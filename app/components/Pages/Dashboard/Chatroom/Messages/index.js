@@ -97,11 +97,17 @@ class Messages extends React.Component {
     // fetch
     await getMessages(roomId, limit, max_value)
 
+    if (!this.messagesList) {
+      return false
+    }
+
     // move to end of div
-    if (scroll_to === null)
+    if (scroll_to === null) {
       this.messagesList.scrollTop = this.messagesList.scrollHeight
-    else
+    }
+    else {
       this.messagesList.scrollTop = scroll_to.offsetTop - this.messagesList.offsetTop
+    }
   }
 
   /**
