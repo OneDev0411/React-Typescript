@@ -4,20 +4,23 @@
 
 %deal-fact-sheet {
   background: #fff;
-  padding: $col-padding 0;
+  margin: $col-padding 0;
   .fact-table {
-    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 1px;
+    width: calc(100% - #{$col-padding});
+    margin: 0 $col-padding/2;
     color: #5b6469;
     margin-bottom: 8px;
     font-size: 14px;
 
     td {
-      padding-bottom: 8px;
+      padding: 3px 0;
+      vertical-align : middle
     }
 
     td.name {
-      width: 60%;
-      padding-left: $col-padding/2;
+      width: 55%;
       color: #78909c;
 
       .status {
@@ -34,10 +37,37 @@
     }
 
     td.field {
-      width: 40%;
+      width: 45%;
       text-align: right;
-      padding-right: $col-padding/2;
       color: #78909c;
+    }
+
+    &.critical-dates {
+      @extend %deal-fact-sheet-critical-dates;
+    }
+  }
+}
+
+%deal-fact-sheet-critical-dates {
+  td.field {
+    border: 1px dashed #fff;
+    transition: 0.1s ease-in all;
+    cursor: pointer;
+    border-radius: 3px;
+
+    .cta {
+      display: none;
+      margin: 0 2px 0 3px;
+    }
+
+    &.editable {
+      &:hover {
+        border-color: #2196f3;
+      }
+    }
+
+    &:hover .cta {
+      display: inline-block;
     }
   }
 }

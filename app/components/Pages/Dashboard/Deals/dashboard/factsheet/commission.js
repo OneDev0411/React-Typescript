@@ -3,7 +3,7 @@ import _ from 'underscore'
 import Deal from '../../../../../../models/Deal'
 
 const table = {
-  sale_price: 'Sales Price',
+  sales_price: 'Sales Price',
   commission_listing: 'Listing Commission',
   commission_selling: 'Sale Commission'
 }

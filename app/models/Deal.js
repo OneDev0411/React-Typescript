@@ -441,6 +441,21 @@ Deal.needsAttention = async function(task_id, status) {
 }
 
 /**
+* update deal context
+*/
+Deal.updateContext = async function(dealId, context) {
+  try {
+    const response = await new Fetch()
+      .post(`/deals/${dealId}/context`)
+      .send({ context })
+
+    return response.body.data
+  } catch (e) {
+    return false
+  }
+}
+
+/**
 * get envelopes of a deal
 */
 Deal.getEnvelopes = async function(deal_id) {
