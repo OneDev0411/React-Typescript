@@ -194,7 +194,7 @@ class BaseTable extends React.Component {
       const criteria = _.find(filters, (value, name) => name.includes(f))
 
       if (_.isFunction(criteria)) {
-        matched = criteria(value)
+        matched = criteria(value, deal)
       } else if (criteria.length > 0) {
         matched = value.toLowerCase().includes(criteria.toLowerCase())
       } else {

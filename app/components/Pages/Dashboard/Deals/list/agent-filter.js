@@ -22,14 +22,23 @@ const FILTER_ARCHIVE = [
   'Temp Off Market',
   'Expired',
   'Cancelled',
-  'Withdrawn'
+  'Withdrawn',
+  'Archived'
 ]
 
 const filters = {
-  All: () => true,
-  Active: status => FILTER_ACTIVE.indexOf(status) > -1,
-  Pending: status => FILTER_PENDING.indexOf(status) > -1,
-  Archive: status => FILTER_ARCHIVE.indexOf(status) > -1
+  All: (status, deal) => {
+    return !deal.deleted_at
+  },
+  Active: (status, deal) => {
+    return FILTER_ACTIVE.indexOf(status) > -1 && !deal.deleted_at
+  },
+  Pending: (status, deal) => {
+    return FILTER_PENDING.indexOf(status) > -1 && !deal.deleted_at
+  },
+  Archive: (status, deal) => {
+    return FILTER_ARCHIVE.indexOf(status) > -1 || !!deal.deleted_at
+  }
 }
 
 class Filter extends React.Component {
@@ -86,16 +95,10 @@ class Filter extends React.Component {
   getBadgeCounter(filter) {
     const { deals } = this.props
 
-    if (filter === 'All') {
-      return _.size(deals)
-    }
-
-    const matched = _.filter(deals, deal => {
+    return _.filter(deals, deal => {
       const status = Deal.get.field(deal, 'listing_status')
-      return filters[filter](status)
-    })
-
-    return matched.length
+      return filters[filter](status, deal)
+    }).length
   }
 
   render() {

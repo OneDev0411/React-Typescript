@@ -12,8 +12,11 @@ class DealsDashboard extends React.Component {
     const { isBackOffice } = props
     const activeFilters = {}
 
+    // initial filters
     if (isBackOffice) {
-      activeFilters['needs_attention'] = c => c > 0
+      activeFilters.needs_attention = count => count > 0
+    } else {
+      activeFilters.status = (status, deal) => !deal.deleted_at
     }
 
     this.state = {

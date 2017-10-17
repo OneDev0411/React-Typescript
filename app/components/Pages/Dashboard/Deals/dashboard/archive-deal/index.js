@@ -90,7 +90,7 @@ class ArchiveDeal extends React.Component {
         onClick={() => this.requestArchive()}
         disabled={archiving}
       >
-        { archiving ? 'Sending notification ...' : 'Archive deal' }
+        { archiving ? 'Working ...' : 'Archive deal' }
       </Button>
     )
   }
