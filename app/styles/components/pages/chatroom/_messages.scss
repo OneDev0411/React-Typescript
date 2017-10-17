@@ -349,7 +349,6 @@ $left-w: 44px;
       bottom: 10px;
       color: #fff;
       .status {
-        width: 50px;
         height: 24px;
         line-height: 24px;
         vertical-align: middle;
@@ -357,8 +356,11 @@ $left-w: 44px;
         font-size: 15px;
         border-radius: 3px;
         margin-bottom: 10px;
+        float: left;
+        padding: 0px 4px;
       }
       .address-title {
+        clear: both;
         font-size: 21px;
         font-weight: 900;
         text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
