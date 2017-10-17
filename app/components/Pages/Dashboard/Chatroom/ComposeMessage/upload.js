@@ -4,7 +4,6 @@ import Message from '../Util/message'
 import Model from '../../../../../models/Chatroom'
 
 export default class Upload extends React.Component {
-
   constructor(props) {
     super(props)
     this.pasteHandler = null
@@ -38,12 +37,7 @@ export default class Upload extends React.Component {
    * handle paste file from clipboard
    */
   onPasteFile(event) {
-    const items = (event.clipboardData || event.originalEvent.clipboardData).items
-
-    const files = Object.keys(items)
-      .filter(index => items[index].kind === 'file')
-      .map(index => items[index].getAsFile())
-
+    const files = (event.clipboardData || event.originalEvent.clipboardData).files
     this.onDrop(files)
   }
 
@@ -67,7 +61,7 @@ export default class Upload extends React.Component {
     // create temporary message
     let { qid, message } = this.createTemporaryMessage(roomId, files)
 
-    for (let index in files) {
+    for (let index = 0; index < files.length; index++) {
       const file = files[index]
 
       // update message
@@ -169,7 +163,9 @@ export default class Upload extends React.Component {
     return (
       <div className="upload">
         <Dropzone
-          ref={(node) => { this.dropzone = node }}
+          ref={(node) => {
+            this.dropzone = node
+          }}
           onDrop={files => this.onDrop(files)}
           onDragEnter={() => this.setState({ dropzoneActive: true })}
           onDragLeave={() => this.setState({ dropzoneActive: false })}
