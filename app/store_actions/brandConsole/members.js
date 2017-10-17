@@ -38,7 +38,7 @@ export function addMembers(brandId, roleId, members) {
       const { data } = response.body
       dispatch(_addMembers(brandId, roleId, data))
     } else {
-      dispatch(notify({ message: `addBrand: ${response.error.message}`, status: 'error' }))
+      dispatch(notify({ message: `addMembers: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -59,7 +59,7 @@ export function deleteMembers(role, member_id) {
     if (response && !response.error && response.body.status === 'success') {
       dispatch(_deleteMembers(role, member_id))
     } else {
-      dispatch(notify({ message: `deleteBrand: ${response.error.message}`, status: 'error' }))
+      dispatch(notify({ message: `deleteMembers: ${response.error.message}`, status: 'error' }))
     }
   }
 }
