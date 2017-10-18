@@ -76,7 +76,7 @@ const isValid = (date) => {
  * parse date to unix time
  */
 const parseDate = (date) => {
-  return Date.parse(date)
+  return moment.unix(date)
 }
 
 /**
@@ -85,16 +85,18 @@ const parseDate = (date) => {
 const getDate = (deal, field) => {
   const now = moment()
   const date = Deal.get.field(deal, field)
+  const context = Deal.get.context(deal, field)
   let status = 'unknown'
 
   if (isValid(date) === false) {
     return {
       value: '',
+      approved: false,
       status
     }
   }
 
-  const dateObject = moment(new Date(parseDate(date)))
+  const dateObject = parseDate(date)
 
   if (dateObject.isAfter(now)) {
     status = 'future'
@@ -104,6 +106,7 @@ const getDate = (deal, field) => {
 
   return {
     value: dateObject.format('MMM DD, YYYY'),
+    approved: context && context.approved_at !== null,
     status
   }
 }
@@ -165,7 +168,8 @@ CriticalDates.getNextDate = function(deal) {
     return 'No closing date'
   }
 
-  return table[date.name].alias + ' ' + moment(new Date(date.value)).format('MMM DD, YYYY')
+  const field = table.find(item => item.key === date.name)
+  return field.alias + ' ' + date.value.format('MMM DD, YYYY')
 }
 
 export default CriticalDates
