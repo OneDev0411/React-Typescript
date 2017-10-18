@@ -28,16 +28,18 @@ class Compose extends React.Component {
   async onSearch(text) {
     const { searchInRooms } = this.props
 
-    if (text === this.criteria)
+    if (text === this.criteria) {
       return false
+    }
 
     // set this variable to detect non characters like shift, ctrl, ...
     this.criteria = text
     this.setState({ viewList: {} })
 
     // dont search when there is no criteria
-    if (this.criteria.length === 0)
+    if (this.criteria.length === 0) {
       return false
+    }
 
     // show searching loader
     this.setState({ searching: true })
@@ -68,8 +70,10 @@ class Compose extends React.Component {
       .uniq(entry => entry.email || entry.phone_number || entry.id)
       .value()
 
-    if (_.size(viewList) === 0)
-      viewList = await this.createNewEntry()
+    if (_.size(viewList) === 0) {
+      viewList = await
+        this.createNewEntry()
+    }
 
     this.setState({ viewList })
   }
@@ -246,8 +250,9 @@ class Compose extends React.Component {
   onBlurDropDownBox() {
     const { dropDownBox } = this.props
 
-    if (dropDownBox === true)
+    if (dropDownBox === true) {
       this.setState({ viewList: {} })
+    }
   }
 
   render() {
