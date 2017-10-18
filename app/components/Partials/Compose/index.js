@@ -47,7 +47,6 @@ class Compose extends React.Component {
     let rooms = []
     if (searchInRooms) {
       rooms = await this.searchInRooms(this.criteria)
-      this.createListView(rooms)
     }
 
     const contacts = await this.searchInContacts(this.criteria)
