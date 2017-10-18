@@ -165,7 +165,7 @@ CriticalDates.getNextDate = function(deal) {
     return 'No closing date'
   }
 
-  const field = table.find(item => item.key === data.name)
+  const field = table.find(item => item.key === date.name)
   return field.alias + ' ' + moment(new Date(date.value)).format('MMM DD, YYYY')
 }
 
