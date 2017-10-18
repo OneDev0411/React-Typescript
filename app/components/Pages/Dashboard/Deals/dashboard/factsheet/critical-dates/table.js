@@ -16,7 +16,8 @@ class Table extends React.Component {
   }
 
   editField(field) {
-    const { isBackOffice } = this.props
+    const { isBackOffice, table } = this.props
+
     if (!field.canEdit(isBackOffice)) {
       return false
     }
@@ -27,18 +28,30 @@ class Table extends React.Component {
     })
   }
 
-  async changeCriticalDate(date) {
-    const { deal, updateContext } = this.props
+  approveDate(e, field) {
+    e.stopPropagation()
+    const { deal, getDate } = this.props
+    const date = getDate(deal, field.key)
+    this.updateCriticalDate(field.key, date.value)
+  }
+
+  onChangeCriticalDate(date) {
     const { selectedField } = this.state
+
+    this.updateCriticalDate(selectedField, date)
 
     // hide picker
     this.hideModal()
+  }
+
+  async updateCriticalDate(field, date) {
+    const { deal, updateContext } = this.props
 
     // set state
-    this.setState({ saving: selectedField })
+    this.setState({ saving: field })
 
     // update context
-    await updateContext(deal.id, { [selectedField]: date })
+    await updateContext(deal.id, { [field]: date })
 
     // set state
     this.setState({ saving: null })
@@ -52,7 +65,7 @@ class Table extends React.Component {
   }
 
   render() {
-    const { saving } = this.state
+    const { saving, selectedField } = this.state
     const { deal, title, showTitle, table, getDate, nextDate, filter, isBackOffice } = this.props
 
     return (
@@ -66,8 +79,9 @@ class Table extends React.Component {
 
         <DatePicker
           show={this.state.showDatePicker}
+          initialDate={selectedField ? getDate(deal, selectedField).value : null}
           onClose={() => this.hideModal()}
-          onSelectDate={date => this.changeCriticalDate(date)}
+          onSelectDate={date => this.onChangeCriticalDate(date)}
         />
 
         <table className="fact-table critical-dates">
@@ -78,6 +92,7 @@ class Table extends React.Component {
               .map(field => {
                 const date = getDate(deal, field.key)
                 const editable = field.canEdit(isBackOffice)
+                const { approved } = date
 
                 return (
                   <tr key={`CRITICAL_DATE_${field.key}`}>
@@ -90,9 +105,20 @@ class Table extends React.Component {
                       { field.name }
                     </td>
                     <td
-                      className={`field ${editable ? 'editable' : ''}`}
+                      className={cn('field', { editable, approved })}
                       onClick={() => this.editField(field)}
                     >
+                      {
+                        date.value && !approved &&
+                        <span
+                          className="icon-not-approved"
+                          data-tip="Approval is pending on this date"
+                          data-place="bottom"
+                        >
+                          <i className="fa fa-info" />
+                        </span>
+                      }
+
                       { date.value }
 
                       {
@@ -101,12 +127,22 @@ class Table extends React.Component {
                       }
 
                       <span className="cta">
-                        { editable ?
+                        { editable && !saving ?
                           <i className="fa fa-pencil" />:
                           <i
                             className="fa fa-lock"
                             data-tip="Please contact your admin to update this date."
                           />
+                        }
+
+                        {
+                          isBackOffice && date.value && !approved && !saving &&
+                          <button
+                            className="btn-approve"
+                            onClick={(e) => this.approveDate(e, field)}
+                          >
+                            Approve
+                          </button>
                         }
                       </span>
                     </td>
