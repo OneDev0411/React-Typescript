@@ -8,13 +8,15 @@ export function updateRoom(state, roomId, attributes) {
   if (!state) {
     return state
   }
-  
+
   return {
     ...state,
-    ...{[roomId]: {
-      ...state[roomId],
-      ...attributes
-    }}
+    ...{
+      [roomId]: {
+        ...state[roomId],
+        ...attributes
+      }
+    }
   }
 }
 
@@ -24,7 +26,7 @@ export function updateRoom(state, roomId, attributes) {
 function createRoom(state, action) {
   return {
     ...state,
-    ...{[action.room.id]: action.room}
+    ...{ [action.room.id]: action.room }
   }
 }
 
@@ -49,7 +51,7 @@ function addRoomMembers(state, action) {
 function updateRoomNotifications(state, action) {
   return updateRoom(state, action.roomId, {
     new_notifications: state[action.roomId].new_notifications + 1,
-    updated_at: (new Date).getTime(),
+    updated_at: (new Date()).getTime(),
     latest_message: action.message
   })
 }
@@ -59,7 +61,7 @@ function updateRoomNotifications(state, action) {
  */
 function updateRoomTime(state, action) {
   return updateRoom(state, action.roomId, {
-    updated_at: (new Date).getTime()
+    updated_at: (new Date()).getTime()
   })
 }
 
@@ -104,7 +106,6 @@ function removeMessageTyping(state, action) {
 
 export default (state = null, action) => {
   switch (action.type) {
-
     case types.GET_ROOMS:
       return {
         ...state,
