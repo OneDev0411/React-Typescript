@@ -39,11 +39,11 @@ Deal.get.field = function(deal, field) {
 
   let value = null
 
-  if (mls_context) {
-    value = mls_context
-  } else if (deal_context) {
+  if (deal_context) {
     let context_type = deal_context.context_type.toLowerCase()
     value = deal_context[context_type]
+  } else if (mls_context) {
+    value = mls_context
   }
 
   return value
