@@ -25,14 +25,14 @@ const Chatbar = ({
     <Rooms
       user={user}
       onSelectRoom={roomId => {
-          // open chat
+        // open chat
         Chatroom.openChat(roomId)
-          // close chatbar
+        // close chatbar
         toggleChatbar()
       }}
     />
   </Menu>
-  )
+)
 
 export default connect(({ chatroom }) => ({
   showChatbar: chatroom.showChatbar
