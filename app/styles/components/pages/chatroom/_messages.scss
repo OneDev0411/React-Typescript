@@ -356,11 +356,10 @@ $left-w: 44px;
         font-size: 15px;
         border-radius: 3px;
         margin-bottom: 10px;
-        float: left;
         padding: 0px 4px;
+        display: inline-block;
       }
       .address-title {
-        clear: both;
         font-size: 21px;
         font-weight: 900;
         text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
