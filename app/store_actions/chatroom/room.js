@@ -11,11 +11,10 @@ function _getRooms(rooms) {
   }
 }
 
-export function addMembersToRoom(roomId, users) {
+export function addMembersToRoom(room) {
   return {
     type: types.ADD_MEMBERS,
-    roomId,
-    users
+    room
   }
 }
 
@@ -72,7 +71,7 @@ export function addRecipients(roomId, recipients) {
   return async dispatch => {
     const response = await Chatroom.addMembers(roomId, recipients)
     const room = response.body.data
-    dispatch(addMembersToRoom(roomId, room.users))
+    dispatch(addMembersToRoom(room))
   }
 }
 

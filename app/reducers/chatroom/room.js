@@ -34,12 +34,12 @@ function createRoom(state, action) {
 function addRoomMembers(state, action) {
   return {
     ...state,
-    ...{[action.roomId]: {
-      ...state[action.roomId],
-      ...{
-        users: _.uniq(state[action.roomId].users.concat(action.users), user => user.id)
+    ...{
+      [action.room.id]: {
+        ...state[action.room.id],
+        ...action.room
       }
-    }}
+    }
   }
 }
 
