@@ -45,6 +45,7 @@ export default class extends React.Component {
         <Modal.Body>
           <DatePicker
             selectedDays={this.getSelectedDate()}
+            month={this.getSelectedDate()}
             onDayClick={(date) => this.onDateChange(date)}
           />
         </Modal.Body>
