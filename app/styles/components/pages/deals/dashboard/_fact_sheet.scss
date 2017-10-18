@@ -56,7 +56,7 @@
     border-radius: 3px;
 
     .cta {
-      display: none;
+      opacity: 0;
       margin: 0 2px 0 3px;
     }
 
@@ -67,7 +67,7 @@
     }
 
     &:hover .cta {
-      display: inline-block;
+      opacity: 1;
     }
   }
 }
