@@ -142,8 +142,9 @@ Chatroom.searchRoom = async function (recipients) {
   const query = qs.join('&')
 
   try {
-    const response = await new Fetch().get(`/rooms/search?${query}`)
-    const rooms = response.body.data
+    const response = await new Fetch().get(`/rooms/search?${query}&room_types[]=Direct&room_types[]=Group`)
+    const rooms = response.body.data.filter(room => room.room_type !== 'Task')
+
     return rooms.length > 0 ? rooms[0] : null
   } catch (e) {
     return null
