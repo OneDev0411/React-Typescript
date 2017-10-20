@@ -24,8 +24,11 @@ Chatroom.getRooms = async function (user = {}) {
       fetchRooms.set({ Authorization: `Bearer ${access_token}` })
     }
 
-    return await fetchRooms
-  } catch (e) {}
+    const response = await fetchRooms
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
 }
 
 /**

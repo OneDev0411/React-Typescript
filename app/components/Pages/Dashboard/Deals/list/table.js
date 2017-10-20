@@ -221,6 +221,7 @@ class BaseTable extends React.Component {
    */
   hasNotification(deal) {
     let counter = 0
+    const { rooms } = this.props
 
     if (!deal.checklists) {
       return ''
@@ -234,7 +235,7 @@ class BaseTable extends React.Component {
 
       checklist.tasks.forEach(task_id => {
         const task = this.props.tasks[task_id]
-        const room = this.props.rooms[task.room.id] || task.room
+        const room = (rooms && rooms[task.room.id]) || task.room
 
         if (room.new_notifications > 0) {
           counter += room.new_notifications
