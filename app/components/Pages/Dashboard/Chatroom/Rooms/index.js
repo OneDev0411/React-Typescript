@@ -164,7 +164,7 @@ class Rooms extends React.Component {
                   room.proposed_title && room
                     .proposed_title
                     .toLowerCase()
-                    .startsWith(filter.toLowerCase())
+                    .includes(filter.toLowerCase())
                 )
                 .sortBy(room => room.updated_at * -1)
                 .map(room =>

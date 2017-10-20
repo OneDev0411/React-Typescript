@@ -8,7 +8,7 @@ export default class MessageInput extends React.Component {
     super(props)
     this.state = {
       rows: 1,
-      height: 40,
+      height: 40
     }
   }
 
@@ -35,9 +35,9 @@ export default class MessageInput extends React.Component {
     }
 
     if (e.key === 'Enter' && e.ctrlKey) {
-      el.value += "\n"
+      el.value += '\n'
 
-      const rows = el.value.split("\n")
+      const rows = el.value.split('\n')
       this.setState({
         rows: rows.length <= 5 ? rows.length : 5
       })

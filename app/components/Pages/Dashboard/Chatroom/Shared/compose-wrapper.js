@@ -13,23 +13,23 @@ const enhance = compose(
 )
 
 const ComposeWrapper = ({
-                          TriggerButton,
-                          InitialValues,
-                          title,
-                          buttonTitle,
-                          onButtonClick,
-                          room = null,
-                          inline = false,
-                          dropDownBox = false,
-                          showOnly = false,
-                          working = false,
-                          /* internal props and states */
-                          showComposeModal,
-                          recipients,
-                          onChangeComposeModal,
-                          onChangeRecipients,
-                          OnLeaveClick
-                        }) =>
+  TriggerButton,
+  InitialValues,
+  title,
+  buttonTitle,
+  onButtonClick,
+  room = null,
+  inline = false,
+  dropDownBox = false,
+  showOnly = false,
+  working = false,
+  /* internal props and states */
+  showComposeModal,
+  recipients,
+  onChangeComposeModal,
+  onChangeRecipients,
+  OnLeaveClick
+}) =>
   (
     <div style={{ display: inline ? 'inline' : 'block' }}>
       <TriggerButton
