@@ -104,17 +104,6 @@ export default class Editable extends React.Component {
         />
 
         {
-          context.value && !approved &&
-          <span
-            className="icon-not-approved"
-            data-tip="Approval is pending on this date"
-            data-place="bottom"
-          >
-            <i className="fa fa-info" />
-          </span>
-        }
-
-        {
           editMode && isStringType ? '' : context.value
         }
 
