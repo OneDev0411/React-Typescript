@@ -18,10 +18,9 @@ export function getForms() {
   }
 }
 
-export function editForm(task, mode = 'embed') {
+export function editForm(task) {
   return {
     type: types.SET_EDIT_FORM,
-    mode: task === null ? null : mode,
     task
   }
 }

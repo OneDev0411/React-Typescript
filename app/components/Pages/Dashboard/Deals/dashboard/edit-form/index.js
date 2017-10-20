@@ -245,17 +245,9 @@ class EditForm extends React.Component {
       onClose: () => this.close()
     }
 
-    if (mode === 'embed') {
-      return (
-        <EmbedForm {...props} />
-      )
-    }
-
-    if (mode === 'context') {
-      return (
-        <RequiredContext {...props} />
-      )
-    }
+    return (
+      <EmbedForm {...props} />
+    )
   }
 }
 
