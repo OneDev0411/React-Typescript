@@ -25,6 +25,12 @@ export default class Editable extends React.Component {
     }
   }
 
+  onKeyPress(e) {
+    if (e.which === 13 || e.keyCode === 13) {
+      this.onFinishEditing()
+    }
+  }
+
   editField() {
     const { editable } = this.props
 
@@ -114,13 +120,20 @@ export default class Editable extends React.Component {
 
         {
           editMode && isStringType &&
-          <input
-            className="input-edit"
-            onBlur={() => this.onFinishEditing()}
-            defaultValue={this.getValue()}
-            ref={(input) => this.input = input}
-            maxLength={15}
-          />
+          <div className="inline">
+            <input
+              className="input-edit"
+              onBlur={() => this.onFinishEditing()}
+              defaultValue={this.getValue()}
+              onKeyPress={(e) => this.onKeyPress(e)}
+              ref={(input) => this.input = input}
+              maxLength={15}
+            />
+            <i
+              className="fa fa-floppy-o"
+              onClick={() => this.onFinishEditing()}
+            />
+          </div>
         }
 
         <span className="cta">

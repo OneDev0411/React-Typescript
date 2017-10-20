@@ -88,8 +88,9 @@
 
         .input-edit {
           display: inline-block;
-          width: 90%;
+          width: 80%;
           height: 20px;
+          margin-right: 3px;
           &:focus {
             outline: none;
           }
