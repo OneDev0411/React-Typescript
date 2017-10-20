@@ -68,5 +68,6 @@ class DealsDashboard extends React.Component {
 }
 
 export default connect(({ deals }) => ({
+  deals: deals.list,
   isBackOffice: deals.backoffice
 }))(DealsDashboard)

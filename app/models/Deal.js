@@ -11,38 +11,53 @@ const Deal = {
 /**
 * a helper that extracts a field from context or proposed values
 */
-Deal.get.field = function(deal, field) {
+Deal.get.context = function(deal, field) {
   if (!deal) {
     return null
   }
 
-  const contexts = ['mls_context', 'form_context', 'deal_context']
+  const contexts = ['mls_context', 'deal_context']
   const values = {}
 
   contexts.forEach(ctx => {
     values[ctx] = deal[ctx] && deal[ctx][field] ? deal[ctx][field] : null
   })
 
-  if (!values) {
-    return null
+  const { mls_context, deal_context } = values
+
+  if (deal_context) {
+    return deal_context
+  } else if (mls_context) {
+    return mls_context
   }
 
-  const { mls_context, form_context, deal_context } = values
+  return null
+}
+
+/**
+* a helper that extracts a field from context or proposed values
+*/
+Deal.get.field = function(deal, field) {
+  const context = Deal.get.context(deal, field)
 
   let value = null
 
-  if (mls_context) {
-    value = mls_context
-  } else if (form_context && deal_context) {
-    value = form_context.created_at > deal_context.created_at ? form_context.value : deal_context.value
-  } else if (form_context && !deal_context) {
-    value = form_context.value
-  } else if (deal_context && !form_context){
-    value = deal_context.value
+  if (!context) {
+    return value
+  }
+
+  if (typeof context === 'string') {
+    return context
+  }
+
+  if (typeof context === 'object' && context.type === 'deal_context_item') {
+    const { context_type } = context
+    return context[context_type.toLowerCase()]
   }
 
   return value
 }
+
 
 /**
 * a helper that extracts address from deal
@@ -447,7 +462,10 @@ Deal.updateContext = async function(dealId, context) {
   try {
     const response = await new Fetch()
       .post(`/deals/${dealId}/context`)
-      .send({ context })
+      .send({
+        context,
+        approved: true
+      })
 
     return response.body.data
   } catch (e) {

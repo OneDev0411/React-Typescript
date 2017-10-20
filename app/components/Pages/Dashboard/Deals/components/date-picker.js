@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import DatePicker from 'react-day-picker'
+import moment from 'moment'
 
 export default class extends React.Component {
   constructor(props) {
@@ -16,8 +17,23 @@ export default class extends React.Component {
     })
   }
 
+  getSelectedDate() {
+    const { initialDate } = this.props
+    const { selectedDate } = this.state
+
+    if (selectedDate) {
+      return selectedDate
+    }
+
+    if (initialDate) {
+      return new Date(initialDate)
+    }
+
+    return null
+  }
+
   render() {
-    const { show, onClose, onSelectDate } = this.props
+    const { show, initialDate, onClose, onSelectDate } = this.props
     const { selectedDate } = this.state
 
     return (
@@ -28,7 +44,8 @@ export default class extends React.Component {
       >
         <Modal.Body>
           <DatePicker
-            selectedDays={selectedDate}
+            selectedDays={this.getSelectedDate()}
+            month={this.getSelectedDate()}
             onDayClick={(date) => this.onDateChange(date)}
           />
         </Modal.Body>

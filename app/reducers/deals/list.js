@@ -7,8 +7,10 @@ export default (state = null, action) => {
   switch (action.type) {
 
     case types.NO_DEAL:
-    case types.GET_DEALS_FAILED:
       return {}
+
+    case types.GET_DEALS_FAILED:
+      return null
 
     case types.ARCHIVE_DEAL:
       return _.omit(state, deal => deal.id === action.deal_id)

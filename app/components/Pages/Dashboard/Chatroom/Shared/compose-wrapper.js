@@ -45,46 +45,52 @@ const ComposeWrapper = ({
           <Modal.Title>
             {title}
           </Modal.Title>
-          {OnLeaveClick &&
-          <OverlayTrigger
-            placement="bottom"
-            overlay={<Tooltip id="popover-leave">Leave chat</Tooltip>}
-          >
-            <span
-              className=" leave-icon"
-              onClick={OnLeaveClick}
+
+          {
+            OnLeaveClick &&
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="popover-leave">Leave chat</Tooltip>}
             >
-              <LeaveIcon />
-            </span>
-          </OverlayTrigger>
+              <span
+                className=" leave-icon"
+                onClick={OnLeaveClick}
+              >
+                <LeaveIcon />
+              </span>
+            </OverlayTrigger>
           }
         </Modal.Header>
 
         <Modal.Body>
-          {!showOnly &&
-          <Compose
-            dropDownBox={dropDownBox}
-            onChangeRecipients={recipients => onChangeRecipients(recipients)}
-          />}
+          {
+            !showOnly &&
+            <Compose
+              dropDownBox={dropDownBox}
+              onChangeRecipients={recipients => onChangeRecipients(recipients)}
+            />
+          }
 
           {InitialValues && <InitialValues />}
         </Modal.Body>
 
-        {!showOnly &&
-        <Modal.Footer>
-          <Button
-            bsStyle="primary"
-            disabled={working || !hasRecipients(recipients)}
-            onClick={async () => {
-              await onButtonClick(recipients)
-              // reset states
-              onChangeComposeModal(false)
-              onChangeRecipients({})
-            }}
-          >
-            {buttonTitle}
-          </Button>
-        </Modal.Footer>}
+        {
+          !showOnly &&
+          <Modal.Footer>
+            <Button
+              bsStyle="primary"
+              disabled={working || !hasRecipients(recipients)}
+              onClick={async () => {
+                await onButtonClick(recipients)
+                // reset states
+                onChangeComposeModal(false)
+                onChangeRecipients({})
+              }}
+            >
+              {buttonTitle}
+            </Button>
+          </Modal.Footer>
+        }
       </Modal>
     </div>
   )

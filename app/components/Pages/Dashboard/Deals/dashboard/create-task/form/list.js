@@ -49,9 +49,9 @@ class Forms extends React.Component {
               .filter(form => {
                 return form.name.toLowerCase().includes(filter.toLowerCase())
               })
-              .map(form => (
+              .map((form, key) => (
                 <li
-                  key={`FORM_ITEM_${form.id}`}
+                  key={`FORM_ITEM_${form.id}_${key}`}
                   onClick={() => onSelectForm(form)}
                 >
                   { form.name }

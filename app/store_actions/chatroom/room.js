@@ -20,11 +20,13 @@ export function addMembersToRoom(room) {
 
 export function getRooms(user) {
   return async dispatch => {
-    const response = await Chatroom.getRooms(user)
-    const { data } = response.body
+    try {
+      const rooms = await Chatroom.getRooms(user)
+      dispatch(_getRooms(_.indexBy(rooms, 'id')))
+      return rooms
+    } catch(e) {
 
-    dispatch(_getRooms(_.indexBy(data, 'id')))
-    return data
+    }
   }
 }
 

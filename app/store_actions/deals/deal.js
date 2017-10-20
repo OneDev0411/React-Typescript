@@ -100,12 +100,18 @@ export function getDeals(user, backoffice = false) {
       ])
     } catch (e) {
       // log
-      console.error(e)
+      let errorMessage = 'Can not get deals'
+
+      if (e.response) {
+        errorMessage = e.response.body.statusCode === 500 ?
+          errorMessage + ', check your internet connection' :
+          e.response.body.message
+      }
 
       dispatch({
         type: types.GET_DEALS_FAILED,
         name: 'get-deals',
-        message: e.response ? e.response.body.message : 'Can not get deals'
+        message: errorMessage
       })
     }
   }
