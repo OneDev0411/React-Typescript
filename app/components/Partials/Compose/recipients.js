@@ -4,7 +4,6 @@ import AutoSizeInput from '../AutoSizeInput'
 import UserAvatar from '../UserAvatar'
 
 export default class extends React.Component {
-
   async componentDidMount() {
     const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
@@ -53,7 +52,7 @@ export default class extends React.Component {
               <i
                 className="fa fa-times"
                 onClick={() => this.props.onRemove(recp)}
-              ></i>
+              />
             </div>
           )
         }
@@ -61,7 +60,7 @@ export default class extends React.Component {
         <AutoSizeInput
           type="text"
           ref={ref => this.setInputRef(ref)}
-          placeholder={_.size(recipients) === 0 ? 'Enter name, email or phone' : '' }
+          placeholder={_.size(recipients) === 0 ? 'Enter name, email or phone' : ''}
           maxLength={254}
         />
       </div>
