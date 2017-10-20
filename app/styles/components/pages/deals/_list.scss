@@ -379,29 +379,35 @@
 
   .fact-table {
     width: 300px !important;
-    td.name {
-      color: #78909c;
-      font-size: 15px;
-      width: 200px;
-      .status {
-        margin-right: 5px;
-        color: #eeeeee;
+    .fact-row {
+      display: flex;
+      flex-direction: row;
 
-        &.past {
-          color: #35b863;
-        }
-        &.next {
-          color: #f6a623;
+      .name {
+        color: #78909c;
+        font-size: 15px;
+        width: 200px;
+        .status {
+          margin-right: 5px;
+          color: #eeeeee;
+
+          &.past {
+            color: #35b863;
+          }
+          &.next {
+            color: #f6a623;
+          }
         }
       }
-    }
 
-    td.field {
-      width: 100px;
-      color: #78909c;
-      font-size: 15px;
-      .cta {
-        display: none;
+      .field {
+        width: 100px;
+        color: #78909c;
+        font-size: 15px;
+
+        .cta, .icon-not-approved, .approve-row {
+          display: none;
+        }
       }
     }
   }
