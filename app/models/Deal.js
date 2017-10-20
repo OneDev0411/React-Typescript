@@ -16,18 +16,6 @@ Deal.get.context = function(deal, field) {
     return null
   }
 
-  const ctx = 'deal_context'
-  return deal[ctx] && deal[ctx][field] ? deal[ctx][field] : null
-}
-
-/**
-* a helper that extracts a field from context or proposed values
-*/
-Deal.get.field = function(deal, field) {
-  if (!deal) {
-    return null
-  }
-
   const contexts = ['mls_context', 'deal_context']
   const values = {}
 
@@ -37,13 +25,34 @@ Deal.get.field = function(deal, field) {
 
   const { mls_context, deal_context } = values
 
+  if (deal_context) {
+    return deal_context
+  } else if (mls_context) {
+    return mls_context
+  }
+
+  return null
+}
+
+/**
+* a helper that extracts a field from context or proposed values
+*/
+Deal.get.field = function(deal, field) {
+  const context = Deal.get.context(deal, field)
+
   let value = null
 
-  if (deal_context) {
-    let context_type = deal_context.context_type.toLowerCase()
-    value = deal_context[context_type]
-  } else if (mls_context) {
-    value = mls_context
+  if (!context) {
+    return value
+  }
+
+  if (typeof context === 'string') {
+    return context
+  }
+
+  if (typeof context === 'object' && context.type === 'deal_context_item') {
+    const { context_type } = context
+    return context[context_type.toLowerCase()]
   }
 
   return value

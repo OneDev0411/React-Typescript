@@ -1,76 +1,75 @@
 import React from 'react'
 import moment from 'moment'
+import cn from 'classnames'
 import Deal from '../../../../../../../models/Deal'
-import Table from './table'
+import Items from '../items'
 
 const table = [
   {
     key: 'list_date',
     name: 'Listing Date',
     alias: 'Lst.',
+    fieldType: 'date',
     side: 'office',
     canEdit: (isBO) => isBO
   }, {
     key: 'expiration_date',
     name: 'Listing Expiration',
     alias: 'Exp.',
+    fieldType: 'date',
     side: 'office',
     canEdit: (isBO) => isBO
   }, {
     key: 'contract_date',
     name: 'Contract Date',
     alias: 'Con.',
+    fieldType: 'date',
     side: 'office',
     canEdit: (isBO) => isBO
   }, {
     key: 'option_period',
     name: 'Option Period',
     alias: 'Opt.',
+    fieldType: 'date',
     side: 'office',
     canEdit: (isBO) => isBO
   }, {
     key: 'financing_due',
     name: 'Financing Due',
     alias: 'Fin.',
+    fieldType: 'date',
     side: 'agent',
     canEdit: () => true
   }, {
     key: 'title_due',
     name: 'Title Work Due',
     alias: 'Til.',
+    fieldType: 'date',
     side: 'agent',
     canEdit: () => true
   }, {
     key: 't47_due',
     name: 'Survey Due',
     alias: 'T47.',
+    fieldType: 'date',
     side: 'agent',
     canEdit: () => true
   }, {
     key: 'closing_date',
     name: 'Closing',
     alias: 'Cls.',
+    fieldType: 'date',
     side: 'office',
     canEdit: (isBO) => isBO
   }, {
     key: 'possession_date',
     name: 'Possession',
     alias: 'Pos.',
+    fieldType: 'date',
     side: 'office',
     canEdit: (isBO) => isBO
   }
 ]
-
-/**
- * check date is valid or not
- */
-const isValid = (date) => {
-  if (!date) {
-    return false
-  }
-
-  return isNaN(parseDate(date)) === false
-}
 
 /**
  * parse date to unix time
@@ -85,10 +84,9 @@ const parseDate = (date) => {
 const getDate = (deal, field) => {
   const now = moment()
   const date = Deal.get.field(deal, field)
-  const context = Deal.get.context(deal, field)
   let status = 'unknown'
 
-  if (isValid(date) === false) {
+  if (!date) {
     return {
       value: '',
       approved: false,
@@ -106,7 +104,6 @@ const getDate = (deal, field) => {
 
   return {
     value: dateObject.format('MMM DD, YYYY'),
-    approved: context && context.approved_at !== null,
     status
   }
 }
@@ -118,12 +115,12 @@ const getNextDateField = (deal) => {
   const closingDate = Deal.get.field(deal, 'closing_date')
   const expirationDate = Deal.get.field(deal, 'expiration_date')
 
-  if (isValid(closingDate)) {
+  if (closingDate) {
     return {
       name: 'closing_date',
       value: parseDate(closingDate)
     }
-  } else if (isValid(expirationDate)) {
+  } else if (expirationDate) {
     return {
       name: 'expiration_date',
       value: parseDate(expirationDate)
@@ -133,25 +130,44 @@ const getNextDateField = (deal) => {
   }
 }
 
+const getLabel = (deal, field, ctx) => {
+  const nextDate = getNextDateField(deal)
+
+  return (
+    <div>
+      <i
+        className={cn('fa fa-circle', 'status', ctx.status, {
+          next: nextDate && nextDate.name === field.key
+        })}
+      />
+
+      { field.name }
+    </div>
+  )
+}
+
+const getValue = (deal, field) => {
+  return getDate(deal, field.key)
+}
 
 const CriticalDates = ({
   deal,
   showTitle = true
 }) => {
-  const nextDate = getNextDateField(deal)
 
-  const props = { showTitle, nextDate, getDate, table, deal }
+  const props = { showTitle, table, deal, getValue, getLabel }
+
   return (
     <div className="deal-info-section">
-      <Table
+      <Items
         title="Office Critical Dates"
-        filter="office"
+        sideFilter="office"
         {...props}
       />
 
-      <Table
+      <Items
         title="Agent Critical Dates"
-        filter="agent"
+        sideFilter="agent"
         {...props}
       />
     </div>

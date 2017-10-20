@@ -8,77 +8,14 @@
   .fact-table {
     border-collapse: separate;
     border-spacing: 0 1px;
-    width: calc(100% - #{$col-padding});
+    width: 300px - $col-padding;
     margin: 0 $col-padding/2;
     color: #5b6469;
     margin-bottom: 8px;
     font-size: 14px;
 
-    td {
-      padding: 3px 0;
-      vertical-align : middle
-    }
-
-    td.name {
-      width: 55%;
-      color: #78909c;
-
-      .status {
-        margin-right: 5px;
-        color: #eeeeee;
-
-        &.past {
-          color: #35b863;
-        }
-        &.next {
-          color: #f6a623;
-        }
-      }
-    }
-
-    td.field {
-      width: 45%;
+    .approve-row {
       text-align: right;
-      color: #78909c;
-    }
-
-    &.critical-dates {
-      @extend %deal-fact-sheet-critical-dates;
-    }
-  }
-}
-
-%deal-fact-sheet-critical-dates {
-  td.field {
-    border: 1px dashed #fff;
-    transition: 0.1s ease-in all;
-    cursor: pointer;
-    border-radius: 3px;
-    color: #8da2b5;
-
-    .icon-not-approved {
-      margin-right: 5px;
-      display: inline-block;
-      width: 11px;
-      height: 11px;
-      line-height: 8px;
-      vertical-align: middle;
-      border-radius: 10px;
-      border: 1px solid #f5a623;
-      text-align: center;
-      i {
-        font-size: 8px;
-        color: #f5a623;
-      }
-    }
-
-    .cta {
-      opacity: 0.1;
-      margin: 0 2px 0 3px;
-      i {
-        margin-left: 5px;
-      }
-
       .btn-approve {
         width: 58px;
         height: 20px;
@@ -87,24 +24,101 @@
         color: #fff;
         font-size: 12px;
         border: none;
+        margin-top: 2px;
         &:focus {
           outline: none;
         }
       }
     }
 
-    &.approved {
-      color: #1d364b;
-    }
+    .fact-row {
+      display: flex;
+      flex-direction: row;
+      min-height: 30px;
+      align-items: center;
 
-    &.editable {
-      &:hover {
-        border-color: #2196f3;
+      .name {
+        min-width: 140px;
+        max-width: 140px;
+        color: #78909c;
+
+        .status {
+          margin-right: 5px;
+          color: #eeeeee;
+
+          &.past {
+            color: #35b863;
+          }
+          &.next {
+            color: #f6a623;
+          }
+        }
       }
-    }
 
-    &:hover .cta {
-      opacity: 1;
+      .field {
+        min-width: 140px;
+        max-width: 140px;
+        color: #8da2b5;
+        text-align: right;
+        border: 1px dashed #fff;
+        transition: 0.1s ease-in all;
+        cursor: pointer;
+        border-radius: 3px;
+
+        &.approved {
+          color: #1d364b;
+        }
+
+        &.editable {
+          &:hover {
+            border-color: #2196f3;
+          }
+        }
+
+        &.disabled {
+          &:hover {
+            border-color: #fff;
+            cursor: auto;
+          }
+        }
+
+        &:hover .cta {
+          opacity: 1;
+        }
+
+        .input-edit {
+          display: inline-block;
+          width: 90%;
+          height: 20px;
+          &:focus {
+            outline: none;
+          }
+        }
+
+        .icon-not-approved {
+          margin-right: 5px;
+          display: inline-block;
+          width: 11px;
+          height: 11px;
+          line-height: 8px;
+          vertical-align: middle;
+          border-radius: 10px;
+          border: 1px solid #f5a623;
+          text-align: center;
+          i {
+            font-size: 8px;
+            color: #f5a623;
+          }
+        }
+
+        .cta {
+          opacity: 0.1;
+          margin: 0 2px 0 3px;
+          i {
+            margin-left: 5px;
+          }
+        }
+      }
     }
   }
 }
