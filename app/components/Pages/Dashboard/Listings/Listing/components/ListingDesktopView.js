@@ -33,12 +33,12 @@ export const renderFeatures = (title, value) => {
     value = value ? 'Yes' : 'No'
   }
 
-  return <div style={{ color: '#aaaaaa', marginBottom: '1rem' }}>
-    {`${title}: `}
-    <span style={{ color: '#777' }}>
-      {value}
-    </span>
-  </div>
+  return (
+    <div style={{ color: '#aaaaaa', marginBottom: '1rem' }}>
+      {`${title}: `}
+      <span style={{ color: '#777' }}>{value}</span>
+    </div>
+  )
 }
 
 import {
@@ -118,6 +118,7 @@ const ListingDesktopView = ({
   let next_icon = '>'
   let listing_subtitle
   let brand_agent_area
+  let bathroomBaloonText
 
   if (container === 'modal') {
     hideModal = onHide
@@ -149,14 +150,26 @@ const ListingDesktopView = ({
     listing_title = address
     mls_number = listing.mls_number
     bedroom_count = property.bedroom_count
-    bathroom_count = property.bathroom_count
+    bathroom_count =
+      property.full_bathroom_count + property.half_bathroom_count || '-'
+    bathroomBaloonText =
+      property.full_bathroom_count != null
+        ? `${property.full_bathroom_count} Full Bath`
+        : ''
+    console.log(property.half_bathroom_count)
+    bathroomBaloonText +=
+      property.half_bathroom_count != null
+        ? ` + ${property.half_bathroom_count} Half Bath`
+        : ''
+    bathroomBaloonText = bathroomBaloonText || 'Unknown'
     square_feet = helpers.numberWithCommas(
       Math.floor(listing_util.metersToFeet(property.square_meters))
     )
 
     if (property.square_meters) {
       price_sq_foot = (Number(price.replace(/,/g, '')) /
-        Number(square_feet.replace(/,/g, ''))).toFixed(2)
+        Number(square_feet.replace(/,/g, ''))
+      ).toFixed(2)
     }
 
     if (property.lot_size_area) {
@@ -168,7 +181,8 @@ const ListingDesktopView = ({
     const { gallery_image_urls } = listing
     const gallery_chunks = _.chunk(gallery_image_urls, 4)
 
-    const carouselItemDivStyle = `border-right-1-solid-fff w-${viewer_width / 4} h-300 pull-left text-center bg-efefef bg-cover bg-center`
+    const carouselItemDivStyle = `border-right-1-solid-fff w-${viewer_width /
+      4} h-300 pull-left text-center bg-efefef bg-cover bg-center`
 
     listing_images = (
       <Carousel
@@ -453,16 +467,12 @@ const ListingDesktopView = ({
     main_content = (
       <div style={S('bg-fff')}>
         <div style={S('p-0 relative')}>
-          {listing.gallery_image_urls && listing.gallery_image_urls.length ? (
-            listing_images
-          ) : (
-            ''
-          )}
-          {listing.gallery_image_urls && listing.gallery_image_urls.length ? (
-            listing_images_cached
-          ) : (
-            ''
-          )}
+          {listing.gallery_image_urls && listing.gallery_image_urls.length
+            ? listing_images
+            : ''}
+          {listing.gallery_image_urls && listing.gallery_image_urls.length
+            ? listing_images_cached
+            : ''}
           <div className="clearfix" />
         </div>
 
@@ -504,11 +514,9 @@ const ListingDesktopView = ({
                   <div style={S('fw-700 font-60')}>
                     ${price}
                     {listing.property &&
-                    listing.property.property_type === 'Residential Lease' ? (
-                      '/mo'
-                    ) : (
-                      ''
-                    )}{' '}
+                    listing.property.property_type === 'Residential Lease'
+                      ? '/mo'
+                      : ''}{' '}
                     {asking_price_area}
                   </div>
                   <div className="lato" style={S('font-24 color-8696a4 mb-10')}>
@@ -526,7 +534,12 @@ const ListingDesktopView = ({
                   <div style={S('font-15 color-4a4a4a mb-10')}>
                     <span>{bedroom_count} Beds</span>
                     &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-                    <span>{bathroom_count} Baths</span>
+                    <span
+                      data-balloon-pos="down"
+                      data-balloon={bathroomBaloonText}
+                    >
+                      {bathroom_count} Baths
+                    </span>
                     &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
                     <span>{square_feet} Sqft</span>
                     &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
@@ -545,31 +558,46 @@ const ListingDesktopView = ({
                         Cost Breakdown
                       </div>
                       {renderFeatures('Price/sqt', `$${price_sq_foot}`)}
-                      {renderFeatures('Unexempt Taxes', listing.unexempt_taxes ? (
-                        `$${listing.unexempt_taxes}`
-                      ) : (
-                        '0'
-                      ))}
-                      {renderFeatures('HOA Fee', listing.association_fee ? (
-                        listing.association_fee
-                      ) : (
-                        '0'
-                      ))}
-                      {renderFeatures('HOA Frequency', listing.association_fee_frequency)}
-                      {renderFeatures('HOA Includes', listing.association_fee_includes)}
+                      {renderFeatures(
+                        'Unexempt Taxes',
+                        listing.unexempt_taxes
+                          ? `$${listing.unexempt_taxes}`
+                          : '0'
+                      )}
+                      {renderFeatures(
+                        'HOA Fee',
+                        listing.association_fee ? listing.association_fee : '0'
+                      )}
+                      {renderFeatures(
+                        'HOA Frequency',
+                        listing.association_fee_frequency
+                      )}
+                      {renderFeatures(
+                        'HOA Includes',
+                        listing.association_fee_includes
+                      )}
                     </div>
                   </div>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('fw-600 mb-10 font-18')}>Key Facts</div>
                     {renderFeatures('Year Built', property.year_built)}
-                    {renderFeatures('Style of House', property.architectural_style)}
+                    {renderFeatures(
+                      'Style of House',
+                      property.architectural_style
+                    )}
                     {renderFeatures('Subdivition', property.subdivition_name)}
                     {renderFeatures('Acres', property.lot_size_area)}
                     {renderFeatures('Stories', property.number_of_stories)}
                     {renderFeatures('MLS#', listing.mls_number)}
                     {renderFeatures('Possession', listing.possession)}
-                    {renderFeatures('Days On Market', listing_util.getDOM(listing.dom))}
-                    {renderFeatures('Current Days On Market', listing_util.getDOM(listing.cdom))}
+                    {renderFeatures(
+                      'Days On Market',
+                      listing_util.getDOM(listing.dom)
+                    )}
+                    {renderFeatures(
+                      'Current Days On Market',
+                      listing_util.getDOM(listing.cdom)
+                    )}
                   </div>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('fw-600 font-18 mb-10')}>
@@ -599,27 +627,60 @@ const ListingDesktopView = ({
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('mb-30')}>
                       <div style={S('fw-600 font-18 mb-10')}>All Features</div>
-                      {renderFeatures('Parking/Garage', property.parking_spaces_garage ? 'Yes' : 'No')}
-                      {renderFeatures('Garage Spaces', property.parking_spaces_covered_total)}
-                      {renderFeatures('Interior Features', property.interior_features)}
-                      {renderFeatures('Alarm/Security', property.security_features)}
+                      {renderFeatures(
+                        'Parking/Garage',
+                        property.parking_spaces_garage ? 'Yes' : 'No'
+                      )}
+                      {renderFeatures(
+                        'Garage Spaces',
+                        property.parking_spaces_covered_total
+                      )}
+                      {renderFeatures(
+                        'Interior Features',
+                        property.interior_features
+                      )}
+                      {renderFeatures(
+                        'Alarm/Security',
+                        property.security_features
+                      )}
                       {renderFeatures('Flooring', property.flooring)}
                     </div>
                   </div>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('h-35')} />
-                    {renderFeatures('Exterior Features', property.exterior_features)}
-                    {renderFeatures('Construction', property.construction_materials)}
+                    {renderFeatures(
+                      'Exterior Features',
+                      property.exterior_features
+                    )}
+                    {renderFeatures(
+                      'Construction',
+                      property.construction_materials
+                    )}
                     {renderFeatures('Foundation', property.foundation_details)}
                     {renderFeatures('Roof', property.roof)}
                   </div>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('fw-600 font-18 mb-10')}>Schools</div>
-                    {renderFeatures('School District', property.school_district)}
-                    {renderFeatures('Elementary School', property.elementary_school_name)}
-                    {renderFeatures('Middle School', property.middle_school_name)}
-                    {renderFeatures('Junior High School', property.junior_high_school_name)}
-                    {renderFeatures('Senior High School', property.senior_high_school_name)}
+                    {renderFeatures(
+                      'School District',
+                      property.school_district
+                    )}
+                    {renderFeatures(
+                      'Elementary School',
+                      property.elementary_school_name
+                    )}
+                    {renderFeatures(
+                      'Middle School',
+                      property.middle_school_name
+                    )}
+                    {renderFeatures(
+                      'Junior High School',
+                      property.junior_high_school_name
+                    )}
+                    {renderFeatures(
+                      'Senior High School',
+                      property.senior_high_school_name
+                    )}
                   </div>
                   <div className="clearfix" />
                   {agent_area_client}
@@ -803,7 +864,10 @@ const ListingDesktopView = ({
                 )} border-1-solid-${Brand.color('primary', 'a1bde4')}`
               )}
               className="btn btn-primary"
-              to={`/signin?redirectTo=${encodeURIComponent(window.location.pathname)}${contact_info ? `&username=${contact_info}` : ''}${window.location.search}`}
+              to={`/signin?redirectTo=${encodeURIComponent(
+                window.location.pathname
+              )}${contact_info ? `&username=${contact_info}` : ''}${window
+                .location.search}`}
             >
               Log in
             </Link>
