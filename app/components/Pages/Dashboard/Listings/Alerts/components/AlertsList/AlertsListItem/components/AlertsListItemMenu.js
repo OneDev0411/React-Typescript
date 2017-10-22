@@ -49,8 +49,6 @@ class AlertListItemMenu extends React.Component {
       .propagationPath()
       .includes(this.componentNode)
 
-    console.log(triggeredNodeIsEqualWithComponentNode)
-
     if (!triggeredNodeIsEqualWithComponentNode) {
       this._setIsOpen(false)
       document.removeEventListener('click', this._onCLickDocumentHandler, false)
