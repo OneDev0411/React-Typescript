@@ -1,6 +1,10 @@
 import Fetch from '../../../services/fetch'
 
 const getCounties = async query => {
+  if (!query || query.length < 4) {
+    return Promise.resolve(() => ({ options: [] }))
+  }
+
   try {
     const response = await new Fetch().get(`/counties/search?q=${query}`)
 

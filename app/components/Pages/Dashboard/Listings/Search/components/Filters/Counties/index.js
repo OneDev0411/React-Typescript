@@ -5,12 +5,13 @@ import Select from 'react-select'
 import AsyncMultiSelect from '../components/AsyncMultiSelect'
 import api from '../../../../../../../../models/listings/search'
 
-const Counties = () =>
+const Counties = () => (
   <AsyncMultiSelect
-    name="counties"
     label="Counties"
+    fieldName="counties"
     loadOptions={api.getCounties}
     placeholder="type in county name..."
   />
+)
 
 export default pure(Counties)

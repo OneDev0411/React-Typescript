@@ -169,10 +169,13 @@ const normalizedMlsAreas = areas => {
   return mls_areas
 }
 
-const normalizeValues = (values, state) => {
-  const { options } = state.search
+const normalizedMultiSelectedInputOptions = options =>
+  options.length === 0 ? null : options.map(({ label }) => label)
 
-  const {
+const normalizeValues = (values, state) => {
+  const { options } = state
+
+  let {
     counties,
     mlsAreas = [],
     mlsSubareas = [],
@@ -213,6 +216,8 @@ const normalizeValues = (values, state) => {
   )
 
   const mls_areas = normalizedMlsAreas([...mlsAreas, ...mlsSubareas])
+  counties = normalizedMultiSelectedInputOptions(counties)
+  subdivisions = normalizedMultiSelectedInputOptions(subdivisions)
 
   const points =
     mls_areas || school_districts || subdivisions || counties
@@ -261,7 +266,7 @@ const normalizeValues = (values, state) => {
 }
 
 const submitFiltersForm = values => async (dispatch, getState) => {
-  const queryOptions = normalizeValues(values, getState())
+  const queryOptions = normalizeValues(values, getState().search)
 
   const updateMap = () => {
     const { search } = getState()
