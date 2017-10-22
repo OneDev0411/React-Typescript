@@ -82,7 +82,7 @@ const normalizeNumberValues = values => {
   const numberValues = Object.keys(values).filter(
     v =>
       (v.indexOf('minimum') === 0 || v.indexOf('maximum') === 0) &&
-    v.indexOf('sold') === -1
+      v.indexOf('sold') === -1
   )
 
   const unitIsFoot = n => n.indexOf('square') !== -1
@@ -139,10 +139,43 @@ export const obiectPropsValueToArray = obj =>
       })
       .filter(v => v)
 
-const normalizeValues = (values, options) => {
+const normalizedMlsAreas = areas => {
+  const areasByParents = {}
+  areas.forEach(({ value, parent }) => {
+    if (
+      parent !== 0 &&
+      areasByParents['0'] &&
+      areasByParents['0'].indexOf(parent) === 0
+    ) {
+      areasByParents['0'] = areasByParents['0'].filter(p => p !== parent)
+    }
+
+    areasByParents[parent] = !areasByParents[parent]
+      ? [value]
+      : [...areasByParents[parent], value]
+  })
+
+  const mls_areas = []
+  Object.keys(areasByParents).forEach(parent =>
+    areasByParents[parent].forEach(mlsNumber => {
+      mls_areas.push([mlsNumber, Number(parent)])
+    })
+  )
+
+  if (mls_areas.length === 0) {
+    return null
+  }
+
+  return mls_areas
+}
+
+const normalizeValues = (values, state) => {
+  const { options } = state.search
+
   const {
     counties,
-    mls_areas,
+    mlsAreas = [],
+    mlsSubareas = [],
     subdivisions,
     school_districts,
     high_schools,
@@ -178,6 +211,8 @@ const normalizeValues = (values, options) => {
   const architectural_styles = obiectPropsValueToArray(
     values.architectural_styles
   )
+
+  const mls_areas = normalizedMlsAreas([...mlsAreas, ...mlsSubareas])
 
   const points =
     mls_areas || school_districts || subdivisions || counties
@@ -226,7 +261,7 @@ const normalizeValues = (values, options) => {
 }
 
 const submitFiltersForm = values => async (dispatch, getState) => {
-  const queryOptions = normalizeValues(values, getState().search.options)
+  const queryOptions = normalizeValues(values, getState())
 
   const updateMap = () => {
     const { search } = getState()
