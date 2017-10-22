@@ -9,6 +9,7 @@ import extendedBounds from '../../../../utils/extendedBounds'
 import { normalizeListingsForMarkers } from '../../../../utils/map'
 import { removePolygon } from '../../../../store_actions/listings/map/drawing'
 import { feetToMeters } from '../../../../../app/utils/listing'
+import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/Schools'
 
 // Initial valert options {
 //   limit: '250',
@@ -69,6 +70,13 @@ import { feetToMeters } from '../../../../../app/utils/listing'
 //   "Incoming",
 //   "Coming Soon"
 // ]
+
+const MULTI_SELECT_FIELDS = [
+  'counties',
+  'subdivisions',
+  'school_districts',
+  ...SCHOOLS_TYPE
+]
 
 const turnToNumber = value =>
   value ? Number(value.replace(/[^0-9]/g, '')) : null
@@ -169,26 +177,14 @@ const normalizedMlsAreas = areas => {
   return mls_areas
 }
 
-const normalizedMultiSelectedInputOptions = options =>
+const normalizMultiSelectedInputOptions = (options = []) =>
   options.length === 0 ? null : options.map(({ label }) => label)
 
 const normalizeValues = (values, state) => {
   const { options } = state
 
-  let {
-    counties,
-    mlsAreas = [],
-    mlsSubareas = [],
-    subdivisions,
-    school_districts,
-    high_schools,
-    middle_schools,
-    primary_schools,
-    elementary_schools,
-    senior_high_schools,
-    junior_high_schools,
-    intermediate_schools
-  } = values
+  const { mlsAreas = [], mlsSubareas = [] } = values
+  const mls_areas = normalizedMlsAreas([...mlsAreas, ...mlsSubareas])
 
   const listing_statuses = obiectPropsValueToArray(values.listing_statuses)
   const open_house = !!values.open_house
@@ -215,10 +211,14 @@ const normalizeValues = (values, state) => {
     values.architectural_styles
   )
 
-  const mls_areas = normalizedMlsAreas([...mlsAreas, ...mlsSubareas])
-  counties = normalizedMultiSelectedInputOptions(counties)
-  subdivisions = normalizedMultiSelectedInputOptions(subdivisions)
+  const multiSelectFields = {}
+  MULTI_SELECT_FIELDS.forEach(fielld => {
+    multiSelectFields[fielld] = normalizMultiSelectedInputOptions(
+      values[fielld]
+    )
+  })
 
+  const { school_districts, subdivisions, counties } = multiSelectFields
   const points =
     mls_areas || school_districts || subdivisions || counties
       ? null
@@ -231,19 +231,10 @@ const normalizeValues = (values, state) => {
     property_subtypes,
     architectural_styles,
     open_house,
-    counties,
     mls_areas,
-    subdivisions,
-    school_districts,
-    high_schools,
-    middle_schools,
-    primary_schools,
-    elementary_schools,
-    senior_high_schools,
-    junior_high_schools,
-    intermediate_schools,
     pool,
     minimum_sold_date,
+    ...multiSelectFields,
     ...normalizeNumberValues(values)
   }
 
