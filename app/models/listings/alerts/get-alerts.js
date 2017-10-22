@@ -13,11 +13,7 @@ const getAlerts = async (params = {}) => {
       .query({ since_value })
       .query({ sorting_value: 'Update' })
 
-    let { info, data } = response.body
-
-    if (since_value && !max_value) {
-      data = data.reverse()
-    }
+    const { info, data } = response.body
 
     return {
       ...normalize(data, schema.listingsList),

@@ -9,7 +9,7 @@ const createAlert = alertOptions => (dispatch, getState) => {
     const alertsList = getState().alerts.list
     const alerts = selectListings(alertsList)
 
-    return normalize([...alerts, alert], schema.listingsList)
+    return normalize([alert, ...alerts], schema.listingsList)
   }
 
   dispatch({

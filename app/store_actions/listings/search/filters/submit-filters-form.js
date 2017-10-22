@@ -9,6 +9,7 @@ import extendedBounds from '../../../../utils/extendedBounds'
 import { normalizeListingsForMarkers } from '../../../../utils/map'
 import { removePolygon } from '../../../../store_actions/listings/map/drawing'
 import { feetToMeters } from '../../../../../app/utils/listing'
+import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/Schools'
 
 // Initial valert options {
 //   limit: '250',
@@ -70,6 +71,13 @@ import { feetToMeters } from '../../../../../app/utils/listing'
 //   "Coming Soon"
 // ]
 
+const MULTI_SELECT_FIELDS = [
+  'counties',
+  'subdivisions',
+  'school_districts',
+  ...SCHOOLS_TYPE
+]
+
 const turnToNumber = value =>
   value ? Number(value.replace(/[^0-9]/g, '')) : null
 
@@ -82,7 +90,7 @@ const normalizeNumberValues = values => {
   const numberValues = Object.keys(values).filter(
     v =>
       (v.indexOf('minimum') === 0 || v.indexOf('maximum') === 0) &&
-    v.indexOf('sold') === -1
+      v.indexOf('sold') === -1
   )
 
   const unitIsFoot = n => n.indexOf('square') !== -1
@@ -139,20 +147,44 @@ export const obiectPropsValueToArray = obj =>
       })
       .filter(v => v)
 
-const normalizeValues = (values, options) => {
-  const {
-    counties,
-    mls_areas,
-    subdivisions,
-    school_districts,
-    high_schools,
-    middle_schools,
-    primary_schools,
-    elementary_schools,
-    senior_high_schools,
-    junior_high_schools,
-    intermediate_schools
-  } = values
+const normalizedMlsAreas = areas => {
+  const areasByParents = {}
+  areas.forEach(({ value, parent }) => {
+    if (
+      parent !== 0 &&
+      areasByParents['0'] &&
+      areasByParents['0'].indexOf(parent) === 0
+    ) {
+      areasByParents['0'] = areasByParents['0'].filter(p => p !== parent)
+    }
+
+    areasByParents[parent] = !areasByParents[parent]
+      ? [value]
+      : [...areasByParents[parent], value]
+  })
+
+  const mls_areas = []
+  Object.keys(areasByParents).forEach(parent =>
+    areasByParents[parent].forEach(mlsNumber => {
+      mls_areas.push([mlsNumber, Number(parent)])
+    })
+  )
+
+  if (mls_areas.length === 0) {
+    return null
+  }
+
+  return mls_areas
+}
+
+const normalizMultiSelectedInputOptions = (options = []) =>
+  options.length === 0 ? null : options.map(({ label }) => label)
+
+const normalizeValues = (values, state) => {
+  const { options } = state
+
+  const { mlsAreas = [], mlsSubareas = [] } = values
+  const mls_areas = normalizedMlsAreas([...mlsAreas, ...mlsSubareas])
 
   const listing_statuses = obiectPropsValueToArray(values.listing_statuses)
   const open_house = !!values.open_house
@@ -179,6 +211,14 @@ const normalizeValues = (values, options) => {
     values.architectural_styles
   )
 
+  const multiSelectFields = {}
+  MULTI_SELECT_FIELDS.forEach(fielld => {
+    multiSelectFields[fielld] = normalizMultiSelectedInputOptions(
+      values[fielld]
+    )
+  })
+
+  const { school_districts, subdivisions, counties } = multiSelectFields
   const points =
     mls_areas || school_districts || subdivisions || counties
       ? null
@@ -191,19 +231,10 @@ const normalizeValues = (values, options) => {
     property_subtypes,
     architectural_styles,
     open_house,
-    counties,
     mls_areas,
-    subdivisions,
-    school_districts,
-    high_schools,
-    middle_schools,
-    primary_schools,
-    elementary_schools,
-    senior_high_schools,
-    junior_high_schools,
-    intermediate_schools,
     pool,
     minimum_sold_date,
+    ...multiSelectFields,
     ...normalizeNumberValues(values)
   }
 
@@ -226,7 +257,7 @@ const normalizeValues = (values, options) => {
 }
 
 const submitFiltersForm = values => async (dispatch, getState) => {
-  const queryOptions = normalizeValues(values, getState().search.options)
+  const queryOptions = normalizeValues(values, getState().search)
 
   const updateMap = () => {
     const { search } = getState()

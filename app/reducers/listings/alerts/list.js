@@ -10,7 +10,6 @@ export const allIds = (state = [], action) => {
   switch (action.type) {
     case ADD_ALERT_SUCCESS:
     case FETCH_ALERTS_SUCCESS:
-      return [...new Set([...state, ...action.response.result])]
     case DELETE_ALERT_SUCCESS:
       return action.response.result
     default:
@@ -21,11 +20,7 @@ export const allIds = (state = [], action) => {
 export const info = (state = { total: 0, count: 0 }, action) => {
   switch (action.type) {
     case FETCH_ALERTS_SUCCESS:
-      const { total, count } = action.response.info
-      return {
-        total,
-        count: state.count + count
-      }
+      return action.response.info
     case DELETE_ALERT_SUCCESS:
       return {
         count: state.count - 1,
