@@ -5,7 +5,6 @@ import { addNotification as notify } from 'reapop'
 import { editForm, saveSubmission } from '../../../../../../store_actions/deals'
 import Deal from '../../../../../../models/Deal'
 import EmbedForm from './embed'
-import RequiredContext from './context'
 
 class EditForm extends React.Component {
   constructor(props) {

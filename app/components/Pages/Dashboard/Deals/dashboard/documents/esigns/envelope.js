@@ -9,7 +9,8 @@ class Envelope extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showFormViewer: false
+      showFormViewer: false,
+      showDropDown: false
     }
   }
 
@@ -26,6 +27,10 @@ class Envelope extends React.Component {
     this.setState({
       showFormViewer: !this.state.showFormViewer
     })
+  }
+
+  toggleShowDropDown(show) {
+    this.setState({ showDropDown: show })
   }
 
   getFormUrl() {
@@ -46,7 +51,7 @@ class Envelope extends React.Component {
 
   render() {
     const { deal, task, envelope } = this.props
-    const { showFormViewer } = this.state
+    const { showFormViewer, showDropDown } = this.state
     const { recipients } = envelope
     const areSigned = recipients.filter(r => r.status === 'Completed')
     const notSigned = recipients.filter(r => r.status !== 'Completed')
@@ -96,6 +101,8 @@ class Envelope extends React.Component {
             id="drp-esign-who-signed"
             className="deal-esgin-whosigned"
             pullRight
+            open={showDropDown}
+            onToggle={(open) => this.toggleShowDropDown(open)}
           >
             <Button
               bsRole="toggle"
@@ -106,6 +113,7 @@ class Envelope extends React.Component {
             </Button>
 
             <WhoSigned
+              onRequestClose={() => this.toggleShowDropDown(false)}
               envelope={envelope}
               areSigned={areSigned}
               notSigned={notSigned}
