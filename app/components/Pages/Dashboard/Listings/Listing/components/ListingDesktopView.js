@@ -156,7 +156,6 @@ const ListingDesktopView = ({
       property.full_bathroom_count != null
         ? `${property.full_bathroom_count} Full Bath`
         : ''
-    console.log(property.half_bathroom_count)
     bathroomBaloonText +=
       property.half_bathroom_count != null
         ? ` + ${property.half_bathroom_count} Half Bath`
