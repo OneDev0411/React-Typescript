@@ -5,7 +5,9 @@ import { toggleChatbar } from '../../../../../store_actions/chatroom'
 import SvgChat from '../../Partials/Svgs/Chat'
 
 const openChatbar = toggleChatbar => {
-  if (window && window.location.pathname.includes('/recents/')) { return false }
+  if (window && window.location.pathname.includes('/recents/')) {
+    return false
+  }
 
   toggleChatbar()
 }

@@ -36,7 +36,6 @@ class WhoSigned extends React.Component {
         status: 'success'
       })
     } catch (e) {
-      console.log(e)
       notify({
         message: 'Could not resend eSignature, please try again',
         status: 'error'
