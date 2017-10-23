@@ -71,7 +71,7 @@ export default ({
 
           <span
             className={cn('cta-btn no-status', {
-              isActive: isNotReviewed
+              isActive: isNotReviewed && needs_attention !== true
             })}
             data-tip="Not Reviewed"
             data-effect="solid"
