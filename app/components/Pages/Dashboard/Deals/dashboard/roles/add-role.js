@@ -52,6 +52,7 @@ class AddRole extends React.Component {
 
   render() {
     const { show, form, saving } = this.state
+    const { allowedRoles } = this.props
     const buttonDisabled = (form === null) || (saving === true)
 
     return (
@@ -85,6 +86,7 @@ class AddRole extends React.Component {
           <Modal.Body>
             <RoleForm
               onFormCompleted={form => this.setState({ form })}
+              allowedRoles={allowedRoles}
             />
           </Modal.Body>
 
