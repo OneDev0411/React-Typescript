@@ -60,7 +60,6 @@ class PdfViewer extends React.Component {
     try {
       const doc = await PDFJS.getDocument(uri)
 
-      console.log(doc)
       // trigger when load is completed
       if (!this.mounted) {
         return false

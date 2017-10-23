@@ -19,7 +19,7 @@ export default (state = null, action) => {
         ...state,
         [action.taskId]: {
           ...state[action.taskId],
-          ...{ uploading: action.status }
+          uploading: action.status
         }
       }
 
