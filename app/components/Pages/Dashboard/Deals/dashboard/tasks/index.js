@@ -12,7 +12,7 @@ const List = ({
   deal,
   selectedTaskId,
   onSelectTask,
-  isBackoffice
+  isBackOffice
 }) => {
 
   if (!checklist) {
@@ -28,6 +28,14 @@ const List = ({
         {
           checklist.tasks &&
           checklist.tasks
+          .sort(id => {
+            if (!isBackOffice) {
+              return 0
+            }
+
+            const task = tasks[id]
+            return task.needs_attention === true ? -1 : 1
+          })
           .map((id, key) => {
             const task = tasks[id]
             const room = rooms[task.room.id] || task.room
@@ -75,5 +83,6 @@ const List = ({
 
 export default connect(({ deals, chatroom }) => ({
   rooms: chatroom.rooms,
-  tasks: deals.tasks
+  tasks: deals.tasks,
+  isBackOffice: deals.backoffice
 }))(List)
