@@ -19,6 +19,13 @@ const List = ({
     return false
   }
 
+  let sortedTasks = checklist.tasks
+
+  // sort tasks of backoffice, based on notified flag. they gonna show first.
+  if (isBackOffice && checklist.tasks) {
+    sortedTasks = _.sortBy(checklist.tasks, (id) => tasks[id].needs_attention ? 0 : 1)
+  }
+
   return (
     <ChecklistPanel
       checklist={checklist}
@@ -26,16 +33,8 @@ const List = ({
     >
       <div className={`list ${!checklist.tasks ? 'empty' : ''}`}>
         {
-          checklist.tasks &&
-          checklist.tasks
-          .sort(id => {
-            if (!isBackOffice) {
-              return 0
-            }
-
-            const task = tasks[id]
-            return task.needs_attention === true ? -1 : 1
-          })
+          sortedTasks &&
+          sortedTasks
           .map((id, key) => {
             const task = tasks[id]
             const room = rooms[task.room.id] || task.room
