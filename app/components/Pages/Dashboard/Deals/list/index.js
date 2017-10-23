@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import AgentTable from './agent-table'
 import BackOfficeTable from './backoffice-table'
 import Header from './header'
+import { getDeals } from '../../../../../store_actions/deals'
 
 class DealsDashboard extends React.Component {
   constructor(props) {
@@ -22,6 +23,19 @@ class DealsDashboard extends React.Component {
     this.state = {
       activeFilters
     }
+  }
+
+  componentDidMount() {
+    this.refetchDeals()
+  }
+
+  refetchDeals() {
+    // refetch deals based on this feature request:
+    // https://gitlab.com/rechat/web/issues/419
+    const { getDeals, user } = this.props
+
+    const isBackOffice = user.features.indexOf('Backoffice') > -1
+    getDeals(user, isBackOffice)
   }
 
   /**
@@ -67,7 +81,8 @@ class DealsDashboard extends React.Component {
   }
 }
 
-export default connect(({ deals }) => ({
+export default connect(({ deals, user }) => ({
   deals: deals.list,
-  isBackOffice: deals.backoffice
-}))(DealsDashboard)
+  isBackOffice: deals.backoffice,
+  user
+}), { getDeals })(DealsDashboard)

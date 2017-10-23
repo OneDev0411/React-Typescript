@@ -8,11 +8,11 @@ class DealsContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { dispatch, deals, forms, user } = this.props
+    const { getDeals, deals, forms, user } = this.props
 
     if (!deals) {
       const isBackOffice = user.features.indexOf('Backoffice') > -1 ? true : false
-      dispatch(getDeals(user, isBackOffice))
+      getDeals(user, isBackOffice)
     }
   }
 
@@ -45,9 +45,9 @@ class DealsContainer extends React.Component {
   }
 }
 
-export default connect(({ deals, data }) => ({
+export default connect(({ deals, user }) => ({
   error: deals.error,
   deals: deals.list,
   forms: deals.forms,
-  user: data.user
-}))(DealsContainer)
+  user
+}), { getDeals })(DealsContainer)
