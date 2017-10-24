@@ -87,14 +87,14 @@
       position: relative;
       span {
         position: absolute;
-        top: -7px;
-        right: -7px;
-        background-color: red;
+        top: -6px;
+        right: -6px;
+        background-color: #FF4747;
         display: block;
-        width: 17px;
-        height: 17px;
+        width: 15px;
+        height: 15px;
         border-radius: 50px;
-        line-height: 17px;
+        line-height: 15px;
         vertical-align: middle;
         color: #fff;
         font-size: 10px;
@@ -367,7 +367,7 @@
   min-width: 300px;
 
   &.push-left {
-    margin-left: -50px;
+    margin-left: -5px;
   }
 
   .arrow:after {

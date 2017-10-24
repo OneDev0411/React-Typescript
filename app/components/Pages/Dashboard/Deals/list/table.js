@@ -100,7 +100,6 @@ class BaseTable extends React.Component {
       >
         <span className="hoverable">
           { CriticalDates.getNextDate(deal) }
-          <i className="fa fa-caret-down" />
         </span>
       </OverlayTrigger>
     )

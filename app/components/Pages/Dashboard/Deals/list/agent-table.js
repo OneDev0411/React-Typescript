@@ -117,8 +117,6 @@ class AgentTable extends BaseTable {
           >
             { firstRole ? `: ${firstRole.user.abbreviated_display_name}` : ''}
           </span>
-
-          <i className="fa fa-caret-down" />
         </div>
 
       </OverlayTrigger>

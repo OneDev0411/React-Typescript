@@ -61,11 +61,14 @@ const List = ({
                   />
                 }
 
-                <span
-                  className={cn('notification', {
-                    has_notification: room.new_notifications > 0
-                  })}
-                />
+                {
+                  room.new_notifications > 0 &&
+                  <div className="notification">
+                    <img src="/static/images/deals/comments.svg" />
+                    <span>{room.new_notifications}</span>
+                  </div>
+                }
+
               </div>
             )
           })

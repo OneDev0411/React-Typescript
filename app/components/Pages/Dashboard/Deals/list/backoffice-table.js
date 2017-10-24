@@ -145,7 +145,6 @@ class BackOfficeTable extends BaseTable {
       >
         <span className="hoverable">
           { items.length }
-          <i className="fa fa-caret-down" />
         </span>
       </OverlayTrigger>
     )
