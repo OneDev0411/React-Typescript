@@ -458,13 +458,13 @@ Deal.needsAttention = async function(task_id, status) {
 /**
 * update deal context
 */
-Deal.updateContext = async function(dealId, context) {
+Deal.updateContext = async function(dealId, context, approved) {
   try {
     const response = await new Fetch()
       .post(`/deals/${dealId}/context`)
       .send({
         context,
-        approved: true
+        approved
       })
 
     return response.body.data

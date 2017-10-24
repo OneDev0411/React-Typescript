@@ -10,63 +10,54 @@ const table = [
     name: 'Listing Date',
     alias: 'Lst.',
     fieldType: 'date',
-    side: 'office',
     canEdit: (isBO) => isBO
   }, {
     key: 'expiration_date',
     name: 'Listing Expiration',
     alias: 'Exp.',
     fieldType: 'date',
-    side: 'office',
     canEdit: (isBO) => isBO
   }, {
     key: 'contract_date',
     name: 'Contract Date',
     alias: 'Con.',
     fieldType: 'date',
-    side: 'office',
     canEdit: (isBO) => isBO
   }, {
     key: 'option_period',
     name: 'Option Period',
     alias: 'Opt.',
     fieldType: 'date',
-    side: 'office',
     canEdit: (isBO) => isBO
   }, {
     key: 'financing_due',
     name: 'Financing Due',
     alias: 'Fin.',
     fieldType: 'date',
-    side: 'agent',
     canEdit: () => true
   }, {
     key: 'title_due',
     name: 'Title Work Due',
     alias: 'Til.',
     fieldType: 'date',
-    side: 'agent',
     canEdit: () => true
   }, {
     key: 't47_due',
     name: 'Survey Due',
     alias: 'T47.',
     fieldType: 'date',
-    side: 'agent',
     canEdit: () => true
   }, {
     key: 'closing_date',
     name: 'Closing',
     alias: 'Cls.',
     fieldType: 'date',
-    side: 'office',
     canEdit: (isBO) => isBO
   }, {
     key: 'possession_date',
     name: 'Possession',
     alias: 'Pos.',
     fieldType: 'date',
-    side: 'office',
     canEdit: (isBO) => isBO
   }
 ]
@@ -75,7 +66,7 @@ const table = [
  * parse date to unix time
  */
 const parseDate = (date) => {
-  return moment.unix(date)
+  return moment(date)
 }
 
 /**
@@ -84,6 +75,7 @@ const parseDate = (date) => {
 const getDate = (deal, field) => {
   const now = moment()
   const date = Deal.get.field(deal, field)
+
   let status = 'unknown'
 
   if (!date) {
@@ -153,26 +145,18 @@ const getValue = (deal, field) => {
 const CriticalDates = ({
   deal,
   showTitle = true
-}) => {
-
-  const props = { showTitle, table, deal, getValue, getLabel }
-
-  return (
-    <div className="deal-info-section">
-      <Items
-        title="Office Critical Dates"
-        sideFilter="office"
-        {...props}
-      />
-
-      <Items
-        title="Agent Critical Dates"
-        sideFilter="agent"
-        {...props}
-      />
-    </div>
-  )
-}
+}) => (
+  <div className="deal-info-section">
+    <Items
+      title="Critical Dates"
+      showTitle={showTitle}
+      table={table}
+      deal={deal}
+      getValue={getValue}
+      getLabel={getLabel}
+    />
+  </div>
+)
 
 /**
  * get next date

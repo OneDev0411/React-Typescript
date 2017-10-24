@@ -33,7 +33,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { show, initialDate, onClose, onSelectDate } = this.props
+    const { show, saveText, initialDate, onClose, onSelectDate } = this.props
     const { selectedDate } = this.state
 
     return (
@@ -62,7 +62,7 @@ export default class extends React.Component {
             className="deal-button"
             onClick={() => onSelectDate(selectedDate)}
           >
-            Update
+            { saveText || 'Update' }
           </Button>
         </Modal.Footer>
       </Modal>

@@ -21,7 +21,6 @@ class ArchiveDeal extends React.Component {
   requestArchive() {
     const { isBackOffice, confirmation } = this.props
 
-
     confirmation({
       message: isBackOffice ? 'Archive this deal?' : 'Notify admin to archive this deal?',
       confirmLabel: 'Yes',

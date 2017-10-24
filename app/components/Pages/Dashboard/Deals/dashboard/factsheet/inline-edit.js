@@ -14,13 +14,17 @@ export default class Editable extends React.Component {
 
   onFinishEditing(value = null) {
     const { field, onChange } = this.props
-    const fieldValue = value || this.input.value
+    let fieldValue = value
+
+    if (!value && this.input) {
+      fieldValue = this.input.value
+    }
 
     this.setState({
       editMode: false
     })
 
-    if (fieldValue !== this.getValue()) {
+    if (fieldValue && fieldValue !== this.getValue()) {
       onChange(field, fieldValue)
     }
   }
@@ -33,10 +37,6 @@ export default class Editable extends React.Component {
 
   editField() {
     const { editable } = this.props
-
-    if (!editable) {
-      return false
-    }
 
     this.setState({
       editMode: true
@@ -54,18 +54,16 @@ export default class Editable extends React.Component {
       return false
     }
 
-    if (editable && saving !== field.key) {
+    if (saving !== field.key) {
       return (
-        <i className="fa fa-pencil" />
+        <i
+          className="fa fa-pencil"
+          data-tip={editable ? null : "This field needs office approval after changing" }
+        />
       )
     }
 
-    return (
-      <i
-        className="fa fa-lock"
-        data-tip="Please contact your admin to update this date."
-      />
-    )
+    return false
   }
 
   getValue() {
@@ -98,6 +96,7 @@ export default class Editable extends React.Component {
 
         <DatePicker
           show={editMode && field.fieldType === 'date'}
+          saveText={editable ? 'Update' : 'Notify Admin'}
           initialDate={this.getValue()}
           onClose={() => this.cancelEditing()}
           onSelectDate={date => this.onFinishEditing(date)}

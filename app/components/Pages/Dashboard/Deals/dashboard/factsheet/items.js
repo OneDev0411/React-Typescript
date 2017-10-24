@@ -1,10 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
 import _ from 'underscore'
+import moment from 'moment'
 import Deal from '../../../../../../models/Deal'
 import Editable from './inline-edit'
-import { updateContext } from '../../../../../../store_actions/deals'
+import {
+  updateContext,
+  createGenericTask,
+  changeNeedsAttention
+} from '../../../../../../store_actions/deals'
 
 class Table extends React.Component {
   constructor(props) {
@@ -16,26 +22,50 @@ class Table extends React.Component {
 
   approveField(e, field, ctx) {
     e.stopPropagation()
-    this.updateField(field.key, ctx.rawValue || ctx.value)
+    this.updateField(field, ctx.rawValue || ctx.value)
   }
 
   onChangeContext(field, value) {
-    this.updateField(field.key, value)
+    this.updateField(field, value)
   }
 
   async updateField(field, value) {
-    const { deal, updateContext } = this.props
+    const { deal, isBackOffice, updateContext } = this.props
+    const editable = field.canEdit(isBackOffice)
 
     // set state
-    this.setState({ saving: field })
+    this.setState({ saving: field.key })
 
-    // update context
-    await updateContext(deal.id, { [field]: value })
+    await updateContext(deal.id, { [field.key]: value }, editable)
+
+    if (editable === false) {
+      await this.notifyAdmin(field, value)
+    }
 
     // set state
     this.setState({ saving: null })
   }
 
+  async notifyAdmin(field, value) {
+    const { deal, checklists, notify, changeNeedsAttention, createGenericTask } = this.props
+    let displayingValue = value
+
+    if (field.fieldType === 'date') {
+      displayingValue = moment(value).format('MMM DD, YYYY')
+    }
+
+    const title = `Notify admin to change value of ${field.name} to ${displayingValue}`
+    const checklist = checklists[deal.checklists[0]]
+    const task = await createGenericTask(deal.id, title, checklist.id)
+    changeNeedsAttention(task.id, true)
+
+    return notify({
+      message: 'Back office has been notified to change context value',
+      status: 'success',
+      dismissible: true,
+      dismissAfter: 4000
+    })
+  }
 
   render() {
     const { saving } = this.state
@@ -46,7 +76,6 @@ class Table extends React.Component {
       isBackOffice,
       showTitle,
       title,
-      sideFilter,
       getValue,
       getLabel
     } = this.props
@@ -63,7 +92,6 @@ class Table extends React.Component {
         <div className="fact-table critical-dates">
           {
             _.chain(table)
-            .filter(field => field.side ? field.side === sideFilter : true)
             .map(field => {
               const context = Deal.get.context(deal, field.key)
               const fieldCtx = getValue(deal, field)
@@ -131,5 +159,6 @@ class Table extends React.Component {
 }
 
 export default connect(({ deals }) => ({
+  checklists: deals.checklists,
   isBackOffice: deals.backoffice
-}), { updateContext })(Table)
+}), { notify, updateContext, createGenericTask, changeNeedsAttention })(Table)
