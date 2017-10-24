@@ -107,7 +107,7 @@ class AgentTable extends BaseTable {
           </Popover>
         }
       >
-        <div>
+        <div className="hoverable inline">
           <span>
             { Deal.get.side(deal) }
           </span>
@@ -117,6 +117,8 @@ class AgentTable extends BaseTable {
           >
             { firstRole ? `: ${firstRole.user.abbreviated_display_name}` : ''}
           </span>
+
+          <i className="fa fa-caret-down" />
         </div>
 
       </OverlayTrigger>

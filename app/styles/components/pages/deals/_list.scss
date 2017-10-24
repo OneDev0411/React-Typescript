@@ -73,6 +73,35 @@
       border-top: 1px solid $border-color !important;
     }
 
+    td > .hoverable {
+      padding-bottom: 4px;
+      border-bottom: 1px dashed #ccc;
+      i {
+        margin-left: 6px;
+        margin-top: 6px;
+        color: #ccc;
+      }
+    }
+
+    td > .unread-notifications {
+      position: relative;
+      span {
+        position: absolute;
+        top: -7px;
+        right: -7px;
+        background-color: red;
+        display: block;
+        width: 17px;
+        height: 17px;
+        border-radius: 50px;
+        line-height: 17px;
+        vertical-align: middle;
+        color: #fff;
+        font-size: 10px;
+        text-align: center;
+      }
+    }
+
     tr.header td {
       border: none !important;
     }
@@ -379,6 +408,10 @@
 
   .fact-table {
     width: 300px !important;
+    .approve-row {
+      display: none;
+    }
+
     .fact-row {
       display: flex;
       flex-direction: row;
@@ -405,7 +438,7 @@
         color: #78909c;
         font-size: 15px;
 
-        .cta, .icon-not-approved, .approve-row {
+        .cta, .icon-not-approved {
           display: none;
         }
       }

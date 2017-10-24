@@ -98,7 +98,10 @@ class BaseTable extends React.Component {
           </Popover>
         }
       >
-        <span>{ CriticalDates.getNextDate(deal) }</span>
+        <span className="hoverable">
+          { CriticalDates.getNextDate(deal) }
+          <i className="fa fa-caret-down" />
+        </span>
       </OverlayTrigger>
     )
   }
@@ -244,15 +247,15 @@ class BaseTable extends React.Component {
     })
 
     if (counter > 0) {
-      return <span
-        style={{
-          display: 'block',
-          width: '10px',
-          height: '10px',
-          borderRadius: '20px',
-          backgroundColor: '#2196f3'
-        }}
-      />
+      return (
+        <div
+          className="inline unread-notifications"
+          data-tip={`You have ${counter} unread messages in this deal`}
+        >
+          <img src="/static/images/deals/comments.svg" />
+          <span>{ counter }</span>
+        </div>
+      )
     }
   }
 
