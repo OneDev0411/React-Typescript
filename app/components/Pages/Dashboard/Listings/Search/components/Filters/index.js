@@ -18,7 +18,7 @@ import GroupRadios from './components/GroupRadios'
 import ArchitecturalStyles from './ArchitecturalStyles'
 import SubStatuses from './components/SubStatuses'
 import SoldStatusChildrens from './SoldStatusChildrens'
-import { activeStatuses, otherStatuses } from './statuses'
+import { pendingStatuses, otherStatuses } from './statuses'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
 import actions from '../../../../../../../store_actions/listings/search/filters'
 
@@ -39,7 +39,7 @@ const Filters = ({
   onSubmitHandler,
   activeOpenHouses,
   activeOtherListings,
-  activeActiveListings
+  activePendingListings
 }) => (
   <div className={`c-filters ${isOpen ? 'c-filters--isOpen' : ''}`}>
     <div className="c-filters__inner-wrapper">
@@ -61,15 +61,23 @@ const Filters = ({
           </FiltersListingsStatusRow>
 
           <FiltersListingsStatusRow
+            name="listing_statuses.active"
             title="Active"
+            isField
+            hasSwitchToggle
+            color={`#${getStatusColor('Active')}`}
+          />
+
+          <FiltersListingsStatusRow
+            title="Pending"
             hasAccordion
             hasSwitchToggle
-            name="active-statuses"
-            fields={activeStatuses}
-            color={`#${getStatusColor('Active')}`}
-            onChangeSwitchToggle={activeActiveListings}
+            name="pending-statuses"
+            fields={pendingStatuses}
+            color={`#${getStatusColor('Pending')}`}
+            onChangeSwitchToggle={activePendingListings}
           >
-            <SubStatuses fields={activeStatuses} />
+            <SubStatuses fields={pendingStatuses} />
           </FiltersListingsStatusRow>
 
           <FiltersListingsStatusRow
@@ -88,7 +96,7 @@ const Filters = ({
             hasSwitchToggle
             name="other-statuses"
             fields={otherStatuses}
-            color={`#${getStatusColor('Pending')}`}
+            color={`#${getStatusColor('Sold')}`}
             onChangeSwitchToggle={activeOtherListings}
           >
             <SubStatuses fields={otherStatuses} />
@@ -140,7 +148,7 @@ export default compose(
       pool: 'either',
       open_house: false,
       listing_statuses: {
-        ...activeStatuses
+        active: 'Active'
       },
       property_subtypes,
       minimum_sold_date: '3', // unit is month but it need to timestamp

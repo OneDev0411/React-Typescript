@@ -3,7 +3,7 @@ import activeOpenHouses from './active-open-houses'
 import toggleFiltersArea from './toggle-filters-area'
 import submitFiltersForm from './submit-filters-form'
 import activeOtherListings from './active-other-listings'
-import activeActiveListings from './active-active-listings'
+import activePendingListings from './active-pending-listings'
 
 export default {
   activeSold,
@@ -11,5 +11,5 @@ export default {
   toggleFiltersArea,
   submitFiltersForm,
   activeOtherListings,
-  activeActiveListings
+  activePendingListings
 }
