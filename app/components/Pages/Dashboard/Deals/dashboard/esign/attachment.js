@@ -74,7 +74,6 @@ class SelectDocumentModal extends React.Component {
   render() {
     const { attachments } = this.state
     const { tasks, esign } = this.props
-
     const documents = this.getCompletedDocuments()
 
     return (
