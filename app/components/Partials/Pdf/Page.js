@@ -11,35 +11,38 @@ class PdfPage extends React.Component {
     this.state = {
       page: null,
       width: 0,
-      height: 0
+      height: 0,
+      fitScale: null
     }
   }
 
   componentWillMount() {
     this.delayedWindowResize = _.debounce(this.onResize.bind(this), 10)
-    window.addEventListener("resize", this.delayedWindowResize.bind(this));
+    window.addEventListener('resize', this.delayedWindowResize.bind(this))
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.delayedWindowResize.bind(this));
+    window.removeEventListener('resize', this.delayedWindowResize.bind(this))
   }
 
   componentDidMount() {
-    const { pageNumber } = this.props
-    this.renderPage(pageNumber)
+    const { pageNumber, fitWindow } = this.props
+    this.renderPage(pageNumber, 0, fitWindow)
   }
 
   componentWillReceiveProps(nextProps) {
-    const { pageNumber, scale, zoom } = nextProps
+    const { pageNumber, scale, fitWindow, zoom } = nextProps
     const currentPageNumber = this.props.pageNumber
     const currentScale = this.props.scale
     const currentZoom = this.props.zoom
+    const currentFitWindow = this.props.fitWindow
 
     if (pageNumber !== currentPageNumber ||
       scale !== currentScale ||
-      zoom !== currentZoom
+      zoom !== currentZoom ||
+      fitWindow != currentFitWindow
     ) {
-      this.renderPage(pageNumber, zoom)
+      this.renderPage(pageNumber, zoom, fitWindow)
     }
   }
 
@@ -48,9 +51,8 @@ class PdfPage extends React.Component {
   }
 
   onResize() {
-    console.log('RESIZE')
-    const { pageNumber, zoom } = this.props
-    this.renderPage(pageNumber, zoom)
+    const { pageNumber, zoom, fitWindow } = this.props
+    this.renderPage(pageNumber, zoom, fitWindow)
   }
 
   async calculateScale(pageNumber) {
@@ -66,30 +68,28 @@ class PdfPage extends React.Component {
     const page = await doc.getPage(pageNumber)
     const viewport = page.getViewport(1)
 
-    console.log('======>', height, viewport.height)
     return height / viewport.height
   }
 
   /**
    *
    */
-  async renderPage(pageNumber, zoom = 0) {
-    const { scale, doc } = this.props
-    let newScale
+  async renderPage(pageNumber, zoom = 0, fitWindow = false) {
+    const { doc } = this.props
+    const { fitScale } = this.state
 
-    console.log(scale, zoom)
-    if (scale === 'auto' && !zoom) {
-      newScale = await this.calculateScale(pageNumber)
+    let newScale = 1
+
+    if (fitWindow) {
+      newScale = fitScale || await this.calculateScale(pageNumber)
+
+      if (!fitScale) {
+        this.setState({ fitScale: newScale })
+      }
     }
 
-    if (zoom > 0) {
+    if (zoom && zoom !== 0) {
       newScale = 1 + zoom
-    }
-
-    console.log(newScale)
-
-    if (newScale === null) {
-      return false
     }
 
     // load page
@@ -102,6 +102,11 @@ class PdfPage extends React.Component {
     const viewport = page.getViewport(newScale + zoom)
     const { width, height } = viewport
     const canvas = this.canvas
+
+    if (!canvas) {
+      return false
+    }
+
     const context = canvas.getContext('2d')
     canvas.width = width
     canvas.height = height
@@ -116,34 +121,30 @@ class PdfPage extends React.Component {
   }
 
   render() {
-    const { width, height } = this.state
+    const { height } = this.state
     const {
-      scale,
       pageNumber,
       rotation,
       zoom,
-      containerHeight
+      defaultContainerHeight
     } = this.props
-
-    const containerStyle = {
-      width,
-      height: zoom !== null && height > 0 ? height : containerHeight
-    }
 
     return (
       <div
         className="pdf-container"
-        style={containerStyle}
+        style={{
+          height: (height > 0 && zoom !== null) ? height : defaultContainerHeight
+        }}
         ref={ref => this.container = ref}
       >
-
         <canvas
           className={`pdf-page rotate${rotation}`}
+          id="pdf-canvas"
           ref={ref => this.canvas = ref}
         />
 
         <div className="page-number">
-          - {pageNumber} -
+          {pageNumber}
         </div>
       </div>
     )

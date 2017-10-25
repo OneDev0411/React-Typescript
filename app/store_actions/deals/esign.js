@@ -2,10 +2,11 @@ import _ from 'underscore'
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
 
-export function showAttachments(attachments) {
+export function showAttachments(attachments, { showCompose }) {
   return {
     type: types.SHOW_ATTACHMENTS,
-    attachments
+    attachments,
+    showCompose: showCompose || false
   }
 }
 
@@ -20,6 +21,12 @@ export function removeAttachment(id) {
   return {
     type: types.REMOVE_ATTACHMENT,
     id
+  }
+}
+
+export function closeAttachments() {
+  return {
+    type: types.CLOSE_ATTACHMENTS,
   }
 }
 

@@ -78,14 +78,13 @@ class BaseTable extends React.Component {
     )
   }
 
-  getNextDate(deal, rowId) {
+  getNextDate(deal, rowId, rowsCount) {
     const { deals } = this.props
-    const dealsCount = _.size(deals)
 
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
-        placement={rowId > 3 && rowId + 3 >= dealsCount ? 'top' : 'bottom'}
+        placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
         overlay={
           <Popover
             className="deal-list--popover"
@@ -98,7 +97,9 @@ class BaseTable extends React.Component {
           </Popover>
         }
       >
-        <span>{ CriticalDates.getNextDate(deal) }</span>
+        <span className="hoverable">
+          { CriticalDates.getNextDate(deal) }
+        </span>
       </OverlayTrigger>
     )
   }
@@ -194,7 +195,7 @@ class BaseTable extends React.Component {
       const criteria = _.find(filters, (value, name) => name.includes(f))
 
       if (_.isFunction(criteria)) {
-        matched = criteria(value)
+        matched = criteria(value, deal)
       } else if (criteria.length > 0) {
         matched = value.toLowerCase().includes(criteria.toLowerCase())
       } else {
@@ -221,6 +222,7 @@ class BaseTable extends React.Component {
    */
   hasNotification(deal) {
     let counter = 0
+    const { rooms } = this.props
 
     if (!deal.checklists) {
       return ''
@@ -234,7 +236,7 @@ class BaseTable extends React.Component {
 
       checklist.tasks.forEach(task_id => {
         const task = this.props.tasks[task_id]
-        const room = this.props.rooms[task.room.id] || task.room
+        const room = (rooms && rooms[task.room.id]) || task.room
 
         if (room.new_notifications > 0) {
           counter += room.new_notifications
@@ -243,15 +245,15 @@ class BaseTable extends React.Component {
     })
 
     if (counter > 0) {
-      return <span
-        style={{
-          display: 'block',
-          width: '10px',
-          height: '10px',
-          borderRadius: '20px',
-          backgroundColor: '#2196f3'
-        }}
-      />
+      return (
+        <div
+          className="inline unread-notifications"
+          data-tip={`You have ${counter} unread messages in this deal`}
+        >
+          <img src="/static/images/deals/comments.svg" />
+          <span>{ counter }</span>
+        </div>
+      )
     }
   }
 
@@ -263,7 +265,7 @@ class BaseTable extends React.Component {
     const filteredDeals = _.filter(deals, deal => this.applyFilters(deal))
 
     let hasRows = true
-    if ((isBackOffice && _.size(filteredDeals) === 0) ||
+    if ((isBackOffice && filteredDeals.length === 0) ||
       (!isBackOffice && _.size(deals) === 0)
     ) {
       hasRows = false
@@ -317,7 +319,7 @@ class BaseTable extends React.Component {
                           key={`DEAL_${deal.id}__CELL_${key}`}
                           className={cell.className}
                         >
-                          { cell.getText(deal, rowId) }
+                          { cell.getText(deal, rowId, filteredDeals.length) }
                         </td>
                       )
                     }

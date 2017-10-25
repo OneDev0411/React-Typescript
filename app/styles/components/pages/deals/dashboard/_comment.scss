@@ -81,6 +81,79 @@
     text-align: right;
   }
 
+  .loading {
+    img {
+      width: 20px;
+      margin-left: 5px;
+    }
+    padding-right: 10px;
+    font-weight: 500;
+    color: gray;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    line-height: 28px;
+    border: solid 2px #c9d7df;
+    background-color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: 0.15s ease-in all;
+
+    .ico {
+      color: #c9d7df;
+    }
+
+    &.isActive .ico,
+    &:hover .ico,
+    .ico:hover {
+      color: #fff;
+    }
+
+    &.approve {
+      &.isActive,
+      &:hover {
+        border-color: #35b863;
+        background-color: #35b863;
+      }
+    }
+
+    &.decline {
+      &.isActive,
+      &:hover {
+        border-color: #d0021b;
+        background-color: #d0021b;
+      }
+    }
+
+    &.no-status {
+      line-height: 27px;
+      .ico {
+        display: inline-block;
+        border: solid 2px #c9d7df;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      &.isActive,
+      &:hover {
+        border-color: #f5a623;
+        background-color: #f5a623;
+      }
+
+      &.isActive .ico,
+      &:hover .ico {
+        border: solid 2px #fff;
+      }
+    }
+  }
+
   .deal-button {
     box-shadow: none;
     height: 30px;
@@ -92,40 +165,8 @@
     border: solid 1px #e6eaec;
     margin-left: 3px;
     margin-bottom: 3px;
-    transition: 0.2s all ease-in;
 
-    &.decline-comment, &.approve-comment {
-      &:hover {
-        border-color: #2196f3;
-        color: #2196f3;
-      }
-    }
-
-    &.approve-comment {
-      border: solid 1px #35b863;
-      color: #35b863;
-      background-color: transparent;
-      &:hover {
-        background-color: #35b863;
-        border-color: #35b863;
-        color: #fff;
-      }
-    }
-
-    &.decline-comment {
-      border: solid 1px #d0011b;
-      color: #d0011b;
-      background-color: transparent;
-      &:hover {
-        background-color: #d0011b;
-        border-color: #d0011b;
-        color: #fff;
-      }
-    }
-
-    &.add-comment,
-    &.notify-admin,
-    &.submit-review {
+    &.add-comment {
       transition: 0.1s ease-in all;
       &:hover {
         color: #78909c;

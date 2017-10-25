@@ -11,6 +11,7 @@ import * as actions from '../../../../../../store_actions/listings/map'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
 const map = ({
+  user,
   style,
   markers,
   appData,
@@ -44,6 +45,7 @@ const map = ({
         <Marker
           lat={lat}
           lng={lng}
+          user={user}
           data={appData}
           listing={marker}
           key={`MARKER_${id}`}
@@ -66,12 +68,12 @@ const mapHOC = compose(
       height: 'calc(100vh - 56px)'
     }
   }),
-  connect(({ data, favorites }) => {
+  connect(({ user, data, favorites }) => {
     const { map } = favorites
     return {
       map,
+      user,
       appData: data,
-      user: data.user,
       mapProps: map.props
     }
   }, actions),

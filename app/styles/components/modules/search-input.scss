@@ -6,7 +6,7 @@
   height: 30px;
   text-align: center;
   border-radius: 4px;
-  color: #9B9B9B;
+  color: #9b9b9b;
   border: solid 1px #394553;
   background-color: rgba(216, 216, 216, 0.1);
   input {
@@ -15,7 +15,7 @@
     background-color: transparent;
     border: none;
     height: 100%;
-    color: #9B9B9B;
+    color: #9b9b9b;
     display: inline-block;
     transition: width 700ms;
     &::-webkit-input-placeholder {
@@ -27,16 +27,20 @@
       text-align: left;
       margin-right: 16px;
     }
-    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    &::-webkit-input-placeholder {
+      /* Chrome/Opera/Safari */
       text-align: left;
     }
-    &::-moz-placeholder { /* Firefox 19+ */
+    &::-moz-placeholder {
+      /* Firefox 19+ */
       text-align: left;
     }
-    &:-ms-input-placeholder { /* IE 10+ */
+    &:-ms-input-placeholder {
+      /* IE 10+ */
       text-align: left;
     }
-    &:-moz-placeholder { /* Firefox 18- */
+    &:-moz-placeholder {
+      /* Firefox 18- */
       text-align: left;
     }
   }
@@ -61,7 +65,7 @@
     }
   }
   &:before {
-    content: "";
+    content: '';
     display: inline-block;
     vertical-align: middle;
     height: 100%;

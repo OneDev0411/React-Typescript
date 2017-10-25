@@ -9,25 +9,32 @@ const List = ({
   tasks,
   rooms,
   checklist,
-  dealId,
+  deal,
   selectedTaskId,
   onSelectTask,
-  isBackoffice
+  isBackOffice
 }) => {
 
   if (!checklist) {
     return false
   }
 
+  let sortedTasks = checklist.tasks
+
+  // sort tasks of backoffice, based on notified flag. they gonna show first.
+  if (isBackOffice && checklist.tasks) {
+    sortedTasks = _.sortBy(checklist.tasks, (id) => tasks[id].needs_attention ? 0 : 1)
+  }
+
   return (
     <ChecklistPanel
       checklist={checklist}
-      dealId={dealId}
+      deal={deal}
     >
       <div className={`list ${!checklist.tasks ? 'empty' : ''}`}>
         {
-          checklist.tasks &&
-          checklist.tasks
+          sortedTasks &&
+          sortedTasks
           .map((id, key) => {
             const task = tasks[id]
             const room = rooms[task.room.id] || task.room
@@ -54,18 +61,21 @@ const List = ({
                   />
                 }
 
-                <span
-                  className={cn('notification', {
-                    has_notification: room.new_notifications > 0
-                  })}
-                />
+                {
+                  room.new_notifications > 0 &&
+                  <div className="notification">
+                    <img src="/static/images/deals/comments.svg" />
+                    <span>{room.new_notifications}</span>
+                  </div>
+                }
+
               </div>
             )
           })
         }
 
         <CreateTask
-          dealId={dealId}
+          dealId={deal.id}
           listId={checklist.id}
         />
       </div>
@@ -75,5 +85,6 @@ const List = ({
 
 export default connect(({ deals, chatroom }) => ({
   rooms: chatroom.rooms,
-  tasks: deals.tasks
+  tasks: deals.tasks,
+  isBackOffice: deals.backoffice
 }))(List)

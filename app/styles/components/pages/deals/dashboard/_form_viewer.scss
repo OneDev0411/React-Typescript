@@ -82,11 +82,18 @@
     @extend %deal-dashboard;
     overflow: hidden;
     box-shadow: none;
+    @include scrollbar();
 
     .fw-wrapper {
       width: 100%;
       display: flex;
       flex-direction: row;
+
+      &.show-comments {
+        .pdf-toolbar {
+          right: 316px;
+        }
+      }
     }
 
     .factsheet {
@@ -119,25 +126,27 @@
         font-size: 17px;
         font-weight: bold;
         color: #1c364c;
+        background-color: transparent;
+        border: none;
       }
 
       .deal-comments {
         margin-top: 0 !important;
         background-color: #fff;
         .messages {
-          min-height: 70vh;
-          max-height: 70vh;
+          min-height: 68vh !important;
+          max-height: 68vh !important;
           overflow: auto;
           border: none;
-          padding: 0;
-          margin: 0;
+          padding: 0 !important;
+          margin: 0 !important;
         }
       }
     }
 
     .file-viewer {
-      min-height: 91vh;
-      max-height: 91vh;
+      min-height: 93vh;
+      max-height: 93vh;
       overflow: scroll;
       margin: 0px auto;
       background-color: #F0F4F7;

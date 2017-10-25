@@ -104,6 +104,8 @@ class Search extends Component {
   render() {
     const {
       data,
+      user,
+      isWidget,
       listings,
       isFetching,
       isLoggedIn,
@@ -122,6 +124,7 @@ class Search extends Component {
         <div className="l-listings__panel">
           <ListingsPanel
             tabName="SEARCH"
+            isWidget={isWidget}
             listings={listings}
             isLoggedIn={isLoggedIn}
             activePanel={activePanel}
@@ -129,7 +132,7 @@ class Search extends Component {
           />
         </div>
         <CreateAlertModal
-          user={data.user}
+          user={user}
           onHide={this.shareModalCloseHandler}
           isActive={this.state.shareModalIsActive}
           alertProposedTitle={listings.info.proposed_title}
@@ -139,14 +142,15 @@ class Search extends Component {
   }
 }
 
-const mapStateToProps = ({ data, search }) => {
+const mapStateToProps = ({ user, data, search }) => {
   const { listings, map, panels, filters } = search
 
   return {
     map,
+    user,
     data,
     mapProps: map.props,
-    isLoggedIn: data.user || false,
+    isLoggedIn: user || false,
     activePanel: panels.activePanel,
     isFetching: listings.isFetching,
     filterAreaIsOpen: filters.isOpen,

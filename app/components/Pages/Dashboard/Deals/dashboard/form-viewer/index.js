@@ -5,13 +5,15 @@ import DealInfo from '../deal-info'
 import Comments from '../comments'
 import CommentInput from '../comments/input'
 import PdfViewer from '../../../../../Partials/Pdf/Viewer'
+import { setFormViewer } from '../../../../../../store_actions/deals/forms'
 
 class FormViewer extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      showFactsheet: false,
-      showComments: false
+      showFactsheet: props.isBackOffice,
+      showComments: props.isBackOffice
     }
   }
 
@@ -27,10 +29,21 @@ class FormViewer extends React.Component {
     })
   }
 
+  onClose() {
+    const { setFormViewer } = this.props
+    setFormViewer(null)
+  }
+
   render() {
     const { showFactsheet, showComments } = this.state
-    const { deal, task, title, file, isActive, onClose} = this.props
-    const { name, type, url } = file
+    const { deal, formViewer } = this.props
+    const { task, title, file } = formViewer
+
+    if (!task) {
+      return false
+    }
+
+    const { name, type, url, downloadUrl } = file
 
     const COMMENTS_WIDTH = showComments ? '300px' : '0px'
     const FACTSHEET_WIDTH = showFactsheet ? '300px' : '0px'
@@ -43,12 +56,12 @@ class FormViewer extends React.Component {
     return (
       <Modal
         className="deal-form-viewer-modal"
-        show={isActive}
-        onHide={onClose}
+        show={task !== null}
+        onHide={() => this.onClose()}
       >
         <Modal.Header>
           <Button
-            onClick={onClose}
+            onClick={() => this.onClose()}
             className="close-btn"
           >
             X
@@ -79,7 +92,9 @@ class FormViewer extends React.Component {
         </Modal.Header>
 
         <Modal.Body>
-          <div className="fw-wrapper">
+          <div
+            className={`fw-wrapper ${showFactsheet ? 'show-factsheet' : ''} ${showComments ? 'show-comments' : ''}`}
+          >
             <div
               className="factsheet"
               style={{
@@ -105,8 +120,8 @@ class FormViewer extends React.Component {
                 type === 'pdf' &&
                 <PdfViewer
                   uri={url}
-                  scale="auto"
-                  containerHeight="85vh"
+                  downloadUrl={downloadUrl}
+                  defaultContainerHeight="85vh"
                 />
               }
 
@@ -144,4 +159,7 @@ class FormViewer extends React.Component {
   }
 }
 
-export default FormViewer
+export default connect(({ deals }) => ({
+  formViewer: deals.formViewer,
+  isBackOffice: deals.backoffice
+}), { setFormViewer })(FormViewer)

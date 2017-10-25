@@ -30,7 +30,7 @@ class BadgeCounter extends React.Component {
           return false
         }
 
-        const room = rooms[task.room.id] || task.room
+        const room = (rooms && rooms[task.room.id]) || task.room
         return room.new_notifications > 0
       })
     })

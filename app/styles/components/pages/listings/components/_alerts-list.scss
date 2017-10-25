@@ -101,7 +101,7 @@
 .c-alertList__item__menu {
   right: 5rem;
   width: 200px;
-  height: 81px;
+  height: auto;
   display: none;
   margin: 0;
   padding: 0;
@@ -115,13 +115,14 @@
 
   > li {
     margin: 0;
+    height: 4rem;
   }
 }
 
 .c-alertList__item__menu__item-btn {
   @extend .c-alertList__item__btn;
   width: 100%;
-  height: 40px;
+  height: 100%;
   text-align: left;
   line-height: 1;
   font-size: 1.5rem;
@@ -151,7 +152,7 @@
   }
 }
 
-.c-alertList__item__menu__divider {
+.c-alertList__item__menu__divider.c-alertList__item__menu__divider {
   height: 1px;
   background: #e9e9e9;
 }

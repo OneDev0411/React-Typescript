@@ -35,9 +35,9 @@ function dealUpdated(deal) {
   }
 }
 
-export function dealDeleted(deal_id) {
+export function dealArchived(deal_id) {
   return {
-    type: types.DELETE_DEAL,
+    type: types.ARCHIVE_DEAL,
     deal_id
   }
 }
@@ -50,10 +50,10 @@ export function appendChecklist(deal_id, checklist_id) {
   }
 }
 
-export function deleteDeal(dealId) {
+export function archiveDeal(dealId) {
   return async (dispatch) => {
-    await Deal.deleteDeal(dealId)
-    dispatch(dealDeleted(dealId))
+    await Deal.archiveDeal(dealId)
+    dispatch(dealArchived(dealId))
   }
 }
 
@@ -100,12 +100,18 @@ export function getDeals(user, backoffice = false) {
       ])
     } catch (e) {
       // log
-      console.error(e)
+      let errorMessage = 'Can not get deals'
+
+      if (e.response) {
+        errorMessage = e.response.body.statusCode === 500 ?
+          errorMessage + ', check your internet connection' :
+          e.response.body.message
+      }
 
       dispatch({
         type: types.GET_DEALS_FAILED,
         name: 'get-deals',
-        message: e.response ? e.response.body.message : 'Can not get deals'
+        message: errorMessage
       })
     }
   }

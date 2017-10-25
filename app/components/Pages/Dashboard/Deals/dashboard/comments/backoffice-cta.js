@@ -40,34 +40,52 @@ export default ({
   const { needs_attention } = task
   const isDeclined = (status === 'Declined')
   const isApproved = (status === 'Approved')
+  const isNotReviewed = !isDeclined && !isApproved
+
   return (
     <div>
-      <Button
-        data-tip={isDeclined ?
-          'Click to undo' :
-          'Decline and remove Needs Attention notification'
-        }
-        className="deal-button decline-comment"
-        disabled={isSaving}
-        onClick={() => onSendComment(isDeclined ? null : false, isDeclined ? 'Incomplete' : 'Declined')}
-      >
-        { getDeclineButtonCaption(status, hasComment) }
-      </Button>
+      {
+        !isSaving ?
+        <div className="inline">
+          <span
+            className={cn('cta-btn decline', {
+              isActive: isDeclined
+            })}
+            data-tip={isDeclined ? 'Declined' : 'Decline'}
+            data-effect="solid"
+            onClick={() => onSendComment(needs_attention ? false : null, 'Declined')}
+          >
+            <i className="ico fa fa-times" />
+          </span>
+
+          <span
+            className={cn('cta-btn approve', {
+              isActive: isApproved
+            })}
+            data-tip={isApproved ? 'Approved' : 'Approve'}
+            data-effect="solid"
+            onClick={() => onSendComment(needs_attention ? false : null, 'Approved')}
+          >
+            <i className="ico fa fa-check" />
+          </span>
+
+          <span
+            className={cn('cta-btn no-status', {
+              isActive: isNotReviewed && needs_attention !== true
+            })}
+            data-tip="Not Reviewed"
+            data-effect="solid"
+            onClick={() => onSendComment(needs_attention ? false : null, 'Incomplete')}
+          >
+            <span className="ico circle" />
+          </span>
+        </div> :
+        <div className="loading inline">
+          Saving <img src="/static/images/loading-states/three-dots-blue.svg" />
+        </div>
+      }
 
       <Button
-        data-tip={isApproved ?
-          'Click to undo' :
-          'Approve and remove Needs Attention notification'
-        }
-        className="deal-button approve-comment"
-        disabled={isSaving}
-        onClick={() => onSendComment(isApproved ? null : false, isApproved ? 'Incomplete' : 'Approved')}
-      >
-        { getApproveButtonCaption(status, hasComment) }
-      </Button>
-
-      <Button
-        data-tip="Leaving a comment will notify the agent"
         className={cn('deal-button add-comment', {
           enabled: hasComment
         })}

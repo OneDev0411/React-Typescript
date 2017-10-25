@@ -8,17 +8,16 @@ class DealsContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { dispatch, deals, forms, user } = this.props
+    const { getDeals, deals, forms, user } = this.props
 
     if (!deals) {
       const isBackOffice = user.features.indexOf('Backoffice') > -1 ? true : false
-      dispatch(getDeals(user, isBackOffice))
+      getDeals(user, isBackOffice)
     }
   }
 
   render() {
     const { deals, user, error } = this.props
-    const children = React.cloneElement(this.props.children, { user, deals })
     const hasError = error && error.action === 'get-deals' && deals === null
 
     if (hasError) {
@@ -40,15 +39,15 @@ class DealsContainer extends React.Component {
           </div>
         }
 
-        { deals && children }
+        { deals && this.props.children }
       </div>
     )
   }
 }
 
-export default connect(({ deals, data }) => ({
+export default connect(({ deals, user }) => ({
   error: deals.error,
   deals: deals.list,
   forms: deals.forms,
-  user: data.user
-}))(DealsContainer)
+  user
+}), { getDeals })(DealsContainer)

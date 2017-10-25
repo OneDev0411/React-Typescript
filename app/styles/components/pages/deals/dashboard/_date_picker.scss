@@ -1,0 +1,49 @@
+.modal-deal-date-picker {
+  .DayPicker-Month {
+    width: 100%;
+    height: 300px;
+  }
+
+  .DayPicker .DayPicker-Caption {
+    height: 50px;
+    font-weight: 500;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .DayPicker-Weekdays,
+  .DayPicker-Body {
+    font-size: 17px;
+  }
+
+  .DayPicker-Day {
+    border-radius: 5px;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .modal-footer {
+    .deal-button {
+      min-width: 100px;
+      height: 33px;
+      line-height: 17px;
+      background-color: #2196f3;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      &.cancel {
+        background-color: transparent;
+        color: #2196f3;
+        box-shadow: none;
+      }
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+}

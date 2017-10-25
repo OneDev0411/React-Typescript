@@ -57,6 +57,7 @@ export default class Form extends React.Component {
   }
 
   render() {
+    const { allowedRoles } = this.props
     const { form, validation } = this.state
 
     return (
@@ -90,7 +91,15 @@ export default class Form extends React.Component {
           title={form.role || 'Select Role'}
         >
           {
-            role_names.map(name =>
+            role_names
+            .filter(name => {
+              if (!allowedRoles) {
+                return true
+              }
+
+              return allowedRoles.indexOf(name) > -1
+            })
+            .map(name =>
               <MenuItem
                 key={`ROLE_${name}`}
                 onClick={() => this.setForm('role', name)}

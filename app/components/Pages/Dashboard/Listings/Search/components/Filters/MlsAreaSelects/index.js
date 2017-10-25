@@ -15,22 +15,22 @@ import api from '../../../../../../../../models/listings/search'
 const formName = 'filters'
 const selector = formValueSelector(formName)
 
-const MlsAreaSelects = (
-  {
-    areas = [],
-    subareas = [],
-    selectedAreas,
-    onChangeAreas,
-    loadingSubareas,
-    selectedSubareas,
-    onChangeSubareas
-  } // console.log(subareas)
-) => (
+const MlsAreaSelects = ({
+  areas,
+  subareas,
+  updateField,
+  selectedAreas,
+  onChangeAreas,
+  loadingSubareas,
+  selectedSubareas,
+  onChangeSubareas,
+  setSelectedSubareas
+}) => (
   <div style={{ marginBottom: '3rem' }}>
     <Label label="MLS Areas">
       <Select
         multi
-        name="mls_areas"
+        name="mlsAreas"
         options={areas}
         value={selectedAreas}
         placeholder="Area #..."
@@ -43,11 +43,14 @@ const MlsAreaSelects = (
       <Label label="MLS Subareas">
         <Select
           multi
-          name="subareas"
+          name="mlsSubareas"
           options={subareas}
           addLabelText="MLS Subareas"
           placeholder="Subarea #..."
-          onChange={onChangeSubareas}
+          onChange={areas =>
+            setSelectedSubareas(areas, () =>
+              updateField(formName, 'mlsSubareas', areas)
+            )}
           value={selectedSubareas}
           disabled={loadingSubareas}
           className="c-filters__select"
@@ -59,6 +62,82 @@ const MlsAreaSelects = (
 )
 
 export default compose(
+  connect(
+    state => {
+      const initialAreas = selector(state, 'mlsAreas') || []
+      const initialSubareas = selector(state, 'mlsSubareas') || []
+
+      return {
+        initialAreas,
+        initialSubareas
+      }
+    },
+    { updateField }
+  ),
+  withState('subareas', 'setSubareas', []),
+  withState(
+    'selectedAreas',
+    'setSelectedAreas',
+    ({ initialAreas }) => initialAreas
+  ),
+  withState(
+    'selectedSubareas',
+    'setSelectedSubareas',
+    ({ initialSubareas }) => initialSubareas
+  ),
+  withState('loadingSubareas', 'setLoadingSubareas', false),
+  withHandlers({
+    getSubareas: ({ setSubareas, setLoadingSubareas }) => async areas => {
+      setLoadingSubareas(true)
+
+      const subareas = await api.getMlsSubareas(areas)
+      setSubareas(subareas)
+      setLoadingSubareas(false)
+    }
+  }),
+  withHandlers({
+    onChangeAreas: ({
+      getSubareas,
+      updateField,
+      selectedAreas,
+      setSelectedAreas,
+      selectedSubareas,
+      setSelectedSubareas
+    }) => areas => {
+      if (areas.length === 0) {
+        setSelectedAreas([], () => updateField(formName, 'mlsAreas', []))
+
+        if (selectedSubareas.length > 0) {
+          setSelectedSubareas([], () =>
+            updateField(formName, 'mlsSubareas', [])
+          )
+          return
+        }
+
+        return
+      }
+
+      // delete subareas when theirs parent deleted.
+      if (areas.length < selectedAreas.length) {
+        const subareas = selectedSubareas.map((subarea, index) => {
+          const hasParent = areas.some(area => subarea.parent === area.value)
+          if (hasParent) {
+            return subarea
+          }
+        })
+
+        setSelectedSubareas(subareas, () => {
+          getSubareas(areas)
+          updateField(formName, 'mlsSubareas', subareas)
+        })
+      }
+
+      setSelectedAreas(areas, () => {
+        getSubareas(areas)
+        updateField(formName, 'mlsAreas', areas)
+      })
+    }
+  }),
   lifecycle({
     componentDidMount() {
       api.getMlsAreas().then(areas => {
@@ -66,114 +145,11 @@ export default compose(
           areas
         })
       })
-    }
-  }),
-  connect(
-    state => ({
-      mlsAreasFromState: selector(state, 'mls_areas') || []
-    }),
-    { updateField }
-  ),
-  withState('subareas', 'setSubareas', []),
-  withState('selectedAreas', 'setSelectedAreas', []),
-  withState('selectedSubareas', 'setSelectedSubareas', []),
-  withState('loadingSubareas', 'setLoadingSubareas', false),
-  withHandlers({
-    updateAreas: ({ selectedAreas, selectedSubareas, updateField }) => () => {
-      if (selectedAreas.length === 0) {
-        updateField(formName, 'mls_areas', null)
-        return
+
+      const { selectedAreas, getSubareas } = this.props
+      if (selectedAreas.length > 0) {
+        getSubareas(selectedAreas)
       }
-
-      const allAreas = [...selectedAreas, ...selectedSubareas]
-      const areasByParents = {}
-      allAreas.forEach(({ value, parent }) => {
-        if (
-          parent !== 0 &&
-          areasByParents['0'] &&
-          areasByParents['0'].indexOf(parent) === 0
-        ) {
-          areasByParents['0'] = areasByParents['0'].filter(p => p !== parent)
-        }
-
-        areasByParents[parent] = !areasByParents[parent]
-          ? [value]
-          : [...areasByParents[parent], value]
-      })
-
-      const mls_areas = []
-      Object.keys(areasByParents).forEach(parent =>
-        areasByParents[parent].forEach(mlsNumber => {
-          mls_areas.push([mlsNumber, Number(parent)])
-        })
-      )
-
-      updateField(formName, 'mls_areas', mls_areas)
     }
-  }),
-  withHandlers({
-    getSubareas: ({ setSubareas, setLoadingSubareas }) => areas => {
-      setLoadingSubareas(true)
-
-      api.getMlsSubareas(areas).then(subareas => {
-        setSubareas(subareas)
-        setLoadingSubareas(false)
-      })
-    }
-  }),
-  withHandlers({
-    onChangeAreas: ({
-      getSubareas,
-      setSubareas,
-      updateAreas,
-      selectedAreas,
-      setSelectedAreas,
-      selectedSubareas,
-      setSelectedSubareas
-    }) => areas => {
-      if (areas.length === 0) {
-        setSelectedAreas([], updateAreas)
-
-        if (selectedSubareas.length > 0) {
-          setSelectedSubareas([])
-          return
-        }
-
-        return
-      }
-
-      setSelectedAreas(areas, () => {
-        getSubareas(areas)
-        updateAreas()
-      })
-    },
-    onChangeSubareas: ({
-      updateAreas,
-      selectedSubareas,
-      setSelectedSubareas
-    }) => areas => {
-      setSelectedSubareas(areas, updateAreas)
-    }
-  }),
-  withPropsOnChange(
-    (props, nextProps) =>
-      !_.isEqual(props.mlsAreasFromState, nextProps.mlsAreasFromState),
-    ({
-      updateAreas,
-      selectedAreas,
-      selectedSubareas,
-      setSelectedAreas,
-      mlsAreasFromState,
-      setSelectedSubareas
-    }) => {
-      if (mlsAreasFromState.length === 0 && selectedAreas.length > 0) {
-        setSelectedAreas([], updateAreas)
-
-        if (selectedSubareas.length > 0) {
-          setSelectedSubareas([])
-        }
-      }
-      return {}
-    }
-  )
+  })
 )(MlsAreaSelects)

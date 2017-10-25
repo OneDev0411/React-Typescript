@@ -4,8 +4,7 @@ export default (state = {}, action) => {
   switch (action.type) {
     case types.SET_EDIT_FORM:
       return {
-        task: action.task,
-        mode: action.mode
+        task: action.task
       }
 
     default:

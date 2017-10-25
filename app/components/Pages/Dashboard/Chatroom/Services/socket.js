@@ -12,7 +12,6 @@ import {
 import { changeSocketStatus } from '../../../../../store_actions/socket'
 
 export default class ChatSocket extends Socket {
-
   constructor(user) {
     super(user)
 
@@ -45,11 +44,10 @@ export default class ChatSocket extends Socket {
     const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
 
     Rx
-    .Observable
-    .fromEvent(socket, 'User.State', (state, user_id) => ({ state, user_id }))
-    .distinctUntilChanged((p, c) => p.user_id === c.user_id && p.state === c.state )
-    .subscribe(this.onUserState)
-
+      .Observable
+      .fromEvent(socket, 'User.State', (state, user_id) => ({ state, user_id }))
+      .distinctUntilChanged((p, c) => p.user_id === c.user_id && p.state === c.state)
+      .subscribe(this.onUserState)
   }
 
   /**
@@ -97,7 +95,7 @@ export default class ChatSocket extends Socket {
   /**
    * income event when a user started typing
    */
-  onUserTyping({room_id, user_id}) {
+  onUserTyping({ room_id, user_id }) {
     if (user_id !== this.user.id) {
       store.dispatch(addMessageTyping(room_id, user_id))
     }
@@ -106,7 +104,7 @@ export default class ChatSocket extends Socket {
   /**
    * income socket event when user typing has been ended
    */
-  onUserTypingEnded({user_id, room_id}) {
+  onUserTypingEnded({ user_id, room_id }) {
     if (user_id !== this.user.id) {
       store.dispatch(removeMessageTyping(room_id, user_id))
     }

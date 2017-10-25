@@ -4,7 +4,8 @@ import { Row, Col, Modal, Button } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
 import cn from 'classnames'
-import { closeEsign, updateAttachments } from '../../../../../../store_actions/deals'
+import extractDocumentOfTask from '../../utils/extract-document-of-task'
+import { closeAttachments, setFormViewer, updateAttachments } from '../../../../../../store_actions/deals'
 
 class SelectDocumentModal extends React.Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class SelectDocumentModal extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { esign } = nextProps
 
-    if (esign.show && esign.view === 'attachment') {
+    if (esign.showAttachments) {
       this.setState({ attachments: esign.attachments })
     }
   }
@@ -44,7 +45,7 @@ class SelectDocumentModal extends React.Component {
   onClose() {
     this.setState({
       attachments: []
-    }, this.props.closeEsign)
+    }, this.props.closeAttachments)
   }
 
   onDone(attachments) {
@@ -52,35 +53,33 @@ class SelectDocumentModal extends React.Component {
   }
 
   getCompletedDocuments() {
-    const { tasks, dealId } = this.props
+    const { tasks, deal } = this.props
 
     return _.filter(tasks, task =>
       task.task_type === 'Form' &&
-      task.deal === dealId &&
+      task.deal === deal.id &&
       task.submission &&
       task.submission.state === 'Fair'
     )
   }
 
-  shouldDisplay() {
-    const { esign} = this.props
+  viewForm(e, task) {
+    e.stopPropagation()
 
-    if (esign.show && esign.view === 'attachment') {
-      return true
-    }
-
-    return false
+    const { deal, setFormViewer } = this.props
+    const file = extractDocumentOfTask(deal, task)
+    setFormViewer(task, file)
   }
 
   render() {
     const { attachments } = this.state
-    const { tasks, dealId } = this.props
+    const { tasks, esign } = this.props
 
     const documents = this.getCompletedDocuments()
 
     return (
       <Modal
-        show={this.shouldDisplay()}
+        show={esign.showAttachments === true}
         onHide={() => this.onClose()}
         dialogClassName="modal-deal-esign-documents"
       >
@@ -116,11 +115,20 @@ class SelectDocumentModal extends React.Component {
                       </span>
                     </Col>
 
-                    <Col sm={11} xs={10} className="name vcenter">
+                    <Col sm={10} xs={9} className="name vcenter">
                       <div>{ task.title }</div>
                       <div className="date">
                         Completed {moment.unix(task.submission.updated_at).format('MMMM DD, YYYY')}
                       </div>
+                    </Col>
+
+                    <Col
+                      sm={1}
+                      xs={1}
+                      className="vcenter"
+                      onClick={(e) => this.viewForm(e, task)}
+                    >
+                      <i className="fa fa-eye" />
                     </Col>
                   </Row>
                 )
@@ -141,7 +149,7 @@ class SelectDocumentModal extends React.Component {
               onClick={() => this.onDone(attachments)}
               disabled={attachments.length < 1}
             >
-              Next
+              {esign.showCompose ? 'Select' : 'Next'}
             </Button>
           </Modal.Footer>
         }
@@ -153,4 +161,4 @@ class SelectDocumentModal extends React.Component {
 export default connect(({ deals }) => ({
   tasks: deals.tasks,
   esign: deals.esign || {}
-}), { closeEsign, updateAttachments })(SelectDocumentModal)
+}), { closeAttachments, updateAttachments, setFormViewer })(SelectDocumentModal)

@@ -106,7 +106,7 @@
     "react-burger-menu": "^2.0.2",
     "react-click-outside": "github:tj/react-click-outside",
     "react-color": "^2.13.8",
-    "react-day-picker": "^5.2.3",
+    "react-day-picker": "^5.5.3",
     "react-dom": "^15.4.2",
     "react-dropzone": "github:izadmehr/react-dropzone#buildVersion",
     "react-ga": "^2.2.0",

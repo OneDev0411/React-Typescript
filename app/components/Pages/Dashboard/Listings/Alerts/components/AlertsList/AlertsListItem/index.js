@@ -18,7 +18,7 @@ const SharedWith = ({ alert }) => {
       </span>
       {users
         .filter(user => user.id !== created_by.id)
-        .map((user, index) => user.first_name)
+        .map((user, index) => user.first_name || user.phone_number)
         .join(', ')}
     </p>
   )

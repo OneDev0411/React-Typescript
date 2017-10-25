@@ -49,8 +49,6 @@ class AlertListItemMenu extends React.Component {
       .propagationPath()
       .includes(this.componentNode)
 
-    console.log(triggeredNodeIsEqualWithComponentNode)
-
     if (!triggeredNodeIsEqualWithComponentNode) {
       this._setIsOpen(false)
       document.removeEventListener('click', this._onCLickDocumentHandler, false)
@@ -99,7 +97,7 @@ class AlertListItemMenu extends React.Component {
           </svg>
         </button>
         <ul className="c-alertList__item__menu">
-          <li>
+          {/* <li>
             <button
               disabled
               onClick={onClickEdit}
@@ -118,7 +116,7 @@ class AlertListItemMenu extends React.Component {
               <span>Edit</span>
             </button>
           </li>
-          <li className="c-alertList__item__menu__divider" />
+          <li className="c-alertList__item__menu__divider" /> */}
           <li>
             <button
               onClick={onClickDelete}

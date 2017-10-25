@@ -5,7 +5,7 @@ export default (state = null, action) => {
     case types.GET_DEALS_FAILED:
       return {}
 
-    case types.DELETE_DEAL:
+    case types.ARCHIVE_DEAL:
       return _.omit(state, task => task.deal === action.deal_id)
 
     case types.GET_TASKS:
@@ -19,7 +19,7 @@ export default (state = null, action) => {
         ...state,
         [action.taskId]: {
           ...state[action.taskId],
-          ...{ uploading: action.status }
+          uploading: action.status
         }
       }
 

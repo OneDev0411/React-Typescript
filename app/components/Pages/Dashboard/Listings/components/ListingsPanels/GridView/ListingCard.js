@@ -16,6 +16,7 @@ const ListingCard = ({
   listing,
   tabName,
   onClick,
+  isWidget,
   children,
   activePanel,
   onMouseEnter,
@@ -24,6 +25,8 @@ const ListingCard = ({
   const props = prepareProps(user, listing)
   const mouseEventIsActive =
     tabName && tabName !== 'ALERTS' && activePanel && activePanel === 'map'
+
+  const target = user && !isWidget ? '' : '_blank'
 
   return (
     <LazyLoad className="c-listing-card" height={260} offsetBottom={900}>
@@ -60,9 +63,15 @@ const ListingCard = ({
           <div className="c-listing-card__alertStatus">{listing.new}</div>
         )}
         {typeof onClick === 'function' ? (
-          <a href="#" onClick={onClick} className="c-listing-card__link" />
+          <a
+            href="#"
+            target={target}
+            onClick={onClick}
+            className="c-listing-card__link"
+          />
         ) : (
           <Link
+            target={target}
             to={`/dashboard/mls/${listing.id}`}
             className="c-listing-card__link"
           />

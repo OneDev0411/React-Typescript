@@ -4,8 +4,7 @@ import { Row, Col, Dropdown, Button } from 'react-bootstrap'
 import Lightbox from 'react-images'
 import moment from 'moment'
 import _ from 'underscore'
-import FormViewer from '../../form-viewer'
-import { deleteAttachment } from '../../../../../../../store_actions/deals'
+import { deleteAttachment, setFormViewer } from '../../../../../../../store_actions/deals'
 import VerticalDotsIcon from '../../../../Partials/Svgs/VerticalDots'
 
 /**
@@ -15,9 +14,7 @@ class FileAttachments extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      deleting: false,
-      selectedFile: {},
-      showViewer: false
+      deleting: false
     }
   }
 
@@ -29,11 +26,16 @@ class FileAttachments extends React.Component {
     return file.mime.includes('image/')
   }
 
-  openDoc(file) {
-    this.setState({
-      selectedFile: file,
-      showViewer: true
-    })
+  openDoc(selectedFile) {
+    const { setFormViewer, task } = this.props
+
+    const file = {
+      type: selectedFile.type,
+      name: selectedFile.name,
+      url: selectedFile.src
+    }
+
+    setFormViewer(task, file)
   }
 
   async deleteFile(task, file) {
@@ -59,7 +61,7 @@ class FileAttachments extends React.Component {
 
   render() {
     const { attachments, deal, task } = this.props
-    const { showViewer, selectedFile, deleting } = this.state
+    const { deleting } = this.state
 
     const files = attachments
       .filter(file => this.isPdf(file) || this.isImage(file))
@@ -73,18 +75,6 @@ class FileAttachments extends React.Component {
 
     return (
       <div>
-        <FormViewer
-          deal={deal}
-          task={task}
-          file={{
-            type: selectedFile.type,
-            name: selectedFile.name,
-            url: selectedFile.src
-          }}
-          isActive={showViewer}
-          onClose={() => this.setState({ showViewer: false })}
-        />
-
         {
           files.map((file, key) =>
             <div
@@ -99,7 +89,9 @@ class FileAttachments extends React.Component {
                 className="name"
                 onClick={() => this.openDoc(file)}
               >
-                { file.name }
+                <span className="link">
+                  { file.name }
+                </span>
               </div>
 
               <div className="actions">
@@ -145,4 +137,4 @@ class FileAttachments extends React.Component {
   }
 }
 
-export default connect(null, { deleteAttachment })(FileAttachments)
+export default connect(null, { deleteAttachment, setFormViewer })(FileAttachments)

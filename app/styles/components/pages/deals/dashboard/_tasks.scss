@@ -86,7 +86,8 @@
             color: #d0011b;
             padding-left: 1px;
             margin-right: 2px;
-            &.BACKUP {
+            &.BACKUP,
+            &.PRIMARY {
               color: #8da2b5;
             }
             &.TERMINATED {
@@ -178,7 +179,7 @@
     .status, .notification {
       position: absolute;
       top: 21px;
-      right: 16px;
+      right: 22px;
       border-radius: 3px;
       min-width: 100px;
       background: #35b863;
@@ -202,14 +203,31 @@
     }
 
     .notification {
-      top: 23px;
+      top: 19px;
       right: 0px;
       min-width: 10px;
       height: 10px;
       border-radius: 20px;
       background-color: transparent;
-      &.has_notification {
-        background-color: #2196f3;
+
+      img {
+        width: 16px;
+      }
+
+      span {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: #FF4747;
+        display: block;
+        width: 13px;
+        height: 13px;
+        border-radius: 50px;
+        line-height: 13px;
+        vertical-align: middle;
+        color: #fff;
+        font-size: 10px;
+        text-align: center;
       }
     }
   }

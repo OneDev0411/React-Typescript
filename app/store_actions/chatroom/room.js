@@ -11,21 +11,22 @@ function _getRooms(rooms) {
   }
 }
 
-export function addMembersToRoom(roomId, users) {
+export function addMembersToRoom(room) {
   return {
     type: types.ADD_MEMBERS,
-    roomId,
-    users
+    room
   }
 }
 
 export function getRooms(user) {
   return async dispatch => {
-    const response = await Chatroom.getRooms(user)
-    const { data } = response.body
+    try {
+      const rooms = await Chatroom.getRooms(user)
+      dispatch(_getRooms(_.indexBy(rooms, 'id')))
+      return rooms
+    } catch(e) {
 
-    dispatch(_getRooms(_.indexBy(data, 'id')))
-    return data
+    }
   }
 }
 
@@ -72,7 +73,7 @@ export function addRecipients(roomId, recipients) {
   return async dispatch => {
     const response = await Chatroom.addMembers(roomId, recipients)
     const room = response.body.data
-    dispatch(addMembersToRoom(roomId, room.users))
+    dispatch(addMembersToRoom(room))
   }
 }
 

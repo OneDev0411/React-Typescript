@@ -38,6 +38,7 @@ const actions = {
 
 const map = ({
   style,
+  user,
   appData,
   options,
   isWidget,
@@ -74,8 +75,10 @@ const map = ({
             <SimpleMarker
               lat={lat}
               lng={lng}
+              user={user}
               data={appData}
               listing={points[0]}
+              isWidget={isWidget}
               key={`SIMPLE_MARKER_${id}`}
               markerPopupIsActive={hoveredMarkerId === id}
               onMouseEnterHandler={() => onMarkerMouseEnter(id)}
@@ -95,7 +98,7 @@ const map = ({
         )
       })}
     </Map>
-    {!isWidget && <NotLoggedInMessage isLoggedIn={appData.user ? true : ''} />}
+    {!isWidget && <NotLoggedInMessage isLoggedIn={user ? true : ''} />}
     <DrawingRemoveButton
       onClick={onClickRemovePolygon}
       points={drawing.points}
@@ -116,7 +119,8 @@ const mapHOC = compose(
     }
   }),
   connect(
-    ({ data }, { listings, isWidget }) => ({
+    ({ user, data }, { listings, isWidget }) => ({
+      user,
       appData: data,
       markers: listings.data,
       style: {

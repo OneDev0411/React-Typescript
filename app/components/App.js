@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { batchActions } from 'redux-batched-actions'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -73,6 +72,12 @@ class App extends Component {
 
       // load saved listings
       this._fetchFavorites(user)
+
+      // set user for full story
+      this.setFullStoryUser(user)
+
+      // set user data for sentry
+      this.setSentryUser(user, data.brand)
     }
 
     // check user is mobile device or not
@@ -181,6 +186,31 @@ class App extends Component {
     ReactGA.pageview(window.location.pathname)
   }
 
+  setFullStoryUser(user) {
+    if (window.FS) {
+      window.FS.identify(user.id, {
+        name: user.display_name,
+        email: user.email
+      })
+    }
+  }
+
+  setSentryUser(user, brand) {
+    if (window.Raven) {
+      const { email, id } = user
+      const userData = {
+        id,
+        email,
+        name: user.display_name,
+        brand: brand && {
+          id: brand.id,
+          name: brand.name
+        }
+      }
+      window.Raven.setUserContext(userData)
+    }
+  }
+
   showMobileSplashViewer() {
     AppStore.data.show_mobile_splash_viewer = true
     this.createBranchLink()
@@ -226,8 +256,7 @@ class App extends Component {
         forgetHide: false,
         downloadAppButtonText: 'GET',
         openAppButtonText: 'OPEN',
-        customCSS:
-          '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
+        customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
       },
       {
         data: {
@@ -247,8 +276,7 @@ class App extends Component {
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
-    const path = location.pathname
-    data.path = path
+    data.path = location.pathname
     data.location = location
 
     const children = React.cloneElement(this.props.children, {

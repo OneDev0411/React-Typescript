@@ -29,7 +29,12 @@ class Header extends React.Component {
 
     return (
       <Row className="deals-list-header">
-        <Col lg={6} md={5} sm={6} xs={12}>
+        <Col
+          lg={isBackOffice ? 9 : 6}
+          md={isBackOffice ? 7 : 5}
+          sm={6}
+          xs={12}
+        >
           {
             isBackOffice ?
             <BackOfficeFilter
@@ -43,7 +48,13 @@ class Header extends React.Component {
           }
         </Col>
 
-        <Col lg={6} md={7} sm={6} xs={12} className="text-right">
+        <Col
+          lg={isBackOffice ? 3 : 6}
+          md={isBackOffice ? 5 : 7}
+          sm={6}
+          xs={12}
+          className="text-right"
+        >
           <SearchInput
             onChange={value => this.onInputChange(value)}
             placeholder="Search by address or a person's name"

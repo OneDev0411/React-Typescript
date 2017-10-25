@@ -6,7 +6,9 @@ const getSchoolsDistricts = async query => {
   }
 
   try {
-    const response = await new Fetch().get(`/schools/search?q=${query}`)
+    const response = await new Fetch().get(
+      `/schools/districts/search?q[]=${query}`
+    )
 
     const options = response.body.data.map(({ district }) => ({
       label: district,

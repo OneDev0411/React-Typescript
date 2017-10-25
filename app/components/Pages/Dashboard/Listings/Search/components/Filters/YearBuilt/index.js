@@ -17,14 +17,14 @@ const exactLength = limit => value =>
 const exactLength4 = exactLength(4)
 
 const tooOld = year =>
-  year && Number(year) < 1889
+  year && Number(year) < 1800
     ? 'You might be search museums for this!'
     : undefined
 
 const formatHandler = value =>
   value == null ? '' : Number(value.replace(/[^0-9]/g, ''))
 
-const YearBuilt = () =>
+const YearBuilt = () => (
   <MinMaxInputs
     name="year_built"
     label="Year Built"
@@ -34,5 +34,6 @@ const YearBuilt = () =>
     warnMin={tooOld}
     humanNumber={false}
   />
+)
 
 export default pure(YearBuilt)

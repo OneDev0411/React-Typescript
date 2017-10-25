@@ -64,6 +64,16 @@
 
       &.active {
         margin-right: 2%;
+
+        &.disabled {
+          &:hover {
+            cursor: auto;
+            color: #8da3b7;
+            i {
+              color: #dce5eb !important;
+            }
+          }
+        }
       }
     }
   }

@@ -5,7 +5,6 @@ import { addNotification as notify } from 'reapop'
 import { editForm, saveSubmission } from '../../../../../../store_actions/deals'
 import Deal from '../../../../../../models/Deal'
 import EmbedForm from './embed'
-import RequiredContext from './context'
 
 class EditForm extends React.Component {
   constructor(props) {
@@ -245,17 +244,9 @@ class EditForm extends React.Component {
       onClose: () => this.close()
     }
 
-    if (mode === 'embed') {
-      return (
-        <EmbedForm {...props} />
-      )
-    }
-
-    if (mode === 'context') {
-      return (
-        <RequiredContext {...props} />
-      )
-    }
+    return (
+      <EmbedForm {...props} />
+    )
   }
 }
 

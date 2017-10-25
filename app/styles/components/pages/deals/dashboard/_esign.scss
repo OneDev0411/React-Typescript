@@ -99,7 +99,6 @@
 
   .who-signed {
     padding: 0;
-    // right: 8px;
     width: 375px;
     border-radius: 6px;
 
@@ -133,6 +132,9 @@
           font-size: 13px;
           font-weight: 500;
           color: #8ca2b6;
+          &.cls {
+            margin-left: 5px;
+          }
         }
       }
     }
@@ -150,6 +152,7 @@
         color: #8da2b5;
         img {
           margin-right: 10px;
+          width: 18px;
         }
       }
 
@@ -167,13 +170,13 @@
         }
 
         .avatar {
-          width: 10%;
+          width: 8%;
         }
 
         .info {
-          width: 65%;
+          width: 67%;
           margin-left: 10px;
-          .name {
+          .sname {
             font-size: 15px;
             font-weight: 500;
             color: #1d364b;

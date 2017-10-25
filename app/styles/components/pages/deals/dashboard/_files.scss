@@ -80,20 +80,27 @@
       .name {
         color: #1d364b;
         font-size: 15px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
         width: calc(100% - 55% - 25px);
         padding-left: 20px;
         font-weight: 400;
         color: #1d364b;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
 
-        &.link {
+        .link {
           cursor: pointer;
+          padding-bottom: 4px;
+          border-bottom: 1px solid transparent;
+          display: inline-block;
           &:hover {
-            text-decoration: underline;
+            border-bottom-color: #1d364b;
           }
         }
+      }
+
+      &:hover .link{
+        border-bottom-color: #ccc;
       }
 
       .actions {

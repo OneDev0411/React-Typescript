@@ -30,36 +30,30 @@ class Alerts extends Component {
   }
 
   componentDidMount() {
-    const {
-      params,
-      getAlerts,
-      isFetching,
-      getAlertFeed,
-      selectedAlert,
-      clearAlertNotification
-    } = this.props
+    this.props.getAlerts()
+  }
 
-    if (!isFetching) {
-      const { alertId } = params
+  componentWillReceiveProps(nextProps) {
+    const { alertsList, selectedAlert, isFetching } = nextProps
+    const alert =
+      selectedAlert || (alertsList.data.length > 0 && alertsList.data[0])
 
-      if (alertId) {
-        getAlert(alertId).then(alert => {
-          const { id, room, new_recommendations } = alert
-          getAlertFeed(id, room)
+    if (alert && !isFetching) {
+      this._getAlertFeed(alert)
+    }
+  }
 
-          if (parseInt(new_recommendations, 10) > 0) {
-            setTimeout(() => clearAlertNotification(id, room), 5000)
-          }
-        })
-      }
-      getAlerts()
+  _getAlertFeed(alert) {
+    const { getAlertFeed, clearAlertNotification } = this.props
+    const { id, room, new_recommendations } = alert
+    getAlertFeed(id, room)
+
+    if (parseInt(new_recommendations, 10) > 0) {
+      setTimeout(() => clearAlertNotification(id, room), 5000)
     }
 
-    if (
-      selectedAlert &&
-      window.location.pathname.indexOf(selectedAlert.id) === -1
-    ) {
-      browserHistory.push(`/dashboard/mls/alerts/${selectedAlert.id}`)
+    if (window.location.pathname.indexOf(id) === -1) {
+      browserHistory.push(`/dashboard/mls/alerts/${id}`)
     }
   }
 

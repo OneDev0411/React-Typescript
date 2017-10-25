@@ -42,54 +42,63 @@ const ListingPanelHOC = compose(
     onClickDropdownItem: ({ setSortingIndex }) => index => {
       setSortingIndex(index)
     },
-    onClickSortingDirection: ({ setSortingDirection }) => event => {
-      const dir = event.target.checked ? -1 : 1
-      setSortingDirection(dir)
+    onClickSortingDirection: ({ setSortingDirection, sortingDirection }) => () => {
+      setSortingDirection(sortingDirection * -1)
     }
   }),
   withPropsOnChange(
-    ['listings', 'sortingIndex', 'sortingDirection'],
+    (props, nextProps) => !_.isEqual(props.sortingIndex, nextProps.sortingIndex) || !_.isEqual(props.sortingDirection, nextProps.sortingDirection) || !_.isEqual(props.listings, nextProps.listings),
     ({ listings, sortingIndex, sortingDirection }) => {
       const { data, info } = listings
 
-      const sortedListings = _.sortBy(listings.data, listing => {
+      const sortedListings = _.sortBy(data, listing => {
         const getPropertyValue = prop =>
           ((listing.compact_property && listing.compact_property[prop]) ||
-            (listing.property && listing.property[prop])) * sortingDirection
+            (listing.property && listing.property[prop])) * sortingDirection || 0
+
+        const getBathroomValue = () => {
+          const { half_bathroom_count, full_bathroom_count } =
+            listing.compact_property || listing.property
+
+          return (half_bathroom_count + full_bathroom_count) * sortingDirection
+        }
 
         switch (sortingIndex) {
-          case 'area':
-            return (
-              ((listing.address && listing.address.postal_code) ||
-                (listing.property && listing.property.address.postal_code)) *
-              sortingDirection
-            )
+          // case 'area':
+          //   return ((listing.address && listing.address.postal_code) ||
+          //   (listing.property && listing.property.address.postal_code)) * sortingDirection
+          case 'baths':
+            return getBathroomValue() * -1
           case 'price':
             return listing.price * sortingDirection
-          case 'bedrooms':
-            return getPropertyValue('bedroom_count')
-          case 'baths':
-            return getPropertyValue('bathroom_count')
           case 'sqft':
             return getPropertyValue('square_meters')
-          case '$/Sqft':
+          case 'built':
+            return getPropertyValue('year_built') * -1
+          case 'bedrooms':
+            return getPropertyValue('bedroom_count') * -1
+          case '$/sqft':
             return Math.floor(
               listing.price /
                 listingUtils.metersToFeet(getPropertyValue('square_meters'))
             )
-          case 'built':
-            return getPropertyValue('yearBuilt')
           case 'distance':
-            return (
-              window.google &&
-              window.currentMap &&
-              google.maps.geometry.spherical.computeDistanceBetween(
-                window.currentMap.getCenter(),
-                new google.maps.LatLng(listing.lat, listing.lng)
-              ) * sortingDirection
-            )
+            const { latitude, longitude } = listing.location || listing.property.address.location
+
+            if (latitude && longitude) {
+              return (
+                window.google &&
+                window.currentMap &&
+                google.maps.geometry.spherical.computeDistanceBetween(
+                  window.currentMap.getCenter(),
+                  new google.maps.LatLng(latitude, longitude)
+                ) * sortingDirection
+              )
+            }
+
+            return data
           default:
-            return listings.data
+            return data
         }
       })
 

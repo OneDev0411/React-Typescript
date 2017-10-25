@@ -56,10 +56,24 @@ export function deleteAttachment(task, fileId) {
   }
 }
 
-export function createTask(deal_id, form, title, status, task_type, list_id) {
+export function createFormTask(dealId, form, title, checklist) {
+  const task_type = 'Form'
+  const status = 'Incomplete'
+
   return async (dispatch) => {
-    const task = await Deal.createTask(deal_id, form, title, status, task_type, list_id)
-    dispatch(addNewTask(deal_id, list_id, task))
+    const task = await Deal.createTask(dealId, { title, status, task_type, checklist, form })
+    dispatch(addNewTask(dealId, checklist, task))
+    return task
+  }
+}
+
+export function createGenericTask(dealId, title, checklist) {
+  const status = 'Incomplete'
+  const task_type = 'Generic'
+
+  return async (dispatch) => {
+    const task = await Deal.createTask(dealId, { title, status, task_type, checklist})
+    dispatch(addNewTask(dealId, checklist, task))
     return task
   }
 }

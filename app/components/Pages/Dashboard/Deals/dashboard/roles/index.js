@@ -131,6 +131,7 @@ class Roles extends React.Component {
 
         <AddRole
           dealId={deal.id}
+          allowedRoles={allowedRoles}
         />
       </div>
     )

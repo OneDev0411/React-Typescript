@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import _ from 'underscore'
-import { createTask } from '../../../../../../../store_actions/deals'
+import { createFormTask } from '../../../../../../../store_actions/deals'
 import Forms from './list'
 import TaskName from './task-name'
 
@@ -20,13 +20,13 @@ class CreateForm extends React.Component {
    *
    */
   createNewTask(form) {
-    const { dealId, createTask, listId } = this.props
+    const { dealId, createFormTask, listId } = this.props
 
     // hide form
     this.displayForm(false)
 
     // create form
-    createTask(dealId, form.id, form.name, 'Incomplete', 'Form', listId)
+    createFormTask(dealId, form.id, form.name, listId)
   }
 
   /**
@@ -87,4 +87,4 @@ class CreateForm extends React.Component {
   }
 }
 
-export default connect(null, { createTask })(CreateForm)
+export default connect(null, { createFormTask })(CreateForm)

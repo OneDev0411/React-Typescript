@@ -8,7 +8,7 @@ import _ from 'underscore'
 import cn from 'classnames'
 import ChatModel from '../../../../../../../models/Chatroom'
 import ChatMessage from '../../../../Chatroom/Util/message'
-import { addAttachment, setIsUploading, editForm } from '../../../../../../../store_actions/deals'
+import { addAttachment, setIsUploading } from '../../../../../../../store_actions/deals'
 
 class UploadDocument extends React.Component {
   constructor(props) {
@@ -19,13 +19,13 @@ class UploadDocument extends React.Component {
   }
 
   async onDrop(files) {
-    const { task, addAttachment, setIsUploading, editForm } = this.props
+    const { task, addAttachment, noDrop, setIsUploading } = this.props
 
     this.setState({
       dropzoneActive: false
     })
 
-    if (files.length === 0) {
+    if (noDrop === true || files.length === 0) {
       return false
     }
 
@@ -38,8 +38,7 @@ class UploadDocument extends React.Component {
     if (file) {
       batchActions([
         addAttachment(task.deal, task.checklist, task.id, file),
-        setIsUploading(task.id, false),
-        editForm(task, 'context')
+        setIsUploading(task.id, false)
       ])
 
       this.postMessage(task.room.id, file.id)
@@ -89,7 +88,7 @@ class UploadDocument extends React.Component {
       <Dropzone
         disableClick
         ref={(node) => { this.dropzone = node }}
-        onDrop={files => this.onDrop(files)}
+        onDrop={(files) => this.onDrop(files)}
         onDragEnter={() => this.setState({ dropzoneActive: true })}
         onDragLeave={() => this.setState({ dropzoneActive: false })}
         multiple={false}
@@ -131,16 +130,15 @@ class UploadDocument extends React.Component {
 
             {
               uploading &&
-              <ProgressBar active now={60} />
+              <ProgressBar active now={70} />
             }
           </div>
         }
-
       </Dropzone>
     )
   }
 }
 
-export default connect(({ data }) => ({
-  user: data.user
-}), { addAttachment, setIsUploading, editForm })(UploadDocument)
+export default connect(({ user }) => ({
+  user
+}), { addAttachment, setIsUploading })(UploadDocument)

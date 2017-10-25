@@ -32,12 +32,12 @@ class WhoSigned extends React.Component {
     try {
       await Deal.resendEnvelope(envelopeId)
       notify({
-        message: 'eSign has been resent',
+        message: 'eSignature has resent',
         status: 'success'
       })
     } catch (e) {
       notify({
-        message: 'Can not resend eSign right now, please try again',
+        message: 'Could not resend eSignature, please try again',
         status: 'error'
       })
     }
@@ -49,7 +49,7 @@ class WhoSigned extends React.Component {
 
   render () {
     const { resending } = this.state
-    const { areSigned, notSigned, envelope, user } = this.props
+    const { onRequestClose, areSigned, notSigned, envelope, user } = this.props
 
     return (
       <div className="dropdown-menu dropdown-menu-right who-signed">
@@ -64,6 +64,13 @@ class WhoSigned extends React.Component {
               onClick={() => this.resendDocs(envelope.id)}
             >
               { resending ? 'Resending ...' : 'Resend docs' }
+            </Button>
+
+            <Button
+              className="deal-button cls"
+              onClick={onRequestClose}
+            >
+              X
             </Button>
           </div>
         </div>
@@ -91,7 +98,7 @@ class WhoSigned extends React.Component {
                     />
                   </div>
                   <div className="info">
-                    <div className="name">{ signer.user.display_name }</div>
+                    <div className="sname">{ signer.user.display_name }</div>
                     <div className="date">-</div>
                   </div>
                 </div>
@@ -123,7 +130,7 @@ class WhoSigned extends React.Component {
                     />
                   </div>
                   <div className="info">
-                    <div className="name">{ signer.user.display_name }</div>
+                    <div className="sname">{signer.user.display_name}</div>
                   </div>
 
                   <div className="sign-now">

@@ -3,8 +3,8 @@ import Fetch from '../../../services/fetch'
 const getSchools = async districts => {
   const query = districts.map(({ value }) => `districts[]=${value}`).join('&')
 
-  if (!query) {
-    return Promise.resolve()
+  if (!query || query.length < 4) {
+    return Promise.resolve(() => ({}))
   }
 
   try {

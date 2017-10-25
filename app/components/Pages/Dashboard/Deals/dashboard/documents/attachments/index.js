@@ -34,6 +34,7 @@ export default ({
       <UploadFile
         task={task}
         hasAttachments={hasAttachments}
+        noDrop={true}
       />
     </div>
   )
