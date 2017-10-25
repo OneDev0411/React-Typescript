@@ -184,7 +184,7 @@ class SendSignatures extends React.Component {
     const { tasks, esign, deal, user, showAttachments } = this.props
     const { recipients, isSending, showDocusignBanner } = this.state
 
-    if (!esign.show || esign.view !== 'compose') {
+    if (!esign.showCompose) {
       return false
     }
 
@@ -242,6 +242,7 @@ class SendSignatures extends React.Component {
           <div className="attachments">
             <ComposeAttachments
               esign={esign}
+              deal={deal}
               tasks={tasks}
             />
           </div>
@@ -257,7 +258,7 @@ class SendSignatures extends React.Component {
 
             <Button
               disabled={isSending}
-              onClick={() => showAttachments(esign.attachments)}
+              onClick={() => showAttachments(esign.attachments, { showCompose: true })}
               className="btn-attach"
             >
               <i className="fa fa-paperclip fa-rotate-90" /> Attach

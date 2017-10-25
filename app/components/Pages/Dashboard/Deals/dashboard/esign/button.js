@@ -47,7 +47,7 @@ const EsignButton = ({
           }
 
           <MenuItem
-            onClick={() => showAttachments(attachments)}
+            onClick={() => showAttachments(attachments, { showCompose: false })}
             eventKey="2"
           >
             <MultipleFileSvg />

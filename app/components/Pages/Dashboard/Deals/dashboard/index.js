@@ -106,7 +106,7 @@ class DealDetails extends React.Component {
         />
 
         <ESignAttachments
-          dealId={deal.id}
+          deal={deal}
         />
 
         <ESignCompose
