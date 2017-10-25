@@ -6,7 +6,7 @@ const __SORTING_VALUE__ = 'Update'
 const mappingStatus = status => {
   switch (status) {
     case 'New':
-      return 'NEW LISTING'
+      return 'Have not Seen'
     case 'PriceDrop':
       return 'PRICE DROP'
     case 'StatusChange':
