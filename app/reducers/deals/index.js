@@ -4,6 +4,7 @@ import tasks from './tasks'
 import checklists from './checklists'
 import forms from './forms'
 import formEdit from './form-edit'
+import formViewer from './form-viewer'
 import esign from './esign'
 import backoffice from './backoffice'
 import error from './error'
@@ -14,6 +15,7 @@ export default combineReducers({
   checklists,
   forms,
   formEdit,
+  formViewer,
   esign,
   backoffice,
   error

@@ -25,7 +25,16 @@ export function editForm(task) {
   }
 }
 
-function _addForm(checklist) {
+export function setFormViewer(task, file = null, title = null) {
+  return {
+    type: types.SET_FORM_VIEWER,
+    task,
+    file,
+    title
+  }
+}
+
+function formCreated(checklist) {
   return {
     type: types.ADD_FORM,
     checklist
@@ -35,11 +44,11 @@ function _addForm(checklist) {
 export function addForm(brandId, checklistId, formId) {
   return async (dispatch) => {
     const response = await Deal.addForm(brandId, checklistId, formId)
-    dispatch(_addForm(response))
+    dispatch(formCreated(response))
   }
 }
 
-function _deleteForm(checklistId, formId) {
+function formDeleted(checklistId, formId) {
   return {
     type: types.DELETE_FORM,
     checklistId,
@@ -50,7 +59,7 @@ function _deleteForm(checklistId, formId) {
 export function deleteForm(checklist, formId) {
   return async (dispatch) => {
     await Deal.deleteForm(checklist, formId)
-    dispatch(_deleteForm(checklist.id, formId))
+    dispatch(formDeleted(checklist.id, formId))
   }
 }
 

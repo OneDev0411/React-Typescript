@@ -1,15 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Dropdown, Button } from 'react-bootstrap'
-import FormViewer from '../../form-viewer'
 import WhoSigned from './who-signed'
+import { setFormViewer } from '../../../../../../../store_actions/deals/forms'
 import config from '../../../../../../../../config/public'
 
 class Envelope extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showFormViewer: false,
       showDropDown: false
     }
   }
@@ -21,12 +20,6 @@ class Envelope extends React.Component {
     })
 
     return names.join(', ')
-  }
-
-  toggleFormViewer() {
-    this.setState({
-      showFormViewer: !this.state.showFormViewer
-    })
   }
 
   toggleShowDropDown(show) {
@@ -50,11 +43,12 @@ class Envelope extends React.Component {
   }
 
   render() {
-    const { deal, task, envelope } = this.props
-    const { showFormViewer, showDropDown } = this.state
+    const { task, envelope, setFormViewer } = this.props
+    const { showDropDown } = this.state
     const { recipients } = envelope
     const areSigned = recipients.filter(r => r.status === 'Completed')
     const notSigned = recipients.filter(r => r.status !== 'Completed')
+    const recipientsNames = this.getRecipientsNames(recipients)
 
     const formUrl = this.getFormUrl()
 
@@ -70,35 +64,26 @@ class Envelope extends React.Component {
         key={`eSign_${envelope.id}`}
       >
 
-        <FormViewer
-          deal={deal}
-          task={task}
-          file={pdfFile}
-          isActive={showFormViewer}
-          onClose={() => this.toggleFormViewer()}
-        />
-
         <div className="image">
           <img src="/static/images/deals/signature.svg" />
         </div>
 
         <div className="name">
-          <span className="link">
-            Sent to { this.getRecipientsNames(recipients) }
-          </span>
+          {
+            formUrl ?
+            <span
+              className="link"
+              onClick={() => setFormViewer(task, pdfFile)}
+            >
+              Sent to {recipientsNames}
+            </span> :
+            <span>
+              Sent to {recipientsNames}
+            </span>
+          }
         </div>
 
         <div className="actions">
-          {
-            formUrl &&
-            <button
-              className="btn-deal"
-              onClick={() => this.toggleFormViewer()}
-            >
-              View
-            </button>
-          }
-
           <Dropdown
             id="drp-esign-who-signed"
             className="deal-esgin-whosigned"
@@ -130,4 +115,4 @@ class Envelope extends React.Component {
 
 export default connect(({ user }) => ({
   user
-}))(Envelope)
+}), { setFormViewer })(Envelope)
