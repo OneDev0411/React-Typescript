@@ -58,7 +58,7 @@ class BackOfficeTable extends BaseTable {
         caption: 'NEEDS ATTENTION',
         className: 'col-md-2',
         sortable: true,
-        getText: (deal, rowId) => this.getNeedsAttentions(deal, rowId),
+        getText: (deal, rowId, rowsCount) => this.getNeedsAttentions(deal, rowId, rowsCount),
         getValue: deal => this.getNeedsAttentionCount(deal)
       },
       notificiation: {
@@ -100,15 +100,14 @@ class BackOfficeTable extends BaseTable {
   /**
    * render needs attentions ui
    */
-  getNeedsAttentions(deal, rowId) {
+  getNeedsAttentions(deal, rowId, rowsCount) {
     const { deals, tasks } = this.props
-    const dealsCount = _.size(deals)
     const items = this.getNeedsAttentionsItems(deal)
 
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
-        placement={rowId > 3 && rowId + 3 >= dealsCount ? 'top' : 'bottom'}
+        placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
         overlay={
           <Popover
             className="deal-list--needs-attention--popover"

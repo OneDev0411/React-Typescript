@@ -39,13 +39,13 @@ class AgentTable extends BaseTable {
         caption: 'SIDE',
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: (deal, rowId) => this.getSide(deal, rowId),
+        getText: (deal, rowId, rowsCount) => this.getSide(deal, rowId, rowsCount),
         getValue: deal => deal.deal_type.toString() + this.getRoleNames(deal)
       },
       critical_dates: {
         caption: 'CRITICAL DATES',
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: (deal, rowId) => this.getNextDate(deal, rowId)
+        getText: (deal, rowId, rowsCount) => this.getNextDate(deal, rowId, rowsCount)
       },
       outstanding: {
         caption: 'OUTSTANDING',
@@ -61,9 +61,8 @@ class AgentTable extends BaseTable {
     }
   }
 
-  getSide(deal, rowId) {
+  getSide(deal, rowId, rowsCount) {
     const { deals } = this.props
-    const dealsCount = _.size(deals)
 
     if (!deal.roles) {
       return Deal.get.side(deal)
@@ -74,7 +73,7 @@ class AgentTable extends BaseTable {
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
-        placement={rowId > 3 && rowId + 3 >= dealsCount ? 'top' : 'bottom'}
+        placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
         overlay={
           <Popover
             className="deal-list--popover push-left"

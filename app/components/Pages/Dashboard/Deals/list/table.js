@@ -78,14 +78,13 @@ class BaseTable extends React.Component {
     )
   }
 
-  getNextDate(deal, rowId) {
+  getNextDate(deal, rowId, rowsCount) {
     const { deals } = this.props
-    const dealsCount = _.size(deals)
 
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
-        placement={rowId > 3 && rowId + 3 >= dealsCount ? 'top' : 'bottom'}
+        placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
         overlay={
           <Popover
             className="deal-list--popover"
@@ -266,7 +265,7 @@ class BaseTable extends React.Component {
     const filteredDeals = _.filter(deals, deal => this.applyFilters(deal))
 
     let hasRows = true
-    if ((isBackOffice && _.size(filteredDeals) === 0) ||
+    if ((isBackOffice && filteredDeals.length === 0) ||
       (!isBackOffice && _.size(deals) === 0)
     ) {
       hasRows = false
@@ -320,7 +319,7 @@ class BaseTable extends React.Component {
                           key={`DEAL_${deal.id}__CELL_${key}`}
                           className={cell.className}
                         >
-                          { cell.getText(deal, rowId) }
+                          { cell.getText(deal, rowId, filteredDeals.length) }
                         </td>
                       )
                     }
