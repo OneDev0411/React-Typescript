@@ -83,7 +83,9 @@ class Envelope extends React.Component {
         </div>
 
         <div className="name">
-          Sent to { this.getRecipientsNames(recipients) }
+          <span className="link">
+            Sent to { this.getRecipientsNames(recipients) }
+          </span>
         </div>
 
         <div className="actions">

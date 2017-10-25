@@ -99,7 +99,9 @@ class FileAttachments extends React.Component {
                 className="name"
                 onClick={() => this.openDoc(file)}
               >
-                { file.name }
+                <span className="link">
+                  { file.name }
+                </span>
               </div>
 
               <div className="actions">

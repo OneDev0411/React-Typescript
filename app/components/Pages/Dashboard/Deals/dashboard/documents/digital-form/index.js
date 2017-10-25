@@ -61,10 +61,11 @@ class Form extends React.Component {
 
             <div
               className="name"
-              style={{ cursor: 'pointer' }}
               onClick={() => this.setState({ showFormViewer: true })}
             >
-              { task.title }
+              <span className="link">
+                { task.title }
+              </span>
             </div>
 
             <div className="actions">
