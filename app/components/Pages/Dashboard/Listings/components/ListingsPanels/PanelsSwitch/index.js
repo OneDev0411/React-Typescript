@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { ButtonGroup } from 'react-bootstrap'
 
 import SwitchButton from './SwitchButton'
-import setActivePanel from '../../../../../../../store_actions/listings/panels'
+import { setActivePanel } from '../../../../../../../store_actions/listings/panels'
 
 const PanelsSwitch = ({ activePanel, setActivePanel, tabName }) => {
   const onClickHandler = panel => () => setActivePanel(tabName, panel)
