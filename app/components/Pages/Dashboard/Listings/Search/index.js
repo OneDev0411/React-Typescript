@@ -118,7 +118,7 @@ class Search extends Component {
         <div className="l-listings__map">
           {this.state.mapWithQueryIsInitialized && <Map {...this.props} />}
           <SearchToolbar />
-          <Filters isOpen={filterAreaIsOpen} />
+          <Filters isOpen={filterAreaIsOpen} isSubmitting={isFetching} />
           {isFetching && <Loading text="MLS®" />}
         </div>
         <div className="l-listings__panel">

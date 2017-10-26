@@ -51,10 +51,11 @@ const architectural_styles = {
 
 const Filters = ({
   isOpen,
+  reset,
   pristine,
-  submitting,
   activeSold,
   handleSubmit,
+  isSubmitting,
   onSubmitHandler,
   activeOpenHouses,
   activeOtherListings,
@@ -121,7 +122,7 @@ const Filters = ({
             <SubStatuses fields={otherStatuses} />
           </FiltersListingsStatusRow>
         </div>
-        <div style={{ padding: '3rem 2rem 6rem', backgroundColor: '#fff' }}>
+        <div style={{ padding: '3rem 2rem 8rem', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
           <Counties />
           <NumberRange name="price" placeholder="$Any" label="Price Range" />
@@ -154,14 +155,24 @@ const Filters = ({
           <YearBuilt />
         </div>
       </form>
-      <button
-        onClick={handleSubmit(onSubmitHandler)}
-        className="c-filters__submit-btn"
-        disabled={submitting}
-        style={{ background: `#${Brand.color('primary', '#2196f3')}` }}
-      >
-        Update Filters
-      </button>
+      <div className="c-filters__form-cta-buttons">
+        <button
+          onClick={reset}
+          className="c-filters__reset-btn"
+          disabled={isSubmitting || pristine}
+          style={{ color: `#${Brand.color('primary', '#2196f3')}` }}
+        >
+          Reset Filters
+        </button>
+        <button
+          disabled={isSubmitting || pristine}
+          className="c-filters__submit-btn"
+          onClick={handleSubmit(onSubmitHandler)}
+          style={{ background: `#${Brand.color('primary', '#2196f3')}` }}
+        >
+          {isSubmitting ? 'Updating...' : 'Update Filters'}
+        </button>
+      </div>
     </div>
   </div>
 )
