@@ -28,11 +28,6 @@ const ComposeAttachments = ({
 
               <span className="ctas">
                 <i
-                  className="fa open-form fa-eye"
-                  onClick={() => setFormViewer(task, file)}
-                />
-
-                <i
                   className="fa fa-times"
                   onClick={() => removeAttachment(id)}
                 />
