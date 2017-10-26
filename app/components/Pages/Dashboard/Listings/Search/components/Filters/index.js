@@ -10,12 +10,11 @@ import { getStatusColor } from '../../../../../../../utils/listing'
 import Schools from './Schools'
 import Counties from './Counties'
 import YearBuilt from './YearBuilt'
+import Tags from './components/Tags'
 import NumberRange from './NumberRange'
 import Subdivision from './Subdivision'
 import MlsAreaSelects from './MlsAreaSelects'
-import PropertySubtypes from './PropertySubtypes'
 import GroupRadios from './components/GroupRadios'
-import ArchitecturalStyles from './ArchitecturalStyles'
 import SubStatuses from './components/SubStatuses'
 import SoldStatusChildrens from './SoldStatusChildrens'
 import { pendingStatuses, otherStatuses } from './statuses'
@@ -28,6 +27,26 @@ const property_subtypes = {
   duplex: 'RES-Half Duplex',
   townhouse: 'RES-Townhouse',
   single_family: 'RES-Single Family'
+}
+
+const architectural_styles = {
+  southwestern: 'Southwestern',
+  ranch: 'Ranch',
+  spanish: 'Spanish',
+  aFrame: 'A-Frame',
+  midCentry_modern: 'Mid-Centry Modern',
+  prairie: 'Prairie',
+  studio_apartment: 'Studio Apartment',
+  contemporary: 'Contemporary/Modern',
+  split_level: 'Split Level',
+  victorian: 'Victorian',
+  traditional: 'Traditional',
+  mediterranean: 'Mediterranean',
+  colonial: 'Colonial',
+  oriental: 'Oriental',
+  loft: 'Loft',
+  french: 'French',
+  tudor: 'Tudor'
 }
 
 const Filters = ({
@@ -106,8 +125,16 @@ const Filters = ({
           <MlsAreaSelects />
           <Counties />
           <NumberRange name="price" placeholder="$Any" label="Price Range" />
-          <PropertySubtypes fields={property_subtypes} />
-          <ArchitecturalStyles />
+          <Tags
+            name="property_subtypes"
+            label="Property Subtypes"
+            fields={property_subtypes}
+          />
+          <Tags
+            label="Style of Home"
+            name="architectural_styles"
+            fields={architectural_styles}
+          />
           <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
           <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
           <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
@@ -151,6 +178,7 @@ export default compose(
         active: 'Active'
       },
       property_subtypes,
+      architectural_styles,
       minimum_sold_date: '3', // unit is month but it need to timestamp
       minimum_bedrooms: 'any',
       minimum_bathrooms: 'any',
