@@ -41,9 +41,7 @@ app.use(async (ctx, next) => {
 })
 
 // attach template engine
-const templatesDir = __DEV__
-  ? path.resolve(appConfig.compile.entry, 'templates')
-  : appConfig.compile.output
+const templatesDir = __DEV__ ? path.resolve(entry, 'templates') : output
 
 // use template engine
 app.use(views(templatesDir, { map: { html: 'hogan' } }))
@@ -110,7 +108,7 @@ if (__DEV__) {
 } else {
   app.use(
     mount(
-      serve(path.join(output), {
+      serve(publicPath, path.join(output), {
         gzip: true,
         maxage: 86400000
       })
