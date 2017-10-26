@@ -1,12 +1,48 @@
 import React from 'react'
-import pure from 'recompose/pure'
-import { Field } from 'redux-form'
+import { connect } from 'react-redux'
+import { Field, formValueSelector } from 'redux-form'
+import { obiectPropsValueToArray } from '../../../../../../../../store_actions/listings/search/filters/submit-filters-form'
+import toggleAll from '../../../../../../../../store_actions/listings/search/filters/toggle-all'
 
 import Label from './Label'
+const selector = formValueSelector('filters')
 
-const Tags = ({ name, label, fields }) =>
-  <Label label={label}>
-    <div className="c-filters__tag-wrapper">
+const arraysIsSame = (array1, array2) =>
+  Array.isArray(array1) &&
+  Array.isArray(array2) &&
+  array1.length === array2.length &&
+  array1.every((element, index) => element === array2[index])
+
+const Tags = ({
+  name,
+  label,
+  fields,
+  selectAllValue,
+  selectedTags,
+  toggleAll
+}) => (
+  <div style={{ marginBottom: '3rem' }}>
+    <div className="c-filters__tags__header clearfix">
+      <strong className="c-filters__tags__title">{label}</strong>
+      <div className="c-filters__tags__select-all">
+        <label htmlFor={`select-all-${name}`} className="c-filters-tag">
+          <input
+            type="checkbox"
+            checked={selectAllValue}
+            id={`select-all-${name}`}
+            defaultChecked={selectAllValue}
+            className="c-filters__tag__input"
+            onChange={event => {
+              toggleAll(name, fields, event.target.checked)
+            }}
+          />
+          <span className="c-filters__tag__text">
+            {selectAllValue ? 'Deselect All' : 'Select All'}
+          </span>
+        </label>
+      </div>
+    </div>
+    <div className="c-filters__tags__body clearfix">
       {Object.keys(fields).map(field => {
         const value = fields[field]
         const id = `${name}__${field}`
@@ -21,13 +57,26 @@ const Tags = ({ name, label, fields }) =>
               className="c-filters__tag__input"
               normalize={v => (v ? value : null)}
             />
-            <span className="c-filters__tag__text">
-              {value}
-            </span>
+            <span className="c-filters__tag__text">{value}</span>
           </label>
         )
       })}
     </div>
-  </Label>
+  </div>
+)
 
-export default pure(Tags)
+export default connect(
+  (state, { name, fields }) => {
+    const selectedTags = selector(state, name)
+    const selectAllValue = arraysIsSame(
+      obiectPropsValueToArray(selectedTags),
+      obiectPropsValueToArray(fields)
+    )
+
+    return {
+      selectedTags,
+      selectAllValue
+    }
+  },
+  { toggleAll }
+)(Tags)

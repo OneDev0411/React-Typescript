@@ -27,7 +27,7 @@ const CreateAlertModal = ({
   successModalIsActive,
   activeShareAlertModal,
   shareAlertModalIsActive
-}) =>
+}) => (
   <div>
     <Modal
       show={isActive}
@@ -40,6 +40,7 @@ const CreateAlertModal = ({
           style={{ background: brandColor }}
         >
           <img
+            alt="bell"
             className="c-create-alert-modal__hero__logo"
             src="/static/images/dashboard/mls/alert-bell.svg"
           />
@@ -94,6 +95,7 @@ const CreateAlertModal = ({
       isActive={shareAlertModalIsActive}
     />
   </div>
+)
 
 export const normalizeAlertOptions = (
   searchOptions,
@@ -101,11 +103,17 @@ export const normalizeAlertOptions = (
   alertOptions
 ) => {
   let points = searchOptions.points
-  const { mls_areas, school_districts, subdivisions, counties } = searchOptions
+  const {
+    mls_areas,
+    postal_codes,
+    school_districts,
+    subdivisions,
+    counties
+  } = searchOptions
 
   if (
     drawingPoints.length === 0 &&
-    (mls_areas || school_districts || subdivisions || counties)
+    (mls_areas || postal_codes || school_districts || subdivisions || counties)
   ) {
     points = null
   }
