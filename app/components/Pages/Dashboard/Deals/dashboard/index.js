@@ -8,6 +8,7 @@ import ReactTooltip from 'react-tooltip'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import EditForm from './edit-form'
+import FormViewer from './form-viewer'
 import DealInfo from './deal-info'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
@@ -100,14 +101,17 @@ class DealDetails extends React.Component {
           deal={deal}
         />
 
+        <FormViewer
+          deal={deal}
+        />
+
         <ESignAttachments
-          dealId={deal.id}
+          deal={deal}
         />
 
         <ESignCompose
           deal={deal}
         />
-
       </Row>
     )
   }

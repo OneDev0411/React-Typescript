@@ -5,16 +5,22 @@ export default (state = null, action) => {
   switch (action.type) {
     case types.SHOW_ATTACHMENTS:
       return {
-        show: true,
-        view: 'attachment',
+        showCompose: action.showCompose,
+        showAttachments: true,
         attachments: action.attachments
       }
 
     case types.UPDATE_ATTACHMENTS:
       return {
-        show: true,
-        view: 'compose',
+        showCompose: true,
+        showAttachments: false,
         attachments: action.attachments
+      }
+
+    case types.CLOSE_ATTACHMENTS:
+      return {
+        ...state,
+        showAttachments: false
       }
 
     case types.REMOVE_ATTACHMENT:

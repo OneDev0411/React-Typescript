@@ -141,6 +141,7 @@
 
       li {
         padding: 0 $pad-size;
+        cursor: pointer;
         width: 400px;
         height: 30px;
         line-height: 30px;
@@ -156,12 +157,23 @@
           text-overflow: ellipsis;
           white-space: nowrap;
           overflow: hidden;
+          &:hover {
+            text-decoration: underline;
+            color: #2196f3;
+          }
         }
 
-        .remove-attachment {
+        .ctas {
           float: right;
-          cursor: pointer;
-          color: #62778c;
+
+          i {
+            cursor: pointer;
+            color: #62778c;
+          }
+
+          .open-form {
+            margin-right: 10px;
+          }
         }
       }
     }

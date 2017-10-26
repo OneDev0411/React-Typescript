@@ -5,6 +5,7 @@ import DealInfo from '../deal-info'
 import Comments from '../comments'
 import CommentInput from '../comments/input'
 import PdfViewer from '../../../../../Partials/Pdf/Viewer'
+import { setFormViewer } from '../../../../../../store_actions/deals/forms'
 
 class FormViewer extends React.Component {
   constructor(props) {
@@ -28,10 +29,21 @@ class FormViewer extends React.Component {
     })
   }
 
+  onClose() {
+    const { setFormViewer } = this.props
+    setFormViewer(null)
+  }
+
   render() {
     const { showFactsheet, showComments } = this.state
-    const { deal, task, title, file, isActive, downloadUrl, onClose} = this.props
-    const { name, type, url } = file
+    const { deal, formViewer } = this.props
+    const { task, title, file } = formViewer
+
+    if (!task) {
+      return false
+    }
+
+    const { name, type, url, downloadUrl } = file
 
     const COMMENTS_WIDTH = showComments ? '300px' : '0px'
     const FACTSHEET_WIDTH = showFactsheet ? '300px' : '0px'
@@ -44,12 +56,12 @@ class FormViewer extends React.Component {
     return (
       <Modal
         className="deal-form-viewer-modal"
-        show={isActive}
-        onHide={onClose}
+        show={task !== null}
+        onHide={() => this.onClose()}
       >
         <Modal.Header>
           <Button
-            onClick={onClose}
+            onClick={() => this.onClose()}
             className="close-btn"
           >
             X
@@ -148,5 +160,6 @@ class FormViewer extends React.Component {
 }
 
 export default connect(({ deals }) => ({
+  formViewer: deals.formViewer,
   isBackOffice: deals.backoffice
-}))(FormViewer)
+}), { setFormViewer })(FormViewer)
