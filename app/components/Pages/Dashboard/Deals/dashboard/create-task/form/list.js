@@ -2,6 +2,7 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import Dropzone from 'react-dropzone'
+import cn from 'classnames'
 
 class Forms extends React.Component {
   constructor(props) {
@@ -12,25 +13,30 @@ class Forms extends React.Component {
   }
 
   onSelectFile(files) {
-    if (files.length === 0) {
+    const { creatingForm, onRequestUpload } = this.props
+
+    if (creatingForm !== null || files.length === 0) {
       return false
     }
 
-    this.props.onRequestUpload(files[0])
+    onRequestUpload(files[0])
   }
 
   render() {
-    const { forms, show, onClose, onSelectForm } = this.props
+    const { creatingForm, forms, show, onClose, onSelectForm } = this.props
     const { filter } = this.state
 
     return (
       <Modal
         show={show}
         onHide={onClose}
+        backdrop="static"
         dialogClassName="modal-deal-create-form"
       >
-        <Modal.Header closeButton>
-          Add Task
+        <Modal.Header
+          closeButton={creatingForm === null}
+        >
+          {creatingForm ? 'Creating Task ...' : 'Add Task'}
         </Modal.Header>
 
         <Modal.Body>
@@ -53,8 +59,14 @@ class Forms extends React.Component {
                 <li
                   key={`FORM_ITEM_${form.id}_${key}`}
                   onClick={() => onSelectForm(form)}
+                  className={cn({ disabled: creatingForm !== null })}
                 >
                   { form.name }
+
+                  {
+                    creatingForm && creatingForm.id === form.id &&
+                    <i className="fa fa-spinner fa-spin" />
+                  }
                 </li>
               ))
               .value()

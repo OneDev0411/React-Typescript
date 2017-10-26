@@ -130,6 +130,8 @@
 }
 
 %deal-tasks {
+  @extend %tasks-transition;
+
   .task,
   .add-task {
     position: relative;
@@ -256,4 +258,24 @@
     margin: 0;
   }
   @extend %dels-dropdown-cta-menu;
+}
+
+%tasks-transition {
+  .tasks-enter {
+    opacity: 0.01;
+  }
+
+  .tasks-enter.tasks-enter-active {
+    opacity: 1;
+    transition: opacity 1000ms ease-in;
+  }
+
+  .tasks-leave {
+    opacity: 1;
+  }
+
+  .tasks-leave.tasks-leave-active {
+    opacity: 0.01;
+    transition: opacity 800ms ease-in;
+  }
 }

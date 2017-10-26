@@ -46,6 +46,10 @@
       text-overflow: ellipsis;
       overflow: hidden;
 
+      i {
+        margin-left: 10px;
+      }
+
       &:last-child {
         border-bottom: none;
       }
@@ -71,6 +75,14 @@
       &:hover {
         background-color: #eff5fa;
         text-decoration: underline;
+      }
+
+      &.disabled {
+        &:hover {
+          cursor: auto;
+          text-decoration: none;
+          background-color: #fff;
+        }
       }
     }
   }
