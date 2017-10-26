@@ -14,7 +14,7 @@ const TaskStatus = ({
   if (review) {
     status = review.status
     reviewTime = moment.unix(review.created_at).format('MMMM DD, YY [at] HH:mm')
-    tooltip = `${status}, ${reviewTime}`
+    tooltip = `Status: (${status}, ${reviewTime})`
   }
 
   if (isBackoffice && (status === 'Submitted' || task.needs_attention)) {
