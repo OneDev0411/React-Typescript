@@ -8,21 +8,39 @@ export default class extends React.Component {
     const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
 
+    const checkInputKey = (e) => {
+      let addKey
+      // new browsers
+      if (e.key) {
+        addKey = e.key === 'Enter' || e.key === 'Tab' || e.key === ','
+        // old browsers
+      } else {
+        addKey = e.keyCode === 13 || e.keyCode === 9 || e.key === 188
+      }
+      return addKey
+    }
     this.inputHandler = Observable
-      .fromEvent(this.autosize.getInput(), 'keyup')
+      .fromEvent(this.autosize.getInput(), 'keydown')
+    this.inputHandler
+      .filter(e => !checkInputKey(e))
       .map(e => e.target.value)
       .filter(text => text.length === 0 || text.length >= 3)
       .debounceTime(300)
       .subscribe(text => this.props.onSearch(text))
+
+    this.disposeInputHandler = this.inputHandler
+      .filter(e => checkInputKey(e))
+      .subscribe(e => this.props.addFirstSuggestion(e))
   }
 
   componentWillUnmount() {
-    this.inputHandler.unsubscribe()
+    this.disposeInputHandler.unsubscribe()
   }
 
   setInputRef(ref) {
-    if (!ref || this.autosize)
+    if (!ref || this.autosize) {
       return false
+    }
 
     this.autosize = ref
     this.props.inputRef(ref.getInput())
