@@ -73,6 +73,7 @@ export default class MessageInput extends React.Component {
         />
 
         <Textarea
+          onBlur={e => this.props.onBlur(e.target.value)}
           autoFocus
           id={handlerId}
           dir="auto"
