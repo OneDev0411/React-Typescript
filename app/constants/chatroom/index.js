@@ -4,6 +4,7 @@ import room from './room'
 import popup from './popup'
 import state from './state'
 import activeRoom from './active-room'
+import drafts from './drafts'
 
 const ActionTypes = {}
 
@@ -13,7 +14,8 @@ new Array(
   ...room,
   ...popup,
   ...state,
-  ...activeRoom
+  ...activeRoom,
+  ...drafts
 )
 .forEach(action => {
   ActionTypes[action] = `CHATROOM___${action}`

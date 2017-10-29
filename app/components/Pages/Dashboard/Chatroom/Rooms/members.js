@@ -79,6 +79,7 @@ const ManageMembers = ({
       OnLeaveClick={() => {
         Chatroom.leaveRoom(user.id, room)
       }}
+      directRoom={room.users.length === 2}
     />
   )
 }

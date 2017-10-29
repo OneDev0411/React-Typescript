@@ -10,7 +10,6 @@ export default ({
   onBlurDropDownBox,
   onAdd
 }) => {
-
   /**
    * get entry hint
    */
@@ -19,8 +18,7 @@ export default ({
       return email
     else if (phone_number && phone_number !== display_name)
       return phone_number
-    else
-      return ''
+    return ''
   }
 
   /**

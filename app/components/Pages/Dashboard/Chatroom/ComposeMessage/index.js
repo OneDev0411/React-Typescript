@@ -4,6 +4,9 @@ import Message from '../Util/message'
 import Mention from '../Util/mention'
 import Socket from '../Services/socket'
 import MessageInput from './input'
+import {
+  insertDraft
+} from '../../../../../store_actions/chatroom'
 
 class ComposeMessage extends React.Component {
   constructor(props) {
@@ -30,7 +33,10 @@ class ComposeMessage extends React.Component {
       .subscribe(() => this.sendMessage())
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.draft) {
+      this.text_message.value = nextProps.draft
+    }
     this.text_message.focus()
   }
 
@@ -104,6 +110,7 @@ class ComposeMessage extends React.Component {
         isInstantChat={isInstantChat}
         inputRef={ref => this.text_message = ref}
         onHeightChange={this.props.onHeightChange}
+        onBlur={message => this.props.insertDraft({ roomId: this.props.roomId, message })}
       />
     )
   }
@@ -111,10 +118,13 @@ class ComposeMessage extends React.Component {
 
 function mapStateToProps({ chatroom }, props) {
   const room = chatroom.rooms[props.roomId]
+  const draft = chatroom.drafts[props.roomId]
 
   return {
-    members: room ? room.users : null
+    members: room ? room.users : null,
+    draft
   }
 }
 
-export default connect(mapStateToProps)(ComposeMessage)
+export default connect(mapStateToProps
+  , { insertDraft })(ComposeMessage)
