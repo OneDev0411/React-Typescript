@@ -5,6 +5,7 @@ import AgentTable from './agent-table'
 import BackOfficeTable from './backoffice-table'
 import Header from './header'
 import { getDeals } from '../../../../../store_actions/deals'
+import { hasUserAccess } from '../../../../../utils/user-acl'
 
 class DealsDashboard extends React.Component {
   constructor(props) {
@@ -33,9 +34,7 @@ class DealsDashboard extends React.Component {
     // refetch deals based on this feature request:
     // https://gitlab.com/rechat/web/issues/419
     const { getDeals, user } = this.props
-
-    const isBackOffice = user.features.indexOf('Backoffice') > -1
-    getDeals(user, isBackOffice)
+    getDeals(user, hasUserAccess(user, 'BackOffice'))
   }
 
   /**

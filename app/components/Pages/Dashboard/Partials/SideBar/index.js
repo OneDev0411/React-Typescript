@@ -17,6 +17,9 @@ import SvgNotifications from '../Svgs/Notifications'
 import Brand from '../../../../../controllers/Brand'
 import Avatar from './components/Avatar'
 
+// utils
+import { hasUserAccess, getUserRoles } from '../../../../../utils/user-acl'
+
 // chatroom stuff
 import InstantChatTrigger from '../../Chatroom/Shared/instant-trigger'
 
@@ -100,6 +103,10 @@ const appNavbar = ({
     name: `${user.first_name} ${user.last_name}`
   }
 
+  const roles = getUserRoles(user)
+  const hasDealsPermission = roles.includes('Deals')
+  const hasBackOfficePermission = roles.includes('BackOffice')
+
   return (
     <aside className="c-app-navbar">
 
@@ -119,10 +126,7 @@ const appNavbar = ({
             </Link>
           </NavbarItem> }
 
-        { user.brand &&
-          user.features &&
-          (user.features.includes('Deals') ||
-          user.features.includes('Backoffice')) &&
+        { (hasDealsPermission || hasBackOfficePermission) &&
           <NavbarItem title="Deals">
             <Link to="/dashboard/deals">
               <DealsIcon color={activePath === 'DEALS' ? ACTIVE_COLOR : DEFAULT_COLOR} />
@@ -152,10 +156,7 @@ const appNavbar = ({
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <li><Link to="/dashboard/account">Account</Link></li>
-            {
-              user.brand &&
-              user.features &&
-              user.features.includes('Backoffice') &&
+            { hasBackOfficePermission &&
               <li>
                 <Link to="/dashboard/brands">Brands</Link>
               </li>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { getDeals } from '../../../../store_actions/deals'
+import { hasUserAccess } from '../../../../utils/user-acl'
 
 class DealsContainer extends React.Component {
   constructor(props) {
@@ -11,8 +12,7 @@ class DealsContainer extends React.Component {
     const { getDeals, deals, forms, user } = this.props
 
     if (!deals) {
-      const isBackOffice = user.features.indexOf('Backoffice') > -1 ? true : false
-      getDeals(user, isBackOffice)
+      getDeals(user, hasUserAccess(user, 'BackOffice'))
     }
   }
 
