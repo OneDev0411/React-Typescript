@@ -73,43 +73,57 @@ class ListingStatus extends React.Component {
     const approved = statusContext.approved_at !== null
 
     return (
-      <div className="item">
-        <StatusModal
-          deal={deal}
-          show={showModal}
-          status={status}
-          saveText={isBackOffice ? 'Update' : 'Notify Admin'}
-          onChangeStatus={(status) => this.onChangeStatus(status)}
-          onClose={() => this.toggleModal()}
-        />
-
-        <div className="lbl">Status:</div>
-        <div className="value mls-status">
-          <span
-            className="status"
-            style={{ background: getStatusColorClass(status) }}
+      <div>
+        <div className="item">
+          <StatusModal
+            deal={deal}
+            show={showModal}
+            status={status}
+            saveText={isBackOffice ? 'Update' : 'Notify Admin'}
+            onChangeStatus={(status) => this.onChangeStatus(status)}
+            onClose={() => this.toggleModal()}
           />
-          <span
-            data-tip={approved ? null : 'Waiting for office approval'}
-          >
-            { status }
-          </span>
+
+          <div className="lbl">Status:</div>
+          <div className="value mls-status">
+            <span
+              className="status"
+              style={{ background: getStatusColorClass(status) }}
+            />
+            <span
+              data-tip={!isBackOffice && !approved ? 'Waiting for office approval' : null}
+            >
+              { status }
+            </span>
+
+            {
+              !saving &&
+              <i
+                className="fa fa-pencil"
+                onClick={() => this.toggleModal()}
+              />
+            }
+          </div>
 
           {
-            !saving &&
+            saving &&
             <i
-              className="fa fa-pencil"
-              onClick={() => this.toggleModal()}
+              style={{ marginLeft: '5px' }}
+              className="fa fa-spin fa-spinner"
             />
           }
         </div>
 
         {
-          saving &&
-          <i
-            style={{ marginLeft: '5px' }}
-            className="fa fa-spin fa-spinner"
-          />
+          isBackOffice && !approved && !saving &&
+          <div className="approve-row">
+            <button
+              className="btn-approve"
+              onClick={() => this.updateStatus(status)}
+            >
+              Approve
+            </button>
+          </div>
         }
       </div>
     )

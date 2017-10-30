@@ -19,14 +19,21 @@
 
 %deal-mls-info {
   margin: $col-padding / 2;
+  @extend %deal-fact-approve-row;
+
   .item {
     display: flex;
     flex-direction: row;
     color: #62778c;
-    margin-bottom: 10px;
+
+    &:last-child {
+      margin-top: 10px;
+    }
+
     .lbl {
       width: 20%;
     }
+
     .value {
       width: 80%;
       text-align: right;
