@@ -1,7 +1,11 @@
 export function getUserRoles(user) {
-  const { brand } = user
-  const role = user.roles.find(group => group.brand === user.brand)
+  const { brand, roles } = user
 
+  if (!roles || !brand) {
+    return []
+  }
+
+  const role = roles.find(group => group.brand === user.brand)
   return role ? role.acl : []
 }
 
