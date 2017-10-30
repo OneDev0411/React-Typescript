@@ -50,11 +50,14 @@ class Table extends React.Component {
     const { deal, checklists, notify, changeNeedsAttention, createGenericTask } = this.props
     let displayingValue = value
 
-    if (field.fieldType === 'date') {
+    if (field.fieldType === 'date' && value.length > 0) {
       displayingValue = moment(value).format('MMM DD, YYYY')
     }
 
-    const title = `Notify admin to change value of ${field.name} to ${displayingValue}`
+    const title = value.length > 0 ?
+      `Change context ${field.name} to ${displayingValue}` :
+      `Remove context ${field.name}`
+
     const checklist = checklists[deal.checklists[0]]
     const task = await createGenericTask(deal.id, title, checklist.id)
     changeNeedsAttention(task.id, true)
@@ -106,18 +109,7 @@ class Table extends React.Component {
                       { getLabel ? getLabel(deal, field, fieldCtx) : field.name }
                     </div>
 
-                    <div className={cn('field', { editable, approved, disabled })}>
-                      {
-                        fieldCtx.value && approved === false &&
-                        <span
-                          className="icon-not-approved"
-                          data-tip="Approval is pending on this date"
-                          data-place="bottom"
-                        >
-                          <i className="fa fa-info" />
-                        </span>
-                      }
-
+                    <div className={cn('field', { editable: true, approved, disabled })}>
                       <Editable
                         field={field}
                         context={fieldCtx}
@@ -143,7 +135,7 @@ class Table extends React.Component {
                         className="btn-approve"
                         onClick={(e) => this.approveField(e, field, fieldCtx)}
                       >
-                        approve
+                        Approve
                       </button>
                     }
                   </div>

@@ -64,6 +64,13 @@
         transition: 0.1s ease-in all;
         cursor: pointer;
         border-radius: 3px;
+        i {
+          color: #afbbc8
+        }
+
+        .ico-remove {
+          display: none;
+        }
 
         &.approved {
           color: #1d364b;
@@ -72,6 +79,13 @@
         &.editable {
           &:hover {
             border-color: #2196f3;
+            i {
+              color: #2196f3;
+            }
+
+            .ico-remove {
+              display: inline-block;
+            }
           }
         }
 
@@ -80,10 +94,6 @@
             border-color: #fff;
             cursor: auto;
           }
-        }
-
-        &:hover .cta {
-          opacity: 1;
         }
 
         .input-edit {
@@ -96,24 +106,7 @@
           }
         }
 
-        .icon-not-approved {
-          margin-right: 5px;
-          display: inline-block;
-          width: 11px;
-          height: 11px;
-          line-height: 8px;
-          vertical-align: middle;
-          border-radius: 10px;
-          border: 1px solid #f5a623;
-          text-align: center;
-          i {
-            font-size: 8px;
-            color: #f5a623;
-          }
-        }
-
         .cta {
-          opacity: 1;
           margin: 0 2px 0 3px;
           i {
             margin-left: 5px;

@@ -1,6 +1,9 @@
 import React from 'react'
 import ListingCard from '../listing-card'
-import FactSheet from '../factsheet'
+import CriticalDates from '../factsheet/critical-dates'
+import ListingInfo from '../factsheet/listing-info'
+import Commission from '../factsheet/commission'
+// import FactSheet from '../factsheet'
 import Roles from '../roles'
 import AddContract from '../add-contract'
 import ArchiveDeal from '../archive-deal'
@@ -25,11 +28,19 @@ export default ({
         deal={deal}
       />
 
+      <CriticalDates
+        deal={deal}
+      />
+
       <Roles
         deal={deal}
       />
 
-      <FactSheet
+      <ListingInfo
+        deal={deal}
+      />
+
+      <Commission
         deal={deal}
       />
 

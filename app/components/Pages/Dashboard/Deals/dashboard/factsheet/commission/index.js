@@ -38,12 +38,14 @@ const getValue = (deal, field) => {
 }
 
 export default ({ deal }) => (
-  <div className="deal-info-section">
-    <Items
-      deal={deal}
-      title="CDA Information"
-      table={table}
-      getValue={getValue}
-    />
+  <div className="deal-fact-sheet">
+    <div className="deal-info-section">
+      <Items
+        deal={deal}
+        title="CDA Information"
+        table={table}
+        getValue={getValue}
+      />
+    </div>
   </div>
 )
