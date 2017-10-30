@@ -8,34 +8,29 @@ import { Popover, OverlayTrigger } from 'react-bootstrap'
 import UserAvatar from '../../../../../Partials/UserAvatar'
 
 function getAckedUsers(message, room) {
-  if (!message.acked_by)
+  if (!message.acked_by) {
     return []
+  }
 
-  const list = _
+  return _
     .uniq(message.acked_by)
     .map(id => ({ user: _.find(room.users, { id }) }))
     .filter(user => user !== null)
-
-  return list
 }
 
 function getDeliveredUsers(message, room) {
-
   let deliveries = _.uniq(message.deliveries, d => d.user)
 
-  if (message.acked_by)
+  if (message.acked_by) {
     deliveries = _.filter(deliveries, d => message.acked_by.indexOf(d.user) === -1)
+  }
 
-  const list = _
-    .map(deliveries, info => {
-      return {
-        user: _.find(room.users, { id: info.user }),
-        info
-      }
-    })
+  return _
+    .map(deliveries, info => ({
+      user: _.find(room.users, { id: info.user }),
+      info
+    }))
     .filter(user => user !== null)
-
-  return list
 }
 
 /**
@@ -47,10 +42,9 @@ const RenderList = ({
   className,
   avatarSize = 30
 }) => {
-
-  if (list.length === 0)
+  if (list.length === 0) {
     return false
-
+  }
   return (
     <div className={`content ${className}`}>
       <div className="title">
@@ -81,12 +75,12 @@ const RenderList = ({
               <Col xs={6} className="name-section">
                 <div
                   className="name"
-                  style={ !info ? {lineHeight: `${avatarSize}px`} : {} }
+                  style={!info ? { lineHeight: `${avatarSize}px` } : {}}
                 >
                   {
                     user.display_name.length <= 20 ?
-                    user.display_name :
-                    user.display_name.substr(0, 20) + '...'
+                      user.display_name :
+                      `${user.display_name.substr(0, 20)}...`
                   }
                 </div>
                 {
@@ -95,8 +89,8 @@ const RenderList = ({
                     Delivered via&nbsp;
                     {
                       info
-                      .delivery_type
-                      .replace('airship', 'mobile notification')
+                        .delivery_type
+                        .replace('airship', 'mobile notification')
                     }
                   </div>
                 }
@@ -135,7 +129,6 @@ const DeliveryReport = ({
   message,
   placement = 'right'
 }) => {
-
   if (!room || !author || author.id !== user.id) {
     return false
   }
@@ -143,8 +136,9 @@ const DeliveryReport = ({
   const ackedUsers = getAckedUsers(message, room)
   const deliveredUsers = getDeliveredUsers(message, room)
 
-  if (ackedUsers.length === 0 && deliveredUsers.length === 0)
+  if (ackedUsers.length === 0 && deliveredUsers.length === 0) {
     return false
+  }
 
   const MessageInfo = (
     <Popover

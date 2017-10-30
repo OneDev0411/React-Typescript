@@ -109,7 +109,7 @@
     "react-color": "^2.13.8",
     "react-day-picker": "^5.5.3",
     "react-dom": "^15.4.2",
-    "react-dropzone": "git+https://github.com/izadmehr/react-dropzone.git#buildVersion",
+    "react-dropzone": "github:izadmehr/react-dropzone#b10365ae5338475c0d3cc355f41a8f5dd8aa2096",
     "react-ga": "^2.2.0",
     "react-hot-loader": "^3.0.0-beta.6",
     "react-images": "^0.5.2",
