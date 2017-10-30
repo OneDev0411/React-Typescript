@@ -59,5 +59,5 @@ const Details = ({
 )
 
 export default connect(({ contacts }) => ({
-  defaultTags: contacts.tags,
+  defaultTags: contacts.tags
 }))(Details)

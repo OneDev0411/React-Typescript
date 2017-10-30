@@ -12,7 +12,7 @@ export default ({
   <textarea
     value={value}
     placeholder={placeholder}
-    style={{ height: (lines * 23) + 'px' }}
+    style={{ height: `${lines * 23}px` }}
     ref={inputRef}
     onChange={onChange}
     onBlur={onBlur}

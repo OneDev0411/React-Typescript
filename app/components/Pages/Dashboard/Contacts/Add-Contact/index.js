@@ -30,7 +30,7 @@ export default class AddContact extends React.Component {
     const list = this.state[stateName]
 
     list[key] = e.target.value
-    this.setState({[stateName]: list})
+    this.setState({ [stateName]: list })
   }
 
   addNewAttribute(attribute) {
@@ -41,7 +41,7 @@ export default class AddContact extends React.Component {
       return
 
     list.push('')
-    this.setState({[stateName]: list})
+    this.setState({ [stateName]: list })
   }
 
   onRemoveAttribute(attribute, key) {
@@ -50,7 +50,7 @@ export default class AddContact extends React.Component {
 
     // remove
     list.splice(key, 1)
-    this.setState({[stateName]: list})
+    this.setState({ [stateName]: list })
   }
 
   async save() {
@@ -60,13 +60,12 @@ export default class AddContact extends React.Component {
     this.setState({ saving: true })
 
     try {
-
       const contact = {
-        emails: emails,
+        emails,
         phone_numbers: phones,
         first_name: firstName,
         last_name: lastName,
-        stage: stage
+        stage
       }
 
       const id = await store.dispatch(addContact(contact))
@@ -75,8 +74,7 @@ export default class AddContact extends React.Component {
 
       // trigger
       onNewContact(id)
-    }
-    catch(e) {
+    } catch (e) {
       console.log(e)
       if (e.response) {
         alert(e.response.body.message)
@@ -84,7 +82,6 @@ export default class AddContact extends React.Component {
         //   validationErrors: e.response.body.attributes
         // })
       }
-
     } finally {
       this.setState({ saving: false })
     }
@@ -109,7 +106,7 @@ export default class AddContact extends React.Component {
       <div>
         <Button
           bsStyle="primary"
-          onClick={() => this.openDialog() }
+          onClick={() => this.openDialog()}
         >
           Add Contact
         </Button>
