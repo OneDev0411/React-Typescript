@@ -20,6 +20,7 @@ class Compose extends React.Component {
       viewList: {},
       recipients: {}
     }
+    this.onBlurDropDownBox = this.onBlurDropDownBox.bind(this)
   }
 
   /**
@@ -36,7 +37,7 @@ class Compose extends React.Component {
     this.criteria = text
     this.setState({ viewList: {} })
 
-    // dont search when there is no criteria
+    // don't search when there is no criteria
     if (this.criteria.length === 0) {
       return false
     }
@@ -191,7 +192,7 @@ class Compose extends React.Component {
       ...{ [recipient.id]: recipient }
     }
 
-    this.setState({ recipients }, this.onChangeRecipients)
+    this.setState({ recipients, viewList: {} }, this.onChangeRecipients)
 
     // reset search input text
     this.searchInput.value = ''
@@ -265,6 +266,13 @@ class Compose extends React.Component {
           onSearch={text => this.onSearch(text)}
           onRemove={recipient => this.onRemove(recipient)}
           inputRef={el => this.searchInput = el}
+          addFirstSuggestion={e => {
+            if (viewList && viewList.length > 0) {
+              e.preventDefault()
+              this.onAdd(viewList[0])
+            }
+            this.onBlurDropDownBox()
+          }}
         />
 
         <Suggestions
@@ -272,7 +280,7 @@ class Compose extends React.Component {
           searching={searching}
           viewList={viewList}
           onAdd={recipient => this.onAdd(recipient)}
-          onBlurDropDownBox={() => this.onBlurDropDownBox()}
+          onBlurDropDownBox={this.onBlurDropDownBox}
         />
       </div>
     )
