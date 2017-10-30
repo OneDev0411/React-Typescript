@@ -2,7 +2,7 @@ export function getUserRoles(user) {
   const { brand } = user
   const role = user.roles.find(group => group.brand === user.brand)
 
-  return role.acl || []
+  return role ? role.acl : []
 }
 
 export function hasUserAccess(user, action) {
