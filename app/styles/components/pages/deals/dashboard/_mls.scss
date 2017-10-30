@@ -30,7 +30,8 @@
     .value {
       width: 80%;
       text-align: right;
-      &.mls-number {
+      &.mls-number,
+      &.mls-status {
         transition: 0.1s all ease-in;
         i {
           display: none;

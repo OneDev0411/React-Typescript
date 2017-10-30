@@ -32,7 +32,13 @@ export const getStatusColorClass = status => {
     case 'Sold':
     case 'Cancelled':
     case 'Leased':
+    case 'Archived':
       return 'red'
+    case 'Temp Off Market':
+    case 'Withdrawn':
+    case 'Withdrawn Sublisting':
+      return '#62778c'
+
     default:
       return ''
   }
