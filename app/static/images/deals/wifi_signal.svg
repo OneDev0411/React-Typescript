@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="91px" height="76px" viewBox="0 0 91 76" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>wifi signal</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Rechat-Early-Test:-Current-Web-States" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.300000012">
+        <g id="Connection-Lost-Copy" transform="translate(-675.000000, -374.000000)" fill="#8DA2B5">
+            <g id="wifi-signal" transform="translate(675.000000, 374.000000)">
+                <path d="M45,60 C42.796,60 41,61.796 41,64 C41,66.204 42.796,68 45,68 C47.204,68 49,66.204 49,64 C49,61.796 47.204,60 45,60 M45,76 C38.384,76 33,70.616 33,64 C33,57.384 38.384,52 45,52 C51.616,52 57,57.384 57,64 C57,70.616 51.616,76 45,76" id="Fill-1206"></path>
+                <path d="M62.592,47.032 C58.064,42.496 52.036,40 45.624,40 C39.212,40 33.188,42.496 28.66,47.032 L23,41.376 C29.04,35.332 37.076,32 45.624,32 C54.176,32 62.208,35.332 68.252,41.376 L62.592,47.032 Z" id="Fill-1207"></path>
+                <path d="M84.86,24.404 C74.28,13.824 60.216,8 45.256,8 C30.296,8 16.232,13.824 5.656,24.404 L0,18.748 C12.088,6.656 28.16,0 45.256,0 C62.352,0 78.424,6.656 90.516,18.748 L84.86,24.404 Z" id="Fill-1208"></path>
+                <path d="M73.22,35.6940006 C57.628,20.1020006 32.256,20.0980006 16.656,35.6900006 L11,30.0300006 C29.72,11.3180006 60.168,11.3260006 78.876,30.0380006 L73.22,35.6940006 Z" id="Fill-1209"></path>
+            </g>
+        </g>
+    </g>
+</svg>

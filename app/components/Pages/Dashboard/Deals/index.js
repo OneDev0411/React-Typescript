@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { getDeals } from '../../../../store_actions/deals'
 import { hasUserAccess } from '../../../../utils/user-acl'
+import DealsError from './error'
 
 class DealsContainer extends React.Component {
   constructor(props) {
@@ -16,21 +17,17 @@ class DealsContainer extends React.Component {
     }
   }
 
+
   render() {
     const { deals, user, error } = this.props
-    const hasError = error && error.action === 'get-deals' && deals === null
-
-    if (hasError) {
-      return (
-        <div className="deal-fetch-error">
-          <i className="fa fa-exclamation-triangle fa-5x" />
-          <p>{ error.message }</p>
-        </div>
-      )
-    }
 
     return (
       <div className="deals">
+        <DealsError
+          deals={deals}
+          error={error}
+        />
+
         {
           deals === null &&
           <div className="deal-fetch-loading">
