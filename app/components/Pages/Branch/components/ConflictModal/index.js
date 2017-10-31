@@ -9,11 +9,12 @@ const ConflictModal = ({ params, brandInfo }) => {
     loggedInUser,
     receivingUser,
     redirectTo,
-    messageText
+    messageText,
+    actionButtonProps
   } = params
   const { is_shadow } = receivingUser
 
-  const actionButton = {
+  const actionButton = actionButtonProps || {
     text: 'Sign in',
     href: `/signout?username=${encodeURIComponent(
       receivingUser.email
