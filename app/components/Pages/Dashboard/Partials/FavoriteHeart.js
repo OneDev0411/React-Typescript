@@ -10,18 +10,21 @@ export default class FavoriteHeart extends Component {
 
   render() {
     const listing = this.props.listing
-    if (!listing)
+    if (!listing) {
       return false
+    }
 
     const mls_number = listing.mls_number
     const heart_style = S('pointer absolute r-10 t-10 w-44 h-40 z-2')
 
     return (
       <img
-        onClick={controller.listing_card.handleFavoriteAction.bind(
-          this,
-          listing
-        )}
+        onClick={e => {
+          e.stopPropagation()
+          controller.listing_card.handleFavoriteAction(
+            listing
+          )
+        }}
         style={heart_style}
         src={`/static/images/dashboard/mls/heart${this.isFavorited(mls_number)
           ? '-red'

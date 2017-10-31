@@ -117,13 +117,14 @@ export default class ListingCard extends Component {
         key={`listing-viewer-${listing.id}-${helpers.randomString(10)}`}
         style={listing_card_style}
         className={this.props.className}
+        onClick={this.props.handleListingClick.bind(this, listing)}
       >{
           data.user &&
           <FavoriteHeart
             listing={listing}
           />
         }
-        <div style={listing_image_style} onClick={this.props.handleListingClick.bind(this, listing)}>
+        <div style={listing_image_style}>
           <div style={overlay_style} />
           <div style={price_tag_style}>
             ${price}{listing.compact_property && listing.compact_property.property_type === 'Residential Lease' ? '/mo' : ''}
@@ -131,7 +132,6 @@ export default class ListingCard extends Component {
         </div>
         <div
           style={S('absolute b-0 h-100 p-10 pl-15 color-000')}
-          onClick={this.props.handleListingClick.bind(this, listing)}
         >
           <div style={S('font-14')}>{listing_util.addressTitle(address)}</div>
           <div style={S('font-14')}>
