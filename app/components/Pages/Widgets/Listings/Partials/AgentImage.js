@@ -40,7 +40,6 @@ const AgentImage = ({ listing }) => {
 
   return (
     <div
-      onClick={() => controller.action_bubble.handleAgentClick({ ...listing, list_agent: listing.proposed_agent })}
       style={S(`p-0 br-100 border-2-solid-fff absolute r-20 b-${is_mobile ? '103' : '80'} bg-ccc`)}
     >
       <div
