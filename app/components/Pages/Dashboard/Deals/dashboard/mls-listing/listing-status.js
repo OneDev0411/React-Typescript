@@ -41,7 +41,7 @@ class ListingStatus extends React.Component {
     await updateContext(deal.id, {'listing_status': status}, editable)
 
     if (editable === false) {
-      await this.notifyAdmin()
+      await this.notifyAdmin(status)
     }
 
     // set state

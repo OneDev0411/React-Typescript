@@ -50,11 +50,11 @@ class Table extends React.Component {
     const { deal, checklists, notify, changeNeedsAttention, createGenericTask } = this.props
     let displayingValue = value
 
-    if (field.fieldType === 'date' && value.length > 0) {
+    if (field.fieldType === 'date' && value && value.length > 0) {
       displayingValue = moment(value).format('MMM DD, YYYY')
     }
 
-    const title = value.length > 0 ?
+    const title = value && value.length > 0 ?
       `Change context ${field.name} to ${displayingValue}` :
       `Remove context ${field.name}`
 

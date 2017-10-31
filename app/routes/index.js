@@ -308,7 +308,7 @@ export default (
       />
       <Route
         path="/password/reset"
-        component={UserIsNotAuthenticated(AsyncResetPassword)}
+        component={AsyncResetPassword}
       />
 
       <Route path="/mobile" component={AsyncMobile} />

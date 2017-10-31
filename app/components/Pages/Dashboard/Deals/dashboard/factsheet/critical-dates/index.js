@@ -146,17 +146,15 @@ const CriticalDates = ({
   deal,
   showTitle = true
 }) => (
-  <div className="deal-fact-sheet">
-    <div className="deal-info-section">
-      <Items
-        title="Critical Dates"
-        showTitle={showTitle}
-        table={table}
-        deal={deal}
-        getValue={getValue}
-        getLabel={getLabel}
-      />
-    </div>
+  <div className="deal-info-section">
+    <Items
+      title="Critical Dates"
+      showTitle={showTitle}
+      table={table}
+      deal={deal}
+      getValue={getValue}
+      getLabel={getLabel}
+    />
   </div>
 )
 

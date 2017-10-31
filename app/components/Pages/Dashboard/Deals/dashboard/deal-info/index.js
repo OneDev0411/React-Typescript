@@ -28,21 +28,25 @@ export default ({
         deal={deal}
       />
 
-      <CriticalDates
-        deal={deal}
-      />
+      <div className="deal-fact-sheet">
+        <CriticalDates
+          deal={deal}
+        />
+      </div>
 
       <Roles
         deal={deal}
       />
 
-      <ListingInfo
-        deal={deal}
-      />
+      <div className="deal-fact-sheet">
+        <ListingInfo
+          deal={deal}
+        />
 
-      <Commission
-        deal={deal}
-      />
+        <Commission
+          deal={deal}
+        />
+      </div>
 
       <ArchiveDeal
         deal={deal}

@@ -14,7 +14,7 @@ export default class Editable extends React.Component {
 
   deleteField(e, field) {
     e.stopPropagation()
-    this.onFinishEditing('')
+    this.props.onChange(field, null)
   }
 
   onFinishEditing(value = null) {
