@@ -36,6 +36,9 @@ const routes = {
     ['signup'],
     ['upgrade-account'],
     ['verify-phone']
+  ],
+  room: [
+    ['create-rec']
   ]
 }
 
