@@ -49,7 +49,7 @@ export default ({
   const photo = Deal.get.field(deal, 'photo')
 
   return (
-    <div className="listing-card">
+    <div className="deal-listing-card">
 
       {
         showBackButton &&

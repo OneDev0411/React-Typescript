@@ -9,9 +9,10 @@
     @extend %deal-list--header;
   }
 
-  .list-empty {
+  .list-empty,
+  .deals-error {
     text-align: center;
-    margin-top: 20%;
+    margin-top: 17%;
     img {
       width: 91px;
       margin-bottom: 21px;
@@ -29,6 +30,15 @@
       font-weight: 500;
       color: #8da2b5;
       margin-bottom: 20px;
+    }
+
+    .link {
+      color: #2196f3;
+      cursor: pointer;
+      margin-left: 5px;
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     &.backoffice {
@@ -438,7 +448,7 @@
         color: #78909c;
         font-size: 15px;
 
-        .cta, .icon-not-approved {
+        .cta {
           display: none;
         }
       }

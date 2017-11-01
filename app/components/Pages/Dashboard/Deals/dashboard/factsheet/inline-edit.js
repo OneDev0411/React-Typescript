@@ -12,11 +12,16 @@ export default class Editable extends React.Component {
     }
   }
 
+  deleteField(e, field) {
+    e.stopPropagation()
+    this.props.onChange(field, null)
+  }
+
   onFinishEditing(value = null) {
     const { field, onChange } = this.props
     let fieldValue = value
 
-    if (!value && this.input) {
+    if (value === null && this.input) {
       fieldValue = this.input.value
     }
 
@@ -24,7 +29,7 @@ export default class Editable extends React.Component {
       editMode: false
     })
 
-    if (fieldValue && fieldValue !== this.getValue()) {
+    if (fieldValue !== null && fieldValue !== this.getValue()) {
       onChange(field, fieldValue)
     }
   }
@@ -56,10 +61,18 @@ export default class Editable extends React.Component {
 
     if (saving !== field.key) {
       return (
-        <i
-          className="fa fa-pencil"
-          data-tip={editable ? null : "This field needs office approval after changing" }
-        />
+        <span>
+          <i
+            className="fa fa-pencil"
+            data-tip={editable ? null : "This field needs office approval after changing" }
+          />
+
+          <i
+            className="fa fa-times-circle ico-remove"
+            data-tip={editable ? null : "This field needs office approval after removing" }
+            onClick={(e) => this.deleteField(e, field)}
+          />
+        </span>
       )
     }
 
@@ -103,7 +116,13 @@ export default class Editable extends React.Component {
         />
 
         {
-          editMode && isStringType ? '' : context.value
+          editMode && isStringType ?
+          '' :
+          <span
+            data-tip={approved ? null : 'Approval is pending on this date'}
+          >
+            {context.value}
+          </span>
         }
 
         {
@@ -118,7 +137,7 @@ export default class Editable extends React.Component {
               maxLength={15}
             />
             <i
-              className="fa fa-floppy-o"
+              className="fa fa-check-circle"
               onClick={() => this.onFinishEditing()}
             />
           </div>

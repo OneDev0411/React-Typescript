@@ -8,6 +8,9 @@ import UserIsNotAuthenticated from './userIsNotAuthenticated'
 import { getDeals } from '../store_actions/deals'
 import { getContacts } from '../store_actions/contact'
 
+// utils
+import { hasUserAccess } from '../utils/user-acl'
+
 // Containers
 import AppLayout from '../components/App'
 
@@ -111,9 +114,7 @@ const AsyncDealsLayout = Load({
       return
     }
 
-    const isBackOffice =
-      user.brand && user.features && user.features.includes('Backoffice')
-    return dispatch(getDeals(user, isBackOffice))
+    return dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
   }
 })
 
@@ -307,7 +308,7 @@ export default (
       />
       <Route
         path="/password/reset"
-        component={UserIsNotAuthenticated(AsyncResetPassword)}
+        component={AsyncResetPassword}
       />
 
       <Route path="/mobile" component={AsyncMobile} />

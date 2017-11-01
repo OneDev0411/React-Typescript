@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
@@ -10,6 +11,7 @@ import TableView from './TableView'
 import PanelHeader from './PanelHeader'
 import PanelsSwitch from './PanelsSwitch'
 import listingUtils from '../../../../../../utils/listing'
+import actions from '../../../../../../store_actions/listings/panels'
 
 const ListingPanel = props => {
   const { tabName, listings, activePanel } = props
@@ -36,14 +38,20 @@ const ListingPanel = props => {
 }
 
 const ListingPanelHOC = compose(
-  withState('sortingIndex', 'setSortingIndex', 'price'),
-  withState('sortingDirection', 'setSortingDirection', 1),
+  connect((state, { tabName }) => {
+    const { panels } = state[tabName.toLowerCase()]
+    if (panels) {
+      return { ...panels }
+    }
+
+    return null
+  }, actions),
   withHandlers({
-    onClickDropdownItem: ({ setSortingIndex }) => index => {
-      setSortingIndex(index)
+    onClickDropdownItem: ({ setPanelSortingIndex, tabName }) => index => {
+      setPanelSortingIndex(tabName, index)
     },
-    onClickSortingDirection: ({ setSortingDirection, sortingDirection }) => () => {
-      setSortingDirection(sortingDirection * -1)
+    onClickSortingDirection: ({ togglePanelSortingDirection, tabName }) => () => {
+      togglePanelSortingDirection(tabName)
     }
   }),
   withPropsOnChange(

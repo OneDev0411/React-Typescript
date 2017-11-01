@@ -1,0 +1,40 @@
+.c-filters__form-cta-buttons {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 2rem;
+  z-index: 2;
+  background: #fff;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.23);
+}
+
+%button {
+  height: 48px;
+  width: calc(50% - 1rem);
+  padding: 0;
+  display: inline-block;
+  font-size: 17px;
+  border-width: 0;
+  border-radius: 3px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.23);
+
+  &:disabled,
+  &[disabled] {
+    box-shadow: none;
+    background: #e6ebef !important;
+    color: darken(#e6ebef, 20%) !important;
+  }
+}
+
+.c-filters__submit-btn {
+  @extend %button;
+  color: #fff;
+  background: #2196f3;
+}
+
+.c-filters__reset-btn {
+  @extend %button;
+  margin-right: 2rem;
+  color: #2196f3;
+}

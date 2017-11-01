@@ -64,7 +64,12 @@ class Section extends Component {
 
   initOptions(brokerage, agent, type, brand, user) {
     const options = {
-      property_types: ['Residential', 'Residential Lease', 'Lots & Acreage'],
+      property_types: [
+        'Residential',
+        'Residential Lease',
+        'Lots & Acreage',
+        'Multi-Family'
+      ],
       property_subtypes: [
         'RES-Single Family',
         'RES-Half Duplex',
@@ -80,7 +85,8 @@ class Section extends Component {
         'LSE-Triplex',
         'LND-Commercial',
         'LND-Farm/Ranch',
-        'LND-Residential'
+        'LND-Residential',
+        'MUL-Full Duplex'
       ]
     }
     if (brokerage) {

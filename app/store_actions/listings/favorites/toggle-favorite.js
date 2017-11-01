@@ -43,13 +43,13 @@ const toggleFavorite = listing => (dispatch, getState) => {
   }
 
   dispatch({
-    tabName: 'FAVORITE',
+    tabName: 'FAVORITES',
     type: actionsType.TOGGLE_FAVORITE,
     response: handleToggle(listing)
   })
 
   dispatch({
-    tabName: 'FAVORITE',
+    tabName: 'FAVORITES',
     type: actionsType.TOGGLE_FAVORITE_REQUEST
   })
 
@@ -71,18 +71,18 @@ const toggleFavorite = listing => (dispatch, getState) => {
   return api.toggleFavorites(params).then(
     response => {
       dispatch({
-        tabName: 'FAVORITE',
+        tabName: 'FAVORITES',
         type: actionsType.TOGGLE_FAVORITE_SUCCESS
       })
     },
     ({ message }) => {
       dispatch({
-        tabName: 'FAVORITE',
+        tabName: 'FAVORITES',
         type: actionsType.TOGGLE_FAVORITE_FAILURE,
         message: message || 'Something went wrong.'
       })
       dispatch({
-        tabName: 'FAVORITE',
+        tabName: 'FAVORITES',
         type: actionsType.TOGGLE_FAVORITE,
         response: handleToggle(listing)
       })

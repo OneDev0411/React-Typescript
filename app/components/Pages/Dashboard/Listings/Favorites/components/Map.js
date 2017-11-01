@@ -83,13 +83,13 @@ const mapHOC = compose(
       window.currentMap = map
     },
     onChange: ({ setMapProps }) => mapProps => {
-      setMapProps('FAVORITE', mapProps)
+      setMapProps('FAVORITES', mapProps)
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('FAVORITE', -1)
+      setMapHoveredMarkerId('FAVORITES', -1)
     },
     onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('FAVORITE', id)
+      setMapHoveredMarkerId('FAVORITES', id)
     }
   }),
   withPropsOnChange(

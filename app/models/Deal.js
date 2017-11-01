@@ -380,7 +380,7 @@ Deal.createRole = async function (deal_id, form) {
   try {
     const response = await new Fetch()
       .post(`/deals/${deal_id}/roles`)
-      .send({ first_name, last_name, email, role })
+      .send({ roles: [{first_name, last_name, email, role}] })
 
     return response.body.data
   } catch (e) {

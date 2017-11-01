@@ -74,7 +74,6 @@ class SelectDocumentModal extends React.Component {
   render() {
     const { attachments } = this.state
     const { tasks, esign } = this.props
-
     const documents = this.getCompletedDocuments()
 
     return (
@@ -115,20 +114,19 @@ class SelectDocumentModal extends React.Component {
                       </span>
                     </Col>
 
-                    <Col sm={10} xs={9} className="name vcenter">
-                      <div>{ task.title }</div>
+                    <Col sm={11} xs={10} className="name vcenter">
+                      <div>
+                        <span
+                          className="file-name"
+                          onClick={e => this.viewForm(e, task)}
+                        >
+                          { task.title }
+                        </span>
+                      </div>
+
                       <div className="date">
                         Completed {moment.unix(task.submission.updated_at).format('MMMM DD, YYYY')}
                       </div>
-                    </Col>
-
-                    <Col
-                      sm={1}
-                      xs={1}
-                      className="vcenter"
-                      onClick={(e) => this.viewForm(e, task)}
-                    >
-                      <i className="fa fa-eye" />
                     </Col>
                   </Row>
                 )

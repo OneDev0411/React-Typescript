@@ -10,6 +10,7 @@ class CreateForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      creatingForm: null,
       selectedFile: null,
       showFormsModal: false,
       showUploadNameModal: false
@@ -19,14 +20,17 @@ class CreateForm extends React.Component {
   /**
    *
    */
-  createNewTask(form) {
+  async createNewTask(form) {
     const { dealId, createFormTask, listId } = this.props
 
-    // hide form
-    this.displayForm(false)
+    this.setState({ creatingForm: form })
 
     // create form
-    createFormTask(dealId, form.id, form.name, listId)
+    await createFormTask(dealId, form.id, form.name, listId)
+
+    this.setState({ creatingForm: null }, () => {
+      this.displayForm(false)
+    })
   }
 
   /**
@@ -48,7 +52,13 @@ class CreateForm extends React.Component {
   }
 
   render() {
-    const { selectedFile, showFormsModal, showTaskNameModal } = this.state
+    const {
+      creatingForm,
+      selectedFile,
+      showFormsModal,
+      showTaskNameModal
+    } = this.state
+
     const { dealId, listId, forms } = this.props
 
     return (
@@ -64,7 +74,7 @@ class CreateForm extends React.Component {
         </div>
 
         <div className="title">
-          Add new item (Documents, tasks, ...)
+          Add new item (documents, tasks, ...)
         </div>
 
         <TaskName
@@ -78,6 +88,7 @@ class CreateForm extends React.Component {
         <Forms
           show={showFormsModal}
           listId={listId}
+          creatingForm={creatingForm}
           onSelectForm={form => this.createNewTask(form)}
           onRequestUpload={file => this.onRequestUpload(file)}
           onClose={() => this.displayForm(false)}

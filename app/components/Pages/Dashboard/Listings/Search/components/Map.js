@@ -20,9 +20,9 @@ import {
   normalizeListingsForMarkers
 } from '../../../../../../utils/map'
 
-import { getListings } from '../../../../../../reducers/listings'
 import * as mapActions from '../../../../../../store_actions/listings/map'
 import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
+import getListingsByMapBounds from '../../../../../../store_actions/listings/search/get-listings/by-map-bounds'
 
 import {
   bootstrapURLKeys,
@@ -33,7 +33,8 @@ import {
 
 const actions = {
   ...mapActions,
-  ...drawingActions
+  ...drawingActions,
+  getListingsByMapBounds
 }
 
 const map = ({
@@ -154,8 +155,15 @@ const mapHOC = compose(
     onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
       setMapHoveredMarkerId('SEARCH', id)
     },
-    onClickRemovePolygon: ({ removePolygon, map }) => () => {
+    onClickRemovePolygon: ({
+      map,
+      removePolygon,
+      inactiveDrawing,
+      getListingsByMapBounds
+    }) => () => {
       removePolygon(map.drawing.shape)
+      inactiveDrawing()
+      getListingsByMapBounds(map.props.bounds)
     },
     onClusterMarkerClick: () => points => {
       const googleMaps = window.google.maps

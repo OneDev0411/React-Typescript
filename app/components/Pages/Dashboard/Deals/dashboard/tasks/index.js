@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import CreateTask from '../create-task'
@@ -32,47 +33,53 @@ const List = ({
       deal={deal}
     >
       <div className={`list ${!checklist.tasks ? 'empty' : ''}`}>
-        {
-          sortedTasks &&
-          sortedTasks
-          .map((id, key) => {
-            const task = tasks[id]
-            const room = rooms[task.room.id] || task.room
-            const hasStatus = task.review !== null || task.needs_attention === true
+        <ReactCSSTransitionGroup
+          transitionName="tasks"
+          transitionEnterTimeout={1000}
+          transitionLeaveTimeout={800}
+        >
+          {
+            sortedTasks &&
+            sortedTasks
+            .map((id, key) => {
+              const task = tasks[id]
+              const room = rooms[task.room.id] || task.room
+              const hasStatus = task.review !== null || task.needs_attention === true
 
-            return (
-              <div
-                key={`TASK_${id}_${key}`}
-                onClick={() => onSelectTask(task)}
-                className={cn('task', {
-                  'active': selectedTaskId === id,
-                  'no-status': !hasStatus
-                })}
-              >
-                <div className="icon" />
-                <div className="title">
-                  { task.title }
-                </div>
-
-                {
-                  hasStatus &&
-                  <TaskStatus
-                    task={task}
-                  />
-                }
-
-                {
-                  room.new_notifications > 0 &&
-                  <div className="notification">
-                    <img src="/static/images/deals/comments.svg" />
-                    <span>{room.new_notifications}</span>
+              return (
+                <div
+                  key={`TASK_${id}`}
+                  onClick={() => onSelectTask(task)}
+                  className={cn('task', {
+                    'active': selectedTaskId === id,
+                    'no-status': !hasStatus
+                  })}
+                >
+                  <div className="icon" />
+                  <div className="title">
+                    { task.title }
                   </div>
-                }
 
-              </div>
-            )
-          })
-        }
+                  {
+                    hasStatus &&
+                    <TaskStatus
+                      task={task}
+                    />
+                  }
+
+                  {
+                    room.new_notifications > 0 &&
+                    <div className="notification">
+                      <img src="/static/images/deals/comments.svg" />
+                      <span>{room.new_notifications}</span>
+                    </div>
+                  }
+
+                </div>
+              )
+            })
+          }
+        </ReactCSSTransitionGroup>
 
         <CreateTask
           dealId={deal.id}

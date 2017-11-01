@@ -28,7 +28,8 @@ const ComposeWrapper = ({
   recipients,
   onChangeComposeModal,
   onChangeRecipients,
-  OnLeaveClick
+  OnLeaveClick,
+  directRoom
 }) =>
   (
     <div style={{ display: inline ? 'inline' : 'block' }}>
@@ -45,12 +46,17 @@ const ComposeWrapper = ({
           <Modal.Title>
             {title}
           </Modal.Title>
-
           {
             OnLeaveClick &&
             <OverlayTrigger
               placement="bottom"
-              overlay={<Tooltip id="popover-leave">Leave chat</Tooltip>}
+              overlay={<Tooltip id="popover-leave">
+                {
+                  directRoom
+                    ? 'Archive chat'
+                    : 'Leave chat'
+                }
+              </Tooltip>}
             >
               <span
                 className=" leave-icon"

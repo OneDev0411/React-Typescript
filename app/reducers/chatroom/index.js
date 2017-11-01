@@ -6,6 +6,7 @@ import popups from './popup'
 import rooms from './room'
 import states from './user'
 import activeRoom from './active-room'
+import drafts from './drafts'
 
 const appReducer = combineReducers({
   activeRoom,
@@ -14,7 +15,8 @@ const appReducer = combineReducers({
   messages,
   popups,
   rooms,
-  states
+  states,
+  drafts
 })
 
 export default (state, action) => {

@@ -72,7 +72,7 @@ class TaskName extends React.Component {
         backdrop="static"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Name Task</Modal.Title>
+          Name Task
         </Modal.Header>
 
         <Modal.Body>

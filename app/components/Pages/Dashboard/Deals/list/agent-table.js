@@ -64,11 +64,12 @@ class AgentTable extends BaseTable {
   getSide(deal, rowId, rowsCount) {
     const { deals } = this.props
 
-    if (!deal.roles) {
+    const sideName = Deal.get.side(deal)
+    const relatedRole = deal.roles && deal.roles.find(r => r.role === sideName)
+
+    if (!deal.roles || !relatedRole) {
       return Deal.get.side(deal)
     }
-
-    const firstRole = deal.roles && deal.roles[0]
 
     return (
       <OverlayTrigger
@@ -95,9 +96,9 @@ class AgentTable extends BaseTable {
                       />
                     </div>
                     <div className="info">
-                      <span className="name">{ role.user.abbreviated_display_name }, </span>
-                      <span className="role">{ roleName(role.role) }</span>
-                      <span className="email">{ role.user.email }</span>
+                      <span className="name">{role.user.display_name}, </span>
+                      <span className="role">{roleName(role.role)}</span>
+                      <span className="email">{role.user.email}</span>
                     </div>
                   </div>
                 )
@@ -108,13 +109,13 @@ class AgentTable extends BaseTable {
       >
         <div className="hoverable inline">
           <span>
-            { Deal.get.side(deal) }
+            { sideName }
           </span>
 
           <span
             style={{ color: '#5b6469', fontSize: '13px' }}
           >
-            { firstRole ? `: ${firstRole.user.abbreviated_display_name}` : ''}
+            { relatedRole ? `: ${relatedRole.user.last_name}` : ''}
           </span>
         </div>
 
@@ -129,7 +130,7 @@ class AgentTable extends BaseTable {
     const names = []
 
     deal.roles && deal.roles.forEach(role =>
-      names.push(role.user.abbreviated_display_name)
+      names.push(role.user.display_name)
     )
 
     return ': ' + names.join(', ')

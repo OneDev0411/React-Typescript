@@ -10,15 +10,14 @@ import { getStatusColor } from '../../../../../../../utils/listing'
 import Schools from './Schools'
 import Counties from './Counties'
 import YearBuilt from './YearBuilt'
+import Tags from './components/Tags'
 import NumberRange from './NumberRange'
 import Subdivision from './Subdivision'
 import MlsAreaSelects from './MlsAreaSelects'
-import PropertySubtypes from './PropertySubtypes'
 import GroupRadios from './components/GroupRadios'
-import ArchitecturalStyles from './ArchitecturalStyles'
 import SubStatuses from './components/SubStatuses'
 import SoldStatusChildrens from './SoldStatusChildrens'
-import { activeStatuses, otherStatuses } from './statuses'
+import { pendingStatuses, otherStatuses } from './statuses'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
 import actions from '../../../../../../../store_actions/listings/search/filters'
 
@@ -30,16 +29,37 @@ const property_subtypes = {
   single_family: 'RES-Single Family'
 }
 
+const architectural_styles = {
+  southwestern: 'Southwestern',
+  ranch: 'Ranch',
+  spanish: 'Spanish',
+  aFrame: 'A-Frame',
+  midCentry_modern: 'Mid-Centry Modern',
+  prairie: 'Prairie',
+  studio_apartment: 'Studio Apartment',
+  contemporary: 'Contemporary/Modern',
+  split_level: 'Split Level',
+  victorian: 'Victorian',
+  traditional: 'Traditional',
+  mediterranean: 'Mediterranean',
+  colonial: 'Colonial',
+  oriental: 'Oriental',
+  loft: 'Loft',
+  french: 'French',
+  tudor: 'Tudor'
+}
+
 const Filters = ({
   isOpen,
+  reset,
   pristine,
-  submitting,
   activeSold,
   handleSubmit,
+  isSubmitting,
   onSubmitHandler,
   activeOpenHouses,
   activeOtherListings,
-  activeActiveListings
+  activePendingListings
 }) => (
   <div className={`c-filters ${isOpen ? 'c-filters--isOpen' : ''}`}>
     <div className="c-filters__inner-wrapper">
@@ -61,15 +81,23 @@ const Filters = ({
           </FiltersListingsStatusRow>
 
           <FiltersListingsStatusRow
+            name="listing_statuses.active"
             title="Active"
+            isField
+            hasSwitchToggle
+            color={`#${getStatusColor('Active')}`}
+          />
+
+          <FiltersListingsStatusRow
+            title="Pending"
             hasAccordion
             hasSwitchToggle
-            name="active-statuses"
-            fields={activeStatuses}
-            color={`#${getStatusColor('Active')}`}
-            onChangeSwitchToggle={activeActiveListings}
+            name="pending-statuses"
+            fields={pendingStatuses}
+            color={`#${getStatusColor('Pending')}`}
+            onChangeSwitchToggle={activePendingListings}
           >
-            <SubStatuses fields={activeStatuses} />
+            <SubStatuses fields={pendingStatuses} />
           </FiltersListingsStatusRow>
 
           <FiltersListingsStatusRow
@@ -88,18 +116,26 @@ const Filters = ({
             hasSwitchToggle
             name="other-statuses"
             fields={otherStatuses}
-            color={`#${getStatusColor('Pending')}`}
+            color={`#${getStatusColor('Sold')}`}
             onChangeSwitchToggle={activeOtherListings}
           >
             <SubStatuses fields={otherStatuses} />
           </FiltersListingsStatusRow>
         </div>
-        <div style={{ padding: '3rem 2rem 6rem', backgroundColor: '#fff' }}>
+        <div style={{ padding: '3rem 2rem 8rem', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
           <Counties />
           <NumberRange name="price" placeholder="$Any" label="Price Range" />
-          <PropertySubtypes fields={property_subtypes} />
-          <ArchitecturalStyles />
+          <Tags
+            name="property_subtypes"
+            label="Property Subtypes"
+            fields={property_subtypes}
+          />
+          <Tags
+            label="Style of Home"
+            name="architectural_styles"
+            fields={architectural_styles}
+          />
           <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
           <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
           <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
@@ -119,14 +155,24 @@ const Filters = ({
           <YearBuilt />
         </div>
       </form>
-      <button
-        onClick={handleSubmit(onSubmitHandler)}
-        className="c-filters__submit-btn"
-        disabled={submitting}
-        style={{ background: `#${Brand.color('primary', '#2196f3')}` }}
-      >
-        Update Filters
-      </button>
+      <div className="c-filters__form-cta-buttons">
+        <button
+          onClick={reset}
+          className="c-filters__reset-btn"
+          disabled={isSubmitting || pristine}
+          style={{ color: `#${Brand.color('primary', '#2196f3')}` }}
+        >
+          Reset Filters
+        </button>
+        <button
+          disabled={isSubmitting || pristine}
+          className="c-filters__submit-btn"
+          onClick={handleSubmit(onSubmitHandler)}
+          style={{ background: `#${Brand.color('primary', '#2196f3')}` }}
+        >
+          {isSubmitting ? 'Updating...' : 'Update Filters'}
+        </button>
+      </div>
     </div>
   </div>
 )
@@ -140,9 +186,10 @@ export default compose(
       pool: 'either',
       open_house: false,
       listing_statuses: {
-        ...activeStatuses
+        active: 'Active'
       },
       property_subtypes,
+      architectural_styles,
       minimum_sold_date: '3', // unit is month but it need to timestamp
       minimum_bedrooms: 'any',
       minimum_bathrooms: 'any',
