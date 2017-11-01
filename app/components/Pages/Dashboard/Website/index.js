@@ -24,7 +24,11 @@ export default class Website extends Component {
         <main>
           <div style={main_style}>
             <iframe
-              style={S('w-100p h-100p absolute')}
+              style={{
+                height: '100%',
+                position: 'absolute',
+                width: 'calc(100% - 70px)'
+              }}
               src={`${API_URL}/store?access_token=${user.access_token}${brand_id ? `&brand=${brand_id}` : ''}`}
               frameBorder="0"
             />
