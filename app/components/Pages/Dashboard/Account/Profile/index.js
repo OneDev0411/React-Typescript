@@ -13,7 +13,7 @@ const Profile = ({ user }) => (
       <Catalog user={user} />
       <PersonalInfo />
       <ChangePassword />
-      {user.brand && user.agent && <CoverImage />}
+      {user.user_type === 'Agent' && <CoverImage />}
     </div>
   </div>
 )
