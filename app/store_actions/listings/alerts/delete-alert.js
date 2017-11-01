@@ -26,16 +26,16 @@ const deleteAlert = alert => (dispatch, getState) => {
 
   return api.deleteAlert(alertId, alertRoom).then(
     response => {
-      if (selectedAlertId === alertId) {
-        dispatch(setSelectedAlertId(''))
-        browserHistory.push('/dashboard/mls/alerts')
-      }
-
       dispatch({
         tabName: 'ALERTS',
         response: deleteHandler(),
         type: actionsType.DELETE_ALERT_SUCCESS
       })
+
+      if (selectedAlertId === alertId) {
+        dispatch(setSelectedAlertId(''))
+        browserHistory.push('/dashboard/mls/alerts')
+      }
     },
     ({ message }) => {
       dispatch({
