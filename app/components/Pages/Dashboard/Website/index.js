@@ -1,6 +1,5 @@
 // Dashboard/Website/index.js
 import React, { Component } from 'react'
-import SideBar from '../Partials/SideBar'
 import S from 'shorti'
 import config from '../../../../../config/public'
 
@@ -19,13 +18,10 @@ export default class Website extends Component {
     if (brand) {
       brand_id = brand
     }
-    const main_style = S('absolute h-100p border-left-70-solid-fff w-100p')
+    const main_style = S('absolute h-100p w-100p')
     return (
       <div style={S('minw-1000')}>
         <main>
-          <SideBar
-            data={data}
-          />
           <div style={main_style}>
             <iframe
               style={S('w-100p h-100p absolute')}
