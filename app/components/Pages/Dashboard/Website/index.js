@@ -13,10 +13,12 @@ export default class Website extends Component {
     const user = data.user
     let brand = data.brand
     let brand_id
-    if (!brand)
+    if (!brand) {
       brand = user.brand
-    if (brand)
-      brand_id = brand.id
+    }
+    if (brand) {
+      brand_id = brand
+    }
     const main_style = S('absolute h-100p border-left-70-solid-fff w-100p')
     return (
       <div style={S('minw-1000')}>
@@ -25,7 +27,11 @@ export default class Website extends Component {
             data={data}
           />
           <div style={main_style}>
-            <iframe style={S('w-100p h-100p absolute')} src={`${API_URL}/store?access_token=${user.access_token}${brand_id ? `&brand=${brand_id}` : ''}`} frameBorder="0" />
+            <iframe
+              style={S('w-100p h-100p absolute')}
+              src={`${API_URL}/store?access_token=${user.access_token}${brand_id ? `&brand=${brand_id}` : ''}`}
+              frameBorder="0"
+            />
           </div>
         </main>
       </div>
