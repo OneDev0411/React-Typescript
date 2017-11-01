@@ -21,12 +21,7 @@ export const queryOptions = {
   limit: '250',
   open_house: false,
   property_types: ['Residential'],
-  listing_statuses: [
-    'Active',
-    'Active Contingent',
-    'Active Kick Out',
-    'Active Option Contract'
-  ],
+  listing_statuses: ['Active'],
   points: [
     {
       latitude: 32.83938955111425,

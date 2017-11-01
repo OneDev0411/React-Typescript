@@ -16,9 +16,6 @@ import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Se
 //   property_types: ['Residential'],
 //   listing_statuses: [
 //     'Active',
-//     'Active Contingent',
-//     'Active Kick Out',
-//     'Active Option Contract'
 //   ],
 //   points: [
 //     {

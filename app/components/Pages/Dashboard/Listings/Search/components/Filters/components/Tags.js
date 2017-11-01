@@ -30,7 +30,6 @@ const Tags = ({
             type="checkbox"
             checked={selectAllValue}
             id={`select-all-${name}`}
-            defaultChecked={selectAllValue}
             className="c-filters__tag__input"
             onChange={event => {
               toggleAll(name, fields, event.target.checked)

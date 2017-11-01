@@ -27,7 +27,11 @@ import {
 } from '../../../constants/listings/favorites'
 
 export const byId = (state = {}, action) => {
-  if (action.response && action.response.entities && action.response.entities.listings) {
+  if (
+    action.response &&
+    action.response.entities &&
+    action.response.entities.listings
+  ) {
     return {
       ...state,
       ...action.response.entities.listings

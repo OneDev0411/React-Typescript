@@ -92,6 +92,7 @@ const RegisterForm = ({
               type="text"
               label="Last Name"
               component={renderField}
+              autoComplete="new-password"
             />
             {phone_number && (
               <Field
@@ -99,6 +100,7 @@ const RegisterForm = ({
                 type="email"
                 label="Email"
                 component={renderField}
+                autoComplete="new-password"
               />
             )}
             <Field
@@ -106,6 +108,7 @@ const RegisterForm = ({
               type="password"
               label="Password"
               component={renderField}
+              autoComplete="new-password"
             />
             <div className="clearfix" style={{ marginTop: '-1rem' }}>
               <Field
