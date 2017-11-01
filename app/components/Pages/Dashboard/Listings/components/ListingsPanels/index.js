@@ -38,9 +38,14 @@ const ListingPanel = props => {
 }
 
 const ListingPanelHOC = compose(
-  connect(({ search }) => ({
-    ...search.panels
-  }), actions),
+  connect((state, { tabName }) => {
+    const { panels } = state[tabName.toLowerCase()]
+    if (panels) {
+      return { ...panels }
+    }
+
+    return null
+  }, actions),
   withHandlers({
     onClickDropdownItem: ({ setPanelSortingIndex, tabName }) => index => {
       setPanelSortingIndex(tabName, index)
