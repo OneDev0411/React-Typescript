@@ -31,6 +31,7 @@ export const renderField = ({
   input,
   label,
   require,
+  autoComplete = 'on',
   autoFocus = false,
   meta: { dirty, error }
 }) => {
@@ -42,6 +43,7 @@ export const renderField = ({
           {...input}
           type={type}
           id={input.name}
+          autoComplete={autoComplete}
           className={`c-auth__field__input ${(input.value && 'has-content') ||
             ''} ${hasError ? 'has-error' : ''}`}
         />

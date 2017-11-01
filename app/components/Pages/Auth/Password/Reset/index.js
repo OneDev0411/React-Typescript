@@ -53,6 +53,7 @@ const Reset = ({
               name="password"
               type="password"
               label="New Password"
+              autoComplete="new-password"
               onChange={(e, value, newValue) => {
                 if (submitError && newValue) {
                   setSubmitError(false)
@@ -64,6 +65,7 @@ const Reset = ({
               type="password"
               name="confirm_password"
               label="Confirm New Password"
+              autoComplete="new-password"
               onChange={(e, value, newValue) => {
                 if (submitError && newValue) {
                   setSubmitError(false)
@@ -118,7 +120,9 @@ const Reset = ({
       receivingUser: user,
       actionButtonProps: {
         text: 'Sign out',
-        href: `/signout?redirectFromSignout=${encodeURIComponent(window.location.href)}`
+        href: `/signout?redirectFromSignout=${encodeURIComponent(
+          window.location.href
+        )}`
       },
       messageText:
         'You are logged in on this device. For reset your password, please sign out.'
