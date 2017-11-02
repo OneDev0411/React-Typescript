@@ -129,12 +129,15 @@
 
       .sortable {
         cursor: pointer;
-        &.isActive {
-          color: rgba(93, 150, 243, 0.8);
-        }
+        color: #263445;
+        opacity: 0.7;
 
         &:hover {
-          color: #2196f3;
+          opacity: 0.5;
+        }
+
+        &.isActive {
+          opacity: 1;
         }
       }
     }
