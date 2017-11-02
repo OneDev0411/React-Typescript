@@ -286,18 +286,14 @@ class BaseTable extends React.Component {
                         sortable: cell.sortable,
                         isActive: sortBy === key
                       })}
-                      onClick={() => {
-                        if (cell.sortable) {
-                          this.setSort(key)
-                        }
-                      }}
                     >
-                      { cell.caption }&nbsp;
-
-                      {
-                        cell.sortable &&
-                        this.getSorterCaret(key)
-                      }
+                      <span
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => cell.sortable && this.setSort(key)}
+                      >
+                        { cell.caption }&nbsp;
+                        { cell.sortable && this.getSorterCaret(key) }
+                      </span>
                     </td>
                   )
                 }
