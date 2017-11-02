@@ -24,7 +24,7 @@
     opacity: 0.5;
     text-align: center;
     cursor: pointer;
-    transition: all 0.5s ease-in;
+    transition: all 0.2s ease-in;
     &:hover {
       opacity: 1;
     }
@@ -52,7 +52,7 @@
     color: #fff;
     display: flex;
     align-items: top;
-    transition: all 0.3s ease-in;
+    transition: all 0.2s ease-in;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.7);
