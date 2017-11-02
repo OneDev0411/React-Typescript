@@ -6,7 +6,6 @@ import Commission from '../factsheet/commission'
 // import FactSheet from '../factsheet'
 import Roles from '../roles'
 import AddContract from '../add-contract'
-import ArchiveDeal from '../archive-deal'
 import MlsListing from '../mls-listing'
 
 export default ({
@@ -47,10 +46,6 @@ export default ({
           deal={deal}
         />
       </div>
-
-      <ArchiveDeal
-        deal={deal}
-      />
     </div>
   </div>
 )
