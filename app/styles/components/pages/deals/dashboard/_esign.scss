@@ -132,6 +132,15 @@
           font-size: 13px;
           font-weight: 500;
           color: #8ca2b6;
+          &.void {
+            margin-left: 5px;
+            &:hover {
+              background-color: red;
+              border-color: red;
+              color: #fff
+            }
+          }
+
           &.cls {
             margin-left: 5px;
           }

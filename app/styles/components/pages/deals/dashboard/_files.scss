@@ -59,6 +59,10 @@
       height: 60px;
       transition: 0.2s ease-in background-color;
 
+      &.eSign {
+        @extend %deals-files-esign;
+      }
+
       &:last-child {
         border-bottom: none;
       }
@@ -167,6 +171,40 @@
     .link {
       color: #2196f3;
       cursor: pointer;
+    }
+  }
+}
+
+%deals-files-esign {
+  &.voided {
+    position: relative;
+
+    .name,
+    .btn-group,
+    img {
+      opacity: 0.4;
+    }
+
+    &:hover .link{
+      border-bottom-color: transparent;
+      cursor: auto !important;
+    }
+
+    .void-label {
+      position: absolute;
+      top: 10px;
+      right: 0px;
+      width: 65px;
+      height: 20px;
+      line-height: 20px;
+      font-weight: 500;
+      vertical-align: middle;
+      text-align: center;
+      color: #fff;
+      background-color: red;
+      z-index: 200;
+      border-radius: 5px 0 0 5px;
+      letter-spacing: 0.5px;
     }
   }
 }

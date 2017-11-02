@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Dropdown, Button } from 'react-bootstrap'
+import cn from 'classnames'
 import WhoSigned from './who-signed'
 import { setFormViewer } from '../../../../../../../store_actions/deals/forms'
 import config from '../../../../../../../../config/public'
@@ -43,9 +44,10 @@ class Envelope extends React.Component {
   }
 
   render() {
-    const { task, envelope, setFormViewer } = this.props
+    const { deal, task, envelope, setFormViewer } = this.props
     const { showDropDown } = this.state
     const { recipients } = envelope
+    const isVoided = envelope.status === 'Voided'
     const areSigned = recipients.filter(r => r.status === 'Completed')
     const notSigned = recipients.filter(r => r.status !== 'Completed')
     const recipientsNames = this.getRecipientsNames(recipients)
@@ -60,9 +62,18 @@ class Envelope extends React.Component {
 
     return (
       <div
-        className="item eSign"
+        className={cn('item eSign', {
+          voided: isVoided
+        })}
         key={`eSign_${envelope.id}`}
       >
+
+        {
+          isVoided &&
+          <span className="void-label">
+            VOIDED
+          </span>
+        }
 
         <div className="image">
           <img src="/static/images/deals/signature.svg" />
@@ -73,7 +84,7 @@ class Envelope extends React.Component {
             formUrl ?
             <span
               className="link"
-              onClick={() => setFormViewer(task, pdfFile)}
+              onClick={() => !isVoided && setFormViewer(task, pdfFile)}
             >
               Sent to {recipientsNames}
             </span> :
@@ -88,7 +99,7 @@ class Envelope extends React.Component {
             id="drp-esign-who-signed"
             className="deal-esgin-whosigned"
             pullRight
-            open={showDropDown}
+            open={showDropDown && !isVoided}
             onToggle={(open) => this.toggleShowDropDown(open)}
           >
             <Button
@@ -101,6 +112,7 @@ class Envelope extends React.Component {
 
             <WhoSigned
               onRequestClose={() => this.toggleShowDropDown(false)}
+              deal={deal}
               envelope={envelope}
               areSigned={areSigned}
               notSigned={notSigned}
