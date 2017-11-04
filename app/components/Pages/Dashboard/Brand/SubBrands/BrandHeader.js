@@ -34,10 +34,12 @@ const BrandHeader = ({
     Edit
   </Button>
   let members = {}
+
   if (brand.roles) {
     brand.roles.forEach(role =>
       role.members && role.members.map(member => {
         let roles = members[member.id] ? members[member.id].roles : {}
+
         roles[role.id] = role
         members[member.id] = {
           ...member,
@@ -56,6 +58,7 @@ const BrandHeader = ({
         if (!brand.brands) {
           getChildrenBrands(brand.id)
         }
+
         toggleBrand(brand.id)
       }}
     >

@@ -65,6 +65,7 @@ class Wrapper extends React.Component {
     />
   }
 }
+
 const ModalNewChecklist = ({
   TriggerButton,
   title,
@@ -96,6 +97,7 @@ const ModalNewChecklist = ({
   const propertyTypes = [
     'any', 'Resale', 'New Home', 'Lot / Land', 'Residential Lease', 'Commercial Sale', 'Commercial Lease'
   ]
+
   return <div style={{ display: inline ? 'inline' : 'block' }}>
     <TriggerButton
       clickHandler={() => onChangeComposeModal(!showComposeModal)}
@@ -223,12 +225,17 @@ const ModalNewChecklist = ({
           bsStyle="primary"
           onClick={() => {
             onChangeComposeModal(false)
+
             let titlePropertyDealTypeNullable = titlePropertyDealType
+
             if (titlePropertyDealType === 'any')
               titlePropertyDealTypeNullable = null
+
             let titleDealTypeNullable = titleDealType
+
             if (titlePropertyDealType === 'any')
               titleDealTypeNullable = null
+
             onButtonClick({
               title: titleChecklist,
               deal_type: titleDealTypeNullable,
