@@ -52,7 +52,7 @@ class UploadDocument extends React.Component {
     try {
       const response = await ChatModel.uploadAttachment(roomId, file)
       return response.body.data
-    } catch(e) {
+    } catch (e) {
       return null
     }
   }

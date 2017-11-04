@@ -7,7 +7,8 @@
   "repository": "https://bitbucket.org/rechat/web",
   "license": "ISC",
   "scripts": {
-    "develop": "NODE_ENV=development nodemon ./bin/server --ignore ./app --exec babel-node",
+    "develop": "NODE_ENV=development nodemon --inspect=0.0.0.0:9229 $NODE_DEBUG_OPTION ./bin/server --ignore ./app --exec babel-node",
+    "start-dev-hmr": "NODE_ENV=development babel-node ./bin/server webpack-dev-server --progress --inline --hot --open",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
     "serve": "NODE_ENV=production babel-node ./bin/server",
@@ -20,6 +21,7 @@
     "node": "7.6.0"
   },
   "dependencies": {
+    "@types/react": "^16.0.19",
     "async": "^2.3.0",
     "async-busboy": "^0.6.1",
     "autoprefixer": "^7.1.2",
@@ -163,15 +165,15 @@
     "xss": "^0.3.3"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.0.1",
     "babel-preset-stage-2": "^6.24.1",
     "chai": "^3.5.0",
-    "eslint": "^4.6.1",
+    "eslint": "^4.10.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-loader": "^1.9.0",
-    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.3.0",
+    "eslint-plugin-react": "^7.4.0",
     "jsdom": "^9.12.0",
     "mocha": "^3.2.0",
     "mocha-jsdom": "^1.1.0",

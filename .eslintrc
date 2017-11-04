@@ -10,7 +10,7 @@
     ],
     "rules": {
         "no-new": 0,
-        "curly": [2, "all"],
+        "curly": [0, "all"],
         "comma-dangle": [2, "never"],
         "semi": [2, "never"],
         "camelcase": 0,

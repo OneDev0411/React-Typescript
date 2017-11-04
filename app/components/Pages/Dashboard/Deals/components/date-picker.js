@@ -1,7 +1,6 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import DatePicker from 'react-day-picker'
-import moment from 'moment'
 
 export default class extends React.Component {
   constructor(props) {
@@ -33,7 +32,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { show, saveText, initialDate, onClose, onSelectDate } = this.props
+    const { show, saveText, onClose, onSelectDate } = this.props
     const { selectedDate } = this.state
 
     if (!show) {
