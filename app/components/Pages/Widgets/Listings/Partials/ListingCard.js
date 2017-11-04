@@ -1,6 +1,5 @@
 // Widgets/Partials/ListingCard.js
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import S from 'shorti'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
@@ -171,12 +170,12 @@ export default class ListingCard extends Component {
   }
 }
 ListingCard.propTypes = {
-  data: PropTypes.object,
-  listing: PropTypes.object,
-  handleEmailSubmit: PropTypes.func,
-  handleListingInquirySubmit: PropTypes.func,
-  handleCloseSignupForm: PropTypes.func,
-  handleListingClick: PropTypes.func,
-  handleLoginClick: PropTypes.func,
-  showIntercom: PropTypes.func
+  data: React.PropTypes.object,
+  listing: React.PropTypes.object,
+  handleEmailSubmit: React.PropTypes.func,
+  handleListingInquirySubmit: React.PropTypes.func,
+  handleCloseSignupForm: React.PropTypes.func,
+  handleListingClick: React.PropTypes.func,
+  handleLoginClick: React.PropTypes.func,
+  showIntercom: React.PropTypes.func
 }

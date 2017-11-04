@@ -1,8 +1,9 @@
 import webpack from 'webpack'
+import path from 'path'
 import config from '../config/webpack'
 
 export default {
-  devtool: 'inline-source-map',
+  devtool: 'eval',
   entry: {},
   output: {
     path: config.compile.output,

@@ -174,7 +174,7 @@ class App extends Component {
     }
 
     ReactGA.initialize(google_analytics_id, {
-      debug: false
+      debug: true
     })
     ReactGA.ga(
       'create',
