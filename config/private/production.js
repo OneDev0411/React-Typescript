@@ -28,5 +28,8 @@ export default {
   intercom: {
     app_id: process.env.INTERCOM_APP_ID,
     secret_key: process.env.INTERCOM_SECRET_KEY
+  },
+  sentry: {
+    key: process.env.SENTRY_API_URL
   }
 }
