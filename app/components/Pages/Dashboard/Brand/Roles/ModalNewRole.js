@@ -51,6 +51,7 @@ class ModalNewRole extends React.Component {
       title,
       acl
     } = this.state
+
     return (
       <div style={{ display: 'inline' }}>
         <TriggerButton
@@ -83,6 +84,7 @@ class ModalNewRole extends React.Component {
               <div className="title">Roles:</div>
               {aclTypes.map(permission => {
                 let active = acl && (acl.indexOf(permission) > -1)
+
                 return <span
                   key={permission}
                 >
@@ -94,6 +96,7 @@ class ModalNewRole extends React.Component {
                       } else {
                         acl.push(permission)
                       }
+
                       this.setState({ acl })
                     }}
                   >

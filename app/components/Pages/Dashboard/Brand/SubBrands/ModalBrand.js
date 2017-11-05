@@ -152,6 +152,7 @@ class ModalBrand extends React.Component {
             bsStyle="primary"
             onClick={() => {
               this.onChangeComposeModal(false)
+
               let brand = {
                 name: title,
                 palette: { primary: primaryColor },
@@ -160,6 +161,7 @@ class ModalBrand extends React.Component {
                   site_title
                 }
               }
+
               onButtonClick(brand)
             }
             }

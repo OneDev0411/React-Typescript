@@ -1,16 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
 import _ from 'underscore'
 import moment from 'moment'
 import Deal from '../../../../../../models/Deal'
 import Editable from './inline-edit'
-import {
-  updateContext,
-  createGenericTask,
-  changeNeedsAttention
-} from '../../../../../../store_actions/deals'
+import { updateContext } from '../../../../../../store_actions/deals'
 
 class Table extends React.Component {
   constructor(props) {
@@ -38,50 +33,13 @@ class Table extends React.Component {
 
     await updateContext(deal.id, { [field.key]: value }, editable)
 
-    if (editable === false) {
-      await this.notifyAdmin(field, value)
-    }
-
     // set state
     this.setState({ saving: null })
   }
 
-  async notifyAdmin(field, value) {
-    const { deal, checklists, notify, changeNeedsAttention, createGenericTask } = this.props
-    let displayingValue = value
-
-    if (field.fieldType === 'date' && value && value.length > 0) {
-      displayingValue = moment(value).format('MMM DD, YYYY')
-    }
-
-    const title = value && value.length > 0 ?
-      `Change context ${field.name} to ${displayingValue}` :
-      `Remove context ${field.name}`
-
-    const checklist = checklists[deal.checklists[0]]
-    const task = await createGenericTask(deal.id, title, checklist.id)
-    changeNeedsAttention(task.id, true)
-
-    return notify({
-      message: 'Back office has been notified to change context value',
-      status: 'success',
-      dismissible: true,
-      dismissAfter: 4000
-    })
-  }
-
   render() {
     const { saving } = this.state
-
-    const {
-      table,
-      deal,
-      isBackOffice,
-      showTitle,
-      title,
-      getValue,
-      getLabel
-    } = this.props
+    const { table, deal, isBackOffice, showTitle, title, getValue, getLabel } = this.props
 
     return (
       <div>
@@ -151,6 +109,5 @@ class Table extends React.Component {
 }
 
 export default connect(({ deals }) => ({
-  checklists: deals.checklists,
   isBackOffice: deals.backoffice
-}), { notify, updateContext, createGenericTask, changeNeedsAttention })(Table)
+}), { updateContext })(Table)

@@ -68,11 +68,24 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          ...{
-            envelopes: [
-              ...state[action.deal_id].envelopes || [],
-              ...action.envelopes
-            ]
+          envelopes: {
+            ...state[action.deal_id].envelopes,
+            ...action.envelopes
+          }
+        }
+      }
+
+    case types.SET_ENVELOPE_STATUS:
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          envelopes: {
+            ...state[action.deal_id].envelopes,
+            [action.envelope_id]: {
+              ...state[action.deal_id].envelopes[action.envelope_id],
+              status: action.status
+            }
           }
         }
       }

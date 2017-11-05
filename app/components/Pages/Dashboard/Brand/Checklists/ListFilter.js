@@ -14,8 +14,10 @@ export default class ListFilter extends React.Component {
 
   filterData(e) {
     e.preventDefault()
+
     const regex = new RegExp(e.target.value, 'i')
     let filtered = []
+
     Object.keys(this.props.data).forEach((key) => {
       if (this.props.data[key].name.search(regex) > -1)
         filtered.push(this.props.data[key])
@@ -28,6 +30,7 @@ export default class ListFilter extends React.Component {
   render() {
     const { filteredData } = this.state
     let items = []
+
     Object.keys(filteredData).forEach((key) => (
       items.push(<li
         key={key}

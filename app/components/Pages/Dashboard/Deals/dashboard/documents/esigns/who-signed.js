@@ -5,6 +5,8 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import UserAvatar from '../../../../../../Partials/UserAvatar'
 import Deal from '../../../../../../../models/Deal'
+import { voidEnvelope } from '../../../../../../../store_actions/deals'
+import { confirmation } from '../../../../../../../store_actions/confirmation'
 import config from '../../../../../../../../config/public'
 
 class WhoSigned extends React.Component {
@@ -47,9 +49,33 @@ class WhoSigned extends React.Component {
     })
   }
 
+  requestVoidEnvelope(envelopeId) {
+    const { confirmation } = this.props
+
+    confirmation({
+      message: 'Once you void this form you cannot edit or send for signatures',
+      confirmLabel: 'Void',
+      onConfirm: () => this.voidEnvelope(envelopeId)
+    })
+  }
+
+  async voidEnvelope(envelopeId) {
+    const { deal, voidEnvelope, notify } = this.props
+    try {
+      voidEnvelope(deal.id, envelopeId)
+    } catch(e) {
+      notify({
+        message: 'Can not void this eSign',
+        status: 'error'
+      })
+    }
+  }
+
   render () {
     const { resending } = this.state
     const { onRequestClose, areSigned, notSigned, envelope, user } = this.props
+
+    console.log('>>>>', envelope.status)
 
     return (
       <div className="dropdown-menu dropdown-menu-right who-signed">
@@ -64,6 +90,13 @@ class WhoSigned extends React.Component {
               onClick={() => this.resendDocs(envelope.id)}
             >
               { resending ? 'Resending ...' : 'Resend docs' }
+            </Button>
+
+            <Button
+              className="deal-button void"
+              onClick={() => this.requestVoidEnvelope(envelope.id)}
+            >
+              Void
             </Button>
 
             <Button
@@ -157,4 +190,4 @@ class WhoSigned extends React.Component {
 
 export default connect(({ data }) => ({
   user: data.user
-}), { notify })(WhoSigned)
+}), { voidEnvelope, confirmation, notify })(WhoSigned)

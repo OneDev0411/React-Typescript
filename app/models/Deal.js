@@ -505,7 +505,6 @@ Deal.resendEnvelope = async function (id) {
 * send envelope
 */
 Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recipients) {
-
   const data = {
     deal: deal_id,
     title: subject,
@@ -522,6 +521,21 @@ Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recip
     return response.body.data
   } catch (e) {
     throw e
+  }
+}
+
+/**
+* void envelope
+*/
+Deal.voidEnvelope = async function(envelope_id) {
+  try {
+    const response = await new Fetch()
+      .patch(`/envelopes/${envelope_id}/status`)
+      .send({ status: 'Voided' })
+
+    return response.body.data
+  } catch (e) {
+    return null
   }
 }
 

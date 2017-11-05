@@ -29,16 +29,20 @@ export default class extends React.Component {
       return new Date(initialDate)
     }
 
-    return null
+    return new Date()
   }
 
   render() {
     const { show, saveText, initialDate, onClose, onSelectDate } = this.props
     const { selectedDate } = this.state
 
+    if (!show) {
+      return false
+    }
+
     return (
       <Modal
-        show={show}
+        show={true}
         onHide={onClose}
         dialogClassName="modal-deal-date-picker"
       >

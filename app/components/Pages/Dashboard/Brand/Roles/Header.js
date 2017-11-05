@@ -19,6 +19,7 @@ const Header = ({
       Add New Role
     </Button>
   )
+
   return (
     <div className="toolbar">
       <span className="button">

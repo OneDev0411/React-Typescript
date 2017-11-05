@@ -26,6 +26,7 @@ const Row = ({
         Edit
       </Button>
     )
+
   return <div
     className={cn('checklist-row', { active: activeItem })}
     onClick={() => onSelectItem(checklist.id)}

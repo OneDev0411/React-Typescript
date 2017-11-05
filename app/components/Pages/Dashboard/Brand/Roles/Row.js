@@ -26,6 +26,7 @@ const Row = ({
         Edit
       </Button>
     )
+
   return <div
     className={cn('checklist-row', { active: activeItem })}
   >
@@ -37,6 +38,7 @@ const Row = ({
     {
       aclTypes.map(permission => {
         let active = role.acl && (role.acl.indexOf(permission) > -1)
+
         return <div
           key={permission}
           className="checklist--row--column-center"

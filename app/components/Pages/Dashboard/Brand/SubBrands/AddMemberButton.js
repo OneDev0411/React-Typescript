@@ -15,7 +15,7 @@ const AddMemberButton = ({
       className="add-member--brand-row"
       onClick={() => clickHandler()}
     >
-      <i className="fa fa-user-plus" aria-hidden="true"></i>
+      <i className="fa fa-user-plus" aria-hidden="true" />
     </button>
   )
 

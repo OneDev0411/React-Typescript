@@ -45,14 +45,12 @@ export default class Editable extends React.Component {
 
     this.setState({
       editMode: true
-    }, () => {
-      this.input && this.input.focus()
-    })
+    }, () => this.input && this.input.focus())
   }
 
   getEditCta() {
     const { editMode } = this.state
-    const { editable, field, saving } = this.props
+    const { editable, context, field, saving } = this.props
     const isDateType = field.fieldType === 'date'
 
     if (saving === field.key || (editMode && !isDateType)) {
@@ -63,14 +61,16 @@ export default class Editable extends React.Component {
       return (
         <span>
           <i
-            className="fa fa-pencil"
-            data-tip={editable ? null : "This field needs office approval after changing" }
+            className={cn('fa fa-times-circle ico-remove', {
+              hide: !context.value || context.value.length === 0
+            })}
+            data-tip={editable ? null : "This field needs office approval after removing" }
+            onClick={(e) => this.deleteField(e, field)}
           />
 
           <i
-            className="fa fa-times-circle ico-remove"
-            data-tip={editable ? null : "This field needs office approval after removing" }
-            onClick={(e) => this.deleteField(e, field)}
+            className="fa fa-pencil"
+            data-tip={editable ? null : "This field needs office approval after changing" }
           />
         </span>
       )
@@ -98,7 +98,7 @@ export default class Editable extends React.Component {
     const isStringType = !isDateType
 
     if (disabled) {
-      return <span>{ context.value }</span>
+      return <span>{context.value}</span>
     }
 
     return (

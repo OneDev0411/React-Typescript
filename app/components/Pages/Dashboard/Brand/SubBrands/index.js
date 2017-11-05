@@ -28,6 +28,7 @@ class SubBrands extends React.Component {
 
   render() {
     const { brands, brandParent } = this.props
+
     return (
       <div className="brands">
         <i

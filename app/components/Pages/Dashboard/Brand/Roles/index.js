@@ -16,7 +16,9 @@ class Roles extends React.Component {
   }
 
   componentDidMount() {
-    this.props.params && this.props.getRoles(this.props.params.brand)
+    if (this.props.params) {
+      this.props.getRoles(this.props.params.brand)
+    }
   }
 
   render() {
@@ -24,6 +26,7 @@ class Roles extends React.Component {
       roles,
       spinner
     } = this.props
+
     return (
       <div className="brand">
         <i
