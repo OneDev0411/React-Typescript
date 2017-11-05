@@ -30,6 +30,6 @@ export default {
     secret_key: process.env.INTERCOM_SECRET_KEY
   },
   sentry: {
-    key: process.env.SENTRY_API_URL
+    api_url: process.env.SENTRY_API_URL
   }
 }
