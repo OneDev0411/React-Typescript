@@ -125,7 +125,7 @@ const Reset = ({
         )}`
       },
       messageText:
-        'You are logged in on this device. For reset your password, please sign out.'
+        'You are logged in on this device. To reset your password, please sign out.'
     }
     content = <ConflictModal params={params} brandInfo={brandInfo} />
   }

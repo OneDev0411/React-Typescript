@@ -99,7 +99,7 @@
   <script src="https://cdn.ravenjs.com/3.18.1/raven.min.js"
           crossorigin="anonymous"></script>
   <script type="text/javascript">
-    Raven.config('https://7f57b86b16d94f69937eb7ae66111fbc@sentry.io/229413').install()
+    Raven.config('{{ data.sentryKey }}').install()
   </script>
   <script type="text/javascript" src="https://cdn.trackjs.com/releases/current/tracker.js"></script>
 </body>
