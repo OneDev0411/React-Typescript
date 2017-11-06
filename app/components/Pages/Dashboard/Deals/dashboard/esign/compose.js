@@ -139,7 +139,7 @@ class SendSignatures extends React.Component {
       )
 
       // add envelope to list of envelopes
-      setEnvelopes(deal.id, [envelope])
+      setEnvelopes(deal.id, { [envelope.id]: envelope })
 
       // close esign
       this.props.closeEsignWizard()

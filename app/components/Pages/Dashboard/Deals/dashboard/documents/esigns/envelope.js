@@ -72,9 +72,6 @@ class Envelope extends React.Component {
             onClick={() => !isVoided && this.openFormViewer()}
           >
             Sent to {recipientsNames}
-          </span> :
-          <span>
-            Sent to {recipientsNames}
           </span>
         </div>
 
