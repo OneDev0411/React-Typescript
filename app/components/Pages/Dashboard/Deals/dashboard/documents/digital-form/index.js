@@ -1,25 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
-import { editForm, setFormViewer } from '../../../../../../../store_actions/deals/forms'
+import { browserHistory } from 'react-router'
 import ESignButton from '../../esign/button'
-import extractDocumentOfTask from '../../../utils/extract-document-of-task'
 
 const Form = ({
   deal,
   task,
-  isBackOffice,
-  setFormViewer,
-  editForm
+  isBackOffice
 }) => {
-
   if (isBackOffice || !task || !task.form) {
     return false
   }
 
   const { submission } = task
   const attachments = submission && submission.state === 'Fair' ? [task.id] : []
-  const file = extractDocumentOfTask(deal, task)
 
   return (
     <div className="file">
@@ -32,7 +27,7 @@ const Form = ({
 
           <div
             className="name"
-            onClick={() => setFormViewer(task, file)}
+            onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}`)}
           >
             <span className="link">
               { task.title }
@@ -48,7 +43,7 @@ const Form = ({
 
             <button
               className="btn-deal"
-              onClick={() => editForm(task)}
+              onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/form-edit/${task.id}`)}
             >
               Edit Form
             </button>
@@ -61,4 +56,4 @@ const Form = ({
 
 export default connect(({ deals }) => ({
   isBackOffice: deals.backoffice
-}), { editForm, setFormViewer })(Form)
+}))(Form)

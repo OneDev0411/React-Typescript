@@ -2,20 +2,17 @@ import _ from 'underscore'
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
 
-function setEnvelopeStatus(deal_id, envelope_id, status) {
+export function showAttachments(display = true) {
   return {
-    type: types.SET_ENVELOPE_STATUS,
-    deal_id,
-    envelope_id,
-    status
+    type: types.SHOW_ATTACHMENTS,
+    display
   }
 }
 
-export function showAttachments(attachments, { showCompose }) {
+export function showCompose(display = true) {
   return {
-    type: types.SHOW_ATTACHMENTS,
-    attachments,
-    showCompose: showCompose || false
+    type: types.SHOW_COMPOSE,
+    display
   }
 }
 
@@ -26,6 +23,20 @@ export function updateAttachments(attachments) {
   }
 }
 
+export function addEsignRecipient(recipient) {
+  return {
+    type: types.SET_RECIPIENT,
+    recipient
+  }
+}
+
+export function removeEsignRecipient(id) {
+  return {
+    type: types.REMOVE_RECIPIENT,
+    id
+  }
+}
+
 export function removeAttachment(id) {
   return {
     type: types.REMOVE_ATTACHMENT,
@@ -33,15 +44,10 @@ export function removeAttachment(id) {
   }
 }
 
-export function closeAttachments() {
-  return {
-    type: types.CLOSE_ATTACHMENTS,
-  }
-}
 
-export function closeEsign() {
+export function closeEsignWizard() {
   return {
-    type: types.CLOSE_ESIGN,
+    type: types.CLOSE_ESIGN_WIZARD,
   }
 }
 
@@ -50,6 +56,15 @@ export function setEnvelopes(deal_id, envelopes) {
     type: types.SET_ENVELOPES,
     deal_id,
     envelopes
+  }
+}
+
+function setEnvelopeStatus(deal_id, envelope_id, status) {
+  return {
+    type: types.SET_ENVELOPE_STATUS,
+    deal_id,
+    envelope_id,
+    status
   }
 }
 

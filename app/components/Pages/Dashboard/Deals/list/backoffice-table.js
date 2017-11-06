@@ -7,6 +7,7 @@ import _ from 'underscore'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
 import getNeedsAttentions from '../utils/needs-attention'
+import { closeEsignWizard, setSelectedTask } from '../../../../../store_actions/deals'
 
 class BackOfficeTable extends BaseTable {
   constructor(props) {
@@ -200,4 +201,4 @@ export default connect(({ deals, chatroom }) => ({
   tasks: deals.tasks,
   checklists: deals.checklists,
   rooms: chatroom.rooms
-}))(BackOfficeTable)
+}), { closeEsignWizard, setSelectedTask })(BackOfficeTable)

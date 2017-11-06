@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import config from '../../../../../../../config/public'
+import config from '../../../../../../config/public'
 
 class EditFormFrame extends React.PureComponent {
   constructor(props) {

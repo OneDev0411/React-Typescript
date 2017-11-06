@@ -1,12 +1,13 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
-import { editForm, saveSubmission } from '../../../../../../store_actions/deals'
-import Deal from '../../../../../../models/Deal'
+import { saveSubmission } from '../../../../../store_actions/deals'
+import Deal from '../../../../../models/Deal'
 import EmbedForm from './embed'
 
-class EditForm extends React.Component {
+class FormEdit extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -32,15 +33,11 @@ class EditForm extends React.Component {
    *
    */
   onLoad() {
-    const { deal, mode } = this.props
+    const { deal } = this.props
     this.setState({ loaded: true })
 
     // set deal
     this.sendMessage('setDeal', [deal])
-
-    if (mode === 'context') {
-      this.sendMessage('hideOptionalRows')
-    }
   }
 
   /**
@@ -195,17 +192,7 @@ class EditForm extends React.Component {
    *
    */
   close() {
-    const { editForm } = this.props
-
-    // edit form
-    editForm(null)
-
-    // set state
-    this.setState({
-      loaded: false,
-      saving: false,
-      incompleteFields: []
-    })
+    browserHistory.goBack()
   }
 
   /**
@@ -224,7 +211,7 @@ class EditForm extends React.Component {
   }
 
   render() {
-    const { deal, task, mode } = this.props
+    const { deal, task } = this.props
     const { loaded, saving, incompleteFields } = this.state
 
     const isValidForm = task && task.form && task.task_type === 'Form'
@@ -233,28 +220,30 @@ class EditForm extends React.Component {
       return false
     }
 
-    const props = {
-      task,
-      loaded,
-      incompleteFields,
-      saving,
-      buttonCaption: this.getButtonCaption(),
-      onFrameRef: ref => this.frame = ref,
-      onSave: () => this.onSave(),
-      onClose: () => this.close()
-    }
-
     return (
-      <EmbedForm {...props} />
+      <EmbedForm
+        task={task}
+        loaded={loaded}
+        incompleteFields={incompleteFields}
+        saving={saving}
+        buttonCaption={() => this.getButtonCaption()}
+        onFrameRef={ref => this.frame = ref}
+        onSave={() => this.onSave()}
+        onClose={() => this.close()}
+      />
     )
   }
 }
 
-export default connect(({ deals }) =>  ({
-  task: deals.formEdit ? deals.formEdit.task : null,
-  mode: deals.formEdit ? deals.formEdit.mode : null
-}), {
-  editForm,
-  saveSubmission,
-  notify
-})(EditForm)
+
+function mapStateToProps({ user, deals }, props) {
+  const { list, tasks } = deals
+  const { id, taskId } = props.params
+
+  return {
+    task: tasks && tasks[taskId],
+    deal: list && list[id]
+  }
+}
+
+export default connect(mapStateToProps, { saveSubmission, notify })(FormEdit)

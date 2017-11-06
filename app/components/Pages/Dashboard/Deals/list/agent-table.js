@@ -5,6 +5,7 @@ import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import roleName from '../utils/roles'
+import { closeEsignWizard, setSelectedTask } from '../../../../../store_actions/deals'
 
 class AgentTable extends BaseTable {
   constructor(props) {
@@ -168,4 +169,4 @@ export default connect(({ deals, chatroom }) => ({
   tasks: deals.tasks,
   checklists: deals.checklists,
   rooms: chatroom.rooms
-}))(AgentTable)
+}), { closeEsignWizard, setSelectedTask })(AgentTable)

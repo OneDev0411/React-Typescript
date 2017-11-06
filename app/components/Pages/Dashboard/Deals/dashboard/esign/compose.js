@@ -10,13 +10,18 @@ import Recipients from './recipients'
 import ComposeAttachments from './compose-attachments'
 import Docusign from './docusign'
 import DealModel from '../../../../../../models/Deal'
-import { closeEsign, showAttachments, setEnvelopes } from '../../../../../../store_actions/deals'
+import {
+  closeEsignWizard,
+  showAttachments,
+  setEnvelopes,
+  addEsignRecipient,
+  removeEsignRecipient
+} from '../../../../../../store_actions/deals'
 
 class SendSignatures extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      recipients: {},
       isSending: false,
       showDocusignBanner: false
     }
@@ -35,22 +40,15 @@ class SendSignatures extends React.Component {
   /**
    * add new recipinet
    */
-  addRecipients(recp) {
-    const { recipients } = this.state
-    this.setState({
-      recipients: {
-        ...recipients,
-        [recp.email]: recp
-      }
-    })
+  addRecipients(recipient) {
+    this.props.addEsignRecipient(recipient)
   }
 
   /**
    * remove recipient
    */
   removeRecipient(email) {
-    const recipients = _.filter(this.state.recipients, recp => recp.email !== email)
-    this.setState({ recipients })
+    this.props.removeEsignRecipient(email)
   }
 
   /**
@@ -108,22 +106,18 @@ class SendSignatures extends React.Component {
   }
 
   closeForm() {
-    const { closeEsign } = this.props
-
     //close form
-    closeEsign()
-
-    // reset recipients
-    this.setState({
-      recipients: {}
-    })
+    this.props.closeEsignWizard()
   }
+
   /**
    * send envelope
    */
   async send() {
-    const { recipients, isSending } = this.state
-    const { notify, closeEsign, setEnvelopes, user, deal, esign, tasks } = this.props
+    const { isSending } = this.state
+    const { notify, setEnvelopes, user, deal, esign, tasks } = this.props
+    const { recipients } = esign
+
     const subject = this.subject.value
     const message = this.message.value
     const attachments = esign.attachments.map(id => {
@@ -148,7 +142,7 @@ class SendSignatures extends React.Component {
       setEnvelopes(deal.id, [envelope])
 
       // close esign
-      closeEsign()
+      this.props.closeEsignWizard()
 
       notify({
         message: 'eSign has been sent',
@@ -156,10 +150,7 @@ class SendSignatures extends React.Component {
       })
 
       // reset recipients
-      this.setState({
-        recipients: {},
-        isSending: false
-      })
+      this.setState({ isSending: false })
 
     } catch(e) {
       const isDocusignError = ~~e.status === 412
@@ -182,7 +173,8 @@ class SendSignatures extends React.Component {
 
   render() {
     const { tasks, esign, deal, user, showAttachments } = this.props
-    const { recipients, isSending, showDocusignBanner } = this.state
+    const { isSending, showDocusignBanner } = this.state
+    const { recipients } = esign
 
     if (!esign.showCompose) {
       return false
@@ -258,7 +250,7 @@ class SendSignatures extends React.Component {
 
             <Button
               disabled={isSending}
-              onClick={() => showAttachments(esign.attachments, { showCompose: true })}
+              onClick={() => showAttachments(true)}
               className="btn-attach"
             >
               <i className="fa fa-paperclip fa-rotate-90" /> Attach
@@ -275,4 +267,11 @@ export default connect(({ deals, data }) => ({
   tasks: deals.tasks,
   checklists: deals.checklists,
   esign: deals.esign || {}
-}), { showAttachments, closeEsign, setEnvelopes, notify })(SendSignatures)
+}), {
+  addEsignRecipient,
+  removeEsignRecipient,
+  showAttachments,
+  closeEsignWizard,
+  setEnvelopes,
+  notify
+})(SendSignatures)

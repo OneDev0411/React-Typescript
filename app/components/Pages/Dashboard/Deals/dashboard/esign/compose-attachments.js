@@ -1,27 +1,25 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { removeAttachment, setFormViewer } from '../../../../../../store_actions/deals'
-import extractDocumentOfTask from '../../utils/extract-document-of-task'
+import { browserHistory } from 'react-router'
+import { removeAttachment } from '../../../../../../store_actions/deals'
 
 const ComposeAttachments = ({
   esign,
   tasks,
   deal,
-  removeAttachment,
-  setFormViewer
+  removeAttachment
 }) => {
   return (
     <ul>
       {
         esign.attachments.map(id => {
           const task = tasks[id]
-          const file = extractDocumentOfTask(deal, task)
 
           return (
             <li key={id}>
               <span
                 className="name"
-                onClick={() => setFormViewer(task, file)}
+                onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}`)}
               >
                 { tasks[id].title }
               </span>
@@ -40,4 +38,4 @@ const ComposeAttachments = ({
   )
 }
 
-export default connect(null, { removeAttachment, setFormViewer })(ComposeAttachments)
+export default connect(null, { removeAttachment })(ComposeAttachments)

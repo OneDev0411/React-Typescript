@@ -214,6 +214,12 @@ class BaseTable extends React.Component {
       return false
     }
 
+    // reset esign flow
+    this.props.closeEsignWizard()
+
+    // reset selected task
+    this.props.setSelectedTask(null)
+
     browserHistory.push(`/dashboard/deals/${id}`)
   }
 
