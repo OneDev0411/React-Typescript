@@ -192,7 +192,8 @@ class FormEdit extends React.Component {
    *
    */
   close() {
-    browserHistory.goBack()
+    const { deal } = this.props
+    browserHistory.push(`/dashboard/deals/${deal.id}`)
   }
 
   /**
@@ -226,7 +227,7 @@ class FormEdit extends React.Component {
         loaded={loaded}
         incompleteFields={incompleteFields}
         saving={saving}
-        buttonCaption={() => this.getButtonCaption()}
+        buttonCaption={this.getButtonCaption()}
         onFrameRef={ref => this.frame = ref}
         onSave={() => this.onSave()}
         onClose={() => this.close()}

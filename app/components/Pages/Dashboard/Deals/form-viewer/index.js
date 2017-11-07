@@ -92,7 +92,8 @@ class FormViewer extends React.Component {
   }
 
   onClose() {
-    browserHistory.goBack()
+    const { deal } = this.props
+    browserHistory.push(`/dashboard/deals/${deal.id}`)
   }
 
   render() {
