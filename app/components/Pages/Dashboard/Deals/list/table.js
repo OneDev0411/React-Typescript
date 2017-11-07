@@ -65,7 +65,7 @@ class BaseTable extends React.Component {
   }
 
   getStatus(deal) {
-    const status = Deal.get.field(deal, 'listing_status')
+    const status = deal.deleted_at ? 'Archived' : Deal.get.field(deal, 'listing_status')
 
     return (
       <div>
