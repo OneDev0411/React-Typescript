@@ -96,7 +96,7 @@ class Filter extends React.Component {
     const { deals } = this.props
 
     return _.filter(deals, deal => {
-      const status = Deal.get.field(deal, 'listing_status')
+      const status = Deal.get.status(deal)
       return filters[filter](status, deal)
     }).length
   }

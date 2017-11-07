@@ -24,7 +24,7 @@ class AgentTable extends BaseTable {
         sortable: true,
         className: 'col-md-2 hidden-xs',
         getText: deal => this.getStatus(deal),
-        getValue: deal => Deal.get.field(deal, 'listing_status'),
+        getValue: deal => Deal.get.status(deal),
         sortByList: ['Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
           'Active Contingent', 'Active Kick Out', 'Pending', 'Sold', 'Leased', 'Expired',
           'Temp Off Market', 'Cancelled', 'Withdrawn']

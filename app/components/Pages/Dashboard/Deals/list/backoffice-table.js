@@ -26,7 +26,7 @@ class BackOfficeTable extends BaseTable {
         sortable: true,
         className: 'col-md-1 hidden-xs',
         getText: deal => this.getStatus(deal),
-        getValue: deal => Deal.get.field(deal, 'listing_status'),
+        getValue: deal => Deal.get.status(deal),
         sortByList: ['Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
           'Active Contingent', 'Active Kick Out', 'Pending', 'Sold', 'Leased', 'Expired',
           'Temp Off Market', 'Cancelled', 'Withdrawn']
