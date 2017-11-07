@@ -45,8 +45,6 @@ class Envelope extends React.Component {
     const notSigned = recipients.filter(r => r.status !== 'Completed')
     const recipientsNames = this.getRecipientsNames(recipients)
 
-    // const formUrl = this.getFormUrl()
-
     return (
       <div
         className={cn('item eSign', {
