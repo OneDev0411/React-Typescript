@@ -165,7 +165,7 @@ const Filters = ({
           Reset Filters
         </button>
         <button
-          disabled={isSubmitting || pristine}
+          disabled={isSubmitting}
           className="c-filters__submit-btn"
           onClick={handleSubmit(onSubmitHandler)}
           style={{ background: `#${Brand.color('primary', '#2196f3')}` }}
