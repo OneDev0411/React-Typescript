@@ -35,9 +35,7 @@ export default ({
             type="email"
             id={null}
             showEdit
-            showAdd
             text=""
-            onAdd={onAddAttribute}
             onChange={onChangeAttribute}
           />
         </div>
