@@ -18,17 +18,20 @@ const AsyncMultiSelect = ({
   fieldName,
   loadOptions,
   placeholder,
+  updateField,
   selectedOptions
 }) => (
   <Label label={label}>
     <Select.Async
       multi
       name={fieldName}
-      onChange={onChange}
       value={selectedOptions}
       loadOptions={loadOptions}
       placeholder={placeholder}
       className="c-filters__select"
+      onChange={options => {
+        updateField(formName, fieldName, options)
+      }}
     />
   </Label>
 )
@@ -36,27 +39,9 @@ const AsyncMultiSelect = ({
 export default compose(
   pure,
   connect(
-    (state, { fieldName }) => {
-      const initialOptions = selector(state, fieldName) || []
-
-      return {
-        initialOptions
-      }
-    },
+    (state, { fieldName }) => ({
+      selectedOptions: selector(state, fieldName) || []
+    }),
     { updateField }
-  ),
-  withState(
-    'selectedOptions',
-    'setSelectedOptions',
-    ({ initialOptions }) => initialOptions
-  ),
-  withHandlers({
-    onChange: ({ setSelectedOptions, updateField, fieldName }) => (
-      options = []
-    ) => {
-      setSelectedOptions(options, () =>
-        updateField(formName, fieldName, options)
-      )
-    }
-  })
+  )
 )(AsyncMultiSelect)

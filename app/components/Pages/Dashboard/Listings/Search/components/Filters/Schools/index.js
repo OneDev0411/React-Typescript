@@ -5,6 +5,7 @@ import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withPropsOnChange from 'recompose/withPropsOnChange'
 import { change as updateField, formValueSelector } from 'redux-form'
 
 import Label from '../components/Label'
@@ -89,35 +90,26 @@ const Schools = ({
 export default compose(
   connect(
     state => {
-      const initialSchools = {}
-      const initialDistricts = selector(state, 'school_districts') || []
+      const selectedSchools = {}
+      const selectedDistricts = selector(state, 'school_districts') || []
 
       SCHOOLS_TYPE.forEach(school => {
         const schoolData = selector(state, school) || []
+
         if (schoolData.length > 0) {
-          initialSchools[school] = schoolData
+          selectedSchools[school] = schoolData
         }
       })
 
       return {
-        initialSchools,
-        initialDistricts
+        selectedSchools,
+        selectedDistricts
       }
     },
     { updateField }
   ),
-  withState('schools', 'setSchools', []),
-  withState(
-    'selectedSchools',
-    'setSelectedSchools',
-    ({ initialSchools }) => initialSchools
-  ),
+  withState('schools', 'setSchools', {}),
   withState('loadingSchools', 'setLoadingSchools', false),
-  withState(
-    'selectedDistricts',
-    'setSelectedDistricts',
-    ({ initialDistricts }) => initialDistricts
-  ),
   withHandlers({
     getSchools: ({
       setSchools,
@@ -149,9 +141,7 @@ export default compose(
       setSchools,
       updateField,
       loadingSchools,
-      selectedSchools,
-      setSelectedSchools,
-      setSelectedDistricts
+      selectedSchools
     }) => (districts = []) => {
       if (loadingSchools) {
         return
@@ -159,21 +149,16 @@ export default compose(
 
       if (districts.length === 0) {
         setSchools([])
-        setSelectedSchools([])
-        setSelectedDistricts([])
         updateField(FORM_NAME, 'school_districts', [])
 
         if (Object.keys(selectedSchools).length > 0) {
           Object.keys(selectedSchools).forEach(school =>
             updateField(FORM_NAME, school, [])
           )
-          setSelectedSchools([])
         }
       } else {
-        setSelectedDistricts(districts, () => {
-          updateField(FORM_NAME, 'school_districts', districts)
-          getSchools(districts)
-        })
+        updateField(FORM_NAME, 'school_districts', districts)
+        getSchools(districts)
       }
     },
     onChangeSchools: ({
@@ -188,16 +173,23 @@ export default compose(
 
       selectedSchools[type] = schools.length === 0 ? [] : schools
 
-      setSelectedSchools(selectedSchools, () => {
-        Object.keys(selectedSchools).forEach(school =>
-          updateField(FORM_NAME, school, selectedSchools[school])
-        )
-      })
+      Object.keys(selectedSchools).forEach(school =>
+        updateField(FORM_NAME, school, selectedSchools[school])
+      )
     }
   }),
+  withPropsOnChange(
+    ['selectedDistricts'],
+    ({ schools, setSchools, selectedDistricts }) => {
+      if (selectedDistricts.length === 0 && Object.keys(schools).length > 0) {
+        setSchools({})
+      }
+    }
+  ),
   lifecycle({
     componentDidMount() {
       const { selectedDistricts, getSchools } = this.props
+
       if (selectedDistricts.length > 0) {
         getSchools(selectedDistricts)
       }

@@ -22,11 +22,10 @@ const props = (state = {}, action) => {
         ...action.mapProps
       }
     case actionsType.SET_MAP_ZOOM_IN:
-      const result = {
+      return {
         ...state,
         zoom: ++state.zoom
       }
-      return result
     case actionsType.SET_MAP_ZOOM_OUT:
       return {
         ...state,

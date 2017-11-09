@@ -7,9 +7,18 @@ import { goToPlace } from '../../map'
 import { selectListings } from '../../../../reducers/listings'
 import extendedBounds from '../../../../utils/extendedBounds'
 import { normalizeListingsForMarkers } from '../../../../utils/map'
-import { removePolygon } from '../../../../store_actions/listings/map/drawing'
+import {
+  removePolygon,
+  inactiveDrawing
+} from '../../../../store_actions/listings/map/drawing'
 import { feetToMeters } from '../../../../../app/utils/listing'
 import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/Schools'
+
+import { SEARCH_BY_FILTERS_AREAS } from '../../../../constants/listings/search'
+import {
+  reset as resetSearchType,
+  setSearchType
+} from '../../../../store_actions/listings/search/set-type'
 
 // Initial valert options {
 //   limit: '250',
@@ -80,6 +89,7 @@ const turnToNumber = value =>
 
 const getSoldDate = (selectedMonth = 3) => {
   const date = new Date(Date.now())
+
   return date.setMonth(date.getMonth() - selectedMonth) / 1000
 }
 
@@ -93,6 +103,7 @@ const normalizeNumberValues = values => {
   const unitIsFoot = n => n.indexOf('square') !== -1
 
   const normalizedValues = {}
+
   numberValues.forEach(v => {
     let numberValue = turnToNumber(values[v]) || null
 
@@ -122,9 +133,11 @@ const ignoreNullValues = values => {
 
   Object.keys(values).forEach(v => {
     const value = values[v]
+
     if (value === null) {
       return
     }
+
     withoutNullValues[v] = value
   })
 
@@ -137,15 +150,18 @@ export const obiectPropsValueToArray = obj =>
     : Object.keys(obj)
       .map(p => {
         const value = obj[p]
+
         if (!value) {
           return
         }
+
         return value
       })
       .filter(v => v)
 
 const normalizedMlsAreas = areas => {
   const areasByParents = {}
+
   areas.forEach(({ value, parent }) => {
     if (
       parent !== 0 &&
@@ -161,6 +177,7 @@ const normalizedMlsAreas = areas => {
   })
 
   const mls_areas = []
+
   Object.keys(areasByParents).forEach(parent =>
     areasByParents[parent].forEach(mlsNumber => {
       mls_areas.push([mlsNumber, Number(parent)])
@@ -174,8 +191,13 @@ const normalizedMlsAreas = areas => {
   return mls_areas
 }
 
-const normalizMultiSelectedInputOptions = (options = []) =>
-  options.length === 0 ? null : options.map(({ label }) => label)
+const normalizMultiSelectedInputOptions = options => {
+  if (Array.isArray(options) && options.length > 0) {
+    return options.map(({ label }) => label)
+  }
+
+  return null
+}
 
 const normalizeValues = (values, state) => {
   const { options } = state
@@ -188,6 +210,7 @@ const normalizeValues = (values, state) => {
 
   if (listing_statuses.length === 0) {
     let alertMsg = 'Please select at least one listing status.'
+
     window.alert(alertMsg)
 
     throw new SubmissionError({
@@ -209,6 +232,7 @@ const normalizeValues = (values, state) => {
   )
 
   const multiSelectFields = {}
+
   MULTI_SELECT_FIELDS.forEach(fielld => {
     multiSelectFields[fielld] = normalizMultiSelectedInputOptions(
       values[fielld]
@@ -216,10 +240,16 @@ const normalizeValues = (values, state) => {
   })
 
   const { school_districts, subdivisions, counties } = multiSelectFields
-  const points =
+  const hasAreasOptions =
     mls_areas || school_districts || subdivisions || counties
-      ? null
-      : options.points
+
+  const points = hasAreasOptions ? null : options.points
+
+  let { postal_codes } = options
+
+  if (hasAreasOptions && postal_codes) {
+    postal_codes = null
+  }
 
   const nextOptions = {
     ...options,
@@ -230,6 +260,7 @@ const normalizeValues = (values, state) => {
     open_house,
     mls_areas,
     pool,
+    postal_codes,
     minimum_sold_date,
     ...multiSelectFields,
     ...normalizeNumberValues(values)
@@ -243,12 +274,14 @@ const normalizeValues = (values, state) => {
     }
   })
 
-  if (typeof queryOptions.points === 'undefined') {
+  if (typeof queryOptions.points === 'undefined' && !hasAreasOptions) {
     const { map } = state
-    queryOptions.points = generatePointsFromBounds(map.props.bounds)
+
+    console.log(map.props)
+    queryOptions.points = generatePointsFromBounds(map.props.marginBounds)
   }
 
-  // console.log(options, values, queryOptions)
+  console.log(options, values, queryOptions)
 
   return queryOptions
 }
@@ -266,6 +299,7 @@ const submitFiltersForm = values => async (dispatch, getState) => {
 
     if (drawingPoints.length > 2 && queryOptions.points === null) {
       dispatch(removePolygon(drawingShape))
+      dispatch(inactiveDrawing())
     }
 
     if (hasSearchInput && queryOptions.points === null) {
@@ -274,19 +308,23 @@ const submitFiltersForm = values => async (dispatch, getState) => {
 
     if (listings.length === 1) {
       const { latitude: lat, longitude: lng } = listings[0].location
+
       goToPlace({ center: { lat, lng } })(dispatch, getState)
-      return
     }
 
-    if (listings.length && window.google) {
+    if (queryOptions.points == null && listings.length && window.google) {
       const extendedProps = extendedBounds(
         normalizeListingsForMarkers(listings),
         search.map.props
       )
 
+      dispatch(setSearchType(SEARCH_BY_FILTERS_AREAS))
+
       if (!extendedProps) {
         const { latitude: lat, longitude: lng } = listings[0].location
+
         goToPlace({ center: { lat, lng }, zoom: 16 })(dispatch, getState)
+
         return
       }
 
@@ -299,10 +337,10 @@ const submitFiltersForm = values => async (dispatch, getState) => {
       dispatch,
       getState
     )
-    updateMap()
+  } else {
+    await getListings.byValert(queryOptions)(dispatch, getState)
   }
 
-  await getListings.byValert(queryOptions)(dispatch, getState)
   updateMap()
 }
 

@@ -9,6 +9,7 @@ const getPolygonBounds = polygon => {
     latitude: bound.lat(),
     longitude: bound.lng()
   }))
+
   return [...points, points[0]]
 }
 
@@ -30,6 +31,7 @@ const setDrawingManager = (dispatch, getState) => {
 
   google.maps.event.addListener(drawingManager, 'polygoncomplete', polygon => {
     const points = getPolygonBounds(polygon)
+
     dispatch(
       setPolygon({
         points,
@@ -69,12 +71,12 @@ export const removePolygon = polygon => (dispatch, getState) => {
     type: types.REMOVE_POLYGON
   })
 
-  if (drawingManager && drawingManager.map.id === window.currentMap.id) {
-    drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON)
-  } else {
-    google.maps.event.clearInstanceListeners(drawingManager)
-    setDrawingManager(dispatch, getState)
-  }
+  // if (drawingManager && drawingManager.map.id === window.currentMap.id) {
+  //   drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON)
+  // } else {
+  //   google.maps.event.clearInstanceListeners(drawingManager)
+  //   setDrawingManager(dispatch, getState)
+  // }
 }
 
 export const setPolygon = polygon => ({
