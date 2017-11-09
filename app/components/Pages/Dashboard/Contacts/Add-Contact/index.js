@@ -1,12 +1,14 @@
 import React from 'react'
 import { Button, Modal, FormControl } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 import Stage from '../components/Stage'
 import Emails from './Emails'
 import Phones from './Phones'
 import store from '../../../../../stores'
 import { addContact } from '../../../../../store_actions/contact'
 
-export default class AddContact extends React.Component {
+class AddContact extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -37,8 +39,9 @@ export default class AddContact extends React.Component {
     const stateName = `${attribute}s`
     const list = this.state[stateName]
 
-    if (list.length >= this.multiple_limit)
+    if (list.length >= this.multiple_limit) {
       return
+    }
 
     list.push('')
     this.setState({ [stateName]: list })
@@ -55,7 +58,7 @@ export default class AddContact extends React.Component {
 
   async save() {
     const { firstName, lastName, stage, phones, emails } = this.state
-    const { onNewContact, dispatch } = this.props
+    const { onNewContact } = this.props
 
     this.setState({ saving: true })
 
@@ -75,12 +78,11 @@ export default class AddContact extends React.Component {
       // trigger
       onNewContact(id)
     } catch (e) {
-      console.log(e)
       if (e.response) {
-        alert(e.response.body.message)
-        // this.setState({
-        //   validationErrors: e.response.body.attributes
-        // })
+        this.props.notify({
+          message: e.response.body.message,
+          status: 'error'
+        })
       }
     } finally {
       this.setState({ saving: false })
@@ -165,7 +167,7 @@ export default class AddContact extends React.Component {
               onClick={() => this.save()}
               disabled={saving}
             >
-              { saving ? 'Saving...' : 'Add' }
+              {saving ? 'Saving...' : 'Add'}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -173,3 +175,5 @@ export default class AddContact extends React.Component {
     )
   }
 }
+
+export default connect(null, { notify })(AddContact)
