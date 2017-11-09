@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Modal, Button } from 'react-bootstrap'
-import DealInfo from '../deal-info'
-import Comments from '../comments'
-import CommentInput from '../comments/input'
-import PdfViewer from '../../../../../Partials/Pdf/Viewer'
-import { setFormViewer } from '../../../../../../store_actions/deals/forms'
+import { browserHistory } from 'react-router'
+import DealInfo from '../dashboard/deal-info'
+import Comments from '../dashboard/comments'
+import CommentInput from '../dashboard/comments/input'
+import PdfViewer from '../../../../Partials/Pdf/Viewer'
+import extractDocumentOfTask from '../utils/extract-document-of-task'
+import config from '../../../../../../config/public'
 
 class FormViewer extends React.Component {
   constructor(props) {
@@ -13,7 +15,67 @@ class FormViewer extends React.Component {
 
     this.state = {
       showFactsheet: props.isBackOffice,
-      showComments: props.isBackOffice
+      showComments: props.isBackOffice,
+      file: this.getFile()
+    }
+  }
+
+  getFile() {
+    const { params } = this.props
+    const { type } = params
+
+    switch (type) {
+      case 'attachment':
+        return this.getAttachmentFile()
+      case 'envelope':
+        return this.getEnvelopeFile()
+      default:
+        return this.getDigitalForm()
+    }
+  }
+
+  getAttachmentFile() {
+    const { tasks, params } = this.props
+    const { taskId, objectId } = params
+    const task = tasks[taskId]
+    const file = task.room.attachments.find(attachment => attachment.id === objectId)
+
+    return {
+      type: file.mime === 'application/pdf' ? 'pdf' : 'image',
+      name: file.name,
+      url: file.url
+    }
+  }
+
+  getDigitalForm() {
+    const { deal, tasks, params } = this.props
+    const { taskId } = params
+
+    return extractDocumentOfTask(deal, tasks[taskId])
+  }
+
+  getEnvelopeFile() {
+    const { deal, user, tasks, params } = this.props
+    const { taskId, type, objectId } = params
+    const envelope = deal.envelopes[objectId]
+    const task = tasks[taskId]
+
+    if (!task.submission || !envelope.documents) {
+      return null
+    }
+
+    // get document index
+    const doc = envelope.documents
+      .find(doc => doc.submission === task.submission.id)
+
+    if (!doc){
+      return null
+    }
+
+    return {
+      name: envelope.title,
+      type: 'pdf',
+      url: `${config.api_url}/envelopes/${envelope.id}/${doc.document_id}.pdf?access_token=${user.access_token}`
     }
   }
 
@@ -30,20 +92,15 @@ class FormViewer extends React.Component {
   }
 
   onClose() {
-    const { setFormViewer } = this.props
-    setFormViewer(null)
+    const { deal } = this.props
+    browserHistory.push(`/dashboard/deals/${deal.id}`)
   }
 
   render() {
-    const { showFactsheet, showComments } = this.state
-    const { deal, formViewer } = this.props
-    const { task, title, file } = formViewer
-
-    if (!task) {
-      return false
-    }
-
+    const { file, showFactsheet, showComments } = this.state
+    const { deal, tasks, params } = this.props
     const { name, type, url, downloadUrl } = file
+    const task = tasks[params.taskId]
 
     const COMMENTS_WIDTH = showComments ? '300px' : '0px'
     const FACTSHEET_WIDTH = showFactsheet ? '300px' : '0px'
@@ -56,7 +113,7 @@ class FormViewer extends React.Component {
     return (
       <Modal
         className="deal-form-viewer-modal"
-        show={task !== null}
+        show={true}
         onHide={() => this.onClose()}
       >
         <Modal.Header>
@@ -68,7 +125,7 @@ class FormViewer extends React.Component {
           </Button>
 
           <span className="title">
-            { title || name }
+            { name }
           </span>
 
           <div className="cta">
@@ -117,7 +174,7 @@ class FormViewer extends React.Component {
               className="file-viewer"
             >
               {
-                type === 'pdf' &&
+                file && type === 'pdf' &&
                 <PdfViewer
                   uri={url}
                   downloadUrl={downloadUrl}
@@ -126,7 +183,7 @@ class FormViewer extends React.Component {
               }
 
               {
-                type === 'image' &&
+                file && type === 'image' &&
                 <img
                   className="image"
                   src={url}
@@ -159,7 +216,17 @@ class FormViewer extends React.Component {
   }
 }
 
-export default connect(({ deals }) => ({
-  formViewer: deals.formViewer,
-  isBackOffice: deals.backoffice
-}), { setFormViewer })(FormViewer)
+function mapStateToProps({ user, deals }, props) {
+  const { list } = deals
+  const { dealId } = props.params
+
+  return {
+    user,
+    formViewer: deals.formViewer,
+    isBackOffice: deals.backoffice,
+    deal: list && list[dealId] ? list[dealId] : null,
+    tasks: deals.tasks
+  }
+}
+
+export default connect(mapStateToProps)(FormViewer)

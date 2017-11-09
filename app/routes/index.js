@@ -128,6 +128,15 @@ const AsyncDealDashboard = Load({
     import('../components/Pages/Dashboard/Deals/dashboard' /* webpackChunkName: "deal_d" */)
 })
 
+const AsyncDealFormViewer = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Deals/form-viewer' /* webpackChunkName: "deal_fv" */)
+})
+
+const AsyncDealFormEdit = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Deals/form-edit' /* webpackChunkName: "deal_fe" */)
+})
 /* ==================================== */
 //  Contacts
 /* ==================================== */
@@ -349,6 +358,11 @@ export default (
       >
         <IndexRoute component={AsyncDealsList} />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
+        <Route path="/dashboard/deals/:id/form-edit/:taskId" component={AsyncDealFormEdit} />
+        <Route
+          path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
+          component={AsyncDealFormViewer}
+        />
       </Route>
 
       <Route path="/dashboard/recents(/:roomId)">

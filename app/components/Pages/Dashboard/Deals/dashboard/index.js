@@ -7,19 +7,14 @@ import _ from 'underscore'
 import ReactTooltip from 'react-tooltip'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
-import EditForm from './edit-form'
-import FormViewer from './form-viewer'
 import DealInfo from './deal-info'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
-import { closeEsign, getEnvelopes } from '../../../../../store_actions/deals'
+import { getEnvelopes } from '../../../../../store_actions/deals'
 
 class DealDetails extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      selectedTaskId: null
-    }
   }
 
   componentDidMount() {
@@ -34,25 +29,9 @@ class DealDetails extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.closeEsign()
-  }
-
-  onSelectTask(task) {
-    this.setState({
-      selectedTaskId: task.id
-    })
-  }
-
-  onCloseTask() {
-    this.setState({
-      selectedTaskId: null
-    })
-  }
-
   render() {
-    const { deal, params } = this.props
-    const { selectedTaskId } = this.state
+    const { deal, selectedTask, params } = this.props
+    const selectedTaskId = selectedTask ? selectedTask.id : null
 
     if (!deal) {
       return false
@@ -81,8 +60,6 @@ class DealDetails extends React.Component {
         >
           <Checklists
             deal={deal}
-            selectedTaskId={selectedTaskId}
-            onSelectTask={task => this.onSelectTask(task)}
           />
         </Col>
 
@@ -96,14 +73,6 @@ class DealDetails extends React.Component {
             onCloseTask={() => this.onCloseTask()}
           />
         </Col>
-
-        <EditForm
-          deal={deal}
-        />
-
-        <FormViewer
-          deal={deal}
-        />
 
         <ESignAttachments
           deal={deal}
@@ -122,8 +91,9 @@ function mapStateToProps({ deals }, props) {
   const { id } = props.params
 
   return {
+    selectedTask: deals.selectedTask,
     deal: list && list[id] ? list[id] : null
   }
 }
 
-export default connect(mapStateToProps, { closeEsign, getEnvelopes })(DealDetails)
+export default connect(mapStateToProps, { getEnvelopes })(DealDetails)

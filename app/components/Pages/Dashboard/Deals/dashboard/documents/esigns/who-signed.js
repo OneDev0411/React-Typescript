@@ -75,8 +75,6 @@ class WhoSigned extends React.Component {
     const { resending } = this.state
     const { onRequestClose, areSigned, notSigned, envelope, user } = this.props
 
-    console.log('>>>>', envelope.status)
-
     return (
       <div className="dropdown-menu dropdown-menu-right who-signed">
         <div className="ws-head">

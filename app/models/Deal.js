@@ -3,7 +3,6 @@ import _ from 'underscore'
 import config from '../../config/public'
 import Fetch from '../services/fetch'
 
-
 const Deal = {
   get: {}
 }
@@ -85,6 +84,10 @@ Deal.get.address = function(deal) {
   }
 
   return address
+}
+
+Deal.get.status = function(deal) {
+  return deal.deleted_at ? 'Archived' : Deal.get.field(deal, 'listing_status')
 }
 
 /**

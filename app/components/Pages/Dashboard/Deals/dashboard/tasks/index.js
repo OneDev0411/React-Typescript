@@ -5,14 +5,15 @@ import cn from 'classnames'
 import CreateTask from '../create-task'
 import TaskStatus from './status'
 import ChecklistPanel from '../checklists/panel'
+import { setSelectedTask } from '../../../../../../store_actions/deals'
 
 const List = ({
   tasks,
   rooms,
   checklist,
   deal,
-  selectedTaskId,
-  onSelectTask,
+  selectedTask,
+  setSelectedTask,
   isBackOffice
 }) => {
 
@@ -49,9 +50,9 @@ const List = ({
               return (
                 <div
                   key={`TASK_${id}`}
-                  onClick={() => onSelectTask(task)}
+                  onClick={() => setSelectedTask(task)}
                   className={cn('task', {
-                    'active': selectedTaskId === id,
+                    'active': selectedTask && selectedTask.id === id,
                     'no-status': !hasStatus
                   })}
                 >
@@ -93,5 +94,6 @@ const List = ({
 export default connect(({ deals, chatroom }) => ({
   rooms: chatroom.rooms,
   tasks: deals.tasks,
+  selectedTask: deals.selectedTask,
   isBackOffice: deals.backoffice
-}))(List)
+}), { setSelectedTask })(List)
