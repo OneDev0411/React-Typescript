@@ -1,6 +1,4 @@
-
 import * as types from '../../../constants/listings/search'
-
 
 export const resetSearchType = () => ({
   type: types.RESET_SEARCH_TYPE
@@ -18,7 +16,15 @@ export const searchByPostalCode = () => ({
   type: types.SEARCH_BY_POSTAL_CODE
 })
 
+export const searchByFiltersAreas = () => ({
+  type: types.SEARCH_BY_FILTERS_AREAS
+})
+
+export const setSearchType = type => ({ type })
+
 export const reset = () => dispatch =>
-  Promise.resolve(setTimeout(() => {
-    dispatch(resetSearchType())
-  }, 333))
+  Promise.resolve(
+    setTimeout(() => {
+      dispatch(resetSearchType())
+    }, 333)
+  )

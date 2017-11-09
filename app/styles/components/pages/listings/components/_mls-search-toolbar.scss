@@ -40,6 +40,11 @@
   border-radius: 5px;
   background-color: #fff;
 
+  &:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+
   // remove clear icon on IE and Edge browser
   &::-ms-clear {
     display: none;
@@ -76,6 +81,14 @@
       fill: #444;
     }
   }
+
+  &:disabled {
+    background-color: transparent;
+    cursor: not-allowed;
+    > svg {
+      fill: #ccc;
+    }
+  }
 }
 
 .c-mls-toolbar__search-box__field__submit-btn {
@@ -106,6 +119,13 @@
     > svg {
       fill: #2196f3;
       transform: rotate(180deg);
+    }
+  }
+  &:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    > svg {
+      fill: #ccc;
     }
   }
   > svg {

@@ -9,10 +9,12 @@ const getListingsByValert = options => (dispatch, getState) => {
   const { zoom } = search.map.props
 
   let query
+
   if (brand && zoom >= DECLUSTER_ZOOM_LEVEL) {
     query = '?associations=compact_listing.proposed_agent'
 
     const office = brand.offices && brand.offices[0] ? brand.offices[0] : ''
+
     if (office) {
       query += `&order_by[]=office&order_by[]=status&office=${office}`
     }
