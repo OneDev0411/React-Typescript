@@ -44,7 +44,6 @@ const Details = ({
 
       <Birthdays
         birthdays={birthdays}
-        onAddAttribute={onAddAttribute}
         onChangeAttribute={onChangeAttribute}
       />
 

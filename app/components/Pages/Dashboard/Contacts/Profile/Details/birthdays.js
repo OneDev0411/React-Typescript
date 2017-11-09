@@ -1,12 +1,29 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Editable from '../Editable'
+import moment from 'moment'
 
-export default ({
+import { addNotification as notify } from 'reapop'
+
+const BirthdayComponent = ({
   birthdays,
-  onAddAttribute,
-  onChangeAttribute
-}) => (
-  <div>
+  onChangeAttribute,
+  notify
+}) => {
+  const onChangeBirthday = (...args) => {
+    let momentObj = moment(args[2])
+
+    if (momentObj.isValid()) {
+      onChangeAttribute(args[0], args[1], momentObj.valueOf())
+    } else {
+      notify({
+        message: 'Invalid birthday.',
+        status: 'error'
+      })
+    }
+  }
+
+  return <div>
     {
       birthdays.map((item, key) => (
         <li key={`birthday_${key}`}>
@@ -18,8 +35,8 @@ export default ({
               placeholder="mm / dd / yyyy"
               showEdit
               showAdd={false}
-              text={item.birthday}
-              onChange={onChangeAttribute.bind(this)}
+              text={moment(item.birthday).format('L')}
+              onChange={onChangeBirthday}
             />
           </div>
         </li>
@@ -35,13 +52,14 @@ export default ({
             type="birthday"
             id={null}
             showEdit
-            showAdd
+            showAdd={false}
             text="-"
-            onAdd={onAddAttribute}
-            onChange={onChangeAttribute}
+            onChange={onChangeBirthday}
           />
         </div>
       </li>
     }
   </div>
-)
+}
+
+export default connect(null, { notify })(BirthdayComponent)
