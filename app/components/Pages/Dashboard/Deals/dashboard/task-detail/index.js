@@ -9,8 +9,7 @@ import CommentInput from '../comments/input'
 
 const TaskManager = ({
   deal,
-  task,
-  onCloseTask
+  task
 }) => {
   if (!task) {
     return false
@@ -28,7 +27,6 @@ const TaskManager = ({
         >
           <Header
             task={task}
-            onCloseTask={() => onCloseTask()}
           />
 
           <Documents

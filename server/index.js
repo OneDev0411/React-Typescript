@@ -80,6 +80,7 @@ app.use(async (ctx, next) => {
   ctx.locals = {
     ...ctx.locals,
     intercomId: config.intercom.app_id,
+    sentryKey: config.sentry.api_url,
     appStore: { data: {} },
     time: new Date().getTime()
   }

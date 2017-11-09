@@ -45,7 +45,6 @@ export default ({
   deal,
   showBackButton = true
 }) => {
-  const status = Deal.get.field(deal, 'listing_status')
   const photo = Deal.get.field(deal, 'photo')
 
   return (

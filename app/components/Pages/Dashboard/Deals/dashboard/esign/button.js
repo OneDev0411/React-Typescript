@@ -1,18 +1,34 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Dropdown, MenuItem, Button } from 'react-bootstrap'
+import { batchActions } from 'redux-batched-actions'
 import FileSvg from '../../../Partials/Svgs/File'
 import MultipleFileSvg from '../../../Partials/Svgs/MultipleFile'
-import { showAttachments, updateAttachments } from '../../../../../../store_actions/deals'
+import { showCompose, showAttachments, updateAttachments } from '../../../../../../store_actions/deals'
 
 const EsignButton = ({
   dealId,
   task,
   attachments = [],
   showAttachments,
+  showCompose,
   updateAttachments
 }) => {
   const formIsCompleted = task.submission && task.submission.state === 'Fair'
+
+  const onSingleClick = () => {
+    batchActions([
+      updateAttachments(attachments),
+      showCompose()
+    ])
+  }
+
+  const onMultipleClick = () => {
+    batchActions([
+      updateAttachments(attachments),
+      showAttachments()
+    ])
+  }
 
   return (
     <div className="inline">
@@ -33,7 +49,7 @@ const EsignButton = ({
           {
             formIsCompleted &&
             <MenuItem
-              onClick={() => updateAttachments(attachments)}
+              onClick={onSingleClick}
               eventKey="1"
             >
               <FileSvg />
@@ -47,7 +63,7 @@ const EsignButton = ({
           }
 
           <MenuItem
-            onClick={() => showAttachments(attachments, { showCompose: false })}
+            onClick={onMultipleClick}
             eventKey="2"
           >
             <MultipleFileSvg />
@@ -61,4 +77,4 @@ const EsignButton = ({
 }
 
 export default connect(null,
-  { showAttachments, updateAttachments })(EsignButton)
+  { showCompose, showAttachments, updateAttachments })(EsignButton)

@@ -48,35 +48,29 @@ export default class Editable extends React.Component {
     }, () => this.input && this.input.focus())
   }
 
-  getEditCta() {
+  getCtas() {
     const { editMode } = this.state
     const { editable, context, field, saving } = this.props
     const isDateType = field.fieldType === 'date'
 
-    if (saving === field.key || (editMode && !isDateType)) {
-      return false
-    }
+    const showCTA = saving !== field.key && !editMode
 
-    if (saving !== field.key) {
-      return (
-        <span>
-          <i
-            className={cn('fa fa-times-circle ico-remove', {
-              hide: !context.value || context.value.length === 0
-            })}
-            data-tip={editable ? null : "This field needs office approval after removing" }
-            onClick={(e) => this.deleteField(e, field)}
-          />
+    return (
+      <span>
+        <i
+          className={cn('fa fa-times-circle ico-remove', {
+            hide: !showCTA || !context.value || context.value.length === 0
+          })}
+          data-tip={editable ? null : "This field needs office approval after removing" }
+          onClick={(e) => this.deleteField(e, field)}
+        />
 
-          <i
-            className="fa fa-pencil"
-            data-tip={editable ? null : "This field needs office approval after changing" }
-          />
-        </span>
-      )
-    }
-
-    return false
+        <i
+          className={cn('fa fa-pencil', { hide: !showCTA })}
+          data-tip={editable ? null : "This field needs office approval after changing" }
+        />
+      </span>
+    )
   }
 
   getValue() {
@@ -103,7 +97,7 @@ export default class Editable extends React.Component {
 
     return (
       <div
-        className="inline"
+        style={{ display: 'inline-block', minWidth: '100%' }}
         onClick={() => this.editField()}
       >
 
@@ -144,7 +138,7 @@ export default class Editable extends React.Component {
         }
 
         <span className="cta">
-          {this.getEditCta()}
+          {this.getCtas()}
         </span>
       </div>
     )

@@ -65,7 +65,7 @@ class BaseTable extends React.Component {
   }
 
   getStatus(deal) {
-    const status = Deal.get.field(deal, 'listing_status')
+    const status = Deal.get.status(deal)
 
     return (
       <div>
@@ -213,6 +213,12 @@ class BaseTable extends React.Component {
     if (e.target.type === 'checkbox') {
       return false
     }
+
+    // reset esign flow
+    this.props.closeEsignWizard()
+
+    // reset selected task
+    this.props.setSelectedTask(null)
 
     browserHistory.push(`/dashboard/deals/${id}`)
   }

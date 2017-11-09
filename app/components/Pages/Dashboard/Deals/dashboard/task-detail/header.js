@@ -1,8 +1,10 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { setSelectedTask } from '../../../../../../store_actions/deals'
 
 const Header = ({
   task,
-  onCloseTask
+  setSelectedTask
 }) => (
   <table className="heading">
     <tbody>
@@ -20,7 +22,7 @@ const Header = ({
         >
           <button
             className="deal-button close-task"
-            onClick={() => onCloseTask()}
+            onClick={() => setSelectedTask(null)}
           >
             X
           </button>
@@ -30,4 +32,4 @@ const Header = ({
   </table>
 )
 
-export default Header
+export default connect(null, { setSelectedTask })(Header)
