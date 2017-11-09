@@ -1,10 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 import Contact from '../../../../../../models/Contact'
 import Editable from '../Editable'
 
-export default ({
+const AddressComponent = ({
   contact,
-  onChangeAddress
+  onChangeAddress,
+  notify
 }) => (
   <div className="card address">
     <div className="title">Address</div>
@@ -61,9 +64,16 @@ export default ({
                 id={address.id}
                 showEdit
                 text={address.postal_code || '-'}
-                onChange={(type, id, text) =>
-                  onChangeAddress(address, 'postal_code', id, text)
-                }
+                onChange={(type, id, text) => {
+                  if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(text))
+                    onChangeAddress(address, 'postal_code', id, text)
+                  else {
+                    notify({
+                      message: 'Invalid zip code.',
+                      status: 'error'
+                    })
+                  }
+                }}
               />
             </div>
           </li>
@@ -72,3 +82,5 @@ export default ({
     }
   </div>
 )
+
+export default connect(null, { notify })(AddressComponent)

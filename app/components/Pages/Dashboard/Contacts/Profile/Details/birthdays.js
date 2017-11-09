@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 import Editable from '../Editable'
 import moment from 'moment'
-
-import { addNotification as notify } from 'reapop'
 
 const BirthdayComponent = ({
   birthdays,
