@@ -65,16 +65,19 @@ const ComposeWrapper = ({
             {
               roles && roles.map((role, index) => {
                 let active = activeRoles.indexOf(role.id) > -1
+
                 return <div
                   key={index}
                   className="row-container"
                   onClick={() => {
                     let indexOf = activeRoles.indexOf(role.id)
+
                     if (indexOf > -1) {
                       activeRoles.splice(indexOf, 1)
                     } else {
                       activeRoles.push(role.id)
                     }
+
                     onChangeActiveRoles(activeRoles)
                   }}
                 >

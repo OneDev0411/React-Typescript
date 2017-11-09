@@ -44,7 +44,7 @@ export default class Listings extends Component {
         ref={ref => this.parentDiv = ref}
       >
         <ListingSection
-          title="Our Exclusive Listings"
+          title="Exclusive Listings"
           data={data}
           type="active"
           updateHeight={this.updateHeight}

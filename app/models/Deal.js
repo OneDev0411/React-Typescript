@@ -3,7 +3,6 @@ import _ from 'underscore'
 import config from '../../config/public'
 import Fetch from '../services/fetch'
 
-
 const Deal = {
   get: {}
 }
@@ -85,6 +84,10 @@ Deal.get.address = function(deal) {
   }
 
   return address
+}
+
+Deal.get.status = function(deal) {
+  return deal.deleted_at ? 'Archived' : Deal.get.field(deal, 'listing_status')
 }
 
 /**
@@ -380,7 +383,7 @@ Deal.createRole = async function (deal_id, form) {
   try {
     const response = await new Fetch()
       .post(`/deals/${deal_id}/roles`)
-      .send({ first_name, last_name, email, role })
+      .send({ roles: [{first_name, last_name, email, role}] })
 
     return response.body.data
   } catch (e) {
@@ -505,7 +508,6 @@ Deal.resendEnvelope = async function (id) {
 * send envelope
 */
 Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recipients) {
-
   const data = {
     deal: deal_id,
     title: subject,
@@ -522,6 +524,21 @@ Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recip
     return response.body.data
   } catch (e) {
     throw e
+  }
+}
+
+/**
+* void envelope
+*/
+Deal.voidEnvelope = async function(envelope_id) {
+  try {
+    const response = await new Fetch()
+      .patch(`/envelopes/${envelope_id}/status`)
+      .send({ status: 'Voided' })
+
+    return response.body.data
+  } catch (e) {
+    return null
   }
 }
 

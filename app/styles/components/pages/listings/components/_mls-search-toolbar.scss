@@ -2,6 +2,7 @@
   position: absolute;
   top: 20px;
   left: 20px;
+  display: flex;
 }
 
 .c-mls-toolbar__drawing-btn,
@@ -85,9 +86,7 @@
   position: relative;
   height: 100%;
   padding: 0.8rem 3rem 0.8rem 0;
-  margin-bottom: 2px;
   display: inline-block;
-  vertical-align: middle;
   font-size: 15px;
   font-weight: Bold;
   line-height: 24px;
@@ -113,7 +112,7 @@
     position: absolute;
     width: 24px;
     height: 24px;
-    top: 0.9rem;
+    top: 1.25rem;
     transform: rotate(0);
     transition: transform 0.3s;
   }
@@ -131,12 +130,11 @@
 
 .c-mls-toolbar__drawing-btn {
   position: relative;
-  height: 4.6rem;
-  width: 4.6rem;
+  height: 4.8rem;
+  width: 4.8rem;
   margin-left: 1rem;
   padding: 0;
   background-color: #fff;
-  vertical-align: middle;
   > svg {
     display: inline-block;
     vertical-align: middle;

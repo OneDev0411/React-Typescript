@@ -9,9 +9,10 @@
     @extend %deal-list--header;
   }
 
-  .list-empty {
+  .list-empty,
+  .deals-error {
     text-align: center;
-    margin-top: 20%;
+    margin-top: 17%;
     img {
       width: 91px;
       margin-bottom: 21px;
@@ -29,6 +30,15 @@
       font-weight: 500;
       color: #8da2b5;
       margin-bottom: 20px;
+    }
+
+    .link {
+      color: #2196f3;
+      cursor: pointer;
+      margin-left: 5px;
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     &.backoffice {
@@ -118,13 +128,15 @@
       }
 
       .sortable {
-        cursor: pointer;
+        color: #263445;
+        opacity: 0.7;
+
         &:hover {
-          color: #2196f3;
+          opacity: 0.5;
         }
 
         &.isActive {
-          color: #2196f3;
+          opacity: 1;
         }
       }
     }
@@ -134,7 +146,7 @@
       border-radius: 4px;
       background-color: #fff;
       color: #5b6469;
-      transition: 0.3s ease-in all;
+      transition: 0.2s ease-in all;
       &:hover {
         background-color: #F8FAFB;
       }
@@ -148,6 +160,10 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+      &:hover {
+        text-decoration: underline;
+      }
+
       img {
         width: 40px;
         height: 40px;
@@ -438,7 +454,7 @@
         color: #78909c;
         font-size: 15px;
 
-        .cta, .icon-not-approved {
+        .cta {
           display: none;
         }
       }

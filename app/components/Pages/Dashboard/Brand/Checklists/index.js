@@ -23,7 +23,10 @@ class Checklists extends React.Component {
   }
 
   componentDidMount() {
-    this.props.params && this.props.getChecklists(this.props.params.brand)
+    if (this.props.params) {
+      this.props.getChecklists(this.props.params.brand)
+    }
+
     this.props.getForms()
   }
 
@@ -40,6 +43,7 @@ class Checklists extends React.Component {
       Checklists,
       spinner
     } = this.props
+
     return (
       <div className="brand">
         <i

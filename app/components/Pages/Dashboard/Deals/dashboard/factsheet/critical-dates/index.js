@@ -66,7 +66,7 @@ const table = [
  * parse date to unix time
  */
 const parseDate = (date) => {
-  return moment(date)
+  return moment.unix(date)
 }
 
 /**

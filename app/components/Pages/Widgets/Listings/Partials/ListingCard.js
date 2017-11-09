@@ -11,9 +11,13 @@ import SignUpConfirmMessage from './SignUpConfirmMessage'
 
 export default class ListingCard extends Component {
   side(listing) {
-    if (!listing.proposed_agent) { return }
+    if (!listing.proposed_agent) {
+      return
+    }
 
-    if (!listing.proposed_agent.agent) { return }
+    if (!listing.proposed_agent.agent) {
+      return
+    }
 
     const agent = listing.proposed_agent.agent
 
@@ -25,11 +29,17 @@ export default class ListingCard extends Component {
       agent.mlsid === listing.selling_agent_mls_id || agent.mlsid === listing.co_selling_agent_mls_id
     )
 
-    if (is_list_agent && is_selling_agent) { return 'Listing & Buyer Agent' }
+    if (is_list_agent && is_selling_agent) {
+      return 'Listing & Buyer Agent'
+    }
 
-    if (is_list_agent && !is_selling_agent) { return 'Listing Agent' }
+    if (is_list_agent && !is_selling_agent) {
+      return 'Listing Agent'
+    }
 
-    if (!is_list_agent && is_selling_agent) { return 'Buyer Agent' }
+    if (!is_list_agent && is_selling_agent) {
+      return 'Buyer Agent'
+    }
 
     return ''
   }
@@ -38,9 +48,13 @@ export default class ListingCard extends Component {
     const listing = this.props.listing
     const data = this.props.data
     let property = listing.property
-    if (!property) { property = listing.compact_property }
+    if (!property) {
+      property = listing.compact_property
+    }
     let address = listing.address
-    if (!address) { address = property.address }
+    if (!address) {
+      address = property.address
+    }
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     let listing_card_style = {
       ...S('w-380 h-360 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'),
@@ -103,11 +117,14 @@ export default class ListingCard extends Component {
         key={`listing-viewer-${listing.id}-${helpers.randomString(10)}`}
         style={listing_card_style}
         className={this.props.className}
-      >
-        <FavoriteHeart
-          listing={listing}
-        />
-        <div style={listing_image_style} onClick={this.props.handleListingClick.bind(this, listing)}>
+        onClick={this.props.handleListingClick.bind(this, listing)}
+      >{
+          data.user &&
+          <FavoriteHeart
+            listing={listing}
+          />
+        }
+        <div style={listing_image_style}>
           <div style={overlay_style} />
           <div style={price_tag_style}>
             ${price}{listing.compact_property && listing.compact_property.property_type === 'Residential Lease' ? '/mo' : ''}
@@ -115,7 +132,6 @@ export default class ListingCard extends Component {
         </div>
         <div
           style={S('absolute b-0 h-100 p-10 pl-15 color-000')}
-          onClick={this.props.handleListingClick.bind(this, listing)}
         >
           <div style={S('font-14')}>{listing_util.addressTitle(address)}</div>
           <div style={S('font-14')}>

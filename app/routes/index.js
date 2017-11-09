@@ -8,6 +8,9 @@ import UserIsNotAuthenticated from './userIsNotAuthenticated'
 import { getDeals } from '../store_actions/deals'
 import { getContacts } from '../store_actions/contact'
 
+// utils
+import { hasUserAccess } from '../utils/user-acl'
+
 // Containers
 import AppLayout from '../components/App'
 
@@ -111,9 +114,7 @@ const AsyncDealsLayout = Load({
       return
     }
 
-    const isBackOffice =
-      user.brand && user.features && user.features.includes('Backoffice')
-    return dispatch(getDeals(user, isBackOffice))
+    return dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
   }
 })
 
@@ -127,6 +128,15 @@ const AsyncDealDashboard = Load({
     import('../components/Pages/Dashboard/Deals/dashboard' /* webpackChunkName: "deal_d" */)
 })
 
+const AsyncDealFormViewer = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Deals/form-viewer' /* webpackChunkName: "deal_fv" */)
+})
+
+const AsyncDealFormEdit = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Deals/form-edit' /* webpackChunkName: "deal_fe" */)
+})
 /* ==================================== */
 //  Contacts
 /* ==================================== */
@@ -307,7 +317,7 @@ export default (
       />
       <Route
         path="/password/reset"
-        component={UserIsNotAuthenticated(AsyncResetPassword)}
+        component={AsyncResetPassword}
       />
 
       <Route path="/mobile" component={AsyncMobile} />
@@ -348,6 +358,11 @@ export default (
       >
         <IndexRoute component={AsyncDealsList} />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
+        <Route path="/dashboard/deals/:id/form-edit/:taskId" component={AsyncDealFormEdit} />
+        <Route
+          path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
+          component={AsyncDealFormViewer}
+        />
       </Route>
 
       <Route path="/dashboard/recents(/:roomId)">

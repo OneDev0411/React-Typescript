@@ -12,11 +12,16 @@ export default class Editable extends React.Component {
     }
   }
 
+  deleteField(e, field) {
+    e.stopPropagation()
+    this.props.onChange(field, null)
+  }
+
   onFinishEditing(value = null) {
     const { field, onChange } = this.props
     let fieldValue = value
 
-    if (!value && this.input) {
+    if (value === null && this.input) {
       fieldValue = this.input.value
     }
 
@@ -24,7 +29,7 @@ export default class Editable extends React.Component {
       editMode: false
     })
 
-    if (fieldValue && fieldValue !== this.getValue()) {
+    if (fieldValue !== null && fieldValue !== this.getValue()) {
       onChange(field, fieldValue)
     }
   }
@@ -40,30 +45,32 @@ export default class Editable extends React.Component {
 
     this.setState({
       editMode: true
-    }, () => {
-      this.input && this.input.focus()
-    })
+    }, () => this.input && this.input.focus())
   }
 
-  getEditCta() {
+  getCtas() {
     const { editMode } = this.state
-    const { editable, field, saving } = this.props
+    const { editable, context, field, saving } = this.props
     const isDateType = field.fieldType === 'date'
 
-    if (saving === field.key || (editMode && !isDateType)) {
-      return false
-    }
+    const showCTA = saving !== field.key && !editMode
 
-    if (saving !== field.key) {
-      return (
+    return (
+      <span>
         <i
-          className="fa fa-pencil"
+          className={cn('fa fa-times-circle ico-remove', {
+            hide: !showCTA || !context.value || context.value.length === 0
+          })}
+          data-tip={editable ? null : "This field needs office approval after removing" }
+          onClick={(e) => this.deleteField(e, field)}
+        />
+
+        <i
+          className={cn('fa fa-pencil', { hide: !showCTA })}
           data-tip={editable ? null : "This field needs office approval after changing" }
         />
-      )
-    }
-
-    return false
+      </span>
+    )
   }
 
   getValue() {
@@ -85,12 +92,12 @@ export default class Editable extends React.Component {
     const isStringType = !isDateType
 
     if (disabled) {
-      return <span>{ context.value }</span>
+      return <span>{context.value}</span>
     }
 
     return (
       <div
-        className="inline"
+        style={{ display: 'inline-block', minWidth: '100%' }}
         onClick={() => this.editField()}
       >
 
@@ -103,7 +110,13 @@ export default class Editable extends React.Component {
         />
 
         {
-          editMode && isStringType ? '' : context.value
+          editMode && isStringType ?
+          '' :
+          <span
+            data-tip={approved ? null : 'Approval is pending on this date'}
+          >
+            {context.value}
+          </span>
         }
 
         {
@@ -118,14 +131,14 @@ export default class Editable extends React.Component {
               maxLength={15}
             />
             <i
-              className="fa fa-floppy-o"
+              className="fa fa-check-circle"
               onClick={() => this.onFinishEditing()}
             />
           </div>
         }
 
         <span className="cta">
-          {this.getEditCta()}
+          {this.getCtas()}
         </span>
       </div>
     )

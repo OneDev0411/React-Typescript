@@ -4,6 +4,7 @@ import { Panel, Button } from 'react-bootstrap'
 import BrandHeader from './BrandHeader'
 import ModalBrand from './ModalBrand'
 import { addBrand } from '../../../../../store_actions/brandConsole'
+
 const Teams = ({
   brands,
   brandParent,

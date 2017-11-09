@@ -10,7 +10,7 @@ export default ({
     return false
   }
 
-  const envelopes = (deal.envelopes || []).filter(envelope =>
+  const envelopes = _.filter(deal.envelopes, envelope =>
     envelope.documents && envelope.documents.filter(doc =>
       doc.submission === task.submission.id).length > 0
   )

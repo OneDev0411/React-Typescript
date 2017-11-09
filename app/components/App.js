@@ -10,6 +10,9 @@ import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'
 import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
 import DealSocket from './Pages/Dashboard/Deals/services/socket'
 
+// utils
+import { hasUserAccess } from '../utils/user-acl'
+
 // navs
 import SideBar from './Pages/Dashboard/Partials/SideBar'
 
@@ -111,10 +114,7 @@ class App extends Component {
     const { dispatch, deals } = this.props
 
     if (!deals) {
-      const isBackOffice =
-        user.brand && user.features && user.features.includes('Backoffice')
-
-      return dispatch(getDeals(user, isBackOffice))
+      return dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
     }
   }
 

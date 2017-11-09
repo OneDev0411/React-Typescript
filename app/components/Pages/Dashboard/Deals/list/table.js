@@ -65,7 +65,7 @@ class BaseTable extends React.Component {
   }
 
   getStatus(deal) {
-    const status = Deal.get.field(deal, 'listing_status')
+    const status = Deal.get.status(deal)
 
     return (
       <div>
@@ -214,6 +214,12 @@ class BaseTable extends React.Component {
       return false
     }
 
+    // reset esign flow
+    this.props.closeEsignWizard()
+
+    // reset selected task
+    this.props.setSelectedTask(null)
+
     browserHistory.push(`/dashboard/deals/${id}`)
   }
 
@@ -286,18 +292,14 @@ class BaseTable extends React.Component {
                         sortable: cell.sortable,
                         isActive: sortBy === key
                       })}
-                      onClick={() => {
-                        if (cell.sortable) {
-                          this.setSort(key)
-                        }
-                      }}
                     >
-                      { cell.caption }&nbsp;
-
-                      {
-                        cell.sortable &&
-                        this.getSorterCaret(key)
-                      }
+                      <span
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => cell.sortable && this.setSort(key)}
+                      >
+                        { cell.caption }&nbsp;
+                        { cell.sortable && this.getSorterCaret(key) }
+                      </span>
                     </td>
                   )
                 }

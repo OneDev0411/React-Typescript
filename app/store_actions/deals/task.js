@@ -49,6 +49,13 @@ export function setIsUploading(taskId, status) {
   }
 }
 
+export function setSelectedTask(task) {
+  return {
+    type: types.SET_SELECTED_TASK,
+    task
+  }
+}
+
 export function deleteAttachment(task, fileId) {
   return async (dispatch) => {
     await Deal.deleteAttachment(task.room.id, fileId)

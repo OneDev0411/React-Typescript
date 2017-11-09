@@ -1,4 +1,5 @@
 import _ from 'underscore'
+import { browserHistory } from 'react-router'
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
 
@@ -15,22 +16,6 @@ export function getForms() {
     const indexedForms = _.indexBy(forms, 'id')
 
     dispatch(initializeForms(indexedForms))
-  }
-}
-
-export function editForm(task) {
-  return {
-    type: types.SET_EDIT_FORM,
-    task
-  }
-}
-
-export function setFormViewer(task, file = null, title = null) {
-  return {
-    type: types.SET_FORM_VIEWER,
-    task,
-    file,
-    title
   }
 }
 

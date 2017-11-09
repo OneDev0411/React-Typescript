@@ -21,7 +21,7 @@ class Checklist extends React.Component {
   render() {
     let terminatedChecklistsCount = 0
     const { showTerminatedChecklists } = this.state
-    const { deal, selectedTaskId, onSelectTask, checklists } = this.props
+    const { deal, checklists } = this.props
 
     if (!deal.checklists) {
       return false
@@ -52,8 +52,6 @@ class Checklist extends React.Component {
                 key={id}
                 deal={deal}
                 checklist={checklists[id]}
-                selectedTaskId={selectedTaskId}
-                onSelectTask={onSelectTask}
               />
             )
             .value()

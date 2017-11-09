@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
+import cn from 'classnames'
 import WhoSigned from './who-signed'
-import { setFormViewer } from '../../../../../../../store_actions/deals/forms'
-import config from '../../../../../../../../config/public'
 
 class Envelope extends React.Component {
   constructor(props) {
@@ -28,59 +28,49 @@ class Envelope extends React.Component {
 
   getFormUrl() {
     const { user, task, envelope } = this.props
-    if (!task.submission || !envelope.documents) {
-      return null
-    }
 
-    // get document index
-    const doc = envelope.documents.find(doc => doc.submission === task.submission.id)
+  }
 
-    if (!doc){
-      return null
-    }
-
-    return `${config.api_url}/envelopes/${envelope.id}/${doc.document_id}.pdf?access_token=${user.access_token}`
+  openFormViewer() {
+    const { deal, envelope, task } = this.props
+    browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}/envelope/${envelope.id}`)
   }
 
   render() {
-    const { task, envelope, setFormViewer } = this.props
+    const { deal, task, envelope } = this.props
     const { showDropDown } = this.state
     const { recipients } = envelope
+    const isVoided = envelope.status === 'Voided'
     const areSigned = recipients.filter(r => r.status === 'Completed')
     const notSigned = recipients.filter(r => r.status !== 'Completed')
     const recipientsNames = this.getRecipientsNames(recipients)
 
-    const formUrl = this.getFormUrl()
-
-    const pdfFile = {
-      name: envelope.title,
-      type: 'pdf',
-      url: formUrl
-    }
-
     return (
       <div
-        className="item eSign"
+        className={cn('item eSign', {
+          voided: isVoided
+        })}
         key={`eSign_${envelope.id}`}
       >
+
+        {
+          isVoided &&
+          <span className="void-label">
+            VOIDED
+          </span>
+        }
 
         <div className="image">
           <img src="/static/images/deals/signature.svg" />
         </div>
 
         <div className="name">
-          {
-            formUrl ?
-            <span
-              className="link"
-              onClick={() => setFormViewer(task, pdfFile)}
-            >
-              Sent to {recipientsNames}
-            </span> :
-            <span>
-              Sent to {recipientsNames}
-            </span>
-          }
+          <span
+            className="link"
+            onClick={() => !isVoided && this.openFormViewer()}
+          >
+            Sent to {recipientsNames}
+          </span>
         </div>
 
         <div className="actions">
@@ -88,7 +78,7 @@ class Envelope extends React.Component {
             id="drp-esign-who-signed"
             className="deal-esgin-whosigned"
             pullRight
-            open={showDropDown}
+            open={showDropDown && !isVoided}
             onToggle={(open) => this.toggleShowDropDown(open)}
           >
             <Button
@@ -101,6 +91,7 @@ class Envelope extends React.Component {
 
             <WhoSigned
               onRequestClose={() => this.toggleShowDropDown(false)}
+              deal={deal}
               envelope={envelope}
               areSigned={areSigned}
               notSigned={notSigned}
@@ -115,4 +106,4 @@ class Envelope extends React.Component {
 
 export default connect(({ user }) => ({
   user
-}), { setFormViewer })(Envelope)
+}))(Envelope)

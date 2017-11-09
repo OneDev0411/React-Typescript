@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import { Row, Col, Dropdown, Button } from 'react-bootstrap'
 import Lightbox from 'react-images'
 import moment from 'moment'
 import _ from 'underscore'
-import { deleteAttachment, setFormViewer } from '../../../../../../../store_actions/deals'
+import { deleteAttachment } from '../../../../../../../store_actions/deals'
 import VerticalDotsIcon from '../../../../Partials/Svgs/VerticalDots'
 
 /**
@@ -26,16 +27,9 @@ class FileAttachments extends React.Component {
     return file.mime.includes('image/')
   }
 
-  openDoc(selectedFile) {
-    const { setFormViewer, task } = this.props
-
-    const file = {
-      type: selectedFile.type,
-      name: selectedFile.name,
-      url: selectedFile.src
-    }
-
-    setFormViewer(task, file)
+  openDoc(fileId) {
+    const { deal, task } = this.props
+    browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}/attachment/${fileId}`)
   }
 
   async deleteFile(task, file) {
@@ -87,7 +81,7 @@ class FileAttachments extends React.Component {
               </div>
               <div
                 className="name"
-                onClick={() => this.openDoc(file)}
+                onClick={() => this.openDoc(file.id)}
               >
                 <span className="link">
                   { file.name }
@@ -97,7 +91,7 @@ class FileAttachments extends React.Component {
               <div className="actions">
                 <button
                   className="btn-deal"
-                  onClick={() => this.openDoc(file)}
+                  onClick={() => this.openDoc(file.id)}
                 >
                   View
                 </button>
@@ -137,4 +131,4 @@ class FileAttachments extends React.Component {
   }
 }
 
-export default connect(null, { deleteAttachment, setFormViewer })(FileAttachments)
+export default connect(null, { deleteAttachment })(FileAttachments)

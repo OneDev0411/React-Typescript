@@ -1,31 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Modal, Button } from 'react-bootstrap'
+import { batchActions } from 'redux-batched-actions'
+import { browserHistory } from 'react-router'
 import moment from 'moment'
 import _ from 'underscore'
 import cn from 'classnames'
-import extractDocumentOfTask from '../../utils/extract-document-of-task'
-import { closeAttachments, setFormViewer, updateAttachments } from '../../../../../../store_actions/deals'
+import {
+  closeAttachments,
+  showCompose,
+  showAttachments,
+  updateAttachments
+} from '../../../../../../store_actions/deals'
 
 class SelectDocumentModal extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      attachments: []
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { esign } = nextProps
-
-    if (esign.showAttachments) {
-      this.setState({ attachments: esign.attachments })
-    }
   }
 
   toggleSelectAttachment(task) {
-    const { attachments } = this.state
     let newList = []
+    const { esign, updateAttachments } = this.props
+    const { attachments } = esign
     const index = attachments.indexOf(task.id)
 
     if (index === -1) {
@@ -37,19 +33,21 @@ class SelectDocumentModal extends React.Component {
       newList = attachments.filter(doc => doc !== task.id)
     }
 
-    this.setState({
-      attachments: newList
-    })
+    updateAttachments(newList)
   }
 
   onClose() {
-    this.setState({
-      attachments: []
-    }, this.props.closeAttachments)
+    const { showAttachments } = this.props
+    showAttachments(false)
   }
 
-  onDone(attachments) {
-    this.props.updateAttachments(attachments)
+  onDone() {
+    const { showAttachments, showCompose } = this.props
+
+    batchActions([
+      showCompose(true),
+      showAttachments(false)
+    ])
   }
 
   getCompletedDocuments() {
@@ -65,15 +63,14 @@ class SelectDocumentModal extends React.Component {
 
   viewForm(e, task) {
     e.stopPropagation()
+    const { deal } = this.props
 
-    const { deal, setFormViewer } = this.props
-    const file = extractDocumentOfTask(deal, task)
-    setFormViewer(task, file)
+    browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}`)
   }
 
   render() {
-    const { attachments } = this.state
     const { tasks, esign } = this.props
+    const { attachments } = esign
     const documents = this.getCompletedDocuments()
 
     return (
@@ -144,7 +141,7 @@ class SelectDocumentModal extends React.Component {
 
             <Button
               className="deal-button"
-              onClick={() => this.onDone(attachments)}
+              onClick={() => this.onDone()}
               disabled={attachments.length < 1}
             >
               {esign.showCompose ? 'Select' : 'Next'}
@@ -159,4 +156,4 @@ class SelectDocumentModal extends React.Component {
 export default connect(({ deals }) => ({
   tasks: deals.tasks,
   esign: deals.esign || {}
-}), { closeAttachments, updateAttachments, setFormViewer })(SelectDocumentModal)
+}), { showAttachments, showCompose, updateAttachments })(SelectDocumentModal)

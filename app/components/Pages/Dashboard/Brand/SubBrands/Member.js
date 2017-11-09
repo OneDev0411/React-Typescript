@@ -19,6 +19,7 @@ const Member = ({
       {
         roles.map((role, index) => {
           let active = member.roles[role.id]
+
           return <div
             key={index}
             className="row-container"

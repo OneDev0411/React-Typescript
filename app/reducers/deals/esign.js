@@ -1,26 +1,31 @@
 import types from '../../constants/deals'
 
-export default (state = null, action) => {
+const initialState = {
+  showCompose: false,
+  showAttachments: false,
+  attachments: [],
+  recipients: {}
+}
+
+export default (state = initialState, action) => {
 
   switch (action.type) {
     case types.SHOW_ATTACHMENTS:
       return {
-        showCompose: action.showCompose,
-        showAttachments: true,
-        attachments: action.attachments
+        ...state,
+        showAttachments: action.display
+      }
+
+    case types.SHOW_COMPOSE:
+      return {
+        ...state,
+        showCompose: action.display
       }
 
     case types.UPDATE_ATTACHMENTS:
       return {
-        showCompose: true,
-        showAttachments: false,
-        attachments: action.attachments
-      }
-
-    case types.CLOSE_ATTACHMENTS:
-      return {
         ...state,
-        showAttachments: false
+        attachments: action.attachments
       }
 
     case types.REMOVE_ATTACHMENT:
@@ -31,8 +36,23 @@ export default (state = null, action) => {
         }
       }
 
-    case types.CLOSE_ESIGN:
-      return null
+    case types.SET_RECIPIENT:
+      return {
+        ...state,
+        recipients: {
+          ...state.recipients,
+          [action.recipient.email]: action.recipient
+        }
+      }
+
+    case types.REMOVE_RECIPIENT:
+      return {
+        ...state,
+        recipients: _.filter(state.recipients, recp => recp.email !== action.id)
+      }
+
+    case types.CLOSE_ESIGN_WIZARD:
+      return initialState
 
     default:
       return state
