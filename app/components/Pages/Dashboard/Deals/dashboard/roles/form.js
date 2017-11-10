@@ -22,9 +22,10 @@ const role_names = [
 export default class Form extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
       validation: {},
-      form: {}
+      form: props.form || {}
     }
   }
 
@@ -65,24 +66,29 @@ export default class Form extends React.Component {
         <input
           className="first_name"
           placeholder="First Name"
+          value={form.first_name || ''}
           onChange={e => this.setForm('first_name', e.target.value)}
         />
 
         <input
           className="last_name"
           placeholder="Last Name"
+          value={form.last_name || ''}
           onChange={e => this.setForm('last_name', e.target.value)}
         />
 
         <input
           className="email"
           placeholder="Email"
+          value={form.email || ''}
           onChange={e => this.setForm('email', e.target.value)}
         />
 
         <input
           className="phone"
           placeholder="Phone"
+          value={form.phone || ''}
+          onChange={e => this.setForm('phone', e.target.value)}
         />
 
         <DropdownButton
