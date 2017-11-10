@@ -46,11 +46,13 @@ export const setCssPositionToListingsWithSameBuilding = clusters => {
 
   Object.keys(pointsGroupByLat).forEach(lat => {
     const listingsWithSameBuilding = pointsGroupByLat[lat]
+
     if (listingsWithSameBuilding.length > 1) {
       newClusters = [
         ...newClusters,
         ...setCssPosition(listingsWithSameBuilding)
       ]
+
       return
     }
 
@@ -82,7 +84,3 @@ export const generatePointsFromBounds = bounds => [
     longitude: bounds.ne.lng
   }
 ]
-
-export default {
-  generatePointsFromBounds
-}

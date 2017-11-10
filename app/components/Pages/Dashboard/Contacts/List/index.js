@@ -1,12 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
 import Contact from '../../../../../models/Contact'
 import { upsertAttributes } from '../../../../../store_actions/contact'
-import AddContact from '../Add-Contact'
 import Stage from '../components/Stage'
 import NoContact from './no-contact'
 import Header from './header'
@@ -53,51 +51,51 @@ const ContactsList = ({
           </tr>
           {
             _.chain(contacts)
-            .map(contact => (
-              <tr
-                key={`CONTACT_${contact.id}`}
-                onClick={(e) => openContact(contact.id, e)}
-                className="item"
-              >
-                <td className="col-md-2">
-                  <div className="name">
-                    <Avatar
-                      className="avatar"
-                      round
-                      name={Contact.get.name(contact)}
-                      src={Contact.get.avatar(contact)}
-                      size={35}
-                    />
-                    <span className="ellipsis">
-                      { Contact.get.name(contact) }
-                    </span>
-                  </div>
-                </td>
-
-                <td className="col-md-3 ellipsis">
-                  { Contact.get.email(contact) }
-                </td>
-
-                <td className="col-md-2 hidden-xs ellipsis">
-                  { Contact.get.phone(contact) }
-                </td>
-
-                <td
-                  className="col-md-2 hidden-xs"
-                  onClick={e => e.stopPropagation()}
+              .map(contact => (
+                <tr
+                  key={`CONTACT_${contact.id}`}
+                  onClick={(e) => openContact(contact.id, e)}
+                  className="item"
                 >
-                  <Stage
-                    default={Contact.get.stage(contact).name}
-                    onChange={stage => onChangeStage(stage, contact, upsertAttributes)}
-                  />
-                </td>
+                  <td className="col-md-2">
+                    <div className="name">
+                      <Avatar
+                        className="avatar"
+                        round
+                        name={Contact.get.name(contact)}
+                        src={Contact.get.avatar(contact)}
+                        size={35}
+                      />
+                      <span className="ellipsis">
+                        { Contact.get.name(contact) }
+                      </span>
+                    </div>
+                  </td>
 
-                <td className="col-md-3 hidden-sm hidden-xs">
-                  { Contact.get.source(contact).label }
-                </td>
-              </tr>
-            ))
-            .value()
+                  <td className="col-md-3 ellipsis">
+                    { Contact.get.email(contact) }
+                  </td>
+
+                  <td className="col-md-2 hidden-xs ellipsis">
+                    { Contact.get.phone(contact) }
+                  </td>
+
+                  <td
+                    className="col-md-2 hidden-xs"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <Stage
+                      default={Contact.get.stage(contact).name}
+                      onChange={stage => onChangeStage(stage, contact, upsertAttributes)}
+                    />
+                  </td>
+
+                  <td className="col-md-3 hidden-sm hidden-xs">
+                    { Contact.get.source(contact).label }
+                  </td>
+                </tr>
+              ))
+              .value()
           }
         </tbody>
       </table>

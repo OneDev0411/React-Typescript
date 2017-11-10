@@ -1,12 +1,14 @@
 import React from 'react'
 import { Button, Modal, FormControl } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 import Stage from '../components/Stage'
 import Emails from './Emails'
 import Phones from './Phones'
 import store from '../../../../../stores'
 import { addContact } from '../../../../../store_actions/contact'
 
-export default class AddContact extends React.Component {
+class AddContact extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -30,18 +32,19 @@ export default class AddContact extends React.Component {
     const list = this.state[stateName]
 
     list[key] = e.target.value
-    this.setState({[stateName]: list})
+    this.setState({ [stateName]: list })
   }
 
   addNewAttribute(attribute) {
     const stateName = `${attribute}s`
     const list = this.state[stateName]
 
-    if (list.length >= this.multiple_limit)
+    if (list.length >= this.multiple_limit) {
       return
+    }
 
     list.push('')
-    this.setState({[stateName]: list})
+    this.setState({ [stateName]: list })
   }
 
   onRemoveAttribute(attribute, key) {
@@ -50,23 +53,22 @@ export default class AddContact extends React.Component {
 
     // remove
     list.splice(key, 1)
-    this.setState({[stateName]: list})
+    this.setState({ [stateName]: list })
   }
 
   async save() {
     const { firstName, lastName, stage, phones, emails } = this.state
-    const { onNewContact, dispatch } = this.props
+    const { onNewContact } = this.props
 
     this.setState({ saving: true })
 
     try {
-
       const contact = {
-        emails: emails,
+        emails,
         phone_numbers: phones,
         first_name: firstName,
         last_name: lastName,
-        stage: stage
+        stage
       }
 
       const id = await store.dispatch(addContact(contact))
@@ -75,16 +77,13 @@ export default class AddContact extends React.Component {
 
       // trigger
       onNewContact(id)
-    }
-    catch(e) {
-      console.log(e)
+    } catch (e) {
       if (e.response) {
-        alert(e.response.body.message)
-        // this.setState({
-        //   validationErrors: e.response.body.attributes
-        // })
+        this.props.notify({
+          message: e.response.body.message,
+          status: 'error'
+        })
       }
-
     } finally {
       this.setState({ saving: false })
     }
@@ -109,7 +108,7 @@ export default class AddContact extends React.Component {
       <div>
         <Button
           bsStyle="primary"
-          onClick={() => this.openDialog() }
+          onClick={() => this.openDialog()}
         >
           Add Contact
         </Button>
@@ -168,7 +167,7 @@ export default class AddContact extends React.Component {
               onClick={() => this.save()}
               disabled={saving}
             >
-              { saving ? 'Saving...' : 'Add' }
+              {saving ? 'Saving...' : 'Add'}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -176,3 +175,5 @@ export default class AddContact extends React.Component {
     )
   }
 }
+
+export default connect(null, { notify })(AddContact)

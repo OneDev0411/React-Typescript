@@ -2,15 +2,15 @@ import React from 'react'
 import { FormControl } from 'react-bootstrap'
 
 export default ({
-    list,
-    attribute,
-    prefix,
-    placeholder,
-    onChange,
-    onAdd,
-    onRemove,
-    validationErrors,
-    maxItems = 3
+  list,
+  attribute,
+  prefix,
+  placeholder,
+  onChange,
+  onAdd,
+  onRemove,
+  validationErrors,
+  maxItems = 3
 }) => (
   <div className="multiple">
     {

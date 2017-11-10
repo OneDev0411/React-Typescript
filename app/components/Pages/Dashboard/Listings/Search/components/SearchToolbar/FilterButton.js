@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import toggleFilterArea from '../../../../../../../store_actions/listings/search/filters/toggle-filters-area'
+import { toggleFilterArea } from '../../../../../../../store_actions/listings/search/filters/toggle-filters-area'
 
-const FilterButton = ({ isOpen, toggleFilterArea }) => (
+const FilterButton = ({ isOpen, toggleFilterArea, isFetching }) => (
   <button
+    disabled={isFetching}
     onClick={toggleFilterArea}
     className={`c-mls-toolbar__search-box__filter-btn ${isOpen
       ? 'is-open'
@@ -23,6 +24,12 @@ const FilterButton = ({ isOpen, toggleFilterArea }) => (
   </button>
 )
 
-export default connect(({ search }) => ({ isOpen: search.filters.isOpen }), {
-  toggleFilterArea
-})(FilterButton)
+export default connect(
+  ({ search }) => ({
+    isOpen: search.filters.isOpen,
+    isFetching: search.listings.isFetching
+  }),
+  {
+    toggleFilterArea
+  }
+)(FilterButton)

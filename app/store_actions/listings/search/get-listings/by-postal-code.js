@@ -2,7 +2,7 @@ import getListingsByValert from './by-valert'
 import { getFetchingStatus } from '../../../../reducers/listings'
 import { queryOptions } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
 
-const QUERY_LIMIT = 100
+const QUERY_LIMIT = 200
 
 const getListingsByPostalCode = (postalCode, options = {}) => (
   dispatch,

@@ -23,8 +23,7 @@ const MlsAreaSelects = ({
   onChangeAreas,
   loadingSubareas,
   selectedSubareas,
-  onChangeSubareas,
-  setSelectedSubareas
+  onChangeSubareas
 }) => (
   <div style={{ marginBottom: '3rem' }}>
     <Label label="MLS Areas">
@@ -47,14 +46,11 @@ const MlsAreaSelects = ({
           options={subareas}
           addLabelText="MLS Subareas"
           placeholder="Subarea #..."
-          onChange={areas =>
-            setSelectedSubareas(areas, () =>
-              updateField(formName, 'mlsSubareas', areas)
-            )}
           value={selectedSubareas}
           disabled={loadingSubareas}
           className="c-filters__select"
           style={{ margninBottom: '2rem' }}
+          onChange={areas => updateField(formName, 'mlsSubareas', areas)}
         />
       </Label>
     )}
@@ -64,33 +60,24 @@ const MlsAreaSelects = ({
 export default compose(
   connect(
     state => {
-      const initialAreas = selector(state, 'mlsAreas') || []
-      const initialSubareas = selector(state, 'mlsSubareas') || []
+      const selectedAreas = selector(state, 'mlsAreas') || []
+      const selectedSubareas = selector(state, 'mlsSubareas') || []
 
       return {
-        initialAreas,
-        initialSubareas
+        selectedAreas,
+        selectedSubareas
       }
     },
     { updateField }
   ),
   withState('subareas', 'setSubareas', []),
-  withState(
-    'selectedAreas',
-    'setSelectedAreas',
-    ({ initialAreas }) => initialAreas
-  ),
-  withState(
-    'selectedSubareas',
-    'setSelectedSubareas',
-    ({ initialSubareas }) => initialSubareas
-  ),
   withState('loadingSubareas', 'setLoadingSubareas', false),
   withHandlers({
     getSubareas: ({ setSubareas, setLoadingSubareas }) => async areas => {
       setLoadingSubareas(true)
 
       const subareas = await api.getMlsSubareas(areas)
+
       setSubareas(subareas)
       setLoadingSubareas(false)
     }
@@ -105,12 +92,11 @@ export default compose(
       setSelectedSubareas
     }) => areas => {
       if (areas.length === 0) {
-        setSelectedAreas([], () => updateField(formName, 'mlsAreas', []))
+        updateField(formName, 'mlsAreas', [])
 
         if (selectedSubareas.length > 0) {
-          setSelectedSubareas([], () =>
-            updateField(formName, 'mlsSubareas', [])
-          )
+          updateField(formName, 'mlsSubareas', [])
+
           return
         }
 
@@ -121,21 +107,18 @@ export default compose(
       if (areas.length < selectedAreas.length) {
         const subareas = selectedSubareas.map((subarea, index) => {
           const hasParent = areas.some(area => subarea.parent === area.value)
+
           if (hasParent) {
             return subarea
           }
         })
 
-        setSelectedSubareas(subareas, () => {
-          getSubareas(areas)
-          updateField(formName, 'mlsSubareas', subareas)
-        })
+        getSubareas(areas)
+        updateField(formName, 'mlsSubareas', subareas)
       }
 
-      setSelectedAreas(areas, () => {
-        getSubareas(areas)
-        updateField(formName, 'mlsAreas', areas)
-      })
+      getSubareas(areas)
+      updateField(formName, 'mlsAreas', areas)
     }
   }),
   lifecycle({
@@ -147,6 +130,7 @@ export default compose(
       })
 
       const { selectedAreas, getSubareas } = this.props
+
       if (selectedAreas.length > 0) {
         getSubareas(selectedAreas)
       }

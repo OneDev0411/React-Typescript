@@ -23,10 +23,10 @@ export default class extends React.Component {
 
     const newTags = {
       ...tags,
-      ...{[item.tag]: {
+      ...{ [item.tag]: {
         ...tags[item.tag],
-        ...{active: !item.active}
-      }}
+        ...{ active: !item.active }
+      } }
     }
 
     this.setState({
@@ -44,13 +44,13 @@ export default class extends React.Component {
 
     const newTags = {
       ...tags,
-      ...{[tagName]: {
+      ...{ [tagName]: {
         is_new: true,
         id: tagName,
         active: true,
         type: 'tag',
         tag: tagName
-      }}
+      } }
     }
 
     this.setState({

@@ -27,11 +27,11 @@ class Contacts extends React.Component {
       <div className="contacts">
         {
           contacts ?
-          this.props.children :
-          <div className="loading-list">
-            <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
-            <b>Loading contacts ...</b>
-          </div>
+            this.props.children :
+            <div className="loading-list">
+              <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
+              <b>Loading contacts ...</b>
+            </div>
         }
       </div>
     )

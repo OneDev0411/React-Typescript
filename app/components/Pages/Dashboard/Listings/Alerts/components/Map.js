@@ -13,10 +13,7 @@ import {
   setCssPositionToListingsWithSameBuilding,
   generatePointsFromBounds
 } from '../../../../../../utils/map'
-import {
-  getBounds,
-  getExtededMapProps
-} from '../../../../../../utils/extendedBounds'
+import { getBounds } from '../../../../../../utils/extendedBounds'
 import * as actions from '../../../../../../store_actions/listings/map'
 
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
@@ -51,6 +48,7 @@ const map = ({
   >
     {markers.map(({ points, lat, lng }) => {
       const { id } = points[0]
+
       return (
         <Marker
           lat={lat}
@@ -143,6 +141,7 @@ const mapHOC = compose(
       if (markersOverlay && markers.length === 0) {
         markersOverlay.setMap(null)
         markersOverlay = null
+
         return { markers }
       }
 
@@ -160,10 +159,12 @@ const mapHOC = compose(
           drawingOverlay(points)
         } else {
           const markersBounds = getBounds(markers)
+
           points = normalizePoints(generatePointsFromBounds(markersBounds))
         }
 
         const bounds = new googleMaps.LatLngBounds()
+
         points.forEach(point => bounds.extend(point))
 
         window.currentMap.fitBounds(bounds)
