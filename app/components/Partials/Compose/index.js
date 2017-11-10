@@ -46,11 +46,13 @@ class Compose extends React.Component {
     this.setState({ searching: true })
 
     let rooms = []
+
     if (searchInRooms) {
       rooms = await this.searchInRooms(this.criteria)
     }
 
     const contacts = await this.searchInContacts(this.criteria)
+
     this.createListView(rooms, contacts)
 
     // hide loader
@@ -92,9 +94,11 @@ class Compose extends React.Component {
 
     const { PhoneNumberUtil, PhoneNumberFormat } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
     const phoneUtil = PhoneNumberUtil.getInstance()
+
     try {
       let phoneNumber = phoneUtil.parse(id, 'US')
       let isNumberValid = phoneUtil.isValidNumber(phoneNumber)
+
       if (isNumberValid) {
         return {
           [id]: this.createListItem('phone_number', {
@@ -177,6 +181,7 @@ class Compose extends React.Component {
   async askServer(url) {
     try {
       const response = await new Fetch().get(url)
+
       return response.body.data
     } catch (e) {
       return null
@@ -267,10 +272,11 @@ class Compose extends React.Component {
           onRemove={recipient => this.onRemove(recipient)}
           inputRef={el => this.searchInput = el}
           addFirstSuggestion={e => {
-            if (viewList && viewList.length > 0) {
+            if (viewList && _.size(viewList) > 0) {
               e.preventDefault()
-              this.onAdd(viewList[0])
+              this.onAdd(viewList[0] || viewList[Object.keys(viewList)[0]])
             }
+
             this.onBlurDropDownBox()
           }}
         />
