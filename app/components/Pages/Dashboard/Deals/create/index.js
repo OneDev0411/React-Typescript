@@ -91,7 +91,6 @@ class CreateDeal extends React.Component {
       return this.openDeal(deal.id)
 
     } catch(e) {
-      console.log(e)
       // notify user
       notify({
         title: 'Can not create deal',
