@@ -1,0 +1,46 @@
+import React from 'react'
+import { Dropdown, MenuItem } from 'react-bootstrap'
+import RadioButton from '../components/radio'
+
+const properties = [
+  'Resale',
+  'New Home',
+  'Lot / Land',
+  'Residential Lease',
+  'Commercial Sale',
+  'Commercial Lease'
+]
+
+export default ({
+  selectedType,
+  onChangeDealType
+}) => (
+  <div className="form-section deal-type">
+    <div className="hero">
+      What type of deal is this? <span className="required">*</span>
+    </div>
+
+    <Dropdown id="deal-create-type-dropdown">
+      <Dropdown.Toggle className="deal-type-dropdown">
+        { selectedType || 'Choose a type' }
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu className="deal-type-dropdown-list">
+        {
+          properties.map((item, key) =>
+            <MenuItem
+              key={`MENU_ITEM_${key}`}
+              onClick={() => onChangeDealType(item)}
+              eventKey={key+1}
+            >
+              <RadioButton
+                selected={selectedType === item}
+                title={item}
+              />
+            </MenuItem>
+          )
+        }
+      </Dropdown.Menu>
+    </Dropdown>
+  </div>
+)
