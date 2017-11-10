@@ -9,7 +9,6 @@ import {
 import ManageTags from './Manage-Tag'
 
 class Tags extends React.Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -68,7 +67,7 @@ class Tags extends React.Component {
     await upsertAttributes(contact_id, 'tag', attributes)
   }
 
-  render(){
+  render() {
     const { tags } = this.props
     const { showTagModal, saving, removingTagId } = this.state
 
@@ -81,17 +80,17 @@ class Tags extends React.Component {
         <ul className="tags">
           {
             _.chain(tags)
-            .filter(item => item.active === true && item.id !== removingTagId)
-            .map(item => (
-              <li
-                key={`tag_${item.id}`}
-                className="active"
-                onClick={() => this.remove(item)}
-              >
-                { item.tag }
-              </li>
-            ))
-            .value()
+              .filter(item => item.active === true && item.id !== removingTagId)
+              .map(item => (
+                <li
+                  key={`tag_${item.id}`}
+                  className="active"
+                  onClick={() => this.remove(item)}
+                >
+                  { item.tag }
+                </li>
+              ))
+              .value()
           }
           <li
             className="new-item"

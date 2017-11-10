@@ -61,5 +61,4 @@ export default class StageDropDown extends React.Component {
       </div>
     )
   }
-
 }

@@ -11,13 +11,13 @@ export default({
       <div className="image">
         {
           attributes.image ?
-          <img src={attributes.image} /> :
-          <Avatar
-            round
-            name={name}
-            src={avatar}
-            size={34}
-          />
+            <img src={attributes.image} /> :
+            <Avatar
+              round
+              name={name}
+              src={avatar}
+              size={34}
+            />
         }
       </div>
 
@@ -39,8 +39,8 @@ export default({
     <div>
       {
         attributes.url ?
-        <a href={attributes.url} target="_blank">{ activity }</a> :
-        activity
+          <a href={attributes.url} target="_blank">{ activity }</a> :
+          activity
       }
     </div>
   )

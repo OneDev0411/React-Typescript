@@ -21,24 +21,22 @@ export default class extends React.Component {
           </div>
         }
         {
-          notes.map(item => {
-            return (
-              <div key={`note_${item.id}`} className="item">
-                <Editable
-                  type="note"
-                  id={item.id}
-                  showEdit={true}
-                  showAdd={false}
-                  text={item.note}
-                  multiline={true}
-                  onChange={(type, id, text) => this.onNoteChange(type, id, text)}
-                />
-                <span className="time">
-                  { moment.unix(item.created_at ).format('MMMM DD, YYYY')}
-                </span>
-              </div>
-            )
-          })
+          notes.map(item => (
+            <div key={`note_${item.id}`} className="item">
+              <Editable
+                type="note"
+                id={item.id}
+                showEdit
+                showAdd={false}
+                text={item.note}
+                multiline
+                onChange={(type, id, text) => this.onNoteChange(type, id, text)}
+              />
+              <span className="time">
+                { moment.unix(item.created_at).format('MMMM DD, YYYY')}
+              </span>
+            </div>
+          ))
         }
       </div>
     )
