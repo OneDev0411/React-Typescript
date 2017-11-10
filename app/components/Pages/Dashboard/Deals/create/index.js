@@ -27,28 +27,8 @@ class CreateDeal extends React.Component {
       dealSide: '',
       dealPropertyType: '',
       dealAddress: null,
-      agents: {
-        'mark@rechat.com': {
-          email: 'mark@rechat.com',
-          first_name: 'Mark',
-          last_name: 'Koepsell',
-          role: 'BuyerAgent'
-        },
-        'shayan@rechat.com': {
-          email: 'SHA@rechat.com',
-          first_name: 'Shayan',
-          last_name: 'Hamidi',
-          role: 'SellerAgent'
-        }
-      },
-      clients: {
-        'ramni@rechat.com': {
-          email: 'ramni@rechat.com',
-          first_name: 'Ramin',
-          last_name: 'Mousavi',
-          role: 'Tenant'
-        }
-      }
+      agents: {},
+      clients: {}
     }
   }
 
