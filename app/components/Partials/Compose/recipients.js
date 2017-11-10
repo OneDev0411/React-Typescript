@@ -10,6 +10,7 @@ export default class extends React.Component {
 
     const checkInputKey = (e) => {
       let addKey
+
       // new browsers
       if (e.key) {
         addKey = e.key === 'Enter' || e.key === 'Tab' || e.key === ','
@@ -17,24 +18,27 @@ export default class extends React.Component {
       } else {
         addKey = e.keyCode === 13 || e.keyCode === 9 || e.key === 188
       }
+
       return addKey
     }
-    this.inputHandler = Observable
-      .fromEvent(this.autosize.getInput(), 'keydown')
-    this.inputHandler
+
+    this.inputHandlerKeyUp = Observable
+      .fromEvent(this.autosize.getInput(), 'keyup')
       .filter(e => !checkInputKey(e))
       .map(e => e.target.value)
       .filter(text => text.length === 0 || text.length >= 3)
       .debounceTime(300)
       .subscribe(text => this.props.onSearch(text))
 
-    this.disposeInputHandler = this.inputHandler
+    this.disposeInputHandlerKeyDown = Observable
+      .fromEvent(this.autosize.getInput(), 'keydown')
       .filter(e => checkInputKey(e))
       .subscribe(e => this.props.addFirstSuggestion(e))
   }
 
   componentWillUnmount() {
-    this.disposeInputHandler.unsubscribe()
+    this.inputHandlerKeyUp.unsubscribe()
+    this.disposeInputHandlerKeyDown.unsubscribe()
   }
 
   setInputRef(ref) {
@@ -66,7 +70,7 @@ export default class extends React.Component {
                 size={22}
               />
 
-              <span>{ recp.display_name }</span>
+              <span>{recp.display_name}</span>
               <i
                 className="fa fa-times"
                 onClick={() => this.props.onRemove(recp)}

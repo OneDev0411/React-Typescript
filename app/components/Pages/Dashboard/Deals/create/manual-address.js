@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, Button, FormControl } from 'react-bootstrap'
 
-class CreateDealModal extends React.Component {
+export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -12,6 +12,28 @@ class CreateDealModal extends React.Component {
       state: '',
       postal_code: ''
     }
+  }
+
+  onAdd() {
+    this.props.onCreateAddress({
+      type: 'listing',
+      address_components: this.state
+    })
+  }
+
+  isValidated() {
+    const {
+      street_number,
+      street_name,
+      unit_number,
+      city,
+      state,
+      postal_code
+    } = this.state
+
+    return [street_number, street_name, unit_number, city, state, postal_code]
+      .join('')
+      .length > 0
   }
 
   render() {
@@ -34,7 +56,7 @@ class CreateDealModal extends React.Component {
         onHide={() => this.props.onHide()}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Enter the full listing address</Modal.Title>
+          Address
         </Modal.Header>
 
         <Modal.Body>
@@ -84,10 +106,10 @@ class CreateDealModal extends React.Component {
               <Button
                 bsStyle="primary"
                 style={{ margin: '20px' }}
-                onClick={() => this.props.onClickSave(this.state)}
-                disabled={saving}
+                onClick={() => this.onAdd()}
+                disabled={saving || !this.isValidated()}
               >
-                { saving ? 'Creating...' : 'Create Deal' }
+                Add
               </Button>
             </div>
           </div>
@@ -97,5 +119,3 @@ class CreateDealModal extends React.Component {
     )
   }
 }
-
-export default CreateDealModal

@@ -1,168 +1,96 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
-import { Grid, Row, Col, Button, Modal } from 'react-bootstrap'
 import _ from 'underscore'
 import Deal from '../../../../../models/Deal'
-import listingsHelper from '../../../../../utils/listing'
-import AddressComponents from './address_components'
-import ListingsView from '../components/listings-search'
-import DealButton from './button'
-import SearchInput from '../components/rx-input'
-import { createDeal } from '../../../../../store_actions/deals'
+import Navbar from './nav'
+import DealSide from './deal-side'
+import DealPropertyType from './deal-property-type'
+import DealClients from './deal-clients'
+import DealAgents from './deal-agents'
+import DealAddress from './deal-address'
+import {
+  createDeal,
+  createRoles,
+  closeEsignWizard,
+  setSelectedTask
+} from '../../../../../store_actions/deals'
 
-class DealCreate extends React.Component {
 
+class CreateDeal extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showModal: false,
       saving: false,
-      showAddressComponents: false,
-      address: '',
-      listings: null,
-      searching: false,
-      property_type: null
+      dealSide: '',
+      dealPropertyType: '',
+      dealAddress: null,
+      agents: {},
+      clients: {}
     }
   }
 
-  /**
-   * triggers when user types address
-   */
-  onChangeAddress(e) {
-    const address = e.target.value
-
+  onUpsertRole(form, type) {
     this.setState({
-      address
-    })
-  }
-
-  /**
-   * search rechat listings
-   */
-  async search(address) {
-    if (address.length === 0) {
-      return false
-    }
-
-    // show loading
-    this.setState({
-      searching: true,
-      listings: null
-    })
-
-    try {
-      // search in mls listings
-      const response = await Deal.searchListings(address)
-      const listings = this.createList(response.data)
-
-      // hide loading
-      this.setState({
-        listings,
-        searching: false
-      })
-    }
-    catch(e) {
-      this.setState({ searching: false })
-    }
-  }
-
-  /**
-   * normalize list
-   */
-  createList(data) {
-    const list = []
-
-     _.each(data, item => {
-      list.push({
-        id: item.id,
-        full_address: listingsHelper.addressTitle(item.address),
-        address_components: item.address,
-        price: item.price,
-        status: item.status,
-        image: item.cover_image_url
-      })
-    })
-
-    return list
-  }
-
-  /**
-   * on user selects a place or listing
-   */
-  onSelectListing(item) {
-    const { type } = this.props
-    const { saving, property_type } = this.state
-
-    if (saving) {
-      return false
-    }
-
-    return this.save({
-      property_type,
-      deal_type: (type === 'offer') ? 'Buying' : 'Selling',
-      listing: item.id
-    })
-  }
-
-  /**
-   * prepare listing address components to save
-   */
-  createNewListing(address_components) {
-    const { type } = this.props
-    const { street_number, street_name, unit_number, city, state, postal_code } = address_components
-    const { property_type } = this.state
-
-    const side = (type === 'offer') ? 'Buying' : 'Selling'
-
-    // create full address
-    let full_address = [
-      street_number,
-      street_name,
-      city,
-      state,
-      postal_code
-    ].join(' ').trim()
-
-    const data = {
-      property_type,
-      deal_type: side,
-      deal_context: {
-        full_address,
-        street_number,
-        unit_number,
-        city,
-        state,
-        street_name,
-        postal_code
+      [type]: {
+        ...this.state[type],
+        [form.email]: form
       }
-    }
-
-    this.save(data)
+    })
   }
 
-  /**
-   * save deal
-   */
-  async save(data) {
-    const { user, createDeal, notify } = this.props
+  onRemoveRole(id, type) {
+    this.setState({
+      [type]: _.omit(this.state[type], (role, roleId) => id === roleId)
+    })
+  }
+
+  onCreateAddress(component, type) {
+    this.setState({ dealAddress: component })
+  }
+
+  isFormValidated() {
+    const { dealSide, dealPropertyType, agents, clients } = this.state
+
+    return dealSide.length > 0 &&
+      dealPropertyType.length > 0 &&
+      _.size(agents) > 0 &&
+      _.size(clients) > 0
+  }
+
+  async createDeal() {
+    const { dealSide, dealPropertyType, dealAddress } = this.state
+    const { user, notify, createDeal, createRoles } = this.props
+
+    const dealObject = {
+      property_type: dealPropertyType,
+      deal_type: dealSide
+    }
+
+    if (dealAddress.id) {
+      dealObject.listing = dealAddress.id
+    } else {
+      dealObject.deal_context = this.getDealContext()
+    }
 
     // show loading
     this.setState({ saving: true })
 
     try {
       // create deal
-      const deal = await Deal.create(user, data)
+      const deal = await Deal.create(user, dealObject)
 
       // dispatch new deal
       await createDeal(deal)
 
-      // navigate to the deal
-      browserHistory.push(`/dashboard/deals/${deal.id}`)
-    } catch(e) {
-      this.setState({ saving: false })
+      // add roles
+      await createRoles(deal.id, this.getRoles())
 
+      return this.openDeal(deal.id)
+
+    } catch(e) {
       // notify user
       notify({
         title: 'Can not create deal',
@@ -171,109 +99,106 @@ class DealCreate extends React.Component {
         dismissible: true
       })
     }
+
+    this.setState({ saving: false })
   }
 
-  /**
-   * open listing/offer wizard
-   */
-  onClickOption(type, property_type) {
-    const showAddressComponents = (type === 'listing')
-    const showModal = (type !== 'listing')
+  getDealContext() {
+    const { dealAddress } = this.state
+    const address = dealAddress.address_components
+    const { street_number, street_name, city, state, unit_number, postal_code } = address
 
-    this.setState({
-      property_type,
-      showAddressComponents,
-      showModal
-    })
+    const full_address = [
+      street_number,
+      street_name,
+      city,
+      state,
+      postal_code
+    ].join(' ').trim()
+
+    return {
+      full_address,
+      street_number,
+      unit_number,
+      city,
+      state,
+      street_name,
+      postal_code
+    }
+  }
+
+  getRoles() {
+    const { agents, clients } = this.state
+    const roles = []
+    _.each(clients, client => roles.push(client))
+    _.each(agents, agent => roles.push(agent))
+
+    return roles
+  }
+
+  openDeal(id) {
+    // reset esign flow
+    this.props.closeEsignWizard()
+
+    // reset selected task
+    this.props.setSelectedTask(null)
+
+    browserHistory.push(`/dashboard/deals/${id}`)
   }
 
   render() {
-    const { type, user } = this.props
-    const {
-      showModal,
-      saving,
-      address,
-      listings,
-      searching,
-      showAddressComponents
-    } = this.state
+    const { saving, dealSide, dealPropertyType, dealAddress, agents, clients } = this.state
 
     return (
       <div className="deal-create">
-        <DealButton
-          onClickOption={(type, item) => this.onClickOption(type, item)}
-          type={type}
-        />
+        <Navbar />
+        <div className="form">
+          <div className="swoosh">
+            Swoosh! Another one in the bag.
+          </div>
 
-        <AddressComponents
-          onClickSave={(address_components) => this.createNewListing(address_components)}
-          onHide={() => this.setState({ showAddressComponents: false })}
-          saving={saving}
-          show={showAddressComponents}
-          address={address}
-        />
+          <DealSide
+            selectedSide={dealSide}
+            onChangeDealSide={(dealSide) => this.setState({ dealSide })}
+          />
 
-        <Modal
-          show={showModal}
-          dialogClassName="modal-create-deal"
-          onHide={() => this.setState({ showModal: false })}
-        >
+          <DealPropertyType
+            selectedType={dealPropertyType}
+            onChangeDealType={(dealPropertyType) => this.setState({ dealPropertyType })}
+          />
 
-          <Modal.Header closeButton>
-            Search by MLS# or address
-          </Modal.Header>
+          <DealClients
+            clients={clients}
+            onUpsertClient={form => this.onUpsertRole(form, 'clients')}
+            onRemoveClient={id => this.onRemoveRole(id, 'clients')}
+          />
 
-          <Modal.Body>
-            <SearchInput
-              value={address}
-              placeholder="Enter MLS # or address"
-              onChange={e => this.onChangeAddress(e)}
-              subscribe={value => this.search(value)}
-            />
+          <DealAgents
+            agents={agents}
+            onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
+            onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
+          />
 
-            <Button
-              className="btn-create"
-              bsStyle="primary"
-              onClick={() => this.showCreateModal()}
-              disabled={saving}
-            >
-              { saving ? 'Creating...' : 'Create' }
-            </Button>
+          <DealAddress
+            dealAddress={dealAddress}
+            onCreateAddress={(component, type) => this.onCreateAddress(component, type)}
+            onRemoveAddress={() => this.setState({ dealAddress: null })}
+          />
 
-            <div className="listings">
+          <Button
+            className="btn btn-primary create-deal-button"
+            onClick={() => this.createDeal()}
+            disabled={saving || !this.isFormValidated()}
+          >
+            {saving ? 'Creating ...' : 'Create Deal'}
+          </Button>
 
-              <div className="list">
-                <div className="create-manually">
-                  <span
-                    onClick={() => this.setState({
-                      showAddressComponents: true,
-                      showModal: false
-                    })}
-                  >
-                    Not on MLS?  Create manually.
-                  </span>
-                </div>
-                {
-                  searching &&
-                  <i className="fa fa-spinner fa-spin fa-fw loader"></i>
-                }
-
-                <ListingsView
-                  type={type}
-                  listings={listings}
-                  onSelectListing={(item) => this.onSelectListing(item)}
-                />
-              </div>
-            </div>
-
-          </Modal.Body>
-        </Modal>
-
+        </div>
       </div>
     )
   }
 }
 
-export default connect(({data}) => ({
-  user: data.user
-}), { createDeal, notify })(DealCreate)
+export default connect(({ deals, user }) => ({
+  user
+}), { createDeal, createRoles, closeEsignWizard, setSelectedTask, notify })(CreateDeal)

@@ -59,7 +59,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { show, onHide } = this.props
+    const { show, modalTitle, onHide } = this.props
     const { searching, listings } = this.state
 
     return (
@@ -69,7 +69,7 @@ export default class extends React.Component {
         onHide={onHide}
       >
         <Modal.Header closeButton>
-          Add MLS #
+          {modalTitle || 'Add MLS #'}
         </Modal.Header>
 
         <Modal.Body>

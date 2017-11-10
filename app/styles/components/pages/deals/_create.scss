@@ -1,16 +1,400 @@
 $margin: 20px;
-%deal-create {
-  display: inline-block;
 
-  .create-deal {
-    @extend %create-deal;
+.create-deal-button {
+  @extend %create-deal-button;
+}
+
+.deal-create {
+  @extend %deal-create;
+}
+
+%deal-create {
+  background-color: #fff;
+  min-height: 100vh;
+
+  .nav {
+    @extend %deal-create-nav;
   }
 
-  .create-deal-list {
-    @extend %create-deal-list;
+  .form {
+    @extend %deal-create-form;
   }
 }
 
+/**
+*
+*/
+%deal-create-nav {
+  height: 55px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+
+  .title {
+    width: 90%;
+    font-size: 17px;
+    font-weight: 500;
+    color: #000000;
+  }
+
+  .cta {
+    width: 10%;
+    text-align: right;
+    .deal-button.cancel{
+      width: 34px;
+      height: 34px;
+    }
+  }
+}
+
+/**
+*
+*/
+%deal-create-form {
+  padding: 20px 50px;
+
+  .swoosh {
+    font-size: 14px;
+    color: #8da2b5;
+    margin-bottom: 21px;
+  }
+
+  .form-section {
+    margin-bottom: 30px;
+  }
+
+  .hero {
+    font-size: 30px;
+    font-weight: 600;
+    color: #263445;
+    margin-bottom: 18px;
+
+    .required {
+      color: #d0021b;
+    }
+  }
+
+  .entity-item {
+    @extend %deal-create-entity-item;
+  }
+
+  .deal-side {
+    .deal-radio {
+      margin-right: 35px;
+    }
+  }
+
+  .deal-type {
+    .radio-button {
+      line-height: 18px;
+    }
+
+    .deal-type-dropdown {
+      @extend %deal-type-dropdown;
+    }
+
+    .deal-type-dropdown-list {
+      @extend %deal-type-dropdown-list;
+    }
+  }
+
+  .deal-people {
+    .people-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      width: 600px;
+    }
+  }
+
+  .deal-address {
+    .entity-item {
+      width: 200px;
+      margin-bottom: 0px;
+    }
+
+    .address-info {
+      img {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .name {
+        font-size: 15px;
+        color: #263445;
+      }
+    }
+
+    .remove-address {
+      cursor: pointer;
+      color: #2196f3;
+      margin-left: 20px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .create-deal-button {
+    margin-left: 0;
+    width: 150px;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+/**
+*
+*/
+%deal-type-dropdown {
+  width: 375px;
+  height: 40px;
+  border-radius: 3px;
+  font-size: 15px;
+  background-color: #ffffff;
+  border: solid 1px #e3e3e3;
+  text-align: left;
+  box-shadow: none;
+
+  .caret {
+    float: right;
+    margin-top: 7px;
+  }
+}
+
+%deal-type-dropdown-list {
+  padding: 0;
+  width: 375px;
+  border: none !important;
+  border-radius: 4px;
+
+  li {
+    color: #5b6469;
+    font-size: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 0 0 #eaeaea, 0 -1px 0 0 #e9e9e9;
+
+    &:first-child {
+      border-radius: 4px 4px 0 0;
+      border-top: none;
+    }
+
+    &:last-child {
+      border-radius: 0 0 4px 4px;
+    }
+
+    a {
+      padding: 15px 10px;
+    }
+  }
+}
+
+/**
+*
+*/
+%deal-create-entity-item {
+  display: flex;
+  width: 160px;
+  height: 34px;
+  border-radius: 3px;
+  background-color: #f8fafb;
+  border: solid 1px #dce5eb;
+  align-items: center;
+  padding: 0 5px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+
+  .user-avatar {
+    flex: 2;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .name {
+    flex: 7;
+    padding-left: 3px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1d364b;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  .remove {
+    flex: 1;
+    i {
+      color: gray;
+    }
+
+    &:hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
+
+  .add-item {
+    display: flex;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      background-color: #2196f3;
+      color: #fff;
+      text-align: center;
+      font-size: 25px;
+      line-height: 16px;
+      border-radius: 40px;
+      margin-right: 5px;
+    }
+
+    .text {
+      font-size: 15px;
+      color: #263445;
+      font-weight: 400;
+    }
+  }
+
+  &.new {
+    background-color: #fff;
+    border: none;
+  }
+}
+
+/**
+*
+*/
+%create-deal-button {
+  background-color: #2196f3;
+  color: #fff;
+  margin-left: 7px;
+  border: none;
+  height: 30px;
+  line-height: 16px;
+  vertical-align: middle;
+  margin-left: 10px;
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+/**
+*
+*/
+.modal-deal-listing {
+  .modal-content {
+    border: none;
+  }
+
+  .modal-header {
+    @extend %deal-modal-header;
+    background-color: #f8fafb;
+  }
+
+  .modal-body {
+    padding: 0;
+    margin: 0;
+    .place-create {
+      input {
+        display: inline;
+        border-radius: 0;
+        width: 33.3333%;
+        height: 60px;
+        border-color: #dde6ec;
+
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+
+      input:first-child {
+        border-left: none;
+      }
+
+      input:last-child {
+        border-right: none;
+      }
+
+      .row_one {
+        input {
+          border-top: none;
+          border-bottom: none;
+        }
+      }
+
+      .street_name, .state {
+        border-right: none;
+        border-left: none;
+      }
+    }
+  }
+}
+
+/**
+*
+*/
+.modal-create-deal {
+  .modal-content {
+    border: none;
+  }
+
+  .modal-header {
+    @extend %deal-modal-header;
+    background-color: #f8fafb;
+  }
+
+  .modal-body {
+    min-height: 470px;
+    max-height: 470px;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+
+    .listings {
+      @extend %listings;
+    }
+
+    .rx-input {
+      display: inline-block;
+      width: 448px;
+      height: 44px;
+      margin: $margin;
+      margin-bottom: 0;
+    }
+
+    .btn-create {
+      width: 90px;
+      height: 44px;
+      border-radius: 3px;
+      background-color: #2196f3;
+      border-color: #2196f3;
+      margin-right: $margin;
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+}
+
+
+/**
+*
+*/
 %listings {
   margin-top: $margin;
   .address {
@@ -132,116 +516,3 @@ $margin: 20px;
     }
   }
 }
-
-%create-deal-list {
-  padding: 0;
-  width: 260px;
-
-  li {
-    color: #5b6469;
-    font-size: 15px;
-    background-color: #ffffff;
-    box-shadow: 0 1px 0 0 #eaeaea, 0 -1px 0 0 #e9e9e9;
-
-    a {
-      padding: 0 12px;
-      height: 40px;
-      line-height: 40px;
-    }
-  }
-
-  li.title {
-    height: 40px;
-    line-height: 40px;
-    vertical-align: middle;
-    background-color: #eaedef;
-    font-weight: 500;
-    padding-left: 12px;
-  }
-}
-
-%create-deal {
-  background-color: #2196f3;
-  color: #fff;
-  margin-left: 7px;
-  border: none;
-  height: 30px;
-  line-height: 16px;
-  vertical-align: middle;
-  &:hover {
-    opacity: 0.7;
-  }
-}
-
-.modal-deal-listing {
-  .modal-body {
-    padding: 0;
-    margin: 0;
-    .place-create {
-      input {
-        display: inline;
-        border-radius: 0;
-        width: 33.3333%;
-      }
-
-      input:first-child {
-        border-left: none;
-      }
-
-      input:last-child {
-        border-right: none;
-      }
-
-      .row_one {
-        input {
-          border-top: none;
-          border-bottom: none;
-        }
-      }
-
-      .street_address, .state {
-        border-right: none;
-        border-left: none;
-      }
-    }
-  }
-}
-
-.modal-create-deal {
-  .modal-header {
-    @extend %deal-modal-header;
-  }
-
-  .modal-body {
-    min-height: 470px;
-    max-height: 470px;
-    padding: 0;
-    margin: 0;
-    overflow: auto;
-
-    .listings {
-      @extend %listings;
-    }
-
-    .rx-input {
-      display: inline-block;
-      width: 448px;
-      height: 44px;
-      margin: $margin;
-      margin-bottom: 0;
-    }
-
-    .btn-create {
-      width: 90px;
-      height: 44px;
-      border-radius: 3px;
-      background-color: #2196f3;
-      border-color: #2196f3;
-      margin-right: $margin;
-      &:hover {
-        opacity: 0.7;
-      }
-    }
-  }
-}
-
