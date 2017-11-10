@@ -1,8 +1,6 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
-import Contact from '../../../../../../models/Contact'
 import TimelineItem from './item'
 import * as userActions from './userActionsHelper'
 
