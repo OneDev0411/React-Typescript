@@ -29,13 +29,25 @@ class Roles extends React.Component {
     }
   }
 
-  onRequestRemoveRole(role) {
-    const { confirmation } = this.props
+  onRequestRemoveRole(user) {
+    const { deal, confirmation } = this.props
+
+    const isRemovingDenied = (deal.deal_type === 'Selling' && user.role === 'SellerAgent') ||
+      (deal.deal_type === 'Buying' && user.role === 'BuyerAgent')
+
+    if (isRemovingDenied) {
+      return confirmation({
+        message: `You cannot remove ${roleName(user.role)} role in ${deal.deal_type} deals</b>`,
+        hideCancelButton: true,
+        confirmLabel: 'Okay, I Understand',
+        onConfirm: () => null
+      })
+    }
 
     confirmation({
-      message: `Remove <b>${role.user.display_name}</b>?`,
+      message: `Remove <b>${user.user.display_name}</b>?`,
       confirmLabel: 'Yes, remove contact',
-      onConfirm: () => this.removeRole(role)
+      onConfirm: () => this.removeRole(user)
     })
   }
 
