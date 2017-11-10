@@ -105,6 +105,10 @@
 }
 
 .deal-mls-search {
+  .modal-content {
+    border: none;
+  }
+
   .modal-header {
     @extend %deal-modal-header;
   }
