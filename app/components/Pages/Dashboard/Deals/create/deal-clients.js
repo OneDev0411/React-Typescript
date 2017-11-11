@@ -3,12 +3,31 @@ import _ from 'underscore'
 import CrudRole from './crud-role'
 import RoleItem from './role-item'
 
+const BUYING = 'Buying'
+const SELLING = 'Selling'
+
+function getRoles(side) {
+  if (side === BUYING) {
+    return ['Buyer', 'Tenant']
+  } else if (side === SELLING) {
+    return ['Seller', 'Landlord']
+  } else {
+    return []
+  }
+}
+
 export default ({
   clients,
+  dealSide,
+  display,
   onUpsertClient,
   onRemoveClient
 }) => {
-  const allowedRoles = ['Buyer', 'Seller', 'Landlord', 'Tenant']
+  const allowedRoles = getRoles(dealSide)
+
+  if (!display) {
+    return false
+  }
 
   return (
     <div className="form-section deal-people deal-client">

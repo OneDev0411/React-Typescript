@@ -3,9 +3,9 @@ import { FormGroup, FormControl, DropdownButton, MenuItem } from 'react-bootstra
 import roleNames from '../../utils/roles'
 
 const role_names = [
-  'BuyerAgent',
+  // 'BuyerAgent',
   'CoBuyerAgent',
-  'SellerAgent',
+  // 'SellerAgent',
   'CoSellerAgent',
   'Buyer',
   'Seller',

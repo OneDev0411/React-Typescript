@@ -3,16 +3,32 @@ import _ from 'underscore'
 import CrudRole from './crud-role'
 import RoleItem from './role-item'
 
+const BUYING = 'Buying'
+const SELLING = 'Selling'
+
+function getRoles(agents, side) {
+  if (side === BUYING) {
+    return _.size(agents) === 0 ? ['BuyerAgent'] : ['CoBuyerAgent']
+  } else if (side === SELLING) {
+    return _.size(agents) === 0 ? ['SellerAgent'] : ['CoSellerAgent']
+  } else {
+    return []
+  }
+}
+
 export default ({
   agents,
+  dealSide,
+  display,
   onUpsertAgent,
   onRemoveAgent
 }) => {
-  const allowedRoles = _.size(agents) === 0 ?
-    ['BuyerAgent', 'SellerAgent'] :
-    ['CoBuyerAgent', 'CoSellerAgent']
-
+  const allowedRoles = getRoles(agents, dealSide)
   const title = _.size(agents) === 0 ? 'primary agent' : 'co-agent'
+
+  if (!display) {
+    return false
+  }
 
   return (
     <div className="form-section deal-people deal-agent">

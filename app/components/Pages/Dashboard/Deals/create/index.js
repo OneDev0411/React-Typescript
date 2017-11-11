@@ -11,6 +11,7 @@ import DealPropertyType from './deal-property-type'
 import DealClients from './deal-clients'
 import DealAgents from './deal-agents'
 import DealAddress from './deal-address'
+import { confirmation } from '../../../../../store_actions/confirmation'
 import {
   createDeal,
   createRoles,
@@ -58,6 +59,28 @@ class CreateDeal extends React.Component {
       dealPropertyType.length > 0 &&
       _.size(agents) > 0 &&
       _.size(clients) > 0
+  }
+
+  requestChangeDealSide(dealSide) {
+    const { agents, clients } = this.state
+
+    if (_.size(agents) > 0 || _.size(clients) > 0) {
+      return this.props.confirmation({
+        message: 'Changing deal side will remove all contacts.',
+        confirmLabel: 'Okay, Continue',
+        onConfirm: () => this.changeDealSide(dealSide)
+      })
+    }
+
+    this.changeDealSide(dealSide)
+  }
+
+  changeDealSide(dealSide) {
+    this.setState({
+      dealSide,
+      agents: {},
+      clients: {}
+    })
   }
 
   async createDeal() {
@@ -148,6 +171,7 @@ class CreateDeal extends React.Component {
 
   render() {
     const { saving, dealSide, dealPropertyType, dealAddress, agents, clients } = this.state
+    const canAddRole = dealSide.length > 0
 
     return (
       <div className="deal-create">
@@ -159,7 +183,7 @@ class CreateDeal extends React.Component {
 
           <DealSide
             selectedSide={dealSide}
-            onChangeDealSide={(dealSide) => this.setState({ dealSide })}
+            onChangeDealSide={(dealSide) => this.requestChangeDealSide(dealSide)}
           />
 
           <DealPropertyType
@@ -168,12 +192,16 @@ class CreateDeal extends React.Component {
           />
 
           <DealClients
+            display={canAddRole}
+            dealSide={dealSide}
             clients={clients}
             onUpsertClient={form => this.onUpsertRole(form, 'clients')}
             onRemoveClient={id => this.onRemoveRole(id, 'clients')}
           />
 
           <DealAgents
+            display={canAddRole}
+            dealSide={dealSide}
             agents={agents}
             onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
             onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
@@ -200,5 +228,13 @@ class CreateDeal extends React.Component {
 }
 
 export default connect(({ deals, user }) => ({
-  user
-}), { createDeal, createRoles, closeEsignWizard, setSelectedTask, notify })(CreateDeal)
+  user,
+  confirmation
+}), {
+  confirmation,
+  createDeal,
+  createRoles,
+  closeEsignWizard,
+  setSelectedTask,
+  notify
+})(CreateDeal)
