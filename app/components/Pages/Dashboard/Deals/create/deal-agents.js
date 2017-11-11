@@ -33,7 +33,7 @@ export default ({
   return (
     <div className="form-section deal-people deal-agent">
       <div className="hero">
-        Who is the agent on your side? <span className="required">*</span>
+        Who is the {dealSide === BUYING ? 'buyer' : 'listing'} agent? <span className="required">*</span>
       </div>
 
       <div className="people-container">
