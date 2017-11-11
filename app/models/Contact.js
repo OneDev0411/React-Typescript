@@ -1,19 +1,14 @@
 import _ from 'underscore'
-import moment from 'moment'
-import config from '../../config/public'
 import Fetch from '../services/fetch'
 
 const Contact = {
   get: {},
   helper: {}
 }
-// set api host
-const api_host = config.api_url
-const proxy_host = config.app.url
 
 /**
-* add new contact
-*/
+ * add new contact
+ */
 Contact.add = async function (params) {
   const { contacts } = params
 
@@ -29,8 +24,8 @@ Contact.add = async function (params) {
 }
 
 /**
-* returns contacts list
-*/
+ * returns contacts list
+ */
 Contact.getContacts = async function (user) {
   try {
     const fetchContacts = new Fetch()
@@ -45,6 +40,7 @@ Contact.getContacts = async function (user) {
     }
 
     const response = await fetchContacts
+
     return response.body.data
   } catch (e) {
     throw e
@@ -52,8 +48,8 @@ Contact.getContacts = async function (user) {
 }
 
 /**
-* returns contact's timeline
-*/
+ * returns contact's timeline
+ */
 Contact.getTimeline = async function (id) {
   const endpoint = `/contacts/${id}/timeline`
 
@@ -68,8 +64,8 @@ Contact.getTimeline = async function (id) {
 }
 
 /**
-* add note
-*/
+ * add note
+ */
 Contact.addNote = async function (id, note) {
   const endpoint = `/contacts/${id}/attributes`
   const payload = Contact.helper.populateAttributes('note', [{ note }])
@@ -86,8 +82,8 @@ Contact.addNote = async function (id, note) {
 }
 
 /**
-* add new item to user's timeline
-*/
+ * add new item to user's timeline
+ */
 Contact.updateUserTimeline = async function (action, object_class, object) {
   const requestBody = {
     action,
@@ -107,8 +103,8 @@ Contact.updateUserTimeline = async function (action, object_class, object) {
 }
 
 /**
-* create new attributes
-*/
+ * create new attributes
+ */
 Contact.createAttributes = async function (id, type, attributes) {
   const endpoint = `/contacts/${id}/attributes`
   const payload = Contact.helper.populateAttributes(type, attributes)
@@ -125,8 +121,8 @@ Contact.createAttributes = async function (id, type, attributes) {
 }
 
 /**
-* update current attributes
-*/
+ * update current attributes
+ */
 Contact.updateAttributes = async function (id, type, attributes) {
   const payload = Contact.helper.populateAttributes(type, attributes)
 
@@ -142,8 +138,8 @@ Contact.updateAttributes = async function (id, type, attributes) {
 }
 
 /**
-* delete attribute
-*/
+ * delete attribute
+ */
 Contact.deleteAttribute = async function (id, attribute_id) {
   try {
     const response = await new Fetch()
@@ -156,8 +152,8 @@ Contact.deleteAttribute = async function (id, attribute_id) {
 }
 
 /**
-* get tags
-*/
+ * get tags
+ */
 Contact.getTags = async function () {
   try {
     const response = await new Fetch()
@@ -170,18 +166,20 @@ Contact.getTags = async function () {
 }
 
 /**
-* helpers functions
-*/
+ * helpers functions
+ */
 Contact.helper = {
   populateAttributes: (type, attributes) => ({
     attributes: _.map(attributes, attr => {
       const item = { type }
 
-      if (attr[type])
+      if (attr[type]) {
         item[type] = attr[type]
+      }
 
-      if (attr.id)
+      if (attr.id) {
         item.id = attr.id
+      }
 
       return { ...item, ...attr }
     })
@@ -189,25 +187,30 @@ Contact.helper = {
 }
 
 /**
-* Helper class to get Contact fields
-*/
+ * Helper class to get Contact fields
+ */
 Contact.get = {
   _sort: (list, sort_by = 'updated_at', order = 'desc') => {
-    if (!list)
+    if (!list) {
       return null
+    }
 
-    if (list.length === 1)
+    if (list.length === 1) {
       return list[0]
+    }
 
     const order_val = order === 'asc' ? 1 : -1
     const sorted = _.sortBy(list, item => item[sort_by] * order_val)
+
     return sorted[0]
   },
   _trim: (text, max) => text.length < max ? text : `${text.substr(0, max)}...`,
   _all: (context, attrs, type) => {
-    let list = new Array()
+    let list = []
+
     _.each(context.sub_contacts, sub => {
       const collection = _.uniq(sub.attributes[attrs], type)
+
       list = list.concat(collection)
     })
 
@@ -215,20 +218,23 @@ Contact.get = {
   },
   name: (context, max = 1000) => {
     const name = context.display_name.trim()
+
     return Contact.get._trim(name, max)
   },
   avatar: context => {
     const item = Contact.get._sort(context.users)
 
-    if (item)
+    if (item) {
       return item.cover_image_url
+    }
   },
   source: context => {
     const source_types = context.sub_contacts[0].attributes.source_types
     const item = Contact.get._sort(source_types, 'updated_at')
 
-    if (!item)
+    if (!item) {
       return {}
+    }
 
     let label
 
@@ -259,22 +265,22 @@ Contact.get = {
     const emails = context.sub_contacts[0].attributes.emails
     const item = Contact.get._sort(emails)
 
-    if (item)
+    if (item) {
       return Contact.get._trim(item.email, max)
+    }
   },
   emails: context => Contact.get._all(context, 'emails', 'email'),
   phone: context => {
     const phone_numbers = context.sub_contacts[0].attributes.phone_numbers
-    const item = Contact.get._sort(phone_numbers)
 
-    if (item)
-      return item.phone_number
+    if (phone_numbers && phone_numbers.length > 0) {
+      return phone_numbers[0].phone_number
+    }
   },
   phones: context => Contact.get._all(context, 'phone_numbers', 'phone_number'),
   stage: context => {
     const stages = context.sub_contacts[0].attributes.stages
     const item = Contact.get._sort(stages)
-
 
     if (item) {
       return {
@@ -290,14 +296,18 @@ Contact.get = {
   address: context => {
     const addresses = context.sub_contacts[0].attributes.addresses
     const item = Contact.get._sort(addresses)
+
     return item || {}
   },
   addresses: context => {
     let list = []
+
     _.each(context.sub_contacts, sub => {
       const address = Contact.get._sort(sub.attributes.addresses)
-      if (address)
+
+      if (address) {
         list.push(address)
+      }
     })
 
     if (list.length === 0) {
@@ -313,20 +323,26 @@ Contact.get = {
   },
   birthdays: context => {
     const list = []
+
     _.each(context.sub_contacts, sub => {
       const item = Contact.get._sort(sub.attributes.birthdays)
-      if (item)
+
+      if (item) {
         list.push(item)
+      }
     })
 
     return list
   },
   notes: context => {
-    let list = new Array()
+    let list = []
+
     _.each(context.sub_contacts, sub => {
       const notes = sub.attributes.notes
-      if (notes && notes.length > 0)
+
+      if (notes && notes.length > 0) {
         list = list.concat(notes)
+      }
     })
 
     return _.sortBy(list, item => item.updated_at * -1)
