@@ -1,9 +1,7 @@
 @import './list';
 @import './create';
-@import './dropdown';
 @import './dashboard';
-@import './badge';
-@import './modal';
+@import './components';
 
 .deals {
   min-height: 100vh;
@@ -11,10 +9,6 @@
 
   .deals-list {
     @extend %deals-list;
-  }
-
-  .deal-create {
-    @extend %deal-create;
   }
 
   .deal-dashboard {

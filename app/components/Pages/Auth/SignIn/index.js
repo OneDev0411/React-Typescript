@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../controllers/Brand'
 import submitSigninForm from '../../../../store_actions/auth/signin'
+import SimpleField from '../../../Pages/Dashboard/Account/Profile/components/SimpleField'
 
 export const getBrandInfo = brand => {
   let siteTitle = 'Rechat'
@@ -36,6 +37,7 @@ export const renderField = ({
   meta: { dirty, error }
 }) => {
   const hasError = dirty && error
+
   return (
     <div className={`c-auth__field ${input.name}`}>
       <div className="c-auth__field__input-wrapper">
@@ -95,13 +97,13 @@ const SigninForm = ({
               type="email"
               label="Email"
               tabIndex={0}
-              component={renderField}
+              component={SimpleField}
             />
             <Field
               name="password"
               type="password"
               label="Password"
-              component={renderField}
+              component={SimpleField}
             />
             <div className="c-forgot u-align-right">
               <Link to="/password/forgot">Forgot your password?</Link>

@@ -9,10 +9,7 @@ import SearchToolbar from './components/SearchToolbar'
 import ListingsPanel from '../components/ListingsPanels'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
 import { selectListings } from '../../../../../reducers/listings'
-import getListingsByMapBounds from '../../../../../store_actions/listings/search/get-listings/by-map-bounds'
 import searchActions from '../../../../../store_actions/listings/search'
-
-let mapOnChangeDebounce = 0
 
 class Search extends Component {
   constructor(props) {
@@ -36,14 +33,6 @@ class Search extends Component {
     if (this.searchQuery) {
       this._findPlace(this.searchQuery)
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.searchQuery && !this.state.mapWithQueryIsInitialized) {
-      return
-    }
-
-    this._fetchListings(nextProps)
   }
 
   async _findPlace(address) {
@@ -71,24 +60,6 @@ class Search extends Component {
     }
   }
 
-  _fetchListings(nextProps) {
-    const { mapProps: nextMapProps } = nextProps
-    const { mapProps, getListingsByMapBounds } = this.props
-
-    if (!_.isEqual(mapProps, nextMapProps)) {
-      if (!mapOnChangeDebounce) {
-        mapOnChangeDebounce = 1
-        getListingsByMapBounds(nextMapProps.bounds)
-      } else {
-        clearTimeout(mapOnChangeDebounce)
-        mapOnChangeDebounce = setTimeout(() => {
-          getListingsByMapBounds(nextMapProps.bounds)
-          clearTimeout(mapOnChangeDebounce)
-        }, 300)
-      }
-    }
-  }
-
   shareModalCloseHandler() {
     this.setState({
       shareModalIsActive: false
@@ -103,7 +74,6 @@ class Search extends Component {
 
   render() {
     const {
-      data,
       user,
       isWidget,
       listings,
@@ -142,14 +112,12 @@ class Search extends Component {
   }
 }
 
-const mapStateToProps = ({ user, data, search }) => {
+const mapStateToProps = ({ user, search }) => {
   const { listings, map, panels, filters } = search
 
   return {
     map,
     user,
-    data,
-    mapProps: map.props,
     isLoggedIn: user || false,
     activePanel: panels.activePanel,
     isFetching: listings.isFetching,
@@ -162,6 +130,5 @@ const mapStateToProps = ({ user, data, search }) => {
 }
 
 export default connect(mapStateToProps, {
-  ...searchActions,
-  getListingsByMapBounds
+  ...searchActions
 })(Search)

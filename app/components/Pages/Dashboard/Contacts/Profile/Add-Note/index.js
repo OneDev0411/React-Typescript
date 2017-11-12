@@ -34,7 +34,6 @@ export default class AddNote extends React.Component {
   }
 
   render() {
-
     const { note, saving } = this.state
     return (
       <div className="note">
@@ -45,8 +44,8 @@ export default class AddNote extends React.Component {
         <textarea
           placeholder="Leave a note for yourself."
           value={note}
-          onChange={e => this.setState({ note: e.target.value }) }
-        ></textarea>
+          onChange={e => this.setState({ note: e.target.value })}
+        />
         <div className="footer">
           <Button
             bsStyle="primary"

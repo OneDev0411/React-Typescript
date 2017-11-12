@@ -377,13 +377,11 @@ Deal.updateListing = async function (dealId, listingId) {
 /**
 * add new role
 */
-Deal.createRole = async function (deal_id, form) {
-  const { first_name, last_name, email, role } = form
-
+Deal.createRole = async function (deal_id, roles) {
   try {
     const response = await new Fetch()
       .post(`/deals/${deal_id}/roles`)
-      .send({ roles: [{first_name, last_name, email, role}] })
+      .send({ roles })
 
     return response.body.data
   } catch (e) {

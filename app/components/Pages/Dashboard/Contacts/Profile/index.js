@@ -9,7 +9,6 @@ import Details from './Details'
 import Address from './Address'
 import AddNote from './Add-Note'
 import Activities from './Activities'
-import Editable from './Editable'
 import {
   getTimeline,
   updateContact,
@@ -24,10 +23,6 @@ class ContactProfile extends React.Component {
     }
   }
 
-  goBack() {
-    browserHistory.push('/dashboard/contacts')
-  }
-
   componentDidMount() {
     const { getTimeline } = this.props
     const contact = this.getContact()
@@ -37,6 +32,9 @@ class ContactProfile extends React.Component {
     }
   }
 
+  goBack() {
+    browserHistory.push('/dashboard/contacts')
+  }
   getContact() {
     const { contacts, params } = this.props
     const contact = contacts[params.id]
@@ -180,6 +178,6 @@ class ContactProfile extends React.Component {
 
 export default connect(({ contacts, user }) => ({
   user,
-  contacts: contacts.list,
+  contacts: contacts.list
 }), { getTimeline, upsertAttributes, updateContact })(ContactProfile)
 

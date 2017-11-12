@@ -7,7 +7,6 @@ import TimelineItem from './item'
 import * as userActions from './userActionsHelper'
 
 export default class Timeline extends React.Component {
-
   constructor(props) {
     super(props)
   }
@@ -19,7 +18,7 @@ export default class Timeline extends React.Component {
 
     return {
       ...attributes,
-      ...{time: moment.unix(activity.created_at).fromNow()}
+      ...{ time: moment.unix(activity.created_at).fromNow() }
     }
   }
 

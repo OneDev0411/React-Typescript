@@ -39,7 +39,7 @@ export default class extends React.Component {
     this.setState({ editMode: false })
   }
 
-  nl2br (input) {
+  nl2br(input) {
     return input.split('\n').map((text, key) => (
       <div key={`editable_item___line_${key}`}>
         { text }
@@ -88,8 +88,7 @@ export default class extends React.Component {
             <i
               className="fa fa-pencil"
               onClick={() => this.onClickEdit()}
-            >
-            </i>
+            />
           }
 
           {
@@ -97,8 +96,7 @@ export default class extends React.Component {
             <i
               className="fa fa-plus-circle"
               onClick={() => this.onClickAdd()}
-            >
-            </i>
+            />
           }
         </div>
       </div>

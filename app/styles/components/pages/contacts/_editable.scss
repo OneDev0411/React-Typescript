@@ -5,7 +5,8 @@
     align-items: center;
     padding: 4px;
     position: relative;
-
+    justify-content: space-between;
+    
     input,
     textarea {
       border: none;
@@ -21,7 +22,6 @@
     }
 
     .text {
-      width: 80%;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
@@ -29,7 +29,6 @@
 
     .control {
       display: none;
-      width: 20%;
       text-align: right;
       i {
         cursor: pointer;
@@ -55,7 +54,7 @@
     }
 
     &:hover .control {
-      display: block;
+      display: flex;
     }
   }
 }

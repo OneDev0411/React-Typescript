@@ -18,10 +18,10 @@ function roleDeleted(deal_id, role_id) {
 }
 
 
-export function createRole(deal_id, form) {
+export function createRoles(deal_id, roles) {
   return async (dispatch) => {
     try {
-      const deal = await Deals.createRole(deal_id, form)
+      const deal = await Deals.createRole(deal_id, roles)
       dispatch(updateRoles(deal.id, deal.roles))
     } catch(e) {
       throw e

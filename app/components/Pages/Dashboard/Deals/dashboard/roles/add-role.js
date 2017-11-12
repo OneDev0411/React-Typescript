@@ -4,7 +4,7 @@ import { Button, FormControl, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import RoleForm from './form'
-import { createRole } from '../../../../../../store_actions/deals'
+import { createRoles } from '../../../../../../store_actions/deals'
 
 class AddRole extends React.Component {
   constructor(props) {
@@ -26,14 +26,18 @@ class AddRole extends React.Component {
 
   async create() {
     const { form } = this.state
-    const { dealId, createRole, notify } = this.props
+    const { dealId, createRoles, notify } = this.props
+
+    if (!dealId) {
+      return false
+    }
 
     this.setState({
       saving: true
     })
 
     try {
-      await createRole(dealId, form)
+      await createRoles(dealId, [form])
       this.setState({ show: false })
     } catch (e) {
       const { attributes } = e.response.body
@@ -106,4 +110,4 @@ class AddRole extends React.Component {
   }
 }
 
-export default connect(null, { createRole, notify })(AddRole)
+export default connect(null, { createRoles, notify })(AddRole)

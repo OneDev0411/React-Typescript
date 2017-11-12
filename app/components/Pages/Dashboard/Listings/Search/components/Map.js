@@ -15,6 +15,8 @@ import ClusterMarker from '../../components/Markers/ClusterMarker'
 import NotLoggedInMessage from '../../components/NotLoggedInMessage'
 import DrawingRemoveButton from '../../components/DrawingRemoveButton'
 
+import { reset as resetSearchType } from '../../../../../../store_actions/listings/search/set-type'
+
 import {
   setCssPositionToListingsWithSameBuilding,
   normalizeListingsForMarkers
@@ -34,8 +36,11 @@ import {
 const actions = {
   ...mapActions,
   ...drawingActions,
+  resetSearchType,
   getListingsByMapBounds
 }
+
+let mapOnChangeDebounce = 0
 
 const map = ({
   style,
@@ -63,6 +68,7 @@ const map = ({
       center={center}
       options={options}
       onChange={onChange}
+      margin={[175, 50, 50, 50]}
       defaultZoom={defaultZoom}
       defaultCenter={defaultCenter}
       yesIWantToUseGoogleMapApiInternals
@@ -72,6 +78,7 @@ const map = ({
       {clusters.map(({ points, lat, lng }, index) => {
         if (points.length === 1) {
           const { id } = points[0]
+
           return (
             <SimpleMarker
               lat={lat}
@@ -120,9 +127,11 @@ const mapHOC = compose(
     }
   }),
   connect(
-    ({ user, data }, { listings, isWidget }) => ({
+    ({ user, data, search }, { listings, isWidget }) => ({
       user,
       appData: data,
+      searchType: search.type,
+      mapProps: search.map.props,
       markers: listings.data,
       style: {
         position: 'relative',
@@ -138,16 +147,55 @@ const mapHOC = compose(
       window.currentMap = googleMap
 
       const { shape, points } = map.drawing
+
       if (points.length) {
         shape.setMap(googleMap)
       }
     },
-    onChange: ({ setOffMapAutoMove, setMapProps, map }) => gmap => {
-      if (map.autoMove) {
-        setOffMapAutoMove()
-      }
+    onChange: ({
+      map,
+      searchType,
+      setMapProps,
+      resetSearchType,
+      setOffMapAutoMove,
+      getListingsByMapBounds
+    }) => (gmap = {}) => {
+      const { marginBounds } = gmap
 
       setMapProps('SEARCH', gmap)
+
+      if (map.autoMove) {
+        setOffMapAutoMove()
+
+        // search by our api
+        if (searchType === 'by_map_bounds') {
+          getListingsByMapBounds(marginBounds)
+        }
+
+        if (searchType === 'by_google_suggests') {
+          getListingsByMapBounds(marginBounds)
+          resetSearchType()
+        }
+
+        if (searchType === 'by_filters_areas') {
+          resetSearchType()
+        }
+
+        return
+      }
+
+      if (marginBounds) {
+        if (!mapOnChangeDebounce) {
+          mapOnChangeDebounce = 1
+          getListingsByMapBounds(marginBounds)
+        } else {
+          clearTimeout(mapOnChangeDebounce)
+          mapOnChangeDebounce = setTimeout(() => {
+            getListingsByMapBounds(marginBounds)
+            clearTimeout(mapOnChangeDebounce)
+          }, 300)
+        }
+      }
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
       setMapHoveredMarkerId('SEARCH', -1)
@@ -163,12 +211,13 @@ const mapHOC = compose(
     }) => () => {
       removePolygon(map.drawing.shape)
       inactiveDrawing()
-      getListingsByMapBounds(map.props.bounds)
+      getListingsByMapBounds(map.props.marginBounds)
     },
     onClusterMarkerClick: () => points => {
       const googleMaps = window.google.maps
 
       const bounds = new googleMaps.LatLngBounds()
+
       points.forEach(point => bounds.extend(point))
 
       window.currentMap.fitBounds(bounds)
@@ -196,6 +245,7 @@ const mapHOC = compose(
       let clusters = []
 
       isFetching = isFetching && mapProps.zoom < DECLUSTER_ZOOM_LEVEL
+
       if (_.isEmpty(mapProps) || !mapProps.bounds || isFetching) {
         return { clusters }
       }

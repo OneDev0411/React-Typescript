@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
-import DealCreate from '../create'
+import { Link } from 'react-router'
 import AgentFilter from './agent-filter'
 import BackOfficeFilter from './backoffice-filter'
 import SearchInput from '../../../../Partials/SearchInput'
@@ -62,10 +62,12 @@ class Header extends React.Component {
 
           {
             !isBackOffice &&
-            <div className="inline">
-              <DealCreate type="listing" />
-              <DealCreate type="offer" />
-            </div>
+            <Link
+              to="/dashboard/deals/create"
+              className="btn btn-primary create-deal-button"
+            >
+              Create New Deal
+            </Link>
           }
         </Col>
       </Row>
