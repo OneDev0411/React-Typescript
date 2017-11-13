@@ -19,7 +19,6 @@ import {
   setSelectedTask
 } from '../../../../../store_actions/deals'
 
-
 class CreateDeal extends React.Component {
   constructor(props) {
     super(props)
