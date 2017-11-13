@@ -172,6 +172,7 @@ class CreateDeal extends React.Component {
   render() {
     const { saving, dealSide, dealPropertyType, dealAddress, agents, clients } = this.state
     const canAddRole = dealSide.length > 0
+    const canAddAddress = dealSide.length > 0
 
     return (
       <div className="deal-create">
@@ -208,7 +209,9 @@ class CreateDeal extends React.Component {
           />
 
           <DealAddress
+            display={canAddAddress}
             dealAddress={dealAddress}
+            dealSide={dealSide}
             onCreateAddress={(component, type) => this.onCreateAddress(component, type)}
             onRemoveAddress={() => this.setState({ dealAddress: null })}
           />
