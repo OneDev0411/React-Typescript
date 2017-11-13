@@ -20,12 +20,13 @@ class UploadDocument extends React.Component {
 
   async onDrop(files) {
     const { task, addAttachment, noDrop, setIsUploading } = this.props
+    const { dropzoneActive } = this.state
 
     this.setState({
       dropzoneActive: false
     })
 
-    if (noDrop === true || files.length === 0) {
+    if ((dropzoneActive && noDrop) || files.length === 0) {
       return false
     }
 
@@ -87,7 +88,7 @@ class UploadDocument extends React.Component {
     return (
       <Dropzone
         disableClick
-        ref={(node) => { this.dropzone = node }}
+        ref={(node) => this.dropzone = node}
         onDrop={(files) => this.onDrop(files)}
         onDragEnter={() => this.setState({ dropzoneActive: true })}
         onDragLeave={() => this.setState({ dropzoneActive: false })}
