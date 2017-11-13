@@ -366,6 +366,19 @@ Contact.get = {
       ..._.indexBy(tags, 'tag'),
       ...list
     }
+  },
+  companies: context => {
+    const list = []
+
+    _.each(context.sub_contacts, sub => {
+      const item = Contact.get._sort(sub.attributes.companies)
+
+      if (item) {
+        list.push(item)
+      }
+    })
+
+    return list
   }
 }
 
