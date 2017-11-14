@@ -1,0 +1,69 @@
+{
+  "src_folders": ["./test/functional/tests"],
+  "output_folder": "./test/functional/tests",
+  "page_objects_path": "./test/functional/pages",
+
+  "selenium": {
+    "start_process": false
+  },
+
+  "test_settings": {
+    "use_xpath": true,
+    "default": {
+      "launch_url": "https://irish.rechat.com",
+      "selenium_port": 9515,
+      "selenium_host": "localhost",
+      "default_path_prefix": "",
+      "screenshots": {
+        "enabled": true,
+        "on_failure": true,
+        "on_error": false,
+        "path": "screenshots"
+      },
+
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "browser": "chrome",
+        "acceptSslCerts": true
+      },
+
+      "globals": {
+        "waitForConditionTimeout": 1500000,
+        "rechat_username": "testadnan07@gmail.com",
+        "rechat_password": "aaaaaaa"
+      },
+      "skip_testcases_on_fail": false
+    },
+
+    "bs": {
+      "selenium_port": 80,
+      "selenium_host": "hub-cloud.browserstack.com",
+
+      "desiredCapabilities": {
+        "build": "nightwatch-browserstack",
+        "browserstack.user": "",
+        "browserstack.key": "",
+        "browserstack.debug": true,
+        "browser": "chrome"
+      }
+    },
+
+    "chrome": {
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true,
+        "chromeOptions": {
+          "args": [
+            "--no-sandbox",
+            "--headless",
+            "--disable-gpu",
+            "remote-debugging-port=9222"
+          ],
+          "binary":
+            "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
+        }
+      }
+    }
+  }
+}

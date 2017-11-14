@@ -17,7 +17,8 @@
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
     "test": "jest",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "test:nw": "nightwatch"
   },
   "engines": {
     "node": "7.6.0"
@@ -180,6 +181,7 @@
     "fetch-mock": "^5.13.1",
     "jest": "^21.2.1",
     "jsdom": "^9.12.0",
+    "nightwatch": "^0.9.16",
     "nodemon": "^1.11.0",
     "react-test-renderer": "^16.1.1",
     "redux-mock-store": "^1.3.0",
