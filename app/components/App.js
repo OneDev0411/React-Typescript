@@ -95,6 +95,7 @@ class App extends Component {
 
   static async fetchData(dispatch, params) {
     const { user } = params
+
     return dispatch(getRooms(user))
   }
 
@@ -207,6 +208,7 @@ class App extends Component {
           name: brand.name
         }
       }
+
       window.Raven.setUserContext(userData)
     }
   }
@@ -219,7 +221,9 @@ class App extends Component {
 
   createBranchLink() {
     const branch = require('branch-sdk')
+
     branch.init(config.branch.key)
+
     let branch_data = window.branchData
 
     if (!branch_data) {
@@ -245,6 +249,7 @@ class App extends Component {
     }
 
     const branch = require('branch-sdk')
+
     branch.init(config.branch.key)
     branch.banner(
       {
@@ -256,7 +261,8 @@ class App extends Component {
         forgetHide: false,
         downloadAppButtonText: 'GET',
         openAppButtonText: 'OPEN',
-        customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
+        customCSS:
+          '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
       },
       {
         data: {
@@ -293,9 +299,9 @@ class App extends Component {
     }
 
     return (
-      <div>
+      <div className="u-scrollbar">
         {user &&
-        !user.email_confirmed && <VerificationBanner email={user.email} />}
+          !user.email_confirmed && <VerificationBanner email={user.email} />}
 
         {user && navArea}
 
