@@ -48,6 +48,8 @@ class Rooms extends React.Component {
       // display first room if there is no active room
       if (!activeRoom) {
         let firstRoomId = rooms[Object.keys(rooms)[0]].id
+
+        showChatbar && this.props.toggleChatbar(false)
         changeActiveRoom(firstRoomId)
       }
     }
