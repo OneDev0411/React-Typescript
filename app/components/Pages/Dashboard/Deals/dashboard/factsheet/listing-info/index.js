@@ -38,7 +38,8 @@ const getValue = (deal, field) => {
   if (!field.context) {
     value = Deal.get.field(deal, field.key)
   } else {
-    value = deal[field.context][field.contextField]
+    let context = deal[field.context]
+    value = context ? context[field.contextField] : null
   }
 
   const object = {
