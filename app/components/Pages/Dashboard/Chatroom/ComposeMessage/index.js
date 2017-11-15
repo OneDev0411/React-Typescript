@@ -21,6 +21,7 @@ class ComposeMessage extends React.Component {
     // create handler for text keypress
     const handler = Observable
       .fromEvent(this.text_message, 'keypress')
+
     handler
       .filter(e => e.key ? e.key !== 'Enter' : e.keyCode !== 13)
       .throttleTime(1000)
@@ -37,6 +38,7 @@ class ComposeMessage extends React.Component {
     if (nextProps.draft) {
       this.text_message.value = nextProps.draft
     }
+
     this.text_message.focus()
   }
 
@@ -46,6 +48,7 @@ class ComposeMessage extends React.Component {
     }
 
     const { roomId } = this.props
+
     this.isTyping = true
 
     // emit message
@@ -110,7 +113,10 @@ class ComposeMessage extends React.Component {
         isInstantChat={isInstantChat}
         inputRef={ref => this.text_message = ref}
         onHeightChange={this.props.onHeightChange}
-        onBlur={message => this.props.insertDraft({ roomId: this.props.roomId, message })}
+        onBlur={message => this.props.insertDraft({
+          roomId: this.props.roomId,
+          message
+        })}
       />
     )
   }

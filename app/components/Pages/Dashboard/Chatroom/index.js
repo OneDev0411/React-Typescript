@@ -12,7 +12,6 @@ import store from '../../../../stores'
 const roomsWidth = '330px'
 
 class Chatroom extends React.Component {
-
   componentWillMount() {
     const { activeRoom, params } = this.props
     const { rooms } = store.getState().chatroom
@@ -69,6 +68,7 @@ class Chatroom extends React.Component {
 
   getLeft() {
     const { instantMode } = this.props
+
     return instantMode ? roomsWidth : `calc(65px + ${roomsWidth})`
   }
 

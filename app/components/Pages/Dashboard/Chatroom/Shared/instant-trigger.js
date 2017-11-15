@@ -14,6 +14,7 @@ const openChatbar = toggleChatbar => {
 
 const InstantTrigger = ({ rooms, toggleChatbar }) => {
   let counter = 0
+
   _.each(rooms, room => {
     if (['Direct', 'Group'].indexOf(room.room_type) === -1) {
       return false

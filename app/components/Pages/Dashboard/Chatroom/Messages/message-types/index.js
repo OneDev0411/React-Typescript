@@ -15,7 +15,6 @@ const MessageTypes = ({
   message,
   previousMessage
 }) => {
-
   const comment = Message.getText(message, members, user)
 
   // simple comment
@@ -26,6 +25,7 @@ const MessageTypes = ({
 
   // check message is alert
   const alert = Message.isAlert(message)
+
   if (alert) {
     message_object = <AlertMessage
       alert={alert}
@@ -44,6 +44,7 @@ const MessageTypes = ({
 
   // check message has attachment
   const hasAttachments = message.attachments && message.attachments.length > 0
+
   if (hasAttachments) {
     message_object = <AttachementMessage
       comment={comment}

@@ -87,15 +87,20 @@ export default class Mentions extends React.Component {
     const { showSuggestions } = this.state
 
     let isWordCharacter = true
-    if (e.key)
+
+    if (e.key) {
       isWordCharacter = e.key.length === 1
-    else
+    } else {
       isWordCharacter = !KEYS[e.keyCode]
-    const isBackspaceOrDelete = (KEYS[e.keyCode] === 'BACKSPACE' || KEYS[e.keyCode] === 'DELETE')
+    }
+
+    const isBackspaceOrDelete =
+      (KEYS[e.keyCode] === 'BACKSPACE' || KEYS[e.keyCode] === 'DELETE')
 
     // prevent parsing non characters and backspace
-    if (!isWordCharacter && !isBackspaceOrDelete)
+    if (!isWordCharacter && !isBackspaceOrDelete) {
       return e.preventDefault()
+    }
 
     if (
       input.value === '' ||
@@ -122,8 +127,9 @@ export default class Mentions extends React.Component {
     const { showSuggestions, suggestions, selectedIndex } = this.state
     const code = e.keyCode
 
-    if (!showSuggestions || suggestions.length === 0)
+    if (!showSuggestions || suggestions.length === 0) {
       return false
+    }
 
     if (KEYS[code] === 'ESC') {
       return this.clearSuggestions()
@@ -131,25 +137,31 @@ export default class Mentions extends React.Component {
 
     if (KEYS[code] === 'ENTER') {
       e.preventDefault()
+
       return this.selectMention(suggestions[selectedIndex])
     }
 
     let delta = 0
-    if (KEYS[code] === 'DOWN')
-      delta = 1
-    else if (KEYS[code] === 'UP')
-      delta = -1
 
-    if (delta === 0)
+    if (KEYS[code] === 'DOWN') {
+      delta = 1
+    } else if (KEYS[code] === 'UP') {
+      delta = -1
+    }
+
+    if (delta === 0) {
       return false
+    }
 
     let index = selectedIndex + delta
 
-    if (index < 0)
+    if (index < 0) {
       index = suggestions.length - 1
+    }
 
-    if (index >= suggestions.length)
+    if (index >= suggestions.length) {
       index = 0
+    }
 
     this.setState({ selectedIndex: index })
   }
@@ -159,6 +171,7 @@ export default class Mentions extends React.Component {
    */
   getCursorPosition() {
     const { input } = this
+
     return input.selectionStart
   }
 
@@ -167,6 +180,7 @@ export default class Mentions extends React.Component {
    */
   setCursorPosition(index) {
     const { input } = this
+
     input.setSelectionRange(index, index)
   }
 
@@ -179,6 +193,7 @@ export default class Mentions extends React.Component {
     const cursorPosition = this.getCursorPosition()
 
     let i
+
     for (i = cursorPosition - 1; i >= 0; i--) {
       const char = input.value.charAt(i)
       const previousChar = input.value.charAt(i - 1).trim()
@@ -192,8 +207,9 @@ export default class Mentions extends React.Component {
       }
     }
 
-    if (i === -1)
+    if (i === -1) {
       return null
+    }
 
     return i
   }
@@ -205,8 +221,9 @@ export default class Mentions extends React.Component {
     const cursorPosition = this.getCursorPosition()
     const index = this.findTriggerIndex()
 
-    if (index === null)
+    if (index === null) {
       return null
+    }
 
     return this.input.value.substring(index, cursorPosition)
   }
@@ -243,7 +260,8 @@ export default class Mentions extends React.Component {
     const { input } = this
     const index = this.findTriggerIndex()
 
-    input.value = `${input.value.substr(0, index) + text} ${input.value.substr(index + text.length)}`
+    input.value =
+      `${input.value.substr(0, index) + text} ${input.value.substr(index + text.length)}`
 
     // change cursor position
     this.setCursorPosition(index + text.length + 1)
@@ -257,6 +275,7 @@ export default class Mentions extends React.Component {
     const { trigger } = this.props
 
     const username = `${trigger}${user.username}`
+
     this.replaceMentionWithQuery(username)
 
     // hide suggestions
@@ -295,8 +314,9 @@ export default class Mentions extends React.Component {
     const { position } = this.props
     const { suggestions, showSuggestions, selectedIndex, query } = this.state
 
-    if (!showSuggestions || suggestions.length === 0)
+    if (!showSuggestions || suggestions.length === 0) {
       return false
+    }
 
     return (
       <div
@@ -309,7 +329,9 @@ export default class Mentions extends React.Component {
         <div className="heading">
           Users matching {query}
           <div className="hint">
-            <i className="fa fa-long-arrow-up" /><i className="fa fa-long-arrow-down" /> to navigate
+            <i className="fa fa-long-arrow-up" /><i
+              className="fa fa-long-arrow-down"
+            /> to navigate
             &nbsp;&nbsp;&nbsp;
             ↵ to select
             &nbsp;&nbsp;&nbsp;
@@ -332,10 +354,10 @@ export default class Mentions extends React.Component {
                   showStateIndicator={false}
                 />
 
-                <b>{ user.username }</b> &nbsp;
+                <b>{user.username}</b> &nbsp;
                 {
                   user.name !== user.username &&
-                  <span className="name">{ user.name }</span>
+                  <span className="name">{user.name}</span>
                 }
               </div>
             )

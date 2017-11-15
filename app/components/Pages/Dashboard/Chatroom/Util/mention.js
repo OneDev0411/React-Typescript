@@ -1,9 +1,6 @@
 import _ from 'underscore'
 
 export default class Mention {
-  constructor() {
-  }
-
   /**
    * make mention blue
    */
@@ -18,7 +15,9 @@ export default class Mention {
     // replacer
     let replacer = (text, user) => {
       const username = `@${user.username}`
-      const replace = `<span style="background-color: rgb(255, 243, 184)">${username}</span>`
+      const replace =
+        `<span style="background-color: rgb(255, 243, 184)">${username}</span>`
+
       return text.replace(new RegExp(username, 'g'), replace)
     }
 
@@ -32,7 +31,7 @@ export default class Mention {
     })
 
     // highlight @Room
-    filterd_text = replacer(filterd_text, {username: 'Room'})
+    filterd_text = replacer(filterd_text, { username: 'Room' })
 
     return filterd_text
   }
@@ -51,7 +50,7 @@ export default class Mention {
 
     mentions.forEach(username => {
       const user = _.find(membersList,
-        member => '@'+member.username.toLowerCase() === username.toLowerCase())
+        member => `@${member.username.toLowerCase()}` === username.toLowerCase())
 
       if (!user) {
         return false
@@ -72,24 +71,26 @@ export default class Mention {
     }
 
     const list = members
-    .filter(user => user.id !== me.id)
-    .map(user => {
-      let username = user.username || user.abbreviated_display_name
-      username = username.replace(/\+/g, '') // replace plus characters
+      .filter(user => user.id !== me.id)
+      .map(user => {
+        let username = user.username || user.abbreviated_display_name
 
-      let atSignSplitter = username.split('@')
-      if (atSignSplitter.length > 1) {
-        username = atSignSplitter[0]
-      }
+        username = username.replace(/\+/g, '') // replace plus characters
 
-      return {
-        id: [user.id],
-        avatar: user.profile_image_url,
-        name: user.display_name,
-        email: user.email,
-        username
-      }
-    })
+        let atSignSplitter = username.split('@')
+
+        if (atSignSplitter.length > 1) {
+          username = atSignSplitter[0]
+        }
+
+        return {
+          id: [user.id],
+          avatar: user.profile_image_url,
+          name: user.display_name,
+          email: user.email,
+          username
+        }
+      })
 
     list.unshift({
       id: _.pluck(members, 'id'),
