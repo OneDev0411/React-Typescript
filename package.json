@@ -153,6 +153,7 @@
     "swipe-js-iso": "^2.0.3",
     "text-mask-addons": "^3.5.0",
     "underscore": "^1.8.3",
+    "universal-cookie": "^2.1.0",
     "uppy": "^0.15.0",
     "uuid-validate": "0.0.2",
     "validator": "^7.0.0",
