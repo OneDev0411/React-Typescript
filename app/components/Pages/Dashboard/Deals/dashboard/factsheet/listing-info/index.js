@@ -4,6 +4,16 @@ import Items from '../items'
 
 const table = [
   {
+    key: 'original_price',
+    context: 'mls_context',
+    contextField: 'list_price',
+    approved: true,
+    name: 'Original Price',
+    dataType: 'currency',
+    disabled: true,
+    canEdit: () => null
+  },
+  {
     key: 'list_price',
     name: 'List Price',
     dataType: 'currency',
@@ -13,7 +23,7 @@ const table = [
     name: 'Property Type',
     dataType: 'text',
     disabled: true,
-    canEdit: (isBO) => isBO
+    canEdit: () => null
   }, {
     key: 'file_id',
     name: 'File ID',
@@ -23,7 +33,13 @@ const table = [
 ]
 
 const getValue = (deal, field) => {
-  const value = Deal.get.field(deal, field.key)
+  let value
+
+  if (!field.context) {
+    value = Deal.get.field(deal, field.key)
+  } else {
+    value = deal[field.context][field.contextField]
+  }
 
   const object = {
     value,
