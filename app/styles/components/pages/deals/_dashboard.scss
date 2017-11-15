@@ -3,34 +3,6 @@ $listing-card-height: 210px;
 $deal-info-width: 300px;
 $deal-tasks-width: 388px;
 
-@mixin scrollbar() {
-  ::-webkit-scrollbar {
-    width: 0.3em;
-    height: 0.5em;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    border-radius: 10px;
-    padding: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-    display: none;
-  }
-
-  ::-webkit-scrollbar-corner {
-    background-color: transparent;
-  }
-}
-
 @import './dashboard/_info';
 @import './dashboard/_add_contract';
 @import './dashboard/_tasks';
@@ -64,12 +36,7 @@ $deal-tasks-width: 388px;
   z-index: 1;
 
   .column {
-    @include scrollbar();
-    &:hover {
-      ::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.6);
-      }
-    }
+    @include scrollbar(0.3em);
 
     padding: 0;
     height: auto;
