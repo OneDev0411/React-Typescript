@@ -1,68 +1,51 @@
 {
-  "src_folders": ["./test/functional/tests"],
-  "output_folder": "./test/functional/tests",
-  "page_objects_path": "./test/functional/pages",
+  "src_folders": ["./tests/E2E/specs"],
+  "output_folder": "./tests/E2E/reports",
+  "page_objects_path": "./tests/E2E/pages",
+  "custom_commands_path": "",
+  "custom_assertions_path": "",
+  "globals_path": "./tests/E2E/globalsModule",
 
   "selenium": {
-    "start_process": false
+    "start_process": false,
+    "server_path": "",
+    "log_path": "",
+    "port": 4444,
+    "cli_args": {
+      "webdriver.chrome.driver": "./bin/chromedriver",
+      "webdriver.gecko.driver": "",
+      "webdriver.edge.driver": ""
+    }
   },
 
   "test_settings": {
-    "use_xpath": true,
     "default": {
-      "launch_url": "https://irish.rechat.com",
       "selenium_port": 9515,
       "selenium_host": "localhost",
       "default_path_prefix": "",
+      "silent": true,
       "screenshots": {
-        "enabled": true,
-        "on_failure": true,
-        "on_error": false,
-        "path": "screenshots"
-      },
-
-      "desiredCapabilities": {
-        "browserName": "chrome",
-        "browser": "chrome",
-        "acceptSslCerts": true
-      },
-
-      "globals": {
-        "waitForConditionTimeout": 1500000,
-        "rechat_username": "testadnan07@gmail.com",
-        "rechat_password": "aaaaaaa"
-      },
-      "skip_testcases_on_fail": false
-    },
-
-    "bs": {
-      "selenium_port": 80,
-      "selenium_host": "hub-cloud.browserstack.com",
-
-      "desiredCapabilities": {
-        "build": "nightwatch-browserstack",
-        "browserstack.user": "",
-        "browserstack.key": "",
-        "browserstack.debug": true,
-        "browser": "chrome"
+        "enabled": false,
+        "path": ""
       }
     },
-
+    "desiredCapabilities": {
+      "browserName": "chrome",
+      "chromeOptions": {
+        "args": [
+          "--no-sandbox",
+          "--headless",
+          "--disable-gpu",
+          "remote-debugging-port=9222"
+        ],
+        "binary":
+          "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
+      },
+      "acceptSslCerts": true
+    },
     "chrome": {
       "desiredCapabilities": {
-        "browserName": "chrome",
-        "javascriptEnabled": true,
-        "acceptSslCerts": true,
-        "chromeOptions": {
-          "args": [
-            "--no-sandbox",
-            "--headless",
-            "--disable-gpu",
-            "remote-debugging-port=9222"
-          ],
-          "binary":
-            "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
-        }
+        "browserName": "chrome"
       }
     }
   }
