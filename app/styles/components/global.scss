@@ -4,7 +4,10 @@ body,
 #app{
   height: 100%;
 }
-
+.intercom-launcher-frame,
+.intercom-launcher-badge-frame {
+  display: none !important;
+}
 .touch-scroll {
   -webkit-overflow-scrolling: touch;
 }
