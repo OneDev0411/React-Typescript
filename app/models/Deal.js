@@ -45,7 +45,7 @@ Deal.get.field = function(deal, field) {
     return value
   }
 
-  if (typeof context === 'string') {
+  if (typeof context !== 'object') {
     return context
   }
 
