@@ -24,10 +24,11 @@ Deal.get.context = function(deal, field) {
 
   const { mls_context, deal_context } = values
 
-  if (deal_context) {
-    return deal_context
-  } else if (mls_context) {
+  // mls context has priority over deal context, when there is no deal context
+  if (mls_context && !deal_context) {
     return mls_context
+  } else if (deal_context) {
+    return deal_context
   }
 
   return null
