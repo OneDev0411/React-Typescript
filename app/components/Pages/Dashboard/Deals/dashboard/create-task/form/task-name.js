@@ -17,9 +17,10 @@ class TaskName extends React.Component {
   async create() {
     const { file, createFormTask, setSelectedTask, listId, dealId,
       addAttachment, onClose } = this.props
-    const { title } = this.state
 
-    if (title.length === 0 || !file) {
+    const { title, status } = this.state
+
+    if (title.length === 0 || !file || status !== null) {
       return false
     }
 

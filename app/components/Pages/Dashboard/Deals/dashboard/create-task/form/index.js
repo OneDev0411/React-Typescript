@@ -23,6 +23,10 @@ class CreateForm extends React.Component {
   async createNewTask(form) {
     const { dealId, createFormTask, setSelectedTask, listId } = this.props
 
+    if (this.state.creatingForm !== null) {
+      return false
+    }
+
     this.setState({ creatingForm: form })
 
     // create form
