@@ -63,6 +63,10 @@ Deal.get.field = function(deal, field) {
 * a helper that extracts address from deal
 */
 Deal.get.address = function(deal) {
+  if (deal.listing) {
+    return deal.mls_context.full_address
+  }
+
   const unitNumber = Deal.get.field(deal, 'unit_number')
   const city = Deal.get.field(deal, 'city')
   const postalCode = Deal.get.field(deal, 'postal_code')

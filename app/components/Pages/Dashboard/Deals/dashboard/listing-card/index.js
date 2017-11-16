@@ -3,13 +3,24 @@ import _ from 'underscore'
 import { browserHistory, Link } from 'react-router'
 import Deal from '../../../../../../models/Deal'
 
+function getAddressField(deal, field) {
+  if (deal.listing) {
+    return deal.mls_context[field]
+  }
+
+  return Deal.get.field(deal, field)
+}
+
 function getHomeAddress(deal) {
-  const unitNumber = Deal.get.field(deal, 'unit_number')
+  const unitNumber = getAddressField(deal, 'unit_number')
+  const street_number = getAddressField(deal, 'street_number')
+  const street_name = getAddressField(deal, 'street_name')
+  const street_suffix = getAddressField(deal, 'street_suffix')
 
   return [
-    Deal.get.field(deal, 'street_number'),
-    Deal.get.field(deal, 'street_name'),
-    Deal.get.field(deal, 'street_suffix'),
+    street_number,
+    street_name,
+    street_suffix,
     unitNumber ? `, #${unitNumber}` : null
   ]
   .filter(item => item !== null)
@@ -17,9 +28,9 @@ function getHomeAddress(deal) {
 }
 
 function getListingAddress(deal) {
-  const city = Deal.get.field(deal, 'city')
-  const state = Deal.get.field(deal, 'state_code')
-  const postalCode = Deal.get.field(deal, 'postal_code')
+  const city = getAddressField(deal, 'city')
+  const state = getAddressField(deal, 'state_code')
+  const postalCode = getAddressField(deal, 'postal_code')
 
   const address = [
     city ? `${city},` : null,
