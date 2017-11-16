@@ -35,11 +35,11 @@ const table = [
 const getValue = (deal, field) => {
   let value
 
-  if (!field.context) {
-    value = Deal.get.field(deal, field.key)
-  } else {
+  if (field.context) {
     let context = deal[field.context]
     value = context ? context[field.contextField] : null
+  } else {
+    value = Deal.get.field(deal, field.key)
   }
 
   const object = {
