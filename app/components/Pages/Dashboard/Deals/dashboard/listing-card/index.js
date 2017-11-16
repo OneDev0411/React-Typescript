@@ -2,7 +2,6 @@ import React from 'react'
 import _ from 'underscore'
 import { browserHistory, Link } from 'react-router'
 import Deal from '../../../../../../models/Deal'
-// import ListingViewer from '../listing-viewer'
 
 function getHomeAddress(deal) {
   const unitNumber = Deal.get.field(deal, 'unit_number')
@@ -22,13 +21,19 @@ function getListingAddress(deal) {
   const state = Deal.get.field(deal, 'state_code')
   const postalCode = Deal.get.field(deal, 'postal_code')
 
-  return [
+  const address = [
     city ? `${city},` : null,
     state,
     postalCode
   ]
   .filter(item => item !== null)
   .join(' ')
+
+  if (address.length === 0) {
+    return Deal.get.clientNames(deal)
+  }
+
+  return address
 }
 
 function openListing(deal) {

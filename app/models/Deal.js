@@ -83,11 +83,28 @@ Deal.get.address = function(deal) {
     return address.slice(0, -1)
   }
 
+  if (address.length === 0) {
+    return Deal.get.clientNames(deal)
+  }
+
   return address
 }
 
 Deal.get.status = function(deal) {
   return deal.deleted_at ? 'Archived' : Deal.get.field(deal, 'listing_status')
+}
+
+Deal.get.clientNames = function(deal) {
+  const roles = deal.deal_type === 'Buying' ? ['Buyer', 'Tenant'] : ['Seller', 'Landlord']
+  const clients = []
+
+  deal.roles.forEach(item => {
+    if (roles.indexOf(item.role) > -1) {
+      clients.push(item.user.display_name)
+    }
+  })
+
+  return clients.join(', ')
 }
 
 /**
