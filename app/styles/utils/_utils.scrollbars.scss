@@ -1,12 +1,13 @@
-@mixin scrollbar($width: 0.6em, $thumb-bgc: #7f7f7f, $track-bgc: #d9d9de) {
+@mixin scrollbar($width: 10px, $thumb-bgc: #cfd9e1, $track-bgc: #edf2f5) {
   ::-webkit-scrollbar {
     width: $width;
     height: 0.5em;
+    padding-right: 3px;
   }
 
   ::-webkit-scrollbar-thumb {
     background-color: $thumb-bgc;
-    border-radius: 10px;
+    border-radius: 5px;
   }
 
   ::-webkit-scrollbar-track {
@@ -26,4 +27,8 @@
 
 .u-scrollbar {
   @include scrollbar();
+}
+
+.u-scrollbar--thinner {
+  @include scrollbar(6px);
 }

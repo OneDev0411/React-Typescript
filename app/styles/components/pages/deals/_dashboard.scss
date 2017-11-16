@@ -36,7 +36,7 @@ $deal-tasks-width: 388px;
   z-index: 1;
 
   .column {
-    @include scrollbar(0.3em);
+    @extend .u-scrollbar--thinner;
 
     padding: 0;
     height: auto;
