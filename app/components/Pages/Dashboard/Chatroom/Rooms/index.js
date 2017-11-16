@@ -113,9 +113,6 @@ class Rooms extends React.Component {
     const { filter } = this.state
     const { showChatbar, instantMode, rooms, activeRoom } = this.props
 
-    console.log('showChatbar: ', showChatbar)
-    console.log('instantMode: ', instantMode)
-
     return (
       <div className="rooms">
         <div className="toolbar">
