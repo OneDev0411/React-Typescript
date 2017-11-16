@@ -1,9 +1,9 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { createFormTask } from '../../../../../../../store_actions/deals'
+import { createFormTask, setSelectedTask,
+  addAttachment } from '../../../../../../../store_actions/deals'
 import ChatModel from '../../../../../../../models/Chatroom'
-import { addAttachment } from '../../../../../../../store_actions/deals'
 
 class TaskName extends React.Component {
   constructor(props) {
@@ -15,7 +15,8 @@ class TaskName extends React.Component {
   }
 
   async create() {
-    const { file, createFormTask, listId, dealId, addAttachment, onClose } = this.props
+    const { file, createFormTask, setSelectedTask, listId, dealId,
+      addAttachment, onClose } = this.props
     const { title } = this.state
 
     if (title.length === 0 || !file) {
@@ -37,6 +38,9 @@ class TaskName extends React.Component {
 
       // add attachment to the list
       addAttachment(task.deal, task.checklist, task.id, uploaded)
+
+      // make task active
+      setSelectedTask(task)
 
     } catch(e) {
       // todo
@@ -102,4 +106,5 @@ class TaskName extends React.Component {
   }
 }
 
-export default connect(null, { createFormTask, addAttachment })(TaskName)
+export default connect(null, {
+  createFormTask, setSelectedTask, addAttachment })(TaskName)

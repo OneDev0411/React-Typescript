@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import _ from 'underscore'
-import { createFormTask } from '../../../../../../../store_actions/deals'
+import { createFormTask, setSelectedTask } from '../../../../../../../store_actions/deals'
 import Forms from './list'
 import TaskName from './task-name'
 
@@ -21,12 +21,15 @@ class CreateForm extends React.Component {
    *
    */
   async createNewTask(form) {
-    const { dealId, createFormTask, listId } = this.props
+    const { dealId, createFormTask, setSelectedTask, listId } = this.props
 
     this.setState({ creatingForm: form })
 
     // create form
-    await createFormTask(dealId, form.id, form.name, listId)
+    const task = await createFormTask(dealId, form.id, form.name, listId)
+
+    // make this task active
+    setSelectedTask(task)
 
     this.setState({ creatingForm: null }, () => {
       this.displayForm(false)
@@ -98,4 +101,4 @@ class CreateForm extends React.Component {
   }
 }
 
-export default connect(null, { createFormTask })(CreateForm)
+export default connect(null, { createFormTask, setSelectedTask })(CreateForm)
