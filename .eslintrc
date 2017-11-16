@@ -9,6 +9,7 @@
   "rules": {
     "no-new": 0,
     "curly": [2, "all"],
+    "no-unused-expressions": ["error", { "allowShortCircuit": true }],
     "comma-dangle": [2, "never"],
     "semi": [2, "never"],
     "camelcase": 0,
