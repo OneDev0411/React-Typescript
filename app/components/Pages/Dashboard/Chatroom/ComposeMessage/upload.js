@@ -1,9 +1,11 @@
 import React from 'react'
 import Dropzone from 'react-dropzone'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 import Message from '../Util/message'
 import Model from '../../../../../models/Chatroom'
 
-export default class Upload extends React.Component {
+class Upload extends React.Component {
   constructor(props) {
     super(props)
     this.pasteHandler = null
@@ -38,6 +40,7 @@ export default class Upload extends React.Component {
    */
   onPasteFile(event) {
     const files = (event.clipboardData || event.originalEvent.clipboardData).files
+
     this.onDrop(files)
   }
 
@@ -72,6 +75,7 @@ export default class Upload extends React.Component {
 
       // upload file
       const fileId = await this.uploadFile(roomId, file)
+
       if (fileId) {
         attachments.push(fileId)
       }
@@ -93,6 +97,7 @@ export default class Upload extends React.Component {
   async uploadFile(roomId, file) {
     try {
       const response = await Model.uploadAttachment(roomId, file)
+
       return response.body.data.id
     } catch (e) {
       return null
@@ -129,7 +134,10 @@ export default class Upload extends React.Component {
       current: files[0]
     }
 
-    const { qid, tempMessage } = Message.createTemporaryMessage(roomId, message, author)
+    const {
+      qid,
+      tempMessage
+    } = Message.createTemporaryMessage(roomId, message, author)
 
     // store message into messages list
     Message.create(roomId, tempMessage)
@@ -167,6 +175,13 @@ export default class Upload extends React.Component {
             this.dropzone = node
           }}
           onDrop={files => this.onDrop(files)}
+          onDropRejected={() => {
+            this.props.notify({
+              title: 'File Type Error',
+              message: 'This type of file not allowed',
+              status: 'error'
+            })
+          }}
           onDragEnter={() => this.setState({ dropzoneActive: true })}
           onDragLeave={() => this.setState({ dropzoneActive: false })}
           multiple
@@ -194,3 +209,7 @@ export default class Upload extends React.Component {
     )
   }
 }
+
+export default connect(null, {
+  notify
+})(Upload)

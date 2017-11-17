@@ -16,9 +16,6 @@ import {
 } from '../../../../../store_actions/chatroom'
 
 export default class Chatroom {
-  constructor() {
-  }
-
   /**
    * synchronize chatroom with new data
    */
@@ -30,11 +27,13 @@ export default class Chatroom {
     store.dispatch(getRooms())
 
     // check are there any messages to sync or not
-    if (_.size(chatroom.messages) === 0)
+    if (_.size(chatroom.messages) === 0) {
       return false
+    }
 
     // create a priority list for fetching
     const priorityList = Object.keys(popups || {})
+
     if (activeRoom) {
       priorityList.unshift(activeRoom)
     }
@@ -80,6 +79,7 @@ export default class Chatroom {
    */
   static getPopups() {
     const { popups } = store.getState().chatroom
+
     return popups
   }
 
@@ -88,6 +88,7 @@ export default class Chatroom {
    */
   static getPopupInstance(room) {
     const popups = Chatroom.getPopups()
+
     return popups ? popups[room] : null
   }
 
@@ -108,6 +109,7 @@ export default class Chatroom {
    */
   static isMinimized(room) {
     const popup = Chatroom.getPopupInstance(room)
+
     return popup ? popup.minimize : false
   }
 
@@ -133,8 +135,7 @@ export default class Chatroom {
     if (window && window.location.pathname.includes('/recents/')) {
       browserHistory.push(`/dashboard/recents/${room}?redirect=room`)
       store.dispatch(changeActiveRoom(room))
-    }
-    else {
+    } else {
       // open popup if not minimized (if activate=true open it anyway)
       if (!Chatroom.isMinimized(room) || activate) {
         Chatroom.openPopup(room, activate)

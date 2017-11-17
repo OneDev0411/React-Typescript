@@ -13,7 +13,6 @@ import {
 } from '../../../../../store_actions/chatroom'
 
 export default class ChatNotification extends NotificationService {
-
   constructor(user) {
     super(user)
 
@@ -21,6 +20,7 @@ export default class ChatNotification extends NotificationService {
     this._lastRoomGotNotification = null
 
     const { scoket } = window
+
     socket.on('Notification.Delivered', this.onNotificationDelivered.bind(this))
     socket.on('Room.Acknowledged', this.onNotificationAcknowledged.bind(this))
 
@@ -41,6 +41,7 @@ export default class ChatNotification extends NotificationService {
    */
   getChatroomStore() {
     const { chatroom } = store.getState()
+
     return chatroom
   }
 
@@ -98,7 +99,7 @@ export default class ChatNotification extends NotificationService {
    */
   async createMessage(chatroom, notification, message) {
     const { room: roomId, notification_type, auxiliary_subject } = notification
-    const isDealTaskRoom = auxiliary_subject && auxiliary_subject.type === 'deal' ? true : false
+    const isDealTaskRoom = !!(auxiliary_subject && auxiliary_subject.type === 'deal')
     const room = chatroom.rooms[roomId]
 
     // fetch room immediately if room is not exists
@@ -108,7 +109,6 @@ export default class ChatNotification extends NotificationService {
 
     // don't anything when message.author is eqaual to current user
     if (message.author && message.author.id === this.user.id) {
-
       // when user search a listing/alert,
       // the relevant room should go to top of rooms list
       if (room && ['UserSharedListing', 'UserCreatedAlert'].indexOf(notification_type) > -1) {
@@ -162,6 +162,7 @@ export default class ChatNotification extends NotificationService {
 
     if (room.room_type === 'Group') {
       const isMentioned = _.find(message.mentions, id => id === user.id)
+
       if (!isMentioned) {
         shouldSendNotification = false
       }
@@ -225,6 +226,7 @@ export default class ChatNotification extends NotificationService {
 
     // when new user invites to a existant room
     const isExists = _.find(rooms[roomId].users, u => u.id === user.id)
+
     if (!isExists) {
       store.dispatch(addMembersToRoom(roomId, [user]))
     }
@@ -241,8 +243,8 @@ export default class ChatNotification extends NotificationService {
     const roomMessages = messages[notification.room]
 
     const messageId = notification.object
-    if (!roomMessages || !roomMessages.list[messageId])
-      return false
+
+    if (!roomMessages || !roomMessages.list[messageId]) { return false }
 
     store.dispatch(updateMessageDeliveries(
       user,

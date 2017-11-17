@@ -50,11 +50,11 @@ export default ({
   if (number > 1) {
     left += 20 * (number - 1)
   }
+
   return (
     <ClickOutside
       onClickOutside={() => {
-        if (isActive && !instantMode)
-          onChangeActive(null)
+        if (isActive && !instantMode) { onChangeActive(null) }
       }}
     >
       <div

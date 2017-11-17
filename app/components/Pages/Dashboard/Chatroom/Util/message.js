@@ -3,7 +3,7 @@ import emojify from 'emojify.js'
 import _ from 'underscore'
 import linkifyString from 'linkifyjs/string'
 import store from '../../../../../stores'
-import { createMessage, updateMessage} from '../../../../../store_actions/chatroom'
+import { createMessage, updateMessage } from '../../../../../store_actions/chatroom'
 import Mention from './mention'
 
 export default class Message {
@@ -19,7 +19,10 @@ export default class Message {
   static send(roomId, message, author = {}) {
     return new Promise((resolve, reject) => {
       // create temp message
-      const { qid, tempMessage } = Message.createTemporaryMessage(roomId, message, author)
+      const {
+        qid,
+        tempMessage
+      } = Message.createTemporaryMessage(roomId, message, author)
 
       // create temporary message
       Message.create(roomId, tempMessage)
@@ -40,6 +43,7 @@ export default class Message {
       if (err) {
         return reject(err)
       }
+
       Message.create(roomId, message, qid)
     })
   }
@@ -65,7 +69,7 @@ export default class Message {
    */
   static createTemporaryMessage(roomId, message, author = {}) {
     const unixtime = moment().unix()
-    const qid = 'queued_' + unixtime
+    const qid = `queued_${unixtime}`
 
     const { abbreviated_display_name } = author
 
@@ -75,12 +79,12 @@ export default class Message {
         id: qid,
         room: roomId,
         author: {
-          abbreviated_display_name: abbreviated_display_name,
+          abbreviated_display_name,
           ...author
         },
         queued: true,
         created_at: unixtime,
-        updated_at: unixtime,
+        updated_at: unixtime
       }
     }
 
@@ -97,7 +101,7 @@ export default class Message {
     store.dispatch(createMessage(roomId, { [message.id]: message }, queueId))
   }
 
-   /**
+  /**
    * update message
    */
   static update(roomId, message) {
@@ -123,8 +127,10 @@ export default class Message {
    * convert new line to break line
    */
   static nl2br(str, is_xhtml = false) {
-    const breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>'
-    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2')
+    const breakTag =
+      (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>'
+
+    return (`${str}`).replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, `$1${breakTag}$2`)
   }
 
   /**
@@ -133,7 +139,11 @@ export default class Message {
   static isAlert(message) {
     const { notification } = message
 
-    if (notification && notification.objects && notification.object_class === 'Alert') {
+    if (
+      notification
+      && notification.objects
+      && notification.object_class === 'Alert'
+    ) {
       return notification.objects[0]
     }
 
@@ -144,15 +154,19 @@ export default class Message {
    * get message author
    */
   static getAuthor(message) {
-    if (!message)
+    if (!message) {
       return null
+    }
 
-    if (message.author)
+    if (message.author) {
       return message.author
+    }
 
     const alert = Message.isAlert(message)
-    if (alert)
+
+    if (alert) {
       return alert.created_by
+    }
 
     // test for listing without message
     if (message.notification &&
@@ -169,8 +183,9 @@ export default class Message {
    * get message date
    */
   static getYMD(message) {
-    if (!message)
+    if (!message) {
       return null
+    }
 
     return moment.unix(message.created_at).format('YMMD')
   }

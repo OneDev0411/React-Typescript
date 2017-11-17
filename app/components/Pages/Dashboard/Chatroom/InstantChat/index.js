@@ -20,11 +20,11 @@ const InstantChat = ({
     />
     <div
       className="chatroom-fullscreen"
-      style={ !chatroom.instantMode ? { display: 'none' } : {} }
+      style={!chatroom.instantMode ? { display: 'none' } : {}}
     >
       <Chatroom
         user={user}
-        isInstant={true}
+        isInstant
         activeRoom={chatroom.activeRoom}
       />
     </div>
