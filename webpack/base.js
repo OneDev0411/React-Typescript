@@ -13,14 +13,9 @@ export default {
   },
   resolve: {
     extensions: ['.js', '.json', '.css', '.scss'],
-    modules: [
-      config.compile.entry,
-      'node_modules'
-    ]
+    modules: [config.compile.entry, 'node_modules']
   },
-  plugins: [
-    new webpack.DefinePlugin(config.globals)
-  ],
+  plugins: [new webpack.DefinePlugin(config.globals)],
   module: {
     rules: [
       {
@@ -30,17 +25,14 @@ export default {
         options: {
           cacheDirectory: true,
           babelrc: false,
-          presets: [
-            'react',
-            ['es2015', { modules: false }],
-            'stage-0'
-          ],
+          presets: ['react', ['es2015', { modules: false }], 'stage-0'],
           env: {
             development: {
               plugins: [
                 ['react-hot-loader/babel'],
                 [
-                  'react-transform', {
+                  'react-transform',
+                  {
                     transforms: [
                       {
                         transform: 'react-transform-catch-errors',
@@ -56,45 +48,64 @@ export default {
       },
       {
         test: /\.woff(\?.*)?$/,
-        use: [{
-          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/font-woff'
-        }]
+        use: [
+          {
+            loader:
+              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/font-woff'
+          }
+        ]
       },
       {
         test: /\.woff2(\?.*)?$/,
-        use: [{
-          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/font-woff2'
-        }]
+        use: [
+          {
+            loader:
+              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/font-woff2'
+          }
+        ]
       },
       {
         test: /\.otf(\?.*)?$/,
-        use: [{
-          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=font/opentype'
-        }]
+        use: [
+          {
+            loader:
+              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=font/opentype'
+          }
+        ]
       },
       {
         test: /\.ttf(\?.*)?$/,
-        use: [{
-          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/octet-stream'
-        }]
+        use: [
+          {
+            loader:
+              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/octet-stream'
+          }
+        ]
       },
       {
         test: /\.eot(\?.*)?$/,
-        use: [{
-          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]'
-        }]
+        use: [
+          {
+            loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]'
+          }
+        ]
       },
       {
         test: /\.svg(\?.*)?$/,
-        use: [{
-          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=image/svg+xml'
-        }]
+        use: [
+          {
+            loader:
+              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=image/svg+xml'
+          }
+        ]
       },
       {
         test: /\.(png|jpg|gif)$/,
-        use: [{
-          loader: 'file-loader'
-        }]
+        use: [
+          {
+            loader: 'file-loader'
+          }
+        ]
       }
     ]
   }

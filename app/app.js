@@ -21,13 +21,9 @@ import './styles/main.scss'
 export default () => (
   <Provider store={store}>
     <div>
-      <Router history={history}>
-        { routes }
-      </Router>
+      <Router history={history}>{routes}</Router>
 
-      <NotificationsSystem
-        theme={notificationTheme}
-      />
+      <NotificationsSystem theme={notificationTheme} />
 
       <ConfirmationModal />
     </div>

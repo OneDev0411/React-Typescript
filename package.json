@@ -1,13 +1,14 @@
 {
-  "name": "rechat.co-web",
-  "version": "6.1.2",
+  "name": "rechat",
+  "version": "9.0",
   "description": "",
   "main": "app.js",
   "author": "",
-  "repository": "https://bitbucket.org/rechat/web",
+  "repository": "git@gitlab.com:rechat/web.git",
   "license": "ISC",
   "scripts": {
-    "develop": "NODE_ENV=development nodemon ./bin/server --ignore ./app --exec babel-node",
+    "develop":
+      "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
     "serve": "NODE_ENV=production babel-node ./bin/server",
@@ -15,9 +16,10 @@
     "lint": "npm run lint:app && npm run lint:server",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
-    "test": "jest",
+    "test:app": "jest",
     "test:watch": "npm test -- --watch",
-    "test:nw": "nightwatch"
+    "test:e2e": "nightwatch",
+    "e2e-setup": "selenium-standalone install"
   },
   "engines": {
     "node": "7.6.0"
@@ -112,7 +114,8 @@
     "react-color": "^2.13.8",
     "react-day-picker": "^5.5.3",
     "react-dom": "^15.4.2",
-    "react-dropzone": "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
+    "react-dropzone":
+      "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
     "react-ga": "^2.2.0",
     "react-hot-loader": "^3.0.0-beta.6",
     "react-images": "^0.5.2",
@@ -168,8 +171,8 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-jest": "^21.2.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-stage-2": "^6.24.1",
-    "chromedriver": "^2.33.2",
     "enzyme": "^3.1.1",
     "eslint": "^4.6.1",
     "eslint-config-airbnb": "^15.1.0",
@@ -184,6 +187,7 @@
     "nodemon": "^1.11.0",
     "react-test-renderer": "^16.1.1",
     "redux-mock-store": "^1.3.0",
+    "selenium-standalone": "^6.11.0",
     "should": "^11.2.1",
     "uglify-es": "git://github.com/mishoo/UglifyJS2.git#harmony",
     "uglifyjs-webpack-plugin": "^1.0.0-rc.0",

@@ -9,4 +9,9 @@ module.exports = {
   verbose: true,
   roots: ['<rootDir>/app/'],
   moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx']
+
+  // An array of regexp pattern strings that are matched against all
+  // test paths before executing the test.
+  // Default: ["/node_modules/"]
+  // testPathIgnorePatterns: ["<rootDir>/tests/E2E/", "<rootDir>/node_modules/"]
 }

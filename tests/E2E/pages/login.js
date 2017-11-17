@@ -49,9 +49,7 @@ module.exports = {
 
         let self = this
 
-        this.api.elements('css selector', 'form[action="/signin"]', (
-          element
-        ) => {
+        this.api.elements('css selector', 'form[action="/signin"]', element => {
           console.log(element)
 
           if (element.value.length) {
