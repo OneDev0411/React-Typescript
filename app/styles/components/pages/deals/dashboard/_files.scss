@@ -43,7 +43,6 @@
       border: solid 1px #d2d7db;
       border-radius: 0 0 3px 3px;
       margin-bottom: 10px;
-      z-index: 100;
     }
 
     .item {
@@ -103,7 +102,7 @@
         }
       }
 
-      &:hover .link{
+      &:hover .link {
         border-bottom-color: #ccc;
       }
 
@@ -122,8 +121,12 @@
           background-color: #ffffff;
           border: solid 1px #e7eef0;
           margin-right: 8px;
-          &:focus { outline: none; }
-          &:hover { background-color: #fbfbfb; }
+          &:focus {
+            outline: none;
+          }
+          &:hover {
+            background-color: #fbfbfb;
+          }
         }
 
         .btn-group {
@@ -185,7 +188,7 @@
       opacity: 0.4;
     }
 
-    &:hover .link{
+    &:hover .link {
       border-bottom-color: transparent;
       cursor: auto !important;
     }
@@ -202,7 +205,6 @@
       text-align: center;
       color: #fff;
       background-color: red;
-      z-index: 200;
       border-radius: 5px 0 0 5px;
       letter-spacing: 0.5px;
     }
