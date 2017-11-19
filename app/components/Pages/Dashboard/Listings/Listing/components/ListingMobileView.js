@@ -19,6 +19,8 @@ import config from '../../../../../../../config/public'
 import Brand from '../../../../../../controllers/Brand'
 import listing_util from '../../../../../../utils/listing'
 
+import FetchError from './FetchError'
+
 import Loading from '../../../../../Partials/Loading'
 import FavoriteHeart from '../../components/FavoriteHeart'
 import ListingMarker from '../../../Partials/ListingMarker'
@@ -31,7 +33,8 @@ import ListingMapMarker from '../../../Partials/ListingMapMarker'
 const ListingMobileView = ({
   data,
   listing,
-  isFetching
+  isFetching,
+  errorMessage
   // showShareModal,
   // onHideShareModal,
   // shareModalIsActive
@@ -71,6 +74,8 @@ const ListingMobileView = ({
   )
 
   let main_content = isFetching && <Loading />
+
+  main_content = !isFetching && errorMessage && <FetchError message={errorMessage} />
 
   if (listing && listing.property) {
     property = listing.property

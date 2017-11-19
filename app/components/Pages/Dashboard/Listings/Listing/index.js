@@ -1,7 +1,8 @@
-import { connect } from 'react-redux'
 import React from 'react'
+import { connect } from 'react-redux'
 
-import ListingView from './components/ListingView'
+import ListingMobileView from './components/ListingMobileView'
+import ListingDesktopView from './components/ListingDesktopView'
 import ContactModel from '../../../../../models/Contact'
 import getListing from '../../../../../store_actions/listings/listing/get-listing'
 
@@ -18,9 +19,13 @@ class Listing extends React.Component {
   }
 
   render() {
-    const { data, listing, isFetching } = this.props
+    let content = <ListingDesktopView {...this.props} />
 
-    return <ListingView data={data} listing={listing} isFetching={isFetching} />
+    if (this.props.data.is_mobile) {
+      content = <ListingMobileView {...this.props} />
+    }
+
+    return content
   }
 }
 
@@ -33,6 +38,7 @@ export default connect(
       user,
       id: paramsId || '',
       isFetching: listing.isFetching,
+      errorMessage: listing.errorMessage,
       listing: listingId === paramsId ? listing.data : {}
     }
   },

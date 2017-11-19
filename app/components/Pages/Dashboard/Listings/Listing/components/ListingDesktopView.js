@@ -15,6 +15,7 @@ import config from '../../../../../../../config/public'
 import Brand from '../../../../../../controllers/Brand'
 import listing_util from '../../../../../../utils/listing'
 
+import FetchError from './FetchError'
 import Loading from '../../../../../Partials/Loading'
 import FavoriteHeart from '../../components/FavoriteHeart'
 import ListingMarker from '../../../Partials/ListingMarker'
@@ -50,6 +51,7 @@ import {
   CarouselItem,
   OverlayTrigger
 } from 'react-bootstrap'
+import { errorMessage } from '../../../../../../reducers/listings/shared/index';
 
 export const fadeIn = node => {
   const elem = ReactDOM.findDOMNode(node)
@@ -72,6 +74,7 @@ const ListingDesktopView = ({
   hideModal,
   container,
   isFetching,
+  errorMessage,
   showShareModal,
   onHideShareModal,
   showModalGallery,
@@ -135,6 +138,9 @@ const ListingDesktopView = ({
   )
 
   let main_content = isFetching && <Loading />
+
+  main_content = !isFetching && errorMessage &&
+    <FetchError message={errorMessage} backButtonHandler={hideModal} />
 
   if (listing && listing.property) {
     property = listing.property
