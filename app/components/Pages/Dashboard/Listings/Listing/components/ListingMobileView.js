@@ -40,9 +40,11 @@ const ListingMobileView = ({
   const brand_agent = listing.proposed_agent
 
   let current_slide
+
   if (listing) {
     current_slide = listing.current_slide
   }
+
   if (!current_slide) {
     current_slide = 0
   }
@@ -63,11 +65,7 @@ const ListingMobileView = ({
   let brand_agent_area
 
   let listing_images = (
-    <div
-      style={S(
-        'bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292'
-      )}
-    >
+    <div style={S('bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292')}>
       No image
     </div>
   )
@@ -95,7 +93,8 @@ const ListingMobileView = ({
 
     if (property.square_meters) {
       price_sq_foot = (Number(price.replace(/,/g, '')) /
-        Number(square_feet.replace(/,/g, ''))).toFixed(2)
+        Number(square_feet.replace(/,/g, ''))
+      ).toFixed(2)
     }
 
     if (property.lot_size_area) {
@@ -105,40 +104,49 @@ const ListingMobileView = ({
     description = property.description
 
     const { gallery_image_urls } = listing
+
     listing_images = (
       <ReactSwipe className="carousel" swipeOptions={{ continuous: false }}>
-        {gallery_image_urls.map((gallery_image_url, i) =>
+        {gallery_image_urls.map((gallery_image_url, i) => (
           <div key={`gallery-image-${gallery_image_url}${i}`}>
             <div
               style={S(
-                `w-100p h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(${listing_util.getResizeUrl(
-                  gallery_image_url
-                )}?w=500)`
+                `w-100p h-300
+                pull-left
+                text-center
+                bg-efefef bg-cover bg-center
+                bg-url(${listing_util.getResizeUrl(gallery_image_url)}
+                ?w=500)`
               )}
             />
           </div>
-        )}
+        ))}
       </ReactSwipe>
     )
 
     // Cache images for uninteruted scroll
-    const listing_images_cached = gallery_image_urls.map((image_url, i) =>
+    const listing_images_cached = gallery_image_urls.map((image_url, i) => (
       <img
+        alt="gallery"
         key={`image-${i}`}
         src={`${listing_util.getResizeUrl(image_url)}?w=500`}
         style={S('w-0 h-0')}
       />
-    )
+    ))
 
-    listing_subtitle = `${listing.property.address.city}, ${listing.property
-      .address.state} ${listing.property.address.postal_code}`
+    listing_subtitle = `${listing.property.address.city}, ${listing.property.address
+      .state} ${listing.property.address.postal_code}`
 
     const status_color = listing_util.getStatusColor(listing.status)
 
     let sold_date
+
     if (listing.close_date) {
       const sold_date_obj = helpers.friendlyDate(listing.close_date)
-      sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
+
+      sold_date = `${sold_date_obj.month} 
+      ${sold_date_obj.date}, 
+      ${sold_date_obj.year}`
     }
 
     const listing_status_indicator = (
@@ -146,9 +154,7 @@ const ListingMobileView = ({
         className="pull-left"
         style={S('bg-ebeef1 relative t-7 br-100 pt-11 h-35 pl-36 pr-15 mr-15')}
       >
-        <span
-          style={S(`mr-5 font-46 l-10 t-17n absolute color-${status_color}`)}
-        >
+        <span style={S(`mr-5 font-46 l-10 t-17n absolute color-${status_color}`)}>
           &#8226;
         </span>
         <span style={S('font-14 relative t-3n')}>
@@ -179,6 +185,7 @@ const ListingMobileView = ({
     // }
 
     let mls_link
+
     if (mls_number) {
       mls_link = (
         <span>
@@ -189,6 +196,7 @@ const ListingMobileView = ({
     }
 
     let lot_size_area
+
     if (lot_size) {
       lot_size_area = (
         <span>
@@ -201,18 +209,24 @@ const ListingMobileView = ({
     // Agent info
     if (brand_agent) {
       let profile_image_area
+
       if (brand_agent.cover_image_url) {
         profile_image_area = (
-          <img style={S('w-100p')} src={brand_agent.cover_image_url} />
+          <div style={{ textAlign: 'center' }}>
+            <img
+              alt="agent"
+              style={{ maxWidth: '100%' }}
+              src={brand_agent.cover_image_url}
+            />
+          </div>
         )
       }
 
       let phone_area
+
       if (brand_agent.phone_number) {
         phone_area = (
-          <div style={S('font-15 mb-5')}>
-            M: {brand_agent.phone_number}
-          </div>
+          <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
         )
       }
 
@@ -233,21 +247,18 @@ const ListingMobileView = ({
                   )}) bg-center w-20 h-20 pull-left mr-10`
                 )}
               />
-              <div style={S('pull-left')}>
-                {Brand.message('office_title')}
-              </div>
+              <div style={S('pull-left')}>{Brand.message('office_title')}</div>
               <div className="clearfix" />
             </div>
             {phone_area}
-            <div style={S('font-15 mb-5')}>
-              E: {brand_agent.email}
-            </div>
+            <div style={S('font-15 mb-5')}>E: {brand_agent.email}</div>
           </div>
         </div>
       )
     }
 
     let list_agent_area
+
     if (user && user.user_type === 'Agent') {
       const email_style = {
         ...S('font-15 mb-20'),
@@ -256,11 +267,10 @@ const ListingMobileView = ({
 
       // TODO New Listing Info
       let showing_instructions
+
       if (listing.showing_instructions) {
         showing_instructions = (
-          <div style={S('font-15 mb-5')}>
-            {showing_instructions}
-          </div>
+          <div style={S('font-15 mb-5')}>{showing_instructions}</div>
         )
       }
 
@@ -275,24 +285,21 @@ const ListingMobileView = ({
               {listing.list_agent_full_name}, Seller Agent
             </span>
           </div>
-          <div style={S('font-15 mb-5')}>
-            {listing.list_agent_direct_work_phone}
-          </div>
-          <div style={S('font-15 mb-5')}>
-            {listing.list_office_name}
-          </div>
+          <div style={S('font-15 mb-5')}>{listing.list_agent_direct_work_phone}</div>
+          <div style={S('font-15 mb-5')}>{listing.list_office_name}</div>
           {showing_instructions}
           <div style={email_style}>
             <a
-              href={`mailto:${listing.list_agent_email}?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
+              href={`mailto:${listing.list_agent_email}
+              ?subject=Your listing on Rechat.com
+              &body=I saw your listing (${listing_title}) on Rechat.com and 
+              I'm interested in getting more information.`}
               style={S('color-748090')}
             >
               {listing.list_agent_email}
             </a>
           </div>
-          <div
-            style={S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5')}
-          />
+          <div style={S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5')} />
         </div>
       )
     }
@@ -300,6 +307,7 @@ const ListingMobileView = ({
     let latitude
     let longitude
     let location_area
+
     if (listing.property.address.location) {
       latitude = listing.property.address.location.latitude
       longitude = listing.property.address.location.longitude
@@ -346,11 +354,10 @@ const ListingMobileView = ({
     }
 
     let asking_price_area
+
     if (listing.close_price && user && user.user_type === 'Client') {
       asking_price_area = (
-        <span style={S('font-14 relative color-ccc fw-400')}>
-          (Asking price)
-        </span>
+        <span style={S('font-14 relative color-ccc fw-400')}>(Asking price)</span>
       )
     }
 
@@ -411,9 +418,7 @@ const ListingMobileView = ({
           <div>
             <Col xs={12}>
               <div style={S('fw-600 font-18 mb-10')}>Description</div>
-              <div style={S('color-4a4a4a font-18 mb-20 pr-30')}>
-                {description}
-              </div>
+              <div style={S('color-4a4a4a font-18 mb-20 pr-30')}>{description}</div>
             </Col>
             <div className="clearfix" />
           </div>
@@ -423,17 +428,18 @@ const ListingMobileView = ({
                 <div style={S('mb-20')}>
                   <div style={S('fw-600 font-18 mb-10')}>Cost Breakdown</div>
                   {renderFeatures('Price/sqt', `$${price_sq_foot}`)}
-                  {renderFeatures('Unexempt Taxes', listing.unexempt_taxes ? (
-                    `$${listing.unexempt_taxes}`
-                  ) : (
-                    '0'
-                  ))}
-                  {renderFeatures('HOA Fee', listing.association_fee ? (
-                    listing.association_fee
-                  ) : (
-                    '0'
-                  ))}
-                  {renderFeatures('HOA Frequency', listing.association_fee_frequency)}
+                  {renderFeatures(
+                    'Unexempt Taxes',
+                    listing.unexempt_taxes ? `$${listing.unexempt_taxes}` : '0'
+                  )}
+                  {renderFeatures(
+                    'HOA Fee',
+                    listing.association_fee ? listing.association_fee : '0'
+                  )}
+                  {renderFeatures(
+                    'HOA Frequency',
+                    listing.association_fee_frequency
+                  )}
                   {renderFeatures('HOA Includes', listing.association_fee_includes)}
                 </div>
               </div>
@@ -447,12 +453,13 @@ const ListingMobileView = ({
                 {renderFeatures('MLS#', listing.mls_number)}
                 {renderFeatures('Possession', listing.possession)}
                 {renderFeatures('Days On Market', listing_util.getDOM(listing.dom))}
-                {renderFeatures('Current Days On Market', listing_util.getDOM(listing.cdom))}
+                {renderFeatures(
+                  'Current Days On Market',
+                  listing_util.getDOM(listing.cdom)
+                )}
               </div>
               <div style={S('pr-20')}>
-                <div style={S('fw-600 font-18 mb-10')}>
-                  Amenities & Utilities
-                </div>
+                <div style={S('fw-600 font-18 mb-10')}>Amenities & Utilities</div>
                 {renderFeatures('Pool', property.pool_yn)}
                 {renderFeatures('Pool Features', property.pool_features)}
                 {renderFeatures('Handicap Amenities', property.handicap_yn)}
@@ -465,8 +472,14 @@ const ListingMobileView = ({
             <div style={S('font-15')}>
               <div style={S('pr-20')}>
                 <div style={S('fw-600 font-18 mb-10')}>All Features</div>
-                {renderFeatures('Parking/Garage', property.parking_spaces_garage ? 'Yes' : 'No')}
-                {renderFeatures('Garage Spaces', property.parking_spaces_covered_total)}
+                {renderFeatures(
+                  'Parking/Garage',
+                  property.parking_spaces_garage ? 'Yes' : 'No'
+                )}
+                {renderFeatures(
+                  'Garage Spaces',
+                  property.parking_spaces_covered_total
+                )}
                 {renderFeatures('Interior Features', property.interior_features)}
                 {renderFeatures('Alarm/Security', property.security_features)}
                 {renderFeatures('Flooring', property.flooring)}
@@ -480,10 +493,19 @@ const ListingMobileView = ({
               <div style={S('pr-20 mb-20')}>
                 <div style={S('fw-600 font-18 mb-10')}>Schools</div>
                 {renderFeatures('School District', property.school_district)}
-                {renderFeatures('Elementary School', property.elementary_school_name)}
+                {renderFeatures(
+                  'Elementary School',
+                  property.elementary_school_name
+                )}
                 {renderFeatures('Middle School', property.middle_school_name)}
-                {renderFeatures('Junior High School', property.junior_high_school_name)}
-                {renderFeatures('Senior High School', property.senior_high_school_name)}
+                {renderFeatures(
+                  'Junior High School',
+                  property.junior_high_school_name
+                )}
+                {renderFeatures(
+                  'Senior High School',
+                  property.senior_high_school_name
+                )}
               </div>
               <div className="clearfix" />
             </div>
@@ -494,9 +516,7 @@ const ListingMobileView = ({
     )
   }
 
-  const viewer_wrap_style = S(
-    'absolute h-100p bg-fff t-0 l-0 z-1000 ml-0 w-100p'
-  )
+  const viewer_wrap_style = S('absolute h-100p bg-fff t-0 l-0 z-1000 ml-0 w-100p')
   const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
 
   // let join_area
@@ -528,9 +548,11 @@ const ListingMobileView = ({
         }}
         className="tk-calluna-sans text-primary"
       >
-        {Brand.asset('site_logo_wide')
-          ? <img style={S('w-100p')} src={Brand.asset('site_logo_wide')} />
-          : 'Rechat'}
+        {Brand.asset('site_logo_wide') ? (
+          <img alt="brand" style={S('w-100p')} src={Brand.asset('site_logo_wide')} />
+        ) : (
+          'Rechat'
+        )}
       </a>
     </div>
   )
@@ -606,25 +628,26 @@ const ListingMobileView = ({
   // }
 
   let brand_agent_footer
+
   if (brand_agent) {
     let profile_image_area
+
     if (brand_agent.cover_image_url) {
       profile_image_area = (
         <div
           style={S(
-            `w-300 h-300 center-block br-300 bg-cover bg-top bg-url(${brand_agent.cover_image_url})`
+            `w-300 h-300 
+            center-block br-300 
+            bg-cover bg-top bg-url(${brand_agent.cover_image_url})`
           )}
         />
       )
     }
 
     let phone_area
+
     if (brand_agent.phone_number) {
-      phone_area = (
-        <div style={S('font-15 mb-5')}>
-          M: {brand_agent.phone_number}
-        </div>
-      )
+      phone_area = <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
     }
 
     brand_agent_area = (
@@ -650,9 +673,7 @@ const ListingMobileView = ({
             <div className="clearfix" />
           </div>
           {phone_area}
-          <div style={S('font-15 mb-5')}>
-            E: {brand_agent.email}
-          </div>
+          <div style={S('font-15 mb-5')}>E: {brand_agent.email}</div>
         </div>
         <div style={S('font-22 color-fff')} className="lato">
           Love this home? I can help you.
@@ -706,12 +727,12 @@ const ListingMobileView = ({
       {left_area}
       {main_content}
       {brand_agent_footer}
-      {/*<ShareModal
+      {/* <ShareModal
         listing={listing}
         user={user}
         isActive={shareModalIsActive}
         onHide={onHideShareModal}
-      />*/}
+      /> */}
     </div>
   )
 }

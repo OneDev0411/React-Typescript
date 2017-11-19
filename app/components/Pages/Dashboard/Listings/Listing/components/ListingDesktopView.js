@@ -87,17 +87,21 @@ const ListingDesktopView = ({
   const brand_agent = listing.proposed_agent
 
   let viewer_width = 0
+
   if (typeof window !== 'undefined') {
     viewer_width = window.innerWidth
+
     if (user && !data.is_widget && container !== 'modal') {
       viewer_width -= 70
     }
   }
 
   let current_slide
+
   if (listing) {
     current_slide = listing.current_slide
   }
+
   if (!current_slide) {
     current_slide = 0
   }
@@ -125,11 +129,7 @@ const ListingDesktopView = ({
   }
 
   let listing_images = (
-    <div
-      style={S(
-        'bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292'
-      )}
-    >
+    <div style={S('bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292')}>
       No image
     </div>
   )
@@ -198,27 +198,19 @@ const ListingDesktopView = ({
           >
             <div
               onClick={() => showModalGallery(gallery_image_url[0])}
-              style={S(
-                `${carouselItemDivStyle} bg-url(${gallery_image_url[0]})`
-              )}
+              style={S(`${carouselItemDivStyle} bg-url(${gallery_image_url[0]})`)}
             />
             <div
               onClick={() => showModalGallery(gallery_image_url[1])}
-              style={S(
-                `${carouselItemDivStyle} bg-url(${gallery_image_url[1]})`
-              )}
+              style={S(`${carouselItemDivStyle} bg-url(${gallery_image_url[1]})`)}
             />
             <div
               onClick={() => showModalGallery(gallery_image_url[2])}
-              style={S(
-                `${carouselItemDivStyle} bg-url(${gallery_image_url[2]})`
-              )}
+              style={S(`${carouselItemDivStyle} bg-url(${gallery_image_url[2]})`)}
             />
             <div
               onClick={() => showModalGallery(gallery_image_url[3])}
-              style={S(
-                `${carouselItemDivStyle} bg-url(${gallery_image_url[3]})`
-              )}
+              style={S(`${carouselItemDivStyle} bg-url(${gallery_image_url[3]})`)}
             />
           </CarouselItem>
         ))}
@@ -229,11 +221,13 @@ const ListingDesktopView = ({
     const listing_images_cached = gallery_image_urls.map((image_url, i) => (
       <div key={`cached-images-${i}`} style={S('w-0 h-0')}>
         <img
+          alt="gallery"
           key={`image-800-${i}`}
           src={`${image_url}?w=800`}
           style={S('w-0 h-0')}
         />
         <img
+          alt="gallery"
           key={`image-1200-${i}`}
           src={`${image_url}?w=1200`}
           style={S('w-0 h-0')}
@@ -241,14 +235,16 @@ const ListingDesktopView = ({
       </div>
     ))
 
-    listing_subtitle = `${listing.property.address.city}, ${listing.property
-      .address.state} ${listing.property.address.postal_code}`
+    listing_subtitle = `${listing.property.address.city}, ${listing.property.address
+      .state} ${listing.property.address.postal_code}`
 
     const status_color = listing_util.getStatusColor(listing.status)
 
     let sold_date
+
     if (listing.close_date) {
       const sold_date_obj = helpers.friendlyDate(listing.close_date)
+
       sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
     }
 
@@ -256,7 +252,11 @@ const ListingDesktopView = ({
       <div
         className="pull-left"
         style={S(
-          `border-1-solid-${status_color} font-14 color-fff relative br-3 pt-5 pb-5 pl-10 pr-10 mt-3 bg-${status_color}`
+          `relative 
+          font-14 
+          br-3 pt-5 pb-5 pl-10 pr-10 mt-3 
+          border-1-solid-${status_color} 
+          bg-${status_color} color-fff`
         )}
       >
         {listing.status} {sold_date}
@@ -281,6 +281,7 @@ const ListingDesktopView = ({
     const tooltip = <Tooltip id="copied-tooltip">Copied</Tooltip>
 
     let mls_link
+
     if (mls_number) {
       mls_link = (
         <span>
@@ -304,6 +305,7 @@ const ListingDesktopView = ({
     }
 
     let lot_size_area
+
     if (lot_size) {
       lot_size_area = (
         <span>
@@ -316,13 +318,21 @@ const ListingDesktopView = ({
     // Agent info
     if (brand_agent) {
       let profile_image_area
+
       if (brand_agent.cover_image_url) {
         profile_image_area = (
-          <img style={S('w-100p')} src={brand_agent.cover_image_url} />
+          <div style={{ textAlign: 'center' }}>
+            <img
+              alt="agent"
+              style={{ maxWidth: '100%' }}
+              src={brand_agent.cover_image_url}
+            />
+          </div>
         )
       }
 
       let phone_area
+
       if (brand_agent.phone_number) {
         phone_area = (
           <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
@@ -330,7 +340,7 @@ const ListingDesktopView = ({
       }
 
       brand_agent_area = (
-        <div style={S('color-bfc3c7 w-100p text-left relative')}>
+        <div style={S('color-bfc3c7 text-left relative')}>
           {profile_image_area}
           <div style={S('bg-263445 p-20 w-100p')}>
             <div style={S('font-18 mb-5 color-fff')}>
@@ -357,6 +367,7 @@ const ListingDesktopView = ({
     }
 
     let list_agent_area
+
     if (user && user.user_type === 'Agent') {
       const email_style = {
         ...S('font-15 mb-20'),
@@ -365,6 +376,7 @@ const ListingDesktopView = ({
 
       // TODO New Listing Info
       let showing_instructions
+
       if (listing.showing_instructions) {
         showing_instructions = (
           <div style={S('font-15 mb-5')}>{showing_instructions}</div>
@@ -382,27 +394,27 @@ const ListingDesktopView = ({
               {listing.list_agent_full_name}, Seller Agent
             </span>
           </div>
-          <div style={S('font-15 mb-5')}>
-            {listing.list_agent_direct_work_phone}
-          </div>
+          <div style={S('font-15 mb-5')}>{listing.list_agent_direct_work_phone}</div>
           <div style={S('font-15 mb-5')}>{listing.list_office_name}</div>
           {showing_instructions}
           <div style={email_style}>
             <a
-              href={`mailto:${listing.list_agent_email}?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
+              href={`mailto:${listing.list_agent_email}
+              ?subject=Your listing on Rechat.com&body=
+              I saw your listing (${listing_title}) on Rechat.com and 
+              I'm interested in getting more information.`}
               style={S('color-748090')}
             >
               {listing.list_agent_email}
             </a>
           </div>
-          <div
-            style={S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5')}
-          />
+          <div style={S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5')} />
         </div>
       )
     }
 
     let listing_map_small
+
     if (listing.property.address.location) {
       const center = {
         lat: listing.property.address.location.latitude,
@@ -444,6 +456,7 @@ const ListingDesktopView = ({
     }
 
     let asking_price_area
+
     if (listing.close_price && user && user.user_type === 'Client') {
       asking_price_area = (
         <span style={S('font-28 relative t-5n color-ccc fw-400')}>
@@ -486,8 +499,8 @@ const ListingDesktopView = ({
                       <div style={S('text-center w-50p pull-left')}>
                         <a
                           target="_blank"
-                          href={`http://maps.google.com/?q=${listing.property
-                            .address.geo_source_formatted_address_google}`}
+                          href={`http://maps.google.com/?q=${listing.property.address
+                            .geo_source_formatted_address_google}`}
                         >
                           Google Maps
                         </a>
@@ -496,11 +509,10 @@ const ListingDesktopView = ({
                       <div style={S('text-center w-50p pull-left')}>
                         <a
                           target="_blank"
-                          href={`http://maps.google.com/?q=${listing.property
-                            .address
+                          href={`http://maps.google.com/?q=${listing.property.address
                             .geo_source_formatted_address_google}&layer=c&cbll=${listing
-                            .property.address.location.latitude},${listing
-                            .property.address.location.longitude}`}
+                            .property.address.location.latitude},${listing.property
+                            .address.location.longitude}`}
                         >
                           Street View
                         </a>
@@ -533,10 +545,7 @@ const ListingDesktopView = ({
                   <div style={S('font-15 color-4a4a4a mb-10')}>
                     <span>{bedroom_count} Beds</span>
                     &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-                    <span
-                      data-balloon-pos="down"
-                      data-balloon={bathroomBaloonText}
-                    >
+                    <span data-balloon-pos="down" data-balloon={bathroomBaloonText}>
                       {bathroom_count} Baths
                     </span>
                     &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
@@ -553,15 +562,11 @@ const ListingDesktopView = ({
                 <div style={S('mb-30 font-15')}>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('mb-30')}>
-                      <div style={S('fw-600 mb-10 font-18')}>
-                        Cost Breakdown
-                      </div>
+                      <div style={S('fw-600 mb-10 font-18')}>Cost Breakdown</div>
                       {renderFeatures('Price/sqt', `$${price_sq_foot}`)}
                       {renderFeatures(
                         'Unexempt Taxes',
-                        listing.unexempt_taxes
-                          ? `$${listing.unexempt_taxes}`
-                          : '0'
+                        listing.unexempt_taxes ? `$${listing.unexempt_taxes}` : '0'
                       )}
                       {renderFeatures(
                         'HOA Fee',
@@ -580,10 +585,7 @@ const ListingDesktopView = ({
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('fw-600 mb-10 font-18')}>Key Facts</div>
                     {renderFeatures('Year Built', property.year_built)}
-                    {renderFeatures(
-                      'Style of House',
-                      property.architectural_style
-                    )}
+                    {renderFeatures('Style of House', property.architectural_style)}
                     {renderFeatures('Subdivition', property.subdivition_name)}
                     {renderFeatures('Acres', property.lot_size_area)}
                     {renderFeatures('Stories', property.number_of_stories)}
@@ -638,40 +640,25 @@ const ListingDesktopView = ({
                         'Interior Features',
                         property.interior_features
                       )}
-                      {renderFeatures(
-                        'Alarm/Security',
-                        property.security_features
-                      )}
+                      {renderFeatures('Alarm/Security', property.security_features)}
                       {renderFeatures('Flooring', property.flooring)}
                     </div>
                   </div>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('h-35')} />
-                    {renderFeatures(
-                      'Exterior Features',
-                      property.exterior_features
-                    )}
-                    {renderFeatures(
-                      'Construction',
-                      property.construction_materials
-                    )}
+                    {renderFeatures('Exterior Features', property.exterior_features)}
+                    {renderFeatures('Construction', property.construction_materials)}
                     {renderFeatures('Foundation', property.foundation_details)}
                     {renderFeatures('Roof', property.roof)}
                   </div>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('fw-600 font-18 mb-10')}>Schools</div>
-                    {renderFeatures(
-                      'School District',
-                      property.school_district
-                    )}
+                    {renderFeatures('School District', property.school_district)}
                     {renderFeatures(
                       'Elementary School',
                       property.elementary_school_name
                     )}
-                    {renderFeatures(
-                      'Middle School',
-                      property.middle_school_name
-                    )}
+                    {renderFeatures('Middle School', property.middle_school_name)}
                     {renderFeatures(
                       'Junior High School',
                       property.junior_high_school_name
@@ -698,6 +685,7 @@ const ListingDesktopView = ({
   let viewer_wrap_style = S(
     `absolute h-100p bg-fff t-0 l-0 z-10 ml-70 w-${viewer_width}`
   )
+
   if (!user || data.is_widget) {
     viewer_wrap_style = {
       ...viewer_wrap_style,
@@ -710,6 +698,7 @@ const ListingDesktopView = ({
   const nav_bar_style = S('mb-0 p-0 h-54 pt-7 w-100p')
 
   let modal_gallery_area
+
   if (galleryModalIsActive) {
     const gallery_image_urls = listing.gallery_image_urls
 
@@ -730,7 +719,9 @@ const ListingDesktopView = ({
           <CarouselItem key={`gallery-image-${gallery_image_url[0]}${i}`}>
             <div
               style={S(
-                `w-100p h-500 pull-left text-center bg-efefef bg-cover bg-center bg-url(${gallery_image_url})`
+                `w-100p h-500 
+                pull-left text-center 
+                bg-efefef bg-cover bg-center bg-url(${gallery_image_url})`
               )}
             />
           </CarouselItem>
@@ -744,6 +735,7 @@ const ListingDesktopView = ({
     display: 'inline-block',
     verticalAlign: 'middle'
   }
+
   if (user) {
     left_area = (
       <button
@@ -775,6 +767,7 @@ const ListingDesktopView = ({
   }
 
   let right_area
+
   if (user && Object.keys(listing).length > 0) {
     const login_btn_color = Brand.color('primary', '006aff')
 
@@ -805,9 +798,11 @@ const ListingDesktopView = ({
 
   if (Brand.asset('site_logo_wide')) {
     const host = `https://${window.location.host}`
+
     brand_logo = (
       <a href={host}>
         <img
+          alt="brand"
           style={S('maxw-200 maxh-35')}
           src={Brand.asset('site_logo_wide')}
         />
@@ -819,6 +814,7 @@ const ListingDesktopView = ({
   let token
   let contact_info
   let claim_account_message
+
   if (data.location && data.location.query && data.location.query.token) {
     token = data.location.query.token
   }
@@ -832,8 +828,8 @@ const ListingDesktopView = ({
 
     claim_account_message = (
       <div style={S('bg-2196f3 color-fff w-100p font-17 p-20 text-center')}>
-        This listing was shared to {contact_info}. Claim your account to save
-        this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
+        This listing was shared to {contact_info}. Claim your account to save this
+        listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
         <Link
           style={{
             padding: '1rem',
@@ -865,8 +861,8 @@ const ListingDesktopView = ({
               className="btn btn-primary"
               to={`/signin?redirectTo=${encodeURIComponent(
                 window.location.pathname
-              )}${contact_info ? `&username=${contact_info}` : ''}${window
-                .location.search}`}
+              )}${contact_info ? `&username=${contact_info}` : ''}${window.location
+                .search}`}
             >
               Log in
             </Link>
@@ -878,23 +874,26 @@ const ListingDesktopView = ({
   }
 
   let brand_agent_footer
+
   if (brand_agent) {
     let profile_image_area
+
     if (brand_agent.cover_image_url) {
       profile_image_area = (
         <div
           style={S(
-            `w-300 h-300 center-block br-300 bg-cover bg-top bg-url(${brand_agent.cover_image_url})`
+            `w-300 h-300 
+            center-block br-300 
+            bg-cover bg-top bg-url(${brand_agent.cover_image_url})`
           )}
         />
       )
     }
 
     let phone_area
+
     if (brand_agent.phone_number) {
-      phone_area = (
-        <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
-      )
+      phone_area = <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
     }
 
     brand_agent_area = (
@@ -928,7 +927,12 @@ const ListingDesktopView = ({
       </div>
     )
     brand_agent_footer = (
-      <div style={S('w-100p pt-40 pb-40 bg-263445 text-center')}>
+      <div
+        style={{
+          borderLeft: '1px solid #304054',
+          ...S('w-100p pt-40 pb-40 bg-263445 text-center')
+        }}
+      >
         {brand_agent_area}
       </div>
     )
@@ -977,6 +981,7 @@ export default compose(
   withHandlers({
     hideModal: () => () => {
       const currentLocation = browserHistory.getCurrentLocation()
+
       if (currentLocation.key) {
         browserHistory.goBack()
       } else {
@@ -1044,11 +1049,7 @@ export default compose(
       galleryModalIsActive,
       handleModalGalleryNav
     }) => event => {
-      if (
-        event.keyCode === 27 &&
-        !galleryModalIsActive &&
-        container !== 'modal'
-      ) {
+      if (event.keyCode === 27 && !galleryModalIsActive && container !== 'modal') {
         browserHistory.goBack()
       }
 
@@ -1056,6 +1057,7 @@ export default compose(
         if (event.keyCode === 37) {
           handleModalGalleryNav(null, 'prev')
         }
+
         if (event.keyCode === 39) {
           handleModalGalleryNav(null, 'next')
         }
@@ -1064,14 +1066,11 @@ export default compose(
   }),
   lifecycle({
     componentDidMount() {
-      document.addEventListener(
-        'keydown',
-        this.props.windowKeyDownHandler,
-        false
-      )
+      document.addEventListener('keydown', this.props.windowKeyDownHandler, false)
 
       if (typeof window !== 'undefined') {
         const clipboard = require('clipboard')
+
         new clipboard('.copy-mls')
       }
 
