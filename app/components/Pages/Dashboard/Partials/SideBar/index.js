@@ -120,7 +120,7 @@ const appNavbar = ({
       <InstantChatTrigger />
 
       <ul className="c-app-navbar__list c-app-navbar__list--top">
-        <NavbarItem title="Listings">
+        <NavbarItem title="MLS">
           <Link to="/dashboard/mls">
             <SvgMap
               color={activePath === 'MAP' ? ACTIVE_COLOR : DEFAULT_COLOR}
