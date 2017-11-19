@@ -58,7 +58,7 @@ class Table extends React.Component {
               const fieldCtx = getValue(deal, field)
               const editable = field.canEdit(isBackOffice)
               const disabled = field.disabled === true
-              const approved = context && context.approved_at !== null
+              const approved = (context && context.approved_at !== null) || (field.approved)
 
               return (
                 <div key={`CRITICAL_DATE_${field.key}`}>

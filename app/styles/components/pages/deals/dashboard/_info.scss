@@ -17,7 +17,7 @@
 
   .deal-info-section {
     .deal-info-title {
-      width: calc(100% - #{$col-padding};
+      width: calc(100% - #{$col-padding});
       margin-left: $col-padding / 2;
       font-size: 14px;
       font-weight: 500;
@@ -35,9 +35,9 @@
     height: 34px;
     line-height: 17px;
     border-radius: 3px;
-    color: #2196F3;
+    color: #2196f3;
     border: solid 1px #dde2e6;
-    border-color: #2196F3;
+    border-color: #2196f3;
     font-weight: 500;
     transition: 0.2s all ease-in;
 
@@ -47,7 +47,7 @@
     }
     &:hover {
       color: #fff;
-      background-color: #2196F3;
+      background-color: #2196f3;
     }
   }
 
@@ -62,5 +62,3 @@
     }
   }
 }
-
-

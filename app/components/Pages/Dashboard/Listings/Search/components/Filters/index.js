@@ -62,7 +62,7 @@ const Filters = ({
   activePendingListings
 }) => (
   <div className={`c-filters ${isOpen ? 'c-filters--isOpen' : ''}`}>
-    <div className="c-filters__inner-wrapper">
+    <div className="c-filters__inner-wrapper u-scrollbar--thinner">
       <form
         onSubmit={handleSubmit(onSubmitHandler)}
         className="c-filters__content"

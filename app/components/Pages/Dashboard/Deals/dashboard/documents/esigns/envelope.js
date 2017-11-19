@@ -15,6 +15,7 @@ class Envelope extends React.Component {
 
   getRecipientsNames(recipients) {
     const names = []
+
     recipients.forEach(recp => {
       names.push(recp.user.display_name)
     })
@@ -28,12 +29,14 @@ class Envelope extends React.Component {
 
   getFormUrl() {
     const { user, task, envelope } = this.props
-
   }
 
   openFormViewer() {
     const { deal, envelope, task } = this.props
-    browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}/envelope/${envelope.id}`)
+
+    browserHistory.push(
+      `/dashboard/deals/${deal.id}/form-viewer/${task.id}/envelope/${envelope.id}`
+    )
   }
 
   render() {
@@ -52,23 +55,12 @@ class Envelope extends React.Component {
         })}
         key={`eSign_${envelope.id}`}
       >
-
-        {
-          isVoided &&
-          <span className="void-label">
-            VOIDED
-          </span>
-        }
-
         <div className="image">
           <img src="/static/images/deals/signature.svg" />
         </div>
 
         <div className="name">
-          <span
-            className="link"
-            onClick={() => !isVoided && this.openFormViewer()}
-          >
+          <span className="link" onClick={() => !isVoided && this.openFormViewer()}>
             Sent to {recipientsNames}
           </span>
         </div>
@@ -79,7 +71,7 @@ class Envelope extends React.Component {
             className="deal-esgin-whosigned"
             pullRight
             open={showDropDown && !isVoided}
-            onToggle={(open) => this.toggleShowDropDown(open)}
+            onToggle={open => this.toggleShowDropDown(open)}
           >
             <Button
               bsRole="toggle"
@@ -99,6 +91,8 @@ class Envelope extends React.Component {
             />
           </Dropdown>
         </div>
+
+        {isVoided && <span className="void-label">VOIDED</span>}
       </div>
     )
   }

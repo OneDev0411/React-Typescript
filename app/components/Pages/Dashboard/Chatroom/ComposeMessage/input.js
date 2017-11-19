@@ -22,6 +22,7 @@ export default class MessageInput extends React.Component {
 
   setReference(ref) {
     const { inputRef } = this.props
+
     this.text_message = ref
     inputRef(ref)
   }
@@ -38,6 +39,7 @@ export default class MessageInput extends React.Component {
       el.value += '\n'
 
       const rows = el.value.split('\n')
+
       this.setState({
         rows: rows.length <= 5 ? rows.length : 5
       })

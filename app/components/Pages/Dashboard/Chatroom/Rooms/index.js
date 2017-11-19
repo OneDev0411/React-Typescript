@@ -30,16 +30,19 @@ class Rooms extends React.Component {
     this.setState({ filter })
   }
 
-  onChangeCompose(showComposeModal) {
-    this.setState({ showComposeModal })
-  }
-
   /**
    * toggle full screen chatroom
    */
   fullScreen(e) {
     e.preventDefault()
-    const { activeRoom, changeActiveRoom, toggleInstantMode, showChatbar, rooms } = this.props
+
+    const {
+      activeRoom,
+      changeActiveRoom,
+      toggleInstantMode,
+      showChatbar,
+      rooms
+    } = this.props
 
     // toggle chatroom display
     toggleInstantMode()
@@ -48,6 +51,8 @@ class Rooms extends React.Component {
       // display first room if there is no active room
       if (!activeRoom) {
         let firstRoomId = rooms[Object.keys(rooms)[0]].id
+
+        showChatbar && this.props.toggleChatbar(false)
         changeActiveRoom(firstRoomId)
       }
     }
@@ -75,7 +80,9 @@ class Rooms extends React.Component {
     }
 
     // get partner data
-    const User = room.users.length > 1 ? _.find(room.users, u => u.id !== user.id) : room.users[0]
+    const User = room.users.length > 1
+      ? _.find(room.users, u => u.id !== user.id)
+      : room.users[0]
 
     return <UserAvatar
       userId={User.id}
@@ -94,6 +101,7 @@ class Rooms extends React.Component {
    */
   getRoomTitle(title) {
     const len = 27
+
     if (title.length <= len) {
       return title
     }
@@ -179,7 +187,9 @@ class Rooms extends React.Component {
                     <Col
                       sm={9}
                       xs={9}
-                      className={cn('title vcenter', { hasNotification: room.new_notifications > 0 })}
+                      className={cn('title vcenter',
+                        { hasNotification: room.new_notifications > 0 }
+                      )}
                     >
                       <span>
                         {this.getRoomTitle(room.proposed_title)}

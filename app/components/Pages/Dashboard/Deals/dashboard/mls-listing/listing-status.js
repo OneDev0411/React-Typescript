@@ -69,7 +69,7 @@ class ListingStatus extends React.Component {
     const { showModal, saving } = this.state
     const { deal, isBackOffice } = this.props
     const statusContext = Deal.get.context(deal, 'listing_status')
-    const status = statusContext.text
+    const status = statusContext.text || statusContext
     const approved = statusContext.approved_at !== null
 
     return (

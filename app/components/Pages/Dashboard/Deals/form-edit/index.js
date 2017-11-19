@@ -155,11 +155,11 @@ class FormEdit extends React.Component {
       deal
     } = this.props
 
-    if (!task) {
+    const { incompleteFields, saving } = this.state
+
+    if (!task || saving) {
       return false
     }
-
-    const { incompleteFields } = this.state
 
     // show saving
     this.setState({ saving: true })
@@ -177,7 +177,7 @@ class FormEdit extends React.Component {
       })
 
       // close form
-      this.close()
+      return this.close()
 
     } catch(e) {
       console.log(e)

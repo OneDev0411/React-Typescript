@@ -139,7 +139,7 @@ class Roles extends React.Component {
         }
 
         <AddRole
-          dealId={deal.id}
+          deal={deal}
           allowedRoles={allowedRoles}
         />
       </div>

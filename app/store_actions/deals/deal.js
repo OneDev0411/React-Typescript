@@ -77,7 +77,7 @@ export function updateDeal(deal) {
   }
 }
 
-export function getDeals(user, backoffice = false) {
+export function getDeals(user, backoffice = false, errorOnFail = true) {
   return async (dispatch) => {
     // set user is backoffice or not
     dispatch(isBackOffice(backoffice))
@@ -99,11 +99,13 @@ export function getDeals(user, backoffice = false) {
         dispatch(setDeals(deals))
       ])
     } catch (e) {
-      dispatch({
-        type: types.GET_DEALS_FAILED,
-        name: 'get-deals',
-        message: e.response ? e.response.body.message : null
-      })
+      if (errorOnFail) {
+        dispatch({
+          type: types.GET_DEALS_FAILED,
+          name: 'get-deals',
+          message: e.response ? e.response.body.message : null
+        })
+      }
     }
   }
 }

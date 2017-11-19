@@ -3,9 +3,9 @@ import { FormGroup, FormControl, DropdownButton, MenuItem } from 'react-bootstra
 import roleNames from '../../utils/roles'
 
 const role_names = [
-  // 'BuyerAgent',
+  'BuyerAgent',
   'CoBuyerAgent',
-  // 'SellerAgent',
+  'SellerAgent',
   'CoSellerAgent',
   'Buyer',
   'Seller',
@@ -58,7 +58,7 @@ export default class Form extends React.Component {
   }
 
   render() {
-    const { allowedRoles } = this.props
+    const { deal, allowedRoles } = this.props
     const { form, validation } = this.state
 
     return (
@@ -99,6 +99,15 @@ export default class Form extends React.Component {
           {
             role_names
             .filter(name => {
+              const dealType = deal ? deal.deal_type : null
+
+              if (
+                (name === 'BuyerAgent' && dealType === 'Buying') ||
+                (name === 'SellerAgent' && dealType === 'Selling')
+              ) {
+                return false
+              }
+
               if (!allowedRoles) {
                 return true
               }

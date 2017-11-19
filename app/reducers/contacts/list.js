@@ -9,16 +9,16 @@ export default (state = null, action) => {
     case types.GET_TIMELINE:
       return {
         ...state,
-        ...{[action.id]: {
+        [action.id]: {
           ...state[action.id],
-          ...{timeline: action.timeline}
-        }}
+          timeline: action.timeline
+        }
       }
 
     case types.ADD_CONTACT:
     case types.UPDATE_CONTACT:
       return {
-        ...{[action.contact.id]: action.contact},
+        [action.contact.id]: action.contact,
         ...state
       }
 
@@ -27,10 +27,10 @@ export default (state = null, action) => {
     case types.DELETE_ATTRIBUTE:
       return {
         ...state,
-        ...{[action.id]: {
+        [action.id]: {
           ...action.contact,
-          ...{timeline: state[action.id].timeline}
-        }}
+          timeline: state[action.id].timeline
+        }
       }
 
     default:

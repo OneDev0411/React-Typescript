@@ -26,9 +26,9 @@ class AddRole extends React.Component {
 
   async create() {
     const { form } = this.state
-    const { dealId, createRoles, notify } = this.props
+    const { deal, createRoles, notify } = this.props
 
-    if (!dealId) {
+    if (!deal) {
       return false
     }
 
@@ -37,7 +37,7 @@ class AddRole extends React.Component {
     })
 
     try {
-      await createRoles(dealId, [form])
+      await createRoles(deal.id, [form])
       this.setState({ show: false })
     } catch (e) {
       const { attributes } = e.response.body
@@ -56,7 +56,7 @@ class AddRole extends React.Component {
 
   render() {
     const { show, form, saving } = this.state
-    const { allowedRoles } = this.props
+    const { deal, allowedRoles } = this.props
     const buttonDisabled = (form === null) || (saving === true)
 
     return (
@@ -89,8 +89,9 @@ class AddRole extends React.Component {
 
           <Modal.Body>
             <RoleForm
-              onFormCompleted={form => this.setState({ form })}
+              deal={deal}
               allowedRoles={allowedRoles}
+              onFormCompleted={form => this.setState({ form })}
             />
           </Modal.Body>
 

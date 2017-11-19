@@ -38,12 +38,14 @@ class ContactProfile extends React.Component {
   getContact() {
     const { contacts, params } = this.props
     const contact = contacts[params.id]
+
     return contact || this.goBack()
   }
 
   getStageIndex(contact) {
     const list = ['General', 'UnqualifiedLead', 'QualifiedLead', 'Active', 'PastClient']
     const stage = Contact.get.stage(contact)
+
     return list.indexOf(stage.name)
   }
 
@@ -95,6 +97,7 @@ class ContactProfile extends React.Component {
 
   upsertAttributes(type, attributes) {
     const { params, upsertAttributes } = this.props
+
     upsertAttributes(params.id, type, attributes)
   }
 
@@ -116,6 +119,7 @@ class ContactProfile extends React.Component {
     const emails = Contact.get.emails(contact)
     const phones = Contact.get.phones(contact)
     const birthdays = Contact.get.birthdays(contact)
+    const companies = Contact.get.companies(contact)
 
     return (
       <div className="profile">
@@ -144,6 +148,7 @@ class ContactProfile extends React.Component {
               emails={emails}
               phones={phones}
               birthdays={birthdays}
+              companies={companies}
               onChangeAttribute={(...args) => this.onChangeAttribute(...args)}
               onAddAttribute={(type) => this.onAddAttribute(type)}
             />
