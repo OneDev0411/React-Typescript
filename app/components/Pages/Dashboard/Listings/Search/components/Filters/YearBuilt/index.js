@@ -5,6 +5,7 @@ import MinMaxInputs from '../components/MinMaxInputs'
 
 const currentYear = () => {
   const date = new Date()
+
   return date.getFullYear()
 }
 const maxValue = year =>
@@ -17,9 +18,7 @@ const exactLength = limit => value =>
 const exactLength4 = exactLength(4)
 
 const tooOld = year =>
-  year && Number(year) < 1800
-    ? 'You might be search museums for this!'
-    : undefined
+  year && Number(year) < 1800 ? 'You might search museums for this!' : undefined
 
 const formatHandler = value =>
   value == null ? '' : Number(value.replace(/[^0-9]/g, ''))

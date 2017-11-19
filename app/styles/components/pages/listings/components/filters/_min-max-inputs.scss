@@ -5,7 +5,7 @@
     position: relative;
     display: flex;
     flex-flow: column;
-    width: calc(50% - .5px);
+    width: calc(50% - 0.5px);
     display: inline-block;
 
     &:first-child {
@@ -59,14 +59,16 @@
 
 .c-min-max-inputs__alert {
   width: 100%;
-  padding: .5rem 1rem;
-  color: #fff;
+  padding: 0.5rem 1rem;
+  border: 1px solid;
 
   &.has-error {
-    background-color: #d00023;
+    color: #d00023;
+    border-color: #d00023;
   }
 
   &.has-warning {
-    background-color: #e48b1f;
+    color: #e48b1f;
+    border-color: #e48b1f;
   }
 }
