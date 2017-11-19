@@ -30,19 +30,20 @@ import DealsIcon from '../../Deals/components/sidebar-badge'
 const ACTIVE_COLOR = `#${Brand.color('primary', '3388ff')}`
 const DEFAULT_COLOR = '#4e5c6c'
 
+
 const getActivePath = path => {
+  const checkPath = filter => (path.match(filter) || {}).input
+
   switch (path) {
-    case '/dashboard/mls':
-    case '/dashboard/mls/alerts':
-    case '/dashboard/mls/actives':
+    case checkPath(/\/dashboard\/mls/):
       return 'MAP'
-    case '/dashboard/contacts':
+    case checkPath(/\/dashboard\/contacts/):
       return 'CONTACTS'
     case '/dashboard/notifications':
       return 'NOTIF'
     case '/dashboard/website':
       return 'STORE'
-    case (path.match(/\/dashboard\/deals/) || {}).input:
+    case checkPath(/\/dashboard\/deals/):
       return 'DEALS'
     default:
       return ''
@@ -51,6 +52,7 @@ const getActivePath = path => {
 
 const getNotificationIcon = data => {
   let icon
+
   if (data.new_notifications_count && data.new_notifications_count > 0) {
     icon = (
       <div style={S('absolute t-5n r-15')}>
@@ -62,6 +64,7 @@ const getNotificationIcon = data => {
       </div>
     )
   }
+
   return icon
 }
 
@@ -80,11 +83,7 @@ const IntercomCloseButton = ({ onClick }) => (
 )
 
 const NavbarItem = ({ title, children }) => (
-  <li
-    data-balloon={title}
-    data-balloon-pos="right"
-    className="c-app-navbar__item"
-  >
+  <li data-balloon={title} data-balloon-pos="right" className="c-app-navbar__item">
     {children}
   </li>
 )
@@ -122,9 +121,7 @@ const appNavbar = ({
       <ul className="c-app-navbar__list c-app-navbar__list--top">
         <NavbarItem title="MLS">
           <Link to="/dashboard/mls">
-            <SvgMap
-              color={activePath === 'MAP' ? ACTIVE_COLOR : DEFAULT_COLOR}
-            />
+            <SvgMap color={activePath === 'MAP' ? ACTIVE_COLOR : DEFAULT_COLOR} />
           </Link>
         </NavbarItem>
 
