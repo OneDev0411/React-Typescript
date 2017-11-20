@@ -174,7 +174,8 @@ Deal.getAll = async function(user = {}, backoffice = false) {
     associations += 'associations[]=review.updated_by'
   } else {
     endpoint = `/brands/${user.brand}/deals`
-    associations = 'associations[]=room.attachments'
+    associations = 'associations[]=room.attachments&'
+    associations += 'associations[]=agent.office'
   }
 
   try {

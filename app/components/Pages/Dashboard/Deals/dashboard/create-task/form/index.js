@@ -15,22 +15,22 @@ class CreateForm extends React.Component {
       showFormsModal: false,
       showUploadNameModal: false
     }
-  }
 
-  createNewTaskHandler(form) {
-    if (this.state.creatingForm !== null) {
-      return false
-    }
-
-    this.setState({
-      creatingForm: form
-    }, () => this.createNewTask(form))
+    this.createNewTask = _.debounce(this.createNewTask, 100)
   }
 
   /**
    *
    */
   async createNewTask(form) {
+    if (this.state.creatingForm !== null) {
+      return false
+    }
+
+    this.setState({
+      creatingForm: form
+    })
+
     const { dealId, createFormTask, setSelectedTask, listId } = this.props
 
     // create form
@@ -99,7 +99,7 @@ class CreateForm extends React.Component {
           show={showFormsModal}
           listId={listId}
           creatingForm={creatingForm}
-          onSelectForm={form => this.createNewTaskHandler(form)}
+          onSelectForm={form => this.createNewTask(form)}
           onRequestUpload={file => this.onRequestUpload(file)}
           onClose={() => this.displayForm(false)}
         />
