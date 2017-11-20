@@ -3,6 +3,7 @@ import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { clearUploadFiles } from '../../../../../../store_actions/deals'
 import TasksDropDown from './tasks-dropdown'
+import Checkbox from '../../components/radio'
 
 class UploadModal extends React.Component {
   constructor(props) {
@@ -16,8 +17,20 @@ class UploadModal extends React.Component {
     this.props.clearUploadFiles()
   }
 
+  getModalStyle(filesCount) {
+    if (filesCount <= 5) {
+      return {}
+    }
+
+    return {
+      maxHeight: '400px',
+      overflow: 'auto'
+    }
+  }
+
   render() {
     const { upload } = this.props
+    const filesCount = upload.files.length
 
     return (
       <Modal
@@ -30,30 +43,45 @@ class UploadModal extends React.Component {
           { upload.files.length } Documents
         </Modal.Header>
 
-        <Modal.Body>
-          {
-            upload.files.map((file, id) =>
-              <div className="upload-row" key={id}>
-                <div className="file-name">
-                  <img src="/static/images/deals/document.png" />
-                  { file.name }
-                </div>
+        <Modal.Body
+          style={this.getModalStyle(filesCount)}
+        >
+          <div className="uploads-container">
+            {
+              upload.files.map((file, key) =>
+                <div key={key}>
+                  <div className="upload-row">
+                    <div className="file-name">
+                      <img src="/static/images/deals/document.png" />
+                      { file.name }
+                    </div>
 
-                <div className="file-task">
-                  <TasksDropDown />
-                </div>
+                    <div className="file-task">
+                      <TasksDropDown
+                        shouldDropUp={filesCount > 4 && key + 2 >= filesCount}
+                      />
+                    </div>
 
-                <div className="file-cta">
-                  <Button
-                    bsStyle="primary"
-                    onClick={() => null}
-                  >
-                    Upload
-                  </Button>
+                    <div className="file-cta">
+                      <Button
+                        bsStyle="primary"
+                        onClick={() => null}
+                      >
+                        Upload
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="notify-admin">
+                    <Checkbox
+                      square
+                      selected={true}
+                      title="Notify Office"
+                    />
+                  </div>
                 </div>
-              </div>
-            )
-          }
+              )
+            }
+          </div>
         </Modal.Body>
 
         <Modal.Footer>

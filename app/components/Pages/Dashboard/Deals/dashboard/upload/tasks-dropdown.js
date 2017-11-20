@@ -11,12 +11,22 @@ class DropDownTasks extends React.Component {
     return null
   }
 
+  calculateDropDownPosition() {
+    console.log(this.dropdown)
+  }
+
   render() {
-    const { upload, checklists, tasks } = this.props
+    const { shouldDropUp, upload, checklists, tasks } = this.props
 
     return (
-      <Dropdown id="deal-tasks-dropdown">
-        <Dropdown.Toggle className="deal-task-dropdown">
+      <Dropdown
+        id="deal-tasks-dropdown"
+        dropup={shouldDropUp}
+      >
+        <Dropdown.Toggle
+          className="deal-task-dropdown"
+          onClick={() => this.calculateDropDownPosition()}
+        >
           { this.getSelectedTask() || 'Select a task' }
         </Dropdown.Toggle>
 
@@ -26,7 +36,10 @@ class DropDownTasks extends React.Component {
               const checklist = checklists[chId]
               return (
                 <div key={chId}>
-                  { checklist.title }
+
+                  <div className="checklist">
+                    { checklist.title }
+                  </div>
 
                   {
                     checklist.tasks.map((tId, key) => {
@@ -39,6 +52,10 @@ class DropDownTasks extends React.Component {
                       )
                     })
                   }
+
+                  <MenuItem className="new-task">
+                    Add new task to { checklist.title }
+                  </MenuItem>
                 </div>
               )
             })

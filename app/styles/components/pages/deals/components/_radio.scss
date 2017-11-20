@@ -12,6 +12,11 @@
     background-color: #fff;
     border: solid 1px #e9e9e9;
     text-align: center;
+
+    &.square {
+      border-radius: 3px;
+    }
+
     i {
       color: transparent
     }
