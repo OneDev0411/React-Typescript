@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Dropdown, MenuItem } from 'react-bootstrap'
+import { setUploadAttributes } from '../../../../../../store_actions/deals'
 
 class DropDownTasks extends React.Component {
   constructor(props) {
@@ -8,11 +9,8 @@ class DropDownTasks extends React.Component {
   }
 
   getSelectedTask() {
-    return null
-  }
-
-  calculateDropDownPosition() {
-    console.log(this.dropdown)
+    const { tasks, selectedTask } = this.props
+    return selectedTask ? tasks[selectedTask].title : null
   }
 
   render() {
@@ -23,10 +21,7 @@ class DropDownTasks extends React.Component {
         id="deal-tasks-dropdown"
         dropup={shouldDropUp}
       >
-        <Dropdown.Toggle
-          className="deal-task-dropdown"
-          onClick={() => this.calculateDropDownPosition()}
-        >
+        <Dropdown.Toggle className="deal-task-dropdown">
           { this.getSelectedTask() || 'Select a task' }
         </Dropdown.Toggle>
 
@@ -46,7 +41,10 @@ class DropDownTasks extends React.Component {
                       const task = tasks[tId]
 
                       return (
-                        <MenuItem key={tId}>
+                        <MenuItem
+                          key={tId}
+                          onClick={() => this.props.onSelectTask(tId)}
+                        >
                           { task.title }
                         </MenuItem>
                       )
@@ -74,4 +72,4 @@ function mapStateToProps({ deals }) {
   }
 }
 
-export default connect(mapStateToProps)(DropDownTasks)
+export default connect(mapStateToProps, { setUploadAttributes })(DropDownTasks)

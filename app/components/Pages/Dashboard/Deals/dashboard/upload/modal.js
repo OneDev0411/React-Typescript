@@ -1,7 +1,8 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { clearUploadFiles } from '../../../../../../store_actions/deals'
+import { clearUploadFiles, setUploadAttributes } from '../../../../../../store_actions/deals'
+import ChatModel from '../../../../../../models/Chatroom'
 import TasksDropDown from './tasks-dropdown'
 import Checkbox from '../../components/radio'
 
@@ -10,6 +11,18 @@ class UploadModal extends React.Component {
     super(props)
     this.state = {
 
+    }
+  }
+
+  /**
+   * upload a file to room
+   */
+  async uploadFile(roomId, file) {
+    try {
+      const response = await ChatModel.uploadAttachment(roomId, file)
+      return response.body.data
+    } catch(e) {
+      return null
     }
   }
 
@@ -28,19 +41,31 @@ class UploadModal extends React.Component {
     }
   }
 
+  onClickNotifyAdmin(fileId, file) {
+    console.log('>>>>>>', file)
+    this.props.setUploadAttributes(fileId, {
+      notifyAdmin: file.notifyAdmin ? false : true
+    })
+  }
+
+  onSelectTask(fileId, taskId) {
+    console.log(fileId, taskId)
+    this.props.setUploadAttributes(fileId, { taskId })
+  }
+
   render() {
     const { upload } = this.props
-    const filesCount = upload.files.length
+    const filesCount = _.size(upload.files)
 
     return (
       <Modal
         dialogClassName="modal-deal-upload-files"
-        show={upload.files.length > 0}
+        show={filesCount > 0}
         onHide={() => this.closeModal()}
         backdrop="static"
       >
         <Modal.Header closeButton>
-          { upload.files.length } Documents
+          { filesCount } Documents
         </Modal.Header>
 
         <Modal.Body
@@ -48,8 +73,8 @@ class UploadModal extends React.Component {
         >
           <div className="uploads-container">
             {
-              upload.files.map((file, key) =>
-                <div key={key}>
+              _.map(upload.files, (file, id) =>
+                <div key={id}>
                   <div className="upload-row">
                     <div className="file-name">
                       <img src="/static/images/deals/document.png" />
@@ -58,7 +83,9 @@ class UploadModal extends React.Component {
 
                     <div className="file-task">
                       <TasksDropDown
-                        shouldDropUp={filesCount > 4 && key + 2 >= filesCount}
+                        onSelectTask={(taskId) => this.onSelectTask(id, taskId)}
+                        selectedTask={file.taskId}
+                        shouldDropUp={filesCount > 4 && id + 2 >= filesCount}
                       />
                     </div>
 
@@ -74,8 +101,9 @@ class UploadModal extends React.Component {
                   <div className="notify-admin">
                     <Checkbox
                       square
-                      selected={true}
+                      selected={file.notifyAdmin || false}
                       title="Notify Office"
+                      onClick={() => this.onClickNotifyAdmin(id, file)}
                     />
                   </div>
                 </div>
@@ -103,4 +131,6 @@ function mapStateToProps({ deals }) {
   }
 }
 
-export default connect(mapStateToProps, { clearUploadFiles })(UploadModal)
+export default connect(mapStateToProps, {
+  clearUploadFiles, setUploadAttributes
+})(UploadModal)

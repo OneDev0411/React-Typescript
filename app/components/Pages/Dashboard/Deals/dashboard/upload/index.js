@@ -27,6 +27,7 @@ class UploadDocument extends React.Component {
       dropzoneActive: false
     })
 
+    console.log(files)
     this.props.setUploadFiles(files, deal, task)
 
     // if ((dropzoneActive && noDrop) || files.length === 0) {

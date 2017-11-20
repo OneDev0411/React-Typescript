@@ -177,6 +177,9 @@
     a {
       padding: 15px 15px 15px 11px;
       color: #1d364b;
+      &:focus {
+        outline: none;
+      }
     }
 
     &.new-task {
