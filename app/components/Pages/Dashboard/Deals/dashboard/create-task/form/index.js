@@ -17,17 +17,23 @@ class CreateForm extends React.Component {
     }
   }
 
+  createNewTaskHandler(form) {
+    if (this.state.creatingForm !== null) {
+      return false
+    }
+
+    this.setState({
+      creatingForm: form
+    }, () => this.createNewTask(form))
+  }
+
   /**
    *
    */
   async createNewTask(form) {
     const { dealId, createFormTask, setSelectedTask, listId } = this.props
 
-    if (this.state.creatingForm !== null) {
-      return false
-    }
-
-    this.setState({ creatingForm: form })
+    console.log('>>>>>>')
 
     // create form
     const task = await createFormTask(dealId, form.id, form.name, listId)
@@ -35,9 +41,8 @@ class CreateForm extends React.Component {
     // make this task active
     setSelectedTask(task)
 
-    this.setState({ creatingForm: null }, () => {
-      this.displayForm(false)
-    })
+    this.setState({ creatingForm: null })
+    this.displayForm(false)
   }
 
   /**
@@ -96,7 +101,7 @@ class CreateForm extends React.Component {
           show={showFormsModal}
           listId={listId}
           creatingForm={creatingForm}
-          onSelectForm={form => this.createNewTask(form)}
+          onSelectForm={form => this.createNewTaskHandler(form)}
           onRequestUpload={file => this.onRequestUpload(file)}
           onClose={() => this.displayForm(false)}
         />
