@@ -33,8 +33,6 @@ class CreateForm extends React.Component {
   async createNewTask(form) {
     const { dealId, createFormTask, setSelectedTask, listId } = this.props
 
-    console.log('>>>>>>')
-
     // create form
     const task = await createFormTask(dealId, form.id, form.name, listId)
 
