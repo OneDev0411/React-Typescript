@@ -6,6 +6,7 @@ import forms from './forms'
 import selectedTask from './selected-task'
 import esign from './esign'
 import backoffice from './backoffice'
+import upload from './upload'
 import error from './error'
 
 export default combineReducers({
@@ -16,5 +17,6 @@ export default combineReducers({
   esign,
   backoffice,
   selectedTask,
+  upload,
   error
 })

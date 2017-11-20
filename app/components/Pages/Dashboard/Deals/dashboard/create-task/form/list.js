@@ -3,6 +3,7 @@ import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import Dropzone from 'react-dropzone'
 import cn from 'classnames'
+import Upload from '../../upload'
 
 class Forms extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class Forms extends React.Component {
       return false
     }
 
-    onRequestUpload(files[0])
+    onRequestUpl(files[0])
   }
 
   render() {
@@ -77,15 +78,12 @@ class Forms extends React.Component {
         <Modal.Footer>
           <ul>
             <li className="upload">
-              <Dropzone
-                disableClick={false}
-                multiple={false}
-                accept="application/pdf,image/*"
+              <Upload
+                task={{}}
                 onDrop={files => this.onSelectFile(files)}
-                style={{ width: '100%' }}
               >
                 <i className="fa fa-plus" /> Other
-              </Dropzone>
+              </Upload>
             </li>
           </ul>
         </Modal.Footer>

@@ -1,0 +1,137 @@
+.modal-deal-upload-files {
+  width: 885px;
+
+  .modal-content {
+    border: none;
+  }
+
+  .modal-header {
+    @extend %deal-modal-header;
+  }
+
+  .modal-body {
+    // padding: 0 !important;
+    // margin: 0 !important;
+    @extend %upload-file-container;
+  }
+
+  .modal-footer {
+    button {
+      width: 110px;
+      height: 34px;
+      border-radius: 3px;
+      background-color: #2196f3;
+      border: none;
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+}
+
+%upload-file-container {
+  .upload-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+
+    .file-name {
+      img {
+        width: 16px;
+        margin-right: 10px;
+      }
+
+      width: 52%;
+      height: 40px;
+      line-height: 40px;
+      vertical-align: middle;
+      padding: 0 20px;
+      border-radius: 4px;
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.9);
+      border: solid 1px #dce5eb;
+      font-size: 14px;
+      font-weight: 400;
+      color: #1d364b;
+      overflow: auto;
+    }
+
+    .file-task {
+      width: 32%;
+      padding-left: 16px;
+    }
+
+    .file-cta {
+      width: 16%;
+      text-align: right;
+
+      button {
+        width: 90px;
+        height: 40px;
+        border-radius: 4px;
+        background-color: #dce5eb;
+        border: none;
+        color: #8da2b5;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+}
+
+
+/**
+*
+*/
+.deal-task-dropdown {
+  width: 288px;
+  height: 40px;
+  border-radius: 3px;
+  font-size: 15px;
+  border: solid 1px #e3e3e3;
+  text-align: left;
+  box-shadow: none !important;
+  background-color: transparent !important;
+
+  &:hover, &.open {
+    border: solid 1px #2196f3 !important;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .caret {
+    float: right;
+    margin-top: 7px;
+  }
+}
+
+.deal-task-dropdown-list {
+  padding: 0;
+  width: 288px;
+  border: none !important;
+  border-radius: 4px;
+
+  li {
+    color: #5b6469;
+    font-size: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 0 0 #eaeaea, 0 -1px 0 0 #e9e9e9;
+
+    &:first-child {
+      border-radius: 4px 4px 0 0;
+      border-top: none;
+    }
+
+    &:last-child {
+      border-radius: 0 0 4px 4px;
+    }
+
+    a {
+      padding: 15px 10px;
+    }
+  }
+}

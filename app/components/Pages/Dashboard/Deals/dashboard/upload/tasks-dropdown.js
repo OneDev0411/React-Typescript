@@ -1,0 +1,60 @@
+import React from 'react'
+import { connect } from 'react-redux'
+import { Dropdown, MenuItem } from 'react-bootstrap'
+
+class DropDownTasks extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
+  getSelectedTask() {
+    return null
+  }
+
+  render() {
+    const { upload, checklists, tasks } = this.props
+
+    return (
+      <Dropdown id="deal-tasks-dropdown">
+        <Dropdown.Toggle className="deal-task-dropdown">
+          { this.getSelectedTask() || 'Select a task' }
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu className="deal-task-dropdown-list">
+          {
+            upload.deal.checklists.map((chId, key) => {
+              const checklist = checklists[chId]
+              return (
+                <div key={chId}>
+                  { checklist.title }
+
+                  {
+                    checklist.tasks.map((tId, key) => {
+                      const task = tasks[tId]
+
+                      return (
+                        <MenuItem key={tId}>
+                          { task.title }
+                        </MenuItem>
+                      )
+                    })
+                  }
+                </div>
+              )
+            })
+          }
+        </Dropdown.Menu>
+      </Dropdown>
+    )
+  }
+}
+
+function mapStateToProps({ deals }) {
+  return {
+    upload: deals.upload,
+    checklists: deals.checklists,
+    tasks: deals.tasks
+  }
+}
+
+export default connect(mapStateToProps)(DropDownTasks)
