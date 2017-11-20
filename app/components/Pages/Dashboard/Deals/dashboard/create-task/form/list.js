@@ -59,6 +59,7 @@ class Forms extends React.Component {
                 <li
                   key={`FORM_ITEM_${form.id}_${key}`}
                   onClick={() => onSelectForm(form)}
+                  onDoubleClick={() => null}
                   className={cn({ disabled: creatingForm !== null })}
                 >
                   { form.name }
