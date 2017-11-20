@@ -1,7 +1,6 @@
 import _ from 'underscore'
 import Chatroom from '../../models/Chatroom'
 import types from '../../constants/chatroom'
-import AppStore from '../../stores/AppStore'
 import { addNotification as notify } from 'reapop'
 
 function _getRooms(rooms) {
@@ -18,13 +17,23 @@ export function addMembersToRoom(room) {
   }
 }
 
+export function removeMemberFromRoom(roomId, memberId) {
+  return {
+    type: types.REMOVE_MEMBER,
+    roomId,
+    memberId
+  }
+}
+
 export function getRooms(user) {
   return async dispatch => {
     try {
       const rooms = await Chatroom.getRooms(user)
+
       dispatch(_getRooms(_.indexBy(rooms, 'id')))
+
       return rooms
-    } catch(e) {
+    } catch (e) {
 
     }
   }
@@ -41,9 +50,11 @@ export function createRoom(recipients) {
   return async dispatch => {
     try {
       const room = await Chatroom.createRoom(recipients)
+
       dispatch(addNewRoom(room))
+
       return room.id
-    } catch(e) {
+    } catch (e) {
       dispatch(notify({
         title: 'Can not create room',
         message: e.response ? e.response.body.message : null,
@@ -65,6 +76,7 @@ export function updateRoomTime(roomId) {
 export function fetchAndCreateExistingRoom(roomId) {
   return async dispatch => {
     const room = await Chatroom.getRoomById(roomId)
+
     dispatch(addNewRoom(room))
   }
 }
@@ -73,7 +85,26 @@ export function addRecipients(roomId, recipients) {
   return async dispatch => {
     const response = await Chatroom.addMembers(roomId, recipients)
     const room = response.body.data
+
     dispatch(addMembersToRoom(room))
+  }
+}
+
+export function removeMember(roomId, memberId) {
+  return async dispatch => {
+    const response = await Chatroom.removeMember(roomId, memberId)
+
+    if (response
+      && !response.error
+      && response.body
+      && response.body.status === 'success') {
+      dispatch(removeMemberFromRoom(roomId, memberId))
+    } else {
+      dispatch(notify({
+        message: response.response.body.message,
+        status: 'error'
+      }))
+    }
   }
 }
 

@@ -1,6 +1,4 @@
 import _ from 'underscore'
-import moment from 'moment'
-import config from '../../config/public'
 import Fetch from '../services/fetch'
 
 const Chatroom = {}
@@ -25,6 +23,7 @@ Chatroom.getRooms = async function (user = {}) {
     }
 
     const response = await fetchRooms
+
     return response.body.data
   } catch (e) {
     throw e
@@ -99,6 +98,17 @@ Chatroom.addMembers = async function (roomId, recipients) {
   }
 }
 
+/**
+* remove member of a room
+*/
+Chatroom.removeMember = async function (roomId, memberId) {
+  try {
+    return await new Fetch().delete(`/rooms/${roomId}/users/${memberId}`)
+  } catch (error) {
+    return error
+  }
+}
+
 Chatroom.getMessages = async function (
   id,
   limit = 20,
@@ -109,11 +119,13 @@ Chatroom.getMessages = async function (
 
   if (value) {
     let type = `${value_type}_value`
+
     endpoint += `&${type}=${value}`
   }
 
   try {
     const response = await new Fetch().get(endpoint)
+
     return response.body
   } catch (e) {
     throw e
@@ -132,6 +144,7 @@ Chatroom.uploadAttachment = async function (roomId, file) {
 
 Chatroom.searchRoom = async function (recipients) {
   let qs = []
+
   _.each(recipients, (recp, key) => {
     _.each(recp, item => {
       qs.push(`${key}[]=${item}`)

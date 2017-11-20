@@ -46,6 +46,22 @@ function addRoomMembers(state, action) {
 }
 
 /**
+ * remove member from specific room
+ */
+function removeRoomMember(state, action) {
+  const users
+    = state[action.roomId].users.filter(user => user.id !== action.memberId)
+
+  return {
+    ...state,
+    [action.roomId]: {
+      ...state[action.roomId],
+      users
+    }
+  }
+}
+
+/**
  * update room notification counter when receive a new message
  */
 function updateRoomNotifications(state, action) {
@@ -89,7 +105,8 @@ function addMessageTyping(state, action) {
     typing: {
       ...state[action.roomId].typing,
       ...{
-        [action.userId]: _.find(state[action.roomId].users, user => user.id === action.userId)
+        [action.userId]:
+          _.find(state[action.roomId].users, user => user.id === action.userId)
       }
     }
   })
@@ -120,6 +137,9 @@ export default (state = null, action) => {
 
     case types.ADD_MEMBERS:
       return addRoomMembers(state, action)
+
+    case types.REMOVE_MEMBER:
+      return removeRoomMember(state, action)
 
     case types.REMOVE_ROOM:
       return removeRoom(state, action)

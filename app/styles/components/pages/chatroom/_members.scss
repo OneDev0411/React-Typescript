@@ -2,7 +2,7 @@
   .members-list {
     margin: 20px 0 10px 0;
     .item {
-      margin: 10px 0;
+      padding: 10px;
       .vcenter {
         display: inline-block;
         vertical-align: middle;
@@ -15,6 +15,23 @@
       .status {
         color: #9b9a9b;
         font-size: 13px;
+      }
+      .delete-icon {
+        visibility: hidden;
+        color: #8ca2b6;
+        display: block;
+        text-align: center;
+      }
+    }
+
+    .group-members:hover {
+      background-color: #f4f9fe;
+      .delete-icon {
+        visibility: visible;
+        &:hover {
+          color: #2196f3;
+          cursor: pointer;
+        }
       }
     }
   }
