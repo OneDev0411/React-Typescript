@@ -11,6 +11,7 @@ import DealInfo from './deal-info'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
 import UploadPromptModal from './upload/prompt'
+import PDFSplitterModal from './upload/pdf-splitter'
 import { getEnvelopes } from '../../../../../store_actions/deals'
 
 class DealDetails extends React.Component {
@@ -84,6 +85,7 @@ class DealDetails extends React.Component {
         />
 
         <UploadPromptModal />
+        <PDFSplitterModal />
       </Row>
     )
   }

@@ -17,6 +17,12 @@ export default (state = initialState, action) => {
     case types.CLEAR_UPLOAD_FILES:
       return initialState
 
+    case types.SET_DISPLAY_SPLITTER:
+      return {
+        ...state,
+        displaySplitter: action.display
+      }
+
     case types.SET_UPLOAD_ATTRIBUTES:
       return {
         ...state,

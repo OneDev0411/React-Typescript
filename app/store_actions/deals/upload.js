@@ -15,7 +15,9 @@ export function setUploadFiles(files, deal, task) {
   // I used properties object to keep file attributes, because file object that
   // created by browser shouldn't change, otherwise upload breaks
   files.forEach(file => {
-    indexedFiles[uuid()] = {
+    const uniqId = uuid()
+    indexedFiles[uniqId] = {
+      id: uniqId,
       fileObject: file,
       properties: {}
     }
@@ -34,6 +36,13 @@ export function setUploadAttributes(fileId, attributes) {
     type: types.SET_UPLOAD_ATTRIBUTES,
     fileId,
     attributes
+  }
+}
+
+export function displaySplitter(display) {
+  return {
+    type: types.SET_DISPLAY_SPLITTER,
+    display
   }
 }
 

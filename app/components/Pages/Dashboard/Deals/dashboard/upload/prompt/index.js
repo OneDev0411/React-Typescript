@@ -2,7 +2,8 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import { clearUploadFiles, setUploadAttributes } from '../../../../../../../store_actions/deals'
+import { clearUploadFiles, setUploadAttributes,
+  displaySplitter } from '../../../../../../../store_actions/deals'
 import ChatModel from '../../../../../../../models/Chatroom'
 import TasksDropDown from '../tasks-dropdown'
 import Checkbox from '../../../components/radio'
@@ -84,7 +85,6 @@ class UploadModal extends React.Component {
             {
               _.map(upload.files, (file, id) => {
                 const selectedTask = this.getSelectedTask(file)
-                console.log(selectedTask)
 
                 return (
                   <div key={id}>
@@ -134,7 +134,7 @@ class UploadModal extends React.Component {
         <Modal.Footer>
           <Button
             bsStyle="primary"
-            onClick={() => null}
+            onClick={() => this.props.displaySplitter(true)}
           >
             Split PDFs
           </Button>
@@ -152,5 +152,5 @@ function mapStateToProps({ deals }) {
 }
 
 export default connect(mapStateToProps, {
-  clearUploadFiles, setUploadAttributes
+  clearUploadFiles, setUploadAttributes, displaySplitter
 })(UploadModal)
