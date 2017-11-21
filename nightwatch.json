@@ -30,7 +30,8 @@
       },
 
       "desiredCapabilities": {
-        "browserName": "chrome",
+        "browserName": "firefox",
+        "marionette": true,
         "acceptSslCerts": true,
         "javascriptEnabled": true
       },
@@ -53,10 +54,11 @@
       }
     },
 
-    "firefox": {
+    "chrome": {
       "desiredCapabilities": {
-        "marionette": true,
-        "browserName": "firefox"
+        "browserName": "chrome",
+        "acceptSslCerts": true,
+        "javascriptEnabled": true
       }
     },
 

@@ -35,8 +35,8 @@ module.exports = (settings => {
   }
 
   if (chromeOptions) {
-    settings.test_settings.default.desiredCapabilities = {
-      ...settings.test_settings.default.desiredCapabilities,
+    settings.test_settings.chrome.desiredCapabilities = {
+      ...settings.test_settings.chrome.desiredCapabilities,
       chromeOptions
     }
   }
