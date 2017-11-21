@@ -1,29 +1,45 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Dropdown, MenuItem } from 'react-bootstrap'
+import { Dropdown, MenuItem, Button } from 'react-bootstrap'
 import { setUploadAttributes } from '../../../../../../store_actions/deals'
 
 class DropDownTasks extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      showMenu: false
+    }
   }
 
-  getSelectedTask() {
-    const { tasks, selectedTask } = this.props
-    return selectedTask ? tasks[selectedTask].title : null
+  toggleMenu() {
+    this.setState({
+      showMenu: !this.state.showMenu
+    })
+  }
+
+  onSelectTask(taskId) {
+    this.props.onSelectTask(taskId)
+    this.toggleMenu()
   }
 
   render() {
-    const { shouldDropUp, upload, checklists, tasks } = this.props
+    const { showMenu } = this.state
+    const { shouldDropUp, selectedTask, upload, checklists, tasks } = this.props
 
     return (
       <Dropdown
         id="deal-tasks-dropdown"
         dropup={shouldDropUp}
+        open={showMenu}
+        onToggle={() => this.toggleMenu()}
       >
-        <Dropdown.Toggle className="deal-task-dropdown">
-          { this.getSelectedTask() || 'Select a task' }
-        </Dropdown.Toggle>
+        <Button
+          className="deal-task-dropdown"
+          bsRole="toggle"
+          onClick={e => e.stopPropagation()}
+        >
+          { (selectedTask && selectedTask.title) || 'Select a task' }
+        </Button>
 
         <Dropdown.Menu className="deal-task-dropdown-list">
           {
@@ -37,23 +53,19 @@ class DropDownTasks extends React.Component {
                   </div>
 
                   {
-                    checklist.tasks.map((tId, key) => {
-                      const task = tasks[tId]
-
-                      return (
-                        <MenuItem
-                          key={tId}
-                          onClick={() => this.props.onSelectTask(tId)}
-                        >
-                          { task.title }
-                        </MenuItem>
-                      )
-                    })
+                    checklist.tasks.map((tId, key) =>
+                      <li
+                        key={tId}
+                        onClick={() => this.onSelectTask(tId)}
+                      >
+                        { tasks[tId].title }
+                      </li>
+                    )
                   }
 
-                  <MenuItem className="new-task">
+                  <li className="new-task">
                     Add new task to { checklist.title }
-                  </MenuItem>
+                  </li>
                 </div>
               )
             })

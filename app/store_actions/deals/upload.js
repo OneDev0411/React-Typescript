@@ -10,9 +10,20 @@ function uuid() {
 }
 
 export function setUploadFiles(files, deal, task) {
+  const indexedFiles = {}
+
+  // I used properties object to keep file attributes, because file object that
+  // created by browser shouldn't change, otherwise upload breaks
+  files.forEach(file => {
+    indexedFiles[uuid()] = {
+      fileObject: file,
+      properties: {}
+    }
+  })
+
   return {
     type: types.SET_UPLOAD_FILES,
-    files: _.indexBy(files, () => uuid()),
+    files: indexedFiles,
     deal,
     task
   }
