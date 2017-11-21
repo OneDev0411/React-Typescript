@@ -10,8 +10,7 @@ export default ({
 
   // dont show date-splitter when loading previous messages or when
   // messages are in the same day
-  if (previousMessage === null || previousMessageDate === messageDate)
-    return false
+  if (previousMessage === null || previousMessageDate === messageDate) { return false }
 
   return (
     <div className="date-splitter">

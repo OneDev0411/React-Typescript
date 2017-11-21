@@ -1,13 +1,16 @@
 // Global
 html,
 body,
-#app{
+#app {
   height: 100%;
 }
+
 .intercom-launcher-frame,
-.intercom-launcher-badge-frame {
+.intercom-launcher-badge-frame,
+.intercom-launcher-discovery-frame {
   display: none !important;
 }
+
 .touch-scroll {
   -webkit-overflow-scrolling: touch;
 }

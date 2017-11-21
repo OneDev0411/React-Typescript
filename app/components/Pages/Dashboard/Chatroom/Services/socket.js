@@ -72,8 +72,7 @@ export default class ChatSocket extends Socket {
     const list = messages[room.id] ? messages[room.id].list : null
 
     // do not dispatch when message is created
-    if (!list || list[message.id])
-      return false
+    if (!list || list[message.id]) { return false }
 
     Message.create(room.id, message)
   }

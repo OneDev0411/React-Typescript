@@ -49,7 +49,7 @@ class AgentTable extends BaseTable {
         getText: (deal, rowId, rowsCount) => this.getNextDate(deal, rowId, rowsCount)
       },
       outstanding: {
-        caption: 'OUTSTANDING',
+        caption: 'TASKS',
         className: 'col-md-1 hidden-sm hidden-xs',
         sortable: true,
         getText: deal => this.getOutstandingsCount(deal)

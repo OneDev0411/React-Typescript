@@ -4,13 +4,13 @@ import _ from 'underscore'
 
 const getUser = function (list, index = 0) {
   const key = Object.keys(list)[index]
+
   return list[key].abbreviated_display_name
 }
 
 const MessageTyping = ({
   typing = {}
 }) => {
-
   // get count of typers
   const count = _.size(typing)
 
@@ -28,8 +28,11 @@ const MessageTyping = ({
 
   return (
     <div className="message-typing">
-      <span className="message">{ message }</span>
-      <img src="/static/images/loading-states/three-dots-blue.svg" />
+      <span className="message">{message}</span>
+      <img
+        alt="loading"
+        src="/static/images/loading-states/three-dots-blue.svg"
+      />
     </div>
   )
 }
@@ -38,8 +41,9 @@ function mapStateToProps({ chatroom }, ownProps) {
   const { roomId } = ownProps
   const { rooms } = chatroom
 
-  if (!roomId || !rooms || !rooms[roomId])
+  if (!roomId || !rooms || !rooms[roomId]) {
     return { typing: {} }
+  }
 
   return {
     typing: rooms[roomId].typing

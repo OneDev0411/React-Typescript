@@ -5,6 +5,7 @@ import Tags from '../Tags'
 import Phones from './phones'
 import Emails from './emails'
 import Birthdays from './birthdays'
+import Companies from './companies'
 
 const Details = ({
   contact,
@@ -12,6 +13,7 @@ const Details = ({
   emails,
   phones,
   birthdays,
+  companies,
   onAddAttribute,
   onChangeAttribute,
   defaultTags
@@ -44,6 +46,11 @@ const Details = ({
 
       <Birthdays
         birthdays={birthdays}
+        onChangeAttribute={onChangeAttribute}
+      />
+
+      <Companies
+        companies={companies}
         onChangeAttribute={onChangeAttribute}
       />
 

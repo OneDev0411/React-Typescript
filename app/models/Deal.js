@@ -24,10 +24,11 @@ Deal.get.context = function(deal, field) {
 
   const { mls_context, deal_context } = values
 
-  if (deal_context) {
-    return deal_context
-  } else if (mls_context) {
+  // mls context has priority over deal context, when there is no deal context
+  if (mls_context && !deal_context) {
     return mls_context
+  } else if (deal_context) {
+    return deal_context
   }
 
   return null
@@ -45,7 +46,7 @@ Deal.get.field = function(deal, field) {
     return value
   }
 
-  if (typeof context === 'string') {
+  if (typeof context !== 'object') {
     return context
   }
 
@@ -62,6 +63,10 @@ Deal.get.field = function(deal, field) {
 * a helper that extracts address from deal
 */
 Deal.get.address = function(deal) {
+  if (deal.listing) {
+    return deal.mls_context.full_address
+  }
+
   const unitNumber = Deal.get.field(deal, 'unit_number')
   const city = Deal.get.field(deal, 'city')
   const postalCode = Deal.get.field(deal, 'postal_code')
@@ -83,11 +88,28 @@ Deal.get.address = function(deal) {
     return address.slice(0, -1)
   }
 
+  if (address.length === 0) {
+    return Deal.get.clientNames(deal)
+  }
+
   return address
 }
 
 Deal.get.status = function(deal) {
   return deal.deleted_at ? 'Archived' : Deal.get.field(deal, 'listing_status')
+}
+
+Deal.get.clientNames = function(deal) {
+  const roles = deal.deal_type === 'Buying' ? ['Buyer', 'Tenant'] : ['Seller', 'Landlord']
+  const clients = []
+
+  deal.roles.forEach(item => {
+    if (roles.indexOf(item.role) > -1) {
+      clients.push(item.user.display_name)
+    }
+  })
+
+  return clients.join(', ')
 }
 
 /**
@@ -152,7 +174,8 @@ Deal.getAll = async function(user = {}, backoffice = false) {
     associations += 'associations[]=review.updated_by'
   } else {
     endpoint = `/brands/${user.brand}/deals`
-    associations = 'associations[]=room.attachments'
+    associations = 'associations[]=room.attachments&'
+    associations += 'associations[]=agent.office'
   }
 
   try {

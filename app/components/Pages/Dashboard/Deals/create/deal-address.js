@@ -2,6 +2,9 @@ import React from 'react'
 import ManualAddress from './manual-address'
 import MlsSearch from '../dashboard/mls-listing/search'
 
+const BUYING = 'Buying'
+const SELLING = 'Selling'
+
 export default class DealAddress extends React.Component {
 
   constructor(props) {
@@ -39,7 +42,11 @@ export default class DealAddress extends React.Component {
 
   render() {
     const { showManualAddress, showMlsSearch } = this.state
-    const { dealAddress, onRemoveAddress } = this.props
+    const { display, dealAddress, dealSide, onRemoveAddress } = this.props
+
+    if (!display) {
+      return false
+    }
 
     return (
       <div className="form-section deal-address">
@@ -78,15 +85,19 @@ export default class DealAddress extends React.Component {
             </span>
           </div> :
           <div>
-            <div
-              className="entity-item address new"
-              onClick={() => this.toggleMlsModal()}
-            >
-              <span className="add-item">
-                <span className="icon">+</span>
-                <span className="text">Add Listing</span>
-              </span>
-            </div>
+
+            {
+              dealSide === BUYING &&
+              <div
+                className="entity-item address new"
+                onClick={() => this.toggleMlsModal()}
+              >
+                <span className="add-item">
+                  <span className="icon">+</span>
+                  <span className="text">Add Listing</span>
+                </span>
+              </div>
+            }
 
             <div
               className="entity-item address new"
@@ -94,7 +105,9 @@ export default class DealAddress extends React.Component {
             >
               <span className="add-item">
                 <span className="icon">+</span>
-                <span className="text">Or add address manually</span>
+                <span className="text">
+                  { dealSide === BUYING ? 'Or add address manually': 'Add address' }
+                </span>
               </span>
             </div>
           </div>

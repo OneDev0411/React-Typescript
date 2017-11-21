@@ -76,7 +76,7 @@ class ImageAttachments extends React.Component {
                 onClick={() => {
                   this.setState({
                     currentImage: key,
-                    showLightbox: true,
+                    showLightbox: true
                   })
                 }}
                 src={file.preview_url}
@@ -115,7 +115,7 @@ class PdfAttachments extends React.Component {
 
     return (
       <div className="inline">
-         <PdfModal
+        <PdfModal
           file={{
             type: 'pdf',
             name: selectedFile.name,

@@ -6,7 +6,7 @@ import Items from '../items'
 const table = [
   {
     key: 'sales_price',
-    name: 'Sales Price',
+    name: 'Sold Price',
     dataType: 'currency',
     canEdit: (isBO) => isBO
   }, {

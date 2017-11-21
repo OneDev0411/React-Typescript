@@ -45,6 +45,7 @@ const RenderList = ({
   if (list.length === 0) {
     return false
   }
+
   return (
     <div className={`content ${className}`}>
       <div className="title">

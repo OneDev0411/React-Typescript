@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Header from './header'
 import Documents from '../documents'
-import UploadFile from '../documents/attachments/upload'
+import Upload from '../upload'
 
 import Comments from '../comments'
 import CommentInput from '../comments/input'
@@ -17,8 +17,9 @@ const TaskManager = ({
 
   return (
     <div className="full-width">
-      <UploadFile
+      <Upload
         disableClick={true}
+        deal={deal}
         task={task}
       >
         <div
@@ -43,7 +44,7 @@ const TaskManager = ({
           key={`CM_INPUT_${task.id}`}
           task={task}
         />
-      </UploadFile>
+      </Upload>
     </div>
   )
 }

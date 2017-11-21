@@ -3,6 +3,7 @@ import forms from './forms'
 import esign from './esign'
 import task from './task'
 import checklist from './checklist'
+import upload from './upload'
 import backoffice from './backoffice'
 import error from './error'
 
@@ -14,6 +15,7 @@ new Array(
   ...esign,
   ...task,
   ...checklist,
+  ...upload,
   ...backoffice,
   ...error
 )

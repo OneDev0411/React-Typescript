@@ -9,6 +9,8 @@
   "rules": {
     "no-new": 0,
     "curly": [2, "all"],
+    "no-unused-expressions": ["error", { "allowShortCircuit": true }],
+    "max-len": ["error", 85],
     "comma-dangle": [2, "never"],
     "semi": [2, "never"],
     "camelcase": 0,
@@ -26,7 +28,6 @@
     "react/require-default-props": 0,
     "react/jsx-filename-extension": 0,
     "react/jsx-no-bind": 0,
-    "max-len": 0,
     "react/prefer-stateless-function": 0,
     "react/jsx-wrap-multilines": 0,
     "jsx-a11y/no-static-element-interactions": 0,

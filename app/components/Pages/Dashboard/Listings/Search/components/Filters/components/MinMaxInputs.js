@@ -7,8 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import Label from './Label'
 
-const turnToNumber = value =>
-  value ? Number(value.replace(/[^0-9]/g, '')) : null
+const turnToNumber = value => (value ? Number(value.replace(/[^0-9]/g, '')) : null)
 
 const renderField = ({
   type,
@@ -26,16 +25,9 @@ const renderField = ({
     <label htmlFor={input.name} className="c-min-max-inputs__label">
       {label}
     </label>
-    <input
-      {...input}
-      type={type}
-      className={className}
-      placeholder={placeholder}
-    />
+    <input {...input} type={type} className={className} placeholder={placeholder} />
     {touched &&
-      (error && (
-        <div className="c-min-max-inputs__alert has-error">{error}</div>
-      ))}
+      (error && <div className="c-min-max-inputs__alert has-error">{error}</div>)}
     {touched &&
       (warning && (
         <div className="c-min-max-inputs__alert has-warning">{warning}</div>
@@ -102,10 +94,10 @@ export default compose(
       setMinimumValue(turnToNumber(value))
     },
     validateMinValue: ({ minimumValue, humanNumber }) => value =>
-      value && minimumValue && turnToNumber(value) <= minimumValue
+      value && minimumValue && turnToNumber(value) < minimumValue
         ? `Must be minimum ${humanNumber
-          ? (minimumValue + 1).toLocaleString()
-          : minimumValue + 1}`
+          ? minimumValue.toLocaleString()
+          : minimumValue}`
         : undefined
   })
 )(MinMaxInputs)

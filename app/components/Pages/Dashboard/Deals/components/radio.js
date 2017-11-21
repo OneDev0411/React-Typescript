@@ -2,6 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 
 export default ({
+  square = false,
   selected,
   title,
   onClick = () => null
@@ -11,7 +12,7 @@ export default ({
     onClick={onClick}
   >
     <span
-      className={cn('radio-button', { selected })}
+      className={cn('radio-button', { selected, square })}
     >
       <i className={cn('fa fa-check', { selected })} />
     </span>

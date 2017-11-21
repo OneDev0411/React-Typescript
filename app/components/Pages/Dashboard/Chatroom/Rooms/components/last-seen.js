@@ -20,6 +20,7 @@ class LastSeen extends React.Component {
 
   tick() {
     const { counter } = this.state
+
     this.setState({ counter: counter + 1 })
   }
 

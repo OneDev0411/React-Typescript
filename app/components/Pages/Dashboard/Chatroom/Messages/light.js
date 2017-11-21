@@ -6,7 +6,6 @@ import MessageItem from './message-item'
 import SocketStatus from '../SocketStatus'
 
 class Messages extends React.Component {
-
   constructor(props) {
     super(props)
   }
@@ -35,8 +34,7 @@ class Messages extends React.Component {
     const keys = Object.keys(messages)
     const index = keys.indexOf(msg.id)
 
-    if (index === -1 || !keys[index - 1])
-      return null
+    if (index === -1 || !keys[index - 1]) { return null }
 
     return messages[keys[index - 1]]
   }

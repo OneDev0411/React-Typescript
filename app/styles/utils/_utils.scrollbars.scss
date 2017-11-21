@@ -1,0 +1,34 @@
+@mixin scrollbar($width: 10px, $thumb-bgc: #cfd9e1, $track-bgc: #edf2f5) {
+  ::-webkit-scrollbar {
+    width: $width;
+    height: 0.5em;
+    padding-right: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: $thumb-bgc;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $track-bgc;
+  }
+
+  ::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+}
+
+.u-scrollbar {
+  @include scrollbar();
+}
+
+.u-scrollbar--thinner {
+  @include scrollbar(6px);
+}

@@ -12,8 +12,8 @@ export default ({
         Uploading files - &nbsp;
         {
           message.index === message.count ?
-          <span>(Finished)</span> :
-          <span>({ message.index } from { message.count })</span>
+            <span>(Finished)</span> :
+            <span>({ message.index } from { message.count })</span>
         }
       </strong>
 

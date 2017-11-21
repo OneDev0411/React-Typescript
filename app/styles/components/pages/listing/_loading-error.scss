@@ -1,0 +1,28 @@
+.c-listing__loading-error {
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 2rem;
+
+  // 404 title
+  > h2 {
+    font-size: 9.9rem;
+    font-weight: bold;
+    color: red;
+  }
+
+  > button {
+    margin-top: 3rem;
+    padding: 1rem 3rem;
+    font-size: 1.8rem;
+    color: #fff;
+    border: none;
+    transition: box-shadow 0.3s;
+
+    &:hover {
+      box-shadow: 0 2px 5px #9d9d9d;
+    }
+  }
+}

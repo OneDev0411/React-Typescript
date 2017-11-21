@@ -1,5 +1,5 @@
 import React from 'react'
-import UploadFile from './upload'
+import Upload from '../../upload'
 import FileAttachments from './files'
 
 export default ({
@@ -31,7 +31,8 @@ export default ({
         </div>
       }
 
-      <UploadFile
+      <Upload
+        deal={deal}
         task={task}
         hasAttachments={hasAttachments}
         noDrop={true}

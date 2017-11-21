@@ -10,6 +10,7 @@ import TaskDetail from './task-detail'
 import DealInfo from './deal-info'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
+import UploadModal from './upload/modal'
 import { getEnvelopes } from '../../../../../store_actions/deals'
 
 class DealDetails extends React.Component {
@@ -81,6 +82,8 @@ class DealDetails extends React.Component {
         <ESignCompose
           deal={deal}
         />
+
+        <UploadModal />
       </Row>
     )
   }

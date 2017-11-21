@@ -58,23 +58,23 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { data, user } = this.props
+    const { data, user, dispatch } = this.props
 
     if (user) {
       // load rooms
       this.initialRooms()
 
       // load deals
-      this.initialDeals(user)
+      dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
 
       // load contacts
-      this.initialContacts()
+      dispatch(getContacts())
 
       // load notifications
       this.loadNotifications(data)
 
       // load saved listings
-      this._fetchFavorites(user)
+      dispatch(getFavorites(user))
 
       // set user for full story
       this.setFullStoryUser(user)
@@ -95,6 +95,7 @@ class App extends Component {
 
   static async fetchData(dispatch, params) {
     const { user } = params
+
     return dispatch(getRooms(user))
   }
 
@@ -110,39 +111,13 @@ class App extends Component {
     new DealSocket(user)
   }
 
-  async initialDeals(user) {
-    const { dispatch, deals } = this.props
-
-    if (!deals) {
-      return dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
-    }
-  }
-
   async initialRooms() {
-    let { rooms, dispatch } = this.props
+    const { dispatch } = this.props
 
-    if (!rooms) {
-      rooms = await dispatch(getRooms())
-    }
+    const rooms = await dispatch(getRooms())
 
     // hack for share alert modal -> prepare rooms for it
     AppStore.data.rooms = rooms
-  }
-
-  initialContacts() {
-    const { dispatch, contacts } = this.props
-
-    if (!contacts) {
-      dispatch(getContacts())
-    }
-  }
-
-  _fetchFavorites(user) {
-    const { dispatch, favoritesListings } = this.props
-
-    if (!favoritesListings.length) {
-      dispatch(getFavorites(user))
-    }
   }
 
   checkForMobile() {
@@ -207,6 +182,7 @@ class App extends Component {
           name: brand.name
         }
       }
+
       window.Raven.setUserContext(userData)
     }
   }
@@ -219,7 +195,9 @@ class App extends Component {
 
   createBranchLink() {
     const branch = require('branch-sdk')
+
     branch.init(config.branch.key)
+
     let branch_data = window.branchData
 
     if (!branch_data) {
@@ -245,6 +223,7 @@ class App extends Component {
     }
 
     const branch = require('branch-sdk')
+
     branch.init(config.branch.key)
     branch.banner(
       {
@@ -256,16 +235,15 @@ class App extends Component {
         forgetHide: false,
         downloadAppButtonText: 'GET',
         openAppButtonText: 'OPEN',
-        customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
+        customCSS:
+          '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
       },
       {
         data: {
           type: AppStore.data.user
             ? 'WebBranchBannerClickedUser'
             : 'WebBranchBannerClickedShadowUser',
-          access_token: AppStore.data.user
-            ? AppStore.data.user.access_token
-            : null
+          access_token: AppStore.data.user ? AppStore.data.user.access_token : null
         }
       }
     )
@@ -293,9 +271,8 @@ class App extends Component {
     }
 
     return (
-      <div>
-        {user &&
-        !user.email_confirmed && <VerificationBanner email={user.email} />}
+      <div className="u-scrollbar">
+        {user && !user.email_confirmed && <VerificationBanner email={user.email} />}
 
         {user && navArea}
 
@@ -309,13 +286,11 @@ class App extends Component {
   }
 }
 
-export default connect(
-  ({ user, data, favorites, deals, contacts, chatroom }) => ({
-    data,
-    user,
-    deals: deals.list,
-    rooms: chatroom.rooms,
-    contacts: contacts.list,
-    favoritesListings: selectListings(favorites.listings)
-  })
-)(App)
+export default connect(({ user, data, favorites, deals, contacts, chatroom }) => ({
+  data,
+  user,
+  deals: deals.list,
+  rooms: chatroom.rooms,
+  contacts: contacts.list,
+  favoritesListings: selectListings(favorites.listings)
+}))(App)
