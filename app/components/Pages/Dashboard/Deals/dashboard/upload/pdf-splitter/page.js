@@ -74,13 +74,11 @@ class Page extends React.Component {
           { pageNumber }
         </span>
 
-        <span className="select-page">
-          Add page
-        </span>
+        { this.props.children }
       </div>
     )
   }
 
 }
 
-export default connect(null)(Page)
+export default Page

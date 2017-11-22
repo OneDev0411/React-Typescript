@@ -3,13 +3,11 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
 import Page from './page'
+import { setSplitterDocument, setSplitterPage } from '../../../../../../../store_actions/deals'
 
 class PDF extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      documents: {}
-    }
   }
 
   async componentDidMount() {
@@ -26,26 +24,25 @@ class PDF extends React.Component {
 
     pdfs.forEach(async pdf => {
       const doc = await PDFJS.getDocument(pdf.fileObject.preview)
-
-      this.setState({
-        documents: {
-          ...this.state.documents,
-          [pdf.id]: doc
-        }
-      })
+      this.props.setSplitterDocument(pdf.id, doc)
     })
   }
 
-  render() {
-    const { documents } = this.state
-    const { upload } = this.props
+  onSelectPage(pageNumber, pdfId) {
+    this.props.setSplitterPage(pdfId, pageNumber)
+  }
 
-    // console.log(documents)
+  render() {
+    const { splitter, upload } = this.props
+
     return (
       <div>
         {
-          _.map(documents, (doc, id) =>
-            <div className="pdf-section">
+          _.map(splitter.documents, (doc, id) =>
+            <div
+              key={`pdf-${id}`}
+              className="pdf-section"
+            >
 
               <div className="heading">
                 <span className="page-title">
@@ -62,9 +59,21 @@ class PDF extends React.Component {
                 .map((v, i) => (
                   <Page
                     key={`page-${i}`}
+                    pdfId={id}
                     doc={doc}
                     pageNumber={i + 1}
-                  />
+                  >
+                    {
+                      splitter.pages[`${id}_${i+1}`] ?
+                      <span className="page-cta inuse">In Use</span> :
+                      <span
+                        className="page-cta"
+                        onClick={() => this.onSelectPage(i + 1, id)}
+                      >
+                        Add page
+                      </span>
+                    }
+                  </Page>
                 ))
               }
             </div>
@@ -77,8 +86,9 @@ class PDF extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
+    splitter: deals.splitter,
     upload: deals.upload
   }
 }
 
-export default connect(mapStateToProps)(PDF)
+export default connect(mapStateToProps, { setSplitterPage, setSplitterDocument })(PDF)

@@ -64,13 +64,13 @@ class UploadModal extends React.Component {
   }
 
   render() {
-    const { upload } = this.props
+    const { splitter, upload } = this.props
     const filesCount = _.size(upload.files)
 
     return (
       <Modal
         dialogClassName="modal-deal-upload-files"
-        show={filesCount > 0}
+        show={filesCount > 0 && !splitter.display}
         onHide={() => this.closeModal()}
         backdrop="static"
       >
@@ -147,7 +147,8 @@ class UploadModal extends React.Component {
 function mapStateToProps({ deals }) {
   return {
     tasks: deals.tasks,
-    upload: deals.upload
+    upload: deals.upload,
+    splitter: deals.splitter
   }
 }
 

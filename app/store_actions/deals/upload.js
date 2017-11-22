@@ -1,13 +1,6 @@
 import _ from 'underscore'
 import types from '../../constants/deals'
-
-function uuid() {
-  const s4 = () => Math.floor((1 + Math.random()) * 0x10000)
-    .toString(16)
-    .substring(1)
-
-  return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`
-}
+import uuid from '../../utils/uuid'
 
 export function setUploadFiles(files, deal, task) {
   const indexedFiles = {}
@@ -36,13 +29,6 @@ export function setUploadAttributes(fileId, attributes) {
     type: types.SET_UPLOAD_ATTRIBUTES,
     fileId,
     attributes
-  }
-}
-
-export function displaySplitter(display) {
-  return {
-    type: types.SET_DISPLAY_SPLITTER,
-    display
   }
 }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import PDFS from './pdf'
+import Workspace from './workspace'
 import { displaySplitter } from '../../../../../../../store_actions/deals'
 
 class PDFSplitter extends React.Component {
@@ -10,9 +11,9 @@ class PDFSplitter extends React.Component {
   }
 
   render() {
-    const { upload } = this.props
+    const { splitter, upload } = this.props
 
-    if (upload.displaySplitter !== true) {
+    if (splitter.display !== true) {
       return false
     }
 
@@ -34,6 +35,7 @@ class PDFSplitter extends React.Component {
           </div>
 
           <div className="workspace">
+            <Workspace />
           </div>
         </div>
       </div>
@@ -43,7 +45,8 @@ class PDFSplitter extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
-    upload: deals.upload
+    upload: deals.upload,
+    splitter: deals.splitter
   }
 }
 
