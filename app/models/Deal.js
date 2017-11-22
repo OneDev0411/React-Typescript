@@ -103,6 +103,10 @@ Deal.get.clientNames = function(deal) {
   const roles = deal.deal_type === 'Buying' ? ['Buyer', 'Tenant'] : ['Seller', 'Landlord']
   const clients = []
 
+  if (!deal.roles) {
+    return ''
+  }
+
   deal.roles.forEach(item => {
     if (roles.indexOf(item.role) > -1) {
       clients.push(item.user.display_name)
