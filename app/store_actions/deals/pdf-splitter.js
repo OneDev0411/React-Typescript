@@ -30,3 +30,10 @@ export function deselectSplitterPage(docId, pageNumber) {
     pageNumber
   }
 }
+
+export function setPagePreview(preview) {
+  return {
+    type: types.SET_PAGE_PREVIEW,
+    preview
+  }
+}

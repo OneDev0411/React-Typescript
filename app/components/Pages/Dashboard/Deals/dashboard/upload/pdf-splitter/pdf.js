@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
-import Page from './page'
+import PageThumbnail from './page/thumbnail'
 import { setSplitterDocument, selectSplitterPage } from '../../../../../../../store_actions/deals'
 
 class PDF extends React.Component {
@@ -60,10 +60,10 @@ class PDF extends React.Component {
                   const inUse = typeof splitter.pages[`${id}_${i+1}`] !== 'undefined'
 
                   return (
-                    <Page
+                    <PageThumbnail
+                      key={`page-${i}`}
                       inUse={inUse}
                       canvasClassName={cn({ inUse })}
-                      key={`page-${i}`}
                       pdfId={id}
                       doc={doc}
                       pageNumber={i + 1}
@@ -78,7 +78,7 @@ class PDF extends React.Component {
                           Add page
                         </span>
                       }
-                    </Page>
+                    </PageThumbnail>
                   )
                 })
               }

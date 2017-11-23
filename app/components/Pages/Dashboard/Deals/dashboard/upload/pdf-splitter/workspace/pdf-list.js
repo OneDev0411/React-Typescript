@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
 import { DropTarget } from 'react-dnd'
-import Page from '../page'
+import PageThumbnail from '../page/thumbnail'
 import TasksDropDown from '../../tasks-dropdown'
 import Checkbox from '../../../../components/radio'
 import { deselectSplitterPage } from '../../../../../../../../store_actions/deals'
@@ -39,7 +39,7 @@ class WorkspacePdfList extends React.Component {
       <div className={cn('pdfholder', { canDrop: isOver && canDrop })}>
         {
           _.map(splitter.pages, (page, id) =>
-            <Page
+            <PageThumbnail
               key={`pdf-page-${id}`}
               inUse={true}
               canvasClassName="no-drag"
@@ -53,7 +53,7 @@ class WorkspacePdfList extends React.Component {
               >
                 Remove
               </span>
-            </Page>
+            </PageThumbnail>
           )
         }
       </div>

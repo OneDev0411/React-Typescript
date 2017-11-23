@@ -1,42 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import { DragSource } from 'react-dnd'
-import { selectSplitterPage } from '../../../../../../../store_actions/deals'
-import store from '../../../../../../../stores'
-
-/**
- * Specifies the drag source contract.
- */
-const pageSource = {
-  beginDrag(props) {
-    return {
-      documentId: props.pdfId,
-      pageNumber: props.pageNumber
-    }
-  },
-  canDrag(props, monitor) {
-    return !props.inUse
-  },
-  endDrag(props, monitor, component) {
-    if (!monitor.didDrop()) {
-      return
-    }
-
-    const item = monitor.getItem()
-    store.dispatch(selectSplitterPage(item.documentId, item.pageNumber))
-  }
-}
-
-/**
- * Specifies which props to inject into your component.
- */
-function collect(connect, monitor) {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  }
-}
 
 class Page extends React.Component {
   constructor(props) {
@@ -54,11 +18,11 @@ class Page extends React.Component {
   }
 
   async calculateScale(pageNumber) {
-    const { doc } = this.props
+    const { doc, containerHeight } = this.props
     const page = await doc.getPage(pageNumber)
     const viewport = page.getViewport(1)
 
-    return (158 / viewport.height) * 2
+    return (containerHeight / viewport.height) * 2
   }
 
   /**
@@ -93,9 +57,9 @@ class Page extends React.Component {
   }
 
   render() {
-    const { isDragging, connectDragSource, canvasClassName, pageNumber } = this.props
+    const { pageNumber, canvasClassName } = this.props
 
-    return connectDragSource(
+    return (
       <div
         className="page-container"
         ref={ref => this.container = ref}
@@ -106,15 +70,10 @@ class Page extends React.Component {
           className={cn('page-canvas', canvasClassName)}
         />
 
-        <span className="page-number">
-          { pageNumber }
-        </span>
-
         { this.props.children }
       </div>
     )
   }
-
 }
 
-export default DragSource('SPLITTER_PDF_PAGE', pageSource, collect)(Page)
+export default Page

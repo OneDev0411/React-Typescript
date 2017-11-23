@@ -4,6 +4,7 @@ import cn from 'classnames'
 import { DragDropContextProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import PDFS from './pdf'
+import PagePreview from './page/preview'
 import Workspace from './workspace'
 import { displaySplitter } from '../../../../../../../store_actions/deals'
 
@@ -30,6 +31,11 @@ class PDFSplitter extends React.Component {
             X
           </span>
         </div>
+
+        {
+          splitter.pagePreview &&
+          <PagePreview />
+        }
 
         <DragDropContextProvider backend={HTML5Backend}>
           <div className="splitter-container">

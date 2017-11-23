@@ -14,8 +14,15 @@
   .splitter-container {
     @extend %pdf-splitter-container;
   }
+
+  .page-preview {
+    @extend %pdf-splitter-page-preview;
+  }
 }
 
+/**
+ *
+ */
 %pdf-splitter-header {
   height: 56px;
   line-height: 56px;
@@ -41,6 +48,9 @@
   }
 }
 
+/**
+ *
+ */
 %pdf-splitter-container {
   display: flex;
   background-color: #fff;
@@ -57,7 +67,9 @@
   }
 }
 
-
+/**
+ *
+ */
 %pdf-splitter-pdfs-section {
   max-height: calc(100vh - 56px);
   overflow: scroll;
@@ -94,6 +106,9 @@
   }
 }
 
+/**
+ *
+ */
 %pdf-splitter-workspace-section {
   .details {
     height: 190px;
@@ -153,10 +168,11 @@
   .pdfholder {
     $height: calc(100vh - 220px);
     padding: 18px 8px;
-    background-color: #fff;
+    background-color: #f8fafb;
+    box-shadow: -1px 0 0 0 #e7eef2;
     min-height: $height;
     max-height: $height;
-    overflow: scroll;
+    overflow: auto;
     @extend %pdf-splitter-page;
 
     &.canDrop {
@@ -165,6 +181,9 @@
   }
 }
 
+/**
+ *
+ */
 %pdf-splitter-page {
   .page-container {
     display: inline-block;
@@ -184,6 +203,10 @@
         opacity: 0.7;
       }
 
+      &:hover + .page-zoom-in {
+        opacity: 1;
+      }
+
       &.inUse {
         cursor: auto;
         opacity: 0.3;
@@ -198,6 +221,22 @@
         &:hover {
           opacity: 1;
         }
+      }
+    }
+
+    .page-zoom-in {
+      position: absolute;
+      display: block;
+      top: 4px;
+      right: 4px;
+      opacity: 0;
+      img {
+        width: 24px;
+      }
+
+      &:hover {
+        cursor: pointer;
+        opacity: 0.9;
       }
     }
 
@@ -255,5 +294,42 @@
         }
       }
     }
+  }
+}
+
+/**
+ *
+ */
+%pdf-splitter-page-preview {
+  position: fixed;
+  border-radius: 8px;
+  background-color: #fff;
+  border: solid 1px #cad0d4;
+  width: 500px;
+  height: 700px;
+  top: calc((100% - 700px) / 2) ;
+  left: calc((100% - 500px) / 2);
+  z-index: 1053;
+
+  .header {
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    border-radius: 8px 8px 0 0;
+    background-color: #f0f4f7;
+    border-bottom: solid 1px #cad0d4;
+    text-align: center;
+    font-size: 12px;
+    color: #62778c;
+
+    .close {
+      margin-top: 9px;
+      font-size: 15px;
+    }
+  }
+
+  .preview {
+    max-height: calc(100% - 32px);
+    overflow: auto;
   }
 }

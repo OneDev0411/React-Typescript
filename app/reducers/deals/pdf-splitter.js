@@ -4,7 +4,8 @@ import types from '../../constants/deals'
 const initialState = {
   display: false,
   documents: {},
-  pages: {}
+  pages: {},
+  pagePreview: null
 }
 
 export default (state = initialState, action) => {
@@ -14,6 +15,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         display: action.display
+      }
+
+    case types.SET_PAGE_PREVIEW:
+      return {
+        ...state,
+        pagePreview: action.preview
       }
 
     case types.SET_SPLITTER_DOCUMENT:
