@@ -56,25 +56,31 @@ class PDF extends React.Component {
 
               {
                 Array.apply(null, { length: doc.pdfInfo.numPages })
-                .map((v, i) => (
-                  <Page
-                    key={`page-${i}`}
-                    pdfId={id}
-                    doc={doc}
-                    pageNumber={i + 1}
-                  >
-                    {
-                      splitter.pages[`${id}_${i+1}`] ?
-                      <span className="page-cta inuse">In Use</span> :
-                      <span
-                        className="page-cta"
-                        onClick={() => this.onSelectPage(i + 1, id)}
-                      >
-                        Add page
-                      </span>
-                    }
-                  </Page>
-                ))
+                .map((v, i) => {
+                  const inUse = typeof splitter.pages[`${id}_${i+1}`] !== 'undefined'
+
+                  return (
+                    <Page
+                      inUse={inUse}
+                      canvasClassName={cn({ inUse })}
+                      key={`page-${i}`}
+                      pdfId={id}
+                      doc={doc}
+                      pageNumber={i + 1}
+                    >
+                      {
+                        inUse ?
+                        <span className="page-cta inuse">In Use</span> :
+                        <span
+                          className="page-cta"
+                          onClick={() => this.onSelectPage(i + 1, id)}
+                        >
+                          Add page
+                        </span>
+                      }
+                    </Page>
+                  )
+                })
               }
             </div>
           )

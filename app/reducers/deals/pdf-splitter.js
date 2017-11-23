@@ -1,3 +1,4 @@
+import _ from 'underscore'
 import types from '../../constants/deals'
 
 const initialState = {
@@ -34,6 +35,13 @@ export default (state = initialState, action) => {
             pageNumber: action.pageNumber
           }
         }
+      }
+
+    case types.DESELECT_SPLITTER_PAGE:
+      return {
+        ...state,
+        pages: _.omit(state.pages, page =>
+          page.documentId === action.docId && page.pageNumber === action.pageNumber)
       }
 
     default:

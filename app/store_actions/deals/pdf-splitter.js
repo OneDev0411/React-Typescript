@@ -22,3 +22,11 @@ export function setSplitterPage(docId, pageNumber) {
     pageNumber
   }
 }
+
+export function deselectSplitterPage(docId, pageNumber) {
+  return {
+    type: types.DESELECT_SPLITTER_PAGE,
+    docId,
+    pageNumber
+  }
+}

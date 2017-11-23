@@ -152,12 +152,16 @@
 
   .pdfholder {
     $height: calc(100vh - 220px);
-    padding: 18px 9px;
+    padding: 18px 8px;
     background-color: #fff;
     min-height: $height;
     max-height: $height;
     overflow: scroll;
     @extend %pdf-splitter-page;
+
+    &.canDrop {
+      border: 2px dashed yellow;
+    }
   }
 }
 
@@ -175,9 +179,25 @@
       width: 136px;
       height: 156px;
       border-radius: 4px;
-
+      cursor: all-scroll;
       &:hover {
-        opacity: 0.5;
+        opacity: 0.7;
+      }
+
+      &.inUse {
+        cursor: auto;
+        opacity: 0.3;
+
+        &:hover {
+          opacity: 0.3;
+        }
+      }
+
+      &.no-drag {
+        cursor: auto;
+        &:hover {
+          opacity: 1;
+        }
       }
     }
 

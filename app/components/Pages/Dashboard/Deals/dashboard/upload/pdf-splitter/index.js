@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import { DragDropContextProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 import PDFS from './pdf'
 import Workspace from './workspace'
 import { displaySplitter } from '../../../../../../../store_actions/deals'
@@ -29,15 +31,23 @@ class PDFSplitter extends React.Component {
           </span>
         </div>
 
-        <div className="splitter-container">
-          <div className="pdfs">
-            <PDFS />
-          </div>
+        <DragDropContextProvider backend={HTML5Backend}>
+          <div className="splitter-container">
+            <div
+              className="pdfs"
+              ref={ref => this.pdfsContainer = ref}
+            >
+              <PDFS />
+            </div>
 
-          <div className="workspace">
-            <Workspace />
+            <div
+              className="workspace"
+              ref={ref => this.workspaceContainer = ref}
+            >
+              <Workspace />
+            </div>
           </div>
-        </div>
+        </DragDropContextProvider>
       </div>
     )
   }

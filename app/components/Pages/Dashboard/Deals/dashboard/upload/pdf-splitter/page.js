@@ -1,6 +1,42 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import { DragSource } from 'react-dnd'
+import { setSplitterPage } from '../../../../../../../store_actions/deals'
+import store from '../../../../../../../stores'
+
+/**
+ * Specifies the drag source contract.
+ */
+const pageSource = {
+  beginDrag(props) {
+    return {
+      documentId: props.pdfId,
+      pageNumber: props.pageNumber
+    }
+  },
+  canDrag(props, monitor) {
+    return !props.inUse
+  },
+  endDrag(props, monitor, component) {
+    if (!monitor.didDrop()) {
+      return
+    }
+
+    const item = monitor.getItem()
+    store.dispatch(setSplitterPage(item.documentId, item.pageNumber))
+  }
+}
+
+/**
+ * Specifies which props to inject into your component.
+ */
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  }
+}
 
 class Page extends React.Component {
   constructor(props) {
@@ -57,17 +93,17 @@ class Page extends React.Component {
   }
 
   render() {
-    const { pageNumber } = this.props
+    const { isDragging, connectDragSource, canvasClassName, pageNumber } = this.props
 
-    return (
+    return connectDragSource(
       <div
         className="page-container"
         ref={ref => this.container = ref}
       >
         <canvas
-          className="page-canvas"
           id={`pdf-page-canvas-${pageNumber}`}
           ref={ref => this.canvas = ref}
+          className={cn('page-canvas', canvasClassName)}
         />
 
         <span className="page-number">
@@ -81,4 +117,5 @@ class Page extends React.Component {
 
 }
 
-export default Page
+export default DragSource('SPLITTER_PDF_PAGE', pageSource, collect)(Page)
+
