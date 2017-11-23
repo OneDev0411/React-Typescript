@@ -14,15 +14,6 @@ export default (state = null, action) => {
         ...action.tasks
       }
 
-    case types.IS_UPLOADING:
-      return {
-        ...state,
-        [action.taskId]: {
-          ...state[action.taskId],
-          uploading: action.status
-        }
-      }
-
     case types.CREATE_TASK:
       return {
         [action.task.id]: action.task,

@@ -2,8 +2,9 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import { clearUploadFiles, setUploadAttributes,
-  displaySplitter } from '../../../../../../../store_actions/deals'
+import ReactTooltip from 'react-tooltip'
+import { clearUploadFiles, setUploadAttributes, displaySplitter,
+  addAttachment, changeNeedsAttention } from '../../../../../../../store_actions/deals'
 import ChatModel from '../../../../../../../models/Chatroom'
 import TasksDropDown from '../tasks-dropdown'
 import Checkbox from '../../../components/radio'
@@ -63,6 +64,50 @@ class UploadModal extends React.Component {
     return null
   }
 
+  async upload({ id, fileObject, properties }, task) {
+    // set status
+    this.props.setUploadAttributes(id, { status: 'uploading'})
+
+    // upload file
+    const file = await this.uploadFile(task.room.id, fileObject, properties.fileTitle)
+
+    if (!file) {
+      return false
+    }
+
+    // set status
+    this.props.setUploadAttributes(id, { status: 'uploaded' })
+
+    // add files to attachments list
+    this.props.addAttachment(task.deal, task.checklist, task.id, file)
+
+    if (properties.notifyOffice === true) {
+      this.props.changeNeedsAttention(task.id, true)
+    }
+  }
+
+  /**
+   * upload a file to room
+   */
+  async uploadFile(roomId, file, fileName) {
+    try {
+      const response = await ChatModel.uploadAttachment(roomId, file, fileName)
+      return response.body.data
+    } catch(e) {
+      return null
+    }
+  }
+
+  getButtonCaption(file) {
+    const { status } = file.properties
+
+    if (status === 'uploading') {
+      return 'Uploading ...'
+    }
+
+    return 'Upload'
+  }
+
   render() {
     const { splitter, upload } = this.props
     const filesCount = _.size(upload.files)
@@ -81,10 +126,15 @@ class UploadModal extends React.Component {
         <Modal.Body
           style={this.getModalStyle(filesCount)}
         >
+          <ReactTooltip
+            effect="solid"
+          />
+
           <div className="uploads-container">
             {
               _.map(upload.files, (file, id) => {
                 const selectedTask = this.getSelectedTask(file)
+                const isUploading = file.properties.status === 'uploading'
 
                 return (
                   <div key={id}>
@@ -108,11 +158,11 @@ class UploadModal extends React.Component {
                       <div className="file-cta">
                         <Button
                           bsStyle="primary"
-                          className={cn({ disabled: selectedTask === null })}
-                          disabled={selectedTask === null}
-                          onClick={() => null}
+                          className={cn({ disabled: isUploading || !selectedTask})}
+                          disabled={isUploading || !selectedTask}
+                          onClick={() => this.upload(file, selectedTask)}
                         >
-                          Upload
+                          {this.getButtonCaption(file)}
                         </Button>
                       </div>
                     </div>
@@ -132,6 +182,12 @@ class UploadModal extends React.Component {
         </Modal.Body>
 
         <Modal.Footer>
+          <img
+            src="/static/images/deals/question.png"
+            className="help"
+            data-tip="Create new documents and save them to tasks"
+          />
+
           <Button
             bsStyle="primary"
             onClick={() => this.props.displaySplitter(true)}
@@ -153,5 +209,9 @@ function mapStateToProps({ deals }) {
 }
 
 export default connect(mapStateToProps, {
-  clearUploadFiles, setUploadAttributes, displaySplitter
+  clearUploadFiles,
+  setUploadAttributes,
+  displaySplitter,
+  addAttachment,
+  changeNeedsAttention
 })(UploadModal)

@@ -13,7 +13,7 @@ class FileName extends React.Component {
   toggleEditName(fileId, file) {
     this.props.setUploadAttributes(fileId, {
       editNameEnabled: file.properties.editNameEnabled ? false : true,
-      taskTitle: this.inputs[fileId].value
+      fileTitle: this.inputs[fileId].value
     })
   }
 

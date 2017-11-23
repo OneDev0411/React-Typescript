@@ -8,8 +8,7 @@ import _ from 'underscore'
 import cn from 'classnames'
 import ChatModel from '../../../../../../models/Chatroom'
 import ChatMessage from '../../../Chatroom/Util/message'
-import { addAttachment, setUploadFiles,
-  setIsUploading } from '../../../../../../store_actions/deals'
+import { addAttachment, setUploadFiles } from '../../../../../../store_actions/deals'
 
 class UploadDocument extends React.Component {
   constructor(props) {
@@ -27,7 +26,6 @@ class UploadDocument extends React.Component {
       dropzoneActive: false
     })
 
-    console.log(files)
     this.props.setUploadFiles(files, deal, task)
 
     // if ((dropzoneActive && noDrop) || files.length === 0) {
@@ -48,18 +46,6 @@ class UploadDocument extends React.Component {
 
   //     this.postMessage(task.room.id, file.id)
   //   }
-  }
-
-  /**
-   * upload a file to room
-   */
-  async uploadFile(roomId, file) {
-    try {
-      const response = await ChatModel.uploadAttachment(roomId, file)
-      return response.body.data
-    } catch(e) {
-      return null
-    }
   }
 
   /**
@@ -146,4 +132,4 @@ class UploadDocument extends React.Component {
 
 export default connect(({ user }) => ({
   user
-}), { addAttachment, setIsUploading, setUploadFiles })(UploadDocument)
+}), { addAttachment, setUploadFiles })(UploadDocument)

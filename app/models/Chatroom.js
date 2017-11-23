@@ -132,13 +132,13 @@ Chatroom.getMessages = async function (
   }
 }
 
-Chatroom.uploadAttachment = async function (roomId, file) {
-  let endpoint = `/rooms/${roomId}/attachments`
-
+Chatroom.uploadAttachment = async function (roomId, file, fileName = null) {
   try {
-    return await new Fetch().upload(endpoint).attach(file.name, file)
+    return await new Fetch()
+      .upload(`/rooms/${roomId}/attachments`)
+      .attach(fileName || file.name, file)
   } catch (e) {
-    console.log(e)
+    return null
   }
 }
 
