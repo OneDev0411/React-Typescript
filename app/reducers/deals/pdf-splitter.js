@@ -25,7 +25,7 @@ export default (state = initialState, action) => {
         }
       }
 
-    case types.SET_SPLITTER_PAGE:
+    case types.SELECT_SPLITTER_PAGE:
       return {
         ...state,
         pages: {

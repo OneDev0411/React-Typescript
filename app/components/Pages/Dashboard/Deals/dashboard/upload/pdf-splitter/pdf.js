@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
 import Page from './page'
-import { setSplitterDocument, setSplitterPage } from '../../../../../../../store_actions/deals'
+import { setSplitterDocument, selectSplitterPage } from '../../../../../../../store_actions/deals'
 
 class PDF extends React.Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class PDF extends React.Component {
   }
 
   onSelectPage(pageNumber, pdfId) {
-    this.props.setSplitterPage(pdfId, pageNumber)
+    this.props.selectSplitterPage(pdfId, pageNumber)
   }
 
   render() {
@@ -97,4 +97,4 @@ function mapStateToProps({ deals }) {
   }
 }
 
-export default connect(mapStateToProps, { setSplitterPage, setSplitterDocument })(PDF)
+export default connect(mapStateToProps, { selectSplitterPage, setSplitterDocument })(PDF)

@@ -15,9 +15,9 @@ export function setSplitterDocument(docId, doc) {
   }
 }
 
-export function setSplitterPage(docId, pageNumber) {
+export function selectSplitterPage(docId, pageNumber) {
   return {
-    type: types.SET_SPLITTER_PAGE,
+    type: types.SELECT_SPLITTER_PAGE,
     docId,
     pageNumber
   }

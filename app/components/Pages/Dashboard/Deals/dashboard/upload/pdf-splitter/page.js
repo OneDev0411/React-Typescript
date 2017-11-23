@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import { DragSource } from 'react-dnd'
-import { setSplitterPage } from '../../../../../../../store_actions/deals'
+import { selectSplitterPage } from '../../../../../../../store_actions/deals'
 import store from '../../../../../../../stores'
 
 /**
@@ -24,7 +24,7 @@ const pageSource = {
     }
 
     const item = monitor.getItem()
-    store.dispatch(setSplitterPage(item.documentId, item.pageNumber))
+    store.dispatch(selectSplitterPage(item.documentId, item.pageNumber))
   }
 }
 
@@ -118,4 +118,3 @@ class Page extends React.Component {
 }
 
 export default DragSource('SPLITTER_PDF_PAGE', pageSource, collect)(Page)
-
