@@ -3,6 +3,7 @@ import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import ReactTooltip from 'react-tooltip'
+import { addNotification as notify } from 'reapop'
 import { resetUploadFiles, setUploadAttributes, displaySplitter,
   addAttachment, changeNeedsAttention, resetSplitter } from '../../../../../../../store_actions/deals'
 import ChatModel from '../../../../../../../models/Chatroom'
@@ -73,15 +74,30 @@ class UploadModal extends React.Component {
       return false
     }
 
+    // get filename
+    const filename = properties.fileTitle || fileObject.name
+
     // set status
     this.props.setUploadAttributes(id, { status: STATUS_UPLOADING})
 
     // upload file
-    const file = await this.uploadFile(task.room.id, fileObject, properties.fileTitle)
+    const file = await this.uploadFile(task.room.id, fileObject, filename)
 
     if (!file) {
+      this.props.setUploadAttributes(id, { status: null })
+
+      this.props.notify({
+        message: `Couldn't upload "${filename}". try again.`,
+        status: 'error'
+      })
+
       return false
     }
+
+    this.props.notify({
+      message: `"${filename}" uploaded.`,
+      status: 'success'
+    })
 
     // set status
     this.props.setUploadAttributes(id, { status: STATUS_UPLOADED })
@@ -230,6 +246,7 @@ function mapStateToProps({ deals }) {
 }
 
 export default connect(mapStateToProps, {
+  notify,
   resetUploadFiles,
   resetSplitter,
   setUploadAttributes,
