@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import { addNotification as notify } from 'reapop'
 import { Dropdown, MenuItem, Button } from 'react-bootstrap'
 import { setUploadAttributes, createFormTask } from '../../../../../../store_actions/deals'
 
@@ -30,7 +31,7 @@ class DropDownTasks extends React.Component {
   }
 
   async createNewTask(e, checklistId) {
-    const { upload, createFormTask, onSelectTask } = this.props
+    const { upload, notify, createFormTask, onSelectTask } = this.props
 
     if (e.which !== 13) {
       return false
@@ -48,6 +49,11 @@ class DropDownTasks extends React.Component {
 
     // create task
     const task = await createFormTask(upload.deal.id, null, taskTitle, checklistId)
+
+    notify({
+      message: `Task "${taskTitle}" created.`,
+      status: 'success'
+    })
 
     this.setState({
       isCreatingTask: false,
@@ -144,6 +150,7 @@ function mapStateToProps({ deals }) {
 }
 
 export default connect(mapStateToProps, {
+  notify,
   createFormTask,
   setUploadAttributes
 })(DropDownTasks)
