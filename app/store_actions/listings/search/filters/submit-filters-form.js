@@ -310,11 +310,11 @@ const submitFiltersForm = values => async (dispatch, getState) => {
       dispatch(setSearchInput(''))
     }
 
-    if (listings.length === 1) {
-      const { latitude: lat, longitude: lng } = listings[0].location
+    // if (listings.length === 1) {
+    //   const { latitude: lat, longitude: lng } = listings[0].location
 
-      goToPlace({ center: { lat, lng } })(dispatch, getState)
-    }
+    //   goToPlace({ center: { lat, lng } })(dispatch, getState)
+    // }
 
     if (queryOptions.points == null && listings.length && window.google) {
       const extendedProps = extendedBounds(
