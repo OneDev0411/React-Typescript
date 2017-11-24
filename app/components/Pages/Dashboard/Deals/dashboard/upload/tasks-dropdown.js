@@ -65,11 +65,6 @@ class DropDownTasks extends React.Component {
   render() {
     const { showMenu, newTaskMode, isCreatingTask } = this.state
     const { shouldDropUp, selectedTask, upload, checklists, tasks } = this.props
-    const dealChecklists = upload.deal.checklists
-
-    if (!dealChecklists || dealChecklists.length === 0) {
-      return false
-    }
 
     return (
       <Dropdown
@@ -88,7 +83,7 @@ class DropDownTasks extends React.Component {
 
         <Dropdown.Menu className="deal-task-dropdown-list">
           {
-            dealChecklists.map((chId, key) => {
+            upload.deal.checklists.map((chId, key) => {
               const checklist = checklists[chId]
               return (
                 <div key={chId}>
@@ -98,6 +93,7 @@ class DropDownTasks extends React.Component {
                   </div>
 
                   {
+                    checklist.tasks &&
                     checklist.tasks.map((tId, key) =>
                       <li
                         key={tId}
