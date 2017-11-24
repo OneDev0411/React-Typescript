@@ -155,7 +155,7 @@ class WorkspaceForm extends React.Component {
               </button>
             </div> :
             <div className="prg">
-              Saving PDF...
+              Saving PDF... (It might take a few moments)
               <ProgressBar now={100} bsStyle="success" active />
             </div>
           }

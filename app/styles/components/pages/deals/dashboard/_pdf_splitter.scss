@@ -73,9 +73,26 @@ $splitter-header: 56px;
  *
  */
 %pdf-splitter-pdfs-section {
-  max-height: calc(100vh - #{$splitter-header});
+  $max-section-height: calc(100vh - #{$splitter-header});
+  max-height: $max-section-height;
   overflow: scroll;
   overflow-x: hidden;
+
+  .loading {
+    height: $max-section-height;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    font-size: 15px;
+    color: #8da2b5;
+
+    img {
+      width: 80px;
+      margin-bottom: 15px;
+    }
+  }
 
   .pdf-section {
     display: block;
@@ -158,8 +175,9 @@ $splitter-header: 56px;
       .prg {
         margin-top: 10px;
         text-align: left;
-        font-weight: 600;
+        font-weight: 500;
         .progress {
+          margin-top: 3px;
           height: 15px !important;
         }
       }

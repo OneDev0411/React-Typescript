@@ -13,7 +13,11 @@ class PDF extends React.Component {
     super(props)
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    setTimeout(() => this.initialize(), 1300)
+  }
+
+  async initialize() {
     const { upload } = this.props
     const pdfs = _.filter(upload.files, file => file.fileObject.type === 'application/pdf')
 
@@ -40,6 +44,14 @@ class PDF extends React.Component {
 
     return (
       <div>
+        {
+          _.size(splitter.documents) === 0 &&
+          <div className="loading">
+            <img src="/static/images/loading-states/three-dots-blue.svg" />
+            <p>Loading Documents</p>
+          </div>
+        }
+
         {
           _.chain(splitter.documents)
           .filter((doc, id) => {
