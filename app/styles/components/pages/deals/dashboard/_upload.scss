@@ -230,5 +230,26 @@
     &.new-task {
       color: #2196f3;
     }
+
+    &.selected {
+      background-color: #2196f3;
+      color: #fff;
+    }
+
+    .new-task {
+      height: 30px;
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      padding: 3px 5px;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .creating-task {
+      font-weight: 600;
+      color: #2196f3;
+    }
   }
 }

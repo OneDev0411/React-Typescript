@@ -1,17 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import cn from 'classnames'
 import { Dropdown, MenuItem, Button } from 'react-bootstrap'
-import { setUploadAttributes } from '../../../../../../store_actions/deals'
+import { setUploadAttributes, createFormTask } from '../../../../../../store_actions/deals'
 
 class DropDownTasks extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showMenu: false
+      showMenu: false,
+      newTaskMode: false,
+      isCreatingTask: false
     }
   }
 
   toggleMenu() {
+    if (this.state.newTaskMode) {
+      return false
+    }
+
     this.setState({
       showMenu: !this.state.showMenu
     })
@@ -22,8 +29,35 @@ class DropDownTasks extends React.Component {
     this.toggleMenu()
   }
 
+  async createNewTask(e, checklistId) {
+    const { upload, createFormTask, onSelectTask } = this.props
+
+    if (e.which !== 13) {
+      return false
+    }
+
+    const taskTitle = this.inputNewTask.value
+
+    if (taskTitle.length === 0) {
+      return this.setState({ newTaskMode: null })
+    }
+
+    this.setState({
+      isCreatingTask: true
+    })
+
+    // create task
+    const task = await createFormTask(upload.deal.id, null, taskTitle, checklistId)
+
+    this.setState({
+      isCreatingTask: false,
+      newTaskMode: false,
+      showMenu: false
+    }, () => onSelectTask(task.id))
+  }
+
   render() {
-    const { showMenu } = this.state
+    const { showMenu, newTaskMode, isCreatingTask } = this.state
     const { shouldDropUp, selectedTask, upload, checklists, tasks } = this.props
 
     return (
@@ -56,6 +90,9 @@ class DropDownTasks extends React.Component {
                     checklist.tasks.map((tId, key) =>
                       <li
                         key={tId}
+                        className={cn({
+                          selected: selectedTask && selectedTask.id === tId
+                        })}
                         onClick={() => this.onSelectTask(tId)}
                       >
                         { tasks[tId].title }
@@ -63,9 +100,31 @@ class DropDownTasks extends React.Component {
                     )
                   }
 
-                  <li className="new-task">
-                    Add new task to { checklist.title }
-                  </li>
+                  {
+                    (newTaskMode && newTaskMode === chId) ?
+                    <li>
+                      {
+                        isCreatingTask ?
+                        <span className="creating-task">
+                          Creating task ...
+                        </span> :
+                        <input
+                          className="new-task"
+                          placeholder="Name this task and press enter"
+                          ref={ref => this.inputNewTask = ref}
+                          onKeyPress={e => this.createNewTask(e, chId)}
+                          onBlur={() => this.setState({ newTaskMode: null })}
+                          autoFocus
+                        />
+                      }
+                    </li> :
+                    <li
+                      className="new-task"
+                      onClick={() => this.setState({ newTaskMode: chId })}
+                    >
+                      Add new task to { checklist.title }
+                    </li>
+                  }
                 </div>
               )
             })
@@ -84,4 +143,7 @@ function mapStateToProps({ deals }) {
   }
 }
 
-export default connect(mapStateToProps, { setUploadAttributes })(DropDownTasks)
+export default connect(mapStateToProps, {
+  createFormTask,
+  setUploadAttributes
+})(DropDownTasks)
