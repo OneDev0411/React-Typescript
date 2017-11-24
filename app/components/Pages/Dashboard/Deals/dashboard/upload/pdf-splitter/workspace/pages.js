@@ -5,10 +5,11 @@ import { Button } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
 import { DropTarget } from 'react-dnd'
+import { deselectSplitterPage } from '../../../../../../../../store_actions/deals'
+import Checkbox from '../../../../components/radio'
 import PageThumbnail from '../page/thumbnail'
 import TasksDropDown from '../../tasks-dropdown'
-import Checkbox from '../../../../components/radio'
-import { deselectSplitterPage } from '../../../../../../../../store_actions/deals'
+import EmptyState from './empty-state'
 
 /**
  * Specifies which props to inject into your component.
@@ -37,6 +38,11 @@ class WorkspacePdfList extends React.Component {
 
     return connectDropTarget(
       <div className={cn('pdfholder', { canDrop: isOver && canDrop })}>
+        {
+          _.size(splitter.pages) === 0 &&
+          <EmptyState />
+        }
+
         {
           _.map(splitter.pages, (page, id) =>
             <PageThumbnail

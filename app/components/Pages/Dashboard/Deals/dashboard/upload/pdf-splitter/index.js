@@ -1,16 +1,38 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import _ from 'underscore'
 import { DragDropContextProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import PDFList from './pdf-list'
 import PagePreview from './page/preview'
 import Workspace from './workspace'
-import { displaySplitter } from '../../../../../../../store_actions/deals'
+import { displaySplitter, resetSplitter } from '../../../../../../../store_actions/deals'
+import { confirmation } from '../../../../../../../store_actions/confirmation'
+
 
 class PDFSplitter extends React.Component {
   constructor(props) {
     super(props)
+  }
+
+  closeSplitter() {
+    const { splitter, confirmation } = this.props
+
+    if (_.size(splitter.pages) === 0) {
+      return this.props.displaySplitter(false)
+    }
+
+    confirmation({
+      message: 'Wait! Are you sure ?',
+      description: 'You have unsaved changes.',
+      confirmLabel: 'Yes',
+      cancelLabel: 'No',
+      onConfirm: () => {
+        this.props.displaySplitter(false)
+        this.props.resetSplitter()
+      }
+    })
   }
 
   render() {
@@ -25,7 +47,7 @@ class PDFSplitter extends React.Component {
         <div className="header">
           <span>Split</span>
           <span
-            onClick={() => this.props.displaySplitter(false)}
+            onClick={() => this.closeSplitter()}
             className="close-form"
           >
             X
@@ -66,4 +88,8 @@ function mapStateToProps({ deals }) {
   }
 }
 
-export default connect(mapStateToProps, { displaySplitter })(PDFSplitter)
+export default connect(mapStateToProps, {
+  displaySplitter,
+  resetSplitter,
+  confirmation
+})(PDFSplitter)
