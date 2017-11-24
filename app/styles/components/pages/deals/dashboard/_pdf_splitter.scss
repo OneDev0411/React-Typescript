@@ -131,6 +131,34 @@ $splitter-header: 56px;
 %pdf-splitter-workspace-section {
   $detailsHeight: 190px;
 
+  .splitter-saving {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1053;
+    left: 0px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+
+    .inner {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 500px;
+      height: 100px;
+      font-size: 14px;
+      font-weight: 500;
+
+      .progress {
+        margin-top: 10px;
+      }
+    }
+  }
+
   .details {
     height: $detailsHeight;
     background-color: #f0f4f7;

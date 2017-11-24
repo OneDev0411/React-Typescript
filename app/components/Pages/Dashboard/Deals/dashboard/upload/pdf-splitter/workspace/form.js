@@ -112,6 +112,17 @@ class WorkspaceForm extends React.Component {
     const { title, task, notifyOffice, saving } = this.state
     const formValidated = this.isFormValidated()
 
+    if (saving) {
+      return (
+        <div className="splitter-saving">
+          <div className="inner">
+            Saving PDF... (It might take a few moments)
+            <ProgressBar now={100} bsStyle="success" active />
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className="details">
         <input
@@ -135,30 +146,21 @@ class WorkspaceForm extends React.Component {
         />
 
         <div className="buttons">
-          {
-            !saving ?
-            <div>
-              <button
-                onClick={() => this.saveAndQuit()}
-                disabled={!formValidated}
-                className={cn('save-quit', { disabled: !formValidated })}
-              >
-                Save and quit
-              </button>
+          <button
+            onClick={() => this.saveAndQuit()}
+            disabled={!formValidated}
+            className={cn('save-quit', { disabled: !formValidated })}
+          >
+            Save and quit
+          </button>
 
-              <button
-                className={cn('save-new', { disabled: !formValidated })}
-                disabled={!formValidated}
-                onClick={() => this.saveAndNew()}
-              >
-                Save and create another
-              </button>
-            </div> :
-            <div className="prg">
-              Saving PDF... (It might take a few moments)
-              <ProgressBar now={100} bsStyle="success" active />
-            </div>
-          }
+          <button
+            className={cn('save-new', { disabled: !formValidated })}
+            disabled={!formValidated}
+            onClick={() => this.saveAndNew()}
+          >
+            Save and create another
+          </button>
         </div>
 
       </div>
