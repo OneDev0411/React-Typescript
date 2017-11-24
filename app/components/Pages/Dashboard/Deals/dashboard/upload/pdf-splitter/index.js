@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import { DragDropContextProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-import PDFS from './pdf'
+import PDFList from './pdf-list'
 import PagePreview from './page/preview'
 import Workspace from './workspace'
 import { displaySplitter } from '../../../../../../../store_actions/deals'
@@ -43,7 +43,7 @@ class PDFSplitter extends React.Component {
               className="pdfs"
               ref={ref => this.pdfsContainer = ref}
             >
-              <PDFS />
+              <PDFList />
             </div>
 
             <div

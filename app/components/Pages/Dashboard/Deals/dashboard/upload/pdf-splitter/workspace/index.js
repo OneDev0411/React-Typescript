@@ -4,9 +4,8 @@ import { Button } from 'react-bootstrap'
 import { DropTarget } from 'react-dnd'
 import cn from 'classnames'
 import _ from 'underscore'
-import Page from '../page'
 import Form from './form'
-import PdfList from './pdf-list'
+import Pages from './pages'
 
 class Workspace extends React.Component {
   constructor(props) {
@@ -22,7 +21,7 @@ class Workspace extends React.Component {
           upload={upload}
         />
 
-        <PdfList
+        <Pages
           upload={upload}
           splitter={splitter}
         />

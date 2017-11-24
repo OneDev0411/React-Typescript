@@ -27,25 +27,6 @@ class UploadDocument extends React.Component {
     })
 
     this.props.setUploadFiles(files, deal, task)
-
-    // if ((dropzoneActive && noDrop) || files.length === 0) {
-    //   return false
-    // }
-
-     //   setIsUploading(task.id, true)
-
-  //   // upload file
-  //   const file = await this.uploadFile(task.room.id, files[0])
-
-  //   // post message to room
-  //   if (file) {
-  //     batchActions([
-  //       addAttachment(task.deal, task.checklist, task.id, file),
-  //       setIsUploading(task.id, false)
-  //     ])
-
-  //     this.postMessage(task.room.id, file.id)
-  //   }
   }
 
   /**

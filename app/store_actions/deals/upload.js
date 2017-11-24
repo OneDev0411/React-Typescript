@@ -32,8 +32,8 @@ export function setUploadAttributes(fileId, attributes) {
   }
 }
 
-export function clearUploadFiles() {
+export function resetUploadFiles() {
   return {
-    type: types.CLEAR_UPLOAD_FILES
+    type: types.RESET_UPLOAD_FILES
   }
 }

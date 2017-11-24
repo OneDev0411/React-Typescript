@@ -4,13 +4,9 @@ import cn from 'classnames'
 import { setPagePreview } from '../../../../../../../../store_actions/deals'
 import Page from '.'
 
-class PageZoom extends React.Component {
+class PagePreview extends React.Component {
   constructor(props) {
     super(props)
-  }
-
-  componentDidMount() {
-    console.log('>>>>')
   }
 
   closeModal() {
@@ -18,13 +14,13 @@ class PageZoom extends React.Component {
   }
 
   render() {
-    const { splitter } = this.props
+    const { upload, splitter } = this.props
     const { pdfId, doc, pageNumber } = splitter.pagePreview
 
     return (
       <div className="page-preview">
         <div className="header">
-          ONE TO FOUR FAMILY
+          { upload.files[pdfId].fileObject.name}
 
           <span
             className="close"
@@ -53,8 +49,9 @@ class PageZoom extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
+    upload: deals.upload,
     splitter: deals.splitter
   }
 }
 
-export default connect(mapStateToProps, { setPagePreview })(PageZoom)
+export default connect(mapStateToProps, { setPagePreview })(PagePreview)

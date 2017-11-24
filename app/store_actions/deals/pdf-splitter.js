@@ -31,9 +31,21 @@ export function deselectSplitterPage(docId, pageNumber) {
   }
 }
 
+export function resetSplitterSelectedPages() {
+  return {
+    type: types.RESET_SPLITTER_PAGES
+  }
+}
+
 export function setPagePreview(preview) {
   return {
     type: types.SET_PAGE_PREVIEW,
     preview
+  }
+}
+
+export function resetSplitter() {
+  return {
+    type: types.RESET_SPLITTER
   }
 }

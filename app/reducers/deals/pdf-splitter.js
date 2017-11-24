@@ -51,6 +51,15 @@ export default (state = initialState, action) => {
           page.documentId === action.docId && page.pageNumber === action.pageNumber)
       }
 
+    case types.RESET_SPLITTER_PAGES:
+      return {
+        ...state,
+        pages: {}
+      }
+
+    case types.RESET_SPLITTER:
+      return initialState
+
     default:
       return state
   }

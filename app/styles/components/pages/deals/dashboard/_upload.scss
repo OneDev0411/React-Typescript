@@ -43,6 +43,7 @@
     text-align: right;
     margin: 5px 0 20px 0;
     padding-right: 7px;
+    min-height: 20px;
 
     .deal-radio {
       .radio-button {
@@ -134,6 +135,12 @@
           background-color: #dce5eb;
           color: #8da2b5;
         }
+
+        &.uploaded {
+          cursor: auto;
+          background-color: #35b863;
+        }
+
         &:focus {
           outline: none;
         }
@@ -156,6 +163,9 @@
   padding-top: 3px;
   box-shadow: none !important;
   background-color: transparent !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 
   &:hover, &.open {
     border: solid 1px #2196f3 !important;

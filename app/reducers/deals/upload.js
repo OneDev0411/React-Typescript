@@ -14,7 +14,7 @@ export default (state = initialState, action) => {
         files: action.files
       }
 
-    case types.CLEAR_UPLOAD_FILES:
+    case types.RESET_UPLOAD_FILES:
       return initialState
 
     case types.SET_UPLOAD_ATTRIBUTES:

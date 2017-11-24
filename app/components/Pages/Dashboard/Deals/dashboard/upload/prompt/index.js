@@ -3,12 +3,15 @@ import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import ReactTooltip from 'react-tooltip'
-import { clearUploadFiles, setUploadAttributes, displaySplitter,
-  addAttachment, changeNeedsAttention } from '../../../../../../../store_actions/deals'
+import { resetUploadFiles, setUploadAttributes, displaySplitter,
+  addAttachment, changeNeedsAttention, resetSplitter } from '../../../../../../../store_actions/deals'
 import ChatModel from '../../../../../../../models/Chatroom'
 import TasksDropDown from '../tasks-dropdown'
 import Checkbox from '../../../components/radio'
 import FileName from './file-name'
+
+const STATUS_UPLOADING = 'uploading'
+const STATUS_UPLOADED = 'uploaded'
 
 class UploadModal extends React.Component {
   constructor(props) {
@@ -28,7 +31,8 @@ class UploadModal extends React.Component {
   }
 
   closeModal() {
-    this.props.clearUploadFiles()
+    this.props.resetUploadFiles()
+    this.props.resetSplitter()
   }
 
   getModalStyle(filesCount) {
@@ -65,8 +69,12 @@ class UploadModal extends React.Component {
   }
 
   async upload({ id, fileObject, properties }, task) {
+    if (properties.status === STATUS_UPLOADED) {
+      return false
+    }
+
     // set status
-    this.props.setUploadAttributes(id, { status: 'uploading'})
+    this.props.setUploadAttributes(id, { status: STATUS_UPLOADING})
 
     // upload file
     const file = await this.uploadFile(task.room.id, fileObject, properties.fileTitle)
@@ -76,7 +84,7 @@ class UploadModal extends React.Component {
     }
 
     // set status
-    this.props.setUploadAttributes(id, { status: 'uploaded' })
+    this.props.setUploadAttributes(id, { status: STATUS_UPLOADED })
 
     // add files to attachments list
     this.props.addAttachment(task.deal, task.checklist, task.id, file)
@@ -101,8 +109,12 @@ class UploadModal extends React.Component {
   getButtonCaption(file) {
     const { status } = file.properties
 
-    if (status === 'uploading') {
+    if (status === STATUS_UPLOADING) {
       return 'Uploading ...'
+    }
+
+    if (status === STATUS_UPLOADED) {
+      return <i className="fa fa-check" />
     }
 
     return 'Upload'
@@ -111,6 +123,7 @@ class UploadModal extends React.Component {
   render() {
     const { splitter, upload } = this.props
     const filesCount = _.size(upload.files)
+    let fileCounter = 0
 
     return (
       <Modal
@@ -134,7 +147,9 @@ class UploadModal extends React.Component {
             {
               _.map(upload.files, (file, id) => {
                 const selectedTask = this.getSelectedTask(file)
-                const isUploading = file.properties.status === 'uploading'
+                const isUploading = file.properties.status === STATUS_UPLOADING
+                const isUploaded = file.properties.status === STATUS_UPLOADED
+                fileCounter += 1
 
                 return (
                   <div key={id}>
@@ -151,14 +166,17 @@ class UploadModal extends React.Component {
                         <TasksDropDown
                           onSelectTask={(taskId) => this.onSelectTask(id, taskId)}
                           selectedTask={selectedTask}
-                          shouldDropUp={filesCount > 4 && id + 2 >= filesCount}
+                          shouldDropUp={filesCount > 4 && fileCounter + 2 >= filesCount}
                         />
                       </div>
 
                       <div className="file-cta">
                         <Button
                           bsStyle="primary"
-                          className={cn({ disabled: isUploading || !selectedTask})}
+                          className={cn({
+                            disabled: isUploading || !selectedTask,
+                            uploaded: isUploaded
+                          })}
                           disabled={isUploading || !selectedTask}
                           onClick={() => this.upload(file, selectedTask)}
                         >
@@ -167,12 +185,15 @@ class UploadModal extends React.Component {
                       </div>
                     </div>
                     <div className="notify-admin">
-                      <Checkbox
-                        square
-                        selected={file.properties.notifyOffice || false}
-                        title="Notify Office"
-                        onClick={() => this.onClickNotifyAdmin(id, file)}
-                      />
+                      {
+                        (!isUploading && !isUploaded) &&
+                        <Checkbox
+                          square
+                          selected={file.properties.notifyOffice || false}
+                          title="Notify Office"
+                          onClick={() => this.onClickNotifyAdmin(id, file)}
+                        />
+                      }
                     </div>
                   </div>
                 )
@@ -209,7 +230,8 @@ function mapStateToProps({ deals }) {
 }
 
 export default connect(mapStateToProps, {
-  clearUploadFiles,
+  resetUploadFiles,
+  resetSplitter,
   setUploadAttributes,
   displaySplitter,
   addAttachment,
