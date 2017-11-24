@@ -1,6 +1,11 @@
+.modal-confirmation-backdrop {
+  z-index: 1999;
+}
+
 .modal-confirmation {
   width: 500px;
   height: 200px;
+
   .modal-content {
     border: none;
     box-shadow: none;
