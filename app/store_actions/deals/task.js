@@ -41,14 +41,6 @@ export function setTasks(tasks) {
   }
 }
 
-export function setIsUploading(taskId, status) {
-  return {
-    type: types.IS_UPLOADING,
-    taskId,
-    status
-  }
-}
-
 export function setSelectedTask(task) {
   return {
     type: types.SET_SELECTED_TASK,

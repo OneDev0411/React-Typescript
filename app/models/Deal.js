@@ -103,6 +103,10 @@ Deal.get.clientNames = function(deal) {
   const roles = deal.deal_type === 'Buying' ? ['Buyer', 'Tenant'] : ['Seller', 'Landlord']
   const clients = []
 
+  if (!deal.roles) {
+    return ''
+  }
+
   deal.roles.forEach(item => {
     if (roles.indexOf(item.role) > -1) {
       clients.push(item.user.display_name)
@@ -560,6 +564,30 @@ Deal.voidEnvelope = async function(envelope_id) {
     return response.body.data
   } catch (e) {
     return null
+  }
+}
+
+/**
+* split files
+*/
+Deal.splitPDF = async function(title, room_id, files, pages) {
+  try {
+    const request = agent
+      .post(`${config.app.url}/api/deals/pdf-splitter`)
+      .field({ pages: JSON.stringify(pages) })
+      .field({ title })
+      .field({ room_id })
+
+    files.forEach(file => {
+      request.attach(file.id, file, `${file.id}.pdf`)
+    })
+
+    // send request
+    await request
+
+    return true
+  } catch (e) {
+    throw e
   }
 }
 

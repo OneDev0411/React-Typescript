@@ -4,6 +4,7 @@ import esign from './esign'
 import task from './task'
 import checklist from './checklist'
 import upload from './upload'
+import splitter from './splitter'
 import backoffice from './backoffice'
 import error from './error'
 
@@ -16,6 +17,7 @@ new Array(
   ...task,
   ...checklist,
   ...upload,
+  ...splitter,
   ...backoffice,
   ...error
 )

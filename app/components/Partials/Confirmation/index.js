@@ -11,7 +11,12 @@ const Confirmation = ({
     <div>
       <Modal
         show={confirmation.show}
+        backdrop="static"
+        backdropClassName="modal-confirmation-backdrop"
         dialogClassName="modal-confirmation"
+        style={{
+          zIndex: 2000
+        }}
       >
         <Modal.Body>
           <div

@@ -17,6 +17,11 @@
   .modal-footer {
     border-top: none;
 
+    .help {
+      width: 18px;
+      margin-right: 20px;
+    }
+
     button {
       width: 110px;
       height: 34px;
@@ -38,6 +43,7 @@
     text-align: right;
     margin: 5px 0 20px 0;
     padding-right: 7px;
+    min-height: 20px;
 
     .deal-radio {
       .radio-button {
@@ -61,16 +67,11 @@
     align-items: center;
 
     .file-name {
-      img {
-        width: 16px;
-        margin-right: 10px;
-      }
-
       width: 52%;
       height: 40px;
       line-height: 40px;
       vertical-align: middle;
-      padding: 0 20px;
+      padding: 0 0 0 20px;
       border-radius: 4px;
       backdrop-filter: blur(10px);
       background-color: rgba(255, 255, 255, 0.9);
@@ -81,6 +82,37 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+
+      img {
+        width: 16px;
+        margin-right: 10px;
+      }
+
+      .edit-icon {
+        float: right;
+        margin-top: 10px;
+        opacity: 0.1;
+        cursor: pointer;
+        &.canEditName {
+          opacity: 1;
+        }
+      }
+
+      .input-edit-name {
+        width: 85%;
+        height: 30px;
+        &.disabled {
+          border: none;
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      &:hover .edit-icon {
+        opacity: 1;
+      }
     }
 
     .file-task {
@@ -96,9 +128,19 @@
         width: 90px;
         height: 40px;
         border-radius: 4px;
-        background-color: #dce5eb;
+        background-color: #1d86d9;
         border: none;
-        color: #8da2b5;
+
+        &.disabled {
+          background-color: #dce5eb;
+          color: #8da2b5;
+        }
+
+        &.uploaded {
+          cursor: auto;
+          background-color: #35b863;
+        }
+
         &:focus {
           outline: none;
         }
@@ -115,11 +157,15 @@
   width: 307px;
   height: 40px;
   border-radius: 3px;
-  font-size: 15px;
+  font-size: 14px;
   border: solid 1px #e3e3e3;
   text-align: left;
+  padding-top: 3px;
   box-shadow: none !important;
   background-color: transparent !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 
   &:hover, &.open {
     border: solid 1px #2196f3 !important;
@@ -140,6 +186,7 @@
   border-radius: 4px;
   max-height: 250px;
   overflow: scroll;
+  overflow-x: hidden;
 
   .checklist {
     height: 40px;
@@ -154,12 +201,14 @@
   }
 
   li {
-    color: #5b6469;
+    padding: 0 15px 0 11px;
+    color: #1d364b;
     font-size: 14px;
     background-color: #ffffff;
     box-shadow: 0 1px 0 0 #eaeaea, 0 -1px 0 0 #e9e9e9;
     height: 40px;
     line-height: 40px;
+    cursor: pointer;
     vertical-align: middle;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -174,18 +223,33 @@
       border-radius: 0 0 4px 4px;
     }
 
-    a {
-      padding: 15px 15px 15px 11px;
-      color: #1d364b;
+    &:hover {
+      background-color: #f0f4f7;
+    }
+
+    &.new-task {
+      color: #2196f3;
+    }
+
+    &.selected {
+      background-color: #2196f3;
+      color: #fff;
+    }
+
+    .new-task {
+      height: 30px;
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      padding: 3px 5px;
       &:focus {
         outline: none;
       }
     }
 
-    &.new-task {
-      a {
-        color: #2196f3;
-      }
+    .creating-task {
+      font-weight: 600;
+      color: #2196f3;
     }
   }
 }

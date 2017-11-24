@@ -5,6 +5,5 @@ export default [
   'CREATE_TASK',
   'ADD_ATTACHMENT',
   'DELETE_ATTACHMENT',
-  'IS_UPLOADING',
   'SET_SELECTED_TASK'
 ]

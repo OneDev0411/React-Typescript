@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import cn from 'classnames'
-import SubmitReview from '../submit-review'
 
 function getSubmitButtonLabel(isSaving, hasComment) {
   if (isSaving) {
