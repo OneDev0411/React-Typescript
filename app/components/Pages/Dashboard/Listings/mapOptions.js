@@ -2,6 +2,34 @@ import config from '../../../../../config/public'
 
 export const DECLUSTER_ZOOM_LEVEL = 16
 
+export const property_subtypes = {
+  condo: 'RES-Condo',
+  farm: 'RES-Farm/Ranch',
+  duplex: 'RES-Half Duplex',
+  townhouse: 'RES-Townhouse',
+  single_family: 'RES-Single Family'
+}
+
+export const architectural_styles = {
+  southwestern: 'Southwestern',
+  ranch: 'Ranch',
+  spanish: 'Spanish',
+  aFrame: 'A-Frame',
+  midCentry_modern: 'Mid-Centry Modern',
+  prairie: 'Prairie',
+  studio_apartment: 'Studio Apartment',
+  contemporary: 'Contemporary/Modern',
+  split_level: 'Split Level',
+  victorian: 'Victorian',
+  traditional: 'Traditional',
+  mediterranean: 'Mediterranean',
+  colonial: 'Colonial',
+  oriental: 'Oriental',
+  loft: 'Loft',
+  french: 'French',
+  tudor: 'Tudor'
+}
+
 export const bootstrapURLKeys = {
   key: config.google.api_key,
   libraries: ['drawing', 'places', 'geometry'].join(',')
@@ -44,13 +72,8 @@ export const queryOptions = {
       longitude: -96.89115626525879
     }
   ],
-  property_subtypes: [
-    'RES-Single Family',
-    'RES-Half Duplex',
-    'RES-Farm/Ranch',
-    'RES-Condo',
-    'RES-Townhouse'
-  ]
+  property_subtypes: objectValueToArray(property_subtypes),
+  architectural_styles: objectValueToArray(architectural_styles)
 }
 
 export const mapOptions = {
@@ -71,4 +94,8 @@ export default {
   queryOptions,
   mapInitialState,
   DECLUSTER_ZOOM_LEVEL
+}
+
+function objectValueToArray(obj = {}) {
+  return Object.keys(obj).map(prop => obj[prop])
 }

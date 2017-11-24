@@ -84,8 +84,7 @@ const MULTI_SELECT_FIELDS = [
   ...SCHOOLS_TYPE
 ]
 
-const turnToNumber = value =>
-  value ? Number(value.replace(/[^0-9]/g, '')) : null
+const turnToNumber = value => (value ? Number(value.replace(/[^0-9]/g, '')) : null)
 
 const getSoldDate = (selectedMonth = 3) => {
   const date = new Date(Date.now())
@@ -199,9 +198,7 @@ const normalizMultiSelectedInputOptions = options => {
   return null
 }
 
-const normalizeValues = (values, state) => {
-  const { options } = state
-
+const normalizeValues = (values, options, state) => {
   const { mlsAreas = [], mlsSubareas = [] } = values
   const mls_areas = normalizedMlsAreas([...mlsAreas, ...mlsSubareas])
 
@@ -227,21 +224,16 @@ const normalizeValues = (values, state) => {
   }
 
   const property_subtypes = obiectPropsValueToArray(values.property_subtypes)
-  const architectural_styles = obiectPropsValueToArray(
-    values.architectural_styles
-  )
+  const architectural_styles = obiectPropsValueToArray(values.architectural_styles)
 
   const multiSelectFields = {}
 
   MULTI_SELECT_FIELDS.forEach(fielld => {
-    multiSelectFields[fielld] = normalizMultiSelectedInputOptions(
-      values[fielld]
-    )
+    multiSelectFields[fielld] = normalizMultiSelectedInputOptions(values[fielld])
   })
 
   const { school_districts, subdivisions, counties } = multiSelectFields
-  const hasAreasOptions =
-    mls_areas || school_districts || subdivisions || counties
+  const hasAreasOptions = mls_areas || school_districts || subdivisions || counties
 
   const points = hasAreasOptions ? null : options.points
 
@@ -277,17 +269,29 @@ const normalizeValues = (values, state) => {
   if (typeof queryOptions.points === 'undefined' && !hasAreasOptions) {
     const { map } = state
 
-    console.log(map.props)
     queryOptions.points = generatePointsFromBounds(map.props.marginBounds)
   }
 
-  console.log(options, values, queryOptions)
+  // console.group('Submitted Filters')
+  // console.log('Options:', options)
+  // console.log('Values:', values)
+  // console.log('queryOptions:', queryOptions)
+  // console.groupEnd()
 
   return queryOptions
 }
 
 const submitFiltersForm = values => async (dispatch, getState) => {
-  const queryOptions = normalizeValues(values, getState().search)
+  const state = getState().search
+  const { options } = state
+
+  Object.keys(options).forEach(o => {
+    if (options[o] && typeof values[o] === 'undefined') {
+      options[o] = null
+    }
+  })
+
+  const queryOptions = normalizeValues(values, options, state)
 
   const updateMap = () => {
     const { search } = getState()
@@ -306,11 +310,11 @@ const submitFiltersForm = values => async (dispatch, getState) => {
       dispatch(setSearchInput(''))
     }
 
-    if (listings.length === 1) {
-      const { latitude: lat, longitude: lng } = listings[0].location
+    // if (listings.length === 1) {
+    //   const { latitude: lat, longitude: lng } = listings[0].location
 
-      goToPlace({ center: { lat, lng } })(dispatch, getState)
-    }
+    //   goToPlace({ center: { lat, lng } })(dispatch, getState)
+    // }
 
     if (queryOptions.points == null && listings.length && window.google) {
       const extendedProps = extendedBounds(
