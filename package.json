@@ -1,13 +1,14 @@
 {
   "name": "rechat",
-  "version": "9.0.0",
+  "version": "6.1.5",
   "description": "",
   "main": "app.js",
   "author": "",
   "repository": "git@gitlab.com:rechat/web.git",
   "license": "ISC",
   "scripts": {
-    "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
+    "develop":
+      "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
     "serve": "NODE_ENV=production babel-node ./bin/server",
@@ -115,7 +116,8 @@
     "react-dnd": "^2.5.4",
     "react-dnd-html5-backend": "^2.5.4",
     "react-dom": "^15.4.2",
-    "react-dropzone": "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
+    "react-dropzone":
+      "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
     "react-ga": "^2.2.0",
     "react-hot-loader": "^3.0.0-beta.6",
     "react-images": "^0.5.2",
