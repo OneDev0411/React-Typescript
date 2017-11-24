@@ -32,7 +32,7 @@ app.use(async (ctx, next) => {
     await next()
   } catch (e) {
     // log error
-    console.log(e, e.stack)
+    console.log('[ APP ERROR ]: ', e, e.stack)
 
     ctx.status = e.status || 500
     ctx.body = e.message || 'Internal Server Error'
