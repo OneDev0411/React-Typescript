@@ -80,7 +80,11 @@ class WorkspaceForm extends React.Component {
     }
 
     // set status
-    this.setState({ saving: false })
+    this.setState({
+      saving: false,
+      title: '',
+      notifyOffice: false
+    })
 
     return created
   }
