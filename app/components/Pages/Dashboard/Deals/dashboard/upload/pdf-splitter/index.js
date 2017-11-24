@@ -17,10 +17,10 @@ class PDFSplitter extends React.Component {
   }
 
   closeSplitter() {
-    const { splitter, confirmation } = this.props
+    const { splitter, confirmation, resetSplitter } = this.props
 
     if (_.size(splitter.pages) === 0) {
-      return this.props.displaySplitter(false)
+      return resetSplitter()
     }
 
     confirmation({
@@ -28,10 +28,7 @@ class PDFSplitter extends React.Component {
       description: 'You have unsaved changes.',
       confirmLabel: 'Yes',
       cancelLabel: 'No',
-      onConfirm: () => {
-        this.props.displaySplitter(false)
-        this.props.resetSplitter()
-      }
+      onConfirm: () => resetSplitter()
     })
   }
 
