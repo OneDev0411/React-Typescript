@@ -1,3 +1,5 @@
+$splitter-header: 56px;
+
 .pdf-splitter {
   position: fixed;
   z-index: 1052;
@@ -24,8 +26,8 @@
  *
  */
 %pdf-splitter-header {
-  height: 56px;
-  line-height: 56px;
+  height: $splitter-header;
+  line-height: $splitter-header;
   vertical-align: middle;
   padding: 0 20px;
   background-color: #fff;
@@ -54,7 +56,7 @@
 %pdf-splitter-container {
   display: flex;
   background-color: #fff;
-  min-height: calc(100vh - 56px);
+  min-height: calc(100vh - #{$splitter-header});
 
   .pdfs {
     width: 57%;
@@ -71,7 +73,7 @@
  *
  */
 %pdf-splitter-pdfs-section {
-  max-height: calc(100vh - 56px);
+  max-height: calc(100vh - #{$splitter-header});
   overflow: scroll;
   overflow-x: hidden;
 
@@ -110,8 +112,10 @@
  *
  */
 %pdf-splitter-workspace-section {
+  $detailsHeight: 190px;
+
   .details {
-    height: 190px;
+    height: $detailsHeight;
     background-color: #f0f4f7;
     padding: 16px;
 
@@ -200,7 +204,7 @@
   }
 
   .pdfholder {
-    $height: calc(100vh - 240px);
+    $height: calc(100vh - #{$splitter-header} - #{$detailsHeight});
     padding: 18px 8px;
     background-color: #f8fafb;
     box-shadow: -1px 0 0 0 #e7eef2;
@@ -213,6 +217,32 @@
     &.canDrop {
       border-radius: 3px;
       border: 2px dashed #2196f3;
+    }
+  }
+
+  .empty-state {
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: calc(100vh - #{$splitter-header} - #{$detailsHeight} - 8%);
+
+    img {
+      width: 330px;
+      margin-bottom: 24px;
+    }
+
+    .title {
+      font-size: 17px;
+      font-weight: bold;
+      color: #62778c;
+      margin-bottom: 8px;
+    }
+
+    .desc {
+      font-size: 16px;
+      color: #8da2b5;
     }
   }
 }

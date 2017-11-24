@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="332" height="189" viewBox="0 0 332 189">
+    <defs>
+        <rect id="a" width="330" height="186.438" rx="3"/>
+        <rect id="c" width="120" height="12" x="201" y="147" rx="3"/>
+        <rect id="d" width="120" height="12" x="201" y="165" rx="3"/>
+        <path id="f" d="M-1 16h190v171H-1z"/>
+        <filter id="e" width="101.1%" height="100.6%" x="-.3%" y="-.3%" filterUnits="objectBoundingBox">
+            <feOffset dx="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feColorMatrix in="shadowOffsetOuter1" values="0 0 0 0 0.941176471 0 0 0 0 0.956862745 0 0 0 0 0.968627451 0 0 0 1 0"/>
+        </filter>
+        <path id="h" d="M4-1h322a4 4 0 0 1 4 4v14H0V3a4 4 0 0 1 4-4z"/>
+        <filter id="g" width="103%" height="155.6%" x="-1.5%" y="-22.2%" filterUnits="objectBoundingBox">
+            <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1.5"/>
+            <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+        </filter>
+        <rect id="i" width="32" height="40.094" x="10" y="29.068" rx="1"/>
+        <rect id="j" width="32" height="40.094" x="48" y="29.068" rx="1"/>
+        <rect id="k" width="32" height="40.094" x="91.84" y="33.046" rx="1"/>
+        <rect id="l" width="32" height="40.094" x="10" y="75.176" rx="1"/>
+        <rect id="m" width="32" height="40.094" x="48" y="75.176" rx="1"/>
+        <rect id="n" width="32" height="40.094" x="10" y="142.068" rx="1"/>
+        <rect id="o" width="32" height="40.094" x="48" y="142.068" rx="1"/>
+        <rect id="p" width="32" height="40.094" x="9.312" y="5.501" rx="1"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g transform="translate(1 1)">
+            <mask id="b" fill="#fff">
+                <use xlink:href="#a"/>
+            </mask>
+            <use fill="#FFF" xlink:href="#a"/>
+            <rect width="331" height="187.438" x="-.5" y="-.5" stroke="#DCE5EB" rx="3"/>
+            <path fill="#F8FAFB" d="M189 16h142v172H189z" mask="url(#b)"/>
+            <path fill="#F0F4F7" d="M189 135h142v52H189z" mask="url(#b)"/>
+            <g mask="url(#b)">
+                <use fill="#FFF" fill-opacity=".9" xlink:href="#c"/>
+                <rect width="119" height="11" x="201.5" y="147.5" stroke="#DCE5EB" rx="3"/>
+            </g>
+            <g mask="url(#b)">
+                <use fill="#FFF" fill-opacity=".9" xlink:href="#d"/>
+                <rect width="119" height="11" x="201.5" y="165.5" stroke="#DCE5EB" rx="3"/>
+            </g>
+            <g mask="url(#b)">
+                <use fill="#000" filter="url(#e)" xlink:href="#f"/>
+                <use fill="#FFF" xlink:href="#f"/>
+            </g>
+            <path fill="#F0F4F7" d="M11 129h160v1H11z" mask="url(#b)"/>
+            <g mask="url(#b)">
+                <use fill="#000" filter="url(#g)" xlink:href="#h"/>
+                <use fill="#F8FAFB" xlink:href="#h"/>
+            </g>
+        </g>
+        <g transform="translate(1 1)">
+            <use fill="#F0F4F7" xlink:href="#i"/>
+            <rect width="31" height="39.094" x="10.5" y="29.568" stroke="#DCE5EB" rx="1"/>
+        </g>
+        <g opacity=".2" transform="translate(1 1)">
+            <use fill="#F0F4F7" xlink:href="#j"/>
+            <rect width="31" height="39.094" x="48.5" y="29.568" stroke="#2196F3" rx="1"/>
+        </g>
+        <g transform="rotate(15 104.542 57.391)">
+            <use fill="#F0F4F7" xlink:href="#k"/>
+            <rect width="31" height="39.094" x="92.34" y="33.546" stroke="#2196F3" stroke-opacity=".3" rx="1"/>
+        </g>
+        <g transform="translate(1 1)">
+            <use fill="#F0F4F7" xlink:href="#l"/>
+            <rect width="31" height="39.094" x="10.5" y="75.676" stroke="#DCE5EB" rx="1"/>
+        </g>
+        <g transform="translate(1 1)">
+            <use fill="#F0F4F7" xlink:href="#m"/>
+            <rect width="31" height="39.094" x="48.5" y="75.676" stroke="#DCE5EB" rx="1"/>
+        </g>
+        <text fill="#DCE5EB" font-family="SFUIText-Regular, SF UI Text" font-size="17" transform="translate(1 1)">
+            <tspan x="22" y="55.115">1</tspan>
+        </text>
+        <text fill="#DCE5EB" font-family="SFUIText-Regular, SF UI Text" font-size="17" transform="translate(1 1)">
+            <tspan x="59" y="55.115">2</tspan>
+        </text>
+        <g transform="translate(1 1)">
+            <use fill="#F0F4F7" xlink:href="#n"/>
+            <rect width="31" height="39.094" x="10.5" y="142.568" stroke="#DCE5EB" rx="1"/>
+        </g>
+        <g transform="translate(1 1)">
+            <use fill="#F0F4F7" xlink:href="#o"/>
+            <rect width="31" height="39.094" x="48.5" y="142.568" stroke="#DCE5EB" rx="1"/>
+        </g>
+        <text fill="#DCE5EB" font-family="SFUIText-Regular, SF UI Text" font-size="17" transform="translate(1 1)">
+            <tspan x="22" y="168.115">1</tspan>
+        </text>
+        <text fill="#DCE5EB" font-family="SFUIText-Regular, SF UI Text" font-size="17" transform="translate(1 1)">
+            <tspan x="59" y="168.115">2</tspan>
+        </text>
+        <text fill="#DCE5EB" font-family="SFUIText-Regular, SF UI Text" font-size="17" transform="rotate(16 105.442 58.185)">
+            <tspan x="103" y="60.127">2</tspan>
+        </text>
+        <g transform="rotate(33 17.263 420.852)">
+            <use fill="#FFF" xlink:href="#p"/>
+            <rect width="31" height="39.094" x="9.812" y="6.001" stroke="#2196F3" rx="1"/>
+        </g>
+        <g fill="#2196F3">
+            <path d="M247 104.242l4 10.024 1-5.012 5-1.001zM260 115.268h2v-2.004h-2v2.004zm2-2.004l-3-3.008-3 3.008h2v2.004h-2v-2.004l-3 3.007 3 3.007v-2.005h2v2.005h-2l3 3.007 3-3.007h-2v-2.005h2v2.005l3-3.007-3-3.007z"/>
+        </g>
+        <text fill="#2196F3" font-family="SFUIText-Regular, SF UI Text" font-size="17" transform="rotate(36 25.616 389.452)">
+            <tspan x="18" y="32.061">2</tspan>
+        </text>
+        <text fill="#DCE5EB" font-family="SFUIText-Regular, SF UI Text" font-size="17" transform="translate(1 1)">
+            <tspan x="21" y="101.224">3</tspan>
+        </text>
+        <text fill="#DCE5EB" font-family="SFUIText-Regular, SF UI Text" font-size="17" transform="translate(1 1)">
+            <tspan x="58" y="101.224">4</tspan>
+        </text>
+    </g>
+</svg>
