@@ -1,5 +1,7 @@
 import helpers from './helpers'
 
+const ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT = 10.7639
+
 export const getStatusColor = status => {
   switch (status) {
     case 'Active':
@@ -50,9 +52,9 @@ export const getStatusColorClass = status => {
   }
 }
 
-export const metersToFeet = meters => Math.round(meters * '10.7639')
+export const metersToFeet = metre => metre * ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
 
-export const feetToMeters = feet => Math.round(feet / '10.7639')
+export const feetToMeters = foot => foot / ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
 
 export const localAddress = address =>
   `${address.street_number} ${address.street_name} ST ${address.unit_number}`
