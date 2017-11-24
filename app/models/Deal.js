@@ -567,4 +567,28 @@ Deal.voidEnvelope = async function(envelope_id) {
   }
 }
 
+/**
+* split files
+*/
+Deal.splitPDF = async function(title, room_id, files, pages) {
+  try {
+    const request = agent
+      .post(`${config.app.url}/api/deals/pdf-splitter`)
+      .field({ pages: JSON.stringify(pages) })
+      .field({ title })
+      .field({ room_id })
+
+    files.forEach(file => {
+      request.attach(file.id, file, `${file.id}.pdf`)
+    })
+
+    // send request
+    await request
+
+    return true
+  } catch (e) {
+    throw e
+  }
+}
+
 export default Deal
