@@ -583,9 +583,8 @@ Deal.splitPDF = async function(title, room_id, files, pages) {
     })
 
     // send request
-    await request
-
-    return true
+    const response = await request
+    return response.body
   } catch (e) {
     throw e
   }
