@@ -12,7 +12,9 @@ export function setUploadFiles(files, deal, task) {
     indexedFiles[uniqId] = {
       id: uniqId,
       fileObject: file,
-      properties: {}
+      properties: {
+        notifyOffice: true
+      }
     }
   })
 

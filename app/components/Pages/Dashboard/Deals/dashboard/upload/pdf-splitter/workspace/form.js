@@ -22,7 +22,7 @@ class WorkspaceForm extends React.Component {
       saving: false,
       title: '',
       task: props.upload.task || null,
-      notifyOffice: false
+      notifyOffice: true
     }
   }
 
