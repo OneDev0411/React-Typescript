@@ -19,35 +19,8 @@ import SubStatuses from './components/SubStatuses'
 import SoldStatusChildrens from './SoldStatusChildrens'
 import { pendingStatuses, otherStatuses } from './statuses'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
+import { property_subtypes, architectural_styles } from '../../../mapOptions'
 import actions from '../../../../../../../store_actions/listings/search/filters'
-
-const property_subtypes = {
-  condo: 'RES-Condo',
-  farm: 'RES-Farm/Ranch',
-  duplex: 'RES-Half Duplex',
-  townhouse: 'RES-Townhouse',
-  single_family: 'RES-Single Family'
-}
-
-const architectural_styles = {
-  southwestern: 'Southwestern',
-  ranch: 'Ranch',
-  spanish: 'Spanish',
-  aFrame: 'A-Frame',
-  midCentry_modern: 'Mid-Centry Modern',
-  prairie: 'Prairie',
-  studio_apartment: 'Studio Apartment',
-  contemporary: 'Contemporary/Modern',
-  split_level: 'Split Level',
-  victorian: 'Victorian',
-  traditional: 'Traditional',
-  mediterranean: 'Mediterranean',
-  colonial: 'Colonial',
-  oriental: 'Oriental',
-  loft: 'Loft',
-  french: 'French',
-  tudor: 'Tudor'
-}
 
 const Filters = ({
   isOpen,
@@ -63,10 +36,7 @@ const Filters = ({
 }) => (
   <div className={`c-filters ${isOpen ? 'c-filters--isOpen' : ''}`}>
     <div className="c-filters__inner-wrapper u-scrollbar--thinner">
-      <form
-        onSubmit={handleSubmit(onSubmitHandler)}
-        className="c-filters__content"
-      >
+      <form onSubmit={handleSubmit(onSubmitHandler)} className="c-filters__content">
         <div>
           <FiltersListingsStatusRow
             name="listing_statuses.sold"
