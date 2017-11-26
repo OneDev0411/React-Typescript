@@ -5,14 +5,16 @@ import api from '../../../models/listings/alerts'
 
 const getAlertFeed = (alertId, roomId) => (dispatch, getState) => {
   const { feed } = getState().alerts
+
   if (getFetchingStatus(feed)) {
     return Promise.resolve()
   }
 
   dispatch(setSelectedAlertId(alertId))
 
-  const feedListings = feed.byAlertId[alertId] || []
-  if (feedListings.length) {
+  const feedListings = feed.byAlertId[alertId]
+
+  if (feedListings && Array.isArray(feedListings)) {
     return Promise.resolve()
   }
 
