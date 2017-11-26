@@ -35,7 +35,14 @@ const AlertListItem = ({ user, alert, isSelected, onClickAlert, onClickDelete })
       to={`/dashboard/mls/alerts/${alert.id}`}
     />
     <div className="c-alertList__item__thumbnail">
-      <img src={alert.cover_image_url} alt="mls alert list item - rechat" />
+      <img
+        alt="mls alert list item - rechat"
+        src={
+          alert.cover_image_url
+            ? alert.cover_image_url
+            : '/static/images/deals/home.svg'
+        }
+      />
     </div>
     <div className="c-alertList__item__info">
       <h3 className="c-alertList__item__title san-fran ellipses">
