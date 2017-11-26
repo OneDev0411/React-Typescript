@@ -1,67 +1,34 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Waypoint from 'react-waypoint'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import AlertsListItem from './AlertsListItem'
-import getAlerts from '../../../../../../../store_actions/listings/alerts/get-alerts'
 
-const AlertsList = ({
-  user,
-  alertsList,
-  isFetching,
-  renderWaypoint,
-  selectedAlertId,
-  loadMoreHandler,
-  onClickDeleteAlert
-}) => {
+const AlertsList = ({ user, alertsList, selectedAlertId, onClickDeleteAlert }) => {
   const alerts = alertsList.data
-  const alertsLength = alerts.length
 
   return (
     <div className="c-alerts-list">
-      {alerts.map((alert, index) =>
+      {alerts.map((alert, index) => (
         <AlertsListItem
-          key={`ALERT_LIST_ITEM_${index}`}
           user={user}
           alert={alert}
+          key={`ALERT_LIST_ITEM_${index}`}
           onClickDelete={onClickDeleteAlert}
           isSelected={selectedAlertId === alert.id}
         />
-      )}
-      {!isFetching &&
-        alertsList.info.total !== alertsLength &&
-        <Waypoint onEnter={loadMoreHandler} />}
+      ))}
     </div>
   )
 }
 
 export default compose(
-  connect(
-    ({ data, alerts, chatroom }, { alertsList }) => ({
-      user: data.user,
-      rooms: chatroom.rooms,
-      isFetching: alerts.isFetching,
-      selectedAlertId: alerts.selectedAlertId
-    }),
-    { getAlerts }
-  ),
-  withHandlers({
-    loadMoreHandler: ({ getAlerts, alertsList, isFetching }) => () => {
-      const alerts = alertsList.data
-      const alertslength = alerts.length
-
-      if (isFetching || !alertslength) {
-        return
-      }
-
-      const latestAlert = alerts[alertslength - 1]
-      const max_value = latestAlert.updated_at
-      getAlerts({ max_value })
-    }
-  }),
+  connect(({ user, alerts, chatroom }) => ({
+    user,
+    rooms: chatroom.rooms,
+    selectedAlertId: alerts.selectedAlertId
+  })),
   withPropsOnChange(['alertsList', 'rooms'], ({ alertsList, rooms, user }) => {
     if (!rooms) {
       return
