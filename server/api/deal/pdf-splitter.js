@@ -38,7 +38,7 @@ router.post('/deals/pdf-splitter', async (ctx, next) => {
       .pipe(fs.createWriteStream(filepath))
     )
 
-    await ctx
+    const response = await ctx
       .fetch(`/rooms/${room_id}/attachments`, 'POST')
       .set('Authorization', `Bearer ${ctx.session.user.access_token}`)
       .attach('attachment', filepath, `${title}.pdf`)
@@ -47,7 +47,9 @@ router.post('/deals/pdf-splitter', async (ctx, next) => {
     fs.unlink(filepath, () => null)
     _.each(files, file => { fs.unlink(file.path, () => null) })
 
-    ctx.body = {}
+    ctx.body = {
+      file: response.body.data
+    }
 
   } catch(e) {
     console.log('[ Splitter Error ] ', e)

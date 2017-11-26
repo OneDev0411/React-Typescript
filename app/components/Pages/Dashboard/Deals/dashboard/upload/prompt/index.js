@@ -49,7 +49,7 @@ class UploadModal extends React.Component {
 
   onClickNotifyAdmin(fileId, file) {
     this.props.setUploadAttributes(fileId, {
-      notifyOffice: file.properties.notifyOffice ? false : true
+      notifyOffice: !file.properties.notifyOffice
     })
   }
 
