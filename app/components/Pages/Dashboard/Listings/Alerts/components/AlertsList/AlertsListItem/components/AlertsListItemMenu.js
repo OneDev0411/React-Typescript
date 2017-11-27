@@ -58,6 +58,7 @@ class AlertListItemMenu extends React.Component {
   render() {
     const { isOpen } = this.state
     const { alertId, onClickEdit, onClickDelete } = this.props
+
     return (
       <div
         id={alertId}
@@ -69,11 +70,7 @@ class AlertListItemMenu extends React.Component {
         <button
           onClick={() => {
             if (!isOpen) {
-              document.addEventListener(
-                'click',
-                this._onCLickDocumentHandler,
-                false
-              )
+              document.addEventListener('click', this._onCLickDocumentHandler, false)
             } else {
               document.removeEventListener(
                 'click',
@@ -81,6 +78,7 @@ class AlertListItemMenu extends React.Component {
                 false
               )
             }
+
             this._setIsOpen(!isOpen)
           }}
           className="c-alertList__item__menu-trigger-btn"

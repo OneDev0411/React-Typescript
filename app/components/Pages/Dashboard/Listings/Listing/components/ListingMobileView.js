@@ -115,14 +115,7 @@ const ListingMobileView = ({
         {gallery_image_urls.map((gallery_image_url, i) => (
           <div key={`gallery-image-${gallery_image_url}${i}`}>
             <div
-              style={S(
-                `w-100p h-300
-                pull-left
-                text-center
-                bg-efefef bg-cover bg-center
-                bg-url(${listing_util.getResizeUrl(gallery_image_url)}
-                ?w=500)`
-              )}
+              style={S(`w-100p h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(${listing_util.getResizeUrl(gallery_image_url)}?w=500)`)}
             />
           </div>
         ))}
@@ -246,11 +239,7 @@ const ListingMobileView = ({
             </div>
             <div style={S('font-14 mb-5 color-bfc3c7')}>
               <div
-                style={S(
-                  `bg-cover bg-url(${Brand.asset(
-                    'office_logo'
-                  )}) bg-center w-20 h-20 pull-left mr-10`
-                )}
+                style={S(`bg-cover bg-url(${Brand.asset('office_logo')}) bg-center w-20 h-20 pull-left mr-10`)}
               />
               <div style={S('pull-left')}>{Brand.message('office_title')}</div>
               <div className="clearfix" />
@@ -281,9 +270,7 @@ const ListingMobileView = ({
 
       list_agent_area = (
         <div
-          style={S(
-            'mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center'
-          )}
+          style={S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center')}
         >
           <div style={S('font-18 mb-5 color-3388ff')}>
             <span style={S('fw-400')}>
@@ -295,10 +282,7 @@ const ListingMobileView = ({
           {showing_instructions}
           <div style={email_style}>
             <a
-              href={`mailto:${listing.list_agent_email}
-              ?subject=Your listing on Rechat.com
-              &body=I saw your listing (${listing_title}) on Rechat.com and 
-              I'm interested in getting more information.`}
+              href={`mailto:${listing.list_agent_email}?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
               style={S('color-748090')}
             >
               {listing.list_agent_email}
@@ -640,11 +624,7 @@ const ListingMobileView = ({
     if (brand_agent.cover_image_url) {
       profile_image_area = (
         <div
-          style={S(
-            `w-300 h-300 
-            center-block br-300 
-            bg-cover bg-top bg-url(${brand_agent.cover_image_url})`
-          )}
+          style={S(`w-300 h-300 center-block br-300 bg-cover bg-top bg-url(${brand_agent.cover_image_url})`)}
         />
       )
     }
@@ -666,11 +646,7 @@ const ListingMobileView = ({
           </div>
           <div style={S('font-14 mb-15 relative')}>
             <div
-              style={S(
-                `bg-cover bg-url(${Brand.asset(
-                  'office_logo'
-                )}) bg-center w-20 h-20 inline-block mr-10 mt-10`
-              )}
+              style={S(`bg-cover bg-url(${Brand.asset('office_logo')}) bg-center w-20 h-20 inline-block mr-10 mt-10`)}
             />
             <div style={S('inline-block relative t-5n')}>
               {Brand.message('office_title')}
