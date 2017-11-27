@@ -60,18 +60,23 @@ class CreateDeal extends React.Component {
       _.size(clients) > 0
   }
 
-  requestChangeDealSide(dealSide) {
-    const { agents, clients } = this.state
+  requestChangeDealSide(nextDealSide) {
+    const { agents, clients, dealSide } = this.state
+
+    if (dealSide === nextDealSide) {
+      return false
+    }
 
     if (_.size(agents) > 0 || _.size(clients) > 0) {
+      let clientsTitle = (dealSide === 'Buying') ? 'buyers' : 'sellers'
       return this.props.confirmation({
-        message: 'Changing deal side will remove all contacts.',
+        message: `Changing deal side will remove all ${clientsTitle}.`,
         confirmLabel: 'Okay, Continue',
-        onConfirm: () => this.changeDealSide(dealSide)
+        onConfirm: () => this.changeDealSide(nextDealSide)
       })
     }
 
-    this.changeDealSide(dealSide)
+    this.changeDealSide(nextDealSide)
   }
 
   changeDealSide(dealSide) {
