@@ -11,7 +11,6 @@ import {
   resetSplitterSelectedPages,
   resetSplitter,
   changeNeedsAttention,
-  setUploadAttributes,
   addAttachment
 } from '../../../../../../../../store_actions/deals'
 
@@ -65,11 +64,6 @@ class WorkspaceForm extends React.Component {
       // set create as true
       created = true
 
-      // flag splitted files as uploaded items
-      files.forEach(file => {
-        this.props.setUploadAttributes(file.id, { status: 'uploaded' })
-      })
-
       if (notifyOffice) {
         this.props.changeNeedsAttention(task.id, true)
       }
@@ -90,7 +84,7 @@ class WorkspaceForm extends React.Component {
     this.setState({
       saving: false,
       title: '',
-      notifyOffice: false
+      notifyOffice: true
     })
 
     return created
@@ -191,7 +185,6 @@ export default connect(mapStateToProps, {
   notify,
   resetSplitter,
   resetSplitterSelectedPages,
-  setUploadAttributes,
   changeNeedsAttention,
   addAttachment
 })(WorkspaceForm)
