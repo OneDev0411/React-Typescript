@@ -57,10 +57,10 @@ class PDF extends React.Component {
           .filter((doc, id) => {
             // set doc id
             doc.id = id
-            return true
-            // set status
-            // const { status } = upload.files[id].properties
-            // return status !== STATUS_UPLOADED && status !== STATUS_UPLOADING
+
+            // get status
+            const { status } = upload.files[id].properties
+            return status !== STATUS_UPLOADED && status !== STATUS_UPLOADING
           })
           .map((doc) =>
             <div
