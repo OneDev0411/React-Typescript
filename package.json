@@ -21,7 +21,7 @@
     "e2e-setup": "selenium-standalone install"
   },
   "engines": {
-    "node": "7.6.0"
+    "node": "9.2.0"
   },
   "dependencies": {
     "async": "^2.6.0",
