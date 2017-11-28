@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import { addNotification as notify } from 'reapop'
 import { Dropdown, MenuItem, Button } from 'react-bootstrap'
+import _ from 'underscore'
 import { setUploadAttributes, createFormTask } from '../../../../../../store_actions/deals'
 
 class DropDownTasks extends React.Component {
@@ -13,6 +14,8 @@ class DropDownTasks extends React.Component {
       newTaskMode: false,
       isCreatingTask: false
     }
+
+    this.cancelEdit = _.debounce(this.cancelEdit, 100)
   }
 
   toggleMenu() {
@@ -30,17 +33,23 @@ class DropDownTasks extends React.Component {
     this.toggleMenu()
   }
 
-  async createNewTask(e, checklistId) {
-    const { upload, notify, createFormTask, onSelectTask } = this.props
-
-    if (e.which !== 13) {
-      return false
+  onKeyPress(e, checklistId) {
+    if (e.which === 13) {
+      this.createNewTask(checklistId)
     }
+  }
+
+  cancelEdit() {
+    this.setState({ newTaskMode: false })
+  }
+
+  async createNewTask(checklistId) {
+    const { upload, notify, createFormTask, onSelectTask } = this.props
 
     const taskTitle = this.inputNewTask.value
 
     if (taskTitle.length === 0) {
-      return this.setState({ newTaskMode: null })
+      return this.cancelEdit()
     }
 
     this.setState({
@@ -79,6 +88,12 @@ class DropDownTasks extends React.Component {
           onClick={e => e.stopPropagation()}
         >
           { (selectedTask && selectedTask.title) || 'Select a task' }
+
+          <span className="indicator">
+            <i
+              className={`fa fa-caret-${showMenu ? 'up' : 'down'}`}
+            />
+          </span>
         </Button>
 
         <Dropdown.Menu className="deal-task-dropdown-list">
@@ -115,14 +130,23 @@ class DropDownTasks extends React.Component {
                         <span className="creating-task">
                           Creating task ...
                         </span> :
-                        <input
-                          className="new-task"
-                          placeholder="Name this task and press enter"
-                          ref={ref => this.inputNewTask = ref}
-                          onKeyPress={e => this.createNewTask(e, chId)}
-                          onBlur={() => this.setState({ newTaskMode: null })}
-                          autoFocus
-                        />
+                        <div className="create-task-input">
+                          <input
+                            className="new-task"
+                            placeholder="Name this task and press enter"
+                            ref={ref => this.inputNewTask = ref}
+                            onKeyPress={e => this.onKeyPress(e, chId)}
+                            onBlur={() => this.cancelEdit()}
+                            autoFocus
+                          />
+
+                          <span
+                            className="save"
+                            onClick={() => this.createNewTask(chId)}
+                          >
+                            Save
+                          </span>
+                        </div>
                       }
                     </li> :
                     <li
