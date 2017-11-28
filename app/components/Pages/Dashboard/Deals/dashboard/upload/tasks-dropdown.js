@@ -40,6 +40,12 @@ class DropDownTasks extends React.Component {
   }
 
   cancelEdit() {
+    const { isCreatingTask } = this.state
+
+    if (isCreatingTask) {
+      return false
+    }
+
     this.setState({ newTaskMode: false })
   }
 
