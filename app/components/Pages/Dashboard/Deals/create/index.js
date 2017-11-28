@@ -68,9 +68,8 @@ class CreateDeal extends React.Component {
     }
 
     if (_.size(agents) > 0 || _.size(clients) > 0) {
-      let clientsTitle = (dealSide === 'Buying') ? 'buyers' : 'sellers'
       return this.props.confirmation({
-        message: `Changing deal side will remove all ${clientsTitle}.`,
+        message: 'Changing deal side will remove all contacts.',
         confirmLabel: 'Okay, Continue',
         onConfirm: () => this.changeDealSide(nextDealSide)
       })
