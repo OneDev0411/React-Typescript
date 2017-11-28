@@ -6,8 +6,22 @@ const fs = require('fs')
 const scissors = require('scissors')
 const PromisedStream = require('stream-to-promise')
 const uuid = require('../../../app/utils/uuid').default
-
 const app = new Koa()
+
+function splitFiles(splits, filepath) {
+  return new Promise((resolve, reject) => {
+    const writeStream = fs
+      .createWriteStream(filepath)
+      .on('error', (e) => reject(e))
+
+    scissors
+      .join(...splits)
+      .pdfStream()
+      .on('error', (e) => reject(e))
+      .on('finish', resolve)
+      .pipe(writeStream)
+  })
+}
 
 router.post('/deals/pdf-splitter', async (ctx, next) => {
   const { files, fields } = await fileParser(ctx.req)
@@ -16,6 +30,12 @@ router.post('/deals/pdf-splitter', async (ctx, next) => {
 
   try {
     const filepath = `/tmp/${uuid()}.pdf`
+
+    _.each(files, file => {
+      if (!fs.existsSync(file.path)) {
+        throw new Error(`File ${file.filename} did not uploaded correctly, try again.`)
+      }
+    })
 
     const splits = _.map(files, file => {
       const selectedPages = _.chain(pages)
@@ -31,12 +51,8 @@ router.post('/deals/pdf-splitter', async (ctx, next) => {
       throw new Error('No pdf file selected to split')
     }
 
-    await PromisedStream(
-      scissors
-      .join(...splits)
-      .pdfStream()
-      .pipe(fs.createWriteStream(filepath))
-    )
+    // split files
+    await splitFiles(splits, filepath)
 
     const response = await ctx
       .fetch(`/rooms/${room_id}/attachments`, 'POST')
