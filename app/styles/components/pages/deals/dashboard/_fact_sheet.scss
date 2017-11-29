@@ -29,7 +29,7 @@
     border-spacing: 0 1px;
     width: 300px - $col-padding;
     margin: 0 $col-padding/2;
-    color: #5b6469;
+    color: #1d364b;
     margin-bottom: 8px;
     font-size: 14px;
 
@@ -44,7 +44,7 @@
       .name {
         min-width: 140px;
         max-width: 140px;
-        color: #78909c;
+        color: #1d364b;
 
         .status {
           margin-right: 5px;
@@ -62,7 +62,8 @@
       .field {
         min-width: 140px;
         max-width: 140px;
-        color: #8da2b5;
+        font-size: 14px;
+        color: #1d364b;
         text-align: right;
         border: 1px dashed #fff;
         transition: 0.1s ease-in all;

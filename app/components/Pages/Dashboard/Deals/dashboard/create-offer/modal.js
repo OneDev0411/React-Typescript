@@ -4,20 +4,20 @@ import cn from 'classnames'
 import { addNotification as notify } from 'reapop'
 import { Modal, Button } from 'react-bootstrap'
 import ReactTooltip from 'react-tooltip'
-import { addContract } from '../../../../../../store_actions/deals'
+import { createOffer } from '../../../../../../store_actions/deals'
 
-class AddContractModal extends React.Component {
+class CreateOfferModal extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       creating: false,
       buyerName: '',
-      activeOption: props.hasPrimaryContract ? 'backup' : null
+      activeOption: props.hasPrimaryOffer ? 'backup' : null
     }
   }
 
-  async createContract() {
-    const { deal, addContract, notify, onClose } = this.props
+  async createOffer() {
+    const { deal, notify, onClose } = this.props
     const { buyerName, activeOption } = this.state
     const isBackup = activeOption === 'backup'
     const order = this.getMaxOrder() + 1
@@ -25,11 +25,11 @@ class AddContractModal extends React.Component {
     this.setState({ creating: true })
 
     try {
-      await addContract(deal.id, buyerName, order, isBackup, deal.property_type)
+      await this.props.createOffer(deal.id, buyerName, order, isBackup, deal.property_type)
 
       notify({
-        title: 'Contract created',
-        message: `The Contract(${buyerName}) has been created`,
+        title: 'Offer created',
+        message: `The offer(${buyerName}) has been created`,
         status: 'success',
         dismissible: true,
         dismissAfter: 6000
@@ -68,17 +68,17 @@ class AddContractModal extends React.Component {
   }
 
   render() {
-    const { show, hasPrimaryContract, onClose } = this.props
+    const { show, hasPrimaryOffer, onClose } = this.props
     const { activeOption, buyerName, creating } = this.state
 
     return (
       <Modal
         show={show}
         onHide={() => onClose()}
-        dialogClassName="modal-deal-add-contract"
+        dialogClassName="modal-deal-add-offer"
       >
         <Modal.Header closeButton>
-          Add a Contract
+          Add New Offer
         </Modal.Header>
 
         <Modal.Body>
@@ -97,17 +97,17 @@ class AddContractModal extends React.Component {
           />
 
           <div
-            className={`option active ${hasPrimaryContract ? 'disabled' : ''}`}
-            data-tip={hasPrimaryContract ?
-              'You can not have 2 primary contracts at the same time' :
+            className={`option active ${hasPrimaryOffer ? 'disabled' : ''}`}
+            data-tip={hasPrimaryOffer ?
+              'You can not have 2 primary offers at the same time' :
               null
             }
-            onClick={() => !hasPrimaryContract && this.setState({ activeOption: 'active' })}
+            onClick={() => !hasPrimaryOffer && this.setState({ activeOption: 'active' })}
           >
             <span className="check-area">
               <i className={`fa fa-${activeOption === 'active' ? 'check-circle-o' : 'circle-o'}`} />
             </span>
-            Primary Contract
+            Primary Offer
           </div>
 
           <div
@@ -117,7 +117,7 @@ class AddContractModal extends React.Component {
             <span className="check-area">
               <i className={`fa fa-${activeOption === 'backup' ? 'check-circle-o' : 'circle-o'}`} />
             </span>
-            Backup Contract
+            Backup Offer
           </div>
         </Modal.Body>
 
@@ -125,7 +125,7 @@ class AddContractModal extends React.Component {
           <Button
             className="deal-button"
             disabled={creating || buyerName.length === 0 || activeOption === null}
-            onClick={() => this.createContract()}
+            onClick={() => this.createOffer()}
           >
             { creating ? 'Creating' : 'Add' }
           </Button>
@@ -137,4 +137,4 @@ class AddContractModal extends React.Component {
 
 export default connect(({ deals }) => ({
   checklists: deals.checklists
-}), { addContract, notify })(AddContractModal)
+}), { createOffer, notify })(CreateOfferModal)

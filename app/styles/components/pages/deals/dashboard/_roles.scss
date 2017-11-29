@@ -111,7 +111,7 @@
   background: #fff;
   padding: $col-padding 0 1px 0;
   .item {
-    margin-bottom: 20px;
+    margin-bottom: 17px;
     display: flex;
     align-items: center;
     padding-left: $col-padding/2;
@@ -122,16 +122,14 @@
 
     &.add-new {
       cursor: pointer;
-      .add-contact-avatar {
-        display: block;
-        width: 40px;
-        height: 40px;
-        line-height: 42px;
-        vertical-align: middle;
-        text-align: center;
-        background-color: #eff3f7;
-        color: #61778d;
-        border-radius: 80px;
+      img {
+        width: 21px;
+        margin-left: 5.5px; // (32px - 21px) / 2
+        margin-right: 23.5px; // 50px - 21px - 5px
+      }
+
+      &:hover {
+        opacity: 0.8;
       }
     }
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import _ from 'underscore'
+import cn from 'classnames'
 import { browserHistory, Link } from 'react-router'
 import Deal from '../../../../../../models/Deal'
 
@@ -53,10 +54,6 @@ function openListing(deal) {
   }
 }
 
-function goBack() {
-  browserHistory.push('/dashboard/deals')
-}
-
 export default ({
   deal,
   showBackButton = true
@@ -66,54 +63,33 @@ export default ({
   return (
     <div className="deal-listing-card">
 
-      {
-        showBackButton &&
-        <div
-          className="back"
-          onClick={() => goBack()}
-        >
-          <i className="fa fa-angle-left fa-3x" />
-        </div>
-      }
-
-      {
-        photo &&
-        <img
-          className="listing-photo"
-          src={photo}
-        />
-      }
-
-      {
-        !photo &&
-        <img
-          className="placeholder"
-          src="/static/images/deals/group-146.svg"
-        />
-      }
-
       <div
-        className="data"
+        className={cn('listing-photo', { hasListing: deal.listing })}
         onClick={() => openListing(deal)}
-        style={{ cursor: deal.listing ? 'pointer' : 'auto' }}
       >
+        <img
+          src={photo || "/static/images/deals/group-146.svg"}
+        />
 
-        <div className="address-info">
-          <div className="title">
-            { getHomeAddress(deal) }
-          </div>
+        <span className="view-btn">
+          VIEW
+        </span>
+      </div>
 
-          <div className="addr">
-            { getListingAddress(deal) }
-          </div>
+      <div className="address-info">
+        <div className="title">
+          { getHomeAddress(deal) }
         </div>
 
-        <div className="view">
-          {
-            deal.listing &&
-            <img src="/static/images/deals/view-listing.svg" />
-          }
+        <div className="addr">
+          { getListingAddress(deal) }
         </div>
+
+        <img
+          onClick={() => openListing(deal)}
+          className={cn('open-listing', { hidden: !deal.listing })}
+          src="/static/images/deals/view-listing.svg"
+        />
       </div>
 
     </div>

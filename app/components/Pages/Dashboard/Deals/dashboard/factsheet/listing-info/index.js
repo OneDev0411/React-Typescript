@@ -64,7 +64,7 @@ export default ({ deal }) => (
   <div className="deal-info-section">
     <Items
       deal={deal}
-      title="Listing Information"
+      title="LISTING INFORMATION"
       table={table}
       getValue={getValue}
     />

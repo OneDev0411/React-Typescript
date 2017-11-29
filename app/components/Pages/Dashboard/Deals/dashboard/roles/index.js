@@ -110,7 +110,7 @@ class Roles extends React.Component {
                 <UserAvatar
                   name={item.user.display_name}
                   image={item.user.profile_image_url}
-                  size={40}
+                  size={32}
                   showStateIndicator={false}
                 />
               </div>

@@ -84,7 +84,7 @@ class CreateForm extends React.Component {
         </div>
 
         <div className="title">
-          Add new item (documents, tasks, ...)
+          Add checklist item
         </div>
 
         <TaskName

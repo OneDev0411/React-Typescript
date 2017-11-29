@@ -19,8 +19,8 @@ const table = [
     canEdit: (isBO) => isBO
   }, {
     key: 'contract_date',
-    name: 'Contract Date',
-    alias: 'Con.',
+    name: 'Offer Date',
+    alias: 'Off.',
     fieldType: 'date',
     canEdit: (isBO) => isBO
   }, {
@@ -148,7 +148,7 @@ const CriticalDates = ({
 }) => (
   <div className="deal-info-section">
     <Items
-      title="Critical Dates"
+      title="CRITICAL DATES"
       showTitle={showTitle}
       table={table}
       deal={deal}
