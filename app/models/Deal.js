@@ -470,7 +470,7 @@ Deal.changeTaskStatus = async function(task_id, status) {
 }
 
 /**
-* set notify admin flag
+* set notify office flag
 */
 Deal.needsAttention = async function(task_id, status) {
   try {

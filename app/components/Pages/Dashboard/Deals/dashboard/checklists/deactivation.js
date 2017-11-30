@@ -43,7 +43,7 @@ class TaskDeactivation extends React.Component {
 
     const type = checklist.is_deactivated ? 'primary' : 'backup'
     confirmation({
-      message: `Notify Admin to make this a ${type} offer.`,
+      message: `Notify office to make this a ${type} offer.`,
       confirmLabel: 'Yes',
       onConfirm: () => this.deactivateChecklist()
     })
@@ -69,7 +69,7 @@ class TaskDeactivation extends React.Component {
 
     // agents can't active/decactive a checklist directly
     if (!isBackoffice) {
-      let title = `Notify Admin to make this a ${newType} offer.`
+      let title = `Notify office to make this a ${newType} offer.`
       const task = await createGenericTask(deal.id, title, checklist.id)
       changeNeedsAttention(task.id, true)
 
@@ -123,8 +123,8 @@ class TaskDeactivation extends React.Component {
     }
 
     return checklist.is_deactivated ?
-      'Notify admin to make primary this offer' :
-      'Notify admin to backup this offer'
+      'Notify office to make primary this offer' :
+      'Notify office to backup this offer'
   }
 
   render() {

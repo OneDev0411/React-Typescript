@@ -103,7 +103,7 @@ export default class Editable extends React.Component {
 
         <DatePicker
           show={editMode && field.fieldType === 'date'}
-          saveText={editable ? 'Update' : 'Notify Admin'}
+          saveText={editable ? 'Update' : 'Notify Office'}
           initialDate={this.getValue()}
           onClose={() => this.cancelEditing()}
           onSelectDate={date => this.onFinishEditing(date)}

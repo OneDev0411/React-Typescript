@@ -25,7 +25,7 @@ const table = [
     canEdit: (isBO) => isBO
   }, {
     key: 'option_period',
-    name: 'Option Period',
+    name: 'Option Ending',
     alias: 'Opt.',
     fieldType: 'date',
     canEdit: (isBO) => isBO

@@ -25,10 +25,10 @@ export default ({
     <Button
       className="deal-button enabled notify-admin"
       disabled={isSaving}
-      data-tip={hasComment ? null : 'Notify Admin to Review'}
+      data-tip={hasComment ? null : 'Notify office to Review'}
       onClick={() => onSendComment(true)}
     >
-      Notify Admin
+      Notify Office
     </Button>
   </div>
 )
