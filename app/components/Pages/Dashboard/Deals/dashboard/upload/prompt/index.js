@@ -47,14 +47,14 @@ class UploadModal extends React.Component {
     }
   }
 
-  onClickNotifyAdmin(fileId, file) {
-    this.props.setUploadAttributes(fileId, {
+  onClickNotifyAdmin(file) {
+    this.props.setUploadAttributes(file.id, {
       notifyOffice: !file.properties.notifyOffice
     })
   }
 
-  onSelectTask(fileId, taskId) {
-    this.props.setUploadAttributes(fileId, { taskId })
+  onSelectTask(file, taskId) {
+    this.props.setUploadAttributes(file.id, { taskId })
   }
 
   getSelectedTask(file) {
@@ -130,7 +130,7 @@ class UploadModal extends React.Component {
     }
 
     if (status === STATUS_UPLOADED) {
-      return <i className="fa fa-check" />
+      return 'Uploaded'
     }
 
     return 'Upload'
@@ -172,15 +172,14 @@ class UploadModal extends React.Component {
                     <div className="upload-row">
                       <div className="file-name">
                         <FileName
-                          fileId={id}
                           file={file}
-                          canEditName={file.properties.editNameEnabled === true}
+                          canEditName={file.properties.editNameEnabled}
                         />
                       </div>
 
                       <div className="file-task">
                         <TasksDropDown
-                          onSelectTask={(taskId) => this.onSelectTask(id, taskId)}
+                          onSelectTask={(taskId) => this.onSelectTask(file, taskId)}
                           selectedTask={selectedTask}
                           shouldDropUp={filesCount > 4 && fileCounter + 2 >= filesCount}
                         />
@@ -207,8 +206,15 @@ class UploadModal extends React.Component {
                           square
                           selected={file.properties.notifyOffice || false}
                           title="Notify Office"
-                          onClick={() => this.onClickNotifyAdmin(id, file)}
+                          onClick={() => this.onClickNotifyAdmin(file)}
                         />
+                      }
+
+                      {
+                        (isUploaded && file.properties.notifyOffice) &&
+                        <span className="notified">
+                          Office Notified
+                        </span>
                       }
                     </div>
                   </div>

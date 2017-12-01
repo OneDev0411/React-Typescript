@@ -10,36 +10,53 @@ class FileName extends React.Component {
     this.inputs = []
   }
 
-  toggleEditName(fileId, file) {
-    this.props.setUploadAttributes(fileId, {
-      editNameEnabled: file.properties.editNameEnabled ? false : true,
-      fileTitle: this.inputs[fileId].value
+  toggleEdit(file, status) {
+    this.props.setUploadAttributes(file.id, {
+      editNameEnabled: status,
+      fileTitle: this.inputs[file.id].value
     })
   }
 
+  onKeyPress(e, file) {
+    if (e.which !== 13) {
+      return false
+    }
+
+    return this.toggleEdit(file, false)
+  }
+
   render() {
-    const { file, fileId, canEditName } = this.props
+    const { file, canEditName } = this.props
 
     return (
       <div>
-        <img
-          src="/static/images/deals/document.png"
-        />
+        <img src="/static/images/deals/document.png" />
 
         <input
-          ref={ref => this.inputs[fileId] = ref}
-          className={cn('input-edit-name', {
-            disabled: !canEditName
-          })}
+          ref={ref => this.inputs[file.id] = ref}
+          autoFocus
+          className={cn('input-edit-name', { disabled: !canEditName })}
           readOnly={!canEditName}
           defaultValue={file.fileObject.name}
+          onBlur={() => this.toggleEdit(file, false)}
+          onKeyPress={e => this.onKeyPress(e, file)}
+          onClick={() => this.toggleEdit(file, true)}
         />
 
-        <img
-          className={cn('edit-icon', { canEditName })}
-          onClick={() => this.toggleEditName(fileId, file)}
-          src={`/static/images/deals/${canEditName ? 'circle-check.svg' : 'edit-pen.png'}`}
-        />
+        {
+          canEditName ?
+          <span
+            onClick={() => this.toggleEdit(file, false)}
+            className="save"
+          >
+            Save
+          </span> :
+          <img
+            className={cn('edit-icon', { canEditName })}
+            src={`/static/images/deals/edit-pen.png`}
+            onClick={() => this.toggleEdit(file, true)}
+          />
+        }
       </div>
     )
   }

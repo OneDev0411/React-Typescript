@@ -431,15 +431,15 @@ Deal.deleteRole = async function (deal_id, role_id) {
 }
 
 /**
-* accept a contract
+* create a new offer
 */
-Deal.addContract = async function (deal_id, name, order, is_backup, property_type) {
+Deal.createOffer = async function (deal_id, name, order, is_backup, property_type) {
   try {
     const response = await new Fetch()
       .post(`/deals/${deal_id}/checklists/offer`)
       .send({
         checklist: {
-          title: `Contract (${name})`,
+          title: `Offer (${name})`,
           is_deactivated: is_backup,
           order: order
         },
@@ -470,7 +470,7 @@ Deal.changeTaskStatus = async function(task_id, status) {
 }
 
 /**
-* set notify admin flag
+* set notify office flag
 */
 Deal.needsAttention = async function(task_id, status) {
   try {

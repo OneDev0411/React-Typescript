@@ -38,6 +38,18 @@
   }
 }
 
+%deal-tiny-save-btn {
+  .save {
+    cursor: pointer;
+    padding-left: 4px;
+    font-weight: 500;
+
+    &:hover {
+      color: #2196f3;
+    }
+  }
+}
+
 %upload-file-container {
   .notify-admin {
     text-align: right;
@@ -59,6 +71,11 @@
         font-size: 12px;
         color: #62778c;
       }
+    }
+
+    span.notified {
+      font-size: 12px;
+      color: gray;
     }
   }
 
@@ -101,6 +118,10 @@
       .input-edit-name {
         width: 85%;
         height: 30px;
+        border-radius: 4px;
+        padding: 0 5px;
+        border: 1px solid #ccc;
+
         &.disabled {
           border: none;
         }
@@ -109,6 +130,8 @@
           outline: none;
         }
       }
+
+      @extend %deal-tiny-save-btn;
 
       &:hover .edit-icon {
         opacity: 1;
@@ -173,9 +196,8 @@
     box-shadow: none;
   }
 
-  .caret {
+  .indicator {
     float: right;
-    margin-top: 7px;
   }
 }
 
@@ -241,9 +263,17 @@
       width: 100%;
       border-radius: 4px;
       border: 1px solid #ccc;
-      padding: 3px 5px;
+      padding: 3px 5px 3px 5px;
       &:focus {
         outline: none;
+      }
+    }
+
+    .create-task-input {
+      @extend %deal-tiny-save-btn;
+      .save {
+        position: absolute;
+        right: 25px;
       }
     }
 

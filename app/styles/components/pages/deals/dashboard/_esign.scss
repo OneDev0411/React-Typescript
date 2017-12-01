@@ -214,8 +214,14 @@
 * styles of esign documents list
 */
 .modal-deal-esign-documents {
+  .modal-content {
+    border: none;
+  }
+
   .modal-body {
     padding: 0;
+    max-height: 400px;
+    overflow: auto;
   }
 
   .deal-button {

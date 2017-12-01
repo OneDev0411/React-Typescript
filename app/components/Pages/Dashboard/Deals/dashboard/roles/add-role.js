@@ -65,15 +65,11 @@ class AddRole extends React.Component {
           className="item add-new"
           onClick={() => this.showModal()}
         >
-          <div className="role-avatar">
-            <span className="add-contact-avatar">
-              <i className="fa fa-plus" />
-            </span>
-          </div>
+          <img src="/static/images/deals/contact-add.png" />
 
           <div className="name">
             <div style={{ color: '#61778d' }}>
-              Add Contact
+              Add a Contact
             </div>
           </div>
         </div>

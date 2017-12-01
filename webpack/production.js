@@ -10,7 +10,7 @@ import appConfig from '../config/webpack'
 const postcss = function () {
   return [
     require('autoprefixer')({
-      'browserslist': [
+      'browsers': [
         '> 1%',
         'IE 10',
         'Last 2 versions'

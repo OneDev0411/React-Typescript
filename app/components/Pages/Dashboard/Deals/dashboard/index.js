@@ -8,10 +8,12 @@ import ReactTooltip from 'react-tooltip'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import DealInfo from './deal-info'
+import CreateOffer from './create-offer'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
 import UploadPromptModal from './upload/prompt'
 import PDFSplitterModal from './upload/pdf-splitter'
+import NavBar from './navbar'
 import { getEnvelopes } from '../../../../../store_actions/deals'
 
 class DealDetails extends React.Component {
@@ -40,53 +42,52 @@ class DealDetails extends React.Component {
     }
 
     return (
-      <Row className="deal-dashboard">
+      <div className="deal-dashboard">
+
+        <NavBar deal={deal} />
+
+        <div className="content">
+          <div className="column deal-info">
+            <DealInfo
+              deal={deal}
+              showBackButton={true}
+            />
+          </div>
+
+          <div className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}>
+            <CreateOffer
+              deal={deal}
+            />
+
+            <Checklists
+              deal={deal}
+            />
+          </div>
+
+          <div
+            className="column deal-task-detail"
+            style={{ display: selectedTaskId ? 'inherit' : 'none' }}
+          >
+            <TaskDetail
+              deal={deal}
+              taskId={selectedTaskId}
+              onCloseTask={() => this.onCloseTask()}
+            />
+          </div>
+        </div>
+
+        <ESignAttachments deal={deal} />
+        <ESignCompose deal={deal} />
+        <UploadPromptModal />
+        <PDFSplitterModal />
+
         <ReactTooltip
           place="top"
           className="deal-filter--tooltip"
           multiline
         />
 
-        <Col
-          className="column deal-info"
-        >
-          <DealInfo
-            deal={deal}
-            showBackButton={true}
-          />
-        </Col>
-
-        <Col
-          xs={12}
-          className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}
-        >
-          <Checklists
-            deal={deal}
-          />
-        </Col>
-
-        <Col
-          className="column deal-task-detail"
-          style={{ display: selectedTaskId ? 'inherit' : 'none' }}
-        >
-          <TaskDetail
-            deal={deal}
-            taskId={selectedTaskId}
-            onCloseTask={() => this.onCloseTask()}
-          />
-        </Col>
-
-        <ESignAttachments
-          deal={deal}
-        />
-
-        <ESignCompose
-          deal={deal}
-        />
-
-        <UploadPromptModal />
-        <PDFSplitterModal />
-      </Row>
+      </div>
     )
   }
 }

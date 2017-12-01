@@ -79,7 +79,7 @@ class ListingStatus extends React.Component {
             deal={deal}
             show={showModal}
             status={status}
-            saveText={isBackOffice ? 'Update' : 'Notify Admin'}
+            saveText={isBackOffice ? 'Update' : 'Notify Office'}
             onChangeStatus={(status) => this.onChangeStatus(status)}
             onClose={() => this.toggleModal()}
           />

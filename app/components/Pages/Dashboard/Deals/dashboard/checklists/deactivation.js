@@ -7,7 +7,7 @@ import {
   updateChecklist
 } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
-import hasPrimaryContract from '../../utils/has-primary-contract'
+import hasPrimaryOffer from '../../utils/has-primary-offer'
 
 class TaskDeactivation extends React.Component {
 
@@ -28,9 +28,9 @@ class TaskDeactivation extends React.Component {
       return false
     }
 
-    if (checklist.is_deactivated && hasPrimaryContract(deal)) {
+    if (checklist.is_deactivated && hasPrimaryOffer(deal)) {
       return confirmation({
-        message: 'Please terminate your Primary contract before converting this Back up into primary',
+        message: 'Please terminate your Primary offer before converting this Back up into primary',
         confirmLabel: 'Okay',
         hideCancelButton: true,
         onConfirm: () => null
@@ -43,7 +43,7 @@ class TaskDeactivation extends React.Component {
 
     const type = checklist.is_deactivated ? 'primary' : 'backup'
     confirmation({
-      message: `Notify Admin to make this a ${type} contract.`,
+      message: `Notify office to make this a ${type} offer.`,
       confirmLabel: 'Yes',
       onConfirm: () => this.deactivateChecklist()
     })
@@ -69,12 +69,12 @@ class TaskDeactivation extends React.Component {
 
     // agents can't active/decactive a checklist directly
     if (!isBackoffice) {
-      let title = `Notify Admin to make this a ${newType} contract.`
+      let title = `Notify office to make this a ${newType} offer.`
       const task = await createGenericTask(deal.id, title, checklist.id)
       changeNeedsAttention(task.id, true)
 
       notify({
-        message: `Back office has notified to ${newType} this contract`,
+        message: `Back office has notified to ${newType} this offer`,
         status: 'success',
         dismissible: true,
         dismissAfter: 6000
@@ -92,7 +92,7 @@ class TaskDeactivation extends React.Component {
       })
 
       notify({
-        message: `The checklist has been changed to ${newType} contract`,
+        message: `The checklist has been changed to ${newType} offer`,
         status: 'success',
         dismissible: true,
         dismissAfter: 6000
@@ -118,13 +118,13 @@ class TaskDeactivation extends React.Component {
 
     if (isBackoffice) {
       return checklist.is_deactivated ?
-        'Make this a primary contract' :
-        'Make this a back up contract'
+        'Make this a primary offer' :
+        'Make this a back up offer'
     }
 
     return checklist.is_deactivated ?
-      'Notify admin to make primary this contract' :
-      'Notify admin to backup this contract'
+      'Notify office to make primary this offer' :
+      'Notify office to backup this offer'
   }
 
   render() {

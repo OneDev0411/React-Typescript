@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import AddContractModal from './modal'
-import hasPrimaryContract from '../../utils/has-primary-contract'
+import CreateOfferModal from './modal'
+import hasPrimaryOffer from '../../utils/has-primary-offer'
 
-class AddContract extends React.Component {
+export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -21,17 +21,17 @@ class AddContract extends React.Component {
   render() {
     const { deal } = this.props
     return (
-      <div>
+      <div className="create-offer">
         <Button
-          className="info-btn add-contract-button"
+          className="add-offer-button"
           onClick={() => this.toggleDisplayModal()}
         >
-          Add a new contract
+          Add New Offer
         </Button>
 
-        <AddContractModal
+        <CreateOfferModal
           deal={deal}
-          hasPrimaryContract={hasPrimaryContract(deal)}
+          hasPrimaryOffer={hasPrimaryOffer(deal)}
           show={this.state.showModal}
           onClose={() => this.toggleDisplayModal()}
         />
@@ -40,5 +40,3 @@ class AddContract extends React.Component {
     )
   }
 }
-
-export default AddContract

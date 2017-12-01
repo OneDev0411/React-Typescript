@@ -20,7 +20,7 @@ const table = [
     canEdit: (isBO) => isBO
   }, {
     key: 'property_type',
-    name: 'Property Type',
+    name: 'Checklist Type',
     dataType: 'text',
     disabled: true,
     canEdit: () => null
@@ -34,6 +34,12 @@ const table = [
 
 const getValue = (deal, field) => {
   let value
+
+  if (field.key === 'property_type') {
+    return {
+      value: deal.property_type
+    }
+  }
 
   if (field.context) {
     let context = deal[field.context]
@@ -58,7 +64,7 @@ export default ({ deal }) => (
   <div className="deal-info-section">
     <Items
       deal={deal}
-      title="Listing Information"
+      title="LISTING INFORMATION"
       table={table}
       getValue={getValue}
     />
