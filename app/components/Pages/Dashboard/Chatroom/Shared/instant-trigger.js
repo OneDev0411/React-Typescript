@@ -25,13 +25,16 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
 
   return (
     <div
-      data-balloon="Chat Rooms"
-      data-balloon-pos="right"
-      className="chatroom-icon"
+      className="c-app-navbar__item__inbox"
       onClick={() => openChatbar(toggleChatbar)}
     >
-      <SvgChat color="#4e5c6c" />
-      {counter > 0 && <span className="count">{counter}</span>}
+      <span className="c-app-navbar__item__inbox__icon">
+        <SvgChat color="#8da2b5" />
+        {counter > 0 && (
+          <span className="c-app-navbar__notification-badge">{counter}</span>
+        )}
+      </span>
+      <span className="c-app-navbar__item__title">Inbox</span>
     </div>
   )
 }
