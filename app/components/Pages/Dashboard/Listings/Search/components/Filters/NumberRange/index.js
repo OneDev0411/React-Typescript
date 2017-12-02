@@ -1,19 +1,22 @@
 import React from 'react'
-import pure from 'recompose/pure'
-
 import MinMaxInputs from '../components/MinMaxInputs'
+import { toNumber } from '../../../../../../../../utils/helpers'
 
-const _defaultFormatHandler = value =>
-  value == null ? '' : Number(value.replace(/[^0-9]/g, '')).toLocaleString()
+const _defaultFormatHandler = value => {
+  if (!value || value == null) {
+    return ''
+  }
 
-const NumberRange = ({ formatHandler, ...rest }) =>
+  return typeof value === 'number' ? value.toLocaleString() : toNumber(value, true)
+}
+
+const NumberRange = ({ formatHandler, ...rest }) => (
   <MinMaxInputs
     {...rest}
     formatHandler={
-      typeof formatHandler === 'function'
-        ? formatHandler
-        : _defaultFormatHandler
+      typeof formatHandler === 'function' ? formatHandler : _defaultFormatHandler
     }
   />
+)
 
-export default pure(NumberRange)
+export default NumberRange

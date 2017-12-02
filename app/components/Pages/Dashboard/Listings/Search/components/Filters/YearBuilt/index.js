@@ -2,6 +2,7 @@ import React from 'react'
 import pure from 'recompose/pure'
 
 import MinMaxInputs from '../components/MinMaxInputs'
+import { toNumber } from '../../../../../../../../utils/helpers'
 
 const currentYear = () => {
   const date = new Date()
@@ -20,8 +21,7 @@ const exactLength4 = exactLength(4)
 const tooOld = year =>
   year && Number(year) < 1800 ? 'You might search museums for this!' : undefined
 
-const formatHandler = value =>
-  value == null ? '' : Number(value.replace(/[^0-9]/g, ''))
+const formatHandler = value => (value == null ? '' : toNumber(value))
 
 const YearBuilt = () => (
   <MinMaxInputs
