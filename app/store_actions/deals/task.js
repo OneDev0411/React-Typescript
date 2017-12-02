@@ -34,6 +34,21 @@ function attachmentDeleted(task, file_id) {
   }
 }
 
+function taskDeleted(checklistId, taskId) {
+  return {
+    type: types.DELETE_TASK,
+    checklistId,
+    taskId
+  }
+}
+
+function taskUpdated(task) {
+  return {
+    type: types.UPDATE_TASK,
+    task
+  }
+}
+
 export function setTasks(tasks) {
   return {
     type: types.GET_TASKS,
@@ -45,6 +60,20 @@ export function setSelectedTask(task) {
   return {
     type: types.SET_SELECTED_TASK,
     task
+  }
+}
+
+export function deleteTask(checklistId, taskId) {
+  return async (dispatch) => {
+    Deal.deleteTask(taskId)
+    dispatch(taskDeleted(checklistId, taskId))
+  }
+}
+
+export function updateTask(taskId, attributes) {
+  return async (dispatch) => {
+    const task = await Deal.updateTask(taskId, attributes)
+    dispatch(taskUpdated(task))
   }
 }
 
