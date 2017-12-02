@@ -8,29 +8,21 @@
 
 %deal-comments {
   margin-left: 0 !important;
-  background: #f8fafb;
   position: relative;
 
   .comment-heading {
-    margin: 0 10px;
-    height: 40px;
-    line-height: 40px;
-    vertical-align: middle;
-    padding-left: 12px;
-    background-color: #f8fafb;
-    border: solid 1px #d2d7db;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     color: #1d364b;
-    border-radius: 3px 3px 0 0;
-    font-size: 17px;
+    border-bottom: 1px solid #f0f4f7;
+    padding-bottom: 5px;
+    margin: 0 $col-padding;
   }
 
   .messages {
     height: auto !important;
     margin: 0 10px 20px 10px !important;
-    background-color: #fff;
-    border: 1px solid #dce5eb;
-    border-top: none;
-    border-radius: 0 0 3px 3px;
     .loading {
       width: 90%;
     }
@@ -57,9 +49,6 @@
 %deal-comment-create {
   min-height: 107px;
   padding: 10px;
-  border-radius: 0 0 3px 3px;
-  background-color: #ffffff;
-  box-shadow: 0 -1px 5px 0 rgba(167, 184, 200, 0.7);
   margin-top: 3px;
   position: absolute;
   left: 0;

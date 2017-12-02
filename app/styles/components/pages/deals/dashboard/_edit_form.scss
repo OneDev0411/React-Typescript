@@ -22,8 +22,11 @@
     margin-right: 0;
 
     .exit {
+      margin-left: 8px;
       width: 34px;
       height: 34px;
+      font-weight: 600;
+      font-size: 16px;
     }
 
     .name {
@@ -37,13 +40,23 @@
 
     .incomplete-fields {
       margin-right: 15px;
-      color: gray;
+      color: #8da2b5;
+      font-size: 13px;
+      letter-spacing: 0.5px;
     }
 
     .btns {
       text-align: right;
       .save {
+        background-color: #2196f3;
+        border-color: #2196f3;
+        color: #fff;
         min-width: 100px;
+
+        &:hover {
+          color: #2196f3;
+          background-color: #fff;
+        }
       }
     }
   }

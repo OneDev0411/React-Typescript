@@ -31,7 +31,11 @@
       color: #2196f3;
       &:hover {
         background-color: #2196f3;
+        border-color: #2196f3;
         color: #fff;
+      }
+      &:focus {
+        outline: 0;
       }
     }
   }
@@ -207,46 +211,18 @@
 
     .status, .notification {
       position: absolute;
-      top: 10px;
+      top: 8px;
       right: 22px;
-      border-radius: 3px;
-      min-width: 76px;
-      height: 18px;
-      line-height: 18px;
-      vertical-align: middle;
-      background: transparent;
       color: #fff;
-      border: 1px solid transparent;
-      text-align: center;
       margin-right: 10px;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 1px;
 
-      &.Incomplete {
-        display: none;
-      }
-      &.Pending, &.ATTENTION {
-        color: #f6a623;
-        border-color: #f6a623;
-      }
-      &.Declined {
-        color: #d0011b;
-        border-color: #d0011b;
-      }
-      &.Approved {
-        color: #35b863;
-        border-color: #35b863;
-      }
-      &.Submitted,
-      &.Notified {
-        color: #f6a623;
-        border-color: #f6a623;
-      }
+      @extend %status-colors;
     }
 
     .notification {
-      top: 9px;
+      min-width: 16px !important;
+      width: 16px;
+      top: 7px;
       right: 0px;
       min-width: 10px;
       height: 10px;
@@ -319,5 +295,40 @@
   .tasks-leave.tasks-leave-active {
     opacity: 0.01;
     transition: opacity 800ms ease-in;
+  }
+}
+
+%status-colors {
+  border: 1px solid transparent;
+  text-align: center;
+  border-radius: 3px;
+  min-width: 76px;
+  height: 18px;
+  line-height: 18px;
+  vertical-align: middle;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  background: transparent;
+
+  &.Incomplete {
+    display: none;
+  }
+  &.Pending, &.ATTENTION {
+    color: #f6a623;
+    border-color: #f6a623;
+  }
+  &.Declined {
+    color: #d0011b;
+    border-color: #d0011b;
+  }
+  &.Approved {
+    color: #35b863;
+    border-color: #35b863;
+  }
+  &.Submitted,
+  &.Notified {
+    color: #f6a623;
+    border-color: #f6a623;
   }
 }

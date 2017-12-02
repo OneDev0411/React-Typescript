@@ -7,13 +7,12 @@
   min-width: $width;
   max-width: $width;
   border: 1px solid #dce5eb;
-  margin: 20px $col-padding 20px 0;
+  margin: 20px $col-padding 20px 5px;
   border-radius: 4px;
-  background-color: #f8fafb;
-  @include scrollbar();
+  background-color: #fff;
 
-  .heading {
-    @extend %deal-task-detail-heading;
+  .header {
+    @extend %deal-task-detail-header;
   }
 
   .scrollable {
@@ -29,49 +28,97 @@
   }
 }
 
-%deal-task-detail-heading {
-  width: 100%;
-  height: 58px;
-  padding: 0 $col-padding 0 $col-padding;
-  border-radius: 3px 3px 0 0;
-  border-bottom: 1px solid #dce5eb;
-  background-color: #f8fafb;
-  margin-bottom: 15px;
+%deal-task-detail-header {
+  padding: 16px $col-padding 0 $col-padding;
+  margin-bottom: 24px;
+
+  .top {
+    border-radius: 3px 3px 0 0;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .task-status {
+      width: 60%;
+      text-align: left;
+      .status {
+        @extend %status-colors;
+        width: 76px;
+        padding: 3px 5px;
+      }
+    }
+
+    .cta {
+      width: 40%;
+      text-align: right;
+      vertical-align: middle;
+      padding-right: 10px;
+    }
+
+    .close-task,
+    .delete-task {
+      img {
+        height: 16px;
+        margin-left: 15px;
+        cursor: pointer;
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  .saving-title {
+    i {
+      color: #2196f3;
+      font-size: 15px;
+    }
+  }
 
   .title {
-    padding: 15px 10px;
-    font-size: 17px;
-    font-weight: 500;
-    color: #1d364b
-  }
+    position: relative;
+    width: 100%;
+    font-size: 21px;
+    letter-spacing: 0.8px;
+    text-align: left;
+    color: #1d364b;
+    padding: 1px 20px 1px 1px;
 
-  .task-close {
-    text-align: right;
-    vertical-align: middle;
-    padding-right: 10px;
-  }
+    textarea {
+      width: 100%;
+      height: 100%;
+      resize: none;
+      border: none;
+      &:focus {
+        outline: none;
+      }
+    }
 
-  .task-btn {
-    float: right;
-    height: 34px;
-    line-height: 30px;
-    vertical-align: middle;
-    color: #78909c;
-    margin-top: 12px;
-    border-radius: 3px;
-    background-color: #ffffff;
-    border: solid 1px #e7eef0;
+    .cta {
+      position: absolute;
+      cursor: pointer;
+      top: 6px;
+      right: 10px;
+      color: #2196f3;
+      font-size: 13px;
+
+      .save {
+        border: 1px solid #2196f3;
+        padding: 3px;
+        border-radius: 4px;
+      }
+    }
 
     &:focus {
       outline: none;
     }
-    &:hover {
-      background-color: #fbfbfb;
-    }
-  }
 
-  .close-task {
-    font-size: 18px;
-    width: 34px;
+    &.isEditingTitle,
+    &:hover {
+      padding: 0 20px 0 0;
+      border: dashed 1px #2196f3;
+      border-radius: 4px;
+    }
   }
 }
