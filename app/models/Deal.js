@@ -372,6 +372,35 @@ Deal.createTask = async function (dealId, data) {
 }
 
 /**
+* delete task
+*/
+Deal.deleteTask = async function (taskId) {
+  try {
+    const response = await new Fetch()
+      .delete(`/tasks/${taskId}`)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* delete task
+*/
+Deal.updateTask = async function (taskId, attributes) {
+  try {
+    const response = await new Fetch()
+      .patch(`/tasks/${taskId}`)
+      .send(attributes)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * update checklist
 */
 Deal.updateChecklist = async function (deal_id, checklist_id, attributes) {
