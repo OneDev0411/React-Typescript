@@ -11,7 +11,6 @@ const getListing = id => async (dispatch, getState) => {
   try {
     const response = await api.getListing(id)
 
-    console.log('try')
     dispatch({
       response,
       tabName: 'LISTING',

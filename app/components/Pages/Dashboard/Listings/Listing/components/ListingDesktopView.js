@@ -10,7 +10,7 @@ import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import helpers from '../../../../../../utils/helpers'
+import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
 import config from '../../../../../../../config/public'
 import Brand from '../../../../../../controllers/Brand'
 import listing_util from '../../../../../../utils/listing'
@@ -150,7 +150,7 @@ const ListingDesktopView = ({
       price = listing.close_price
     }
 
-    price = helpers.numberWithCommas(price)
+    price = numberWithCommas(price)
     year_built = property.year_built
     address = listing_util.addressTitle(property.address)
     listing_title = address
@@ -167,7 +167,7 @@ const ListingDesktopView = ({
         ? ` + ${property.half_bathroom_count} Half Bath`
         : ''
     bathroomBaloonText = bathroomBaloonText || 'Unknown'
-    square_feet = helpers.numberWithCommas(
+    square_feet = numberWithCommas(
       Math.floor(listing_util.metersToFeet(property.square_meters))
     )
 
@@ -249,7 +249,7 @@ const ListingDesktopView = ({
     let sold_date
 
     if (listing.close_date) {
-      const sold_date_obj = helpers.friendlyDate(listing.close_date)
+      const sold_date_obj = friendlyDate(listing.close_date)
 
       sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
     }

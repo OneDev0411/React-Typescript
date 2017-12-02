@@ -1,12 +1,11 @@
 import React from 'react'
-import SideBar from '../Partials/SideBar'
-import MobileNav from '../Partials/MobileNav'
 import NotificationDispatcher from '../../../../dispatcher/NotificationDispatcher'
 import S from 'shorti'
 import _ from 'lodash'
-import helpers from '../../../../utils/helpers'
+import { getTimeAgo } from '../../../../utils/helpers'
 import AppStore from '../../../../stores/AppStore'
 import { browserHistory } from 'react-router'
+
 export default class extends React.Component {
   constructor(props) {
     super(props)
@@ -14,6 +13,7 @@ export default class extends React.Component {
   componentDidMount() {
     const { data } = this.props
     const { user } = data
+
     // delete notifications
     NotificationDispatcher.dispatch({
       action: 'delete-all',
@@ -23,25 +23,31 @@ export default class extends React.Component {
   handleNotifClick(notification) {
     const { data } = this.props
     const { user } = data
+
     NotificationDispatcher.dispatch({
       action: 'mark-seen',
       user,
       id: notification.id
     })
+
     // Deals
     if (notification.notification_type === 'UserReactedToEnvelope') {
       browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
     }
+
     // Listings
     if (notification.notification_type === 'ListingPriceDroppedUser') {
       browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
     }
+
     if (notification.notification_type === 'ListingStatusChangedUser') {
       browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
     }
+
     if (notification.notification_type === 'ListingBecameAvailableUser') {
       browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
     }
+
     if (notification.notification_type === 'OpenHouseAvailableListing') {
       browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
     }
@@ -50,21 +56,25 @@ export default class extends React.Component {
     const type = notification.notification_type
     const subject = notification.subjects[0]
     let object
+
     if (notification.objects) {
       object = notification.objects[0]
     }
+
     let icon
-    const common_image_style =
-      'bg-center bg-cover w-50 h-50 absolute br-100 t-15'
+    const common_image_style = 'bg-center bg-cover w-50 h-50 absolute br-100 t-15'
+
     switch (type) {
       case 'UserSentMessage':
         icon = (
           <div>
             <div
               style={S(
-                `${subject.profile_image_url
-                  ? `bg-url(${subject.profile_image_url})`
-                  : 'bg-ccc'} ${common_image_style}`
+                `${
+                  subject.profile_image_url
+                    ? `bg-url(${subject.profile_image_url})`
+                    : 'bg-ccc'
+                } ${common_image_style}`
               )}
             >
               {!subject.profile_image_url && (
@@ -80,9 +90,7 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(
-                `bg-url(${subject.profile_image_url}) ${common_image_style}`
-              )}
+              style={S(`bg-url(${subject.profile_image_url}) ${common_image_style}`)}
             />
           </div>
         )
@@ -91,9 +99,7 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(
-                `bg-url(${subject.profile_image_url}) ${common_image_style}`
-              )}
+              style={S(`bg-url(${subject.profile_image_url}) ${common_image_style}`)}
             />
           </div>
         )
@@ -102,9 +108,7 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(
-                `bg-url(${object.cover_image_url}) ${common_image_style}`
-              )}
+              style={S(`bg-url(${object.cover_image_url}) ${common_image_style}`)}
             />
           </div>
         )
@@ -113,9 +117,7 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(
-                `bg-url(${subject.profile_image_url}) ${common_image_style}`
-              )}
+              style={S(`bg-url(${subject.profile_image_url}) ${common_image_style}`)}
             />
           </div>
         )
@@ -125,9 +127,11 @@ export default class extends React.Component {
           <div>
             <div
               style={S(
-                `${subject.cover_image_url
-                  ? `bg-url(${subject.cover_image_url})`
-                  : 'bg-ccc'} ${common_image_style}`
+                `${
+                  subject.cover_image_url
+                    ? `bg-url(${subject.cover_image_url})`
+                    : 'bg-ccc'
+                } ${common_image_style}`
               )}
             >
               {!subject.cover_image_url && (
@@ -144,9 +148,11 @@ export default class extends React.Component {
           <div>
             <div
               style={S(
-                `${subject.cover_image_url
-                  ? `bg-url(${subject.cover_image_url})`
-                  : 'bg-ccc'} ${common_image_style}`
+                `${
+                  subject.cover_image_url
+                    ? `bg-url(${subject.cover_image_url})`
+                    : 'bg-ccc'
+                } ${common_image_style}`
               )}
             >
               {!subject.cover_image_url && (
@@ -163,9 +169,11 @@ export default class extends React.Component {
           <div>
             <div
               style={S(
-                `${subject.cover_image_url
-                  ? `bg-url(${subject.cover_image_url})`
-                  : 'bg-ccc'} ${common_image_style}`
+                `${
+                  subject.cover_image_url
+                    ? `bg-url(${subject.cover_image_url})`
+                    : 'bg-ccc'
+                } ${common_image_style}`
               )}
             >
               {!subject.cover_image_url && (
@@ -181,9 +189,7 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(
-                `bg-url(${object.cover_image_url}) ${common_image_style}`
-              )}
+              style={S(`bg-url(${object.cover_image_url}) ${common_image_style}`)}
             />
           </div>
         )
@@ -192,9 +198,7 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(
-                `bg-url(${subject.profile_image_url}) ${common_image_style}`
-              )}
+              style={S(`bg-url(${subject.profile_image_url}) ${common_image_style}`)}
             />
           </div>
         )
@@ -203,9 +207,7 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(
-                `bg-url(${subject.profile_image_url}) ${common_image_style}`
-              )}
+              style={S(`bg-url(${subject.profile_image_url}) ${common_image_style}`)}
             />
           </div>
         )
@@ -213,20 +215,25 @@ export default class extends React.Component {
       default:
         icon = <div />
     }
+
     return icon
   }
   getNotifications() {
     const { data } = this.props
     const { notifications } = data
+
     if (notifications && notifications.length) {
       return notifications.map((notification, i) => {
         let bg_color = 'rgba(32, 150, 243, 0.05)'
+
         if (notification.seen) {
           bg_color = '#ffffff'
         }
+
         if (notification.notification_type === 'ContactCreatedForUser') {
           return
         }
+
         return (
           <div
             onClick={this.handleNotifClick.bind(this, notification)}
@@ -240,20 +247,20 @@ export default class extends React.Component {
           >
             {this.notificationIcon(notification)}
             <div style={S('relative ml-70')}>
-              <div style={S('color-263445 font-17')}>
-                {notification.message}
-              </div>
+              <div style={S('color-263445 font-17')}>{notification.message}</div>
               <div style={S('color-c6c6c6')}>
-                {helpers.getTimeAgo(notification.created_at)} ago
+                {getTimeAgo(notification.created_at)} ago
               </div>
             </div>
           </div>
         )
       })
     }
+
     if (data.notifications_retrieved) {
       return <div style={S('text-center mt-40')}>No Notifications Yet</div>
     }
+
     return <div style={S('text-center mt-40')}>Loading...</div>
   }
   render() {

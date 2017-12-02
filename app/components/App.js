@@ -16,10 +16,6 @@ import { hasUserAccess } from '../utils/user-acl'
 // navs
 import SideBar from './Pages/Dashboard/Partials/SideBar'
 
-const MobileNav = Load({
-  loader: () => import('./Pages/Dashboard/Partials/MobileNav')
-})
-
 // global chat components
 import { getRooms } from '../store_actions/chatroom'
 
@@ -266,7 +262,6 @@ class App extends Component {
     let navArea = <SideBar data={data} location={location} />
 
     if (data.is_mobile && user) {
-      // nav_area = <MobileNav data={data} />
       navArea = <div />
     }
 
