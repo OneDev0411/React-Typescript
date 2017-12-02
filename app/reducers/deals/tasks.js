@@ -1,3 +1,4 @@
+import _ from 'underscore'
 import types from '../../constants/deals'
 
 export default (state = null, action) => {
@@ -7,6 +8,9 @@ export default (state = null, action) => {
 
     case types.ARCHIVE_DEAL:
       return _.omit(state, task => task.deal === action.deal_id)
+
+    case types.DELETE_TASK:
+      return _.omit(state, task => task.id === action.taskId)
 
     case types.GET_TASKS:
       return {
@@ -18,6 +22,12 @@ export default (state = null, action) => {
       return {
         [action.task.id]: action.task,
         ...state
+      }
+
+    case types.UPDATE_TASK:
+      return {
+        ...state,
+        [action.task.id]: action.task,
       }
 
     case types.UPDATE_SUBMISSION:
