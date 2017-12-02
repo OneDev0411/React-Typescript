@@ -10,6 +10,7 @@ $item-height: 3.4rem;
   left: 0;
   z-index: 100;
   overflow: hidden;
+  padding-left: 2rem;
   background-color: #263445;
   transition: width 0.26s ease-out;
 
@@ -17,21 +18,10 @@ $item-height: 3.4rem;
     width: 16rem;
     transition: width 0.13s;
 
-    .c-app-navbar__list,
-    .c-app-navbar__account-dropdown {
-      text-align: left;
-    }
-
     .c-app-navbar__item {
-      padding-left: 2rem;
-
       &.is-active .c-app-navbar__item__title {
         color: inherit;
       }
-    }
-
-    .c-app-navbar__account-dropdown {
-      padding-left: 1.4rem;
     }
 
     .c-app-navbar__item__title {
@@ -44,7 +34,6 @@ $item-height: 3.4rem;
 .c-app-navbar__list {
   margin: 0;
   padding: 0;
-  text-align: center;
 }
 
 .c-app-navbar__list--top {
@@ -92,7 +81,7 @@ $item-height: 3.4rem;
   top: 0;
   left: 0;
   transform: translateX(100%);
-  padding-left: 5.5rem;
+  padding-left: 3.5rem;
   color: #8da2b5;
   line-height: $item-height;
   font-size: 1.5rem;
@@ -143,14 +132,13 @@ $item-height: 3.4rem;
 .c-app-navbar__account-dropdown {
   width: 90%;
   height: 30px;
-  text-align: center;
 
   > button.dropdown-toggle {
     width: 30px;
     height: 100%;
     float: none;
     padding: 0;
-    margin: 0;
+    margin-left: -0.5rem !important;
     border: none;
     background: transparent;
 
