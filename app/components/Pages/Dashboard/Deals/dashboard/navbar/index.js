@@ -28,7 +28,7 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <div className="navbar">
+      <div className="deal-navbar">
         <div
           className="back"
           onClick={() => this.goBack()}

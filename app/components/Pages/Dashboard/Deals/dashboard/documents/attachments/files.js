@@ -73,35 +73,27 @@ class FileAttachments extends React.Component {
           files.map((file, key) =>
             <div
               key={`PDF_FILE_${file.id}`}
-              className="item"
+              className="item attachment"
               style={{ cursor: 'pointer' }}
+              onClick={() => this.openDoc(file.id)}
             >
               <div className="image">
                 <img src={file.preview_url} />
               </div>
-              <div
-                className="name"
-                onClick={() => this.openDoc(file.id)}
-              >
+              <div className="name">
                 <span className="link">
                   { file.name }
                 </span>
               </div>
 
               <div className="actions">
-                <button
-                  className="btn-deal"
-                  onClick={() => this.openDoc(file.id)}
-                >
-                  View
-                </button>
-
                 <Dropdown
                   id={`ATTACHMENTS_CTA_${file.id}`}
                   className="deal-file-cta-menu"
                   pullRight
                 >
                   <Button
+                    onClick={e => e.stopPropagation()}
                     className="cta-btn btn-link"
                     bsRole="toggle"
                   >

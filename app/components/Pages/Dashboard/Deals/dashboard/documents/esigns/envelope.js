@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
 import cn from 'classnames'
-import WhoSigned from './who-signed'
 
 class Envelope extends React.Component {
   constructor(props) {
@@ -59,40 +58,18 @@ class Envelope extends React.Component {
           <img src="/static/images/deals/signature.svg" />
         </div>
 
-        <div className="name">
-          <span className="link" onClick={() => !isVoided && this.openFormViewer()}>
-            Sent to {recipientsNames}
-          </span>
+        <div
+          className="name"
+          onClick={() => !isVoided && this.openFormViewer()}
+        >
+          <span>{ recipientsNames }</span>
+          <p>{ areSigned.length } of { recipients.length } signed</p>
         </div>
 
-        <div className="actions">
-          <Dropdown
-            id="drp-esign-who-signed"
-            className="deal-esgin-whosigned"
-            pullRight
-            open={showDropDown && !isVoided}
-            onToggle={open => this.toggleShowDropDown(open)}
-          >
-            <Button
-              bsRole="toggle"
-              className="btn-deal deal-esgin-cta-btn"
-              style={{ width: '100%' }}
-            >
-              {areSigned.length} of {recipients.length} Signed
-            </Button>
-
-            <WhoSigned
-              onRequestClose={() => this.toggleShowDropDown(false)}
-              deal={deal}
-              envelope={envelope}
-              areSigned={areSigned}
-              notSigned={notSigned}
-              bsRole="menu"
-            />
-          </Dropdown>
-        </div>
-
-        {isVoided && <span className="void-label">VOIDED</span>}
+        {
+          isVoided &&
+          <span className="void-label">VOIDED</span>
+        }
       </div>
     )
   }

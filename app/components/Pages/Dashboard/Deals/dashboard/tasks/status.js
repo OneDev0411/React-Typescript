@@ -25,6 +25,10 @@ const TaskStatus = ({
     status = 'Notified'
   }
 
+  if (!status) {
+    return false
+  }
+
   return (
     <span
       className={`status ${status}`}
