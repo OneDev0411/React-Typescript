@@ -31,6 +31,7 @@ class BadgeCounter extends React.Component {
         }
 
         const room = (rooms && rooms[task.room.id]) || task.room
+
         return room.new_notifications > 0
       })
     })
@@ -62,6 +63,7 @@ class BadgeCounter extends React.Component {
 
   getBadgeCount() {
     const { isBackOffice } = this.props
+
     return isBackOffice ? this.getBackOfficeBadge() : this.getAgentBadge()
   }
 
@@ -70,10 +72,12 @@ class BadgeCounter extends React.Component {
     const counter = this.getBadgeCount()
 
     return (
-      <div className="deals-icon">
+      <span className="c-app-navbar__item__inbox__icon">
         <SvgDeals color={color} />
-        {counter > 0 && <span className="count">{counter}</span>}
-      </div>
+        {counter > 0 && (
+          <span className="c-app-navbar__notification-badge">{counter}</span>
+        )}
+      </span>
     )
   }
 }

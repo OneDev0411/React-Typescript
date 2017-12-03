@@ -1,5 +1,6 @@
 import { SubmissionError } from 'redux-form'
 import getListings from '../get-listings'
+import { toNumber } from '../../../../utils/helpers'
 import { generatePointsFromBounds } from '../../../../utils/map'
 import setSearchInput from '../../../../store_actions/listings/search/set-search-input'
 import toogleFiltersArea from '../../../../store_actions/listings/search/filters/toggle-filters-area'
@@ -84,7 +85,13 @@ const MULTI_SELECT_FIELDS = [
   ...SCHOOLS_TYPE
 ]
 
-const turnToNumber = value => (value ? Number(value.replace(/[^0-9]/g, '')) : null)
+const turnToNumber = value => {
+  if (!value || value == null) {
+    return null
+  }
+
+  return typeof value === 'number' ? value : toNumber(value)
+}
 
 const getSoldDate = (selectedMonth = 3) => {
   const date = new Date(Date.now())
@@ -112,6 +119,18 @@ const normalizeNumberValues = values => {
 
     normalizedValues[v] = numberValue
   })
+
+  if (values.priceZeroCleaner) {
+    const { minimum_price, maximum_price } = normalizedValues
+
+    if (minimum_price) {
+      normalizedValues.minimum_price = minimum_price * 1000
+    }
+
+    if (maximum_price) {
+      normalizedValues.maximum_price = maximum_price * 1000
+    }
+  }
 
   return normalizedValues
 }

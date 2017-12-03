@@ -1,25 +1,32 @@
-async function getPhoneNumberUtil () {
-  const { PhoneNumberUtil } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+async function getPhoneNumberUtil() {
+  const {
+    PhoneNumberUtil
+  } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+
   return PhoneNumberUtil.getInstance()
 }
 
 export function randomString(len, charSet) {
   charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+
   let randomString = ''
+
   for (let i = 0; i < len; i++) {
     let randomPoz = Math.floor(Math.random() * charSet.length)
+
     randomString += charSet.substring(randomPoz, randomPoz + 1)
   }
+
   return randomString
 }
 
 export function getParameterByName(name) {
   name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
+
   let regex = new RegExp(`[\\?&]${name}=([^&#]*)`),
     results = regex.exec(location.search)
-  return results === null
-    ? ''
-    : decodeURIComponent(results[1].replace(/\+/g, ' '))
+
+  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '))
 }
 
 export function prepareToken(token) {
@@ -28,8 +35,8 @@ export function prepareToken(token) {
 
 export function convertDateToTimefunction(date) {
   let date_arr = date.split('-')
-  let time =
-    new Date(date_arr[0], date_arr[1] - 1, date_arr[2]).getTime() / 1000
+  let time = new Date(date_arr[0], date_arr[1] - 1, date_arr[2]).getTime() / 1000
+
   return time
 }
 
@@ -57,7 +64,7 @@ export function friendlyDate(seconds_timestamp) {
   let hour = a.getHours()
   let min = a.getMinutes()
   let sec = a.getSeconds()
-  let time_friendly = this.getTime(a)
+  let time_friendly = getTime(a)
   let time = {
     day,
     date,
@@ -68,6 +75,7 @@ export function friendlyDate(seconds_timestamp) {
     sec,
     time_friendly
   }
+
   return time
 }
 
@@ -82,15 +90,18 @@ export function getTimeAgo(time) {
     { name: 'year', limit: null, in_seconds: 31556926 }
   ]
   var diff = (new Date() - new Date(time * 1000)) / 1000
+
   if (diff < 5) {
     return 'now'
   }
 
   let i = 0,
     unit
+
   while ((unit = units[i++])) {
     if (diff < unit.limit || !unit.limit) {
       var diff = Math.floor(diff / unit.in_seconds)
+
       return `${diff} ${unit.name}${diff > 1 ? 's' : ''}`
     }
   }
@@ -100,18 +111,23 @@ export function getTime(date) {
   let hours = date.getHours()
   let minutes = date.getMinutes()
   let ampm = hours >= 12 ? 'pm' : 'am'
+
   hours %= 12
   hours = hours || 12 // the hour '0' should be '12'
   minutes = minutes < 10 ? `0${minutes}` : minutes
+
   let strTime = `${hours}:${minutes}${ampm}`
+
   return strTime
 }
 
 export function getYMD(timestamp) {
   let date = new Date()
+
   if (timestamp) {
     date = new Date(timestamp)
   }
+
   return `${date.getFullYear()}-${`0${date.getMonth() + 1}`.slice(
     -2
   )}-${`0${date.getDate()}`.slice(-2)}`
@@ -129,47 +145,59 @@ export function getDaysFromMiliseconds(miliseconds) {
 
 export async function isValidPhoneNumber(phone_number) {
   const phoneUtil = await getPhoneNumberUtil()
+
   if (
     phone_number.trim() &&
     phoneUtil.isValidNumber(phoneUtil.parse(phone_number))
   ) {
     return true
   }
+
   return false
 }
 
 export function imageExists(url) {
   let img = new Image()
+
   img.src = url
+
   return img.height != 0
 }
 
 export function addTimeToDate(date_object, hours, minutes, suffix) {
   let date_miliseconds = date_object.getTime() // in miliseconds
+
   // Get time
   if (hours === 0) {
     hours = 12
   }
+
   if (suffix === 'PM' && hours !== 12) {
     hours += 12
   }
+
   if (suffix === 'AM' && hours === 12) {
     hours = 0
   }
+
   const seconds_after_midnight = hours * 60 * 60 + minutes * 60
   const miliseconds = date_miliseconds + seconds_after_midnight * 1000
+
   return miliseconds
 }
 
 export async function parsePhoneNumber(phone_number) {
   const phoneUtil = await getPhoneNumberUtil()
+
   if (phone_number && phoneUtil.isPossibleNumberString(phone_number)) {
     const values = phoneUtil.parse(phone_number).values_
+
     return {
       country_code: values[1],
       phone_number: values[2]
     }
   }
+
   return {
     country_code: 1,
     phone_number
@@ -204,21 +232,16 @@ export const hasRecipients = recipients => {
   return recps.length > 0
 }
 
-export default {
-  randomString,
-  getParameterByName,
-  prepareToken,
-  convertDateToTimefunction,
-  friendlyDate,
-  getTimeAgo,
-  getTime,
-  getYMD,
-  numberWithCommas,
-  getDaysFromMiliseconds,
-  isValidPhoneNumber,
-  imageExists,
-  addTimeToDate,
-  parsePhoneNumber,
-  isValidUSZip,
-  hasRecipients
+export const toNumber = (value, formated = false) => {
+  if (typeof value !== 'string') {
+    return
+  }
+
+  value = Number(value.replace(/[^0-9]/g, ''))
+
+  if (formated) {
+    value = value.toLocaleString()
+  }
+
+  return value
 }

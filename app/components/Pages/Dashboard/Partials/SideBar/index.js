@@ -28,8 +28,7 @@ import InstantChatTrigger from '../../Chatroom/Shared/instant-trigger'
 import DealsIcon from '../../Deals/components/sidebar-badge'
 
 const ACTIVE_COLOR = `#${Brand.color('primary', '3388ff')}`
-const DEFAULT_COLOR = '#4e5c6c'
-
+const DEFAULT_COLOR = '#8da2b5'
 
 const getActivePath = path => {
   const checkPath = filter => (path.match(filter) || {}).input
@@ -50,24 +49,6 @@ const getActivePath = path => {
   }
 }
 
-const getNotificationIcon = data => {
-  let icon
-
-  if (data.new_notifications_count && data.new_notifications_count > 0) {
-    icon = (
-      <div style={S('absolute t-5n r-15')}>
-        <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
-          <span style={S('color-fff font-10 relative t-9n')}>
-            {data.new_notifications_count}
-          </span>
-        </div>
-      </div>
-    )
-  }
-
-  return icon
-}
-
 const IntercomCloseButton = ({ onClick }) => (
   <button onClick={onClick} className="intercom__close-btn">
     <svg
@@ -82,27 +63,32 @@ const IntercomCloseButton = ({ onClick }) => (
   </button>
 )
 
-const NavbarItem = ({ title, children }) => (
-  <li data-balloon={title} data-balloon-pos="right" className="c-app-navbar__item">
-    {children}
-  </li>
+const NavbarItem = ({ children, isActive }) => (
+  <li className={`c-app-navbar__item ${isActive ? 'is-active' : ''}`}>{children}</li>
 )
 
 const SupportButton = ({ onClick, isActive }) => (
-  <NavbarItem title="Support">
-    <button onClick={onClick} className="c-app-navbar__support-btn">
+  <NavbarItem isActive={isActive}>
+    <button
+      onClick={onClick}
+      className="c-app-navbar__support-btn"
+      style={{
+        color: isActive ? ACTIVE_COLOR : DEFAULT_COLOR
+      }}
+    >
       <SvgSupport color={isActive ? ACTIVE_COLOR : DEFAULT_COLOR} />
+      <span className="c-app-navbar__item__title">Support</span>
     </button>
   </NavbarItem>
 )
 
 const appNavbar = ({
-  data,
   user,
   activePath,
   activeIntercom,
   intercomIsActive,
-  unactiveIntercom
+  unactiveIntercom,
+  appNotifications
 }) => {
   const intercomUser = {
     user_id: user.id,
@@ -116,31 +102,36 @@ const appNavbar = ({
 
   return (
     <aside className="c-app-navbar">
-      <InstantChatTrigger />
-
       <ul className="c-app-navbar__list c-app-navbar__list--top">
-        <NavbarItem title="MLS">
+        <NavbarItem>
+          <InstantChatTrigger />
+        </NavbarItem>
+
+        <NavbarItem isActive={activePath === 'MAP'}>
           <Link to="/dashboard/mls">
             <SvgMap color={activePath === 'MAP' ? ACTIVE_COLOR : DEFAULT_COLOR} />
+            <span className="c-app-navbar__item__title">MLS</span>
           </Link>
         </NavbarItem>
 
         {user.user_type !== 'Client' && (
-          <NavbarItem title="Contacts">
+          <NavbarItem isActive={activePath === 'CONTACTS'}>
             <Link to="/dashboard/contacts">
               <SvgPeople
                 color={activePath === 'CONTACTS' ? ACTIVE_COLOR : DEFAULT_COLOR}
               />
+              <span className="c-app-navbar__item__title">Contacts</span>
             </Link>
           </NavbarItem>
         )}
 
         {(hasDealsPermission || hasBackOfficePermission) && (
-          <NavbarItem title="Deals">
+          <NavbarItem isActive={activePath === 'DEALS'}>
             <Link to="/dashboard/deals">
               <DealsIcon
                 color={activePath === 'DEALS' ? ACTIVE_COLOR : DEFAULT_COLOR}
               />
+              <span className="c-app-navbar__item__title">Deals</span>
             </Link>
           </NavbarItem>
         )}
@@ -148,23 +139,31 @@ const appNavbar = ({
         {user.agent &&
           user.user_type === 'Agent' &&
           user.agent.office_mlsid === 'CSTPP01' && (
-            <NavbarItem title="Store">
+            <NavbarItem isActive={activePath === 'STORE'}>
               <Link to="/dashboard/website">
                 <SvgStore
-                  color={activePath === 'Store' ? ACTIVE_COLOR : DEFAULT_COLOR}
+                  color={activePath === 'STORE' ? ACTIVE_COLOR : DEFAULT_COLOR}
                 />
               </Link>
+              <span className="c-app-navbar__item__title">Store</span>
             </NavbarItem>
           )}
       </ul>
 
       <ul className="c-app-navbar__list c-app-navbar__list--bottom">
-        <NavbarItem title="Notifications">
+        <NavbarItem isActive={activePath === 'NOTIF'}>
           <Link to="/dashboard/notifications">
-            {getNotificationIcon(data)}
-            <SvgNotifications
-              color={activePath === 'NOTIF' ? ACTIVE_COLOR : DEFAULT_COLOR}
-            />
+            <span className="c-app-navbar__item__inbox__icon">
+              <SvgNotifications
+                color={activePath === 'NOTIF' ? ACTIVE_COLOR : DEFAULT_COLOR}
+              />
+              {appNotifications > 0 && (
+                <span className="c-app-navbar__notification-badge">
+                  {appNotifications}
+                </span>
+              )}
+            </span>
+            <span className="c-app-navbar__item__title">Notifications</span>
           </Link>
         </NavbarItem>
 
@@ -173,12 +172,13 @@ const appNavbar = ({
         <Dropdown
           dropup
           id="account-dropdown"
-          data-balloon="Settings"
-          data-balloon-pos="right"
           className="c-app-navbar__account-dropdown"
         >
           <Dropdown.Toggle>
-            <Avatar user={user} />
+            <Avatar user={user} size={30} />
+            <span className="c-app-navbar__item__title">
+              {user.first_name || user.email || user.phone_number}
+            </span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <li>
@@ -219,9 +219,9 @@ const appNavbar = ({
 
 export default compose(
   connect(({ data, user }, { location }) => ({
-    data,
     user,
-    activePath: getActivePath(location.pathname)
+    activePath: getActivePath(location.pathname),
+    appNotifications: data.new_notifications_count || 0
   })),
   withState('intercomIsActive', 'setIntercomIsActive', false),
   withHandlers({

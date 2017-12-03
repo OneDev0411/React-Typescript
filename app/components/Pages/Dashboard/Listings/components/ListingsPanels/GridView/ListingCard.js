@@ -3,7 +3,6 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import helpers from '../../../../../../../utils/helpers'
 import LazyLoad from 'react-lazy-load'
 import listingUtils from '../../../../../../../utils/listing'
 

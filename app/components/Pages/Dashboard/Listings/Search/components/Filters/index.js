@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import Brand from '../../../../../../../controllers/Brand'
 import { getStatusColor } from '../../../../../../../utils/listing'
 
+import Price from './Price'
 import Schools from './Schools'
 import Counties from './Counties'
 import YearBuilt from './YearBuilt'
@@ -21,6 +22,21 @@ import { pendingStatuses, otherStatuses } from './statuses'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
 import { property_subtypes, architectural_styles } from '../../../mapOptions'
 import actions from '../../../../../../../store_actions/listings/search/filters'
+
+const INITIAL_VALUES = {
+  pool: 'either',
+  open_house: false,
+  listing_statuses: {
+    active: 'Active'
+  },
+  property_subtypes,
+  architectural_styles,
+  minimum_sold_date: '3', // unit is month but it need to timestamp
+  priceZeroCleaner: false,
+  minimum_bedrooms: 'any',
+  minimum_bathrooms: 'any',
+  minimum_parking_spaces: 'any'
+}
 
 const Filters = ({
   isOpen,
@@ -95,7 +111,7 @@ const Filters = ({
         <div style={{ padding: '3rem 2rem 8rem', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
           <Counties />
-          <NumberRange name="price" placeholder="$Any" label="Price Range" />
+          <Price />
           <Tags
             name="property_subtypes"
             label="Property Subtypes"
@@ -148,23 +164,22 @@ const Filters = ({
 )
 
 export default compose(
-  connect(null, { ...actions }),
+  connect(
+    ({ user }) => {
+      const priceZeroCleaner = user && user.user_type === 'Agent'
+
+      return {
+        initialValues: {
+          ...INITIAL_VALUES,
+          priceZeroCleaner
+        }
+      }
+    },
+    { ...actions }
+  ),
   reduxForm({
     form: 'filters',
-    destroyOnUnmount: false,
-    initialValues: {
-      pool: 'either',
-      open_house: false,
-      listing_statuses: {
-        active: 'Active'
-      },
-      property_subtypes,
-      architectural_styles,
-      minimum_sold_date: '3', // unit is month but it need to timestamp
-      minimum_bedrooms: 'any',
-      minimum_bathrooms: 'any',
-      minimum_parking_spaces: 'any'
-    }
+    destroyOnUnmount: false
   }),
   withHandlers({
     onSubmitHandler: ({ submitFiltersForm }) => values => {
