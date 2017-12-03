@@ -12,11 +12,10 @@
   background: #fff;
 
   .header {
-    height: 66px;
-    line-height: 66px;
+    height: $deal-dashboard-header-height;
+    line-height: 55px;
     vertical-align: middle;
     background-color: #ffffff;
-    padding: 0 20px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     margin-left: 0;
     margin-right: 0;

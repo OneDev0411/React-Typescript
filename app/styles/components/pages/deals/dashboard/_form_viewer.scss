@@ -13,6 +13,9 @@
 
   .modal-header {
     background-color: #fff;
+    padding-top: 10px !important;
+    height: $deal-dashboard-header-height;
+    vertical-align: middle;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
     .close-btn {

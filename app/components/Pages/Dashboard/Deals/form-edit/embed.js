@@ -32,7 +32,10 @@ export default ({
 
         {
           (saving || !loaded) ?
-          <b>{ buttonCaption }</b> :
+          <span style={{ marginRight: '20px' }}>
+            <i className="fa fa-spin fa-spinner" />&nbsp;
+            { buttonCaption }
+          </span> :
           <button
             className="deal-button save"
             onClick={onSave}
