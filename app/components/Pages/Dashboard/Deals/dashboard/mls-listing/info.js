@@ -11,20 +11,23 @@ export default ({
       deal={deal}
     />
 
-    <div className="item">
-      <div className="lbl">MLS#:</div>
-      <div className="value mls-number">
-        { deal.mls_context.mls_number }
-        <i
-          className="fa fa-pencil"
-          onClick={editMls}
-        />
+    {
+      deal.listing &&
+      <div className="item">
+        <div className="lbl">MLS#:</div>
+        <div className="value mls-number">
+          { deal.mls_context.mls_number }
+          <i
+            className="fa fa-pencil"
+            onClick={editMls}
+          />
 
-        <i
-          className="fa fa-times-circle"
-          onClick={deleteMls}
-        />
+          <i
+            className="fa fa-times-circle"
+            onClick={deleteMls}
+          />
+        </div>
       </div>
-    </div>
+    }
   </div>
 )

@@ -70,7 +70,7 @@ class MlsListing extends React.Component {
         }
 
         {
-          !saving && deal.listing &&
+          !saving &&
           <ListingInfo
             deal={deal}
             editMls={() => this.toggleSearchModal()}

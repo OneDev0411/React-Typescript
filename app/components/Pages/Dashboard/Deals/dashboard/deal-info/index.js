@@ -1,5 +1,5 @@
 import React from 'react'
-import ListingCard from '../listing-card'
+import ListingCard from '../mls-listing/listing-card'
 import CriticalDates from '../factsheet/critical-dates'
 import ListingInfo from '../factsheet/listing-info'
 import Commission from '../factsheet/commission'

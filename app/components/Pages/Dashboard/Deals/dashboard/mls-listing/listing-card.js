@@ -71,9 +71,7 @@ export default ({
           src={photo || "/static/images/deals/group-146.svg"}
         />
 
-        <span className="view-btn">
-          VIEW
-        </span>
+        <span className="view-btn">VIEW</span>
       </div>
 
       <div className="address-info">
