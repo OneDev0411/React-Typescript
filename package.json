@@ -150,7 +150,7 @@
     "rimraf": "^2.6.1",
     "rxjs": "^5.5.2",
     "sass-loader": "^6.0.3",
-    "scissors": "^0.2.3",
+    "scissors": "git+https://github.com/tcr/scissors.git",
     "shorti": "^1.2.6",
     "socket.io": "^1.7.3",
     "socket.io-client": "^1.7.3",
