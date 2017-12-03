@@ -68,7 +68,6 @@ class AgentTable extends BaseTable {
     const sideName = Deal.get.side(deal)
     const relatedRole = deal.roles && deal.roles.find(r => r.role === sideName)
 
-    console.log(relatedRole)
     if (!deal.roles || !relatedRole) {
       return Deal.get.side(deal)
     }
