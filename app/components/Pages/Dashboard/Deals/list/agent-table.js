@@ -33,7 +33,7 @@ class AgentTable extends BaseTable {
         caption: 'PRICE $',
         sortable: true,
         className: 'col-md-1 hidden-xs',
-        getText: deal => this.getFormattedNumber(Deal.get.field(deal, 'list_price')),
+        getText: deal => Deal.get.formattedPrice(Deal.get.field(deal, 'list_price'), 'decimal'),
         getValue: deal => Deal.get.field(deal, 'list_price')
       },
       side: {

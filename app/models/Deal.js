@@ -119,14 +119,16 @@ Deal.get.clientNames = function(deal) {
 /**
 * a helper that formats price
 */
-Deal.get.formattedPrice = function(number) {
+Deal.get.formattedPrice = function(number, style = 'currency') {
   if (!number) {
     return number
   }
 
-  return '$' + number
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return new Intl.NumberFormat('en-US', {
+    style,
+    currency: 'USD',
+    minimumFractionDigits: 2
+  }).format(number)
 }
 
 /**

@@ -32,19 +32,6 @@ class BaseTable extends React.Component {
   /**
    *
    */
-  getFormattedNumber(number) {
-    if (!number) {
-      return number
-    }
-
-    return number
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  }
-
-  /**
-   *
-   */
   getListingPhoto(deal) {
     const photo = Deal.get.field(deal, 'photo')
     return photo ? photo : '/static/images/deals/home.png'
