@@ -14,7 +14,8 @@ export default ({
   toggleComments,
   editForm,
   task,
-  file
+  file,
+  fileType
 }) => {
   const COMMENTS_WIDTH = showComments ? '300px' : '0px'
   const FACTSHEET_WIDTH = showFactsheet ? '300px' : '0px'
@@ -53,12 +54,15 @@ export default ({
             Comments
           </Button>
 
-          <Button
-            className="deal-button edit-form"
-            onClick={editForm}
-          >
-            Edit Form
-          </Button>
+          {
+            fileType === 'digital-form' &&
+            <Button
+              className="deal-button edit-form"
+              onClick={editForm}
+            >
+              Edit Form
+            </Button>
+          }
         </div>
 
       </Modal.Header>

@@ -4,8 +4,8 @@ import { Row, Col, Modal, Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import extractDocumentOfTask from '../utils/extract-document-of-task'
 import { getEnvelopes } from '../../../../../store_actions/deals'
-import FileView from './file'
-import EnvelopeView from './envelope'
+import FileView from './file-view'
+import EnvelopeView from './envelope-view'
 import config from '../../../../../../config/public'
 
 class FormViewer extends React.Component {
@@ -137,6 +137,7 @@ class FormViewer extends React.Component {
         toggleComments={() => this.toggleComments()}
         editForm={() => this.editForm()}
         file={file}
+        fileType={params.type || 'digital-form'}
         task={tasks[params.taskId]}
         showFactsheet={showFactsheet}
         showComments={showComments}
