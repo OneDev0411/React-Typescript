@@ -7,5 +7,6 @@ export default [
   'DELETE_ATTACHMENT',
   'SET_SELECTED_TASK',
   'DELETE_TASK',
-  'UPDATE_TASK'
+  'UPDATE_TASK',
+  'UPDATE_TASKS'
 ]

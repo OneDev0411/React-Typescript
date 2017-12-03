@@ -513,6 +513,22 @@ Deal.needsAttention = async function(task_id, status) {
 }
 
 /**
+* bulk submit for review
+*/
+Deal.bulkSubmit = async function(dealId, tasks) {
+  try {
+    const response = await new Fetch()
+      .put(`/deals/${dealId}/tasks`)
+      .send(tasks)
+
+    return response.body.data
+
+  } catch (e) {
+    return false
+  }
+}
+
+/**
 * update deal context
 */
 Deal.updateContext = async function(dealId, context, approved) {

@@ -128,7 +128,6 @@ class Header extends React.Component {
                 defaultValue={task.title}
                 onKeyPress={e => this.onKeyPress(e)}
                 ref={ref => this.titleInput = ref}
-                onBlur={() => this.toggleEdit()}
               /> :
               <span>{task.title}</span>
             }

@@ -30,6 +30,12 @@ export default (state = null, action) => {
         [action.task.id]: action.task,
       }
 
+    case types.UPDATE_TASKS:
+      return {
+        ...state,
+        ...action.tasks
+      }
+
     case types.UPDATE_SUBMISSION:
       return {
         ...state,

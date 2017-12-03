@@ -1,5 +1,7 @@
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
+import { normalize } from 'normalizr'
+import * as schema from './schema'
 
 function addNewTask(deal_id, list_id, task) {
   return {
@@ -49,6 +51,13 @@ function taskUpdated(task) {
   }
 }
 
+function tasksUpdated(tasks) {
+  return {
+    type: types.UPDATE_TASKS,
+    tasks
+  }
+}
+
 export function setTasks(tasks) {
   return {
     type: types.GET_TASKS,
@@ -60,6 +69,15 @@ export function setSelectedTask(task) {
   return {
     type: types.SET_SELECTED_TASK,
     task
+  }
+}
+
+export function bulkSubmit(dealId, tasksList) {
+  return async (dispatch) => {
+    const data = await Deal.bulkSubmit(dealId, tasksList)
+
+    const { entities } = normalize(data, schema.taskSchema)
+    dispatch(tasksUpdated(entities.tasks))
   }
 }
 
