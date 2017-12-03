@@ -42,7 +42,6 @@ const List = ({
           {
             sortedTasks &&
             sortedTasks
-            .filter(id => tasks[id].deleted_at === null)
             .map((id, key) => {
               const task = tasks[id]
               const room = rooms[task.room.id] || task.room
