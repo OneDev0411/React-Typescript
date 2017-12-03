@@ -68,6 +68,7 @@ class AgentTable extends BaseTable {
     const sideName = Deal.get.side(deal)
     const relatedRole = deal.roles && deal.roles.find(r => r.role === sideName)
 
+    console.log(relatedRole)
     if (!deal.roles || !relatedRole) {
       return Deal.get.side(deal)
     }
@@ -116,7 +117,7 @@ class AgentTable extends BaseTable {
           <span
             style={{ color: '#5b6469', fontSize: '13px' }}
           >
-            { relatedRole ? `: ${relatedRole.user.last_name}` : ''}
+            { relatedRole && relatedRole.user.last_name ? `: ${relatedRole.user.last_name}` : ''}
           </span>
         </div>
 
