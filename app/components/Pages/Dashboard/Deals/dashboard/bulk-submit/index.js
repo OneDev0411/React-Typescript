@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
+import { addNotification as notify } from 'reapop'
 import TaskStatus from '../tasks/status'
 import CheckBox from '../../components/radio'
 import { bulkSubmit } from '../../../../../../store_actions/deals'
@@ -42,7 +43,7 @@ class BulkSubmit extends React.Component {
 
   async submit() {
     const { selectedTasks } = this.state
-    const { deal, bulkSubmit } = this.props
+    const { deal, bulkSubmit, notify } = this.props
 
     const tasks = selectedTasks.map(id => ({
       id,
@@ -51,6 +52,12 @@ class BulkSubmit extends React.Component {
 
     this.setState({ saving: true })
     await bulkSubmit(deal.id, tasks)
+
+    notify({
+      title: 'Tasks have submitted',
+      message: `${selectedTasks.length} tasks submitted for review`,
+      status: 'success'
+    })
 
     this.setState({
       showModal: false,
@@ -160,7 +167,7 @@ class BulkSubmit extends React.Component {
               className="deal-button"
               onClick={() => this.submit()}
             >
-              { saving ? 'Submitting ...' : 'Save' }
+              { saving ? 'Saving ...' : 'Notify Admin' }
             </Button>
 
           </Modal.Footer>
@@ -174,4 +181,4 @@ class BulkSubmit extends React.Component {
 export default connect(({ deals }) => ({
   tasks: deals.tasks,
   checklists: deals.checklists
-}), { bulkSubmit })(BulkSubmit)
+}), { bulkSubmit, notify })(BulkSubmit)
