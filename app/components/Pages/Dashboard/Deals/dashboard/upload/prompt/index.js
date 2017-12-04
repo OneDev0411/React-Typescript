@@ -238,7 +238,7 @@ class UploadModal extends React.Component {
 
           <Button
             bsStyle="primary"
-            className="btn-split"
+            className={cn('btn-split', { disabled: pdfsList.length === 0 })}
             disabled={pdfsList.length === 0}
             onClick={() => this.props.displaySplitter(true)}
           >

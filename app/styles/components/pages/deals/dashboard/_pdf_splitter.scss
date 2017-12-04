@@ -44,6 +44,10 @@ $splitter-header: 56px;
     float: right;
     font-weight: normal;
     cursor: pointer;
+    i {
+      font-size: 14px;
+    }
+
     &:hover {
       opacity: 0.7;
     }
@@ -310,22 +314,16 @@ $splitter-header: 56px;
     margin: 0 9px 9px 0;
 
     .overlay {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       position: absolute;
       left: 0;
       top: 0;
       right: 0;
       bottom: 0;
       transition: 0.1s ease-in all;
-      background-color: rgba(0, 0, 0, 0.4);
+      background-color: rgba(0, 0, 0, 0.3);
       opacity: 0;
       border-radius: 3px;
       cursor: all-scroll;
-      i {
-        font-size: 21px;
-      }
     }
 
     &:hover .overlay {
@@ -451,7 +449,7 @@ $splitter-header: 56px;
   border: solid 1px #cad0d4;
   width: 70vh;
   height: 95vh;
-  top: calc((100% - 700px) / 2) ;
+  top: 2.5vh ;
   left: calc((100% - 500px) / 2);
   z-index: 1053;
 

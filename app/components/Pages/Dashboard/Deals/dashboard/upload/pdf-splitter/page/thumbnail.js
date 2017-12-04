@@ -64,9 +64,7 @@ class PageThumbnail extends React.Component {
         >
           {
             !inUse &&
-            <div className="overlay">
-              <i className="fa fa-arrows" />
-            </div>
+            <div className="overlay" />
           }
 
           <span

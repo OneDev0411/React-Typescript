@@ -40,6 +40,11 @@
         background-color: #2196f3;
         color: #fff;
       }
+      &.disabled {
+        background-color: #dce5eb;
+        border-color: #dce5eb;
+        color: #8da2b5;
+      }
     }
 
   }
