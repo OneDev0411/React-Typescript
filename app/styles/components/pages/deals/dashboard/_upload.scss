@@ -22,19 +22,26 @@
       margin-right: 20px;
     }
 
-    button {
+    .btn-split {
       width: 110px;
       height: 34px;
       border-radius: 3px;
-      background-color: #2196f3;
-      border: none;
+      background-color: #fff;
+      border: 1px solid #dce5eb;
+      color: #2196f3;
+      font-size: 14px;
+      font-weight: 600;
+
       &:focus {
         outline: none;
       }
       &:hover {
-        opacity: 0.7;
+        border-color: #2196f3;
+        background-color: #2196f3;
+        color: #fff;
       }
     }
+
   }
 }
 
@@ -88,28 +95,33 @@
       height: 40px;
       line-height: 40px;
       vertical-align: middle;
-      padding: 0 0 0 20px;
+      padding: 0 0 0 12px;
       border-radius: 4px;
-      backdrop-filter: blur(10px);
       background-color: rgba(255, 255, 255, 0.9);
       border: solid 1px #dce5eb;
       font-size: 14px;
-      font-weight: 400;
+      letter-spacing: -0.2px;
       color: #1d364b;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
 
       img {
-        width: 16px;
-        margin-right: 10px;
+        width: 17px;
+        margin-right: 12px;
+        margin-top: -3px;
       }
 
       .edit-icon {
         float: right;
-        margin-top: 10px;
-        opacity: 0.1;
+        color: #afbbc8;
         cursor: pointer;
+        font-size: 17px;
+        margin: 10px 12px 0 0;
+        &:hover {
+          color: #2196f3;
+        }
+
         &.canEditName {
           opacity: 1;
         }
@@ -151,8 +163,12 @@
         width: 90px;
         height: 40px;
         border-radius: 4px;
-        background-color: #1d86d9;
+        background-color: #2196f3;
         border: none;
+
+        &:hover {
+          background-color: #1d86d9;
+        }
 
         &.disabled {
           background-color: #dce5eb;
@@ -177,6 +193,7 @@
 *
 */
 .deal-task-dropdown {
+  position: relative;
   width: 307px;
   height: 40px;
   border-radius: 3px;
@@ -190,14 +207,22 @@
   white-space: nowrap;
   overflow: hidden;
 
-  &:hover, &.open {
-    border: solid 1px #2196f3 !important;
+  &.open {
+    border: solid 1px #2196f3;
     background-color: transparent;
     box-shadow: none;
   }
 
+  &:hover {
+    border: 1px solid #dce5eb;
+    background-color: #f0f4f7 !important;
+    box-shadow: none;
+  }
+
   .indicator {
-    float: right;
+    position: absolute;
+    top: 10px;
+    right: 5px;
   }
 }
 

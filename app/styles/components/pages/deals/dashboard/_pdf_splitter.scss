@@ -222,15 +222,18 @@ $splitter-header: 56px;
         &.save-new {
           background-color: #2196f3;
           color: #fff;
+          &:hover {
+            background-color: #1d86d9;
+          }
         }
 
         &.save-quit {
           background-color: #fff;
           color: #2196f3;
-        }
-
-        &:hover {
-          opacity: 0.8;
+          &:hover {
+            background-color: #2196f3;
+            color: #fff;
+          }
         }
 
         &.disabled {
@@ -306,18 +309,37 @@ $splitter-header: 56px;
     border: solid 1px #dce5eb;
     margin: 0 9px 9px 0;
 
+    .overlay {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      transition: 0.1s ease-in all;
+      background-color: rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      border-radius: 3px;
+      cursor: all-scroll;
+      i {
+        font-size: 21px;
+      }
+    }
+
+    &:hover .overlay {
+      opacity: 1;
+    }
+
+    &:hover .page-zoom-in {
+      opacity: 1;
+    }
+
     .page-canvas {
       width: 136px;
       height: 156px;
       border-radius: 4px;
-      cursor: all-scroll;
-      &:hover {
-        opacity: 0.7;
-      }
-
-      &:hover + .page-zoom-in {
-        opacity: 1;
-      }
 
       &.inUse {
         cursor: auto;
@@ -339,16 +361,25 @@ $splitter-header: 56px;
     .page-zoom-in {
       position: absolute;
       display: block;
+      width: 24px;
+      height: 24px;
+      text-align: center;
       top: 4px;
       right: 4px;
       opacity: 0;
-      img {
-        width: 24px;
-      }
+      color: #2196f3;
+      border: 1px solid #2196f3;
+      padding: 2px 3px;
+      border-radius: 3px;
+      background-color: #fff;
 
       &:hover {
         cursor: pointer;
         opacity: 0.9;
+        background-color: #2196f3;
+        i {
+          color: #fff;
+        }
       }
     }
 
@@ -387,7 +418,7 @@ $splitter-header: 56px;
       text-align: center;
 
       &:hover {
-        opacity: 0.8;
+        background-color: #1d86d9;
       }
 
       &.remove {
@@ -401,6 +432,7 @@ $splitter-header: 56px;
         border: solid 1px #c2cdd7;
         color: #1d364b;
         font-weight: 600;
+
         &:hover {
           opacity: 1;
         }
@@ -417,8 +449,8 @@ $splitter-header: 56px;
   border-radius: 8px;
   background-color: #fff;
   border: solid 1px #cad0d4;
-  width: 500px;
-  height: 700px;
+  width: 70vh;
+  height: 95vh;
   top: calc((100% - 700px) / 2) ;
   left: calc((100% - 500px) / 2);
   z-index: 1053;
@@ -432,14 +464,18 @@ $splitter-header: 56px;
     border-bottom: solid 1px #cad0d4;
     text-align: center;
     font-size: 12px;
-    color: #62778c;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    color: #62778c;
 
-    .close {
-      margin-top: 9px;
+    .exit {
       font-size: 15px;
+      float: right;
+      cursor: pointer;
+      i {
+        color: #62778c;
+      }
     }
   }
 

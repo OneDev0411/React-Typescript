@@ -23,19 +23,17 @@ class PagePreview extends React.Component {
           { upload.files[pdfId].fileObject.name}
 
           <span
-            className="close"
+            className="exit"
             onClick={() => this.closeModal()}
           >
-            X
+            <i className="fa fa-times" />
           </span>
         </div>
 
-        <div
-          className="preview"
-          ref={ref => this.previewContainer = ref}
-        >
+        <div className="preview">
           <Page
-            containerHeight={320}
+            containerHeight="95%"
+            zoom={0.9}
             pdfId={pdfId}
             doc={doc}
             pageNumber={pageNumber}
