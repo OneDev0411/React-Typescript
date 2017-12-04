@@ -14,12 +14,12 @@ function splitFiles(splits, filepath) {
       .createWriteStream(filepath)
       .on('error', (e) => reject(e))
 
-    scissors
+    return scissors
       .join(...splits)
       .pdfStream()
+      .pipe(writeStream)
       .on('error', (e) => reject(e))
       .on('finish', resolve)
-      .pipe(writeStream)
   })
 }
 
@@ -33,7 +33,7 @@ router.post('/deals/pdf-splitter', async (ctx, next) => {
 
     _.each(files, file => {
       if (!fs.existsSync(file.path)) {
-        throw new Error(`File ${file.filename} did not uploaded correctly, try again.`)
+        throw new Error(`File ${file.filename} is not uploaded correctly, try again.`)
       }
     })
 
