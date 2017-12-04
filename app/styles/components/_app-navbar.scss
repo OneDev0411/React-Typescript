@@ -70,10 +70,6 @@ $item-height: 3.4rem;
   &:hover {
     background-color: rgba(#62778c, 0.4);
   }
-
-  &.is-active {
-    pointer-events: none;
-  }
 }
 
 .c-app-navbar__item__title {
