@@ -139,6 +139,11 @@ class UploadModal extends React.Component {
   render() {
     const { splitter, upload } = this.props
     const filesCount = _.size(upload.files)
+
+    // get list of pdfs aren't uploaded yet
+    const pdfsList = _.filter(upload.files, file =>
+      file.fileObject.type === 'application/pdf' && file.properties.status !== STATUS_UPLOADED)
+
     let fileCounter = 0
 
     return (
@@ -233,6 +238,8 @@ class UploadModal extends React.Component {
 
           <Button
             bsStyle="primary"
+            className={cn('btn-split', { disabled: pdfsList.length === 0 })}
+            disabled={pdfsList.length === 0}
             onClick={() => this.props.displaySplitter(true)}
           >
             Split PDFs

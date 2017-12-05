@@ -51,9 +51,8 @@ class FileName extends React.Component {
           >
             Save
           </span> :
-          <img
-            className={cn('edit-icon', { canEditName })}
-            src={`/static/images/deals/edit-pen.png`}
+          <i
+            className={cn('edit-icon fa fa-pencil', { canEditName })}
             onClick={() => this.toggleEdit(file, true)}
           />
         }

@@ -18,11 +18,17 @@ class Page extends React.Component {
   }
 
   async calculateScale(pageNumber) {
-    const { doc, containerHeight } = this.props
+    const { doc, zoom, containerHeight } = this.props
     const page = await doc.getPage(pageNumber)
     const viewport = page.getViewport(1)
 
-    return (containerHeight / viewport.height) * 2
+    let height = containerHeight
+    if (containerHeight.toString().includes('%')) {
+      const percent = ~~containerHeight.slice(0, -1)
+      height = ~~((percent * window.innerHeight) / 100)
+    }
+
+    return (height / viewport.height) * zoom
   }
 
   /**

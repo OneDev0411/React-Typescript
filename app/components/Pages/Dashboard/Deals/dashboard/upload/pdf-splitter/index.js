@@ -47,7 +47,7 @@ class PDFSplitter extends React.Component {
             onClick={() => this.closeSplitter()}
             className="close-form"
           >
-            X
+            <i className="fa fa-times" />
           </span>
         </div>
 
