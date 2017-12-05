@@ -27,6 +27,8 @@ const ListingCard = ({
 
   const target = user && !isWidget ? '' : '_blank'
 
+  const { lot_size_area } = listing.compact_property
+
   return (
     <LazyLoad className="c-listing-card" height={260} offsetBottom={900}>
       <div
@@ -50,11 +52,14 @@ const ListingCard = ({
           <h5 className="c-listing-card__price">$ {props.price}</h5>
           <div className="c-listing-card__details">
             <span>{props.beds} Beds</span>
-            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
             <span>{props.baths} Baths</span>
-            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
             <span>{props.sqft} Sqft</span>
-            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            {lot_size_area && (
+              <span>&nbsp;&nbsp;&middot;&nbsp;&nbsp;{lot_size_area} Acres</span>
+            )}
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
             <span>{props.builtYear}</span>
           </div>
         </div>
