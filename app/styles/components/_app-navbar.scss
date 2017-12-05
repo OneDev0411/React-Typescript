@@ -11,11 +11,9 @@ $item-height: 3.4rem;
   z-index: 100;
   overflow: hidden;
   background-color: #263445;
-  transition: width 0.26s ease-out;
 
   &:hover {
     width: 16rem;
-    transition: width 0.13s;
 
     .c-app-navbar__item {
       &.is-active .c-app-navbar__item__title {
@@ -24,8 +22,8 @@ $item-height: 3.4rem;
     }
 
     .c-app-navbar__item__title {
-      transform: translateX(0);
-      transition: transform 0.13s 0.13s;
+      opacity: 1;
+      transition: opacity 0.3s 0.1s;
     }
   }
 }
@@ -76,11 +74,12 @@ $item-height: 3.4rem;
   position: absolute;
   top: 0;
   left: 0;
-  transform: translateX(100%);
+  opacity: 0;
   padding-left: 5.5rem;
   color: #8da2b5;
   line-height: $item-height;
   font-size: 1.5rem;
+  will-change: opacity;
 
   .c-app-navbar__item:hover & {
     color: #fff;
