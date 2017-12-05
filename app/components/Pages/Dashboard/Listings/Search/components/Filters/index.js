@@ -12,11 +12,11 @@ import Schools from './Schools'
 import Counties from './Counties'
 import YearBuilt from './YearBuilt'
 import Tags from './components/Tags'
-import NumberRange from './NumberRange'
 import Subdivision from './Subdivision'
 import MlsAreaSelects from './MlsAreaSelects'
 import GroupRadios from './components/GroupRadios'
 import SubStatuses from './components/SubStatuses'
+import MinMaxInputs from './components/MinMaxInputs'
 import SoldStatusChildrens from './SoldStatusChildrens'
 import { pendingStatuses, otherStatuses } from './statuses'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
@@ -127,8 +127,8 @@ const Filters = ({
           <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
           <Subdivision />
           <Schools />
-          <NumberRange name="square_meters" label="Square Footage" />
-          <NumberRange name="lot_square_meters" label="Lot Size Area (Foot)" />
+          <MinMaxInputs name="square_meters" label="Square Footage" />
+          <MinMaxInputs name="lot_square_meters" label="Lot Size Area (Acre)" />
           <GroupRadios
             label="Pool"
             name="pool"
