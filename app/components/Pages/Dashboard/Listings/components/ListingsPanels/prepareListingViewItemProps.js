@@ -32,7 +32,7 @@ const listViewItemProps = (user, listing) => {
     backgroundImage: `url('${listing.cover_image_url}')`
   }
 
-  const area = address.postal_code
+  const zipCode = address.postal_code
   const builtYear = property.year_built
   const beds = property.bedroom_count || '-'
   const baths = property.half_bathroom_count + property.full_bathroom_count || '-'
@@ -45,7 +45,7 @@ const listViewItemProps = (user, listing) => {
     backgroundImage,
     statusColor,
     address: addressTitle,
-    area,
+    zipCode,
     price,
     beds,
     baths,
