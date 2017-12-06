@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import cn from 'classnames'
+import ToolTip from '../../components/tooltip'
 
 function getSubmitButtonLabel(isSaving, hasComment) {
   if (isSaving) {
@@ -21,14 +22,15 @@ export default ({
   isSaving,
   onSendComment
 }) => (
-  <div>
+  <ToolTip
+    caption={hasComment ? null : 'Notify office to Review'}
+  >
     <Button
       className="deal-button enabled notify-admin"
       disabled={isSaving}
-      data-tip={hasComment ? null : 'Notify office to Review'}
       onClick={() => onSendComment(true)}
     >
       Notify Office
     </Button>
-  </div>
+  </ToolTip>
 )

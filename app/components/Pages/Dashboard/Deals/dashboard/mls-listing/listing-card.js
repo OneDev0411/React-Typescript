@@ -99,10 +99,7 @@ class ListingCard extends React.Component {
           className={cn('listing-photo', { hasListing: deal.listing })}
           onClick={() => this.openListing(deal)}
         >
-          <img
-            src={photo || "/static/images/deals/group-146.svg"}
-          />
-
+          <img src={photo || "/static/images/deals/group-146.svg"} />
           <span className="view-btn">VIEW</span>
         </div>
 

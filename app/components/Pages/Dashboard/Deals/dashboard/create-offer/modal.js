@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import { addNotification as notify } from 'reapop'
 import { Modal, Button } from 'react-bootstrap'
-import ReactTooltip from 'react-tooltip'
 import { createOffer } from '../../../../../../store_actions/deals'
+import ToolTip from '../../components/tooltip'
 
 class CreateOfferModal extends React.Component {
   constructor(props) {
@@ -82,12 +82,6 @@ class CreateOfferModal extends React.Component {
         </Modal.Header>
 
         <Modal.Body>
-          <ReactTooltip
-            place="top"
-            className="deal-filter--tooltip"
-            multiline
-          />
-
           <span className="control-label">BUYER NAME</span>
           <input
             className="buyer-name"
@@ -96,19 +90,22 @@ class CreateOfferModal extends React.Component {
             onChange={e => this.setState({ buyerName: e.target.value })}
           />
 
-          <div
-            className={`option active ${hasPrimaryOffer ? 'disabled' : ''}`}
-            data-tip={hasPrimaryOffer ?
+          <ToolTip
+            caption={hasPrimaryOffer ?
               'You can not have 2 primary offers at the same time' :
               null
             }
-            onClick={() => !hasPrimaryOffer && this.setState({ activeOption: 'active' })}
           >
-            <span className="check-area">
-              <i className={`fa fa-${activeOption === 'active' ? 'check-circle-o' : 'circle-o'}`} />
-            </span>
-            Primary Offer
-          </div>
+            <div
+              className={`option active ${hasPrimaryOffer ? 'disabled' : ''}`}
+              onClick={() => !hasPrimaryOffer && this.setState({ activeOption: 'active' })}
+            >
+              <span className="check-area">
+                <i className={`fa fa-${activeOption === 'active' ? 'check-circle-o' : 'circle-o'}`} />
+              </span>
+              Primary Offer
+            </div>
+          </ToolTip>
 
           <div
             className="option backup"

@@ -8,6 +8,7 @@ import { getStatusColorClass } from '../../../../../utils/listing'
 import Deal from '../../../../../models/Deal'
 import CriticalDates from '../dashboard/factsheet/critical-dates'
 import EmptyState from './empty-state'
+import ToolTip from '../components/tooltip'
 
 /*
  * implement a new functionality for underscore that checks
@@ -239,13 +240,12 @@ class BaseTable extends React.Component {
 
     if (counter > 0) {
       return (
-        <div
-          className="inline unread-notifications"
-          data-tip={`You have ${counter} unread messages in this deal`}
-        >
-          <img src="/static/images/deals/comments.svg" />
-          <span>{ counter }</span>
-        </div>
+        <ToolTip caption={`You have ${counter} unread messages in this deal`}>
+          <div className="inline unread-notifications">
+            <img src="/static/images/deals/comments.svg" />
+            <span>{ counter }</span>
+          </div>
+        </ToolTip>
       )
     }
   }

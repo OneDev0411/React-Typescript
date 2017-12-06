@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import DatePicker from '../../components/date-picker'
 import cn from 'classnames'
+import ToolTip from '../../components/tooltip'
 import Deal from '../../../../../../models/Deal'
 
 export default class Editable extends React.Component {
@@ -57,18 +58,18 @@ export default class Editable extends React.Component {
 
     return (
       <span>
-        <i
-          className={cn('fa fa-times-circle ico-remove', {
-            hide: !showCTA || !context.value || context.value.length === 0
-          })}
-          data-tip={editable ? null : "This field needs office approval after removing" }
-          onClick={(e) => this.deleteField(e, field)}
-        />
+        <ToolTip caption={editable ? null : "This field needs office approval after removing" }>
+          <i
+            className={cn('fa fa-times-circle ico-remove', {
+              hide: !showCTA || !context.value || context.value.length === 0
+            })}
+            onClick={(e) => this.deleteField(e, field)}
+          />
+        </ToolTip>
 
-        <i
-          className={cn('fa fa-pencil', { hide: !showCTA })}
-          data-tip={editable ? null : "This field needs office approval after changing" }
-        />
+        <ToolTip caption={editable ? null : "This field needs office approval after changing" }>
+          <i className={cn('fa fa-pencil', { hide: !showCTA })} />
+        </ToolTip>
       </span>
     )
   }
@@ -112,11 +113,9 @@ export default class Editable extends React.Component {
         {
           editMode && isStringType ?
           '' :
-          <span
-            data-tip={approved ? null : 'Approval is pending on this date'}
-          >
-            {context.value}
-          </span>
+          <ToolTip caption={approved ? null : 'Approval is pending on this date'}>
+            <span>{context.value}</span>
+          </ToolTip>
         }
 
         {

@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
-import ReactTooltip from 'react-tooltip'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import DealInfo from './deal-info'
@@ -80,13 +79,6 @@ class DealDetails extends React.Component {
         <ESignCompose deal={deal} />
         <UploadPromptModal />
         <PDFSplitterModal />
-
-        <ReactTooltip
-          place="top"
-          className="deal-filter--tooltip"
-          multiline
-        />
-
       </div>
     )
   }

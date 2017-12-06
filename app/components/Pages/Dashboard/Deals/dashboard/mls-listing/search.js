@@ -66,6 +66,7 @@ export default class extends React.Component {
       <Modal
         show={show}
         dialogClassName="deal-mls-search"
+        backdrop="static"
         onHide={onHide}
       >
         <Modal.Header closeButton>

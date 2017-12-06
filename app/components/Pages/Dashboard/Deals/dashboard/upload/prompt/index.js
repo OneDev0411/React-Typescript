@@ -2,12 +2,12 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import ReactTooltip from 'react-tooltip'
 import { addNotification as notify } from 'reapop'
 import { resetUploadFiles, setUploadAttributes, displaySplitter,
   addAttachment, changeNeedsAttention, resetSplitter } from '../../../../../../../store_actions/deals'
 import ChatModel from '../../../../../../../models/Chatroom'
 import TasksDropDown from '../tasks-dropdown'
+import ToolTip from '../../../components/tooltip'
 import Checkbox from '../../../components/radio'
 import FileName from './file-name'
 
@@ -160,10 +160,6 @@ class UploadModal extends React.Component {
         <Modal.Body
           style={this.getModalStyle(filesCount)}
         >
-          <ReactTooltip
-            effect="solid"
-          />
-
           <div className="uploads-container">
             {
               _.map(upload.files, (file, id) => {
@@ -230,11 +226,12 @@ class UploadModal extends React.Component {
         </Modal.Body>
 
         <Modal.Footer>
-          <img
-            src="/static/images/deals/question.png"
-            className="help"
-            data-tip="Create new documents and save them to tasks"
-          />
+          <ToolTip caption="Create new documents and save them to tasks">
+            <img
+              src="/static/images/deals/question.png"
+              className="help"
+            />
+          </ToolTip>
 
           <Button
             bsStyle="primary"

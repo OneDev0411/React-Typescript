@@ -4,6 +4,7 @@ import { addNotification as notify } from 'reapop'
 import Deal from '../../../../../../models/Deal'
 import { getStatusColorClass } from '../../../../../../utils/listing'
 import StatusModal from './listing-status-modal'
+import ToolTip from '../../components/tooltip'
 import {
   updateContext,
   createGenericTask,
@@ -95,11 +96,11 @@ class ListingStatus extends React.Component {
               className="status"
               style={{ background: getStatusColorClass(status) }}
             />
-            <span
-              data-tip={!isBackOffice && !approved ? 'Waiting for office approval' : null}
+            <ToolTip
+              caption={!isBackOffice && !approved ? 'Waiting for office approval' : null}
             >
-              { status }
-            </span>
+              <span>{ status }</span>
+            </ToolTip>
 
             {
               !saving &&
