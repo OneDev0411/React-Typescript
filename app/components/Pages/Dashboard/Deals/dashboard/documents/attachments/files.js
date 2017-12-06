@@ -32,9 +32,11 @@ class FileAttachments extends React.Component {
     browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}/attachment/${fileId}`)
   }
 
-  async deleteFile(task, file) {
+  async deleteFile(e, task, file) {
     const { deleteAttachment } = this.props
     const { deleting } = this.state
+
+    e.stopPropagation()
 
     if (deleting) {
       return false
@@ -102,7 +104,7 @@ class FileAttachments extends React.Component {
 
                   <Dropdown.Menu>
                     <li
-                      onClick={() => this.deleteFile(task, file)}
+                      onClick={(e) => this.deleteFile(e, task, file)}
                     >
                       {
                         deleting ?
