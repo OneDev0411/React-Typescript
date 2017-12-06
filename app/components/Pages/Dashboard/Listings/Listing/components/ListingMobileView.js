@@ -14,7 +14,7 @@ import { Col, Button } from 'react-bootstrap'
 
 import { renderFeatures } from './ListingDesktopView'
 
-import helpers from '../../../../../../utils/helpers'
+import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
 import config from '../../../../../../../config/public'
 import Brand from '../../../../../../controllers/Brand'
 import listing_util from '../../../../../../utils/listing'
@@ -85,20 +85,20 @@ const ListingMobileView = ({
       price = listing.close_price
     }
 
-    price = helpers.numberWithCommas(price)
+    price = numberWithCommas(price)
     year_built = property.year_built
     address = listing_util.addressTitle(property.address)
     listing_title = address
     mls_number = listing.mls_number
     bedroom_count = property.bedroom_count
     bathroom_count = property.bathroom_count
-    square_feet = helpers.numberWithCommas(
+    square_feet = numberWithCommas(
       Math.floor(listing_util.metersToFeet(property.square_meters))
     )
 
     if (property.square_meters) {
-      price_sq_foot = (Number(price.replace(/,/g, '')) /
-        Number(square_feet.replace(/,/g, ''))
+      price_sq_foot = (
+        Number(price.replace(/,/g, '')) / Number(square_feet.replace(/,/g, ''))
       ).toFixed(2)
     }
 
@@ -115,7 +115,11 @@ const ListingMobileView = ({
         {gallery_image_urls.map((gallery_image_url, i) => (
           <div key={`gallery-image-${gallery_image_url}${i}`}>
             <div
-              style={S(`w-100p h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(${listing_util.getResizeUrl(gallery_image_url)}?w=500)`)}
+              style={S(
+                `w-100p h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(${listing_util.getResizeUrl(
+                  gallery_image_url
+                )}?w=500)`
+              )}
             />
           </div>
         ))}
@@ -132,15 +136,16 @@ const ListingMobileView = ({
       />
     ))
 
-    listing_subtitle = `${listing.property.address.city}, ${listing.property.address
-      .state} ${listing.property.address.postal_code}`
+    listing_subtitle = `${listing.property.address.city}, ${
+      listing.property.address.state
+    } ${listing.property.address.postal_code}`
 
     const status_color = listing_util.getStatusColor(listing.status)
 
     let sold_date
 
     if (listing.close_date) {
-      const sold_date_obj = helpers.friendlyDate(listing.close_date)
+      const sold_date_obj = friendlyDate(listing.close_date)
 
       sold_date = `${sold_date_obj.month} 
       ${sold_date_obj.date}, 
@@ -239,7 +244,11 @@ const ListingMobileView = ({
             </div>
             <div style={S('font-14 mb-5 color-bfc3c7')}>
               <div
-                style={S(`bg-cover bg-url(${Brand.asset('office_logo')}) bg-center w-20 h-20 pull-left mr-10`)}
+                style={S(
+                  `bg-cover bg-url(${Brand.asset(
+                    'office_logo'
+                  )}) bg-center w-20 h-20 pull-left mr-10`
+                )}
               />
               <div style={S('pull-left')}>{Brand.message('office_title')}</div>
               <div className="clearfix" />
@@ -270,7 +279,9 @@ const ListingMobileView = ({
 
       list_agent_area = (
         <div
-          style={S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center')}
+          style={S(
+            'mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center'
+          )}
         >
           <div style={S('font-18 mb-5 color-3388ff')}>
             <span style={S('fw-400')}>
@@ -282,7 +293,11 @@ const ListingMobileView = ({
           {showing_instructions}
           <div style={email_style}>
             <a
-              href={`mailto:${listing.list_agent_email}?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
+              href={`mailto:${
+                listing.list_agent_email
+              }?subject=Your listing on Rechat.com&body=I saw your listing (${
+                listing_title
+              }) on Rechat.com and I'm interested in getting more information.`}
               style={S('color-748090')}
             >
               {listing.list_agent_email}
@@ -624,7 +639,11 @@ const ListingMobileView = ({
     if (brand_agent.cover_image_url) {
       profile_image_area = (
         <div
-          style={S(`w-300 h-300 center-block br-300 bg-cover bg-top bg-url(${brand_agent.cover_image_url})`)}
+          style={S(
+            `w-300 h-300 center-block br-300 bg-cover bg-top bg-url(${
+              brand_agent.cover_image_url
+            })`
+          )}
         />
       )
     }
@@ -646,7 +665,11 @@ const ListingMobileView = ({
           </div>
           <div style={S('font-14 mb-15 relative')}>
             <div
-              style={S(`bg-cover bg-url(${Brand.asset('office_logo')}) bg-center w-20 h-20 inline-block mr-10 mt-10`)}
+              style={S(
+                `bg-cover bg-url(${Brand.asset(
+                  'office_logo'
+                )}) bg-center w-20 h-20 inline-block mr-10 mt-10`
+              )}
             />
             <div style={S('inline-block relative t-5n')}>
               {Brand.message('office_title')}

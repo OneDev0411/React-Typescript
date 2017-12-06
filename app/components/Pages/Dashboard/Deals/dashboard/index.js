@@ -46,7 +46,7 @@ class DealDetails extends React.Component {
 
         <NavBar deal={deal} />
 
-        <div className="content">
+        <div className="deal-content">
           <div className="column deal-info">
             <DealInfo
               deal={deal}

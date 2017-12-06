@@ -2,11 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Modal, Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
-import DealInfo from '../dashboard/deal-info'
-import Comments from '../dashboard/comments'
-import CommentInput from '../dashboard/comments/input'
-import PdfViewer from '../../../../Partials/Pdf/Viewer'
 import extractDocumentOfTask from '../utils/extract-document-of-task'
+import { getEnvelopes } from '../../../../../store_actions/deals'
+import FileView from './file-view'
+import EnvelopeView from './envelope-view'
 import config from '../../../../../../config/public'
 
 class FormViewer extends React.Component {
@@ -15,12 +14,17 @@ class FormViewer extends React.Component {
 
     this.state = {
       showFactsheet: props.isBackOffice,
-      showComments: props.isBackOffice,
-      file: this.getFile()
+      showComments: props.isBackOffice
     }
   }
 
-  getFile() {
+  async componentDidMount() {
+    this.setState({
+      file: await this.getFile()
+    })
+  }
+
+  async getFile() {
     const { params } = this.props
     const { type } = params
 
@@ -28,7 +32,7 @@ class FormViewer extends React.Component {
       case 'attachment':
         return this.getAttachmentFile()
       case 'envelope':
-        return this.getEnvelopeFile()
+        return await this.getEnvelopeFile()
       default:
         return this.getDigitalForm()
     }
@@ -54,9 +58,14 @@ class FormViewer extends React.Component {
     return extractDocumentOfTask(deal, tasks[taskId])
   }
 
-  getEnvelopeFile() {
-    const { deal, user, tasks, params } = this.props
+  async getEnvelopeFile() {
+    const { deal, user, tasks, params, getEnvelopes } = this.props
     const { taskId, type, objectId } = params
+
+    if (!deal.envelopes) {
+      deal.envelopes = await getEnvelopes(deal.id)
+    }
+
     const envelope = deal.envelopes[objectId]
     const task = tasks[taskId]
 
@@ -91,6 +100,11 @@ class FormViewer extends React.Component {
     })
   }
 
+  editForm() {
+    const { deal, params } = this.props
+    browserHistory.push(`/dashboard/deals/${deal.id}/form-edit/${params.taskId}`)
+  }
+
   onClose() {
     const { deal } = this.props
     browserHistory.push(`/dashboard/deals/${deal.id}`)
@@ -99,119 +113,35 @@ class FormViewer extends React.Component {
   render() {
     const { file, showFactsheet, showComments } = this.state
     const { deal, tasks, params } = this.props
-    const { name, type, url, downloadUrl } = file
-    const task = tasks[params.taskId]
 
-    const COMMENTS_WIDTH = showComments ? '300px' : '0px'
-    const FACTSHEET_WIDTH = showFactsheet ? '300px' : '0px'
-    const PDF_WIDTH = `calc(100% - ${COMMENTS_WIDTH} - ${FACTSHEET_WIDTH})`
-
-    if (['pdf', 'image'].indexOf(type) === -1) {
+    if (!file || ['pdf', 'image'].indexOf(file.type) === -1) {
       return null
     }
 
+    if (params.type === 'envelope') {
+      return (
+        <EnvelopeView
+          deal={deal}
+          onClose={() => this.onClose()}
+          file={file}
+          envelope={deal.envelopes[params.objectId]}
+        />
+      )
+    }
+
     return (
-      <Modal
-        className="deal-form-viewer-modal"
-        show={true}
-        onHide={() => this.onClose()}
-      >
-        <Modal.Header>
-          <Button
-            onClick={() => this.onClose()}
-            className="close-btn"
-          >
-            X
-          </Button>
-
-          <span className="title">
-            { name }
-          </span>
-
-          <div className="cta">
-            <Button
-              className="deal-button"
-              onClick={() => this.toggleFactsheet()}
-            >
-              <img src="/static/images/deals/digital-form.svg" />
-              Deal Facts
-            </Button>
-
-            <Button
-              className="deal-button comments"
-              onClick={() => this.toggleComments()}
-            >
-              <img src="/static/images/deals/comments.svg" />
-              Comments
-            </Button>
-          </div>
-
-        </Modal.Header>
-
-        <Modal.Body>
-          <div
-            className={`fw-wrapper ${showFactsheet ? 'show-factsheet' : ''} ${showComments ? 'show-comments' : ''}`}
-          >
-            <div
-              className="factsheet"
-              style={{
-                display: showFactsheet ? 'block' : 'none',
-                minWidth: FACTSHEET_WIDTH,
-                maxWidth: FACTSHEET_WIDTH
-              }}
-            >
-              <DealInfo
-                deal={deal}
-                showBackButton={false}
-              />
-            </div>
-
-            <div
-              style={{
-                minWidth: PDF_WIDTH,
-                maxWidth: PDF_WIDTH
-              }}
-              className="file-viewer"
-            >
-              {
-                file && type === 'pdf' &&
-                <PdfViewer
-                  uri={url}
-                  downloadUrl={downloadUrl}
-                  defaultContainerHeight="85vh"
-                />
-              }
-
-              {
-                file && type === 'image' &&
-                <img
-                  className="image"
-                  src={url}
-                  alt={name}
-                />
-              }
-            </div>
-
-            <div
-              className="comments"
-              style={{
-                display: showComments ? 'block' : 'none',
-                minWidth: COMMENTS_WIDTH,
-                maxWidth: COMMENTS_WIDTH
-              }}
-            >
-              <Comments
-                task={task}
-              />
-
-              <CommentInput
-                task={task}
-              />
-            </div>
-          </div>
-
-        </Modal.Body>
-      </Modal>
+      <FileView
+        deal={deal}
+        onClose={() => this.onClose()}
+        toggleFactsheet={() => this.toggleFactsheet()}
+        toggleComments={() => this.toggleComments()}
+        editForm={() => this.editForm()}
+        file={file}
+        fileType={params.type || 'digital-form'}
+        task={tasks[params.taskId]}
+        showFactsheet={showFactsheet}
+        showComments={showComments}
+      />
     )
   }
 }
@@ -229,4 +159,4 @@ function mapStateToProps({ user, deals }, props) {
   }
 }
 
-export default connect(mapStateToProps)(FormViewer)
+export default connect(mapStateToProps, { getEnvelopes })(FormViewer)

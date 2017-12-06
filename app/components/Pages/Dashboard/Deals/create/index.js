@@ -16,7 +16,8 @@ import {
   createDeal,
   createRoles,
   closeEsignWizard,
-  setSelectedTask
+  setSelectedTask,
+  updateContext
 } from '../../../../../store_actions/deals'
 
 class CreateDeal extends React.Component {
@@ -88,7 +89,7 @@ class CreateDeal extends React.Component {
 
   async createDeal() {
     const { dealSide, dealPropertyType, dealAddress } = this.state
-    const { user, notify, createDeal, createRoles } = this.props
+    const { user, notify, createDeal, createRoles, updateContext } = this.props
 
     const dealObject = {
       property_type: dealPropertyType,
@@ -115,6 +116,12 @@ class CreateDeal extends React.Component {
 
       // add roles
       await createRoles(deal.id, this.getRoles())
+
+      if (!dealObject.listing) {
+        await updateContext(deal.id, {
+          listing_status: 'Active'
+        }, true)
+      }
 
       return this.openDeal(deal.id)
 
@@ -244,5 +251,6 @@ export default connect(({ deals, user }) => ({
   createRoles,
   closeEsignWizard,
   setSelectedTask,
+  updateContext,
   notify
 })(CreateDeal)

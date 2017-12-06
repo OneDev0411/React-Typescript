@@ -33,8 +33,8 @@ class DealsDashboard extends React.Component {
   refetchDeals() {
     // refetch deals based on this feature request:
     // https://gitlab.com/rechat/web/issues/419
-    const { getDeals, user } = this.props
-    getDeals(user, hasUserAccess(user, 'BackOffice'), false)
+    // const { getDeals, user } = this.props
+    // getDeals(user, hasUserAccess(user, 'BackOffice'), false)
   }
 
   /**

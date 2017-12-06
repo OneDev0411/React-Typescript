@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
-import DrawIcon from '../../../../Partials/Svgs/Draw'
+import DrawIcon from '../../../../Partials/Svgs/PolygonDraw'
 import Brand from '../../../../../../../controllers/Brand'
 import {
   activeDrawing,
@@ -17,15 +17,17 @@ const DrawingButton = ({
   isFetching,
   hasPolygon = []
 }) =>
-  isLoggedIn &&
-  <button
-    onClick={onClick}
-    className="c-mls-toolbar__drawing-btn"
-    disabled={hasPolygon.length || isFetching}>
-    <DrawIcon
-      color={isDrawing ? `#${Brand.color('primary', '3388ff')}` : '#929292'}
-    />
-  </button>
+  isLoggedIn && (
+    <button
+      onClick={onClick}
+      className="c-mls-toolbar__drawing-btn"
+      disabled={hasPolygon.length || isFetching}
+    >
+      <DrawIcon
+        color={isDrawing ? `#${Brand.color('primary', '3388ff')}` : '#929292'}
+      />
+    </button>
+  )
 
 export default compose(
   connect(

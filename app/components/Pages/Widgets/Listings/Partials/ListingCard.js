@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import S from 'shorti'
 import listing_util from '../../../../../utils/listing'
-import helpers from '../../../../../utils/helpers'
+import { randomString, numberWithCommas } from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
 import Brand from '../../../../../controllers/Brand'
 import ActionBubble from '../../../Partials/ActionBubble'
@@ -56,7 +56,7 @@ export default class ListingCard extends Component {
     if (!address) {
       address = property.address
     }
-    const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
+    const square_feet = numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     let listing_card_style = {
       ...S('w-380 h-360 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'),
       boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)',
@@ -83,7 +83,7 @@ export default class ListingCard extends Component {
     const overlay_style = {
       ...S('absolute w-100p h-100p br-3')
     }
-    const price = helpers.numberWithCommas(listing.price)
+    const price = numberWithCommas(listing.price)
     const price_tag_style = {
       ...S(`absolute b-30 p-15 pt-6 h-48 bg-${Brand.color('primary')} font-26 fw-500 color-fff`),
       borderTopRightRadius: '3px',
@@ -115,7 +115,7 @@ export default class ListingCard extends Component {
 
     return (
       <div
-        key={`listing-viewer-${listing.id}-${helpers.randomString(10)}`}
+        key={`listing-viewer-${listing.id}-${randomString(10)}`}
         style={listing_card_style}
         className={this.props.className}
         onClick={this.props.handleListingClick.bind(this, listing)}

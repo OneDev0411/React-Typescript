@@ -25,6 +25,7 @@ $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
 @import './dashboard/_mls_status_modal';
 @import './dashboard/_upload';
 @import './dashboard/_pdf_splitter';
+@import './dashboard/_bulk_submit';
 
 %deal-dashboard {
   margin-left: 0;
@@ -32,11 +33,11 @@ $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
   display: flex;
   flex-direction: column;
 
-  .navbar {
+  .deal-navbar {
     @extend %deal-dashboard-navbar;
   }
 
-  .content {
+  .deal-content {
     display: flex;
     flex-direction: row;
     overflow: hidden;

@@ -73,19 +73,23 @@ class WorkspaceForm extends React.Component {
         status: 'success'
       })
 
+      // set status
+      this.setState({
+        saving: false,
+        title: '',
+        notifyOffice: true
+      })
+
     } catch(e) {
       notify({
         message: "Couldn't create pdf file. try again.",
         status: 'error'
       })
-    }
 
-    // set status
-    this.setState({
-      saving: false,
-      title: '',
-      notifyOffice: true
-    })
+      this.setState({
+        saving: false
+      })
+    }
 
     return created
   }

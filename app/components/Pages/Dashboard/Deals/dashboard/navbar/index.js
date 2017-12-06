@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Dropzone from 'react-dropzone'
 import { showAttachments, setUploadFiles } from '../../../../../../store_actions/deals'
+import BulkSubmit from '../bulk-submit'
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -27,8 +28,10 @@ class NavBar extends React.Component {
   }
 
   render() {
+    const { deal } = this.props
+
     return (
-      <div className="navbar">
+      <div className="deal-navbar">
         <div
           className="back"
           onClick={() => this.goBack()}
@@ -52,11 +55,9 @@ class NavBar extends React.Component {
             Get Signatures
           </button>
 
-          <button
-            className="btn-deal"
-          >
-            Submit
-          </button>
+          <BulkSubmit
+            deal={deal}
+          />
         </div>
 
          <Dropzone

@@ -119,14 +119,16 @@ Deal.get.clientNames = function(deal) {
 /**
 * a helper that formats price
 */
-Deal.get.formattedPrice = function(number) {
+Deal.get.formattedPrice = function(number, style = 'currency') {
   if (!number) {
     return number
   }
 
-  return '$' + number
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return new Intl.NumberFormat('en-US', {
+    style,
+    currency: 'USD',
+    minimumFractionDigits: 2
+  }).format(number)
 }
 
 /**
@@ -372,6 +374,35 @@ Deal.createTask = async function (dealId, data) {
 }
 
 /**
+* delete task
+*/
+Deal.deleteTask = async function (taskId) {
+  try {
+    const response = await new Fetch()
+      .delete(`/tasks/${taskId}`)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* delete task
+*/
+Deal.updateTask = async function (taskId, attributes) {
+  try {
+    const response = await new Fetch()
+      .patch(`/tasks/${taskId}`)
+      .send(attributes)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * update checklist
 */
 Deal.updateChecklist = async function (deal_id, checklist_id, attributes) {
@@ -477,6 +508,22 @@ Deal.needsAttention = async function(task_id, status) {
     await new Fetch()
       .patch(`/tasks/${task_id}/needs_attention`)
       .send({ needs_attention: status })
+
+  } catch (e) {
+    return false
+  }
+}
+
+/**
+* bulk submit for review
+*/
+Deal.bulkSubmit = async function(dealId, tasks) {
+  try {
+    const response = await new Fetch()
+      .put(`/deals/${dealId}/tasks`)
+      .send(tasks)
+
+    return response.body.data
 
   } catch (e) {
     return false

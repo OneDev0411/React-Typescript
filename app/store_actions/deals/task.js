@@ -1,5 +1,7 @@
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
+import { normalize } from 'normalizr'
+import * as schema from './schema'
 
 function addNewTask(deal_id, list_id, task) {
   return {
@@ -34,6 +36,28 @@ function attachmentDeleted(task, file_id) {
   }
 }
 
+function taskDeleted(checklistId, taskId) {
+  return {
+    type: types.DELETE_TASK,
+    checklistId,
+    taskId
+  }
+}
+
+function taskUpdated(task) {
+  return {
+    type: types.UPDATE_TASK,
+    task
+  }
+}
+
+function tasksUpdated(tasks) {
+  return {
+    type: types.UPDATE_TASKS,
+    tasks
+  }
+}
+
 export function setTasks(tasks) {
   return {
     type: types.GET_TASKS,
@@ -45,6 +69,29 @@ export function setSelectedTask(task) {
   return {
     type: types.SET_SELECTED_TASK,
     task
+  }
+}
+
+export function bulkSubmit(dealId, tasksList) {
+  return async (dispatch) => {
+    const data = await Deal.bulkSubmit(dealId, tasksList)
+
+    const { entities } = normalize(data, schema.taskSchema)
+    dispatch(tasksUpdated(entities.tasks))
+  }
+}
+
+export function deleteTask(checklistId, taskId) {
+  return async (dispatch) => {
+    Deal.deleteTask(taskId)
+    dispatch(taskDeleted(checklistId, taskId))
+  }
+}
+
+export function updateTask(taskId, attributes) {
+  return async (dispatch) => {
+    const task = await Deal.updateTask(taskId, attributes)
+    dispatch(taskUpdated(task))
   }
 }
 

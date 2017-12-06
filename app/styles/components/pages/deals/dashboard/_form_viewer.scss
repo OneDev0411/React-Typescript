@@ -13,6 +13,9 @@
 
   .modal-header {
     background-color: #fff;
+    padding-top: 10px !important;
+    height: $deal-dashboard-header-height;
+    vertical-align: middle;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
     .close-btn {
@@ -47,21 +50,22 @@
         font-size: 13px;
         font-weight: 500;
         color: #8da2b5;
-        img {
-          margin-right: 6px;
-          font-size: 14px;
-          width: 14px;
-          margin-bottom: 3px;
+        &:hover {
+          color: #2196f3;
+          border-color: #2196f3;
         }
-
-        &.comments {
-          img {
-            width: 18px;
-          }
-        }
-
         &:focus {
           outline: none;
+        }
+      }
+
+      .edit-form {
+        background-color: #2196f3;
+        border-color: #2196f3;
+        color: #fff;
+        &:hover {
+          background: #fff;
+          color: #2196f3;
         }
       }
     }
@@ -88,28 +92,43 @@
       width: 100%;
       display: flex;
       flex-direction: row;
+      @extend .u-scrollbar--thinner;
 
       &.show-comments {
         .pdf-toolbar {
           right: 316px;
         }
       }
+
+      &.show-envelopes {
+        .pdf-toolbar {
+          right: 390px;
+        }
+      }
     }
 
     .factsheet {
       @extend %deal-info;
+      @extend .u-scrollbar--thinner;
       padding: 0;
       background-color: #fff;
       border-right: 1px solid #c9d7df;
-      .scrollable {
-        // min-height: calc(91vh - #{$listing-card-height});
-        // max-height: calc(91vh - #{$listing-card-height});
+    }
+
+    .envelopes {
+      @extend .u-scrollbar--thinner;
+      border-left: 1px solid #dce5eb;
+      box-shadow: -1px 0 0 0 #dce5eb;
+      background-color: #fff;
+      .who-signed {
+        @extend %deal-envelopes-who-signed;
       }
     }
 
     .comments {
       @extend %deal-comments;
       @extend %deal-comment-create;
+      @extend .u-scrollbar--thinner;
 
       padding: 0 !important;
       margin: 0 !important;
@@ -179,6 +198,128 @@
         position: fixed;
         bottom: 4%;
         left: 44%;
+      }
+    }
+  }
+}
+
+%deal-envelopes-who-signed {
+  padding: 0;
+
+  .ws-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 49px;
+    background-color: #f8fafb;
+    box-shadow: 0 1px 0 0 #e9e9e9;
+    padding: 0 12px;
+    border-radius: 6px 6px 0 0;
+
+    .ttl {
+      font-size: 17px;
+      font-weight: 600;
+      text-align: left;
+      color: #1d364b;
+      width: 40%;
+    }
+
+    .cta {
+      width: 60%;
+      text-align: right;
+      .deal-button {
+        height: 26px;
+        line-height: 3px;
+        border-radius: 3px;
+        border: solid 1px #dce5eb;
+        color: #2196f3;
+        font-weight: 600;
+        &:hover {
+          background-color: #2196f3;
+          border-color: #2196f3;
+          color: #fff;
+        }
+
+        &.void {
+          margin-left: 5px;
+          color: #d0021b;
+          letter-spacing: 0.5px;
+          &:hover {
+            background-color: red;
+            border-color: red;
+            color: #fff;
+          }
+        }
+
+        &.cls {
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+
+  .ws-section {
+    overflow: hidden;
+
+    .ws-section-title {
+      padding: 12px;
+      background-color: #fff;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: #1d364b;
+
+      img {
+        margin-right: 10px;
+        width: 18px;
+      }
+    }
+
+    .ws-section-body {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background-color: #fff;
+      padding: 10px 9px;
+      box-shadow: 0 1px 0 0 #f0f4f7, 0 -1px 0 0 #f0f4f7;
+
+      &:last-child {
+        margin-bottom: 35px;
+      }
+
+      .avatar {
+        width: 8%;
+      }
+
+      .info {
+        width: 67%;
+        margin-left: 10px;
+        .sname {
+          font-size: 15px;
+          font-weight: 500;
+          color: #1d364b;
+        }
+
+        .date {
+          font-size: 13px;
+          color: #8da2b5;
+        }
+      }
+
+      .sign-now {
+        width: 25%;
+        text-align: right;
+        .sign-button {
+          padding: 5px 10px;
+          width: 80px;
+          height: 26px;
+          border-radius: 3px;
+          border: solid 1px #dce5eb;
+          color: #2196f3;
+          font-size: 13px;
+          font-weight: 600;
+        }
       }
     }
   }

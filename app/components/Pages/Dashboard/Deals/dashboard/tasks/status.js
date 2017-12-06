@@ -4,6 +4,7 @@ import moment from 'moment'
 
 const TaskStatus = ({
   task,
+  noTip,
   isBackoffice
 }) => {
   const { review } = task
@@ -25,10 +26,14 @@ const TaskStatus = ({
     status = 'Notified'
   }
 
+  if (!status) {
+    return false
+  }
+
   return (
     <span
       className={`status ${status}`}
-      data-tip={tooltip}
+      data-tip={!noTip && tooltip}
       data-place="bottom"
     >
       { status.toUpperCase() }

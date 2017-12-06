@@ -71,7 +71,9 @@ function setEnvelopeStatus(deal_id, envelope_id, status) {
 export function getEnvelopes(deal_id) {
   return async (dispatch) => {
     const envelopes = await Deal.getEnvelopes(deal_id)
-    dispatch(setEnvelopes(deal_id, _.indexBy(envelopes, 'id')))
+    const indexedEnvelopes = _.indexBy(envelopes, 'id')
+    dispatch(setEnvelopes(deal_id, indexedEnvelopes))
+    return indexedEnvelopes
   }
 }
 

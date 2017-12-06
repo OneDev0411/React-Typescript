@@ -3,7 +3,6 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import helpers from '../../../../../../../utils/helpers'
 import LazyLoad from 'react-lazy-load'
 import listingUtils from '../../../../../../../utils/listing'
 
@@ -51,11 +50,14 @@ const ListingCard = ({
           <h5 className="c-listing-card__price">$ {props.price}</h5>
           <div className="c-listing-card__details">
             <span>{props.beds} Beds</span>
-            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
             <span>{props.baths} Baths</span>
-            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
             <span>{props.sqft} Sqft</span>
-            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            {props.lotSizeArea && (
+              <span>&nbsp;&nbsp;&middot;&nbsp;&nbsp;{props.lotSizeArea} Acres</span>
+            )}
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
             <span>{props.builtYear}</span>
           </div>
         </div>

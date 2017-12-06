@@ -41,7 +41,7 @@ const TaskManager = ({
         </div>
 
         <CommentInput
-          key={`CM_INPUT_${task.id}`}
+          key={task.id}
           task={task}
         />
       </Upload>

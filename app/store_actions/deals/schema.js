@@ -13,6 +13,7 @@ export const deal = new schema.Entity('deals', {
   checklists: [checklist]
 })
 
+export const taskSchema = [task]
 export const dealsSchema = [deal]
 export const dealSchema = deal
 export const checklistSchema = checklist

@@ -1,0 +1,112 @@
+// Sidebar
+
+$item-height: 3.4rem;
+
+.c-app-navbar {
+  width: 15rem;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  overflow: hidden;
+  background-color: #263445;
+}
+
+.c-app-navbar__list {
+  margin: 0;
+  padding: 0;
+}
+
+.c-app-navbar__list--top {
+  padding-top: 1rem;
+}
+
+.c-app-navbar__list--bottom {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 1rem;
+}
+
+.c-app-navbar__item {
+  position: relative;
+  height: $item-height;
+  padding-left: 2rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(#62778c, 0.4);
+  }
+}
+
+.c-app-navbar__item__title,
+.c-app-navbar__item__title--button {
+  width: 100%;
+  display: block;
+  padding: 0;
+  color: #8da2b5;
+  line-height: $item-height;
+  font-size: 1.5rem;
+
+  &:hover,
+  &:active,
+  .c-app-navbar__item.is-active & {
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+.c-app-navbar__item__title--button {
+  border: none;
+  text-align: left;
+  background: transparent;
+
+  &:focus {
+    outline-width: 0;
+  }
+}
+
+.c-app-navbar__item__inbox {
+  height: 100%;
+}
+
+.c-app-navbar__notification-badge {
+  $size: 20px;
+  display: inline-block;
+  width: $size;
+  height: $size;
+  margin-left: 1rem;
+  text-align: center !important;
+  font-size: 12px;
+  line-height: $size;
+  border-radius: 100px;
+  color: #fff;
+  background-color: red;
+}
+
+.c-app-navbar__account-dropdown {
+  width: 90%;
+  padding-left: 2rem;
+
+  > .c-app-navbar__item__title--button {
+    &:hover,
+    &:focus,
+    &:active,
+    .open &:focus {
+      color: #fff !important;
+      background: transparent !important;
+    }
+  }
+
+  .dropdown-menu {
+    left: 2rem;
+    min-width: 12rem;
+  }
+
+  &.open > .c-app-navbar__item__title--button {
+    color: #fff;
+    border: none;
+    background: transparent;
+  }
+}

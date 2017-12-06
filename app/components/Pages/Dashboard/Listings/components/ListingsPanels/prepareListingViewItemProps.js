@@ -1,4 +1,4 @@
-import helpers from '../../../../../../utils/helpers'
+import { numberWithCommas } from '../../../../../../utils/helpers'
 import listingUtils from '../../../../../../utils/listing'
 
 const listViewItemProps = (user, listing) => {
@@ -14,11 +14,12 @@ const listViewItemProps = (user, listing) => {
     address = property.address
   }
 
-  const sqft = helpers.numberWithCommas(
+  const sqft = numberWithCommas(
     Math.floor(listingUtils.metersToFeet(property.square_meters))
   )
 
   let price = listing.price
+
   if (listing.close_price && user && user.user_type === 'Agent') {
     price = listing.close_price
   }
@@ -31,25 +32,28 @@ const listViewItemProps = (user, listing) => {
     backgroundImage: `url('${listing.cover_image_url}')`
   }
 
-  const area = address.postal_code
+  const zipCode = address.postal_code
   const builtYear = property.year_built
   const beds = property.bedroom_count || '-'
-  const baths =
-    property.half_bathroom_count + property.full_bathroom_count || '-'
-  price = helpers.numberWithCommas(Math.floor(price))
+  const lotSizeArea = property.lot_size_area
+  const baths = property.half_bathroom_count + property.full_bathroom_count || '-'
+
+  price = numberWithCommas(Math.floor(price))
+
   const addressTitle = listingUtils.addressTitle(address)
 
   return {
     backgroundImage,
     statusColor,
     address: addressTitle,
-    area,
+    zipCode,
     price,
     beds,
     baths,
     sqft,
     pricePerSquareFoot,
-    builtYear
+    builtYear,
+    lotSizeArea
   }
 }
 
