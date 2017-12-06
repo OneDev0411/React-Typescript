@@ -54,7 +54,7 @@ export default ({
     </Row>
 
     <Row>
-      <Col md={12} sm={12} xs={12}>
+      <Col md={12} sm={12} xs={12} style={{ overflow: 'none' }}>
         <Frame
           task={task}
           frameRef={ref => onFrameRef(ref)}
