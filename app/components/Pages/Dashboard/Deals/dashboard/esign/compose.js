@@ -124,6 +124,20 @@ class SendSignatures extends React.Component {
       return { revision: tasks[id].submission.last_revision }
     })
 
+    if (_.size(recipients) === 0) {
+      return notify({
+        message: 'You must select one recipient at least',
+        status: 'error'
+      })
+    }
+
+    if (attachments.length === 0) {
+      return notify({
+        message: 'Select a document at least',
+        status: 'error'
+      })
+    }
+
     this.setState({
       isSending: true,
       showDocusignBanner: false
