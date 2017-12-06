@@ -94,7 +94,7 @@ export default class Form extends React.Component {
         <DropdownButton
           id="deal-add-role--drp"
           className="deal-add-role--drp"
-          title={form.role || 'Select Role'}
+          title={form.role ? roleNames(form.role) : 'Select Role'}
         >
           {
             role_names
