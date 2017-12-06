@@ -14,8 +14,6 @@ class DropDownTasks extends React.Component {
       newTaskMode: false,
       isCreatingTask: false
     }
-
-    this.cancelEdit = _.debounce(this.cancelEdit, 100)
   }
 
   toggleMenu() {
@@ -39,10 +37,11 @@ class DropDownTasks extends React.Component {
     }
   }
 
-  cancelEdit() {
+  discardEdit(e) {
     const { isCreatingTask } = this.state
+    const taskTitle = this.inputNewTask.value
 
-    if (isCreatingTask) {
+    if (isCreatingTask || taskTitle.length > 0) {
       return false
     }
 
@@ -55,7 +54,7 @@ class DropDownTasks extends React.Component {
     const taskTitle = this.inputNewTask.value
 
     if (taskTitle.length === 0) {
-      return this.cancelEdit()
+      return this.discardEdit()
     }
 
     this.setState({
@@ -142,7 +141,7 @@ class DropDownTasks extends React.Component {
                             placeholder="Name this task and press enter"
                             ref={ref => this.inputNewTask = ref}
                             onKeyPress={e => this.onKeyPress(e, chId)}
-                            onBlur={() => this.cancelEdit()}
+                            onBlur={(e) => this.discardEdit(e)}
                             autoFocus
                           />
 
