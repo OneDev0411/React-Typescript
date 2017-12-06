@@ -35,6 +35,7 @@ const listViewItemProps = (user, listing) => {
   const zipCode = address.postal_code
   const builtYear = property.year_built
   const beds = property.bedroom_count || '-'
+  const lotSizeArea = property.lot_size_area
   const baths = property.half_bathroom_count + property.full_bathroom_count || '-'
 
   price = numberWithCommas(Math.floor(price))
@@ -51,7 +52,8 @@ const listViewItemProps = (user, listing) => {
     baths,
     sqft,
     pricePerSquareFoot,
-    builtYear
+    builtYear,
+    lotSizeArea
   }
 }
 

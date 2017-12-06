@@ -9,16 +9,23 @@ import { Link, browerHistory } from 'react-router'
 import Intercom from 'react-intercom'
 import { Dropdown } from 'react-bootstrap'
 
+import SvgMap from '../Svgs/Map'
+import SvgStore from '../Svgs/Store'
+import SvgPeople from '../Svgs/People'
+import SvgBriefCase from '../Svgs/BriefCase'
+import SvgSupport from '../Svgs/Support'
+import SvgNotifications from '../Svgs/Notifications'
 import Brand from '../../../../../controllers/Brand'
+import Avatar from './components/Avatar'
 
 // utils
 import { hasUserAccess, getUserRoles } from '../../../../../utils/user-acl'
 
 // chatroom stuff
-import Inbox from '../../Chatroom/Shared/instant-trigger'
+import InstantChatTrigger from '../../Chatroom/Shared/instant-trigger'
 
 // deals notification badge counter
-import DealsNotifications from '../../Deals/components/sidebar-badge'
+import DealsIcon from '../../Deals/components/sidebar-badge'
 
 const ACTIVE_COLOR = `#${Brand.color('primary', '3388ff')}`
 const DEFAULT_COLOR = '#8da2b5'
@@ -60,6 +67,21 @@ const NavbarItem = ({ children, isActive }) => (
   <li className={`c-app-navbar__item ${isActive ? 'is-active' : ''}`}>{children}</li>
 )
 
+const SupportButton = ({ onClick, isActive }) => (
+  <NavbarItem isActive={isActive}>
+    <button
+      onClick={onClick}
+      className="c-app-navbar__support-btn"
+      style={{
+        color: isActive ? ACTIVE_COLOR : DEFAULT_COLOR
+      }}
+    >
+      <SvgSupport color={isActive ? ACTIVE_COLOR : DEFAULT_COLOR} />
+      <span className="c-app-navbar__item__title">Support</span>
+    </button>
+  </NavbarItem>
+)
+
 const appNavbar = ({
   user,
   activePath,
@@ -82,28 +104,34 @@ const appNavbar = ({
     <aside className="c-app-navbar">
       <ul className="c-app-navbar__list c-app-navbar__list--top">
         <NavbarItem>
-          <Inbox />
+          <InstantChatTrigger />
         </NavbarItem>
 
         <NavbarItem isActive={activePath === 'MAP'}>
-          <Link to="/dashboard/mls" className="c-app-navbar__item__title">
-            MLS
+          <Link to="/dashboard/mls">
+            <SvgMap color={activePath === 'MAP' ? ACTIVE_COLOR : DEFAULT_COLOR} />
+            <span className="c-app-navbar__item__title">MLS</span>
           </Link>
         </NavbarItem>
 
         {user.user_type !== 'Client' && (
           <NavbarItem isActive={activePath === 'CONTACTS'}>
-            <Link to="/dashboard/contacts" className="c-app-navbar__item__title">
-              Contacts
+            <Link to="/dashboard/contacts">
+              <SvgPeople
+                color={activePath === 'CONTACTS' ? ACTIVE_COLOR : DEFAULT_COLOR}
+              />
+              <span className="c-app-navbar__item__title">Contacts</span>
             </Link>
           </NavbarItem>
         )}
 
         {(hasDealsPermission || hasBackOfficePermission) && (
           <NavbarItem isActive={activePath === 'DEALS'}>
-            <Link to="/dashboard/deals" className="c-app-navbar__item__title">
-              Deals
-              <DealsNotifications />
+            <Link to="/dashboard/deals">
+              <DealsIcon
+                color={activePath === 'DEALS' ? ACTIVE_COLOR : DEFAULT_COLOR}
+              />
+              <span className="c-app-navbar__item__title">Deals</span>
             </Link>
           </NavbarItem>
         )}
@@ -112,39 +140,45 @@ const appNavbar = ({
           user.user_type === 'Agent' &&
           user.agent.office_mlsid === 'CSTPP01' && (
             <NavbarItem isActive={activePath === 'STORE'}>
-              <Link to="/dashboard/website">Store</Link>
+              <Link to="/dashboard/website">
+                <SvgStore
+                  color={activePath === 'STORE' ? ACTIVE_COLOR : DEFAULT_COLOR}
+                />
+              </Link>
+              <span className="c-app-navbar__item__title">Store</span>
             </NavbarItem>
           )}
       </ul>
 
       <ul className="c-app-navbar__list c-app-navbar__list--bottom">
         <NavbarItem isActive={activePath === 'NOTIF'}>
-          <Link to="/dashboard/notifications" className="c-app-navbar__item__title">
-            Notifications
-            {appNotifications > 0 && (
-              <span className="c-app-navbar__notification-badge">
-                {appNotifications}
-              </span>
-            )}
+          <Link to="/dashboard/notifications">
+            <span className="c-app-navbar__item__inbox__icon">
+              <SvgNotifications
+                color={activePath === 'NOTIF' ? ACTIVE_COLOR : DEFAULT_COLOR}
+              />
+              {appNotifications > 0 && (
+                <span className="c-app-navbar__notification-badge">
+                  {appNotifications}
+                </span>
+              )}
+            </span>
+            <span className="c-app-navbar__item__title">Notifications</span>
           </Link>
         </NavbarItem>
 
-        <NavbarItem isActive={intercomIsActive}>
-          <button
-            onClick={activeIntercom}
-            className="c-app-navbar__item__title--button"
-          >
-            Support
-          </button>
-        </NavbarItem>
+        <SupportButton onClick={activeIntercom} isActive={intercomIsActive} />
 
         <Dropdown
           dropup
           id="account-dropdown"
           className="c-app-navbar__account-dropdown"
         >
-          <Dropdown.Toggle className="c-app-navbar__item__title--button">
-            {user.first_name || user.email || user.phone_number}
+          <Dropdown.Toggle>
+            <Avatar user={user} size={30} />
+            <span className="c-app-navbar__item__title">
+              {user.first_name || user.email || user.phone_number}
+            </span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <li>

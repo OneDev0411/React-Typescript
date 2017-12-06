@@ -16,7 +16,7 @@ const onFocus = (e, room, onChangeActive) => {
 /**
  * reset room's notifications
  */
-const resetNotifications = (room) => {
+const resetNotifications = room => {
   if (~~room.new_notifications > 0) {
     ChatNotification.clear(room.id)
   }
@@ -37,9 +37,9 @@ export default ({
   // extract settings
   const { minimize } = settings
   const width = 270 // pixels
-  const defaultLeft = 90 // pixel
+  const defaultLeft = 170 // pixel
 
-  let left = (width * (number - 1)) + defaultLeft
+  let left = width * (number - 1) + defaultLeft
 
   // limit popups count based on screen width
   if (left + defaultLeft + width > window.innerWidth) {
@@ -54,7 +54,9 @@ export default ({
   return (
     <ClickOutside
       onClickOutside={() => {
-        if (isActive && !instantMode) { onChangeActive(null) }
+        if (isActive && !instantMode) {
+          onChangeActive(null)
+        }
       }}
     >
       <div
