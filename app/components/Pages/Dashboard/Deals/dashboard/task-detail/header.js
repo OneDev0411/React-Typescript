@@ -51,7 +51,7 @@ class Header extends React.Component {
 
     const title = this.titleInput.value
 
-    if (title === task.title) {
+    if (title === task.title || title.length === 0) {
       return this.toggleEdit()
     }
 
@@ -124,6 +124,7 @@ class Header extends React.Component {
             {
               isEditingTitle ?
               <textarea
+                autoFocus
                 onClick={e => e.stopPropagation()}
                 defaultValue={task.title}
                 onKeyPress={e => this.onKeyPress(e)}
