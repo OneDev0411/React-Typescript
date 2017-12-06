@@ -92,7 +92,10 @@ class Compose extends React.Component {
       }
     }
 
-    const { PhoneNumberUtil, PhoneNumberFormat } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+    const {
+      PhoneNumberUtil,
+      PhoneNumberFormat
+    } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
     const phoneUtil = PhoneNumberUtil.getInstance()
 
     try {
@@ -116,7 +119,9 @@ class Compose extends React.Component {
    * search recipients in rooms
    */
   async searchInRooms(q) {
-    const rooms = await this.askServer(`/rooms/search?q[]=${q}&room_types[]=Direct&room_types[]=Group`)
+    const rooms = await this.askServer(
+      `/rooms/search?q[]=${q}&room_types[]=Direct&room_types[]=Group`
+    )
 
     return rooms
     // .filter(room => room.users.length > 2)
@@ -211,7 +216,10 @@ class Compose extends React.Component {
    */
   onRemove(recipient) {
     // remove selected recipient
-    const recipients = _.omit(this.state.recipients, (item, id) => id === recipient.id)
+    const recipients = _.omit(
+      this.state.recipients,
+      (item, id) => id === recipient.id
+    )
 
     this.setState({ recipients }, this.onChangeRecipients)
 

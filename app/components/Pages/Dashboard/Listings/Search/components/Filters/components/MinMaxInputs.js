@@ -44,7 +44,6 @@ const renderField = ({
 const MinMaxInputs = ({
   name,
   label,
-  formatHandler,
   humanNumber,
   onChangeMin,
   validateMin = [],
@@ -53,6 +52,7 @@ const MinMaxInputs = ({
   placeholder = 'Any',
   warnMin,
   warnMax,
+  formatHandler = v => v,
   normalizeHandler = v => v || null
 }) => {
   const minName = `minimum_${name}`

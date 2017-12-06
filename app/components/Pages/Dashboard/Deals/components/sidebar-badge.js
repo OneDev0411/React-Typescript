@@ -68,17 +68,13 @@ class BadgeCounter extends React.Component {
   }
 
   render() {
-    const { color } = this.props
     const counter = this.getBadgeCount()
 
-    return (
-      <span className="c-app-navbar__item__inbox__icon">
-        <SvgDeals color={color} />
-        {counter > 0 && (
-          <span className="c-app-navbar__notification-badge">{counter}</span>
-        )}
-      </span>
-    )
+    if (counter > 0) {
+      return <span className="c-app-navbar__notification-badge">{counter}</span>
+    }
+
+    return <span />
   }
 }
 

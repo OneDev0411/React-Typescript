@@ -237,7 +237,7 @@ export const toNumber = (value, formated = false) => {
     return
   }
 
-  value = Number(value.replace(/[^0-9]/g, ''))
+  value = Number(value.replace(/[^0-9.]/g, ''))
 
   if (formated) {
     value = value.toLocaleString()

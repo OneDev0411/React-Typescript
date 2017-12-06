@@ -18,8 +18,8 @@
       background-color: #fafafa;
     }
   }
-  td, th {
-    width: 8%;
+  td,
+  th {
     padding-bottom: 1rem;
     text-align: left;
   }
@@ -65,12 +65,12 @@
   font-weight: normal;
   line-height: 1;
   margin-top: 0;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .c-tableview__listing-status__icon {
   width: 10px;
   height: 10px;
-  margin-right: .5rem;
+  margin-right: 0.5rem;
   border-radius: 50%;
 }

@@ -1,3 +1,4 @@
+const ONE_ACRE_TO_SQUARE_METERS = 4046.86
 const ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT = 10.7639
 
 export const getStatusColor = status => {
@@ -49,6 +50,9 @@ export const getStatusColorClass = status => {
       return ''
   }
 }
+
+export const metersToAcres = metre => metre / ONE_ACRE_TO_SQUARE_METERS
+export const acresToMeters = acres => acres * ONE_ACRE_TO_SQUARE_METERS
 
 export const metersToFeet = metre => metre * ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
 

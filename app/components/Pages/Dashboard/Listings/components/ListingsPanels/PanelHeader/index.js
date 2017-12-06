@@ -36,7 +36,6 @@ const PanelHeader = ({
             title={sortingIndex.charAt(0).toUpperCase() + sortingIndex.substr(1)}
             id="listings-sort-dropdown"
             className="c-panel__header__sorting__dropdown">
-            { /* sortingIndex !== 'area' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>Area</MenuItem> */}
             { sortingIndex !== 'price' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
               Price
             </MenuItem>}
@@ -55,7 +54,8 @@ const PanelHeader = ({
             { sortingIndex !== 'built' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
               Built
             </MenuItem>}
-            { sortingIndex !== 'distance' && <MenuItem onClick={e => onClickDropdownItem('distance')}>
+            { activePanel === 'table' && sortingIndex !== 'Zip Code' && <MenuItem onClick={e => onClickDropdownItem('Zip Code')}>Zip Code</MenuItem> }
+            { activePanel === 'map' && sortingIndex !== 'distance' && <MenuItem onClick={e => onClickDropdownItem('distance')}>
               Distance to map center
             </MenuItem>}
           </DropdownButton>
@@ -77,14 +77,14 @@ const PanelHeader = ({
     { activePanel === 'table' && <table className="c-tableview__table" style={{ marginTop: tabName !== 'ALERTS' ? '1.7rem' : 0 }}>
       <thead className="c-tableview__table__header">
         <tr>
-          <th style={{ paddingLeft: '1rem', width: '30%' }}>Address</th>
-          <th >Area</th>
-          <th style={{ width: '12%' }}>Price</th>
-          <th>Beds</th>
-          <th>Baths</th>
-          <th>Sqft</th>
-          <th>$/Sqft</th>
-          <th>Built Year</th>
+          <th style={{ paddingLeft: '1rem', width: '29%' }}>Address</th>
+          <th style={{ width: '14%' }}>Price</th>
+          <th style={{ width: '7%' }}>Beds</th>
+          <th style={{ width: '7%' }}>Baths</th>
+          <th style={{ width: '10%' }}>Sqft</th>
+          <th style={{ width: '10%' }}>$/Sqft</th>
+          <th style={{ width: '10%' }}>Built Year</th>
+          <th style={{ width: '10%' }}>Zip Code</th>
         </tr>
       </thead>
     </table> }

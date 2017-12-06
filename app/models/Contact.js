@@ -222,7 +222,15 @@ Contact.get = {
     return Contact.get._trim(name, max)
   },
   avatar: context => {
-    const item = Contact.get._sort(context.users)
+    const avatars = context.sub_contacts[0].attributes.profile_image_urls
+    let item = Contact.get._sort(avatars)
+
+    if (item) {
+      return item.profile_image_url
+    }
+
+
+    item = Contact.get._sort(context.users)
 
     if (item) {
       return item.cover_image_url

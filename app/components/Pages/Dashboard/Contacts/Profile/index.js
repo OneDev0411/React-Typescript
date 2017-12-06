@@ -35,6 +35,7 @@ class ContactProfile extends React.Component {
   goBack() {
     browserHistory.push('/dashboard/contacts')
   }
+
   getContact() {
     const { contacts, params } = this.props
     const contact = contacts[params.id]
@@ -43,7 +44,13 @@ class ContactProfile extends React.Component {
   }
 
   getStageIndex(contact) {
-    const list = ['General', 'UnqualifiedLead', 'QualifiedLead', 'Active', 'PastClient']
+    const list = [
+      'General',
+      'UnqualifiedLead',
+      'QualifiedLead',
+      'Active',
+      'PastClient'
+    ]
     const stage = Contact.get.stage(contact)
 
     return list.indexOf(stage.name)
@@ -136,7 +143,13 @@ class ContactProfile extends React.Component {
             <div className="card stage">
               <div className="title">Stage:</div>
               <Stepper
-                steps={['General', 'Unqualified Lead', 'Qualified Lead', 'Active', 'Past Client']}
+                steps={[
+                  'General',
+                  'Unqualified Lead',
+                  'Qualified Lead',
+                  'Active',
+                  'Past Client'
+                ]}
                 active={this.getStageIndex(contact)}
                 onChange={stage => this.changeStage(stage, contact)}
               />

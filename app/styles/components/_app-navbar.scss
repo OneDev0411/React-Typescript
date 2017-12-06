@@ -3,7 +3,7 @@
 $item-height: 3.4rem;
 
 .c-app-navbar {
-  width: 7rem;
+  width: 15rem;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -11,23 +11,6 @@ $item-height: 3.4rem;
   z-index: 100;
   overflow: hidden;
   background-color: #263445;
-  transition: width 0.26s ease-out;
-
-  &:hover {
-    width: 16rem;
-    transition: width 0.13s;
-
-    .c-app-navbar__item {
-      &.is-active .c-app-navbar__item__title {
-        color: inherit;
-      }
-    }
-
-    .c-app-navbar__item__title {
-      transform: translateX(0);
-      transition: transform 0.13s 0.13s;
-    }
-  }
 }
 
 .c-app-navbar__list {
@@ -42,48 +25,45 @@ $item-height: 3.4rem;
 .c-app-navbar__list--bottom {
   width: 100%;
   position: absolute;
+  left: 0;
   bottom: 1rem;
 }
 
 .c-app-navbar__item {
   position: relative;
   height: $item-height;
-  margin-bottom: 1rem;
   padding-left: 2rem;
   cursor: pointer;
-
-  > a {
-    line-height: $item-height;
-    display: block;
-    width: 100%;
-  }
-
-  .c-app-navbar__support-btn {
-    line-height: $item-height;
-  }
-
-  svg {
-    display: inline-block;
-    vertical-align: middle;
-  }
 
   &:hover {
     background-color: rgba(#62778c, 0.4);
   }
 }
 
-.c-app-navbar__item__title {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateX(100%);
-  padding-left: 5.5rem;
+.c-app-navbar__item__title,
+.c-app-navbar__item__title--button {
+  width: 100%;
+  display: block;
+  padding: 0;
   color: #8da2b5;
   line-height: $item-height;
   font-size: 1.5rem;
 
-  .c-app-navbar__item:hover & {
+  &:hover,
+  &:active,
+  .c-app-navbar__item.is-active & {
     color: #fff;
+    text-decoration: none;
+  }
+}
+
+.c-app-navbar__item__title--button {
+  border: none;
+  text-align: left;
+  background: transparent;
+
+  &:focus {
+    outline-width: 0;
   }
 }
 
@@ -91,74 +71,42 @@ $item-height: 3.4rem;
   height: 100%;
 }
 
-.c-app-navbar__item__inbox__icon {
-  position: relative;
-  display: inline-block;
-
-  .c-app-navbar__item__inbox & {
-    margin-top: 0.5rem;
-  }
-}
-
 .c-app-navbar__notification-badge {
-  $size: 16px;
-  position: absolute;
-  left: 1.25rem;
-  top: -0.5rem;
+  $size: 20px;
+  display: inline-block;
   width: $size;
   height: $size;
+  margin-left: 1rem;
   text-align: center !important;
-  font-size: 10px;
+  font-size: 12px;
   line-height: $size;
   border-radius: 100px;
   color: #fff;
   background-color: red;
 }
 
-.c-app-navbar__support-btn {
-  padding: 0;
-  border: none;
-  background: transparent;
-
-  &:focus {
-    outline: none;
-  }
-}
-
 .c-app-navbar__account-dropdown {
   width: 90%;
-  height: 30px;
   padding-left: 2rem;
 
-  > button.dropdown-toggle {
-    width: 30px;
-    height: 100%;
-    float: none;
-    padding: 0;
-    margin-left: -0.5rem !important;
-    border: none;
-    background: transparent;
-
-    .open &:focus {
-      background: transparent;
-    }
-  }
-
-  .c-app-navbar__item__title {
-    padding-left: 4rem;
-  }
-
-  &.open > button.dropdown-toggle {
-    background: transparent;
-
+  > .c-app-navbar__item__title--button {
+    &:hover,
     &:focus,
-    &:active {
-      background: transparent;
+    &:active,
+    .open &:focus {
+      color: #fff !important;
+      background: transparent !important;
     }
   }
 
   .dropdown-menu {
-    left: 1rem;
-    min-width: 140px;
+    left: 2rem;
+    min-width: 12rem;
+  }
+
+  &.open > .c-app-navbar__item__title--button {
+    color: #fff;
+    border: none;
+    background: transparent;
   }
 }

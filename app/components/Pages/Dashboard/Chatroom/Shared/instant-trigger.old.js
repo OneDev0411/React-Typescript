@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import { toggleChatbar } from '../../../../../store_actions/chatroom'
 import SvgChat from '../../Partials/Svgs/Chat'
-import { toggleBrand } from '../../../../../store_actions/brandConsole/index'
 
 const openChatbar = toggleChatbar => {
   if (window && window.location.pathname.includes('/recents/')) {
@@ -25,16 +24,17 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
   })
 
   return (
-    <div>
-      <button
-        className="c-app-navbar__item__title--button"
-        onClick={() => openChatbar(toggleChatbar)}
-      >
-        Inbox
+    <div
+      className="c-app-navbar__item__inbox"
+      onClick={() => openChatbar(toggleChatbar)}
+    >
+      <span className="c-app-navbar__item__inbox__icon">
+        <SvgChat color="#8da2b5" />
         {counter > 0 && (
           <span className="c-app-navbar__notification-badge">{counter}</span>
         )}
-      </button>
+      </span>
+      <span className="c-app-navbar__item__title">Inbox</span>
     </div>
   )
 }

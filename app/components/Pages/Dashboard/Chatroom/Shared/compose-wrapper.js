@@ -5,6 +5,7 @@ import Compose from '../../../../Partials/Compose'
 import { hasRecipients } from '../../../../../utils/helpers'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import LeaveIcon from '../../Partials/Svgs/LeaveIcon'
+import HelpIcon from '../../Partials/Svgs/HelpIcon'
 
 const enhance = compose(
   pure,
@@ -63,6 +64,22 @@ const ComposeWrapper = ({
                 onClick={OnLeaveClick}
               >
                 <LeaveIcon />
+              </span>
+            </OverlayTrigger>
+          }
+          {
+            directRoom &&
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="popover-leave">
+                You cannot add members to a direct message room
+              </Tooltip>}
+            >
+              <span
+                className=" leave-icon"
+                onClick={OnLeaveClick}
+              >
+                <HelpIcon />
               </span>
             </OverlayTrigger>
           }

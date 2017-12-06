@@ -12,7 +12,7 @@ import {
   removePolygon,
   inactiveDrawing
 } from '../../../../store_actions/listings/map/drawing'
-import { feetToMeters } from '../../../../../app/utils/listing'
+import { feetToMeters, acresToMeters } from '../../../../../app/utils/listing'
 import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/Schools'
 
 import { SEARCH_BY_FILTERS_AREAS } from '../../../../constants/listings/search'
@@ -106,18 +106,21 @@ const normalizeNumberValues = values => {
       v.indexOf('sold') === -1
   )
 
-  const unitIsFoot = n => n.indexOf('square') !== -1
+  const unitIsFoot = n => n.indexOf('square_meters') !== -1
+  const unitIsAcre = n => n.indexOf('lot_square_meters') !== -1
 
   const normalizedValues = {}
 
   numberValues.forEach(v => {
     let numberValue = turnToNumber(values[v]) || null
 
-    if (unitIsFoot(v)) {
-      numberValue = feetToMeters(numberValue)
+    if (unitIsAcre(v)) {
+      normalizedValues[v] = acresToMeters(numberValue)
+    } else if (unitIsFoot(v)) {
+      normalizedValues[v] = feetToMeters(numberValue)
+    } else {
+      normalizedValues[v] = numberValue
     }
-
-    normalizedValues[v] = numberValue
   })
 
   if (values.priceZeroCleaner) {

@@ -95,7 +95,7 @@ const ListingDesktopView = ({
     viewer_width = window.innerWidth
 
     if (user && !data.is_widget && container !== 'modal') {
-      viewer_width -= 70
+      viewer_width -= 150
     }
   }
 
@@ -689,7 +689,7 @@ const ListingDesktopView = ({
   }
 
   let viewer_wrap_style = S(
-    `absolute h-100p bg-fff t-0 l-0 z-10 ml-70 w-${viewer_width}`
+    `absolute h-100p bg-fff t-0 l-0 z-10 ml-150 w-${viewer_width}`
   )
 
   if (!user || data.is_widget) {

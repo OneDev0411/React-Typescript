@@ -3,7 +3,7 @@ import { change as updateField, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
-import NumberRange from '../NumberRange'
+import MinMaxInputs from '../components/MinMaxInputs'
 import { normalize } from 'normalizr'
 import { toNumber } from '../../../../../../../../utils/helpers'
 
@@ -39,7 +39,20 @@ const Price = ({
         <span className="c-filters__tag__text">(000s)</span>
       </label>
     )}
-    <NumberRange name="price" label="Price" placeholder="$Any" />
+    <MinMaxInputs
+      name="price"
+      label="Price"
+      placeholder="$Any"
+      formatHandler={value => {
+        if (!value || value == null) {
+          return ''
+        }
+
+        return typeof value === 'number'
+          ? value.toLocaleString()
+          : toNumber(value, true)
+      }}
+    />
   </div>
 )
 

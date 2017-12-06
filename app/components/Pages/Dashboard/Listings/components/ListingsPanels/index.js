@@ -21,18 +21,21 @@ const ListingPanel = props => {
   return (
     <div className={panelClassName}>
       <PanelsSwitch activePanel={activePanel} tabName={tabName} />
-      {(tabName !== 'ALERTS' ||
-        (tabName === 'ALERTS' && activePanel !== 'map')) &&
+      {(tabName !== 'ALERTS' || (tabName === 'ALERTS' && activePanel !== 'map')) && (
         <div className="l-listings__panel__container">
           {(tabName !== 'ALERTS' ||
-            (tabName === 'ALERTS' && activePanel === 'table')) &&
-            <PanelHeader {...props} info={listings.info} />}
+            (tabName === 'ALERTS' && activePanel === 'table')) && (
+              <PanelHeader {...props} info={listings.info} />
+            )}
           <div className="c-panel__list-container">
-            {activePanel === 'table'
-              ? <TableView {...props} />
-              : <GridView {...props} />}
+            {activePanel === 'table' ? (
+              <TableView {...props} />
+            ) : (
+              <GridView {...props} />
+            )}
           </div>
-        </div>}
+        </div>
+      )}
     </div>
   )
 }
@@ -40,6 +43,7 @@ const ListingPanel = props => {
 const ListingPanelHOC = compose(
   connect((state, { tabName }) => {
     const { panels } = state[tabName.toLowerCase()]
+
     if (panels) {
       return { ...panels }
     }
@@ -55,7 +59,10 @@ const ListingPanelHOC = compose(
     }
   }),
   withPropsOnChange(
-    (props, nextProps) => !_.isEqual(props.sortingIndex, nextProps.sortingIndex) || !_.isEqual(props.sortingDirection, nextProps.sortingDirection) || !_.isEqual(props.listings, nextProps.listings),
+    (props, nextProps) =>
+      !_.isEqual(props.sortingIndex, nextProps.sortingIndex) ||
+      !_.isEqual(props.sortingDirection, nextProps.sortingDirection) ||
+      !_.isEqual(props.listings, nextProps.listings),
     ({ listings, sortingIndex, sortingDirection }) => {
       const { data, info } = listings
 
@@ -71,27 +78,35 @@ const ListingPanelHOC = compose(
           return (half_bathroom_count + full_bathroom_count) * sortingDirection
         }
 
+        const getZipCodes = () => {
+          let zipCode =
+            (listing.address && listing.address.postal_code) ||
+            (listing.property && listing.property.address.postal_code)
+
+          return zipCode * sortingDirection
+        }
+
         switch (sortingIndex) {
-          // case 'area':
-          //   return ((listing.address && listing.address.postal_code) ||
-          //   (listing.property && listing.property.address.postal_code)) * sortingDirection
+          case 'Zip Code':
+            return getZipCodes()
           case 'baths':
-            return getBathroomValue() * -1
+            return getBathroomValue()
           case 'price':
             return listing.price * sortingDirection
           case 'sqft':
             return getPropertyValue('square_meters')
           case 'built':
-            return getPropertyValue('year_built') * -1
+            return getPropertyValue('year_built')
           case 'bedrooms':
-            return getPropertyValue('bedroom_count') * -1
+            return getPropertyValue('bedroom_count')
           case '$/sqft':
             return Math.floor(
               listing.price /
                 listingUtils.metersToFeet(getPropertyValue('square_meters'))
             )
           case 'distance':
-            const { latitude, longitude } = listing.location || listing.property.address.location
+            const { latitude, longitude } =
+              listing.location || listing.property.address.location
 
             if (latitude && longitude) {
               return (
