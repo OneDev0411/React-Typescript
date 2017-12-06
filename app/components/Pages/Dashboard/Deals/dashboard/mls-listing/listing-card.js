@@ -1,95 +1,146 @@
 import React from 'react'
-import _ from 'underscore'
+import { connect } from 'react-redux'
 import cn from 'classnames'
 import { browserHistory, Link } from 'react-router'
+import ManualAddress from '../../create/manual-address'
 import Deal from '../../../../../../models/Deal'
+import { updateContext } from '../../../../../../store_actions/deals'
 
-function getAddressField(deal, field) {
-  if (deal.listing) {
-    return deal.mls_context[field]
+class ListingCard extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isSavingAddress: false,
+      showAddressModal: false
+    }
   }
 
-  return Deal.get.field(deal, field)
-}
+  getAddressField(deal, field) {
+    const value = Deal.get.field(deal, field)
 
-function getHomeAddress(deal) {
-  const unitNumber = getAddressField(deal, 'unit_number')
-  const street_number = getAddressField(deal, 'street_number')
-  const street_name = getAddressField(deal, 'street_name')
-  const street_suffix = getAddressField(deal, 'street_suffix')
+    if (deal.listing && !value) {
+      return deal.mls_context[field]
+    }
 
-  return [
-    street_number,
-    street_name,
-    street_suffix,
-    unitNumber ? `, #${unitNumber}` : null
-  ]
-  .filter(item => item !== null)
-  .join(' ')
-}
-
-function getListingAddress(deal) {
-  const city = getAddressField(deal, 'city')
-  const state = getAddressField(deal, 'state_code')
-  const postalCode = getAddressField(deal, 'postal_code')
-
-  const address = [
-    city ? `${city},` : null,
-    state,
-    postalCode
-  ]
-  .filter(item => item !== null)
-  .join(' ')
-
-  if (address.length === 0) {
-    return Deal.get.clientNames(deal)
+    return value
   }
 
-  return address
-}
+  getHomeAddress(deal) {
+    const unitNumber = this.getAddressField(deal, 'unit_number')
+    const street_number = this.getAddressField(deal, 'street_number')
+    const street_name = this.getAddressField(deal, 'street_name')
+    const street_suffix = this.getAddressField(deal, 'street_suffix')
 
-function openListing(deal) {
-  if (deal.listing) {
-    browserHistory.push(`/dashboard/mls/${deal.listing}`)
+    return [
+      street_number,
+      street_name,
+      street_suffix,
+      unitNumber ? `, #${unitNumber}` : null
+    ]
+    .filter(item => item !== null)
+    .join(' ')
   }
-}
 
-export default ({
-  deal,
-  showBackButton = true
-}) => {
-  const photo = Deal.get.field(deal, 'photo')
+  getListingAddress(deal) {
+    const city = this.getAddressField(deal, 'city')
+    const state = this.getAddressField(deal, 'state_code')
+    const postalCode = this.getAddressField(deal, 'postal_code')
 
-  return (
-    <div className="deal-listing-card">
+    const address = [
+      city ? `${city},` : null,
+      state,
+      postalCode
+    ]
+    .filter(item => item !== null)
+    .join(' ')
 
-      <div
-        className={cn('listing-photo', { hasListing: deal.listing })}
-        onClick={() => openListing(deal)}
-      >
-        <img
-          src={photo || "/static/images/deals/group-146.svg"}
-        />
+    if (address.length === 0) {
+      return Deal.get.clientNames(deal)
+    }
 
-        <span className="view-btn">VIEW</span>
-      </div>
+    return address
+  }
 
-      <div className="address-info">
-        <div className="title">
-          { getHomeAddress(deal) }
+  openListing(deal) {
+    if (deal.listing) {
+      browserHistory.push(`/dashboard/mls/${deal.listing}`)
+    }
+  }
+
+  toggleShowAddressModal() {
+    this.setState({
+      showAddressModal: !this.state.showAddressModal
+    })
+  }
+
+  async onCreateAddress(address) {
+    const { deal } = this.props
+
+    this.setState({
+      isSavingAddress: true,
+      showAddressModal: false
+    })
+
+    await this.props.updateContext(deal.id, address.address_components, true)
+
+    this.setState({
+      isSavingAddress: false
+    })
+  }
+
+  render() {
+    const { deal } = this.props
+    const{ showAddressModal, isSavingAddress } = this.state
+    const photo = Deal.get.field(deal, 'photo')
+
+    return (
+      <div className="deal-listing-card">
+        <div
+          className={cn('listing-photo', { hasListing: deal.listing })}
+          onClick={() => this.openListing(deal)}
+        >
+          <img
+            src={photo || "/static/images/deals/group-146.svg"}
+          />
+
+          <span className="view-btn">VIEW</span>
         </div>
 
-        <div className="addr">
-          { getListingAddress(deal) }
+        <div className="address-info">
+
+          <div
+            className={cn('editable', { canEdit: !isSavingAddress })}
+            onClick={() => !isSavingAddress && this.toggleShowAddressModal()}
+          >
+            <div className="title">
+              { this.getHomeAddress(deal) }
+            </div>
+
+            <div className="addr">
+              { this.getListingAddress(deal) }
+            </div>
+
+            <i className="fa fa-pencil edit-icon" />
+            { isSavingAddress && <i className="fa fa-spin fa-spinner" /> }
+          </div>
+
+          <img
+            onClick={() => openListing(deal)}
+            className={cn('open-listing', { hidden: !deal.listing })}
+            src="/static/images/deals/view-listing.svg"
+          />
         </div>
 
-        <img
-          onClick={() => openListing(deal)}
-          className={cn('open-listing', { hidden: !deal.listing })}
-          src="/static/images/deals/view-listing.svg"
+        <ManualAddress
+          show={showAddressModal}
+          deal={deal}
+          onHide={() => this.toggleShowAddressModal()}
+          onCreateAddress={address => this.onCreateAddress(address)}
         />
       </div>
-
-    </div>
-  )
+    )
+  }
 }
+
+export default connect(null, { updateContext })(ListingCard)

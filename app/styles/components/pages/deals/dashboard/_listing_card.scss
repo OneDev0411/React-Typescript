@@ -53,12 +53,46 @@
     line-height: 1.47;
     color: #1d364b;
 
+    .editable {
+      @extend %deal-listing-card-editable;
+    }
+
     .open-listing {
       position: absolute;
       top: 0;
       right: 0;
       cursor: pointer;
       opacity: 0.8;
+    }
+  }
+}
+
+%deal-listing-card-editable {
+  position: relative;
+  border-radius: 4px;
+  border: 1px dashed transparent;
+  margin-right: 20px;
+  padding: 1px;
+
+  i {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: #2196f3;
+  }
+
+  .edit-icon {
+    display: none;
+  }
+
+  &.canEdit {
+    &:hover {
+      cursor: pointer;
+      border-color: #2196f3;
+    }
+
+    &:hover .edit-icon {
+      display: block;
     }
   }
 }
