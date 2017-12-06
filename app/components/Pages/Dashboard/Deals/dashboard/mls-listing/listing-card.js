@@ -17,13 +17,11 @@ class ListingCard extends React.Component {
   }
 
   getAddressField(deal, field) {
-    const value = Deal.get.field(deal, field)
-
-    if (deal.listing && !value) {
+    if (deal.listing) {
       return deal.mls_context[field]
     }
 
-    return value
+    return Deal.get.field(deal, field)
   }
 
   getHomeAddress(deal) {
@@ -82,6 +80,7 @@ class ListingCard extends React.Component {
       showAddressModal: false
     })
 
+    address.use_manual_address = true
     await this.props.updateContext(deal.id, address.address_components, true)
 
     this.setState({

@@ -19,12 +19,16 @@ class UploadDocument extends React.Component {
   }
 
   async onDrop(files) {
-    const { deal, task, noDrop, onDropHandler } = this.props
+    const { deal, task, onDrop, onDropHandler } = this.props
     const { dropzoneActive } = this.state
 
     this.setState({
       dropzoneActive: false
     })
+
+    if (onDrop) {
+      return onDrop(files)
+    }
 
     this.props.setUploadFiles(files, deal, task)
   }

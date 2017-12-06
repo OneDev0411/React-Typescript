@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import _ from 'underscore'
 import { createFormTask, setSelectedTask } from '../../../../../../../store_actions/deals'
-import Forms from './list'
+import Forms from './forms-list'
 import TaskName from './task-name'
 
 class CreateForm extends React.Component {
@@ -11,7 +11,7 @@ class CreateForm extends React.Component {
     super(props)
     this.state = {
       creatingForm: null,
-      selectedFile: null,
+      selectedFiles: null,
       showFormsModal: false,
       showUploadNameModal: false
     }
@@ -31,10 +31,10 @@ class CreateForm extends React.Component {
       creatingForm: form
     })
 
-    const { dealId, createFormTask, setSelectedTask, listId } = this.props
+    const { deal, createFormTask, setSelectedTask, listId } = this.props
 
     // create form
-    const task = await createFormTask(dealId, form.id, form.name, listId)
+    const task = await createFormTask(deal.id, form.id, form.name, listId)
 
     // make this task active
     setSelectedTask(task)
@@ -46,9 +46,9 @@ class CreateForm extends React.Component {
   /**
    *
    */
-  onRequestUpload(file) {
+  onNewTask(file) {
     this.setState({
-      selectedFile: file,
+      selectedFiles: file,
       showFormsModal: false,
       showTaskNameModal: true
     })
@@ -62,14 +62,8 @@ class CreateForm extends React.Component {
   }
 
   render() {
-    const {
-      creatingForm,
-      selectedFile,
-      showFormsModal,
-      showTaskNameModal
-    } = this.state
-
-    const { dealId, listId, forms } = this.props
+    const { creatingForm, selectedFiles, showFormsModal, showTaskNameModal } = this.state
+    const { deal, listId, forms } = this.props
 
     return (
       <div
@@ -89,18 +83,19 @@ class CreateForm extends React.Component {
 
         <TaskName
           show={showTaskNameModal}
-          dealId={dealId}
+          deal={deal}
           listId={listId}
-          file={selectedFile}
+          files={selectedFiles}
           onClose={() => this.setState({ showTaskNameModal: false })}
         />
 
         <Forms
           show={showFormsModal}
+          deal={deal}
           listId={listId}
           creatingForm={creatingForm}
           onSelectForm={form => this.createNewTask(form)}
-          onRequestUpload={file => this.onRequestUpload(file)}
+          onNewTask={file => this.onNewTask(file)}
           onClose={() => this.displayForm(false)}
         />
       </div>

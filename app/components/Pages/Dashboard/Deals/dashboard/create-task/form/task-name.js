@@ -1,73 +1,57 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { createFormTask, setSelectedTask,
-  addAttachment } from '../../../../../../../store_actions/deals'
-import ChatModel from '../../../../../../../models/Chatroom'
+import {
+  createFormTask,
+  setSelectedTask,
+  setUploadFiles
+} from '../../../../../../../store_actions/deals'
 
 class TaskName extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       title: '',
-      status: null
+      isCreatingTask: false
     }
   }
 
   async create() {
-    const { file, createFormTask, setSelectedTask, listId, dealId,
-      addAttachment, onClose } = this.props
+    const { files, createFormTask, setSelectedTask, listId, deal,
+      onClose, setUploadFiles } = this.props
 
-    const { title, status } = this.state
+    const { title, isCreatingTask } = this.state
 
-    if (title.length === 0 || !file || status !== null) {
+    if (isCreatingTask || title.length === 0 || files.length === 0) {
       return false
     }
 
     // change status
-    this.setState({ status: 'Creating task' })
+    this.setState({ isCreatingTask: true })
 
     try {
       // create task
-      const task = await createFormTask(dealId, null, title, listId)
-
-      // change status
-      this.setState({ status: 'Uploading file' })
-
-      // upload file
-      const uploaded = await this.uploadFile(task.room.id, file)
-
-      // add attachment to the list
-      addAttachment(task.deal, task.checklist, task.id, uploaded)
+      const task = await createFormTask(deal.id, null, title, listId)
 
       // make task active
       setSelectedTask(task)
+
+      // upload file
+      setUploadFiles(files, deal, task)
 
     } catch(e) {
       // todo
     } finally {
       this.setState({
-        status: null,
+        isCreatingTask: false,
         title: ''
       }, onClose)
     }
   }
 
-  /**
-   * upload a file to room
-   */
-  async uploadFile(roomId, file) {
-    try {
-      const response = await ChatModel.uploadAttachment(roomId, file)
-      return response.body.data
-    } catch(e) {
-      return null
-    }
-  }
-
   render() {
     const { show, onClose } = this.props
-    const { title, status } = this.state
+    const { title, isCreatingTask } = this.state
 
     return (
       <Modal
@@ -96,10 +80,10 @@ class TaskName extends React.Component {
         <Modal.Footer>
           <Button
             bsStyle="primary"
-            disabled={status !== null}
+            disabled={isCreatingTask}
             onClick={() => this.create()}
           >
-            { status || 'Upload' }
+            { isCreatingTask ? 'Creating Task ...' : 'Create Task' }
           </Button>
         </Modal.Footer>
       </Modal>
@@ -108,4 +92,4 @@ class TaskName extends React.Component {
 }
 
 export default connect(null, {
-  createFormTask, setSelectedTask, addAttachment })(TaskName)
+  createFormTask, setSelectedTask, setUploadFiles })(TaskName)
