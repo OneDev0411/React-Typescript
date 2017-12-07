@@ -280,10 +280,11 @@ $left-w: 44px;
   .alert-widget {
     margin-top: 5px;
     width: $wd;
-    height: $hg;
     border-radius: 3px;
     background-color: #e1ebf2;
     border: solid 1px #c4d4e1;
+    display: flex;
+    align-items: stretch;
     &:hover {
       cursor: pointer;
       opacity: 0.8;
@@ -292,10 +293,11 @@ $left-w: 44px;
     .icon {
       width: $hg;
       text-align: center;
-      line-height: $hg;
       vertical-align: middle;
       border-right: 1px solid #e2e2e2;
-      float: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       img {
         max-width: 30px;
       }
@@ -303,8 +305,8 @@ $left-w: 44px;
 
     .heading {
       padding-top: 10px;
-      margin-left: $hg;
       padding-left: 10px;
+      padding-bottom: 10px;
       width: $wd - $hg;
       color: #4a494a;
       .title {
