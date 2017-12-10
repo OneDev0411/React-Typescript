@@ -219,12 +219,8 @@
       width: $icon-width;
     }
     .heading {
-      margin-left: $icon-width;
       padding-left: 5px;
       width: $wd - $icon-width;
-      .title {
-        display: none;
-      }
       .proposed {
         font-size: 13px;
       }
