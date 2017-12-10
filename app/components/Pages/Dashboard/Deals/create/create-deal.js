@@ -4,13 +4,17 @@ import { Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
+import cn from 'classnames'
 import Deal from '../../../../../models/Deal'
 import Navbar from './nav'
 import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
 import DealClients from './deal-clients'
 import DealAgents from './deal-agents'
+import DealReferrals from './deal-referrals'
+import DealStatus from './deal-status'
 import DealAddress from './deal-address'
+import CriticalDates from './critical-dates'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import {
   createDeal,
@@ -28,8 +32,11 @@ class CreateDeal extends React.Component {
       dealSide: '',
       dealPropertyType: '',
       dealAddress: null,
+      dealStatus: '',
+      criticalDates: {},
       agents: {},
-      clients: {}
+      clients: {},
+      referrals: {}
     }
   }
 
@@ -53,22 +60,23 @@ class CreateDeal extends React.Component {
   }
 
   isFormValidated() {
-    const { dealSide, dealPropertyType, agents, clients } = this.state
+    const { dealSide, dealPropertyType, dealStatus, agents, clients } = this.state
 
     return dealSide.length > 0 &&
+      dealStatus.length > 0 &&
       dealPropertyType.length > 0 &&
       _.size(agents) > 0 &&
       _.size(clients) > 0
   }
 
   requestChangeDealSide(nextDealSide) {
-    const { agents, clients, dealSide } = this.state
+    const { agents, clients, referrals, dealSide } = this.state
 
     if (dealSide === nextDealSide) {
       return false
     }
 
-    if (_.size(agents) > 0 || _.size(clients) > 0) {
+    if (_.size(agents) > 0 || _.size(clients) > 0 || _.size(referrals) > 0) {
       return this.props.confirmation({
         message: 'Changing deal side will remove all contacts.',
         confirmLabel: 'Okay, Continue',
@@ -83,12 +91,28 @@ class CreateDeal extends React.Component {
     this.setState({
       dealSide,
       agents: {},
-      clients: {}
+      clients: {},
+      referrals: {}
+    })
+  }
+
+  changeDealStatus(status) {
+    this.setState({
+      dealStatus: status
+    })
+  }
+
+  changeCriticalDates(field, value) {
+    this.setState({
+      criticalDates: {
+        ...this.state.criticalDates,
+        [field]: value
+      }
     })
   }
 
   async createDeal() {
-    const { dealSide, dealPropertyType, dealAddress } = this.state
+    const { dealSide, dealPropertyType, dealAddress, dealStatus, criticalDates } = this.state
     const { user, notify, createDeal, createRoles, updateContext } = this.props
 
     const dealObject = {
@@ -117,11 +141,11 @@ class CreateDeal extends React.Component {
       // add roles
       await createRoles(deal.id, this.getRoles())
 
-      if (!dealObject.listing) {
-        await updateContext(deal.id, {
-          listing_status: 'Active'
-        }, true)
-      }
+      // create contexts
+      await updateContext(deal.id, {
+        ...criticalDates,
+        listing_status: dealStatus
+      }, true)
 
       return this.openDeal(deal.id)
 
@@ -163,10 +187,11 @@ class CreateDeal extends React.Component {
   }
 
   getRoles() {
-    const { agents, clients } = this.state
+    const { agents, clients, referrals } = this.state
     const roles = []
     _.each(clients, client => roles.push(client))
     _.each(agents, agent => roles.push(agent))
+    _.each(referrals, referral => roles.push(referral))
 
     return roles
   }
@@ -182,13 +207,16 @@ class CreateDeal extends React.Component {
   }
 
   render() {
-    const { saving, dealSide, dealPropertyType, dealAddress, agents, clients } = this.state
-    const canAddRole = dealSide.length > 0
-    const canAddAddress = dealSide.length > 0
+    const { saving, dealSide, dealStatus, dealPropertyType,
+      dealAddress, criticalDates, agents, clients, referrals } = this.state
+    const canCreateDeal = this.isFormValidated() && !saving
 
     return (
       <div className="deal-create">
-        <Navbar />
+        <Navbar
+          title="Create New Deal"
+        />
+
         <div className="form">
           <div className="swoosh">
             Swoosh! Another one in the bag.
@@ -199,39 +227,62 @@ class CreateDeal extends React.Component {
             onChangeDealSide={(dealSide) => this.requestChangeDealSide(dealSide)}
           />
 
-          <DealPropertyType
-            selectedType={dealPropertyType}
-            onChangeDealType={(dealPropertyType) => this.setState({ dealPropertyType })}
-          />
+          {
+            dealSide.length > 0 &&
+            <div>
+              <DealPropertyType
+                selectedType={dealPropertyType}
+                onChangeDealType={(dealPropertyType) => this.setState({ dealPropertyType })}
+              />
 
-          <DealClients
-            display={canAddRole}
-            dealSide={dealSide}
-            clients={clients}
-            onUpsertClient={form => this.onUpsertRole(form, 'clients')}
-            onRemoveClient={id => this.onRemoveRole(id, 'clients')}
-          />
+              <DealClients
+                dealSide={dealSide}
+                clients={clients}
+                onUpsertClient={form => this.onUpsertRole(form, 'clients')}
+                onRemoveClient={id => this.onRemoveRole(id, 'clients')}
+              />
 
-          <DealAgents
-            display={canAddRole}
-            dealSide={dealSide}
-            agents={agents}
-            onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
-            onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
-          />
+              <DealAgents
+                dealSide={dealSide}
+                agents={agents}
+                onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
+                onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
+              />
 
-          <DealAddress
-            display={canAddAddress}
-            dealAddress={dealAddress}
-            dealSide={dealSide}
-            onCreateAddress={(component, type) => this.onCreateAddress(component, type)}
-            onRemoveAddress={() => this.setState({ dealAddress: null })}
-          />
+              <DealReferrals
+                dealSide={dealSide}
+                referrals={referrals}
+                onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
+                onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
+              />
+
+              <DealStatus
+                dealStatus={dealStatus}
+                onChangeDealStatus={status => this.changeDealStatus(status)}
+              />
+
+              <DealAddress
+                dealAddress={dealAddress}
+                dealSide={dealSide}
+                onCreateAddress={(component, type) => this.onCreateAddress(component, type)}
+                onRemoveAddress={() => this.setState({ dealAddress: null })}
+              />
+
+              <CriticalDates
+                criticalDates={criticalDates}
+                onChangeCriticalDates={(field, value) => this.changeCriticalDates(field, value)}
+                fields={{
+                  'list_date': 'Listing Date',
+                  'expiration_date': 'Listing Expiration'
+                }}
+              />
+            </div>
+          }
 
           <Button
-            className="btn btn-primary create-deal-button"
+            className={cn('btn btn-primary create-deal-button', { disabled: !canCreateDeal })}
             onClick={() => this.createDeal()}
-            disabled={saving || !this.isFormValidated()}
+            disabled={!canCreateDeal}
           >
             {saving ? 'Creating ...' : 'Create Deal'}
           </Button>

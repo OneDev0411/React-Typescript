@@ -17,14 +17,14 @@ class CrudRole extends React.Component {
   }
 
   closeModal() {
-    this.setState({ show: false })
+    this.setState({ show: false, form: null })
   }
 
   addRole() {
     const { form } = this.state
 
-    this.closeModal()
     this.props.onUpsertRole(form)
+    this.closeModal()
   }
 
   render() {
