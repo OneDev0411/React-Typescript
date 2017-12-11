@@ -20,17 +20,6 @@ export default ({
 
       <Col md={6} sm={6} xs={6} className="btns">
         {
-          loaded &&
-          <span className="incomplete-fields">
-            {
-              incompleteFields.length > 0 ?
-              `There are ${incompleteFields.length} incomplete fields` :
-              'All fields completed'
-            }
-          </span>
-        }
-
-        {
           (saving || !loaded) ?
           <span style={{ marginRight: '20px' }}>
             <i className="fa fa-spin fa-spinner" />&nbsp;
