@@ -50,7 +50,6 @@ $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
     max-height: $column-height;
 
     .column {
-      @extend .u-scrollbar--thinner;
       padding: 0;
       height: auto;
     }
