@@ -8,45 +8,45 @@
   .deals-list-header {
     @extend %deal-list--header;
   }
+}
 
-  .list-empty,
-  .deals-error {
-    text-align: center;
-    margin-top: 17%;
-    img {
-      width: 91px;
-      margin-bottom: 21px;
+.list-empty,
+.deals-error {
+  text-align: center;
+  margin-top: 17%;
+  img {
+    width: 91px;
+    margin-bottom: 21px;
+  }
+
+  .title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #62778c;
+    margin-bottom: 10px;
+  }
+
+  .descr {
+    font-size: 14px;
+    font-weight: 500;
+    color: #8da2b5;
+    margin-bottom: 20px;
+  }
+
+  .link {
+    color: #2196f3;
+    cursor: pointer;
+    margin-left: 5px;
+    &:hover {
+      text-decoration: underline;
     }
+  }
 
+  &.backoffice {
+    margin-top: 12%;
     .title {
-      font-size: 17px;
-      font-weight: 600;
-      color: #62778c;
-      margin-bottom: 10px;
-    }
-
-    .descr {
-      font-size: 14px;
-      font-weight: 500;
-      color: #8da2b5;
-      margin-bottom: 20px;
-    }
-
-    .link {
-      color: #2196f3;
-      cursor: pointer;
-      margin-left: 5px;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
-    &.backoffice {
-      margin-top: 12%;
-      .title {
-        font-size: 26px;
-        font-weight: bold;
-      }
+      font-size: 26px;
+      font-weight: bold;
     }
   }
 }
@@ -99,7 +99,7 @@
         position: absolute;
         top: -6px;
         right: -6px;
-        background-color: #FF4747;
+        background-color: #ff4747;
         display: block;
         width: 15px;
         height: 15px;
@@ -148,7 +148,7 @@
       color: #5b6469;
       transition: 0.2s ease-in all;
       &:hover {
-        background-color: #F8FAFB;
+        background-color: #f8fafb;
       }
     }
 
