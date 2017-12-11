@@ -25,7 +25,6 @@ class Table extends React.Component {
   }
 
   async updateField(field, value) {
-    console.log(field, value)
     const { deal, isBackOffice, updateContext } = this.props
     const editable = field.canEdit(isBackOffice)
 
