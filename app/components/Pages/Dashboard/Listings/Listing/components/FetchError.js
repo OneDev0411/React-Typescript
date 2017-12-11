@@ -6,7 +6,7 @@ const FetchError = ({ message, backButtonHandler }) => (
       <h3 className="title">Something went wrong!</h3>
       <p className="descr">
         Help us improve your experience by sending an error{' '}
-        <a href="mailto:support@rechat.com">report</a> or{' '}
+        <a href="mailto:support@rechat.com">report</a> or go back to{' '}
         <button
           onClick={backButtonHandler}
           style={{
@@ -16,9 +16,8 @@ const FetchError = ({ message, backButtonHandler }) => (
             background: 'transparent'
           }}
         >
-          go back
-        </button>{' '}
-        to search for properties.
+          search for properties
+        </button>.
       </p>
     </div>
   </div>
