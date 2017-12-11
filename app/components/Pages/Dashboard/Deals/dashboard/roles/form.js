@@ -64,18 +64,31 @@ export default class Form extends React.Component {
     return phoneNumberPattern.test(phone)
   }
 
+  shouldShowCommission(form) {
+    return ['BuyerAgent', 'BuyerReferral', 'SellerAgent', 'SellerReferral']
+      .indexOf(form.role) > -1
+  }
+
   validate(field, value) {
     const { form, validation } = this.state
+    const showCommission = this.shouldShowCommission(form)
+    const requiredFields = ['legal_first_name', 'legal_last_name', 'email', 'role']
+
+    if (showCommission) {
+      requiredFields.push('commission')
+    }
 
     const fields = {
       legal_first_name: (name) => name && name.length > 0,
       legal_last_name: (name) => name && name.length > 0,
       email: (email) => email && this.isEmail(email),
       phone: (phone) => phone && this.isValidPhone(phone),
-      role: (role) => role
+      role: (role) => role,
+      commission: (value) => value && ~~value >= 0
     }
 
-    if (fields[field] && !fields[field](value)) {
+    const validator = fields[field]
+    if (value.length > 0 && validator && !validator(value)) {
       this.setState({
         validation: {
           ...validation,
@@ -88,13 +101,14 @@ export default class Form extends React.Component {
       })
     }
 
-    const isFormCompleted = _.every(fields, (fn, key) => fn(form[key]))
-    isFormCompleted && this.props.onFormCompleted(form)
+    const isFormCompleted = _.every(requiredFields, name => fields[name](form[name]))
+    this.props.onFormCompleted(isFormCompleted ? form : null)
   }
 
   render() {
     const { deal, allowedRoles } = this.props
     const { form, validation } = this.state
+    const showCommission = this.shouldShowCommission(form)
 
     return (
       <div>
@@ -146,7 +160,7 @@ export default class Form extends React.Component {
         <div className="input-container">
           <input
             className={cn('phone', { invalid: validation['phone'] === 'error' })}
-            placeholder="Phone * (xxx) xxx-xxxx"
+            placeholder="Phone (xxx) xxx-xxxx"
             value={form.phone || ''}
             onChange={e => this.setForm('phone', e.target.value)}
           />
@@ -190,10 +204,10 @@ export default class Form extends React.Component {
         </Dropdown>
 
         {
-          ['BuyerAgent', 'BuyerReferral', 'SellerAgent', 'SellerReferral'].indexOf(form.role) > -1 &&
+          showCommission &&
           <input
             className="commission"
-            placeholder="Commission"
+            placeholder="Commission *"
             type="number"
             min={0}
             value={form.commission || ''}
@@ -201,12 +215,16 @@ export default class Form extends React.Component {
           />
         }
 
-        <input
-          className="company"
-          placeholder="Company"
-          value={form.title_company || ''}
-          onChange={e => this.setForm('title_company', e.target.value)}
-        />
+        {
+          // company field can be hidden for the following role types: Buyer, Seller, Landlord, Tenant
+          form.role && ['Buyer', 'Seller', 'Landlord', 'Tenant'].indexOf(form.role) === -1 &&
+          <input
+            className="company"
+            placeholder="Company"
+            value={form.title_company || ''}
+            onChange={e => this.setForm('title_company', e.target.value)}
+          />
+        }
       </div>
     )
   }

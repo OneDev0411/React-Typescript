@@ -11,6 +11,7 @@ import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
 import UploadPromptModal from './upload/prompt'
 import PDFSplitterModal from './upload/pdf-splitter'
+import CreateOffer from './create-offer'
 import NavBar from './navbar'
 import { getEnvelopes } from '../../../../../store_actions/deals'
 
@@ -53,18 +54,8 @@ class DealDetails extends React.Component {
           </div>
 
           <div className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}>
-            <div className="create-offer">
-              <Button
-                className="add-offer-button"
-                onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)}
-              >
-                Add New Offer
-              </Button>
-            </div>
-
-            <Checklists
-              deal={deal}
-            />
+            <CreateOffer deal={deal} />
+            <Checklists deal={deal} />
           </div>
 
           <div

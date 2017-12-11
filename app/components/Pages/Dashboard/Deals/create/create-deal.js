@@ -90,6 +90,7 @@ class CreateDeal extends React.Component {
   changeDealSide(dealSide) {
     this.setState({
       dealSide,
+      dealStatus: '',
       agents: {},
       clients: {},
       referrals: {}
@@ -97,9 +98,7 @@ class CreateDeal extends React.Component {
   }
 
   changeDealStatus(status) {
-    this.setState({
-      dealStatus: status
-    })
+    this.setState({ dealStatus: status })
   }
 
   changeCriticalDates(field, value) {
@@ -114,6 +113,7 @@ class CreateDeal extends React.Component {
   async createDeal() {
     const { dealSide, dealPropertyType, dealAddress, dealStatus, criticalDates } = this.state
     const { user, notify, createDeal, createRoles, updateContext } = this.props
+    const isBuyingDeal = dealSide === 'Buying'
 
     const dealObject = {
       property_type: dealPropertyType,
@@ -144,7 +144,7 @@ class CreateDeal extends React.Component {
       // create contexts
       await updateContext(deal.id, {
         ...criticalDates,
-        listing_status: dealStatus
+        listing_status: isBuyingDeal ? dealStatus : 'Active'
       }, true)
 
       return this.openDeal(deal.id)
@@ -256,10 +256,13 @@ class CreateDeal extends React.Component {
                 onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
               />
 
-              <DealStatus
-                dealStatus={dealStatus}
-                onChangeDealStatus={status => this.changeDealStatus(status)}
-              />
+              {
+                dealSide === 'Buying' &&
+                <DealStatus
+                  dealStatus={dealStatus}
+                  onChangeDealStatus={status => this.changeDealStatus(status)}
+                />
+              }
 
               <DealAddress
                 dealAddress={dealAddress}
