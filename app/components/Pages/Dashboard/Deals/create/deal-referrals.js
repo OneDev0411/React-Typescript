@@ -9,7 +9,7 @@ export default ({
   onUpsertReferral,
   onRemoveReferral
 }) => {
-  const allowedRoles = ['BuyerReferral', 'SellerReferral']
+  const allowedRoles = (dealSide === 'Buying') ? ['BuyerReferral'] : ['SellerReferral']
 
   return (
     <div className="form-section deal-people deal-referral">
