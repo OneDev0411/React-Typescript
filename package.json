@@ -85,7 +85,7 @@
     "koa-static": "^3.0.0",
     "koa-views": "6.0.1",
     "koa2-session-redis": "0.0.1",
-    "linkifyjs": "^2.1.4",
+    "linkifyjs": "github:izadmehr/linkifyjs#build",
     "lodash": "^4.17.4",
     "merge": "^1.2.0",
     "minifier": "^0.8.1",
