@@ -25,6 +25,7 @@ class Table extends React.Component {
   }
 
   async updateField(field, value) {
+    console.log(field, value)
     const { deal, isBackOffice, updateContext } = this.props
     const editable = field.canEdit(isBackOffice)
 
@@ -88,7 +89,7 @@ class Table extends React.Component {
 
                   <div className="approve-row">
                     {
-                      isBackOffice && fieldCtx.value && !approved && saving !== field.key &&
+                      isBackOffice && fieldCtx.value && !disabled && !approved && saving !== field.key &&
                       <button
                         className="btn-approve"
                         onClick={(e) => this.approveField(e, field, fieldCtx)}
