@@ -1,11 +1,15 @@
 import React from 'react'
-import { FormGroup, FormControl, DropdownButton, MenuItem } from 'react-bootstrap'
+import { FormGroup, FormControl, Dropdown, DropdownButton, MenuItem } from 'react-bootstrap'
+import cn from 'classnames'
 import roleNames from '../../utils/roles'
+import ToolTip from '../../components/tooltip'
 
 const role_names = [
   'BuyerAgent',
+  'BuyerReferral',
   'CoBuyerAgent',
   'SellerAgent',
+  'SellerReferral',
   'CoSellerAgent',
   'Buyer',
   'Seller',
@@ -27,6 +31,16 @@ export default class Form extends React.Component {
       validation: {},
       form: props.form || {}
     }
+
+    this.validate = _.debounce(this.validate, 400)
+  }
+
+  setCommission(value) {
+    if (~~value < 0) {
+      return false
+    }
+
+    this.setForm('commission', value)
   }
 
   setForm(field, value) {
@@ -37,24 +51,45 @@ export default class Form extends React.Component {
         ...form,
         [field]: value
       }
-    }, this.validate)
+    }, () => this.validate(field, value))
   }
 
-  validate() {
-    const fields = ['first_name', 'last_name', 'email', 'role']
-    const { form } = this.state
-    const validation = {}
-    let validated = true
+  isEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email)
+  }
 
-    fields.forEach(key => {
-      if (!form[key] || form[key].length === 0) {
-        validation[key] = 'error'
-        validated = false
-      }
-    })
+  isValidPhone(phone) {
+    const phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
+    return phoneNumberPattern.test(phone)
+  }
 
-    this.setState({ validation })
-    this.props.onFormCompleted(validated ? form : null)
+  validate(field, value) {
+    const { form, validation } = this.state
+
+    const fields = {
+      legal_first_name: (name) => name && name.length > 0,
+      legal_last_name: (name) => name && name.length > 0,
+      email: (email) => email && this.isEmail(email),
+      phone: (phone) => phone && this.isValidPhone(phone),
+      role: (role) => role
+    }
+
+    if (fields[field] && !fields[field](value)) {
+      this.setState({
+        validation: {
+          ...validation,
+          [field]: 'error'
+        }
+      })
+    } else {
+      this.setState({
+        validation: _.filter(validation, (value, key) => key !== field)
+      })
+    }
+
+    const isFormCompleted = _.every(fields, (fn, key) => fn(form[key]))
+    isFormCompleted && this.props.onFormCompleted(form)
   }
 
   render() {
@@ -63,72 +98,115 @@ export default class Form extends React.Component {
 
     return (
       <div>
+        <Dropdown id="deal-add-role-title--drp" bsStyle="default">
+          <Dropdown.Toggle>
+            {form.legal_prefix || 'Title'}
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu className="deal-add-role-title--drpmenu">
+            {
+              ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr']
+              .map((name, key) =>
+                <MenuItem
+                  key={`Title_${key}`}
+                  style={{ width: '40%' }}
+                  onClick={() => this.setForm('legal_prefix', name)}
+                >
+                  {name}
+                </MenuItem>
+              )
+            }
+          </Dropdown.Menu>
+        </Dropdown>
+
         <input
           className="first_name"
-          placeholder="First Name"
-          value={form.first_name || ''}
-          onChange={e => this.setForm('first_name', e.target.value)}
+          placeholder="Legal First Name *"
+          value={form.legal_first_name || ''}
+          onChange={e => this.setForm('legal_first_name', e.target.value)}
         />
 
         <input
           className="last_name"
-          placeholder="Last Name"
-          value={form.last_name || ''}
-          onChange={e => this.setForm('last_name', e.target.value)}
+          placeholder="Legal Last Name *"
+          value={form.legal_last_name || ''}
+          onChange={e => this.setForm('legal_last_name', e.target.value)}
         />
 
-        <input
-          className="email"
-          placeholder="Email"
-          value={form.email || ''}
-          onChange={e => this.setForm('email', e.target.value)}
-        />
-
-        <input
-          className="phone"
-          placeholder="Phone"
-          value={form.phone || ''}
-          onChange={e => this.setForm('phone', e.target.value)}
-        />
-
-        <DropdownButton
-          id="deal-add-role--drp"
-          className="deal-add-role--drp"
-          title={form.role ? roleNames(form.role) : 'Select Role'}
-        >
-          {
-            role_names
-            .filter(name => {
-              const dealType = deal ? deal.deal_type : null
-
-              if (
-                (name === 'BuyerAgent' && dealType === 'Buying') ||
-                (name === 'SellerAgent' && dealType === 'Selling')
-              ) {
-                return false
-              }
-
-              if (!allowedRoles) {
-                return true
-              }
-
-              return allowedRoles.indexOf(name) > -1
-            })
-            .map(name =>
-              <MenuItem
-                key={`ROLE_${name}`}
-                onClick={() => this.setForm('role', name)}
-              >
-                { roleNames(name) }
-              </MenuItem>
-            )
-          }
-
-        </DropdownButton>
-
-        <div className="role-descr">
-          Just select the role of the signer and Rechat already knows where they need to sign.
+        <div className="input-container">
+          <input
+            className={cn('email', { invalid: validation['email'] === 'error' })}
+            placeholder="Email *"
+            value={form.email || ''}
+            onChange={e => this.setForm('email', e.target.value)}
+          />
+          {validation['email'] === 'error' && <span>Enter a valid email</span>}
         </div>
+
+        <div className="input-container">
+          <input
+            className={cn('phone', { invalid: validation['phone'] === 'error' })}
+            placeholder="Phone * (xxx) xxx-xxxx"
+            value={form.phone || ''}
+            onChange={e => this.setForm('phone', e.target.value)}
+          />
+          {validation['phone'] === 'error' && <span>Enter a valid phone</span>}
+        </div>
+
+        <Dropdown id="deal-add-role--drp">
+          <Dropdown.Toggle>
+            {form.role ? roleNames(form.role) : 'Select a Role *'}
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu className="deal-add-role--drpmenu">
+            {
+              role_names
+              .filter(name => {
+                const dealType = deal ? deal.deal_type : null
+
+                if (
+                  (name === 'BuyerAgent' && dealType === 'Buying') ||
+                  (name === 'SellerAgent' && dealType === 'Selling')
+                ) {
+                  return false
+                }
+
+                if (!allowedRoles) {
+                  return true
+                }
+
+                return allowedRoles.indexOf(name) > -1
+              })
+              .map(name =>
+                <MenuItem
+                  key={`ROLE_${name}`}
+                  onClick={() => this.setForm('role', name)}
+                >
+                  { roleNames(name) }
+                </MenuItem>
+              )
+            }
+          </Dropdown.Menu>
+        </Dropdown>
+
+        {
+          ['BuyerAgent', 'BuyerReferral', 'SellerAgent', 'SellerReferral'].indexOf(form.role) > -1 &&
+          <input
+            className="commission"
+            placeholder="Commission"
+            type="number"
+            min={0}
+            value={form.commission || ''}
+            onChange={e => this.setCommission(e.target.value)}
+          />
+        }
+
+        <input
+          className="company"
+          placeholder="Company"
+          value={form.title_company || ''}
+          onChange={e => this.setForm('title_company', e.target.value)}
+        />
       </div>
     )
   }

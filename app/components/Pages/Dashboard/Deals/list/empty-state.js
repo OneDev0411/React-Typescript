@@ -1,6 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router'
 import _ from 'underscore'
-import DealCreate from '../create'
 
 export default ({
   isBackOffice
@@ -22,9 +22,13 @@ export default ({
       <div className="title">You don’t have any deals yet</div>
       <div className="descr">Get started by creating a new listing or making an offer.</div>
 
-      <div className="inline">
-        <DealCreate type="listing" />
-        <DealCreate type="offer" />
+      <div>
+        <Link
+          to="/dashboard/deals/create"
+          className="btn btn-primary create-deal-button"
+        >
+          Create New Deal
+        </Link>
       </div>
     </div>
   )

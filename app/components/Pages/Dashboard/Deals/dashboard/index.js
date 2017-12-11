@@ -1,13 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
-import { Row, Col } from 'react-bootstrap'
+import { Link, browserHistory } from 'react-router'
+import { Row, Col, Button } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import DealInfo from './deal-info'
-import CreateOffer from './create-offer'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
 import UploadPromptModal from './upload/prompt'
@@ -54,9 +53,14 @@ class DealDetails extends React.Component {
           </div>
 
           <div className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}>
-            <CreateOffer
-              deal={deal}
-            />
+            <div className="create-offer">
+              <Button
+                className="add-offer-button"
+                onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)}
+              >
+                Add New Offer
+              </Button>
+            </div>
 
             <Checklists
               deal={deal}

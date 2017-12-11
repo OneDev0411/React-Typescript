@@ -19,16 +19,11 @@ function getRoles(agents, side) {
 export default ({
   agents,
   dealSide,
-  display,
   onUpsertAgent,
   onRemoveAgent
 }) => {
   const allowedRoles = getRoles(agents, dealSide)
   const title = _.size(agents) === 0 ? 'primary agent' : 'co-agent'
-
-  if (!display) {
-    return false
-  }
 
   return (
     <div className="form-section deal-people deal-agent">

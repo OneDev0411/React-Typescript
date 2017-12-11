@@ -13,7 +13,8 @@ const properties = [
 
 export default ({
   selectedType,
-  onChangeDealType
+  onChangeDealType,
+  display
 }) => (
   <div className="form-section deal-type">
     <div className="hero">
