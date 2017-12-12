@@ -1,33 +1,29 @@
 import React from 'react'
 import RadioButton from '../components/radio'
-import hasPrimaryOffer from '../utils/has-primary-offer'
 
 export default ({
   deal,
+  dealHasPrimaryOffer,
   offerType,
   onChangeOfferType
-}) => {
-  const hpo = hasPrimaryOffer(deal)
-
-  return (
-    <div className="form-section deal-offer">
-      <div className="hero">
-        Is this a primary or backup offer? <span className="required">*</span>
-      </div>
-
-      <RadioButton
-        selected={offerType === 'primary'}
-        tooltip={hpo ? 'You can not have 2 primary offers at the same time' : null}
-        disabled={hpo === true}
-        title="Primary Offer"
-        onClick={() => !hpo && onChangeOfferType('primary')}
-      />
-
-      <RadioButton
-        selected={offerType === 'backup'}
-        title="Backup Offer"
-        onClick={() => onChangeOfferType('backup')}
-      />
+}) => (
+  <div className="form-section deal-offer">
+    <div className="hero">
+      Is this a primary or backup offer? <span className="required">*</span>
     </div>
-  )
-}
+
+    <RadioButton
+      selected={offerType === 'primary'}
+      tooltip={dealHasPrimaryOffer ? 'This deal already has a primary offer' : null}
+      disabled={dealHasPrimaryOffer === true}
+      title="Primary Offer"
+      onClick={() => !dealHasPrimaryOffer && onChangeOfferType('primary')}
+    />
+
+    <RadioButton
+      selected={offerType === 'backup'}
+      title="Backup Offer"
+      onClick={() => onChangeOfferType('backup')}
+    />
+  </div>
+)

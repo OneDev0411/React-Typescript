@@ -203,6 +203,22 @@ $margin: 20px;
       margin-right: 35px;
     }
   }
+
+  .buyer-name {
+    input {
+      width: 400px;
+      height: 42px;
+      border-radius: 4px;
+      background-color: #fff;
+      border: solid 1px #dce5eb;
+      padding: 0 10px;
+      font-size: 16px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
 }
 
 /**
@@ -339,12 +355,23 @@ $margin: 20px;
   color: #fff;
   margin-left: 7px;
   border: none;
-  height: 30px;
-  line-height: 16px;
+  height: 34px;
+  line-height: 17px;
   vertical-align: middle;
-  margin-left: 10px;
+  margin-left: 0px;
+  min-width: 150px;
+
   &:hover {
     opacity: 0.7;
+  }
+
+  &.disabled {
+    background-color: #dce5eb;
+    color: #8da2b5;
+    &:hover {
+      background-color: #dce5eb;
+      color: #8da2b5;
+    }
   }
 }
 

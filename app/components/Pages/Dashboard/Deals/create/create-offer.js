@@ -10,18 +10,24 @@ import Navbar from './nav'
 import OfferType from './offer-type'
 import EnderType from './offer-ender-type'
 import DealClients from './deal-clients'
+import BuyerName from './offer-buyer-name'
 import DealAgents from './deal-agents'
 import ClosingOfficers from './offer-closing-officer'
 import DealReferrals from './deal-referrals'
 import CriticalDates from './critical-dates'
 import { createRoles, createOffer, updateContext } from '../../../../../store_actions/deals'
+import hasPrimaryOffer from '../utils/has-primary-offer'
 
 class CreateOffer extends React.Component {
   constructor(props) {
     super(props)
+    const dealHasPrimaryOffer = hasPrimaryOffer(props.deal)
+
     this.state = {
+      dealHasPrimaryOffer,
       saving: false,
-      offerType: '',
+      buyerName: '',
+      offerType: dealHasPrimaryOffer ? 'backup' : '',
       enderType: -1,
       criticalDates: {},
       agents: {},
@@ -86,7 +92,11 @@ class CreateOffer extends React.Component {
   }
 
   isFormValidated() {
-    const { offerType, clients, agents, enderType } = this.state
+    const { offerType, buyerName, clients, agents, enderType } = this.state
+
+    if (this.isBackupOffer()) {
+      return buyerName.length > 0
+    }
 
     return offerType.length > 0 &&
       enderType !== -1 &&
@@ -96,22 +106,28 @@ class CreateOffer extends React.Component {
 
   async createOffer() {
     const { deal, notify, createOffer, createRoles, updateContext } = this.props
-    const { offerType, clients, enderType, criticalDates } = this.state
-    const isBackup = offerType === 'backup'
+    const { clients, enderType, criticalDates } = this.state
+    const isBackupOffer = this.isBackupOffer()
+    const isPrimaryOffer = this.isPrimaryOffer()
     const order = this.getMaxOrder() + 1
-    const buyerName = _.map(clients, client =>
+    const buyerName = isBackupOffer ? this.state.buyerName : _.map(clients, client =>
       `${client.legal_first_name} ${client.legal_last_name}`).join(', ')
 
     this.setState({ saving: true })
 
     try {
-      await createOffer(deal.id, buyerName, order, isBackup, deal.property_type)
-      await createRoles(deal.id, this.getRoles())
-      // create/update contexts
-      await updateContext(deal.id, {
-        ...criticalDates,
-        ender_type: enderType
-      }, true)
+      await createOffer(deal.id, buyerName, order, isBackupOffer, deal.property_type)
+
+      if (isPrimaryOffer) {
+        // create roles
+        await createRoles(deal.id, this.getRoles())
+
+        // create/update contexts
+        await updateContext(deal.id, {
+          ...criticalDates,
+          ender_type: enderType
+        }, true)
+      }
 
       notify({
         title: 'Offer created',
@@ -152,6 +168,14 @@ class CreateOffer extends React.Component {
     return max
   }
 
+  isBackupOffer() {
+    return this.state.offerType === 'backup'
+  }
+
+  isPrimaryOffer() {
+    return this.state.offerType === 'primary'
+  }
+
   backToDeal() {
     const { deal } = this.props
     browserHistory.push(`/dashboard/deals/${deal.id}`)
@@ -159,7 +183,7 @@ class CreateOffer extends React.Component {
 
   render() {
     const { saving, criticalDates, referrals, closingOfficers, offerType,
-      enderType, agents, clients } = this.state
+      enderType, agents, clients, buyerName, dealHasPrimaryOffer } = this.state
     const { deal } = this.props
 
     const canCreateOffer = this.isFormValidated() && !saving
@@ -174,59 +198,73 @@ class CreateOffer extends React.Component {
         <div className="form">
 
           <OfferType
+            dealHasPrimaryOffer={dealHasPrimaryOffer}
             offerType={offerType}
             deal={deal}
             onChangeOfferType={offer => this.changeOfferType(offer)}
           />
 
-          <DealClients
-            dealSide={deal.deal_type}
-            clients={clients}
-            onUpsertClient={form => this.onUpsertRole(form, 'clients')}
-            onRemoveClient={id => this.onRemoveRole(id, 'clients')}
-          />
-
-          <EnderType
-            enderType={enderType}
-            onChangeEnderType={type => this.changeEnderType(type)}
-          />
-
-          <DealAgents
-            dealSide={deal.deal_type}
-            agents={agents}
-            onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
-            onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
-          />
-
-          <ClosingOfficers
-            closingOfficers={closingOfficers}
-            onUpsertClosingOfficer={form => this.onUpsertRole(form, 'closingOfficers')}
-            onRemoveClosingOfficer={id => this.onRemoveRole(id, 'closingOfficers')}
-          />
-
           {
-            enderType === 'AgentDoubleEnder' &&
-            <DealReferrals
-              dealSide={deal.deal_type}
-              referrals={referrals}
-              onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
-              onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
+            this.isBackupOffer() &&
+            <BuyerName
+              buyerName={buyerName}
+              onChangeBuyerName={(buyerName) => this.setState({ buyerName })}
             />
           }
 
-          <CriticalDates
-            criticalDates={criticalDates}
-            onChangeCriticalDates={(field, value) => this.changeCriticalDates(field, value)}
-            fields={{
-              'contract_date': 'Offer Date',
-              'option_period': 'Option Date',
-              'financing_due': 'Financing Due',
-              'title_due': 'Title Work Due',
-              't47_due': 'Survey Due',
-              'closing_date': 'Closing',
-              'possession_date': 'Possession'
-            }}
-          />
+          {
+            this.isPrimaryOffer() &&
+            <div>
+              <DealClients
+                dealSide={deal.deal_type}
+                clients={clients}
+                onUpsertClient={form => this.onUpsertRole(form, 'clients')}
+                onRemoveClient={id => this.onRemoveRole(id, 'clients')}
+              />
+
+              <EnderType
+                enderType={enderType}
+                onChangeEnderType={type => this.changeEnderType(type)}
+              />
+
+              <DealAgents
+                dealSide={deal.deal_type}
+                agents={agents}
+                onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
+                onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
+              />
+
+              <ClosingOfficers
+                closingOfficers={closingOfficers}
+                onUpsertClosingOfficer={form => this.onUpsertRole(form, 'closingOfficers')}
+                onRemoveClosingOfficer={id => this.onRemoveRole(id, 'closingOfficers')}
+              />
+
+              {
+                enderType === 'AgentDoubleEnder' &&
+                <DealReferrals
+                  dealSide={deal.deal_type}
+                  referrals={referrals}
+                  onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
+                  onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
+                />
+              }
+
+              <CriticalDates
+                criticalDates={criticalDates}
+                onChangeCriticalDates={(field, value) => this.changeCriticalDates(field, value)}
+                fields={{
+                  'contract_date': 'Offer Date',
+                  'option_period': 'Option Date',
+                  'financing_due': 'Financing Due',
+                  'title_due': 'Title Work Due',
+                  't47_due': 'Survey Due',
+                  'closing_date': 'Closing',
+                  'possession_date': 'Possession'
+                }}
+              />
+            </div>
+          }
 
           <Button
             className={cn('btn btn-primary create-offer-button', { disabled: !canCreateOffer })}
