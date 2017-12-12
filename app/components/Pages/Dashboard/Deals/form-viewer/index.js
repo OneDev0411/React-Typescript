@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Modal, Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
+import _ from 'underscore'
 import extractDocumentOfTask from '../utils/extract-document-of-task'
 import { getEnvelopes } from '../../../../../store_actions/deals'
 import FileView from './file-view'
@@ -42,7 +43,12 @@ class FormViewer extends React.Component {
     const { tasks, params } = this.props
     const { taskId, objectId } = params
     const task = tasks[taskId]
-    const file = task.room.attachments.find(attachment => attachment.id === objectId)
+    const { attachments } = task.room
+    const file = attachments && _.find(attachments, attachment => attachment.id === objectId)
+
+    if (!file) {
+      return false
+    }
 
     return {
       type: file.mime === 'application/pdf' ? 'pdf' : 'image',
