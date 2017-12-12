@@ -122,22 +122,6 @@ const getNextDateField = (deal) => {
   }
 }
 
-const getLabel = (deal, field, ctx) => {
-  const nextDate = getNextDateField(deal)
-
-  return (
-    <div>
-      <i
-        className={cn('fa fa-circle', 'status', ctx.status, {
-          next: nextDate && nextDate.name === field.key
-        })}
-      />
-
-      { field.name }
-    </div>
-  )
-}
-
 const getValue = (deal, field) => {
   return getDate(deal, field.key)
 }
@@ -153,7 +137,6 @@ const CriticalDates = ({
       table={table}
       deal={deal}
       getValue={getValue}
-      getLabel={getLabel}
     />
   </div>
 )
