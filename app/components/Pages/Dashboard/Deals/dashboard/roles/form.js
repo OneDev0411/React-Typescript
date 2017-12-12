@@ -32,7 +32,7 @@ export default class Form extends React.Component {
       form: props.form || {}
     }
 
-    this.validate = _.debounce(this.validate, 400)
+    this.validate = _.debounce(this.validate, 200)
   }
 
   setCommission(value) {

@@ -61,9 +61,10 @@ class CreateDeal extends React.Component {
 
   isFormValidated() {
     const { dealSide, dealPropertyType, dealStatus, agents, clients } = this.state
+    const statusCompleted = (dealSide === 'Buying') ? dealStatus.length > 0 : true
 
     return dealSide.length > 0 &&
-      dealStatus.length > 0 &&
+      statusCompleted &&
       dealPropertyType.length > 0 &&
       _.size(agents) > 0 &&
       _.size(clients) > 0
