@@ -23,6 +23,7 @@ import {
   setSelectedTask,
   updateContext
 } from '../../../../../store_actions/deals'
+import OpenDeal from '../utils/open-deal'
 
 class CreateDeal extends React.Component {
   constructor(props) {
@@ -148,7 +149,7 @@ class CreateDeal extends React.Component {
         listing_status: isBuyingDeal ? dealStatus : 'Active'
       }, true)
 
-      return this.openDeal(deal.id)
+      return OpenDeal(deal.id)
 
     } catch(e) {
       // notify user
@@ -195,16 +196,6 @@ class CreateDeal extends React.Component {
     _.each(referrals, referral => roles.push(referral))
 
     return roles
-  }
-
-  openDeal(id) {
-    // reset esign flow
-    this.props.closeEsignWizard()
-
-    // reset selected task
-    this.props.setSelectedTask(null)
-
-    browserHistory.push(`/dashboard/deals/${id}`)
   }
 
   render() {
