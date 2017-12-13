@@ -29,6 +29,11 @@ class Roles extends React.Component {
     }
   }
 
+  getRoleName(role) {
+    const name = `${role.legal_prefix || ''} ${role.legal_first_name} ${role.legal_last_name}`.trim()
+    return name.length > 0 ? name : role.item.display_name
+  }
+
   onRequestRemoveRole(user) {
     const { deal, confirmation } = this.props
 
@@ -92,13 +97,7 @@ class Roles extends React.Component {
         {
           roles &&
           roles
-          .filter(item => {
-            if (!allowedRoles) {
-              return true
-            }
-
-            return allowedRoles.indexOf(item.role) > -1
-          })
+          .filter(item => !allowedRoles ? true : allowedRoles.indexOf(item.role) > -1)
           .map(item =>
             <div
               key={item.id}
@@ -108,7 +107,7 @@ class Roles extends React.Component {
             >
               <div className="role-avatar">
                 <UserAvatar
-                  name={item.user.display_name}
+                  name={this.getRoleName(item)}
                   image={item.user.profile_image_url}
                   size={32}
                   showStateIndicator={false}
@@ -116,7 +115,7 @@ class Roles extends React.Component {
               </div>
 
               <div className="name">
-                <div>{ item.user.display_name }</div>
+                <div>{this.getRoleName(item)}</div>
                 <div className="role">{ roleName(item.role) }</div>
               </div>
 
