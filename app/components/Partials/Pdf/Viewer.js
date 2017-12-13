@@ -27,6 +27,9 @@ class PdfViewer extends React.Component {
     if (uri) {
       this.load(uri)
     }
+
+    this.bindedKeyDown = this.onKeyDown.bind(this)
+    window.addEventListener('keydown', this.bindedKeyDown)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,6 +42,33 @@ class PdfViewer extends React.Component {
 
   componentWillUnmount() {
     this.mounted = false
+    window.removeEventListener('keydown', this.bindedKeyDown)
+  }
+
+  onKeyDown(e) {
+    const { enableKeyboardShortcuts } = this.props
+    if (!enableKeyboardShortcuts) {
+      return false
+    }
+
+    const code = (e.keyCode || e.which)
+    const doc = document.documentElement
+    const pdfCanvas = document.getElementById('pdf-canvas')
+    const moveSize = pdfCanvas.clientHeight
+    const top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0)
+
+    switch (code) {
+      case 40: // press arrow down
+        return this.pdf_context.scrollTop = top + moveSize
+      case 38: // press arrow up
+        return this.pdf_context.scrollTop = top - moveSize
+      case 48: // press 0 button
+        return this.fitWindow()
+      case 187: // press +
+        return this.zoomIn()
+      case 189: // press -
+        return this.zoomOut()
+    }
   }
 
   async load(uri) {
