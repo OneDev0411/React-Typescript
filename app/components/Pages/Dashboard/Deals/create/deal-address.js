@@ -42,11 +42,7 @@ export default class DealAddress extends React.Component {
 
   render() {
     const { showManualAddress, showMlsSearch } = this.state
-    const { display, dealAddress, dealSide, onRemoveAddress } = this.props
-
-    if (!display) {
-      return false
-    }
+    const { dealAddress, dealSide, onRemoveAddress } = this.props
 
     return (
       <div className="form-section deal-address">

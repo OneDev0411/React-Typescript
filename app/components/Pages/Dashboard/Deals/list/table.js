@@ -9,6 +9,7 @@ import Deal from '../../../../../models/Deal'
 import CriticalDates from '../dashboard/factsheet/critical-dates'
 import EmptyState from './empty-state'
 import ToolTip from '../components/tooltip'
+import OpenDeal from '../utils/open-deal'
 
 /*
  * implement a new functionality for underscore that checks
@@ -202,13 +203,7 @@ class BaseTable extends React.Component {
       return false
     }
 
-    // reset esign flow
-    this.props.closeEsignWizard()
-
-    // reset selected task
-    this.props.setSelectedTask(null)
-
-    browserHistory.push(`/dashboard/deals/${id}`)
+    OpenDeal(id)
   }
 
   /**

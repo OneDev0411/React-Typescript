@@ -19,15 +19,10 @@ function getRoles(side) {
 export default ({
   clients,
   dealSide,
-  display,
   onUpsertClient,
   onRemoveClient
 }) => {
   const allowedRoles = getRoles(dealSide)
-
-  if (!display) {
-    return false
-  }
 
   return (
     <div className="form-section deal-people deal-client">

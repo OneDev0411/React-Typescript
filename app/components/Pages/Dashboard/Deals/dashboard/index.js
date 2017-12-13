@@ -1,17 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
-import { Row, Col } from 'react-bootstrap'
+import { Link, browserHistory } from 'react-router'
+import { Row, Col, Button } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import DealInfo from './deal-info'
-import CreateOffer from './create-offer'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
 import UploadPromptModal from './upload/prompt'
 import PDFSplitterModal from './upload/pdf-splitter'
+import CreateOffer from './create-offer'
 import NavBar from './navbar'
 import { getEnvelopes } from '../../../../../store_actions/deals'
 
@@ -41,7 +41,7 @@ class DealDetails extends React.Component {
     }
 
     return (
-      <div className="deal-dashboard">
+      <div className="deal-dashboard u-scrollbar--thinner">
 
         <NavBar deal={deal} />
 
@@ -54,13 +54,8 @@ class DealDetails extends React.Component {
           </div>
 
           <div className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}>
-            <CreateOffer
-              deal={deal}
-            />
-
-            <Checklists
-              deal={deal}
-            />
+            <CreateOffer deal={deal} />
+            <Checklists deal={deal} />
           </div>
 
           <div

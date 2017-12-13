@@ -11,13 +11,13 @@ export default ({
     onClick={onClick}
   >
     <UserAvatar
-      name={`${person.first_name} ${person.last_name}`}
+      name={`${person.legal_first_name} ${person.legal_last_name}`}
       size={24}
       showStateIndicator={false}
     />
 
     <span className="name">
-      {person.first_name} {person.last_name}
+      {person.legal_prefix} {person.legal_first_name} {person.legal_last_name}
     </span>
 
     <span

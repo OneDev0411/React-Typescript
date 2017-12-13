@@ -7,7 +7,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import PDFList from './pdf-list'
 import PagePreview from './page/preview'
 import Workspace from './workspace'
-import { displaySplitter, resetSplitter } from '../../../../../../../store_actions/deals'
+import { resetSplitter } from '../../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../../store_actions/confirmation'
 
 
@@ -86,7 +86,6 @@ function mapStateToProps({ deals }) {
 }
 
 export default connect(mapStateToProps, {
-  displaySplitter,
   resetSplitter,
   confirmation
 })(PDFSplitter)

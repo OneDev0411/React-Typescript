@@ -30,8 +30,8 @@ class Header extends React.Component {
     return (
       <Row className="deals-list-header">
         <Col
-          lg={isBackOffice ? 9 : 6}
-          md={isBackOffice ? 7 : 5}
+          lg={isBackOffice ? 9 : 7}
+          md={isBackOffice ? 7 : 6}
           sm={6}
           xs={12}
         >
@@ -49,8 +49,8 @@ class Header extends React.Component {
         </Col>
 
         <Col
-          lg={isBackOffice ? 3 : 6}
-          md={isBackOffice ? 5 : 7}
+          lg={isBackOffice ? 3 : 5}
+          md={isBackOffice ? 5 : 6}
           sm={6}
           xs={12}
           className="text-right"

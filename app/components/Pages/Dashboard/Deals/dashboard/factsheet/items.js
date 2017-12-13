@@ -39,7 +39,7 @@ class Table extends React.Component {
 
   render() {
     const { saving } = this.state
-    const { table, deal, isBackOffice, showTitle, title, getValue, getLabel } = this.props
+    const { table, deal, isBackOffice, showTitle, title, getValue } = this.props
 
     return (
       <div>
@@ -64,7 +64,7 @@ class Table extends React.Component {
                 <div key={`CRITICAL_DATE_${field.key}`}>
                   <div className="fact-row">
                     <div className="name">
-                      { getLabel ? getLabel(deal, field, fieldCtx) : field.name }
+                      { field.name }
                     </div>
 
                     <div className={cn('field', { editable: true, approved, disabled })}>
@@ -88,7 +88,7 @@ class Table extends React.Component {
 
                   <div className="approve-row">
                     {
-                      isBackOffice && fieldCtx.value && !approved && saving !== field.key &&
+                      isBackOffice && fieldCtx.value && !disabled && !approved && saving !== field.key &&
                       <button
                         className="btn-approve"
                         onClick={(e) => this.approveField(e, field, fieldCtx)}

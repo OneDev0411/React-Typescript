@@ -86,7 +86,7 @@ class Roles extends React.Component {
     return (
       <div className="deal-info-section deal-roles">
         <div className="deal-info-title">
-          Contacts
+          CONTACTS
         </div>
 
         {

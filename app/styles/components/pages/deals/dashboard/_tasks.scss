@@ -17,7 +17,7 @@
 
   .create-offer {
     padding: $col-padding;
-    padding-bottom: 12px;
+    padding-bottom: 0;
 
     .add-offer-button {
       width: 100%;
@@ -42,7 +42,6 @@
 
   .checklists-container {
     padding: $col-padding !important;
-    padding-top: 0 !important;
 
     .checklist {
       @extend %deal-task-checklist;
@@ -173,7 +172,7 @@
     font-size: 14px;
     color: #1d364b;
     cursor: pointer;
-    transition: background-color 0.1s ease-in;
+    transition: background-color 0.05s ease-in;
     border-bottom: 1px solid #eef1f2;
     padding: 0 0 0 10px;
 
