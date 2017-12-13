@@ -1,8 +1,9 @@
 import React from 'react'
 import TextInput from './textinput'
 import TextArea from './textarea'
+import cn from 'classnames'
 
-export default class extends React.Component {
+class Editable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -34,6 +35,8 @@ export default class extends React.Component {
 
     if (onChange && text.length > 0 && text !== this.props.text) {
       onChange(type, id, text)
+    } else if (text.length === 0) {
+      this.setState({ text: '-' })
     }
 
     this.setState({ editMode: false })
@@ -42,24 +45,39 @@ export default class extends React.Component {
   nl2br(input) {
     return input.split('\n').map((text, key) => (
       <div key={`editable_item___line_${key}`}>
-        { text }
+        {text}
       </div>
     ))
   }
 
   render() {
-    const { multiline, placeholder, showAdd, showEdit } = this.props
+    const {
+      multiline,
+      placeholder,
+      showAdd, showEdit,
+      validate,
+      error,
+      index
+    } = this.props
     const { text, editMode } = this.state
     const TextInput = this.input
 
     if (editMode) {
       return (
-        <div className="contact-editable">
+        <div
+          className={cn('contact-editable', { error })}
+        >
           <TextInput
             value={text}
             placeholder={placeholder}
             lines={text.split('\n').length || 1}
-            onChange={e => this.setState({ text: e.target.value })}
+            onChange={e => {
+              this.setState({ text: e.target.value })
+
+              if (e.target.value !== '' && e.target.value !== '-') {
+                validate(index, e.target.value)
+              }
+            }}
             onBlur={() => this.onCloseEdit()}
             onClose={() => this.onCloseEdit()}
             inputRef={el => this.text_input = el}
@@ -70,13 +88,13 @@ export default class extends React.Component {
 
     return (
       <div
-        className="contact-editable"
+        className={cn('contact-editable', { error })}
       >
         <div
           onClick={() => this.onClickEdit()}
           className="text"
         >
-          { multiline ? this.nl2br(text) : text }
+          {multiline ? this.nl2br(text) : text}
         </div>
 
         <div
@@ -103,3 +121,11 @@ export default class extends React.Component {
     )
   }
 }
+
+Editable.defaultProps = {
+  validate: () => {
+  },
+  error: false
+}
+
+export default Editable

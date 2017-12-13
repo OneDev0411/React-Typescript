@@ -56,5 +56,10 @@
     &:hover .control {
       display: flex;
     }
+    &.error {
+      border: 1px dashed red;
+      border-radius: 3px;
+      padding: 3px;
+    }
   }
 }
