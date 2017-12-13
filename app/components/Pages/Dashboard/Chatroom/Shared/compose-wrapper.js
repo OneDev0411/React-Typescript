@@ -77,7 +77,6 @@ const ComposeWrapper = ({
             >
               <span
                 className=" leave-icon"
-                onClick={OnLeaveClick}
               >
                 <HelpIcon />
               </span>
