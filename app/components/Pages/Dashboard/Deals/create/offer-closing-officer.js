@@ -8,7 +8,7 @@ export default ({
   onRemoveClosingOfficer,
   onUpsertClosingOfficer
 }) => {
-  const allowedRoles = ['ClosingOfficer']
+  const allowedRoles = ['Title'] // Title == Closing Officer
 
   return (
     <div className="form-section deal-people deal-client">

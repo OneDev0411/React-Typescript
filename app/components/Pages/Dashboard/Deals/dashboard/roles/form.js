@@ -194,6 +194,7 @@ export default class Form extends React.Component {
           <Dropdown.Menu className="deal-add-role--drpmenu">
             {
               role_names
+              .sort(name => this.isAllowed(name) ? -1 : 1)
               .map((name, key) => {
                 const isAllowed = this.isAllowed(name)
 
