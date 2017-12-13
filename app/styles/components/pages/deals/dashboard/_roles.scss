@@ -149,12 +149,27 @@
     }
 
     ul.dropdown-menu {
-      li > a {
-        height: 30px;
-        font-weight: 500;
-        &:hover {
-          color: #2196f3;
-          background-color: transparent;
+      li {
+        a {
+          height: 30px;
+          font-weight: 500;
+          color: #263445;
+
+          &:hover {
+            color: #2196f3;
+            background-color: transparent;
+          }
+        }
+
+        &.disabled {
+          cursor: not-allowed;
+          a {
+            font-weight: normal;
+            color: #8da2b5;
+
+            &:hover {
+            }
+          }
         }
       }
     }

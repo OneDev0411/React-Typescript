@@ -69,6 +69,25 @@ export default class Form extends React.Component {
       .indexOf(form.role) > -1
   }
 
+  isAllowed(name) {
+    const { deal, allowedRoles } = this.props
+
+    const dealType = deal ? deal.deal_type : null
+
+    if (
+      (name === 'BuyerAgent' && dealType === 'Buying') ||
+      (name === 'SellerAgent' && dealType === 'Selling')
+    ) {
+      return false
+    }
+
+    if (!allowedRoles) {
+      return true
+    }
+
+    return allowedRoles.indexOf(name) > -1
+  }
+
   validate(field, value) {
     const { form, validation } = this.state
     const showCommission = this.shouldShowCommission(form)
@@ -175,30 +194,26 @@ export default class Form extends React.Component {
           <Dropdown.Menu className="deal-add-role--drpmenu">
             {
               role_names
-              .filter(name => {
-                const dealType = deal ? deal.deal_type : null
+              .map((name, key) => {
+                const isAllowed = this.isAllowed(name)
 
-                if (
-                  (name === 'BuyerAgent' && dealType === 'Buying') ||
-                  (name === 'SellerAgent' && dealType === 'Selling')
-                ) {
-                  return false
+                if (!isAllowed) {
+                  return (
+                    <li key={key} className="disabled">
+                      <a href="#" onClick={e => e.preventDefault()}>{ name }</a>
+                    </li>
+                  )
                 }
 
-                if (!allowedRoles) {
-                  return true
-                }
-
-                return allowedRoles.indexOf(name) > -1
+                return (
+                  <MenuItem
+                    key={`ROLE_${name}`}
+                    onClick={() => this.setForm('role', name)}
+                  >
+                    { roleNames(name) }
+                  </MenuItem>
+                )
               })
-              .map(name =>
-                <MenuItem
-                  key={`ROLE_${name}`}
-                  onClick={() => this.setForm('role', name)}
-                >
-                  { roleNames(name) }
-                </MenuItem>
-              )
             }
           </Dropdown.Menu>
         </Dropdown>

@@ -8,6 +8,8 @@ export default ({
   onRemoveClosingOfficer,
   onUpsertClosingOfficer
 }) => {
+  const allowedRoles = ['ClosingOfficer']
+
   return (
     <div className="form-section deal-people deal-client">
       <div className="hero">
@@ -20,6 +22,7 @@ export default ({
             <CrudRole
               key={id}
               role={agent}
+              allowedRoles={allowedRoles}
               modalTitle="Edit closing officer"
               onRemoveRole={(id) => onRemoveClosingOfficer(id)}
               onUpsertRole={onUpsertClosingOfficer}
@@ -30,6 +33,7 @@ export default ({
         <CrudRole
           modalTitle="Add closing officer"
           ctaTitle="Add closing officer"
+          allowedRoles={allowedRoles}
           onUpsertRole={onUpsertClosingOfficer}
         />
       </div>
