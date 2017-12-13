@@ -30,8 +30,8 @@ class Roles extends React.Component {
   }
 
   getRoleName(role) {
-    const name = `${role.legal_prefix || ''} ${role.legal_first_name} ${role.legal_last_name}`.trim()
-    return name.length > 0 ? name : role.item.display_name
+    const name = `${role.legal_prefix || ''} ${role.legal_first_name || ''} ${role.legal_last_name || ''}`.trim()
+    return name.length > 0 ? name : role.user.display_name
   }
 
   onRequestRemoveRole(user) {
