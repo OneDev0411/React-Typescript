@@ -77,6 +77,7 @@ class AddRole extends React.Component {
         <Modal
           show={show}
           onHide={() => this.closeModal()}
+          backdrop="static"
           dialogClassName="modal-deal-add-role"
         >
           <Modal.Header closeButton>

@@ -55,6 +55,7 @@ class CrudRole extends React.Component {
           show={show}
           onHide={() => this.closeModal()}
           dialogClassName="modal-deal-add-role"
+          backdrop="static"
         >
           <Modal.Header closeButton>
             {modalTitle}
