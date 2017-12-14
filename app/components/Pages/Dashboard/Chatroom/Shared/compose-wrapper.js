@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
 import { compose, withState, pure } from 'recompose'
 import Compose from '../../../../Partials/Compose'
@@ -6,6 +7,7 @@ import { hasRecipients } from '../../../../../utils/helpers'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import LeaveIcon from '../../Partials/Svgs/LeaveIcon'
 import HelpIcon from '../../Partials/Svgs/HelpIcon'
+import { confirmation } from '../../../../../store_actions/confirmation'
 
 const enhance = compose(
   pure,
@@ -30,7 +32,8 @@ const ComposeWrapper = ({
   onChangeComposeModal,
   onChangeRecipients,
   OnLeaveClick,
-  directRoom
+  directRoom,
+  confirmation
 }) =>
   (
     <div style={{ display: inline ? 'inline' : 'block' }}>
@@ -61,7 +64,16 @@ const ComposeWrapper = ({
             >
               <span
                 className=" leave-icon"
-                onClick={OnLeaveClick}
+                onClick={() => confirmation({
+                  message: directRoom ? 'Archive this chat?' : 'Leave this chat?',
+                  description: directRoom ?
+                    'This chatroom will reappear in your inbox' +
+                    ' if you receive a message.'
+                    : 'You will no longer receive messages or notifications' +
+                    ' from this chatroom once you leave.',
+                  confirmLabel: directRoom ? 'Yes, archive' : 'Yes, leave',
+                  onConfirm: () => OnLeaveClick()
+                })}
               >
                 <LeaveIcon />
               </span>
@@ -116,4 +128,6 @@ const ComposeWrapper = ({
       </Modal>
     </div>
   )
-export default enhance(ComposeWrapper)
+export default connect(null, {
+  confirmation
+})(enhance(ComposeWrapper))
