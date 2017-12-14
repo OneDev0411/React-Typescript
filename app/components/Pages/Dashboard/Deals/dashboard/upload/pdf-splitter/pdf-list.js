@@ -74,7 +74,7 @@ class PDF extends React.Component {
                 </span>
 
                 <span className="pages-count">
-                  ({ doc.pdfInfo.numPages } page)
+                  ({ doc.pdfInfo.numPages } pages)
                 </span>
               </div>
 
