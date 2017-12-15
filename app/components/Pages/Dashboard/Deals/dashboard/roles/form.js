@@ -26,10 +26,17 @@ const role_names = [
 export default class Form extends React.Component {
   constructor(props) {
     super(props)
+    const form = props.form || {}
+    const availableRoles = role_names.filter(name => this.isAllowed(name))
+    const preselectedRole = availableRoles.length === 1 && availableRoles[0]
+
+    if (preselectedRole) {
+      form.role = preselectedRole
+    }
 
     this.state = {
       validation: {},
-      form: props.form || {}
+      form
     }
 
     this.validate = _.debounce(this.validate, 200)
