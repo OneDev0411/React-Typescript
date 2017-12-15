@@ -13,7 +13,7 @@
 
   .modal-body {
     text-align: center;
-    padding: 53px 50px;
+    padding: 37px 18px 32px;
     background-color: #ffffff;
     box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1);
     border-radius: 6px;
@@ -21,17 +21,17 @@
     .confirmation-title {
       font-size: 26px;
       font-weight: 600;
-      color: #5b6469;
+      color: #1e364b;
     }
 
     .confirmation-descr {
-      padding-top: 10px;
+      padding-top: 16px;
       font-size: 17px;
-      color: #62778c;
+      color: #8fa3b6;
     }
 
     .cta {
-      margin-top: 35px;
+      margin-top: 16px;
     }
 
     button {
@@ -39,7 +39,7 @@
       border-radius: 3px;
       box-shadow: 0 1px 1px 0 #eef1f2;
       border: solid 1px #f4f7f9;
-      margin-left: 5px;
+      margin-left: 12px;
       &:focus {
         outline: none;
       }
