@@ -218,6 +218,7 @@ class CreateOffer extends React.Component {
               <DealClients
                 dealSide={deal.deal_type}
                 clients={clients}
+                title="Who are the buyers?"
                 onUpsertClient={form => this.onUpsertRole(form, 'clients')}
                 onRemoveClient={id => this.onRemoveRole(id, 'clients')}
               />
@@ -230,6 +231,7 @@ class CreateOffer extends React.Component {
               <DealAgents
                 dealSide={deal.deal_type}
                 agents={agents}
+                title="Who are the buyer agents?"
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                 onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
               />
@@ -245,6 +247,7 @@ class CreateOffer extends React.Component {
                 <DealReferrals
                   dealSide={deal.deal_type}
                   referrals={referrals}
+                  title="Did someone refer the buyer?"
                   onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
                   onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
                 />
