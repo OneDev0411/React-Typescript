@@ -18,7 +18,7 @@ class PdfViewer extends React.Component {
       fitWindow: true
     }
 
-    this.docNavigatorKeyboardHandler = this.docNavigatorKeyboardHandler.bind(this)
+    this.docKeyboardShortcutHandler = this.docKeyboardShortcutHandler.bind(this)
   }
 
   componentDidMount() {
@@ -41,10 +41,10 @@ class PdfViewer extends React.Component {
 
   componentWillUnmount() {
     this.mounted = false
-    document.removeEventListener('keydown', this.docNavigatorKeyboardHandler)
+    document.removeEventListener('keydown', this.docKeyboardShortcutHandler)
   }
 
-  docNavigatorKeyboardHandler(event) {
+  docKeyboardShortcutHandler(event) {
     const { keyCode } = event
     const $viewerContainer = this.$pdfContext.parentElement.parentElement
     const pdfPageHeight =
@@ -66,6 +66,15 @@ class PdfViewer extends React.Component {
       case 39:
         // arrow forward = next page
         $viewerContainer.scrollTo(0, $viewerContainer.scrollTop + pdfPageHeight)
+        break
+      case 187:
+        this.zoomIn()
+        break
+      case 189:
+        this.zoomOut()
+        break
+      case 48:
+        this.fitWindow()
         break
       default:
         break
@@ -98,7 +107,7 @@ class PdfViewer extends React.Component {
 
       // set states
       this.setState({ doc, loading: false }, () => {
-        document.addEventListener('keydown', this.docNavigatorKeyboardHandler)
+        document.addEventListener('keydown', this.docKeyboardShortcutHandler)
       })
 
       // trigger onLoaded event
