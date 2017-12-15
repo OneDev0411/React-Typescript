@@ -4,7 +4,6 @@ import _ from 'underscore'
 import Page from './Page'
 
 class PdfViewer extends React.Component {
-
   constructor(props) {
     super(props)
 
@@ -18,18 +17,18 @@ class PdfViewer extends React.Component {
       zoom: null,
       fitWindow: true
     }
+
+    this.docNavigatorKeyboardHandler = this.docNavigatorKeyboardHandler.bind(this)
   }
 
   componentDidMount() {
     const { uri } = this.props
+
     this.mounted = true
 
     if (uri) {
       this.load(uri)
     }
-
-    this.bindedKeyDown = this.onKeyDown.bind(this)
-    window.addEventListener('keydown', this.bindedKeyDown)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,32 +41,34 @@ class PdfViewer extends React.Component {
 
   componentWillUnmount() {
     this.mounted = false
-    window.removeEventListener('keydown', this.bindedKeyDown)
+    document.removeEventListener('keydown', this.docNavigatorKeyboardHandler)
   }
 
-  onKeyDown(e) {
-    const { enableKeyboardShortcuts } = this.props
-    if (!enableKeyboardShortcuts) {
-      return false
-    }
+  docNavigatorKeyboardHandler(event) {
+    const { keyCode } = event
+    const $viewerContainer = this.$pdfContext.parentElement.parentElement
+    const pdfPageHeight =
+      this.$pdfContext.firstElementChild.firstElementChild.offsetHeight + 45
 
-    const code = (e.keyCode || e.which)
-    const doc = document.documentElement
-    const pdfCanvas = document.getElementById('pdf-canvas')
-    const moveSize = pdfCanvas.clientHeight
-    const top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0)
-
-    switch (code) {
-      case 40: // press arrow down
-        return this.pdf_context.scrollTop = top + moveSize
-      case 38: // press arrow up
-        return this.pdf_context.scrollTop = top - moveSize
-      case 48: // press 0 button
-        return this.fitWindow()
-      case 187: // press +
-        return this.zoomIn()
-      case 189: // press -
-        return this.zoomOut()
+    switch (keyCode) {
+      case 40:
+        // arrow down
+        $viewerContainer.scrollTo(0, $viewerContainer.scrollTop + 50)
+        break
+      case 38:
+        // arrow up
+        $viewerContainer.scrollTo(0, $viewerContainer.scrollTop - 50)
+        break
+      case 37:
+        // arrow backward = previous page
+        $viewerContainer.scrollTo(0, $viewerContainer.scrollTop - pdfPageHeight)
+        break
+      case 39:
+        // arrow forward = next page
+        $viewerContainer.scrollTo(0, $viewerContainer.scrollTop + pdfPageHeight)
+        break
+      default:
+        break
     }
   }
 
@@ -77,7 +78,7 @@ class PdfViewer extends React.Component {
     }
 
     // lazy load
-    await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */ )
+    await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */)
     await import('pdfjs-dist/web/compatibility' /* webpackChunkName: "pdf.comp" */)
 
     this.setState({
@@ -96,11 +97,12 @@ class PdfViewer extends React.Component {
       }
 
       // set states
-      this.setState({ doc, loading: false })
+      this.setState({ doc, loading: false }, () => {
+        document.addEventListener('keydown', this.docNavigatorKeyboardHandler)
+      })
 
       // trigger onLoaded event
       this.props.onLoad()
-
     } catch (e) {
       this.setState({ uri: null, loading: false })
     }
@@ -109,13 +111,15 @@ class PdfViewer extends React.Component {
   rotate() {
     const { rotation } = this.state
     const newRotation = rotation + 90 < 360 ? rotation + 90 : 0
+
     this.setState({
-      rotation: newRotation,
+      rotation: newRotation
     })
   }
 
   zoomIn() {
     const zoom = this.state.zoom || 0
+
     if (zoom >= 0.6) {
       return false
     }
@@ -152,24 +156,18 @@ class PdfViewer extends React.Component {
 
     return (
       <div>
-        {
-          loading &&
+        {loading && (
           <div className="loading center">
             <i className="fa fa-spin fa-spinner fa-2x" />
             <p>Loading document</p>
           </div>
-        }
+        )}
 
-        {
-          doc && !loading &&
-          <div
-            className="pdf-context"
-            ref={ref => this.pdf_context = ref}
-          >
-            <div className="wrapper">
-              {
-                Array.apply(null, { length: doc.pdfInfo.numPages })
-                .map((v, i) => (
+        {doc &&
+          !loading && (
+            <div className="pdf-context" ref={ref => (this.$pdfContext = ref)}>
+              <div className="wrapper">
+                {Array.apply(null, { length: doc.pdfInfo.numPages }).map((v, i) => (
                   <Page
                     key={`page-${i}`}
                     doc={doc}
@@ -177,64 +175,51 @@ class PdfViewer extends React.Component {
                     rotation={rotation}
                     zoom={zoom}
                     defaultContainerHeight={defaultContainerHeight || '85vh'}
-                    pageNumber={i+1}
+                    pageNumber={i + 1}
                   />
-                ))
-              }
+                ))}
+              </div>
+
+              <div className="pdf-toolbar">
+                <OverlayTrigger
+                  placement="left"
+                  overlay={<Tooltip>Rotate Pdf</Tooltip>}
+                >
+                  <i className="fa fa-rotate-right" onClick={() => this.rotate()} />
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                  placement="left"
+                  overlay={<Tooltip>Zoom In</Tooltip>}
+                >
+                  <i className="fa fa-plus-circle" onClick={() => this.zoomIn()} />
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                  placement="left"
+                  overlay={<Tooltip>Zoom Out</Tooltip>}
+                >
+                  <i className="fa fa-minus-circle" onClick={() => this.zoomOut()} />
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                  placement="left"
+                  overlay={<Tooltip>Automatic Zoom</Tooltip>}
+                >
+                  <i className="fa fa-square-o" onClick={() => this.fitWindow()} />
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                  placement="left"
+                  overlay={<Tooltip>Download Pdf</Tooltip>}
+                >
+                  <a target="_blank" href={downloadUrl || uri}>
+                    <i className="fa fa-download" />
+                  </a>
+                </OverlayTrigger>
+              </div>
             </div>
-
-            <div className="pdf-toolbar">
-              <OverlayTrigger
-                placement="left"
-                overlay={<Tooltip>Rotate Pdf</Tooltip>}
-              >
-                <i
-                  className="fa fa-rotate-right"
-                  onClick={() => this.rotate()}
-                />
-              </OverlayTrigger>
-
-              <OverlayTrigger
-                placement="left"
-                overlay={<Tooltip>Zoom In</Tooltip>}
-              >
-                <i
-                  className="fa fa-plus-circle"
-                  onClick={() => this.zoomIn()}
-                />
-              </OverlayTrigger>
-
-              <OverlayTrigger
-                placement="left"
-                overlay={<Tooltip>Zoom Out</Tooltip>}
-              >
-                <i
-                  className="fa fa-minus-circle"
-                  onClick={() => this.zoomOut()}
-                />
-              </OverlayTrigger>
-
-              <OverlayTrigger
-                placement="left"
-                overlay={<Tooltip>Automatic Zoom</Tooltip>}
-              >
-                <i
-                  className="fa fa-square-o"
-                  onClick={() => this.fitWindow()}
-                />
-              </OverlayTrigger>
-
-              <OverlayTrigger
-                placement="left"
-                overlay={<Tooltip>Download Pdf</Tooltip>}
-              >
-                <a target="_blank" href={downloadUrl || uri}>
-                  <i className="fa fa-download" />
-                </a>
-              </OverlayTrigger>
-            </div>
-          </div>
-        }
+          )}
       </div>
     )
   }
