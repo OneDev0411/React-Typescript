@@ -19,18 +19,16 @@ function getRoles(agents, side) {
 export default ({
   agents,
   dealSide,
-  title,
   onUpsertAgent,
   onRemoveAgent
 }) => {
   const allowedRoles = getRoles(agents, dealSide)
-  const ctaTitle = _.size(agents) === 0 ? 'primary agent' : 'co-agent'
+  const title = _.size(agents) === 0 ? 'primary agent' : 'co-agent'
 
   return (
     <div className="form-section deal-people deal-agent">
       <div className="hero">
-        { title || `Who is the ${dealSide === BUYING ? 'buyer' : 'listing'} agent?` }&nbsp;
-        <span className="required">*</span>
+        Who is the {dealSide === BUYING ? 'buyer' : 'listing'} agent? <span className="required">*</span>
       </div>
 
       <div className="people-container">
@@ -48,8 +46,8 @@ export default ({
         }
 
         <CrudRole
-          modalTitle={`Add ${ctaTitle}`}
-          ctaTitle={`Add ${ctaTitle}`}
+          modalTitle={`Add ${title}`}
+          ctaTitle={`Add ${title}`}
           allowedRoles={allowedRoles}
           onUpsertRole={onUpsertAgent}
         />

@@ -6,7 +6,6 @@ import RoleItem from './role-item'
 export default ({
   referrals,
   dealSide,
-  title,
   onUpsertReferral,
   onRemoveReferral
 }) => {
@@ -15,7 +14,7 @@ export default ({
   return (
     <div className="form-section deal-people deal-referral">
       <div className="hero">
-        { title || `Did someone refer the ${dealSide === 'Buying' ? 'buyer' : 'seller'}?`}
+        Did someone refer the {dealSide === 'Buying' ? 'buyer' : 'seller'}?
       </div>
 
       <div className="people-container">

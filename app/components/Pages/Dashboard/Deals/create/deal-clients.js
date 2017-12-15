@@ -19,7 +19,6 @@ function getRoles(side) {
 export default ({
   clients,
   dealSide,
-  title,
   onUpsertClient,
   onRemoveClient
 }) => {
@@ -28,7 +27,7 @@ export default ({
   return (
     <div className="form-section deal-people deal-client">
       <div className="hero">
-        { title || `Who are the ${dealSide === 'Buying' ? 'buyers' : 'sellers'}`}&nbsp;
+        Who are the {dealSide === 'Buying' ? 'buyers' : 'sellers'}&nbsp;
         <span className="required">*</span>
       </div>
 
