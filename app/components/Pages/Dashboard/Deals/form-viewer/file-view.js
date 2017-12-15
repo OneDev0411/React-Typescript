@@ -87,7 +87,6 @@ export default ({
 
           <Viewer
             width={PDF_WIDTH}
-            enableKeyboardShortcuts={!showComments}
             file={file}
           />
 
