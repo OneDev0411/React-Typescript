@@ -7,7 +7,9 @@ const BrandLogo = ({ brand, user, isWidget, title = 'Rechat', styles }) => {
     return <div />
   }
 
-  title = brand ? brand.messages.site_title : title
+  if (brand) {
+    title = Brand.message('site_title', 'Rechat', brand)
+  }
 
   const image = Brand.asset('site_logo_wide')
 
@@ -23,16 +25,14 @@ const BrandLogo = ({ brand, user, isWidget, title = 'Rechat', styles }) => {
       <a
         href={`https://${window.location.host}`}
         style={
-          image ? (
-            {}
-          ) : (
-            {
+          image
+            ? {}
+            : {
               fontSize: '2.5rem',
               fontWieght: 'bold',
               paddingTop: '1rem',
               color: `#${Brand.color('primary', '3388ff')}`
             }
-          )
         }
       >
         {image ? (
