@@ -186,8 +186,7 @@ const ListingDesktopView = ({
     const { gallery_image_urls } = listing
     const gallery_chunks = _.chunk(gallery_image_urls, 4)
 
-    const carouselItemDivStyle = `border-right-1-solid-fff w-${viewer_width /
-      4} h-300 pull-left text-center bg-efefef bg-cover bg-center`
+    const carouselItemDivStyle = `border-right-1-solid-fff w-25p h-300 pull-left text-center bg-efefef bg-cover bg-center`
 
     listing_images = (
       <Carousel
