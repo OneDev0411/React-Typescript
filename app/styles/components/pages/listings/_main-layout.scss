@@ -1,5 +1,4 @@
 $panel-width: 380px;
-$sidebar-width: 150px;
 $header-height: 54px;
 
 .l-listings__header {
@@ -65,7 +64,7 @@ $header-height: 54px;
   }
   .l-listings--logged .c-listings-panel--table & {
     @media screen and (min-width: 1024px) and (max-width: 1920px) {
-      width: calc(100% - #{$sidebar-width});
+      width: calc(100% - #{$app-sidenav-width});
     }
   }
   .c-listings-panel--grid & {
@@ -76,9 +75,9 @@ $header-height: 54px;
     }
   }
   .l-listings--logged .c-listings-panel--grid & {
-    width: calc(100% - #{$sidebar-width});
+    width: calc(100% - #{$app-sidenav-width});
     @media screen and (min-width: 1920px) {
-      width: calc(100% - #{$sidebar-width});
+      width: calc(100% - #{$app-sidenav-width});
     }
   }
   .l-listings__main--alert & {
@@ -87,19 +86,19 @@ $header-height: 54px;
     border-left-width: 0;
     @media screen and (min-width: 1024px) {
       display: block;
-      width: calc(100% - #{$sidebar-width} - #{$panel-width});
+      width: calc(100% - #{$app-sidenav-width} - #{$panel-width});
     }
   }
   .l-listings__main--alert .c-listings-panel--grid & {
-    width: calc(100% - #{$sidebar-width} - #{$panel-width});
+    width: calc(100% - #{$app-sidenav-width} - #{$panel-width});
     @media screen and (min-width: 1920px) {
-      width: calc(100% - #{$sidebar-width} - #{$panel-width});
+      width: calc(100% - #{$app-sidenav-width} - #{$panel-width});
     }
   }
   .l-listings__main--alert .c-listings-panel--table & {
     border-width: 0;
     @media screen and (min-width: 1024px) and (max-width: 1920px) {
-      width: calc(100% - #{$sidebar-width} - #{$panel-width});
+      width: calc(100% - #{$app-sidenav-width} - #{$panel-width});
     }
   }
 }
