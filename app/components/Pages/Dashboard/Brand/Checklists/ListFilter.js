@@ -19,8 +19,9 @@ export default class ListFilter extends React.Component {
     let filtered = []
 
     Object.keys(this.props.data).forEach((key) => {
-      if (this.props.data[key].name.search(regex) > -1)
+      if (this.props.data[key].name.search(regex) > -1) {
         filtered.push(this.props.data[key])
+      }
     })
     this.setState({
       filteredData: filtered
