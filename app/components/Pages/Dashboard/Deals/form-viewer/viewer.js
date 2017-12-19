@@ -3,7 +3,8 @@ import PdfViewer from '../../../../Partials/Pdf/Viewer'
 
 export default ({
   width,
-  file
+  file,
+  enableKeyboardShortcuts = true
 }) => {
   const { name, type, url, downloadUrl } = file
 
@@ -19,6 +20,7 @@ export default ({
         file && type === 'pdf' &&
         <PdfViewer
           uri={url}
+          enableKeyboardShortcuts={enableKeyboardShortcuts}
           downloadUrl={downloadUrl}
           defaultContainerHeight="85vh"
         />

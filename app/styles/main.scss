@@ -5,7 +5,9 @@
 @import 'components/resets';
 @import 'components/resets-bootstrap';
 
-@import '~react-day-picker/lib/style.css';
+@import 'settings/settings.core.scss';
+
+@import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
 
 // utilities
 @import 'utils/utils.list';

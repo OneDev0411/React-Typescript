@@ -44,6 +44,7 @@ export default class DealSocket extends Socket {
    */
   onDealChange(response) {
     const { action, deal } = response
+    console.log(`[ ${action} ] got a deals socket event`)
 
     switch (action) {
       case 'Updated':

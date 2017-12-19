@@ -107,6 +107,7 @@ export const validateEmail = values => {
 export default compose(
   connect(({ brand, auth }, { location }) => {
     const { email } = location.query
+
     return {
       brand,
       initialValues: { email }
@@ -133,16 +134,15 @@ export default compose(
         setResetSuccessfully(values.email)
       } catch ({ status, response }) {
         let errorMessage = 'An unexpected error occurred. Please try again.'
+        const shadowUserError =
+          'Unfortunately you can\'t reset your password as a shadow user. We resent a new activation email. Check your inbox.'
 
         if (status === 403) {
+          errorMessage = shadowUserError
+
           try {
             await signup(values.email)
-          } catch (error) {
-            if (error === 202 && response) {
-              errorMessage = `${response.body
-                .message} We resent a new activation email. Please check your inbox.`
-            }
-          }
+          } catch (error) {}
         }
 
         if (status === 404) {

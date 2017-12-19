@@ -3,7 +3,7 @@
 $item-height: 3.4rem;
 
 .c-app-navbar {
-  width: 15rem;
+  width: $app-sidenav-width;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -32,12 +32,20 @@ $item-height: 3.4rem;
 .c-app-navbar__item {
   position: relative;
   height: $item-height;
-  padding-left: 2rem;
+  padding-left: 1rem;
   cursor: pointer;
 
   &:hover {
     background-color: rgba(#62778c, 0.4);
   }
+}
+
+.c-app-navbar__item__active-sign {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
 }
 
 .c-app-navbar__item__title,
@@ -51,9 +59,15 @@ $item-height: 3.4rem;
 
   &:hover,
   &:active,
-  .c-app-navbar__item.is-active & {
+  .c-app-navbar__item.is-active &,
+  .c-app-navbar__item.is-active &:hover {
     color: #fff;
     text-decoration: none;
+  }
+
+  .c-app-navbar__item.is-active & {
+    color: inherit;
+    font-weight: bold;
   }
 }
 
@@ -73,21 +87,23 @@ $item-height: 3.4rem;
 
 .c-app-navbar__notification-badge {
   $size: 20px;
-  display: inline-block;
+  position: absolute;
+  top: 0.7rem;
+  right: 1rem;
   width: $size;
   height: $size;
-  margin-left: 1rem;
   text-align: center !important;
   font-size: 12px;
   line-height: $size;
-  border-radius: 100px;
+  border-radius: 100%;
   color: #fff;
   background-color: red;
 }
 
 .c-app-navbar__account-dropdown {
   width: 90%;
-  padding-left: 2rem;
+  padding-left: 1rem;
+  margin-top: 1rem;
 
   > .c-app-navbar__item__title--button {
     &:hover,
@@ -97,11 +113,21 @@ $item-height: 3.4rem;
       color: #fff !important;
       background: transparent !important;
     }
+
+    > .caret {
+      display: none;
+    }
   }
 
   .dropdown-menu {
-    left: 2rem;
-    min-width: 12rem;
+    left: 1rem;
+    min-width: $app-sidenav-width - 2rem;
+    text-align: center;
+
+    > li > a {
+      padding-left: 1rem;
+      padding-left: 1rem;
+    }
   }
 
   &.open > .c-app-navbar__item__title--button {

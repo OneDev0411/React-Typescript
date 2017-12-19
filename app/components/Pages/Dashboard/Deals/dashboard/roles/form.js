@@ -26,10 +26,17 @@ const role_names = [
 export default class Form extends React.Component {
   constructor(props) {
     super(props)
+    const form = props.form || {}
+    const availableRoles = role_names.filter(name => this.isAllowed(name))
+    const preselectedRole = availableRoles.length === 1 && availableRoles[0]
+
+    if (preselectedRole) {
+      form.role = preselectedRole
+    }
 
     this.state = {
       validation: {},
-      form: props.form || {}
+      form
     }
 
     this.validate = _.debounce(this.validate, 200)
@@ -67,6 +74,25 @@ export default class Form extends React.Component {
   shouldShowCommission(form) {
     return ['BuyerAgent', 'BuyerReferral', 'SellerAgent', 'SellerReferral']
       .indexOf(form.role) > -1
+  }
+
+  isAllowed(name) {
+    const { deal, allowedRoles } = this.props
+
+    const dealType = deal ? deal.deal_type : null
+
+    if (
+      (name === 'BuyerAgent' && dealType === 'Buying') ||
+      (name === 'SellerAgent' && dealType === 'Selling')
+    ) {
+      return false
+    }
+
+    if (!allowedRoles) {
+      return true
+    }
+
+    return allowedRoles.indexOf(name) > -1
   }
 
   validate(field, value) {
@@ -175,30 +201,27 @@ export default class Form extends React.Component {
           <Dropdown.Menu className="deal-add-role--drpmenu">
             {
               role_names
-              .filter(name => {
-                const dealType = deal ? deal.deal_type : null
+              .sort(name => this.isAllowed(name) ? -1 : 1)
+              .map((name, key) => {
+                const isAllowed = this.isAllowed(name)
 
-                if (
-                  (name === 'BuyerAgent' && dealType === 'Buying') ||
-                  (name === 'SellerAgent' && dealType === 'Selling')
-                ) {
-                  return false
+                if (!isAllowed) {
+                  return (
+                    <li key={key} className="disabled">
+                      <a href="#" onClick={e => e.preventDefault()}>{ name }</a>
+                    </li>
+                  )
                 }
 
-                if (!allowedRoles) {
-                  return true
-                }
-
-                return allowedRoles.indexOf(name) > -1
+                return (
+                  <MenuItem
+                    key={`ROLE_${name}`}
+                    onClick={() => this.setForm('role', name)}
+                  >
+                    { roleNames(name) }
+                  </MenuItem>
+                )
               })
-              .map(name =>
-                <MenuItem
-                  key={`ROLE_${name}`}
-                  onClick={() => this.setForm('role', name)}
-                >
-                  { roleNames(name) }
-                </MenuItem>
-              )
             }
           </Dropdown.Menu>
         </Dropdown>
