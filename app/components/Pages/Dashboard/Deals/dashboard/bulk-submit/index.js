@@ -96,8 +96,7 @@ class BulkSubmit extends React.Component {
               .filter(id => !checklists[id].is_terminated)
               .map(id => {
                 const checklist = checklists[id]
-                const checklistTasks = checklist.tasks && checklist
-                  .tasks
+                const checklistTasks = (checklist.tasks || [])
                   .filter(tId => tasks[tId].needs_attention !== true)
 
                 return (
