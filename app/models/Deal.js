@@ -637,4 +637,20 @@ Deal.splitPDF = async function(title, room_id, files, pages) {
   }
 }
 
+
+/**
+ * Search through all deals
+ */
+Deal.searchAllDeals = async function (query) {
+  try {
+    const response = await new Fetch()
+      .post('/deals/filter')
+      .send({ query })
+
+    return response.body.data
+  } catch (error) {
+    return { error }
+  }
+}
+
 export default Deal

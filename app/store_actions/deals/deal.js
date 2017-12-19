@@ -84,8 +84,11 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
 
     try {
       // get deals (brand is backoffice)
+      dispatch({ type: types.SHOW_SPINNER })
+
       const data = await Deal.getAll(user, backoffice)
 
+      dispatch({ type: types.HIDE_SPINNER })
       if (data.length === 0) {
         return dispatch({ type: types.NO_DEAL })
       }
@@ -120,5 +123,37 @@ export function createDeal(deal) {
       dispatch(setChecklists(checklists)),
       dispatch(addNewDeal(deals[deal.id]))
     ])
+  }
+}
+
+export function searchAllDeals(query) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: types.SHOW_SPINNER })
+
+
+      const data = await Deal.searchAllDeals(query)
+
+      dispatch({ type: types.HIDE_SPINNER })
+
+      if (data.length === 0) {
+        return dispatch({ type: types.NO_DEAL })
+      }
+
+      const { entities } = normalize(data, schema.dealsSchema)
+      const { deals, checklists, tasks } = entities
+
+      batchActions([
+        dispatch(setTasks(tasks)),
+        dispatch(setChecklists(checklists)),
+        dispatch(setDeals(deals))
+      ])
+    } catch (e) {
+      dispatch({
+        type: types.GET_DEALS_FAILED,
+        name: 'get-deals',
+        message: e.response ? e.response.body.message : null
+      })
+    }
   }
 }

@@ -5,22 +5,29 @@ import { Link } from 'react-router'
 import AgentFilter from './agent-filter'
 import BackOfficeFilter from './backoffice-filter'
 import SearchInput from '../../../../Partials/SearchInput'
+import debounce from 'lodash/debounce'
 
 class Header extends React.Component {
   constructor(props) {
     super(props)
+    this.debounced_version = debounce(this.onInputChange, 700)
   }
 
   onInputChange(value) {
-    const { isBackOffice, onFilterChange } = this.props
+    const { isBackOffice, onFilterChange, searchAllDeals, refetchDeals } = this.props
     let filters
 
     if (isBackOffice) {
-      filters = { 'address^agent_name': value }
+      if (value) {
+        searchAllDeals(value)
+      } else if (this.lastQuery) {
+        refetchDeals()
+      }
     } else {
       filters = { 'address^side': value }
     }
 
+    this.lastQuery = value
     onFilterChange(filters)
   }
 
@@ -37,14 +44,14 @@ class Header extends React.Component {
         >
           {
             isBackOffice ?
-            <BackOfficeFilter
-              active={activeFilterTab}
-              onChangeFilter={filters => onFilterChange(filters)}
-            /> :
-            <AgentFilter
-              active={activeFilterTab}
-              onChangeFilter={filters => onFilterChange(filters)}
-            />
+              <BackOfficeFilter
+                active={activeFilterTab}
+                onChangeFilter={filters => onFilterChange(filters)}
+              /> :
+              <AgentFilter
+                active={activeFilterTab}
+                onChangeFilter={filters => onFilterChange(filters)}
+              />
           }
         </Col>
 
@@ -56,7 +63,7 @@ class Header extends React.Component {
           className="text-right"
         >
           <SearchInput
-            onChange={value => this.onInputChange(value)}
+            onChange={value => this.debounced_version(value)}
             placeholder="Search by address or a person's name"
           />
 

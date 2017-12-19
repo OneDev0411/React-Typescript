@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import AgentTable from './agent-table'
 import BackOfficeTable from './backoffice-table'
+import cn from 'classnames'
 import Header from './header'
-import { getDeals } from '../../../../../store_actions/deals'
+import { getDeals, searchAllDeals } from '../../../../../store_actions/deals'
 import { hasUserAccess } from '../../../../../utils/user-acl'
 
 class DealsDashboard extends React.Component {
@@ -26,15 +26,10 @@ class DealsDashboard extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.refetchDeals()
-  }
 
-  refetchDeals() {
-    // refetch deals based on this feature request:
-    // https://gitlab.com/rechat/web/issues/419
-    // const { getDeals, user } = this.props
-    // getDeals(user, hasUserAccess(user, 'BackOffice'), false)
+  refetchDeals = () => {
+    const { getDeals, user } = this.props
+    getDeals(user, hasUserAccess(user, 'BackOffice'), false)
   }
 
   /**
@@ -50,29 +45,33 @@ class DealsDashboard extends React.Component {
   }
 
   render() {
-    const { deals, isBackOffice, params } = this.props
+    const { deals, isBackOffice, params, searchAllDeals, spinner } = this.props
     const { activeFilters } = this.state
 
     return (
       <div className="deals-list">
-
         <Header
           activeFilterTab={params.filter}
           onFilterChange={(name, filter) => this.setFilter(name, filter)}
+          searchAllDeals={searchAllDeals}
+          refetchDeals={this.refetchDeals}
+        />
+        <i
+          className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__deals', { hide_spinner: !spinner })}
         />
 
         {
           !isBackOffice ?
-          <AgentTable
-            deals={deals}
-            filters={activeFilters}
-            isBackOffice={false}
-          /> :
-          <BackOfficeTable
-            deals={deals}
-            filters={activeFilters}
-            isBackOffice={true}
-          />
+            <AgentTable
+              deals={deals}
+              filters={activeFilters}
+              isBackOffice={false}
+            /> :
+            <BackOfficeTable
+              deals={deals}
+              filters={activeFilters}
+              isBackOffice
+            />
         }
 
       </div>
@@ -83,5 +82,6 @@ class DealsDashboard extends React.Component {
 export default connect(({ deals, user }) => ({
   deals: deals.list,
   isBackOffice: deals.backoffice,
-  user
-}), { getDeals })(DealsDashboard)
+  user,
+  spinner: deals.spinner,
+}), { getDeals, searchAllDeals })(DealsDashboard)
