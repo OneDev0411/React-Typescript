@@ -5,7 +5,6 @@ import error from './error'
 
 export default (state = null, action) => {
   switch (action.type) {
-
     case types.NO_DEAL:
       return {}
 
