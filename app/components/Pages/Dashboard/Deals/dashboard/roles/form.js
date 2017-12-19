@@ -26,6 +26,7 @@ const role_names = [
 export default class Form extends React.Component {
   constructor(props) {
     super(props)
+
     const form = props.form || {}
     const availableRoles = role_names.filter(name => this.isAllowed(name))
     const preselectedRole = availableRoles.length === 1 && availableRoles[0]
@@ -62,12 +63,14 @@ export default class Form extends React.Component {
   }
 
   isEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
     return re.test(email)
   }
 
   isValidPhone(phone) {
     const phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
+
     return phoneNumberPattern.test(phone)
   }
 
@@ -114,6 +117,7 @@ export default class Form extends React.Component {
     }
 
     const validator = fields[field]
+
     if (value.length > 0 && validator && !validator(value)) {
       this.setState({
         validation: {
@@ -128,6 +132,7 @@ export default class Form extends React.Component {
     }
 
     const isFormCompleted = _.every(requiredFields, name => fields[name](form[name]))
+
     this.props.onFormCompleted(isFormCompleted ? form : null)
   }
 
@@ -146,15 +151,15 @@ export default class Form extends React.Component {
           <Dropdown.Menu className="deal-add-role-title--drpmenu">
             {
               ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr']
-              .map((name, key) =>
-                <MenuItem
-                  key={`Title_${key}`}
-                  style={{ width: '40%' }}
-                  onClick={() => this.setForm('legal_prefix', name)}
-                >
-                  {name}
-                </MenuItem>
-              )
+                .map((name, key) =>
+                  <MenuItem
+                    key={`Title_${key}`}
+                    style={{ width: '40%' }}
+                    onClick={() => this.setForm('legal_prefix', name)}
+                  >
+                    {name}
+                  </MenuItem>
+                )
             }
           </Dropdown.Menu>
         </Dropdown>
@@ -175,22 +180,22 @@ export default class Form extends React.Component {
 
         <div className="input-container">
           <input
-            className={cn('email', { invalid: validation['email'] === 'error' })}
+            className={cn('email', { invalid: validation.email === 'error' })}
             placeholder="Email *"
             value={form.email || ''}
             onChange={e => this.setForm('email', e.target.value)}
           />
-          {validation['email'] === 'error' && <span>Enter a valid email</span>}
+          {validation.email === 'error' && <span>Enter a valid email</span>}
         </div>
 
         <div className="input-container">
           <input
-            className={cn('phone', { invalid: validation['phone'] === 'error' })}
+            className={cn('phone', { invalid: validation.phone === 'error' })}
             placeholder="Phone (xxx) xxx-xxxx"
             value={form.phone || ''}
             onChange={e => this.setForm('phone', e.target.value)}
           />
-          {validation['phone'] === 'error' && <span>Enter a valid phone</span>}
+          {validation.phone === 'error' && <span>Enter a valid phone</span>}
         </div>
 
         <Dropdown id="deal-add-role--drp">
@@ -201,27 +206,27 @@ export default class Form extends React.Component {
           <Dropdown.Menu className="deal-add-role--drpmenu">
             {
               role_names
-              .sort(name => this.isAllowed(name) ? -1 : 1)
-              .map((name, key) => {
-                const isAllowed = this.isAllowed(name)
+                .sort(name => this.isAllowed(name) ? -1 : 1)
+                .map((name, key) => {
+                  const isAllowed = this.isAllowed(name)
 
-                if (!isAllowed) {
+                  if (!isAllowed) {
+                    return (
+                      <li key={key} className="disabled">
+                        <a href="#" onClick={e => e.preventDefault()}>{ name }</a>
+                      </li>
+                    )
+                  }
+
                   return (
-                    <li key={key} className="disabled">
-                      <a href="#" onClick={e => e.preventDefault()}>{ name }</a>
-                    </li>
+                    <MenuItem
+                      key={`ROLE_${name}`}
+                      onClick={() => this.setForm('role', name)}
+                    >
+                      { roleNames(name) }
+                    </MenuItem>
                   )
-                }
-
-                return (
-                  <MenuItem
-                    key={`ROLE_${name}`}
-                    onClick={() => this.setForm('role', name)}
-                  >
-                    { roleNames(name) }
-                  </MenuItem>
-                )
-              })
+                })
             }
           </Dropdown.Menu>
         </Dropdown>

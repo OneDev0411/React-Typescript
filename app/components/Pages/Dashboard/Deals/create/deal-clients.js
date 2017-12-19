@@ -11,9 +11,9 @@ function getRoles(side) {
     return ['Buyer', 'Tenant']
   } else if (side === SELLING) {
     return ['Seller', 'Landlord']
-  } else {
-    return []
   }
+
+  return []
 }
 
 export default ({

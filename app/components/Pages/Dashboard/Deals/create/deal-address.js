@@ -3,10 +3,8 @@ import ManualAddress from './manual-address'
 import MlsSearch from '../dashboard/mls-listing/search'
 
 const BUYING = 'Buying'
-const SELLING = 'Selling'
 
 export default class DealAddress extends React.Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -65,48 +63,51 @@ export default class DealAddress extends React.Component {
 
         {
           dealAddress ?
-          <div className="address-info">
-            <img src={this.getListingImage(dealAddress)} />
-            <span className="name">
-              {dealAddress.address_components.street_number}&nbsp;
-              {dealAddress.address_components.street_name}&nbsp;
-              {dealAddress.address_components.street_suffix}
-            </span>
+            <div className="address-info">
+              <img
+                alt="listing not available"
+                src={this.getListingImage(dealAddress)}
+              />
+              <span className="name">
+                {dealAddress.address_components.street_number}&nbsp;
+                {dealAddress.address_components.street_name}&nbsp;
+                {dealAddress.address_components.street_suffix}
+              </span>
 
-            <span
-              className="remove-address"
-              onClick={onRemoveAddress}
-            >
+              <span
+                className="remove-address"
+                onClick={onRemoveAddress}
+              >
               Remove Address
-            </span>
-          </div> :
-          <div>
+              </span>
+            </div> :
+            <div>
 
-            {
-              dealSide === BUYING &&
+              {
+                dealSide === BUYING &&
+                <div
+                  className="entity-item address new"
+                  onClick={() => this.toggleMlsModal()}
+                >
+                  <span className="add-item">
+                    <span className="icon">+</span>
+                    <span className="text">Add Listing</span>
+                  </span>
+                </div>
+              }
+
               <div
                 className="entity-item address new"
-                onClick={() => this.toggleMlsModal()}
+                onClick={() => this.toggleManualAddressModal()}
               >
                 <span className="add-item">
                   <span className="icon">+</span>
-                  <span className="text">Add Listing</span>
+                  <span className="text">
+                    { dealSide === BUYING ? 'Or add address manually' : 'Add address' }
+                  </span>
                 </span>
               </div>
-            }
-
-            <div
-              className="entity-item address new"
-              onClick={() => this.toggleManualAddressModal()}
-            >
-              <span className="add-item">
-                <span className="icon">+</span>
-                <span className="text">
-                  { dealSide === BUYING ? 'Or add address manually': 'Add address' }
-                </span>
-              </span>
             </div>
-          </div>
         }
 
       </div>

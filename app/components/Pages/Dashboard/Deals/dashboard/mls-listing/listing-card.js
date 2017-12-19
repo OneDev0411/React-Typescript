@@ -36,8 +36,8 @@ class ListingCard extends React.Component {
       street_suffix,
       unitNumber ? `, #${unitNumber}` : null
     ]
-    .filter(item => item !== null)
-    .join(' ')
+      .filter(item => item !== null)
+      .join(' ')
   }
 
   getListingAddress(deal) {
@@ -50,8 +50,8 @@ class ListingCard extends React.Component {
       state,
       postalCode
     ]
-    .filter(item => item !== null)
-    .join(' ')
+      .filter(item => item !== null)
+      .join(' ')
 
     if (address.length === 0) {
       return Deal.get.clientNames(deal)
@@ -90,7 +90,7 @@ class ListingCard extends React.Component {
 
   render() {
     const { deal } = this.props
-    const{ showAddressModal, isSavingAddress } = this.state
+    const { showAddressModal, isSavingAddress } = this.state
     const photo = Deal.get.field(deal, 'photo')
 
     return (
@@ -99,7 +99,7 @@ class ListingCard extends React.Component {
           className={cn('listing-photo', { hasListing: deal.listing })}
           onClick={() => this.openListing(deal)}
         >
-          <img src={photo || "/static/images/deals/group-146.svg"} />
+          <img src={photo || '/static/images/deals/group-146.svg'} />
           <span className="view-btn">VIEW</span>
         </div>
 

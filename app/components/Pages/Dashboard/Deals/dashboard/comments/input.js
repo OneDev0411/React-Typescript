@@ -15,7 +15,7 @@ class CommentCreate extends React.Component {
       isSaving: false,
       comment: '',
       rows: 2,
-      height: 40,
+      height: 40
     }
   }
 
@@ -26,6 +26,7 @@ class CommentCreate extends React.Component {
   onCommentSaved() {
     // scroll to the end
     const el = document.getElementById('deals-task-scrollable')
+
     el.scrollTop = el.scrollHeight
   }
 
@@ -46,7 +47,7 @@ class CommentCreate extends React.Component {
 
       // send message
       Message.postTaskComment(task, message)
-      .then(() => this.onCommentSaved())
+        .then(() => this.onCommentSaved())
     }
 
     // clear message box
@@ -69,7 +70,7 @@ class CommentCreate extends React.Component {
           dismissible: true
         })
       }
-    } catch(e) {
+    } catch (e) {
       notify({
         message: 'Can not complete this action. try again',
         status: 'error',

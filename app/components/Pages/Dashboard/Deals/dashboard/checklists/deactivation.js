@@ -10,7 +10,6 @@ import { confirmation } from '../../../../../../store_actions/confirmation'
 import hasPrimaryOffer from '../../utils/has-primary-offer'
 
 class TaskDeactivation extends React.Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -21,6 +20,7 @@ class TaskDeactivation extends React.Component {
   requestDeactivateChecklist(e) {
     // stop collapsing
     e.stopPropagation()
+
     const { deal, isBackoffice, confirmation, checklist } = this.props
     const { saving } = this.state
 
@@ -42,6 +42,7 @@ class TaskDeactivation extends React.Component {
     }
 
     const type = checklist.is_deactivated ? 'primary' : 'backup'
+
     confirmation({
       message: `Notify office to make this a ${type} offer.`,
       confirmLabel: 'Yes',
@@ -49,7 +50,7 @@ class TaskDeactivation extends React.Component {
     })
   }
 
-  async deactivateChecklist(e) {
+  async deactivateChecklist() {
     const {
       isBackoffice,
       deal,
@@ -71,6 +72,7 @@ class TaskDeactivation extends React.Component {
     if (!isBackoffice) {
       let title = `Notify office to make this a ${newType} offer.`
       const task = await createGenericTask(deal.id, title, checklist.id)
+
       changeNeedsAttention(task.id, true)
 
       notify({
@@ -82,13 +84,14 @@ class TaskDeactivation extends React.Component {
 
       onRequestCloseDropDownMenu()
       this.setState({ saving: false })
+
       return true
     }
 
     try {
       await updateChecklist(deal.id, checklist.id, {
         ...checklist,
-        is_deactivated: checklist.is_deactivated ? false : true
+        is_deactivated: !checklist.is_deactivated
       })
 
       notify({
@@ -97,8 +100,7 @@ class TaskDeactivation extends React.Component {
         dismissible: true,
         dismissAfter: 6000
       })
-
-    } catch(e) {
+    } catch (e) {
       notify({
         title: 'Error!',
         message: 'Can not complete this action. please retry',
@@ -142,13 +144,13 @@ class TaskDeactivation extends React.Component {
       >
         {
           saving ?
-          <span style={{ color }}>
-            <i className="fa fa-spin fa-spinner" /> Saving...
-          </span> :
+            <span style={{ color }}>
+              <i className="fa fa-spin fa-spinner" /> Saving...
+            </span> :
 
-          <span style={{ color }}>
-            {this.getLabel()}
-          </span>
+            <span style={{ color }}>
+              {this.getLabel()}
+            </span>
         }
       </li>
     )
@@ -160,4 +162,5 @@ export default connect(null,
     updateChecklist,
     createGenericTask,
     changeNeedsAttention,
-    notify, confirmation })(TaskDeactivation)
+    notify,
+    confirmation })(TaskDeactivation)

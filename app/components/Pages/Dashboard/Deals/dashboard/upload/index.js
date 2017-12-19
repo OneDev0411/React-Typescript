@@ -67,7 +67,7 @@ class UploadDocument extends React.Component {
         onDrop={(files) => this.onDrop(files)}
         onDragEnter={() => this.setState({ dropzoneActive: true })}
         onDragLeave={() => this.setState({ dropzoneActive: false })}
-        multiple={true}
+        multiple
         accept="application/pdf,image/*"
         style={{ width: '100%' }}
       >

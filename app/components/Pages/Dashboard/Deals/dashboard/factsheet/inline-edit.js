@@ -58,7 +58,7 @@ export default class Editable extends React.Component {
 
     return (
       <span>
-        <ToolTip caption={editable ? null : "This field needs office approval after removing" }>
+        <ToolTip caption={editable ? null : 'This field needs office approval after removing'}>
           <i
             className={cn('fa fa-times-circle ico-remove', {
               hide: !showCTA || !context.value || context.value.length === 0
@@ -67,7 +67,7 @@ export default class Editable extends React.Component {
           />
         </ToolTip>
 
-        <ToolTip caption={editable ? null : "This field needs office approval after changing" }>
+        <ToolTip caption={editable ? null : 'This field needs office approval after changing'}>
           <i className={cn('fa fa-pencil', { hide: !showCTA })} />
         </ToolTip>
       </span>
@@ -77,6 +77,7 @@ export default class Editable extends React.Component {
   getValue() {
     const { context } = this.props
     const value = context.rawValue || context.value || ''
+
     return value.toString()
   }
 
@@ -112,10 +113,10 @@ export default class Editable extends React.Component {
 
         {
           editMode && isStringType ?
-          '' :
-          <ToolTip caption={approved ? null : 'Pending Office Approval'}>
-            <span>{context.value}</span>
-          </ToolTip>
+            '' :
+            <ToolTip caption={approved ? null : 'Pending Office Approval'}>
+              <span>{context.value}</span>
+            </ToolTip>
         }
 
         {

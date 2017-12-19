@@ -24,7 +24,7 @@ export default ({
   return (
     <Modal
       className="deal-form-viewer-modal"
-      show={true}
+      show
       onHide={onClose}
     >
       <Modal.Header>

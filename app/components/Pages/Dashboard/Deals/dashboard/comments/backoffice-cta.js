@@ -32,8 +32,6 @@ function getApproveButtonCaption(status, hasComment) {
 export default ({
   task,
   onSendComment,
-  onDecline,
-  onApprove,
   hasComment,
   isSaving
 }) => {
@@ -47,43 +45,47 @@ export default ({
     <div>
       {
         !isSaving ?
-        <div className="inline">
-          <ToolTip
-            caption={isDeclined ? 'Declined' : 'Decline'}
-          >
-            <span
-              className={cn('cta-btn decline', { isActive: isDeclined })}
-              onClick={() => onSendComment(needs_attention ? false : null, 'Declined')}
+          <div className="inline">
+            <ToolTip
+              caption={isDeclined ? 'Declined' : 'Decline'}
             >
-              <i className="ico fa fa-times" />
-            </span>
-          </ToolTip>
+              <span
+                className={cn('cta-btn decline', { isActive: isDeclined })}
+                onClick={() => onSendComment(needs_attention ? false : null, 'Declined')}
+              >
+                <i className="ico fa fa-times" />
+              </span>
+            </ToolTip>
 
-          <ToolTip
-            caption={isApproved ? 'Approved' : 'Approve'}
-          >
-            <span
-              className={cn('cta-btn approve', { isActive: isApproved })}
-              onClick={() => onSendComment(needs_attention ? false : null, 'Approved')}
+            <ToolTip
+              caption={isApproved ? 'Approved' : 'Approve'}
             >
-              <i className="ico fa fa-check" />
-            </span>
-          </ToolTip>
+              <span
+                className={cn('cta-btn approve', { isActive: isApproved })}
+                onClick={() => onSendComment(needs_attention ? false : null, 'Approved')}
+              >
+                <i className="ico fa fa-check" />
+              </span>
+            </ToolTip>
 
-          <ToolTip
-            caption="Not Reviewed"
-          >
-            <span
-              className={cn('cta-btn no-status', { isActive: isNotReviewed && needs_attention !== true })}
-              onClick={() => onSendComment(needs_attention ? false : null, 'Incomplete')}
+            <ToolTip
+              caption="Not Reviewed"
             >
-              <span className="ico circle" />
-            </span>
-          </ToolTip>
-        </div> :
-        <div className="loading inline">
-          Saving <img src="/static/images/loading-states/three-dots-blue.svg" />
-        </div>
+              <span
+                className={cn('cta-btn no-status', { isActive: isNotReviewed && needs_attention !== true })}
+                onClick={() => onSendComment(needs_attention ? false : null, 'Incomplete')}
+              >
+                <span className="ico circle" />
+              </span>
+            </ToolTip>
+          </div> :
+          <div className="loading inline">
+          Saving
+            <img
+              alt="setting"
+              src="/static/images/loading-states/three-dots-blue.svg"
+            />
+          </div>
       }
 
       <Button

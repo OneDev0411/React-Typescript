@@ -49,7 +49,7 @@ class DealDetails extends React.Component {
           <div className="column deal-info">
             <DealInfo
               deal={deal}
-              showBackButton={true}
+              showBackButton
             />
           </div>
 

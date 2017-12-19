@@ -52,26 +52,24 @@ class Forms extends React.Component {
           <ul>
             {
               _
-              .chain(forms)
-              .filter(form => {
-                return form.name.toLowerCase().includes(filter.toLowerCase())
-              })
-              .map((form, key) => (
-                <li
-                  key={`FORM_ITEM_${form.id}_${key}`}
-                  onClick={() => onSelectForm(form)}
-                  onDoubleClick={() => null}
-                  className={cn({ disabled: creatingForm !== null })}
-                >
-                  { form.name }
+                .chain(forms)
+                .filter(form => form.name.toLowerCase().includes(filter.toLowerCase()))
+                .map((form, key) => (
+                  <li
+                    key={`FORM_ITEM_${form.id}_${key}`}
+                    onClick={() => onSelectForm(form)}
+                    onDoubleClick={() => null}
+                    className={cn({ disabled: creatingForm !== null })}
+                  >
+                    { form.name }
 
-                  {
-                    creatingForm && creatingForm.id === form.id &&
-                    <i className="fa fa-spinner fa-spin" />
-                  }
-                </li>
-              ))
-              .value()
+                    {
+                      creatingForm && creatingForm.id === form.id &&
+                      <i className="fa fa-spinner fa-spin" />
+                    }
+                  </li>
+                ))
+                .value()
             }
           </ul>
         </Modal.Body>

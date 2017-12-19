@@ -18,7 +18,7 @@ const TaskManager = ({
   return (
     <div className="full-width">
       <Upload
-        disableClick={true}
+        disableClick
         deal={deal}
         task={task}
       >

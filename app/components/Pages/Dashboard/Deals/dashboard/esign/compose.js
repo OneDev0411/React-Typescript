@@ -29,11 +29,13 @@ class SendSignatures extends React.Component {
 
   componentDidMount() {
     const { esign } = this.props
+
     this.prefillRoles(esign)
   }
 
   componentWillReceiveProps(nextProps) {
     const { esign } = nextProps
+
     this.prefillRoles(esign)
   }
 
@@ -61,6 +63,7 @@ class SendSignatures extends React.Component {
     // extract roles of selected documents
     deal.checklists.forEach(id => {
       const checklist = checklists[id]
+
       if (checklist.is_terminated || !checklist.allowed_forms) {
         return false
       }
@@ -91,7 +94,6 @@ class SendSignatures extends React.Component {
     const roleNames = this.getFormsRoles()
 
     _.each(deal.roles, item => {
-
       if (roleNames.indexOf(item.role) === -1) {
         return false
       }
@@ -106,7 +108,7 @@ class SendSignatures extends React.Component {
   }
 
   closeForm() {
-    //close form
+    // close form
     this.props.closeEsignWizard()
   }
 
@@ -120,9 +122,7 @@ class SendSignatures extends React.Component {
 
     const subject = this.subject.value
     const message = this.message.value
-    const attachments = esign.attachments.map(id => {
-      return { revision: tasks[id].submission.last_revision }
-    })
+    const attachments = esign.attachments.map(id => ({ revision: tasks[id].submission.last_revision }))
 
     if (_.size(recipients) === 0) {
       return notify({
@@ -165,8 +165,7 @@ class SendSignatures extends React.Component {
 
       // reset recipients
       this.setState({ isSending: false })
-
-    } catch(e) {
+    } catch (e) {
       const isDocusignError = ~~e.status === 412
 
       this.setState({

@@ -6,7 +6,6 @@ export default ({
   deal,
   task
 }) => {
-
   if (!task) {
     return null
   }

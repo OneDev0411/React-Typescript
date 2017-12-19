@@ -31,6 +31,7 @@ class Roles extends React.Component {
 
   getRoleName(role) {
     const name = `${role.legal_prefix || ''} ${role.legal_first_name || ''} ${role.legal_last_name || ''}`.trim()
+
     return name.length > 0 ? name : role.user.display_name
   }
 
@@ -71,7 +72,7 @@ class Roles extends React.Component {
         message: 'Role removed',
         status: 'success'
       })
-    } catch(e) {
+    } catch (e) {
       notify({
         message: 'Can not remove role, try again',
         status: 'error'
@@ -97,44 +98,44 @@ class Roles extends React.Component {
         {
           roles &&
           roles
-          .filter(item => !allowedRoles ? true : allowedRoles.indexOf(item.role) > -1)
-          .map(item =>
-            <div
-              key={item.id}
-              className="item"
-              style={{ cursor: onSelectRole ? 'pointer': 'auto' }}
-              onClick={() => this.onClickRole(item)}
-            >
-              <div className="role-avatar">
-                <UserAvatar
-                  name={this.getRoleName(item)}
-                  image={item.user.profile_image_url}
-                  size={32}
-                  showStateIndicator={false}
-                />
-              </div>
-
-              <div className="name">
-                <div>{this.getRoleName(item)}</div>
-                <div className="role">{ roleName(item.role) }</div>
-              </div>
-
-              <div className="cta">
-                {
-                  deletingRoleId && item.id === deletingRoleId &&
-                  <i className="fa fa-spinner fa-spin" />
-                }
-
-                {
-                  !deletingRoleId &&
-                  <i
-                    onClick={() => this.onRequestRemoveRole(item)}
-                    className="fa fa-delete fa-times"
+            .filter(item => !allowedRoles ? true : allowedRoles.indexOf(item.role) > -1)
+            .map(item =>
+              <div
+                key={item.id}
+                className="item"
+                style={{ cursor: onSelectRole ? 'pointer' : 'auto' }}
+                onClick={() => this.onClickRole(item)}
+              >
+                <div className="role-avatar">
+                  <UserAvatar
+                    name={this.getRoleName(item)}
+                    image={item.user.profile_image_url}
+                    size={32}
+                    showStateIndicator={false}
                   />
-                }
+                </div>
+
+                <div className="name">
+                  <div>{this.getRoleName(item)}</div>
+                  <div className="role">{ roleName(item.role) }</div>
+                </div>
+
+                <div className="cta">
+                  {
+                    deletingRoleId && item.id === deletingRoleId &&
+                    <i className="fa fa-spinner fa-spin" />
+                  }
+
+                  {
+                    !deletingRoleId &&
+                    <i
+                      onClick={() => this.onRequestRemoveRole(item)}
+                      className="fa fa-delete fa-times"
+                    />
+                  }
+                </div>
               </div>
-            </div>
-          )
+            )
         }
 
         <AddRole

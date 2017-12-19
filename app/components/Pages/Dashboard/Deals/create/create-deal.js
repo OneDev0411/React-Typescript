@@ -150,8 +150,7 @@ class CreateDeal extends React.Component {
       }, true)
 
       return OpenDeal(deal.id)
-
-    } catch(e) {
+    } catch (e) {
       // notify user
       notify({
         title: 'Can not create deal',
@@ -191,6 +190,7 @@ class CreateDeal extends React.Component {
   getRoles() {
     const { agents, clients, referrals } = this.state
     const roles = []
+
     _.each(clients, client => roles.push(client))
     _.each(agents, agent => roles.push(agent))
     _.each(referrals, referral => roles.push(referral))
@@ -267,8 +267,8 @@ class CreateDeal extends React.Component {
                 criticalDates={criticalDates}
                 onChangeCriticalDates={(field, value) => this.changeCriticalDates(field, value)}
                 fields={{
-                  'list_date': 'Listing Date',
-                  'expiration_date': 'Listing Expiration'
+                  list_date: 'Listing Date',
+                  expiration_date: 'Listing Expiration'
                 }}
               />
             </div>

@@ -44,35 +44,33 @@ export default class extends React.Component {
         <Modal.Body>
           <Row>
             {
-              this.statusList.map((status, key) => {
-                return (
-                  <Col
-                    key={key}
-                    md={6}
-                    sm={6}
-                    xs={6}
-                    className="vcenter"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => this.setState({ selectedStatus: status })}
+              this.statusList.map((status, key) => (
+                <Col
+                  key={key}
+                  md={6}
+                  sm={6}
+                  xs={6}
+                  className="vcenter"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => this.setState({ selectedStatus: status })}
+                >
+
+                  <span
+                    className={cn('radio', { selected: selectedStatus === status })}
                   >
+                    <i className="fa fa-check" />
+                  </span>
 
-                    <span
-                      className={cn('radio', { selected: selectedStatus === status })}
-                    >
-                      <i className="fa fa-check" />
-                    </span>
+                  <span
+                    className="status"
+                    style={{ background: getStatusColorClass(status) }}
+                  />
 
-                    <span
-                      className="status"
-                      style={{ background: getStatusColorClass(status) }}
-                    />
-
-                    <span className="name">
-                      { status }
-                    </span>
-                  </Col>
-                )
-              })
+                  <span className="name">
+                    { status }
+                  </span>
+                </Col>
+              ))
             }
           </Row>
         </Modal.Body>

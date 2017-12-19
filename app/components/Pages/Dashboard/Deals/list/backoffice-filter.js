@@ -23,10 +23,11 @@ class Filter extends React.Component {
   setFilter(filter) {
     const filters = {}
     const arg = filter === 'All' ? '' : `/filter/${filter}`
+
     browserHistory.push(`/dashboard/deals${arg}`)
 
     // set inbox name
-    filters['__inbox_name__'] = filter
+    filters.__inbox_name__ = filter
 
     // set filters
     this.props.onChangeFilter(filters)
@@ -65,6 +66,7 @@ class Filter extends React.Component {
           {
             tabs.map(tabName => {
               const counter = this.getBadgeCounter(tabName)
+
               if (counter === 0) {
                 return false
               }
@@ -92,7 +94,7 @@ class Filter extends React.Component {
   }
 }
 
-export default connect (({ deals }) => ({
+export default connect(({ deals }) => ({
   deals: deals.list,
   checklists: deals.checklists
 }))(Filter)

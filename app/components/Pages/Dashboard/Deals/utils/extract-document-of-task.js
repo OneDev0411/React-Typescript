@@ -10,10 +10,12 @@ export default function (deal, task) {
 
   // get or create pdfFile object
   const file = submission ? submission.file : getPdfFile(task)
+
   file.type = 'pdf'
 
   // create download url
-  const fileType = submission ? 'submission': 'raw'
+  const fileType = submission ? 'submission' : 'raw'
+
   file.downloadUrl = `/api/deals/pdf/download/${deal.id}/${task.id}/${fileType}`
 
   return file

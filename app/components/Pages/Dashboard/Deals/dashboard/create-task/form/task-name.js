@@ -38,8 +38,7 @@ class TaskName extends React.Component {
 
       // upload file
       setUploadFiles(files, deal, task)
-
-    } catch(e) {
+    } catch (e) {
       // todo
     } finally {
       this.setState({

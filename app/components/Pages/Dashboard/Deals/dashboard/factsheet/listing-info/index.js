@@ -43,6 +43,7 @@ const getValue = (deal, field) => {
 
   if (field.context) {
     let context = deal[field.context]
+
     value = context ? context[field.contextField] : null
   } else {
     value = Deal.get.field(deal, field.key)

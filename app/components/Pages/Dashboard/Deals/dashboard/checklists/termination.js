@@ -4,7 +4,6 @@ import { addNotification as notify } from 'reapop'
 import { updateChecklist } from '../../../../../../store_actions/deals'
 
 class TaskTermination extends React.Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -33,10 +32,11 @@ class TaskTermination extends React.Component {
     try {
       await updateChecklist(deal.id, checklist.id, {
         ...checklist,
-        is_terminated: checklist.is_terminated ? false : true
+        is_terminated: !checklist.is_terminated
       })
 
       const action = checklist.is_terminated ? 'activated' : 'terminated'
+
       notify({
         title: action,
         message: `The checklist has been ${action}`,
@@ -44,8 +44,7 @@ class TaskTermination extends React.Component {
         dismissible: true,
         dismissAfter: 6000
       })
-
-    } catch(e) {
+    } catch (e) {
       notify({
         title: 'Error!',
         message: 'Can not complete this action. please retry',
@@ -74,16 +73,16 @@ class TaskTermination extends React.Component {
       >
         {
           saving ?
-          <span style={{ color }}>
-            {
-              checklist.is_terminated ?
-              <span><i className="fa fa-spin fa-spinner" /> Activating...</span> :
-              <span><i className="fa fa-spin fa-spinner" /> Terminating...</span>
-            }
-          </span> :
-          <span style={{ color }}>
-            { checklist.is_terminated ? 'Active' : 'Terminate' }
-          </span>
+            <span style={{ color }}>
+              {
+                checklist.is_terminated ?
+                  <span><i className="fa fa-spin fa-spinner" /> Activating...</span> :
+                  <span><i className="fa fa-spin fa-spinner" /> Terminating...</span>
+              }
+            </span> :
+            <span style={{ color }}>
+              { checklist.is_terminated ? 'Active' : 'Terminate' }
+            </span>
         }
       </li>
     )

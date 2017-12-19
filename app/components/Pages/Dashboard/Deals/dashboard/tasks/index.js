@@ -16,7 +16,6 @@ const List = ({
   setSelectedTask,
   isBackOffice
 }) => {
-
   if (!checklist) {
     return false
   }
@@ -42,43 +41,43 @@ const List = ({
           {
             sortedTasks &&
             sortedTasks
-            .map((id, key) => {
-              const task = tasks[id]
-              const room = rooms[task.room.id] || task.room
-              const hasStatus = task.review !== null || task.needs_attention === true
+              .map((id, key) => {
+                const task = tasks[id]
+                const room = rooms[task.room.id] || task.room
+                const hasStatus = task.review !== null || task.needs_attention === true
 
-              return (
-                <div
-                  key={`TASK_${id}`}
-                  onClick={() => setSelectedTask(task)}
-                  className={cn('task', {
-                    'active': selectedTask && selectedTask.id === id,
-                    'no-status': !hasStatus
-                  })}
-                >
-                  <div className="icon" />
-                  <div className="title">
-                    { task.title }
-                  </div>
-
-                  {
-                    hasStatus &&
-                    <TaskStatus
-                      task={task}
-                    />
-                  }
-
-                  {
-                    room.new_notifications > 0 &&
-                    <div className="notification">
-                      <img src="/static/images/deals/comments.svg" />
-                      <span>{room.new_notifications}</span>
+                return (
+                  <div
+                    key={`TASK_${id}`}
+                    onClick={() => setSelectedTask(task)}
+                    className={cn('task', {
+                      active: selectedTask && selectedTask.id === id,
+                      'no-status': !hasStatus
+                    })}
+                  >
+                    <div className="icon" />
+                    <div className="title">
+                      { task.title }
                     </div>
-                  }
 
-                </div>
-              )
-            })
+                    {
+                      hasStatus &&
+                      <TaskStatus
+                        task={task}
+                      />
+                    }
+
+                    {
+                      room.new_notifications > 0 &&
+                      <div className="notification">
+                        <img src="/static/images/deals/comments.svg" />
+                        <span>{room.new_notifications}</span>
+                      </div>
+                    }
+
+                  </div>
+                )
+              })
           }
         </ReactCSSTransitionGroup>
 

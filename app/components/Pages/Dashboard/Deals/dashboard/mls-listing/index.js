@@ -34,6 +34,7 @@ class MlsListing extends React.Component {
 
   delete() {
     const listing = { id: null }
+
     this.onSelectListing(listing)
   }
 
@@ -47,7 +48,7 @@ class MlsListing extends React.Component {
 
     try {
       await updateListing(deal.id, listing.id)
-    } catch(e) {
+    } catch (e) {
       console.log(e)
     }
 

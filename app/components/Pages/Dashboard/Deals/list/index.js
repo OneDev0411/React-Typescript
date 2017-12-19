@@ -29,6 +29,7 @@ class DealsDashboard extends React.Component {
 
   refetchDeals = () => {
     const { getDeals, user } = this.props
+
     getDeals(user, hasUserAccess(user, 'BackOffice'), false)
   }
 
@@ -83,5 +84,5 @@ export default connect(({ deals, user }) => ({
   deals: deals.list,
   isBackOffice: deals.backoffice,
   user,
-  spinner: deals.spinner,
+  spinner: deals.spinner
 }), { getDeals, searchAllDeals })(DealsDashboard)

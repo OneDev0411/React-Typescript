@@ -14,6 +14,7 @@ class Page extends React.Component {
 
   componentDidMount() {
     const { pageNumber } = this.props
+
     this.renderPage(pageNumber)
   }
 
@@ -23,8 +24,10 @@ class Page extends React.Component {
     const viewport = page.getViewport(1)
 
     let height = containerHeight
+
     if (containerHeight.toString().includes('%')) {
       const percent = ~~containerHeight.slice(0, -1)
+
       height = ~~((percent * window.innerHeight) / 100)
     }
 
@@ -50,6 +53,7 @@ class Page extends React.Component {
     }
 
     const context = canvas.getContext('2d')
+
     canvas.width = width
     canvas.height = height
 

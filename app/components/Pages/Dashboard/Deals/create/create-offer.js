@@ -21,6 +21,7 @@ import hasPrimaryOffer from '../utils/has-primary-offer'
 class CreateOffer extends React.Component {
   constructor(props) {
     super(props)
+
     const dealHasPrimaryOffer = hasPrimaryOffer(props.deal)
 
     this.state = {
@@ -68,6 +69,7 @@ class CreateOffer extends React.Component {
   getRoles() {
     const { enderType, agents, clients, closingOfficers, referrals } = this.state
     const roles = []
+
     _.each(clients, client => roles.push(client))
     _.each(agents, agent => roles.push(agent))
     _.each(closingOfficers, co => roles.push(co))
@@ -138,7 +140,7 @@ class CreateOffer extends React.Component {
       })
 
       this.backToDeal()
-    } catch(e) {
+    } catch (e) {
       notify({
         title: 'Could not create offer',
         message: e.response && e.response.body ? e.response.body.message : null,
@@ -154,12 +156,14 @@ class CreateOffer extends React.Component {
     let max = 0
 
     const { deal, checklists } = this.props
+
     if (!deal.checklists) {
       return max
     }
 
     deal.checklists.forEach(id => {
       const list = checklists[id]
+
       if (list.order > max) {
         max = list.order
       }
@@ -178,6 +182,7 @@ class CreateOffer extends React.Component {
 
   backToDeal() {
     const { deal } = this.props
+
     browserHistory.push(`/dashboard/deals/${deal.id}`)
   }
 
@@ -254,13 +259,13 @@ class CreateOffer extends React.Component {
                 criticalDates={criticalDates}
                 onChangeCriticalDates={(field, value) => this.changeCriticalDates(field, value)}
                 fields={{
-                  'contract_date': 'Offer Date',
-                  'option_period': 'Option Date',
-                  'financing_due': 'Financing Due',
-                  'title_due': 'Title Work Due',
-                  't47_due': 'Survey Due',
-                  'closing_date': 'Closing',
-                  'possession_date': 'Possession'
+                  contract_date: 'Offer Date',
+                  option_period: 'Option Date',
+                  financing_due: 'Financing Due',
+                  title_due: 'Title Work Due',
+                  t47_due: 'Survey Due',
+                  closing_date: 'Closing',
+                  possession_date: 'Possession'
                 }}
               />
             </div>

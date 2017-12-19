@@ -32,7 +32,7 @@ export default ({
             <MenuItem
               key={`MENU_ITEM_${key}`}
               onClick={() => onChangeDealType(item)}
-              eventKey={key+1}
+              eventKey={key + 1}
             >
               <RadioButton
                 selected={selectedType === item}

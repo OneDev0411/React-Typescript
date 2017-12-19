@@ -14,6 +14,7 @@ export default class AddRecipients extends React.Component {
 
   toggleRolesModal(e) {
     const c = e ? e.target.className : null
+
     if (c && c.includes('recp')) {
       return false
     }
@@ -23,6 +24,7 @@ export default class AddRecipients extends React.Component {
 
   onAddRecipient(role) {
     const { onAddRecipient } = this.props
+
     this.toggleRolesModal()
     onAddRecipient(role)
   }

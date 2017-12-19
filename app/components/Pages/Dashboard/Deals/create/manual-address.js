@@ -5,6 +5,7 @@ import Deal from '../../../../../models/Deal'
 export default class extends React.Component {
   constructor(props) {
     super(props)
+
     const { deal } = props
 
     this.state = {

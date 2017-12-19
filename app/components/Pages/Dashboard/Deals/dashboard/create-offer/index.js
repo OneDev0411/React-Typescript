@@ -4,7 +4,6 @@ import { Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 
 export default ({ deal }) => {
-
   if (deal.deal_type !== 'Selling') {
     return false
   }

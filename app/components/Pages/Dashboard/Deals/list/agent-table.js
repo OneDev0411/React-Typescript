@@ -134,7 +134,7 @@ class AgentTable extends BaseTable {
       names.push(role.user.display_name)
     )
 
-    return ': ' + names.join(', ')
+    return `: ${names.join(', ')}`
   }
 
   /**
@@ -149,12 +149,14 @@ class AgentTable extends BaseTable {
 
     deal.checklists.forEach(id => {
       const checklist = this.props.checklists[id]
+
       if (!checklist.tasks || checklist.tasks.length === 0) {
         return
       }
 
       checklist.tasks.forEach(task_id => {
         const task = this.props.tasks[task_id]
+
         if (!task.review || task.review.status === 'Declined') {
           counter += 1
         }

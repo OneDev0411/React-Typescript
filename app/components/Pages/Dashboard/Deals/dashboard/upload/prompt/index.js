@@ -25,8 +25,9 @@ class UploadModal extends React.Component {
   async uploadFile(roomId, file) {
     try {
       const response = await ChatModel.uploadAttachment(roomId, file)
+
       return response.body.data
-    } catch(e) {
+    } catch (e) {
       return null
     }
   }
@@ -78,7 +79,7 @@ class UploadModal extends React.Component {
     const filename = properties.fileTitle || fileObject.name
 
     // set status
-    this.props.setUploadAttributes(id, { status: STATUS_UPLOADING})
+    this.props.setUploadAttributes(id, { status: STATUS_UPLOADING })
 
     // upload file
     const file = await this.uploadFile(task.room.id, fileObject, filename)
@@ -116,8 +117,9 @@ class UploadModal extends React.Component {
   async uploadFile(roomId, file, fileName) {
     try {
       const response = await ChatModel.uploadAttachment(roomId, file, fileName)
+
       return response.body.data
-    } catch(e) {
+    } catch (e) {
       return null
     }
   }
@@ -166,6 +168,7 @@ class UploadModal extends React.Component {
                 const selectedTask = this.getSelectedTask(file)
                 const isUploading = file.properties.status === STATUS_UPLOADING
                 const isUploaded = file.properties.status === STATUS_UPLOADED
+
                 fileCounter += 1
 
                 return (

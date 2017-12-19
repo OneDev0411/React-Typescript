@@ -11,9 +11,9 @@ function getRoles(agents, side) {
     return _.size(agents) === 0 ? ['BuyerAgent'] : ['CoBuyerAgent']
   } else if (side === SELLING) {
     return _.size(agents) === 0 ? ['SellerAgent'] : ['CoSellerAgent']
-  } else {
-    return []
   }
+
+  return []
 }
 
 export default ({

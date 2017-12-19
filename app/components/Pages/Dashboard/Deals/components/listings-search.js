@@ -20,7 +20,10 @@ export default ({
       {
         _.size(listview) === 0 &&
         <div className="empty-state">
-          <img src="/static/images/deals/home-icon.svg" />
+          <img
+            alt="home"
+            src="/static/images/deals/home-icon.svg"
+          />
           No matches
         </div>
       }
@@ -28,6 +31,7 @@ export default ({
       {
         _.map(listview, (item, key) => {
           const c = item.address_components
+
           return (
             <Row
               key={`PLACE_${key}`}

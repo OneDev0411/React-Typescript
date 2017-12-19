@@ -32,35 +32,36 @@ class Checklist extends React.Component {
         <PanelGroup>
           {
             _
-            .chain(deal.checklists)
-            .sortBy(id => {
-              const list = checklists[id]
-              const isTerminated = list.is_terminated
+              .chain(deal.checklists)
+              .sortBy(id => {
+                const list = checklists[id]
+                const isTerminated = list.is_terminated
 
-              if (isTerminated) {
-                terminatedChecklistsCount += 1
-                return 100000
-              }
+                if (isTerminated) {
+                  terminatedChecklistsCount += 1
 
-              return list.order
-            })
-            .filter(id =>
-              showTerminatedChecklists ? true : (checklists[id].is_terminated === false)
-            )
-            .map(id =>
-              <Tasks
-                key={id}
-                deal={deal}
-                checklist={checklists[id]}
-              />
-            )
-            .value()
+                  return 100000
+                }
+
+                return list.order
+              })
+              .filter(id =>
+                showTerminatedChecklists ? true : (checklists[id].is_terminated === false)
+              )
+              .map(id =>
+                <Tasks
+                  key={id}
+                  deal={deal}
+                  checklist={checklists[id]}
+                />
+              )
+              .value()
           }
         </PanelGroup>
 
         <button
           className="show-terminated-btn"
-          style={{ display: terminatedChecklistsCount > 0 ? 'block': 'none' }}
+          style={{ display: terminatedChecklistsCount > 0 ? 'block' : 'none' }}
           onClick={() => this.toggleDisplayTerminatedChecklists()}
         >
           { showTerminatedChecklists ? 'Hide' : 'Show' } Terminated

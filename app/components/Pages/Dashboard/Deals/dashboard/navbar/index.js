@@ -24,6 +24,7 @@ class NavBar extends React.Component {
 
   onDrop(files) {
     const { deal } = this.props
+
     this.props.setUploadFiles(files, deal, null)
   }
 
@@ -60,11 +61,11 @@ class NavBar extends React.Component {
           />
         </div>
 
-         <Dropzone
+        <Dropzone
           disableClick
           ref={(node) => this.dropzone = node}
           onDrop={(files) => this.onDrop(files)}
-          multiple={true}
+          multiple
           accept="application/pdf,image/*"
           style={{ display: 'none' }}
         />
