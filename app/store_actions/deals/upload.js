@@ -9,6 +9,7 @@ export function setUploadFiles(files, deal, task) {
   // created by browser shouldn't change, otherwise upload breaks
   files.forEach(file => {
     const uniqId = uuid()
+
     indexedFiles[uniqId] = {
       id: uniqId,
       fileObject: file,

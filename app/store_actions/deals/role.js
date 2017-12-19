@@ -22,8 +22,9 @@ export function createRoles(deal_id, roles) {
   return async (dispatch) => {
     try {
       const deal = await Deals.createRole(deal_id, roles)
+
       dispatch(updateRoles(deal.id, deal.roles))
-    } catch(e) {
+    } catch (e) {
       throw e
     }
   }
@@ -34,7 +35,7 @@ export function deleteRole(deal_id, role_id) {
     try {
       await Deals.deleteRole(deal_id, role_id)
       dispatch(roleDeleted(deal_id, role_id))
-    } catch(e) {
+    } catch (e) {
       throw e
     }
   }

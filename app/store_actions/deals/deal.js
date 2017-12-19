@@ -60,6 +60,7 @@ export function archiveDeal(dealId) {
 export function updateListing(dealId, listingId) {
   return async (dispatch) => {
     const deal = await Deal.updateListing(dealId, listingId)
+
     dispatch(updateDeal(deal))
   }
 }
@@ -89,6 +90,7 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
       const data = await Deal.getAll(user, backoffice)
 
       dispatch({ type: types.HIDE_SPINNER })
+
       if (data.length === 0) {
         return dispatch({ type: types.NO_DEAL })
       }

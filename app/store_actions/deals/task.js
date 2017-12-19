@@ -77,6 +77,7 @@ export function bulkSubmit(dealId, tasksList) {
     const data = await Deal.bulkSubmit(dealId, tasksList)
 
     const { entities } = normalize(data, schema.taskSchema)
+
     dispatch(tasksUpdated(entities.tasks))
   }
 }
@@ -91,6 +92,7 @@ export function deleteTask(checklistId, taskId) {
 export function updateTask(taskId, attributes) {
   return async (dispatch) => {
     const task = await Deal.updateTask(taskId, attributes)
+
     dispatch(taskUpdated(task))
   }
 }
@@ -108,7 +110,9 @@ export function createFormTask(dealId, form, title, checklist) {
 
   return async (dispatch) => {
     const task = await Deal.createTask(dealId, { title, status, task_type, checklist, form })
+
     dispatch(addNewTask(dealId, checklist, task))
+
     return task
   }
 }
@@ -118,8 +122,10 @@ export function createGenericTask(dealId, title, checklist) {
   const task_type = 'Generic'
 
   return async (dispatch) => {
-    const task = await Deal.createTask(dealId, { title, status, task_type, checklist})
+    const task = await Deal.createTask(dealId, { title, status, task_type, checklist })
+
     dispatch(addNewTask(dealId, checklist, task))
+
     return task
   }
 }
