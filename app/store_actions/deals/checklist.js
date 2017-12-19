@@ -28,9 +28,9 @@ export function updateChecklist(dealId, checklistId, attributes) {
   }
 }
 
-export function addContract(dealId, name, order, isBackup, propertyType) {
+export function createOffer(dealId, name, order, isBackup, propertyType) {
   return async (dispatch) => {
-    const data = await Deal.addContract(dealId, name, order, isBackup, propertyType)
+    const data = await Deal.createOffer(dealId, name, order, isBackup, propertyType)
 
     const { entities } = normalize(data, schema.checklistSchema)
     const { checklists, tasks } = entities

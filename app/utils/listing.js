@@ -1,5 +1,4 @@
-import helpers from './helpers'
-
+const ONE_ACRE_TO_SQUARE_METERS = 4046.86
 const ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT = 10.7639
 
 export const getStatusColor = status => {
@@ -52,6 +51,9 @@ export const getStatusColorClass = status => {
   }
 }
 
+export const metersToAcres = metre => metre / ONE_ACRE_TO_SQUARE_METERS
+export const acresToMeters = acres => acres * ONE_ACRE_TO_SQUARE_METERS
+
 export const metersToFeet = metre => metre * ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
 
 export const feetToMeters = foot => foot / ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
@@ -60,9 +62,9 @@ export const localAddress = address =>
   `${address.street_number} ${address.street_name} ST ${address.unit_number}`
 
 export const addressTitle = address =>
-  `${address.street_number} ${address.street_name} ${address.street_suffix} ${address.unit_number
-    ? `Unit ${address.unit_number}`
-    : ''}`
+  `${address.street_number} ${address.street_name} ${address.street_suffix} ${
+    address.unit_number ? `Unit ${address.unit_number}` : ''
+  }`
 
 export const getDOM = dom => Math.floor(dom)
 // return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
@@ -72,10 +74,12 @@ export const getSmallPrice = price => {
     .toFixed(2)
     .replace(/[.,]00$/, '')
   let letter = 'k'
+
   if (price_small > 1000) {
     price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
     letter = 'm'
   }
+
   return price_small + letter
 }
 

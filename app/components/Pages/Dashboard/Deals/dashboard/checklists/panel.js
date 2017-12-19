@@ -51,11 +51,14 @@ class ChecklistPanel extends React.Component {
               <span className="p-title">
                 { checklist.title }
               </span>
+            </div>
 
+            <div className="s-label">
               <Labels
                 checklist={checklist}
               />
             </div>
+
 
             {
               _.filter(actions, available => available).length > 0 &&

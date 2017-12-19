@@ -96,7 +96,17 @@ class FormEdit extends React.Component {
    *
    */
   onGetValues(data) {
-    this.saveForm(data)
+    const { task } = this.props
+    const { saving } = this.state
+
+    if (!task || saving) {
+      return false
+    }
+
+    this.setState({
+      saving: true
+    }, () => this.saveForm(data))
+
   }
 
   /**
@@ -148,21 +158,8 @@ class FormEdit extends React.Component {
    *
    */
   async saveForm(values) {
-    const {
-      saveSubmission,
-      task,
-      notify,
-      deal
-    } = this.props
-
-    const { incompleteFields, saving } = this.state
-
-    if (!task || saving) {
-      return false
-    }
-
-    // show saving
-    this.setState({ saving: true })
+    const { saveSubmission, task, notify, deal } = this.props
+    const { incompleteFields } = this.state
 
     const status = incompleteFields.length === 0 ? 'Fair' : 'Draft'
 

@@ -5,6 +5,7 @@ import { obiectPropsValueToArray } from '../../../../../../../../store_actions/l
 import toggleAll from '../../../../../../../../store_actions/listings/search/filters/toggle-all'
 
 import Label from './Label'
+
 const selector = formValueSelector('filters')
 
 const arraysIsSame = (array1, array2) =>
@@ -13,17 +14,10 @@ const arraysIsSame = (array1, array2) =>
   array1.length === array2.length &&
   array1.every((element, index) => element === array2[index])
 
-const Tags = ({
-  name,
-  label,
-  fields,
-  selectAllValue,
-  selectedTags,
-  toggleAll
-}) => (
+const Tags = ({ name, label, fields, selectAllValue, selectedTags, toggleAll }) => (
   <div style={{ marginBottom: '3rem' }}>
     <div className="c-filters__tags__header clearfix">
-      <strong className="c-filters__tags__title">{label}</strong>
+      <span className="c-filters__tags__title">{label}</span>
       <div className="c-filters__tags__select-all">
         <label htmlFor={`select-all-${name}`} className="c-filters-tag">
           <input
@@ -45,6 +39,7 @@ const Tags = ({
       {Object.keys(fields).map(field => {
         const value = fields[field]
         const id = `${name}__${field}`
+
         return (
           <label key={id} htmlFor={id} className="c-filters__tag">
             <Field

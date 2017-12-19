@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
-import ReactTooltip from 'react-tooltip'
+import ToolTip from '../components/tooltip'
 import Deal from '../../../../../models/Deal'
 
 const FILTER_ACTIVE = [
@@ -106,29 +106,28 @@ class Filter extends React.Component {
 
     return (
       <div>
-        <ReactTooltip
-          place="top"
-          className="deal-filter--tooltip"
-          multiline
-        />
-
         <ul className="filter">
           {
             _.map(filters, (fn, filter) =>
-              <li
+              <ToolTip
                 key={`FILTER_${filter}`}
-                className={filter === active ? 'active' : ''}
-                onClick={() => this.setFilter(filter)}
-                data-tip={this.getFilterTabTooltip(filter)}
+                multiline
+                caption={this.getFilterTabTooltip(filter)}
+                placement="bottom"
               >
-                <span className="title">
-                  { filter }
-                </span>
+                <li
+                  className={filter === active ? 'active' : ''}
+                  onClick={() => this.setFilter(filter)}
+                >
+                  <span className="title">
+                    { filter }
+                  </span>
 
-                <span className="badge counter">
-                  { this.getBadgeCounter(filter) }
-                </span>
-              </li>
+                  <span className="badge counter">
+                    { this.getBadgeCounter(filter) }
+                  </span>
+                </li>
+              </ToolTip>
             )
           }
         </ul>

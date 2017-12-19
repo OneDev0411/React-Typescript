@@ -1,21 +1,13 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
-const router = require('koa-router')()
-
 import Crypto from '../../../server/util/crypto'
-import helpers from '../../../app/utils/helpers'
+
+const router = require('koa-router')()
 
 const app = new Koa()
 
 router.post('/create-password', bodyParser(), async (ctx, next) => {
-  const {
-    email,
-    new_email,
-    phone_number,
-    token,
-    password,
-    agent
-  } = ctx.request.body
+  const { email, new_email, phone_number, token, password, agent } = ctx.request.body
 
   const data = {
     shadow_token: token,

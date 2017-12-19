@@ -13,11 +13,12 @@ const properties = [
 
 export default ({
   selectedType,
-  onChangeDealType
+  onChangeDealType,
+  display
 }) => (
   <div className="form-section deal-type">
     <div className="hero">
-      What type of deal is this? <span className="required">*</span>
+      What is the checklist type? <span className="required">*</span>
     </div>
 
     <Dropdown id="deal-create-type-dropdown">

@@ -1,0 +1,96 @@
+.modal-deal-bulk-submit {
+  .modal-content {
+    border: none;
+  }
+
+  .modal-header {
+    @extend %deal-modal-header;
+  }
+
+  .modal-body {
+    max-height: 450px;
+    overflow: auto;
+    padding: 0;
+
+    .checklist {
+      .ch-title {
+        height: 32px;
+        line-height: 32px;
+        vertical-align: middle;
+        padding: 0 15px;
+        background-color: #eff5fa;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #1d364b;
+      }
+
+      .empty-state {
+        padding: 20px 0;
+        font-weight: 400;
+        text-align: center;
+        color: #8da2b5;
+      }
+    }
+
+    .task {
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 40px;
+      padding: 0 15px;
+      box-shadow: 0 1px 1px 0 #e9eef2;
+      font-size: 14px;
+      color: #1d364b;
+      cursor: pointer;
+
+      .icon {
+        width: 5%;
+      }
+
+      .title {
+        width: 75%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .status {
+        position: absolute;
+        top: 12px;
+        right: 2px;
+        color: #fff;
+        margin-right: 10px;
+
+        @extend %status-colors;
+      }
+    }
+  }
+
+  .modal-footer {
+    span {
+      font-size: 14px;
+      font-weight: 500;
+      color: #8da2b5;
+    }
+
+    .deal-button {
+      min-width: 100px;
+      height: 33px;
+      line-height: 17px;
+      background-color: #2196f3;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      margin-left: 10px;
+
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        background-color: #197dcd;
+      }
+    }
+  }
+}

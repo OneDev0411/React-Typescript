@@ -9,6 +9,7 @@ import backoffice from './backoffice'
 import upload from './upload'
 import splitter from './pdf-splitter'
 import error from './error'
+import spinner from './spinner'
 
 export default combineReducers({
   list,
@@ -20,5 +21,6 @@ export default combineReducers({
   selectedTask,
   upload,
   splitter,
-  error
+  error,
+  spinner
 })

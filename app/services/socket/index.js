@@ -12,7 +12,6 @@ const socket = io(config.socket.server, {
 })
 
 export default class Socket {
-
   /**
    * socket authentication status
    */
@@ -40,7 +39,7 @@ export default class Socket {
     window.socket.on('reconnect', this.onReconnect.bind(this))
     window.socket.on('disconnect', this.onReconnecting.bind(this))
 
-    window.addEventListener('online',  this.onReconnect.bind(this))
+    window.addEventListener('online', this.onReconnect.bind(this))
     window.addEventListener('offline', this.onInternetOffline.bind(this))
 
     // bind ping
@@ -53,11 +52,11 @@ export default class Socket {
   static authenticate(user) {
     if (!user || !user.access_token) {
       console.error('Can not authenticate user socket')
+
       return false
     }
 
     socket.emit('Authenticate', user.access_token, (err, user) => {
-
       if (err || !user) {
         return false
       }
@@ -99,7 +98,8 @@ export default class Socket {
    * on ping
    */
   onPing(callback) {
-    if (!callback) return false
+    if (!callback) { return false }
+
     callback(null, new Date())
   }
 }

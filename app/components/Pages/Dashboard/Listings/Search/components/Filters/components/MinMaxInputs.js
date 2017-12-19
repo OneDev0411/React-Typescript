@@ -1,13 +1,19 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { Field } from 'redux-form'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import Label from './Label'
+import { toNumber } from '../../../../../../../../utils/helpers'
 
-const turnToNumber = value => (value ? Number(value.replace(/[^0-9]/g, '')) : null)
+const turnToNumber = value => {
+  if (!value || value == null) {
+    return null
+  }
+
+  return typeof value === 'number' ? value : toNumber(value)
+}
 
 const renderField = ({
   type,
@@ -18,9 +24,9 @@ const renderField = ({
   meta: { touched, error, warning }
 }) => (
   <div
-    className={`c-min-max-inputs__${input.name.indexOf('min') === 0
-      ? 'min'
-      : 'max'}`}
+    className={`c-min-max-inputs__${
+      input.name.indexOf('min') === 0 ? 'min' : 'max'
+    }`}
   >
     <label htmlFor={input.name} className="c-min-max-inputs__label">
       {label}
@@ -38,7 +44,6 @@ const renderField = ({
 const MinMaxInputs = ({
   name,
   label,
-  formatHandler,
   humanNumber,
   onChangeMin,
   validateMin = [],
@@ -46,7 +51,9 @@ const MinMaxInputs = ({
   validateMinValue,
   placeholder = 'Any',
   warnMin,
-  warnMax
+  warnMax,
+  formatHandler = v => v,
+  normalizeHandler = v => v || null
 }) => {
   const minName = `minimum_${name}`
   const maxName = `maximum_${name}`
@@ -64,7 +71,7 @@ const MinMaxInputs = ({
           validate={validateMin}
           format={formatHandler}
           placeholder={placeholder}
-          normalize={v => v || null}
+          normalize={normalizeHandler}
           onChange={(e, value, nextValue) => onChangeMin(value)}
           className="c-min-max-inputs__field"
         />
@@ -77,7 +84,7 @@ const MinMaxInputs = ({
           warn={warnMax}
           format={formatHandler}
           placeholder={placeholder}
-          normalize={v => v || null}
+          normalize={normalizeHandler}
           validate={[...validateMax, validateMinValue]}
           className="c-min-max-inputs__field"
         />
@@ -87,7 +94,6 @@ const MinMaxInputs = ({
 }
 
 export default compose(
-  pure,
   withState('minimumValue', 'setMinimumValue', 0),
   withHandlers({
     onChangeMin: ({ setMinimumValue }) => value => {
@@ -95,9 +101,9 @@ export default compose(
     },
     validateMinValue: ({ minimumValue, humanNumber }) => value =>
       value && minimumValue && turnToNumber(value) < minimumValue
-        ? `Must be minimum ${humanNumber
-          ? minimumValue.toLocaleString()
-          : minimumValue}`
+        ? `Must be minimum ${
+          humanNumber ? minimumValue.toLocaleString() : minimumValue
+        }`
         : undefined
   })
 )(MinMaxInputs)

@@ -19,13 +19,13 @@ const table = [
     canEdit: (isBO) => isBO
   }, {
     key: 'contract_date',
-    name: 'Contract Date',
-    alias: 'Con.',
+    name: 'Offer Date',
+    alias: 'Off.',
     fieldType: 'date',
     canEdit: (isBO) => isBO
   }, {
     key: 'option_period',
-    name: 'Option Period',
+    name: 'Option Ending',
     alias: 'Opt.',
     fieldType: 'date',
     canEdit: (isBO) => isBO
@@ -66,7 +66,7 @@ const table = [
  * parse date to unix time
  */
 const parseDate = (date) => {
-  return moment.unix(date)
+  return moment.unix(date).utc()
 }
 
 /**
@@ -122,22 +122,6 @@ const getNextDateField = (deal) => {
   }
 }
 
-const getLabel = (deal, field, ctx) => {
-  const nextDate = getNextDateField(deal)
-
-  return (
-    <div>
-      <i
-        className={cn('fa fa-circle', 'status', ctx.status, {
-          next: nextDate && nextDate.name === field.key
-        })}
-      />
-
-      { field.name }
-    </div>
-  )
-}
-
 const getValue = (deal, field) => {
   return getDate(deal, field.key)
 }
@@ -148,12 +132,11 @@ const CriticalDates = ({
 }) => (
   <div className="deal-info-section">
     <Items
-      title="Critical Dates"
+      title="CRITICAL DATES"
       showTitle={showTitle}
       table={table}
       deal={deal}
       getValue={getValue}
-      getLabel={getLabel}
     />
   </div>
 )

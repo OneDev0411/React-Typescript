@@ -4,26 +4,28 @@
 
 %deal-edit-form {
   position: fixed;
-  left: 70px;
+  left: 0;
   right: 0;
   top: 0;
-  // z-index: 102;
+  z-index: 101;
   bottom: 0;
   background: #fff;
 
   .header {
-    height: 66px;
-    line-height: 66px;
+    height: $deal-dashboard-header-height;
+    line-height: 55px;
     vertical-align: middle;
     background-color: #ffffff;
-    padding: 0 20px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     margin-left: 0;
     margin-right: 0;
 
     .exit {
+      margin-left: 8px;
       width: 34px;
       height: 34px;
+      font-weight: 600;
+      font-size: 16px;
     }
 
     .name {
@@ -35,15 +37,18 @@
       color: #000000;
     }
 
-    .incomplete-fields {
-      margin-right: 15px;
-      color: gray;
-    }
-
     .btns {
       text-align: right;
       .save {
+        background-color: #2196f3;
+        border-color: #2196f3;
+        color: #fff;
         min-width: 100px;
+
+        &:hover {
+          color: #2196f3;
+          background-color: #fff;
+        }
       }
     }
   }

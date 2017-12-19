@@ -54,6 +54,11 @@ $toolBarHeight: 60px;
 }
 
 #popover-brand-user-avatar {
+  .popover-title{
+    .sub-title {
+      margin: 10px 0 0
+    }
+  }
   .row-container {
     margin-top: 4px;
     cursor: pointer;

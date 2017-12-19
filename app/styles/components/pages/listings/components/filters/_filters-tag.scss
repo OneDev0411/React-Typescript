@@ -34,6 +34,7 @@ $md-checkmark-color: #fff;
   padding-left: $md-checkbox-size + 5px;
   font-weight: normal;
   color: #9b9b9b;
+  cursor: pointer;
 
   &:before,
   &:after {

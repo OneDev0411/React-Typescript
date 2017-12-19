@@ -1,17 +1,34 @@
 import React from 'react'
 import { Modal, Button, FormControl } from 'react-bootstrap'
+import Deal from '../../../../../models/Deal'
 
 export default class extends React.Component {
   constructor(props) {
     super(props)
+    const { deal } = props
+
     this.state = {
-      street_number: '',
-      street_name: '',
-      unit_number: '',
-      city: '',
-      state: '',
-      postal_code: ''
+      street_number: this.getAddressField('street_number'),
+      street_name: this.getAddressField('street_name'),
+      unit_number: this.getAddressField('unit_number'),
+      city: this.getAddressField('city'),
+      state: this.getAddressField('state'),
+      postal_code: this.getAddressField('postal_code')
     }
+  }
+
+  getAddressField(field) {
+    const { deal } = this.props
+
+    if (!deal) {
+      return ''
+    }
+
+    if (deal.listing) {
+      return deal.mls_context[field]
+    }
+
+    return Deal.get.field(deal, field)
   }
 
   onAdd() {
@@ -37,7 +54,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { show, saving } = this.props
+    const { show, deal, saving } = this.props
 
     const {
       street_number,
@@ -109,7 +126,7 @@ export default class extends React.Component {
                 onClick={() => this.onAdd()}
                 disabled={saving || !this.isValidated()}
               >
-                Add
+                { deal ? 'Update Address' : 'Add' }
               </Button>
             </div>
           </div>

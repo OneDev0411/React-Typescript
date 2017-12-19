@@ -2,13 +2,11 @@ import React from 'react'
 import FormTask from './form'
 
 export default ({
-  dealId,
+  deal,
   listId
-}) => {
-  return (
-    <FormTask
-      dealId={dealId}
-      listId={listId}
-    />
-  )
-}
+}) => (
+  <FormTask
+    deal={deal}
+    listId={listId}
+  />
+)

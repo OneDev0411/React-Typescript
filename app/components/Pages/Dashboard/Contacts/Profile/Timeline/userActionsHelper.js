@@ -37,19 +37,20 @@ function getListingTitle(activity) {
 function getAlertTitle(activity) {
   const alert = activity.object
   const { title, proposed_title } = alert
-  return (title && title.length > 0) ? title : proposed_title
+
+  return title && title.length > 0 ? title : proposed_title
 }
 
-function getListingPhoto(listing) {
-  if (!listing || !listing.cover_image_url) {
+function getListingPhoto({ cover_image_url }) {
+  if (!cover_image_url) {
     return '/static/images/deals/home.svg'
   }
 
-  return listing.cover_image_url
+  return cover_image_url
 }
 
-function getListingUrl(listing) {
-  return `/dashboard/mls/${listing.id}`
+function getListingUrl({ id }) {
+  return `/dashboard/mls/${id}`
 }
 
 export function UserViewedAlert(activity, name) {
@@ -69,10 +70,12 @@ export function UserViewedListing(activity, name) {
 }
 
 export function UserFavoritedListing(activity, name) {
+  const { listing } = activity.object
+
   return {
     title: `${name} <b>favorited</b> ${getListingTitle(activity)}`,
-    image: getListingPhoto(activity.object),
-    url: getListingUrl(activity.object),
+    image: getListingPhoto(listing),
+    url: getListingUrl(listing),
     icon: 'heart'
   }
 }

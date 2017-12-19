@@ -3,11 +3,12 @@ import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
-import UserAvatar from '../../../../../../Partials/UserAvatar'
-import Deal from '../../../../../../../models/Deal'
-import { voidEnvelope } from '../../../../../../../store_actions/deals'
-import { confirmation } from '../../../../../../../store_actions/confirmation'
-import config from '../../../../../../../../config/public'
+import moment from 'moment'
+import UserAvatar from '../../../../Partials/UserAvatar'
+import Deal from '../../../../../models/Deal'
+import { voidEnvelope } from '../../../../../store_actions/deals'
+import { confirmation } from '../../../../../store_actions/confirmation'
+import config from '../../../../../../config/public'
 
 class WhoSigned extends React.Component {
   constructor(props) {
@@ -60,9 +61,10 @@ class WhoSigned extends React.Component {
   }
 
   async voidEnvelope(envelopeId) {
-    const { deal, voidEnvelope, notify } = this.props
+    const { deal, voidEnvelope, notify, onClose } = this.props
     try {
       voidEnvelope(deal.id, envelopeId)
+      onClose()
     } catch(e) {
       notify({
         message: 'Can not void this eSign',
@@ -73,10 +75,14 @@ class WhoSigned extends React.Component {
 
   render () {
     const { resending } = this.state
-    const { onRequestClose, areSigned, notSigned, envelope, user } = this.props
+    const { onRequestClose, envelope, user } = this.props
+    const { recipients } = envelope
+    const areSigned = recipients.filter(r => r.status === 'Completed')
+    const notSigned = recipients.filter(r => r.status !== 'Completed')
+    const declineds = recipients.filter(r => r.status === 'Declined')
 
     return (
-      <div className="dropdown-menu dropdown-menu-right who-signed">
+      <div className="who-signed">
         <div className="ws-head">
           <div className="ttl">
             Who signed
@@ -95,13 +101,6 @@ class WhoSigned extends React.Component {
               onClick={() => this.requestVoidEnvelope(envelope.id)}
             >
               Void
-            </Button>
-
-            <Button
-              className="deal-button cls"
-              onClick={onRequestClose}
-            >
-              X
             </Button>
           </div>
         </div>
@@ -130,7 +129,9 @@ class WhoSigned extends React.Component {
                   </div>
                   <div className="info">
                     <div className="sname">{ signer.user.display_name }</div>
-                    <div className="date">-</div>
+                    <div className="date">
+                      Signed { moment.unix(signer.updated_at).format('HH:mm A dddd MMM DD, YYYY') }
+                    </div>
                   </div>
                 </div>
               )
@@ -175,6 +176,37 @@ class WhoSigned extends React.Component {
                         Sign now
                       </a>
                     }
+                  </div>
+                </div>
+              )
+            }
+          </div>
+        }
+
+        {
+          declineds.length > 0 &&
+          <div className="ws-section">
+            <div className="ws-section-title">
+              <img src="/static/images/deals/ws.svg" />
+              DECLINED TO SIGN
+            </div>
+
+            {
+              declineds.map((signer, key) =>
+                <div
+                  key={`DECLINED_${key}`}
+                  className="ws-section-body"
+                >
+                  <div className="avatar">
+                    <UserAvatar
+                      name={signer.user.display_name}
+                      image={signer.user.profile_image_thumbnail_url}
+                      size={30}
+                      showStateIndicator={false}
+                    />
+                  </div>
+                  <div className="info">
+                    <div className="sname">{signer.user.display_name}</div>
                   </div>
                 </div>
               )

@@ -12,7 +12,7 @@ const MessagesToolbar = ({
   room
 }) => (
   <Row className="toolbar">
-    <Col md={9} lg={9} sm={9} xs={9}>
+    <Col md={9} lg={9} sm={9} xs={9} className="title">
       { room.proposed_title }
     </Col>
 

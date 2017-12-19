@@ -8,6 +8,15 @@ export default (state = null, action) => {
     case types.ARCHIVE_DEAL:
       return _.omit(state, checklist => checklist.deal === action.deal_id)
 
+    case types.DELETE_TASK:
+      return {
+        ...state,
+        [action.checklistId]: {
+          ...state[action.checklistId],
+          tasks: _.without(state[action.checklistId].tasks, action.taskId)
+        }
+      }
+
     case types.GET_CHECKLISTS:
       return {
         ...state,

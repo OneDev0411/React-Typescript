@@ -1,4 +1,4 @@
-export default function(body, options) {
+export default function (body) {
   // do the magic here
 
   return body

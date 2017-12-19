@@ -1,5 +1,6 @@
 import { SubmissionError } from 'redux-form'
 import getListings from '../get-listings'
+import { toNumber } from '../../../../utils/helpers'
 import { generatePointsFromBounds } from '../../../../utils/map'
 import setSearchInput from '../../../../store_actions/listings/search/set-search-input'
 import toogleFiltersArea from '../../../../store_actions/listings/search/filters/toggle-filters-area'
@@ -11,7 +12,7 @@ import {
   removePolygon,
   inactiveDrawing
 } from '../../../../store_actions/listings/map/drawing'
-import { feetToMeters } from '../../../../../app/utils/listing'
+import { feetToMeters, acresToMeters } from '../../../../../app/utils/listing'
 import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/Schools'
 
 import { SEARCH_BY_FILTERS_AREAS } from '../../../../constants/listings/search'
@@ -84,7 +85,13 @@ const MULTI_SELECT_FIELDS = [
   ...SCHOOLS_TYPE
 ]
 
-const turnToNumber = value => (value ? Number(value.replace(/[^0-9]/g, '')) : null)
+const turnToNumber = value => {
+  if (!value || value == null) {
+    return null
+  }
+
+  return typeof value === 'number' ? value : toNumber(value)
+}
 
 const getSoldDate = (selectedMonth = 3) => {
   const date = new Date(Date.now())
@@ -99,19 +106,34 @@ const normalizeNumberValues = values => {
       v.indexOf('sold') === -1
   )
 
-  const unitIsFoot = n => n.indexOf('square') !== -1
+  const unitIsFoot = n => n.indexOf('square_meters') !== -1
+  const unitIsAcre = n => n.indexOf('lot_square_meters') !== -1
 
   const normalizedValues = {}
 
   numberValues.forEach(v => {
     let numberValue = turnToNumber(values[v]) || null
 
-    if (unitIsFoot(v)) {
-      numberValue = feetToMeters(numberValue)
+    if (unitIsAcre(v)) {
+      normalizedValues[v] = acresToMeters(numberValue)
+    } else if (unitIsFoot(v)) {
+      normalizedValues[v] = feetToMeters(numberValue)
+    } else {
+      normalizedValues[v] = numberValue
+    }
+  })
+
+  if (values.priceZeroCleaner) {
+    const { minimum_price, maximum_price } = normalizedValues
+
+    if (minimum_price) {
+      normalizedValues.minimum_price = minimum_price * 1000
     }
 
-    normalizedValues[v] = numberValue
-  })
+    if (maximum_price) {
+      normalizedValues.maximum_price = maximum_price * 1000
+    }
+  }
 
   return normalizedValues
 }

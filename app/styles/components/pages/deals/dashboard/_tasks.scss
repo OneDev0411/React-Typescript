@@ -5,6 +5,9 @@
 %deal-tasks {
   min-width: $deal-tasks-width;
   max-width: $deal-tasks-width;
+  min-height: $column-height;
+  max-height: $column-height;
+  overflow: auto;
 
   &.expanded {
     $expanded-width: calc(100% - #{$deal-info-width});
@@ -12,11 +15,33 @@
     max-width: $expanded-width;
   }
 
+  .create-offer {
+    padding: $col-padding;
+    padding-bottom: 0;
+
+    .add-offer-button {
+      width: 100%;
+      height: 36px;
+      border-radius: 4px;
+      background-color: #ffffff;
+      border: solid 1px #dce5eb;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-align: center;
+      color: #2196f3;
+      &:hover {
+        background-color: #2196f3;
+        border-color: #2196f3;
+        color: #fff;
+      }
+      &:focus {
+        outline: 0;
+      }
+    }
+  }
+
   .checklists-container {
     padding: $col-padding !important;
-    min-height: 100vh;
-    max-height: 100vh;
-    overflow: auto;
 
     .checklist {
       @extend %deal-task-checklist;
@@ -57,7 +82,6 @@
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
-      justify-content: flex-start;
       align-items: center;
       width: 100%;
       height: 50px;
@@ -71,21 +95,25 @@
       }
 
       .s-info {
-        width: 88%; //fallback
-        width: calc(90% - 20px);
+        width: calc(100% - 130px);
         color: #1D364B;
-        font-size: 17px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.5px
+      }
+
+      .s-label {
+        width: 80px;
+
         ul.labels {
-          margin: -5px 0 0 0;
-          min-height: 6px;
+          margin: 0;
           padding: 0;
           li.p-label {
-            display: inline-block;
-            font-size: 10px;
+            font-size: 13px;
             font-weight: 500;
-            color: #d0011b;
-            padding-left: 1px;
-            margin-right: 2px;
+            text-align: right;
+            color: #8da2b5;
+
             &.BACKUP,
             &.PRIMARY {
               color: #8da2b5;
@@ -107,7 +135,7 @@
       }
 
       .cta {
-        width: 10%;
+        width: 30px;
       }
     }
 
@@ -139,10 +167,12 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    background-color: #fefefe;
-    height: 56px;
+    background-color: #fff;
+    height: 36px;
+    font-size: 14px;
+    color: #1d364b;
     cursor: pointer;
-    transition: background-color 0.1s ease-in;
+    transition: background-color 0.05s ease-in;
     border-bottom: 1px solid #eef1f2;
     padding: 0 0 0 10px;
 
@@ -162,7 +192,7 @@
 
     .title {
       font-size: 14px;
-      color: #61778d;
+      color: #1d364b;
       min-width: 55%;
       max-width: 55%;
       overflow: hidden;
@@ -180,32 +210,18 @@
 
     .status, .notification {
       position: absolute;
-      top: 21px;
+      top: 8px;
       right: 22px;
-      border-radius: 3px;
-      min-width: 100px;
-      background: #35b863;
       color: #fff;
-      font-size: 11px;
-      text-align: center;
       margin-right: 10px;
-      &.Incomplete {
-        display: none;
-      }
-      &.Pending, &.ATTENTION {
-        background-color: #f6a623;
-      }
-      &.Declined {
-        background-color: #d0011b;
-      }
-      &.Submitted,
-      &.Notified {
-        background-color: #f6a623;
-      }
+
+      @extend %status-colors;
     }
 
     .notification {
-      top: 19px;
+      min-width: 16px !important;
+      width: 16px;
+      top: 7px;
       right: 0px;
       min-width: 10px;
       height: 10px;
@@ -239,9 +255,10 @@
     border-radius: 0 0 4px 4px;
 
     .title {
-      color: #2196f3;
       min-width: 95%;
       max-width: 95%;
+      color: #1d364b;
+      font-size: 14px;
     }
     .img-add {
       width: 10px;
@@ -277,5 +294,41 @@
   .tasks-leave.tasks-leave-active {
     opacity: 0.01;
     transition: opacity 800ms ease-in;
+  }
+}
+
+%status-colors {
+  border: 1px solid transparent;
+  text-align: center;
+  border-radius: 3px;
+  min-width: 76px;
+  padding: 0 2px;
+  height: 18px;
+  line-height: 18px;
+  vertical-align: middle;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  background: transparent;
+
+  &.Incomplete {
+    display: none;
+  }
+  &.Pending, &.ATTENTION {
+    color: #f6a623;
+    border-color: #f6a623;
+  }
+  &.Declined {
+    color: #d0011b;
+    border-color: #d0011b;
+  }
+  &.Approved {
+    color: #35b863;
+    border-color: #35b863;
+  }
+  &.Submitted,
+  &.Notified {
+    color: #f6a623;
+    border-color: #f6a623;
   }
 }

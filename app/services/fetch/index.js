@@ -4,7 +4,7 @@ import SuperAgent from 'superagent'
 import config from '../../../config/public'
 
 export default class Fetch {
-  constructor(options = {}) {
+  constructor() {
     const isServerSide = typeof window === 'undefined'
 
     this._middlewares = {}
@@ -58,6 +58,7 @@ export default class Fetch {
 
   upload(endpoint, method = 'post') {
     this._proxyUrl += '/upload'
+
     return this._create(method, endpoint)
   }
 
@@ -68,7 +69,8 @@ export default class Fetch {
 
     _.each(this._middlewares, (options, name) => {
       try {
-        const handler = require('./middlewares/' + name).default
+        const handler = require(`./middlewares/${name}`).default
+
         response.body = handler(response.body, options)
       } catch (e) {
         console.warn(e)
@@ -78,6 +80,7 @@ export default class Fetch {
 
   middleware(name, options) {
     this._middlewares[name] = options
+
     return this
   }
 }

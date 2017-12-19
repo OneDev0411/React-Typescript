@@ -83,7 +83,7 @@ const List = ({
         </ReactCSSTransitionGroup>
 
         <CreateTask
-          dealId={deal.id}
+          deal={deal}
           listId={checklist.id}
         />
       </div>

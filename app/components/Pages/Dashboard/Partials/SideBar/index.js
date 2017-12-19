@@ -9,27 +9,19 @@ import { Link, browerHistory } from 'react-router'
 import Intercom from 'react-intercom'
 import { Dropdown } from 'react-bootstrap'
 
-import SvgMap from '../Svgs/Map'
-import SvgStore from '../Svgs/Store'
-import SvgPeople from '../Svgs/People'
-import SvgBriefCase from '../Svgs/BriefCase'
-import SvgSupport from '../Svgs/Support'
-import SvgNotifications from '../Svgs/Notifications'
 import Brand from '../../../../../controllers/Brand'
-import Avatar from './components/Avatar'
 
 // utils
 import { hasUserAccess, getUserRoles } from '../../../../../utils/user-acl'
 
 // chatroom stuff
-import InstantChatTrigger from '../../Chatroom/Shared/instant-trigger'
+import Inbox from '../../Chatroom/Shared/instant-trigger'
 
 // deals notification badge counter
-import DealsIcon from '../../Deals/components/sidebar-badge'
+import DealsNotifications from '../../Deals/components/sidebar-badge'
 
 const ACTIVE_COLOR = `#${Brand.color('primary', '3388ff')}`
-const DEFAULT_COLOR = '#4e5c6c'
-
+const DEFAULT_COLOR = '#8da2b5'
 
 const getActivePath = path => {
   const checkPath = filter => (path.match(filter) || {}).input
@@ -50,24 +42,6 @@ const getActivePath = path => {
   }
 }
 
-const getNotificationIcon = data => {
-  let icon
-
-  if (data.new_notifications_count && data.new_notifications_count > 0) {
-    icon = (
-      <div style={S('absolute t-5n r-15')}>
-        <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
-          <span style={S('color-fff font-10 relative t-9n')}>
-            {data.new_notifications_count}
-          </span>
-        </div>
-      </div>
-    )
-  }
-
-  return icon
-}
-
 const IntercomCloseButton = ({ onClick }) => (
   <button onClick={onClick} className="intercom__close-btn">
     <svg
@@ -82,27 +56,17 @@ const IntercomCloseButton = ({ onClick }) => (
   </button>
 )
 
-const NavbarItem = ({ title, children }) => (
-  <li data-balloon={title} data-balloon-pos="right" className="c-app-navbar__item">
-    {children}
-  </li>
-)
-
-const SupportButton = ({ onClick, isActive }) => (
-  <NavbarItem title="Support">
-    <button onClick={onClick} className="c-app-navbar__support-btn">
-      <SvgSupport color={isActive ? ACTIVE_COLOR : DEFAULT_COLOR} />
-    </button>
-  </NavbarItem>
+const NavbarItem = ({ children, isActive }) => (
+  <li className={`c-app-navbar__item ${isActive ? 'is-active' : ''}`}>{children}</li>
 )
 
 const appNavbar = ({
-  data,
   user,
   activePath,
   activeIntercom,
   intercomIsActive,
-  unactiveIntercom
+  unactiveIntercom,
+  appNotifications
 }) => {
   const intercomUser = {
     user_id: user.id,
@@ -116,31 +80,30 @@ const appNavbar = ({
 
   return (
     <aside className="c-app-navbar">
-      <InstantChatTrigger />
-
       <ul className="c-app-navbar__list c-app-navbar__list--top">
-        <NavbarItem title="MLS">
-          <Link to="/dashboard/mls">
-            <SvgMap color={activePath === 'MAP' ? ACTIVE_COLOR : DEFAULT_COLOR} />
+        <NavbarItem>
+          <Inbox />
+        </NavbarItem>
+
+        <NavbarItem isActive={activePath === 'MAP'}>
+          <Link to="/dashboard/mls" className="c-app-navbar__item__title">
+            MLS
           </Link>
         </NavbarItem>
 
         {user.user_type !== 'Client' && (
-          <NavbarItem title="Contacts">
-            <Link to="/dashboard/contacts">
-              <SvgPeople
-                color={activePath === 'CONTACTS' ? ACTIVE_COLOR : DEFAULT_COLOR}
-              />
+          <NavbarItem isActive={activePath === 'CONTACTS'}>
+            <Link to="/dashboard/contacts" className="c-app-navbar__item__title">
+              Contacts
             </Link>
           </NavbarItem>
         )}
 
         {(hasDealsPermission || hasBackOfficePermission) && (
-          <NavbarItem title="Deals">
-            <Link to="/dashboard/deals">
-              <DealsIcon
-                color={activePath === 'DEALS' ? ACTIVE_COLOR : DEFAULT_COLOR}
-              />
+          <NavbarItem isActive={activePath === 'DEALS'}>
+            <Link to="/dashboard/deals" className="c-app-navbar__item__title">
+              Deals
+              <DealsNotifications />
             </Link>
           </NavbarItem>
         )}
@@ -148,37 +111,40 @@ const appNavbar = ({
         {user.agent &&
           user.user_type === 'Agent' &&
           user.agent.office_mlsid === 'CSTPP01' && (
-            <NavbarItem title="Store">
-              <Link to="/dashboard/website">
-                <SvgStore
-                  color={activePath === 'Store' ? ACTIVE_COLOR : DEFAULT_COLOR}
-                />
-              </Link>
+            <NavbarItem isActive={activePath === 'STORE'}>
+              <Link to="/dashboard/website">Store</Link>
             </NavbarItem>
           )}
       </ul>
 
       <ul className="c-app-navbar__list c-app-navbar__list--bottom">
-        <NavbarItem title="Notifications">
-          <Link to="/dashboard/notifications">
-            {getNotificationIcon(data)}
-            <SvgNotifications
-              color={activePath === 'NOTIF' ? ACTIVE_COLOR : DEFAULT_COLOR}
-            />
+        <NavbarItem isActive={activePath === 'NOTIF'}>
+          <Link to="/dashboard/notifications" className="c-app-navbar__item__title">
+            Notifications
+            {appNotifications > 0 && (
+              <span className="c-app-navbar__notification-badge">
+                {appNotifications}
+              </span>
+            )}
           </Link>
         </NavbarItem>
 
-        <SupportButton onClick={activeIntercom} isActive={intercomIsActive} />
+        <NavbarItem isActive={intercomIsActive}>
+          <button
+            onClick={activeIntercom}
+            className="c-app-navbar__item__title--button"
+          >
+            Support
+          </button>
+        </NavbarItem>
 
         <Dropdown
           dropup
           id="account-dropdown"
-          data-balloon="Settings"
-          data-balloon-pos="right"
           className="c-app-navbar__account-dropdown"
         >
-          <Dropdown.Toggle>
-            <Avatar user={user} />
+          <Dropdown.Toggle className="c-app-navbar__item__title--button">
+            {user.first_name || user.email || user.phone_number}
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <li>
@@ -219,9 +185,9 @@ const appNavbar = ({
 
 export default compose(
   connect(({ data, user }, { location }) => ({
-    data,
     user,
-    activePath: getActivePath(location.pathname)
+    activePath: getActivePath(location.pathname),
+    appNotifications: data.new_notifications_count || 0
   })),
   withState('intercomIsActive', 'setIntercomIsActive', false),
   withHandlers({

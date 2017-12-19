@@ -33,7 +33,7 @@ class AgentTable extends BaseTable {
         caption: 'PRICE $',
         sortable: true,
         className: 'col-md-1 hidden-xs',
-        getText: deal => this.getFormattedNumber(Deal.get.field(deal, 'list_price')),
+        getText: deal => Deal.get.formattedPrice(Deal.get.field(deal, 'list_price'), 'decimal'),
         getValue: deal => Deal.get.field(deal, 'list_price')
       },
       side: {
@@ -116,7 +116,7 @@ class AgentTable extends BaseTable {
           <span
             style={{ color: '#5b6469', fontSize: '13px' }}
           >
-            { relatedRole ? `: ${relatedRole.user.last_name}` : ''}
+            { relatedRole && relatedRole.user.last_name ? `: ${relatedRole.user.last_name}` : ''}
           </span>
         </div>
 

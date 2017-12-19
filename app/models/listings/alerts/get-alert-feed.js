@@ -32,20 +32,26 @@ const getAlertFeed = async (alertId, roomId) => {
 
     const { data } = response.body
 
-    const listings = data.map(rec => ({
-      ...rec.listing,
-      recId: rec.id,
-      recRoom: rec.room,
-      new: mappingStatus(rec.last_update),
-      lat: rec.listing.property.address.location.latitude,
-      lng: rec.listing.property.address.location.longitude
-    }))
+    if (data && data.length > 0) {
+      const listings = data.map(rec => ({
+        ...rec.listing,
+        recId: rec.id,
+        recRoom: rec.room,
+        new: mappingStatus(rec.last_update),
+        lat: rec.listing.property.address.location.latitude,
+        lng: rec.listing.property.address.location.longitude
+      }))
 
-    let feed = {}
-    feed[alertId] = listings
+      return {
+        [alertId]: listings
+      }
+    }
 
-    return feed
+    return {
+      [alertId]: []
+    }
   } catch (error) {
+    console.log('wtf')
     throw error
   }
 }

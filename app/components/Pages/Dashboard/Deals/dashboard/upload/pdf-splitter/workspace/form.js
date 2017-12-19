@@ -11,7 +11,7 @@ import {
   resetSplitterSelectedPages,
   resetSplitter,
   changeNeedsAttention,
-  setUploadAttributes
+  addAttachment
 } from '../../../../../../../../store_actions/deals'
 
 class WorkspaceForm extends React.Component {
@@ -21,7 +21,7 @@ class WorkspaceForm extends React.Component {
       saving: false,
       title: '',
       task: props.upload.task || null,
-      notifyOffice: false
+      notifyOffice: true
     }
   }
 
@@ -56,12 +56,13 @@ class WorkspaceForm extends React.Component {
       .value()
 
     try {
-      created = await Deal.splitPDF(title, task.room.id, files, pages)
+      const { file } = await Deal.splitPDF(title, task.room.id, files, pages)
 
-      // flag splitted files as uploaded items
-      files.forEach(file => {
-        this.props.setUploadAttributes(file.id, { status: 'uploaded' })
-      })
+      // add files to attachments list
+      this.props.addAttachment(task.deal, task.checklist, task.id, file)
+
+      // set create as true
+      created = true
 
       if (notifyOffice) {
         this.props.changeNeedsAttention(task.id, true)
@@ -72,19 +73,23 @@ class WorkspaceForm extends React.Component {
         status: 'success'
       })
 
+      // set status
+      this.setState({
+        saving: false,
+        title: '',
+        notifyOffice: true
+      })
+
     } catch(e) {
       notify({
         message: "Couldn't create pdf file. try again.",
         status: 'error'
       })
-    }
 
-    // set status
-    this.setState({
-      saving: false,
-      title: '',
-      notifyOffice: false
-    })
+      this.setState({
+        saving: false
+      })
+    }
 
     return created
   }
@@ -184,6 +189,6 @@ export default connect(mapStateToProps, {
   notify,
   resetSplitter,
   resetSplitterSelectedPages,
-  setUploadAttributes,
-  changeNeedsAttention
+  changeNeedsAttention,
+  addAttachment
 })(WorkspaceForm)

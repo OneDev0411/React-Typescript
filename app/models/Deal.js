@@ -119,14 +119,16 @@ Deal.get.clientNames = function(deal) {
 /**
 * a helper that formats price
 */
-Deal.get.formattedPrice = function(number) {
+Deal.get.formattedPrice = function(number, style = 'currency') {
   if (!number) {
     return number
   }
 
-  return '$' + number
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return new Intl.NumberFormat('en-US', {
+    style,
+    currency: 'USD',
+    minimumFractionDigits: 2
+  }).format(number)
 }
 
 /**
@@ -372,6 +374,35 @@ Deal.createTask = async function (dealId, data) {
 }
 
 /**
+* delete task
+*/
+Deal.deleteTask = async function (taskId) {
+  try {
+    const response = await new Fetch()
+      .delete(`/tasks/${taskId}`)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* delete task
+*/
+Deal.updateTask = async function (taskId, attributes) {
+  try {
+    const response = await new Fetch()
+      .patch(`/tasks/${taskId}`)
+      .send(attributes)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * update checklist
 */
 Deal.updateChecklist = async function (deal_id, checklist_id, attributes) {
@@ -431,15 +462,15 @@ Deal.deleteRole = async function (deal_id, role_id) {
 }
 
 /**
-* accept a contract
+* create a new offer
 */
-Deal.addContract = async function (deal_id, name, order, is_backup, property_type) {
+Deal.createOffer = async function (deal_id, name, order, is_backup, property_type) {
   try {
     const response = await new Fetch()
       .post(`/deals/${deal_id}/checklists/offer`)
       .send({
         checklist: {
-          title: `Contract (${name})`,
+          title: `Offer (${name})`,
           is_deactivated: is_backup,
           order: order
         },
@@ -470,13 +501,29 @@ Deal.changeTaskStatus = async function(task_id, status) {
 }
 
 /**
-* set notify admin flag
+* set notify office flag
 */
 Deal.needsAttention = async function(task_id, status) {
   try {
     await new Fetch()
       .patch(`/tasks/${task_id}/needs_attention`)
       .send({ needs_attention: status })
+
+  } catch (e) {
+    return false
+  }
+}
+
+/**
+* bulk submit for review
+*/
+Deal.bulkSubmit = async function(dealId, tasks) {
+  try {
+    const response = await new Fetch()
+      .put(`/deals/${dealId}/tasks`)
+      .send(tasks)
+
+    return response.body.data
 
   } catch (e) {
     return false
@@ -583,11 +630,26 @@ Deal.splitPDF = async function(title, room_id, files, pages) {
     })
 
     // send request
-    await request
-
-    return true
+    const response = await request
+    return response.body
   } catch (e) {
     throw e
+  }
+}
+
+
+/**
+ * Search through all deals
+ */
+Deal.searchAllDeals = async function (query) {
+  try {
+    const response = await new Fetch()
+      .post('/deals/filter')
+      .send({ query })
+
+    return response.body.data
+  } catch (error) {
+    return { error }
   }
 }
 

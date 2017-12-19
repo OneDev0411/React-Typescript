@@ -41,7 +41,7 @@ export default ({ deal }) => (
   <div className="deal-info-section">
     <Items
       deal={deal}
-      title="CDA Information"
+      title="CDA INFORMATION"
       table={table}
       getValue={getValue}
     />

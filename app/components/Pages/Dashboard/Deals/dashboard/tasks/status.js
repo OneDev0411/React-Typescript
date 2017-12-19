@@ -1,9 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import ToolTip from '../../components/tooltip'
 
 const TaskStatus = ({
   task,
+  noTip,
   isBackoffice
 }) => {
   const { review } = task
@@ -25,14 +27,21 @@ const TaskStatus = ({
     status = 'Notified'
   }
 
+  if (!status) {
+    return false
+  }
+
   return (
-    <span
-      className={`status ${status}`}
-      data-tip={tooltip}
-      data-place="bottom"
+    <ToolTip
+      caption={!noTip && tooltip}
+      placement="bottom"
     >
-      { status.toUpperCase() }
-    </span>
+      <span
+        className={`status ${status}`}
+      >
+        { status.toUpperCase() }
+      </span>
+    </ToolTip>
   )
 }
 

@@ -1,10 +1,12 @@
 $col-padding: 20px;
-$listing-card-height: 210px;
 $deal-info-width: 300px;
 $deal-tasks-width: 388px;
+$deal-dashboard-header-height: 54px;
+$column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
 
+@import './dashboard/_navbar';
 @import './dashboard/_info';
-@import './dashboard/_add_contract';
+@import './dashboard/_create_offer';
 @import './dashboard/_tasks';
 @import './dashboard/_task_detail';
 @import './dashboard/_fact_sheet';
@@ -23,24 +25,33 @@ $deal-tasks-width: 388px;
 @import './dashboard/_mls_status_modal';
 @import './dashboard/_upload';
 @import './dashboard/_pdf_splitter';
+@import './dashboard/_bulk_submit';
 
 %deal-dashboard {
   margin-left: 0;
   margin-right: 0;
   display: flex;
-  overflow: hidden;
-  height: 100vh;
-  backface-visibility: hidden;
-  -webkit-overflow-scrolling: touch;
-  -ms-overflow-style: none;
-  will-change: overflow;
-  position: relative;
-  // z-index: 1;
+  flex-direction: column;
 
-  .column {
-    @extend .u-scrollbar--thinner;
+  .deal-navbar {
+    @extend %deal-dashboard-navbar;
+  }
 
-    padding: 0;
-    height: auto;
+  .deal-content {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: none;
+    will-change: overflow;
+    position: relative;
+    min-height: $column-height;
+    max-height: $column-height;
+
+    .column {
+      padding: 0;
+      height: auto;
+    }
   }
 }

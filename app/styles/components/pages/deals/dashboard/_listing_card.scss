@@ -1,85 +1,104 @@
 .deal-listing-card {
-  @extend %deal-listing-card;
+  height: 65px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: row;
+
+  .listing-photo {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    &.hasListing {
+      cursor: pointer;
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 4px;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .view-btn {
+      position: absolute;
+      bottom: 2px;
+      left: 2px;
+      right: 2px;
+      height: 16px;
+      display: none;
+      border-radius: 2px;
+      background-color: #2196f3;
+      font-size: 12px;
+      text-align: center;
+      color: #fff;
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
+    &.hasListing {
+      &:hover .view-btn {
+        display: block;
+      }
+    }
+  }
+
+  .address-info {
+    position: relative;
+    width: calc(100% - 50px);
+    height: 50px;
+    padding-left: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.47;
+    color: #1d364b;
+
+    .title {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .editable {
+      @extend %deal-listing-card-editable;
+    }
+
+    .open-listing {
+      position: absolute;
+      top: 0;
+      right: 0;
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
 }
 
-%deal-listing-card {
+%deal-listing-card-editable {
   position: relative;
-  background-color: #4e5c6c;
-  min-height: $listing-card-height;
-  img.listing-photo {
-    width: 100%;
-    min-height: $listing-card-height;
-    max-height: $listing-card-height;
+  border-radius: 4px;
+  border: 1px dashed transparent;
+  margin-right: 20px;
+  padding: 1px;
+
+  i {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: #2196f3;
   }
 
-  .back {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 41px;
-    height: 41px;
-    border-radius: 3px;
-    background-color: #000;
-    color: #fff;
-    opacity: 0.5;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s ease-in;
+  .edit-icon {
+    display: none;
+  }
+
+  &.canEdit {
     &:hover {
-      opacity: 1;
-    }
-    i {
-      vertical-align: middle;
-      font-size: 40px;
-    }
-  }
-
-  .placeholder {
-    position: absolute;
-    width: 50px;
-    top: 25%;
-    left: calc(50% - 25px);
-  }
-
-  .data {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    min-height: 60px;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px 16px;
-    color: #fff;
-    display: flex;
-    align-items: top;
-    transition: all 0.2s ease-in;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.7);
+      cursor: pointer;
+      border-color: #2196f3;
     }
 
-    .address-info {
-      width: 90%;
-      .title {
-        font-size: 19px;
-        font-weight: bold;
-      }
-
-      .addr {
-        color: #c9d7df;
-        font-size: 14px;
-      }
-    }
-
-    .view {
-      width: 10%;
-      text-align: right;
-
-      img, i {
-        margin-top: 10px;
-        width: 16px;
-        cursor: pointer;
-      }
+    &:hover .edit-icon {
+      display: block;
     }
   }
 }

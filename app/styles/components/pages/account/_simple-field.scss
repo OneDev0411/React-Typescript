@@ -15,15 +15,17 @@
   padding: 0.5rem 1rem;
   font-size: 1.6rem;
   line-height: 1;
+  color: #333;
   border: 1px solid #cecece;
   border-radius: 3px;
 
   &:focus {
     outline-width: 2px;
+    background-color: #f5f5f5;
   }
 
   &.has-error {
-    border-radius: 3px 3px 0 0;
+    border-radius: 3px;
     border-color: red;
     outline-color: red;
     background: rgba(red, 0.1);

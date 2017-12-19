@@ -11,21 +11,21 @@
   .scrollable {
     overflow: auto;
     overflow-x: hidden;
-    min-height: calc(100vh - #{$listing-card-height});
-    max-height: calc(100vh - #{$listing-card-height});
+    min-height: $column-height;
+    max-height: $column-height;
   }
 
   .deal-info-section {
     .deal-info-title {
       width: calc(100% - #{$col-padding});
       margin-left: $col-padding / 2;
-      font-size: 14px;
-      font-weight: 500;
-      text-align: left;
-      color: #1d364b;
       border-bottom: 1px solid rgba(220, 225, 229, 0.5);
       padding-bottom: 5px;
       margin-bottom: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: #1d364b;
     }
   }
 

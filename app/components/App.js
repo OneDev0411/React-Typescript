@@ -16,10 +16,6 @@ import { hasUserAccess } from '../utils/user-acl'
 // navs
 import SideBar from './Pages/Dashboard/Partials/SideBar'
 
-const MobileNav = Load({
-  loader: () => import('./Pages/Dashboard/Partials/MobileNav')
-})
-
 // global chat components
 import { getRooms } from '../store_actions/chatroom'
 
@@ -58,14 +54,16 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { data, user, dispatch } = this.props
+    const { data, user, deals, dispatch } = this.props
 
     if (user) {
       // load rooms
       this.initialRooms()
 
       // load deals
-      dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
+      if (!deals) {
+        dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
+      }
 
       // load contacts
       dispatch(getContacts())
@@ -266,7 +264,6 @@ class App extends Component {
     let navArea = <SideBar data={data} location={location} />
 
     if (data.is_mobile && user) {
-      // nav_area = <MobileNav data={data} />
       navArea = <div />
     }
 

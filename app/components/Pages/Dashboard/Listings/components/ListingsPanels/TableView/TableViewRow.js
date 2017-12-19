@@ -27,7 +27,8 @@ const TableViewRow = ({
         browserHistory.push(`/dashboard/mls/${listing.id}`)
       }}
       onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : ''}
-      onMouseLeave={mouseEventIsActive ? onMouseLeave : ''}>
+      onMouseLeave={mouseEventIsActive ? onMouseLeave : ''}
+    >
       <td className="c-tableview__address-cell">
         <div className="c-tableview__address-cell__img">
           {listing.cover_image_url && <img src={listing.cover_image_url} />}
@@ -47,13 +48,13 @@ const TableViewRow = ({
           </p>
         </div>
       </td>
-      <td>{props.area}</td>
-      <td style={{ width: '12%' }}>{props.price}</td>
-      <td>{props.beds}</td>
-      <td>{props.baths}</td>
-      <td>{props.sqft}</td>
-      <td>{props.pricePerSquareFoot}</td>
-      <td>{props.builtYear}</td>
+      <td style={{ width: '15%' }}>{props.price}</td>
+      <td style={{ width: '7%' }}>{props.beds}</td>
+      <td style={{ width: '7%' }}>{props.baths}</td>
+      <td style={{ width: '10%' }}>{props.sqft}</td>
+      <td style={{ width: '10%' }}>{props.pricePerSquareFoot}</td>
+      <td style={{ width: '10%' }}>{props.builtYear}</td>
+      <td style={{ width: '10%' }}>{props.zipCode}</td>
     </tr>
   )
 }

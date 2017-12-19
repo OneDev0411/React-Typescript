@@ -14,17 +14,17 @@ class Forms extends React.Component {
   }
 
   onSelectFile(files) {
-    const { creatingForm, onRequestUpload } = this.props
+    const { creatingForm, onNewTask } = this.props
 
     if (creatingForm !== null || files.length === 0) {
       return false
     }
 
-    onRequestUpl(files[0])
+    onNewTask(files)
   }
 
   render() {
-    const { creatingForm, forms, show, onClose, onSelectForm } = this.props
+    const { creatingForm, forms, deal, show, onClose, onSelectForm } = this.props
     const { filter } = this.state
 
     return (
@@ -81,6 +81,7 @@ class Forms extends React.Component {
             <li className="upload">
               <Upload
                 task={{}}
+                deal={deal}
                 onDrop={files => this.onSelectFile(files)}
               >
                 <i className="fa fa-plus" /> Other

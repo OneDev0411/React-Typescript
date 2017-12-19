@@ -2,12 +2,12 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import ReactTooltip from 'react-tooltip'
 import { addNotification as notify } from 'reapop'
 import { resetUploadFiles, setUploadAttributes, displaySplitter,
   addAttachment, changeNeedsAttention, resetSplitter } from '../../../../../../../store_actions/deals'
 import ChatModel from '../../../../../../../models/Chatroom'
 import TasksDropDown from '../tasks-dropdown'
+import ToolTip from '../../../components/tooltip'
 import Checkbox from '../../../components/radio'
 import FileName from './file-name'
 
@@ -47,14 +47,14 @@ class UploadModal extends React.Component {
     }
   }
 
-  onClickNotifyAdmin(fileId, file) {
-    this.props.setUploadAttributes(fileId, {
-      notifyOffice: file.properties.notifyOffice ? false : true
+  onClickNotifyAdmin(file) {
+    this.props.setUploadAttributes(file.id, {
+      notifyOffice: !file.properties.notifyOffice
     })
   }
 
-  onSelectTask(fileId, taskId) {
-    this.props.setUploadAttributes(fileId, { taskId })
+  onSelectTask(file, taskId) {
+    this.props.setUploadAttributes(file.id, { taskId })
   }
 
   getSelectedTask(file) {
@@ -130,7 +130,7 @@ class UploadModal extends React.Component {
     }
 
     if (status === STATUS_UPLOADED) {
-      return <i className="fa fa-check" />
+      return 'Uploaded'
     }
 
     return 'Upload'
@@ -139,6 +139,11 @@ class UploadModal extends React.Component {
   render() {
     const { splitter, upload } = this.props
     const filesCount = _.size(upload.files)
+
+    // get list of pdfs aren't uploaded yet
+    const pdfsList = _.filter(upload.files, file =>
+      file.fileObject.type === 'application/pdf' && file.properties.status !== STATUS_UPLOADED)
+
     let fileCounter = 0
 
     return (
@@ -155,10 +160,6 @@ class UploadModal extends React.Component {
         <Modal.Body
           style={this.getModalStyle(filesCount)}
         >
-          <ReactTooltip
-            effect="solid"
-          />
-
           <div className="uploads-container">
             {
               _.map(upload.files, (file, id) => {
@@ -172,15 +173,14 @@ class UploadModal extends React.Component {
                     <div className="upload-row">
                       <div className="file-name">
                         <FileName
-                          fileId={id}
                           file={file}
-                          canEditName={file.properties.editNameEnabled === true}
+                          canEditName={file.properties.editNameEnabled}
                         />
                       </div>
 
                       <div className="file-task">
                         <TasksDropDown
-                          onSelectTask={(taskId) => this.onSelectTask(id, taskId)}
+                          onSelectTask={(taskId) => this.onSelectTask(file, taskId)}
                           selectedTask={selectedTask}
                           shouldDropUp={filesCount > 4 && fileCounter + 2 >= filesCount}
                         />
@@ -207,8 +207,15 @@ class UploadModal extends React.Component {
                           square
                           selected={file.properties.notifyOffice || false}
                           title="Notify Office"
-                          onClick={() => this.onClickNotifyAdmin(id, file)}
+                          onClick={() => this.onClickNotifyAdmin(file)}
                         />
+                      }
+
+                      {
+                        (isUploaded && file.properties.notifyOffice) &&
+                        <span className="notified">
+                          Office Notified
+                        </span>
                       }
                     </div>
                   </div>
@@ -219,14 +226,17 @@ class UploadModal extends React.Component {
         </Modal.Body>
 
         <Modal.Footer>
-          <img
-            src="/static/images/deals/question.png"
-            className="help"
-            data-tip="Create new documents and save them to tasks"
-          />
+          <ToolTip caption="Create new documents and save them to tasks">
+            <img
+              src="/static/images/deals/question.png"
+              className="help"
+            />
+          </ToolTip>
 
           <Button
             bsStyle="primary"
+            className={cn('btn-split', { disabled: pdfsList.length === 0 })}
+            disabled={pdfsList.length === 0}
             onClick={() => this.props.displaySplitter(true)}
           >
             Split PDFs

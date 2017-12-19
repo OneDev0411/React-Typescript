@@ -14,28 +14,20 @@ export default ({
   const attachments = task.room.attachments || []
   const hasAttachments = attachments.length > 0
 
+  if (!hasAttachments) {
+    return false
+  }
+
   return (
     <div className="file">
       <div className="title">
         Uploads
       </div>
 
-      {
-        hasAttachments &&
-        <div className="file-group">
-          <FileAttachments
-            deal={deal}
-            task={task}
-            attachments={attachments}
-          />
-        </div>
-      }
-
-      <Upload
+      <FileAttachments
         deal={deal}
         task={task}
-        hasAttachments={hasAttachments}
-        noDrop={true}
+        attachments={attachments}
       />
     </div>
   )

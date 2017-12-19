@@ -3,7 +3,6 @@ import cn from 'classnames'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 import UserAvatar from '../../../../Partials/UserAvatar'
 
-
 const Member = ({
   member,
   roles,
@@ -13,7 +12,10 @@ const Member = ({
   const popoverHoverFocus = (
     <Popover
       id="popover-brand-user-avatar"
-      title={<strong>{member.display_name}</strong>}
+      title={<div>
+        <strong>{member.display_name}</strong>
+        <p className="sub-title">{member.email}</p>
+      </div>}
     >
       <strong>Member Roles:</strong>
       {

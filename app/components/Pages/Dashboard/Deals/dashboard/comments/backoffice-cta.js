@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import cn from 'classnames'
+import ToolTip from '../../components/tooltip'
 
 function getDeclineButtonCaption(status, hasComment) {
   if (!hasComment && status === 'Declined') {
@@ -47,38 +48,38 @@ export default ({
       {
         !isSaving ?
         <div className="inline">
-          <span
-            className={cn('cta-btn decline', {
-              isActive: isDeclined
-            })}
-            data-tip={isDeclined ? 'Declined' : 'Decline'}
-            data-effect="solid"
-            onClick={() => onSendComment(needs_attention ? false : null, 'Declined')}
+          <ToolTip
+            caption={isDeclined ? 'Declined' : 'Decline'}
           >
-            <i className="ico fa fa-times" />
-          </span>
+            <span
+              className={cn('cta-btn decline', { isActive: isDeclined })}
+              onClick={() => onSendComment(needs_attention ? false : null, 'Declined')}
+            >
+              <i className="ico fa fa-times" />
+            </span>
+          </ToolTip>
 
-          <span
-            className={cn('cta-btn approve', {
-              isActive: isApproved
-            })}
-            data-tip={isApproved ? 'Approved' : 'Approve'}
-            data-effect="solid"
-            onClick={() => onSendComment(needs_attention ? false : null, 'Approved')}
+          <ToolTip
+            caption={isApproved ? 'Approved' : 'Approve'}
           >
-            <i className="ico fa fa-check" />
-          </span>
+            <span
+              className={cn('cta-btn approve', { isActive: isApproved })}
+              onClick={() => onSendComment(needs_attention ? false : null, 'Approved')}
+            >
+              <i className="ico fa fa-check" />
+            </span>
+          </ToolTip>
 
-          <span
-            className={cn('cta-btn no-status', {
-              isActive: isNotReviewed && needs_attention !== true
-            })}
-            data-tip="Not Reviewed"
-            data-effect="solid"
-            onClick={() => onSendComment(needs_attention ? false : null, 'Incomplete')}
+          <ToolTip
+            caption="Not Reviewed"
           >
-            <span className="ico circle" />
-          </span>
+            <span
+              className={cn('cta-btn no-status', { isActive: isNotReviewed && needs_attention !== true })}
+              onClick={() => onSendComment(needs_attention ? false : null, 'Incomplete')}
+            >
+              <span className="ico circle" />
+            </span>
+          </ToolTip>
         </div> :
         <div className="loading inline">
           Saving <img src="/static/images/loading-states/three-dots-blue.svg" />
