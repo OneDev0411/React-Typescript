@@ -45,7 +45,13 @@ class PdfViewer extends React.Component {
   }
 
   docKeyboardShortcutHandler(event) {
-    const { keyCode } = event
+    const { disableKeyboardShortcuts } = this.props
+
+    if (disableKeyboardShortcuts) {
+      return false
+    }
+
+    const keyCode = event.keyCode || event.which
     const $viewerContainer = this.$pdfContext.parentElement.parentElement
     const pdfPageHeight =
       this.$pdfContext.firstElementChild.firstElementChild.offsetHeight + 45

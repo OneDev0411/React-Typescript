@@ -22,54 +22,36 @@ export default ({
   const PDF_WIDTH = `calc(100% - ${COMMENTS_WIDTH} - ${FACTSHEET_WIDTH})`
 
   return (
-    <Modal
-      className="deal-form-viewer-modal"
-      show
-      onHide={onClose}
-    >
+    <Modal className="deal-form-viewer-modal" show onHide={onClose}>
       <Modal.Header>
-        <Button
-          onClick={onClose}
-          className="close-btn"
-        >
+        <Button onClick={onClose} className="close-btn">
           X
         </Button>
 
-        <span className="title">
-          { file.name }
-        </span>
+        <span className="title">{file.name}</span>
 
         <div className="cta">
-          <Button
-            className="deal-button"
-            onClick={toggleFactsheet}
-          >
+          <Button className="deal-button" onClick={toggleFactsheet}>
             Deal Facts
           </Button>
 
-          <Button
-            className="deal-button comments"
-            onClick={toggleComments}
-          >
+          <Button className="deal-button comments" onClick={toggleComments}>
             Comments
           </Button>
 
-          {
-            fileType === 'digital-form' &&
-            <Button
-              className="deal-button edit-form"
-              onClick={editForm}
-            >
+          {fileType === 'digital-form' && (
+            <Button className="deal-button edit-form" onClick={editForm}>
               Edit Form
             </Button>
-          }
+          )}
         </div>
-
       </Modal.Header>
 
       <Modal.Body>
         <div
-          className={`fw-wrapper ${showFactsheet ? 'show-factsheet' : ''} ${showComments ? 'show-comments' : ''}`}
+          className={`fw-wrapper ${showFactsheet ? 'show-factsheet' : ''} ${
+            showComments ? 'show-comments' : ''
+          }`}
         >
           <div
             className="factsheet"
@@ -79,15 +61,13 @@ export default ({
               maxWidth: FACTSHEET_WIDTH
             }}
           >
-            <DealInfo
-              deal={deal}
-              showBackButton={false}
-            />
+            <DealInfo deal={deal} showBackButton={false} />
           </div>
 
           <Viewer
-            width={PDF_WIDTH}
             file={file}
+            width={PDF_WIDTH}
+            disableKeyboardShortcuts={showComments || showFactsheet}
           />
 
           <div
@@ -98,16 +78,11 @@ export default ({
               maxWidth: COMMENTS_WIDTH
             }}
           >
-            <Comments
-              task={task}
-            />
+            <Comments task={task} />
 
-            <CommentInput
-              task={task}
-            />
+            <CommentInput task={task} />
           </div>
         </div>
-
       </Modal.Body>
     </Modal>
   )
