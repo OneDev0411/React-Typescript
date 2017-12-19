@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
@@ -42,10 +41,12 @@ class CreateDeal extends React.Component {
   }
 
   onUpsertRole(form, type) {
+    let id = form.id || (Object.keys(this.state[type] || {}).length + 1)
+
     this.setState({
       [type]: {
         ...this.state[type],
-        [form.email]: form
+        [id]: { ...form, id }
       }
     })
   }
@@ -56,7 +57,7 @@ class CreateDeal extends React.Component {
     })
   }
 
-  onCreateAddress(component, type) {
+  onCreateAddress(component) {
     this.setState({ dealAddress: component })
   }
 
@@ -191,9 +192,9 @@ class CreateDeal extends React.Component {
     const { agents, clients, referrals } = this.state
     const roles = []
 
-    _.each(clients, client => roles.push(client))
-    _.each(agents, agent => roles.push(agent))
-    _.each(referrals, referral => roles.push(referral))
+    _.each(clients, client => roles.push(_.omit(client, 'id')))
+    _.each(agents, agent => roles.push(_.omit(agent, 'id')))
+    _.each(referrals, referral => roles.push(_.omit(referral, 'id')))
 
     return roles
   }

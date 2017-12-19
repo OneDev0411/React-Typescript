@@ -24,9 +24,10 @@ export default ({
               key={id}
               role={agent}
               modalTitle="Edit referral"
+              buttonText="Edit"
               allowedRoles={allowedRoles}
               onRemoveRole={(id) => onRemoveReferral(id)}
-              onUpsertRole={onUpsertReferral}
+              onUpsertRole={newRole => onUpsertReferral({ ...agent, ...newRole })}
             />
           )
         }

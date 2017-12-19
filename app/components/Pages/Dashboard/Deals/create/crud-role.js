@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, FormControl, Modal } from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap'
 import RoleForm from '../dashboard/roles/form'
 import RoleItem from './role-item'
 
@@ -29,7 +29,7 @@ class CrudRole extends React.Component {
 
   render() {
     const { show, form } = this.state
-    const { role, allowedRoles, onRemoveRole, modalTitle, ctaTitle } = this.props
+    const { role, allowedRoles, onRemoveRole, modalTitle, ctaTitle, buttonText } = this.props
     const buttonDisabled = (form === null)
 
     return (
@@ -77,7 +77,7 @@ class CrudRole extends React.Component {
               disabled={buttonDisabled}
               onClick={() => this.addRole()}
             >
-              Add
+              {buttonText || 'Add'}
             </Button>
           </Modal.Footer>
         </Modal>

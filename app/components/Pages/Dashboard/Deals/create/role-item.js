@@ -24,7 +24,7 @@ export default ({
       className="remove"
       onClick={(e) => {
         e.stopPropagation()
-        onRemove(person.email)
+        onRemove(person.id)
       }}
     >
       <i className="fa fa-times" />
