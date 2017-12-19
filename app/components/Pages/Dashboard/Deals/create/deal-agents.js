@@ -38,9 +38,10 @@ export default ({
               key={id}
               role={agent}
               modalTitle="Edit Agent"
+              buttonText="Edit"
               allowedRoles={allowedRoles}
               onRemoveRole={(id) => onRemoveAgent(id)}
-              onUpsertRole={onUpsertAgent}
+              onUpsertRole={newRole => onUpsertAgent({ ...agent, ...newRole })}
             />
           )
         }

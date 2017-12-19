@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import { browserHistory, Link } from 'react-router'
+import { browserHistory } from 'react-router'
 import ManualAddress from '../../create/manual-address'
 import Deal from '../../../../../../models/Deal'
 import { updateContext } from '../../../../../../store_actions/deals'
@@ -99,7 +99,7 @@ class ListingCard extends React.Component {
           className={cn('listing-photo', { hasListing: deal.listing })}
           onClick={() => this.openListing(deal)}
         >
-          <img src={photo || '/static/images/deals/group-146.svg'} />
+          <img alt="" src={photo || '/static/images/deals/group-146.svg'} />
           <span className="view-btn">VIEW</span>
         </div>
 
@@ -122,7 +122,8 @@ class ListingCard extends React.Component {
           </div>
 
           <img
-            onClick={() => openListing(deal)}
+            alt=""
+            onClick={() => this.openListing(deal)}
             className={cn('open-listing', { hidden: !deal.listing })}
             src="/static/images/deals/view-listing.svg"
           />

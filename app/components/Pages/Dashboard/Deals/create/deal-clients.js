@@ -1,7 +1,6 @@
 import React from 'react'
 import _ from 'underscore'
 import CrudRole from './crud-role'
-import RoleItem from './role-item'
 
 const BUYING = 'Buying'
 const SELLING = 'Selling'
@@ -38,9 +37,10 @@ export default ({
               key={id}
               role={agent}
               modalTitle="Edit client"
+              buttonText="Edit"
               allowedRoles={allowedRoles}
               onRemoveRole={(id) => onRemoveClient(id)}
-              onUpsertRole={onUpsertClient}
+              onUpsertRole={newRole => onUpsertClient({ ...agent, ...newRole })}
             />
           )
         }
