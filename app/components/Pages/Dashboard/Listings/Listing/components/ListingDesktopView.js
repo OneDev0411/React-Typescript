@@ -95,7 +95,7 @@ const ListingDesktopView = ({
     viewer_width = window.innerWidth
 
     if (user && !data.is_widget && container !== 'modal') {
-      viewer_width -= 150
+      viewer_width -= 110
     }
   }
 
@@ -186,8 +186,7 @@ const ListingDesktopView = ({
     const { gallery_image_urls } = listing
     const gallery_chunks = _.chunk(gallery_image_urls, 4)
 
-    const carouselItemDivStyle = `border-right-1-solid-fff w-${viewer_width /
-      4} h-300 pull-left text-center bg-efefef bg-cover bg-center`
+    const carouselItemDivStyle = `border-right-1-solid-fff w-25p h-300 pull-left text-center bg-efefef bg-cover bg-center`
 
     listing_images = (
       <Carousel
@@ -689,7 +688,7 @@ const ListingDesktopView = ({
   }
 
   let viewer_wrap_style = S(
-    `absolute h-100p bg-fff t-0 l-0 z-10 ml-150 w-${viewer_width}`
+    `absolute h-100p bg-fff t-0 l-0 z-10 ml-110 w-${viewer_width}`
   )
 
   if (!user || data.is_widget) {

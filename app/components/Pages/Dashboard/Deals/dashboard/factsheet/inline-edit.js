@@ -113,7 +113,7 @@ export default class Editable extends React.Component {
         {
           editMode && isStringType ?
           '' :
-          <ToolTip caption={approved ? null : 'Approval is pending on this date'}>
+          <ToolTip caption={approved ? null : 'Pending Office Approval'}>
             <span>{context.value}</span>
           </ToolTip>
         }

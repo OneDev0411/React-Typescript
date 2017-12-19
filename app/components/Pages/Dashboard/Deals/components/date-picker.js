@@ -29,12 +29,13 @@ export default class extends React.Component {
       return new Date(initialDate)
     }
 
-    return new Date()
+    return null
   }
 
   render() {
     const { show, saveText, initialDate, onClose, onSelectDate } = this.props
     const { selectedDate } = this.state
+    const date = this.getSelectedDate()
 
     if (!show) {
       return false
@@ -48,8 +49,8 @@ export default class extends React.Component {
       >
         <Modal.Body>
           <DatePicker
-            selectedDays={this.getSelectedDate()}
-            month={this.getSelectedDate()}
+            selectedDays={date}
+            month={date}
             onDayClick={(date) => this.onDateChange(date)}
           />
         </Modal.Body>
@@ -65,6 +66,7 @@ export default class extends React.Component {
           <Button
             className="deal-button"
             onClick={() => onSelectDate(selectedDate)}
+            disabled={!date}
           >
             { saveText || 'Update' }
           </Button>

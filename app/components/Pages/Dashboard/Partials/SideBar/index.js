@@ -8,6 +8,7 @@ import withHandlers from 'recompose/withHandlers'
 import { Link, browerHistory } from 'react-router'
 import Intercom from 'react-intercom'
 import { Dropdown } from 'react-bootstrap'
+import Avatar from './components/Avatar'
 
 import Brand from '../../../../../controllers/Brand'
 
@@ -56,9 +57,31 @@ const IntercomCloseButton = ({ onClick }) => (
   </button>
 )
 
-const NavbarItem = ({ children, isActive }) => (
-  <li className={`c-app-navbar__item ${isActive ? 'is-active' : ''}`}>{children}</li>
-)
+const NavbarItem = ({ children, isActive }) => {
+  let color = '#fff'
+  let backgroundColor = 'transparent'
+
+  if (isActive) {
+    color = ACTIVE_COLOR
+    backgroundColor = ACTIVE_COLOR
+  }
+
+  return (
+    <li
+      className={`c-app-navbar__item ${isActive ? 'is-active' : ''}`}
+      style={{ color }}
+    >
+      {isActive && (
+        <span
+          className="c-app-navbar__item__active-sign"
+          style={{ backgroundColor }}
+        />
+      )}
+
+      {children}
+    </li>
+  )
+}
 
 const appNavbar = ({
   user,
@@ -120,7 +143,7 @@ const appNavbar = ({
       <ul className="c-app-navbar__list c-app-navbar__list--bottom">
         <NavbarItem isActive={activePath === 'NOTIF'}>
           <Link to="/dashboard/notifications" className="c-app-navbar__item__title">
-            Notifications
+            Updates
             {appNotifications > 0 && (
               <span className="c-app-navbar__notification-badge">
                 {appNotifications}
@@ -144,7 +167,7 @@ const appNavbar = ({
           className="c-app-navbar__account-dropdown"
         >
           <Dropdown.Toggle className="c-app-navbar__item__title--button">
-            {user.first_name || user.email || user.phone_number}
+            <Avatar user={user} size={30} />
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <li>

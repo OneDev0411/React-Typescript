@@ -37,7 +37,7 @@ export default ({
   // extract settings
   const { minimize } = settings
   const width = 270 // pixels
-  const defaultLeft = 170 // pixel
+  const defaultLeft = 130 // pixel
 
   let left = width * (number - 1) + defaultLeft
 
