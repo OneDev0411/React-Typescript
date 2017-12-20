@@ -7,6 +7,7 @@ const table = [
   {
     key: 'sales_price',
     name: 'Sold Price',
+    validate: (price) => /^(?:[1-9]\d*|0)?(?:\.\d+)?$/.test(price),
     dataType: 'currency',
     canEdit: (isBO) => isBO
   }, {
