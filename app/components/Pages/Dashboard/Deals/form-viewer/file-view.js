@@ -5,110 +5,94 @@ import Comments from '../dashboard/comments'
 import CommentInput from '../dashboard/comments/input'
 import Viewer from './viewer'
 
-export default ({
-  deal,
-  onClose,
-  showFactsheet,
-  showComments,
-  toggleFactsheet,
-  toggleComments,
-  editForm,
-  task,
-  file,
-  fileType
-}) => {
-  const COMMENTS_WIDTH = showComments ? '300px' : '0px'
-  const FACTSHEET_WIDTH = showFactsheet ? '300px' : '0px'
-  const PDF_WIDTH = `calc(100% - ${COMMENTS_WIDTH} - ${FACTSHEET_WIDTH})`
+export default class extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      disableKeyboardShortcuts: false
+    }
+  }
 
-  return (
-    <Modal
-      className="deal-form-viewer-modal"
-      show
-      onHide={onClose}
-    >
-      <Modal.Header>
-        <Button
-          onClick={onClose}
-          className="close-btn"
-        >
-          X
-        </Button>
+  render() {
+    const { disableKeyboardShortcuts } = this.state
+    const { deal, onClose, showFactsheet, showComments, toggleFactsheet, toggleComments,
+      editForm, task, file, fileType } = this.props
 
-        <span className="title">
-          { file.name }
-        </span>
+    const COMMENTS_WIDTH = showComments ? '300px' : '0px'
+    const FACTSHEET_WIDTH = showFactsheet ? '300px' : '0px'
+    const PDF_WIDTH = `calc(100% - ${COMMENTS_WIDTH} - ${FACTSHEET_WIDTH})`
 
-        <div className="cta">
-          <Button
-            className="deal-button"
-            onClick={toggleFactsheet}
-          >
-            Deal Facts
+    return (
+      <Modal className="deal-form-viewer-modal" show onHide={onClose}>
+        <Modal.Header>
+          <Button onClick={onClose} className="close-btn">
+            X
           </Button>
 
-          <Button
-            className="deal-button comments"
-            onClick={toggleComments}
-          >
-            Comments
-          </Button>
+          <span className="title">{file.name}</span>
 
-          {
-            fileType === 'digital-form' &&
-            <Button
-              className="deal-button edit-form"
-              onClick={editForm}
-            >
-              Edit Form
+          <div className="cta">
+            <Button className="deal-button" onClick={toggleFactsheet}>
+              Deal Facts
             </Button>
-          }
-        </div>
 
-      </Modal.Header>
+            <Button className="deal-button comments" onClick={toggleComments}>
+              Comments
+            </Button>
 
-      <Modal.Body>
-        <div
-          className={`fw-wrapper ${showFactsheet ? 'show-factsheet' : ''} ${showComments ? 'show-comments' : ''}`}
-        >
-          <div
-            className="factsheet"
-            style={{
-              display: showFactsheet ? 'block' : 'none',
-              minWidth: FACTSHEET_WIDTH,
-              maxWidth: FACTSHEET_WIDTH
-            }}
-          >
-            <DealInfo
-              deal={deal}
-              showBackButton={false}
-            />
+            {fileType === 'digital-form' && (
+              <Button className="deal-button edit-form" onClick={editForm}>
+                Edit Form
+              </Button>
+            )}
           </div>
+        </Modal.Header>
 
-          <Viewer
-            width={PDF_WIDTH}
-            file={file}
-          />
-
+        <Modal.Body>
           <div
-            className="comments"
-            style={{
-              display: showComments ? 'block' : 'none',
-              minWidth: COMMENTS_WIDTH,
-              maxWidth: COMMENTS_WIDTH
-            }}
+            className={`fw-wrapper ${showFactsheet ? 'show-factsheet' : ''} ${
+              showComments ? 'show-comments' : ''
+            }`}
           >
-            <Comments
-              task={task}
+            <div
+              className="factsheet"
+              style={{
+                display: showFactsheet ? 'block' : 'none',
+                minWidth: FACTSHEET_WIDTH,
+                maxWidth: FACTSHEET_WIDTH
+              }}
+            >
+              <DealInfo
+                deal={deal}
+                showBackButton={false}
+              />
+            </div>
+
+            <Viewer
+              file={file}
+              width={PDF_WIDTH}
+              disableKeyboardShortcuts={disableKeyboardShortcuts}
             />
 
-            <CommentInput
-              task={task}
-            />
+            <div
+              className="comments"
+              style={{
+                display: showComments ? 'block' : 'none',
+                minWidth: COMMENTS_WIDTH,
+                maxWidth: COMMENTS_WIDTH
+              }}
+            >
+              <Comments task={task} />
+
+              <CommentInput
+                task={task}
+                onFocus={() => this.setState({ disableKeyboardShortcuts: true })}
+                onBlur={() => this.setState({ disableKeyboardShortcuts: false })}
+              />
+            </div>
           </div>
-        </div>
-
-      </Modal.Body>
-    </Modal>
-  )
+        </Modal.Body>
+      </Modal>
+    )
+  }
 }
