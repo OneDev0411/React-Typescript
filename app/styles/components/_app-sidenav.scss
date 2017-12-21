@@ -34,8 +34,9 @@ $item-height: 3.4rem;
   height: $item-height;
   padding-left: 1rem;
   cursor: pointer;
+  transition: background-color 0.2s ease-in;
 
-  &:hover {
+  &:not(.is-active):hover {
     background-color: rgba(#62778c, 0.4);
   }
 }
@@ -46,6 +47,12 @@ $item-height: 3.4rem;
   left: 0;
   width: 3px;
   height: 100%;
+  opacity: 0;
+  will-change: opacity;
+
+  .c-app-sidenav__item.is-active > & {
+    opacity: 1;
+  }
 }
 
 .c-app-sidenav__item__title,
@@ -59,14 +66,13 @@ $item-height: 3.4rem;
 
   &:hover,
   &:active,
-  .c-app-sidenav__item.is-active &,
-  .c-app-sidenav__item.is-active &:hover {
-    color: #fff;
+  .c-app-sidenav__item.is-active & {
+    color: lighten(#8da2b5, 30%);
     text-decoration: none;
   }
 
   .c-app-sidenav__item.is-active & {
-    color: inherit;
+    color: #fff;
     font-weight: bold;
   }
 }

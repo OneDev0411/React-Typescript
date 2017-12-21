@@ -55,31 +55,17 @@ const IntercomCloseButton = ({ onClick }) => (
   </button>
 )
 
-const SideNavItem = ({ children, isActive }) => {
-  let color = '#fff'
-  let backgroundColor = 'transparent'
-
-  if (isActive) {
-    color = ACTIVE_COLOR
-    backgroundColor = ACTIVE_COLOR
-  }
-
-  return (
-    <li
-      className={`c-app-sidenav__item ${isActive ? 'is-active' : ''}`}
-      style={{ color }}
-    >
-      {isActive && (
-        <span
-          className="c-app-sidenav__item__active-sign"
-          style={{ backgroundColor }}
-        />
-      )}
-
-      {children}
-    </li>
-  )
-}
+const SideNavItem = ({ children, isActive }) => (
+  <li
+    className={`c-app-sidenav__item ${isActive ? 'is-active' : ''}`}
+  >
+    <span
+      className="c-app-sidenav__item__active-sign"
+      style={{ backgroundColor: ACTIVE_COLOR }}
+    />
+    {children}
+  </li>
+)
 
 const appNavbar = ({
   user,
