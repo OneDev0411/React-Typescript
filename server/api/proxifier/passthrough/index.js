@@ -34,7 +34,11 @@ router.post('/proxifier', bodyParser(), async ctx => {
       }
       request = ctx.fetch(endpoint, method).send(requestBody)
     } else {
-      request = ctx.fetch(endpoint, method).send(ctx.request.body)
+      request = ctx.fetch(endpoint, method)
+
+      if (method.toLowerCase() !== 'get') {
+        request.send(ctx.request.body)
+      }
     }
 
     if (headers.authorization) {
