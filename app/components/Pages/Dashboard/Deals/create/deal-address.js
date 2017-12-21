@@ -91,7 +91,7 @@ export default class DealAddress extends React.Component {
                 >
                   <span className="add-item">
                     <span className="icon">+</span>
-                    <span className="text">Add Listing</span>
+                    <span className="text">Add From MLS</span>
                   </span>
                 </div>
               }
