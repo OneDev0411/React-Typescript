@@ -92,7 +92,7 @@ export default class Editable extends React.Component {
     const isStringType = !isDateType
 
     if (disabled) {
-      return <span>{context.value}</span>
+      return <span className="disabeld-field">{context.value}</span>
     }
 
 
