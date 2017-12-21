@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
-import moment from 'moment'
 import Deal from '../../../../../../models/Deal'
 import Editable from './inline-edit'
 import { updateContext } from '../../../../../../store_actions/deals'
@@ -67,23 +66,16 @@ class Table extends React.Component {
                         { field.name }
                       </div>
 
-                      <div className={cn('field', { editable: true, approved, disabled })}>
-                        <Editable
-                          field={field}
-                          context={fieldCtx}
-                          editable={editable}
-                          disabled={disabled}
-                          approved={approved}
-                          isBackOffice={isBackOffice}
-                          saving={saving}
-                          onChange={(field, value) => this.onChangeContext(field, value)}
-                        />
-
-                        {
-                          saving && saving === field.key &&
-                          <i className="fa fa-spin fa-spinner" />
-                        }
-                      </div>
+                      <Editable
+                        field={field}
+                        context={fieldCtx}
+                        editable={editable}
+                        disabled={disabled}
+                        approved={approved}
+                        isBackOffice={isBackOffice}
+                        saving={saving}
+                        onChange={(field, value) => this.onChangeContext(field, value)}
+                      />
                     </div>
 
                     <div className="approve-row">

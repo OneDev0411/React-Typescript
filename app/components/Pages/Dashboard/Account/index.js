@@ -4,8 +4,8 @@ import Tabs from './components/Tabs'
 
 const AccountLayout = ({ user, children }) => (
   <div className="l-account">
-    <aside className="l-account__sidebar">
-      <header className="l-account__sidebar__header">
+    <aside className="l-account__sidenav">
+      <header className="l-account__sidenav__header">
         <h1>Account Settings</h1>
       </header>
       <Tabs user={user} />

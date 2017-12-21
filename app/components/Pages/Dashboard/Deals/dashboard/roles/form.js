@@ -1,8 +1,8 @@
 import React from 'react'
-import { FormGroup, FormControl, Dropdown, DropdownButton, MenuItem } from 'react-bootstrap'
+import _ from 'underscore'
+import { Dropdown, MenuItem } from 'react-bootstrap'
 import cn from 'classnames'
 import roleNames from '../../utils/roles'
-import ToolTip from '../../components/tooltip'
 
 const role_names = [
   'BuyerAgent',
@@ -68,10 +68,19 @@ export default class Form extends React.Component {
     return re.test(email)
   }
 
-  isValidPhone(phone) {
-    const phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
+  async isValidPhone(phone) {
+    const {
+      PhoneNumberUtil
+    } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+    const phoneUtil = PhoneNumberUtil.getInstance()
 
-    return phoneNumberPattern.test(phone)
+    try {
+      let phoneNumber = phoneUtil.parse(phone, 'US')
+
+      return phoneUtil.isValidNumber(phoneNumber)
+    } catch (e) {
+      return false
+    }
   }
 
   shouldShowCommission(form) {
@@ -98,7 +107,7 @@ export default class Form extends React.Component {
     return allowedRoles.indexOf(name) > -1
   }
 
-  validate(field, value) {
+  async validate(field, value) {
     const { form, validation } = this.state
     const showCommission = this.shouldShowCommission(form)
     const requiredFields = ['legal_first_name', 'legal_last_name', 'email', 'role']
@@ -118,7 +127,7 @@ export default class Form extends React.Component {
 
     const validator = fields[field]
 
-    if (value.length > 0 && validator && !validator(value)) {
+    if (value.length > 0 && validator && !await validator(value)) {
       this.setState({
         validation: {
           ...validation,
@@ -137,7 +146,6 @@ export default class Form extends React.Component {
   }
 
   render() {
-    const { deal, allowedRoles } = this.props
     const { form, validation } = this.state
     const showCommission = this.shouldShowCommission(form)
 

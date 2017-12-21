@@ -17,6 +17,7 @@ const table = [
     key: 'list_price',
     name: 'List Price',
     dataType: 'currency',
+    validate: (price) => /^(?:[1-9]\d*|0)?(?:\.\d+)?$/.test(price),
     canEdit: (isBO) => isBO
   }, {
     key: 'property_type',
