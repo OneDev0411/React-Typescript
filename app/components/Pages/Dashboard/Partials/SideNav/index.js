@@ -1,5 +1,3 @@
-// Sidebar.js
-import S from 'shorti'
 import React from 'react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
@@ -19,7 +17,7 @@ import { hasUserAccess, getUserRoles } from '../../../../../utils/user-acl'
 import Inbox from '../../Chatroom/Shared/instant-trigger'
 
 // deals notification badge counter
-import DealsNotifications from '../../Deals/components/sidebar-badge'
+import DealsNotifications from '../../Deals/components/SideNavBadge'
 
 const ACTIVE_COLOR = `#${Brand.color('primary', '3388ff')}`
 const DEFAULT_COLOR = '#8da2b5'
@@ -57,31 +55,17 @@ const IntercomCloseButton = ({ onClick }) => (
   </button>
 )
 
-const NavbarItem = ({ children, isActive }) => {
-  let color = '#fff'
-  let backgroundColor = 'transparent'
-
-  if (isActive) {
-    color = ACTIVE_COLOR
-    backgroundColor = ACTIVE_COLOR
-  }
-
-  return (
-    <li
-      className={`c-app-navbar__item ${isActive ? 'is-active' : ''}`}
-      style={{ color }}
-    >
-      {isActive && (
-        <span
-          className="c-app-navbar__item__active-sign"
-          style={{ backgroundColor }}
-        />
-      )}
-
-      {children}
-    </li>
-  )
-}
+const SideNavItem = ({ children, isActive }) => (
+  <li
+    className={`c-app-sidenav__item ${isActive ? 'is-active' : ''}`}
+  >
+    <span
+      className="c-app-sidenav__item__active-sign"
+      style={{ backgroundColor: ACTIVE_COLOR }}
+    />
+    {children}
+  </li>
+)
 
 const appNavbar = ({
   user,
@@ -102,71 +86,71 @@ const appNavbar = ({
   const hasBackOfficePermission = roles.includes('BackOffice')
 
   return (
-    <aside className="c-app-navbar">
-      <ul className="c-app-navbar__list c-app-navbar__list--top">
-        <NavbarItem>
+    <aside className="c-app-sidenav">
+      <ul className="c-app-sidenav__list c-app-sidenav__list--top">
+        <SideNavItem>
           <Inbox />
-        </NavbarItem>
+        </SideNavItem>
 
-        <NavbarItem isActive={activePath === 'MAP'}>
-          <Link to="/dashboard/mls" className="c-app-navbar__item__title">
+        <SideNavItem isActive={activePath === 'MAP'}>
+          <Link to="/dashboard/mls" className="c-app-sidenav__item__title">
             MLS
           </Link>
-        </NavbarItem>
+        </SideNavItem>
 
         {user.user_type !== 'Client' && (
-          <NavbarItem isActive={activePath === 'CONTACTS'}>
-            <Link to="/dashboard/contacts" className="c-app-navbar__item__title">
+          <SideNavItem isActive={activePath === 'CONTACTS'}>
+            <Link to="/dashboard/contacts" className="c-app-sidenav__item__title">
               Contacts
             </Link>
-          </NavbarItem>
+          </SideNavItem>
         )}
 
         {(hasDealsPermission || hasBackOfficePermission) && (
-          <NavbarItem isActive={activePath === 'DEALS'}>
-            <Link to="/dashboard/deals" className="c-app-navbar__item__title">
+          <SideNavItem isActive={activePath === 'DEALS'}>
+            <Link to="/dashboard/deals" className="c-app-sidenav__item__title">
               Deals
               <DealsNotifications />
             </Link>
-          </NavbarItem>
+          </SideNavItem>
         )}
 
         {user.agent &&
           user.user_type === 'Agent' &&
           user.agent.office_mlsid === 'CSTPP01' && (
-            <NavbarItem isActive={activePath === 'STORE'}>
+            <SideNavItem isActive={activePath === 'STORE'}>
               <Link to="/dashboard/website">Store</Link>
-            </NavbarItem>
+            </SideNavItem>
           )}
       </ul>
 
-      <ul className="c-app-navbar__list c-app-navbar__list--bottom">
-        <NavbarItem isActive={activePath === 'NOTIF'}>
-          <Link to="/dashboard/notifications" className="c-app-navbar__item__title">
+      <ul className="c-app-sidenav__list c-app-sidenav__list--bottom">
+        <SideNavItem isActive={activePath === 'NOTIF'}>
+          <Link to="/dashboard/notifications" className="c-app-sidenav__item__title">
             Updates
             {appNotifications > 0 && (
-              <span className="c-app-navbar__notification-badge">
+              <span className="c-app-sidenav__notification-badge">
                 {appNotifications}
               </span>
             )}
           </Link>
-        </NavbarItem>
+        </SideNavItem>
 
-        <NavbarItem isActive={intercomIsActive}>
+        <SideNavItem isActive={intercomIsActive}>
           <button
             onClick={activeIntercom}
-            className="c-app-navbar__item__title--button"
+            className="c-app-sidenav__item__title--button"
           >
             Support
           </button>
-        </NavbarItem>
+        </SideNavItem>
 
         <Dropdown
           dropup
           id="account-dropdown"
-          className="c-app-navbar__account-dropdown"
+          className="c-app-sidenav__account-dropdown"
         >
-          <Dropdown.Toggle className="c-app-navbar__item__title--button">
+          <Dropdown.Toggle className="c-app-sidenav__item__title--button">
             <Avatar user={user} size={30} />
           </Dropdown.Toggle>
           <Dropdown.Menu>

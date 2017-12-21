@@ -47,7 +47,7 @@ export default ({
 
               <Col md={7} sm={7} xs={7} className="address-col">
                 <span style={{ color: '#5b6469' }}>
-                  {c.street_number} {c.street_name} {c.street_suffix}
+                  {c.street_number} {c.street_name} {c.street_suffix} Unit {c.unit_number}
                 </span>
 
                 <span className="addr">

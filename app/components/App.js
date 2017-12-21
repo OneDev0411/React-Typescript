@@ -14,7 +14,7 @@ import DealSocket from './Pages/Dashboard/Deals/services/socket'
 import { hasUserAccess } from '../utils/user-acl'
 
 // navs
-import SideBar from './Pages/Dashboard/Partials/SideBar'
+import SideNav from './Pages/Dashboard/Partials/SideNav'
 
 // global chat components
 import { getRooms } from '../store_actions/chatroom'
@@ -260,8 +260,8 @@ class App extends Component {
       user
     })
 
-    // render sidebar
-    let navArea = <SideBar data={data} location={location} />
+    // render sideNav
+    let navArea = <SideNav data={data} location={location} />
 
     if (data.is_mobile && user) {
       navArea = <div />

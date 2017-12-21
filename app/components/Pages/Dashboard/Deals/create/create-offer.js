@@ -111,7 +111,7 @@ class CreateOffer extends React.Component {
     const { clients, enderType, criticalDates } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
-    const order = this.getMaxOrder() + 1
+    const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
     const buyerName = isBackupOffer ? this.state.buyerName : _.map(clients, client =>
       `${client.legal_first_name} ${client.legal_last_name}`).join(', ')
 
@@ -139,7 +139,7 @@ class CreateOffer extends React.Component {
         dismissAfter: 6000
       })
 
-      this.backToDeal()
+      return this.backToDeal()
     } catch (e) {
       notify({
         title: 'Could not create offer',

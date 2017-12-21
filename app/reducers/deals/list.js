@@ -37,10 +37,10 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          checklists: [
+          checklists: _.uniq([
             ...state[action.deal_id].checklists || [],
             action.checklist_id
-          ]
+          ])
         }
       }
 

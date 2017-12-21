@@ -29,6 +29,7 @@ const table = [
     key: 'file_id',
     name: 'File ID',
     dataType: 'text',
+    validate: () => true,
     canEdit: (isBO) => isBO
   }
 ]
