@@ -71,7 +71,7 @@ class BadgeCounter extends React.Component {
     const counter = this.getBadgeCount()
 
     if (counter > 0) {
-      return <span className="c-app-navbar__notification-badge">{counter}</span>
+      return <span className="c-app-sidenav__notification-badge">{counter}</span>
     }
 
     return <span />

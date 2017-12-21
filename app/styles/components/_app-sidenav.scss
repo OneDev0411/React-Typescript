@@ -1,8 +1,8 @@
-// Sidebar
+// SideNav
 
 $item-height: 3.4rem;
 
-.c-app-navbar {
+.c-app-sidenav {
   width: $app-sidenav-width;
   height: 100vh;
   position: fixed;
@@ -13,23 +13,23 @@ $item-height: 3.4rem;
   background-color: #263445;
 }
 
-.c-app-navbar__list {
+.c-app-sidenav__list {
   margin: 0;
   padding: 0;
 }
 
-.c-app-navbar__list--top {
+.c-app-sidenav__list--top {
   padding-top: 1rem;
 }
 
-.c-app-navbar__list--bottom {
+.c-app-sidenav__list--bottom {
   width: 100%;
   position: absolute;
   left: 0;
   bottom: 1rem;
 }
 
-.c-app-navbar__item {
+.c-app-sidenav__item {
   position: relative;
   height: $item-height;
   padding-left: 1rem;
@@ -40,7 +40,7 @@ $item-height: 3.4rem;
   }
 }
 
-.c-app-navbar__item__active-sign {
+.c-app-sidenav__item__active-sign {
   position: absolute;
   top: 0;
   left: 0;
@@ -48,8 +48,8 @@ $item-height: 3.4rem;
   height: 100%;
 }
 
-.c-app-navbar__item__title,
-.c-app-navbar__item__title--button {
+.c-app-sidenav__item__title,
+.c-app-sidenav__item__title--button {
   width: 100%;
   display: block;
   padding: 0;
@@ -59,19 +59,19 @@ $item-height: 3.4rem;
 
   &:hover,
   &:active,
-  .c-app-navbar__item.is-active &,
-  .c-app-navbar__item.is-active &:hover {
+  .c-app-sidenav__item.is-active &,
+  .c-app-sidenav__item.is-active &:hover {
     color: #fff;
     text-decoration: none;
   }
 
-  .c-app-navbar__item.is-active & {
+  .c-app-sidenav__item.is-active & {
     color: inherit;
     font-weight: bold;
   }
 }
 
-.c-app-navbar__item__title--button {
+.c-app-sidenav__item__title--button {
   border: none;
   text-align: left;
   background: transparent;
@@ -81,11 +81,11 @@ $item-height: 3.4rem;
   }
 }
 
-.c-app-navbar__item__inbox {
+.c-app-sidenav__item__inbox {
   height: 100%;
 }
 
-.c-app-navbar__notification-badge {
+.c-app-sidenav__notification-badge {
   $size: 20px;
   position: absolute;
   top: 0.7rem;
@@ -100,12 +100,12 @@ $item-height: 3.4rem;
   background-color: red;
 }
 
-.c-app-navbar__account-dropdown {
+.c-app-sidenav__account-dropdown {
   width: 90%;
   padding-left: 1rem;
   margin-top: 1rem;
 
-  > .c-app-navbar__item__title--button {
+  > .c-app-sidenav__item__title--button {
     &:hover,
     &:focus,
     &:active,
@@ -130,7 +130,7 @@ $item-height: 3.4rem;
     }
   }
 
-  &.open > .c-app-navbar__item__title--button {
+  &.open > .c-app-sidenav__item__title--button {
     color: #fff;
     border: none;
     background: transparent;
