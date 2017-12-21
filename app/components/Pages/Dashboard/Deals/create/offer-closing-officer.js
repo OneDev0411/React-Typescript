@@ -8,12 +8,12 @@ export default ({
   onRemoveClosingOfficer,
   onUpsertClosingOfficer
 }) => {
-  const allowedRoles = ['Title'] // Title == Closing Officer
+  const allowedRoles = ['Title'] // Title == Escrow Officer
 
   return (
     <div className="form-section deal-people deal-client">
       <div className="hero">
-       Do you know who the closing officer is?
+       Do you know who the Escrow Officer is?
       </div>
 
       <div className="people-container">
@@ -23,7 +23,7 @@ export default ({
               key={id}
               role={agent}
               allowedRoles={allowedRoles}
-              modalTitle="Edit closing officer"
+              modalTitle="Edit Escrow Officer"
               onRemoveRole={(id) => onRemoveClosingOfficer(id)}
               onUpsertRole={onUpsertClosingOfficer}
             />
@@ -31,8 +31,8 @@ export default ({
         }
 
         <CrudRole
-          modalTitle="Add closing officer"
-          ctaTitle="Add closing officer"
+          modalTitle="Add Escrow Officer"
+          ctaTitle="Add Escrow Officer"
           allowedRoles={allowedRoles}
           onUpsertRole={onUpsertClosingOfficer}
         />
