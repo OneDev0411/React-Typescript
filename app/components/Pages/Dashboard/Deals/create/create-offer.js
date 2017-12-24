@@ -38,6 +38,41 @@ class CreateOffer extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const { deal } = this.props
+    this.prepopulateRoles(deal.roles)
+  }
+
+  prepopulateRoles(roles) {
+    roles.forEach(item => {
+      let type
+
+      switch (item.role) {
+        case 'Seller':
+        case 'Landlord':
+          type = 'clients'
+          break
+
+        case 'SellerAgent':
+          type = 'agents'
+          break
+
+        case 'SellerReferral':
+          type = 'referrals'
+          break
+
+        case 'Title':
+          type = 'closingOfficers'
+          break
+      }
+
+      if (type) {
+        item.disabled = true
+        this.onUpsertRole(item, type)
+      }
+    })
+  }
+
   onUpsertRole(form, type) {
     this.setState({
       [type]: {

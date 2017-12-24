@@ -314,6 +314,13 @@ $margin: 20px;
     }
   }
 
+  &.disabled {
+    .name:hover, .user-avatar:hover {
+      text-decoration: none;
+      cursor: auto;
+    }
+  }
+
   .add-item {
     display: flex;
     cursor: pointer;
