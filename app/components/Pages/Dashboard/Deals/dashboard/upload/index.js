@@ -1,14 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, ProgressBar } from 'react-bootstrap'
-import { batchActions } from 'redux-batched-actions'
+import { ProgressBar } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
-import moment from 'moment'
-import _ from 'underscore'
 import cn from 'classnames'
-import ChatModel from '../../../../../../models/Chatroom'
 import ChatMessage from '../../../Chatroom/Util/message'
-import { addAttachment, setUploadFiles } from '../../../../../../store_actions/deals'
+import {
+  setUploadFiles } from '../../../../../../store_actions/deals'
 
 class UploadDocument extends React.Component {
   constructor(props) {
@@ -19,8 +16,7 @@ class UploadDocument extends React.Component {
   }
 
   async onDrop(files) {
-    const { deal, task, onDrop, onDropHandler } = this.props
-    const { dropzoneActive } = this.state
+    const { deal, task, onDrop } = this.props
 
     this.setState({
       dropzoneActive: false
@@ -117,4 +113,4 @@ class UploadDocument extends React.Component {
 
 export default connect(({ user }) => ({
   user
-}), { addAttachment, setUploadFiles })(UploadDocument)
+}), { setUploadFiles })(UploadDocument)
