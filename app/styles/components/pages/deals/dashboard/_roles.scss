@@ -62,8 +62,24 @@
       width: 100%;
     }
 
-    .commission {
+    .commission-row {
       width: 100%;
+      box-shadow: 0 -1px 0 0 #dce5eb, 0 1px 1px 0 #dce5eb;
+
+      .radio {
+        height: auto;
+        display: inline;
+        background-color: transparent;
+        box-shadow: none;
+        margin-left: 10px;
+      }
+
+      .commission {
+        margin-left: 15px;
+        width: 80%;
+        box-shadow: none;
+        border-left: 1px solid #dce5eb;
+      }
     }
 
     @extend %deal-roles-drop-downs;
