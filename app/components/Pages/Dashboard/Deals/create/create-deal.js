@@ -120,7 +120,12 @@ class CreateDeal extends React.Component {
 
     const dealObject = {
       property_type: dealPropertyType,
-      deal_type: dealSide
+      deal_type: dealSide,
+      roles: this.getRoles(),
+      deal_context: {
+        ...criticalDates,
+        listing_status: isBuyingDeal ? dealStatus : 'Active'
+      }
     }
 
     if (dealAddress) {
@@ -135,20 +140,11 @@ class CreateDeal extends React.Component {
     this.setState({ saving: true })
 
     try {
-      // create deal
+      // // create deal
       const deal = await Deal.create(user, dealObject)
 
       // dispatch new deal
       await createDeal(deal)
-
-      // add roles
-      await createRoles(deal.id, this.getRoles())
-
-      // create contexts
-      await updateContext(deal.id, {
-        ...criticalDates,
-        listing_status: isBuyingDeal ? dealStatus : 'Active'
-      }, true)
 
       return OpenDeal(deal.id)
     } catch (e) {
