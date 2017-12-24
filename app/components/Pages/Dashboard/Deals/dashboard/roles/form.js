@@ -343,8 +343,8 @@ export default class Form extends React.Component {
           <input
             className="company"
             placeholder="Company"
-            value={form.title_company || ''}
-            onChange={e => this.setForm('title_company', e.target.value)}
+            value={form.company_title || ''}
+            onChange={e => this.setForm('company_title', e.target.value)}
           />
         }
       </div>
