@@ -1,5 +1,5 @@
 const aliases = {
-  Title: 'Closing Officer',
+  Title: 'Escrow Officer',
   Lender: 'Lending Agent'
 }
 
