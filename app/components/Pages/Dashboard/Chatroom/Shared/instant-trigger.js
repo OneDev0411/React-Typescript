@@ -27,12 +27,12 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
   return (
     <div>
       <button
-        className="c-app-navbar__item__title--button"
+        className="c-app-sidenav__item__title--button"
         onClick={() => openChatbar(toggleChatbar)}
       >
         Inbox
         {counter > 0 && (
-          <span className="c-app-navbar__notification-badge">{counter}</span>
+          <span className="c-app-sidenav__notification-badge">{counter}</span>
         )}
       </button>
     </div>

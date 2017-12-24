@@ -21,8 +21,9 @@ class Roles extends React.Component {
 
     if (onSelectRole) {
       onSelectRole({
-        first_name: item.user.first_name,
-        last_name: item.user.last_name,
+        legal_prefix: item.legal_prefix,
+        legal_first_name: item.legal_first_name,
+        legal_last_name: item.legal_last_name,
         email: item.user.email,
         role: item.role
       })

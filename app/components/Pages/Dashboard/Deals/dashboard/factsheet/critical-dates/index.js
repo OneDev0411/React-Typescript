@@ -9,55 +9,64 @@ const table = [
     name: 'Listing Date',
     alias: 'Lst.',
     fieldType: 'date',
-    canEdit: (isBO) => isBO
+    canEdit: (isBO) => isBO,
+    validate: () => true
   }, {
     key: 'expiration_date',
     name: 'Listing Expiration',
     alias: 'Exp.',
     fieldType: 'date',
-    canEdit: (isBO) => isBO
+    canEdit: (isBO) => isBO,
+    validate: () => true
   }, {
     key: 'contract_date',
     name: 'Offer Date',
     alias: 'Off.',
     fieldType: 'date',
-    canEdit: (isBO) => isBO
+    canEdit: (isBO) => isBO,
+    validate: () => true
   }, {
     key: 'option_period',
     name: 'Option Ending',
     alias: 'Opt.',
     fieldType: 'date',
-    canEdit: (isBO) => isBO
+    canEdit: (isBO) => isBO,
+    validate: () => true
   }, {
     key: 'financing_due',
     name: 'Financing Due',
     alias: 'Fin.',
     fieldType: 'date',
-    canEdit: () => true
+    canEdit: () => true,
+    validate: () => true
   }, {
     key: 'title_due',
     name: 'Title Work Due',
     alias: 'Til.',
     fieldType: 'date',
-    canEdit: () => true
+    canEdit: () => true,
+    validate: () => true
   }, {
     key: 't47_due',
     name: 'Survey Due',
     alias: 'T47.',
     fieldType: 'date',
-    canEdit: () => true
+    canEdit: () => true,
+    validate: () => true
   }, {
     key: 'closing_date',
     name: 'Closing',
     alias: 'Cls.',
     fieldType: 'date',
-    canEdit: (isBO) => isBO
+    canEdit: (isBO) => isBO,
+    validate: () => true
   }, {
     key: 'possession_date',
     name: 'Possession',
     alias: 'Pos.',
     fieldType: 'date',
-    canEdit: (isBO) => isBO
+    canEdit: (isBO) => isBO,
+    validate: () => true
   }
 ]
 

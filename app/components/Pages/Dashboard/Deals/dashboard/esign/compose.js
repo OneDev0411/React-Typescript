@@ -99,8 +99,9 @@ class SendSignatures extends React.Component {
       }
 
       this.addRecipients({
-        first_name: item.user.first_name,
-        last_name: item.user.last_name,
+        legal_prefix: item.user.legal_prefix,
+        legal_first_name: item.user.first_name,
+        legal_last_name: item.user.last_name,
         email: item.user.email,
         role: item.role
       })
