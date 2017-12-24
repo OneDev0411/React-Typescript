@@ -4,17 +4,16 @@ import RadioButton from '../components/radio'
 
 const properties = [
   'Resale',
+  'Residential Lease',
   'New Home',
   'Lot / Land',
-  'Residential Lease',
   'Commercial Sale',
   'Commercial Lease'
 ]
 
 export default ({
   selectedType,
-  onChangeDealType,
-  display
+  onChangeDealType
 }) => (
   <div className="form-section deal-type">
     <div className="hero">
