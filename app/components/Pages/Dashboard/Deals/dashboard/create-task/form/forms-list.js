@@ -1,15 +1,17 @@
 import React from 'react'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import Dropzone from 'react-dropzone'
 import cn from 'classnames'
-import Upload from '../../upload'
+import _ from 'underscore'
+import TaskName from './task-name'
 
 class Forms extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      filter: ''
+      filter: '',
+      showTaskNameModal: false,
+      taskName: ''
     }
   }
 
@@ -24,8 +26,19 @@ class Forms extends React.Component {
   }
 
   render() {
-    const { creatingForm, forms, deal, show, onClose, onSelectForm } = this.props
-    const { filter } = this.state
+    const {
+      creatingForm,
+      forms,
+      show,
+      onClose,
+      onSelectForm,
+      addTaskName,
+      isCreatingTask
+    } = this.props
+    const {
+      filter,
+      showTaskNameModal
+    } = this.state
 
     return (
       <Modal
@@ -61,7 +74,7 @@ class Forms extends React.Component {
                     onDoubleClick={() => null}
                     className={cn({ disabled: creatingForm !== null })}
                   >
-                    { form.name }
+                    {form.name}
 
                     {
                       creatingForm && creatingForm.id === form.id &&
@@ -77,13 +90,22 @@ class Forms extends React.Component {
         <Modal.Footer>
           <ul>
             <li className="upload">
-              <Upload
-                task={{}}
-                deal={deal}
-                onDrop={files => this.onSelectFile(files)}
+
+              <TaskName
+                show={showTaskNameModal}
+                onClose={() => this.setState({ showTaskNameModal: false })}
+                isCreatingTask={isCreatingTask}
+                addTaskName={(taskName) => {
+                  addTaskName(taskName)
+                  console.log('form list: ', taskName)
+                }}
+              />
+              <div onClick={() => this.setState({
+                showTaskNameModal: true
+              })}
               >
                 <i className="fa fa-plus" /> Other
-              </Upload>
+              </div>
             </li>
           </ul>
         </Modal.Footer>

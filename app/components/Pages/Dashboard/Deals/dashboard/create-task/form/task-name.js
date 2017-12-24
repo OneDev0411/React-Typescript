@@ -8,49 +8,13 @@ import {
 } from '../../../../../../../store_actions/deals'
 
 class TaskName extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      title: '',
-      isCreatingTask: false
-    }
-  }
-
-  async create() {
-    const { files, createFormTask, setSelectedTask, listId, deal,
-      onClose, setUploadFiles } = this.props
-
-    const { title, isCreatingTask } = this.state
-
-    if (isCreatingTask || title.length === 0 || files.length === 0) {
-      return false
-    }
-
-    // change status
-    this.setState({ isCreatingTask: true })
-
-    try {
-      // create task
-      const task = await createFormTask(deal.id, null, title, listId)
-
-      // make task active
-      setSelectedTask(task)
-
-      // upload file
-      setUploadFiles(files, deal, task)
-    } catch (e) {
-      // todo
-    } finally {
-      this.setState({
-        isCreatingTask: false,
-        title: ''
-      }, onClose)
-    }
-  }
-
   render() {
-    const { show, onClose } = this.props
-    const { title, isCreatingTask } = this.state
+    const {
+      show,
+      onClose,
+      addTaskName,
+      isCreatingTask
+    } = this.props
 
     return (
       <Modal
@@ -67,8 +31,7 @@ class TaskName extends React.Component {
           <span className="label">Title</span>
           <input
             type="text"
-            value={title}
-            onChange={e => this.setState({ title: e.target.value })}
+            ref={input => this.input = input}
           />
 
           <span className="note">
@@ -79,10 +42,12 @@ class TaskName extends React.Component {
         <Modal.Footer>
           <Button
             bsStyle="primary"
-            disabled={isCreatingTask}
-            onClick={() => this.create()}
+            onClick={() => {
+              console.log('task name: ', this.input.value)
+              addTaskName(this.input.value)
+            }}
           >
-            { isCreatingTask ? 'Creating Task ...' : 'Create Task' }
+            {isCreatingTask ? 'Creating Task ...' : 'Create Task'}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -91,4 +56,5 @@ class TaskName extends React.Component {
 }
 
 export default connect(null, {
-  createFormTask, setSelectedTask, setUploadFiles })(TaskName)
+  createFormTask, setSelectedTask, setUploadFiles
+})(TaskName)
