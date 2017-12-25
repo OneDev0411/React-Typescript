@@ -60,6 +60,7 @@ export default class Form extends React.Component {
    */
   setCommissionType(type) {
     const { form } = this.state
+
     delete form[this.getCommissionField()]
 
     this.setState({ commission_type: type }, () => this.setCommission(''))
@@ -94,6 +95,7 @@ export default class Form extends React.Component {
    */
   getCommissionValue() {
     const { form } = this.state
+
     return form[this.getCommissionField()]
   }
 
@@ -211,6 +213,7 @@ export default class Form extends React.Component {
     }
 
     const isFormCompleted = _.every(requiredFields, name => fields[name](form[name]))
+
     this.props.onFormCompleted(isFormCompleted ? form : null)
   }
 
@@ -219,7 +222,7 @@ export default class Form extends React.Component {
     const showCommission = this.shouldShowCommission(form)
 
     return (
-      <div>
+      <div className="deal-roles-form">
         <Dropdown id="deal-add-role-title--drp" bsStyle="default">
           <Dropdown.Toggle>
             {form.legal_prefix || 'Title'}
@@ -240,28 +243,35 @@ export default class Form extends React.Component {
             }
           </Dropdown.Menu>
         </Dropdown>
-
-        <input
-          className="first_name"
-          placeholder="Legal First Name *"
-          value={form.legal_first_name || ''}
-          onChange={e => this.setForm('legal_first_name', e.target.value)}
-        />
-
-        <input
-          className="last_name"
-          placeholder="Legal Last Name *"
-          value={form.legal_last_name || ''}
-          onChange={e => this.setForm('legal_last_name', e.target.value)}
-        />
-
-        <div className="input-container">
+        <div className="first_name">
           <input
-            className={cn('email', { invalid: validation.email === 'error' })}
-            placeholder="Email *"
-            value={form.email || ''}
-            onChange={e => this.setForm('email', e.target.value)}
+            id="first_name"
+            required="required"
+            value={form.legal_first_name || ''}
+            onChange={e => this.setForm('legal_first_name', e.target.value)}
           />
+          <label htmlFor="first_name">Legal First Name</label>
+        </div>
+        <div className="last_name">
+          <input
+            id="last_name"
+            required="required"
+            value={form.legal_last_name || ''}
+            onChange={e => this.setForm('legal_last_name', e.target.value)}
+          />
+          <label htmlFor="last_name">Legal Last Name</label>
+        </div>
+        <div className="input-container">
+          <div className="email">
+            <input
+              id="email"
+              required="required"
+              className={cn({ invalid: validation.email === 'error' })}
+              value={form.email || ''}
+              onChange={e => this.setForm('email', e.target.value)}
+            />
+            <label htmlFor="email">Email</label>
+          </div>
           {validation.email === 'error' && <span>Enter a valid email</span>}
         </div>
 
@@ -280,7 +290,7 @@ export default class Form extends React.Component {
             {form.role ? roleNames(form.role) : 'Select a Role *'}
           </Dropdown.Toggle>
 
-          <Dropdown.Menu className="deal-add-role--drpmenu">
+          <Dropdown.Menu className="deal-add-role--drpmenu u-scrollbar--thinner">
             {
               role_names
                 .sort(name => this.isAllowed(name) ? -1 : 1)
@@ -290,7 +300,7 @@ export default class Form extends React.Component {
                   if (!isAllowed) {
                     return (
                       <li key={key} className="disabled">
-                        <a href="#" onClick={e => e.preventDefault()}>{ name }</a>
+                        <a href="#" onClick={e => e.preventDefault()}>{name}</a>
                       </li>
                     )
                   }
@@ -300,7 +310,7 @@ export default class Form extends React.Component {
                       key={`ROLE_${name}`}
                       onClick={() => this.setForm('role', name)}
                     >
-                      { roleNames(name) }
+                      {roleNames(name)}
                     </MenuItem>
                   )
                 })
@@ -326,14 +336,16 @@ export default class Form extends React.Component {
               checked={commission_type === '$'}
               onChange={() => this.setCommissionType('$')}
             />&nbsp;&nbsp;$
-
-            <input
-              className="commission"
-              placeholder="Commission *"
-              type="number"
-              value={this.getCommissionValue()}
-              onChange={e => this.setCommission(e.target.value)}
-            />
+            <div className="commission">
+              <input
+                id="commission"
+                required="required"
+                type="number"
+                value={this.getCommissionValue()}
+                onChange={e => this.setCommission(e.target.value)}
+              />
+              <label htmlFor="commission">Commission</label>
+            </div>
           </div>
         }
 

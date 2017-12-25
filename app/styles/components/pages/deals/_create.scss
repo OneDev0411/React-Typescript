@@ -233,10 +233,14 @@ $margin: 20px;
   border: solid 1px #e3e3e3;
   text-align: left;
   box-shadow: none;
-
+  color: #B0BFC7;
+  
   .caret {
     float: right;
     margin-top: 7px;
+  }
+  &:hover {
+    border-color: #8bc9fe;
   }
 }
 
