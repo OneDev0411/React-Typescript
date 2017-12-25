@@ -22,7 +22,7 @@ export default ({
 
     <Dropdown id="deal-create-type-dropdown">
       <Dropdown.Toggle className="deal-type-dropdown">
-        { selectedType || 'Choose a type' }
+        { selectedType || 'Choose a checklist type' }
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="deal-type-dropdown-list">
