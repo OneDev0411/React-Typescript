@@ -110,9 +110,7 @@ export function createFormTask(dealId, form, title, checklist) {
 
   return async (dispatch) => {
     const task = await Deal.createTask(dealId, { title, status, task_type, checklist, form })
-
     dispatch(addNewTask(dealId, checklist, task))
-
     return task
   }
 }
@@ -123,9 +121,7 @@ export function createGenericTask(dealId, title, checklist) {
 
   return async (dispatch) => {
     const task = await Deal.createTask(dealId, { title, status, task_type, checklist })
-
     dispatch(addNewTask(dealId, checklist, task))
-
     return task
   }
 }

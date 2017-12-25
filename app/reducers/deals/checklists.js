@@ -29,21 +29,18 @@ export default (state = null, action) => {
         [action.id]: action.checklist
       }
 
-    case types.CREATE_TASK: {
-      let tasks = state[action.list_id].tasks || []
-
-      if (tasks.indexOf(action.task.id) === -1) {
-        tasks.push(action.task.id)
-      }
-
+    case types.CREATE_TASK:
       return {
         ...state,
         [action.list_id]: {
           ...state[action.list_id],
-          tasks
+          tasks: _.uniq([
+            action.task.id,
+            ...state[action.list_id].tasks || []
+          ])
         }
       }
-    }
+
     default:
       return state
   }

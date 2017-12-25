@@ -10,7 +10,7 @@ import {
 const TaskName = ({
   show,
   onClose,
-  addTaskName,
+  onCreateNewTask,
   isCreatingTask
 }) => (
   <Modal
@@ -20,27 +20,27 @@ const TaskName = ({
     backdrop="static"
   >
     <Modal.Header closeButton>
-          Name Task
+      Name Task
     </Modal.Header>
 
     <Modal.Body>
       <span className="label">Title</span>
       <input
         type="text"
-        ref={input => this.input = input}
+        ref={ref => this.input = ref}
+        readOnly={isCreatingTask}
       />
 
       <span className="note">
-            Accurate titles help with context when glancing through your checklist.
+        Accurate titles help with context when glancing through your checklist.
       </span>
     </Modal.Body>
 
     <Modal.Footer>
       <Button
         bsStyle="primary"
-        onClick={() => {
-          addTaskName(this.input.value)
-        }}
+        disabled={isCreatingTask}
+        onClick={() => onCreateNewTask(this.input.value)}
       >
         {isCreatingTask ? 'Creating Task ...' : 'Create Task'}
       </Button>
