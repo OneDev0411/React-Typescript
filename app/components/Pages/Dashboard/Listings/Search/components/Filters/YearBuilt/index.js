@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 
 import MinMaxInputs from '../components/MinMaxInputs'
 import { toNumber } from '../../../../../../../../utils/helpers'
@@ -35,4 +34,4 @@ const YearBuilt = () => (
   />
 )
 
-export default pure(YearBuilt)
+export default YearBuilt

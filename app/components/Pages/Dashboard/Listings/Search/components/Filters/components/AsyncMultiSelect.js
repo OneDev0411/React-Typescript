@@ -1,6 +1,5 @@
 import React from 'react'
 import Select from 'react-select'
-import pure from 'recompose/pure'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -37,7 +36,6 @@ const AsyncMultiSelect = ({
 )
 
 export default compose(
-  pure,
   connect(
     (state, { fieldName }) => ({
       selectedOptions: selector(state, fieldName) || []

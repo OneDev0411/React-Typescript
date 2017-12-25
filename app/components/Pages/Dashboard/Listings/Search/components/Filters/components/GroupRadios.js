@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { Field } from 'redux-form'
 
 import Label from './Label'
@@ -16,12 +15,13 @@ const _fields = [
   { title: '+5', value: '5' }
 ]
 
-const GroupRadios = ({ name, label, fields = _fields }) =>
+const GroupRadios = ({ name, label, fields = _fields }) => (
   <Label label={label}>
     <div className="c-group-radios">
       {fields.map(field => {
         const { value, title } = field
         const id = `${name}__${value}`
+
         return (
           <label
             key={id}
@@ -37,13 +37,12 @@ const GroupRadios = ({ name, label, fields = _fields }) =>
               component="input"
               className="c-group-radios__item-input"
             />
-            <span className="c-group-radios__item-label__text">
-              {title}
-            </span>
+            <span className="c-group-radios__item-label__text">{title}</span>
           </label>
         )
       })}
     </div>
   </Label>
+)
 
-export default pure(GroupRadios)
+export default GroupRadios

@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { Field } from 'redux-form'
 
 // each index represent month period for minimum_sold_date
@@ -9,7 +8,7 @@ const fields = {
   last_year: '12'
 }
 
-const SoldStatusChildrens = ({ name }) =>
+const SoldStatusChildrens = ({ name }) => (
   <ul className="c-filters-sold-status-childrens" style={{ padding: '1rem 0' }}>
     {Object.keys(fields).map(field => {
       const id = `${name}__${field}`
@@ -34,5 +33,6 @@ const SoldStatusChildrens = ({ name }) =>
       )
     })}
   </ul>
+)
 
-export default pure(SoldStatusChildrens)
+export default SoldStatusChildrens
