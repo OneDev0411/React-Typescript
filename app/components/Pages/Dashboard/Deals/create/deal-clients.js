@@ -46,8 +46,8 @@ export default ({
         }
 
         <CrudRole
-          modalTitle="Add your client"
-          ctaTitle="Add your client"
+          modalTitle="Add a client"
+          ctaTitle="Add a client"
           allowedRoles={allowedRoles}
           onUpsertRole={onUpsertClient}
         />
