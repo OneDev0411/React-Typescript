@@ -26,7 +26,7 @@ export default ({
   return (
     <div className="form-section deal-people deal-client">
       <div className="hero">
-        Who are the {dealSide === 'Buying' ? 'buyers' : 'sellers'}&nbsp;
+        Who are the {dealSide === 'Buying' ? 'buyers' : 'sellers'}?&nbsp;
         <span className="required">*</span>
       </div>
 
@@ -46,8 +46,8 @@ export default ({
         }
 
         <CrudRole
-          modalTitle="Add your client"
-          ctaTitle="Add your client"
+          modalTitle="Add a client"
+          ctaTitle="Add a client"
           allowedRoles={allowedRoles}
           onUpsertRole={onUpsertClient}
         />
