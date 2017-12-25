@@ -37,20 +37,69 @@ export default class Form extends React.Component {
 
     this.state = {
       validation: {},
+      commission_type: '%',
       form
     }
 
     this.validate = _.debounce(this.validate, 200)
   }
 
+  /**
+   * set form commission
+   */
   setCommission(value) {
-    if (~~value < 0) {
+    if (!this.validateCommission(value)) {
       return false
     }
 
-    this.setForm('commission', value)
+    this.setForm(this.getCommissionField(), value)
   }
 
+  /**
+   * set form commission type
+   */
+  setCommissionType(type) {
+    const { form } = this.state
+    delete form[this.getCommissionField()]
+
+    this.setState({ commission_type: type }, () => this.setCommission(''))
+  }
+
+  /**
+   * validate commission value
+   */
+  validateCommission(value) {
+    const { commission_type } = this.state
+
+    if (!/^[0-9]*$/.test(value)) {
+      return false
+    }
+
+    return (commission_type === '%') ? (value >= 0 && value <= 100) : value >= 0
+  }
+
+  /**
+   * get commission field name
+   */
+  getCommissionField() {
+    const { commission_type } = this.state
+
+    return (commission_type === '%') ?
+      'commission_percentage' :
+      'commission_dollar'
+  }
+
+  /**
+   * get commission value
+   */
+  getCommissionValue() {
+    const { form } = this.state
+    return form[this.getCommissionField()]
+  }
+
+  /**
+   * set form field's value
+   */
   setForm(field, value) {
     const { form } = this.state
 
@@ -62,12 +111,18 @@ export default class Form extends React.Component {
     }, () => this.validate(field, value))
   }
 
+  /**
+   * validate email
+   */
   isEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
     return re.test(email)
   }
 
+  /**
+   * validate phone number
+   */
   async isValidPhone(phone) {
     const {
       PhoneNumberUtil
@@ -83,11 +138,17 @@ export default class Form extends React.Component {
     }
   }
 
+  /**
+   * check whether should show commission field or not
+   */
   shouldShowCommission(form) {
     return ['BuyerAgent', 'BuyerReferral', 'SellerAgent', 'SellerReferral']
       .indexOf(form.role) > -1
   }
 
+  /**
+   * check role type is allowed to select or not
+   */
   isAllowed(name) {
     const { deal, allowedRoles } = this.props
 
@@ -107,13 +168,16 @@ export default class Form extends React.Component {
     return allowedRoles.indexOf(name) > -1
   }
 
+  /**
+   * validate form
+   */
   async validate(field, value) {
-    const { form, validation } = this.state
+    const { form, validation, commission_type } = this.state
     const showCommission = this.shouldShowCommission(form)
     const requiredFields = ['legal_first_name', 'legal_last_name', 'email', 'role']
 
     if (showCommission) {
-      requiredFields.push('commission')
+      requiredFields.push(this.getCommissionField())
     }
 
     const fields = {
@@ -121,10 +185,16 @@ export default class Form extends React.Component {
       legal_last_name: (name) => name && name.length > 0,
       email: (email) => email && this.isEmail(email),
       phone: (phone) => phone && this.isValidPhone(phone),
-      role: (role) => role,
-      commission: (value) => value && ~~value >= 0
+      role: (role) => role
     }
 
+    // set commission field name
+    const commission_field = this.getCommissionField()
+
+    // set commission field based on commission type
+    fields[commission_field] = (value) => value && this.validateCommission(value)
+
+    // validate field
     const validator = fields[field]
 
     if (value.length > 0 && validator && !await validator(value)) {
@@ -141,12 +211,11 @@ export default class Form extends React.Component {
     }
 
     const isFormCompleted = _.every(requiredFields, name => fields[name](form[name]))
-
     this.props.onFormCompleted(isFormCompleted ? form : null)
   }
 
   render() {
-    const { form, validation } = this.state
+    const { form, commission_type, validation } = this.state
     const showCommission = this.shouldShowCommission(form)
 
     return (
@@ -241,14 +310,31 @@ export default class Form extends React.Component {
 
         {
           showCommission &&
-          <input
-            className="commission"
-            placeholder="Commission *"
-            type="number"
-            min={0}
-            value={form.commission || ''}
-            onChange={e => this.setCommission(e.target.value)}
-          />
+          <div className="commission-row">
+            <input
+              className="radio"
+              type="radio"
+              name="commission_type"
+              checked={commission_type === '%'}
+              onChange={() => this.setCommissionType('%')}
+            />&nbsp;&nbsp;%
+
+            <input
+              className="radio"
+              type="radio"
+              name="commission_type"
+              checked={commission_type === '$'}
+              onChange={() => this.setCommissionType('$')}
+            />&nbsp;&nbsp;$
+
+            <input
+              className="commission"
+              placeholder="Commission *"
+              type="number"
+              value={this.getCommissionValue()}
+              onChange={e => this.setCommission(e.target.value)}
+            />
+          </div>
         }
 
         {
@@ -257,8 +343,8 @@ export default class Form extends React.Component {
           <input
             className="company"
             placeholder="Company"
-            value={form.title_company || ''}
-            onChange={e => this.setForm('title_company', e.target.value)}
+            value={form.company_title || ''}
+            onChange={e => this.setForm('company_title', e.target.value)}
           />
         }
       </div>
