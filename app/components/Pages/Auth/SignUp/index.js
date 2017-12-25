@@ -29,10 +29,9 @@ const getErrorMessage = (errorCode, email) => {
       )
     case 202:
       return (
-        <div className="c-auth__submit-alert c-auth__submit-alert--warning">
-          An account with this email address exists in our system. We resent a
-          new activation email. Please check your inbox.
-        </div>
+        <p className="c-auth__submit-alert--success">
+          We resent a new activation email.<br />Please check <b>{email}</b>.
+        </p>
       )
     default:
       return (
