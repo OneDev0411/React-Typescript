@@ -25,7 +25,7 @@ class ChecklistPanel extends React.Component {
 
     return {
       termination: isBackoffice && checklist.is_terminatable,
-      deactivation: checklist.is_deactivatable
+      deactivation: isBackoffice && checklist.is_deactivatable
     }
   }
 
@@ -59,49 +59,45 @@ class ChecklistPanel extends React.Component {
               />
             </div>
 
-
             {
               _.filter(actions, available => available).length > 0 &&
               <div className="cta">
-
-                {
-                  (actions.termination || isBackoffice) &&
-                  <Dropdown
-                    id={`CHKLST_CTA_${checklist.id}`}
-                    className="deal-checklist-cta-menu"
-                    open={showMenu}
-                    onToggle={() => this.toggleMenu()}
-                    pullRight
+                <Dropdown
+                  id={`CHKLST_CTA_${checklist.id}`}
+                  className="deal-checklist-cta-menu"
+                  open={showMenu}
+                  onToggle={() => this.toggleMenu()}
+                  pullRight
+                >
+                  <Button
+                    className="cta-btn btn-link"
+                    bsRole="toggle"
+                    onClick={e => e.stopPropagation()}
                   >
-                    <Button
-                      className="cta-btn btn-link"
-                      bsRole="toggle"
-                      onClick={e => e.stopPropagation()}
-                    >
-                      <VerticalDotsIcon
-                        width={20}
-                        height={20}
-                        fill="#8da2b5"
-                      />
-                    </Button>
-                    <Dropdown.Menu >
-                      <TaskTermination
-                        hasPermission={actions.termination}
-                        deal={deal}
-                        checklist={checklist}
-                        onRequestCloseDropDownMenu={() => this.toggleMenu()}
-                      />
+                    <VerticalDotsIcon
+                      width={20}
+                      height={20}
+                      fill="#8da2b5"
+                    />
+                  </Button>
 
-                      <TaskDeactivation
-                        hasPermission={actions.deactivation}
-                        deal={deal}
-                        checklist={checklist}
-                        isBackoffice={isBackoffice}
-                        onRequestCloseDropDownMenu={() => this.toggleMenu()}
-                      />
-                    </Dropdown.Menu>
-                  </Dropdown>
-                }
+                  <Dropdown.Menu >
+                    <TaskTermination
+                      hasPermission={actions.termination}
+                      deal={deal}
+                      checklist={checklist}
+                      onRequestCloseDropDownMenu={() => this.toggleMenu()}
+                    />
+
+                    <TaskDeactivation
+                      hasPermission={actions.deactivation}
+                      deal={deal}
+                      checklist={checklist}
+                      isBackoffice={isBackoffice}
+                      onRequestCloseDropDownMenu={() => this.toggleMenu()}
+                    />
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
             }
           </div>
