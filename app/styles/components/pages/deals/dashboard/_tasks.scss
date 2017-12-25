@@ -96,10 +96,10 @@
 
       .s-info {
         width: calc(100% - 130px);
-        color: #1D364B;
+        color: #1d364b;
         font-size: 13px;
         font-weight: 600;
-        letter-spacing: 0.5px
+        letter-spacing: 0.5px;
       }
 
       .s-label {
@@ -123,11 +123,11 @@
             }
             &:after {
               color: #000;
-              content: ' ― '
+              content: ' ― ';
             }
             &:last-child {
               &:after {
-                content: ""
+                content: '';
               }
             }
           }
@@ -140,9 +140,9 @@
     }
 
     a.collapsed .p-icon:before {
-      font-family: "FontAwesome";
+      font-family: 'FontAwesome';
       color: #c9d7df;
-      content: "\f0da";
+      content: '\f0da';
     }
 
     .cta {
@@ -162,19 +162,27 @@
 
   .task,
   .add-task {
+    width: 100%;
     position: relative;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    text-align: left;
     background-color: #fff;
     height: 36px;
     font-size: 14px;
     color: #1d364b;
     cursor: pointer;
     transition: background-color 0.05s ease-in;
-    border-bottom: 1px solid #eef1f2;
+    border-style: solid;
+    border-color: #eef1f2;
+    border-width: 0 0 1px 0;
     padding: 0 0 0 10px;
+
+    &:focus {
+      outline-width: 0;
+    }
 
     &.active {
       background: #dce5eb;
@@ -208,7 +216,8 @@
       }
     }
 
-    .status, .notification {
+    .status,
+    .notification {
       position: absolute;
       top: 8px;
       right: 22px;
@@ -236,7 +245,7 @@
         position: absolute;
         top: -5px;
         right: -5px;
-        background-color: #FF4747;
+        background-color: #ff4747;
         display: block;
         width: 13px;
         height: 13px;
@@ -314,7 +323,8 @@
   &.Incomplete {
     display: none;
   }
-  &.Pending, &.ATTENTION {
+  &.Pending,
+  &.ATTENTION {
     color: #f6a623;
     border-color: #f6a623;
   }
