@@ -103,12 +103,6 @@ class CreateForm extends React.Component {
       deal,
       listId
     } = this.props
-    console.table({
-      listId,
-      showFormsModal,
-      showTaskNameModal,
-      isCreatingTask
-    })
     return (
       <div
       >
@@ -145,11 +139,12 @@ class CreateForm extends React.Component {
           addTaskName={(taskName) => {
             this.setState({ taskName })
             this.formNewTaskFileInputEl.click()
-            console.log('taskName: ', taskName)
           }}
         />
         <input
           type="file"
+          multiple
+          accept="application/pdf,image/*"
           style={{ display: 'none', height: 0, width: 0 }}
           ref={input => this.formNewTaskFileInputEl = input}
           onChange={this.create}
