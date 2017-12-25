@@ -63,42 +63,45 @@ class ChecklistPanel extends React.Component {
             {
               _.filter(actions, available => available).length > 0 &&
               <div className="cta">
-                <Dropdown
-                  id={`CHKLST_CTA_${checklist.id}`}
-                  className="deal-checklist-cta-menu"
-                  open={showMenu}
-                  onToggle={() => this.toggleMenu()}
-                  pullRight
-                >
-                  <Button
-                    className="cta-btn btn-link"
-                    bsRole="toggle"
-                    onClick={e => e.stopPropagation()}
+
+                {
+                  (actions.termination || isBackoffice) &&
+                  <Dropdown
+                    id={`CHKLST_CTA_${checklist.id}`}
+                    className="deal-checklist-cta-menu"
+                    open={showMenu}
+                    onToggle={() => this.toggleMenu()}
+                    pullRight
                   >
-                    <VerticalDotsIcon
-                      width={20}
-                      height={20}
-                      fill="#8da2b5"
-                    />
-                  </Button>
+                    <Button
+                      className="cta-btn btn-link"
+                      bsRole="toggle"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <VerticalDotsIcon
+                        width={20}
+                        height={20}
+                        fill="#8da2b5"
+                      />
+                    </Button>
+                    <Dropdown.Menu >
+                      <TaskTermination
+                        hasPermission={actions.termination}
+                        deal={deal}
+                        checklist={checklist}
+                        onRequestCloseDropDownMenu={() => this.toggleMenu()}
+                      />
 
-                  <Dropdown.Menu>
-                    <TaskTermination
-                      hasPermission={actions.termination}
-                      deal={deal}
-                      checklist={checklist}
-                      onRequestCloseDropDownMenu={() => this.toggleMenu()}
-                    />
-
-                    <TaskDeactivation
-                      hasPermission={actions.deactivation}
-                      deal={deal}
-                      checklist={checklist}
-                      isBackoffice={isBackoffice}
-                      onRequestCloseDropDownMenu={() => this.toggleMenu()}
-                    />
-                  </Dropdown.Menu>
-                </Dropdown>
+                      <TaskDeactivation
+                        hasPermission={actions.deactivation}
+                        deal={deal}
+                        checklist={checklist}
+                        isBackoffice={isBackoffice}
+                        onRequestCloseDropDownMenu={() => this.toggleMenu()}
+                      />
+                    </Dropdown.Menu>
+                  </Dropdown>
+                }
               </div>
             }
           </div>
