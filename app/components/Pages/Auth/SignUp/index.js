@@ -104,8 +104,8 @@ const Signup = ({
           ) : (
             <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                We sent an activation email.<br />
-                Please check <b>{submitSuccessfully}</b>
+                We {submitSuccessfully.isShadow ? 'resent a new' : ' sent an'}  activation email.<br />
+                Please check <b>{submitSuccessfully.email}</b>
               </p>
               <Link
                   to={`/signin?username=${encodeURIComponent(
@@ -142,13 +142,19 @@ export default compose(
       try {
         await signup(email)
         setIsSubmitting(false)
-        setSubmitSuccessfully(email)
+        setSubmitSuccessfully({
+          email,
+          isShadow: false
+        })
       } catch (errorCode) {
         setIsSubmitting(false)
 
         // shadow user
         if (errorCode === 202) {
-          setSubmitSuccessfully(email)
+          setSubmitSuccessfully({
+            email,
+            isShadow: true
+          })
           return
         }
 
