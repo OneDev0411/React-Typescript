@@ -295,7 +295,7 @@ export default class Form extends React.Component {
             {form.role ? roleNames(form.role) : 'Select a Role *'}
           </Dropdown.Toggle>
 
-          <Dropdown.Menu className="deal-add-role--drpmenu u-scrollbar--thinner">
+          <Dropdown.Menu className="deal-add-role--drpmenu u-scrollbar--thinner--self">
             {
               role_names
                 .sort(name => this.isAllowed(name) ? -1 : 1)
