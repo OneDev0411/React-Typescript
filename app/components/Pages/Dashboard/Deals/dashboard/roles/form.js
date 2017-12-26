@@ -28,24 +28,42 @@ export default class Form extends React.Component {
     super(props)
 
     const form = props.form || {}
-    form.isNewRecord = form.email === null
-
-    if (form.isNewRecord) {
-      const availableRoles = role_names.filter(name => this.isAllowed(name))
-      const preselectedRole = availableRoles.length === 1 && availableRoles[0]
-
-      if (preselectedRole) {
-        form.role = preselectedRole
-      }
-    }
+    form.isNewRecord = typeof form.email === 'undefined'
 
     this.state = {
       validation: {},
-      commission_type: '%',
+      commission_type: this.getCommissionType(form),
       form
     }
 
     this.validate = _.debounce(this.validate, 200)
+  }
+
+  componentDidMount() {
+    this.preselectRoles()
+  }
+
+  /**
+   * preselect role, if there is any
+   */
+  preselectRoles() {
+    const { form } = this.state
+
+    if (!form.isNewRecord) {
+      return false
+    }
+
+    const availableRoles = role_names.filter(name => this.isAllowed(name))
+    const preselectedRole = availableRoles.length === 1 && availableRoles[0]
+
+    if (preselectedRole) {
+      this.setState({
+        form: {
+          ...this.state.form,
+          role: preselectedRole
+        }
+      })
+    }
   }
 
   /**
@@ -99,8 +117,18 @@ export default class Form extends React.Component {
    */
   getCommissionValue() {
     const { form } = this.state
-
     return form[this.getCommissionField()]
+  }
+
+  /**
+   * get commission type
+   */
+  getCommissionType(form) {
+    if (form.isNewRecord) {
+      return '%'
+    }
+
+    return form.commission_percentage ? '%' : '$'
   }
 
   /**
@@ -122,7 +150,6 @@ export default class Form extends React.Component {
    */
   isEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
     return re.test(email)
   }
 
@@ -218,7 +245,6 @@ export default class Form extends React.Component {
     }
 
     const isFormCompleted = _.every(requiredFields, name => fields[name](form[name]))
-
     this.props.onFormCompleted(isFormCompleted ? form : null)
   }
 
