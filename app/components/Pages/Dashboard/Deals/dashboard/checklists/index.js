@@ -21,7 +21,7 @@ class Checklist extends React.Component {
   render() {
     let terminatedChecklistsCount = 0
     const { showTerminatedChecklists } = this.state
-    const { deal, checklists } = this.props
+    const { deal, checklists, isBackOffice } = this.props
 
     if (!deal.checklists) {
       return false
@@ -45,9 +45,14 @@ class Checklist extends React.Component {
 
                 return list.order
               })
-              .filter(id =>
-                showTerminatedChecklists ? true : (checklists[id].is_terminated === false)
-              )
+              .filter(id => {
+                // dont display Backup contracts in BackOffice dashboard
+                if (isBackOffice && checklists[id].is_deactivated) {
+                  return false
+                }
+
+                return showTerminatedChecklists ? true : (checklists[id].is_terminated === false)
+              })
               .map(id =>
                 <Tasks
                   key={id}
@@ -72,5 +77,6 @@ class Checklist extends React.Component {
 }
 
 export default connect(({ deals }) => ({
+  isBackOffice: deals.backoffice,
   checklists: deals.checklists
 }))(Checklist)

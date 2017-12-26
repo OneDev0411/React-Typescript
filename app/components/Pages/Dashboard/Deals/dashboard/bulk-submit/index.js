@@ -93,7 +93,7 @@ class BulkSubmit extends React.Component {
             {
               _
                 .chain(deal.checklists)
-                .filter(id => !checklists[id].is_terminated)
+                .filter(id => !checklists[id].is_terminated && !checklists[id].is_deactivated)
                 .map(id => {
                   const checklist = checklists[id]
                   const checklistTasks = checklist.tasks && checklist

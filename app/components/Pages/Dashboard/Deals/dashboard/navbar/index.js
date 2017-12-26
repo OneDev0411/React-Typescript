@@ -29,7 +29,7 @@ class NavBar extends React.Component {
   }
 
   render() {
-    const { deal } = this.props
+    const { deal, isBackOffice } = this.props
 
     return (
       <div className="deal-navbar">
@@ -56,9 +56,12 @@ class NavBar extends React.Component {
             Get Signatures
           </button>
 
-          <BulkSubmit
-            deal={deal}
-          />
+          {
+            !isBackOffice &&
+            <BulkSubmit
+              deal={deal}
+            />
+          }
         </div>
 
         <Dropzone
@@ -74,7 +77,9 @@ class NavBar extends React.Component {
   }
 }
 
-export default connect(null, {
+export default connect(({ deals }) => ({
+  isBackOffice: deals.backoffice,
+}), {
   showAttachments,
   setUploadFiles
 })(NavBar)
