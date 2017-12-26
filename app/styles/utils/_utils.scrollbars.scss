@@ -1,27 +1,54 @@
-@mixin scrollbar($width: 10px, $thumb-bgc: #cfd9e1, $track-bgc: #edf2f5) {
-  ::-webkit-scrollbar {
-    width: $width;
-    height: 0.5em;
-    padding-right: 3px;
-  }
+@mixin scrollbar($just-self: false, $width: 10px, $thumb-bgc: #cfd9e1, $track-bgc: #edf2f5) {
+  @if $just-self {
+    &::-webkit-scrollbar {
+      width: $width;
+      height: 0.5em;
+      padding-right: 3px;
+    }
 
-  ::-webkit-scrollbar-thumb {
-    background-color: $thumb-bgc;
-    border-radius: 5px;
-  }
+    &::-webkit-scrollbar-thumb {
+      background-color: $thumb-bgc;
+      border-radius: 5px;
+    }
 
-  ::-webkit-scrollbar-track {
-    background: $track-bgc;
-  }
+    &::-webkit-scrollbar-track {
+      background: $track-bgc;
+    }
 
-  ::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-    display: none;
-  }
+    &::-webkit-scrollbar-button {
+      width: 0;
+      height: 0;
+      display: none;
+    }
 
-  ::-webkit-scrollbar-corner {
-    background-color: transparent;
+    &::-webkit-scrollbar-corner {
+      background-color: transparent;
+    }
+  } @else {
+    ::-webkit-scrollbar {
+      width: $width;
+      height: 0.5em;
+      padding-right: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: $thumb-bgc;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: $track-bgc;
+    }
+
+    ::-webkit-scrollbar-button {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+
+    ::-webkit-scrollbar-corner {
+      background-color: transparent;
+    }
   }
 }
 
@@ -30,5 +57,9 @@
 }
 
 .u-scrollbar--thinner {
-  @include scrollbar(6px);
+  @include scrollbar(false, 6px !important);
+}
+
+.u-scrollbar--thinner--self {
+  @include scrollbar(true, 6px !important);
 }
