@@ -8,9 +8,13 @@ const SELLING = 'Selling'
 
 function getRoles(agents, side) {
   if (side === BUYING) {
-    return _.size(agents) === 0 ? ['BuyerAgent'] : ['CoBuyerAgent']
-  } else if (side === SELLING) {
-    return _.size(agents) === 0 ? ['SellerAgent'] : ['CoSellerAgent']
+    const hasBuyerAgent = _.find(agents, agent => agent.role === 'BuyerAgent')
+    return hasBuyerAgent ? ['CoBuyerAgent'] : ['BuyerAgent']
+  }
+
+  if (side === SELLING) {
+    const hasSellerAgent = _.find(agents, agent => agent.role === 'SellerAgent')
+    return hasSellerAgent ? ['CoSellerAgent'] : ['SellerAgent']
   }
 
   return []

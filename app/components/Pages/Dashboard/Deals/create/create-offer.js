@@ -77,14 +77,14 @@ class CreateOffer extends React.Component {
     this.setState({
       [type]: {
         ...this.state[type],
-        [form.email]: form
+        [form.email || form.user.email]: form
       }
     })
   }
 
-  onRemoveRole(id, type) {
+  onRemoveRole(email, type) {
     this.setState({
-      [type]: _.omit(this.state[type], (role, roleId) => id === roleId)
+      [type]: _.omit(this.state[type], (role) => role.email === email)
     })
   }
 
@@ -101,21 +101,6 @@ class CreateOffer extends React.Component {
     })
   }
 
-  getRoles() {
-    const { enderType, agents, clients, closingOfficers, referrals } = this.state
-    const roles = []
-
-    _.each(clients, client => roles.push(client))
-    _.each(agents, agent => roles.push(agent))
-    _.each(closingOfficers, co => roles.push(co))
-
-    if (enderType === 'AgentDoubleEnder') {
-      _.each(referrals, referral => roles.push(referral))
-    }
-
-    return roles
-  }
-
   openDeal(id) {
     browserHistory.push(`/dashboard/deals/${id}`)
   }
@@ -129,7 +114,7 @@ class CreateOffer extends React.Component {
   }
 
   isFormValidated() {
-    const { offerType, buyerName, clients, agents, enderType } = this.state
+    const { offerType, buyerName, enderType } = this.state
 
     if (this.isBackupOffer()) {
       return buyerName.length > 0
@@ -137,18 +122,43 @@ class CreateOffer extends React.Component {
 
     return offerType.length > 0 &&
       enderType !== -1 &&
-      _.size(agents) > 0 &&
-      _.size(clients) > 0
+      _.size(this.getRolesByType('agents')) > 0 &&
+      _.size(this.getRolesByType('clients')) > 0
+  }
+
+  getRolesByType(type) {
+    // do not include disabled roles (prepopulated items)
+    return _.omit(this.state[type], role => role.disabled === true)
+  }
+
+  getAllRoles() {
+    const { enderType } = this.state
+    const roles = []
+
+    _.each(this.getRolesByType('clients'), client => roles.push(client))
+    _.each(this.getRolesByType('agents'), agent => roles.push(agent))
+    _.each(this.getRolesByType('closingOfficers'), co => roles.push(co))
+
+    if (enderType === 'AgentDoubleEnder') {
+      _.each(this.getRolesByType('referrals'), referral => roles.push(referral))
+    }
+
+    return roles
   }
 
   async createOffer() {
     const { deal, notify, createOffer, createRoles, updateContext } = this.props
-    const { clients, enderType, criticalDates } = this.state
+    const { enderType, criticalDates } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
     const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
-    const buyerName = isBackupOffer ? this.state.buyerName : _.map(clients, client =>
-      `${client.legal_first_name} ${client.legal_last_name}`).join(', ')
+
+    let buyerName = this.state.buyerName
+
+    if (!isBackupOffer) {
+      buyerName = _.map(this.getRolesByType('clients'), client =>
+        `${client.legal_first_name} ${client.legal_last_name}`).join(', ')
+    }
 
     this.setState({ saving: true })
 
@@ -157,7 +167,7 @@ class CreateOffer extends React.Component {
 
       if (isPrimaryOffer) {
         // create roles
-        await createRoles(deal.id, this.getRoles())
+        await createRoles(deal.id, this.getAllRoles())
 
         // create/update contexts
         await updateContext(deal.id, {
@@ -300,7 +310,7 @@ class CreateOffer extends React.Component {
                   title_due: 'Title Work Due',
                   t47_due: 'Survey Due',
                   closing_date: 'Closing',
-                  possession_date: 'Possession'
+                  // possession_date: 'Possession'
                 }}
               />
             </div>

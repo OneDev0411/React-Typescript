@@ -41,19 +41,17 @@ class CreateDeal extends React.Component {
   }
 
   onUpsertRole(form, type) {
-    let id = form.id || (Object.keys(this.state[type] || {}).length + 1)
-
     this.setState({
       [type]: {
         ...this.state[type],
-        [id]: { ...form, id }
+        [form.email]: form
       }
     })
   }
 
-  onRemoveRole(id, type) {
+  onRemoveRole(email, type) {
     this.setState({
-      [type]: _.omit(this.state[type], (role, roleId) => id === roleId)
+      [type]: _.omit(this.state[type], (role) => role.email === email)
     })
   }
 

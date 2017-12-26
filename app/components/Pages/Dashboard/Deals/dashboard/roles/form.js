@@ -28,11 +28,15 @@ export default class Form extends React.Component {
     super(props)
 
     const form = props.form || {}
-    const availableRoles = role_names.filter(name => this.isAllowed(name))
-    const preselectedRole = availableRoles.length === 1 && availableRoles[0]
+    form.isNewRecord = form.email === null
 
-    if (preselectedRole) {
-      form.role = preselectedRole
+    if (form.isNewRecord) {
+      const availableRoles = role_names.filter(name => this.isAllowed(name))
+      const preselectedRole = availableRoles.length === 1 && availableRoles[0]
+
+      if (preselectedRole) {
+        form.role = preselectedRole
+      }
     }
 
     this.state = {
@@ -144,8 +148,8 @@ export default class Form extends React.Component {
    * check whether should show commission field or not
    */
   shouldShowCommission(form) {
-    return ['BuyerAgent', 'BuyerReferral', 'SellerAgent', 'SellerReferral']
-      .indexOf(form.role) > -1
+    return ['CoBuyerAgent', 'BuyerAgent', 'BuyerReferral',
+      'CoSellerAgent', 'SellerAgent', 'SellerReferral'].indexOf(form.role) > -1
   }
 
   /**
@@ -153,6 +157,7 @@ export default class Form extends React.Component {
    */
   isAllowed(name) {
     const { deal, allowedRoles } = this.props
+    const { form } = this.state
 
     const dealType = deal ? deal.deal_type : null
 
@@ -163,7 +168,7 @@ export default class Form extends React.Component {
       return false
     }
 
-    if (!allowedRoles) {
+    if (!allowedRoles || (!form.isNewRecord && form.role === name)) {
       return true
     }
 
