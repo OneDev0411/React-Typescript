@@ -75,6 +75,9 @@ class UploadModal extends React.Component {
       return false
     }
 
+    // check task is inside a backup contract
+    const isBackupContract = this.isBackupContract(task)
+
     // get filename
     const filename = properties.fileTitle || fileObject.name
 
@@ -106,7 +109,7 @@ class UploadModal extends React.Component {
     // add files to attachments list
     this.props.addAttachment(task.deal, task.checklist, task.id, file)
 
-    if (properties.notifyOffice === true) {
+    if (properties.notifyOffice === true && !isBackupContract) {
       this.props.changeNeedsAttention(task.id, true)
     }
   }
@@ -138,6 +141,15 @@ class UploadModal extends React.Component {
     return 'Upload'
   }
 
+  isBackupContract(task) {
+    const { checklists } = this.props
+    if (!task) {
+      return false
+    }
+
+    return checklists[task.checklist].is_deactivated
+  }
+
   render() {
     const { splitter, upload } = this.props
     const filesCount = _.size(upload.files)
@@ -166,6 +178,7 @@ class UploadModal extends React.Component {
             {
               _.map(upload.files, (file, id) => {
                 const selectedTask = this.getSelectedTask(file)
+                const isBackupContract = this.isBackupContract(selectedTask)
                 const isUploading = file.properties.status === STATUS_UPLOADING
                 const isUploaded = file.properties.status === STATUS_UPLOADED
 
@@ -205,7 +218,7 @@ class UploadModal extends React.Component {
                     </div>
                     <div className="notify-admin">
                       {
-                        (!isUploading && !isUploaded) &&
+                        (!isBackupContract && !isUploading && !isUploaded) &&
                         <Checkbox
                           square
                           selected={file.properties.notifyOffice || false}
@@ -215,7 +228,7 @@ class UploadModal extends React.Component {
                       }
 
                       {
-                        (isUploaded && file.properties.notifyOffice) &&
+                        (isUploaded && file.properties.notifyOffice && !isBackupContract) &&
                         <span className="notified">
                           Office Notified
                         </span>
@@ -252,6 +265,7 @@ class UploadModal extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
+    checklists: deals.checklists,
     tasks: deals.tasks,
     upload: deals.upload,
     splitter: deals.splitter
