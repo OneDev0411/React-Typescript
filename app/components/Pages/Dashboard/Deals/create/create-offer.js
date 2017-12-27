@@ -262,7 +262,7 @@ class CreateOffer extends React.Component {
             this.isPrimaryOffer() &&
             <div>
               <DealClients
-                dealSide={'Buying'}
+                dealSide="Buying"
                 clients={clients}
                 onUpsertClient={form => this.onUpsertRole(form, 'clients')}
                 onRemoveClient={id => this.onRemoveRole(id, 'clients')}
@@ -274,7 +274,7 @@ class CreateOffer extends React.Component {
               />
 
               <DealAgents
-                dealSide={'Buying'}
+                dealSide="Buying"
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                 onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
@@ -289,7 +289,7 @@ class CreateOffer extends React.Component {
               {
                 enderType === 'AgentDoubleEnder' &&
                 <DealReferrals
-                  dealSide={'Buying'}
+                  dealSide="Buying"
                   referrals={referrals}
                   onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
                   onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
