@@ -48,12 +48,13 @@ class CreateOffer extends React.Component {
       let type
 
       switch (item.role) {
-        case 'Seller':
-        case 'Landlord':
+        case 'Buyer':
+        case 'Tenant':
           type = 'clients'
           break
 
-        case 'SellerAgent':
+        case 'BuyerAgent':
+        case 'CoBuyerAgent':
           type = 'agents'
           break
 
@@ -114,7 +115,7 @@ class CreateOffer extends React.Component {
   }
 
   isFormValidated() {
-    const { offerType, buyerName, enderType } = this.state
+    const { offerType, agents, clients, buyerName, enderType } = this.state
 
     if (this.isBackupOffer()) {
       return buyerName.length > 0
@@ -122,33 +123,28 @@ class CreateOffer extends React.Component {
 
     return offerType.length > 0 &&
       enderType !== -1 &&
-      _.size(this.getRolesByType('agents')) > 0 &&
-      _.size(this.getRolesByType('clients')) > 0
-  }
-
-  getRolesByType(type) {
-    // do not include disabled roles (prepopulated items)
-    return _.omit(this.state[type], role => role.disabled === true)
+      _.size(agents) > 0 &&
+      _.size(clients) > 0
   }
 
   getAllRoles() {
-    const { enderType } = this.state
+    const { enderType, clients, agents, closingOfficers, referrals } = this.state
     const roles = []
 
-    _.each(this.getRolesByType('clients'), client => roles.push(client))
-    _.each(this.getRolesByType('agents'), agent => roles.push(agent))
-    _.each(this.getRolesByType('closingOfficers'), co => roles.push(co))
+    _.each(clients, client => roles.push(client))
+    _.each(agents, agent => roles.push(agent))
+    _.each(closingOfficers, co => roles.push(co))
 
     if (enderType === 'AgentDoubleEnder') {
-      _.each(this.getRolesByType('referrals'), referral => roles.push(referral))
+      _.each(referrals, referral => roles.push(referral))
     }
 
-    return roles
+    return roles.filter(role => role.disabled !== true)
   }
 
   async createOffer() {
     const { deal, notify, createOffer, createRoles, updateContext } = this.props
-    const { enderType, criticalDates } = this.state
+    const { enderType, criticalDates, clients } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
     const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
@@ -156,7 +152,7 @@ class CreateOffer extends React.Component {
     let buyerName = this.state.buyerName
 
     if (!isBackupOffer) {
-      buyerName = _.map(this.getRolesByType('clients'), client =>
+      buyerName = _.map(clients, client =>
         `${client.legal_first_name} ${client.legal_last_name}`).join(', ')
     }
 
