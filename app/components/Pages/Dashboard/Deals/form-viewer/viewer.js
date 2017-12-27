@@ -1,11 +1,7 @@
 import React from 'react'
 import PdfViewer from '../../../../Partials/Pdf/Viewer'
 
-export default ({
-  width,
-  file,
-  enableKeyboardShortcuts = true
-}) => {
+export default ({ width, file, disableKeyboardShortcuts = false }) => {
   const { name, type, url, downloadUrl } = file
 
   return (
@@ -16,24 +12,17 @@ export default ({
       }}
       className="file-viewer"
     >
-      {
-        file && type === 'pdf' &&
-        <PdfViewer
-          uri={url}
-          enableKeyboardShortcuts={enableKeyboardShortcuts}
-          downloadUrl={downloadUrl}
-          defaultContainerHeight="85vh"
-        />
-      }
+      {file &&
+        type === 'pdf' && (
+          <PdfViewer
+            uri={url}
+            downloadUrl={downloadUrl}
+            defaultContainerHeight="85vh"
+            disableKeyboardShortcuts={disableKeyboardShortcuts}
+          />
+        )}
 
-      {
-        file && type === 'image' &&
-        <img
-          className="image"
-          src={url}
-          alt={name}
-        />
-      }
+      {file && type === 'image' && <img className="image" src={url} alt={name} />}
     </div>
   )
 }

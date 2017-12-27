@@ -8,8 +8,9 @@ import {
   resetUploadFiles
 } from '../../../../../store_actions/deals'
 
-export default function(dealId) {
+export default function (dealId) {
   const { dispatch } = store
+
   batchActions([
     dispatch(closeEsignWizard()),
     dispatch(setSelectedTask(null)),

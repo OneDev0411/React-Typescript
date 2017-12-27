@@ -94,8 +94,8 @@ class AddRole extends React.Component {
 
           <Modal.Footer>
             <Button
-              className={`btn-deal ${buttonDisabled ? 'disabled': ''}`}
-              bsStyle={buttonDisabled ? "link" : "primary"}
+              className={`btn-deal ${buttonDisabled ? 'disabled' : ''}`}
+              bsStyle={buttonDisabled ? 'link' : 'primary'}
               disabled={buttonDisabled}
               onClick={() => this.create()}
             >

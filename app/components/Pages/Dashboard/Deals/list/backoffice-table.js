@@ -75,8 +75,10 @@ class BackOfficeTable extends BaseTable {
    */
   getOffice(deal) {
     return ''
+
     const brand = this.flattenBrand(deal.brand)
-    return brand && brand.messages ?  brand.messages.office_title : 'N/A'
+
+    return brand && brand.messages ? brand.messages.office_title : 'N/A'
   }
 
   /**
@@ -88,6 +90,7 @@ class BackOfficeTable extends BaseTable {
     }
 
     let text = 'Submitted '
+
     if (task.review.updated_by) {
       text += `By ${task.review.updated_by.display_name}, `
     }
@@ -117,6 +120,7 @@ class BackOfficeTable extends BaseTable {
             {
               items.map(task_id => {
                 const task = tasks[task_id]
+
                 return (
                   <Row
                     key={task.id}
@@ -162,7 +166,7 @@ class BackOfficeTable extends BaseTable {
    */
   getNeedsAttentionsItems(deal) {
     const { filters } = this.props
-    const filterTab = filters['__inbox_name__']
+    const filterTab = filters.__inbox_name__
 
     return getNeedsAttentions(deal, filterTab)
   }
@@ -187,6 +191,7 @@ class BackOfficeTable extends BaseTable {
     }
 
     brands.reverse()
+
     const merged = {}
 
     brands.forEach(brand_loop => {

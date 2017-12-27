@@ -14,6 +14,7 @@ export default class AddRecipients extends React.Component {
 
   toggleRolesModal(e) {
     const c = e ? e.target.className : null
+
     if (c && c.includes('recp')) {
       return false
     }
@@ -23,6 +24,7 @@ export default class AddRecipients extends React.Component {
 
   onAddRecipient(role) {
     const { onAddRecipient } = this.props
+
     this.toggleRolesModal()
     onAddRecipient(role)
   }
@@ -51,7 +53,9 @@ export default class AddRecipients extends React.Component {
         {
           _.map(recipients, recp =>
             <span className="recp" key={`RECP_${recp.email}`}>
-              <span className="recp-t">{recp.first_name} {recp.last_name}</span>
+              <span className="recp-t">
+                {recp.legal_prefix} {recp.legal_first_name} {recp.legal_last_name}
+              </span>
               <span className="recp-d">{roleName(recp.role)}, {recp.email}</span>
               <span className="recp-c">
                 <i

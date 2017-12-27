@@ -42,8 +42,7 @@ export default class extends React.Component {
         listings,
         searching: false
       })
-    }
-    catch(e) {
+    } catch (e) {
       this.setState({
         searching: false
       })
@@ -85,7 +84,7 @@ export default class extends React.Component {
             <div className="list">
               {
                 searching &&
-                <i className="fa fa-spinner fa-spin fa-fw loader"></i>
+                <i className="fa fa-spinner fa-spin fa-fw loader" />
               }
 
               <ListingsView

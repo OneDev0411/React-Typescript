@@ -32,6 +32,7 @@ export default class extends React.Component {
 
   changeCriticalDate(date) {
     const { selectedField } = this.state
+
     this.props.onChangeCriticalDates(selectedField, date)
     this.cancelEditing()
   }
@@ -51,22 +52,22 @@ export default class extends React.Component {
             <div key={key}>
               {
                 criticalDates[key] ?
-                <CriticalValue
-                  name={name}
-                  date={criticalDates[key]}
-                  onRemove={() => onChangeCriticalDates(key, null)}
-                  onEdit={() => this.setSelectedField(key)}
-                /> :
-                <div
-                  className="entity-item date new"
-                  style={{ marginBottom: 0 }}
-                  onClick={() => this.setSelectedField(key)}
-                >
-                  <div className="add-item">
-                    <span className="icon">+</span>
-                    <span className="text">{ name }</span>
+                  <CriticalValue
+                    name={name}
+                    date={criticalDates[key]}
+                    onRemove={() => onChangeCriticalDates(key, null)}
+                    onEdit={() => this.setSelectedField(key)}
+                  /> :
+                  <div
+                    className="entity-item date new"
+                    style={{ marginBottom: 0 }}
+                    onClick={() => this.setSelectedField(key)}
+                  >
+                    <div className="add-item">
+                      <span className="icon">+</span>
+                      <span className="text">{ name }</span>
+                    </div>
                   </div>
-                </div>
               }
             </div>
           ))

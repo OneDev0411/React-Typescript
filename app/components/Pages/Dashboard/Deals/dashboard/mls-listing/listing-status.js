@@ -39,7 +39,7 @@ class ListingStatus extends React.Component {
     // set state
     this.setState({ saving: true })
 
-    await updateContext(deal.id, {'listing_status': status}, editable)
+    await updateContext(deal.id, { listing_status: status }, editable)
 
     if (editable === false) {
       await this.notifyAdmin(status)
@@ -56,6 +56,7 @@ class ListingStatus extends React.Component {
 
     const checklist = checklists[deal.checklists[0]]
     const task = await createGenericTask(deal.id, title, checklist.id)
+
     changeNeedsAttention(task.id, true)
 
     return notify({

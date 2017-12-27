@@ -105,6 +105,7 @@ class DropDownTasks extends React.Component {
           {
             upload.deal.checklists.map((chId, key) => {
               const checklist = checklists[chId]
+
               return (
                 <div key={chId}>
 
@@ -129,37 +130,37 @@ class DropDownTasks extends React.Component {
 
                   {
                     (newTaskMode && newTaskMode === chId) ?
-                    <li>
-                      {
-                        isCreatingTask ?
-                        <span className="creating-task">
+                      <li>
+                        {
+                          isCreatingTask ?
+                            <span className="creating-task">
                           Creating task ...
-                        </span> :
-                        <div className="create-task-input">
-                          <input
-                            className="new-task"
-                            placeholder="Name this task and press enter"
-                            ref={ref => this.inputNewTask = ref}
-                            onKeyPress={e => this.onKeyPress(e, chId)}
-                            onBlur={(e) => this.discardEdit(e)}
-                            autoFocus
-                          />
+                            </span> :
+                            <div className="create-task-input">
+                              <input
+                                className="new-task"
+                                placeholder="Name this task and press enter"
+                                ref={ref => this.inputNewTask = ref}
+                                onKeyPress={e => this.onKeyPress(e, chId)}
+                                onBlur={(e) => this.discardEdit(e)}
+                                autoFocus
+                              />
 
-                          <span
-                            className="save"
-                            onClick={() => this.createNewTask(chId)}
-                          >
+                              <span
+                                className="save"
+                                onClick={() => this.createNewTask(chId)}
+                              >
                             Save
-                          </span>
-                        </div>
-                      }
-                    </li> :
-                    <li
-                      className="new-task"
-                      onClick={() => this.setState({ newTaskMode: chId })}
-                    >
+                              </span>
+                            </div>
+                        }
+                      </li> :
+                      <li
+                        className="new-task"
+                        onClick={() => this.setState({ newTaskMode: chId })}
+                      >
                       Add new task to { checklist.title }
-                    </li>
+                      </li>
                   }
                 </div>
               )

@@ -228,13 +228,15 @@ const ModalNewChecklist = ({
 
             let titlePropertyDealTypeNullable = titlePropertyDealType
 
-            if (titlePropertyDealType === 'any')
+            if (titlePropertyDealType === 'any') {
               titlePropertyDealTypeNullable = null
+            }
 
             let titleDealTypeNullable = titleDealType
 
-            if (titlePropertyDealType === 'any')
+            if (titlePropertyDealType === 'any') {
               titleDealTypeNullable = null
+            }
 
             onButtonClick({
               title: titleChecklist,

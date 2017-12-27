@@ -8,12 +8,16 @@ const SELLING = 'Selling'
 
 function getRoles(agents, side) {
   if (side === BUYING) {
-    return _.size(agents) === 0 ? ['BuyerAgent'] : ['CoBuyerAgent']
-  } else if (side === SELLING) {
-    return _.size(agents) === 0 ? ['SellerAgent'] : ['CoSellerAgent']
-  } else {
-    return []
+    const hasBuyerAgent = _.find(agents, agent => agent.role === 'BuyerAgent')
+    return hasBuyerAgent ? ['CoBuyerAgent'] : ['BuyerAgent']
   }
+
+  if (side === SELLING) {
+    const hasSellerAgent = _.find(agents, agent => agent.role === 'SellerAgent')
+    return hasSellerAgent ? ['CoSellerAgent'] : ['SellerAgent']
+  }
+
+  return []
 }
 
 export default ({
@@ -23,7 +27,7 @@ export default ({
   onRemoveAgent
 }) => {
   const allowedRoles = getRoles(agents, dealSide)
-  const title = _.size(agents) === 0 ? 'primary agent' : 'co-agent'
+  const title = allowedRoles[0] === 'BuyerAgent' ? 'primary agent' : 'co-agent'
 
   return (
     <div className="form-section deal-people deal-agent">
@@ -38,9 +42,10 @@ export default ({
               key={id}
               role={agent}
               modalTitle="Edit Agent"
+              buttonText="Update"
               allowedRoles={allowedRoles}
               onRemoveRole={(id) => onRemoveAgent(id)}
-              onUpsertRole={onUpsertAgent}
+              onUpsertRole={newRole => onUpsertAgent({ ...agent, ...newRole })}
             />
           )
         }

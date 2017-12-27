@@ -4,17 +4,16 @@ import RadioButton from '../components/radio'
 
 const properties = [
   'Resale',
+  'Residential Lease',
   'New Home',
   'Lot / Land',
-  'Residential Lease',
   'Commercial Sale',
   'Commercial Lease'
 ]
 
 export default ({
   selectedType,
-  onChangeDealType,
-  display
+  onChangeDealType
 }) => (
   <div className="form-section deal-type">
     <div className="hero">
@@ -23,7 +22,7 @@ export default ({
 
     <Dropdown id="deal-create-type-dropdown">
       <Dropdown.Toggle className="deal-type-dropdown">
-        { selectedType || 'Choose a type' }
+        { selectedType || 'Choose a checklist type' }
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="deal-type-dropdown-list">
@@ -32,7 +31,7 @@ export default ({
             <MenuItem
               key={`MENU_ITEM_${key}`}
               onClick={() => onChangeDealType(item)}
-              eventKey={key+1}
+              eventKey={key + 1}
             >
               <RadioButton
                 selected={selectedType === item}

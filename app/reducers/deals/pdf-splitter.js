@@ -10,7 +10,6 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-
     case types.SET_SPLITTER_DISPLAY:
       return {
         ...state,

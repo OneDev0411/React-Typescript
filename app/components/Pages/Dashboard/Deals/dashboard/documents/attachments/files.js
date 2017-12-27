@@ -29,6 +29,7 @@ class FileAttachments extends React.Component {
 
   openDoc(fileId) {
     const { deal, task } = this.props
+
     browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}/attachment/${fileId}`)
   }
 
@@ -48,7 +49,7 @@ class FileAttachments extends React.Component {
 
     try {
       await deleteAttachment(task, file.id)
-    } catch(e) {}
+    } catch (e) {}
 
     this.setState({
       deleting: false
@@ -108,10 +109,10 @@ class FileAttachments extends React.Component {
                     >
                       {
                         deleting ?
-                        <span>
-                          <i className="fa fa-spinner fa-spin" /> Deleting ...
-                        </span> :
-                        <span>Delete file</span>
+                          <span>
+                            <i className="fa fa-spinner fa-spin" /> Deleting ...
+                          </span> :
+                          <span>Delete file</span>
                       }
                     </li>
                   </Dropdown.Menu>

@@ -46,6 +46,7 @@ export default ({
    * sub message comes without avatar (grouping concept)
    */
   const isLeadMessage = previousMessage === null ||
+    previousMessage.activity ||
     message.recommendation ||
     isAlert ||
     hasAttachments ||

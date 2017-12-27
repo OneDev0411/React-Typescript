@@ -83,7 +83,7 @@ class FormViewer extends React.Component {
     const doc = envelope.documents
       .find(doc => doc.submission === task.submission.id)
 
-    if (!doc){
+    if (!doc) {
       return null
     }
 
@@ -108,11 +108,13 @@ class FormViewer extends React.Component {
 
   editForm() {
     const { deal, params } = this.props
+
     browserHistory.push(`/dashboard/deals/${deal.id}/form-edit/${params.taskId}`)
   }
 
   onClose() {
     const { deal } = this.props
+
     browserHistory.push(`/dashboard/deals/${deal.id}`)
   }
 

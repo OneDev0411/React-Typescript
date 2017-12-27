@@ -1,6 +1,6 @@
 import store from '../../../../../stores'
 
-export default function(deal, filterTab = null) {
+export default function (deal, filterTab = null) {
   const appState = store.getState()
   const { deals } = appState
 
@@ -29,6 +29,7 @@ export default function(deal, filterTab = null) {
 
     list.tasks.forEach(task_id => {
       const task = deals.tasks[task_id]
+
       if (task && task.needs_attention) {
         needs_attentions.push(task.id)
       }

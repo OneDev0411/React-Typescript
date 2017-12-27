@@ -16,7 +16,7 @@ import OpenDeal from '../utils/open-deal'
  * whether a list should update or not
  */
 _.mixin({
-  shouldReverse: function(obj, order) {
+  shouldReverse(obj, order) {
     return order === 'desc' ? obj.reverse() : obj
   }
 })
@@ -36,7 +36,8 @@ class BaseTable extends React.Component {
    */
   getListingPhoto(deal) {
     const photo = Deal.get.field(deal, 'photo')
-    return photo ? photo : '/static/images/deals/home.png'
+
+    return photo || '/static/images/deals/home.png'
   }
 
   /**
@@ -121,6 +122,7 @@ class BaseTable extends React.Component {
 
     if (cell.sortByList) {
       const order = cell.sortByList.indexOf(object)
+
       return order > -1 ? order : cell.sortByList.length + 1
     }
 
@@ -128,9 +130,9 @@ class BaseTable extends React.Component {
       return null
     } else if (typeof object === 'number') {
       return ~~object
-    } else {
-      return object.toString().toLowerCase()
     }
+
+    return object.toString().toLowerCase()
   }
 
   /**
@@ -138,6 +140,7 @@ class BaseTable extends React.Component {
    */
   getSorterCaret(field) {
     const { sortOrder, sortBy } = this.state
+
     return <i
       className={
         cn('fa fa-caret-down', {
@@ -160,6 +163,7 @@ class BaseTable extends React.Component {
 
     return _.every(filters, (value, name) => {
       const splitted = name.split('^')
+
       return this.isMatched(deal, splitted)
     })
   }
@@ -219,6 +223,7 @@ class BaseTable extends React.Component {
 
     deal.checklists.forEach(id => {
       const checklist = this.props.checklists[id]
+
       if (!checklist.tasks || checklist.tasks.length === 0) {
         return false
       }
@@ -253,6 +258,7 @@ class BaseTable extends React.Component {
     const filteredDeals = _.filter(deals, deal => this.applyFilters(deal))
 
     let hasRows = true
+
     if ((isBackOffice && filteredDeals.length === 0) ||
       (!isBackOffice && _.size(deals) === 0)
     ) {
@@ -263,59 +269,59 @@ class BaseTable extends React.Component {
       <div className="table-container">
         {
           hasRows ?
-          <table className="table table-hover">
-            <tbody>
-              <tr className="header">
-                {
-                  _.map(this.cells, (cell, key) =>
-                    <td
-                      key={`CELL_${key}`}
-                      className={cn(cell.className, {
-                        sortable: cell.sortable,
-                        isActive: sortBy === key
-                      })}
-                    >
-                      <span
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => cell.sortable && this.setSort(key)}
+            <table className="table table-hover">
+              <tbody>
+                <tr className="header">
+                  {
+                    _.map(this.cells, (cell, key) =>
+                      <td
+                        key={`CELL_${key}`}
+                        className={cn(cell.className, {
+                          sortable: cell.sortable,
+                          isActive: sortBy === key
+                        })}
                       >
-                        { cell.caption }&nbsp;
-                        { cell.sortable && this.getSorterCaret(key) }
-                      </span>
-                    </td>
-                  )
-                }
-              </tr>
-
-              {
-                _.chain(filteredDeals)
-                .sortBy(deal => this.sort(deal))
-                .shouldReverse(sortOrder)
-                .map((deal, rowId) => (
-                  <tr
-                    key={`DEAL_${deal.id}`}
-                    className="item"
-                    onClick={e => this.onClickDeal(e, deal.id)}
-                  >
-                    {
-                      _.map(this.cells, (cell, key) =>
-                        <td
-                          key={`DEAL_${deal.id}__CELL_${key}`}
-                          className={cell.className}
+                        <span
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => cell.sortable && this.setSort(key)}
                         >
-                          { cell.getText(deal, rowId, filteredDeals.length) }
-                        </td>
-                      )
-                    }
-                  </tr>
-                ))
-                .value()
-              }
-            </tbody>
-          </table> :
-          <EmptyState
-            isBackOffice={isBackOffice}
-          />
+                          { cell.caption }&nbsp;
+                          { cell.sortable && this.getSorterCaret(key) }
+                        </span>
+                      </td>
+                    )
+                  }
+                </tr>
+
+                {
+                  _.chain(filteredDeals)
+                    .sortBy(deal => this.sort(deal))
+                    .shouldReverse(sortOrder)
+                    .map((deal, rowId) => (
+                      <tr
+                        key={`DEAL_${deal.id}`}
+                        className="item"
+                        onClick={e => this.onClickDeal(e, deal.id)}
+                      >
+                        {
+                          _.map(this.cells, (cell, key) =>
+                            <td
+                              key={`DEAL_${deal.id}__CELL_${key}`}
+                              className={cell.className}
+                            >
+                              { cell.getText(deal, rowId, filteredDeals.length) }
+                            </td>
+                          )
+                        }
+                      </tr>
+                    ))
+                    .value()
+                }
+              </tbody>
+            </table> :
+            <EmptyState
+              isBackOffice={isBackOffice}
+            />
         }
 
       </div>

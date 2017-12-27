@@ -18,7 +18,7 @@ const TaskManager = ({
   return (
     <div className="full-width">
       <Upload
-        disableClick={true}
+        disableClick
         deal={deal}
         task={task}
       >
@@ -27,6 +27,7 @@ const TaskManager = ({
           id="deals-task-scrollable"
         >
           <Header
+            key={task.id}
             task={task}
           />
 

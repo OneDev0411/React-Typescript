@@ -27,18 +27,10 @@ const FILTER_ARCHIVE = [
 ]
 
 const filters = {
-  All: (status, deal) => {
-    return !deal.deleted_at
-  },
-  Active: (status, deal) => {
-    return FILTER_ACTIVE.indexOf(status) > -1 && !deal.deleted_at
-  },
-  Pending: (status, deal) => {
-    return FILTER_PENDING.indexOf(status) > -1 && !deal.deleted_at
-  },
-  Archive: (status, deal) => {
-    return FILTER_ARCHIVE.indexOf(status) > -1 || !!deal.deleted_at
-  }
+  All: (status, deal) => !deal.deleted_at,
+  Active: (status, deal) => FILTER_ACTIVE.indexOf(status) > -1 && !deal.deleted_at,
+  Pending: (status, deal) => FILTER_PENDING.indexOf(status) > -1 && !deal.deleted_at,
+  Archive: (status, deal) => FILTER_ARCHIVE.indexOf(status) > -1 || !!deal.deleted_at
 }
 
 class Filter extends React.Component {
@@ -59,6 +51,7 @@ class Filter extends React.Component {
    */
   setFilter(filter) {
     const arg = filter === 'All' ? '' : `/filter/${filter}`
+
     browserHistory.push(`/dashboard/deals${arg}`)
 
     this.props.onChangeFilter({
@@ -97,6 +90,7 @@ class Filter extends React.Component {
 
     return _.filter(deals, deal => {
       const status = Deal.get.status(deal)
+
       return filters[filter](status, deal)
     }).length
   }

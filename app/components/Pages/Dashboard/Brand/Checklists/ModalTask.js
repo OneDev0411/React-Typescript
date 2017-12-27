@@ -80,8 +80,9 @@ const ModalNewTask = ({
   return <div style={{ display: inline ? 'inline' : 'block' }}>
     <TriggerButton
       clickHandler={() => {
-        if (task)
+        if (task) {
           onSelectItem(task.id)
+        }
 
         onChangeComposeModal(!showComposeModal)
       }}

@@ -73,7 +73,7 @@ class BulkSubmit extends React.Component {
     return (
       <div className="inline">
         <button
-          className="btn-deal"
+          className="navbar-button btn-deal"
           onClick={() => this.toggleShowModal()}
         >
           Submit
@@ -93,65 +93,65 @@ class BulkSubmit extends React.Component {
             {
               _
               .chain(deal.checklists)
-              .filter(id => !checklists[id].is_terminated)
+              .filter(id => !checklists[id].is_terminated&& !checklists[id].is_deactivated)
               .map(id => {
                 const checklist = checklists[id]
                 const checklistTasks = (checklist.tasks || [])
                   .filter(tId => tasks[tId].needs_attention !== true)
 
-                return (
-                  <div
-                    key={id}
-                    className="checklist"
-                  >
-                    <div className="ch-title">
-                      { checklist.title }
-                    </div>
-
-                    {
-                      checklistTasks.length === 0 &&
-                      <div className="empty-state">
-                        There is no unnotified task in this checklist
+                  return (
+                    <div
+                      key={id}
+                      className="checklist"
+                    >
+                      <div className="ch-title">
+                        { checklist.title }
                       </div>
-                    }
 
-                    {
-                      checklistTasks
-                      .map(tId => {
-                        const task = tasks[tId]
-                        const hasStatus = task.review !== null || task.needs_attention === true
+                      {
+                        checklistTasks.length === 0 &&
+                        <div className="empty-state">
+                        There is no unnotified task in this checklist
+                        </div>
+                      }
 
-                        return (
-                          <div
-                            key={tId}
-                            className={cn('task', { 'no-status': !hasStatus })}
-                            onClick={() => this.toggleSelectTask(task)}
-                          >
-                            <div className="icon">
-                              <CheckBox
-                                selected={selectedTasks.indexOf(task.id) > -1}
-                              />
-                            </div>
+                      {
+                        checklistTasks
+                          .map(tId => {
+                            const task = tasks[tId]
+                            const hasStatus = task.review !== null || task.needs_attention === true
 
-                            <div className="title">
-                              { task.title }
-                            </div>
+                            return (
+                              <div
+                                key={tId}
+                                className={cn('task', { 'no-status': !hasStatus })}
+                                onClick={() => this.toggleSelectTask(task)}
+                              >
+                                <div className="icon">
+                                  <CheckBox
+                                    selected={selectedTasks.indexOf(task.id) > -1}
+                                  />
+                                </div>
 
-                            {
-                              hasStatus &&
-                              <TaskStatus
-                                task={task}
-                                noTip
-                              />
-                            }
-                          </div>
-                        )
-                      })
-                    }
-                  </div>
-                )
-              })
-              .value()
+                                <div className="title">
+                                  { task.title }
+                                </div>
+
+                                {
+                                  hasStatus &&
+                                  <TaskStatus
+                                    task={task}
+                                    noTip
+                                  />
+                                }
+                              </div>
+                            )
+                          })
+                      }
+                    </div>
+                  )
+                })
+                .value()
             }
           </Modal.Body>
 

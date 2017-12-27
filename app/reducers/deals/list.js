@@ -5,7 +5,6 @@ import error from './error'
 
 export default (state = null, action) => {
   switch (action.type) {
-
     case types.NO_DEAL:
       return {}
 
@@ -38,10 +37,10 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          checklists: [
+          checklists: _.uniq([
             ...state[action.deal_id].checklists || [],
             action.checklist_id
-          ]
+          ])
         }
       }
 

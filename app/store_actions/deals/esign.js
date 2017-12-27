@@ -47,7 +47,7 @@ export function removeAttachment(id) {
 
 export function closeEsignWizard() {
   return {
-    type: types.CLOSE_ESIGN_WIZARD,
+    type: types.CLOSE_ESIGN_WIZARD
   }
 }
 
@@ -72,7 +72,9 @@ export function getEnvelopes(deal_id) {
   return async (dispatch) => {
     const envelopes = await Deal.getEnvelopes(deal_id)
     const indexedEnvelopes = _.indexBy(envelopes, 'id')
+
     dispatch(setEnvelopes(deal_id, indexedEnvelopes))
+
     return indexedEnvelopes
   }
 }
@@ -82,7 +84,7 @@ export function voidEnvelope(dealId, envelopeId) {
     try {
       dispatch(setEnvelopeStatus(dealId, envelopeId, 'Voided'))
       await Deal.voidEnvelope(envelopeId)
-    } catch(e) {
+    } catch (e) {
       throw e
     }
   }

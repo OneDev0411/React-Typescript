@@ -25,8 +25,9 @@ class UploadModal extends React.Component {
   async uploadFile(roomId, file) {
     try {
       const response = await ChatModel.uploadAttachment(roomId, file)
+
       return response.body.data
-    } catch(e) {
+    } catch (e) {
       return null
     }
   }
@@ -74,11 +75,14 @@ class UploadModal extends React.Component {
       return false
     }
 
+    // check task is inside a backup contract
+    const isBackupContract = this.isBackupContract(task)
+
     // get filename
     const filename = properties.fileTitle || fileObject.name
 
     // set status
-    this.props.setUploadAttributes(id, { status: STATUS_UPLOADING})
+    this.props.setUploadAttributes(id, { status: STATUS_UPLOADING })
 
     // upload file
     const file = await this.uploadFile(task.room.id, fileObject, filename)
@@ -105,7 +109,7 @@ class UploadModal extends React.Component {
     // add files to attachments list
     this.props.addAttachment(task.deal, task.checklist, task.id, file)
 
-    if (properties.notifyOffice === true) {
+    if (properties.notifyOffice === true && !isBackupContract) {
       this.props.changeNeedsAttention(task.id, true)
     }
   }
@@ -116,8 +120,9 @@ class UploadModal extends React.Component {
   async uploadFile(roomId, file, fileName) {
     try {
       const response = await ChatModel.uploadAttachment(roomId, file, fileName)
+
       return response.body.data
-    } catch(e) {
+    } catch (e) {
       return null
     }
   }
@@ -134,6 +139,15 @@ class UploadModal extends React.Component {
     }
 
     return 'Upload'
+  }
+
+  isBackupContract(task) {
+    const { checklists } = this.props
+    if (!task) {
+      return false
+    }
+
+    return checklists[task.checklist].is_deactivated
   }
 
   render() {
@@ -164,8 +178,10 @@ class UploadModal extends React.Component {
             {
               _.map(upload.files, (file, id) => {
                 const selectedTask = this.getSelectedTask(file)
+                const isBackupContract = this.isBackupContract(selectedTask)
                 const isUploading = file.properties.status === STATUS_UPLOADING
                 const isUploaded = file.properties.status === STATUS_UPLOADED
+
                 fileCounter += 1
 
                 return (
@@ -202,7 +218,7 @@ class UploadModal extends React.Component {
                     </div>
                     <div className="notify-admin">
                       {
-                        (!isUploading && !isUploaded) &&
+                        (!isBackupContract && !isUploading && !isUploaded) &&
                         <Checkbox
                           square
                           selected={file.properties.notifyOffice || false}
@@ -212,7 +228,7 @@ class UploadModal extends React.Component {
                       }
 
                       {
-                        (isUploaded && file.properties.notifyOffice) &&
+                        (isUploaded && file.properties.notifyOffice && !isBackupContract) &&
                         <span className="notified">
                           Office Notified
                         </span>
@@ -249,6 +265,7 @@ class UploadModal extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
+    checklists: deals.checklists,
     tasks: deals.tasks,
     upload: deals.upload,
     splitter: deals.splitter

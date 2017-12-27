@@ -47,7 +47,7 @@ class WorkspacePdfList extends React.Component {
           _.map(splitter.pages, (page, id) =>
             <PageThumbnail
               key={`pdf-page-${id}`}
-              inUse={true}
+              inUse
               canvasClassName="no-drag"
               pdfId={page.documentId}
               doc={splitter.documents[page.documentId]}

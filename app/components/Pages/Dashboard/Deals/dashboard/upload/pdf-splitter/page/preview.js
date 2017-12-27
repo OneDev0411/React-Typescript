@@ -42,7 +42,6 @@ class PagePreview extends React.Component {
       </div>
     )
   }
-
 }
 
 function mapStateToProps({ deals }) {

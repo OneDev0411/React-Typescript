@@ -50,7 +50,9 @@ class WorkspaceForm extends React.Component {
       .uniq()
       .map(id => {
         const file = upload.files[id].fileObject
+
         file.id = id
+
         return file
       })
       .value()
@@ -79,10 +81,9 @@ class WorkspaceForm extends React.Component {
         title: '',
         notifyOffice: true
       })
-
-    } catch(e) {
+    } catch (e) {
       notify({
-        message: "Couldn't create pdf file. try again.",
+        message: 'Couldn\'t create pdf file. try again.',
         status: 'error'
       })
 

@@ -21,16 +21,16 @@ export default ({
       <Col md={6} sm={6} xs={6} className="btns">
         {
           (saving || !loaded) ?
-          <span style={{ marginRight: '20px' }}>
-            <i className="fa fa-spin fa-spinner" />&nbsp;
-            { buttonCaption }
-          </span> :
-          <button
-            className="deal-button save"
-            onClick={onSave}
-          >
-            { incompleteFields.length === 0 ? 'Save' : 'Save Draft' }
-          </button>
+            <span style={{ marginRight: '20px' }}>
+              <i className="fa fa-spin fa-spinner" />&nbsp;
+              { buttonCaption }
+            </span> :
+            <button
+              className="deal-button save"
+              onClick={onSave}
+            >
+              { incompleteFields.length === 0 ? 'Save' : 'Save Draft' }
+            </button>
         }
 
         <button

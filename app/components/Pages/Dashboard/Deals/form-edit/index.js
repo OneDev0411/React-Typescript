@@ -13,7 +13,7 @@ class FormEdit extends React.Component {
     this.state = {
       loaded: false,
       saving: false,
-      incompleteFields: [],
+      incompleteFields: []
     }
   }
 
@@ -34,6 +34,7 @@ class FormEdit extends React.Component {
    */
   onLoad() {
     const { deal } = this.props
+
     this.setState({ loaded: true })
 
     // set deal
@@ -106,7 +107,6 @@ class FormEdit extends React.Component {
     this.setState({
       saving: true
     }, () => this.saveForm(data))
-
   }
 
   /**
@@ -132,6 +132,7 @@ class FormEdit extends React.Component {
     }
 
     const win = this.frame.contentWindow
+
     win.postMessage({ fn, args }, '*')
   }
 
@@ -175,8 +176,7 @@ class FormEdit extends React.Component {
 
       // close form
       return this.close()
-
-    } catch(e) {
+    } catch (e) {
       console.log(e)
       /* nothing */
     }
@@ -190,6 +190,7 @@ class FormEdit extends React.Component {
    */
   close() {
     const { deal } = this.props
+
     browserHistory.push(`/dashboard/deals/${deal.id}`)
   }
 
@@ -203,9 +204,9 @@ class FormEdit extends React.Component {
       return 'Saving ...'
     } else if (!loaded) {
       return 'Loading ...'
-    } else {
-      return incompleteFields.length === 0 ? 'Save' : 'Save Draft'
     }
+
+    return incompleteFields.length === 0 ? 'Save' : 'Save Draft'
   }
 
   render() {

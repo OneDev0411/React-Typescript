@@ -24,11 +24,12 @@ class NavBar extends React.Component {
 
   onDrop(files) {
     const { deal } = this.props
+
     this.props.setUploadFiles(files, deal, null)
   }
 
   render() {
-    const { deal } = this.props
+    const { deal, isBackOffice } = this.props
 
     return (
       <div className="deal-navbar">
@@ -42,29 +43,39 @@ class NavBar extends React.Component {
 
         <div className="ctas">
           <button
-            className="btn-deal"
+            className="navbar-button"
+            onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)}
+          >
+            Add New Offer
+          </button>
+
+          <button
+            className="navbar-button"
             onClick={() => this.openUploadDialog()}
           >
             Upload
           </button>
 
           <button
-            className="btn-deal"
+            className="navbar-button"
             onClick={() => this.getSignatures()}
           >
             Get Signatures
           </button>
 
-          <BulkSubmit
-            deal={deal}
-          />
+          {
+            !isBackOffice &&
+            <BulkSubmit
+              deal={deal}
+            />
+          }
         </div>
 
-         <Dropzone
+        <Dropzone
           disableClick
           ref={(node) => this.dropzone = node}
           onDrop={(files) => this.onDrop(files)}
-          multiple={true}
+          multiple
           accept="application/pdf,image/*"
           style={{ display: 'none' }}
         />
@@ -73,7 +84,9 @@ class NavBar extends React.Component {
   }
 }
 
-export default connect(null, {
+export default connect(({ deals }) => ({
+  isBackOffice: deals.backoffice
+}), {
   showAttachments,
   setUploadFiles
 })(NavBar)

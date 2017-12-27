@@ -1,15 +1,14 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import DatePicker from '../../components/date-picker'
 import cn from 'classnames'
 import ToolTip from '../../components/tooltip'
-import Deal from '../../../../../../models/Deal'
 
 export default class Editable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      editMode: false
+      editMode: false,
+      error: false
     }
   }
 
@@ -31,7 +30,9 @@ export default class Editable extends React.Component {
     })
 
     if (fieldValue !== null && fieldValue !== this.getValue()) {
-      onChange(field, fieldValue)
+      if (field.validate && field.validate(fieldValue)) {
+        onChange(field, fieldValue)
+      }
     }
   }
 
@@ -42,8 +43,6 @@ export default class Editable extends React.Component {
   }
 
   editField() {
-    const { editable } = this.props
-
     this.setState({
       editMode: true
     }, () => this.input && this.input.focus())
@@ -52,13 +51,12 @@ export default class Editable extends React.Component {
   getCtas() {
     const { editMode } = this.state
     const { editable, context, field, saving } = this.props
-    const isDateType = field.fieldType === 'date'
 
     const showCTA = saving !== field.key && !editMode
 
     return (
       <span>
-        <ToolTip caption={editable ? null : "This field needs office approval after removing" }>
+        <ToolTip caption={editable ? null : 'This field needs office approval after removing'}>
           <i
             className={cn('fa fa-times-circle ico-remove', {
               hide: !showCTA || !context.value || context.value.length === 0
@@ -67,7 +65,7 @@ export default class Editable extends React.Component {
           />
         </ToolTip>
 
-        <ToolTip caption={editable ? null : "This field needs office approval after changing" }>
+        <ToolTip caption={editable ? null : 'This field needs office approval after changing'}>
           <i className={cn('fa fa-pencil', { hide: !showCTA })} />
         </ToolTip>
       </span>
@@ -77,6 +75,7 @@ export default class Editable extends React.Component {
   getValue() {
     const { context } = this.props
     const value = context.rawValue || context.value || ''
+
     return value.toString()
   }
 
@@ -87,58 +86,76 @@ export default class Editable extends React.Component {
   }
 
   render() {
-    const { isBackOffice, field, context, approved, editable, disabled } = this.props
-    const { editMode } = this.state
+    const { field, context, approved, editable, disabled, saving } = this.props
+    const { editMode, error } = this.state
     const isDateType = field.fieldType === 'date'
     const isStringType = !isDateType
 
     if (disabled) {
-      return <span>{context.value}</span>
+      return <span className="disabeld-field">{context.value}</span>
     }
 
+
     return (
-      <div
-        style={{ display: 'inline-block', minWidth: '100%' }}
-        onClick={() => this.editField()}
+      <div className={cn('field'
+        , { editable: true, approved, disabled }
+        , { error })}
       >
 
-        <DatePicker
-          show={editMode && field.fieldType === 'date'}
-          saveText={editable ? 'Update' : 'Notify Office'}
-          initialDate={this.getValue()}
-          onClose={() => this.cancelEditing()}
-          onSelectDate={date => this.onFinishEditing(date)}
-        />
+        <div
+          style={{ display: 'inline-block', minWidth: '100%' }}
+          onClick={() => this.editField()}
+        >
 
+          <DatePicker
+            show={editMode && field.fieldType === 'date'}
+            saveText={editable ? 'Update' : 'Notify Office'}
+            initialDate={this.getValue()}
+            onClose={() => this.cancelEditing()}
+            onSelectDate={date => this.onFinishEditing(date)}
+          />
+
+          {
+            editMode && isStringType ?
+              '' :
+              <ToolTip caption={approved ? null : 'Pending Office Approval'}>
+                <span>{context.value}</span>
+              </ToolTip>
+          }
+
+          {
+            editMode && isStringType &&
+            <div className="inline">
+              <input
+                className="input-edit"
+                onBlur={() => this.onFinishEditing()}
+                defaultValue={this.getValue()}
+                onKeyPress={(e) => this.onKeyPress(e)}
+                onChange={e => {
+                  const error = this.input
+                    && field.validate
+                    && !field.validate(e.target.value)
+
+                  this.setState({ error })
+                }}
+                ref={(input) => this.input = input}
+                maxLength={15}
+              />
+              <i
+                className="fa fa-check-circle"
+                onClick={() => this.onFinishEditing()}
+              />
+            </div>
+          }
+
+          <span className="cta">
+            {this.getCtas()}
+          </span>
+        </div>
         {
-          editMode && isStringType ?
-          '' :
-          <ToolTip caption={approved ? null : 'Pending Office Approval'}>
-            <span>{context.value}</span>
-          </ToolTip>
+          saving && saving === field.key &&
+          <i className="fa fa-spin fa-spinner" />
         }
-
-        {
-          editMode && isStringType &&
-          <div className="inline">
-            <input
-              className="input-edit"
-              onBlur={() => this.onFinishEditing()}
-              defaultValue={this.getValue()}
-              onKeyPress={(e) => this.onKeyPress(e)}
-              ref={(input) => this.input = input}
-              maxLength={15}
-            />
-            <i
-              className="fa fa-check-circle"
-              onClick={() => this.onFinishEditing()}
-            />
-          </div>
-        }
-
-        <span className="cta">
-          {this.getCtas()}
-        </span>
       </div>
     )
   }

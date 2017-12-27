@@ -9,8 +9,8 @@ export default ({
   clients,
   dealStatus,
   onChangeDealStatus,
-  display,
-}) =>  (
+  display
+}) => (
   <div className="form-section deal-status">
     <div className="hero">
       What is the status of the deal? <span className="required">*</span>

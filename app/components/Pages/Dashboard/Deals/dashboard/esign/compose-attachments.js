@@ -8,34 +8,32 @@ const ComposeAttachments = ({
   tasks,
   deal,
   removeAttachment
-}) => {
-  return (
-    <ul>
-      {
-        esign.attachments.map(id => {
-          const task = tasks[id]
+}) => (
+  <ul>
+    {
+      esign.attachments.map(id => {
+        const task = tasks[id]
 
-          return (
-            <li key={id}>
-              <span
-                className="name"
-                onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}`)}
-              >
-                { tasks[id].title }
-              </span>
+        return (
+          <li key={id}>
+            <span
+              className="name"
+              onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}`)}
+            >
+              { tasks[id].title }
+            </span>
 
-              <span className="ctas">
-                <i
-                  className="fa fa-times"
-                  onClick={() => removeAttachment(id)}
-                />
-              </span>
-            </li>
-          )
-        })
-      }
-    </ul>
-  )
-}
+            <span className="ctas">
+              <i
+                className="fa fa-times"
+                onClick={() => removeAttachment(id)}
+              />
+            </span>
+          </li>
+        )
+      })
+    }
+  </ul>
+)
 
 export default connect(null, { removeAttachment })(ComposeAttachments)

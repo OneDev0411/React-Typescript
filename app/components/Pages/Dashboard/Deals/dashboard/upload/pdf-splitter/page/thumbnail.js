@@ -25,6 +25,7 @@ const pageSource = {
     }
 
     const item = monitor.getItem()
+
     store.dispatch(selectSplitterPage(item.documentId, item.pageNumber))
   }
 }
@@ -46,6 +47,7 @@ class PageThumbnail extends React.Component {
 
   previewPage() {
     const { pdfId, doc, pageNumber, setPagePreview } = this.props
+
     setPagePreview({ pdfId, doc, pageNumber })
   }
 

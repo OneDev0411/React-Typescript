@@ -26,11 +26,12 @@ class PDF extends React.Component {
     }
 
     // lazy load
-    await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */ )
+    await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */)
     await import('pdfjs-dist/web/compatibility' /* webpackChunkName: "pdf.comp" */)
 
     pdfs.forEach(async pdf => {
       const doc = await PDFJS.getDocument(pdf.fileObject.preview)
+
       this.props.setSplitterDocument(pdf.id, doc)
     })
   }
@@ -54,61 +55,62 @@ class PDF extends React.Component {
 
         {
           _.chain(splitter.documents)
-          .filter((doc, id) => {
+            .filter((doc, id) => {
             // set doc id
-            doc.id = id
+              doc.id = id
 
-            // get status
-            const { status } = upload.files[id].properties
-            return status !== STATUS_UPLOADED && status !== STATUS_UPLOADING
-          })
-          .map((doc) =>
-            <div
-              key={`pdf-${doc.id}`}
-              className="pdf-section"
-            >
+              // get status
+              const { status } = upload.files[id].properties
 
-              <div className="heading">
-                <span className="page-title">
-                  { upload.files[doc.id].fileObject.name }
-                </span>
+              return status !== STATUS_UPLOADED && status !== STATUS_UPLOADING
+            })
+            .map((doc) =>
+              <div
+                key={`pdf-${doc.id}`}
+                className="pdf-section"
+              >
 
-                <span className="pages-count">
+                <div className="heading">
+                  <span className="page-title">
+                    { upload.files[doc.id].fileObject.name }
+                  </span>
+
+                  <span className="pages-count">
                   ({ doc.pdfInfo.numPages } pages)
-                </span>
-              </div>
+                  </span>
+                </div>
 
-              {
-                Array.apply(null, { length: doc.pdfInfo.numPages })
-                .map((v, i) => {
-                  const inUse = typeof splitter.pages[`${doc.id}_${i+1}`] !== 'undefined'
+                {
+                  Array.apply(null, { length: doc.pdfInfo.numPages })
+                    .map((v, i) => {
+                      const inUse = typeof splitter.pages[`${doc.id}_${i + 1}`] !== 'undefined'
 
-                  return (
-                    <PageThumbnail
-                      key={`page-${i}`}
-                      inUse={inUse}
-                      canvasClassName={cn({ inUse })}
-                      pdfId={doc.id}
-                      doc={doc}
-                      pageNumber={i + 1}
-                    >
-                      {
-                        inUse ?
-                        <span className="page-cta inuse">In Use</span> :
-                        <span
-                          className="page-cta"
-                          onClick={() => this.onSelectPage(i + 1, doc.id)}
+                      return (
+                        <PageThumbnail
+                          key={`page-${i}`}
+                          inUse={inUse}
+                          canvasClassName={cn({ inUse })}
+                          pdfId={doc.id}
+                          doc={doc}
+                          pageNumber={i + 1}
                         >
+                          {
+                            inUse ?
+                              <span className="page-cta inuse">In Use</span> :
+                              <span
+                                className="page-cta"
+                                onClick={() => this.onSelectPage(i + 1, doc.id)}
+                              >
                           Add page
-                        </span>
-                      }
-                    </PageThumbnail>
-                  )
-                })
-              }
-            </div>
-          )
-          .value()
+                              </span>
+                          }
+                        </PageThumbnail>
+                      )
+                    })
+                }
+              </div>
+            )
+            .value()
         }
       </div>
     )

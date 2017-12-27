@@ -21,6 +21,7 @@ class WhoSigned extends React.Component {
   getSignLink(eid) {
     const { user } = this.props
     const token = user.access_token
+
     return `${config.app.url}/api/deals/envelope/${eid}/sign?access_token=${token}`
   }
 
@@ -62,10 +63,11 @@ class WhoSigned extends React.Component {
 
   async voidEnvelope(envelopeId) {
     const { deal, voidEnvelope, notify, onClose } = this.props
+
     try {
       voidEnvelope(deal.id, envelopeId)
       onClose()
-    } catch(e) {
+    } catch (e) {
       notify({
         message: 'Can not void this eSign',
         status: 'error'
@@ -73,7 +75,7 @@ class WhoSigned extends React.Component {
     }
   }
 
-  render () {
+  render() {
     const { resending } = this.state
     const { onRequestClose, envelope, user } = this.props
     const { recipients } = envelope

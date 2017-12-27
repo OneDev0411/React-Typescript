@@ -5,14 +5,15 @@ import TaskRoom from '../../../Chatroom/Services/notification'
 import { addNewRoom } from '../../../../../../store_actions/chatroom/room'
 
 class Comment extends React.Component {
-
   componentDidMount() {
     const { task, rooms } = this.props
+
     this.getRoom(task, rooms)
   }
 
   componentWillReceiveProps(nextProps) {
     const { task, rooms } = nextProps
+
     this.getRoom(task, rooms)
   }
 

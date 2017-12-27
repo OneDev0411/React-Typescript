@@ -43,7 +43,7 @@ export default class extends React.Component {
 
     return (
       <Modal
-        show={true}
+        show
         onHide={onClose}
         dialogClassName="modal-deal-date-picker"
       >

@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
-import moment from 'moment'
 import Deal from '../../../../../../models/Deal'
 import Editable from './inline-edit'
 import { updateContext } from '../../../../../../store_actions/deals'
@@ -53,21 +52,20 @@ class Table extends React.Component {
         <div className="fact-table critical-dates">
           {
             _.chain(table)
-            .map(field => {
-              const context = Deal.get.context(deal, field.key)
-              const fieldCtx = getValue(deal, field)
-              const editable = field.canEdit(isBackOffice)
-              const disabled = field.disabled === true
-              const approved = (context && context.approved_at !== null) || (field.approved)
+              .map(field => {
+                const context = Deal.get.context(deal, field.key)
+                const fieldCtx = getValue(deal, field)
+                const editable = field.canEdit(isBackOffice)
+                const disabled = field.disabled === true
+                const approved = (context && context.approved_at !== null) || (field.approved)
 
-              return (
-                <div key={`CRITICAL_DATE_${field.key}`}>
-                  <div className="fact-row">
-                    <div className="name">
-                      { field.name }
-                    </div>
+                return (
+                  <div key={`CRITICAL_DATE_${field.key}`}>
+                    <div className="fact-row">
+                      <div className="name">
+                        { field.name }
+                      </div>
 
-                    <div className={cn('field', { editable: true, approved, disabled })}>
                       <Editable
                         field={field}
                         context={fieldCtx}
@@ -78,29 +76,23 @@ class Table extends React.Component {
                         saving={saving}
                         onChange={(field, value) => this.onChangeContext(field, value)}
                       />
+                    </div>
 
+                    <div className="approve-row">
                       {
-                        saving && saving === field.key &&
-                        <i className="fa fa-spin fa-spinner" />
+                        isBackOffice && fieldCtx.value && !disabled && !approved && saving !== field.key &&
+                        <button
+                          className="btn-approve"
+                          onClick={(e) => this.approveField(e, field, fieldCtx)}
+                        >
+                        Approve
+                        </button>
                       }
                     </div>
                   </div>
-
-                  <div className="approve-row">
-                    {
-                      isBackOffice && fieldCtx.value && !disabled && !approved && saving !== field.key &&
-                      <button
-                        className="btn-approve"
-                        onClick={(e) => this.approveField(e, field, fieldCtx)}
-                      >
-                        Approve
-                      </button>
-                    }
-                  </div>
-                </div>
-              )
-            })
-            .value()
+                )
+              })
+              .value()
           }
         </div>
       </div>

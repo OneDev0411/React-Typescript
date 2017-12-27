@@ -45,16 +45,16 @@ class FileName extends React.Component {
 
         {
           canEditName ?
-          <span
-            onClick={() => this.toggleEdit(file, false)}
-            className="save"
-          >
+            <span
+              onClick={() => this.toggleEdit(file, false)}
+              className="save"
+            >
             Save
-          </span> :
-          <i
-            className={cn('edit-icon fa fa-pencil', { canEditName })}
-            onClick={() => this.toggleEdit(file, true)}
-          />
+            </span> :
+            <i
+              className={cn('edit-icon fa fa-pencil', { canEditName })}
+              onClick={() => this.toggleEdit(file, true)}
+            />
         }
       </div>
     )

@@ -34,10 +34,10 @@ export default (state = null, action) => {
         ...state,
         [action.list_id]: {
           ...state[action.list_id],
-          tasks: [
+          tasks: _.uniq([
             action.task.id,
             ...state[action.list_id].tasks || []
-          ]
+          ])
         }
       }
 

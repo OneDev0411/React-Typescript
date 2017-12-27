@@ -20,7 +20,10 @@ export default ({
       {
         _.size(listview) === 0 &&
         <div className="empty-state">
-          <img src="/static/images/deals/home-icon.svg" />
+          <img
+            alt="home"
+            src="/static/images/deals/home-icon.svg"
+          />
           No matches
         </div>
       }
@@ -28,6 +31,7 @@ export default ({
       {
         _.map(listview, (item, key) => {
           const c = item.address_components
+
           return (
             <Row
               key={`PLACE_${key}`}
@@ -43,7 +47,7 @@ export default ({
 
               <Col md={7} sm={7} xs={7} className="address-col">
                 <span style={{ color: '#5b6469' }}>
-                  {c.street_number} {c.street_name} {c.street_suffix}
+                  {c.street_number} {c.street_name} {c.street_suffix} Unit {c.unit_number}
                 </span>
 
                 <span className="addr">

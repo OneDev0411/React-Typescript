@@ -13,34 +13,26 @@ import { getBrandInfo, renderField } from '../SignIn'
 import signup from '../../../../models/auth/signup'
 
 const getErrorMessage = (errorCode, email) => {
-  switch (errorCode) {
-    case 409:
-      return (
-        <div className="c-auth__submit-alert c-auth__submit-alert--warning">
-          An account with this email address exists in our system. Please{' '}
-          <Link to={`/password/forgot?email=${encodeURIComponent(email)}`}>
-            reset your password
-          </Link>{' '}
-          or{' '}
-          <Link to={`/signin?username=${encodeURIComponent(email)}`}>
-            sign in
-          </Link>.
-        </div>
-      )
-    case 202:
-      return (
-        <div className="c-auth__submit-alert c-auth__submit-alert--warning">
-          An account with this email address exists in our system. We resent a
-          new activation email. Please check your inbox.
-        </div>
-      )
-    default:
-      return (
-        <div className="c-auth__submit-error-alert">
-          There was an error with this request. Please try again.
-        </div>
-      )
+  if (errorCode === 409) {
+    return (
+      <div className="c-auth__submit-alert c-auth__submit-alert--warning">
+        An account with this email address exists in our system. Please{' '}
+        <Link to={`/password/forgot?email=${encodeURIComponent(email)}`}>
+          reset your password
+        </Link>{' '}
+        or{' '}
+        <Link to={`/signin?username=${encodeURIComponent(email)}`}>
+          sign in
+        </Link>.
+      </div>
+    )
   }
+
+  return (
+    <div className="c-auth__submit-error-alert">
+      There was an error with this request. Please try again.
+    </div>
+  )
 }
 
 const Signup = ({
@@ -112,16 +104,16 @@ const Signup = ({
           ) : (
             <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                Check your email and confirm your email address to continue.
-                Please{' '}
-                <Link
+                We {submitSuccessfully.isShadow ? 'resent a new' : ' sent an'}  activation email.<br />
+                Please check <b>{submitSuccessfully.email}</b>
+              </p>
+              <Link
                   to={`/signin?username=${encodeURIComponent(
                     submitSuccessfully
                   )}`}
                 >
-                  sign in
-                </Link>.
-              </p>
+                Sign in
+              </Link>
             </div>
           )}
         </main>
@@ -150,9 +142,22 @@ export default compose(
       try {
         await signup(email)
         setIsSubmitting(false)
-        setSubmitSuccessfully(email)
+        setSubmitSuccessfully({
+          email,
+          isShadow: false
+        })
       } catch (errorCode) {
         setIsSubmitting(false)
+
+        // shadow user
+        if (errorCode === 202) {
+          setSubmitSuccessfully({
+            email,
+            isShadow: true
+          })
+          return
+        }
+
         setSubmitError({
           email,
           message: getErrorMessage(errorCode, email)

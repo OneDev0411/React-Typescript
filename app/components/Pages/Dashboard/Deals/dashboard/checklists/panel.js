@@ -25,7 +25,7 @@ class ChecklistPanel extends React.Component {
 
     return {
       termination: isBackoffice && checklist.is_terminatable,
-      deactivation: checklist.is_deactivatable
+      deactivation: isBackoffice && checklist.is_deactivatable
     }
   }
 
@@ -59,7 +59,6 @@ class ChecklistPanel extends React.Component {
               />
             </div>
 
-
             {
               _.filter(actions, available => available).length > 0 &&
               <div className="cta">
@@ -82,7 +81,7 @@ class ChecklistPanel extends React.Component {
                     />
                   </Button>
 
-                  <Dropdown.Menu>
+                  <Dropdown.Menu >
                     <TaskTermination
                       hasPermission={actions.termination}
                       deal={deal}

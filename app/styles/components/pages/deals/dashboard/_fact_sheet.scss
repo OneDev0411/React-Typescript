@@ -59,6 +59,12 @@
         }
       }
 
+      .disabeld-field {
+        text-align: right;
+        width: 100%;
+        display: inline-block;
+      }
+
       .field {
         min-width: 140px;
         max-width: 140px;
@@ -106,6 +112,7 @@
           width: 80%;
           height: 20px;
           margin-right: 3px;
+          border: none;
           &:focus {
             outline: none;
           }
@@ -116,6 +123,10 @@
           i {
             margin-left: 5px;
           }
+        }
+
+        &.editable.error {
+          border-color: red;
         }
       }
     }

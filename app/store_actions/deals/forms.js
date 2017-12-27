@@ -29,6 +29,7 @@ function formCreated(checklist) {
 export function addForm(brandId, checklistId, formId) {
   return async (dispatch) => {
     const response = await Deal.addForm(brandId, checklistId, formId)
+
     dispatch(formCreated(response))
   }
 }
@@ -59,6 +60,7 @@ export function updateSubmission(taskId, submission) {
 export function saveSubmission(taskId, formId, state, values) {
   return async (dispatch) => {
     const submission = await Deal.saveSubmission(taskId, formId, state, values)
+
     dispatch(updateSubmission(taskId, submission))
   }
 }

@@ -8,7 +8,6 @@ import {
 } from '../../../../../store_actions/deals'
 
 export default class DealSocket extends Socket {
-
   constructor(user) {
     super(user)
 
@@ -44,6 +43,7 @@ export default class DealSocket extends Socket {
    */
   onDealChange(response) {
     const { action, deal } = response
+
     console.log(`[ ${action} ] got a deals socket event`)
 
     switch (action) {

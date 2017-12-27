@@ -1,7 +1,6 @@
 import React from 'react'
 import _ from 'underscore'
 import CrudRole from './crud-role'
-import RoleItem from './role-item'
 
 const BUYING = 'Buying'
 const SELLING = 'Selling'
@@ -11,9 +10,9 @@ function getRoles(side) {
     return ['Buyer', 'Tenant']
   } else if (side === SELLING) {
     return ['Seller', 'Landlord']
-  } else {
-    return []
   }
+
+  return []
 }
 
 export default ({
@@ -27,7 +26,7 @@ export default ({
   return (
     <div className="form-section deal-people deal-client">
       <div className="hero">
-        Who are the {dealSide === 'Buying' ? 'buyers' : 'sellers'}&nbsp;
+        Who are the {dealSide === 'Buying' ? 'buyers' : 'sellers'}?&nbsp;
         <span className="required">*</span>
       </div>
 
@@ -38,16 +37,17 @@ export default ({
               key={id}
               role={agent}
               modalTitle="Edit client"
+              buttonText="Update"
               allowedRoles={allowedRoles}
               onRemoveRole={(id) => onRemoveClient(id)}
-              onUpsertRole={onUpsertClient}
+              onUpsertRole={newRole => onUpsertClient({ ...agent, ...newRole })}
             />
           )
         }
 
         <CrudRole
-          modalTitle="Add your client"
-          ctaTitle="Add your client"
+          modalTitle="Add a client"
+          ctaTitle="Add a client"
           allowedRoles={allowedRoles}
           onUpsertRole={onUpsertClient}
         />

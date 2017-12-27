@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
@@ -50,13 +49,13 @@ class CreateDeal extends React.Component {
     })
   }
 
-  onRemoveRole(id, type) {
+  onRemoveRole(email, type) {
     this.setState({
-      [type]: _.omit(this.state[type], (role, roleId) => id === roleId)
+      [type]: _.omit(this.state[type], (role) => role.email === email)
     })
   }
 
-  onCreateAddress(component, type) {
+  onCreateAddress(component) {
     this.setState({ dealAddress: component })
   }
 
@@ -119,7 +118,12 @@ class CreateDeal extends React.Component {
 
     const dealObject = {
       property_type: dealPropertyType,
-      deal_type: dealSide
+      deal_type: dealSide,
+      roles: this.getRoles(),
+      deal_context: {
+        ...criticalDates,
+        listing_status: isBuyingDeal ? dealStatus : 'Active'
+      }
     }
 
     if (dealAddress) {
@@ -134,24 +138,14 @@ class CreateDeal extends React.Component {
     this.setState({ saving: true })
 
     try {
-      // create deal
+      // // create deal
       const deal = await Deal.create(user, dealObject)
 
       // dispatch new deal
       await createDeal(deal)
 
-      // add roles
-      await createRoles(deal.id, this.getRoles())
-
-      // create contexts
-      await updateContext(deal.id, {
-        ...criticalDates,
-        listing_status: isBuyingDeal ? dealStatus : 'Active'
-      }, true)
-
       return OpenDeal(deal.id)
-
-    } catch(e) {
+    } catch (e) {
       // notify user
       notify({
         title: 'Can not create deal',
@@ -191,9 +185,10 @@ class CreateDeal extends React.Component {
   getRoles() {
     const { agents, clients, referrals } = this.state
     const roles = []
-    _.each(clients, client => roles.push(client))
-    _.each(agents, agent => roles.push(agent))
-    _.each(referrals, referral => roles.push(referral))
+
+    _.each(clients, client => roles.push(_.omit(client, 'id')))
+    _.each(agents, agent => roles.push(_.omit(agent, 'id')))
+    _.each(referrals, referral => roles.push(_.omit(referral, 'id')))
 
     return roles
   }
@@ -267,8 +262,8 @@ class CreateDeal extends React.Component {
                 criticalDates={criticalDates}
                 onChangeCriticalDates={(field, value) => this.changeCriticalDates(field, value)}
                 fields={{
-                  'list_date': 'Listing Date',
-                  'expiration_date': 'Listing Expiration'
+                  list_date: 'Listing Date',
+                  expiration_date: 'Listing Expiration'
                 }}
               />
             </div>

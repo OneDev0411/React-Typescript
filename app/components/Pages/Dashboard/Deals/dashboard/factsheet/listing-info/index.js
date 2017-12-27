@@ -17,6 +17,7 @@ const table = [
     key: 'list_price',
     name: 'List Price',
     dataType: 'currency',
+    validate: (price) => /^(?:[1-9]\d*|0)?(?:\.\d+)?$/.test(price),
     canEdit: (isBO) => isBO
   }, {
     key: 'property_type',
@@ -28,6 +29,7 @@ const table = [
     key: 'file_id',
     name: 'File ID',
     dataType: 'text',
+    validate: () => true,
     canEdit: (isBO) => isBO
   }
 ]
@@ -43,6 +45,7 @@ const getValue = (deal, field) => {
 
   if (field.context) {
     let context = deal[field.context]
+
     value = context ? context[field.contextField] : null
   } else {
     value = Deal.get.field(deal, field.key)

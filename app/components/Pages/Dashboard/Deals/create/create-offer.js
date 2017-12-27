@@ -21,6 +21,7 @@ import hasPrimaryOffer from '../utils/has-primary-offer'
 class CreateOffer extends React.Component {
   constructor(props) {
     super(props)
+
     const dealHasPrimaryOffer = hasPrimaryOffer(props.deal)
 
     this.state = {
@@ -37,18 +38,54 @@ class CreateOffer extends React.Component {
     }
   }
 
-  onUpsertRole(form, type) {
-    this.setState({
-      [type]: {
-        ...this.state[type],
-        [form.email]: form
+  componentDidMount() {
+    const { deal } = this.props
+    this.prepopulateRoles(deal.roles)
+  }
+
+  prepopulateRoles(roles) {
+    roles.forEach(item => {
+      let type
+
+      switch (item.role) {
+        case 'Buyer':
+        case 'Tenant':
+          type = 'clients'
+          break
+
+        case 'BuyerAgent':
+        case 'CoBuyerAgent':
+          type = 'agents'
+          break
+
+        case 'SellerReferral':
+          type = 'referrals'
+          break
+
+        case 'Title':
+          type = 'closingOfficers'
+          break
+      }
+
+      if (type) {
+        item.disabled = true
+        this.onUpsertRole(item, type)
       }
     })
   }
 
-  onRemoveRole(id, type) {
+  onUpsertRole(form, type) {
     this.setState({
-      [type]: _.omit(this.state[type], (role, roleId) => id === roleId)
+      [type]: {
+        ...this.state[type],
+        [form.email || form.user.email]: form
+      }
+    })
+  }
+
+  onRemoveRole(email, type) {
+    this.setState({
+      [type]: _.omit(this.state[type], (role) => role.email === email)
     })
   }
 
@@ -65,20 +102,6 @@ class CreateOffer extends React.Component {
     })
   }
 
-  getRoles() {
-    const { enderType, agents, clients, closingOfficers, referrals } = this.state
-    const roles = []
-    _.each(clients, client => roles.push(client))
-    _.each(agents, agent => roles.push(agent))
-    _.each(closingOfficers, co => roles.push(co))
-
-    if (enderType === 'AgentDoubleEnder') {
-      _.each(referrals, referral => roles.push(referral))
-    }
-
-    return roles
-  }
-
   openDeal(id) {
     browserHistory.push(`/dashboard/deals/${id}`)
   }
@@ -92,7 +115,7 @@ class CreateOffer extends React.Component {
   }
 
   isFormValidated() {
-    const { offerType, buyerName, clients, agents, enderType } = this.state
+    const { offerType, agents, clients, buyerName, enderType } = this.state
 
     if (this.isBackupOffer()) {
       return buyerName.length > 0
@@ -104,14 +127,34 @@ class CreateOffer extends React.Component {
       _.size(clients) > 0
   }
 
+  getAllRoles() {
+    const { enderType, clients, agents, closingOfficers, referrals } = this.state
+    const roles = []
+
+    _.each(clients, client => roles.push(client))
+    _.each(agents, agent => roles.push(agent))
+    _.each(closingOfficers, co => roles.push(co))
+
+    if (enderType === 'AgentDoubleEnder') {
+      _.each(referrals, referral => roles.push(referral))
+    }
+
+    return roles.filter(role => role.disabled !== true)
+  }
+
   async createOffer() {
     const { deal, notify, createOffer, createRoles, updateContext } = this.props
-    const { clients, enderType, criticalDates } = this.state
+    const { enderType, criticalDates, clients } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
-    const order = this.getMaxOrder() + 1
-    const buyerName = isBackupOffer ? this.state.buyerName : _.map(clients, client =>
-      `${client.legal_first_name} ${client.legal_last_name}`).join(', ')
+    const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
+
+    let buyerName = this.state.buyerName
+
+    if (!isBackupOffer) {
+      buyerName = _.map(clients, client =>
+        `${client.legal_first_name} ${client.legal_last_name}`).join(', ')
+    }
 
     this.setState({ saving: true })
 
@@ -120,7 +163,7 @@ class CreateOffer extends React.Component {
 
       if (isPrimaryOffer) {
         // create roles
-        await createRoles(deal.id, this.getRoles())
+        await createRoles(deal.id, this.getAllRoles())
 
         // create/update contexts
         await updateContext(deal.id, {
@@ -137,8 +180,8 @@ class CreateOffer extends React.Component {
         dismissAfter: 6000
       })
 
-      this.backToDeal()
-    } catch(e) {
+      return this.backToDeal()
+    } catch (e) {
       notify({
         title: 'Could not create offer',
         message: e.response && e.response.body ? e.response.body.message : null,
@@ -154,12 +197,14 @@ class CreateOffer extends React.Component {
     let max = 0
 
     const { deal, checklists } = this.props
+
     if (!deal.checklists) {
       return max
     }
 
     deal.checklists.forEach(id => {
       const list = checklists[id]
+
       if (list.order > max) {
         max = list.order
       }
@@ -178,6 +223,7 @@ class CreateOffer extends React.Component {
 
   backToDeal() {
     const { deal } = this.props
+
     browserHistory.push(`/dashboard/deals/${deal.id}`)
   }
 
@@ -216,7 +262,7 @@ class CreateOffer extends React.Component {
             this.isPrimaryOffer() &&
             <div>
               <DealClients
-                dealSide={'Buying'}
+                dealSide="Buying"
                 clients={clients}
                 onUpsertClient={form => this.onUpsertRole(form, 'clients')}
                 onRemoveClient={id => this.onRemoveRole(id, 'clients')}
@@ -228,7 +274,7 @@ class CreateOffer extends React.Component {
               />
 
               <DealAgents
-                dealSide={'Buying'}
+                dealSide="Buying"
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                 onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
@@ -243,7 +289,7 @@ class CreateOffer extends React.Component {
               {
                 enderType === 'AgentDoubleEnder' &&
                 <DealReferrals
-                  dealSide={'Buying'}
+                  dealSide="Buying"
                   referrals={referrals}
                   onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
                   onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
@@ -254,13 +300,13 @@ class CreateOffer extends React.Component {
                 criticalDates={criticalDates}
                 onChangeCriticalDates={(field, value) => this.changeCriticalDates(field, value)}
                 fields={{
-                  'contract_date': 'Offer Date',
-                  'option_period': 'Option Date',
-                  'financing_due': 'Financing Due',
-                  'title_due': 'Title Work Due',
-                  't47_due': 'Survey Due',
-                  'closing_date': 'Closing',
-                  'possession_date': 'Possession'
+                  contract_date: 'Offer Date',
+                  option_period: 'Option Date',
+                  financing_due: 'Financing Due',
+                  title_due: 'Title Work Due',
+                  t47_due: 'Survey Due',
+                  closing_date: 'Closing',
+                  // possession_date: 'Possession'
                 }}
               />
             </div>

@@ -1,8 +1,8 @@
 import React from 'react'
-import { FormGroup, FormControl, Dropdown, DropdownButton, MenuItem } from 'react-bootstrap'
+import _ from 'underscore'
+import { Dropdown, MenuItem } from 'react-bootstrap'
 import cn from 'classnames'
 import roleNames from '../../utils/roles'
-import ToolTip from '../../components/tooltip'
 
 const role_names = [
   'BuyerAgent',
@@ -26,30 +26,114 @@ const role_names = [
 export default class Form extends React.Component {
   constructor(props) {
     super(props)
-    const form = props.form || {}
-    const availableRoles = role_names.filter(name => this.isAllowed(name))
-    const preselectedRole = availableRoles.length === 1 && availableRoles[0]
 
-    if (preselectedRole) {
-      form.role = preselectedRole
-    }
+    const form = props.form || {}
+    form.isNewRecord = typeof form.email === 'undefined'
 
     this.state = {
       validation: {},
+      commission_type: this.getCommissionType(form),
       form
     }
 
     this.validate = _.debounce(this.validate, 200)
   }
 
-  setCommission(value) {
-    if (~~value < 0) {
+  componentDidMount() {
+    this.preselectRoles()
+  }
+
+  /**
+   * preselect role, if there is any
+   */
+  preselectRoles() {
+    const { form } = this.state
+
+    if (!form.isNewRecord) {
       return false
     }
 
-    this.setForm('commission', value)
+    const availableRoles = role_names.filter(name => this.isAllowed(name))
+    const preselectedRole = availableRoles.length === 1 && availableRoles[0]
+
+    if (preselectedRole) {
+      this.setState({
+        form: {
+          ...this.state.form,
+          role: preselectedRole
+        }
+      })
+    }
   }
 
+  /**
+   * set form commission
+   */
+  setCommission(value) {
+    if (!this.validateCommission(value)) {
+      return false
+    }
+
+    this.setForm(this.getCommissionField(), value)
+  }
+
+  /**
+   * set form commission type
+   */
+  setCommissionType(type) {
+    const { form } = this.state
+
+    delete form[this.getCommissionField()]
+
+    this.setState({ commission_type: type }, () => this.setCommission(''))
+  }
+
+  /**
+   * validate commission value
+   */
+  validateCommission(value) {
+    const { commission_type } = this.state
+
+    if (!/^[0-9]*$/.test(value)) {
+      return false
+    }
+
+    return (commission_type === '%') ? (value >= 0 && value <= 100) : value >= 0
+  }
+
+  /**
+   * get commission field name
+   */
+  getCommissionField() {
+    const { commission_type } = this.state
+
+    return (commission_type === '%') ?
+      'commission_percentage' :
+      'commission_dollar'
+  }
+
+  /**
+   * get commission value
+   */
+  getCommissionValue() {
+    const { form } = this.state
+    return form[this.getCommissionField()]
+  }
+
+  /**
+   * get commission type
+   */
+  getCommissionType(form) {
+    if (form.isNewRecord) {
+      return '%'
+    }
+
+    return form.commission_percentage ? '%' : '$'
+  }
+
+  /**
+   * set form field's value
+   */
   setForm(field, value) {
     const { form } = this.state
 
@@ -61,23 +145,46 @@ export default class Form extends React.Component {
     }, () => this.validate(field, value))
   }
 
+  /**
+   * validate email
+   */
   isEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return re.test(email)
   }
 
-  isValidPhone(phone) {
-    const phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
-    return phoneNumberPattern.test(phone)
+  /**
+   * validate phone number
+   */
+  async isValidPhone(phone) {
+    const {
+      PhoneNumberUtil
+    } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+    const phoneUtil = PhoneNumberUtil.getInstance()
+
+    try {
+      let phoneNumber = phoneUtil.parse(phone, 'US')
+
+      return phoneUtil.isValidNumber(phoneNumber)
+    } catch (e) {
+      return false
+    }
   }
 
+  /**
+   * check whether should show commission field or not
+   */
   shouldShowCommission(form) {
-    return ['BuyerAgent', 'BuyerReferral', 'SellerAgent', 'SellerReferral']
-      .indexOf(form.role) > -1
+    return ['CoBuyerAgent', 'BuyerAgent', 'BuyerReferral',
+      'CoSellerAgent', 'SellerAgent', 'SellerReferral'].indexOf(form.role) > -1
   }
 
+  /**
+   * check role type is allowed to select or not
+   */
   isAllowed(name) {
     const { deal, allowedRoles } = this.props
+    const { form } = this.state
 
     const dealType = deal ? deal.deal_type : null
 
@@ -88,20 +195,23 @@ export default class Form extends React.Component {
       return false
     }
 
-    if (!allowedRoles) {
+    if (!allowedRoles || (!form.isNewRecord && form.role === name)) {
       return true
     }
 
     return allowedRoles.indexOf(name) > -1
   }
 
-  validate(field, value) {
-    const { form, validation } = this.state
+  /**
+   * validate form
+   */
+  async validate(field, value) {
+    const { form, validation, commission_type } = this.state
     const showCommission = this.shouldShowCommission(form)
     const requiredFields = ['legal_first_name', 'legal_last_name', 'email', 'role']
 
     if (showCommission) {
-      requiredFields.push('commission')
+      requiredFields.push(this.getCommissionField())
     }
 
     const fields = {
@@ -109,12 +219,19 @@ export default class Form extends React.Component {
       legal_last_name: (name) => name && name.length > 0,
       email: (email) => email && this.isEmail(email),
       phone: (phone) => phone && this.isValidPhone(phone),
-      role: (role) => role,
-      commission: (value) => value && ~~value >= 0
+      role: (role) => role
     }
 
+    // set commission field name
+    const commission_field = this.getCommissionField()
+
+    // set commission field based on commission type
+    fields[commission_field] = (value) => value && this.validateCommission(value)
+
+    // validate field
     const validator = fields[field]
-    if (value.length > 0 && validator && !validator(value)) {
+
+    if (value.length > 0 && validator && !await validator(value)) {
       this.setState({
         validation: {
           ...validation,
@@ -132,12 +249,11 @@ export default class Form extends React.Component {
   }
 
   render() {
-    const { deal, allowedRoles } = this.props
-    const { form, validation } = this.state
+    const { form, commission_type, validation } = this.state
     const showCommission = this.shouldShowCommission(form)
 
     return (
-      <div>
+      <div className="deal-roles-form">
         <Dropdown id="deal-add-role-title--drp" bsStyle="default">
           <Dropdown.Toggle>
             {form.legal_prefix || 'Title'}
@@ -146,51 +262,58 @@ export default class Form extends React.Component {
           <Dropdown.Menu className="deal-add-role-title--drpmenu">
             {
               ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr']
-              .map((name, key) =>
-                <MenuItem
-                  key={`Title_${key}`}
-                  style={{ width: '40%' }}
-                  onClick={() => this.setForm('legal_prefix', name)}
-                >
-                  {name}
-                </MenuItem>
-              )
+                .map((name, key) =>
+                  <MenuItem
+                    key={`Title_${key}`}
+                    style={{ width: '40%' }}
+                    onClick={() => this.setForm('legal_prefix', name)}
+                  >
+                    {name}
+                  </MenuItem>
+                )
             }
           </Dropdown.Menu>
         </Dropdown>
-
-        <input
-          className="first_name"
-          placeholder="Legal First Name *"
-          value={form.legal_first_name || ''}
-          onChange={e => this.setForm('legal_first_name', e.target.value)}
-        />
-
-        <input
-          className="last_name"
-          placeholder="Legal Last Name *"
-          value={form.legal_last_name || ''}
-          onChange={e => this.setForm('legal_last_name', e.target.value)}
-        />
-
-        <div className="input-container">
+        <div className="first_name">
           <input
-            className={cn('email', { invalid: validation['email'] === 'error' })}
-            placeholder="Email *"
-            value={form.email || ''}
-            onChange={e => this.setForm('email', e.target.value)}
+            id="first_name"
+            required="required"
+            value={form.legal_first_name || ''}
+            onChange={e => this.setForm('legal_first_name', e.target.value)}
           />
-          {validation['email'] === 'error' && <span>Enter a valid email</span>}
+          <label htmlFor="first_name">Legal First Name</label>
+        </div>
+        <div className="last_name">
+          <input
+            id="last_name"
+            required="required"
+            value={form.legal_last_name || ''}
+            onChange={e => this.setForm('legal_last_name', e.target.value)}
+          />
+          <label htmlFor="last_name">Legal Last Name</label>
+        </div>
+        <div className="input-container">
+          <div className="email">
+            <input
+              id="email"
+              required="required"
+              className={cn({ invalid: validation.email === 'error' })}
+              value={form.email || ''}
+              onChange={e => this.setForm('email', e.target.value)}
+            />
+            <label htmlFor="email">Email</label>
+          </div>
+          {validation.email === 'error' && <span>Enter a valid email</span>}
         </div>
 
         <div className="input-container">
           <input
-            className={cn('phone', { invalid: validation['phone'] === 'error' })}
+            className={cn('phone', { invalid: validation.phone === 'error' })}
             placeholder="Phone (xxx) xxx-xxxx"
             value={form.phone || ''}
             onChange={e => this.setForm('phone', e.target.value)}
           />
-          {validation['phone'] === 'error' && <span>Enter a valid phone</span>}
+          {validation.phone === 'error' && <span>Enter a valid phone</span>}
         </div>
 
         <Dropdown id="deal-add-role--drp">
@@ -198,44 +321,63 @@ export default class Form extends React.Component {
             {form.role ? roleNames(form.role) : 'Select a Role *'}
           </Dropdown.Toggle>
 
-          <Dropdown.Menu className="deal-add-role--drpmenu">
+          <Dropdown.Menu className="deal-add-role--drpmenu u-scrollbar--thinner--self">
             {
               role_names
-              .sort(name => this.isAllowed(name) ? -1 : 1)
-              .map((name, key) => {
-                const isAllowed = this.isAllowed(name)
+                .sort(name => this.isAllowed(name) ? -1 : 1)
+                .map((name, key) => {
+                  const isAllowed = this.isAllowed(name)
 
-                if (!isAllowed) {
+                  if (!isAllowed) {
+                    return (
+                      <li key={key} className="disabled">
+                        <a href="#" onClick={e => e.preventDefault()}>{name}</a>
+                      </li>
+                    )
+                  }
+
                   return (
-                    <li key={key} className="disabled">
-                      <a href="#" onClick={e => e.preventDefault()}>{ name }</a>
-                    </li>
+                    <MenuItem
+                      key={`ROLE_${name}`}
+                      onClick={() => this.setForm('role', name)}
+                    >
+                      {roleNames(name)}
+                    </MenuItem>
                   )
-                }
-
-                return (
-                  <MenuItem
-                    key={`ROLE_${name}`}
-                    onClick={() => this.setForm('role', name)}
-                  >
-                    { roleNames(name) }
-                  </MenuItem>
-                )
-              })
+                })
             }
           </Dropdown.Menu>
         </Dropdown>
 
         {
           showCommission &&
-          <input
-            className="commission"
-            placeholder="Commission *"
-            type="number"
-            min={0}
-            value={form.commission || ''}
-            onChange={e => this.setCommission(e.target.value)}
-          />
+          <div className="commission-row">
+            <input
+              className="radio"
+              type="radio"
+              name="commission_type"
+              checked={commission_type === '%'}
+              onChange={() => this.setCommissionType('%')}
+            />&nbsp;&nbsp;%
+
+            <input
+              className="radio"
+              type="radio"
+              name="commission_type"
+              checked={commission_type === '$'}
+              onChange={() => this.setCommissionType('$')}
+            />&nbsp;&nbsp;$
+            <div className="commission">
+              <input
+                id="commission"
+                required="required"
+                type="number"
+                value={this.getCommissionValue()}
+                onChange={e => this.setCommission(e.target.value)}
+              />
+              <label htmlFor="commission">Commission</label>
+            </div>
+          </div>
         }
 
         {
@@ -244,8 +386,8 @@ export default class Form extends React.Component {
           <input
             className="company"
             placeholder="Company"
-            value={form.title_company || ''}
-            onChange={e => this.setForm('title_company', e.target.value)}
+            value={form.company_title || ''}
+            onChange={e => this.setForm('company_title', e.target.value)}
           />
         }
       </div>

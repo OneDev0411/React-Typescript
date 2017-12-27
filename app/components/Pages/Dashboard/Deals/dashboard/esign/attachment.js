@@ -38,6 +38,7 @@ class SelectDocumentModal extends React.Component {
 
   onClose() {
     const { showAttachments } = this.props
+
     showAttachments(false)
   }
 
@@ -63,6 +64,7 @@ class SelectDocumentModal extends React.Component {
 
   viewForm(e, task) {
     e.stopPropagation()
+
     const { deal } = this.props
 
     browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}`)
