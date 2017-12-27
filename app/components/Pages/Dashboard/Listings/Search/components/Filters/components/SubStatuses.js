@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { Field } from 'redux-form'
 
 import Flag from '../FiltersListingsStatusRow/Flag'
@@ -41,4 +40,4 @@ const SubStatuses = ({ fields }) =>
     })}
   </ul>
 
-export default pure(SubStatuses)
+export default SubStatuses

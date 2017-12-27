@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import compose from 'recompose/compose'
 import defaultProps from 'recompose/defaultProps'
 import withPropsOnChange from 'recompose/withPropsOnChange'
@@ -10,9 +9,9 @@ const ClusterMarker = ({
   onClickHandler,
   defaultMotionStyle,
   motionStyle
-}) =>
+}) => (
   <Motion style={motionStyle} defaultStyle={defaultMotionStyle}>
-    {({ scale }) =>
+    {({ scale }) => (
       <div
         className="cluster-marker"
         onClick={onClickHandler}
@@ -20,11 +19,11 @@ const ClusterMarker = ({
           transform: `translate3D(0,0,0) scale(${scale}, ${scale})`
         }}
       >
-        <div>
-          {text}
-        </div>
-      </div>}
+        <div>{text}</div>
+      </div>
+    )}
   </Motion>
+)
 
 export default compose(
   defaultProps({
@@ -37,9 +36,6 @@ export default compose(
     damping: 7,
     precision: 0.001
   }),
-  // pure optimization can cause some effects you don't want,
-  // don't use it in development for markers
-  pure,
   withPropsOnChange(
     ['initialScale'],
     ({ initialScale, defaultScale, $prerender }) => ({
@@ -49,14 +45,7 @@ export default compose(
   ),
   withPropsOnChange(
     ['hovered'],
-    ({
-      hovered,
-      hoveredScale,
-      defaultScale,
-      stiffness,
-      damping,
-      precision
-    }) => ({
+    ({ hovered, hoveredScale, defaultScale, stiffness, damping, precision }) => ({
       hovered,
       motionStyle: {
         scale: spring(hovered ? hoveredScale : defaultScale, {

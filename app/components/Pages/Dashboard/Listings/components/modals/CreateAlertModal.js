@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -64,9 +63,9 @@ const CreateAlertModal = ({
       <Modal.Footer className="c-create-alert-modal__footer">
         <button
           onClick={saveAlertHandler}
-          className={`c-create-alert-modal__button c-create-alert-modal__button--linki ${isSaving
-            ? 'isSaving'
-            : ''}`}
+          className={`c-create-alert-modal__button c-create-alert-modal__button--linki ${
+            isSaving ? 'isSaving' : ''
+          }`}
           disabled={isSaving}
           style={{ float: 'left', color: brandColor }}
         >
@@ -74,9 +73,9 @@ const CreateAlertModal = ({
         </button>
         <button
           onClick={activeShareAlertModal}
-          className={`c-create-alert-modal__button c-create-alert-modal__button--linki ${isSaving
-            ? 'isSaving'
-            : ''}`}
+          className={`c-create-alert-modal__button c-create-alert-modal__button--linki ${
+            isSaving ? 'isSaving' : ''
+          }`}
           disabled={isSaving}
           style={{ float: 'right', color: brandColor }}
         >
@@ -130,7 +129,6 @@ export const normalizeAlertOptions = (
 }
 
 export default compose(
-  pure,
   connect(
     ({ data, search }) => ({
       user: data.user,

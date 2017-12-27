@@ -1,13 +1,10 @@
 import React from 'react'
-import pure from 'recompose/pure'
 
-const AccordionTrigger = ({ onClick, active }) =>
+const AccordionTrigger = ({ onClick, active }) => (
   <button
     type="button"
     onClick={onClick}
-    className={`c-filters-status__accordion-trigger ${active
-      ? 'is-active'
-      : ''}`}
+    className={`c-filters-status__accordion-trigger ${active ? 'is-active' : ''}`}
   >
     <svg
       fill="#e9e9e9"
@@ -21,5 +18,6 @@ const AccordionTrigger = ({ onClick, active }) =>
       <path d="M0 0h24v24H0z" fill="none" />
     </svg>
   </button>
+)
 
-export default pure(AccordionTrigger)
+export default AccordionTrigger
