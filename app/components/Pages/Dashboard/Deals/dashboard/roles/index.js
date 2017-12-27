@@ -38,8 +38,12 @@ class Roles extends React.Component {
 
   onRequestRemoveRole(user) {
     const { deal, confirmation } = this.props
+    const { deal_type } = deal
 
-    if (['SellerAgent', 'BuyerAgent'].indexOf(user.role) > -1) {
+    if (
+      (deal_type === 'Buying' && user.role === 'BuyerAgent') ||
+      (deal_type === 'Selling' && user.role === 'SellerAgent')
+    ) {
       return confirmation({
         message: 'You cannot delete the primary agent for the deal',
         hideCancelButton: true,
