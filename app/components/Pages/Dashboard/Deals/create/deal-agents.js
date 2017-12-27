@@ -27,7 +27,7 @@ export default ({
   onRemoveAgent
 }) => {
   const allowedRoles = getRoles(agents, dealSide)
-  const title = _.size(agents) === 0 ? 'primary agent' : 'co-agent'
+  const title = allowedRoles[0] === 'BuyerAgent' ? 'primary agent' : 'co-agent'
 
   return (
     <div className="form-section deal-people deal-agent">
