@@ -24,24 +24,33 @@
     width: 90%;
     text-align: right;
 
-    .btn-deal {
-      height: 32px;
+    .navbar-button{
       min-width: 80px;
       margin-left: 12px;
       border-radius: 3px;
-      background-color: #2196f3;
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.5px;
-      color: #fff;
-      border: none;
+      color: #2196f3;
+      background-color: #ffffff;
+      border: solid 1px #dce5eb;
+      padding: 8px 15px;
 
       &:focus {
         outline: none;
       }
 
       &:hover {
-        background-color: #197dcd;
+        background-color: #f1f7fb;
+      }
+    }
+    .btn-deal {
+      background-color: #2196f3;
+      color: #fff;
+      border: none;
+
+      &:hover {
+        background-color: #1a7fd0;
       }
     }
   }

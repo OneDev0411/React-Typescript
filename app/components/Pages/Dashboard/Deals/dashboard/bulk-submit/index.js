@@ -73,7 +73,7 @@ class BulkSubmit extends React.Component {
     return (
       <div className="inline">
         <button
-          className="btn-deal"
+          className="navbar-button btn-deal"
           onClick={() => this.toggleShowModal()}
         >
           Submit

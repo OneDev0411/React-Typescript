@@ -43,14 +43,21 @@ class NavBar extends React.Component {
 
         <div className="ctas">
           <button
-            className="btn-deal"
+            className="navbar-button"
+            onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)}
+          >
+            Add New Offer
+          </button>
+
+          <button
+            className="navbar-button"
             onClick={() => this.openUploadDialog()}
           >
             Upload
           </button>
 
           <button
-            className="btn-deal"
+            className="navbar-button"
             onClick={() => this.getSignatures()}
           >
             Get Signatures
@@ -78,7 +85,7 @@ class NavBar extends React.Component {
 }
 
 export default connect(({ deals }) => ({
-  isBackOffice: deals.backoffice,
+  isBackOffice: deals.backoffice
 }), {
   showAttachments,
   setUploadFiles
