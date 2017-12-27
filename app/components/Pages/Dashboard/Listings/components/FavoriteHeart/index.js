@@ -10,18 +10,13 @@ const style = {
   cursor: 'pointer'
 }
 
-const Heart = ({ isFavorited, onClick, width = '100%', height = '100%' }) =>
+const Heart = ({ isFavorited, onClick, width = '100%', height = '100%' }) => (
   <img
     style={{ ...style, width, height }}
     onClick={onClick}
-    src={`/static/images/dashboard/mls/heart${isFavorited
-      ? '-red'
-      : '-white'}.svg`}
+    src={`/static/images/dashboard/mls/heart${isFavorited ? '-red' : '-white'}.svg`}
   />
-
-Heart.propTypes = {
-  listing: React.PropTypes.object
-}
+)
 
 const HeartHOC = compose(
   connect(

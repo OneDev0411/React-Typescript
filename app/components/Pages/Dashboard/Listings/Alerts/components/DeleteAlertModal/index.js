@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
 import compose from 'recompose/compose'
@@ -62,7 +61,6 @@ const DeleteAlertModal = ({
   </div>
 
 export default compose(
-  pure,
   connect(null, { deleteAlert }),
   withState('isDeleting', 'setIsDeleting', false),
   withState('successModalIsActive', 'setSuccessModalIsActive', false),

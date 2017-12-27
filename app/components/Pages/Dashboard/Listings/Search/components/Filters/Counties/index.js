@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import Select from 'react-select'
 
 import AsyncMultiSelect from '../components/AsyncMultiSelect'
@@ -14,4 +13,4 @@ const Counties = () => (
   />
 )
 
-export default pure(Counties)
+export default Counties

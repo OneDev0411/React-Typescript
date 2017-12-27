@@ -32,8 +32,8 @@ const ListingCard = ({
       <div
         style={props.backgroundImage}
         className="c-listing-card__inner"
-        onMouseLeave={mouseEventIsActive ? onMouseLeave : ''}
-        onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : ''}
+        onMouseLeave={mouseEventIsActive ? onMouseLeave : () => {}}
+        onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : () => {}}
       >
         <div className="c-listing-card__content-wrapper">
           {props.statusColor && (
