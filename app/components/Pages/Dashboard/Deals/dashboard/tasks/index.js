@@ -49,7 +49,7 @@ const List = ({
                   classNames="fade"
                   key={`TASK_${id}`}
                 >
-                  <button
+                  <div
                     onClick={() => setSelectedTask(task)}
                     className={cn('task', {
                       active: selectedTask && selectedTask.id === id,
@@ -70,7 +70,7 @@ const List = ({
                         <span>{room.new_notifications}</span>
                       </div>
                     )}
-                  </button>
+                  </div>
                 </CSSTransition>
               )
             })}
