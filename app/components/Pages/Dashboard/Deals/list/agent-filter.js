@@ -114,15 +114,14 @@ class Filter extends React.Component {
                   onClick={() => this.setFilter(filter)}
                 >
                   <span className="title">
-                    { filter }
+                    {filter}
                   </span>
 
                   <span className="badge counter">
-                    { this.getBadgeCounter(filter) }
+                    {this.getBadgeCounter(filter)}
                   </span>
                 </li>
-              </ToolTip>
-            )
+              </ToolTip>)
           }
         </ul>
       </div>

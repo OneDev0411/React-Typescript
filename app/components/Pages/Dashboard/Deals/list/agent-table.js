@@ -5,7 +5,10 @@ import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import roleName from '../utils/roles'
-import { closeEsignWizard, setSelectedTask } from '../../../../../store_actions/deals'
+import {
+  closeEsignWizard,
+  setSelectedTask
+} from '../../../../../store_actions/deals'
 
 class AgentTable extends BaseTable {
   constructor(props) {
@@ -101,8 +104,7 @@ class AgentTable extends BaseTable {
                       <span className="role">{roleName(role.role)}</span>
                       <span className="email">{role.user.email}</span>
                     </div>
-                  </div>
-                )
+                  </div>)
               }
             </div>
           </Popover>
@@ -110,13 +112,13 @@ class AgentTable extends BaseTable {
       >
         <div className="hoverable inline">
           <span>
-            { sideName }
+            {sideName}
           </span>
 
           <span
             style={{ color: '#5b6469', fontSize: '13px' }}
           >
-            { relatedRole && relatedRole.user.last_name ? `: ${relatedRole.user.last_name}` : ''}
+            {relatedRole && relatedRole.user.last_name ? `: ${relatedRole.user.last_name}` : ''}
           </span>
         </div>
 
@@ -131,8 +133,7 @@ class AgentTable extends BaseTable {
     const names = []
 
     deal.roles && deal.roles.forEach(role =>
-      names.push(role.user.display_name)
-    )
+      names.push(role.user.display_name))
 
     return `: ${names.join(', ')}`
   }

@@ -1,7 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import cn from 'classnames'
-import { browserHistory } from 'react-router'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 import _ from 'underscore'
 import { getStatusColorClass } from '../../../../../utils/listing'
@@ -49,7 +47,7 @@ class BaseTable extends React.Component {
     return (
       <div className="address-row">
         <img src={this.getListingPhoto(deal)} />
-        <div className="name">{ address }</div>
+        <div className="name">{address}</div>
       </div>
     )
   }
@@ -63,13 +61,12 @@ class BaseTable extends React.Component {
           className="status-bullet"
           style={{ background: getStatusColorClass(status) }}
         />
-        { status }
+        {status}
       </div>
     )
   }
 
   getNextDate(deal, rowId, rowsCount) {
-    const { deals } = this.props
 
     return (
       <OverlayTrigger
@@ -88,7 +85,7 @@ class BaseTable extends React.Component {
         }
       >
         <span className="hoverable">
-          { CriticalDates.getNextDate(deal) }
+          {CriticalDates.getNextDate(deal)}
         </span>
       </OverlayTrigger>
     )
@@ -97,7 +94,7 @@ class BaseTable extends React.Component {
   /**
    *
    */
-  setSort(field, order = 'ASC', sorter = []) {
+  setSort(field) {
     const { sortBy, sortOrder } = this.state
 
     this.setState({
@@ -110,7 +107,7 @@ class BaseTable extends React.Component {
    *
    */
   sort(deal) {
-    const { sortBy, sortOrder } = this.state
+    const { sortBy } = this.state
 
     if (!sortBy) {
       return true
@@ -155,7 +152,6 @@ class BaseTable extends React.Component {
    */
   applyFilters(deal) {
     const { filters } = this.props
-    const { cells } = this
 
     if (_.size(filters) === 0) {
       return true
@@ -243,7 +239,7 @@ class BaseTable extends React.Component {
         <ToolTip caption={`You have ${counter} unread messages in this deal`}>
           <div className="inline unread-notifications">
             <img src="/static/images/deals/comments.svg" />
-            <span>{ counter }</span>
+            <span>{counter}</span>
           </div>
         </ToolTip>
       )
@@ -273,50 +269,48 @@ class BaseTable extends React.Component {
               <tbody>
                 <tr className="header">
                   {
-                    _.map(this.cells, (cell, key) =>
-                      <td
-                        key={`CELL_${key}`}
-                        className={cn(cell.className, {
-                          sortable: cell.sortable,
-                          isActive: sortBy === key
-                        })}
+                  _.map(this.cells, (cell, key) =>
+                    <td
+                      key={`CELL_${key}`}
+                      className={cn(cell.className, {
+                        sortable: cell.sortable,
+                        isActive: sortBy === key
+                      })}
+                    >
+                      <span
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => cell.sortable && this.setSort(key)}
                       >
-                        <span
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => cell.sortable && this.setSort(key)}
-                        >
-                          { cell.caption }&nbsp;
-                          { cell.sortable && this.getSorterCaret(key) }
-                        </span>
-                      </td>
-                    )
-                  }
+                        {cell.caption}&nbsp;
+                        {cell.sortable && this.getSorterCaret(key)}
+                      </span>
+                    </td>)
+                }
                 </tr>
 
                 {
-                  _.chain(filteredDeals)
-                    .sortBy(deal => this.sort(deal))
-                    .shouldReverse(sortOrder)
-                    .map((deal, rowId) => (
-                      <tr
-                        key={`DEAL_${deal.id}`}
-                        className="item"
-                        onClick={e => this.onClickDeal(e, deal.id)}
-                      >
-                        {
-                          _.map(this.cells, (cell, key) =>
-                            <td
-                              key={`DEAL_${deal.id}__CELL_${key}`}
-                              className={cell.className}
-                            >
-                              { cell.getText(deal, rowId, filteredDeals.length) }
-                            </td>
-                          )
-                        }
-                      </tr>
-                    ))
-                    .value()
-                }
+                _.chain(filteredDeals)
+                  .sortBy(deal => this.sort(deal))
+                  .shouldReverse(sortOrder)
+                  .map((deal, rowId) => (
+                    <tr
+                      key={`DEAL_${deal.id}`}
+                      className="item"
+                      onClick={e => this.onClickDeal(e, deal.id)}
+                    >
+                      {
+                        _.map(this.cells, (cell, key) =>
+                          <td
+                            key={`DEAL_${deal.id}__CELL_${key}`}
+                            className={cell.className}
+                          >
+                            {cell.getText(deal, rowId, filteredDeals.length)}
+                          </td>)
+                      }
+                    </tr>
+                  ))
+                  .value()
+              }
               </tbody>
             </table> :
             <EmptyState

@@ -26,7 +26,6 @@ class DealsDashboard extends React.Component {
     }
   }
 
-
   refetchDeals = () => {
     const { getDeals, user } = this.props
 
@@ -46,7 +45,9 @@ class DealsDashboard extends React.Component {
   }
 
   render() {
-    const { deals, isBackOffice, params, searchAllDeals, spinner } = this.props
+    const {
+      deals, isBackOffice, params, searchAllDeals, spinner
+    } = this.props
     const { activeFilters } = this.state
 
     return (
@@ -58,7 +59,10 @@ class DealsDashboard extends React.Component {
           refetchDeals={this.refetchDeals}
         />
         <i
-          className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__deals', { hide_spinner: !spinner })}
+          className={cn(
+            'fa fa-spinner fa-pulse fa-fw fa-3x spinner__deals',
+            { hide_spinner: !spinner }
+          )}
         />
 
         {

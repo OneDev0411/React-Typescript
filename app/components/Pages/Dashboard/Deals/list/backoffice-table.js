@@ -3,11 +3,13 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { Row, Col, OverlayTrigger, Popover } from 'react-bootstrap'
 import merge from 'merge'
-import _ from 'underscore'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
 import getNeedsAttentions from '../utils/needs-attention'
-import { closeEsignWizard, setSelectedTask } from '../../../../../store_actions/deals'
+import {
+  closeEsignWizard,
+  setSelectedTask
+} from '../../../../../store_actions/deals'
 
 class BackOfficeTable extends BaseTable {
   constructor(props) {
@@ -28,8 +30,8 @@ class BackOfficeTable extends BaseTable {
         getText: deal => this.getStatus(deal),
         getValue: deal => Deal.get.status(deal),
         sortByList: ['Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
-          'Active Contingent', 'Active Kick Out', 'Pending', 'Sold', 'Leased', 'Expired',
-          'Temp Off Market', 'Cancelled', 'Withdrawn']
+          'Active Contingent', 'Active Kick Out', 'Pending', 'Sold', 'Leased',
+          'Expired', 'Temp Off Market', 'Cancelled', 'Withdrawn']
       },
       property_type: {
         caption: 'PROPERTY TYPE',
@@ -59,7 +61,8 @@ class BackOfficeTable extends BaseTable {
         caption: 'NEEDS ATTENTION',
         className: 'col-md-2',
         sortable: true,
-        getText: (deal, rowId, rowsCount) => this.getNeedsAttentions(deal, rowId, rowsCount),
+        getText: (deal, rowId, rowsCount) =>
+          this.getNeedsAttentions(deal, rowId, rowsCount),
         getValue: deal => this.getNeedsAttentionCount(deal)
       },
       notificiation: {
@@ -101,11 +104,12 @@ class BackOfficeTable extends BaseTable {
 
     return text
   }
+
   /**
    * render needs attentions ui
    */
   getNeedsAttentions(deal, rowId, rowsCount) {
-    const { deals, tasks } = this.props
+    const { tasks } = this.props
     const items = this.getNeedsAttentionsItems(deal)
 
     return (
@@ -129,10 +133,10 @@ class BackOfficeTable extends BaseTable {
                     <Col xs={8}>
                       <div className="info">
                         <span className="info-title">
-                          { task.title }
+                          {task.title}
                         </span>
                         <span className="info-desc">
-                          { this.getTaskReviewMessage(task) }
+                          {this.getTaskReviewMessage(task)}
                         </span>
                       </div>
                     </Col>
@@ -148,7 +152,7 @@ class BackOfficeTable extends BaseTable {
         }
       >
         <span className="hoverable">
-          { items.length }
+          {items.length}
         </span>
       </OverlayTrigger>
     )

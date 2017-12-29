@@ -47,8 +47,11 @@ class Filter extends React.Component {
   }
 
   render() {
-    const { checklists } = this.props
-    const active = this.props.active || 'All'
+    const {
+      checklists,
+      searchMode
+    } = this.props
+    const active = !searchMode && (this.props.active || 'All')
 
     const tabs = _
       .chain(checklists)
@@ -78,11 +81,11 @@ class Filter extends React.Component {
                   className={tabName === active ? 'active' : ''}
                 >
                   <span className="title">
-                    { tabName }
+                    {tabName}
                   </span>
 
                   <span className="badge counter">
-                    { counter }
+                    {counter}
                   </span>
                 </li>
               )
