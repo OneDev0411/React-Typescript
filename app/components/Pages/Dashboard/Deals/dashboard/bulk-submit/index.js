@@ -27,6 +27,10 @@ class BulkSubmit extends React.Component {
   toggleSelectTask(task) {
     const { selectedTasks } = this.state
 
+    if (task.needs_attention === true) {
+      return false
+    }
+
     if (selectedTasks.indexOf(task.id) > -1) {
       return this.setState({
         selectedTasks: _.without(selectedTasks, task.id)
@@ -93,11 +97,9 @@ class BulkSubmit extends React.Component {
             {
               _
               .chain(deal.checklists)
-              .filter(id => !checklists[id].is_terminated&& !checklists[id].is_deactivated)
+              .filter(id => !checklists[id].is_terminated && !checklists[id].is_deactivated)
               .map(id => {
                 const checklist = checklists[id]
-                const checklistTasks = (checklist.tasks || [])
-                  .filter(tId => tasks[tId].needs_attention !== true)
 
                   return (
                     <div
@@ -109,14 +111,7 @@ class BulkSubmit extends React.Component {
                       </div>
 
                       {
-                        checklistTasks.length === 0 &&
-                        <div className="empty-state">
-                        There is no unnotified task in this checklist
-                        </div>
-                      }
-
-                      {
-                        checklistTasks
+                        (checklist.tasks || [])
                           .map(tId => {
                             const task = tasks[tId]
                             const hasStatus = task.review !== null || task.needs_attention === true
@@ -124,13 +119,19 @@ class BulkSubmit extends React.Component {
                             return (
                               <div
                                 key={tId}
-                                className={cn('task', { 'no-status': !hasStatus })}
+                                className={cn('task', {
+                                  disabled: task.needs_attention === true
+                                })}
                                 onClick={() => this.toggleSelectTask(task)}
                               >
+
                                 <div className="icon">
-                                  <CheckBox
-                                    selected={selectedTasks.indexOf(task.id) > -1}
-                                  />
+                                  {
+                                    task.needs_attention !== true &&
+                                    <CheckBox
+                                      selected={selectedTasks.indexOf(task.id) > -1}
+                                    />
+                                  }
                                 </div>
 
                                 <div className="title">
