@@ -1,6 +1,6 @@
-import _ from 'underscore'
 import { normalize } from 'normalizr'
 import { batchActions } from 'redux-batched-actions'
+import _ from 'underscore'
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
 import * as schema from './schema'
@@ -10,6 +10,13 @@ import { setChecklists } from './checklist'
 function setDeals(deals) {
   return {
     type: types.GET_DEALS,
+    deals
+  }
+}
+
+function addSearchedDeals(deals) {
+  return {
+    type: types.ADD_SEARCHED_DEALS,
     deals
   }
 }
@@ -139,16 +146,18 @@ export function searchAllDeals(query) {
       dispatch({ type: types.HIDE_SPINNER })
 
       if (data.length === 0) {
-        return dispatch({ type: types.NO_DEAL })
+        dispatch(addSearchedDeals({}))
       }
 
       const { entities } = normalize(data, schema.dealsSchema)
       const { deals, checklists, tasks } = entities
 
+      _.each(deals, deal => deal.searchResult = true)
+
       batchActions([
         dispatch(setTasks(tasks)),
         dispatch(setChecklists(checklists)),
-        dispatch(setDeals(deals))
+        dispatch(addSearchedDeals(deals))
       ])
     } catch (e) {
       dispatch({

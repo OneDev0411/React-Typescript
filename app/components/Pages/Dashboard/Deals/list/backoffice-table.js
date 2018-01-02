@@ -69,6 +69,11 @@ class BackOfficeTable extends BaseTable {
         caption: '',
         className: 'col-md-1',
         getText: deal => this.hasNotification(deal)
+      },
+      searchResult: {
+        caption: '',
+        justFilter: true,
+        getValue: deal => deal.searchResult
       }
     }
   }
