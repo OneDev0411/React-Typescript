@@ -24,7 +24,7 @@ class Messages extends React.Component {
     /**
      * create a reference for onNewMessage function
      * more info in https://stackoverflow.com/questions/11565471
-    */
+     */
     this.messageListener = this.onNewMessage.bind(this)
     this.messagesObservable = null
 
@@ -35,10 +35,14 @@ class Messages extends React.Component {
     this.initializeScroller()
 
     // initialize chatroom with latest room
-    if (roomId && !messages[roomId]) { this.loadMessages(roomId) }
+    if (roomId && !messages[roomId]) {
+      this.loadMessages(roomId)
+    }
 
     // scroll to end of messages while re-loading a pop
-    if (isPopup) { this.scrollEnd() }
+    if (isPopup) {
+      this.scrollEnd()
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -71,7 +75,7 @@ class Messages extends React.Component {
       .debounceTime(500)
       .scan(top => this.messagesList.scrollTop - this.messagesList.clientTop, 10000)
       .filter(top => {
-      // check scroll direction
+        // check scroll direction
         const isScrolledToTop = top < this.lastScrollTop
 
         // set last scroll pos
@@ -116,7 +120,9 @@ class Messages extends React.Component {
     const messages = this.props.messages[roomId]
 
     // check whether old messages are loaded or not
-    if (!messages || messages.total <= _.size(messages.list)) { return false }
+    if (!messages || messages.total <= _.size(messages.list)) {
+      return false
+    }
 
     // get key id of last chat
     const key = _.keys(messages.list)[0]
@@ -137,7 +143,9 @@ class Messages extends React.Component {
     const keys = Object.keys(messages)
     const index = keys.indexOf(msg.id)
 
-    if (index === -1 || !keys[index - 1]) { return null }
+    if (index === -1 || !keys[index - 1]) {
+      return null
+    }
 
     return messages[keys[index - 1]]
   }
@@ -145,17 +153,23 @@ class Messages extends React.Component {
   onNewMessage(room) {
     const { roomId } = this.props
 
-    if (!this.messagesList) { return false }
+    if (!this.messagesList) {
+      return false
+    }
 
     const count = this.messagesList.children.length
 
-    if (count < 4) { return false }
+    if (count < 4) {
+      return false
+    }
 
     // get element
     const el = this.messagesList.children[count - 4]
 
     // scroll end when receive new message and in visible area
-    if (this.elementInViewport(el) && room.id === roomId) { this.scrollEnd() }
+    if (this.elementInViewport(el) && room.id === roomId) {
+      this.scrollEnd()
+    }
   }
 
   /**
@@ -179,7 +193,11 @@ class Messages extends React.Component {
    */
   scrollEnd() {
     setTimeout(() => {
-      this.messagesList.scrollTop = this.messagesList.scrollHeight
+      if (this.messagesList) {
+        this.messagesList.scrollTop = this.messagesList.scrollHeight
+      } else {
+        this.scrollEnd()
+      }
     }, 200)
   }
 
@@ -312,8 +330,7 @@ class Messages extends React.Component {
                     message={msg}
                     previousMessage={this.getPreviousMessage(messages.list, msg)}
                   />
-                </div>
-              )
+                </div>)
             }
           </div>
         </UploadHandler>

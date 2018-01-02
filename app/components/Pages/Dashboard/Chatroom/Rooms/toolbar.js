@@ -47,7 +47,7 @@ function mapStateToProps({ chatroom }, ownProps) {
 
   return {
     instantMode: chatroom.instantMode,
-    room: rooms && roomId ? rooms[roomId] : {}
+    room: rooms && rooms[roomId] || {}
   }
 }
 
