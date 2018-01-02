@@ -21,7 +21,7 @@
     "test:watch": "npm test -- --watch",
     "test:e2e": "nightwatch",
     "e2e-setup": "selenium-standalone install",
-    "heroku-postbuild": "npm run build"
+    "postinstall": "npm run build"
   },
   "engines": {
     "node": "9.2.0"
