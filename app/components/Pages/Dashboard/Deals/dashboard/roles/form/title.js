@@ -5,25 +5,30 @@ export default ({
   form,
   onChange
 }) => (
-  <Dropdown id="deal-add-role-title--drp" bsStyle="default">
-    <Dropdown.Toggle>
-      {form.legal_prefix || 'Title'}
-    </Dropdown.Toggle>
+  <div className="role-title">
+    <label>Title</label>
+    <div>
+      <Dropdown id="deal-add-role-title--drp" bsStyle="default">
+        <Dropdown.Toggle>
+          {form.legal_prefix || 'Select a Title'}
+        </Dropdown.Toggle>
 
-    <Dropdown.Menu className="deal-add-role-title--drpmenu">
-      {
-        ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr']
-        .map((name, key) =>
-          <MenuItem
-            key={`Title_${key}`}
-            style={{ width: '40%' }}
-            onClick={() => onChange(name)}
-          >
-            {name}
-          </MenuItem>
-        )
-      }
-    </Dropdown.Menu>
-  </Dropdown>
+        <Dropdown.Menu className="deal-add-role-title--drpmenu">
+          {
+            ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr']
+            .map((name, key) =>
+              <MenuItem
+                key={`Title_${key}`}
+                style={{ width: '40%' }}
+                onClick={() => onChange(name)}
+              >
+                {name}
+              </MenuItem>
+            )
+          }
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
+  </div>
 )
 

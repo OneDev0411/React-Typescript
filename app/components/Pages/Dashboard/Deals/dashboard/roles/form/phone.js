@@ -6,14 +6,18 @@ export default ({
   validation,
   onChange
 }) => (
-  <div className="input-container">
+  <div className="input-container phone">
+    <label>Phone</label>
+
     <input
-      className={cn('phone', { invalid: validation.phone === 'error' })}
-      placeholder="Phone (xxx) xxx-xxxx"
+      name="phone"
+      type="text"
+      placeholder="(###) - ### ####"
       value={form.phone || ''}
       onChange={e => onChange(e.target.value)}
     />
-    {validation.phone === 'error' && <span>Enter a valid phone</span>}
+
+    {validation.phone === 'error' && <span className="error">Enter a valid phone</span>}
   </div>
 )
 

@@ -11,12 +11,18 @@ export default ({
   }
 
   return (
-    <input
-      className="company"
-      placeholder="Company"
-      value={form.company_title || ''}
-      onChange={e => onChange(e.target.value)}
-    />
+    <div className="last_name">
+      <label>Company</label>
+
+      <input
+        id="company"
+        name="company"
+        type="text"
+        placeholder="Company Name"
+        value={form.company_title || ''}
+        onChange={e => onChange(e.target.value)}
+      />
+    </div>
   )
 }
 

@@ -8,34 +8,40 @@ export default ({
   isAllowed,
   onChange
 }) => (
-  <Dropdown id="deal-add-role--drp">
-    <Dropdown.Toggle>
-      {form.role ? roleNames(form.role) : 'Select a Role *'}
-    </Dropdown.Toggle>
+  <div>
 
-    <Dropdown.Menu className="deal-add-role--drpmenu u-scrollbar--thinner--self">
-      {
-        role_names
-          .sort(name => isAllowed(name) ? -1 : 1)
-          .map((name, key) => {
-            if (!isAllowed(name)) {
-              return (
-                <li key={key} className="disabled">
-                  <a href="#" onClick={e => e.preventDefault()}>{name}</a>
-                </li>
-              )
-            }
+    <label>Select Role <sup>*</sup></label>
+    <div>
+      <Dropdown id="deal-add-role--drp">
+        <Dropdown.Toggle>
+          {form.role ? roleNames(form.role) : 'Select a Role *'}
+        </Dropdown.Toggle>
 
-            return (
-              <MenuItem
-                key={`ROLE_${name}`}
-                onClick={() => onChange(name)}
-              >
-                {roleNames(name)}
-              </MenuItem>
-            )
-          })
-      }
-    </Dropdown.Menu>
-  </Dropdown>
+        <Dropdown.Menu className="deal-add-role--drpmenu u-scrollbar--thinner--self">
+          {
+            role_names
+              .sort(name => isAllowed(name) ? -1 : 1)
+              .map((name, key) => {
+                if (!isAllowed(name)) {
+                  return (
+                    <li key={key} className="disabled">
+                      <a href="#" onClick={e => e.preventDefault()}>{name}</a>
+                    </li>
+                  )
+                }
+
+                return (
+                  <MenuItem
+                    key={`ROLE_${name}`}
+                    onClick={() => onChange(name)}
+                  >
+                    {roleNames(name)}
+                  </MenuItem>
+                )
+              })
+          }
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
+  </div>
 )
