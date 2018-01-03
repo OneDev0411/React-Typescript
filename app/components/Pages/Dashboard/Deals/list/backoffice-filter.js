@@ -12,8 +12,14 @@ class Filter extends React.Component {
   componentDidMount() {
     const { active } = this.props
 
-    const activeTab = active || this.getTabs()[0]
-    this.setFilter(activeTab)
+    const tabs = this.getTabs()
+
+    // get active tab
+    const activeTab = active || (tabs && tabs[0])
+
+    if (activeTab) {
+      this.setFilter(activeTab)
+    }
   }
 
   /**
