@@ -88,12 +88,11 @@ export function updateDeal(deal) {
 export function getDeals(user, backoffice = false, errorOnFail = true) {
   return async (dispatch) => {
     // set user is backoffice or not
+    dispatch(isBackOffice(backoffice))
 
     try {
       // get deals (brand is backoffice)
       const data = await Deal.getAll(user, backoffice)
-
-      dispatch({ type: types.HIDE_SPINNER })
 
       if (data.length === 0) {
         return dispatch({ type: types.NO_DEAL })
