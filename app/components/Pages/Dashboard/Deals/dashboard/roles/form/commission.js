@@ -1,5 +1,4 @@
 import React from 'react'
-import Input from 'react-floating-label-input'
 
 export default class Commission extends React.Component {
   constructor(props) {
@@ -96,10 +95,10 @@ export default class Commission extends React.Component {
         />&nbsp;&nbsp;$
 
         <div className="commission">
-          <Input
+          <input
             id="commission"
             required="required"
-            label="Commission"
+            placeholder="Commission"
             shrink={50}
             type="number"
             value={this.getCommissionValue()}
