@@ -40,6 +40,15 @@ class DealsDashboard extends React.Component {
     })
   }
 
+  initialAgentFilters = (filters) => {
+    this.setState({
+      activeFilters: {
+        status: (status, deal) => !deal.deleted_at,
+        ...filters
+      }
+    })
+  }
+
   searchBOFilters = () => {
     this.setState({
       activeFilters: { searchResult: true }
@@ -76,11 +85,12 @@ class DealsDashboard extends React.Component {
         <Header
           activeFilterTab={params.filter}
           initialBOFilters={this.initialBOFilters}
+          initialAgentFilters={this.initialAgentFilters}
           searchBOFilters={this.searchBOFilters}
           searchBoxIsOpen={searchBoxIsOpen}
           setSearchStatus={this.setSearchStatus}
           showEmptySearchPage={this.showEmptySearchPage}
-          onFilterChange={(name, filter) => this.setFilter(name, filter)}
+          onFilterChange={filters => this.setFilter(filters)}
         />
         <i
           className={cn(

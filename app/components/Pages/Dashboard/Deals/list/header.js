@@ -55,8 +55,15 @@ class Header extends React.Component {
       searchBoxIsOpen,
       setSearchStatus,
       initialBOFilters,
-      showEmptySearchPage
+      showEmptySearchPage,
+      initialAgentFilters
     } = this.props
+
+    let showSearchInput = true
+
+    if (!isBackOffice && activeFilterTab && activeFilterTab !== 'All') {
+      showSearchInput = false
+    }
 
     return (
       <div className="deals-list--header">
@@ -77,22 +84,24 @@ class Header extends React.Component {
                       this.searchInput.value = ''
                     }
 
-                    if (isBackOffice) {
-                      if (searchBoxIsOpen) {
-                        setSearchStatus(false)
-                        initialBOFilters(filters)
-                      }
-
-                      onFilterChange(filters)
-                    } else {
-                      onFilterChange(filters)
+                    if (searchBoxIsOpen) {
+                      setSearchStatus(false)
+                      initialBOFilters(filters)
                     }
+
+                    onFilterChange(filters)
                   }
                   }
                 /> :
                 <AgentFilter
                   active={activeFilterTab}
-                  onChangeFilter={filters => onFilterChange(filters)}
+                  onChangeFilter={filters => {
+                    initialAgentFilters(filters)
+
+                    if (this.searchInput) {
+                      this.searchInput.value = ''
+                    }
+                  }}
                 />
             }
           </Col>
@@ -104,6 +113,7 @@ class Header extends React.Component {
             xs={12}
             className="text-right"
           >
+            {isBackOffice &&
             <OverlayTrigger
               placement="bottom"
               overlay={
@@ -118,7 +128,9 @@ class Header extends React.Component {
                 onClick={() => {
                   setSearchStatus(!searchBoxIsOpen)
 
-                  if (!searchBoxIsOpen) {
+                  if (searchBoxIsOpen) {
+                    this.searchInput.value = ''
+                  } else {
                     showEmptySearchPage(true)
                   }
                 }}
@@ -127,6 +139,7 @@ class Header extends React.Component {
                 <i className="fa fa-search" aria-hidden="true" />
               </span>
             </OverlayTrigger>
+            }
             {
               !isBackOffice &&
               <Link
@@ -138,7 +151,8 @@ class Header extends React.Component {
             }
           </Col>
         </Row>
-        <Panel collapsible expanded={searchBoxIsOpen}>
+        {showSearchInput &&
+        <Panel collapsible expanded={isBackOffice ? searchBoxIsOpen : true}>
           <div
             className="deals-list--header--searchBox"
           >
@@ -154,6 +168,7 @@ class Header extends React.Component {
             />
           </div>
         </Panel>
+        }
       </div>
     )
   }
