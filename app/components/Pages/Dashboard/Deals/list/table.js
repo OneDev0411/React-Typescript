@@ -8,6 +8,8 @@ import CriticalDates from '../dashboard/factsheet/critical-dates'
 import EmptyState from './empty-state'
 import ToolTip from '../components/tooltip'
 import OpenDeal from '../utils/open-deal'
+import NoSearchResults from './no-search-results'
+import EmptySearch from './empty-search'
 
 /*
  * implement a new functionality for underscore that checks
@@ -67,7 +69,6 @@ class BaseTable extends React.Component {
   }
 
   getNextDate(deal, rowId, rowsCount) {
-
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
@@ -129,7 +130,8 @@ class BaseTable extends React.Component {
       return ~~object
     }
 
-    return object.toString().toLowerCase()
+    return object.toString()
+      .toLowerCase()
   }
 
   /**
@@ -185,8 +187,11 @@ class BaseTable extends React.Component {
 
       if (_.isFunction(criteria)) {
         matched = criteria(value, deal)
+      } else if (_.isBoolean(criteria)) {
+        matched = value
       } else if (criteria.length > 0) {
-        matched = value.toLowerCase().includes(criteria.toLowerCase())
+        matched = value.toLowerCase()
+          .includes(criteria.toLowerCase())
       } else {
         matched = true
       }
@@ -247,7 +252,13 @@ class BaseTable extends React.Component {
   }
 
   render() {
-    const { deals, isBackOffice } = this.props
+    const {
+      deals,
+      isBackOffice,
+      searchBoxIsOpen,
+      emptySearchPageIsOpen,
+      loadingDeals
+    } = this.props
     const { sortBy, sortOrder } = this.state
 
     // apply filter to deals
@@ -255,9 +266,25 @@ class BaseTable extends React.Component {
 
     let hasRows = true
 
+    if (searchBoxIsOpen && emptySearchPageIsOpen) {
+      return (
+        <div className="table-container">
+          <EmptySearch />
+        </div>
+      )
+    }
+
     if ((isBackOffice && filteredDeals.length === 0) ||
       (!isBackOffice && _.size(deals) === 0)
     ) {
+      if (searchBoxIsOpen) {
+        return (
+          <div className="table-container">
+            <NoSearchResults />
+          </div>
+        )
+      }
+
       hasRows = false
     }
 
@@ -299,13 +326,17 @@ class BaseTable extends React.Component {
                       onClick={e => this.onClickDeal(e, deal.id)}
                     >
                       {
-                        _.map(this.cells, (cell, key) =>
-                          <td
-                            key={`DEAL_${deal.id}__CELL_${key}`}
-                            className={cell.className}
-                          >
-                            {cell.getText(deal, rowId, filteredDeals.length)}
-                          </td>)
+                        _.chain(this.cells)
+                          .filter(cell => !cell.justFilter)
+                          .map((cell, key) => (
+                            <td
+                              key={`DEAL_${deal.id}__CELL_${key}`}
+                              className={cell.className}
+                            >
+                              {cell.getText(deal, rowId, filteredDeals.length)}
+                            </td>
+                          ))
+                          .value()
                       }
                     </tr>
                   ))

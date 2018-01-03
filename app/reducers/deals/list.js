@@ -17,6 +17,11 @@ export default (state = null, action) => {
     case types.GET_DEALS:
       return action.deals
 
+    case types.ADD_SEARCHED_DEALS:
+      const notSearchedDeals = _.pick(state, deal => !deal.searchResult)
+
+      return { ...notSearchedDeals, ...action.deals }
+
     case types.CREATE_DEAL:
       return {
         [action.deal.id]: action.deal,

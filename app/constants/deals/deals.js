@@ -11,5 +11,7 @@ export default [
   'UPDATE_ROLES',
   'DELETE_ROLE',
   'SHOW_SPINNER',
-  'HIDE_SPINNER'
+  'HIDE_SPINNER',
+  'ADD_SEARCHED_DEALS'
+
 ]

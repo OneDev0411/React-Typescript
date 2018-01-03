@@ -4,8 +4,6 @@ import AgentTable from './agent-table'
 import BackOfficeTable from './backoffice-table'
 import cn from 'classnames'
 import Header from './header'
-import { getDeals, searchAllDeals } from '../../../../../store_actions/deals'
-import { hasUserAccess } from '../../../../../utils/user-acl'
 
 class DealsDashboard extends React.Component {
   constructor(props) {
@@ -22,14 +20,39 @@ class DealsDashboard extends React.Component {
     }
 
     this.state = {
-      activeFilters
+      activeFilters,
+      searchBoxIsOpen: false,
+      emptySearchPageIsOpen: false
     }
   }
 
-  refetchDeals = () => {
-    const { getDeals, user } = this.props
 
-    getDeals(user, hasUserAccess(user, 'BackOffice'), false)
+  setSearchStatus = searchBoxIsOpen => this.setState({ searchBoxIsOpen })
+  showEmptySearchPage = emptySearchPageIsOpen => this.setState({ emptySearchPageIsOpen })
+
+
+  initialBOFilters = (filters) => {
+    this.setState({
+      activeFilters: {
+        needs_attention: count => count > 0,
+        ..._.omit(filters, 'searchResult')
+      }
+    })
+  }
+
+  initialAgentFilters = (filters) => {
+    this.setState({
+      activeFilters: {
+        status: (status, deal) => !deal.deleted_at,
+        ...filters
+      }
+    })
+  }
+
+  searchBOFilters = () => {
+    this.setState({
+      activeFilters: { searchResult: true }
+    })
   }
 
   /**
@@ -46,22 +69,33 @@ class DealsDashboard extends React.Component {
 
   render() {
     const {
-      deals, isBackOffice, params, searchAllDeals, spinner
+      deals,
+      isBackOffice,
+      params,
+      loadingDeals
     } = this.props
-    const { activeFilters } = this.state
+    const {
+      activeFilters,
+      searchBoxIsOpen,
+      emptySearchPageIsOpen
+    } = this.state
 
     return (
       <div className="deals-list">
         <Header
           activeFilterTab={params.filter}
-          onFilterChange={(name, filter) => this.setFilter(name, filter)}
-          searchAllDeals={searchAllDeals}
-          refetchDeals={this.refetchDeals}
+          initialBOFilters={this.initialBOFilters}
+          initialAgentFilters={this.initialAgentFilters}
+          searchBOFilters={this.searchBOFilters}
+          searchBoxIsOpen={searchBoxIsOpen}
+          setSearchStatus={this.setSearchStatus}
+          showEmptySearchPage={this.showEmptySearchPage}
+          onFilterChange={filters => this.setFilter(filters)}
         />
         <i
           className={cn(
             'fa fa-spinner fa-pulse fa-fw fa-3x spinner__deals',
-            { hide_spinner: !spinner }
+            { hide_spinner: !loadingDeals }
           )}
         />
 
@@ -74,6 +108,8 @@ class DealsDashboard extends React.Component {
             /> :
             <BackOfficeTable
               deals={deals}
+              searchBoxIsOpen={searchBoxIsOpen}
+              emptySearchPageIsOpen={emptySearchPageIsOpen || loadingDeals}
               filters={activeFilters}
               isBackOffice
             />
@@ -84,9 +120,8 @@ class DealsDashboard extends React.Component {
   }
 }
 
-export default connect(({ deals, user }) => ({
+export default connect(({ deals }) => ({
   deals: deals.list,
   isBackOffice: deals.backoffice,
-  user,
-  spinner: deals.spinner
-}), { getDeals, searchAllDeals })(DealsDashboard)
+  loadingDeals: deals.spinner
+}))(DealsDashboard)
