@@ -12,7 +12,8 @@ import AgentFilter from './agent-filter'
 import BackOfficeFilter from './backoffice-filter'
 import debounce from 'lodash/debounce'
 import {
-  searchAllDeals
+  searchAllDeals,
+  cleanSearchedDeals
 } from '../../../../../store_actions/deals'
 
 class Header extends React.Component {
@@ -56,7 +57,8 @@ class Header extends React.Component {
       setSearchStatus,
       initialBOFilters,
       showEmptySearchPage,
-      initialAgentFilters
+      initialAgentFilters,
+      cleanSearchedDeals
     } = this.props
 
     let showSearchInput = true
@@ -87,9 +89,10 @@ class Header extends React.Component {
                     if (searchBoxIsOpen) {
                       setSearchStatus(false)
                       initialBOFilters(filters)
+                      cleanSearchedDeals()
+                    } else {
+                      onFilterChange(filters)
                     }
-
-                    onFilterChange(filters)
                   }
                   }
                 /> :
@@ -132,6 +135,7 @@ class Header extends React.Component {
                     this.searchInput.value = ''
                   } else {
                     showEmptySearchPage(true)
+                    this.searchInput.focus()
                   }
                 }}
                 className="search-button"
@@ -177,5 +181,6 @@ class Header extends React.Component {
 export default connect(({ deals }) => ({
   isBackOffice: deals.backoffice
 }), {
-  searchAllDeals
+  searchAllDeals,
+  cleanSearchedDeals
 })(Header)

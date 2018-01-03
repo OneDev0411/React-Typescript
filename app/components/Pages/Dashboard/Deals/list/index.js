@@ -35,7 +35,7 @@ class DealsDashboard extends React.Component {
     this.setState({
       activeFilters: {
         needs_attention: count => count > 0,
-        ...filters
+        ..._.omit(filters, 'searchResult')
       }
     })
   }
@@ -44,7 +44,7 @@ class DealsDashboard extends React.Component {
     this.setState({
       activeFilters: {
         status: (status, deal) => !deal.deleted_at,
-        ...filters
+        ..._.omit(filters, 'searchResult')
       }
     })
   }
@@ -79,6 +79,8 @@ class DealsDashboard extends React.Component {
       searchBoxIsOpen,
       emptySearchPageIsOpen
     } = this.state
+
+    console.log('activeFilters: ', activeFilters)
 
     return (
       <div className="deals-list">

@@ -21,6 +21,13 @@ function addSearchedDeals(deals) {
   }
 }
 
+export function cleanSearchedDeals() {
+  return {
+    type: types.ADD_SEARCHED_DEALS,
+    deals: {}
+  }
+}
+
 function addNewDeal(deal) {
   return {
     type: types.CREATE_DEAL,
