@@ -2,6 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
 import { Button, Col } from 'react-bootstrap'
+import PropTypes from 'prop-types'
 
 export default class ListFilter extends React.Component {
   constructor(props) {
@@ -18,11 +19,12 @@ export default class ListFilter extends React.Component {
     const regex = new RegExp(e.target.value, 'i')
     let filtered = []
 
-    Object.keys(this.props.data).forEach((key) => {
-      if (this.props.data[key].name.search(regex) > -1) {
-        filtered.push(this.props.data[key])
-      }
-    })
+    Object.keys(this.props.data)
+      .forEach((key) => {
+        if (this.props.data[key].name.search(regex) > -1) {
+          filtered.push(this.props.data[key])
+        }
+      })
     this.setState({
       filteredData: filtered
     })
@@ -32,30 +34,31 @@ export default class ListFilter extends React.Component {
     const { filteredData } = this.state
     let items = []
 
-    Object.keys(filteredData).forEach((key) => (
-      items.push(<li
-        key={key}
-        className={this.props.liClassName}
-      >
-        <Col md={6} sm={6} xs={6}>{filteredData[key].name}</Col>
-        <Col md={3} sm={3} xs={3}>
-          <Button
-            onClick={() => this.props.addForm && this.props.addForm(filteredData[key])}
+    Object.keys(filteredData)
+      .forEach((key) => (
+        items.push(
+          <li
+            key={key}
+            className={this.props.liClassName}
           >
-          Allow Form
-          </Button>
-        </Col>
-        <Col md={3} sm={3} xs={3}>
-          <Button
-            bsStyle="primary"
-            onClick={() => this.props.addTask && this.props.addTask(filteredData[key])}
-          >
-          Add Task
-          </Button>
-        </Col>
-      </li>)
-    )
-    )
+            <Col md={6} sm={6} xs={6}>{filteredData[key].name}</Col>
+            <Col md={3} sm={3} xs={3}>
+              <Button
+                onClick={() => this.props.addForm && this.props.addForm(filteredData[key])}
+              >
+                Allow Form
+              </Button>
+            </Col>
+            <Col md={3} sm={3} xs={3}>
+              <Button
+                bsStyle="primary"
+                onClick={() => this.props.addTask && this.props.addTask(filteredData[key])}
+              >
+                Add Task
+              </Button>
+            </Col>
+          </li>)
+      ))
 
     return (
       <ClickOutside
@@ -86,11 +89,11 @@ export default class ListFilter extends React.Component {
 }
 
 ListFilter.propTypes = {
-  parentClassName: React.PropTypes.string,
-  ulClassName: React.PropTypes.string,
-  liClassName: React.PropTypes.string,
-  inputContainerClassName: React.PropTypes.string,
-  inputClassName: React.PropTypes.string,
-  placeholder: React.PropTypes.string,
-  data: React.PropTypes.object
+  parentClassName: PropTypes.string,
+  ulClassName: PropTypes.string,
+  liClassName: PropTypes.string,
+  inputContainerClassName: PropTypes.string,
+  inputClassName: PropTypes.string,
+  placeholder: PropTypes.string,
+  data: PropTypes.object
 }

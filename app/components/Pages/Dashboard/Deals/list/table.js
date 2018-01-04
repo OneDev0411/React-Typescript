@@ -1,7 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import cn from 'classnames'
-import { browserHistory } from 'react-router'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 import _ from 'underscore'
 import { getStatusColorClass } from '../../../../../utils/listing'
@@ -10,6 +8,8 @@ import CriticalDates from '../dashboard/factsheet/critical-dates'
 import EmptyState from './empty-state'
 import ToolTip from '../components/tooltip'
 import OpenDeal from '../utils/open-deal'
+import NoSearchResults from './no-search-results'
+import EmptySearch from './empty-search'
 
 /*
  * implement a new functionality for underscore that checks
@@ -49,7 +49,7 @@ class BaseTable extends React.Component {
     return (
       <div className="address-row">
         <img src={this.getListingPhoto(deal)} />
-        <div className="name">{ address }</div>
+        <div className="name">{address}</div>
       </div>
     )
   }
@@ -63,14 +63,12 @@ class BaseTable extends React.Component {
           className="status-bullet"
           style={{ background: getStatusColorClass(status) }}
         />
-        { status }
+        {status}
       </div>
     )
   }
 
   getNextDate(deal, rowId, rowsCount) {
-    const { deals } = this.props
-
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
@@ -88,7 +86,7 @@ class BaseTable extends React.Component {
         }
       >
         <span className="hoverable">
-          { CriticalDates.getNextDate(deal) }
+          {CriticalDates.getNextDate(deal)}
         </span>
       </OverlayTrigger>
     )
@@ -97,7 +95,7 @@ class BaseTable extends React.Component {
   /**
    *
    */
-  setSort(field, order = 'ASC', sorter = []) {
+  setSort(field) {
     const { sortBy, sortOrder } = this.state
 
     this.setState({
@@ -110,7 +108,7 @@ class BaseTable extends React.Component {
    *
    */
   sort(deal) {
-    const { sortBy, sortOrder } = this.state
+    const { sortBy } = this.state
 
     if (!sortBy) {
       return true
@@ -132,7 +130,8 @@ class BaseTable extends React.Component {
       return ~~object
     }
 
-    return object.toString().toLowerCase()
+    return object.toString()
+      .toLowerCase()
   }
 
   /**
@@ -155,7 +154,6 @@ class BaseTable extends React.Component {
    */
   applyFilters(deal) {
     const { filters } = this.props
-    const { cells } = this
 
     if (_.size(filters) === 0) {
       return true
@@ -189,8 +187,11 @@ class BaseTable extends React.Component {
 
       if (_.isFunction(criteria)) {
         matched = criteria(value, deal)
+      } else if (_.isBoolean(criteria)) {
+        matched = value
       } else if (criteria.length > 0) {
-        matched = value.toLowerCase().includes(criteria.toLowerCase())
+        matched = value.toLowerCase()
+          .includes(criteria.toLowerCase())
       } else {
         matched = true
       }
@@ -243,7 +244,7 @@ class BaseTable extends React.Component {
         <ToolTip caption={`You have ${counter} unread messages in this deal`}>
           <div className="inline unread-notifications">
             <img src="/static/images/deals/comments.svg" />
-            <span>{ counter }</span>
+            <span>{counter}</span>
           </div>
         </ToolTip>
       )
@@ -251,7 +252,13 @@ class BaseTable extends React.Component {
   }
 
   render() {
-    const { deals, isBackOffice } = this.props
+    const {
+      deals,
+      isBackOffice,
+      searchBoxIsOpen,
+      emptySearchPageIsOpen,
+      loadingDeals
+    } = this.props
     const { sortBy, sortOrder } = this.state
 
     // apply filter to deals
@@ -259,9 +266,25 @@ class BaseTable extends React.Component {
 
     let hasRows = true
 
+    if (searchBoxIsOpen && emptySearchPageIsOpen) {
+      return (
+        <div className="table-container">
+          <EmptySearch />
+        </div>
+      )
+    }
+
     if ((isBackOffice && filteredDeals.length === 0) ||
       (!isBackOffice && _.size(deals) === 0)
     ) {
+      if (searchBoxIsOpen) {
+        return (
+          <div className="table-container">
+            <NoSearchResults />
+          </div>
+        )
+      }
+
       hasRows = false
     }
 
@@ -273,50 +296,52 @@ class BaseTable extends React.Component {
               <tbody>
                 <tr className="header">
                   {
-                    _.map(this.cells, (cell, key) =>
-                      <td
-                        key={`CELL_${key}`}
-                        className={cn(cell.className, {
-                          sortable: cell.sortable,
-                          isActive: sortBy === key
-                        })}
+                  _.map(this.cells, (cell, key) =>
+                    <td
+                      key={`CELL_${key}`}
+                      className={cn(cell.className, {
+                        sortable: cell.sortable,
+                        isActive: sortBy === key
+                      })}
+                    >
+                      <span
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => cell.sortable && this.setSort(key)}
                       >
-                        <span
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => cell.sortable && this.setSort(key)}
-                        >
-                          { cell.caption }&nbsp;
-                          { cell.sortable && this.getSorterCaret(key) }
-                        </span>
-                      </td>
-                    )
-                  }
+                        {cell.caption}&nbsp;
+                        {cell.sortable && this.getSorterCaret(key)}
+                      </span>
+                    </td>)
+                }
                 </tr>
 
                 {
-                  _.chain(filteredDeals)
-                    .sortBy(deal => this.sort(deal))
-                    .shouldReverse(sortOrder)
-                    .map((deal, rowId) => (
-                      <tr
-                        key={`DEAL_${deal.id}`}
-                        className="item"
-                        onClick={e => this.onClickDeal(e, deal.id)}
-                      >
-                        {
-                          _.map(this.cells, (cell, key) =>
+                _.chain(filteredDeals)
+                  .sortBy(deal => this.sort(deal))
+                  .shouldReverse(sortOrder)
+                  .map((deal, rowId) => (
+                    <tr
+                      key={`DEAL_${deal.id}`}
+                      className="item"
+                      onClick={e => this.onClickDeal(e, deal.id)}
+                    >
+                      {
+                        _.chain(this.cells)
+                          .filter(cell => !cell.justFilter)
+                          .map((cell, key) => (
                             <td
                               key={`DEAL_${deal.id}__CELL_${key}`}
                               className={cell.className}
                             >
-                              { cell.getText(deal, rowId, filteredDeals.length) }
+                              {cell.getText(deal, rowId, filteredDeals.length)}
                             </td>
-                          )
-                        }
-                      </tr>
-                    ))
-                    .value()
-                }
+                          ))
+                          .value()
+                      }
+                    </tr>
+                  ))
+                  .value()
+              }
               </tbody>
             </table> :
             <EmptyState

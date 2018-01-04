@@ -59,12 +59,14 @@ class UploadModal extends React.Component {
   }
 
   getSelectedTask(file) {
-    const { upload, tasks } = this.props
+    const { upload, selectedTask, tasks } = this.props
 
     if (file.properties.taskId) {
       return tasks[file.properties.taskId]
     } else if (upload.task) {
       return upload.task
+    } else if (selectedTask) {
+      return selectedTask
     }
 
     return null
@@ -266,6 +268,7 @@ class UploadModal extends React.Component {
 function mapStateToProps({ deals }) {
   return {
     checklists: deals.checklists,
+    selectedTask: deals.selectedTask,
     tasks: deals.tasks,
     upload: deals.upload,
     splitter: deals.splitter

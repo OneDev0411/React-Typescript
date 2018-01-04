@@ -6,6 +6,7 @@ import checklist from './checklist'
 import upload from './upload'
 import splitter from './splitter'
 import backoffice from './backoffice'
+import agent from './agent'
 import error from './error'
 
 const ActionTypes = {}
@@ -19,6 +20,7 @@ new Array(
   ...upload,
   ...splitter,
   ...backoffice,
+  ...agent,
   ...error
 )
 .forEach(action => {

@@ -43,7 +43,7 @@ class NavBar extends React.Component {
 
         <div className="ctas">
           {
-            deal.deal_type !== 'Selling' &&
+            deal.deal_type === 'Selling' &&
             <button
               className="navbar-button"
               onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)}

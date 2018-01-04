@@ -8,6 +8,7 @@ import esign from './esign'
 import backoffice from './backoffice'
 import upload from './upload'
 import splitter from './pdf-splitter'
+import agents from './agent'
 import error from './error'
 import spinner from './spinner'
 
@@ -20,6 +21,7 @@ export default combineReducers({
   backoffice,
   selectedTask,
   upload,
+  agents,
   splitter,
   error,
   spinner

@@ -12,8 +12,13 @@ class Filter extends React.Component {
   componentDidMount() {
     const { active } = this.props
 
-    if (active && active !== 'All') {
-      this.setFilter(active)
+    const tabs = this.getTabs()
+
+    // get active tab
+    const activeTab = active || (tabs && tabs[0])
+
+    if (activeTab) {
+      this.setFilter(activeTab)
     }
   }
 
@@ -22,7 +27,7 @@ class Filter extends React.Component {
    */
   setFilter(filter) {
     const filters = {}
-    const arg = filter === 'All' ? '' : `/filter/${filter}`
+    const arg = `/filter/${filter}`
 
     browserHistory.push(`/dashboard/deals${arg}`)
 
@@ -31,6 +36,15 @@ class Filter extends React.Component {
 
     // set filters
     this.props.onChangeFilter(filters)
+  }
+
+  getTabs() {
+    return _
+      .chain(this.props.checklists)
+      .pluck('tab_name')
+      .uniq()
+      .filter(tab => tab !== null)
+      .value()
   }
 
   getBadgeCounter(tabName) {
@@ -47,24 +61,14 @@ class Filter extends React.Component {
   }
 
   render() {
-    const { checklists } = this.props
-    const active = this.props.active || 'All'
-
-    const tabs = _
-      .chain(checklists)
-      .pluck('tab_name')
-      .uniq()
-      .filter(tab => tab !== null)
-      .value()
-
-    // add All tab
-    tabs.unshift('All')
+    const { searchMode, active } = this.props
+    const activeTab = !searchMode && active
 
     return (
       <div>
         <ul className="filter">
           {
-            tabs.map(tabName => {
+            this.getTabs().map(tabName => {
               const counter = this.getBadgeCounter(tabName)
 
               if (counter === 0) {
@@ -75,14 +79,14 @@ class Filter extends React.Component {
                 <li
                   key={`FILTER_${tabName}`}
                   onClick={() => this.setFilter(tabName)}
-                  className={tabName === active ? 'active' : ''}
+                  className={tabName === activeTab ? 'active' : ''}
                 >
                   <span className="title">
-                    { tabName }
+                    {tabName}
                   </span>
 
                   <span className="badge counter">
-                    { counter }
+                    {counter}
                   </span>
                 </li>
               )

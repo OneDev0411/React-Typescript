@@ -21,8 +21,7 @@ class Rooms extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      filter: '',
-      showComposeModal: false
+      filter: ''
     }
   }
 
@@ -50,10 +49,13 @@ class Rooms extends React.Component {
     if (showChatbar) {
       // display first room if there is no active room
       if (!activeRoom) {
-        let firstRoomId = rooms[Object.keys(rooms)[0]].id
+        if (Object.keys(rooms)[0]) {
+          let firstRoomId = rooms[Object.keys(rooms)[0]].id
+
+          changeActiveRoom(firstRoomId)
+        }
 
         showChatbar && this.props.toggleChatbar(false)
-        changeActiveRoom(firstRoomId)
       }
     }
   }
@@ -111,7 +113,9 @@ class Rooms extends React.Component {
 
   render() {
     const { filter } = this.state
-    const { showChatbar, instantMode, rooms, activeRoom } = this.props
+    const {
+      showChatbar, instantMode, rooms, activeRoom
+    } = this.props
 
     return (
       <div className="rooms">
@@ -172,8 +176,7 @@ class Rooms extends React.Component {
                   room.proposed_title && room
                     .proposed_title
                     .toLowerCase()
-                    .includes(filter.toLowerCase())
-                )
+                    .includes(filter.toLowerCase()))
                 .sortBy(room => room.updated_at * -1)
                 .map(room =>
                   <Row
@@ -187,7 +190,8 @@ class Rooms extends React.Component {
                     <Col
                       sm={9}
                       xs={9}
-                      className={cn('title vcenter',
+                      className={cn(
+'title vcenter',
                         { hasNotification: room.new_notifications > 0 }
                       )}
                     >
@@ -205,8 +209,7 @@ class Rooms extends React.Component {
                         </span>
                       }
                     </Col>
-                  </Row>
-                )
+                  </Row>)
                 .value()
             }
           </div>
@@ -226,6 +229,7 @@ function mapStateToProps({ chatroom }) {
   }
 }
 
-export default connect(mapStateToProps,
+export default connect(
+  mapStateToProps,
   { toggleInstantMode, changeActiveRoom, toggleChatbar }
 )(Rooms)

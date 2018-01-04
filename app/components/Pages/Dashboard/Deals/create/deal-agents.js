@@ -21,13 +21,15 @@ function getRoles(agents, side) {
 }
 
 export default ({
+  scenario,
   agents,
   dealSide,
   onUpsertAgent,
   onRemoveAgent
 }) => {
   const allowedRoles = getRoles(agents, dealSide)
-  const title = allowedRoles[0] === 'BuyerAgent' ? 'primary agent' : 'co-agent'
+  const isPrimaryAgent = ['BuyerAgent', 'SellerAgent'].indexOf(allowedRoles[0]) > -1
+  const title = isPrimaryAgent ? 'primary agent' : 'co-agent'
 
   return (
     <div className="form-section deal-people deal-agent">
@@ -51,6 +53,7 @@ export default ({
         }
 
         <CrudRole
+          shouldPrepopulateAgent={isPrimaryAgent && scenario === 'CreateDeal'}
           modalTitle={`Add ${title}`}
           ctaTitle={`Add ${title}`}
           allowedRoles={allowedRoles}
