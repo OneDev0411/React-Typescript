@@ -109,7 +109,7 @@ const Signup = ({
               </p>
               <Link
                   to={`/signin?username=${encodeURIComponent(
-                    submitSuccessfully
+                    submitSuccessfully.email
                   )}`}
                 >
                 Sign in
