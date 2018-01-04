@@ -6,18 +6,18 @@ export default ({
   validation,
   onChange
 }) => (
-  <div className="input-container">
-    <div className="email">
-      <input
-        id="email"
-        required="required"
-        className={cn({ invalid: validation.email === 'error' })}
-        value={form.email || ''}
-        onChange={e => onChange(e.target.value)}
-      />
-      <label htmlFor="email">Email</label>
-    </div>
-    {validation.email === 'error' && <span>Enter a valid email</span>}
+  <div className="input-container email">
+    <label>Email <sup>*</sup></label>
+    <input
+      name="email"
+      type="email"
+      required="required"
+      placeholder="johnsmith@gmail.com"
+      className={cn({ invalid: validation.email === 'error' })}
+      value={form.email || ''}
+      onChange={e => onChange(e.target.value)}
+    />
+
+    {validation.email === 'error' && <span className="error">Enter a valid email</span>}
   </div>
 )
-

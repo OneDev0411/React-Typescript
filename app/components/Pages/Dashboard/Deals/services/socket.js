@@ -21,11 +21,17 @@ export default class DealSocket extends Socket {
   async bindEvents() {
     const { socket } = window
 
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
+
     // bind User.Typing
     socket.on('Deal', this.onDealChange.bind(this))
 
     // on reconnect
-    socket.on('reconnect', this.onReconnected.bind(this))
+    Rx
+      .Observable
+      .fromEvent(socket, 'reconnect')
+      .throttleTime(20 * 1000)
+      .subscribe(() => this.onReconnected())
   }
 
   /**
@@ -91,7 +97,7 @@ export default class DealSocket extends Socket {
     DealSocket.registerBrand(user)
 
     if (user) {
-      store.dispatch(getDeals(user, deals.backoffice))
+      store.dispatch(getDeals(user, deals.backoffice, false))
     }
   }
 }

@@ -188,20 +188,22 @@ export default class Form extends React.Component {
     return (
       <div className="deal-roles-form">
 
-        <Title
-          form={form}
-          onChange={(value) => this.setForm('legal_prefix', value)}
-        />
+        <div className="row-name">
+          <Title
+            form={form}
+            onChange={(value) => this.setForm('legal_prefix', value)}
+          />
 
-        <FirstName
-          form={form}
-          onChange={(value) => this.setForm('legal_first_name', value)}
-        />
+          <FirstName
+            form={form}
+            onChange={(value) => this.setForm('legal_first_name', value)}
+          />
 
-        <LastName
-          form={form}
-          onChange={(value) => this.setForm('legal_last_name', value)}
-        />
+          <LastName
+            form={form}
+            onChange={(value) => this.setForm('legal_last_name', value)}
+          />
+        </div>
 
         <Email
           form={form}

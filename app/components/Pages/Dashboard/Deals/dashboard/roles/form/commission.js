@@ -96,11 +96,10 @@ export default class Commission extends React.Component {
 
         <div className="commission">
           <input
-            id="commission"
+            name="commission"
             required="required"
-            placeholder="Commission"
-            shrink={50}
             type="number"
+            placeholder="Commission *"
             value={this.getCommissionValue()}
             onChange={e => this.setCommission(e.target.value)}
           />
