@@ -230,6 +230,7 @@ class CreateDeal extends React.Component {
               />
 
               <DealAgents
+                scenario="CreateDeal"
                 dealSide={dealSide}
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}

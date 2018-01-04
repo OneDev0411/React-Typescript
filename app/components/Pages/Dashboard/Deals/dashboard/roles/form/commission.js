@@ -46,7 +46,7 @@ export default class Commission extends React.Component {
    */
   getCommissionValue() {
     const { form } = this.props
-    return form[this.getCommissionField()]
+    return form[this.getCommissionField()] || ''
   }
 
   /**

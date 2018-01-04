@@ -40,7 +40,7 @@ export default class Form extends React.Component {
   preselectRoles() {
     const { form } = this.state
 
-    if (!form.isNewRecord) {
+    if (form.isNewRecord === false && form.role) {
       return false
     }
 
@@ -139,17 +139,7 @@ export default class Form extends React.Component {
   async validate(field, value) {
     const { form, validation } = this.state
 
-    let commission_field = null
-    if (form.commission_percentage) {
-      commission_field = 'commission_percentage'
-    } else if (form.commission_dollar) {
-      commission_field = 'commission_dollar'
-    }
-
     const requiredFields = ['legal_first_name', 'legal_last_name', 'email', 'role']
-    if (commission_field) {
-      requiredFields.push(commission_field)
-    }
 
     const fields = {
       legal_first_name: (name) => name && name.length > 0,
@@ -159,7 +149,17 @@ export default class Form extends React.Component {
       role: (role) => role
     }
 
-    // set commission field based on commission type
+    let commission_field = null
+    if (form.commission_percentage !== undefined) {
+      commission_field = 'commission_percentage'
+    } else if (form.commission_dollar !== undefined) {
+      commission_field = 'commission_dollar'
+    }
+
+    if (commission_field) {
+      requiredFields.push(commission_field)
+    }
+
     fields[commission_field] = (value) => value && this.validateCommission(value)
 
     // validate field
@@ -179,7 +179,11 @@ export default class Form extends React.Component {
     }
 
     const isFormCompleted = _.every(requiredFields, name => fields[name](form[name]))
-    this.props.onFormCompleted(isFormCompleted ? form : null)
+
+    this.props.onFormChange({
+      isFormCompleted,
+      form
+    })
   }
 
   render() {

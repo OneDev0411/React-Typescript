@@ -12,7 +12,8 @@ class AddRole extends React.Component {
     this.state = {
       show: false,
       form: null,
-      saving: false
+      saving: false,
+      isFormCompleted: false
     }
   }
 
@@ -22,6 +23,10 @@ class AddRole extends React.Component {
 
   closeModal() {
     this.setState({ show: false })
+  }
+
+  onFormChange({ form, isFormCompleted }) {
+    this.setState({ form, isFormCompleted })
   }
 
   async create() {
@@ -55,9 +60,9 @@ class AddRole extends React.Component {
   }
 
   render() {
-    const { show, form, saving } = this.state
+    const { show, form, saving, isFormCompleted } = this.state
     const { deal, allowedRoles } = this.props
-    const buttonDisabled = (form === null) || (saving === true)
+    const buttonDisabled = !isFormCompleted || (saving === true)
 
     return (
       <div>
@@ -88,7 +93,7 @@ class AddRole extends React.Component {
             <RoleForm
               deal={deal}
               allowedRoles={allowedRoles}
-              onFormCompleted={form => this.setState({ form })}
+              onFormChange={(data) => this.onFormChange(data)}
             />
           </Modal.Body>
 

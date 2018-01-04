@@ -632,6 +632,23 @@ Deal.splitPDF = async function (title, room_id, files, pages) {
   }
 }
 
+/**
+ * get all agents of brand
+ */
+Deal.getAgents = async function (user) {
+  if (!user.brand) {
+    throw new Error('This user does not belong to any brand')
+  }
+
+  try {
+    const response = await new Fetch()
+      .get(`/brands/${user.brand}/agents`)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
 
 /**
  * Search through all deals

@@ -21,6 +21,7 @@ function getRoles(agents, side) {
 }
 
 export default ({
+  scenario,
   agents,
   dealSide,
   onUpsertAgent,
@@ -52,6 +53,7 @@ export default ({
         }
 
         <CrudRole
+          shouldPrepopulateAgent={isPrimaryAgent && scenario === 'CreateDeal'}
           modalTitle={`Add ${title}`}
           ctaTitle={`Add ${title}`}
           allowedRoles={allowedRoles}
