@@ -9,6 +9,7 @@ export default [
   'APPEND_CHECKLIST',
   'SET_ENVELOPES',
   'UPDATE_ROLES',
+  'UPDATE_ROLE',
   'DELETE_ROLE',
   'SHOW_SPINNER',
   'HIDE_SPINNER',

@@ -46,7 +46,7 @@ export default class Commission extends React.Component {
    */
   getCommissionValue() {
     const { form } = this.props
-    return form[this.getCommissionField()]
+    return form[this.getCommissionField()] || ''
   }
 
   /**
@@ -63,7 +63,7 @@ export default class Commission extends React.Component {
   /**
    * check whether should show commission field or not
    */
-  shouldShowCommission(form) {
+  static shouldShowCommission(form) {
     return ['CoBuyerAgent', 'BuyerAgent', 'BuyerReferral',
       'CoSellerAgent', 'SellerAgent', 'SellerReferral'].indexOf(form.role) > -1
   }
@@ -72,7 +72,7 @@ export default class Commission extends React.Component {
     const { form } = this.props
     const { commission_type } = this.state
 
-    if (!this.shouldShowCommission(form)) {
+    if (!Commission.shouldShowCommission(form)) {
       return false
     }
 

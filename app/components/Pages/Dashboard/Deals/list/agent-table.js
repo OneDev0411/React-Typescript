@@ -93,16 +93,19 @@ class AgentTable extends BaseTable {
                   >
                     <div className="avatar">
                       <UserAvatar
-                        name={role.user.display_name}
-                        image={role.user.profile_image_url}
+                        name={`${role.legal_first_name} ${role.legal_last_name}`}
+                        image={role.user ? role.user.profile_image_url : null}
                         size={26}
                         showStateIndicator={false}
                       />
                     </div>
                     <div className="info">
-                      <span className="name">{role.user.display_name}, </span>
+                      <span className="name">{`${role.legal_first_name} ${role.legal_last_name}`}, </span>
                       <span className="role">{roleName(role.role)}</span>
-                      <span className="email">{role.user.email}</span>
+                      {
+                        role.user &&
+                        <span className="email">{role.user.email}</span>
+                      }
                     </div>
                   </div>)
               }

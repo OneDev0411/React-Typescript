@@ -2,6 +2,30 @@
   @extend %deal-roles;
 }
 
+.modal-deal-select-role {
+  .modal-content {
+    border-radius: 6px;
+    overflow: auto;
+  }
+
+  .modal-header {
+    @extend %deal-modal-header;
+  }
+
+  .modal-body {
+    padding: 0;
+    min-height: 80px;
+    max-height: 400px;
+    overflow: auto;
+    .deal-roles {
+      @extend %deal-roles;
+      .item {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
 .modal-deal-add-role {
   .modal-content {
     border-radius: 6px;
@@ -32,49 +56,6 @@
         font-size: 12px;
       }
     }
-
-    // input {
-    //   height: 48px;
-    //   background-color: #fff;
-    //   border: none;
-    //   box-shadow: 0 -1px 0 0 #dce5eb, 0 1px 1px 0 #dce5eb;
-    //   padding-left: 10px;
-    //   font-size: 15px;
-    //   width: 100%;
-    //   &:focus {
-    //     outline: none;
-    //   }
-
-    //   &.invalid {
-    //     color: red;
-    //   }
-    // }
-
-    // input + label {
-    //   color: #818181;
-    //   font-weight: normal;
-    //   font-size: 15px;
-    //   position: relative;
-    //   left: 9px; /* the negative of the input width */
-    //   top: -35px;
-    // }
-
-    // input[required] + label:after {
-    //   content:'*';
-    //   color: #D0021B;
-    //   font-size: 14px;
-    //   padding-left: 3px;
-    // }
-
-    /* show the placeholder when input has no content (no content = invalid) */
-    // input[required]:invalid + label {
-    //   display: inline-block;
-    // }
-
-    /* hide the placeholder when input has some text typed in */
-    // input[required]:valid + label{
-    //   display: none;
-    // }
 
     label {
       font-weight: normal;

@@ -4,15 +4,30 @@ import { Button, FormControl, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import RoleForm from './form'
-import { createRoles } from '../../../../../../store_actions/deals'
+import { createRoles, updateRole, selectRole } from '../../../../../../store_actions/deals'
 
-class AddRole extends React.Component {
+class UpsertRole extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       show: false,
       form: null,
-      saving: false
+      saving: false,
+      isNewRecord: true,
+      isFormCompleted: false
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { selectedRole } = nextProps
+    const { form, show } = this.state
+
+    if (!show && !form && selectedRole) {
+      this.setState({
+        form: selectedRole,
+        isNewRecord: false,
+        show: true
+      })
     }
   }
 
@@ -21,12 +36,22 @@ class AddRole extends React.Component {
   }
 
   closeModal() {
-    this.setState({ show: false })
+    this.setState({
+      show: false,
+      isNewRecord: true,
+      form: null
+    })
+
+    this.props.selectRole(null)
   }
 
-  async create() {
-    const { form } = this.state
-    const { deal, createRoles, notify } = this.props
+  onFormChange({ form, isFormCompleted }) {
+    this.setState({ form, isFormCompleted })
+  }
+
+  async upsert() {
+    const { form, isNewRecord } = this.state
+    const { deal, createRoles, updateRole, notify } = this.props
 
     if (!deal) {
       return false
@@ -37,8 +62,13 @@ class AddRole extends React.Component {
     })
 
     try {
-      await createRoles(deal.id, [form])
-      this.setState({ show: false })
+      if (isNewRecord) {
+        await createRoles(deal.id, [form])
+      } else {
+        await updateRole(deal.id, form)
+      }
+
+      this.closeModal()
     } catch (e) {
       const { attributes } = e.response.body
       const field = Object.keys(attributes)[0]
@@ -55,9 +85,9 @@ class AddRole extends React.Component {
   }
 
   render() {
-    const { show, form, saving } = this.state
-    const { deal, allowedRoles } = this.props
-    const buttonDisabled = (form === null) || (saving === true)
+    const { show, form, isNewRecord, saving, isFormCompleted } = this.state
+    const { deal, allowedRoles, selectedRole } = this.props
+    const buttonDisabled = !isFormCompleted || (saving === true)
 
     return (
       <div>
@@ -81,14 +111,15 @@ class AddRole extends React.Component {
           dialogClassName="modal-deal-add-role"
         >
           <Modal.Header closeButton>
-            Add contact
+            {isNewRecord ? 'Add Contact' : 'Update Contact'}
           </Modal.Header>
 
           <Modal.Body>
             <RoleForm
               deal={deal}
+              form={form}
               allowedRoles={allowedRoles}
-              onFormCompleted={form => this.setState({ form })}
+              onFormChange={(data) => this.onFormChange(data)}
             />
           </Modal.Body>
 
@@ -97,9 +128,9 @@ class AddRole extends React.Component {
               className={`btn-deal ${buttonDisabled ? 'disabled' : ''}`}
               bsStyle={buttonDisabled ? 'link' : 'primary'}
               disabled={buttonDisabled}
-              onClick={() => this.create()}
+              onClick={() => this.upsert()}
             >
-              { saving ? 'Saving...' : 'Add' }
+              { saving ? 'Saving...' : (isNewRecord ? 'Add' : 'Update') }
             </Button>
           </Modal.Footer>
         </Modal>
@@ -108,4 +139,6 @@ class AddRole extends React.Component {
   }
 }
 
-export default connect(null, { createRoles, notify })(AddRole)
+export default connect(({ deals }) => ({
+  selectedRole: deals.selectedRole
+}), { selectRole, createRoles, updateRole, notify })(UpsertRole)
