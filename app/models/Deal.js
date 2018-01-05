@@ -70,6 +70,7 @@ Deal.get.address = function (deal) {
 
   const unitNumber = Deal.get.field(deal, 'unit_number')
   const city = Deal.get.field(deal, 'city')
+  const state = Deal.get.field(deal, 'state')
   const postalCode = Deal.get.field(deal, 'postal_code')
 
   const address = [
@@ -78,6 +79,7 @@ Deal.get.address = function (deal) {
     Deal.get.field(deal, 'street_suffix') || '',
     unitNumber ? `, #${unitNumber},` : '',
     city ? `, ${city}` : '',
+    state ? `, ${state}` : '',
     postalCode ? `, ${postalCode}` : ''
   ]
     .join(' ')
