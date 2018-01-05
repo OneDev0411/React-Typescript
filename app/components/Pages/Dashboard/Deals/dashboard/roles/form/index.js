@@ -138,8 +138,8 @@ export default class Form extends React.Component {
    */
   async validate(field, value) {
     const { form, validation } = this.state
-
-    const requiredFields = ['legal_first_name', 'legal_last_name', 'email', 'role']
+    let newValidation
+    const requiredFields = ['legal_first_name', 'legal_last_name', 'role']
 
     const fields = {
       legal_first_name: (name) => name && name.length > 0,
@@ -156,29 +156,29 @@ export default class Form extends React.Component {
       commission_field = 'commission_dollar'
     }
 
-    if (commission_field) {
+    if (commission_field && Commission.shouldShowCommission(form)) {
       requiredFields.push(commission_field)
+      fields[commission_field] = (value) => value && this.validateCommission(value)
     }
-
-    fields[commission_field] = (value) => value && this.validateCommission(value)
 
     // validate field
     const validator = fields[field]
 
     if (value.length > 0 && validator && !await validator(value)) {
-      this.setState({
-        validation: {
-          ...validation,
-          [field]: 'error'
-        }
-      })
+      newValidation = {
+        ...validation,
+        [field]: 'error'
+      }
     } else {
-      this.setState({
-        validation: _.filter(validation, (value, key) => key !== field)
-      })
+      newValidation = _.filter(validation, (value, key) => key !== field)
     }
 
-    const isFormCompleted = _.every(requiredFields, name => fields[name](form[name]))
+    this.setState({
+      validation: newValidation
+    })
+
+    const isFormCompleted = _.every(requiredFields, name => fields[name](form[name])) &&
+      _.size(newValidation) === 0
 
     this.props.onFormChange({
       isFormCompleted,

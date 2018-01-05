@@ -177,11 +177,13 @@ Deal.getAll = async function (user = {}, backoffice = false) {
     associations = 'associations[]=room.attachments&'
     associations += 'associations[]=deal.brand&'
     associations += 'associations[]=deal.created_by&'
-    associations += 'associations[]=review.updated_by'
+    associations += 'associations[]=review.updated_by&'
+    associations += 'associations[]=deal.checklists'
   } else {
     endpoint = `/brands/${user.brand}/deals`
     associations = 'associations[]=room.attachments&'
-    associations += 'associations[]=agent.office'
+    associations += 'associations[]=agent.office&'
+    associations += 'associations[]=deal.checklists'
   }
 
   try {
@@ -363,6 +365,7 @@ Deal.createTask = async function (dealId, data) {
     const response = await new Fetch()
       .post(`/deals/${dealId}/tasks`)
       .send(data)
+      .send({ is_deletable: true })
 
     return response.body.data
   } catch (e) {
@@ -437,6 +440,21 @@ Deal.createRole = async function (deal_id, roles) {
     const response = await new Fetch()
       .post(`/deals/${deal_id}/roles`)
       .send({ roles })
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* update a role
+*/
+Deal.updateRole = async function (deal_id, role) {
+  try {
+    const response = await new Fetch()
+      .put(`/deals/${deal_id}/roles/${role.id}`)
+      .send(role)
 
     return response.body.data
   } catch (e) {

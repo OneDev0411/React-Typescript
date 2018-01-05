@@ -13,6 +13,7 @@ export default ({
     show={show}
     onHide={onHide}
     dialogClassName="modal-deal-esign-add-signer"
+    backdrop="static"
   >
     <Modal.Header closeButton>
       Add a signer

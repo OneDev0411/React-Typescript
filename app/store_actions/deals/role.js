@@ -9,6 +9,14 @@ function updateRoles(deal_id, roles) {
   }
 }
 
+function roleUpdated(deal_id, role) {
+  return {
+    type: types.UPDATE_ROLE,
+    deal_id,
+    role
+  }
+}
+
 function roleDeleted(deal_id, role_id) {
   return {
     type: types.DELETE_ROLE,
@@ -17,6 +25,12 @@ function roleDeleted(deal_id, role_id) {
   }
 }
 
+export function selectRole(role) {
+  return {
+    type: types.SET_SELECTED_ROLE,
+    role
+  }
+}
 
 export function createRoles(deal_id, roles) {
   return async (dispatch) => {
@@ -24,6 +38,17 @@ export function createRoles(deal_id, roles) {
       const deal = await Deals.createRole(deal_id, roles)
 
       dispatch(updateRoles(deal.id, deal.roles))
+    } catch (e) {
+      throw e
+    }
+  }
+}
+
+export function updateRole(deal_id, role) {
+  return async (dispatch) => {
+    try {
+      const updatedRole = await Deals.updateRole(deal_id, role)
+      dispatch(roleUpdated(deal_id, updatedRole))
     } catch (e) {
       throw e
     }

@@ -3,8 +3,8 @@ import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import UserAvatar from '../../../../../Partials/UserAvatar'
-import AddRole from './add-role'
-import { deleteRole } from '../../../../../../store_actions/deals'
+import UpsertRole from './upsert-role'
+import { deleteRole, selectRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import roleName from '../../utils/roles'
 
@@ -16,15 +16,28 @@ class Roles extends React.Component {
     }
   }
 
+  selectRole(role) {
+    this.props.selectRole(role)
+  }
+
   onClickRole(item) {
-    const { onSelectRole } = this.props
+    const { onSelectRole, confirmation } = this.props
 
     if (onSelectRole) {
+      if (!item.email) {
+        return confirmation({
+          message: `${item.legal_first_name} has no email!`,
+          description: `Add ${item.legal_first_name}'s email to continue.`,
+          confirmLabel: 'Add Email',
+          onConfirm: () => this.selectRole(item)
+        })
+      }
+
       onSelectRole({
         legal_prefix: item.legal_prefix,
         legal_first_name: item.legal_first_name,
         legal_last_name: item.legal_last_name,
-        email: item.user.email,
+        email: item.email,
         role: item.role
       })
     }
@@ -113,7 +126,7 @@ class Roles extends React.Component {
                 <div className="role-avatar">
                   <UserAvatar
                     name={this.getRoleName(item)}
-                    image={item.user.profile_image_url}
+                    image={item.user ? item.user.profile_image_url : null}
                     size={32}
                     showStateIndicator={false}
                   />
@@ -142,7 +155,7 @@ class Roles extends React.Component {
             )
         }
 
-        <AddRole
+        <UpsertRole
           deal={deal}
           allowedRoles={allowedRoles}
         />
@@ -151,4 +164,4 @@ class Roles extends React.Component {
   }
 }
 
-export default connect(null, { deleteRole, notify, confirmation })(Roles)
+export default connect(null, { deleteRole,selectRole, notify, confirmation })(Roles)
