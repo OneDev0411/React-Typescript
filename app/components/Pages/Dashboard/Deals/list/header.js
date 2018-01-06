@@ -13,6 +13,7 @@ import {
   searchAllDeals,
   cleanSearchedDeals
 } from '../../../../../store_actions/deals'
+import Excel from '../../Partials/Svgs/Excel'
 import cn from 'classnames'
 
 class Header extends React.Component {
@@ -143,6 +144,25 @@ class Header extends React.Component {
                   />
                 </div>
               </OverlayTrigger>
+              }
+              {
+                false &&
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={
+                    <Tooltip id="popover-leave">
+                      Download Report
+                    </Tooltip>
+                  }
+                >
+                  <a
+                    download
+                    href={`/brands/${user.brand}/deals.xls`}
+                    className="search-button"
+                  >
+                    <Excel />
+                  </a>
+                </OverlayTrigger>
               }
               {
                 !isBackOffice &&
