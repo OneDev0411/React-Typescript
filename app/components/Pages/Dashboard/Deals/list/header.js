@@ -60,7 +60,8 @@ class Header extends React.Component {
       initialBOFilters,
       showEmptySearchPage,
       initialAgentFilters,
-      cleanSearchedDeals
+      cleanSearchedDeals,
+      user
     } = this.props
 
     const { inputFocused } = this.state
@@ -74,83 +75,85 @@ class Header extends React.Component {
       <div
         className={cn('deals-list--header', { agent: !isBackOffice })}
       >
-        <div
-          className={cn('deals-list--header-row', { agent: !isBackOffice })}
-        >
-          <div className="deals-list--header-row--col">
-            {
-              isBackOffice ?
-                <BackOfficeFilter
-                  searchMode={searchBoxIsOpen}
-                  active={activeFilterTab}
-                  onChangeFilter={filters => {
-                    if (this.searchInput) {
-                      this.searchInput.value = ''
+        <div style={{ height: '57px' }}>
+          <div
+            className={cn('deals-list--header-row', { agent: !isBackOffice })}
+          >
+            <div className="deals-list--header-row--col">
+              {
+                isBackOffice ?
+                  <BackOfficeFilter
+                    searchMode={searchBoxIsOpen}
+                    active={activeFilterTab}
+                    onChangeFilter={filters => {
+                      if (this.searchInput) {
+                        this.searchInput.value = ''
+                      }
+
+                      if (searchBoxIsOpen) {
+                        setSearchStatus(false)
+                        initialBOFilters(filters)
+                        cleanSearchedDeals()
+                      } else {
+                        onFilterChange(filters)
+                      }
                     }
+                    }
+                  /> :
+                  <AgentFilter
+                    active={activeFilterTab}
+                    onChangeFilter={filters => {
+                      initialAgentFilters(filters)
+
+                      if (this.searchInput) {
+                        this.searchInput.value = ''
+                      }
+                    }}
+                  />
+              }
+            </div>
+
+            <div className="deals-list--header-row--col">
+              {isBackOffice &&
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="popover-leave">
+                    Search deals by address,
+                    <br />
+                    MLS # or agent name…
+                  </Tooltip>
+                }
+              >
+                <div
+                  onClick={() => {
+                    setSearchStatus(!searchBoxIsOpen)
 
                     if (searchBoxIsOpen) {
-                      setSearchStatus(false)
-                      initialBOFilters(filters)
-                      cleanSearchedDeals()
-                    } else {
-                      onFilterChange(filters)
-                    }
-                  }
-                  }
-                /> :
-                <AgentFilter
-                  active={activeFilterTab}
-                  onChangeFilter={filters => {
-                    initialAgentFilters(filters)
-
-                    if (this.searchInput) {
                       this.searchInput.value = ''
+                    } else {
+                      showEmptySearchPage(true)
                     }
                   }}
-                />
-            }
-          </div>
-
-          <div className="deals-list--header-row--col">
-            {isBackOffice &&
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id="popover-leave">
-                  Search deals by address,
-                  <br />
-                  MLS # or agent name…
-                </Tooltip>
+                  className="search-button"
+                >
+                  <i
+                    className={cn('fa fa-search', { active: searchBoxIsOpen })}
+                    aria-hidden="true"
+                  />
+                </div>
+              </OverlayTrigger>
               }
-            >
-              <div
-                onClick={() => {
-                  setSearchStatus(!searchBoxIsOpen)
-
-                  if (searchBoxIsOpen) {
-                    this.searchInput.value = ''
-                  } else {
-                    showEmptySearchPage(true)
-                  }
-                }}
-                className="search-button"
-              >
-                <i
-                  className={cn('fa fa-search', { active: searchBoxIsOpen })}
-                  aria-hidden="true"
-                />
-              </div>
-            </OverlayTrigger>
-            }
-            {
-              !isBackOffice &&
-              <Link
-                to="/dashboard/deals/create"
-                className="btn btn-primary create-deal-button"
-              >
-                Create New Deal
-              </Link>
-            }
+              {
+                !isBackOffice &&
+                <Link
+                  to="/dashboard/deals/create"
+                  className="btn btn-primary create-deal-button"
+                >
+                  Create New Deal
+                </Link>
+              }
+            </div>
           </div>
         </div>
         {showSearchInput &&
@@ -183,8 +186,9 @@ class Header extends React.Component {
   }
 }
 
-export default connect(({ deals }) => ({
-  isBackOffice: deals.backoffice
+export default connect(({ user, deals }) => ({
+  isBackOffice: deals.backoffice,
+  user
 }), {
   searchAllDeals,
   cleanSearchedDeals
