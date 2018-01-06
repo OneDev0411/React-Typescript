@@ -75,6 +75,8 @@ class AgentTable extends BaseTable {
       return Deal.get.side(deal)
     }
 
+    const { user: relatedRoleUser } = relatedRole
+
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
@@ -121,7 +123,7 @@ class AgentTable extends BaseTable {
           <span
             style={{ color: '#5b6469', fontSize: '13px' }}
           >
-            {relatedRole && relatedRole.user.last_name ? `: ${relatedRole.user.last_name}` : ''}
+            {relatedRoleUser && relatedRoleUser.last_name ? `: ${relatedRole.user.last_name}` : ''}
           </span>
         </div>
 
