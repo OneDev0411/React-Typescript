@@ -65,10 +65,10 @@ class Filter extends React.Component {
     const activeTab = !searchMode && active
 
     return (
-      <div>
-        <ul className="filter">
-          {
-            this.getTabs().map(tabName => {
+      <ul className="filter">
+        {
+          this.getTabs()
+            .map(tabName => {
               const counter = this.getBadgeCounter(tabName)
 
               if (counter === 0) {
@@ -81,19 +81,18 @@ class Filter extends React.Component {
                   onClick={() => this.setFilter(tabName)}
                   className={tabName === activeTab ? 'active' : ''}
                 >
-                  <span className="title">
+                  <div className="title">
                     {tabName}
-                  </span>
+                  </div>
 
-                  <span className="badge counter">
+                  <div className="badge counter">
                     {counter}
-                  </span>
+                  </div>
                 </li>
               )
             })
-          }
-        </ul>
-      </div>
+        }
+      </ul>
     )
   }
 }

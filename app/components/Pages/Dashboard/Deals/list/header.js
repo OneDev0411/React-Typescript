@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {
-  Row,
-  Col,
   OverlayTrigger,
   Tooltip,
   Panel
@@ -15,11 +13,15 @@ import {
   searchAllDeals,
   cleanSearchedDeals
 } from '../../../../../store_actions/deals'
+import cn from 'classnames'
 
 class Header extends React.Component {
   constructor(props) {
     super(props)
     this.debouncedOnInputChange = debounce(this.onInputChange, 700)
+    this.state = {
+      inputFocused: false
+    }
   }
 
   onInputChange() {
@@ -61,6 +63,7 @@ class Header extends React.Component {
       cleanSearchedDeals
     } = this.props
 
+    const { inputFocused } = this.state
     let showSearchInput = true
 
     if (!isBackOffice && activeFilterTab && activeFilterTab !== 'All') {
@@ -68,14 +71,13 @@ class Header extends React.Component {
     }
 
     return (
-      <div className="deals-list--header">
-        <Row>
-          <Col
-            lg={isBackOffice ? 9 : 7}
-            md={isBackOffice ? 7 : 6}
-            sm={6}
-            xs={12}
-          >
+      <div
+        className={cn('deals-list--header', { agent: !isBackOffice })}
+      >
+        <div
+          className={cn('deals-list--header-row', { agent: !isBackOffice })}
+        >
+          <div className="deals-list--header-row--col">
             {
               isBackOffice ?
                 <BackOfficeFilter
@@ -107,15 +109,9 @@ class Header extends React.Component {
                   }}
                 />
             }
-          </Col>
+          </div>
 
-          <Col
-            lg={isBackOffice ? 3 : 5}
-            md={isBackOffice ? 5 : 6}
-            sm={6}
-            xs={12}
-            className="text-right"
-          >
+          <div className="deals-list--header-row--col">
             {isBackOffice &&
             <OverlayTrigger
               placement="bottom"
@@ -127,7 +123,7 @@ class Header extends React.Component {
                 </Tooltip>
               }
             >
-              <span
+              <div
                 onClick={() => {
                   setSearchStatus(!searchBoxIsOpen)
 
@@ -135,13 +131,15 @@ class Header extends React.Component {
                     this.searchInput.value = ''
                   } else {
                     showEmptySearchPage(true)
-                    this.searchInput.focus()
                   }
                 }}
                 className="search-button"
               >
-                <i className="fa fa-search" aria-hidden="true" />
-              </span>
+                <i
+                  className={cn('fa fa-search', { active: searchBoxIsOpen })}
+                  aria-hidden="true"
+                />
+              </div>
             </OverlayTrigger>
             }
             {
@@ -153,12 +151,17 @@ class Header extends React.Component {
                 Create New Deal
               </Link>
             }
-          </Col>
-        </Row>
+          </div>
+        </div>
         {showSearchInput &&
-        <Panel collapsible expanded={isBackOffice ? searchBoxIsOpen : true}>
+        <Panel
+          className={cn({ agent: !isBackOffice })}
+          collapsible
+          expanded={isBackOffice ? searchBoxIsOpen : true}
+          onEntered={() => this.searchInput.focus()}
+        >
           <div
-            className="deals-list--header--searchBox"
+            className={cn('deals-list--header--searchBox', { active: inputFocused })}
           >
             <i
               className="fa fa-search"
@@ -166,6 +169,8 @@ class Header extends React.Component {
             />
             <input
               onChange={() => this.debouncedOnInputChange()}
+              onFocus={() => this.setState({ inputFocused: true })}
+              onBlur={() => this.setState({ inputFocused: false })}
               ref={ref => this.searchInput = ref}
               type="text"
               placeholder="Search deals by address, MLS # or agent name…"
