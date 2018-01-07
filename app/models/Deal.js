@@ -321,7 +321,6 @@ Deal.create = async function (user, data) {
 
     return response.body.data
   } catch (e) {
-    console.log(e)
     throw e
   }
 }

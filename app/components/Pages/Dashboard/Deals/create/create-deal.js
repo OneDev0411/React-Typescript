@@ -13,6 +13,7 @@ import DealAgents from './deal-agents'
 import DealReferrals from './deal-referrals'
 import DealStatus from './deal-status'
 import DealAddress from './deal-address'
+import IntercomTrigger from '../../Partials/IntercomTrigger'
 import CriticalDates from './critical-dates'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import {
@@ -36,7 +37,8 @@ class CreateDeal extends React.Component {
       criticalDates: {},
       agents: {},
       clients: {},
-      referrals: {}
+      referrals: {},
+      submitError: null
     }
   }
 
@@ -51,7 +53,7 @@ class CreateDeal extends React.Component {
 
   onRemoveRole(email, type) {
     this.setState({
-      [type]: _.omit(this.state[type], (role) => role.email === email)
+      [type]: _.omit(this.state[type], role => role.email === email)
     })
   }
 
@@ -60,18 +62,24 @@ class CreateDeal extends React.Component {
   }
 
   isFormValidated() {
-    const { dealSide, dealPropertyType, dealStatus, agents, clients } = this.state
-    const statusCompleted = (dealSide === 'Buying') ? dealStatus.length > 0 : true
+    const {
+      dealSide, dealPropertyType, dealStatus, agents, clients
+    } = this.state
+    const statusCompleted = dealSide === 'Buying' ? dealStatus.length > 0 : true
 
-    return dealSide.length > 0 &&
+    return (
+      dealSide.length > 0 &&
       statusCompleted &&
       dealPropertyType.length > 0 &&
       _.size(agents) > 0 &&
       _.size(clients) > 0
+    )
   }
 
   requestChangeDealSide(nextDealSide) {
-    const { agents, clients, referrals, dealSide } = this.state
+    const {
+      agents, clients, referrals, dealSide
+    } = this.state
 
     if (dealSide === nextDealSide) {
       return false
@@ -112,8 +120,17 @@ class CreateDeal extends React.Component {
   }
 
   async createDeal() {
-    const { dealSide, dealPropertyType, dealAddress, dealStatus, criticalDates } = this.state
-    const { user, notify, createDeal, createRoles, updateContext } = this.props
+    const {
+      dealSide,
+      dealPropertyType,
+      dealAddress,
+      dealStatus,
+      criticalDates,
+      submitError
+    } = this.state
+    const {
+      user, notify, createDeal, createRoles, updateContext
+    } = this.props
     const isBuyingDeal = dealSide === 'Buying'
 
     const dealObject = {
@@ -143,33 +160,40 @@ class CreateDeal extends React.Component {
 
       // dispatch new deal
       await createDeal(deal)
+      this.setState({ saving: false })
 
       return OpenDeal(deal.id)
     } catch (e) {
       // notify user
-      notify({
-        title: 'Can not create deal',
-        message: e.response && e.response.body ? e.response.body.message : null,
-        status: 'error',
-        dismissible: true
+      // notify({
+      //   title: 'Can not create deal',
+      //   message: e.response && e.response.body ? e.response.body.message : null,
+      //   status: 'error',
+      //   dismissible: true
+      // })
+
+      this.setState({
+        saving: false,
+        submitError: true
       })
     }
-
-    this.setState({ saving: false })
   }
 
   getDealContext() {
     const { dealAddress } = this.state
     const address = dealAddress.address_components
-    const { street_number, street_name, city, state, unit_number, postal_code } = address
-
-    const full_address = [
+    const {
       street_number,
       street_name,
       city,
       state,
+      unit_number,
       postal_code
-    ].join(' ').trim()
+    } = address
+
+    const full_address = [street_number, street_name, city, state, postal_code]
+      .join(' ')
+      .trim()
 
     return {
       full_address,
@@ -194,32 +218,39 @@ class CreateDeal extends React.Component {
   }
 
   render() {
-    const { saving, dealSide, dealStatus, dealPropertyType,
-      dealAddress, criticalDates, agents, clients, referrals } = this.state
+    const {
+      saving,
+      dealSide,
+      dealStatus,
+      dealPropertyType,
+      dealAddress,
+      criticalDates,
+      agents,
+      clients,
+      referrals,
+      submitError
+    } = this.state
     const canCreateDeal = this.isFormValidated() && !saving
 
     return (
       <div className="deal-create">
-        <Navbar
-          title="Create New Deal"
-        />
+        <Navbar title="Create New Deal" />
 
         <div className="form">
-          <div className="swoosh">
-            Swoosh! Another one in the bag.
-          </div>
+          <div className="swoosh">Swoosh! Another one in the bag.</div>
 
           <DealSide
             selectedSide={dealSide}
-            onChangeDealSide={(dealSide) => this.requestChangeDealSide(dealSide)}
+            onChangeDealSide={dealSide => this.requestChangeDealSide(dealSide)}
           />
 
-          {
-            dealSide.length > 0 &&
+          {dealSide.length > 0 && (
             <div>
               <DealPropertyType
                 selectedType={dealPropertyType}
-                onChangeDealType={(dealPropertyType) => this.setState({ dealPropertyType })}
+                onChangeDealType={dealPropertyType =>
+                  this.setState({ dealPropertyType })
+                }
               />
 
               <DealClients
@@ -244,55 +275,89 @@ class CreateDeal extends React.Component {
                 onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
               />
 
-              {
-                dealSide === 'Buying' &&
+              {dealSide === 'Buying' && (
                 <DealStatus
                   dealStatus={dealStatus}
                   onChangeDealStatus={status => this.changeDealStatus(status)}
                 />
-              }
+              )}
 
               <DealAddress
                 dealAddress={dealAddress}
                 dealSide={dealSide}
-                onCreateAddress={(component, type) => this.onCreateAddress(component, type)}
+                onCreateAddress={(component, type) =>
+                  this.onCreateAddress(component, type)
+                }
                 onRemoveAddress={() => this.setState({ dealAddress: null })}
               />
 
               <CriticalDates
                 criticalDates={criticalDates}
-                onChangeCriticalDates={(field, value) => this.changeCriticalDates(field, value)}
+                onChangeCriticalDates={(field, value) =>
+                  this.changeCriticalDates(field, value)
+                }
                 fields={{
                   list_date: 'Listing Date',
                   expiration_date: 'Listing Expiration'
                 }}
               />
             </div>
-          }
+          )}
+
+          {!saving &&
+            submitError && (
+              <div
+                className="c-alert c-alert--error"
+                style={{
+                  float: 'left',
+                  marginBottom: '2rem'
+                }}
+              >
+                <span>
+                  Sorry, something went wrong while creating the deal. Please try again.
+                </span>
+                <IntercomTrigger
+                  render={({ activeIntercom, intercomIsActive }) => (
+                    <button
+                      onClick={!intercomIsActive ? activeIntercom : () => false}
+                      className="btn btn-primary c-button--link"
+                    >
+                      Support
+                    </button>
+                  )}
+                />
+              </div>
+            )}
 
           <Button
-            className={cn('btn btn-primary create-deal-button', { disabled: !canCreateDeal })}
+            className={cn('btn btn-primary create-deal-button', {
+              disabled: !canCreateDeal
+            })}
             onClick={() => this.createDeal()}
             disabled={!canCreateDeal}
           >
             {saving ? 'Creating ...' : 'Create Deal'}
           </Button>
-
+        
         </div>
+      
       </div>
     )
   }
 }
 
-export default connect(({ deals, user }) => ({
-  user,
-  confirmation
-}), {
-  confirmation,
-  createDeal,
-  createRoles,
-  closeEsignWizard,
-  setSelectedTask,
-  updateContext,
-  notify
-})(CreateDeal)
+export default connect(
+  ({ deals, user }) => ({
+    user,
+    confirmation
+  }),
+  {
+    confirmation,
+    createDeal,
+    createRoles,
+    closeEsignWizard,
+    setSelectedTask,
+    updateContext,
+    notify
+  }
+)(CreateDeal)
