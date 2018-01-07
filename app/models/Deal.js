@@ -112,7 +112,11 @@ Deal.get.clientNames = function (deal) {
 
   deal.roles.forEach(item => {
     if (roles.indexOf(item.role) > -1) {
-      clients.push(item.user.display_name)
+      if (item.user) {
+        clients.push(item.user.display_name)
+      } else {
+        clients.push(`${item.legal_first_name} ${item.legal_last_name}`)
+      }
     }
   })
 
