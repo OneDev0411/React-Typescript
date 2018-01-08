@@ -7,17 +7,16 @@ class PdfViewer extends React.Component {
   constructor(props) {
     super(props)
 
-    // set component mounted
-    this.mounted = true
-
     this.state = {
       uri: null,
       loading: false,
+      isFailed: false,
       doc: null,
       zoom: null,
       fitWindow: true
     }
 
+    this.load = this.load.bind(this)
     this.docKeyboardShortcutHandler = this.docKeyboardShortcutHandler.bind(this)
   }
 
@@ -98,6 +97,7 @@ class PdfViewer extends React.Component {
 
     this.setState({
       uri,
+      isFailed: false,
       loading: true,
       doc: null,
       rotation: 0
@@ -117,9 +117,11 @@ class PdfViewer extends React.Component {
       })
 
       // trigger onLoaded event
-      this.props.onLoad()
+      if (this.props.onLoad && typeof this.props.onLoad === 'function') {
+        this.props.onLoad()
+      }
     } catch (e) {
-      this.setState({ uri: null, loading: false })
+      this.setState({ uri: null, loading: false, isFailed: true })
     }
   }
 
@@ -166,8 +168,10 @@ class PdfViewer extends React.Component {
   }
 
   render() {
-    const { doc, fitWindow, rotation, zoom, loading } = this.state
-    const { defaultContainerHeight, uri, downloadUrl } = this.props
+    const {
+      doc, fitWindow, rotation, zoom, loading, isFailed
+    } = this.state
+    const { defaultContainerHeight, downloadUrl, uri } = this.props
 
     return (
       <div>
@@ -178,63 +182,70 @@ class PdfViewer extends React.Component {
           </div>
         )}
 
-        {doc &&
-          !loading && (
-            <div className="pdf-context" ref={ref => (this.$pdfContext = ref)}>
-              <div className="wrapper">
-                {Array.apply(null, { length: doc.pdfInfo.numPages }).map((v, i) => (
-                  <Page
-                    key={`page-${i}`}
-                    doc={doc}
-                    fitWindow={fitWindow}
-                    rotation={rotation}
-                    zoom={zoom}
-                    defaultContainerHeight={defaultContainerHeight || '85vh'}
-                    pageNumber={i + 1}
-                  />
-                ))}
-              </div>
-
-              <div className="pdf-toolbar">
-                <OverlayTrigger
-                  placement="left"
-                  overlay={<Tooltip>Rotate Pdf</Tooltip>}
-                >
-                  <i className="fa fa-rotate-right" onClick={() => this.rotate()} />
-                </OverlayTrigger>
-
-                <OverlayTrigger
-                  placement="left"
-                  overlay={<Tooltip>Zoom In</Tooltip>}
-                >
-                  <i className="fa fa-plus-circle" onClick={() => this.zoomIn()} />
-                </OverlayTrigger>
-
-                <OverlayTrigger
-                  placement="left"
-                  overlay={<Tooltip>Zoom Out</Tooltip>}
-                >
-                  <i className="fa fa-minus-circle" onClick={() => this.zoomOut()} />
-                </OverlayTrigger>
-
-                <OverlayTrigger
-                  placement="left"
-                  overlay={<Tooltip>Automatic Zoom</Tooltip>}
-                >
-                  <i className="fa fa-square-o" onClick={() => this.fitWindow()} />
-                </OverlayTrigger>
-
-                <OverlayTrigger
-                  placement="left"
-                  overlay={<Tooltip>Download Pdf</Tooltip>}
-                >
-                  <a target="_blank" href={downloadUrl || uri}>
-                    <i className="fa fa-download" />
-                  </a>
-                </OverlayTrigger>
-              </div>
+        {isFailed && (
+          <div style={{ maxWidth: '40rem', margin: '0 auto' }}>
+            <div className="c-alert c-alert--error">
+              <p>Sorry, something went wrong.</p>
+              <button
+                onClick={() => this.load(uri)}
+                className="btn btn-primary c-button--link"
+              >
+                Try Again
+              </button>
             </div>
-          )}
+          </div>
+        )}
+
+        {doc && (
+          <div className="pdf-context" ref={ref => (this.$pdfContext = ref)}>
+            <div className="wrapper">
+              {Array.apply(null, { length: doc.pdfInfo.numPages }).map((v, i) => (
+                <Page
+                  key={`page-${i}`}
+                  doc={doc}
+                  fitWindow={fitWindow}
+                  rotation={rotation}
+                  zoom={zoom}
+                  defaultContainerHeight={defaultContainerHeight || '85vh'}
+                  pageNumber={i + 1}
+                />
+              ))}
+            </div>
+
+            <div className="pdf-toolbar">
+              <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip>Rotate Pdf</Tooltip>}
+              >
+                <i className="fa fa-rotate-right" onClick={() => this.rotate()} />
+              </OverlayTrigger>
+
+              <OverlayTrigger placement="left" overlay={<Tooltip>Zoom In</Tooltip>}>
+                <i className="fa fa-plus-circle" onClick={() => this.zoomIn()} />
+              </OverlayTrigger>
+
+              <OverlayTrigger placement="left" overlay={<Tooltip>Zoom Out</Tooltip>}>
+                <i className="fa fa-minus-circle" onClick={() => this.zoomOut()} />
+              </OverlayTrigger>
+
+              <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip>Automatic Zoom</Tooltip>}
+              >
+                <i className="fa fa-square-o" onClick={() => this.fitWindow()} />
+              </OverlayTrigger>
+
+              <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip>Download Pdf</Tooltip>}
+              >
+                <a target="_blank" href={downloadUrl || uri}>
+                  <i className="fa fa-download" />
+                </a>
+              </OverlayTrigger>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
