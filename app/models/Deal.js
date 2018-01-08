@@ -531,7 +531,7 @@ Deal.needsAttention = async function (task_id, status) {
 /**
 * bulk submit for review
 */
-Deal.bulkSubmit = async function (dealId, tasks) {
+Deal.bulkSubmit = async function bulkSubmit(dealId, tasks) {
   try {
     const response = await new Fetch()
       .put(`/deals/${dealId}/tasks`)
