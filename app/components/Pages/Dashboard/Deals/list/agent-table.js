@@ -156,7 +156,9 @@ class AgentTable extends BaseTable {
     deal.checklists.forEach(id => {
       const checklist = this.props.checklists[id]
 
-      if (!checklist.tasks || checklist.tasks.length === 0) {
+      if (checklist.is_terminated
+        || !checklist.tasks
+        || checklist.tasks.length === 0) {
         return
       }
 
