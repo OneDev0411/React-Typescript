@@ -137,8 +137,13 @@ class AgentTable extends BaseTable {
   getRoleNames(deal) {
     const names = []
 
-    deal.roles && deal.roles.forEach(role =>
-      names.push(role.user.display_name))
+    deal.roles && deal.roles.forEach(role => {
+      if (role.user) {
+        names.push(role.user.display_name)
+      } else {
+        names.push(`${role.legal_first_name} ${role.legal_last_name}`)
+      }
+    })
 
     return `: ${names.join(', ')}`
   }
