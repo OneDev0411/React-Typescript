@@ -3,6 +3,8 @@ $margin: 20px;
 .create-deal-button,
 .create-offer-button {
   @extend %create-deal-button;
+  display: block;
+  clear: both;
 }
 
 .deal-create,
@@ -44,7 +46,7 @@ $margin: 20px;
   .cta {
     width: 10%;
     text-align: right;
-    .deal-button.cancel{
+    .deal-button.cancel {
       width: 34px;
       height: 34px;
     }
@@ -177,7 +179,8 @@ $margin: 20px;
         margin: 0 20px;
       }
 
-      .date, .remove {
+      .date,
+      .remove {
         color: #2196f3;
         font-size: 15px;
         cursor: pointer;
@@ -233,8 +236,8 @@ $margin: 20px;
   border: solid 1px #e3e3e3;
   text-align: left;
   box-shadow: none;
-  color: #B0BFC7;
-  
+  color: #b0bfc7;
+
   .caret {
     float: right;
     margin-top: 7px;
@@ -319,7 +322,8 @@ $margin: 20px;
   }
 
   &.disabled {
-    .name:hover, .user-avatar:hover {
+    .name:hover,
+    .user-avatar:hover {
       text-decoration: none;
       cursor: auto;
     }
@@ -431,7 +435,8 @@ $margin: 20px;
         }
       }
 
-      .street_name, .state {
+      .street_name,
+      .state {
         border-right: none;
         border-left: none;
       }
@@ -484,7 +489,6 @@ $margin: 20px;
     }
   }
 }
-
 
 /**
 *

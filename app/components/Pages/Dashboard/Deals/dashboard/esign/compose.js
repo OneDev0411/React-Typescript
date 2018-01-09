@@ -18,10 +18,16 @@ import {
   removeEsignRecipient
 } from '../../../../../../store_actions/deals'
 
+const ERROR_MESSAGES = {
+  attachments: 'You must select a document at least (from attachments).',
+  recipinets: 'You must select one recipient at least.'
+}
+
 class SendSignatures extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      error: null,
       isSending: false,
       showDocusignBanner: false
     }
@@ -44,6 +50,12 @@ class SendSignatures extends React.Component {
    */
   addRecipients(recipient) {
     this.props.addEsignRecipient(recipient)
+
+    if (this.state.error === ERROR_MESSAGES.recipinets) {
+      this.setState({
+        error: null
+      })
+    }
   }
 
   /**
@@ -74,8 +86,7 @@ class SendSignatures extends React.Component {
     })
 
     // get role names
-    return _
-      .chain(roles)
+    return _.chain(roles)
       .pluck('role')
       .uniq()
       .value()
@@ -109,6 +120,10 @@ class SendSignatures extends React.Component {
   }
 
   closeForm() {
+    this.setState({
+      error: null
+    })
+    
     // close form
     this.props.closeEsignWizard()
   }
@@ -117,26 +132,36 @@ class SendSignatures extends React.Component {
    * send envelope
    */
   async send() {
-    const { isSending } = this.state
-    const { notify, setEnvelopes, user, deal, esign, tasks } = this.props
+    const { isSending, error } = this.state
+    const {
+      notify, setEnvelopes, user, deal, esign, tasks
+    } = this.props
     const { recipients } = esign
 
     const subject = this.subject.value
     const message = this.message.value
-    const attachments = esign.attachments.map(id => ({ revision: tasks[id].submission.last_revision }))
+    const attachments = esign.attachments.map(id => ({
+      revision: tasks[id].submission.last_revision
+    }))
+
+    if (error) {
+      this.setState({ error: null })
+    }
 
     if (_.size(recipients) === 0) {
-      return notify({
-        message: 'You must select one recipient at least',
-        status: 'error'
+      this.setState({
+        error: ERROR_MESSAGES.recipinets
       })
+
+      return
     }
 
     if (attachments.length === 0) {
-      return notify({
-        message: 'Select a document at least',
-        status: 'error'
+      this.setState({
+        error: ERROR_MESSAGES.attachments
       })
+
+      return
     }
 
     this.setState({
@@ -166,8 +191,8 @@ class SendSignatures extends React.Component {
 
       // reset recipients
       this.setState({ isSending: false })
-    } catch (e) {
-      const isDocusignError = ~~e.status === 412
+    } catch (err) {
+      const isDocusignError = ~~err.status === 412
 
       this.setState({
         isSending: false,
@@ -175,19 +200,21 @@ class SendSignatures extends React.Component {
       })
 
       if (isDocusignError === false) {
-        notify({
-          message: e.response ?
-            e.response.body.message :
-            'Can not send eSign, please try again',
-          status: 'error'
+        console.log(err)
+
+        this.setState({
+          error:
+            'Sorry, something went wrong while sending eSigns. Please try again.'
         })
       }
     }
   }
 
   render() {
-    const { tasks, esign, deal, user, showAttachments } = this.props
-    const { isSending, showDocusignBanner } = this.state
+    const {
+      tasks, esign, deal, user, showAttachments
+    } = this.props
+    const { isSending, showDocusignBanner, error } = this.state
     const { recipients } = esign
 
     if (!esign.showCompose) {
@@ -205,11 +232,7 @@ class SendSignatures extends React.Component {
         <div className="send-esigns">
           <div className="header">
             Send for Signatures
-
-            <span
-              className="close-compose"
-              onClick={() => this.closeForm()}
-            >
+            <span className="close-compose" onClick={() => this.closeForm()}>
               <i className="fa fa-times" />
             </span>
           </div>
@@ -228,47 +251,56 @@ class SendSignatures extends React.Component {
           <div className="subject">
             <span className="item-title">Subject: </span>
             <input
-              defaultValue={`Please sign document for ${DealModel.get.field(deal, 'full_address')}`}
-              ref={ref => this.subject = ref}
+              defaultValue={`Please sign document for ${DealModel.get.field(
+                deal,
+                'full_address'
+              )}`}
+              ref={ref => (this.subject = ref)}
               type="text"
             />
           </div>
 
           <div className="message">
             <Textarea
-              inputRef={ref => this.message = ref}
+              inputRef={ref => (this.message = ref)}
               maxRows={8}
               placeholder="Write your message here ..."
             />
-            <div className="signature">
-              <p>{ user.display_name }</p>
-            </div>
-          </div>
-
-          <div className="attachments">
-            <ComposeAttachments
-              esign={esign}
-              deal={deal}
-              tasks={tasks}
-            />
+            <div className="signature">{user.display_name}</div>
           </div>
 
           <div className="footer">
-            <Button
-              disabled={isSending}
-              className="btn-send"
-              onClick={() => this.send()}
-            >
-              { isSending ? 'Sending' : 'Send' }
-            </Button>
+            <div className="attachments">
+              <ComposeAttachments esign={esign} deal={deal} tasks={tasks} />
+            </div>
 
-            <Button
-              disabled={isSending}
-              onClick={() => showAttachments(true)}
-              className="btn-attach"
-            >
-              <i className="fa fa-paperclip fa-rotate-90" /> Attach
-            </Button>
+            <div className="footer__inner">
+              {error && (
+                <div
+                  style={{ margin: '0 0 1rem' }}
+                  className="c-alert c-alert--error"
+                >
+                  {error}
+                </div>
+              )}
+              <div>
+                <Button
+                  disabled={isSending}
+                  className="btn-send"
+                  onClick={() => this.send()}
+                >
+                  {isSending ? 'Sending ...' : 'Send'}
+                </Button>
+
+                <Button
+                  disabled={isSending}
+                  onClick={() => showAttachments(true)}
+                  className="btn-attach"
+                >
+                  <i className="fa fa-paperclip fa-rotate-90" /> Attach
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -276,16 +308,19 @@ class SendSignatures extends React.Component {
   }
 }
 
-export default connect(({ deals, data }) => ({
-  user: data.user,
-  tasks: deals.tasks,
-  checklists: deals.checklists,
-  esign: deals.esign || {}
-}), {
-  addEsignRecipient,
-  removeEsignRecipient,
-  showAttachments,
-  closeEsignWizard,
-  setEnvelopes,
-  notify
-})(SendSignatures)
+export default connect(
+  ({ deals, data }) => ({
+    user: data.user,
+    tasks: deals.tasks,
+    checklists: deals.checklists,
+    esign: deals.esign || {}
+  }),
+  {
+    addEsignRecipient,
+    removeEsignRecipient,
+    showAttachments,
+    closeEsignWizard,
+    setEnvelopes,
+    notify
+  }
+)(SendSignatures)

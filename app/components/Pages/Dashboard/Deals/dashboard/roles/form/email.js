@@ -1,23 +1,22 @@
 import React from 'react'
 import cn from 'classnames'
 
-export default ({
-  form,
-  validation,
-  onChange
-}) => (
+export default ({ form, isInvalid, onChange }) => (
   <div className="input-container email">
-    <label>Email <sup>*</sup></label>
+    <label htmlFor="email" style={{ display: 'block', cursor: 'pointer' }}>
+      Email <sup>*</sup>
+    </label>
     <input
+      id="email"
       name="email"
       type="email"
       required="required"
       placeholder="johnsmith@gmail.com"
-      className={cn({ invalid: validation.email === 'error' })}
+      className={cn({ invalid: isInvalid })}
       value={form.email || ''}
       onChange={e => onChange(e.target.value)}
     />
 
-    {validation.email === 'error' && <span className="error">Enter a valid email</span>}
+    {isInvalid && <span className="error">Enter a valid email</span>}
   </div>
 )

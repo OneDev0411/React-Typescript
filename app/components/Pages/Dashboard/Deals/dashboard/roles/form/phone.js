@@ -1,15 +1,14 @@
 import React from 'react'
 import cn from 'classnames'
 
-export default ({
-  form,
-  validation,
-  onChange
-}) => (
+export default ({ form, onChange, isInvalid }) => (
   <div className="input-container phone">
-    <label>Phone</label>
+    <label htmlFor="phone" style={{ display: 'block', cursor: 'pointer' }}>
+      Phone
+    </label>
 
     <input
+      id="phone"
       name="phone"
       type="text"
       placeholder="(###) - ### ####"
@@ -17,7 +16,6 @@ export default ({
       onChange={e => onChange(e.target.value)}
     />
 
-    {validation.phone === 'error' && <span className="error">Enter a valid phone</span>}
+    {isInvalid && <span className="error">Enter a valid phone</span>}
   </div>
 )
-
