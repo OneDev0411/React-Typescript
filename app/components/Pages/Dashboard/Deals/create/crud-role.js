@@ -45,6 +45,7 @@ class CrudRole extends React.Component {
     const { agent } = user
 
     const form = {
+      title: `${user.first_name} ${user.last_name}`,
       legal_first_name: user.first_name,
       legal_last_name: user.last_name,
       email: user.email,
