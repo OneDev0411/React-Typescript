@@ -5,6 +5,7 @@ import VerticalDotsIcon from '../../../Partials/Svgs/VerticalDots'
 import TaskTermination from './termination'
 import TaskDeactivation from './deactivation'
 import Labels from './labels'
+import Folder from '../../../Partials/Svgs/Folder'
 
 class ChecklistPanel extends React.Component {
   constructor(props) {
@@ -46,8 +47,9 @@ class ChecklistPanel extends React.Component {
             <div className="crt">
               <i className="fa fa-caret-down p-icon" />
             </div>
-            <i className="fa fa-folder-o" />
-
+            <div className="crt">
+              <Folder />
+            </div>
             <div className="s-info">
               <span className="p-title">
                 {`${checklist.title} Folder`}
