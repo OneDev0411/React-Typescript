@@ -46,10 +46,11 @@ class ChecklistPanel extends React.Component {
             <div className="crt">
               <i className="fa fa-caret-down p-icon" />
             </div>
+            <i className="fa fa-folder-o" />
 
             <div className="s-info">
               <span className="p-title">
-                { checklist.title }
+                {`${checklist.title} Folder`}
               </span>
             </div>
 
