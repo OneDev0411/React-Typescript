@@ -25,6 +25,11 @@ class WhoSigned extends React.Component {
     return `${config.app.url}/api/deals/envelope/${eid}/sign?access_token=${token}`
   }
 
+  getName(roleId) {
+    const role = this.props.roles[roleId]
+    return `${role.legal_prefix || ''} ${role.legal_first_name} ${role.legal_last_name}`.trim()
+  }
+
   async resendDocs(envelopeId) {
     const { notify } = this.props
 
@@ -123,14 +128,14 @@ class WhoSigned extends React.Component {
                 >
                   <div className="avatar">
                     <UserAvatar
-                      name={signer.user.display_name}
-                      image={signer.user.profile_image_thumbnail_url}
+                      name={this.getName(signer.role.id)}
+                      image={signer.user && signer.user.profile_image_thumbnail_url}
                       size={30}
                       showStateIndicator={false}
                     />
                   </div>
                   <div className="info">
-                    <div className="sname">{ signer.user.display_name }</div>
+                    <div className="sname">{this.getName(signer.role.id)}</div>
                     <div className="date">
                       Signed { moment.unix(signer.updated_at).format('HH:mm A dddd MMM DD, YYYY') }
                     </div>
@@ -157,19 +162,19 @@ class WhoSigned extends React.Component {
                 >
                   <div className="avatar">
                     <UserAvatar
-                      name={signer.user.display_name}
-                      image={signer.user.profile_image_thumbnail_url}
+                      name={this.getName(signer.role.id)}
+                      image={signer.user && signer.user.profile_image_thumbnail_url}
                       size={30}
                       showStateIndicator={false}
                     />
                   </div>
                   <div className="info">
-                    <div className="sname">{signer.user.display_name}</div>
+                    <div className="sname">{this.getName(signer.role.id)}</div>
                   </div>
 
                   <div className="sign-now">
                     {
-                      signer.user.id === user.id &&
+                      signer.user && signer.user.id === user.id &&
                       <a
                         href={this.getSignLink(envelope.id)}
                         target="_blank"
@@ -201,14 +206,14 @@ class WhoSigned extends React.Component {
                 >
                   <div className="avatar">
                     <UserAvatar
-                      name={signer.user.display_name}
-                      image={signer.user.profile_image_thumbnail_url}
+                      name={this.getName(signer.role.id)}
+                      image={signer.user && signer.user.profile_image_thumbnail_url}
                       size={30}
                       showStateIndicator={false}
                     />
                   </div>
                   <div className="info">
-                    <div className="sname">{signer.user.display_name}</div>
+                    <div className="sname">{this.getName(signer.role.id)}</div>
                   </div>
                 </div>
               )
@@ -220,6 +225,7 @@ class WhoSigned extends React.Component {
   }
 }
 
-export default connect(({ data }) => ({
-  user: data.user
+export default connect(({ deals, user }) => ({
+  roles: deals.roles,
+  user
 }), { voidEnvelope, confirmation, notify })(WhoSigned)

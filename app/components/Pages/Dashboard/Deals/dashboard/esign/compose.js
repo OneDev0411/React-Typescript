@@ -49,7 +49,7 @@ class SendSignatures extends React.Component {
    * add new recipinet
    */
   addRecipients(recipient) {
-    this.props.addEsignRecipient(recipient)
+    this.props.addEsignRecipient({ role: recipient.id })
 
     if (this.state.error === ERROR_MESSAGES.recipinets) {
       this.setState({
@@ -109,13 +109,7 @@ class SendSignatures extends React.Component {
         return false
       }
 
-      this.addRecipients({
-        legal_prefix: item.user.legal_prefix,
-        legal_first_name: item.user.first_name,
-        legal_last_name: item.user.last_name,
-        email: item.user.email,
-        role: item.role
-      })
+      this.addRecipients({ role: item.id })
     })
   }
 
@@ -123,7 +117,7 @@ class SendSignatures extends React.Component {
     this.setState({
       error: null
     })
-    
+
     // close form
     this.props.closeEsignWizard()
   }

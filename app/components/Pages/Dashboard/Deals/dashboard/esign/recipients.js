@@ -1,10 +1,11 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { OverlayTrigger, Popover } from 'react-bootstrap'
 import _ from 'underscore'
 import AddSigner from './add-signer'
 import roleName from '../../utils/roles'
 
-export default class AddRecipients extends React.Component {
+class AddRecipients extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -32,6 +33,7 @@ export default class AddRecipients extends React.Component {
   render() {
     const {
       deal,
+      roles,
       recipients,
       onRemoveRecipient,
       allowedRoles
@@ -43,28 +45,33 @@ export default class AddRecipients extends React.Component {
           className="rcp-container"
           onClick={(e) => this.toggleRolesModal(e)}
         >
-          {
-          _.map(recipients, recp =>
-            <span className="recp" key={`RECP_${recp.email}`}>
-              <span className="recp-t">
-                {recp.legal_prefix} {recp.legal_first_name} {recp.legal_last_name}
-              </span>
-              <span className="recp-d">{roleName(recp.role)}, {recp.email}</span>
-              <span className="recp-c">
-                <i
-                  className="recp-i fa fa-times"
-                  onClick={() => onRemoveRecipient(recp.email)}
-                />
-              </span>
-            </span>)
-        }
 
           {
-          _.size(recipients) === 0 &&
-          <span className="item-title">
-            Each message will be sent separately. Recipients will not see each other.
-          </span>
-        }
+            _.map(recipients, recp => {
+              const role = roles[recp.role]
+              return (
+                <span className="recp" key={`RECP_${role.email}`}>
+                  <span className="recp-t">
+                    {role.legal_prefix} {role.legal_first_name} {role.legal_last_name}
+                  </span>
+                  <span className="recp-d">{roleName(role.role)}, {role.email}</span>
+                  <span className="recp-c">
+                    <i
+                      className="recp-i fa fa-times"
+                      onClick={() => onRemoveRecipient(role.email)}
+                    />
+                  </span>
+                </span>
+              )
+            })
+          }
+
+          {
+            _.size(recipients) === 0 &&
+            <span className="item-title">
+              Each message will be sent separately. Recipients will not see each other.
+            </span>
+          }
         </div>
 
         <AddSigner
@@ -78,3 +85,7 @@ export default class AddRecipients extends React.Component {
     )
   }
 }
+
+export default connect(({ deals }) => ({
+  roles: deals.roles
+}))(AddRecipients)
