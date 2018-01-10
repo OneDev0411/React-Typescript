@@ -157,11 +157,24 @@ export default class Form extends React.Component {
   }
 
   /**
+   * check email is required or not
+   * https://gitlab.com/rechat/web/issues/563
+   */
+  isEmailRequired() {
+    const { form } = this.state
+    return ['BuyerAgent', 'SellerAgent'].indexOf(form.role) > -1
+  }
+
+  /**
    * validate form
    */
   async validate(field, value) {
     const { form, invalidFields } = this.state
     const requiredFields = ['legal_first_name', 'legal_last_name', 'role']
+
+    if (this.isEmailRequired()) {
+      requiredFields.push('email')
+    }
 
     const fields = {
       role: role => role,
@@ -245,6 +258,7 @@ export default class Form extends React.Component {
 
         <Email
           form={form}
+          required={this.isEmailRequired()}
           isInvalid={invalidFields.includes('email')}
           onChange={value => this.setForm('email', value)}
         />
