@@ -124,7 +124,7 @@ class CrudRole extends React.Component {
           backdrop="static"
         >
           <Modal.Header closeButton>
-            {modalTitle}
+            {(form && form.title) || modalTitle}
           </Modal.Header>
 
           <Modal.Body>
