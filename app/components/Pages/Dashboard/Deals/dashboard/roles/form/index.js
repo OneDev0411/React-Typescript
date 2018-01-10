@@ -184,11 +184,8 @@ export default class Form extends React.Component {
       phone: phone => phone && this.isValidPhone(phone)
     }
 
-    let commission_field = null
-
-    if (form.commission_percentage !== undefined) {
-      commission_field = 'commission_percentage'
-    } else if (form.commission_dollar !== undefined) {
+    let commission_field = 'commission_percentage'
+    if (form.commission_dollar !== undefined) {
       commission_field = 'commission_dollar'
     }
 
@@ -200,23 +197,25 @@ export default class Form extends React.Component {
     // validate field
     const validator = fields[field]
 
+    let newInvalidFields = []
+
     if (value.length > 0 && typeof validator === 'function') {
       if (await validator(value)) {
-        if (invalidFields.includes(field)) {
-          this.setState({
-            invalidFields: invalidFields.filter(f => field !== f)
-          })
-        }
-      } else if (!invalidFields.includes(field)) {
-        this.setState({
-          invalidFields: [...this.state.invalidFields, field]
-        })
+        // validated! so remove field from invalidFields
+        newInvalidFields = invalidFields.filter(f => field !== f)
+      } else {
+        // add field to invalidfields
+        newInvalidFields = [...invalidFields, field]
       }
     }
 
+    this.setState({
+      invalidFields: newInvalidFields
+    })
+
     const isFormCompleted =
       _.every(requiredFields, name => fields[name](form[name])) &&
-      !invalidFields.includes(field)
+      !newInvalidFields.includes(field)
 
     this.props.onFormChange({
       isFormCompleted,

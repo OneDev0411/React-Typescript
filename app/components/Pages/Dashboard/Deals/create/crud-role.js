@@ -68,7 +68,11 @@ class CrudRole extends React.Component {
   addRole() {
     const { form } = this.state
 
-    this.props.onUpsertRole(form)
+    this.props.onUpsertRole({
+      id: (new Date()).getTime(),
+      ...form
+    })
+
     this.closeModal()
   }
 

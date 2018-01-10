@@ -319,7 +319,7 @@ Deal.searchListings = async function (address) {
 Deal.create = async function (user, data) {
   try {
     const response = await new Fetch()
-      .post('/deals')
+      .post('/deals?associations[]=deal.checklists')
       .set('X-RECHAT-BRAND', user.brand)
       .send(data)
 
