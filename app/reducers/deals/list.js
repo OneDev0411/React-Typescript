@@ -49,36 +49,24 @@ export default (state = null, action) => {
         }
       }
 
-    case types.UPDATE_ROLES:
+    case types.DELETE_ROLE:
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          roles: _.without(state[action.deal_id].roles, action.role_id)
+        }
+      }
+
+    case types.CREATE_ROLES:
       return {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
           roles: [
             ...state[action.deal_id].roles,
-            ...action.roles
+            ..._.pluck(action.roles, 'id')
           ]
-        }
-      }
-
-    case types.UPDATE_ROLE:
-      return {
-        ...state,
-        [action.deal_id]: {
-          ...state[action.deal_id],
-          roles: [
-            ...state[action.deal_id].roles.filter(role => role.id !== action.role.id),
-            action.role
-          ]
-        }
-      }
-
-    case types.DELETE_ROLE:
-      return {
-        ...state,
-        [action.deal_id]: {
-          ...state[action.deal_id],
-          roles: state[action.deal_id].roles.filter(role => role.id !== action.role_id)
         }
       }
 
