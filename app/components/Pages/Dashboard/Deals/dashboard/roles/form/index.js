@@ -157,11 +157,24 @@ export default class Form extends React.Component {
   }
 
   /**
+   * check email is required or not
+   * https://gitlab.com/rechat/web/issues/563
+   */
+  isEmailRequired() {
+    const { form } = this.state
+    return ['BuyerAgent', 'SellerAgent'].indexOf(form.role) > -1
+  }
+
+  /**
    * validate form
    */
   async validate(field, value) {
     const { form, invalidFields } = this.state
     const requiredFields = ['legal_first_name', 'legal_last_name', 'role']
+
+    if (this.isEmailRequired()) {
+      requiredFields.push('email')
+    }
 
     const fields = {
       role: role => role,
@@ -171,11 +184,8 @@ export default class Form extends React.Component {
       phone: phone => phone && this.isValidPhone(phone)
     }
 
-    let commission_field = null
-
-    if (form.commission_percentage !== undefined) {
-      commission_field = 'commission_percentage'
-    } else if (form.commission_dollar !== undefined) {
+    let commission_field = 'commission_percentage'
+    if (form.commission_dollar !== undefined) {
       commission_field = 'commission_dollar'
     }
 
@@ -187,23 +197,25 @@ export default class Form extends React.Component {
     // validate field
     const validator = fields[field]
 
+    let newInvalidFields = []
+
     if (value.length > 0 && typeof validator === 'function') {
       if (await validator(value)) {
-        if (invalidFields.includes(field)) {
-          this.setState({
-            invalidFields: invalidFields.filter(f => field !== f)
-          })
-        }
-      } else if (!invalidFields.includes(field)) {
-        this.setState({
-          invalidFields: [...this.state.invalidFields, field]
-        })
+        // validated! so remove field from invalidFields
+        newInvalidFields = invalidFields.filter(f => field !== f)
+      } else {
+        // add field to invalidfields
+        newInvalidFields = [...invalidFields, field]
       }
     }
 
+    this.setState({
+      invalidFields: newInvalidFields
+    })
+
     const isFormCompleted =
       _.every(requiredFields, name => fields[name](form[name])) &&
-      !invalidFields.includes(field)
+      !newInvalidFields.includes(field)
 
     this.props.onFormChange({
       isFormCompleted,
@@ -245,6 +257,7 @@ export default class Form extends React.Component {
 
         <Email
           form={form}
+          required={this.isEmailRequired()}
           isInvalid={invalidFields.includes('email')}
           onChange={value => this.setForm('email', value)}
         />

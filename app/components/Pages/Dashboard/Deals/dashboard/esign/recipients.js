@@ -38,7 +38,7 @@ export default class AddRecipients extends React.Component {
     } = this.props
 
     return (
-      <div>
+      <div style={{ width: '100%' }}>
         <div
           className="rcp-container"
           onClick={(e) => this.toggleRolesModal(e)}

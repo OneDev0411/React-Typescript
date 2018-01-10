@@ -37,11 +37,9 @@
 
   .recipients {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
     padding: 0 $pad-size;
-    box-shadow: 0 1px 0 0 #ecf0f4;
+    border: 1px solid #ecf0f4;
     min-height: 50px;
 
     .rcp-container {
@@ -126,13 +124,10 @@
   }
 
   .attachments {
-    // position: absolute;
-    // bottom: 55px + 10px;
-    // left: $pad-size;
-    // width: 530px;
     padding: 1rem $pad-size;
-    max-height: 22%;
-    overflow: auto;
+    max-height: 18.5rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
 
     ul {
       margin: 0;
@@ -183,13 +178,6 @@
   }
 
   .footer {
-    // position: absolute;
-    // line-height: 55px;
-    // vertical-align: middle;
-    // bottom: 0;
-    // right: 0;
-    // left: 0;
-
     .footer__inner {
       border-top: 1px solid #dce5eb;
       background-color: #f8fafb;
@@ -248,6 +236,8 @@
 
   .modal-body {
     padding: 0;
+    max-height: 320px;
+    overflow: auto;
     .deal-roles {
       .deal-info-title {
         display: none;

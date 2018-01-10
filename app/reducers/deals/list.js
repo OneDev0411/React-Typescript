@@ -54,23 +54,24 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          roles: action.roles
+          roles: [
+            ...state[action.deal_id].roles,
+            ...action.roles
+          ]
         }
       }
 
-    case types.UPDATE_ROLE: {
-      const roles = state[action.deal_id].roles
-      const index = _.findIndex(roles, role => role.id === action.role.id)
-      roles[index] = action.role
-
+    case types.UPDATE_ROLE:
       return {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          roles
+          roles: [
+            ...state[action.deal_id].roles.filter(role => role.id !== action.role.id),
+            action.role
+          ]
         }
       }
-    }
 
     case types.DELETE_ROLE:
       return {
