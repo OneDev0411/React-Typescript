@@ -1,6 +1,6 @@
 import _ from 'underscore'
-import store from '../../stores'
 import SuperAgent from 'superagent'
+import store from '../../stores'
 import config from '../../../config/public'
 
 export default class Fetch {
@@ -9,6 +9,7 @@ export default class Fetch {
 
     this._middlewares = {}
     this._autoLogin = true
+    this._isServerSide = isServerSide
     this._baseUrl = isServerSide ? config.app.url : ''
     this._proxyUrl = `${this._baseUrl}/api/proxifier`
   }
@@ -32,6 +33,15 @@ export default class Fetch {
 
     // register events
     agent.on('response', response => this.onResponse(response))
+
+    agent.on('error', error => {
+      const errorCode = error.response && ~~error.response.statusCode
+
+      // handle session expiration
+      if (!this._isServerSide && errorCode === 401) {
+        window.location.href = '/signout'
+      }
+    })
 
     return agent
   }
