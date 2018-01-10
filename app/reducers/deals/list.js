@@ -67,7 +67,7 @@ export default (state = null, action) => {
         [action.deal_id]: {
           ...state[action.deal_id],
           roles: [
-            ..._.omit(state[action.deal_id].roles, role => role.id === action.role.id),
+            ...state[action.deal_id].roles.filter(role => role.id !== action.role.id),
             action.role
           ]
         }
