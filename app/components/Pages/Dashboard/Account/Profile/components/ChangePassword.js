@@ -17,11 +17,13 @@ const ChangePasswordForm = ({
   submitError,
   handleSubmit,
   isSubmitting,
+  setSubmitError,
   onSubmitHandler,
   submitSuccessfully
 }) => {
   const isDisabled = isSubmitting || invalid || pristine
   const { brandColor } = getBrandInfo(brand)
+
   return (
     <FormCard title="Change Password">
       <form

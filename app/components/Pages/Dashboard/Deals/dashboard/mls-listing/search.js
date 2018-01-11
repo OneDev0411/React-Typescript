@@ -10,7 +10,8 @@ export default class extends React.Component {
     super(props)
     this.state = {
       searching: false,
-      listings: null
+      listings: null,
+      errorMessage: null
     }
   }
 
@@ -23,7 +24,7 @@ export default class extends React.Component {
     }
 
     // show loading
-    this.setState({ searching: true })
+    this.setState({ searching: true, errorMessage: null })
 
     try {
       // search in mls listings
@@ -42,24 +43,28 @@ export default class extends React.Component {
         listings,
         searching: false
       })
-    } catch (e) {
+    } catch (err) {
       this.setState({
-        searching: false
+        searching: false,
+        errorMessage: 'Sorry, something went wrong. Please try again.'
       })
     }
   }
 
   onSelectListing(item) {
-    this.setState({
-      listings: null
-    }, () => {
-      this.props.onSelectListing(item)
-    })
+    this.setState(
+      {
+        listings: null
+      },
+      () => {
+        this.props.onSelectListing(item)
+      }
+    )
   }
 
   render() {
     const { show, modalTitle, onHide } = this.props
-    const { searching, listings } = this.state
+    const { searching, listings, errorMessage } = this.state
 
     return (
       <Modal
@@ -68,29 +73,34 @@ export default class extends React.Component {
         backdrop="static"
         onHide={onHide}
       >
-        <Modal.Header closeButton>
-          {modalTitle || 'Add MLS #'}
-        </Modal.Header>
+        <Modal.Header closeButton>{modalTitle || 'Add MLS #'}</Modal.Header>
 
         <Modal.Body>
-
           <SearchInput
             placeholder="Enter MLS # or address"
             onChange={() => null}
             subscribe={value => this.search(value)}
           />
 
+          {errorMessage && (
+            <div
+              className="c-alert c-alert--error"
+              style={{
+                margin: '1rem 2rem'
+              }}
+            >
+              {errorMessage}
+            </div>
+          )}
+
           <div className="listings">
             <div className="list">
-              {
-                searching &&
-                <i className="fa fa-spinner fa-spin fa-fw loader" />
-              }
+              {searching && <i className="fa fa-spinner fa-spin fa-fw loader" />}
 
               <ListingsView
                 type={null}
                 listings={listings}
-                onSelectListing={(item) => this.onSelectListing(item)}
+                onSelectListing={item => this.onSelectListing(item)}
               />
             </div>
           </div>

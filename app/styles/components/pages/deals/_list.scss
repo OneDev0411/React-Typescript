@@ -28,11 +28,11 @@
     width: 91px;
     margin-bottom: 21px;
   }
-.fa-search {
-  color: #8da2b5;
-  font-size: 82px;
-  margin-bottom: 28px;
-}
+  .fa-search {
+    color: #8da2b5;
+    font-size: 82px;
+    margin-bottom: 28px;
+  }
   .title {
     font-size: 17px;
     font-weight: 600;
@@ -200,92 +200,126 @@
  *
  */
 %deal-list--header {
-  background-color: white;
   box-shadow: 0 1px 0 0 #dce5eb;
-  padding: 0 30px;
-  padding-top: (54px - 30px) / 2;
   overflow: hidden;
 
-  ul.filter {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    line-height: 1;
-    li {
-      display: inline-block;
-      margin-right: 50px;
-      font-size: 21px;
-      color: #62778c;
-      cursor: pointer;
-      margin-top: -1px;
-      height: 36px;
-      .title {
-        padding-bottom: 15px;
-      }
-      .badge {
-        background-color: #ededed;
-        font-weight: normal;
-      }
+  &.agent {
+    box-shadow: none;
+  }
 
-      .counter {
-        display: inline-block;
-        color: #62778c;
-        font-size: 13px;
-        margin-left: 6px;
-      }
+  .deals-list--header-row {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 30px;
+    height: 57px;
+    position: fixed;
+    top: 0;
+    width: calc(100% - #{$app-sidenav-width});
+    z-index: 1;
 
-      @media (min-width: 548px) and (max-width: 1173px) {
-        font-size: 16px;
-        .counter {
-          font-size: 10px;
-          margin-left: 2px;
+    &.agent {
+      box-shadow: 0 1px 0 0 #dce5eb;
+    }
+    .deals-list--header-row--col {
+      display: flex;
+      align-items: center;
+      ul.filter {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        li {
+          margin-right: 50px;
+          font-size: 21px;
+          color: #62778c;
+          cursor: pointer;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          .badge {
+            background-color: #ededed;
+            font-weight: normal;
+          }
+
+          .counter {
+            display: inline-block;
+            color: #62778c;
+            font-size: 13px;
+            margin-left: 6px;
+          }
+
+          @media (min-width: 548px) and (max-width: 1173px) {
+            font-size: 16px;
+            .counter {
+              font-size: 10px;
+              margin-left: 2px;
+            }
+          }
+
+          @media (max-width: 548px) {
+            font-size: 15px;
+            .counter {
+              font-size: 10px;
+              margin-left: 2px;
+            }
+          }
+
+          &.active {
+            color: #2196f3;
+            .title {
+              display: inline-block;
+              padding-bottom: 12px;
+              border-bottom: 2px solid #2196f3;
+              align-self: flex-end;
+            }
+
+            .badge {
+              color: #2196f3;
+            }
+          }
         }
       }
 
-      @media (max-width: 548px) {
-        font-size: 15px;
-        .counter {
-          font-size: 10px;
-          margin-left: 2px;
-        }
+      .create-deal-button {
+        height: 30px;
+        line-height: 16px;
+        min-width: 100px;
+        margin-left: 2px;
+        float: right;
       }
 
-      &.active {
-        color: #2196f3;
-        .title {
-          display: inline-block;
-          padding-bottom: 13px;
-          border-bottom: 2px solid #2196f3;
+      .search-button {
+        cursor: pointer;
+        padding: 10px;
+        white-space: pre-line;
+        .fa-search {
+          color: #8da2b5;
+          font-size: 20px;
+          &:hover, &.active {
+            color: #2196f3;
+          }
         }
 
-        .badge {
-          color: #2196f3;
+        &:hover svg > g {
+          fill: #2196f3;
         }
       }
     }
   }
-
-  .create-deal-button {
-    height: 30px;
-    line-height: 16px;
-    min-width: 100px;
-    margin-left: 2px;
-  }
-
-  .search-button {
-    cursor: pointer;
-    padding: 10px;
-    white-space: pre-line;
-    .fa-search {
-      color: #2196f3;
-      font-size: 20px;
-    }
-  }
-
   .panel {
     border: none;
     box-shadow: none;
     margin-bottom: 0;
+    padding: 0 30px;
+
+    &.agent {
+      background-color: inherit;
+    }
     .panel-body {
       padding: 0;
     }
@@ -294,11 +328,14 @@
   .deals-list--header--searchBox {
     border-radius: 4px;
     background-color: #ffffff;
-    border: solid 1px #2196f3;
     margin-top: 10px;
     margin-bottom: 16px;
     padding: 12px;
+    border: solid 1px #dce5eb;
 
+    &.active {
+      border: solid 1px #2196f3;
+    }
     .fa-search {
       color: #2196f3;
       font-size: 16px;

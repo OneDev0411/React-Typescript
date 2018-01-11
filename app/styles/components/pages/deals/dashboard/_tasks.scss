@@ -66,9 +66,16 @@
       }
 
       .crt {
-        width: 20px;
+        margin-right: 12px;
+        display: flex;
+        justify-content: center;
+        width: 15px;
       }
 
+      .fa-folder-o {
+        color: #c9d7df;
+        margin-right: 12px;
+      }
       .s-info {
         width: calc(100% - 130px);
         color: #1d364b;
@@ -88,6 +95,7 @@
             font-weight: 500;
             text-align: right;
             color: #8da2b5;
+            padding-right: 10px;
 
             &.BACKUP,
             &.PRIMARY {

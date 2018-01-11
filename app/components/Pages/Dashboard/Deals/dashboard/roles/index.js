@@ -20,8 +20,9 @@ class Roles extends React.Component {
     this.props.selectRole(role)
   }
 
-  onClickRole(item) {
-    const { onSelectRole, confirmation } = this.props
+  onClickRole(id) {
+    const { roles, onSelectRole, confirmation } = this.props
+    const item = roles[id]
 
     if (onSelectRole) {
       if (!item.email) {
@@ -34,6 +35,7 @@ class Roles extends React.Component {
       }
 
       onSelectRole({
+        id: item.id,
         legal_prefix: item.legal_prefix,
         legal_first_name: item.legal_first_name,
         legal_last_name: item.legal_last_name,
@@ -65,7 +67,7 @@ class Roles extends React.Component {
     }
 
     confirmation({
-      message: `Remove <b>${user.user.display_name}</b>?`,
+      message: `Remove <b>${user.legal_first_name} ${user.legal_last_name}</b>?`,
       confirmLabel: 'Yes, remove contact',
       onConfirm: () => this.removeRole(user)
     })
@@ -102,9 +104,8 @@ class Roles extends React.Component {
   }
 
   render() {
-    const { deal, allowedRoles, onSelectRole } = this.props
+    const { deal, allowedRoles, roles, onSelectRole } = this.props
     const { deletingRoleId } = this.state
-    const { roles } = deal
 
     return (
       <div className="deal-info-section deal-roles">
@@ -113,46 +114,49 @@ class Roles extends React.Component {
         </div>
 
         {
-          roles &&
-          roles
-            .filter(item => !allowedRoles ? true : allowedRoles.indexOf(item.role) > -1)
-            .map(item =>
-              <div
-                key={item.id}
-                className="item"
-                style={{ cursor: onSelectRole ? 'pointer' : 'auto' }}
-                onClick={() => this.onClickRole(item)}
-              >
-                <div className="role-avatar">
-                  <UserAvatar
-                    name={this.getRoleName(item)}
-                    image={item.user ? item.user.profile_image_url : null}
-                    size={32}
-                    showStateIndicator={false}
-                  />
-                </div>
-
-                <div className="name">
-                  <div>{this.getRoleName(item)}</div>
-                  <div className="role">{ roleName(item.role) }</div>
-                </div>
-
-                <div className="cta">
-                  {
-                    deletingRoleId && item.id === deletingRoleId &&
-                    <i className="fa fa-spinner fa-spin" />
-                  }
-
-                  {
-                    !deletingRoleId &&
-                    <i
-                      onClick={() => this.onRequestRemoveRole(item)}
-                      className="fa fa-delete fa-times"
+          deal.roles &&
+          deal.roles
+            .filter(id => !allowedRoles ? true : allowedRoles.indexOf(roles[id].role) > -1)
+            .map(id => {
+              const item = roles[id]
+              return (
+                <div
+                  key={item.id}
+                  className="item"
+                  style={{ cursor: onSelectRole ? 'pointer' : 'auto' }}
+                  onClick={() => this.onClickRole(item.id)}
+                >
+                  <div className="role-avatar">
+                    <UserAvatar
+                      name={this.getRoleName(item)}
+                      image={item.user ? item.user.profile_image_url : null}
+                      size={32}
+                      showStateIndicator={false}
                     />
-                  }
+                  </div>
+
+                  <div className="name">
+                    <div>{this.getRoleName(item)}</div>
+                    <div className="role">{ roleName(item.role) }</div>
+                  </div>
+
+                  <div className="cta">
+                    {
+                      deletingRoleId && item.id === deletingRoleId &&
+                      <i className="fa fa-spinner fa-spin" />
+                    }
+
+                    {
+                      !deletingRoleId &&
+                      <i
+                        onClick={() => this.onRequestRemoveRole(item)}
+                        className="fa fa-delete fa-times"
+                      />
+                    }
+                  </div>
                 </div>
-              </div>
-            )
+              )
+            })
         }
 
         <UpsertRole
@@ -164,4 +168,6 @@ class Roles extends React.Component {
   }
 }
 
-export default connect(null, { deleteRole,selectRole, notify, confirmation })(Roles)
+export default connect(({ deals }) => ({
+  roles: deals.roles
+}), { deleteRole,selectRole, notify, confirmation })(Roles)

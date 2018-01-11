@@ -99,32 +99,30 @@ class Filter extends React.Component {
     const active = this.props.active || 'All'
 
     return (
-      <div>
-        <ul className="filter">
-          {
-            _.map(filters, (fn, filter) =>
-              <ToolTip
-                key={`FILTER_${filter}`}
-                multiline
-                caption={this.getFilterTabTooltip(filter)}
-                placement="bottom"
+      <ul className="filter">
+        {
+          _.map(filters, (fn, filter) =>
+            <ToolTip
+              key={`FILTER_${filter}`}
+              multiline
+              caption={this.getFilterTabTooltip(filter)}
+              placement="bottom"
+            >
+              <li
+                className={filter === active ? 'active' : ''}
+                onClick={() => this.setFilter(filter)}
               >
-                <li
-                  className={filter === active ? 'active' : ''}
-                  onClick={() => this.setFilter(filter)}
-                >
                   <span className="title">
                     {filter}
                   </span>
 
-                  <span className="badge counter">
+                <span className="badge counter">
                     {this.getBadgeCounter(filter)}
                   </span>
-                </li>
-              </ToolTip>)
-          }
-        </ul>
-      </div>
+              </li>
+            </ToolTip>)
+        }
+      </ul>
     )
   }
 }

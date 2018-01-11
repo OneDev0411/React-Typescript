@@ -1,5 +1,4 @@
 import React from 'react'
-import _ from 'underscore'
 import Deal from '../../../../../../../models/Deal'
 import Items from '../items'
 
@@ -8,19 +7,19 @@ const table = [
     key: 'sales_price',
     name: 'Sold Price',
     dataType: 'currency',
-    validate: (price) => /^(?:[1-9]\d*|0)?(?:\.\d+)?$/.test(price),
+    validate: (input) => /^(?:[1-9]\d*|0)?(?:\.\d+)?$/.test(input),
     canEdit: (isBO) => isBO
   }, {
     key: 'commission_listing',
     name: 'Listing Commission',
     dataType: 'text',
-    validate: () => true,
+    validate: (input) => /^(?:[1-9]\d*|0)?(?:\.\d+)?$/.test(input),
     canEdit: (isBO) => isBO
   }, {
     key: 'commission_selling',
     name: 'Sale Commission',
     dataType: 'text',
-    validate: () => true,
+    validate: (input) => /^(?:[1-9]\d*|0)?(?:\.\d+)?$/.test(input),
     canEdit: (isBO) => isBO
   }
 ]

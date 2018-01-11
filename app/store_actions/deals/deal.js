@@ -6,6 +6,7 @@ import Deal from '../../models/Deal'
 import * as schema from './schema'
 import { setTasks } from './task'
 import { setChecklists } from './checklist'
+import { setRoles } from './role'
 
 function setDeals(deals) {
   return {
@@ -82,11 +83,12 @@ export function updateListing(dealId, listingId) {
 export function updateDeal(deal) {
   return async (dispatch) => {
     const { entities } = normalize(deal, schema.dealSchema)
-    const { deals, checklists, tasks } = entities
+    const { deals, roles, checklists, tasks } = entities
 
     batchActions([
       dispatch(setTasks(tasks)),
       dispatch(setChecklists(checklists)),
+      dispatch(setRoles(roles)),
       dispatch(dealUpdated(deals[deal.id]))
     ])
   }
@@ -106,11 +108,12 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
       }
 
       const { entities } = normalize(data, schema.dealsSchema)
-      const { deals, checklists, tasks } = entities
+      const { deals, roles, checklists, tasks } = entities
 
       batchActions([
         dispatch(setTasks(tasks)),
         dispatch(setChecklists(checklists)),
+        dispatch(setRoles(roles)),
         dispatch(setDeals(deals))
       ])
     } catch (e) {
@@ -128,11 +131,12 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
 export function createDeal(deal) {
   return async (dispatch) => {
     const { entities } = normalize(deal, schema.dealSchema)
-    const { deals, checklists, tasks } = entities
+    const { deals, roles, checklists, tasks } = entities
 
     batchActions([
       dispatch(setTasks(tasks)),
       dispatch(setChecklists(checklists)),
+      dispatch(setRoles(roles)),
       dispatch(addNewDeal(deals[deal.id]))
     ])
   }
@@ -153,13 +157,14 @@ export function searchAllDeals(query) {
       }
 
       const { entities } = normalize(data, schema.dealsSchema)
-      const { deals, checklists, tasks } = entities
+      const { deals, roles, checklists, tasks } = entities
 
       _.each(deals, deal => deal.searchResult = true)
 
       batchActions([
         dispatch(setTasks(tasks)),
         dispatch(setChecklists(checklists)),
+        dispatch(setRoles(roles)),
         dispatch(addSearchedDeals(deals))
       ])
     } catch (e) {

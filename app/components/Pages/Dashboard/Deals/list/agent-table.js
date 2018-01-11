@@ -66,14 +66,16 @@ class AgentTable extends BaseTable {
   }
 
   getSide(deal, rowId, rowsCount) {
-    const { deals } = this.props
+    const { deals, roles } = this.props
 
     const sideName = Deal.get.side(deal)
-    const relatedRole = deal.roles && deal.roles.find(r => r.role === sideName)
+    const relatedRole = deal.roles && deal.roles.find(id => roles[id].role === sideName)
 
     if (!deal.roles || !relatedRole) {
       return Deal.get.side(deal)
     }
+
+    const { user: relatedRoleUser } = relatedRole
 
     return (
       <OverlayTrigger
@@ -86,28 +88,32 @@ class AgentTable extends BaseTable {
           >
             <div className="roles">
               {
-                deal.roles.map(role =>
-                  <div
-                    key={`ROLE_${role.id}`}
-                    className="item"
-                  >
-                    <div className="avatar">
-                      <UserAvatar
-                        name={`${role.legal_first_name} ${role.legal_last_name}`}
-                        image={role.user ? role.user.profile_image_url : null}
-                        size={26}
-                        showStateIndicator={false}
-                      />
+                deal.roles.map(id => {
+                  const role = roles[id]
+                  return (
+                    <div
+                      key={`ROLE_${role.id}`}
+                      className="item"
+                    >
+                      <div className="avatar">
+                        <UserAvatar
+                          name={`${role.legal_first_name} ${role.legal_last_name}`}
+                          image={role.user ? role.user.profile_image_url : null}
+                          size={26}
+                          showStateIndicator={false}
+                        />
+                      </div>
+                      <div className="info">
+                        <span className="name">{`${role.legal_first_name} ${role.legal_last_name}`}, </span>
+                        <span className="role">{roleName(role.role)}</span>
+                        {
+                          role.user &&
+                          <span className="email">{role.user.email}</span>
+                        }
+                      </div>
                     </div>
-                    <div className="info">
-                      <span className="name">{`${role.legal_first_name} ${role.legal_last_name}`}, </span>
-                      <span className="role">{roleName(role.role)}</span>
-                      {
-                        role.user &&
-                        <span className="email">{role.user.email}</span>
-                      }
-                    </div>
-                  </div>)
+                  )
+                })
               }
             </div>
           </Popover>
@@ -121,7 +127,7 @@ class AgentTable extends BaseTable {
           <span
             style={{ color: '#5b6469', fontSize: '13px' }}
           >
-            {relatedRole && relatedRole.user.last_name ? `: ${relatedRole.user.last_name}` : ''}
+            {relatedRoleUser && relatedRoleUser.last_name ? `: ${relatedRole.user.last_name}` : ''}
           </span>
         </div>
 
@@ -133,10 +139,17 @@ class AgentTable extends BaseTable {
    * get role names of deal for side column
    */
   getRoleNames(deal) {
+    const { roles } = this.props
     const names = []
 
-    deal.roles && deal.roles.forEach(role =>
-      names.push(role.user.display_name))
+    deal.roles && deal.roles.forEach(id => {
+      const role = roles[id]
+      if (role.user) {
+        names.push(role.user.display_name)
+      } else {
+        names.push(`${role.legal_first_name} ${role.legal_last_name}`)
+      }
+    })
 
     return `: ${names.join(', ')}`
   }
@@ -154,7 +167,9 @@ class AgentTable extends BaseTable {
     deal.checklists.forEach(id => {
       const checklist = this.props.checklists[id]
 
-      if (!checklist.tasks || checklist.tasks.length === 0) {
+      if (checklist.is_terminated
+        || !checklist.tasks
+        || checklist.tasks.length === 0) {
         return
       }
 
@@ -174,5 +189,6 @@ class AgentTable extends BaseTable {
 export default connect(({ deals, chatroom }) => ({
   tasks: deals.tasks,
   checklists: deals.checklists,
+  roles: deals.roles,
   rooms: chatroom.rooms
 }), { closeEsignWizard, setSelectedTask })(AgentTable)

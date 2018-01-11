@@ -51,7 +51,7 @@ function taskUpdated(task) {
   }
 }
 
-function tasksUpdated(tasks) {
+export function updatesTasks(tasks) {
   return {
     type: types.UPDATE_TASKS,
     tasks
@@ -73,24 +73,28 @@ export function setSelectedTask(task) {
 }
 
 export function bulkSubmit(dealId, tasksList) {
-  return async (dispatch) => {
-    const data = await Deal.bulkSubmit(dealId, tasksList)
+  return async dispatch => {
+    const tasks = await Deal.bulkSubmit(dealId, tasksList)
 
-    const { entities } = normalize(data, schema.taskSchema)
+    if (!tasks) {
+      return false
+    }
 
-    dispatch(tasksUpdated(entities.tasks))
+    const { entities } = normalize(tasks, schema.taskSchema)
+
+    return entities.tasks
   }
 }
 
 export function deleteTask(checklistId, taskId) {
-  return async (dispatch) => {
+  return async dispatch => {
     Deal.deleteTask(taskId)
     dispatch(taskDeleted(checklistId, taskId))
   }
 }
 
 export function updateTask(taskId, attributes) {
-  return async (dispatch) => {
+  return async dispatch => {
     const task = await Deal.updateTask(taskId, attributes)
 
     dispatch(taskUpdated(task))
@@ -98,7 +102,7 @@ export function updateTask(taskId, attributes) {
 }
 
 export function deleteAttachment(task, fileId) {
-  return async (dispatch) => {
+  return async dispatch => {
     await Deal.deleteAttachment(task.room.id, fileId)
     dispatch(attachmentDeleted(task, fileId))
   }
@@ -108,9 +112,17 @@ export function createFormTask(dealId, form, title, checklist) {
   const task_type = 'Form'
   const status = 'Incomplete'
 
-  return async (dispatch) => {
-    const task = await Deal.createTask(dealId, { title, status, task_type, checklist, form })
+  return async dispatch => {
+    const task = await Deal.createTask(dealId, {
+      title,
+      status,
+      task_type,
+      checklist,
+      form
+    })
+
     dispatch(addNewTask(dealId, checklist, task))
+
     return task
   }
 }
@@ -119,9 +131,16 @@ export function createGenericTask(dealId, title, checklist) {
   const status = 'Incomplete'
   const task_type = 'Generic'
 
-  return async (dispatch) => {
-    const task = await Deal.createTask(dealId, { title, status, task_type, checklist })
+  return async dispatch => {
+    const task = await Deal.createTask(dealId, {
+      title,
+      status,
+      task_type,
+      checklist
+    })
+
     dispatch(addNewTask(dealId, checklist, task))
+
     return task
   }
 }
@@ -135,14 +154,14 @@ export function addAttachment(deal_id, checklist_id, task_id, file) {
 }
 
 export function changeTaskStatus(taskId, status) {
-  return async (dispatch) => {
+  return async dispatch => {
     await Deal.changeTaskStatus(taskId, status)
     dispatch(changeStatus(taskId, status))
   }
 }
 
 export function changeNeedsAttention(taskId, status) {
-  return async (dispatch) => {
+  return async dispatch => {
     await Deal.needsAttention(taskId, status)
     dispatch(needsAttention(taskId, status))
   }

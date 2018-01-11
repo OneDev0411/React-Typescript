@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {
-  Row,
-  Col,
   OverlayTrigger,
   Tooltip,
   Panel
@@ -15,11 +13,16 @@ import {
   searchAllDeals,
   cleanSearchedDeals
 } from '../../../../../store_actions/deals'
+import Excel from '../../Partials/Svgs/Excel'
+import cn from 'classnames'
 
 class Header extends React.Component {
   constructor(props) {
     super(props)
     this.debouncedOnInputChange = debounce(this.onInputChange, 700)
+    this.state = {
+      inputFocused: false
+    }
   }
 
   onInputChange() {
@@ -58,9 +61,11 @@ class Header extends React.Component {
       initialBOFilters,
       showEmptySearchPage,
       initialAgentFilters,
-      cleanSearchedDeals
+      cleanSearchedDeals,
+      user
     } = this.props
 
+    const { inputFocused } = this.state
     let showSearchInput = true
 
     if (!isBackOffice && activeFilterTab && activeFilterTab !== 'All') {
@@ -68,97 +73,118 @@ class Header extends React.Component {
     }
 
     return (
-      <div className="deals-list--header">
-        <Row>
-          <Col
-            lg={isBackOffice ? 9 : 7}
-            md={isBackOffice ? 7 : 6}
-            sm={6}
-            xs={12}
+      <div
+        className={cn('deals-list--header', { agent: !isBackOffice })}
+      >
+        <div style={{ height: '57px' }}>
+          <div
+            className={cn('deals-list--header-row', { agent: !isBackOffice })}
           >
-            {
-              isBackOffice ?
-                <BackOfficeFilter
-                  searchMode={searchBoxIsOpen}
-                  active={activeFilterTab}
-                  onChangeFilter={filters => {
-                    if (this.searchInput) {
-                      this.searchInput.value = ''
+            <div className="deals-list--header-row--col">
+              {
+                isBackOffice ?
+                  <BackOfficeFilter
+                    searchMode={searchBoxIsOpen}
+                    active={activeFilterTab}
+                    onChangeFilter={filters => {
+                      if (this.searchInput) {
+                        this.searchInput.value = ''
+                      }
+
+                      if (searchBoxIsOpen) {
+                        setSearchStatus(false)
+                        initialBOFilters(filters)
+                        cleanSearchedDeals()
+                      } else {
+                        onFilterChange(filters)
+                      }
                     }
+                    }
+                  /> :
+                  <AgentFilter
+                    active={activeFilterTab}
+                    onChangeFilter={filters => {
+                      initialAgentFilters(filters)
+
+                      if (this.searchInput) {
+                        this.searchInput.value = ''
+                      }
+                    }}
+                  />
+              }
+            </div>
+
+            <div className="deals-list--header-row--col">
+              {isBackOffice &&
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="popover-leave">
+                    Search deals by address,
+                    <br />
+                    MLS # or agent name…
+                  </Tooltip>
+                }
+              >
+                <div
+                  onClick={() => {
+                    setSearchStatus(!searchBoxIsOpen)
 
                     if (searchBoxIsOpen) {
-                      setSearchStatus(false)
-                      initialBOFilters(filters)
-                      cleanSearchedDeals()
-                    } else {
-                      onFilterChange(filters)
-                    }
-                  }
-                  }
-                /> :
-                <AgentFilter
-                  active={activeFilterTab}
-                  onChangeFilter={filters => {
-                    initialAgentFilters(filters)
-
-                    if (this.searchInput) {
                       this.searchInput.value = ''
+                    } else {
+                      showEmptySearchPage(true)
                     }
                   }}
-                />
-            }
-          </Col>
-
-          <Col
-            lg={isBackOffice ? 3 : 5}
-            md={isBackOffice ? 5 : 6}
-            sm={6}
-            xs={12}
-            className="text-right"
-          >
-            {isBackOffice &&
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id="popover-leave">
-                  Search deals by address,
-                  <br />
-                  MLS # or agent name…
-                </Tooltip>
+                  className="search-button"
+                >
+                  <i
+                    className={cn('fa fa-search', { active: searchBoxIsOpen })}
+                    aria-hidden="true"
+                  />
+                </div>
+              </OverlayTrigger>
               }
-            >
-              <span
-                onClick={() => {
-                  setSearchStatus(!searchBoxIsOpen)
-
-                  if (searchBoxIsOpen) {
-                    this.searchInput.value = ''
-                  } else {
-                    showEmptySearchPage(true)
-                    this.searchInput.focus()
+              {
+                false &&
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={
+                    <Tooltip id="popover-leave">
+                      Download Report
+                    </Tooltip>
                   }
-                }}
-                className="search-button"
-              >
-                <i className="fa fa-search" aria-hidden="true" />
-              </span>
-            </OverlayTrigger>
-            }
-            {
-              !isBackOffice &&
-              <Link
-                to="/dashboard/deals/create"
-                className="btn btn-primary create-deal-button"
-              >
-                Create New Deal
-              </Link>
-            }
-          </Col>
-        </Row>
+                >
+                  <a
+                    download
+                    href={`/brands/${user.brand}/deals.xls`}
+                    className="search-button"
+                  >
+                    <Excel />
+                  </a>
+                </OverlayTrigger>
+              }
+              {
+                !isBackOffice &&
+                <Link
+                  to="/dashboard/deals/create"
+                  className="btn btn-primary create-deal-button"
+                >
+                  Create New Deal
+                </Link>
+              }
+            </div>
+          </div>
+        </div>
         {showSearchInput &&
-        <Panel collapsible expanded={isBackOffice ? searchBoxIsOpen : true}>
+        <Panel
+          className={cn({ agent: !isBackOffice })}
+          collapsible
+          expanded={isBackOffice ? searchBoxIsOpen : true}
+          onEntered={() => this.searchInput.focus()}
+        >
           <div
-            className="deals-list--header--searchBox"
+            className={cn('deals-list--header--searchBox', { active: inputFocused })}
           >
             <i
               className="fa fa-search"
@@ -166,6 +192,8 @@ class Header extends React.Component {
             />
             <input
               onChange={() => this.debouncedOnInputChange()}
+              onFocus={() => this.setState({ inputFocused: true })}
+              onBlur={() => this.setState({ inputFocused: false })}
               ref={ref => this.searchInput = ref}
               type="text"
               placeholder="Search deals by address, MLS # or agent name…"
@@ -178,8 +206,9 @@ class Header extends React.Component {
   }
 }
 
-export default connect(({ deals }) => ({
-  isBackOffice: deals.backoffice
+export default connect(({ user, deals }) => ({
+  isBackOffice: deals.backoffice,
+  user
 }), {
   searchAllDeals,
   cleanSearchedDeals

@@ -3,27 +3,42 @@ import _ from 'underscore'
 import { Dropdown, MenuItem } from 'react-bootstrap'
 import cn from 'classnames'
 import Title from './title'
-import FirstName from './first_name'
-import LastName from './last_name'
+import Name from './name'
 import Email from './email'
 import Phone from './phone'
 import Role from './role'
 import Company from './company'
 import Commission from './commission'
 
-const role_names = ['BuyerAgent', 'BuyerReferral', 'CoBuyerAgent', 'SellerAgent',
-  'SellerReferral', 'CoSellerAgent', 'Buyer', 'Seller', 'Title', 'Lawyer', 'Lender',
-  'TeamLead', 'Appraiser', 'Inspector', 'Tenant', 'Landlord']
+const role_names = [
+  'BuyerAgent',
+  'BuyerReferral',
+  'CoBuyerAgent',
+  'SellerAgent',
+  'SellerReferral',
+  'CoSellerAgent',
+  'Buyer',
+  'Seller',
+  'Title',
+  'Lawyer',
+  'Lender',
+  'TeamLead',
+  'Appraiser',
+  'Inspector',
+  'Tenant',
+  'Landlord'
+]
 
 export default class Form extends React.Component {
   constructor(props) {
     super(props)
 
     const form = props.form || {}
-    form.isNewRecord = (typeof form.email === 'undefined')
+
+    form.isNewRecord = typeof form.email === 'undefined'
 
     this.state = {
-      validation: {},
+      invalidFields: [],
       form
     }
 
@@ -63,12 +78,15 @@ export default class Form extends React.Component {
   setForm(field, value) {
     const { form } = this.state
 
-    this.setState({
-      form: {
-        ...form,
-        [field]: value
-      }
-    }, () => this.validate(field, value))
+    this.setState(
+      {
+        form: {
+          ...form,
+          [field]: value
+        }
+      },
+      () => this.validate(field, value)
+    )
   }
 
   /**
@@ -76,6 +94,7 @@ export default class Form extends React.Component {
    */
   isEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
     return re.test(email)
   }
 
@@ -107,7 +126,11 @@ export default class Form extends React.Component {
       return false
     }
 
-    return form.commission_percentage ? (value >= 0 && value <= 100) : value >= 0
+    return form.commission_percentage ? value >= 0 && value <= 100 : value >= 0
+  }
+
+  isValidName(name) {
+    return name && name.length > 0 && new RegExp(/^[A-Za-z\s]+$/).exec(name)
   }
 
   /**
@@ -134,51 +157,65 @@ export default class Form extends React.Component {
   }
 
   /**
+   * check email is required or not
+   * https://gitlab.com/rechat/web/issues/563
+   */
+  isEmailRequired() {
+    const { form } = this.state
+    return ['BuyerAgent', 'SellerAgent'].indexOf(form.role) > -1
+  }
+
+  /**
    * validate form
    */
   async validate(field, value) {
-    const { form, validation } = this.state
-    let newValidation
+    const { form, invalidFields } = this.state
     const requiredFields = ['legal_first_name', 'legal_last_name', 'role']
 
-    const fields = {
-      legal_first_name: (name) => name && name.length > 0,
-      legal_last_name: (name) => name && name.length > 0,
-      email: (email) => email && this.isEmail(email),
-      phone: (phone) => phone && this.isValidPhone(phone),
-      role: (role) => role
+    if (this.isEmailRequired()) {
+      requiredFields.push('email')
     }
 
-    let commission_field = null
-    if (form.commission_percentage !== undefined) {
-      commission_field = 'commission_percentage'
-    } else if (form.commission_dollar !== undefined) {
+    const fields = {
+      role: role => role,
+      email: email => email && this.isEmail(email),
+      legal_last_name: name => this.isValidName(name),
+      legal_first_name: name => this.isValidName(name),
+      phone: phone => phone && this.isValidPhone(phone)
+    }
+
+    let commission_field = 'commission_percentage'
+    if (form.commission_dollar !== undefined) {
       commission_field = 'commission_dollar'
     }
 
     if (commission_field && Commission.shouldShowCommission(form)) {
       requiredFields.push(commission_field)
-      fields[commission_field] = (value) => value && this.validateCommission(value)
+      fields[commission_field] = value => value && this.validateCommission(value)
     }
 
     // validate field
     const validator = fields[field]
 
-    if (value.length > 0 && validator && !await validator(value)) {
-      newValidation = {
-        ...validation,
-        [field]: 'error'
+    let newInvalidFields = []
+
+    if (value.length > 0 && typeof validator === 'function') {
+      if (await validator(value)) {
+        // validated! so remove field from invalidFields
+        newInvalidFields = invalidFields.filter(f => field !== f)
+      } else {
+        // add field to invalidfields
+        newInvalidFields = [...invalidFields, field]
       }
-    } else {
-      newValidation = _.filter(validation, (value, key) => key !== field)
     }
 
     this.setState({
-      validation: newValidation
+      invalidFields: newInvalidFields
     })
 
-    const isFormCompleted = _.every(requiredFields, name => fields[name](form[name])) &&
-      _.size(newValidation) === 0
+    const isFormCompleted =
+      _.every(requiredFields, name => fields[name](form[name])) &&
+      !newInvalidFields.includes(field)
 
     this.props.onFormChange({
       isFormCompleted,
@@ -187,44 +224,54 @@ export default class Form extends React.Component {
   }
 
   render() {
-    const { form, validation } = this.state
+    const { form, invalidFields } = this.state
 
     return (
       <div className="deal-roles-form">
-
         <div className="row-name">
           <Title
             form={form}
-            onChange={(value) => this.setForm('legal_prefix', value)}
+            onChange={value => this.setForm('legal_prefix', value)}
           />
 
-          <FirstName
-            form={form}
-            onChange={(value) => this.setForm('legal_first_name', value)}
+          <Name
+            id="first_name"
+            name="first_name"
+            title="Legal Last Name"
+            placeholder="Legal Last"
+            value={form.legal_first_name}
+            isInvalid={invalidFields.includes('legal_first_name')}
+            onChange={value => this.setForm('legal_first_name', value)}
           />
 
-          <LastName
-            form={form}
-            onChange={(value) => this.setForm('legal_last_name', value)}
+          <Name
+            id="last_name"
+            name="last_name"
+            title="Legal First Name"
+            placeholder="Legal First"
+            value={form.legal_last_name}
+            isInvalid={invalidFields.includes('legal_last_name')}
+            onChange={value => this.setForm('legal_last_name', value)}
           />
         </div>
 
         <Email
           form={form}
-          validation={validation}
-          onChange={(value) => this.setForm('email', value)}
+          required={this.isEmailRequired()}
+          isInvalid={invalidFields.includes('email')}
+          onChange={value => this.setForm('email', value)}
         />
 
         <Phone
           form={form}
-          validation={validation}
-          onChange={(value) => this.setForm('phone', value)}
+          isInvalid={invalidFields.includes('phone')}
+          onChange={value => this.setForm('phone', value)}
         />
 
         <Role
           form={form}
           role_names={role_names}
-          onChange={(value) => this.setForm('role', value)}
+          onChange={value => this.setForm('role', value)}
           isAllowed={this.isAllowedRole.bind(this)}
         />
 
@@ -236,7 +283,7 @@ export default class Form extends React.Component {
 
         <Company
           form={form}
-          onChange={(value) => this.setForm('company_title', value)}
+          onChange={value => this.setForm('company_title', value)}
         />
       </div>
     )

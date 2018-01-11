@@ -70,6 +70,7 @@ Deal.get.address = function (deal) {
 
   const unitNumber = Deal.get.field(deal, 'unit_number')
   const city = Deal.get.field(deal, 'city')
+  const state = Deal.get.field(deal, 'state')
   const postalCode = Deal.get.field(deal, 'postal_code')
 
   const address = [
@@ -78,6 +79,7 @@ Deal.get.address = function (deal) {
     Deal.get.field(deal, 'street_suffix') || '',
     unitNumber ? `, #${unitNumber},` : '',
     city ? `, ${city}` : '',
+    state ? `, ${state}` : '',
     postalCode ? `, ${postalCode}` : ''
   ]
     .join(' ')
@@ -110,7 +112,11 @@ Deal.get.clientNames = function (deal) {
 
   deal.roles.forEach(item => {
     if (roles.indexOf(item.role) > -1) {
-      clients.push(item.user.display_name)
+      if (item.user) {
+        clients.push(item.user.display_name)
+      } else {
+        clients.push(`${item.legal_first_name} ${item.legal_last_name}`)
+      }
     }
   })
 
@@ -313,13 +319,12 @@ Deal.searchListings = async function (address) {
 Deal.create = async function (user, data) {
   try {
     const response = await new Fetch()
-      .post('/deals')
+      .post('/deals?associations[]=deal.checklists')
       .set('X-RECHAT-BRAND', user.brand)
       .send(data)
 
     return response.body.data
   } catch (e) {
-    console.log(e)
     throw e
   }
 }
@@ -530,7 +535,7 @@ Deal.needsAttention = async function (task_id, status) {
 /**
 * bulk submit for review
 */
-Deal.bulkSubmit = async function (dealId, tasks) {
+Deal.bulkSubmit = async function bulkSubmit(dealId, tasks) {
   try {
     const response = await new Fetch()
       .put(`/deals/${dealId}/tasks`)
