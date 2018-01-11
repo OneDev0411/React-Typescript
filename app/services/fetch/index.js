@@ -17,13 +17,14 @@ export default class Fetch {
   _create(method, endpoint) {
     const state = store.getState()
     const { user, brand } = state.data
+    this._isLoggedIn = user && user.access_token !== undefined
 
     const agent = SuperAgent.post(this._proxyUrl)
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
 
     // auto append access-token
-    if (this._autoLogin && user && user.access_token) {
+    if (this._autoLogin && this._isLoggedIn) {
       agent.set('Authorization', `Bearer ${user.access_token}`)
     }
 
@@ -38,7 +39,7 @@ export default class Fetch {
       const errorCode = error.response && ~~error.response.statusCode
 
       // handle session expiration
-      if (!this._isServerSide && errorCode === 401) {
+      if (!this._isServerSide && this._isLoggedIn && errorCode === 401) {
         window.location.href = '/signout'
       }
     })
