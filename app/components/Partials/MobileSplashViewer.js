@@ -1,6 +1,7 @@
 // MobileSplashViewer.js
 import React, { Component } from 'react'
 import { Button } from 'react-bootstrap'
+import PropTypes from 'prop-types'
 import S from 'shorti'
 import MobileSplashController from '../../controllers/MobileSplashController'
 import Brand from '../../controllers/Brand'
@@ -31,5 +32,5 @@ export default class MobileSplashViewer extends Component {
 
 // PropTypes
 MobileSplashViewer.propTypes = {
-  data: React.PropTypes.object
+  data: PropTypes.object
 }

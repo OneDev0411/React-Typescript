@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Modal } from 'react-bootstrap'
 import S from 'shorti'
+import PropTypes from 'prop-types'
+
 export default class CheckEmailModal extends Component {
   render() {
     const data = this.props.data
@@ -38,8 +40,8 @@ export default class CheckEmailModal extends Component {
   }
 }
 CheckEmailModal.propTypes = {
-  data: React.PropTypes.object,
-  hideModal: React.PropTypes.func,
-  showIntercom: React.PropTypes.func,
-  resend: React.PropTypes.func
+  data: PropTypes.object,
+  hideModal: PropTypes.func,
+  showIntercom: PropTypes.func,
+  resend: PropTypes.func
 }

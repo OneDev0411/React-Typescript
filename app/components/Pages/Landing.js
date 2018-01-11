@@ -1,6 +1,8 @@
 // Landing.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
+import PropTypes from 'prop-types'
+
 import {
   Col,
   FormControl,
@@ -384,5 +386,5 @@ export default class Landing extends Component {
 
 // PropTypes
 Landing.propTypes = {
-  data: React.PropTypes.object
+  data: PropTypes.object
 }
