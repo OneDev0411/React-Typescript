@@ -10,7 +10,7 @@ const Deal = {
 /**
 * a helper that extracts a field from context or proposed values
 */
-Deal.get.context = function(deal, field) {
+Deal.get.context = function (deal, field) {
   if (!deal) {
     return null
   }
@@ -37,7 +37,7 @@ Deal.get.context = function(deal, field) {
 /**
 * a helper that extracts a field from context or proposed values
 */
-Deal.get.field = function(deal, field) {
+Deal.get.field = function (deal, field) {
   const context = Deal.get.context(deal, field)
 
   let value = null
@@ -52,6 +52,7 @@ Deal.get.field = function(deal, field) {
 
   if (typeof context === 'object' && context.type === 'deal_context_item') {
     const { context_type } = context
+
     return context[context_type.toLowerCase()]
   }
 
@@ -62,13 +63,14 @@ Deal.get.field = function(deal, field) {
 /**
 * a helper that extracts address from deal
 */
-Deal.get.address = function(deal) {
+Deal.get.address = function (deal) {
   if (deal.listing) {
     return deal.mls_context.full_address
   }
 
   const unitNumber = Deal.get.field(deal, 'unit_number')
   const city = Deal.get.field(deal, 'city')
+  const state = Deal.get.field(deal, 'state')
   const postalCode = Deal.get.field(deal, 'postal_code')
 
   const address = [
@@ -77,12 +79,13 @@ Deal.get.address = function(deal) {
     Deal.get.field(deal, 'street_suffix') || '',
     unitNumber ? `, #${unitNumber},` : '',
     city ? `, ${city}` : '',
-    postalCode ? `, ${postalCode}` : '',
+    state ? `, ${state}` : '',
+    postalCode ? `, ${postalCode}` : ''
   ]
-  .join(' ')
-  .trim()
-  .replace(/(\s)+,/ig, ',')
-  .replace(/,,/ig, ',')
+    .join(' ')
+    .trim()
+    .replace(/(\s)+,/ig, ',')
+    .replace(/,,/ig, ',')
 
   if (address.slice('-1') === ',') {
     return address.slice(0, -1)
@@ -95,11 +98,11 @@ Deal.get.address = function(deal) {
   return address
 }
 
-Deal.get.status = function(deal) {
+Deal.get.status = function (deal) {
   return deal.deleted_at ? 'Archived' : Deal.get.field(deal, 'listing_status')
 }
 
-Deal.get.clientNames = function(deal) {
+Deal.get.clientNames = function (deal) {
   const roles = deal.deal_type === 'Buying' ? ['Buyer', 'Tenant'] : ['Seller', 'Landlord']
   const clients = []
 
@@ -109,7 +112,11 @@ Deal.get.clientNames = function(deal) {
 
   deal.roles.forEach(item => {
     if (roles.indexOf(item.role) > -1) {
-      clients.push(item.user.display_name)
+      if (item.user) {
+        clients.push(item.user.display_name)
+      } else {
+        clients.push(`${item.legal_first_name} ${item.legal_last_name}`)
+      }
     }
   })
 
@@ -119,7 +126,7 @@ Deal.get.clientNames = function(deal) {
 /**
 * a helper that formats price
 */
-Deal.get.formattedPrice = function(number, style = 'currency') {
+Deal.get.formattedPrice = function (number, style = 'currency') {
   if (!number) {
     return number
   }
@@ -134,10 +141,10 @@ Deal.get.formattedPrice = function(number, style = 'currency') {
 /**
 * get deal sise
 */
-Deal.get.side = function(deal) {
+Deal.get.side = function (deal) {
   const sides = {
-    'Buying': 'Buyer',
-    'Selling': 'Seller'
+    Buying: 'Buyer',
+    Selling: 'Seller'
   }
 
   return sides[deal.deal_type]
@@ -146,14 +153,13 @@ Deal.get.side = function(deal) {
 /**
 * get deal by id
 */
-Deal.getById = async function(id) {
+Deal.getById = async function (id) {
   try {
     const response = await new Fetch()
       .get(`/deals/${id}`)
       .query({ 'associations[]': ['room.attachments'] })
 
     return response.body.data
-
   } catch (e) {
     throw e
   }
@@ -162,26 +168,28 @@ Deal.getById = async function(id) {
 /**
 * get deals list
 */
-Deal.getAll = async function(user = {}, backoffice = false) {
+Deal.getAll = async function (user = {}, backoffice = false) {
   const { access_token } = user
   let endpoint
   let associations
 
   if (!user.brand) {
-    throw new Error("This user does not belong to any brand")
+    throw new Error('This user does not belong to any brand')
   }
 
   // backoffice and agent has different endpoints and associations
   if (backoffice) {
     endpoint = `/brands/${user.brand}/deals/inbox`
-    associations =  'associations[]=room.attachments&'
+    associations = 'associations[]=room.attachments&'
     associations += 'associations[]=deal.brand&'
     associations += 'associations[]=deal.created_by&'
-    associations += 'associations[]=review.updated_by'
+    associations += 'associations[]=review.updated_by&'
+    associations += 'associations[]=deal.checklists'
   } else {
     endpoint = `/brands/${user.brand}/deals`
     associations = 'associations[]=room.attachments&'
-    associations += 'associations[]=agent.office'
+    associations += 'associations[]=agent.office&'
+    associations += 'associations[]=deal.checklists'
   }
 
   try {
@@ -194,8 +202,8 @@ Deal.getAll = async function(user = {}, backoffice = false) {
     }
 
     const response = await fetchDeals
-    return response.body.data
 
+    return response.body.data
   } catch (e) {
     throw e
   }
@@ -204,13 +212,12 @@ Deal.getAll = async function(user = {}, backoffice = false) {
 /**
 * get forms list
 */
-Deal.getForms = async function() {
+Deal.getForms = async function () {
   try {
     const response = await new Fetch()
       .get('/forms')
 
     return response.body.data
-
   } catch (e) {
     console.log(e)
   }
@@ -221,13 +228,14 @@ Deal.getForms = async function() {
 */
 Deal.addForm = async function (brandId, checklistId, formId) {
   if (!brandId) {
-    throw new Error("This user does not belong to any brand")
+    throw new Error('This user does not belong to any brand')
   }
 
   try {
     const response = await new Fetch()
       .post(`/brands/${brandId}/checklists/${checklistId}/forms`)
       .send({ form: formId })
+
     return response.body.data
   } catch (e) {
     console.log(e)
@@ -245,7 +253,6 @@ Deal.deleteForm = async function (checklist, formId) {
   try {
     await new Fetch()
       .delete(`/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`)
-
   } catch (e) {
     return null
   }
@@ -278,7 +285,7 @@ Deal.archiveDeal = async function (dealId) {
 /**
 * search google places
 */
-Deal.searchPlaces = async function(address) {
+Deal.searchPlaces = async function (address) {
   try {
     const params = `address=${address}&region=us&components=administrative_area:texas` +
       `&key=${config.google.api_key}`
@@ -287,8 +294,7 @@ Deal.searchPlaces = async function(address) {
       .get(`https://maps.googleapis.com/maps/api/geocode/json?${params}`)
 
     return response.body
-  }
-  catch(e) {
+  } catch (e) {
     throw e
   }
 }
@@ -302,8 +308,7 @@ Deal.searchListings = async function (address) {
       .get(`/listings/search?q=${address}`)
 
     return response.body
-  }
-  catch(e) {
+  } catch (e) {
     throw e
   }
 }
@@ -314,13 +319,12 @@ Deal.searchListings = async function (address) {
 Deal.create = async function (user, data) {
   try {
     const response = await new Fetch()
-      .post('/deals')
+      .post('/deals?associations[]=deal.checklists')
       .set('X-RECHAT-BRAND', user.brand)
       .send(data)
 
     return response.body.data
   } catch (e) {
-    console.log(e)
     throw e
   }
 }
@@ -328,7 +332,7 @@ Deal.create = async function (user, data) {
 /**
  * save submission
  */
-Deal.saveSubmission = async function(id, form, state, values) {
+Deal.saveSubmission = async function (id, form, state, values) {
   try {
     const response = await new Fetch()
       .put(`/tasks/${id}/submission`)
@@ -347,7 +351,7 @@ Deal.saveSubmission = async function(id, form, state, values) {
 /**
  * get submission form
  */
-Deal.getSubmissionForm = async function(task_id, last_revision) {
+Deal.getSubmissionForm = async function (task_id, last_revision) {
   try {
     const response = await new Fetch()
       .get(`/tasks/${task_id}/submission/${last_revision}`)
@@ -366,6 +370,7 @@ Deal.createTask = async function (dealId, data) {
     const response = await new Fetch()
       .post(`/deals/${dealId}/tasks`)
       .send(data)
+      .send({ is_deletable: true })
 
     return response.body.data
   } catch (e) {
@@ -448,6 +453,21 @@ Deal.createRole = async function (deal_id, roles) {
 }
 
 /**
+* update a role
+*/
+Deal.updateRole = async function (deal_id, role) {
+  try {
+    const response = await new Fetch()
+      .put(`/deals/${deal_id}/roles/${role.id}`)
+      .send(role)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * delete role
 */
 Deal.deleteRole = async function (deal_id, role_id) {
@@ -472,11 +492,11 @@ Deal.createOffer = async function (deal_id, name, order, is_backup, property_typ
         checklist: {
           title: `Offer (${name})`,
           is_deactivated: is_backup,
-          order: order
+          order
         },
         conditions: {
           deal_type: 'Buying',
-          property_type: property_type
+          property_type
         }
       })
 
@@ -489,12 +509,11 @@ Deal.createOffer = async function (deal_id, name, order, is_backup, property_typ
 /**
 * change task status
 */
-Deal.changeTaskStatus = async function(task_id, status) {
+Deal.changeTaskStatus = async function (task_id, status) {
   try {
     await new Fetch()
       .put(`/tasks/${task_id}/review`)
       .send({ status })
-
   } catch (e) {
     return false
   }
@@ -503,12 +522,11 @@ Deal.changeTaskStatus = async function(task_id, status) {
 /**
 * set notify office flag
 */
-Deal.needsAttention = async function(task_id, status) {
+Deal.needsAttention = async function (task_id, status) {
   try {
     await new Fetch()
       .patch(`/tasks/${task_id}/needs_attention`)
       .send({ needs_attention: status })
-
   } catch (e) {
     return false
   }
@@ -517,14 +535,13 @@ Deal.needsAttention = async function(task_id, status) {
 /**
 * bulk submit for review
 */
-Deal.bulkSubmit = async function(dealId, tasks) {
+Deal.bulkSubmit = async function bulkSubmit(dealId, tasks) {
   try {
     const response = await new Fetch()
       .put(`/deals/${dealId}/tasks`)
       .send(tasks)
 
     return response.body.data
-
   } catch (e) {
     return false
   }
@@ -533,7 +550,7 @@ Deal.bulkSubmit = async function(dealId, tasks) {
 /**
 * update deal context
 */
-Deal.updateContext = async function(dealId, context, approved) {
+Deal.updateContext = async function (dealId, context, approved) {
   try {
     const response = await new Fetch()
       .post(`/deals/${dealId}/context`)
@@ -551,7 +568,7 @@ Deal.updateContext = async function(dealId, context, approved) {
 /**
 * get envelopes of a deal
 */
-Deal.getEnvelopes = async function(deal_id) {
+Deal.getEnvelopes = async function (deal_id) {
   try {
     const response = await new Fetch()
       .get(`/deals/${deal_id}/envelopes`)
@@ -579,7 +596,7 @@ Deal.resendEnvelope = async function (id) {
 /**
 * send envelope
 */
-Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recipients) {
+Deal.sendEnvelope = async function (deal_id, subject, message, attachments, recipients) {
   const data = {
     deal: deal_id,
     title: subject,
@@ -590,7 +607,7 @@ Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recip
 
   try {
     const response = await new Fetch()
-      .post(`/envelopes`)
+      .post('/envelopes')
       .send(data)
 
     return response.body.data
@@ -602,7 +619,7 @@ Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recip
 /**
 * void envelope
 */
-Deal.voidEnvelope = async function(envelope_id) {
+Deal.voidEnvelope = async function (envelope_id) {
   try {
     const response = await new Fetch()
       .patch(`/envelopes/${envelope_id}/status`)
@@ -617,7 +634,7 @@ Deal.voidEnvelope = async function(envelope_id) {
 /**
 * split files
 */
-Deal.splitPDF = async function(title, room_id, files, pages) {
+Deal.splitPDF = async function (title, room_id, files, pages) {
   try {
     const request = agent
       .post(`${config.app.url}/api/deals/pdf-splitter`)
@@ -631,12 +648,30 @@ Deal.splitPDF = async function(title, room_id, files, pages) {
 
     // send request
     const response = await request
+
     return response.body
   } catch (e) {
     throw e
   }
 }
 
+/**
+ * get all agents of brand
+ */
+Deal.getAgents = async function (user) {
+  if (!user.brand) {
+    throw new Error('This user does not belong to any brand')
+  }
+
+  try {
+    const response = await new Fetch()
+      .get(`/brands/${user.brand}/agents`)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
 
 /**
  * Search through all deals

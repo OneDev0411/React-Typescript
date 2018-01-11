@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { Modal } from 'react-bootstrap'
 
 const Icon = ({ type }) => {
@@ -21,16 +20,15 @@ const Icon = ({ type }) => {
   }
 }
 
-const SuccessModal = ({ isActive, type, text }) =>
+const SuccessModal = ({ isActive, type, text }) => (
   <Modal dialogClassName="c-success-modal" show={isActive}>
     <div className="c-success-modal__body din">
       <span className="c-success-modal__icon">
         <Icon type={type} />
       </span>
-      <div style={{ textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' }}>
-        {text}
-      </div>
+      <div style={{ textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' }}>{text}</div>
     </div>
   </Modal>
+)
 
-export default pure(SuccessModal)
+export default SuccessModal

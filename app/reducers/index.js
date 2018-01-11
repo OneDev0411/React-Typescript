@@ -15,6 +15,7 @@ import alerts from './listings/alerts'
 import listing from './listings/listing'
 import favorites from './listings/favorites'
 import widgets from './widgets'
+import { intercom } from './intercom'
 import confirmation from './confirmation'
 import { createNamedWrapperReducer } from '../utils/redux-utils'
 import { reducer as reduxFormReducer } from 'redux-form'
@@ -28,6 +29,7 @@ const appReducer = combineReducers({
   contacts,
   chatroom,
   widgets,
+  intercom,
   confirmation,
 
   /* deals reducers */

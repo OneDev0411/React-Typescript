@@ -15,6 +15,7 @@ import DealAgents from './deal-agents'
 import ClosingOfficers from './offer-closing-officer'
 import DealReferrals from './deal-referrals'
 import CriticalDates from './critical-dates'
+import IntercomTrigger from '../../Partials/IntercomTrigger'
 import { createRoles, createOffer, updateContext } from '../../../../../store_actions/deals'
 import hasPrimaryOffer from '../utils/has-primary-offer'
 
@@ -34,7 +35,8 @@ class CreateOffer extends React.Component {
       agents: {},
       clients: {},
       closingOfficers: {},
-      referrals: {}
+      referrals: {},
+      submitError: null
     }
   }
 
@@ -78,14 +80,14 @@ class CreateOffer extends React.Component {
     this.setState({
       [type]: {
         ...this.state[type],
-        [form.email || form.user.email]: form
+        [form.id || form.user.id]: form
       }
     })
   }
 
-  onRemoveRole(email, type) {
+  onRemoveRole(id, type) {
     this.setState({
-      [type]: _.omit(this.state[type], (role) => role.email === email)
+      [type]: _.omit(this.state[type], (role) => role.id === id)
     })
   }
 
@@ -228,7 +230,7 @@ class CreateOffer extends React.Component {
   }
 
   render() {
-    const { saving, criticalDates, referrals, closingOfficers, offerType,
+    const {saving, submitError, criticalDates, referrals, closingOfficers, offerType,
       enderType, agents, clients, buyerName, dealHasPrimaryOffer } = this.state
     const { deal } = this.props
 
@@ -274,6 +276,7 @@ class CreateOffer extends React.Component {
               />
 
               <DealAgents
+                scenario="CreateOffer"
                 dealSide="Buying"
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
@@ -311,6 +314,31 @@ class CreateOffer extends React.Component {
               />
             </div>
           }
+
+          {!saving &&
+            submitError && (
+              <div
+                className="c-alert c-alert--error"
+                style={{
+                  float: 'left',
+                  marginBottom: '2rem'
+                }}
+              >
+                <span>
+                  Sorry, something went wrong while adding an offer. Please try again.
+                </span>
+                <IntercomTrigger
+                  render={({ activeIntercom, intercomIsActive }) => (
+                    <button
+                      onClick={!intercomIsActive ? activeIntercom : () => false}
+                      className="btn btn-primary c-button--link"
+                    >
+                      Support
+                    </button>
+                  )}
+                />
+              </div>
+            )}
 
           <Button
             className={cn('btn btn-primary create-offer-button', { disabled: !canCreateOffer })}

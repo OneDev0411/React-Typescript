@@ -101,23 +101,32 @@ function removeRoom(state, action) {
  * add "user is typing" for a specific room
  */
 function addMessageTyping(state, action) {
-  return updateRoom(state, action.roomId, {
-    typing: {
-      ...state[action.roomId].typing,
-      ...{
-        [action.userId]:
-          _.find(state[action.roomId].users, user => user.id === action.userId)
+  let typing = state[action.roomId] && state[action.roomId].typing
+  const users = state[action.roomId] && state[action.roomId].users
+
+  if (users) {
+    return updateRoom(state, action.roomId, {
+      typing: {
+        ...typing,
+        ...{
+          [action.userId]:
+          _.find(users, user => user.id === action.userId)
+        }
       }
-    }
-  })
+    })
+  }
+
+  return state
 }
 
 /**
  * remove "user is typing"
  */
 function removeMessageTyping(state, action) {
+  let typing = state[action.roomId] && state[action.roomId].typing
+
   return updateRoom(state, action.roomId, {
-    typing: _.omit(state[action.roomId].typing, user => user.id === action.userId)
+    typing: typing && _.omit(typing, user => user.id === action.userId)
   })
 }
 

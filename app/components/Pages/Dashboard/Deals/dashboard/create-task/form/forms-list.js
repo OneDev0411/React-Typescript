@@ -18,12 +18,16 @@ class Forms extends React.Component {
       filter: '',
       isCreatingTask: null,
       showNewTaskModal: false,
-      newTaskTitle: ''
+      newTaskTitle: '',
+      createTaskIsFailed: false
     }
   }
 
   async createTask(form) {
-    const { deal, createFormTask, setSelectedTask, onClose, listId } = this.props
+    const {
+      deal, createFormTask, setSelectedTask, onClose, listId
+    } = this.props
+
     if (this.lockedTaskCreation) {
       return false
     }
@@ -32,20 +36,27 @@ class Forms extends React.Component {
     this.lockedTaskCreation = true
 
     this.setState({
+      createTaskIsFailed: false,
       isCreatingTask: form.isNew || form
     })
 
-    // create form
-    const task = await createFormTask(deal.id, form.id, form.name, listId)
+    try {
+      // create form
+      const task = await createFormTask(deal.id, form.id, form.name, listId)
 
-    // make this task active
-    setSelectedTask(task)
+      // make this task active
+      setSelectedTask(task)
 
-    this.setState({ isCreatingTask: null })
-    this.lockedTaskCreation = false
-    onClose()
+      this.setState({ isCreatingTask: null })
+      this.lockedTaskCreation = false
+      onClose()
 
-    return task
+      return task
+    } catch (error) {
+      this.setState({ createTaskIsFailed: true, isCreatingTask: null })
+
+      return false
+    }
   }
 
   async createNewTask(taskName) {
@@ -74,16 +85,20 @@ class Forms extends React.Component {
     // create task
     const task = await this.createTask(form)
 
-    this.setState({
-      newTaskTitle: '',
-      showNewTaskModal: false
-    })
+    if (task) {
+      this.setState({
+        newTaskTitle: '',
+        showNewTaskModal: false
+      })
 
-    this.props.setUploadFiles(files, deal, task)
+      this.props.setUploadFiles(files, deal, task)
+    }
   }
 
   render() {
-    const { forms, show, onClose, displayTaskName } = this.props
+    const {
+      forms, show, onClose, displayTaskName
+    } = this.props
     const { filter, showNewTaskModal, isCreatingTask } = this.state
 
     return (
@@ -94,26 +109,20 @@ class Forms extends React.Component {
           backdrop="static"
           dialogClassName="modal-deal-create-form"
         >
-          <Modal.Header
-            closeButton={isCreatingTask === null}
-          >
-            {isCreatingTask ? 'Creating Task ...' : 'Add Task'}
-          </Modal.Header>
+          <Modal.Header closeButton={isCreatingTask === null}>Add Task</Modal.Header>
 
           <Modal.Body>
-            {
-              _.size(forms) > 5 &&
+            {_.size(forms) > 5 && (
               <input
                 placeholder="Type in to search ..."
                 onChange={e => this.setState({ filter: e.target.value })}
               />
-            }
+            )}
 
             <ul>
-              {
-                _
-                .chain(forms)
-                .filter(form => form.name.toLowerCase().includes(filter.toLowerCase()))
+              {_.chain(forms)
+                .filter(form =>
+                  form.name.toLowerCase().includes(filter.toLowerCase()))
                 .map((form, key) => (
                   <li
                     key={`FORM_ITEM_${form.id}_${key}`}
@@ -123,14 +132,13 @@ class Forms extends React.Component {
                   >
                     {form.name}
 
-                    {
-                      isCreatingTask && isCreatingTask.id === form.id &&
-                      <i className="fa fa-spinner fa-spin" />
-                    }
+                    {isCreatingTask &&
+                      isCreatingTask.id === form.id && (
+                        <i className="fa fa-spinner fa-spin" />
+                      )}
                   </li>
                 ))
-                .value()
-              }
+                .value()}
             </ul>
           </Modal.Body>
 
@@ -149,13 +157,14 @@ class Forms extends React.Component {
           show={showNewTaskModal}
           onClose={() => this.setState({ showNewTaskModal: false })}
           isCreatingTask={isCreatingTask}
-          onCreateNewTask={(name) => this.createNewTask(name) }
+          isFailed={this.state.createTaskIsFailed}
+          onCreateNewTask={name => this.createNewTask(name)}
         />
 
         <Dropzone
           disableClick
-          ref={(ref) => this.dropzone = ref}
-          onDrop={(files) => this.onDropFiles(files)}
+          ref={ref => (this.dropzone = ref)}
+          onDrop={files => this.onDropFiles(files)}
           multiple
           accept="application/pdf,image/*"
           style={{ display: 'none' }}

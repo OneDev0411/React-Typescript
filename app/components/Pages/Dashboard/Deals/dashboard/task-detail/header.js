@@ -79,13 +79,16 @@ class Header extends React.Component {
           </div>
 
           <div className="cta">
-            <span
-              className="delete-task"
-              onClick={() => this.requestDeleteTask(task)}
-              title="Delete Task"
-            >
-              <img src="/static/images/deals/trashcan.png" />
-            </span>
+            {
+              task.is_deletable &&
+              <span
+                className="delete-task"
+                onClick={() => this.requestDeleteTask(task)}
+                title="Delete Task"
+              >
+                <img src="/static/images/deals/trashcan.png" />
+              </span>
+            }
 
             <span
               className="close-task"

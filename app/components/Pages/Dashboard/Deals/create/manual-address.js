@@ -6,8 +6,6 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
 
-    const { deal } = props
-
     this.state = {
       street_number: this.getAddressField('street_number'),
       street_name: this.getAddressField('street_name'),
@@ -36,6 +34,14 @@ export default class extends React.Component {
     this.props.onCreateAddress({
       type: 'listing',
       address_components: this.state
+    })
+    this.setState({
+      street_number: '',
+      street_name: '',
+      unit_number: '',
+      city: '',
+      state: '',
+      postal_code: ''
     })
   }
 

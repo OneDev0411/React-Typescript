@@ -9,7 +9,8 @@ export default class FavoriteHeart extends Component {
   }
 
   render() {
-    const listing = this.props.listing
+    const { listing } = this.props
+
     if (!listing) {
       return false
     }
@@ -21,19 +22,14 @@ export default class FavoriteHeart extends Component {
       <img
         onClick={e => {
           e.stopPropagation()
-          controller.listing_card.handleFavoriteAction(
-            listing
-          )
+          controller.listing_card.handleFavoriteAction(listing)
         }}
+        alt="heart"
         style={heart_style}
-        src={`/static/images/dashboard/mls/heart${this.isFavorited(mls_number)
-          ? '-red'
-          : '-white'}.svg`}
+        src={`/static/images/dashboard/mls/heart${
+          this.isFavorited(mls_number) ? '-red' : '-white'
+        }.svg`}
       />
     )
   }
-}
-
-FavoriteHeart.propTypes = {
-  listing: React.PropTypes.object
 }

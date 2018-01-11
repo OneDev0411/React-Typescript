@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -27,17 +26,16 @@ const ShareAlertModal = ({
   successModalIsActive
 }) => {
   const disabled = isSharing || !hasRecipients(recipients)
+
   return (
     <div>
       <Modal
         show={isActive}
-        onHide={isSharing ? () => {
-        } : onHide}
+        onHide={isSharing ? () => {} : onHide}
         className="c-share-modal"
       >
         <button
-          onClick={isSharing ? () => {
-          } : onHide}
+          onClick={isSharing ? () => {} : onHide}
           className="c-share-modal__close-btn"
         >
           <svg
@@ -47,9 +45,7 @@ const ShareAlertModal = ({
             width="16"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-            />
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
             <path d="M0 0h24v24H0z" fill="none" />
           </svg>
         </button>
@@ -60,9 +56,7 @@ const ShareAlertModal = ({
         <Modal.Footer className="c-create-alert-modal__footer">
           <button
             onClick={shareHandler}
-            className={`c-create-alert-modal__button ${disabled
-              ? 'isSaving'
-              : ''}`}
+            className={`c-create-alert-modal__button ${disabled ? 'isSaving' : ''}`}
             disabled={disabled}
             style={{ float: 'right', backgroundColor: !disabled && brandColor }}
           >
@@ -80,7 +74,6 @@ const ShareAlertModal = ({
 }
 
 export default compose(
-  pure,
   connect(
     ({ data, search }) => ({
       user: data.user,
@@ -108,15 +101,11 @@ export default compose(
       setIsSharing(true)
 
       createRoom(recipients).then(room => {
-        const alertOptions = normalizeAlertOptions(
-          searchOptions,
-          drawingPoints,
-          {
-            room,
-            title: alertTitle,
-            created_by: user.id
-          }
-        )
+        const alertOptions = normalizeAlertOptions(searchOptions, drawingPoints, {
+          room,
+          title: alertTitle,
+          created_by: user.id
+        })
 
         createAlert(alertOptions)
           .then(() => {

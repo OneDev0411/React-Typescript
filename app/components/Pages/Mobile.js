@@ -3,24 +3,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 import withState from 'recompose/withState'
 import compose from 'recompose/compose'
-import pure from 'recompose/pure'
 import { Button } from 'react-bootstrap'
 import S from 'shorti'
 import Brand from '../../controllers/Brand'
 import config from '../../../config/public'
 
-
-const Mobile = ({
-  iFrameSrc,
-  data,
-  setIFrameSrc,
-  location
-}) => {
+const Mobile = ({ iFrameSrc, data, setIFrameSrc, location }) => {
   /**
    * Try to open the external app using URL scheme
    * @param urlNotFoundApp urlNotFoundApp where should go if app not found (if exists)
    */
-  let loadAppByUri = (urlNotFoundApp) => {
+  let loadAppByUri = urlNotFoundApp => {
     let goToAppPage = null
     let clearEvents
     let setEvents
@@ -40,9 +33,11 @@ const Mobile = ({
      */
     appWasFound = () => {
       console.log('appWasFound: ', waiting)
+
       if (!waiting) {
         return false
       }
+
       waiting = false
       clearEvents()
     }
@@ -55,9 +50,11 @@ const Mobile = ({
       if (!waiting) {
         return false
       }
+
       waiting = false
       clearEvents()
       console.log(`Changing location to ${urlNotFoundApp}`, urlNotFoundApp)
+
       if (urlNotFoundApp) {
         console.log('appWasNotFound')
         document.location = urlNotFoundApp
@@ -99,10 +96,7 @@ const Mobile = ({
      * after some wait, it is because
      * the app was not founded.
      */
-    goToAppPage = setTimeout(
-      appWasNotFound,
-      2000
-    )
+    goToAppPage = setTimeout(appWasNotFound, 2000)
   }
 
   const mobile_splash_style = S(
@@ -110,9 +104,11 @@ const Mobile = ({
   )
 
   let logo = '/static/images/mobile/icon@3x.png'
+
   if (data.brand) {
     logo = Brand.asset('site_logo')
   }
+
   return (
     <div style={mobile_splash_style}>
       <div style={S('bg-263445 absolute t-0 l-0 w-100p h-100p op-.7 z-9')} />
@@ -120,18 +116,18 @@ const Mobile = ({
         <div style={S('mt-50 mb-30')}>
           <img style={S('w-76')} src={logo} alt="" />
         </div>
-        {location && location.query.type === 'iphone'
-          ? <div>
-            {iFrameSrc && <iframe
-              style={{ display: 'none' }}
-              title="open iOS app"
-              src={iFrameSrc}
-            />
-            }
+        {location && location.query.type === 'iphone' ? (
+          <div>
+            {iFrameSrc && (
+              <iframe
+                style={{ display: 'none' }}
+                title="open iOS app"
+                src={iFrameSrc}
+              />
+            )}
             <p style={{ fontSize: '18px', padding: '2rem' }}>
-              Our mobile web version is temporarily unavailable. Please use your desktop browser to access Rechat.com
-              or
-              use the mobile iOS App.
+              Our mobile web version is temporarily unavailable. Please use your
+              desktop browser to access Rechat.com or use the mobile iOS App.
             </p>
             <Button
               style={S(
@@ -160,15 +156,18 @@ const Mobile = ({
               )}
               bsSize="large"
               onClick={() => {
-                document.location = (config.itunes_url)
+                document.location = config.itunes_url
               }}
             >
               Install the App
             </Button>
           </div>
-          : <div style={{ fontSize: '18px', padding: '2rem' }}>
-            Our mobile web version is temporarily unavailable. Please use your desktop browser to access Rechat.com.
-          </div>}
+        ) : (
+          <div style={{ fontSize: '18px', padding: '2rem' }}>
+            Our mobile web version is temporarily unavailable. Please use your
+            desktop browser to access Rechat.com.
+          </div>
+        )}
       </div>
       <div style={S('text-center color-fff absolute w-100p b-30 z-11')}>
         Powered by{' '}
@@ -181,7 +180,6 @@ const Mobile = ({
 }
 
 export default compose(
-  pure,
   connect(({ data }) => ({ data })),
   withState('iFrameSrc', 'setIFrameSrc', '')
 )(Mobile)

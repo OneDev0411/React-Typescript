@@ -153,8 +153,7 @@ const validate = values => {
   const NAME_CHARACHTER_LIMIT = 1
   const minimumCharactersError = length =>
     `Must be at least ${length} characters.`
-  const invalidCharactersError =
-    'Invalid charachter. You are allowed use alphabet character and space in this field.'
+  const invalidCharactersError = 'Invalid charachters. You are just allowed use alphabet characters and space.'
   const isValidName = name => new RegExp(/^[A-Za-z\s]+$/).exec(name)
 
   if (!values.first_name) {

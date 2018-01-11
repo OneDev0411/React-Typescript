@@ -52,7 +52,10 @@ class FormEdit extends React.Component {
     }
 
     if (task && task.submission) {
-      submission = await Deal.getSubmissionForm(task.id, task.submission.last_revision)
+      submission = await Deal.getSubmissionForm(
+        task.id,
+        task.submission.last_revision
+      )
     }
 
     this.sendMessage('setValues', [submission.values])
@@ -104,9 +107,12 @@ class FormEdit extends React.Component {
       return false
     }
 
-    this.setState({
-      saving: true
-    }, () => this.saveForm(data))
+    this.setState(
+      {
+        saving: true
+      },
+      () => this.saveForm(data)
+    )
   }
 
   /**
@@ -159,7 +165,9 @@ class FormEdit extends React.Component {
    *
    */
   async saveForm(values) {
-    const { saveSubmission, task, notify, deal } = this.props
+    const {
+      saveSubmission, task, notify, deal
+    } = this.props
     const { incompleteFields } = this.state
 
     const status = incompleteFields.length === 0 ? 'Fair' : 'Draft'
@@ -170,15 +178,16 @@ class FormEdit extends React.Component {
 
       notify({
         message: 'The form has been saved!',
-        status: 'success',
-        dismissible: true
+        status: 'success'
       })
 
       // close form
       return this.close()
-    } catch (e) {
-      console.log(e)
-      /* nothing */
+    } catch (err) {
+      notify({
+        message: 'Sorry, something went wrong while saving form. Please try again.',
+        status: 'error'
+      })
     }
 
     // don't show saving
@@ -226,14 +235,13 @@ class FormEdit extends React.Component {
         incompleteFields={incompleteFields}
         saving={saving}
         buttonCaption={this.getButtonCaption()}
-        onFrameRef={ref => this.frame = ref}
+        onFrameRef={ref => (this.frame = ref)}
         onSave={() => this.onSave()}
         onClose={() => this.close()}
       />
     )
   }
 }
-
 
 function mapStateToProps({ user, deals }, props) {
   const { list, tasks } = deals

@@ -4,9 +4,11 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Link, browerHistory } from 'react-router'
-import Intercom from 'react-intercom'
 import { Dropdown } from 'react-bootstrap'
 import Avatar from './components/Avatar'
+import Intercom from '../Intercom'
+import IntercomTrigger from '../IntercomTrigger'
+import { activeIntercom } from '../../../../../store_actions/intercom'
 
 import Brand from '../../../../../controllers/Brand'
 
@@ -41,24 +43,8 @@ const getActivePath = path => {
   }
 }
 
-const IntercomCloseButton = ({ onClick }) => (
-  <button onClick={onClick} className="intercom__close-btn">
-    <svg
-      fill="#333"
-      height="32"
-      viewBox="0 0 24 24"
-      width="32"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-    </svg>
-  </button>
-)
-
 const SideNavItem = ({ children, isActive }) => (
-  <li
-    className={`c-app-sidenav__item ${isActive ? 'is-active' : ''}`}
-  >
+  <li className={`c-app-sidenav__item ${isActive ? 'is-active' : ''}`}>
     <span
       className="c-app-sidenav__item__active-sign"
       style={{ backgroundColor: ACTIVE_COLOR }}
@@ -67,20 +53,11 @@ const SideNavItem = ({ children, isActive }) => (
   </li>
 )
 
-const appNavbar = ({
+const appSideNav = ({
   user,
   activePath,
-  activeIntercom,
-  intercomIsActive,
-  unactiveIntercom,
   appNotifications
 }) => {
-  const intercomUser = {
-    user_id: user.id,
-    email: user.email,
-    name: `${user.first_name} ${user.last_name}`
-  }
-
   const roles = getUserRoles(user)
   const hasDealsPermission = roles.includes('Deals')
   const hasBackOfficePermission = roles.includes('BackOffice')
@@ -136,14 +113,21 @@ const appNavbar = ({
           </Link>
         </SideNavItem>
 
-        <SideNavItem isActive={intercomIsActive}>
-          <button
-            onClick={activeIntercom}
-            className="c-app-sidenav__item__title--button"
-          >
-            Support
-          </button>
-        </SideNavItem>
+        <IntercomTrigger
+          render={({
+            activeIntercom,
+            intercomIsActive
+          }) => (
+            <SideNavItem isActive={intercomIsActive}>
+              <button
+                onClick={!intercomIsActive ? activeIntercom : () => false}
+                className="c-app-sidenav__item__title--button"
+              >
+                Support
+              </button>
+            </SideNavItem>
+          )}
+        />
 
         <Dropdown
           dropup
@@ -182,31 +166,13 @@ const appNavbar = ({
         </Dropdown>
       </ul>
 
-      {window.INTERCOM_ID && (
-        <Intercom appID={window.INTERCOM_ID} {...intercomUser} />
-      )}
-      {intercomIsActive && <IntercomCloseButton onClick={unactiveIntercom} />}
+      <Intercom />
     </aside>
   )
 }
 
-export default compose(
-  connect(({ data, user }, { location }) => ({
-    user,
-    activePath: getActivePath(location.pathname),
-    appNotifications: data.new_notifications_count || 0
-  })),
-  withState('intercomIsActive', 'setIntercomIsActive', false),
-  withHandlers({
-    activeIntercom: ({ intercomIsActive, setIntercomIsActive }) => () => {
-      if (!intercomIsActive) {
-        window.Intercom('show')
-        setIntercomIsActive(true)
-      }
-    },
-    unactiveIntercom: ({ intercomIsActive, setIntercomIsActive }) => () => {
-      window.Intercom('hide')
-      setIntercomIsActive(false)
-    }
-  })
-)(appNavbar)
+export default connect(({ data, user }, { location }) => ({
+  user,
+  activePath: getActivePath(location.pathname),
+  appNotifications: data.new_notifications_count || 0
+}))(appSideNav)

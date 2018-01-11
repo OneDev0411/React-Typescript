@@ -1,10 +1,9 @@
 .send-esigns {
-  $pad-size: 17px;
+  $pad-size: 15px;
   position: fixed;
   text-align: left;
-  right: 20px;
+  right: 15px;
   bottom: 0;
-  height: 610px;
   width: 550px;
   border-radius: 3px 3px 0 0;
   background-color: #fff;
@@ -38,11 +37,9 @@
 
   .recipients {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
     padding: 0 $pad-size;
-    box-shadow: 0 1px 0 0 #ecf0f4;
+    border: 1px solid #ecf0f4;
     min-height: 50px;
 
     .rcp-container {
@@ -108,9 +105,9 @@
   }
 
   .message {
-    padding: $pad-size;
-    position: relative;
-    height: 150px;
+    padding: 1rem $pad-size;
+    height: 218px;
+
     textarea {
       border: none;
       width: 100%;
@@ -127,12 +124,10 @@
   }
 
   .attachments {
-    position: absolute;
-    bottom: 55px + 10px;
-    left: $pad-size;
-    width: 530px;
-    max-height: 22%;
-    overflow: auto;
+    padding: 1rem $pad-size;
+    max-height: 18.5rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
 
     ul {
       margin: 0;
@@ -149,6 +144,10 @@
         background-color: #f0f4f7;
         border: solid 1px #e9eef2;
         margin-bottom: 5px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
 
         .name {
           display: inline-block;
@@ -179,28 +178,19 @@
   }
 
   .footer {
-    position: absolute;
-    height: 55px;
-    line-height: 55px;
-    vertical-align: middle;
-    background-color: #f8fafb;
-    box-shadow: 0 -1px 0 0 #dce5eb;
-    padding: 0 $pad-size;
-    bottom: 0;
-    right: 0;
-    left: 0;
+    .footer__inner {
+      border-top: 1px solid #dce5eb;
+      background-color: #f8fafb;
+      padding: 1rem $pad-size;
+    }
 
     .btn-send,
     .btn-attach {
       width: 100px;
       height: 34px;
-      line-height: 17px;
       border-radius: 3px;
       font-weight: 500;
-      font-size: 14px;
-      &:hover {
-        opacity: 0.7;
-      }
+      font-size: 13px;
 
       &:focus {
         outline: none;
@@ -209,15 +199,24 @@
 
     .btn-send {
       background-color: #2196f3;
-      border-color: #2196f3;
+      border-width: 0;
       color: #fff;
       margin-right: 10px;
+
+      &:hover {
+        background-color: darken($color: #2196f3, $amount: 7%);
+      }
     }
 
     .btn-attach {
       background-color: #fff;
-      border: solid 1px #dde2e6;
+      border-color: #dde2e6;
       color: #8da2b5;
+
+      &:hover {
+        background-color: #f9f9f9;
+      }
+
       i {
         margin-right: 5px;
       }
@@ -237,6 +236,8 @@
 
   .modal-body {
     padding: 0;
+    max-height: 320px;
+    overflow: auto;
     .deal-roles {
       .deal-info-title {
         display: none;
