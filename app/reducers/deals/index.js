@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import list from './list'
 import tasks from './tasks'
+import roles from './roles'
 import checklists from './checklists'
 import forms from './forms'
 import selectedTask from './selected-task'
@@ -17,6 +18,7 @@ export default combineReducers({
   list,
   tasks,
   checklists,
+  roles,
   forms,
   esign,
   backoffice,

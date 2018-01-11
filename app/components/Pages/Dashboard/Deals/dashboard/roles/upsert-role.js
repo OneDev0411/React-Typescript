@@ -19,10 +19,10 @@ class UpsertRole extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedRole } = nextProps
+    const { selectedRole, allowedRoles } = nextProps
     const { form, show } = this.state
 
-    if (!show && !form && selectedRole) {
+    if (selectedRole && !show && !form && !allowedRoles) {
       this.setState({
         form: selectedRole,
         isNewRecord: false,

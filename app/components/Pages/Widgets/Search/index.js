@@ -1,6 +1,7 @@
 // Search.js
 import S from 'shorti'
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { FormControl } from 'react-bootstrap'
 import config from '../../../../../config/public'
 
@@ -107,5 +108,5 @@ export default class Search extends Component {
 
 // PropTypes
 Search.propTypes = {
-  data: React.PropTypes.object
+  data: PropTypes.object
 }

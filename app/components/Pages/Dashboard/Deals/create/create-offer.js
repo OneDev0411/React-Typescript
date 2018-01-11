@@ -80,14 +80,14 @@ class CreateOffer extends React.Component {
     this.setState({
       [type]: {
         ...this.state[type],
-        [form.email || form.user.email]: form
+        [form.id || form.user.id]: form
       }
     })
   }
 
-  onRemoveRole(email, type) {
+  onRemoveRole(id, type) {
     this.setState({
-      [type]: _.omit(this.state[type], (role) => role.email === email)
+      [type]: _.omit(this.state[type], (role) => role.id === id)
     })
   }
 

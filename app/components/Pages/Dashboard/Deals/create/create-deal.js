@@ -46,14 +46,14 @@ class CreateDeal extends React.Component {
     this.setState({
       [type]: {
         ...this.state[type],
-        [form.email]: form
+        [form.id]: form
       }
     })
   }
 
-  onRemoveRole(email, type) {
+  onRemoveRole(id, type) {
     this.setState({
-      [type]: _.omit(this.state[type], role => role.email === email)
+      [type]: _.omit(this.state[type], role => role.id === id)
     })
   }
 
@@ -164,14 +164,6 @@ class CreateDeal extends React.Component {
 
       return OpenDeal(deal.id)
     } catch (e) {
-      // notify user
-      // notify({
-      //   title: 'Can not create deal',
-      //   message: e.response && e.response.body ? e.response.body.message : null,
-      //   status: 'error',
-      //   dismissible: true
-      // })
-
       this.setState({
         saving: false,
         submitError: true
@@ -338,9 +330,9 @@ class CreateDeal extends React.Component {
           >
             {saving ? 'Creating ...' : 'Create Deal'}
           </Button>
-        
+
         </div>
-      
+
       </div>
     )
   }
