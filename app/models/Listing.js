@@ -1,7 +1,7 @@
 // models/Listing.js
 import es6Promise from 'es6-promise'
+
 es6Promise.polyfill()
-import validate from 'uuid-validate'
 import 'isomorphic-fetch'
 import Fetch from '../services/fetch'
 import config from '../../config/public'
@@ -17,11 +17,13 @@ const getRequest = (url, token) =>
     })
   })
 
-const asyncRequest = async (request) => {
+const asyncRequest = async request => {
   try {
     const response = await fetch(request)
+
     if (response.status >= 200 && response.status < 300) {
       const parsedResponse = await response.json()
+
       return parsedResponse.data
     }
   } catch (error) {
@@ -47,10 +49,9 @@ export default {
     return await fetchListing
   },
   get: (params, callback) => {
-
     new Fetch()
       .get(`/listings/${params.id}?associations=compact_listing.proposed_agent`)
-      .end(function(err, res) {
+      .end((err, res) => {
         if (err) {
           return callback(err, false)
         }
@@ -65,26 +66,32 @@ export default {
   getMlsNumber: (params, callback) => {
     const { access_token, q } = params
     const url = `${API_HOST}/listings/search?mls_number=${q}`
+
     callback(false, asyncRequest(getRequest(url, access_token)))
   },
   search: (params, callback) => {
     const { access_token, q } = params
     const url = `${API_HOST}/listings/search?q=${q}`
+
     callback(false, asyncRequest(getRequest(url, access_token)))
   },
   getValerts: (params, callback) => {
-    const { options, office, offset, brand } = params
+    const {
+      options, office, offset, brand
+    } = params
 
     // base endpoint
     let endpoint = '/valerts'
 
     // From map widget
     if (office && !options.list_offices) {
-      endpoint += '?associations=compact_listing.proposed_agent&order_by[]=office&order_by[]=status&office=' + office
+      endpoint +=
+        `?associations=compact_listing.proposed_agent&order_by[]=office&order_by[]=status&office=${
+          office}`
     }
 
     // From listing widget
-    if (options.list_offices && options.list_offices.length || options.brand) {
+    if ((options.list_offices && options.list_offices.length) || options.brand) {
       endpoint += '?associations=compact_listing.proposed_agent'
 
       if (options.listing_statuses[0] === 'Sold') {
@@ -94,13 +101,13 @@ export default {
 
     // Offset
     if (offset) {
-      endpoint = endpoint + '&limit=500&offset=' + offset
+      endpoint = `${endpoint}&limit=500&offset=${offset}`
     }
 
     new Fetch()
       .post(endpoint)
       .send(options)
-      .end(function(err, res) {
+      .end((err, res) => {
         if (err) {
           return callback(err, false)
         }
@@ -148,7 +155,7 @@ export default {
     //   })
     //   .then(response => callback(false, { ...response, ...params }))
   },
-  getListing: async (id) => {
+  getListing: async id => {
     if (!id) {
       return
     }

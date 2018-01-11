@@ -64,6 +64,13 @@
 
         @extend %status-colors;
       }
+
+      &.disabled {
+        cursor: auto;
+        .title {
+          color: gray;
+        }
+      }
     }
   }
 

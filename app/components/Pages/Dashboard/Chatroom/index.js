@@ -28,7 +28,9 @@ class Chatroom extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { activeRoom, location, isInstant, instantMode } = this.props
+    const {
+      activeRoom, location, isInstant, instantMode
+    } = this.props
 
     // when user switch from popup to full screen (= instant) chat
     if (isInstant && instantMode !== nextProps.instantMode) {
@@ -47,11 +49,14 @@ class Chatroom extends React.Component {
     return nextProps.activeRoom !== undefined &&
       nextProps.location !== undefined &&
       activeRoom !== nextProps.activeRoom &&
-      (nextProps.location.query.redirect !== undefined || location.key !== nextProps.location.key)
+      (nextProps.location.query.redirect !== undefined
+        || location.key !== nextProps.location.key)
   }
 
   changeRoom(id) {
-    const { instantMode, changeActiveRoom, activeRoom, location } = this.props
+    const {
+      instantMode, changeActiveRoom, activeRoom, location
+    } = this.props
 
     if (id !== activeRoom) {
       changeActiveRoom(id)
@@ -78,7 +83,7 @@ class Chatroom extends React.Component {
     return (
       <div className="chatroom">
         <audio id="chatroom-new-message">
-          <soruce src="/static/audio/ding.wav" type="audio/wav" />
+          <source src="/static/audio/ding.wav" type="audio/wav" />
           <source src="/static/audio/ding.mp3" type="audio/mpeg" />
         </audio>
 

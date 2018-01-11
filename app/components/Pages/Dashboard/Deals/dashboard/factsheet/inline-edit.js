@@ -97,24 +97,19 @@ export default class Editable extends React.Component {
 
 
     return (
-      <div className={cn('field'
-        , { editable: true, approved, disabled }
-        , { error })}
-      >
+      <div className={cn('field', { editable: true, approved, disabled, error })}>
+        <DatePicker
+          show={editMode && field.fieldType === 'date'}
+          saveText={editable ? 'Update' : 'Notify Office'}
+          initialDate={this.getValue()}
+          onClose={() => this.cancelEditing()}
+          onSelectDate={date => this.onFinishEditing(date)}
+        />
 
         <div
           style={{ display: 'inline-block', minWidth: '100%' }}
           onClick={() => this.editField()}
         >
-
-          <DatePicker
-            show={editMode && field.fieldType === 'date'}
-            saveText={editable ? 'Update' : 'Notify Office'}
-            initialDate={this.getValue()}
-            onClose={() => this.cancelEditing()}
-            onSelectDate={date => this.onFinishEditing(date)}
-          />
-
           {
             editMode && isStringType ?
               '' :

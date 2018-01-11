@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { Field } from 'redux-form'
 
 const SwitchToggle = ({
@@ -20,7 +19,8 @@ const SwitchToggle = ({
         id={`${name}_checkbox`}
         normalize={v => (v ? value : null)}
         onChange={(event, newValue, previousValue) =>
-          onChangeHandler(event, newValue)}
+          onChangeHandler(event, newValue)
+        }
       />
     ) : (
       <input
@@ -36,4 +36,4 @@ const SwitchToggle = ({
   </div>
 )
 
-export default pure(SwitchToggle)
+export default SwitchToggle

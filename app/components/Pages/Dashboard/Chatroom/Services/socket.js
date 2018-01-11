@@ -25,6 +25,9 @@ export default class ChatSocket extends Socket {
   async bindEvents() {
     const { socket } = window
 
+    // update user state
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
+
     // bind User.Typing
     socket.on('User.Typing', this.onUserTyping.bind(this))
 
@@ -38,10 +41,11 @@ export default class ChatSocket extends Socket {
     socket.on('Users.States', this.onUserStates)
 
     // on reconnect
-    socket.on('reconnect', this.onReconnected.bind(this))
-
-    // update user state
-    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
+    Rx
+      .Observable
+      .fromEvent(socket, 'reconnect')
+      .throttleTime(20 * 1000)
+      .subscribe(() => this.onReconnected())
 
     Rx
       .Observable

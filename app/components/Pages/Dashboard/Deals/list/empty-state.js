@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router'
-import _ from 'underscore'
 
 export default ({
   isBackOffice
@@ -11,7 +10,8 @@ export default ({
         <img src="/static/images/deals/coffee-icon.svg" />
         <div className="title">You’ve done it. Inbox zero.</div>
         <div className="descr">
-          Sit back and relax. Get a coffee. We’ll notify you when a deal needs your attention.
+          Sit back and relax. Get a coffee. We’ll notify you when a deal needs your
+          attention.
         </div>
       </div>
     )
@@ -20,7 +20,9 @@ export default ({
   return (
     <div className="list-empty">
       <div className="title">You don’t have any deals yet</div>
-      <div className="descr">Get started by creating a new listing or making an offer.</div>
+      <div className="descr">Get started by creating a new listing or making an
+        offer.
+      </div>
 
       <div>
         <Link

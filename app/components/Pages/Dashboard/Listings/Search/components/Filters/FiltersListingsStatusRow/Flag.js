@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 
 const Flag = ({ icon, color }) => {
   if (icon) {
@@ -9,12 +8,10 @@ const Flag = ({ icon, color }) => {
       </span>
     )
   }
+
   return (
-    <span
-      className="c-filters-status__color"
-      style={{ backgroundColor: color }}
-    />
+    <span className="c-filters-status__color" style={{ backgroundColor: color }} />
   )
 }
 
-export default pure(Flag)
+export default Flag

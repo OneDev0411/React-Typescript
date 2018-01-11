@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -27,6 +26,7 @@ const ShareListingModal = ({
   successModalIsActive
 }) => {
   const disabled = isSharing || !hasRecipients(recipients)
+
   return (
     <div>
       <Modal
@@ -49,18 +49,14 @@ const ShareListingModal = ({
             <path d="M0 0h24v24H0z" fill="none" />
           </svg>
         </button>
-        <Modal.Title className="c-share-modal__title">
-          Share Listing
-        </Modal.Title>
+        <Modal.Title className="c-share-modal__title">Share Listing</Modal.Title>
         <Modal.Body style={{ padding: 0 }}>
           <Recipients onChangeRecipients={recps => setRecipients(recps)} />
         </Modal.Body>
         <Modal.Footer className="c-create-alert-modal__footer">
           <button
             onClick={shareHandler}
-            className={`c-create-alert-modal__button ${disabled
-              ? 'isSaving'
-              : ''}`}
+            className={`c-create-alert-modal__button ${disabled ? 'isSaving' : ''}`}
             disabled={disabled}
             style={{ float: 'right', backgroundColor: !disabled && brandColor }}
           >
@@ -74,7 +70,6 @@ const ShareListingModal = ({
 }
 
 export default compose(
-  pure,
   connect(null, { createRoom }),
   withState('recipients', 'setRecipients', {}),
   withState('isSharing', 'setIsSharing', false),
@@ -100,6 +95,7 @@ export default compose(
         createRecommendation({ room, mls_number, notification })
           .then(recsId => {
             setIsSharing(false)
+
             if (recsId) {
               onHide()
               setSuccessModalIsActive(true)

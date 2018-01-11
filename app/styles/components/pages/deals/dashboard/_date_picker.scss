@@ -23,6 +23,14 @@
     }
   }
 
+  .DayPicker .DayPicker-NavButton--next {
+    margin-right: 4px;
+  }
+
+  .DayPicker .DayPicker-NavButton--prev {
+    margin-left: 4px;
+  }
+
   .modal-footer {
     .deal-button {
       min-width: 100px;

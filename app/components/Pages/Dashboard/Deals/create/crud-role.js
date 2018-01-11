@@ -1,36 +1,101 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Button, Modal } from 'react-bootstrap'
+import Roles from '../dashboard/roles'
 import RoleForm from '../dashboard/roles/form'
 import RoleItem from './role-item'
+import UserAvatar from '../../../../Partials/UserAvatar'
+import roleName from '../utils/roles'
 
 class CrudRole extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      show: false,
+      showFormModal: false,
+      showAgentsModal: false,
+      isFormCompleted: false,
       form: null
     }
   }
 
   showModal() {
-    this.setState({ show: true })
+    const { teamAgents, shouldPrepopulateAgent } = this.props
+    let showAgentsModal = false
+    let showFormModal = false
+
+    if (shouldPrepopulateAgent !== true) {
+      return this.setState({
+        showFormModal: true
+      })
+    }
+
+    if (teamAgents.length >= 1) {
+      showAgentsModal = true
+    } else {
+      showFormModal = true
+    }
+
+    this.setState({
+      showFormModal,
+      showAgentsModal
+    })
+  }
+
+  populateForm(user) {
+    const { agent } = user
+
+    const form = {
+      title: `${user.first_name} ${user.last_name}`,
+      legal_first_name: user.first_name,
+      legal_last_name: user.last_name,
+      email: user.email,
+      phone: user.phone_number || agent.work_phone,
+      company: agent.office ? agent.office.name : ''
+    }
+
+    this.setState({ form })
   }
 
   closeModal() {
-    this.setState({ show: false, form: null })
+    this.setState({
+      showFormModal: false,
+      showAgentsModal: false,
+      isFormCompleted: false,
+      form: null
+    })
   }
 
   addRole() {
     const { form } = this.state
 
-    this.props.onUpsertRole(form)
+    this.props.onUpsertRole({
+      id: (new Date()).getTime(),
+      ...form
+    })
+
     this.closeModal()
   }
 
+  onSelectRole(user) {
+    this.populateForm(user)
+
+    this.setState({
+      showAgentsModal: false,
+      showFormModal: true
+    })
+  }
+
+  onFormChange({ form, isFormCompleted }) {
+    this.setState({
+      form,
+      isFormCompleted
+    })
+  }
+
   render() {
-    const { show, form } = this.state
-    const { role, allowedRoles, onRemoveRole, modalTitle, ctaTitle, buttonText } = this.props
-    const buttonDisabled = (form === null)
+    const { showFormModal, showAgentsModal, isFormCompleted, form } = this.state
+    const { role, teamAgents, allowedRoles, onRemoveRole, modalTitle,
+      ctaTitle, buttonText } = this.props
 
     return (
       <div>
@@ -53,37 +118,80 @@ class CrudRole extends React.Component {
         }
 
         <Modal
-          show={show}
+          show={showFormModal}
           onHide={() => this.closeModal()}
           dialogClassName="modal-deal-add-role"
           backdrop="static"
         >
           <Modal.Header closeButton>
-            {modalTitle}
+            {(form && form.title) || modalTitle}
           </Modal.Header>
 
           <Modal.Body>
             <RoleForm
-              form={role}
-              onFormCompleted={form => this.setState({ form })}
+              form={role || form}
+              onFormChange={data => this.onFormChange(data)}
               allowedRoles={allowedRoles}
             />
           </Modal.Body>
 
           <Modal.Footer>
             <Button
-              className={`btn-deal ${buttonDisabled ? 'disabled' : ''}`}
-              bsStyle={buttonDisabled ? 'link' : 'primary'}
-              disabled={buttonDisabled}
+              className={`btn-deal ${!isFormCompleted ? 'disabled' : ''}`}
+              bsStyle={!isFormCompleted ? 'link' : 'primary'}
+              disabled={!isFormCompleted}
               onClick={() => this.addRole()}
             >
               {buttonText || 'Add'}
             </Button>
           </Modal.Footer>
         </Modal>
+
+        <Modal
+          show={showAgentsModal}
+          dialogClassName="modal-deal-select-role"
+          onHide={() => this.closeModal()}
+          backdrop="static"
+        >
+          <Modal.Header closeButton>
+            Choose primary agent
+          </Modal.Header>
+
+          <Modal.Body>
+            <div className="deal-roles">
+              {
+                teamAgents &&
+                teamAgents
+                .map(user =>
+                  <div
+                    key={user.id}
+                    className="item"
+                    onClick={() => this.onSelectRole(user)}
+                  >
+                    <div className="role-avatar">
+                      <UserAvatar
+                        name={user.display_name}
+                        image={user.profile_image_url}
+                        size={32}
+                        showStateIndicator={false}
+                      />
+                    </div>
+
+                    <div className="name">
+                      <div>{user.display_name}</div>
+                      <div className="role">{roleName(user.role || '')}</div>
+                    </div>
+                  </div>
+                )
+              }
+            </div>
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }
 }
 
-export default CrudRole
+export default connect(({ deals }) => ({
+  teamAgents: deals.agents
+}))(CrudRole)

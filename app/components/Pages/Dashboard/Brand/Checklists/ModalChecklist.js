@@ -97,6 +97,7 @@ const ModalNewChecklist = ({
   const propertyTypes = [
     'any', 'Resale', 'New Home', 'Lot / Land', 'Residential Lease', 'Commercial Sale', 'Commercial Lease'
   ]
+  const formValid = titleChecklist && tabName && /[1-9]/g.test(order)
 
   return <div style={{ display: inline ? 'inline' : 'block' }}>
     <TriggerButton
@@ -144,8 +145,7 @@ const ModalNewChecklist = ({
               key={item}
               eventKey={item}
             >{item}
-            </MenuItem>
-          )}
+            </MenuItem>)}
         </DropdownButton>
         <div className="title">Property Type</div>
         <DropdownButton
@@ -158,8 +158,7 @@ const ModalNewChecklist = ({
               key={item}
               eventKey={item}
             >{item}
-            </MenuItem>
-          )}
+            </MenuItem>)}
         </DropdownButton>
         <div className="title">Order</div>
         <div className="input-container">
@@ -223,6 +222,7 @@ const ModalNewChecklist = ({
       <Modal.Footer>
         <Button
           bsStyle="primary"
+          disabled={!formValid}
           onClick={() => {
             onChangeComposeModal(false)
 

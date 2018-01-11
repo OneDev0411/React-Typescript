@@ -26,12 +26,14 @@ const TableViewRow = ({
       onClick={() => {
         browserHistory.push(`/dashboard/mls/${listing.id}`)
       }}
-      onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : ''}
-      onMouseLeave={mouseEventIsActive ? onMouseLeave : ''}
+      onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : () => {}}
+      onMouseLeave={mouseEventIsActive ? onMouseLeave : () => {}}
     >
       <td className="c-tableview__address-cell">
         <div className="c-tableview__address-cell__img">
-          {listing.cover_image_url && <img src={listing.cover_image_url} />}
+          {listing.cover_image_url && (
+            <img alt="placeholder" src={listing.cover_image_url} />
+          )}
         </div>
         <div className="c-tableview__address-cell__body">
           <h4 className="c-tableview__listing-address san-fran ellipses">

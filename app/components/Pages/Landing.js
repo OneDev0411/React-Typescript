@@ -18,7 +18,6 @@ emojify.setConfig({
 })
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
-import CheckEmailModal from '../Partials/CheckEmailModal'
 import Brand from '../../controllers/Brand'
 import MobileSplashViewer from '../Partials/MobileSplashViewer'
 
@@ -380,9 +379,4 @@ export default class Landing extends Component {
       </div>
     )
   }
-}
-
-// PropTypes
-Landing.propTypes = {
-  data: React.PropTypes.object
 }

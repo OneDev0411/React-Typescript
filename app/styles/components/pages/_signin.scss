@@ -230,10 +230,7 @@
   padding: 0.7rem 1rem;
 }
 
-.c-auth__field__error-alert,
-.c-auth__submit-alert,
-.c-auth__submit-error-alert,
-.c-auth__submit-alert--success {
+.c-auth__field__error-alert {
   border-radius: 3px;
   font-size: 1.4rem;
 }
@@ -241,29 +238,21 @@
 .c-auth__submit-alert,
 .c-auth__submit-error-alert,
 .c-auth__submit-alert--success {
-  margin-top: 2rem;
-  padding: 1rem;
-  line-height: 1.5;
+  @extend .c-alert;
 }
 
 .c-auth__field__error-alert,
 .c-auth__submit-error-alert {
-  color: #d0011b;
-  background: rgba(208, 2, 27, 0.05);
-  border: 1px solid rgba(208, 2, 27, 0.2);
+  @extend .c-alert--error;
 }
 
 .c-auth__submit-alert--success {
+  @extend .c-alert--success;
   margin-bottom: 3rem;
-  color: #15374d;
-  border: 1px solid #d1d7dc;
-  background: rgba(33, 150, 243, 0.1);
 }
 
 .c-auth__submit-alert--warning {
-  color: #f6a623;
-  background: rgba(245, 166, 35, 0.05);
-  border: 1px solid rgba(245, 166, 35, 0.2);
+  @extend .c-alert--warning;
 }
 
 .c-auth--register__houseIcon {
@@ -316,7 +305,7 @@
   justify-content: center;
 
   .c-auth__field--radio__input:checked + & {
-    font-weight: bold;
+    font-weight: 500;
     color: #333;
     border-color: #35b863;
 

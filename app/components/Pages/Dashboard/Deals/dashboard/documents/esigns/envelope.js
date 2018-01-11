@@ -12,11 +12,16 @@ class Envelope extends React.Component {
     }
   }
 
+  getName(roleId) {
+    const role = this.props.roles[roleId]
+    return `${role.legal_prefix || ''} ${role.legal_first_name} ${role.legal_last_name}`.trim()
+  }
+
   getRecipientsNames(recipients) {
     const names = []
 
     recipients.forEach(recp => {
-      names.push(recp.user.display_name)
+      names.push(this.getName(recp.role.id))
     })
 
     return names.join(', ')
@@ -75,6 +80,7 @@ class Envelope extends React.Component {
   }
 }
 
-export default connect(({ user }) => ({
+export default connect(({ deals, user }) => ({
+  roles: deals.roles,
   user
 }))(Envelope)

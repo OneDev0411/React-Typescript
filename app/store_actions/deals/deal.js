@@ -1,16 +1,31 @@
-import _ from 'underscore'
 import { normalize } from 'normalizr'
 import { batchActions } from 'redux-batched-actions'
+import _ from 'underscore'
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
 import * as schema from './schema'
 import { setTasks } from './task'
 import { setChecklists } from './checklist'
+import { setRoles } from './role'
 
 function setDeals(deals) {
   return {
     type: types.GET_DEALS,
     deals
+  }
+}
+
+function addSearchedDeals(deals) {
+  return {
+    type: types.ADD_SEARCHED_DEALS,
+    deals
+  }
+}
+
+export function cleanSearchedDeals() {
+  return {
+    type: types.ADD_SEARCHED_DEALS,
+    deals: {}
   }
 }
 
@@ -68,11 +83,12 @@ export function updateListing(dealId, listingId) {
 export function updateDeal(deal) {
   return async (dispatch) => {
     const { entities } = normalize(deal, schema.dealSchema)
-    const { deals, checklists, tasks } = entities
+    const { deals, roles, checklists, tasks } = entities
 
     batchActions([
       dispatch(setTasks(tasks)),
       dispatch(setChecklists(checklists)),
+      dispatch(setRoles(roles)),
       dispatch(dealUpdated(deals[deal.id]))
     ])
   }
@@ -85,22 +101,19 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
 
     try {
       // get deals (brand is backoffice)
-      dispatch({ type: types.SHOW_SPINNER })
-
       const data = await Deal.getAll(user, backoffice)
-
-      dispatch({ type: types.HIDE_SPINNER })
 
       if (data.length === 0) {
         return dispatch({ type: types.NO_DEAL })
       }
 
       const { entities } = normalize(data, schema.dealsSchema)
-      const { deals, checklists, tasks } = entities
+      const { deals, roles, checklists, tasks } = entities
 
       batchActions([
         dispatch(setTasks(tasks)),
         dispatch(setChecklists(checklists)),
+        dispatch(setRoles(roles)),
         dispatch(setDeals(deals))
       ])
     } catch (e) {
@@ -118,11 +131,12 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
 export function createDeal(deal) {
   return async (dispatch) => {
     const { entities } = normalize(deal, schema.dealSchema)
-    const { deals, checklists, tasks } = entities
+    const { deals, roles, checklists, tasks } = entities
 
     batchActions([
       dispatch(setTasks(tasks)),
       dispatch(setChecklists(checklists)),
+      dispatch(setRoles(roles)),
       dispatch(addNewDeal(deals[deal.id]))
     ])
   }
@@ -139,16 +153,19 @@ export function searchAllDeals(query) {
       dispatch({ type: types.HIDE_SPINNER })
 
       if (data.length === 0) {
-        return dispatch({ type: types.NO_DEAL })
+        dispatch(addSearchedDeals({}))
       }
 
       const { entities } = normalize(data, schema.dealsSchema)
-      const { deals, checklists, tasks } = entities
+      const { deals, roles, checklists, tasks } = entities
+
+      _.each(deals, deal => deal.searchResult = true)
 
       batchActions([
         dispatch(setTasks(tasks)),
         dispatch(setChecklists(checklists)),
-        dispatch(setDeals(deals))
+        dispatch(setRoles(roles)),
+        dispatch(addSearchedDeals(deals))
       ])
     } catch (e) {
       dispatch({

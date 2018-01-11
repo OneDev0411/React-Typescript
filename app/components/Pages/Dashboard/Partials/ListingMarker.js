@@ -2,6 +2,7 @@
 import _ from 'lodash'
 import S from 'shorti'
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { numberWithCommas, friendlyDate } from '../../../../utils/helpers'
 import Brand from '../../../../controllers/Brand'
 import listing_util from '../../../../utils/listing'
@@ -312,8 +313,8 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
 }
 
 ListingMarker.propTypes = {
-  data: React.PropTypes.object,
-  listing: React.PropTypes.object,
-  context: React.PropTypes.string,
-  popupIsActive: React.PropTypes.bool
+  data: PropTypes.object,
+  listing: PropTypes.object,
+  context: PropTypes.string,
+  popupIsActive: PropTypes.bool
 }

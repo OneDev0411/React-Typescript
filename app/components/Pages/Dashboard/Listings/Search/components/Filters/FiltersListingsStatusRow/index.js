@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -22,11 +21,14 @@ const checkFieldsStatus = (state, fields) => {
   }
 
   const statuses = Object.keys(fields)
+
   while (!statusIsActive && statusIndex < statuses.length) {
     const status = selector(state, `listing_statuses.${statuses[statusIndex]}`)
+
     if (status) {
       statusIsActive = true
     }
+
     statusIndex++
   }
 
@@ -46,7 +48,7 @@ const FiltersListingsStatus = ({
   hasSwitchToggle,
   accordionIsActive,
   onChangeSwitchToggle = () => {},
-  onClickAccordionTriggger
+  onClickAccordionTriggger = () => {}
 }) => {
   accordionIsActive = hasSwitchToggle
     ? accordionIsActive && statusIsActive
@@ -63,19 +65,19 @@ const FiltersListingsStatus = ({
         </div>
 
         <div
-          className={`c-filters-status__right-side ${statusIsActive
-            ? 'is-active'
-            : ''}`}
+          className={`c-filters-status__right-side ${
+            statusIsActive ? 'is-active' : ''
+          }`}
         >
           {hasAccordion && (
             <AccordionTrigger
-              onClick={AccordionTriggerIsActive && onClickAccordionTriggger}
+              onClick={onClickAccordionTriggger}
               active={accordionIsActive}
             />
           )}
 
           {hasAccordion &&
-          hasSwitchToggle && <span className="c-filters-status__separator" />}
+            hasSwitchToggle && <span className="c-filters-status__separator" />}
 
           {hasSwitchToggle && (
             <SwitchToggle
@@ -89,17 +91,15 @@ const FiltersListingsStatus = ({
         </div>
       </div>
 
-      {hasAccordion && (
-        <Accordion active={accordionIsActive}>{children}</Accordion>
-      )}
+      {hasAccordion && <Accordion active={accordionIsActive}>{children}</Accordion>}
     </div>
   )
 }
 
 export default compose(
-  pure,
   connect((state, { name, fields }) => {
     const statusIsActive = checkFieldsStatus(state, fields || name) || false
+
     return { statusIsActive }
   }),
   withState(
@@ -108,10 +108,7 @@ export default compose(
     ({ hasSwitchToggle }) => hasSwitchToggle
   ),
   withHandlers({
-    onClickAccordionTriggger: ({
-      accordionIsActive,
-      triggerAccordion
-    }) => () => {
+    onClickAccordionTriggger: ({ accordionIsActive, triggerAccordion }) => () => {
       triggerAccordion(!accordionIsActive)
     }
   })

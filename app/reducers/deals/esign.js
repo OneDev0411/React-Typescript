@@ -38,10 +38,10 @@ export default (state = initialState, action) => {
     case types.SET_RECIPIENT:
       return {
         ...state,
-        recipients: {
+        recipients: [
           ...state.recipients,
-          [action.recipient.email]: action.recipient
-        }
+          action.recipient
+        ]
       }
 
     case types.REMOVE_RECIPIENT:
