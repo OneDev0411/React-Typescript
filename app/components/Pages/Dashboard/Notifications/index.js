@@ -31,7 +31,7 @@ export default class extends React.Component {
     })
 
     // Deals
-    if (notification.notification_type === 'UserReactedToEnvelope') {
+    if (notification.notification_type === 'DealRoleReactedToEnvelope') {
       browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
     }
 
@@ -203,7 +203,7 @@ export default class extends React.Component {
           </div>
         )
         break
-      case 'UserReactedToEnvelope':
+      case 'DealRoleReactedToEnvelope':
         icon = (
           <div>
             <div
