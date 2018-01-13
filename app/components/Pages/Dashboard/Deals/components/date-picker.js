@@ -32,8 +32,21 @@ export default class extends React.Component {
     return null
   }
 
+  onClose() {
+    const { onClose } = this.props
+    this.setState({ selectedDate: null }, onClose)
+  }
+
+  onSelectDate() {
+    const { onSelectDate } = this.props
+    const { selectedDate } = this.state
+
+    onSelectDate(selectedDate)
+    this.setState({ selectedDate: null })
+  }
+
   render() {
-    const { show, saveText, initialDate, onClose, onSelectDate } = this.props
+    const { show, saveText, initialDate } = this.props
     const { selectedDate } = this.state
     const date = this.getSelectedDate()
 
@@ -44,8 +57,9 @@ export default class extends React.Component {
     return (
       <Modal
         show
-        onHide={onClose}
+        onHide={() => this.onClose()}
         dialogClassName="modal-deal-date-picker"
+        backdrop="static"
       >
         <Modal.Body>
           <DatePicker
@@ -58,14 +72,14 @@ export default class extends React.Component {
         <Modal.Footer>
           <Button
             className="deal-button cancel"
-            onClick={onClose}
+            onClick={() => this.onClose()}
           >
             Cancel
           </Button>
 
           <Button
             className="deal-button"
-            onClick={() => onSelectDate(selectedDate)}
+            onClick={() => this.onSelectDate(selectedDate)}
             disabled={!date}
           >
             { saveText || 'Update' }
