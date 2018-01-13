@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getDeals, getAgents } from '../../../../store_actions/deals'
+import { getDeals, getAgents, getContexts } from '../../../../store_actions/deals'
 import { hasUserAccess } from '../../../../utils/user-acl'
 import DealsError from './error'
 
@@ -10,10 +10,23 @@ class DealsContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { getDeals, getAgents, deals, agents, forms, user } = this.props
+    const {
+      getDeals,
+      getAgents,
+      getContexts,
+      contexts,
+      deals,
+      agents,
+      forms,
+      user
+    } = this.props
 
     if (!deals) {
       getDeals(user, hasUserAccess(user, 'BackOffice'))
+    }
+
+    if (!contexts) {
+      getContexts()
     }
 
     if (!agents) {
@@ -22,7 +35,7 @@ class DealsContainer extends React.Component {
   }
 
   render() {
-    const { deals, user, error } = this.props
+    const { deals, contexts, user, error } = this.props
 
     return (
       <div className="deals">
@@ -39,7 +52,7 @@ class DealsContainer extends React.Component {
           </div>
         }
 
-        { deals && this.props.children }
+        { deals && contexts && this.props.children }
       </div>
     )
   }
@@ -48,7 +61,8 @@ class DealsContainer extends React.Component {
 export default connect(({ deals, user }) => ({
   error: deals.error,
   deals: deals.list,
+  contexts: deals.contexts,
   agents: deals.agents,
   forms: deals.forms,
   user
-}), { getDeals, getAgents })(DealsContainer)
+}), { getDeals, getAgents, getContexts })(DealsContainer)
