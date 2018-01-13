@@ -157,7 +157,7 @@ Deal.getById = async function (id) {
   try {
     const response = await new Fetch()
       .get(`/deals/${id}`)
-      .query({ 'associations[]': ['room.attachments'] })
+      .query({'associations[]': ['room.attachments']})
 
     return response.body.data
   } catch (e) {
@@ -206,6 +206,20 @@ Deal.getAll = async function (user = {}, backoffice = false) {
     return response.body.data
   } catch (e) {
     throw e
+  }
+}
+
+/**
+* get contexts info
+*/
+Deal.getContexts = async function() {
+  try {
+    const response = await new Fetch()
+      .get('/deals/contexts')
+
+    return response.body.data
+  } catch (e) {
+    console.log(e)
   }
 }
 
