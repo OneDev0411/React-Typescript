@@ -106,7 +106,7 @@ Deal.get.clientNames = function (deal, roles) {
   const allowedRoles = deal.deal_type === 'Buying' ? ['Buyer', 'Tenant'] : ['Seller', 'Landlord']
   const clients = []
 
-  if (!deal.roles) {
+  if (!deal.roles || !roles) {
     return ''
   }
 
