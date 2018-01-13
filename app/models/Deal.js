@@ -63,7 +63,7 @@ Deal.get.field = function (deal, field) {
 /**
 * a helper that extracts address from deal
 */
-Deal.get.address = function (deal) {
+Deal.get.address = function (deal, roles) {
   if (deal.listing) {
     return deal.mls_context.full_address
   }
@@ -92,7 +92,7 @@ Deal.get.address = function (deal) {
   }
 
   if (address.length === 0) {
-    return Deal.get.clientNames(deal)
+    return Deal.get.clientNames(deal, roles)
   }
 
   return address
@@ -102,16 +102,18 @@ Deal.get.status = function (deal) {
   return deal.deleted_at ? 'Archived' : Deal.get.field(deal, 'listing_status')
 }
 
-Deal.get.clientNames = function (deal) {
-  const roles = deal.deal_type === 'Buying' ? ['Buyer', 'Tenant'] : ['Seller', 'Landlord']
+Deal.get.clientNames = function (deal, roles) {
+  const allowedRoles = deal.deal_type === 'Buying' ? ['Buyer', 'Tenant'] : ['Seller', 'Landlord']
   const clients = []
 
   if (!deal.roles) {
     return ''
   }
 
-  deal.roles.forEach(item => {
-    if (roles.indexOf(item.role) > -1) {
+  deal.roles.forEach(role => {
+    let item = roles[role]
+
+    if (allowedRoles.indexOf(item.role) > -1) {
       if (item.user) {
         clients.push(item.user.display_name)
       } else {

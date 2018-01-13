@@ -44,7 +44,7 @@ class BaseTable extends React.Component {
    *
    */
   getAddress(deal) {
-    const address = Deal.get.address(deal)
+    const address = Deal.get.address(deal, this.props.roles)
 
     return (
       <div className="address-row">
