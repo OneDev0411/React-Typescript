@@ -1,9 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link, browserHistory } from 'react-router'
-import { Row, Col, Button } from 'react-bootstrap'
-import cn from 'classnames'
-import _ from 'underscore'
+import { browserHistory } from 'react-router'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import DealInfo from './deal-info'
@@ -32,7 +29,7 @@ class DealDetails extends React.Component {
   }
 
   render() {
-    const { deal, selectedTask, params } = this.props
+    const { deal, selectedTask } = this.props
     const selectedTaskId = selectedTask ? selectedTask.id : null
 
     if (!deal) {
