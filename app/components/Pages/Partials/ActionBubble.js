@@ -1,6 +1,7 @@
 // Partials/ActionBubble.js
 import React, { Component } from 'react'
 import { OverlayTrigger, FormControl, Button, Popover, Alert } from 'react-bootstrap'
+import PropTypes from 'prop-types'
 import S from 'shorti'
 import Brand from '../../../controllers/Brand'
 export default class ActionBubble extends Component {
@@ -112,11 +113,11 @@ export default class ActionBubble extends Component {
   }
 }
 ActionBubble.propTypes = {
-  data: React.PropTypes.object,
-  listing: React.PropTypes.object,
-  handleEmailSubmit: React.PropTypes.func,
-  handleListingInquirySubmit: React.PropTypes.func,
-  handleCloseSignupForm: React.PropTypes.func,
-  handleLoginClick: React.PropTypes.func,
-  showIntercom: React.PropTypes.func
+  data: PropTypes.object,
+  listing: PropTypes.object,
+  handleEmailSubmit: PropTypes.func,
+  handleListingInquirySubmit: PropTypes.func,
+  handleCloseSignupForm: PropTypes.func,
+  handleLoginClick: PropTypes.func,
+  showIntercom: PropTypes.func
 }

@@ -214,5 +214,6 @@ class BackOfficeTable extends BaseTable {
 export default connect(({ deals, chatroom }) => ({
   tasks: deals.tasks,
   checklists: deals.checklists,
+  roles: deals.roles,
   rooms: chatroom.rooms
 }), { closeEsignWizard, setSelectedTask })(BackOfficeTable)

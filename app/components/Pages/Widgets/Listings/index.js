@@ -1,6 +1,7 @@
 // Widgets/Listings/index.js
 import React, { Component } from 'react'
 import S from 'shorti'
+import PropTypes from 'prop-types'
 import ListingSection from './Partials/ListingSection'
 import AppStore from '../../../../stores/AppStore'
 
@@ -68,6 +69,6 @@ export default class Listings extends Component {
 }
 // PropTypes
 Listings.propTypes = {
-  data: React.PropTypes.object,
-  location: React.PropTypes.object
+  data: PropTypes.object,
+  location: PropTypes.object
 }

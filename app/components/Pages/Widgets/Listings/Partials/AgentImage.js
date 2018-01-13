@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import S from 'shorti'
 import Brand from '../../../../../controllers/Brand'
 import controller from '../../../Dashboard/controller'
@@ -52,8 +53,8 @@ const AgentImage = ({ listing }) => {
 }
 
 AgentImage.propTypes = {
-  listing: React.PropTypes.object,
-  handleAgentClick: React.PropTypes.func
+  listing: PropTypes.object,
+  handleAgentClick: PropTypes.func
 }
 
 

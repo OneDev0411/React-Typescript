@@ -61,12 +61,17 @@ class AgentTable extends BaseTable {
         caption: '',
         className: 'col-md-1 hidden-sm hidden-xs',
         getText: deal => this.hasNotification(deal)
+      },
+      mlsSearch: {
+        caption: '',
+        justFilter: true,
+        getValue: deal => Deal.get.field(deal, 'mls_number') || ''
       }
     }
   }
 
   getSide(deal, rowId, rowsCount) {
-    const { deals, roles } = this.props
+    const { roles } = this.props
 
     const sideName = Deal.get.side(deal)
     const relatedRole = deal.roles && deal.roles.find(id => roles[id].role === sideName)
@@ -90,6 +95,7 @@ class AgentTable extends BaseTable {
               {
                 deal.roles.map(id => {
                   const role = roles[id]
+
                   return (
                     <div
                       key={`ROLE_${role.id}`}
@@ -104,7 +110,10 @@ class AgentTable extends BaseTable {
                         />
                       </div>
                       <div className="info">
-                        <span className="name">{`${role.legal_first_name} ${role.legal_last_name}`}, </span>
+                        <span
+                          className="name"
+                        >{`${role.legal_first_name} ${role.legal_last_name}`},
+                        </span>
                         <span className="role">{roleName(role.role)}</span>
                         {
                           role.user &&
@@ -125,7 +134,10 @@ class AgentTable extends BaseTable {
           </span>
 
           <span
-            style={{ color: '#5b6469', fontSize: '13px' }}
+            style={{
+              color: '#5b6469',
+              fontSize: '13px'
+            }}
           >
             {relatedRoleUser && relatedRoleUser.last_name ? `: ${relatedRole.user.last_name}` : ''}
           </span>
@@ -144,11 +156,8 @@ class AgentTable extends BaseTable {
 
     deal.roles && deal.roles.forEach(id => {
       const role = roles[id]
-      if (role.user) {
-        names.push(role.user.display_name)
-      } else {
-        names.push(`${role.legal_first_name} ${role.legal_last_name}`)
-      }
+
+      names.push(`${role.legal_first_name} ${role.legal_last_name}`)
     })
 
     return `: ${names.join(', ')}`
@@ -191,4 +200,7 @@ export default connect(({ deals, chatroom }) => ({
   checklists: deals.checklists,
   roles: deals.roles,
   rooms: chatroom.rooms
-}), { closeEsignWizard, setSelectedTask })(AgentTable)
+}), {
+  closeEsignWizard,
+  setSelectedTask
+})(AgentTable)

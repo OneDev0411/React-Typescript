@@ -54,7 +54,7 @@ class ListingCard extends React.Component {
       .join(' ')
 
     if (address.length === 0) {
-      return Deal.get.clientNames(deal)
+      return Deal.get.clientNames(deal, this.props.roles)
     }
 
     return address
@@ -140,4 +140,6 @@ class ListingCard extends React.Component {
   }
 }
 
-export default connect(null, { updateContext })(ListingCard)
+export default connect(({ deals }) => ({
+  roles: deals.roles
+}), { updateContext })(ListingCard)

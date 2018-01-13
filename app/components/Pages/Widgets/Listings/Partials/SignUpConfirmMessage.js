@@ -1,5 +1,6 @@
 import React from 'react'
 import S from 'shorti'
+import PropTypes from 'prop-types'
 import Brand from '../../../../../controllers/Brand'
 import controller from '../../../Dashboard/controller'
 
@@ -124,11 +125,11 @@ const SignUpConfirmMessage = ({
 }
 
 SignUpConfirmMessage.propTypes = {
-  data: React.PropTypes.object,
-  listing: React.PropTypes.object,
-  handleLoginClick: React.PropTypes.func,
-  resend: React.PropTypes.func,
-  hideModal: React.PropTypes.func
+  data: PropTypes.object,
+  listing: PropTypes.object,
+  handleLoginClick: PropTypes.func,
+  resend:PropTypes.func,
+  hideModal: PropTypes.func
 }
 
 export default SignUpConfirmMessage

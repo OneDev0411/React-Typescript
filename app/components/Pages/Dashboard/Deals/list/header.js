@@ -46,7 +46,7 @@ class Header extends React.Component {
 
       searchBOFilters()
     } else {
-      filters = { 'address^side': value }
+      filters = { 'address^side^mlsSearch': value }
       onFilterChange(filters)
     }
   }
