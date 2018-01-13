@@ -5,7 +5,7 @@ import Load from '../loader'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
 // actions
-import { getDeals } from '../store_actions/deals'
+import { getDeals, getContexts } from '../store_actions/deals'
 import { getContacts } from '../store_actions/contact'
 
 // utils
@@ -114,6 +114,7 @@ const AsyncDealsLayout = Load({
       return
     }
 
+    dispatch(getContexts())
     return dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
   }
 })
