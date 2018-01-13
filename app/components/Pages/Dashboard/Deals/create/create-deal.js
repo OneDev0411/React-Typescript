@@ -5,6 +5,7 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
 import Deal from '../../../../../models/Deal'
+import DealContext from '../../../../../models/DealContext'
 import Navbar from './nav'
 import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
@@ -14,7 +15,7 @@ import DealReferrals from './deal-referrals'
 import DealStatus from './deal-status'
 import DealAddress from './deal-address'
 import IntercomTrigger from '../../Partials/IntercomTrigger'
-import CriticalDates from './critical-dates'
+import Contexts from './contexts'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import {
   createDeal,
@@ -34,7 +35,7 @@ class CreateDeal extends React.Component {
       dealPropertyType: '',
       dealAddress: null,
       dealStatus: '',
-      criticalDates: {},
+      contexts: {},
       agents: {},
       clients: {},
       referrals: {},
@@ -63,16 +64,22 @@ class CreateDeal extends React.Component {
 
   isFormValidated() {
     const {
-      dealSide, dealPropertyType, dealStatus, agents, clients
+      dealSide,
+      dealPropertyType,
+      contexts,
+      dealStatus,
+      agents,
+      clients
     } = this.state
-    const statusCompleted = dealSide === 'Buying' ? dealStatus.length > 0 : true
+    const statusCompleted = (dealSide === 'Buying') ? dealStatus.length > 0 : true
 
     return (
       dealSide.length > 0 &&
-      statusCompleted &&
       dealPropertyType.length > 0 &&
+      statusCompleted &&
       _.size(agents) > 0 &&
-      _.size(clients) > 0
+      _.size(clients) > 0 &&
+      DealContext.validateList(contexts, dealSide, dealPropertyType)
     )
   }
 
@@ -110,10 +117,10 @@ class CreateDeal extends React.Component {
     this.setState({ dealStatus: status })
   }
 
-  changeCriticalDates(field, value) {
+  changeContext(field, value) {
     this.setState({
-      criticalDates: {
-        ...this.state.criticalDates,
+      contexts: {
+        ...this.state.contexts,
         [field]: value
       }
     })
@@ -121,16 +128,14 @@ class CreateDeal extends React.Component {
 
   async createDeal() {
     const {
+      contexts,
       dealSide,
       dealPropertyType,
       dealAddress,
       dealStatus,
-      criticalDates,
       submitError
     } = this.state
-    const {
-      user, notify, createDeal, createRoles, updateContext
-    } = this.props
+    const { user, notify, createDeal, createRoles, updateContext } = this.props
     const isBuyingDeal = dealSide === 'Buying'
 
     const dealObject = {
@@ -138,7 +143,7 @@ class CreateDeal extends React.Component {
       deal_type: dealSide,
       roles: this.getRoles(),
       deal_context: {
-        ...criticalDates,
+        ...contexts,
         listing_status: isBuyingDeal ? dealStatus : 'Active'
       }
     }
@@ -147,7 +152,7 @@ class CreateDeal extends React.Component {
       if (dealAddress.id) {
         dealObject.listing = dealAddress.id
       } else {
-        dealObject.deal_context = this.getDealContext()
+        dealObject.deal_context = this.getAddressContext()
       }
     }
 
@@ -171,7 +176,7 @@ class CreateDeal extends React.Component {
     }
   }
 
-  getDealContext() {
+  getAddressContext() {
     const { dealAddress } = this.state
     const address = dealAddress.address_components
     const {
@@ -198,6 +203,15 @@ class CreateDeal extends React.Component {
     }
   }
 
+  getDealContexts() {
+    const { dealSide, dealPropertyType } = this.state
+    if (dealSide.length === 0 || dealPropertyType.length === 0) {
+      return []
+    }
+
+    return DealContext.getItems(dealSide, dealPropertyType)
+  }
+
   getRoles() {
     const { agents, clients, referrals } = this.state
     const roles = []
@@ -216,13 +230,14 @@ class CreateDeal extends React.Component {
       dealStatus,
       dealPropertyType,
       dealAddress,
-      criticalDates,
+      contexts,
       agents,
       clients,
       referrals,
       submitError
     } = this.state
     const canCreateDeal = this.isFormValidated() && !saving
+    const dealContexts = this.getDealContexts()
 
     return (
       <div className="deal-create">
@@ -283,16 +298,16 @@ class CreateDeal extends React.Component {
                 onRemoveAddress={() => this.setState({ dealAddress: null })}
               />
 
-              <CriticalDates
-                criticalDates={criticalDates}
-                onChangeCriticalDates={(field, value) =>
-                  this.changeCriticalDates(field, value)
-                }
-                fields={{
-                  list_date: 'Listing Date',
-                  expiration_date: 'Listing Expiration'
-                }}
-              />
+              {
+                dealPropertyType.length > 0 && dealContexts.length > 0 &&
+                <Contexts
+                  contexts={contexts}
+                  onChangeContext={(field, value) =>
+                    this.changeContext(field, value)
+                  }
+                  fields={dealContexts}
+                />
+              }
             </div>
           )}
 
@@ -330,9 +345,7 @@ class CreateDeal extends React.Component {
           >
             {saving ? 'Creating ...' : 'Create Deal'}
           </Button>
-
         </div>
-
       </div>
     )
   }
