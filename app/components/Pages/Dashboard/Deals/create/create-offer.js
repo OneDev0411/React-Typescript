@@ -6,6 +6,7 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
 import Deal from '../../../../../models/Deal'
+import DealContext from '../../../../../models/DealContext'
 import Navbar from './nav'
 import OfferType from './offer-type'
 import EnderType from './offer-ender-type'
@@ -14,7 +15,7 @@ import BuyerName from './offer-buyer-name'
 import DealAgents from './deal-agents'
 import ClosingOfficers from './offer-closing-officer'
 import DealReferrals from './deal-referrals'
-import CriticalDates from './critical-dates'
+import Contexts from './contexts'
 import IntercomTrigger from '../../Partials/IntercomTrigger'
 import { createRoles, createOffer, updateContext } from '../../../../../store_actions/deals'
 import hasPrimaryOffer from '../utils/has-primary-offer'
@@ -31,7 +32,7 @@ class CreateOffer extends React.Component {
       buyerName: '',
       offerType: dealHasPrimaryOffer ? 'backup' : '',
       enderType: -1,
-      criticalDates: {},
+      contexts: {},
       agents: {},
       clients: {},
       closingOfficers: {},
@@ -42,12 +43,18 @@ class CreateOffer extends React.Component {
 
   componentDidMount() {
     const { deal } = this.props
-    this.prepopulateRoles(deal.roles)
+
+    if (deal.roles) {
+      this.prepopulateRoles(deal.roles)
+    }
   }
 
-  prepopulateRoles(roles) {
-    roles.forEach(item => {
+  prepopulateRoles(list) {
+    const { roles } = this.props
+
+    list.forEach(id => {
       let type
+      const item = roles[id]
 
       switch (item.role) {
         case 'Buyer':
@@ -95,10 +102,10 @@ class CreateOffer extends React.Component {
     this.setState({ dealAddress: component })
   }
 
-  changeCriticalDates(field, value) {
+  changeContext(field, value) {
     this.setState({
-      criticalDates: {
-        ...this.state.criticalDates,
+      contexts: {
+        ...this.state.contexts,
         [field]: value
       }
     })
@@ -117,7 +124,8 @@ class CreateOffer extends React.Component {
   }
 
   isFormValidated() {
-    const { offerType, agents, clients, buyerName, enderType } = this.state
+    const { deal } = this.props
+    const { offerType, contexts, agents, clients, buyerName, enderType } = this.state
 
     if (this.isBackupOffer()) {
       return buyerName.length > 0
@@ -126,19 +134,25 @@ class CreateOffer extends React.Component {
     return offerType.length > 0 &&
       enderType !== -1 &&
       _.size(agents) > 0 &&
-      _.size(clients) > 0
+      _.size(clients) > 0 &&
+      DealContext.validateList(
+        contexts,
+        'Buying',
+        deal.property_type,
+        DealContext.hasActiveOffer(deal)
+      )
   }
 
   getAllRoles() {
     const { enderType, clients, agents, closingOfficers, referrals } = this.state
     const roles = []
 
-    _.each(clients, client => roles.push(client))
-    _.each(agents, agent => roles.push(agent))
-    _.each(closingOfficers, co => roles.push(co))
+    _.each(clients, client => roles.push(_.omit(client, 'id')))
+    _.each(agents, agent => roles.push(_.omit(agent, 'id')))
+    _.each(closingOfficers, co => roles.push(_.omit(co, 'id')))
 
     if (enderType === 'AgentDoubleEnder') {
-      _.each(referrals, referral => roles.push(referral))
+      _.each(referrals, referral => roles.push(_.omit(referral, 'id')))
     }
 
     return roles.filter(role => role.disabled !== true)
@@ -146,7 +160,7 @@ class CreateOffer extends React.Component {
 
   async createOffer() {
     const { deal, notify, createOffer, createRoles, updateContext } = this.props
-    const { enderType, criticalDates, clients } = this.state
+    const { enderType, contexts, clients } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
     const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
@@ -169,7 +183,7 @@ class CreateOffer extends React.Component {
 
         // create/update contexts
         await updateContext(deal.id, {
-          ...criticalDates,
+          ...contexts,
           ender_type: enderType
         }, true)
       }
@@ -223,6 +237,12 @@ class CreateOffer extends React.Component {
     return this.state.offerType === 'primary'
   }
 
+  getDealContexts() {
+    const { deal } = this.props
+    const hasActiveOffer = true
+    return DealContext.getItems('Buying', deal.property_type, hasActiveOffer)
+  }
+
   backToDeal() {
     const { deal } = this.props
 
@@ -230,11 +250,23 @@ class CreateOffer extends React.Component {
   }
 
   render() {
-    const {saving, submitError, criticalDates, referrals, closingOfficers, offerType,
-      enderType, agents, clients, buyerName, dealHasPrimaryOffer } = this.state
+    const {
+      saving,
+      submitError,
+      contexts,
+      referrals,
+      closingOfficers,
+      offerType,
+      enderType,
+      agents,
+      clients,
+      buyerName,
+      dealHasPrimaryOffer
+    } = this.state
     const { deal } = this.props
 
     const canCreateOffer = this.isFormValidated() && !saving
+    const dealContexts = this.getDealContexts()
 
     return (
       <div className="deal-create-offer">
@@ -299,18 +331,12 @@ class CreateOffer extends React.Component {
                 />
               }
 
-              <CriticalDates
-                criticalDates={criticalDates}
-                onChangeCriticalDates={(field, value) => this.changeCriticalDates(field, value)}
-                fields={{
-                  contract_date: 'Offer Date',
-                  option_period: 'Option Date',
-                  financing_due: 'Financing Due',
-                  title_due: 'Title Work Due',
-                  t47_due: 'Survey Due',
-                  closing_date: 'Closing',
-                  // possession_date: 'Possession'
-                }}
+              <Contexts
+                contexts={contexts}
+                onChangeContext={(field, value) =>
+                  this.changeContext(field, value)
+                }
+                fields={dealContexts}
               />
             </div>
           }
@@ -356,6 +382,7 @@ class CreateOffer extends React.Component {
 function mapStateToProps({ deals }, props) {
   return {
     deal: deals.list[props.params.id],
+    roles: deals.roles,
     checklists: deals.checklists
   }
 }
