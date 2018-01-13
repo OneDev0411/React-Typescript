@@ -43,7 +43,7 @@ class DealsDashboard extends React.Component {
   initialAgentFilters = (filters) => {
     this.setState({
       activeFilters: {
-        status: (status, deal) => !deal.deleted_at,
+        ...this.state.activeFilters,
         ...filters
       }
     })

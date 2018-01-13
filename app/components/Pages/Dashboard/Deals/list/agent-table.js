@@ -61,12 +61,17 @@ class AgentTable extends BaseTable {
         caption: '',
         className: 'col-md-1 hidden-sm hidden-xs',
         getText: deal => this.hasNotification(deal)
+      },
+      mlsSearch: {
+        caption: '',
+        justFilter: true,
+        getValue: deal => Deal.get.field(deal, 'mls_number') || ''
       }
     }
   }
 
   getSide(deal, rowId, rowsCount) {
-    const { deals, roles } = this.props
+    const { roles } = this.props
 
     const sideName = Deal.get.side(deal)
     const relatedRole = deal.roles && deal.roles.find(id => roles[id].role === sideName)
