@@ -10,6 +10,7 @@ import backoffice from './backoffice'
 import upload from './upload'
 import splitter from './pdf-splitter'
 import agents from './agent'
+import contexts from './contexts'
 import selectedRole from './selected-role'
 import error from './error'
 import spinner from './spinner'
@@ -22,6 +23,7 @@ export default combineReducers({
   forms,
   esign,
   backoffice,
+  contexts,
   selectedTask,
   selectedRole,
   upload,
