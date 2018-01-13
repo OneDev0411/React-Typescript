@@ -25,12 +25,11 @@ class Table extends React.Component {
 
   async updateField(field, value) {
     const { deal, isBackOffice, updateContext } = this.props
-    const editable = field.canEdit(isBackOffice)
 
     // set state
-    this.setState({ saving: field.key })
+    this.setState({ saving: field.name })
 
-    await updateContext(deal.id, { [field.key]: value }, editable)
+    await updateContext(deal.id, { [field.name]: value }, field.needs_approval)
 
     // set state
     this.setState({ saving: null })
@@ -53,23 +52,22 @@ class Table extends React.Component {
           {
             _.chain(table)
               .map(field => {
-                const context = Deal.get.context(deal, field.key)
+                const context = Deal.get.context(deal, field.name)
                 const fieldCtx = getValue(deal, field)
-                const editable = field.canEdit(isBackOffice)
                 const disabled = field.disabled === true
                 const approved = (context && context.approved_at !== null) || (field.approved)
 
                 return (
-                  <div key={`CRITICAL_DATE_${field.key}`}>
+                  <div key={`CRITICAL_DATE_${field.name}`}>
                     <div className="fact-row">
                       <div className="name">
-                        { field.name }
+                        {field.label}
                       </div>
 
                       <Editable
                         field={field}
                         context={fieldCtx}
-                        editable={editable}
+                        editable={field.needs_approval}
                         disabled={disabled}
                         approved={approved}
                         isBackOffice={isBackOffice}
@@ -80,7 +78,7 @@ class Table extends React.Component {
 
                     <div className="approve-row">
                       {
-                        isBackOffice && fieldCtx.value && !disabled && !approved && saving !== field.key &&
+                        isBackOffice && fieldCtx.value && !disabled && !approved && saving !== field.name &&
                         <button
                           className="btn-approve"
                           onClick={(e) => this.approveField(e, field, fieldCtx)}
