@@ -63,7 +63,7 @@ Context.getPropertyTypeFlag = function(property_type) {
  */
 Context.getFactsheetSection = function(deal, name) {
   const criteria = (ctx) => ctx.section === name
-  const hasActiveOffer = Context.hasActiveOffer()
+  const hasActiveOffer = Context.hasActiveOffer(deal)
 
   return Context
     .query(criteria)
