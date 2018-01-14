@@ -8,40 +8,38 @@ const Context = {}
 /**
  * returns list of all contexts
  */
-Context.getList = function () {
+Context.getList = function() {
   const state = store.getState()
   const { deals } = state
-
   return deals && deals.contexts
 }
 
 /**
  * returns list of all checklists
  */
-Context.getChecklists = function () {
+Context.getChecklists = function() {
   const state = store.getState()
   const { deals } = state
-
   return deals && deals.checklists
 }
 
 /**
  * returns deal type flag
  */
-Context.getDealTypeFlag = function (deal_type) {
+Context.getDealTypeFlag = function(deal_type) {
   if (deal_type === 'Selling') {
     return 1
   } else if (deal_type === 'Buying') {
     return 2
+  } else {
+    return null
   }
-
-  return null
 }
 
 /**
  * returns property type flag
  */
-Context.getPropertyTypeFlag = function (property_type) {
+Context.getPropertyTypeFlag = function(property_type) {
   switch (property_type) {
     case 'Resale':
       return 128
@@ -63,12 +61,13 @@ Context.getPropertyTypeFlag = function (property_type) {
 /**
  * return list of section
  */
-Context.getFactsheetSection = function (deal, name) {
-  const criteria = ctx => ctx.section === name
-  const hasActiveOffer = Context.hasActiveOffer()
+Context.getFactsheetSection = function(deal, name) {
+  const criteria = (ctx) => ctx.section === name
+  const hasActiveOffer = Context.hasActiveOffer(deal)
 
-  return Context.query(criteria).filter(ctx =>
-    Context.filterByFlags(
+  return Context
+    .query(criteria)
+    .filter(ctx => Context.filterByFlags(
       ctx,
       deal.deal_type,
       deal.property_type,
@@ -80,40 +79,27 @@ Context.getFactsheetSection = function (deal, name) {
 /**
  * return context items
  */
-Context.getItems = function (deal_type, property_type, hasActiveOffer = false) {
-  const requiredFields = Context.getRequiredItems(
-    deal_type,
-    property_type,
-    hasActiveOffer
-  )
-  const optionalFields = Context.getOptionalItems(
-    deal_type,
-    property_type,
-    hasActiveOffer
-  )
-
+Context.getItems = function(deal_type, property_type, hasActiveOffer = false) {
+  const requiredFields = Context.getRequiredItems(deal_type, property_type, hasActiveOffer)
+  const optionalFields = Context.getOptionalItems(deal_type, property_type, hasActiveOffer)
   return []
     .concat(requiredFields, optionalFields)
-    .sort(ctx => (ctx.data_type === 'Date' ? 1 : -1))
+    .sort(ctx => ctx.data_type === 'Date' ? 1 : -1)
 }
 
 /**
  * return required context
  */
-Context.getRequiredItems = function (
-  deal_type,
-  property_type,
-  hasActiveOffer = false
-) {
-  return Context.getList()
-    .filter(ctx =>
-      Context.filterByFlags(
-        ctx,
-        deal_type,
-        property_type,
-        hasActiveOffer,
-        'required'
-      ))
+Context.getRequiredItems = function(deal_type, property_type, hasActiveOffer = false) {
+  return Context
+    .getList()
+    .filter(ctx => Context.filterByFlags(
+      ctx,
+      deal_type,
+      property_type,
+      hasActiveOffer,
+      'required'
+    ))
     .map(ctx => ({
       ...ctx,
       validate: Context.validate,
@@ -124,20 +110,16 @@ Context.getRequiredItems = function (
 /**
  * return optional context
  */
-Context.getOptionalItems = function (
-  deal_type,
-  property_type,
-  hasActiveOffer = false
-) {
-  return Context.getList()
-    .filter(ctx =>
-      Context.filterByFlags(
-        ctx,
-        deal_type,
-        property_type,
-        hasActiveOffer,
-        'optional'
-      ))
+Context.getOptionalItems = function(deal_type, property_type, hasActiveOffer = false) {
+  return Context
+    .getList()
+    .filter(ctx => Context.filterByFlags(
+      ctx,
+      deal_type,
+      property_type,
+      hasActiveOffer,
+      'optional'
+    ))
     .map(ctx => ({
       ...ctx,
       validate: Context.validate,
@@ -151,7 +133,8 @@ Context.getOptionalItems = function (
 Context.query = function (criteria) {
   const contexts = Context.getList()
 
-  return _.chain(contexts)
+  return _
+    .chain(contexts)
     .filter(ctx => criteria(ctx))
     .map(ctx => ({
       ...ctx,
@@ -164,40 +147,23 @@ Context.query = function (criteria) {
 /**
  * check deal has active offer
  */
-Context.hasActiveOffer = function (deal) {
-  if (!deal) {
-    return
-  }
-
+Context.hasActiveOffer = function(deal) {
   const checklists = Context.getChecklists()
+  const filtered = deal.checklists.filter(id => {
+    const checklist = checklists[id]
 
-  if (checklists) {
-    const filtered = deal.checklists.filter(id => {
-      const checklist = checklists[id]
+    return !checklist.is_deactivated &&
+      !checklist.is_terminated &&
+      checklist.checklist_type === 'Buying'
+  })
 
-      return (
-        !checklist.is_deactivated &&
-        !checklist.is_terminated &&
-        checklist.checklist_type === 'Buying'
-      )
-    })
-
-    return filtered.length > 0
-  }
-
-  return false
+  return filtered.length > 0
 }
 
 /**
  * return list of filtered contexts based on given criteria
  */
-Context.filterByFlags = function (
-  context,
-  deal_type,
-  property_type,
-  hasActiveOffer,
-  filterBy
-) {
+Context.filterByFlags = function (context, deal_type, property_type, hasActiveOffer, filterBy) {
   const flag = context[filterBy]
   const dealTypeFlag = Context.getDealTypeFlag(deal_type)
   const propertyTypeFlag = Context.getPropertyTypeFlag(property_type)
@@ -211,7 +177,7 @@ Context.filterByFlags = function (
     return false
   }
 
-  if (isSellingDeal && (hasActiveOffer || flag & (131072 === 0))) {
+  if (isSellingDeal && (hasActiveOffer || flag & 131072 === 0)) {
     return false
   }
 
@@ -221,21 +187,21 @@ Context.filterByFlags = function (
 /**
  * returns check context is currency
  */
-Context.isCurrency = function (field) {
+Context.isCurrency = function(field) {
   return ['list_price', 'sales_price'].indexOf(field.name) > -1
 }
 
 /**
  * returns check context is disabled
  */
-Context.isDisabled = function (field) {
+Context.isDisabled = function(field) {
   return ['list_price'].indexOf(field.name) > -1
 }
 
 /**
  * returns value of context
  */
-Context.getValue = function (deal, field) {
+Context.getValue = function(deal, field) {
   if (field.data_type === 'Date') {
     return Context.getDateValue(deal, field)
   }
@@ -264,7 +230,7 @@ Context.getValue = function (deal, field) {
 /**
  * returns date value of context
  */
-Context.getDateValue = function (deal, field) {
+Context.getDateValue = function(deal, field) {
   const date = Deal.get.field(deal, field.name)
 
   return {
@@ -272,14 +238,14 @@ Context.getDateValue = function (deal, field) {
   }
 }
 
-Context.parseDate = function (date) {
+Context.parseDate = function(date) {
   return moment.unix(date).utc()
 }
 
 /**
  * validate a context
  */
-Context.validate = function (ctx, value) {
+Context.validate = function(ctx, value) {
   if (value === undefined || value.length === 0) {
     return !ctx.mandatory
   }
@@ -297,40 +263,34 @@ Context.validate = function (ctx, value) {
 /**
  * validate a date context
  */
-Context.validateDate = function (value) {
+Context.validateDate = function(value) {
   if (typeof value === 'object' && value instanceof Date) {
     return true
   }
 
   const date = moment(value)
-
   return date && date.isValid()
 }
 
 /**
  * validate given contexts
  */
-Context.validateList = function (list, deal_type, property_type, hasActiveOffer) {
+Context.validateList = function(list, deal_type, property_type, hasActiveOffer) {
   const dealContexts = Context.getItems(deal_type, property_type, hasActiveOffer)
-
   return _.every(dealContexts, ctx => ctx.validate(ctx, list[ctx.name]))
 }
 
 /**
  * get valid contexts
  */
-Context.getValidItems = function (
-  list,
-  deal_type,
-  property_type,
-  hasActiveOffer = false
-) {
+Context.getValidItems = function(list, deal_type, property_type, hasActiveOffer = false) {
   const dealContexts = _.indexBy(
     Context.getItems(deal_type, property_type, hasActiveOffer),
     'name'
   )
 
-  return _.pick(list, (value, name) => Context.validate(dealContexts[name], value))
+  return _.pick(list, (value, name) =>
+    Context.validate(dealContexts[name], value))
 }
 
 export default Context
