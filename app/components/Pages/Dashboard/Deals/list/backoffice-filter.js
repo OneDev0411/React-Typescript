@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { browserHistory } from 'react-router'
-import getNeedsAttentions from '../utils/needs-attention'
 
 class Filter extends React.Component {
   constructor(props) {
@@ -40,8 +39,9 @@ class Filter extends React.Component {
 
   getTabs() {
     return _
-      .chain(this.props.checklists)
-      .pluck('tab_name')
+      .chain(this.props.deals)
+      .pluck('inboxes')
+      .flatten()
       .uniq()
       .filter(tab => tab !== null)
       .value()
@@ -52,7 +52,11 @@ class Filter extends React.Component {
     let counter = 0
 
     _.each(deals, deal => {
-      if (getNeedsAttentions(deal, tabName).length > 0) {
+      if (
+        deal.inboxes &&
+        deal.inboxes.indexOf(tabName) > -1 &&
+        deal.need_attentions > 0
+      ) {
         counter += 1
       }
     })

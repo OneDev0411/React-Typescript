@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import SvgDeals from '../../Partials/Svgs/Deals'
-import getNeedsAttentions from '../utils/needs-attention'
 
 class BadgeCounter extends React.Component {
   constructor(props) {
@@ -25,7 +24,7 @@ class BadgeCounter extends React.Component {
     let counter = 0
 
     _.each(this.props.deals, deal => {
-      if (deal.needs_attention > 0) {
+      if (~~deal.need_attentions > 0) {
         counter += 1
       }
     })
