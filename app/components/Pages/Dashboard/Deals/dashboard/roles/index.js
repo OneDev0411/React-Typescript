@@ -42,6 +42,8 @@ class Roles extends React.Component {
         email: item.email,
         role: item.role
       })
+    } else {
+      this.selectRole(item)
     }
   }
 
@@ -50,9 +52,12 @@ class Roles extends React.Component {
     return name.length > 0 ? name : role.user.display_name
   }
 
-  onRequestRemoveRole(user) {
+  onRequestRemoveRole(e, user) {
     const { deal, confirmation } = this.props
     const { deal_type } = deal
+
+    // stop propagating
+    e.stopPropagation()
 
     if (
       (deal_type === 'Buying' && user.role === 'BuyerAgent') ||
@@ -123,7 +128,6 @@ class Roles extends React.Component {
                 <div
                   key={item.id}
                   className="item"
-                  style={{ cursor: onSelectRole ? 'pointer' : 'auto' }}
                   onClick={() => this.onClickRole(item.id)}
                 >
                   <div className="role-avatar">
@@ -136,7 +140,7 @@ class Roles extends React.Component {
                   </div>
 
                   <div className="name">
-                    <div>{this.getRoleName(item)}</div>
+                    <div className="title">{this.getRoleName(item)}</div>
                     <div className="role">{ roleName(item.role) }</div>
                   </div>
 
@@ -151,7 +155,7 @@ class Roles extends React.Component {
                       {
                         !deletingRoleId &&
                         <i
-                          onClick={() => this.onRequestRemoveRole(item)}
+                          onClick={(e) => this.onRequestRemoveRole(e, item)}
                           className="fa fa-delete fa-times"
                         />
                       }

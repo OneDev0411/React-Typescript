@@ -65,7 +65,7 @@ class UpsertRole extends React.Component {
       if (isNewRecord) {
         await createRoles(deal.id, [form])
       } else {
-        await updateRole(deal.id, form)
+        await updateRole(deal.id, _.omit(form, 'user'))
       }
 
       this.closeModal()
@@ -78,10 +78,10 @@ class UpsertRole extends React.Component {
       }
 
       const { attributes } = e.response.body
-      const field = Object.keys(attributes)[0]
+      const field = attributes && Object.keys(attributes)[0]
 
       notify({
-        message: `${field} is invalid`,
+        message: `${field || 'entered data'} is invalid`,
         status: 'error'
       })
     }
