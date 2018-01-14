@@ -122,7 +122,7 @@ export default class Form extends React.Component {
   validateCommission(value) {
     const { form } = this.state
 
-    if (!/^[0-9]*$/.test(value)) {
+    if (!/^[0-9.]*$/.test(value)) {
       return false
     }
 
