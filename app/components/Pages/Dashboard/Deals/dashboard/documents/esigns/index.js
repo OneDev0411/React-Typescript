@@ -1,21 +1,25 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import _ from 'underscore'
 import Envelope from './envelope'
 
-export default ({
+const Envelopes = ({
   deal,
-  task
+  task,
+  envelopes
 }) => {
   if (!task.submission) {
     return false
   }
 
-  const envelopes = _.filter(deal.envelopes, envelope =>
-    envelope.documents && envelope.documents.filter(doc =>
-      doc.submission === task.submission.id).length > 0
+  const filteredEnvelopes = _.filter(deal.envelopes, id =>
+    envelopes[id].documents &&
+    envelopes[id].documents
+    .filter(doc => doc.submission === task.submission.id)
+    .length > 0
   )
 
-  if (envelopes.length === 0) {
+  if (filteredEnvelopes.length === 0) {
     return false
   }
 
@@ -24,12 +28,12 @@ export default ({
       <div className="title">Sent for Signatures</div>
       <div className="file-group">
         {
-          _.map(envelopes, (envelope, key) =>
+          filteredEnvelopes.map(id =>
             <Envelope
-              key={`ENVELOPE_${key}`}
+              key={`ENVELOPE_${id}`}
               deal={deal}
               task={task}
-              envelope={envelope}
+              envelope={envelopes[id]}
             />
           )
         }
@@ -37,3 +41,7 @@ export default ({
     </div>
   )
 }
+
+export default connect(({ deals }) => ({
+  envelopes: deals.envelopes
+}))(Envelopes)
