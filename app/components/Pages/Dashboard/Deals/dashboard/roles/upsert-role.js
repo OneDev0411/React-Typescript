@@ -70,6 +70,13 @@ class UpsertRole extends React.Component {
 
       this.closeModal()
     } catch (e) {
+      if (!e.response) {
+        return notify({
+          message: `Error: ${e.message}`,
+          status: 'error'
+        })
+      }
+
       const { attributes } = e.response.body
       const field = Object.keys(attributes)[0]
 
