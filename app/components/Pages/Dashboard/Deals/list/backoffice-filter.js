@@ -25,16 +25,14 @@ class Filter extends React.Component {
    * set filter tab tooltip
    */
   setFilter(filter) {
-    const filters = {}
     const arg = `/filter/${filter}`
 
     browserHistory.push(`/dashboard/deals${arg}`)
 
-    // set inbox name
-    filters.__inbox_name__ = filter
-
     // set filters
-    this.props.onChangeFilter(filters)
+    this.props.onChangeFilter({
+      __inbox__: (deal) => deal.inboxes && deal.inboxes.indexOf(filter) > -1
+    })
   }
 
   getTabs() {
