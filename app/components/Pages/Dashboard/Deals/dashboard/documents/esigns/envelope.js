@@ -12,16 +12,20 @@ class Envelope extends React.Component {
     }
   }
 
-  getName(roleId) {
-    const role = this.props.roles[roleId]
-    return `${role.legal_prefix || ''} ${role.legal_first_name} ${role.legal_last_name}`.trim()
+  getName(role) {
+    if (role.user) {
+      return role.user.display_name
+    }
+
+    return `${role.legal_prefix || ''} ${role.legal_first_name || ''} ${role.legal_last_name || ''}`
+      .trim()
   }
 
   getRecipientsNames(recipients) {
     const names = []
 
     recipients.forEach(recp => {
-      names.push(this.getName(recp.role.id))
+      names.push(this.getName(recp.role))
     })
 
     return names.join(', ')
@@ -67,8 +71,8 @@ class Envelope extends React.Component {
           className="name"
           onClick={() => !isVoided && this.openFormViewer()}
         >
-          <span>{ recipientsNames }</span>
-          <p>{ areSigned.length } of { recipients.length } signed</p>
+          <span>{recipientsNames}</span>
+          <p>{areSigned.length} of {recipients.length} signed</p>
         </div>
 
         {
