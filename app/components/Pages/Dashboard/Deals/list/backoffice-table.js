@@ -82,7 +82,6 @@ class BackOfficeTable extends BaseTable {
    * get office name
    */
   getOffice(deal) {
-    return ''
 
     const brand = this.flattenBrand(deal.brand)
 
@@ -104,7 +103,8 @@ class BackOfficeTable extends BaseTable {
     }
 
     if (task.review.updated_at) {
-      text += moment.unix(task.review.updated_at).format('MMMM DD, HH:mm')
+      text += moment.unix(task.review.updated_at)
+        .format('MMMM DD, HH:mm')
     }
 
     return text
@@ -188,23 +188,19 @@ class BackOfficeTable extends BaseTable {
       return null
     }
 
-    let new_brand = {
-      ...brand
-    }
+    const brands = [brand]
 
-    const brands = [new_brand]
-
-    while (new_brand.parent) {
-      brands.push(new_brand.parent)
-      new_brand = new_brand.parent
+    while (brand.parent) {
+      brands.push(brand.parent)
+      brand = brand.parent
     }
 
     brands.reverse()
 
-    const merged = {}
+    let merged = {}
 
     brands.forEach(brand_loop => {
-      merge.recursive(merged, brand_loop)
+      merge.recursive(merged, { ...brand_loop, parent: undefined })
     })
 
     return merged
