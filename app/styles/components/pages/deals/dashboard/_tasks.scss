@@ -18,6 +18,11 @@
   .checklists-container {
     padding: $col-padding !important;
 
+    .loading {
+      text-align: center;
+      margin-top: 35vh;
+    }
+
     .checklist {
       @extend %deal-task-checklist;
     }
