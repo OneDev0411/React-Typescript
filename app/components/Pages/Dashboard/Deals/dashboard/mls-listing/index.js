@@ -63,35 +63,25 @@ class MlsListing extends React.Component {
 
     return (
       <div className="deal-mls">
-        {
-          saving &&
+        {saving && (
           <div className="loading">
             <i className="fa fa-spin fa-spinner" />
           </div>
-        }
+        )}
 
-        {
-          !saving &&
+        {!saving && (
           <ListingInfo
             deal={deal}
             editMls={() => this.toggleSearchModal()}
             deleteMls={() => this.requestDeleteMls()}
           />
-        }
-
-        {
-          !saving && !deal.listing &&
-          <EmptyState
-            addMls={() => this.toggleSearchModal()}
-          />
-        }
+        )}
 
         <SearchModal
           show={showMlsModal}
           onHide={() => this.toggleSearchModal()}
           onSelectListing={listing => this.onSelectListing(listing)}
         />
-
       </div>
     )
   }
