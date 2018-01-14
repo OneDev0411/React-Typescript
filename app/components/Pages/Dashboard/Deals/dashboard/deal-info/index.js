@@ -29,6 +29,7 @@ export default ({
 
     <Roles
       deal={deal}
+      allowDeleteRole={true}
     />
 
     <div className="deal-fact-sheet">

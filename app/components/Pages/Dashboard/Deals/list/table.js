@@ -181,7 +181,7 @@ class BaseTable extends React.Component {
 
       // don't process filter that uses reserved words
       if (/__(.*)__/.test(f)) {
-        return true
+        return filters[f](deal)
       }
 
       if (!cells[f]) {
@@ -196,8 +196,7 @@ class BaseTable extends React.Component {
       } else if (_.isBoolean(criteria)) {
         matched = value
       } else if (criteria.length > 0) {
-        matched = value.toLowerCase()
-          .includes(criteria.toLowerCase())
+        matched = value.toLowerCase().includes(criteria.toLowerCase())
       } else {
         matched = true
       }

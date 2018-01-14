@@ -67,7 +67,7 @@ class WorkspaceForm extends React.Component {
       created = true
 
       if (notifyOffice) {
-        this.props.changeNeedsAttention(task.id, true)
+        this.props.changeNeedsAttention(task.deal, task.id, true)
       }
 
       notify({

@@ -112,7 +112,7 @@ class UploadModal extends React.Component {
     this.props.addAttachment(task.deal, task.checklist, task.id, file)
 
     if (properties.notifyOffice === true && !isBackupContract) {
-      this.props.changeNeedsAttention(task.id, true)
+      this.props.changeNeedsAttention(task.deal, task.id, true)
     }
   }
 

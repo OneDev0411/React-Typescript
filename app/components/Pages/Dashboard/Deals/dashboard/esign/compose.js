@@ -61,8 +61,8 @@ class SendSignatures extends React.Component {
   /**
    * remove recipient
    */
-  removeRecipient(email) {
-    this.props.removeEsignRecipient(email)
+  removeRecipient(id) {
+    this.props.removeEsignRecipient(id)
   }
 
   /**

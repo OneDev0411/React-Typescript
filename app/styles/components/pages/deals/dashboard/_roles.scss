@@ -161,18 +161,23 @@
 %deal-roles {
   background: #fff;
   padding: $col-padding 0 1px 0;
+  cursor: pointer;
+
   .item {
-    margin-bottom: 17px;
+    margin-bottom: 7px;
     display: flex;
     align-items: center;
-    padding-left: $col-padding/2;
+    padding: 5px 0 5px $col-padding/2;
+
+    &:hover {
+      background: #F0F4F7;
+    }
 
     .role-avatar {
       width: 50px;
     }
 
     &.add-new {
-      cursor: pointer;
       img {
         width: 21px;
         margin-left: 5.5px; // (32px - 21px) / 2
@@ -181,6 +186,8 @@
 
       &:hover {
         opacity: 0.8;
+        background-color: transparent;
+        text-decoration: none;
       }
     }
 
@@ -188,10 +195,18 @@
       color: #263445;
       font-weight: 500;
       width: calc(100% - 55px - #{$col-padding});
+
+      .title {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
       .role {
         font-weight: normal;
         color: #8696a4;
         font-size: 14px;
+        text-decoration: none;
       }
     }
 

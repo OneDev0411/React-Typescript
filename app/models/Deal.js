@@ -538,14 +538,11 @@ Deal.changeTaskStatus = async function (task_id, status) {
 /**
 * set notify office flag
 */
-Deal.needsAttention = async function (task_id, status) {
-  try {
-    await new Fetch()
-      .patch(`/tasks/${task_id}/needs_attention`)
-      .send({ needs_attention: status })
-  } catch (e) {
-    return false
-  }
+Deal.needsAttention = async function (deal_id, task_id, status) {
+  return Deal.bulkSubmit(deal_id, [{
+    id: task_id,
+    needs_attention: status
+  }])
 }
 
 /**
