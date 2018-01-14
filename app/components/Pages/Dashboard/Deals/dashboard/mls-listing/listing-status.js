@@ -57,7 +57,7 @@ class ListingStatus extends React.Component {
     const checklist = checklists[deal.checklists[0]]
     const task = await createGenericTask(deal.id, title, checklist.id)
 
-    changeNeedsAttention(task.id, true)
+    changeNeedsAttention(deal.id, task.id, true)
 
     return notify({
       message: 'Back office has been notified to change listing status',

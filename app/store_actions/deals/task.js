@@ -153,16 +153,16 @@ export function addAttachment(deal_id, checklist_id, task_id, file) {
   }
 }
 
-export function changeTaskStatus(taskId, status) {
+export function changeTaskStatus(deal_id, status) {
   return async dispatch => {
-    await Deal.changeTaskStatus(taskId, status)
-    dispatch(changeStatus(taskId, status))
+    await Deal.changeTaskStatus(deal_id, status)
+    dispatch(changeStatus(deal_id, status))
   }
 }
 
-export function changeNeedsAttention(taskId, status) {
+export function changeNeedsAttention(deal_id, task_id, status) {
   return async dispatch => {
-    await Deal.needsAttention(taskId, status)
-    dispatch(needsAttention(taskId, status))
+    await Deal.needsAttention(deal_id, task_id, status)
+    dispatch(needsAttention(deal_id, status))
   }
 }

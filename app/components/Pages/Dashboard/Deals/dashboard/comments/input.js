@@ -59,7 +59,7 @@ class CommentCreate extends React.Component {
 
     try {
       if (needs_attention !== null) {
-        await changeNeedsAttention(task.id, needs_attention)
+        await changeNeedsAttention(task.deal, task.id, needs_attention)
       }
 
       if (task_status !== null) {
