@@ -1,10 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 import cn from 'classnames'
 import { browserHistory } from 'react-router'
 import ManualAddress from '../../create/manual-address'
 import Deal from '../../../../../../models/Deal'
 import { updateContext } from '../../../../../../store_actions/deals'
+
+const WARNING_MESSAGE =
+  'Listing information can only be changed on MLS. Once changed, the update will be reflected here.'
 
 class ListingCard extends React.Component {
   constructor(props) {
@@ -12,8 +16,11 @@ class ListingCard extends React.Component {
 
     this.state = {
       isSavingAddress: false,
-      showAddressModal: false
+      showAddressModal: false,
+      showWarningTooltip: false
     }
+
+    this._setWarningTooltipState = this._setWarningTooltipState.bind(this)
   }
 
   getAddressField(deal, field) {
@@ -45,11 +52,7 @@ class ListingCard extends React.Component {
     const state = this.getAddressField(deal, 'state_code')
     const postalCode = this.getAddressField(deal, 'postal_code')
 
-    const address = [
-      city ? `${city},` : null,
-      state,
-      postalCode
-    ]
+    const address = [city ? `${city},` : null, state, postalCode]
       .filter(item => item !== null)
       .join(' ')
 
@@ -88,10 +91,17 @@ class ListingCard extends React.Component {
     })
   }
 
+  _setWarningTooltipState(showWarningTooltip) {
+    this.setState({
+      showWarningTooltip
+    })
+  }
+
   render() {
     const { deal } = this.props
-    const { showAddressModal, isSavingAddress } = this.state
+    const { showWarningTooltip, showAddressModal, isSavingAddress } = this.state
     const photo = Deal.get.field(deal, 'photo')
+    const showEditingAddressWarning = deal.listing && showWarningTooltip
 
     return (
       <div className="deal-listing-card">
@@ -104,29 +114,51 @@ class ListingCard extends React.Component {
         </div>
 
         <div className="address-info">
-
           <div
-            className={cn('editable', { canEdit: !isSavingAddress })}
-            onClick={() => !isSavingAddress && this.toggleShowAddressModal()}
+            onMouseEnter={() => this._setWarningTooltipState(true)}
+            onMouseLeave={() => this._setWarningTooltipState(false)}
+            className={cn('deal-listing-card__address', {
+              isHovered: showEditingAddressWarning
+            })}
           >
-            <div className="title">
-              { this.getHomeAddress(deal) }
-            </div>
+            <div className="title">{this.getHomeAddress(deal)}</div>
 
-            <div className="addr">
-              { this.getListingAddress(deal) }
-            </div>
+            <div className="addr">{this.getListingAddress(deal)}</div>
 
-            <i className="fa fa-pencil edit-icon" />
-            { isSavingAddress && <i className="fa fa-spin fa-spinner" /> }
+            {showEditingAddressWarning && (
+              <div className="deal-listing-card__warning-tooltip">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 72 90"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7.81 34.66V23.93C7.81 10.715 20.505 0 36.172 0c15.663 0 28.362 10.711 28.362 23.93l-.003 5.363v5.364h2.418c2.644 0 4.804 2.168 4.804 4.808v45.73c0 2.64-2.164 4.805-4.804 4.805l-62.141-.004C2.164 89.996 0 87.828 0 85.191v-45.73c0-2.64 2.164-4.8 4.809-4.8l3-.001zm47.421 0V23.93c0-7.828-8.535-14.18-19.055-14.18-10.523 0-19.059 6.352-19.059 14.18v10.73h38.114z"
+                    fill="#adadad"
+                    fillRule="evenodd"
+                  />
+                </svg>
+                <span>{WARNING_MESSAGE}</span>
+              </div>
+            )}
           </div>
 
-          <img
-            alt=""
-            onClick={() => this.openListing(deal)}
-            className={cn('open-listing', { hidden: !deal.listing })}
-            src="/static/images/deals/view-listing.svg"
-          />
+          {deal.listing && (
+            <Link className="open-listing" to={`/dashboard/mls/${deal.listing}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                className="deal-listing-card__open-link-icon"
+                fill="#C9D7DF"
+                fillRule="evenodd"
+              >
+                <path d="M14 16c1.103 0 2-.897 2-2v-4h-2v4H2V2h4V0H2C.897 0 0 .897 0 2v12c0 1.103.897 2 2 2h12z" />
+                <path d="M9 2h3.586L5.293 9.293l1.414 1.414L14 3.414V7h2V0H9z" />
+              </svg>
+            </Link>
+          )}
         </div>
 
         <ManualAddress
@@ -140,6 +172,9 @@ class ListingCard extends React.Component {
   }
 }
 
-export default connect(({ deals }) => ({
-  roles: deals.roles
-}), { updateContext })(ListingCard)
+export default connect(
+  ({ deals }) => ({
+    roles: deals.roles
+  }),
+  { updateContext }
+)(ListingCard)
