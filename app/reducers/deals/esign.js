@@ -47,7 +47,7 @@ export default (state = initialState, action) => {
     case types.REMOVE_RECIPIENT:
       return {
         ...state,
-        recipients: _.filter(state.recipients, recp => recp.email !== action.id)
+        recipients: _.filter(state.recipients, recp => recp.role !== action.id)
       }
 
     case types.CLOSE_ESIGN_WIZARD:
