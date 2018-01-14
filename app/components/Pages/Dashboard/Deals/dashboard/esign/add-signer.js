@@ -24,6 +24,7 @@ export default ({
         deal={deal}
         allowedRoles={allowedRoles}
         onSelectRole={role => onAddRecipient(role)}
+        allowDeleteRole={false}
       />
     </Modal.Body>
   </Modal>

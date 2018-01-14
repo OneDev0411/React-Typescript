@@ -104,7 +104,7 @@ class Roles extends React.Component {
   }
 
   render() {
-    const { deal, allowedRoles, roles, onSelectRole } = this.props
+    const { deal, allowedRoles, roles, onSelectRole, allowDeleteRole } = this.props
     const { deletingRoleId } = this.state
 
     return (
@@ -140,20 +140,23 @@ class Roles extends React.Component {
                     <div className="role">{ roleName(item.role) }</div>
                   </div>
 
-                  <div className="cta">
-                    {
-                      deletingRoleId && item.id === deletingRoleId &&
-                      <i className="fa fa-spinner fa-spin" />
-                    }
+                  {
+                    allowDeleteRole  &&
+                    <div className="cta">
+                      {
+                        deletingRoleId && item.id === deletingRoleId &&
+                        <i className="fa fa-spinner fa-spin" />
+                      }
 
-                    {
-                      !deletingRoleId &&
-                      <i
-                        onClick={() => this.onRequestRemoveRole(item)}
-                        className="fa fa-delete fa-times"
-                      />
-                    }
-                  </div>
+                      {
+                        !deletingRoleId &&
+                        <i
+                          onClick={() => this.onRequestRemoveRole(item)}
+                          className="fa fa-delete fa-times"
+                        />
+                      }
+                    </div>
+                  }
                 </div>
               )
             })
