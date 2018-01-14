@@ -13,7 +13,7 @@ import DealModel from '../../../../../../models/Deal'
 import {
   closeEsignWizard,
   showAttachments,
-  setEnvelopes,
+  createEnvelope,
   addEsignRecipient,
   removeEsignRecipient
 } from '../../../../../../store_actions/deals'
@@ -128,7 +128,7 @@ class SendSignatures extends React.Component {
   async send() {
     const { isSending, error } = this.state
     const {
-      notify, setEnvelopes, user, deal, esign, tasks
+      notify, createEnvelope, closeEsignWizard, user, deal, esign, tasks
     } = this.props
     const { recipients } = esign
 
@@ -147,7 +147,7 @@ class SendSignatures extends React.Component {
         error: ERROR_MESSAGES.recipinets
       })
 
-      return
+      return false
     }
 
     if (attachments.length === 0) {
@@ -155,7 +155,7 @@ class SendSignatures extends React.Component {
         error: ERROR_MESSAGES.attachments
       })
 
-      return
+      return false
     }
 
     this.setState({
@@ -164,7 +164,10 @@ class SendSignatures extends React.Component {
     })
 
     try {
-      const envelope = await DealModel.sendEnvelope(
+
+
+      // add envelope to list of envelopes
+      await createEnvelope(
         deal.id,
         subject,
         message,
@@ -172,11 +175,8 @@ class SendSignatures extends React.Component {
         recipients
       )
 
-      // add envelope to list of envelopes
-      setEnvelopes(deal.id, { [envelope.id]: envelope })
-
       // close esign
-      this.props.closeEsignWizard()
+      closeEsignWizard()
 
       notify({
         message: 'eSign has been sent',
@@ -314,7 +314,7 @@ export default connect(
     removeEsignRecipient,
     showAttachments,
     closeEsignWizard,
-    setEnvelopes,
+    createEnvelope,
     notify
   }
 )(SendSignatures)
