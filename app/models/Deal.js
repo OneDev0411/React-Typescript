@@ -160,6 +160,8 @@ Deal.getById = async function (id) {
     const response = await new Fetch()
       .get(`/deals/${id}`)
       .query({'associations[]': ['room.attachments']})
+      .query({'associations[]': ['deal.checklists']})
+      .query({'associations[]': ['deal.envelopes']})
 
     return response.body.data
   } catch (e) {
@@ -182,16 +184,14 @@ Deal.getAll = async function (user = {}, backoffice = false) {
   // backoffice and agent has different endpoints and associations
   if (backoffice) {
     endpoint = `/brands/${user.brand}/deals/inbox`
-    associations = 'associations[]=room.attachments&'
-    associations += 'associations[]=deal.brand&'
+    associations = 'associations[]=deal.brand&'
     associations += 'associations[]=deal.created_by&'
     associations += 'associations[]=review.updated_by&'
-    associations += 'associations[]=deal.checklists'
+    associations += 'associations[]=deal.new_notifications'
   } else {
     endpoint = `/brands/${user.brand}/deals`
-    associations = 'associations[]=room.attachments&'
-    associations += 'associations[]=agent.office&'
-    associations += 'associations[]=deal.checklists'
+    associations = 'associations[]=agent.office&'
+    associations += 'associations[]=deal.new_notifications'
   }
 
   try {
@@ -578,20 +578,6 @@ Deal.updateContext = async function (dealId, context, approved) {
     return response.body.data
   } catch (e) {
     return false
-  }
-}
-
-/**
-* get envelopes of a deal
-*/
-Deal.getEnvelopes = async function (deal_id) {
-  try {
-    const response = await new Fetch()
-      .get(`/deals/${deal_id}/envelopes`)
-
-    return response.body.data
-  } catch (e) {
-    return null
   }
 }
 
