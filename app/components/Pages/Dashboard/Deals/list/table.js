@@ -4,6 +4,7 @@ import { Popover, OverlayTrigger } from 'react-bootstrap'
 import _ from 'underscore'
 import { getStatusColorClass } from '../../../../../utils/listing'
 import Deal from '../../../../../models/Deal'
+import DealContext from '../../../../../models/DealContext'
 import CriticalDates from '../dashboard/factsheet/critical-dates'
 import EmptyState from './empty-state'
 import ToolTip from '../components/tooltip'
@@ -36,7 +37,6 @@ class BaseTable extends React.Component {
    */
   getListingPhoto(deal) {
     const photo = Deal.get.field(deal, 'photo')
-
     return photo || '/static/images/deals/home.png'
   }
 
@@ -69,6 +69,12 @@ class BaseTable extends React.Component {
   }
 
   getNextDate(deal, rowId, rowsCount) {
+    const table = DealContext.getFactsheetSection(deal, 'CriticalDates')
+
+    if (table.length === 0) {
+      return <span></span>
+    }
+
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
@@ -215,36 +221,12 @@ class BaseTable extends React.Component {
    *
    */
   hasNotification(deal) {
-    let counter = 0
-    const { rooms } = this.props
-
-    if (!deal.checklists) {
-      return ''
-    }
-
-    deal.checklists.forEach(id => {
-      const checklist = this.props.checklists[id]
-
-      if (!checklist.tasks || checklist.tasks.length === 0) {
-        return false
-      }
-
-      checklist.tasks.forEach(task_id => {
-        const task = this.props.tasks[task_id]
-        const room = (rooms && rooms[task.room.id]) || task.room
-
-        if (room.new_notifications > 0) {
-          counter += room.new_notifications
-        }
-      })
-    })
-
-    if (counter > 0) {
+    if (deal.new_notifications > 0) {
       return (
-        <ToolTip caption={`You have ${counter} unread messages in this deal`}>
+        <ToolTip caption={`You have ${deal.new_notifications} unread messages in this deal`}>
           <div className="inline unread-notifications">
             <img src="/static/images/deals/comments.svg" />
-            <span>{counter}</span>
+            <span>{deal.new_notifications}</span>
           </div>
         </ToolTip>
       )

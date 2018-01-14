@@ -29,17 +29,25 @@ const getNextDateField = (deal) => {
 const CriticalDates = ({
   deal,
   showTitle = true
-}) => (
-  <div className="deal-info-section">
-    <Items
-      title="CRITICAL DATES"
-      showTitle={showTitle}
-      table={Context.getFactsheetSection(deal, 'CriticalDates')}
-      deal={deal}
-      getValue={Context.getValue}
-    />
-  </div>
-)
+}) => {
+  const table = Context.getFactsheetSection(deal, 'CriticalDates')
+
+  if (table.length === 0) {
+    return false
+  }
+
+  return (
+    <div className="deal-info-section">
+      <Items
+        title="CRITICAL DATES"
+        showTitle={showTitle}
+        table={table}
+        deal={deal}
+        getValue={Context.getValue}
+      />
+    </div>
+  )
+}
 
 /**
  * get next date

@@ -65,6 +65,10 @@ Context.getFactsheetSection = function(deal, name) {
   const criteria = (ctx) => ctx.section === name
   const hasActiveOffer = Context.hasActiveOffer(deal)
 
+  if (hasActiveOffer === null) {
+    return []
+  }
+
   return Context
     .query(criteria)
     .filter(ctx => Context.filterByFlags(
@@ -149,11 +153,16 @@ Context.query = function (criteria) {
  */
 Context.hasActiveOffer = function(deal) {
   const checklists = Context.getChecklists()
+
+  if (!deal.checklists) {
+    return null
+  }
+
   const filtered = deal.checklists.filter(id => {
     const checklist = checklists[id]
 
-    return !checklist.is_deactivated &&
-      !checklist.is_terminated &&
+    return checklist.is_deactivated === false &&
+      checklist.is_terminated === false &&
       checklist.checklist_type === 'Buying'
   })
 

@@ -9,7 +9,8 @@ import ESignCompose from './esign/compose'
 import UploadPromptModal from './upload/prompt'
 import PDFSplitterModal from './upload/pdf-splitter'
 import NavBar from './navbar'
-import { getEnvelopes } from '../../../../../store_actions/deals'
+import { getDeal } from '../../../../../store_actions/deals'
+import Deal from '../../../../../models/Deal'
 
 class DealDetails extends React.Component {
   constructor(props) {
@@ -17,14 +18,14 @@ class DealDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { deal, getEnvelopes } = this.props
+    const { deal, getDeal } = this.props
 
     if (deal === null) {
       return browserHistory.push('/dashboard/deals')
     }
 
-    if (!deal.envelopes) {
-      getEnvelopes(deal.id)
+    if (!deal.checklists) {
+      getDeal(deal.id)
     }
   }
 
@@ -84,4 +85,4 @@ function mapStateToProps({ deals }, props) {
   }
 }
 
-export default connect(mapStateToProps, { getEnvelopes })(DealDetails)
+export default connect(mapStateToProps, { getDeal })(DealDetails)

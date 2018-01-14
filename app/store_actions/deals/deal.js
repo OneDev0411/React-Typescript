@@ -7,6 +7,7 @@ import * as schema from './schema'
 import { setTasks } from './task'
 import { setChecklists } from './checklist'
 import { setRoles } from './role'
+import { setEnvelopes } from './envelope'
 
 function setDeals(deals) {
   return {
@@ -83,14 +84,26 @@ export function updateListing(dealId, listingId) {
 export function updateDeal(deal) {
   return async (dispatch) => {
     const { entities } = normalize(deal, schema.dealSchema)
-    const { deals, roles, checklists, tasks } = entities
+    const { deals, roles, envelopes, checklists, tasks } = entities
 
     batchActions([
       dispatch(setTasks(tasks)),
       dispatch(setChecklists(checklists)),
       dispatch(setRoles(roles)),
+      dispatch(setEnvelopes(envelopes)),
       dispatch(dealUpdated(deals[deal.id]))
     ])
+  }
+}
+
+export function getDeal(deal_id) {
+  return async (dispatch) => {
+    try {
+      const deal = await Deal.getById(deal_id)
+      dispatch(updateDeal(deal))
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 
