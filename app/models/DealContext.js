@@ -186,7 +186,7 @@ Context.filterByFlags = function (context, deal_type, property_type, hasActiveOf
     return false
   }
 
-  if (isSellingDeal && (hasActiveOffer || flag & 131072 === 0)) {
+  if (isSellingDeal && !hasActiveOffer && ((flag & 131072) === 131072)) {
     return false
   }
 
