@@ -277,22 +277,25 @@ class BaseTable extends React.Component {
               <tbody>
                 <tr className="header">
                   {
-                  _.map(this.cells, (cell, key) =>
-                    <td
-                      key={`CELL_${key}`}
-                      className={cn(cell.className, {
+                    _.chain(this.cells)
+                      .filter(cell => !cell.justFilter)
+                      .map((cell, key) =>
+                        <td
+                          key={`CELL_${key}`}
+                          className={cn(cell.className, {
                         sortable: cell.sortable,
                         isActive: sortBy === key
                       })}
-                    >
-                      <span
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => cell.sortable && this.setSort(key)}
-                      >
-                        {cell.caption}&nbsp;
-                        {cell.sortable && this.getSorterCaret(key)}
-                      </span>
-                    </td>)
+                        >
+                          <span
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => cell.sortable && this.setSort(key)}
+                          >
+                            {cell.caption}&nbsp;
+                            {cell.sortable && this.getSorterCaret(key)}
+                          </span>
+                        </td>)
+                    .value()
                 }
                 </tr>
 
