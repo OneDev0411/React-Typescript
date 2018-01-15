@@ -8,12 +8,26 @@ class FileName extends React.Component {
     super(props)
 
     this.inputs = []
+    this.state = {
+      isActive: false
+    }
+
+    this._setActiveState = this._setActiveState.bind(this)
+    this._save = this._save.bind(this)
   }
 
-  toggleEdit(file, status) {
+  _setActiveState() {
+    this.setState({
+      isActive: true
+    })
+  }
+
+  _save(file) {
     this.props.setUploadAttributes(file.id, {
-      editNameEnabled: status,
       fileTitle: this.inputs[file.id] && this.inputs[file.id].value
+    })
+    this.setState({
+      isActive: false
     })
   }
 
@@ -22,40 +36,44 @@ class FileName extends React.Component {
       return false
     }
 
-    return this.toggleEdit(file, false)
+    return this._save(file, false)
   }
 
   render() {
-    const { file, canEditName } = this.props
+    const { file } = this.props
+    const { isActive } = this.state
 
     return (
       <div>
         <img src="/static/images/deals/document.png" />
 
         <input
-          ref={ref => this.inputs[file.id] = ref}
-          autoFocus
-          className={cn('input-edit-name', { disabled: !canEditName })}
-          readOnly={!canEditName}
-          defaultValue={file.fileObject.name}
-          onBlur={() => this.toggleEdit(file, false)}
+          readOnly={!isActive}
+          defaultValue={file.properties.fileTitle || file.fileObject.name}
+          ref={ref => (this.inputs[file.id] = ref)}
+          onBlur={() => this._save(file)}
           onKeyPress={e => this.onKeyPress(e, file)}
-          onClick={() => this.toggleEdit(file, true)}
+          onClick={() => this._setActiveState()}
+          className={cn('input-edit-name', { disabled: !isActive })}
         />
 
-        {
-          canEditName ?
-            <span
-              onClick={() => this.toggleEdit(file, false)}
-              className="save"
-            >
+        {isActive ? (
+          <button
+            className="deals-info__shadow-buton save"
+            onClick={() => this._save(file)}
+          >
             Save
-            </span> :
-            <i
-              className={cn('edit-icon fa fa-pencil', { canEditName })}
-              onClick={() => this.toggleEdit(file, true)}
-            />
-        }
+          </button>
+        ) : (
+          <button
+            className={cn('deals-info__shadow-buton edit-icon', {
+              canEditName: isActive
+            })}
+            onClick={() => this._setActiveState()}
+          >
+            EDIT
+          </button>
+        )}
       </div>
     )
   }

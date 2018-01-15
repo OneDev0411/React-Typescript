@@ -10,7 +10,6 @@ import Workspace from './workspace'
 import { resetSplitter } from '../../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../../store_actions/confirmation'
 
-
 class PDFSplitter extends React.Component {
   constructor(props) {
     super(props)
@@ -43,32 +42,20 @@ class PDFSplitter extends React.Component {
       <div className="pdf-splitter">
         <div className="header">
           <span>Split</span>
-          <span
-            onClick={() => this.closeSplitter()}
-            className="close-form"
-          >
+          <span onClick={() => this.closeSplitter()} className="close-form">
             <i className="fa fa-times" />
           </span>
         </div>
 
-        {
-          splitter.pagePreview &&
-          <PagePreview />
-        }
+        {splitter.pagePreview && <PagePreview />}
 
         <DragDropContextProvider backend={HTML5Backend}>
           <div className="splitter-container">
-            <div
-              className="pdfs"
-              ref={ref => this.pdfsContainer = ref}
-            >
+            <div className="pdfs" ref={ref => (this.pdfsContainer = ref)}>
               <PDFList />
             </div>
 
-            <div
-              className="workspace"
-              ref={ref => this.workspaceContainer = ref}
-            >
+            <div className="workspace" ref={ref => (this.workspaceContainer = ref)}>
               <Workspace />
             </div>
           </div>
