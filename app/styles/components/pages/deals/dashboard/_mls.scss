@@ -1,4 +1,6 @@
 .deal-mls {
+  margin-bottom: 2rem;
+
   .loading {
     text-align: center;
     margin: 15px 0;
@@ -18,7 +20,6 @@
 }
 
 %deal-mls-info {
-  margin: $col-padding / 2;
   @extend %deal-fact-approve-row;
 
   .item {
@@ -133,7 +134,7 @@
   }
 }
 
-.mls-info__button {
+.deals-info__shadow-buton {
   padding: 0;
   border: none;
   color: #2196f3;

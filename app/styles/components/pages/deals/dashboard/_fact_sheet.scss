@@ -23,15 +23,12 @@
 
 %deal-fact-sheet {
   background: #fff;
-  margin: $col-padding 0;
+  margin-bottom: $col-padding;
   .fact-table {
+    font-size: 14px;
     border-collapse: separate;
     border-spacing: 0 1px;
-    width: 300px - $col-padding;
-    margin: 0 $col-padding/2;
     color: #1d364b;
-    margin-bottom: 8px;
-    font-size: 14px;
 
     @extend %deal-fact-approve-row;
 
@@ -41,9 +38,13 @@
       min-height: 30px;
       align-items: center;
 
+      &:hover {
+        border: 1px dashed #2196f3;
+        padding: 0 3px;
+      }
+
       .name {
-        min-width: 140px;
-        max-width: 140px;
+        width: 50%;
         color: #1d364b;
 
         .status {
@@ -66,8 +67,7 @@
       }
 
       .field {
-        min-width: 140px;
-        max-width: 140px;
+        width: 50%;
         font-size: 14px;
         color: #1d364b;
         text-align: right;
@@ -75,11 +75,8 @@
         transition: 0.1s ease-in all;
         cursor: pointer;
         border-radius: 3px;
-        i {
-          color: #afbbc8
-        }
 
-        .ico-remove {
+        .cta__button {
           display: none;
         }
 
@@ -89,13 +86,13 @@
 
         &.editable {
           &:hover {
-            border-color: #2196f3;
-            i {
+            .cta {
               color: #2196f3;
             }
 
-            .ico-remove {
+            .cta__button {
               display: inline-block;
+              margin-left: 0.5rem;
             }
           }
         }
@@ -118,15 +115,16 @@
           }
         }
 
-        .cta {
-          margin: 0 2px 0 3px;
-          i {
-            margin-left: 5px;
-          }
-        }
-
         &.editable.error {
           border-color: red;
+        }
+
+        .ico-remove {
+          color: #afbbc8;
+
+          &:hover {
+            color: #2196f3;
+          }
         }
       }
     }
