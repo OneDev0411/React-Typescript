@@ -30,6 +30,25 @@
       color: #8fa3b6;
     }
 
+    .confirmation-input {
+      textarea {
+        width: 400px;
+        height: 80px;
+        margin-top: 15px;
+        color: #324457;
+        font-size: 17px;
+        padding: 10px;
+        border-radius: 3px;
+        backdrop-filter: blur(10px);
+        background-color: #fafafa;
+        border: solid 1px #dce5eb;
+        resize: none;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
     .cta {
       margin-top: 16px;
     }
