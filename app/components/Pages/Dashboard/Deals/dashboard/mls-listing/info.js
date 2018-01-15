@@ -36,13 +36,13 @@ class Info extends Component {
             {(hasMLSAddress && deal.mls_context.mls_number) || '-'}
 
             {isHovered && (
-              <button className="deals-info__shadow-buton" onClick={editMls}>
+              <button className="c-button--shadow" onClick={editMls}>
                 EDIT
               </button>
             )}
 
             {hasMLSAddress && (
-              <button onClick={deleteMls} className="deals-info__shadow-buton">
+              <button onClick={deleteMls} className="c-button--shadow">
                 <i className="fa fa-times-circle" />
               </button>
             )}
