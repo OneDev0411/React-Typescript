@@ -113,7 +113,7 @@ class ListingStatus extends React.Component {
 
             {!saving && (
               <button
-                className="c-button--shadow"
+                className="deals-info__mls-status__edit-cta c-button--shadow"
                 onClick={() => this.toggleModal()}
               >
                 EDIT
