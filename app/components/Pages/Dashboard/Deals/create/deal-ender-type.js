@@ -3,11 +3,14 @@ import RadioButton from '../components/radio'
 
 export default ({
   enderType,
+  isRequired,
+  showAgentDoubleEnder,
   onChangeEnderType
 }) => (
   <div className="form-section deal-offer">
     <div className="hero">
-      Is this a double-ender deal? <span className="required">*</span>
+      Is this an in-house deal?&nbsp;
+      {isRequired && <span className="required">*</span>}
     </div>
 
     <RadioButton
@@ -16,11 +19,14 @@ export default ({
       onClick={() => onChangeEnderType(null)}
     />
 
-    <RadioButton
-      selected={enderType === 'AgentDoubleEnder'}
-      title="Yes, I am on both sides"
-      onClick={() => onChangeEnderType('AgentDoubleEnder')}
-    />
+    {
+      showAgentDoubleEnder &&
+      <RadioButton
+        selected={enderType === 'AgentDoubleEnder'}
+        title="Yes, I represent both sides"
+        onClick={() => onChangeEnderType('AgentDoubleEnder')}
+      />
+    }
 
     <RadioButton
       selected={enderType === 'OfficeDoubleEnder'}

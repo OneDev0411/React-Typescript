@@ -5,6 +5,10 @@ export default function (deal) {
   const { deals } = store.getState()
   const { checklists } = deals
 
+  if (!deal.checklists) {
+    return null
+  }
+
   return deal.checklists.some(chId => {
     const checklist = checklists[chId]
 

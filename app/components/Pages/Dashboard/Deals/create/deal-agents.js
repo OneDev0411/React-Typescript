@@ -24,17 +24,23 @@ export default ({
   scenario,
   agents,
   dealSide,
+  ctaTitleForPrimaryAgent,
+  shouldPrepopulateAgent = true,
   onUpsertAgent,
   onRemoveAgent
 }) => {
   const allowedRoles = getRoles(agents, dealSide)
   const isPrimaryAgent = ['BuyerAgent', 'SellerAgent'].indexOf(allowedRoles[0]) > -1
-  const title = isPrimaryAgent ? 'primary agent' : 'co-agent'
+
+  const title = isPrimaryAgent ?
+    (ctaTitleForPrimaryAgent || 'Add myself or another agent on my team') :
+    'Add co-agent'
 
   return (
     <div className="form-section deal-people deal-agent">
       <div className="hero">
-        Who is the {dealSide === BUYING ? 'buyer' : 'listing'} agent? <span className="required">*</span>
+        Enter {dealSide === BUYING ? 'buyer' : 'listing'} agent’s information.&nbsp;
+        <span className="required">*</span>
       </div>
 
       <div className="people-container">
@@ -53,9 +59,12 @@ export default ({
         }
 
         <CrudRole
-          shouldPrepopulateAgent={isPrimaryAgent && scenario === 'CreateDeal'}
-          modalTitle={`Add ${title}`}
-          ctaTitle={`Add ${title}`}
+          shouldPrepopulateAgent={shouldPrepopulateAgent &&
+            isPrimaryAgent &&
+            scenario === 'CreateDeal'
+          }
+          modalTitle={title}
+          ctaTitle={title}
           allowedRoles={allowedRoles}
           onUpsertRole={onUpsertAgent}
         />

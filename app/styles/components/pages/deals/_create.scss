@@ -241,6 +241,10 @@ $margin: 20px;
   box-shadow: none;
   color: #b0bfc7;
 
+  &.selected {
+    color: #262626;
+  }
+
   .caret {
     float: right;
     margin-top: 7px;
@@ -282,7 +286,7 @@ $margin: 20px;
 */
 %deal-create-entity-item {
   display: flex;
-  width: 160px;
+  min-width: 160px;
   min-height: 34px;
   border-radius: 3px;
   background-color: #f8fafb;

@@ -19,14 +19,20 @@ export default ({
   clients,
   dealSide,
   onUpsertClient,
-  onRemoveClient
+  onRemoveClient,
+  ctaTitle = 'Add client'
 }) => {
   const allowedRoles = getRoles(dealSide)
 
   return (
     <div className="form-section deal-people deal-client">
       <div className="hero">
-        Who are the {dealSide === 'Buying' ? 'buyers' : 'sellers'}?&nbsp;
+        {
+          dealSide === 'Buying' ?
+          'Enter buyer information as shown on offer.' :
+          'Enter the seller’s legal information'
+        }
+        &nbsp;
         <span className="required">*</span>
       </div>
 
@@ -47,7 +53,7 @@ export default ({
 
         <CrudRole
           modalTitle="Add a client"
-          ctaTitle="Add a client"
+          ctaTitle={ctaTitle}
           allowedRoles={allowedRoles}
           onUpsertRole={onUpsertClient}
         />

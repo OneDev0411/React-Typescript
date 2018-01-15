@@ -45,7 +45,8 @@ export default class DealAddress extends React.Component {
     return (
       <div className="form-section deal-address">
         <div className="hero">
-          Do you have an address for this deal?
+          What is the address of the subject property?&nbsp;
+          <span className="required">*</span>
         </div>
 
         <ManualAddress
@@ -91,7 +92,7 @@ export default class DealAddress extends React.Component {
                 >
                   <span className="add-item">
                     <span className="icon">+</span>
-                    <span className="text">Add From MLS</span>
+                    <span className="text">Enter MLS #</span>
                   </span>
                 </div>
               }
@@ -103,7 +104,7 @@ export default class DealAddress extends React.Component {
                 <span className="add-item">
                   <span className="icon">+</span>
                   <span className="text">
-                    { dealSide === BUYING ? 'Or add address manually' : 'Add address' }
+                    { dealSide === BUYING ? 'Or manually input' : 'Add address' }
                   </span>
                 </span>
               </div>
