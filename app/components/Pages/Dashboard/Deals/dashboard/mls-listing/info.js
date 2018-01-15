@@ -1,33 +1,56 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ListingStatus from './listing-status'
 
-export default ({
-  deal,
-  editMls,
-  deleteMls
-}) => (
-  <div className="mls-info">
-    <ListingStatus
-      deal={deal}
-    />
+class Info extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isHovered: false
+    }
 
-    {
-      deal.listing &&
-      <div className="item">
-        <div className="lbl">MLS#:</div>
-        <div className="value mls-number">
-          { deal.mls_context.mls_number }
-          <i
-            className="fa fa-pencil"
-            onClick={editMls}
-          />
+    this._setHoverState = this._setHoverState.bind(this)
+  }
 
-          <i
-            className="fa fa-times-circle"
-            onClick={deleteMls}
-          />
+  _setHoverState(isHovered) {
+    this.setState({
+      isHovered
+    })
+  }
+
+  render() {
+    const { isHovered } = this.state
+    const { deal, editMls, deleteMls } = this.props
+    const hasMLSAddress = deal && deal.mls_context
+
+    return (
+      <div className="mls-info">
+        <ListingStatus deal={deal} />
+
+        <div
+          className="item"
+          onMouseEnter={() => this._setHoverState(true)}
+          onMouseLeave={() => this._setHoverState(false)}
+        >
+          <div className="lbl">MLS#:</div>
+          <div className="value mls-number">
+            {(hasMLSAddress && deal.mls_context.mls_number) || '-'}
+
+            {isHovered && (
+              <button className="mls-info__button" onClick={editMls}>
+                EDIT
+              </button>
+            )}
+
+            {hasMLSAddress && (
+              <button onClick={deleteMls} className="mls-info__button">
+                <i className="fa fa-times-circle" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
-    }
-  </div>
-)
+    )
+  }
+}
+
+export default Info
