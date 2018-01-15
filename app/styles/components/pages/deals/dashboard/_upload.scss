@@ -46,14 +46,12 @@
         color: #8da2b5;
       }
     }
-
   }
 }
 
 %deal-tiny-save-btn {
   .save {
     cursor: pointer;
-    padding-left: 4px;
     font-weight: 500;
 
     &:hover {
@@ -96,6 +94,7 @@
     align-items: center;
 
     .file-name {
+      position: relative;
       width: 52%;
       height: 40px;
       line-height: 40px;
@@ -111,6 +110,10 @@
       white-space: nowrap;
       overflow: hidden;
 
+      button:focus {
+        outline: none;
+      }
+
       img {
         width: 17px;
         margin-right: 12px;
@@ -118,11 +121,13 @@
       }
 
       .edit-icon {
-        float: right;
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
         color: #afbbc8;
         cursor: pointer;
-        font-size: 17px;
-        margin: 10px 12px 0 0;
+
         &:hover {
           color: #2196f3;
         }
@@ -133,18 +138,24 @@
       }
 
       .input-edit-name {
-        width: 85%;
+        width: 84%;
         height: 30px;
-        border-radius: 4px;
         padding: 0 5px;
+        border-radius: 3px;
         border: 1px solid #ccc;
 
         &.disabled {
           border: none;
         }
 
+        &:hover {
+          background: #fafafa;
+        }
+
         &:focus {
-          outline: none;
+          background: #fafafa;
+          outline-width: 1px;
+          border-width: 0;
         }
       }
 
@@ -192,7 +203,6 @@
     }
   }
 }
-
 
 /**
 *

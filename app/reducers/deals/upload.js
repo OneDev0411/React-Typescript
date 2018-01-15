@@ -18,16 +18,20 @@ export default (state = initialState, action) => {
       return initialState
 
     case types.SET_UPLOAD_ATTRIBUTES:
+      const { fileId } = action
+      const file = state.files[fileId]
+      const properties = {
+        ...file.properties,
+        ...action.attributes
+      }
+
       return {
         ...state,
         files: {
           ...state.files,
-          [action.fileId]: {
-            ...state.files[action.fileId],
-            properties: {
-              ...state.files[action.fileId].properties,
-              ...action.attributes
-            }
+          [fileId]: {
+            ...file,
+            properties
           }
         }
       }

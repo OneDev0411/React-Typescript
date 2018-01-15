@@ -50,7 +50,13 @@ class ListingStatus extends React.Component {
   }
 
   async notifyAdmin(status) {
-    const { deal, checklists, notify, changeNeedsAttention, createGenericTask } = this.props
+    const {
+      deal,
+      checklists,
+      notify,
+      changeNeedsAttention,
+      createGenericTask
+    } = this.props
 
     const title = `Change listing status to ${status}`
 
@@ -87,7 +93,7 @@ class ListingStatus extends React.Component {
             show={showModal}
             status={status}
             saveText={isBackOffice ? 'Update' : 'Notify Office'}
-            onChangeStatus={(status) => this.onChangeStatus(status)}
+            onChangeStatus={status => this.onChangeStatus(status)}
             onClose={() => this.toggleModal()}
           />
 
@@ -98,46 +104,54 @@ class ListingStatus extends React.Component {
               style={{ background: getStatusColorClass(status) }}
             />
             <ToolTip
-              caption={!isBackOffice && !approved ? 'Waiting for office approval' : null}
+              caption={
+                !isBackOffice && !approved ? 'Waiting for office approval' : null
+              }
             >
-              <span>{ status }</span>
+              <span>{status}</span>
             </ToolTip>
 
-            {
-              !saving &&
-              <i
-                className="fa fa-pencil"
+            {!saving && (
+              <button
+                className="deals-info__mls-status__edit-cta c-button--shadow"
                 onClick={() => this.toggleModal()}
-              />
-            }
+              >
+                EDIT
+              </button>
+            )}
           </div>
 
-          {
-            saving &&
-            <i
-              style={{ marginLeft: '5px' }}
-              className="fa fa-spin fa-spinner"
-            />
-          }
+          {saving && (
+            <i style={{ marginLeft: '5px' }} className="fa fa-spin fa-spinner" />
+          )}
         </div>
 
-        {
-          isBackOffice && !approved && !saving &&
-          <div className="approve-row">
-            <button
-              className="btn-approve"
-              onClick={() => this.updateStatus(status)}
-            >
-              Approve
-            </button>
-          </div>
-        }
+        {isBackOffice &&
+          !approved &&
+          !saving && (
+            <div className="approve-row">
+              <button
+                className="btn-approve"
+                onClick={() => this.updateStatus(status)}
+              >
+                Approve
+              </button>
+            </div>
+          )}
       </div>
     )
   }
 }
 
-export default connect(({ deals }) => ({
-  isBackOffice: deals.backoffice,
-  checklists: deals.checklists
-}), { notify, updateContext, createGenericTask, changeNeedsAttention })(ListingStatus)
+export default connect(
+  ({ deals }) => ({
+    isBackOffice: deals.backoffice,
+    checklists: deals.checklists
+  }),
+  {
+    notify,
+    updateContext,
+    createGenericTask,
+    changeNeedsAttention
+  }
+)(ListingStatus)

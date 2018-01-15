@@ -48,25 +48,38 @@ export default class Editable extends React.Component {
 
   getCtas() {
     const { editMode } = this.state
-    const { editable, context, field, saving } = this.props
+    const {
+      needsApproval, context, field, saving
+    } = this.props
     const showCTA = saving !== field.name && !editMode
 
-    return (
-      <span>
-        <ToolTip caption={editable ? null : 'This field needs office approval after removing'}>
-          <i
-            className={cn('fa fa-times-circle ico-remove', {
-              hide: !showCTA || !context.value || context.value.length === 0
-            })}
-            onClick={(e) => this.deleteField(e, field)}
-          />
-        </ToolTip>
-
-        <ToolTip caption={editable ? null : 'This field needs office approval after changing'}>
-          <i className={cn('fa fa-pencil', { hide: !showCTA })} />
-        </ToolTip>
-      </span>
-    )
+    return [
+      <ToolTip
+        key="EDITABLE_INPUT_CTA_BUTTON__EDIT"
+        caption={
+          needsApproval
+            ? null
+            : 'This field needs office approval after changing'
+        }
+      >
+        <span className={cn('cta__button', { hide: !showCTA })}>EDIT</span>
+      </ToolTip>,
+      <ToolTip
+        key="EDITABLE_INPUT_CTA_BUTTON__DELETE"
+        caption={
+          needsApproval
+            ? null
+            : 'This field needs office approval after removing'
+        }
+      >
+        <button
+          className={cn('c-button--shadow cta__button ico-remove fa fa-times-circle', {
+            hide: !showCTA || !context.value || context.value.length === 0
+          })}
+          onClick={(e) => this.deleteField(e, field)}
+        />
+      </ToolTip>
+    ]
   }
 
   getValue() {
@@ -83,7 +96,9 @@ export default class Editable extends React.Component {
   }
 
   render() {
-    const { field, context, approved, editable, disabled, saving } = this.props
+    const {
+      field, context, approved, needsApproval, disabled, saving
+    } = this.props
     const { editMode, error } = this.state
     const isDateType = field.data_type === 'Date'
     const isStringType = !isDateType
@@ -93,10 +108,10 @@ export default class Editable extends React.Component {
     }
 
     return (
-      <div className={cn('field', { editable: true, approved, disabled, error })}>
+      <div className={cn('field editable', { approved, disabled, error })}>
         <DatePicker
           show={editMode && isDateType}
-          saveText={editable ? 'Update' : 'Notify Office'}
+          saveText={needsApproval ? 'Update' : 'Notify Office'}
           initialDate={this.getValue()}
           onClose={() => this.cancelEditing()}
           onSelectDate={date => this.onFinishEditing(date)}
@@ -125,13 +140,14 @@ export default class Editable extends React.Component {
                 onKeyPress={(e) => this.onKeyPress(e)}
                 onChange={e => {
                   const error = this.input && !field.validate(e.target.value)
+
                   this.setState({ error })
                 }}
                 ref={(input) => this.input = input}
                 maxLength={15}
               />
-              <i
-                className="fa fa-check-circle"
+              <button
+                className="c-button--shadow fa fa-check-circle"
                 onClick={() => this.onFinishEditing()}
               />
             </div>
@@ -143,7 +159,10 @@ export default class Editable extends React.Component {
         </div>
         {
           saving && saving === field.name &&
-          <i className="fa fa-spin fa-spinner" style={{ display: 'inline-block' }}/>
+          <i
+            className="fa fa-spin fa-spinner"
+            style={{ display: 'inline-block', marginLeft: '0.5rem' }}
+          />
         }
       </div>
     )

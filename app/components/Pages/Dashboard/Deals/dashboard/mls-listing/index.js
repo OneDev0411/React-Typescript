@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import EmptyState from './no-mls'
 import SearchModal from './search'
 import ListingInfo from './info'
 import { updateListing } from '../../../../../../store_actions/deals'
