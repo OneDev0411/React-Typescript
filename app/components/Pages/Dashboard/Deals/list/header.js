@@ -146,22 +146,25 @@ class Header extends React.Component {
                 </div>
               </OverlayTrigger>
               }
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="popover-leave">
+              {
+                !isBackOffice &&
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={
+                    <Tooltip id="popover-leave">
                       Download Report
-                  </Tooltip>
+                    </Tooltip>
                   }
-              >
-                <a
-                  download
-                  href="/api/deals/excel/"
-                  className="search-button"
                 >
-                  <Excel />
-                </a>
-              </OverlayTrigger>
+                  <a
+                    download
+                    href="/api/deals/excel/"
+                    className="search-button"
+                  >
+                    <Excel />
+                  </a>
+                </OverlayTrigger>
+              }
               {
                 !isBackOffice &&
                 <Link
