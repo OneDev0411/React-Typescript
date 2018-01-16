@@ -172,7 +172,6 @@ export function searchAllDeals(query) {
       const { entities } = normalize(data, schema.dealsSchema)
       const { deals, roles, checklists, tasks } = entities
 
-      _.each(deals, deal => deal.searchResult = true)
 
       batchActions([
         dispatch(setTasks(tasks)),

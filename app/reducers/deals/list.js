@@ -1,7 +1,5 @@
-import { combineReducers } from 'redux'
 import _ from 'underscore'
 import types from '../../constants/deals'
-import error from './error'
 
 export default (state = null, action) => {
   switch (action.type) {
@@ -17,11 +15,29 @@ export default (state = null, action) => {
     case types.GET_DEALS:
       return action.deals
 
-    case types.ADD_SEARCHED_DEALS:
-      const notSearchedDeals = _.pick(state, deal => !deal.searchResult)
+    case types.ADD_SEARCHED_DEALS: {
+      const notSearchedDeals = _.pick(state, deal => !deal.searchResult || deal.duplicateDeal)
 
-      return { ...notSearchedDeals, ...action.deals }
+      _.chain(notSearchedDeals)
+        .filter(deal => deal.duplicateDeal)
+        .each(deal => {
+          deal.duplicateDeal = false
+          deal.searchResult = false
+        })
+        .value()
 
+      _.map(action.deals, deal => {
+        deal.searchResult = true
+
+        if (notSearchedDeals[deal.id]) {
+          deal.duplicateDeal = true
+        }
+
+        notSearchedDeals[deal.id] = deal
+      })
+
+      return notSearchedDeals
+    }
     case types.CREATE_DEAL:
       return {
         [action.deal.id]: action.deal,
