@@ -8,8 +8,8 @@ const Deal = {
 }
 
 /**
-* a helper that extracts a field from context or proposed values
-*/
+ * a helper that extracts a field from context or proposed values
+ */
 Deal.get.context = function (deal, field) {
   if (!deal) {
     return null
@@ -35,8 +35,8 @@ Deal.get.context = function (deal, field) {
 }
 
 /**
-* a helper that extracts a field from context or proposed values
-*/
+ * a helper that extracts a field from context or proposed values
+ */
 Deal.get.field = function (deal, field) {
   const context = Deal.get.context(deal, field)
 
@@ -59,10 +59,9 @@ Deal.get.field = function (deal, field) {
   return value
 }
 
-
 /**
-* a helper that extracts address from deal
-*/
+ * a helper that extracts address from deal
+ */
 Deal.get.address = function (deal, roles) {
   if (deal.listing) {
     return deal.mls_context.full_address
@@ -84,8 +83,8 @@ Deal.get.address = function (deal, roles) {
   ]
     .join(' ')
     .trim()
-    .replace(/(\s)+,/ig, ',')
-    .replace(/,,/ig, ',')
+    .replace(/(\s)+,/gi, ',')
+    .replace(/,,/gi, ',')
 
   if (address.slice('-1') === ',') {
     return address.slice(0, -1)
@@ -103,7 +102,8 @@ Deal.get.status = function (deal) {
 }
 
 Deal.get.clientNames = function (deal, roles) {
-  const allowedRoles = deal.deal_type === 'Buying' ? ['Buyer', 'Tenant'] : ['Seller', 'Landlord']
+  const allowedRoles =
+    deal.deal_type === 'Buying' ? ['Buyer', 'Tenant'] : ['Seller', 'Landlord']
   const clients = []
 
   if (!deal.roles || !roles) {
@@ -126,8 +126,8 @@ Deal.get.clientNames = function (deal, roles) {
 }
 
 /**
-* a helper that formats price
-*/
+ * a helper that formats price
+ */
 Deal.get.formattedPrice = function (number, style = 'currency') {
   if (!number) {
     return number
@@ -141,8 +141,8 @@ Deal.get.formattedPrice = function (number, style = 'currency') {
 }
 
 /**
-* get deal sise
-*/
+ * get deal sise
+ */
 Deal.get.side = function (deal) {
   const sides = {
     Buying: 'Buyer',
@@ -153,15 +153,15 @@ Deal.get.side = function (deal) {
 }
 
 /**
-* get deal by id
-*/
+ * get deal by id
+ */
 Deal.getById = async function (id) {
   try {
     const response = await new Fetch()
       .get(`/deals/${id}`)
-      .query({'associations[]': ['room.attachments']})
-      .query({'associations[]': ['deal.checklists']})
-      .query({'associations[]': ['deal.envelopes']})
+      .query({ 'associations[]': ['room.attachments'] })
+      .query({ 'associations[]': ['deal.checklists'] })
+      .query({ 'associations[]': ['deal.envelopes'] })
 
     return response.body.data
   } catch (e) {
@@ -170,8 +170,8 @@ Deal.getById = async function (id) {
 }
 
 /**
-* get deals list
-*/
+ * get deals list
+ */
 Deal.getAll = async function (user = {}, backoffice = false) {
   const { access_token } = user
   let endpoint
@@ -195,8 +195,7 @@ Deal.getAll = async function (user = {}, backoffice = false) {
   }
 
   try {
-    const fetchDeals = new Fetch()
-      .get(`${endpoint}?${associations}`)
+    const fetchDeals = new Fetch().get(`${endpoint}?${associations}`)
 
     // required on ssr
     if (access_token) {
@@ -212,26 +211,26 @@ Deal.getAll = async function (user = {}, backoffice = false) {
 }
 
 /**
-* get contexts info
-*/
-Deal.getContexts = async function() {
+ * get contexts info
+ */
+Deal.getContexts = async function () {
   try {
-    const response = await new Fetch()
-      .get('/deals/contexts')
+    const response = await new Fetch().get('/deals/contexts')
 
     return response.body.data
   } catch (e) {
     console.log(e)
+
+    return null
   }
 }
 
 /**
-* get forms list
-*/
+ * get forms list
+ */
 Deal.getForms = async function () {
   try {
-    const response = await new Fetch()
-      .get('/forms')
+    const response = await new Fetch().get('/forms')
 
     return response.body.data
   } catch (e) {
@@ -240,8 +239,8 @@ Deal.getForms = async function () {
 }
 
 /**
-* add a form
-*/
+ * add a form
+ */
 Deal.addForm = async function (brandId, checklistId, formId) {
   if (!brandId) {
     throw new Error('This user does not belong to any brand')
@@ -267,8 +266,7 @@ Deal.deleteForm = async function (checklist, formId) {
   }
 
   try {
-    await new Fetch()
-      .delete(`/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`)
+    await new Fetch().delete(`/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`)
   } catch (e) {
     return null
   }
@@ -279,8 +277,7 @@ Deal.deleteForm = async function (checklist, formId) {
  */
 Deal.deleteAttachment = async function (roomId, fileId) {
   try {
-    await new Fetch()
-      .delete(`/rooms/${roomId}/attachments/${fileId}`)
+    await new Fetch().delete(`/rooms/${roomId}/attachments/${fileId}`)
   } catch (e) {
     throw e
   }
@@ -291,23 +288,22 @@ Deal.deleteAttachment = async function (roomId, fileId) {
  */
 Deal.archiveDeal = async function (dealId) {
   try {
-    await new Fetch()
-      .delete(`/deals/${dealId}`)
+    await new Fetch().delete(`/deals/${dealId}`)
   } catch (e) {
     throw e
   }
 }
 
 /**
-* search google places
-*/
+ * search google places
+ */
 Deal.searchPlaces = async function (address) {
   try {
-    const params = `address=${address}&region=us&components=administrative_area:texas` +
+    const params =
+      `address=${address}&region=us&components=administrative_area:texas` +
       `&key=${config.google.api_key}`
 
-    const response = await agent
-      .get(`https://maps.googleapis.com/maps/api/geocode/json?${params}`)
+    const response = await agent.get(`https://maps.googleapis.com/maps/api/geocode/json?${params}`)
 
     return response.body
   } catch (e) {
@@ -316,12 +312,11 @@ Deal.searchPlaces = async function (address) {
 }
 
 /**
-* search listings
-*/
+ * search listings
+ */
 Deal.searchListings = async function (address) {
   try {
-    const response = await new Fetch()
-      .get(`/listings/search?q=${address}`)
+    const response = await new Fetch().get(`/listings/search?q=${address}`)
 
     return response.body
   } catch (e) {
@@ -330,8 +325,8 @@ Deal.searchListings = async function (address) {
 }
 
 /**
-* create new deal
-*/
+ * create new deal
+ */
 Deal.create = async function (user, data) {
   try {
     const response = await new Fetch()
@@ -350,13 +345,11 @@ Deal.create = async function (user, data) {
  */
 Deal.saveSubmission = async function (id, form, state, values) {
   try {
-    const response = await new Fetch()
-      .put(`/tasks/${id}/submission`)
-      .send({
-        state,
-        form,
-        values
-      })
+    const response = await new Fetch().put(`/tasks/${id}/submission`).send({
+      state,
+      form,
+      values
+    })
 
     return response.body.data
   } catch (e) {
@@ -369,8 +362,7 @@ Deal.saveSubmission = async function (id, form, state, values) {
  */
 Deal.getSubmissionForm = async function (task_id, last_revision) {
   try {
-    const response = await new Fetch()
-      .get(`/tasks/${task_id}/submission/${last_revision}`)
+    const response = await new Fetch().get(`/tasks/${task_id}/submission/${last_revision}`)
 
     return response.body.data
   } catch (e) {
@@ -379,8 +371,8 @@ Deal.getSubmissionForm = async function (task_id, last_revision) {
 }
 
 /**
-* create new task
-*/
+ * create new task
+ */
 Deal.createTask = async function (dealId, data) {
   try {
     const response = await new Fetch()
@@ -395,12 +387,11 @@ Deal.createTask = async function (dealId, data) {
 }
 
 /**
-* delete task
-*/
+ * delete task
+ */
 Deal.deleteTask = async function (taskId) {
   try {
-    const response = await new Fetch()
-      .delete(`/tasks/${taskId}`)
+    const response = await new Fetch().delete(`/tasks/${taskId}`)
 
     return response.body.data
   } catch (e) {
@@ -409,13 +400,11 @@ Deal.deleteTask = async function (taskId) {
 }
 
 /**
-* delete task
-*/
+ * delete task
+ */
 Deal.updateTask = async function (taskId, attributes) {
   try {
-    const response = await new Fetch()
-      .patch(`/tasks/${taskId}`)
-      .send(attributes)
+    const response = await new Fetch().patch(`/tasks/${taskId}`).send(attributes)
 
     return response.body.data
   } catch (e) {
@@ -424,8 +413,8 @@ Deal.updateTask = async function (taskId, attributes) {
 }
 
 /**
-* update checklist
-*/
+ * update checklist
+ */
 Deal.updateChecklist = async function (deal_id, checklist_id, attributes) {
   try {
     const response = await new Fetch()
@@ -439,8 +428,8 @@ Deal.updateChecklist = async function (deal_id, checklist_id, attributes) {
 }
 
 /**
-* update listing
-*/
+ * update listing
+ */
 Deal.updateListing = async function (dealId, listingId) {
   try {
     const response = await new Fetch()
@@ -454,8 +443,8 @@ Deal.updateListing = async function (dealId, listingId) {
 }
 
 /**
-* add new role
-*/
+ * add new role
+ */
 Deal.createRole = async function (deal_id, roles) {
   try {
     const response = await new Fetch()
@@ -469,8 +458,8 @@ Deal.createRole = async function (deal_id, roles) {
 }
 
 /**
-* update a role
-*/
+ * update a role
+ */
 Deal.updateRole = async function (deal_id, role) {
   try {
     const response = await new Fetch()
@@ -484,12 +473,11 @@ Deal.updateRole = async function (deal_id, role) {
 }
 
 /**
-* delete role
-*/
+ * delete role
+ */
 Deal.deleteRole = async function (deal_id, role_id) {
   try {
-    await new Fetch()
-      .delete(`/deals/${deal_id}/roles/${role_id}`)
+    await new Fetch().delete(`/deals/${deal_id}/roles/${role_id}`)
 
     return true
   } catch (e) {
@@ -498,8 +486,8 @@ Deal.deleteRole = async function (deal_id, role_id) {
 }
 
 /**
-* create a new offer
-*/
+ * create a new offer
+ */
 Deal.createOffer = async function (deal_id, name, order, is_backup, property_type) {
   try {
     const response = await new Fetch()
@@ -523,36 +511,34 @@ Deal.createOffer = async function (deal_id, name, order, is_backup, property_typ
 }
 
 /**
-* change task status
-*/
+ * change task status
+ */
 Deal.changeTaskStatus = async function (task_id, status) {
   try {
-    await new Fetch()
-      .put(`/tasks/${task_id}/review`)
-      .send({ status })
+    await new Fetch().put(`/tasks/${task_id}/review`).send({ status })
   } catch (e) {
     return false
   }
 }
 
 /**
-* set notify office flag
-*/
+ * set notify office flag
+ */
 Deal.needsAttention = async function (deal_id, task_id, status) {
-  return Deal.bulkSubmit(deal_id, [{
-    id: task_id,
-    needs_attention: status
-  }])
+  return Deal.bulkSubmit(deal_id, [
+    {
+      id: task_id,
+      needs_attention: status
+    }
+  ])
 }
 
 /**
-* bulk submit for review
-*/
+ * bulk submit for review
+ */
 Deal.bulkSubmit = async function bulkSubmit(dealId, tasks) {
   try {
-    const response = await new Fetch()
-      .put(`/deals/${dealId}/tasks`)
-      .send(tasks)
+    const response = await new Fetch().put(`/deals/${dealId}/tasks`).send(tasks)
 
     return response.body.data
   } catch (e) {
@@ -561,16 +547,14 @@ Deal.bulkSubmit = async function bulkSubmit(dealId, tasks) {
 }
 
 /**
-* update deal context
-*/
+ * update deal context
+ */
 Deal.updateContext = async function (dealId, context, approved) {
   try {
-    const response = await new Fetch()
-      .post(`/deals/${dealId}/context`)
-      .send({
-        context,
-        approved
-      })
+    const response = await new Fetch().post(`/deals/${dealId}/context`).send({
+      context,
+      approved
+    })
 
     return response.body.data
   } catch (e) {
@@ -579,12 +563,11 @@ Deal.updateContext = async function (dealId, context, approved) {
 }
 
 /**
-* resend specific envelope
-*/
+ * resend specific envelope
+ */
 Deal.resendEnvelope = async function (id) {
   try {
-    const response = await new Fetch()
-      .post(`/envelopes/${id}/resend`)
+    const response = await new Fetch().post(`/envelopes/${id}/resend`)
 
     return response.body.data
   } catch (e) {
@@ -593,9 +576,15 @@ Deal.resendEnvelope = async function (id) {
 }
 
 /**
-* send envelope
-*/
-Deal.sendEnvelope = async function (deal_id, subject, message, attachments, recipients) {
+ * send envelope
+ */
+Deal.sendEnvelope = async function (
+  deal_id,
+  subject,
+  message,
+  attachments,
+  recipients
+) {
   const data = {
     deal: deal_id,
     title: subject,
@@ -605,9 +594,7 @@ Deal.sendEnvelope = async function (deal_id, subject, message, attachments, reci
   }
 
   try {
-    const response = await new Fetch()
-      .post('/envelopes')
-      .send(data)
+    const response = await new Fetch().post('/envelopes').send(data)
 
     return response.body.data
   } catch (e) {
@@ -616,8 +603,8 @@ Deal.sendEnvelope = async function (deal_id, subject, message, attachments, reci
 }
 
 /**
-* void envelope
-*/
+ * void envelope
+ */
 Deal.voidEnvelope = async function (envelope_id) {
   try {
     const response = await new Fetch()
@@ -631,8 +618,8 @@ Deal.voidEnvelope = async function (envelope_id) {
 }
 
 /**
-* split files
-*/
+ * split files
+ */
 Deal.splitPDF = async function (title, room_id, files, pages) {
   try {
     const request = agent
@@ -663,8 +650,7 @@ Deal.getAgents = async function (user) {
   }
 
   try {
-    const response = await new Fetch()
-      .get(`/brands/${user.brand}/agents`)
+    const response = await new Fetch().get(`/brands/${user.brand}/agents`)
 
     return response.body.data
   } catch (e) {
@@ -677,9 +663,7 @@ Deal.getAgents = async function (user) {
  */
 Deal.searchAllDeals = async function (query) {
   try {
-    const response = await new Fetch()
-      .post('/deals/filter')
-      .send({ query })
+    const response = await new Fetch().post('/deals/filter').send({ query })
 
     return response.body.data
   } catch (error) {
