@@ -213,9 +213,18 @@ Deal.getAll = async function (user = {}, backoffice = false) {
 /**
  * get contexts info
  */
-Deal.getContexts = async function () {
+Deal.getContexts = async function (user = {}) {
+  const { access_token } = user
+
   try {
-    const response = await new Fetch().get('/deals/contexts')
+    const request = new Fetch().get('/deals/contexts')
+
+    // required on ssr
+    if (access_token) {
+      request.set({ Authorization: `Bearer ${access_token}` })
+    }
+
+    const response = await request
 
     return response.body.data
   } catch (e) {

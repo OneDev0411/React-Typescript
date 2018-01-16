@@ -35,34 +35,35 @@ class DealsContainer extends React.Component {
   }
 
   render() {
-    const { deals, contexts, user, error } = this.props
+    const {
+      deals, contexts, user, error
+    } = this.props
 
     return (
       <div className="deals">
-        <DealsError
-          deals={deals}
-          error={error}
-        />
+        <DealsError deals={deals} error={error} />
 
-        {
-          deals === null &&
+        {deals === null && (
           <div className="deal-fetch-loading">
             <i className="fa fa-spin fa-spinner fa-4x" />
             <p>Loading deals</p>
           </div>
-        }
+        )}
 
-        { deals && contexts && this.props.children }
+        {deals && contexts && this.props.children}
       </div>
     )
   }
 }
 
-export default connect(({ deals, user }) => ({
-  error: deals.error,
-  deals: deals.list,
-  contexts: deals.contexts,
-  agents: deals.agents,
-  forms: deals.forms,
-  user
-}), { getDeals, getAgents, getContexts })(DealsContainer)
+export default connect(
+  ({ deals, user }) => ({
+    error: deals.error,
+    deals: deals.list,
+    contexts: deals.contexts,
+    agents: deals.agents,
+    forms: deals.forms,
+    user
+  }),
+  { getDeals, getAgents, getContexts }
+)(DealsContainer)
