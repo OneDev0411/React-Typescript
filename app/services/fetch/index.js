@@ -17,11 +17,13 @@ export default class Fetch {
   _create(method, endpoint) {
     const state = store.getState()
     const { user, brand } = state.data
+
     this._isLoggedIn = user && user.access_token !== undefined
 
     const agent = SuperAgent.post(this._proxyUrl)
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
+      .retry(2)
 
     // auto append access-token
     if (this._autoLogin && this._isLoggedIn) {
