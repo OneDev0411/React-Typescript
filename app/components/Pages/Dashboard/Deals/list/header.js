@@ -15,6 +15,7 @@ import {
 } from '../../../../../store_actions/deals'
 import Excel from '../../Partials/Svgs/Excel'
 import cn from 'classnames'
+import config from '../../../../../../config/public'
 
 class Header extends React.Component {
   constructor(props) {
@@ -145,25 +146,22 @@ class Header extends React.Component {
                 </div>
               </OverlayTrigger>
               }
-              {
-                false &&
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id="popover-leave">
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="popover-leave">
                       Download Report
-                    </Tooltip>
+                  </Tooltip>
                   }
+              >
+                <a
+                  download
+                  href="/api/deals/excel/"
+                  className="search-button"
                 >
-                  <a
-                    download
-                    href={`/brands/${user.brand}/deals.xls`}
-                    className="search-button"
-                  >
-                    <Excel />
-                  </a>
-                </OverlayTrigger>
-              }
+                  <Excel />
+                </a>
+              </OverlayTrigger>
               {
                 !isBackOffice &&
                 <Link
