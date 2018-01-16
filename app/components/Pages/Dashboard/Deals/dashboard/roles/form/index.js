@@ -187,7 +187,7 @@ export default class Form extends React.Component {
 
     let commission_field = 'commission_percentage'
 
-    if (form.commission_dollar !== undefined) {
+    if (form.commission_dollar > 0) {
       commission_field = 'commission_dollar'
     }
 
