@@ -15,7 +15,7 @@ router.get('/deals/excel', async (ctx, next) => {
       return false
     }
 
-    let url = `http://localhost:8080/static/humans.txt`
+    let url = `/brands/${user.brand}/deals.xls`
 
 
     ctx.set('Content-Disposition', 'attachment')
