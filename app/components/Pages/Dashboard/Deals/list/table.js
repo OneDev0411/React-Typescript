@@ -37,6 +37,7 @@ class BaseTable extends React.Component {
    */
   getListingPhoto(deal) {
     const photo = Deal.get.field(deal, 'photo')
+
     return photo || '/static/images/deals/home.png'
   }
 
@@ -72,7 +73,7 @@ class BaseTable extends React.Component {
     const table = DealContext.getFactsheetSection(deal, 'CriticalDates')
 
     if (table.length === 0) {
-      return <span></span>
+      return <span />
     }
 
     return (
@@ -278,8 +279,9 @@ class BaseTable extends React.Component {
                 <tr className="header">
                   {
                     _.chain(this.cells)
-                      .filter(cell => !cell.justFilter)
-                      .map((cell, key) =>
+                      .pairs()
+                      .filter(cell => !cell[1].justFilter)
+                      .map(([key, cell]) =>
                         <td
                           key={`CELL_${key}`}
                           className={cn(cell.className, {
