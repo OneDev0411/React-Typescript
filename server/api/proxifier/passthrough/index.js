@@ -1,7 +1,9 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import _ from 'underscore'
+
 const router = require('koa-router')()
+
 import updateSession from '../update-session'
 import config from '../../../../config/private'
 
@@ -32,6 +34,7 @@ router.post('/proxifier', bodyParser(), async ctx => {
         client_id: config.api.client_id,
         client_secret: config.api.client_secret
       }
+
       request = ctx.fetch(endpoint, method).send(requestBody)
     } else {
       request = ctx.fetch(endpoint, method)
@@ -62,8 +65,6 @@ router.post('/proxifier', bodyParser(), async ctx => {
       statusCode: response.statusCode
     }
   } catch (e) {
-    console.log('[ Error ] ', e.message)
-
     e.response = e.response || {
       status: 500,
       text: e.message
@@ -72,6 +73,7 @@ router.post('/proxifier', bodyParser(), async ctx => {
     const { status, text } = e.response
 
     ctx.status = status
+
     try {
       ctx.body = {
         statusCode: status,

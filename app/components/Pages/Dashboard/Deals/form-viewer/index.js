@@ -57,7 +57,8 @@ class FormViewer extends React.Component {
     const { taskId, objectId } = params
     const task = tasks[taskId]
     const { attachments } = task.room
-    const file = attachments && _.find(attachments, attachment => attachment.id === objectId)
+    const file =
+      attachments && _.find(attachments, attachment => attachment.id === objectId)
 
     if (!file) {
       return false
@@ -78,24 +79,26 @@ class FormViewer extends React.Component {
   }
 
   async getEnvelopeFile() {
-    const { deal, user, tasks, envelopes, params, getDeal } = this.props
+    const {
+      deal, user, tasks, envelopes, params, getDeal
+    } = this.props
     const { taskId, type, objectId } = params
 
     if (!deal.envelopes) {
       getDeal(deal.id)
+
       return null
     }
 
     const envelope = envelopes[objectId]
     const task = tasks[taskId]
 
-    if (!task.submission || !envelope.documents) {
+    if (!task || !task.submission || !envelope.documents) {
       return null
     }
 
     // get document index
-    const doc = envelope.documents
-      .find(doc => doc.submission === task.submission.id)
+    const doc = envelope.documents.find(doc => doc.submission === task.submission.id)
 
     if (!doc) {
       return null
@@ -104,7 +107,9 @@ class FormViewer extends React.Component {
     return {
       name: envelope.title,
       type: 'pdf',
-      url: `${config.api_url}/envelopes/${envelope.id}/${doc.document_id}.pdf?access_token=${user.access_token}`
+      url: `${config.api_url}/envelopes/${envelope.id}/${
+        doc.document_id
+      }.pdf?access_token=${user.access_token}`
     }
   }
 
@@ -134,7 +139,9 @@ class FormViewer extends React.Component {
 
   render() {
     const { file, showFactsheet, showComments } = this.state
-    const { deal, tasks, envelopes, params } = this.props
+    const {
+      deal, tasks, envelopes, params
+    } = this.props
 
     if (!file) {
       return (

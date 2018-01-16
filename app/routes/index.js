@@ -27,8 +27,7 @@ import Landing from '../components/Pages/Landing'
 /* ==================================== */
 
 const AsyncBranch = Load({
-  loader: () =>
-    import('../components/Pages/Branch' /* webpackChunkName: "branch" */)
+  loader: () => import('../components/Pages/Branch' /* webpackChunkName: "branch" */)
 })
 
 const AsyncSignUp = Load({
@@ -110,11 +109,13 @@ const AsyncDealsLayout = Load({
     import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
   fetchData: (dispatch, params) => {
     const { user } = params
+
     if (user == null) {
       return
     }
 
-    dispatch(getContexts())
+    dispatch(getContexts(user))
+
     return dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
   }
 })
@@ -256,18 +257,15 @@ const AsyncForms = Load({
 })
 
 const AsyncMobile = Load({
-  loader: () =>
-    import('../components/Pages/Mobile' /* webpackChunkName: "mobile" */)
+  loader: () => import('../components/Pages/Mobile' /* webpackChunkName: "mobile" */)
 })
 
 const AsyncNoMatch = Load({
-  loader: () =>
-    import('../components/Pages/NoMatch' /* webpackChunkName: "404" */)
+  loader: () => import('../components/Pages/NoMatch' /* webpackChunkName: "404" */)
 })
 
 const AsyncOops = Load({
-  loader: () =>
-    import('../components/Pages/Oops' /* webpackChunkName: "Oops" */)
+  loader: () => import('../components/Pages/Oops' /* webpackChunkName: "Oops" */)
 })
 
 function authenticate(nextState, replace) {
@@ -305,31 +303,19 @@ export default (
       <IndexRoute component={Landing} />
       <Route path="/branch" component={AsyncBranch} />
 
-      <Route
-        path="register"
-        component={UserIsNotAuthenticated(AsyncRegister)}
-      />
+      <Route path="register" component={UserIsNotAuthenticated(AsyncRegister)} />
 
       <Route path="/signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
       <Route path="/signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
 
-      <Route
-        path="/verify/confirm/:verifyType"
-        component={AsyncVerifyConfirm}
-      />
-      <Route
-        path="/verify/request/:verifyType"
-        component={AsyncVerifyRequest}
-      />
+      <Route path="/verify/confirm/:verifyType" component={AsyncVerifyConfirm} />
+      <Route path="/verify/request/:verifyType" component={AsyncVerifyRequest} />
 
       <Route
         path="/password/forgot"
         component={UserIsNotAuthenticated(AsyncForgotPassword)}
       />
-      <Route
-        path="/password/reset"
-        component={AsyncResetPassword}
-      />
+      <Route path="/password/reset" component={AsyncResetPassword} />
 
       <Route path="/mobile" component={AsyncMobile} />
 
@@ -363,15 +349,18 @@ export default (
         <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       </Route>
 
-      <Route
-        path="/dashboard/deals(/filter/:filter)"
-        component={AsyncDealsLayout}
-      >
+      <Route path="/dashboard/deals(/filter/:filter)" component={AsyncDealsLayout}>
         <IndexRoute component={AsyncDealsList} />
         <Route path="/dashboard/deals/create" component={AsyncDealCreate} />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
-        <Route path="/dashboard/deals/:id/form-edit/:taskId" component={AsyncDealFormEdit} />
-        <Route path="/dashboard/deals/:id/create-offer" component={AsyncDealCreateOffer} />
+        <Route
+          path="/dashboard/deals/:id/form-edit/:taskId"
+          component={AsyncDealFormEdit}
+        />
+        <Route
+          path="/dashboard/deals/:id/create-offer"
+          component={AsyncDealCreateOffer}
+        />
         <Route
           path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
           component={AsyncDealFormViewer}
@@ -382,10 +371,7 @@ export default (
         <IndexRoute component={AsyncRecents} />
       </Route>
 
-      <Route
-        path="/dashboard/notifications"
-        component={AsyncNotificationsPage}
-      />
+      <Route path="/dashboard/notifications" component={AsyncNotificationsPage} />
 
       <Route path="dashboard/account" component={AsyncAccountLayout}>
         <IndexRoute component={AsyncProfile} />
@@ -398,10 +384,7 @@ export default (
           path="/dashboard/brands/checklist/:brand"
           component={AsyncChecklistBrand}
         />
-        <Route
-          path="/dashboard/brands/role/:brand"
-          component={AsyncRoleBrand}
-        />
+        <Route path="/dashboard/brands/role/:brand" component={AsyncRoleBrand} />
       </Route>
 
       <Route path="/dashboard/website" component={AsyncWebsite} />

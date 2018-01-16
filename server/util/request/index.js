@@ -11,9 +11,11 @@ function logger(url, method, headers, ctx) {
   const endpoint = `${method.toUpperCase()} ${api_url}${url}`.green
 
   let text = `[ ${colors.white.bold(username)} ] ${endpoint}`
+
   if (user) {
     text += ` (${user.access_token})`.yellow
   }
+
   text += `\n${JSON.stringify(headers).cyan}`
   text += '\n'
 
@@ -22,6 +24,7 @@ function logger(url, method, headers, ctx) {
 
 const requestMiddleware = async (ctx, next) => {
   ctx.config = config
+
   const api_url = config.api.url
   const app_name = config.app_name
   const access_token = ctx.request.query.access_token
@@ -47,12 +50,12 @@ const requestMiddleware = async (ctx, next) => {
     logger(url, method, headers, ctx)
 
     try {
-      return superagent
-        [method.toLowerCase()](`${api_url}${url}`)
+      return superagent[method.toLowerCase()](`${api_url}${url}`)
         .set(headers)
         .on('error', err => {
           let responseText = err.response ? err.response.text : err.message
-          console.log('[ Fetch Error ] ', responseText)
+
+          console.log(`[ Fetch Error: ${url} ] `, responseText)
 
           // try to parse encoded json
           try {
@@ -71,9 +74,7 @@ const requestMiddleware = async (ctx, next) => {
           ctx.body = {
             status: 'error',
             response: {
-              status: err.response
-                ? err.response.status
-                : 'Internal server error',
+              status: err.response ? err.response.status : 'Internal server error',
               text: responseText
             }
           }
@@ -82,7 +83,7 @@ const requestMiddleware = async (ctx, next) => {
           if (~~response.status >= 200 && ~~response.status <= 207) {
             try {
               response.body.status = 'success'
-            } catch(e) {
+            } catch (e) {
               // nothing
             }
           }
@@ -94,8 +95,8 @@ const requestMiddleware = async (ctx, next) => {
   }
 
   /**
-  * stream file
-  */
+   * stream file
+   */
   ctx.stream = async url => {
     const download = request({
       url: `${api_url}${url}`,
