@@ -1,14 +1,16 @@
 import Koa from 'koa'
 import agent from 'superagent'
 import _ from 'underscore'
+
 const router = require('koa-router')()
 const app = new Koa()
 
 const rawBaseUrl = 'https://rechat-forms.s3-us-west-2.amazonaws.com'
 
 async function getDeal(request, id, user) {
-  const response = await request(`/deals/${id}`)
-    .set({ Authorization: `Bearer ${user.access_token}`})
+  const response = await request(`/deals/${id}?associations[]=deal.checklists`).set({
+    Authorization: `Bearer ${user.access_token}`
+  })
 
   return response.body.data
 }
@@ -27,11 +29,11 @@ router.get('/deals/pdf/download/:dealId/:taskId/:type', async (ctx, next) => {
   const { dealId, taskId, type } = ctx.params
 
   try {
-
     const { user } = ctx.session
 
     if (!user) {
       ctx.status = 404
+
       return false
     }
 
@@ -53,6 +55,7 @@ router.get('/deals/pdf/download/:dealId/:taskId/:type', async (ctx, next) => {
 
     if (!url) {
       ctx.status = 404
+
       return false
     }
 
@@ -61,6 +64,7 @@ router.get('/deals/pdf/download/:dealId/:taskId/:type', async (ctx, next) => {
 
     if (stat.headers['content-type'] !== 'application/pdf') {
       ctx.status = 404
+
       return false
     }
 
@@ -68,8 +72,7 @@ router.get('/deals/pdf/download/:dealId/:taskId/:type', async (ctx, next) => {
     ctx.attachment(`${filename}.pdf`)
 
     ctx.body = agent.get(url)
-  }
-  catch(e) {
+  } catch (e) {
     console.log(e)
   }
 })
