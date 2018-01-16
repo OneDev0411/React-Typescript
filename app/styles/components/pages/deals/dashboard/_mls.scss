@@ -27,14 +27,12 @@
     flex-direction: row;
     color: #1d364b;
     font-size: 14px;
+    height: 3rem;
+    line-height: 3rem;
 
     &:hover {
-      padding-right: 5px;
+      padding: 0 5px;
       border: 1px dashed #2196f3;
-    }
-
-    &:last-child {
-      margin-top: 8px;
     }
 
     .lbl {

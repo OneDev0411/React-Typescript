@@ -56,7 +56,7 @@ class Table extends React.Component {
 
               return (
                 <div key={`CRITICAL_DATE_${field.name}`}>
-                  <div className="fact-row">
+                  <div className={cn('fact-row', { disabled })}>
                     <div className="name">{field.label}</div>
 
                     <Editable
