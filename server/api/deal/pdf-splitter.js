@@ -1,4 +1,5 @@
 import Koa from 'koa'
+
 const router = require('koa-router')()
 const fileParser = require('async-busboy')
 const _ = require('underscore')
@@ -10,15 +11,13 @@ const app = new Koa()
 
 function splitFiles(splits, filepath) {
   return new Promise((resolve, reject) => {
-    const writeStream = fs
-      .createWriteStream(filepath)
-      .on('error', (e) => reject(e))
+    const writeStream = fs.createWriteStream(filepath).on('error', e => reject(e))
 
     return scissors
       .join(...splits)
       .pdfStream()
       .pipe(writeStream)
-      .on('error', (e) => reject(e))
+      .on('error', e => reject(e))
       .on('finish', resolve)
   })
 }
@@ -26,7 +25,8 @@ function splitFiles(splits, filepath) {
 router.post('/deals/pdf-splitter', async (ctx, next) => {
   const { files, fields } = await fileParser(ctx.req)
   const pages = JSON.parse(fields.pages)
-  const { title, room_id } = fields
+  const { title, room_id, task_id } = fields
+  const { user } = ctx.session
 
   try {
     const filepath = `/tmp/${uuid()}.pdf`
@@ -43,8 +43,7 @@ router.post('/deals/pdf-splitter', async (ctx, next) => {
         .pluck('pageNumber')
         .value()
 
-      return scissors(file.path)
-        .pages(...selectedPages)
+      return scissors(file.path).pages(...selectedPages)
     })
 
     if (splits.length === 0) {
@@ -56,18 +55,31 @@ router.post('/deals/pdf-splitter', async (ctx, next) => {
 
     const response = await ctx
       .fetch(`/rooms/${room_id}/attachments`, 'POST')
-      .set('Authorization', `Bearer ${ctx.session.user.access_token}`)
+      .set('Authorization', `Bearer ${user.access_token}`)
       .attach('attachment', filepath, `${title}.pdf`)
+
+    // response is a file object
+    const file = response.body.data
+
+    await ctx
+      .fetch(`/tasks/${task_id}/messages`, 'POST')
+      .set('Authorization', `Bearer ${user.access_token}`)
+      .send({
+        author: user.id,
+        room: room_id,
+        attachments: [file.id]
+      })
 
     // cleanup !
     fs.unlink(filepath, () => null)
-    _.each(files, file => { fs.unlink(file.path, () => null) })
+    _.each(files, file => {
+      fs.unlink(file.path, () => null)
+    })
 
     ctx.body = {
-      file: response.body.data
+      file
     }
-
-  } catch(e) {
+  } catch (e) {
     console.log('[ Splitter Error ] ', e)
     ctx.status = 400
     ctx.body = e

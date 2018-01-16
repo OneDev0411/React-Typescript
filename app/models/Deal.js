@@ -382,6 +382,21 @@ Deal.getSubmissionForm = async function (task_id, last_revision) {
 /**
  * create new task
  */
+Deal.createTaskMessage = async function (taskId, message) {
+  try {
+    const response = await new Fetch()
+      .post(`/tasks/${taskId}/messages`)
+      .send(message)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+ * create new task
+ */
 Deal.createTask = async function (dealId, data) {
   try {
     const response = await new Fetch()
@@ -629,13 +644,14 @@ Deal.voidEnvelope = async function (envelope_id) {
 /**
  * split files
  */
-Deal.splitPDF = async function (title, room_id, files, pages) {
+Deal.splitPDF = async function (title, task_id, room_id, files, pages) {
   try {
     const request = agent
       .post(`${config.app.url}/api/deals/pdf-splitter`)
       .field({ pages: JSON.stringify(pages) })
       .field({ title })
       .field({ room_id })
+      .field({ task_id })
 
     files.forEach(file => {
       request.attach(file.id, file, `${file.id}.pdf`)

@@ -58,7 +58,13 @@ class WorkspaceForm extends React.Component {
       .value()
 
     try {
-      const { file } = await Deal.splitPDF(title, task.room.id, files, pages)
+      const { file } = await Deal.splitPDF(
+        title,
+        task.id,
+        task.room.id,
+        files,
+        pages
+      )
 
       // add files to attachments list
       this.props.addAttachment(task.deal, task.checklist, task.id, file)
@@ -119,7 +125,9 @@ class WorkspaceForm extends React.Component {
 
   render() {
     const { upload, tasks } = this.props
-    const { title, task, notifyOffice, saving } = this.state
+    const {
+      title, task, notifyOffice, saving
+    } = this.state
     const formValidated = this.isFormValidated()
 
     if (saving) {
@@ -143,7 +151,7 @@ class WorkspaceForm extends React.Component {
         />
 
         <TasksDropDown
-          onSelectTask={(taskId) => this.setState({ task: tasks[taskId] })}
+          onSelectTask={taskId => this.setState({ task: tasks[taskId] })}
           selectedTask={task}
           upload={upload}
         />
@@ -172,7 +180,6 @@ class WorkspaceForm extends React.Component {
             Save and create another
           </button>
         </div>
-
       </div>
     )
   }
