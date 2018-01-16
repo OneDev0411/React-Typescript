@@ -59,14 +59,14 @@ class FileName extends React.Component {
 
         {isActive ? (
           <button
-            className="deals-info__shadow-buton save"
+            className="c-button--shadow save"
             onClick={() => this._save(file)}
           >
             Save
           </button>
         ) : (
           <button
-            className={cn('deals-info__shadow-buton edit-icon', {
+            className={cn('c-button--shadow edit-icon', {
               canEditName: isActive
             })}
             onClick={() => this._setActiveState()}

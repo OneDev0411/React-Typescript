@@ -103,27 +103,35 @@ class ListingCard extends React.Component {
     const photo = Deal.get.field(deal, 'photo')
     const showEditingAddressWarning = deal.listing && showWarningTooltip
 
+    const homeAddress = this.getHomeAddress(deal)
+    const listingAddress = this.getListingAddress(deal)
+
     return (
       <div className="deal-listing-card">
-        <div
-          className={cn('listing-photo', { hasListing: deal.listing })}
+        <button
+          className={cn('c-button--shadow listing-photo', {
+            hasListing: deal.listing
+          })}
           onClick={() => this.openListing(deal)}
         >
           <img alt="" src={photo || '/static/images/deals/group-146.svg'} />
           <span className="view-btn">VIEW</span>
-        </div>
+        </button>
 
         <div className="address-info">
-          <div
+          <button
+            disabled={deal.listing}
+            onClick={() => !isSavingAddress && this.toggleShowAddressModal()}
             onMouseEnter={() => this._setWarningTooltipState(true)}
             onMouseLeave={() => this._setWarningTooltipState(false)}
-            className={cn('deal-listing-card__address', {
-              isHovered: showEditingAddressWarning
+            className={cn('deal-listing-card__address c-button--shadow', {
+              isHovered: showEditingAddressWarning,
+              'is-editable': !deal.listing
             })}
           >
-            <div className="title">{this.getHomeAddress(deal)}</div>
+            {homeAddress && <div className="title">{homeAddress}</div>}
 
-            <div className="addr">{this.getListingAddress(deal)}</div>
+            {listingAddress && <div className="addr">{listingAddress}</div>}
 
             {showEditingAddressWarning && (
               <div className="deal-listing-card__warning-tooltip">
@@ -142,7 +150,7 @@ class ListingCard extends React.Component {
                 <span>{WARNING_MESSAGE}</span>
               </div>
             )}
-          </div>
+          </button>
 
           {deal.listing && (
             <Link className="open-listing" to={`/dashboard/mls/${deal.listing}`}>

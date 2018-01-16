@@ -50,7 +50,8 @@ export default class extends React.Component {
     return (
       <div className="form-section contexts">
         <div className="hero">
-          Do you know any of these critical dates?
+          Please provide the following information:&nbsp;
+          Those marked with an * are required.
         </div>
 
         {
@@ -63,7 +64,6 @@ export default class extends React.Component {
                 >
                   <div className="add-item text-input">
                     <div>
-                      <span className="icon">+</span>
                       <span className="text">
                         {field.label} {field.mandatory && <sup>*</sup>}
                       </span>

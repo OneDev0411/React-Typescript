@@ -14,7 +14,8 @@ export default ({
   return (
     <div className="form-section deal-people deal-referral">
       <div className="hero">
-        Did someone refer the {dealSide === 'Buying' ? 'buyer' : 'seller'}?
+        Did someone refer the {dealSide === 'Buying' ? 'buyer' : 'seller'}?  -&nbsp;
+        add referral if available
       </div>
 
       <div className="people-container">

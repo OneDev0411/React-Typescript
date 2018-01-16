@@ -73,7 +73,7 @@ export default class Editable extends React.Component {
         }
       >
         <button
-          className={cn('deals-info__shadow-buton cta__button ico-remove fa fa-times-circle', {
+          className={cn('c-button--shadow cta__button ico-remove fa fa-times-circle', {
             hide: !showCTA || !context.value || context.value.length === 0
           })}
           onClick={(e) => this.deleteField(e, field)}
@@ -147,7 +147,7 @@ export default class Editable extends React.Component {
                 maxLength={15}
               />
               <button
-                className="deals-info__shadow-buton fa fa-check-circle"
+                className="c-button--shadow fa fa-check-circle"
                 onClick={() => this.onFinishEditing()}
               />
             </div>

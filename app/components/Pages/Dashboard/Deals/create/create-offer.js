@@ -9,11 +9,11 @@ import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 import Navbar from './nav'
 import OfferType from './offer-type'
-import EnderType from './offer-ender-type'
+import EnderType from './deal-ender-type'
 import DealClients from './deal-clients'
 import BuyerName from './offer-buyer-name'
 import DealAgents from './deal-agents'
-import ClosingOfficers from './offer-closing-officer'
+import EscrowOfficers from './escrow-officer'
 import DealReferrals from './deal-referrals'
 import Contexts from './contexts'
 import IntercomTrigger from '../../Partials/IntercomTrigger'
@@ -23,8 +23,9 @@ import hasPrimaryOffer from '../utils/has-primary-offer'
 class CreateOffer extends React.Component {
   constructor(props) {
     super(props)
+    const { deal } = props
 
-    const dealHasPrimaryOffer = hasPrimaryOffer(props.deal)
+    const dealHasPrimaryOffer = hasPrimaryOffer(deal)
 
     this.state = {
       dealHasPrimaryOffer,
@@ -35,7 +36,7 @@ class CreateOffer extends React.Component {
       contexts: {},
       agents: {},
       clients: {},
-      closingOfficers: {},
+      escrowOfficers: {},
       referrals: {},
       submitError: null
     }
@@ -43,6 +44,10 @@ class CreateOffer extends React.Component {
 
   componentDidMount() {
     const { deal } = this.props
+
+    if (!deal.checklists) {
+      return browserHistory.push(`/dashboard/deals/${deal.id}`)
+    }
 
     if (deal.roles) {
       this.prepopulateRoles(deal.roles)
@@ -72,7 +77,7 @@ class CreateOffer extends React.Component {
           break
 
         case 'Title':
-          type = 'closingOfficers'
+          type = 'escrowOfficers'
           break
       }
 
@@ -131,10 +136,13 @@ class CreateOffer extends React.Component {
       return buyerName.length > 0
     }
 
+    // agents are required only when enderType = No
+    const agentsValid = enderType === null ? _.size(agents) > 0 : true
+
     return offerType.length > 0 &&
       enderType !== -1 &&
-      _.size(agents) > 0 &&
       _.size(clients) > 0 &&
+      agentsValid &&
       DealContext.validateList(
         contexts,
         'Buying',
@@ -144,12 +152,12 @@ class CreateOffer extends React.Component {
   }
 
   getAllRoles() {
-    const { enderType, clients, agents, closingOfficers, referrals } = this.state
+    const { enderType, clients, agents, escrowOfficers, referrals } = this.state
     const roles = []
 
     _.each(clients, client => roles.push(_.omit(client, 'id')))
     _.each(agents, agent => roles.push(_.omit(agent, 'id')))
-    _.each(closingOfficers, co => roles.push(_.omit(co, 'id')))
+    _.each(escrowOfficers, co => roles.push(_.omit(co, 'id')))
 
     if (enderType === 'AgentDoubleEnder') {
       _.each(referrals, referral => roles.push(_.omit(referral, 'id')))
@@ -255,7 +263,7 @@ class CreateOffer extends React.Component {
       submitError,
       contexts,
       referrals,
-      closingOfficers,
+      escrowOfficers,
       offerType,
       enderType,
       agents,
@@ -303,22 +311,27 @@ class CreateOffer extends React.Component {
               />
 
               <EnderType
+                isRequired={true}
                 enderType={enderType}
+                showAgentDoubleEnder={true}
                 onChangeEnderType={type => this.changeEnderType(type)}
               />
 
-              <DealAgents
-                scenario="CreateOffer"
-                dealSide="Buying"
-                agents={agents}
-                onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
-                onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
-              />
+              {
+                enderType === null &&
+                <DealAgents
+                  scenario="CreateOffer"
+                  dealSide="Buying"
+                  agents={agents}
+                  onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
+                  onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
+                />
+              }
 
-              <ClosingOfficers
-                closingOfficers={closingOfficers}
-                onUpsertClosingOfficer={form => this.onUpsertRole(form, 'closingOfficers')}
-                onRemoveClosingOfficer={id => this.onRemoveRole(id, 'closingOfficers')}
+              <EscrowOfficers
+                escrowOfficers={escrowOfficers}
+                onUpsertEscrowOfficer={form => this.onUpsertRole(form, 'escrowOfficers')}
+                onRemoveEscrowOfficer={id => this.onRemoveRole(id, 'escrowOfficers')}
               />
 
               {

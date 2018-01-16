@@ -1,5 +1,6 @@
 import React from 'react'
 import { Dropdown, MenuItem } from 'react-bootstrap'
+import cn from 'classnames'
 import RadioButton from '../components/radio'
 
 const properties = [
@@ -17,11 +18,15 @@ export default ({
 }) => (
   <div className="form-section deal-type">
     <div className="hero">
-      What is the checklist type? <span className="required">*</span>
+      Select a checklist type. <span className="required">*</span>
     </div>
 
     <Dropdown id="deal-create-type-dropdown">
-      <Dropdown.Toggle className="deal-type-dropdown">
+      <Dropdown.Toggle
+        className={cn('deal-type-dropdown', {
+          selected: selectedType.length > 0
+        })}
+      >
         { selectedType || 'Choose a checklist type' }
       </Dropdown.Toggle>
 
