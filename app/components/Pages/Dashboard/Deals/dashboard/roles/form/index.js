@@ -35,7 +35,7 @@ export default class Form extends React.Component {
 
     const form = props.form || {}
 
-    form.isNewRecord = typeof form.email === 'undefined'
+    form.isNewRecord = typeof form.id === 'undefined'
 
     this.state = {
       invalidFields: [],
@@ -162,6 +162,7 @@ export default class Form extends React.Component {
    */
   isEmailRequired() {
     const { form } = this.state
+
     return ['BuyerAgent', 'SellerAgent'].indexOf(form.role) > -1
   }
 
@@ -185,6 +186,7 @@ export default class Form extends React.Component {
     }
 
     let commission_field = 'commission_percentage'
+
     if (form.commission_dollar !== undefined) {
       commission_field = 'commission_dollar'
     }
@@ -225,6 +227,7 @@ export default class Form extends React.Component {
 
   render() {
     const { form, invalidFields } = this.state
+    const { deal } = this.props
 
     return (
       <div className="deal-roles-form">
@@ -269,6 +272,7 @@ export default class Form extends React.Component {
         />
 
         <Role
+          deal={deal}
           form={form}
           role_names={role_names}
           onChange={value => this.setForm('role', value)}

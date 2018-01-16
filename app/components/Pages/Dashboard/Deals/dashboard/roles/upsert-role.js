@@ -4,7 +4,11 @@ import { Button, FormControl, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import RoleForm from './form'
-import { createRoles, updateRole, selectRole } from '../../../../../../store_actions/deals'
+import {
+  createRoles,
+  updateRole,
+  selectRole
+} from '../../../../../../store_actions/deals'
 
 class UpsertRole extends React.Component {
   constructor(props) {
@@ -51,7 +55,9 @@ class UpsertRole extends React.Component {
 
   async upsert() {
     const { form, isNewRecord } = this.state
-    const { deal, createRoles, updateRole, notify } = this.props
+    const {
+      deal, createRoles, updateRole, notify
+    } = this.props
 
     if (!deal) {
       return false
@@ -92,22 +98,19 @@ class UpsertRole extends React.Component {
   }
 
   render() {
-    const { show, form, isNewRecord, saving, isFormCompleted } = this.state
+    const {
+      show, form, isNewRecord, saving, isFormCompleted
+    } = this.state
     const { deal, allowedRoles, selectedRole } = this.props
-    const buttonDisabled = !isFormCompleted || (saving === true)
+    const buttonDisabled = !isFormCompleted || saving === true
 
     return (
       <div>
-        <div
-          className="item add-new"
-          onClick={() => this.showModal()}
-        >
+        <div className="item add-new" onClick={() => this.showModal()}>
           <img src="/static/images/deals/contact-add.png" />
 
           <div className="name">
-            <div style={{ color: '#61778d' }}>
-              Add a Contact
-            </div>
+            <div style={{ color: '#61778d' }}>Add a Contact</div>
           </div>
         </div>
 
@@ -126,7 +129,7 @@ class UpsertRole extends React.Component {
               deal={deal}
               form={form}
               allowedRoles={allowedRoles}
-              onFormChange={(data) => this.onFormChange(data)}
+              onFormChange={data => this.onFormChange(data)}
             />
           </Modal.Body>
 
@@ -137,7 +140,7 @@ class UpsertRole extends React.Component {
               disabled={buttonDisabled}
               onClick={() => this.upsert()}
             >
-              { saving ? 'Saving...' : (isNewRecord ? 'Add' : 'Update') }
+              {saving ? 'Saving...' : isNewRecord ? 'Add' : 'Update'}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -146,6 +149,14 @@ class UpsertRole extends React.Component {
   }
 }
 
-export default connect(({ deals }) => ({
-  selectedRole: deals.selectedRole
-}), { selectRole, createRoles, updateRole, notify })(UpsertRole)
+export default connect(
+  ({ deals }) => ({
+    selectedRole: deals.selectedRole
+  }),
+  {
+    selectRole,
+    createRoles,
+    updateRole,
+    notify
+  }
+)(UpsertRole)
