@@ -38,7 +38,7 @@ class DealDetails extends React.Component {
     }
 
     return (
-      <div className="deal-dashboard u-scrollbar--thinner">
+      <div className="deal-dashboard">
 
         <NavBar deal={deal} />
 
