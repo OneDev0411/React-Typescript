@@ -19,8 +19,8 @@ import {
 } from '../../../../../../store_actions/deals'
 
 const ERROR_MESSAGES = {
-  attachments: 'You must select a document at least (from attachments).',
-  recipinets: 'You must select one recipient at least.'
+  attachments: 'Please select a document to attach.',
+  recipinets: 'Please select at least one recipient.'
 }
 
 class SendSignatures extends React.Component {
@@ -198,7 +198,7 @@ class SendSignatures extends React.Component {
 
         this.setState({
           error:
-            'Sorry, something went wrong while sending eSigns. Please try again.'
+            'You have encountered an unknown system issue. We\'re working on it. In the meantime, connect with our Support team.'
         })
       }
     }
@@ -279,7 +279,7 @@ class SendSignatures extends React.Component {
               )}
               <div>
                 <Button
-                  disabled={isSending}
+                  disabled={isSending || error}
                   className="btn-send"
                   onClick={() => this.send()}
                 >

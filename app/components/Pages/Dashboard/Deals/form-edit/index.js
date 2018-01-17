@@ -185,7 +185,7 @@ class FormEdit extends React.Component {
       return this.close()
     } catch (err) {
       notify({
-        message: 'Sorry, something went wrong while saving form. Please try again.',
+        message: 'We were unable to save your form. Please try saving again',
         status: 'error'
       })
     }
