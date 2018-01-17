@@ -185,12 +185,12 @@ class PdfViewer extends React.Component {
         {isFailed && (
           <div style={{ maxWidth: '40rem', margin: '0 auto' }}>
             <div className="c-alert c-alert--error">
-              <p>Sorry, something went wrong.</p>
+              <p>We weren’t able to create a document preview.</p>
               <button
                 onClick={() => this.load(uri)}
                 className="btn btn-primary c-button--link"
               >
-                Try Again
+                Refresh
               </button>
             </div>
           </div>

@@ -25,3 +25,16 @@ fieldset[disabled] .btn {
   padding: 0.25rem 0.5rem;
   margin-left: 1rem;
 }
+
+.c-button--shadow {
+  padding: 0;
+  border: none;
+  color: #2196f3;
+  font-weight: normal;
+  margin-left: 0.5rem;
+  background-color: transparent;
+
+  &:focus {
+    outline-width: 0;
+  }
+}

@@ -41,37 +41,39 @@ class NavBar extends React.Component {
           Deals
         </div>
 
-        <div className="ctas">
-          {
-            deal.deal_type === 'Selling' &&
+        {deal.checklists && (
+          <div className="ctas">
+            {
+              deal.deal_type === 'Selling' &&
+              <button
+                className="navbar-button"
+                onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)}
+              >
+              Add New Offer
+              </button>
+            }
             <button
               className="navbar-button"
-              onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)}
+              onClick={() => this.openUploadDialog()}
             >
-            Add New Offer
+              Upload
             </button>
-          }
-          <button
-            className="navbar-button"
-            onClick={() => this.openUploadDialog()}
-          >
-            Upload
-          </button>
 
-          <button
-            className="navbar-button"
-            onClick={() => this.getSignatures()}
-          >
-            Get Signatures
-          </button>
+            <button
+              className="navbar-button"
+              onClick={() => this.getSignatures()}
+            >
+              Get Signatures
+            </button>
 
-          {
-            !isBackOffice &&
-            <BulkSubmit
-              deal={deal}
-            />
-          }
-        </div>
+            {
+              !isBackOffice &&
+              <BulkSubmit
+                deal={deal}
+              />
+            }
+          </div>
+        )}
 
         <Dropzone
           disableClick

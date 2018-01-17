@@ -1,11 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import {
-  createGenericTask,
-  changeNeedsAttention,
-  updateChecklist
-} from '../../../../../../store_actions/deals'
+import { updateChecklist } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import hasPrimaryOffer from '../../utils/has-primary-offer'
 
@@ -52,12 +48,9 @@ class TaskDeactivation extends React.Component {
 
   async deactivateChecklist() {
     const {
-      isBackoffice,
       deal,
       checklist,
       updateChecklist,
-      createGenericTask,
-      changeNeedsAttention,
       onRequestCloseDropDownMenu,
       notify
     } = this.props
@@ -67,26 +60,6 @@ class TaskDeactivation extends React.Component {
     this.setState({
       saving: true
     })
-
-    // agents can't active/decactive a checklist directly
-    if (!isBackoffice) {
-      let title = `Notify office to make this a ${newType} offer.`
-      const task = await createGenericTask(deal.id, title, checklist.id)
-
-      changeNeedsAttention(task.id, true)
-
-      notify({
-        message: `Back office has notified to ${newType} this offer`,
-        status: 'success',
-        dismissible: true,
-        dismissAfter: 6000
-      })
-
-      onRequestCloseDropDownMenu()
-      this.setState({ saving: false })
-
-      return true
-    }
 
     try {
       await updateChecklist(deal.id, checklist.id, {
@@ -157,10 +130,4 @@ class TaskDeactivation extends React.Component {
   }
 }
 
-export default connect(null,
-  {
-    updateChecklist,
-    createGenericTask,
-    changeNeedsAttention,
-    notify,
-    confirmation })(TaskDeactivation)
+export default connect(null, { updateChecklist, notify, confirmation })(TaskDeactivation)

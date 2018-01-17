@@ -15,6 +15,7 @@ import {
 } from '../../../../../store_actions/deals'
 import Excel from '../../Partials/Svgs/Excel'
 import cn from 'classnames'
+import config from '../../../../../../config/public'
 
 class Header extends React.Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class Header extends React.Component {
 
       searchBOFilters()
     } else {
-      filters = { 'address^side': value }
+      filters = { 'address^side^mlsSearch': value }
       onFilterChange(filters)
     }
   }
@@ -146,7 +147,7 @@ class Header extends React.Component {
               </OverlayTrigger>
               }
               {
-                false &&
+                !isBackOffice &&
                 <OverlayTrigger
                   placement="bottom"
                   overlay={
@@ -157,7 +158,7 @@ class Header extends React.Component {
                 >
                   <a
                     download
-                    href={`/brands/${user.brand}/deals.xls`}
+                    href="/api/deals/excel/"
                     className="search-button"
                   >
                     <Excel />

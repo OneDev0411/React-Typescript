@@ -59,7 +59,7 @@
 
     label {
       font-weight: normal;
-      color: #9EB2C2;
+      color: #9eb2c2;
       padding: 5px 0 0 12px;
       font-size: 12px;
       sup {
@@ -78,7 +78,7 @@
       }
 
       &::placeholder {
-        color: #C6D1DB;
+        color: #c6d1db;
         opacity: 1;
       }
     }
@@ -105,7 +105,8 @@
       }
     }
 
-    .email, .phone {
+    .email,
+    .phone {
       width: 100%;
       border-bottom: 1px solid #dce5eb;
     }
@@ -161,18 +162,24 @@
 %deal-roles {
   background: #fff;
   padding: $col-padding 0 1px 0;
+  cursor: pointer;
+
   .item {
-    margin-bottom: 17px;
+    position: relative;
+    margin-bottom: 7px;
     display: flex;
     align-items: center;
-    padding-left: $col-padding/2;
+    padding: 5px;
+
+    &:hover {
+      background: #f0f4f7;
+    }
 
     .role-avatar {
       width: 50px;
     }
 
     &.add-new {
-      cursor: pointer;
       img {
         width: 21px;
         margin-left: 5.5px; // (32px - 21px) / 2
@@ -181,6 +188,8 @@
 
       &:hover {
         opacity: 0.8;
+        background-color: transparent;
+        text-decoration: none;
       }
     }
 
@@ -188,15 +197,28 @@
       color: #263445;
       font-weight: 500;
       width: calc(100% - 55px - #{$col-padding});
+
+      .title {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
       .role {
         font-weight: normal;
         color: #8696a4;
         font-size: 14px;
+        text-decoration: none;
       }
     }
 
     .cta {
       width: 15px;
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+
       i {
         color: #62778c;
         cursor: pointer;
@@ -216,7 +238,8 @@
 
 %deal-roles-drop-downs {
   .dropdown {
-    &.btn-group.open, .dropdown-toggle {
+    &.btn-group.open,
+    .dropdown-toggle {
       background-color: transparent;
       box-shadow: none !important;
       font-size: 15px;

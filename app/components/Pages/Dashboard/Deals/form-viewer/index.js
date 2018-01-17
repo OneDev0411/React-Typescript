@@ -4,7 +4,7 @@ import { Row, Col, Modal, Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import extractDocumentOfTask from '../utils/extract-document-of-task'
-import { getEnvelopes } from '../../../../../store_actions/deals'
+import { getDeal } from '../../../../../store_actions/deals'
 import FileView from './file-view'
 import EnvelopeView from './envelope-view'
 import config from '../../../../../../config/public'
@@ -14,12 +14,25 @@ class FormViewer extends React.Component {
     super(props)
 
     this.state = {
+      file: null,
       showFactsheet: props.isBackOffice,
       showComments: props.isBackOffice
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.setFile()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { file } = this.state
+
+    if (!file) {
+      this.setFile()
+    }
+  }
+
+  async setFile() {
     this.setState({
       file: await this.getFile()
     })
@@ -44,7 +57,8 @@ class FormViewer extends React.Component {
     const { taskId, objectId } = params
     const task = tasks[taskId]
     const { attachments } = task.room
-    const file = attachments && _.find(attachments, attachment => attachment.id === objectId)
+    const file =
+      attachments && _.find(attachments, attachment => attachment.id === objectId)
 
     if (!file) {
       return false
@@ -65,23 +79,26 @@ class FormViewer extends React.Component {
   }
 
   async getEnvelopeFile() {
-    const { deal, user, tasks, params, getEnvelopes } = this.props
+    const {
+      deal, user, tasks, envelopes, params, getDeal
+    } = this.props
     const { taskId, type, objectId } = params
 
     if (!deal.envelopes) {
-      deal.envelopes = await getEnvelopes(deal.id)
+      getDeal(deal.id)
+
+      return null
     }
 
-    const envelope = deal.envelopes[objectId]
+    const envelope = envelopes[objectId]
     const task = tasks[taskId]
 
-    if (!task.submission || !envelope.documents) {
+    if (!task || !task.submission || !envelope.documents) {
       return null
     }
 
     // get document index
-    const doc = envelope.documents
-      .find(doc => doc.submission === task.submission.id)
+    const doc = envelope.documents.find(doc => doc.submission === task.submission.id)
 
     if (!doc) {
       return null
@@ -90,7 +107,9 @@ class FormViewer extends React.Component {
     return {
       name: envelope.title,
       type: 'pdf',
-      url: `${config.api_url}/envelopes/${envelope.id}/${doc.document_id}.pdf?access_token=${user.access_token}`
+      url: `${config.api_url}/envelopes/${envelope.id}/${
+        doc.document_id
+      }.pdf?access_token=${user.access_token}`
     }
   }
 
@@ -120,10 +139,20 @@ class FormViewer extends React.Component {
 
   render() {
     const { file, showFactsheet, showComments } = this.state
-    const { deal, tasks, params } = this.props
+    const {
+      deal, tasks, envelopes, params
+    } = this.props
 
-    if (!file || ['pdf', 'image'].indexOf(file.type) === -1) {
-      return null
+    if (!file) {
+      return (
+        <div className="center-middle">
+          <i className="fa fa-spin fa-spinner fa-3x" />
+        </div>
+      )
+    }
+
+    if (['pdf', 'image'].indexOf(file.type) === -1) {
+      return false
     }
 
     if (params.type === 'envelope') {
@@ -132,7 +161,7 @@ class FormViewer extends React.Component {
           deal={deal}
           onClose={() => this.onClose()}
           file={file}
-          envelope={deal.envelopes[params.objectId]}
+          envelope={envelopes[params.objectId]}
         />
       )
     }
@@ -163,8 +192,9 @@ function mapStateToProps({ user, deals }, props) {
     formViewer: deals.formViewer,
     isBackOffice: deals.backoffice,
     deal: list && list[dealId] ? list[dealId] : null,
-    tasks: deals.tasks
+    tasks: deals.tasks,
+    envelopes: deals.envelopes
   }
 }
 
-export default connect(mapStateToProps, { getEnvelopes })(FormViewer)
+export default connect(mapStateToProps, { getDeal })(FormViewer)

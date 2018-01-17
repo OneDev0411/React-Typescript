@@ -35,7 +35,7 @@ class AgentTable extends BaseTable {
       price: {
         caption: 'PRICE $',
         sortable: true,
-        className: 'col-md-1 hidden-xs',
+        className: 'col-md-2 hidden-xs',
         getText: deal => Deal.get.formattedPrice(Deal.get.field(deal, 'list_price'), 'decimal'),
         getValue: deal => Deal.get.field(deal, 'list_price')
       },
@@ -51,22 +51,21 @@ class AgentTable extends BaseTable {
         className: 'col-md-2 hidden-sm hidden-xs',
         getText: (deal, rowId, rowsCount) => this.getNextDate(deal, rowId, rowsCount)
       },
-      outstanding: {
-        caption: 'TASKS',
-        className: 'col-md-1 hidden-sm hidden-xs',
-        sortable: true,
-        getText: deal => this.getOutstandingsCount(deal)
-      },
       notificiation: {
         caption: '',
         className: 'col-md-1 hidden-sm hidden-xs',
         getText: deal => this.hasNotification(deal)
+      },
+      mlsSearch: {
+        caption: '',
+        justFilter: true,
+        getValue: deal => Deal.get.field(deal, 'mls_number') || ''
       }
     }
   }
 
   getSide(deal, rowId, rowsCount) {
-    const { deals, roles } = this.props
+    const { roles } = this.props
 
     const sideName = Deal.get.side(deal)
     const relatedRole = deal.roles && deal.roles.find(id => roles[id].role === sideName)
@@ -90,6 +89,7 @@ class AgentTable extends BaseTable {
               {
                 deal.roles.map(id => {
                   const role = roles[id]
+
                   return (
                     <div
                       key={`ROLE_${role.id}`}
@@ -104,8 +104,14 @@ class AgentTable extends BaseTable {
                         />
                       </div>
                       <div className="info">
-                        <span className="name">{`${role.legal_first_name} ${role.legal_last_name}`}, </span>
+                        <span
+                          className="name"
+                        >
+                          {`${role.legal_first_name} ${role.legal_last_name}`},
+                        </span>
+
                         <span className="role">{roleName(role.role)}</span>
+
                         {
                           role.user &&
                           <span className="email">{role.user.email}</span>
@@ -125,7 +131,10 @@ class AgentTable extends BaseTable {
           </span>
 
           <span
-            style={{ color: '#5b6469', fontSize: '13px' }}
+            style={{
+              color: '#5b6469',
+              fontSize: '13px'
+            }}
           >
             {relatedRoleUser && relatedRoleUser.last_name ? `: ${relatedRole.user.last_name}` : ''}
           </span>
@@ -144,45 +153,10 @@ class AgentTable extends BaseTable {
 
     deal.roles && deal.roles.forEach(id => {
       const role = roles[id]
-      if (role.user) {
-        names.push(role.user.display_name)
-      } else {
-        names.push(`${role.legal_first_name} ${role.legal_last_name}`)
-      }
+      names.push(`${role.legal_first_name} ${role.legal_last_name}`)
     })
 
     return `: ${names.join(', ')}`
-  }
-
-  /**
-   * get outstandings count
-   */
-  getOutstandingsCount(deal) {
-    let counter = 0
-
-    if (!deal.checklists) {
-      return counter
-    }
-
-    deal.checklists.forEach(id => {
-      const checklist = this.props.checklists[id]
-
-      if (checklist.is_terminated
-        || !checklist.tasks
-        || checklist.tasks.length === 0) {
-        return
-      }
-
-      checklist.tasks.forEach(task_id => {
-        const task = this.props.tasks[task_id]
-
-        if (!task.review || task.review.status === 'Declined') {
-          counter += 1
-        }
-      })
-    })
-
-    return counter
   }
 }
 
@@ -191,4 +165,7 @@ export default connect(({ deals, chatroom }) => ({
   checklists: deals.checklists,
   roles: deals.roles,
   rooms: chatroom.rooms
-}), { closeEsignWizard, setSelectedTask })(AgentTable)
+}), {
+  closeEsignWizard,
+  setSelectedTask
+})(AgentTable)

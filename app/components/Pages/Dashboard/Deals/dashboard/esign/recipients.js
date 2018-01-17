@@ -58,7 +58,7 @@ class AddRecipients extends React.Component {
                   <span className="recp-c">
                     <i
                       className="recp-i fa fa-times"
-                      onClick={() => onRemoveRecipient(role.email)}
+                      onClick={() => onRemoveRecipient(role.id)}
                     />
                   </span>
                 </span>

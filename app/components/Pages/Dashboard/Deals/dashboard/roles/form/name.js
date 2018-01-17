@@ -14,7 +14,7 @@ export default ({
         data-balloon-pos="up"
         data-balloon-length="large"
         className="c-field-balloon c-field-balloon--error"
-        data-balloon="Invalid charachters. You are just allowed use alphabet characters and space."
+        data-balloon="Please include only letters. You have added a number or special character."
       />
     )}
 

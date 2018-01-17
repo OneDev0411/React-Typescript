@@ -4,29 +4,29 @@ import CrudRole from './crud-role'
 import RoleItem from './role-item'
 
 export default ({
-  closingOfficers,
-  onRemoveClosingOfficer,
-  onUpsertClosingOfficer
+  escrowOfficers,
+  onRemoveEscrowOfficer,
+  onUpsertEscrowOfficer
 }) => {
   const allowedRoles = ['Title'] // Title == Escrow Officer
 
   return (
     <div className="form-section deal-people deal-client">
       <div className="hero">
-       Do you know who the Escrow Officer is?
+        Do you have Title company and Escrow officer information?  - add escrow officer
       </div>
 
       <div className="people-container">
         {
-          _.map(closingOfficers, (agent, id) =>
+          _.map(escrowOfficers, (agent, id) =>
             <CrudRole
               key={id}
               role={agent}
               allowedRoles={allowedRoles}
               modalTitle="Edit Escrow Officer"
               buttonText="Update"
-              onRemoveRole={(id) => onRemoveClosingOfficer(id)}
-              onUpsertRole={onUpsertClosingOfficer}
+              onRemoveRole={(id) => onRemoveEscrowOfficer(id)}
+              onUpsertRole={onUpsertEscrowOfficer}
             />
           )
         }
@@ -35,7 +35,7 @@ export default ({
           modalTitle="Add Escrow Officer"
           ctaTitle="Add Escrow Officer"
           allowedRoles={allowedRoles}
-          onUpsertRole={onUpsertClosingOfficer}
+          onUpsertRole={onUpsertEscrowOfficer}
         />
       </div>
     </div>

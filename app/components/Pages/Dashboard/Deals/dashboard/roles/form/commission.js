@@ -12,20 +12,23 @@ export default class Commission extends React.Component {
    * set form commission
    */
   setCommission(value) {
-    if (!this.props.validateCommission(value)) {
+    const { onChange, validateCommission } = this.props
+
+    if (!validateCommission(value)) {
       return false
     }
 
-    this.props.onChange(this.getCommissionField(), value)
+    onChange(this.getCommissionField(), parseFloat(value))
   }
 
   /**
    * set form commission type
    */
   setCommissionType(type) {
-    const { form } = this.props
+    const { form, onChange } = this.props
 
-    delete form[this.getCommissionField()]
+    // reset current value
+    onChange(this.getCommissionField(), 0)
 
     this.setState({ commission_type: type }, () => this.setCommission(''))
   }
@@ -36,9 +39,7 @@ export default class Commission extends React.Component {
   getCommissionField() {
     const { commission_type } = this.state
 
-    return (commission_type === '%') ?
-      'commission_percentage' :
-      'commission_dollar'
+    return commission_type === '%' ? 'commission_percentage' : 'commission_dollar'
   }
 
   /**
@@ -46,6 +47,7 @@ export default class Commission extends React.Component {
    */
   getCommissionValue() {
     const { form } = this.props
+
     return form[this.getCommissionField()] || ''
   }
 
@@ -64,8 +66,16 @@ export default class Commission extends React.Component {
    * check whether should show commission field or not
    */
   static shouldShowCommission(form) {
-    return ['CoBuyerAgent', 'BuyerAgent', 'BuyerReferral',
-      'CoSellerAgent', 'SellerAgent', 'SellerReferral'].indexOf(form.role) > -1
+    return (
+      [
+        'CoBuyerAgent',
+        'BuyerAgent',
+        'BuyerReferral',
+        'CoSellerAgent',
+        'SellerAgent',
+        'SellerReferral'
+      ].indexOf(form.role) > -1
+    )
   }
 
   render() {
@@ -85,7 +95,6 @@ export default class Commission extends React.Component {
           checked={commission_type === '%'}
           onChange={() => this.setCommissionType('%')}
         />&nbsp;&nbsp;%
-
         <input
           className="radio"
           type="radio"
@@ -93,7 +102,6 @@ export default class Commission extends React.Component {
           checked={commission_type === '$'}
           onChange={() => this.setCommissionType('$')}
         />&nbsp;&nbsp;$
-
         <div className="commission">
           <input
             name="commission"
@@ -104,7 +112,6 @@ export default class Commission extends React.Component {
             onChange={e => this.setCommission(e.target.value)}
           />
         </div>
-
       </div>
     )
   }

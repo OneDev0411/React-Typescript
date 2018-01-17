@@ -23,12 +23,15 @@ class Checklist extends React.Component {
     const { showTerminatedChecklists } = this.state
     const { deal, checklists, isBackOffice } = this.props
 
-    if (!deal.checklists) {
-      return false
-    }
-
     return (
       <div className="checklists-container">
+        {
+          !deal.checklists &&
+          <div className="loading">
+            <i className="fa fa-spin fa-spinner fa-3x" />&nbsp;
+          </div>
+        }
+
         <PanelGroup>
           {
             _

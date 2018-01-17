@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import { confirmation } from '../../../../../../store_actions/confirmation'
-import { setSelectedTask, deleteTask, updateTask } from '../../../../../../store_actions/deals'
+import { updateTask } from '../../../../../../store_actions/deals'
 import TaskStatus from '../tasks/status'
+import DeleteTask from './delete-task'
 
 class Header extends React.Component {
   constructor(props) {
@@ -12,22 +12,6 @@ class Header extends React.Component {
       isEditingTitle: false,
       isSavingTitle: false
     }
-  }
-
-  requestDeleteTask(task) {
-    this.props.confirmation({
-      message: 'Delete this task?',
-      description: 'You cannot undo this action',
-      confirmLabel: 'Yes, Delete',
-      onConfirm: () => this.deleteTask(task)
-    })
-  }
-
-  deleteTask(task) {
-    const { setSelectedTask, deleteTask } = this.props
-
-    deleteTask(task.checklist, task.id)
-    setSelectedTask(null)
   }
 
   onKeyPress(e) {
@@ -69,7 +53,7 @@ class Header extends React.Component {
 
   render() {
     const { isSavingTitle, isEditingTitle } = this.state
-    const { task, setSelectedTask } = this.props
+    const { deal, task, setSelectedTask } = this.props
 
     return (
       <div className="header">
@@ -79,16 +63,10 @@ class Header extends React.Component {
           </div>
 
           <div className="cta">
-            {
-              task.is_deletable &&
-              <span
-                className="delete-task"
-                onClick={() => this.requestDeleteTask(task)}
-                title="Delete Task"
-              >
-                <img src="/static/images/deals/trashcan.png" />
-              </span>
-            }
+            <DeleteTask
+              deal={deal}
+              task={task}
+            />
 
             <span
               className="close-task"
@@ -143,8 +121,5 @@ class Header extends React.Component {
 }
 
 export default connect(null, {
-  setSelectedTask,
-  deleteTask,
-  updateTask,
-  confirmation
+  updateTask
 })(Header)

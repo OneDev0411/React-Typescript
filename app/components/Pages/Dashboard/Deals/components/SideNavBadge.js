@@ -2,46 +2,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import SvgDeals from '../../Partials/Svgs/Deals'
-import getNeedsAttentions from '../utils/needs-attention'
 
 class BadgeCounter extends React.Component {
   constructor(props) {
     super(props)
   }
 
-  hasNewNotification(deal) {
-    const { checklists, tasks, rooms } = this.props
-
-    if (!deal.checklists) {
-      return false
-    }
-
-    return deal.checklists.some(chId => {
-      const checklist = checklists && checklists[chId]
-
-      if (!checklist || !checklist.tasks) {
-        return false
-      }
-
-      return checklist.tasks.some(tId => {
-        const task = tasks && tasks[tId]
-
-        if (!task) {
-          return false
-        }
-
-        const room = (rooms && rooms[task.room.id]) || task.room
-
-        return room.new_notifications > 0
-      })
-    })
-  }
-
   getAgentBadge() {
     let counter = 0
 
     _.each(this.props.deals, deal => {
-      if (this.hasNewNotification(deal)) {
+      if (deal.new_notifications > 0) {
         counter += 1
       }
     })
@@ -53,7 +24,7 @@ class BadgeCounter extends React.Component {
     let counter = 0
 
     _.each(this.props.deals, deal => {
-      if (getNeedsAttentions(deal).length > 0) {
+      if (~~deal.need_attentions > 0) {
         counter += 1
       }
     })
@@ -63,7 +34,6 @@ class BadgeCounter extends React.Component {
 
   getBadgeCount() {
     const { isBackOffice } = this.props
-
     return isBackOffice ? this.getBackOfficeBadge() : this.getAgentBadge()
   }
 

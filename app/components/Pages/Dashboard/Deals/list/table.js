@@ -4,6 +4,7 @@ import { Popover, OverlayTrigger } from 'react-bootstrap'
 import _ from 'underscore'
 import { getStatusColorClass } from '../../../../../utils/listing'
 import Deal from '../../../../../models/Deal'
+import DealContext from '../../../../../models/DealContext'
 import CriticalDates from '../dashboard/factsheet/critical-dates'
 import EmptyState from './empty-state'
 import ToolTip from '../components/tooltip'
@@ -44,7 +45,7 @@ class BaseTable extends React.Component {
    *
    */
   getAddress(deal) {
-    const address = Deal.get.address(deal)
+    const address = Deal.get.address(deal, this.props.roles)
 
     return (
       <div className="address-row">
@@ -69,6 +70,12 @@ class BaseTable extends React.Component {
   }
 
   getNextDate(deal, rowId, rowsCount) {
+    const table = DealContext.getFactsheetSection(deal, 'CriticalDates')
+
+    if (table.length === 0) {
+      return <span />
+    }
+
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
@@ -175,7 +182,7 @@ class BaseTable extends React.Component {
 
       // don't process filter that uses reserved words
       if (/__(.*)__/.test(f)) {
-        return true
+        return filters[f](deal)
       }
 
       if (!cells[f]) {
@@ -190,8 +197,7 @@ class BaseTable extends React.Component {
       } else if (_.isBoolean(criteria)) {
         matched = value
       } else if (criteria.length > 0) {
-        matched = value.toLowerCase()
-          .includes(criteria.toLowerCase())
+        matched = value.toLowerCase().includes(criteria.toLowerCase())
       } else {
         matched = true
       }
@@ -215,36 +221,12 @@ class BaseTable extends React.Component {
    *
    */
   hasNotification(deal) {
-    let counter = 0
-    const { rooms } = this.props
-
-    if (!deal.checklists) {
-      return ''
-    }
-
-    deal.checklists.forEach(id => {
-      const checklist = this.props.checklists[id]
-
-      if (!checklist.tasks || checklist.tasks.length === 0) {
-        return false
-      }
-
-      checklist.tasks.forEach(task_id => {
-        const task = this.props.tasks[task_id]
-        const room = (rooms && rooms[task.room.id]) || task.room
-
-        if (room.new_notifications > 0) {
-          counter += room.new_notifications
-        }
-      })
-    })
-
-    if (counter > 0) {
+    if (deal.new_notifications > 0) {
       return (
-        <ToolTip caption={`You have ${counter} unread messages in this deal`}>
+        <ToolTip caption={`You have ${deal.new_notifications} unread messages in this deal`}>
           <div className="inline unread-notifications">
             <img src="/static/images/deals/comments.svg" />
-            <span>{counter}</span>
+            <span>{deal.new_notifications}</span>
           </div>
         </ToolTip>
       )
@@ -296,22 +278,26 @@ class BaseTable extends React.Component {
               <tbody>
                 <tr className="header">
                   {
-                  _.map(this.cells, (cell, key) =>
-                    <td
-                      key={`CELL_${key}`}
-                      className={cn(cell.className, {
+                    _.chain(this.cells)
+                      .pairs()
+                      .filter(cell => !cell[1].justFilter)
+                      .map(([key, cell]) =>
+                        <td
+                          key={`CELL_${key}`}
+                          className={cn(cell.className, {
                         sortable: cell.sortable,
                         isActive: sortBy === key
                       })}
-                    >
-                      <span
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => cell.sortable && this.setSort(key)}
-                      >
-                        {cell.caption}&nbsp;
-                        {cell.sortable && this.getSorterCaret(key)}
-                      </span>
-                    </td>)
+                        >
+                          <span
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => cell.sortable && this.setSort(key)}
+                          >
+                            {cell.caption}&nbsp;
+                            {cell.sortable && this.getSorterCaret(key)}
+                          </span>
+                        </td>)
+                    .value()
                 }
                 </tr>
 

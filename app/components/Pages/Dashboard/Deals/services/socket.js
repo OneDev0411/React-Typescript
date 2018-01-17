@@ -96,8 +96,8 @@ export default class DealSocket extends Socket {
     // register brand
     DealSocket.registerBrand(user)
 
-    if (user) {
-      store.dispatch(getDeals(user, deals.backoffice, false))
-    }
+    // if (user) {
+    //   store.dispatch(getDeals(user, deals.backoffice, false))
+    // }
   }
 }

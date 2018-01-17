@@ -6,39 +6,24 @@ import Commission from '../factsheet/commission'
 import Roles from '../roles'
 import MlsListing from '../mls-listing'
 
-export default ({
-  deal,
-  showBackButton = true
-}) => (
+export default ({ deal, showBackButton = true }) => (
   <div className="scrollable">
+    <div className="deal-info__inner">
+      <ListingCard deal={deal} showBackButton={showBackButton} />
 
-    <ListingCard
-      deal={deal}
-      showBackButton={showBackButton}
-    />
+      <MlsListing deal={deal} />
 
-    <MlsListing
-      deal={deal}
-    />
+      <div className="deal-fact-sheet">
+        <CriticalDates deal={deal} />
+      </div>
 
-    <div className="deal-fact-sheet">
-      <CriticalDates
-        deal={deal}
-      />
-    </div>
+      <Roles deal={deal} allowDeleteRole />
 
-    <Roles
-      deal={deal}
-    />
+      <div className="deal-fact-sheet">
+        <ListingInfo deal={deal} />
 
-    <div className="deal-fact-sheet">
-      <ListingInfo
-        deal={deal}
-      />
-
-      <Commission
-        deal={deal}
-      />
+        <Commission deal={deal} />
+      </div>
     </div>
   </div>
 )

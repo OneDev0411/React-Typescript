@@ -155,7 +155,8 @@ class BulkSubmit extends React.Component {
                   margin: '0 0 1rem'
                 }}
               >
-                Sorry, something went wrong. Please try again.
+                You have encountered an unknown system issue. We're working on it. In
+                the meantime, connect with our Support team.
               </div>
             )}
 

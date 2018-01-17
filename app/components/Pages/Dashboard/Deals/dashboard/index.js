@@ -1,9 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link, browserHistory } from 'react-router'
-import { Row, Col, Button } from 'react-bootstrap'
-import cn from 'classnames'
-import _ from 'underscore'
+import { browserHistory } from 'react-router'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import DealInfo from './deal-info'
@@ -12,7 +9,8 @@ import ESignCompose from './esign/compose'
 import UploadPromptModal from './upload/prompt'
 import PDFSplitterModal from './upload/pdf-splitter'
 import NavBar from './navbar'
-import { getEnvelopes } from '../../../../../store_actions/deals'
+import { getDeal } from '../../../../../store_actions/deals'
+import Deal from '../../../../../models/Deal'
 
 class DealDetails extends React.Component {
   constructor(props) {
@@ -20,19 +18,19 @@ class DealDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { deal, getEnvelopes } = this.props
+    const { deal, getDeal } = this.props
 
     if (deal === null) {
       return browserHistory.push('/dashboard/deals')
     }
 
-    if (!deal.envelopes) {
-      getEnvelopes(deal.id)
+    if (!deal.checklists) {
+      getDeal(deal.id)
     }
   }
 
   render() {
-    const { deal, selectedTask, params } = this.props
+    const { deal, selectedTask } = this.props
     const selectedTaskId = selectedTask ? selectedTask.id : null
 
     if (!deal) {
@@ -87,4 +85,4 @@ function mapStateToProps({ deals }, props) {
   }
 }
 
-export default connect(mapStateToProps, { getEnvelopes })(DealDetails)
+export default connect(mapStateToProps, { getDeal })(DealDetails)

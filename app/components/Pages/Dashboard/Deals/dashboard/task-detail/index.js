@@ -27,6 +27,7 @@ const TaskManager = ({
           id="deals-task-scrollable"
         >
           <Header
+            deal={deal}
             key={task.id}
             task={task}
           />

@@ -5,7 +5,6 @@ import { Row, Col, OverlayTrigger, Popover } from 'react-bootstrap'
 import merge from 'merge'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
-import getNeedsAttentions from '../utils/needs-attention'
 import {
   closeEsignWizard,
   setSelectedTask
@@ -57,14 +56,6 @@ class BackOfficeTable extends BaseTable {
         className: 'col-md-2 hidden-sm hidden-xs',
         getText: deal => this.getNextDate(deal)
       },
-      needs_attention: {
-        caption: 'NEEDS ATTENTION',
-        className: 'col-md-2',
-        sortable: true,
-        getText: (deal, rowId, rowsCount) =>
-          this.getNeedsAttentions(deal, rowId, rowsCount),
-        getValue: deal => this.getNeedsAttentionCount(deal)
-      },
       notificiation: {
         caption: '',
         className: 'col-md-1',
@@ -82,10 +73,7 @@ class BackOfficeTable extends BaseTable {
    * get office name
    */
   getOffice(deal) {
-    return ''
-
     const brand = this.flattenBrand(deal.brand)
-
     return brand && brand.messages ? brand.messages.office_title : 'N/A'
   }
 
@@ -104,80 +92,11 @@ class BackOfficeTable extends BaseTable {
     }
 
     if (task.review.updated_at) {
-      text += moment.unix(task.review.updated_at).format('MMMM DD, HH:mm')
+      text += moment.unix(task.review.updated_at)
+        .format('MMMM DD, HH:mm')
     }
 
     return text
-  }
-
-  /**
-   * render needs attentions ui
-   */
-  getNeedsAttentions(deal, rowId, rowsCount) {
-    const { tasks } = this.props
-    const items = this.getNeedsAttentionsItems(deal)
-
-    return (
-      <OverlayTrigger
-        trigger={['hover', 'focus']}
-        placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
-        overlay={
-          <Popover
-            className="deal-list--needs-attention--popover"
-            id={`popover-trigger-na-${deal.id}`}
-          >
-            {
-              items.map(task_id => {
-                const task = tasks[task_id]
-
-                return (
-                  <Row
-                    key={task.id}
-                    className="item"
-                  >
-                    <Col xs={8}>
-                      <div className="info">
-                        <span className="info-title">
-                          {task.title}
-                        </span>
-                        <span className="info-desc">
-                          {this.getTaskReviewMessage(task)}
-                        </span>
-                      </div>
-                    </Col>
-
-                    <Col xs={4}>
-                      <span className="bdg">NEEDS ATTENTION</span>
-                    </Col>
-                  </Row>
-                )
-              })
-            }
-          </Popover>
-        }
-      >
-        <span className="hoverable">
-          {items.length}
-        </span>
-      </OverlayTrigger>
-    )
-  }
-
-  /**
-   * get needs attentions count
-   */
-  getNeedsAttentionCount(deal) {
-    return this.getNeedsAttentionsItems(deal).length
-  }
-
-  /**
-   * get needs attentions items
-   */
-  getNeedsAttentionsItems(deal) {
-    const { filters } = this.props
-    const filterTab = filters.__inbox_name__
-
-    return getNeedsAttentions(deal, filterTab)
   }
 
   /**
@@ -188,23 +107,19 @@ class BackOfficeTable extends BaseTable {
       return null
     }
 
-    let new_brand = {
-      ...brand
-    }
+    const brands = [brand]
 
-    const brands = [new_brand]
-
-    while (new_brand.parent) {
-      brands.push(new_brand.parent)
-      new_brand = new_brand.parent
+    while (brand.parent) {
+      brands.push(brand.parent)
+      brand = brand.parent
     }
 
     brands.reverse()
 
-    const merged = {}
+    let merged = {}
 
     brands.forEach(brand_loop => {
-      merge.recursive(merged, brand_loop)
+      merge.recursive(merged, { ...brand_loop, parent: undefined })
     })
 
     return merged
@@ -214,5 +129,6 @@ class BackOfficeTable extends BaseTable {
 export default connect(({ deals, chatroom }) => ({
   tasks: deals.tasks,
   checklists: deals.checklists,
+  roles: deals.roles,
   rooms: chatroom.rooms
 }), { closeEsignWizard, setSelectedTask })(BackOfficeTable)

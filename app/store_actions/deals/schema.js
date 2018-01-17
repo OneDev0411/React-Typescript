@@ -1,7 +1,10 @@
 import { schema } from 'normalizr'
 
-// schema for task
+// schema for role
 const role = new schema.Entity('roles')
+
+// schema for envelope
+const envelope = new schema.Entity('envelopes')
 
 // schema for task
 const task = new schema.Entity('tasks')
@@ -14,6 +17,7 @@ const checklist = new schema.Entity('checklists', {
 // schema for deal
 export const deal = new schema.Entity('deals', {
   roles: [role],
+  envelopes: [envelope],
   checklists: [checklist]
 })
 

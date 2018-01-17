@@ -14,7 +14,9 @@ import editUser from '../../../../store_actions/user/edit'
 import submitSigninForm from '../../../../store_actions/auth/signin'
 import updatePassword from '../../../../models/auth/password/update'
 
-export const renderAgentField = ({ id, input, label, checked }) => (
+export const renderAgentField = ({
+  id, input, label, checked
+}) => (
   <div className="c-auth__field--radio">
     <input
       {...input}
@@ -66,16 +68,14 @@ const RegisterForm = ({
               <img
                 src={siteLogo}
                 alt={`${siteTitle} logo`}
-                className={'c-auth__logo'}
+                className="c-auth__logo"
               />
             </Link>
           )}
           <h1 className="c-auth__title din">{siteTitle}</h1>
           <p className="c-auth__subtitle">Thanks! You're almost there...</p>
           <div>
-            <small>
-              Please fill out the details below to set up your profile.
-            </small>
+            <small>Please fill out the details below to set up your profile.</small>
           </div>
         </header>
         <main className="c-auth__main">
@@ -151,9 +151,9 @@ const RegisterForm = ({
 const validate = values => {
   const errors = {}
   const NAME_CHARACHTER_LIMIT = 1
-  const minimumCharactersError = length =>
-    `Must be at least ${length} characters.`
-  const invalidCharactersError = 'Invalid charachters. You are just allowed use alphabet characters and space.'
+  const minimumCharactersError = length => `Must be at least ${length} characters.`
+  const invalidCharactersError =
+    'Please include only letters. You have added a number or special character.'
   const isValidName = name => new RegExp(/^[A-Za-z\s]+$/).exec(name)
 
   if (!values.first_name) {
@@ -213,18 +213,11 @@ export default compose(
       setIsSubmitting(true)
 
       const {
-        first_name,
-        last_name,
-        email,
-        password,
-        user_type
+        first_name, last_name, email, password, user_type
       } = formInputsValue
 
       const {
-        token,
-        redirectTo,
-        phone_number,
-        email: emailFromURI
+        token, redirectTo, phone_number, email: emailFromURI
       } = paramsFromURI
 
       const userPassword = {
@@ -253,12 +246,11 @@ export default compose(
       // console.log(redirectTo, formInputsValue, userPassword, userInfo)
       try {
         let redirect = '/dashboard/mls'
+
         await updatePassword(userPassword)
 
         if (user_type === 'Agent') {
-          redirect = `/dashboard/account/upgrade?redirectTo=${encodeURIComponent(
-            redirectTo
-          )}`
+          redirect = `/dashboard/account/upgrade?redirectTo=${encodeURIComponent(redirectTo)}`
         }
 
         await submitSigninForm(loginInfo, redirect)
