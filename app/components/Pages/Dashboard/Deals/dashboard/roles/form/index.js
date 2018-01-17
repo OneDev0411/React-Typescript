@@ -199,21 +199,31 @@ export default class Form extends React.Component {
     // validate field
     const validator = fields[field]
 
-    let newInvalidFields = []
+    let newInvalidFields = invalidFields
 
-    if (value.length > 0 && typeof validator === 'function') {
-      if (await validator(value)) {
-        // validated! so remove field from invalidFields
-        newInvalidFields = invalidFields.filter(f => field !== f)
-      } else {
-        // add field to invalidfields
-        newInvalidFields = [...invalidFields, field]
-      }
+    const removeField = () => {
+      newInvalidFields = invalidFields.filter(f => field !== f)
+      this.setState({
+        invalidFields: newInvalidFields
+      })
     }
 
-    this.setState({
-      invalidFields: newInvalidFields
-    })
+    if (value.length > 0) {
+      if (await validator(value)) {
+        // validated! so remove field from invalidFields
+        if (invalidFields.length > 0 && invalidFields.includes(field)) {
+          removeField()
+        }
+      } else if (!invalidFields.includes(field)) {
+        // add field to invalidfields
+        newInvalidFields = [...invalidFields, field]
+        this.setState({
+          invalidFields: newInvalidFields
+        })
+      }
+    } else if (invalidFields.includes(field)) {
+      removeField()
+    }
 
     const isFormCompleted =
       _.every(requiredFields, name => fields[name](form[name])) &&
@@ -240,8 +250,8 @@ export default class Form extends React.Component {
           <Name
             id="first_name"
             name="first_name"
-            title="Legal Last Name"
-            placeholder="Legal Last"
+            title="Legal First Name"
+            placeholder="Legal First"
             value={form.legal_first_name}
             isInvalid={invalidFields.includes('legal_first_name')}
             onChange={value => this.setForm('legal_first_name', value)}
@@ -250,8 +260,8 @@ export default class Form extends React.Component {
           <Name
             id="last_name"
             name="last_name"
-            title="Legal First Name"
-            placeholder="Legal First"
+            title="Legal Last Name"
+            placeholder="Legal Last"
             value={form.legal_last_name}
             isInvalid={invalidFields.includes('legal_last_name')}
             onChange={value => this.setForm('legal_last_name', value)}
