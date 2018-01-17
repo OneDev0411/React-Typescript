@@ -18,6 +18,7 @@
   .checklists-container {
     padding: $col-padding !important;
 
+    height: calc(100vh - 56px);
     .loading {
       text-align: center;
       margin-top: 35vh;
