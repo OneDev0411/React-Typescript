@@ -7,12 +7,7 @@ import Roles from '../roles'
 import MlsListing from '../mls-listing'
 
 export default ({ deal, showBackButton = true }) => (
-  <div
-    className="scrollable"
-    data-simplebar
-    data-simplebar-autohide="false"
-  >
-
+  <div className="scrollable" data-simplebar>
     <div className="deal-info__inner">
       <ListingCard deal={deal} showBackButton={showBackButton} />
 

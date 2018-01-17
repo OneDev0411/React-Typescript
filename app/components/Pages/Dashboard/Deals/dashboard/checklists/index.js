@@ -24,7 +24,7 @@ class Checklist extends React.Component {
     const { deal, checklists, isBackOffice } = this.props
 
     return (
-      <div className="checklists-container" data-simplebar data-simplebar-autohide="false">
+      <div className="checklists-container" data-simplebar>
         {!deal.checklists && (
           <div className="loading">
             <i className="fa fa-spin fa-spinner fa-3x" />&nbsp;

@@ -3,7 +3,9 @@
 }
 
 %deal-task-detail {
-  $width: calc(100% - #{$deal-info-width} - #{$deal-tasks-width} - #{$col-padding});
+  $width: calc(
+    100% - #{$deal-info-width} - #{$deal-tasks-width} - #{$col-padding}
+  );
   min-width: $width;
   max-width: $width;
   border: 1px solid #dce5eb;
@@ -16,10 +18,8 @@
   }
 
   .scrollable {
-    $hg: calc(100vh - 110px - 77px);
-    height: $hg;
-    max-height: $hg;
-    overflow: auto;
+    height: $column-height;
+    overflow-x: hidden;
   }
 
   .full-width {
