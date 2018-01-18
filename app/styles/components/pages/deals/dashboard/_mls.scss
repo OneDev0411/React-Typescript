@@ -132,6 +132,12 @@
 
     .listings {
       @extend %listings;
+      padding: 0 2rem;
+
+      .list {
+        max-height: 336px;
+        margin: 0 -2rem;
+      }
     }
   }
 }
