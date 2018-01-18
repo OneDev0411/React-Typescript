@@ -313,6 +313,7 @@ class CreateOffer extends React.Component {
 
     const canCreateOffer = this.isFormValidated() && !saving
     const dealContexts = this.getDealContexts()
+    const isDoubleEnderAgent = enderType === 'AgentDoubleEnder'
 
     return (
       <div className="deal-create-offer">
@@ -352,6 +353,7 @@ class CreateOffer extends React.Component {
               <DealAgents
                 scenario="CreateOffer"
                 dealSide="Buying"
+                shouldPrepopulateAgent={isDoubleEnderAgent}
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                 onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
@@ -370,7 +372,7 @@ class CreateOffer extends React.Component {
                 onChangeDealStatus={status => this.changeDealStatus(status)}
               />
 
-              {enderType === 'AgentDoubleEnder' && (
+              {isDoubleEnderAgent && (
                 <DealReferrals
                   dealSide="Buying"
                   referrals={referrals}

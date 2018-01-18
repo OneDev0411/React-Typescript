@@ -56,9 +56,7 @@ export default ({
         ))}
 
         <CrudRole
-          shouldPrepopulateAgent={
-            shouldPrepopulateAgent && isPrimaryAgent && scenario === 'CreateDeal'
-          }
+          shouldPrepopulateAgent={shouldPrepopulateAgent && isPrimaryAgent}
           modalTitle={title}
           ctaTitle={title}
           allowedRoles={allowedRoles}
