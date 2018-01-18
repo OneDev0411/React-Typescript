@@ -274,7 +274,7 @@ class App extends Component {
     }
 
     return (
-      <div>
+      <div className="u-scrollbar">
         {user && !user.email_confirmed && <VerificationBanner email={user.email} />}
 
         {user && navArea}
