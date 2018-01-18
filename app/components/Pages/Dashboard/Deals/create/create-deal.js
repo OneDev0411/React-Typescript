@@ -398,7 +398,6 @@ class CreateDeal extends React.Component {
                     dealSide="Selling"
                     agents={sellingAgents}
                     shouldPrepopulateAgent={false}
-                    ctaTitleForPrimaryAgent="Add primary agent"
                     onUpsertAgent={form => this.onUpsertRole(form, 'sellingAgents')}
                     onRemoveAgent={id => this.onRemoveRole(id, 'sellingAgents')}
                   />
