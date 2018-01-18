@@ -5,9 +5,9 @@
 
   .sg-container {
     position: relative;
-
+    height: 220px;
+    overflow: hidden;
     .suggestions {
-
       .loader {
         width: 50px;
         margin: 10px 0;
@@ -79,9 +79,6 @@
 }
 
 %compose--suggestions {
-  min-height: 220px;
-  max-height: 220px;
-  overflow: auto;
   margin-top: 10px;
   padding-left: 2px;
 
