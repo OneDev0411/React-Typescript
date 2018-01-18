@@ -78,7 +78,7 @@ class DealsDashboard extends React.Component {
     } = this.state
 
     return (
-      <div className="deals-list">
+      <div className="deals-list" data-simplebar>
         <Header
           activeFilterTab={params.filter}
           initialBOFilters={this.initialBOFilters}

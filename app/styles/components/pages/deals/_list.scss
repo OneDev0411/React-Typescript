@@ -1,6 +1,6 @@
 %deals-list {
   overflow-x: hidden;
-  min-height: 100vh;
+  height: 100vh;
   .table-container {
     @extend %deal-list--table;
   }
@@ -300,7 +300,8 @@
         .fa-search {
           color: #8da2b5;
           font-size: 20px;
-          &:hover, &.active {
+          &:hover,
+          &.active {
             color: #2196f3;
           }
         }
