@@ -6,13 +6,17 @@ import SearchInput from '../../components/rx-input'
 import Deal from '../../../../../../models/Deal'
 import listing from '../../../../../../utils/listing'
 
+const WARNING_MESSAGE = `
+  Try entering the address like this ‘1234 Main Street, 
+  Dallas Texas, 75243’ to get the best results.`
+
 export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       searching: false,
       listings: null,
-      alert: null
+      failure: null
     }
   }
 
@@ -24,15 +28,27 @@ export default class extends React.Component {
       return false
     }
 
+    if (address.length < 3) {
+      this.setState({
+        listings: null,
+        failure:
+          listing.length > 0
+            ? null
+            : {
+              type: 'warning',
+              message: `Your input is too short! ${WARNING_MESSAGE}`
+            }
+      })
+
+      return false
+    }
+
     // show loading
-    this.setState({ searching: true, alert: null })
-    console.log('salam')
+    this.setState({ listings: null, searching: true, failure: null })
 
     try {
       // search in mls listings
       const response = await Deal.searchListings(address)
-
-      console.log(response.data)
 
       const listings = response.data.map(item => ({
         id: item.id,
@@ -44,23 +60,28 @@ export default class extends React.Component {
       }))
 
       // hide loading
-      this.setState({
-        listings,
-        searching: false,
-        alert:
-          listing.length > 0
-            ? null
-            : {
-              type: 'warning',
-              message:
-                  'We were unable to locate the address. Try entering the address like this ‘1234 Main Street, Dallas Texas, 75243’ to get the best results.'
-            }
-      })
+      if (listings.length > 0) {
+        this.setState({
+          listings,
+          searching: false
+        })
+      } else {
+        this.setState({
+          listings: null,
+          searching: false,
+          failure:
+            listing.length > 0
+              ? null
+              : {
+                type: 'warning',
+                message: `We were unable to locate the address. ${WARNING_MESSAGE}`
+              }
+        })
+      }
     } catch (err) {
-      console.log(err)
       this.setState({
         searching: false,
-        alert: {
+        failure: {
           type: 'error',
           message:
             'You have encountered an unknown system issue. We\'re working on it. In the meantime, connect with our Support team.'
@@ -82,7 +103,7 @@ export default class extends React.Component {
 
   render() {
     const { show, modalTitle, onHide } = this.props
-    const { searching, listings, alert } = this.state
+    const { searching, listings, failure } = this.state
 
     return (
       <Modal
@@ -100,21 +121,25 @@ export default class extends React.Component {
             subscribe={value => this.search(value)}
           />
 
-          {alert && (
+          {failure && (
             <div
-              className={`c-alert c-alert--${alert.type}`}
+              className={`c-alert c-alert--${failure.type}`}
               style={{
                 margin: '1rem 2rem'
               }}
             >
-              {alert.message}
+              {failure.message}
             </div>
           )}
 
           <div className="listings">
+            {searching && (
+              <span>
+                <span>Loading...</span>
+                <i className="fa fa-spinner fa-spin fa-fw loader" />
+              </span>
+            )}
             <div className="list">
-              {searching && <i className="fa fa-spinner fa-spin fa-fw loader" />}
-
               <ListingsView
                 type={null}
                 listings={listings}
