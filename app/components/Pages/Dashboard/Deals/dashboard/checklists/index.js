@@ -25,13 +25,12 @@ class Checklist extends React.Component {
 
     return (
       <div className="checklists-container" data-simplebar>
-        {!deal.checklists && (
-          <div className="loading">
-            <i className="fa fa-spin fa-spinner fa-3x" />&nbsp;
-          </div>
-        )}
-
         <PanelGroup>
+          {!deal.checklists && (
+            <div className="loading">
+              <i className="fa fa-spin fa-spinner fa-3x" />
+            </div>
+          )}
           {_.chain(deal.checklists)
             .sortBy(id => {
               const list = checklists[id]
@@ -51,7 +50,9 @@ class Checklist extends React.Component {
                 return false
               }
 
-              return showTerminatedChecklists ? true : checklists[id].is_terminated === false
+              return showTerminatedChecklists
+                ? true
+                : checklists[id].is_terminated === false
             })
             .map(id => <Tasks key={id} deal={deal} checklist={checklists[id]} />)
             .value()}
