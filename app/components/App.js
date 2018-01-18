@@ -54,7 +54,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { data, user, deals, dispatch } = this.props
+    const {
+      data, user, deals, dispatch
+    } = this.props
+
+    import('simplebar')
 
     if (user) {
       // load rooms
@@ -248,7 +252,9 @@ class App extends Component {
   }
 
   render() {
-    const { data, user, rooms, location } = this.props
+    const {
+      data, user, rooms, location
+    } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -283,7 +289,9 @@ class App extends Component {
   }
 }
 
-export default connect(({ user, data, favorites, deals, contacts, chatroom }) => ({
+export default connect(({
+  user, data, favorites, deals, contacts, chatroom
+}) => ({
   data,
   user,
   deals: deals.list,

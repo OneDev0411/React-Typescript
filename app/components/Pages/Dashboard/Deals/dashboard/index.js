@@ -38,31 +38,22 @@ class DealDetails extends React.Component {
     }
 
     return (
-      <div className="deal-dashboard u-scrollbar--thinner">
-
+      <div className="deal-dashboard">
         <NavBar deal={deal} />
 
         <div className="deal-content">
           <div className="column deal-info">
-            <DealInfo
-              deal={deal}
-              showBackButton
-            />
-          </div>
-
-          <div className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}>
-            <Checklists deal={deal} />
+            <DealInfo deal={deal} showBackButton />
           </div>
 
           <div
-            className="column deal-task-detail"
-            style={{ display: selectedTaskId ? 'inherit' : 'none' }}
+            className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}
           >
-            <TaskDetail
-              deal={deal}
-              taskId={selectedTaskId}
-              onCloseTask={() => this.onCloseTask()}
-            />
+            <Checklists deal={deal} />
+          </div>
+
+          <div className="column deal-task-detail" style={{ display: selectedTaskId ? 'inherit' : 'none' }}>
+            <TaskDetail deal={deal} taskId={selectedTaskId} onCloseTask={() => this.onCloseTask()} />
           </div>
         </div>
 
