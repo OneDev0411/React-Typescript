@@ -40,7 +40,7 @@ import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
 
-import OfflineBanner from './Partials/OfflineBanner'
+require('offline-js')
 
 class App extends Component {
   componentWillMount() {
@@ -284,8 +284,6 @@ class App extends Component {
         <main className={`l-app__main ${user ? 'is-logged-in' : ''}`}>
           {children}
         </main>
-
-        <OfflineBanner />
       </div>
     )
   }
