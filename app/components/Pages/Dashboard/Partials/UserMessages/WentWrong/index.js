@@ -1,7 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import IntercomTrigger from '../../IntercomTrigger'
 
-const WentWrong = ({ onClickSupport }) => (
+const WentWrong = ({ onClickSupport = () => {} }) => (
   <span>
     {
       'You have encountered an unknown system issue. We\'re working on it. In the meantime, connect with our'
@@ -27,5 +28,9 @@ const WentWrong = ({ onClickSupport }) => (
     {'.'}
   </span>
 )
+
+WentWrong.propTypes = {
+  onClickSupport: PropTypes.func
+}
 
 export default WentWrong

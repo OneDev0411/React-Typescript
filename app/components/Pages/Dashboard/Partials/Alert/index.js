@@ -1,8 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import WentWrong from '../UserMessages/WentWrong'
 
 const Alert = ({
-  type, code, message, supportHandler, children
+  children, code, message, supportHandler, type
 }) => {
   let content = message
 
@@ -20,6 +21,13 @@ const Alert = ({
       {children || content}
     </div>
   )
+}
+
+Alert.propTypes = {
+  code: PropTypes.number,
+  message: PropTypes.string,
+  supportHandler: PropTypes.func,
+  type: PropTypes.string.isRequired
 }
 
 export default Alert
