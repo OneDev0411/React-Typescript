@@ -32,20 +32,36 @@ export default ({
     return style
   }
 
+  const isWebkit = 'WebkitAppearance' in document.documentElement.style
+
   return (
-    <div className="sg-container" data-simplebar>
+    <div className="sg-container u-scrollbar" data-simplebar={!isWebkit || null}>
       <div
         className={cn('suggestions', { dropdown: dropDownBox === true })}
         style={getStyles()}
         tabIndex="1"
         onBlur={() => onBlurDropDownBox()}
       >
-        {searching && <img className="loader" src="/static/images/loading-states/three-dots-blue.svg" />}
+        {searching && (
+          <img
+            className="loader"
+            src="/static/images/loading-states/three-dots-blue.svg"
+          />
+        )}
 
         {_.map(viewList, recp => (
-          <Row key={`RECP_SUG_${recp.id}`} className="item" onClick={() => onAdd(recp)}>
+          <Row
+            key={`RECP_SUG_${recp.id}`}
+            className="item"
+            onClick={() => onAdd(recp)}
+          >
             <Col sm={1} xs={1} md={1} className="vcenter" style={{ padding: 0 }}>
-              <UserAvatar showStateIndicator={false} name={recp.display_name} image={recp.image} size={35} />
+              <UserAvatar
+                showStateIndicator={false}
+                name={recp.display_name}
+                image={recp.image}
+                size={35}
+              />
             </Col>
 
             <Col sm={8} xs={8} md={8} className="vcenter">
