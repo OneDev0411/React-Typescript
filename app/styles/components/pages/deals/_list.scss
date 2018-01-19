@@ -297,6 +297,9 @@
         cursor: pointer;
         padding: 10px;
         white-space: pre-line;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         .fa-search {
           color: #8da2b5;
           font-size: 20px;
