@@ -60,6 +60,8 @@ class App extends Component {
       data, user, deals, dispatch
     } = this.props
 
+    import('simplebar')
+
     if (user) {
       // load rooms
       this.initialRooms()

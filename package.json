@@ -152,6 +152,7 @@
     "sass-loader": "^6.0.6",
     "scissors": "git+https://github.com/tcr/scissors.git",
     "shorti": "^1.2.6",
+    "simplebar": "^2.5.1",
     "socket.io": "^1.7.3",
     "socket.io-client": "^1.7.3",
     "stream-to-promise": "^2.2.0",
