@@ -57,8 +57,11 @@ class App extends Component {
     const {
       data, user, deals, dispatch
     } = this.props
+    const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
-    import('simplebar')
+    if (!isWebkit) {
+      import('simplebar')
+    }
 
     if (user) {
       // load rooms
