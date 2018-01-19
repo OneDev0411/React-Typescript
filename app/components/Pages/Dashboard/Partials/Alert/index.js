@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import WentWrong from '../UserMessages/WentWrong'
 
 const Alert = ({
-  children, code, message, supportHandler, type
+  children, code, message, style, supportHandler, type
 }) => {
   let content = message
 
@@ -12,12 +12,7 @@ const Alert = ({
   }
 
   return (
-    <div
-      className={`c-alert c-alert--${type}`}
-      style={{
-        margin: '1rem 2rem'
-      }}
-    >
+    <div className={`c-alert c-alert--${type}`} style={style}>
       {children || content}
     </div>
   )
@@ -27,6 +22,7 @@ Alert.propTypes = {
   code: PropTypes.number,
   message: PropTypes.string,
   supportHandler: PropTypes.func,
+  style: PropTypes.object,
   type: PropTypes.string.isRequired
 }
 

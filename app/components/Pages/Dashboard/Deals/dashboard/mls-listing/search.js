@@ -118,7 +118,13 @@ export default class extends React.Component {
             subscribe={value => this.search(value)}
           />
 
-          {failure && <Alert {...failure} supportHandler={onHide} />}
+          {failure && (
+            <Alert
+              {...failure}
+              supportHandler={onHide}
+              style={{ margin: '1rem 2rem' }}
+            />
+          )}
 
           <div className="listings">
             {searching && (
