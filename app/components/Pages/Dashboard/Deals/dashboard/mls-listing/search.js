@@ -4,6 +4,7 @@ import listingsHelper from '../../../../../../utils/listing'
 import ListingsView from '../../components/listings-search'
 import SearchInput from '../../components/rx-input'
 import Deal from '../../../../../../models/Deal'
+import Alert from '../../../Partials/Alert'
 import listing from '../../../../../../utils/listing'
 
 const WARNING_MESSAGE = `
@@ -20,9 +21,6 @@ export default class extends React.Component {
     }
   }
 
-  /**
-   * search rechat listings
-   */
   async search(address) {
     if (address.length === 0) {
       return false
@@ -82,9 +80,8 @@ export default class extends React.Component {
       this.setState({
         searching: false,
         failure: {
-          type: 'error',
-          message:
-            'You have encountered an unknown system issue. We\'re working on it. In the meantime, connect with our Support team.'
+          code: 500,
+          type: 'error'
         }
       })
     }
@@ -121,16 +118,7 @@ export default class extends React.Component {
             subscribe={value => this.search(value)}
           />
 
-          {failure && (
-            <div
-              className={`c-alert c-alert--${failure.type}`}
-              style={{
-                margin: '1rem 2rem'
-              }}
-            >
-              {failure.message}
-            </div>
-          )}
+          {failure && <Alert {...failure} supportHandler={onHide} />}
 
           <div className="listings">
             {searching && (
