@@ -22,9 +22,10 @@ class Checklist extends React.Component {
     let terminatedChecklistsCount = 0
     const { showTerminatedChecklists } = this.state
     const { deal, checklists, isBackOffice } = this.props
+    const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
     return (
-      <div className="checklists-container" data-simplebar>
+      <div className="checklists-container" data-simplebar={!isWebkit || null}>
         <PanelGroup>
           {!deal.checklists && (
             <div className="loading">
