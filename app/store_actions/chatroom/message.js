@@ -3,7 +3,7 @@ import moment from 'moment'
 import types from '../../constants/chatroom'
 import Chatroom from '../../models/Chatroom'
 
-function _getMessages (id, messages, { total }, append = null) {
+function messagesReceived(id, messages, { total }, append = null) {
   return {
     type: types.GET_MESSAGES,
     id,
@@ -13,8 +13,8 @@ function _getMessages (id, messages, { total }, append = null) {
   }
 }
 
-export function getMessages (id, limit, value, value_type) {
-  return async (dispatch) => {
+export function getMessages(id, limit, value, value_type) {
+  return async dispatch => {
     try {
       const { info, data } = await Chatroom.getMessages(id, limit, value, value_type)
 
@@ -24,13 +24,12 @@ export function getMessages (id, limit, value, value_type) {
       // reverse messages because we are displaying newest messages first
       const messages = _.indexBy(data.reverse(), 'id')
 
-      dispatch(_getMessages(id, messages, info, append))
-    } catch(e) {
+      dispatch(messagesReceived(id, messages, info, append))
+    } catch (e) {
       console.log(e)
     }
   }
 }
-
 
 export function createMessage(id, message, queueId) {
   return {
