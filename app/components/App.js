@@ -63,6 +63,10 @@ class App extends Component {
       import('simplebar')
     }
 
+    if (window) {
+      require('offline-js')
+    }
+
     if (user) {
       // load rooms
       this.initialRooms()

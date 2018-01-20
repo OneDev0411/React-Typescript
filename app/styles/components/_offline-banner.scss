@@ -1,0 +1,20 @@
+.c-offline-banner {
+  position: fixed;
+  top: 8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  padding: 0.5rem 2rem;
+  color: #fff;
+  border-radius: 5px;
+  background: #f5a700;
+}
+
+.c-offline-banner__button.c-offline-banner__button {
+  color: #fff;
+  text-decoration: underline;
+
+  &:focus {
+    outline: none;
+  }
+}

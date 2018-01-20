@@ -7,14 +7,10 @@ import path from 'path'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
-const postcss = function () {
+function postcss() {
   return [
     require('autoprefixer')({
-      'browsers': [
-        '> 1%',
-        'IE 10',
-        'Last 2 versions'
-      ]
+      browsers: ['> 1%', 'IE 10', 'Last 2 versions']
     })
   ]
 }
