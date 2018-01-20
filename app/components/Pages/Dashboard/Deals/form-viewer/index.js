@@ -8,6 +8,7 @@ import { getDeal } from '../../../../../store_actions/deals'
 import FileView from './file-view'
 import EnvelopeView from './envelope-view'
 import config from '../../../../../../config/public'
+import task from '../../../../../constants/brandConsole/task'
 
 class FormViewer extends React.Component {
   constructor(props) {
@@ -39,8 +40,14 @@ class FormViewer extends React.Component {
   }
 
   async getFile() {
-    const { params } = this.props
+    const { deal, params } = this.props
     const { type } = params
+
+    if (!deal.checklists) {
+      getDeal(deal.id)
+
+      return null
+    }
 
     switch (type) {
       case 'attachment':
@@ -80,15 +87,9 @@ class FormViewer extends React.Component {
 
   async getEnvelopeFile() {
     const {
-      deal, user, tasks, envelopes, params, getDeal
+      deal, user, tasks, envelopes, params
     } = this.props
     const { taskId, type, objectId } = params
-
-    if (!deal.envelopes) {
-      getDeal(deal.id)
-
-      return null
-    }
 
     const envelope = envelopes[objectId]
     const task = tasks[taskId]
