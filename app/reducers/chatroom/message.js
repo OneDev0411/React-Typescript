@@ -13,9 +13,8 @@ function createMessages(state, action) {
   // create new message
   if (action.append) {
     list = { ...list, ...action.messages }
-  }
-  // load previous messages into store
-  else {
+  } else {
+    // load previous messages into store
     list = { ...action.messages, ...list }
   }
 
@@ -31,11 +30,11 @@ function createMessages(state, action) {
 
   return {
     ...state,
-    ...{[action.id]: {
+    [action.id]: {
       ...state[action.id],
       ...action.info,
       ...{ list }
-    }}
+    }
   }
 }
 
@@ -48,17 +47,17 @@ function updateMessage(state, action) {
 
   return {
     ...state,
-    ...{[action.roomId]: {
+    [action.roomId]: {
       ...messages,
-      ...{list: {
+      list: {
         ...messages.list,
-        ...{[action.message.id]: {
+        [action.message.id]: {
           ...message,
           ...action.message,
-          ...{updated_at: (new Date).getTime()}
-        }}
-      }}
-    }}
+          updated_at: new Date().getTime()
+        }
+      }
+    }
   }
 }
 
@@ -70,24 +69,21 @@ function updateMessageDeliveries(state, action) {
   const message = messages.list[action.messageId]
 
   let deliveries = message.deliveries
-  if (!deliveries)
-    deliveries = [action.deliveryInfo]
-  else
-    deliveries.push(action.deliveryInfo)
 
+  if (!deliveries) { deliveries = [action.deliveryInfo] } else { deliveries.push(action.deliveryInfo) }
 
   return {
     ...state,
-    ...{[action.roomId]: {
+    [action.roomId]: {
       ...messages,
-      ...{list: {
+      list: {
         ...messages.list,
-        ...{[action.messageId]: {
+        [action.messageId]: {
           ...messages.list[action.messageId],
-          ...{deliveries}
-        }}
-      }}
-    }}
+          ...{ deliveries }
+        }
+      }
+    }
   }
 }
 
@@ -100,8 +96,8 @@ function acknowledgeRoom(state, action) {
   const ackList = {}
 
   const reversed = Object.keys(messages.list).reverse()
-  for (let id in reversed) {
 
+  for (let id in reversed) {
     // get message
     const key = reversed[id]
     const message = messages.list[key]
@@ -114,14 +110,11 @@ function acknowledgeRoom(state, action) {
       break
     }
 
-    if (!acked_by)
-      acked_by = [action.userId]
-    else
-      acked_by.push(action.userId)
+    if (!acked_by) { acked_by = [action.userId] } else { acked_by.push(action.userId) }
 
     ackList[message.id] = {
       ...message,
-      ...{acked_by}
+      ...{ acked_by }
     }
   }
 
@@ -133,10 +126,10 @@ function acknowledgeRoom(state, action) {
 
   return {
     ...state,
-    ...{[action.roomId]: {
+    [action.roomId]: {
       ...messages,
-      ...{list: messagesList}
-    }}
+      list: messagesList
+    }
   }
 }
 
@@ -149,7 +142,6 @@ function removeRoomMessages(state, action) {
 
 export default (state = {}, action) => {
   switch (action.type) {
-
     case types.GET_MESSAGES:
     case types.CREATE_MESSAGE:
       return createMessages(state, action)
