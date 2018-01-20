@@ -33,7 +33,7 @@ function createMessages(state, action) {
     [action.id]: {
       ...state[action.id],
       ...action.info,
-      ...{ list }
+      list
     }
   }
 }
@@ -70,7 +70,11 @@ function updateMessageDeliveries(state, action) {
 
   let deliveries = message.deliveries
 
-  if (!deliveries) { deliveries = [action.deliveryInfo] } else { deliveries.push(action.deliveryInfo) }
+  if (!deliveries) {
+    deliveries = [action.deliveryInfo]
+  } else {
+    deliveries.push(action.deliveryInfo)
+  }
 
   return {
     ...state,
@@ -80,7 +84,7 @@ function updateMessageDeliveries(state, action) {
         ...messages.list,
         [action.messageId]: {
           ...messages.list[action.messageId],
-          ...{ deliveries }
+          deliveries
         }
       }
     }
@@ -110,11 +114,15 @@ function acknowledgeRoom(state, action) {
       break
     }
 
-    if (!acked_by) { acked_by = [action.userId] } else { acked_by.push(action.userId) }
+    if (!acked_by) {
+      acked_by = [action.userId]
+    } else {
+      acked_by.push(action.userId)
+    }
 
     ackList[message.id] = {
       ...message,
-      ...{ acked_by }
+      acked_by
     }
   }
 
