@@ -40,7 +40,7 @@ class FormViewer extends React.Component {
   }
 
   async getFile() {
-    const { deal, params } = this.props
+    const { deal, getDeal, params } = this.props
     const { type } = params
 
     if (!deal.checklists) {
