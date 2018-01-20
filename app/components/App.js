@@ -40,8 +40,6 @@ import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
 
-require('offline-js')
-
 class App extends Component {
   componentWillMount() {
     const { user } = this.props
@@ -59,6 +57,10 @@ class App extends Component {
     const {
       data, user, deals, dispatch
     } = this.props
+
+    if (window) {
+      require('offline-js')
+    }
 
     import('simplebar')
 
