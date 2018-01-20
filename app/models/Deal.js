@@ -175,7 +175,7 @@ Deal.getById = async function (id) {
 Deal.getAll = async function (user = {}, backoffice = false) {
   const { access_token } = user
   let endpoint
-  let associations
+  let params
 
   if (!user.brand) {
     throw new Error('This user does not belong to any brand')
@@ -184,18 +184,19 @@ Deal.getAll = async function (user = {}, backoffice = false) {
   // backoffice and agent has different endpoints and associations
   if (backoffice) {
     endpoint = `/brands/${user.brand}/deals/inbox`
-    associations = 'associations[]=deal.brand&'
-    associations += 'associations[]=deal.created_by&'
-    associations += 'associations[]=review.updated_by&'
-    associations += 'associations[]=deal.new_notifications'
+    params = 'associations[]=deal.brand&'
+    params += 'associations[]=deal.created_by&'
+    params += 'associations[]=review.updated_by&'
+    params += 'associations[]=deal.new_notifications'
   } else {
     endpoint = `/brands/${user.brand}/deals`
-    associations = 'associations[]=agent.office&'
-    associations += 'associations[]=deal.new_notifications'
+    params = 'deleted=true&'
+    params += 'associations[]=agent.office&'
+    params += 'associations[]=deal.new_notifications'
   }
 
   try {
-    const fetchDeals = new Fetch().get(`${endpoint}?${associations}`)
+    const fetchDeals = new Fetch().get(`${endpoint}?${params}`)
 
     // required on ssr
     if (access_token) {
