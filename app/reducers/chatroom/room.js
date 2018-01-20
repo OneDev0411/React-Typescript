@@ -11,11 +11,9 @@ export function updateRoom(state, roomId, attributes) {
 
   return {
     ...state,
-    ...{
-      [roomId]: {
-        ...state[roomId],
-        ...attributes
-      }
+    [roomId]: {
+      ...state[roomId],
+      ...attributes
     }
   }
 }
@@ -26,7 +24,7 @@ export function updateRoom(state, roomId, attributes) {
 function createRoom(state, action) {
   return {
     ...state,
-    ...{ [action.room.id]: action.room }
+    [action.room.id]: action.room
   }
 }
 
@@ -36,11 +34,9 @@ function createRoom(state, action) {
 function addRoomMembers(state, action) {
   return {
     ...state,
-    ...{
-      [action.room.id]: {
-        ...state[action.room.id],
-        ...action.room
-      }
+    [action.room.id]: {
+      ...state[action.room.id],
+      ...action.room
     }
   }
 }
@@ -49,8 +45,7 @@ function addRoomMembers(state, action) {
  * remove member from specific room
  */
 function removeRoomMember(state, action) {
-  const users
-    = state[action.roomId].users.filter(user => user.id !== action.memberId)
+  const users = state[action.roomId].users.filter(user => user.id !== action.memberId)
 
   return {
     ...state,
@@ -67,7 +62,7 @@ function removeRoomMember(state, action) {
 function updateRoomNotifications(state, action) {
   return updateRoom(state, action.roomId, {
     new_notifications: state[action.roomId].new_notifications + 1,
-    updated_at: (new Date()).getTime(),
+    updated_at: new Date().getTime(),
     latest_message: action.message
   })
 }
@@ -77,7 +72,7 @@ function updateRoomNotifications(state, action) {
  */
 function updateRoomTime(state, action) {
   return updateRoom(state, action.roomId, {
-    updated_at: (new Date()).getTime()
+    updated_at: new Date().getTime()
   })
 }
 
@@ -108,10 +103,7 @@ function addMessageTyping(state, action) {
     return updateRoom(state, action.roomId, {
       typing: {
         ...typing,
-        ...{
-          [action.userId]:
-          _.find(users, user => user.id === action.userId)
-        }
+        [action.userId]: _.find(users, user => user.id === action.userId)
       }
     })
   }
