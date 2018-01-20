@@ -18,7 +18,6 @@
   .checklists-container {
     padding: $col-padding !important;
 
-    height: calc(100vh - 56px);
     .loading {
       text-align: center;
       margin-top: 35vh;
@@ -30,6 +29,9 @@
 
     .show-terminated-btn {
       @extend %terminated-btn;
+    }
+    &[data-simplebar] {
+      height: calc(100vh - 56px);
     }
   }
 }

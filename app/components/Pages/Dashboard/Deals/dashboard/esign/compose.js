@@ -10,6 +10,7 @@ import Recipients from './recipients'
 import ComposeAttachments from './compose-attachments'
 import Docusign from './docusign'
 import DealModel from '../../../../../../models/Deal'
+import Alert from '../../../Partials/Alert'
 import {
   closeEsignWizard,
   showAttachments,
@@ -26,8 +27,9 @@ const ERROR_MESSAGES = {
 class SendSignatures extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      error: null,
+      failure: null,
       isSending: false,
       showDocusignBanner: false
     }
@@ -51,9 +53,9 @@ class SendSignatures extends React.Component {
   addRecipients(recipient) {
     this.props.addEsignRecipient({ role: recipient.id })
 
-    if (this.state.error === ERROR_MESSAGES.recipinets) {
+    if (this.state.failure === ERROR_MESSAGES.recipinets) {
       this.setState({
-        error: null
+        failure: null
       })
     }
   }
@@ -115,7 +117,7 @@ class SendSignatures extends React.Component {
 
   closeForm() {
     this.setState({
-      error: null
+      failure: null
     })
 
     // close form
@@ -126,9 +128,15 @@ class SendSignatures extends React.Component {
    * send envelope
    */
   async send() {
-    const { isSending, error } = this.state
+    const { isSending, failure } = this.state
     const {
-      notify, createEnvelope, closeEsignWizard, user, deal, esign, tasks
+      notify,
+      createEnvelope,
+      closeEsignWizard,
+      user,
+      deal,
+      esign,
+      tasks
     } = this.props
     const { recipients } = esign
 
@@ -138,13 +146,16 @@ class SendSignatures extends React.Component {
       revision: tasks[id].submission.last_revision
     }))
 
-    if (error) {
-      this.setState({ error: null })
+    if (failure) {
+      this.setState({ failure: null })
     }
 
     if (_.size(recipients) === 0) {
       this.setState({
-        error: ERROR_MESSAGES.recipinets
+        failure: {
+          type: 'error',
+          message: ERROR_MESSAGES.recipinets
+        }
       })
 
       return false
@@ -152,7 +163,10 @@ class SendSignatures extends React.Component {
 
     if (attachments.length === 0) {
       this.setState({
-        error: ERROR_MESSAGES.attachments
+        failure: {
+          type: 'error',
+          message: ERROR_MESSAGES.attachments
+        }
       })
 
       return false
@@ -164,16 +178,8 @@ class SendSignatures extends React.Component {
     })
 
     try {
-
-
       // add envelope to list of envelopes
-      await createEnvelope(
-        deal.id,
-        subject,
-        message,
-        attachments,
-        recipients
-      )
+      await createEnvelope(deal.id, subject, message, attachments, recipients)
 
       // close esign
       closeEsignWizard()
@@ -197,8 +203,10 @@ class SendSignatures extends React.Component {
         console.log(err)
 
         this.setState({
-          error:
-            'You have encountered an unknown system issue. We\'re working on it. In the meantime, connect with our Support team.'
+          failure: {
+            code: 500,
+            type: 'error'
+          }
         })
       }
     }
@@ -208,8 +216,9 @@ class SendSignatures extends React.Component {
     const {
       tasks, esign, deal, user, showAttachments
     } = this.props
-    const { isSending, showDocusignBanner, error } = this.state
+    const { isSending, showDocusignBanner, failure } = this.state
     const { recipients } = esign
+    const hasRecipients = Object.keys(recipients).length > 0
 
     if (!esign.showCompose) {
       return false
@@ -269,17 +278,10 @@ class SendSignatures extends React.Component {
             </div>
 
             <div className="footer__inner">
-              {error && (
-                <div
-                  style={{ margin: '0 0 1rem' }}
-                  className="c-alert c-alert--error"
-                >
-                  {error}
-                </div>
-              )}
+              {failure && <Alert {...failure} style={{ margin: '0 0 1rem' }} />}
               <div>
                 <Button
-                  disabled={isSending || error}
+                  disabled={isSending || !hasRecipients}
                   className="btn-send"
                   onClick={() => this.send()}
                 >

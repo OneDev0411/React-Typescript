@@ -18,8 +18,13 @@
   }
 
   .scrollable {
-    height: $column-height;
-    overflow-x: hidden;
+    $hg: calc(100vh - 110px - 77px);
+    height: $hg;
+    overflow: auto;
+    &[data-simplebar] {
+      overflow-y: visible;
+      overflow-x: hidden;
+    }
   }
 
   .full-width {

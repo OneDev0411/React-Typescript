@@ -1,6 +1,7 @@
 // main.scss
 @import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
 @import 'vendor/balloon-css/_balloon.scss';
+@import 'vendor/offline-js/_offline-js.scss';
 
 @import 'components/resets';
 @import 'components/resets-bootstrap';
@@ -39,6 +40,7 @@
 @import 'components/listing-modal';
 @import 'components/feed-modal';
 @import 'components/intercom';
+@import 'components/offline-banner';
 
 @import 'components/modules/alert';
 @import '../../node_modules/simplebar/dist/simplebar.css';

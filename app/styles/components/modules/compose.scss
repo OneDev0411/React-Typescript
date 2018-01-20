@@ -5,8 +5,7 @@
 
   .sg-container {
     position: relative;
-    height: 220px;
-    overflow: hidden;
+
     .suggestions {
       .loader {
         width: 50px;
@@ -21,6 +20,15 @@
 
       &.dropdown {
         @extend %compose--suggestions-dropdown;
+      }
+    }
+    &[data-simplebar] {
+      height: 220px;
+      overflow: hidden;
+      .suggestions {
+        min-height: initial;
+        max-height: initial;
+        overflow: auto;
       }
     }
   }
@@ -79,6 +87,9 @@
 }
 
 %compose--suggestions {
+  min-height: 220px;
+  max-height: 220px;
+  overflow: auto;
   margin-top: 10px;
   padding-left: 2px;
 
