@@ -171,8 +171,8 @@ class WhoSigned extends React.Component {
                 </div>
 
                 <div className="sign-now">
-                  {signer.user &&
-                    signer.user.id === user.id && (
+                  {signer.role.user &&
+                    signer.role.user.id === user.id && (
                       <a
                         href={this.getSignLink(envelope.id, signer.id)}
                         target="_blank"
