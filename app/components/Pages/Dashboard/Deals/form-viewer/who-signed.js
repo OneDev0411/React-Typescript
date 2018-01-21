@@ -171,15 +171,16 @@ class WhoSigned extends React.Component {
                 </div>
 
                 <div className="sign-now">
-                  {signer.role.email === user.email && (
-                    <a
-                      href={this.getSignLink(envelope.id, signer.id)}
-                      target="_blank"
-                      className="sign-button"
-                    >
-                      Sign now
-                    </a>
-                  )}
+                  {signer.user &&
+                    signer.user.id === user.id && (
+                      <a
+                        href={this.getSignLink(envelope.id, signer.id)}
+                        target="_blank"
+                        className="sign-button"
+                      >
+                        Sign now
+                      </a>
+                    )}
                 </div>
               </div>
             ))}
