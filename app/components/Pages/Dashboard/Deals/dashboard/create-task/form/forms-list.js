@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
 import Dropzone from 'react-dropzone'
+import Deal from '../../../../../../../models/Deal'
 import {
   createFormTask,
   setSelectedTask,
@@ -183,7 +184,7 @@ class Forms extends React.Component {
           ref={ref => (this.dropzone = ref)}
           onDrop={files => this.onDropFiles(files)}
           multiple
-          accept="application/pdf,image/*"
+          accept={Deal.upload.getAcceptedDocuments()}
           style={{ display: 'none' }}
         />
       </div>

@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { ProgressBar } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
 import cn from 'classnames'
+import Deal from '../../../../../../models/Deal'
 import ChatMessage from '../../../Chatroom/Util/message'
-import {
-  setUploadFiles } from '../../../../../../store_actions/deals'
+import { setUploadFiles } from '../../../../../../store_actions/deals'
 
 class UploadDocument extends React.Component {
   constructor(props) {
@@ -54,63 +54,60 @@ class UploadDocument extends React.Component {
   render() {
     const { dropzoneActive } = this.state
     const { children, task, hasAttachments } = this.props
-    const { uploading } = (task || {})
+    const { uploading } = task || {}
 
     return (
       <Dropzone
         disableClick
-        ref={(node) => this.dropzone = node}
-        onDrop={(files) => this.onDrop(files)}
+        ref={node => (this.dropzone = node)}
+        onDrop={files => this.onDrop(files)}
         onDragEnter={() => this.setState({ dropzoneActive: true })}
         onDragLeave={() => this.setState({ dropzoneActive: false })}
         multiple
-        accept="application/pdf,image/*"
+        accept={Deal.upload.getAcceptedDocuments()}
         style={{ width: '100%' }}
       >
-        {
-          dropzoneActive &&
-          <div
-            className="upload-placeholder"
-          >
+        {dropzoneActive && (
+          <div className="upload-placeholder">
             <div className="upload-area">
               <img src="/static/images/deals/dnd.png" />
               <h1 className="title">Drop to upload to this task</h1>
               <span className="desc">
-                You can drag and drop any files to the upload section of the task you are in.
+                You can drag and drop any files to the upload section of the task you
+                are in.
               </span>
             </div>
           </div>
-        }
+        )}
 
-        {
-          children ||
+        {children || (
           <div className={cn('file-upload', { 'has-attachments': hasAttachments })}>
-
             <div className="item">
-
               <div className="image">
                 <img src="/static/images/deals/upload-file.svg" />
               </div>
               <div className="name">
                 <div>
                   Drag and Drop your files to upload or&nbsp;
-                  <span className="link" onClick={() => this.openDialog()}>browse</span>
+                  <span className="link" onClick={() => this.openDialog()}>
+                    browse
+                  </span>
                 </div>
               </div>
               <div className="actions" />
             </div>
 
-            {
-              uploading &&
-              <ProgressBar active now={70} />
-            }
+            {uploading && <ProgressBar active now={70} />}
           </div>
-        }
+        )}
       </Dropzone>
     )
   }
 }
 
-export default connect(({ user }) => ({
-  user
-}), { setUploadFiles })(UploadDocument)
+export default connect(
+  ({ user }) => ({
+    user
+  }),
+  { setUploadFiles }
+)(UploadDocument)

@@ -4,7 +4,15 @@ import config from '../../config/public'
 import Fetch from '../services/fetch'
 
 const Deal = {
-  get: {}
+  get: {},
+  upload: {}
+}
+
+/**
+ * get accepted documents in file upload
+ */
+Deal.upload.getAcceptedDocuments = function () {
+  return ['image/*', 'application/*'].join(',')
 }
 
 /**
