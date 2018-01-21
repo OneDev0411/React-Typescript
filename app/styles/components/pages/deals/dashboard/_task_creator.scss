@@ -3,6 +3,10 @@
     @extend %deal-modal-header;
   }
 
+  .modal-content {
+    border: none;
+  }
+
   .modal-body {
     max-height: 430px;
     overflow: auto;

@@ -174,7 +174,7 @@ class UploadModal extends React.Component {
   }
 
   render() {
-    const { splitter, upload } = this.props
+    const { deal, splitter, upload } = this.props
     const filesCount = _.size(upload.files)
 
     // get list of pdfs aren't uploaded yet
@@ -218,6 +218,7 @@ class UploadModal extends React.Component {
 
                     <div className="file-task">
                       <TasksDropDown
+                        deal={deal}
                         onSelectTask={taskId => this.onSelectTask(file, taskId)}
                         selectedTask={selectedTask}
                         shouldDropUp={

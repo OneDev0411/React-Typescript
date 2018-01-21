@@ -7,15 +7,13 @@ class NewTaskModal extends Component {
     super(props)
 
     this.state = {
-      title: null
+      title: ''
     }
-
-    this.setTitle = this.setTitle.bind(this)
   }
 
-  setTitle(event) {
+  setTitle(title) {
     this.setState({
-      title: event.target.value
+      title
     })
   }
 
@@ -36,7 +34,11 @@ class NewTaskModal extends Component {
 
         <Modal.Body>
           <span className="label">Title</span>
-          <input type="text" readOnly={isCreatingTask} onChange={this.setTitle} />
+          <input
+            type="text"
+            readOnly={isCreatingTask}
+            onChange={e => this.setTitle(e.target.value)}
+          />
 
           <span className="note">
             Accurate titles help with context when glancing through your checklist.
@@ -59,7 +61,7 @@ class NewTaskModal extends Component {
           <Button
             bsStyle="primary"
             className="c-new-task-modal__submit-btn"
-            disabled={isCreatingTask || !title}
+            disabled={isCreatingTask || title.length === 0}
             onClick={() => onCreateNewTask(title)}
           >
             {isCreatingTask ? 'Creating Task ...' : 'Create Task'}

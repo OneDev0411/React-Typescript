@@ -47,20 +47,29 @@ class DealDetails extends React.Component {
           </div>
 
           <div
-            className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}
+            className={`column deal-tasks ${
+              selectedTaskId ? 'collapsed' : 'expanded'
+            }`}
           >
             <Checklists deal={deal} />
           </div>
 
-          <div className="column deal-task-detail" style={{ display: selectedTaskId ? 'inherit' : 'none' }}>
-            <TaskDetail deal={deal} taskId={selectedTaskId} onCloseTask={() => this.onCloseTask()} />
+          <div
+            className="column deal-task-detail"
+            style={{ display: selectedTaskId ? 'inherit' : 'none' }}
+          >
+            <TaskDetail
+              deal={deal}
+              taskId={selectedTaskId}
+              onCloseTask={() => this.onCloseTask()}
+            />
           </div>
         </div>
 
         <ESignAttachments deal={deal} />
         <ESignCompose deal={deal} />
-        <UploadPromptModal />
-        <PDFSplitterModal />
+        <UploadPromptModal deal={deal} />
+        <PDFSplitterModal deal={deal} />
       </div>
     )
   }

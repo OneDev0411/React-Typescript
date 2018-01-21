@@ -124,7 +124,7 @@ class WorkspaceForm extends React.Component {
   }
 
   render() {
-    const { upload, tasks } = this.props
+    const { deal, upload, tasks } = this.props
     const {
       title, task, notifyOffice, saving
     } = this.state
@@ -151,6 +151,7 @@ class WorkspaceForm extends React.Component {
         />
 
         <TasksDropDown
+          deal={deal}
           onSelectTask={taskId => this.setState({ task: tasks[taskId] })}
           selectedTask={task}
           upload={upload}
