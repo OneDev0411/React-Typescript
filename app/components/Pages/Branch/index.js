@@ -18,7 +18,9 @@ const OOPS_PAGE = '/oops'
 const branchKey = config.branch.key
 
 const getActionRedirectURL = params => {
-  const { action, room, alert, listing } = params
+  const {
+    action, room, alert, listing
+  } = params
 
   if (action === 'RedirectToRoom' && room) {
     return `/dashboard/recents/${room}`
@@ -51,7 +53,9 @@ const generateVerificationActionRedirectUrl = params => {
       url += `email?email=${email}&email_code=${email_code}`
       break
     case 'PhoneVerification':
-      url += `phone?phone_number=${phone_number}&phone_code=${phone_code}&receivingUserEmail=${receivingUser.email}`
+      url += `phone?phone_number=${phone_number}&phone_code=${phone_code}&receivingUserEmail=${
+        receivingUser.email
+      }`
       break
     default:
       url = OOPS_PAGE
@@ -61,12 +65,7 @@ const generateVerificationActionRedirectUrl = params => {
   return url
 }
 
-const redirectHandler = (
-  actionType,
-  branchData,
-  loggedInUser,
-  setActiveModal
-) => {
+const redirectHandler = (actionType, branchData, loggedInUser, setActiveModal) => {
   let redirect
 
   Object.keys(branchData).forEach(key => {
@@ -103,6 +102,7 @@ const redirectHandler = (
         name: 'VERIFYING_CONFLICT',
         params
       })
+
       return
     }
   } else if (isShadow) {
@@ -121,9 +121,7 @@ const redirectHandler = (
       redirect += `&email=${email}`
     }
 
-    redirect += `&redirectTo=${encodeURIComponent(
-      getActionRedirectURL(branchData)
-    )}`
+    redirect += `&redirectTo=${encodeURIComponent(getActionRedirectURL(branchData))}`
 
     if (hasConflict()) {
       // console.log('you logged with different user')
@@ -131,6 +129,7 @@ const redirectHandler = (
       params.messageText =
         'You are currently logged in a different user. Please sign out and sign up your new account.'
       setActiveModal({ name: 'SHADOW_CONFLICT', params })
+
       return
     }
   } else if (loggedInUser) {
@@ -140,14 +139,18 @@ const redirectHandler = (
     if (hasConflict()) {
       // console.log('you logged with deferent user')
       params.redirectTo = encodeURIComponent(redirect)
-      params.messageText = `You are currently logged in a different user.  Please sign out and sign in using ${receivingUser.email}.`
+      params.messageText = `You are currently logged in a different user.  Please sign out and sign in using ${
+        receivingUser.email
+      }.`
       setActiveModal({ name: 'CONFLICT', params })
+
       return
     }
   } else {
     // console.log('you registered before with this email')
 
     const username = `username=${encodeURIComponent(receivingUser.email)}`
+
     redirect = !listing
       ? `/signin?${username}&redirectTo=`
       : `/dashboard/mls/${listing}?${username}&redirectTo=`
@@ -168,7 +171,7 @@ const branch = ({
   if (!branchData) {
     Branch.init(branchKey, (err, { data_parsed }) => {
       if (err) {
-        console.log(err)
+        // console.log(err)
         browserHistory.push(OOPS_PAGE)
       }
 
@@ -195,19 +198,17 @@ const branch = ({
               receivingUser
             }
 
-            if (action.indexOf('Verification') !== -1) {
+            if (action.includes('Verification')) {
               const { email_code, phone_code } = branchData
+
               console.log(email_confirmed)
+
               if (
                 (email_code && !email_confirmed) ||
                 (phone_code && !phone_confirmed)
               ) {
-                redirectHandler(
-                  'VERIFY',
-                  branchData,
-                  loggedInUser,
-                  setActiveModal
-                )
+                redirectHandler('VERIFY', branchData, loggedInUser, setActiveModal)
+
                 return
               }
 
@@ -215,11 +216,10 @@ const branch = ({
                 name: 'VERIFIED',
                 params: {
                   receivingUser,
-                  verificationType: phone_code
-                    ? 'phone number'
-                    : 'email address'
+                  verificationType: phone_code ? 'phone number' : 'email address'
                 }
               })
+
               return
             }
 
@@ -237,31 +237,21 @@ const branch = ({
   }
 
   let content = <Loading />
+
   if (activeModal) {
     const brandInfo = getBrandInfo(brand)
     const { name, params } = activeModal
+
     switch (name) {
       case 'CONFLICT':
       case 'SHADOW_CONFLICT':
       case 'PROTECTED_RESOURCE':
         content = <ConflictModal params={params} brandInfo={brandInfo} />
         break
+      case 'VERIFIED':
       case 'VERIFYING_CONFLICT':
         content = (
-          <VerifyRedirectModal
-            type={name}
-            params={params}
-            brandInfo={brandInfo}
-          />
-        )
-        break
-      case 'VERIFIED':
-        content = (
-          <VerifyRedirectModal
-            type={name}
-            params={params}
-            brandInfo={brandInfo}
-          />
+          <VerifyRedirectModal type={name} params={params} brandInfo={brandInfo} />
         )
         break
       default:
