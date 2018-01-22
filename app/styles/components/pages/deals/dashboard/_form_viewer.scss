@@ -194,6 +194,15 @@
         border: 2px solid gray;
       }
 
+      .no-preview {
+        font-size: 17px;
+        margin-top: 30vh;
+        .file-name {
+          margin: 5px 0 20px 0;
+          color: gray;
+        }
+      }
+
       .pagination {
         position: fixed;
         bottom: 4%;

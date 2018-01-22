@@ -39,18 +39,18 @@ class DealDetails extends React.Component {
 
     return (
       <div className="deal-dashboard u-scrollbar--thinner">
-
         <NavBar deal={deal} />
 
         <div className="deal-content">
           <div className="column deal-info">
-            <DealInfo
-              deal={deal}
-              showBackButton
-            />
+            <DealInfo deal={deal} showBackButton />
           </div>
 
-          <div className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}>
+          <div
+            className={`column deal-tasks ${
+              selectedTaskId ? 'collapsed' : 'expanded'
+            }`}
+          >
             <Checklists deal={deal} />
           </div>
 
@@ -68,8 +68,8 @@ class DealDetails extends React.Component {
 
         <ESignAttachments deal={deal} />
         <ESignCompose deal={deal} />
-        <UploadPromptModal />
-        <PDFSplitterModal />
+        <UploadPromptModal deal={deal} />
+        <PDFSplitterModal deal={deal} />
       </div>
     )
   }

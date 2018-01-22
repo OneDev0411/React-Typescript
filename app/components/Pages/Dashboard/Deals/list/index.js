@@ -24,12 +24,11 @@ class DealsDashboard extends React.Component {
     }
   }
 
-
   setSearchStatus = searchBoxIsOpen => this.setState({ searchBoxIsOpen })
-  showEmptySearchPage = emptySearchPageIsOpen => this.setState({ emptySearchPageIsOpen })
+  showEmptySearchPage = emptySearchPageIsOpen =>
+    this.setState({ emptySearchPageIsOpen })
 
-
-  initialBOFilters = (filters) => {
+  initialBOFilters = filters => {
     this.setState({
       activeFilters: {
         ..._.omit(filters, 'searchResult')
@@ -37,11 +36,10 @@ class DealsDashboard extends React.Component {
     })
   }
 
-  initialAgentFilters = (filters) => {
+  initialAgentFilters = filters => {
     this.setState({
       activeFilters: {
-        ...this.state.activeFilters,
-        ...filters
+        ..._.omit(filters, 'searchResult')
       }
     })
   }
@@ -66,19 +64,13 @@ class DealsDashboard extends React.Component {
 
   render() {
     const {
-      deals,
-      isBackOffice,
-      params,
-      loadingDeals
+      deals, isBackOffice, params, loadingDeals
     } = this.props
-    const {
-      activeFilters,
-      searchBoxIsOpen,
-      emptySearchPageIsOpen
-    } = this.state
+    const { activeFilters, searchBoxIsOpen, emptySearchPageIsOpen } = this.state
+    const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
     return (
-      <div className="deals-list">
+      <div className="deals-list" data-simplebar={!isWebkit || null}>
         <Header
           activeFilterTab={params.filter}
           initialBOFilters={this.initialBOFilters}
@@ -90,28 +82,22 @@ class DealsDashboard extends React.Component {
           onFilterChange={filters => this.setFilter(filters)}
         />
         <i
-          className={cn(
-            'fa fa-spinner fa-pulse fa-fw fa-3x spinner__deals',
-            { hide_spinner: !loadingDeals }
-          )}
+          className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__deals', {
+            hide_spinner: !loadingDeals
+          })}
         />
 
-        {
-          !isBackOffice ?
-            <AgentTable
-              deals={deals}
-              filters={activeFilters}
-              isBackOffice={false}
-            /> :
-            <BackOfficeTable
-              deals={deals}
-              searchBoxIsOpen={searchBoxIsOpen}
-              emptySearchPageIsOpen={emptySearchPageIsOpen || loadingDeals}
-              filters={activeFilters}
-              isBackOffice
-            />
-        }
-
+        {!isBackOffice ? (
+          <AgentTable deals={deals} filters={activeFilters} isBackOffice={false} />
+        ) : (
+          <BackOfficeTable
+            deals={deals}
+            searchBoxIsOpen={searchBoxIsOpen}
+            emptySearchPageIsOpen={emptySearchPageIsOpen || loadingDeals}
+            filters={activeFilters}
+            isBackOffice
+          />
+        )}
       </div>
     )
   }

@@ -18,11 +18,13 @@ class WhoSigned extends React.Component {
     }
   }
 
-  getSignLink(eid) {
+  getSignLink(envelopeId, recipientId) {
     const { user } = this.props
     const token = user.access_token
 
-    return `${config.app.url}/api/deals/envelope/${eid}/sign?access_token=${token}`
+    return `${
+      config.app.url
+    }/api/deals/envelope/${envelopeId}/sign/${recipientId}?access_token=${token}`
   }
 
   getName(role) {
@@ -30,8 +32,8 @@ class WhoSigned extends React.Component {
       return role.user.display_name
     }
 
-    return `${role.legal_prefix || ''} ${role.legal_first_name || ''} ${role.legal_last_name || ''}`
-      .trim()
+    return `${role.legal_prefix || ''} ${role.legal_first_name ||
+      ''} ${role.legal_last_name || ''}`.trim()
   }
 
   async resendDocs(envelopeId) {
@@ -71,7 +73,9 @@ class WhoSigned extends React.Component {
   }
 
   async voidEnvelope(envelopeId) {
-    const { deal, voidEnvelope, notify, onClose } = this.props
+    const {
+      deal, voidEnvelope, notify, onClose
+    } = this.props
 
     try {
       voidEnvelope(deal.id, envelopeId)
@@ -95,16 +99,14 @@ class WhoSigned extends React.Component {
     return (
       <div className="who-signed">
         <div className="ws-head">
-          <div className="ttl">
-            Who signed
-          </div>
+          <div className="ttl">Who signed</div>
           <div className="cta">
             <Button
               className="deal-button"
               disabled={resending}
               onClick={() => this.resendDocs(envelope.id)}
             >
-              { resending ? 'Resending ...' : 'Resend docs' }
+              {resending ? 'Resending ...' : 'Resend docs'}
             </Button>
 
             <Button
@@ -116,120 +118,108 @@ class WhoSigned extends React.Component {
           </div>
         </div>
 
-        {
-          areSigned.length > 0 &&
+        {areSigned.length > 0 && (
           <div className="ws-section">
             <div className="ws-section-title">
               <img src="/static/images/deals/ws.svg" />
               SIGNED BY
             </div>
 
-            {
-              areSigned.map((signer, key) =>
-                <div
-                  key={`ARE_SIGNED_${key}`}
-                  className="ws-section-body"
-                >
-                  <div className="avatar">
-                    <UserAvatar
-                      name={this.getName(signer.role)}
-                      image={signer.user && signer.user.profile_image_thumbnail_url}
-                      size={30}
-                      showStateIndicator={false}
-                    />
-                  </div>
-                  <div className="info">
-                    <div className="sname">{this.getName(signer.role)}</div>
-                    <div className="date">
-                      Signed { moment.unix(signer.updated_at).format('HH:mm A dddd MMM DD, YYYY') }
-                    </div>
+            {areSigned.map((signer, key) => (
+              <div key={`ARE_SIGNED_${key}`} className="ws-section-body">
+                <div className="avatar">
+                  <UserAvatar
+                    name={this.getName(signer.role)}
+                    image={signer.user && signer.user.profile_image_thumbnail_url}
+                    size={30}
+                    showStateIndicator={false}
+                  />
+                </div>
+                <div className="info">
+                  <div className="sname">{this.getName(signer.role)}</div>
+                  <div className="date">
+                    Signed{' '}
+                    {moment
+                      .unix(signer.updated_at)
+                      .format('HH:mm A dddd MMM DD, YYYY')}
                   </div>
                 </div>
-              )
-            }
+              </div>
+            ))}
           </div>
-        }
+        )}
 
-        {
-          notSigned.length > 0 &&
+        {notSigned.length > 0 && (
           <div className="ws-section">
             <div className="ws-section-title">
               <img src="/static/images/deals/ws.svg" />
               HAS NOT SIGNED
             </div>
 
-            {
-              notSigned.map((signer, key) =>
-                <div
-                  key={`NOT_SIGNED_${key}`}
-                  className="ws-section-body"
-                >
-                  <div className="avatar">
-                    <UserAvatar
-                      name={this.getName(signer.role)}
-                      image={signer.user && signer.user.profile_image_thumbnail_url}
-                      size={30}
-                      showStateIndicator={false}
-                    />
-                  </div>
-                  <div className="info">
-                    <div className="sname">{this.getName(signer.role)}</div>
-                  </div>
+            {notSigned.map((signer, key) => (
+              <div key={`NOT_SIGNED_${key}`} className="ws-section-body">
+                <div className="avatar">
+                  <UserAvatar
+                    name={this.getName(signer.role)}
+                    image={signer.user && signer.user.profile_image_thumbnail_url}
+                    size={30}
+                    showStateIndicator={false}
+                  />
+                </div>
+                <div className="info">
+                  <div className="sname">{this.getName(signer.role)}</div>
+                </div>
 
-                  <div className="sign-now">
-                    {
-                      signer.user && signer.user.id === user.id &&
+                <div className="sign-now">
+                  {signer.role.user &&
+                    signer.role.user.id === user.id && (
                       <a
-                        href={this.getSignLink(envelope.id)}
+                        href={this.getSignLink(envelope.id, signer.id)}
                         target="_blank"
                         className="sign-button"
                       >
                         Sign now
                       </a>
-                    }
-                  </div>
+                    )}
                 </div>
-              )
-            }
+              </div>
+            ))}
           </div>
-        }
+        )}
 
-        {
-          declineds.length > 0 &&
+        {declineds.length > 0 && (
           <div className="ws-section">
             <div className="ws-section-title">
               <img src="/static/images/deals/ws.svg" />
               DECLINED TO SIGN
             </div>
 
-            {
-              declineds.map((signer, key) =>
-                <div
-                  key={`DECLINED_${key}`}
-                  className="ws-section-body"
-                >
-                  <div className="avatar">
-                    <UserAvatar
-                      name={this.getName(signer.role)}
-                      image={signer.user && signer.user.profile_image_thumbnail_url}
-                      size={30}
-                      showStateIndicator={false}
-                    />
-                  </div>
-                  <div className="info">
-                    <div className="sname">{this.getName(signer.role)}</div>
-                  </div>
+            {declineds.map((signer, key) => (
+              <div key={`DECLINED_${key}`} className="ws-section-body">
+                <div className="avatar">
+                  <UserAvatar
+                    name={this.getName(signer.role)}
+                    image={signer.user && signer.user.profile_image_thumbnail_url}
+                    size={30}
+                    showStateIndicator={false}
+                  />
                 </div>
-              )
-            }
+                <div className="info">
+                  <div className="sname">{this.getName(signer.role)}</div>
+                </div>
+              </div>
+            ))}
           </div>
-        }
+        )}
       </div>
     )
   }
 }
 
-export default connect(({ deals, user }) => ({
-  roles: deals.roles,
-  user
-}), { voidEnvelope, confirmation, notify })(WhoSigned)
+export default connect(
+  ({ deals, user }) => ({
+    roles: deals.roles,
+    user
+  }),
+  { voidEnvelope, confirmation, notify }
+)(WhoSigned)

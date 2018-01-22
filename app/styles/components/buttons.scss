@@ -38,3 +38,11 @@ fieldset[disabled] .btn {
     outline-width: 0;
   }
 }
+
+.c-button--shadow--link {
+  @extend .c-button--shadow;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

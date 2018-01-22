@@ -30,6 +30,9 @@
     .show-terminated-btn {
       @extend %terminated-btn;
     }
+    &[data-simplebar] {
+      height: calc(100vh - 56px);
+    }
   }
 }
 

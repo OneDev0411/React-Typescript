@@ -3,7 +3,7 @@ import Koa from 'koa'
 const router = require('koa-router')()
 const app = new Koa()
 
-router.get('/deals/excel', async (ctx) => {
+router.get('/deals/excel', async ctx => {
   try {
     const { user } = ctx.session
 
@@ -18,7 +18,7 @@ router.get('/deals/excel', async (ctx) => {
     ctx.set('Content-Disposition', 'attachment')
     ctx.attachment('deals.xls')
 
-    const response = await ctx
+    const response = ctx
       .fetch(url)
       .set('Authorization', `Bearer ${ctx.session.user.access_token}`)
 

@@ -1,47 +1,75 @@
-import React from 'react'
+import React, { Component } from 'react'
+import Alert from '../../../../Partials/Alert'
 import { Modal, Button } from 'react-bootstrap'
 
-export default ({
-  show, onClose, onCreateNewTask, isCreatingTask, isFailed
-}) => (
-  <Modal
-    dialogClassName="modal-deal-create-form-task-name"
-    show={show}
-    onHide={onClose}
-    backdrop="static"
-  >
-    <Modal.Header closeButton>Name Task</Modal.Header>
+class NewTaskModal extends Component {
+  constructor(props) {
+    super(props)
 
-    <Modal.Body>
-      <span className="label">Title</span>
-      <input type="text" ref={ref => (this.input = ref)} readOnly={isCreatingTask} />
+    this.state = {
+      title: ''
+    }
+  }
 
-      <span className="note">
-        Accurate titles help with context when glancing through your checklist.
-      </span>
-    </Modal.Body>
+  setTitle(title) {
+    this.setState({
+      title
+    })
+  }
 
-    <Modal.Footer>
-      {isFailed && (
-        <div
-          className="c-alert c-alert--error"
-          style={{
-            textAlign: 'left',
-            margin: '0 0 1rem'
-          }}
-        >
-          You have encountered an unknown system issue. We're working on it. In the
-          meantime, connect with our Support team.
-        </div>
-      )}
+  render() {
+    const {
+      show, onClose, onCreateNewTask, isCreatingTask, isFailed
+    } = this.props
+    const { title } = this.state
 
-      <Button
-        bsStyle="primary"
-        disabled={isCreatingTask}
-        onClick={() => onCreateNewTask(this.input.value)}
+    return (
+      <Modal
+        dialogClassName="c-new-task-modal"
+        show={show}
+        onHide={onClose}
+        backdrop="static"
       >
-        {isCreatingTask ? 'Creating Task ...' : 'Create Task'}
-      </Button>
-    </Modal.Footer>
-  </Modal>
-)
+        <Modal.Header closeButton>Custom Task</Modal.Header>
+
+        <Modal.Body>
+          <span className="label">Title</span>
+          <input
+            type="text"
+            readOnly={isCreatingTask}
+            onChange={e => this.setTitle(e.target.value)}
+          />
+
+          <span className="note">
+            Accurate titles help with context when glancing through your checklist.
+          </span>
+        </Modal.Body>
+
+        <Modal.Footer>
+          {isFailed && (
+            <Alert
+              code={500}
+              type="error"
+              style={{
+                textAlign: 'left',
+                margin: '0 0 1rem'
+              }}
+              supportHandler={onClose}
+            />
+          )}
+
+          <Button
+            bsStyle="primary"
+            className="c-new-task-modal__submit-btn"
+            disabled={isCreatingTask || title.length === 0}
+            onClick={() => onCreateNewTask(title)}
+          >
+            {isCreatingTask ? 'Creating Task ...' : 'Create Task'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+}
+
+export default NewTaskModal

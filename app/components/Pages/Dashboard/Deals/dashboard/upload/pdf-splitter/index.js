@@ -32,7 +32,7 @@ class PDFSplitter extends React.Component {
   }
 
   render() {
-    const { splitter, upload } = this.props
+    const { deal, splitter, upload } = this.props
 
     if (splitter.display !== true) {
       return false
@@ -56,7 +56,7 @@ class PDFSplitter extends React.Component {
             </div>
 
             <div className="workspace" ref={ref => (this.workspaceContainer = ref)}>
-              <Workspace />
+              <Workspace deal={deal} />
             </div>
           </div>
         </DragDropContextProvider>

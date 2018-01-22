@@ -28,6 +28,7 @@ class CreateForm extends React.Component {
         </div>
 
         <Forms
+          allowCustomTask
           deal={deal}
           listId={listId}
           show={showFormsModal}

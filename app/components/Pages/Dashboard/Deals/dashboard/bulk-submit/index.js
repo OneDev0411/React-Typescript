@@ -6,6 +6,7 @@ import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 import TaskStatus from '../tasks/status'
 import CheckBox from '../../components/radio'
+import Alert from '../../../Partials/Alert'
 import { bulkSubmit, updatesTasks } from '../../../../../../store_actions/deals'
 
 class BulkSubmit extends React.Component {
@@ -17,6 +18,8 @@ class BulkSubmit extends React.Component {
       isFailed: false,
       selectedTasks: []
     }
+
+    this.toggleShowModal = this.toggleShowModal.bind(this)
   }
 
   toggleShowModal() {
@@ -88,18 +91,15 @@ class BulkSubmit extends React.Component {
 
     return (
       <div className="inline">
-        <button
-          className="navbar-button btn-deal"
-          onClick={() => this.toggleShowModal()}
-        >
+        <button className="navbar-button btn-deal" onClick={this.toggleShowModal}>
           Submit
         </button>
 
         <Modal
           show={showModal}
           backdrop="static"
-          onHide={() => this.toggleShowModal()}
-          dialogClassName="modal-deal-bulk-submit"
+          onHide={this.toggleShowModal}
+          dialogClassName="c-deal-bulk-submit-modal"
         >
           <Modal.Header closeButton>Bulk Submit</Modal.Header>
 
@@ -148,26 +148,28 @@ class BulkSubmit extends React.Component {
 
           <Modal.Footer>
             {isFailed && (
-              <div
-                className="c-alert c-alert--error"
+              <Alert
+                code={500}
+                type="error"
                 style={{
+                  color: '#d0011b',
                   textAlign: 'left',
                   margin: '0 0 1rem'
                 }}
-              >
-                You have encountered an unknown system issue. We're working on it. In
-                the meantime, connect with our Support team.
-              </div>
+                supportHandler={this.toggleShowModal}
+              />
             )}
 
             <div>
               {selectedTasks.length > 0 && (
-                <span>{selectedTasks.length} task selected</span>
+                <span className="c-deal-bulk-submit-modal__counter">
+                  {selectedTasks.length} task selected
+                </span>
               )}
 
               <Button
                 disabled={selectedTasks.length === 0 || saving}
-                className="deal-button"
+                className="c-deal-bulk-submit-modal__submit-btn"
                 onClick={() => this.submit()}
               >
                 {saving ? 'Saving ...' : 'Notify Admin'}

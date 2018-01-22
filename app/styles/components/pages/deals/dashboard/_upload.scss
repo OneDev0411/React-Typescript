@@ -291,6 +291,11 @@
 
     &.new-task {
       color: #2196f3;
+      .add-task {
+        img {
+          display: none;
+        }
+      }
     }
 
     &.selected {

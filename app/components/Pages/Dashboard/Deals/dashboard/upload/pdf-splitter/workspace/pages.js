@@ -8,7 +8,6 @@ import { DropTarget } from 'react-dnd'
 import { deselectSplitterPage } from '../../../../../../../../store_actions/deals'
 import Checkbox from '../../../../components/radio'
 import PageThumbnail from '../page/thumbnail'
-import TasksDropDown from '../../tasks-dropdown'
 import EmptyState from './empty-state'
 
 /**
@@ -34,36 +33,31 @@ class WorkspacePdfList extends React.Component {
   }
 
   render() {
-    const { isOver, canDrop, connectDropTarget, splitter, upload } = this.props
+    const {
+      isOver, canDrop, connectDropTarget, splitter, upload
+    } = this.props
 
-    return connectDropTarget(
-      <div className={cn('pdfholder', { canDrop: isOver && canDrop })}>
-        {
-          _.size(splitter.pages) === 0 &&
-          <EmptyState />
-        }
+    return connectDropTarget(<div className={cn('pdfholder', { canDrop: isOver && canDrop })}>
+      {_.size(splitter.pages) === 0 && <EmptyState />}
 
-        {
-          _.map(splitter.pages, (page, id) =>
-            <PageThumbnail
-              key={`pdf-page-${id}`}
-              inUse
-              canvasClassName="no-drag"
-              pdfId={page.documentId}
-              doc={splitter.documents[page.documentId]}
-              pageNumber={page.pageNumber}
-            >
-              <span
-                className="page-cta remove"
-                onClick={() => this.deselectPage(page.documentId, page.pageNumber)}
-              >
-                Remove
-              </span>
-            </PageThumbnail>
-          )
-        }
-      </div>
-    )
+      {_.map(splitter.pages, (page, id) => (
+        <PageThumbnail
+          key={`pdf-page-${id}`}
+          inUse
+          canvasClassName="no-drag"
+          pdfId={page.documentId}
+          doc={splitter.documents[page.documentId]}
+          pageNumber={page.pageNumber}
+        >
+          <span
+            className="page-cta remove"
+            onClick={() => this.deselectPage(page.documentId, page.pageNumber)}
+          >
+              Remove
+          </span>
+        </PageThumbnail>
+        ))}
+                             </div>)
   }
 }
 

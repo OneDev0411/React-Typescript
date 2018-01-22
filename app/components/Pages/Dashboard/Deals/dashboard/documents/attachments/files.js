@@ -27,6 +27,16 @@ class FileAttachments extends React.Component {
     return file.mime.includes('image/')
   }
 
+  getFileType(file) {
+    if (this.isPdf(file)) {
+      return 'pdf'
+    } else if (this.isImage(file)) {
+      return 'image'
+    } else {
+      return 'unknown'
+    }
+  }
+
   openDoc(fileId) {
     const { deal, task } = this.props
 
@@ -61,11 +71,10 @@ class FileAttachments extends React.Component {
     const { deleting } = this.state
 
     const files = attachments
-      .filter(file => this.isPdf(file) || this.isImage(file))
       .map(file => ({
         id: file.id,
         name: file.name,
-        type: this.isPdf(file) ? 'pdf' : 'image',
+        type: this.getFileType(file),
         preview_url: file.preview_url,
         src: file.url
       }))

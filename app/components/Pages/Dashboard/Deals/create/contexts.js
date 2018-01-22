@@ -5,12 +5,18 @@ import Context from '../../../../../models/DealContext'
 import RadioButton from '../components/radio'
 import DatePicker from '../components/date-picker'
 
-const ContextValue = ({ name, date, onRemove, onEdit }) => (
+const ContextValue = ({
+  name, date, onRemove, onEdit
+}) => (
   <div className="selected-field">
-    { name }:&nbsp;
-    <span className="date" onClick={onEdit}>{ moment(date).format('MMMM DD, YYYY') }</span>
+    {name}:&nbsp;
+    <span className="date" onClick={onEdit}>
+      {moment(date).format('MMMM DD, YYYY')}
+    </span>
     <span className="splitter">|</span>
-    <span className="remove" onClick={onRemove}>Remove date</span>
+    <span className="remove" onClick={onRemove}>
+      Remove date
+    </span>
   </div>
 )
 
@@ -49,51 +55,53 @@ export default class extends React.Component {
 
     return (
       <div className="form-section contexts">
-        <div className="hero">
+        <div className="hero no-margin-bottom">
           Please provide the following information:&nbsp;
-          Those marked with an * are required.
         </div>
 
-        {
-          _.map(fields, field => (
-            <div key={field.name}>
-              {
-                field.data_type !== 'Date' &&
-                <div
-                  className="entity-item string new"
-                >
-                  <div className="add-item text-input">
-                    <div>
-                      <span className="text">
-                        {field.label} {field.mandatory && <sup>*</sup>}
-                      </span>
-                    </div>
+        <div className="hero-description">
+          Those marked with an <span className="required">*</span> are required.
+        </div>
 
-                    <input
-                      className={cn({
-                        invalid: contexts[field.name] &&
-                          !Context.validate(field, contexts[field.name])
-                      })}
-                      type={field.data_type}
-                      value={contexts[field.name] || ''}
-                      onChange={e => this.onChangeStringContext(field.name, e.target.value)}
-                    />
+        {_.map(fields, field => (
+          <div key={field.name}>
+            {field.data_type !== 'Date' && (
+              <div className="entity-item string new">
+                <div className="add-item text-input">
+                  <div>
+                    <span className="text">
+                      {field.label} {field.mandatory && <sup>*</sup>}
+                    </span>
                   </div>
-                </div>
-              }
 
-              {
-                contexts[field.name] && field.data_type === 'Date' &&
+                  <input
+                    className={cn({
+                      invalid:
+                        contexts[field.name] &&
+                        !Context.validate(field, contexts[field.name])
+                    })}
+                    type={field.data_type}
+                    value={contexts[field.name] || ''}
+                    onChange={e =>
+                      this.onChangeStringContext(field.name, e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+            )}
+
+            {contexts[field.name] &&
+              field.data_type === 'Date' && (
                 <ContextValue
                   name={field.label}
                   date={contexts[field.name]}
                   onRemove={() => onChangeContext(field.name, null)}
                   onEdit={() => this.setSelectedField(field.name)}
                 />
-              }
+              )}
 
-              {
-                !contexts[field.name] && field.data_type === 'Date' &&
+            {!contexts[field.name] &&
+              field.data_type === 'Date' && (
                 <div
                   className="entity-item date new"
                   onClick={() => this.setSelectedField(field.name)}
@@ -105,10 +113,9 @@ export default class extends React.Component {
                     </span>
                   </div>
                 </div>
-              }
-            </div>
-          ))
-        }
+              )}
+          </div>
+        ))}
 
         <DatePicker
           show={selectedField !== null}

@@ -9,11 +9,13 @@ const SELLING = 'Selling'
 function getRoles(agents, side) {
   if (side === BUYING) {
     const hasBuyerAgent = _.find(agents, agent => agent.role === 'BuyerAgent')
+
     return hasBuyerAgent ? ['CoBuyerAgent'] : ['BuyerAgent']
   }
 
   if (side === SELLING) {
     const hasSellerAgent = _.find(agents, agent => agent.role === 'SellerAgent')
+
     return hasSellerAgent ? ['CoSellerAgent'] : ['SellerAgent']
   }
 
@@ -24,7 +26,6 @@ export default ({
   scenario,
   agents,
   dealSide,
-  ctaTitleForPrimaryAgent,
   shouldPrepopulateAgent = true,
   onUpsertAgent,
   onRemoveAgent
@@ -32,9 +33,7 @@ export default ({
   const allowedRoles = getRoles(agents, dealSide)
   const isPrimaryAgent = ['BuyerAgent', 'SellerAgent'].indexOf(allowedRoles[0]) > -1
 
-  const title = isPrimaryAgent ?
-    (ctaTitleForPrimaryAgent || 'Add myself or another agent on my team') :
-    'Add co-agent'
+  const title = isPrimaryAgent ? 'Add primary agent' : 'Add co-agent'
 
   return (
     <div className="form-section deal-people deal-agent">
@@ -44,25 +43,20 @@ export default ({
       </div>
 
       <div className="people-container">
-        {
-          _.map(agents, (agent, id) =>
-            <CrudRole
-              key={id}
-              role={agent}
-              modalTitle="Edit Agent"
-              buttonText="Update"
-              allowedRoles={allowedRoles}
-              onRemoveRole={(id) => onRemoveAgent(id)}
-              onUpsertRole={newRole => onUpsertAgent({ ...agent, ...newRole })}
-            />
-          )
-        }
+        {_.map(agents, (agent, id) => (
+          <CrudRole
+            key={id}
+            role={agent}
+            modalTitle="Edit Agent"
+            buttonText="Update"
+            allowedRoles={allowedRoles}
+            onRemoveRole={id => onRemoveAgent(id)}
+            onUpsertRole={newRole => onUpsertAgent({ ...agent, ...newRole })}
+          />
+        ))}
 
         <CrudRole
-          shouldPrepopulateAgent={shouldPrepopulateAgent &&
-            isPrimaryAgent &&
-            scenario === 'CreateDeal'
-          }
+          shouldPrepopulateAgent={shouldPrepopulateAgent && isPrimaryAgent}
           modalTitle={title}
           ctaTitle={title}
           allowedRoles={allowedRoles}
