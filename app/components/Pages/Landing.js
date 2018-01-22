@@ -22,11 +22,6 @@ import Brand from '../../controllers/Brand'
 import MobileSplashViewer from '../Partials/MobileSplashViewer'
 
 export default class Landing extends Component {
-  componentWillMount() {
-    if (process.env.NODE_ENV === 'development') {
-      this.getContent()
-    }
-  }
   componentDidMount() {
     AppStore.data.blinking_cursor = true
     AppStore.data.animation_started = true
@@ -45,95 +40,12 @@ export default class Landing extends Component {
       window.location.href = `/signin?email=${encodeURIComponent(email)}`
     }
   }
-  getContent() {
-    AppDispatcher.dispatch({
-      action: 'get-content',
-      slug: 'landing-page',
-      rendered: 'client'
-    })
-  }
-  showIntercom(e) {
-    e.preventDefault()
-    window.Intercom('show')
-  }
   toggleNavBarLinks() {
     if (AppStore.data.navbar_in) {
       delete AppStore.data.navbar_in
     } else {
       AppStore.data.navbar_in = true
     }
-    AppStore.emitChange()
-  }
-  setSignupEmail(e) {
-    const email = e.target.value
-    AppStore.data.signup_email = email
-    AppStore.emitChange()
-  }
-  handleEmailSubmit(e) {
-    // If clicked
-    setTimeout(() => {
-      this.refs.email.refs.input.focus()
-    }, 100)
-    e.preventDefault()
-    delete AppStore.data.errors
-    AppStore.emitChange()
-    const data = this.props.data
-    const email = data.signup_email
-    // If no email or double submit
-    if (!email || data.submitting) {
-      return
-    }
-    const random_password = randomString(9)
-    if (!email.trim()) {
-      return
-    }
-    if (!validator.isEmail(email)) {
-      AppStore.data.errors = {
-        type: 'email-invalid'
-      }
-      AppStore.emitChange()
-      setTimeout(() => {
-        delete AppStore.data.errors
-        AppStore.emitChange()
-      }, 3000)
-      return
-    }
-    AppStore.data.submitting = true
-    AppStore.emitChange()
-    const user = {
-      first_name: email,
-      email,
-      user_type: 'Client',
-      password: random_password,
-      grant_type: 'password',
-      is_shadow: true
-    }
-    AppDispatcher.dispatch({
-      action: 'sign-up-shadow',
-      user,
-      redirect_to: ''
-    })
-  }
-  resend() {
-    const data = this.props.data
-    const new_user = data.new_user
-    const user = {
-      first_name: new_user.email,
-      email: new_user.email,
-      user_type: 'Client',
-      password: new_user.random_password,
-      grant_type: 'password',
-      is_shadow: true
-    }
-    AppStore.data.resent_email_confirmation = true
-    AppDispatcher.dispatch({
-      action: 'sign-up-shadow',
-      user,
-      redirect_to: ''
-    })
-  }
-  hideModal() {
-    delete AppStore.data.show_signup_confirm_modal
     AppStore.emitChange()
   }
   render() {
@@ -228,23 +140,6 @@ export default class Landing extends Component {
       signup_input_style = {
         ...signup_input_style,
         width: window.innerWidth - 125
-      }
-    }
-    let popover = <Popover id="popover" className="hidden" />
-    if (data.errors) {
-      if (data.errors.type === 'email-invalid') {
-        popover = (
-          <Popover id="popover" title="">
-            You must enter a valid email
-          </Popover>
-        )
-      }
-      if (data.errors.type === 'bad-request') {
-        popover = (
-          <Popover id="popover" title="">
-            Bad request.
-          </Popover>
-        )
       }
     }
 
