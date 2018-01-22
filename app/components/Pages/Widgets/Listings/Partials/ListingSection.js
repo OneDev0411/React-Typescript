@@ -1,8 +1,7 @@
-import { connect } from 'react-redux'
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import ListingCard from './ListingCard'
 import S from 'shorti'
-import controller from '../../../Dashboard/controller'
 
 import { Button } from 'react-bootstrap'
 import Loading from '../../../../Partials/Loading'
@@ -10,16 +9,9 @@ import Brand from '../../../../../controllers/Brand'
 import getListing from '../../../../../store_actions/widgets/listings/get-listings'
 
 class Section extends Component {
-  constructor() {
-    super()
-    this.state = {
-      listings: [],
-      isLoading: true
-    }
-  }
-
   componentDidMount() {
-    const data = this.props.data
+    const { data } = this.props
+
     this.options = this.initOptions(
       data.location.query.brokerage,
       data.location.query.agent,
@@ -50,12 +42,14 @@ class Section extends Component {
 
   initWidgetOptions() {
     let queryString = ''
+
     if (
       (this.options.list_offices && this.options.list_offices.length) ||
       this.options.brand
     ) {
       queryString += '?associations=compact_listing.proposed_agent&order_by[]=price'
     }
+
     return {
       queryString,
       type: this.props.type
@@ -89,18 +83,23 @@ class Section extends Component {
         'MUL-Full Duplex'
       ]
     }
+
     if (brokerage) {
       options.list_offices = [brokerage]
     }
+
     if (agent) {
       options.agents = [agent]
     }
+
     if (brand) {
       options.brand = brand
     }
+
     if (user) {
       options.access_token = user.access_token
     }
+
     if (type === 'sold') {
       options.limit = '6'
       options.listing_statuses = ['Sold', 'Leased']
@@ -113,6 +112,7 @@ class Section extends Component {
         'Pending'
       ]
     }
+
     return options
   }
 
@@ -120,6 +120,7 @@ class Section extends Component {
     if (query.indexOf('?') < 0) {
       return `${query}?${newQuery}=${newValue}`
     }
+
     return `${query}&${newQuery}=${newValue}`
   }
 
@@ -136,9 +137,11 @@ class Section extends Component {
 
   render() {
     let showLoadMore
+
     if (this.props.listingsInfo.total > this.props.listings.length) {
       showLoadMore = true
     }
+
     return (
       <div className="futurastd listing-section">
         <div
@@ -151,53 +154,48 @@ class Section extends Component {
           }}
         >
           <h1
-            style={S(`font-50 color-263445 mb-0${this.props.data.is_mobile ? ' ml-10 mr-10' : ''}`)}
+            style={S(`font-50 color-263445 mb-0${
+                this.props.data.is_mobile ? ' ml-10 mr-10' : ''
+              }`)}
           >
             {this.props.title}
           </h1>
           <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
         </div>
         {this.props.listings &&
-          this.props.listings.map((listing, i) =>
+          this.props.listings.map((listing, i) => (
             <ListingCard
               className="listing-card"
-              handleEmailSubmit={controller.action_bubble.handleEmailSubmit}
               key={i}
               data={this.props.data}
               listing={listing}
-              handleCloseSignupForm={
-                controller.action_bubble.handleCloseSignupForm
-              }
               handleListingClick={this.handleListingClick}
-              handleListingInquirySubmit={
-                controller.action_bubble.handleListingInquirySubmit
-              }
-              handleLoginClick={controller.action_bubble.handleLoginClick}
-              showIntercom={controller.action_bubble.showIntercom}
             />
-          )}
+          ))}
         <div className="clearfix" />
-        {this.props.isFetching &&
+        {this.props.isFetching && (
           <div style={S('text-center')}>
             <Loading />
-          </div>}
+          </div>
+        )}
         {Brand.color('primary') &&
-          showLoadMore &&
-          <div style={S('text-center')}>
-            <Button
-              onClick={this.triggerNextPage.bind(this, 'active')}
-              style={{
-                backgroundColor: `#${Brand.color('primary')}`,
-                borderColor: `#${Brand.color('primary')}`,
-                paddingLeft: '3em',
-                paddingRight: '3em',
-                fontSize: '1.2em'
-              }}
-              bsStyle="primary"
-            >
-              Load More
-            </Button>
-          </div>}
+          showLoadMore && (
+            <div style={S('text-center')}>
+              <Button
+                onClick={this.triggerNextPage.bind(this, 'active')}
+                style={{
+                  backgroundColor: `#${Brand.color('primary')}`,
+                  borderColor: `#${Brand.color('primary')}`,
+                  paddingLeft: '3em',
+                  paddingRight: '3em',
+                  fontSize: '1.2em'
+                }}
+                bsStyle="primary"
+              >
+                Load More
+              </Button>
+            </div>
+          )}
       </div>
     )
   }
@@ -206,6 +204,7 @@ class Section extends Component {
 export default connect(
   ({ widgets }, { type }) => {
     const listings = widgets.listings[type] || {}
+
     return {
       listings: listings.listings || [],
       listingsInfo: listings.listingsInfo || {},
