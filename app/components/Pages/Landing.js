@@ -1,17 +1,15 @@
 // Landing.js
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Col } from 'react-bootstrap'
 import S from 'shorti'
 import Typist from 'react-typist'
-import emojify from 'emojify.js'
-
-emojify.setConfig({
-  img_dir: '/static/images/emoji'
-})
 import Brand from '../../controllers/Brand'
 
-export default class Landing extends Component {
+const ANIMATED_TEXT = ['seamless', 'smarter', 'faster', 'more knowledgeable']
+
+class Landing extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -29,16 +27,7 @@ export default class Landing extends Component {
   render() {
     // Data
     const { renderTypest } = this.state
-    const animated_text = [
-      'smarter',
-      'faster',
-      'more responsive',
-      'more knowledgeable'
-    ]
 
-    const { data } = this.props
-
-    // Content from data props
     // Styles
     const page_style = {
       height: '100vh',
@@ -65,7 +54,7 @@ export default class Landing extends Component {
         From search to close be<br />
         {renderTypest && (
           <Typist onTypingDone={this.onTypingDone}>
-            {animated_text.map(text => (
+            {ANIMATED_TEXT.map(text => (
               <span key={text}>
                 <Typist.Delay ms={1000} />
                 {text}
@@ -114,6 +103,7 @@ export default class Landing extends Component {
             +
           </span>
           <img
+            alt="logo"
             style={S('w-200 relative t-3n')}
             src={Brand.asset('site_logo_wide')}
           />
@@ -135,10 +125,10 @@ export default class Landing extends Component {
               {brand_logo}
             </div>
           </div>
-          {data && data.user ? (
+          {this.props.user ? (
             <Link
-              className="btn btn-default"
               to="/dashboard/mls"
+              className="btn btn-default"
               style={S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 w-100')}
             >
               DASHBOARD
@@ -189,3 +179,5 @@ export default class Landing extends Component {
     )
   }
 }
+
+export default connect(({ user }) => ({ user }))(Landing)
