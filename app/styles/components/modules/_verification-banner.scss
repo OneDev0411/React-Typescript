@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   left: 11rem;
-  width: 100%;
+  width: calc(100% - 11rem);
   height: 5.5rem;
   line-height: 5.5rem;
   padding: 0 2rem;
@@ -17,7 +17,7 @@
 .c-verify-banner__close-btn {
   position: absolute;
   top: 1.6rem;
-  right: 7rem;
+  right: 0;
   width: 2.4rem;
   height: 2.4rem;
   display: block;

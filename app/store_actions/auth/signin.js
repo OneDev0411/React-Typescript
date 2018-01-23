@@ -1,5 +1,6 @@
 import { browserHistory } from 'react-router'
 import signin from '../../models/auth/signin'
+import { hasUserAccess, getUserRoles } from '../../utils/user-acl'
 import * as actionsType from '../../constants/auth/signin'
 
 const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
@@ -31,9 +32,25 @@ const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
         window.Raven.setUserContext(userData)
       }
 
-      if (redirectTo) {
-        browserHistory.push(redirectTo)
+      console.log(redirectTo)
+
+      if (redirectTo && redirectTo.includes('http')) {
+        browserHistory.push('/branch?waitingForRedirect')
+        window.location.href = redirectTo
+
+        return
       }
+
+      let defaultRedirect = '/dashboard/mls'
+      const roles = getUserRoles(user)
+      const hasDealsPermission = roles.includes('Deals')
+      const hasBackOfficePermission = roles.includes('BackOffice')
+
+      if (hasDealsPermission || hasBackOfficePermission) {
+        defaultRedirect = '/dashboard/deals'
+      }
+
+      browserHistory.push(redirectTo || defaultRedirect)
     },
     error => {
       dispatch({
