@@ -12,15 +12,9 @@ import getListing from '../actions/listings/get-listing'
 import editFavorite from '../actions/rooms/edit-favorite'
 import getActives from '../actions/recs/get-actives'
 import getFavorites from '../actions/recs/get-favorites'
-import getPagedRecs from '../actions/recs/get-paged-recs'
 import markRecsAsRead from '../actions/recs/mark-as-read'
 import getValertsWidget from '../actions/listings/get-valerts-widget'
 import pageValertsWidget from '../actions/listings/page-valerts-widget'
-import searchSchoolDistrictsMap from '../actions/schools/search-school-districts-map'
-import searchSchoolsMap from '../actions/schools/search-schools-map'
-import searchAreasMap from '../actions/areas/search-areas-map'
-import showCountiesMap from '../actions/counties/show-counties-map'
-import searchSubdivisionsMap from '../actions/subdivisions/search-subdivisions-map'
 
 const ListingDispatcher = new Dispatcher()
 
@@ -79,26 +73,6 @@ ListingDispatcher.register(payload => {
 
     case 'mark-recs-as-read':
       markRecsAsRead(payload.user, payload.alert_id, payload.room_id)
-      break
-
-    case 'search-schools-map':
-      searchSchoolsMap(payload.districts)
-      break
-
-    case 'search-school-districts-map':
-      searchSchoolDistrictsMap(payload.q)
-      break
-
-    case 'search-areas-map':
-      searchAreasMap(payload.parents, payload.q)
-      break
-
-    case 'show-counties-map':
-      showCountiesMap(payload.q)
-      break
-
-    case 'search-subdivisions-map':
-      searchSubdivisionsMap(payload.q)
       break
 
     default:
