@@ -12,9 +12,7 @@ const routes = {
     ['download-excel'],
     ['pdf-splitter']
   ],
-  notification: [['all'], ['delete'], ['delete-room-notifications'], ['mark-seen']],
-  rec: [['actives'], ['feed'], ['mark'], ['favorites']],
-  room: [['create-rec']]
+  notification: [['all'], ['delete'], ['delete-room-notifications'], ['mark-seen']]
 }
 
 _.each(routes, (group, name) => {
