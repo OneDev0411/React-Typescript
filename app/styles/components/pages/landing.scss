@@ -1,60 +1,60 @@
-.page-landing{
-  #app{
+.page-landing {
+  #app {
     min-height: 850px;
   }
   overflow: hidden;
-  .sign-up__button{
+  .sign-up__button {
     background-color: $brand-primary;
-    &:hover{
+    &:hover {
       background-color: $brand-primary !important;
       border: 1px solid $btn-primary-border;
     }
   }
-  .headline{
+  .headline {
     font-size: 64px;
-    @media(max-width: 768px){
+    @media (max-width: 768px) {
       font-size: 44px;
     }
   }
-  .navbar-right{
+  .navbar-right {
     position: relative;
     top: -5px;
   }
-  .navbar-collapse{
+  .navbar-collapse {
     right: 20px;
-    @media(max-width: 768px){
+    @media (max-width: 768px) {
       right: 0;
       margin-top: 0 !important;
       background-color: rgba(0, 0, 0, 0.4);
-      li:first{
+      li:first {
         padding-top: 10px !important;
       }
-      li{
+      li {
         padding: 5px 0;
       }
     }
   }
-  .navbar-default .navbar-toggle .icon-bar{
+  .navbar-default .navbar-toggle .icon-bar {
     background-color: #fff;
   }
-  .navbar-toggle{
+  .navbar-toggle {
     color: #fff;
     background-color: transparent !important;
   }
-  .navbar-header{
-    @media(max-width: 768px){
+  .navbar-header {
+    @media (max-width: 768px) {
       padding-left: 15px;
     }
   }
-  .contact-us-btn{
-    @media(max-width: 768px){
+  .contact-us-btn {
+    @media (max-width: 768px) {
       margin-right: 0 !important;
     }
   }
-  .landing-main{
+  .landing-main {
     margin: 0 auto;
     @extend .flex-center-wrap;
-    @media(max-height: 768px){
+    @media (max-height: 768px) {
       display: block;
       position: relative;
       width: 100%;
@@ -62,29 +62,29 @@
       top: 180px;
     }
   }
-  .form-input--email{
-    @media(max-width: 768px){
+  .form-input--email {
+    @media (max-width: 768px) {
       padding-right: 0 !important;
     }
   }
-  .footer-text{
-    &--left{
+  .footer-text {
+    &--left {
       text-align: left;
     }
-    &--right{
+    &--right {
       text-align: right;
     }
-    @media(max-width: 768px){
+    @media (max-width: 768px) {
       text-align: center;
     }
   }
-  .footer{
-    a{
+  .footer {
+    a {
       color: #ededed;
       text-decoration: none;
       -webkit-transition: all $transition-speed;
       transition: all $transition-speed;
-      &:hover{
+      &:hover {
         color: #ccc;
       }
     }
@@ -92,14 +92,14 @@
 }
 
 .page-bg-video {
-  .overlay{
+  .overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
-    z-index: 2
+    z-index: 2;
   }
   .fullscreen-bg__video {
     position: absolute;
@@ -110,57 +110,22 @@
     object-fit: cover;
   }
 }
+.Typist .Cursor {
+  display: inline-block;
 
-// Blinking cursor
-.blinking-cursor {
-  -webkit-animation: 1s blink step-end infinite;
-  -moz-animation: 1s blink step-end infinite;
-  -ms-animation: 1s blink step-end infinite;
-  -o-animation: 1s blink step-end infinite;
-  animation: 1s blink step-end infinite;
-}
-
-@keyframes "blink" {
-  from, to {
-    color: transparent;
-  }
-  50% {
-    color: #fff;
-  }
-}
-
-@-moz-keyframes blink {
-  from, to {
-    color: transparent;
-  }
-  50% {
-    color: #fff;
-  }
-}
-
-@-webkit-keyframes "blink" {
-  from, to {
-    color: transparent;
-  }
-  50% {
-    color: #fff;
-  }
-}
-
-@-ms-keyframes "blink" {
-  from, to {
-    color: transparent;
-  }
-  50% {
-    color: #fff;
-  }
-}
-
-@-o-keyframes "blink" {
-  from, to {
-    color: transparent;
-  }
-  50% {
-    color: #fff;
+  &--blinking {
+    opacity: 1;
+    animation: blink 1s linear infinite;
+    @keyframes blink {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
   }
 }

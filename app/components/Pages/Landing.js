@@ -1,43 +1,23 @@
 // Landing.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import {
-  Col,
-  FormControl,
-  Button,
-  OverlayTrigger,
-  Popover
-} from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 import S from 'shorti'
-import validator from 'validator'
-import { randomString } from '../../utils/helpers'
-
+import Typist from 'react-typist'
 import emojify from 'emojify.js'
+
 emojify.setConfig({
   img_dir: '/static/images/emoji'
 })
-import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
 import Brand from '../../controllers/Brand'
 import MobileSplashViewer from '../Partials/MobileSplashViewer'
 
 export default class Landing extends Component {
-  componentDidMount() {
-    AppStore.data.blinking_cursor = true
-    AppStore.data.animation_started = true
-    AppStore.data.current_text = 'smarter'
-    AppStore.emitChange()
-    setTimeout(() => {
-      AppDispatcher.dispatch({
-        action: 'landing-text-animation'
-      })
-    }, 3000)
-  }
-  componentDidUpdate() {
-    const data = this.props.data
-    if (data.errors && data.errors.type === 'email-in-use') {
-      const email = data.signup_email
-      window.location.href = `/signin?email=${encodeURIComponent(email)}`
+  constructor(props) {
+    super(props)
+    this.state = {
+      renderTypest: true
     }
   }
   toggleNavBarLinks() {
@@ -46,29 +26,27 @@ export default class Landing extends Component {
     } else {
       AppStore.data.navbar_in = true
     }
+
     AppStore.emitChange()
+  }
+  onHeaderTyped = () => {
+    this.setState({ renderTypest: false })
+    setTimeout(() => {
+      this.setState({ renderTypest: true })
+    }, 100)
   }
   render() {
     // Data
-    const data = this.props.data
-    let blinking_cursor = AppStore.data.blinking_cursor
-    let video_src = AppStore.data.video_src
-    if (!video_src) {
-      video_src = 'young_agent'
-    }
-    let current_text = data.initial_text
-    if (AppStore.data.animation_started) {
-      current_text = AppStore.data.current_text
-    }
-    // Blinking cursor
-    if (typeof blinking_cursor === 'undefined') {
-      blinking_cursor = true
-    }
-    if (blinking_cursor) {
-      blinking_cursor = 'blinking-cursor'
-    } else {
-      blinking_cursor = ''
-    }
+    const { renderTypest } = this.state
+    const animated_text = [
+      'smarter',
+      'faster',
+      'more responsive',
+      'more knowledgeable'
+    ]
+
+    const { data } = this.props
+
 
     // Content from data props
     // Styles
@@ -91,15 +69,23 @@ export default class Landing extends Component {
       ...S('absolute b-0 w-100p mb-20 pt-20 color-ededed font-13  z-2'),
       borderTop: '1px solid rgba(168,168,168, 0.3)'
     }
-    const current_text_style = {
-      fontStyle: 'italic'
-    }
     // Get video and text from random number
     const headline_text = (
       <div>
         From search to close be<br />
-        <span style={current_text_style}>{current_text}</span>
-        <span className={blinking_cursor}>|</span>
+        {renderTypest && (
+          <Typist onTypingDone={this.onHeaderTyped}>
+            {animated_text.map(text => (
+              <span key={text}>
+                <Typist.Delay ms={1000} />
+                {text}
+                <Typist.Delay ms={1000} />
+
+                <Typist.Backspace count={text.length} delay={1000} />
+              </span>
+            ))}
+          </Typist>
+        )}
       </div>
     )
     const video = (
@@ -109,50 +95,26 @@ export default class Landing extends Component {
         loop="true"
         className="fullscreen-bg__video"
       >
-        <source
-          src={`/static/videos/landing/${video_src}.webm`}
-          type="video/webm"
-        />
-        <source
-          src={`/static/videos/landing/${video_src}.mp4`}
-          type="video/mp4"
-        />
-        <source
-          src={`/static/videos/landing/${video_src}.ogv`}
-          type="video/ogg"
-        />
+        <source src="/static/videos/landing/young_agent.webm" type="video/webm" />
+        <source src="/static/videos/landing/young_agent.mp4" type="video/mp4" />
+        <source src="/static/videos/landing/young_agent.ogv" type="video/ogg" />
       </video>
     )
     let login_btn_li_style
     let login_btn_style
-    let signup_input_style = {
-      ...S('h-37'),
-      borderTopRightRadius: 0,
-      borderBottomRightRadius: 0
-    }
-    const signup_btn_style = {
-      borderTopLeftRadius: 0,
-      borderBottomLeftRadius: 0
-    }
+
     if (typeof window !== 'undefined' && window.innerWidth <= 768) {
       login_btn_style = ' w-100p'
       login_btn_li_style = S('pl-15 pr-15')
-      signup_input_style = {
-        ...signup_input_style,
-        width: window.innerWidth - 125
-      }
     }
 
     let brand_logo
+
     if (Brand.asset('site_logo_wide')) {
       brand_logo = (
         <div style={{ ...S('ml-15 inline-block'), textDecoration: 'none' }}>
           <span
-            style={S(
-              `inline-block font-30 mr-15 relative t-1n color-${Brand.color(
-                'primary'
-              )}`
-            )}
+            style={S(`inline-block font-30 mr-15 relative t-1n color-${Brand.color('primary')}`)}
           >
             +
           </span>
@@ -163,10 +125,13 @@ export default class Landing extends Component {
         </div>
       )
     }
+
     let mobile_splash_viewer
+
     if (data.show_mobile_splash_viewer) {
       mobile_splash_viewer = <MobileSplashViewer data={data} />
     }
+
     return (
       <div className="page-landing page-bg-video" style={page_style}>
         <div className="overlay" />
@@ -198,9 +163,9 @@ export default class Landing extends Component {
               </div>
               <div
                 style={collapse_style}
-                className={`collapse navbar-collapse text-center${data.navbar_in
-                  ? ' in'
-                  : ''}`}
+                className={`collapse navbar-collapse text-center${
+                  data.navbar_in ? ' in' : ''
+                }`}
               >
                 {data && data.user ? (
                   <ul className="nav navbar-nav navbar-right">
@@ -208,9 +173,7 @@ export default class Landing extends Component {
                       <Link
                         className="btn btn-default"
                         to="/dashboard/mls"
-                        style={S(
-                          'color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 w-100'
-                        )}
+                        style={S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 w-100')}
                       >
                         DASHBOARD
                       </Link>
@@ -222,9 +185,7 @@ export default class Landing extends Component {
                       <Link
                         className="btn btn-default"
                         to="/signin"
-                        style={S(
-                          `color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`
-                        )}
+                        style={S(`color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`)}
                       >
                         SIGN IN
                       </Link>
@@ -233,9 +194,7 @@ export default class Landing extends Component {
                       <Link
                         className="btn btn-default"
                         to="/signup"
-                        style={S(
-                          `color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`
-                        )}
+                        style={S(`color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`)}
                       >
                         SIGN UP
                       </Link>
@@ -258,13 +217,12 @@ export default class Landing extends Component {
         <footer className="footer" style={footer_style}>
           <div className="container">
             <Col className="footer-text footer-text--left" sm={6}>
-              Made with{' '}
-              <img src="/static/images/landing/heart.png" alt="love" /> by
+              Made with <img src="/static/images/landing/heart.png" alt="love" /> by
               Rechat | <a href="mailto:support@rechat.com">Contact Us</a>
             </Col>
             <Col className="footer-text footer-text--right" sm={6}>
-              Rechat Inc. &copy; {new Date().getFullYear()}. All Rights
-              Reserved. <a href="/terms">Terms of Service</a> |{' '}
+              Rechat Inc. &copy; {new Date().getFullYear()}. All Rights Reserved.{' '}
+              <a href="/terms">Terms of Service</a> |{' '}
               <a href="/terms/mls">MLS Terms</a> |{' '}
               <a href="/privacy">Privacy Policy</a>
             </Col>

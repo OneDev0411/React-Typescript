@@ -137,6 +137,7 @@
     "react-text-mask": "^5.0.1",
     "react-textarea-autosize": "^5.2.1",
     "react-transition-group": "^2.2.1",
+    "react-typist": "^2.0.4",
     "read-chunk": "^2.0.0",
     "reapop": "^1.1.4",
     "reapop-theme-wybo": "^0.4.1",

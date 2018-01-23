@@ -20,12 +20,10 @@ import listingInquiry from '../actions/user/listing-inquiry'
 import searchUsersNewMessage from '../actions/user/search-new-message'
 import searchUsersShare from '../actions/user/search-share'
 import searchUsersAddMembers from '../actions/user/search-add-members'
-import getReceivingUser from '../actions/user/get-receiving-user'
 // Rooms
 import setNotification from '../actions/rooms/notifications'
 
 // Pages
-import landingPage from '../actions/pages/landing'
 import getContent from '../actions/pages/get-content'
 
 // Agents
@@ -54,14 +52,6 @@ AppDispatcher.register(async (payload) => {
   switch (action) {
     case 'get-content':
       getContent(payload.slug, payload.rendered, payload.res, payload.callback)
-      break
-
-    case 'landing-text-animation':
-      landingPage.animateText()
-      break
-
-    case 'landing-swap-video':
-      landingPage.swapVideo(payload.video_src)
       break
 
     case 'sign-up':
@@ -185,10 +175,6 @@ AppDispatcher.register(async (payload) => {
 
     case 'search-users-add-members':
       searchUsersAddMembers(payload.user, payload.q)
-      break
-
-    case 'get-receiving-user':
-      getReceivingUser(payload.user_id)
       break
 
     default:
