@@ -7,7 +7,6 @@ import { randomString, numberWithCommas } from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
 import Brand from '../../../../../controllers/Brand'
 import AgentImage from './AgentImage'
-import SignUpConfirmMessage from './SignUpConfirmMessage'
 
 export default class ListingCard extends Component {
   side(listing) {
@@ -155,7 +154,6 @@ export default class ListingCard extends Component {
           </div>
         </div>
         <AgentImage listing={listing} />
-        <SignUpConfirmMessage data={data} listing={listing} />
       </div>
     )
   }
