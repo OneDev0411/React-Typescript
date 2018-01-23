@@ -9,7 +9,7 @@ import config from '../../../../config/private'
 
 const app = new Koa()
 
-router.post('/proxifier', bodyParser(), async ctx => {
+router.post('/proxifier/:endpoint', bodyParser(), async ctx => {
   const headers = ctx.headers
   const queryString = ctx.request.querystring
 
