@@ -164,9 +164,9 @@ export default compose(
       return {
         brand,
         isLogging,
+        redirectTo,
         submitError,
-        initialValues: { username },
-        redirectTo: redirectTo || '/dashboard/mls'
+        initialValues: { username }
       }
     },
     { submitSigninForm }
