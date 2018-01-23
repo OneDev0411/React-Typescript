@@ -18,22 +18,6 @@ const routes = {
   ],
   notification: [['all'], ['delete'], ['delete-room-notifications'], ['mark-seen']],
   rec: [['actives'], ['feed'], ['mark'], ['favorites']],
-  user: [
-    ['create-password'],
-    ['edit-password'],
-    ['edit-profile-pic'],
-    ['email-verifications'],
-    ['forgot-password'],
-    ['get-favorites'],
-    ['get-self'],
-    ['get'],
-    ['listing-inquiry'],
-    ['phone-verifications'],
-    ['reset-password'],
-    ['search'],
-    ['upgrade-account'],
-    ['verify-phone']
-  ],
   room: [['create-rec']]
 }
 

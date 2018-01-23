@@ -14,7 +14,6 @@ import saveAlert from '../actions/alerts/save-alert'
 import getAlertRoom from '../actions/alerts/get-alert-room'
 import getAlertMap from '../actions/alerts/get-alert-map'
 import getAlerts from '../actions/alerts/get-alerts'
-import shareListing from '../actions/listings/share-listing'
 import editFavorite from '../actions/rooms/edit-favorite'
 import getActives from '../actions/recs/get-actives'
 import getFavorites from '../actions/recs/get-favorites'
@@ -27,13 +26,14 @@ import searchSchoolsMap from '../actions/schools/search-schools-map'
 import searchAreasMap from '../actions/areas/search-areas-map'
 import showCountiesMap from '../actions/counties/show-counties-map'
 import searchSubdivisionsMap from '../actions/subdivisions/search-subdivisions-map'
+
 const ListingDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
-ListingDispatcher.register((payload) => {
+ListingDispatcher.register(payload => {
   const action = payload.action
-  switch (action) {
 
+  switch (action) {
     case 'search-mls-number':
       searchMlsNumber(payload.user, payload.q, payload.status)
       break
@@ -75,7 +75,15 @@ ListingDispatcher.register((payload) => {
       break
 
     case 'share-alert':
-      shareAlert(payload.user, payload.rooms, payload.users, payload.emails, payload.phone_numbers, payload.alert, payload.message)
+      shareAlert(
+        payload.user,
+        payload.rooms,
+        payload.users,
+        payload.emails,
+        payload.phone_numbers,
+        payload.alert,
+        payload.message
+      )
       break
 
     case 'get-alert-room':
@@ -100,10 +108,6 @@ ListingDispatcher.register((payload) => {
 
     case 'get-favorites':
       getFavorites(payload.user)
-      break
-
-    case 'share-listing':
-      shareListing(payload.user, payload.mls_number, payload.message, payload.users, payload.emails, payload.phone_numbers, payload.notification)
       break
 
     case 'edit-favorite':
@@ -137,6 +141,7 @@ ListingDispatcher.register((payload) => {
     default:
       return true
   }
+
   return true
 })
 
