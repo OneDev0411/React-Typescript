@@ -6,7 +6,6 @@ import { Modal, Button } from 'react-bootstrap'
 import ListingModalViewer from '../../ListingModalViewer'
 import Loading from '../../../../../../../components/Partials/Loading'
 import ListingCard from '../../../../Listings/components/ListingsPanels/GridView/ListingCard'
-import api from '../../../../../../../../app/models/Listing'
 
 class AlertViewerModal extends Component {
   constructor(props) {
@@ -49,7 +48,8 @@ class AlertViewerModal extends Component {
                 this.setState({
                   showListingModal: true,
                   selectedListing: listing
-                })}
+                })
+              }
             />
           ))}
           <ListingModalViewer

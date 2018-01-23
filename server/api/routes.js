@@ -4,7 +4,6 @@ const list = []
 
 const routes = {
   proxifier: [['passthrough'], ['upload']],
-  listing: [['search'], ['listings']],
   message: [['messages']],
   deal: [
     ['docusign-login'],
