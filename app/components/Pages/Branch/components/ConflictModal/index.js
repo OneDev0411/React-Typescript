@@ -16,9 +16,7 @@ const ConflictModal = ({ params, brandInfo }) => {
 
   const actionButton = actionButtonProps || {
     text: 'Sign in',
-    href: `/signout?username=${encodeURIComponent(
-      receivingUser.email
-    )}&redirectTo=${redirectTo}`
+    href: `/signout?username=${encodeURIComponent(receivingUser.email)}&redirectTo=${redirectTo}`
   }
 
   if (is_shadow) {

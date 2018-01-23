@@ -3,73 +3,38 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
+import lifecycle from 'recompose/lifecycle'
 import withHandlers from 'recompose/withHandlers'
 
+import Alert from '../../Dashboard/Partials/Alert'
 import Brand from '../../../../controllers/Brand'
 import { getBrandInfo } from '../../Auth/SignIn'
 import verify from '../../../../models/verify'
+import { Spinner } from '../../../Partials/Loading'
+import { updateUser } from '../../../../store_actions/user'
 
-const getErrorMessage = (errorCode, verifyParams, isLoggedIn) => {
-  const { verifyType, body, receivingUserEmail } = verifyParams
-  const redirectTo = `redirectTo=${encodeURIComponent(
-    `/verify/request/${verifyType}`
-  )}`
-  const verifyTypeIsEmail = verifyType === 'email'
-  const username = !verifyTypeIsEmail
-    ? ''
-    : `&username=${encodeURIComponent(body.email || receivingUserEmail)}`
-
-  switch (errorCode) {
-    case 403:
-      return (
-        <div>
-          Sorry, this verify link is not valid anymore.
-          {!isLoggedIn && (
-            <p>
-              Currently you aren't logged in on app, for receive new verify link
-              you must login. Please
-              <Link to={`/signin?${redirectTo + username}`}> sign in</Link>.
-            </p>
-          )}
-        </div>
-      )
-    default:
-      return ''
-  }
-}
+const ERROR_MESSAGE =
+  'You have encountered an unknown system issue. We\'re working on it. In the meantime, connect with our support.'
 
 const confirmVerify = ({
   brand,
   verifyType,
-  verifyQueryParams,
-  submitError,
+  userMessage,
   isSubmitting,
-  userIsLoggedIn,
-  confirmHandler,
-  submitSuccessfully,
-  verifyRequestHandler
+  verifyQueryParams
 }) => {
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
-  const hasInvalidCodeError =
-    userIsLoggedIn && submitError && submitError.errorCode === 403
-
-  const submitButtonText = () => {
-    if (!hasInvalidCodeError) {
-      return isSubmitting ? 'Verifying...' : 'Confirm'
-    }
-    return isSubmitting ? 'Submiting...' : 'Submit a new verify request'
-  }
 
   return (
     <div className="signin-page-wrapper">
       <article className="c-auth">
-        <header className="c-auth__header">
+        <header className="c-auth__header" style={{ marginBottom: '4rem' }}>
           {siteLogo && (
             <Link to="/" tabIndex={-1}>
               <img
                 src={siteLogo}
                 alt={`${siteTitle} logo`}
-                className={'c-auth__logo'}
+                className="c-auth__logo"
               />
             </Link>
           )}
@@ -84,51 +49,19 @@ const confirmVerify = ({
           </p>
         </header>
         <main className="c-auth__main">
-          {!submitSuccessfully ? (
+          {isSubmitting && <Spinner />}
+
+          {userMessage && (
             <div>
-              {submitError && (
-                <div className="c-auth__submit-error-alert">
-                  {submitError.message}
-                </div>
-              )}
-              {(userIsLoggedIn || submitError.errorCode !== 403) && (
-                <button
-                  onClick={
-                    hasInvalidCodeError ? verifyRequestHandler : confirmHandler
-                  }
-                  className="c-auth__submit-btn"
-                  disabled={isSubmitting}
-                  style={{
-                    background: brandColor,
-                    opacity: isSubmitting ? 0.7 : 1
-                  }}
-                >
-                  {submitButtonText()}
-                </button>
-              )}
-            </div>
-          ) : (
-            <div style={{ textAlign: 'center' }}>
-              <p className="c-auth__submit-alert--success">
-                <span>This account is verified.</span>
-                <br />
-                {userIsLoggedIn ? (
-                  <Link to="/dashboard/mls">go to dashboard</Link>
-                ) : (
-                  <span>
-                    Please{' '}
-                    <Link
-                      to={`/signin${verifyType === 'email'
-                        ? `?username=${encodeURIComponent(
-                          verifyQueryParams.body.email
-                        )}`
-                        : ''}`}
-                    >
-                      sign in
-                    </Link>
-                  </span>
-                )}.
-              </p>
+              <Alert
+                {...userMessage}
+                style={{ marginBottom: '2rem', fontSize: '1.5rem' }}
+              >
+                {userMessage.text}
+              </Alert>
+              <div style={{ textAlign: 'center' }}>
+                <Link to="/dashboard/mls">go to the dashboard</Link>
+              </div>
             </div>
           )}
         </main>
@@ -138,99 +71,113 @@ const confirmVerify = ({
 }
 
 export default compose(
-  connect(
-    (
-      { brand, user: userIsLoggedIn },
-      { location: { query }, params: { verifyType } }
-    ) => {
-      const {
+  connect(({ brand }, { location: { query }, params: { verifyType } }) => {
+    const {
+      email, email_code, phone_code, phone_number, receivingUserEmail
+    } = query
+
+    const verifyQueryParams = {
+      verifyType,
+      receivingUserEmail
+    }
+
+    if (verifyType === 'email') {
+      verifyQueryParams.body = {
         email,
-        email_code,
-        phone_code,
-        phone_number,
-        receivingUserEmail
-      } = query
-
-      const verifyQueryParams = {
-        verifyType,
-        receivingUserEmail
-      }
-
-      if (verifyType === 'email') {
-        verifyQueryParams.body = {
-          email,
-          email_code
-        }
-      }
-
-      if (verifyType === 'phone') {
-        verifyQueryParams.body = {
-          phone_number,
-          code: phone_code
-        }
-      }
-
-      return {
-        brand,
-        verifyType,
-        userIsLoggedIn,
-        verifyQueryParams
+        email_code
       }
     }
-  ),
-  withState('submitError', 'setSubmitError', false),
-  withState('isSubmitting', 'setIsSubmitting', false),
-  withState('submitSuccessfully', 'setSubmitSuccessfully', false),
-  withHandlers({
-    confirmHandler: ({
-      userIsLoggedIn,
-      verifyType,
-      verifyQueryParams,
-      setSubmitError,
-      setIsSubmitting,
-      setSubmitSuccessfully
-    }) => () => {
-      setIsSubmitting(true)
 
-      verify
-        .confirm(verifyQueryParams)
-        .then(statusCode => {
-          setIsSubmitting(false)
-          setSubmitSuccessfully(true)
-        })
-        .catch(errorCode => {
-          setIsSubmitting(false)
-          setSubmitError({
-            errorCode,
-            message: getErrorMessage(
-              errorCode,
-              verifyQueryParams,
-              userIsLoggedIn
-            )
-          })
-        })
-    },
+    if (verifyType === 'phone') {
+      verifyQueryParams.body = {
+        phone_number,
+        code: phone_code
+      }
+    }
+
+    return {
+      brand,
+      verifyType,
+      verifyQueryParams
+    }
+  }, { updateUser }),
+  withState('userMessage', 'setUserMessage', null),
+  withState('isSubmitting', 'setIsSubmitting', true),
+  withHandlers({
     verifyRequestHandler: ({
       verifyType,
-      setSubmitError,
+      setUserMessage,
       setIsSubmitting,
-      setSubmitSuccessfully
+      verifyQueryParams
     }) => () => {
-      setIsSubmitting(true)
+      setUserMessage(null)
+
+      const to =
+        verifyType === 'email'
+          ? verifyQueryParams.body.email
+          : verifyQueryParams.body.phone_number
 
       verify
         .request(verifyType)
         .then(statusCode => {
           setIsSubmitting(false)
-          setSubmitSuccessfully(true)
+          setUserMessage({
+            type: 'success',
+            text: `Your previous activation code has expired. We\'ve sent a new verification link to ${to}.`
+          })
         })
         .catch(errorCode => {
           setIsSubmitting(false)
-          setSubmitError({
-            errorCode,
-            message: getErrorMessage(errorCode)
+          setUserMessage({
+            code: errorCode,
+            type: 'error',
+            text: ERROR_MESSAGE
           })
         })
+    }
+  }),
+  withHandlers({
+    confirmHandler: ({
+      updateUser,
+      verifyType,
+      verifyQueryParams,
+      setUserMessage,
+      setIsSubmitting,
+      verifyRequestHandler
+    }) => () => {
+      setUserMessage(null)
+
+      verify
+        .confirm(verifyQueryParams)
+        .then(user => {
+          updateUser(user)
+          setIsSubmitting(false)
+          setUserMessage({
+            type: 'success',
+            text: `${verifyType === 'email' ? 'Email' : 'Phone number'} is verified.`
+          })
+        })
+        .catch(errorCode => {
+          if (errorCode === 403) {
+            verifyRequestHandler()
+
+            return
+          }
+
+          setIsSubmitting(false)
+          setUserMessage({
+            code: errorCode,
+            type: 'error',
+            text: ERROR_MESSAGE
+          })
+        })
+    }
+  }),
+  lifecycle({
+    componentDidMount() {
+      const { confirmHandler } = this.props
+
+      confirmHandler()
     }
   })
 )(confirmVerify)

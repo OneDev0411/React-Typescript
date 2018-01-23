@@ -12,6 +12,7 @@ import Loading from '../../Partials/Loading'
 import { getBrandInfo } from '../Auth/SignIn'
 import getUser from '../../../models/user/get-user'
 import ConflictModal from './components/ConflictModal'
+import NeedsToLoginModal from './components/NeedsToLoginModal'
 import VerifyRedirectModal from './components/VerifyRedirectModal'
 
 const OOPS_PAGE = '/oops'
@@ -86,21 +87,40 @@ const redirectHandler = (actionType, branchData, loggedInUser, setActiveModal) =
     receivingUser
   } = branchData
 
-  const params = { action, loggedInUser, receivingUser }
+  const branchUrl = branchData['~referring_link']
+
+  const params = {
+    action,
+    loggedInUser,
+    receivingUser,
+    branchUrl
+  }
   const hasConflict = () => loggedInUser && receivingUser.id !== loggedInUser.id
 
   if (actionType === 'VERIFY') {
     // console.log('verify')
     redirect = generateVerificationActionRedirectUrl(branchData)
 
+    const setParams = () => ({
+      ...params,
+      redirectTo: branchUrl,
+      verificationType: phone_number ? 'phone number' : 'email address'
+    })
+
+    if (!loggedInUser) {
+      setActiveModal({
+        name: 'NEEDS_TO_LOGIN',
+        params: setParams()
+      })
+
+      return
+    }
+
     if (hasConflict()) {
       // console.log('different user logged in with receiving user')
-      params.redirectTo = encodeURIComponent(redirect)
-      params.verificationType = phone_number ? 'phone number' : 'email address'
-
       setActiveModal({
         name: 'VERIFYING_CONFLICT',
-        params
+        params: setParams()
       })
 
       return
@@ -166,7 +186,8 @@ const branch = ({
   activeModal,
   setActiveModal,
   branchData,
-  setBranchData
+  setBranchData,
+  waitingForRedirect
 }) => {
   if (!branchData) {
     Branch.init(branchKey, (err, { data_parsed }) => {
@@ -177,7 +198,7 @@ const branch = ({
 
       setBranchData(data_parsed)
     })
-  } else {
+  } else if (!waitingForRedirect) {
     const { receiving_user, action } = branchData
 
     if (action) {
@@ -200,8 +221,6 @@ const branch = ({
 
             if (action.includes('Verification')) {
               const { email_code, phone_code } = branchData
-
-              console.log(email_confirmed)
 
               if (
                 (email_code && !email_confirmed) ||
@@ -254,6 +273,9 @@ const branch = ({
           <VerifyRedirectModal type={name} params={params} brandInfo={brandInfo} />
         )
         break
+      case 'NEEDS_TO_LOGIN':
+        content = <NeedsToLoginModal params={params} brandInfo={brandInfo} />
+        break
       default:
         break
     }
@@ -274,10 +296,15 @@ const branch = ({
 }
 
 export default compose(
-  connect(({ user: loggedInUser, brand }) => ({
-    brand,
-    loggedInUser
-  })),
+  connect(({ user: loggedInUser, brand }, { location }) => {
+    const waitingForRedirect = Object.keys(location.query).includes('waitingForRedirect')
+
+    return {
+      brand,
+      waitingForRedirect,
+      loggedInUser
+    }
+  }),
   withState('branchData', 'setBranchData', null),
   withState('activeModal', 'setActiveModal', null)
 )(branch)
