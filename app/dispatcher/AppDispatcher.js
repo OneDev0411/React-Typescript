@@ -2,8 +2,6 @@
 import { Dispatcher } from './flux'
 
 // User
-import signup from '../actions/user/signup'
-import signupShadow from '../actions/user/signup-shadow'
 import signin from '../actions/user/signin'
 import editUser from '../actions/user/edit-user'
 import forgotPassword from '../actions/user/forgot-password'
@@ -47,19 +45,6 @@ AppDispatcher.register(async payload => {
   const action = payload.action
 
   switch (action) {
-    case 'sign-up':
-      signup(
-        payload.user,
-        payload.password,
-        payload.confirm_password,
-        payload.redirect_to
-      )
-      break
-
-    case 'sign-up-shadow':
-      signupShadow(payload.user, payload.redirect_to)
-      break
-
     case 'sign-in':
       signin(payload.email, payload.password, payload.redirect_to, payload.invite)
       break
