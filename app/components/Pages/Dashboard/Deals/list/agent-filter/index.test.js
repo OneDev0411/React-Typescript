@@ -19,7 +19,7 @@ describe('Test agent filters in deals component', () => {
     expect(wrapper.find('li').length).toBe(4)
   })
 
-  test.only('Should select "All" as default active filter', () => {
+  test('Should select "All" as default active filter', () => {
     const Wrapper = <AgentFilter />
 
     const wrapper = shallow(Wrapper)
@@ -30,7 +30,7 @@ describe('Test agent filters in deals component', () => {
       .text()).toEqual('All')
   })
 
-  test.only('Should select given filter as active filter', () => {
+  test('Should select given filter as active filter', () => {
     const activeFilter = 'Pending'
 
     const props = {
@@ -50,7 +50,7 @@ describe('Test agent filters in deals component', () => {
     expect(props.onChangeFilter.mock.calls.length).toBe(1)
   })
 
-  test.only('Should change active filter on click', () => {
+  test('Should change active filter on click', () => {
     const props = {
       onChangeFilter: jest.fn()
     }
@@ -67,7 +67,7 @@ describe('Test agent filters in deals component', () => {
     expect(props.onChangeFilter.mock.calls.length).toBe(1)
   })
 
-  test.only('Should show correct badge counter', () => {
+  test('Should show correct badge counter', () => {
     setupDeals()
 
     const Wrapper = <AgentFilter deals={store.getState().deals.list} />
