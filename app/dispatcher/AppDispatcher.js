@@ -23,9 +23,6 @@ import searchUsersAddMembers from '../actions/user/search-add-members'
 // Rooms
 import setNotification from '../actions/rooms/notifications'
 
-// Pages
-import getContent from '../actions/pages/get-content'
-
 // Agents
 import getAgentReport from '../actions/agents/get-report'
 import searchAgentSignup from '../actions/agents/search-agent-signup'
@@ -46,14 +43,10 @@ import geocodeAddress from '../actions/google/geocode-address'
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
-AppDispatcher.register(async (payload) => {
+AppDispatcher.register(async payload => {
   const action = payload.action
 
   switch (action) {
-    case 'get-content':
-      getContent(payload.slug, payload.rendered, payload.res, payload.callback)
-      break
-
     case 'sign-up':
       signup(
         payload.user,
@@ -68,12 +61,7 @@ AppDispatcher.register(async (payload) => {
       break
 
     case 'sign-in':
-      signin(
-        payload.email,
-        payload.password,
-        payload.redirect_to,
-        payload.invite
-      )
+      signin(payload.email, payload.password, payload.redirect_to, payload.invite)
       break
 
     case 'edit-user':
@@ -180,6 +168,7 @@ AppDispatcher.register(async (payload) => {
     default:
       return true
   }
+
   return true
 })
 
