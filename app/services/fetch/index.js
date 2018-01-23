@@ -1,5 +1,6 @@
 import _ from 'underscore'
 import SuperAgent from 'superagent'
+import SuperTest from 'supertest'
 import store from '../../stores'
 import config from '../../../config/public'
 
@@ -47,6 +48,10 @@ export default class Fetch {
     })
 
     return agent
+  }
+
+  mock() {
+    return SuperTest(this._proxyUrl)
   }
 
   get(endpoint) {
