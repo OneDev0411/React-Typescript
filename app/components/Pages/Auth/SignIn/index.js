@@ -46,8 +46,9 @@ export const renderField = ({
           type={type}
           id={input.name}
           autoComplete={autoComplete}
-          className={`c-auth__field__input ${(input.value && 'has-content') ||
-            ''} ${hasError ? 'has-error' : ''}`}
+          className={`c-auth__field__input ${(input.value && 'has-content') || ''} ${
+            hasError ? 'has-error' : ''
+          }`}
         />
         <label htmlFor={input.name} className="c-auth__field__label">
           <span>{label}</span>
@@ -83,7 +84,7 @@ const SigninForm = ({
               <img
                 src={siteLogo}
                 alt={`${siteTitle} logo`}
-                className={'c-auth__logo'}
+                className="c-auth__logo"
               />
             </Link>
           )}
@@ -140,9 +141,7 @@ const validate = values => {
 
   if (!values.username) {
     errors.username = 'Required'
-  } else if (
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.username)
-  ) {
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.username)) {
     errors.username = 'Invalid email address'
   }
 

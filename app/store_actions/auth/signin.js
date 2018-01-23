@@ -32,7 +32,12 @@ const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
       }
 
       if (redirectTo) {
-        browserHistory.push(redirectTo)
+        if (redirectTo.includes('http')) {
+          browserHistory.push('/branch?waitingForRedirect')
+          window.location.href = redirectTo
+        } else {
+          browserHistory.push(redirectTo)
+        }
       }
     },
     error => {
