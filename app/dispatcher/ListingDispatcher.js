@@ -9,11 +9,6 @@ import getValerts from '../actions/listings/get-valerts'
 import getValertsAlert from '../actions/listings/get-valerts-alert'
 import getValertsNoGeo from '../actions/listings/get-valerts-no-geo'
 import getListing from '../actions/listings/get-listing'
-import shareAlert from '../actions/alerts/share-alert'
-import saveAlert from '../actions/alerts/save-alert'
-import getAlertRoom from '../actions/alerts/get-alert-room'
-import getAlertMap from '../actions/alerts/get-alert-map'
-import getAlerts from '../actions/alerts/get-alerts'
 import editFavorite from '../actions/rooms/edit-favorite'
 import getActives from '../actions/recs/get-actives'
 import getFavorites from '../actions/recs/get-favorites'
@@ -68,38 +63,6 @@ ListingDispatcher.register(payload => {
 
     case 'get-listing':
       getListing(payload.user, payload.id)
-      break
-
-    case 'save-alert':
-      saveAlert(payload.user, payload.alert)
-      break
-
-    case 'share-alert':
-      shareAlert(
-        payload.user,
-        payload.rooms,
-        payload.users,
-        payload.emails,
-        payload.phone_numbers,
-        payload.alert,
-        payload.message
-      )
-      break
-
-    case 'get-alert-room':
-      getAlertRoom(payload.user, payload.room_id, payload.alert_id)
-      break
-
-    case 'get-alert-map':
-      getAlertMap(payload.user, payload.room_id, payload.alert_id)
-      break
-
-    case 'get-paged-recs':
-      getPagedRecs(payload.user, payload.alert, payload.timestamp)
-      break
-
-    case 'get-alerts':
-      getAlerts(payload.user)
       break
 
     case 'get-actives':

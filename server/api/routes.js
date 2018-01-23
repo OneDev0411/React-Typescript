@@ -4,7 +4,6 @@ const list = []
 
 const routes = {
   proxifier: [['passthrough'], ['upload']],
-  alert: [['get-alerts'], ['get-alert-room'], ['acknowledge-notifications']],
   intercom: [['signin'], ['signup']],
   listing: [['search'], ['listings']],
   message: [['messages']],
