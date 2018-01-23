@@ -9,19 +9,19 @@ const routes = {
   intercom: [['signin'], ['signup']],
   listing: [['search'], ['listings']],
   message: [['messages']],
-  deal: [['docusign-login'], ['envelope-sign'], ['download-pdf'], ['download-excel'], ['pdf-splitter']],
-  notification: [
-    ['all'],
-    ['delete'],
-    ['delete-room-notifications'],
-    ['mark-seen']
+  deal: [
+    ['docusign-login'],
+    ['envelope-sign'],
+    ['download-pdf'],
+    ['download-excel'],
+    ['pdf-splitter']
   ],
+  notification: [['all'], ['delete'], ['delete-room-notifications'], ['mark-seen']],
   rec: [['actives'], ['feed'], ['mark'], ['favorites']],
   user: [
     ['create-password'],
     ['edit-password'],
     ['edit-profile-pic'],
-    ['edit-user'],
     ['email-verifications'],
     ['forgot-password'],
     ['get-favorites'],
@@ -31,15 +31,10 @@ const routes = {
     ['phone-verifications'],
     ['reset-password'],
     ['search'],
-    ['signin'],
-    ['signup-shadow'],
-    ['signup'],
     ['upgrade-account'],
     ['verify-phone']
   ],
-  room: [
-    ['create-rec']
-  ]
+  room: [['create-rec']]
 }
 
 _.each(routes, (group, name) => {
@@ -47,6 +42,7 @@ _.each(routes, (group, name) => {
     let item = {
       path: `./api/${name}/${route[0]}`
     }
+
     list.push(item)
   })
 })

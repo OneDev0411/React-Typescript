@@ -2,7 +2,6 @@
 import { Dispatcher } from './flux'
 
 // User
-import editUser from '../actions/user/edit-user'
 import forgotPassword from '../actions/user/forgot-password'
 import forgotPasswordResend from '../actions/user/forgot-password-resend'
 import resetPassword from '../actions/user/reset-password'
@@ -44,10 +43,6 @@ AppDispatcher.register(async payload => {
   const action = payload.action
 
   switch (action) {
-    case 'edit-user':
-      editUser(payload.user, payload.user_info)
-      break
-
     case 'forgot-password':
       forgotPassword(payload.email)
       break
