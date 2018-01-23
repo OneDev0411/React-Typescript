@@ -3,49 +3,14 @@
     min-height: 850px;
   }
   overflow: hidden;
-  .sign-up__button {
-    background-color: $brand-primary;
-    &:hover {
-      background-color: $brand-primary !important;
-      border: 1px solid $btn-primary-border;
-    }
-  }
+
   .headline {
     font-size: 64px;
     @media (max-width: 768px) {
       font-size: 44px;
     }
   }
-  .navbar-right {
-    position: relative;
-    top: -5px;
-  }
-  .navbar-collapse {
-    right: 20px;
-    @media (max-width: 768px) {
-      right: 0;
-      margin-top: 0 !important;
-      background-color: rgba(0, 0, 0, 0.4);
-      li:first {
-        padding-top: 10px !important;
-      }
-      li {
-        padding: 5px 0;
-      }
-    }
-  }
-  .navbar-default .navbar-toggle .icon-bar {
-    background-color: #fff;
-  }
-  .navbar-toggle {
-    color: #fff;
-    background-color: transparent !important;
-  }
-  .navbar-header {
-    @media (max-width: 768px) {
-      padding-left: 15px;
-    }
-  }
+
   .contact-us-btn {
     @media (max-width: 768px) {
       margin-right: 0 !important;
@@ -60,11 +25,6 @@
       width: 100%;
       height: 0 !important;
       top: 180px;
-    }
-  }
-  .form-input--email {
-    @media (max-width: 768px) {
-      padding-right: 0 !important;
     }
   }
   .footer-text {
@@ -92,6 +52,15 @@
 }
 
 .page-bg-video {
+  header {
+    position: absolute;
+    width: 100%;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+  }
   .overlay {
     position: fixed;
     top: 0;

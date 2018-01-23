@@ -9,9 +9,7 @@ import emojify from 'emojify.js'
 emojify.setConfig({
   img_dir: '/static/images/emoji'
 })
-import AppStore from '../../stores/AppStore'
 import Brand from '../../controllers/Brand'
-import MobileSplashViewer from '../Partials/MobileSplashViewer'
 
 export default class Landing extends Component {
   constructor(props) {
@@ -20,21 +18,14 @@ export default class Landing extends Component {
       renderTypest: true
     }
   }
-  toggleNavBarLinks() {
-    if (AppStore.data.navbar_in) {
-      delete AppStore.data.navbar_in
-    } else {
-      AppStore.data.navbar_in = true
-    }
 
-    AppStore.emitChange()
-  }
-  onHeaderTyped = () => {
+  onTypingDone = () => {
     this.setState({ renderTypest: false })
     setTimeout(() => {
       this.setState({ renderTypest: true })
     }, 100)
   }
+
   render() {
     // Data
     const { renderTypest } = this.state
@@ -46,7 +37,6 @@ export default class Landing extends Component {
     ]
 
     const { data } = this.props
-
 
     // Content from data props
     // Styles
@@ -74,7 +64,7 @@ export default class Landing extends Component {
       <div>
         From search to close be<br />
         {renderTypest && (
-          <Typist onTypingDone={this.onHeaderTyped}>
+          <Typist onTypingDone={this.onTypingDone}>
             {animated_text.map(text => (
               <span key={text}>
                 <Typist.Delay ms={1000} />
@@ -112,7 +102,12 @@ export default class Landing extends Component {
 
     if (Brand.asset('site_logo_wide')) {
       brand_logo = (
-        <div style={{ ...S('ml-15 inline-block'), textDecoration: 'none' }}>
+        <div
+          style={{
+            ...S('ml-15 inline-block'),
+            textDecoration: 'none'
+          }}
+        >
           <span
             style={S(`inline-block font-30 mr-15 relative t-1n color-${Brand.color('primary')}`)}
           >
@@ -126,84 +121,46 @@ export default class Landing extends Component {
       )
     }
 
-    let mobile_splash_viewer
-
-    if (data.show_mobile_splash_viewer) {
-      mobile_splash_viewer = <MobileSplashViewer data={data} />
-    }
-
     return (
       <div className="page-landing page-bg-video" style={page_style}>
         <div className="overlay" />
         {video}
-        <header style={S('absolute w-100p z-3')}>
-          <nav className="navbar navbar-default" style={navbar_style}>
-            <div className="container-fluid">
-              <div className="navbar-header">
-                <button
-                  onClick={this.toggleNavBarLinks.bind(this)}
-                  style={S('mt-15')}
-                  type="button"
-                  className="navbar-toggle collapsed"
-                  data-toggle="collapse"
-                  aria-expanded={data.navbar_in ? 'true' : 'false'}
-                >
-                  <span className="sr-only">Toggle navigation</span>
-                  <span className="icon-bar" />
-                  <span className="icon-bar" />
-                  <span className="icon-bar" />
-                </button>
-                <div
-                  className="tk-calluna-sans pull-left"
-                  style={S('font-28 mt-12 color-fff')}
-                >
-                  Rechat
-                  {brand_logo}
-                </div>
-              </div>
-              <div
-                style={collapse_style}
-                className={`collapse navbar-collapse text-center${
-                  data.navbar_in ? ' in' : ''
-                }`}
-              >
-                {data && data.user ? (
-                  <ul className="nav navbar-nav navbar-right">
-                    <li style={{ marginRight: '20px' }}>
-                      <Link
-                        className="btn btn-default"
-                        to="/dashboard/mls"
-                        style={S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 w-100')}
-                      >
-                        DASHBOARD
-                      </Link>
-                    </li>
-                  </ul>
-                ) : (
-                  <ul className="nav navbar-nav navbar-right">
-                    <li style={{ marginRight: '20px' }}>
-                      <Link
-                        className="btn btn-default"
-                        to="/signin"
-                        style={S(`color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`)}
-                      >
-                        SIGN IN
-                      </Link>
-                    </li>
-                    <li style={login_btn_li_style}>
-                      <Link
-                        className="btn btn-default"
-                        to="/signup"
-                        style={S(`color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`)}
-                      >
-                        SIGN UP
-                      </Link>
-                    </li>
-                  </ul>
-                )}
-              </div>
+        <header>
+          <div className="navbar-header">
+            <div
+              className="tk-calluna-sans pull-left"
+              style={S('font-28 color-fff')}
+            >
+              Rechat
+              {brand_logo}
             </div>
-          </nav>
+          </div>
+          {data && data.user ? (
+            <Link
+              className="btn btn-default"
+              to="/dashboard/mls"
+              style={S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 w-100')}
+            >
+              DASHBOARD
+            </Link>
+          ) : (
+            <div>
+              <Link
+                className="btn btn-default"
+                to="/signin"
+                style={S(`color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-16 ${login_btn_style}`)}
+              >
+                SIGN IN
+              </Link>
+              <Link
+                className="btn btn-default"
+                to="/signup"
+                style={S(`color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 ${login_btn_style}`)}
+              >
+                SIGN UP
+              </Link>
+            </div>
+          )}
         </header>
         <main className="container" style={S('h-100p z-2 relative')}>
           <div className="landing-main text-center" style={S('h-100p')}>
@@ -228,7 +185,6 @@ export default class Landing extends Component {
             </Col>
           </div>
         </footer>
-        {mobile_splash_viewer}
       </div>
     )
   }
