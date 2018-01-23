@@ -9,7 +9,7 @@ import { setChecklists } from './checklist'
 import { setRoles } from './role'
 import { setEnvelopes } from './envelope'
 
-function setDeals(deals) {
+export function setDeals(deals) {
   return {
     type: types.GET_DEALS,
     deals
@@ -67,14 +67,14 @@ export function appendChecklist(deal_id, checklist_id) {
 }
 
 export function archiveDeal(dealId) {
-  return async (dispatch) => {
+  return async dispatch => {
     await Deal.archiveDeal(dealId)
     dispatch(dealArchived(dealId))
   }
 }
 
 export function updateListing(dealId, listingId) {
-  return async (dispatch) => {
+  return async dispatch => {
     const deal = await Deal.updateListing(dealId, listingId)
 
     dispatch(updateDeal(deal))
@@ -82,9 +82,11 @@ export function updateListing(dealId, listingId) {
 }
 
 export function updateDeal(deal) {
-  return async (dispatch) => {
+  return async dispatch => {
     const { entities } = normalize(deal, schema.dealSchema)
-    const { deals, roles, envelopes, checklists, tasks } = entities
+    const {
+      deals, roles, envelopes, checklists, tasks
+    } = entities
 
     batchActions([
       dispatch(setTasks(tasks)),
@@ -97,9 +99,10 @@ export function updateDeal(deal) {
 }
 
 export function getDeal(deal_id) {
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       const deal = await Deal.getById(deal_id)
+
       dispatch(updateDeal(deal))
     } catch (e) {
       console.log(e)
@@ -108,7 +111,7 @@ export function getDeal(deal_id) {
 }
 
 export function getDeals(user, backoffice = false, errorOnFail = true) {
-  return async (dispatch) => {
+  return async dispatch => {
     // set user is backoffice or not
     dispatch(isBackOffice(backoffice))
 
@@ -121,7 +124,9 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
       }
 
       const { entities } = normalize(data, schema.dealsSchema)
-      const { deals, roles, checklists, tasks } = entities
+      const {
+        deals, roles, checklists, tasks
+      } = entities
 
       batchActions([
         dispatch(setTasks(tasks)),
@@ -142,9 +147,11 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
 }
 
 export function createDeal(deal) {
-  return async (dispatch) => {
+  return async dispatch => {
     const { entities } = normalize(deal, schema.dealSchema)
-    const { deals, roles, checklists, tasks } = entities
+    const {
+      deals, roles, checklists, tasks
+    } = entities
 
     batchActions([
       dispatch(setTasks(tasks)),
@@ -156,10 +163,9 @@ export function createDeal(deal) {
 }
 
 export function searchAllDeals(query) {
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       dispatch({ type: types.SHOW_SPINNER })
-
 
       const data = await Deal.searchAllDeals(query)
 
@@ -170,8 +176,9 @@ export function searchAllDeals(query) {
       }
 
       const { entities } = normalize(data, schema.dealsSchema)
-      const { deals, roles, checklists, tasks } = entities
-
+      const {
+        deals, roles, checklists, tasks
+      } = entities
 
       batchActions([
         dispatch(setTasks(tasks)),
