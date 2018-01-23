@@ -7,12 +7,10 @@
   "repository": "git@gitlab.com:rechat/web.git",
   "license": "ISC",
   "scripts": {
-    "develop":
-      "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
+    "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
-    "serve":
-      "NODE_ENV=production forever node_modules/babel-cli/bin/babel-node.js ./bin/server",
+    "serve": "NODE_ENV=production forever node_modules/babel-cli/bin/babel-node.js ./bin/server",
     "serve:stage": "NODE_ENV=stage babel-node ./bin/server",
     "lint": "npm run lint:app && npm run lint:server",
     "lint:app": "eslint ./app",
@@ -119,8 +117,7 @@
     "react-dnd": "^2.5.4",
     "react-dnd-html5-backend": "^2.5.4",
     "react-dom": "^16.2.0",
-    "react-dropzone":
-      "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
+    "react-dropzone": "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
     "react-ga": "^2.3.5",
     "react-hot-loader": "^3.1.3",
     "react-images": "^0.5.11",
@@ -162,6 +159,7 @@
     "stream-to-promise": "^2.2.0",
     "style-loader": "^0.19.1",
     "superagent": "^3.8.2",
+    "superagent-mocker": "^0.5.2",
     "swipe-js-iso": "^2.0.3",
     "text-mask-addons": "^3.7.1",
     "underscore": "^1.8.3",
@@ -186,7 +184,6 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1",
-    "fetch-mock": "^5.13.1",
     "jest": "^22.0.4",
     "jsdom": "^11.5.1",
     "nightwatch": "^0.9.16",
