@@ -65,11 +65,6 @@ const AsyncResetPassword = Load({
     import('../components/Pages/Auth/Password/Reset' /* webpackChunkName: "reset_password" */)
 })
 
-const AsyncConfirmAgent = Load({
-  loader: () =>
-    import('../components/Pages/SignUp/ConfirmAgent' /* webpackChunkName: "confirm" */)
-})
-
 /* ==================================== */
 //  MLS
 /* ==================================== */

@@ -1,15 +1,17 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import _ from 'underscore'
+
 const fileParser = require('async-busboy')
 const router = require('koa-router')()
+
 import updateSession from '../update-session'
 import config from '../../../../config/private'
 
 const app = new Koa()
 
 router.post('/proxifier/upload', bodyParser(), async ctx => {
-  const headers = ctx.headers
+  const { headers } = ctx
   const { files, fields } = await fileParser(ctx.req)
 
   try {

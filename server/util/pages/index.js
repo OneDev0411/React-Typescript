@@ -3,7 +3,6 @@ import mount from 'koa-mount'
 import url from 'url'
 import MobileDetect from 'mobile-detect'
 import config from '../../../config/private'
-import handle490 from './490.js'
 
 const _ = require('underscore')
 
@@ -13,28 +12,22 @@ const routes = {
   app: [['signout'], ['reset_password'], ['listing']]
 }
 
-app.use(handle490)
-
 app.use(async (ctx, next) => {
   const isMobile = new MobileDetect(ctx.req.headers['user-agent'])
 
   const isDashboard = url => url.toLowerCase().indexOf('dashboard') !== -1
 
   const isListingPage = url =>
-    new RegExp(
-      /^\/dashboard\/mls\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
-    ).test(url)
+    new RegExp(/^\/dashboard\/mls\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/).test(url)
 
-  if (
-    !isDashboard(ctx.url) ||
-    (isDashboard(ctx.url) && isListingPage(ctx.url))
-  ) {
+  if (!isDashboard(ctx.url) || (isDashboard(ctx.url) && isListingPage(ctx.url))) {
     // eslint-disable-next-line
     return await next()
   }
 
   if (isMobile.phone()) {
     let url = '/mobile'
+
     if (isMobile.is('iPhone')) {
       url = '/mobile?type=iphone'
     }
@@ -50,6 +43,7 @@ app.use(async (ctx, next) => {
   let { appStore } = locals
 
   const { data, user } = appStore
+
   if (!session.user) {
     if (user) {
       delete appStore.user
