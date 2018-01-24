@@ -7,7 +7,9 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../controllers/Brand'
 
-const VerificationBanner = ({ brand, isShow, email, onClickHandler }) => {
+const VerificationBanner = ({
+  brand, isShow, email, onClickHandler
+}) => {
   if (!isShow) {
     return <div />
   }

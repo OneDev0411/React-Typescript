@@ -85,16 +85,11 @@ class BaseTable extends React.Component {
             className="deal-list--popover"
             id={`popover-trigger-factsheet-${deal.id}`}
           >
-            <CriticalDates
-              deal={deal}
-              showTitle={false}
-            />
+            <CriticalDates deal={deal} showTitle={false} />
           </Popover>
         }
       >
-        <span className="hoverable">
-          {CriticalDates.getNextDate(deal)}
-        </span>
+        <span className="hoverable">{CriticalDates.getNextDate(deal)}</span>
       </OverlayTrigger>
     )
   }
@@ -107,7 +102,7 @@ class BaseTable extends React.Component {
 
     this.setState({
       sortBy: field,
-      sortOrder: (sortOrder === 'asc' && field === sortBy) ? 'desc' : 'asc'
+      sortOrder: sortOrder === 'asc' && field === sortBy ? 'desc' : 'asc'
     })
   }
 
@@ -137,8 +132,7 @@ class BaseTable extends React.Component {
       return ~~object
     }
 
-    return object.toString()
-      .toLowerCase()
+    return object.toString().toLowerCase()
   }
 
   /**
@@ -147,13 +141,13 @@ class BaseTable extends React.Component {
   getSorterCaret(field) {
     const { sortOrder, sortBy } = this.state
 
-    return <i
-      className={
-        cn('fa fa-caret-down', {
+    return (
+      <i
+        className={cn('fa fa-caret-down', {
           'fa-rotate-180': field === sortBy && sortOrder === 'desc'
-        })
-      }
-    />
+        })}
+      />
+    )
   }
 
   /**
@@ -223,7 +217,9 @@ class BaseTable extends React.Component {
   hasNotification(deal) {
     if (deal.new_notifications > 0) {
       return (
-        <ToolTip caption={`You have ${deal.new_notifications} unread messages in this deal`}>
+        <ToolTip
+          caption={`You have ${deal.new_notifications} unread messages in this deal`}
+        >
           <div className="inline unread-notifications">
             <img src="/static/images/deals/comments.svg" />
             <span>{deal.new_notifications}</span>
@@ -256,7 +252,8 @@ class BaseTable extends React.Component {
       )
     }
 
-    if ((isBackOffice && filteredDeals.length === 0) ||
+    if (
+      (isBackOffice && filteredDeals.length === 0) ||
       (!isBackOffice && _.size(deals) === 0)
     ) {
       if (searchBoxIsOpen) {
@@ -272,69 +269,61 @@ class BaseTable extends React.Component {
 
     return (
       <div className="table-container">
-        {
-          hasRows ?
-            <table className="table table-hover">
-              <tbody>
-                <tr className="header">
-                  {
-                    _.chain(this.cells)
-                      .pairs()
-                      .filter(cell => !cell[1].justFilter)
-                      .map(([key, cell]) =>
-                        <td
-                          key={`CELL_${key}`}
-                          className={cn(cell.className, {
+        {hasRows ? (
+          <table className="table table-hover">
+            <tbody>
+              <tr className="header">
+                {_.chain(this.cells)
+                  .pairs()
+                  .filter(cell => !cell[1].justFilter)
+                  .map(([key, cell]) => (
+                    <td
+                      key={`CELL_${key}`}
+                      className={cn(cell.className, {
                         sortable: cell.sortable,
                         isActive: sortBy === key
                       })}
-                        >
-                          <span
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => cell.sortable && this.setSort(key)}
-                          >
-                            {cell.caption}&nbsp;
-                            {cell.sortable && this.getSorterCaret(key)}
-                          </span>
-                        </td>)
-                    .value()
-                }
-                </tr>
-
-                {
-                _.chain(filteredDeals)
-                  .sortBy(deal => this.sort(deal))
-                  .shouldReverse(sortOrder)
-                  .map((deal, rowId) => (
-                    <tr
-                      key={`DEAL_${deal.id}`}
-                      className="item"
-                      onClick={e => this.onClickDeal(e, deal.id)}
                     >
-                      {
-                        _.chain(this.cells)
-                          .filter(cell => !cell.justFilter)
-                          .map((cell, key) => (
-                            <td
-                              key={`DEAL_${deal.id}__CELL_${key}`}
-                              className={cell.className}
-                            >
-                              {cell.getText(deal, rowId, filteredDeals.length)}
-                            </td>
-                          ))
-                          .value()
-                      }
-                    </tr>
+                      <span
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => cell.sortable && this.setSort(key)}
+                      >
+                        {cell.caption}&nbsp;
+                        {cell.sortable && this.getSorterCaret(key)}
+                      </span>
+                    </td>
                   ))
-                  .value()
-              }
-              </tbody>
-            </table> :
-            <EmptyState
-              isBackOffice={isBackOffice}
-            />
-        }
+                  .value()}
+              </tr>
 
+              {_.chain(filteredDeals)
+                .sortBy(deal => this.sort(deal))
+                .shouldReverse(sortOrder)
+                .map((deal, rowId) => (
+                  <tr
+                    key={`DEAL_${deal.id}`}
+                    className="item"
+                    onClick={e => this.onClickDeal(e, deal.id)}
+                  >
+                    {_.chain(this.cells)
+                      .filter(cell => !cell.justFilter)
+                      .map((cell, key) => (
+                        <td
+                          key={`DEAL_${deal.id}__CELL_${key}`}
+                          className={cell.className}
+                        >
+                          {cell.getText(deal, rowId, filteredDeals.length)}
+                        </td>
+                      ))
+                      .value()}
+                  </tr>
+                ))
+                .value()}
+            </tbody>
+          </table>
+        ) : (
+          <EmptyState isBackOffice={isBackOffice} />
+        )}
       </div>
     )
   }

@@ -2,13 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
-import ToolTip from '../components/tooltip'
-import Deal from '../../../../../models/Deal'
+import ToolTip from '../../components/tooltip'
+import Deal from '../../../../../../models/Deal'
 
-const FILTER_ACTIVE = [
-  'Active',
-  'Coming Soon'
-]
+const FILTER_ACTIVE = ['Active', 'Coming Soon']
 
 const FILTER_PENDING = [
   'Active Contingent',
@@ -33,7 +30,7 @@ const filters = {
   Archive: (status, deal) => FILTER_ARCHIVE.indexOf(status) > -1 || !!deal.deleted_at
 }
 
-class Filter extends React.Component {
+export class AgentFilter extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -100,28 +97,23 @@ class Filter extends React.Component {
 
     return (
       <ul className="filter">
-        {
-          _.map(filters, (fn, filter) =>
-            <ToolTip
-              key={`FILTER_${filter}`}
-              multiline
-              caption={this.getFilterTabTooltip(filter)}
-              placement="bottom"
+        {_.map(filters, (fn, filter) => (
+          <ToolTip
+            key={`FILTER_${filter}`}
+            multiline
+            caption={this.getFilterTabTooltip(filter)}
+            placement="bottom"
+          >
+            <li
+              className={filter === active ? 'active' : ''}
+              onClick={() => this.setFilter(filter)}
             >
-              <li
-                className={filter === active ? 'active' : ''}
-                onClick={() => this.setFilter(filter)}
-              >
-                  <span className="title">
-                    {filter}
-                  </span>
+              <span className="title">{filter}</span>
 
-                <span className="badge counter">
-                    {this.getBadgeCounter(filter)}
-                  </span>
-              </li>
-            </ToolTip>)
-        }
+              <span className="badge counter">{this.getBadgeCounter(filter)}</span>
+            </li>
+          </ToolTip>
+        ))}
       </ul>
     )
   }
@@ -129,4 +121,4 @@ class Filter extends React.Component {
 
 export default connect(({ deals }) => ({
   deals: deals.list
-}))(Filter)
+}))(AgentFilter)

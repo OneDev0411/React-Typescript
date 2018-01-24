@@ -167,13 +167,13 @@ class BulkSubmit extends React.Component {
                 </span>
               )}
 
-              <Button
+              <button
                 disabled={selectedTasks.length === 0 || saving}
                 className="c-deal-bulk-submit-modal__submit-btn"
                 onClick={() => this.submit()}
               >
                 {saving ? 'Saving ...' : 'Notify Admin'}
-              </Button>
+              </button>
             </div>
           </Modal.Footer>
         </Modal>
