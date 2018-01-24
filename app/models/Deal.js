@@ -688,7 +688,7 @@ Deal.getAgents = async function (user) {
 
     return response.body.data
   } catch (e) {
-    throw e
+    return null
   }
 }
 
