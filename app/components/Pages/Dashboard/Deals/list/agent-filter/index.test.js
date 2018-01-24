@@ -17,7 +17,7 @@ describe('Test agent filters in deals component', () => {
 
     const wrapper = shallow(Wrapper)
 
-    expect(wrapper.find('[data-test="filter-item"]').length).to.equal(4)
+    expect(wrapper.findByAttr('filter-item').length).to.equal(4)
   })
 
   test('Should select "All" as default active filter', () => {
@@ -26,8 +26,8 @@ describe('Test agent filters in deals component', () => {
     const wrapper = shallow(Wrapper)
 
     expect(wrapper
-      .find('[data-test="filter-item"].active')
-      .find('[data-test="title"]')
+      .queryAttr('filter-item > .active')
+      .findByAttr('title')
       .text()).to.equal('All')
   })
 
@@ -44,8 +44,8 @@ describe('Test agent filters in deals component', () => {
     const wrapper = shallow(Wrapper)
 
     expect(wrapper
-      .find('[data-test="filter-item"].active')
-      .find('[data-test="title"]')
+      .queryAttr('filter-item > .active')
+      .findByAttr('title')
       .text()).to.equal(activeFilter)
 
     expect(props.onChangeFilter.mock.calls.length).to.equal(1)
@@ -60,8 +60,8 @@ describe('Test agent filters in deals component', () => {
 
     const wrapper = shallow(Wrapper)
 
-    const secondTab = wrapper.find('[data-test="filter-item"]').at(1)
-    const secondTabName = secondTab.find('[data-test="title"]').text()
+    const secondTab = wrapper.findByAttr('filter-item').at(1)
+    const secondTabName = secondTab.findByAttr('title').text()
 
     secondTab.simulate('click')
 
@@ -79,9 +79,9 @@ describe('Test agent filters in deals component', () => {
 
     badges.forEach((number, key) => {
       expect(wrapper
-        .find('[data-test="filter-item"]')
+        .findByAttr('filter-item')
         .at(key)
-        .find('[data-test="badge"]')
+        .findByAttr('badge')
         .text()).to.equal(number.toString())
     })
   })
