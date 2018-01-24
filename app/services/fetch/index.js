@@ -1,6 +1,5 @@
 import _ from 'underscore'
 import SuperAgent from 'superagent'
-// import mocker from 'superagent-mocker'
 import nock from 'nock'
 import store from '../../stores'
 import config from '../../../config/public'
@@ -8,11 +7,12 @@ import config from '../../../config/public'
 export default class Fetch {
   constructor() {
     const isServerSide = typeof window === 'undefined'
+    const isTestEnv = process.env.NODE_ENV === 'test'
 
     this._middlewares = {}
     this._autoLogin = true
     this._isServerSide = isServerSide
-    this._baseUrl = isServerSide ? config.app.url : ''
+    this._baseUrl = isServerSide || isTestEnv ? config.app.url : ''
     this._proxyUrl = `${this._baseUrl}/api/proxifier`
   }
 
@@ -22,7 +22,7 @@ export default class Fetch {
 
     this._isLoggedIn = user && user.access_token !== undefined
 
-    const agent = SuperAgent.post(this._proxyUrl)
+    const agent = SuperAgent.post(`${this._proxyUrl}/${this.getEndpointKey(endpoint)}`)
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
       .retry(2)
@@ -51,18 +51,21 @@ export default class Fetch {
     return agent
   }
 
-  getEndpointKey(endpoint) {
-    return endpoint.replace(/\//g, '-')
+  getEndpointKey(url) {
+    return url
+      .split(/[?#]/)[0] // remove query string
+      .replace('/', '') // change first slash to null
+      .replace(/(?!^)\//g, '-') // change the rest slashes to dash
   }
 
-  mock() {
-    // return mocker(SuperAgent)
-  }
+  mock({
+    endpoint, method, statusCode, response
+  }) {
+    const endpointKey = this.getEndpointKey(endpoint)
 
-  fake(configuration) {
-    return nock(`${config.app.url}/api/proxifier/${this.getEndpointKey(configuration.endpoint)}`)
-      .post('/')
-      .reply(200, configuration.response, { 'Content-Type': 'application/json' })
+    return nock(`${config.app.url}/api/proxifier`)
+      [method || 'post'](`/${endpointKey}`)
+      .reply(statusCode || 200, response)
   }
 
   get(endpoint) {
