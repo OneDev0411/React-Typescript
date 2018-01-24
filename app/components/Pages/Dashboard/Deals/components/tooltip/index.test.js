@@ -32,14 +32,11 @@ test('Should not contain Tooltip object when caption is not defined', () => {
 test('Should render Tooltip', () => {
   const Wrapper = (
     <Tooltip caption="tooltip works">
-      <div className="trigger-handler">Hover Me!</div>
+      <div>Hover Me!</div>
     </Tooltip>
   )
 
   const wrapper = shallow(Wrapper)
-
-  // create wrapper
-  const trigger = wrapper.find('div.trigger-handler')
 
   const tooltip = shallow(wrapper.find('OverlayTrigger').prop('overlay'))
 

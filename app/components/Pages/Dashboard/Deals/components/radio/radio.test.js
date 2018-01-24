@@ -11,7 +11,7 @@ test('Should render radio button with title', () => {
 
   const wrapper = shallow(Wrapper)
 
-  expect(wrapper.find('.radio-label').text()).to.equal(title)
+  expect(wrapper.find('[data-test="radio-label"]').text()).to.equal(title)
 })
 
 test('Should select and unselect radio button on clicking', () => {
