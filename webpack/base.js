@@ -22,6 +22,9 @@ export default {
       port: 1337 // optional: set a port
     })
   ],
+  externals: {
+    fs: '{}'
+  },
   module: {
     rules: [
       {
