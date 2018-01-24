@@ -212,6 +212,11 @@ const AsyncUpgradeAccount = Load({
 //  Widgets
 /* ==================================== */
 
+const WidgetsContainer = Load({
+  loader: () =>
+    import('../components/Pages/Widgets/' /* webpackChunkName: "widgets_container" */)
+
+})
 const AsyncListingsWidget = Load({
   loader: () =>
     import('../components/Pages/Widgets/Listings' /* webpackChunkName: "listing_w" */)
@@ -319,9 +324,11 @@ export default (
 
       <Route path="/mobile" component={AsyncMobile} />
 
-      <Route path="/widgets/map" component={AsyncMapWidget} />
-      <Route path="/widgets/search" component={AsyncSearchWidget} />
-      <Route path="/widgets/listings" component={AsyncListingsWidget} />
+      <Route path="/wdigets" component={WidgetsContainer}>
+        <Route path="/widgets/map" component={AsyncMapWidget} />
+        <Route path="/widgets/search" component={AsyncSearchWidget} />
+        <Route path="/widgets/listings" component={AsyncListingsWidget} />
+      </Route>
     </Route>
 
     <Route path="/" component={AppLayout}>
