@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16'
  * searchs a "date-test" attribute
  * @returns a dom element
  */
-ShallowWrapper.prototype.findByAttr = function (attr) {
+ShallowWrapper.prototype.findAttr = function (attr) {
   return this.find(`[data-test="${attr}"]`)
 }
 

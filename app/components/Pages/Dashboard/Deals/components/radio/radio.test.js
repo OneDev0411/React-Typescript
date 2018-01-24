@@ -12,7 +12,7 @@ describe('Test radio button component', () => {
 
     const wrapper = shallow(Wrapper)
 
-    expect(wrapper.findByAttr('radio-label').text()).to.equal(title)
+    expect(wrapper.findAttr('radio-label').text()).to.equal(title)
   })
 
   test('Should select and unselect radio button on clicking', () => {
