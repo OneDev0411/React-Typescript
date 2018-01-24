@@ -1,6 +1,7 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
 import { shallow, mount, render } from 'enzyme'
+import { expect } from 'chai'
 import ReactTestUtils from 'react-dom/test-utils'
 import ConnectedAgentFilter, { AgentFilter } from '.'
 import store from '../../../../../../stores'
@@ -16,7 +17,7 @@ describe('Test agent filters in deals component', () => {
 
     const wrapper = shallow(Wrapper)
 
-    expect(wrapper.find('li').length).toBe(4)
+    expect(wrapper.find('[data-test="filter-item"]').length).to.equal(4)
   })
 
   test('Should select "All" as default active filter', () => {
@@ -25,9 +26,9 @@ describe('Test agent filters in deals component', () => {
     const wrapper = shallow(Wrapper)
 
     expect(wrapper
-      .find('li.active')
-      .find('span.title')
-      .text()).toEqual('All')
+      .find('[data-test="filter-item"].active')
+      .find('[data-test="title"]')
+      .text()).to.equal('All')
   })
 
   test('Should select given filter as active filter', () => {
@@ -43,11 +44,11 @@ describe('Test agent filters in deals component', () => {
     const wrapper = shallow(Wrapper)
 
     expect(wrapper
-      .find('li.active')
-      .find('span.title')
-      .text()).toEqual(activeFilter)
+      .find('[data-test="filter-item"].active')
+      .find('[data-test="title"]')
+      .text()).to.equal(activeFilter)
 
-    expect(props.onChangeFilter.mock.calls.length).toBe(1)
+    expect(props.onChangeFilter.mock.calls.length).to.equal(1)
   })
 
   test('Should change active filter on click', () => {
@@ -59,12 +60,12 @@ describe('Test agent filters in deals component', () => {
 
     const wrapper = shallow(Wrapper)
 
-    const secondTab = wrapper.find('li').at(1)
-    const secondTabName = secondTab.find('span.title').text()
+    const secondTab = wrapper.find('[data-test="filter-item"]').at(1)
+    const secondTabName = secondTab.find('[data-test="title"]').text()
 
     secondTab.simulate('click')
 
-    expect(props.onChangeFilter.mock.calls.length).toBe(1)
+    expect(props.onChangeFilter.mock.calls.length).to.equal(1)
   })
 
   test('Should show correct badge counter', () => {
@@ -78,10 +79,10 @@ describe('Test agent filters in deals component', () => {
 
     badges.forEach((number, key) => {
       expect(wrapper
-        .find('li')
+        .find('[data-test="filter-item"]')
         .at(key)
-        .find('.counter')
-        .text()).toBe(number.toString())
+        .find('[data-test="badge"]')
+        .text()).to.equal(number.toString())
     })
   })
 })

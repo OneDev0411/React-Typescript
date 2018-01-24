@@ -96,7 +96,7 @@ export class AgentFilter extends React.Component {
     const active = this.props.active || 'All'
 
     return (
-      <ul className="filter">
+      <ul className="filter" data-test="filter">
         {_.map(filters, (fn, filter) => (
           <ToolTip
             key={`FILTER_${filter}`}
@@ -107,10 +107,15 @@ export class AgentFilter extends React.Component {
             <li
               className={filter === active ? 'active' : ''}
               onClick={() => this.setFilter(filter)}
+              data-test="filter-item"
             >
-              <span className="title">{filter}</span>
+              <span className="title" data-test="title">
+                {filter}
+              </span>
 
-              <span className="badge counter">{this.getBadgeCounter(filter)}</span>
+              <span className="badge counter" data-test="badge">
+                {this.getBadgeCounter(filter)}
+              </span>
             </li>
           </ToolTip>
         ))}
