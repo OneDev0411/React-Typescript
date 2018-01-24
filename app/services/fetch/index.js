@@ -1,6 +1,6 @@
 import _ from 'underscore'
 import SuperAgent from 'superagent'
-import SuperTest from 'supertest'
+import mocker from 'superagent-mocker'
 import store from '../../stores'
 import config from '../../../config/public'
 
@@ -50,8 +50,21 @@ export default class Fetch {
     return agent
   }
 
+  getEndpointKey(endpoint) {
+    return endpoint.replace(/\//g, '-')
+  }
+
   mock() {
-    return SuperTest(this._proxyUrl)
+    return mocker(SuperAgent)
+  }
+
+  fake(config) {
+    return this.mock()[config.method || 'post'](
+      `${this._proxyUrl}/${this.getEndpointKey(config.endpoint)}`,
+      req => ({
+        body: config.response
+      })
+    )
   }
 
   get(endpoint) {

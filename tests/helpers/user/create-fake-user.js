@@ -1,0 +1,68 @@
+import uuid from '../../../app/utils/uuid'
+
+export default function (first_name, last_name) {
+  const email = `${first_name}@rechat.com`
+  const full_name = `${first_name}${last_name}`
+
+  return {
+    type: 'user',
+    username: null,
+    first_name,
+    last_name,
+    email,
+    phone_number: null,
+    created_at: 1512437600.3552,
+    id: uuid(),
+    cover_image_url: null,
+    profile_image_url: null,
+    updated_at: 1512437679.00056,
+    user_status: 'Active',
+    profile_image_thumbnail_url: null,
+    cover_image_thumbnail_url: null,
+    email_confirmed: true,
+    timezone: 'America/Chicago',
+    user_type: 'Agent',
+    deleted_at: null,
+    phone_confirmed: false,
+    agent: {
+      id: uuid(),
+      email,
+      mlsid: '998711032',
+      fax: null,
+      full_name,
+      first_name,
+      last_name,
+      middle_name: '',
+      phone_number: null,
+      nar_number: '',
+      office_mui: 9999999,
+      status: 'Active',
+      office_mlsid: 'RCHT01',
+      work_phone: '(999) 999-9999',
+      generational_name: null,
+      matrix_unique_id: 998711032,
+      updated_at: 1512437239.16002,
+      deleted_at: null,
+      created_at: 1512437239.16002,
+      type: 'agent',
+      user_id: uuid(),
+      office_id: uuid(),
+      profile_image_url: null,
+      cover_image_url: null,
+      online_state: 'Offline',
+      secret_questions: ['(999) XXX-XX99', 'user+xxxxxxxxxxxxxt.com']
+    },
+    is_shadow: false,
+    personal_room: '46a9001e-d95c-11e7-96c4-0242ac11000d',
+    brand: '88c7100a-9ed1-11e7-8c9b-0242ac110003',
+    fake_email: false,
+    features: null,
+    last_seen_at: 1512787437.934,
+    current_time: '4:32 PM - Tuesday Jan 23, 2018',
+    push_allowed: true,
+    has_docusign: true,
+    display_name: full_name,
+    abbreviated_display_name: `${first_name}`,
+    address: null
+  }
+}
