@@ -1,5 +1,6 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
+import { expect } from 'chai'
 import { shallow, mount, render } from 'enzyme'
 import ReactTestUtils from 'react-dom/test-utils'
 import Radio from '.'
@@ -10,7 +11,7 @@ test('Should render radio button with title', () => {
 
   const wrapper = shallow(Wrapper)
 
-  expect(wrapper.find('.radio-label').text()).toEqual(title)
+  expect(wrapper.find('.radio-label').text()).to.equal(title)
 })
 
 test('Should select and unselect radio button on clicking', () => {
@@ -18,12 +19,12 @@ test('Should select and unselect radio button on clicking', () => {
 
   const wrapper = shallow(Wrapper)
 
-  expect(wrapper.find('.selected').length).toBe(0)
+  expect(wrapper.find('.selected').length).to.equal(0)
 
   // change "selected" prop
   wrapper.setProps({ selected: true })
 
-  expect(wrapper.find('.selected').length).toBe(1)
+  expect(wrapper.find('.selected').length).to.equal(1)
 })
 
 test('Should render checkbox when square prop is passed', () => {
@@ -31,5 +32,5 @@ test('Should render checkbox when square prop is passed', () => {
 
   const wrapper = shallow(Wrapper)
 
-  expect(wrapper.find('.square').length).toBe(1)
+  expect(wrapper.find('.square').length).to.equal(1)
 })

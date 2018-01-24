@@ -1,5 +1,6 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
+import { expect } from 'chai'
 import { shallow, mount, render } from 'enzyme'
 import ReactTestUtils from 'react-dom/test-utils'
 import Tooltip from '.'
@@ -13,7 +14,7 @@ test('Should contain Tooltip object', () => {
 
   const wrapper = shallow(Wrapper)
 
-  expect(wrapper.find('OverlayTrigger').length).toBe(1)
+  expect(wrapper.find('OverlayTrigger').length).to.equal(1)
 })
 
 test('Should not contain Tooltip object when caption is not defined', () => {
@@ -25,7 +26,7 @@ test('Should not contain Tooltip object when caption is not defined', () => {
 
   const wrapper = shallow(Wrapper)
 
-  expect(wrapper.find('OverlayTrigger').length).toBe(0)
+  expect(wrapper.find('OverlayTrigger').length).to.equal(0)
 })
 
 test('Should render Tooltip', () => {
@@ -42,5 +43,5 @@ test('Should render Tooltip', () => {
 
   const tooltip = shallow(wrapper.find('OverlayTrigger').prop('overlay'))
 
-  expect(tooltip.find('.tooltip-inner').text()).toBe('tooltip works')
+  expect(tooltip.find('.tooltip-inner').text()).to.equal('tooltip works')
 })
