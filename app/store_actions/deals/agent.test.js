@@ -19,23 +19,36 @@ describe('Test agent actions in deal components', () => {
     store = mockStore(null)
   })
 
-  test('should create agents', async () => {
+  test('should create agents on success response', async () => {
     const agents = [fakeUser('John', 'Doe'), fakeUser('John', 'Wick')]
 
-    new Fetch().fake({
+    new Fetch().mock({
       endpoint: `/brands/${user.brand}/agents`,
       response: {
         data: agents
       }
     })
 
-    const x = await Deal.getAgents(user)
+    const expectedActions = [{ type: types.GET_AGENTS, agents }]
 
-    console.log(x)
+    await store.dispatch(getAgents(user))
+    expect(store.getActions()).toEqual(expectedActions)
+  })
 
-    // const expectedActions = [{ type: types.GET_AGENTS, agents }]
+  test('should not create agents on error', async () => {
+    new Fetch().mock({
+      endpoint: `/brands/${user.brand}/agents`,
+      statusCode: 403,
+      response: {
+        http: 403,
+        message: 'Access denied to brand resource',
+        code: 'AccessForbidden'
+      }
+    })
 
-    // await store.dispatch(getAgents(user))
-    // expect(store.getActions()).toEqual(expectedActions)
+    const expectedActions = [{ type: types.GET_AGENTS, agents: null }]
+
+    await store.dispatch(getAgents(user))
+    expect(store.getActions()).toEqual(expectedActions)
   })
 })
