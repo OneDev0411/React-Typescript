@@ -1,14 +1,13 @@
 // Widgets/Partials/ListingCard.js
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import PropTypes from 'prop-types'
 import S from 'shorti'
 import listing_util from '../../../../../utils/listing'
 import { randomString, numberWithCommas } from '../../../../../utils/helpers'
-import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
+import FavoriteHeart from '../../../Dashboard/Listings/components/FavoriteHeart'
 import Brand from '../../../../../controllers/Brand'
-import ActionBubble from '../../../Partials/ActionBubble'
 import AgentImage from './AgentImage'
-import SignUpConfirmMessage from './SignUpConfirmMessage'
 
 export default class ListingCard extends Component {
   side(listing) {
@@ -20,15 +19,15 @@ export default class ListingCard extends Component {
       return
     }
 
-    const agent = listing.proposed_agent.agent
+    const { agent } = listing.proposed_agent
 
-    const is_list_agent = (
-      agent.mlsid === listing.list_agent_mls_id || agent.mlsid === listing.co_list_agent_mls_id
-    )
+    const is_list_agent =
+      agent.mlsid === listing.list_agent_mls_id ||
+      agent.mlsid === listing.co_list_agent_mls_id
 
-    const is_selling_agent = (
-      agent.mlsid === listing.selling_agent_mls_id || agent.mlsid === listing.co_selling_agent_mls_id
-    )
+    const is_selling_agent =
+      agent.mlsid === listing.selling_agent_mls_id ||
+      agent.mlsid === listing.co_selling_agent_mls_id
 
     if (is_list_agent && is_selling_agent) {
       return 'Listing & Buyer Agent'
@@ -46,16 +45,23 @@ export default class ListingCard extends Component {
   }
 
   render() {
-    const listing = this.props.listing
-    const data = this.props.data
-    let property = listing.property
+    const { listing, user, data } = this.props
+    let { property } = listing
+
+    if (!listing) {
+      return null
+    }
+
     if (!property) {
       property = listing.compact_property
     }
-    let address = listing.address
+
+    let { address } = listing
+
     if (!address) {
       address = property.address
     }
+
     const square_feet = numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     let listing_card_style = {
       ...S('w-380 h-360 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'),
@@ -65,6 +71,7 @@ export default class ListingCard extends Component {
     const listing_image_style = {
       ...S(`bg-cover bg-url(${listing_util.getResizeUrl(listing.cover_image_url)}?w=800) bg-center w-380 h-260 relative`)
     }
+
     // Responsive
     if (typeof window !== 'undefined' && window.innerWidth < 1000) {
       listing_card_style.width = window.innerWidth - 20
@@ -73,13 +80,16 @@ export default class ListingCard extends Component {
         ...listing_card_style,
         ...S('ml-15')
       }
+
       if (window.innerWidth < 500) {
         listing_card_style.height = listing_card_style.width * '.6'
         listing_card_style.height = 253
       }
+
       listing_image_style.width = listing_card_style.width
       listing_image_style.height = listing_card_style.height - 130
     }
+
     const overlay_style = {
       ...S('absolute w-100p h-100p br-3')
     }
@@ -89,51 +99,37 @@ export default class ListingCard extends Component {
       borderTopRightRadius: '3px',
       borderBottomRightRadius: '3px'
     }
-    let action_bubble
-    if (data.signup_tooltip && data.signup_tooltip.listing === listing.id) {
-      action_bubble = (
-        <ActionBubble
-          data={data}
-          listing={listing}
-          handleEmailSubmit={this.props.handleEmailSubmit}
-          handleListingInquirySubmit={this.props.handleListingInquirySubmit}
-          handleCloseSignupForm={this.props.handleCloseSignupForm}
-          handleLoginClick={this.props.handleLoginClick}
-          showIntercom={this.props.showIntercom}
-        />
-      )
-    }
+
     const status_color = listing_util.getStatusColor(listing.status)
     let year_built_area
+
     if (property.year_built) {
       year_built_area = (
         <span>
-          &nbsp;&middot;&nbsp;{property.year_built ? `Built in ${property.year_built}` : ''}
+          &nbsp;&middot;&nbsp;{property.year_built
+            ? `Built in ${property.year_built}`
+            : ''}
         </span>
       )
     }
 
     return (
       <div
-        key={`listing-viewer-${listing.id}-${randomString(10)}`}
         style={listing_card_style}
         className={this.props.className}
-        onClick={this.props.handleListingClick.bind(this, listing)}
-      >{
-          data.user &&
-          <FavoriteHeart
-            listing={listing}
-          />
-        }
+        key={`widget-listing-viewer-${listing.id}`}
+      >
         <div style={listing_image_style}>
           <div style={overlay_style} />
           <div style={price_tag_style}>
-            ${price}{listing.compact_property && listing.compact_property.property_type === 'Residential Lease' ? '/mo' : ''}
+            ${price}
+            {listing.compact_property &&
+            listing.compact_property.property_type === 'Residential Lease'
+              ? '/mo'
+              : ''}
           </div>
         </div>
-        <div
-          style={S('absolute b-0 h-100 p-10 pl-15 color-000')}
-        >
+        <div style={S('absolute b-0 h-100 p-10 pl-15 color-000')}>
           <div style={S('font-14')}>{listing_util.addressTitle(address)}</div>
           <div style={S('font-14')}>
             <div style={S(`mt-8${data.is_mobile ? ' font-14' : ''}`)}>
@@ -146,7 +142,9 @@ export default class ListingCard extends Component {
             </div>
           </div>
           <div style={S('font-14')}>
-            <div style={S(`pull-left mr-15 mt-18${data.is_mobile ? ' font-14' : ''}`)}>
+            <div
+              style={S(`pull-left mr-15 mt-18${data.is_mobile ? ' font-14' : ''}`)}
+            >
               <div style={S(`pull-left w-10 h-10 br-100 mr-8 bg-${status_color}`)} />
               <div style={S(`pull-left mt-5n color-${status_color}`)}>
                 {listing.status}
@@ -158,25 +156,24 @@ export default class ListingCard extends Component {
             </div>
           </div>
         </div>
-        <AgentImage
-          listing={listing}
+        <Link
+          target="_blank"
+          className="c-listing-card__link"
+          to={`/dashboard/mls/${listing.id}`}
         />
-        {action_bubble}
-        <SignUpConfirmMessage
-          data={data}
-          listing={listing}
-        />
+        <AgentImage listing={listing} />
+        {user && (
+          <div className="c-listing-card__favorite-heart">
+            <FavoriteHeart listing={listing} />
+          </div>
+        )}
       </div>
     )
   }
 }
+
 ListingCard.propTypes = {
-  data: PropTypes.object,
-  listing: PropTypes.object,
-  handleEmailSubmit: PropTypes.func,
-  handleListingInquirySubmit: PropTypes.func,
-  handleCloseSignupForm: PropTypes.func,
-  handleListingClick: PropTypes.func,
-  handleLoginClick: PropTypes.func,
-  showIntercom: PropTypes.func
+  user: PropTypes.object,
+  data: PropTypes.object.isRequired,
+  listing: PropTypes.object.isRequired
 }
