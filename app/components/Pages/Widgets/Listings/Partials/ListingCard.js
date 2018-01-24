@@ -1,10 +1,11 @@
 // Widgets/Partials/ListingCard.js
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import PropTypes from 'prop-types'
 import S from 'shorti'
 import listing_util from '../../../../../utils/listing'
 import { randomString, numberWithCommas } from '../../../../../utils/helpers'
-import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
+import FavoriteHeart from '../../../Dashboard/Listings/components/FavoriteHeart'
 import Brand from '../../../../../controllers/Brand'
 import AgentImage from './AgentImage'
 
@@ -44,8 +45,12 @@ export default class ListingCard extends Component {
   }
 
   render() {
-    const { listing, data } = this.props
+    const { listing, user, data } = this.props
     let { property } = listing
+
+    if (!listing) {
+      return null
+    }
 
     if (!property) {
       property = listing.compact_property
@@ -110,12 +115,10 @@ export default class ListingCard extends Component {
 
     return (
       <div
-        key={`widget-listing-viewer-${listing.id}`}
         style={listing_card_style}
         className={this.props.className}
-        onClick={this.props.handleListingClick.bind(this, listing)}
+        key={`widget-listing-viewer-${listing.id}`}
       >
-        {data.user && <FavoriteHeart listing={listing} />}
         <div style={listing_image_style}>
           <div style={overlay_style} />
           <div style={price_tag_style}>
@@ -153,19 +156,24 @@ export default class ListingCard extends Component {
             </div>
           </div>
         </div>
+        <Link
+          target="_blank"
+          className="c-listing-card__link"
+          to={`/dashboard/mls/${listing.id}`}
+        />
         <AgentImage listing={listing} />
+        {user && (
+          <div className="c-listing-card__favorite-heart">
+            <FavoriteHeart listing={listing} />
+          </div>
+        )}
       </div>
     )
   }
 }
 
 ListingCard.propTypes = {
-  data: PropTypes.object,
-  listing: PropTypes.object,
-  handleEmailSubmit: PropTypes.func,
-  handleListingInquirySubmit: PropTypes.func,
-  handleCloseSignupForm: PropTypes.func,
-  handleListingClick: PropTypes.func,
-  handleLoginClick: PropTypes.func,
-  showIntercom: PropTypes.func
+  user: PropTypes.object,
+  data: PropTypes.object.isRequired,
+  listing: PropTypes.object.isRequired
 }

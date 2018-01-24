@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import ListingCard from './ListingCard'
 import S from 'shorti'
@@ -10,14 +11,14 @@ import getListing from '../../../../../store_actions/widgets/listings/get-listin
 
 class Section extends Component {
   componentDidMount() {
-    const { data } = this.props
+    const { data, user, location } = this.props
 
     this.options = this.initOptions(
-      data.location.query.brokerage,
-      data.location.query.agent,
+      location.query.brokerage,
+      location.query.agent,
       this.props.type,
-      data.location.query.brand,
-      data.user
+      location.query.brand,
+      user
     )
     this.widgetOptions = this.initWidgetOptions()
     this.props.getListing(this.options, this.widgetOptions)
@@ -137,6 +138,7 @@ class Section extends Component {
 
   render() {
     let showLoadMore
+    const { data, user } = this.props
 
     if (this.props.listingsInfo.total > this.props.listings.length) {
       showLoadMore = true
@@ -167,9 +169,9 @@ class Section extends Component {
             <ListingCard
               className="listing-card"
               key={i}
-              data={this.props.data}
+              data={data}
+              user={user}
               listing={listing}
-              handleListingClick={this.handleListingClick}
             />
           ))}
         <div className="clearfix" />
@@ -201,15 +203,16 @@ class Section extends Component {
   }
 }
 
-export default connect(
-  ({ widgets }, { type }) => {
+export default withRouter(connect(
+  ({ widgets }, { type, location }) => {
     const listings = widgets.listings[type] || {}
 
     return {
+      location,
       listings: listings.listings || [],
       listingsInfo: listings.listingsInfo || {},
       isFetching: listings.isFetching || false
     }
   },
   { getListing }
-)(Section)
+)(Section))
