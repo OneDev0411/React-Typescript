@@ -1,36 +1,38 @@
 // Widgets/Listings/index.js
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import S from 'shorti'
 import PropTypes from 'prop-types'
 import ListingSection from './Partials/ListingSection'
 import AppStore from '../../../../stores/AppStore'
 
-export default class Listings extends Component {
-
+class ListingsWidget extends Component {
   constructor(props) {
     super(props)
-    this.updateHeight = this.updateHeight.bind(this)
+    this._updateHeight = this._updateHeight.bind(this)
     this.height = 0
   }
+
   componentWillMount() {
     AppStore.data.is_widget = true
     AppStore.emitChange()
   }
 
   componentDidUpdate() {
-    this.updateHeight()
+    this._updateHeight()
   }
 
-  updateHeight() {
+  _updateHeight() {
     if (this.parentDiv &&
       this.height !== this.parentDiv.scrollHeight) {
-      parent.postMessage({ height: this.parentDiv.scrollHeight }, '*')
+      window.parent.postMessage({ height: this.parentDiv.scrollHeight }, '*')
       this.height = this.parentDiv.scrollHeight
     }
   }
+
   render() {
-    // Data
-    const data = this.props.data
+    const { user, data } = this.props
+
     let links_area = (
       <div>
         <div style={S('color-9b9b9b font-15 mb-40 mt-40')} className="text-center">
@@ -39,6 +41,7 @@ export default class Listings extends Component {
         </div>
       </div>
     )
+
     return (
       <div
         className="futurastd"
@@ -47,8 +50,9 @@ export default class Listings extends Component {
         <ListingSection
           title="Exclusive Listings"
           data={data}
+          user={user}
           type="active"
-          updateHeight={this.updateHeight}
+          updateHeight={this._updateHeight}
         />
         <div
           className="clearfix"
@@ -56,8 +60,9 @@ export default class Listings extends Component {
         <ListingSection
           title="Sold"
           data={data}
+          user={user}
           type="sold"
-          updateHeight={this.updateHeight}
+          updateHeight={this._updateHeight}
         />
         <div
           className="clearfix"
@@ -67,8 +72,13 @@ export default class Listings extends Component {
     )
   }
 }
-// PropTypes
-Listings.propTypes = {
+
+ListingsWidget.propTypes = {
   data: PropTypes.object,
-  location: PropTypes.object
+  user: PropTypes.object
 }
+
+export default connect(({ user, data }) => ({
+  data,
+  user
+}))(ListingsWidget)

@@ -6,8 +6,8 @@ import config from '../../../config/public'
 // create socket
 const socket = io(config.socket.server, {
   reconnection: true,
-  reconnectionDelay: 1000,
-  reconnectionDelayMax: 5000,
+  reconnectionDelay: 5000,
+  reconnectionDelayMax: 6000,
   reconnectionAttempts: 99999
 })
 
@@ -98,7 +98,9 @@ export default class Socket {
    * on ping
    */
   onPing(callback) {
-    if (!callback) { return false }
+    if (!callback) {
+      return false
+    }
 
     callback(null, new Date())
   }
