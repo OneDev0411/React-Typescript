@@ -22,7 +22,7 @@ export default class Fetch {
 
     this._isLoggedIn = user && user.access_token !== undefined
 
-    const agent = SuperAgent.post(`${this._proxyUrl}/${this.getEndpointKey(endpoint)}`)
+    const agent = SuperAgent.post(this._proxyUrl)
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
       .retry(2)
