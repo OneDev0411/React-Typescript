@@ -106,8 +106,8 @@ export class AgentFilter extends React.Component {
           >
             <li
               className={filter === active ? 'active' : ''}
-              onClick={() => this.setFilter(filter)}
               data-test="filter-item"
+              onClick={() => this.setFilter(filter)}
             >
               <span className="title" data-test="title">
                 {filter}
