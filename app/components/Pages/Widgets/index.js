@@ -68,10 +68,8 @@ class App extends Component {
 
 
     return (
-      <div className="u-scrollbar">
-        <main className={`l-app__main ${user ? 'is-logged-in' : ''}`}>
-          {children}
-        </main>
+      <div>
+        {children}
       </div>
     )
   }
