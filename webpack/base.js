@@ -15,6 +15,9 @@ export default {
     extensions: ['.js', '.json', '.css', '.scss'],
     modules: [config.compile.entry, 'node_modules']
   },
+  externals: {
+    fs: '{}'
+  },
   plugins: [new webpack.DefinePlugin(config.globals)],
   module: {
     rules: [
