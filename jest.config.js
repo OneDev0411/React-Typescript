@@ -8,8 +8,8 @@ module.exports = {
   notify: true,
   verbose: true,
   roots: ['<rootDir>/app/'],
-  moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx']
-
+  moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx'],
+  testURL: 'http://localhost:8080'
   // An array of regexp pattern strings that are matched against all
   // test paths before executing the test.
   // Default: ["/node_modules/"]
