@@ -17,7 +17,7 @@ import DealAddress from './deal-address'
 import EscrowOfficers from './escrow-officer'
 import Contexts from './contexts'
 import EnderType from './deal-ender-type'
-import IntercomTrigger from '../../Partials/IntercomTrigger'
+import Alert from '../../Partials/Alert'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import {
   createDeal,
@@ -398,7 +398,6 @@ class CreateDeal extends React.Component {
                     dealSide="Selling"
                     agents={sellingAgents}
                     shouldPrepopulateAgent={false}
-                    ctaTitleForPrimaryAgent="Add primary agent"
                     onUpsertAgent={form => this.onUpsertRole(form, 'sellingAgents')}
                     onRemoveAgent={id => this.onRemoveRole(id, 'sellingAgents')}
                   />
@@ -446,30 +445,13 @@ class CreateDeal extends React.Component {
             </div>
           )}
 
-          {!saving &&
-            submitError && (
-              <div
-                className="c-alert c-alert--error"
-                style={{
-                  float: 'left',
-                  marginBottom: '2rem'
-                }}
-              >
-                <span>
-                  Sorry, something went wrong while creating the deal. Please try again.
-                </span>
-                <IntercomTrigger
-                  render={({ activeIntercom, intercomIsActive }) => (
-                    <button
-                      onClick={!intercomIsActive ? activeIntercom : () => false}
-                      className="btn btn-primary c-button--link"
-                    >
-                      Support
-                    </button>
-                  )}
-                />
-              </div>
-            )}
+          {!saving && submitError && (
+            <Alert
+              code={500}
+              type="error"
+              style={{ float: 'left', marginBottom: '2rem' }}
+            />
+          )}
 
           <Button
             className={cn('btn btn-primary create-deal-button', {

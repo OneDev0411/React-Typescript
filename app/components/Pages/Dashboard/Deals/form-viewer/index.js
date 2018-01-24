@@ -72,10 +72,20 @@ class FormViewer extends React.Component {
     }
 
     return {
-      type: file.mime === 'application/pdf' ? 'pdf' : 'image',
+      type: this.getFileType(file),
       name: file.name,
       url: file.url
     }
+  }
+
+  getFileType(file) {
+    if (file.mime === 'application/pdf') {
+      return 'pdf'
+    } else if (file.mime.includes('image/')) {
+      return 'image'
+    }
+
+    return 'unknown'
   }
 
   getDigitalForm() {
@@ -152,9 +162,7 @@ class FormViewer extends React.Component {
       )
     }
 
-    if (['pdf', 'image'].indexOf(file.type) === -1) {
-      return false
-    }
+    console.log(file.type)
 
     if (params.type === 'envelope') {
       return (

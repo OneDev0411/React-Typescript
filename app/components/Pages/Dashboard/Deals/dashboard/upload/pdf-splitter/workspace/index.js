@@ -13,23 +13,16 @@ class Workspace extends React.Component {
   }
 
   render() {
-    const { splitter, upload } = this.props
+    const { deal, splitter, upload } = this.props
 
     return (
       <div>
-        <Form
-          upload={upload}
-        />
-
-        <Pages
-          upload={upload}
-          splitter={splitter}
-        />
+        <Form deal={deal} upload={upload} />
+        <Pages upload={upload} splitter={splitter} />
       </div>
     )
   }
 }
-
 
 function mapStateToProps({ deals }) {
   return {

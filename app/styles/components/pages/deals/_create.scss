@@ -58,6 +58,7 @@ $margin: 20px;
 */
 %deal-create-form {
   padding: 20px 50px;
+  $required-color: #d0021b;
 
   .swoosh {
     font-size: 14px;
@@ -78,8 +79,20 @@ $margin: 20px;
     color: #263445;
     margin-bottom: 18px;
 
+    &.no-margin-bottom {
+      margin-bottom: 0;
+    }
+
     .required {
-      color: #d0021b;
+      color: $required-color;
+    }
+  }
+
+  .hero-description {
+    margin-bottom: 18px;
+    font-size: 17px;
+    .required {
+      color: $required-color;
     }
   }
 

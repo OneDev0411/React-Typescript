@@ -67,9 +67,10 @@ class DealsDashboard extends React.Component {
       deals, isBackOffice, params, loadingDeals
     } = this.props
     const { activeFilters, searchBoxIsOpen, emptySearchPageIsOpen } = this.state
+    const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
     return (
-      <div className="deals-list">
+      <div className="deals-list" data-simplebar={!isWebkit || null}>
         <Header
           activeFilterTab={params.filter}
           initialBOFilters={this.initialBOFilters}

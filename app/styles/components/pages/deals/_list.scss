@@ -1,6 +1,6 @@
 %deals-list {
   overflow-x: hidden;
-  min-height: 100vh;
+  height: 100vh;
   .table-container {
     @extend %deal-list--table;
   }
@@ -69,7 +69,7 @@
  *
  */
 %deal-list--table {
-  padding: 2% 30px;
+  padding: 2rem;
 
   .table {
     $border-color: #e8eef3;
@@ -212,8 +212,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0 30px;
-    height: 57px;
+    padding: 0 2rem;
+    height: 5.5rem;
     position: fixed;
     top: 0;
     width: calc(100% - #{$app-sidenav-width});
@@ -319,7 +319,7 @@
     border: none;
     box-shadow: none;
     margin-bottom: 0;
-    padding: 0 30px;
+    padding: 0 2rem;
 
     &.agent {
       background-color: inherit;

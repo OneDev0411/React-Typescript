@@ -13,23 +13,21 @@ export default ({
   return (
     <div className="form-section deal-people deal-client">
       <div className="hero">
-        Do you have Title company and Escrow officer information?  - add escrow officer
+        Do you have Title company and Escrow officer information?
       </div>
 
       <div className="people-container">
-        {
-          _.map(escrowOfficers, (agent, id) =>
-            <CrudRole
-              key={id}
-              role={agent}
-              allowedRoles={allowedRoles}
-              modalTitle="Edit Escrow Officer"
-              buttonText="Update"
-              onRemoveRole={(id) => onRemoveEscrowOfficer(id)}
-              onUpsertRole={onUpsertEscrowOfficer}
-            />
-          )
-        }
+        {_.map(escrowOfficers, (agent, id) => (
+          <CrudRole
+            key={id}
+            role={agent}
+            allowedRoles={allowedRoles}
+            modalTitle="Edit Escrow Officer"
+            buttonText="Update"
+            onRemoveRole={id => onRemoveEscrowOfficer(id)}
+            onUpsertRole={onUpsertEscrowOfficer}
+          />
+        ))}
 
         <CrudRole
           modalTitle="Add Escrow Officer"

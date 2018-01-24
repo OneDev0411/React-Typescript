@@ -12,11 +12,12 @@ export default (state = {}, action) => {
     case types.GET_ROOMS: {
       let opensPopups = Object.assign({}, cookies.get('popups'), state)
 
-      opensPopups && Object.keys(opensPopups).forEach(key => {
-        if (!action.rooms[key]) {
-          delete opensPopups[key]
-        }
-      })
+      opensPopups &&
+        Object.keys(opensPopups).forEach(key => {
+          if (!action.rooms[key]) {
+            delete opensPopups[key]
+          }
+        })
 
       return opensPopups
     }
@@ -24,10 +25,8 @@ export default (state = {}, action) => {
     case types.ADD_POPUP: {
       const nextState = {
         ...state,
-        ...{
-          [action.roomId]: {
-            minimize: false
-          }
+        [action.roomId]: {
+          minimize: false
         }
       }
 
@@ -53,11 +52,9 @@ export default (state = {}, action) => {
     case types.MAXIMIZE_POPUP: {
       const nextState = {
         ...state,
-        ...{
-          [action.roomId]: {
-            minimize: false,
-            maximize: true
-          }
+        [action.roomId]: {
+          minimize: false,
+          maximize: true
         }
       }
 

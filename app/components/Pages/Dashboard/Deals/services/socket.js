@@ -27,9 +27,7 @@ export default class DealSocket extends Socket {
     socket.on('Deal', this.onDealChange.bind(this))
 
     // on reconnect
-    Rx
-      .Observable
-      .fromEvent(socket, 'reconnect')
+    Rx.Observable.fromEvent(socket, 'reconnect')
       .throttleTime(20 * 1000)
       .subscribe(() => this.onReconnected())
   }
@@ -38,8 +36,14 @@ export default class DealSocket extends Socket {
    * authenticate user brand
    */
   static registerBrand(user) {
+    console.log('[ + ] Registering Deal Brand')
+
     if (user && user.brand) {
-      window.socket.emit('Brand.Register', user.brand)
+      window.socket.emit('Brand.Register', user.brand, (user, err) => {
+        if (err) {
+          console.log(`[ + ] Deal brand registering failed: ${err}`)
+        }
+      })
     }
   }
 
@@ -93,6 +97,7 @@ export default class DealSocket extends Socket {
     const { deals } = state
     const { user } = this
 
+    console.log('[ + ] Deal socket reconnected')
     // register brand
     DealSocket.registerBrand(user)
 

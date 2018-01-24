@@ -13,16 +13,22 @@ import EnderType from './deal-ender-type'
 import DealClients from './deal-clients'
 import BuyerName from './offer-buyer-name'
 import DealAgents from './deal-agents'
+import DealStatus from './deal-status'
 import EscrowOfficers from './escrow-officer'
 import DealReferrals from './deal-referrals'
 import Contexts from './contexts'
 import IntercomTrigger from '../../Partials/IntercomTrigger'
-import { createRoles, createOffer, updateContext } from '../../../../../store_actions/deals'
+import {
+  createRoles,
+  createOffer,
+  updateContext
+} from '../../../../../store_actions/deals'
 import hasPrimaryOffer from '../utils/has-primary-offer'
 
 class CreateOffer extends React.Component {
   constructor(props) {
     super(props)
+
     const { deal } = props
 
     const dealHasPrimaryOffer = hasPrimaryOffer(deal)
@@ -31,6 +37,7 @@ class CreateOffer extends React.Component {
       dealHasPrimaryOffer,
       saving: false,
       buyerName: '',
+      dealStatus: '',
       offerType: dealHasPrimaryOffer ? 'backup' : '',
       enderType: -1,
       contexts: {},
@@ -99,7 +106,7 @@ class CreateOffer extends React.Component {
 
   onRemoveRole(id, type) {
     this.setState({
-      [type]: _.omit(this.state[type], (role) => role.id === id)
+      [type]: _.omit(this.state[type], role => role.id === id)
     })
   }
 
@@ -128,9 +135,24 @@ class CreateOffer extends React.Component {
     this.setState({ enderType })
   }
 
+  /**
+   * handles deal status change
+   */
+  changeDealStatus(status) {
+    this.setState({ dealStatus: status })
+  }
+
   isFormValidated() {
     const { deal } = this.props
-    const { offerType, contexts, agents, clients, buyerName, enderType } = this.state
+    const {
+      offerType,
+      contexts,
+      agents,
+      clients,
+      buyerName,
+      enderType,
+      dealStatus
+    } = this.state
 
     if (this.isBackupOffer()) {
       return buyerName.length > 0
@@ -139,20 +161,25 @@ class CreateOffer extends React.Component {
     // agents are required only when enderType = No
     const agentsValid = enderType === null ? _.size(agents) > 0 : true
 
-    return offerType.length > 0 &&
+    return (
+      offerType.length > 0 &&
       enderType !== -1 &&
       _.size(clients) > 0 &&
       agentsValid &&
+      dealStatus.length > 0 &&
       DealContext.validateList(
         contexts,
         'Buying',
         deal.property_type,
         DealContext.hasActiveOffer(deal)
       )
+    )
   }
 
   getAllRoles() {
-    const { enderType, clients, agents, escrowOfficers, referrals } = this.state
+    const {
+      enderType, clients, agents, escrowOfficers, referrals
+    } = this.state
     const roles = []
 
     _.each(clients, client => roles.push(_.omit(client, 'id')))
@@ -167,7 +194,9 @@ class CreateOffer extends React.Component {
   }
 
   async createOffer() {
-    const { deal, notify, createOffer, createRoles, updateContext } = this.props
+    const {
+      deal, notify, createOffer, createRoles, updateContext
+    } = this.props
     const { enderType, contexts, clients } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
@@ -176,8 +205,10 @@ class CreateOffer extends React.Component {
     let buyerName = this.state.buyerName
 
     if (!isBackupOffer) {
-      buyerName = _.map(clients, client =>
-        `${client.legal_first_name} ${client.legal_last_name}`).join(', ')
+      buyerName = _.map(
+        clients,
+        client => `${client.legal_first_name} ${client.legal_last_name}`
+      ).join(', ')
     }
 
     this.setState({ saving: true })
@@ -190,10 +221,15 @@ class CreateOffer extends React.Component {
         await createRoles(deal.id, this.getAllRoles())
 
         // create/update contexts
-        await updateContext(deal.id, {
-          ...contexts,
-          ender_type: enderType
-        }, true)
+        await updateContext(
+          deal.id,
+          {
+            ...contexts,
+            listing_status: dealStatus,
+            ender_type: enderType
+          },
+          true
+        )
       }
 
       notify({
@@ -248,6 +284,7 @@ class CreateOffer extends React.Component {
   getDealContexts() {
     const { deal } = this.props
     const hasActiveOffer = true
+
     return DealContext.getItems('Buying', deal.property_type, hasActiveOffer)
   }
 
@@ -264,6 +301,7 @@ class CreateOffer extends React.Component {
       contexts,
       referrals,
       escrowOfficers,
+      dealStatus,
       offerType,
       enderType,
       agents,
@@ -275,16 +313,13 @@ class CreateOffer extends React.Component {
 
     const canCreateOffer = this.isFormValidated() && !saving
     const dealContexts = this.getDealContexts()
+    const isDoubleEnderAgent = enderType === 'AgentDoubleEnder'
 
     return (
       <div className="deal-create-offer">
-        <Navbar
-          title="Add New Offer"
-          onClose={() => this.backToDeal()}
-        />
+        <Navbar title="Add New Offer" onClose={() => this.backToDeal()} />
 
         <div className="form">
-
           <OfferType
             dealHasPrimaryOffer={dealHasPrimaryOffer}
             offerType={offerType}
@@ -292,16 +327,14 @@ class CreateOffer extends React.Component {
             onChangeOfferType={offer => this.changeOfferType(offer)}
           />
 
-          {
-            this.isBackupOffer() &&
+          {this.isBackupOffer() && (
             <BuyerName
               buyerName={buyerName}
-              onChangeBuyerName={(buyerName) => this.setState({ buyerName })}
+              onChangeBuyerName={buyerName => this.setState({ buyerName })}
             />
-          }
+          )}
 
-          {
-            this.isPrimaryOffer() &&
+          {this.isPrimaryOffer() && (
             <div>
               <DealClients
                 dealSide="Buying"
@@ -311,48 +344,50 @@ class CreateOffer extends React.Component {
               />
 
               <EnderType
-                isRequired={true}
+                isRequired
                 enderType={enderType}
-                showAgentDoubleEnder={true}
+                showAgentDoubleEnder
                 onChangeEnderType={type => this.changeEnderType(type)}
               />
 
-              {
-                enderType === null &&
-                <DealAgents
-                  scenario="CreateOffer"
-                  dealSide="Buying"
-                  agents={agents}
-                  onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
-                  onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
-                />
-              }
+              <DealAgents
+                scenario="CreateOffer"
+                dealSide="Buying"
+                shouldPrepopulateAgent={isDoubleEnderAgent}
+                agents={agents}
+                onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
+                onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
+              />
 
               <EscrowOfficers
                 escrowOfficers={escrowOfficers}
-                onUpsertEscrowOfficer={form => this.onUpsertRole(form, 'escrowOfficers')}
+                onUpsertEscrowOfficer={form =>
+                  this.onUpsertRole(form, 'escrowOfficers')
+                }
                 onRemoveEscrowOfficer={id => this.onRemoveRole(id, 'escrowOfficers')}
               />
 
-              {
-                enderType === 'AgentDoubleEnder' &&
+              <DealStatus
+                dealStatus={dealStatus}
+                onChangeDealStatus={status => this.changeDealStatus(status)}
+              />
+
+              {isDoubleEnderAgent && (
                 <DealReferrals
                   dealSide="Buying"
                   referrals={referrals}
                   onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
                   onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
                 />
-              }
+              )}
 
               <Contexts
                 contexts={contexts}
-                onChangeContext={(field, value) =>
-                  this.changeContext(field, value)
-                }
+                onChangeContext={(field, value) => this.changeContext(field, value)}
                 fields={dealContexts}
               />
             </div>
-          }
+          )}
 
           {!saving &&
             submitError && (
@@ -364,7 +399,8 @@ class CreateOffer extends React.Component {
                 }}
               >
                 <span>
-                  Sorry, something went wrong while adding an offer. Please try again.
+                  Sorry, something went wrong while adding an offer. Please try
+                  again.
                 </span>
                 <IntercomTrigger
                   render={({ activeIntercom, intercomIsActive }) => (
@@ -380,7 +416,9 @@ class CreateOffer extends React.Component {
             )}
 
           <Button
-            className={cn('btn btn-primary create-offer-button', { disabled: !canCreateOffer })}
+            className={cn('btn btn-primary create-offer-button', {
+              disabled: !canCreateOffer
+            })}
             onClick={() => this.createOffer()}
             disabled={!canCreateOffer}
           >

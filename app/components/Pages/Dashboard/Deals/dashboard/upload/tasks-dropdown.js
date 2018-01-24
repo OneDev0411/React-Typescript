@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import { addNotification as notify } from 'reapop'
 import { Dropdown, MenuItem, Button } from 'react-bootstrap'
 import _ from 'underscore'
-import { setUploadAttributes, createFormTask } from '../../../../../../store_actions/deals'
+import {
+  setUploadAttributes,
+  createFormTask
+} from '../../../../../../store_actions/deals'
+import TaskForms from '../create-task/form/forms-list'
 
 class DropDownTasks extends React.Component {
   constructor(props) {
@@ -12,12 +16,16 @@ class DropDownTasks extends React.Component {
     this.state = {
       showMenu: false,
       newTaskMode: false,
-      isCreatingTask: false
+      newFormMode: null,
+      isCreatingTask: false,
+      taskTitle: ''
     }
   }
 
   toggleMenu() {
-    if (this.state.newTaskMode) {
+    const { newTaskMode, newFormMode } = this.state
+
+    if (newTaskMode || newFormMode) {
       return false
     }
 
@@ -38,8 +46,7 @@ class DropDownTasks extends React.Component {
   }
 
   discardEdit(e) {
-    const { isCreatingTask } = this.state
-    const taskTitle = this.inputNewTask.value
+    const { isCreatingTask, taskTitle } = this.state
 
     if (isCreatingTask || taskTitle.length > 0) {
       return false
@@ -48,10 +55,21 @@ class DropDownTasks extends React.Component {
     this.setState({ newTaskMode: false })
   }
 
-  async createNewTask(checklistId) {
-    const { upload, notify, createFormTask, onSelectTask } = this.props
+  onTaskTitleChange(value) {
+    this.setState({
+      taskTitle: value
+    })
+  }
 
-    const taskTitle = this.inputNewTask.value
+  toggleNewFormMode(chId) {
+    this.setState({ newFormMode: chId })
+  }
+
+  async createNewTask(checklistId) {
+    const {
+      upload, notify, createFormTask, onSelectTask
+    } = this.props
+    const { taskTitle } = this.state
 
     if (taskTitle.length === 0) {
       return this.discardEdit()
@@ -69,16 +87,33 @@ class DropDownTasks extends React.Component {
       status: 'success'
     })
 
-    this.setState({
-      isCreatingTask: false,
-      newTaskMode: false,
-      showMenu: false
-    }, () => onSelectTask(task.id))
+    this.setState(
+      {
+        taskTitle: '',
+        isCreatingTask: false,
+        newTaskMode: false,
+        showMenu: false
+      },
+      () => onSelectTask(task.id)
+    )
   }
 
   render() {
-    const { showMenu, newTaskMode, isCreatingTask } = this.state
-    const { shouldDropUp, selectedTask, upload, checklists, tasks } = this.props
+    const {
+      showMenu,
+      newTaskMode,
+      newFormMode,
+      isCreatingTask,
+      taskTitle
+    } = this.state
+    const {
+      deal,
+      shouldDropUp,
+      selectedTask,
+      upload,
+      checklists,
+      tasks
+    } = this.props
 
     return (
       <Dropdown
@@ -92,80 +127,87 @@ class DropDownTasks extends React.Component {
           bsRole="toggle"
           onClick={e => e.stopPropagation()}
         >
-          { (selectedTask && selectedTask.title) || 'Select a task' }
+          {(selectedTask && selectedTask.title) || 'Select a task'}
 
           <span className="indicator">
-            <i
-              className={`fa fa-caret-${showMenu ? 'up' : 'down'}`}
-            />
+            <i className={`fa fa-caret-${showMenu ? 'up' : 'down'}`} />
           </span>
         </Button>
 
         <Dropdown.Menu className="deal-task-dropdown-list">
-          {
-            upload.deal.checklists.map((chId, key) => {
-              const checklist = checklists[chId]
+          {upload.deal.checklists.map((chId, key) => {
+            const checklist = checklists[chId]
 
-              return (
-                <div key={chId}>
+            return (
+              <div key={chId}>
+                <div className="checklist">{checklist.title}</div>
 
-                  <div className="checklist">
-                    { checklist.title }
-                  </div>
+                {checklist.tasks &&
+                  checklist.tasks.map((tId, key) => (
+                    <li
+                      key={tId}
+                      className={cn({
+                        selected: selectedTask && selectedTask.id === tId
+                      })}
+                      onClick={() => this.onSelectTask(tId)}
+                    >
+                      {tasks[tId].title}
+                    </li>
+                  ))}
 
-                  {
-                    checklist.tasks &&
-                    checklist.tasks.map((tId, key) =>
-                      <li
-                        key={tId}
-                        className={cn({
-                          selected: selectedTask && selectedTask.id === tId
-                        })}
-                        onClick={() => this.onSelectTask(tId)}
-                      >
-                        { tasks[tId].title }
-                      </li>
-                    )
-                  }
+                {newTaskMode && newTaskMode === chId ? (
+                  <li>
+                    {isCreatingTask ? (
+                      <span className="creating-task">Creating task ...</span>
+                    ) : (
+                      <div className="create-task-input">
+                        <input
+                          className="new-task"
+                          placeholder="Name this task and press enter"
+                          onChange={e => this.onTaskTitleChange(e.target.value)}
+                          value={taskTitle}
+                          onKeyPress={e => this.onKeyPress(e, chId)}
+                          onBlur={e => this.discardEdit(e)}
+                          autoFocus
+                        />
 
-                  {
-                    (newTaskMode && newTaskMode === chId) ?
-                      <li>
-                        {
-                          isCreatingTask ?
-                            <span className="creating-task">
-                          Creating task ...
-                            </span> :
-                            <div className="create-task-input">
-                              <input
-                                className="new-task"
-                                placeholder="Name this task and press enter"
-                                ref={ref => this.inputNewTask = ref}
-                                onKeyPress={e => this.onKeyPress(e, chId)}
-                                onBlur={(e) => this.discardEdit(e)}
-                                autoFocus
-                              />
+                        <span
+                          className="save"
+                          onClick={() => this.createNewTask(chId)}
+                        >
+                          {taskTitle ? 'Save' : 'Cancel'}
+                        </span>
+                      </div>
+                    )}
+                  </li>
+                ) : (
+                  <Fragment>
+                    <li
+                      className="new-task"
+                      onClick={() => this.toggleNewFormMode(chId)}
+                    >
+                      Add new form to {checklist.title}
+                    </li>
 
-                              <span
-                                className="save"
-                                onClick={() => this.createNewTask(chId)}
-                              >
-                            Save
-                              </span>
-                            </div>
-                        }
-                      </li> :
-                      <li
-                        className="new-task"
-                        onClick={() => this.setState({ newTaskMode: chId })}
-                      >
-                      Add new task to { checklist.title }
-                      </li>
-                  }
-                </div>
-              )
-            })
-          }
+                    <li
+                      className="new-task"
+                      onClick={() => this.setState({ newTaskMode: chId })}
+                    >
+                      Add new task to {checklist.title}
+                    </li>
+
+                    <TaskForms
+                      deal={deal}
+                      listId={checklist.id}
+                      show={newFormMode === chId}
+                      onClose={() => this.toggleNewFormMode(null)}
+                      onTaskCreate={task => this.onSelectTask(task.id)}
+                    />
+                  </Fragment>
+                )}
+              </div>
+            )
+          })}
         </Dropdown.Menu>
       </Dropdown>
     )

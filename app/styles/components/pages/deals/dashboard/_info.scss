@@ -21,10 +21,8 @@
   max-width: $deal-info-width;
 
   .scrollable {
-    overflow: auto;
+    height: $column-height;
     overflow-x: hidden;
-    min-height: $column-height;
-    max-height: $column-height;
   }
 
   .deal-info-section {

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
 import Dropzone from 'react-dropzone'
+import Deal from '../../../../../../../models/Deal'
 import {
   createFormTask,
   setSelectedTask,
@@ -25,7 +26,12 @@ class Forms extends React.Component {
 
   async createTask(form) {
     const {
-      deal, createFormTask, setSelectedTask, onClose, listId
+      deal,
+      createFormTask,
+      setSelectedTask,
+      onClose,
+      onTaskCreate,
+      listId
     } = this.props
 
     if (this.lockedTaskCreation) {
@@ -49,7 +55,14 @@ class Forms extends React.Component {
 
       this.setState({ isCreatingTask: null })
       this.lockedTaskCreation = false
-      onClose()
+
+      if (onClose) {
+        onClose()
+      }
+
+      if (onTaskCreate) {
+        onTaskCreate(task)
+      }
 
       return task
     } catch (error) {
@@ -97,7 +110,7 @@ class Forms extends React.Component {
 
   render() {
     const {
-      forms, show, onClose, displayTaskName
+      forms, show, onClose, displayTaskName, allowCustomTask
     } = this.props
     const { filter, showNewTaskModal, isCreatingTask } = this.state
 
@@ -108,6 +121,9 @@ class Forms extends React.Component {
           onHide={onClose}
           backdrop="static"
           dialogClassName="modal-deal-create-form"
+          style={{
+            zIndex: 2000
+          }}
         >
           <Modal.Header closeButton={isCreatingTask === null}>Add Task</Modal.Header>
 
@@ -142,15 +158,17 @@ class Forms extends React.Component {
             </ul>
           </Modal.Body>
 
-          <Modal.Footer>
-            <ul>
-              <li className="upload">
-                <div onClick={() => this.showNewTaskModal()}>
-                  <i className="fa fa-plus" /> Other
-                </div>
-              </li>
-            </ul>
-          </Modal.Footer>
+          {allowCustomTask && (
+            <Modal.Footer>
+              <ul>
+                <li className="upload">
+                  <div onClick={() => this.showNewTaskModal()}>
+                    <i className="fa fa-plus" /> Other
+                  </div>
+                </li>
+              </ul>
+            </Modal.Footer>
+          )}
         </Modal>
 
         <TaskName
@@ -166,7 +184,7 @@ class Forms extends React.Component {
           ref={ref => (this.dropzone = ref)}
           onDrop={files => this.onDropFiles(files)}
           multiple
-          accept="application/pdf,image/*"
+          accept={Deal.upload.getAcceptedDocuments()}
           style={{ display: 'none' }}
         />
       </div>

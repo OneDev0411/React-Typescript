@@ -1,4 +1,4 @@
-.modal-deal-bulk-submit {
+.c-deal-bulk-submit-modal {
   .modal-content {
     border: none;
   }
@@ -73,31 +73,30 @@
       }
     }
   }
+}
 
-  .modal-footer {
-    span {
-      font-size: 14px;
-      font-weight: 500;
-      color: #8da2b5;
-    }
+.c-deal-bulk-submit-modal__counter {
+  color: #8da2b5;
+}
 
-    .deal-button {
-      min-width: 100px;
-      height: 33px;
-      line-height: 17px;
-      background-color: #2196f3;
-      border: none;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 500;
-      margin-left: 10px;
+.c-deal-bulk-submit-modal__submit-btn {
+  padding: 0.5rem 1rem;
+  margin-left: 1rem;
+  border: none;
+  color: #fff;
+  border-radius: 3px;
+  background-color: #2196f3;
 
-      &:focus {
-        outline: none;
-      }
-      &:hover {
-        background-color: #197dcd;
-      }
-    }
+  &:disabled {
+    background-color: #b8c3ca;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:not(:disabled):hover {
+    color: #fff;
+    background-color: #197dcd;
   }
 }

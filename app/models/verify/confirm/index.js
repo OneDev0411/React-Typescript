@@ -6,14 +6,17 @@ import Fetch from '../../../services/fetch'
  */
 const verify = async params => {
   const { body, verifyType } = params
+
   if (!body || !verifyType) {
     return 600
   }
+
   try {
     const response = await new Fetch()
       .patch(`/users/${verifyType}_confirmed`)
       .send(body)
-    return response.statusCode
+
+    return response.body.data
   } catch ({ status }) {
     throw status
   }
