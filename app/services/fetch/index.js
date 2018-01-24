@@ -1,6 +1,7 @@
 import _ from 'underscore'
 import SuperAgent from 'superagent'
-import mocker from 'superagent-mocker'
+// import mocker from 'superagent-mocker'
+import nock from 'nock'
 import store from '../../stores'
 import config from '../../../config/public'
 
@@ -55,16 +56,13 @@ export default class Fetch {
   }
 
   mock() {
-    return mocker(SuperAgent)
+    // return mocker(SuperAgent)
   }
 
-  fake(config) {
-    return this.mock()[config.method || 'post'](
-      `${this._proxyUrl}/${this.getEndpointKey(config.endpoint)}`,
-      req => ({
-        body: config.response
-      })
-    )
+  fake(configuration) {
+    return nock(`${config.app.url}/api/proxifier/${this.getEndpointKey(configuration.endpoint)}`)
+      .post('/')
+      .reply(200, configuration.response, { 'Content-Type': 'application/json' })
   }
 
   get(endpoint) {
