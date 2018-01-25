@@ -233,7 +233,7 @@ const AsyncSearchWidget = Load({
 
 const AsyncBrands = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Brand/SubBrands' /* webpackChunkName: "brand_settings" */)
+    import('../components/Pages/Dashboard/Brand/index' /* webpackChunkName: "brand_settings" */)
 })
 
 const AsyncChecklistBrand = Load({

@@ -25,7 +25,7 @@ export default class Commission extends React.Component {
    * set form commission type
    */
   setCommissionType(type) {
-    const { form, onChange } = this.props
+    const { onChange } = this.props
 
     // reset current value
     onChange(this.getCommissionField(), 0)
@@ -105,7 +105,6 @@ export default class Commission extends React.Component {
         <div className="commission">
           <input
             name="commission"
-            required="required"
             type="number"
             placeholder="Commission *"
             value={this.getCommissionValue()}

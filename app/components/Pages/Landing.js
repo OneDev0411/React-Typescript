@@ -7,6 +7,8 @@ import S from 'shorti'
 import Typist from 'react-typist'
 import Brand from '../../controllers/Brand'
 
+import getDefaultHomePage from '../../utils/get-default-home-page'
+
 const ANIMATED_TEXT = ['seamless', 'smarter', 'faster', 'more knowledgeable']
 
 class Landing extends Component {
@@ -25,7 +27,7 @@ class Landing extends Component {
   }
 
   render() {
-    // Data
+    const { user } = this.props
     const { renderTypest } = this.state
 
     // Styles
@@ -125,9 +127,9 @@ class Landing extends Component {
               {brand_logo}
             </div>
           </div>
-          {this.props.user ? (
+          {user ? (
             <Link
-              to="/dashboard/mls"
+              to={getDefaultHomePage(user)}
               className="btn btn-default"
               style={S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 w-100')}
             >

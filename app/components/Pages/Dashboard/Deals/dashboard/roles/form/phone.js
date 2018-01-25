@@ -1,5 +1,4 @@
 import React from 'react'
-import cn from 'classnames'
 
 export default ({ form, onChange, isInvalid }) => (
   <div className="input-container phone">
