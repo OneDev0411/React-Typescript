@@ -1,19 +1,21 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import _ from 'underscore'
+
 const fileParser = require('async-busboy')
 const router = require('koa-router')()
+
 import updateSession from '../update-session'
 import config from '../../../../config/private'
 
 const app = new Koa()
 
-router.post('/proxifier/upload', bodyParser(), async ctx => {
+router.post('/proxifier/upload/:endpointKey', bodyParser(), async ctx => {
   const headers = ctx.headers
   const { files, fields } = await fileParser(ctx.req)
 
   try {
-    // remove base_url because current fetcher middleware add it by itself
+    // remove base url because current fetcher middleware add it by itself
     const endpoint = headers['x-endpoint'].replace(config.api.url, '')
 
     // get method
