@@ -32,7 +32,7 @@
       span.title {
         font-size: 31px;
         font-weight: 300;
-        line-height: 1.0;
+        line-height: 1;
       }
 
       .count {
@@ -44,6 +44,20 @@
     .cta {
       width: 20%;
       text-align: right;
+      display: flex;
+      justify-content: flex-end;
+      .contacts__toolbar__import {
+        margin-right: 12px;
+        border-radius: 3px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #2196f3;
+        background-color: #ffffff;
+        border: solid 1px #dce5eb;
+        padding: 8px 15px;
+        cursor: pointer;
+      }
     }
   }
 }
@@ -113,7 +127,7 @@
       font-size: 14px;
       color: #5b6469;
       &:hover {
-        background-color: #F8FAFB;
+        background-color: #f8fafb;
       }
 
       .ellipsis {

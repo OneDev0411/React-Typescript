@@ -79,6 +79,7 @@
     "intercom-client": "^2.9.1",
     "ioredis": "^2.5.0",
     "isomorphic-fetch": "^2.2.1",
+    "js-base64": "^2.4.1",
     "keymaster": "^1.6.2",
     "koa": "^2.4.1",
     "koa-bodyparser": "next",

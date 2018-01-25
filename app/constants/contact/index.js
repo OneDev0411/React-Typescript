@@ -8,9 +8,10 @@ new Array(
   'ADD_NOTE',
   'GET_TIMELINE',
   'UPSERT_ATTRIBUTES',
-  'DELETE_ATTRIBUTE'
-)
-.forEach(action => {
+  'DELETE_ATTRIBUTE',
+  'IMPORT_SUCCESSFUL_LOGIN',
+  'IMPORT_DONE'
+).forEach(action => {
   ActionTypes[action] = `CONTACTS___${action}`
 })
 
