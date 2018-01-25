@@ -1,4 +1,5 @@
 import types from '../../constants/deals'
+import _ from 'underscore'
 
 export default (state = null, action) => {
   switch (action.type) {
@@ -34,10 +35,7 @@ export default (state = null, action) => {
         ...state,
         [action.list_id]: {
           ...state[action.list_id],
-          tasks: _.uniq([
-            action.task.id,
-            ...state[action.list_id].tasks || []
-          ])
+          tasks: _.uniq([action.task.id, ...(state[action.list_id].tasks || [])])
         }
       }
 

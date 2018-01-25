@@ -5,7 +5,7 @@ import reducer from './agent'
 import fakeUser from '../../../tests/helpers/user/create-fake-user'
 import agent from '../../constants/deals/agent'
 
-describe('Test agent reducers in deal components', () => {
+describe('Test agent reducers in deals', () => {
   let agents
 
   beforeEach(() => {
@@ -21,9 +21,5 @@ describe('Test agent reducers in deal components', () => {
       type: types.GET_AGENTS,
       agents
     })).to.equal(agents)
-  })
-
-  test('should handle default state', () => {
-    expect(reducer(agents, {})).to.equal(agents)
   })
 })
