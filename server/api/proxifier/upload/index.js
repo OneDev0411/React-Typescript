@@ -15,7 +15,7 @@ router.post('/proxifier/upload/:endpointKey', bodyParser(), async ctx => {
   const { files, fields } = await fileParser(ctx.req)
 
   try {
-    // remove base_url because current fetcher middleware add it by itself
+    // remove base url because current fetcher middleware add it by itself
     const endpoint = headers['x-endpoint'].replace(config.api.url, '')
 
     // get method
