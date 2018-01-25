@@ -12,6 +12,8 @@ import S from 'shorti'
 import validator from 'validator'
 import { randomString } from '../../utils/helpers'
 
+import getDefaultHomePage from '../../utils/get-default-home-page'
+
 import emojify from 'emojify.js'
 emojify.setConfig({
   img_dir: '/static/images/emoji'
@@ -312,7 +314,7 @@ export default class Landing extends Component {
                     <li style={{ marginRight: '20px' }}>
                       <Link
                         className="btn btn-default"
-                        to="/dashboard/mls"
+                        to={getDefaultHomePage(data.user)}
                         style={S(
                           'color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 w-100'
                         )}

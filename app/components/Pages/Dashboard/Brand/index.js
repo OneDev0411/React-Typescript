@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Col } from 'react-bootstrap'
 import cn from 'classnames'
-import Teams from './Teams'
-import { getBrand } from '../../../../../store_actions/brandConsole'
+import Teams from './SubBrands/Teams'
+import { getBrand } from '../../../../store_actions/brandConsole/index'
 
 class SubBrands extends React.Component {
   constructor(props) {
