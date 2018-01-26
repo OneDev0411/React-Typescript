@@ -232,6 +232,8 @@ Context.isDisabled = function (deal, field) {
   if (field.name === 'list_price' && deal.listing) {
     return true
   }
+
+  return false
 }
 
 /**
