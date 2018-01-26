@@ -13,11 +13,6 @@ class ListingsWidget extends Component {
     this.height = 0
   }
 
-  componentWillMount() {
-    AppStore.data.is_widget = true
-    AppStore.emitChange()
-  }
-
   componentDidUpdate() {
     this._updateHeight()
   }

@@ -11,7 +11,7 @@ import config from '../../../../config/private'
 const app = new Koa()
 
 router.post('/proxifier/upload/:endpointKey', bodyParser(), async ctx => {
-  const headers = ctx.headers
+  const { headers } = ctx
   const { files, fields } = await fileParser(ctx.req)
 
   try {

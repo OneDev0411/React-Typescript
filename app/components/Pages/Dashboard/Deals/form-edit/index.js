@@ -33,10 +33,14 @@ class FormEdit extends React.Component {
    *
    */
   onLoad() {
-    const { deal } = this.props
+    let { deal, roles } = this.props
+    let dealRoles = {}
 
+    // deal.roles.forEach(role => (dealRoles[role] = roles[role]))
+    dealRoles = deal.roles.map(role => roles[role])
     this.setState({ loaded: true })
 
+    deal = { ...deal, roles: dealRoles }
     // set deal
     this.sendMessage('setDeal', [deal])
   }
@@ -249,7 +253,8 @@ function mapStateToProps({ user, deals }, props) {
 
   return {
     task: tasks && tasks[taskId],
-    deal: list && list[id]
+    deal: list && list[id],
+    roles: deals.roles
   }
 }
 
