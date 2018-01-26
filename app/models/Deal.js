@@ -656,7 +656,7 @@ Deal.voidEnvelope = async function (envelope_id) {
 Deal.splitPDF = async function (title, task_id, room_id, files, pages) {
   try {
     const request = agent
-      .post(`${config.app.url}/api/deals/pdf-splitter`)
+      .post('/api/deals/pdf-splitter')
       .field({ pages: JSON.stringify(pages) })
       .field({ title })
       .field({ room_id })
