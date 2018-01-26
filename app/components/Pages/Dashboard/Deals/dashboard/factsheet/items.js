@@ -41,6 +41,8 @@ class Table extends React.Component {
       table, deal, isBackOffice, showTitle, title, getValue
     } = this.props
 
+    console.log(deal)
+
     return (
       <div>
         {showTitle !== false && <div className="deal-info-title">{title}</div>}
@@ -50,7 +52,7 @@ class Table extends React.Component {
             .map(field => {
               const context = Deal.get.context(deal, field.name)
               const fieldCtx = getValue(deal, field)
-              const disabled = field.disabled === true
+              const disabled = field.disabled === true && deal.listing
               const approved =
                 (context && context.approved_at !== null) || field.approved
 
