@@ -1,6 +1,5 @@
 import path from 'path'
 import webpack from 'webpack'
-import Jarvis from 'webpack-jarvis'
 import config from '../config/webpack'
 
 export default {
@@ -17,10 +16,7 @@ export default {
     modules: [config.compile.entry, 'node_modules']
   },
   plugins: [
-    new webpack.DefinePlugin(config.globals),
-    new Jarvis({
-      port: 1337 // optional: set a port
-    })
+    new webpack.DefinePlugin(config.globals)
   ],
   externals: {
     fs: '{}'
