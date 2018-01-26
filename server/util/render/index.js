@@ -14,6 +14,7 @@ function fetch(store, renderProps) {
     if (component && component.fetchData) {
       return component.fetchData(store.dispatch, renderProps.params)
     }
+
     return Promise.reslove
   })
 }
@@ -29,6 +30,7 @@ async function display(file, renderProps) {
     const hostname = urlParser.parse(this.request.origin).hostname
     const brand = await getBrand(hostname)
     const { data } = initialState
+
     initialState = {
       ...initialState,
       data: {
@@ -42,11 +44,7 @@ async function display(file, renderProps) {
   }
 
   // create store
-  const store = createStore(
-    reducers,
-    initialState,
-    compose(applyMiddleware(thunk))
-  )
+  const store = createStore(reducers, initialState, compose(applyMiddleware(thunk)))
 
   // append user data to render props params
   if (initialState.user) {
@@ -90,8 +88,7 @@ async function display(file, renderProps) {
       store_data,
       data: this.locals,
       jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`,
-      jsVendorBundle: `${config.compile.publicPath}/${config.compile
-        .jsVendorBundle}`
+      jsVendorBundle: `${config.compile.publicPath}/${config.compile.jsVendorBundle}`
     })
   }
 }
