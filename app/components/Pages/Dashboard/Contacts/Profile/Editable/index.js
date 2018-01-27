@@ -43,18 +43,17 @@ class Editable extends React.Component {
   }
 
   nl2br(input) {
-    return input.split('\n').map((text, key) => (
-      <div key={`editable_item___line_${key}`}>
-        {text}
-      </div>
-    ))
+    return input
+      .split('\n')
+      .map((text, key) => <div key={`editable_item___line_${key}`}>{text}</div>)
   }
 
   render() {
     const {
       multiline,
       placeholder,
-      showAdd, showEdit,
+      showAdd,
+      showEdit,
       validate,
       error,
       index
@@ -64,9 +63,7 @@ class Editable extends React.Component {
 
     if (editMode) {
       return (
-        <div
-          className={cn('contact-editable', { error })}
-        >
+        <div className={cn('contact-editable', { error })}>
           <TextInput
             value={text}
             placeholder={placeholder}
@@ -80,42 +77,29 @@ class Editable extends React.Component {
             }}
             onBlur={() => this.onCloseEdit()}
             onClose={() => this.onCloseEdit()}
-            inputRef={el => this.text_input = el}
+            inputRef={el => (this.text_input = el)}
           />
         </div>
       )
     }
 
     return (
-      <div
-        className={cn('contact-editable', { error })}
-      >
-        <div
-          onClick={() => this.onClickEdit()}
-          className="text"
-        >
+      <div className={cn('contact-editable', { error })}>
+        <div onClick={() => this.onClickEdit()} className="text">
           {multiline ? this.nl2br(text) : text}
         </div>
 
-        <div
-          className={`control ${multiline ? 'multiline' : ''}`}
-        >
+        <div className={`control ${multiline ? 'multiline' : ''}`}>
+          {showEdit && (
+            <i className="fa fa-pencil" onClick={() => this.onClickEdit()} />
+          )}
 
-          {
-            showEdit &&
-            <i
-              className="fa fa-pencil"
-              onClick={() => this.onClickEdit()}
-            />
-          }
-
-          {
-            showAdd &&
+          {showAdd && (
             <i
               className="fa fa-plus-circle"
               onClick={() => this.onClickAdd()}
             />
-          }
+          )}
         </div>
       </div>
     )
@@ -123,8 +107,7 @@ class Editable extends React.Component {
 }
 
 Editable.defaultProps = {
-  validate: () => {
-  },
+  validate: () => {},
   error: false
 }
 

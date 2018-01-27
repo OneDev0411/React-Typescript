@@ -3,10 +3,7 @@ import { compose, withState, pure } from 'recompose'
 import Editable from '../Editable'
 import moment from 'moment'
 
-const enhance = compose(
-  pure,
-  withState('errorIdItems', 'setErrorIdItem', [])
-)
+const enhance = compose(pure, withState('errorIdItems', 'setErrorIdItem', []))
 
 const BirthdayComponent = ({
   birthdays,
@@ -33,9 +30,9 @@ const BirthdayComponent = ({
     }
   }
 
-  return <div>
-    {
-      birthdays.map((item, key) => (
+  return (
+    <div>
+      {birthdays.map((item, key) => (
         <li key={`birthday_${key}`}>
           <div className="name">Birthday</div>
           <div className="data">
@@ -53,29 +50,28 @@ const BirthdayComponent = ({
             />
           </div>
         </li>
-      ))
-    }
+      ))}
 
-    {
-      birthdays.length === 0 &&
-      <li>
-        <div className="name">Birthday</div>
-        <div className="data">
-          <Editable
-            type="birthday"
-            id={null}
-            showEdit
-            showAdd={false}
-            text="-"
-            onChange={onChangeBirthday}
-            validate={validate}
-            error={errorIdItems.indexOf('new') > -1}
-            index="new"
-          />
-        </div>
-      </li>
-    }
-  </div>
+      {birthdays.length === 0 && (
+        <li>
+          <div className="name">Birthday</div>
+          <div className="data">
+            <Editable
+              type="birthday"
+              id={null}
+              showEdit
+              showAdd={false}
+              text="-"
+              onChange={onChangeBirthday}
+              validate={validate}
+              error={errorIdItems.indexOf('new') > -1}
+              index="new"
+            />
+          </div>
+        </li>
+      )}
+    </div>
+  )
 }
 
 export default enhance(BirthdayComponent)
