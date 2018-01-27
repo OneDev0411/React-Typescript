@@ -46,7 +46,7 @@
     "no-shadow": 0,
     "consistent-return": 0,
     "react/no-unescaped-entities": 0,
-    "no-unused-vars": 0,
+    "no-unused-vars": "error",
     "prefer-const": 0,
     "jsx-quotes": 1,
     "react/jsx-no-undef": 1,
