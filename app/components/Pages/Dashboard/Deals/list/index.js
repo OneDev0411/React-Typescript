@@ -19,7 +19,7 @@ class DealsDashboard extends React.Component {
 
     this.state = {
       activeFilters,
-      searchBoxIsOpen: false,
+      searchBoxIsOpen: !isBackOffice,
       emptySearchPageIsOpen: false
     }
   }
@@ -39,6 +39,7 @@ class DealsDashboard extends React.Component {
   initialAgentFilters = filters => {
     this.setState({
       activeFilters: {
+        status: (status, deal) => !deal.deleted_at,
         ..._.omit(filters, 'searchResult')
       }
     })
@@ -88,7 +89,13 @@ class DealsDashboard extends React.Component {
         />
 
         {!isBackOffice ? (
-          <AgentTable deals={deals} filters={activeFilters} isBackOffice={false} />
+          <AgentTable
+            deals={deals}
+            searchBoxIsOpen={searchBoxIsOpen}
+            emptySearchPageIsOpen={emptySearchPageIsOpen || loadingDeals}
+            filters={activeFilters}
+            isBackOffice={false}
+          />
         ) : (
           <BackOfficeTable
             deals={deals}

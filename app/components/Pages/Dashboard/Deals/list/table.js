@@ -234,8 +234,7 @@ class BaseTable extends React.Component {
       deals,
       isBackOffice,
       searchBoxIsOpen,
-      emptySearchPageIsOpen,
-      loadingDeals
+      emptySearchPageIsOpen
     } = this.props
     const { sortBy, sortOrder } = this.state
 
@@ -252,10 +251,7 @@ class BaseTable extends React.Component {
       )
     }
 
-    if (
-      (isBackOffice && filteredDeals.length === 0) ||
-      (!isBackOffice && _.size(deals) === 0)
-    ) {
+    if (filteredDeals.length === 0) {
       if (searchBoxIsOpen) {
         return (
           <div className="table-container">
