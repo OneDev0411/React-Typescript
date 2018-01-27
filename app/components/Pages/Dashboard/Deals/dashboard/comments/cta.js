@@ -10,11 +10,11 @@ const CallToAction = ({
   isSaving,
   onSendComment
 }) => {
-  const props = { task, hasComment, onSendComment, isSaving }
+  const props = {
+    task, hasComment, onSendComment, isSaving
+  }
 
-  return isBackoffice ?
-    <BackOfficeCta {...props} /> :
-    <AgentCta {...props} />
+  return isBackoffice ? <BackOfficeCta {...props} /> : <AgentCta {...props} />
 }
 
 export default connect(({ deals }) => ({
