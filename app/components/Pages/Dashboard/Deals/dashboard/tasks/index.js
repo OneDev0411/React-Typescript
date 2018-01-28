@@ -5,7 +5,11 @@ import cn from 'classnames'
 import CreateTask from '../create-task'
 import TaskStatus from './status'
 import ChecklistPanel from '../checklists/panel'
-import { setSelectedTask } from '../../../../../../store_actions/deals'
+import {
+  setSelectedTask,
+  updateDealNotifications
+} from '../../../../../../store_actions/deals'
+import { Tab } from 'react-bootstrap'
 
 const List = ({
   tasks,
@@ -14,6 +18,7 @@ const List = ({
   deal,
   selectedTask,
   setSelectedTask,
+  updateDealNotifications,
   isBackOffice
 }) => {
   if (!checklist) {
@@ -21,6 +26,18 @@ const List = ({
   }
 
   let sortedTasks = checklist.tasks
+
+  // select a task
+  const selectTask = function (task) {
+    if (task.room.new_notifications > 0) {
+      updateDealNotifications(
+        deal.id,
+        deal.new_notifications - task.room.new_notifications
+      )
+    }
+
+    setSelectedTask(task)
+  }
 
   // sort tasks of backoffice, based on notified flag. they gonna show first.
   if (isBackOffice && checklist.tasks) {
@@ -50,7 +67,7 @@ const List = ({
                   key={`TASK_${id}`}
                 >
                   <div
-                    onClick={() => setSelectedTask(task)}
+                    onClick={() => selectTask(task)}
                     className={cn('task', {
                       active: selectedTask && selectedTask.id === id,
                       'no-status': !hasStatus
@@ -89,5 +106,5 @@ export default connect(
     selectedTask: deals.selectedTask,
     isBackOffice: deals.backoffice
   }),
-  { setSelectedTask }
+  { setSelectedTask, updateDealNotifications }
 )(List)

@@ -16,7 +16,10 @@ export default (state = null, action) => {
       return action.deals
 
     case types.ADD_SEARCHED_DEALS: {
-      const notSearchedDeals = _.pick(state, deal => !deal.searchResult || deal.duplicateDeal)
+      const notSearchedDeals = _.pick(
+        state,
+        deal => !deal.searchResult || deal.duplicateDeal
+      )
 
       _.chain(notSearchedDeals)
         .filter(deal => deal.duplicateDeal)
@@ -59,7 +62,7 @@ export default (state = null, action) => {
         [action.deal_id]: {
           ...state[action.deal_id],
           checklists: _.uniq([
-            ...state[action.deal_id].checklists || [],
+            ...(state[action.deal_id].checklists || []),
             action.checklist_id
           ])
         }
@@ -79,10 +82,7 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          roles: [
-            ...state[action.deal_id].roles,
-            ..._.pluck(action.roles, 'id')
-          ]
+          roles: [...state[action.deal_id].roles, ..._.pluck(action.roles, 'id')]
         }
       }
 
@@ -91,10 +91,16 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          envelopes: [
-            ...state[action.deal_id].envelopes,
-            action.envelope.id
-          ]
+          envelopes: [...state[action.deal_id].envelopes, action.envelope.id]
+        }
+      }
+
+    case types.UPDATE_NOTIFICATIONS:
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          new_notifications: action.count
         }
       }
 

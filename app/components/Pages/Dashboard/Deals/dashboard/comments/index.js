@@ -18,7 +18,7 @@ class Comment extends React.Component {
   }
 
   getRoom(task, rooms) {
-    const { addNewRoom } = this.props
+    const { deal, addNewRoom } = this.props
     const room = rooms[task.room.id]
 
     if (task && !room) {
@@ -48,7 +48,10 @@ class Comment extends React.Component {
   }
 }
 
-export default connect(({ data, chatroom }) => ({
-  rooms: chatroom.rooms,
-  user: data.user
-}), { addNewRoom })(Comment)
+export default connect(
+  ({ data, chatroom }) => ({
+    rooms: chatroom.rooms,
+    user: data.user
+  }),
+  { addNewRoom }
+)(Comment)

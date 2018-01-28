@@ -22,7 +22,7 @@ const TaskManager = ({ deal, task }) => {
 
           <Documents deal={deal} task={task} />
 
-          <Comments task={task} />
+          <Comments deal={deal} task={task} />
         </div>
 
         <CommentInput key={task.id} task={task} />
