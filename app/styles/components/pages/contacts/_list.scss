@@ -26,9 +26,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-
+    justify-content: space-between;
     .info {
-      width: 80%;
       span.title {
         font-size: 31px;
         font-weight: 300;
@@ -42,7 +41,6 @@
     }
 
     .cta {
-      width: 20%;
       text-align: right;
       display: flex;
       justify-content: flex-end;
