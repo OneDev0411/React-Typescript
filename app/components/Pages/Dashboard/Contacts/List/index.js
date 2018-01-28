@@ -4,17 +4,23 @@ import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
 import Contact from '../../../../../models/Contact'
-import { upsertAttributes } from '../../../../../store_actions/contact'
+import {
+  upsertAttributes,
+  removeImportResult
+} from '../../../../../store_actions/contact'
 import Stage from '../components/Stage'
 import NoContact from './no-contact'
 import Header from './header'
+import ImportResultModal from './ImportResultModal'
 
 function onChangeStage(stage, contact, upsertAttributes) {
-  upsertAttributes(contact.id, 'stage', [{
-    id: Contact.get.stage(contact).id,
-    type: 'stage',
-    stage
-  }])
+  upsertAttributes(contact.id, 'stage', [
+    {
+      id: Contact.get.stage(contact).id,
+      type: 'stage',
+      stage
+    }
+  ])
 }
 
 function openContact(id) {
@@ -23,23 +29,27 @@ function openContact(id) {
 
 const ContactsList = ({
   contacts,
-  user
+  user,
+  loadingImport,
+  importInfo,
+  removeImportResult
 }) => (
   <div className="list">
     <Header
       user={user}
       contactsCount={_.size(contacts)}
-      onNewContact={(id) => openContact(id)}
+      onNewContact={id => openContact(id)}
     />
-
+    {loadingImport && (
+      <i className="fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading" />
+    )}
     <NoContact
       user={user}
       contactsCount={_.size(contacts)}
-      onNewContact={(id) => openContact(id)}
+      onNewContact={id => openContact(id)}
     />
 
-    {
-      _.size(contacts) > 0 &&
+    {_.size(contacts) > 0 && (
       <table className="table">
         <tbody>
           <tr className="header">
@@ -49,61 +59,63 @@ const ContactsList = ({
             <td className="col-md-2 hidden-xs">STAGE</td>
             <td className="col-md-3 hidden-sm hidden-xs">SOURCE</td>
           </tr>
-          {
-            _.chain(contacts)
-              .map(contact => (
-                <tr
-                  key={`CONTACT_${contact.id}`}
-                  onClick={(e) => openContact(contact.id, e)}
-                  className="item"
-                >
-                  <td className="col-md-2">
-                    <div className="name">
-                      <Avatar
-                        className="avatar"
-                        round
-                        name={Contact.get.name(contact)}
-                        src={Contact.get.avatar(contact)}
-                        size={35}
-                      />
-                      <span className="ellipsis">
-                        { Contact.get.name(contact) }
-                      </span>
-                    </div>
-                  </td>
-
-                  <td className="col-md-3 ellipsis">
-                    { Contact.get.email(contact) }
-                  </td>
-
-                  <td className="col-md-2 hidden-xs ellipsis">
-                    { Contact.get.phone(contact) }
-                  </td>
-
-                  <td
-                    className="col-md-2 hidden-xs"
-                    onClick={e => e.stopPropagation()}
-                  >
-                    <Stage
-                      default={Contact.get.stage(contact).name}
-                      onChange={stage => onChangeStage(stage, contact, upsertAttributes)}
+          {_.chain(contacts)
+            .map(contact => (
+              <tr
+                key={`CONTACT_${contact.id}`}
+                onClick={e => openContact(contact.id, e)}
+                className="item"
+              >
+                <td className="col-md-2">
+                  <div className="name">
+                    <Avatar
+                      className="avatar"
+                      round
+                      name={Contact.get.name(contact)}
+                      src={Contact.get.avatar(contact)}
+                      size={35}
                     />
-                  </td>
+                    <span className="ellipsis">{Contact.get.name(contact)}</span>
+                  </div>
+                </td>
 
-                  <td className="col-md-3 hidden-sm hidden-xs">
-                    { Contact.get.source(contact).label }
-                  </td>
-                </tr>
-              ))
-              .value()
-          }
+                <td className="col-md-3 ellipsis">{Contact.get.email(contact)}</td>
+
+                <td className="col-md-2 hidden-xs ellipsis">
+                  {Contact.get.phone(contact)}
+                </td>
+
+                <td
+                  className="col-md-2 hidden-xs"
+                  onClick={e => e.stopPropagation()}
+                >
+                  <Stage
+                    default={Contact.get.stage(contact).name}
+                    onChange={stage =>
+                      onChangeStage(stage, contact, upsertAttributes)
+                    }
+                  />
+                </td>
+
+                <td className="col-md-3 hidden-sm hidden-xs">
+                  {Contact.get.source(contact).label}
+                </td>
+              </tr>
+            ))
+            .value()}
         </tbody>
       </table>
-    }
+    )}
+    <ImportResultModal importInfo={importInfo} closeModal={removeImportResult} />
   </div>
 )
 
-export default connect(({ contacts, user }) => ({
-  contacts: contacts.list,
-  user
-}), { upsertAttributes })(ContactsList)
+export default connect(
+  ({ contacts, user }) => ({
+    contacts: contacts.list,
+    user,
+    loadingImport: contacts.spinner,
+    importInfo: contacts.importCsv
+  }),
+  { upsertAttributes, removeImportResult }
+)(ContactsList)
