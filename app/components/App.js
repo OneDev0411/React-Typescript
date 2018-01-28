@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
-import Modal from 'react-modal'
-
-Modal.setAppElement('#app')
 
 import getBrand from '../store_actions/brand'
 import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'

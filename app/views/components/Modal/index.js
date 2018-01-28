@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactModal from 'react-modal'
 
+ReactModal.setAppElement('#app')
+
 export default function Modal(props) {
   return (
     <ReactModal
