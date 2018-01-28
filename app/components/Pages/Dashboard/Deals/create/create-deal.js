@@ -94,11 +94,13 @@ class CreateDeal extends React.Component {
       sellingClients
     } = this.state
 
-    const statusCompleted = (dealSide === 'Buying') ? dealStatus.length > 0 : true
+    const statusCompleted = dealSide === 'Buying' ? dealStatus.length > 0 : true
 
     // on Buying side, user should add SellerClient and SellerAgent
-    const validSellingAgents = (dealSide === 'Buying') ? _.size(sellingAgents) > 0 : true
-    const validSellingClients = (dealSide === 'Buying') ? _.size(sellingClients) > 0 : true
+    const validSellingAgents =
+      dealSide === 'Buying' ? _.size(sellingAgents) > 0 : true
+    const validSellingClients =
+      dealSide === 'Buying' ? _.size(sellingClients) > 0 : true
 
     // agents and clients are required on both side
     const validAgents = _.size(agents) > 0
@@ -133,7 +135,8 @@ class CreateDeal extends React.Component {
       'clients',
       'sellingClients',
       'referrals',
-      'escrowOfficers'].some(name => _.size(this.state[name]) > 0)
+      'escrowOfficers'
+    ].some(name => _.size(this.state[name]) > 0)
 
     if (showConfirmation) {
       return this.props.confirmation({
@@ -204,7 +207,9 @@ class CreateDeal extends React.Component {
       enderType,
       submitError
     } = this.state
-    const { user, notify, createDeal, createRoles, updateContext } = this.props
+    const {
+      user, notify, createDeal, createRoles, updateContext
+    } = this.props
     const isBuyingDeal = dealSide === 'Buying'
 
     const dealObject = {
@@ -287,6 +292,7 @@ class CreateDeal extends React.Component {
    */
   getDealContexts() {
     const { dealSide, dealPropertyType } = this.state
+
     if (dealSide.length === 0 || dealPropertyType.length === 0) {
       return []
     }
@@ -360,98 +366,107 @@ class CreateDeal extends React.Component {
             }
           />
 
-          {dealSide.length > 0 && dealPropertyType.length > 0 && (
-            <div>
-              <DealClients
-                dealSide={dealSide}
-                clients={clients}
-                onUpsertClient={form => this.onUpsertRole(form, 'clients')}
-                onRemoveClient={id => this.onRemoveRole(id, 'clients')}
-              />
-
-              <DealReferrals
-                dealSide={dealSide}
-                referrals={referrals}
-                onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
-                onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
-              />
-
-              <DealAgents
-                scenario="CreateDeal"
-                dealSide={dealSide}
-                agents={agents}
-                onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
-                onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
-              />
-
-              {dealSide === 'Buying' && (
-                <Fragment>
-                  <EnderType
-                    isRequired={false}
-                    enderType={enderType}
-                    showAgentDoubleEnder={false}
-                    onChangeEnderType={type => this.changeEnderType(type)}
-                  />
-
-                  <DealAgents
-                    scenario="CreateDeal"
-                    dealSide="Selling"
-                    agents={sellingAgents}
-                    shouldPrepopulateAgent={false}
-                    onUpsertAgent={form => this.onUpsertRole(form, 'sellingAgents')}
-                    onRemoveAgent={id => this.onRemoveRole(id, 'sellingAgents')}
-                  />
-
-                  <DealClients
-                    dealSide="Selling"
-                    clients={sellingClients}
-                    ctaTitle="Add seller"
-                    onUpsertClient={form => this.onUpsertRole(form, 'sellingClients')}
-                    onRemoveClient={id => this.onRemoveRole(id, 'sellingClients')}
-                  />
-
-                  <EscrowOfficers
-                    escrowOfficers={escrowOfficers}
-                    onUpsertEscrowOfficer={form => this.onUpsertRole(form, 'escrowOfficers')}
-                    onRemoveEscrowOfficer={id => this.onRemoveRole(id, 'escrowOfficers')}
-                  />
-
-                  <DealStatus
-                    dealStatus={dealStatus}
-                    onChangeDealStatus={status => this.changeDealStatus(status)}
-                  />
-                </Fragment>
-              )}
-
-              <DealAddress
-                dealAddress={dealAddress}
-                dealSide={dealSide}
-                onCreateAddress={(component, type) =>
-                  this.onCreateAddress(component, type)
-                }
-                onRemoveAddress={() => this.setState({ dealAddress: null })}
-              />
-
-              {
-                dealContexts.length > 0 &&
-                <Contexts
-                  contexts={contexts}
-                  onChangeContext={(field, value) =>
-                    this.changeContext(field, value)
-                  }
-                  fields={dealContexts}
+          {dealSide.length > 0 &&
+            dealPropertyType.length > 0 && (
+              <div>
+                <DealClients
+                  dealSide={dealSide}
+                  clients={clients}
+                  onUpsertClient={form => this.onUpsertRole(form, 'clients')}
+                  onRemoveClient={id => this.onRemoveRole(id, 'clients')}
                 />
-              }
-            </div>
-          )}
 
-          {!saving && submitError && (
-            <Alert
-              code={500}
-              type="error"
-              style={{ float: 'left', marginBottom: '2rem' }}
-            />
-          )}
+                <DealReferrals
+                  dealSide={dealSide}
+                  referrals={referrals}
+                  onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
+                  onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
+                />
+
+                <DealAgents
+                  scenario="CreateDeal"
+                  dealSide={dealSide}
+                  agents={agents}
+                  onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
+                  onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
+                />
+
+                {dealSide === 'Buying' && (
+                  <Fragment>
+                    <EnderType
+                      isRequired={false}
+                      enderType={enderType}
+                      showAgentDoubleEnder={false}
+                      onChangeEnderType={type => this.changeEnderType(type)}
+                    />
+
+                    <DealAgents
+                      scenario="CreateDeal"
+                      dealSide="Selling"
+                      agents={sellingAgents}
+                      shouldPrepopulateAgent={false}
+                      onUpsertAgent={form =>
+                        this.onUpsertRole(form, 'sellingAgents')
+                      }
+                      onRemoveAgent={id => this.onRemoveRole(id, 'sellingAgents')}
+                    />
+
+                    <DealClients
+                      dealSide="Selling"
+                      clients={sellingClients}
+                      ctaTitle="Add seller"
+                      onUpsertClient={form =>
+                        this.onUpsertRole(form, 'sellingClients')
+                      }
+                      onRemoveClient={id => this.onRemoveRole(id, 'sellingClients')}
+                    />
+
+                    <EscrowOfficers
+                      escrowOfficers={escrowOfficers}
+                      onUpsertEscrowOfficer={form =>
+                        this.onUpsertRole(form, 'escrowOfficers')
+                      }
+                      onRemoveEscrowOfficer={id =>
+                        this.onRemoveRole(id, 'escrowOfficers')
+                      }
+                    />
+
+                    <DealStatus
+                      dealStatus={dealStatus}
+                      onChangeDealStatus={status => this.changeDealStatus(status)}
+                    />
+                  </Fragment>
+                )}
+
+                <DealAddress
+                  dealAddress={dealAddress}
+                  dealSide={dealSide}
+                  onCreateAddress={(component, type) =>
+                    this.onCreateAddress(component, type)
+                  }
+                  onRemoveAddress={() => this.setState({ dealAddress: null })}
+                />
+
+                {dealContexts.length > 0 && (
+                  <Contexts
+                    contexts={contexts}
+                    onChangeContext={(field, value) =>
+                      this.changeContext(field, value)
+                    }
+                    fields={dealContexts}
+                  />
+                )}
+              </div>
+            )}
+
+          {!saving &&
+            submitError && (
+              <Alert
+                code={500}
+                type="error"
+                style={{ float: 'left', marginBottom: '2rem' }}
+              />
+            )}
 
           <Button
             className={cn('btn btn-primary create-deal-button', {

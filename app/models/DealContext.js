@@ -284,7 +284,7 @@ Context.parseDate = function (date) {
  * validate a context
  */
 Context.validate = function (ctx, value) {
-  if (value === undefined || value.length === 0) {
+  if (value === undefined || value === null || value.length === 0) {
     return !ctx.mandatory
   }
 
