@@ -32,6 +32,9 @@ export default (state = null, action) => {
           timeline: state[action.id].timeline
         }
       }
+    case types.UPLOAD_CVS: {
+      return { ...state, ...action.contacts }
+    }
 
     default:
       return state

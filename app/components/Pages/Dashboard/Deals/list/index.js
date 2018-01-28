@@ -64,9 +64,7 @@ class DealsDashboard extends React.Component {
   }
 
   render() {
-    const {
-      deals, isBackOffice, params, loadingDeals
-    } = this.props
+    const { deals, isBackOffice, params, loadingDeals } = this.props
     const { activeFilters, searchBoxIsOpen, emptySearchPageIsOpen } = this.state
     const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
@@ -83,7 +81,7 @@ class DealsDashboard extends React.Component {
           onFilterChange={filters => this.setFilter(filters)}
         />
         <i
-          className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__deals', {
+          className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading', {
             hide_spinner: !loadingDeals
           })}
         />
