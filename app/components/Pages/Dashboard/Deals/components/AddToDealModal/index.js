@@ -1,17 +1,15 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import Modal from '../../../../../../views/components/Modal'
 import Header from './components/Header'
 import Body from './components/Body'
 import Footer from './components/Footer'
 import ShadowButton from './components/ShadowButton'
 
-function mapToProps(state) {
-  const { brand } = state
-
-  return {
-    brand
-  }
+const propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  closeHandler: PropTypes.func.isRequired,
+  addManuallyHandler: PropTypes.func.isRequired
 }
 
 class AddToDealModal extends Component {
@@ -50,4 +48,6 @@ class AddToDealModal extends Component {
   }
 }
 
-export default connect(mapToProps)(AddToDealModal)
+AddToDealModal.propTypes = propTypes
+
+export default AddToDealModal

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 const Container = styled.div`
   height: 56px;
@@ -17,7 +18,11 @@ const Title = styled.h3`
   color: #26465e;
 `
 
-export default function Header(props) {
+const propTypes = {
+  title: PropTypes.string
+}
+
+function Header(props) {
   return (
     <Container>
       <Title>{props.title}</Title>
@@ -25,3 +30,7 @@ export default function Header(props) {
     </Container>
   )
 }
+
+Header.propTypes = propTypes
+
+export default Header
