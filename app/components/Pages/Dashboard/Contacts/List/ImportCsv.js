@@ -3,11 +3,7 @@ import { connect } from 'react-redux'
 import { getContacts, uplaodCsv } from '../../../../../store_actions/contact'
 import Dropzone from 'react-dropzone'
 
-class ImportOutlook extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
+class ImportCSV extends React.Component {
   async onDropFiles(files) {
     this.props.uplaodCsv(files[0])
   }
@@ -35,9 +31,11 @@ class ImportOutlook extends React.Component {
 }
 
 export default connect(
-  ({ contacts, user }) => ({
-    importOutlook: contacts.importOutlook,
-    user
-  }),
+  ({ contacts, user }) => {
+    return {
+      importInfo: contacts.importCsv,
+      user
+    }
+  },
   { getContacts, uplaodCsv }
-)(ImportOutlook)
+)(ImportCSV)

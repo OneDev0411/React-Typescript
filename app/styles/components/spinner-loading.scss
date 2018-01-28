@@ -1,0 +1,9 @@
+.spinner__loading {
+  position: fixed;
+  left: 50%;
+  margin-left: 27px;
+  margin-top: 8px;
+  &.hide_spinner {
+    visibility: hidden;
+  }
+}
