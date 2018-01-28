@@ -82,7 +82,10 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          roles: [...state[action.deal_id].roles, ..._.pluck(action.roles, 'id')]
+          roles: [
+            ...(state[action.deal_id].roles || []),
+            ..._.pluck(action.roles, 'id')
+          ]
         }
       }
 
