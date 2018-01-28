@@ -2,10 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
 import { addNotification as notify } from 'reapop'
-import { Row, Col } from 'react-bootstrap'
 import Message from '../../../Chatroom/Util/message'
-import Deal from '../../../../../../models/Deal'
-import { changeTaskStatus, changeNeedsAttention } from '../../../../../../store_actions/deals'
+import {
+  changeTaskStatus,
+  changeNeedsAttention
+} from '../../../../../../store_actions/deals'
 import ActionButtons from './cta'
 
 class CommentCreate extends React.Component {
@@ -35,7 +36,9 @@ class CommentCreate extends React.Component {
    * also change needs_attention flag and change status of task if requests by BO
    */
   async sendComment(needs_attention = null, task_status = null) {
-    const { task, user, changeTaskStatus, changeNeedsAttention, notify } = this.props
+    const {
+      task, user, changeTaskStatus, changeNeedsAttention, notify
+    } = this.props
     const { comment } = this.state
 
     if (comment) {
@@ -46,8 +49,7 @@ class CommentCreate extends React.Component {
       }
 
       // send message
-      Message.postTaskComment(task, message)
-        .then(() => this.onCommentSaved())
+      Message.postTaskComment(task, message).then(() => this.onCommentSaved())
     }
 
     // clear message box
@@ -84,7 +86,9 @@ class CommentCreate extends React.Component {
   }
 
   render() {
-    const { comment, rows, height, isSaving } = this.state
+    const {
+      comment, rows, height, isSaving
+    } = this.state
     const { task, onFocus, onBlur } = this.props
     const hasComment = comment.length > 0
 
@@ -117,12 +121,14 @@ class CommentCreate extends React.Component {
             onSendComment={(notify, status) => this.sendComment(notify, status)}
           />
         </div>
-
       </div>
     )
   }
 }
 
-export default connect(({ deals, data }) => ({
-  user: data.user
-}), { changeTaskStatus, changeNeedsAttention, notify })(CommentCreate)
+export default connect(
+  ({ data }) => ({
+    user: data.user
+  }),
+  { changeTaskStatus, changeNeedsAttention, notify }
+)(CommentCreate)

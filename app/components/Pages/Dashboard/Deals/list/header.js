@@ -11,7 +11,6 @@ import {
 } from '../../../../../store_actions/deals'
 import Excel from '../../Partials/Svgs/Excel'
 import cn from 'classnames'
-import config from '../../../../../../config/public'
 
 class Header extends React.Component {
   constructor(props) {
@@ -24,28 +23,16 @@ class Header extends React.Component {
 
   onInputChange() {
     const { value } = this.searchInput
-    const {
-      isBackOffice,
-      onFilterChange,
-      searchAllDeals,
-      searchBOFilters,
-      showEmptySearchPage
-    } = this.props
-    let filters
+    const { searchAllDeals, searchBOFilters, showEmptySearchPage } = this.props
 
-    if (isBackOffice) {
-      if (value) {
-        searchAllDeals(value)
-        showEmptySearchPage(false)
-      } else {
-        showEmptySearchPage(true)
-      }
-
-      searchBOFilters()
+    if (value && value.length > 2) {
+      searchAllDeals(value)
+      showEmptySearchPage(false)
     } else {
-      filters = { 'address^side^mlsSearch': value }
-      onFilterChange(filters)
+      showEmptySearchPage(true)
     }
+
+    searchBOFilters()
   }
 
   render() {
@@ -58,8 +45,7 @@ class Header extends React.Component {
       initialBOFilters,
       showEmptySearchPage,
       initialAgentFilters,
-      cleanSearchedDeals,
-      user
+      cleanSearchedDeals
     } = this.props
 
     const { inputFocused } = this.state
@@ -72,7 +58,9 @@ class Header extends React.Component {
     return (
       <div className={cn('deals-list--header', { agent: !isBackOffice })}>
         <div style={{ height: '57px' }}>
-          <div className={cn('deals-list--header-row', { agent: !isBackOffice })}>
+          <div
+            className={cn('deals-list--header-row', { agent: !isBackOffice })}
+          >
             <div className="deals-list--header-row--col">
               {isBackOffice ? (
                 <BackOfficeFilter
@@ -96,10 +84,16 @@ class Header extends React.Component {
                 <AgentFilter
                   active={activeFilterTab}
                   onChangeFilter={filters => {
-                    initialAgentFilters(filters)
-
                     if (this.searchInput) {
                       this.searchInput.value = ''
+                    }
+
+                    if (searchBoxIsOpen) {
+                      setSearchStatus(false)
+                      initialAgentFilters(filters)
+                      cleanSearchedDeals()
+                    } else {
+                      onFilterChange(filters)
                     }
                   }}
                 />
@@ -131,7 +125,9 @@ class Header extends React.Component {
                     className="search-button"
                   >
                     <i
-                      className={cn('fa fa-search', { active: searchBoxIsOpen })}
+                      className={cn('fa fa-search', {
+                        active: searchBoxIsOpen
+                      })}
                       aria-hidden="true"
                     />
                   </div>
@@ -186,9 +182,8 @@ class Header extends React.Component {
 }
 
 export default connect(
-  ({ user, deals }) => ({
-    isBackOffice: deals.backoffice,
-    user
+  ({ deals }) => ({
+    isBackOffice: deals.backoffice
   }),
   {
     searchAllDeals,

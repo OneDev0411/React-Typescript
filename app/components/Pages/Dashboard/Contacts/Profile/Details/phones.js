@@ -2,10 +2,7 @@ import React from 'react'
 import { compose, withState, pure } from 'recompose'
 import Editable from '../Editable'
 
-const enhance = compose(
-  pure,
-  withState('errorIdItems', 'setErrorIdItem', [])
-)
+const enhance = compose(pure, withState('errorIdItems', 'setErrorIdItem', []))
 
 const Phones = ({
   phones,
@@ -14,7 +11,7 @@ const Phones = ({
   errorIdItems,
   setErrorIdItem
 }) => {
-  const validatePhone = async (phone) => {
+  const validatePhone = async phone => {
     if (phone) {
       const {
         PhoneNumberUtil
@@ -51,9 +48,9 @@ const Phones = ({
     }
   }
 
-  return <div>
-    {
-      phones.map((item, key) => (
+  return (
+    <div>
+      {phones.map((item, key) => (
         <li key={`phone_${key}`}>
           <div className="name">Phone</div>
           <div className="data">
@@ -71,28 +68,27 @@ const Phones = ({
             />
           </div>
         </li>
-      ))
-    }
+      ))}
 
-    {
-      phones.length === 0 &&
-      <li>
-        <div className="name">Phone</div>
-        <div className="data">
-          <Editable
-            type="phone_number"
-            id={null}
-            showEdit
-            text="-"
-            onChange={onChangePhone}
-            validate={validate}
-            error={errorIdItems.indexOf('new') > -1}
-            index="new"
-          />
-        </div>
-      </li>
-    }
-  </div>
+      {phones.length === 0 && (
+        <li>
+          <div className="name">Phone</div>
+          <div className="data">
+            <Editable
+              type="phone_number"
+              id={null}
+              showEdit
+              text="-"
+              onChange={onChangePhone}
+              validate={validate}
+              error={errorIdItems.indexOf('new') > -1}
+              index="new"
+            />
+          </div>
+        </li>
+      )}
+    </div>
+  )
 }
 
 export default enhance(Phones)

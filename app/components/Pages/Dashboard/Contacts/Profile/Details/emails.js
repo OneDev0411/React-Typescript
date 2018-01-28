@@ -3,10 +3,7 @@ import { compose, withState, pure } from 'recompose'
 
 import Editable from '../Editable'
 
-const enhance = compose(
-  pure,
-  withState('errorIdItems', 'setErrorIdItem', [])
-)
+const enhance = compose(pure, withState('errorIdItems', 'setErrorIdItem', []))
 
 const Emails = ({
   emails,
@@ -30,16 +27,16 @@ const Emails = ({
   }
 
   const onChangeEmail = (...args) => {
-    const isNumberValid = validateEmail(args[2])
+    const isEmailValid = validateEmail(args[2])
 
-    if (isNumberValid) {
+    if (isEmailValid) {
       onChangeAttribute(...args)
     }
   }
 
-  return <div>
-    {
-      emails.map((item, key) => (
+  return (
+    <div>
+      {emails.map((item, key) => (
         <li key={`email_${key}`}>
           <div className="name">Email</div>
           <div className="data">
@@ -57,27 +54,27 @@ const Emails = ({
             />
           </div>
         </li>
-      ))
-    }
+      ))}
 
-    {
-      emails.length === 0 &&
-      <li>
-        <div className="name">Email</div>
-        <div className="data">
-          <Editable
-            type="email"
-            id={null}
-            showEdit
-            text=""
-            onChange={onChangeEmail}
-            error={errorIdItems.indexOf('new') > -1}
-            index="new"
-          />
-        </div>
-      </li>
-    }
-  </div>
+      {emails.length === 0 && (
+        <li>
+          <div className="name">Email</div>
+          <div className="data">
+            <Editable
+              type="email"
+              id={null}
+              showEdit
+              text=""
+              onChange={onChangeEmail}
+              validate={validate}
+              error={errorIdItems.indexOf('new') > -1}
+              index="new"
+            />
+          </div>
+        </li>
+      )}
+    </div>
+  )
 }
 
 export default enhance(Emails)
