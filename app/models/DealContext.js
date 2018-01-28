@@ -169,23 +169,7 @@ Context.query = function (deal, criteria) {
  * check deal has active offer
  */
 Context.hasActiveOffer = function (deal) {
-  const checklists = Context.getChecklists()
-
-  if (!deal.checklists) {
-    return null
-  }
-
-  const filtered = deal.checklists.filter(id => {
-    const checklist = checklists[id]
-
-    return (
-      checklist.is_deactivated === false &&
-      checklist.is_terminated === false &&
-      checklist.checklist_type === 'Buying'
-    )
-  })
-
-  return filtered.length > 0
+  return deal.has_active_offer
 }
 
 /**

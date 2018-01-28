@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { updateChecklist } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
-import hasPrimaryOffer from '../../utils/has-primary-offer'
 
 class TaskDeactivation extends React.Component {
   constructor(props) {
@@ -17,16 +16,19 @@ class TaskDeactivation extends React.Component {
     // stop collapsing
     e.stopPropagation()
 
-    const { deal, isBackoffice, confirmation, checklist } = this.props
+    const {
+      deal, isBackoffice, confirmation, checklist
+    } = this.props
     const { saving } = this.state
 
     if (saving === true) {
       return false
     }
 
-    if (checklist.is_deactivated && hasPrimaryOffer(deal)) {
+    if (checklist.is_deactivated && deal.has_active_offer) {
       return confirmation({
-        message: 'Please terminate your Primary offer before converting this Back up into primary',
+        message:
+          'Please terminate your Primary offer before converting this Back up into primary',
         confirmLabel: 'Okay',
         hideCancelButton: true,
         onConfirm: () => null
@@ -90,16 +92,15 @@ class TaskDeactivation extends React.Component {
   getLabel() {
     const { checklist, isBackoffice } = this.props
 
-
     if (isBackoffice) {
-      return checklist.is_deactivated ?
-        'Make this a primary offer' :
-        'Make this a back up offer'
+      return checklist.is_deactivated
+        ? 'Make this a primary offer'
+        : 'Make this a back up offer'
     }
 
-    return checklist.is_deactivated ?
-      'Notify office to make primary this offer' :
-      'Notify office to backup this offer'
+    return checklist.is_deactivated
+      ? 'Notify office to make primary this offer'
+      : 'Notify office to backup this offer'
   }
 
   render() {
@@ -112,19 +113,14 @@ class TaskDeactivation extends React.Component {
     }
 
     return (
-      <li
-        onClick={e => this.requestDeactivateChecklist(e)}
-      >
-        {
-          saving ?
-            <span style={{ color }}>
-              <i className="fa fa-spin fa-spinner" /> Saving...
-            </span> :
-
-            <span style={{ color }}>
-              {this.getLabel()}
-            </span>
-        }
+      <li onClick={e => this.requestDeactivateChecklist(e)}>
+        {saving ? (
+          <span style={{ color }}>
+            <i className="fa fa-spin fa-spinner" /> Saving...
+          </span>
+        ) : (
+          <span style={{ color }}>{this.getLabel()}</span>
+        )}
       </li>
     )
   }
