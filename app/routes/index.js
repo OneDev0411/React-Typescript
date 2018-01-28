@@ -65,11 +65,6 @@ const AsyncResetPassword = Load({
     import('../components/Pages/Auth/Password/Reset' /* webpackChunkName: "reset_password" */)
 })
 
-const AsyncConfirmAgent = Load({
-  loader: () =>
-    import('../components/Pages/SignUp/ConfirmAgent' /* webpackChunkName: "confirm" */)
-})
-
 /* ==================================== */
 //  MLS
 /* ==================================== */
@@ -238,7 +233,7 @@ const AsyncSearchWidget = Load({
 
 const AsyncBrands = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Brand/SubBrands' /* webpackChunkName: "brand_settings" */)
+    import('../components/Pages/Dashboard/Brand/index' /* webpackChunkName: "brand_settings" */)
 })
 
 const AsyncChecklistBrand = Load({

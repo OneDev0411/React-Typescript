@@ -28,6 +28,13 @@ router.post('/deals/pdf-splitter', async (ctx, next) => {
   const { title, room_id, task_id } = fields
   const { user } = ctx.session
 
+  if (!user) {
+    ctx.status = 401
+    ctx.body = ''
+
+    return false
+  }
+
   try {
     const filepath = `/tmp/${uuid()}.pdf`
 

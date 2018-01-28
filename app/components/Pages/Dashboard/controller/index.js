@@ -19,8 +19,6 @@ import recents from './recents'
 import add_members from './add-members'
 // Chat
 import chat_module from './chat-module'
-// Action Bubble
-import action_bubble from './action-bubble'
 
 // combine controllers
 const controller = {
@@ -38,7 +36,6 @@ const controller = {
   recents,
   search_input_map,
   add_members,
-  chat_module,
-  action_bubble
+  chat_module
 }
 export default controller

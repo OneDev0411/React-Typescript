@@ -179,10 +179,12 @@ export default class Form extends React.Component {
 
     const fields = {
       role: role => role,
+      legal_prefix: value => ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].indexOf(value) > -1,
       email: email => email && this.isEmail(email),
       legal_last_name: name => this.isValidName(name),
       legal_first_name: name => this.isValidName(name),
-      phone: phone => phone && this.isValidPhone(phone)
+      phone: phone => phone && this.isValidPhone(phone),
+      company_title: name => this.isValidName(name)
     }
 
     let commission_field = 'commission_percentage'
@@ -298,6 +300,7 @@ export default class Form extends React.Component {
         <Company
           form={form}
           onChange={value => this.setForm('company_title', value)}
+          isInvalid={invalidFields.includes('company_title')}
         />
       </div>
     )

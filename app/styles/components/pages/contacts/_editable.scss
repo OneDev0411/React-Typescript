@@ -6,13 +6,14 @@
     padding: 4px;
     position: relative;
     justify-content: space-between;
-    
+
     input,
     textarea {
       border: none;
       width: 100%;
       color: #000;
       resize: none;
+      padding: 0;
       &:focus,
       &:hover {
         outline: none;

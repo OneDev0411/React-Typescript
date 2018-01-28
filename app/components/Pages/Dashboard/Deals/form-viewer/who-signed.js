@@ -22,9 +22,7 @@ class WhoSigned extends React.Component {
     const { user } = this.props
     const token = user.access_token
 
-    return `${
-      config.app.url
-    }/api/deals/envelope/${envelopeId}/sign/${recipientId}?access_token=${token}`
+    return `/api/deals/envelope/${envelopeId}/sign/${recipientId}?access_token=${token}`
   }
 
   getName(role) {

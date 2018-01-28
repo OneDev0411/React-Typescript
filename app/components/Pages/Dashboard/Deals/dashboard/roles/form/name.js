@@ -22,7 +22,6 @@ export default ({
       id={id}
       name={name}
       type="text"
-      required="required"
       value={value || ''}
       placeholder={placeholder}
       onChange={e => onChange(e.target.value)}

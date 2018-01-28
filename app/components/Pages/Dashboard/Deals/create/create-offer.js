@@ -197,7 +197,7 @@ class CreateOffer extends React.Component {
     const {
       deal, notify, createOffer, createRoles, updateContext
     } = this.props
-    const { enderType, contexts, clients } = this.state
+    const { enderType, dealStatus, contexts, clients } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
     const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
