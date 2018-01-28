@@ -1,5 +1,5 @@
-import webpack from 'webpack'
 import path from 'path'
+import webpack from 'webpack'
 import config from '../config/webpack'
 
 export default {
@@ -15,10 +15,12 @@ export default {
     extensions: ['.js', '.json', '.css', '.scss'],
     modules: [config.compile.entry, 'node_modules']
   },
+  plugins: [
+    new webpack.DefinePlugin(config.globals)
+  ],
   externals: {
     fs: '{}'
   },
-  plugins: [new webpack.DefinePlugin(config.globals)],
   module: {
     rules: [
       {

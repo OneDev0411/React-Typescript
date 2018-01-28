@@ -3,13 +3,11 @@ import DealsList from '../../fixtures/deals/deals-list'
 import * as schema from '../../../app/store_actions/deals/schema'
 
 const { entities } = normalize(DealsList, schema.dealsSchema)
-const {
-  deals, roles, checklists, tasks
-} = entities
+
+export const deals = entities.deals
+export const roles = entities.roles
 
 export default {
   deals,
-  roles,
-  checklists,
-  tasks
+  roles
 }

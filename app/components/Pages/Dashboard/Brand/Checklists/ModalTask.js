@@ -9,16 +9,13 @@ class Wrapper extends React.Component {
       showComposeModal: false,
       titleTask: props.task && props.task.title,
       taskType: props.task && props.task.task_type,
-      allowedForm: (props.task && props.task.form) ? props.task.form : {},
+      allowedForm: props.task && props.task.form ? props.task.form : {},
       order: props.task && props.task.order
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.task
-      && nextProps.activeItem
-    ) {
+    if (nextProps.task && nextProps.activeItem) {
       this.setState({
         titleTask: nextProps.task.title,
         taskType: nextProps.task.task_type,
@@ -35,19 +32,21 @@ class Wrapper extends React.Component {
   changeTitleOrder = order => this.setState({ order })
 
   render() {
-    return <ModalNewTask
-      {...this.props}
-      showComposeModal={this.state.showComposeModal}
-      titleTask={this.state.titleTask}
-      taskType={this.state.taskType}
-      allowedForm={this.state.allowedForm}
-      order={this.state.order}
-      onChangeComposeModal={this.onChangeComposeModal}
-      changeTitleTask={this.changeTitleTask}
-      changeTaskType={this.changeTaskType}
-      changeAllowedForm={this.changeAllowedForm}
-      changeTitleOrder={this.changeTitleOrder}
-    />
+    return (
+      <ModalNewTask
+        {...this.props}
+        showComposeModal={this.state.showComposeModal}
+        titleTask={this.state.titleTask}
+        taskType={this.state.taskType}
+        allowedForm={this.state.allowedForm}
+        order={this.state.order}
+        onChangeComposeModal={this.onChangeComposeModal}
+        changeTitleTask={this.changeTitleTask}
+        changeTaskType={this.changeTaskType}
+        changeAllowedForm={this.changeAllowedForm}
+        changeTitleOrder={this.changeTitleOrder}
+      />
+    )
   }
 }
 
@@ -73,108 +72,105 @@ const ModalNewTask = ({
   task,
   onSelectItem
 }) => {
-  const taskTypes = [
-    'Form', 'Generic'
-  ]
+  const taskTypes = ['Form', 'Generic']
+  const formValid = titleTask && taskType && /[1-9]/g.test(order)
 
-  return <div style={{ display: inline ? 'inline' : 'block' }}>
-    <TriggerButton
-      clickHandler={() => {
-        if (task) {
-          onSelectItem(task.id)
-        }
+  console.log(titleTask, taskType, order)
 
-        onChangeComposeModal(!showComposeModal)
-      }}
-    />
+  return (
+    <div style={{ display: inline ? 'inline' : 'block' }}>
+      <TriggerButton
+        clickHandler={() => {
+          if (task) {
+            onSelectItem(task.id)
+          }
 
-    <Modal
-      show={showComposeModal}
-      dialogClassName="modal-checklist"
-      onHide={() => onChangeComposeModal(false)}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>
-          {title}
-        </Modal.Title>
-      </Modal.Header>
+          onChangeComposeModal(!showComposeModal)
+        }}
+      />
 
-      <Modal.Body>
-        <div className="title">Task Name</div>
-        <div className="input-container">
-          <input
-            value={titleTask}
-            type="text"
-            placeholder="Write a task name…"
-            onChange={(event) => changeTitleTask(event.target.value)}
-          />
-        </div>
-        <div className="title">Task Type</div>
-        <DropdownButton
-          id="taskType"
-          title={taskType || 'Choose a task type'}
-          onSelect={(selectedItem) => changeTaskType(selectedItem)}
-        >
-          {taskTypes.map(item =>
-            <MenuItem
-              key={item}
-              eventKey={item}
-            >{item}
-            </MenuItem>
-          )}
-        </DropdownButton>
-        { taskType === 'Form' &&
-        <div>
-          <div className="title">Select Form</div>
+      <Modal
+        show={showComposeModal}
+        dialogClassName="modal-checklist"
+        onHide={() => onChangeComposeModal(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{title}</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className="title">Task Name</div>
+          <div className="input-container">
+            <input
+              value={titleTask}
+              type="text"
+              placeholder="Write a task name…"
+              onChange={event => changeTitleTask(event.target.value)}
+            />
+          </div>
+          <div className="title">Task Type</div>
           <DropdownButton
-            id="form"
-            title={allowedForm.name || 'Choose a allowed form'}
-            onSelect={(selectedItem) => changeAllowedForm(forms[selectedItem])}
+            id="taskType"
+            title={taskType || 'Choose a task type'}
+            onSelect={selectedItem => changeTaskType(selectedItem)}
           >
-            {forms && allowed_forms && allowed_forms.map((item, i) =>
-              (
-                <MenuItem
-                  key={i}
-                  eventKey={item}
-                >{forms[item] && forms[item].name}
-                </MenuItem>
-              )
-            )}
+            {taskTypes.map(item => (
+              <MenuItem key={item} eventKey={item}>
+                {item}
+              </MenuItem>
+            ))}
           </DropdownButton>
-        </div>
-        }
-        <div className="title">Order</div>
+          {taskType === 'Form' && (
+            <div>
+              <div className="title">Select Form</div>
+              <DropdownButton
+                id="form"
+                title={allowedForm.name || 'Choose a allowed form'}
+                onSelect={selectedItem => changeAllowedForm(forms[selectedItem])}
+              >
+                {forms &&
+                  allowed_forms &&
+                  allowed_forms.map((item, i) => (
+                    <MenuItem key={i} eventKey={item}>
+                      {forms[item] && forms[item].name}
+                    </MenuItem>
+                  ))}
+              </DropdownButton>
+            </div>
+          )}
+          <div className="title">Order</div>
 
-        <div className="input-container">
-          <input
-            type="text"
-            value={order}
-            placeholder="order…"
-            onChange={(event) => changeTitleOrder(event.target.value)}
-          />
-        </div>
-      </Modal.Body>
+          <div className="input-container">
+            <input
+              type="text"
+              value={order}
+              placeholder="order…"
+              onChange={event => changeTitleOrder(event.target.value)}
+            />
+          </div>
+        </Modal.Body>
 
-      <Modal.Footer>
-        <Button
-          bsStyle="primary"
-          onClick={() => {
-            onChangeComposeModal(false)
-            onButtonClick({
-              title: titleTask,
-              task_type: taskType,
-              order,
-              form: allowedForm.id
-            })
-          }}
-        >
-          {buttonTitle}
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  </div>
+        <Modal.Footer>
+          <Button
+            bsStyle="primary"
+            disabled={!formValid}
+            onClick={() => {
+              onChangeComposeModal(false)
+              onButtonClick({
+                title: titleTask,
+                task_type: taskType,
+                order,
+                form: allowedForm.id
+              })
+            }}
+          >
+            {buttonTitle}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  )
 }
 export default connect(({ deals }) => ({
   forms: deals.forms
-})
-)(Wrapper)
+}))(Wrapper)

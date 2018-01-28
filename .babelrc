@@ -11,5 +11,13 @@
         }
       }
     ]
-  ]
+  ],
+  "env": {
+    "test": {
+      "compact": "false"
+    },
+    "production": {
+      "plugins": [["react-remove-properties", { "properties": ["data-test"] }]]
+    }
+  }
 }

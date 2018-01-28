@@ -1,7 +1,9 @@
 import React from 'react'
 import cn from 'classnames'
 
-export default ({ form, required, isInvalid, onChange }) => (
+export default ({
+  form, required, isInvalid, onChange
+}) => (
   <div className="input-container email">
     <label htmlFor="email" style={{ display: 'block', cursor: 'pointer' }}>
       Email {required && <sup>*</sup>}
@@ -10,7 +12,6 @@ export default ({ form, required, isInvalid, onChange }) => (
       id="email"
       name="email"
       type="email"
-      required="required"
       placeholder="johnsmith@gmail.com"
       className={cn({ invalid: isInvalid })}
       value={form.email || ''}
