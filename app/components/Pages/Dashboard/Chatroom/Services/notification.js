@@ -140,7 +140,12 @@ export default class ChatNotification extends NotificationService {
       return ChatNotification.clear(roomId)
     }
 
-    if (!isWindowActive && activeRoom && roomId === activeRoom) {
+    if (
+      !isWindowActive &&
+      shouldUpdateRoomNotifications &&
+      activeRoom &&
+      roomId === activeRoom
+    ) {
       this.updateRoomNotifications(roomId, message)
     }
 
