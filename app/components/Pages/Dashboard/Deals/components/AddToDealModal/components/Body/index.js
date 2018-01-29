@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Downshift from 'downshift'
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
+import { extractUserInfoFromContact } from '../../../../../../../../models/Contact'
 
 const ContactsListContainer = styled.div`
   position: relative;
@@ -71,11 +72,8 @@ class Body extends Component {
     <ContactsListContainer>
       <ContactsList className="u-scrollbar--thinner">
         {items
-                    .filter(i =>
-                        !inputValue ||
-                        i.display_name
-                          .toLowerCase()
-                          .includes(inputValue.toLowerCase()))
+                    .filter(item =>
+                      filterKeywords({ keyword: inputValue, contact: item }))
                     .map((item, index) => (
                       <ContactItem
                         item={item}
@@ -97,3 +95,19 @@ class Body extends Component {
 Body.propTypes = propTypes
 
 export default Body
+
+function filterKeywords({ keyword, contact }) {
+  if (!keyword || keyword.length < 3) {
+    return true
+  }
+
+  const user = extractUserInfoFromContact(contact)
+
+  return Object.keys(user).some(fieldName => {
+    const fieldValue = user[fieldName]
+
+    if (fieldValue) {
+      return fieldValue.toLowerCase().includes(keyword.toLowerCase())
+    }
+  })
+}

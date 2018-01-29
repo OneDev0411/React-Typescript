@@ -159,6 +159,15 @@ Contact.getTags = async function() {
 /**
  * helpers functions
  */
+// Contact.helper = {
+//   populateAttributes: (type, attributes) => ({
+//     attributes: attributes.map(item => ({ type, ...item }))
+//   })
+
+
+/**
+ * helpers functions
+ */
 Contact.helper = {
   populateAttributes: (type, attributes) => ({
     attributes: _.map(attributes, attr => {
@@ -397,3 +406,26 @@ Contact.uplaodCsv = async function(file, fileName = null) {
 }
 
 export default Contact
+
+export function extractUserInfoFromContact(contact) {
+  const { display_name } = contact
+  const email = Contact.get.email(contact)
+  const phone = Contact.get.phone(contact)
+  const profile_image_url = Contact.get.avatar(contact)
+
+  const namesAttributes = {
+    ...Contact.get._all(contact, 'names', 'name')[0]
+  }
+  const { first_name, last_name } = namesAttributes
+
+  const user = {
+    email,
+    phone,
+    last_name,
+    first_name,
+    display_name,
+    profile_image_url
+  }
+
+  return user
+}

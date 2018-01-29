@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Avatar from '../../../../../../../../views/components/Avatar/index'
-import Contact from '../../../../../../../../models/Contact'
+import { extractUserInfoFromContact } from '../../../../../../../../models/Contact'
 
 const Container = styled.div`
   height: 48px;
@@ -29,7 +29,7 @@ const propTypes = {
 
 function ContactItem(props) {
   const { item } = props
-  const user = extractUserInfoFromContactModel(item)
+  const user = extractUserInfoFromContact(item)
   const { email, phone } = user
   const title = getUserTitle(user)
 
@@ -52,29 +52,6 @@ function ContactItem(props) {
 ContactItem.propTypes = propTypes
 
 export default ContactItem
-
-function extractUserInfoFromContactModel(contact) {
-  const { display_name } = contact
-  const email = Contact.get.email(contact)
-  const phone = Contact.get.phone(contact)
-  const profile_image_url = Contact.get.avatar(contact)
-
-  const namesAttributes = {
-    ...Contact.get._all(contact, 'names', 'name')[0]
-  }
-  const { first_name, last_name } = namesAttributes
-
-  const user = {
-    email,
-    phone,
-    last_name,
-    first_name,
-    display_name,
-    profile_image_url
-  }
-
-  return user
-}
 
 function getUserTitle(user) {
   const { first_name, last_name, display_name } = user
