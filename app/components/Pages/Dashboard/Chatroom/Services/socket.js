@@ -41,15 +41,14 @@ export default class ChatSocket extends Socket {
     socket.on('Users.States', this.onUserStates)
 
     // on reconnect
-    Rx
-      .Observable
-      .fromEvent(socket, 'reconnect')
+    Rx.Observable.fromEvent(socket, 'reconnect')
       .throttleTime(20 * 1000)
       .subscribe(() => this.onReconnected())
 
-    Rx
-      .Observable
-      .fromEvent(socket, 'User.State', (state, user_id) => ({ state, user_id }))
+    Rx.Observable.fromEvent(socket, 'User.State', (state, user_id) => ({
+      state,
+      user_id
+    }))
       .distinctUntilChanged((p, c) => p.user_id === c.user_id && p.state === c.state)
       .subscribe(this.onUserState)
   }
@@ -76,7 +75,9 @@ export default class ChatSocket extends Socket {
     const list = messages[room.id] ? messages[room.id].list : null
 
     // do not dispatch when message is created
-    if (!list || list[message.id]) { return false }
+    if (!list || list[message.id]) {
+      return false
+    }
 
     Message.create(room.id, message)
   }
