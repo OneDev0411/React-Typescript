@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
@@ -12,16 +12,7 @@ import Stage from '../components/Stage'
 import NoContact from './no-contact'
 import Header from './header'
 import ImportResultModal from './ImportResultModal'
-
-function onChangeStage(stage, contact, upsertAttributes) {
-  upsertAttributes(contact.id, 'stage', [
-    {
-      id: Contact.get.stage(contact).id,
-      type: 'stage',
-      stage
-    }
-  ])
-}
+import ReactTable from 'react-table'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -32,84 +23,123 @@ const ContactsList = ({
   user,
   loadingImport,
   importInfo,
-  removeImportResult
-}) => (
-  <div className="list">
-    <Header
-      user={user}
-      contactsCount={_.size(contacts)}
-      onNewContact={id => openContact(id)}
-    />
-    {loadingImport && (
-      <i className="fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading" />
-    )}
-    <NoContact
-      user={user}
-      contactsCount={_.size(contacts)}
-      onNewContact={id => openContact(id)}
-    />
+  removeImportResult,
+  upsertAttributes
+}) => {
+  const onChangeStage = (stage, contact, upsertAttributes) => {
+    upsertAttributes(contact.id, 'stage', [
+      {
+        id: Contact.get.stage(contact).id,
+        type: 'stage',
+        stage
+      }
+    ])
+  }
+  const columns = [
+    {
+      Header: () => (
+        <Fragment>
+          Name
+          <i class="fa fa-caret-down" />
+          <i class="fa fa-caret-up" />
+        </Fragment>
+      ),
+      id: 'name',
+      accessor: contact => Contact.get.name(contact),
+      Cell: ({ original: contact }) => {
+        return (
+          <div className="name">
+            <Avatar
+              className="avatar"
+              round
+              name={Contact.get.name(contact)}
+              src={Contact.get.avatar(contact)}
+              size={35}
+            />
+            <span className="contact-name">{Contact.get.name(contact)}</span>
+          </div>
+        )
+      }
+    },
+    {
+      Header: () => (
+        <Fragment>
+          EMAIL
+          <i class="fa fa-caret-down" />
+          <i class="fa fa-caret-up" />
+        </Fragment>
+      ),
+      id: 'email',
+      accessor: contact => Contact.get.email(contact),
+      Cell: ({ original: contact }) => Contact.get.email(contact)
+    },
+    {
+      Header: 'PHONE',
+      id: 'phone',
+      accessor: contact => Contact.get.phone(contact),
+      Cell: ({ original: contact }) => Contact.get.phone(contact)
+    },
+    {
+      Header: () => (
+        <Fragment>
+          STAGE
+          <i class="fa fa-caret-down" />
+          <i class="fa fa-caret-up" />
+        </Fragment>
+      ),
+      id: 'stage',
+      accessor: contact => Contact.get.stage(contact).name,
+      className: 'td--stage-container',
+      Cell: ({ original: contact }) => (
+        <Stage
+          default={Contact.get.stage(contact).name}
+          onChange={stage => onChangeStage(stage, contact, upsertAttributes)}
+        />
+      )
+    },
+    {
+      Header: () => (
+        <Fragment>
+          SOURCE
+          <i class="fa fa-caret-down" />
+          <i class="fa fa-caret-up" />
+        </Fragment>
+      ),
+      id: 'source',
+      accessor: contact => Contact.get.source(contact).label,
+      Cell: ({ original: contact }) => Contact.get.source(contact).label
+    }
+  ]
 
-    {_.size(contacts) > 0 && (
-      <table className="table">
-        <tbody>
-          <tr className="header">
-            <td className="col-md-2">NAME</td>
-            <td className="col-md-3">EMAIL</td>
-            <td className="col-md-2 hidden-xs">PHONE</td>
-            <td className="col-md-2 hidden-xs">STAGE</td>
-            <td className="col-md-3 hidden-sm hidden-xs">SOURCE</td>
-          </tr>
-          {_.chain(contacts)
-            .map(contact => (
-              <tr
-                key={`CONTACT_${contact.id}`}
-                onClick={e => openContact(contact.id, e)}
-                className="item"
-              >
-                <td className="col-md-2">
-                  <div className="name">
-                    <Avatar
-                      className="avatar"
-                      round
-                      name={Contact.get.name(contact)}
-                      src={Contact.get.avatar(contact)}
-                      size={35}
-                    />
-                    <span className="ellipsis">{Contact.get.name(contact)}</span>
-                  </div>
-                </td>
+  return (
+    <div className="list">
+      <Header
+        user={user}
+        contactsCount={_.size(contacts)}
+        onNewContact={id => openContact(id)}
+      />
+      {loadingImport && (
+        <i className="fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading" />
+      )}
+      <NoContact
+        user={user}
+        contactsCount={_.size(contacts)}
+        onNewContact={id => openContact(id)}
+      />
+      <ReactTable
+        defaultPageSize={Object.keys(contacts).length}
+        showPaginationBottom={false}
+        data={Object.values(contacts)}
+        columns={columns}
+        getTdProps={(state, rowInfo) => ({
+          onClick: () => openContact(rowInfo.original.id)
+        })}
+      />
 
-                <td className="col-md-3 ellipsis">{Contact.get.email(contact)}</td>
-
-                <td className="col-md-2 hidden-xs ellipsis">
-                  {Contact.get.phone(contact)}
-                </td>
-
-                <td
-                  className="col-md-2 hidden-xs"
-                  onClick={e => e.stopPropagation()}
-                >
-                  <Stage
-                    default={Contact.get.stage(contact).name}
-                    onChange={stage =>
-                      onChangeStage(stage, contact, upsertAttributes)
-                    }
-                  />
-                </td>
-
-                <td className="col-md-3 hidden-sm hidden-xs">
-                  {Contact.get.source(contact).label}
-                </td>
-              </tr>
-            ))
-            .value()}
-        </tbody>
-      </table>
-    )}
-    <ImportResultModal importInfo={importInfo} closeModal={removeImportResult} />
-  </div>
-)
-
+      <ImportResultModal importInfo={importInfo} closeModal={removeImportResult} />
+    </div>
+  )
+}
 export default connect(
   ({ contacts, user }) => ({
     contacts: contacts.list,

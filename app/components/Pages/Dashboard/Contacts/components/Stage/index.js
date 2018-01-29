@@ -13,18 +13,23 @@ export default class StageDropDown extends React.Component {
       PastClient: 'Past Client'
     }
 
-    // remove spaces
+    this.state = {
+      selected: this.defineStage(props)
+    }
+  }
+  componentWillReceiveProps(props) {
+    this.setState({ selected: this.defineStage(props) })
+  }
+
+  defineStage(props) {
     const defaultValue = props.default ? props.default.replace(/\s/g, '') : null
 
     // get stage
     const stage = defaultValue && this.stages[defaultValue] ? defaultValue : null
 
-    this.state = {
-      selected: stage
-    }
+    return stage
   }
-
-  onChange(eventKey, event) {
+  onChange(eventKey) {
     this.setState({
       selected: eventKey
     })
@@ -36,27 +41,27 @@ export default class StageDropDown extends React.Component {
   render() {
     const { selected } = this.state
 
-    if (!selected)
+    if (!selected) {
       return false
+    }
 
     return (
       <div className="contact-stages">
         <DropdownButton
           title={this.stages[selected]}
           id="drp-stages"
-          onSelect={(eventKey, event) => this.onChange(eventKey, event)}
+          onSelect={eventKey => this.onChange(eventKey)}
+          onClick={event => event.stopPropagation()}
         >
-          {
-            _.map(this.stages, (name, key) =>
-              <MenuItem
-                key={`STAGE_${key}`}
-                eventKey={key}
-                className={key === selected ? 'selected' : ''}
-              >
-                { name }
-              </MenuItem>
-            )
-          }
+          {_.map(this.stages, (name, key) => (
+            <MenuItem
+              key={`STAGE_${key}`}
+              eventKey={key}
+              className={key === selected ? 'selected' : ''}
+            >
+              {name}
+            </MenuItem>
+          ))}
         </DropdownButton>
       </div>
     )
