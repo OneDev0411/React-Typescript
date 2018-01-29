@@ -1,7 +1,7 @@
 import Socket from '../../../../../services/socket'
 import store from '../../../../../stores'
 import {
-  getDeals,
+  // getDeals,
   createDeal,
   updateDeal,
   dealArchived
@@ -93,11 +93,12 @@ export default class DealSocket extends Socket {
    * on reconnect
    */
   onReconnected() {
-    const state = store.getState()
-    const { deals } = state
+    // const state = store.getState()
+    // const { deals } = state
     const { user } = this
 
     console.log('[ + ] Deal socket reconnected')
+
     // register brand
     DealSocket.registerBrand(user)
 
