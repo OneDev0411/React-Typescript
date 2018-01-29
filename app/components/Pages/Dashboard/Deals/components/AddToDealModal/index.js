@@ -5,6 +5,7 @@ import Header from './components/Header'
 import Body from './components/Body'
 import Footer from './components/Footer'
 import ShadowButton from './components/ShadowButton'
+import CancelButton from './components/CancelButton'
 
 const propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -41,9 +42,7 @@ class AddToDealModal extends Component {
         </Header>
         <Body contactsList={contactsList} />
         <Footer>
-          <ShadowButton onClick={closeHandler} color="#26465e">
-            Cancel
-          </ShadowButton>
+          <CancelButton onClick={closeHandler}>Cancel</CancelButton>
         </Footer>
       </Modal>
     )
