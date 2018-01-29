@@ -410,7 +410,9 @@ export default Contact
 export function extractUserInfoFromContact(contact) {
   const { display_name } = contact
   const email = Contact.get.email(contact)
-  const phone = Contact.get.phone(contact)
+  const emails = Contact.get.emails(contact)
+  const phones = Contact.get.phones(contact)
+  const phone_number = Contact.get.phone(contact)
   const profile_image_url = Contact.get.avatar(contact)
 
   const namesAttributes = {
@@ -419,11 +421,13 @@ export function extractUserInfoFromContact(contact) {
   const { first_name, last_name } = namesAttributes
 
   const user = {
-    email,
-    phone,
     last_name,
     first_name,
     display_name,
+    email,
+    emails,
+    phones,
+    phone_number,
     profile_image_url
   }
 

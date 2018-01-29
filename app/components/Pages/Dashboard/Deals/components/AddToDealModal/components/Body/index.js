@@ -50,6 +50,7 @@ class Body extends Component {
 
   render() {
     const { items } = this.state
+    const { selectedItemHandler } = this.props
 
     return (
       <Downshift
@@ -77,8 +78,9 @@ class Body extends Component {
                     .map((item, index) => (
                       <ContactItem
                         item={item}
+                        key={item.id}
                         {...getItemProps({ item })}
-                        onClick={() => {}}
+                        onClickHandler={selectedItemHandler}
                         isHighlighted={highlightedIndex === index}
                       />
                     ))}
@@ -97,7 +99,7 @@ Body.propTypes = propTypes
 export default Body
 
 function filterKeywords({ keyword, contact }) {
-  if (!keyword || keyword.length < 3) {
+  if (!keyword || keyword.length < 2) {
     return true
   }
 
@@ -106,7 +108,7 @@ function filterKeywords({ keyword, contact }) {
   return Object.keys(user).some(fieldName => {
     const fieldValue = user[fieldName]
 
-    if (fieldValue) {
+    if (typeof fieldValue === 'string') {
       return fieldValue.toLowerCase().includes(keyword.toLowerCase())
     }
   })

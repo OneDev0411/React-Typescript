@@ -16,7 +16,11 @@ const propTypes = {
 class AddToDealModal extends Component {
   render() {
     const {
-      isOpen, closeHandler, addManuallyHandler, contactsList
+      isOpen,
+      closeHandler,
+      addManuallyHandler,
+      contactsList,
+      selectedItemHandler
     } = this.props
 
     return (
@@ -40,7 +44,10 @@ class AddToDealModal extends Component {
             </svg>
           </ShadowButton>
         </Header>
-        <Body contactsList={contactsList} />
+        <Body
+          contactsList={contactsList}
+          selectedItemHandler={selectedItemHandler}
+        />
         <Footer>
           <CancelButton onClick={closeHandler}>Cancel</CancelButton>
         </Footer>

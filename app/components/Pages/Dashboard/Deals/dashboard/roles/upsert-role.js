@@ -9,6 +9,8 @@ import {
   updateRole,
   selectRole
 } from '../../../../../../store_actions/deals'
+import AddToDealModal from '../../components/AddToDealModal'
+import { getContactsList } from '../../../../../../reducers/contacts/list'
 
 class UpsertRole extends React.Component {
   constructor(props) {
@@ -18,8 +20,15 @@ class UpsertRole extends React.Component {
       form: null,
       saving: false,
       isNewRecord: true,
-      isFormCompleted: false
+      isFormCompleted: false,
+      showAddToDealModal: false
     }
+
+    this.showModal = this.showModal.bind(this)
+    this.closeModal = this.closeModal.bind(this)
+    this.handleOpenAddToDealModal = this.handleOpenAddToDealModal.bind(this)
+    this.handleCloseAddToDealModal = this.handleCloseAddToDealModal.bind(this)
+    this.addRoleWithExistingContactHandler = this.addRoleWithExistingContactHandler.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -36,7 +45,10 @@ class UpsertRole extends React.Component {
   }
 
   showModal() {
-    this.setState({ show: true })
+    this.setState({
+      show: true,
+      showAddToDealModal: false
+    })
   }
 
   closeModal() {
@@ -97,16 +109,48 @@ class UpsertRole extends React.Component {
     })
   }
 
+  handleOpenAddToDealModal() {
+    this.setState({ showAddToDealModal: true })
+  }
+
+  handleCloseAddToDealModal() {
+    this.setState({ showAddToDealModal: false })
+  }
+
+  addRoleWithExistingContactHandler(user) {
+    const {
+      legal_last_name, legal_first_name, last_name, first_name
+    } = user
+
+    const form = {
+      legal_first_name: legal_first_name || first_name,
+      legal_last_name: legal_last_name || last_name,
+      ...user
+    }
+
+    this.setState({
+      form,
+      show: true,
+      isNewRecord: true,
+      showAddToDealModal: false
+    })
+  }
+
   render() {
     const {
-      show, form, isNewRecord, saving, isFormCompleted
+      show,
+      form,
+      isNewRecord,
+      saving,
+      isFormCompleted,
+      showAddToDealModal
     } = this.state
-    const { deal, allowedRoles, selectedRole } = this.props
+    const { deal, allowedRoles, contactsList } = this.props
     const buttonDisabled = !isFormCompleted || saving === true
 
     return (
       <div>
-        <div className="item add-new" onClick={() => this.showModal()}>
+        <div className="item add-new" onClick={this.handleOpenAddToDealModal}>
           <img src="/static/images/deals/contact-add.png" />
 
           <div className="name">
@@ -114,9 +158,17 @@ class UpsertRole extends React.Component {
           </div>
         </div>
 
+        <AddToDealModal
+          isOpen={showAddToDealModal}
+          contactsList={contactsList}
+          addManuallyHandler={this.showModal}
+          closeHandler={this.handleCloseAddToDealModal}
+          selectedItemHandler={this.addRoleWithExistingContactHandler}
+        />
+
         <Modal
           show={show}
-          onHide={() => this.closeModal()}
+          onHide={this.closeModal}
           backdrop="static"
           dialogClassName="modal-deal-add-role"
         >
@@ -149,14 +201,19 @@ class UpsertRole extends React.Component {
   }
 }
 
-export default connect(
-  ({ deals }) => ({
-    selectedRole: deals.selectedRole
-  }),
-  {
-    selectRole,
-    createRoles,
-    updateRole,
-    notify
+function mapToProps({ deals, contacts }) {
+  const { selectedRole } = deals
+  const contactsList = getContactsList(contacts)
+
+  return {
+    selectedRole,
+    contactsList
   }
-)(UpsertRole)
+}
+
+export default connect(mapToProps, {
+  selectRole,
+  createRoles,
+  updateRole,
+  notify
+})(UpsertRole)

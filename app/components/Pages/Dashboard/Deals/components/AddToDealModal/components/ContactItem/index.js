@@ -28,13 +28,13 @@ const propTypes = {
 }
 
 function ContactItem(props) {
-  const { item } = props
+  const { item, onClickHandler } = props
   const user = extractUserInfoFromContact(item)
   const { email, phone } = user
   const title = getUserTitle(user)
 
   return (
-    <Container key={item.id} {...props}>
+    <Container {...props} onClick={() => onClickHandler(user)}>
       <div style={{ width: '32px', height: '32px', borderRadius: '50%' }}>
         <Avatar user={user} size={32} />
       </div>

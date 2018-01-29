@@ -1,5 +1,4 @@
 import types from '../../constants/contact'
-import _ from 'underscore'
 
 export default (state = null, action) => {
   switch (action.type) {
@@ -39,4 +38,15 @@ export default (state = null, action) => {
     default:
       return state
   }
+}
+
+// state: Object - Contacts state
+export const getContactsList = state => {
+  const { list } = state
+
+  if (list) {
+    return Object.keys(list).map(id => list[id])
+  }
+
+  return []
 }

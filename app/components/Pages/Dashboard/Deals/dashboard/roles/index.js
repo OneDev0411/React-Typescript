@@ -178,9 +178,6 @@ export default connect(
     roles: deals.roles
   }),
   {
-    deleteRole,
-    selectRole,
-    notify,
-    confirmation
+    deleteRole, selectRole, notify, confirmation
   }
 )(Roles)
