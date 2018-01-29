@@ -8,9 +8,14 @@ new Array(
   'ADD_NOTE',
   'GET_TIMELINE',
   'UPSERT_ATTRIBUTES',
-  'DELETE_ATTRIBUTE'
-)
-.forEach(action => {
+  'DELETE_ATTRIBUTE',
+  'IMPORT_SUCCESSFUL_LOGIN',
+  'IMPORT_DONE',
+  'UPLOAD_CVS',
+  'REMOVE_IMPORT_RESULT',
+  'SHOW_SPINNER',
+  'HIDE_SPINNER'
+).forEach(action => {
   ActionTypes[action] = `CONTACTS___${action}`
 })
 

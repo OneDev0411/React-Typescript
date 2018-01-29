@@ -8,16 +8,6 @@
   .deals-list--header {
     @extend %deal-list--header;
   }
-
-  .spinner__deals {
-    position: fixed;
-    left: 50%;
-    margin-left: 27px;
-    margin-top: 8px;
-  }
-  .spinner__deals.hide_spinner {
-    visibility: hidden;
-  }
 }
 
 .list-empty,
@@ -62,6 +52,11 @@
       font-size: 26px;
       font-weight: bold;
     }
+  }
+
+  .create-deal-button {
+    max-width: 150px;
+    margin: 0 auto;
   }
 }
 

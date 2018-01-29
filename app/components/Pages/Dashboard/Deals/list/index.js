@@ -19,33 +19,38 @@ class DealsDashboard extends React.Component {
 
     this.state = {
       activeFilters,
-      searchBoxIsOpen: false,
+      searchBoxIsOpen: !isBackOffice,
       emptySearchPageIsOpen: false
     }
   }
 
-  setSearchStatus = searchBoxIsOpen => this.setState({ searchBoxIsOpen })
-  showEmptySearchPage = emptySearchPageIsOpen =>
-    this.setState({ emptySearchPageIsOpen })
+  setSearchStatus(searchBoxIsOpen) {
+    return this.setState({ searchBoxIsOpen })
+  }
 
-  initialBOFilters = filters => {
-    this.setState({
+  showEmptySearchPage(emptySearchPageIsOpen) {
+    return this.setState({ emptySearchPageIsOpen })
+  }
+
+  initialBOFilters(filters) {
+    return this.setState({
       activeFilters: {
         ..._.omit(filters, 'searchResult')
       }
     })
   }
 
-  initialAgentFilters = filters => {
-    this.setState({
+  initialAgentFilters(filters) {
+    return this.setState({
       activeFilters: {
+        status: (status, deal) => !deal.deleted_at,
         ..._.omit(filters, 'searchResult')
       }
     })
   }
 
-  searchBOFilters = () => {
-    this.setState({
+  searchBOFilters() {
+    return this.setState({
       activeFilters: { searchResult: true }
     })
   }
@@ -73,22 +78,31 @@ class DealsDashboard extends React.Component {
       <div className="deals-list" data-simplebar={!isWebkit || null}>
         <Header
           activeFilterTab={params.filter}
-          initialBOFilters={this.initialBOFilters}
-          initialAgentFilters={this.initialAgentFilters}
-          searchBOFilters={this.searchBOFilters}
+          initialBOFilters={filters => this.initialBOFilters(filters)}
+          initialAgentFilters={filters => this.initialAgentFilters(filters)}
+          searchBOFilters={() => this.searchBOFilters()}
           searchBoxIsOpen={searchBoxIsOpen}
-          setSearchStatus={this.setSearchStatus}
-          showEmptySearchPage={this.showEmptySearchPage}
+          setSearchStatus={searchBoxIsOpen => this.setSearchStatus(searchBoxIsOpen)}
+          showEmptySearchPage={emptySearchPageIsOpen =>
+            this.showEmptySearchPage(emptySearchPageIsOpen)
+          }
           onFilterChange={filters => this.setFilter(filters)}
         />
         <i
-          className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__deals', {
+          className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading', {
             hide_spinner: !loadingDeals
           })}
         />
 
         {!isBackOffice ? (
-          <AgentTable deals={deals} filters={activeFilters} isBackOffice={false} />
+          <AgentTable
+            deals={deals}
+            tabName={params.filter || 'All'}
+            searchBoxIsOpen={searchBoxIsOpen}
+            emptySearchPageIsOpen={emptySearchPageIsOpen || loadingDeals}
+            filters={activeFilters}
+            isBackOffice={false}
+          />
         ) : (
           <BackOfficeTable
             deals={deals}

@@ -23,7 +23,6 @@ import {
   createOffer,
   updateContext
 } from '../../../../../store_actions/deals'
-import hasPrimaryOffer from '../utils/has-primary-offer'
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -31,7 +30,7 @@ class CreateOffer extends React.Component {
 
     const { deal } = props
 
-    const dealHasPrimaryOffer = hasPrimaryOffer(deal)
+    const dealHasPrimaryOffer = DealContext.hasActiveOffer(deal)
 
     this.state = {
       dealHasPrimaryOffer,
@@ -51,10 +50,6 @@ class CreateOffer extends React.Component {
 
   componentDidMount() {
     const { deal } = this.props
-
-    if (!deal.checklists) {
-      return browserHistory.push(`/dashboard/deals/${deal.id}`)
-    }
 
     if (deal.roles) {
       this.prepopulateRoles(deal.roles)
@@ -197,7 +192,9 @@ class CreateOffer extends React.Component {
     const {
       deal, notify, createOffer, createRoles, updateContext
     } = this.props
-    const { enderType, dealStatus, contexts, clients } = this.state
+    const {
+      enderType, dealStatus, contexts, clients
+    } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
     const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
@@ -283,9 +280,8 @@ class CreateOffer extends React.Component {
 
   getDealContexts() {
     const { deal } = this.props
-    const hasActiveOffer = true
 
-    return DealContext.getItems('Buying', deal.property_type, hasActiveOffer)
+    return DealContext.getItems('Buying', deal.property_type, true)
   }
 
   backToDeal() {

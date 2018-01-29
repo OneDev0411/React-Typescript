@@ -9,13 +9,11 @@ const Contact = {
 /**
  * add new contact
  */
-Contact.add = async function (params) {
+Contact.add = async function(params) {
   const { contacts } = params
 
   try {
-    const response = await new Fetch()
-      .post('/contacts')
-      .send({ contacts })
+    const response = await new Fetch().post('/contacts').send({ contacts })
 
     return response
   } catch (e) {
@@ -26,7 +24,7 @@ Contact.add = async function (params) {
 /**
  * returns contacts list
  */
-Contact.getContacts = async function (user) {
+Contact.getContacts = async function(user) {
   try {
     const fetchContacts = new Fetch()
       .get('/contacts')
@@ -50,12 +48,11 @@ Contact.getContacts = async function (user) {
 /**
  * returns contact's timeline
  */
-Contact.getTimeline = async function (id) {
+Contact.getTimeline = async function(id) {
   const endpoint = `/contacts/${id}/timeline`
 
   try {
-    const response = await new Fetch()
-      .get(endpoint)
+    const response = await new Fetch().get(endpoint)
 
     return response
   } catch (e) {
@@ -66,14 +63,12 @@ Contact.getTimeline = async function (id) {
 /**
  * add note
  */
-Contact.addNote = async function (id, note) {
+Contact.addNote = async function(id, note) {
   const endpoint = `/contacts/${id}/attributes`
   const payload = Contact.helper.populateAttributes('note', [{ note }])
 
   try {
-    const response = await new Fetch()
-      .post(endpoint)
-      .send(payload)
+    const response = await new Fetch().post(endpoint).send(payload)
 
     return response
   } catch (e) {
@@ -84,7 +79,7 @@ Contact.addNote = async function (id, note) {
 /**
  * add new item to user's timeline
  */
-Contact.updateUserTimeline = async function (action, object_class, object) {
+Contact.updateUserTimeline = async function(action, object_class, object) {
   const requestBody = {
     action,
     object,
@@ -92,9 +87,7 @@ Contact.updateUserTimeline = async function (action, object_class, object) {
   }
 
   try {
-    const response = await new Fetch()
-      .post('/users/self/timeline')
-      .send(requestBody)
+    const response = await new Fetch().post('/users/self/timeline').send(requestBody)
 
     return response
   } catch (e) {
@@ -105,14 +98,12 @@ Contact.updateUserTimeline = async function (action, object_class, object) {
 /**
  * create new attributes
  */
-Contact.createAttributes = async function (id, type, attributes) {
+Contact.createAttributes = async function(id, type, attributes) {
   const endpoint = `/contacts/${id}/attributes`
   const payload = Contact.helper.populateAttributes(type, attributes)
 
   try {
-    const response = await new Fetch()
-      .post(endpoint)
-      .send(payload)
+    const response = await new Fetch().post(endpoint).send(payload)
 
     return response.body.data
   } catch (e) {
@@ -123,7 +114,7 @@ Contact.createAttributes = async function (id, type, attributes) {
 /**
  * update current attributes
  */
-Contact.updateAttributes = async function (id, type, attributes) {
+Contact.updateAttributes = async function(id, type, attributes) {
   const payload = Contact.helper.populateAttributes(type, attributes)
 
   try {
@@ -140,10 +131,11 @@ Contact.updateAttributes = async function (id, type, attributes) {
 /**
  * delete attribute
  */
-Contact.deleteAttribute = async function (id, attribute_id) {
+Contact.deleteAttribute = async function(id, attribute_id) {
   try {
-    const response = await new Fetch()
-      .delete(`/contacts/${id}/attributes/${attribute_id}`)
+    const response = await new Fetch().delete(
+      `/contacts/${id}/attributes/${attribute_id}`
+    )
 
     return response.body.data
   } catch (e) {
@@ -154,10 +146,9 @@ Contact.deleteAttribute = async function (id, attribute_id) {
 /**
  * get tags
  */
-Contact.getTags = async function () {
+Contact.getTags = async function() {
   try {
-    const response = await new Fetch()
-      .get('/contacts/tags')
+    const response = await new Fetch().get('/contacts/tags')
 
     return response
   } catch (e) {
@@ -204,7 +195,7 @@ Contact.get = {
 
     return sorted[0]
   },
-  _trim: (text, max) => text.length < max ? text : `${text.substr(0, max)}...`,
+  _trim: (text, max) => (text.length < max ? text : `${text.substr(0, max)}...`),
   _all: (context, attrs, type) => {
     let list = []
 
@@ -228,7 +219,6 @@ Contact.get = {
     if (item) {
       return item.profile_image_url
     }
-
 
     item = Contact.get._sort(context.users)
 
@@ -319,12 +309,14 @@ Contact.get = {
     })
 
     if (list.length === 0) {
-      list = [{
-        street_name: '-',
-        city: '-',
-        state: '-',
-        postal_code: '-'
-      }]
+      list = [
+        {
+          street_name: '-',
+          city: '-',
+          state: '-',
+          postal_code: '-'
+        }
+      ]
     }
 
     return list
@@ -387,6 +379,18 @@ Contact.get = {
     })
 
     return list
+  }
+}
+
+Contact.uplaodCsv = async function(file, fileName = null) {
+  const title = fileName || file.name
+
+  try {
+    return await new Fetch()
+      .upload('/contacts/outlook.csv')
+      .attach('attachment', file, title)
+  } catch (e) {
+    console.log(e)
   }
 }
 

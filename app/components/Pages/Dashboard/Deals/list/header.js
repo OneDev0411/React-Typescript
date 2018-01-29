@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { OverlayTrigger, Tooltip, Panel } from 'react-bootstrap'
+import { Panel } from 'react-bootstrap'
 import { Link } from 'react-router'
 import AgentFilter from './agent-filter'
 import BackOfficeFilter from './backoffice-filter'
+import Tooltip from '../components/tooltip'
 import debounce from 'lodash/debounce'
 import {
   searchAllDeals,
@@ -11,7 +12,6 @@ import {
 } from '../../../../../store_actions/deals'
 import Excel from '../../Partials/Svgs/Excel'
 import cn from 'classnames'
-import config from '../../../../../../config/public'
 
 class Header extends React.Component {
   constructor(props) {
@@ -24,28 +24,16 @@ class Header extends React.Component {
 
   onInputChange() {
     const { value } = this.searchInput
-    const {
-      isBackOffice,
-      onFilterChange,
-      searchAllDeals,
-      searchBOFilters,
-      showEmptySearchPage
-    } = this.props
-    let filters
+    const { searchAllDeals, searchBOFilters, showEmptySearchPage } = this.props
 
-    if (isBackOffice) {
-      if (value) {
-        searchAllDeals(value)
-        showEmptySearchPage(false)
-      } else {
-        showEmptySearchPage(true)
-      }
-
-      searchBOFilters()
+    if (value && value.length > 2) {
+      searchAllDeals(value)
+      showEmptySearchPage(false)
     } else {
-      filters = { 'address^side^mlsSearch': value }
-      onFilterChange(filters)
+      showEmptySearchPage(true)
     }
+
+    searchBOFilters()
   }
 
   render() {
@@ -58,8 +46,7 @@ class Header extends React.Component {
       initialBOFilters,
       showEmptySearchPage,
       initialAgentFilters,
-      cleanSearchedDeals,
-      user
+      cleanSearchedDeals
     } = this.props
 
     const { inputFocused } = this.state
@@ -96,10 +83,16 @@ class Header extends React.Component {
                 <AgentFilter
                   active={activeFilterTab}
                   onChangeFilter={filters => {
-                    initialAgentFilters(filters)
-
                     if (this.searchInput) {
                       this.searchInput.value = ''
+                    }
+
+                    if (searchBoxIsOpen) {
+                      setSearchStatus(false)
+                      initialAgentFilters(filters)
+                      cleanSearchedDeals()
+                    } else {
+                      onFilterChange(filters)
                     }
                   }}
                 />
@@ -108,15 +101,10 @@ class Header extends React.Component {
 
             <div className="deals-list--header-row--col">
               {isBackOffice && (
-                <OverlayTrigger
+                <Tooltip
+                  multiline
                   placement="bottom"
-                  overlay={
-                    <Tooltip id="popover-leave">
-                      Search deals by address,
-                      <br />
-                      MLS # or agent name…
-                    </Tooltip>
-                  }
+                  caption="Search deals by address,<br />MLS # or agent name…"
                 >
                   <div
                     onClick={() => {
@@ -131,20 +119,21 @@ class Header extends React.Component {
                     className="search-button"
                   >
                     <i
-                      className={cn('fa fa-search', { active: searchBoxIsOpen })}
+                      className={cn('fa fa-search', {
+                        active: searchBoxIsOpen
+                      })}
                       aria-hidden="true"
                     />
                   </div>
-                </OverlayTrigger>
+                </Tooltip>
               )}
-              <OverlayTrigger
-                placement="bottom"
-                overlay={<Tooltip id="popover-leave">Download Report</Tooltip>}
-              >
+
+              <Tooltip placement="bottom" caption="Download Report">
                 <a href="/api/deals/excel/" className="search-button">
                   <Excel />
                 </a>
-              </OverlayTrigger>
+              </Tooltip>
+
               {!isBackOffice && (
                 <Link
                   to="/dashboard/deals/create"
@@ -156,6 +145,7 @@ class Header extends React.Component {
             </div>
           </div>
         </div>
+
         {showSearchInput && (
           <Panel
             className={cn({ agent: !isBackOffice })}
@@ -186,9 +176,8 @@ class Header extends React.Component {
 }
 
 export default connect(
-  ({ user, deals }) => ({
-    isBackOffice: deals.backoffice,
-    user
+  ({ deals }) => ({
+    isBackOffice: deals.backoffice
   }),
   {
     searchAllDeals,

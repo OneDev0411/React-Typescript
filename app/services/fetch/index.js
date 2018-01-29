@@ -22,7 +22,9 @@ export default class Fetch {
 
     this._isLoggedIn = user && user.access_token !== undefined
 
-    const agent = SuperAgent.post(`${this._proxyUrl}/${this.getEndpointKey(endpoint)}`)
+    const agent = SuperAgent.post(
+      `${this._proxyUrl}/${this.getEndpointKey(endpoint)}`
+    )
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
       .retry(2)
@@ -58,9 +60,7 @@ export default class Fetch {
       .replace(/(?!^)\//g, '-') // change the rest slashes to dash
   }
 
-  mock({
-    endpoint, method, statusCode, response
-  }) {
+  mock({ endpoint, method, statusCode, response }) {
     const endpointKey = this.getEndpointKey(endpoint)
 
     return nock(`${config.app.url}/api/proxifier`)
