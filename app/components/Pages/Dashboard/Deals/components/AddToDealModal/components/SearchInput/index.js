@@ -38,16 +38,14 @@ const Input = styled.input`
 `
 
 const propTypes = {
-  onChange: PropTypes.func.isRequired
+  style: PropTypes.object,
+  inputProps: PropTypes.object.isRequired
 }
 
-function SearchInput({ onChange }) {
+function SearchInput({ style, inputProps }) {
   return (
-    <div style={{ position: 'relative' }}>
-      <Input
-        onChange={onChange}
-        placeholder="Enter a keyword for searching on contacts"
-      />
+    <div style={{ position: 'relative', ...style }}>
+      <Input {...inputProps} />
       <SearchIcon
         size={24}
         color="#8DA2B5"

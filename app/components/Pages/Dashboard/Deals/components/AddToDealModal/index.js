@@ -14,7 +14,9 @@ const propTypes = {
 
 class AddToDealModal extends Component {
   render() {
-    const { isOpen, closeHandler, addManuallyHandler } = this.props
+    const {
+      isOpen, closeHandler, addManuallyHandler, contactsList
+    } = this.props
 
     return (
       <Modal
@@ -37,7 +39,7 @@ class AddToDealModal extends Component {
             </svg>
           </ShadowButton>
         </Header>
-        <Body />
+        <Body contactsList={contactsList} />
         <Footer>
           <ShadowButton onClick={closeHandler} color="#26465e">
             Cancel
