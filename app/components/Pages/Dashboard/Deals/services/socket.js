@@ -36,14 +36,14 @@ export default class DealSocket extends Socket {
    * authenticate user brand
    */
   static registerBrand(user) {
-    console.log('[ + ] Registering Deal Brand')
 
     if (user && user.brand) {
+      console.log('[ + ] Registering Deal Brand')
       window.socket.emit('Brand.Register', user.brand, (user, err) => {
-        if (err) {
-          console.log(`[ + ] Deal brand registering failed: ${err}`)
-        }
+        console.log('[ + ] Deal brand registering completed', err)
       })
+    } else {
+      console.log('[ + ] registerBrand failing', user)
     }
   }
 
