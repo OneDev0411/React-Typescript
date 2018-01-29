@@ -14,7 +14,9 @@ export default class NotificationService extends Socket {
   }
 
   subscribe(name, handler) {
-    emitter.on(name, handler)
+    if (!emitter._events[name]) {
+      emitter.on(name, handler)
+    }
   }
 
   unsubscribe(name, handler) {
@@ -46,9 +48,8 @@ export default class NotificationService extends Socket {
       return false
     }
 
-    const Notification = window.Notification
-      || window.mozNotification
-      || window.webkitNotification
+    const Notification =
+      window.Notification || window.mozNotification || window.webkitNotification
 
     if (Notification.permission === 'granted') {
       this.sendBrowserMessage(message, onClick)
@@ -66,8 +67,8 @@ export default class NotificationService extends Socket {
    */
   sendBrowserMessage(message, onClick) {
     const title = message.title || 'You have new Rechat notification'
-    const icon
-      = message.image || `${config.app.url}/static/images/dashboard/rebot@2x.png`
+    const icon =
+      message.image || `${config.app.url}/static/images/dashboard/rebot@2x.png`
     const body = message.body || 'You have new message'
 
     const instance = new Notification(title, {
