@@ -9,7 +9,6 @@ import {
   setSelectedTask,
   updateDealNotifications
 } from '../../../../../../store_actions/deals'
-import { Tab } from 'react-bootstrap'
 
 const List = ({
   tasks,
@@ -28,7 +27,7 @@ const List = ({
   let sortedTasks = checklist.tasks
 
   // select a task
-  const selectTask = function (task) {
+  function selectTask(task) {
     if (task.room.new_notifications > 0) {
       updateDealNotifications(
         deal.id,
@@ -52,7 +51,7 @@ const List = ({
       <div className={`list ${!checklist.tasks ? 'empty' : ''}`}>
         <TransitionGroup>
           {sortedTasks &&
-            sortedTasks.map((id, key) => {
+            sortedTasks.map(id => {
               const task = tasks[id]
               const room = rooms[task.room.id] || task.room
               const hasStatus = task.review !== null || task.needs_attention === true
