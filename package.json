@@ -93,6 +93,7 @@
     "koa2-session-redis": "0.0.1",
     "linkifyjs": "github:izadmehr/linkifyjs#build",
     "lodash": "^4.17.4",
+    "match-sorter": "^2.2.0",
     "merge": "^1.2.0",
     "minifier": "^0.8.1",
     "mobile-detect": "^1.4.1",

@@ -1,14 +1,12 @@
 import React from 'react'
 import _ from 'underscore'
 import { Dropdown, MenuItem } from 'react-bootstrap'
-import cn from 'classnames'
 import Title from './title'
 import Name from './name'
-import Email from './email'
-import Phone from './phone'
 import Role from './role'
 import Company from './company'
 import Commission from './commission'
+import InputWithSelect from './InputWithSelect'
 
 const role_names = [
   'BuyerAgent',
@@ -42,7 +40,7 @@ export default class Form extends React.Component {
       form
     }
 
-    this.validate = _.debounce(this.validate, 200)
+    // this.validate = _.debounce(this.validate, 200)
   }
 
   componentDidMount() {
@@ -230,8 +228,8 @@ export default class Form extends React.Component {
       })
     }
 
-    if (value.length > 0) {
-      if (await validator(value)) {
+    if (value) {
+      if (typeof validator === 'function' && (await validator(value))) {
         // validated! so remove field from invalidFields
         if (invalidFields.length > 0 && invalidFields.includes(field)) {
           removeField()
@@ -301,17 +299,31 @@ export default class Form extends React.Component {
           />
         </div>
 
-        <Email
-          form={form}
-          required={this.isEmailRequired()}
+        <InputWithSelect
+          title="Email"
+          errorText="Enter a valid email"
+          placeholder="example@gmail.com"
+          isRequired={this.isEmailRequired()}
           isInvalid={invalidFields.includes('email')}
-          onChange={value => this.setForm('email', value)}
+          onChangeHandler={value => this.setForm('email', value)}
+          items={extractItems({
+            data: form,
+            singleName: 'email',
+            pluralName: 'emails'
+          })}
         />
 
-        <Phone
-          form={form}
+        <InputWithSelect
+          title="Phone"
+          errorText="Enter a valid phone"
+          placeholder="(###) - ### ####"
           isInvalid={invalidFields.includes('phone')}
-          onChange={value => this.setForm('phone', value)}
+          onChangeHandler={value => this.setForm('phone', value)}
+          items={extractItems({
+            data: form,
+            singleName: 'phone',
+            pluralName: 'phones'
+          })}
         />
 
         <Role
@@ -337,4 +349,14 @@ export default class Form extends React.Component {
       </div>
     )
   }
+}
+
+function extractItems({ data, singleName, pluralName }) {
+  const pluralValue = data[pluralName]
+
+  if (pluralValue && Array.isArray(pluralValue)) {
+    return pluralValue.map(item => item[singleName])
+  }
+
+  return [data[singleName]]
 }

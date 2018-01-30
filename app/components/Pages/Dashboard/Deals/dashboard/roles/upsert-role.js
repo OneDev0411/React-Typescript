@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button, FormControl, Modal } from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import RoleForm from './form'
@@ -12,63 +12,54 @@ import {
 import AddToDealModal from '../../components/AddToDealModal'
 import { getContactsList } from '../../../../../../reducers/contacts/list'
 
+const initialState = {
+  form: null,
+  show: false,
+  saving: false,
+  isFormCompleted: false,
+  showAddToDealModal: false
+}
+
 class UpsertRole extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      show: false,
-      form: null,
-      saving: false,
-      isNewRecord: true,
-      isFormCompleted: false,
-      showAddToDealModal: false
-    }
+  state = initialState
 
-    this.showModal = this.showModal.bind(this)
-    this.closeModal = this.closeModal.bind(this)
-    this.handleOpenAddToDealModal = this.handleOpenAddToDealModal.bind(this)
-    this.handleCloseAddToDealModal = this.handleCloseAddToDealModal.bind(this)
-    this.addRoleWithExistingContactHandler = this.addRoleWithExistingContactHandler.bind(this)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { selectedRole, allowedRoles } = nextProps
+  componentWillReceiveProps = nextProps => {
     const { form, show } = this.state
+    const { selectedRole, allowedRoles } = nextProps
 
     if (selectedRole && !show && !form && !allowedRoles) {
       this.setState({
         form: selectedRole,
-        isNewRecord: false,
         show: true
       })
     }
   }
 
-  showModal() {
+  componentWillUnmount = () => {
+    this.setState(initialState)
+    this.props.selectRole(null)
+  }
+
+  showModal = () => {
     this.setState({
       show: true,
       showAddToDealModal: false
     })
   }
 
-  closeModal() {
-    this.setState({
-      show: false,
-      isNewRecord: true,
-      form: null
-    })
-
+  closeModal = () => {
+    this.setState(initialState)
     this.props.selectRole(null)
   }
 
-  onFormChange({ form, isFormCompleted }) {
+  onFormChange = ({ form, isFormCompleted }) => {
     this.setState({ form, isFormCompleted })
   }
 
-  async upsert() {
-    const { form, isNewRecord } = this.state
+  upsert = async () => {
+    const { form } = this.state
     const {
-      deal, createRoles, updateRole, notify
+      deal, createRoles, updateRole, notify, selectedRole
     } = this.props
 
     if (!deal) {
@@ -79,8 +70,10 @@ class UpsertRole extends React.Component {
       saving: true
     })
 
+    console.log(form)
+
     try {
-      if (isNewRecord) {
+      if (selectedRole) {
         await createRoles(deal.id, [form])
       } else {
         await updateRole(deal.id, _.omit(form, 'user'))
@@ -109,15 +102,15 @@ class UpsertRole extends React.Component {
     })
   }
 
-  handleOpenAddToDealModal() {
+  handleOpenAddToDealModal = () => {
     this.setState({ showAddToDealModal: true })
   }
 
-  handleCloseAddToDealModal() {
+  handleCloseAddToDealModal = () => {
     this.setState({ showAddToDealModal: false })
   }
 
-  addRoleWithExistingContactHandler(user) {
+  addRoleWithExistingContactHandler = user => {
     const {
       legal_last_name, legal_first_name, last_name, first_name
     } = user
@@ -131,19 +124,26 @@ class UpsertRole extends React.Component {
     this.setState({
       form,
       show: true,
-      isNewRecord: true,
       showAddToDealModal: false
     })
   }
 
+  setSubmitButtonText = () => {
+    const { saving } = this.state
+    const { selectedRole } = this.props
+
+    let text = selectedRole ? 'Update' : 'Add'
+
+    if (saving) {
+      return selectedRole ? 'Updating...' : 'Adding...'
+    }
+
+    return text
+  }
+
   render() {
     const {
-      show,
-      form,
-      isNewRecord,
-      saving,
-      isFormCompleted,
-      showAddToDealModal
+      show, form, saving, isFormCompleted, showAddToDealModal
     } = this.state
     const { deal, allowedRoles, contactsList } = this.props
     const buttonDisabled = !isFormCompleted || saving === true
@@ -172,9 +172,7 @@ class UpsertRole extends React.Component {
           backdrop="static"
           dialogClassName="modal-deal-add-role"
         >
-          <Modal.Header closeButton>
-            {isNewRecord ? 'Add Contact' : 'Update Contact'}
-          </Modal.Header>
+          <Modal.Header closeButton>Add to Deal</Modal.Header>
 
           <Modal.Body>
             <RoleForm
@@ -190,9 +188,9 @@ class UpsertRole extends React.Component {
               className={`btn-deal ${buttonDisabled ? 'disabled' : ''}`}
               bsStyle={buttonDisabled ? 'link' : 'primary'}
               disabled={buttonDisabled}
-              onClick={() => this.upsert()}
+              onClick={this.upsert}
             >
-              {saving ? 'Saving...' : isNewRecord ? 'Add' : 'Update'}
+              {this.setSubmitButtonText()}
             </Button>
           </Modal.Footer>
         </Modal>

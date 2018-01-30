@@ -1,5 +1,4 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import UserAvatar from '../../../../../Partials/UserAvatar'
@@ -16,12 +15,10 @@ class Roles extends React.Component {
     }
   }
 
-  selectRole(role) {
-    this.props.selectRole(role)
-  }
-
   onClickRole(id) {
-    const { roles, onSelectRole, confirmation } = this.props
+    const {
+      roles, onSelectRole, confirmation, selectRole
+    } = this.props
     const item = roles[id]
 
     if (onSelectRole) {
@@ -30,7 +27,7 @@ class Roles extends React.Component {
           message: `${item.legal_first_name} has no email!`,
           description: `Add ${item.legal_first_name}'s email to continue.`,
           confirmLabel: 'Add Email',
-          onConfirm: () => this.selectRole(item)
+          onConfirm: () => selectRole(item)
         })
       }
 
@@ -44,7 +41,7 @@ class Roles extends React.Component {
         role: item.role
       })
     } else {
-      this.selectRole(item)
+      selectRole(item)
     }
   }
 
@@ -113,7 +110,7 @@ class Roles extends React.Component {
 
   render() {
     const {
-      deal, allowedRoles, roles, onSelectRole, allowDeleteRole
+      deal, allowedRoles, roles, allowDeleteRole
     } = this.props
     const { deletingRoleId } = this.state
 
@@ -178,6 +175,9 @@ export default connect(
     roles: deals.roles
   }),
   {
-    deleteRole, selectRole, notify, confirmation
+    notify,
+    deleteRole,
+    selectRole,
+    confirmation
   }
 )(Roles)
