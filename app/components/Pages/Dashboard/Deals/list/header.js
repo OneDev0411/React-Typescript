@@ -57,10 +57,10 @@ class Header extends React.Component {
     }
 
     return (
-      <div className={cn('deals-list--header', { agent: !isBackOffice })}>
+      <div className={cn('list--header', { agent: !isBackOffice })}>
         <div style={{ height: '57px' }}>
-          <div className={cn('deals-list--header-row', { agent: !isBackOffice })}>
-            <div className="deals-list--header-row--col">
+          <div className={cn('list--header-row', { agent: !isBackOffice })}>
+            <div className="list--header-row--col">
               {isBackOffice ? (
                 <BackOfficeFilter
                   searchMode={searchBoxIsOpen}
@@ -99,7 +99,7 @@ class Header extends React.Component {
               )}
             </div>
 
-            <div className="deals-list--header-row--col">
+            <div className="list--header-row--col">
               {isBackOffice && (
                 <Tooltip
                   multiline
@@ -137,7 +137,7 @@ class Header extends React.Component {
               {!isBackOffice && (
                 <Link
                   to="/dashboard/deals/create"
-                  className="btn btn-primary create-deal-button"
+                  className="btn btn-primary create-button"
                 >
                   Create New Deal
                 </Link>
@@ -148,13 +148,13 @@ class Header extends React.Component {
 
         {showSearchInput && (
           <Panel
-            className={cn({ agent: !isBackOffice })}
+            className={cn('list--header', { agent: !isBackOffice })}
             collapsible
             expanded={isBackOffice ? searchBoxIsOpen : true}
             onEntered={() => this.searchInput.focus()}
           >
             <div
-              className={cn('deals-list--header--searchBox', {
+              className={cn('list--header--searchBox', {
                 active: inputFocused
               })}
             >

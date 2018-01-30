@@ -2,26 +2,42 @@ import React from 'react'
 import AddContact from '../Add-Contact'
 import ImportOutlook from './ImportOutlook'
 import ImportCsv from './ImportCsv'
+import HeaderSearch from '../../../../Partials/headerSearch'
+import cn from 'classnames'
 
-export default ({ user, contactsCount, onNewContact }) => {
+export default ({ user, contactsCount, onNewContact, onInputChange }) => {
   if (contactsCount === 0) {
     return false
   }
 
+  const isBackOffice = false
+
   return (
-    <div className="toolbar">
-      <div className="info">
-        <span className="title">All Contacts</span>
+    <div className={cn('list--header', { agent: !isBackOffice })}>
+      <div style={{ height: '57px' }}>
+        <div className={cn('list--header-row', { agent: !isBackOffice })}>
+          <div className="list--header-row--col">
+            <ul className="filter">
+              <li>
+                <span className="title">All Contacts</span>
 
-        <span className="count">{contactsCount} Contacts</span>
+                <span className="badge counter">{contactsCount} Contacts</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="list--header-row--col">
+            <ImportOutlook userId={user.id} />
+            <ImportCsv />
+
+            <AddContact user={user} onNewContact={id => onNewContact(id)} />
+          </div>
+        </div>
       </div>
-
-      <div className="cta">
-        <ImportOutlook userId={user.id} />
-        <ImportCsv />
-
-        <AddContact user={user} onNewContact={id => onNewContact(id)} />
-      </div>
+      <HeaderSearch
+        onInputChange={text => onInputChange(text)}
+        placeholder="Search all contacs ..."
+      />
     </div>
   )
 }

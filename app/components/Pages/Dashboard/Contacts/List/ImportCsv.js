@@ -12,7 +12,7 @@ class ImportCSV extends React.Component {
     return (
       <div>
         <button
-          className="c-button--shadow contacts__toolbar__import"
+          className="c-button--shadow secondary-button"
           onClick={() => this.dropzone.open()}
         >
           Import from Csv

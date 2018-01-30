@@ -106,10 +106,7 @@ class AddContact extends React.Component {
 
     return (
       <div>
-        <Button
-          bsStyle="primary"
-          onClick={() => this.openDialog()}
-        >
+        <Button bsStyle="primary" onClick={() => this.openDialog()}>
           Add Contact
         </Button>
 
@@ -123,10 +120,7 @@ class AddContact extends React.Component {
               <Modal.Title>New Contact</Modal.Title>
             </Modal.Header>
 
-            <Stage
-              default="General"
-              onChange={stage => this.setState({ stage })}
-            />
+            <Stage default="General" onChange={stage => this.setState({ stage })} />
 
             <div className="fullname">
               <FormControl
@@ -158,12 +152,12 @@ class AddContact extends React.Component {
               onChange={this.onChangeAttribute.bind(this)}
               onRemove={this.onRemoveAttribute.bind(this)}
             />
-
           </Modal.Body>
 
           <Modal.Footer>
             <Button
               bsStyle="primary"
+              className="create-button"
               onClick={() => this.save()}
               disabled={saving}
             >
