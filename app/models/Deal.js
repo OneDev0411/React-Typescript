@@ -437,7 +437,9 @@ Deal.deleteTask = async function (taskId) {
  */
 Deal.updateTask = async function (taskId, attributes) {
   try {
-    const response = await new Fetch().patch(`/tasks/${taskId}`).send(attributes)
+    const response = await new Fetch()
+      .patch(`/tasks/${taskId}?associations[]=room.attachments`)
+      .send(attributes)
 
     return response.body.data
   } catch (e) {
