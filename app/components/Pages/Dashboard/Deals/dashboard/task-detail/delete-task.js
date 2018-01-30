@@ -1,6 +1,5 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { Modal, Button } from 'react-bootstrap'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import Message from '../../../Chatroom/Util/message'
 import {
@@ -15,7 +14,9 @@ class DeleteTask extends React.Component {
   }
 
   async notifyOffice(comment) {
-    const { deal, user, task, changeNeedsAttention } = this.props
+    const {
+      deal, user, task, changeNeedsAttention
+    } = this.props
     const message = {
       comment,
       author: user.id,
@@ -23,8 +24,7 @@ class DeleteTask extends React.Component {
     }
 
     // send message
-    Message.postTaskComment(task, message)
-      .then(() => this.onCommentSaved())
+    Message.postTaskComment(task, message).then(() => this.onCommentSaved())
 
     await changeNeedsAttention(deal.id, task.id, true)
   }
@@ -32,6 +32,7 @@ class DeleteTask extends React.Component {
   onCommentSaved() {
     // scroll to the end
     const el = document.getElementById('deals-task-scrollable')
+
     el.scrollTop = el.scrollHeight
   }
 
@@ -44,8 +45,8 @@ class DeleteTask extends React.Component {
         description: 'Only your back office can delete this task.',
         confirmLabel: 'Notify Office',
         needsUserEntry: true,
-        inputDefaultValue: "Not applicable, please remove from my folder.",
-        onConfirm: (comment) => this.notifyOffice(comment)
+        inputDefaultValue: 'Please remove from my folder.',
+        onConfirm: comment => this.notifyOffice(comment)
       })
     }
 
@@ -80,13 +81,16 @@ class DeleteTask extends React.Component {
   }
 }
 
-export default connect(({ deals, user }) => ({
-  user,
-  checklists: deals.checklists,
-  isBackOffice: deals.backoffice
-}), {
-  setSelectedTask,
-  deleteTask,
-  changeNeedsAttention,
-  confirmation
-})(DeleteTask)
+export default connect(
+  ({ deals, user }) => ({
+    user,
+    checklists: deals.checklists,
+    isBackOffice: deals.backoffice
+  }),
+  {
+    setSelectedTask,
+    deleteTask,
+    changeNeedsAttention,
+    confirmation
+  }
+)(DeleteTask)
