@@ -2,10 +2,10 @@ import React from 'react'
 import AddContact from '../Add-Contact'
 import ImportOutlook from './ImportOutlook'
 import ImportCsv from './ImportCsv'
-import HeaderSearch from './headerSearch'
+import HeaderSearch from '../../../../Partials/headerSearch'
 import cn from 'classnames'
 
-export default ({ user, contactsCount, onNewContact }) => {
+export default ({ user, contactsCount, onNewContact, onInputChange }) => {
   if (contactsCount === 0) {
     return false
   }
@@ -34,7 +34,10 @@ export default ({ user, contactsCount, onNewContact }) => {
           </div>
         </div>
       </div>
-      <HeaderSearch onInputChange={() => {}} />
+      <HeaderSearch
+        onInputChange={text => onInputChange(text)}
+        placeholder="Search all contacs ..."
+      />
     </div>
   )
 }

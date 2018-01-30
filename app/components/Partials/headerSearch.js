@@ -15,8 +15,7 @@ export default class HeaderSearch extends React.Component {
 
   render() {
     const { inputFocused } = this.state
-
-    return <div />
+    const { placeholder } = this.props
 
     return (
       <Panel
@@ -32,12 +31,12 @@ export default class HeaderSearch extends React.Component {
         >
           <i className="fa fa-search" aria-hidden="true" />
           <input
-            onChange={() => this.debouncedOnInputChange()}
+            onChange={event => this.debouncedOnInputChange(event.target.value)}
             onFocus={() => this.setState({ inputFocused: true })}
             onBlur={() => this.setState({ inputFocused: false })}
             ref={ref => (this.searchInput = ref)}
             type="text"
-            placeholder="Search deals by address, MLS # or agent name…"
+            placeholder={placeholder}
           />
         </div>
       </Panel>
