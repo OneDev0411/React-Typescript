@@ -63,7 +63,7 @@ export function getPropertyTypeFlag(property_type) {
  */
 export function getFactsheetSection(deal, name) {
   const criteria = ctx => ctx.section === name
-  const hasActiveOffer = hasActiveOffer(deal)
+  const hasActiveOffer = getHasActiveOffer(deal)
 
   if (hasActiveOffer === null) {
     return []
@@ -86,9 +86,8 @@ export function getItems(deal_type, property_type, hasActiveOffer = false) {
   const requiredFields = getRequiredItems(deal_type, property_type, hasActiveOffer)
   const optionalFields = getOptionalItems(deal_type, property_type, hasActiveOffer)
 
-  return []
-    .concat(requiredFields, optionalFields)
-    .sort(ctx => (ctx.data_type === 'Date' ? 1 : -1))
+  return [].concat(requiredFields, optionalFields)
+  // .sort(ctx => (ctx.data_type === 'Date' ? 1 : -1))
 }
 
 /**
@@ -138,7 +137,7 @@ export function query(deal, criteria) {
 /**
  * check deal has active offer
  */
-export function hasActiveOffer(deal) {
+export function getHasActiveOffer(deal) {
   return deal.has_active_offer
 }
 
@@ -301,7 +300,7 @@ export default {
   getRequiredItems,
   getOptionalItems,
   query,
-  hasActiveOffer,
+  getHasActiveOffer,
   filterByFlags,
   isCurrency,
   isDisabled,

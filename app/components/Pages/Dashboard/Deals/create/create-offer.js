@@ -29,7 +29,7 @@ class CreateOffer extends React.Component {
 
     const { deal } = props
 
-    const dealHasPrimaryOffer = DealContext.hasActiveOffer(deal)
+    const dealHasPrimaryOffer = DealContext.getHasActiveOffer(deal)
 
     this.state = {
       dealHasPrimaryOffer,
@@ -165,7 +165,7 @@ class CreateOffer extends React.Component {
         contexts,
         'Buying',
         deal.property_type,
-        DealContext.hasActiveOffer(deal)
+        DealContext.getHasActiveOffer(deal)
       )
     )
   }
