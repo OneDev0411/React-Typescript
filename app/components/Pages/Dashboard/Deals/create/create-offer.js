@@ -74,7 +74,7 @@ class CreateOffer extends React.Component {
           type = 'agents'
           break
 
-        case 'SellerReferral':
+        case 'BuyerReferral':
           type = 'referrals'
           break
 
@@ -199,7 +199,7 @@ class CreateOffer extends React.Component {
     const isPrimaryOffer = this.isPrimaryOffer()
     const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
 
-    let buyerName = this.state.buyerName
+    let { buyerName } = this.state
 
     if (!isBackupOffer) {
       buyerName = _.map(
