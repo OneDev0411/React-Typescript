@@ -1,6 +1,3 @@
-import _ from 'underscore'
-import config from '../../../config/public'
-import Fetch from '../../services/fetch'
 import contextHelper from './context-helper'
 import context from './context'
 import uploadHelper from './upload-helper'

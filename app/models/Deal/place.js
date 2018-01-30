@@ -1,5 +1,6 @@
 import agent from 'superagent'
 import Fetch from '../../services/fetch'
+import config from '../../../config/public'
 
 /**
  * search google places
