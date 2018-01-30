@@ -130,7 +130,7 @@ export default class Form extends React.Component {
   }
 
   isValidName(name) {
-    return name && name.length > 0 && new RegExp(/^[A-Za-z\s]+$/).exec(name)
+    return name && name.trim().length > 0 && new RegExp(/^[A-Za-z\s]+$/).exec(name)
   }
 
   /**
