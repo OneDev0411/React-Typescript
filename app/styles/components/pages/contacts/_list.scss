@@ -22,7 +22,6 @@
 
 %contacts-list--toolbar {
   .toolbar {
-    margin: 0 0 2% 0;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -61,8 +60,6 @@
 }
 
 %contacts-list--table {
-  padding: 2% 30px;
-
   .table {
     $border-color: #e8eef3;
     border-collapse: separate;

@@ -40,8 +40,8 @@ const ContactsList = ({
       Header: () => (
         <Fragment>
           Name
-          <i class="fa fa-caret-down" />
-          <i class="fa fa-caret-up" />
+          <i className="fa fa-caret-down" />
+          <i className="fa fa-caret-up" />
         </Fragment>
       ),
       id: 'name',
@@ -65,8 +65,8 @@ const ContactsList = ({
       Header: () => (
         <Fragment>
           EMAIL
-          <i class="fa fa-caret-down" />
-          <i class="fa fa-caret-up" />
+          <i className="fa fa-caret-down" />
+          <i className="fa fa-caret-up" />
         </Fragment>
       ),
       id: 'email',
@@ -83,8 +83,8 @@ const ContactsList = ({
       Header: () => (
         <Fragment>
           STAGE
-          <i class="fa fa-caret-down" />
-          <i class="fa fa-caret-up" />
+          <i className="fa fa-caret-down" />
+          <i className="fa fa-caret-up" />
         </Fragment>
       ),
       id: 'stage',
@@ -101,8 +101,8 @@ const ContactsList = ({
       Header: () => (
         <Fragment>
           SOURCE
-          <i class="fa fa-caret-down" />
-          <i class="fa fa-caret-up" />
+          <i className="fa fa-caret-down" />
+          <i className="fa fa-caret-up" />
         </Fragment>
       ),
       id: 'source',
@@ -127,6 +127,7 @@ const ContactsList = ({
         onNewContact={id => openContact(id)}
       />
       <ReactTable
+        className="list-table"
         defaultPageSize={Object.keys(contacts).length}
         showPaginationBottom={false}
         data={Object.values(contacts)}

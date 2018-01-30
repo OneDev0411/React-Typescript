@@ -37,11 +37,9 @@ class ImportOutlook extends React.Component {
     }
   }
   render() {
-    return <div />
-
     return (
       <button
-        className="c-button--shadow contacts__toolbar__import"
+        className="c-button--shadow secondary-button"
         onClick={() => {
           this.loginWindows = window.open(
             this.url,
