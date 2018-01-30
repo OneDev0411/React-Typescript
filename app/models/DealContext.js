@@ -87,7 +87,6 @@ export function getItems(deal_type, property_type, hasActiveOffer = false) {
   const optionalFields = getOptionalItems(deal_type, property_type, hasActiveOffer)
 
   return [].concat(requiredFields, optionalFields)
-  // .sort(ctx => (ctx.data_type === 'Date' ? 1 : -1))
 }
 
 /**
