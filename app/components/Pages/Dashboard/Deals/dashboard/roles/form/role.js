@@ -23,7 +23,7 @@ const Role = ({
       <div>
         <Dropdown id="deal-add-role--drp">
           <Dropdown.Toggle>
-            {form.role ? roleNames(form.role) : 'Select a Role *'}
+            {form.role ? roleNames(form.role) : 'Select a Role'}
           </Dropdown.Toggle>
 
           <Dropdown.Menu className="deal-add-role--drpmenu u-scrollbar--thinner--self">
