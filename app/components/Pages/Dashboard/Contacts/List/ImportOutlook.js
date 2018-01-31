@@ -39,20 +39,31 @@ class ImportOutlook extends React.Component {
     }
   }
   render() {
+    return <div />
+
     return (
       <div className="secondary-button">
-        <button
-          className="c-button--shadow "
-          onClick={() => {
-            this.loginWindows = window.open(
-              this.url,
-              'myWindow',
-              'width=200,height=100'
-            )
-          }}
+        <OverlayTrigger
+          placement="bottom"
+          overlay={
+            <Tooltip id="tooltip">
+              Integrate with Outlook to auto-import your contacts
+            </Tooltip>
+          }
         >
-          Import from Outlook
-        </button>
+          <button
+            className="c-button--shadow "
+            onClick={() => {
+              this.loginWindows = window.open(
+                this.url,
+                'myWindow',
+                'width=200,height=100'
+              )
+            }}
+          >
+            Import from Outlook
+          </button>
+        </OverlayTrigger>
       </div>
     )
   }
