@@ -51,10 +51,11 @@ export default class extends React.Component {
       street_name, city, state, postal_code
     } = this.state
 
+    // use (variable || '') for backward compatibilites
     return (
-      street_name.trim().length > 0 &&
-      city.trim().length > 0 &&
-      state.trim().length > 0 &&
+      (street_name || '').trim().length > 0 &&
+      (city || '').trim().length > 0 &&
+      (state || '').trim().length > 0 &&
       /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(postal_code)
     )
   }
