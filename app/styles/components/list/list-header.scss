@@ -131,6 +131,15 @@
           .import-dropdown--item [role='menuitem'] {
             padding-top: 10px;
             padding-bottom: 10px;
+            display: flex;
+            .import-dropdown--item--icons {
+              margin-left: 50px;
+              .right--icon {
+                margin-left: 18px;
+                color: #c7c7cc;
+                font-size: 15px;
+              }
+            }
           }
           .import-dropdown--divider {
             margin: 0;
