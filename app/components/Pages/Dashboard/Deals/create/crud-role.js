@@ -69,7 +69,7 @@ class CrudRole extends React.Component {
     const { form } = this.state
 
     this.props.onUpsertRole({
-      id: (new Date()).getTime(),
+      id: new Date().getTime(),
       ...form
     })
 
@@ -93,29 +93,36 @@ class CrudRole extends React.Component {
   }
 
   render() {
-    const { showFormModal, showAgentsModal, isFormCompleted, form } = this.state
-    const { role, teamAgents, allowedRoles, onRemoveRole, modalTitle,
-      ctaTitle, buttonText } = this.props
+    const {
+      showFormModal, showAgentsModal, isFormCompleted, form
+    } = this.state
+    const {
+      role,
+      teamAgents,
+      allowedRoles,
+      onRemoveRole,
+      modalTitle,
+      ctaTitle,
+      buttonText,
+      isCommissionRequired
+    } = this.props
 
     return (
       <div>
-        {
-          role ?
-            <RoleItem
-              person={role}
-              onRemove={onRemoveRole}
-              onClick={() => this.showModal()}
-            /> :
-            <div className="entity-item people new">
-              <span
-                className="add-item"
-                onClick={() => this.showModal()}
-              >
-                <span className="icon">+</span>
-                <span className="text">{ctaTitle}</span>
-              </span>
-            </div>
-        }
+        {role ? (
+          <RoleItem
+            person={role}
+            onRemove={onRemoveRole}
+            onClick={() => this.showModal()}
+          />
+        ) : (
+          <div className="entity-item people new">
+            <span className="add-item" onClick={() => this.showModal()}>
+              <span className="icon">+</span>
+              <span className="text">{ctaTitle}</span>
+            </span>
+          </div>
+        )}
 
         <Modal
           show={showFormModal}
@@ -132,6 +139,7 @@ class CrudRole extends React.Component {
               form={role || form}
               onFormChange={data => this.onFormChange(data)}
               allowedRoles={allowedRoles}
+              isCommissionRequired={isCommissionRequired}
             />
           </Modal.Body>
 
@@ -153,16 +161,12 @@ class CrudRole extends React.Component {
           onHide={() => this.closeModal()}
           backdrop="static"
         >
-          <Modal.Header closeButton>
-            Choose primary agent
-          </Modal.Header>
+          <Modal.Header closeButton>Choose primary agent</Modal.Header>
 
           <Modal.Body>
             <div className="deal-roles">
-              {
-                teamAgents &&
-                teamAgents
-                .map(user =>
+              {teamAgents &&
+                teamAgents.map(user => (
                   <div
                     key={user.id}
                     className="item"
@@ -182,8 +186,7 @@ class CrudRole extends React.Component {
                       <div className="role">{roleName(user.role || '')}</div>
                     </div>
                   </div>
-                )
-              }
+                ))}
             </div>
           </Modal.Body>
         </Modal>

@@ -167,6 +167,15 @@ export default class Form extends React.Component {
   }
 
   /**
+   * check whether commission is required or not
+   * it's required by default
+   * https://gitlab.com/rechat/web/issues/691
+   */
+  isCommissionRequired() {
+    return this.props.isCommissionRequired !== false
+  }
+
+  /**
    * validate form
    */
   async validate(field, value) {
@@ -187,15 +196,17 @@ export default class Form extends React.Component {
       company_title: name => this.isValidName(name)
     }
 
-    let commission_field = 'commission_percentage'
+    if (this.isCommissionRequired()) {
+      let commission_field = 'commission_percentage'
 
-    if (form.commission_dollar > 0) {
-      commission_field = 'commission_dollar'
-    }
+      if (form.commission_dollar > 0) {
+        commission_field = 'commission_dollar'
+      }
 
-    if (commission_field && Commission.shouldShowCommission(form)) {
-      requiredFields.push(commission_field)
-      fields[commission_field] = value => value && this.validateCommission(value)
+      if (commission_field && Commission.shouldShowCommission(form)) {
+        requiredFields.push(commission_field)
+        fields[commission_field] = value => value && this.validateCommission(value)
+      }
     }
 
     // validate field
@@ -293,6 +304,7 @@ export default class Form extends React.Component {
 
         <Commission
           form={form}
+          isRequired={this.isCommissionRequired()}
           validateCommission={this.validateCommission.bind(this)}
           onChange={(field, value) => this.setForm(field, value)}
         />

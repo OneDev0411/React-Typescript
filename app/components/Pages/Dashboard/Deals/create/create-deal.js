@@ -405,6 +405,7 @@ class CreateDeal extends React.Component {
                       dealSide="Selling"
                       agents={sellingAgents}
                       shouldPrepopulateAgent={false}
+                      isCommissionRequired={false}
                       onUpsertAgent={form =>
                         this.onUpsertRole(form, 'sellingAgents')
                       }
