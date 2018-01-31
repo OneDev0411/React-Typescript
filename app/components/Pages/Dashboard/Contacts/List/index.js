@@ -4,14 +4,10 @@ import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
 import Contact from '../../../../../models/Contact'
-import {
-  upsertAttributes,
-  removeImportResult
-} from '../../../../../store_actions/contact'
+import { upsertAttributes } from '../../../../../store_actions/contact'
 import Stage from '../components/Stage'
 import NoContact from './no-contact'
 import Header from './header'
-import ImportResultModal from './ImportResultModal'
 import ReactTable from 'react-table'
 import NoSearchResults from '../../../../Partials/no-search-results'
 
@@ -145,13 +141,7 @@ class ContactsList extends React.Component {
     return matched
   }
   render() {
-    const {
-      contacts,
-      user,
-      loadingImport,
-      importInfo,
-      removeImportResult
-    } = this.props
+    const { contacts, user, loadingImport } = this.props
     const filteredContacts = _.filter(contacts, contact =>
       this.applyFilters(contact)
     )
@@ -193,7 +183,7 @@ class ContactsList extends React.Component {
             })}
           />
         )}
-        <ImportResultModal importInfo={importInfo} closeModal={removeImportResult} />
+        {/* <ImportResultModal importInfo={importInfo} closeModal={removeImportResult} /> */}
       </div>
     )
   }
@@ -203,8 +193,7 @@ export default connect(
   ({ contacts, user }) => ({
     contacts: contacts.list,
     user,
-    loadingImport: contacts.spinner,
-    importInfo: contacts.importCsv
+    loadingImport: contacts.spinner
   }),
-  { upsertAttributes, removeImportResult }
+  { upsertAttributes }
 )(ContactsList)

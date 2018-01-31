@@ -17,7 +17,7 @@ class ImportCSV extends React.Component {
           <button className="c-button--shadow " onClick={() => this.dropzone.open()}>
             Import from CSV
           </button>
-          <Dropdown>
+          <Dropdown id="import-csv-dropdown">
             <Dropdown.Toggle noCaret className="c-button--shadow info-button">
               <HelpIcon className="fa fa-question-circle" />
             </Dropdown.Toggle>
