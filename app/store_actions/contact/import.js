@@ -1,6 +1,7 @@
 import types from '../../constants/contact'
 import Contact from '../../models/Contact'
 import { batchActions } from 'redux-batched-actions'
+import { addNotification as notify } from 'reapop'
 
 export function removeImportResult() {
   return dispatch => {
@@ -23,6 +24,18 @@ function contactsFetched(body) {
     info: body.info
   }
 }
+function notifyResult(info) {
+  const status = info.errors ? 'warning' : 'success'
+
+  return notify({
+    allowHTML: true,
+    title: 'Import done',
+    message:
+      `<p>Successfully imported: ${info.count - info.errors}` +
+      (info.errors ? `<br /> Not imported: ${info.errors}</p>` : ''),
+    status
+  })
+}
 
 export function uplaodCsv(file, fileName = null) {
   return async dispatch => {
@@ -31,12 +44,26 @@ export function uplaodCsv(file, fileName = null) {
 
       const response = await Contact.uplaodCsv(file, fileName)
 
+      if (response) {
+        batchActions([
+          dispatch({ type: types.HIDE_SPINNER }),
+          dispatch(contactsFetched(response.body)),
+          dispatch(notifyResult(response.body.info))
+        ])
+      } else {
+        dispatch({ type: types.HIDE_SPINNER })
+      }
+    } catch (e) {
       batchActions([
         dispatch({ type: types.HIDE_SPINNER }),
-        dispatch(contactsFetched(response.body))
+        dispatch(
+          notify({
+            title: 'Import failed',
+            message: e.message,
+            status: 'error'
+          })
+        )
       ])
-    } catch (e) {
-      console.log(e)
     }
   }
 }

@@ -102,9 +102,49 @@
         letter-spacing: 0.5px;
         color: #2196f3;
         background-color: #ffffff;
-        border: solid 1px #dce5eb;
-        padding: 8px 15px;
-        cursor: pointer;
+        border: solid 1px #e0e0e0;
+        display: flex;
+        button {
+          padding: 8px 15px;
+          margin-left: 0;
+        }
+        .info-button {
+          border-left: solid 1px #e0e0e0;
+          display: flex;
+          padding: 8px;
+          &:hover {
+            svg g {
+              fill: #2196f3;
+            }
+          }
+        }
+        .import-dropdown {
+          padding: 0;
+          .dropdown-header {
+            background-color: #f0f4f7;
+            font-size: 14px;
+            font-weight: 500;
+            color: #758a9e;
+            padding-top: 10px;
+            padding-bottom: 10px;
+          }
+          .import-dropdown--item [role='menuitem'] {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            display: flex;
+            .import-dropdown--item--icons {
+              margin-left: 50px;
+              .right--icon {
+                margin-left: 18px;
+                color: #c7c7cc;
+                font-size: 15px;
+              }
+            }
+          }
+          .import-dropdown--divider {
+            margin: 0;
+          }
+        }
       }
       .search-button {
         cursor: pointer;
