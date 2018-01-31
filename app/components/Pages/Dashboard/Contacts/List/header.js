@@ -1,7 +1,7 @@
 import React from 'react'
 import AddContact from '../Add-Contact'
 import ImportOutlook from './ImportOutlook'
-import ImportCsv from './ImportCsv'
+import ImportCSV from './ImportCsv'
 import HeaderSearch from '../../../../Partials/headerSearch'
 import cn from 'classnames'
 
@@ -27,8 +27,8 @@ export default ({ user, contactsCount, onNewContact, onInputChange }) => {
           </div>
 
           <div className="list--header-row--col">
+            <ImportCSV />
             <ImportOutlook userId={user.id} />
-            <ImportCsv />
 
             <AddContact user={user} onNewContact={id => onNewContact(id)} />
           </div>
@@ -36,7 +36,7 @@ export default ({ user, contactsCount, onNewContact, onInputChange }) => {
       </div>
       <HeaderSearch
         onInputChange={text => onInputChange(text)}
-        placeholder="Search all contacs ..."
+        placeholder="Search all contacts ..."
       />
     </div>
   )
