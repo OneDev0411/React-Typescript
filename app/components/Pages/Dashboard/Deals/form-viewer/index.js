@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Modal, Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import extractDocumentOfTask from '../utils/extract-document-of-task'
@@ -8,7 +7,6 @@ import { getDeal } from '../../../../../store_actions/deals'
 import FileView from './file-view'
 import EnvelopeView from './envelope-view'
 import config from '../../../../../../config/public'
-import task from '../../../../../constants/brandConsole/task'
 
 class FormViewer extends React.Component {
   constructor(props) {
@@ -25,7 +23,7 @@ class FormViewer extends React.Component {
     this.setFile()
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     const { file } = this.state
 
     if (!file) {
@@ -53,7 +51,7 @@ class FormViewer extends React.Component {
       case 'attachment':
         return this.getAttachmentFile()
       case 'envelope':
-        return await this.getEnvelopeFile()
+        return this.getEnvelopeFile()
       default:
         return this.getDigitalForm()
     }
@@ -97,7 +95,7 @@ class FormViewer extends React.Component {
 
   async getEnvelopeFile() {
     const {
-      deal, user, tasks, envelopes, params
+      user, tasks, envelopes, params
     } = this.props
     const { taskId, type, objectId } = params
 
@@ -161,8 +159,6 @@ class FormViewer extends React.Component {
         </div>
       )
     }
-
-    console.log(file.type)
 
     if (params.type === 'envelope') {
       return (
