@@ -232,6 +232,9 @@ class CreateDeal extends React.Component {
       }
     }
 
+    // create contexts object
+    dealObject.deal_context = this.createContextsObject(dealObject.deal_context)
+
     // show loading
     this.setState({ saving: true })
 
@@ -250,6 +253,19 @@ class CreateDeal extends React.Component {
         submitError: true
       })
     }
+  }
+
+  /**
+   * create context object
+   */
+  createContextsObject(contexts) {
+    const contextsObject = {}
+
+    _.each(contexts, (value, name) => {
+      contextsObject[name] = { value, approved: false }
+    })
+
+    return contextsObject
   }
 
   /**
