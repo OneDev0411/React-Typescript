@@ -50,7 +50,10 @@ export default class StageDropDown extends React.Component {
         <DropdownButton
           title={this.stages[selected]}
           id="drp-stages"
-          onSelect={eventKey => this.onChange(eventKey)}
+          onSelect={(eventKey, event) => {
+            this.onChange(eventKey)
+            event.stopPropagation()
+          }}
           onClick={event => event.stopPropagation()}
         >
           {_.map(this.stages, (name, key) => (
