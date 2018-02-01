@@ -41,8 +41,23 @@ export default class Fetch {
     agent.on('error', error => {
       const errorCode = error.response && ~~error.response.statusCode
 
+      // server send to client 401 error for invalid answer!
+      // Emil said "we can not change it in server",
+      // so we forced to handle it in here with this dirty way.
+      // https://gitlab.com/rechat/web/issues/695
+      //
+      const errorMessage =
+        error.response && error.response.body && error.response.body.message
+      const isUpgradeToAgentRequest =
+        errorMessage === 'Invalid answer to secret question'
+
       // handle session expiration
-      if (!this._isServerSide && this._isLoggedIn && errorCode === 401) {
+      if (
+        !this._isServerSide &&
+        this._isLoggedIn &&
+        errorCode === 401 &&
+        !isUpgradeToAgentRequest
+      ) {
         window.location.href = '/signout'
       }
     })
