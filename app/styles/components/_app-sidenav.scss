@@ -9,7 +9,7 @@ $item-height: 3.4rem;
   top: 0;
   left: 0;
   z-index: 100;
-  overflow: hidden;
+  // overflow: hidden;
   background-color: #263445;
 }
 
@@ -127,12 +127,64 @@ $item-height: 3.4rem;
 
   .dropdown-menu {
     left: 1rem;
-    min-width: $app-sidenav-width - 2rem;
-    text-align: center;
+    padding: 0;
+    margin: 0;
+    width: 250px;
+    border: none;
+    border-radius: 5px;
+
+    > li.divider {
+      margin: 0;
+    }
+
+    > li.separator {
+      &:first-child {
+        border-radius: 5px 5px 0 0;
+      }
+
+      padding-left: 16px;
+      height: 30px;
+      line-height: 30px;
+      vertical-align: middle;
+      background-color: #f0f4f7;
+      box-shadow: 0 1px 0 0 #e9e9e9;
+      font-size: 14px;
+      color: #62778c;
+    }
 
     > li > a {
-      padding-left: 1rem;
-      padding-left: 1rem;
+      font-size: 17px;
+      color: #1e364b;
+      padding: 0 0 0 16px;
+      margin: 0;
+      height: 40px;
+      line-height: 40px;
+      vertical-align: middle;
+    }
+
+    > li.brand-account > a {
+      display: flex;
+      flex-direction: row;
+
+      .user-avatar {
+        margin-right: 8px;
+        width: 40px;
+      }
+
+      .brand-title {
+        width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #67717c;
+        &.active {
+          color: #263445;
+        }
+      }
+
+      .icon {
+        width: 20px;
+        margin: 0 4px 0 16px;
+      }
     }
   }
 
