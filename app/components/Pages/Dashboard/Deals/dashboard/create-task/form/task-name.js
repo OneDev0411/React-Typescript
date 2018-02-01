@@ -30,7 +30,7 @@ class NewTaskModal extends Component {
         onHide={onClose}
         backdrop="static"
       >
-        <Modal.Header closeButton>Custom Task</Modal.Header>
+        <Modal.Header closeButton>Create New Task</Modal.Header>
 
         <Modal.Body>
           <span className="label">Title</span>

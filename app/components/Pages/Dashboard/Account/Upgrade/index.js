@@ -26,6 +26,7 @@ const AgentConfirm = ({
   confirmModalIsActive
 }) => {
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
+
   return (
     <div>
       <PageTitle title="Upgrade Account" />
@@ -52,14 +53,14 @@ const AgentConfirm = ({
                   type="text"
                   onChange={e => {
                     const newValue = e.target.value
+
                     setMlsid(newValue)
+
                     if (upgradeError && newValue) {
                       setUpgradeError(false)
                     }
                   }}
-                  className={`c-auth__field__input ${!mlsid
-                    ? ''
-                    : 'has-content'}`}
+                  className={`c-auth__field__input ${!mlsid ? '' : 'has-content'}`}
                 />
                 <label htmlFor="mlsid" className="c-auth__field__label">
                   Your Agent Number
@@ -70,11 +71,9 @@ const AgentConfirm = ({
               </div>
               {upgradeError && (
                 <div className="c-auth__submit-error-alert">
-                  {upgradeError === 404 ? (
-                    `Agent corresponding to this MLS ID (${mlsid}) not found!`
-                  ) : (
-                    'There was an error with this request. Please try again.'
-                  )}
+                  {upgradeError === 404
+                    ? `Agent corresponding to this MLS ID (${mlsid}) not found!`
+                    : 'There was an error with this request. Please try again.'}
                 </div>
               )}
               <button
@@ -109,9 +108,10 @@ const AgentConfirm = ({
 export default compose(
   connect(({ brand }, { location: { query } }) => {
     const { redirectTo } = query
+
     return {
       brand,
-      redirectTo: redirectTo || '/dashboard/mls'
+      redirectTo: redirectTo || '/dashboard/account'
     }
   }),
   withState('agent', 'setAgent', ''),
@@ -132,8 +132,10 @@ export default compose(
     }) => async event => {
       event.preventDefault()
       setIsUpgrading(true)
+
       try {
         const agent = await searchAgent(mlsid)
+
         setAgent(agent)
         setIsUpgrading(false)
         setConfirmModalActive(true)
