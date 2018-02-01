@@ -5,7 +5,10 @@ import cn from 'classnames'
 import CreateTask from '../create-task'
 import TaskStatus from './status'
 import ChecklistPanel from '../checklists/panel'
-import { setSelectedTask } from '../../../../../../store_actions/deals'
+import {
+  setSelectedTask,
+  updateDealNotifications
+} from '../../../../../../store_actions/deals'
 
 const List = ({
   tasks,
@@ -14,6 +17,7 @@ const List = ({
   deal,
   selectedTask,
   setSelectedTask,
+  updateDealNotifications,
   isBackOffice
 }) => {
   if (!checklist) {
@@ -21,6 +25,18 @@ const List = ({
   }
 
   let sortedTasks = checklist.tasks
+
+  // select a task
+  function selectTask(task) {
+    if (task.room.new_notifications > 0) {
+      updateDealNotifications(
+        deal.id,
+        deal.new_notifications - task.room.new_notifications
+      )
+    }
+
+    setSelectedTask(task)
+  }
 
   // sort tasks of backoffice, based on notified flag. they gonna show first.
   if (isBackOffice && checklist.tasks) {
@@ -35,7 +51,7 @@ const List = ({
       <div className={`list ${!checklist.tasks ? 'empty' : ''}`}>
         <TransitionGroup>
           {sortedTasks &&
-            sortedTasks.map((id, key) => {
+            sortedTasks.map(id => {
               const task = tasks[id]
               const room = rooms[task.room.id] || task.room
               const hasStatus = task.review !== null || task.needs_attention === true
@@ -50,7 +66,7 @@ const List = ({
                   key={`TASK_${id}`}
                 >
                   <div
-                    onClick={() => setSelectedTask(task)}
+                    onClick={() => selectTask(task)}
                     className={cn('task', {
                       active: selectedTask && selectedTask.id === id,
                       'no-status': !hasStatus
@@ -89,5 +105,5 @@ export default connect(
     selectedTask: deals.selectedTask,
     isBackOffice: deals.backoffice
   }),
-  { setSelectedTask }
+  { setSelectedTask, updateDealNotifications }
 )(List)

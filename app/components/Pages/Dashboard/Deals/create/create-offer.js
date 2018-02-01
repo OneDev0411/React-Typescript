@@ -5,7 +5,6 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
-import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 import Navbar from './nav'
 import OfferType from './offer-type'
@@ -23,7 +22,6 @@ import {
   createOffer,
   updateContext
 } from '../../../../../store_actions/deals'
-import hasPrimaryOffer from '../utils/has-primary-offer'
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -31,7 +29,7 @@ class CreateOffer extends React.Component {
 
     const { deal } = props
 
-    const dealHasPrimaryOffer = hasPrimaryOffer(deal)
+    const dealHasPrimaryOffer = DealContext.getHasActiveOffer(deal)
 
     this.state = {
       dealHasPrimaryOffer,
@@ -51,10 +49,6 @@ class CreateOffer extends React.Component {
 
   componentDidMount() {
     const { deal } = this.props
-
-    if (!deal.checklists) {
-      return browserHistory.push(`/dashboard/deals/${deal.id}`)
-    }
 
     if (deal.roles) {
       this.prepopulateRoles(deal.roles)
@@ -79,7 +73,7 @@ class CreateOffer extends React.Component {
           type = 'agents'
           break
 
-        case 'SellerReferral':
+        case 'BuyerReferral':
           type = 'referrals'
           break
 
@@ -171,7 +165,7 @@ class CreateOffer extends React.Component {
         contexts,
         'Buying',
         deal.property_type,
-        DealContext.hasActiveOffer(deal)
+        DealContext.getHasActiveOffer(deal)
       )
     )
   }
@@ -197,12 +191,14 @@ class CreateOffer extends React.Component {
     const {
       deal, notify, createOffer, createRoles, updateContext
     } = this.props
-    const { enderType, dealStatus, contexts, clients } = this.state
+    const {
+      enderType, dealStatus, contexts, clients
+    } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
     const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
 
-    let buyerName = this.state.buyerName
+    let { buyerName } = this.state
 
     if (!isBackupOffer) {
       buyerName = _.map(
@@ -283,9 +279,8 @@ class CreateOffer extends React.Component {
 
   getDealContexts() {
     const { deal } = this.props
-    const hasActiveOffer = true
 
-    return DealContext.getItems('Buying', deal.property_type, hasActiveOffer)
+    return DealContext.getItems('Buying', deal.property_type, true)
   }
 
   backToDeal() {

@@ -1,11 +1,7 @@
 import React from 'react'
-import Upload from '../../upload'
 import FileAttachments from './files'
 
-export default ({
-  deal,
-  task
-}) => {
+export default ({ deal, task }) => {
   if (!task) {
     return null
   }
@@ -19,15 +15,9 @@ export default ({
 
   return (
     <div className="file">
-      <div className="title">
-        Uploads
-      </div>
+      <div className="title">Uploads</div>
 
-      <FileAttachments
-        deal={deal}
-        task={task}
-        attachments={attachments}
-      />
+      <FileAttachments deal={deal} task={task} attachments={attachments} />
     </div>
   )
 }

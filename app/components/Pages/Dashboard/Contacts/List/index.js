@@ -1,121 +1,199 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
 import Contact from '../../../../../models/Contact'
-import {
-  upsertAttributes,
-  removeImportResult
-} from '../../../../../store_actions/contact'
+import { upsertAttributes } from '../../../../../store_actions/contact'
 import Stage from '../components/Stage'
 import NoContact from './no-contact'
 import Header from './header'
-import ImportResultModal from './ImportResultModal'
-
-function onChangeStage(stage, contact, upsertAttributes) {
-  upsertAttributes(contact.id, 'stage', [
-    {
-      id: Contact.get.stage(contact).id,
-      type: 'stage',
-      stage
-    }
-  ])
-}
+import ReactTable from 'react-table'
+import NoSearchResults from '../../../../Partials/no-search-results'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
 }
 
-const ContactsList = ({
-  contacts,
-  user,
-  loadingImport,
-  importInfo,
-  removeImportResult
-}) => (
-  <div className="list">
-    <Header
-      user={user}
-      contactsCount={_.size(contacts)}
-      onNewContact={id => openContact(id)}
-    />
-    {loadingImport && (
-      <i className="fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading" />
-    )}
-    <NoContact
-      user={user}
-      contactsCount={_.size(contacts)}
-      onNewContact={id => openContact(id)}
-    />
+class ContactsList extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      filter: ''
+    }
+    this.columns = [
+      {
+        Header: () => (
+          <Fragment>
+            Name
+            <i className="fa fa-caret-down" />
+            <i className="fa fa-caret-up" />
+          </Fragment>
+        ),
+        id: 'name',
+        accessor: contact => Contact.get.name(contact),
+        Cell: ({ original: contact }) => {
+          return (
+            <div className="name">
+              <Avatar
+                className="avatar"
+                round
+                name={Contact.get.name(contact)}
+                src={Contact.get.avatar(contact)}
+                size={35}
+              />
+              <span className="contact-name">{Contact.get.name(contact)}</span>
+            </div>
+          )
+        }
+      },
+      {
+        Header: () => (
+          <Fragment>
+            EMAIL
+            <i className="fa fa-caret-down" />
+            <i className="fa fa-caret-up" />
+          </Fragment>
+        ),
+        id: 'email',
+        accessor: contact => Contact.get.email(contact),
+        Cell: ({ original: contact }) => Contact.get.email(contact)
+      },
+      {
+        Header: 'PHONE',
+        id: 'phone',
+        accessor: contact => Contact.get.phone(contact),
+        Cell: ({ original: contact }) => Contact.get.phone(contact)
+      },
+      {
+        Header: () => (
+          <Fragment>
+            STAGE
+            <i className="fa fa-caret-down" />
+            <i className="fa fa-caret-up" />
+          </Fragment>
+        ),
+        id: 'stage',
+        accessor: contact => Contact.get.stage(contact).name,
+        className: 'td--stage-container',
+        Cell: ({ original: contact }) => (
+          <Stage
+            default={Contact.get.stage(contact).name}
+            onChange={stage =>
+              this.onChangeStage(stage, contact, props.upsertAttributes)
+            }
+          />
+        )
+      },
+      {
+        Header: () => (
+          <Fragment>
+            SOURCE
+            <i className="fa fa-caret-down" />
+            <i className="fa fa-caret-up" />
+          </Fragment>
+        ),
+        id: 'source',
+        accessor: contact => Contact.get.source(contact).label,
+        Cell: ({ original: contact }) => Contact.get.source(contact).label
+      }
+    ]
+  }
 
-    {_.size(contacts) > 0 && (
-      <table className="table">
-        <tbody>
-          <tr className="header">
-            <td className="col-md-2">NAME</td>
-            <td className="col-md-3">EMAIL</td>
-            <td className="col-md-2 hidden-xs">PHONE</td>
-            <td className="col-md-2 hidden-xs">STAGE</td>
-            <td className="col-md-3 hidden-sm hidden-xs">SOURCE</td>
-          </tr>
-          {_.chain(contacts)
-            .map(contact => (
-              <tr
-                key={`CONTACT_${contact.id}`}
-                onClick={e => openContact(contact.id, e)}
-                className="item"
-              >
-                <td className="col-md-2">
-                  <div className="name">
-                    <Avatar
-                      className="avatar"
-                      round
-                      name={Contact.get.name(contact)}
-                      src={Contact.get.avatar(contact)}
-                      size={35}
-                    />
-                    <span className="ellipsis">{Contact.get.name(contact)}</span>
-                  </div>
-                </td>
+  onChangeStage = (stage, contact, upsertAttributes) => {
+    upsertAttributes(contact.id, 'stage', [
+      {
+        id: Contact.get.stage(contact).id,
+        type: 'stage',
+        stage
+      }
+    ])
+  }
 
-                <td className="col-md-3 ellipsis">{Contact.get.email(contact)}</td>
+  onInputChange = filter => this.setState({ filter })
+  applyFilters(contact) {
+    let matched = false
+    const { filter } = this.state
+    let regex = new RegExp(
+      /// First some charater that break the regex are removed
+      filter.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'),
+      'i'
+    )
 
-                <td className="col-md-2 hidden-xs ellipsis">
-                  {Contact.get.phone(contact)}
-                </td>
+    if (regex.test(Contact.get.name(contact))) {
+      matched = true
+    }
 
-                <td
-                  className="col-md-2 hidden-xs"
-                  onClick={e => e.stopPropagation()}
-                >
-                  <Stage
-                    default={Contact.get.stage(contact).name}
-                    onChange={stage =>
-                      onChangeStage(stage, contact, upsertAttributes)
-                    }
-                  />
-                </td>
+    if (!matched && Object.keys(Contact.get.emails(contact)).length !== 0) {
+      matched = _.some(Contact.get.emails(contact), item => regex.test(item.email))
+    }
 
-                <td className="col-md-3 hidden-sm hidden-xs">
-                  {Contact.get.source(contact).label}
-                </td>
-              </tr>
-            ))
-            .value()}
-        </tbody>
-      </table>
-    )}
-    <ImportResultModal importInfo={importInfo} closeModal={removeImportResult} />
-  </div>
-)
+    if (!matched && Object.keys(Contact.get.phones(contact)).length !== 0) {
+      matched = _.some(Contact.get.phones(contact), item =>
+        item.phone_number.includes(filter)
+      )
+    }
+
+    if (!matched && Object.keys(Contact.get.tags(contact)).length !== 0) {
+      matched = _.some(Contact.get.tags(contact), item => regex.test(item.tag))
+    }
+
+    return matched
+  }
+  render() {
+    const { contacts, user, loadingImport } = this.props
+    const filteredContacts = _.filter(contacts, contact =>
+      this.applyFilters(contact)
+    )
+
+    if (_.size(contacts) === 0) {
+      return (
+        <div className="list">
+          <NoContact
+            user={user}
+            contactsCount={_.size(contacts)}
+            onNewContact={id => openContact(id)}
+          />
+        </div>
+      )
+    }
+
+    return (
+      <div className="list">
+        <Header
+          user={user}
+          contactsCount={_.size(contacts)}
+          onNewContact={id => openContact(id)}
+          onInputChange={this.onInputChange}
+        />
+        {loadingImport && (
+          <i className="fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading" />
+        )}
+        {_.size(filteredContacts) === 0 ? (
+          <NoSearchResults description="Try typing another name, email, phone or tag." />
+        ) : (
+          <ReactTable
+            className="list-table"
+            pageSize={Object.keys(filteredContacts).length}
+            showPaginationBottom={false}
+            data={Object.values(filteredContacts)}
+            columns={this.columns}
+            getTdProps={(state, rowInfo) => ({
+              onClick: () => openContact(rowInfo.original.id)
+            })}
+          />
+        )}
+        {/* <ImportResultModal importInfo={importInfo} closeModal={removeImportResult} /> */}
+      </div>
+    )
+  }
+}
 
 export default connect(
   ({ contacts, user }) => ({
     contacts: contacts.list,
     user,
-    loadingImport: contacts.spinner,
-    importInfo: contacts.importCsv
+    loadingImport: contacts.spinner
   }),
-  { upsertAttributes, removeImportResult }
+  { upsertAttributes }
 )(ContactsList)

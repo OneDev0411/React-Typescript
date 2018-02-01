@@ -41,7 +41,7 @@ export default (state = null, action) => {
         ...state,
         [action.taskId]: {
           ...state[action.taskId],
-          ...{ submission: action.submission }
+          submission: action.submission
         }
       }
 
@@ -50,11 +50,9 @@ export default (state = null, action) => {
         ...state,
         [action.taskId]: {
           ...state[action.taskId],
-          ...{
-            review: {
-              ...state[action.taskId].review,
-              ...{ status: action.status }
-            }
+          review: {
+            ...state[action.taskId].review,
+            status: action.status
           }
         }
       }
@@ -64,7 +62,7 @@ export default (state = null, action) => {
         ...state,
         [action.taskId]: {
           ...state[action.taskId],
-          ...{ needs_attention: action.status }
+          needs_attention: action.status
         }
       }
 
@@ -76,7 +74,7 @@ export default (state = null, action) => {
           room: {
             ...state[action.task_id].room,
             attachments: [
-              ...state[action.task_id].room.attachments || [],
+              ...(state[action.task_id].room.attachments || []),
               action.file
             ]
           }
@@ -90,8 +88,7 @@ export default (state = null, action) => {
           ...state[action.task_id],
           room: {
             ...state[action.task_id].room,
-            attachments: state[action.task_id].room.attachments
-              .filter(file => file.id !== action.file_id)
+            attachments: state[action.task_id].room.attachments.filter(file => file.id !== action.file_id)
           }
         }
       }

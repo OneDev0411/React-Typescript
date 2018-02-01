@@ -11,6 +11,8 @@ class ImportOutlook extends React.Component {
       userID: this.props.userId,
       client: 'web',
       doneEvent: '<nameOfEventToCallWhenDataIsReady>',
+      authSuccessEvent: '<nameOfEventToCallWhenDataIsReady>',
+      failEvent: '<nameOfEventToCallWhenDataIsReady>',
       redirectURL: '<urlToRedirectUserWhileFetchingDataFromMSGraph>'
     }
     const stateBase64 = Base64.encodeURI(JSON.stringify(state))
@@ -40,18 +42,29 @@ class ImportOutlook extends React.Component {
     return <div />
 
     return (
-      <button
-        className="c-button--shadow contacts__toolbar__import"
-        onClick={() => {
-          this.loginWindows = window.open(
-            this.url,
-            'myWindow',
-            'width=200,height=100'
-          )
-        }}
-      >
-        Import from Outlook
-      </button>
+      <div className="secondary-button">
+        <OverlayTrigger
+          placement="bottom"
+          overlay={
+            <Tooltip id="tooltip">
+              Integrate with Outlook to auto-import your contacts
+            </Tooltip>
+          }
+        >
+          <button
+            className="c-button--shadow "
+            onClick={() => {
+              this.loginWindows = window.open(
+                this.url,
+                'myWindow',
+                'width=200,height=100'
+              )
+            }}
+          >
+            Import from Outlook
+          </button>
+        </OverlayTrigger>
+      </div>
     )
   }
 }

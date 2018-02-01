@@ -48,8 +48,10 @@ class Roles extends React.Component {
   }
 
   getRoleName(role) {
-    const name = `${role.legal_prefix || ''} ${role.legal_first_name || ''} ${role.legal_last_name || ''}`.trim()
-    return name.length > 0 ? name : role.user.display_name
+    const name = `${role.legal_prefix || ''} ${role.legal_first_name ||
+      ''} ${role.legal_last_name || ''}`.trim()
+
+    return role.user ? role.user.display_name : name
   }
 
   onRequestRemoveRole(e, user) {
@@ -109,21 +111,22 @@ class Roles extends React.Component {
   }
 
   render() {
-    const { deal, allowedRoles, roles, onSelectRole, allowDeleteRole } = this.props
+    const {
+      deal, allowedRoles, roles, onSelectRole, allowDeleteRole
+    } = this.props
     const { deletingRoleId } = this.state
 
     return (
       <div className="deal-info-section deal-roles">
-        <div className="deal-info-title">
-          CONTACTS
-        </div>
+        <div className="deal-info-title">CONTACTS</div>
 
-        {
-          deal.roles &&
+        {deal.roles &&
           deal.roles
-            .filter(id => !allowedRoles ? true : allowedRoles.indexOf(roles[id].role) > -1)
+            .filter(id =>
+                !allowedRoles ? true : allowedRoles.indexOf(roles[id].role) > -1)
             .map(id => {
               const item = roles[id]
+
               return (
                 <div
                   key={item.id}
@@ -141,40 +144,42 @@ class Roles extends React.Component {
 
                   <div className="name">
                     <div className="title">{this.getRoleName(item)}</div>
-                    <div className="role">{ roleName(item.role) }</div>
+                    <div className="role">{roleName(item.role)}</div>
                   </div>
 
-                  {
-                    allowDeleteRole  &&
+                  {allowDeleteRole && (
                     <div className="cta">
-                      {
-                        deletingRoleId && item.id === deletingRoleId &&
-                        <i className="fa fa-spinner fa-spin" />
-                      }
+                      {deletingRoleId &&
+                        item.id === deletingRoleId && (
+                          <i className="fa fa-spinner fa-spin" />
+                        )}
 
-                      {
-                        !deletingRoleId &&
+                      {!deletingRoleId && (
                         <i
-                          onClick={(e) => this.onRequestRemoveRole(e, item)}
+                          onClick={e => this.onRequestRemoveRole(e, item)}
                           className="fa fa-delete fa-times"
                         />
-                      }
+                      )}
                     </div>
-                  }
+                  )}
                 </div>
               )
-            })
-        }
+            })}
 
-        <UpsertRole
-          deal={deal}
-          allowedRoles={allowedRoles}
-        />
+        <UpsertRole deal={deal} allowedRoles={allowedRoles} />
       </div>
     )
   }
 }
 
-export default connect(({ deals }) => ({
-  roles: deals.roles
-}), { deleteRole,selectRole, notify, confirmation })(Roles)
+export default connect(
+  ({ deals }) => ({
+    roles: deals.roles
+  }),
+  {
+    deleteRole,
+    selectRole,
+    notify,
+    confirmation
+  }
+)(Roles)

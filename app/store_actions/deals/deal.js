@@ -58,6 +58,14 @@ export function dealArchived(deal_id) {
   }
 }
 
+export function updateDealNotifications(deal_id, count) {
+  return {
+    type: types.UPDATE_NOTIFICATIONS,
+    deal_id,
+    count
+  }
+}
+
 export function appendChecklist(deal_id, checklist_id) {
   return {
     type: types.APPEND_CHECKLIST,

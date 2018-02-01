@@ -24,10 +24,10 @@ export default class extends React.Component {
     }
 
     if (deal.listing) {
-      return deal.mls_context[field]
+      return deal.mls_context[field] || ''
     }
 
-    return Deal.get.field(deal, field)
+    return Deal.get.field(deal, field) || ''
   }
 
   onAdd() {
@@ -35,6 +35,7 @@ export default class extends React.Component {
       type: 'listing',
       address_components: this.state
     })
+
     this.setState({
       street_number: '',
       street_name: '',
@@ -47,17 +48,15 @@ export default class extends React.Component {
 
   isValidated() {
     const {
-      street_number,
-      street_name,
-      unit_number,
-      city,
-      state,
-      postal_code
+      street_name, city, state, postal_code
     } = this.state
 
-    return [street_number, street_name, unit_number, city, state, postal_code]
-      .join('')
-      .length > 0
+    return (
+      street_name.trim().length > 0 &&
+      city.trim().length > 0 &&
+      state.trim().length > 0 &&
+      /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(postal_code)
+    )
   }
 
   render() {
@@ -79,9 +78,7 @@ export default class extends React.Component {
         dialogClassName="modal-deal-listing"
         onHide={() => this.props.onHide()}
       >
-        <Modal.Header closeButton>
-          Address
-        </Modal.Header>
+        <Modal.Header closeButton>Address</Modal.Header>
 
         <Modal.Body>
           <div className="place-create">
@@ -93,7 +90,7 @@ export default class extends React.Component {
                 onChange={e => this.setState({ street_number: e.target.value })}
               />
               <FormControl
-                placeholder="Street address"
+                placeholder="Street address *"
                 className="street_name"
                 value={street_name}
                 onChange={e => this.setState({ street_name: e.target.value })}
@@ -107,19 +104,19 @@ export default class extends React.Component {
             </div>
             <div className="row_two">
               <FormControl
-                placeholder="City"
+                placeholder="City *"
                 className="city"
                 value={city}
                 onChange={e => this.setState({ city: e.target.value })}
               />
               <FormControl
-                placeholder="State"
+                placeholder="State *"
                 className="state"
                 value={state}
                 onChange={e => this.setState({ state: e.target.value })}
               />
               <FormControl
-                placeholder="Zipcode"
+                placeholder="Zipcode *"
                 className="zipcode"
                 value={postal_code}
                 onChange={e => this.setState({ postal_code: e.target.value })}
@@ -133,12 +130,11 @@ export default class extends React.Component {
                 onClick={() => this.onAdd()}
                 disabled={saving || !this.isValidated()}
               >
-                { deal ? 'Update Address' : 'Add' }
+                {deal ? 'Update Address' : 'Add'}
               </Button>
             </div>
           </div>
         </Modal.Body>
-
       </Modal>
     )
   }

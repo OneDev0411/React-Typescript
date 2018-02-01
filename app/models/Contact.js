@@ -274,6 +274,8 @@ Contact.get = {
     if (phone_numbers && phone_numbers.length > 0) {
       return phone_numbers[0].phone_number
     }
+
+    return ''
   },
   phones: context => Contact.get._all(context, 'phone_numbers', 'phone_number'),
   stage: context => {

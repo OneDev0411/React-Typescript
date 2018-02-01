@@ -19,7 +19,7 @@ export default class ChatNotification extends NotificationService {
     // temporary variable to hold last room id that received notification
     this._lastRoomGotNotification = null
 
-    const { scoket } = window
+    const { socket } = window
 
     socket.on('Notification.Delivered', this.onNotificationDelivered.bind(this))
     socket.on('Room.Acknowledged', this.onNotificationAcknowledged.bind(this))
@@ -66,7 +66,6 @@ export default class ChatNotification extends NotificationService {
     this._lastRoomGotNotification = null
   }
 
-
   /**
    * play ding sound
    */
@@ -101,17 +100,22 @@ export default class ChatNotification extends NotificationService {
     const { room: roomId, notification_type, auxiliary_subject } = notification
     const isDealTaskRoom = !!(auxiliary_subject && auxiliary_subject.type === 'deal')
     const room = chatroom.rooms[roomId]
+    let shouldUpdateRoomNotifications = true
 
     // fetch room immediately if room is not exists
     if (!room) {
       await store.dispatch(fetchAndCreateExistingRoom(roomId))
+      shouldUpdateRoomNotifications = false
     }
 
     // don't anything when message.author is eqaual to current user
     if (message.author && message.author.id === this.user.id) {
       // when user search a listing/alert,
       // the relevant room should go to top of rooms list
-      if (room && ['UserSharedListing', 'UserCreatedAlert'].indexOf(notification_type) > -1) {
+      if (
+        room &&
+        ['UserSharedListing', 'UserCreatedAlert'].indexOf(notification_type) > -1
+      ) {
         store.dispatch(updateRoomTime(roomId))
       }
 
@@ -136,12 +140,23 @@ export default class ChatNotification extends NotificationService {
       return ChatNotification.clear(roomId)
     }
 
-    if (!isWindowActive && activeRoom && roomId === activeRoom) {
+    if (
+      !isWindowActive &&
+      shouldUpdateRoomNotifications &&
+      activeRoom &&
+      roomId === activeRoom
+    ) {
       this.updateRoomNotifications(roomId, message)
     }
 
-    if (roomId !== activeRoom && message.author && message.author.id !== this.user.id) {
-      this.updateRoomNotifications(roomId, message)
+    if (
+      roomId !== activeRoom &&
+      message.author &&
+      message.author.id !== this.user.id
+    ) {
+      if (shouldUpdateRoomNotifications) {
+        this.updateRoomNotifications(roomId, message)
+      }
 
       // open chat popup but make it inactive
       if (!this.isRouterMode() && !isDealTaskRoom && !chatroom.popups[roomId]) {
@@ -176,13 +191,16 @@ export default class ChatNotification extends NotificationService {
     ChatNotification.playSound()
 
     // send browser notification if tab is not active
-    this.sendBrowserNotification({
-      title: `New message from ${message.author.display_name}`,
-      image: message.author.profile_image_url,
-      body: message.comment
-    }, () => {
-      Chatroom.openChat(roomId)
-    })
+    this.sendBrowserNotification(
+      {
+        title: `New message from ${message.author.display_name}`,
+        image: message.author.profile_image_url,
+        body: message.comment
+      },
+      () => {
+        Chatroom.openChat(roomId)
+      }
+    )
   }
 
   /**
@@ -200,6 +218,8 @@ export default class ChatNotification extends NotificationService {
   async onShareSomething(chatroom, notification) {
     const { subjects, objects } = notification
 
+    console.log('new share received')
+
     const message = {
       ...objects[0],
       ...{ author: subjects[0] }
@@ -213,7 +233,7 @@ export default class ChatNotification extends NotificationService {
    */
   onInviteRoom(chatroom, notification) {
     const { rooms } = chatroom
-    const { room: roomId, subjects, objects, auxiliary_object: user } = notification
+    const { room: roomId, auxiliary_object: user } = notification
 
     if (!rooms || !rooms[roomId]) {
       return false
@@ -244,13 +264,11 @@ export default class ChatNotification extends NotificationService {
 
     const messageId = notification.object
 
-    if (!roomMessages || !roomMessages.list[messageId]) { return false }
+    if (!roomMessages || !roomMessages.list[messageId]) {
+      return false
+    }
 
-    store.dispatch(updateMessageDeliveries(
-      user,
-      delivery_type,
-      notification
-    ))
+    store.dispatch(updateMessageDeliveries(user, delivery_type, notification))
   }
 
   /**

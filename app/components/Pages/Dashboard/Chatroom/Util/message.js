@@ -19,10 +19,11 @@ export default class Message {
   static send(roomId, message, author = {}) {
     return new Promise((resolve, reject) => {
       // create temp message
-      const {
-        qid,
-        tempMessage
-      } = Message.createTemporaryMessage(roomId, message, author)
+      const { qid, tempMessage } = Message.createTemporaryMessage(
+        roomId,
+        message,
+        author
+      )
 
       // create temporary message
       Message.create(roomId, tempMessage)
@@ -127,10 +128,9 @@ export default class Message {
    * convert new line to break line
    */
   static nl2br(str, is_xhtml = false) {
-    const breakTag =
-      (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>'
+    const breakTag = is_xhtml || typeof is_xhtml === 'undefined' ? '<br />' : '<br>'
 
-    return (`${str}`).replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, `$1${breakTag}$2`)
+    return `${str}`.replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, `$1${breakTag}$2`)
   }
 
   /**
@@ -140,9 +140,9 @@ export default class Message {
     const { notification } = message
 
     if (
-      notification
-      && notification.objects
-      && notification.object_class === 'Alert'
+      notification &&
+      notification.objects &&
+      notification.object_class === 'Alert'
     ) {
       return notification.objects[0]
     }
@@ -169,14 +169,18 @@ export default class Message {
     }
 
     // test for listing without message
-    if (message.notification &&
+    if (
+      message.notification &&
       message.notification.subjects &&
       message.notification.subjects[0].type === 'user'
     ) {
       return message.notification.subjects[0]
     }
 
-    return null
+    return {
+      profile_image_url: '/static/images/dashboard/rebot@2x.png',
+      display_name: 'Notify every member in this room'
+    }
   }
 
   /**

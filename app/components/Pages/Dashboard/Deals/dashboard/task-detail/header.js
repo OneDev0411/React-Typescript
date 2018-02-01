@@ -70,7 +70,7 @@ class Header extends React.Component {
               onClick={() => setSelectedTask(null)}
               title="Close Task"
             >
-              <img src="/static/images/deals/close.png" />
+              <img src="/static/images/deals/close.png" alt="" />
             </span>
           </div>
         </div>

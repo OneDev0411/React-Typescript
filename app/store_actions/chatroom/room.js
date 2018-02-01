@@ -33,9 +33,7 @@ export function getRooms(user) {
       dispatch(_getRooms(_.indexBy(rooms, 'id')))
 
       return rooms
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
 }
 
@@ -94,10 +92,12 @@ export function removeMember(roomId, memberId) {
   return async dispatch => {
     const response = await Chatroom.removeMember(roomId, memberId)
 
-    if (response
-      && !response.error
-      && response.body
-      && response.body.status === 'success') {
+    if (
+      response &&
+      !response.error &&
+      response.body &&
+      response.body.status === 'success'
+    ) {
       dispatch(removeMemberFromRoom(roomId, memberId))
     } else {
       dispatch(notify({

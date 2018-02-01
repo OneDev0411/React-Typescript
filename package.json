@@ -141,6 +141,7 @@
     "react-router-redux": "^4.0.8",
     "react-select": "1.1.0",
     "react-swipe": "5.1.1",
+    "react-table": "^6.7.6",
     "react-telephone-input": "^4.3.4",
     "react-text-mask": "^5.0.1",
     "react-textarea-autosize": "^5.2.1",

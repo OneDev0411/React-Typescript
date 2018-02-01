@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { OverlayTrigger, Tooltip, Panel } from 'react-bootstrap'
+import { Panel } from 'react-bootstrap'
 import { Link } from 'react-router'
 import AgentFilter from './agent-filter'
 import BackOfficeFilter from './backoffice-filter'
+import Tooltip from '../components/tooltip'
 import debounce from 'lodash/debounce'
 import {
   searchAllDeals,
@@ -56,12 +57,10 @@ class Header extends React.Component {
     }
 
     return (
-      <div className={cn('deals-list--header', { agent: !isBackOffice })}>
+      <div className={cn('list--header', { agent: !isBackOffice })}>
         <div style={{ height: '57px' }}>
-          <div
-            className={cn('deals-list--header-row', { agent: !isBackOffice })}
-          >
-            <div className="deals-list--header-row--col">
+          <div className={cn('list--header-row', { agent: !isBackOffice })}>
+            <div className="list--header-row--col">
               {isBackOffice ? (
                 <BackOfficeFilter
                   searchMode={searchBoxIsOpen}
@@ -100,17 +99,12 @@ class Header extends React.Component {
               )}
             </div>
 
-            <div className="deals-list--header-row--col">
+            <div className="list--header-row--col">
               {isBackOffice && (
-                <OverlayTrigger
+                <Tooltip
+                  multiline
                   placement="bottom"
-                  overlay={
-                    <Tooltip id="popover-leave">
-                      Search deals by address,
-                      <br />
-                      MLS # or agent name…
-                    </Tooltip>
-                  }
+                  caption="Search deals by address,<br />MLS # or agent name…"
                 >
                   <div
                     onClick={() => {
@@ -131,20 +125,19 @@ class Header extends React.Component {
                       aria-hidden="true"
                     />
                   </div>
-                </OverlayTrigger>
+                </Tooltip>
               )}
-              <OverlayTrigger
-                placement="bottom"
-                overlay={<Tooltip id="popover-leave">Download Report</Tooltip>}
-              >
+
+              <Tooltip placement="bottom" caption="Download Report">
                 <a href="/api/deals/excel/" className="search-button">
                   <Excel />
                 </a>
-              </OverlayTrigger>
+              </Tooltip>
+
               {!isBackOffice && (
                 <Link
                   to="/dashboard/deals/create"
-                  className="btn btn-primary create-deal-button"
+                  className="btn btn-primary create-button"
                 >
                   Create New Deal
                 </Link>
@@ -152,15 +145,16 @@ class Header extends React.Component {
             </div>
           </div>
         </div>
+
         {showSearchInput && (
           <Panel
-            className={cn({ agent: !isBackOffice })}
+            className={cn('list--header', { agent: !isBackOffice })}
             collapsible
             expanded={isBackOffice ? searchBoxIsOpen : true}
             onEntered={() => this.searchInput.focus()}
           >
             <div
-              className={cn('deals-list--header--searchBox', {
+              className={cn('list--header--searchBox', {
                 active: inputFocused
               })}
             >

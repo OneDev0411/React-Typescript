@@ -73,7 +73,7 @@ export function setSelectedTask(task) {
 }
 
 export function bulkSubmit(dealId, tasksList) {
-  return async dispatch => {
+  return async () => {
     const tasks = await Deal.bulkSubmit(dealId, tasksList)
 
     if (!tasks) {
@@ -163,6 +163,6 @@ export function changeTaskStatus(deal_id, status) {
 export function changeNeedsAttention(deal_id, task_id, status) {
   return async dispatch => {
     await Deal.needsAttention(deal_id, task_id, status)
-    dispatch(needsAttention(deal_id, status))
+    dispatch(needsAttention(task_id, status))
   }
 }

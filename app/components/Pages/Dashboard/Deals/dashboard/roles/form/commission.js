@@ -79,7 +79,7 @@ export default class Commission extends React.Component {
   }
 
   render() {
-    const { form } = this.props
+    const { form, isRequired } = this.props
     const { commission_type } = this.state
 
     if (!Commission.shouldShowCommission(form)) {
@@ -106,7 +106,7 @@ export default class Commission extends React.Component {
           <input
             name="commission"
             type="number"
-            placeholder="Commission *"
+            placeholder={`Commission ${isRequired && '*'}`}
             value={this.getCommissionValue()}
             onChange={e => this.setCommission(e.target.value)}
           />

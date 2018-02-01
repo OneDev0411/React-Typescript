@@ -9,8 +9,7 @@ function getSubmitButtonLabel(isSaving, hasComment) {
   if (isSaving) {
     return (
       <span>
-        <i className="fa fa-spin fa-spinner" />&nbsp;
-        Submitting ...
+        <i className="fa fa-spin fa-spinner" />&nbsp; Submitting ...
       </span>
     )
   }
@@ -26,7 +25,7 @@ const AgentCta = ({
   confirmation,
   onSendComment
 }) => {
-  const sendComment = function() {
+  function sendComment() {
     const isBackupChecklist = checklists[task.checklist].is_deactivated
 
     if (isBackupChecklist) {
@@ -42,11 +41,9 @@ const AgentCta = ({
   }
 
   return (
-    <ToolTip
-      caption={hasComment ? null : 'Notify office to Review'}
-    >
+    <ToolTip caption={hasComment ? null : 'Notify office to Review'}>
       <Button
-        className="deal-button enabled notify-admin"
+        className="deal-button enabled add-comment notify-admin"
         disabled={isSaving}
         onClick={() => sendComment()}
       >
@@ -56,8 +53,11 @@ const AgentCta = ({
   )
 }
 
-export default connect(({ deals }) => ({
-  checklists: deals.checklists
-}), {
-  confirmation
-})(AgentCta)
+export default connect(
+  ({ deals }) => ({
+    checklists: deals.checklists
+  }),
+  {
+    confirmation
+  }
+)(AgentCta)

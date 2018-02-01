@@ -10,8 +10,6 @@ export default ({ width, file, disableKeyboardShortcuts = false }) => {
     name, type, url, downloadUrl
   } = file
 
-  console.log(file)
-
   return (
     <div
       style={{

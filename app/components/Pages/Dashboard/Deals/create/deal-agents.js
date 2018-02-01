@@ -23,10 +23,10 @@ function getRoles(agents, side) {
 }
 
 export default ({
-  scenario,
   agents,
   dealSide,
   shouldPrepopulateAgent = true,
+  isCommissionRequired,
   onUpsertAgent,
   onRemoveAgent
 }) => {
@@ -47,6 +47,7 @@ export default ({
           <CrudRole
             key={id}
             role={agent}
+            isCommissionRequired={isCommissionRequired}
             modalTitle="Edit Agent"
             buttonText="Update"
             allowedRoles={allowedRoles}
@@ -57,6 +58,7 @@ export default ({
 
         <CrudRole
           shouldPrepopulateAgent={shouldPrepopulateAgent && isPrimaryAgent}
+          isCommissionRequired={isCommissionRequired}
           modalTitle={title}
           ctaTitle={title}
           allowedRoles={allowedRoles}

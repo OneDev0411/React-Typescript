@@ -232,6 +232,7 @@ class BaseTable extends React.Component {
   render() {
     const {
       deals,
+      tabName,
       isBackOffice,
       searchBoxIsOpen,
       emptySearchPageIsOpen
@@ -240,86 +241,73 @@ class BaseTable extends React.Component {
 
     // apply filter to deals
     const filteredDeals = _.filter(deals, deal => this.applyFilters(deal))
-
-    let hasRows = true
+    const hasRows = filteredDeals.length > 0
 
     if (searchBoxIsOpen && emptySearchPageIsOpen) {
-      return (
-        <div className="table-container">
-          <EmptySearch />
-        </div>
-      )
+      return <EmptySearch />
     }
 
-    if (filteredDeals.length === 0) {
-      if (searchBoxIsOpen) {
-        return (
-          <div className="table-container">
-            <NoSearchResults />
-          </div>
-        )
-      }
+    if (searchBoxIsOpen && !hasRows) {
+      return <NoSearchResults />
+    }
 
-      hasRows = false
+    if (!hasRows && tabName === 'All') {
+      return <EmptyState isBackOffice={isBackOffice} />
     }
 
     return (
       <div className="table-container">
-        {hasRows ? (
-          <table className="table table-hover">
-            <tbody>
-              <tr className="header">
-                {_.chain(this.cells)
-                  .pairs()
-                  .filter(cell => !cell[1].justFilter)
-                  .map(([key, cell]) => (
-                    <td
-                      key={`CELL_${key}`}
-                      className={cn(cell.className, {
-                        sortable: cell.sortable,
-                        isActive: sortBy === key
-                      })}
-                    >
-                      <span
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => cell.sortable && this.setSort(key)}
-                      >
-                        {cell.caption}&nbsp;
-                        {cell.sortable && this.getSorterCaret(key)}
-                      </span>
-                    </td>
-                  ))
-                  .value()}
-              </tr>
-
-              {_.chain(filteredDeals)
-                .sortBy(deal => this.sort(deal))
-                .shouldReverse(sortOrder)
-                .map((deal, rowId) => (
-                  <tr
-                    key={`DEAL_${deal.id}`}
-                    className="item"
-                    onClick={e => this.onClickDeal(e, deal.id)}
+        <table className="table table-hover">
+          <tbody>
+            <tr className="header">
+              {_.chain(this.cells)
+                .pairs()
+                .filter(cell => !cell[1].justFilter)
+                .map(([key, cell]) => (
+                  <td
+                    key={`CELL_${key}`}
+                    className={cn(cell.className, {
+                      sortable: cell.sortable,
+                      isActive: sortBy === key
+                    })}
                   >
-                    {_.chain(this.cells)
-                      .filter(cell => !cell.justFilter)
-                      .map((cell, key) => (
-                        <td
-                          key={`DEAL_${deal.id}__CELL_${key}`}
-                          className={cell.className}
-                        >
-                          {cell.getText(deal, rowId, filteredDeals.length)}
-                        </td>
-                      ))
-                      .value()}
-                  </tr>
+                    <span
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => cell.sortable && this.setSort(key)}
+                    >
+                      {cell.caption}&nbsp;
+                      {cell.sortable && this.getSorterCaret(key)}
+                    </span>
+                  </td>
                 ))
                 .value()}
-            </tbody>
-          </table>
-        ) : (
-          <EmptyState isBackOffice={isBackOffice} />
-        )}
+            </tr>
+
+            {_.chain(filteredDeals)
+              .sortBy(deal => this.sort(deal))
+              .shouldReverse(sortOrder)
+              .map((deal, rowId) => (
+                <tr
+                  key={`DEAL_${deal.id}`}
+                  className="item"
+                  onClick={e => this.onClickDeal(e, deal.id)}
+                >
+                  {_.chain(this.cells)
+                    .filter(cell => !cell.justFilter)
+                    .map((cell, key) => (
+                      <td
+                        key={`DEAL_${deal.id}__CELL_${key}`}
+                        className={cell.className}
+                      >
+                        {cell.getText(deal, rowId, filteredDeals.length)}
+                      </td>
+                    ))
+                    .value()}
+                </tr>
+              ))
+              .value()}
+          </tbody>
+        </table>
       </div>
     )
   }

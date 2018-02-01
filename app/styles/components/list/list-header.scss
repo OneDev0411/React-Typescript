@@ -1,0 +1,211 @@
+.list-table {
+  padding: 2em;
+}
+.list--header {
+  box-shadow: 0 1px 0 0 #dce5eb;
+  overflow: hidden;
+
+  &.agent {
+    box-shadow: none;
+  }
+
+  .list--header-row {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 5.5rem;
+    position: fixed;
+    top: 0;
+    width: calc(100% - #{$app-sidenav-width});
+    z-index: 1;
+
+    &.agent {
+      box-shadow: 0 1px 0 0 #dce5eb;
+    }
+    .list--header-row--col {
+      display: flex;
+      align-items: center;
+      ul.filter {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        li {
+          margin-right: 50px;
+          font-size: 21px;
+          color: #62778c;
+          cursor: pointer;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          .badge {
+            background-color: #ededed;
+            font-weight: normal;
+          }
+
+          .counter {
+            display: inline-block;
+            color: #62778c;
+            font-size: 13px;
+            margin-left: 6px;
+          }
+
+          @media (min-width: 548px) and (max-width: 1173px) {
+            font-size: 16px;
+            .counter {
+              font-size: 10px;
+              margin-left: 2px;
+            }
+          }
+
+          @media (max-width: 548px) {
+            font-size: 15px;
+            .counter {
+              font-size: 10px;
+              margin-left: 2px;
+            }
+          }
+
+          &.active {
+            color: #2196f3;
+            .title {
+              display: inline-block;
+              padding-bottom: 12px;
+              border-bottom: 2px solid #2196f3;
+              align-self: flex-end;
+            }
+
+            .badge {
+              color: #2196f3;
+            }
+          }
+        }
+      }
+
+      .create-button {
+        height: 30px;
+        line-height: 16px;
+        min-width: 100px;
+        margin-left: 2px;
+        float: right;
+      }
+      .secondary-button {
+        margin-right: 12px;
+        border-radius: 3px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #2196f3;
+        background-color: #ffffff;
+        border: solid 1px #e0e0e0;
+        display: flex;
+        button {
+          padding: 8px 15px;
+          margin-left: 0;
+        }
+        .info-button {
+          border-left: solid 1px #e0e0e0;
+          display: flex;
+          padding: 8px;
+          &:hover {
+            svg g {
+              fill: #2196f3;
+            }
+          }
+        }
+        .import-dropdown {
+          padding: 0;
+          .dropdown-header {
+            background-color: #f0f4f7;
+            font-size: 14px;
+            font-weight: 500;
+            color: #758a9e;
+            padding-top: 10px;
+            padding-bottom: 10px;
+          }
+          .import-dropdown--item [role='menuitem'] {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            display: flex;
+            .import-dropdown--item--icons {
+              margin-left: 50px;
+              .right--icon {
+                margin-left: 18px;
+                color: #c7c7cc;
+                font-size: 15px;
+              }
+            }
+          }
+          .import-dropdown--divider {
+            margin: 0;
+          }
+        }
+      }
+      .search-button {
+        cursor: pointer;
+        padding: 10px;
+        white-space: pre-line;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .fa-search {
+          color: #8da2b5;
+          font-size: 20px;
+          &:hover,
+          &.active {
+            color: #2196f3;
+          }
+        }
+
+        &:hover svg > g {
+          fill: #2196f3;
+        }
+      }
+    }
+  }
+}
+
+.list--header.panel {
+  border: none;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0 2rem;
+
+  &.agent {
+    background-color: inherit;
+  }
+  .panel-body {
+    padding: 0;
+  }
+
+  .list--header--searchBox {
+    border-radius: 4px;
+    background-color: #ffffff;
+    margin-top: 10px;
+    margin-bottom: 16px;
+    padding: 12px;
+    border: solid 1px #dce5eb;
+
+    &.active {
+      border: solid 1px #2196f3;
+    }
+    .fa-search {
+      color: #2196f3;
+      font-size: 16px;
+    }
+    input {
+      font-size: 15px;
+      border: none;
+      width: calc(100% - 32px);
+      margin-left: 12px;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

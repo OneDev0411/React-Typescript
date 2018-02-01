@@ -3,7 +3,7 @@ import webpack from 'webpack'
 import config from '../config/webpack'
 
 export default {
-  devtool: 'eval',
+  devtool: 'inline-source-map',
   entry: {},
   output: {
     path: config.compile.output,

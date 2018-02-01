@@ -8,7 +8,9 @@ $left-w: 44px;
 %messages {
   $height-of-create-message: 45px;
   $height-of-typing-area: 5vh;
-  $messages-height: calc(100vh - #{$height-of-typing-area} - #{$height-of-create-message});
+  $messages-height: calc(
+    100vh - #{$height-of-typing-area} - #{$height-of-create-message}
+  );
 
   padding: 0;
   position: relative;
@@ -28,7 +30,7 @@ $left-w: 44px;
   }
 
   .no-messages {
-    color: #9BB1C1;
+    color: #9bb1c1;
     text-align: center;
     font-size: 16px;
     font-weight: 400;
@@ -37,7 +39,7 @@ $left-w: 44px;
 
   .socket-status {
     position: absolute;
-    top: 10%;
+    top: 10vh;
     left: calc((100% - 130px) / 2);
     z-index: 1010;
     color: #fff;
@@ -382,11 +384,11 @@ $left-w: 44px;
           margin-right: 5px;
           text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
           &:before {
-            content: " •  "
+            content: ' •  ';
           }
           &:first-child {
             &:before {
-              content: ""
+              content: '';
             }
           }
         }
@@ -426,8 +428,9 @@ $left-w: 44px;
       color: gray;
     }
 
-    &.selected, &:hover {
-      background-color: #2196F3;
+    &.selected,
+    &:hover {
+      background-color: #2196f3;
       color: #fff;
       .name {
         color: #fff;

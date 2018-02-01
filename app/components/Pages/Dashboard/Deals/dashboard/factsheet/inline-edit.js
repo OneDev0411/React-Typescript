@@ -19,6 +19,8 @@ export default class Editable extends React.Component {
 
   onFinishEditing(value = null) {
     const { field, onChange } = this.props
+    const { error } = this.state
+
     let fieldValue = value
 
     if (value === null && this.input) {
@@ -26,10 +28,15 @@ export default class Editable extends React.Component {
     }
 
     this.setState({
-      editMode: false
+      editMode: false,
+      error: false
     })
 
-    if (fieldValue && fieldValue !== this.getValue() && field.validate(fieldValue)) {
+    if (
+      fieldValue &&
+      fieldValue !== this.getValue() &&
+      field.validate(field, fieldValue)
+    ) {
       onChange(field, fieldValue)
     }
   }
@@ -41,9 +48,12 @@ export default class Editable extends React.Component {
   }
 
   editField() {
-    this.setState({
-      editMode: true
-    }, () => this.input && this.input.focus())
+    this.setState(
+      {
+        editMode: true
+      },
+      () => this.input && this.input.focus()
+    )
   }
 
   getCtas() {
@@ -57,9 +67,7 @@ export default class Editable extends React.Component {
       <ToolTip
         key="EDITABLE_INPUT_CTA_BUTTON__EDIT"
         caption={
-          needsApproval
-            ? null
-            : 'This field needs office approval after changing'
+          needsApproval ? null : 'This field needs office approval after changing'
         }
       >
         <span className={cn('cta__button', { hide: !showCTA })}>EDIT</span>
@@ -67,16 +75,17 @@ export default class Editable extends React.Component {
       <ToolTip
         key="EDITABLE_INPUT_CTA_BUTTON__DELETE"
         caption={
-          needsApproval
-            ? null
-            : 'This field needs office approval after removing'
+          needsApproval ? null : 'This field needs office approval after removing'
         }
       >
         <button
-          className={cn('c-button--shadow cta__button ico-remove fa fa-times-circle', {
-            hide: !showCTA || !context.value || context.value.length === 0
-          })}
-          onClick={(e) => this.deleteField(e, field)}
+          className={cn(
+            'c-button--shadow cta__button ico-remove fa fa-times-circle',
+            {
+              hide: !showCTA || !context.value || context.value.length === 0
+            }
+          )}
+          onClick={e => this.deleteField(e, field)}
         />
       </ToolTip>
     ]
@@ -121,49 +130,45 @@ export default class Editable extends React.Component {
           style={{ display: 'inline-block', minWidth: '80%' }}
           onClick={() => this.editField()}
         >
-          {
-            (!editMode || (editMode && isDateType)) &&
+          {(!editMode || (editMode && isDateType)) && (
             <ToolTip caption={approved ? null : 'Pending Office Approval'}>
-              <span style={{ opacity: saving ? 0.8 : 1 }}>
-                {context.value}
-              </span>
+              <span style={{ opacity: saving ? 0.8 : 1 }}>{context.value}</span>
             </ToolTip>
-          }
+          )}
 
-          {
-            editMode && isStringType &&
-            <div className="inline">
-              <input
-                className="input-edit"
-                onBlur={() => this.onFinishEditing()}
-                defaultValue={this.getValue()}
-                onKeyPress={(e) => this.onKeyPress(e)}
-                onChange={e => {
-                  const error = this.input && !field.validate(e.target.value)
+          {editMode &&
+            isStringType && (
+              <div className="inline">
+                <input
+                  className="input-edit"
+                  onBlur={() => this.onFinishEditing()}
+                  defaultValue={this.getValue()}
+                  onKeyPress={e => this.onKeyPress(e)}
+                  onChange={e => {
+                    const error =
+                      this.input && !field.validate(field, e.target.value)
 
-                  this.setState({ error })
-                }}
-                ref={(input) => this.input = input}
-                maxLength={15}
-              />
-              <button
-                className="c-button--shadow fa fa-check-circle"
-                onClick={() => this.onFinishEditing()}
-              />
-            </div>
-          }
+                    this.setState({ error })
+                  }}
+                  ref={input => (this.input = input)}
+                  maxLength={15}
+                />
+                <button
+                  className="c-button--shadow fa fa-check-circle"
+                  onClick={() => this.onFinishEditing()}
+                />
+              </div>
+            )}
 
-          <span className="cta">
-            {this.getCtas()}
-          </span>
+          <span className="cta">{this.getCtas()}</span>
         </div>
-        {
-          saving && saving === field.name &&
-          <i
-            className="fa fa-spin fa-spinner"
-            style={{ display: 'inline-block', marginLeft: '0.5rem' }}
-          />
-        }
+        {saving &&
+          saving === field.name && (
+            <i
+              className="fa fa-spin fa-spinner"
+              style={{ display: 'inline-block', marginLeft: '0.5rem' }}
+            />
+          )}
       </div>
     )
   }

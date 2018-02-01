@@ -23,9 +23,9 @@ webpackConfig.plugins.push(
   new webpack.HotModuleReplacementPlugin(),
   new Jarvis({
     port: 1337 // optional: set a port
-  })
+  }),
   // new webpack.NoEmitOnErrorsPlugin(),
-  // new WebpackNotifierPlugin({ alwaysNotify: true })
+  new WebpackNotifierPlugin({ alwaysNotify: true })
 )
 
 webpackConfig.module.rules.push(
