@@ -36,10 +36,7 @@ const secretQuestionModal = ({
     >
       <Modal.Body>
         <div style={{ marginBottom: '4rem' }}>
-          <h2
-            style={{ marginBottom: '4rem' }}
-            className="c-confirm-modal__title"
-          >
+          <h2 style={{ marginBottom: '4rem' }} className="c-confirm-modal__title">
             Confirm Your Contact Information
           </h2>
           <p className="c-confirm-modal__message">
@@ -49,7 +46,7 @@ const secretQuestionModal = ({
             {question}
           </p>
           <p className="c-confirm-modal__message">
-            Confirm this is you by entering your email or phone number # below:
+            Answering the question, it might be your email or phone number.
           </p>
         </div>
         <form onSubmit={onConfirmHandler}>
@@ -62,7 +59,9 @@ const secretQuestionModal = ({
               type="text"
               onChange={e => {
                 const newValue = e.target.value
+
                 setSecret(newValue)
+
                 if (confirmError && newValue) {
                   setConfirmError(false)
                 }
@@ -70,7 +69,7 @@ const secretQuestionModal = ({
               className={`c-auth__field__input ${secret ? 'has-content' : ''}`}
             />
             <label htmlFor="secret" className="c-auth__field__label">
-              Your Email or Phone Number
+              Enter the answer:
             </label>
             <span className="focus-border">
               <i />
@@ -144,6 +143,7 @@ export default compose(
     }) => async event => {
       event.preventDefault()
       setIsConfirming(true)
+
       try {
         await upgradeToAgent({ agent, secret })
         setIsConfirming(false)
