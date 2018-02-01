@@ -232,15 +232,15 @@ class CreateDeal extends React.Component {
       }
     }
 
-    // create contexts object
-    dealObject.deal_context = this.createContextsObject(dealObject.deal_context)
-
     // show loading
     this.setState({ saving: true })
 
     try {
       // create deal
-      const deal = await Deal.create(user, dealObject)
+      const deal = await Deal.create(user, {
+        ...dealObject,
+        deal_context: this.createContextsObject(dealObject.deal_context)
+      })
 
       // dispatch new deal
       await createDeal(deal)
