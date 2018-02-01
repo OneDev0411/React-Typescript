@@ -9,7 +9,7 @@ import { getDeals, getContexts } from '../store_actions/deals'
 import { getContacts } from '../store_actions/contact'
 
 // utils
-import { hasUserAccess } from '../utils/user-acl'
+import { hasUserAccess } from '../utils/user-brands'
 
 // Containers
 import AppLayout from '../components/App'
@@ -210,7 +210,6 @@ const AsyncUpgradeAccount = Load({
 const WidgetsContainer = Load({
   loader: () =>
     import('../components/Pages/Widgets/' /* webpackChunkName: "widgets_container" */)
-
 })
 const AsyncListingsWidget = Load({
   loader: () =>

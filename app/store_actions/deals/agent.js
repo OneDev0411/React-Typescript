@@ -9,8 +9,9 @@ function addAgents(agents) {
 }
 
 export function getAgents(user) {
-  return async (dispatch) => {
+  return async dispatch => {
     const agents = await Deal.getAgents(user)
+
     dispatch(addAgents(agents))
   }
 }

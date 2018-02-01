@@ -1,4 +1,4 @@
-import { hasUserAccess, getUserRoles } from './user-acl'
+import { hasUserAccess, getActiveBrand } from './user-brands'
 
 let defaultHomepage = '/dashboard/mls'
 
@@ -7,7 +7,7 @@ export default function getHomepage(user) {
     return defaultHomepage
   }
 
-  const roles = getUserRoles(user)
+  const roles = getActiveBrand(user)
   const hasDealsPermission = roles.includes('Deals')
   const hasBackOfficePermission = roles.includes('BackOffice')
 

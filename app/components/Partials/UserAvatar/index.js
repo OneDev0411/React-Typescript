@@ -20,27 +20,31 @@ const UserAvatar = ({
   textSizeRatio = 3,
   fgColor
 }) => {
-  const defaultStyles = showStateIndicator ?
-    { position: 'relative', width: `${size}px` } :
-    {}
+  const defaultStyles = showStateIndicator
+    ? { position: 'relative', width: `${size}px` }
+    : {}
 
   // normalize name
   let normalizedName = name
 
   let props
+
   if (typeof normalizedName === 'number') {
     props = {
       value: normalizedName.toString()
     }
   } else {
     const splitName = name.split(' ')
+
     if (splitName.length > 2) {
       normalizedName = `${splitName[0]} ${splitName[1]}`
     }
+
     props = {
       name: normalizedName
     }
   }
+
   return (
     <div
       className="user-avatar"
@@ -58,8 +62,7 @@ const UserAvatar = ({
         textSizeRatio={textSizeRatio}
         fgColor={fgColor}
       />
-      {
-        showStateIndicator &&
+      {showStateIndicator && (
         <div
           className="user-avatar-indicator"
           style={{
@@ -73,7 +76,7 @@ const UserAvatar = ({
             border: `${size / 25}px solid ${borderColor}`
           }}
         />
-      }
+      )}
     </div>
   )
 }
@@ -86,7 +89,8 @@ function mapStateToProps({ chatroom }, ownProps) {
   }
 
   const state = states[ownProps.userId] ? states[ownProps.userId].state : 'Offline'
+
   return { state }
 }
 
-export default (connect(mapStateToProps))(UserAvatar)
+export default connect(mapStateToProps)(UserAvatar)
