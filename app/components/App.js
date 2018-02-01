@@ -12,7 +12,7 @@ import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
 import DealSocket from './Pages/Dashboard/Deals/services/socket'
 
 // utils
-import { hasUserAccess } from '../utils/user-brands'
+import { hasUserAccess } from '../utils/user-teams'
 
 // navs
 import SideNav from './Pages/Dashboard/Partials/SideNav'
@@ -21,7 +21,7 @@ import SideNav from './Pages/Dashboard/Partials/SideNav'
 import { getRooms } from '../store_actions/chatroom'
 
 // get user roles
-import getUserBrands from '../store_actions/user/brands'
+import getTeams from '../store_actions/user/teams'
 
 // deals featch on launch
 import { getDeals } from '../store_actions/deals'
@@ -72,8 +72,8 @@ class App extends Component {
     }
 
     if (user) {
-      if (!user.brands) {
-        dispatch(getUserBrands())
+      if (!user.teams) {
+        dispatch(getTeams())
       }
 
       // load rooms
@@ -118,7 +118,7 @@ class App extends Component {
     }
 
     return batchActions([
-      await dispatch(getUserBrands(user)),
+      await dispatch(getTeams(user)),
       await dispatch(getRooms(user))
     ])
   }

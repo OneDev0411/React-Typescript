@@ -9,7 +9,7 @@ import { getDeals, getContexts } from '../store_actions/deals'
 import { getContacts } from '../store_actions/contact'
 
 // utils
-import { hasUserAccess } from '../utils/user-brands'
+import { hasUserAccess } from '../utils/user-teams'
 
 // Containers
 import AppLayout from '../components/App'

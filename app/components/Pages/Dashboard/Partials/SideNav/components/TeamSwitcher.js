@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
 import cn from 'classnames'
 import {
-  getActivatedBrandId,
-  changeActiveBrand
-} from '../../../../../../utils/user-brands'
+  getActiveTeamId,
+  changeActiveTeam
+} from '../../../../../../utils/user-teams'
 import flattenBrand from '../../../../../../utils/flatten-brand'
 import Avatar from '../../../../../Partials/UserAvatar'
 
@@ -11,7 +11,7 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      savingBrand: false
+      savingTeam: false
     }
   }
 
@@ -34,61 +34,57 @@ export default class extends React.Component {
     )
   }
 
-  changeBrand(e, account) {
+  changeTeam(e, team) {
     e.preventDefault()
 
     const { user } = this.props
-    const { savingBrand } = this.state
+    const { savingTeam } = this.state
 
-    if (savingBrand || account.brand.id === getActivatedBrandId(user)) {
+    if (savingTeam || team.brand.id === getActiveTeamId(user)) {
       return false
     }
 
-    this.setState({ savingBrand: account.brand.id })
-    changeActiveBrand(account.brand.id)
+    this.setState({ savingTeam: team.brand.id })
+    changeActiveTeam(team.brand.id)
     window.location.reload(true)
   }
 
   render() {
     const { user } = this.props
-    const { savingBrand } = this.state
+    const { savingTeam } = this.state
 
-    if (!user.brands || user.brands.length <= 1) {
+    if (!user.teams || user.teams.length <= 1) {
       return false
     }
 
     return (
       <Fragment>
         <li className="separator">Switch Accounts</li>
-        {user.brands.map(account => {
-          const isActiveBrand = account.brand.id === getActivatedBrandId(user)
+        {user.teams.map(team => {
+          const isActiveTeam = team.brand.id === getActiveTeamId(user)
 
           return [
-            <li key={account.brand.id} className="brand-account">
-              <a href="#" onClick={e => this.changeBrand(e, account)}>
-                {this.getAvatar(account.brand)}
+            <li key={team.brand.id} className="team-account">
+              <a href="#" onClick={e => this.changeTeam(e, team)}>
+                {this.getAvatar(team.brand)}
 
-                <div className={cn('brand-title', { active: isActiveBrand })}>
-                  {account.brand.name}
+                <div className={cn('team-title', { active: isActiveTeam })}>
+                  {team.brand.name}
                 </div>
 
                 <div className="icon">
-                  {!savingBrand &&
-                    isActiveBrand && (
+                  {!savingTeam &&
+                    isActiveTeam && (
                       <img src="/static/images/dashboard/checkmark.svg" alt="" />
                     )}
 
-                  {savingBrand === account.brand.id && (
+                  {savingTeam === team.brand.id && (
                     <i className="fa fa-spinner fa-spin" />
                   )}
                 </div>
               </a>
             </li>,
-            <li
-              key={`sp_${account.brand.id}`}
-              role="separator"
-              className="divider"
-            />
+            <li key={`sp_${team.brand.id}`} role="separator" className="divider" />
           ]
         })}
       </Fragment>

@@ -162,7 +162,7 @@ $item-height: 3.4rem;
       vertical-align: middle;
     }
 
-    > li.brand-account > a {
+    > li.team-account > a {
       display: flex;
       flex-direction: row;
 
@@ -171,7 +171,7 @@ $item-height: 3.4rem;
         width: 40px;
       }
 
-      .brand-title {
+      .team-title {
         width: 180px;
         overflow: hidden;
         text-overflow: ellipsis;

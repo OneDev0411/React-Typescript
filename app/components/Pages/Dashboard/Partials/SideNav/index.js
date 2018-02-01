@@ -5,11 +5,11 @@ import { Dropdown } from 'react-bootstrap'
 import Avatar from './components/Avatar'
 import Intercom from '../Intercom'
 import IntercomTrigger from '../IntercomTrigger'
-import TeamSwitcher from './components/BrandSwitcher'
+import TeamSwitcher from './components/TeamSwitcher'
 import Brand from '../../../../../controllers/Brand'
 
 // utils
-import { getActiveBrand } from '../../../../../utils/user-brands'
+import { getActiveTeamACL } from '../../../../../utils/user-teams'
 
 // chatroom stuff
 import Inbox from '../../Chatroom/Shared/instant-trigger'
@@ -50,10 +50,10 @@ const SideNavItem = ({ children, isActive }) => (
 )
 
 const appSideNav = ({ user, activePath, appNotifications }) => {
-  const activeBrand = getActiveBrand(user)
+  const acl = getActiveTeamACL(user)
 
-  const hasDealsPermission = activeBrand.includes('Deals')
-  const hasBackOfficePermission = activeBrand.includes('BackOffice')
+  const hasDealsPermission = acl.includes('Deals')
+  const hasBackOfficePermission = acl.includes('BackOffice')
 
   return (
     <aside className="c-app-sidenav">
