@@ -192,6 +192,7 @@ export default class Form extends React.Component {
       email: email => email && this.isEmail(email),
       legal_last_name: name => this.isValidName(name),
       legal_first_name: name => this.isValidName(name),
+      legal_middle_name: name => this.isValidName(name),
       phone: phone => phone && this.isValidPhone(phone),
       company_title: name => this.isValidName(name)
     }
@@ -268,6 +269,17 @@ export default class Form extends React.Component {
             value={form.legal_first_name}
             isInvalid={invalidFields.includes('legal_first_name')}
             onChange={value => this.setForm('legal_first_name', value)}
+          />
+
+          <Name
+            id="middle_name"
+            name="middle_name"
+            title="Legal Middle Name"
+            placeholder="Legal Middle"
+            isRequired={false}
+            value={form.legal_middle_name}
+            isInvalid={invalidFields.includes('legal_middle_name')}
+            onChange={value => this.setForm('legal_middle_name', value)}
           />
 
           <Name

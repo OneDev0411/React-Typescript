@@ -90,13 +90,18 @@
       border-bottom: 1px solid #dce5eb;
 
       .first_name {
-        width: 40%;
+        width: 26%;
         border-left: 1px solid #dce5eb;
         border-right: 1px solid #dce5eb;
       }
 
+      .middle_name {
+        width: 26%;
+        border-right: 1px solid #dce5eb;
+      }
+
       .last_name {
-        width: 40%;
+        width: 26%;
         padding-left: 5px;
       }
 

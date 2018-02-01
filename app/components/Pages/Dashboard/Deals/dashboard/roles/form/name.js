@@ -1,11 +1,18 @@
 import React from 'react'
 
 export default ({
-  id, name, title, value, onChange, isInvalid, placeholder
+  id,
+  name,
+  title,
+  value,
+  onChange,
+  isInvalid,
+  placeholder,
+  isRequired = true
 }) => (
   <div className={name} style={{ position: 'relative' }}>
     <label htmlFor={id} style={{ display: 'block', cursor: 'pointer' }}>
-      {title} <sup>*</sup>
+      {title} {isRequired && <sup>*</sup>}
     </label>
 
     {isInvalid && (
