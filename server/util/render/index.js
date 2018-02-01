@@ -1,13 +1,10 @@
-import React from 'react'
 import urlParser from 'url'
-import { renderToString } from 'react-dom/server'
-import { RouterContext } from 'react-router'
 import { createStore, applyMiddleware, compose } from 'redux'
-import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
 import getBrand from '../../../app/models/brand'
+import getTeams from '../../../app/store_actions/user/teams'
 
 function fetch(store, renderProps) {
   return renderProps.components.map(component => {
@@ -27,7 +24,7 @@ async function display(file, renderProps) {
   let initialState = this.locals.appStore || {}
 
   try {
-    const hostname = urlParser.parse(this.request.origin).hostname
+    const { hostname } = urlParser.parse(this.request.origin)
     const brand = await getBrand(hostname)
     const { data } = initialState
 
@@ -48,7 +45,11 @@ async function display(file, renderProps) {
 
   // append user data to render props params
   if (initialState.user) {
-    renderProps.params.user = initialState.user
+    await store.dispatch(getTeams(initialState.user))
+    renderProps.params.user = {
+      ...store.getState().user,
+      activeTeam: this.cookie['rechat-active-team'] || null
+    }
   }
 
   try {

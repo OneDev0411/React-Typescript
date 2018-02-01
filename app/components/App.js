@@ -117,10 +117,7 @@ class App extends Component {
       return Promise.resolve()
     }
 
-    return batchActions([
-      await dispatch(getTeams(user)),
-      await dispatch(getRooms(user))
-    ])
+    return dispatch(getRooms(user))
   }
 
   _getBrand() {

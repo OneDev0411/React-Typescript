@@ -38,6 +38,10 @@ export class AgentFilter extends React.Component {
   componentDidMount() {
     const { active } = this.props
 
+    if (!_.find(filters, (fn, name) => name === active)) {
+      return browserHistory.push('/dashboard/deals')
+    }
+
     if (active && active !== 'All') {
       this.setFilter(active)
     }
