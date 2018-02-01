@@ -99,7 +99,7 @@ const ModalNewTask = ({
         </Modal.Header>
 
         <Modal.Body>
-          <div className="title">Task Name</div>
+          <div className="title">Create New Task</div>
           <div className="input-container">
             <input
               value={titleTask}
