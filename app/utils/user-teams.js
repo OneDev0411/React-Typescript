@@ -26,7 +26,7 @@ export function getActiveTeamId(user) {
   return cookie.get(ACTIVE_TEAM_COOKIE) || user.brand
 }
 
-export function changeActiveTeam(id) {
+export function setActiveTeam(id) {
   cookie.set(ACTIVE_TEAM_COOKIE, id, {
     path: '/',
     expires: 360

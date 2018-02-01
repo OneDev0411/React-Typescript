@@ -1,9 +1,6 @@
 import React, { Fragment } from 'react'
 import cn from 'classnames'
-import {
-  getActiveTeamId,
-  changeActiveTeam
-} from '../../../../../../utils/user-teams'
+import { getActiveTeamId, setActiveTeam } from '../../../../../../utils/user-teams'
 import flattenBrand from '../../../../../../utils/flatten-brand'
 import Avatar from '../../../../../Partials/UserAvatar'
 
@@ -45,7 +42,7 @@ export default class extends React.Component {
     }
 
     this.setState({ savingTeam: team.brand.id })
-    changeActiveTeam(team.brand.id)
+    setActiveTeam(team.brand.id)
     window.location.reload(true)
   }
 
