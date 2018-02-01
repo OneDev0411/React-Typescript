@@ -13,9 +13,18 @@ export function getActiveTeam(user) {
 }
 
 export function getActiveTeamACL(user) {
-  const team = getActiveTeam(user)
+  // const team = getActiveTeam(user)
+  // return team && team.acl ? team.acl : []
 
-  return team && team.acl ? team.acl : []
+  const { roles } = user
+
+  if (!roles || !user.brand) {
+    return []
+  }
+
+  const role = roles.find(role => role.brand === user.brand)
+
+  return role && role.acl ? role.acl : []
 }
 
 export function hasUserAccess(user, action) {
