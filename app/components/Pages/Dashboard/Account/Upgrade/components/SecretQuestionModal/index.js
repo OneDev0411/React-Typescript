@@ -107,8 +107,8 @@ const secretQuestionModal = ({
         <div style={{ textAlign: 'right' }}>
           <button
             onClick={() => {
-              onHide()
               setConfirmError(false)
+              onHide()
             }}
             disabled={isConfirming}
             style={{ display: 'inline-block' }}
