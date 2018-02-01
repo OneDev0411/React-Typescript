@@ -3,27 +3,30 @@ import { connect } from 'react-redux'
 import config from '../../../../../../../config/public'
 
 /**
-* open login-to-docusign popup
+ * open login-to-docusign popup
  */
 function loginToDocusign(user, onAuthorize) {
   const token = user.access_token
-  const login = window.open(`${config.app.url}/api/deals/docusign/login?access_token=${token}`,
-    'sharer', 'toolbar=0,status=0,width=548,height=325')
+  const login = window.open(
+    `${config.app.url}/api/deals/docusign/login?access_token=${token}`,
+    'sharer',
+    'toolbar=0,status=0,width=548,height=325'
+  )
 
-  window.addEventListener('message', (event) => {
-    login.close()
+  window.addEventListener(
+    'message',
+    () => {
+      login.close()
 
-    setTimeout(() => {
-      onAuthorize()
-    }, 200)
-  }, false)
+      setTimeout(() => {
+        onAuthorize()
+      }, 200)
+    },
+    false
+  )
 }
 
-export default ({
-  user,
-  show,
-  onAuthorize
-}) => {
+export default ({ user, show, onAuthorize }) => {
   if (!show) {
     return false
   }
@@ -31,17 +34,13 @@ export default ({
   return (
     <div className="deal-esign-docusign">
       For electronic signatures you need to log into your Docusign account
-
       <button
         className="btn-login"
         onClick={() => loginToDocusign(user, onAuthorize)}
       >
         Login
       </button>
-
-      <img
-        src="/static/images/deals/docusign.png"
-      />
+      <img src="/static/images/deals/docusign.png" />
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Modal } from 'react-bootstrap'
-import Roles from '../dashboard/roles'
 import RoleForm from '../dashboard/roles/form'
 import RoleItem from './role-item'
 import UserAvatar from '../../../../Partials/UserAvatar'
