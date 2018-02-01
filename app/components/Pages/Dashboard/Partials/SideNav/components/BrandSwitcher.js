@@ -53,7 +53,7 @@ export default class extends React.Component {
     const { user } = this.props
     const { savingBrand } = this.state
 
-    if (!user.brands || user.brands.length === 1) {
+    if (!user.brands || user.brands.length <= 1) {
       return false
     }
 
