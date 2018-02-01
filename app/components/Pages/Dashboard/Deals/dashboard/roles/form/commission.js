@@ -106,7 +106,7 @@ export default class Commission extends React.Component {
           <input
             name="commission"
             type="number"
-            placeholder={`Commission ${isRequired && '*'}`}
+            placeholder={`Enter commission for this agent ${isRequired && '*'}`}
             value={this.getCommissionValue()}
             onChange={e => this.setCommission(e.target.value)}
           />
