@@ -1,19 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
-import { Link, browerHistory } from 'react-router'
+import { Link } from 'react-router'
 import { Dropdown } from 'react-bootstrap'
 import Avatar from './components/Avatar'
 import Intercom from '../Intercom'
 import IntercomTrigger from '../IntercomTrigger'
-import { activeIntercom } from '../../../../../store_actions/intercom'
-
+import TeamSwitcher from './components/TeamSwitcher'
 import Brand from '../../../../../controllers/Brand'
 
 // utils
-import { hasUserAccess, getUserRoles } from '../../../../../utils/user-acl'
+import { getActiveTeamACL } from '../../../../../utils/user-teams'
 
 // chatroom stuff
 import Inbox from '../../Chatroom/Shared/instant-trigger'
@@ -22,7 +18,7 @@ import Inbox from '../../Chatroom/Shared/instant-trigger'
 import DealsNotifications from '../../Deals/components/SideNavBadge'
 
 const ACTIVE_COLOR = `#${Brand.color('primary', '3388ff')}`
-const DEFAULT_COLOR = '#8da2b5'
+// const DEFAULT_COLOR = '#8da2b5'
 
 const getActivePath = path => {
   const checkPath = filter => (path.match(filter) || {}).input
@@ -53,14 +49,11 @@ const SideNavItem = ({ children, isActive }) => (
   </li>
 )
 
-const appSideNav = ({
-  user,
-  activePath,
-  appNotifications
-}) => {
-  const roles = getUserRoles(user)
-  const hasDealsPermission = roles.includes('Deals')
-  const hasBackOfficePermission = roles.includes('BackOffice')
+const appSideNav = ({ user, activePath, appNotifications }) => {
+  const acl = getActiveTeamACL(user)
+
+  const hasDealsPermission = acl.includes('Deals')
+  const hasBackOfficePermission = acl.includes('BackOffice')
 
   return (
     <aside className="c-app-sidenav">
@@ -114,10 +107,7 @@ const appSideNav = ({
         </SideNavItem>
 
         <IntercomTrigger
-          render={({
-            activeIntercom,
-            intercomIsActive
-          }) => (
+          render={({ activeIntercom, intercomIsActive }) => (
             <SideNavItem isActive={intercomIsActive}>
               <button
                 onClick={!intercomIsActive ? activeIntercom : () => false}
@@ -137,10 +127,16 @@ const appSideNav = ({
           <Dropdown.Toggle className="c-app-sidenav__item__title--button">
             <Avatar user={user} size={30} />
           </Dropdown.Toggle>
+
           <Dropdown.Menu>
+            <TeamSwitcher user={user} />
+
+            <li className="separator">Settings</li>
+
             <li>
               <Link to="/dashboard/account">Account</Link>
             </li>
+
             {hasBackOfficePermission && (
               <li>
                 <Link to="/dashboard/brands">Brands</Link>
@@ -155,7 +151,7 @@ const appSideNav = ({
             <li>
               <a
                 href="/signout"
-                onClick={event => {
+                onClick={() => {
                   window.localStorage.removeItem('verificationBanner')
                 }}
               >

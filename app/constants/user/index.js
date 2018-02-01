@@ -1,4 +1,5 @@
 export const UPDATE_USER = 'UPDATE_USER'
+export const SET_USER_TEAMS = 'SET_USER_TEAMS'
 
 export const EDIT_USER_REQUEST = 'EDIT_USER_REQUEST'
 export const EDIT_USER_SUCCESS = 'EDIT_USER_SUCCESS'

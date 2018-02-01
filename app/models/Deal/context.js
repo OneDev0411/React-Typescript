@@ -25,11 +25,10 @@ export async function getContexts(user = {}) {
 /**
  * update deal context
  */
-export async function updateContext(dealId, context, approved) {
+export async function updateContext(dealId, context) {
   try {
     const response = await new Fetch().post(`/deals/${dealId}/context`).send({
-      context,
-      approved
+      context
     })
 
     return response.body.data

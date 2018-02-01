@@ -14,13 +14,11 @@ function initialUserStates(action) {
 function updateUserState(state, action) {
   return {
     ...state,
-    ...{ [action.userId]: {
+    [action.userId]: {
       ...state[action.userId],
-      ...{
-        state: action.state,
-        last_seen_at: action.state === 'Offline' ? moment().format('X') : null
-      }
-    } }
+      state: action.state,
+      last_seen_at: action.state === 'Offline' ? moment().format('X') : null
+    }
   }
 }
 

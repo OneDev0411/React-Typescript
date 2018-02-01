@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { getDeals, getAgents, getContexts } from '../../../../store_actions/deals'
-import { hasUserAccess } from '../../../../utils/user-acl'
+import { hasUserAccess } from '../../../../utils/user-teams'
 import DealsError from './error'
 
 class DealsContainer extends React.Component {
@@ -35,9 +35,7 @@ class DealsContainer extends React.Component {
   }
 
   render() {
-    const {
-      deals, contexts, user, error
-    } = this.props
+    const { deals, contexts, error } = this.props
 
     return (
       <div className="deals">

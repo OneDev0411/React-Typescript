@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { batchActions } from 'redux-batched-actions'
 import { connect } from 'react-redux'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
@@ -11,13 +12,16 @@ import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
 import DealSocket from './Pages/Dashboard/Deals/services/socket'
 
 // utils
-import { hasUserAccess } from '../utils/user-acl'
+import { hasUserAccess } from '../utils/user-teams'
 
 // navs
 import SideNav from './Pages/Dashboard/Partials/SideNav'
 
 // global chat components
 import { getRooms } from '../store_actions/chatroom'
+
+// get user roles
+import getTeams from '../store_actions/user/teams'
 
 // deals featch on launch
 import { getDeals } from '../store_actions/deals'
@@ -68,6 +72,10 @@ class App extends Component {
     }
 
     if (user) {
+      if (!user.teams) {
+        dispatch(getTeams())
+      }
+
       // load rooms
       this.initialRooms()
 
@@ -105,7 +113,14 @@ class App extends Component {
   static async fetchData(dispatch, params) {
     const { user } = params
 
-    return dispatch(getRooms(user))
+    if (!user) {
+      return Promise.resolve()
+    }
+
+    return batchActions([
+      await dispatch(getTeams(user)),
+      await dispatch(getRooms(user))
+    ])
   }
 
   _getBrand() {

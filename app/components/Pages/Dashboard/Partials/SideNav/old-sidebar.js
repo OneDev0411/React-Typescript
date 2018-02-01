@@ -19,7 +19,7 @@ import Brand from '../../../../../controllers/Brand'
 import Avatar from './components/Avatar'
 
 // utils
-import { hasUserAccess, getUserRoles } from '../../../../../utils/user-acl'
+import { hasUserAccess, getUserRoles } from '../../../../../utils/user-teams'
 
 // chatroom stuff
 import InstantChatTrigger from '../../Chatroom/Shared/instant-trigger'

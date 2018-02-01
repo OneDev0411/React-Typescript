@@ -84,7 +84,10 @@ class ListingCard extends React.Component {
     })
 
     address.use_manual_address = true
-    await this.props.updateContext(deal.id, address.address_components, true)
+    await this.props.updateContext(deal.id, {
+      value: address.address_components,
+      approved: true
+    })
 
     this.setState({
       isSavingAddress: false

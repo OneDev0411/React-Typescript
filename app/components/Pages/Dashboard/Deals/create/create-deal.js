@@ -21,10 +21,8 @@ import Alert from '../../Partials/Alert'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import {
   createDeal,
-  createRoles,
   closeEsignWizard,
-  setSelectedTask,
-  updateContext
+  setSelectedTask
 } from '../../../../../store_actions/deals'
 import OpenDeal from '../utils/open-deal'
 
@@ -204,12 +202,9 @@ class CreateDeal extends React.Component {
       dealPropertyType,
       dealAddress,
       dealStatus,
-      enderType,
-      submitError
+      enderType
     } = this.state
-    const {
-      user, notify, createDeal, createRoles, updateContext
-    } = this.props
+    const { user, createDeal } = this.props
     const isBuyingDeal = dealSide === 'Buying'
 
     const dealObject = {
@@ -485,17 +480,15 @@ class CreateDeal extends React.Component {
 }
 
 export default connect(
-  ({ deals, user }) => ({
+  ({ user }) => ({
     user,
     confirmation
   }),
   {
     confirmation,
     createDeal,
-    createRoles,
     closeEsignWizard,
     setSelectedTask,
-    updateContext,
     notify
   }
 )(CreateDeal)

@@ -19,7 +19,6 @@ export default class Editable extends React.Component {
 
   onFinishEditing(value = null) {
     const { field, onChange } = this.props
-    const { error } = this.state
 
     let fieldValue = value
 
