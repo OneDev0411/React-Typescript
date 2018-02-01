@@ -39,6 +39,7 @@ class Roles extends React.Component {
         legal_prefix: item.legal_prefix,
         legal_first_name: item.legal_first_name,
         legal_last_name: item.legal_last_name,
+        legal_middle_name: item.legal_middle_name,
         email: item.email,
         role: item.role
       })
