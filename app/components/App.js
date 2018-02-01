@@ -113,6 +113,10 @@ class App extends Component {
   static async fetchData(dispatch, params) {
     const { user } = params
 
+    if (!user) {
+      return Promise.resolve()
+    }
+
     return batchActions([
       await dispatch(getUserBrands(user)),
       await dispatch(getRooms(user))
