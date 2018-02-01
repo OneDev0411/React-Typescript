@@ -15,7 +15,7 @@ export function getActiveTeam(user) {
 export function getActiveTeamACL(user) {
   const team = getActiveTeam(user)
 
-  return team ? team.acl : []
+  return team && team.acl ? team.acl : []
 }
 
 export function hasUserAccess(user, action) {
