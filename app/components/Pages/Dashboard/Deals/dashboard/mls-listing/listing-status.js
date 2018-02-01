@@ -34,14 +34,18 @@ class ListingStatus extends React.Component {
 
   async updateStatus(status) {
     const { deal, isBackOffice, updateContext } = this.props
-    const editable = isBackOffice === true
 
     // set state
     this.setState({ saving: true })
 
-    await updateContext(deal.id, { listing_status: status }, editable)
+    await updateContext(deal.id, {
+      listing_status: {
+        value: status,
+        approved: isBackOffice
+      }
+    })
 
-    if (editable === false) {
+    if (!isBackOffice === false) {
       await this.notifyAdmin(status)
     }
 

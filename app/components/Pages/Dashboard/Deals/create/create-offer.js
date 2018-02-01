@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
+import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 import Navbar from './nav'
 import OfferType from './offer-type'
@@ -189,7 +190,7 @@ class CreateOffer extends React.Component {
 
   async createOffer() {
     const {
-      deal, notify, createOffer, createRoles, updateContext
+      deal, notify, createOffer, createRoles
     } = this.props
     const {
       enderType, dealStatus, contexts, clients
@@ -217,15 +218,11 @@ class CreateOffer extends React.Component {
         await createRoles(deal.id, this.getAllRoles())
 
         // create/update contexts
-        await updateContext(
-          deal.id,
-          {
-            ...contexts,
-            listing_status: dealStatus,
-            ender_type: enderType
-          },
-          true
-        )
+        await this.saveContexts({
+          ...contexts,
+          listing_status: dealStatus,
+          ender_type: enderType
+        })
       }
 
       notify({
@@ -247,6 +244,23 @@ class CreateOffer extends React.Component {
     }
 
     this.setState({ saving: false })
+  }
+
+  async saveContexts(contexts) {
+    const { deal, updateContext } = this.props
+
+    const contextsObject = {}
+
+    _.each(contexts, (value, name) => {
+      const field = Deal.get.context(deal, name)
+
+      contextsObject[name] = {
+        value,
+        approved: field ? field.approved_at !== null : false
+      }
+    })
+
+    return updateContext(deal.id, contextsObject)
   }
 
   getMaxOrder() {

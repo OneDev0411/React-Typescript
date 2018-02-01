@@ -24,12 +24,17 @@ class Table extends React.Component {
   }
 
   async updateField(field, value) {
-    const { deal, isBackOffice, updateContext } = this.props
+    const { deal, updateContext } = this.props
 
     // set state
     this.setState({ saving: field.name })
 
-    await updateContext(deal.id, { [field.name]: value }, field.needs_approval)
+    await updateContext(deal.id, {
+      [field.name]: {
+        value,
+        approved: field.needs_approval
+      }
+    })
 
     // set state
     this.setState({ saving: null })
