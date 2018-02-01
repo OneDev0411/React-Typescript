@@ -24,10 +24,10 @@ export default class extends React.Component {
     }
 
     if (deal.listing) {
-      return deal.mls_context[field]
+      return deal.mls_context[field] || ''
     }
 
-    return Deal.get.field(deal, field)
+    return Deal.get.field(deal, field) || ''
   }
 
   onAdd() {
