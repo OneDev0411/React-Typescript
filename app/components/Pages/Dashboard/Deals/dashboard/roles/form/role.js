@@ -1,19 +1,19 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { Dropdown, MenuItem } from 'react-bootstrap'
 import roleNames from '../../../utils/roles'
 
-const Role = ({
-  deal, form, role_names, isAllowed, onChange, selectedRole
-}) => {
-  if (selectedRole) {
-    if (
-      (deal.deal_type === 'Buying' && selectedRole.role === 'BuyerAgent') ||
-      (deal.deal_type === 'Selling' && selectedRole.role === 'SellerAgent')
-    ) {
-      return false
-    }
-  }
+function Role({
+  form, role_names, isAllowed, onChange
+}) {
+  // Todo: dead code
+  // if (selectedRole) {
+  //   if (
+  //     (deal.deal_type === 'Buying' && selectedRole.role === 'BuyerAgent') ||
+  //     (deal.deal_type === 'Selling' && selectedRole.role === 'SellerAgent')
+  //   ) {
+  //     return false
+  //   }
+  // }
 
   return (
     <div>
@@ -51,6 +51,4 @@ const Role = ({
   )
 }
 
-export default connect(({ deals }) => ({
-  selectedRole: deals.selectedRole
-}))(Role)
+export default Role
