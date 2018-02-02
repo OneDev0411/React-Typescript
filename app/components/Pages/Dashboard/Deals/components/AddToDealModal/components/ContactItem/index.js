@@ -34,6 +34,7 @@ function ContactItem(props) {
     phone_number, legal_full_name, email, display_name
   } = user
   const title = legal_full_name || display_name
+  const summary = [email, phone_number].filter(i => i).join(', ')
 
   return (
     <Container {...props} onClick={() => onClickHandler(user)}>
@@ -42,10 +43,7 @@ function ContactItem(props) {
       </div>
       <div style={{ paddingLeft: '2rem', height: '32px' }}>
         <Title>{title}</Title>
-        <div style={{ color: '#8696a4' }}>
-          <span>{email}</span>
-          {phone_number && <span>{`, ${phone_number}`}</span>}
-        </div>
+        <div style={{ color: '#8696a4' }}>{summary}</div>
       </div>
     </Container>
   )
