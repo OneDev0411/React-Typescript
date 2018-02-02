@@ -39,7 +39,10 @@ class ImportCSV extends React.Component {
                 Import CSV from Outlook
                 <div className="import-dropdown--item--icons">
                   <OutlookIcon />
-                  <i class="fa fa-chevron-right right--icon" aria-hidden="true" />
+                  <i
+                    className="fa fa-chevron-right right--icon"
+                    aria-hidden="true"
+                  />
                 </div>
               </MenuItem>
               <MenuItem divider className="import-dropdown--divider" />
@@ -55,7 +58,10 @@ class ImportCSV extends React.Component {
                 Import CSV from Google
                 <div className="import-dropdown--item--icons">
                   <GoogleIcon />
-                  <i class="fa fa-chevron-right right--icon" aria-hidden="true" />
+                  <i
+                    className="fa fa-chevron-right right--icon"
+                    aria-hidden="true"
+                  />
                 </div>
               </MenuItem>
             </Dropdown.Menu>

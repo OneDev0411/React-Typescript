@@ -75,8 +75,6 @@ const ModalNewTask = ({
   const taskTypes = ['Form', 'Generic']
   const formValid = titleTask && taskType && /[1-9]/g.test(order)
 
-  console.log(titleTask, taskType, order)
-
   return (
     <div style={{ display: inline ? 'inline' : 'block' }}>
       <TriggerButton
