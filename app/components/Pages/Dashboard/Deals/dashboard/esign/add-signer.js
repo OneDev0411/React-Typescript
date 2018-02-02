@@ -3,11 +3,7 @@ import { Modal } from 'react-bootstrap'
 import Roles from '../roles'
 
 export default ({
-  show,
-  deal,
-  onHide,
-  allowedRoles,
-  onAddRecipient
+  show, deal, onHide, allowedRoles, onAddRecipient
 }) => (
   <Modal
     show={show}
@@ -15,16 +11,15 @@ export default ({
     dialogClassName="modal-deal-esign-add-signer"
     backdrop="static"
   >
-    <Modal.Header closeButton>
-      Add a signer
-    </Modal.Header>
+    <Modal.Header closeButton>Add a signer</Modal.Header>
 
     <Modal.Body>
       <Roles
         deal={deal}
-        allowedRoles={allowedRoles}
-        onSelectRole={role => onAddRecipient(role)}
+        isRequiredEmail
         allowDeleteRole={false}
+        allowedRoles={allowedRoles}
+        onSelect={role => onAddRecipient(role)}
       />
     </Modal.Body>
   </Modal>
