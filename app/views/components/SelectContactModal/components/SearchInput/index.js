@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import SearchIcon from '../../../../../../../../views/components/SvgIcons/SearchIcon'
+import SearchIcon from '../../../SvgIcons/SearchIcon'
 
 const Input = styled.input`
   width: 100%;

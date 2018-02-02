@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Avatar from '../../../../../../../../views/components/Avatar/index'
-import { extractUserInfoFromContact } from '../../../../../../../../models/Contact'
+import Avatar from '../../../Avatar/index'
+import { extractUserInfoFromContact } from '../../../../../models/Contact'
 
 const Container = styled.div`
   height: 48px;

@@ -1,8 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import AddToDealModal from '../../components/AddToDealModal'
+import SelectContactModal from '../../../../../../views/components/SelectContactModal'
 import AddRoleModal from './AddRoleModal'
-import { getContactsList } from '../../../../../../reducers/contacts/list'
 
 const initialState = {
   fakeRole: null,
@@ -52,7 +50,7 @@ class UpsertRole extends React.Component {
 
   render() {
     const { fakeRole, showAddRoleModal, showAddToDealModal } = this.state
-    const { deal, allowedRoles, contactsList } = this.props
+    const { deal, allowedRoles } = this.props
 
     return (
       <div>
@@ -64,9 +62,9 @@ class UpsertRole extends React.Component {
           </div>
         </div>
 
-        <AddToDealModal
+        <SelectContactModal
+          title="Add to Deal"
           isOpen={showAddToDealModal}
-          contactsList={contactsList}
           addManuallyHandler={this.showAddRoleModal}
           closeHandler={this.handleCloseAddToDealModal}
           selectedItemHandler={this.addRoleWithExistingContactHandler}
@@ -84,12 +82,4 @@ class UpsertRole extends React.Component {
   }
 }
 
-function mapToProps({ contacts }) {
-  const contactsList = getContactsList(contacts)
-
-  return {
-    contactsList
-  }
-}
-
-export default connect(mapToProps)(UpsertRole)
+export default UpsertRole

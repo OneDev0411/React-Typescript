@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Downshift from 'downshift'
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
-import { extractUserInfoFromContact } from '../../../../../../../../models/Contact'
+import { extractUserInfoFromContact } from '../../../../../models/Contact'
 
 const ContactsListContainer = styled.div`
   position: relative;
