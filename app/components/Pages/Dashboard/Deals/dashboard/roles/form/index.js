@@ -1,14 +1,13 @@
 import React from 'react'
 import _ from 'underscore'
-import { Dropdown, MenuItem } from 'react-bootstrap'
-import Title from './title'
 import Name from './name'
 import Role from './role'
+import Title from './title'
 import Company from './company'
 import Commission from './commission'
 import InputWithSelect from './InputWithSelect'
 
-const role_names = [
+const ROLE_NAMES = [
   'BuyerAgent',
   'BuyerReferral',
   'CoBuyerAgent',
@@ -33,39 +32,61 @@ export default class Form extends React.Component {
 
     const form = props.form || {}
 
-    form.isNewRecord = typeof form.id === 'undefined'
+    const isNewRecord = typeof form.role === 'undefined'
+
+    // console.log('isNewRecord', isNewRecord, form)
 
     this.state = {
-      invalidFields: [],
-      form
+      form,
+      isNewRecord,
+      invalidFields: []
     }
 
     // this.validate = _.debounce(this.validate, 200)
   }
 
   componentDidMount() {
-    const { form } = this.state
+    const { form, isNewRecord } = this.state
 
-    this.preselectRoles()
-
-    if (form.isNewRecord) {
+    if (isNewRecord) {
       Object.keys(form).forEach(field => {
         this.validate(field, form[field])
       })
+
+      return
     }
+
+    this.preselectRoles()
+  }
+
+  /**
+   * check role type is allowed to select or not
+   */
+  isAllowedRole = name => {
+    const { deal, allowedRoles } = this.props
+    const { form, isNewRecord } = this.state
+
+    const dealType = deal ? deal.deal_type : null
+
+    if (
+      (name === 'BuyerAgent' && dealType === 'Buying') ||
+      (name === 'SellerAgent' && dealType === 'Selling')
+    ) {
+      return false
+    }
+
+    if (!allowedRoles || (!isNewRecord && form.role === name)) {
+      return true
+    }
+
+    return allowedRoles.includes(name)
   }
 
   /**
    * preselect role, if there is any
    */
-  preselectRoles() {
-    const { form } = this.state
-
-    if (form.isNewRecord === false && form.role) {
-      return false
-    }
-
-    const availableRoles = role_names.filter(name => this.isAllowedRole(name))
+  preselectRoles = () => {
+    const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
     const preselectedRole = availableRoles.length === 1 && availableRoles[0]
 
     if (preselectedRole) {
@@ -107,16 +128,14 @@ export default class Form extends React.Component {
   /**
    * validate phone number
    */
-  async isValidPhone(phone) {
+  async isValidPhoneNumber(phoneNumber) {
     const {
       PhoneNumberUtil
     } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
     const phoneUtil = PhoneNumberUtil.getInstance()
 
     try {
-      let phoneNumber = phoneUtil.parse(phone, 'US')
-
-      return phoneUtil.isValidNumber(phoneNumber)
+      return phoneUtil.isValidNumber(phoneUtil.parse(phoneNumber, 'US'))
     } catch (e) {
       return false
     }
@@ -137,29 +156,6 @@ export default class Form extends React.Component {
 
   isValidName(name) {
     return name && name.trim().length > 0 && new RegExp(/^[A-Za-z\s]+$/).exec(name)
-  }
-
-  /**
-   * check role type is allowed to select or not
-   */
-  isAllowedRole(name) {
-    const { deal, allowedRoles } = this.props
-    const { form } = this.state
-
-    const dealType = deal ? deal.deal_type : null
-
-    if (
-      (name === 'BuyerAgent' && dealType === 'Buying') ||
-      (name === 'SellerAgent' && dealType === 'Selling')
-    ) {
-      return false
-    }
-
-    if (!allowedRoles || (!form.isNewRecord && form.role === name)) {
-      return true
-    }
-
-    return allowedRoles.indexOf(name) > -1
   }
 
   /**
@@ -199,7 +195,8 @@ export default class Form extends React.Component {
       legal_last_name: name => this.isValidName(name),
       legal_first_name: name => this.isValidName(name),
       legal_middle_name: name => this.isValidName(name),
-      phone: phone => phone && this.isValidPhone(phone),
+      phone_number: phoneNumber =>
+        phoneNumber && this.isValidPhoneNumber(phoneNumber),
       company_title: name => this.isValidName(name)
     }
 
@@ -280,9 +277,9 @@ export default class Form extends React.Component {
           <Name
             id="middle_name"
             name="middle_name"
+            isRequired={false}
             title="Legal Middle Name"
             placeholder="Legal Middle"
-            isRequired={false}
             value={form.legal_middle_name}
             isInvalid={invalidFields.includes('legal_middle_name')}
             onChange={value => this.setForm('legal_middle_name', value)}
@@ -317,11 +314,11 @@ export default class Form extends React.Component {
           title="Phone"
           errorText="Enter a valid phone"
           placeholder="(###) - ### ####"
-          isInvalid={invalidFields.includes('phone')}
-          onChangeHandler={value => this.setForm('phone', value)}
+          isInvalid={invalidFields.includes('phone_number')}
+          onChangeHandler={value => this.setForm('phone_number', value)}
           items={extractItems({
             data: form,
-            singleName: 'phone',
+            singleName: 'phone_number',
             pluralName: 'phones'
           })}
         />
@@ -329,7 +326,7 @@ export default class Form extends React.Component {
         <Role
           deal={deal}
           form={form}
-          role_names={role_names}
+          role_names={ROLE_NAMES}
           onChange={value => this.setForm('role', value)}
           isAllowed={this.isAllowedRole.bind(this)}
         />

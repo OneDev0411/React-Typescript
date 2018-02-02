@@ -6,53 +6,48 @@ import UpsertRole from './upsert-role'
 import { deleteRole, selectRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import roleName from '../../utils/roles'
+import AddRoleModal from './AddRoleModal'
 
 class Roles extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      deletingRoleId: null
-    }
+  state = {
+    deletingRoleId: null,
+    showAddRoleModal: false
   }
 
-  onClickRole(id) {
-    const {
-      roles, onSelectRole, confirmation, selectRole
-    } = this.props
-    const item = roles[id]
+  setSellectedRole = role => {
+    this.setState({
+      form: role,
+      showAddRoleModal: true
+    })
 
-    if (onSelectRole) {
-      if (!item.email) {
-        return confirmation({
-          message: `${item.legal_first_name} has no email!`,
-          description: `Add ${item.legal_first_name}'s email to continue.`,
-          confirmLabel: 'Add Email',
-          onConfirm: () => selectRole(item)
-        })
-      }
-
-      onSelectRole({
-        id: item.id,
-        legal_prefix: item.legal_prefix,
-        legal_first_name: item.legal_first_name,
-        legal_last_name: item.legal_last_name,
-        legal_middle_name: item.legal_middle_name,
-        email: item.email,
-        role: item.role
-      })
-    } else {
-      selectRole(item)
-    }
+    this.props.selectRole(role)
   }
 
-  getRoleName(role) {
+  getRoleName = role => {
     const name = `${role.legal_prefix || ''} ${role.legal_first_name ||
       ''} ${role.legal_last_name || ''}`.trim()
 
     return role.user ? role.user.display_name : name
   }
 
-  onRequestRemoveRole(e, user) {
+  onClickRole = role => {
+    const { confirmation, isRequiredEmail } = this.props
+
+    if (!role.email && isRequiredEmail) {
+      console.log('salam', role)
+
+      return confirmation({
+        message: `${role.legal_first_name} has no email!`,
+        description: `Add ${role.legal_first_name}'s email to continue.`,
+        confirmLabel: 'Add Email',
+        onConfirm: () => this.setSellectedRole(role)
+      })
+    }
+
+    this.setSellectedRole(role)
+  }
+
+  onRequestRemoveRole = (e, user) => {
     const { deal, confirmation } = this.props
     const { deal_type } = deal
 
@@ -78,7 +73,7 @@ class Roles extends React.Component {
     })
   }
 
-  async removeRole(role) {
+  removeRole = async role => {
     const { deleteRole, notify, deal } = this.props
     const { deletingRoleId } = this.state
 
@@ -93,12 +88,12 @@ class Roles extends React.Component {
     try {
       await deleteRole(deal.id, role.id)
       notify({
-        message: 'Role removed',
+        message: 'The contact removed from this deal.',
         status: 'success'
       })
     } catch (e) {
       notify({
-        message: 'Can not remove role, try again',
+        message: 'Can not remove the contact from this deal, please try again',
         status: 'error'
       })
     } finally {
@@ -108,11 +103,19 @@ class Roles extends React.Component {
     }
   }
 
+  closeAddRoleModal = () => {
+    this.setState({ showAddRoleModal: false })
+  }
+
   render() {
     const {
-      deal, allowedRoles, roles, allowDeleteRole
+      deal,
+      allowedRoles,
+      roles,
+      allowDeleteRole,
+      isRequiredEmail
     } = this.props
-    const { deletingRoleId } = this.state
+    const { deletingRoleId, form, showAddRoleModal } = this.state
 
     return (
       <div className="deal-info-section deal-roles">
@@ -120,41 +123,41 @@ class Roles extends React.Component {
 
         {deal.roles &&
           deal.roles
-            .filter(id =>
-                !allowedRoles ? true : allowedRoles.indexOf(roles[id].role) > -1)
-            .map(id => {
-              const item = roles[id]
+            .filter(roleId => !allowedRoles || allowedRoles.includes(roles[roleId].role))
+            .map(roleId => {
+              const role = roles[roleId]
+              const { id, user } = role
 
               return (
                 <div
-                  key={item.id}
+                  key={id}
                   className="item"
-                  onClick={() => this.onClickRole(item.id)}
+                  onClick={() => this.onClickRole(role)}
                 >
                   <div className="role-avatar">
                     <UserAvatar
-                      name={this.getRoleName(item)}
-                      image={item.user ? item.user.profile_image_url : null}
                       size={32}
                       showStateIndicator={false}
+                      name={this.getRoleName(role)}
+                      image={user ? user.profile_image_url : null}
                     />
                   </div>
 
                   <div className="name">
-                    <div className="title">{this.getRoleName(item)}</div>
-                    <div className="role">{roleName(item.role)}</div>
+                    <div className="title">{this.getRoleName(role)}</div>
+                    <div className="role">{roleName(role.role)}</div>
                   </div>
 
                   {allowDeleteRole && (
                     <div className="cta">
                       {deletingRoleId &&
-                        item.id === deletingRoleId && (
+                        id === deletingRoleId && (
                           <i className="fa fa-spinner fa-spin" />
                         )}
 
                       {!deletingRoleId && (
                         <i
-                          onClick={e => this.onRequestRemoveRole(e, item)}
+                          onClick={e => this.onRequestRemoveRole(e, role)}
                           className="fa fa-delete fa-times"
                         />
                       )}
@@ -163,6 +166,15 @@ class Roles extends React.Component {
                 </div>
               )
             })}
+
+        <AddRoleModal
+          deal={deal}
+          role={form}
+          isOpen={showAddRoleModal}
+          allowedRoles={allowedRoles}
+          isRequiredEmail={isRequiredEmail}
+          closeHandler={this.closeAddRoleModal}
+        />
 
         <UpsertRole deal={deal} allowedRoles={allowedRoles} />
       </div>

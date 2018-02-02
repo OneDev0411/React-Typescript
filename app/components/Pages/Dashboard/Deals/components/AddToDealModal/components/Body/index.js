@@ -42,10 +42,8 @@ class Body extends Component {
     this.onChangeHandler = this.onChangeHandler.bind(this)
   }
 
-  onChangeHandler() {
-    this.setState({
-      items: ['salam']
-    })
+  onChangeHandler = item => {
+    this.props.selectedItemHandler(extractUserInfoFromContact(item))
   }
 
   render() {
@@ -54,6 +52,8 @@ class Body extends Component {
 
     return (
       <Downshift
+        onChange={this.onChangeHandler}
+        itemToString={({ display_name }) => display_name}
         render={({
  getInputProps, getItemProps, inputValue, highlightedIndex
 }) => (
@@ -62,7 +62,6 @@ class Body extends Component {
       <SearchInput
         style={{ marginBottom: '12px' }}
         inputProps={{
-                  onChange: this.onChangeHandler,
                   ...getInputProps({
                     placeholder: 'Enter a keyword for searching in your contacts'
                   })

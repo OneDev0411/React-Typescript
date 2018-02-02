@@ -74,6 +74,7 @@ class InputWithSelect extends Component {
         onChange={this.changeHandler}
         onStateChange={this.stateChangeHandler}
         onInputValueChange={this.handleInputChange}
+        itemToString={item => item}
         render={({
           getInputProps,
           getItemProps,
@@ -93,7 +94,17 @@ class InputWithSelect extends Component {
                 >
                   {title}
                 </label>
-                {isRequired && <sup>*</sup>}
+                {isRequired && (
+                  <sup
+                    style={{
+                      color: 'red',
+                      fontSize: '1.5rem',
+                      verticalAlign: 'sub'
+                    }}
+                  >
+                    *
+                  </sup>
+                )}
                 {isInvalid && <ErrorMessage>{errorText}</ErrorMessage>}
               </div>
               <input
@@ -102,22 +113,23 @@ class InputWithSelect extends Component {
                   style: { width: '100%' }
                 })}
               />
-              {isOpen && (
-                <Options>
-                  {(inputValue ? matchSorter(items, inputValue) : items).map((item, index) => (
-                    <Item
-                      key={item}
-                      {...getItemProps({
-                          item,
-                          isSelected: selectedItem === item,
-                          isActive: highlightedIndex === index
-                        })}
-                    >
-                      {item}
-                    </Item>
-                    ))}
-                </Options>
-              )}
+              {isOpen &&
+                items && (
+                  <Options>
+                    {(inputValue ? matchSorter(items, inputValue) : items).map((item, index) => (
+                      <Item
+                        key={item}
+                        {...getItemProps({
+                            item,
+                            isSelected: selectedItem === item,
+                            isActive: highlightedIndex === index
+                          })}
+                      >
+                        {item}
+                      </Item>
+                      ))}
+                  </Options>
+                )}
             </Container>
           </div>
         )}
