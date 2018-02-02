@@ -304,7 +304,7 @@ export default class Form extends React.Component {
           isInvalid={invalidFields.includes('email')}
           onChangeHandler={value => this.setForm('email', value)}
           items={extractItems({
-            data: form,
+            form,
             singleName: 'email',
             pluralName: 'emails'
           })}
@@ -317,7 +317,7 @@ export default class Form extends React.Component {
           isInvalid={invalidFields.includes('phone_number')}
           onChangeHandler={value => this.setForm('phone_number', value)}
           items={extractItems({
-            data: form,
+            form,
             singleName: 'phone_number',
             pluralName: 'phones'
           })}
@@ -348,12 +348,22 @@ export default class Form extends React.Component {
   }
 }
 
-function extractItems({ data, singleName, pluralName }) {
-  const pluralValue = data[pluralName]
+function extractItems({ form = {}, singleName, pluralName }) {
+  if (Object.keys(form).length === 0) {
+    return []
+  }
+
+  const pluralValue = form[pluralName]
 
   if (pluralValue && Array.isArray(pluralValue)) {
     return pluralValue.map(item => item[singleName])
   }
 
-  return [data[singleName]]
+  const singleValue = form[singleName]
+
+  if (singleValue) {
+    return [singleValue]
+  }
+
+  return []
 }
