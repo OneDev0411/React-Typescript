@@ -62,6 +62,8 @@ class InputWithSelect extends Component {
     this.setState({ selectedItem })
   }
 
+  handleItemToString = item => (typeof item !== 'string' ? '' : item)
+
   render() {
     const {
       isRequired, isInvalid, title, errorText, placeholder
@@ -72,9 +74,9 @@ class InputWithSelect extends Component {
       <Downshift
         selectedItem={selectedItem}
         onChange={this.changeHandler}
+        itemToString={this.handleItemToString}
         onStateChange={this.stateChangeHandler}
         onInputValueChange={this.handleInputChange}
-        itemToString={item => item}
         render={({
           getInputProps,
           getItemProps,
