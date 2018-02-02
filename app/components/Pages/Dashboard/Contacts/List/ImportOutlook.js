@@ -28,7 +28,7 @@ class ImportOutlook extends React.Component {
     if (nextProps.importOutlook.done) {
       this.props.getContacts()
       this.props.removeImportResult()
-      this.loginWindows.close()
+      this.loginWindows && this.loginWindows.close()
       this.setState({
         showLoading: false
       })

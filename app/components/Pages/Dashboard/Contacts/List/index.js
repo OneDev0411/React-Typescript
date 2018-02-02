@@ -146,8 +146,6 @@ class ContactsList extends React.Component {
       this.applyFilters(contact)
     )
 
-    console.log(user.id)
-
     if (_.size(contacts) === 0) {
       return (
         <div className="list">
