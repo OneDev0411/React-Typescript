@@ -1,4 +1,5 @@
 import Fetch from '../../services/fetch'
+import { getActiveTeamId } from '../../utils/user-teams'
 
 /**
  * Search through all deals
@@ -35,22 +36,24 @@ export async function getById(id) {
  */
 export async function getAll(user = {}, backoffice = false) {
   const { access_token } = user
+  const brandId = getActiveTeamId(user)
+
   let endpoint
   let params
 
-  if (!user.brand) {
+  if (!brandId) {
     throw new Error('This user does not belong to any brand')
   }
 
   // backoffice and agent has different endpoints and associations
   if (backoffice) {
-    endpoint = `/brands/${user.brand}/deals/inbox`
+    endpoint = `/brands/${brandId}/deals/inbox`
     params = 'associations[]=deal.brand&'
     params += 'associations[]=deal.created_by&'
     params += 'associations[]=review.updated_by&'
     params += 'associations[]=deal.new_notifications'
   } else {
-    endpoint = `/brands/${user.brand}/deals`
+    endpoint = `/brands/${brandId}/deals`
     params = 'deleted=true&'
     params += 'associations[]=agent.office&'
     params += 'associations[]=deal.new_notifications'

@@ -2,12 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import ToolTip from '../../components/tooltip'
+import { create } from 'domain'
 
-const TaskStatus = ({
-  task,
-  noTip,
-  isBackoffice
-}) => {
+const TaskStatus = ({ task, noTip, isBackoffice }) => {
   const { review } = task
   let status = null
   let reviewTime = null
@@ -15,7 +12,10 @@ const TaskStatus = ({
 
   if (review) {
     status = review.status
-    reviewTime = moment.unix(review.created_at).format('MMMM DD, YY [at] HH:mm')
+
+    const { created_at } = review
+
+    reviewTime = moment.unix(created_at).format('MMMM DD, YY [at] hh:mm A')
     tooltip = `Status: (${status}, ${reviewTime})`
   }
 
@@ -32,15 +32,8 @@ const TaskStatus = ({
   }
 
   return (
-    <ToolTip
-      caption={!noTip && tooltip}
-      placement="bottom"
-    >
-      <span
-        className={`status ${status}`}
-      >
-        { status.toUpperCase() }
-      </span>
+    <ToolTip caption={!noTip && tooltip} placement="bottom">
+      <span className={`status ${status}`}>{status.toUpperCase()}</span>
     </ToolTip>
   )
 }

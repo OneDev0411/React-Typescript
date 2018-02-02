@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { batchActions } from 'redux-batched-actions'
 import { connect } from 'react-redux'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
