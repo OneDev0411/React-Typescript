@@ -186,6 +186,10 @@ class BaseTable extends React.Component {
       const value = cells[f].getValue(deal)
       const criteria = _.find(filters, (value, name) => name.includes(f))
 
+      if (!criteria) {
+        return matched
+      }
+
       if (_.isFunction(criteria)) {
         matched = criteria(value, deal)
       } else if (_.isBoolean(criteria)) {

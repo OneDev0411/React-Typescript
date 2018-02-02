@@ -237,7 +237,10 @@ class CreateDeal extends React.Component {
 
     try {
       // create deal
-      const deal = await Deal.create(user, dealObject)
+      const deal = await Deal.create(user, {
+        ...dealObject,
+        deal_context: this.createContextsObject(dealObject.deal_context)
+      })
 
       // dispatch new deal
       await createDeal(deal)
@@ -250,6 +253,19 @@ class CreateDeal extends React.Component {
         submitError: true
       })
     }
+  }
+
+  /**
+   * create context object
+   */
+  createContextsObject(contexts) {
+    const contextsObject = {}
+
+    _.each(contexts, (value, name) => {
+      contextsObject[name] = { value, approved: false }
+    })
+
+    return contextsObject
   }
 
   /**

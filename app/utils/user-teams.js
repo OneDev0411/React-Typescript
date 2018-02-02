@@ -23,7 +23,7 @@ export function hasUserAccess(user, action) {
 }
 
 export function getActiveTeamId(user) {
-  return cookie.get(ACTIVE_TEAM_COOKIE) || user.brand
+  return cookie.get(ACTIVE_TEAM_COOKIE) || user.activeTeam || user.brand
 }
 
 export function setActiveTeam(id) {

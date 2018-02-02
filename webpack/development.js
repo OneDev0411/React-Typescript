@@ -25,8 +25,11 @@ webpackConfig.plugins.push(
     port: 1337 // optional: set a port
   })
   // new webpack.NoEmitOnErrorsPlugin(),
-  // new WebpackNotifierPlugin({ alwaysNotify: true })
 )
+
+if (process.env.notify) {
+  webpackConfig.plugins.push(new WebpackNotifierPlugin({ alwaysNotify: true }))
+}
 
 webpackConfig.module.rules.push(
   {

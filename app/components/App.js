@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { batchActions } from 'redux-batched-actions'
 import { connect } from 'react-redux'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
@@ -117,10 +116,7 @@ class App extends Component {
       return Promise.resolve()
     }
 
-    return batchActions([
-      await dispatch(getTeams(user)),
-      await dispatch(getRooms(user))
-    ])
+    return dispatch(getRooms(user))
   }
 
   _getBrand() {

@@ -2,8 +2,8 @@ import Koa from 'koa'
 import mount from 'koa-mount'
 import serve from 'koa-static'
 import views from 'koa-views'
-import cookie from 'koa-cookie'
 import session from 'koa-session'
+import cookie from 'koa-cookie'
 import path from 'path'
 import webpack from 'webpack'
 import _ from 'underscore'
@@ -59,18 +59,16 @@ app.use(render())
  */
 app.keys = ['r3ch4t@re4ct_rocks!!!']
 
-app.use(
-  session(
-    {
-      key: 'rechat-webapp:session',
-      maxAge: 60 * 86400 * 1000, // 60 days
-      overwrite: true,
-      httpOnly: true,
-      signed: true
-    },
-    app
-  )
-)
+app.use(session(
+  {
+    key: 'rechat-webapp:session',
+    maxAge: 60 * 86400 * 1000, // 60 days
+    overwrite: true,
+    httpOnly: true,
+    signed: true
+  },
+  app
+))
 
 /**
  * middleware for time and initial appStore
@@ -109,14 +107,10 @@ if (__DEV__) {
 
   app.use(mount(publicPath, serve(path.join(entry, publicPath))))
 } else {
-  app.use(
-    mount(
-      serve(path.join(output), {
-        gzip: true,
-        maxage: 86400000
-      })
-    )
-  )
+  app.use(mount(serve(path.join(output), {
+    gzip: true,
+    maxage: 86400000
+  })))
 }
 
 // parse pages
