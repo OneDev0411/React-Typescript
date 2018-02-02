@@ -5,42 +5,49 @@ import RoleForm from '../dashboard/roles/form'
 import RoleItem from './role-item'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import roleName from '../utils/roles'
+import SelectContactModal from '../../../../../views/components/SelectContactModal'
+
+const initialState = {
+  form: null,
+  showFormModal: false,
+  showAgentsModal: false,
+  isFormCompleted: false,
+  showSelectContactModal: false
+}
 
 class CrudRole extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      showFormModal: false,
-      showAgentsModal: false,
-      isFormCompleted: false,
-      form: null
-    }
+  state = initialState
+
+  handlOnHide = () => {
+    this.setState(initialState)
   }
 
-  showModal() {
-    const { teamAgents, shouldPrepopulateAgent } = this.props
-    let showAgentsModal = false
-    let showFormModal = false
+  handleShowModal = () => {
+    const { teamAgents, shouldPrepopulateAgent, role } = this.props
 
-    if (shouldPrepopulateAgent !== true) {
-      return this.setState({
-        showFormModal: true
-      })
+    if (shouldPrepopulateAgent && teamAgents.length > 0) {
+      return this.setState({ showAgentsModal: true })
     }
 
-    if (teamAgents.length >= 1) {
-      showAgentsModal = true
-    } else {
-      showFormModal = true
+    if (role) {
+      return this.setState({ showFormModal: true })
     }
 
-    this.setState({
-      showFormModal,
-      showAgentsModal
+    return this.setState({ showSelectContactModal: true })
+  }
+
+  addRole = () => {
+    const { form } = this.state
+
+    this.props.onUpsertRole({
+      id: new Date().getTime(),
+      ...form
     })
+
+    this.handlOnHide()
   }
 
-  populateForm(user) {
+  populateFormWithAgentData = user => {
     const { agent } = user
 
     const form = {
@@ -55,28 +62,8 @@ class CrudRole extends React.Component {
     this.setState({ form })
   }
 
-  closeModal() {
-    this.setState({
-      showFormModal: false,
-      showAgentsModal: false,
-      isFormCompleted: false,
-      form: null
-    })
-  }
-
-  addRole() {
-    const { form } = this.state
-
-    this.props.onUpsertRole({
-      id: new Date().getTime(),
-      ...form
-    })
-
-    this.closeModal()
-  }
-
-  onSelectRole(user) {
-    this.populateForm(user)
+  onSelectAgent = agent => {
+    this.populateFormWithAgentData(agent)
 
     this.setState({
       showAgentsModal: false,
@@ -84,25 +71,56 @@ class CrudRole extends React.Component {
     })
   }
 
-  onFormChange({ form, isFormCompleted }) {
+  onFormChange = ({ form, isFormCompleted }) => {
     this.setState({
       form,
       isFormCompleted
     })
   }
 
+  handleOpenFormModal = () => {
+    this.setState({
+      showFormModal: true,
+      showAgentsModal: false,
+      showSelectContactModal: false
+    })
+  }
+
+  handleSelectedContact = contact => {
+    const {
+      legal_last_name, legal_first_name, last_name, first_name
+    } = contact
+
+    const form = {
+      ...contact,
+      legal_first_name: legal_first_name || first_name,
+      legal_last_name: legal_last_name || last_name
+    }
+
+    this.setState({ form, showFormModal: true, showSelectContactModal: false })
+  }
+
+  handleOpenSelectContactModal = () => {
+    this.setState({ showSelectContactModal: true })
+  }
+
   render() {
     const {
-      showFormModal, showAgentsModal, isFormCompleted, form
+      form,
+      showFormModal,
+      showAgentsModal,
+      isFormCompleted,
+      showSelectContactModal
     } = this.state
+
     const {
       role,
-      teamAgents,
-      allowedRoles,
-      onRemoveRole,
-      modalTitle,
       ctaTitle,
       buttonText,
+      modalTitle,
+      teamAgents,
+      onRemoveRole,
+      allowedRoles,
       isCommissionRequired
     } = this.props
 
@@ -112,20 +130,31 @@ class CrudRole extends React.Component {
           <RoleItem
             person={role}
             onRemove={onRemoveRole}
-            onClick={() => this.showModal()}
+            onClick={this.handleShowModal}
           />
         ) : (
           <div className="entity-item people new">
-            <span className="add-item" onClick={() => this.showModal()}>
+            <button
+              onClick={this.handleShowModal}
+              className="c-button--shadow add-item"
+            >
               <span className="icon">+</span>
               <span className="text">{ctaTitle}</span>
-            </span>
+            </button>
           </div>
         )}
 
+        <SelectContactModal
+          title="Add to Deal"
+          isOpen={showSelectContactModal}
+          closeHandler={this.handlOnHide}
+          addManuallyHandler={this.handleOpenFormModal}
+          selectedItemHandler={this.handleSelectedContact}
+        />
+
         <Modal
           show={showFormModal}
-          onHide={() => this.closeModal()}
+          onHide={this.handlOnHide}
           dialogClassName="modal-deal-add-role"
           backdrop="static"
         >
@@ -136,9 +165,9 @@ class CrudRole extends React.Component {
           <Modal.Body>
             <RoleForm
               form={role || form}
-              onFormChange={data => this.onFormChange(data)}
               allowedRoles={allowedRoles}
               isCommissionRequired={isCommissionRequired}
+              onFormChange={data => this.onFormChange(data)}
             />
           </Modal.Body>
 
@@ -147,7 +176,7 @@ class CrudRole extends React.Component {
               className={`btn-deal ${!isFormCompleted ? 'disabled' : ''}`}
               bsStyle={!isFormCompleted ? 'link' : 'primary'}
               disabled={!isFormCompleted}
-              onClick={() => this.addRole()}
+              onClick={this.addRole}
             >
               {buttonText || 'Add'}
             </Button>
@@ -155,10 +184,10 @@ class CrudRole extends React.Component {
         </Modal>
 
         <Modal
+          backdrop="static"
           show={showAgentsModal}
           dialogClassName="modal-deal-select-role"
-          onHide={() => this.closeModal()}
-          backdrop="static"
+          onHide={this.handlOnHide}
         >
           <Modal.Header closeButton>Choose primary agent</Modal.Header>
 
@@ -169,7 +198,7 @@ class CrudRole extends React.Component {
                   <div
                     key={user.id}
                     className="item"
-                    onClick={() => this.onSelectRole(user)}
+                    onClick={() => this.onSelectAgent(user)}
                   >
                     <div className="role-avatar">
                       <UserAvatar
