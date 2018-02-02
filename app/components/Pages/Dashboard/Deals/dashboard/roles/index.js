@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import UserAvatar from '../../../../../Partials/UserAvatar'
 import UpsertRole from './upsert-role'
-import { deleteRole, selectRole } from '../../../../../../store_actions/deals'
+import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import roleName from '../../utils/roles'
 import AddRoleModal from './AddRoleModal'
@@ -19,8 +19,6 @@ class Roles extends React.Component {
       form: role,
       showAddRoleModal: true
     })
-
-    this.props.selectRole(role)
   }
 
   getRoleName = role => {
@@ -186,14 +184,17 @@ class Roles extends React.Component {
   }
 }
 
+function mapToProps({ deals }) {
+  const { roles } = deals
+
+  return { roles }
+}
+
 export default connect(
-  ({ deals }) => ({
-    roles: deals.roles
-  }),
+  mapToProps,
   {
     notify,
     deleteRole,
-    selectRole,
     confirmation
   }
 )(Roles)
