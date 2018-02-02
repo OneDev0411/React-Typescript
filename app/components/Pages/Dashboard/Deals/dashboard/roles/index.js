@@ -30,18 +30,22 @@ class Roles extends React.Component {
     return role.user ? role.user.display_name : name
   }
 
-  onClickRole = role => {
-    const { confirmation, isRequiredEmail } = this.props
+  handleOnClick = role => {
+    const { confirmation, isRequiredEmail, onSelect } = this.props
 
     if (!role.email && isRequiredEmail) {
-      console.log('salam', role)
-
       return confirmation({
         message: `${role.legal_first_name} has no email!`,
         description: `Add ${role.legal_first_name}'s email to continue.`,
         confirmLabel: 'Add Email',
         onConfirm: () => this.setSellectedRole(role)
       })
+    }
+
+    if (typeof onSelect === 'function') {
+      onSelect(role)
+
+      return
     }
 
     this.setSellectedRole(role)
@@ -132,7 +136,7 @@ class Roles extends React.Component {
                 <div
                   key={id}
                   className="item"
-                  onClick={() => this.onClickRole(role)}
+                  onClick={() => this.handleOnClick(role)}
                 >
                   <div className="role-avatar">
                     <UserAvatar
