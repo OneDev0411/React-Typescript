@@ -30,8 +30,10 @@ const propTypes = {
 function ContactItem(props) {
   const { item, onClickHandler } = props
   const user = extractUserInfoFromContact(item)
-  const { email, phone } = user
-  const title = getUserTitle(user)
+  const {
+    phone_number, legal_full_name, email, display_name
+  } = user
+  const title = legal_full_name || display_name
 
   return (
     <Container {...props} onClick={() => onClickHandler(user)}>
@@ -42,7 +44,7 @@ function ContactItem(props) {
         <Title>{title}</Title>
         <div style={{ color: '#8696a4' }}>
           <span>{email}</span>
-          {phone && <span>{`, ${phone}`}</span>}
+          {phone_number && <span>{`, ${phone_number}`}</span>}
         </div>
       </div>
     </Container>
@@ -52,13 +54,3 @@ function ContactItem(props) {
 ContactItem.propTypes = propTypes
 
 export default ContactItem
-
-function getUserTitle(user) {
-  const { first_name, last_name, display_name } = user
-
-  if (first_name && last_name) {
-    return `${first_name} ${last_name}`
-  }
-
-  return display_name
-}
