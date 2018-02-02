@@ -1,6 +1,11 @@
 import Socket from '../../../../../services/socket'
 import store from '../../../../../stores'
-import { loginSusseful, importDone } from '../../../../../store_actions/contact'
+
+import {
+  loginSusseful,
+  importDone,
+  importFail
+} from '../../../../../store_actions/contact'
 
 export default class ContactSocket extends Socket {
   constructor(user) {
@@ -13,7 +18,9 @@ export default class ContactSocket extends Socket {
   async bindEvents() {
     const { socket } = window
 
-    socket.on('contact.importDone', () => store.dispatch(loginSusseful()))
-    socket.on('contact.succesfullLogin', () => store.dispatch(importDone()))
+    socket.on('importDone', () => store.dispatch(importDone()))
+
+    socket.on('importSuccesfullLogin', () => store.dispatch(loginSusseful()))
+    socket.on('importFail', () => store.dispatch(importFail()))
   }
 }

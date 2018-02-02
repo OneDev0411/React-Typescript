@@ -32,20 +32,18 @@ class ContactsList extends React.Component {
         ),
         id: 'name',
         accessor: contact => Contact.get.name(contact),
-        Cell: ({ original: contact }) => {
-          return (
-            <div className="name">
-              <Avatar
-                className="avatar"
-                round
-                name={Contact.get.name(contact)}
-                src={Contact.get.avatar(contact)}
-                size={35}
-              />
-              <span className="contact-name">{Contact.get.name(contact)}</span>
-            </div>
-          )
-        }
+        Cell: ({ original: contact }) => (
+          <div className="name">
+            <Avatar
+              className="avatar"
+              round
+              name={Contact.get.name(contact)}
+              src={Contact.get.avatar(contact)}
+              size={35}
+            />
+            <span className="contact-name">{Contact.get.name(contact)}</span>
+          </div>
+        )
       },
       {
         Header: () => (
@@ -115,7 +113,7 @@ class ContactsList extends React.Component {
     let matched = false
     const { filter } = this.state
     let regex = new RegExp(
-      /// First some charater that break the regex are removed
+      // / First reomoving some charater that break the regex
       filter.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'),
       'i'
     )
@@ -125,7 +123,9 @@ class ContactsList extends React.Component {
     }
 
     if (!matched && Object.keys(Contact.get.emails(contact)).length !== 0) {
-      matched = _.some(Contact.get.emails(contact), item => regex.test(item.email))
+      matched = _.some(Contact.get.emails(contact), item =>
+        regex.test(item.email)
+      )
     }
 
     if (!matched && Object.keys(Contact.get.phones(contact)).length !== 0) {
@@ -145,6 +145,8 @@ class ContactsList extends React.Component {
     const filteredContacts = _.filter(contacts, contact =>
       this.applyFilters(contact)
     )
+
+    console.log(user.id)
 
     if (_.size(contacts) === 0) {
       return (
@@ -183,7 +185,6 @@ class ContactsList extends React.Component {
             })}
           />
         )}
-        {/* <ImportResultModal importInfo={importInfo} closeModal={removeImportResult} /> */}
       </div>
     )
   }

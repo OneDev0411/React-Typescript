@@ -1,45 +1,49 @@
 import React from 'react'
-import { Base64 } from 'js-base64'
 import { connect } from 'react-redux'
-import { getContacts } from '../../../../../store_actions/contact'
+import {
+  getContacts,
+  removeImportResult
+} from '../../../../../store_actions/contact'
+import { Tooltip, OverlayTrigger } from 'react-bootstrap'
+import ModalImportLoading from './ModalImportLoading'
+import config from '../../../../../../config/public'
 
 class ImportOutlook extends React.Component {
   constructor(props) {
     super(props)
-
-    const state = {
-      userID: this.props.userId,
-      client: 'web',
-      doneEvent: '<nameOfEventToCallWhenDataIsReady>',
-      authSuccessEvent: '<nameOfEventToCallWhenDataIsReady>',
-      failEvent: '<nameOfEventToCallWhenDataIsReady>',
-      redirectURL: '<urlToRedirectUserWhileFetchingDataFromMSGraph>'
+    this.state = {
+      showLoading: false
     }
-    const stateBase64 = Base64.encodeURI(JSON.stringify(state))
 
-    this.url = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize\
-    ?redirect_uri=http://localhost:3078/ms-auth-redirect\
-    &response_type=code%20id_token\
-    &response_mode=form_post&client_id=a7e6a3a9-db5e-430f-8024-95ecc91b40eb\
-    &state=${stateBase64}\
-    &nonce=XRl0OwU2Ow9ODsCEe5Wrp4LoUEgjSGr3\
-    &scope=profile\
-    %20offline_access%20https://graph.microsoft.com/mail.readwrite\
-    %20https://graph.microsoft.com/calendars.readwrite\
-    %20https://graph.microsoft.com/contacts.readwrite%20openid\
-    &x-client-SKU=passport-azure-ad&x-client-Ver=3.0.9`
+    this.url = `${config.api_url}/authorize-ms-graph\
+?failEvent=importFail\
+&user=${this.props.userId}\
+&doneEvent=importDone\
+&authSuccessEvent=importSuccesfullLogin\
+&client=web`
     this.loginWindows = undefined
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.importOutlook.SuccessfulLogin) {
-      this.loginWindows.close()
-    } else if (nextProps.importOutlook.done) {
+    if (nextProps.importOutlook.done) {
       this.props.getContacts()
+      this.props.removeImportResult()
+      this.loginWindows.close()
+      this.setState({
+        showLoading: false
+      })
+    }
+
+    if (nextProps.importOutlook.failLogin) {
+      this.props.removeImportResult()
+      this.setState({
+        showLoading: false
+      })
     }
   }
+
   render() {
-    return <div />
+    const { showLoading } = this.state
 
     return (
       <div className="secondary-button">
@@ -59,11 +63,15 @@ class ImportOutlook extends React.Component {
                 'myWindow',
                 'width=200,height=100'
               )
+              this.setState({
+                showLoading: true
+              })
             }}
           >
             Import from Outlook
           </button>
         </OverlayTrigger>
+        <ModalImportLoading show={showLoading} />
       </div>
     )
   }
@@ -74,5 +82,5 @@ export default connect(
     importOutlook: contacts.importOutlook,
     user
   }),
-  { getContacts }
+  { getContacts, removeImportResult }
 )(ImportOutlook)

@@ -107,6 +107,9 @@
         button {
           padding: 8px 15px;
           margin-left: 0;
+          &:hover {
+            background-color: #f0f4f7;
+          }
         }
         .info-button {
           border-left: solid 1px #e0e0e0;
