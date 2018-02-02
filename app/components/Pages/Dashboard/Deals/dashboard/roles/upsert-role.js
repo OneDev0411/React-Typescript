@@ -1,162 +1,85 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Button, FormControl, Modal } from 'react-bootstrap'
-import { addNotification as notify } from 'reapop'
-import _ from 'underscore'
-import RoleForm from './form'
-import {
-  createRoles,
-  updateRole,
-  selectRole
-} from '../../../../../../store_actions/deals'
+import SelectContactModal from '../../../../../../views/components/SelectContactModal'
+import AddRoleModal from './AddRoleModal'
+
+const initialState = {
+  fakeRole: null,
+  showAddRoleModal: false,
+  showAddToDealModal: false
+}
 
 class UpsertRole extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      show: false,
-      form: null,
-      saving: false,
-      isNewRecord: true,
-      isFormCompleted: false
-    }
-  }
+  state = initialState
 
-  componentWillReceiveProps(nextProps) {
-    const { selectedRole, allowedRoles } = nextProps
-    const { form, show } = this.state
-
-    if (selectedRole && !show && !form && !allowedRoles) {
-      this.setState({
-        form: selectedRole,
-        isNewRecord: false,
-        show: true
-      })
-    }
-  }
-
-  showModal() {
-    this.setState({ show: true })
-  }
-
-  closeModal() {
+  showAddRoleModal = () => {
     this.setState({
-      show: false,
-      isNewRecord: true,
-      form: null
+      showAddRoleModal: true,
+      showAddToDealModal: false
     })
-
-    this.props.selectRole(null)
   }
 
-  onFormChange({ form, isFormCompleted }) {
-    this.setState({ form, isFormCompleted })
+  closeAddRoleModal = () => {
+    this.setState(initialState)
   }
 
-  async upsert() {
-    const { form, isNewRecord } = this.state
+  handleOpenAddToDealModal = () => {
+    this.setState({ showAddToDealModal: true })
+  }
+
+  handleCloseAddToDealModal = () => {
+    this.setState({ showAddToDealModal: false })
+  }
+
+  addRoleWithExistingContactHandler = user => {
     const {
-      deal, createRoles, updateRole, notify
-    } = this.props
+      legal_last_name, legal_first_name, last_name, first_name
+    } = user
 
-    if (!deal) {
-      return false
+    const fakeRole = {
+      legal_first_name: legal_first_name || first_name,
+      legal_last_name: legal_last_name || last_name,
+      ...user
     }
 
     this.setState({
-      saving: true
-    })
-
-    try {
-      if (isNewRecord) {
-        await createRoles(deal.id, [form])
-      } else {
-        await updateRole(deal.id, _.omit(form, 'user'))
-      }
-
-      this.closeModal()
-    } catch (e) {
-      if (!e.response) {
-        return notify({
-          message: `Error: ${e.message}`,
-          status: 'error'
-        })
-      }
-
-      const { attributes } = e.response.body
-      const field = attributes && Object.keys(attributes)[0]
-
-      notify({
-        message: `${field || 'entered data'} is invalid`,
-        status: 'error'
-      })
-    }
-
-    this.setState({
-      saving: false
+      fakeRole,
+      showAddRoleModal: true,
+      showAddToDealModal: false
     })
   }
 
   render() {
-    const {
-      show, form, isNewRecord, saving, isFormCompleted
-    } = this.state
-    const { deal, allowedRoles, selectedRole } = this.props
-    const buttonDisabled = !isFormCompleted || saving === true
+    const { fakeRole, showAddRoleModal, showAddToDealModal } = this.state
+    const { deal, allowedRoles } = this.props
 
     return (
       <div>
-        <div className="item add-new" onClick={() => this.showModal()}>
-          <img src="/static/images/deals/contact-add.png" />
+        <div className="item add-new" onClick={this.handleOpenAddToDealModal}>
+          <img src="/static/images/deals/contact-add.png" alt="add contact" />
 
           <div className="name">
             <div style={{ color: '#61778d' }}>Add a Contact</div>
           </div>
         </div>
 
-        <Modal
-          show={show}
-          onHide={() => this.closeModal()}
-          backdrop="static"
-          dialogClassName="modal-deal-add-role"
-        >
-          <Modal.Header closeButton>
-            {isNewRecord ? 'Add Contact' : 'Update Contact'}
-          </Modal.Header>
+        <SelectContactModal
+          title="Add to Deal"
+          isOpen={showAddToDealModal}
+          addManuallyHandler={this.showAddRoleModal}
+          closeHandler={this.handleCloseAddToDealModal}
+          selectedItemHandler={this.addRoleWithExistingContactHandler}
+        />
 
-          <Modal.Body>
-            <RoleForm
-              deal={deal}
-              form={form}
-              allowedRoles={allowedRoles}
-              onFormChange={data => this.onFormChange(data)}
-            />
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button
-              className={`btn-deal ${buttonDisabled ? 'disabled' : ''}`}
-              bsStyle={buttonDisabled ? 'link' : 'primary'}
-              disabled={buttonDisabled}
-              onClick={() => this.upsert()}
-            >
-              {saving ? 'Saving...' : isNewRecord ? 'Add' : 'Update'}
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <AddRoleModal
+          deal={deal}
+          role={fakeRole}
+          isOpen={showAddRoleModal}
+          allowedRoles={allowedRoles}
+          closeHandler={this.closeAddRoleModal}
+        />
       </div>
     )
   }
 }
 
-export default connect(
-  ({ deals }) => ({
-    selectedRole: deals.selectedRole
-  }),
-  {
-    selectRole,
-    createRoles,
-    updateRole,
-    notify
-  }
-)(UpsertRole)
+export default UpsertRole

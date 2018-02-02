@@ -152,14 +152,13 @@
 
   .modal-footer {
     .btn-deal {
-      width: 70px;
-      height: 32px;
-      line-height: 16px;
+      font-size: 1.5rem;
+      line-height: 1;
       border-radius: 3px;
       border: none;
       &.disabled {
-        border: solid 1px #dde2e6;
-        color: #dde2e6;
+        color: #555;
+        background: #ddd;
       }
     }
   }

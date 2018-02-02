@@ -22,7 +22,9 @@ const Loader = () => (
 )
 
 const LoadingHandler = props => {
-  const { isLoading, timedOut, pastDelay, error } = props
+  const {
+    isLoading, timedOut, pastDelay, error
+  } = props
 
   if (error || (isLoading && timedOut)) {
     if (typeof window !== 'undefined') {
@@ -40,16 +42,14 @@ const LoadingHandler = props => {
 }
 
 export default opts => {
-  const Component = Loadable(
-    Object.assign(
-      {
-        loading: LoadingHandler,
-        delay: 4000,
-        timeout: 20000
-      },
-      opts
-    )
-  )
+  const Component = Loadable(Object.assign(
+    {
+      loading: LoadingHandler,
+      delay: 2000,
+      timeout: 20000
+    },
+    opts
+  ))
 
   if (opts.fetchData) {
     Component.fetchData = opts.fetchData
