@@ -46,6 +46,16 @@ class Body extends Component {
     this.props.selectedItemHandler(extractUserInfoFromContact(item))
   }
 
+  handleItemToString = item => {
+    if (!item) {
+      return ''
+    }
+
+    const { display_name } = item
+
+    return display_name || 'unknown'
+  }
+
   render() {
     const { items } = this.state
     const { selectedItemHandler } = this.props
@@ -53,7 +63,7 @@ class Body extends Component {
     return (
       <Downshift
         onChange={this.onChangeHandler}
-        itemToString={({ display_name }) => display_name}
+        itemToString={this.handleItemToString}
         render={({
  getInputProps, getItemProps, inputValue, highlightedIndex
 }) => (
