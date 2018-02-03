@@ -4,13 +4,19 @@ import { getActiveTeamId } from '../../utils/user-teams'
 /**
  * Search through all deals
  */
-export async function searchAllDeals(query) {
+export async function searchAllDeals(query, isBackOffice) {
   try {
-    const response = await new Fetch().post('/deals/filter').send({ query })
+    let url = '/deals/filter'
+
+    if (isBackOffice) {
+      url += '?associations=deal.created_by'
+    }
+
+    const response = await new Fetch().post(url).send({ query })
 
     return response.body.data
   } catch (error) {
-    return { error }
+    throw error
   }
 }
 

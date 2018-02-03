@@ -24,10 +24,15 @@ class Header extends React.Component {
 
   onInputChange() {
     const { value } = this.searchInput
-    const { searchAllDeals, searchBOFilters, showEmptySearchPage } = this.props
+    const {
+      searchAllDeals,
+      searchBOFilters,
+      showEmptySearchPage,
+      isBackOffice
+    } = this.props
 
-    if (value && value.length > 2) {
-      searchAllDeals(value)
+    if (value && value.length > 0) {
+      searchAllDeals(value, isBackOffice)
       showEmptySearchPage(false)
     } else {
       showEmptySearchPage(true)
