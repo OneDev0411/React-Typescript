@@ -5,6 +5,7 @@ import config from '../../../config/public'
 
 // create socket
 const socket = io(config.socket.server, {
+  transports: ['websocket'],
   reconnection: true,
   reconnectionDelay: 5000,
   reconnectionDelayMax: 6000,
