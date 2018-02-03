@@ -1,26 +1,26 @@
 import Fetch from '../../services/fetch/index'
 
-const Brands = {}
-
-Brands.getBrands = async function (brandId) {
+export async function getBrands(brandId) {
   try {
-    return await new Fetch()
-      .get(`/brands/${brandId}?associations[]=brand.roles&associations[]=brand_role.members`)
+    return await new Fetch().get(
+      `/brands/${brandId}?associations[]=brand.roles&associations[]=brand_role.members`
+    )
   } catch (error) {
     return { error }
   }
 }
 
-Brands.getChildrenBrands = async function (brandId) {
+export async function getChildrenBrands(brandId) {
   try {
-    return await new Fetch()
-      .get(`/brands/${brandId}/children?associations[]=brand.roles&associations[]=brand_role.members`)
+    return await new Fetch().get(
+      `/brands/${brandId}/children?associations[]=brand.roles&associations[]=brand_role.members`
+    )
   } catch (error) {
     return { error }
   }
 }
 
-Brands.addBrand = async function (brand) {
+export async function addBrand(brand) {
   try {
     return await new Fetch()
       .post('/brands?associations[]=brand.roles')
@@ -30,22 +30,26 @@ Brands.addBrand = async function (brand) {
   }
 }
 
-Brands.editBrand = async function (brand) {
+export async function editBrand(brand) {
   try {
-    return await new Fetch()
-      .put(`/brands/${brand.id}`)
-      .send(brand)
+    return await new Fetch().put(`/brands/${brand.id}`).send(brand)
   } catch (error) {
     return { error }
   }
 }
 
-Brands.deleteBrand = async function (brandId) {
+export async function deleteBrand(brandId) {
   try {
-    return await new Fetch()
-      .delete(`/brands/${brandId}`)
+    return await new Fetch().delete(`/brands/${brandId}`)
   } catch (error) {
     return { error }
   }
 }
-export default Brands
+
+export default {
+  getBrands,
+  getChildrenBrands,
+  addBrand,
+  editBrand,
+  deleteBrand
+}
