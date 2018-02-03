@@ -51,7 +51,8 @@ class Header extends React.Component {
       initialBOFilters,
       showEmptySearchPage,
       initialAgentFilters,
-      cleanSearchedDeals
+      cleanSearchedDeals,
+      removeSearchFilter
     } = this.props
 
     const { inputFocused } = this.state
@@ -117,6 +118,8 @@ class Header extends React.Component {
 
                       if (searchBoxIsOpen) {
                         this.searchInput.value = ''
+                        removeSearchFilter()
+                        cleanSearchedDeals()
                       } else {
                         showEmptySearchPage(true)
                       }

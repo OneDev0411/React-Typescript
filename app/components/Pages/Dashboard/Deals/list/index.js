@@ -40,6 +40,14 @@ class DealsDashboard extends React.Component {
     })
   }
 
+  removeSearchFilter() {
+    return this.setState({
+      activeFilters: {
+        ..._.omit(this.state.activeFilters, 'searchResult')
+      }
+    })
+  }
+
   initialAgentFilters(filters) {
     return this.setState({
       activeFilters: {
@@ -68,9 +76,7 @@ class DealsDashboard extends React.Component {
   }
 
   render() {
-    const {
-      deals, isBackOffice, params, loadingDeals
-    } = this.props
+    const { deals, isBackOffice, params, loadingDeals } = this.props
     const { activeFilters, searchBoxIsOpen, emptySearchPageIsOpen } = this.state
     const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
@@ -80,9 +86,12 @@ class DealsDashboard extends React.Component {
           activeFilterTab={params.filter}
           initialBOFilters={filters => this.initialBOFilters(filters)}
           initialAgentFilters={filters => this.initialAgentFilters(filters)}
+          removeSearchFilter={() => this.removeSearchFilter()}
           searchBOFilters={() => this.searchBOFilters()}
           searchBoxIsOpen={searchBoxIsOpen}
-          setSearchStatus={searchBoxIsOpen => this.setSearchStatus(searchBoxIsOpen)}
+          setSearchStatus={searchBoxIsOpen =>
+            this.setSearchStatus(searchBoxIsOpen)
+          }
           showEmptySearchPage={emptySearchPageIsOpen =>
             this.showEmptySearchPage(emptySearchPageIsOpen)
           }
