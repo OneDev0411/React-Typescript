@@ -31,7 +31,7 @@ class Header extends React.Component {
       isBackOffice
     } = this.props
 
-    if (value && value.length > 0) {
+    if (value && value.length > 3) {
       searchAllDeals(value, isBackOffice)
       showEmptySearchPage(false)
     } else {
