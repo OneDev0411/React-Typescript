@@ -42,7 +42,7 @@ export function notifyResult(info) {
       message += `<br /> Not imported: ${info.errors}</p>`
     }
   } else {
-    message = 'Contacts have been imrpted successfuly!'
+    message = 'Contacts have been imported successfuly!'
   }
 
   return notify({
