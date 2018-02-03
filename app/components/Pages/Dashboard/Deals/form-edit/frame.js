@@ -19,7 +19,9 @@ class EditFormFrame extends React.PureComponent {
     return (
       <iframe
         className="form-iframe"
-        src={`${config.forms.url}/embed/${task.form}?domain=${host}&access_token=${access_token}`}
+        src={`${config.forms.url}/embed/${
+          task.form
+        }?domain=${host}&access_token=${access_token}`}
         frameBorder="0"
         ref={ref => this.props.frameRef(ref)}
       />

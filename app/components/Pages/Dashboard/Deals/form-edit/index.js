@@ -1,5 +1,4 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
@@ -22,7 +21,7 @@ class FormEdit extends React.Component {
     this.connect()
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     const task = this.props.task || {}
     const nextTask = nextProps.task || {}
 
@@ -68,14 +67,14 @@ class FormEdit extends React.Component {
   /**
    *
    */
-  onUpdate(data) {
+  onUpdate() {
     this.sendMessage('incompleteFields')
   }
 
   /**
    *
    */
-  onSubmit(data) {
+  onSubmit() {
     this.sendMessage('incompleteFields')
   }
 
@@ -84,13 +83,6 @@ class FormEdit extends React.Component {
    */
   onIncompleteFields(data) {
     this.setState({ incompleteFields: data })
-  }
-
-  /**
-   *
-   */
-  onSetValues(data) {
-    // do nothing
   }
 
   /**
@@ -150,7 +142,7 @@ class FormEdit extends React.Component {
    *
    */
   receiveMessage(event) {
-    const { type, fn, args } = event.data
+    const { fn, args } = event.data
 
     if (!fn) {
       return
@@ -169,9 +161,7 @@ class FormEdit extends React.Component {
    *
    */
   async saveForm(values) {
-    const {
-      saveSubmission, task, notify, deal
-    } = this.props
+    const { saveSubmission, task, notify } = this.props
     const { incompleteFields } = this.state
 
     const status = incompleteFields.length === 0 ? 'Fair' : 'Draft'
@@ -223,7 +213,7 @@ class FormEdit extends React.Component {
   }
 
   render() {
-    const { deal, task } = this.props
+    const { task } = this.props
     const { loaded, saving, incompleteFields } = this.state
 
     const isValidForm = task && task.form && task.task_type === 'Form'
@@ -247,7 +237,7 @@ class FormEdit extends React.Component {
   }
 }
 
-function mapStateToProps({ user, deals }, props) {
+function mapStateToProps({ deals }, props) {
   const { list, tasks } = deals
   const { id, taskId } = props.params
 
