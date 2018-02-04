@@ -51,30 +51,35 @@ class App extends Component {
     // check branding
     this._getBrand()
 
-    if (user && typeof window !== 'undefined') {
-      this.initializeContactSocket(user)
-      this.initializeChatSocket(user)
-      this.initializeDealSocket(user)
+    if (typeof window !== 'undefined') {
+      import('offline-js')
+
+      if (!('WebkitAppearance' in document.documentElement.style)) {
+        import('simplebar')
+      }
+
+      if (user) {
+        this.initializeContactSocket(user)
+        this.initializeChatSocket(user)
+        this.initializeDealSocket(user)
+      }
     }
   }
 
   componentDidMount() {
-    const {
-      data, user, deals, dispatch
-    } = this.props
-    const isWebkit = 'WebkitAppearance' in document.documentElement.style
+    this.initializeApp()
+  }
 
-    if (!isWebkit) {
-      import('simplebar')
-    }
-
-    if (window) {
-      require('offline-js')
-    }
+  async initializeApp() {
+    const { data, deals, dispatch } = this.props
+    let { user } = this.props
 
     if (user) {
       if (!user.teams) {
-        dispatch(getTeams())
+        user = {
+          ...user,
+          teams: await dispatch(getTeams())
+        }
       }
 
       // load rooms

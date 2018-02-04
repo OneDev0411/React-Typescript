@@ -100,10 +100,6 @@ class CrudRole extends React.Component {
     this.setState({ form, showFormModal: true, showSelectContactModal: false })
   }
 
-  handleOpenSelectContactModal = () => {
-    this.setState({ showSelectContactModal: true })
-  }
-
   render() {
     const {
       form,
