@@ -52,7 +52,8 @@ class AgentTable extends BaseTable {
         getText: deal =>
           Deal.get.formattedPrice(
             Deal.get.field(deal, 'list_price'),
-            'decimal'
+            'currency',
+            0
           ),
         getValue: deal => Deal.get.field(deal, 'list_price')
       },

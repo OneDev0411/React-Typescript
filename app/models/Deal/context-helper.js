@@ -119,7 +119,11 @@ export function getClientNames(deal, roles) {
 /**
  * a helper that formats price
  */
-export function getFormattedPrice(number, style = 'currency') {
+export function getFormattedPrice(
+  number,
+  style = 'currency',
+  minimumFractionDigits = 2
+) {
   if (!number) {
     return number
   }
@@ -127,12 +131,12 @@ export function getFormattedPrice(number, style = 'currency') {
   return new Intl.NumberFormat('en-US', {
     style,
     currency: 'USD',
-    minimumFractionDigits: 2
+    minimumFractionDigits
   }).format(number)
 }
 
 /**
- * get deal sise
+ * get deal side
  */
 export function getSide(deal) {
   const sides = {

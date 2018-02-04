@@ -2,6 +2,7 @@ import types from '../../constants/contact'
 import Contact from '../../models/Contact'
 import { batchActions } from 'redux-batched-actions'
 import { addNotification as notify } from 'reapop'
+import _ from 'underscore'
 
 export function removeImportResult() {
   return { type: types.REMOVE_IMPORT_RESULT }
@@ -26,7 +27,7 @@ export function importDone() {
 function contactsFetched(body) {
   return {
     type: types.UPLOAD_CVS,
-    contacts: body.data || {},
+    contacts: _.indexBy(body.data || [], 'id'),
     info: body.info
   }
 }
