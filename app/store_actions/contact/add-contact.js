@@ -107,7 +107,7 @@ export function addContact(args) {
 }
 
 function attributeNormalizer({ attributeName, attributeValue }) {
-  return attributeValue.filter(item => item != null).map(item => ({
+  return attributeValue.filter(item => item).map(item => ({
     type: attributeName,
     [attributeName]: item
   }))
