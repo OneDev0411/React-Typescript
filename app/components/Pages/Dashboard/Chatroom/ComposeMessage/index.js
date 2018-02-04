@@ -38,8 +38,6 @@ class ComposeMessage extends React.Component {
     if (nextProps.draft) {
       this.text_message.value = nextProps.draft
     }
-
-    this.text_message.focus()
   }
 
   onTyping() {

@@ -12,9 +12,11 @@ export default ({ user, contactsCount }) => {
     <div className="no-contacts">
       <p className="title">You don't have contacts yet</p>
       <p>To get started, click the blue button to add contact</p>
-      <AddContact user={user} onNewContact={id => onNewContact(id)} />
-      <ImportOutlook userId={user.id} />
-      <ImportCsv />
+      <div className="no-contacts--button-container">
+        <AddContact user={user} onNewContact={id => onNewContact(id)} />
+        <ImportOutlook userId={user.id} />
+        <ImportCsv />
+      </div>
     </div>
   )
 }

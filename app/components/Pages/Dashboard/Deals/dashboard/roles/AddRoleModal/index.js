@@ -5,6 +5,7 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import RoleForm from '../form'
 import { createRoles, updateRole } from '../../../../../../../store_actions/deals'
+import { addContact } from '../../../../../../../store_actions/contact/add-contact'
 
 const initialState = {
   form: null,
@@ -34,7 +35,7 @@ class AddRoleModal extends React.Component {
     let successMessage
     const { form } = this.state
     const {
-      deal, createRoles, updateRole, notify
+      deal, createRoles, updateRole, notify, addContact
     } = this.props
 
     if (!deal) {
@@ -50,6 +51,7 @@ class AddRoleModal extends React.Component {
         await updateRole(deal.id, _.omit(form, 'user'))
         successMessage = 'Contact updated.'
       } else {
+        await addContact(nomilizedFormDataAsContact(form))
         await createRoles(deal.id, [form])
         successMessage = 'Contact added.'
       }
@@ -143,6 +145,29 @@ class AddRoleModal extends React.Component {
 
 export default connect(null, {
   notify,
+  addContact,
   updateRole,
   createRoles
 })(AddRoleModal)
+
+function nomilizedFormDataAsContact(formData = {}) {
+  const { email, phone_number } = formData
+  let emails
+  let phone_numbers
+
+  if (email) {
+    emails = [email]
+    delete formData.email
+  }
+
+  if (phone_number) {
+    phone_numbers = [phone_number]
+    delete formData.phone_number
+  }
+
+  return {
+    ...formData,
+    emails,
+    phone_numbers
+  }
+}

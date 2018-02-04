@@ -15,7 +15,7 @@ class ImportCSV extends React.Component {
   render() {
     return (
       <Fragment>
-        <div className="secondary-button">
+        <div className="list--secondary-button">
           <button className="c-button--shadow " onClick={() => this.dropzone.open()}>
             Import from CSV
           </button>
