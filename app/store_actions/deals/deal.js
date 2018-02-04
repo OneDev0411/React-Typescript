@@ -8,6 +8,7 @@ import { setTasks } from './task'
 import { setChecklists } from './checklist'
 import { setRoles } from './role'
 import { setEnvelopes } from './envelope'
+import { addNotification as notify } from 'reapop'
 
 export function setDeals(deals) {
   return {
@@ -170,12 +171,12 @@ export function createDeal(deal) {
   }
 }
 
-export function searchAllDeals(query) {
+export function searchAllDeals(query, isBackOffice = false) {
   return async dispatch => {
     try {
       dispatch({ type: types.SHOW_SPINNER })
 
-      const data = await Deal.searchAllDeals(query)
+      const data = await Deal.searchAllDeals(query, isBackOffice)
 
       dispatch({ type: types.HIDE_SPINNER })
 
@@ -195,11 +196,18 @@ export function searchAllDeals(query) {
         dispatch(addSearchedDeals(deals))
       ])
     } catch (e) {
-      dispatch({
-        type: types.GET_DEALS_FAILED,
-        name: 'get-deals',
-        message: e.response ? e.response.body.message : null
-      })
+      batchActions([
+        dispatch({ type: types.HIDE_SPINNER }),
+        dispatch(cleanSearchedDeals()),
+        dispatch(
+          notify({
+            title: 'Server Error',
+            message:
+              e.response && e.response.body ? e.response.body.message : null,
+            status: 'error'
+          })
+        )
+      ])
     }
   }
 }

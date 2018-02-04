@@ -29,7 +29,7 @@ export default class extends React.Component {
             X
           </Button>
 
-          <span className="title">{file.name}</span>
+          <span className="title">{task.title}</span>
 
           <div className="cta">
             <Button className="deal-button" onClick={toggleFactsheet}>

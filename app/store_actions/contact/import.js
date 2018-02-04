@@ -4,17 +4,23 @@ import { batchActions } from 'redux-batched-actions'
 import { addNotification as notify } from 'reapop'
 
 export function removeImportResult() {
-  return dispatch => {
-    dispatch({ type: types.REMOVE_IMPORT_RESULT })
-  }
+  return { type: types.REMOVE_IMPORT_RESULT }
 }
 
 export function loginSusseful() {
-  return dispatch({ type: types.IMPORT_SUCCESSFUL_LOGIN })
+  return { type: types.IMPORT_SUCCESSFUL_LOGIN }
+}
+
+export function importFail() {
+  return { type: types.IMPORT_FAIL_LOGIN }
 }
 
 export function importDone() {
-  return dispatch({ type: types.IMPORT_DONE })
+  return dispatch => {
+    dispatch(notifyResult({}))
+
+    dispatch({ type: types.IMPORT_DONE })
+  }
 }
 
 function contactsFetched(body) {
@@ -24,15 +30,25 @@ function contactsFetched(body) {
     info: body.info
   }
 }
-function notifyResult(info) {
+
+export function notifyResult(info) {
   const status = info.errors ? 'warning' : 'success'
+  let message
+
+  if (info.count) {
+    message = `<p>Successfully imported: ${info.count - info.errors}`
+
+    if (info.error) {
+      message += `<br /> Not imported: ${info.errors}</p>`
+    }
+  } else {
+    message = 'Contacts have been imported successfuly!'
+  }
 
   return notify({
     allowHTML: true,
-    title: 'Import done',
-    message:
-      `<p>Successfully imported: ${info.count - info.errors}` +
-      (info.errors ? `<br /> Not imported: ${info.errors}</p>` : ''),
+    title: 'Contact import complete!',
+    message,
     status
   })
 }

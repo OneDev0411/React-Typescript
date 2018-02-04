@@ -24,10 +24,15 @@ class Header extends React.Component {
 
   onInputChange() {
     const { value } = this.searchInput
-    const { searchAllDeals, searchBOFilters, showEmptySearchPage } = this.props
+    const {
+      searchAllDeals,
+      searchBOFilters,
+      showEmptySearchPage,
+      isBackOffice
+    } = this.props
 
-    if (value && value.length > 2) {
-      searchAllDeals(value)
+    if (value && value.length > 3) {
+      searchAllDeals(value, isBackOffice)
       showEmptySearchPage(false)
     } else {
       showEmptySearchPage(true)
@@ -46,7 +51,8 @@ class Header extends React.Component {
       initialBOFilters,
       showEmptySearchPage,
       initialAgentFilters,
-      cleanSearchedDeals
+      cleanSearchedDeals,
+      removeSearchFilter
     } = this.props
 
     const { inputFocused } = this.state
@@ -112,6 +118,8 @@ class Header extends React.Component {
 
                       if (searchBoxIsOpen) {
                         this.searchInput.value = ''
+                        removeSearchFilter()
+                        cleanSearchedDeals()
                       } else {
                         showEmptySearchPage(true)
                       }

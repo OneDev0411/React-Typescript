@@ -8,6 +8,7 @@ import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'
 
 // services
 import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
+import contactSocket from './Pages/Dashboard/Contacts/Services/socket'
 import DealSocket from './Pages/Dashboard/Deals/services/socket'
 
 // utils
@@ -51,6 +52,7 @@ class App extends Component {
     this._getBrand()
 
     if (user && typeof window !== 'undefined') {
+      this.initializeContactSocket(user)
       this.initializeChatSocket(user)
       this.initializeDealSocket(user)
     }
@@ -123,6 +125,9 @@ class App extends Component {
     this.props.dispatch(getBrand())
   }
 
+  initializeContactSocket(user) {
+    new contactSocket(user)
+  }
   initializeChatSocket(user) {
     new ChatSocket(user)
   }

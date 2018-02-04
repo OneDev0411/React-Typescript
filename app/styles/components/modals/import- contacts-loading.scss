@@ -1,0 +1,31 @@
+.modal-import-outlook-loading {
+  width: 500px;
+  height: 200px;
+
+  .modal-content {
+    border: none;
+    box-shadow: none;
+  }
+
+  .modal-body {
+    text-align: center;
+    padding: 37px 18px 32px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    .import-loading-icon {
+      color: #2196f3;
+    }
+    .confirmation-title {
+      font-size: 26px;
+      font-weight: 600;
+      color: #1e364b;
+    }
+
+    .confirmation-descr {
+      padding-top: 16px;
+      font-size: 17px;
+      color: #8fa3b6;
+    }
+  }
+}
