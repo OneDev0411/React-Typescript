@@ -46,7 +46,7 @@ class ImportOutlook extends React.Component {
     const { showLoading } = this.state
 
     return (
-      <div className="secondary-button">
+      <div className="list--secondary-button">
         <OverlayTrigger
           placement="bottom"
           overlay={

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import { Button, Modal, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -105,7 +105,7 @@ class AddContact extends React.Component {
     } = this.state
 
     return (
-      <div>
+      <Fragment>
         <Button bsStyle="primary" onClick={() => this.openDialog()}>
           Add Contact
         </Button>
@@ -165,7 +165,7 @@ class AddContact extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-      </div>
+      </Fragment>
     )
   }
 }

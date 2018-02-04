@@ -14,8 +14,12 @@
     .title {
       font-size: 19px;
     }
-    button {
-      margin-top: 8px;
+    .no-contacts--button-container {
+      display: inline-block;
+
+      > div {
+        margin-top: 8px;
+      }
     }
   }
 }
