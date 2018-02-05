@@ -10,7 +10,6 @@ import UploadPromptModal from './upload/prompt'
 import PDFSplitterModal from './upload/pdf-splitter'
 import NavBar from './navbar'
 import { getDeal } from '../../../../../store_actions/deals'
-import Deal from '../../../../../models/Deal'
 
 class DealDetails extends React.Component {
   constructor(props) {
