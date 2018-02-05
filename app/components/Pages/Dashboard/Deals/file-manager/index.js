@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Dropzone from 'react-dropzone'
 import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
-import Deal from '../../../../../models/Deal'
 import UploadPromptModal from '../dashboard/upload/prompt'
 import PDFSplitterModal from '../dashboard/upload/pdf-splitter'
+import Navbar from './navbar'
+import FilesTable from './table'
 
 export class FileManager extends React.Component {
   constructor(props) {
@@ -19,47 +19,17 @@ export class FileManager extends React.Component {
     }
   }
 
-  backToDeal() {}
-
-  openUploadDialog() {
-    this.dropzone.open()
-  }
-
-  onDrop(files) {
-    const { deal } = this.props
-
-    this.props.setUploadFiles(files, deal, null)
-  }
-
   render() {
     const { deal } = this.props
 
+    if (!deal.checklists) {
+      return false
+    }
+
     return (
-      <div className="deal-dashboard u-scrollbar--thinner">
-        <div className="deal-navbar">
-          <div className="back" onClick={() => this.backToDeal()}>
-            <i className="fa fa-chevron-left" />
-            Document List
-          </div>
-
-          <div className="ctas">
-            <button
-              className="navbar-button"
-              onClick={() => this.openUploadDialog()}
-            >
-              Upload
-            </button>
-          </div>
-        </div>
-
-        <Dropzone
-          disableClick
-          ref={node => (this.dropzone = node)}
-          onDrop={files => this.onDrop(files)}
-          multiple
-          accept={Deal.upload.getAcceptedDocuments()}
-          style={{ display: 'none' }}
-        />
+      <div className="deal-dashboard file-manager u-scrollbar--thinner">
+        <Navbar deal={deal} />
+        <FilesTable deal={deal} />
 
         <UploadPromptModal deal={deal} />
         <PDFSplitterModal deal={deal} />

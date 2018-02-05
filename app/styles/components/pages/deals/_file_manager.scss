@@ -1,0 +1,19 @@
+%file-manager {
+  .table-container {
+    margin: 2% 13px;
+
+    .rt-table {
+      .rt-tr-group {
+        color: #1d364b;
+        font-size: 14px;
+        height: 60px;
+      }
+
+      .rt-td {
+        &:first-child {
+          padding-left: 10px;
+        }
+      }
+    }
+  }
+}

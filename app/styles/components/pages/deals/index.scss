@@ -1,6 +1,7 @@
 @import './list';
 @import './create';
 @import './dashboard';
+@import './file_manager';
 @import './components';
 
 .deals {
@@ -13,6 +14,10 @@
 
   .deal-dashboard {
     @extend %deal-dashboard;
+  }
+
+  .file-manager {
+    @extend %file-manager;
   }
 }
 
