@@ -19,22 +19,26 @@ class DealsDashboard extends React.Component {
 
     this.state = {
       activeFilters,
-      searchBoxIsOpen: !isBackOffice,
       emptySearchPageIsOpen: false
     }
-  }
-
-  setSearchStatus(searchBoxIsOpen) {
-    return this.setState({ searchBoxIsOpen })
   }
 
   showEmptySearchPage(emptySearchPageIsOpen) {
     return this.setState({ emptySearchPageIsOpen })
   }
 
-  initialBOFilters(filters) {
-    return this.setState({
+  initialFilters(filters, isBackOffice) {
+    if (isBackOffice) {
+      this.setState({
+        activeFilters: {
+          ..._.omit(filters, 'searchResult')
+        }
+      })
+    }
+
+    this.setState({
       activeFilters: {
+        status: (status, deal) => !deal.deleted_at,
         ..._.omit(filters, 'searchResult')
       }
     })
@@ -44,15 +48,6 @@ class DealsDashboard extends React.Component {
     return this.setState({
       activeFilters: {
         ..._.omit(this.state.activeFilters, 'searchResult')
-      }
-    })
-  }
-
-  initialAgentFilters(filters) {
-    return this.setState({
-      activeFilters: {
-        status: (status, deal) => !deal.deleted_at,
-        ..._.omit(filters, 'searchResult')
       }
     })
   }
@@ -77,25 +72,21 @@ class DealsDashboard extends React.Component {
 
   render() {
     const { deals, isBackOffice, params, loadingDeals } = this.props
-    const { activeFilters, searchBoxIsOpen, emptySearchPageIsOpen } = this.state
+    const { activeFilters, emptySearchPageIsOpen } = this.state
     const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
     return (
       <div className="deals-list" data-simplebar={!isWebkit || null}>
         <Header
           activeFilterTab={params.filter}
-          initialBOFilters={filters => this.initialBOFilters(filters)}
-          initialAgentFilters={filters => this.initialAgentFilters(filters)}
+          initialFilters={filters => this.initialFilters(filters)}
           removeSearchFilter={() => this.removeSearchFilter()}
           searchBOFilters={() => this.searchBOFilters()}
-          searchBoxIsOpen={searchBoxIsOpen}
-          setSearchStatus={searchBoxIsOpen =>
-            this.setSearchStatus(searchBoxIsOpen)
-          }
           showEmptySearchPage={emptySearchPageIsOpen =>
             this.showEmptySearchPage(emptySearchPageIsOpen)
           }
           onFilterChange={filters => this.setFilter(filters)}
+          filters={activeFilters}
         />
         <i
           className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading', {
@@ -107,7 +98,6 @@ class DealsDashboard extends React.Component {
           <AgentTable
             deals={deals}
             tabName={params.filter || 'All'}
-            searchBoxIsOpen={searchBoxIsOpen}
             emptySearchPageIsOpen={emptySearchPageIsOpen || loadingDeals}
             filters={activeFilters}
             isBackOffice={false}
@@ -115,7 +105,6 @@ class DealsDashboard extends React.Component {
         ) : (
           <BackOfficeTable
             deals={deals}
-            searchBoxIsOpen={searchBoxIsOpen}
             emptySearchPageIsOpen={emptySearchPageIsOpen || loadingDeals}
             filters={activeFilters}
             isBackOffice

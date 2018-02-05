@@ -222,7 +222,9 @@ class BaseTable extends React.Component {
     if (deal.new_notifications > 0) {
       return (
         <ToolTip
-          caption={`You have ${deal.new_notifications} unread messages in this deal`}
+          caption={`You have ${
+            deal.new_notifications
+          } unread messages in this deal`}
         >
           <div className="inline unread-notifications">
             <img src="/static/images/deals/comments.svg" />
@@ -238,14 +240,15 @@ class BaseTable extends React.Component {
       deals,
       tabName,
       isBackOffice,
-      searchBoxIsOpen,
-      emptySearchPageIsOpen
+      emptySearchPageIsOpen,
+      filters
     } = this.props
     const { sortBy, sortOrder } = this.state
 
     // apply filter to deals
     const filteredDeals = _.filter(deals, deal => this.applyFilters(deal))
     const hasRows = filteredDeals.length > 0
+    const searchBoxIsOpen = filters.searchResult
 
     if (searchBoxIsOpen && emptySearchPageIsOpen) {
       return <EmptySearch />

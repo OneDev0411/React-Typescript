@@ -25,9 +25,12 @@ const FILTER_ARCHIVE = [
 
 const filters = {
   All: (status, deal) => !deal.deleted_at,
-  Active: (status, deal) => FILTER_ACTIVE.indexOf(status) > -1 && !deal.deleted_at,
-  Pending: (status, deal) => FILTER_PENDING.indexOf(status) > -1 && !deal.deleted_at,
-  Archive: (status, deal) => FILTER_ARCHIVE.indexOf(status) > -1 || !!deal.deleted_at
+  Active: (status, deal) =>
+    FILTER_ACTIVE.indexOf(status) > -1 && !deal.deleted_at,
+  Pending: (status, deal) =>
+    FILTER_PENDING.indexOf(status) > -1 && !deal.deleted_at,
+  Archive: (status, deal) =>
+    FILTER_ARCHIVE.indexOf(status) > -1 || !!deal.deleted_at
 }
 
 export class AgentFilter extends React.Component {
@@ -92,7 +95,10 @@ export class AgentFilter extends React.Component {
     return _.filter(deals, deal => {
       const status = Deal.get.status(deal)
 
-      return filters[filter](status, deal)
+      return (
+        (!deal.searchResult || deal.duplicateDeal) &&
+        filters[filter](status, deal)
+      )
     }).length
   }
 
