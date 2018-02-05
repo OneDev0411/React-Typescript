@@ -76,8 +76,8 @@ class ContactsList extends React.Component {
         className: 'td--stage-container',
         Cell: ({ original: contact }) => (
           <Stage
-            default={Contact.get.stage(contact).name}
-            onChange={stage =>
+            defaultTitle={Contact.get.stage(contact).name}
+            handleOnSelect={stage =>
               this.onChangeStage(stage, contact, props.upsertAttributes)
             }
           />
@@ -123,15 +123,12 @@ class ContactsList extends React.Component {
     }
 
     if (!matched && Object.keys(Contact.get.emails(contact)).length !== 0) {
-      matched = _.some(Contact.get.emails(contact), item =>
-        regex.test(item.email)
-      )
+      matched = _.some(Contact.get.emails(contact), item => regex.test(item.email))
     }
 
     if (!matched && Object.keys(Contact.get.phones(contact)).length !== 0) {
       matched = _.some(Contact.get.phones(contact), item =>
-        item.phone_number.includes(filter)
-      )
+        item.phone_number.includes(filter))
     }
 
     if (!matched && Object.keys(Contact.get.tags(contact)).length !== 0) {
@@ -143,8 +140,7 @@ class ContactsList extends React.Component {
   render() {
     const { contacts, user, loadingImport } = this.props
     const filteredContacts = _.filter(contacts, contact =>
-      this.applyFilters(contact)
-    )
+      this.applyFilters(contact))
 
     if (_.size(contacts) === 0) {
       return (

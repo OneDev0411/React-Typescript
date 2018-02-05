@@ -18,6 +18,7 @@ const INITIAL_STATE = {
   last_name: '',
   emails: [''],
   phones: [''],
+  title: null,
   saving: false,
   invalidFields: [],
   isFormCompleted: false,
@@ -193,7 +194,22 @@ class AddContactModal extends React.Component {
               <Modal.Title>Add New Contact</Modal.Title>
             </Modal.Header>
 
-            <Stage default="General" onChange={stage => this.setState({ stage })} />
+            <div
+              style={{
+                height: '38px',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              <div style={{ padding: '0 2rem' }}>
+                <span style={{ marginRight: '1rem' }}>Stage:</span>
+                <Stage
+                  defaultTitle="General"
+                  selectedItem={this.state.stage}
+                  handleOnSelect={stage => this.setState({ stage })}
+                />
+              </div>
+            </div>
 
             <div className="fullname">
               <Name

@@ -11,6 +11,10 @@
     }
   }
 
+  .modal-footer {
+    border-top-width: 0;
+  }
+
   %sharp-input {
     border-radius: 0;
   }
@@ -58,15 +62,11 @@
     }
   }
 
-  .contact-stages {
-    margin: 10px 0 7px 3%;
-  }
-
   .multiple {
     .m-row {
       position: relative;
       input {
-        border-top: none;
+        border-top-width: 0;
       }
       @extend %show-add-button;
     }
