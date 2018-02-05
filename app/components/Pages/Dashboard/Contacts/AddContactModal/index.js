@@ -1,112 +1,62 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
+import update from 'react-addons-update'
+import styled from 'styled-components'
 import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import { PhoneNumberUtil } from 'google-libphonenumber'
 import Stage from '../components/Stage'
+import Title from '../components/Title'
 import Name from './Name'
 import Emails from './Emails'
 import Phones from './Phones'
 import store from '../../../../../stores'
 import { addContact } from '../../../../../store_actions/contact'
 
-class AddContact extends React.Component {
+const HalfColumnContainer = styled.div`
+  width: 50%;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  border-right: 1px solid #e2e6ea;
+
+  &:last-of-type {
+    border-right-width: 0;
+  }
+`
+
+const INITIAL_STATE = {
+  stage: 'General',
+  first_name: '',
+  middle_name: '',
+  last_name: '',
+  emails: [''],
+  phones: [''],
+  title: null,
+  saving: false,
+  invalidFields: [],
+  isFormCompleted: false,
+  isOpen: false
+}
+
+class AddContactModal extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      showNewContactModal: false,
-      saving: false,
-      validationErrors: {},
-      first_name: '',
-      last_name: '',
-      middle_name: '',
-      stage: 'General',
-      emails: [''],
-      phones: [''],
-      invalidFields: [],
-      isFormCompleted: false
-    }
+
+    this.state = INITIAL_STATE
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  openDialog() {
-    this.setState({ showNewContactModal: true })
+  handleOpenModal = () => {
+    this.setState({ isOpen: true })
   }
 
-  onChangeAttribute(attribute, key, value) {
-    const stateName = `${attribute}s`
-    const list = this.state[stateName]
-    const field = {
-      fieldValue: value,
-      validatorName: attribute,
-      fieldName: `${attribute}_${key}`
-    }
-
-    list[key] = value
-    this.setState({ [stateName]: list }, () => this.validate(field))
+  handlOnClose = () => {
+    this.setState(INITIAL_STATE)
   }
 
-  addNewAttribute(attribute) {
-    const stateName = `${attribute}s`
-    const list = this.state[stateName]
-
-    if (list.length >= this.multiple_limit) {
-      return
-    }
-
-    list.push('')
-    this.setState({ [stateName]: list })
-  }
-
-  onRemoveAttribute(attribute, key) {
-    const stateName = `${attribute}s`
-    const list = this.state[stateName]
-
-    // remove
-    list.splice(key, 1)
-    this.setState({ [stateName]: list })
-  }
-
-  async save() {
-    const {
-      first_name, middle_name, last_name, stage, phones, emails
-    } = this.state
-    const { onNewContact } = this.props
-
-    this.setState({ saving: true })
-
-    try {
-      const contact = {
-        emails,
-        phone_numbers: phones,
-        first_name,
-        last_name,
-        middle_name,
-        stage
-      }
-
-      const id = await store.dispatch(addContact(contact))
-
-      this.setState({ showNewContactModal: false })
-
-      // trigger
-      onNewContact(id)
-    } catch (e) {
-      if (e.response) {
-        this.props.notify({
-          message: e.response.body.message,
-          status: 'error'
-        })
-      }
-    } finally {
-      this.setState({ saving: false })
-    }
-  }
-
-  onHide() {
-    this.setState({ showNewContactModal: false })
-  }
-
-  validate = async ({ fieldName, fieldValue, validatorName }) => {
+  async validate({ fieldName, fieldValue, validatorName }) {
     const { invalidFields } = this.state
 
     const isValidName = name =>
@@ -150,6 +100,74 @@ class AddContact extends React.Component {
     }
   }
 
+  handleOnChangeAttribute = (name, index, value) => {
+    const attributeName = `${name}s`
+    const attribute = update(this.state[attributeName], { $splice: [[index, 1]] })
+    const newAttribute = [...attribute, value]
+
+    const fieldForValidator = {
+      fieldValue: value,
+      validatorName: name,
+      fieldName: `${name}_${index}`
+    }
+
+    this.setState({ [attributeName]: newAttribute }, () =>
+      this.validate(fieldForValidator))
+  }
+
+  handleAddNewAttribute = attributeName => {
+    const fieldName = `${attributeName}s`
+
+    // The empty string value that have been added,
+    // it is just to mapping over the items for generate item in react.
+    this.setState(prevState => ({
+      [fieldName]: [...prevState[fieldName], '']
+    }))
+  }
+
+  handleRemoveAttribute = (attributeName, index) => {
+    const fieldName = `${attributeName}s`
+
+    this.setState(prevState => ({
+      [fieldName]: update(prevState[fieldName], { $splice: [[index, 1]] })
+    }))
+  }
+
+  async handleSubmit() {
+    const {
+      title, first_name, middle_name, last_name, stage, phones, emails
+    } = this.state
+    const { onNewContact } = this.props
+
+    this.setState({ saving: true })
+
+    try {
+      const contact = {
+        title,
+        emails,
+        phone_numbers: phones,
+        first_name,
+        last_name,
+        middle_name,
+        stage
+      }
+
+      const id = await store.dispatch(addContact(contact))
+
+      this.setState(INITIAL_STATE)
+
+      // trigger
+      onNewContact(id)
+    } catch (e) {
+      if (e.response) {
+        this.props.notify({
+          message: e.response.body.message,
+          status: 'error'
+        })
+      }
+    }
+  }
+
   setFieldToState = field => {
     const { fieldName, fieldValue } = field
 
@@ -162,10 +180,10 @@ class AddContact extends React.Component {
     return requiredFields.every(field => this.state[field])
   }
 
-  render() {
+  render = () => {
     const {
       saving,
-      showNewContactModal,
+      isOpen,
       first_name,
       middle_name,
       last_name,
@@ -178,21 +196,38 @@ class AddContact extends React.Component {
 
     return (
       <Fragment>
-        <Button bsStyle="primary" onClick={() => this.openDialog()}>
+        <Button bsStyle="primary" onClick={this.handleOpenModal}>
           Add Contact
         </Button>
 
         <Modal
           dialogClassName="modal-add-contact"
-          show={showNewContactModal}
-          onHide={() => this.onHide()}
+          show={isOpen}
+          onHide={this.handlOnClose}
         >
           <Modal.Body>
             <Modal.Header closeButton>
-              <Modal.Title>New Contact</Modal.Title>
+              <Modal.Title>Add New Contact</Modal.Title>
             </Modal.Header>
 
-            <Stage default="General" onChange={stage => this.setState({ stage })} />
+            <div style={{ display: 'flex' }}>
+              <HalfColumnContainer>
+                <span style={{ marginRight: '1rem' }}>Stage:</span>
+                <Stage
+                  defaultTitle="General"
+                  selectedItem={this.state.stage}
+                  handleOnSelect={stage => this.setState({ stage })}
+                />
+              </HalfColumnContainer>
+              <HalfColumnContainer>
+                <span style={{ marginRight: '1rem' }}>Title:</span>
+                <Title
+                  defaultTitle="Mr"
+                  selectedItem={this.state.title}
+                  handleOnSelect={title => this.setState({ title })}
+                />
+              </HalfColumnContainer>
+            </div>
 
             <div className="fullname">
               <Name
@@ -238,22 +273,22 @@ class AddContact extends React.Component {
 
             <Emails
               list={emails}
-              attribute="email"
+              attributeName="email"
               invalidFields={invalidFields}
               errorMessage="Enter a valid email!"
-              onAdd={this.addNewAttribute.bind(this)}
-              onChange={this.onChangeAttribute.bind(this)}
-              onRemove={this.onRemoveAttribute.bind(this)}
+              onAdd={this.handleAddNewAttribute}
+              onChange={this.handleOnChangeAttribute}
+              onRemove={this.handleRemoveAttribute}
             />
 
             <Phones
               list={phones}
-              attribute="phone"
+              attributeName="phone"
               invalidFields={invalidFields}
               errorMessage="Enter a valid phone number!"
-              onAdd={this.addNewAttribute.bind(this)}
-              onChange={this.onChangeAttribute.bind(this)}
-              onRemove={this.onRemoveAttribute.bind(this)}
+              onAdd={this.handleAddNewAttribute}
+              onChange={this.handleOnChangeAttribute}
+              onRemove={this.handleRemoveAttribute}
             />
           </Modal.Body>
 
@@ -261,7 +296,7 @@ class AddContact extends React.Component {
             <Button
               bsStyle="primary"
               className="create-button"
-              onClick={() => this.save()}
+              onClick={this.handleSubmit}
               disabled={saving || !isFormCompleted}
             >
               {saving ? 'Saving...' : 'Add'}
@@ -273,7 +308,7 @@ class AddContact extends React.Component {
   }
 }
 
-export default connect(null, { notify })(AddContact)
+export default connect(null, { notify })(AddContactModal)
 
 /**
  * validate email

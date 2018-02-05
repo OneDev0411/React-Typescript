@@ -12,6 +12,7 @@ export function addContact(args) {
   let {
     first_name,
     last_name,
+    title,
     middle_name,
     legal_first_name,
     legal_middle_name,
@@ -28,14 +29,14 @@ export function addContact(args) {
       names: [
         {
           type: 'name',
+          title,
           first_name,
           middle_name,
           last_name,
           legal_prefix,
           legal_first_name,
           legal_middle_name,
-          legal_last_name,
-          title: legal_prefix
+          legal_last_name
         }
       ],
       source_types: [

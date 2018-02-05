@@ -1,5 +1,5 @@
 import React from 'react'
-import AddContact from '../Add-Contact'
+import AddContact from '../AddContactModal'
 import ImportOutlook from './ImportOutlook'
 import ImportCsv from './ImportCsv'
 

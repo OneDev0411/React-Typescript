@@ -73,11 +73,11 @@ class ContactsList extends React.Component {
         ),
         id: 'stage',
         accessor: contact => Contact.get.stage(contact).name,
-        className: 'td--stage-container',
+        className: 'td--dropdown-container',
         Cell: ({ original: contact }) => (
           <Stage
-            default={Contact.get.stage(contact).name}
-            onChange={stage =>
+            defaultTitle={Contact.get.stage(contact).name}
+            handleOnSelect={stage =>
               this.onChangeStage(stage, contact, props.upsertAttributes)
             }
           />
