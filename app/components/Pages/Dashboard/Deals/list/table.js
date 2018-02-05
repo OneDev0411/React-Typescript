@@ -250,71 +250,82 @@ class BaseTable extends React.Component {
     const hasRows = filteredDeals.length > 0
     const searchBoxIsOpen = filters.searchResult
 
+    let emptySearch
+    let noSearchResults
+    let emptyState
+
     if (searchBoxIsOpen && emptySearchPageIsOpen) {
-      return <EmptySearch />
+      emptySearch = true
     }
 
     if (searchBoxIsOpen && !hasRows) {
-      return <NoSearchResults />
+      noSearchResults = true
     }
 
     if (!hasRows && tabName === 'All') {
-      return <EmptyState isBackOffice={isBackOffice} />
+      emptyState = true
     }
 
     return (
       <div className="table-container">
-        <table className="table table-hover">
-          <tbody>
-            <tr className="header">
-              {_.chain(this.cells)
-                .pairs()
-                .filter(cell => !cell[1].justFilter)
-                .map(([key, cell]) => (
-                  <td
-                    key={`CELL_${key}`}
-                    className={cn(cell.className, {
-                      sortable: cell.sortable,
-                      isActive: sortBy === key
-                    })}
-                  >
-                    <span
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => cell.sortable && this.setSort(key)}
-                    >
-                      {cell.caption}&nbsp;
-                      {cell.sortable && this.getSorterCaret(key)}
-                    </span>
-                  </td>
-                ))
-                .value()}
-            </tr>
-
-            {_.chain(filteredDeals)
-              .sortBy(deal => this.sort(deal))
-              .shouldReverse(sortOrder)
-              .map((deal, rowId) => (
-                <tr
-                  key={`DEAL_${deal.id}`}
-                  className="item"
-                  onClick={e => this.onClickDeal(e, deal.id)}
-                >
+        {emptySearch && <EmptySearch />}
+        {noSearchResults && <NoSearchResults />}
+        {emptyState && <EmptyState isBackOffice={isBackOffice} />}
+        {!emptySearch &&
+          !noSearchResults &&
+          !emptyState && (
+            <table className="table table-hover">
+              <tbody>
+                <tr className="header">
                   {_.chain(this.cells)
-                    .filter(cell => !cell.justFilter)
-                    .map((cell, key) => (
+                    .pairs()
+                    .filter(cell => !cell[1].justFilter)
+                    .map(([key, cell]) => (
                       <td
-                        key={`DEAL_${deal.id}__CELL_${key}`}
-                        className={cell.className}
+                        key={`CELL_${key}`}
+                        className={cn(cell.className, {
+                          sortable: cell.sortable,
+                          isActive: sortBy === key
+                        })}
                       >
-                        {cell.getText(deal, rowId, filteredDeals.length)}
+                        <span
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => cell.sortable && this.setSort(key)}
+                        >
+                          {cell.caption}&nbsp;
+                          {cell.sortable && this.getSorterCaret(key)}
+                        </span>
                       </td>
                     ))
                     .value()}
                 </tr>
-              ))
-              .value()}
-          </tbody>
-        </table>
+
+                {_.chain(filteredDeals)
+                  .sortBy(deal => this.sort(deal))
+                  .shouldReverse(sortOrder)
+                  .map((deal, rowId) => (
+                    <tr
+                      key={`DEAL_${deal.id}`}
+                      className="item"
+                      onClick={e => this.onClickDeal(e, deal.id)}
+                    >
+                      {_.chain(this.cells)
+                        .filter(cell => !cell.justFilter)
+                        .map((cell, key) => (
+                          <td
+                            key={`DEAL_${deal.id}__CELL_${key}`}
+                            className={cell.className}
+                          >
+                            {cell.getText(deal, rowId, filteredDeals.length)}
+                          </td>
+                        ))
+                        .value()}
+                    </tr>
+                  ))
+                  .value()}
+              </tbody>
+            </table>
+          )}
       </div>
     )
   }
