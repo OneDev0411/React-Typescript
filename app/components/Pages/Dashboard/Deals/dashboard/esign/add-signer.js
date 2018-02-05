@@ -1,18 +1,18 @@
 import React from 'react'
-import { Modal } from 'react-bootstrap'
 import Roles from '../roles'
+import Modal from '../../../../../../views/components/BasicModal'
+import CancelButton from '../../../../../../views/components/Button/CancelButton'
 
 export default ({
   show, deal, onHide, allowedRoles, onAddRecipient
 }) => (
   <Modal
-    show={show}
-    onHide={onHide}
-    dialogClassName="modal-deal-esign-add-signer"
-    backdrop="static"
+    isOpen={show}
+    className="c-add-signer-modal"
+    contentLabel="Add a Signer"
+    handleOnClose={onHide}
   >
-    <Modal.Header closeButton>Add a signer</Modal.Header>
-
+    <Modal.Header title="Add a Signer" />
     <Modal.Body>
       <Roles
         deal={deal}
@@ -22,5 +22,8 @@ export default ({
         onSelect={role => onAddRecipient(role)}
       />
     </Modal.Body>
+    <Modal.Footer style={{ flexDirection: 'row-reverse' }}>
+      <CancelButton onClick={onHide}>Cancel</CancelButton>
+    </Modal.Footer>
   </Modal>
 )
