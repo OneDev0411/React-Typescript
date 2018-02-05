@@ -190,7 +190,7 @@ class AddContactModal extends React.Component {
         >
           <Modal.Body>
             <Modal.Header closeButton>
-              <Modal.Title>New Contact</Modal.Title>
+              <Modal.Title>Add New Contact</Modal.Title>
             </Modal.Header>
 
             <Stage default="General" onChange={stage => this.setState({ stage })} />
