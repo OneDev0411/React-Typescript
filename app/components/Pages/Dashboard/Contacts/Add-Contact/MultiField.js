@@ -5,7 +5,7 @@ class MultiField extends React.Component {
   render = () => {
     const {
       list,
-      attribute,
+      attributeName,
       prefix,
       placeholder,
       onChange,
@@ -29,7 +29,7 @@ class MultiField extends React.Component {
                 onChange={event => {
                   const { value } = event.target
 
-                  onChange(attribute, index, value)
+                  onChange(attributeName, index, value)
                 }}
               />
 
@@ -47,14 +47,14 @@ class MultiField extends React.Component {
                 list.length <= maxItems && (
                   <img
                     src="/static/images/contacts/add.svg"
-                    onClick={() => onAdd(attribute)}
+                    onClick={() => onAdd(attributeName)}
                   />
                 )}
 
               {index > 0 && (
                 <img
                   src="/static/images/contacts/remove.svg"
-                  onClick={e => onRemove(attribute, key)}
+                  onClick={e => onRemove(attributeName, key)}
                 />
               )}
             </div>
