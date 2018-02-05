@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { getContactsList } from '../../../reducers/contacts/list'
 import { extractUserInfoFromContact } from '../../../models/Contact'
 
-import BasicModal from '../BasicModal'
+import BareModal from '../BareModal'
 import Header from './components/Header'
 import Body from './components/Body'
 import Footer from './components/Footer'
@@ -35,7 +35,7 @@ function SelectContactModal(props) {
   } = props
 
   return (
-    <BasicModal isOpen={isOpen} contentLabel={title} onRequestClose={handleOnClose}>
+    <BareModal isOpen={isOpen} contentLabel={title} onRequestClose={handleOnClose}>
       <Header title={title}>
         <ShadowButton onClick={handleAddManually} color="#2196f3">
           <svg
@@ -55,7 +55,7 @@ function SelectContactModal(props) {
       <Footer>
         <CancelButton onClick={handleOnClose}>Cancel</CancelButton>
       </Footer>
-    </BasicModal>
+    </BareModal>
   )
 }
 
