@@ -4,7 +4,20 @@ import styled from 'styled-components'
 import Downshift from 'downshift'
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
-import { extractUserInfoFromContact } from '../../../../../models/Contact'
+
+function filterKeywords({ item, keyword }) {
+  if (!keyword || keyword.length < 2) {
+    return true
+  }
+
+  return Object.keys(item).some(fieldName => {
+    const fieldValue = item[fieldName]
+
+    if (typeof fieldValue === 'string') {
+      return fieldValue.toLowerCase().includes(keyword.toLowerCase())
+    }
+  })
+}
 
 const ContactsListContainer = styled.div`
   position: relative;
@@ -26,24 +39,19 @@ const ContactsList = styled.div`
 `
 
 const propTypes = {
-  contactsList: PropTypes.array.isRequired
+  handleSelectedItem: PropTypes.func.isRequired,
+  list: PropTypes.arrayOf(PropTypes.shape).isRequired
 }
 
 class Body extends Component {
   constructor(props) {
     super(props)
 
-    const { contactsList } = this.props
+    const { list } = this.props
 
     this.state = {
-      items: contactsList || []
+      items: list || []
     }
-
-    this.onChangeHandler = this.onChangeHandler.bind(this)
-  }
-
-  onChangeHandler = item => {
-    this.props.selectedItemHandler(extractUserInfoFromContact(item))
   }
 
   handleItemToString = item => {
@@ -58,11 +66,11 @@ class Body extends Component {
 
   render() {
     const { items } = this.state
-    const { selectedItemHandler } = this.props
+    const { handleSelectedItem } = this.props
 
     return (
       <Downshift
-        onChange={this.onChangeHandler}
+        onChange={handleSelectedItem}
         itemToString={this.handleItemToString}
         render={({
  getInputProps, getItemProps, inputValue, highlightedIndex
@@ -73,7 +81,7 @@ class Body extends Component {
         style={{ marginBottom: '12px' }}
         inputProps={{
                   ...getInputProps({
-                    placeholder: 'Enter a keyword for searching in your contacts'
+                    placeholder: 'Enter a keyword ...'
                   })
                 }}
       />
@@ -82,14 +90,13 @@ class Body extends Component {
     <ContactsListContainer>
       <ContactsList className="u-scrollbar--thinner">
         {items
-                    .filter(item =>
-                      filterKeywords({ keyword: inputValue, contact: item }))
+                    .filter(item => filterKeywords({ item, keyword: inputValue }))
                     .map((item, index) => (
                       <ContactItem
                         item={item}
-                        key={item.id}
+                        key={item.id || `downshift_search_result_item_${index}`}
                         {...getItemProps({ item })}
-                        onClickHandler={selectedItemHandler}
+                        onClickHandler={handleSelectedItem}
                         isHighlighted={highlightedIndex === index}
                       />
                     ))}
@@ -106,19 +113,3 @@ class Body extends Component {
 Body.propTypes = propTypes
 
 export default Body
-
-function filterKeywords({ keyword, contact }) {
-  if (!keyword || keyword.length < 2) {
-    return true
-  }
-
-  const user = extractUserInfoFromContact(contact)
-
-  return Object.keys(user).some(fieldName => {
-    const fieldValue = user[fieldName]
-
-    if (typeof fieldValue === 'string') {
-      return fieldValue.toLowerCase().includes(keyword.toLowerCase())
-    }
-  })
-}

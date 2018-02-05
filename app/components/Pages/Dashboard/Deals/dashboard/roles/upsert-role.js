@@ -30,15 +30,19 @@ class UpsertRole extends React.Component {
     this.setState({ showAddToDealModal: false })
   }
 
-  addRoleWithExistingContactHandler = user => {
+  handleSelectedContact = contact => {
+    const newContact = contact
+
+    delete newContact.id
+
     const {
       legal_last_name, legal_first_name, last_name, first_name
-    } = user
+    } = contact
 
     const fakeRole = {
       legal_first_name: legal_first_name || first_name,
       legal_last_name: legal_last_name || last_name,
-      ...user
+      ...newContact
     }
 
     this.setState({
@@ -50,7 +54,7 @@ class UpsertRole extends React.Component {
 
   render() {
     const { fakeRole, showAddRoleModal, showAddToDealModal } = this.state
-    const { deal, allowedRoles } = this.props
+    const { deal, allowedRoles, contactsList } = this.props
 
     return (
       <div>
@@ -65,9 +69,9 @@ class UpsertRole extends React.Component {
         <SelectContactModal
           title="Add to Deal"
           isOpen={showAddToDealModal}
-          addManuallyHandler={this.showAddRoleModal}
-          closeHandler={this.handleCloseAddToDealModal}
-          selectedItemHandler={this.addRoleWithExistingContactHandler}
+          handleAddManually={this.showAddRoleModal}
+          handleOnClose={this.handleCloseAddToDealModal}
+          handleSelectedItem={this.handleSelectedContact}
         />
 
         <AddRoleModal

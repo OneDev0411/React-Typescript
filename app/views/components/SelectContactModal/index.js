@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { getContactsList } from '../../../reducers/contacts/list'
+import { extractUserInfoFromContact } from '../../../models/Contact'
 
-import BasicModal from '../BasicModal'
+import BareModal from '../BareModal'
 import Header from './components/Header'
 import Body from './components/Body'
 import Footer from './components/Footer'
@@ -13,31 +14,30 @@ import CancelButton from '../Button/CancelButton'
 const propTypes = {
   title: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
-  closeHandler: PropTypes.func.isRequired,
-  addManuallyHandler: PropTypes.func.isRequired,
-  selectedItemHandler: PropTypes.func.isRequired,
-  contactsList: PropTypes.arrayOf(PropTypes.shape)
+  handleOnClose: PropTypes.func.isRequired,
+  handleAddManually: PropTypes.func.isRequired,
+  handleSelectedItem: PropTypes.func.isRequired,
+  list: PropTypes.arrayOf(PropTypes.shape)
 }
 
 const defaultProps = {
-  contactsList: [],
   title: 'Select Contact'
 }
 
-function Modal(props) {
+function SelectContactModal(props) {
   const {
     title,
     isOpen,
-    closeHandler,
     contactsList,
-    addManuallyHandler,
-    selectedItemHandler
+    handleOnClose,
+    handleAddManually,
+    handleSelectedItem
   } = props
 
   return (
-    <BasicModal isOpen={isOpen} contentLabel={title} onRequestClose={closeHandler}>
+    <BareModal isOpen={isOpen} contentLabel={title} onRequestClose={handleOnClose}>
       <Header title={title}>
-        <ShadowButton onClick={addManuallyHandler} color="#2196f3">
+        <ShadowButton onClick={handleAddManually} color="#2196f3">
           <svg
             width="32"
             height="32"
@@ -51,26 +51,23 @@ function Modal(props) {
           </svg>
         </ShadowButton>
       </Header>
-      <Body contactsList={contactsList} selectedItemHandler={selectedItemHandler} />
+      <Body list={contactsList} handleSelectedItem={handleSelectedItem} />
       <Footer>
-        <CancelButton onClick={closeHandler}>Cancel</CancelButton>
+        <CancelButton onClick={handleOnClose}>Cancel</CancelButton>
       </Footer>
-    </BasicModal>
+    </BareModal>
   )
 }
 
-Modal.propTypes = propTypes
-Modal.defaultProps = defaultProps
-Modal.displayName = 'SelectContactModal'
+SelectContactModal.propTypes = propTypes
+SelectContactModal.defaultProps = defaultProps
 
 function mapToProps({ contacts }) {
-  const contactsList = getContactsList(contacts)
+  const contactsList = getContactsList(contacts).map(extractUserInfoFromContact)
 
   return {
     contactsList
   }
 }
 
-const selectContactModal = connect(mapToProps)(Modal)
-
-export default selectContactModal
+export default connect(mapToProps)(SelectContactModal)
