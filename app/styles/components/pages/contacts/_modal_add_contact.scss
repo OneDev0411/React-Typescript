@@ -40,6 +40,10 @@
     border-left: 0;
     border-color: #e2e6ea;
     padding-left: 3%;
+
+    &::-ms-clear {
+      display: none;
+    }
   }
 
   .fullname {
