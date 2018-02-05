@@ -16,14 +16,13 @@ export default class HeaderSearch extends React.Component {
   }
 
   static propTypes = {
-    onInputChange: PropTypes.isRequired.func,
+    onInputChange: PropTypes.func.isRequired,
     collapsible: PropTypes.bool,
     expanded: PropTypes.bool,
     debounceTime: PropTypes.number
   }
 
   static defaultProps = {
-    onInputChange: () => null,
     collapsible: true,
     expanded: true,
     debounceTime: 700
@@ -35,7 +34,7 @@ export default class HeaderSearch extends React.Component {
 
     return (
       <Panel
-        className="list--header agent"
+        className="list--header no-box-shadow"
         collapsible={collapsible}
         expanded={expanded}
         onEntered={() => this.searchInput.focus()}
