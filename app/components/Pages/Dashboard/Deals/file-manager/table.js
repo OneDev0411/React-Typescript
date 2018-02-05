@@ -7,11 +7,13 @@ import _ from 'underscore'
 import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
 import Radio from '../components/radio'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
+import Search from '../../../../Partials/headerSearch'
 
 export class FileManager extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      filter: '',
       deleting: null,
       selectedRows: []
     }
@@ -19,6 +21,16 @@ export class FileManager extends React.Component {
 
   getDate(date) {
     return moment.unix(date).format('MMMM DD, YY [at] hh:mm A')
+  }
+
+  applyFilter(file, task) {
+    const { filter } = this.state
+
+    if (filter.length === 0) {
+      return true
+    }
+
+    return file.name.includes(filter) || task.title.includes(filter)
   }
 
   getAllFiles() {
@@ -32,7 +44,7 @@ export class FileManager extends React.Component {
         const task = tasks[tId]
         const attachments = task.room.attachments || []
 
-        attachments.forEach(file => {
+        attachments.filter(file => this.applyFilter(file, task)).forEach(file => {
           files.push({
             id: file.id,
             name: file.name,
@@ -136,6 +148,12 @@ export class FileManager extends React.Component {
 
     return (
       <div className="table-container">
+        <Search
+          onInputChange={filter => this.setState({ filter })}
+          debounceTime={100}
+          placeholder="Search all uploaded files in this deal…"
+        />
+
         <ReactTable
           showPagination={false}
           data={data}
