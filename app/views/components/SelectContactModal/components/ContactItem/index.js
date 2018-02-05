@@ -29,17 +29,16 @@ const propTypes = {
 
 function ContactItem(props) {
   const { item, onClickHandler } = props
-  const user = extractUserInfoFromContact(item)
   const {
     phone_number, legal_full_name, email, display_name
-  } = user
+  } = item
   const title = legal_full_name || display_name
   const summary = [email, phone_number].filter(i => i).join(', ')
 
   return (
-    <Container {...props} onClick={() => onClickHandler(user)}>
+    <Container {...props} onClick={() => onClickHandler(item)}>
       <div style={{ width: '32px', height: '32px', borderRadius: '50%' }}>
-        <Avatar user={user} size={32} />
+        <Avatar user={item} size={32} />
       </div>
       <div style={{ paddingLeft: '2rem', height: '32px' }}>
         <Title>{title}</Title>
