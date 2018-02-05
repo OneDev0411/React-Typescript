@@ -1,15 +1,30 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import update from 'react-addons-update'
+import styled from 'styled-components'
 import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import { PhoneNumberUtil } from 'google-libphonenumber'
 import Stage from '../components/Stage'
+import Title from '../components/Title'
 import Name from './Name'
 import Emails from './Emails'
 import Phones from './Phones'
 import store from '../../../../../stores'
 import { addContact } from '../../../../../store_actions/contact'
+
+const HalfColumnContainer = styled.div`
+  width: 50%;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  border-right: 1px solid #e2e6ea;
+
+  &:last-of-type {
+    border-right-width: 0;
+  }
+`
 
 const INITIAL_STATE = {
   stage: 'General',
@@ -120,7 +135,7 @@ class AddContactModal extends React.Component {
 
   async handleSubmit() {
     const {
-      first_name, middle_name, last_name, stage, phones, emails
+      title, first_name, middle_name, last_name, stage, phones, emails
     } = this.state
     const { onNewContact } = this.props
 
@@ -128,6 +143,7 @@ class AddContactModal extends React.Component {
 
     try {
       const contact = {
+        title,
         emails,
         phone_numbers: phones,
         first_name,
@@ -194,21 +210,23 @@ class AddContactModal extends React.Component {
               <Modal.Title>Add New Contact</Modal.Title>
             </Modal.Header>
 
-            <div
-              style={{
-                height: '38px',
-                display: 'flex',
-                alignItems: 'center'
-              }}
-            >
-              <div style={{ padding: '0 2rem' }}>
+            <div style={{ display: 'flex' }}>
+              <HalfColumnContainer>
                 <span style={{ marginRight: '1rem' }}>Stage:</span>
                 <Stage
                   defaultTitle="General"
                   selectedItem={this.state.stage}
                   handleOnSelect={stage => this.setState({ stage })}
                 />
-              </div>
+              </HalfColumnContainer>
+              <HalfColumnContainer>
+                <span style={{ marginRight: '1rem' }}>Title:</span>
+                <Title
+                  defaultTitle="Mr"
+                  selectedItem={this.state.title}
+                  handleOnSelect={title => this.setState({ title })}
+                />
+              </HalfColumnContainer>
             </div>
 
             <div className="fullname">
