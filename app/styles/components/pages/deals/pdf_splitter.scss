@@ -125,7 +125,57 @@ $splitter-header: 56px;
       }
     }
 
+    .page-selector {
+      @extend %pdf-splitter-page-selector;
+    }
+
     @extend %pdf-splitter-page;
+  }
+}
+
+%pdf-splitter-page-selector {
+  margin-bottom: 20px;
+
+  .radio-button {
+    margin: 0;
+  }
+
+  .btn-radio {
+    border: none;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  span {
+    margin: 0 8px 0 0;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+    color: #1e364b;
+  }
+
+  input {
+    width: 180px;
+    height: 32px;
+    border-radius: 3px;
+    margin-right: 5px;
+    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: solid 1px #dce5eb;
+    padding: 0 5px;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  button {
+    min-width: 50px;
+    min-height: 31px;
+    border-radius: 3px;
+    &.disabled {
+      background-color: #d4dfe6;
+      color: #8da2b5;
+    }
   }
 }
 

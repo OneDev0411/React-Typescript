@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
 import PageThumbnail from './page/thumbnail'
+import PageSelector from './page/selector'
 import {
   selectSplitterPage,
   setSplitterPdfObject
@@ -57,6 +58,8 @@ class PDF extends React.Component {
 
               <span className="pages-count">({doc.pdfInfo.numPages} pages)</span>
             </div>
+
+            <PageSelector pdfId={id} numPages={doc.pdfInfo.numPages} />
 
             {Array.apply(null, { length: doc.pdfInfo.numPages }).map((v, i) => {
               const inUse = typeof pages[`${id}_${i + 1}`] !== 'undefined'
