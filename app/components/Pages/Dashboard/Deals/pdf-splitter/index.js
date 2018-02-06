@@ -7,8 +7,8 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import PDFList from './pdf-list'
 import PagePreview from './page/preview'
 import Workspace from './workspace'
-import { resetSplitter } from '../../../../../../../store_actions/deals'
-import { confirmation } from '../../../../../../../store_actions/confirmation'
+import { resetSplitter } from '../../../../../store_actions/deals'
+import { confirmation } from '../../../../../store_actions/confirmation'
 
 class PDFSplitter extends React.Component {
   constructor(props) {

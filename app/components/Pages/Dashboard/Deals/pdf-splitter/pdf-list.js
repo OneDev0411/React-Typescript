@@ -6,7 +6,7 @@ import PageThumbnail from './page/thumbnail'
 import {
   setSplitterDocument,
   selectSplitterPage
-} from '../../../../../../../store_actions/deals'
+} from '../../../../../store_actions/deals'
 
 const STATUS_UPLOADING = 'uploading'
 const STATUS_UPLOADED = 'uploaded'

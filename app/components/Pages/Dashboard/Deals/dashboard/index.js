@@ -7,7 +7,7 @@ import DealInfo from './deal-info'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
 import UploadPromptModal from './upload/prompt'
-import PDFSplitterModal from './upload/pdf-splitter'
+import PDFSplitterModal from '../pdf-splitter'
 import NavBar from './navbar'
 import { getDeal } from '../../../../../store_actions/deals'
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
 import UploadPromptModal from '../dashboard/upload/prompt'
-import PDFSplitterModal from '../dashboard/upload/pdf-splitter'
+import PDFSplitterModal from '../pdf-splitter'
 import Navbar from './navbar'
 import FilesTable from './table'
 

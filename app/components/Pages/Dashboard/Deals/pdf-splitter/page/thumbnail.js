@@ -2,8 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import { DragSource } from 'react-dnd'
-import { selectSplitterPage, setPagePreview } from '../../../../../../../../store_actions/deals'
-import store from '../../../../../../../../stores'
+import {
+  selectSplitterPage,
+  setPagePreview
+} from '../../../../../../store_actions/deals'
+import store from '../../../../../../stores'
 import Page from '.'
 
 /**
@@ -46,44 +49,43 @@ class PageThumbnail extends React.Component {
   }
 
   previewPage() {
-    const { pdfId, doc, pageNumber, setPagePreview } = this.props
+    const {
+      pdfId, doc, pageNumber, setPagePreview
+    } = this.props
 
     setPagePreview({ pdfId, doc, pageNumber })
   }
 
   render() {
-    const { connectDragSource, inUse, canvasClassName, pageNumber, pdfId, doc } = this.props
+    const {
+      connectDragSource,
+      inUse,
+      canvasClassName,
+      pageNumber,
+      pdfId,
+      doc
+    } = this.props
 
-    return connectDragSource(
-      <div className="inline">
-        <Page
-          containerHeight={158}
-          zoom={2}
-          canvasClassName={canvasClassName}
-          pdfId={pdfId}
-          doc={doc}
-          pageNumber={pageNumber}
-        >
-          {
-            !inUse &&
-            <div className="overlay" />
-          }
+    return connectDragSource(<div className="inline">
+      <Page
+        containerHeight={158}
+        zoom={2}
+        canvasClassName={canvasClassName}
+        pdfId={pdfId}
+        doc={doc}
+        pageNumber={pageNumber}
+      >
+        {!inUse && <div className="overlay" />}
 
-          <span
-            className="page-zoom-in"
-            onClick={() => this.previewPage()}
-          >
-            <i className="fa fa-search" />
-          </span>
+        <span className="page-zoom-in" onClick={() => this.previewPage()}>
+          <i className="fa fa-search" />
+        </span>
 
-          <span className="page-number">
-            { pageNumber }
-          </span>
+        <span className="page-number">{pageNumber}</span>
 
-          { this.props.children }
-        </Page>
-      </div>
-    )
+        {this.props.children}
+      </Page>
+                             </div>)
   }
 }
 

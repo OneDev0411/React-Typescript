@@ -1,9 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
-import { DropTarget } from 'react-dnd'
-import cn from 'classnames'
-import _ from 'underscore'
 import Form from './form'
 import Pages from './pages'
 

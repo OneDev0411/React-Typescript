@@ -4,15 +4,15 @@ import { Button, ProgressBar } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
-import TasksDropDown from '../../tasks-dropdown'
-import Checkbox from '../../../../components/radio'
-import Deal from '../../../../../../../../models/Deal'
+import TasksDropDown from '../../dashboard/upload/tasks-dropdown'
+import Checkbox from '../../components/radio'
+import Deal from '../../../../../../models/Deal'
 import {
   resetSplitterSelectedPages,
   resetSplitter,
   changeNeedsAttention,
   addAttachment
-} from '../../../../../../../../store_actions/deals'
+} from '../../../../../../store_actions/deals'
 
 class WorkspaceForm extends React.Component {
   constructor(props) {
