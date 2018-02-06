@@ -13,7 +13,7 @@ import {
 } from '../../../../../../../store_actions/deals'
 import ChatModel from '../../../../../../../models/Chatroom'
 import DealModel from '../../../../../../../models/Deal'
-import TasksDropDown from '../tasks-dropdown'
+import TasksDropDown from '../../../components/tasks-dropdown'
 import ToolTip from '../../../components/tooltip'
 import Checkbox from '../../../components/radio'
 import FileName from './file-name'
