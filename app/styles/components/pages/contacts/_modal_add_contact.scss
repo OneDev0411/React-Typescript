@@ -11,6 +11,10 @@
     }
   }
 
+  .modal-footer {
+    border-top-width: 0;
+  }
+
   %sharp-input {
     border-radius: 0;
   }
@@ -36,28 +40,37 @@
     border-left: 0;
     border-color: #e2e6ea;
     padding-left: 3%;
-  }
 
-  .fullname {
-    input {
-      @extend %sharp-input;
-      display: inline;
-      width: 50%;
-      &:first-child {
-        border-right: 1px solid #e2e6ea;
-      }
+    &::-ms-clear {
+      display: none;
     }
   }
 
-  .contact-stages {
-    margin: 10px 0 7px 3%;
+  .fullname {
+    border: 1px solid #e2e6ea;
+
+    > div {
+      display: inline-block;
+      width: calc(100% / 3);
+      border-right: 1px solid #e2e6ea;
+      &:last-child {
+        border-right-width: 0;
+      }
+
+      > input {
+        padding: 0.5rem 2rem;
+        width: 100%;
+        height: 38px;
+        border-width: 0;
+      }
+    }
   }
 
   .multiple {
     .m-row {
       position: relative;
       input {
-        border-top: none;
+        border-top-width: 0;
       }
       @extend %show-add-button;
     }

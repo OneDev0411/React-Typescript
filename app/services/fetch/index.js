@@ -22,9 +22,7 @@ export default class Fetch {
 
     this._isLoggedIn = user && user.access_token !== undefined
 
-    const agent = SuperAgent.post(
-      `${this._proxyUrl}/${this.getEndpointKey(endpoint)}`
-    )
+    const agent = SuperAgent.post(`${this._proxyUrl}/${this.getEndpointKey(endpoint)}`)
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
       .retry(2)
@@ -44,28 +42,29 @@ export default class Fetch {
     agent.on('error', error => {
       const errorCode = error.response && ~~error.response.statusCode
 
-      // server send to client 401 error for invalid answer!
-      // Emil said "we can not change it in server",
-      // so we forced to handle it in here with this dirty way.
-      // https://gitlab.com/rechat/web/issues/695
-      //
-      const errorMessage =
-        error.response && error.response.body && error.response.body.message
-      const isUpgradeToAgentRequest =
-        errorMessage === 'Invalid answer to secret question'
-
-      // handle session expiration
-      if (
-        !this._isServerSide &&
-        this._isLoggedIn &&
-        errorCode === 401 &&
-        !isUpgradeToAgentRequest
-      ) {
-        window.location.href = '/signout'
+      if (errorCode === 401) {
+        this.handle401Error(error)
       }
     })
 
     return agent
+  }
+
+  handle401Error(error) {
+    // server send to client 401 error for invalid answer!
+    // Emil said "we can not change it in server",
+    // so we forced to handle it in here with this dirty way.
+    // https://gitlab.com/rechat/web/issues/695
+    //
+    const { body } = error.response
+    const errorMessage = body && body.message
+    const isUpgradeToAgentRequest =
+      errorMessage === 'Invalid answer to secret question'
+
+    // handle session expiration
+    if (!this._isServerSide && this._isLoggedIn && !isUpgradeToAgentRequest) {
+      window.location.href = '/signout'
+    }
   }
 
   getEndpointKey(url) {
@@ -75,7 +74,9 @@ export default class Fetch {
       .replace(/(?!^)\//g, '-') // change the rest slashes to dash
   }
 
-  mock({ endpoint, method, statusCode, response }) {
+  mock({
+    endpoint, method, statusCode, response
+  }) {
     const endpointKey = this.getEndpointKey(endpoint)
 
     return nock(`${config.app.url}/api/proxifier`)

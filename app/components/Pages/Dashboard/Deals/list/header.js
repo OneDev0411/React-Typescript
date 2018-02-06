@@ -6,6 +6,8 @@ import AgentFilter from './agent-filter'
 import BackOfficeFilter from './backoffice-filter'
 import Tooltip from '../components/tooltip'
 import debounce from 'lodash/debounce'
+import { browserHistory } from 'react-router'
+
 import {
   searchAllDeals,
   cleanSearchedDeals
@@ -17,9 +19,22 @@ class Header extends React.Component {
   constructor(props) {
     super(props)
     this.debouncedOnInputChange = debounce(this.onInputChange, 700)
+
     this.state = {
       inputFocused: false
     }
+    browserHistory.listen(location => {
+      const searchBoxIsOpen = this.props.filters.searchResult
+
+      if (searchBoxIsOpen && location.pathname.includes('/dashboard/deals')) {
+        props.removeSearchFilter()
+        props.cleanSearchedDeals()
+
+        if (this.searchInput) {
+          this.searchInput.value = ''
+        }
+      }
+    })
   }
 
   onInputChange() {
@@ -41,20 +56,26 @@ class Header extends React.Component {
     searchBOFilters()
   }
 
+  onChangeFilter = filters => {
+    const { initialFilters } = this.props
+
+    if (this.searchInput) {
+      this.searchInput.value = ''
+    }
+
+    initialFilters(filters)
+  }
   render() {
     const {
       isBackOffice,
-      onFilterChange,
       activeFilterTab,
-      searchBoxIsOpen,
-      setSearchStatus,
-      initialBOFilters,
       showEmptySearchPage,
-      initialAgentFilters,
       cleanSearchedDeals,
-      removeSearchFilter
+      removeSearchFilter,
+      filters,
+      searchBOFilters
     } = this.props
-
+    const searchBoxIsOpen = filters.searchResult
     const { inputFocused } = this.state
     let showSearchInput = true
 
@@ -71,36 +92,12 @@ class Header extends React.Component {
                 <BackOfficeFilter
                   searchMode={searchBoxIsOpen}
                   active={activeFilterTab}
-                  onChangeFilter={filters => {
-                    if (this.searchInput) {
-                      this.searchInput.value = ''
-                    }
-
-                    if (searchBoxIsOpen) {
-                      setSearchStatus(false)
-                      initialBOFilters(filters)
-                      cleanSearchedDeals()
-                    } else {
-                      onFilterChange(filters)
-                    }
-                  }}
+                  onChangeFilter={this.onChangeFilter}
                 />
               ) : (
                 <AgentFilter
                   active={activeFilterTab}
-                  onChangeFilter={filters => {
-                    if (this.searchInput) {
-                      this.searchInput.value = ''
-                    }
-
-                    if (searchBoxIsOpen) {
-                      setSearchStatus(false)
-                      initialAgentFilters(filters)
-                      cleanSearchedDeals()
-                    } else {
-                      onFilterChange(filters)
-                    }
-                  }}
+                  onChangeFilter={this.onChangeFilter}
                 />
               )}
             </div>
@@ -114,14 +111,13 @@ class Header extends React.Component {
                 >
                   <div
                     onClick={() => {
-                      setSearchStatus(!searchBoxIsOpen)
-
                       if (searchBoxIsOpen) {
                         this.searchInput.value = ''
                         removeSearchFilter()
                         cleanSearchedDeals()
                       } else {
                         showEmptySearchPage(true)
+                        searchBOFilters()
                       }
                     }}
                     className="search-button"

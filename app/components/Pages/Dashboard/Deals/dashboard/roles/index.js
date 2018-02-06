@@ -190,11 +190,8 @@ function mapToProps({ deals }) {
   return { roles }
 }
 
-export default connect(
-  mapToProps,
-  {
-    notify,
-    deleteRole,
-    confirmation
-  }
-)(Roles)
+export default connect(mapToProps, {
+  notify,
+  deleteRole,
+  confirmation
+})(Roles)

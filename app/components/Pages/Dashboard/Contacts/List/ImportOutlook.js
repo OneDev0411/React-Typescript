@@ -34,6 +34,12 @@ class ImportOutlook extends React.Component {
       })
     }
 
+    if (nextProps.importOutlook.SuccessfulLogin) {
+      this.setState({
+        showLoading: true
+      })
+    }
+
     if (nextProps.importOutlook.failLogin) {
       this.props.removeImportResult()
       this.setState({
@@ -43,10 +49,10 @@ class ImportOutlook extends React.Component {
   }
 
   render() {
-    const { showLoading } = this.state
+    const { SuccessfulLogin } = this.props.importOutlook
 
     return (
-      <div className="secondary-button">
+      <div className="list--secondary-button">
         <OverlayTrigger
           placement="bottom"
           overlay={
@@ -61,17 +67,14 @@ class ImportOutlook extends React.Component {
               this.loginWindows = window.open(
                 this.url,
                 'myWindow',
-                'width=200,height=100'
+                'width=400,height=600'
               )
-              this.setState({
-                showLoading: true
-              })
             }}
           >
             Import from Outlook
           </button>
         </OverlayTrigger>
-        <ModalImportLoading show={showLoading} />
+        <ModalImportLoading show={SuccessfulLogin} />
       </div>
     )
   }

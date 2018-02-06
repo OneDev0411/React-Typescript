@@ -9,5 +9,7 @@ export default function getUser(user = {}) {
       type: actionsType.SET_USER_TEAMS,
       teams
     })
+
+    return teams
   }
 }

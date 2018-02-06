@@ -408,16 +408,18 @@ Contact.uplaodCsv = async function(file, fileName = null) {
 export default Contact
 
 export function extractUserInfoFromContact(contact) {
-  const { summary } = contact
+  const { summary, id } = contact
   const emails = Contact.get.emails(contact)
   const phones = Contact.get.phones(contact)
   const profile_image_url = Contact.get.avatar(contact)
 
   const user = {
-    ...summary,
+    id,
     emails,
     phones,
-    profile_image_url
+    contactId: id,
+    profile_image_url,
+    ...summary
   }
 
   return user

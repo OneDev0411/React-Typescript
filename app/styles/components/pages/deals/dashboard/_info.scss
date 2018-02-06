@@ -79,3 +79,13 @@
     }
   }
 }
+
+.c-add-signer-modal {
+  .deal-info-title {
+    display: none !important;
+  }
+
+  .deal-info-section.deal-roles {
+    padding: 0 !important;
+  }
+}

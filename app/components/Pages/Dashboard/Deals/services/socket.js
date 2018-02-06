@@ -6,6 +6,7 @@ import {
   updateDeal,
   dealArchived
 } from '../../../../../store_actions/deals'
+import { getActiveTeamACL } from '../../../../../utils/user-teams'
 
 export default class DealSocket extends Socket {
   constructor(user) {
@@ -36,14 +37,10 @@ export default class DealSocket extends Socket {
    * authenticate user brand
    */
   static registerBrand(user) {
+    const acl = getActiveTeamACL(user)
 
-    if (user && user.brand) {
-      console.log('[ + ] Registering Deal Brand')
-      window.socket.emit('Brand.Register', user.brand, (user, err) => {
-        console.log('[ + ] Deal brand registering completed', err)
-      })
-    } else {
-      console.log('[ + ] registerBrand failing', user)
+    if (acl.indexOf('Deals') > -1 || acl.indexOf('BackOffice') > -1) {
+      window.socket.emit('Brand.Register', user.brand)
     }
   }
 

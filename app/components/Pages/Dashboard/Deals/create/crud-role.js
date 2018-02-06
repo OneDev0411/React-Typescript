@@ -100,10 +100,6 @@ class CrudRole extends React.Component {
     this.setState({ form, showFormModal: true, showSelectContactModal: false })
   }
 
-  handleOpenSelectContactModal = () => {
-    this.setState({ showSelectContactModal: true })
-  }
-
   render() {
     const {
       form,
@@ -147,9 +143,9 @@ class CrudRole extends React.Component {
         <SelectContactModal
           title="Add to Deal"
           isOpen={showSelectContactModal}
-          closeHandler={this.handlOnHide}
-          addManuallyHandler={this.handleOpenFormModal}
-          selectedItemHandler={this.handleSelectedContact}
+          handleOnClose={this.handlOnHide}
+          handleAddManually={this.handleOpenFormModal}
+          handleSelectedItem={this.handleSelectedContact}
         />
 
         <Modal
@@ -223,6 +219,10 @@ class CrudRole extends React.Component {
   }
 }
 
-export default connect(({ deals }) => ({
-  teamAgents: deals.agents
-}))(CrudRole)
+function mapToProps({ deals }) {
+  const { agents: teamAgents } = deals
+
+  return { teamAgents }
+}
+
+export default connect(mapToProps)(CrudRole)

@@ -31,13 +31,12 @@ class Filter extends React.Component {
 
     // set filters
     this.props.onChangeFilter({
-      __inbox__: (deal) => deal.inboxes && deal.inboxes.indexOf(filter) > -1
+      __inbox__: deal => deal.inboxes && deal.inboxes.indexOf(filter) > -1
     })
   }
 
   getTabs() {
-    return _
-      .chain(this.props.deals)
+    return _.chain(this.props.deals)
       .pluck('inboxes')
       .flatten()
       .uniq()
@@ -51,6 +50,7 @@ class Filter extends React.Component {
 
     _.each(deals, deal => {
       if (
+        (!deal.searchResult || deal.duplicateDeal) &&
         deal.inboxes &&
         deal.inboxes.indexOf(tabName) > -1 &&
         deal.need_attentions > 0
@@ -68,32 +68,25 @@ class Filter extends React.Component {
 
     return (
       <ul className="filter">
-        {
-          this.getTabs()
-            .map(tabName => {
-              const counter = this.getBadgeCounter(tabName)
+        {this.getTabs().map(tabName => {
+          const counter = this.getBadgeCounter(tabName)
 
-              if (counter === 0) {
-                return false
-              }
+          if (counter === 0) {
+            return false
+          }
 
-              return (
-                <li
-                  key={`FILTER_${tabName}`}
-                  onClick={() => this.setFilter(tabName)}
-                  className={tabName === activeTab ? 'active' : ''}
-                >
-                  <div className="title">
-                    {tabName}
-                  </div>
+          return (
+            <li
+              key={`FILTER_${tabName}`}
+              onClick={() => this.setFilter(tabName)}
+              className={tabName === activeTab ? 'active' : ''}
+            >
+              <div className="title">{tabName}</div>
 
-                  <div className="badge counter">
-                    {counter}
-                  </div>
-                </li>
-              )
-            })
-        }
+              <div className="badge counter">{counter}</div>
+            </li>
+          )
+        })}
       </ul>
     )
   }

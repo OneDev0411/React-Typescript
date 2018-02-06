@@ -13,7 +13,6 @@ export default ({
           <Editable
             type="company"
             id={item.id}
-            placeholder="mm / dd / yyyy"
             showEdit
             showAdd={false}
             text={item.company}

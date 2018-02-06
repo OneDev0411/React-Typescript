@@ -1,5 +1,5 @@
 import Fetch from '../../services/fetch'
-import { getActiveTeamId } from '../../utils/user-teams'
+import { getActiveTeamId, getActiveTeamACL } from '../../utils/user-teams'
 
 /**
  * Search through all deals
@@ -43,12 +43,20 @@ export async function getById(id) {
 export async function getAll(user = {}, backoffice = false) {
   const { access_token } = user
   const brandId = getActiveTeamId(user)
+  const acl = getActiveTeamACL(user)
 
   let endpoint
   let params
 
   if (!brandId) {
     throw new Error('This user does not belong to any brand')
+  }
+
+  if (
+    (backoffice && acl.indexOf('BackOffice') === -1) ||
+    (!backoffice && acl.indexOf('Deals') === -1)
+  ) {
+    throw new Error('Access denied to brand resource')
   }
 
   // backoffice and agent has different endpoints and associations

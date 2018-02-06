@@ -45,7 +45,12 @@ async function display(file, renderProps) {
 
   // append user data to render props params
   if (initialState.user) {
-    await store.dispatch(getTeams(initialState.user))
+    try {
+      await store.dispatch(getTeams(initialState.user))
+    } catch (e) {
+      /* nothing */
+    }
+
     renderProps.params.user = {
       ...store.getState().user,
       activeTeam: this.cookie['rechat-active-team'] || null

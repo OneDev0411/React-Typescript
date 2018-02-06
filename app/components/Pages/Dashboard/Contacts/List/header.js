@@ -1,11 +1,13 @@
 import React from 'react'
-import AddContact from '../Add-Contact'
+import AddContactModal from '../AddContactModal'
 import ImportOutlook from './ImportOutlook'
 import ImportCSV from './ImportCsv'
 import HeaderSearch from '../../../../Partials/headerSearch'
 import cn from 'classnames'
 
-export default ({ user, contactsCount, onNewContact, onInputChange }) => {
+export default ({
+  user, contactsCount, onNewContact, onInputChange
+}) => {
   if (contactsCount === 0) {
     return false
   }
@@ -30,7 +32,7 @@ export default ({ user, contactsCount, onNewContact, onInputChange }) => {
             <ImportCSV />
             <ImportOutlook userId={user.id} />
 
-            <AddContact user={user} onNewContact={id => onNewContact(id)} />
+            <AddContactModal user={user} onNewContact={id => onNewContact(id)} />
           </div>
         </div>
       </div>

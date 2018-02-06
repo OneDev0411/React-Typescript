@@ -5,6 +5,7 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import RoleForm from '../form'
 import { createRoles, updateRole } from '../../../../../../../store_actions/deals'
+import { addContact } from '../../../../../../../store_actions/contact/add-contact'
 
 const initialState = {
   form: null,
@@ -30,11 +31,16 @@ class AddRoleModal extends React.Component {
     this.setState({ form, isFormCompleted })
   }
 
+  notifySuccess = message =>
+    this.props.notify({
+      message,
+      status: 'success'
+    })
+
   submit = async () => {
-    let successMessage
     const { form } = this.state
     const {
-      deal, createRoles, updateRole, notify
+      deal, createRoles, updateRole, notify, addContact
     } = this.props
 
     if (!deal) {
@@ -48,17 +54,20 @@ class AddRoleModal extends React.Component {
     try {
       if (this.isUpdateModal()) {
         await updateRole(deal.id, _.omit(form, 'user'))
-        successMessage = 'Contact updated.'
+        this.notifySuccess('Contact updated.')
       } else {
+        if (!form.contactId) {
+          const copyFormData = Object.assign({}, form)
+
+          await addContact(nomilizedFormDataAsContact(copyFormData))
+          this.notifySuccess('New contact created.')
+        }
+
         await createRoles(deal.id, [form])
-        successMessage = 'Contact added.'
+        this.notifySuccess('Contact added to the deal.')
       }
 
       this.handleCloseModal()
-      notify({
-        status: 'success',
-        message: successMessage
-      })
     } catch (e) {
       if (!e.response) {
         return notify({
@@ -143,6 +152,29 @@ class AddRoleModal extends React.Component {
 
 export default connect(null, {
   notify,
+  addContact,
   updateRole,
   createRoles
 })(AddRoleModal)
+
+function nomilizedFormDataAsContact(formData = {}) {
+  const { email, phone_number } = formData
+  let emails
+  let phone_numbers
+
+  if (email) {
+    emails = [email]
+    delete formData.email
+  }
+
+  if (phone_number) {
+    phone_numbers = [phone_number]
+    delete formData.phone_number
+  }
+
+  return {
+    ...formData,
+    emails,
+    phone_numbers
+  }
+}
