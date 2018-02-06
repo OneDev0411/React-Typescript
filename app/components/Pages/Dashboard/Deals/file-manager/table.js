@@ -3,6 +3,7 @@ import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import { Dropdown, Button } from 'react-bootstrap'
 import moment from 'moment'
+import _ from 'underscore'
 import { getDeal, displaySplitter } from '../../../../../store_actions/deals'
 import Radio from '../components/radio'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
@@ -14,8 +15,10 @@ export class FileManager extends React.Component {
     this.state = {
       filter: '',
       deleting: null,
-      selectedRows: []
+      selectedRows: {}
     }
+
+    this.onCellClick = this.onCellClick.bind(this)
   }
 
   getDate(date) {
@@ -37,6 +40,20 @@ export class FileManager extends React.Component {
 
   isPdfDocument(mime) {
     return mime === 'application/pdf'
+  }
+
+  onCellClick(state, rowInfo, column) {
+    return {
+      onClick: (e, handleOriginal) => {
+        if (column.id === 'radio') {
+          this.toggleSelectedRow(rowInfo.original)
+        }
+
+        if (handleOriginal) {
+          handleOriginal()
+        }
+      }
+    }
   }
 
   getAllFiles() {
@@ -84,24 +101,38 @@ export class FileManager extends React.Component {
     return <img className="icon" src={src} alt="" />
   }
 
-  toggleSelectedRow(id) {
+  toggleSelectedRow(file) {
     const { selectedRows } = this.state
     let newSelectedRows = []
 
-    if (selectedRows.indexOf(id) > -1) {
-      newSelectedRows = selectedRows.filter(rowId => rowId !== id)
+    if (selectedRows[file.id]) {
+      newSelectedRows = _.omit(selectedRows, row => row.id === file.id)
     } else {
-      newSelectedRows = [...selectedRows, id]
+      newSelectedRows = {
+        ...selectedRows,
+        [file.id]: file
+      }
     }
 
     this.setState({ selectedRows: newSelectedRows })
   }
 
-  showSplitter(files) {
-    this.props.displaySplitter(files)
-  }
+  splitMultipleFiles() {
+    const { selectedRows } = this.state
 
-  splitMultipleFiles() {}
+    const files = _.chain(selectedRows)
+      .filter(file => this.isPdfDocument(file.mime))
+      .map(file => ({
+        id: file.id,
+        file: { url: file.url },
+        properties: { name: file.name }
+      }))
+      .value()
+
+    if (files.length > 0) {
+      this.props.displaySplitter(files)
+    }
+  }
 
   splitSingleFile(file) {
     const files = [
@@ -112,7 +143,7 @@ export class FileManager extends React.Component {
       }
     ]
 
-    this.showSplitter(files)
+    this.props.displaySplitter(files)
   }
 
   getColumns() {
@@ -120,16 +151,12 @@ export class FileManager extends React.Component {
 
     return [
       {
+        id: 'radio',
         Header: '',
         accessor: '',
         width: 40,
         className: 'select-row',
-        Cell: props => (
-          <Radio
-            selected={selectedRows.indexOf(props.original.id) > -1}
-            onClick={() => this.toggleSelectedRow(props.original.id)}
-          />
-        )
+        Cell: ({ original: file }) => <Radio selected={selectedRows[file.id]} />
       },
       {
         id: 'name',
@@ -220,13 +247,14 @@ export class FileManager extends React.Component {
         />
 
         <div className="callToActions">
-          {selectedRows.length > 0 && (
-            <Fragment>
-              <button className="button inverse">Delete files</button>
-              <button className="button" onClick={() => this.showSplitter()}>
-                Split PDFs
-              </button>
-            </Fragment>
+          {_.size(selectedRows) > 0 && (
+            <button className="button inverse">Delete files</button>
+          )}
+
+          {_.some(selectedRows, file => this.isPdfDocument(file.mime)) && (
+            <button className="button" onClick={() => this.splitMultipleFiles()}>
+              Split PDFs
+            </button>
           )}
         </div>
 
@@ -235,6 +263,7 @@ export class FileManager extends React.Component {
           data={data}
           pageSize={data.length}
           columns={this.getColumns()}
+          getTdProps={this.onCellClick}
           sortable
           multiSort
           resizable

@@ -27,12 +27,13 @@ export class FileManager extends React.Component {
     }
 
     return (
-      <div className="file-manager u-scrollbar--thinner">
+      <div className="file-manager">
         <Navbar deal={deal} />
-        <FilesTable deal={deal} />
-
-        <UploadPromptModal deal={deal} />
-        <PDFSplitterModal deal={deal} />
+        <div className="content u-scrollbar--thinner">
+          <FilesTable deal={deal} />
+          <UploadPromptModal deal={deal} />
+          <PDFSplitterModal deal={deal} />
+        </div>
       </div>
     )
   }
