@@ -9,7 +9,6 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case types.SET_UPLOAD_FILES:
       return {
-        deal: action.deal,
         task: action.task,
         files: action.files
       }

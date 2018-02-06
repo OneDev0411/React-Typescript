@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import { addNotification as notify } from 'reapop'
 import { Dropdown, Button } from 'react-bootstrap'
-import _ from 'underscore'
 import {
   setUploadAttributes,
   createFormTask
@@ -107,12 +106,7 @@ class DropDownTasks extends React.Component {
       taskTitle
     } = this.state
     const {
-      deal,
-      shouldDropUp,
-      selectedTask,
-      upload,
-      checklists,
-      tasks
+      deal, shouldDropUp, selectedTask, checklists, tasks
     } = this.props
 
     return (

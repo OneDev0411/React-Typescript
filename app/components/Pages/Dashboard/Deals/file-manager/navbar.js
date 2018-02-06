@@ -21,9 +21,7 @@ export class FileManager extends React.Component {
   }
 
   onDrop(files) {
-    const { deal } = this.props
-
-    this.props.setUploadFiles(files, deal, null)
+    this.props.setUploadFiles(files, null)
   }
 
   render() {

@@ -16,7 +16,7 @@ class UploadDocument extends React.Component {
   }
 
   async onDrop(files) {
-    const { deal, task, onDrop } = this.props
+    const { task, onDrop } = this.props
 
     this.setState({
       dropzoneActive: false
@@ -26,7 +26,7 @@ class UploadDocument extends React.Component {
       return onDrop(files)
     }
 
-    this.props.setUploadFiles(files, deal, task)
+    this.props.setUploadFiles(files, task)
   }
 
   /**
@@ -70,7 +70,7 @@ class UploadDocument extends React.Component {
         {dropzoneActive && (
           <div className="upload-placeholder">
             <div className="upload-area">
-              <img src="/static/images/deals/dnd.png" />
+              <img src="/static/images/deals/dnd.png" alt="" />
               <h1 className="title">Drop to upload to this task</h1>
               <span className="desc">
                 You can drag and drop any files to the upload section of the task you
@@ -84,7 +84,7 @@ class UploadDocument extends React.Component {
           <div className={cn('file-upload', { 'has-attachments': hasAttachments })}>
             <div className="item">
               <div className="image">
-                <img src="/static/images/deals/upload-file.svg" />
+                <img src="/static/images/deals/upload-file.svg" alt="" />
               </div>
               <div className="name">
                 <div>

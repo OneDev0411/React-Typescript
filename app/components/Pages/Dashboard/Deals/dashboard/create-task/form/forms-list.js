@@ -86,7 +86,6 @@ class Forms extends React.Component {
   }
 
   async onDropFiles(files) {
-    const { deal } = this.props
     const { newTaskTitle } = this.state
 
     const form = {
@@ -104,13 +103,13 @@ class Forms extends React.Component {
         showNewTaskModal: false
       })
 
-      this.props.setUploadFiles(files, deal, task)
+      this.props.setUploadFiles(files, task)
     }
   }
 
   render() {
     const {
-      forms, show, onClose, displayTaskName, allowCustomTask
+      forms, show, onClose, allowCustomTask
     } = this.props
     const { filter, showNewTaskModal, isCreatingTask } = this.state
 
