@@ -3,8 +3,11 @@ import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import { Dropdown, Button } from 'react-bootstrap'
 import moment from 'moment'
-import cn from 'classnames'
-import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
+import {
+  getDeal,
+  setUploadFiles,
+  displaySplitter
+} from '../../../../../store_actions/deals'
 import Radio from '../components/radio'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import Search from '../../../../Partials/headerSearch'
@@ -98,11 +101,19 @@ export class FileManager extends React.Component {
     this.setState({ selectedRows: newSelectedRows })
   }
 
-  render() {
-    const { selectedRows, deleting } = this.state
-    const data = this.getAllFiles()
+  showSplitter() {
+    const { displaySplitter, setUploadFiles, deal } = this.props
 
-    const columns = [
+    console.log(deal)
+
+    displaySplitter(true)
+    setUploadFiles({}, deal, null)
+  }
+
+  getColumns() {
+    const { selectedRows, deleting } = this.state
+
+    return [
       {
         Header: '',
         accessor: '',
@@ -183,6 +194,12 @@ export class FileManager extends React.Component {
         )
       }
     ]
+  }
+
+  render() {
+    const { selectedRows } = this.state
+
+    const data = this.getAllFiles()
 
     return (
       <div className="table-container">
@@ -196,7 +213,9 @@ export class FileManager extends React.Component {
           {selectedRows.length > 0 && (
             <Fragment>
               <button className="button inverse">Delete files</button>
-              <button className="button">Split PDFs</button>
+              <button className="button" onClick={() => this.showSplitter()}>
+                Split PDFs
+              </button>
             </Fragment>
           )}
         </div>
@@ -205,7 +224,7 @@ export class FileManager extends React.Component {
           showPagination={false}
           data={data}
           pageSize={data.length}
-          columns={columns}
+          columns={this.getColumns()}
           sortable
           multiSort
           resizable
@@ -223,6 +242,7 @@ export default connect(
   }),
   {
     getDeal,
-    setUploadFiles
+    setUploadFiles,
+    displaySplitter
   }
 )(FileManager)
