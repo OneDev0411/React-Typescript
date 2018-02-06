@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import update from 'react-addons-update'
+import update from 'immutability-helper'
 import styled from 'styled-components'
 import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'

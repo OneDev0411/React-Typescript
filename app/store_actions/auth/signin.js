@@ -1,5 +1,6 @@
 import { browserHistory } from 'react-router'
 import signin from '../../models/auth/signin'
+import getTeams from '../../store_actions/user/teams'
 import getDefaultHomePage from '../../utils/get-default-home-page'
 import * as actionsType from '../../constants/auth/signin'
 
@@ -9,11 +10,24 @@ const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
   })
 
   return signin(userInfo).then(
-    user => {
+    async user => {
       dispatch({
         user,
         type: actionsType.SIGNIN_SUCCESS
       })
+
+      try {
+        if (!user.teams) {
+          const teams = await dispatch(getTeams())
+
+          user = {
+            ...user,
+            teams
+          }
+        }
+      } catch (error) {
+        throw error
+      }
 
       // set user data for sentry
       if (window.Raven) {

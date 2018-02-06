@@ -7,10 +7,12 @@
   "repository": "git@gitlab.com:rechat/web.git",
   "license": "ISC",
   "scripts": {
-    "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
+    "develop":
+      "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
-    "serve": "NODE_ENV=production forever node_modules/babel-cli/bin/babel-node.js ./bin/server",
+    "serve":
+      "NODE_ENV=production forever node_modules/babel-cli/bin/babel-node.js ./bin/server",
     "serve:stage": "NODE_ENV=stage babel-node ./bin/server",
     "lint": "npm run lint:app && npm run lint:server",
     "lint:app": "eslint ./app",
@@ -58,7 +60,6 @@
     "cuid": "^1.3.8",
     "downshift": "^1.25.0",
     "emojify.js": "^1.1.0",
-    "emojione": "^2.2.7",
     "es6-promise": "^4.1.0",
     "events": "^1.1.1",
     "express": "^4.16.2",
@@ -76,6 +77,7 @@
     "html-webpack-plugin": "^2.30.1",
     "icloud": "^0.1.0",
     "imagemin-webpack-plugin": "^1.5.2",
+    "immutability-helper": "^2.6.4",
     "intercom-client": "^2.9.1",
     "ioredis": "^2.5.0",
     "isomorphic-fetch": "^2.2.1",
@@ -114,7 +116,6 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-addons-shallow-compare": "^15.6.2",
-    "react-addons-update": "^15.6.2",
     "react-avatar": "^2.5.1",
     "react-bootstrap": "^0.31.5",
     "react-burger-menu": "^2.1.11",
@@ -124,7 +125,8 @@
     "react-dnd": "^2.5.4",
     "react-dnd-html5-backend": "^2.5.4",
     "react-dom": "^16.2.0",
-    "react-dropzone": "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
+    "react-dropzone":
+      "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
     "react-ga": "^2.3.5",
     "react-hot-loader": "^3.1.3",
     "react-images": "^0.5.11",

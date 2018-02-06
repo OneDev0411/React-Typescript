@@ -11,9 +11,6 @@ import config from '../../../../../../config/public'
 class ImportOutlook extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      showLoading: false
-    }
 
     this.url = `${config.api_url}/authorize-ms-graph\
 ?failEvent=importFail\
@@ -29,21 +26,15 @@ class ImportOutlook extends React.Component {
       this.props.getContacts()
       this.props.removeImportResult()
       this.loginWindows && this.loginWindows.close()
-      this.setState({
-        showLoading: false
-      })
     }
 
     if (nextProps.importOutlook.failLogin) {
       this.props.removeImportResult()
-      this.setState({
-        showLoading: false
-      })
     }
   }
 
   render() {
-    const { showLoading } = this.state
+    const { SuccessfulLogin } = this.props.importOutlook
 
     return (
       <div className="list--secondary-button">
@@ -61,17 +52,14 @@ class ImportOutlook extends React.Component {
               this.loginWindows = window.open(
                 this.url,
                 'myWindow',
-                'width=200,height=100'
+                'width=300,height=500'
               )
-              this.setState({
-                showLoading: true
-              })
             }}
           >
             Import from Outlook
           </button>
         </OverlayTrigger>
-        <ModalImportLoading show={showLoading} />
+        <ModalImportLoading show={SuccessfulLogin} />
       </div>
     )
   }

@@ -1,4 +1,4 @@
-import { hasUserAccess, getActiveTeamACL } from './user-teams'
+import { hasUserAccess } from './user-teams'
 
 let defaultHomepage = '/dashboard/mls'
 
@@ -7,9 +7,8 @@ export default function getHomepage(user) {
     return defaultHomepage
   }
 
-  const acl = getActiveTeamACL(user)
-  const hasDealsPermission = acl.includes('Deals')
-  const hasBackOfficePermission = acl.includes('BackOffice')
+  const hasDealsPermission = hasUserAccess(user, 'Deals')
+  const hasBackOfficePermission = hasUserAccess(user, 'BackOffice')
 
   if (hasDealsPermission || hasBackOfficePermission) {
     defaultHomepage = '/dashboard/deals'
