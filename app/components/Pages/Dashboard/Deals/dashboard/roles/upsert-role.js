@@ -54,7 +54,7 @@ class UpsertRole extends React.Component {
 
   render() {
     const { fakeRole, showAddRoleModal, showAddToDealModal } = this.state
-    const { deal, allowedRoles, contactsList } = this.props
+    const { deal, allowedRoles } = this.props
 
     return (
       <div>

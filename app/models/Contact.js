@@ -417,6 +417,7 @@ export function extractUserInfoFromContact(contact) {
     id,
     emails,
     phones,
+    contactId: id,
     profile_image_url,
     ...summary
   }

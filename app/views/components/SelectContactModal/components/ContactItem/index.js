@@ -33,7 +33,7 @@ function ContactItem(props) {
     phone_number, legal_full_name, email, display_name
   } = item
   const title = legal_full_name || display_name
-  const summary = [email, phone_number].filter(i => i).join(', ')
+  const summary = [email, phone_number].filter(i => i && i !== title).join(', ')
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>

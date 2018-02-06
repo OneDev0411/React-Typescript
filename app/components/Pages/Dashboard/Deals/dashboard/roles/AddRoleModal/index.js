@@ -31,8 +31,13 @@ class AddRoleModal extends React.Component {
     this.setState({ form, isFormCompleted })
   }
 
+  notifySuccess = message =>
+    this.props.notify({
+      message,
+      status: 'success'
+    })
+
   submit = async () => {
-    let successMessage
     const { form } = this.state
     const {
       deal, createRoles, updateRole, notify, addContact
@@ -49,18 +54,20 @@ class AddRoleModal extends React.Component {
     try {
       if (this.isUpdateModal()) {
         await updateRole(deal.id, _.omit(form, 'user'))
-        successMessage = 'Contact updated.'
+        this.notifySuccess('Contact updated.')
       } else {
-        await addContact(nomilizedFormDataAsContact(form))
+        if (!form.contactId) {
+          const copyFormData = Object.assign({}, form)
+
+          await addContact(nomilizedFormDataAsContact(copyFormData))
+          this.notifySuccess('New contact created.')
+        }
+
         await createRoles(deal.id, [form])
-        successMessage = 'Contact added.'
+        this.notifySuccess('Contact added to the deal.')
       }
 
       this.handleCloseModal()
-      notify({
-        status: 'success',
-        message: successMessage
-      })
     } catch (e) {
       if (!e.response) {
         return notify({
