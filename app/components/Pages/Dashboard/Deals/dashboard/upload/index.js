@@ -16,7 +16,7 @@ class UploadDocument extends React.Component {
   }
 
   async onDrop(files) {
-    const { task, onDrop } = this.props
+    const { task, onDrop, setUploadFiles } = this.props
 
     this.setState({
       dropzoneActive: false
@@ -26,7 +26,7 @@ class UploadDocument extends React.Component {
       return onDrop(files)
     }
 
-    this.props.setUploadFiles(files, task)
+    setUploadFiles(files, task)
   }
 
   /**

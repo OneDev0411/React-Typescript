@@ -110,8 +110,6 @@ const AsyncDealsLayout = Load({
       return Promise.resolve()
     }
 
-    console.log(user)
-
     return batchActions([
       await dispatch(getContexts(user)),
       await dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))

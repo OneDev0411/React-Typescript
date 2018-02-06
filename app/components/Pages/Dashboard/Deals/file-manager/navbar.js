@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import Dropzone from 'react-dropzone'
@@ -26,7 +26,7 @@ export class FileManager extends React.Component {
 
   render() {
     return (
-      <div className="deal-dashboard u-scrollbar--thinner">
+      <Fragment>
         <div className="deal-navbar">
           <div className="back" onClick={() => this.backToDeal()}>
             <i className="fa fa-chevron-left" />
@@ -51,7 +51,7 @@ export class FileManager extends React.Component {
           accept={Deal.upload.getAcceptedDocuments()}
           style={{ display: 'none' }}
         />
-      </div>
+      </Fragment>
     )
   }
 }

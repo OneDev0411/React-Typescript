@@ -27,7 +27,7 @@ export class FileManager extends React.Component {
     }
 
     return (
-      <div className="deal-dashboard file-manager u-scrollbar--thinner">
+      <div className="file-manager u-scrollbar--thinner">
         <Navbar deal={deal} />
         <FilesTable deal={deal} />
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import cn from 'classnames'
 import _ from 'underscore'
 import { DragDropContextProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
@@ -32,9 +31,9 @@ class PDFSplitter extends React.Component {
   }
 
   render() {
-    const { deal, splitter, upload } = this.props
+    const { deal, splitter } = this.props
 
-    if (splitter.display !== true) {
+    if (_.size(splitter.files) < 1) {
       return false
     }
 
@@ -67,7 +66,6 @@ class PDFSplitter extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
-    upload: deals.upload,
     splitter: deals.splitter
   }
 }

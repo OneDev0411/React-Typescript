@@ -4,12 +4,9 @@ import cn from 'classnames'
 import _ from 'underscore'
 import PageThumbnail from './page/thumbnail'
 import {
-  setSplitterDocument,
-  selectSplitterPage
+  selectSplitterPage,
+  setSplitterPdfObject
 } from '../../../../../store_actions/deals'
-
-const STATUS_UPLOADING = 'uploading'
-const STATUS_UPLOADED = 'uploaded'
 
 class PDF extends React.Component {
   constructor(props) {
@@ -21,24 +18,18 @@ class PDF extends React.Component {
   }
 
   async initialize() {
-    const { upload } = this.props
-    const pdfs = _.filter(
-      upload.files,
-      file => file.fileObject.type === 'application/pdf'
-    )
-
-    if (pdfs.length === 0) {
-      return false
-    }
-
-    // lazy load
+    /* eslint-disable max-len */
     await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */)
+
+    /* eslint-disable max-len */
     await import('pdfjs-dist/web/compatibility' /* webpackChunkName: "pdf.comp" */)
 
-    pdfs.forEach(async pdf => {
-      const doc = await PDFJS.getDocument(pdf.fileObject.preview)
+    const { splitter, setSplitterPdfObject } = this.props
 
-      this.props.setSplitterDocument(pdf.id, doc)
+    _.each(splitter.files, async pdf => {
+      const doc = await PDFJS.getDocument(pdf.file.preview)
+
+      setSplitterPdfObject(pdf.id, doc)
     })
   }
 
@@ -47,67 +38,53 @@ class PDF extends React.Component {
   }
 
   render() {
-    const { splitter, upload } = this.props
+    const { splitter } = this.props
+    const { files, pdfObjects, pages } = splitter
 
     return (
       <div>
-        {_.size(splitter.documents) === 0 && (
+        {_.size(pdfObjects) === 0 && (
           <div className="loading">
-            <img src="/static/images/loading-states/three-dots-blue.svg" />
+            <img src="/static/images/loading-states/three-dots-blue.svg" alt="" />
             <p>Loading Documents</p>
           </div>
         )}
 
-        {_.chain(splitter.documents)
-          .filter((doc, id) => {
-            // set doc id
-            doc.id = id
+        {_.map(pdfObjects, (doc, id) => (
+          <div key={id} className="pdf-section">
+            <div className="heading">
+              <span className="page-title">{files[id].name}</span>
 
-            // get status
-            const { status } = upload.files[id].properties
-
-            return status !== STATUS_UPLOADED && status !== STATUS_UPLOADING
-          })
-          .map(doc => (
-            <div key={`pdf-${doc.id}`} className="pdf-section">
-              <div className="heading">
-                <span className="page-title">
-                  {upload.files[doc.id].properties.fileTitle ||
-                    upload.files[doc.id].fileObject.name}
-                </span>
-
-                <span className="pages-count">({doc.pdfInfo.numPages} pages)</span>
-              </div>
-
-              {Array.apply(null, { length: doc.pdfInfo.numPages }).map((v, i) => {
-                const inUse =
-                  typeof splitter.pages[`${doc.id}_${i + 1}`] !== 'undefined'
-
-                return (
-                  <PageThumbnail
-                    key={`page-${i}`}
-                    inUse={inUse}
-                    canvasClassName={cn({ inUse })}
-                    pdfId={doc.id}
-                    doc={doc}
-                    pageNumber={i + 1}
-                  >
-                    {inUse ? (
-                      <span className="page-cta inuse">In Use</span>
-                    ) : (
-                      <span
-                        className="page-cta"
-                        onClick={() => this.onSelectPage(i + 1, doc.id)}
-                      >
-                        Add page
-                      </span>
-                    )}
-                  </PageThumbnail>
-                )
-              })}
+              <span className="pages-count">({doc.pdfInfo.numPages} pages)</span>
             </div>
-          ))
-          .value()}
+
+            {Array.apply(null, { length: doc.pdfInfo.numPages }).map((v, i) => {
+              const inUse = typeof pages[`${id}_${i + 1}`] !== 'undefined'
+
+              return (
+                <PageThumbnail
+                  key={`page-${i}`}
+                  inUse={inUse}
+                  canvasClassName={cn({ inUse })}
+                  pdfId={id}
+                  doc={doc}
+                  pageNumber={i + 1}
+                >
+                  {inUse ? (
+                    <span className="page-cta inuse">In Use</span>
+                  ) : (
+                    <span
+                      className="page-cta"
+                      onClick={() => this.onSelectPage(i + 1, id)}
+                    >
+                      Add page
+                    </span>
+                  )}
+                </PageThumbnail>
+              )
+            })}
+          </div>
+        ))}
       </div>
     )
   }
@@ -115,9 +92,11 @@ class PDF extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
-    splitter: deals.splitter,
-    upload: deals.upload
+    splitter: deals.splitter
   }
 }
 
-export default connect(mapStateToProps, { selectSplitterPage, setSplitterDocument })(PDF)
+export default connect(mapStateToProps, {
+  selectSplitterPage,
+  setSplitterPdfObject
+})(PDF)

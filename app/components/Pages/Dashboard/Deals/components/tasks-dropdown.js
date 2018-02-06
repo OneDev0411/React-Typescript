@@ -3,10 +3,7 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import { addNotification as notify } from 'reapop'
 import { Dropdown, Button } from 'react-bootstrap'
-import {
-  setUploadAttributes,
-  createFormTask
-} from '../../../../../store_actions/deals'
+import { createFormTask } from '../../../../../store_actions/deals'
 import TaskForms from '../dashboard/create-task/form/forms-list'
 
 class DropDownTasks extends React.Component {
@@ -210,7 +207,6 @@ class DropDownTasks extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
-    upload: deals.upload,
     checklists: deals.checklists,
     tasks: deals.tasks
   }
@@ -218,6 +214,5 @@ function mapStateToProps({ deals }) {
 
 export default connect(mapStateToProps, {
   notify,
-  createFormTask,
-  setUploadAttributes
+  createFormTask
 })(DropDownTasks)

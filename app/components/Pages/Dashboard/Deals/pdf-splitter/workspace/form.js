@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button, ProgressBar } from 'react-bootstrap'
+import { ProgressBar } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
@@ -20,7 +20,7 @@ class WorkspaceForm extends React.Component {
     this.state = {
       saving: false,
       title: '',
-      task: props.upload.task || null,
+      task: null,
       notifyOffice: true
     }
   }
@@ -38,7 +38,7 @@ class WorkspaceForm extends React.Component {
 
   async save() {
     const { title, task, notifyOffice } = this.state
-    const { notify, upload, splitter } = this.props
+    const { notify, splitter } = this.props
     const { pages } = splitter
     let created = false
 
@@ -48,13 +48,7 @@ class WorkspaceForm extends React.Component {
     const files = _.chain(pages)
       .pluck('documentId')
       .uniq()
-      .map(id => {
-        const file = upload.files[id].fileObject
-
-        file.id = id
-
-        return file
-      })
+      .map(id => splitter.files[id])
       .value()
 
     try {
@@ -124,10 +118,11 @@ class WorkspaceForm extends React.Component {
   }
 
   render() {
-    const { deal, upload, tasks } = this.props
+    const { deal, tasks } = this.props
     const {
       title, task, notifyOffice, saving
     } = this.state
+
     const formValidated = this.isFormValidated()
 
     if (saving) {
@@ -154,7 +149,6 @@ class WorkspaceForm extends React.Component {
           deal={deal}
           onSelectTask={taskId => this.setState({ task: tasks[taskId] })}
           selectedTask={task}
-          upload={upload}
         />
 
         <Checkbox
@@ -188,7 +182,6 @@ class WorkspaceForm extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
-    upload: deals.upload,
     splitter: deals.splitter,
     tasks: deals.tasks
   }

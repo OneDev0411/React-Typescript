@@ -2,6 +2,7 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 import {
   resetUploadFiles,
@@ -160,24 +161,42 @@ class UploadModal extends React.Component {
     return checklists[task.checklist].is_deactivated
   }
 
-  render() {
-    const { deal, splitter, upload } = this.props
-    const filesCount = _.size(upload.files)
+  getPdfFiles() {
+    const { upload } = this.props
 
-    // get list of pdfs aren't uploaded yet
-    const pdfsList = _.filter(
+    return _.filter(
       upload.files,
       file =>
         file.fileObject.type === 'application/pdf' &&
         file.properties.status !== STATUS_UPLOADED
     )
+  }
+
+  showSplitter() {
+    const { displaySplitter } = this.props
+
+    const files = this.getPdfFiles().map(item => ({
+      id: item.id,
+      file: item.fileObject,
+      properties: item.properties
+    }))
+
+    displaySplitter(files)
+  }
+
+  render() {
+    const { deal, splitter, upload } = this.props
+    const filesCount = _.size(upload.files)
+
+    // get list of pdfs aren't uploaded yet
+    const pdfsList = this.getPdfFiles()
 
     let fileCounter = 0
 
     return (
       <Modal
         dialogClassName="modal-deal-upload-files"
-        show={filesCount > 0 && !splitter.display}
+        show={filesCount > 0 && _.size(splitter.files) === 0}
         onHide={() => this.closeModal()}
         backdrop="static"
       >
@@ -261,7 +280,7 @@ class UploadModal extends React.Component {
             bsStyle="primary"
             className={cn('btn-split', { disabled: pdfsList.length === 0 })}
             disabled={pdfsList.length === 0}
-            onClick={() => this.props.displaySplitter(true)}
+            onClick={() => this.showSplitter()}
           >
             Split PDFs
           </Button>
@@ -286,8 +305,8 @@ export default connect(mapStateToProps, {
   notify,
   resetUploadFiles,
   resetSplitter,
-  setUploadAttributes,
   displaySplitter,
+  setUploadAttributes,
   addAttachment,
   changeNeedsAttention
 })(UploadModal)

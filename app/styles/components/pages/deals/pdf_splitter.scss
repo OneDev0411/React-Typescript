@@ -181,7 +181,8 @@ $splitter-header: 56px;
       }
     }
 
-    .dropdown, .deal-task-dropdown {
+    .dropdown,
+    .deal-task-dropdown {
       background-color: #fff !important;
       width: 100%;
     }
@@ -397,7 +398,7 @@ $splitter-header: 56px;
       border: solid 1px #8da2b5;
       font-size: 12px;
       font-weight: 600;
-      color: #1d364b
+      color: #1d364b;
     }
 
     .page-cta {
@@ -449,7 +450,7 @@ $splitter-header: 56px;
   border: solid 1px #cad0d4;
   width: 70vh;
   height: 95vh;
-  top: 2.5vh ;
+  top: 2.5vh;
   left: calc((100% - 500px) / 2);
   z-index: 1053;
 

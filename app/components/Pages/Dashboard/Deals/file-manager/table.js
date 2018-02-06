@@ -104,7 +104,7 @@ export class FileManager extends React.Component {
   showSplitter() {
     const { displaySplitter, setUploadFiles } = this.props
 
-    displaySplitter(true)
+    displaySplitter()
     setUploadFiles({}, null)
   }
 

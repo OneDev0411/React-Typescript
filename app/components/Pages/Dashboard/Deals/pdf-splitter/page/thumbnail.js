@@ -66,26 +66,30 @@ class PageThumbnail extends React.Component {
       doc
     } = this.props
 
-    return connectDragSource(<div className="inline">
-      <Page
-        containerHeight={158}
-        zoom={2}
-        canvasClassName={canvasClassName}
-        pdfId={pdfId}
-        doc={doc}
-        pageNumber={pageNumber}
-      >
-        {!inUse && <div className="overlay" />}
+    const DragComponent = (
+      <div className="inline">
+        <Page
+          containerHeight={158}
+          zoom={2}
+          canvasClassName={canvasClassName}
+          pdfId={pdfId}
+          doc={doc}
+          pageNumber={pageNumber}
+        >
+          {!inUse && <div className="overlay" />}
 
-        <span className="page-zoom-in" onClick={() => this.previewPage()}>
-          <i className="fa fa-search" />
-        </span>
+          <span className="page-zoom-in" onClick={() => this.previewPage()}>
+            <i className="fa fa-search" />
+          </span>
 
-        <span className="page-number">{pageNumber}</span>
+          <span className="page-number">{pageNumber}</span>
 
-        {this.props.children}
-      </Page>
-                             </div>)
+          {this.props.children}
+        </Page>
+      </div>
+    )
+
+    return connectDragSource(DragComponent)
   }
 }
 
