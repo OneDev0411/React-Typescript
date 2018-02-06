@@ -26,19 +26,6 @@ class UploadModal extends React.Component {
     super(props)
   }
 
-  /**
-   * upload a file to room
-   */
-  async uploadFile(roomId, file) {
-    try {
-      const response = await ChatModel.uploadAttachment(roomId, file)
-
-      return response.body.data
-    } catch (e) {
-      return null
-    }
-  }
-
   closeModal() {
     this.props.resetUploadFiles()
     this.props.resetSplitter()
@@ -267,7 +254,7 @@ class UploadModal extends React.Component {
 
         <Modal.Footer>
           <ToolTip caption="Create new documents and save them to tasks">
-            <img src="/static/images/deals/question.png" className="help" />
+            <img src="/static/images/deals/question.png" className="help" alt="" />
           </ToolTip>
 
           <Button
