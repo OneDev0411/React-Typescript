@@ -457,7 +457,6 @@ $splitter-header: 56px;
       width: 72px;
       height: 24px;
       line-height: 24px;
-      vertical-align: middle;
       border-radius: 4px;
       background-color: #2196f3;
       bottom: 4px;
@@ -473,6 +472,13 @@ $splitter-header: 56px;
       &.remove {
         background-color: #1d364b;
         color: #fff;
+      }
+
+      &.is-used {
+        background: #17283a;
+        color: #fff;
+        top: 4px;
+        cursor: auto;
       }
 
       &.inuse {

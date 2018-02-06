@@ -5,6 +5,7 @@ const initialState = {
   files: {}, // keeps files list
   pdfObjects: {}, // keeps pdfjs objects
   pages: {}, // keeps selected pages which should split
+  usedPages: {}, // keeps used pages in the current workspace
   pagePreview: null // whether previewing a page or not
 }
 
@@ -40,6 +41,15 @@ export default (state = initialState, action) => {
             documentId: action.docId,
             pageNumber: action.pageNumber
           }
+        }
+      }
+
+    case types.SET_SPLITTER_USED_PAGES:
+      return {
+        ...state,
+        usedPages: {
+          ...state.usedPages,
+          ...action.pages
         }
       }
 

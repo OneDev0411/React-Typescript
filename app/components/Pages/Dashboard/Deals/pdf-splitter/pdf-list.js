@@ -40,7 +40,11 @@ class PDF extends React.Component {
 
   render() {
     const { splitter } = this.props
-    const { files, pdfObjects, pages } = splitter
+    const {
+      files, pdfObjects, pages, usedPages
+    } = splitter
+
+    console.log(usedPages)
 
     return (
       <div>
@@ -62,7 +66,9 @@ class PDF extends React.Component {
             <PageSelector pdfId={id} numPages={doc.pdfInfo.numPages} />
 
             {Array.apply(null, { length: doc.pdfInfo.numPages }).map((v, i) => {
-              const inUse = typeof pages[`${id}_${i + 1}`] !== 'undefined'
+              const pageId = `${id}_${i + 1}`
+              const inUse = typeof pages[pageId] !== 'undefined'
+              const isUsed = typeof usedPages[pageId] !== 'undefined'
 
               return (
                 <PageThumbnail
@@ -73,6 +79,8 @@ class PDF extends React.Component {
                   doc={doc}
                   pageNumber={i + 1}
                 >
+                  {isUsed && <span className="page-cta is-used">Used</span>}
+
                   {inUse ? (
                     <span className="page-cta inuse">In Use</span>
                   ) : (

@@ -10,6 +10,7 @@ import Deal from '../../../../../../models/Deal'
 import {
   resetSplitterSelectedPages,
   resetSplitter,
+  setSplitterUsedPages,
   changeNeedsAttention,
   addAttachment
 } from '../../../../../../store_actions/deals'
@@ -37,10 +38,16 @@ class WorkspaceForm extends React.Component {
   }
 
   async save() {
-    const { title, task, notifyOffice } = this.state
+    const {
+      title,
+      task,
+      notifyOffice,
+      addAttachment,
+      changeNeedsAttention
+    } = this.state
     const { notify, splitter } = this.props
     const { pages } = splitter
-    let created = false
+    let fileCreated = false
 
     // set status
     this.setState({ saving: true })
@@ -61,14 +68,14 @@ class WorkspaceForm extends React.Component {
       )
 
       // add files to attachments list
-      this.props.addAttachment(task.deal, task.checklist, task.id, file)
-
-      // set create as true
-      created = true
+      addAttachment(task.deal, task.checklist, task.id, file)
 
       if (notifyOffice) {
-        this.props.changeNeedsAttention(task.deal, task.id, true)
+        changeNeedsAttention(task.deal, task.id, true)
       }
+
+      // set create as true
+      fileCreated = true
 
       notify({
         message: `Pdf "${title}" created successfully`,
@@ -92,7 +99,7 @@ class WorkspaceForm extends React.Component {
       })
     }
 
-    return created
+    return fileCreated
   }
 
   async saveAndQuit() {
@@ -107,14 +114,18 @@ class WorkspaceForm extends React.Component {
   }
 
   async saveAndNew() {
-    const saved = await this.save()
+    const { splitter } = this.props
+    const { pages } = splitter
 
-    if (!saved) {
-      return false
-    }
+    // const saved = await this.save()
+
+    // if (!saved) {
+    //   return false
+    // }
 
     // reset selected pages
     this.props.resetSplitterSelectedPages()
+    this.props.setSplitterUsedPages(pages)
   }
 
   render() {
@@ -191,6 +202,7 @@ export default connect(mapStateToProps, {
   notify,
   resetSplitter,
   resetSplitterSelectedPages,
+  setSplitterUsedPages,
   changeNeedsAttention,
   addAttachment
 })(WorkspaceForm)

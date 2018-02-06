@@ -8,6 +8,13 @@ export function displaySplitter(files = {}) {
   }
 }
 
+export function setSplitterUsedPages(pages) {
+  return {
+    type: types.SET_SPLITTER_USED_PAGES,
+    pages
+  }
+}
+
 export function setSplitterPdfObject(docId, doc) {
   return {
     type: types.SET_SPLITTER_PDF_OBJECT,
