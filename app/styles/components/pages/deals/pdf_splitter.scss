@@ -292,8 +292,8 @@ $splitter-header: 56px;
         }
 
         &.disabled {
-          background-color: #dce5eb;
-          color: #8da2b5;
+          background-color: #dce5eb !important;
+          color: #8da2b5 !important;
 
           &:hover {
             opacity: 1;

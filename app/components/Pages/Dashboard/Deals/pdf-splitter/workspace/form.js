@@ -38,14 +38,10 @@ class WorkspaceForm extends React.Component {
   }
 
   async save() {
+    const { title, task, notifyOffice } = this.state
     const {
-      title,
-      task,
-      notifyOffice,
-      addAttachment,
-      changeNeedsAttention
-    } = this.state
-    const { notify, splitter } = this.props
+      notify, splitter, addAttachment, changeNeedsAttention
+    } = this.props
     const { pages } = splitter
     let fileCreated = false
 
@@ -55,7 +51,7 @@ class WorkspaceForm extends React.Component {
     const files = _.chain(pages)
       .pluck('documentId')
       .uniq()
-      .map(id => splitter.files[id])
+      .map(id => splitter.files[id].file)
       .value()
 
     try {
@@ -89,6 +85,8 @@ class WorkspaceForm extends React.Component {
         notifyOffice: true
       })
     } catch (e) {
+      console.log(e)
+
       notify({
         message: 'Couldn\'t create pdf file. try again.',
         status: 'error'
@@ -117,11 +115,11 @@ class WorkspaceForm extends React.Component {
     const { splitter } = this.props
     const { pages } = splitter
 
-    // const saved = await this.save()
+    const saved = await this.save()
 
-    // if (!saved) {
-    //   return false
-    // }
+    if (!saved) {
+      return false
+    }
 
     // reset selected pages
     this.props.resetSplitterSelectedPages()
