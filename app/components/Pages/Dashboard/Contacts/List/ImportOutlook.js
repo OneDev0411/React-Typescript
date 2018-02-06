@@ -11,9 +11,6 @@ import config from '../../../../../../config/public'
 class ImportOutlook extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      showLoading: false
-    }
 
     this.url = `${config.api_url}/authorize-ms-graph\
 ?failEvent=importFail\
@@ -29,22 +26,10 @@ class ImportOutlook extends React.Component {
       this.props.getContacts()
       this.props.removeImportResult()
       this.loginWindows && this.loginWindows.close()
-      this.setState({
-        showLoading: false
-      })
-    }
-
-    if (nextProps.importOutlook.SuccessfulLogin) {
-      this.setState({
-        showLoading: true
-      })
     }
 
     if (nextProps.importOutlook.failLogin) {
       this.props.removeImportResult()
-      this.setState({
-        showLoading: false
-      })
     }
   }
 
@@ -67,7 +52,7 @@ class ImportOutlook extends React.Component {
               this.loginWindows = window.open(
                 this.url,
                 'myWindow',
-                'width=400,height=600'
+                'width=300,height=500'
               )
             }}
           >
