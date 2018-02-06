@@ -5,7 +5,7 @@ import uuid from '../../utils/uuid'
 export function setUploadFiles(files, deal, task) {
   const indexedFiles = {}
 
-  // I used properties object to keep file attributes, because file object that
+  // I used properties object to keep file attributes, because file object which
   // created by browser shouldn't change, otherwise upload breaks
   files.forEach(file => {
     const uniqId = uuid()
