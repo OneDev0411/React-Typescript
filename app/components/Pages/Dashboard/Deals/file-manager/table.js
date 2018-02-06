@@ -3,7 +3,7 @@ import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import { Dropdown, Button } from 'react-bootstrap'
 import moment from 'moment'
-import _ from 'underscore'
+import cn from 'classnames'
 import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
 import Radio from '../components/radio'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
@@ -30,7 +30,14 @@ export class FileManager extends React.Component {
       return true
     }
 
-    return file.name.includes(filter) || task.title.includes(filter)
+    return (
+      file.name.toLowerCase().includes(filter.toLowerCase()) ||
+      task.title.toLowerCase().includes(filter.toLowerCase())
+    )
+  }
+
+  isPdfDocument(mime) {
+    return mime === 'application/pdf'
   }
 
   getAllFiles() {
@@ -46,10 +53,8 @@ export class FileManager extends React.Component {
 
         attachments.filter(file => this.applyFilter(file, task)).forEach(file => {
           files.push({
-            id: file.id,
-            name: file.name,
-            task: task.title,
-            created_at: file.created_at
+            ...file,
+            task: task.title
           })
         })
       })
@@ -66,6 +71,18 @@ export class FileManager extends React.Component {
         <i className="fa fa-caret-up" />
       </Fragment>
     )
+  }
+
+  getDocumentIcon(file) {
+    let src
+
+    if (this.isPdfDocument(file.mime)) {
+      src = '/static/images/deals/pdf-icon.svg'
+    } else if (file.mime.includes('image/')) {
+      src = file.preview_url
+    }
+
+    return <img className="icon" src={src} alt="" />
   }
 
   toggleSelectedRow(id) {
@@ -90,6 +107,7 @@ export class FileManager extends React.Component {
         Header: '',
         accessor: '',
         width: 40,
+        className: 'select-row',
         Cell: props => (
           <Radio
             selected={selectedRows.indexOf(props.original.id) > -1}
@@ -98,18 +116,38 @@ export class FileManager extends React.Component {
         )
       },
       {
+        id: 'name',
         Header: () => this.getCellTitle('NAME'),
-        accessor: 'name'
+        className: 'name',
+        accessor: 'name',
+        Cell: ({ original: file }) => (
+          <Fragment>
+            {this.getDocumentIcon(file)}
+            {file.name}
+          </Fragment>
+        )
       },
       {
         id: 'created_at',
         Header: () => this.getCellTitle('DATE UPLOADED'),
         accessor: 'created_at',
-        Cell: props => this.getDate(props.value)
+        Cell: ({ value }) => this.getDate(value)
       },
       {
         Header: () => this.getCellTitle('TASK'),
         accessor: 'task'
+      },
+      {
+        Header: '',
+        accessor: '',
+        width: 110,
+        Cell: ({ original: file }) => (
+          <Fragment>
+            {this.isPdfDocument(file.mime) && (
+              <button className="button split-button hide">Split PDF</button>
+            )}
+          </Fragment>
+        )
       },
       {
         Header: '',
@@ -153,6 +191,15 @@ export class FileManager extends React.Component {
           debounceTime={100}
           placeholder="Search all uploaded files in this deal…"
         />
+
+        <div className="callToActions">
+          {selectedRows.length > 0 && (
+            <Fragment>
+              <button className="button inverse">Delete files</button>
+              <button className="button">Split PDFs</button>
+            </Fragment>
+          )}
+        </div>
 
         <ReactTable
           showPagination={false}
