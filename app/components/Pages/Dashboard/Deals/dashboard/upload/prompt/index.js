@@ -175,10 +175,12 @@ class UploadModal extends React.Component {
   showSplitter() {
     const { displaySplitter } = this.props
 
+    console.log(this.getPdfFiles())
+
     const files = this.getPdfFiles().map(item => ({
       id: item.id,
       file: item.fileObject,
-      properties: item.properties
+      properties: { name: item.fileObject.name, ...item.properties }
     }))
 
     displaySplitter(files)

@@ -28,7 +28,9 @@ class PDF extends React.Component {
     const { splitter, setSplitterPdfObject } = this.props
 
     _.each(splitter.files, async pdf => {
-      const doc = await PDFJS.getDocument(pdf.file.preview)
+      const url = pdf.file.preview || pdf.file.url
+
+      const doc = await PDFJS.getDocument(url)
 
       setSplitterPdfObject(pdf.id, doc)
     })
@@ -44,8 +46,6 @@ class PDF extends React.Component {
       files, pdfObjects, pages, usedPages
     } = splitter
 
-    console.log(usedPages)
-
     return (
       <div>
         {_.size(pdfObjects) === 0 && (
@@ -58,7 +58,7 @@ class PDF extends React.Component {
         {_.map(pdfObjects, (doc, id) => (
           <div key={id} className="pdf-section">
             <div className="heading">
-              <span className="page-title">{files[id].name}</span>
+              <span className="page-title">{files[id].properties.name}</span>
 
               <span className="pages-count">({doc.pdfInfo.numPages} pages)</span>
             </div>

@@ -3,11 +3,7 @@ import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import { Dropdown, Button } from 'react-bootstrap'
 import moment from 'moment'
-import {
-  getDeal,
-  setUploadFiles,
-  displaySplitter
-} from '../../../../../store_actions/deals'
+import { getDeal, displaySplitter } from '../../../../../store_actions/deals'
 import Radio from '../components/radio'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import Search from '../../../../Partials/headerSearch'
@@ -101,11 +97,22 @@ export class FileManager extends React.Component {
     this.setState({ selectedRows: newSelectedRows })
   }
 
-  showSplitter() {
-    const { displaySplitter, setUploadFiles } = this.props
+  showSplitter(files) {
+    this.props.displaySplitter(files)
+  }
 
-    displaySplitter()
-    setUploadFiles({}, null)
+  splitMultipleFiles() {}
+
+  splitSingleFile(file) {
+    const files = [
+      {
+        id: file.id,
+        file: { url: file.url },
+        properties: { name: file.name }
+      }
+    ]
+
+    this.showSplitter(files)
   }
 
   getColumns() {
@@ -153,7 +160,12 @@ export class FileManager extends React.Component {
         Cell: ({ original: file }) => (
           <Fragment>
             {this.isPdfDocument(file.mime) && (
-              <button className="button split-button hide">Split PDF</button>
+              <button
+                className="button split-button hide"
+                onClick={() => this.splitSingleFile(file)}
+              >
+                Split PDF
+              </button>
             )}
           </Fragment>
         )
@@ -240,7 +252,6 @@ export default connect(
   }),
   {
     getDeal,
-    setUploadFiles,
     displaySplitter
   }
 )(FileManager)
