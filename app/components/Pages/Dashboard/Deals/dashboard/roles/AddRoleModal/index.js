@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import pick from 'lodash/pick'
 import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
@@ -16,12 +17,7 @@ const initialState = {
 }
 
 class AddRoleModal extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = initialState
-    this.getUpdatedNameAttributes = this.getUpdatedNameAttributes.bind(this)
-  }
+  state = initialState
 
   componentWillUnmount = () => {
     this.setState(initialState)
@@ -71,18 +67,21 @@ class AddRoleModal extends React.Component {
           const copyFormData = Object.assign({}, form)
 
           await addContact(nomilizedFormDataAsContact(copyFormData))
-          this.notifySuccess('New contact created.')
         } else {
-          const nameAttributes = await this.getUpdatedNameAttributes(form)
           const newAttributes = await this.getNewAttributes(form)
+          const nameAttribute = await this.getUpdatedNameAttribute(form)
 
-          if (nameAttributes.length > 0 || newAttributes.length > 0) {
-            if (nameAttributes.length > 0) {
-              await upsertAttributes(form.contact.id, 'name', nameAttributes, true)
+          if (nameAttribute && !nameAttribute.id) {
+            newAttributes.push(nameAttribute)
+          }
+
+          if (nameAttribute || newAttributes.length > 0) {
+            if (nameAttribute && nameAttribute.id) {
+              await upsertAttributes(form.contact.id, 'name', [nameAttribute], true)
             }
 
             if (newAttributes.length > 0) {
-              await upsertAttributes(form.contact.id, 'name', newAttributes, true)
+              await upsertAttributes(form.contact.id, '', newAttributes, true)
             }
 
             this.notifySuccess('Contact updated.')
@@ -95,6 +94,8 @@ class AddRoleModal extends React.Component {
 
       this.handleCloseModal()
     } catch (e) {
+      // console.log(e)
+
       if (!e.response) {
         return notify({
           message: `Error: ${e.message}`,
@@ -116,10 +117,9 @@ class AddRoleModal extends React.Component {
     })
   }
 
-  async getUpdatedNameAttributes(formData = {}) {
+  async getUpdatedNameAttribute(formData = {}) {
     const { contact } = formData
-    const { sub_contacts } = contact
-    const { attributes } = sub_contacts[0]
+    const { summary, sub_contacts } = contact
     const updateList = [
       'legal_prefix',
       'legal_first_name',
@@ -127,68 +127,73 @@ class AddRoleModal extends React.Component {
       'legal_last_name'
     ]
 
-    const { names } = attributes
+    const { names } = sub_contacts[0].attributes
+    const namesId = Array.isArray(names) ? names[0].id : undefined
 
-    const namesAttribute = Array.isArray(names) && names[0]
+    const nameFields = [
+      'title',
+      'nickname',
+      'first_name',
+      'middle_name',
+      'last_name',
+      'legal_prefix',
+      'legal_first_name',
+      'legal_middle_name',
+      'legal_last_name'
+    ]
 
-    if (namesAttribute) {
-      const updatedNamesList = Object.keys(formData)
-        .filter(attr => updateList.includes(attr))
-        .filter(attr => {
-          if (formData[attr]) {
-            return !namesAttribute[attr] || formData[attr] !== namesAttribute[attr]
-          }
-        })
+    const nameAttribute = pick(summary, nameFields)
 
-      const updatedNames = {}
-
-      updatedNamesList.forEach(name => {
-        updatedNames[name] = formData[name]
+    const updatedNamesList = Object.keys(formData)
+      .filter(attr => updateList.includes(attr))
+      .filter(attr => {
+        if (formData[attr]) {
+          return !nameAttribute[attr] || formData[attr] !== nameAttribute[attr]
+        }
       })
 
-      if (Object.keys(updatedNames).length > 0) {
-        return [{
-          ...namesAttribute,
-          ...updatedNames
-        }]
+    const updatedNames = {}
+
+    updatedNamesList.forEach(name => {
+      updatedNames[name] = formData[name]
+    })
+
+    if (Object.keys(updatedNames).length > 0) {
+      return {
+        ...nameAttribute,
+        ...updatedNames,
+        id: namesId,
+        type: 'name'
       }
     }
 
-    return []
+    return null
   }
 
   async getNewAttributes(formData = {}) {
-    const { email, phone_number, emails, phones } = formData
+    const {
+      email, phone_number, emails, phones
+    } = formData
     const newAttributes = []
 
-    if (email) {
-      if (emails.length === 0) {
-        newAttributes.push({
-          email,
-          type: 'email',
-          is_primary: true
-        })
-      } else if (!emails.includes(email)) {
-        newAttributes.push({
-          email,
-          type: 'email'
-        })
-      }
+    const isNewEmail = email && !emails.map(item => item.email).includes(email)
+    const isNewPhoneNumber =
+      phone_number && !phones.map(item => item.phone_number).includes(phone_number)
+
+    if (isNewEmail) {
+      newAttributes.push({
+        email,
+        type: 'email',
+        is_primary: emails.length === 0
+      })
     }
 
-    if (phone_number) {
-      if (phones.length === 0) {
-        newAttributes.push({
-          phone_number,
-          is_primary: true,
-          type: 'phone_number'
-        })
-      } else if (!phones.includes(phone_number)) {
-        newAttributes.push({
-          phone_number,
-          type: 'phone_number'
-        })
-      }
+    if (isNewPhoneNumber) {
+      newAttributes.push({
+        phone_number,
+        type: 'phone_number',
+        is_primary: phones.length === 0
+      })
     }
 
     return newAttributes

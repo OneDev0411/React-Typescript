@@ -15,7 +15,12 @@ function getErrorMessage(e) {
   return e.response ? e.response.body.attributes[type][0] : 'Field is not valid'
 }
 
-export function upsertAttributes(id, type, attributes, notifyIsDisabled = false) {
+export function upsertAttributes(
+  id,
+  type = '',
+  attributes,
+  notifyIsDisabled = false
+) {
   const typeName = type.replace('_', ' ')
 
   const updates = _.filter(attributes, attr => attr.id)
