@@ -1,6 +1,7 @@
+import { normalize } from 'normalizr'
+import _ from 'underscore'
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
-import { normalize } from 'normalizr'
 import * as schema from './schema'
 
 function addNewTask(deal_id, list_id, task) {
@@ -101,10 +102,10 @@ export function updateTask(taskId, attributes) {
   }
 }
 
-export function deleteAttachment(task, fileId) {
+export function deleteAttachment(dealId, list) {
   return async dispatch => {
-    await Deal.deleteAttachment(task.room.id, fileId)
-    dispatch(attachmentDeleted(task, fileId))
+    await Deal.deleteAttachment(dealId, _.keys(list))
+    _.each(list, (task, fileId) => dispatch(attachmentDeleted(task, fileId)))
   }
 }
 

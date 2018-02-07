@@ -1,15 +1,23 @@
+import _ from 'underscore'
 import types from '../../constants/deals'
 
-export function displaySplitter(display) {
+export function displaySplitter(files = {}) {
   return {
     type: types.SET_SPLITTER_DISPLAY,
-    display
+    files: _.indexBy(files, 'id')
   }
 }
 
-export function setSplitterDocument(docId, doc) {
+export function setSplitterUsedPages(pages) {
   return {
-    type: types.SET_SPLITTER_DOCUMENT,
+    type: types.SET_SPLITTER_USED_PAGES,
+    pages
+  }
+}
+
+export function setSplitterPdfObject(docId, doc) {
+  return {
+    type: types.SET_SPLITTER_PDF_OBJECT,
     docId,
     doc
   }

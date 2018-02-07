@@ -1,12 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import Dropzone from 'react-dropzone'
-import {
-  showAttachments,
-  setUploadFiles
-} from '../../../../../../store_actions/deals'
-import Deal from '../../../../../../models/Deal'
+import { showAttachments } from '../../../../../../store_actions/deals'
 import BulkSubmit from '../bulk-submit'
 
 class NavBar extends React.Component {
@@ -23,13 +18,9 @@ class NavBar extends React.Component {
   }
 
   openUploadDialog() {
-    this.dropzone.open()
-  }
-
-  onDrop(files) {
     const { deal } = this.props
 
-    this.props.setUploadFiles(files, deal, null)
+    browserHistory.push(`/dashboard/deals/${deal.id}/files`)
   }
 
   render() {
@@ -58,7 +49,7 @@ class NavBar extends React.Component {
               className="navbar-button"
               onClick={() => this.openUploadDialog()}
             >
-              Upload
+              View & Upload Files
             </button>
 
             <button className="navbar-button" onClick={() => this.getSignatures()}>
@@ -68,15 +59,6 @@ class NavBar extends React.Component {
             {!isBackOffice && <BulkSubmit deal={deal} />}
           </div>
         )}
-
-        <Dropzone
-          disableClick
-          ref={node => (this.dropzone = node)}
-          onDrop={files => this.onDrop(files)}
-          multiple
-          accept={Deal.upload.getAcceptedDocuments()}
-          style={{ display: 'none' }}
-        />
       </div>
     )
   }
@@ -86,8 +68,5 @@ export default connect(
   ({ deals }) => ({
     isBackOffice: deals.backoffice
   }),
-  {
-    showAttachments,
-    setUploadFiles
-  }
+  { showAttachments }
 )(NavBar)

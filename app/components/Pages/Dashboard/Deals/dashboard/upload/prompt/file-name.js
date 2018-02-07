@@ -11,21 +11,19 @@ class FileName extends React.Component {
     this.state = {
       isActive: false
     }
-
-    this._setActiveState = this._setActiveState.bind(this)
-    this._save = this._save.bind(this)
   }
 
-  _setActiveState() {
+  setActiveState() {
     this.setState({
       isActive: true
     })
   }
 
-  _save(file) {
+  save(file) {
     this.props.setUploadAttributes(file.id, {
       fileTitle: this.inputs[file.id] && this.inputs[file.id].value
     })
+
     this.setState({
       isActive: false
     })
@@ -36,7 +34,7 @@ class FileName extends React.Component {
       return false
     }
 
-    return this._save(file, false)
+    return this.save(file, false)
   }
 
   render() {
@@ -45,23 +43,20 @@ class FileName extends React.Component {
 
     return (
       <div>
-        <img src="/static/images/deals/document.png" />
+        <img src="/static/images/deals/document.png" alt="" />
 
         <input
           readOnly={!isActive}
           defaultValue={file.properties.fileTitle || file.fileObject.name}
           ref={ref => (this.inputs[file.id] = ref)}
-          onBlur={() => this._save(file)}
+          onBlur={() => this.save(file)}
           onKeyPress={e => this.onKeyPress(e, file)}
-          onClick={() => this._setActiveState()}
+          onClick={() => this.setActiveState()}
           className={cn('input-edit-name', { disabled: !isActive })}
         />
 
         {isActive ? (
-          <button
-            className="c-button--shadow save"
-            onClick={() => this._save(file)}
-          >
+          <button className="c-button--shadow save" onClick={() => this.save(file)}>
             Save
           </button>
         ) : (
@@ -69,7 +64,7 @@ class FileName extends React.Component {
             className={cn('c-button--shadow edit-icon', {
               canEditName: isActive
             })}
-            onClick={() => this._setActiveState()}
+            onClick={() => this.setActiveState()}
           >
             EDIT
           </button>

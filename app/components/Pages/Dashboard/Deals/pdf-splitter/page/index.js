@@ -1,15 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import cn from 'classnames'
 
 class Page extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      width: 0,
-      height: 0,
-      page: null
-    }
   }
 
   componentDidMount() {
@@ -28,10 +22,10 @@ class Page extends React.Component {
     if (containerHeight.toString().includes('%')) {
       const percent = ~~containerHeight.slice(0, -1)
 
-      height = ~~((percent * window.innerHeight) / 100)
+      height = ~~(percent * window.innerHeight / 100)
     }
 
-    return (height / viewport.height) * zoom
+    return height / viewport.height * zoom
   }
 
   /**
@@ -61,26 +55,20 @@ class Page extends React.Component {
       canvasContext: context,
       viewport
     })
-
-    // set states
-    await this.setState({ page, width, height })
   }
 
   render() {
     const { pageNumber, canvasClassName } = this.props
 
     return (
-      <div
-        className="page-container"
-        ref={ref => this.container = ref}
-      >
+      <div className="page-container" ref={ref => (this.container = ref)}>
         <canvas
           id={`pdf-page-canvas-${pageNumber}`}
-          ref={ref => this.canvas = ref}
+          ref={ref => (this.canvas = ref)}
           className={cn('page-canvas', canvasClassName)}
         />
 
-        { this.props.children }
+        {this.props.children}
       </div>
     )
   }

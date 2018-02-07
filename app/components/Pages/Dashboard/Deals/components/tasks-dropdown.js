@@ -2,13 +2,9 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import { addNotification as notify } from 'reapop'
-import { Dropdown, MenuItem, Button } from 'react-bootstrap'
-import _ from 'underscore'
-import {
-  setUploadAttributes,
-  createFormTask
-} from '../../../../../../store_actions/deals'
-import TaskForms from '../create-task/form/forms-list'
+import { Dropdown, Button } from 'react-bootstrap'
+import { createFormTask } from '../../../../../store_actions/deals'
+import TaskForms from '../dashboard/create-task/form/forms-list'
 
 class DropDownTasks extends React.Component {
   constructor(props) {
@@ -45,7 +41,7 @@ class DropDownTasks extends React.Component {
     }
   }
 
-  discardEdit(e) {
+  discardEdit() {
     const { isCreatingTask, taskTitle } = this.state
 
     if (isCreatingTask || taskTitle.length > 0) {
@@ -67,7 +63,7 @@ class DropDownTasks extends React.Component {
 
   async createNewTask(checklistId) {
     const {
-      upload, notify, createFormTask, onSelectTask
+      deal, notify, createFormTask, onSelectTask
     } = this.props
     const { taskTitle } = this.state
 
@@ -80,7 +76,7 @@ class DropDownTasks extends React.Component {
     })
 
     // create task
-    const task = await createFormTask(upload.deal.id, null, taskTitle, checklistId)
+    const task = await createFormTask(deal.id, null, taskTitle, checklistId)
 
     notify({
       message: `Task "${taskTitle}" created.`,
@@ -107,12 +103,7 @@ class DropDownTasks extends React.Component {
       taskTitle
     } = this.state
     const {
-      deal,
-      shouldDropUp,
-      selectedTask,
-      upload,
-      checklists,
-      tasks
+      deal, shouldDropUp, selectedTask, checklists, tasks
     } = this.props
 
     return (
@@ -135,7 +126,7 @@ class DropDownTasks extends React.Component {
         </Button>
 
         <Dropdown.Menu className="deal-task-dropdown-list">
-          {upload.deal.checklists.map((chId, key) => {
+          {deal.checklists.map(chId => {
             const checklist = checklists[chId]
 
             return (
@@ -216,7 +207,6 @@ class DropDownTasks extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
-    upload: deals.upload,
     checklists: deals.checklists,
     tasks: deals.tasks
   }
@@ -224,6 +214,5 @@ function mapStateToProps({ deals }) {
 
 export default connect(mapStateToProps, {
   notify,
-  createFormTask,
-  setUploadAttributes
+  createFormTask
 })(DropDownTasks)

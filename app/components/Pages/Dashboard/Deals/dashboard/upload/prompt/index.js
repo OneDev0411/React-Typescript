@@ -2,6 +2,7 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 import {
   resetUploadFiles,
@@ -13,7 +14,7 @@ import {
 } from '../../../../../../../store_actions/deals'
 import ChatModel from '../../../../../../../models/Chatroom'
 import DealModel from '../../../../../../../models/Deal'
-import TasksDropDown from '../tasks-dropdown'
+import TasksDropDown from '../../../components/tasks-dropdown'
 import ToolTip from '../../../components/tooltip'
 import Checkbox from '../../../components/radio'
 import FileName from './file-name'
@@ -24,19 +25,6 @@ const STATUS_UPLOADED = 'uploaded'
 class UploadModal extends React.Component {
   constructor(props) {
     super(props)
-  }
-
-  /**
-   * upload a file to room
-   */
-  async uploadFile(roomId, file) {
-    try {
-      const response = await ChatModel.uploadAttachment(roomId, file)
-
-      return response.body.data
-    } catch (e) {
-      return null
-    }
   }
 
   closeModal() {
@@ -173,24 +161,42 @@ class UploadModal extends React.Component {
     return checklists[task.checklist].is_deactivated
   }
 
-  render() {
-    const { deal, splitter, upload } = this.props
-    const filesCount = _.size(upload.files)
+  getPdfFiles() {
+    const { upload } = this.props
 
-    // get list of pdfs aren't uploaded yet
-    const pdfsList = _.filter(
+    return _.filter(
       upload.files,
       file =>
         file.fileObject.type === 'application/pdf' &&
         file.properties.status !== STATUS_UPLOADED
     )
+  }
+
+  showSplitter() {
+    const { displaySplitter } = this.props
+
+    const files = this.getPdfFiles().map(item => ({
+      id: item.id,
+      file: item.fileObject,
+      properties: { name: item.fileObject.name, ...item.properties }
+    }))
+
+    displaySplitter(files)
+  }
+
+  render() {
+    const { deal, splitter, upload } = this.props
+    const filesCount = _.size(upload.files)
+
+    // get list of pdfs aren't uploaded yet
+    const pdfsList = this.getPdfFiles()
 
     let fileCounter = 0
 
     return (
       <Modal
         dialogClassName="modal-deal-upload-files"
-        show={filesCount > 0 && !splitter.display}
+        show={filesCount > 0 && _.size(splitter.files) === 0}
         onHide={() => this.closeModal()}
         backdrop="static"
       >
@@ -267,14 +273,14 @@ class UploadModal extends React.Component {
 
         <Modal.Footer>
           <ToolTip caption="Create new documents and save them to tasks">
-            <img src="/static/images/deals/question.png" className="help" />
+            <img src="/static/images/deals/question.png" className="help" alt="" />
           </ToolTip>
 
           <Button
             bsStyle="primary"
             className={cn('btn-split', { disabled: pdfsList.length === 0 })}
             disabled={pdfsList.length === 0}
-            onClick={() => this.props.displaySplitter(true)}
+            onClick={() => this.showSplitter()}
           >
             Split PDFs
           </Button>
@@ -299,8 +305,8 @@ export default connect(mapStateToProps, {
   notify,
   resetUploadFiles,
   resetSplitter,
-  setUploadAttributes,
   displaySplitter,
+  setUploadAttributes,
   addAttachment,
   changeNeedsAttention
 })(UploadModal)

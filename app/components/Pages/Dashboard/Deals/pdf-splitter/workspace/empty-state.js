@@ -2,7 +2,7 @@ import React from 'react'
 
 export default () => (
   <div className="empty-state">
-    <img src="/static/images/deals/split-empty.svg" />
+    <img src="/static/images/deals/split-empty.svg" alt="" />
     <div className="title">Drag and drop pages here</div>
 
     <div className="desc">

@@ -125,7 +125,57 @@ $splitter-header: 56px;
       }
     }
 
+    .page-selector {
+      @extend %pdf-splitter-page-selector;
+    }
+
     @extend %pdf-splitter-page;
+  }
+}
+
+%pdf-splitter-page-selector {
+  margin-bottom: 20px;
+
+  .radio-button {
+    margin: 0;
+  }
+
+  .btn-radio {
+    border: none;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  span {
+    margin: 0 8px 0 0;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+    color: #1e364b;
+  }
+
+  input {
+    width: 180px;
+    height: 32px;
+    border-radius: 3px;
+    margin-right: 5px;
+    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: solid 1px #dce5eb;
+    padding: 0 5px;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  button {
+    min-width: 50px;
+    min-height: 31px;
+    border-radius: 3px;
+    &.disabled {
+      background-color: #d4dfe6;
+      color: #8da2b5;
+    }
   }
 }
 
@@ -181,7 +231,8 @@ $splitter-header: 56px;
       }
     }
 
-    .dropdown, .deal-task-dropdown {
+    .dropdown,
+    .deal-task-dropdown {
       background-color: #fff !important;
       width: 100%;
     }
@@ -241,8 +292,8 @@ $splitter-header: 56px;
         }
 
         &.disabled {
-          background-color: #dce5eb;
-          color: #8da2b5;
+          background-color: #dce5eb !important;
+          color: #8da2b5 !important;
 
           &:hover {
             opacity: 1;
@@ -397,7 +448,7 @@ $splitter-header: 56px;
       border: solid 1px #8da2b5;
       font-size: 12px;
       font-weight: 600;
-      color: #1d364b
+      color: #1d364b;
     }
 
     .page-cta {
@@ -406,7 +457,6 @@ $splitter-header: 56px;
       width: 72px;
       height: 24px;
       line-height: 24px;
-      vertical-align: middle;
       border-radius: 4px;
       background-color: #2196f3;
       bottom: 4px;
@@ -422,6 +472,13 @@ $splitter-header: 56px;
       &.remove {
         background-color: #1d364b;
         color: #fff;
+      }
+
+      &.is-used {
+        background: #17283a;
+        color: #fff;
+        top: 4px;
+        cursor: auto;
       }
 
       &.inuse {
@@ -449,7 +506,7 @@ $splitter-header: 56px;
   border: solid 1px #cad0d4;
   width: 70vh;
   height: 95vh;
-  top: 2.5vh ;
+  top: 2.5vh;
   left: calc((100% - 500px) / 2);
   z-index: 1053;
 

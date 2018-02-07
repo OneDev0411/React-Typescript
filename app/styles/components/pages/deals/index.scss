@@ -1,7 +1,10 @@
 @import './list';
 @import './create';
 @import './dashboard';
+@import './file_manager';
+@import './pdf_splitter';
 @import './components';
+@import './navbar';
 
 .deals {
   min-height: 100vh;
@@ -13,6 +16,14 @@
 
   .deal-dashboard {
     @extend %deal-dashboard;
+  }
+
+  .deal-navbar {
+    @extend %deal-navbar;
+  }
+
+  .file-manager {
+    @extend %file-manager;
   }
 }
 
