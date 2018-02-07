@@ -314,8 +314,8 @@ export class FileManager extends React.Component {
     if (data.length === 0) {
       return (
         <div className="table-container empty-table">
-          <img src="/static/images/deals/dnd.png" alt="" />
-          There is no uploaded files in this deal
+          <img src="/static/images/deals/files.svg" alt="" />
+          No uploaded files in this deal
         </div>
       )
     }
