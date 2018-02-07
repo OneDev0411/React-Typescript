@@ -18,8 +18,6 @@ function getErrorMessage(e) {
 export function upsertAttributes(id, type, attributes, notifyIsDisabled = false) {
   const typeName = type.replace('_', ' ')
 
-  console.log(attributes)
-
   const updates = _.filter(attributes, attr => attr.id)
   const inserts = _.filter(attributes, attr => !attr.id)
 

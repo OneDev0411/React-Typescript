@@ -114,8 +114,6 @@ Contact.createAttributes = async function (id, type, attributes) {
  * update current attributes
  */
 Contact.updateAttributes = async function (id, type, attributes) {
-  console.log(type, attributes)
-
   try {
     const response = await new Fetch().patch(`/contacts/${id}`).send({ attributes })
 

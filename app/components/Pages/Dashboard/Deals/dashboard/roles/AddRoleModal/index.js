@@ -74,10 +74,18 @@ class AddRoleModal extends React.Component {
           this.notifySuccess('New contact created.')
         } else {
           const nameAttributes = await this.getUpdatedNameAttributes(form)
+          const newAttributes = await this.getNewAttributes(form)
 
-          if (nameAttributes) {
-            await upsertAttributes(form.contact.id, 'name', [nameAttributes], true)
-            this.notifySuccess('The contact updated.')
+          if (nameAttributes.length > 0 || newAttributes.length > 0) {
+            if (nameAttributes.length > 0) {
+              await upsertAttributes(form.contact.id, 'name', nameAttributes, true)
+            }
+
+            if (newAttributes.length > 0) {
+              await upsertAttributes(form.contact.id, 'name', newAttributes, true)
+            }
+
+            this.notifySuccess('Contact updated.')
           }
         }
 
@@ -139,14 +147,51 @@ class AddRoleModal extends React.Component {
       })
 
       if (Object.keys(updatedNames).length > 0) {
-        return {
+        return [{
           ...namesAttribute,
           ...updatedNames
-        }
+        }]
       }
     }
 
-    return null
+    return []
+  }
+
+  async getNewAttributes(formData = {}) {
+    const { email, phone_number, emails, phones } = formData
+    const newAttributes = []
+
+    if (email) {
+      if (emails.length === 0) {
+        newAttributes.push({
+          email,
+          type: 'email',
+          is_primary: true
+        })
+      } else if (!emails.includes(email)) {
+        newAttributes.push({
+          email,
+          type: 'email'
+        })
+      }
+    }
+
+    if (phone_number) {
+      if (phones.length === 0) {
+        newAttributes.push({
+          phone_number,
+          is_primary: true,
+          type: 'phone_number'
+        })
+      } else if (!phones.includes(phone_number)) {
+        newAttributes.push({
+          phone_number,
+          type: 'phone_number'
+        })
+      }
+    }
+
+    return newAttributes
   }
 
   setSubmitButtonText = () => {
