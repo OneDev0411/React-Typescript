@@ -43,11 +43,12 @@ class InputWithSelect extends Component {
   constructor(props) {
     super(props)
 
-    const { items } = this.props
+    const { items, defaultSelectedItem } = this.props
 
     this.state = {
-      items,
-      selectedItem: items[0]
+      selectedItem: items.includes(defaultSelectedItem)
+        ? defaultSelectedItem
+        : items[0]
     }
   }
 
@@ -66,9 +67,16 @@ class InputWithSelect extends Component {
 
   render() {
     const {
-      isRequired, isInvalid, title, errorText, placeholder
+      isRequired,
+      isInvalid,
+      title,
+      items,
+      errorText,
+      placeholder,
+      defaultSelectedItem
     } = this.props
-    const { items, selectedItem } = this.state
+
+    const { selectedItem } = this.state
 
     return (
       <Downshift
@@ -76,6 +84,7 @@ class InputWithSelect extends Component {
         onChange={this.changeHandler}
         itemToString={this.handleItemToString}
         onStateChange={this.stateChangeHandler}
+        defaultSelectedItem={defaultSelectedItem}
         onInputValueChange={this.handleInputChange}
         render={({
           getInputProps,
