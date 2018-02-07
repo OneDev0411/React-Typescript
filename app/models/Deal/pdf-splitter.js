@@ -30,7 +30,13 @@ export async function splitPDF(title, task_id, room_id, files, pages) {
     // send request
     const response = await request
 
-    return response.body
+    const body = JSON.parse(response.text)
+
+    if (body.success) {
+      return body
+    }
+
+    throw new Error(body.error)
   } catch (e) {
     throw e
   }
