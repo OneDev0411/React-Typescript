@@ -15,7 +15,12 @@ function getErrorMessage(e) {
   return e.response ? e.response.body.attributes[type][0] : 'Field is not valid'
 }
 
-export function upsertAttributes (id, type, attributes) {
+export function upsertAttributes(
+  id,
+  type = '',
+  attributes,
+  notifyIsDisabled = false
+) {
   const typeName = type.replace('_', ' ')
 
   const updates = _.filter(attributes, attr => attr.id)
@@ -23,8 +28,7 @@ export function upsertAttributes (id, type, attributes) {
 
   let contact
 
-  return async (dispatch) => {
-
+  return async dispatch => {
     // insert attributes
     if (inserts.length > 0) {
       try {
@@ -34,11 +38,13 @@ export function upsertAttributes (id, type, attributes) {
         // dispatch
         dispatch(attributesUpserted(id, contact))
 
-        dispatch(notify({
-          message: `New ${typeName} created`,
-          status: 'success'
-        }))
-      } catch(e) {
+        if (!notifyIsDisabled) {
+          dispatch(notify({
+            message: `New ${typeName} created.`,
+            status: 'success'
+          }))
+        }
+      } catch (e) {
         dispatch(notify({
           title: `Can not create ${typeName}`,
           message: getErrorMessage(e),
@@ -49,7 +55,6 @@ export function upsertAttributes (id, type, attributes) {
 
     // update attributes
     if (updates.length > 0) {
-
       try {
         // send save request
         contact = await Contact.updateAttributes(id, type, updates)
@@ -57,12 +62,13 @@ export function upsertAttributes (id, type, attributes) {
         // dispatch
         dispatch(attributesUpserted(id, contact))
 
-        dispatch(notify({
-          message: `${typeName} updated`,
-          status: 'success'
-        }))
-
-      } catch(e) {
+        if (!notifyIsDisabled) {
+          dispatch(notify({
+            message: `${typeName} updated`,
+            status: 'success'
+          }))
+        }
+      } catch (e) {
         dispatch(notify({
           title: `Can not update ${typeName}`,
           message: getErrorMessage(e),
