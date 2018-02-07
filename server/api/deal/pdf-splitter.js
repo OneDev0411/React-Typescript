@@ -1,11 +1,12 @@
 import Koa from 'koa'
 
 const router = require('koa-router')()
+const streams = require('memory-streams')
+const agent = require('superagent')
 const fileParser = require('async-busboy')
 const _ = require('underscore')
 const fs = require('fs')
 const scissors = require('scissors')
-const PromisedStream = require('stream-to-promise')
 const uuid = require('../../../app/utils/uuid').default
 const app = new Koa()
 
@@ -22,10 +23,34 @@ function splitFiles(splits, filepath) {
   })
 }
 
-router.post('/deals/pdf-splitter', async (ctx, next) => {
-  const { files, fields } = await fileParser(ctx.req)
-  const pages = JSON.parse(fields.pages)
-  const { title, room_id, task_id } = fields
+async function downloadFiles(files) {
+  return Promise.all(_.map(JSON.parse(files), async file => {
+    const stream = new streams.ReadableStream()
+    const { body } = await agent.get(file.object.url).buffer()
+
+    stream.append(body)
+
+    return {
+      path: stream,
+      filename: `${file.documentId}.pdf`
+    }
+  }))
+}
+
+async function getFiles(files) {
+  _.each(files, file => {
+    if (!fs.existsSync(file.path)) {
+      throw new Error(`File ${file.filename} is not uploaded correctly, try again.`)
+    }
+  })
+
+  return files
+}
+
+router.post('/deals/pdf-splitter', async ctx => {
+  const parser = await fileParser(ctx.req)
+  const pages = JSON.parse(parser.fields.pages)
+  const { title, room_id, task_id } = parser.fields
   const { user } = ctx.session
 
   if (!user) {
@@ -38,11 +63,13 @@ router.post('/deals/pdf-splitter', async (ctx, next) => {
   try {
     const filepath = `/tmp/${uuid()}.pdf`
 
-    _.each(files, file => {
-      if (!fs.existsSync(file.path)) {
-        throw new Error(`File ${file.filename} is not uploaded correctly, try again.`)
-      }
-    })
+    let files
+
+    if (parser.files.length > 0) {
+      files = await getFiles(parser.files)
+    } else {
+      files = await downloadFiles(parser.fields.files)
+    }
 
     const splits = _.map(files, file => {
       const selectedPages = _.chain(pages)
@@ -80,6 +107,10 @@ router.post('/deals/pdf-splitter', async (ctx, next) => {
     // cleanup !
     fs.unlink(filepath, () => null)
     _.each(files, file => {
+      if (typeof file.path === 'object') {
+        return true
+      }
+
       fs.unlink(file.path, () => null)
     })
 
