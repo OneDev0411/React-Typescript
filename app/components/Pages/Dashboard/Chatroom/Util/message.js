@@ -6,13 +6,11 @@ import store from '../../../../../stores'
 import { createMessage, updateMessage } from '../../../../../store_actions/chatroom'
 import Mention from './mention'
 
-export default class Message {
-  constructor() {
-    emojify.setConfig({
-      img_dir: '/static/images/emoji'
-    })
-  }
+emojify.setConfig({
+  img_dir: '/static/images/emoji'
+})
 
+export default class Message {
   /**
    * send new message
    */
