@@ -6,6 +6,12 @@ import _ from 'underscore'
 import RoleForm from '../form'
 import { createRoles, updateRole } from '../../../../../../../store_actions/deals'
 import { addContact } from '../../../../../../../store_actions/contact/add-contact'
+import { upsertAttributes } from '../../../../../../../store_actions/contact/index'
+import {
+  getNewAttributes,
+  getUpdatedNameAttribute,
+  normalizedFormDataAsContact
+} from '../../../utils/roles'
 
 const initialState = {
   form: null,
@@ -38,10 +44,17 @@ class AddRoleModal extends React.Component {
     })
 
   submit = async () => {
-    const { form } = this.state
     const {
-      deal, createRoles, updateRole, notify, addContact
+      deal,
+      createRoles,
+      updateRole,
+      notify,
+      addContact,
+      upsertAttributes
     } = this.props
+    const { form } = this.state
+    const { contact, legal_first_name, legal_last_name } = form
+    const fullName = `${legal_first_name} ${legal_last_name}`
 
     if (!deal) {
       return false
@@ -54,13 +67,31 @@ class AddRoleModal extends React.Component {
     try {
       if (this.isUpdateModal()) {
         await updateRole(deal.id, _.omit(form, 'user'))
-        this.notifySuccess('Contact updated.')
       } else {
-        if (!form.contactId) {
+        if (!contact) {
           const copyFormData = Object.assign({}, form)
 
-          await addContact(nomilizedFormDataAsContact(copyFormData))
-          this.notifySuccess('New contact created.')
+          await addContact(normalizedFormDataAsContact(copyFormData))
+          this.notifySuccess(`${fullName} has been added to your Contacts.`)
+        } else {
+          const newAttributes = await getNewAttributes(form)
+          const nameAttribute = await getUpdatedNameAttribute(form)
+
+          if (nameAttribute && !nameAttribute.id) {
+            newAttributes.push(nameAttribute)
+          }
+
+          if (nameAttribute || newAttributes.length > 0) {
+            if (nameAttribute && nameAttribute.id) {
+              await upsertAttributes(form.contact.id, 'name', [nameAttribute], true)
+            }
+
+            if (newAttributes.length > 0) {
+              await upsertAttributes(form.contact.id, '', newAttributes, true)
+            }
+
+            this.notifySuccess(`${fullName}'s contact profile has been updated.`)
+          }
         }
 
         await createRoles(deal.id, [form])
@@ -154,27 +185,6 @@ export default connect(null, {
   notify,
   addContact,
   updateRole,
-  createRoles
+  createRoles,
+  upsertAttributes
 })(AddRoleModal)
-
-function nomilizedFormDataAsContact(formData = {}) {
-  const { email, phone_number } = formData
-  let emails
-  let phone_numbers
-
-  if (email) {
-    emails = [email]
-    delete formData.email
-  }
-
-  if (phone_number) {
-    phone_numbers = [phone_number]
-    delete formData.phone_number
-  }
-
-  return {
-    ...formData,
-    emails,
-    phone_numbers
-  }
-}

@@ -27,29 +27,24 @@ export default ({
   return (
     <div className="form-section deal-people deal-client">
       <div className="hero">
-        {
-          dealSide === 'Buying' ?
-          'Enter buyer information as shown on offer.' :
-          'Enter the seller’s legal information'
-        }
+        {dealSide === 'Buying'
+          ? 'Enter buyer information as shown on offer.'
+          : 'Enter the seller’s legal information'}
         &nbsp;
         <span className="required">*</span>
       </div>
 
       <div className="people-container">
-        {
-          _.map(clients, (agent, id) =>
-            <CrudRole
-              key={id}
-              role={agent}
-              modalTitle="Edit client"
-              buttonText="Update"
-              allowedRoles={allowedRoles}
-              onRemoveRole={(id) => onRemoveClient(id)}
-              onUpsertRole={newRole => onUpsertClient({ ...agent, ...newRole })}
-            />
-          )
-        }
+        {_.map(clients, (agent, id) => (
+          <CrudRole
+            key={id}
+            role={agent}
+            modalTitle="Edit client"
+            allowedRoles={allowedRoles}
+            onRemoveRole={id => onRemoveClient(id)}
+            onUpsertRole={newRole => onUpsertClient({ ...agent, ...newRole })}
+          />
+        ))}
 
         <CrudRole
           modalTitle="Add a client"

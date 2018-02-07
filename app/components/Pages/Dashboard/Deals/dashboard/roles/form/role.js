@@ -1,20 +1,10 @@
 import React from 'react'
 import { Dropdown, MenuItem } from 'react-bootstrap'
-import roleNames from '../../../utils/roles'
+import { roleName } from '../../../utils/roles'
 
 function Role({
   form, role_names, isAllowed, onChange
 }) {
-  // Todo: dead code
-  // if (selectedRole) {
-  //   if (
-  //     (deal.deal_type === 'Buying' && selectedRole.role === 'BuyerAgent') ||
-  //     (deal.deal_type === 'Selling' && selectedRole.role === 'SellerAgent')
-  //   ) {
-  //     return false
-  //   }
-  // }
-
   return (
     <div>
       <label>
@@ -23,7 +13,7 @@ function Role({
       <div>
         <Dropdown id="deal-add-role--drp">
           <Dropdown.Toggle>
-            {form.role ? roleNames(form.role) : 'Select a Role'}
+            {form.role ? roleName(form.role) : 'Select a Role'}
           </Dropdown.Toggle>
 
           <Dropdown.Menu className="deal-add-role--drpmenu u-scrollbar--thinner--self">
@@ -40,7 +30,7 @@ function Role({
 
               return (
                 <MenuItem key={`ROLE_${name}`} onClick={() => onChange(name)}>
-                  {roleNames(name)}
+                  {roleName(name)}
                 </MenuItem>
               )
             })}
