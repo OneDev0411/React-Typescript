@@ -49,7 +49,6 @@ export default ({
             role={agent}
             isCommissionRequired={isCommissionRequired}
             modalTitle="Edit Agent"
-            buttonText="Update"
             allowedRoles={allowedRoles}
             onRemoveRole={id => onRemoveAgent(id)}
             onUpsertRole={newRole => onUpsertAgent({ ...agent, ...newRole })}

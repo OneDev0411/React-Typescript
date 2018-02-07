@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import pick from 'lodash/pick'
 import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
@@ -8,6 +7,11 @@ import RoleForm from '../form'
 import { createRoles, updateRole } from '../../../../../../../store_actions/deals'
 import { addContact } from '../../../../../../../store_actions/contact/add-contact'
 import { upsertAttributes } from '../../../../../../../store_actions/contact/index'
+import {
+  getNewAttributes,
+  getUpdatedNameAttribute,
+  normalizedFormDataAsContact
+} from '../../../utils/roles'
 
 const initialState = {
   form: null,
@@ -66,10 +70,11 @@ class AddRoleModal extends React.Component {
         if (!form.contact) {
           const copyFormData = Object.assign({}, form)
 
-          await addContact(nomilizedFormDataAsContact(copyFormData))
+          await addContact(normalizedFormDataAsContact(copyFormData))
+          this.notifySuccess('Contact created.')
         } else {
-          const newAttributes = await this.getNewAttributes(form)
-          const nameAttribute = await this.getUpdatedNameAttribute(form)
+          const newAttributes = await getNewAttributes(form)
+          const nameAttribute = await getUpdatedNameAttribute(form)
 
           if (nameAttribute && !nameAttribute.id) {
             newAttributes.push(nameAttribute)
@@ -115,88 +120,6 @@ class AddRoleModal extends React.Component {
     this.setState({
       saving: false
     })
-  }
-
-  async getUpdatedNameAttribute(formData = {}) {
-    const { contact } = formData
-    const { summary, sub_contacts } = contact
-    const updateList = [
-      'legal_prefix',
-      'legal_first_name',
-      'legal_middle_name',
-      'legal_last_name'
-    ]
-
-    const { names } = sub_contacts[0].attributes
-    const namesId = Array.isArray(names) ? names[0].id : undefined
-
-    const nameFields = [
-      'title',
-      'nickname',
-      'first_name',
-      'middle_name',
-      'last_name',
-      'legal_prefix',
-      'legal_first_name',
-      'legal_middle_name',
-      'legal_last_name'
-    ]
-
-    const nameAttribute = pick(summary, nameFields)
-
-    const updatedNamesList = Object.keys(formData)
-      .filter(attr => updateList.includes(attr))
-      .filter(attr => {
-        if (formData[attr]) {
-          return !nameAttribute[attr] || formData[attr] !== nameAttribute[attr]
-        }
-      })
-
-    const updatedNames = {}
-
-    updatedNamesList.forEach(name => {
-      updatedNames[name] = formData[name]
-    })
-
-    if (Object.keys(updatedNames).length > 0) {
-      return {
-        ...nameAttribute,
-        ...updatedNames,
-        id: namesId,
-        type: 'name'
-      }
-    }
-
-    return null
-  }
-
-  async getNewAttributes(formData = {}) {
-    const {
-      email, phone_number, emails, phones
-    } = formData
-    const newAttributes = []
-
-    const isNewEmail = email && !emails.map(item => item.email).includes(email)
-    const isNewPhoneNumber =
-      phone_number && !phones.map(item => item.phone_number).includes(phone_number)
-
-    if (isNewEmail) {
-      newAttributes.push({
-        email,
-        type: 'email',
-        is_primary: emails.length === 0
-      })
-    }
-
-    if (isNewPhoneNumber) {
-      newAttributes.push({
-        phone_number,
-        type: 'phone_number',
-        is_primary: phones.length === 0
-      })
-    }
-
-    return newAttributes
   }
 
   setSubmitButtonText = () => {
@@ -266,25 +189,3 @@ export default connect(null, {
   createRoles,
   upsertAttributes
 })(AddRoleModal)
-
-function nomilizedFormDataAsContact(formData = {}) {
-  const { email, phone_number } = formData
-  let emails
-  let phone_numbers
-
-  if (email) {
-    emails = [email]
-    delete formData.email
-  }
-
-  if (phone_number) {
-    phone_numbers = [phone_number]
-    delete formData.phone_number
-  }
-
-  return {
-    ...formData,
-    emails,
-    phone_numbers
-  }
-}
