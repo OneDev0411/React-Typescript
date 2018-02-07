@@ -44,7 +44,6 @@ class AddRoleModal extends React.Component {
     })
 
   submit = async () => {
-    const { form } = this.state
     const {
       deal,
       createRoles,
@@ -53,6 +52,9 @@ class AddRoleModal extends React.Component {
       addContact,
       upsertAttributes
     } = this.props
+    const { form } = this.state
+    const { contact, legal_first_name, legal_last_name } = form
+    const fullName = `${legal_first_name} ${legal_last_name}`
 
     if (!deal) {
       return false
@@ -65,13 +67,12 @@ class AddRoleModal extends React.Component {
     try {
       if (this.isUpdateModal()) {
         await updateRole(deal.id, _.omit(form, 'user'))
-        this.notifySuccess('Contact updated.')
       } else {
-        if (!form.contact) {
+        if (!contact) {
           const copyFormData = Object.assign({}, form)
 
           await addContact(normalizedFormDataAsContact(copyFormData))
-          this.notifySuccess('Contact created.')
+          this.notifySuccess(`${fullName} has been added to your Contacts.`)
         } else {
           const newAttributes = await getNewAttributes(form)
           const nameAttribute = await getUpdatedNameAttribute(form)
@@ -89,7 +90,7 @@ class AddRoleModal extends React.Component {
               await upsertAttributes(form.contact.id, '', newAttributes, true)
             }
 
-            this.notifySuccess('Contact updated.')
+            this.notifySuccess(`${fullName}'s contact profile has been updated.`)
           }
         }
 
@@ -99,8 +100,6 @@ class AddRoleModal extends React.Component {
 
       this.handleCloseModal()
     } catch (e) {
-      // console.log(e)
-
       if (!e.response) {
         return notify({
           message: `Error: ${e.message}`,

@@ -61,18 +61,22 @@ class CrudRole extends React.Component {
   addRole = async () => {
     const { form } = this.state
     const { notify, addContact, upsertAttributes } = this.props
+    const {
+      contact, legal_first_name, legal_last_name, isAgent
+    } = form
+    const fullName = `${legal_first_name} ${legal_last_name}`
 
     try {
-      if (!form.isAgent && !this.isUpdateModal()) {
+      if (!isAgent && !this.isUpdateModal()) {
         this.setState({
           isSaving: true
         })
 
-        if (!form.contact) {
+        if (!contact) {
           const copyFormData = Object.assign({}, form)
 
           await addContact(normalizedFormDataAsContact(copyFormData))
-          this.notifySuccess('Contact created.')
+          this.notifySuccess(`${fullName} has been added to your Contacts.`)
         } else {
           const newAttributes = await getNewAttributes(form)
           const nameAttribute = await getUpdatedNameAttribute(form)
@@ -90,7 +94,7 @@ class CrudRole extends React.Component {
               await upsertAttributes(form.contact.id, '', newAttributes, true)
             }
 
-            this.notifySuccess('Contact updated.')
+            this.notifySuccess(`${fullName}'s contact profile has been updated.`)
           }
         }
       }
