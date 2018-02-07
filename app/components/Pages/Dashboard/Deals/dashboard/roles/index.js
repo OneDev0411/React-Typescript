@@ -5,7 +5,7 @@ import UserAvatar from '../../../../../Partials/UserAvatar'
 import UpsertRole from './upsert-role'
 import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
-import roleName from '../../utils/roles'
+import { roleName } from '../../utils/roles'
 import AddRoleModal from './AddRoleModal'
 
 class Roles extends React.Component {

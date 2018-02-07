@@ -1,6 +1,7 @@
 import React from 'react'
 import SelectContactModal from '../../../../../../views/components/SelectContactModal'
 import AddRoleModal from './AddRoleModal'
+import { normalizeContact } from '../../utils/roles'
 
 const initialState = {
   fakeRole: null,
@@ -31,40 +32,8 @@ class UpsertRole extends React.Component {
   }
 
   handleSelectedContact = contact => {
-    const newContact = contact
-
-    delete newContact.id
-
-    const {
-      legal_prefix,
-      legal_last_name,
-      legal_middle_name,
-      legal_first_name,
-      title,
-      last_name,
-      middle_name,
-      first_name,
-      email,
-      phone_number
-    } = contact
-
-    const firstName =
-      first_name !== email && first_name !== phone_number && first_name
-    const legalFirstName =
-      legal_first_name !== email &&
-      legal_first_name !== phone_number &&
-      legal_first_name
-
-    const fakeRole = {
-      ...newContact,
-      legal_prefix: legal_prefix || title,
-      legal_first_name: legalFirstName || firstName,
-      legal_middle_name: legal_middle_name || middle_name,
-      legal_last_name: legal_last_name || last_name
-    }
-
     this.setState({
-      fakeRole,
+      fakeRole: normalizeContact(contact),
       showAddRoleModal: true,
       showAddToDealModal: false
     })

@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { OverlayTrigger, Popover } from 'react-bootstrap'
 import _ from 'underscore'
 import AddSigner from './add-signer'
-import roleName from '../../utils/roles'
+import { roleName } from '../../utils/roles'
 
 class AddRecipients extends React.Component {
   constructor(props) {

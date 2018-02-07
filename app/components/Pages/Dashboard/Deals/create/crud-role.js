@@ -4,7 +4,7 @@ import { Button, Modal } from 'react-bootstrap'
 import RoleForm from '../dashboard/roles/form'
 import RoleItem from './role-item'
 import UserAvatar from '../../../../Partials/UserAvatar'
-import roleName from '../utils/roles'
+import { roleName, normalizeContact } from '../utils/roles'
 import SelectContactModal from '../../../../../views/components/SelectContactModal'
 
 const initialState = {
@@ -87,17 +87,11 @@ class CrudRole extends React.Component {
   }
 
   handleSelectedContact = contact => {
-    const {
-      legal_last_name, legal_first_name, last_name, first_name
-    } = contact
-
-    const form = {
-      ...contact,
-      legal_first_name: legal_first_name || first_name,
-      legal_last_name: legal_last_name || last_name
-    }
-
-    this.setState({ form, showFormModal: true, showSelectContactModal: false })
+    this.setState({
+      form: normalizeContact(contact),
+      showFormModal: true,
+      showSelectContactModal: false
+    })
   }
 
   render() {
