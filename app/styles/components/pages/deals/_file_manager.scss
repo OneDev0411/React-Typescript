@@ -52,7 +52,7 @@
   .table-container {
     margin: 2% 13px;
 
-    &.empty-table {
+    .empty-table, .loading {
       img {
         width: 200px;
         display: block;

@@ -22,15 +22,20 @@ export class FileManager extends React.Component {
   render() {
     const { deal } = this.props
 
-    if (!deal.checklists) {
-      return false
-    }
-
     return (
       <div className="file-manager">
         <Navbar deal={deal} />
         <div className="content u-scrollbar--thinner">
-          <FilesTable deal={deal} />
+          <div className="table-container">
+            {
+              deal.checklists ?
+              <FilesTable deal={deal} /> :
+              <div className="loading">
+                <i className="fa fa-spin fa-spinner fa-3x" />
+              </div>
+            }
+          </div>
+
           <UploadPromptModal deal={deal} />
           <PDFSplitterModal deal={deal} />
         </div>
