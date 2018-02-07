@@ -401,7 +401,7 @@ Contact.uplaodCsv = async function(file, fileName = null) {
       .upload('/contacts/outlook.csv')
       .attach('attachment', file, title)
   } catch (e) {
-    console.log(e)
+    throw e
   }
 }
 
