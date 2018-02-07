@@ -61,9 +61,7 @@ class CrudRole extends React.Component {
   addRole = async () => {
     const { form } = this.state
     const { notify, addContact, upsertAttributes } = this.props
-    const {
-      contact, legal_first_name, legal_last_name, isAgent
-    } = form
+    const { contact, legal_first_name, legal_last_name, isAgent } = form
     const fullName = `${legal_first_name} ${legal_last_name}`
 
     try {
@@ -87,14 +85,21 @@ class CrudRole extends React.Component {
 
           if (nameAttribute || newAttributes.length > 0) {
             if (nameAttribute && nameAttribute.id) {
-              await upsertAttributes(form.contact.id, 'name', [nameAttribute], true)
+              await upsertAttributes(
+                form.contact.id,
+                'name',
+                [nameAttribute],
+                true
+              )
             }
 
             if (newAttributes.length > 0) {
               await upsertAttributes(form.contact.id, '', newAttributes, true)
             }
 
-            this.notifySuccess(`${fullName}'s contact profile has been updated.`)
+            this.notifySuccess(
+              `${fullName}'s contact profile has been updated.`
+            )
           }
         }
       }
@@ -127,9 +132,7 @@ class CrudRole extends React.Component {
   }
 
   onSelectAgent = user => {
-    const {
-      agent, first_name, last_name, email, phone_number
-    } = user
+    const { agent, first_name, last_name, email, phone_number } = user
     const { office, work_phone } = agent
 
     const form = {
@@ -238,9 +241,7 @@ class CrudRole extends React.Component {
           dialogClassName="modal-deal-add-role"
           backdrop="static"
         >
-          <Modal.Header closeButton>
-            {(form && form.title) || modalTitle}
-          </Modal.Header>
+          <Modal.Header closeButton>{modalTitle}</Modal.Header>
 
           <Modal.Body>
             <RoleForm
@@ -309,4 +310,6 @@ function mapToProps({ deals }) {
   return { teamAgents }
 }
 
-export default connect(mapToProps, { notify, addContact, upsertAttributes })(CrudRole)
+export default connect(mapToProps, { notify, addContact, upsertAttributes })(
+  CrudRole
+)
