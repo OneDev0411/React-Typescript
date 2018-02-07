@@ -6,6 +6,7 @@ import _ from 'underscore'
 import RoleForm from '../form'
 import { createRoles, updateRole } from '../../../../../../../store_actions/deals'
 import { addContact } from '../../../../../../../store_actions/contact/add-contact'
+import { upsertAttributes } from '../../../../../../../store_actions/contact/index'
 
 const initialState = {
   form: null,
@@ -15,7 +16,12 @@ const initialState = {
 }
 
 class AddRoleModal extends React.Component {
-  state = initialState
+  constructor(props) {
+    super(props)
+
+    this.state = initialState
+    this.getUpdatedNameAttributes = this.getUpdatedNameAttributes.bind(this)
+  }
 
   componentWillUnmount = () => {
     this.setState(initialState)
@@ -40,7 +46,12 @@ class AddRoleModal extends React.Component {
   submit = async () => {
     const { form } = this.state
     const {
-      deal, createRoles, updateRole, notify, addContact
+      deal,
+      createRoles,
+      updateRole,
+      notify,
+      addContact,
+      upsertAttributes
     } = this.props
 
     if (!deal) {
@@ -56,11 +67,18 @@ class AddRoleModal extends React.Component {
         await updateRole(deal.id, _.omit(form, 'user'))
         this.notifySuccess('Contact updated.')
       } else {
-        if (!form.contactId) {
+        if (!form.contact) {
           const copyFormData = Object.assign({}, form)
 
           await addContact(nomilizedFormDataAsContact(copyFormData))
           this.notifySuccess('New contact created.')
+        } else {
+          const nameAttributes = await this.getUpdatedNameAttributes(form)
+
+          if (nameAttributes) {
+            await upsertAttributes(form.contact.id, 'name', [nameAttributes], true)
+            this.notifySuccess('The contact updated.')
+          }
         }
 
         await createRoles(deal.id, [form])
@@ -88,6 +106,47 @@ class AddRoleModal extends React.Component {
     this.setState({
       saving: false
     })
+  }
+
+  async getUpdatedNameAttributes(formData = {}) {
+    const { contact } = formData
+    const { sub_contacts } = contact
+    const { attributes } = sub_contacts[0]
+    const updateList = [
+      'legal_prefix',
+      'legal_first_name',
+      'legal_middle_name',
+      'legal_last_name'
+    ]
+
+    const { names } = attributes
+
+    const namesAttribute = Array.isArray(names) && names[0]
+
+    if (namesAttribute) {
+      const updatedNamesList = Object.keys(formData)
+        .filter(attr => updateList.includes(attr))
+        .filter(attr => {
+          if (formData[attr]) {
+            return !namesAttribute[attr] || formData[attr] !== namesAttribute[attr]
+          }
+        })
+
+      const updatedNames = {}
+
+      updatedNamesList.forEach(name => {
+        updatedNames[name] = formData[name]
+      })
+
+      if (Object.keys(updatedNames).length > 0) {
+        return {
+          ...namesAttribute,
+          ...updatedNames
+        }
+      }
+    }
+
+    return null
   }
 
   setSubmitButtonText = () => {
@@ -154,7 +213,8 @@ export default connect(null, {
   notify,
   addContact,
   updateRole,
-  createRoles
+  createRoles,
+  upsertAttributes
 })(AddRoleModal)
 
 function nomilizedFormDataAsContact(formData = {}) {

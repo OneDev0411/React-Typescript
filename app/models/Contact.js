@@ -9,7 +9,7 @@ const Contact = {
 /**
  * add new contact
  */
-Contact.add = async function(params) {
+Contact.add = async function (params) {
   const { contacts } = params
 
   try {
@@ -24,7 +24,7 @@ Contact.add = async function(params) {
 /**
  * returns contacts list
  */
-Contact.getContacts = async function(user) {
+Contact.getContacts = async function (user) {
   try {
     const fetchContacts = new Fetch()
       .get('/contacts')
@@ -48,7 +48,7 @@ Contact.getContacts = async function(user) {
 /**
  * returns contact's timeline
  */
-Contact.getTimeline = async function(id) {
+Contact.getTimeline = async function (id) {
   const endpoint = `/contacts/${id}/timeline`
 
   try {
@@ -63,7 +63,7 @@ Contact.getTimeline = async function(id) {
 /**
  * add note
  */
-Contact.addNote = async function(id, note) {
+Contact.addNote = async function (id, note) {
   const endpoint = `/contacts/${id}/attributes`
   const payload = Contact.helper.populateAttributes('note', [{ note }])
 
@@ -79,7 +79,7 @@ Contact.addNote = async function(id, note) {
 /**
  * add new item to user's timeline
  */
-Contact.updateUserTimeline = async function(action, object_class, object) {
+Contact.updateUserTimeline = async function (action, object_class, object) {
   const requestBody = {
     action,
     object,
@@ -98,12 +98,11 @@ Contact.updateUserTimeline = async function(action, object_class, object) {
 /**
  * create new attributes
  */
-Contact.createAttributes = async function(id, type, attributes) {
+Contact.createAttributes = async function (id, type, attributes) {
   const endpoint = `/contacts/${id}/attributes`
-  const payload = Contact.helper.populateAttributes(type, attributes)
 
   try {
-    const response = await new Fetch().post(endpoint).send(payload)
+    const response = await new Fetch().post(endpoint).send({ attributes })
 
     return response.body.data
   } catch (e) {
@@ -114,13 +113,11 @@ Contact.createAttributes = async function(id, type, attributes) {
 /**
  * update current attributes
  */
-Contact.updateAttributes = async function(id, type, attributes) {
-  const payload = Contact.helper.populateAttributes(type, attributes)
+Contact.updateAttributes = async function (id, type, attributes) {
+  console.log(type, attributes)
 
   try {
-    const response = await new Fetch()
-      .patch(`/contacts/${id}`)
-      .send({ attributes: payload.attributes })
+    const response = await new Fetch().patch(`/contacts/${id}`).send({ attributes })
 
     return response.body.data
   } catch (e) {
@@ -131,11 +128,9 @@ Contact.updateAttributes = async function(id, type, attributes) {
 /**
  * delete attribute
  */
-Contact.deleteAttribute = async function(id, attribute_id) {
+Contact.deleteAttribute = async function (id, attribute_id) {
   try {
-    const response = await new Fetch().delete(
-      `/contacts/${id}/attributes/${attribute_id}`
-    )
+    const response = await new Fetch().delete(`/contacts/${id}/attributes/${attribute_id}`)
 
     return response.body.data
   } catch (e) {
@@ -146,7 +141,7 @@ Contact.deleteAttribute = async function(id, attribute_id) {
 /**
  * get tags
  */
-Contact.getTags = async function() {
+Contact.getTags = async function () {
   try {
     const response = await new Fetch().get('/contacts/tags')
 
@@ -159,32 +154,32 @@ Contact.getTags = async function() {
 /**
  * helpers functions
  */
-// Contact.helper = {
-//   populateAttributes: (type, attributes) => ({
-//     attributes: attributes.map(item => ({ type, ...item }))
-//   })
-
+Contact.helper = {
+  populateAttributes: (type, attributes) => ({
+    attributes: attributes.map(item => ({ type, ...item }))
+  })
+}
 
 /**
  * helpers functions
  */
-Contact.helper = {
-  populateAttributes: (type, attributes) => ({
-    attributes: _.map(attributes, attr => {
-      const item = { type }
+// Contact.helper = {
+//   populateAttributes: (type, attributes) => ({
+//     attributes: _.map(attributes, attr => {
+//       const item = { type }
 
-      if (attr[type]) {
-        item[type] = attr[type]
-      }
+//       if (attr[type]) {
+//         item[type] = attr[type]
+//       }
 
-      if (attr.id) {
-        item.id = attr.id
-      }
+//       if (attr.id) {
+//         item.id = attr.id
+//       }
 
-      return { ...item, ...attr }
-    })
-  })
-}
+//       return { ...item, ...attr }
+//     })
+//   })
+// }
 
 /**
  * Helper class to get Contact fields
@@ -393,7 +388,7 @@ Contact.get = {
   }
 }
 
-Contact.uplaodCsv = async function(file, fileName = null) {
+Contact.uplaodCsv = async function (file, fileName = null) {
   const title = fileName || file.name
 
   try {
@@ -417,7 +412,7 @@ export function extractUserInfoFromContact(contact) {
     id,
     emails,
     phones,
-    contactId: id,
+    contact,
     profile_image_url,
     ...summary
   }
