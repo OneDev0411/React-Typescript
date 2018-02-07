@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import ReactTable from 'react-table'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
@@ -47,6 +48,8 @@ export class FileManager extends React.Component {
       onClick: (e, handleOriginal) => {
         if (column.id === 'radio') {
           this.toggleSelectedRow(rowInfo.original)
+        } else {
+          this.openFile(rowInfo.original)
         }
 
         if (handleOriginal) {
@@ -70,6 +73,7 @@ export class FileManager extends React.Component {
         attachments.filter(file => this.applyFilter(file, task)).forEach(file => {
           files.push({
             ...file,
+            taskId: task.id,
             task: task.title
           })
         })
@@ -144,6 +148,14 @@ export class FileManager extends React.Component {
     ]
 
     this.props.displaySplitter(files)
+  }
+
+  openFile(file) {
+    const { deal } = this.props
+
+    browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${file.taskId}/attachment/${
+      file.id
+    }?backTo=files`)
   }
 
   getColumns() {
@@ -235,7 +247,6 @@ export class FileManager extends React.Component {
 
   render() {
     const { selectedRows } = this.state
-
     const data = this.getAllFiles()
 
     return (
@@ -264,10 +275,14 @@ export class FileManager extends React.Component {
           pageSize={data.length}
           columns={this.getColumns()}
           getTdProps={this.onCellClick}
+          defaultSorted={[
+            {
+              id: 'created_at',
+              desc: true
+            }
+          ]}
           sortable
-          multiSort
           resizable
-          filterable={false}
         />
       </div>
     )

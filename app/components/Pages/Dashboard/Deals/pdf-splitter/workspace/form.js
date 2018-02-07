@@ -51,7 +51,10 @@ class WorkspaceForm extends React.Component {
     const files = _.chain(pages)
       .pluck('documentId')
       .uniq()
-      .map(id => splitter.files[id].file)
+      .map(id => ({
+        object: splitter.files[id].file,
+        documentId: id
+      }))
       .value()
 
     try {
