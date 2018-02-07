@@ -29,8 +29,8 @@ export default ({
           </div>
 
           <div className="list--header-row--col">
-            <ImportCSV />
-            <ImportOutlook userId={user.id} />
+            {/* <ImportCSV /> */}
+            {/* <ImportOutlook userId={user.id} /> */}
 
             <AddContactModal user={user} onNewContact={id => onNewContact(id)} />
           </div>
