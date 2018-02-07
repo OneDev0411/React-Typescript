@@ -1,11 +1,17 @@
 import React, { Fragment } from 'react'
 import ReactTable from 'react-table'
 import { connect } from 'react-redux'
+import cn from 'classnames'
 import { browserHistory } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
-import { getDeal, displaySplitter } from '../../../../../store_actions/deals'
+import {
+  getDeal,
+  displaySplitter,
+  deleteAttachment
+} from '../../../../../store_actions/deals'
+import { confirmation } from '../../../../../store_actions/confirmation'
 import Radio from '../components/radio'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import Search from '../../../../Partials/headerSearch'
@@ -15,7 +21,7 @@ export class FileManager extends React.Component {
     super(props)
     this.state = {
       filter: '',
-      deleting: null,
+      isDeleting: [],
       selectedRows: {}
     }
 
@@ -46,10 +52,12 @@ export class FileManager extends React.Component {
   onCellClick(state, rowInfo, column) {
     return {
       onClick: (e, handleOriginal) => {
+        if (['radio', 'delete'].indexOf(column.id) === -1) {
+          return this.openFile(rowInfo.original)
+        }
+
         if (column.id === 'radio') {
           this.toggleSelectedRow(rowInfo.original)
-        } else {
-          this.openFile(rowInfo.original)
         }
 
         if (handleOriginal) {
@@ -121,6 +129,15 @@ export class FileManager extends React.Component {
     this.setState({ selectedRows: newSelectedRows })
   }
 
+  toggleSelectAll(rows) {
+    const { selectedRows } = this.state
+    const shouldSelectAll = _.size(selectedRows) < rows.length
+
+    this.setState({
+      selectedRows: shouldSelectAll ? _.indexBy(rows, 'id') : {}
+    })
+  }
+
   splitMultipleFiles() {
     const { selectedRows } = this.state
 
@@ -150,6 +167,46 @@ export class FileManager extends React.Component {
     this.props.displaySplitter(files)
   }
 
+  requestDeleteSelectedFiles() {
+    const { tasks, confirmation } = this.props
+    const { selectedRows } = this.state
+    const deleteList = {}
+
+    _.each(selectedRows, file => {
+      deleteList[file.id] = tasks[file.taskId]
+    })
+
+    confirmation({
+      message: `Delete ${_.size(selectedRows)} files?`,
+      confirmLabel: 'Yes, Delete',
+      onConfirm: () => this.deleteFiles(deleteList)
+    })
+  }
+
+  deleteSingleFile(file) {
+    const { tasks } = this.props
+
+    this.deleteFiles({
+      [file.id]: tasks[file.taskId]
+    })
+  }
+
+  async deleteFiles(files) {
+    const { deal, deleteAttachment } = this.props
+    const { isDeleting } = this.state
+
+    this.setState({
+      isDeleting: [...isDeleting, ..._.keys(files)]
+    })
+
+    await deleteAttachment(deal.id, files)
+
+    this.setState({
+      selectedRows: [],
+      isDeleting: _.filter(isDeleting, id => files[id] !== null)
+    })
+  }
+
   openFile(file) {
     const { deal } = this.props
 
@@ -158,16 +215,22 @@ export class FileManager extends React.Component {
     }?backTo=files`)
   }
 
-  getColumns() {
-    const { selectedRows, deleting } = this.state
+  getColumns(rows) {
+    const { selectedRows, isDeleting } = this.state
 
     return [
       {
         id: 'radio',
-        Header: '',
+        Header: () => (
+          <Radio
+            selected={rows.length > 0 && rows.length === _.size(selectedRows)}
+            onClick={() => this.toggleSelectAll(rows)}
+          />
+        ),
         accessor: '',
         width: 40,
         className: 'select-row',
+        sortable: false,
         Cell: ({ original: file }) => <Radio selected={selectedRows[file.id]} />
       },
       {
@@ -210,16 +273,13 @@ export class FileManager extends React.Component {
         )
       },
       {
+        id: 'delete',
         Header: '',
         accessor: '',
         className: 'td--dropdown-container',
         width: 30,
-        Cell: props => (
-          <Dropdown
-            id={`file_${props.original.id}`}
-            className="deal-file-cta-menu"
-            pullRight
-          >
+        Cell: ({ original: file }) => (
+          <Dropdown id={`file_${file.id}`} className="deal-file-cta-menu" pullRight>
             <Button
               onClick={e => e.stopPropagation()}
               className="cta-btn btn-link"
@@ -230,12 +290,14 @@ export class FileManager extends React.Component {
 
             <Dropdown.Menu>
               <li>
-                {deleting ? (
+                {isDeleting.indexOf(file.id) > -1 ? (
                   <span>
                     <i className="fa fa-spinner fa-spin" /> Deleting ...
                   </span>
                 ) : (
-                  <span>Delete file</span>
+                  <span onClick={() => this.deleteSingleFile(file)}>
+                    Delete file
+                  </span>
                 )}
               </li>
             </Dropdown.Menu>
@@ -246,8 +308,17 @@ export class FileManager extends React.Component {
   }
 
   render() {
-    const { selectedRows } = this.state
+    const { isDeleting, selectedRows } = this.state
     const data = this.getAllFiles()
+
+    if (data.length === 0) {
+      return (
+        <div className="table-container empty-table">
+          <img src="/static/images/deals/dnd.png" alt="" />
+          There is no uploaded files in this deal
+        </div>
+      )
+    }
 
     return (
       <div className="table-container">
@@ -259,7 +330,17 @@ export class FileManager extends React.Component {
 
         <div className="callToActions">
           {_.size(selectedRows) > 0 && (
-            <button className="button inverse">Delete files</button>
+            <button
+              className={cn('button inverse', {
+                disabled: isDeleting.length > 0
+              })}
+              disabled={isDeleting.length > 0}
+              onClick={() => this.requestDeleteSelectedFiles()}
+            >
+              {isDeleting.length === 0
+                ? 'Delete files'
+                : `Deleting ${isDeleting.length} files`}
+            </button>
           )}
 
           {_.some(selectedRows, file => this.isPdfDocument(file.mime)) && (
@@ -273,7 +354,7 @@ export class FileManager extends React.Component {
           showPagination={false}
           data={data}
           pageSize={data.length}
-          columns={this.getColumns()}
+          columns={this.getColumns(data)}
           getTdProps={this.onCellClick}
           defaultSorted={[
             {
@@ -295,7 +376,9 @@ export default connect(
     tasks: deals.tasks
   }),
   {
+    confirmation,
     getDeal,
+    deleteAttachment,
     displaySplitter
   }
 )(FileManager)

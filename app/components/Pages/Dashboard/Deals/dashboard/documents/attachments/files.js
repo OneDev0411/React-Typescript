@@ -42,7 +42,7 @@ class FileAttachments extends React.Component {
   }
 
   async deleteFile(e, task, file) {
-    const { deleteAttachment } = this.props
+    const { deal, deleteAttachment } = this.props
     const { deleting } = this.state
 
     e.stopPropagation()
@@ -56,7 +56,9 @@ class FileAttachments extends React.Component {
     })
 
     try {
-      await deleteAttachment(task, [file.id])
+      await deleteAttachment(deal.id, {
+        [file.id]: task
+      })
     } catch (e) {}
 
     this.setState({
