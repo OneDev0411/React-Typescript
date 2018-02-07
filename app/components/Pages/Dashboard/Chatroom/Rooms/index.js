@@ -133,15 +133,15 @@ class Rooms extends React.Component {
             <div
               className="toggle-sidebar"
             >
-              <a
+              <button
                 onClick={() => {
                   instantMode && this.props.toggleInstantMode()
                   showChatbar && this.props.toggleChatbar(false)
                 }}
-                className="btn-tgl"
+                className="c-button--shadow btn-tgl"
               >
                 <i className="fa fa-angle-double-left fa-2x" />
-              </a>
+              </button>
             </div>
           </OverlayTrigger>
 
@@ -154,12 +154,12 @@ class Rooms extends React.Component {
               <div
                 className="toggle-sidebar two-direction-arrow-container"
               >
-                <a
+                <button
                   onClick={e => this.fullScreen(e)}
-                  className="btn-tgl"
+                  className="c-button--shadow btn-tgl"
                 >
                   <TwoDirectionArrow className="two-direction-arrow" />
-                </a>
+                </button>
               </div>
             </OverlayTrigger>
           }
