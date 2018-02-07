@@ -140,8 +140,6 @@ class Chatroom extends React.Component {
 
 export default connect(
   ({ chatroom }) => {
-    console.log('connect instantMode: ', chatroom.instantMode)
-
     return {
       instantMode: chatroom.instantMode,
       activeRoom: chatroom.activeRoom
