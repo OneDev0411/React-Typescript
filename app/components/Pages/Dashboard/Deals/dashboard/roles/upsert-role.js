@@ -1,6 +1,6 @@
 import React from 'react'
 import SelectContactModal from '../../../../../../views/components/SelectContactModal'
-import AddRoleModal from './AddRoleModal'
+import AddRoleModal from './add-role-modal'
 import { normalizeContact } from '../../utils/roles'
 
 const initialState = {

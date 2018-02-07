@@ -5,7 +5,7 @@ import Role from './role'
 import Title from './title'
 import Company from './company'
 import Commission from './commission'
-import InputWithSelect from './InputWithSelect'
+import InputWithSelect from './input-with-select'
 
 const ROLE_NAMES = [
   'BuyerAgent',

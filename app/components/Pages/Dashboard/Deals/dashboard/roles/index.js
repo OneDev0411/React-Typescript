@@ -6,7 +6,7 @@ import UpsertRole from './upsert-role'
 import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import { roleName } from '../../utils/roles'
-import AddRoleModal from './AddRoleModal'
+import AddRoleModal from './add-role-modal'
 
 class Roles extends React.Component {
   state = {
