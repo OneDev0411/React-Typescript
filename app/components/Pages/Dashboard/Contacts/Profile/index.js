@@ -1,10 +1,12 @@
 import React from 'react'
+import pick from 'lodash/pick'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
 import Header from './Header'
 import Information from './Information'
+import Names from './Names'
 import Details from './Details'
 import Address from './Address'
 import AddNote from './Add-Note'
@@ -57,23 +59,27 @@ class ContactProfile extends React.Component {
   }
 
   onChangeAttribute(type, id, text) {
-    this.upsertAttributes(type, [{
-      id,
-      type,
-      [type]: text
-    }])
+    this.upsertAttributes(type, [
+      {
+        id,
+        type,
+        [type]: text
+      }
+    ])
   }
 
   onChangeAddress(address, field, id, text) {
     const { street_name, city, state, postal_code } = address
-    const attributes = [{
-      type: 'address',
-      id,
-      street_name,
-      city,
-      state,
-      postal_code
-    }]
+    const attributes = [
+      {
+        type: 'address',
+        id,
+        street_name,
+        city,
+        state,
+        postal_code
+      }
+    ]
 
     // set field
     attributes[0][field] = text
@@ -84,7 +90,7 @@ class ContactProfile extends React.Component {
   onAddAttribute(type) {
     const { updateContact } = this.props
     const contact = this.getContact()
-    const attributes = contact.sub_contacts[0].attributes
+    const { attributes } = contact.sub_contacts[0]
     const entity = `${type}s`
 
     if (!attributes[entity]) {
@@ -102,20 +108,55 @@ class ContactProfile extends React.Component {
     })
   }
 
-  upsertAttributes(type, attributes) {
+  upsertAttributes(type, attributes, disableNotify) {
     const { params, upsertAttributes } = this.props
 
-    upsertAttributes(params.id, type, attributes)
+    upsertAttributes(params.id, type, attributes, disableNotify)
   }
 
   changeStage(stage, contact) {
-    const attributes = [{
-      id: Contact.get.stage(contact).id,
-      type: 'stage',
-      stage: stage.replace(/\s/g, '')
-    }]
+    const attributes = [
+      {
+        id: Contact.get.stage(contact).id,
+        type: 'stage',
+        stage: stage.replace(/\s/g, '')
+      }
+    ]
 
     this.upsertAttributes('stage', attributes)
+  }
+
+  getNames = names => {
+    const { id } = names
+
+    const nameFields = {
+      first_name: '-',
+      middle_name: '-',
+      last_name: '-',
+      legal_first_name: '-',
+      legal_middle_name: '-',
+      legal_last_name: '-'
+    }
+
+    const nameAttribute = {
+      ...nameFields,
+      ...pick(names, Object.keys(nameFields))
+    }
+
+    const getTitle = name =>
+      name
+        .split('_')
+        .map(i => i.charAt(0).toUpperCase() + i.substr(1, i.length))
+        .join(' ')
+
+    if (Object.keys(nameAttribute).length > 0) {
+      return Object.keys(nameAttribute).map(name => ({
+        id,
+        name,
+        value: nameAttribute[name],
+        title: getTitle(name)
+      }))
+    }
   }
 
   render() {
@@ -127,18 +168,15 @@ class ContactProfile extends React.Component {
     const phones = Contact.get.phones(contact)
     const birthdays = Contact.get.birthdays(contact)
     const companies = Contact.get.companies(contact)
+    const { names } = contact.sub_contacts[0].attributes
 
     return (
       <div className="profile">
-        <Header
-          goBackHandler={this.goBack}
-        />
+        <Header goBackHandler={this.goBack} />
 
         <div className="content">
           <div className="left-pane">
-            <Information
-              contact={contact}
-            />
+            <Information contact={contact} />
 
             <div className="card stage">
               <div className="title">Stage:</div>
@@ -155,6 +193,23 @@ class ContactProfile extends React.Component {
               />
             </div>
 
+            {Array.isArray(names) && (
+              <Names
+                names={this.getNames(names[0])}
+                onChangeAttribute={(type, id, text) => {
+                  const attributes = [
+                    {
+                      ...names[0],
+                      [type]: text,
+                      id: id || undefined
+                    }
+                  ]
+
+                  this.upsertAttributes('name', attributes, true)
+                }}
+              />
+            )}
+
             <Details
               contact={contact}
               user={user}
@@ -163,14 +218,13 @@ class ContactProfile extends React.Component {
               birthdays={birthdays}
               companies={companies}
               onChangeAttribute={(...args) => this.onChangeAttribute(...args)}
-              onAddAttribute={(type) => this.onAddAttribute(type)}
+              onAddAttribute={type => this.onAddAttribute(type)}
             />
 
             <Address
               contact={contact}
               onChangeAddress={(...args) => this.onChangeAddress(...args)}
             />
-
           </div>
 
           <div className="right-pane">
@@ -187,15 +241,16 @@ class ContactProfile extends React.Component {
               onChangeAttribute={(...args) => this.onChangeAttribute(...args)}
             />
           </div>
-
         </div>
       </div>
     )
   }
 }
 
-export default connect(({ contacts, user }) => ({
-  user,
-  contacts: contacts.list
-}), { getTimeline, upsertAttributes, updateContact })(ContactProfile)
-
+export default connect(
+  ({ contacts, user }) => ({
+    user,
+    contacts: contacts.list
+  }),
+  { getTimeline, upsertAttributes, updateContact }
+)(ContactProfile)
