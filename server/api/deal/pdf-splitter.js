@@ -1,7 +1,8 @@
 import Koa from 'koa'
-
+const FakeStream = require('../../util/fake-stream')
 const router = require('koa-router')()
-const streams = require('memory-streams')
+const memoryStream = require('memory-streams')
+const PassThrough = require('stream').PassThrough
 const agent = require('superagent')
 const fileParser = require('async-busboy')
 const _ = require('underscore')
@@ -25,7 +26,7 @@ function splitFiles(splits, filepath) {
 
 async function downloadFiles(files) {
   return Promise.all(_.map(JSON.parse(files), async file => {
-    const stream = new streams.ReadableStream()
+    const stream = new memoryStream.ReadableStream()
     const { body } = await agent.get(file.object.url).buffer()
 
     stream.append(body)
@@ -56,8 +57,18 @@ router.post('/deals/pdf-splitter', async ctx => {
   if (!user) {
     ctx.status = 401
     ctx.body = ''
-
     return false
+  }
+
+  const fakeStream = new FakeStream()
+
+  const fakeInterval = setInterval(() => fakeStream.push('\n'), 1500)
+  ctx.body = fakeStream.pipe(PassThrough())
+
+  const finishStream = function(data) {
+    clearInterval(fakeInterval)
+    fakeStream.push(JSON.stringify(data))
+    fakeStream.emit('end')
   }
 
   try {
@@ -114,13 +125,10 @@ router.post('/deals/pdf-splitter', async ctx => {
       fs.unlink(file.path, () => null)
     })
 
-    ctx.body = {
-      file
-    }
+    finishStream({ success: true, file })
   } catch (e) {
     console.log('[ Splitter Error ] ', e)
-    ctx.status = 400
-    ctx.body = e
+    finishStream({ success: false, error: e.message })
   }
 })
 

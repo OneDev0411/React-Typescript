@@ -91,7 +91,8 @@ class WorkspaceForm extends React.Component {
       console.log(e)
 
       notify({
-        message: 'Couldn\'t create pdf file. try again.',
+        title: 'Couldn\'t create the splitted pdf file. please try again.',
+        message: e.message,
         status: 'error'
       })
 

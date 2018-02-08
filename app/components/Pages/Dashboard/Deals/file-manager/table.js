@@ -74,6 +74,10 @@ export class FileManager extends React.Component {
     deal.checklists.forEach(chId => {
       const checklist = checklists[chId] || []
 
+      if (!checklist.tasks) {
+        return []
+      }
+
       checklist.tasks.forEach(tId => {
         const task = tasks[tId]
         const attachments = task.room.attachments || []
@@ -87,7 +91,7 @@ export class FileManager extends React.Component {
         })
       })
     })
-
+    
     return files
   }
 
