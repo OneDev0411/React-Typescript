@@ -76,7 +76,10 @@ export function uplaodCsv(file, fileName = null) {
         dispatch(
           notify({
             title: 'Import failed',
-            message: e.message,
+            message:
+              e.response && e.response.body
+                ? e.response.body.message
+                : e.message,
             status: 'error'
           })
         )
