@@ -141,9 +141,17 @@ class FormViewer extends React.Component {
   }
 
   onClose() {
-    const { deal } = this.props
+    const { deal, location } = this.props
+    const { query } = location
+    let url = `/dashboard/deals/${deal.id}`
 
-    browserHistory.push(`/dashboard/deals/${deal.id}`)
+    if (query) {
+      if (query.backTo === 'files') {
+        url += '/files'
+      }
+    }
+
+    browserHistory.push(url)
   }
 
   render() {

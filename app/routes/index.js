@@ -110,8 +110,6 @@ const AsyncDealsLayout = Load({
       return Promise.resolve()
     }
 
-    console.log(user)
-
     return batchActions([
       await dispatch(getContexts(user)),
       await dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
@@ -137,6 +135,11 @@ const AsyncDealsList = Load({
 const AsyncDealDashboard = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Deals/dashboard' /* webpackChunkName: "deal_d" */)
+})
+
+const AsyncDealFileManager = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Deals/file-manager' /* webpackChunkName: "deal_fm" */)
 })
 
 const AsyncDealFormViewer = Load({
@@ -358,6 +361,7 @@ export default (
         <IndexRoute component={AsyncDealsList} />
         <Route path="/dashboard/deals/create" component={AsyncDealCreate} />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
+        <Route path="/dashboard/deals/:id/files" component={AsyncDealFileManager} />
         <Route
           path="/dashboard/deals/:id/form-edit/:taskId"
           component={AsyncDealFormEdit}

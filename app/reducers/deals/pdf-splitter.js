@@ -2,10 +2,11 @@ import _ from 'underscore'
 import types from '../../constants/deals'
 
 const initialState = {
-  display: false,
-  documents: {},
-  pages: {},
-  pagePreview: null
+  files: {}, // keeps files list
+  pdfObjects: {}, // keeps pdfjs objects
+  pages: {}, // keeps selected pages which should split
+  usedPages: {}, // keeps used pages in the current workspace
+  pagePreview: null // whether previewing a page or not
 }
 
 export default (state = initialState, action) => {
@@ -13,7 +14,7 @@ export default (state = initialState, action) => {
     case types.SET_SPLITTER_DISPLAY:
       return {
         ...state,
-        display: action.display
+        files: action.files
       }
 
     case types.SET_PAGE_PREVIEW:
@@ -22,11 +23,11 @@ export default (state = initialState, action) => {
         pagePreview: action.preview
       }
 
-    case types.SET_SPLITTER_DOCUMENT:
+    case types.SET_SPLITTER_PDF_OBJECT:
       return {
         ...state,
-        documents: {
-          ...state.documents,
+        pdfObjects: {
+          ...state.pdfObjects,
           [action.docId]: action.doc
         }
       }
@@ -43,11 +44,23 @@ export default (state = initialState, action) => {
         }
       }
 
+    case types.SET_SPLITTER_USED_PAGES:
+      return {
+        ...state,
+        usedPages: {
+          ...state.usedPages,
+          ...action.pages
+        }
+      }
+
     case types.DESELECT_SPLITTER_PAGE:
       return {
         ...state,
-        pages: _.omit(state.pages, page =>
-          page.documentId === action.docId && page.pageNumber === action.pageNumber)
+        pages: _.omit(
+          state.pages,
+          page =>
+            page.documentId === action.docId && page.pageNumber === action.pageNumber
+        )
       }
 
     case types.RESET_SPLITTER_PAGES:

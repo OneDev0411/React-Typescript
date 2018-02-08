@@ -5,7 +5,7 @@ import Role from './role'
 import Title from './title'
 import Company from './company'
 import Commission from './commission'
-import InputWithSelect from './InputWithSelect'
+import InputWithSelect from './input-with-select'
 
 const ROLE_NAMES = [
   'BuyerAgent',
@@ -300,6 +300,7 @@ export default class Form extends React.Component {
           title="Email"
           errorText="Enter a valid email"
           placeholder="example@gmail.com"
+          defaultSelectedItem={form.email}
           isRequired={this.isEmailRequired()}
           isInvalid={invalidFields.includes('email')}
           onChangeHandler={value => this.setForm('email', value)}
@@ -314,6 +315,7 @@ export default class Form extends React.Component {
           title="Phone"
           errorText="Enter a valid phone"
           placeholder="(###) - ### ####"
+          defaultSelectedItem={form.phone_number}
           isInvalid={invalidFields.includes('phone_number')}
           onChangeHandler={value => this.setForm('phone_number', value)}
           items={extractItems({

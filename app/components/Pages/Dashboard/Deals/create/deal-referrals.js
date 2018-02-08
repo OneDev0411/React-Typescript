@@ -20,7 +20,6 @@ export default ({
             key={id}
             role={agent}
             modalTitle="Edit referral"
-            buttonText="Update"
             allowedRoles={allowedRoles}
             onRemoveRole={id => onRemoveReferral(id)}
             onUpsertRole={newRole => onUpsertReferral({ ...agent, ...newRole })}

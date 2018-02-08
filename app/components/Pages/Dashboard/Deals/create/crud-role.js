@@ -1,14 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Modal } from 'react-bootstrap'
+import { addNotification as notify } from 'reapop'
 import RoleForm from '../dashboard/roles/form'
 import RoleItem from './role-item'
 import UserAvatar from '../../../../Partials/UserAvatar'
-import roleName from '../utils/roles'
+import {
+  roleName,
+  normalizeContact,
+  getNewAttributes,
+  getUpdatedNameAttribute,
+  normalizedFormDataAsContact
+} from '../utils/roles'
 import SelectContactModal from '../../../../../views/components/SelectContactModal'
+import { addContact } from '../../../../../store_actions/contact/add-contact'
+import { upsertAttributes } from '../../../../../store_actions/contact/index'
 
 const initialState = {
   form: null,
+  isSaving: false,
   showFormModal: false,
   showAgentsModal: false,
   isFormCompleted: false,
@@ -36,36 +46,106 @@ class CrudRole extends React.Component {
     return this.setState({ showSelectContactModal: true })
   }
 
-  addRole = () => {
-    const { form } = this.state
+  isUpdateModal = () => {
+    const { role } = this.props
 
-    this.props.onUpsertRole({
-      id: new Date().getTime(),
-      ...form
+    return role && role.role
+  }
+
+  notifySuccess = message =>
+    this.props.notify({
+      message,
+      status: 'success'
     })
 
-    this.handlOnHide()
+  addRole = async () => {
+    const { form } = this.state
+    const { notify, addContact, upsertAttributes } = this.props
+    const { contact, legal_first_name, legal_last_name, isAgent } = form
+    const fullName = `${legal_first_name} ${legal_last_name}`
+
+    try {
+      if (!isAgent && !this.isUpdateModal()) {
+        this.setState({
+          isSaving: true
+        })
+
+        if (!contact) {
+          const copyFormData = Object.assign({}, form)
+
+          await addContact(normalizedFormDataAsContact(copyFormData))
+          this.notifySuccess(`${fullName} has been added to your Contacts.`)
+        } else {
+          const newAttributes = await getNewAttributes(form)
+          const nameAttribute = await getUpdatedNameAttribute(form)
+
+          if (nameAttribute && !nameAttribute.id) {
+            newAttributes.push(nameAttribute)
+          }
+
+          if (nameAttribute || newAttributes.length > 0) {
+            if (nameAttribute && nameAttribute.id) {
+              await upsertAttributes(
+                form.contact.id,
+                'name',
+                [nameAttribute],
+                true
+              )
+            }
+
+            if (newAttributes.length > 0) {
+              await upsertAttributes(form.contact.id, '', newAttributes, true)
+            }
+
+            this.notifySuccess(
+              `${fullName}'s contact profile has been updated.`
+            )
+          }
+        }
+      }
+
+      this.props.onUpsertRole({
+        id: new Date().getTime(),
+        ...form
+      })
+      this.handlOnHide()
+    } catch (e) {
+      this.setState({
+        isSaving: false
+      })
+
+      if (!e.response) {
+        return notify({
+          message: `Error: ${e.message}`,
+          status: 'error'
+        })
+      }
+
+      const { attributes } = e.response.body
+      const field = attributes && Object.keys(attributes)[0]
+
+      notify({
+        message: `${field || 'entered data'} is invalid`,
+        status: 'error'
+      })
+    }
   }
 
-  populateFormWithAgentData = user => {
-    const { agent } = user
+  onSelectAgent = user => {
+    const { agent, first_name, last_name, email, phone_number } = user
+    const { office, work_phone } = agent
 
     const form = {
-      title: `${user.first_name} ${user.last_name}`,
-      legal_first_name: user.first_name,
-      legal_last_name: user.last_name,
-      email: user.email,
-      phone: user.phone_number || agent.work_phone,
-      company: agent.office ? agent.office.name : ''
+      email,
+      isAgent: true,
+      legal_last_name: last_name,
+      legal_first_name: first_name,
+      phone: phone_number || work_phone,
+      company: office ? office.name : ''
     }
 
-    this.setState({ form })
-  }
-
-  onSelectAgent = agent => {
-    this.populateFormWithAgentData(agent)
-
     this.setState({
+      form,
       showAgentsModal: false,
       showFormModal: true
     })
@@ -87,22 +167,30 @@ class CrudRole extends React.Component {
   }
 
   handleSelectedContact = contact => {
-    const {
-      legal_last_name, legal_first_name, last_name, first_name
-    } = contact
+    this.setState({
+      form: normalizeContact(contact),
+      showFormModal: true,
+      showSelectContactModal: false
+    })
+  }
 
-    const form = {
-      ...contact,
-      legal_first_name: legal_first_name || first_name,
-      legal_last_name: legal_last_name || last_name
+  setSubmitButtonText = () => {
+    const { isSaving } = this.state
+    const isUpdate = this.isUpdateModal()
+
+    let text = isUpdate ? 'Update' : 'Add'
+
+    if (isSaving) {
+      return isUpdate ? 'Updating...' : 'Adding...'
     }
 
-    this.setState({ form, showFormModal: true, showSelectContactModal: false })
+    return text
   }
 
   render() {
     const {
       form,
+      isSaving,
       showFormModal,
       showAgentsModal,
       isFormCompleted,
@@ -112,7 +200,6 @@ class CrudRole extends React.Component {
     const {
       role,
       ctaTitle,
-      buttonText,
       modalTitle,
       teamAgents,
       onRemoveRole,
@@ -154,9 +241,7 @@ class CrudRole extends React.Component {
           dialogClassName="modal-deal-add-role"
           backdrop="static"
         >
-          <Modal.Header closeButton>
-            {(form && form.title) || modalTitle}
-          </Modal.Header>
+          <Modal.Header closeButton>{modalTitle}</Modal.Header>
 
           <Modal.Body>
             <RoleForm
@@ -169,12 +254,12 @@ class CrudRole extends React.Component {
 
           <Modal.Footer>
             <Button
-              className={`btn-deal ${!isFormCompleted ? 'disabled' : ''}`}
-              bsStyle={!isFormCompleted ? 'link' : 'primary'}
-              disabled={!isFormCompleted}
               onClick={this.addRole}
+              disabled={!isFormCompleted || isSaving}
+              bsStyle={!isFormCompleted ? 'link' : 'primary'}
+              className={`btn-deal ${!isFormCompleted ? 'disabled' : ''}`}
             >
-              {buttonText || 'Add'}
+              {this.setSubmitButtonText()}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -225,4 +310,6 @@ function mapToProps({ deals }) {
   return { teamAgents }
 }
 
-export default connect(mapToProps)(CrudRole)
+export default connect(mapToProps, { notify, addContact, upsertAttributes })(
+  CrudRole
+)

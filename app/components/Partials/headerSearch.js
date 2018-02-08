@@ -7,21 +7,36 @@ import PropTypes from 'prop-types'
 export default class HeaderSearch extends React.Component {
   constructor(props) {
     super(props)
-    this.debouncedOnInputChange = debounce(props.onInputChange, 700)
+
+    this.debouncedOnInputChange = debounce(props.onInputChange, props.debounceTime)
+
     this.state = {
       inputFocused: false
     }
   }
 
+  static propTypes = {
+    onInputChange: PropTypes.func.isRequired,
+    collapsible: PropTypes.bool,
+    expanded: PropTypes.bool,
+    debounceTime: PropTypes.number
+  }
+
+  static defaultProps = {
+    collapsible: true,
+    expanded: true,
+    debounceTime: 700
+  }
+
   render() {
     const { inputFocused } = this.state
-    const { placeholder } = this.props
+    const { placeholder, collapsible, expanded } = this.props
 
     return (
       <Panel
-        className="list--header agent"
-        collapsible
-        expanded={true}
+        className="list--header no-box-shadow"
+        collapsible={collapsible}
+        expanded={expanded}
         onEntered={() => this.searchInput.focus()}
       >
         <div
@@ -46,8 +61,4 @@ export default class HeaderSearch extends React.Component {
 
 HeaderSearch.propTypes = {
   onInputChange: PropTypes.func.isRequired
-}
-
-HeaderSearch.defaultProps = {
-  onInputChange: () => {}
 }
