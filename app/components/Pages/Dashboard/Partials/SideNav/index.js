@@ -108,7 +108,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
 
         <IntercomTrigger
           render={({ activeIntercom, intercomIsActive }) => (
-            <SideNavItem isActive={intercomIsActive}>
+            <SideNavItem isActive={false}>
               <button
                 onClick={!intercomIsActive ? activeIntercom : () => false}
                 className="c-app-sidenav__item__title--button"
