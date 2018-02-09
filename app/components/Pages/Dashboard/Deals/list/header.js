@@ -43,17 +43,21 @@ class Header extends React.Component {
       searchAllDeals,
       searchBOFilters,
       showEmptySearchPage,
-      isBackOffice
+      isBackOffice,
+      removeSearchFilter
     } = this.props
 
     if (value && value.length > 3) {
       searchAllDeals(value, isBackOffice)
       showEmptySearchPage(false)
+      searchBOFilters()
+    } else if (!value && !isBackOffice) {
+      showEmptySearchPage(false)
+      removeSearchFilter()
     } else {
       showEmptySearchPage(true)
+      searchBOFilters()
     }
-
-    searchBOFilters()
   }
 
   onChangeFilter = filters => {
