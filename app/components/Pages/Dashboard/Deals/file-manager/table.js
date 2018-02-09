@@ -312,10 +312,10 @@ export class FileManager extends React.Component {
   }
 
   render() {
-    const { isDeleting, selectedRows } = this.state
+    const { filter, isDeleting, selectedRows } = this.state
     const data = this.getAllFiles()
 
-    if (data.length === 0) {
+    if (data.length === 0 && filter.length === 0) {
       return (
         <div className="empty-table">
           <img src="/static/images/deals/files.svg" alt="" />
