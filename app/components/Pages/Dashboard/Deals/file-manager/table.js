@@ -52,11 +52,11 @@ export class FileManager extends React.Component {
   onCellClick(state, rowInfo, column) {
     return {
       onClick: (e, handleOriginal) => {
-        if (['radio', 'delete'].indexOf(column.id) === -1) {
+        if (['td-select', 'td-delete', 'td-split'].indexOf(column.id) === -1) {
           return this.openFile(rowInfo.original)
         }
 
-        if (column.id === 'radio') {
+        if (column.id === 'td-select') {
           this.toggleSelectedRow(rowInfo.original)
         }
 
@@ -224,7 +224,7 @@ export class FileManager extends React.Component {
 
     return [
       {
-        id: 'radio',
+        id: 'td-select',
         Header: () => (
           <Radio
             selected={rows.length > 0 && rows.length === _.size(selectedRows)}
@@ -260,6 +260,7 @@ export class FileManager extends React.Component {
         accessor: 'task'
       },
       {
+        id: 'td-split',
         Header: '',
         accessor: '',
         width: 110,
@@ -277,7 +278,7 @@ export class FileManager extends React.Component {
         )
       },
       {
-        id: 'delete',
+        id: 'td-delete',
         Header: '',
         accessor: '',
         className: 'td--dropdown-container',
