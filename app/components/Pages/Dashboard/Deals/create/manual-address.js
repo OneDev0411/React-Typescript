@@ -90,7 +90,7 @@ export default class extends React.Component {
                 onChange={e => this.setState({ street_number: e.target.value })}
               />
               <FormControl
-                placeholder="Street address *"
+                placeholder="Street name *"
                 className="street_name"
                 value={street_name}
                 onChange={e => this.setState({ street_name: e.target.value })}
