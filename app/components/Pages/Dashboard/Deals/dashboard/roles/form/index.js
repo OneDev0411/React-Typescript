@@ -154,8 +154,8 @@ export default class Form extends React.Component {
     return form.commission_percentage ? value >= 0 && value <= 100 : value >= 0
   }
 
-  isValidName(name) {
-    return name && name.trim().length > 0 && new RegExp(/^[A-Za-z\s]+$/).exec(name)
+  isValidName(name, regular = /^[A-Za-z\s]+$/) { 
+    return name && name.trim().length > 0 && new RegExp(regular).exec(name)
   }
 
   /**
@@ -197,7 +197,7 @@ export default class Form extends React.Component {
       legal_middle_name: name => this.isValidName(name),
       phone_number: phoneNumber =>
         phoneNumber && this.isValidPhoneNumber(phoneNumber),
-      company_title: name => this.isValidName(name)
+      company_title: name => this.isValidName(name, /^['A-Za-z\s]+$/)
     }
 
     if (this.isCommissionRequired()) {
