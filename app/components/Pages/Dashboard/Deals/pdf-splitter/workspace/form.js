@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { batchActions } from 'redux-batched-actions';
 import { ProgressBar } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
@@ -10,6 +11,7 @@ import Deal from '../../../../../../models/Deal'
 import {
   resetSplitterSelectedPages,
   resetSplitter,
+  resetUploadFiles,
   setSplitterUsedPages,
   changeNeedsAttention,
   addAttachment
@@ -105,6 +107,7 @@ class WorkspaceForm extends React.Component {
   }
 
   async saveAndQuit() {
+    const { resetSplitter, resetUploadFiles } = this.props
     const saved = await this.save()
 
     if (!saved) {
@@ -112,11 +115,15 @@ class WorkspaceForm extends React.Component {
     }
 
     // destruct splitter states
-    this.props.resetSplitter()
+    batchActions([
+      resetSplitter(),
+      resetUploadFiles()
+    ])
   }
 
   async saveAndNew() {
-    const { splitter } = this.props
+    const { splitter, resetSplitterSelectedPages, setSplitterUsedPages, resetUploadFiles } = this.props
+
     const { pages } = splitter
 
     const saved = await this.save()
@@ -126,8 +133,11 @@ class WorkspaceForm extends React.Component {
     }
 
     // reset selected pages
-    this.props.resetSplitterSelectedPages()
-    this.props.setSplitterUsedPages(pages)
+    batchActions([
+      resetSplitterSelectedPages(),
+      setSplitterUsedPages(pages),
+      resetUploadFiles()
+    ])
   }
 
   render() {
@@ -203,6 +213,7 @@ function mapStateToProps({ deals }) {
 export default connect(mapStateToProps, {
   notify,
   resetSplitter,
+  resetUploadFiles,
   resetSplitterSelectedPages,
   setSplitterUsedPages,
   changeNeedsAttention,
