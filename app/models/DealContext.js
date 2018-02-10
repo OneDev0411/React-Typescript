@@ -128,7 +128,8 @@ export function query(deal, criteria) {
     .map(ctx => ({
       ...ctx,
       validate,
-      disabled: isDisabled(deal, ctx)
+      disabled: isDisabled(deal, ctx),
+      needs_approval: ctx.needs_approval || false
     }))
     .value()
 }
