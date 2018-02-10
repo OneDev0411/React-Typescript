@@ -24,7 +24,7 @@ class Table extends React.Component {
   }
 
   async updateField(field, value) {
-    const { deal, updateContext } = this.props
+    const { deal, updateContext, isBackOffice } = this.props
 
     // set state
     this.setState({ saving: field.name })
@@ -71,7 +71,7 @@ class Table extends React.Component {
                       disabled={disabled}
                       approved={approved}
                       isBackOffice={isBackOffice}
-                      needsApproval={field.needs_approval}
+                      needsApproval={!isBackOffice && field.needs_approval}
                       onChange={(field, value) => this.onChangeContext(field, value)}
                     />
                   </div>
