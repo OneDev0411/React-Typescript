@@ -494,6 +494,9 @@ $margin: 20px;
         border-right: none;
         border-left: none;
       }
+      .zipcode.error {
+        border: 1px dashed red;
+      }
     }
   }
 }

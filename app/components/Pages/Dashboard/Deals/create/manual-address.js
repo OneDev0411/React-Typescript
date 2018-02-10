@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal, Button, FormControl } from 'react-bootstrap'
 import Deal from '../../../../../models/Deal'
+import cn from 'classnames'
 
 export default class extends React.Component {
   constructor(props) {
@@ -47,21 +48,18 @@ export default class extends React.Component {
   }
 
   isValidated() {
-    const {
-      street_name, city, state, postal_code
-    } = this.state
+    const { street_name, city, state, postal_code } = this.state
 
     return (
       street_name.trim().length > 0 &&
       city.trim().length > 0 &&
       state.trim().length > 0 &&
-      /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(postal_code)
+      /(^\d{4,}$)/.test(postal_code)
     )
   }
 
   render() {
     const { show, deal, saving } = this.props
-
     const {
       street_number,
       street_name,
@@ -70,6 +68,7 @@ export default class extends React.Component {
       state,
       postal_code
     } = this.state
+    const zipCodeValid = !postal_code || /(^\d{4,}$)/.test(postal_code)
 
     return (
       <Modal
@@ -90,7 +89,7 @@ export default class extends React.Component {
                 onChange={e => this.setState({ street_number: e.target.value })}
               />
               <FormControl
-                placeholder="Street name *"
+                placeholder="Street Name *"
                 className="street_name"
                 value={street_name}
                 onChange={e => this.setState({ street_name: e.target.value })}
@@ -117,7 +116,7 @@ export default class extends React.Component {
               />
               <FormControl
                 placeholder="Zipcode *"
-                className="zipcode"
+                className={cn('zipcode', { error: !zipCodeValid })}
                 value={postal_code}
                 onChange={e => this.setState({ postal_code: e.target.value })}
               />
