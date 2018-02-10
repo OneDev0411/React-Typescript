@@ -21,12 +21,8 @@ class Roles extends React.Component {
     })
   }
 
-  getRoleName = role => {
-    const name = `${role.legal_prefix || ''} ${role.legal_first_name ||
-      ''} ${role.legal_last_name || ''}`.trim()
-
-    return role.user ? role.user.display_name : name
-  }
+  getRoleName = role =>
+    role.legal_full_name || (role.user && role.user.display_name)
 
   handleOnClick = role => {
     const { confirmation, isRequiredEmail, onSelect } = this.props
@@ -69,7 +65,9 @@ class Roles extends React.Component {
     }
 
     confirmation({
-      message: `Remove <b>${user.legal_first_name} ${user.legal_last_name}</b>?`,
+      message: `Remove <b>${user.legal_first_name} ${
+        user.legal_last_name
+      }</b>?`,
       confirmLabel: 'Yes, remove contact',
       onConfirm: () => this.removeRole(user)
     })
@@ -125,7 +123,10 @@ class Roles extends React.Component {
 
         {deal.roles &&
           deal.roles
-            .filter(roleId => !allowedRoles || allowedRoles.includes(roles[roleId].role))
+            .filter(
+              roleId =>
+                !allowedRoles || allowedRoles.includes(roles[roleId].role)
+            )
             .map(roleId => {
               const role = roles[roleId]
               const { id, user } = role
