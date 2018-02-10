@@ -260,9 +260,16 @@ class CreateDeal extends React.Component {
    */
   createContextsObject(contexts) {
     const contextsObject = {}
+    const { isBackOffice } = this.props
+    const dealContexts = _.indexBy(this.getDealContexts(), 'name')
 
     _.each(contexts, (value, name) => {
-      contextsObject[name] = { value, approved: false }
+      const needsApproval = dealContexts[name] ?
+        dealContexts[name].needs_approval :
+        false
+      const approved = isBackOffice ? true : !needsApproval
+
+      contextsObject[name] = { value, approved }
     })
 
     return contextsObject
@@ -496,9 +503,10 @@ class CreateDeal extends React.Component {
 }
 
 export default connect(
-  ({ user }) => ({
+  ({ deals, user }) => ({
     user,
-    confirmation
+    confirmation,
+    isBackOffice: deals.backoffice
   }),
   {
     confirmation,
