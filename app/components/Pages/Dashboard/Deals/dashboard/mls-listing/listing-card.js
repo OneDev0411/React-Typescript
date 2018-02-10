@@ -76,18 +76,30 @@ class ListingCard extends React.Component {
   }
 
   async onCreateAddress(address) {
+    const { address_components } = address
+
+    if (Object.keys(address_components).length === 0) {
+      return
+    }
+
     const { deal } = this.props
+    const context = {}
 
     this.setState({
       isSavingAddress: true,
       showAddressModal: false
     })
 
-    address.use_manual_address = true
-    await this.props.updateContext(deal.id, {
-      value: address.address_components,
-      approved: true
-    })
+    if (Object.keys(address_components).length > 0) {
+      Object.keys(address_components).forEach(item => {
+        context[item] = {
+          value: address_components[item],
+          approved: false
+        }
+      })
+    }
+
+    await this.props.updateContext(deal.id, context)
 
     this.setState({
       isSavingAddress: false
@@ -156,7 +168,10 @@ class ListingCard extends React.Component {
           </button>
 
           {deal.listing && (
-            <Link className="open-listing" to={`/dashboard/mls/${deal.listing}`}>
+            <Link
+              className="open-listing"
+              to={`/dashboard/mls/${deal.listing}`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
