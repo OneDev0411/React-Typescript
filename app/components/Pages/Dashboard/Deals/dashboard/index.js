@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
+import UploadPromptModal from './upload/prompt'
+import PDFSplitterModal from '../pdf-splitter'
 import DealInfo from './deal-info'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
@@ -65,6 +67,8 @@ class DealDetails extends React.Component {
 
         <ESignAttachments deal={deal} />
         <ESignCompose deal={deal} />
+        <UploadPromptModal deal={deal} />
+        <PDFSplitterModal deal={deal} />
       </div>
     )
   }
