@@ -26,7 +26,10 @@ class Header extends React.Component {
     browserHistory.listen(location => {
       const searchBoxIsOpen = this.props.filters.searchResult
 
-      if (searchBoxIsOpen && location.pathname.includes('/dashboard/deals')) {
+      if (
+        searchBoxIsOpen &&
+        location.pathname.includes('/dashboard/deals/filter')
+      ) {
         props.removeSearchFilter()
         props.cleanSearchedDeals()
 
