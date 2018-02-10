@@ -32,7 +32,7 @@ class Table extends React.Component {
     await updateContext(deal.id, {
       [field.name]: {
         value,
-        approved: field.needs_approval
+        approved: isBackOffice ? true : !field.needs_approval
       }
     })
 
