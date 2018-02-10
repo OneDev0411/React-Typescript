@@ -27,29 +27,47 @@ class DealsDashboard extends React.Component {
     return this.setState({ emptySearchPageIsOpen })
   }
 
-  initialFilters(filters, isBackOffice) {
+  initialFilters(filters) {
+    const { isBackOffice, params } = this.props
+
     if (isBackOffice) {
       this.setState({
         activeFilters: {
+          __inbox__: deal =>
+            deal.inboxes && deal.inboxes.indexOf(params.filter) > -1,
+          ..._.omit(filters, 'searchResult')
+        }
+      })
+    } else {
+      this.setState({
+        activeFilters: {
+          status: (status, deal) => !deal.deleted_at,
           ..._.omit(filters, 'searchResult')
         }
       })
     }
-
-    this.setState({
-      activeFilters: {
-        status: (status, deal) => !deal.deleted_at,
-        ..._.omit(filters, 'searchResult')
-      }
-    })
   }
 
   removeSearchFilter() {
-    return this.setState({
-      activeFilters: {
-        ..._.omit(this.state.activeFilters, 'searchResult')
-      }
-    })
+    const { isBackOffice, params } = this.props
+    const { activeFilters } = this.state
+
+    if (isBackOffice) {
+      this.setState({
+        activeFilters: {
+          __inbox__: deal =>
+            deal.inboxes && deal.inboxes.indexOf(params.filter) > -1,
+          ..._.omit(activeFilters, 'searchResult')
+        }
+      })
+    } else {
+      this.setState({
+        activeFilters: {
+          status: (status, deal) => !deal.deleted_at,
+          ..._.omit(activeFilters, 'searchResult')
+        }
+      })
+    }
   }
 
   searchBOFilters() {
