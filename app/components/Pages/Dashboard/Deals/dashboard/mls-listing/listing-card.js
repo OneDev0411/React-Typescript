@@ -75,32 +75,28 @@ class ListingCard extends React.Component {
 
   async onCreateAddress(address) {
     const { address_components } = address
-    const { isBackOffice, contexts, updateContext } = this.props
+    const { isBackOffice, deal, contexts, updateContext } = this.props
 
     if (_.size(address_components) === 0) {
       return false
     }
-
-    const { deal } = this.props
-    const context = {}
 
     this.setState({
       isSavingAddress: true,
       showAddressModal: false
     })
 
+    const context = {}
     const indexedContexts = _.indexBy(contexts, 'name')
 
-    if (_.size(address_components) > 0) {
-      _.each(address_components, item => {
-        const { needs_approval } = indexedContexts[item]
+    _.each(address_components, item => {
+      const { needs_approval } = indexedContexts[item]
 
-        context[item] = {
-          value: address_components[item],
-          approved: isBackOffice ? true : !needs_approval
-        }
-      })
-    }
+      context[item] = {
+        value: address_components[item],
+        approved: isBackOffice ? true : !needs_approval
+      }
+    })
 
     await updateContext(deal.id, context)
 
