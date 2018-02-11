@@ -69,15 +69,15 @@ class PageSelector extends React.Component {
   getPagesInRange(range) {
     const list = []
     const splitted = range.split('-')
-    const start = splitted[0]
-    const end = splitted[1]
+    const start = ~~splitted[0]
+    const end = ~~splitted[1]
 
     if (splitted.length !== 2 || start > end) {
       return []
     }
 
     for (let i = start; i <= end; i++) {
-      list.push(~~i)
+      list.push(i)
     }
 
     return list

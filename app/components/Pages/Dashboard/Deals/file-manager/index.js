@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router';
 import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
 import UploadPromptModal from '../dashboard/upload/prompt'
 import PDFSplitterModal from '../pdf-splitter'
@@ -13,6 +14,10 @@ export class FileManager extends React.Component {
 
   componentDidMount() {
     const { deal, getDeal } = this.props
+
+    if (!deal) {
+      return browserHistory.push('/dashboard/deals')
+    }
 
     if (!deal.checklists) {
       getDeal(deal.id)
