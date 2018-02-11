@@ -5,7 +5,7 @@ const ACTIVE_TEAM_COOKIE = 'rechat-active-team'
 export function getActiveTeam(user) {
   const { teams } = user
 
-  if (!teams || !user.brand) {
+  if (!teams) {
     return []
   }
 
@@ -23,7 +23,13 @@ export function hasUserAccess(user, action) {
 }
 
 export function getActiveTeamId(user) {
-  return cookie.get(ACTIVE_TEAM_COOKIE) || user.activeTeam || user.brand
+  const id = cookie.get(ACTIVE_TEAM_COOKIE) || user.activeTeam || user.brand
+
+  if (!id && user.teams) {
+    return user.teams[0].brand.id
+  }
+
+  return id
 }
 
 export function setActiveTeam(id) {
