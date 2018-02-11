@@ -173,8 +173,11 @@ export default class Form extends React.Component {
    * it's required by default
    * https://gitlab.com/rechat/web/issues/691
    */
-  isCommissionRequired() {
-    return this.props.isCommissionRequired !== false
+  isCommissionRequired(form) {
+    return (
+      Commission.shouldShowCommission(form) &&
+      this.props.isCommissionRequired !== false
+    )
   }
 
   /**
@@ -198,21 +201,18 @@ export default class Form extends React.Component {
       legal_middle_name: name => this.isValidName(name),
       phone_number: phoneNumber =>
         phoneNumber && this.isValidPhoneNumber(phoneNumber),
-      company_title: name => this.isValidName(name, /^['A-Za-z\s]+$/)
+      company_title: name => this.isValidName(name, /^['A-Za-z\s]+$/),
+      commission_percentage: value => value && this.validateCommission(value),
+      commission_dollar: value => value && this.validateCommission(value)
     }
 
-    let commission_field = 'commission_percentage'
+    if (this.isCommissionRequired(form)) {
+      let commission_field = 'commission_percentage'
 
-    if (form.commission_dollar > 0) {
-      commission_field = 'commission_dollar'
-    }
+      if (form.commission_dollar > 0) {
+        commission_field = 'commission_dollar'
+      }
 
-    if (commission_field && Commission.shouldShowCommission(form)) {
-      fields[commission_field] = value =>
-        value && this.validateCommission(value)
-    }
-
-    if (this.isCommissionRequired()) {
       requiredFields.push(commission_field)
     }
 
@@ -246,8 +246,10 @@ export default class Form extends React.Component {
     }
 
     const isFormCompleted =
-      _.every(requiredFields, name => fields[name](form[name])) &&
-      !newInvalidFields.includes(field)
+      _.every(requiredFields, name =>
+        // console.log(fields, name)
+        fields[name](form[name])
+      ) && !newInvalidFields.includes(field)
 
     this.props.onFormChange({
       isFormCompleted,
@@ -338,7 +340,7 @@ export default class Form extends React.Component {
 
         <Commission
           form={form}
-          isRequired={this.isCommissionRequired()}
+          isRequired={this.isCommissionRequired(form)}
           validateCommission={this.validateCommission.bind(this)}
           onChange={(field, value) => this.setForm(field, value)}
         />
