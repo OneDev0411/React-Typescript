@@ -77,6 +77,7 @@ class ListingCard extends React.Component {
 
   async onCreateAddress(address) {
     const { address_components } = address
+    const { isBackOffice, contexts } = this.props
 
     if (Object.keys(address_components).length === 0) {
       return
@@ -90,11 +91,19 @@ class ListingCard extends React.Component {
       showAddressModal: false
     })
 
+    const indexedContexts = {}
+
+    contexts.forEach(item => {
+      indexedContexts[item.name] = item
+    })
+
     if (Object.keys(address_components).length > 0) {
       Object.keys(address_components).forEach(item => {
+        const { needs_approval } = indexedContexts[item]
+
         context[item] = {
           value: address_components[item],
-          approved: false
+          approved: isBackOffice ? true : !needs_approval
         }
       })
     }
@@ -198,9 +207,14 @@ class ListingCard extends React.Component {
   }
 }
 
-export default connect(
-  ({ deals }) => ({
-    roles: deals.roles
-  }),
-  { updateContext }
-)(ListingCard)
+function mapToProps({ deals }) {
+  const { contexts, roles, backoffice: isBackOffice } = deals
+
+  return {
+    roles,
+    contexts,
+    isBackOffice
+  }
+}
+
+export default connect(mapToProps, { updateContext })(ListingCard)
