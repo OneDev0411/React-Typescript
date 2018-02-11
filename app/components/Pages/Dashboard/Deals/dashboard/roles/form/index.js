@@ -154,7 +154,7 @@ export default class Form extends React.Component {
     return form.commission_percentage ? value >= 0 && value <= 100 : value >= 0
   }
 
-  isValidName(name, regular = /^[A-Za-z\s]+$/) { 
+  isValidName(name, regular = /^[A-Za-z\s]+$/) {
     return name && name.trim().length > 0 && new RegExp(regular).exec(name)
   }
 
@@ -190,7 +190,8 @@ export default class Form extends React.Component {
 
     const fields = {
       role: role => role,
-      legal_prefix: value => ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].indexOf(value) > -1,
+      legal_prefix: value =>
+        ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].indexOf(value) > -1,
       email: email => email && this.isEmail(email),
       legal_last_name: name => this.isValidName(name),
       legal_first_name: name => this.isValidName(name),
@@ -200,17 +201,19 @@ export default class Form extends React.Component {
       company_title: name => this.isValidName(name, /^['A-Za-z\s]+$/)
     }
 
+    let commission_field = 'commission_percentage'
+
+    if (form.commission_dollar > 0) {
+      commission_field = 'commission_dollar'
+    }
+
+    if (commission_field && Commission.shouldShowCommission(form)) {
+      fields[commission_field] = value =>
+        value && this.validateCommission(value)
+    }
+
     if (this.isCommissionRequired()) {
-      let commission_field = 'commission_percentage'
-
-      if (form.commission_dollar > 0) {
-        commission_field = 'commission_dollar'
-      }
-
-      if (commission_field && Commission.shouldShowCommission(form)) {
-        requiredFields.push(commission_field)
-        fields[commission_field] = value => value && this.validateCommission(value)
-      }
+      requiredFields.push(commission_field)
     }
 
     // validate field
