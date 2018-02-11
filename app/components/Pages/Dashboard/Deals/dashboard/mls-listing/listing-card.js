@@ -77,8 +77,8 @@ class ListingCard extends React.Component {
     const { address_components } = address
     const { isBackOffice, contexts, updateContext } = this.props
 
-    if (Object.keys(address_components).length === 0) {
-      return
+    if (_.size(address_components) === 0) {
+      return false
     }
 
     const { deal } = this.props
