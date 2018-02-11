@@ -26,8 +26,8 @@ const requestMiddleware = async (ctx, next) => {
   ctx.config = config
 
   const api_url = config.api.url
-  const app_name = config.app_name
-  const access_token = ctx.request.query.access_token
+  const { app_name } = config
+  const { access_token } = ctx.request.query
   const user_agent = ctx.headers['user-agent']
   const host_name = ctx.request.query.hostname
 
@@ -74,7 +74,9 @@ const requestMiddleware = async (ctx, next) => {
           ctx.body = {
             status: 'error',
             response: {
-              status: err.response ? err.response.status : 'Internal server error',
+              status: err.response
+                ? err.response.status
+                : 'Internal server error',
               text: responseText
             }
           }
@@ -82,11 +84,16 @@ const requestMiddleware = async (ctx, next) => {
         .on('response', response => {
           if (~~response.status >= 200 && ~~response.status <= 207) {
             try {
-              response.body.status = 'success'
+              response.body = {
+                ...response.body,
+                status: 'success'
+              }
             } catch (e) {
-              // nothing
+              /* nothing */
             }
           }
+
+          return response
         })
     } catch (error) {
       console.log(error)
@@ -114,6 +121,6 @@ const requestMiddleware = async (ctx, next) => {
   await next()
 }
 
-export default function () {
+export default function() {
   return requestMiddleware
 }

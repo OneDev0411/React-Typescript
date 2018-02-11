@@ -24,9 +24,10 @@ class Upload extends React.Component {
     }
 
     // subscribe to paste
-    this.pasteHandler = Observable
-      .fromEvent(document.getElementById(inputHandler), 'paste')
-      .subscribe(e => this.onPasteFile(e))
+    this.pasteHandler = Observable.fromEvent(
+      document.getElementById(inputHandler),
+      'paste'
+    ).subscribe(e => this.onPasteFile(e))
   }
 
   componentWillUnmount() {
@@ -39,7 +40,8 @@ class Upload extends React.Component {
    * handle paste file from clipboard
    */
   onPasteFile(event) {
-    const files = (event.clipboardData || event.originalEvent.clipboardData).files
+    const files = (event.clipboardData || event.originalEvent.clipboardData)
+      .files
 
     this.onDrop(files)
   }
@@ -64,9 +66,7 @@ class Upload extends React.Component {
     // create temporary message
     let { qid, message } = this.createTemporaryMessage(roomId, files)
 
-    for (let index = 0; index < files.length; index++) {
-      const file = files[index]
-
+    files.forEach(async (file, index) => {
       // update message
       message = this.updateMessage(roomId, message, {
         index,
@@ -79,7 +79,7 @@ class Upload extends React.Component {
       if (fileId) {
         attachments.push(fileId)
       }
-    }
+    })
 
     // update message
     this.updateMessage(roomId, message, {
@@ -134,10 +134,11 @@ class Upload extends React.Component {
       current: files[0]
     }
 
-    const {
-      qid,
-      tempMessage
-    } = Message.createTemporaryMessage(roomId, message, author)
+    const { qid, tempMessage } = Message.createTemporaryMessage(
+      roomId,
+      message,
+      author
+    )
 
     // store message into messages list
     Message.create(roomId, tempMessage)
@@ -171,7 +172,7 @@ class Upload extends React.Component {
     return (
       <div className="upload">
         <Dropzone
-          ref={(node) => {
+          ref={node => {
             this.dropzone = node
           }}
           onDrop={files => this.onDrop(files)}
@@ -189,21 +190,16 @@ class Upload extends React.Component {
           disableClick={disableClick || false}
           style={this.props.dropZoneStyle}
         >
-          {
-            dropzoneActive &&
-            <div
-              className="upload-guide"
-            >
+          {dropzoneActive && (
+            <div className="upload-guide">
               <div className="upload-area">
                 <i className="fa fa-long-arrow-down fa-3x" />
                 <p>Upload Here</p>
               </div>
             </div>
-          }
+          )}
 
-          {
-            children || <i className="fa fa-plus" aria-hidden="true" />
-          }
+          {children || <i className="fa fa-plus" aria-hidden="true" />}
         </Dropzone>
       </div>
     )

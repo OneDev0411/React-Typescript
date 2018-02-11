@@ -21,8 +21,15 @@ class Roles extends React.Component {
     })
   }
 
-  getRoleName = role =>
+  getUserFullName = role =>
     role.legal_full_name || (role.user && role.user.display_name)
+
+  getUserFullNameForAvatar = role => {
+    const { user, legal_first_name, legal_last_name } = role
+    const fullName = `${legal_first_name} ${legal_last_name}`.trim()
+
+    return fullName || (user && user.display_name)
+  }
 
   handleOnClick = role => {
     const { confirmation, isRequiredEmail, onSelect } = this.props
@@ -141,13 +148,13 @@ class Roles extends React.Component {
                     <UserAvatar
                       size={32}
                       showStateIndicator={false}
-                      name={this.getRoleName(role)}
+                      name={this.getUserFullNameForAvatar(role)}
                       image={user ? user.profile_image_url : null}
                     />
                   </div>
 
                   <div className="name">
-                    <div className="title">{this.getRoleName(role)}</div>
+                    <div className="title">{this.getUserFullName(role)}</div>
                     <div className="role">{roleName(role.role)}</div>
                   </div>
 

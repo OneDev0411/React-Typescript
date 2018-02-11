@@ -154,7 +154,7 @@ export default class Form extends React.Component {
     return form.commission_percentage ? value >= 0 && value <= 100 : value >= 0
   }
 
-  isValidName(name, regular = /^[A-Za-z\s]+$/) { 
+  isValidName(name, regular = /^[A-Za-z\s]+$/) {
     return name && name.trim().length > 0 && new RegExp(regular).exec(name)
   }
 
@@ -173,8 +173,11 @@ export default class Form extends React.Component {
    * it's required by default
    * https://gitlab.com/rechat/web/issues/691
    */
-  isCommissionRequired() {
-    return this.props.isCommissionRequired !== false
+  isCommissionRequired(form) {
+    return (
+      Commission.shouldShowCommission(form) &&
+      this.props.isCommissionRequired !== false
+    )
   }
 
   /**
@@ -190,27 +193,27 @@ export default class Form extends React.Component {
 
     const fields = {
       role: role => role,
-      legal_prefix: value => ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].indexOf(value) > -1,
+      legal_prefix: value =>
+        ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].indexOf(value) > -1,
       email: email => email && this.isEmail(email),
       legal_last_name: name => this.isValidName(name),
       legal_first_name: name => this.isValidName(name),
       legal_middle_name: name => this.isValidName(name),
       phone_number: phoneNumber =>
         phoneNumber && this.isValidPhoneNumber(phoneNumber),
-      company_title: name => this.isValidName(name, /^['A-Za-z\s]+$/)
+      company_title: name => this.isValidName(name, /^['A-Za-z\s]+$/),
+      commission_percentage: value => value && this.validateCommission(value),
+      commission_dollar: value => value && this.validateCommission(value)
     }
 
-    if (this.isCommissionRequired()) {
+    if (this.isCommissionRequired(form)) {
       let commission_field = 'commission_percentage'
 
       if (form.commission_dollar > 0) {
         commission_field = 'commission_dollar'
       }
 
-      if (commission_field && Commission.shouldShowCommission(form)) {
-        requiredFields.push(commission_field)
-        fields[commission_field] = value => value && this.validateCommission(value)
-      }
+      requiredFields.push(commission_field)
     }
 
     // validate field
@@ -243,8 +246,10 @@ export default class Form extends React.Component {
     }
 
     const isFormCompleted =
-      _.every(requiredFields, name => fields[name](form[name])) &&
-      !newInvalidFields.includes(field)
+      _.every(requiredFields, name =>
+        // console.log(fields, name)
+        fields[name](form[name])
+      ) && !newInvalidFields.includes(field)
 
     this.props.onFormChange({
       isFormCompleted,
@@ -335,7 +340,7 @@ export default class Form extends React.Component {
 
         <Commission
           form={form}
-          isRequired={this.isCommissionRequired()}
+          isRequired={this.isCommissionRequired(form)}
           validateCommission={this.validateCommission.bind(this)}
           onChange={(field, value) => this.setForm(field, value)}
         />
