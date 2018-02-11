@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { batchActions } from 'redux-batched-actions';
+import { batchActions } from 'redux-batched-actions'
 import { ProgressBar } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
@@ -14,6 +14,7 @@ import {
   resetUploadFiles,
   setSplitterUsedPages,
   changeNeedsAttention,
+  uploadFile,
   addAttachment
 } from '../../../../../../store_actions/deals'
 
@@ -24,7 +25,9 @@ class WorkspaceForm extends React.Component {
       saving: false,
       title: '',
       task: null,
-      notifyOffice: true
+      notifyOffice: true,
+      documentsUploaded: false,
+      statusMessage: null
     }
   }
 
@@ -41,14 +44,13 @@ class WorkspaceForm extends React.Component {
 
   async save() {
     const { title, task, notifyOffice } = this.state
-    const {
-      notify, splitter, addAttachment, changeNeedsAttention
-    } = this.props
+    const { notify, splitter, addAttachment, changeNeedsAttention } = this.props
     const { pages } = splitter
     let fileCreated = false
 
-    // set status
-    this.setState({ saving: true })
+    this.setState({
+      saving: true
+    })
 
     const files = _.chain(pages)
       .pluck('documentId')
@@ -79,7 +81,7 @@ class WorkspaceForm extends React.Component {
       fileCreated = true
 
       notify({
-        message: `Pdf "${title}" created successfully`,
+        message: `Splitted PDF, "${title}" created and uploaded`,
         status: 'success'
       })
 
@@ -93,7 +95,7 @@ class WorkspaceForm extends React.Component {
       console.log(e)
 
       notify({
-        title: 'Couldn\'t create the splitted pdf file. please try again.',
+        title: "Couldn't create the splitted pdf file. please try again.",
         message: e.message,
         status: 'error'
       })
@@ -108,21 +110,30 @@ class WorkspaceForm extends React.Component {
 
   async saveAndQuit() {
     const { resetSplitter, resetUploadFiles } = this.props
+    const { documentsUploaded } = this.state
+
     const saved = await this.save()
 
     if (!saved) {
       return false
     }
 
+    if (!documentsUploaded) {
+      await this.uploadDocuments()
+    }
+
     // destruct splitter states
-    batchActions([
-      resetSplitter(),
-      resetUploadFiles()
-    ])
+    batchActions([resetSplitter(), resetUploadFiles()])
   }
 
   async saveAndNew() {
-    const { splitter, resetSplitterSelectedPages, setSplitterUsedPages, resetUploadFiles } = this.props
+    const { documentsUploaded } = this.state
+    const {
+      splitter,
+      resetSplitterSelectedPages,
+      setSplitterUsedPages,
+      resetUploadFiles
+    } = this.props
 
     const { pages } = splitter
 
@@ -130,6 +141,10 @@ class WorkspaceForm extends React.Component {
 
     if (!saved) {
       return false
+    }
+
+    if (!documentsUploaded) {
+      await this.uploadDocuments()
     }
 
     // reset selected pages
@@ -140,11 +155,38 @@ class WorkspaceForm extends React.Component {
     ])
   }
 
+  async uploadDocuments() {
+    const { user, uploadFile, splitter, notify } = this.props
+    const { task } = this.state
+    const { files } = splitter
+
+    this.setState({
+      saving: true,
+      statusMessage: 'Uploading selected documents'
+    })
+
+    await Promise.all(
+      _.map(files, async item => {
+        const { name } = item.properties
+
+        await uploadFile(user, task, item.file, name)
+        notify({
+          message: `${name} uploaded`,
+          status: 'success'
+        })
+      })
+    )
+
+    this.setState({
+      saving: false,
+      documentsUploaded: true,
+      statusMessage: null
+    })
+  }
+
   render() {
     const { deal, tasks } = this.props
-    const {
-      title, task, notifyOffice, saving
-    } = this.state
+    const { title, task, notifyOffice, statusMessage, saving } = this.state
 
     const formValidated = this.isFormValidated()
 
@@ -152,7 +194,7 @@ class WorkspaceForm extends React.Component {
       return (
         <div className="splitter-saving">
           <div className="inner">
-            Saving PDF... (It might take a few moments)
+            {statusMessage || 'Creating and uploading splitted PDF... (It might take a few moments)'}
             <ProgressBar now={100} bsStyle="success" active />
           </div>
         </div>
@@ -203,10 +245,11 @@ class WorkspaceForm extends React.Component {
   }
 }
 
-function mapStateToProps({ deals }) {
+function mapStateToProps({ deals, user }) {
   return {
     splitter: deals.splitter,
-    tasks: deals.tasks
+    tasks: deals.tasks,
+    user
   }
 }
 
@@ -217,5 +260,6 @@ export default connect(mapStateToProps, {
   resetSplitterSelectedPages,
   setSplitterUsedPages,
   changeNeedsAttention,
-  addAttachment
+  addAttachment,
+  uploadFile
 })(WorkspaceForm)
