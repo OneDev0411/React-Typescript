@@ -354,22 +354,28 @@ export class FileManager extends React.Component {
             </button>
           )}
         </div>
-
-        <ReactTable
-          showPagination={false}
-          data={data}
-          pageSize={data.length}
-          columns={this.getColumns(data)}
-          getTdProps={this.onCellClick}
-          defaultSorted={[
-            {
-              id: 'created_at',
-              desc: true
-            }
-          ]}
-          sortable
-          resizable
-        />
+        {data.length === 0 && filter.length !== 0 ? (
+          <div className="empty-table" style={{ marginTop: '10vh' }}>
+            <img src="/static/images/deals/files.svg" alt="" />
+            No uploaded file found.
+          </div>
+        ) : (
+          <ReactTable
+            showPagination={false}
+            data={data}
+            pageSize={data.length}
+            columns={this.getColumns(data)}
+            getTdProps={this.onCellClick}
+            defaultSorted={[
+              {
+                id: 'created_at',
+                desc: true
+              }
+            ]}
+            sortable
+            resizable
+          />
+        )}
       </Fragment>
     )
   }
