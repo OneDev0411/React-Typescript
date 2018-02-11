@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import cn from 'classnames'
+import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import ManualAddress from '../../create/manual-address'
 import Deal from '../../../../../../models/Deal'
@@ -19,8 +20,6 @@ class ListingCard extends React.Component {
       showAddressModal: false,
       showWarningTooltip: false
     }
-
-    this._setWarningTooltipState = this._setWarningTooltipState.bind(this)
   }
 
   getAddressField(deal, field) {
@@ -76,7 +75,7 @@ class ListingCard extends React.Component {
 
   async onCreateAddress(address) {
     const { address_components } = address
-    const { isBackOffice, contexts } = this.props
+    const { isBackOffice, contexts, updateContext } = this.props
 
     if (Object.keys(address_components).length === 0) {
       return
@@ -90,14 +89,10 @@ class ListingCard extends React.Component {
       showAddressModal: false
     })
 
-    const indexedContexts = {}
+    const indexedContexts = _.indexBy(contexts, 'name')
 
-    contexts.forEach(item => {
-      indexedContexts[item.name] = item
-    })
-
-    if (Object.keys(address_components).length > 0) {
-      Object.keys(address_components).forEach(item => {
+    if (_.size(address_components) > 0) {
+      _.each(address_components, item => {
         const { needs_approval } = indexedContexts[item]
 
         context[item] = {
@@ -107,14 +102,14 @@ class ListingCard extends React.Component {
       })
     }
 
-    await this.props.updateContext(deal.id, context)
+    await updateContext(deal.id, context)
 
     this.setState({
       isSavingAddress: false
     })
   }
 
-  _setWarningTooltipState(showWarningTooltip) {
+  setWarningTooltipState(showWarningTooltip) {
     this.setState({
       showWarningTooltip
     })
@@ -145,8 +140,8 @@ class ListingCard extends React.Component {
           <button
             disabled={deal.listing}
             onClick={() => !isSavingAddress && this.toggleShowAddressModal()}
-            onMouseEnter={() => this._setWarningTooltipState(true)}
-            onMouseLeave={() => this._setWarningTooltipState(false)}
+            onMouseEnter={() => this.setWarningTooltipState(true)}
+            onMouseLeave={() => this.setWarningTooltipState(false)}
             className={cn('deal-listing-card__address c-button--shadow', {
               isHovered: showEditingAddressWarning,
               'is-editable': !deal.listing
