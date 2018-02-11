@@ -19,7 +19,7 @@ class DealDetails extends React.Component {
   componentDidMount() {
     const { deal, getDeal } = this.props
 
-    if (deal === null) {
+    if (!deal) {
       return browserHistory.push('/dashboard/deals')
     }
 
@@ -75,12 +75,11 @@ class DealDetails extends React.Component {
 }
 
 function mapStateToProps({ deals }, props) {
-  const { list } = deals
   const { id } = props.params
 
   return {
     selectedTask: deals.selectedTask,
-    deal: list && list[id] ? list[id] : null
+    deal: deals.list ? deals.list[id] : null
   }
 }
 
