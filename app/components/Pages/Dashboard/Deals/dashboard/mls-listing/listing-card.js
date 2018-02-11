@@ -32,19 +32,18 @@ class ListingCard extends React.Component {
   }
 
   getHomeAddress(deal) {
-    const unitNumber = this.getAddressField(deal, 'unit_number')
+    const unit_number = this.getAddressField(deal, 'unit_number')
     const street_number = this.getAddressField(deal, 'street_number')
     const street_name = this.getAddressField(deal, 'street_name')
     const street_suffix = this.getAddressField(deal, 'street_suffix')
 
-    return [
-      street_number,
-      street_name,
-      street_suffix,
-      unitNumber ? `, #${unitNumber}` : null
-    ]
+    const street = [street_number, street_name, street_suffix]
       .filter(item => item !== null)
       .join(' ')
+
+    const unitNumber = unit_number ? `, #${unit_number}` : ''
+
+    return street + unitNumber
   }
 
   getListingAddress(deal) {
