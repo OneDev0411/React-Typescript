@@ -169,11 +169,13 @@ class WorkspaceForm extends React.Component {
       _.map(files, async item => {
         const { name } = item.properties
 
-        await uploadFile(user, task, item.file, name)
-        notify({
-          message: `${name} uploaded`,
-          status: 'success'
-        })
+        if (item.file instanceof File) {
+          await uploadFile(user, task, item.file, name)
+          notify({
+            message: `${name} uploaded`,
+            status: 'success'
+          })
+        }
       })
     )
 
