@@ -26,7 +26,7 @@ const BirthdayComponent = ({
 
   const onChangeBirthday = (...args) => {
     if (validateBirthday(args[2])) {
-      onChangeAttribute(args[0], args[1], moment(args[2]).valueOf())
+      onChangeAttribute(args[0], args[1], moment(args[2]).valueOf() / 1000)
     }
   }
 
@@ -42,7 +42,7 @@ const BirthdayComponent = ({
               placeholder="mm / dd / yyyy"
               showEdit
               showAdd={false}
-              text={moment(item.birthday).format('L')}
+              text={moment(item.birthday * 1000).format('L')}
               onChange={onChangeBirthday}
               validate={validate}
               error={errorIdItems.indexOf(key) > -1}
