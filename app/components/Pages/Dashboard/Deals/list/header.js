@@ -2,31 +2,36 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Panel } from 'react-bootstrap'
 import { Link } from 'react-router'
-import AgentFilter from './agent-filter'
-import BackOfficeFilter from './backoffice-filter'
+import { browserHistory } from 'react-router'
 import Tooltip from '../components/tooltip'
 import debounce from 'lodash/debounce'
-import { browserHistory } from 'react-router'
-
+import cn from 'classnames'
+import BackOfficeFilter from './backoffice-filter'
+import AgentFilter from './agent-filter'
+import { getActiveTeamId } from '../../../../../utils/user-teams'
 import {
   searchAllDeals,
   cleanSearchedDeals
 } from '../../../../../store_actions/deals'
 import Excel from '../../Partials/Svgs/Excel'
-import cn from 'classnames'
 
 class Header extends React.Component {
   constructor(props) {
     super(props)
-    this.debouncedOnInputChange = debounce(this.onInputChange, 700)
 
     this.state = {
       inputFocused: false
     }
+
+    this.debouncedOnInputChange = debounce(this.onInputChange, 700)
+
     browserHistory.listen(location => {
       const searchBoxIsOpen = this.props.filters.searchResult
 
-      if (searchBoxIsOpen && location.pathname.includes('/dashboard/deals')) {
+      if (
+        searchBoxIsOpen &&
+        location.pathname.includes('/dashboard/deals/filter')
+      ) {
         props.removeSearchFilter()
         props.cleanSearchedDeals()
 
@@ -43,17 +48,21 @@ class Header extends React.Component {
       searchAllDeals,
       searchBOFilters,
       showEmptySearchPage,
-      isBackOffice
+      isBackOffice,
+      removeSearchFilter
     } = this.props
 
     if (value && value.length > 3) {
       searchAllDeals(value, isBackOffice)
       showEmptySearchPage(false)
+      searchBOFilters()
+    } else if (!value && !isBackOffice) {
+      showEmptySearchPage(false)
+      removeSearchFilter()
     } else {
       showEmptySearchPage(true)
+      searchBOFilters()
     }
-
-    searchBOFilters()
   }
 
   onChangeFilter = filters => {
@@ -65,7 +74,9 @@ class Header extends React.Component {
 
     initialFilters(filters)
   }
+
   render() {
+    const { inputFocused } = this.state
     const {
       isBackOffice,
       activeFilterTab,
@@ -73,10 +84,13 @@ class Header extends React.Component {
       cleanSearchedDeals,
       removeSearchFilter,
       filters,
-      searchBOFilters
+      searchBOFilters,
+      user
     } = this.props
+
+    const activeTeamId = getActiveTeamId(user)
     const searchBoxIsOpen = filters.searchResult
-    const { inputFocused } = this.state
+
     let showSearchInput = true
 
     if (!isBackOffice && activeFilterTab && activeFilterTab !== 'All') {
@@ -133,7 +147,10 @@ class Header extends React.Component {
               )}
 
               <Tooltip placement="bottom" caption="Download Report">
-                <a href="/api/deals/excel/" className="search-button">
+                <a
+                  href={`/api/deals/excel/${activeTeamId}`}
+                  className="search-button"
+                >
                   <Excel />
                 </a>
               </Tooltip>
@@ -180,7 +197,8 @@ class Header extends React.Component {
 }
 
 export default connect(
-  ({ deals }) => ({
+  ({ deals, user }) => ({
+    user,
     isBackOffice: deals.backoffice
   }),
   {
