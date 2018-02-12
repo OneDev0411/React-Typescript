@@ -17,7 +17,7 @@ export async function splitPDF(title, task_id, room_id, files, pages) {
 
     files.forEach(file => {
       if (file.object instanceof File) {
-        request.attach(file.id, file.object, `${file.id}.pdf`)
+        request.attach(file.id, file.object, `${file.documentId}.pdf`)
       } else {
         serverFiles.push(file)
       }
