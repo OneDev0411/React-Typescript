@@ -8,6 +8,7 @@ import PDFSplitterModal from '../pdf-splitter'
 import DealInfo from './deal-info'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
+import Upload from './upload'
 import NavBar from './navbar'
 import { getDeal } from '../../../../../store_actions/deals'
 
@@ -50,7 +51,9 @@ class DealDetails extends React.Component {
               selectedTaskId ? 'collapsed' : 'expanded'
             }`}
           >
-            <Checklists deal={deal} />
+            <Upload disableClick deal={deal}>
+              <Checklists deal={deal} />
+            </Upload>
           </div>
 
           <div
