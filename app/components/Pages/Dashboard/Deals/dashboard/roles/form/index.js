@@ -3,7 +3,6 @@ import _ from 'underscore'
 import Name from './name'
 import Role from './role'
 import Title from './title'
-import Company from './company'
 import Commission from './commission'
 import InputWithSelect from './input-with-select'
 
@@ -246,10 +245,8 @@ export default class Form extends React.Component {
     }
 
     const isFormCompleted =
-      _.every(requiredFields, name =>
-        // console.log(fields, name)
-        fields[name](form[name])
-      ) && !newInvalidFields.includes(field)
+      _.every(requiredFields, name => fields[name](form[name])) &&
+      !newInvalidFields.includes(field)
 
     this.props.onFormChange({
       isFormCompleted,
@@ -257,13 +254,41 @@ export default class Form extends React.Component {
     })
   }
 
+  extractItems({ form = {}, singularName, pluralName }) {
+    if (_.size(form) === 0) {
+      return []
+    }
+
+    const pluralValues = form[pluralName]
+
+    if (pluralValues && _.isArray(pluralValues)) {
+      const values = []
+
+      singularName.forEach(name => {
+        pluralValues.forEach(item => values.push(item[name]))
+      })
+
+      return values.filter(i => i)
+    }
+
+    const singleValues = []
+
+    singularName.forEach(name => {
+      if (form[name]) {
+        singleValues.push(form[name])
+      }
+    })
+
+    return singleValues.filter(i => i)
+  }
+
   render() {
     const { form, invalidFields } = this.state
     const { deal } = this.props
     const { role } = form
 
-    const isShowCompany =
-      !role || !['Buyer', 'Seller', 'Landlord', 'Tenant'].includes(role)
+    const shouldShowCompany =
+      role && !['Buyer', 'Seller', 'Landlord', 'Tenant'].includes(role)
 
     return (
       <div className="deal-roles-form">
@@ -313,7 +338,7 @@ export default class Form extends React.Component {
           isRequired={this.isEmailRequired()}
           isInvalid={invalidFields.includes('email')}
           onChangeHandler={value => this.setForm('email', value)}
-          items={extractItems({
+          items={this.extractItems({
             form,
             singularName: ['email'],
             pluralName: 'emails'
@@ -327,7 +352,7 @@ export default class Form extends React.Component {
           defaultSelectedItem={form.phone_number}
           isInvalid={invalidFields.includes('phone_number')}
           onChangeHandler={value => this.setForm('phone_number', value)}
-          items={extractItems({
+          items={this.extractItems({
             form,
             singularName: ['phone_number'],
             pluralName: 'phones'
@@ -349,7 +374,7 @@ export default class Form extends React.Component {
           onChange={(field, value) => this.setForm(field, value)}
         />
 
-        {isShowCompany && (
+        {shouldShowCompany && (
           <InputWithSelect
             title="Company"
             errorText="Please include only letters and numbers. You have added special character."
@@ -357,7 +382,7 @@ export default class Form extends React.Component {
             defaultSelectedItem={form.companies}
             isInvalid={invalidFields.includes('company_title')}
             onChangeHandler={value => this.setForm('company_title', value)}
-            items={extractItems({
+            items={this.extractItems({
               form,
               singularName: ['company', 'company_title'],
               pluralName: 'companies'
@@ -367,32 +392,4 @@ export default class Form extends React.Component {
       </div>
     )
   }
-}
-
-function extractItems({ form = {}, singularName, pluralName }) {
-  if (Object.keys(form).length === 0) {
-    return []
-  }
-
-  const pluralValues = form[pluralName]
-
-  if (pluralValues && Array.isArray(pluralValues)) {
-    const values = []
-
-    singularName.forEach(name => {
-      pluralValues.forEach(item => values.push(item[name]))
-    })
-
-    return values.filter(i => i)
-  }
-
-  const singleValues = []
-
-  singularName.forEach(name => {
-    if (form[name]) {
-      singleValues.push(form[name])
-    }
-  })
-
-  return singleValues.filter(i => i)
 }
