@@ -371,19 +371,8 @@ Contact.get = {
       ...list
     }
   },
-  companies: context => {
-    const list = []
-
-    _.each(context.sub_contacts, sub => {
-      const item = Contact.get._sort(sub.attributes.companies)
-
-      if (item) {
-        list.push(item)
-      }
-    })
-
-    return list
-  }
+  companies: context =>
+    Contact.get._all(context, 'companies', 'company')
 }
 
 Contact.uplaodCsv = async function (file, fileName = null) {
@@ -404,6 +393,7 @@ export function extractUserInfoFromContact(contact) {
   const { summary, id } = contact
   const emails = Contact.get.emails(contact)
   const phones = Contact.get.phones(contact)
+  const companies = Contact.get.companies(contact)
   const profile_image_url = Contact.get.avatar(contact)
 
   const user = {
@@ -411,6 +401,7 @@ export function extractUserInfoFromContact(contact) {
     emails,
     phones,
     contact,
+    companies,
     profile_image_url,
     ...summary
   }
