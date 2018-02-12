@@ -6,7 +6,10 @@ import {
   updateDeal,
   dealArchived
 } from '../../../../../store_actions/deals'
-import { getActiveTeamACL } from '../../../../../utils/user-teams'
+import {
+  getActiveTeamACL,
+  getActiveTeamId
+} from '../../../../../utils/user-teams'
 
 export default class DealSocket extends Socket {
   constructor(user) {
@@ -40,7 +43,7 @@ export default class DealSocket extends Socket {
     const acl = getActiveTeamACL(user)
 
     if (acl.indexOf('Deals') > -1 || acl.indexOf('BackOffice') > -1) {
-      window.socket.emit('Brand.Register', user.brand)
+      window.socket.emit('Brand.Register', getActiveTeamId(user))
     }
   }
 
