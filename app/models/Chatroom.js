@@ -53,7 +53,7 @@ export async function createRoom(recipients) {
   const room_type = members.length > 1 ? 'Group' : 'Direct'
 
   // search room is created before or not
-  const room = await Chatroom.searchRoom(recipients)
+  const room = await searchRoom(recipients)
 
   if (room) {
     return room
