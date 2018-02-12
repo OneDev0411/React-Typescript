@@ -1,4 +1,5 @@
 import Koa from 'koa'
+
 const FakeStream = require('../../util/fake-stream')
 const router = require('koa-router')()
 const memoryStream = require('memory-streams')
@@ -13,7 +14,9 @@ const app = new Koa()
 
 function splitFiles(splits, filepath) {
   return new Promise((resolve, reject) => {
-    const writeStream = fs.createWriteStream(filepath).on('error', e => reject(e))
+    const writeStream = fs
+      .createWriteStream(filepath)
+      .on('error', e => reject(e))
 
     return scissors
       .join(...splits)
@@ -25,23 +28,27 @@ function splitFiles(splits, filepath) {
 }
 
 async function downloadFiles(files) {
-  return Promise.all(_.map(JSON.parse(files), async file => {
-    const stream = new memoryStream.ReadableStream()
-    const { body } = await agent.get(file.object.url).buffer()
+  return Promise.all(
+    _.map(JSON.parse(files), async file => {
+      const stream = new memoryStream.ReadableStream()
+      const { body } = await agent.get(file.object.url).buffer()
 
-    stream.append(body)
+      stream.append(body)
 
-    return {
-      path: stream,
-      filename: `${file.documentId}.pdf`
-    }
-  }))
+      return {
+        path: stream,
+        filename: `${file.documentId}.pdf`
+      }
+    })
+  )
 }
 
 async function getFiles(files) {
   _.each(files, file => {
     if (!fs.existsSync(file.path)) {
-      throw new Error(`File ${file.filename} is not uploaded correctly, try again.`)
+      throw new Error(
+        `File ${file.filename} is not uploaded correctly, try again.`
+      )
     }
   })
 
@@ -57,15 +64,17 @@ router.post('/deals/pdf-splitter', async ctx => {
   if (!user) {
     ctx.status = 401
     ctx.body = ''
+
     return false
   }
 
   const fakeStream = new FakeStream()
 
   const fakeInterval = setInterval(() => fakeStream.push('\n'), 1500)
+
   ctx.body = fakeStream.pipe(PassThrough())
 
-  const finishStream = function(data) {
+  const finishStream = data => {
     clearInterval(fakeInterval)
     fakeStream.push(JSON.stringify(data))
     fakeStream.emit('end')
