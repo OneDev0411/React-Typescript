@@ -95,7 +95,7 @@ export function getItems(deal_type, property_type, hasActiveOffer = false) {
     hasActiveOffer
   )
 
-  const sortTable = _.pluck(this.getList(), 'name')
+  const sortTable = _.pluck(getList(), 'name')
 
   return _.sortBy([].concat(requiredFields, optionalFields), field =>
     sortTable.indexOf(field.name)
