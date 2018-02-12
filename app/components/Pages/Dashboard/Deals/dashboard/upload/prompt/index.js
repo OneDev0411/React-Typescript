@@ -5,15 +5,13 @@ import cn from 'classnames'
 import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 import {
+  uploadFile,
   resetUploadFiles,
   setUploadAttributes,
   displaySplitter,
-  addAttachment,
   changeNeedsAttention,
   resetSplitter
 } from '../../../../../../../store_actions/deals'
-import ChatModel from '../../../../../../../models/Chatroom'
-import DealModel from '../../../../../../../models/Deal'
 import TasksDropDown from '../../../components/tasks-dropdown'
 import ToolTip from '../../../components/tooltip'
 import Checkbox from '../../../components/radio'
@@ -68,6 +66,14 @@ class UploadModal extends React.Component {
   }
 
   async upload({ id, fileObject, properties }, task) {
+    const {
+      user,
+      uploadFile,
+      setUploadAttributes,
+      changeNeedsAttention,
+      notify
+    } = this.props
+
     if (properties.status === STATUS_UPLOADED) {
       return false
     }
@@ -79,15 +85,15 @@ class UploadModal extends React.Component {
     const filename = properties.fileTitle || fileObject.name
 
     // set status
-    this.props.setUploadAttributes(id, { status: STATUS_UPLOADING })
+    setUploadAttributes(id, { status: STATUS_UPLOADING })
 
     // upload file
-    const file = await this.uploadFile(task, fileObject, filename)
+    const file = await uploadFile(user, task, fileObject, filename)
 
     if (!file) {
-      this.props.setUploadAttributes(id, { status: null })
+      setUploadAttributes(id, { status: null })
 
-      this.props.notify({
+      notify({
         message: `Couldn't upload "${filename}". try again.`,
         status: 'error'
       })
@@ -95,45 +101,16 @@ class UploadModal extends React.Component {
       return false
     }
 
-    this.props.notify({
+    notify({
       message: `"${filename}" uploaded.`,
       status: 'success'
     })
 
     // set status
-    this.props.setUploadAttributes(id, { status: STATUS_UPLOADED })
-
-    // add files to attachments list
-    this.props.addAttachment(task.deal, task.checklist, task.id, file)
+    setUploadAttributes(id, { status: STATUS_UPLOADED })
 
     if (properties.notifyOffice === true && !isBackupContract) {
-      this.props.changeNeedsAttention(task.deal, task.id, true)
-    }
-  }
-
-  /**
-   * upload a file to room
-   */
-  async uploadFile(task, fileObject, fileName) {
-    const { user } = this.props
-
-    try {
-      const response = await ChatModel.uploadAttachment(
-        task.room.id,
-        fileObject,
-        fileName
-      )
-      const file = response.body.data
-
-      DealModel.createTaskMessage(task.id, {
-        author: user.id,
-        room: task.room.id,
-        attachments: [file.id]
-      }).then(() => null)
-
-      return file
-    } catch (e) {
-      return null
+      changeNeedsAttention(task.deal, task.id, true)
     }
   }
 
@@ -273,7 +250,11 @@ class UploadModal extends React.Component {
 
         <Modal.Footer>
           <ToolTip caption="Create new documents and save them to tasks">
-            <img src="/static/images/deals/question.png" className="help" alt="" />
+            <img
+              src="/static/images/deals/question.png"
+              className="help"
+              alt=""
+            />
           </ToolTip>
 
           <Button
@@ -303,10 +284,10 @@ function mapStateToProps({ deals, user }) {
 
 export default connect(mapStateToProps, {
   notify,
+  uploadFile,
   resetUploadFiles,
   resetSplitter,
   displaySplitter,
   setUploadAttributes,
-  addAttachment,
   changeNeedsAttention
 })(UploadModal)

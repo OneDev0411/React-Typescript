@@ -37,6 +37,9 @@ export default class extends React.Component {
       address_components: this.state
     })
 
+    this.clearStates()
+  }
+  clearStates = () =>
     this.setState({
       street_number: '',
       street_name: '',
@@ -45,8 +48,6 @@ export default class extends React.Component {
       state: '',
       postal_code: ''
     })
-  }
-
   isValidated() {
     const { street_name, city, state, postal_code } = this.state
 
@@ -75,7 +76,10 @@ export default class extends React.Component {
         show={show}
         backdrop="static"
         dialogClassName="modal-deal-listing"
-        onHide={() => this.props.onHide()}
+        onHide={() => {
+          this.clearStates()
+          this.props.onHide()
+        }}
       >
         <Modal.Header closeButton>Address</Modal.Header>
 

@@ -2,6 +2,7 @@ import { normalize } from 'normalizr'
 import _ from 'underscore'
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
+import { uploadAttachment } from '../../models/Chatroom'
 import * as schema from './schema'
 
 function addNewTask(deal_id, list_id, task) {
@@ -151,6 +152,33 @@ export function addAttachment(deal_id, checklist_id, task_id, file) {
     type: types.ADD_ATTACHMENT,
     task_id,
     file
+  }
+}
+
+export function uploadFile(user, task, file, fileName = null) {
+  return async dispatch => {
+    try {
+      const response = await uploadAttachment(
+        task.room.id,
+        file,
+        fileName || file.name
+      )
+
+      const fileData = response.body.data
+
+      Deal.createTaskMessage(task.id, {
+        author: user.id,
+        room: task.room.id,
+        attachments: [fileData.id]
+      }).then(() => null)
+
+      // add files to attachments list
+      dispatch(addAttachment(task.deal, task.checklist, task.id, fileData))
+
+      return fileData
+    } catch (e) {
+      return null
+    }
   }
 }
 

@@ -1,7 +1,7 @@
-import Koa from 'koa'
 import colors from 'colors'
 import request from 'request'
 import superagent from 'superagent'
+import _ from 'underscore'
 import config from '../../../config/private'
 
 function logger(url, method, headers, ctx) {
@@ -84,6 +84,13 @@ const requestMiddleware = async (ctx, next) => {
         .on('response', response => {
           if (~~response.status >= 200 && ~~response.status <= 207) {
             try {
+              // because server use streaming technique for uploading endpoints
+              // and it happens because of 30s issue on heroku servers
+              // btw I will kill @emilsedgh before 2020
+              if (_.isEmpty(response.body)) {
+                response.body = JSON.parse(response.text)
+              }
+
               response.body = {
                 ...response.body,
                 status: 'success'
