@@ -205,14 +205,15 @@ class WorkspaceForm extends React.Component {
 
     return (
       <div className="details">
-        <input
+        {/* <input
           className="title"
           placeholder="Document title ..."
           value={title}
           onChange={e => this.setState({ title: e.target.value })}
-        />
+        /> */}
 
         <TasksDropDown
+          searchable
           deal={deal}
           onSelectTask={taskId => this.setState({ task: tasks[taskId] })}
           selectedTask={task}

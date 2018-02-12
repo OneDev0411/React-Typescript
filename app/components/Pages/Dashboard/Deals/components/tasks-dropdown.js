@@ -13,6 +13,7 @@ class DropDownTasks extends React.Component {
       showMenu: false,
       newTaskMode: false,
       newFormMode: null,
+      filter: '',
       isCreatingTask: false,
       taskTitle: ''
     }
@@ -33,6 +34,10 @@ class DropDownTasks extends React.Component {
   onSelectTask(taskId) {
     this.props.onSelectTask(taskId)
     this.toggleMenu()
+
+    this.setState({
+      filter: ''
+    })
   }
 
   onKeyPress(e, checklistId) {
@@ -61,10 +66,18 @@ class DropDownTasks extends React.Component {
     this.setState({ newFormMode: chId })
   }
 
+  onChangeFilter(filter) {
+    const { selectedTask, onSelectTask } = this.props
+
+    this.setState({ filter })
+
+    if (selectedTask) {
+      onSelectTask(null)
+    }
+  }
+
   async createNewTask(checklistId) {
-    const {
-      deal, notify, createFormTask, onSelectTask
-    } = this.props
+    const { deal, notify, createFormTask, onSelectTask } = this.props
     const { taskTitle } = this.state
 
     if (taskTitle.length === 0) {
@@ -100,10 +113,16 @@ class DropDownTasks extends React.Component {
       newTaskMode,
       newFormMode,
       isCreatingTask,
-      taskTitle
+      taskTitle,
+      filter
     } = this.state
     const {
-      deal, shouldDropUp, selectedTask, checklists, tasks
+      deal,
+      shouldDropUp,
+      selectedTask,
+      checklists,
+      tasks,
+      searchable
     } = this.props
 
     return (
@@ -118,7 +137,15 @@ class DropDownTasks extends React.Component {
           bsRole="toggle"
           onClick={e => e.stopPropagation()}
         >
-          {(selectedTask && selectedTask.title) || 'Select a task'}
+          {searchable ? (
+            <input
+              placeholder="Document Title"
+              value={filter || (selectedTask && selectedTask.title) || ''}
+              onChange={e => this.onChangeFilter(e.target.value)}
+            />
+          ) : (
+            (selectedTask && selectedTask.title) || 'Select a task'
+          )}
 
           <span className="indicator">
             <i className={`fa fa-caret-${showMenu ? 'up' : 'down'}`} />
@@ -134,17 +161,23 @@ class DropDownTasks extends React.Component {
                 <div className="checklist">{checklist.title}</div>
 
                 {checklist.tasks &&
-                  checklist.tasks.map((tId, key) => (
-                    <li
-                      key={tId}
-                      className={cn({
-                        selected: selectedTask && selectedTask.id === tId
-                      })}
-                      onClick={() => this.onSelectTask(tId)}
-                    >
-                      {tasks[tId].title}
-                    </li>
-                  ))}
+                  checklist.tasks
+                    .filter(tId =>
+                      tasks[tId].title
+                        .toLowerCase()
+                        .includes(filter.toLowerCase())
+                    )
+                    .map(tId => (
+                      <li
+                        key={tId}
+                        className={cn({
+                          selected: selectedTask && selectedTask.id === tId
+                        })}
+                        onClick={() => this.onSelectTask(tId)}
+                      >
+                        {tasks[tId].title}
+                      </li>
+                    ))}
 
                 {newTaskMode && newTaskMode === chId ? (
                   <li>
