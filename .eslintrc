@@ -5,13 +5,15 @@
     "node": true
   },
   "extends": ["airbnb", "plugin:prettier/recommended"],
-  "plugins": ["react"],
+  "plugins": ["react", "prettier"],
   "rules": {
+    "prettier/prettier": "error",
     "no-new": 0,
     "curly": [2, "all"],
     "no-unused-expressions": ["error", { "allowShortCircuit": true }],
     "max-len": ["error", 85],
     "comma-dangle": [2, "never"],
+    "jsx-a11y/click-events-have-key-events": 0,
     "semi": [2, "never"],
     "camelcase": 0,
     "new-cap": 0,

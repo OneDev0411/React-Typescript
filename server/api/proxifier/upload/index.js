@@ -12,7 +12,7 @@ const app = new Koa()
 
 router.post('/proxifier/upload/:endpointKey', bodyParser(), async ctx => {
   const { headers } = ctx
-  const { files, fields } = await fileParser(ctx.req)
+  const { files } = await fileParser(ctx.req)
 
   try {
     // remove base url because current fetcher middleware add it by itself

@@ -2,18 +2,17 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 import {
+  uploadFile,
   resetUploadFiles,
   setUploadAttributes,
   displaySplitter,
-  addAttachment,
   changeNeedsAttention,
   resetSplitter
 } from '../../../../../../../store_actions/deals'
-import ChatModel from '../../../../../../../models/Chatroom'
-import DealModel from '../../../../../../../models/Deal'
-import TasksDropDown from '../tasks-dropdown'
+import TasksDropDown from '../../../components/tasks-dropdown'
 import ToolTip from '../../../components/tooltip'
 import Checkbox from '../../../components/radio'
 import FileName from './file-name'
@@ -24,19 +23,6 @@ const STATUS_UPLOADED = 'uploaded'
 class UploadModal extends React.Component {
   constructor(props) {
     super(props)
-  }
-
-  /**
-   * upload a file to room
-   */
-  async uploadFile(roomId, file) {
-    try {
-      const response = await ChatModel.uploadAttachment(roomId, file)
-
-      return response.body.data
-    } catch (e) {
-      return null
-    }
   }
 
   closeModal() {
@@ -80,6 +66,14 @@ class UploadModal extends React.Component {
   }
 
   async upload({ id, fileObject, properties }, task) {
+    const {
+      user,
+      uploadFile,
+      setUploadAttributes,
+      changeNeedsAttention,
+      notify
+    } = this.props
+
     if (properties.status === STATUS_UPLOADED) {
       return false
     }
@@ -91,15 +85,15 @@ class UploadModal extends React.Component {
     const filename = properties.fileTitle || fileObject.name
 
     // set status
-    this.props.setUploadAttributes(id, { status: STATUS_UPLOADING })
+    setUploadAttributes(id, { status: STATUS_UPLOADING })
 
     // upload file
-    const file = await this.uploadFile(task, fileObject, filename)
+    const file = await uploadFile(user, task, fileObject, filename)
 
     if (!file) {
-      this.props.setUploadAttributes(id, { status: null })
+      setUploadAttributes(id, { status: null })
 
-      this.props.notify({
+      notify({
         message: `Couldn't upload "${filename}". try again.`,
         status: 'error'
       })
@@ -107,45 +101,16 @@ class UploadModal extends React.Component {
       return false
     }
 
-    this.props.notify({
+    notify({
       message: `"${filename}" uploaded.`,
       status: 'success'
     })
 
     // set status
-    this.props.setUploadAttributes(id, { status: STATUS_UPLOADED })
-
-    // add files to attachments list
-    this.props.addAttachment(task.deal, task.checklist, task.id, file)
+    setUploadAttributes(id, { status: STATUS_UPLOADED })
 
     if (properties.notifyOffice === true && !isBackupContract) {
-      this.props.changeNeedsAttention(task.deal, task.id, true)
-    }
-  }
-
-  /**
-   * upload a file to room
-   */
-  async uploadFile(task, fileObject, fileName) {
-    const { user } = this.props
-
-    try {
-      const response = await ChatModel.uploadAttachment(
-        task.room.id,
-        fileObject,
-        fileName
-      )
-      const file = response.body.data
-
-      DealModel.createTaskMessage(task.id, {
-        author: user.id,
-        room: task.room.id,
-        attachments: [file.id]
-      }).then(() => null)
-
-      return file
-    } catch (e) {
-      return null
+      changeNeedsAttention(task.deal, task.id, true)
     }
   }
 
@@ -173,24 +138,42 @@ class UploadModal extends React.Component {
     return checklists[task.checklist].is_deactivated
   }
 
-  render() {
-    const { deal, splitter, upload } = this.props
-    const filesCount = _.size(upload.files)
+  getPdfFiles() {
+    const { upload } = this.props
 
-    // get list of pdfs aren't uploaded yet
-    const pdfsList = _.filter(
+    return _.filter(
       upload.files,
       file =>
         file.fileObject.type === 'application/pdf' &&
         file.properties.status !== STATUS_UPLOADED
     )
+  }
+
+  showSplitter() {
+    const { displaySplitter } = this.props
+
+    const files = this.getPdfFiles().map(item => ({
+      id: item.id,
+      file: item.fileObject,
+      properties: { name: item.fileObject.name, ...item.properties }
+    }))
+
+    displaySplitter(files)
+  }
+
+  render() {
+    const { deal, splitter, upload } = this.props
+    const filesCount = _.size(upload.files)
+
+    // get list of pdfs aren't uploaded yet
+    const pdfsList = this.getPdfFiles()
 
     let fileCounter = 0
 
     return (
       <Modal
         dialogClassName="modal-deal-upload-files"
-        show={filesCount > 0 && !splitter.display}
+        show={filesCount > 0 && _.size(splitter.files) === 0}
         onHide={() => this.closeModal()}
         backdrop="static"
       >
@@ -267,14 +250,18 @@ class UploadModal extends React.Component {
 
         <Modal.Footer>
           <ToolTip caption="Create new documents and save them to tasks">
-            <img src="/static/images/deals/question.png" className="help" />
+            <img
+              src="/static/images/deals/question.png"
+              className="help"
+              alt=""
+            />
           </ToolTip>
 
           <Button
             bsStyle="primary"
             className={cn('btn-split', { disabled: pdfsList.length === 0 })}
             disabled={pdfsList.length === 0}
-            onClick={() => this.props.displaySplitter(true)}
+            onClick={() => this.showSplitter()}
           >
             Split PDFs
           </Button>
@@ -297,10 +284,10 @@ function mapStateToProps({ deals, user }) {
 
 export default connect(mapStateToProps, {
   notify,
+  uploadFile,
   resetUploadFiles,
   resetSplitter,
-  setUploadAttributes,
   displaySplitter,
-  addAttachment,
+  setUploadAttributes,
   changeNeedsAttention
 })(UploadModal)

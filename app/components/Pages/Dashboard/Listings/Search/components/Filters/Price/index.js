@@ -1,10 +1,7 @@
 import React from 'react'
 import { change as updateField, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import MinMaxInputs from '../components/MinMaxInputs'
-import { normalize } from 'normalizr'
 import { toNumber } from '../../../../../../../../utils/helpers'
 
 const FORM_NAME = 'filters'

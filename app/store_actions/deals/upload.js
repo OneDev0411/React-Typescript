@@ -2,10 +2,10 @@ import _ from 'underscore'
 import types from '../../constants/deals'
 import uuid from '../../utils/uuid'
 
-export function setUploadFiles(files, deal, task) {
+export function setUploadFiles(files, task) {
   const indexedFiles = {}
 
-  // I used properties object to keep file attributes, because file object that
+  // I used properties object to keep file attributes, because file object which
   // created by browser shouldn't change, otherwise upload breaks
   files.forEach(file => {
     const uniqId = uuid()
@@ -22,7 +22,6 @@ export function setUploadFiles(files, deal, task) {
   return {
     type: types.SET_UPLOAD_FILES,
     files: indexedFiles,
-    deal,
     task
   }
 }

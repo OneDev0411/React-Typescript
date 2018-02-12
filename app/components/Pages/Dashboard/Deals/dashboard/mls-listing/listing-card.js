@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import cn from 'classnames'
+import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import ManualAddress from '../../create/manual-address'
 import Deal from '../../../../../../models/Deal'
@@ -19,8 +20,6 @@ class ListingCard extends React.Component {
       showAddressModal: false,
       showWarningTooltip: false
     }
-
-    this._setWarningTooltipState = this._setWarningTooltipState.bind(this)
   }
 
   getAddressField(deal, field) {
@@ -32,19 +31,18 @@ class ListingCard extends React.Component {
   }
 
   getHomeAddress(deal) {
-    const unitNumber = this.getAddressField(deal, 'unit_number')
+    const unit_number = this.getAddressField(deal, 'unit_number')
     const street_number = this.getAddressField(deal, 'street_number')
     const street_name = this.getAddressField(deal, 'street_name')
     const street_suffix = this.getAddressField(deal, 'street_suffix')
 
-    return [
-      street_number,
-      street_name,
-      street_suffix,
-      unitNumber ? `, #${unitNumber}` : null
-    ]
+    const street = [street_number, street_name, street_suffix]
       .filter(item => item !== null)
       .join(' ')
+
+    const unitNumber = unit_number ? `, #${unit_number}` : ''
+
+    return street + unitNumber
   }
 
   getListingAddress(deal) {
@@ -76,25 +74,38 @@ class ListingCard extends React.Component {
   }
 
   async onCreateAddress(address) {
-    const { deal } = this.props
+    const { address_components } = address
+    const { isBackOffice, deal, contexts, updateContext } = this.props
+
+    if (_.size(address_components) === 0) {
+      return false
+    }
 
     this.setState({
       isSavingAddress: true,
       showAddressModal: false
     })
 
-    address.use_manual_address = true
-    await this.props.updateContext(deal.id, {
-      value: address.address_components,
-      approved: true
+    const context = {}
+    const indexedContexts = _.indexBy(contexts, 'name')
+
+    _.each(address_components, item => {
+      const { needs_approval } = indexedContexts[item]
+
+      context[item] = {
+        value: address_components[item],
+        approved: isBackOffice ? true : !needs_approval
+      }
     })
+
+    await updateContext(deal.id, context)
 
     this.setState({
       isSavingAddress: false
     })
   }
 
-  _setWarningTooltipState(showWarningTooltip) {
+  setWarningTooltipState(showWarningTooltip) {
     this.setState({
       showWarningTooltip
     })
@@ -125,8 +136,8 @@ class ListingCard extends React.Component {
           <button
             disabled={deal.listing}
             onClick={() => !isSavingAddress && this.toggleShowAddressModal()}
-            onMouseEnter={() => this._setWarningTooltipState(true)}
-            onMouseLeave={() => this._setWarningTooltipState(false)}
+            onMouseEnter={() => this.setWarningTooltipState(true)}
+            onMouseLeave={() => this.setWarningTooltipState(false)}
             className={cn('deal-listing-card__address c-button--shadow', {
               isHovered: showEditingAddressWarning,
               'is-editable': !deal.listing
@@ -156,7 +167,10 @@ class ListingCard extends React.Component {
           </button>
 
           {deal.listing && (
-            <Link className="open-listing" to={`/dashboard/mls/${deal.listing}`}>
+            <Link
+              className="open-listing"
+              to={`/dashboard/mls/${deal.listing}`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -183,9 +197,14 @@ class ListingCard extends React.Component {
   }
 }
 
-export default connect(
-  ({ deals }) => ({
-    roles: deals.roles
-  }),
-  { updateContext }
-)(ListingCard)
+function mapToProps({ deals }) {
+  const { contexts, roles, backoffice: isBackOffice } = deals
+
+  return {
+    roles,
+    contexts,
+    isBackOffice
+  }
+}
+
+export default connect(mapToProps, { updateContext })(ListingCard)

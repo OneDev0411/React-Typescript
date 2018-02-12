@@ -4,7 +4,6 @@ $deal-tasks-width: 388px;
 $deal-dashboard-header-height: 54px;
 $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
 
-@import './dashboard/_navbar';
 @import './dashboard/_info';
 @import './dashboard/_create_offer';
 @import './dashboard/_tasks';
@@ -24,7 +23,6 @@ $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
 @import './dashboard/_date_picker';
 @import './dashboard/_mls_status_modal';
 @import './dashboard/_upload';
-@import './dashboard/_pdf_splitter';
 @import './dashboard/_bulk_submit';
 
 %deal-dashboard {
@@ -32,10 +30,6 @@ $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
   margin-right: 0;
   display: flex;
   flex-direction: column;
-
-  .deal-navbar {
-    @extend %deal-dashboard-navbar;
-  }
 
   .deal-content {
     display: flex;

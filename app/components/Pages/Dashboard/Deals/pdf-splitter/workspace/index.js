@@ -1,9 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
-import { DropTarget } from 'react-dnd'
-import cn from 'classnames'
-import _ from 'underscore'
 import Form from './form'
 import Pages from './pages'
 
@@ -13,12 +9,12 @@ class Workspace extends React.Component {
   }
 
   render() {
-    const { deal, splitter, upload } = this.props
+    const { deal, splitter } = this.props
 
     return (
       <div>
-        <Form deal={deal} upload={upload} />
-        <Pages upload={upload} splitter={splitter} />
+        <Form deal={deal} />
+        <Pages splitter={splitter} />
       </div>
     )
   }
@@ -26,8 +22,7 @@ class Workspace extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
-    splitter: deals.splitter,
-    upload: deals.upload
+    splitter: deals.splitter
   }
 }
 

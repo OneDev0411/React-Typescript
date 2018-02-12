@@ -3,14 +3,13 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
+import UploadPromptModal from './upload/prompt'
+import PDFSplitterModal from '../pdf-splitter'
 import DealInfo from './deal-info'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
-import UploadPromptModal from './upload/prompt'
-import PDFSplitterModal from './upload/pdf-splitter'
 import NavBar from './navbar'
 import { getDeal } from '../../../../../store_actions/deals'
-import Deal from '../../../../../models/Deal'
 
 class DealDetails extends React.Component {
   constructor(props) {
@@ -20,7 +19,7 @@ class DealDetails extends React.Component {
   componentDidMount() {
     const { deal, getDeal } = this.props
 
-    if (deal === null) {
+    if (!deal) {
       return browserHistory.push('/dashboard/deals')
     }
 
@@ -76,12 +75,11 @@ class DealDetails extends React.Component {
 }
 
 function mapStateToProps({ deals }, props) {
-  const { list } = deals
   const { id } = props.params
 
   return {
     selectedTask: deals.selectedTask,
-    deal: list && list[id] ? list[id] : null
+    deal: deals.list ? deals.list[id] : null
   }
 }
 

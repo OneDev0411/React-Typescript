@@ -45,7 +45,7 @@ class ListingStatus extends React.Component {
       }
     })
 
-    if (!isBackOffice === false) {
+    if (!isBackOffice) {
       await this.notifyAdmin(status)
     }
 

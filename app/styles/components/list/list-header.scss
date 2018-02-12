@@ -3,9 +3,10 @@
 }
 .list--header {
   box-shadow: 0 1px 0 0 #dce5eb;
+  background-color: transparent;
   overflow: hidden;
 
-  &.agent {
+  &.no-box-shadow {
     box-shadow: none;
   }
 

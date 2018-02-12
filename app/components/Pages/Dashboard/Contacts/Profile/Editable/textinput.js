@@ -21,7 +21,7 @@ export default ({
       value={value}
       placeholder={placeholder}
       ref={inputRef}
-      onKeyPress={onKeyPressed}
+      onKeyPress={onKeyPress}
       onChange={onChange}
       onBlur={onBlur}
     />

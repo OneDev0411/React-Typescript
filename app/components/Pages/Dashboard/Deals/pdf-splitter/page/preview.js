@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import cn from 'classnames'
-import { setPagePreview } from '../../../../../../../../store_actions/deals'
+import { setPagePreview } from '../../../../../../store_actions/deals'
 import Page from '.'
 
 class PagePreview extends React.Component {
@@ -14,18 +13,15 @@ class PagePreview extends React.Component {
   }
 
   render() {
-    const { upload, splitter } = this.props
+    const { splitter } = this.props
     const { pdfId, doc, pageNumber } = splitter.pagePreview
 
     return (
       <div className="page-preview">
         <div className="header">
-          { upload.files[pdfId].fileObject.name}
+          {splitter.files[pdfId].name}
 
-          <span
-            className="exit"
-            onClick={() => this.closeModal()}
-          >
+          <span className="exit" onClick={() => this.closeModal()}>
             <i className="fa fa-times" />
           </span>
         </div>
@@ -46,7 +42,6 @@ class PagePreview extends React.Component {
 
 function mapStateToProps({ deals }) {
   return {
-    upload: deals.upload,
     splitter: deals.splitter
   }
 }

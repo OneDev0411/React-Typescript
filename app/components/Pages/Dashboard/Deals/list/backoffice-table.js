@@ -74,7 +74,7 @@ class BackOfficeTable extends BaseTable {
    */
   getOffice(deal) {
     const brand = this.flattenBrand(deal.brand)
-    return brand && brand.messages ? brand.messages.office_title : 'N/A'
+    return brand && brand.messages ? brand.messages.branch_title : 'N/A'
   }
 
   /**

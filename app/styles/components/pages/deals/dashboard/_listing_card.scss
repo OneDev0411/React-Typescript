@@ -1,5 +1,5 @@
 .deal-listing-card {
-  height: 65px;
+  // height: 65px;
   padding: 10px 0;
   display: flex;
   flex-direction: row;
@@ -45,8 +45,8 @@
 
   .address-info {
     position: relative;
-    width: 100%;
-    height: 50px;
+    width: calc(100% - 60px);
+    // height: 50px;
     padding-left: 10px;
     font-size: 15px;
     font-weight: 600;
@@ -83,7 +83,7 @@
 
   &.is-editable {
     width: 100%;
-    height: 5rem;
+    // height: 5rem;
     cursor: pointer;
     display: block;
     padding: 0;

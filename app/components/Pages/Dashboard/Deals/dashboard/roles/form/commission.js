@@ -1,4 +1,5 @@
 import React from 'react'
+import { toNumber } from '../../../../../../../utils/helpers'
 
 export default class Commission extends React.Component {
   constructor(props) {
@@ -39,7 +40,9 @@ export default class Commission extends React.Component {
   getCommissionField() {
     const { commission_type } = this.state
 
-    return commission_type === '%' ? 'commission_percentage' : 'commission_dollar'
+    return commission_type === '%'
+      ? 'commission_percentage'
+      : 'commission_dollar'
   }
 
   /**
@@ -56,7 +59,7 @@ export default class Commission extends React.Component {
    */
   getCommissionType(form) {
     if (form.isNewRecord) {
-      return '%'
+      return '$'
     }
 
     return form.commission_percentage ? '%' : '$'
@@ -105,10 +108,12 @@ export default class Commission extends React.Component {
         <div className="commission">
           <input
             name="commission"
-            type="number"
-            placeholder={`Enter commission for this agent ${isRequired && '*'}`}
+            type="text"
+            placeholder={`Enter commission for this agent ${
+              isRequired ? '*' : ''
+            }`}
             value={this.getCommissionValue()}
-            onChange={e => this.setCommission(e.target.value)}
+            onChange={e => this.setCommission(toNumber(e.target.value))}
           />
         </div>
       </div>

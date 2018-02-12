@@ -5,8 +5,8 @@ import UserAvatar from '../../../../../Partials/UserAvatar'
 import UpsertRole from './upsert-role'
 import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
-import roleName from '../../utils/roles'
-import AddRoleModal from './AddRoleModal'
+import { roleName } from '../../utils/roles'
+import AddRoleModal from './add-role-modal'
 
 class Roles extends React.Component {
   state = {
@@ -21,11 +21,14 @@ class Roles extends React.Component {
     })
   }
 
-  getRoleName = role => {
-    const name = `${role.legal_prefix || ''} ${role.legal_first_name ||
-      ''} ${role.legal_last_name || ''}`.trim()
+  getUserFullName = role =>
+    role.legal_full_name || (role.user && role.user.display_name)
 
-    return role.user ? role.user.display_name : name
+  getUserFullNameForAvatar = role => {
+    const { user, legal_first_name, legal_last_name } = role
+    const fullName = `${legal_first_name} ${legal_last_name}`.trim()
+
+    return fullName || (user && user.display_name)
   }
 
   handleOnClick = role => {
@@ -69,7 +72,9 @@ class Roles extends React.Component {
     }
 
     confirmation({
-      message: `Remove <b>${user.legal_first_name} ${user.legal_last_name}</b>?`,
+      message: `Remove <b>${user.legal_first_name} ${
+        user.legal_last_name
+      }</b>?`,
       confirmLabel: 'Yes, remove contact',
       onConfirm: () => this.removeRole(user)
     })
@@ -125,7 +130,10 @@ class Roles extends React.Component {
 
         {deal.roles &&
           deal.roles
-            .filter(roleId => !allowedRoles || allowedRoles.includes(roles[roleId].role))
+            .filter(
+              roleId =>
+                !allowedRoles || allowedRoles.includes(roles[roleId].role)
+            )
             .map(roleId => {
               const role = roles[roleId]
               const { id, user } = role
@@ -140,13 +148,13 @@ class Roles extends React.Component {
                     <UserAvatar
                       size={32}
                       showStateIndicator={false}
-                      name={this.getRoleName(role)}
+                      name={this.getUserFullNameForAvatar(role)}
                       image={user ? user.profile_image_url : null}
                     />
                   </div>
 
                   <div className="name">
-                    <div className="title">{this.getRoleName(role)}</div>
+                    <div className="title">{this.getUserFullName(role)}</div>
                     <div className="role">{roleName(role.role)}</div>
                   </div>
 

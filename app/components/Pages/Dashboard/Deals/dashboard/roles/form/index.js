@@ -5,7 +5,7 @@ import Role from './role'
 import Title from './title'
 import Company from './company'
 import Commission from './commission'
-import InputWithSelect from './InputWithSelect'
+import InputWithSelect from './input-with-select'
 
 const ROLE_NAMES = [
   'BuyerAgent',
@@ -154,8 +154,8 @@ export default class Form extends React.Component {
     return form.commission_percentage ? value >= 0 && value <= 100 : value >= 0
   }
 
-  isValidName(name) {
-    return name && name.trim().length > 0 && new RegExp(/^[A-Za-z\s]+$/).exec(name)
+  isValidName(name, regular = /^[A-Za-z\s]+$/) {
+    return name && name.trim().length > 0 && new RegExp(regular).exec(name)
   }
 
   /**
@@ -173,8 +173,11 @@ export default class Form extends React.Component {
    * it's required by default
    * https://gitlab.com/rechat/web/issues/691
    */
-  isCommissionRequired() {
-    return this.props.isCommissionRequired !== false
+  isCommissionRequired(form) {
+    return (
+      Commission.shouldShowCommission(form) &&
+      this.props.isCommissionRequired !== false
+    )
   }
 
   /**
@@ -190,27 +193,27 @@ export default class Form extends React.Component {
 
     const fields = {
       role: role => role,
-      legal_prefix: value => ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].indexOf(value) > -1,
+      legal_prefix: value =>
+        ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].indexOf(value) > -1,
       email: email => email && this.isEmail(email),
       legal_last_name: name => this.isValidName(name),
       legal_first_name: name => this.isValidName(name),
       legal_middle_name: name => this.isValidName(name),
       phone_number: phoneNumber =>
         phoneNumber && this.isValidPhoneNumber(phoneNumber),
-      company_title: name => this.isValidName(name)
+      company_title: name => this.isValidName(name, /^['A-Za-z\s]+$/),
+      commission_percentage: value => value && this.validateCommission(value),
+      commission_dollar: value => value && this.validateCommission(value)
     }
 
-    if (this.isCommissionRequired()) {
+    if (this.isCommissionRequired(form)) {
       let commission_field = 'commission_percentage'
 
       if (form.commission_dollar > 0) {
         commission_field = 'commission_dollar'
       }
 
-      if (commission_field && Commission.shouldShowCommission(form)) {
-        requiredFields.push(commission_field)
-        fields[commission_field] = value => value && this.validateCommission(value)
-      }
+      requiredFields.push(commission_field)
     }
 
     // validate field
@@ -243,8 +246,10 @@ export default class Form extends React.Component {
     }
 
     const isFormCompleted =
-      _.every(requiredFields, name => fields[name](form[name])) &&
-      !newInvalidFields.includes(field)
+      _.every(requiredFields, name =>
+        // console.log(fields, name)
+        fields[name](form[name])
+      ) && !newInvalidFields.includes(field)
 
     this.props.onFormChange({
       isFormCompleted,
@@ -255,6 +260,10 @@ export default class Form extends React.Component {
   render() {
     const { form, invalidFields } = this.state
     const { deal } = this.props
+    const { role } = form
+
+    const isShowCompany =
+      !role || !['Buyer', 'Seller', 'Landlord', 'Tenant'].includes(role)
 
     return (
       <div className="deal-roles-form">
@@ -300,12 +309,13 @@ export default class Form extends React.Component {
           title="Email"
           errorText="Enter a valid email"
           placeholder="example@gmail.com"
+          defaultSelectedItem={form.email}
           isRequired={this.isEmailRequired()}
           isInvalid={invalidFields.includes('email')}
           onChangeHandler={value => this.setForm('email', value)}
           items={extractItems({
             form,
-            singleName: 'email',
+            singularName: ['email'],
             pluralName: 'emails'
           })}
         />
@@ -314,11 +324,12 @@ export default class Form extends React.Component {
           title="Phone"
           errorText="Enter a valid phone"
           placeholder="(###) - ### ####"
+          defaultSelectedItem={form.phone_number}
           isInvalid={invalidFields.includes('phone_number')}
           onChangeHandler={value => this.setForm('phone_number', value)}
           items={extractItems({
             form,
-            singleName: 'phone_number',
+            singularName: ['phone_number'],
             pluralName: 'phones'
           })}
         />
@@ -333,37 +344,55 @@ export default class Form extends React.Component {
 
         <Commission
           form={form}
-          isRequired={this.isCommissionRequired()}
+          isRequired={this.isCommissionRequired(form)}
           validateCommission={this.validateCommission.bind(this)}
           onChange={(field, value) => this.setForm(field, value)}
         />
 
-        <Company
-          form={form}
-          onChange={value => this.setForm('company_title', value)}
-          isInvalid={invalidFields.includes('company_title')}
-        />
+        {isShowCompany && (
+          <InputWithSelect
+            title="Company"
+            errorText="Please include only letters and numbers. You have added special character."
+            placeholder="Company Name"
+            defaultSelectedItem={form.companies}
+            isInvalid={invalidFields.includes('company_title')}
+            onChangeHandler={value => this.setForm('company_title', value)}
+            items={extractItems({
+              form,
+              singularName: ['company', 'company_title'],
+              pluralName: 'companies'
+            })}
+          />
+        )}
       </div>
     )
   }
 }
 
-function extractItems({ form = {}, singleName, pluralName }) {
+function extractItems({ form = {}, singularName, pluralName }) {
   if (Object.keys(form).length === 0) {
     return []
   }
 
-  const pluralValue = form[pluralName]
+  const pluralValues = form[pluralName]
 
-  if (pluralValue && Array.isArray(pluralValue)) {
-    return pluralValue.map(item => item[singleName])
+  if (pluralValues && Array.isArray(pluralValues)) {
+    const values = []
+
+    singularName.forEach(name => {
+      pluralValues.forEach(item => values.push(item[name]))
+    })
+
+    return values.filter(i => i)
   }
 
-  const singleValue = form[singleName]
+  const singleValues = []
 
-  if (singleValue) {
-    return [singleValue]
-  }
+  singularName.forEach(name => {
+    if (form[name]) {
+      singleValues.push(form[name])
+    }
+  })
 
-  return []
+  return singleValues.filter(i => i)
 }

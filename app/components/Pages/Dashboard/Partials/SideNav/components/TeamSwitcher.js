@@ -1,6 +1,9 @@
 import React, { Fragment } from 'react'
 import cn from 'classnames'
-import { getActiveTeamId, setActiveTeam } from '../../../../../../utils/user-teams'
+import {
+  getActiveTeamId,
+  setActiveTeam
+} from '../../../../../../utils/user-teams'
 import flattenBrand from '../../../../../../utils/flatten-brand'
 import Avatar from '../../../../../Partials/UserAvatar'
 
@@ -25,7 +28,9 @@ export default class extends React.Component {
         src={flatted.assets ? flatted.assets.site_logo : null}
         color={primaryColor}
         fgColor={
-          primaryColor && primaryColor.toLowerCase() === '#ffffff' ? '#000' : '#fff'
+          primaryColor && primaryColor.toLowerCase() === '#ffffff'
+            ? '#000'
+            : '#fff'
         }
       />
     )
@@ -72,7 +77,10 @@ export default class extends React.Component {
                 <div className="icon">
                   {!savingTeam &&
                     isActiveTeam && (
-                      <img src="/static/images/dashboard/checkmark.svg" alt="" />
+                      <img
+                        src="/static/images/dashboard/checkmark.svg"
+                        alt=""
+                      />
                     )}
 
                   {savingTeam === team.brand.id && (
@@ -81,7 +89,11 @@ export default class extends React.Component {
                 </div>
               </a>
             </li>,
-            <li key={`sp_${team.brand.id}`} role="separator" className="divider" />
+            <li
+              key={`sp_${team.brand.id}`}
+              role="separator"
+              className="divider"
+            />
           ]
         })}
       </Fragment>

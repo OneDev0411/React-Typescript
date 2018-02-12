@@ -1,12 +1,9 @@
 import React from 'react'
-import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
 import { DropTarget } from 'react-dnd'
-import { deselectSplitterPage } from '../../../../../../../../store_actions/deals'
-import Checkbox from '../../../../components/radio'
+import { deselectSplitterPage } from '../../../../../../store_actions/deals'
 import PageThumbnail from '../page/thumbnail'
 import EmptyState from './empty-state'
 
@@ -34,32 +31,38 @@ class WorkspacePdfList extends React.Component {
 
   render() {
     const {
-      isOver, canDrop, connectDropTarget, splitter, upload
+      isOver, canDrop, connectDropTarget, splitter
     } = this.props
+    const { pdfObjects } = splitter
 
-    return connectDropTarget(<div className={cn('pdfholder', { canDrop: isOver && canDrop })}>
-      {_.size(splitter.pages) === 0 && <EmptyState />}
+    const DropTarget = (
+      <div className={cn('pdfholder', { canDrop: isOver && canDrop })}>
+        {_.size(splitter.pages) === 0 && <EmptyState />}
 
-      {_.map(splitter.pages, (page, id) => (
-        <PageThumbnail
-          key={`pdf-page-${id}`}
-          inUse
-          canvasClassName="no-drag"
-          pdfId={page.documentId}
-          doc={splitter.documents[page.documentId]}
-          pageNumber={page.pageNumber}
-        >
-          <span
-            className="page-cta remove"
-            onClick={() => this.deselectPage(page.documentId, page.pageNumber)}
+        {_.map(splitter.pages, (page, id) => (
+          <PageThumbnail
+            key={`pdf-page-${id}`}
+            inUse
+            canvasClassName="no-drag"
+            pdfId={page.documentId}
+            doc={pdfObjects[page.documentId]}
+            pageNumber={page.pageNumber}
           >
+            <span
+              className="page-cta remove"
+              onClick={() => this.deselectPage(page.documentId, page.pageNumber)}
+            >
               Remove
-          </span>
-        </PageThumbnail>
+            </span>
+          </PageThumbnail>
         ))}
-                             </div>)
+      </div>
+    )
+
+    return connectDropTarget(DropTarget)
   }
 }
 
 const connectedWorkSpacePdfList = connect(null, { deselectSplitterPage })(WorkspacePdfList)
+
 export default DropTarget('SPLITTER_PDF_PAGE', {}, collect)(connectedWorkSpacePdfList)
