@@ -260,6 +260,10 @@ export default class Form extends React.Component {
   render() {
     const { form, invalidFields } = this.state
     const { deal } = this.props
+    const { role } = form
+
+    const isShowCompany =
+      !role || !['Buyer', 'Seller', 'Landlord', 'Tenant'].includes(role)
 
     return (
       <div className="deal-roles-form">
@@ -311,7 +315,7 @@ export default class Form extends React.Component {
           onChangeHandler={value => this.setForm('email', value)}
           items={extractItems({
             form,
-            singleName: 'email',
+            singularName: ['email'],
             pluralName: 'emails'
           })}
         />
@@ -325,7 +329,7 @@ export default class Form extends React.Component {
           onChangeHandler={value => this.setForm('phone_number', value)}
           items={extractItems({
             form,
-            singleName: 'phone_number',
+            singularName: ['phone_number'],
             pluralName: 'phones'
           })}
         />
@@ -345,32 +349,50 @@ export default class Form extends React.Component {
           onChange={(field, value) => this.setForm(field, value)}
         />
 
-        <Company
-          form={form}
-          onChange={value => this.setForm('company_title', value)}
-          isInvalid={invalidFields.includes('company_title')}
-        />
+        {isShowCompany && (
+          <InputWithSelect
+            title="Company"
+            errorText="Please include only letters and numbers. You have added special character."
+            placeholder="Company Name"
+            defaultSelectedItem={form.companies}
+            isInvalid={invalidFields.includes('company_title')}
+            onChangeHandler={value => this.setForm('company_title', value)}
+            items={extractItems({
+              form,
+              singularName: ['company', 'company_title'],
+              pluralName: 'companies'
+            })}
+          />
+        )}
       </div>
     )
   }
 }
 
-function extractItems({ form = {}, singleName, pluralName }) {
+function extractItems({ form = {}, singularName, pluralName }) {
   if (Object.keys(form).length === 0) {
     return []
   }
 
-  const pluralValue = form[pluralName]
+  const pluralValues = form[pluralName]
 
-  if (pluralValue && Array.isArray(pluralValue)) {
-    return pluralValue.map(item => item[singleName])
+  if (pluralValues && Array.isArray(pluralValues)) {
+    const values = []
+
+    singularName.forEach(name => {
+      pluralValues.forEach(item => values.push(item[name]))
+    })
+
+    return values.filter(i => i)
   }
 
-  const singleValue = form[singleName]
+  const singleValues = []
 
-  if (singleValue) {
-    return [singleValue]
-  }
+  singularName.forEach(name => {
+    if (form[name]) {
+      singleValues.push(form[name])
+    }
+  })
 
-  return []
+  return singleValues.filter(i => i)
 }

@@ -29,7 +29,8 @@ export function normalizeContact(contact) {
     phone_number
   } = contact
 
-  const firstName = first_name !== email && first_name !== phone_number && first_name
+  const firstName =
+    first_name !== email && first_name !== phone_number && first_name
   const legalFirstName =
     legal_first_name !== email &&
     legal_first_name !== phone_number &&
@@ -123,19 +124,37 @@ export async function getUpdatedNameAttribute(formData = {}) {
 
 export async function getNewAttributes(formData = {}) {
   const {
-    email, phone_number, emails, phones
+    email,
+    phone_number,
+    emails,
+    phones,
+    company_title: company,
+    companies
   } = formData
   const newAttributes = []
 
   const isNewEmail = email && !emails.map(item => item.email).includes(email)
+
+  const isNewCompany =
+    company && !companies.map(item => item.company).includes(company)
+
   const isNewPhoneNumber =
-    phone_number && !phones.map(item => item.phone_number).includes(phone_number)
+    phone_number &&
+    !phones.map(item => item.phone_number).includes(phone_number)
 
   if (isNewEmail) {
     newAttributes.push({
       email,
       type: 'email',
       is_primary: emails.length === 0
+    })
+  }
+
+  if (isNewCompany) {
+    newAttributes.push({
+      company,
+      type: 'company',
+      is_primary: companies.length === 0
     })
   }
 
