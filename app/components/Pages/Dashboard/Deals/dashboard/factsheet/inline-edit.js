@@ -57,16 +57,16 @@ export default class Editable extends React.Component {
 
   getCtas() {
     const { editMode } = this.state
-    const {
-      needsApproval, context, field, saving
-    } = this.props
+    const { needsApproval, context, field, saving } = this.props
     const showCTA = saving !== field.name && !editMode
 
     return [
       <ToolTip
         key="EDITABLE_INPUT_CTA_BUTTON__EDIT"
         caption={
-          needsApproval ? 'This field needs office approval after changing' : null
+          needsApproval
+            ? 'This field needs office approval after changing'
+            : null
         }
       >
         <span className={cn('cta__button', { hide: !showCTA })}>EDIT</span>
@@ -74,7 +74,9 @@ export default class Editable extends React.Component {
       <ToolTip
         key="EDITABLE_INPUT_CTA_BUTTON__DELETE"
         caption={
-          needsApproval ? 'This field needs office approval after removing' : null
+          needsApproval
+            ? 'This field needs office approval after removing'
+            : null
         }
       >
         <button
@@ -105,7 +107,13 @@ export default class Editable extends React.Component {
 
   render() {
     const {
-      field, context, approved, needsApproval, disabled, saving, isBackOffice
+      field,
+      context,
+      approved,
+      needsApproval,
+      disabled,
+      saving,
+      isBackOffice
     } = this.props
     const { editMode, error } = this.state
     const isDateType = field.data_type === 'Date'
@@ -130,7 +138,11 @@ export default class Editable extends React.Component {
           onClick={() => this.editField()}
         >
           {(!editMode || (editMode && isDateType)) && (
-            <ToolTip caption={approved || isBackOffice ? null : 'Pending Office Approval'}>
+            <ToolTip
+              caption={
+                approved || isBackOffice ? null : 'Pending Office Approval'
+              }
+            >
               <span style={{ opacity: saving ? 0.8 : 1 }}>{context.value}</span>
             </ToolTip>
           )}
