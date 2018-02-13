@@ -165,9 +165,11 @@ export default class Editable extends React.Component {
                   maxLength={15}
                 />
                 <button
-                  className="c-button--shadow fa fa-check-circle"
+                  className="c-button--shadow"
                   onClick={() => this.onFinishEditing()}
-                />
+                >
+                  SAVE
+                </button>
               </div>
             )}
 
