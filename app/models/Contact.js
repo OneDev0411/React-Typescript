@@ -9,7 +9,7 @@ const Contact = {
 /**
  * add new contact
  */
-Contact.add = async function (params) {
+Contact.add = async function(params) {
   const { contacts } = params
 
   try {
@@ -24,7 +24,7 @@ Contact.add = async function (params) {
 /**
  * returns contacts list
  */
-Contact.getContacts = async function (user) {
+Contact.getContacts = async function(user) {
   try {
     const fetchContacts = new Fetch()
       .get('/contacts')
@@ -48,7 +48,7 @@ Contact.getContacts = async function (user) {
 /**
  * returns contact's timeline
  */
-Contact.getTimeline = async function (id) {
+Contact.getTimeline = async function(id) {
   const endpoint = `/contacts/${id}/timeline`
 
   try {
@@ -63,7 +63,7 @@ Contact.getTimeline = async function (id) {
 /**
  * add note
  */
-Contact.addNote = async function (id, note) {
+Contact.addNote = async function(id, note) {
   const endpoint = `/contacts/${id}/attributes`
   const payload = Contact.helper.populateAttributes('note', [{ note }])
 
@@ -79,7 +79,7 @@ Contact.addNote = async function (id, note) {
 /**
  * add new item to user's timeline
  */
-Contact.updateUserTimeline = async function (action, object_class, object) {
+Contact.updateUserTimeline = async function(action, object_class, object) {
   const requestBody = {
     action,
     object,
@@ -87,7 +87,9 @@ Contact.updateUserTimeline = async function (action, object_class, object) {
   }
 
   try {
-    const response = await new Fetch().post('/users/self/timeline').send(requestBody)
+    const response = await new Fetch()
+      .post('/users/self/timeline')
+      .send(requestBody)
 
     return response
   } catch (e) {
@@ -98,7 +100,7 @@ Contact.updateUserTimeline = async function (action, object_class, object) {
 /**
  * create new attributes
  */
-Contact.createAttributes = async function (id, type, attributes) {
+Contact.createAttributes = async function(id, type, attributes) {
   const endpoint = `/contacts/${id}/attributes`
 
   try {
@@ -113,9 +115,11 @@ Contact.createAttributes = async function (id, type, attributes) {
 /**
  * update current attributes
  */
-Contact.updateAttributes = async function (id, type, attributes) {
+Contact.updateAttributes = async function(id, type, attributes) {
   try {
-    const response = await new Fetch().patch(`/contacts/${id}`).send({ attributes })
+    const response = await new Fetch()
+      .patch(`/contacts/${id}`)
+      .send({ attributes })
 
     return response.body.data
   } catch (e) {
@@ -126,9 +130,11 @@ Contact.updateAttributes = async function (id, type, attributes) {
 /**
  * delete attribute
  */
-Contact.deleteAttribute = async function (id, attribute_id) {
+Contact.deleteAttribute = async function(id, attribute_id) {
   try {
-    const response = await new Fetch().delete(`/contacts/${id}/attributes/${attribute_id}`)
+    const response = await new Fetch().delete(
+      `/contacts/${id}/attributes/${attribute_id}`
+    )
 
     return response.body.data
   } catch (e) {
@@ -139,7 +145,7 @@ Contact.deleteAttribute = async function (id, attribute_id) {
 /**
  * get tags
  */
-Contact.getTags = async function () {
+Contact.getTags = async function() {
   try {
     const response = await new Fetch().get('/contacts/tags')
 
@@ -197,7 +203,8 @@ Contact.get = {
 
     return sorted[0]
   },
-  _trim: (text, max) => (text.length < max ? text : `${text.substr(0, max)}...`),
+  _trim: (text, max) =>
+    text.length < max ? text : `${text.substr(0, max)}...`,
   _all: (context, attrs, type) => {
     let list = []
 
@@ -371,11 +378,10 @@ Contact.get = {
       ...list
     }
   },
-  companies: context =>
-    Contact.get._all(context, 'companies', 'company')
+  attribute: ({ contact, name, type }) => Contact.get._all(contact, name, type)
 }
 
-Contact.uplaodCsv = async function (file, fileName = null) {
+Contact.uplaodCsv = async function(file, fileName = null) {
   const title = fileName || file.name
 
   try {
