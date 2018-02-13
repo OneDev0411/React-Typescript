@@ -169,16 +169,16 @@ export const obiectPropsValueToArray = obj =>
   !obj
     ? null
     : Object.keys(obj)
-      .map(p => {
-        const value = obj[p]
+        .map(p => {
+          const value = obj[p]
 
-        if (!value) {
-          return
-        }
+          if (!value) {
+            return
+          }
 
-        return value
-      })
-      .filter(v => v)
+          return value
+        })
+        .filter(v => v)
 
 const normalizedMlsAreas = areas => {
   const areasByParents = {}
@@ -246,16 +246,21 @@ const normalizeValues = (values, options, state) => {
   }
 
   const property_subtypes = obiectPropsValueToArray(values.property_subtypes)
-  const architectural_styles = obiectPropsValueToArray(values.architectural_styles)
+  const architectural_styles = obiectPropsValueToArray(
+    values.architectural_styles
+  )
 
   const multiSelectFields = {}
 
   MULTI_SELECT_FIELDS.forEach(fielld => {
-    multiSelectFields[fielld] = normalizMultiSelectedInputOptions(values[fielld])
+    multiSelectFields[fielld] = normalizMultiSelectedInputOptions(
+      values[fielld]
+    )
   })
 
   const { school_districts, subdivisions, counties } = multiSelectFields
-  const hasAreasOptions = mls_areas || school_districts || subdivisions || counties
+  const hasAreasOptions =
+    mls_areas || school_districts || subdivisions || counties
 
   const points = hasAreasOptions ? null : options.points
 
@@ -277,7 +282,8 @@ const normalizeValues = (values, options, state) => {
     postal_codes,
     minimum_sold_date,
     ...multiSelectFields,
-    ...normalizeNumberValues(values)
+    ...normalizeNumberValues(values),
+    property_types: ['Residential']
   }
 
   const queryOptions = ignoreNullValues(nextOptions)
