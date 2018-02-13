@@ -378,7 +378,8 @@ Contact.get = {
       ...list
     }
   },
-  attribute: ({ contact, name, type }) => Contact.get._all(contact, name, type)
+  attribute: ({ contact, name, type }) => Contact.get._all(contact, name, type),
+  companies: context => Contact.get._all(context, 'companies', 'company')
 }
 
 Contact.uplaodCsv = async function(file, fileName = null) {
