@@ -1,6 +1,7 @@
 import React from 'react'
-import DatePicker from '../../components/date-picker'
 import cn from 'classnames'
+import ClickOutside from 'react-click-outside'
+import DatePicker from '../../components/date-picker'
 import ToolTip from '../../components/tooltip'
 
 export default class Editable extends React.Component {
@@ -40,6 +41,14 @@ export default class Editable extends React.Component {
     }
   }
 
+  cancelEdit(e) {
+    e && e.stopPropagation()
+    this.input.value = this.getValue()
+    this.setState({
+      editMode: false,
+      error: false
+    })
+  }
   onKeyPress(e) {
     if (e.which === 13 || e.keyCode === 13) {
       this.onFinishEditing()
@@ -99,7 +108,7 @@ export default class Editable extends React.Component {
     return value.toString()
   }
 
-  cancelEditing() {
+  removeEditMode() {
     this.setState({
       editMode: false
     })
@@ -124,64 +133,78 @@ export default class Editable extends React.Component {
     }
 
     return (
-      <div className={cn('field editable', { approved, disabled, error })}>
-        <DatePicker
-          show={editMode && isDateType}
-          saveText={needsApproval ? 'Notify Office' : 'Update'}
-          initialDate={this.getValue()}
-          onClose={() => this.cancelEditing()}
-          onSelectDate={date => this.onFinishEditing(date)}
-        />
+      <div
+        className={cn('fact-row', { disabled })}
+        onClick={() => this.editField()}
+      >
+        <div className="name">{field.label}</div>
+        <div className={cn('field editable', { approved, disabled, error })}>
+          <DatePicker
+            show={editMode && isDateType}
+            saveText={needsApproval ? 'Notify Office' : 'Update'}
+            initialDate={this.getValue()}
+            onClose={() => this.removeEditMode()}
+            onSelectDate={date => this.onFinishEditing(date)}
+          />
 
-        <div
-          style={{ display: 'inline-block', minWidth: '80%' }}
-          onClick={() => this.editField()}
-        >
-          {(!editMode || (editMode && isDateType)) && (
-            <ToolTip
-              caption={
-                approved || isBackOffice ? null : 'Pending Office Approval'
-              }
-            >
-              <span style={{ opacity: saving ? 0.8 : 1 }}>{context.value}</span>
-            </ToolTip>
-          )}
-
-          {editMode &&
-            isStringType && (
-              <div className="inline">
-                <input
-                  className="input-edit"
-                  onBlur={() => this.onFinishEditing()}
-                  defaultValue={this.getValue()}
-                  onKeyPress={e => this.onKeyPress(e)}
-                  onChange={e => {
-                    const error =
-                      this.input && !field.validate(field, e.target.value)
-
-                    this.setState({ error })
-                  }}
-                  ref={input => (this.input = input)}
-                  maxLength={15}
-                />
-                <button
-                  className="c-button--shadow"
-                  onClick={() => this.onFinishEditing()}
-                >
-                  SAVE
-                </button>
-              </div>
+          <div style={{ display: 'inline-block', minWidth: '80%' }}>
+            {(!editMode || (editMode && isDateType)) && (
+              <ToolTip
+                caption={
+                  approved || isBackOffice ? null : 'Pending Office Approval'
+                }
+              >
+                <span style={{ opacity: saving ? 0.8 : 1 }}>
+                  {context.value}
+                </span>
+              </ToolTip>
             )}
 
-          <span className="cta">{this.getCtas()}</span>
+            {editMode &&
+              isStringType && (
+                <ClickOutside
+                  onClickOutside={() => this.onFinishEditing()}
+                  className="inline"
+                >
+                  <input
+                    className="input-edit"
+                    defaultValue={this.getValue()}
+                    onKeyPress={e => this.onKeyPress(e)}
+                    onChange={e => {
+                      const error =
+                        this.input && !field.validate(field, e.target.value)
+
+                      this.setState({ error })
+                    }}
+                    ref={input => (this.input = input)}
+                    maxLength={15}
+                  />
+                  <button
+                    className="c-button--shadow"
+                    onClick={e => {
+                      e.stopPropagation()
+                      this.onFinishEditing()
+                    }}
+                  >
+                    SAVE
+                  </button>
+                  <button
+                    className="c-button--shadow ico-remove fa fa-times-circle"
+                    onClick={e => this.cancelEdit(e)}
+                  />
+                </ClickOutside>
+              )}
+
+            <span className="cta">{this.getCtas()}</span>
+          </div>
+          {saving &&
+            saving === field.name && (
+              <i
+                className="fa fa-spin fa-spinner"
+                style={{ display: 'inline-block', marginLeft: '0.5rem' }}
+              />
+            )}
         </div>
-        {saving &&
-          saving === field.name && (
-            <i
-              className="fa fa-spin fa-spinner"
-              style={{ display: 'inline-block', marginLeft: '0.5rem' }}
-            />
-          )}
       </div>
     )
   }

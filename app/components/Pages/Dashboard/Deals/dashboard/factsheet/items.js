@@ -61,8 +61,7 @@ class Table extends React.Component {
 
               return (
                 <div key={`CRITICAL_DATE_${field.name}`}>
-                  <div className={cn('fact-row', { disabled })}>
-                    <div className="name">{field.label}</div>
+
 
                     <Editable
                       field={field}
@@ -74,7 +73,6 @@ class Table extends React.Component {
                       needsApproval={!isBackOffice && field.needs_approval}
                       onChange={(field, value) => this.onChangeContext(field, value)}
                     />
-                  </div>
 
                   <div className="approve-row">
                     {isBackOffice &&
