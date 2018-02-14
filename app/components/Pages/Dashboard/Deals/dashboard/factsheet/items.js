@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import cn from 'classnames'
 import _ from 'underscore'
 import Deal from '../../../../../../models/Deal'
 import Editable from './inline-edit'
@@ -42,9 +41,7 @@ class Table extends React.Component {
 
   render() {
     const { saving } = this.state
-    const {
-      table, deal, isBackOffice, showTitle, title, getValue
-    } = this.props
+    const { table, deal, isBackOffice, showTitle, title, getValue } = this.props
 
     return (
       <div>
@@ -61,18 +58,18 @@ class Table extends React.Component {
 
               return (
                 <div key={`CRITICAL_DATE_${field.name}`}>
-
-
-                    <Editable
-                      field={field}
-                      saving={saving}
-                      context={fieldCtx}
-                      disabled={disabled}
-                      approved={approved}
-                      isBackOffice={isBackOffice}
-                      needsApproval={!isBackOffice && field.needs_approval}
-                      onChange={(field, value) => this.onChangeContext(field, value)}
-                    />
+                  <Editable
+                    field={field}
+                    saving={saving}
+                    context={fieldCtx}
+                    disabled={disabled}
+                    approved={approved}
+                    isBackOffice={isBackOffice}
+                    needsApproval={!isBackOffice && field.needs_approval}
+                    onChange={(field, value) =>
+                      this.onChangeContext(field, value)
+                    }
+                  />
 
                   <div className="approve-row">
                     {isBackOffice &&

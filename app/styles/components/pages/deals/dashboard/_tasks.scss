@@ -44,6 +44,13 @@
   font-size: 13px;
   font-weight: 500;
   color: #62778c;
+  display: inline-block;
+  &.hide{
+    display: none;
+  }
+  &.right{
+    margin-left: 20px;
+  }
   &:focus {
     outline: none;
   }
