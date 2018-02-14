@@ -1,10 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Field, formValueSelector } from 'redux-form'
-import { obiectPropsValueToArray } from '../../../../../../../../store_actions/listings/search/filters/submit-filters-form'
+import { getObjectValues } from '../../../../../../../../store_actions/listings/search/filters/submit-filters-form'
 import toggleAll from '../../../../../../../../store_actions/listings/search/filters/toggle-all'
-
-import Label from './Label'
 
 const selector = formValueSelector('filters')
 
@@ -14,7 +12,7 @@ const arraysIsSame = (array1, array2) =>
   array1.length === array2.length &&
   array1.every((element, index) => element === array2[index])
 
-const Tags = ({ name, label, fields, selectAllValue, selectedTags, toggleAll }) => (
+const Tags = ({ name, label, fields, selectAllValue, toggleAll }) => (
   <div style={{ marginBottom: '3rem' }}>
     <div className="c-filters__tags__header clearfix">
       <span className="c-filters__tags__title">{label}</span>
@@ -63,8 +61,8 @@ export default connect(
   (state, { name, fields }) => {
     const selectedTags = selector(state, name)
     const selectAllValue = arraysIsSame(
-      obiectPropsValueToArray(selectedTags),
-      obiectPropsValueToArray(fields)
+      getObjectValues(selectedTags),
+      getObjectValues(fields)
     )
 
     return {
