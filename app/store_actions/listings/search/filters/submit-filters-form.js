@@ -272,6 +272,8 @@ const normalizeValues = (values, options, state) => {
     const minimum_sold_date = getSoldDate(Number(values.minimum_sold_date))
 
     nextOptions = Object.assign(nextOptions, { minimum_sold_date })
+  } else if (nextOptions.minimum_sold_date) {
+    delete nextOptions.minimum_sold_date
   }
 
   const queryOptions = ignoreNullValues(nextOptions)
