@@ -33,9 +33,9 @@ class CommentCreate extends React.Component {
 
   /**
    * post comment,
-   * also change needs_attention flag and change status of task if requests by BO
+   * also change attention_requested flag and change status of task if requests by BO
    */
-  async sendComment(needs_attention = null, task_status = null) {
+  async sendComment(attention_requested = null, task_status = null) {
     const {
       task, user, changeTaskStatus, changeNeedsAttention, notify
     } = this.props
@@ -60,8 +60,8 @@ class CommentCreate extends React.Component {
     })
 
     try {
-      if (needs_attention !== null) {
-        await changeNeedsAttention(task.deal, task.id, needs_attention)
+      if (attention_requested !== null) {
+        await changeNeedsAttention(task.deal, task.id, attention_requested)
       }
 
       if (task_status !== null) {
