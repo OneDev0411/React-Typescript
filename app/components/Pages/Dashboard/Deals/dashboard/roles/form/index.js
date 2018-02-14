@@ -200,7 +200,7 @@ export default class Form extends React.Component {
       legal_middle_name: name => this.isValidName(name),
       phone_number: phoneNumber =>
         phoneNumber && this.isValidPhoneNumber(phoneNumber),
-      company_title: name => this.isValidName(name, /^['A-Za-z\s]+$/),
+      company_title: name => this.isValidName(name, /^['0-9A-Za-z\s]+$/),
       commission_percentage: value => value && this.validateCommission(value),
       commission_dollar: value => value && this.validateCommission(value)
     }
