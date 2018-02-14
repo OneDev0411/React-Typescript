@@ -89,11 +89,11 @@ class ListingCard extends React.Component {
     const context = {}
     const indexedContexts = _.indexBy(contexts, 'name')
 
-    _.each(address_components, item => {
-      const { needs_approval } = indexedContexts[item]
+    _.each(address_components, (value, contextName) => {
+      const { needs_approval } = indexedContexts[contextName]
 
-      context[item] = {
-        value: address_components[item],
+      context[contextName] = {
+        value: address_components[contextName],
         approved: isBackOffice ? true : !needs_approval
       }
     })
