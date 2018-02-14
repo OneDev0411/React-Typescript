@@ -169,6 +169,15 @@
           background-color: #2196f3;
         }
       }
+      &.second-color {
+        color: #f6a623;
+        border-color: #f6a623;
+        margin-right: 20px;
+        &:hover {
+          color: #fff;
+          background-color: #f6a623;
+        }
+      }
     }
   }
 }

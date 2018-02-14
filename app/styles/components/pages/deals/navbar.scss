@@ -18,6 +18,11 @@
     i {
       margin-right: 10px;
     }
+
+    &:hover {
+      color: #1c72b9;
+      text-decoration: none;
+    }
   }
 
   .ctas {
@@ -42,6 +47,7 @@
 
       &:hover {
         background-color: #f1f7fb;
+        text-decoration: none;
       }
     }
     .btn-deal {

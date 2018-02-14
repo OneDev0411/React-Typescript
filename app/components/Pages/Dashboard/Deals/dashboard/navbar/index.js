@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { Link } from 'react-router'
 import { showAttachments } from '../../../../../../store_actions/deals'
 import BulkSubmit from '../bulk-submit'
 
@@ -9,18 +9,8 @@ class NavBar extends React.Component {
     super(props)
   }
 
-  goBack() {
-    browserHistory.push('/dashboard/deals')
-  }
-
   getSignatures() {
     this.props.showAttachments()
-  }
-
-  openUploadDialog() {
-    const { deal } = this.props
-
-    browserHistory.push(`/dashboard/deals/${deal.id}/files`)
   }
 
   render() {
@@ -28,31 +18,33 @@ class NavBar extends React.Component {
 
     return (
       <div className="deal-navbar">
-        <div className="back" onClick={() => this.goBack()}>
+        <Link className="back" to="/dashboard/deals">
           <i className="fa fa-chevron-left" />
           Deals
-        </div>
+        </Link>
 
         {deal.checklists && (
           <div className="ctas">
             {deal.deal_type === 'Selling' && (
-              <button
+              <Link
                 className="navbar-button"
-                onClick={() =>
-                  browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)
-                }
+                to={`/dashboard/deals/${deal.id}/create-offer`}
               >
                 Add New Offer
-              </button>
+              </Link>
             )}
-            <button
+
+            <Link
               className="navbar-button"
-              onClick={() => this.openUploadDialog()}
+              to={`/dashboard/deals/${deal.id}/files`}
             >
               View & Upload Files
-            </button>
+            </Link>
 
-            <button className="navbar-button" onClick={() => this.getSignatures()}>
+            <button
+              className="navbar-button"
+              onClick={() => this.getSignatures()}
+            >
               Get Signatures
             </button>
 

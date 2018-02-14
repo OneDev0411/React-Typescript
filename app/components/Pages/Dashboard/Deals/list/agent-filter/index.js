@@ -25,7 +25,7 @@ const FILTER_ARCHIVE = [
 
 const filters = {
   All: (status, deal) => !deal.deleted_at,
-  Active: (status, deal) =>
+  Listings: (status, deal) =>
     FILTER_ACTIVE.indexOf(status) > -1 && !deal.deleted_at,
   Pending: (status, deal) =>
     FILTER_PENDING.indexOf(status) > -1 && !deal.deleted_at,
