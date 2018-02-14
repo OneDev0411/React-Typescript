@@ -1,9 +1,9 @@
 import React from 'react'
-import { compose, withState, pure } from 'recompose'
+import { compose, withState } from 'recompose'
 import Editable from '../Editable'
 import moment from 'moment'
 
-const enhance = compose(pure, withState('errorIdItems', 'setErrorIdItem', []))
+const enhance = compose(withState('errorIdItems', 'setErrorIdItem', []))
 
 const BirthdayComponent = ({
   birthdays,
@@ -30,48 +30,48 @@ const BirthdayComponent = ({
     }
   }
 
-  return (
-    <div>
-      {birthdays.map((item, key) => (
-        <li key={`birthday_${key}`}>
-          <div className="name">Birthday</div>
-          <div className="data">
-            <Editable
-              type="birthday"
-              id={item.id}
-              placeholder="mm / dd / yyyy"
-              showEdit
-              showAdd={false}
-              text={moment(item.birthday * 1000).format('L')}
-              onChange={onChangeBirthday}
-              validate={validate}
-              error={errorIdItems.indexOf(key) > -1}
-              index={key}
-            />
-          </div>
-        </li>
-      ))}
-
-      {birthdays.length === 0 && (
-        <li>
-          <div className="name">Birthday</div>
-          <div className="data">
-            <Editable
-              type="birthday"
-              id={null}
-              showEdit
-              showAdd={false}
-              text="-"
-              onChange={onChangeBirthday}
-              validate={validate}
-              error={errorIdItems.indexOf('new') > -1}
-              index="new"
-            />
-          </div>
-        </li>
-      )}
-    </div>
+  let birthdayItems = (
+    <li>
+      <div className="name">Birthday</div>
+      <div className="data">
+        <Editable
+          type="birthday"
+          id={null}
+          showEdit
+          showAdd={false}
+          text="-"
+          onChange={onChangeBirthday}
+          validate={validate}
+          error={errorIdItems.indexOf('new') > -1}
+          index="new"
+        />
+      </div>
+    </li>
   )
+
+  if (birthdays.length > 0) {
+    birthdayItems = birthdays.map((item, key) => (
+      <li key={`CONTACT__BIRTHDAY__${item.id}`}>
+        <div className="name">Birthday</div>
+        <div className="data">
+          <Editable
+            type="birthday"
+            id={item.id}
+            placeholder="mm / dd / yyyy"
+            showEdit
+            showAdd={false}
+            text={moment(item.birthday * 1000).format('L')}
+            onChange={onChangeBirthday}
+            validate={validate}
+            error={errorIdItems.indexOf(key) > -1}
+            index={key}
+          />
+        </div>
+      </li>
+    ))
+  }
+
+  return birthdayItems
 }
 
 export default enhance(BirthdayComponent)

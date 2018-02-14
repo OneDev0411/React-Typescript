@@ -6,7 +6,10 @@ import {
   updateDeal,
   dealArchived
 } from '../../../../../store_actions/deals'
-import { getActiveTeamACL, getActiveTeamId } from '../../../../../utils/user-teams'
+import {
+  getActiveTeamACL,
+  getActiveTeamId
+} from '../../../../../utils/user-teams'
 
 export default class DealSocket extends Socket {
   constructor(user) {

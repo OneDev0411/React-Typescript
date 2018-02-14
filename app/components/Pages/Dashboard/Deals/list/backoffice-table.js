@@ -28,9 +28,21 @@ class BackOfficeTable extends BaseTable {
         className: 'col-md-1 hidden-xs',
         getText: deal => this.getStatus(deal),
         getValue: deal => Deal.get.status(deal),
-        sortByList: ['Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
-          'Active Contingent', 'Active Kick Out', 'Pending', 'Sold', 'Leased',
-          'Expired', 'Temp Off Market', 'Cancelled', 'Withdrawn']
+        sortByList: [
+          'Incoming',
+          'Coming Soon',
+          'Active',
+          'Active Option Contract',
+          'Active Contingent',
+          'Active Kick Out',
+          'Pending',
+          'Sold',
+          'Leased',
+          'Expired',
+          'Temp Off Market',
+          'Cancelled',
+          'Withdrawn'
+        ]
       },
       property_type: {
         caption: 'PROPERTY TYPE',
@@ -42,8 +54,8 @@ class BackOfficeTable extends BaseTable {
         caption: 'AGENT NAME',
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: deal => deal.created_by ? deal.created_by.display_name : '',
-        getValue: deal => deal.created_by ? deal.created_by.display_name : ''
+        getText: deal => (deal.created_by ? deal.created_by.display_name : ''),
+        getValue: deal => (deal.created_by ? deal.created_by.display_name : '')
       },
       office: {
         caption: 'OFFICE',
@@ -74,6 +86,7 @@ class BackOfficeTable extends BaseTable {
    */
   getOffice(deal) {
     const brand = this.flattenBrand(deal.brand)
+
     return brand && brand.messages ? brand.messages.branch_title : 'N/A'
   }
 
@@ -92,8 +105,7 @@ class BackOfficeTable extends BaseTable {
     }
 
     if (task.review.updated_at) {
-      text += moment.unix(task.review.updated_at)
-        .format('MMMM DD, HH:mm')
+      text += moment.unix(task.review.updated_at).format('MMMM DD, HH:mm')
     }
 
     return text
@@ -126,9 +138,12 @@ class BackOfficeTable extends BaseTable {
   }
 }
 
-export default connect(({ deals, chatroom }) => ({
-  tasks: deals.tasks,
-  checklists: deals.checklists,
-  roles: deals.roles,
-  rooms: chatroom.rooms
-}), { closeEsignWizard, setSelectedTask })(BackOfficeTable)
+export default connect(
+  ({ deals, chatroom }) => ({
+    tasks: deals.tasks,
+    checklists: deals.checklists,
+    roles: deals.roles,
+    rooms: chatroom.rooms
+  }),
+  { closeEsignWizard, setSelectedTask }
+)(BackOfficeTable)

@@ -40,8 +40,7 @@ class Upload extends React.Component {
    * handle paste file from clipboard
    */
   onPasteFile(event) {
-    const files = (event.clipboardData || event.originalEvent.clipboardData)
-      .files
+    const { files } = event.clipboardData || event.originalEvent.clipboardData
 
     this.onDrop(files)
   }
@@ -66,20 +65,22 @@ class Upload extends React.Component {
     // create temporary message
     let { qid, message } = this.createTemporaryMessage(roomId, files)
 
-    files.forEach(async (file, index) => {
-      // update message
-      message = this.updateMessage(roomId, message, {
-        index,
-        current: file
+    await Promise.all(
+      files.map(async (file, index) => {
+        // update message
+        message = this.updateMessage(roomId, message, {
+          index,
+          current: file
+        })
+
+        // upload file
+        const fileId = await this.uploadFile(roomId, file)
+
+        if (fileId) {
+          attachments.push(fileId)
+        }
       })
-
-      // upload file
-      const fileId = await this.uploadFile(roomId, file)
-
-      if (fileId) {
-        attachments.push(fileId)
-      }
-    })
+    )
 
     // update message
     this.updateMessage(roomId, message, {

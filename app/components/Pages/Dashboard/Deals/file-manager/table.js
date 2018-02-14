@@ -15,6 +15,7 @@ import { confirmation } from '../../../../../store_actions/confirmation'
 import Radio from '../components/radio'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import Search from '../../../../Partials/headerSearch'
+import Upload from '../dashboard/upload'
 
 export class FileManager extends React.Component {
   constructor(props) {
@@ -82,16 +83,18 @@ export class FileManager extends React.Component {
         const task = tasks[tId]
         const attachments = task.room.attachments || []
 
-        attachments.filter(file => this.applyFilter(file, task)).forEach(file => {
-          files.push({
-            ...file,
-            taskId: task.id,
-            task: task.title
+        attachments
+          .filter(file => this.applyFilter(file, task))
+          .forEach(file => {
+            files.push({
+              ...file,
+              taskId: task.id,
+              task: task.title
+            })
           })
-        })
       })
     })
-    
+
     return files
   }
 
@@ -214,9 +217,11 @@ export class FileManager extends React.Component {
   openFile(file) {
     const { deal } = this.props
 
-    browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${file.taskId}/attachment/${
-      file.id
-    }?backTo=files`)
+    browserHistory.push(
+      `/dashboard/deals/${deal.id}/form-viewer/${file.taskId}/attachment/${
+        file.id
+      }?backTo=files`
+    )
   }
 
   getColumns(rows) {
@@ -284,7 +289,11 @@ export class FileManager extends React.Component {
         className: 'td--dropdown-container',
         width: 30,
         Cell: ({ original: file }) => (
-          <Dropdown id={`file_${file.id}`} className="deal-file-cta-menu" pullRight>
+          <Dropdown
+            id={`file_${file.id}`}
+            className="deal-file-cta-menu"
+            pullRight
+          >
             <Button
               onClick={e => e.stopPropagation()}
               className="cta-btn btn-link"
@@ -314,14 +323,17 @@ export class FileManager extends React.Component {
 
   render() {
     const { filter, isDeleting, selectedRows } = this.state
+    const { deal } = this.props
     const data = this.getAllFiles()
 
     if (data.length === 0 && filter.length === 0) {
       return (
-        <div className="empty-table">
-          <img src="/static/images/deals/files.svg" alt="" />
-          No uploaded files in this deal
-        </div>
+        <Upload disableClick deal={deal}>
+          <div className="empty-table">
+            <img src="/static/images/deals/files.svg" alt="" />
+            No uploaded files in this deal
+          </div>
+        </Upload>
       )
     }
 
@@ -349,32 +361,38 @@ export class FileManager extends React.Component {
           )}
 
           {_.some(selectedRows, file => this.isPdfDocument(file.mime)) && (
-            <button className="button" onClick={() => this.splitMultipleFiles()}>
+            <button
+              className="button"
+              onClick={() => this.splitMultipleFiles()}
+            >
               Split PDFs
             </button>
           )}
         </div>
+
         {data.length === 0 && filter.length !== 0 ? (
           <div className="empty-table" style={{ marginTop: '10vh' }}>
             <img src="/static/images/deals/files.svg" alt="" />
             No uploaded file found.
           </div>
         ) : (
-          <ReactTable
-            showPagination={false}
-            data={data}
-            pageSize={data.length}
-            columns={this.getColumns(data)}
-            getTdProps={this.onCellClick}
-            defaultSorted={[
-              {
-                id: 'created_at',
-                desc: true
-              }
-            ]}
-            sortable
-            resizable
-          />
+          <Upload disableClick deal={deal}>
+            <ReactTable
+              showPagination={false}
+              data={data}
+              pageSize={data.length}
+              columns={this.getColumns(data)}
+              getTdProps={this.onCellClick}
+              defaultSorted={[
+                {
+                  id: 'created_at',
+                  desc: true
+                }
+              ]}
+              sortable
+              resizable
+            />
+          </Upload>
         )}
       </Fragment>
     )

@@ -58,8 +58,8 @@ export default class Commission extends React.Component {
    * get commission type
    */
   getCommissionType(form) {
-    if (form.isNewRecord) {
-      return '$'
+    if (!form.commission_percentage && !form.commission_dollar) {
+      return '%'
     }
 
     return form.commission_percentage ? '%' : '$'

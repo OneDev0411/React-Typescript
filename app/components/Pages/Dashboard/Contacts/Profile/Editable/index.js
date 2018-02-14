@@ -22,10 +22,10 @@ class Editable extends React.Component {
   }
 
   onClickAdd() {
-    const { onAdd, type } = this.props
+    const { onAdd, type, attributeName } = this.props
 
     if (onAdd) {
-      onAdd(type)
+      onAdd({ attributeName, attributeType: type })
     }
   }
 

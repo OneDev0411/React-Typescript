@@ -76,26 +76,44 @@ export function getFactsheetSection(deal, name) {
       deal.property_type,
       hasActiveOffer,
       'show_on_fact_sheet'
-    ))
+    )
+  )
 }
 
 /**
  * return context items
  */
 export function getItems(deal_type, property_type, hasActiveOffer = false) {
-  const requiredFields = getRequiredItems(deal_type, property_type, hasActiveOffer)
-  const optionalFields = getOptionalItems(deal_type, property_type, hasActiveOffer)
+  const requiredFields = getRequiredItems(
+    deal_type,
+    property_type,
+    hasActiveOffer
+  )
+  const optionalFields = getOptionalItems(
+    deal_type,
+    property_type,
+    hasActiveOffer
+  )
 
-  return [].concat(requiredFields, optionalFields)
+  const sortTable = _.pluck(getList(), 'name')
+
+  return _.sortBy([].concat(requiredFields, optionalFields), field =>
+    sortTable.indexOf(field.name)
+  )
 }
 
 /**
  * return required context
  */
-export function getRequiredItems(deal_type, property_type, hasActiveOffer = false) {
+export function getRequiredItems(
+  deal_type,
+  property_type,
+  hasActiveOffer = false
+) {
   return getList()
     .filter(ctx =>
-      filterByFlags(ctx, deal_type, property_type, hasActiveOffer, 'required'))
+      filterByFlags(ctx, deal_type, property_type, hasActiveOffer, 'required')
+    )
     .map(ctx => ({
       ...ctx,
       validate,
@@ -106,10 +124,15 @@ export function getRequiredItems(deal_type, property_type, hasActiveOffer = fals
 /**
  * return optional context
  */
-export function getOptionalItems(deal_type, property_type, hasActiveOffer = false) {
+export function getOptionalItems(
+  deal_type,
+  property_type,
+  hasActiveOffer = false
+) {
   return getList()
     .filter(ctx =>
-      filterByFlags(ctx, deal_type, property_type, hasActiveOffer, 'optional'))
+      filterByFlags(ctx, deal_type, property_type, hasActiveOffer, 'optional')
+    )
     .map(ctx => ({
       ...ctx,
       validate,

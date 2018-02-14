@@ -37,6 +37,7 @@
       flex-direction: row;
       min-height: 30px;
       align-items: center;
+      cursor: pointer;
 
       &:not(.disabled):hover {
         border: 1px dashed #2196f3;
@@ -106,7 +107,7 @@
 
         .input-edit {
           display: inline-block;
-          width: 80%;
+          width: calc(100% - 56px);
           height: 20px;
           margin-right: 3px;
           border: none;
