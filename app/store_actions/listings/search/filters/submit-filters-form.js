@@ -165,20 +165,10 @@ const ignoreNullValues = values => {
   return withoutNullValues
 }
 
-export const obiectPropsValueToArray = obj =>
-  !obj
-    ? null
-    : Object.keys(obj)
-        .map(p => {
-          const value = obj[p]
-
-          if (!value) {
-            return
-          }
-
-          return value
-        })
-        .filter(v => v)
+export const getObjectValues = obj =>
+  obj != null && Object.keys(obj).length > 0
+    ? Object.values(obj).filter(i => i)
+    : []
 
 const normalizedMlsAreas = areas => {
   const areasByParents = {}
@@ -221,11 +211,12 @@ const normalizMultiSelectedInputOptions = options => {
 }
 
 const normalizeValues = (values, options, state) => {
+  const open_house = !!values.open_house
+
   const { mlsAreas = [], mlsSubareas = [] } = values
   const mls_areas = normalizedMlsAreas([...mlsAreas, ...mlsSubareas])
 
-  const listing_statuses = obiectPropsValueToArray(values.listing_statuses)
-  const open_house = !!values.open_house
+  const listing_statuses = getObjectValues(values.listing_statuses)
 
   if (listing_statuses.length === 0) {
     let alertMsg = 'Please select at least one listing status.'
@@ -238,17 +229,10 @@ const normalizeValues = (values, options, state) => {
     })
   }
 
-  let minimum_sold_date
   const pool = normalizPoolValue(values.pool)
 
-  if (values.listing_statuses.sold) {
-    minimum_sold_date = getSoldDate(Number(values.minimum_sold_date))
-  }
-
-  const property_subtypes = obiectPropsValueToArray(values.property_subtypes)
-  const architectural_styles = obiectPropsValueToArray(
-    values.architectural_styles
-  )
+  const property_subtypes = getObjectValues(values.property_subtypes)
+  const architectural_styles = getObjectValues(values.architectural_styles)
 
   const multiSelectFields = {}
 
@@ -270,7 +254,7 @@ const normalizeValues = (values, options, state) => {
     postal_codes = null
   }
 
-  const nextOptions = {
+  let nextOptions = {
     ...options,
     points,
     listing_statuses,
@@ -280,10 +264,16 @@ const normalizeValues = (values, options, state) => {
     mls_areas,
     pool,
     postal_codes,
-    minimum_sold_date,
     ...multiSelectFields,
-    ...normalizeNumberValues(values),
-    property_types: ['Residential']
+    ...normalizeNumberValues(values)
+  }
+
+  if (values.listing_statuses.sold) {
+    const minimum_sold_date = getSoldDate(Number(values.minimum_sold_date))
+
+    nextOptions = Object.assign(nextOptions, { minimum_sold_date })
+  } else if (nextOptions.minimum_sold_date) {
+    delete nextOptions.minimum_sold_date
   }
 
   const queryOptions = ignoreNullValues(nextOptions)
@@ -306,7 +296,10 @@ const normalizeValues = (values, options, state) => {
   // console.log('queryOptions:', queryOptions)
   // console.groupEnd()
 
-  return queryOptions
+  return {
+    ...queryOptions,
+    property_types: ['Residential']
+  }
 }
 
 const submitFiltersForm = values => async (dispatch, getState) => {
