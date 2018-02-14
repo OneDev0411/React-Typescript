@@ -57,12 +57,12 @@ export default (state = null, action) => {
         }
       }
 
-    case types.CHANGE_NEEDS_ATTENTION:
+    case types.CHANGE_ATTENTION_REQUESTED:
       return {
         ...state,
         [action.taskId]: {
           ...state[action.taskId],
-          needs_attention: action.status
+          attention_requested: action.status
         }
       }
 

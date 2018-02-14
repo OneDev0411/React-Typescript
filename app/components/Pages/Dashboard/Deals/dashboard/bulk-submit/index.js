@@ -31,7 +31,7 @@ class BulkSubmit extends React.Component {
   toggleSelectTask(task) {
     const { selectedTasks } = this.state
 
-    if (task.needs_attention === true) {
+    if (task.attention_requested === true) {
       return false
     }
 
@@ -54,7 +54,7 @@ class BulkSubmit extends React.Component {
 
     const tasks = selectedTasks.map(id => ({
       id,
-      needs_attention: true
+      attention_requested: true
     }))
 
     this.setState({ saving: true, isFailed: false })
@@ -116,18 +116,18 @@ class BulkSubmit extends React.Component {
                     {(checklist.tasks || []).map(tId => {
                       const task = tasks[tId]
                       const hasStatus =
-                        task.review !== null || task.needs_attention === true
+                        task.review !== null || task.attention_requested === true
 
                       return (
                         <div
                           key={tId}
                           className={cn('task', {
-                            disabled: task.needs_attention === true
+                            disabled: task.attention_requested === true
                           })}
                           onClick={() => this.toggleSelectTask(task)}
                         >
                           <div className="icon">
-                            {task.needs_attention !== true && (
+                            {task.attention_requested !== true && (
                               <CheckBox
                                 selected={selectedTasks.indexOf(task.id) > -1}
                               />

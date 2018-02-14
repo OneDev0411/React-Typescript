@@ -66,7 +66,7 @@ export default function Details({
         />
 
         <Jobs
-          items={Contact.get.attribute({
+          jobs={Contact.get.attribute({
             contact,
             name: 'job_titles',
             type: 'job_title'

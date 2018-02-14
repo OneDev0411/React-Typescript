@@ -24,7 +24,7 @@ function changeStatus(taskId, status) {
 
 function needsAttention(taskId, status) {
   return {
-    type: types.CHANGE_NEEDS_ATTENTION,
+    type: types.CHANGE_ATTENTION_REQUESTED,
     taskId,
     status
   }
