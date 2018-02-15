@@ -76,7 +76,7 @@ export class AgentFilter extends React.Component {
       case 'Archive':
         tooltip = FILTER_ARCHIVE
         break
-      case 'Active':
+      case 'Listings':
         tooltip = FILTER_ACTIVE
         break
       default:
