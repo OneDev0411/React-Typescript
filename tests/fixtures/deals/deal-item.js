@@ -16988,7 +16988,7 @@ export default {
   "inboxes": [
     "Contract"
   ],
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }

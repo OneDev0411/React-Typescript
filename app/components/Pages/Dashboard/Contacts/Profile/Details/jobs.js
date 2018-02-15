@@ -11,7 +11,7 @@ export default ({ jobs, onChangeAttribute, onAddAttribute }) => {
       {jobs.length > 0 ? (
         jobs.map(item => (
           <li key={`job__${item.id}`}>
-            <div className="name">Jobs</div>
+            <div className="name">Job Title</div>
             <div className="data">
               <Editable
                 type="job_title"
@@ -28,7 +28,7 @@ export default ({ jobs, onChangeAttribute, onAddAttribute }) => {
         ))
       ) : (
         <li>
-          <div className="name">Jobs</div>
+          <div className="name">Job Title</div>
           <div className="data">
             <Editable
               type="job_title"

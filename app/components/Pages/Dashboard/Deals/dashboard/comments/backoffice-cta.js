@@ -7,7 +7,7 @@ export default ({
   task, onSendComment, hasComment, isSaving
 }) => {
   const status = task.review ? task.review.status : ''
-  const { needs_attention } = task
+  const { attention_requested } = task
   const isDeclined = status === 'Declined'
   const isApproved = status === 'Approved'
   const isNotReviewed = !isDeclined && !isApproved
@@ -20,7 +20,7 @@ export default ({
             <span
               className={cn('cta-btn decline', { isActive: isDeclined })}
               onClick={() =>
-                onSendComment(needs_attention ? false : null, 'Declined')
+                onSendComment(attention_requested ? false : null, 'Declined')
               }
             >
               <i className="ico fa fa-times" />
@@ -31,7 +31,7 @@ export default ({
             <span
               className={cn('cta-btn approve', { isActive: isApproved })}
               onClick={() =>
-                onSendComment(needs_attention ? false : null, 'Approved')
+                onSendComment(attention_requested ? false : null, 'Approved')
               }
             >
               <i className="ico fa fa-check" />
@@ -41,10 +41,10 @@ export default ({
           <ToolTip caption="Not Reviewed">
             <span
               className={cn('cta-btn no-status', {
-                isActive: isNotReviewed && needs_attention !== true
+                isActive: isNotReviewed && attention_requested !== true
               })}
               onClick={() =>
-                onSendComment(needs_attention ? false : null, 'Incomplete')
+                onSendComment(attention_requested ? false : null, 'Incomplete')
               }
             >
               <span className="ico circle" />

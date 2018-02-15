@@ -52,7 +52,7 @@ const AgentCta = ({
 
   return (
     <Fragment>
-      {task.needs_attention && (
+      {task.attention_requested && (
         <Button
           className="deal-button enabled add-comment second-color"
           disabled={isSaving}

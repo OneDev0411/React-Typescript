@@ -1,7 +1,8 @@
 import React from 'react'
 import { Modal, Button, FormControl } from 'react-bootstrap'
-import Deal from '../../../../../models/Deal'
 import cn from 'classnames'
+import _ from 'underscore'
+import Deal from '../../../../../models/Deal'
 
 export default class extends React.Component {
   constructor(props) {
@@ -44,10 +45,44 @@ export default class extends React.Component {
     return Deal.get.field(deal, field) || ''
   }
 
+  getAddressComponent() {
+    const {
+      street_number,
+      street_name,
+      city,
+      state,
+      unit_number,
+      postal_code
+    } = this.state
+
+    const full_address = [
+      street_number || '',
+      street_name || '',
+      unit_number ? `, Unit ${unit_number},` : '',
+      city ? `, ${city}` : '',
+      state ? `, ${state}` : '',
+      postal_code ? `, ${postal_code}` : ''
+    ]
+      .join(' ')
+      .trim()
+      .replace(/(\s)+,/gi, ',')
+      .replace(/,,/gi, ',')
+
+    return {
+      street_number,
+      street_name,
+      unit_number,
+      city,
+      state,
+      postal_code,
+      full_address
+    }
+  }
+
   onAdd() {
     this.props.onCreateAddress({
       type: 'listing',
-      address_components: this.state
+      address_components: this.getAddressComponent()
     })
 
     this.clearStates()
@@ -76,6 +111,26 @@ export default class extends React.Component {
     )
   }
 
+  areValuesChanged() {
+    const {
+      street_number,
+      street_name,
+      unit_number,
+      city,
+      state,
+      postal_code
+    } = this.state
+
+    return (
+      street_number !== this.getAddressField('street_number') ||
+      street_name !== this.getAddressField('street_name') ||
+      unit_number !== this.getAddressField('unit_number') ||
+      city !== this.getAddressField('city') ||
+      state !== this.getAddressField('state') ||
+      postal_code !== this.getAddressField('postal_code')
+    )
+  }
+
   render() {
     const { show, deal, saving } = this.props
     const {
@@ -89,6 +144,8 @@ export default class extends React.Component {
 
     const isPostalCodeValid =
       !postal_code || this.postalCodePattern.test(postal_code)
+
+    const valuesChanged = this.areValuesChanged()
 
     return (
       <Modal
@@ -150,7 +207,7 @@ export default class extends React.Component {
                 bsStyle="primary"
                 style={{ margin: '20px' }}
                 onClick={() => this.onAdd()}
-                disabled={saving || !this.isValidated()}
+                disabled={saving || !this.isValidated() || !valuesChanged}
               >
                 {deal ? 'Update Address' : 'Add'}
               </Button>

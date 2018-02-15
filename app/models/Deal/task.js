@@ -77,7 +77,7 @@ export async function needsAttention(deal_id, task_id, status) {
   return bulkSubmit(deal_id, [
     {
       id: task_id,
-      needs_attention: status
+      attention_requested: status
     }
   ])
 }
