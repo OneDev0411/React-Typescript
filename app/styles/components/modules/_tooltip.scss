@@ -1,0 +1,11 @@
+.rechat-tooltip {
+  &.is-customized {
+    .tooltip-arrow {
+      display: none;
+    }
+
+    .tooltip-inner {
+      background-color: transparent !important;
+    }
+  }
+}
