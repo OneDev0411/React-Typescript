@@ -111,7 +111,7 @@ export default class extends React.Component {
     )
   }
 
-  areValuesChanged() {
+  areValuesChanged(deal) {
     const {
       street_number,
       street_name,
@@ -122,12 +122,12 @@ export default class extends React.Component {
     } = this.state
 
     return (
-      street_number !== this.getAddressField('street_number') ||
-      street_name !== this.getAddressField('street_name') ||
-      unit_number !== this.getAddressField('unit_number') ||
-      city !== this.getAddressField('city') ||
-      state !== this.getAddressField('state') ||
-      postal_code !== this.getAddressField('postal_code')
+      street_number !== this.getAddressField(deal, 'street_number') ||
+      street_name !== this.getAddressField(deal, 'street_name') ||
+      unit_number !== this.getAddressField(deal, 'unit_number') ||
+      city !== this.getAddressField(deal, 'city') ||
+      state !== this.getAddressField(deal, 'state') ||
+      postal_code !== this.getAddressField(deal, 'postal_code')
     )
   }
 
@@ -144,8 +144,6 @@ export default class extends React.Component {
 
     const isPostalCodeValid =
       !postal_code || this.postalCodePattern.test(postal_code)
-
-    const valuesChanged = this.areValuesChanged()
 
     return (
       <Modal
@@ -207,7 +205,9 @@ export default class extends React.Component {
                 bsStyle="primary"
                 style={{ margin: '20px' }}
                 onClick={() => this.onAdd()}
-                disabled={saving || !this.isValidated() || !valuesChanged}
+                disabled={
+                  saving || !this.isValidated() || !this.areValuesChanged(deal)
+                }
               >
                 {deal ? 'Update Address' : 'Add'}
               </Button>
