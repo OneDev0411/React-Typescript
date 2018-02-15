@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { Row, Col, OverlayTrigger, Popover } from 'react-bootstrap'
 import merge from 'merge'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
@@ -65,7 +64,7 @@ class BackOfficeTable extends BaseTable {
       },
       critical_dates: {
         caption: 'CRITICAL DATES',
-        className: 'col-md-2 hidden-sm hidden-xs',
+        className: 'col-md-1 hidden-sm hidden-xs',
         getText: deal => this.getNextDate(deal)
       },
       notificiation: {
@@ -77,6 +76,19 @@ class BackOfficeTable extends BaseTable {
         caption: '',
         justFilter: true,
         getValue: deal => deal.searchResult
+      },
+      attention_requested_at: {
+        caption: 'SUBMITTED AT',
+        className: 'col-md-1 hidden-sm hidden-xs',
+        sortable: true,
+        getValue: deal => deal.attention_requested_at,
+        getText: deal =>
+          deal.attention_requested_at
+            ? moment
+                .unix(deal.attention_requested_at)
+                .utc()
+                .format('MMM DD, YYYY')
+            : ''
       }
     }
   }

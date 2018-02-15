@@ -9,7 +9,6 @@ import {
   closeEsignWizard,
   setSelectedTask
 } from '../../../../../store_actions/deals'
-import moment from 'moment/moment'
 
 class AgentTable extends BaseTable {
   constructor(props) {
@@ -61,7 +60,7 @@ class AgentTable extends BaseTable {
       side: {
         caption: 'SIDE',
         sortable: true,
-        className: 'col-md-1 hidden-sm hidden-xs',
+        className: 'col-md-2 hidden-sm hidden-xs',
         getText: (deal, rowId, rowsCount) =>
           this.getSide(deal, rowId, rowsCount),
         getValue: deal => deal.deal_type.toString() + this.getRoleNames(deal)
@@ -81,19 +80,6 @@ class AgentTable extends BaseTable {
         caption: '',
         justFilter: true,
         getValue: deal => deal.searchResult
-      },
-      attention_requested_at: {
-        caption: 'SUBMITTED AT',
-        className: 'col-md-1 hidden-sm hidden-xs',
-        sortable: true,
-        getValue: deal => deal.attention_requested_at,
-        getText: deal =>
-          deal.attention_requested_at
-            ? moment
-                .unix(deal.attention_requested_at)
-                .utc()
-                .format('MMM DD, YYYY')
-            : ''
       }
     }
   }
