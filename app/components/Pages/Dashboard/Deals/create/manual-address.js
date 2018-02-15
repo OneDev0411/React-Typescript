@@ -59,6 +59,16 @@ export default class extends React.Component {
     )
   }
 
+  isValuesChanged() {
+    return (
+      this.state.street_number !== this.getAddressField('street_number') ||
+      this.state.street_name !== this.getAddressField('street_name') ||
+      this.state.unit_number !== this.getAddressField('unit_number') ||
+      this.state.city !== this.getAddressField('city') ||
+      this.state.state !== this.getAddressField('state') ||
+      this.state.postal_code !== this.getAddressField('postal_code')
+    )
+  }
   render() {
     const { show, deal, saving } = this.props
     const {
@@ -70,6 +80,7 @@ export default class extends React.Component {
       postal_code
     } = this.state
     const zipCodeValid = !postal_code || /(^\d{4,}$)/.test(postal_code)
+    const valuesChanged = this.isValuesChanged()
 
     return (
       <Modal
@@ -131,7 +142,7 @@ export default class extends React.Component {
                 bsStyle="primary"
                 style={{ margin: '20px' }}
                 onClick={() => this.onAdd()}
-                disabled={saving || !this.isValidated()}
+                disabled={saving || !this.isValidated() || !valuesChanged}
               >
                 {deal ? 'Update Address' : 'Add'}
               </Button>
