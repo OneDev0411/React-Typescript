@@ -32,16 +32,17 @@ class FormEdit extends React.Component {
    *
    */
   onLoad() {
-    let { deal, roles } = this.props
-    let dealRoles = {}
+    const { deal, roles } = this.props
 
-    // deal.roles.forEach(role => (dealRoles[role] = roles[role]))
-    dealRoles = deal.roles.map(role => roles[role])
     this.setState({ loaded: true })
 
-    deal = { ...deal, roles: dealRoles }
+    const dealWithMappedRoles = {
+      ...deal,
+      roles: (deal.roles || []).map(role => roles[role])
+    }
+
     // set deal
-    this.sendMessage('setDeal', [deal])
+    this.sendMessage('setDeal', [dealWithMappedRoles])
   }
 
   /**

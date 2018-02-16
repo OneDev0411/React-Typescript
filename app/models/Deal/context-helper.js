@@ -54,34 +54,11 @@ export function getField(deal, field) {
  * a helper that extracts address from deal
  */
 export function getAddress(deal, roles) {
-  if (deal.listing) {
-    return deal.mls_context.full_address
-  }
+  const address = deal.listing
+    ? deal.mls_context.full_address
+    : getField(deal, 'full_address')
 
-  const unitNumber = getField(deal, 'unit_number')
-  const city = getField(deal, 'city')
-  const state = getField(deal, 'state')
-  const postalCode = getField(deal, 'postal_code')
-
-  const address = [
-    getField(deal, 'street_number') || '',
-    getField(deal, 'street_name') || '',
-    getField(deal, 'street_suffix') || '',
-    unitNumber ? `, #${unitNumber},` : '',
-    city ? `, ${city}` : '',
-    state ? `, ${state}` : '',
-    postalCode ? `, ${postalCode}` : ''
-  ]
-    .join(' ')
-    .trim()
-    .replace(/(\s)+,/gi, ',')
-    .replace(/,,/gi, ',')
-
-  if (address.slice('-1') === ',') {
-    return address.slice(0, -1)
-  }
-
-  if (address.length === 0) {
+  if (!address || address.length === 0) {
     return getClientNames(deal, roles)
   }
 

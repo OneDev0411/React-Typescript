@@ -46,7 +46,6 @@
   .address-info {
     position: relative;
     width: calc(100% - 60px);
-    // height: 50px;
     padding-left: 10px;
     font-size: 15px;
     font-weight: 600;
@@ -74,42 +73,39 @@
   margin: 0;
 }
 
-.deal-listing-card__address.c-button--shadow {
+.deal-listing-card__address {
   position: relative;
   margin: 0;
-  padding-bottom: 2rem;
   text-align: left;
   color: #263445;
+  font-weight: normal;
+
+  &:hover {
+    color: #8da2b5;
+  }
 
   &.is-editable {
     width: 100%;
-    // height: 5rem;
     cursor: pointer;
     display: block;
-    padding: 0;
     color: #263445;
+    border: 1px dashed #fff;
+    padding: 0 1.5rem 0 0.5rem;
 
     &:hover {
       border: 1px dashed #2196f3;
-      padding: 0 0.5rem;
+
+      &:after {
+        content: 'EDIT';
+        position: absolute;
+        bottom: 0;
+        right: 0.5rem;
+        font-size: 1.4rem;
+        font-weight: normal;
+        color: #2196f3;
+      }
     }
   }
-}
-
-.deal-listing-card__address.is-editable:hover {
-  &:after {
-    content: 'EDIT';
-    position: absolute;
-    bottom: 0;
-    right: 0.5rem;
-    font-size: 1.4rem;
-    font-weight: normal;
-    color: #2196f3;
-  }
-}
-
-.deal-listing-card__address.isHovered {
-  color: #8da2b5;
 }
 
 .deal-listing-card__open-link-icon:hover {
@@ -117,10 +113,9 @@
 }
 
 .deal-listing-card__warning-tooltip {
-  position: absolute;
   display: flex;
   flex-direction: row;
-  top: 90%;
+  // top: 90%;
   padding: 1rem 1rem 0.7rem;
   left: -25%;
   width: 25rem;
@@ -146,35 +141,5 @@
     margin-top: -0.3rem;
     margin-left: 1rem;
     width: calc(100% - 3.4rem);
-  }
-}
-
-%deal-listing-card-editable {
-  position: relative;
-  border-radius: 4px;
-  border: 1px dashed transparent;
-  margin-right: 20px;
-  padding: 1px;
-
-  i {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    color: #2196f3;
-  }
-
-  .edit-icon {
-    display: none;
-  }
-
-  &.canEdit {
-    &:hover {
-      cursor: pointer;
-      border-color: #2196f3;
-    }
-
-    &:hover .edit-icon {
-      display: block;
-    }
   }
 }

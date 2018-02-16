@@ -82,10 +82,10 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          roles: [
+          roles: _.uniq([
             ...(state[action.deal_id].roles || []),
             ..._.pluck(action.roles, 'id')
-          ]
+          ])
         }
       }
 

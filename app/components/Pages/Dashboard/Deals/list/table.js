@@ -49,7 +49,7 @@ class BaseTable extends React.Component {
 
     return (
       <div className="address-row">
-        <img src={this.getListingPhoto(deal)} />
+        <img src={this.getListingPhoto(deal)} alt="" />
         <div className="name">{address}</div>
       </div>
     )
