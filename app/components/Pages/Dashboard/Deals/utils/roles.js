@@ -178,9 +178,11 @@ export function getPrimaryAgent(deal, roles) {
       roleId => roles[roleId].role === roleType
     )
 
-    return `${roles[primaryRole].legal_first_name} ${
-      roles[primaryRole].legal_last_name
-    }`
+    if (primaryRole) {
+      return `${roles[primaryRole].legal_first_name} ${
+        roles[primaryRole].legal_last_name
+      }`
+    }
   }
 
   return ''
