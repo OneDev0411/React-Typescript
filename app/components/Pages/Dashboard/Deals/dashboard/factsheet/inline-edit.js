@@ -133,11 +133,10 @@ export default class Editable extends React.Component {
     }
 
     return (
-      <div
-        className={cn('fact-row', { disabled })}
-        onClick={() => this.editField()}
-      >
-        <div className="name">{field.label}</div>
+      <div className={cn('fact-row', { disabled })}>
+        <div className="name" onClick={() => this.editField()}>
+          {field.label}
+        </div>
         <div className={cn('field editable', { approved, disabled, error })}>
           <DatePicker
             show={editMode && isDateType}
@@ -147,7 +146,10 @@ export default class Editable extends React.Component {
             onSelectDate={date => this.onFinishEditing(date)}
           />
 
-          <div style={{ display: 'inline-block', minWidth: '80%' }}>
+          <div
+            style={{ display: 'inline-block', minWidth: '80%' }}
+            onClick={() => this.editField()}
+          >
             {(!editMode || (editMode && isDateType)) && (
               <ToolTip
                 caption={
