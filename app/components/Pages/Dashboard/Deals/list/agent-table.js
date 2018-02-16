@@ -48,7 +48,7 @@ class AgentTable extends BaseTable {
       price: {
         caption: 'PRICE $',
         sortable: true,
-        className: 'col-md-2 hidden-xs',
+        className: 'col-md-1 hidden-xs',
         getText: deal =>
           Deal.get.formattedPrice(
             Deal.get.field(deal, 'list_price'),
@@ -60,7 +60,7 @@ class AgentTable extends BaseTable {
       side: {
         caption: 'SIDE',
         sortable: true,
-        className: 'col-md-2 hidden-sm hidden-xs',
+        className: 'col-md-1 hidden-sm hidden-xs',
         getText: (deal, rowId, rowsCount) =>
           this.getSide(deal, rowId, rowsCount),
         getValue: deal => deal.deal_type.toString() + this.getRoleNames(deal)
@@ -70,6 +70,13 @@ class AgentTable extends BaseTable {
         className: 'col-md-2 hidden-sm hidden-xs',
         getText: (deal, rowId, rowsCount) =>
           this.getNextDate(deal, rowId, rowsCount)
+      },
+      agent_name: {
+        caption: 'AGENT NAME',
+        sortable: true,
+        className: 'col-md-2 hidden-sm hidden-xs',
+        getText: deal => this.getPrimaryAgent(deal),
+        getValue: deal => this.getPrimaryAgent(deal)
       },
       notificiation: {
         caption: '',
@@ -173,6 +180,24 @@ class AgentTable extends BaseTable {
       })
 
     return `: ${names.join(', ')}`
+  }
+
+  getPrimaryAgent(deal) {
+    const { roles } = this.props
+    const roleType = deal.deal_type === 'Buying' ? 'BuyerAgent' : 'SellerAgent'
+
+    if (deal.roles) {
+      const primaryRole = _.find(
+        deal.roles,
+        roleId => roles[roleId].role === roleType
+      )
+
+      return `${roles[primaryRole].legal_first_name} ${
+        roles[primaryRole].legal_last_name
+      }`
+    }
+
+    return ''
   }
 }
 
