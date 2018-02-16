@@ -54,7 +54,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
 
   const hasDealsPermission = acl.includes('Deals')
   const hasBackOfficePermission = acl.includes('BackOffice')
-  const hasAccessToContacts =
+  const hasContactsPermission =
     user.user_type !== 'Client' ||
     (user.features && user.features.includes('Contacts'))
 
@@ -71,7 +71,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
           </Link>
         </SideNavItem>
 
-        {hasAccessToContacts && (
+        {hasContactsPermission && (
           <SideNavItem isActive={activePath === 'CONTACTS'}>
             <Link
               to="/dashboard/contacts"
