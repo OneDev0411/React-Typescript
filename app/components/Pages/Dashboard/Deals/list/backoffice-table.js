@@ -82,13 +82,17 @@ class BackOfficeTable extends BaseTable {
         className: 'col-md-1 hidden-sm hidden-xs',
         sortable: true,
         getValue: deal => deal.attention_requested_at,
-        getText: deal =>
-          deal.attention_requested_at
-            ? moment
-                .unix(deal.attention_requested_at)
-                .utc()
-                .format('MMM DD, YYYY')
-            : ''
+        getText: deal => {
+          if (deal.attention_requested_at) {
+            const dateTime = moment.unix(deal.attention_requested_at).utc()
+            if (dateTime.calendar().includes('Today')){
+              return dateTime.calendar()
+            }
+            return dateTime.format('MMM DD, YYYY [at] hh:mm A')
+          }
+
+          return ''
+        }
       }
     }
   }
