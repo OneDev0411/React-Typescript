@@ -9,6 +9,7 @@ import {
   closeEsignWizard,
   setSelectedTask
 } from '../../../../../store_actions/deals'
+import { getPrimaryAgent } from '../utils/roles'
 
 class AgentTable extends BaseTable {
   constructor(props) {
@@ -75,8 +76,8 @@ class AgentTable extends BaseTable {
         caption: 'AGENT NAME',
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: deal => this.getPrimaryAgent(deal),
-        getValue: deal => this.getPrimaryAgent(deal)
+        getText: deal => getPrimaryAgent(deal, this.props.roles),
+        getValue: deal => getPrimaryAgent(deal, this.props.roles)
       },
       notificiation: {
         caption: '',
@@ -180,24 +181,6 @@ class AgentTable extends BaseTable {
       })
 
     return `: ${names.join(', ')}`
-  }
-
-  getPrimaryAgent(deal) {
-    const { roles } = this.props
-    const roleType = deal.deal_type === 'Buying' ? 'BuyerAgent' : 'SellerAgent'
-
-    if (deal.roles) {
-      const primaryRole = _.find(
-        deal.roles,
-        roleId => roles[roleId].role === roleType
-      )
-
-      return `${roles[primaryRole].legal_first_name} ${
-        roles[primaryRole].legal_last_name
-      }`
-    }
-
-    return ''
   }
 }
 
