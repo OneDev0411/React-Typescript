@@ -4,8 +4,11 @@ import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import RoleForm from '../form'
-import { createRoles, updateRole } from '../../../../../../../store_actions/deals'
-import { addContact } from '../../../../../../../store_actions/contact/add-contact'
+import {
+  createRoles,
+  updateRole
+} from '../../../../../../../store_actions/deals'
+import createNewContact from '../../../../../../../store_actions/contacts/create-new-contact'
 import { upsertAttributes } from '../../../../../../../store_actions/contact/index'
 import {
   getNewAttributes,
@@ -49,7 +52,7 @@ class AddRoleModal extends React.Component {
       createRoles,
       updateRole,
       notify,
-      addContact,
+      createNewContact,
       upsertAttributes
     } = this.props
     const { form } = this.state
@@ -71,7 +74,7 @@ class AddRoleModal extends React.Component {
         if (!contact) {
           const copyFormData = Object.assign({}, form)
 
-          await addContact(normalizedFormDataAsContact(copyFormData))
+          await createNewContact(normalizedFormDataAsContact(copyFormData))
           this.notifySuccess(`${fullName} has been added to your Contacts.`)
         } else {
           const newAttributes = await getNewAttributes(form)
@@ -83,14 +86,21 @@ class AddRoleModal extends React.Component {
 
           if (nameAttribute || newAttributes.length > 0) {
             if (nameAttribute && nameAttribute.id) {
-              await upsertAttributes(form.contact.id, 'name', [nameAttribute], true)
+              await upsertAttributes(
+                form.contact.id,
+                'name',
+                [nameAttribute],
+                true
+              )
             }
 
             if (newAttributes.length > 0) {
               await upsertAttributes(form.contact.id, '', newAttributes, true)
             }
 
-            this.notifySuccess(`${fullName}'s contact profile has been updated.`)
+            this.notifySuccess(
+              `${fullName}'s contact profile has been updated.`
+            )
           }
         }
 
@@ -142,9 +152,7 @@ class AddRoleModal extends React.Component {
 
   render() {
     const { form, saving, isFormCompleted } = this.state
-    const {
-      deal, allowedRoles, isOpen, role
-    } = this.props
+    const { deal, allowedRoles, isOpen, role } = this.props
     const disabled = !isFormCompleted || saving === true
     const modalTitle = this.isUpdateModal() ? 'Update Contact' : 'Add to Deal'
 
@@ -183,8 +191,8 @@ class AddRoleModal extends React.Component {
 
 export default connect(null, {
   notify,
-  addContact,
   updateRole,
   createRoles,
-  upsertAttributes
+  upsertAttributes,
+  createNewContact
 })(AddRoleModal)

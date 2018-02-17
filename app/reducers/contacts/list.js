@@ -5,6 +5,7 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.POST_NEW_CONTACTS_SUCCESS:
     case actionTypes.FETCH_CONTACT_ACTIVITIES_SUCCESS:
       return {
         ...state,
@@ -19,6 +20,7 @@ const ids = (state = [], action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.POST_NEW_CONTACTS_SUCCESS:
       return [...state, ...action.response.result.contacts]
     default:
       return state

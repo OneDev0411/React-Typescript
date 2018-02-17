@@ -28,8 +28,6 @@ const getContact = (user = {}, contactId = '') => async (
       response,
       type: actionTypes.FETCH_CONTACT_SUCCESS
     })
-
-    return contact
   } catch (error) {
     dispatch({
       error,

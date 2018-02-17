@@ -7,36 +7,6 @@ const Contact = {
 }
 
 /**
- * add new contact
- */
-Contact.add = async function(params) {
-  const { contacts } = params
-
-  try {
-    const response = await new Fetch().post('/contacts').send({ contacts })
-
-    return response
-  } catch (e) {
-    throw e
-  }
-}
-
-/**
- * returns contact's timeline
- */
-Contact.getTimeline = async function(id) {
-  const endpoint = `/contacts/${id}/timeline`
-
-  try {
-    const response = await new Fetch().get(endpoint)
-
-    return response
-  } catch (e) {
-    throw e
-  }
-}
-
-/**
  * add note
  */
 Contact.addNote = async function(id, note) {

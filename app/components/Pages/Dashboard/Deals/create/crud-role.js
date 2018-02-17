@@ -13,7 +13,7 @@ import {
   normalizedFormDataAsContact
 } from '../utils/roles'
 import SelectContactModal from '../../../../../views/components/SelectContactModal'
-import { addContact } from '../../../../../store_actions/contact/add-contact'
+import createNewContact from '../../../../../store_actions/contacts/create-new-contact'
 import { upsertAttributes } from '../../../../../store_actions/contact/index'
 
 const initialState = {
@@ -60,7 +60,7 @@ class CrudRole extends React.Component {
 
   addRole = async () => {
     const { form } = this.state
-    const { notify, addContact, upsertAttributes } = this.props
+    const { notify, createNewContact, upsertAttributes } = this.props
     const { contact, legal_first_name, legal_last_name, isAgent } = form
     const fullName = `${legal_first_name} ${legal_last_name}`
 
@@ -73,7 +73,7 @@ class CrudRole extends React.Component {
         if (!contact) {
           const copyFormData = Object.assign({}, form)
 
-          await addContact(normalizedFormDataAsContact(copyFormData))
+          await createNewContact(normalizedFormDataAsContact(copyFormData))
           this.notifySuccess(`${fullName} has been added to your Contacts.`)
         } else {
           const newAttributes = await getNewAttributes(form)
@@ -310,6 +310,8 @@ function mapToProps({ deals }) {
   return { teamAgents }
 }
 
-export default connect(mapToProps, { notify, addContact, upsertAttributes })(
-  CrudRole
-)
+export default connect(mapToProps, {
+  notify,
+  createNewContact,
+  upsertAttributes
+})(CrudRole)
