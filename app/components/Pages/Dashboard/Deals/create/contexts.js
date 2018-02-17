@@ -2,12 +2,9 @@ import React from 'react'
 import moment from 'moment'
 import cn from 'classnames'
 import Context from '../../../../../models/DealContext'
-import RadioButton from '../components/radio'
 import DatePicker from '../components/date-picker'
 
-const ContextValue = ({
-  name, date, onRemove, onEdit
-}) => (
+const ContextValue = ({ name, date, onRemove, onEdit }) => (
   <div className="selected-field">
     {name}:&nbsp;
     <span className="date" onClick={onEdit}>
@@ -80,7 +77,6 @@ export default class extends React.Component {
                         contexts[field.name] &&
                         !Context.validate(field, contexts[field.name])
                     })}
-                    type={field.data_type}
                     value={contexts[field.name] || ''}
                     onChange={e =>
                       this.onChangeStringContext(field.name, e.target.value)
