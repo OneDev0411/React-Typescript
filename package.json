@@ -1,15 +1,14 @@
 {
   "name": "rechat",
-  "version": "8.6.8",
+  "version": "8.6.9",
   "description": "",
   "main": "app.js",
   "author": "",
   "repository": "git@gitlab.com:rechat/web.git",
   "license": "ISC",
   "scripts": {
-    "develop": "NODE_ENV=development nodemon --inspect=0.0.0.0:9229 $NODE_DEBUG_OPTION ./bin/server --config ./nodemon.config.json --exec babel-node",
-    "start-dev-hmr":
-      "NODE_ENV=development notify=true babel-node ./bin/server webpack-dev-server --progress --hot --host rechattest.com",
+    "develop":
+    "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
     "serve":
