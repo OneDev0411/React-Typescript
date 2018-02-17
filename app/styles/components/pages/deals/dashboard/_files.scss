@@ -105,6 +105,14 @@
       }
     }
   }
+  .drag-drop-container {
+    height: 80px;
+    border-radius: 3px;
+    background-color: #fefefe;
+    border: solid 1px #ecf1f4;
+    margin: 16px;
+    padding: 11px;
+  }
 }
 
 %deals-files-esign {
