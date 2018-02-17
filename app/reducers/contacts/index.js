@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux'
 import list from './list'
 import tags from './tags'
-import contact from './contact'
 import spinner from './spinner'
+import contact from './contact'
+import activities from './activities'
 import importOutlook from './importOutlook'
 
 export default combineReducers({
@@ -10,5 +11,6 @@ export default combineReducers({
   tags,
   spinner,
   contact,
+  activities,
   importOutlook
 })

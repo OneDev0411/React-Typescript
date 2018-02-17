@@ -33,4 +33,4 @@ export default contact
 
 export const isFetchingContact = state => state.isFetching
 
-export const fetchingContactError = state => state.error
+export const selectContactError = state => state.error

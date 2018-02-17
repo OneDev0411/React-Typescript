@@ -2,15 +2,6 @@ import types from '../../constants/contact'
 
 export default (state = null, action) => {
   switch (action.type) {
-    case types.GET_TIMELINE:
-      return {
-        ...state,
-        [action.id]: {
-          ...state[action.id],
-          timeline: action.timeline
-        }
-      }
-
     case types.ADD_CONTACT:
     case types.UPDATE_CONTACT:
       return {

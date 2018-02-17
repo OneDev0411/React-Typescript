@@ -14,14 +14,14 @@ import Address from './Address'
 import AddNote from './Add-Note'
 import Activities from './Activities'
 import {
-  getTimeline,
   updateContact,
   upsertAttributes
 } from '../../../../../store_actions/contact'
 
 import getContact from '../../../../../store_actions/contacts/get-contact'
+import getContactActivities from '../../../../../store_actions/contacts/get-contact-activities'
 import { selectContact } from '../../../../../reducers/contacts/list'
-import { fetchingContactError } from '../../../../../reducers/contacts/contact'
+import { selectContactError } from '../../../../../reducers/contacts/contact'
 import Loading from '../../../../Partials/Loading'
 
 const Container = styled.div`
@@ -37,19 +37,24 @@ class ContactProfile extends React.Component {
   }
 
   componentDidMount() {
-    let { contact, getTimeline } = this.props
+    let { contact } = this.props
 
     if (!contact) {
       this.getContact()
-    } else if (!contact.timeline) {
-      getTimeline(contact.id)
+    } else if (!contact.activities) {
+      this.getContactActivities(contact.id)
     }
   }
 
   async getContact() {
-    const { user, getContact, params } = this.props
+    const { user, getContact, params: { id: contactId } } = this.props
 
-    await getContact(user, params.id)
+    await getContact(user, contactId)
+    this.getContactActivities(contactId)
+  }
+
+  async getContactActivities(id) {
+    await this.props.getContactActivities(id)
   }
 
   goBack = () => browserHistory.push('/dashboard/contacts')
@@ -168,7 +173,7 @@ class ContactProfile extends React.Component {
   }
 
   render() {
-    const { contact, user, params, defaultTags, fetchError } = this.props
+    const { user, params, contact, fetchError, defaultTags } = this.props
     const { activeTab } = this.state
 
     if (fetchError) {
@@ -273,13 +278,13 @@ const mapStateToProps = ({ contacts, user }, { params: { id: contactId } }) => {
   return {
     user,
     contact: selectContact(list, contactId),
-    fetchError: fetchingContactError(contact)
+    fetchError: selectContactError(contact)
   }
 }
 
 export default connect(mapStateToProps, {
   getContact,
-  getTimeline,
   updateContact,
-  upsertAttributes
+  upsertAttributes,
+  getContactActivities
 })(ContactProfile)
