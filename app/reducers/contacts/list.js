@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux'
-import * as getContactsTypes from '../../constants/contacts/get-contacts'
+import * as actionTypes from '../../constants/contacts'
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case getContactsTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.FETCH_CONTACT_SUCCESS:
+    case actionTypes.FETCH_CONTACTS_SUCCESS:
       return {
         ...state,
         ...action.response.entities.contacts
@@ -15,8 +16,9 @@ const byId = (state = {}, action) => {
 
 const ids = (state = [], action) => {
   switch (action.type) {
-    case getContactsTypes.FETCH_CONTACTS_SUCCESS:
-      return action.response.result.contacts
+    case actionTypes.FETCH_CONTACT_SUCCESS:
+    case actionTypes.FETCH_CONTACTS_SUCCESS:
+      return [...state, ...action.response.result.contacts]
     default:
       return state
   }
@@ -24,7 +26,7 @@ const ids = (state = [], action) => {
 
 export const info = (state = { total: 0, count: 0 }, action) => {
   switch (action.type) {
-    case getContactsTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.FETCH_CONTACTS_SUCCESS:
       return action.response.info
     default:
       return state
@@ -33,10 +35,10 @@ export const info = (state = { total: 0, count: 0 }, action) => {
 
 const isFetching = (state = false, action) => {
   switch (action.type) {
-    case getContactsTypes.FETCH_CONTACTS_REQUEST:
+    case actionTypes.FETCH_CONTACTS_REQUEST:
       return true
-    case getContactsTypes.FETCH_CONTACTS_SUCCESS:
-    case getContactsTypes.FETCH_CONTACTS_FAILURE:
+    case actionTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.FETCH_CONTACTS_FAILURE:
       return false
     default:
       return state
@@ -45,9 +47,9 @@ const isFetching = (state = false, action) => {
 
 const errorMessage = (state = null, action) => {
   switch (action.type) {
-    case getContactsTypes.FETCH_CONTACTS_FAILURE:
+    case actionTypes.FETCH_CONTACTS_FAILURE:
       return action.message
-    case getContactsTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.FETCH_CONTACTS_SUCCESS:
       return null
     default:
       return state

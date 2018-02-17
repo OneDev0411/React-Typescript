@@ -2,6 +2,7 @@ import React from 'react'
 import pick from 'lodash/pick'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
 import Header from './Header'
@@ -17,8 +18,18 @@ import {
   updateContact,
   upsertAttributes
 } from '../../../../../store_actions/contact'
+
+import getContact from '../../../../../store_actions/contacts/get-contact'
 import { selectContact } from '../../../../../reducers/contacts/list'
+import { fetchingContactError } from '../../../../../reducers/contacts/contact'
 import Loading from '../../../../Partials/Loading'
+
+const Container = styled.div`
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 
 class ContactProfile extends React.Component {
   state = {
@@ -26,11 +37,19 @@ class ContactProfile extends React.Component {
   }
 
   componentDidMount() {
-    const { contact, getTimeline } = this.props
+    let { contact, getTimeline } = this.props
 
-    if (contact && !contact.timeline) {
+    if (!contact) {
+      this.getContact()
+    } else if (!contact.timeline) {
       getTimeline(contact.id)
     }
+  }
+
+  async getContact() {
+    const { user, getContact, params } = this.props
+
+    await getContact(user, params.id)
   }
 
   goBack = () => browserHistory.push('/dashboard/contacts')
@@ -149,21 +168,22 @@ class ContactProfile extends React.Component {
   }
 
   render() {
-    const { user, params, contact, defaultTags } = this.props
+    const { contact, user, params, defaultTags, fetchError } = this.props
     const { activeTab } = this.state
+
+    if (fetchError) {
+      if (fetchError.status === 404) {
+        browserHistory.push('/404')
+      }
+
+      return <Container>{fetchError.message}</Container>
+    }
 
     if (!contact) {
       return (
-        <div
-          style={{
-            height: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
+        <Container>
           <Loading />
-        </div>
+        </Container>
       )
     }
 
@@ -248,16 +268,17 @@ class ContactProfile extends React.Component {
 }
 
 const mapStateToProps = ({ contacts, user }, { params: { id: contactId } }) => {
-  const { list } = contacts
-  const contact = selectContact(list, contactId)
+  const { list, contact } = contacts
 
   return {
     user,
-    contact
+    contact: selectContact(list, contactId),
+    fetchError: fetchingContactError(contact)
   }
 }
 
 export default connect(mapStateToProps, {
+  getContact,
   getTimeline,
   updateContact,
   upsertAttributes

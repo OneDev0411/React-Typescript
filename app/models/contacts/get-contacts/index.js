@@ -1,7 +1,8 @@
-import { normalize, schema } from 'normalizr'
+import { normalize } from 'normalizr'
+import { contactsSchema } from '../schema'
 import Fetch from '../../../services/fetch'
 
-async function getAllContacts(user) {
+async function fetchContacts(user) {
   const { access_token } = user
 
   try {
@@ -19,8 +20,6 @@ async function getAllContacts(user) {
     const response = await fetchContacts
     const { data, info } = response.body
     const contacts = { contacts: data }
-    const contact = new schema.Entity('contacts')
-    const contactsSchema = { contacts: [contact] }
     const normalizedData = normalize(contacts, contactsSchema)
 
     return {
@@ -32,4 +31,4 @@ async function getAllContacts(user) {
   }
 }
 
-export default getAllContacts
+export default fetchContacts

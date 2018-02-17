@@ -1,5 +1,5 @@
-import getAllContacts from '../../../models/contacts/get-contacts'
-import * as getContactsTypes from '../../../constants/contacts/get-contacts'
+import fetchContacts from '../../../models/contacts/get-contacts'
+import * as actionTypes from '../../../constants/contacts'
 
 const getContacts = (user = {}, params) => async (dispatch, getState) => {
   if (Object.keys(user).length === 0) {
@@ -8,18 +8,18 @@ const getContacts = (user = {}, params) => async (dispatch, getState) => {
 
   try {
     dispatch({
-      type: getContactsTypes.FETCH_CONTACTS_REQUEST
+      type: actionTypes.FETCH_CONTACTS_REQUEST
     })
 
-    const response = await getAllContacts(user, params)
+    const response = await fetchContacts(user, params)
 
     dispatch({
       response,
-      type: getContactsTypes.FETCH_CONTACTS_SUCCESS
+      type: actionTypes.FETCH_CONTACTS_SUCCESS
     })
   } catch (error) {
     dispatch({
-      type: getContactsTypes.FETCH_CONTACTS_FAILURE,
+      type: actionTypes.FETCH_CONTACTS_FAILURE,
       message: error.message || 'Something went wrong.'
     })
     throw error
