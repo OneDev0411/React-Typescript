@@ -1,5 +1,4 @@
 export * from './get-tags'
-export * from './add-note'
 export * from './upsert-attributes'
 export * from './delete-attribute'
 export * from './update-contact'

@@ -254,8 +254,7 @@ class ContactProfile extends React.Component {
 
           <div className="right-pane">
             <AddNote
-              user={user}
-              contact_id={params.id}
+              contactId={params.id}
               onSave={() => this.setState({ activeTab: 'notes' })}
             />
 

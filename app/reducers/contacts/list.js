@@ -6,6 +6,7 @@ const byId = (state = {}, action) => {
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.POST_NEW_CONTACTS_SUCCESS:
+    case actionTypes.POST_NEW_ATTRIBUTES_SUCCESS:
     case actionTypes.FETCH_CONTACT_ACTIVITIES_SUCCESS:
       return {
         ...state,

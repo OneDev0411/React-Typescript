@@ -7,22 +7,6 @@ const Contact = {
 }
 
 /**
- * add note
- */
-Contact.addNote = async function(id, note) {
-  const endpoint = `/contacts/${id}/attributes`
-  const payload = Contact.helper.populateAttributes('note', [{ note }])
-
-  try {
-    const response = await new Fetch().post(endpoint).send(payload)
-
-    return response
-  } catch (e) {
-    throw e
-  }
-}
-
-/**
  * add new item to user's timeline
  */
 Contact.updateUserTimeline = async function(action, object_class, object) {
