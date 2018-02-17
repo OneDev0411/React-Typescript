@@ -10,93 +10,92 @@ import NoContact from './no-contact'
 import Header from './header'
 import ReactTable from 'react-table'
 import NoSearchResults from '../../../../Partials/no-search-results'
+import { selectContacts } from '../../../../../reducers/contacts/list'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
 }
 
 class ContactsList extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      filter: ''
-    }
-    this.columns = [
-      {
-        Header: () => (
-          <Fragment>
-            Name
-            <i className="fa fa-caret-down" />
-            <i className="fa fa-caret-up" />
-          </Fragment>
-        ),
-        id: 'name',
-        accessor: contact => Contact.get.name(contact),
-        Cell: ({ original: contact }) => (
-          <div className="name">
-            <Avatar
-              className="avatar"
-              round
-              name={Contact.get.name(contact)}
-              src={Contact.get.avatar(contact)}
-              size={35}
-            />
-            <span className="contact-name">{Contact.get.name(contact)}</span>
-          </div>
-        )
-      },
-      {
-        Header: () => (
-          <Fragment>
-            EMAIL
-            <i className="fa fa-caret-down" />
-            <i className="fa fa-caret-up" />
-          </Fragment>
-        ),
-        id: 'email',
-        accessor: contact => Contact.get.email(contact),
-        Cell: ({ original: contact }) => Contact.get.email(contact)
-      },
-      {
-        Header: 'PHONE',
-        id: 'phone',
-        accessor: contact => Contact.get.phone(contact),
-        Cell: ({ original: contact }) => Contact.get.phone(contact)
-      },
-      {
-        Header: () => (
-          <Fragment>
-            STAGE
-            <i className="fa fa-caret-down" />
-            <i className="fa fa-caret-up" />
-          </Fragment>
-        ),
-        id: 'stage',
-        accessor: contact => Contact.get.stage(contact).name,
-        className: 'td--dropdown-container',
-        Cell: ({ original: contact }) => (
-          <Stage
-            defaultTitle={Contact.get.stage(contact).name}
-            handleOnSelect={stage =>
-              this.onChangeStage(stage, contact, props.upsertAttributes)
-            }
-          />
-        )
-      },
-      {
-        Header: () => (
-          <Fragment>
-            SOURCE
-            <i className="fa fa-caret-down" />
-            <i className="fa fa-caret-up" />
-          </Fragment>
-        ),
-        id: 'source',
-        accessor: contact => Contact.get.source(contact).label,
-        Cell: ({ original: contact }) => Contact.get.source(contact).label
-      }
-    ]
+  state = {
+    filter: ''
   }
+
+  columns = [
+    {
+      Header: () => (
+        <Fragment>
+          Name
+          <i className="fa fa-caret-down" />
+          <i className="fa fa-caret-up" />
+        </Fragment>
+      ),
+      id: 'name',
+      accessor: contact => Contact.get.name(contact),
+      Cell: ({ original: contact }) => (
+        <div className="name">
+          <Avatar
+            className="avatar"
+            round
+            name={Contact.get.name(contact)}
+            src={Contact.get.avatar(contact)}
+            size={35}
+          />
+          <span className="contact-name">{Contact.get.name(contact)}</span>
+        </div>
+      )
+    },
+    {
+      Header: () => (
+        <Fragment>
+          EMAIL
+          <i className="fa fa-caret-down" />
+          <i className="fa fa-caret-up" />
+        </Fragment>
+      ),
+      id: 'email',
+      accessor: contact => Contact.get.email(contact),
+      Cell: ({ original: contact }) => Contact.get.email(contact)
+    },
+    {
+      Header: 'PHONE',
+      id: 'phone',
+      accessor: contact => Contact.get.phone(contact),
+      Cell: ({ original: contact }) => Contact.get.phone(contact)
+    },
+    {
+      Header: () => (
+        <Fragment>
+          STAGE
+          <i className="fa fa-caret-down" />
+          <i className="fa fa-caret-up" />
+        </Fragment>
+      ),
+      id: 'stage',
+      accessor: contact => Contact.get.stage(contact).name,
+      className: 'td--dropdown-container',
+      Cell: ({ original: contact }) => (
+        <Stage
+          defaultTitle={Contact.get.stage(contact).name}
+          handleOnSelect={stage =>
+            this.onChangeStage(stage, contact, props.upsertAttributes)
+          }
+        />
+      )
+    },
+    {
+      Header: () => (
+        <Fragment>
+          SOURCE
+          <i className="fa fa-caret-down" />
+          <i className="fa fa-caret-up" />
+        </Fragment>
+      ),
+      id: 'source',
+      accessor: contact => Contact.get.source(contact).label,
+      Cell: ({ original: contact }) => Contact.get.source(contact).label
+    }
+  ]
 
   onChangeStage = (stage, contact, upsertAttributes) => {
     upsertAttributes(contact.id, 'stage', [
@@ -109,7 +108,8 @@ class ContactsList extends React.Component {
   }
 
   onInputChange = filter => this.setState({ filter })
-  applyFilters(contact) {
+
+  applyFilters = contact => {
     let matched = false
     const { filter } = this.state
     let regex = new RegExp(
@@ -140,29 +140,32 @@ class ContactsList extends React.Component {
 
     return matched
   }
-  render() {
-    const { contacts, user, loadingImport } = this.props
-    const filteredContacts = _.filter(contacts, contact =>
-      this.applyFilters(contact)
-    )
 
-    if (_.size(contacts) === 0) {
+  render() {
+    const { contactsList, user, loadingImport } = this.props
+    const contactsCount = contactsList.length
+
+    if (contactsCount === 0) {
       return (
         <div className="list">
           <NoContact
             user={user}
-            contactsCount={_.size(contacts)}
+            contactsCount={contactsCount}
             onNewContact={id => openContact(id)}
           />
         </div>
       )
     }
 
+    const filteredContacts = contactsList.filter(contact =>
+      this.applyFilters(contact)
+    )
+
     return (
       <div className="list">
         <Header
           user={user}
-          contactsCount={_.size(contacts)}
+          contactsCount={contactsCount}
           onNewContact={id => openContact(id)}
           onInputChange={this.onInputChange}
         />
@@ -188,11 +191,15 @@ class ContactsList extends React.Component {
   }
 }
 
-export default connect(
-  ({ contacts, user }) => ({
-    contacts: contacts.list,
+function mapStateToProps({ user, contacts }) {
+  const { list, spinner: loadingImport } = contacts
+  const contactsList = selectContacts(list)
+
+  return {
     user,
-    loadingImport: contacts.spinner
-  }),
-  { upsertAttributes }
-)(ContactsList)
+    contactsList,
+    loadingImport
+  }
+}
+
+export default connect(mapStateToProps, { upsertAttributes })(ContactsList)

@@ -1,5 +1,4 @@
 export * from './add-contact'
-export * from './get-contacts'
 export * from './get-timeline'
 export * from './get-tags'
 export * from './add-note'

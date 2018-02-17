@@ -17,36 +17,25 @@ import {
   updateContact,
   upsertAttributes
 } from '../../../../../store_actions/contact'
+import { selectContact } from '../../../../../reducers/contacts/list'
+import Loading from '../../../../Partials/Loading'
 
 class ContactProfile extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      activeTab: 'timeline'
-    }
+  state = {
+    activeTab: 'timeline'
   }
 
   componentDidMount() {
-    const { getTimeline } = this.props
-    const contact = this.getContact()
+    const { contact, getTimeline } = this.props
 
-    if (!contact.timeline) {
+    if (contact && !contact.timeline) {
       getTimeline(contact.id)
     }
   }
 
-  goBack() {
-    browserHistory.push('/dashboard/contacts')
-  }
+  goBack = () => browserHistory.push('/dashboard/contacts')
 
-  getContact() {
-    const { contacts, params } = this.props
-    const contact = contacts[params.id]
-
-    return contact || this.goBack()
-  }
-
-  getStageIndex(contact) {
+  getStageIndex = contact => {
     const list = [
       'General',
       'UnqualifiedLead',
@@ -59,7 +48,7 @@ class ContactProfile extends React.Component {
     return list.indexOf(stage.name)
   }
 
-  onChangeAttribute(type, id, text) {
+  onChangeAttribute = (type, id, text) => {
     this.upsertAttributes(type, [
       {
         id,
@@ -69,7 +58,7 @@ class ContactProfile extends React.Component {
     ])
   }
 
-  onChangeAddress(address, field, id, text) {
+  onChangeAddress = (address, field, id, text) => {
     const { street_name, city, state, postal_code } = address
     const attributes = [
       {
@@ -88,9 +77,8 @@ class ContactProfile extends React.Component {
     this.upsertAttributes('address', attributes)
   }
 
-  onAddAttribute({ attributeName, attributeType }) {
-    const { updateContact } = this.props
-    const contact = this.getContact()
+  onAddAttribute = ({ attributeName, attributeType }) => {
+    const { updateContact, contact } = this.props
     const { attributes } = contact.sub_contacts[0]
 
     if (!attributes[attributeName]) {
@@ -109,13 +97,13 @@ class ContactProfile extends React.Component {
     })
   }
 
-  upsertAttributes(type, attributes, disableNotify) {
+  upsertAttributes = (type, attributes, disableNotify) => {
     const { params, upsertAttributes } = this.props
 
     upsertAttributes(params.id, type, attributes, disableNotify)
   }
 
-  changeStage(stage, contact) {
+  changeStage = (stage, contact) => {
     const attributes = [
       {
         id: Contact.get.stage(contact).id,
@@ -161,10 +149,24 @@ class ContactProfile extends React.Component {
   }
 
   render() {
-    const { user, params, defaultTags } = this.props
+    const { user, params, contact, defaultTags } = this.props
     const { activeTab } = this.state
 
-    const contact = this.getContact()
+    if (!contact) {
+      return (
+        <div
+          style={{
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Loading />
+        </div>
+      )
+    }
+
     const { names } = contact.sub_contacts[0].attributes
 
     return (
@@ -245,11 +247,18 @@ class ContactProfile extends React.Component {
   }
 }
 
-export default connect(
-  ({ contacts, user }) => ({
+const mapStateToProps = ({ contacts, user }, { params: { id: contactId } }) => {
+  const { list } = contacts
+  const contact = selectContact(list, contactId)
+
+  return {
     user,
-    defaultTags: contacts.tags,
-    contacts: contacts.list
-  }),
-  { getTimeline, upsertAttributes, updateContact }
-)(ContactProfile)
+    contact
+  }
+}
+
+export default connect(mapStateToProps, {
+  getTimeline,
+  updateContact,
+  upsertAttributes
+})(ContactProfile)

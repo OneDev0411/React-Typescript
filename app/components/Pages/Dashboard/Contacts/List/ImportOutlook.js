@@ -1,9 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  getContacts,
-  removeImportResult
-} from '../../../../../store_actions/contact'
+import { removeImportResult } from '../../../../../store_actions/contact'
+import getContacts from '../../../../../store_actions/contacts/get-contacts'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import ModalImportLoading from './ModalImportLoading'
 import config from '../../../../../../config/public'
@@ -65,10 +63,15 @@ class ImportOutlook extends React.Component {
   }
 }
 
-export default connect(
-  ({ contacts, user }) => ({
-    importOutlook: contacts.importOutlook,
-    user
-  }),
-  { getContacts, removeImportResult }
-)(ImportOutlook)
+function mapStateToProps({ user, contacts }) {
+  const { importOutlook } = contacts
+
+  return {
+    user,
+    importOutlook
+  }
+}
+
+export default connect(mapStateToProps, { getContacts, removeImportResult })(
+  ImportOutlook
+)

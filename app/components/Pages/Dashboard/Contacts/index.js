@@ -1,32 +1,28 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getContacts, getTags } from '../../../../store_actions/contact'
+import { getTags } from '../../../../store_actions/contact'
+import getContacts from '../../../../store_actions/contacts/get-contacts'
+import { selectContacts } from '../../../../reducers/contacts/list'
 
 class Contacts extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
-    const { getContacts, getTags, contacts, tags } = this.props
+    const { getContacts, getTags, contactsList, tags } = this.props
 
-    // get contacts
-    if (!contacts) {
+    if (!contactsList) {
       getContacts()
     }
 
-    // get tags
     if (!tags) {
       getTags()
     }
   }
 
   render() {
-    const { contacts } = this.props
+    const { contactsList } = this.props
 
     return (
       <div className="contacts">
-        {contacts ? (
+        {contactsList ? (
           this.props.children
         ) : (
           <div className="loading-list">
@@ -41,10 +37,13 @@ class Contacts extends React.Component {
   }
 }
 
-export default connect(
-  ({ contacts }) => ({
-    contacts: contacts.list,
-    tags: contacts.tags
-  }),
-  { getContacts, getTags }
-)(Contacts)
+function mapStateToProps({ contacts: { list, tags } }) {
+  const contactsList = selectContacts(list)
+
+  return {
+    tags,
+    contactsList
+  }
+}
+
+export default connect(mapStateToProps, { getContacts, getTags })(Contacts)

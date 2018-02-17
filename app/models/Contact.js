@@ -22,30 +22,6 @@ Contact.add = async function(params) {
 }
 
 /**
- * returns contacts list
- */
-Contact.getContacts = async function(user) {
-  try {
-    const fetchContacts = new Fetch()
-      .get('/contacts')
-      .query({ limit: 10000 })
-      .query({ sorting_value: 'Update' })
-      .query({ 'associations[]': ['user.last_seen_by'] })
-
-    // required on ssr
-    if (user.access_token) {
-      fetchContacts.set({ Authorization: `Bearer ${user.access_token}` })
-    }
-
-    const response = await fetchContacts
-
-    return response.body.data
-  } catch (e) {
-    throw e
-  }
-}
-
-/**
  * returns contact's timeline
  */
 Contact.getTimeline = async function(id) {

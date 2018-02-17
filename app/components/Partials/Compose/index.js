@@ -7,6 +7,7 @@ import Fetch from '../../../services/fetch'
 import Contact from '../../../models/Contact'
 import Recipients from './recipients'
 import Suggestions from './suggestions'
+import { selectContacts } from '../../../reducers/contacts/list'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -73,8 +74,7 @@ class Compose extends React.Component {
       .value()
 
     if (_.size(viewList) === 0) {
-      viewList = await
-        this.createNewEntry()
+      viewList = await this.createNewEntry()
     }
 
     this.setState({ viewList })
@@ -123,15 +123,19 @@ class Compose extends React.Component {
       `/rooms/search?q[]=${q}&room_types[]=Direct&room_types[]=Group`
     )
 
-    return rooms
-    // .filter(room => room.users.length > 2)
-      .map(room => this.createListItem('room', {
-        ...room,
-        ...{
-          users: _.pluck(room.users, 'id'),
-          display_name: `${room.proposed_title}`
-        }
-      }))
+    return (
+      rooms
+        // .filter(room => room.users.length > 2)
+        .map(room =>
+          this.createListItem('room', {
+            ...room,
+            ...{
+              users: _.pluck(room.users, 'id'),
+              display_name: `${room.proposed_title}`
+            }
+          })
+        )
+    )
   }
 
   /**
@@ -139,8 +143,9 @@ class Compose extends React.Component {
    */
   async searchInContacts(q) {
     let contacts = []
+    const { contactsList } = this.props
 
-    _.each(this.props.contacts, contact => {
+    _.each(contactsList, contact => {
       // search in contact's users
       const users_list = contact.users || []
       const users = users_list
@@ -273,12 +278,11 @@ class Compose extends React.Component {
 
     return (
       <div className="compose">
-
         <Recipients
           recipients={recipients}
           onSearch={text => this.onSearch(text)}
           onRemove={recipient => this.onRemove(recipient)}
-          inputRef={el => this.searchInput = el}
+          inputRef={el => (this.searchInput = el)}
           addFirstSuggestion={e => {
             if (viewList && _.size(viewList) > 0) {
               e.preventDefault()
@@ -307,6 +311,10 @@ Compose.propTypes = {
   onChangeRecipients: PropTypes.func.isRequired
 }
 
-export default connect(({ contacts }) => ({
-  contacts: contacts.list
-}))(Compose)
+function mapStateToProps({ contacts: { list } }) {
+  return {
+    contactsList: selectContacts(list)
+  }
+}
+
+export default connect(mapStateToProps)(Compose)
