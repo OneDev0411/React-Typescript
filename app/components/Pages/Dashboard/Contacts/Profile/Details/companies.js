@@ -1,9 +1,13 @@
 import React from 'react'
+import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
+import withPropsOnChange from 'recompose/withPropsOnChange'
 import Editable from '../Editable'
 
-export default ({ companies, onChangeAttribute, onAddAttribute }) => (
+const Companies = ({ fields, onChangeAttribute, handleAddNewField }) => (
   <div>
-    {companies.map((item, key) => (
+    {fields.map((item, key) => (
       <li key={`company_${key}`}>
         <div className="name">Company</div>
         <div className="data">
@@ -13,7 +17,7 @@ export default ({ companies, onChangeAttribute, onAddAttribute }) => (
             showEdit
             showAdd
             text={item.company}
-            onAdd={onAddAttribute}
+            onAdd={handleAddNewField}
             attributeName="companies"
             onChange={onChangeAttribute}
           />
@@ -21,7 +25,7 @@ export default ({ companies, onChangeAttribute, onAddAttribute }) => (
       </li>
     ))}
 
-    {companies.length === 0 && (
+    {fields.length === 0 && (
       <li>
         <div className="name">Company</div>
         <div className="data">
@@ -37,3 +41,26 @@ export default ({ companies, onChangeAttribute, onAddAttribute }) => (
     )}
   </div>
 )
+
+const enhance = compose(
+  withState('errorIdItems', 'setErrorIdItem', []),
+  withState('fields', 'addNewfields', ({ items }) => items),
+  withHandlers({
+    handleAddNewField: ({ addNewfields, fields }) => () => {
+      const newField = {
+        id: undefined,
+        type: 'company',
+        company: 'Enter new company'
+      }
+
+      addNewfields([...fields, newField])
+    }
+  }),
+  withPropsOnChange(['items'], ({ items, addNewfields }) => {
+    addNewfields(items)
+
+    return {}
+  })
+)
+
+export default enhance(Companies)

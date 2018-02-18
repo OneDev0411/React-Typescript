@@ -1,12 +1,13 @@
 import React from 'react'
-import { compose, withState } from 'recompose'
+import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
+import withPropsOnChange from 'recompose/withPropsOnChange'
 import Editable from '../Editable'
 
-const enhance = compose(withState('errorIdItems', 'setErrorIdItem', []))
-
 const Phones = ({
-  phones,
-  onAddAttribute,
+  fields,
+  handleAddNewField,
   onChangeAttribute,
   errorIdItems,
   setErrorIdItem
@@ -50,7 +51,7 @@ const Phones = ({
 
   return (
     <div>
-      {phones.map((item, key) => (
+      {fields.map((item, key) => (
         <li key={`phone_${key}`}>
           <div className="name">Phone</div>
           <div className="data">
@@ -61,7 +62,7 @@ const Phones = ({
               showAdd
               attributeName="phone_numbers"
               text={item.phone_number}
-              onAdd={onAddAttribute}
+              onAdd={handleAddNewField}
               onChange={onChangePhone}
               validate={validate}
               error={errorIdItems.indexOf(key) > -1}
@@ -71,7 +72,7 @@ const Phones = ({
         </li>
       ))}
 
-      {phones.length === 0 && (
+      {fields.length === 0 && (
         <li>
           <div className="name">Phone</div>
           <div className="data">
@@ -91,5 +92,26 @@ const Phones = ({
     </div>
   )
 }
+
+const enhance = compose(
+  withState('errorIdItems', 'setErrorIdItem', []),
+  withState('fields', 'addNewfields', ({ items }) => items),
+  withHandlers({
+    handleAddNewField: ({ addNewfields, fields }) => () => {
+      const newField = {
+        id: undefined,
+        type: 'phone_number',
+        phone_number: 'Enter new phone number'
+      }
+
+      addNewfields([...fields, newField])
+    }
+  }),
+  withPropsOnChange(['items'], ({ items, addNewfields }) => {
+    addNewfields(items)
+
+    return {}
+  })
+)
 
 export default enhance(Phones)

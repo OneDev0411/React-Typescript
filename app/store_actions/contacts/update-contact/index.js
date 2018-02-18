@@ -1,10 +1,10 @@
 import { normalize } from 'normalizr'
 import { contactsSchema } from '../../../models/contacts/schema'
-import postNewAttributes from '../../../models/contacts/post-new-attributes'
+import patchContact from '../../../models/contacts/update-contact'
 import * as actionTypes from '../../../constants/contacts'
 import { selectContact } from '../../../reducers/contacts/list'
 
-const addNewAttributes = ({ contactId = '', attributes = [] }) => async (
+const updateContact = ({ contactId = '', attributes = [] }) => async (
   dispatch,
   getState
 ) => {
@@ -17,14 +17,13 @@ const addNewAttributes = ({ contactId = '', attributes = [] }) => async (
       type: actionTypes.POST_NEW_ATTRIBUTES_REQUEST
     })
 
-    const updatedContact = await postNewAttributes({ contactId, attributes })
+    const updatedContact = await patchContact({ contactId, attributes })
     const { contacts: { list } } = getState()
     const contact = selectContact(list, contactId)
     const newContact = {
       ...contact,
       ...updatedContact
     }
-
     const response = normalize({ contacts: [newContact] }, contactsSchema)
 
     dispatch({
@@ -42,4 +41,4 @@ const addNewAttributes = ({ contactId = '', attributes = [] }) => async (
   }
 }
 
-export default addNewAttributes
+export default updateContact

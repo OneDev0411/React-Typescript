@@ -13,13 +13,11 @@ import Details from './Details'
 import Address from './Address'
 import AddNote from './Add-Note'
 import Activities from './Activities'
-import {
-  updateContact,
-  upsertAttributes
-} from '../../../../../store_actions/contact'
 
 import getContact from '../../../../../store_actions/contacts/get-contact'
 import getContactActivities from '../../../../../store_actions/contacts/get-contact-activities'
+import updateContact from '../../../../../store_actions/contacts/update-contact'
+import addNewAttributes from '../../../../../store_actions/contacts/add-new-attributes'
 import { selectContact } from '../../../../../reducers/contacts/list'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import Loading from '../../../../Partials/Loading'
@@ -32,8 +30,19 @@ const Container = styled.div`
 `
 
 class ContactProfile extends React.Component {
-  state = {
-    activeTab: 'timeline'
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      activeTab: 'timeline'
+    }
+
+    this.handleOnChangeAddress = this.handleOnChangeAddress.bind(this)
+    this.handleChangeStage = this.handleChangeStage.bind(this)
+    this.onChangeAttribute = this.onChangeAttribute.bind(this)
+    this.handelNamesOnChangesAttributes = this.handelNamesOnChangesAttributes.bind(
+      this
+    )
   }
 
   componentDidMount() {
@@ -72,17 +81,40 @@ class ContactProfile extends React.Component {
     return list.indexOf(stage.name)
   }
 
-  onChangeAttribute = (type, id, text) => {
-    this.upsertAttributes(type, [
+  async onChangeAttribute(type, id, text) {
+    const {
+      contact: { id: contactId },
+      addNewAttributes,
+      updateContact
+    } = this.props
+
+    const attributes = [
       {
-        id,
+        id: id || undefined,
         type,
         [type]: text
       }
-    ])
+    ]
+
+    if (id) {
+      return updateContact({
+        contactId,
+        attributes
+      })
+    }
+
+    return addNewAttributes({
+      contactId,
+      attributes
+    })
   }
 
-  onChangeAddress = (address, field, id, text) => {
+  async handleOnChangeAddress(address, field, id, text) {
+    const {
+      updateContact,
+      addNewAttributes,
+      contact: { id: contactId }
+    } = this.props
     const { street_name, city, state, postal_code } = address
     const attributes = [
       {
@@ -98,45 +130,32 @@ class ContactProfile extends React.Component {
     // set field
     attributes[0][field] = text
 
-    this.upsertAttributes('address', attributes)
-  }
-
-  onAddAttribute = ({ attributeName, attributeType }) => {
-    const { updateContact, contact } = this.props
-    const { attributes } = contact.sub_contacts[0]
-
-    if (!attributes[attributeName]) {
-      attributes[attributeName] = []
+    if (id) {
+      return updateContact({ contactId, attributes })
     }
 
-    attributes[attributeName].push({
-      type: attributeType,
-      [attributeType]: `Enter ${attributeType} #${attributes[attributeName]
-        .length + 1}`
-    })
-
-    updateContact({
-      ...contact,
-      ...attributes
-    })
+    return addNewAttributes({ contactId, attributes })
   }
 
-  upsertAttributes = (type, attributes, disableNotify) => {
-    const { params, upsertAttributes } = this.props
+  async handleChangeStage(stage, contact) {
+    const { id: contactId } = contact
+    const { updateContact, addNewAttributes } = this.props
 
-    upsertAttributes(params.id, type, attributes, disableNotify)
-  }
+    const { id: attributeId } = Contact.get.stage(contact)
 
-  changeStage = (stage, contact) => {
     const attributes = [
       {
-        id: Contact.get.stage(contact).id,
         type: 'stage',
+        id: attributeId || undefined,
         stage: stage.replace(/\s/g, '')
       }
     ]
 
-    this.upsertAttributes('stage', attributes)
+    if (attributeId) {
+      return updateContact({ contactId, attributes })
+    }
+
+    return addNewAttributes({ contactId, attributes })
   }
 
   getNames = names => {
@@ -170,6 +189,26 @@ class ContactProfile extends React.Component {
         title: getTitle(name)
       }))
     }
+  }
+
+  async handelNamesOnChangesAttributes(type, id, text) {
+    const { contact, updateContact } = this.props
+    const { id: contactId } = contact
+    const { names } = contact.sub_contacts[0].attributes
+
+    const attributes = [
+      {
+        ...names[0],
+        [type]: text,
+        type: 'name',
+        id: id || undefined
+      }
+    ]
+
+    return updateContact({
+      contactId,
+      attributes
+    })
   }
 
   render() {
@@ -213,24 +252,14 @@ class ContactProfile extends React.Component {
                   'Past Client'
                 ]}
                 active={this.getStageIndex(contact)}
-                onChange={stage => this.changeStage(stage, contact)}
+                onChange={stage => this.handleChangeStage(stage, contact)}
               />
             </div>
 
             {Array.isArray(names) && (
               <Names
                 names={this.getNames(names[0])}
-                onChangeAttribute={(type, id, text) => {
-                  const attributes = [
-                    {
-                      ...names[0],
-                      [type]: text,
-                      id: id || undefined
-                    }
-                  ]
-
-                  this.upsertAttributes('name', attributes, true)
-                }}
+                onChangeAttribute={this.handelNamesOnChangesAttributes}
               />
             )}
 
@@ -243,12 +272,11 @@ class ContactProfile extends React.Component {
             <Details
               contact={contact}
               onChangeAttribute={(...args) => this.onChangeAttribute(...args)}
-              onAddAttribute={type => this.onAddAttribute(type)}
             />
 
             <Address
               contact={contact}
-              onChangeAddress={(...args) => this.onChangeAddress(...args)}
+              onChangeAddress={(...args) => this.handleOnChangeAddress(...args)}
             />
           </div>
 
@@ -284,6 +312,6 @@ const mapStateToProps = ({ contacts, user }, { params: { id: contactId } }) => {
 export default connect(mapStateToProps, {
   getContact,
   updateContact,
-  upsertAttributes,
+  addNewAttributes,
   getContactActivities
 })(ContactProfile)

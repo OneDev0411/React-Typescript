@@ -8,8 +8,7 @@ export default ({
   title,
   placeholder,
   showAdd = true,
-  onChangeAttribute,
-  onAddAttribute = () => {}
+  onChangeAttribute
 }) => {
   if (!Array.isArray(items)) {
     return null
@@ -43,7 +42,6 @@ export default ({
             showAdd={showAdd}
             text={item[type]}
             attributeName={name}
-            onAdd={onAddAttribute}
             placeholder={placeholder}
             onChange={onChangeAttribute}
           />

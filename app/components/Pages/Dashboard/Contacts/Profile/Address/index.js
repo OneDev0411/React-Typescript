@@ -13,7 +13,7 @@ export default ({ contact, onChangeAddress }) => (
         style={{ marginBottom: '10px' }}
       >
         <li>
-          <div className="name">Address</div>
+          <div className="name">Street</div>
           <div className="data">
             <Editable
               type="address"

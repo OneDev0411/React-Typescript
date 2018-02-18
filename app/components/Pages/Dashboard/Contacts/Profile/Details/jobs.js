@@ -1,17 +1,21 @@
 import React from 'react'
+import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
+import withPropsOnChange from 'recompose/withPropsOnChange'
 import Editable from '../Editable'
 
-export default ({ jobs, onChangeAttribute, onAddAttribute }) => {
-  if (!jobs) {
+const Jobs = ({ fields, onChangeAttribute, handleAddNewField }) => {
+  if (!fields) {
     return null
   }
 
   return (
     <div>
-      {jobs.length > 0 ? (
-        jobs.map(item => (
+      {fields.length > 0 ? (
+        fields.map(item => (
           <li key={`job__${item.id}`}>
-            <div className="name">Jobs</div>
+            <div className="name">Job Title</div>
             <div className="data">
               <Editable
                 type="job_title"
@@ -19,7 +23,7 @@ export default ({ jobs, onChangeAttribute, onAddAttribute }) => {
                 showEdit
                 showAdd
                 attributeName="job_titles"
-                onAdd={onAddAttribute}
+                onAdd={handleAddNewField}
                 text={item.job_title}
                 onChange={onChangeAttribute}
               />
@@ -28,7 +32,7 @@ export default ({ jobs, onChangeAttribute, onAddAttribute }) => {
         ))
       ) : (
         <li>
-          <div className="name">Jobs</div>
+          <div className="name">Job Title</div>
           <div className="data">
             <Editable
               type="job_title"
@@ -44,3 +48,25 @@ export default ({ jobs, onChangeAttribute, onAddAttribute }) => {
     </div>
   )
 }
+
+const enhance = compose(
+  withState('fields', 'addNewfields', ({ items }) => items),
+  withHandlers({
+    handleAddNewField: ({ addNewfields, fields }) => () => {
+      const newField = {
+        id: undefined,
+        type: 'job_title',
+        job_title: 'Enter new job title'
+      }
+
+      addNewfields([...fields, newField])
+    }
+  }),
+  withPropsOnChange(['items'], ({ items, addNewfields }) => {
+    addNewfields(items)
+
+    return {}
+  })
+)
+
+export default enhance(Jobs)

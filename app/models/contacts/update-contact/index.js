@@ -1,13 +1,13 @@
 import Fetch from '../../../services/fetch'
 
 /**
- * Adding new attributes to an existing contact.
- * @param {string} contactId The contact's id that attributes should to add it .
- * @param {array} attributes The new attributes that must be added.
+ * Updating a contact (its attributes).
+ * @param {string} contactId The contact's id that will be updated.
+ * @param {array} attributes The attributes that must be updated.
  * @returns {object} Returns updated contact.
  */
 
-export default async function postNewAttributes({
+export default async function updateContact({
   contactId = '',
   attributes = []
 }) {
@@ -20,11 +20,9 @@ export default async function postNewAttributes({
   }
 
   try {
-    const response = await new Fetch()
-      .post(`/contacts/${contactId}/attributes`)
-      .send({
-        attributes
-      })
+    const response = await new Fetch().patch(`/contacts/${contactId}`).send({
+      attributes
+    })
 
     return response.body.data
   } catch (error) {
