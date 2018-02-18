@@ -100,8 +100,12 @@ export function uploadStashFile(dealId, file, fileName = null) {
         fileName || file.name
       )
 
+      const fileData = response.body.data
+
       // add files to deal stash
-      dispatch(stashFileCreated(dealId, response.body.data))
+      dispatch(stashFileCreated(dealId, fileData))
+
+      return fileData
     } catch (e) {
       return null
     }
