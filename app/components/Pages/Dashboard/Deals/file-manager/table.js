@@ -338,8 +338,6 @@ export class FileManager extends React.Component {
     const { deal } = this.props
     const data = this.getAllFiles()
 
-    console.log(deal)
-
     if (data.length === 0 && filter.length === 0) {
       return (
         <Upload disableClick deal={deal}>
