@@ -266,7 +266,7 @@ export function validate(ctx, value) {
 
   switch (ctx.data_type) {
     case 'Number':
-      return parseFloat(value) > 0
+      return /^\d*\.?\d*$/.test(value)
     case 'String':
       return value.length > 0
     case 'Date':
