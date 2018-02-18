@@ -5,7 +5,7 @@ import cn from 'classnames'
 import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 import {
-  uploadFile,
+  uploadTaskFile,
   resetUploadFiles,
   setUploadAttributes,
   displaySplitter,
@@ -68,7 +68,7 @@ class UploadModal extends React.Component {
   async upload({ id, fileObject, properties }, task) {
     const {
       user,
-      uploadFile,
+      uploadTaskFile,
       setUploadAttributes,
       changeNeedsAttention,
       notify
@@ -88,7 +88,7 @@ class UploadModal extends React.Component {
     setUploadAttributes(id, { status: STATUS_UPLOADING })
 
     // upload file
-    const file = await uploadFile(user, task, fileObject, filename)
+    const file = await uploadTaskFile(user, task, fileObject, filename)
 
     if (!file) {
       setUploadAttributes(id, { status: null })
@@ -284,7 +284,7 @@ function mapStateToProps({ deals, user }) {
 
 export default connect(mapStateToProps, {
   notify,
-  uploadFile,
+  uploadTaskFile,
   resetUploadFiles,
   resetSplitter,
   displaySplitter,

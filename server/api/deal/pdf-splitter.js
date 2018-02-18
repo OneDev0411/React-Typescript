@@ -22,7 +22,10 @@ function splitFiles(splits, filepath) {
       .join(...splits)
       .pdfStream()
       .pipe(writeStream)
-      .on('error', e => reject(e))
+      .on('error', e => {
+        console.log(e)
+        reject(e)
+      })
       .on('finish', resolve)
   })
 }
@@ -125,14 +128,14 @@ router.post('/deals/pdf-splitter', async ctx => {
       })
 
     // cleanup !
-    fs.unlink(filepath, () => null)
-    _.each(files, file => {
-      if (typeof file.path === 'object') {
-        return true
-      }
+    // fs.unlink(filepath, () => null)
+    // _.each(files, file => {
+    //   if (typeof file.path === 'object') {
+    //     return true
+    //   }
 
-      fs.unlink(file.path, () => null)
-    })
+    //   fs.unlink(file.path, () => null)
+    // })
 
     finishStream({ success: true, file })
   } catch (e) {

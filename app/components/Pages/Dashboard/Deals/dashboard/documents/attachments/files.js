@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
 import _ from 'underscore'
-import { deleteAttachment } from '../../../../../../../store_actions/deals'
+import { deleteFile } from '../../../../../../../store_actions/deals'
 import VerticalDotsIcon from '../../../../Partials/Svgs/VerticalDots'
 
 /**
@@ -38,11 +38,13 @@ class FileAttachments extends React.Component {
   openDoc(fileId) {
     const { deal, task } = this.props
 
-    browserHistory.push(`/dashboard/deals/${deal.id}/form-viewer/${task.id}/attachment/${fileId}`)
+    browserHistory.push(
+      `/dashboard/deals/${deal.id}/form-viewer/${task.id}/attachment/${fileId}`
+    )
   }
 
   async deleteFile(e, task, file) {
-    const { deal, deleteAttachment } = this.props
+    const { deal, deleteFile } = this.props
     const { deleting } = this.state
 
     e.stopPropagation()
@@ -56,7 +58,7 @@ class FileAttachments extends React.Component {
     })
 
     try {
-      await deleteAttachment(deal.id, {
+      await deleteFile(deal.id, {
         [file.id]: task
       })
     } catch (e) {}
@@ -128,4 +130,4 @@ class FileAttachments extends React.Component {
   }
 }
 
-export default connect(null, { deleteAttachment })(FileAttachments)
+export default connect(null, { deleteFile })(FileAttachments)

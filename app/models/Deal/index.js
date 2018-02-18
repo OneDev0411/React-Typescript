@@ -9,7 +9,7 @@ import place from './place'
 import form from './form'
 import task from './task'
 import pdfSplitter from './pdf-splitter'
-import attachment from './attachment'
+import file from './file'
 import agent from './agent'
 import submission from './submission'
 import checklist from './checklist'
@@ -28,7 +28,7 @@ export default {
   ...task,
   ...pdfSplitter,
   ...context,
-  ...attachment,
+  ...file,
   ...agent,
   ...submission,
   ...checklist,

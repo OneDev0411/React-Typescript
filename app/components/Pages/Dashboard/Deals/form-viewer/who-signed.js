@@ -8,7 +8,6 @@ import UserAvatar from '../../../../Partials/UserAvatar'
 import Deal from '../../../../../models/Deal'
 import { voidEnvelope } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
-import config from '../../../../../../config/public'
 
 class WhoSigned extends React.Component {
   constructor(props) {
@@ -71,9 +70,7 @@ class WhoSigned extends React.Component {
   }
 
   async voidEnvelope(envelopeId) {
-    const {
-      deal, voidEnvelope, notify, onClose
-    } = this.props
+    const { deal, voidEnvelope, notify, onClose } = this.props
 
     try {
       voidEnvelope(deal.id, envelopeId)
@@ -88,7 +85,7 @@ class WhoSigned extends React.Component {
 
   render() {
     const { resending } = this.state
-    const { onRequestClose, envelope, user } = this.props
+    const { envelope, user } = this.props
     const { recipients } = envelope
     const areSigned = recipients.filter(r => r.status === 'Completed')
     const notSigned = recipients.filter(r => r.status !== 'Completed')
@@ -119,7 +116,7 @@ class WhoSigned extends React.Component {
         {areSigned.length > 0 && (
           <div className="ws-section">
             <div className="ws-section-title">
-              <img src="/static/images/deals/ws.svg" />
+              <img src="/static/images/deals/ws.svg" alt="" />
               SIGNED BY
             </div>
 
@@ -128,7 +125,9 @@ class WhoSigned extends React.Component {
                 <div className="avatar">
                   <UserAvatar
                     name={this.getName(signer.role)}
-                    image={signer.user && signer.user.profile_image_thumbnail_url}
+                    image={
+                      signer.user && signer.user.profile_image_thumbnail_url
+                    }
                     size={30}
                     showStateIndicator={false}
                   />
@@ -150,7 +149,7 @@ class WhoSigned extends React.Component {
         {notSigned.length > 0 && (
           <div className="ws-section">
             <div className="ws-section-title">
-              <img src="/static/images/deals/ws.svg" />
+              <img src="/static/images/deals/ws.svg" alt="" />
               HAS NOT SIGNED
             </div>
 
@@ -159,7 +158,9 @@ class WhoSigned extends React.Component {
                 <div className="avatar">
                   <UserAvatar
                     name={this.getName(signer.role)}
-                    image={signer.user && signer.user.profile_image_thumbnail_url}
+                    image={
+                      signer.user && signer.user.profile_image_thumbnail_url
+                    }
                     size={30}
                     showStateIndicator={false}
                   />
@@ -197,7 +198,9 @@ class WhoSigned extends React.Component {
                 <div className="avatar">
                   <UserAvatar
                     name={this.getName(signer.role)}
-                    image={signer.user && signer.user.profile_image_thumbnail_url}
+                    image={
+                      signer.user && signer.user.profile_image_thumbnail_url
+                    }
                     size={30}
                     showStateIndicator={false}
                   />

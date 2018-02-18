@@ -58,12 +58,20 @@ class FormViewer extends React.Component {
   }
 
   getAttachmentFile() {
-    const { tasks, params } = this.props
+    const { deal, tasks, params } = this.props
     const { taskId, objectId } = params
-    const task = tasks[taskId]
-    const { attachments } = task.room
-    const file =
-      attachments && _.find(attachments, attachment => attachment.id === objectId)
+    let file
+
+    if (taskId === 'stash') {
+      file = _.find(deal.files, file => file.id === objectId)
+    } else {
+      const task = tasks[taskId]
+      const { attachments } = task.room
+
+      file =
+        attachments &&
+        _.find(attachments, attachment => attachment.id === objectId)
+    }
 
     if (!file) {
       return false
@@ -94,10 +102,8 @@ class FormViewer extends React.Component {
   }
 
   async getEnvelopeFile() {
-    const {
-      user, tasks, envelopes, params
-    } = this.props
-    const { taskId, type, objectId } = params
+    const { user, tasks, envelopes, params } = this.props
+    const { taskId, objectId } = params
 
     const envelope = envelopes[objectId]
     const task = tasks[taskId]
@@ -107,7 +113,9 @@ class FormViewer extends React.Component {
     }
 
     // get document index
-    const doc = envelope.documents.find(doc => doc.submission === task.submission.id)
+    const doc = envelope.documents.find(
+      doc => doc.submission === task.submission.id
+    )
 
     if (!doc) {
       return null
@@ -137,7 +145,9 @@ class FormViewer extends React.Component {
   editForm() {
     const { deal, params } = this.props
 
-    browserHistory.push(`/dashboard/deals/${deal.id}/form-edit/${params.taskId}`)
+    browserHistory.push(
+      `/dashboard/deals/${deal.id}/form-edit/${params.taskId}`
+    )
   }
 
   onClose() {
@@ -156,9 +166,7 @@ class FormViewer extends React.Component {
 
   render() {
     const { file, showFactsheet, showComments } = this.state
-    const {
-      deal, tasks, envelopes, params
-    } = this.props
+    const { deal, tasks, envelopes, params } = this.props
 
     if (!file) {
       return (
