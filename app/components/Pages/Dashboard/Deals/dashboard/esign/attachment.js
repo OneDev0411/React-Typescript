@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Modal, Button } from 'react-bootstrap'
+import { Row, Col, Modal } from 'react-bootstrap'
 import { batchActions } from 'redux-batched-actions'
 import { browserHistory } from 'react-router'
 import moment from 'moment'
@@ -133,13 +133,18 @@ class SelectDocumentModal extends React.Component {
           <Modal.Footer>
             <span className="count">{attachments.length} doc selected</span>
 
-            <Button
-              className="deal-button"
+            <button
+              className={cn(
+                'c-button--shadow modal-deal-esign-documents--submit',
+                {
+                  active: attachments.length >= 1
+                }
+              )}
               onClick={() => this.onDone()}
               disabled={attachments.length < 1}
             >
               {esign.showCompose ? 'Select' : 'Next'}
-            </Button>
+            </button>
           </Modal.Footer>
         )}
       </Modal>
