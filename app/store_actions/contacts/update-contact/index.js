@@ -14,7 +14,7 @@ const updateContact = ({ contactId = '', attributes = [] }) => async (
 
   try {
     dispatch({
-      type: actionTypes.POST_NEW_ATTRIBUTES_REQUEST
+      type: actionTypes.PATCH_CONTACT_REQUEST
     })
 
     const updatedContact = await patchContact({ contactId, attributes })
@@ -28,14 +28,14 @@ const updateContact = ({ contactId = '', attributes = [] }) => async (
 
     dispatch({
       response,
-      type: actionTypes.POST_NEW_ATTRIBUTES_SUCCESS
+      type: actionTypes.PATCH_CONTACT_SUCCESS
     })
 
     return contact
   } catch (error) {
     dispatch({
       error,
-      type: actionTypes.POST_NEW_ATTRIBUTES_FAILURE
+      type: actionTypes.PATCH_CONTACT_FAILURE
     })
     throw error
   }

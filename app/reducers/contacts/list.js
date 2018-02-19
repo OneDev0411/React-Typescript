@@ -4,6 +4,7 @@ import * as actionTypes from '../../constants/contacts'
 const byId = (state = {}, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_SUCCESS:
+    case actionTypes.PATCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.DELETE_ATTRIBUTE_SUCCESS:
     case actionTypes.POST_NEW_CONTACTS_SUCCESS:
