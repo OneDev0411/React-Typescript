@@ -1,5 +1,5 @@
 import React from 'react'
-import Contact from '../../../../../../models/Contact'
+import Contact from '../../../../../../models/contacts'
 import Editable from '../Editable'
 import Zipcode from './zipcode'
 
@@ -13,7 +13,7 @@ export default ({ contact, onChangeAddress }) => (
         style={{ marginBottom: '10px' }}
       >
         <li>
-          <div className="name">Address</div>
+          <div className="name">Street</div>
           <div className="data">
             <Editable
               type="address"

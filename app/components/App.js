@@ -8,7 +8,7 @@ import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'
 
 // services
 import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
-import contactSocket from './Pages/Dashboard/Contacts/Services/socket'
+import ContactSocket from '../services/socket/contacts'
 import DealSocket from './Pages/Dashboard/Deals/services/socket'
 
 // utils
@@ -31,7 +31,8 @@ const InstantChat = Load({
 })
 
 // contacts
-import { getContacts } from '../store_actions/contact'
+import getContacts from '../store_actions/contacts/get-contacts'
+import { selectContacts } from '../reducers/contacts/list'
 
 // favorites
 import { selectListings } from '../reducers/listings'
@@ -71,7 +72,7 @@ class App extends Component {
   }
 
   async initializeApp() {
-    const { data, deals, dispatch } = this.props
+    const { data, deals, dispatch, contactsList } = this.props
     let { user } = this.props
 
     if (user) {
@@ -91,7 +92,9 @@ class App extends Component {
       }
 
       // load contacts
-      dispatch(getContacts())
+      if (contactsList.length === 0) {
+        dispatch(getContacts())
+      }
 
       // load notifications
       this.loadNotifications(data)
@@ -131,7 +134,7 @@ class App extends Component {
   }
 
   initializeContactSocket(user) {
-    new contactSocket(user)
+    new ContactSocket(user)
   }
   initializeChatSocket(user) {
     new ChatSocket(user)
@@ -273,16 +276,16 @@ class App extends Component {
           type: AppStore.data.user
             ? 'WebBranchBannerClickedUser'
             : 'WebBranchBannerClickedShadowUser',
-          access_token: AppStore.data.user ? AppStore.data.user.access_token : null
+          access_token: AppStore.data.user
+            ? AppStore.data.user.access_token
+            : null
         }
       }
     )
   }
 
   render() {
-    const {
-      data, user, rooms, location
-    } = this.props
+    const { data, user, rooms, location } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -303,7 +306,8 @@ class App extends Component {
 
     return (
       <div className="u-scrollbar">
-        {user && !user.email_confirmed && <VerificationBanner email={user.email} />}
+        {user &&
+          !user.email_confirmed && <VerificationBanner email={user.email} />}
 
         {user && navArea}
 
@@ -317,13 +321,18 @@ class App extends Component {
   }
 }
 
-export default connect(({
-  user, data, favorites, deals, contacts, chatroom
-}) => ({
-  data,
-  user,
-  deals: deals.list,
-  rooms: chatroom.rooms,
-  contacts: contacts.list,
-  favoritesListings: selectListings(favorites.listings)
-}))(App)
+const mapStateToProps = state => {
+  const { user, data, favorites, deals, contacts, chatroom } = state
+  const { list: contactsList } = contacts
+
+  return {
+    data,
+    user,
+    deals: deals.list,
+    rooms: chatroom.rooms,
+    favoritesListings: selectListings(favorites.listings),
+    contactsList: selectContacts(contactsList)
+  }
+}
+
+export default connect(mapStateToProps)(App)

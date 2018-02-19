@@ -1,28 +1,40 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import store from '../../../../../../stores'
-import { addNote } from '../../../../../../store_actions/contact'
+import addNewAttributes from '../../../../../../store_actions/contacts/add-new-attributes'
 
-export default class AddNote extends React.Component {
+class AddNote extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
       note: '',
       saving: false
     }
+
+    this.handelAddNote = this.handelAddNote.bind(this)
   }
 
-  async onAddNote() {
+  async handelAddNote() {
     const { note } = this.state
-    const { contact_id } = this.props
+    const { contactId, addNewAttributes } = this.props
 
-    if (note.trim().length === 0)
+    if (note.trim().length === 0) {
       return
+    }
 
     this.setState({ saving: true })
 
     // save note
-    await store.dispatch(addNote(contact_id, note))
+    await addNewAttributes({
+      contactId,
+      attributes: [
+        {
+          note,
+          type: 'note'
+        }
+      ]
+    })
 
     this.setState({
       saving: false,
@@ -35,6 +47,7 @@ export default class AddNote extends React.Component {
 
   render() {
     const { note, saving } = this.state
+
     return (
       <div className="note">
         <div className="head">
@@ -49,13 +62,15 @@ export default class AddNote extends React.Component {
         <div className="footer">
           <Button
             bsStyle="primary"
-            onClick={() => this.onAddNote()}
+            onClick={this.handelAddNote}
             disabled={saving}
           >
-            { saving ? 'Saving...' : 'Enter' }
+            {saving ? 'Saving...' : 'Save'}
           </Button>
         </div>
       </div>
     )
   }
 }
+
+export default connect(null, { addNewAttributes })(AddNote)

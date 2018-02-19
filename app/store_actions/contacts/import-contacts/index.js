@@ -1,34 +1,43 @@
-import types from '../../constants/contact'
-import Contact from '../../models/Contact'
+import { normalize } from 'normalizr'
 import { batchActions } from 'redux-batched-actions'
 import { addNotification as notify } from 'reapop'
-import _ from 'underscore'
+
+import * as types from '../../../constants/contacts'
+import { contactsSchema } from '../../../models/contacts/schema'
+import uploadContacts from '../../../models/contacts/upload-contacts'
 
 export function removeImportResult() {
-  return { type: types.REMOVE_IMPORT_RESULT }
+  return { type: types.CONTACTS__REMOVE_IMPORT_RESULT }
 }
 
 export function loginSusseful() {
-  return { type: types.IMPORT_SUCCESSFUL_LOGIN }
+  return { type: types.CONTACTS__IMPORT_SUCCESSFUL_LOGIN }
 }
 
 export function importFail() {
-  return { type: types.IMPORT_FAIL_LOGIN }
+  return { type: types.CONTACTS__IMPORT_FAIL_LOGIN }
 }
 
 export function importDone() {
   return dispatch => {
     dispatch(notifyResult({}))
 
-    dispatch({ type: types.IMPORT_DONE })
+    dispatch({ type: types.CONTACTS__IMPORT_DONE })
   }
 }
 
-function contactsFetched(body) {
+function contactsFetched(contacts) {
+  const { data, info } = contacts
+  const normalizedData = normalize({ contacts: data }, contactsSchema)
+
+  const response = {
+    info,
+    ...normalizedData
+  }
+
   return {
-    type: types.UPLOAD_CVS,
-    contacts: _.indexBy(body.data || [], 'id'),
-    info: body.info
+    response,
+    type: types.CONTACTS__UPLOAD_CVS
   }
 }
 
@@ -57,22 +66,22 @@ export function notifyResult(info) {
 export function uplaodCsv(file, fileName = null) {
   return async dispatch => {
     try {
-      dispatch({ type: types.SHOW_SPINNER })
+      dispatch({ type: types.CONTACTS__SHOW_SPINNER })
 
-      const response = await Contact.uplaodCsv(file, fileName)
+      const response = await uploadContacts({ file, fileName })
 
       if (response) {
         batchActions([
-          dispatch({ type: types.HIDE_SPINNER }),
-          dispatch(contactsFetched(response.body)),
-          dispatch(notifyResult(response.body.info))
+          dispatch({ type: types.CONTACTS__HIDE_SPINNER }),
+          dispatch(contactsFetched(response)),
+          dispatch(notifyResult(response.info))
         ])
       } else {
-        dispatch({ type: types.HIDE_SPINNER })
+        dispatch({ type: types.CONTACTS__HIDE_SPINNER })
       }
     } catch (e) {
       batchActions([
-        dispatch({ type: types.HIDE_SPINNER }),
+        dispatch({ type: types.CONTACTS__HIDE_SPINNER }),
         dispatch(
           notify({
             title: 'Import failed',

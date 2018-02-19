@@ -3,14 +3,9 @@ import { Tabs, Tab } from 'react-bootstrap'
 import _ from 'underscore'
 import Timeline from '../Timeline'
 import Notes from '../Notes'
-import Contact from '../../../../../../models/Contact'
+import Contact from '../../../../../../models/contacts'
 
-export default ({
-  contact,
-  activeTab,
-  onChangeTab,
-  onChangeAttribute
-}) => {
+export default ({ contact, activeTab, onChangeTab, onChangeAttribute }) => {
   const notes = Contact.get.notes(contact)
 
   return (
@@ -33,7 +28,7 @@ export default ({
           <Timeline
             name={Contact.get.name(contact)}
             avatar={Contact.get.avatar(contact)}
-            activities={contact.timeline || {}}
+            activities={contact.activities || {}}
           />
         </Tab>
 
@@ -47,10 +42,7 @@ export default ({
           }
           className="notes"
         >
-          <Notes
-            notes={notes}
-            onNoteChange={onChangeAttribute}
-          />
+          <Notes notes={notes} onNoteChange={onChangeAttribute} />
         </Tab>
       </Tabs>
     </div>

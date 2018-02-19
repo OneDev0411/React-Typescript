@@ -1,30 +1,25 @@
-.contact-tags {
-  ul.tags {
-    display: inline;
-    padding: 0;
-    display: inline;
-    li {
-      display: inline-block;
-      border-radius: 100px;
-      background-color: #ffffff;
-      border: solid 1px #d5d5d5;
-      color: #9b9b9b;
-      margin: 0 5px 5px 0;
-      padding: 5px 10px;
-      cursor: pointer;
 
-      &.active {
-        background-color: #263445;
-        border-color: transparent;
-        color: #fff;
-      }
-      &.new-item {
-        border: 1px dashed #d6d6d6;
-        background-color: transparent;
-        color: #d6d6d6;
-        min-width: 85px;
-        text-align: center;
-      }
-    }
+.c-contact__tag {
+  display: inline-block;
+  border-radius: 100px;
+  background-color: #ffffff;
+  border: solid 1px #d5d5d5;
+  color: #9b9b9b;
+  margin: 0 5px 5px 0;
+  padding: 5px 10px;
+  cursor: pointer;
+
+  &.active {
+    background-color: #263445;
+    border-width: 0;
+    color: #fff;
   }
+}
+
+.c-contact__tag--new {
+  @extend .c-contact__tag;
+  min-width: 85px;
+  text-align: center;
+  border-style: dashed;
+  background-color: transparent;
 }

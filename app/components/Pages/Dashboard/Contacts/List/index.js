@@ -3,13 +3,14 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
-import Contact from '../../../../../models/Contact'
-import { upsertAttributes } from '../../../../../store_actions/contact'
+import Contact from '../../../../../models/contacts'
 import Stage from '../components/Stage'
 import NoContact from './no-contact'
 import Header from './header'
 import ReactTable from 'react-table'
 import NoSearchResults from '../../../../Partials/no-search-results'
+import { selectContacts } from '../../../../../reducers/contacts/list'
+import { upsertContactAttributes } from '../../../../../store_actions/contacts'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -78,7 +79,7 @@ class ContactsList extends React.Component {
           <Stage
             defaultTitle={Contact.get.stage(contact).name}
             handleOnSelect={stage =>
-              this.onChangeStage(stage, contact, props.upsertAttributes)
+              this.onChangeStage(stage, contact, props.upsertContactAttributes)
             }
           />
         )
@@ -98,18 +99,22 @@ class ContactsList extends React.Component {
     ]
   }
 
-  onChangeStage = (stage, contact, upsertAttributes) => {
-    upsertAttributes(contact.id, 'stage', [
+  onChangeStage = (stage, contact, handler) => {
+    const { id: contactId } = contact
+    const attributes = [
       {
         id: Contact.get.stage(contact).id,
         type: 'stage',
         stage
       }
-    ])
+    ]
+
+    handler({ contactId, attributes })
   }
 
   onInputChange = filter => this.setState({ filter })
-  applyFilters(contact) {
+
+  applyFilters = contact => {
     let matched = false
     const { filter } = this.state
     let regex = new RegExp(
@@ -140,29 +145,32 @@ class ContactsList extends React.Component {
 
     return matched
   }
-  render() {
-    const { contacts, user, loadingImport } = this.props
-    const filteredContacts = _.filter(contacts, contact =>
-      this.applyFilters(contact)
-    )
 
-    if (_.size(contacts) === 0) {
+  render() {
+    const { contactsList, user, loadingImport } = this.props
+    const contactsCount = contactsList.length
+
+    if (contactsCount === 0) {
       return (
         <div className="list">
           <NoContact
             user={user}
-            contactsCount={_.size(contacts)}
+            contactsCount={contactsCount}
             onNewContact={id => openContact(id)}
           />
         </div>
       )
     }
 
+    const filteredContacts = contactsList.filter(contact =>
+      this.applyFilters(contact)
+    )
+
     return (
       <div className="list">
         <Header
           user={user}
-          contactsCount={_.size(contacts)}
+          contactsCount={contactsCount}
           onNewContact={id => openContact(id)}
           onInputChange={this.onInputChange}
         />
@@ -188,11 +196,17 @@ class ContactsList extends React.Component {
   }
 }
 
-export default connect(
-  ({ contacts, user }) => ({
-    contacts: contacts.list,
+function mapStateToProps({ user, contacts }) {
+  const { list, spinner: loadingImport } = contacts
+  const contactsList = selectContacts(list)
+
+  return {
     user,
-    loadingImport: contacts.spinner
-  }),
-  { upsertAttributes }
-)(ContactsList)
+    contactsList,
+    loadingImport
+  }
+}
+
+export default connect(mapStateToProps, { upsertContactAttributes })(
+  ContactsList
+)

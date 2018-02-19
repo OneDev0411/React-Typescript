@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { getContacts, uplaodCsv } from '../../../../../store_actions/contact'
 import Dropzone from 'react-dropzone'
 import HelpIcon from '../../Partials/Svgs/HelpIcon'
 import OutlookIcon from '../../Partials/Svgs/Outlook'
 import GoogleIcon from '../../Partials/Svgs/Google'
 import { Dropdown, MenuItem } from 'react-bootstrap'
+import { uplaodCsv } from '../../../../../store_actions/contacts/import-contacts'
 
 class ImportCSV extends React.Component {
   async onDropFiles(files) {
@@ -16,7 +16,10 @@ class ImportCSV extends React.Component {
     return (
       <Fragment>
         <div className="list--secondary-button">
-          <button className="c-button--shadow " onClick={() => this.dropzone.open()}>
+          <button
+            className="c-button--shadow "
+            onClick={() => this.dropzone.open()}
+          >
             Import from CSV
           </button>
           <Dropdown id="import-csv-dropdown" pullRight>
@@ -80,12 +83,4 @@ class ImportCSV extends React.Component {
   }
 }
 
-export default connect(
-  ({ contacts, user }) => {
-    return {
-      importInfo: contacts.importCsv,
-      user
-    }
-  },
-  { getContacts, uplaodCsv }
-)(ImportCSV)
+export default connect(null, { uplaodCsv })(ImportCSV)

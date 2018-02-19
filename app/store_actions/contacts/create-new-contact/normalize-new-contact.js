@@ -1,14 +1,11 @@
-import Contact from '../../models/Contact'
-import types from '../../constants/contact'
+/**
+ * Normalize new contact form data as a new contact object.
+ *
+ * @param {object} formData The new contact form data.
+ * @returns {object} Returns the new contact.
+ */
 
-function contactCreated(contact) {
-  return {
-    type: types.ADD_CONTACT,
-    contact
-  }
-}
-
-export function addContact(args) {
+export function normalizeNewContact(formData = {}) {
   let {
     first_name,
     last_name,
@@ -21,7 +18,7 @@ export function addContact(args) {
     legal_prefix,
     emails,
     phone_numbers
-  } = args
+  } = formData
 
   const contact = {
     type: 'contact',
@@ -64,7 +61,11 @@ export function addContact(args) {
     contact.attributes = attributes
   }
 
-  if (phone_numbers && Array.isArray(phone_numbers) && phone_numbers.length > 0) {
+  if (
+    phone_numbers &&
+    Array.isArray(phone_numbers) &&
+    phone_numbers.length > 0
+  ) {
     const phoneNumbers = attributeNormalizer({
       attributeName: 'phone_number',
       attributeValue: phone_numbers
@@ -92,19 +93,7 @@ export function addContact(args) {
     contact.attributes = attributes
   }
 
-  const params = {
-    contacts: [contact]
-  }
-
-  return async dispatch => {
-    const response = await Contact.add(params)
-
-    const contact = response.body.data[0]
-
-    dispatch(contactCreated(contact))
-
-    return contact.id
-  }
+  return contact
 }
 
 function attributeNormalizer({ attributeName, attributeValue }) {

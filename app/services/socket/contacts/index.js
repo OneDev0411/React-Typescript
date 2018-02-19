@@ -1,11 +1,11 @@
-import Socket from '../../../../../services/socket'
-import store from '../../../../../stores'
+import Socket from '../'
+import store from '../../../stores'
 
 import {
   loginSusseful,
   importDone,
   importFail
-} from '../../../../../store_actions/contact'
+} from '../../../store_actions/contacts'
 
 export default class ContactSocket extends Socket {
   constructor(user) {

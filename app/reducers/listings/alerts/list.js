@@ -45,3 +45,5 @@ const list = combineReducers({
 })
 
 export default list
+
+export const selectAlert = (state, id) => state.byId[id]

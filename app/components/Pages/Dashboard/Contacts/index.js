@@ -1,32 +1,35 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getContacts, getTags } from '../../../../store_actions/contact'
+import {
+  getContacts,
+  getContactsTags
+} from '../../../../store_actions/contacts'
+import { selectTags } from '../../../../reducers/contacts/tags'
+import { selectContacts } from '../../../../reducers/contacts/list'
 
 class Contacts extends React.Component {
-  constructor(props) {
-    super(props)
+  componentDidMount() {
+    this.initializeContacts()
   }
 
-  componentDidMount() {
-    const { getContacts, getTags, contacts, tags } = this.props
+  async initializeContacts() {
+    const { getContacts, getContactsTags, contactsList, tagsList } = this.props
 
-    // get contacts
-    if (!contacts) {
-      getContacts()
+    if (contactsList.length === 0) {
+      await getContacts()
     }
 
-    // get tags
-    if (!tags) {
-      getTags()
+    if (tagsList.length === 0) {
+      await getContactsTags()
     }
   }
 
   render() {
-    const { contacts } = this.props
+    const { contactsList } = this.props
 
     return (
       <div className="contacts">
-        {contacts ? (
+        {contactsList ? (
           this.props.children
         ) : (
           <div className="loading-list">
@@ -41,10 +44,16 @@ class Contacts extends React.Component {
   }
 }
 
-export default connect(
-  ({ contacts }) => ({
-    contacts: contacts.list,
-    tags: contacts.tags
-  }),
-  { getContacts, getTags }
-)(Contacts)
+function mapStateToProps({ contacts: { list, tags } }) {
+  const contactsList = selectContacts(list)
+  const tagsList = selectTags(tags)
+
+  return {
+    tagsList,
+    contactsList
+  }
+}
+
+export default connect(mapStateToProps, { getContacts, getContactsTags })(
+  Contacts
+)

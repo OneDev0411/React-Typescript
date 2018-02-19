@@ -1,13 +1,13 @@
 import React from 'react'
-import { compose, withState } from 'recompose'
-
+import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
+import withPropsOnChange from 'recompose/withPropsOnChange'
 import Editable from '../Editable'
 
-const enhance = compose(withState('errorIdItems', 'setErrorIdItem', []))
-
 const Emails = ({
-  emails,
-  onAddAttribute,
+  fields,
+  handleAddNewField,
   onChangeAttribute,
   errorIdItems,
   setErrorIdItem
@@ -36,7 +36,7 @@ const Emails = ({
 
   return (
     <div>
-      {emails.map((item, key) => (
+      {fields.map((item, key) => (
         <li key={`email_${key}`}>
           <div className="name">Email</div>
           <div className="data">
@@ -47,7 +47,7 @@ const Emails = ({
               showAdd
               text={item.email}
               attributeName="emails"
-              onAdd={onAddAttribute}
+              onAdd={handleAddNewField}
               onChange={onChangeEmail}
               validate={validate}
               error={errorIdItems.indexOf(key) > -1}
@@ -57,7 +57,7 @@ const Emails = ({
         </li>
       ))}
 
-      {emails.length === 0 && (
+      {fields.length === 0 && (
         <li>
           <div className="name">Email</div>
           <div className="data">
@@ -65,7 +65,7 @@ const Emails = ({
               type="email"
               id={null}
               showEdit
-              text=""
+              text="-"
               onChange={onChangeEmail}
               validate={validate}
               error={errorIdItems.indexOf('new') > -1}
@@ -77,5 +77,26 @@ const Emails = ({
     </div>
   )
 }
+
+const enhance = compose(
+  withState('errorIdItems', 'setErrorIdItem', []),
+  withState('fields', 'addNewfields', ({ items }) => items),
+  withHandlers({
+    handleAddNewField: ({ addNewfields, fields }) => () => {
+      const newField = {
+        id: undefined,
+        type: 'email',
+        email: 'Enter new email'
+      }
+
+      addNewfields([...fields, newField])
+    }
+  }),
+  withPropsOnChange(['items'], ({ items, addNewfields }) => {
+    addNewfields(items)
+
+    return {}
+  })
+)
 
 export default enhance(Emails)

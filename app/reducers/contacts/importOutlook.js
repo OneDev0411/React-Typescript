@@ -1,20 +1,20 @@
-import types from '../../constants/contact'
+import * as types from '../../constants/contacts'
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case types.IMPORT_SUCCESSFUL_LOGIN:
+    case types.CONTACTS__IMPORT_SUCCESSFUL_LOGIN:
       return {
         SuccessfulLogin: true
       }
-    case types.IMPORT_FAIL_LOGIN:
+    case types.CONTACTS__IMPORT_FAIL_LOGIN:
       return {
         failLogin: true
       }
-    case types.IMPORT_DONE:
+    case types.CONTACTS__IMPORT_DONE:
       return {
         done: true
       }
-    case types.REMOVE_IMPORT_RESULT:
+    case types.CONTACTS__REMOVE_IMPORT_RESULT:
       return {}
     default:
       return state

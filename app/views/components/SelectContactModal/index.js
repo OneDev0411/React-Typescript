@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getContactsList } from '../../../reducers/contacts/list'
-import { extractUserInfoFromContact } from '../../../models/Contact'
+import { extractUserInfoFromContact } from '../../../models/contacts'
+import { selectContacts } from '../../../reducers/contacts/list'
 
 import BareModal from '../BareModal'
 import Header from './components/Header'
@@ -35,7 +35,11 @@ function SelectContactModal(props) {
   } = props
 
   return (
-    <BareModal isOpen={isOpen} contentLabel={title} onRequestClose={handleOnClose}>
+    <BareModal
+      isOpen={isOpen}
+      contentLabel={title}
+      onRequestClose={handleOnClose}
+    >
       <Header title={title}>
         <ShadowButton onClick={handleAddManually} color="#2196f3">
           <svg
@@ -62,12 +66,12 @@ function SelectContactModal(props) {
 SelectContactModal.propTypes = propTypes
 SelectContactModal.defaultProps = defaultProps
 
-function mapToProps({ contacts }) {
-  const contactsList = getContactsList(contacts).map(extractUserInfoFromContact)
+function mapStateToProps({ contacts: { list } }) {
+  const contactsList = selectContacts(list).map(extractUserInfoFromContact)
 
   return {
     contactsList
   }
 }
 
-export default connect(mapToProps)(SelectContactModal)
+export default connect(mapStateToProps)(SelectContactModal)

@@ -14,16 +14,22 @@ const SharedWith = ({ alert }) => {
 
   return (
     <p className="c-alertList__item__shared-by san-fran">
-      <span>{'Shared With: '}</span>
+      <span>Shared With: </span>
       {users
         .filter(user => user.id !== created_by.id)
-        .map((user, index) => user.first_name || user.phone_number)
+        .map(user => user.first_name || user.phone_number)
         .join(', ')}
     </p>
   )
 }
 
-const AlertListItem = ({ user, alert, isSelected, onClickAlert, onClickDelete }) => (
+const AlertListItem = ({
+  user,
+  alert,
+  isSelected,
+  onClickAlert,
+  onClickDelete
+}) => (
   <div
     className={`c-alertList__item ${
       isSelected ? 'c-alertList__item--selected' : ''
@@ -50,7 +56,7 @@ const AlertListItem = ({ user, alert, isSelected, onClickAlert, onClickDelete })
       </h3>
       {user.id !== alert.created_by.id && (
         <p className="c-alertList__item__shared-by san-fran">
-          <span>{'Created By: '}</span>
+          <span>Created By: </span>
           {alert.created_by.first_name}
         </p>
       )}
