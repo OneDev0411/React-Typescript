@@ -168,3 +168,22 @@ export async function getNewAttributes(formData = {}) {
 
   return newAttributes
 }
+
+export function getPrimaryAgent(deal, roles) {
+  const roleType = deal.deal_type === 'Buying' ? 'BuyerAgent' : 'SellerAgent'
+
+  if (deal.roles) {
+    const primaryRole = _.find(
+      deal.roles,
+      roleId => roles[roleId].role === roleType
+    )
+
+    if (primaryRole) {
+      return `${roles[primaryRole].legal_first_name} ${
+        roles[primaryRole].legal_last_name
+      }`
+    }
+  }
+
+  return ''
+}

@@ -42,7 +42,7 @@ const List = ({
   if (isBackOffice && checklist.tasks) {
     sortedTasks = _.sortBy(
       checklist.tasks,
-      id => (tasks[id].needs_attention ? 0 : 1)
+      id => (tasks[id].attention_requested ? 0 : 1)
     )
   }
 
@@ -54,7 +54,7 @@ const List = ({
             sortedTasks.map(id => {
               const task = tasks[id]
               const room = rooms[task.room.id] || task.room
-              const hasStatus = task.review !== null || task.needs_attention === true
+              const hasStatus = task.review !== null || task.attention_requested === true
 
               return (
                 <CSSTransition

@@ -30,6 +30,7 @@ export async function getById(id) {
       .query({ 'associations[]': ['room.attachments'] })
       .query({ 'associations[]': ['deal.checklists'] })
       .query({ 'associations[]': ['deal.envelopes'] })
+      .query({ 'associations[]': ['deal.files'] })
 
     return response.body.data
   } catch (e) {

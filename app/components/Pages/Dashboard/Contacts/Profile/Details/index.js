@@ -1,69 +1,85 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import Contact from '../../../../../../models/Contact'
-import Tags from '../Tags'
 import Phones from './phones'
 import Emails from './emails'
 import Birthdays from './birthdays'
 import Companies from './companies'
+import Jobs from './jobs'
+import Websites from './websites'
 
-const Details = ({
+export default function Details({
   contact,
-  user,
-  emails,
-  phones,
-  birthdays,
-  companies,
   onAddAttribute,
-  onChangeAttribute,
-  defaultTags
-}) => (
-  <div className="card details">
-    <div className="title">Details</div>
-    <ul className="table">
-      <li>
-        <div className="name">Tags</div>
-        <div className="data">
-          <Tags
-            contact_id={contact.id}
-            user={user}
-            tags={Contact.get.tags(contact, defaultTags)}
-          />
-        </div>
-      </li>
+  onChangeAttribute
+}) {
+  return (
+    <div className="card details">
+      <div className="title">Details</div>
+      <ul className="table">
+        <Emails
+          emails={Contact.get.attribute({
+            contact,
+            name: 'emails',
+            type: 'email'
+          })}
+          onAddAttribute={onAddAttribute}
+          onChangeAttribute={onChangeAttribute}
+        />
 
-      <Emails
-        emails={emails}
-        onAddAttribute={onAddAttribute}
-        onChangeAttribute={onChangeAttribute}
-      />
+        <Phones
+          phones={Contact.get.attribute({
+            contact,
+            name: 'phone_numbers',
+            type: 'phone_number'
+          })}
+          onAddAttribute={onAddAttribute}
+          onChangeAttribute={onChangeAttribute}
+        />
 
-      <Phones
-        phones={phones}
-        onAddAttribute={onAddAttribute}
-        onChangeAttribute={onChangeAttribute}
-      />
+        <Birthdays
+          birthdays={Contact.get.attribute({
+            contact,
+            name: 'birthdays',
+            type: 'birthday'
+          })}
+          onChangeAttribute={onChangeAttribute}
+        />
 
-      <Birthdays
-        birthdays={birthdays}
-        onChangeAttribute={onChangeAttribute}
-      />
+        <Companies
+          companies={Contact.get.attribute({
+            contact,
+            name: 'companies',
+            type: 'company'
+          })}
+          onAddAttribute={onAddAttribute}
+          onChangeAttribute={onChangeAttribute}
+        />
 
-      <Companies
-        companies={companies}
-        onChangeAttribute={onChangeAttribute}
-      />
+        <Websites
+          websites={Contact.get.attribute({
+            contact,
+            name: 'websites',
+            type: 'website'
+          })}
+          onAddAttribute={onAddAttribute}
+          onChangeAttribute={onChangeAttribute}
+        />
 
-      <li>
-        <div className="name">Original Source</div>
-        <div className="data">
-          { Contact.get.source(contact).label || '-' }
-        </div>
-      </li>
-    </ul>
-  </div>
-)
+        <Jobs
+          jobs={Contact.get.attribute({
+            contact,
+            name: 'job_titles',
+            type: 'job_title'
+          })}
+          onAddAttribute={onAddAttribute}
+          onChangeAttribute={onChangeAttribute}
+        />
 
-export default connect(({ contacts }) => ({
-  defaultTags: contacts.tags
-}))(Details)
+        <li>
+          <div className="name">Original Source</div>
+          <div className="data">{Contact.get.source(contact).label || '-'}</div>
+        </li>
+      </ul>
+    </div>
+  )
+}

@@ -2,13 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
-import _ from 'underscore'
 import moment from 'moment'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import Deal from '../../../../../models/Deal'
 import { voidEnvelope } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
-import config from '../../../../../../config/public'
 
 class WhoSigned extends React.Component {
   constructor(props) {
@@ -22,16 +20,17 @@ class WhoSigned extends React.Component {
     const { user } = this.props
     const token = user.access_token
 
-    return `/api/deals/envelope/${envelopeId}/sign/${recipientId}?access_token=${token}`
+    return `/api/deals/envelope/${envelopeId}/sign/${recipientId}\
+?access_token=${token}`
   }
 
   getName(role) {
-    if (role.user) {
+    if (role.legal_last_name || role.legal_first_name) {
+      return `${role.legal_prefix || ''} ${role.legal_first_name ||
+        ''} ${role.legal_last_name || ''}`.trim()
+    } else if (role.user) {
       return role.user.display_name
     }
-
-    return `${role.legal_prefix || ''} ${role.legal_first_name ||
-      ''} ${role.legal_last_name || ''}`.trim()
   }
 
   async resendDocs(envelopeId) {
@@ -71,9 +70,7 @@ class WhoSigned extends React.Component {
   }
 
   async voidEnvelope(envelopeId) {
-    const {
-      deal, voidEnvelope, notify, onClose
-    } = this.props
+    const { deal, voidEnvelope, notify, onClose } = this.props
 
     try {
       voidEnvelope(deal.id, envelopeId)
@@ -88,7 +85,7 @@ class WhoSigned extends React.Component {
 
   render() {
     const { resending } = this.state
-    const { onRequestClose, envelope, user } = this.props
+    const { envelope, user } = this.props
     const { recipients } = envelope
     const areSigned = recipients.filter(r => r.status === 'Completed')
     const notSigned = recipients.filter(r => r.status !== 'Completed')
@@ -119,7 +116,7 @@ class WhoSigned extends React.Component {
         {areSigned.length > 0 && (
           <div className="ws-section">
             <div className="ws-section-title">
-              <img src="/static/images/deals/ws.svg" />
+              <img src="/static/images/deals/ws.svg" alt="" />
               SIGNED BY
             </div>
 
@@ -128,7 +125,9 @@ class WhoSigned extends React.Component {
                 <div className="avatar">
                   <UserAvatar
                     name={this.getName(signer.role)}
-                    image={signer.user && signer.user.profile_image_thumbnail_url}
+                    image={
+                      signer.user && signer.user.profile_image_thumbnail_url
+                    }
                     size={30}
                     showStateIndicator={false}
                   />
@@ -150,7 +149,7 @@ class WhoSigned extends React.Component {
         {notSigned.length > 0 && (
           <div className="ws-section">
             <div className="ws-section-title">
-              <img src="/static/images/deals/ws.svg" />
+              <img src="/static/images/deals/ws.svg" alt="" />
               HAS NOT SIGNED
             </div>
 
@@ -159,7 +158,9 @@ class WhoSigned extends React.Component {
                 <div className="avatar">
                   <UserAvatar
                     name={this.getName(signer.role)}
-                    image={signer.user && signer.user.profile_image_thumbnail_url}
+                    image={
+                      signer.user && signer.user.profile_image_thumbnail_url
+                    }
                     size={30}
                     showStateIndicator={false}
                   />
@@ -197,7 +198,9 @@ class WhoSigned extends React.Component {
                 <div className="avatar">
                   <UserAvatar
                     name={this.getName(signer.role)}
-                    image={signer.user && signer.user.profile_image_thumbnail_url}
+                    image={
+                      signer.user && signer.user.profile_image_thumbnail_url
+                    }
                     size={30}
                     showStateIndicator={false}
                   />

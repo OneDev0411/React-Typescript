@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { Row, Col, OverlayTrigger, Popover } from 'react-bootstrap'
 import merge from 'merge'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
@@ -28,9 +27,21 @@ class BackOfficeTable extends BaseTable {
         className: 'col-md-1 hidden-xs',
         getText: deal => this.getStatus(deal),
         getValue: deal => Deal.get.status(deal),
-        sortByList: ['Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
-          'Active Contingent', 'Active Kick Out', 'Pending', 'Sold', 'Leased',
-          'Expired', 'Temp Off Market', 'Cancelled', 'Withdrawn']
+        sortByList: [
+          'Incoming',
+          'Coming Soon',
+          'Active',
+          'Active Option Contract',
+          'Active Contingent',
+          'Active Kick Out',
+          'Pending',
+          'Sold',
+          'Leased',
+          'Expired',
+          'Temp Off Market',
+          'Cancelled',
+          'Withdrawn'
+        ]
       },
       property_type: {
         caption: 'PROPERTY TYPE',
@@ -42,8 +53,8 @@ class BackOfficeTable extends BaseTable {
         caption: 'AGENT NAME',
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: deal => deal.created_by ? deal.created_by.display_name : '',
-        getValue: deal => deal.created_by ? deal.created_by.display_name : ''
+        getText: deal => (deal.created_by ? deal.created_by.display_name : ''),
+        getValue: deal => (deal.created_by ? deal.created_by.display_name : '')
       },
       office: {
         caption: 'OFFICE',
@@ -53,7 +64,7 @@ class BackOfficeTable extends BaseTable {
       },
       critical_dates: {
         caption: 'CRITICAL DATES',
-        className: 'col-md-2 hidden-sm hidden-xs',
+        className: 'col-md-1 hidden-sm hidden-xs',
         getText: deal => this.getNextDate(deal)
       },
       notificiation: {
@@ -65,6 +76,23 @@ class BackOfficeTable extends BaseTable {
         caption: '',
         justFilter: true,
         getValue: deal => deal.searchResult
+      },
+      attention_requested_at: {
+        caption: 'SUBMITTED AT',
+        className: 'col-md-1 hidden-sm hidden-xs',
+        sortable: true,
+        getValue: deal => deal.attention_requested_at,
+        getText: deal => {
+          if (deal.attention_requested_at) {
+            const dateTime = moment.unix(deal.attention_requested_at).utc()
+            if (dateTime.calendar().includes('Today')){
+              return dateTime.calendar()
+            }
+            return dateTime.format('MMM DD, YYYY [at] hh:mm A')
+          }
+
+          return ''
+        }
       }
     }
   }
@@ -74,6 +102,7 @@ class BackOfficeTable extends BaseTable {
    */
   getOffice(deal) {
     const brand = this.flattenBrand(deal.brand)
+
     return brand && brand.messages ? brand.messages.branch_title : 'N/A'
   }
 
@@ -92,8 +121,7 @@ class BackOfficeTable extends BaseTable {
     }
 
     if (task.review.updated_at) {
-      text += moment.unix(task.review.updated_at)
-        .format('MMMM DD, HH:mm')
+      text += moment.unix(task.review.updated_at).format('MMMM DD, HH:mm')
     }
 
     return text
@@ -126,9 +154,12 @@ class BackOfficeTable extends BaseTable {
   }
 }
 
-export default connect(({ deals, chatroom }) => ({
-  tasks: deals.tasks,
-  checklists: deals.checklists,
-  roles: deals.roles,
-  rooms: chatroom.rooms
-}), { closeEsignWizard, setSelectedTask })(BackOfficeTable)
+export default connect(
+  ({ deals, chatroom }) => ({
+    tasks: deals.tasks,
+    checklists: deals.checklists,
+    roles: deals.roles,
+    rooms: chatroom.rooms
+  }),
+  { closeEsignWizard, setSelectedTask }
+)(BackOfficeTable)

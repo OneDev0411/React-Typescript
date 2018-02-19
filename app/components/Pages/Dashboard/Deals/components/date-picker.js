@@ -1,7 +1,6 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import DatePicker from 'react-day-picker'
-import moment from 'moment'
 
 export default class extends React.Component {
   constructor(props) {
@@ -34,6 +33,7 @@ export default class extends React.Component {
 
   onClose() {
     const { onClose } = this.props
+
     this.setState({ selectedDate: null }, onClose)
   }
 
@@ -46,7 +46,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { show, saveText, initialDate } = this.props
+    const { show, saveText } = this.props
     const { selectedDate } = this.state
     const date = this.getSelectedDate()
 
@@ -65,15 +65,12 @@ export default class extends React.Component {
           <DatePicker
             selectedDays={date}
             month={date}
-            onDayClick={(date) => this.onDateChange(date)}
+            onDayClick={date => this.onDateChange(date)}
           />
         </Modal.Body>
 
         <Modal.Footer>
-          <Button
-            className="deal-button cancel"
-            onClick={() => this.onClose()}
-          >
+          <Button className="deal-button cancel" onClick={() => this.onClose()}>
             Cancel
           </Button>
 
@@ -82,7 +79,7 @@ export default class extends React.Component {
             onClick={() => this.onSelectDate(selectedDate)}
             disabled={!date}
           >
-            { saveText || 'Update' }
+            {saveText || 'Update'}
           </Button>
         </Modal.Footer>
       </Modal>

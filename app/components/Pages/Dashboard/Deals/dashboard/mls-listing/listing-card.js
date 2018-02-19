@@ -4,12 +4,10 @@ import { Link } from 'react-router'
 import cn from 'classnames'
 import _ from 'underscore'
 import { browserHistory } from 'react-router'
+import Tooltip from '../../components/tooltip'
 import ManualAddress from '../../create/manual-address'
 import Deal from '../../../../../../models/Deal'
 import { updateContext } from '../../../../../../store_actions/deals'
-
-const WARNING_MESSAGE =
-  'Listing information can only be changed on MLS. Once changed, the update will be reflected here.'
 
 class ListingCard extends React.Component {
   constructor(props) {
@@ -17,48 +15,8 @@ class ListingCard extends React.Component {
 
     this.state = {
       isSavingAddress: false,
-      showAddressModal: false,
-      showWarningTooltip: false
+      showAddressModal: false
     }
-  }
-
-  getAddressField(deal, field) {
-    if (deal.listing) {
-      return deal.mls_context[field]
-    }
-
-    return Deal.get.field(deal, field)
-  }
-
-  getHomeAddress(deal) {
-    const unit_number = this.getAddressField(deal, 'unit_number')
-    const street_number = this.getAddressField(deal, 'street_number')
-    const street_name = this.getAddressField(deal, 'street_name')
-    const street_suffix = this.getAddressField(deal, 'street_suffix')
-
-    const street = [street_number, street_name, street_suffix]
-      .filter(item => item !== null)
-      .join(' ')
-
-    const unitNumber = unit_number ? `, #${unit_number}` : ''
-
-    return street + unitNumber
-  }
-
-  getListingAddress(deal) {
-    const city = this.getAddressField(deal, 'city')
-    const state = this.getAddressField(deal, 'state_code')
-    const postalCode = this.getAddressField(deal, 'postal_code')
-
-    const address = [city ? `${city},` : null, state, postalCode]
-      .filter(item => item !== null)
-      .join(' ')
-
-    if (address.length === 0) {
-      return Deal.get.clientNames(deal, this.props.roles)
-    }
-
-    return address
   }
 
   openListing(deal) {
@@ -75,11 +33,7 @@ class ListingCard extends React.Component {
 
   async onCreateAddress(address) {
     const { address_components } = address
-    const { isBackOffice, deal, contexts, updateContext } = this.props
-
-    if (_.size(address_components) === 0) {
-      return false
-    }
+    const { deal, updateContext } = this.props
 
     this.setState({
       isSavingAddress: true,
@@ -87,14 +41,11 @@ class ListingCard extends React.Component {
     })
 
     const context = {}
-    const indexedContexts = _.indexBy(contexts, 'name')
 
-    _.each(address_components, item => {
-      const { needs_approval } = indexedContexts[item]
-
-      context[item] = {
-        value: address_components[item],
-        approved: isBackOffice ? true : !needs_approval
+    _.each(address_components, (value, name) => {
+      context[name] = {
+        value: address_components[name],
+        approved: true // none of address contexts, don't need admin approval
       }
     })
 
@@ -105,20 +56,10 @@ class ListingCard extends React.Component {
     })
   }
 
-  setWarningTooltipState(showWarningTooltip) {
-    this.setState({
-      showWarningTooltip
-    })
-  }
-
   render() {
-    const { deal } = this.props
-    const { showWarningTooltip, showAddressModal, isSavingAddress } = this.state
+    const { deal, roles } = this.props
+    const { showAddressModal, isSavingAddress } = this.state
     const photo = Deal.get.field(deal, 'photo')
-    const showEditingAddressWarning = deal.listing && showWarningTooltip
-
-    const homeAddress = this.getHomeAddress(deal)
-    const listingAddress = this.getListingAddress(deal)
 
     return (
       <div className="deal-listing-card">
@@ -133,38 +74,45 @@ class ListingCard extends React.Component {
         </button>
 
         <div className="address-info">
-          <button
-            disabled={deal.listing}
-            onClick={() => !isSavingAddress && this.toggleShowAddressModal()}
-            onMouseEnter={() => this.setWarningTooltipState(true)}
-            onMouseLeave={() => this.setWarningTooltipState(false)}
-            className={cn('deal-listing-card__address c-button--shadow', {
-              isHovered: showEditingAddressWarning,
-              'is-editable': !deal.listing
-            })}
+          <Tooltip
+            captionIsHTML
+            tooltipStyles={{
+              marginLeft: '-40px'
+            }}
+            overlayOptions={{
+              delayHide: 200
+            }}
+            caption={
+              deal.listing && (
+                <div className="deal-listing-card__warning-tooltip">
+                  <img src="/static/images/deals/lock.svg" alt="locked" />
+                  <span>
+                    Listing information can only be changed on MLS. Once
+                    changed, the update will be reflected here.
+                  </span>
+                </div>
+              )
+            }
+            placement="bottom"
+            multiline
           >
-            {homeAddress && <div className="title">{homeAddress}</div>}
-
-            {listingAddress && <div className="addr">{listingAddress}</div>}
-
-            {showEditingAddressWarning && (
-              <div className="deal-listing-card__warning-tooltip">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 72 90"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7.81 34.66V23.93C7.81 10.715 20.505 0 36.172 0c15.663 0 28.362 10.711 28.362 23.93l-.003 5.363v5.364h2.418c2.644 0 4.804 2.168 4.804 4.808v45.73c0 2.64-2.164 4.805-4.804 4.805l-62.141-.004C2.164 89.996 0 87.828 0 85.191v-45.73c0-2.64 2.164-4.8 4.809-4.8l3-.001zm47.421 0V23.93c0-7.828-8.535-14.18-19.055-14.18-10.523 0-19.059 6.352-19.059 14.18v10.73h38.114z"
-                    fill="#adadad"
-                    fillRule="evenodd"
-                  />
-                </svg>
-                <span>{WARNING_MESSAGE}</span>
-              </div>
-            )}
-          </button>
+            <div
+              className={cn('deal-listing-card__address', {
+                'is-editable': !deal.listing && !isSavingAddress
+              })}
+              onClick={() =>
+                !deal.listing &&
+                !isSavingAddress &&
+                this.toggleShowAddressModal()
+              }
+            >
+              {isSavingAddress ? (
+                <i className="fa fa-spin fa-spinner" />
+              ) : (
+                Deal.get.address(deal, roles)
+              )}
+            </div>
+          </Tooltip>
 
           {deal.listing && (
             <Link

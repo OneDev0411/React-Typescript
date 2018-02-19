@@ -19,11 +19,11 @@ const TaskStatus = ({ task, noTip, isBackoffice }) => {
     tooltip = `Status: (${status}, ${reviewTime})`
   }
 
-  if (isBackoffice && (status === 'Submitted' || task.needs_attention)) {
+  if (isBackoffice && (status === 'Submitted' || task.attention_requested)) {
     status = 'NEEDS ATTENTION'
   }
 
-  if (!isBackoffice && status !== 'Submitted' && task.needs_attention) {
+  if (!isBackoffice && status !== 'Submitted' && task.attention_requested) {
     status = 'Notified'
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "8.4.2",
+  "version": "8.6.9",
   "description": "",
   "main": "app.js",
   "author": "",
@@ -24,7 +24,7 @@
     "heroku-postbuild": "npm run build"
   },
   "engines": {
-    "node": "9.2.0"
+    "node": "8.2.1"
   },
   "dependencies": {
     "async": "^2.6.0",
@@ -43,6 +43,7 @@
     "babel-preset-react-optimize": "^1.0.1",
     "babel-preset-stage-0": "^6.24.1",
     "balloon-css": "^0.5.0",
+    "bluebird": "^3.5.1",
     "body-parser": "^1.17.1",
     "branch-sdk": "^2.30.0",
     "classnames": "latest",
@@ -163,7 +164,7 @@
     "sass-loader": "^6.0.6",
     "scissors": "git+https://github.com/tcr/scissors.git",
     "shorti": "^1.2.6",
-    "simplebar": "github:izadmehr/simplebar",
+    "simplebar": "github:izadmehr/simplebar#35b9bf51a13adf85e705c972a3d4a5e6e0df5fbd",
     "socket.io": "^1.7.3",
     "socket.io-client": "^1.7.3",
     "stream-to-promise": "^2.2.0",

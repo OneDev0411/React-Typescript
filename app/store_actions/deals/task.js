@@ -1,8 +1,6 @@
 import { normalize } from 'normalizr'
-import _ from 'underscore'
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
-import { uploadAttachment } from '../../models/Chatroom'
 import * as schema from './schema'
 
 function addNewTask(deal_id, list_id, task) {
@@ -24,17 +22,9 @@ function changeStatus(taskId, status) {
 
 function needsAttention(taskId, status) {
   return {
-    type: types.CHANGE_NEEDS_ATTENTION,
+    type: types.CHANGE_ATTENTION_REQUESTED,
     taskId,
     status
-  }
-}
-
-function attachmentDeleted(task, file_id) {
-  return {
-    type: types.DELETE_ATTACHMENT,
-    task_id: task.id,
-    file_id
   }
 }
 
@@ -103,13 +93,6 @@ export function updateTask(taskId, attributes) {
   }
 }
 
-export function deleteAttachment(dealId, list) {
-  return async dispatch => {
-    await Deal.deleteAttachment(dealId, _.keys(list))
-    _.each(list, (task, fileId) => dispatch(attachmentDeleted(task, fileId)))
-  }
-}
-
 export function createFormTask(dealId, form, title, checklist) {
   const task_type = 'Form'
   const status = 'Incomplete'
@@ -144,41 +127,6 @@ export function createGenericTask(dealId, title, checklist) {
     dispatch(addNewTask(dealId, checklist, task))
 
     return task
-  }
-}
-
-export function addAttachment(deal_id, checklist_id, task_id, file) {
-  return {
-    type: types.ADD_ATTACHMENT,
-    task_id,
-    file
-  }
-}
-
-export function uploadFile(user, task, file, fileName = null) {
-  return async dispatch => {
-    try {
-      const response = await uploadAttachment(
-        task.room.id,
-        file,
-        fileName || file.name
-      )
-
-      const fileData = response.body.data
-
-      Deal.createTaskMessage(task.id, {
-        author: user.id,
-        room: task.room.id,
-        attachments: [fileData.id]
-      }).then(() => null)
-
-      // add files to attachments list
-      dispatch(addAttachment(task.deal, task.checklist, task.id, fileData))
-
-      return fileData
-    } catch (e) {
-      return null
-    }
   }
 }
 

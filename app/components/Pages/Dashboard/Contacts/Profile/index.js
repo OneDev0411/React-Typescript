@@ -7,6 +7,7 @@ import Contact from '../../../../../models/Contact'
 import Header from './Header'
 import Information from './Information'
 import Names from './Names'
+import Tags from './Tags'
 import Details from './Details'
 import Address from './Address'
 import AddNote from './Add-Note'
@@ -87,19 +88,19 @@ class ContactProfile extends React.Component {
     this.upsertAttributes('address', attributes)
   }
 
-  onAddAttribute(type) {
+  onAddAttribute({ attributeName, attributeType }) {
     const { updateContact } = this.props
     const contact = this.getContact()
     const { attributes } = contact.sub_contacts[0]
-    const entity = `${type}s`
 
-    if (!attributes[entity]) {
-      attributes[entity] = []
+    if (!attributes[attributeName]) {
+      attributes[attributeName] = []
     }
 
-    attributes[entity].push({
-      type,
-      [type]: `Enter ${type} #${attributes[entity].length + 1}`
+    attributes[attributeName].push({
+      type: attributeType,
+      [attributeType]: `Enter ${attributeType} #${attributes[attributeName]
+        .length + 1}`
     })
 
     updateContact({
@@ -160,14 +161,10 @@ class ContactProfile extends React.Component {
   }
 
   render() {
-    const { user, params } = this.props
+    const { user, params, defaultTags } = this.props
     const { activeTab } = this.state
 
     const contact = this.getContact()
-    const emails = Contact.get.emails(contact)
-    const phones = Contact.get.phones(contact)
-    const birthdays = Contact.get.birthdays(contact)
-    const companies = Contact.get.companies(contact)
     const { names } = contact.sub_contacts[0].attributes
 
     return (
@@ -210,13 +207,14 @@ class ContactProfile extends React.Component {
               />
             )}
 
+            <Tags
+              contact_id={contact.id}
+              user={user}
+              tags={Contact.get.tags(contact, defaultTags)}
+            />
+
             <Details
               contact={contact}
-              user={user}
-              emails={emails}
-              phones={phones}
-              birthdays={birthdays}
-              companies={companies}
               onChangeAttribute={(...args) => this.onChangeAttribute(...args)}
               onAddAttribute={type => this.onAddAttribute(type)}
             />
@@ -250,6 +248,7 @@ class ContactProfile extends React.Component {
 export default connect(
   ({ contacts, user }) => ({
     user,
+    defaultTags: contacts.tags,
     contacts: contacts.list
   }),
   { getTimeline, upsertAttributes, updateContact }

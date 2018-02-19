@@ -82,10 +82,31 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          roles: [
+          roles: _.uniq([
             ...(state[action.deal_id].roles || []),
             ..._.pluck(action.roles, 'id')
-          ]
+          ])
+        }
+      }
+
+    case types.ADD_STASH_FILE:
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          files: [...(state[action.deal_id].files || []), action.file]
+        }
+      }
+
+    case types.DELETE_STASH_FILE:
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          files: _.filter(
+            state[action.deal_id].files,
+            file => file.id !== action.file_id
+          )
         }
       }
 

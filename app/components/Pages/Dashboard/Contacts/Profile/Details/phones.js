@@ -1,8 +1,8 @@
 import React from 'react'
-import { compose, withState, pure } from 'recompose'
+import { compose, withState } from 'recompose'
 import Editable from '../Editable'
 
-const enhance = compose(pure, withState('errorIdItems', 'setErrorIdItem', []))
+const enhance = compose(withState('errorIdItems', 'setErrorIdItem', []))
 
 const Phones = ({
   phones,
@@ -59,6 +59,7 @@ const Phones = ({
               id={item.id}
               showEdit
               showAdd
+              attributeName="phone_numbers"
               text={item.phone_number}
               onAdd={onAddAttribute}
               onChange={onChangePhone}

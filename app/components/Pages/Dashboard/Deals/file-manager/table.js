@@ -9,7 +9,7 @@ import _ from 'underscore'
 import {
   getDeal,
   displaySplitter,
-  deleteAttachment
+  deleteFile
 } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import Radio from '../components/radio'
@@ -70,7 +70,17 @@ export class FileManager extends React.Component {
 
   getAllFiles() {
     const { deal, checklists, tasks } = this.props
+
     const files = []
+    const stashFiles = deal.files || []
+
+    stashFiles.forEach(file => {
+      files.push({
+        ...file,
+        taskId: null,
+        task: 'Draft'
+      })
+    })
 
     deal.checklists.forEach(chId => {
       const checklist = checklists[chId] || []
@@ -199,14 +209,15 @@ export class FileManager extends React.Component {
   }
 
   async deleteFiles(files) {
-    const { deal, deleteAttachment } = this.props
+    const { deal, deleteFile } = this.props
     const { isDeleting } = this.state
 
     this.setState({
       isDeleting: [...isDeleting, ..._.keys(files)]
     })
 
-    await deleteAttachment(deal.id, files)
+    console.log(deal.id, files)
+    await deleteFile(deal.id, files)
 
     this.setState({
       selectedRows: [],
@@ -216,9 +227,10 @@ export class FileManager extends React.Component {
 
   openFile(file) {
     const { deal } = this.props
+    const taskId = file.taskId || 'stash'
 
     browserHistory.push(
-      `/dashboard/deals/${deal.id}/form-viewer/${file.taskId}/attachment/${
+      `/dashboard/deals/${deal.id}/form-viewer/${taskId}/attachment/${
         file.id
       }?backTo=files`
     )
@@ -407,7 +419,7 @@ export default connect(
   {
     confirmation,
     getDeal,
-    deleteAttachment,
+    deleteFile,
     displaySplitter
   }
 )(FileManager)

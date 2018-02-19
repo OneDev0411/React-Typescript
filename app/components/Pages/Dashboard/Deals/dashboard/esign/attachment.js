@@ -1,13 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Modal, Button } from 'react-bootstrap'
+import { Row, Col, Modal } from 'react-bootstrap'
 import { batchActions } from 'redux-batched-actions'
 import { browserHistory } from 'react-router'
 import moment from 'moment'
 import _ from 'underscore'
 import cn from 'classnames'
 import {
-  closeAttachments,
   showCompose,
   showAttachments,
   updateAttachments
@@ -25,10 +24,7 @@ class SelectDocumentModal extends React.Component {
     const index = attachments.indexOf(task.id)
 
     if (index === -1) {
-      newList = [
-        ...attachments,
-        task.id
-      ]
+      newList = [...attachments, task.id]
     } else {
       newList = attachments.filter(doc => doc !== task.id)
     }
@@ -45,20 +41,19 @@ class SelectDocumentModal extends React.Component {
   onDone() {
     const { showAttachments, showCompose } = this.props
 
-    batchActions([
-      showCompose(true),
-      showAttachments(false)
-    ])
+    batchActions([showCompose(true), showAttachments(false)])
   }
 
   getCompletedDocuments() {
     const { tasks, deal } = this.props
 
-    return _.filter(tasks, task =>
-      task.task_type === 'Form' &&
-      task.deal === deal.id &&
-      task.submission &&
-      task.submission.state === 'Fair'
+    return _.filter(
+      tasks,
+      task =>
+        task.task_type === 'Form' &&
+        task.deal === deal.id &&
+        task.submission &&
+        task.submission.state === 'Fair'
     )
   }
 
@@ -71,7 +66,7 @@ class SelectDocumentModal extends React.Component {
   }
 
   render() {
-    const { tasks, esign } = this.props
+    const { esign } = this.props
     const { attachments } = esign
     const documents = this.getCompletedDocuments()
 
@@ -87,75 +82,80 @@ class SelectDocumentModal extends React.Component {
 
         <Modal.Body>
           <div className="documents">
-            {
-              _.size(documents) === 0 &&
+            {_.size(documents) === 0 && (
               <div className="empty-state">
                 <div className="title">Whoops!</div>
-                <div className="descr">You don't have any completed forms to send for signatures.</div>
+                <div className="descr">
+                  You don't have any completed forms to send for signatures.
+                </div>
               </div>
-            }
+            )}
 
-            {
-              _.map(documents, task => {
-                const isSelected = attachments.indexOf(task.id) > -1
+            {_.map(documents, task => {
+              const isSelected = attachments.indexOf(task.id) > -1
 
-                return (
-                  <Row
-                    key={task.id}
-                    className="item"
-                    onClick={() => this.toggleSelectAttachment(task)}
-                  >
-                    <Col sm={1} xs={2} className="vcenter">
+              return (
+                <Row
+                  key={task.id}
+                  className="item"
+                  onClick={() => this.toggleSelectAttachment(task)}
+                >
+                  <Col sm={1} xs={2} className="vcenter">
+                    <span className={cn('radio', { selected: isSelected })}>
+                      {isSelected && <i className="fa fa-check" />}
+                    </span>
+                  </Col>
+
+                  <Col sm={11} xs={10} className="name vcenter">
+                    <div>
                       <span
-                        className={cn('radio', { selected: isSelected })}
+                        className="file-name"
+                        onClick={e => this.viewForm(e, task)}
                       >
-                        { isSelected && <i className="fa fa-check" /> }
+                        {task.title}
                       </span>
-                    </Col>
+                    </div>
 
-                    <Col sm={11} xs={10} className="name vcenter">
-                      <div>
-                        <span
-                          className="file-name"
-                          onClick={e => this.viewForm(e, task)}
-                        >
-                          { task.title }
-                        </span>
-                      </div>
-
-                      <div className="date">
-                        Completed {moment.unix(task.submission.updated_at).format('MMMM DD, YYYY')}
-                      </div>
-                    </Col>
-                  </Row>
-                )
-              })
-            }
+                    <div className="date">
+                      Completed{' '}
+                      {moment
+                        .unix(task.submission.updated_at)
+                        .format('MMMM DD, YYYY')}
+                    </div>
+                  </Col>
+                </Row>
+              )
+            })}
           </div>
         </Modal.Body>
 
-        {
-          _.size(documents) > 0 &&
+        {_.size(documents) > 0 && (
           <Modal.Footer>
-            <span className="count">
-              { attachments.length } doc selected
-            </span>
+            <span className="count">{attachments.length} doc selected</span>
 
-            <Button
-              className="deal-button"
+            <button
+              className={cn(
+                'c-button--shadow modal-deal-esign-documents--submit',
+                {
+                  active: attachments.length >= 1
+                }
+              )}
               onClick={() => this.onDone()}
               disabled={attachments.length < 1}
             >
               {esign.showCompose ? 'Select' : 'Next'}
-            </Button>
+            </button>
           </Modal.Footer>
-        }
+        )}
       </Modal>
     )
   }
 }
 
-export default connect(({ deals }) => ({
-  tasks: deals.tasks,
-  esign: deals.esign || {}
-}), { showAttachments, showCompose, updateAttachments })(SelectDocumentModal)
+export default connect(
+  ({ deals }) => ({
+    tasks: deals.tasks,
+    esign: deals.esign || {}
+  }),
+  { showAttachments, showCompose, updateAttachments }
+)(SelectDocumentModal)

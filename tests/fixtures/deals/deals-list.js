@@ -339,7 +339,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -685,7 +685,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -1161,7 +1161,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -1652,7 +1652,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -2032,7 +2032,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -2555,7 +2555,7 @@ export default [{
   "inboxes": [
     "Contract Inbox"
   ],
-  "need_attentions": 1,
+  "attention_requested_count": 1,
   "form_context": {
     "type": "form_context"
   }
@@ -2861,7 +2861,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -3149,7 +3149,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -3455,7 +3455,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -3770,7 +3770,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -4124,7 +4124,7 @@ export default [{
   "inboxes": [
     "Contract Inbox"
   ],
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -4450,7 +4450,7 @@ export default [{
   "inboxes": [
     "Contract Inbox"
   ],
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -4808,7 +4808,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -5326,7 +5326,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -5733,7 +5733,7 @@ export default [{
   "inboxes": [
     "Contract Inbox"
   ],
-  "need_attentions": 1,
+  "attention_requested_count": 1,
   "form_context": {
     "type": "form_context"
   }
@@ -6219,7 +6219,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -6600,7 +6600,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -6853,7 +6853,7 @@ export default [{
   "inboxes": [
     "Contract Inbox"
   ],
-  "need_attentions": 3,
+  "attention_requested_count": 3,
   "form_context": {
     "type": "form_context"
   }
@@ -7104,7 +7104,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -7355,7 +7355,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -7606,7 +7606,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -7851,7 +7851,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -8098,7 +8098,7 @@ export default [{
   "inboxes": [
     "Contract Inbox"
   ],
-  "need_attentions": 1,
+  "attention_requested_count": 1,
   "form_context": {
     "type": "form_context"
   }
@@ -8269,7 +8269,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -8472,7 +8472,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -8675,7 +8675,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -8846,7 +8846,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -9211,7 +9211,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -9382,7 +9382,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -9569,7 +9569,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -9884,7 +9884,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -10036,7 +10036,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -10188,7 +10188,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -10254,7 +10254,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -10425,7 +10425,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -10596,7 +10596,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -11023,7 +11023,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -11207,7 +11207,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -11561,7 +11561,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -12519,7 +12519,7 @@ export default [{
   "inboxes": [
     "Contract"
   ],
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -12626,7 +12626,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -12692,7 +12692,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -13016,7 +13016,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }
@@ -13082,7 +13082,7 @@ export default [{
   },
   "new_notifications": 0,
   "inboxes": null,
-  "need_attentions": 0,
+  "attention_requested_count": 0,
   "form_context": {
     "type": "form_context"
   }

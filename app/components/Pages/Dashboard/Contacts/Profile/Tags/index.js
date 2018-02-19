@@ -52,6 +52,7 @@ class Tags extends React.Component {
 
   async remove(item) {
     const { contact_id, deleteAttribute } = this.props
+
     // set removing state
     this.setState({ removingTagId: item.id })
 
@@ -64,6 +65,7 @@ class Tags extends React.Component {
 
   async upsert(attributes) {
     const { contact_id, upsertAttributes } = this.props
+
     await upsertAttributes(contact_id, 'tag', attributes)
   }
 
@@ -76,10 +78,13 @@ class Tags extends React.Component {
     }
 
     return (
-      <div>
-        <ul className="tags">
-          {
-            _.chain(tags)
+      <div className="card details">
+        <div className="title" style={{ marginBottom: '16px' }}>
+          Tags
+        </div>
+        <div className="data">
+          <ul className="tags">
+            {_.chain(tags)
               .filter(item => item.active === true && item.id !== removingTagId)
               .map(item => (
                 <li
@@ -87,18 +92,18 @@ class Tags extends React.Component {
                   className="active"
                   onClick={() => this.remove(item)}
                 >
-                  { item.tag }
+                  {item.tag}
                 </li>
               ))
-              .value()
-          }
-          <li
-            className="new-item"
-            onClick={() => this.setState({ showTagModal: true })}
-          >
-            +
-          </li>
-        </ul>
+              .value()}
+            <li
+              className="new-item"
+              onClick={() => this.setState({ showTagModal: true })}
+            >
+              +
+            </li>
+          </ul>
+        </div>
 
         <ManageTags
           show={showTagModal}
@@ -110,4 +115,6 @@ class Tags extends React.Component {
   }
 }
 
-export default connect(null, { getTags, upsertAttributes, deleteAttribute })(Tags)
+export default connect(null, { getTags, upsertAttributes, deleteAttribute })(
+  Tags
+)

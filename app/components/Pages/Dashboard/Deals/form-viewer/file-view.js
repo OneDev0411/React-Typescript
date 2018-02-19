@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Modal, Button } from 'react-bootstrap'
+import { Modal, Button } from 'react-bootstrap'
 import DealInfo from '../dashboard/deal-info'
 import Comments from '../dashboard/comments'
 import CommentInput from '../dashboard/comments/input'
@@ -15,8 +15,18 @@ export default class extends React.Component {
 
   render() {
     const { disableKeyboardShortcuts } = this.state
-    const { deal, onClose, showFactsheet, showComments, toggleFactsheet, toggleComments,
-      editForm, task, file, fileType } = this.props
+    const {
+      deal,
+      onClose,
+      showFactsheet,
+      showComments,
+      toggleFactsheet,
+      toggleComments,
+      editForm,
+      task,
+      file,
+      fileType
+    } = this.props
 
     const COMMENTS_WIDTH = showComments ? '300px' : '0px'
     const FACTSHEET_WIDTH = showFactsheet ? '300px' : '0px'
@@ -29,16 +39,18 @@ export default class extends React.Component {
             X
           </Button>
 
-          <span className="title">{task.title}</span>
+          <span className="title">{task ? task.title : file.name}</span>
 
           <div className="cta">
             <Button className="deal-button" onClick={toggleFactsheet}>
               Deal Facts
             </Button>
 
-            <Button className="deal-button comments" onClick={toggleComments}>
-              Comments
-            </Button>
+            {task && (
+              <Button className="deal-button comments" onClick={toggleComments}>
+                Comments
+              </Button>
+            )}
 
             {fileType === 'digital-form' && (
               <Button className="deal-button edit-form" onClick={editForm}>
@@ -62,10 +74,7 @@ export default class extends React.Component {
                 maxWidth: FACTSHEET_WIDTH
               }}
             >
-              <DealInfo
-                deal={deal}
-                showBackButton={false}
-              />
+              <DealInfo deal={deal} showBackButton={false} />
             </div>
 
             <Viewer
@@ -73,23 +82,28 @@ export default class extends React.Component {
               width={PDF_WIDTH}
               disableKeyboardShortcuts={disableKeyboardShortcuts}
             />
+            {task && (
+              <div
+                className="comments"
+                style={{
+                  display: showComments ? 'block' : 'none',
+                  minWidth: COMMENTS_WIDTH,
+                  maxWidth: COMMENTS_WIDTH
+                }}
+              >
+                <Comments task={task} />
 
-            <div
-              className="comments"
-              style={{
-                display: showComments ? 'block' : 'none',
-                minWidth: COMMENTS_WIDTH,
-                maxWidth: COMMENTS_WIDTH
-              }}
-            >
-              <Comments task={task} />
-
-              <CommentInput
-                task={task}
-                onFocus={() => this.setState({ disableKeyboardShortcuts: true })}
-                onBlur={() => this.setState({ disableKeyboardShortcuts: false })}
-              />
-            </div>
+                <CommentInput
+                  task={task}
+                  onFocus={() =>
+                    this.setState({ disableKeyboardShortcuts: true })
+                  }
+                  onBlur={() =>
+                    this.setState({ disableKeyboardShortcuts: false })
+                  }
+                />
+              </div>
+            )}
           </div>
         </Modal.Body>
       </Modal>

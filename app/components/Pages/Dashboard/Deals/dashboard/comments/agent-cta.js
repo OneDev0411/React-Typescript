@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import cn from 'classnames'
 import ToolTip from '../../components/tooltip'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
@@ -30,7 +29,7 @@ const AgentCta = ({
 
     if (isBackupChecklist) {
       return confirmation({
-        message: 'Sorry, can\'t send message',
+        message: "Sorry, can't send message",
         description: 'You can not Notify Office for Backup Offers.',
         confirmLabel: 'Okay, got it!',
         hideCancelButton: true
@@ -40,16 +39,38 @@ const AgentCta = ({
     onSendComment(true)
   }
 
+  function cancelNotify() {
+    return confirmation({
+      message: 'Cancel Notify Office?',
+      description:
+        'Your pending Notify Office request will be canceled for this task',
+      confirmLabel: 'Yes, cancel',
+      cancelLabel: 'No',
+      onConfirm: () => onSendComment(false)
+    })
+  }
+
   return (
-    <ToolTip caption={hasComment ? null : 'Notify office to Review'}>
-      <Button
-        className="deal-button enabled add-comment notify-admin"
-        disabled={isSaving}
-        onClick={() => sendComment()}
-      >
-        Notify Office
-      </Button>
-    </ToolTip>
+    <Fragment>
+      {task.attention_requested && (
+        <Button
+          className="deal-button enabled add-comment second-color"
+          disabled={isSaving}
+          onClick={() => cancelNotify()}
+        >
+          Cancel Notify
+        </Button>
+      )}
+      <ToolTip caption={hasComment ? null : 'Notify office to Review'}>
+        <Button
+          className="deal-button enabled add-comment notify-admin"
+          disabled={isSaving}
+          onClick={() => sendComment()}
+        >
+          Notify Office
+        </Button>
+      </ToolTip>
+    </Fragment>
   )
 }
 

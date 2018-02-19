@@ -1,12 +1,9 @@
 import React from 'react'
 import Editable from '../Editable'
 
-export default ({
-  companies,
-  onChangeAttribute
-}) => <div>
-  {
-    companies.map((item, key) => (
+export default ({ companies, onChangeAttribute, onAddAttribute }) => (
+  <div>
+    {companies.map((item, key) => (
       <li key={`company_${key}`}>
         <div className="name">Company</div>
         <div className="data">
@@ -14,17 +11,17 @@ export default ({
             type="company"
             id={item.id}
             showEdit
-            showAdd={false}
+            showAdd
             text={item.company}
+            onAdd={onAddAttribute}
+            attributeName="companies"
             onChange={onChangeAttribute}
           />
         </div>
       </li>
-    ))
-  }
+    ))}
 
-  {
-    companies.length === 0 &&
+    {companies.length === 0 && (
       <li>
         <div className="name">Company</div>
         <div className="data">
@@ -32,11 +29,11 @@ export default ({
             type="company"
             id={null}
             showEdit
-            showAdd={false}
             text="-"
             onChange={onChangeAttribute}
           />
         </div>
       </li>
-  }
-</div>
+    )}
+  </div>
+)

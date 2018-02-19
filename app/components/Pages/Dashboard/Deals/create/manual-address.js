@@ -1,25 +1,39 @@
 import React from 'react'
 import { Modal, Button, FormControl } from 'react-bootstrap'
-import Deal from '../../../../../models/Deal'
 import cn from 'classnames'
+import _ from 'underscore'
+import Deal from '../../../../../models/Deal'
 
 export default class extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      street_number: this.getAddressField('street_number'),
-      street_name: this.getAddressField('street_name'),
-      unit_number: this.getAddressField('unit_number'),
-      city: this.getAddressField('city'),
-      state: this.getAddressField('state'),
-      postal_code: this.getAddressField('postal_code')
+    this.state = this.getPopulatedForm(props.deal)
+    this.postalCodePattern = /(^\d{4,}$)/
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { show, deal } = nextProps
+    const { isFormPopulated } = this.state
+
+    if (show && !isFormPopulated) {
+      this.setState(this.getPopulatedForm(deal))
     }
   }
 
-  getAddressField(field) {
-    const { deal } = this.props
+  getPopulatedForm(deal) {
+    return {
+      isFormPopulated: true,
+      street_number: this.getAddressField(deal, 'street_number'),
+      street_name: this.getAddressField(deal, 'street_name'),
+      unit_number: this.getAddressField(deal, 'unit_number'),
+      city: this.getAddressField(deal, 'city'),
+      state: this.getAddressField(deal, 'state'),
+      postal_code: this.getAddressField(deal, 'postal_code')
+    }
+  }
 
+  getAddressField(deal, field) {
     if (!deal) {
       return ''
     }
@@ -31,16 +45,52 @@ export default class extends React.Component {
     return Deal.get.field(deal, field) || ''
   }
 
+  getAddressComponent() {
+    const {
+      street_number,
+      street_name,
+      city,
+      state,
+      unit_number,
+      postal_code
+    } = this.state
+
+    const full_address = [
+      street_number || '',
+      street_name || '',
+      unit_number ? `, Unit ${unit_number},` : '',
+      city ? `, ${city}` : '',
+      state ? `, ${state}` : '',
+      postal_code ? `, ${postal_code}` : ''
+    ]
+      .join(' ')
+      .trim()
+      .replace(/(\s)+,/gi, ',')
+      .replace(/,,/gi, ',')
+
+    return {
+      street_number,
+      street_name,
+      unit_number,
+      city,
+      state,
+      postal_code,
+      full_address
+    }
+  }
+
   onAdd() {
     this.props.onCreateAddress({
       type: 'listing',
-      address_components: this.state
+      address_components: this.getAddressComponent()
     })
 
     this.clearStates()
   }
-  clearStates = () =>
+
+  clearStates() {
     this.setState({
+      isFormPopulated: false,
       street_number: '',
       street_name: '',
       unit_number: '',
@@ -48,6 +98,8 @@ export default class extends React.Component {
       state: '',
       postal_code: ''
     })
+  }
+
   isValidated() {
     const { street_name, city, state, postal_code } = this.state
 
@@ -55,7 +107,27 @@ export default class extends React.Component {
       street_name.trim().length > 0 &&
       city.trim().length > 0 &&
       state.trim().length > 0 &&
-      /(^\d{4,}$)/.test(postal_code)
+      this.postalCodePattern.test(postal_code)
+    )
+  }
+
+  areValuesChanged(deal) {
+    const {
+      street_number,
+      street_name,
+      unit_number,
+      city,
+      state,
+      postal_code
+    } = this.state
+
+    return (
+      street_number !== this.getAddressField(deal, 'street_number') ||
+      street_name !== this.getAddressField(deal, 'street_name') ||
+      unit_number !== this.getAddressField(deal, 'unit_number') ||
+      city !== this.getAddressField(deal, 'city') ||
+      state !== this.getAddressField(deal, 'state') ||
+      postal_code !== this.getAddressField(deal, 'postal_code')
     )
   }
 
@@ -69,7 +141,9 @@ export default class extends React.Component {
       state,
       postal_code
     } = this.state
-    const zipCodeValid = !postal_code || /(^\d{4,}$)/.test(postal_code)
+
+    const isPostalCodeValid =
+      !postal_code || this.postalCodePattern.test(postal_code)
 
     return (
       <Modal
@@ -120,7 +194,7 @@ export default class extends React.Component {
               />
               <FormControl
                 placeholder="Zipcode *"
-                className={cn('zipcode', { error: !zipCodeValid })}
+                className={cn('zipcode', { error: !isPostalCodeValid })}
                 value={postal_code}
                 onChange={e => this.setState({ postal_code: e.target.value })}
               />
@@ -131,7 +205,9 @@ export default class extends React.Component {
                 bsStyle="primary"
                 style={{ margin: '20px' }}
                 onClick={() => this.onAdd()}
-                disabled={saving || !this.isValidated()}
+                disabled={
+                  saving || !this.isValidated() || !this.areValuesChanged(deal)
+                }
               >
                 {deal ? 'Update Address' : 'Add'}
               </Button>
