@@ -37,12 +37,12 @@ import { getContacts } from '../store_actions/contact'
 import { selectListings } from '../reducers/listings'
 import getFavorites from '../store_actions/listings/favorites/get-favorites'
 
-// import _ from 'lodash'
 import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
+import { inactiveIntercom } from '../store_actions/intercom'
 
 class App extends Component {
   componentWillMount() {
@@ -273,16 +273,20 @@ class App extends Component {
           type: AppStore.data.user
             ? 'WebBranchBannerClickedUser'
             : 'WebBranchBannerClickedShadowUser',
-          access_token: AppStore.data.user ? AppStore.data.user.access_token : null
+          access_token: AppStore.data.user
+            ? AppStore.data.user.access_token
+            : null
         }
       }
     )
   }
 
+  componentWillUnmount() {
+    this.props.dispatch(inactiveIntercom())
+  }
+
   render() {
-    const {
-      data, user, rooms, location
-    } = this.props
+    const { data, user, rooms, location } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -303,7 +307,8 @@ class App extends Component {
 
     return (
       <div className="u-scrollbar">
-        {user && !user.email_confirmed && <VerificationBanner email={user.email} />}
+        {user &&
+          !user.email_confirmed && <VerificationBanner email={user.email} />}
 
         {user && navArea}
 
@@ -317,13 +322,13 @@ class App extends Component {
   }
 }
 
-export default connect(({
-  user, data, favorites, deals, contacts, chatroom
-}) => ({
-  data,
-  user,
-  deals: deals.list,
-  rooms: chatroom.rooms,
-  contacts: contacts.list,
-  favoritesListings: selectListings(favorites.listings)
-}))(App)
+export default connect(
+  ({ user, data, favorites, deals, contacts, chatroom }) => ({
+    data,
+    user,
+    deals: deals.list,
+    rooms: chatroom.rooms,
+    contacts: contacts.list,
+    favoritesListings: selectListings(favorites.listings)
+  })
+)(App)
