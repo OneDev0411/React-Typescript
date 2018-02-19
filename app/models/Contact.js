@@ -28,45 +28,6 @@ Contact.updateUserTimeline = async function(action, object_class, object) {
 }
 
 /**
- * create new attributes
- */
-Contact.createAttributes = async function(id, type, attributes) {
-  const endpoint = `/contacts/${id}/attributes`
-
-  try {
-    const response = await new Fetch().post(endpoint).send({ attributes })
-
-    return response.body.data
-  } catch (e) {
-    throw e
-  }
-}
-
-/**
- * update current attributes
- */
-Contact.updateAttributes = async function(id, type, attributes) {
-  try {
-    const response = await new Fetch()
-      .patch(`/contacts/${id}`)
-      .send({ attributes })
-
-    return response.body.data
-  } catch (e) {
-    throw e
-  }
-}
-
-/**
- * helpers functions
- */
-Contact.helper = {
-  populateAttributes: (type, attributes) => ({
-    attributes: attributes.map(item => ({ type, ...item }))
-  })
-}
-
-/**
  * helpers functions
  */
 // Contact.helper = {

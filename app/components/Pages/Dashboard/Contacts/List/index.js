@@ -4,107 +4,112 @@ import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
 import Contact from '../../../../../models/Contact'
-import { upsertAttributes } from '../../../../../store_actions/contact'
 import Stage from '../components/Stage'
 import NoContact from './no-contact'
 import Header from './header'
 import ReactTable from 'react-table'
 import NoSearchResults from '../../../../Partials/no-search-results'
 import { selectContacts } from '../../../../../reducers/contacts/list'
+import { upsertContactAttributes } from '../../../../../store_actions/contacts'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
 }
 
 class ContactsList extends React.Component {
-  state = {
-    filter: ''
+  constructor(props) {
+    super(props)
+    this.state = {
+      filter: ''
+    }
+    this.columns = [
+      {
+        Header: () => (
+          <Fragment>
+            Name
+            <i className="fa fa-caret-down" />
+            <i className="fa fa-caret-up" />
+          </Fragment>
+        ),
+        id: 'name',
+        accessor: contact => Contact.get.name(contact),
+        Cell: ({ original: contact }) => (
+          <div className="name">
+            <Avatar
+              className="avatar"
+              round
+              name={Contact.get.name(contact)}
+              src={Contact.get.avatar(contact)}
+              size={35}
+            />
+            <span className="contact-name">{Contact.get.name(contact)}</span>
+          </div>
+        )
+      },
+      {
+        Header: () => (
+          <Fragment>
+            EMAIL
+            <i className="fa fa-caret-down" />
+            <i className="fa fa-caret-up" />
+          </Fragment>
+        ),
+        id: 'email',
+        accessor: contact => Contact.get.email(contact),
+        Cell: ({ original: contact }) => Contact.get.email(contact)
+      },
+      {
+        Header: 'PHONE',
+        id: 'phone',
+        accessor: contact => Contact.get.phone(contact),
+        Cell: ({ original: contact }) => Contact.get.phone(contact)
+      },
+      {
+        Header: () => (
+          <Fragment>
+            STAGE
+            <i className="fa fa-caret-down" />
+            <i className="fa fa-caret-up" />
+          </Fragment>
+        ),
+        id: 'stage',
+        accessor: contact => Contact.get.stage(contact).name,
+        className: 'td--dropdown-container',
+        Cell: ({ original: contact }) => (
+          <Stage
+            defaultTitle={Contact.get.stage(contact).name}
+            handleOnSelect={stage =>
+              this.onChangeStage(stage, contact, props.upsertContactAttributes)
+            }
+          />
+        )
+      },
+      {
+        Header: () => (
+          <Fragment>
+            SOURCE
+            <i className="fa fa-caret-down" />
+            <i className="fa fa-caret-up" />
+          </Fragment>
+        ),
+        id: 'source',
+        accessor: contact => Contact.get.source(contact).label,
+        Cell: ({ original: contact }) => Contact.get.source(contact).label
+      }
+    ]
   }
 
-  columns = [
-    {
-      Header: () => (
-        <Fragment>
-          Name
-          <i className="fa fa-caret-down" />
-          <i className="fa fa-caret-up" />
-        </Fragment>
-      ),
-      id: 'name',
-      accessor: contact => Contact.get.name(contact),
-      Cell: ({ original: contact }) => (
-        <div className="name">
-          <Avatar
-            className="avatar"
-            round
-            name={Contact.get.name(contact)}
-            src={Contact.get.avatar(contact)}
-            size={35}
-          />
-          <span className="contact-name">{Contact.get.name(contact)}</span>
-        </div>
-      )
-    },
-    {
-      Header: () => (
-        <Fragment>
-          EMAIL
-          <i className="fa fa-caret-down" />
-          <i className="fa fa-caret-up" />
-        </Fragment>
-      ),
-      id: 'email',
-      accessor: contact => Contact.get.email(contact),
-      Cell: ({ original: contact }) => Contact.get.email(contact)
-    },
-    {
-      Header: 'PHONE',
-      id: 'phone',
-      accessor: contact => Contact.get.phone(contact),
-      Cell: ({ original: contact }) => Contact.get.phone(contact)
-    },
-    {
-      Header: () => (
-        <Fragment>
-          STAGE
-          <i className="fa fa-caret-down" />
-          <i className="fa fa-caret-up" />
-        </Fragment>
-      ),
-      id: 'stage',
-      accessor: contact => Contact.get.stage(contact).name,
-      className: 'td--dropdown-container',
-      Cell: ({ original: contact }) => (
-        <Stage
-          defaultTitle={Contact.get.stage(contact).name}
-          handleOnSelect={stage =>
-            this.onChangeStage(stage, contact, props.upsertAttributes)
-          }
-        />
-      )
-    },
-    {
-      Header: () => (
-        <Fragment>
-          SOURCE
-          <i className="fa fa-caret-down" />
-          <i className="fa fa-caret-up" />
-        </Fragment>
-      ),
-      id: 'source',
-      accessor: contact => Contact.get.source(contact).label,
-      Cell: ({ original: contact }) => Contact.get.source(contact).label
-    }
-  ]
-
-  onChangeStage = (stage, contact, upsertAttributes) => {
-    upsertAttributes(contact.id, 'stage', [
+  onChangeStage = (stage, contact, handler) => {
+    const { id: contactId } = contact
+    const attributes = [
       {
         id: Contact.get.stage(contact).id,
         type: 'stage',
         stage
       }
-    ])
+    ]
+
+    handler({ contactId, attributes })
   }
 
   onInputChange = filter => this.setState({ filter })
@@ -202,4 +207,6 @@ function mapStateToProps({ user, contacts }) {
   }
 }
 
-export default connect(mapStateToProps, { upsertAttributes })(ContactsList)
+export default connect(mapStateToProps, { upsertContactAttributes })(
+  ContactsList
+)

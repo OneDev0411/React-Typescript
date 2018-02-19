@@ -8,8 +8,10 @@ import {
   createRoles,
   updateRole
 } from '../../../../../../../store_actions/deals'
-import createNewContact from '../../../../../../../store_actions/contacts/create-new-contact'
-import { upsertAttributes } from '../../../../../../../store_actions/contact/index'
+import {
+  createNewContact,
+  upsertContactAttributes
+} from '../../../../../../../store_actions/contacts'
 import {
   getNewAttributes,
   getUpdatedNameAttribute,
@@ -53,7 +55,7 @@ class AddRoleModal extends React.Component {
       updateRole,
       notify,
       createNewContact,
-      upsertAttributes
+      upsertContactAttributes
     } = this.props
     const { form } = this.state
     const { contact, legal_first_name, legal_last_name } = form
@@ -85,17 +87,20 @@ class AddRoleModal extends React.Component {
           }
 
           if (nameAttribute || newAttributes.length > 0) {
+            const contactId = form.contact.id
+
             if (nameAttribute && nameAttribute.id) {
-              await upsertAttributes(
-                form.contact.id,
-                'name',
-                [nameAttribute],
-                true
-              )
+              await upsertContactAttributes({
+                contactId,
+                attributes: [nameAttribute]
+              })
             }
 
             if (newAttributes.length > 0) {
-              await upsertAttributes(form.contact.id, '', newAttributes, true)
+              await upsertContactAttributes({
+                contactId,
+                attributes: newAttributes
+              })
             }
 
             this.notifySuccess(
@@ -193,6 +198,6 @@ export default connect(null, {
   notify,
   updateRole,
   createRoles,
-  upsertAttributes,
-  createNewContact
+  createNewContact,
+  upsertContactAttributes
 })(AddRoleModal)

@@ -3,6 +3,7 @@ import pick from 'lodash/pick'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
+
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
 import Header from './Header'
@@ -14,10 +15,11 @@ import Address from './Address'
 import AddNote from './Add-Note'
 import Activities from './Activities'
 
-import getContact from '../../../../../store_actions/contacts/get-contact'
-import getContactActivities from '../../../../../store_actions/contacts/get-contact-activities'
-import updateContact from '../../../../../store_actions/contacts/update-contact'
-import addNewAttributes from '../../../../../store_actions/contacts/add-new-attributes'
+import {
+  getContact,
+  getContactActivities,
+  upsertContactAttributes
+} from '../../../../../store_actions/contacts'
 import { selectContact } from '../../../../../reducers/contacts/list'
 import { selectTags } from '../../../../../reducers/contacts/tags'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
@@ -38,33 +40,33 @@ class ContactProfile extends React.Component {
       activeTab: 'timeline'
     }
 
-    this.handleOnChangeAddress = this.handleOnChangeAddress.bind(this)
     this.handleChangeStage = this.handleChangeStage.bind(this)
     this.onChangeAttribute = this.onChangeAttribute.bind(this)
+    this.handleOnChangeAddress = this.handleOnChangeAddress.bind(this)
     this.handelNamesOnChangesAttributes = this.handelNamesOnChangesAttributes.bind(
       this
     )
   }
 
   componentDidMount() {
-    let { contact } = this.props
+    this.initializeContact()
+  }
+
+  async initializeContact() {
+    const {
+      user,
+      contact,
+      getContact,
+      getContactActivities,
+      params: { id: contactId }
+    } = this.props
 
     if (!contact) {
-      this.getContact()
+      await getContact(user, contactId)
+      await getContactActivities(contactId)
     } else if (!contact.activities) {
-      this.getContactActivities(contact.id)
+      await getContactActivities(contactId)
     }
-  }
-
-  async getContact() {
-    const { user, getContact, params: { id: contactId } } = this.props
-
-    await getContact(user, contactId)
-    this.getContactActivities(contactId)
-  }
-
-  async getContactActivities(id) {
-    await this.props.getContactActivities(id)
   }
 
   goBack = () => browserHistory.push('/dashboard/contacts')
@@ -83,11 +85,7 @@ class ContactProfile extends React.Component {
   }
 
   async onChangeAttribute(type, id, text) {
-    const {
-      contact: { id: contactId },
-      addNewAttributes,
-      updateContact
-    } = this.props
+    const { upsertContactAttributes, contact: { id: contactId } } = this.props
 
     const attributes = [
       {
@@ -97,50 +95,36 @@ class ContactProfile extends React.Component {
       }
     ]
 
-    if (id) {
-      return updateContact({
-        contactId,
-        attributes
-      })
-    }
-
-    return addNewAttributes({
+    return upsertContactAttributes({
       contactId,
       attributes
     })
   }
 
   async handleOnChangeAddress(address, field, id, text) {
-    const {
-      updateContact,
-      addNewAttributes,
-      contact: { id: contactId }
-    } = this.props
+    const { upsertContactAttributes, contact: { id: contactId } } = this.props
     const { street_name, city, state, postal_code } = address
     const attributes = [
       {
-        type: 'address',
         id,
-        street_name,
         city,
         state,
-        postal_code
+        postal_code,
+        street_name,
+        [field]: text,
+        type: 'address'
       }
     ]
 
-    // set field
-    attributes[0][field] = text
-
-    if (id) {
-      return updateContact({ contactId, attributes })
-    }
-
-    return addNewAttributes({ contactId, attributes })
+    return upsertContactAttributes({
+      contactId,
+      attributes
+    })
   }
 
-  async handleChangeStage(stage, contact) {
+  async handleChangeStage(stage) {
+    const { contact, upsertContactAttributes } = this.props
     const { id: contactId } = contact
-    const { updateContact, addNewAttributes } = this.props
 
     const { id: attributeId } = Contact.get.stage(contact)
 
@@ -152,11 +136,10 @@ class ContactProfile extends React.Component {
       }
     ]
 
-    if (attributeId) {
-      return updateContact({ contactId, attributes })
-    }
-
-    return addNewAttributes({ contactId, attributes })
+    return upsertContactAttributes({
+      contactId,
+      attributes
+    })
   }
 
   getNames = names => {
@@ -193,7 +176,7 @@ class ContactProfile extends React.Component {
   }
 
   async handelNamesOnChangesAttributes(type, id, text) {
-    const { contact, updateContact } = this.props
+    const { contact, upsertContactAttributes } = this.props
     const { id: contactId } = contact
     const { names } = contact.sub_contacts[0].attributes
 
@@ -206,7 +189,7 @@ class ContactProfile extends React.Component {
       }
     ]
 
-    return updateContact({
+    return upsertContactAttributes({
       contactId,
       attributes
     })
@@ -253,7 +236,7 @@ class ContactProfile extends React.Component {
                   'Past Client'
                 ]}
                 active={this.getStageIndex(contact)}
-                onChange={stage => this.handleChangeStage(stage, contact)}
+                onChange={stage => this.handleChangeStage(stage)}
               />
             </div>
 
@@ -314,7 +297,6 @@ const mapStateToProps = ({ contacts, user }, { params: { id: contactId } }) => {
 
 export default connect(mapStateToProps, {
   getContact,
-  updateContact,
-  addNewAttributes,
-  getContactActivities
+  getContactActivities,
+  upsertContactAttributes
 })(ContactProfile)

@@ -4,39 +4,41 @@ import fetchContactActivities from '../../../models/contacts/get-contact-activit
 import * as actionTypes from '../../../constants/contacts'
 import { selectContact } from '../../../reducers/contacts/list'
 
-const getContactActivities = (contactId = '') => async (dispatch, getState) => {
-  if (!contactId) {
-    return Promise.resolve()
-  }
-
-  try {
-    dispatch({
-      type: actionTypes.FETCH_CONTACT_ACTIVITIES_REQUEST
-    })
-
-    const activities = await fetchContactActivities(contactId)
-    const { contacts: { list } } = getState()
-    const contact = selectContact(list, contactId)
-    const newContact = {
-      ...contact,
-      activities
+export function getContactActivities(contactId = '') {
+  return async (dispatch, getState) => {
+    if (!contactId) {
+      return Promise.resolve()
     }
 
-    const contacts = { contacts: [newContact] }
-    const response = normalize(contacts, contactsSchema)
+    try {
+      dispatch({
+        type: actionTypes.FETCH_CONTACT_ACTIVITIES_REQUEST
+      })
 
-    dispatch({
-      response,
-      type: actionTypes.FETCH_CONTACT_ACTIVITIES_SUCCESS
-    })
+      const activities = await fetchContactActivities(contactId)
+      const { contacts: { list } } = getState()
+      const contact = selectContact(list, contactId)
+      const newContact = {
+        ...contact,
+        activities
+      }
 
-    return contact
-  } catch (error) {
-    dispatch({
-      error,
-      type: actionTypes.FETCH_CONTACT_ACTIVITIES_FAILURE
-    })
-    throw error
+      const contacts = { contacts: [newContact] }
+      const response = normalize(contacts, contactsSchema)
+
+      dispatch({
+        response,
+        type: actionTypes.FETCH_CONTACT_ACTIVITIES_SUCCESS
+      })
+
+      return contact
+    } catch (error) {
+      dispatch({
+        error,
+        type: actionTypes.FETCH_CONTACT_ACTIVITIES_FAILURE
+      })
+      throw error
+    }
   }
 }
 
