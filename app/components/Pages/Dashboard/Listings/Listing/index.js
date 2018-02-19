@@ -3,19 +3,23 @@ import { connect } from 'react-redux'
 
 import ListingMobileView from './components/ListingMobileView'
 import ListingDesktopView from './components/ListingDesktopView'
-import ContactModel from '../../../../../models/Contact'
+import { logUserActivity } from '../../../../../store_actions/user/log-user-activity'
 import getListing from '../../../../../store_actions/listings/listing/get-listing'
 
 class Listing extends React.Component {
   componentDidMount() {
-    const { id, getListing } = this.props
+    const { id, listing, getListing, logUserActivity } = this.props
 
     if (!id) {
       return
     }
 
     getListing(id)
-    ContactModel.updateUserTimeline('UserViewedListing', 'listing', id)
+    logUserActivity({
+      object: listing,
+      object_class: 'listing',
+      action: 'UserViewedListing'
+    })
   }
 
   render() {
@@ -42,5 +46,5 @@ export default connect(
       listing: listingId === paramsId ? listing.data : {}
     }
   },
-  { getListing }
+  { getListing, logUserActivity }
 )(Listing)

@@ -1,30 +1,8 @@
 import _ from 'underscore'
-import Fetch from '../services/fetch'
 
 const Contact = {
   get: {},
   helper: {}
-}
-
-/**
- * add new item to user's timeline
- */
-Contact.updateUserTimeline = async function(action, object_class, object) {
-  const requestBody = {
-    action,
-    object,
-    object_class
-  }
-
-  try {
-    const response = await new Fetch()
-      .post('/users/self/timeline')
-      .send(requestBody)
-
-    return response
-  } catch (e) {
-    throw e
-  }
 }
 
 /**
