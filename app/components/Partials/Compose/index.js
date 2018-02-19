@@ -66,15 +66,28 @@ class Compose extends React.Component {
     // flatten sources
     const entries = [].concat.apply([], sources)
 
+    const { roomUsers } = this.props
+
+    let existingUserIds = {}
+    let filtered = false
+
+    roomUsers.forEach(item => (existingUserIds[item.id] = item.id))
+
     // remove duplicates
     let viewList = _.chain(entries)
       .sortBy(entry => ['user', 'email', 'phone_number'].indexOf(entry.type))
       .uniq(entry => entry.email || entry.phone_number || entry.id)
+      .filter(entry => {
+        if (!existingUserIds[entry.id]) {
+          return true
+        } else if (!filtered) {
+          filtered = true
+        }
+      })
       .value()
 
-    if (_.size(viewList) === 0) {
-      viewList = await
-        this.createNewEntry()
+    if (_.size(viewList) === 0 && !filtered) {
+      viewList = await this.createNewEntry()
     }
 
     this.setState({ viewList })
@@ -304,7 +317,12 @@ class Compose extends React.Component {
 Compose.propTypes = {
   searchInRooms: PropTypes.bool,
   dropDownBox: PropTypes.bool,
-  onChangeRecipients: PropTypes.func.isRequired
+  onChangeRecipients: PropTypes.func.isRequired,
+  roomUsers: PropTypes.array
+}
+
+Compose.defaultProps = {
+  roomUsers: []
 }
 
 export default connect(({ contacts }) => ({

@@ -86,6 +86,7 @@ const ManageMembers = ({
 
   return (
     <Compose
+      roomUsers={room.users}
       TriggerButton={Button}
       InitialValues={RoomMembers}
       showOnly={canAddMember === false}
