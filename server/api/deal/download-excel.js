@@ -15,10 +15,10 @@ router.get('/deals/excel/:brandId', async ctx => {
     }
 
     ctx.set('Content-Disposition', 'attachment')
-    ctx.attachment('deals.xls')
+    ctx.attachment('deals.xlsx')
 
     const response = ctx
-      .fetch(`/brands/${brandId}/deals.xls`)
+      .fetch(`/brands/${brandId}/deals.xlsx`)
       .set('Authorization', `Bearer ${ctx.session.user.access_token}`)
 
     ctx.body = response
