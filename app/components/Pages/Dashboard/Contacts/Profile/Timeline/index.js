@@ -48,14 +48,20 @@ class Timeline extends React.Component {
 
     return (
       <div>
-        {_.map(activities, (activity, id) => (
-          <TimelineItem
-            key={`timeline_item_${id}`}
-            attributes={this.getAttributes(activity)}
-            name={name}
-            avatar={avatar}
-          />
-        ))}
+        {_.map(activities, (activity, id) => {
+          const { object } = activity
+
+          if (object && _.size(activity.object) > 0) {
+            return (
+              <TimelineItem
+                key={`timeline_item_${id}`}
+                attributes={this.getAttributes(activity)}
+                name={name}
+                avatar={avatar}
+              />
+            )
+          }
+        })}
       </div>
     )
   }

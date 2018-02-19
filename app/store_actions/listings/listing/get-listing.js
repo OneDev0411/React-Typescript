@@ -1,7 +1,7 @@
 import api from '../../../models/listings/listing'
 import * as actionsType from '../../../constants/listings/listing'
 
-const getListing = id => async (dispatch, getState) => {
+const getListing = id => async dispatch => {
   dispatch({
     id,
     tabName: 'LISTING',
@@ -17,7 +17,8 @@ const getListing = id => async (dispatch, getState) => {
       type: actionsType.FETCH_LISTING_SUCCESS
     })
   } catch ({ response }) {
-    const message = (response && response.body.message) || 'Something went wrong.'
+    const message =
+      (response && response.body.message) || 'Something went wrong.'
 
     dispatch({
       tabName: 'LISTING',

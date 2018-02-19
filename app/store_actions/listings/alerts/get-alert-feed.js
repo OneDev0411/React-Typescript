@@ -1,13 +1,10 @@
-import { batchActions } from 'redux-batched-actions'
 import setSelectedAlertId from './set-selected-alert-id'
 import { getFetchingStatus } from '../../../reducers/listings'
-import { logUserActivity } from '../../user/log-user-activity'
 import * as actionsType from '../../../constants/listings/alerts'
 import api from '../../../models/listings/alerts'
-import { selectAlert } from '../../../reducers/listings/alerts/list'
 
 const getAlertFeed = (alertId, roomId) => (dispatch, getState) => {
-  const { feed, list } = getState().alerts
+  const { feed } = getState().alerts
 
   if (getFetchingStatus(feed)) {
     return Promise.resolve()
@@ -17,7 +14,7 @@ const getAlertFeed = (alertId, roomId) => (dispatch, getState) => {
 
   const feedListings = feed.byAlertId[alertId]
 
-  if (feedListings && Array.isArray(feedListings)) {
+  if (Array.isArray(feedListings) && feedListings.length > 0) {
     return Promise.resolve()
   }
 
@@ -28,22 +25,11 @@ const getAlertFeed = (alertId, roomId) => (dispatch, getState) => {
 
   return api.getAlertFeed(alertId, roomId).then(
     response => {
-      const alert = selectAlert(list, alertId)
-
-      batchActions([
-        dispatch({
-          response,
-          tabName: 'ALERT_FEED',
-          type: actionsType.FETCH_ALERT_FEED_SUCCESS
-        }),
-        dispatch(
-          logUserActivity({
-            action: 'UserViewedAlert',
-            object_class: 'alert',
-            object: alert
-          })
-        )
-      ])
+      dispatch({
+        response,
+        tabName: 'ALERT_FEED',
+        type: actionsType.FETCH_ALERT_FEED_SUCCESS
+      })
     },
     ({ message }) => {
       dispatch({

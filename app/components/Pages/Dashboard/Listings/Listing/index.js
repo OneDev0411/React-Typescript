@@ -3,22 +3,50 @@ import { connect } from 'react-redux'
 
 import ListingMobileView from './components/ListingMobileView'
 import ListingDesktopView from './components/ListingDesktopView'
-import { logUserActivity } from '../../../../../store_actions/user/log-user-activity'
+import logUserActivity from '../../../../../models/user/post-new-activity'
 import getListing from '../../../../../store_actions/listings/listing/get-listing'
 
 class Listing extends React.Component {
-  componentDidMount() {
-    const { id, listing, getListing, logUserActivity } = this.props
+  state = {
+    isLoggedActivity: false
+  }
 
-    if (!id) {
+  componentDidMount() {
+    this.initializeListing()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.listing.id &&
+      !this.props.listing.id &&
+      !this.state.isLoggedActivity
+    ) {
+      this.logActivity(nextProps.listing)
+    }
+  }
+
+  async initializeListing() {
+    const { listingId, listing, getListing } = this.props
+
+    if (!listingId) {
       return
     }
 
-    getListing(id)
+    if (!listing.id) {
+      await getListing(listingId)
+    } else {
+      this.logActivity(listing)
+    }
+  }
+
+  logActivity(object) {
     logUserActivity({
-      object: listing,
+      object,
       object_class: 'listing',
       action: 'UserViewedListing'
+    })
+    this.setState({
+      isLoggedActivity: true
     })
   }
 
@@ -33,18 +61,17 @@ class Listing extends React.Component {
   }
 }
 
-export default connect(
-  ({ user, listing }, { params }) => {
-    const { id: paramsId } = params
-    const listingId = listing.data.id || ''
+function mapStateToProps(state, props) {
+  const { user, listing } = state
+  const { params: { id: listingId } } = props
 
-    return {
-      user,
-      id: paramsId || '',
-      isFetching: listing.isFetching,
-      errorMessage: listing.errorMessage,
-      listing: listingId === paramsId ? listing.data : {}
-    }
-  },
-  { getListing, logUserActivity }
-)(Listing)
+  return {
+    user,
+    listingId: listingId || '',
+    isFetching: listing.isFetching,
+    errorMessage: listing.errorMessage,
+    listing: listing.data.id === listingId ? listing.data : {}
+  }
+}
+
+export default connect(mapStateToProps, { getListing })(Listing)
