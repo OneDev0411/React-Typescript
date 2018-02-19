@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
-import _ from 'underscore'
 import moment from 'moment'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import Deal from '../../../../../models/Deal'
@@ -21,16 +20,17 @@ class WhoSigned extends React.Component {
     const { user } = this.props
     const token = user.access_token
 
-    return `/api/deals/envelope/${envelopeId}/sign/${recipientId}?access_token=${token}`
+    return `/api/deals/envelope/${envelopeId}/sign/${recipientId}\
+?access_token=${token}`
   }
 
   getName(role) {
-    if (role.user) {
+    if (role.legal_last_name || role.legal_first_name) {
+      return `${role.legal_prefix || ''} ${role.legal_first_name ||
+        ''} ${role.legal_last_name || ''}`.trim()
+    } else if (role.user) {
       return role.user.display_name
     }
-
-    return `${role.legal_prefix || ''} ${role.legal_first_name ||
-      ''} ${role.legal_last_name || ''}`.trim()
   }
 
   async resendDocs(envelopeId) {
