@@ -14,8 +14,8 @@ import {
   resetUploadFiles,
   setSplitterUsedPages,
   changeNeedsAttention,
-  uploadFile,
-  addAttachment
+  uploadStashFile,
+  taskFileCreated
 } from '../../../../../../store_actions/deals'
 
 class WorkspaceForm extends React.Component {
@@ -26,7 +26,8 @@ class WorkspaceForm extends React.Component {
       title: '',
       task: null,
       notifyOffice: true,
-      documentsUploaded: false,
+      uploadProgressPercents: 0,
+      stashFiles: {},
       statusMessage: null
     }
   }
@@ -43,21 +44,27 @@ class WorkspaceForm extends React.Component {
   }
 
   async save() {
-    const { title, task, notifyOffice } = this.state
-    const { notify, splitter, addAttachment, changeNeedsAttention } = this.props
+    const { title, task, stashFiles, notifyOffice } = this.state
+    const {
+      notify,
+      splitter,
+      taskFileCreated,
+      changeNeedsAttention
+    } = this.props
     const { pages } = splitter
     let fileCreated = false
 
     this.setState({
-      saving: true
+      saving: true,
+      uploadProgressPercents: 100
     })
 
     const files = _.chain(pages)
       .pluck('documentId')
       .uniq()
-      .map(id => ({
-        object: splitter.files[id].file,
-        documentId: id
+      .map(documentId => ({
+        url: stashFiles[documentId].url,
+        documentId
       }))
       .value()
 
@@ -71,7 +78,7 @@ class WorkspaceForm extends React.Component {
       )
 
       // add files to attachments list
-      addAttachment(task.deal, task.checklist, task.id, file)
+      taskFileCreated(task.deal, task.checklist, task.id, file)
 
       if (notifyOffice) {
         changeNeedsAttention(task.deal, task.id, true)
@@ -89,13 +96,14 @@ class WorkspaceForm extends React.Component {
       this.setState({
         saving: false,
         title: '',
-        notifyOffice: true
+        notifyOffice: true,
+        uploadProgressPercents: 0
       })
     } catch (e) {
       console.log(e)
 
       notify({
-        title: "Couldn't create the splitted pdf file. please try again.",
+        title: 'Could not create the splitted pdf file. please try again.',
         message: e.message,
         status: 'error'
       })
@@ -110,7 +118,10 @@ class WorkspaceForm extends React.Component {
 
   async saveAndQuit() {
     const { resetSplitter, resetUploadFiles } = this.props
-    const { documentsUploaded } = this.state
+
+    if (this.areDocumentsUploaded() === false) {
+      await this.uploadDocuments()
+    }
 
     const saved = await this.save()
 
@@ -118,16 +129,11 @@ class WorkspaceForm extends React.Component {
       return false
     }
 
-    if (!documentsUploaded) {
-      await this.uploadDocuments()
-    }
-
     // destruct splitter states
     batchActions([resetSplitter(), resetUploadFiles()])
   }
 
   async saveAndNew() {
-    const { documentsUploaded } = this.state
     const {
       splitter,
       resetSplitterSelectedPages,
@@ -137,14 +143,14 @@ class WorkspaceForm extends React.Component {
 
     const { pages } = splitter
 
+    if (this.areDocumentsUploaded() === false) {
+      await this.uploadDocuments()
+    }
+
     const saved = await this.save()
 
     if (!saved) {
       return false
-    }
-
-    if (!documentsUploaded) {
-      await this.uploadDocuments()
     }
 
     // reset selected pages
@@ -156,39 +162,69 @@ class WorkspaceForm extends React.Component {
   }
 
   async uploadDocuments() {
-    const { user, uploadFile, splitter, notify } = this.props
-    const { task } = this.state
+    const { deal, uploadStashFile, splitter, notify } = this.props
     const { files } = splitter
+    const filesCount = _.size(files)
+    const stashFiles = []
+    let counter = 1
 
     this.setState({
       saving: true,
-      statusMessage: 'Uploading selected documents'
+      statusMessage: `Uploading selected documents (${counter} / ${filesCount})`
     })
 
     await Promise.all(
-      _.map(files, async item => {
+      _.map(files, async (item, documentId) => {
         const { name } = item.properties
+        let file
 
         if (item.file instanceof File) {
-          await uploadFile(user, task, item.file, name)
+          // upload files to stash not task
+          file = await uploadStashFile(deal.id, item.file, name)
+
+          // increase counter
+          counter += 1
+
+          this.setState({
+            statusMessage: `Uploading selected documents (${counter} / ${filesCount})`,
+            uploadProgressPercents: Math.floor(counter / filesCount * 100)
+          })
+
           notify({
-            message: `${name} uploaded`,
+            message: `"${name}" Uploaded`,
             status: 'success'
           })
+        } else {
+          /* eslint-disable prefer-destructuring */
+          file = item.file
         }
+
+        stashFiles[documentId] = file
       })
     )
 
     this.setState({
+      stashFiles,
       saving: false,
-      documentsUploaded: true,
-      statusMessage: null
+      statusMessage: null,
+      uploadProgressPercents: 100
     })
+  }
+
+  areDocumentsUploaded() {
+    return Object.keys(this.state.stashFiles).length > 0
   }
 
   render() {
     const { deal, tasks } = this.props
-    const { title, task, notifyOffice, statusMessage, saving } = this.state
+    const {
+      title,
+      task,
+      notifyOffice,
+      statusMessage,
+      uploadProgressPercents,
+      saving
+    } = this.state
 
     const formValidated = this.isFormValidated()
 
@@ -196,8 +232,13 @@ class WorkspaceForm extends React.Component {
       return (
         <div className="splitter-saving">
           <div className="inner">
-            {statusMessage || 'Creating and uploading splitted PDF... (It might take a few moments)'}
-            <ProgressBar now={100} bsStyle="success" active />
+            {statusMessage ||
+              'Creating and uploading splitted PDF... (It might take a few moments)'}
+            <ProgressBar
+              now={uploadProgressPercents}
+              bsStyle="success"
+              active
+            />
           </div>
         </div>
       )
@@ -262,6 +303,6 @@ export default connect(mapStateToProps, {
   resetSplitterSelectedPages,
   setSplitterUsedPages,
   changeNeedsAttention,
-  addAttachment,
-  uploadFile
+  taskFileCreated,
+  uploadStashFile
 })(WorkspaceForm)

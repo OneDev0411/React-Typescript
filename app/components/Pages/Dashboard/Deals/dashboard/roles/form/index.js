@@ -193,17 +193,18 @@ export default class Form extends React.Component {
 
     const fields = {
       role: role => role,
-      legal_prefix: value =>
-        ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].indexOf(value) > -1,
-      email: email => email && this.isEmail(email),
+      legal_prefix(value) {
+        return ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].includes(value)
+      },
       legal_last_name: name => this.isValidName(name),
-      legal_first_name: name => this.isValidName(name),
       legal_middle_name: name => this.isValidName(name),
+      legal_first_name: name => this.isValidName(name),
+      email: email => email && this.isEmail(email),
       phone_number: phoneNumber =>
         phoneNumber && this.isValidPhoneNumber(phoneNumber),
-      company_title: name => this.isValidName(name, /^['0-9A-Za-z\s]+$/),
       commission_percentage: value => value && this.validateCommission(value),
-      commission_dollar: value => value && this.validateCommission(value)
+      commission_dollar: value => value && this.validateCommission(value),
+      company_title: name => name
     }
 
     if (this.isCommissionRequired(form)) {
@@ -378,10 +379,8 @@ export default class Form extends React.Component {
         {shouldShowCompany && (
           <InputWithSelect
             title="Company"
-            errorText="Please include only letters and numbers. You have added special character."
             placeholder="Company Name"
             defaultSelectedItem={form.companies}
-            isInvalid={invalidFields.includes('company_title')}
             onChangeHandler={value => this.setForm('company_title', value)}
             items={this.extractItems({
               form,

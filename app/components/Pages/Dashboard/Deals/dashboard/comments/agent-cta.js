@@ -38,6 +38,7 @@ const AgentCta = ({
 
     onSendComment(true)
   }
+
   function cancelNotify() {
     return confirmation({
       message: 'Cancel Notify Office?',

@@ -93,9 +93,7 @@ export function updateListing(dealId, listingId) {
 export function updateDeal(deal) {
   return async dispatch => {
     const { entities } = normalize(deal, schema.dealSchema)
-    const {
-      deals, roles, envelopes, checklists, tasks
-    } = entities
+    const { deals, roles, envelopes, checklists, tasks } = entities
 
     batchActions([
       dispatch(setTasks(tasks)),
@@ -133,9 +131,7 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
       }
 
       const { entities } = normalize(data, schema.dealsSchema)
-      const {
-        deals, roles, checklists, tasks
-      } = entities
+      const { deals, roles, checklists, tasks } = entities
 
       batchActions([
         dispatch(setTasks(tasks)),
@@ -158,9 +154,7 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
 export function createDeal(deal) {
   return async dispatch => {
     const { entities } = normalize(deal, schema.dealSchema)
-    const {
-      deals, roles, checklists, tasks
-    } = entities
+    const { deals, roles, checklists, tasks } = entities
 
     batchActions([
       dispatch(setTasks(tasks)),
@@ -185,9 +179,7 @@ export function searchAllDeals(query, isBackOffice = false) {
       }
 
       const { entities } = normalize(data, schema.dealsSchema)
-      const {
-        deals, roles, checklists, tasks
-      } = entities
+      const { deals, roles, checklists, tasks } = entities
 
       batchActions([
         dispatch(setTasks(tasks)),

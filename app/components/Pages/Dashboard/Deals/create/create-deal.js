@@ -264,9 +264,9 @@ class CreateDeal extends React.Component {
     const dealContexts = _.indexBy(this.getDealContexts(), 'name')
 
     _.each(contexts, (value, name) => {
-      const needsApproval = dealContexts[name] ?
-        dealContexts[name].needs_approval :
-        false
+      const needsApproval = dealContexts[name]
+        ? dealContexts[name].needs_approval
+        : false
       const approved = isBackOffice ? true : !needsApproval
 
       contextsObject[name] = { value, approved }
@@ -287,12 +287,9 @@ class CreateDeal extends React.Component {
       city,
       state,
       unit_number,
-      postal_code
+      postal_code,
+      full_address
     } = address
-
-    const full_address = [street_number, street_name, city, state, postal_code]
-      .join(' ')
-      .trim()
 
     return {
       full_address,
@@ -397,7 +394,9 @@ class CreateDeal extends React.Component {
                 <DealReferrals
                   dealSide={dealSide}
                   referrals={referrals}
-                  onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
+                  onUpsertReferral={form =>
+                    this.onUpsertRole(form, 'referrals')
+                  }
                   onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
                 />
 
@@ -427,7 +426,9 @@ class CreateDeal extends React.Component {
                       onUpsertAgent={form =>
                         this.onUpsertRole(form, 'sellingAgents')
                       }
-                      onRemoveAgent={id => this.onRemoveRole(id, 'sellingAgents')}
+                      onRemoveAgent={id =>
+                        this.onRemoveRole(id, 'sellingAgents')
+                      }
                     />
 
                     <DealClients
@@ -437,7 +438,9 @@ class CreateDeal extends React.Component {
                       onUpsertClient={form =>
                         this.onUpsertRole(form, 'sellingClients')
                       }
-                      onRemoveClient={id => this.onRemoveRole(id, 'sellingClients')}
+                      onRemoveClient={id =>
+                        this.onRemoveRole(id, 'sellingClients')
+                      }
                     />
 
                     <EscrowOfficers
@@ -452,7 +455,9 @@ class CreateDeal extends React.Component {
 
                     <DealStatus
                       dealStatus={dealStatus}
-                      onChangeDealStatus={status => this.changeDealStatus(status)}
+                      onChangeDealStatus={status =>
+                        this.changeDealStatus(status)
+                      }
                     />
                   </Fragment>
                 )}

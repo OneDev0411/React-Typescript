@@ -31,19 +31,19 @@ const InstantChat = Load({
 })
 
 // contacts
-import getContacts from '../store_actions/contacts/get-contacts'
+import { getContacts } from '../store_actions/contacts/get-contacts'
 import { selectContacts } from '../reducers/contacts/list'
 
 // favorites
 import { selectListings } from '../reducers/listings'
 import getFavorites from '../store_actions/listings/favorites/get-favorites'
 
-// import _ from 'lodash'
 import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
+import { inactiveIntercom } from '../store_actions/intercom'
 
 class App extends Component {
   componentWillMount() {
@@ -69,6 +69,10 @@ class App extends Component {
 
   componentDidMount() {
     this.initializeApp()
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(inactiveIntercom())
   }
 
   async initializeApp() {

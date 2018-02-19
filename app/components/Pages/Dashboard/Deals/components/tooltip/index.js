@@ -1,4 +1,5 @@
 import React from 'react'
+import cn from 'classnames'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 function br2nl(text) {
@@ -10,7 +11,13 @@ function br2nl(text) {
 }
 
 export default ({
-  caption, placement = 'top', multiline = false, children
+  caption,
+  captionIsHTML = false,
+  placement = 'top',
+  multiline = false,
+  overlayOptions = {},
+  tooltipStyles = {},
+  children
 }) => {
   if (!caption) {
     return children
@@ -20,8 +27,15 @@ export default ({
     <OverlayTrigger
       placement={placement}
       overlay={
-        <Tooltip id="deal-tooltip">{multiline ? br2nl(caption) : caption}</Tooltip>
+        <Tooltip
+          id="rechat-tooltip"
+          className={cn('rechat-tooltip', { 'is-customized': captionIsHTML })}
+          style={{ ...tooltipStyles }}
+        >
+          {multiline && !captionIsHTML ? br2nl(caption) : caption}
+        </Tooltip>
       }
+      {...overlayOptions}
     >
       {children}
     </OverlayTrigger>

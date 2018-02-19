@@ -54,6 +54,9 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
 
   const hasDealsPermission = acl.includes('Deals')
   const hasBackOfficePermission = acl.includes('BackOffice')
+  const hasContactsPermission =
+    user.user_type !== 'Client' ||
+    (user.features && user.features.includes('Contacts'))
 
   return (
     <aside className="c-app-sidenav">
@@ -68,9 +71,12 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
           </Link>
         </SideNavItem>
 
-        {user.user_type !== 'Client' && (
+        {hasContactsPermission && (
           <SideNavItem isActive={activePath === 'CONTACTS'}>
-            <Link to="/dashboard/contacts" className="c-app-sidenav__item__title">
+            <Link
+              to="/dashboard/contacts"
+              className="c-app-sidenav__item__title"
+            >
               Contacts
             </Link>
           </SideNavItem>
@@ -96,7 +102,10 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
 
       <ul className="c-app-sidenav__list c-app-sidenav__list--bottom">
         <SideNavItem isActive={activePath === 'NOTIF'}>
-          <Link to="/dashboard/notifications" className="c-app-sidenav__item__title">
+          <Link
+            to="/dashboard/notifications"
+            className="c-app-sidenav__item__title"
+          >
             Updates
             {appNotifications > 0 && (
               <span className="c-app-sidenav__notification-badge">

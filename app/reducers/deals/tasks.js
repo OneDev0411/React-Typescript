@@ -66,7 +66,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.ADD_ATTACHMENT:
+    case types.ADD_TASK_FILE:
       return {
         ...state,
         [action.task_id]: {
@@ -81,14 +81,16 @@ export default (state = null, action) => {
         }
       }
 
-    case types.DELETE_ATTACHMENT:
+    case types.DELETE_TASK_FILE:
       return {
         ...state,
         [action.task_id]: {
           ...state[action.task_id],
           room: {
             ...state[action.task_id].room,
-            attachments: state[action.task_id].room.attachments.filter(file => file.id !== action.file_id)
+            attachments: state[action.task_id].room.attachments.filter(
+              file => file.id !== action.file_id
+            )
           }
         }
       }

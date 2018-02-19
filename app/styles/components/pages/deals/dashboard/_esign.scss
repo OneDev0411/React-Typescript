@@ -92,11 +92,25 @@
     overflow: auto;
   }
 
-  .deal-button {
+  .modal-deal-esign-documents--submit {
     width: 70px;
     height: 34px;
     line-height: 17px;
     vertical-align: middle;
+
+    border-radius: 3px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    border: 1px solid #dce5eb;
+    color: #dce5eb;
+    &.active {
+      color: #2196f3;
+
+      &:hover {
+        background-color: #f1f7fb;
+        text-decoration: none;
+      }
+    }
   }
 
   .count {
