@@ -284,18 +284,6 @@ Contact.get = {
   companies: context => Contact.get._all(context, 'companies', 'company')
 }
 
-Contact.uplaodCsv = async function(file, fileName = null) {
-  const title = fileName || file.name
-
-  try {
-    return await new Fetch()
-      .upload('/contacts/outlook.csv')
-      .attach('attachment', file, title)
-  } catch (e) {
-    throw e
-  }
-}
-
 export default Contact
 
 export function extractUserInfoFromContact(contact) {

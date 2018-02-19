@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { removeImportResult } from '../../../../../store_actions/contact'
-import getContacts from '../../../../../store_actions/contacts/get-contacts'
+import {
+  getContacts,
+  removeImportResult
+} from '../../../../../store_actions/contacts'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import ModalImportLoading from './ModalImportLoading'
 import config from '../../../../../../config/public'

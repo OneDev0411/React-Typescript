@@ -8,7 +8,7 @@ import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'
 
 // services
 import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
-import contactSocket from './Pages/Dashboard/Contacts/Services/socket'
+import ContactSocket from '../services/socket/contacts'
 import DealSocket from './Pages/Dashboard/Deals/services/socket'
 
 // utils
@@ -134,7 +134,7 @@ class App extends Component {
   }
 
   initializeContactSocket(user) {
-    new contactSocket(user)
+    new ContactSocket(user)
   }
   initializeChatSocket(user) {
     new ChatSocket(user)
