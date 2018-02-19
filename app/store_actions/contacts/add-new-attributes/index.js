@@ -4,41 +4,40 @@ import postNewAttributes from '../../../models/contacts/post-new-attributes'
 import * as actionTypes from '../../../constants/contacts'
 import { selectContact } from '../../../reducers/contacts/list'
 
-const addNewAttributes = ({ contactId = '', attributes = [] }) => async (
-  dispatch,
-  getState
-) => {
-  if (!contactId || attributes.length === 0) {
-    return Promise.resolve()
-  }
-
-  try {
-    dispatch({
-      type: actionTypes.POST_NEW_ATTRIBUTES_REQUEST
-    })
-
-    const updatedContact = await postNewAttributes({ contactId, attributes })
-    const { contacts: { list } } = getState()
-    const contact = selectContact(list, contactId)
-    const newContact = {
-      ...contact,
-      ...updatedContact
+export function addNewAttributes({ contactId = '', attributes = [] }) {
+  return async (dispatch, getState) => {
+    if (!contactId || attributes.length === 0) {
+      return Promise.resolve()
     }
 
-    const response = normalize({ contacts: [newContact] }, contactsSchema)
+    try {
+      dispatch({
+        type: actionTypes.POST_NEW_ATTRIBUTES_REQUEST
+      })
 
-    dispatch({
-      response,
-      type: actionTypes.POST_NEW_ATTRIBUTES_SUCCESS
-    })
+      const updatedContact = await postNewAttributes({ contactId, attributes })
+      const { contacts: { list } } = getState()
+      const contact = selectContact(list, contactId)
+      const newContact = {
+        ...contact,
+        ...updatedContact
+      }
 
-    return contact
-  } catch (error) {
-    dispatch({
-      error,
-      type: actionTypes.POST_NEW_ATTRIBUTES_FAILURE
-    })
-    throw error
+      const response = normalize({ contacts: [newContact] }, contactsSchema)
+
+      dispatch({
+        response,
+        type: actionTypes.POST_NEW_ATTRIBUTES_SUCCESS
+      })
+
+      return contact
+    } catch (error) {
+      dispatch({
+        error,
+        type: actionTypes.POST_NEW_ATTRIBUTES_FAILURE
+      })
+      throw error
+    }
   }
 }
 

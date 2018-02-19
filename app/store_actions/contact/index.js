@@ -1,5 +1,2 @@
-export * from './get-tags'
 export * from './upsert-attributes'
-export * from './delete-attribute'
-export * from './update-contact'
 export * from './import'

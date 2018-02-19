@@ -19,6 +19,7 @@ import getContactActivities from '../../../../../store_actions/contacts/get-cont
 import updateContact from '../../../../../store_actions/contacts/update-contact'
 import addNewAttributes from '../../../../../store_actions/contacts/add-new-attributes'
 import { selectContact } from '../../../../../reducers/contacts/list'
+import { selectTags } from '../../../../../reducers/contacts/tags'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import Loading from '../../../../Partials/Loading'
 
@@ -212,8 +213,7 @@ class ContactProfile extends React.Component {
   }
 
   render() {
-    const { user, params, contact, fetchError, defaultTags } = this.props
-    const { activeTab } = this.state
+    const { params, contact, fetchError, defaultTags } = this.props
 
     if (fetchError) {
       if (fetchError.status === 404) {
@@ -231,6 +231,7 @@ class ContactProfile extends React.Component {
       )
     }
 
+    const { activeTab } = this.state
     const { names } = contact.sub_contacts[0].attributes
 
     return (
@@ -264,8 +265,7 @@ class ContactProfile extends React.Component {
             )}
 
             <Tags
-              contact_id={contact.id}
-              user={user}
+              contactId={contact.id}
               tags={Contact.get.tags(contact, defaultTags)}
             />
 
@@ -300,10 +300,13 @@ class ContactProfile extends React.Component {
 }
 
 const mapStateToProps = ({ contacts, user }, { params: { id: contactId } }) => {
-  const { list, contact } = contacts
+  const { list, contact, tags } = contacts
+
+  const defaultTags = selectTags(tags)
 
   return {
     user,
+    defaultTags,
     contact: selectContact(list, contactId),
     fetchError: selectContactError(contact)
   }

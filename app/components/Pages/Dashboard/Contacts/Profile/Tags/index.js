@@ -1,48 +1,53 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import _ from 'underscore'
+import { connect } from 'react-redux'
 import {
-  getTags,
-  upsertAttributes,
-  deleteAttribute
-} from '../../../../../../store_actions/contact'
-import ManageTags from './Manage-Tag'
+  getContactsTags,
+  addNewAttributes,
+  deleteAttributes
+} from '../../../../../../store_actions/contacts'
+import TagsModal from './TagsModal'
 
 class Tags extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showTagModal: false,
       saving: false,
-      removingTagId: null
+      isOpenModal: false
     }
+
+    this.handleSubmitChanges = this.handleSubmitChanges.bind(this)
   }
 
-  async onDone({ inserts, deletes }) {
-    const { getTags } = this.props
+  async handleSubmitChanges({ newTags = [], removedTags = [] }) {
+    const {
+      contactId,
+      getContactsTags,
+      addNewAttributes,
+      deleteAttributes
+    } = this.props
 
     this.setState({
-      showTagModal: false,
+      isOpenModal: false,
       saving: true
     })
 
     // insert new tags
-    if (inserts.length > 0) {
-      const newTags = _.map(inserts, item => ({
+    if (newTags.length > 0) {
+      const attributes = _.map(newTags, item => ({
+        id: undefined,
         type: 'tag',
         tag: item.tag
       }))
 
-      await this.upsert(newTags)
+      await addNewAttributes({ contactId, attributes })
+      await getContactsTags()
     }
 
-    // remove tags
-    for (let item of deletes) {
-      await this.remove(item)
-    }
+    if (removedTags.length > 0) {
+      const attributesIds = removedTags.map(({ id }) => id)
 
-    if (inserts.length > 0 || deletes.length > 0) {
-      getTags()
+      await deleteAttributes({ contactId, attributesIds })
     }
 
     this.setState({
@@ -50,71 +55,59 @@ class Tags extends React.Component {
     })
   }
 
-  async remove(item) {
-    const { contact_id, deleteAttribute } = this.props
+  handelOpenModal = () => this.setState({ isOpenModal: true })
 
-    // set removing state
-    this.setState({ removingTagId: item.id })
-
-    // remove tag
-    await deleteAttribute(contact_id, item.id)
-
-    // reset state
-    this.setState({ removingTagId: null })
-  }
-
-  async upsert(attributes) {
-    const { contact_id, upsertAttributes } = this.props
-
-    await upsertAttributes(contact_id, 'tag', attributes)
-  }
+  handleCloseModal = () => this.setState({ isOpenModal: false })
 
   render() {
     const { tags } = this.props
-    const { showTagModal, saving, removingTagId } = this.state
-
-    if (saving) {
-      return <i className="fa fa-spin fa-spinner" />
-    }
+    const { isOpenModal, saving } = this.state
 
     return (
       <div className="card details">
-        <div className="title" style={{ marginBottom: '16px' }}>
-          Tags
-        </div>
-        <div className="data">
-          <ul className="tags">
-            {_.chain(tags)
-              .filter(item => item.active === true && item.id !== removingTagId)
-              .map(item => (
-                <li
-                  key={`tag_${item.id}`}
-                  className="active"
-                  onClick={() => this.remove(item)}
-                >
-                  {item.tag}
-                </li>
-              ))
-              .value()}
-            <li
-              className="new-item"
-              onClick={() => this.setState({ showTagModal: true })}
-            >
-              +
-            </li>
-          </ul>
+        <div className="title">Tags</div>
+        <div style={{ padding: '16px' }}>
+          {saving ? (
+            <i className="fa fa-spin fa-spinner" />
+          ) : (
+            <div className="tags">
+              {_.chain(tags)
+                .filter(item => item.active)
+                .map(item => (
+                  <button
+                    key={`tag_${item.id}`}
+                    className="c-contact__tag active"
+                    onClick={() =>
+                      this.handleSubmitChanges({ removedTags: [item] })
+                    }
+                  >
+                    {item.tag}
+                  </button>
+                ))
+                .value()}
+              <button
+                className="c-contact__tag--new"
+                onClick={this.handelOpenModal}
+              >
+                +
+              </button>
+            </div>
+          )}
         </div>
 
-        <ManageTags
-          show={showTagModal}
+        <TagsModal
           tags={tags}
-          onDone={changes => this.onDone(changes)}
+          isOpen={isOpenModal}
+          handleClose={this.handleCloseModal}
+          handleSubmit={this.handleSubmitChanges}
         />
       </div>
     )
   }
 }
 
-export default connect(null, { getTags, upsertAttributes, deleteAttribute })(
-  Tags
-)
+export default connect(null, {
+  getContactsTags,
+  deleteAttributes,
+  addNewAttributes
+})(Tags)

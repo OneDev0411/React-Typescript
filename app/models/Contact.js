@@ -58,34 +58,6 @@ Contact.updateAttributes = async function(id, type, attributes) {
 }
 
 /**
- * delete attribute
- */
-Contact.deleteAttribute = async function(id, attribute_id) {
-  try {
-    const response = await new Fetch().delete(
-      `/contacts/${id}/attributes/${attribute_id}`
-    )
-
-    return response.body.data
-  } catch (e) {
-    throw e
-  }
-}
-
-/**
- * get tags
- */
-Contact.getTags = async function() {
-  try {
-    const response = await new Fetch().get('/contacts/tags')
-
-    return response
-  } catch (e) {
-    throw e
-  }
-}
-
-/**
  * helpers functions
  */
 Contact.helper = {

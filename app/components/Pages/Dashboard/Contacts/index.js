@@ -1,19 +1,26 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getTags } from '../../../../store_actions/contact'
-import getContacts from '../../../../store_actions/contacts/get-contacts'
+import {
+  getContacts,
+  getContactsTags
+} from '../../../../store_actions/contacts'
+import { selectTags } from '../../../../reducers/contacts/tags'
 import { selectContacts } from '../../../../reducers/contacts/list'
 
 class Contacts extends React.Component {
   componentDidMount() {
-    const { getContacts, getTags, contactsList, tags } = this.props
+    this.initializeContacts()
+  }
 
-    if (!contactsList) {
-      getContacts()
+  async initializeContacts() {
+    const { getContacts, getContactsTags, contactsList, tagsList } = this.props
+
+    if (contactsList.length === 0) {
+      await getContacts()
     }
 
-    if (!tags) {
-      getTags()
+    if (tagsList.length === 0) {
+      await getContactsTags()
     }
   }
 
@@ -39,11 +46,14 @@ class Contacts extends React.Component {
 
 function mapStateToProps({ contacts: { list, tags } }) {
   const contactsList = selectContacts(list)
+  const tagsList = selectTags(tags)
 
   return {
-    tags,
+    tagsList,
     contactsList
   }
 }
 
-export default connect(mapStateToProps, { getContacts, getTags })(Contacts)
+export default connect(mapStateToProps, { getContacts, getContactsTags })(
+  Contacts
+)

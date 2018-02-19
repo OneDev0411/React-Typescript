@@ -26,16 +26,15 @@
   }
   .modal-body {
     padding: 0;
-    @extend .contact-tags;
     .tags-container {
-      padding: 2%;
+      padding: 16px;
     }
   }
   .modal-footer {
     margin-top: 50px;
     text-align: left;
     input {
-      display: inline;
+      display: inline-block;
       width: 80%;
       border: none;
       box-shadow: none;
