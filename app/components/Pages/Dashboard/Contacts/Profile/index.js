@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import Stepper from '../../../../Partials/Stepper'
-import Contact from '../../../../../models/Contact'
+import Contact from '../../../../../models/contacts'
 import Header from './Header'
 import Information from './Information'
 import Names from './Names'

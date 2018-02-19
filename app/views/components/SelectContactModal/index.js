@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { extractUserInfoFromContact } from '../../../models/Contact'
+import { extractUserInfoFromContact } from '../../../models/contacts'
 import { selectContacts } from '../../../reducers/contacts/list'
 
 import BareModal from '../BareModal'

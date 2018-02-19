@@ -1,5 +1,5 @@
 import React from 'react'
-import Contact from '../../../../../../models/Contact'
+import Contact from '../../../../../../models/contacts'
 import Phones from './phones'
 import Emails from './emails'
 import Birthdays from './birthdays'

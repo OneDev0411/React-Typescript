@@ -1,5 +1,5 @@
 import React from 'react'
-import Contact from '../../../../../../models/Contact'
+import Contact from '../../../../../../models/contacts'
 import Editable from '../Editable'
 import Zipcode from './zipcode'
 

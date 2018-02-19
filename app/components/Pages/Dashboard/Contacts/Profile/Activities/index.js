@@ -3,7 +3,7 @@ import { Tabs, Tab } from 'react-bootstrap'
 import _ from 'underscore'
 import Timeline from '../Timeline'
 import Notes from '../Notes'
-import Contact from '../../../../../../models/Contact'
+import Contact from '../../../../../../models/contacts'
 
 export default ({ contact, activeTab, onChangeTab, onChangeAttribute }) => {
   const notes = Contact.get.notes(contact)
