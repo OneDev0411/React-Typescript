@@ -33,10 +33,13 @@ class Editable extends React.Component {
     const { onChange, type, id } = this.props
     const { text } = this.state
 
-    if (onChange && text.length > 0 && text !== this.props.text) {
-      onChange(type, id, text)
-    } else if (text.length === 0) {
-      this.setState({ text: '-' })
+    if (typeof onChange === 'function' && text !== this.props.text) {
+      if (text.length === 0) {
+        onChange(type, id, '')
+        this.setState({ text: '-' })
+      } else {
+        onChange(type, id, text)
+      }
     }
 
     this.setState({ editMode: false })
@@ -63,9 +66,9 @@ class Editable extends React.Component {
 
     if (editMode) {
       return (
-        <div className={cn('contact-editable', { error })}>
+        <div className={cn('contact-editable is-active', { error })}>
           <TextInput
-            value={text}
+            value={text || '-'}
             placeholder={placeholder}
             lines={text.split('\n').length || 1}
             onChange={e => {
@@ -86,7 +89,7 @@ class Editable extends React.Component {
     return (
       <div className={cn('contact-editable', { error })}>
         <div onClick={() => this.onClickEdit()} className="text">
-          {multiline ? this.nl2br(text) : text}
+          {multiline ? this.nl2br(text) : text || '-'}
         </div>
 
         <div className={`control ${multiline ? 'multiline' : ''}`}>

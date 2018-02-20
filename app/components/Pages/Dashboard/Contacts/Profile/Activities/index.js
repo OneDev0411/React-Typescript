@@ -9,7 +9,7 @@ export default ({ contact, activeTab, onChangeTab, onChangeAttribute }) => {
   const notes = Contact.get.notes(contact)
 
   return (
-    <div className="card activities">
+    <div className="c-contact-profile-card activities">
       <Tabs
         activeKey={activeTab}
         animation={false}

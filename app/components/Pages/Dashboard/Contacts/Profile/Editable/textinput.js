@@ -1,14 +1,6 @@
 import React from 'react'
 
-export default ({
-  value,
-  placeholder,
-  inputRef,
-  onKeyPress,
-  onChange,
-  onBlur,
-  onClose
-}) => {
+export default ({ onKeyPress, onClose, inputRef, ...props }) => {
   function onKeyPressed(e) {
     if (e.key === 'Enter') {
       onClose()
@@ -16,14 +8,6 @@ export default ({
   }
 
   return (
-    <input
-      type="text"
-      value={value}
-      placeholder={placeholder}
-      ref={inputRef}
-      onKeyPress={onKeyPress}
-      onChange={onChange}
-      onBlur={onBlur}
-    />
+    <input type="text" onKeyPress={onKeyPressed} ref={inputRef} {...props} />
   )
 }

@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 
 import { Container } from '../components/Container'
-import Stepper from '../../../../Partials/Stepper'
+import Stage from './Stage'
 import Contact from '../../../../../models/contacts'
 import Header from './Header'
 import Information from './Information'
@@ -63,19 +63,6 @@ class ContactProfile extends React.Component {
   }
 
   goBack = () => browserHistory.push('/dashboard/contacts')
-
-  getStageIndex = contact => {
-    const list = [
-      'General',
-      'UnqualifiedLead',
-      'QualifiedLead',
-      'Active',
-      'PastClient'
-    ]
-    const stage = Contact.get.stage(contact)
-
-    return list.indexOf(stage.name)
-  }
 
   async onChangeAttribute(type, id, text) {
     const { upsertContactAttributes, contact: { id: contactId } } = this.props
@@ -219,20 +206,10 @@ class ContactProfile extends React.Component {
           <div className="left-pane">
             <Information contact={contact} />
 
-            <div className="card stage">
-              <div className="title">Stage:</div>
-              <Stepper
-                steps={[
-                  'General',
-                  'Unqualified Lead',
-                  'Qualified Lead',
-                  'Active',
-                  'Past Client'
-                ]}
-                active={this.getStageIndex(contact)}
-                onChange={stage => this.handleChangeStage(stage)}
-              />
-            </div>
+            <Stage
+              contact={contact}
+              handleOnChange={stage => this.handleChangeStage(stage)}
+            />
 
             {Array.isArray(names) && (
               <Names

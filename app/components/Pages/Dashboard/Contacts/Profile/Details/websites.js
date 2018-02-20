@@ -11,12 +11,12 @@ const Websites = ({ fields, onChangeAttribute, handleAddNewField }) => {
   }
 
   return (
-    <div>
+    <ul className="u-unstyled-list">
       {fields.length > 0 ? (
         fields.map((item, key) => (
-          <li key={`website_${key}`}>
-            <div className="name">Website</div>
-            <div className="data">
+          <li key={`website_${key}`} className="c-contact-detail-item">
+            <label className="c-contact-detail-item__label">Website</label>
+            <span className="c-contact-detail-item__field">
               <Editable
                 type="website"
                 id={item.id}
@@ -27,13 +27,13 @@ const Websites = ({ fields, onChangeAttribute, handleAddNewField }) => {
                 text={item.website}
                 onChange={onChangeAttribute}
               />
-            </div>
+            </span>
           </li>
         ))
       ) : (
-        <li>
-          <div className="name">Website</div>
-          <div className="data">
+        <li className="c-contact-detail-item">
+          <label className="c-contact-detail-item__label">Website</label>
+          <span className="c-contact-detail-item__field">
             <Editable
               type="website"
               id={null}
@@ -42,10 +42,10 @@ const Websites = ({ fields, onChangeAttribute, handleAddNewField }) => {
               text="-"
               onChange={onChangeAttribute}
             />
-          </div>
+          </span>
         </li>
       )}
-    </div>
+    </ul>
   )
 }
 

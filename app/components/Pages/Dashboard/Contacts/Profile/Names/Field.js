@@ -2,13 +2,6 @@ import React from 'react'
 import { compose, withState } from 'recompose'
 import Editable from '../Editable'
 
-const labelStyle = {
-  width: '40%',
-  margin: 0,
-  lineHeight: 2,
-  fontWeight: 'normal'
-}
-
 function Field({ field, onChange, setErrorIdItem, errorIdItems }) {
   const { id, name, value, title } = field
 
@@ -23,18 +16,10 @@ function Field({ field, onChange, setErrorIdItem, errorIdItems }) {
     }
   }
 
-  const handleOnChange = (type, id, text) => {
-    if (isValidName(text)) {
-      onChange(type, id, text)
-    }
-  }
-
   return (
-    <li>
-      <label htmlFor={name} style={labelStyle} className="name">
-        {title}
-      </label>
-      <div className="data">
+    <li className="c-contact-detail-item">
+      <label className="c-contact-detail-item__label">{title}</label>
+      <span className="c-contact-detail-item__field">
         <Editable
           id={id}
           showEdit
@@ -43,10 +28,10 @@ function Field({ field, onChange, setErrorIdItem, errorIdItems }) {
           index={name}
           showAdd={false}
           validate={validate}
-          onChange={handleOnChange}
+          onChange={onChange}
           error={errorIdItems.includes(name)}
         />
-      </div>
+      </span>
     </li>
   )
 }

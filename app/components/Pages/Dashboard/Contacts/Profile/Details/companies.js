@@ -6,29 +6,29 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import Editable from '../Editable'
 
 const Companies = ({ fields, onChangeAttribute, handleAddNewField }) => (
-  <div>
-    {fields.map((item, key) => (
-      <li key={`company_${key}`}>
-        <div className="name">Company</div>
-        <div className="data">
-          <Editable
-            type="company"
-            id={item.id}
-            showEdit
-            showAdd
-            text={item.company}
-            onAdd={handleAddNewField}
-            attributeName="companies"
-            onChange={onChangeAttribute}
-          />
-        </div>
-      </li>
-    ))}
-
-    {fields.length === 0 && (
-      <li>
-        <div className="name">Company</div>
-        <div className="data">
+  <ul className="u-unstyled-list">
+    {fields.length > 0 ? (
+      fields.map((item, key) => (
+        <li key={`company_${key}`} className="c-contact-detail-item">
+          <label className="c-contact-detail-item__label">Company</label>
+          <span className="c-contact-detail-item__field">
+            <Editable
+              type="company"
+              id={item.id}
+              showEdit
+              showAdd
+              text={item.company}
+              onAdd={handleAddNewField}
+              attributeName="companies"
+              onChange={onChangeAttribute}
+            />
+          </span>
+        </li>
+      ))
+    ) : (
+      <li className="c-contact-detail-item">
+        <label className="c-contact-detail-item__label">Company</label>
+        <span className="c-contact-detail-item__field">
           <Editable
             type="company"
             id={null}
@@ -36,10 +36,10 @@ const Companies = ({ fields, onChangeAttribute, handleAddNewField }) => (
             text="-"
             onChange={onChangeAttribute}
           />
-        </div>
+        </span>
       </li>
     )}
-  </div>
+  </ul>
 )
 
 const enhance = compose(

@@ -50,32 +50,32 @@ const Phones = ({
   }
 
   return (
-    <div>
-      {fields.map((item, key) => (
-        <li key={`phone_${key}`}>
-          <div className="name">Phone</div>
-          <div className="data">
-            <Editable
-              type="phone_number"
-              id={item.id}
-              showEdit
-              showAdd
-              attributeName="phone_numbers"
-              text={item.phone_number}
-              onAdd={handleAddNewField}
-              onChange={onChangePhone}
-              validate={validate}
-              error={errorIdItems.indexOf(key) > -1}
-              index={key}
-            />
-          </div>
-        </li>
-      ))}
-
-      {fields.length === 0 && (
-        <li>
-          <div className="name">Phone</div>
-          <div className="data">
+    <ul className="u-unstyled-list">
+      {fields.length > 0 ? (
+        fields.map((item, key) => (
+          <li key={`phone_${key}`} className="c-contact-detail-item">
+            <label className="c-contact-detail-item__label">Phone</label>
+            <span className="c-contact-detail-item__field">
+              <Editable
+                type="phone_number"
+                id={item.id}
+                showEdit
+                showAdd
+                attributeName="phone_numbers"
+                text={item.phone_number}
+                onAdd={handleAddNewField}
+                onChange={onChangePhone}
+                validate={validate}
+                error={errorIdItems.indexOf(key) > -1}
+                index={key}
+              />
+            </span>
+          </li>
+        ))
+      ) : (
+        <li className="c-contact-detail-item">
+          <label className="c-contact-detail-item__label">Phone</label>
+          <span className="c-contact-detail-item__field">
             <Editable
               type="phone_number"
               id={null}
@@ -86,10 +86,10 @@ const Phones = ({
               error={errorIdItems.indexOf('new') > -1}
               index="new"
             />
-          </div>
+          </span>
         </li>
       )}
-    </div>
+    </ul>
   )
 }
 
