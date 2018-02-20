@@ -64,11 +64,15 @@ class Tags extends React.Component {
     const { isOpenModal, saving } = this.state
 
     return (
-      <div className="card details">
-        <div className="title">Tags</div>
-        <div style={{ padding: '16px' }}>
+      <div className="c-contact-profile-card tags">
+        <div className="c-contact-profile-card__title">Tags</div>
+        <div className="c-contact-profile-card__body">
           {saving ? (
-            <i className="fa fa-spin fa-spinner" />
+            <span style={{ color: '#2196f3' }}>
+              <i className="fa fa-spin fa-spinner" />
+              {'  '}
+              Saving ...
+            </span>
           ) : (
             <div className="tags">
               {_.chain(tags)

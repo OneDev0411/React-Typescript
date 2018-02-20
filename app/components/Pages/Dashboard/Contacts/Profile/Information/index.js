@@ -4,7 +4,7 @@ import Contact from '../../../../../../models/contacts'
 import LastSeen from '../../../Chatroom/Rooms/components/last-seen'
 
 export default ({ contact }) => (
-  <div className="card contact-info">
+  <div className="c-contact-profile-card contact-info">
     <Avatar
       className="avatar"
       round

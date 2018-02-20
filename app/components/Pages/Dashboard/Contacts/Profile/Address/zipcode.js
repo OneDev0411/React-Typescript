@@ -27,9 +27,9 @@ const ZipCodeComponent = ({
   }
 
   return (
-    <li>
-      <div className="name">Zipcode</div>
-      <div className="data">
+    <li className="c-contact-detail-item">
+      <label className="c-contact-detail-item__label">Zip Code</label>
+      <span className="c-contact-detail-item__field">
         <Editable
           type="address"
           id={addressId}
@@ -39,7 +39,7 @@ const ZipCodeComponent = ({
           validate={validate}
           onChange={onChangeZipCode}
         />
-      </div>
+      </span>
     </li>
   )
 }

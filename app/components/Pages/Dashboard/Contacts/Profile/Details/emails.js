@@ -35,32 +35,42 @@ const Emails = ({
   }
 
   return (
-    <div>
-      {fields.map((item, key) => (
-        <li key={`email_${key}`}>
-          <div className="name">Email</div>
-          <div className="data">
-            <Editable
-              type="email"
-              id={item.id}
-              showEdit
-              showAdd
-              text={item.email}
-              attributeName="emails"
-              onAdd={handleAddNewField}
-              onChange={onChangeEmail}
-              validate={validate}
-              error={errorIdItems.indexOf(key) > -1}
-              index={key}
+    <ul className="u-unstyled-list">
+      {fields.length > 0 ? (
+        fields.map((item, key) => (
+          <li key={`email_${key}`} className="c-contact-detail-item">
+            <label className="c-contact-detail-item__label">Email</label>
+            <span className="c-contact-detail-item__field">
+              {/* <span className="c-contact-details__field__primary">
+            <label htmlFor={`email_radio_${item.id}`}>Primary</label>
+            <input
+              name="email"
+              type="radio"
+              id={`email_radio_${item.id}`}
+              selected={item.is_primary}
+              value={item.email}
             />
-          </div>
-        </li>
-      ))}
-
-      {fields.length === 0 && (
-        <li>
-          <div className="name">Email</div>
-          <div className="data">
+          </span> */}
+              <Editable
+                type="email"
+                id={item.id}
+                showEdit
+                showAdd
+                text={item.email}
+                attributeName="emails"
+                onAdd={handleAddNewField}
+                onChange={onChangeEmail}
+                validate={validate}
+                error={errorIdItems.indexOf(key) > -1}
+                index={key}
+              />
+            </span>
+          </li>
+        ))
+      ) : (
+        <li className="c-contact-detail-item">
+          <label className="c-contact-detail-item__label">Email</label>
+          <span className="c-contact-detail-item__field">
             <Editable
               type="email"
               id={null}
@@ -71,10 +81,10 @@ const Emails = ({
               error={errorIdItems.indexOf('new') > -1}
               index="new"
             />
-          </div>
+          </span>
         </li>
       )}
-    </div>
+    </ul>
   )
 }
 

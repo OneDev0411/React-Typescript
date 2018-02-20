@@ -6,6 +6,7 @@
     padding: 4px;
     position: relative;
     justify-content: space-between;
+    cursor: pointer;
 
     input,
     textarea {
@@ -26,6 +27,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      width: 100%;
     }
 
     .control {
@@ -48,10 +50,9 @@
       }
     }
 
+    &.is-active,
     &:hover {
       border: 1px dashed #2196f3;
-      border-radius: 3px;
-      padding: 3px;
     }
 
     &:hover .control {
@@ -59,8 +60,6 @@
     }
     &.error {
       border: 1px dashed red;
-      border-radius: 3px;
-      padding: 3px;
     }
   }
 }

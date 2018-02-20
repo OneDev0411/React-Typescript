@@ -1,38 +1,40 @@
-%contact-card {
-  .card {
-    padding: 5px;
-    background: #fff;
-    border-radius: 3px;
-    margin-bottom: 5%;
+.c-contact-profile-card {
+  padding: 1em;
+  margin-bottom: 2em;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
 
-    .title {
-      color: #a3a6a8;
-      border-bottom: solid 1px #e5e7ea;
-      width: 90%;
-      margin: 5px auto;
-      font-weight: bold;
-      padding-bottom: 10px;
-    }
+.c-contact-profile-card__title {
+  color: #444;
+  margin: 0 0 1em;
+  padding-bottom: .5em;
+  font-size: 1.8rem;
+  line-height: 1;
+  border-bottom: solid 1px #e5e7ea;
+}
 
-    ul.table {
-      margin: 2% 5%;
-      padding: 0;
-      width: 100%;
-      li {
-        .name {
-          color: #5b6469;
-          width: 35%;
-          float: left;
-        }
-        .data {
-          margin-bottom: 15px;
-          margin-right: 3%;
-          font-size: 13px;
-          color: #9b9b9b;
-          width: 55%;
-          margin-left: 35%;
-        }
-      }
-    }
+.c-contact-detail-item {
+  margin-bottom: .5em;
+  display: flex;
+  align-items: center;
+}
+
+.c-contact-detail-item__label {
+  width: 40%;
+  margin: 0;
+  color: #5b6469;
+  display: inline-block;
+  font-weight: normal;
+}
+
+.c-contact-detail-item__field {
+  width: 60%;
+  color: #9b9b9b;
+  display: inline-block;
+
+  .contact-editable {
+    height: 29px;
   }
 }

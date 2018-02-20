@@ -48,7 +48,9 @@
     }
     .control {
       display: none;
-      float: right;
+      position: absolute;
+      right: 0;
+      top: 0;
       i {
         cursor: pointer;
         margin-left: 8px;
@@ -182,15 +184,6 @@
             font-size: 1.5em;
             display: inline-block;
             margin-left: 4%;
-          }
-        }
-
-        .stage {
-          padding: 5px 0 20px 0;
-          .title {
-            border-bottom: none;
-            font-weight: normal;
-            margin-bottom: 0px;
           }
         }
 
