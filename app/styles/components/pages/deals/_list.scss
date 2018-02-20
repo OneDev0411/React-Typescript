@@ -128,22 +128,20 @@
       margin-bottom: 40px;
       font-weight: 500;
       text-align: left;
-      color: #8da2b5;
+      color: #67717c;
 
       td > i {
         margin-right: 5px;
       }
 
       .sortable {
-        color: #263445;
-        opacity: 0.7;
 
         &:hover {
-          opacity: 0.5;
+          color: #9399a2;
         }
 
         &.isActive {
-          opacity: 1;
+          color: #273444;
         }
       }
     }
