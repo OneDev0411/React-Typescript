@@ -2,7 +2,6 @@ import webpack from 'webpack'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 import WebpackNotifierPlugin from 'webpack-notifier'
-import Jarvis from 'webpack-jarvis'
 
 const postcss = function postcss() {
   return [
@@ -20,10 +19,7 @@ webpackConfig.entry = [
 ]
 
 webpackConfig.plugins.push(
-  new webpack.HotModuleReplacementPlugin(),
-  new Jarvis({
-    port: 1337 // optional: set a port
-  })
+  new webpack.HotModuleReplacementPlugin()
   // new webpack.NoEmitOnErrorsPlugin(),
 )
 
