@@ -288,6 +288,10 @@ class App extends Component {
     )
   }
 
+  componentWillUnmount() {
+    this.props.dispatch(inactiveIntercom())
+  }
+
   render() {
     const { data, user, rooms, location } = this.props
 

@@ -92,8 +92,7 @@ class AddRoleModal extends React.Component {
             if (nameAttribute && nameAttribute.id) {
               await upsertContactAttributes({
                 contactId,
-                attributes: [nameAttribute]
-              })
+                attributes: [nameAttribute]})
             }
 
             if (newAttributes.length > 0) {
