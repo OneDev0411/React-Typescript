@@ -23,7 +23,6 @@ class WorkspaceForm extends React.Component {
     super(props)
     this.state = {
       saving: false,
-      title: '',
       task: null,
       notifyOffice: true,
       uploadProgressPercents: 0,
@@ -33,10 +32,10 @@ class WorkspaceForm extends React.Component {
   }
 
   isFormValidated() {
-    const { title, task } = this.state
+    const { task } = this.state
     const { splitter } = this.props
 
-    if (title.length > 0 && task !== null && _.size(splitter.pages) > 0) {
+    if (task !== null && _.size(splitter.pages) > 0) {
       return true
     }
 
@@ -44,7 +43,7 @@ class WorkspaceForm extends React.Component {
   }
 
   async save() {
-    const { title, task, stashFiles, notifyOffice } = this.state
+    const { task, stashFiles, notifyOffice } = this.state
     const {
       notify,
       splitter,
@@ -70,7 +69,7 @@ class WorkspaceForm extends React.Component {
 
     try {
       const { file } = await Deal.splitPDF(
-        title,
+        task.title,
         task.id,
         task.room.id,
         files,
@@ -88,14 +87,13 @@ class WorkspaceForm extends React.Component {
       fileCreated = true
 
       notify({
-        message: `Splitted PDF, "${title}" created and uploaded`,
+        message: `Splitted PDF, "${task.title}" created and uploaded`,
         status: 'success'
       })
 
       // set status
       this.setState({
         saving: false,
-        title: '',
         notifyOffice: true,
         uploadProgressPercents: 0
       })
@@ -215,10 +213,15 @@ class WorkspaceForm extends React.Component {
     return Object.keys(this.state.stashFiles).length > 0
   }
 
+  onSelectTask(taskId) {
+    const { tasks } = this.props
+
+    this.setState({ task: tasks[taskId] })
+  }
+
   render() {
-    const { deal, tasks } = this.props
+    const { deal } = this.props
     const {
-      title,
       task,
       notifyOffice,
       statusMessage,
@@ -246,16 +249,10 @@ class WorkspaceForm extends React.Component {
 
     return (
       <div className="details">
-        <input
-          className="title"
-          placeholder="Document title ..."
-          value={title}
-          onChange={e => this.setState({ title: e.target.value })}
-        />
-
         <TasksDropDown
+          searchable
           deal={deal}
-          onSelectTask={taskId => this.setState({ task: tasks[taskId] })}
+          onSelectTask={taskId => this.onSelectTask(taskId)}
           selectedTask={task}
         />
 
