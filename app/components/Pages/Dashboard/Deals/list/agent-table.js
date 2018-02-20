@@ -19,7 +19,7 @@ class AgentTable extends BaseTable {
       address: {
         caption: 'ADDRESS',
         sortable: true,
-        className: 'address col-md-3',
+        className: 'address col-md-4',
         getText: deal => this.getAddress(deal),
         getValue: deal => Deal.get.address(deal)
       },
@@ -50,12 +50,23 @@ class AgentTable extends BaseTable {
         caption: 'PRICE $',
         sortable: true,
         className: 'col-md-1 hidden-xs',
-        getText: deal =>
-          Deal.get.formattedPrice(
+        getText: deal => {
+          const price = Deal.get.field(deal, 'sales_price')
+
+          if (deal.id == 'e1b8b87e-070b-11e8-8b01-0ae785638eb4') {
+            console.log('price: ', price)
+          }
+
+          return Deal.get.formattedPrice(
             Deal.get.field(deal, 'list_price'),
             'currency',
             0
-          ),
+          ) +" " + Deal.get.formattedPrice(
+            Deal.get.field(deal, 'sales_price'),
+            'currency',
+            0
+          )
+        },
         getValue: deal => Deal.get.field(deal, 'list_price')
       },
       side: {
@@ -81,7 +92,7 @@ class AgentTable extends BaseTable {
       },
       notificiation: {
         caption: '',
-        className: 'col-md-1 hidden-sm hidden-xs',
+        className: 'notification-container hidden-sm hidden-xs',
         getText: deal => this.hasNotification(deal)
       },
       searchResult: {

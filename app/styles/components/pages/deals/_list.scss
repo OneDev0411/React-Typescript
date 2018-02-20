@@ -98,25 +98,27 @@
       }
     }
 
-    td > .unread-notifications {
-      position: relative;
-      span {
-        position: absolute;
-        top: -6px;
-        right: -6px;
-        background-color: #ff4747;
-        display: block;
-        width: 15px;
-        height: 15px;
-        border-radius: 50px;
-        line-height: 15px;
-        vertical-align: middle;
-        color: #fff;
-        font-size: 10px;
-        text-align: center;
+    td.notification-container {
+      padding-right: 16px;
+      .unread-notifications {
+        position: relative;
+        span {
+          position: absolute;
+          top: -6px;
+          right: -6px;
+          background-color: #ff4747;
+          display: block;
+          width: 15px;
+          height: 15px;
+          border-radius: 50px;
+          line-height: 15px;
+          vertical-align: middle;
+          color: #fff;
+          font-size: 10px;
+          text-align: center;
+        }
       }
     }
-
     tr.header td {
       border: none !important;
     }
