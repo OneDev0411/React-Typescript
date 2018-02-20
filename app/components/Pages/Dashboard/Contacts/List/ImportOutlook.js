@@ -22,14 +22,22 @@ class ImportOutlook extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.importOutlook.done) {
-      this.props.getContacts()
-      this.props.removeImportResult()
+    const { getContacts, removeImportResult } = this.props
+
+    if (
+      nextProps.importOutlook.done &&
+      this.props.importOutlook.done !== nextProps.importOutlook.done
+    ) {
+      getContacts()
+      removeImportResult()
       this.loginWindows && this.loginWindows.close()
     }
 
-    if (nextProps.importOutlook.failLogin) {
-      this.props.removeImportResult()
+    if (
+      nextProps.importOutlook.failLogin &&
+      this.props.importOutlook.failLogin !== nextProps.importOutlook.failLogin
+    ) {
+      removeImportResult()
     }
   }
 
