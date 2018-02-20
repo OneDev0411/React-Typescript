@@ -4,7 +4,6 @@ import cn from 'classnames'
 import { addNotification as notify } from 'reapop'
 import { Dropdown, Button } from 'react-bootstrap'
 import { createFormTask } from '../../../../../store_actions/deals'
-import TaskForms from '../dashboard/create-task/form/forms-list'
 
 class DropDownTasks extends React.Component {
   constructor(props) {
@@ -12,7 +11,6 @@ class DropDownTasks extends React.Component {
     this.state = {
       showMenu: false,
       newTaskMode: false,
-      newFormMode: null,
       filter: '',
       isCreatingTask: false,
       taskTitle: ''
@@ -20,9 +18,9 @@ class DropDownTasks extends React.Component {
   }
 
   toggleMenu() {
-    const { newTaskMode, newFormMode } = this.state
+    const { newTaskMode } = this.state
 
-    if (newTaskMode || newFormMode) {
+    if (newTaskMode) {
       return false
     }
 
@@ -34,6 +32,25 @@ class DropDownTasks extends React.Component {
   onSelectTask(taskId) {
     this.props.onSelectTask(taskId)
     this.toggleMenu()
+
+    this.setState({
+      filter: ''
+    })
+  }
+
+  async onSelectFormTask(checklistId, form) {
+    const { deal, onSelectTask, createFormTask } = this.props
+
+    onSelectTask(null)
+    this.toggleMenu()
+
+    this.setState({
+      filter: form.name.trim()
+    })
+
+    const task = await createFormTask(deal.id, form.id, form.name, checklistId)
+
+    onSelectTask(task.id)
 
     this.setState({
       filter: ''
@@ -62,14 +79,10 @@ class DropDownTasks extends React.Component {
     })
   }
 
-  toggleNewFormMode(chId) {
-    this.setState({ newFormMode: chId })
-  }
-
   onChangeFilter(filter) {
     const { selectedTask, onSelectTask } = this.props
 
-    this.setState({ filter })
+    this.setState({ filter: filter.trim() })
 
     if (selectedTask) {
       onSelectTask(null)
@@ -111,7 +124,6 @@ class DropDownTasks extends React.Component {
     const {
       showMenu,
       newTaskMode,
-      newFormMode,
       isCreatingTask,
       taskTitle,
       filter
@@ -140,11 +152,13 @@ class DropDownTasks extends React.Component {
           {searchable ? (
             <input
               placeholder="Document Title"
-              value={filter || (selectedTask && selectedTask.title) || ''}
+              value={
+                filter || (selectedTask && selectedTask.title.trim()) || ''
+              }
               onChange={e => this.onChangeFilter(e.target.value)}
             />
           ) : (
-            (selectedTask && selectedTask.title) || 'Select a task'
+            (selectedTask && selectedTask.title) || filter || 'Select a task'
           )}
 
           <span className="indicator">
@@ -206,12 +220,26 @@ class DropDownTasks extends React.Component {
                   </li>
                 ) : (
                   <Fragment>
-                    <li
-                      className="new-task"
-                      onClick={() => this.toggleNewFormMode(chId)}
-                    >
-                      Add new form to {checklist.title}
-                    </li>
+                    {_.chain(checklist.allowed_forms)
+                      .filter(form => {
+                        const isFormExists = _.find(
+                          checklist.tasks,
+                          id => tasks[id].form === form.id
+                        )
+
+                        return typeof isFormExists === 'undefined'
+                      })
+                      .map(form => (
+                        <li
+                          key={form.id}
+                          onClick={() =>
+                            this.onSelectFormTask(checklist.id, form)
+                          }
+                        >
+                          {form.name}
+                        </li>
+                      ))
+                      .value()}
 
                     <li
                       className="new-task"
@@ -219,14 +247,6 @@ class DropDownTasks extends React.Component {
                     >
                       Add new task to {checklist.title}
                     </li>
-
-                    <TaskForms
-                      deal={deal}
-                      listId={checklist.id}
-                      show={newFormMode === chId}
-                      onClose={() => this.toggleNewFormMode(null)}
-                      onTaskCreate={task => this.onSelectTask(task.id)}
-                    />
                   </Fragment>
                 )}
               </div>
