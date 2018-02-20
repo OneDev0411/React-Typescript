@@ -174,6 +174,13 @@ export default class Form extends React.Component {
    * https://gitlab.com/rechat/web/issues/691
    */
   isCommissionRequired(form) {
+    const { deal } = this.props
+
+    // https://gitlab.com/rechat/web/issues/760
+    if (deal && deal.deal_type === 'Buying' && form.role === 'SellerAgent') {
+      return false
+    }
+
     return (
       Commission.shouldShowCommission(form) &&
       this.props.isCommissionRequired !== false
