@@ -19,9 +19,16 @@ class CreateForm extends React.Component {
 
     return (
       <div>
-        <div className="add-task form-task" onClick={() => this.displayForms(true)}>
+        <div
+          className="add-task form-task"
+          onClick={() => this.displayForms(true)}
+        >
           <div className="icon">
-            <img className="img-add" src="/static/images/deals/plus.svg" />
+            <img
+              className="img-add"
+              src="/static/images/deals/plus.svg"
+              alt=""
+            />
           </div>
 
           <div className="title">Add checklist item</div>
