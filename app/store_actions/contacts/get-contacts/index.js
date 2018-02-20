@@ -1,5 +1,8 @@
-import fetchContacts from '../../../models/contacts/get-contacts'
+import { normalize } from 'normalizr'
 import * as actionTypes from '../../../constants/contacts'
+import { contactsSchema } from '../../../models/contacts/schema'
+import fetchContacts from '../../../models/contacts/get-contacts'
+import { isFetchingContactsList } from '../../../reducers/contacts/list'
 
 export function getContacts(user = {}, params) {
   return async (dispatch, getState) => {
@@ -7,12 +10,26 @@ export function getContacts(user = {}, params) {
       ;({ user } = getState())
     }
 
+    const { contacts: { list } } = getState()
+
+    if (isFetchingContactsList(list)) {
+      return Promise.resolve()
+    }
+
     try {
       dispatch({
         type: actionTypes.FETCH_CONTACTS_REQUEST
       })
 
-      const response = await fetchContacts(user, params)
+      let response = await fetchContacts(user, params)
+      const { data, info } = response
+      const contacts = { contacts: data }
+      const normalizedData = normalize(contacts, contactsSchema)
+
+      response = {
+        info,
+        ...normalizedData
+      }
 
       dispatch({
         response,
@@ -20,8 +37,8 @@ export function getContacts(user = {}, params) {
       })
     } catch (error) {
       dispatch({
-        type: actionTypes.FETCH_CONTACTS_FAILURE,
-        message: error.message || 'Something went wrong.'
+        error,
+        type: actionTypes.FETCH_CONTACTS_FAILURE
       })
       throw error
     }

@@ -26,7 +26,10 @@ const ids = (state = [], action) => {
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.POST_NEW_CONTACTS_SUCCESS:
-      return [...state, ...action.response.result.contacts]
+      const newState = [...state, ...action.response.result.contacts]
+
+      // removing duplicates
+      return [...new Set(newState)]
     default:
       return state
   }
@@ -53,10 +56,10 @@ const isFetching = (state = false, action) => {
   }
 }
 
-const errorMessage = (state = null, action) => {
+const error = (state = null, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACTS_FAILURE:
-      return action.message
+      return action.error
     case actionTypes.FETCH_CONTACTS_SUCCESS:
       return null
     default:
@@ -68,8 +71,8 @@ const contactsList = combineReducers({
   ids,
   byId,
   info,
-  isFetching,
-  errorMessage
+  error,
+  isFetching
 })
 
 export default contactsList

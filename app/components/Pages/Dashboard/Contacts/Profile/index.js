@@ -2,8 +2,8 @@ import React from 'react'
 import pick from 'lodash/pick'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 
+import { Container } from '../components/Container'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/contacts'
 import Header from './Header'
@@ -24,13 +24,6 @@ import { selectContact } from '../../../../../reducers/contacts/list'
 import { selectTags } from '../../../../../reducers/contacts/tags'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import Loading from '../../../../Partials/Loading'
-
-const Container = styled.div`
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
 
 class ContactProfile extends React.Component {
   constructor(props) {

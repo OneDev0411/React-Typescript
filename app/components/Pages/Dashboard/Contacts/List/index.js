@@ -8,8 +8,13 @@ import Stage from '../components/Stage'
 import NoContact from './no-contact'
 import Header from './header'
 import ReactTable from 'react-table'
+import Loading from '../../../../Partials/Loading'
+import { Container } from '../components/Container'
 import NoSearchResults from '../../../../Partials/no-search-results'
-import { selectContacts } from '../../../../../reducers/contacts/list'
+import {
+  selectContacts,
+  isFetchingContactsList
+} from '../../../../../reducers/contacts/list'
 import { upsertContactAttributes } from '../../../../../store_actions/contacts'
 
 function openContact(id) {
@@ -147,8 +152,16 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const { contactsList, user, loadingImport } = this.props
+    const { user, isFetching, contactsList, loadingImport } = this.props
     const contactsCount = contactsList.length
+
+    if (isFetching && contactsCount === 0) {
+      return (
+        <Container>
+          <Loading />
+        </Container>
+      )
+    }
 
     if (contactsCount === 0) {
       return (
@@ -199,9 +212,11 @@ class ContactsList extends React.Component {
 function mapStateToProps({ user, contacts }) {
   const { list, spinner: loadingImport } = contacts
   const contactsList = selectContacts(list)
+  const isFetching = isFetchingContactsList(list)
 
   return {
     user,
+    isFetching,
     contactsList,
     loadingImport
   }

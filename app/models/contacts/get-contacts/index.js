@@ -1,5 +1,3 @@
-import { normalize } from 'normalizr'
-import { contactsSchema } from '../schema'
 import Fetch from '../../../services/fetch'
 
 async function fetchContacts(user) {
@@ -18,14 +16,8 @@ async function fetchContacts(user) {
     }
 
     const response = await fetchContacts
-    const { data, info } = response.body
-    const contacts = { contacts: data }
-    const normalizedData = normalize(contacts, contactsSchema)
 
-    return {
-      info,
-      ...normalizedData
-    }
+    return response.body
   } catch (error) {
     throw error
   }
