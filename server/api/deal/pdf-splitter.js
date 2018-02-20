@@ -3,7 +3,7 @@ import config from '../../../config/private'
 import Promise from 'bluebird'
 import memoryStream from 'memory-streams'
 import agent from 'superagent'
-import request from 'request'
+import request from 'requestretry'
 import bodyParser from 'koa-bodyparser'
 import _ from 'underscore'
 import scissors from 'scissors'
@@ -89,10 +89,12 @@ router.post('/deals/pdf-splitter', bodyParser(), async ctx => {
     const splittedFileStream = await splitFiles(splits)
 
     const response = await promisifiedRequest.postAsync({
-      url: `${config.api.url}/rooms/${room_id}/attachments`,
+      url: `${config.api.url}/tasks/${task_id}/attachments`,
       json: true,
+      maxAttempts: 5,
+      retryDelay: 2000,
+      retryStrategy: request.RetryStrategies.HTTPOrNetworkError,
       headers: {
-        // 'Content-Type': 'application/json',
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${user.access_token}`
       },
@@ -114,14 +116,19 @@ router.post('/deals/pdf-splitter', bodyParser(), async ctx => {
 
     const file = response.body.data
 
-    await ctx
-      .fetch(`/tasks/${task_id}/messages`, 'POST')
-      .set('Authorization', `Bearer ${user.access_token}`)
-      .send({
-        author: user.id,
-        room: room_id,
-        attachments: [file.id]
-      })
+    try {
+      await ctx
+        .fetch(`/tasks/${task_id}/messages`, 'POST')
+        .set('Authorization', `Bearer ${user.access_token}`)
+        .retry(3)
+        .send({
+          author: user.id,
+          room: room_id,
+          attachments: [file.id]
+        })
+    } catch (e) {
+      console.log('Couldnot upload files to task messages')
+    }
 
     finishStream({ success: true, file })
   } catch (e) {
