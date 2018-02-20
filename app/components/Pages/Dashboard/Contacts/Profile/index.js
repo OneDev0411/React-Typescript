@@ -144,7 +144,8 @@ class ContactProfile extends React.Component {
       last_name: '-',
       legal_first_name: '-',
       legal_middle_name: '-',
-      legal_last_name: '-'
+      legal_last_name: '-',
+      nickname: '-'
     }
 
     const nameAttribute = {
