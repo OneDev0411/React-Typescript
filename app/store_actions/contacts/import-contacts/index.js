@@ -10,7 +10,7 @@ export function removeImportResult() {
   return { type: types.CONTACTS__REMOVE_IMPORT_RESULT }
 }
 
-export function loginSusseful() {
+export function loginSuccessful() {
   return { type: types.CONTACTS__IMPORT_SUCCESSFUL_LOGIN }
 }
 
