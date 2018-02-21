@@ -50,23 +50,12 @@ class AgentTable extends BaseTable {
         caption: 'PRICE $',
         sortable: true,
         className: 'col-md-1 hidden-xs',
-        getText: deal => {
-          const price = Deal.get.field(deal, 'sales_price')
-
-          if (deal.id == 'e1b8b87e-070b-11e8-8b01-0ae785638eb4') {
-            console.log('price: ', price)
-          }
-
-          return Deal.get.formattedPrice(
+        getText: deal =>
+          Deal.get.formattedPrice(
             Deal.get.field(deal, 'list_price'),
             'currency',
             0
-          ) +" " + Deal.get.formattedPrice(
-            Deal.get.field(deal, 'sales_price'),
-            'currency',
-            0
-          )
-        },
+          ),
         getValue: deal => Deal.get.field(deal, 'list_price')
       },
       side: {
