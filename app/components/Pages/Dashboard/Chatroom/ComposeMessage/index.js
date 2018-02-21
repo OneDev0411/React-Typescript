@@ -4,9 +4,7 @@ import Message from '../Util/message'
 import Mention from '../Util/mention'
 import Socket from '../Services/socket'
 import MessageInput from './input'
-import {
-  insertDraft
-} from '../../../../../store_actions/chatroom'
+import { insertDraft } from '../../../../../store_actions/chatroom'
 
 class ComposeMessage extends React.Component {
   constructor(props) {
@@ -19,11 +17,10 @@ class ComposeMessage extends React.Component {
     const { Observable } = Rx
 
     // create handler for text keypress
-    const handler = Observable
-      .fromEvent(this.text_message, 'keypress')
+    const handler = Observable.fromEvent(this.text_message, 'keypress')
 
     handler
-      .filter(e => e.key ? e.key !== 'Enter' : e.keyCode !== 13)
+      .filter(e => (e.key ? e.key !== 'Enter' : e.keyCode !== 13))
       .throttleTime(1000)
       .do(() => this.onTyping())
       .debounceTime(3500)
@@ -93,8 +90,9 @@ class ComposeMessage extends React.Component {
       room: roomId
     }
 
-    Message.send(roomId, message, user)
-      .then(() => this.props.onComposeMessage())
+    Message.send(roomId, message, user).then(() =>
+      this.props.onComposeMessage()
+    )
 
     // clear message box
     this.text_message.value = ''
@@ -109,12 +107,14 @@ class ComposeMessage extends React.Component {
         user={user}
         mentionsSource={Mention.getList(members, user)}
         isInstantChat={isInstantChat}
-        inputRef={ref => this.text_message = ref}
+        inputRef={ref => (this.text_message = ref)}
         onHeightChange={this.props.onHeightChange}
-        onBlur={message => this.props.insertDraft({
-          roomId: this.props.roomId,
-          message
-        })}
+        onBlur={message =>
+          this.props.insertDraft({
+            roomId: this.props.roomId,
+            message
+          })
+        }
       />
     )
   }
@@ -130,5 +130,4 @@ function mapStateToProps({ chatroom }, props) {
   }
 }
 
-export default connect(mapStateToProps
-  , { insertDraft })(ComposeMessage)
+export default connect(mapStateToProps, { insertDraft })(ComposeMessage)

@@ -69,11 +69,15 @@ class Messages extends React.Component {
   async initializeScroller() {
     const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
 
-    this.messagesObservable = Rx
-      .Observable
-      .fromEvent(this.messagesList, 'scroll')
+    this.messagesObservable = Rx.Observable.fromEvent(
+      this.messagesList,
+      'scroll'
+    )
       .debounceTime(500)
-      .scan(top => this.messagesList.scrollTop - this.messagesList.clientTop, 10000)
+      .scan(
+        top => this.messagesList.scrollTop - this.messagesList.clientTop,
+        10000
+      )
       .filter(top => {
         // check scroll direction
         const isScrolledToTop = top < this.lastScrollTop
@@ -83,7 +87,7 @@ class Messages extends React.Component {
 
         return isScrolledToTop && top < 90
       })
-      .subscribe((top) => this.loadPreviousMessages(top))
+      .subscribe(top => this.loadPreviousMessages(top))
   }
 
   /**
@@ -107,7 +111,8 @@ class Messages extends React.Component {
     if (scroll_to === null) {
       this.messagesList.scrollTop = this.messagesList.scrollHeight
     } else {
-      this.messagesList.scrollTop = scroll_to.offsetTop - this.messagesList.offsetTop
+      this.messagesList.scrollTop =
+        scroll_to.offsetTop - this.messagesList.offsetTop
     }
   }
 
@@ -182,7 +187,7 @@ class Messages extends React.Component {
 
     return (
       top >= this.messagesList.scrollTop &&
-      (top + height) <= (container.scrollTop + container.offsetHeight)
+      top + height <= container.scrollTop + container.offsetHeight
     )
   }
 
@@ -272,34 +277,23 @@ class Messages extends React.Component {
     const messages = roomId ? this.props.messages[roomId] : null
 
     return (
-      <div
-        className="messages"
-        onClick={onClick}
-      >
+      <div className="messages" onClick={onClick}>
         <SocketStatus />
 
-        {
-          !roomId &&
-          <div className="no-room">
-            Please select a chat to start messaging
-          </div>
-        }
+        {!roomId && (
+          <div className="no-room">Please select a chat to start messaging</div>
+        )}
 
-        {
-          roomId && showToolbar &&
-          <Toolbar
-            roomId={roomId}
-          />
-        }
+        {roomId && showToolbar && <Toolbar roomId={roomId} />}
 
-        {
-          roomId && !messages &&
-          <img
-            alt="loading"
-            className="loading"
-            src="/static/images/loading-states/messages.svg"
-          />
-        }
+        {roomId &&
+          !messages && (
+            <img
+              alt="loading"
+              className="loading"
+              src="/static/images/loading-states/messages.svg"
+            />
+          )}
 
         <UploadHandler
           disabled={disableUpload}
@@ -314,42 +308,43 @@ class Messages extends React.Component {
           <div
             id={`messages-list-${roomId}`}
             className="messages-list"
-            ref={ref => this.messagesList = ref}
+            ref={ref => (this.messagesList = ref)}
             style={{
               minHeight: this.getHeight(),
               maxHeight: this.getHeight()
             }}
           >
-            {
-              messages &&
-              _.map(messages.list, msg =>
+            {messages &&
+              _.map(messages.list, msg => (
                 <div key={`MESSAGE_${msg.id}`}>
                   <MessageItem
                     user={user}
                     roomId={roomId}
                     message={msg}
-                    previousMessage={this.getPreviousMessage(messages.list, msg)}
+                    previousMessage={this.getPreviousMessage(
+                      messages.list,
+                      msg
+                    )}
                   />
-                </div>)
-            }
+                </div>
+              ))}
           </div>
         </UploadHandler>
 
-        <UserTyping
-          roomId={roomId}
-        />
+        <UserTyping roomId={roomId} />
 
-        {
-          roomId && showComposeMessage &&
-          <ComposeMessage
-            user={user}
-            roomId={roomId}
-            isInstantChat={isInstantChat}
-            onHeightChange={(height) => this.setState({ composeMessageHeight: height })}
-            onComposeMessage={() => this.scrollEnd()}
-          />
-        }
-
+        {roomId &&
+          showComposeMessage && (
+            <ComposeMessage
+              user={user}
+              roomId={roomId}
+              isInstantChat={isInstantChat}
+              onHeightChange={height =>
+                this.setState({ composeMessageHeight: height })
+              }
+              onComposeMessage={() => this.scrollEnd()}
+            />
+          )}
       </div>
     )
   }
@@ -361,6 +356,9 @@ Messages.defaultProps = {
   showComposeMessage: true
 }
 
-export default connect(({ chatroom }) => ({
-  messages: chatroom.messages
-}), ({ getMessages }))(Messages)
+export default connect(
+  ({ chatroom }) => ({
+    messages: chatroom.messages
+  }),
+  { getMessages }
+)(Messages)
