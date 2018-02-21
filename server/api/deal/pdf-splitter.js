@@ -23,7 +23,7 @@ function splitFiles(splits) {
       .pdfStream()
       .pipe(stream)
       .on('error', e => {
-        console.log(e)
+        console.log('PDFTK Error: ', e)
         reject(e)
       })
       .on('finish', () => resolve(stream))
@@ -70,7 +70,11 @@ router.post('/deals/pdf-splitter', bodyParser(), async ctx => {
   }
 
   try {
+    console.log('[ Splitter ] Downloading stash files')
+
     const downloadedFiles = await downloadFiles(files)
+
+    console.log('[ Splitter ] Stash files are downloaded')
 
     const splits = _.map(downloadedFiles, file => {
       const selectedPages = _.chain(pages)
@@ -86,7 +90,11 @@ router.post('/deals/pdf-splitter', bodyParser(), async ctx => {
     }
 
     // split files
+    console.log('[ Splitter ] Splitting files')
+
     const splittedFileStream = await splitFiles(splits)
+
+    console.log('[ Splitter ] Uploading Splitted pdf into server')
 
     const response = await promisifiedRequest.postAsync({
       url: `${config.api.url}/tasks/${task_id}/attachments`,
@@ -117,6 +125,8 @@ router.post('/deals/pdf-splitter', bodyParser(), async ctx => {
     const file = response.body.data
 
     try {
+      console.log('[ Splitter ] Adding splitted file to tasks room')
+
       await ctx
         .fetch(`/tasks/${task_id}/messages`, 'POST')
         .set('Authorization', `Bearer ${user.access_token}`)
