@@ -41,14 +41,20 @@ async function display(file, renderProps) {
   }
 
   // create store
-  const store = createStore(reducers, initialState, compose(applyMiddleware(thunk)))
+  const store = createStore(
+    reducers,
+    initialState,
+    compose(applyMiddleware(thunk))
+  )
 
   // append user data to render props params
   if (initialState.user) {
     try {
       await store.dispatch(getTeams(initialState.user))
     } catch (e) {
-      /* nothing */
+      if (e.response && e.response.status === 401) {
+        return this.redirect('/signout')
+      }
     }
 
     renderProps.params.user = {
@@ -94,7 +100,9 @@ async function display(file, renderProps) {
       store_data,
       data: this.locals,
       jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`,
-      jsVendorBundle: `${config.compile.publicPath}/${config.compile.jsVendorBundle}`
+      jsVendorBundle: `${config.compile.publicPath}/${
+        config.compile.jsVendorBundle
+      }`
     })
   }
 }

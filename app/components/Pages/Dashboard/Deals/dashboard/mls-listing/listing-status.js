@@ -5,6 +5,7 @@ import Deal from '../../../../../../models/Deal'
 import { getStatusColorClass } from '../../../../../../utils/listing'
 import StatusModal from './listing-status-modal'
 import ToolTip from '../../components/tooltip'
+import Message from '../../../Chatroom/Util/message'
 import {
   updateContext,
   createGenericTask,
@@ -56,6 +57,7 @@ class ListingStatus extends React.Component {
   async notifyAdmin(status) {
     const {
       deal,
+      user,
       checklists,
       notify,
       changeNeedsAttention,
@@ -66,6 +68,15 @@ class ListingStatus extends React.Component {
 
     const checklist = checklists[deal.checklists[0]]
     const task = await createGenericTask(deal.id, title, checklist.id)
+
+    const message = {
+      comment: `Hello, Please change listing status to ${status}`,
+      author: user.id,
+      room: task.room.id
+    }
+
+    // send comment message
+    Message.postTaskComment(task, message)
 
     changeNeedsAttention(deal.id, task.id, true)
 
@@ -109,7 +120,9 @@ class ListingStatus extends React.Component {
             />
             <ToolTip
               caption={
-                !isBackOffice && !approved ? 'Waiting for office approval' : null
+                !isBackOffice && !approved
+                  ? 'Waiting for office approval'
+                  : null
               }
             >
               <span>{status}</span>
@@ -126,7 +139,10 @@ class ListingStatus extends React.Component {
           </div>
 
           {saving && (
-            <i style={{ marginLeft: '5px' }} className="fa fa-spin fa-spinner" />
+            <i
+              style={{ marginLeft: '5px' }}
+              className="fa fa-spin fa-spinner"
+            />
           )}
         </div>
 
@@ -148,7 +164,8 @@ class ListingStatus extends React.Component {
 }
 
 export default connect(
-  ({ deals }) => ({
+  ({ deals, user }) => ({
+    user,
     isBackOffice: deals.backoffice,
     checklists: deals.checklists
   }),

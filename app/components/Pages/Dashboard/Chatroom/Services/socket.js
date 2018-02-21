@@ -49,7 +49,9 @@ export default class ChatSocket extends Socket {
       state,
       user_id
     }))
-      .distinctUntilChanged((p, c) => p.user_id === c.user_id && p.state === c.state)
+      .distinctUntilChanged(
+        (p, c) => p.user_id === c.user_id && p.state === c.state
+      )
       .subscribe(this.onUserState)
   }
 

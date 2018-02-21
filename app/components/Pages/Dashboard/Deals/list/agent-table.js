@@ -19,7 +19,7 @@ class AgentTable extends BaseTable {
       address: {
         caption: 'ADDRESS',
         sortable: true,
-        className: 'address col-md-3',
+        className: 'address col-md-4',
         getText: deal => this.getAddress(deal),
         getValue: deal => Deal.get.address(deal)
       },
@@ -81,7 +81,7 @@ class AgentTable extends BaseTable {
       },
       notificiation: {
         caption: '',
-        className: 'col-md-1 hidden-sm hidden-xs',
+        className: 'notification-container hidden-sm hidden-xs',
         getText: deal => this.hasNotification(deal)
       },
       searchResult: {

@@ -86,7 +86,7 @@ class Checklist extends React.Component {
         </button>
 
         <button
-          className={cn('show-terminated-btn right', {
+          className={cn('show-terminated-btn', {
             hide: deactivatedChecklistsCount === 0
           })}
           onClick={() => this.toggleDisplayDeactivatedChecklists()}

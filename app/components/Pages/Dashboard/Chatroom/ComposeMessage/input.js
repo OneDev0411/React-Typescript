@@ -56,10 +56,7 @@ export default class MessageInput extends React.Component {
     const handlerId = `compose-message-${instantId}--${roomId}`
 
     return (
-      <div
-        className="message-create"
-        style={{ height: `${height}px` }}
-      >
+      <div className="message-create" style={{ height: `${height}px` }}>
         <Mentions
           handler={handlerId}
           source={mentionsSource}
@@ -71,7 +68,10 @@ export default class MessageInput extends React.Component {
           roomId={roomId}
           author={user}
           inputHandler={handlerId}
-          dropZoneStyle={{ width: '100%', height: '100%' }}
+          dropZoneStyle={{
+            width: '100%',
+            height: '100%'
+          }}
         />
 
         <Textarea

@@ -2,7 +2,6 @@ import _ from 'underscore'
 import types from '../../constants/deals'
 import uuid from '../../utils/uuid'
 import Deal from '../../models/Deal'
-import { uploadAttachment } from '../../models/Chatroom'
 
 export function setUploadFiles(files, task) {
   const indexedFiles = {}
@@ -118,8 +117,8 @@ export function uploadStashFile(dealId, file, fileName = null) {
 export function uploadTaskFile(user, task, file, fileName = null) {
   return async dispatch => {
     try {
-      const response = await uploadAttachment(
-        task.room.id,
+      const response = await Deal.uploadTaskFile(
+        task.id,
         file,
         fileName || file.name
       )

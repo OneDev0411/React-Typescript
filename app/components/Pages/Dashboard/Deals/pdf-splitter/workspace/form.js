@@ -23,28 +23,36 @@ class WorkspaceForm extends React.Component {
     super(props)
     this.state = {
       saving: false,
-      title: '',
       task: null,
       notifyOffice: true,
       uploadProgressPercents: 0,
       stashFiles: {},
       statusMessage: null
     }
+
+    this.saveAttempts = 0
   }
 
   isFormValidated() {
-    const { title, task } = this.state
+    const { task } = this.state
     const { splitter } = this.props
 
-    if (title.length > 0 && task !== null && _.size(splitter.pages) > 0) {
+    if (task !== null && _.size(splitter.pages) > 0) {
       return true
     }
 
     return false
   }
 
+  waitFor(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
   async save() {
-    const { title, task, stashFiles, notifyOffice } = this.state
+    const { task, stashFiles, notifyOffice } = this.state
+
+    console.log(`Start Splitting, Attempt ${this.saveAttempts + 1}`)
+
     const {
       notify,
       splitter,
@@ -70,7 +78,7 @@ class WorkspaceForm extends React.Component {
 
     try {
       const { file } = await Deal.splitPDF(
-        title,
+        task.title,
         task.id,
         task.room.id,
         files,
@@ -88,19 +96,25 @@ class WorkspaceForm extends React.Component {
       fileCreated = true
 
       notify({
-        message: `Splitted PDF, "${title}" created and uploaded`,
+        message: `Splitted PDF, "${task.title}" created and uploaded`,
         status: 'success'
       })
 
       // set status
       this.setState({
         saving: false,
-        title: '',
         notifyOffice: true,
         uploadProgressPercents: 0
       })
     } catch (e) {
-      console.log(e)
+      if (this.saveAttempts < 5) {
+        console.log('Failed: ', e.message)
+
+        this.saveAttempts += 1
+        await this.waitFor(3000 * this.saveAttempts)
+
+        return this.save()
+      }
 
       notify({
         title: 'Could not create the splitted pdf file. please try again.',
@@ -112,6 +126,8 @@ class WorkspaceForm extends React.Component {
         saving: false
       })
     }
+
+    this.saveAttempts = 0
 
     return fileCreated
   }
@@ -215,10 +231,15 @@ class WorkspaceForm extends React.Component {
     return Object.keys(this.state.stashFiles).length > 0
   }
 
+  onSelectTask(taskId) {
+    const { tasks } = this.props
+
+    this.setState({ task: tasks[taskId] })
+  }
+
   render() {
-    const { deal, tasks } = this.props
+    const { deal } = this.props
     const {
-      title,
       task,
       notifyOffice,
       statusMessage,
@@ -246,16 +267,10 @@ class WorkspaceForm extends React.Component {
 
     return (
       <div className="details">
-        <input
-          className="title"
-          placeholder="Document title ..."
-          value={title}
-          onChange={e => this.setState({ title: e.target.value })}
-        />
-
         <TasksDropDown
+          searchable
           deal={deal}
-          onSelectTask={taskId => this.setState({ task: tasks[taskId] })}
+          onSelectTask={taskId => this.onSelectTask(taskId)}
           selectedTask={task}
         />
 

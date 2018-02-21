@@ -1,6 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import moment from 'moment'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
@@ -12,9 +10,6 @@ import ListingModalViewer from '../../../Listings/components/ListingModalViewer'
  * renders a recommendation(== listing) message
  */
 const Listing = ({
-  user,
-  author,
-  message,
   comment,
   recommendation,
   /* internal props and states */

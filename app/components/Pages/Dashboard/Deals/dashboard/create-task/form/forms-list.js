@@ -108,9 +108,7 @@ class Forms extends React.Component {
   }
 
   render() {
-    const {
-      forms, show, onClose, allowCustomTask
-    } = this.props
+    const { forms, show, onClose, allowCustomTask } = this.props
     const { filter, showNewTaskModal, isCreatingTask } = this.state
 
     return (
@@ -124,7 +122,9 @@ class Forms extends React.Component {
             zIndex: 2000
           }}
         >
-          <Modal.Header closeButton={isCreatingTask === null}>Add Task</Modal.Header>
+          <Modal.Header closeButton={isCreatingTask === null}>
+            Add Task
+          </Modal.Header>
 
           <Modal.Body>
             {_.size(forms) > 5 && (
@@ -137,7 +137,8 @@ class Forms extends React.Component {
             <ul>
               {_.chain(forms)
                 .filter(form =>
-                  form.name.toLowerCase().includes(filter.toLowerCase()))
+                  form.name.toLowerCase().includes(filter.toLowerCase())
+                )
                 .map((form, key) => (
                   <li
                     key={`FORM_ITEM_${form.id}_${key}`}
