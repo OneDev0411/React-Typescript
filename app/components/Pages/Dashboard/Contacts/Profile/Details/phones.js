@@ -53,9 +53,9 @@ const Phones = ({
     <ul className="u-unstyled-list">
       {fields.length > 0 ? (
         fields.map((item, key) => (
-          <li key={`phone_${key}`} className="c-contact-detail-item">
-            <label className="c-contact-detail-item__label">Phone</label>
-            <span className="c-contact-detail-item__field">
+          <li key={`phone_${key}`} className="c-contact-details-item">
+            <label className="c-contact-details-item__label">Phone</label>
+            <span className="c-contact-details-item__field">
               <Editable
                 type="phone_number"
                 id={item.id}
@@ -73,9 +73,9 @@ const Phones = ({
           </li>
         ))
       ) : (
-        <li className="c-contact-detail-item">
-          <label className="c-contact-detail-item__label">Phone</label>
-          <span className="c-contact-detail-item__field">
+        <li className="c-contact-details-item">
+          <label className="c-contact-details-item__label">Phone</label>
+          <span className="c-contact-details-item__field">
             <Editable
               type="phone_number"
               id={null}

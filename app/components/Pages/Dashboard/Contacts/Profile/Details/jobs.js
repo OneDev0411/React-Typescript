@@ -14,9 +14,9 @@ const Jobs = ({ fields, onChangeAttribute, handleAddNewField }) => {
     <ul className="u-unstyled-list">
       {fields.length > 0 ? (
         fields.map((item, key) => (
-          <li key={`job_${key}`} className="c-contact-detail-item">
-            <label className="c-contact-detail-item__label">Job Title</label>
-            <span className="c-contact-detail-item__field">
+          <li key={`job_${key}`} className="c-contact-details-item">
+            <label className="c-contact-details-item__label">Job Title</label>
+            <span className="c-contact-details-item__field">
               <Editable
                 type="job_title"
                 id={item.id}
@@ -31,9 +31,9 @@ const Jobs = ({ fields, onChangeAttribute, handleAddNewField }) => {
           </li>
         ))
       ) : (
-        <li className="c-contact-detail-item">
-          <label className="c-contact-detail-item__label">Job Title</label>
-          <span className="c-contact-detail-item__field">
+        <li className="c-contact-details-item">
+          <label className="c-contact-details-item__label">Job Title</label>
+          <span className="c-contact-details-item__field">
             <Editable
               type="job_title"
               id={null}

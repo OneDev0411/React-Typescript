@@ -9,9 +9,9 @@ export default ({ contact, onChangeAddress }) => (
     <div className="c-contact-profile-card__body">
       {Contact.get.addresses(contact).map((address, key) => (
         <ul key={`address_${key}`} className="u-unstyled-list">
-          <li className="c-contact-detail-item">
-            <label className="c-contact-detail-item__label">Street</label>
-            <span className="c-contact-detail-item__field">
+          <li className="c-contact-details-item">
+            <label className="c-contact-details-item__label">Street</label>
+            <span className="c-contact-details-item__field">
               <Editable
                 type="address"
                 id={address.id}
@@ -23,9 +23,9 @@ export default ({ contact, onChangeAddress }) => (
               />
             </span>
           </li>
-          <li className="c-contact-detail-item">
-            <label className="c-contact-detail-item__label">City</label>
-            <span className="c-contact-detail-item__field">
+          <li className="c-contact-details-item">
+            <label className="c-contact-details-item__label">City</label>
+            <span className="c-contact-details-item__field">
               <Editable
                 type="address"
                 id={address.id}
@@ -37,9 +37,11 @@ export default ({ contact, onChangeAddress }) => (
               />
             </span>
           </li>
-          <li className="c-contact-detail-item">
-            <label className="c-contact-detail-item__label">State/region</label>
-            <span className="c-contact-detail-item__field">
+          <li className="c-contact-details-item">
+            <label className="c-contact-details-item__label">
+              State/region
+            </label>
+            <span className="c-contact-details-item__field">
               <Editable
                 type="address"
                 id={address.id}

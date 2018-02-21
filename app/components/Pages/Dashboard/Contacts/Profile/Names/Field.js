@@ -17,9 +17,9 @@ function Field({ field, onChange, setErrorIdItem, errorIdItems }) {
   }
 
   return (
-    <li className="c-contact-detail-item">
-      <label className="c-contact-detail-item__label">{title}</label>
-      <span className="c-contact-detail-item__field">
+    <li className="c-contact-details-item">
+      <label className="c-contact-details-item__label">{title}</label>
+      <span className="c-contact-details-item__field">
         <Editable
           id={id}
           showEdit

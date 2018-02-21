@@ -65,9 +65,9 @@ export default function Details({ contact, onChangeAttribute }) {
         onChangeAttribute={onChangeAttribute}
       />
 
-      <div className="c-contact-detail-item" style={{ marginBottom: 0 }}>
-        <span className="c-contact-detail-item__label">Original Source</span>
-        <span className="c-contact-detail-item__field">
+      <div className="c-contact-details-item" style={{ marginBottom: 0 }}>
+        <span className="c-contact-details-item__label">Original Source</span>
+        <span className="c-contact-details-item__field">
           {Contact.get.source(contact).label || '-'}
         </span>
       </div>

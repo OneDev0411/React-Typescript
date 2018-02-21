@@ -31,9 +31,9 @@ const BirthdayComponent = ({
   }
 
   let birthdayItems = (
-    <div className="c-contact-detail-item">
-      <label className="c-contact-detail-item__label">Birthday</label>
-      <span className="c-contact-detail-item__field">
+    <div className="c-contact-details-item">
+      <label className="c-contact-details-item__label">Birthday</label>
+      <span className="c-contact-details-item__field">
         <Editable
           type="birthday"
           id={null}
@@ -52,11 +52,11 @@ const BirthdayComponent = ({
   if (birthdays.length > 0) {
     birthdayItems = birthdays.map((item, key) => (
       <div
-        className="c-contact-detail-item"
+        className="c-contact-details-item"
         key={`CONTACT__BIRTHDAY__${item.id}`}
       >
-        <label className="c-contact-detail-item__label">Birthday</label>
-        <span className="c-contact-detail-item__field">
+        <label className="c-contact-details-item__label">Birthday</label>
+        <span className="c-contact-details-item__field">
           <Editable
             type="birthday"
             id={item.id}

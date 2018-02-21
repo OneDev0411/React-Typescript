@@ -38,9 +38,9 @@ const Emails = ({
     <ul className="u-unstyled-list">
       {fields.length > 0 ? (
         fields.map((item, key) => (
-          <li key={`email_${key}`} className="c-contact-detail-item">
-            <label className="c-contact-detail-item__label">Email</label>
-            <span className="c-contact-detail-item__field">
+          <li key={`email_${key}`} className="c-contact-details-item">
+            <label className="c-contact-details-item__label">Email</label>
+            <span className="c-contact-details-item__field">
               {/* <span className="c-contact-details__field__primary">
             <label htmlFor={`email_radio_${item.id}`}>Primary</label>
             <input
@@ -68,9 +68,9 @@ const Emails = ({
           </li>
         ))
       ) : (
-        <li className="c-contact-detail-item">
-          <label className="c-contact-detail-item__label">Email</label>
-          <span className="c-contact-detail-item__field">
+        <li className="c-contact-details-item">
+          <label className="c-contact-details-item__label">Email</label>
+          <span className="c-contact-details-item__field">
             <Editable
               type="email"
               id={null}

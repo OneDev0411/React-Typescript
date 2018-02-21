@@ -27,9 +27,9 @@ const ZipCodeComponent = ({
   }
 
   return (
-    <li className="c-contact-detail-item">
-      <label className="c-contact-detail-item__label">Zip Code</label>
-      <span className="c-contact-detail-item__field">
+    <li className="c-contact-details-item">
+      <label className="c-contact-details-item__label">Zip Code</label>
+      <span className="c-contact-details-item__field">
         <Editable
           type="address"
           id={addressId}
