@@ -1,5 +1,8 @@
 .list-table {
-  padding: 2em;
+  padding: 2em 2em 0;
+  .rt-tbody {
+    padding-bottom: 150px;
+  }
 }
 .list--header {
   box-shadow: 0 1px 0 0 #dce5eb;
