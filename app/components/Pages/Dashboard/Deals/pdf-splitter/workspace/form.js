@@ -29,6 +29,8 @@ class WorkspaceForm extends React.Component {
       stashFiles: {},
       statusMessage: null
     }
+
+    this.saveRetries = 0
   }
 
   isFormValidated() {
@@ -98,7 +100,12 @@ class WorkspaceForm extends React.Component {
         uploadProgressPercents: 0
       })
     } catch (e) {
-      console.log(e)
+      if (this.saveRetries < 5) {
+        return setTimeout(() => {
+          this.saveRetries += 1
+          this.save()
+        }, 3000 * this.saveRetries)
+      }
 
       notify({
         title: 'Could not create the splitted pdf file. please try again.',
@@ -110,6 +117,9 @@ class WorkspaceForm extends React.Component {
         saving: false
       })
     }
+
+    // reset retries count
+    this.saveRetries = 0
 
     return fileCreated
   }
