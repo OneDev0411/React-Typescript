@@ -114,16 +114,6 @@ export default class Fetch {
     if (~~response.status < 200 || ~~response.status > 207) {
       return response
     }
-
-    _.each(this._middlewares, (options, name) => {
-      try {
-        const handler = require(`./middlewares/${name}`).default
-
-        response.body = handler(response.body, options)
-      } catch (e) {
-        console.warn(e)
-      }
-    })
   }
 
   middleware(name, options) {

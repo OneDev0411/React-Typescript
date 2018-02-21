@@ -10,6 +10,16 @@ export async function uploadStashFile(dealId, file, fileName = null) {
   }
 }
 
+export async function uploadTaskFile(taskId, file, fileName = null) {
+  try {
+    return await new Fetch()
+      .upload(`/tasks/${taskId}/attachments`)
+      .attach('file', file, fileName || file.name)
+  } catch (e) {
+    return null
+  }
+}
+
 /**
  * delete attachment
  */
@@ -25,5 +35,6 @@ export async function deleteStashFile(dealId, files) {
 
 export default {
   uploadStashFile,
+  uploadTaskFile,
   deleteStashFile
 }

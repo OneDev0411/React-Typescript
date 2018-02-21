@@ -29,6 +29,8 @@ class WorkspaceForm extends React.Component {
       stashFiles: {},
       statusMessage: null
     }
+
+    this.saveAttempts = 0
   }
 
   isFormValidated() {
@@ -42,8 +44,15 @@ class WorkspaceForm extends React.Component {
     return false
   }
 
+  waitFor(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
   async save() {
     const { task, stashFiles, notifyOffice } = this.state
+
+    console.log(`Start Splitting, Attempt ${this.saveAttempts + 1}`)
+
     const {
       notify,
       splitter,
@@ -98,7 +107,14 @@ class WorkspaceForm extends React.Component {
         uploadProgressPercents: 0
       })
     } catch (e) {
-      console.log(e)
+      if (this.saveAttempts < 5) {
+        console.log('Failed: ', e.message)
+
+        this.saveAttempts += 1
+        await this.waitFor(3000 * this.saveAttempts)
+
+        return this.save()
+      }
 
       notify({
         title: 'Could not create the splitted pdf file. please try again.',
@@ -110,6 +126,8 @@ class WorkspaceForm extends React.Component {
         saving: false
       })
     }
+
+    this.saveAttempts = 0
 
     return fileCreated
   }
