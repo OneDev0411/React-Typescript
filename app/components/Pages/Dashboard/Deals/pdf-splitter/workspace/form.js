@@ -30,7 +30,7 @@ class WorkspaceForm extends React.Component {
       statusMessage: null
     }
 
-    this.saveRetries = 0
+    this.saveAttempts = 0
   }
 
   isFormValidated() {
@@ -44,8 +44,15 @@ class WorkspaceForm extends React.Component {
     return false
   }
 
+  waitFor(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
   async save() {
     const { task, stashFiles, notifyOffice } = this.state
+
+    console.log(`Start Splitting, Attempt ${this.saveAttempts + 1}`)
+
     const {
       notify,
       splitter,
@@ -100,11 +107,13 @@ class WorkspaceForm extends React.Component {
         uploadProgressPercents: 0
       })
     } catch (e) {
-      if (this.saveRetries < 5) {
-        return setTimeout(() => {
-          this.saveRetries += 1
-          this.save()
-        }, 3000 * this.saveRetries)
+      if (this.saveAttempts < 5) {
+        console.log('Failed: ', e.message)
+
+        this.saveAttempts += 1
+        await this.waitFor(3000 * this.saveAttempts)
+
+        return this.save()
       }
 
       notify({
@@ -118,8 +127,7 @@ class WorkspaceForm extends React.Component {
       })
     }
 
-    // reset retries count
-    this.saveRetries = 0
+    this.saveAttempts = 0
 
     return fileCreated
   }
