@@ -71,7 +71,8 @@ export async function getAll(user = {}, backoffice = false) {
     endpoint = `/brands/${brandId}/deals`
     params = 'deleted=true&'
     params += 'associations[]=agent.office&'
-    params += 'associations[]=deal.new_notifications'
+    params += 'associations[]=deal.new_notifications&'
+    params += 'associations[]=deal.brand'
   }
 
   try {
