@@ -79,7 +79,7 @@ class BackOfficeTable extends BaseTable {
         getValue: deal => deal.attention_requested_at,
         getText: deal => {
           if (deal.attention_requested_at) {
-            const dateTime = moment.unix(deal.attention_requested_at).utc()
+            const dateTime = moment.unix(deal.attention_requested_at).local()
 
             if (dateTime.calendar().includes('Today')) {
               return dateTime.calendar()
