@@ -98,7 +98,9 @@ export default class ChatNotification extends NotificationService {
    */
   async createMessage(chatroom, notification, message) {
     const { room: roomId, notification_type, auxiliary_subject } = notification
-    const isDealTaskRoom = !!(auxiliary_subject && auxiliary_subject.type === 'deal')
+    const isDealTaskRoom = !!(
+      auxiliary_subject && auxiliary_subject.type === 'deal'
+    )
     const room = chatroom.rooms[roomId]
     let shouldUpdateRoomNotifications = true
 
@@ -114,7 +116,8 @@ export default class ChatNotification extends NotificationService {
       // the relevant room should go to top of rooms list
       if (
         room &&
-        ['UserSharedListing', 'UserCreatedAlert'].indexOf(notification_type) > -1
+        ['UserSharedListing', 'UserCreatedAlert'].indexOf(notification_type) >
+          -1
       ) {
         store.dispatch(updateRoomTime(roomId))
       }
@@ -234,10 +237,6 @@ export default class ChatNotification extends NotificationService {
   onInviteRoom(chatroom, notification) {
     const { rooms } = chatroom
     const { room: roomId, auxiliary_object: user } = notification
-
-    if (!rooms || !rooms[roomId]) {
-      return false
-    }
 
     // if user is invited to a new room, create that room
     if (user.id === this.user.id) {
