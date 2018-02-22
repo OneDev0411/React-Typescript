@@ -67,11 +67,6 @@ class BackOfficeTable extends BaseTable {
         className: 'col-md-1 hidden-sm hidden-xs',
         getText: deal => this.getNextDate(deal)
       },
-      notificiation: {
-        caption: '',
-        className: 'col-md-1',
-        getText: deal => this.hasNotification(deal)
-      },
       searchResult: {
         caption: '',
         justFilter: true,
@@ -79,12 +74,12 @@ class BackOfficeTable extends BaseTable {
       },
       attention_requested_at: {
         caption: 'SUBMITTED AT',
-        className: 'col-md-1 hidden-sm hidden-xs',
+        className: 'col-md-2 hidden-sm hidden-xs',
         sortable: true,
         getValue: deal => deal.attention_requested_at,
         getText: deal => {
           if (deal.attention_requested_at) {
-            const dateTime = moment.unix(deal.attention_requested_at).utc()
+            const dateTime = moment.unix(deal.attention_requested_at).local()
 
             if (dateTime.calendar().includes('Today')) {
               return dateTime.calendar()
@@ -95,6 +90,11 @@ class BackOfficeTable extends BaseTable {
 
           return ''
         }
+      },
+      notificiation: {
+        caption: '',
+        className: 'notification-container',
+        getText: deal => this.hasNotification(deal)
       }
     }
   }
