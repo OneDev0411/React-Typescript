@@ -227,7 +227,10 @@ class DropDownTasks extends React.Component {
                           id => tasks[id].form === form.id
                         )
 
-                        return typeof isFormExists === 'undefined'
+                        return (
+                          typeof isFormExists === 'undefined' &&
+                          form.name.toLowerCase().includes(filter.toLowerCase())
+                        )
                       })
                       .map(form => (
                         <li
