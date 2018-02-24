@@ -9,6 +9,13 @@ import Brand from '../../controllers/Brand'
 
 import getDefaultHomePage from '../../utils/get-default-home-page'
 
+const BUTTON_STYLE = {
+  backgroundColor: '#2196f3',
+  borderWidth: 0,
+  color: '#fff',
+  padding: '8px'
+}
+
 const ANIMATED_TEXT = ['seamless', 'smarter', 'faster', 'more knowledgeable']
 
 class Landing extends Component {
@@ -35,15 +42,6 @@ class Landing extends Component {
       height: '100vh',
       background: '#000',
       color: '#ffffff'
-    }
-    const navbar_style = {
-      border: 'none',
-      background: 'none'
-    }
-    const collapse_style = {
-      ...S('mt-20'),
-      border: 'none',
-      boxShadow: 'none'
     }
     const headline_style = S('mb-35')
     const footer_style = {
@@ -76,18 +74,14 @@ class Landing extends Component {
         loop="true"
         className="fullscreen-bg__video"
       >
-        <source src="/static/videos/landing/young_agent.webm" type="video/webm" />
+        <source
+          src="/static/videos/landing/young_agent.webm"
+          type="video/webm"
+        />
         <source src="/static/videos/landing/young_agent.mp4" type="video/mp4" />
         <source src="/static/videos/landing/young_agent.ogv" type="video/ogg" />
       </video>
     )
-    let login_btn_li_style
-    let login_btn_style
-
-    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-      login_btn_style = ' w-100p'
-      login_btn_li_style = S('pl-15 pr-15')
-    }
 
     let brand_logo
 
@@ -100,7 +94,11 @@ class Landing extends Component {
           }}
         >
           <span
-            style={S(`inline-block font-30 mr-15 relative t-1n color-${Brand.color('primary')}`)}
+            style={S(
+              `inline-block font-30 mr-15 relative t-1n color-${Brand.color(
+                'primary'
+              )}`
+            )}
           >
             +
           </span>
@@ -128,26 +126,37 @@ class Landing extends Component {
             </div>
           </div>
           {user ? (
-            <Link
-              to={getDefaultHomePage(user)}
-              className="btn btn-default"
-              style={S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 w-100')}
-            >
-              DASHBOARD
-            </Link>
+            <div>
+              {window.innerWidth > 1200 && (
+                <Link
+                  to={getDefaultHomePage(user)}
+                  className="btn btn-default"
+                  style={{ ...BUTTON_STYLE, marginRight: '1em' }}
+                >
+                  DASHBOARD
+                </Link>
+              )}
+              <a
+                className="btn btn-default"
+                style={BUTTON_STYLE}
+                href="/signout"
+              >
+                SIGN OUT
+              </a>
+            </div>
           ) : (
             <div>
               <Link
                 className="btn btn-default"
                 to="/signin"
-                style={S(`color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-16 ${login_btn_style}`)}
+                style={{ ...BUTTON_STYLE, marginRight: '1em' }}
               >
                 SIGN IN
               </Link>
               <Link
                 className="btn btn-default"
                 to="/signup"
-                style={S(`color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 ${login_btn_style}`)}
+                style={BUTTON_STYLE}
               >
                 SIGN UP
               </Link>
@@ -166,12 +175,13 @@ class Landing extends Component {
         <footer className="footer" style={footer_style}>
           <div className="container">
             <Col className="footer-text footer-text--left" sm={6}>
-              Made with <img src="/static/images/landing/heart.png" alt="love" /> by
+              Made with{' '}
+              <img src="/static/images/landing/heart.png" alt="love" /> by
               Rechat | <a href="mailto:support@rechat.com">Contact Us</a>
             </Col>
             <Col className="footer-text footer-text--right" sm={6}>
-              Rechat Inc. &copy; {new Date().getFullYear()}. All Rights Reserved.{' '}
-              <a href="/terms">Terms of Service</a> |{' '}
+              Rechat Inc. &copy; {new Date().getFullYear()}. All Rights
+              Reserved. <a href="/terms">Terms of Service</a> |{' '}
               <a href="/terms/mls">MLS Terms</a> |{' '}
               <a href="/privacy">Privacy Policy</a>
             </Col>

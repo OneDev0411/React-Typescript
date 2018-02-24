@@ -53,7 +53,8 @@ const List = ({
           {sortedTasks &&
             sortedTasks.map(id => {
               const task = tasks[id]
-              const room = rooms[task.room.id] || task.room
+              const room =
+                rooms && rooms[task.room.id] ? rooms[task.room.id] : task.room
               const hasStatus =
                 task.review !== null || task.attention_requested === true
 
