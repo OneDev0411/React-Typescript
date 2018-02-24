@@ -54,7 +54,8 @@ const List = ({
             sortedTasks.map(id => {
               const task = tasks[id]
               const room = rooms[task.room.id] || task.room
-              const hasStatus = task.review !== null || task.attention_requested === true
+              const hasStatus =
+                task.review !== null || task.attention_requested === true
 
               return (
                 <CSSTransition
