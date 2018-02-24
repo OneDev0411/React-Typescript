@@ -26,7 +26,7 @@ export default function Stage({ contact, handleOnChange }) {
 
   return (
     <div className="c-contact-profile-card stage">
-      <div className="c-contact-profile-card__title">Stage</div>
+      <h3 className="c-contact-profile-card__title">Stage</h3>
       <div className="c-contact-profile-card__body">
         <Stepper
           steps={STEPS}

@@ -5,13 +5,13 @@ import removeAttribute from '../../../models/contacts/delete-attribute'
 import * as actionTypes from '../../../constants/contacts'
 import { selectContact } from '../../../reducers/contacts/list'
 
-export function deleteAttributes({ contactId = '', attributesIds = [] }) {
+export function deleteAttributes({ contactId, attributesIds }) {
   return async (dispatch, getState) => {
     if (!contactId) {
       return Promise.reject()
     }
 
-    if (attributesIds.length === 0) {
+    if (!Array.isArray(attributesIds) || attributesIds.length === 0) {
       return Promise.reject()
     }
 

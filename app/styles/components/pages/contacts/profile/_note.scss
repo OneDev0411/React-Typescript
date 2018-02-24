@@ -1,52 +1,41 @@
-%contact-note {
-  .note {
-    border-radius: 3px;
-    background-color: #f7f7f7;
-    border: solid 1px #e5e5e5;
-    font-size: 16px;
-    ::-webkit-input-placeholder {
-      color: #c6c6c6;
-      font-size: 21px;
-    }
-    ::-moz-placeholder {
-      color: #c6c6c6;
-      font-size: 21px;
-    } /* Firefox 19+ */
-    :-moz-placeholder {
-      color: #c6c6c6;
-      font-size: 21px;
-    } /* Firefox 18- */
-    :-ms-input-placeholder {
-      color: #c6c6c6;
-      font-size: 21px;
-    }
-    .head {
-      margin: 10px;
-      padding-left: 20px;
-      font-size: 13px;
-      font-weight: bold;
-      img {
-        margin-right: 10px;
-      }
-    }
-    textarea {
-      width: 100%;
-      height: 150px;
-      border: none;
-      border-bottom: solid 1px #e5e5e5;
-      resize: none;
-      padding: 10px;
-      &:focus {
-        outline: 0px !important;
-        -webkit-appearance: none;
-      }
-    }
-    .footer {
-      text-align: right;
-      button {
-        margin: 0 5px 5px 0;
-        padding: 5px 18px;
-      }
-    }
-  }
+.c-add-note {
+  padding: 0;
+  background-color: #fff;
+}
+
+.c-add-note__footer,
+.c-add-note__header {
+  width: 100%;
+  display: flex;
+  padding: 16px;
+}
+
+.c-add-note__header {
+  align-items: center;
+  background-color: #eaeaea;
+  border-radius: 3px 3px 0 0;
+}
+
+.c-add-note__footer {
+  justify-content: flex-end;
+  border-top: 1px solid #eaeaea;
+  border-radius: 0 0 3px 3px;
+}
+
+.c-add-note__title {
+  line-height: 1;
+  margin: 0 0 0 8px;
+  font-size: 1.8rem;
+}
+
+.c-add-note__textarea {
+  width: 100%;
+  height: 150px;
+  padding: 16px;
+  display: block;
+  overflow: auto;
+  resize: none;
+  border-width: 0;
+  font-size: 1.6rem;
+  outline-width: 2px;
 }

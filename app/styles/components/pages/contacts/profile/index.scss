@@ -3,18 +3,17 @@
 @import './card';
 @import './note';
 @import './activities';
+@import './detailes';
+@import './c-editable-textarea';
 
 .profile {
-  @extend %contact-editable;
-  @extend %contact-header;
   @extend %contact-activities;
   @extend %contact-timeline;
-  @extend %contact-note;
 
   .content {
     display: flex;
     flex-direction: row;
-    margin: 0 21px;
+    padding: 2em;
     min-height: calc(100vh - 85px);
     
     .left-pane {

@@ -65,7 +65,7 @@ class Tags extends React.Component {
 
     return (
       <div className="c-contact-profile-card tags">
-        <div className="c-contact-profile-card__title">Tags</div>
+        <h3 className="c-contact-profile-card__title">Tags</h3>
         <div className="c-contact-profile-card__body">
           {saving ? (
             <span style={{ color: '#2196f3' }}>

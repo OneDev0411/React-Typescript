@@ -1,5 +1,4 @@
 import React from 'react'
-import pick from 'lodash/pick'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 
@@ -11,7 +10,7 @@ import Information from './Information'
 import Names from './Names'
 import Tags from './Tags'
 import Details from './Details'
-import Address from './Address'
+import Addresses from './Addresses'
 import AddNote from './Add-Note'
 import Activities from './Activities'
 
@@ -33,12 +32,10 @@ class ContactProfile extends React.Component {
       activeTab: 'timeline'
     }
 
+    this.handleAddNote = this.handleAddNote.bind(this)
     this.handleChangeStage = this.handleChangeStage.bind(this)
     this.onChangeAttribute = this.onChangeAttribute.bind(this)
     this.handleOnChangeAddress = this.handleOnChangeAddress.bind(this)
-    this.handelNamesOnChangesAttributes = this.handelNamesOnChangesAttributes.bind(
-      this
-    )
   }
 
   componentDidMount() {
@@ -64,18 +61,8 @@ class ContactProfile extends React.Component {
 
   goBack = () => browserHistory.push('/dashboard/contacts')
 
-  async onChangeAttribute(type, id, text) {
-    const { upsertContactAttributes, contact: { id: contactId } } = this.props
-
-    const attributes = [
-      {
-        id: id || undefined,
-        type,
-        [type]: text
-      }
-    ]
-
-    return upsertContactAttributes({
+  async onChangeAttribute({ contactId, attributes }) {
+    return this.props.upsertContactAttributes({
       contactId,
       attributes
     })
@@ -122,62 +109,27 @@ class ContactProfile extends React.Component {
     })
   }
 
-  getNames = names => {
-    const { id } = names
-
-    const nameFields = {
-      first_name: '-',
-      middle_name: '-',
-      last_name: '-',
-      legal_first_name: '-',
-      legal_middle_name: '-',
-      legal_last_name: '-',
-      nickname: '-'
-    }
-
-    const nameAttribute = {
-      ...nameFields,
-      ...pick(names, Object.keys(nameFields))
-    }
-
-    const getTitle = name =>
-      name
-        .split('_')
-        .map(i => i.charAt(0).toUpperCase() + i.substr(1, i.length))
-        .join(' ')
-
-    if (Object.keys(nameAttribute).length > 0) {
-      return Object.keys(nameAttribute).map(name => ({
-        id,
-        name,
-        value: nameAttribute[name],
-        title: getTitle(name)
-      }))
-    }
-  }
-
-  async handelNamesOnChangesAttributes(type, id, text) {
+  async handleAddNote(note) {
     const { contact, upsertContactAttributes } = this.props
     const { id: contactId } = contact
-    const { names } = contact.sub_contacts[0].attributes
 
-    const attributes = [
-      {
-        ...names[0],
-        [type]: text,
-        type: 'name',
-        id: id || undefined
-      }
-    ]
-
-    return upsertContactAttributes({
+    await upsertContactAttributes({
       contactId,
-      attributes
+      attributes: [
+        {
+          note,
+          type: 'note'
+        }
+      ]
     })
+
+    this.setState({ activeTab: 'notes' })
+
+    return true
   }
 
   render() {
-    const { params, contact, fetchError, defaultTags } = this.props
+    const { contact, fetchError, defaultTags } = this.props
 
     if (fetchError) {
       if (fetchError.status === 404) {
@@ -196,7 +148,6 @@ class ContactProfile extends React.Component {
     }
 
     const { activeTab } = this.state
-    const { names } = contact.sub_contacts[0].attributes
 
     return (
       <div className="profile">
@@ -211,40 +162,26 @@ class ContactProfile extends React.Component {
               handleOnChange={stage => this.handleChangeStage(stage)}
             />
 
-            {Array.isArray(names) && (
-              <Names
-                names={this.getNames(names[0])}
-                onChangeAttribute={this.handelNamesOnChangesAttributes}
-              />
-            )}
+            <Names contact={contact} />
 
             <Tags
               contactId={contact.id}
               tags={Contact.get.tags(contact, defaultTags)}
             />
 
-            <Details
-              contact={contact}
-              onChangeAttribute={(...args) => this.onChangeAttribute(...args)}
-            />
+            <Details contact={contact} />
 
-            <Address
-              contact={contact}
-              onChangeAddress={(...args) => this.handleOnChangeAddress(...args)}
-            />
+            <Addresses contact={contact} />
           </div>
 
           <div className="right-pane">
-            <AddNote
-              contactId={params.id}
-              onSave={() => this.setState({ activeTab: 'notes' })}
-            />
+            <AddNote contact={contact} onSubmit={this.handleAddNote} />
 
             <Activities
               contact={contact}
               activeTab={activeTab}
+              onChangeAttribute={this.onChangeAttribute}
               onChangeTab={activeTab => this.setState({ activeTab })}
-              onChangeAttribute={(...args) => this.onChangeAttribute(...args)}
             />
           </div>
         </div>

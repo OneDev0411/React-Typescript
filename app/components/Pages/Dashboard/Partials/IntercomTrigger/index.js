@@ -1,4 +1,3 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import { activeIntercom } from '../../../../../store_actions/intercom'
 
