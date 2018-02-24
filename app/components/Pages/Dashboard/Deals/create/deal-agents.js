@@ -31,14 +31,16 @@ export default ({
   onRemoveAgent
 }) => {
   const allowedRoles = getRoles(agents, dealSide)
-  const isPrimaryAgent = ['BuyerAgent', 'SellerAgent'].indexOf(allowedRoles[0]) > -1
+  const isPrimaryAgent =
+    ['BuyerAgent', 'SellerAgent'].indexOf(allowedRoles[0]) > -1
 
   const title = isPrimaryAgent ? 'Add primary agent' : 'Add co-agent'
 
   return (
     <div className="form-section deal-people deal-agent">
       <div className="hero">
-        Enter {dealSide === BUYING ? 'buyer' : 'listing'} agent’s information.&nbsp;
+        Enter {dealSide === BUYING ? 'buyer' : 'listing'} agent’s
+        information.&nbsp;
         <span className="required">*</span>
       </div>
 
