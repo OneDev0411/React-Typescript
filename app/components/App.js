@@ -301,19 +301,12 @@ class App extends Component {
       user
     })
 
-    // render sideNav
-    let navArea = <SideNav data={data} location={location} />
-
-    if (data.is_mobile && user) {
-      navArea = <div />
-    }
-
     return (
       <div className="u-scrollbar">
         {user &&
           !user.email_confirmed && <VerificationBanner email={user.email} />}
 
-        {user && navArea}
+        {user && <SideNav data={data} location={location} />}
 
         {user && <InstantChat user={user} rooms={rooms} />}
 
