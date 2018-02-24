@@ -70,6 +70,10 @@ class App extends Component {
     this.initializeApp()
   }
 
+  componentWillUnmount() {
+    this.props.dispatch(inactiveIntercom())
+  }
+
   async initializeApp() {
     const { data, deals, dispatch } = this.props
     let { user } = this.props
@@ -279,10 +283,6 @@ class App extends Component {
         }
       }
     )
-  }
-
-  componentWillUnmount() {
-    this.props.dispatch(inactiveIntercom())
   }
 
   render() {
