@@ -16,7 +16,7 @@ class UploadDocument extends React.Component {
   }
 
   async onDrop(files) {
-    const { task, onDrop, setUploadFiles } = this.props
+    const { onDrop, setUploadFiles } = this.props
 
     this.setState({
       dropzoneActive: false
@@ -26,7 +26,7 @@ class UploadDocument extends React.Component {
       return onDrop(files)
     }
 
-    setUploadFiles(files, task)
+    setUploadFiles(files)
   }
 
   /**
@@ -53,8 +53,7 @@ class UploadDocument extends React.Component {
 
   render() {
     const { dropzoneActive } = this.state
-    const { children, task, hasAttachments } = this.props
-    const { uploading } = task || {}
+    const { children, hasAttachments } = this.props
 
     return (
       <Dropzone
@@ -73,15 +72,17 @@ class UploadDocument extends React.Component {
               <img src="/static/images/deals/dnd.png" alt="" />
               <h1 className="title">Drop to upload to this task</h1>
               <span className="desc">
-                You can drag and drop any files to the upload section of the task you
-                are in.
+                You can drag and drop any files to the upload section of the
+                task you are in.
               </span>
             </div>
           </div>
         )}
 
         {children || (
-          <div className={cn('file-upload', { 'has-attachments': hasAttachments })}>
+          <div
+            className={cn('file-upload', { 'has-attachments': hasAttachments })}
+          >
             <div className="item">
               <div className="image">
                 <img src="/static/images/deals/upload-file.svg" alt="" />
@@ -96,8 +97,6 @@ class UploadDocument extends React.Component {
               </div>
               <div className="actions" />
             </div>
-
-            {uploading && <ProgressBar active now={70} />}
           </div>
         )}
       </Dropzone>

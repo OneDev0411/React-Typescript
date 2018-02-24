@@ -3,7 +3,7 @@ import types from '../../constants/deals'
 import uuid from '../../utils/uuid'
 import Deal from '../../models/Deal'
 
-export function setUploadFiles(files, task) {
+export function setUploadFiles(files) {
   const indexedFiles = {}
 
   // I used properties object to keep file attributes, because file object which
@@ -22,8 +22,7 @@ export function setUploadFiles(files, task) {
 
   return {
     type: types.SET_UPLOAD_FILES,
-    files: indexedFiles,
-    task
+    files: indexedFiles
   }
 }
 
