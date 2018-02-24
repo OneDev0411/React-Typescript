@@ -104,6 +104,7 @@ class WorkspaceForm extends React.Component {
       this.setState({
         saving: false,
         notifyOffice: true,
+        task: null,
         uploadProgressPercents: 0
       })
     } catch (e) {
