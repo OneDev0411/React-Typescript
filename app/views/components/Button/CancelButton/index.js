@@ -8,14 +8,16 @@ const propTypes = {
 const CancelButton = styled.button`
   padding: 0.5em 1em;
   line-height: 1;
-  color: #333;
-  border-width: 0;
+  color: #2196f3;
   border-radius: 3px;
-  background: #cecece;
+  border: 1px solid #ccc;
+  background: #fff;
+  transition: all 0.23s ease-out;
 
   &:hover {
     color: #fff;
     background: #2196f3;
+    border-color: #2196f3;
   }
 `
 
