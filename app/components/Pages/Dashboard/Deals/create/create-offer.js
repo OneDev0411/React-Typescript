@@ -376,6 +376,7 @@ class CreateOffer extends React.Component {
               />
 
               <DealStatus
+                property_type={deal.property_type}
                 dealStatus={dealStatus}
                 onChangeDealStatus={status => this.changeDealStatus(status)}
               />
