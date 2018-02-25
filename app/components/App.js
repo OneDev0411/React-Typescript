@@ -49,7 +49,7 @@ class App extends Component {
     const { user } = this.props
 
     // check branding
-    this._getBrand()
+    this.getBrand()
 
     if (typeof window !== 'undefined') {
       import('offline-js')
@@ -130,7 +130,7 @@ class App extends Component {
     return dispatch(getRooms(user))
   }
 
-  _getBrand() {
+  getBrand() {
     this.props.dispatch(getBrand())
   }
 
