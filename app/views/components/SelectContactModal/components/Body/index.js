@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Downshift from 'downshift'
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
+import NoContacts from '../NoContacts'
 
 function filterKeywords({ item, keyword }) {
   if (!keyword || keyword.length < 2) {
@@ -66,31 +67,37 @@ class Body extends Component {
 
   render() {
     const { items } = this.state
-    const { handleSelectedItem } = this.props
+    const { handleSelectedItem, handleAddManually } = this.props
 
     return (
       <Downshift
         onChange={handleSelectedItem}
         itemToString={this.handleItemToString}
         render={({
- getInputProps, getItemProps, inputValue, highlightedIndex
-}) => (
-  <div style={{ paddingTop: '2rem' }}>
-    <div style={{ padding: '0 2rem' }}>
-      <SearchInput
-        style={{ marginBottom: '12px' }}
-        inputProps={{
+          getInputProps,
+          getItemProps,
+          inputValue,
+          highlightedIndex
+        }) => (
+          <div style={{ paddingTop: '2rem' }}>
+            <div style={{ padding: '0 2rem' }}>
+              <SearchInput
+                style={{ marginBottom: '12px' }}
+                inputProps={{
                   ...getInputProps({
-                    placeholder: 'Enter a keyword ...'
+                    disabled: items.length === 0,
+                    placeholder: 'Search for a contact...'
                   })
                 }}
-      />
-    </div>
-    {items && (
-    <ContactsListContainer>
-      <ContactsList className="u-scrollbar--thinner">
-        {items
-                    .filter(item => filterKeywords({ item, keyword: inputValue }))
+              />
+            </div>
+            <ContactsListContainer>
+              {items.length > 0 ? (
+                <ContactsList className="u-scrollbar--thinner">
+                  {items
+                    .filter(item =>
+                      filterKeywords({ item, keyword: inputValue })
+                    )
                     .map((item, index) => (
                       <ContactItem
                         item={item}
@@ -100,10 +107,12 @@ class Body extends Component {
                         isHighlighted={highlightedIndex === index}
                       />
                     ))}
-      </ContactsList>
-    </ContactsListContainer>
-            )}
-  </div>
+                </ContactsList>
+              ) : (
+                <NoContacts handleAddManually={handleAddManually} />
+              )}
+            </ContactsListContainer>
+          </div>
         )}
       />
     )
