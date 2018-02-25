@@ -3,10 +3,11 @@ import Koa from 'koa'
 const router = require('koa-router')()
 const app = new Koa()
 
-router.get('/deals/excel/:brandId', async ctx => {
+router.get('/export/*', async ctx => {
   try {
     const { user } = ctx.session
-    const { brandId } = ctx.params
+    const url = `/${ctx.params[0]}`
+    const { fileName } = ctx.query
 
     if (!user) {
       ctx.status = 404
@@ -15,10 +16,10 @@ router.get('/deals/excel/:brandId', async ctx => {
     }
 
     ctx.set('Content-Disposition', 'attachment')
-    ctx.attachment('deals.xlsx')
+    ctx.attachment(fileName)
 
     const response = ctx
-      .fetch(`/brands/${brandId}/deals.xlsx`)
+      .fetch(url)
       .set('Authorization', `Bearer ${ctx.session.user.access_token}`)
 
     ctx.body = response
