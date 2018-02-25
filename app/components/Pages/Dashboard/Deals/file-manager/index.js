@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router';
+import { browserHistory } from 'react-router'
 import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
 import UploadPromptModal from '../dashboard/upload/prompt'
 import PDFSplitterModal from '../pdf-splitter'
@@ -32,13 +32,13 @@ export class FileManager extends React.Component {
         <Navbar deal={deal} />
         <div className="content u-scrollbar--thinner">
           <div className="table-container">
-            {
-              deal.checklists ?
-              <FilesTable deal={deal} /> :
+            {deal.checklists ? (
+              <FilesTable deal={deal} />
+            ) : (
               <div className="loading">
                 <i className="fa fa-spin fa-spinner fa-3x" />
               </div>
-            }
+            )}
           </div>
 
           <UploadPromptModal deal={deal} />
