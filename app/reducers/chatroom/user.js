@@ -17,7 +17,7 @@ function updateUserState(state, action) {
     [action.userId]: {
       ...state[action.userId],
       state: action.state,
-      last_seen_at: action.state === 'Offline' ? moment().format('X') : null
+      last_seen_at: null
     }
   }
 }
