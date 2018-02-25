@@ -8,7 +8,7 @@ import BareModal from '../BareModal'
 import Header from './components/Header'
 import Body from './components/Body'
 import Footer from './components/Footer'
-import ShadowButton from '../Button/ShadowButton'
+import AddManuallyButton from './components/AddManuallyButton'
 import CancelButton from '../Button/CancelButton'
 
 const propTypes = {
@@ -41,21 +41,15 @@ function SelectContactModal(props) {
       onRequestClose={handleOnClose}
     >
       <Header title={title}>
-        <ShadowButton onClick={handleAddManually} color="#2196f3">
-          <svg
-            width="32"
-            height="32"
-            fill="#2196f3"
-            viewBox="0 0 24 24"
-            style={{ display: 'block' }}
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-            <path d="M0 0h24v24H0z" fill="none" />
-          </svg>
-        </ShadowButton>
+        {contactsList.length > 0 && (
+          <AddManuallyButton onClick={handleAddManually} />
+        )}
       </Header>
-      <Body list={contactsList} handleSelectedItem={handleSelectedItem} />
+      <Body
+        list={contactsList}
+        handleAddManually={handleAddManually}
+        handleSelectedItem={handleSelectedItem}
+      />
       <Footer>
         <CancelButton onClick={handleOnClose}>Cancel</CancelButton>
       </Footer>

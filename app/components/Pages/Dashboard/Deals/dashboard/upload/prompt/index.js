@@ -52,14 +52,18 @@ class UploadModal extends React.Component {
   }
 
   getSelectedTask(file) {
-    const { upload, selectedTask, tasks } = this.props
+    const { upload, selectedTaskInDeal, tasks } = this.props
+
+    // tasks-dropdown search filter has cleared by user
+    if (file.properties.taskId === null) {
+      return null
+    }
 
     if (file.properties.taskId) {
+      // is not undefined
       return tasks[file.properties.taskId]
-    } else if (upload.task) {
-      return upload.task
-    } else if (selectedTask) {
-      return selectedTask
+    } else if (selectedTaskInDeal) {
+      return selectedTaskInDeal
     }
 
     return null
@@ -201,6 +205,7 @@ class UploadModal extends React.Component {
 
                     <div className="file-task">
                       <TasksDropDown
+                        searchable
                         deal={deal}
                         onSelectTask={taskId => this.onSelectTask(file, taskId)}
                         selectedTask={selectedTask}
@@ -275,7 +280,7 @@ function mapStateToProps({ deals, user }) {
   return {
     user,
     checklists: deals.checklists,
-    selectedTask: deals.selectedTask,
+    selectedTaskInDeal: deals.selectedTask,
     tasks: deals.tasks,
     upload: deals.upload,
     splitter: deals.splitter

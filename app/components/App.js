@@ -140,6 +140,7 @@ class App extends Component {
   initializeContactSocket(user) {
     new ContactSocket(user)
   }
+
   initializeChatSocket(user) {
     new ChatSocket(user)
   }

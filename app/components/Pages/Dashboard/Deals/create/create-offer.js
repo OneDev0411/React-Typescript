@@ -153,14 +153,11 @@ class CreateOffer extends React.Component {
       return buyerName.length > 0
     }
 
-    // agents are required only when enderType = No
-    const agentsValid = enderType === null ? _.size(agents) > 0 : true
-
     return (
       offerType.length > 0 &&
       enderType !== -1 &&
-      _.size(clients) > 0 &&
-      agentsValid &&
+      _.size(clients) > 0 && // validate clients
+      _.size(agents) > 0 && // validate agents
       dealStatus.length > 0 &&
       DealContext.validateList(
         contexts,
@@ -172,9 +169,7 @@ class CreateOffer extends React.Component {
   }
 
   getAllRoles() {
-    const {
-      enderType, clients, agents, escrowOfficers, referrals
-    } = this.state
+    const { enderType, clients, agents, escrowOfficers, referrals } = this.state
     const roles = []
 
     _.each(clients, client => roles.push(_.omit(client, 'id')))
@@ -189,12 +184,8 @@ class CreateOffer extends React.Component {
   }
 
   async createOffer() {
-    const {
-      deal, notify, createOffer, createRoles
-    } = this.props
-    const {
-      enderType, dealStatus, contexts, clients
-    } = this.state
+    const { deal, notify, createOffer, createRoles } = this.props
+    const { enderType, dealStatus, contexts, clients } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
     const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
@@ -211,7 +202,13 @@ class CreateOffer extends React.Component {
     this.setState({ saving: true })
 
     try {
-      await createOffer(deal.id, buyerName, order, isBackupOffer, deal.property_type)
+      await createOffer(
+        deal.id,
+        buyerName,
+        order,
+        isBackupOffer,
+        deal.property_type
+      )
 
       if (isPrimaryOffer) {
         // create roles
@@ -373,7 +370,9 @@ class CreateOffer extends React.Component {
                 onUpsertEscrowOfficer={form =>
                   this.onUpsertRole(form, 'escrowOfficers')
                 }
-                onRemoveEscrowOfficer={id => this.onRemoveRole(id, 'escrowOfficers')}
+                onRemoveEscrowOfficer={id =>
+                  this.onRemoveRole(id, 'escrowOfficers')
+                }
               />
 
               <DealStatus
@@ -385,14 +384,18 @@ class CreateOffer extends React.Component {
                 <DealReferrals
                   dealSide="Buying"
                   referrals={referrals}
-                  onUpsertReferral={form => this.onUpsertRole(form, 'referrals')}
+                  onUpsertReferral={form =>
+                    this.onUpsertRole(form, 'referrals')
+                  }
                   onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
                 />
               )}
 
               <Contexts
                 contexts={contexts}
-                onChangeContext={(field, value) => this.changeContext(field, value)}
+                onChangeContext={(field, value) =>
+                  this.changeContext(field, value)
+                }
                 fields={dealContexts}
               />
             </div>
