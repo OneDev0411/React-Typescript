@@ -6,9 +6,7 @@ function getExtensionName(file) {
 }
 
 export default ({ width, file, disableKeyboardShortcuts = false }) => {
-  const {
-    name, type, url, downloadUrl
-  } = file
+  const { name, type, url, downloadUrl } = file
 
   return (
     <div
@@ -28,7 +26,8 @@ export default ({ width, file, disableKeyboardShortcuts = false }) => {
           />
         )}
 
-      {file && type === 'image' && <img className="image" src={url} alt={name} />}
+      {file &&
+        type === 'image' && <img className="image" src={url} alt={name} />}
 
       {file &&
         type === 'unknown' && (

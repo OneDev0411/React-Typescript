@@ -42,15 +42,16 @@ class PDF extends React.Component {
 
   render() {
     const { splitter } = this.props
-    const {
-      files, pdfObjects, pages, usedPages
-    } = splitter
+    const { files, pdfObjects, pages, usedPages } = splitter
 
     return (
       <div>
         {_.size(pdfObjects) === 0 && (
           <div className="loading">
-            <img src="/static/images/loading-states/three-dots-blue.svg" alt="" />
+            <img
+              src="/static/images/loading-states/three-dots-blue.svg"
+              alt=""
+            />
             <p>Loading Documents</p>
           </div>
         )}
@@ -60,7 +61,9 @@ class PDF extends React.Component {
             <div className="heading">
               <span className="page-title">{files[id].properties.name}</span>
 
-              <span className="pages-count">({doc.pdfInfo.numPages} pages)</span>
+              <span className="pages-count">
+                ({doc.pdfInfo.numPages} pages)
+              </span>
             </div>
 
             <PageSelector pdfId={id} numPages={doc.pdfInfo.numPages} />
