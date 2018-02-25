@@ -386,7 +386,7 @@ class CreateDeal extends React.Component {
           <DealPropertyType
             selectedType={dealPropertyType}
             onChangeDealType={dealPropertyType =>
-              this.setState({ dealPropertyType })
+              this.setState({ dealPropertyType, dealStatus: '' })
             }
           />
 
@@ -463,6 +463,7 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealStatus
+                      property_type={dealPropertyType}
                       dealStatus={dealStatus}
                       onChangeDealStatus={status =>
                         this.changeDealStatus(status)
