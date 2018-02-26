@@ -3,6 +3,7 @@ import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default function DropDown({
   options,
+  disabled,
   selectedItem,
   defaultTitle,
   handleOnSelect
@@ -11,6 +12,7 @@ export default function DropDown({
     <span className="contact-stages">
       <DropdownButton
         id="drp-stages"
+        disabled={disabled}
         title={options[selectedItem] || defaultTitle}
         onSelect={(title, event) => {
           handleOnSelect(title)

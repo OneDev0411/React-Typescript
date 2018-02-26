@@ -7,22 +7,31 @@ import withHandlers from 'recompose/withHandlers'
 
 import { upsertContactAttributes } from '../../../../../../store_actions/contacts'
 import Field from './Field'
+import Title from './Title'
 
 const Names = ({ names, upsertAttribute, handelOnDelete, isSaving }) => (
   <div className="c-contact-profile-card">
     <h3 className="c-contact-profile-card__title">Names</h3>
     <div className="c-contact-profile-card__body">
       <ul className="c-contact-details u-unstyled-list">
+        <Title
+          disabled={isSaving}
+          key="names__legal_prefix"
+          field={names.legal_prefix}
+          onChange={upsertAttribute}
+        />
         {names &&
-          names.map(field => (
-            <Field
-              field={field}
-              isSaving={isSaving}
-              key={`names_${field.type}`}
-              onChange={upsertAttribute}
-              onDelete={handelOnDelete}
-            />
-          ))}
+          Object.keys(names)
+            .filter(name => name !== 'legal_prefix')
+            .map(name => (
+              <Field
+                field={names[name]}
+                isSaving={isSaving}
+                key={`names_${names[name].type}`}
+                onChange={upsertAttribute}
+                onDelete={handelOnDelete}
+              />
+            ))}
       </ul>
     </div>
   </div>
@@ -111,6 +120,7 @@ export default enhance(Names)
 function getNames(names) {
   const { id } = names
   const nameFields = {
+    legal_prefix: '-',
     first_name: '-',
     middle_name: '-',
     last_name: '-',
@@ -132,11 +142,17 @@ function getNames(names) {
       .join(' ')
 
   if (Object.keys(nameAttribute).length > 0) {
-    return Object.keys(nameAttribute).map(name => ({
-      id,
-      type: name,
-      [name]: nameAttribute[name],
-      title: getTitle(name)
-    }))
+    const fields = {}
+
+    Object.keys(nameAttribute).forEach(name => {
+      fields[name] = {
+        id,
+        type: name,
+        [name]: nameAttribute[name],
+        name: getTitle(name)
+      }
+    })
+
+    return fields
   }
 }

@@ -2,13 +2,13 @@ import React from 'react'
 import Editable from '../Editable'
 
 function Field({ field, isSaving, onChange, onDelete }) {
-  const { title } = field
+  const { name } = field
 
   const validator = name => new RegExp(/^[A-Za-z\s]+$/).exec(name)
 
   return (
     <li className="c-contact-details-item">
-      <label className="c-contact-details-item__label">{title}</label>
+      <label className="c-contact-details-item__label">{name}</label>
       <span className="c-contact-details-item__field">
         <Editable
           showEdit
