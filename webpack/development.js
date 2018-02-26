@@ -2,7 +2,6 @@ import webpack from 'webpack'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 import WebpackNotifierPlugin from 'webpack-notifier'
-import Jarvis from 'webpack-jarvis'
 
 const postcss = function postcss() {
   return [
