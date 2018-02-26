@@ -7,7 +7,6 @@
   "extends": ["airbnb", "plugin:prettier/recommended"],
   "plugins": ["react"],
   "rules": {
-    "prettier/prettier": "error",
     "no-new": 0,
     "curly": [2, "all"],
     "no-unused-expressions": ["error", { "allowShortCircuit": true }],
