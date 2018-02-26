@@ -7,6 +7,8 @@ import {
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import ModalImportLoading from './ModalImportLoading'
 import config from '../../../../../../config/public'
+import { getActiveTeamId } from '../../../../../utils/user-teams'
+import Excel from '../../Partials/Svgs/Excel'
 
 class ImportOutlook extends React.Component {
   constructor(props) {
@@ -34,32 +36,19 @@ class ImportOutlook extends React.Component {
   }
 
   render() {
-    const { SuccessfulLogin } = this.props.importOutlook
-
     return (
       <div className="list--secondary-button">
         <OverlayTrigger
           placement="bottom"
-          overlay={
-            <Tooltip id="tooltip">
-              Integrate with Outlook to auto-import your contacts
-            </Tooltip>
-          }
+          overlay={<Tooltip id="tooltip">Export Contacts</Tooltip>}
         >
-          <button
+          <a
+            href="/api/export/contacts/outlook.csv?fileName=contacts.csv"
             className="button c-button--shadow"
-            onClick={() => {
-              this.loginWindows = window.open(
-                this.url,
-                'myWindow',
-                'width=300,height=500'
-              )
-            }}
           >
-            Import from Outlook
-          </button>
+            Export Contacts
+          </a>
         </OverlayTrigger>
-        <ModalImportLoading show={SuccessfulLogin} />
       </div>
     )
   }

@@ -3,16 +3,20 @@ const _ = require('underscore')
 const list = []
 
 const routes = {
-  proxifier: [['passthrough'], ['upload']],
+  proxifier: [['passthrough'], ['upload'], ['export']],
   message: [['messages']],
   deal: [
     ['docusign-login'],
     ['envelope-sign'],
     ['download-pdf'],
-    ['download-excel'],
     ['pdf-splitter']
   ],
-  notification: [['all'], ['delete'], ['delete-room-notifications'], ['mark-seen']]
+  notification: [
+    ['all'],
+    ['delete'],
+    ['delete-room-notifications'],
+    ['mark-seen']
+  ]
 }
 
 _.each(routes, (group, name) => {

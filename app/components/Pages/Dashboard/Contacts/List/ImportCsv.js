@@ -16,7 +16,10 @@ class ImportCSV extends React.Component {
     return (
       <Fragment>
         <div className="list--secondary-button">
-          <button className="c-button--shadow " onClick={() => this.dropzone.open()}>
+          <button
+            className="button c-button--shadow "
+            onClick={() => this.dropzone.open()}
+          >
             Import from CSV
           </button>
           <Dropdown id="import-csv-dropdown" pullRight>
@@ -81,11 +84,9 @@ class ImportCSV extends React.Component {
 }
 
 export default connect(
-  ({ contacts, user }) => {
-    return {
-      importInfo: contacts.importCsv,
-      user
-    }
-  },
+  ({ contacts, user }) => ({
+    importInfo: contacts.importCsv,
+    user
+  }),
   { getContacts, uplaodCsv }
 )(ImportCSV)
