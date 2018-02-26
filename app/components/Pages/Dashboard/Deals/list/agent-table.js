@@ -88,12 +88,6 @@ class AgentTable extends BaseTable {
   }
 
   getPrice = deal => {
-    Object.keys(deal).forEach(test => {
-      if (test.includes('price')) {
-        console.log(test)
-      }
-    })
-
     let price = Deal.get.formattedPrice(
       Deal.get.field(deal, 'sales_price'),
       'currency',
