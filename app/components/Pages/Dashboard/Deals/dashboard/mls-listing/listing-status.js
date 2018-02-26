@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import cn from 'classnames'
 import Deal from '../../../../../../models/Deal'
 import { getStatusColorClass } from '../../../../../../utils/listing'
 import StatusModal from './listing-status-modal'
@@ -43,7 +44,7 @@ class ListingStatus extends React.Component {
       await updateContext(deal.id, {
         listing_status: {
           value: status,
-          approved: isBackOffice
+          approved: true
         }
       })
     } else {
@@ -98,15 +99,15 @@ class ListingStatus extends React.Component {
     }
 
     const status = statusContext.text || statusContext
-    const approved = statusContext.approved_at !== null
 
     return (
-      <div>
-        <div className="item">
+      <Fragment>
+        <div className={cn('item', { disabled: !isBackOffice })}>
           <StatusModal
             deal={deal}
             show={showModal}
             status={status}
+            isBackOffice={isBackOffice}
             saveText={isBackOffice ? 'Update' : 'Notify Office'}
             onChangeStatus={status => this.onChangeStatus(status)}
             onClose={() => this.toggleModal()}
@@ -118,24 +119,18 @@ class ListingStatus extends React.Component {
               className="status"
               style={{ background: getStatusColorClass(status) }}
             />
-            <ToolTip
-              caption={
-                !isBackOffice && !approved
-                  ? 'Waiting for office approval'
-                  : null
-              }
-            >
-              <span>{status}</span>
-            </ToolTip>
 
-            {!saving && (
-              <button
-                className="deals-info__mls-status__edit-cta c-button--shadow"
-                onClick={() => this.toggleModal()}
-              >
-                EDIT
-              </button>
-            )}
+            <span>{status}</span>
+
+            {isBackOffice &&
+              !saving && (
+                <button
+                  className="deals-info__mls-status__edit-cta c-button--shadow"
+                  onClick={() => this.toggleModal()}
+                >
+                  EDIT
+                </button>
+              )}
           </div>
 
           {saving && (
@@ -146,19 +141,17 @@ class ListingStatus extends React.Component {
           )}
         </div>
 
-        {isBackOffice &&
-          !approved &&
-          !saving && (
-            <div className="approve-row">
-              <button
-                className="btn-approve"
-                onClick={() => this.updateStatus(status)}
-              >
-                Approve
-              </button>
-            </div>
-          )}
-      </div>
+        {!isBackOffice && (
+          <div>
+            <button
+              onClick={() => this.toggleModal()}
+              className="btn-change-status"
+            >
+              Change Status
+            </button>
+          </div>
+        )}
+      </Fragment>
     )
   }
 }

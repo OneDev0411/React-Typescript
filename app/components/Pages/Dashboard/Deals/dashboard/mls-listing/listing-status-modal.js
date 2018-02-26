@@ -7,12 +7,23 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
 
-    const { deal } = props
+    this.state = {
+      selectedStatus: props.status
+    }
+
+    this.statusList = this.getStatues()
+  }
+
+  getStatues() {
+    const { deal, isBackOffice } = this.props
     const isLeaseDeal = deal.property_type.includes('Lease')
 
-    this.statusList = isLeaseDeal
-      ? ['Lease', 'Lease Contract', 'Leased']
-      : [
+    if (isLeaseDeal) {
+      return ['Lease', 'Lease Contract', 'Leased']
+    }
+
+    return isBackOffice
+      ? [
           'Active',
           'Cancelled',
           'Active Contingent',
@@ -26,14 +37,16 @@ export default class extends React.Component {
           'Sold',
           'Withdrawn Sublisting'
         ]
-
-    this.state = {
-      selectedStatus: props.status
-    }
+      : [
+          'Active Contingent',
+          'Active Kick Out',
+          'Active Option Contract',
+          'Pending'
+        ]
   }
 
   render() {
-    const { show, onClose, saveText, onChangeStatus } = this.props
+    const { show, onClose, isBackOffice, saveText, onChangeStatus } = this.props
     const { selectedStatus } = this.state
 
     return (
@@ -42,7 +55,9 @@ export default class extends React.Component {
         onHide={onClose}
         dialogClassName="modal-deal-mls-status-modal"
       >
-        <Modal.Header closeButton>Deal status</Modal.Header>
+        <Modal.Header closeButton>
+          {isBackOffice ? 'Deal status' : 'Request to change status'}
+        </Modal.Header>
 
         <Modal.Body>
           <Row>
