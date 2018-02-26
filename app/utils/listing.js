@@ -4,12 +4,14 @@ const ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT = 10.7639
 export const getStatusColor = status => {
   switch (status) {
     case 'Active':
+    case 'Lease':
       return '32b86d'
 
     case 'Pending':
     case 'Active Kick Out':
     case 'Active Contingent':
     case 'Active Option Contract':
+    case 'Lease Contract':
       return 'f5a544'
 
     case 'Sold':
@@ -26,12 +28,14 @@ export const getStatusColor = status => {
 export const getStatusColorClass = status => {
   switch (status) {
     case 'Active':
+    case 'Lease':
       return 'green'
 
     case 'Pending':
     case 'Active Kick Out':
     case 'Active Contingent':
     case 'Active Option Contract':
+    case 'Lease Contract':
       return 'orange'
 
     case 'Sold':

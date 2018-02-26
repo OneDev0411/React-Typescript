@@ -213,7 +213,7 @@ class CreateDeal extends React.Component {
       roles: this.getRoles(),
       deal_context: {
         ...contexts,
-        listing_status: isBuyingDeal ? dealStatus : 'Active'
+        listing_status: isBuyingDeal ? dealStatus : this.getDefaultStatus()
       }
     }
 
@@ -253,6 +253,15 @@ class CreateDeal extends React.Component {
         submitError: true
       })
     }
+  }
+
+  /**
+   * get deal status based selected property type
+   */
+  getDefaultStatus() {
+    const { dealPropertyType } = this.state
+
+    return dealPropertyType.includes('Lease') ? 'Lease' : 'Active'
   }
 
   /**
@@ -377,7 +386,7 @@ class CreateDeal extends React.Component {
           <DealPropertyType
             selectedType={dealPropertyType}
             onChangeDealType={dealPropertyType =>
-              this.setState({ dealPropertyType })
+              this.setState({ dealPropertyType, dealStatus: '' })
             }
           />
 
@@ -454,6 +463,7 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealStatus
+                      property_type={dealPropertyType}
                       dealStatus={dealStatus}
                       onChangeDealStatus={status =>
                         this.changeDealStatus(status)

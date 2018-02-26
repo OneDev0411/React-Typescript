@@ -39,14 +39,14 @@ class ListingStatus extends React.Component {
     // set state
     this.setState({ saving: true })
 
-    await updateContext(deal.id, {
-      listing_status: {
-        value: status,
-        approved: isBackOffice
-      }
-    })
-
-    if (!isBackOffice) {
+    if (isBackOffice) {
+      await updateContext(deal.id, {
+        listing_status: {
+          value: status,
+          approved: isBackOffice
+        }
+      })
+    } else {
       await this.notifyAdmin(status)
     }
 
