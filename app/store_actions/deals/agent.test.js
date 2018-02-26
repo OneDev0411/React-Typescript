@@ -3,9 +3,7 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import types from '../../constants/deals'
 import { getAgents } from './agent'
-import Fetch from '../../services/fetch'
-import Deal from '../../models/Deal'
-import agent from '../../reducers/deals/agent'
+import mock from '../../services/mock'
 import fakeUser from '../../../tests/helpers/user/create-fake-user'
 
 const mockStore = configureMockStore([thunk])
@@ -22,7 +20,7 @@ describe('Test agent actions in deal components', () => {
   test('should create agents on success response', async () => {
     const agents = [fakeUser('John', 'Doe'), fakeUser('John', 'Wick')]
 
-    new Fetch().mock({
+    mock({
       endpoint: `/brands/${user.brand}/agents`,
       response: {
         data: agents
@@ -36,7 +34,7 @@ describe('Test agent actions in deal components', () => {
   })
 
   test('should not create agents on error', async () => {
-    new Fetch().mock({
+    mock({
       endpoint: `/brands/${user.brand}/agents`,
       statusCode: 403,
       response: {
