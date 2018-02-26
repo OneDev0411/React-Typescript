@@ -23,11 +23,14 @@ class Confirmation extends React.Component {
     const userValue = this.input ? this.input.value : ''
 
     hideConfirmation()
-    confirmation.onConfirm(userValue)
+
+    if (confirmation.onConfirm) {
+      confirmation.onConfirm(userValue)
+    }
   }
 
   render() {
-    const { confirmation, hideConfirmation } = this.props
+    const { confirmation } = this.props
 
     return (
       <div>
@@ -47,45 +50,40 @@ class Confirmation extends React.Component {
                 __html: confirmation.message
               }}
             />
-            {
-              confirmation.description &&
+            {confirmation.description && (
               <div className="confirmation-descr">
                 {confirmation.description}
               </div>
-            }
+            )}
 
-            {
-              confirmation.needsUserEntry &&
+            {confirmation.needsUserEntry && (
               <div className="confirmation-input">
                 <textarea
                   defaultValue={confirmation.inputDefaultValue}
                   placeholder={confirmation.inputPlaceholder || ''}
-                  ref={ref => this.input = ref}
+                  ref={ref => (this.input = ref)}
                 />
               </div>
-            }
+            )}
 
             <div className="cta">
-
-              {
-                !confirmation.hideCancelButton &&
+              {!confirmation.hideCancelButton && (
                 <Button
                   className="cancel"
                   bsStyle="default"
                   onClick={() => this.onCancel()}
                 >
-                  { confirmation.cancelLabel || 'Cancel' }
+                  {confirmation.cancelLabel || 'Cancel'}
                 </Button>
-              }
+              )}
 
               <Button
                 bsStyle={confirmation.confirmButtonColor || 'primary'}
                 className="confirm"
                 onClick={() => this.onConfirm()}
               >
-                { confirmation.confirmLabel || 'Confirm' }
+                {confirmation.confirmLabel || 'Confirm'}
               </Button>
-
             </div>
           </Modal.Body>
         </Modal>
@@ -94,6 +92,9 @@ class Confirmation extends React.Component {
   }
 }
 
-export default connect(({ confirmation }) => ({
-  confirmation
-}), { hideConfirmation })(Confirmation)
+export default connect(
+  ({ confirmation }) => ({
+    confirmation
+  }),
+  { hideConfirmation }
+)(Confirmation)
