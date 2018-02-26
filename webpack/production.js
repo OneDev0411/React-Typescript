@@ -42,7 +42,6 @@ webpackConfig.plugins.push(
     parallel: true,
     cache: true,
     uglifyOptions: {
-      ecma: 8,
       output: { comments: false }
     }
   }),
