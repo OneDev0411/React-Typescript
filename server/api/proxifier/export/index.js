@@ -10,9 +10,7 @@ router.get('/export/*', async ctx => {
     const { fileName } = ctx.query
 
     if (!user) {
-      ctx.status = 404
-
-      return false
+      ctx.throw(401, 'Unauthorized')
     }
 
     ctx.set('Content-Disposition', 'attachment')
