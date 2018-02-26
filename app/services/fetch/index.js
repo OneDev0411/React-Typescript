@@ -10,7 +10,6 @@ export default class Fetch {
 
     this._middlewares = {}
     this._autoLogin = true
-    this._isTestEnv = isTestEnv
     this._isServerSide = isServerSide
     this._baseUrl = isServerSide || isTestEnv ? config.app.url : ''
     this._proxyUrl = `${this._baseUrl}/api/proxifier`
@@ -74,23 +73,6 @@ export default class Fetch {
       .split(/[?#]/)[0] // remove query string
       .replace('/', '') // change first slash to null
       .replace(/(?!^)\//g, '-') // change the rest slashes to dash
-  }
-
-  async mock({ endpoint, method, statusCode, response }) {
-    // only import nock in test mode
-    // there are a few milion problems with nock and
-    // webpack and uglifyjs
-    if (process.env.NODE_ENV === 'test') {
-      const nock = await import('nock')
-
-      const endpointKey = this.getEndpointKey(endpoint)
-
-      return nock(`${config.app.url}/api/proxifier`)
-        [method || 'post'](`/${endpointKey}`)
-        .reply(statusCode || 200, response)
-    }
-
-    return null
   }
 
   get(endpoint) {
