@@ -113,7 +113,7 @@ class ListingStatus extends React.Component {
             onClose={() => this.toggleModal()}
           />
 
-          <div className="lbl">Status:</div>
+          <div className="lbl">{isBackOffice ? 'Office/MLS' : 'Status'}:</div>
           <div className="value mls-status">
             <span
               className="status"
