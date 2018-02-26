@@ -80,17 +80,17 @@ export default class Fetch {
     // only import nock in test mode
     // there are a few milion problems with nock and
     // webpack and uglifyjs
-    if (!this._isTestEnv) {
-      return false
+    if (process.env.NODE_ENV === 'test') {
+      const nock = await import('nock')
+
+      const endpointKey = this.getEndpointKey(endpoint)
+
+      return nock(`${config.app.url}/api/proxifier`)
+        [method || 'post'](`/${endpointKey}`)
+        .reply(statusCode || 200, response)
     }
 
-    const nock = await import('nock')
-
-    const endpointKey = this.getEndpointKey(endpoint)
-
-    return nock(`${config.app.url}/api/proxifier`)
-      [method || 'post'](`/${endpointKey}`)
-      .reply(statusCode || 200, response)
+    return null
   }
 
   get(endpoint) {
