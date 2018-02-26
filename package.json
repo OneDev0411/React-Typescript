@@ -102,7 +102,7 @@
     "mobile-detect": "^1.4.1",
     "moment": "^2.20.1",
     "moment-timezone": "^0.5.14",
-    "u": "^9.1.6",
+    "nock": "^9.1.6",
     "node-sass": "^4.7.2",
     "normalizr": "^3.2.4",
     "nunjucks": "^3.0.0",
