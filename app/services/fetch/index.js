@@ -1,6 +1,5 @@
 import _ from 'underscore'
 import SuperAgent from 'superagent'
-import nock from 'nock'
 import store from '../../stores'
 import config from '../../../config/public'
 
@@ -76,7 +75,12 @@ export default class Fetch {
       .replace(/(?!^)\//g, '-') // change the rest slashes to dash
   }
 
-  mock({ endpoint, method, statusCode, response }) {
+  async mock({ endpoint, method, statusCode, response }) {
+    // only import nock in test mode
+    // there are a few milion problems with nock and
+    // webpack and uglifyjs
+    const nock = await import('nock')
+
     const endpointKey = this.getEndpointKey(endpoint)
 
     return nock(`${config.app.url}/api/proxifier`)
