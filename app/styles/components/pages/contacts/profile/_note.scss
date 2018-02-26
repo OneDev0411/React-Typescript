@@ -12,13 +12,12 @@
 
 .c-add-note__header {
   align-items: center;
-  background-color: #eaeaea;
   border-radius: 3px 3px 0 0;
+  border-bottom: 1px solid #eaeaea;
 }
 
 .c-add-note__footer {
   justify-content: flex-end;
-  border-top: 1px solid #eaeaea;
   border-radius: 0 0 3px 3px;
 }
 
