@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'underscore'
+import cn from 'classnames'
 import CrudRole from './crud-role'
-import RoleItem from './role-item'
 
 const BUYING = 'Buying'
 const SELLING = 'Selling'
@@ -23,6 +23,7 @@ function getRoles(agents, side) {
 }
 
 export default ({
+  hasError,
   agents,
   dealSide,
   shouldPrepopulateAgent = true,
@@ -38,7 +39,7 @@ export default ({
 
   return (
     <div className="form-section deal-people deal-agent">
-      <div className="hero">
+      <div className={cn('hero', { hasError })}>
         Enter {dealSide === BUYING ? 'buyer' : 'listing'} agent’s
         information.&nbsp;
         <span className="required">*</span>

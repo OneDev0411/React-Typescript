@@ -43,8 +43,11 @@ class CreateDeal extends React.Component {
       sellingClients: {},
       referrals: {},
       escrowOfficers: {},
-      submitError: null
+      submitError: null,
+      validationErrors: []
     }
+
+    this.isFormSubmitted = false
   }
 
   /**
@@ -52,34 +55,41 @@ class CreateDeal extends React.Component {
    * roles: agent, sellingAgent, client, sellingClient, referrals, escrowOfficers
    */
   onUpsertRole(form, type) {
-    this.setState({
-      [type]: {
-        ...this.state[type],
-        [form.id]: form
-      }
-    })
+    this.setState(
+      {
+        [type]: {
+          ...this.state[type],
+          [form.id]: form
+        }
+      },
+      () => this.validateForm()
+    )
   }
 
   /**
    * handles remove a role
    */
   onRemoveRole(id, type) {
-    this.setState({
-      [type]: _.omit(this.state[type], role => role.id === id)
-    })
+    this.setState(
+      {
+        [type]: _.omit(this.state[type], role => role.id === id)
+      },
+      () => this.validateForm()
+    )
   }
 
   /**
    * handles create an mls or manual address
    */
   onCreateAddress(component) {
-    this.setState({ dealAddress: component })
+    this.setState({ dealAddress: component }, () => this.validateForm())
   }
 
   /**
    * validate form
    */
-  isFormValidated() {
+  validateForm(showConfirmationMessage = false) {
+    const { confirmation } = this.props
     const {
       dealSide,
       dealPropertyType,
@@ -92,29 +102,67 @@ class CreateDeal extends React.Component {
       sellingClients
     } = this.state
 
-    const statusCompleted = dealSide === 'Buying' ? dealStatus.length > 0 : true
+    const validationTable = {
+      side: {
+        validator: () => dealSide.length > 0
+      },
+      property_type: {
+        validator: () => dealPropertyType.length > 0
+      },
+      status: {
+        validator: () => (dealSide === 'Buying' ? dealStatus.length > 0 : true)
+      },
+      address: {
+        validator: () => dealAddress !== null
+      },
+      selling_agents: {
+        // on Buying side, user should add SellerAgent
+        validator: () =>
+          dealSide === 'Buying' ? _.size(sellingAgents) > 0 : true
+      },
+      selling_clients: {
+        // on Buying side, user should add SellerClient
+        validator: () =>
+          dealSide === 'Buying' ? _.size(sellingClients) > 0 : true
+      },
+      agents: {
+        validator: () => _.size(agents) > 0
+      },
+      clients: {
+        validator: () => _.size(clients) > 0
+      },
+      contexts: {
+        validator: () =>
+          DealContext.validateList(contexts, dealSide, dealPropertyType)
+      }
+    }
 
-    // on Buying side, user should add SellerClient and SellerAgent
-    const validSellingAgents =
-      dealSide === 'Buying' ? _.size(sellingAgents) > 0 : true
-    const validSellingClients =
-      dealSide === 'Buying' ? _.size(sellingClients) > 0 : true
+    const validationErrors = []
 
-    // agents and clients are required on both side
-    const validAgents = _.size(agents) > 0
-    const validClients = _.size(clients) > 0
+    _.each(validationTable, (item, name) => {
+      if (item.validator() === true) {
+        return true
+      }
 
-    return (
-      dealSide.length > 0 &&
-      dealPropertyType.length > 0 &&
-      statusCompleted &&
-      dealAddress &&
-      validSellingAgents &&
-      validSellingClients &&
-      validAgents &&
-      validClients &&
-      DealContext.validateList(contexts, dealSide, dealPropertyType)
-    )
+      validationErrors.push(name)
+    })
+
+    this.setState({
+      validationErrors
+    })
+
+    if (validationErrors.length > 0 && showConfirmationMessage) {
+      confirmation({
+        message: 'Validation Error',
+        description: `You are missing ${
+          validationErrors.length
+        } or more required fields.`,
+        confirmLabel: 'Okay',
+        hideCancelButton: true
+      })
+    }
+
+    return validationErrors.length === 0
   }
 
   /**
@@ -152,37 +200,43 @@ class CreateDeal extends React.Component {
    * when deal side changes, we should reset roles and ender_type
    */
   changeDealSide(dealSide) {
-    this.setState({
-      dealSide,
-      dealStatus: '',
-      agents: {},
-      clients: {},
-      referrals: {},
-      sellingClients: {},
-      sellingAgents: {},
-      escrowOfficers: {},
-      enderType: -1,
-      contexts: {}
-    })
+    this.setState(
+      {
+        dealSide,
+        dealStatus: '',
+        agents: {},
+        clients: {},
+        referrals: {},
+        sellingClients: {},
+        sellingAgents: {},
+        escrowOfficers: {},
+        enderType: -1,
+        contexts: {}
+      },
+      () => this.validateForm()
+    )
   }
 
   /**
    * handles deal status change
    */
   changeDealStatus(status) {
-    this.setState({ dealStatus: status })
+    this.setState({ dealStatus: status }, () => this.validateForm())
   }
 
   /**
    * handles deal contexts change
    */
   changeContext(field, value) {
-    this.setState({
-      contexts: {
-        ...this.state.contexts,
-        [field]: value
-      }
-    })
+    this.setState(
+      {
+        contexts: {
+          ...this.state.contexts,
+          [field]: value
+        }
+      },
+      () => this.validateForm()
+    )
   }
 
   /**
@@ -193,9 +247,24 @@ class CreateDeal extends React.Component {
   }
 
   /**
+   * check an specific field has error or not
+   */
+  hasError(field) {
+    const { validationErrors } = this.state
+
+    return this.isFormSubmitted && validationErrors.includes(field)
+  }
+
+  /**
    * creates deal
    */
   async createDeal() {
+    this.isFormSubmitted = true
+
+    if (!this.validateForm(true)) {
+      return false
+    }
+
     const {
       contexts,
       dealSide,
@@ -352,6 +421,8 @@ class CreateDeal extends React.Component {
   }
 
   render() {
+    const dealContexts = this.getDealContexts()
+
     const {
       saving,
       dealSide,
@@ -368,8 +439,6 @@ class CreateDeal extends React.Component {
       enderType,
       submitError
     } = this.state
-    const canCreateDeal = this.isFormValidated() && !saving
-    const dealContexts = this.getDealContexts()
 
     return (
       <div className="deal-create">
@@ -394,6 +463,7 @@ class CreateDeal extends React.Component {
             dealPropertyType.length > 0 && (
               <div>
                 <DealClients
+                  hasError={this.hasError('clients')}
                   dealSide={dealSide}
                   clients={clients}
                   onUpsertClient={form => this.onUpsertRole(form, 'clients')}
@@ -410,6 +480,7 @@ class CreateDeal extends React.Component {
                 />
 
                 <DealAgents
+                  hasError={this.hasError('agents')}
                   scenario="CreateDeal"
                   dealSide={dealSide}
                   agents={agents}
@@ -427,6 +498,7 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealAgents
+                      hasError={this.hasError('selling_agents')}
                       scenario="CreateDeal"
                       dealSide="Selling"
                       agents={sellingAgents}
@@ -441,6 +513,7 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealClients
+                      hasError={this.hasError('selling_clients')}
                       dealSide="Selling"
                       clients={sellingClients}
                       ctaTitle="Add seller"
@@ -463,6 +536,7 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealStatus
+                      hasError={this.hasError('status')}
                       property_type={dealPropertyType}
                       dealStatus={dealStatus}
                       onChangeDealStatus={status =>
@@ -473,6 +547,7 @@ class CreateDeal extends React.Component {
                 )}
 
                 <DealAddress
+                  hasError={this.hasError('address')}
                   dealAddress={dealAddress}
                   dealSide={dealSide}
                   onCreateAddress={(component, type) =>
@@ -483,6 +558,7 @@ class CreateDeal extends React.Component {
 
                 {dealContexts.length > 0 && (
                   <Contexts
+                    hasError={this.hasError('contexts')}
                     contexts={contexts}
                     onChangeContext={(field, value) =>
                       this.changeContext(field, value)
@@ -502,15 +578,18 @@ class CreateDeal extends React.Component {
               />
             )}
 
-          <Button
-            className={cn('btn btn-primary create-deal-button', {
-              disabled: !canCreateDeal
-            })}
-            onClick={() => this.createDeal()}
-            disabled={!canCreateDeal}
-          >
-            {saving ? 'Creating ...' : 'Create Deal'}
-          </Button>
+          {dealSide.length > 0 &&
+            dealPropertyType.length > 0 && (
+              <Button
+                className={cn('btn btn-primary create-deal-button', {
+                  disabled: saving
+                })}
+                onClick={() => this.createDeal()}
+                disabled={saving}
+              >
+                {saving ? 'Creating ...' : 'Create Deal'}
+              </Button>
+            )}
         </div>
       </div>
     )

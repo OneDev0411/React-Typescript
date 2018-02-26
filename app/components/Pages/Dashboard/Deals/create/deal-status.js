@@ -1,8 +1,14 @@
 import React from 'react'
+import cn from 'classnames'
 import RadioButton from '../components/radio'
 import { getStatusColorClass } from '../../../../../utils/listing'
 
-export default ({ property_type, dealStatus, onChangeDealStatus }) => {
+export default ({
+  hasError,
+  property_type,
+  dealStatus,
+  onChangeDealStatus
+}) => {
   const statuses = property_type.includes('Lease')
     ? ['Lease', 'Lease Contract', 'Leased']
     : [
@@ -14,7 +20,7 @@ export default ({ property_type, dealStatus, onChangeDealStatus }) => {
 
   return (
     <div className="form-section deal-status">
-      <div className="hero">
+      <div className={cn('hero', { hasError })}>
         What is the status of the deal? <span className="required">*</span>
       </div>
 
