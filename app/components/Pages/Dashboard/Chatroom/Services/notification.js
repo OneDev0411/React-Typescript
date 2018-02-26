@@ -244,7 +244,10 @@ export default class ChatNotification extends NotificationService {
     }
 
     // when new user invites to a existant room
-    const isExists = _.find(rooms[roomId].users, u => u.id === user.id)
+    const isExists =
+      rooms &&
+      rooms[roomId] &&
+      _.find(rooms[roomId].users, u => u.id === user.id)
 
     if (!isExists) {
       store.dispatch(addMembersToRoom(roomId, [user]))
