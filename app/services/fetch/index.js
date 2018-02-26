@@ -10,6 +10,7 @@ export default class Fetch {
 
     this._middlewares = {}
     this._autoLogin = true
+    this._isTestEnv = isTestEnv
     this._isServerSide = isServerSide
     this._baseUrl = isServerSide || isTestEnv ? config.app.url : ''
     this._proxyUrl = `${this._baseUrl}/api/proxifier`
@@ -79,6 +80,10 @@ export default class Fetch {
     // only import nock in test mode
     // there are a few milion problems with nock and
     // webpack and uglifyjs
+    if (!this._isTestEnv) {
+      return false
+    }
+
     const nock = await import('nock')
 
     const endpointKey = this.getEndpointKey(endpoint)
