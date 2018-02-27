@@ -217,7 +217,6 @@
     "webpack-dev-middleware": "^2.0.3",
     "webpack-dev-server": "^2.9.7",
     "webpack-hot-middleware": "^2.21.0",
-    "webpack-jarvis": "^0.2.2",
     "webpack-notifier": "^1.5.0"
   }
 }
