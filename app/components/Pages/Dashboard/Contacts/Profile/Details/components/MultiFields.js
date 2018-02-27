@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 import { isEqual } from 'lodash'
 
+import Label from './Label'
 import Editable from '../../Editable'
 import Contact from '../../../../../../../models/contacts'
 import {
@@ -24,10 +25,13 @@ const MultiFields = ({
   placeholder,
   handleParse,
   handleFormat,
+  labelTitles,
+  defaultLabel,
   validationText,
   handelOnDelete,
   upsertAttribute,
   handleAddNewField,
+  handleLabelOnChange,
   handelOnChangePrimary
 }) => (
   <ul className="c-contact-details u-unstyled-list">
@@ -58,14 +62,24 @@ const MultiFields = ({
                   data-balloon={item.is_primary ? 'Primary' : 'Set Primary'}
                 />
               )}
-            <label
-              className="c-contact-details-item--multi__label"
-              style={{
-                fontWeight: item.id && item.is_primary ? 'bold' : 'normal'
-              }}
-            >
-              {title}
-            </label>
+            {labelTitles ? (
+              <Label
+                field={item}
+                disabled={isSaving}
+                labelTitles={labelTitles}
+                defaultLabel={defaultLabel}
+                onChange={handleLabelOnChange}
+              />
+            ) : (
+              <label
+                className="c-contact-details-item--multi__label"
+                style={{
+                  fontWeight: item.id && item.is_primary ? 'bold' : 'normal'
+                }}
+              >
+                {title}
+              </label>
+            )}
           </span>
           <span className="c-contact-details-item__field">
             <Editable
@@ -117,7 +131,8 @@ const enhance = compose(
       const newField = {
         type,
         id: undefined,
-        is_primary: false
+        is_primary: false,
+        label: 'default'
       }
 
       addNewfields([...fields, newField])
@@ -141,6 +156,30 @@ const enhance = compose(
         }
 
         await upsertContactAttributes({ contactId, attributes })
+      } catch (error) {
+        throw error
+      } finally {
+        setIsSaving(false)
+      }
+    }
+  }),
+  withHandlers({
+    handleLabelOnChange: ({
+      fields,
+      contactId,
+      setIsSaving,
+      addNewfields,
+      upsertContactAttributes
+    }) => async field => {
+      try {
+        if (field.id) {
+          setIsSaving(true)
+          await upsertContactAttributes({ contactId, attributes: [field] })
+        } else {
+          const newFields = fields.filter(f => f.id)
+
+          return addNewfields([...newFields, field])
+        }
       } catch (error) {
         throw error
       } finally {
@@ -195,7 +234,7 @@ const enhance = compose(
 export default enhance(MultiFields)
 
 function initializeFields(props) {
-  const { name, type, contact } = props
+  const { name, type, contact, defaultLabel } = props
 
   const fields = Contact.get.attribute({
     type,
@@ -211,7 +250,8 @@ function initializeFields(props) {
     {
       type,
       id: undefined,
-      is_primary: true
+      is_primary: true,
+      label: defaultLabel
     }
   ]
 }
