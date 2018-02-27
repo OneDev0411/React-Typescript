@@ -1,6 +1,5 @@
 import _ from 'underscore'
 import SuperAgent from 'superagent'
-import nock from 'nock'
 import store from '../../stores'
 import config from '../../../config/public'
 
@@ -76,14 +75,6 @@ export default class Fetch {
       .replace(/(?!^)\//g, '-') // change the rest slashes to dash
   }
 
-  mock({ endpoint, method, statusCode, response }) {
-    const endpointKey = this.getEndpointKey(endpoint)
-
-    return nock(`${config.app.url}/api/proxifier`)
-      [method || 'post'](`/${endpointKey}`)
-      .reply(statusCode || 200, response)
-  }
-
   get(endpoint) {
     return this._create('get', endpoint)
   }
@@ -114,16 +105,6 @@ export default class Fetch {
     if (~~response.status < 200 || ~~response.status > 207) {
       return response
     }
-
-    _.each(this._middlewares, (options, name) => {
-      try {
-        const handler = require(`./middlewares/${name}`).default
-
-        response.body = handler(response.body, options)
-      } catch (e) {
-        console.warn(e)
-      }
-    })
   }
 
   middleware(name, options) {

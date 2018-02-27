@@ -22,7 +22,8 @@ export default class extends React.Component {
       showComments,
       toggleFactsheet,
       toggleComments,
-      editForm,
+      editFormHandler,
+      splitPdfHandler,
       task,
       file,
       fileType
@@ -52,8 +53,20 @@ export default class extends React.Component {
               </Button>
             )}
 
+            {file.type === 'pdf' && (
+              <Button
+                className="deal-button split"
+                onClick={() => splitPdfHandler(file)}
+              >
+                Split PDF
+              </Button>
+            )}
+
             {fileType === 'digital-form' && (
-              <Button className="deal-button edit-form" onClick={editForm}>
+              <Button
+                className="deal-button edit-form"
+                onClick={editFormHandler}
+              >
                 Edit Form
               </Button>
             )}
@@ -82,6 +95,7 @@ export default class extends React.Component {
               width={PDF_WIDTH}
               disableKeyboardShortcuts={disableKeyboardShortcuts}
             />
+
             {task && (
               <div
                 className="comments"

@@ -51,7 +51,7 @@ class Compose extends React.Component {
       rooms = await this.searchInRooms(this.criteria)
     }
 
-    const contacts = await this.searchInContacts(this.criteria)
+    const contacts = await this.searchInContacts(this.criteria.toLowerCase())
 
     this.createListView(rooms, contacts)
 
@@ -136,15 +136,19 @@ class Compose extends React.Component {
       `/rooms/search?q[]=${q}&room_types[]=Direct&room_types[]=Group`
     )
 
-    return rooms
-    // .filter(room => room.users.length > 2)
-      .map(room => this.createListItem('room', {
-        ...room,
-        ...{
-          users: _.pluck(room.users, 'id'),
-          display_name: `${room.proposed_title}`
-        }
-      }))
+    return (
+      rooms
+        // .filter(room => room.users.length > 2)
+        .map(room =>
+          this.createListItem('room', {
+            ...room,
+            ...{
+              users: _.pluck(room.users, 'id'),
+              display_name: `${room.proposed_title}`
+            }
+          })
+        )
+    )
   }
 
   /**
@@ -157,13 +161,13 @@ class Compose extends React.Component {
       // search in contact's users
       const users_list = contact.users || []
       const users = users_list
-        .filter(user => user.display_name.includes(q))
+        .filter(user => user.display_name.toLowerCase().includes(q))
         .map(user => this.createListItem('user', user))
 
       // search in contact's emails
       const emails_list = Contact.get.emails(contact) || []
       const emails = emails_list
-        .filter(item => item.email.includes(q))
+        .filter(item => item.email.toLowerCase().includes(q))
         .map(email => this.createListItem('email', email))
 
       // search in contact's phone
@@ -286,12 +290,11 @@ class Compose extends React.Component {
 
     return (
       <div className="compose">
-
         <Recipients
           recipients={recipients}
           onSearch={text => this.onSearch(text)}
           onRemove={recipient => this.onRemove(recipient)}
-          inputRef={el => this.searchInput = el}
+          inputRef={el => (this.searchInput = el)}
           addFirstSuggestion={e => {
             if (viewList && _.size(viewList) > 0) {
               e.preventDefault()

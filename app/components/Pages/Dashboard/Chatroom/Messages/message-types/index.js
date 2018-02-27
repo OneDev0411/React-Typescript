@@ -7,71 +7,61 @@ import ActivityMessage from './activity'
 import UploadingFile from './uploading'
 import Message from '../../Util/message'
 
-const MessageTypes = ({
-  author,
-  user,
-  roomId,
-  members,
-  message,
-  previousMessage
-}) => {
+const MessageTypes = ({ author, user, members, message }) => {
   const comment = Message.getText(message, members, user)
 
   // simple comment
-  let message_object = <div
-    className="comment inline"
-    dangerouslySetInnerHTML={{ __html: comment }}
-  />
+  let message_object = (
+    <div
+      className="comment inline"
+      dangerouslySetInnerHTML={{ __html: comment }}
+    />
+  )
 
   // check message is alert
   const alert = Message.isAlert(message)
 
   if (alert) {
-    message_object = <AlertMessage
-      alert={alert}
-    />
+    message_object = <AlertMessage alert={alert} />
   }
 
   if (message.recommendation) {
-    message_object = <RecommendationMessage
-      author={author}
-      user={user}
-      recommendation={message.recommendation}
-      message={message}
-      comment={comment}
-    />
+    message_object = (
+      <RecommendationMessage
+        author={author}
+        user={user}
+        recommendation={message.recommendation}
+        message={message}
+        comment={comment}
+      />
+    )
   }
 
   // check message has attachment
   const hasAttachments = message.attachments && message.attachments.length > 0
 
   if (hasAttachments) {
-    message_object = <AttachementMessage
-      comment={comment}
-      attachments={message.attachments}
-    />
+    message_object = (
+      <AttachementMessage comment={comment} attachments={message.attachments} />
+    )
   }
 
   // check message is ActivityMessage
   if (message.activity) {
-    message_object = <ActivityMessage
-      message={message}
-    />
+    message_object = <ActivityMessage message={message} />
   }
 
   // check message is uploading a file
   if (message.uploading) {
-    message_object = <UploadingFile
-      author={author}
-      user={user}
-      message={message}
-    />
+    message_object = (
+      <UploadingFile author={author} user={user} message={message} />
+    )
   }
 
   return message_object
 }
 
-function mapStateToProps({ chatroom, data }, props) {
+function mapStateToProps({ chatroom }, props) {
   const room = chatroom.rooms[props.roomId]
 
   return {

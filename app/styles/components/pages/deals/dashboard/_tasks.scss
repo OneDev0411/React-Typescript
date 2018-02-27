@@ -44,12 +44,10 @@
   font-size: 13px;
   font-weight: 500;
   color: #62778c;
+  margin-right: 20px;
   display: inline-block;
-  &.hide{
+  &.hide {
     display: none;
-  }
-  &.right{
-    margin-left: 20px;
   }
   &:focus {
     outline: none;

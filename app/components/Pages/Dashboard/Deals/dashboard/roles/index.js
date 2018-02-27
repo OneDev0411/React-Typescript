@@ -14,7 +14,7 @@ class Roles extends React.Component {
     showAddRoleModal: false
   }
 
-  setSellectedRole = role => {
+  setSelectedRole = role => {
     this.setState({
       form: role,
       showAddRoleModal: true
@@ -39,7 +39,7 @@ class Roles extends React.Component {
         message: `${role.legal_first_name} has no email!`,
         description: `Add ${role.legal_first_name}'s email to continue.`,
         confirmLabel: 'Add Email',
-        onConfirm: () => this.setSellectedRole(role)
+        onConfirm: () => this.setSelectedRole(role)
       })
     }
 
@@ -49,7 +49,7 @@ class Roles extends React.Component {
       return
     }
 
-    this.setSellectedRole(role)
+    this.setSelectedRole(role)
   }
 
   onRequestRemoveRole = (e, user) => {

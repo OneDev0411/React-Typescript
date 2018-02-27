@@ -12,8 +12,7 @@ function getAckedUsers(message, room) {
     return []
   }
 
-  return _
-    .uniq(message.acked_by)
+  return _.uniq(message.acked_by)
     .map(id => ({ user: _.find(room.users, { id }) }))
     .filter(user => user !== null)
 }
@@ -22,26 +21,22 @@ function getDeliveredUsers(message, room) {
   let deliveries = _.uniq(message.deliveries, d => d.user)
 
   if (message.acked_by) {
-    deliveries = _.filter(deliveries, d => message.acked_by.indexOf(d.user) === -1)
+    deliveries = _.filter(
+      deliveries,
+      d => message.acked_by.indexOf(d.user) === -1
+    )
   }
 
-  return _
-    .map(deliveries, info => ({
-      user: _.find(room.users, { id: info.user }),
-      info
-    }))
-    .filter(user => user !== null)
+  return _.map(deliveries, info => ({
+    user: _.find(room.users, { id: info.user }),
+    info
+  })).filter(user => user !== null)
 }
 
 /**
  * renders acked_by and deliveries lists
  */
-const RenderList = ({
-  list,
-  title,
-  className,
-  avatarSize = 30
-}) => {
+const RenderList = ({ list, title, className, avatarSize = 30 }) => {
   if (list.length === 0) {
     return false
   }
@@ -53,68 +48,53 @@ const RenderList = ({
           <i className="fa fa-check" />
           <i className="fa fa-check" />
         </span>
-        { title }
+        {title}
       </div>
 
       <div className="report">
-        {
-          list.map(({ user, info }) =>
-            <Row
-              className="item"
-              key={user.id}
-            >
-              <Col xs={2}>
-                <UserAvatar
-                  style={{ float: 'left' }}
-                  size={avatarSize}
-                  name={user.display_name}
-                  image={user.profile_image_url}
-                  showStateIndicator={false}
-                />
-              </Col>
+        {list.map(({ user, info }) => (
+          <Row className="item" key={user.id}>
+            <Col xs={2}>
+              <UserAvatar
+                style={{ float: 'left' }}
+                size={avatarSize}
+                name={user.display_name}
+                image={user.profile_image_url}
+                showStateIndicator={false}
+              />
+            </Col>
 
-              <Col xs={6} className="name-section">
-                <div
-                  className="name"
-                  style={!info ? { lineHeight: `${avatarSize}px` } : {}}
-                >
-                  {
-                    user.display_name.length <= 20 ?
-                      user.display_name :
-                      `${user.display_name.substr(0, 20)}...`
-                  }
+            <Col xs={6} className="name-section">
+              <div
+                className="name"
+                style={!info ? { lineHeight: `${avatarSize}px` } : {}}
+              >
+                {user.display_name.length <= 20
+                  ? user.display_name
+                  : `${user.display_name.substr(0, 20)}...`}
+              </div>
+              {info && (
+                <div className="via">
+                  Delivered via&nbsp;
+                  {info.delivery_type.replace('airship', 'mobile notification')}
                 </div>
-                {
-                  info &&
-                  <div className="via">
-                    Delivered via&nbsp;
-                    {
-                      info
-                        .delivery_type
-                        .replace('airship', 'mobile notification')
-                    }
-                  </div>
-                }
-              </Col>
+              )}
+            </Col>
 
-              <Col xs={4} className="date-section">
-                {
-                  info &&
-                  <span className="date-day">
-                    { moment(info.created_at).format('ddd') }
-                  </span>
-                }
-                {
-                  info &&
-                  <span className="date-time">
-                    { moment(info.created_at).format('HH:mm') }
-                  </span>
-                }
-              </Col>
-
-            </Row>
-          )
-        }
+            <Col xs={4} className="date-section">
+              {info && (
+                <span className="date-day">
+                  {moment(info.created_at).format('ddd')}
+                </span>
+              )}
+              {info && (
+                <span className="date-time">
+                  {moment(info.created_at).format('HH:mm')}
+                </span>
+              )}
+            </Col>
+          </Row>
+        ))}
       </div>
     </div>
   )
@@ -147,11 +127,7 @@ const DeliveryReport = ({
       title=""
       style={{ maxWidth: '340px' }}
     >
-      <RenderList
-        list={ackedUsers}
-        className="read-by"
-        title="READ BY"
-      />
+      <RenderList list={ackedUsers} className="read-by" title="READ BY" />
 
       <RenderList
         list={deliveredUsers}
@@ -168,9 +144,7 @@ const DeliveryReport = ({
       placement={placement}
       overlay={MessageInfo}
     >
-      <span
-        className={cn('delivery-report', { blue: ackedUsers.length > 0 })}
-      >
+      <span className={cn('delivery-report', { blue: ackedUsers.length > 0 })}>
         <i className="fa fa-check" />
         <i className="fa fa-check" />
       </span>

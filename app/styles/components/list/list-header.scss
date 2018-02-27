@@ -1,5 +1,8 @@
 .list-table {
-  padding: 2em;
+  padding: 2em 2em 0;
+  .rt-tbody {
+    padding-bottom: 150px;
+  }
 }
 .list--header {
   box-shadow: 0 1px 0 0 #dce5eb;
@@ -129,11 +132,17 @@
   background-color: #ffffff;
   border: solid 1px #e0e0e0;
   display: flex;
-  button {
+  .button {
     padding: 8px 15px;
     margin-left: 0;
     &:hover {
       background-color: #f0f4f7;
+      color: inherit;
+      text-decoration: none;
+    }
+    &:focus {
+      color: inherit;
+      text-decoration: none;
     }
   }
   .info-button {

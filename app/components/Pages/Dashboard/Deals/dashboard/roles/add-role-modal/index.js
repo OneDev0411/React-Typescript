@@ -4,7 +4,10 @@ import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import RoleForm from '../form'
-import { createRoles, updateRole } from '../../../../../../../store_actions/deals'
+import {
+  createRoles,
+  updateRole
+} from '../../../../../../../store_actions/deals'
 import { addContact } from '../../../../../../../store_actions/contact/add-contact'
 import { upsertAttributes } from '../../../../../../../store_actions/contact/index'
 import {
@@ -83,14 +86,21 @@ class AddRoleModal extends React.Component {
 
           if (nameAttribute || newAttributes.length > 0) {
             if (nameAttribute && nameAttribute.id) {
-              await upsertAttributes(form.contact.id, 'name', [nameAttribute], true)
+              await upsertAttributes(
+                form.contact.id,
+                'name',
+                [nameAttribute],
+                true
+              )
             }
 
             if (newAttributes.length > 0) {
               await upsertAttributes(form.contact.id, '', newAttributes, true)
             }
 
-            this.notifySuccess(`${fullName}'s contact profile has been updated.`)
+            this.notifySuccess(
+              `${fullName}'s contact profile has been updated.`
+            )
           }
         }
 
@@ -142,9 +152,7 @@ class AddRoleModal extends React.Component {
 
   render() {
     const { form, saving, isFormCompleted } = this.state
-    const {
-      deal, allowedRoles, isOpen, role
-    } = this.props
+    const { deal, allowedRoles, isOpen, role } = this.props
     const disabled = !isFormCompleted || saving === true
     const modalTitle = this.isUpdateModal() ? 'Update Contact' : 'Add to Deal'
 

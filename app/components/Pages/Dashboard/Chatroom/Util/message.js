@@ -1,9 +1,11 @@
 import moment from 'moment'
 import emojify from 'emojify.js'
-import _ from 'underscore'
 import linkifyString from 'linkifyjs/string'
 import store from '../../../../../stores'
-import { createMessage, updateMessage } from '../../../../../store_actions/chatroom'
+import {
+  createMessage,
+  updateMessage
+} from '../../../../../store_actions/chatroom'
 import Mention from './mention'
 
 emojify.setConfig({
@@ -15,7 +17,7 @@ export default class Message {
    * send new message
    */
   static send(roomId, message, author = {}) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       // create temp message
       const { qid, tempMessage } = Message.createTemporaryMessage(
         roomId,
@@ -52,14 +54,19 @@ export default class Message {
    */
   static postTaskComment(task, comment) {
     return new Promise((resolve, reject) => {
-      window.socket.emit('Task.Message.Send', task.id, comment, (err, comment) => {
-        if (err) {
-          return reject(err)
-        }
+      window.socket.emit(
+        'Task.Message.Send',
+        task.id,
+        comment,
+        (err, comment) => {
+          if (err) {
+            return reject(err)
+          }
 
-        Message.create(task.room.id, comment)
-        resolve()
-      })
+          Message.create(task.room.id, comment)
+          resolve()
+        }
+      )
     })
   }
 
@@ -126,7 +133,8 @@ export default class Message {
    * convert new line to break line
    */
   static nl2br(str, is_xhtml = false) {
-    const breakTag = is_xhtml || typeof is_xhtml === 'undefined' ? '<br />' : '<br>'
+    const breakTag =
+      is_xhtml || typeof is_xhtml === 'undefined' ? '<br />' : '<br>'
 
     return `${str}`.replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, `$1${breakTag}$2`)
   }

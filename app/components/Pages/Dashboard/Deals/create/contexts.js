@@ -47,12 +47,12 @@ export default class extends React.Component {
   }
 
   render() {
-    const { contexts, fields, onChangeContext } = this.props
+    const { hasError, contexts, fields, onChangeContext } = this.props
     const { selectedField } = this.state
 
     return (
       <div className="form-section contexts">
-        <div className="hero no-margin-bottom">
+        <div className={cn('hero no-margin-bottom', { hasError })}>
           Please provide the following information:&nbsp;
         </div>
 

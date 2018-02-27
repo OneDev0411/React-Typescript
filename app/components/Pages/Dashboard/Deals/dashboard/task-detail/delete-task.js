@@ -14,9 +14,7 @@ class DeleteTask extends React.Component {
   }
 
   async notifyOffice(comment) {
-    const {
-      deal, user, task, changeNeedsAttention
-    } = this.props
+    const { deal, user, task, changeNeedsAttention } = this.props
     const message = {
       comment,
       author: user.id,

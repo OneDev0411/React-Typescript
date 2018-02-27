@@ -37,19 +37,19 @@ import { getContacts } from '../store_actions/contact'
 import { selectListings } from '../reducers/listings'
 import getFavorites from '../store_actions/listings/favorites/get-favorites'
 
-// import _ from 'lodash'
 import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
+import { inactiveIntercom } from '../store_actions/intercom'
 
 class App extends Component {
   componentWillMount() {
     const { user } = this.props
 
     // check branding
-    this._getBrand()
+    this.getBrand()
 
     if (typeof window !== 'undefined') {
       import('offline-js')
@@ -68,6 +68,10 @@ class App extends Component {
 
   componentDidMount() {
     this.initializeApp()
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(inactiveIntercom())
   }
 
   async initializeApp() {
@@ -126,13 +130,14 @@ class App extends Component {
     return dispatch(getRooms(user))
   }
 
-  _getBrand() {
+  getBrand() {
     this.props.dispatch(getBrand())
   }
 
   initializeContactSocket(user) {
     new contactSocket(user)
   }
+
   initializeChatSocket(user) {
     new ChatSocket(user)
   }
@@ -273,16 +278,16 @@ class App extends Component {
           type: AppStore.data.user
             ? 'WebBranchBannerClickedUser'
             : 'WebBranchBannerClickedShadowUser',
-          access_token: AppStore.data.user ? AppStore.data.user.access_token : null
+          access_token: AppStore.data.user
+            ? AppStore.data.user.access_token
+            : null
         }
       }
     )
   }
 
   render() {
-    const {
-      data, user, rooms, location
-    } = this.props
+    const { data, user, rooms, location } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -294,18 +299,12 @@ class App extends Component {
       user
     })
 
-    // render sideNav
-    let navArea = <SideNav data={data} location={location} />
-
-    if (data.is_mobile && user) {
-      navArea = <div />
-    }
-
     return (
       <div className="u-scrollbar">
-        {user && !user.email_confirmed && <VerificationBanner email={user.email} />}
+        {user &&
+          !user.email_confirmed && <VerificationBanner email={user.email} />}
 
-        {user && navArea}
+        {user && <SideNav data={data} location={location} />}
 
         {user && <InstantChat user={user} rooms={rooms} />}
 
@@ -317,13 +316,13 @@ class App extends Component {
   }
 }
 
-export default connect(({
-  user, data, favorites, deals, contacts, chatroom
-}) => ({
-  data,
-  user,
-  deals: deals.list,
-  rooms: chatroom.rooms,
-  contacts: contacts.list,
-  favoritesListings: selectListings(favorites.listings)
-}))(App)
+export default connect(
+  ({ user, data, favorites, deals, contacts, chatroom }) => ({
+    data,
+    user,
+    deals: deals.list,
+    rooms: chatroom.rooms,
+    contacts: contacts.list,
+    favoritesListings: selectListings(favorites.listings)
+  })
+)(App)

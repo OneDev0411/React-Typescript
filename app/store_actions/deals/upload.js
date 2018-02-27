@@ -2,9 +2,8 @@ import _ from 'underscore'
 import types from '../../constants/deals'
 import uuid from '../../utils/uuid'
 import Deal from '../../models/Deal'
-import { uploadAttachment } from '../../models/Chatroom'
 
-export function setUploadFiles(files, task) {
+export function setUploadFiles(files) {
   const indexedFiles = {}
 
   // I used properties object to keep file attributes, because file object which
@@ -23,8 +22,7 @@ export function setUploadFiles(files, task) {
 
   return {
     type: types.SET_UPLOAD_FILES,
-    files: indexedFiles,
-    task
+    files: indexedFiles
   }
 }
 
@@ -118,8 +116,8 @@ export function uploadStashFile(dealId, file, fileName = null) {
 export function uploadTaskFile(user, task, file, fileName = null) {
   return async dispatch => {
     try {
-      const response = await uploadAttachment(
-        task.room.id,
+      const response = await Deal.uploadTaskFile(
+        task.id,
         file,
         fileName || file.name
       )

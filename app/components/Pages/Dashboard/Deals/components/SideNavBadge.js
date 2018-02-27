@@ -24,7 +24,7 @@ class BadgeCounter extends React.Component {
     let counter = 0
 
     _.each(this.props.deals, deal => {
-      if (~~deal.attention_requested_count > 0) {
+      if (~~deal.attention_requests > 0) {
         counter += 1
       }
     })
@@ -34,6 +34,7 @@ class BadgeCounter extends React.Component {
 
   getBadgeCount() {
     const { isBackOffice } = this.props
+
     return isBackOffice ? this.getBackOfficeBadge() : this.getAgentBadge()
   }
 
@@ -41,7 +42,9 @@ class BadgeCounter extends React.Component {
     const counter = this.getBadgeCount()
 
     if (counter > 0) {
-      return <span className="c-app-sidenav__notification-badge">{counter}</span>
+      return (
+        <span className="c-app-sidenav__notification-badge">{counter}</span>
+      )
     }
 
     return <span />

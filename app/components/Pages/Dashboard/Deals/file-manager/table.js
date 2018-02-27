@@ -42,7 +42,7 @@ export class FileManager extends React.Component {
 
     return (
       file.name.toLowerCase().includes(filter.toLowerCase()) ||
-      task.title.toLowerCase().includes(filter.toLowerCase())
+      (task && task.title.toLowerCase().includes(filter.toLowerCase()))
     )
   }
 
@@ -74,7 +74,7 @@ export class FileManager extends React.Component {
     const files = []
     const stashFiles = deal.files || []
 
-    stashFiles.forEach(file => {
+    stashFiles.filter(file => this.applyFilter(file, null)).forEach(file => {
       files.push({
         ...file,
         taskId: null,
@@ -216,7 +216,6 @@ export class FileManager extends React.Component {
       isDeleting: [...isDeleting, ..._.keys(files)]
     })
 
-    console.log(deal.id, files)
     await deleteFile(deal.id, files)
 
     this.setState({

@@ -31,10 +31,6 @@ class LastSeen extends React.Component {
       return 'Online'
     }
 
-    if (userStatus.last_seen_at) {
-      return this.agoTime(userStatus.last_seen_at)
-    }
-
     if (!user.last_seen_at) {
       return 'Offline'
     }
@@ -50,10 +46,12 @@ class LastSeen extends React.Component {
     const { client_type } = user.last_seen_by
     const iconName = client_type === 'Mobile' ? 'mobile' : 'globe'
 
-    return <i
-      className={`fa fa-${iconName}`}
-      style={{ fontSize: '16px', marginRight: '5px' }}
-    />
+    return (
+      <i
+        className={`fa fa-${iconName}`}
+        style={{ fontSize: '16px', marginRight: '5px' }}
+      />
+    )
   }
 
   agoTime(time) {
@@ -66,8 +64,8 @@ class LastSeen extends React.Component {
     return (
       <div>
         <div className="status">
-          { this.getIcon(user) }
-          { this.getLastSeenAt(states, user) }
+          {this.getIcon(user)}
+          {this.getLastSeenAt(states, user)}
         </div>
       </div>
     )

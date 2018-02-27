@@ -14,10 +14,7 @@ export default ({
   deliveryReportPlacement
 }) => (
   <div className="message-group">
-    <DateSplitter
-      message={message}
-      previousMessage={previousMessage}
-    />
+    <DateSplitter message={message} previousMessage={previousMessage} />
 
     <div className="message-item">
       <div className="avatar">
@@ -32,7 +29,7 @@ export default ({
       <div className="content">
         <div>
           <span className="title">
-            { author && author.abbreviated_display_name }
+            {author && author.abbreviated_display_name}
           </span>
 
           <MessageDate message={message} />

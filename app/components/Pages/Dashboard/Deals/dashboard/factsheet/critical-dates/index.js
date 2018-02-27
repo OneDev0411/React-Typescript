@@ -1,5 +1,4 @@
 import React from 'react'
-import moment from 'moment'
 import Deal from '../../../../../../../models/Deal'
 import Context from '../../../../../../../models/DealContext'
 import Items from '../items'
@@ -7,7 +6,7 @@ import Items from '../items'
 /**
  * get field of upcoming (next) date
  */
-const getNextDateField = (deal) => {
+const getNextDateField = deal => {
   const closingDate = Deal.get.field(deal, 'closing_date')
   const expirationDate = Deal.get.field(deal, 'expiration_date')
 
@@ -26,10 +25,7 @@ const getNextDateField = (deal) => {
   return null
 }
 
-const CriticalDates = ({
-  deal,
-  showTitle = true
-}) => {
+const CriticalDates = ({ deal, showTitle = true }) => {
   const table = Context.getFactsheetSection(deal, 'CriticalDates')
 
   if (table.length === 0) {
@@ -52,15 +48,16 @@ const CriticalDates = ({
 /**
  * get next date
  */
-CriticalDates.getNextDate = function (deal) {
+CriticalDates.getNextDate = function(deal) {
   const date = getNextDateField(deal)
 
   if (!date) {
     return 'No closing date'
   }
 
-  const field = Context.getFactsheetSection(deal, 'CriticalDates')
-    .find(item => item.name === date.name)
+  const field = Context.getFactsheetSection(deal, 'CriticalDates').find(
+    item => item.name === date.name
+  )
 
   return field && `${field.short_label}. ${date.value.format('MMM DD, YYYY')}`
 }

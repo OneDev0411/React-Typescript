@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import cn from 'classnames'
 import Deal from '../../../../../../models/Deal'
 import { getStatusColorClass } from '../../../../../../utils/listing'
 import StatusModal from './listing-status-modal'
 import ToolTip from '../../components/tooltip'
+import Message from '../../../Chatroom/Util/message'
 import {
   updateContext,
   createGenericTask,
@@ -38,14 +40,14 @@ class ListingStatus extends React.Component {
     // set state
     this.setState({ saving: true })
 
-    await updateContext(deal.id, {
-      listing_status: {
-        value: status,
-        approved: isBackOffice
-      }
-    })
-
-    if (!isBackOffice) {
+    if (isBackOffice) {
+      await updateContext(deal.id, {
+        listing_status: {
+          value: status,
+          approved: true
+        }
+      })
+    } else {
       await this.notifyAdmin(status)
     }
 
@@ -56,6 +58,7 @@ class ListingStatus extends React.Component {
   async notifyAdmin(status) {
     const {
       deal,
+      user,
       checklists,
       notify,
       changeNeedsAttention,
@@ -66,6 +69,15 @@ class ListingStatus extends React.Component {
 
     const checklist = checklists[deal.checklists[0]]
     const task = await createGenericTask(deal.id, title, checklist.id)
+
+    const message = {
+      comment: `Hello, Please change listing status to ${status}`,
+      author: user.id,
+      room: task.room.id
+    }
+
+    // send comment message
+    Message.postTaskComment(task, message)
 
     changeNeedsAttention(deal.id, task.id, true)
 
@@ -87,68 +99,66 @@ class ListingStatus extends React.Component {
     }
 
     const status = statusContext.text || statusContext
-    const approved = statusContext.approved_at !== null
 
     return (
-      <div>
-        <div className="item">
+      <Fragment>
+        <div className={cn('item', { disabled: !isBackOffice })}>
           <StatusModal
             deal={deal}
             show={showModal}
             status={status}
+            isBackOffice={isBackOffice}
             saveText={isBackOffice ? 'Update' : 'Notify Office'}
             onChangeStatus={status => this.onChangeStatus(status)}
             onClose={() => this.toggleModal()}
           />
 
-          <div className="lbl">Status:</div>
+          <div className="lbl">{isBackOffice ? 'Office/MLS' : 'Status'}:</div>
           <div className="value mls-status">
             <span
               className="status"
               style={{ background: getStatusColorClass(status) }}
             />
-            <ToolTip
-              caption={
-                !isBackOffice && !approved ? 'Waiting for office approval' : null
-              }
-            >
-              <span>{status}</span>
-            </ToolTip>
 
-            {!saving && (
-              <button
-                className="deals-info__mls-status__edit-cta c-button--shadow"
-                onClick={() => this.toggleModal()}
-              >
-                EDIT
-              </button>
-            )}
+            <span>{status}</span>
+
+            {isBackOffice &&
+              !saving && (
+                <button
+                  className="deals-info__mls-status__edit-cta c-button--shadow"
+                  onClick={() => this.toggleModal()}
+                >
+                  EDIT
+                </button>
+              )}
           </div>
 
           {saving && (
-            <i style={{ marginLeft: '5px' }} className="fa fa-spin fa-spinner" />
+            <i
+              style={{ marginLeft: '5px' }}
+              className="fa fa-spin fa-spinner"
+            />
           )}
         </div>
 
-        {isBackOffice &&
-          !approved &&
-          !saving && (
-            <div className="approve-row">
-              <button
-                className="btn-approve"
-                onClick={() => this.updateStatus(status)}
-              >
-                Approve
-              </button>
-            </div>
-          )}
-      </div>
+        {!isBackOffice && (
+          <div>
+            <button
+              onClick={() => this.toggleModal()}
+              className="btn-change-status"
+            >
+              Change Status
+            </button>
+          </div>
+        )}
+      </Fragment>
     )
   }
 }
 
 export default connect(
-  ({ deals }) => ({
+  ({ deals, user }) => ({
+    user,
     isBackOffice: deals.backoffice,
     checklists: deals.checklists
   }),

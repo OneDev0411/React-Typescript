@@ -53,7 +53,7 @@ class Filter extends React.Component {
         (!deal.searchResult || deal.duplicateDeal) &&
         deal.inboxes &&
         deal.inboxes.indexOf(tabName) > -1 &&
-        deal.attention_requested_count > 0
+        deal.attention_requests > 0
       ) {
         counter += 1
       }

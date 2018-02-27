@@ -19,7 +19,7 @@ class AgentTable extends BaseTable {
       address: {
         caption: 'ADDRESS',
         sortable: true,
-        className: 'address col-md-3',
+        className: 'address col-md-4',
         getText: deal => this.getAddress(deal),
         getValue: deal => Deal.get.address(deal)
       },
@@ -50,12 +50,7 @@ class AgentTable extends BaseTable {
         caption: 'PRICE $',
         sortable: true,
         className: 'col-md-1 hidden-xs',
-        getText: deal =>
-          Deal.get.formattedPrice(
-            Deal.get.field(deal, 'list_price'),
-            'currency',
-            0
-          ),
+        getText: this.getPrice,
         getValue: deal => Deal.get.field(deal, 'list_price')
       },
       side: {
@@ -81,7 +76,7 @@ class AgentTable extends BaseTable {
       },
       notificiation: {
         caption: '',
-        className: 'col-md-1 hidden-sm hidden-xs',
+        className: 'notification-container hidden-sm hidden-xs',
         getText: deal => this.hasNotification(deal)
       },
       searchResult: {
@@ -92,6 +87,23 @@ class AgentTable extends BaseTable {
     }
   }
 
+  getPrice = deal => {
+    let price = Deal.get.formattedPrice(
+      Deal.get.field(deal, 'sales_price'),
+      'currency',
+      0
+    )
+
+    if (!price) {
+      price = Deal.get.formattedPrice(
+        Deal.get.field(deal, 'list_price'),
+        'currency',
+        0
+      )
+    }
+
+    return price
+  }
   getSide(deal, rowId, rowsCount) {
     const { roles } = this.props
 

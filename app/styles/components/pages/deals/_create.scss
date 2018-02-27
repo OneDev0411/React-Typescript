@@ -86,6 +86,10 @@ $margin: 20px;
     .required {
       color: $required-color;
     }
+
+    &.hasError {
+      color: #ec4b35;
+    }
   }
 
   .hero-description {

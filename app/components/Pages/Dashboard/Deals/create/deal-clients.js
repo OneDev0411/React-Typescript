@@ -1,5 +1,6 @@
 import React from 'react'
 import _ from 'underscore'
+import cn from 'classnames'
 import CrudRole from './crud-role'
 
 const BUYING = 'Buying'
@@ -16,6 +17,7 @@ function getRoles(side) {
 }
 
 export default ({
+  hasError,
   clients,
   dealSide,
   onUpsertClient,
@@ -26,7 +28,7 @@ export default ({
 
   return (
     <div className="form-section deal-people deal-client">
-      <div className="hero">
+      <div className={cn('hero', { hasError })}>
         {dealSide === 'Buying'
           ? 'Enter buyer information as shown on offer.'
           : 'Enter the seller’s legal information'}

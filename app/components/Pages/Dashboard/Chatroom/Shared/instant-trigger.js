@@ -2,8 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { toggleChatbar } from '../../../../../store_actions/chatroom'
-import SvgChat from '../../Partials/Svgs/Chat'
-import { toggleBrand } from '../../../../../store_actions/brandConsole/index'
 
 const openChatbar = toggleChatbar => {
   if (window && window.location.pathname.includes('/recents/')) {

@@ -239,6 +239,15 @@
     top: 10px;
     right: 5px;
   }
+
+  input {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    &:focus {
+      outline: none;
+    }
+  }
 }
 
 .deal-task-dropdown-list {

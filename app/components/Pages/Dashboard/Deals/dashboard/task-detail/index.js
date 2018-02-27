@@ -16,7 +16,7 @@ const TaskManager = ({ deal, task }) => {
 
   return (
     <div className="full-width" data-simplebar={!isWebkit || null}>
-      <Upload disableClick deal={deal} task={task}>
+      <Upload disableClick deal={deal}>
         <div className="scrollable" id="deals-task-scrollable">
           <Header deal={deal} key={task.id} task={task} />
 

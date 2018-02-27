@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "8.6.9",
+  "version": "8.10.0",
   "description": "",
   "main": "app.js",
   "author": "",
@@ -24,7 +24,7 @@
     "heroku-postbuild": "npm run build"
   },
   "engines": {
-    "node": "8.2.1"
+    "node": "9.2.0"
   },
   "dependencies": {
     "async": "^2.6.0",
@@ -100,7 +100,7 @@
     "mobile-detect": "^1.4.1",
     "moment": "^2.20.1",
     "moment-timezone": "^0.5.14",
-    "nock": "^9.1.6",
+    "nock": "^9.2.2",
     "node-sass": "^4.7.2",
     "normalizr": "^3.2.4",
     "nunjucks": "^3.0.0",
@@ -159,10 +159,11 @@
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^7.2.0",
     "redux-thunk": "^2.2.0",
+    "requestretry": "^1.13.0",
     "rimraf": "^2.6.1",
     "rxjs": "^5.5.6",
     "sass-loader": "^6.0.6",
-    "scissors": "git+https://github.com/tcr/scissors.git",
+    "scissors": "git+https://github.com/raminious/scissors.git",
     "shorti": "^1.2.6",
     "simplebar": "github:izadmehr/simplebar#35b9bf51a13adf85e705c972a3d4a5e6e0df5fbd",
     "socket.io": "^1.7.3",
@@ -208,11 +209,10 @@
     "redux-mock-store": "^1.4.0",
     "selenium-standalone": "^6.11.0",
     "uglify-es": "git://github.com/mishoo/UglifyJS2.git#harmony",
-    "uglifyjs-webpack-plugin": "^1.1.4",
+    "uglifyjs-webpack-plugin": "^1.2.2",
     "webpack-dev-middleware": "^2.0.3",
     "webpack-dev-server": "^2.9.7",
     "webpack-hot-middleware": "^2.21.0",
-    "webpack-jarvis": "^0.2.2",
     "webpack-notifier": "^1.5.0"
   }
 }
