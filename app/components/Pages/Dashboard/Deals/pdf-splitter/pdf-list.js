@@ -7,7 +7,8 @@ import PageThumbnail from './page/thumbnail'
 import PageSelector from './page/selector'
 import {
   selectSplitterPage,
-  setSplitterPdfObject
+  setSplitterPdfObject,
+  resetSplitter
 } from '../../../../../store_actions/deals'
 
 class PDF extends React.Component {
@@ -38,6 +39,8 @@ class PDF extends React.Component {
 
         setSplitterPdfObject(pdf.id, doc)
       } catch (e) {
+        this.props.resetSplitter()
+
         const message =
           e.name === 'PasswordException'
             ? 'Sorry this document is password protected.'
@@ -129,5 +132,6 @@ function mapStateToProps({ deals }) {
 export default connect(mapStateToProps, {
   selectSplitterPage,
   setSplitterPdfObject,
-  notify
+  notify,
+  resetSplitter
 })(PDF)
