@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
+import { addNotification as notify } from 'reapop'
 import PageThumbnail from './page/thumbnail'
 import PageSelector from './page/selector'
 import {
@@ -19,6 +20,8 @@ class PDF extends React.Component {
   }
 
   async initialize() {
+    const { notify } = this.props
+
     /* eslint-disable max-len */
     await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */)
 
@@ -30,9 +33,22 @@ class PDF extends React.Component {
     _.each(splitter.files, async pdf => {
       const url = pdf.file.preview || pdf.file.url
 
-      const doc = await PDFJS.getDocument(url)
+      try {
+        const doc = await PDFJS.getDocument(url)
 
-      setSplitterPdfObject(pdf.id, doc)
+        setSplitterPdfObject(pdf.id, doc)
+      } catch (e) {
+        const message =
+          e.name === 'PasswordException'
+            ? 'Sorry this document is password protected.'
+            : e.message
+
+        notify({
+          title: 'Splitting Error',
+          message,
+          status: 'error'
+        })
+      }
     })
   }
 
@@ -42,15 +58,16 @@ class PDF extends React.Component {
 
   render() {
     const { splitter } = this.props
-    const {
-      files, pdfObjects, pages, usedPages
-    } = splitter
+    const { files, pdfObjects, pages, usedPages } = splitter
 
     return (
       <div>
         {_.size(pdfObjects) === 0 && (
           <div className="loading">
-            <img src="/static/images/loading-states/three-dots-blue.svg" alt="" />
+            <img
+              src="/static/images/loading-states/three-dots-blue.svg"
+              alt=""
+            />
             <p>Loading Documents</p>
           </div>
         )}
@@ -60,7 +77,9 @@ class PDF extends React.Component {
             <div className="heading">
               <span className="page-title">{files[id].properties.name}</span>
 
-              <span className="pages-count">({doc.pdfInfo.numPages} pages)</span>
+              <span className="pages-count">
+                ({doc.pdfInfo.numPages} pages)
+              </span>
             </div>
 
             <PageSelector pdfId={id} numPages={doc.pdfInfo.numPages} />
@@ -109,5 +128,6 @@ function mapStateToProps({ deals }) {
 
 export default connect(mapStateToProps, {
   selectSplitterPage,
-  setSplitterPdfObject
+  setSplitterPdfObject,
+  notify
 })(PDF)
