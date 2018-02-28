@@ -9,6 +9,7 @@ import { isEqual } from 'lodash'
 
 import Label from './Label'
 import Editable from '../../Editable'
+import Loading from '../../../components/Loading'
 import Contact from '../../../../../../../models/contacts'
 import {
   deleteAttributes,
@@ -99,15 +100,7 @@ const MultiFields = ({
         </li>
       )
     })}
-    {isSaving && (
-      <div className="c-contact-details__saving-cover">
-        <span style={{ color: '#2196f3' }}>
-          <i className="fa fa-spin fa-spinner" />
-          {'  '}
-          Saving ...
-        </span>
-      </div>
-    )}
+    {isSaving && <Loading />}
   </ul>
 )
 

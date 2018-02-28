@@ -8,6 +8,7 @@ import withHandlers from 'recompose/withHandlers'
 import { upsertContactAttributes } from '../../../../../../store_actions/contacts'
 import Field from './Field'
 import Title from './Title'
+import Loading from '../../components/Loading'
 
 const Names = ({ names, upsertAttribute, handelOnDelete, isSaving }) => (
   <div className="c-contact-profile-card">
@@ -32,6 +33,7 @@ const Names = ({ names, upsertAttribute, handelOnDelete, isSaving }) => (
                 onDelete={handelOnDelete}
               />
             ))}
+        {isSaving && <Loading />}
       </ul>
     </div>
   </div>
