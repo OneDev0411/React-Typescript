@@ -51,9 +51,9 @@ class PDF extends React.Component {
               }". it's damaged or not readable. ${e.message}`
 
         notify({
-          title: 'Splitting Error',
+          title: 'Cannot open pdf file',
           message,
-          status: 'error'
+          status: 'warning'
         })
 
         if (invalidFilesCount === _.size(splitter.files)) {
