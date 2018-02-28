@@ -27,6 +27,12 @@ class Tags extends React.Component {
       deleteAttributes
     } = this.props
 
+    if (newTags.length === 0 && removedTags.length === 0) {
+      return this.setState({
+        isOpenModal: false
+      })
+    }
+
     this.setState({
       isOpenModal: false,
       saving: true
@@ -41,7 +47,6 @@ class Tags extends React.Component {
       }))
 
       await addNewAttributes({ contactId, attributes })
-      await getContactsTags()
     }
 
     if (removedTags.length > 0) {
@@ -49,6 +54,8 @@ class Tags extends React.Component {
 
       await deleteAttributes({ contactId, attributesIds })
     }
+
+    await getContactsTags()
 
     this.setState({
       saving: false
