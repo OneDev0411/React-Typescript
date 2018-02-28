@@ -31,7 +31,7 @@ class PDF extends React.Component {
 
     const { splitter, setSplitterPdfObject, resetSplitter } = this.props
 
-    let validFiles = 0
+    let invalidFilesCount = 0
 
     _.each(splitter.files, async pdf => {
       const url = pdf.file.preview || pdf.file.url
@@ -39,9 +39,10 @@ class PDF extends React.Component {
       try {
         const doc = await PDFJS.getDocument(url)
 
-        validFiles += 1
         setSplitterPdfObject(pdf.id, doc)
       } catch (e) {
+        invalidFilesCount += 1
+
         const message =
           e.name === 'PasswordException'
             ? `Sorry "${pdf.file.name}" is password protected.`
@@ -54,12 +55,12 @@ class PDF extends React.Component {
           message,
           status: 'error'
         })
+
+        if (invalidFilesCount === _.size(splitter.files)) {
+          resetSplitter()
+        }
       }
     })
-
-    if (validFiles === 0) {
-      resetSplitter()
-    }
   }
 
   onSelectPage(pageNumber, pdfId) {
