@@ -19,14 +19,13 @@ const MultiFields = ({
   name,
   title,
   fields,
+  labels,
   isSingle,
   isSaving,
   validator,
   placeholder,
   handleParse,
   handleFormat,
-  labelTitles,
-  defaultLabel,
   validationText,
   handelOnDelete,
   upsertAttribute,
@@ -62,12 +61,12 @@ const MultiFields = ({
                   data-balloon={item.is_primary ? 'Primary' : 'Set Primary'}
                 />
               )}
-            {labelTitles ? (
+            {labels ? (
               <Label
+                name={name}
                 field={item}
+                labels={labels}
                 disabled={isSaving}
-                labelTitles={labelTitles}
-                defaultLabel={defaultLabel}
                 onChange={handleLabelOnChange}
               />
             ) : (

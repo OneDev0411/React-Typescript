@@ -15,13 +15,13 @@ export default function Details({ contact }) {
 
       <Phones contact={contact} />
 
-      <Companies contact={contact} />
-
-      <Websites contact={contact} />
-
       <JobTitles contact={contact} />
 
+      <Companies contact={contact} />
+
       <Birthdays contact={contact} />
+
+      <Websites contact={contact} />
 
       <OrginalSource contact={contact} />
     </div>

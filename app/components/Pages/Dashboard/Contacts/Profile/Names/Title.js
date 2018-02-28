@@ -2,12 +2,21 @@ import React from 'react'
 import Dropdown from '../../components/Dropdown'
 
 const OPTIONS = {
-  '-': '-',
-  Mr: 'Mr',
-  Ms: 'Ms',
-  Mrs: 'Mrs',
-  Miss: 'Miss',
-  Dr: 'Dr'
+  default: {
+    title: 'Mr'
+  },
+  ms: {
+    title: 'Ms'
+  },
+  mrs: {
+    title: 'Mrs'
+  },
+  miss: {
+    title: 'Miss'
+  },
+  dr: {
+    title: 'Dr'
+  }
 }
 
 class Title extends React.Component {
@@ -30,14 +39,14 @@ class Title extends React.Component {
       <li className="c-contact-details-item">
         <label className="c-contact-details-item__label">Title</label>
         <span
-          className="c-contact-details-item__field"
           style={{ paddingLeft: '4px' }}
+          className="c-contact-details-item__field"
         >
           <Dropdown
-            defaultTitle="Mr"
+            name="title"
             options={OPTIONS}
             disabled={disabled}
-            selectedItem={field.legal_prefix}
+            defaultTitle={field.legal_prefix}
             handleOnSelect={this.handleOnSelect}
           />
         </span>

@@ -15,20 +15,20 @@ class Label extends React.Component {
   }
 
   render() {
-    const { field, disabled, defaultLabel, labelTitles } = this.props
+    const { name, field, disabled, labels } = this.props
+    const { id, label, is_primary } = field
 
     return (
       <span
         className={cn('c-contact-details-item__field__label-select', {
-          'is-active': field.id && field.is_primary
+          'is-active': id && is_primary
         })}
       >
         <Dropdown
-          title={field.label}
+          name={name}
+          options={labels}
           disabled={disabled}
-          options={labelTitles}
-          selectedItem={field.label}
-          defaultTitle={defaultLabel}
+          defaultTitle={label}
           handleOnSelect={this.handleOnSelect}
         />
       </span>

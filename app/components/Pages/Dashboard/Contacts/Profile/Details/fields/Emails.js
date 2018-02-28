@@ -2,8 +2,9 @@ import React from 'react'
 import MultiFields from '../components/MultiFields'
 
 const LABEL_OPTIONS = {
-  personal: 'Personal Email',
-  business: 'Business Email'
+  default: { title: 'Email' },
+  personal: { title: 'Personal Email' },
+  business: { title: 'Business Email' }
 }
 
 export default function Emails({ contact }) {
@@ -18,9 +19,8 @@ export default function Emails({ contact }) {
       type="email"
       name="emails"
       contact={contact}
-      defaultLabel="Email"
       validator={validator}
-      labelTitles={LABEL_OPTIONS}
+      labels={LABEL_OPTIONS}
       placeholder="example@gmail.com"
       validationText="Invalid email."
     />
