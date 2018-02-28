@@ -35,7 +35,6 @@ class ContactProfile extends React.Component {
     this.handleAddNote = this.handleAddNote.bind(this)
     this.handleChangeStage = this.handleChangeStage.bind(this)
     this.onChangeAttribute = this.onChangeAttribute.bind(this)
-    this.handleOnChangeAddress = this.handleOnChangeAddress.bind(this)
   }
 
   componentDidMount() {
@@ -63,27 +62,6 @@ class ContactProfile extends React.Component {
 
   async onChangeAttribute({ contactId, attributes }) {
     return this.props.upsertContactAttributes({
-      contactId,
-      attributes
-    })
-  }
-
-  async handleOnChangeAddress(address, field, id, text) {
-    const { upsertContactAttributes, contact: { id: contactId } } = this.props
-    const { street_name, city, state, postal_code } = address
-    const attributes = [
-      {
-        id,
-        city,
-        state,
-        postal_code,
-        street_name,
-        [field]: text,
-        type: 'address'
-      }
-    ]
-
-    return upsertContactAttributes({
       contactId,
       attributes
     })

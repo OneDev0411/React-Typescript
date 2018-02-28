@@ -68,13 +68,20 @@ const enhance = compose(
 
       try {
         const [field] = fields
-        const { type, id: fieldId } = field
+        const { type: fieldType, id: fieldId } = field
         const address = getAddress({ fieldId, contact })
+        let { is_primary } = address
+
+        if (is_primary == null) {
+          is_primary = true
+        }
 
         const attributes = [
           {
             ...address,
-            [type]: field[type]
+            is_primary,
+            type: 'address',
+            [fieldType]: field[fieldType]
           }
         ]
 
@@ -134,10 +141,10 @@ function getAddresses(contact) {
   const addresses = Contact.get.addresses(contact)
 
   const addressFields = {
-    street_name: '-',
-    city: '-',
-    state: '-',
-    postal_code: '-'
+    street_name: '',
+    city: '',
+    state: '',
+    postal_code: ''
   }
 
   const getTitle = field =>
