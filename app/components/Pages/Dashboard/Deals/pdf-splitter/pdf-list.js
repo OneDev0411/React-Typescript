@@ -31,6 +31,8 @@ class PDF extends React.Component {
 
     const { splitter, setSplitterPdfObject } = this.props
 
+    let splitErroesLength = 0
+
     _.each(splitter.files, async pdf => {
       const url = pdf.file.preview || pdf.file.url
 
@@ -39,18 +41,22 @@ class PDF extends React.Component {
 
         setSplitterPdfObject(pdf.id, doc)
       } catch (e) {
-        this.props.resetSplitter()
+        splitErroesLength++
 
         const message =
           e.name === 'PasswordException'
-            ? 'Sorry this document is password protected.'
-            : e.message
+            ? `Sorry ${pdf.file.name} is password protected.`
+            : `Sorry ${pdf.file.name} is not splitting. ${e.message}`
 
         notify({
           title: 'Splitting Error',
           message,
           status: 'error'
         })
+      }
+
+      if (splitErroesLength === Object.keys(splitter.files).length) {
+        this.props.resetSplitter()
       }
     })
   }
