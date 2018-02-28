@@ -29,9 +29,9 @@ class PDF extends React.Component {
     /* eslint-disable max-len */
     await import('pdfjs-dist/web/compatibility' /* webpackChunkName: "pdf.comp" */)
 
-    const { splitter, setSplitterPdfObject } = this.props
+    const { splitter, setSplitterPdfObject, resetSplitter } = this.props
 
-    let splitErroesLength = 0
+    let validFiles = 0
 
     _.each(splitter.files, async pdf => {
       const url = pdf.file.preview || pdf.file.url
@@ -39,14 +39,15 @@ class PDF extends React.Component {
       try {
         const doc = await PDFJS.getDocument(url)
 
+        validFiles += 1
         setSplitterPdfObject(pdf.id, doc)
       } catch (e) {
-        splitErroesLength++
-
         const message =
           e.name === 'PasswordException'
-            ? `Sorry ${pdf.file.name} is password protected.`
-            : `Sorry ${pdf.file.name} is not splitting. ${e.message}`
+            ? `Sorry "${pdf.file.name}" is password protected.`
+            : `Sorry we can't open "${
+                pdf.file.name
+              }". it's damaged or not readable. ${e.message}`
 
         notify({
           title: 'Splitting Error',
@@ -54,11 +55,11 @@ class PDF extends React.Component {
           status: 'error'
         })
       }
-
-      if (splitErroesLength === Object.keys(splitter.files).length) {
-        this.props.resetSplitter()
-      }
     })
+
+    if (validFiles === 0) {
+      resetSplitter()
+    }
   }
 
   onSelectPage(pageNumber, pdfId) {
