@@ -41,7 +41,7 @@
 
 .c-contact-details-item__field__label-select {
   button.dropdown-toggle {
-    color: inherit;
+    color: #444;
   }
 
   &.is-active {
@@ -75,3 +75,14 @@
   display: inline-block;
 }
 
+.c-contact-details--address {
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: solid 1px #e5e7ea;
+
+  &:last-child {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+  }
+}

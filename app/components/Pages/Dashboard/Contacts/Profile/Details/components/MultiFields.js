@@ -228,7 +228,7 @@ export default enhance(MultiFields)
 function initializeFields(props) {
   const { name, type, contact, defaultLabel } = props
 
-  const fields = Contact.get.attribute({
+  const fields = Contact.get.attributes({
     type,
     name,
     contact

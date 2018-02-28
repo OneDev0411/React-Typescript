@@ -153,10 +153,10 @@ Contact.get = {
     let list = []
 
     _.each(context.sub_contacts, sub => {
-      const address = Contact.get._sort(sub.attributes.addresses)
+      const { addresses } = sub.attributes
 
-      if (address) {
-        list.push(address)
+      if (addresses && addresses.length > 0) {
+        list = [...list, ...addresses]
       }
     })
 
@@ -219,7 +219,8 @@ Contact.get = {
       ...list
     }
   },
-  attribute: ({ contact, name, type }) => Contact.get._all(contact, name, type),
+  attributes: ({ contact, name, type }) =>
+    Contact.get._all(contact, name, type),
   companies: context => Contact.get._all(context, 'companies', 'company')
 }
 

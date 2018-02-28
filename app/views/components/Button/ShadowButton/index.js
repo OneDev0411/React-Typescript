@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 const propTypes = {
   color: PropTypes.string,
+  hoverColor: PropTypes.string,
   onClick: PropTypes.func.isRequired
 }
 
@@ -13,6 +14,12 @@ const ShadowButton = styled.button`
   color: ${props => props.color};
   border-width: 0;
   background: transparent;
+
+  ${props =>
+    !props.disabled &&
+    `&:hover {
+    color: ${props.hoverColor};
+  }`};
 `
 
 ShadowButton.propTypes = propTypes
