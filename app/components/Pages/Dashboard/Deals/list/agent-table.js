@@ -115,7 +115,7 @@ class AgentTable extends BaseTable {
       return Deal.get.side(deal)
     }
 
-    const { user: relatedRoleUser } = relatedRole
+    const { user: relatedRoleUser } = roles[relatedRole]
 
     return (
       <OverlayTrigger
@@ -170,7 +170,7 @@ class AgentTable extends BaseTable {
             }}
           >
             {relatedRoleUser && relatedRoleUser.last_name
-              ? `: ${relatedRole.user.last_name}`
+              ? `: ${relatedRoleUser.last_name}`
               : ''}
           </span>
         </div>
