@@ -60,7 +60,7 @@ export default compose(
             }
           ]
 
-          console.log(attributes, image)
+          // console.log(attributes, image)
 
           await addNewAttributes({ contactId, attributes })
         } catch (error) {

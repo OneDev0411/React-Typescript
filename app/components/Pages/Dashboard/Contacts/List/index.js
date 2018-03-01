@@ -1,21 +1,28 @@
 import React, { Fragment } from 'react'
+import _ from 'underscore'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import Avatar from 'react-avatar'
-import _ from 'underscore'
-import Contact from '../../../../../models/contacts'
-import Stage from '../components/Stage'
-import NoContact from './no-contact'
-import Header from './header'
 import ReactTable from 'react-table'
-import Loading from '../../../../Partials/Loading'
-import { Container } from '../components/Container'
-import NoSearchResults from '../../../../Partials/no-search-results'
+import Avatar from 'react-avatar'
+
+import Contact from '../../../../../models/contacts'
+
 import {
   selectContacts,
   isFetchingContactsList
 } from '../../../../../reducers/contacts/list'
-import { upsertContactAttributes } from '../../../../../store_actions/contacts'
+import {
+  deleteContact,
+  upsertContactAttributes
+} from '../../../../../store_actions/contacts'
+
+import Header from './header'
+import NoContact from './no-contact'
+import Stage from '../components/Stage'
+import Loading from '../../../../Partials/Loading'
+import { Container } from '../components/Container'
+import NoSearchResults from '../../../../Partials/no-search-results'
+import TrachIcon from '../../../../../views/components/SvgIcons/TrashIcon'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -24,9 +31,14 @@ function openContact(id) {
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      filter: ''
+      filter: '',
+      deletingContact: null
     }
+
+    this.handleOnDelete = this.handleOnDelete.bind(this)
+
     this.columns = [
       {
         Header: () => (
@@ -98,10 +110,40 @@ class ContactsList extends React.Component {
         id: 'source',
         accessor: contact => Contact.get.source(contact).label,
         Cell: ({ original: contact }) => Contact.get.source(contact).label
+      },
+      {
+        id: 'delete',
+        width: 36,
+        className: 'c-contacts-list__delete',
+        accessor: contact => contact.id,
+        Cell: ({ original: contact }) => {
+          const isDisabled = this.state.deletingContact === contact.id
+
+          return (
+            <button
+              disabled={isDisabled}
+              className="c-button--shadow"
+              onClick={event => this.handleOnDelete(event, contact.id)}
+            >
+              <TrachIcon size={24} color="#cecece" />
+            </button>
+          )
+        }
       }
     ]
 
     this.onChangeStage = this.onChangeStage.bind(this)
+  }
+
+  async handleOnDelete(event, contactId) {
+    event.stopPropagation()
+
+    this.setState({ deletingContact: contactId })
+
+    const { deleteContact } = this.props
+
+    await deleteContact(contactId)
+    this.setState({ deletingContact: null })
   }
 
   async onChangeStage(stage, contact) {
@@ -153,6 +195,7 @@ class ContactsList extends React.Component {
   }
 
   render() {
+    const { deletingContact } = this.state
     const { user, isFetching, contactsList, loadingImport } = this.props
     const contactsCount = contactsList.length
 
@@ -200,9 +243,20 @@ class ContactsList extends React.Component {
             showPaginationBottom={false}
             data={Object.values(filteredContacts)}
             columns={this.columns}
-            getTdProps={(state, rowInfo) => ({
-              onClick: () => openContact(rowInfo.original.id)
-            })}
+            getTrProps={(state, { original: { id: contactId } }) => {
+              if (deletingContact === contactId) {
+                return {
+                  style: {
+                    opacity: 0.5,
+                    ponterEvents: 'none'
+                  }
+                }
+              }
+
+              return {
+                onClick: () => openContact(contactId)
+              }
+            }}
           />
         )}
       </div>
@@ -223,6 +277,7 @@ function mapStateToProps({ user, contacts }) {
   }
 }
 
-export default connect(mapStateToProps, { upsertContactAttributes })(
-  ContactsList
-)
+export default connect(mapStateToProps, {
+  deleteContact,
+  upsertContactAttributes
+})(ContactsList)
