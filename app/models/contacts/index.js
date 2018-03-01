@@ -160,17 +160,6 @@ Contact.get = {
       }
     })
 
-    if (list.length === 0) {
-      list = [
-        {
-          street_name: '-',
-          city: '-',
-          state: '-',
-          postal_code: '-'
-        }
-      ]
-    }
-
     return list
   },
   birthdays: context => {

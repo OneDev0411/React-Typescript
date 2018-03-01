@@ -1,5 +1,5 @@
 import React from 'react'
-import Editable from '../../Editable'
+import Editable from '../../../Editable'
 
 export default function Field({ field, ...props }) {
   return (

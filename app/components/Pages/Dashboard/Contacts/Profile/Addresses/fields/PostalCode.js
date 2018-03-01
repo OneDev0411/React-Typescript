@@ -8,7 +8,7 @@ export default function PostalCodeField(props) {
     <Field
       placeholder="65619"
       validator={validator}
-      validationText="Please include numbers. You have added a letter or special character."
+      validationText="Please include numbers and dash. You have added a letter or special character."
       {...props}
     />
   )

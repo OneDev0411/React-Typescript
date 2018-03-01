@@ -6,19 +6,25 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import {
-  upsertContactAttributes,
-  deleteAttributes
+  addNewAttributes,
+  deleteAttributes,
+  upsertContactAttributes
 } from '../../../../../../store_actions/contacts'
 import Contact from '../../../../../../models/contacts'
+
+import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
+
+import Label from '../Details/components/Label'
+import Loading from '../../components/Loading'
+
 import City from './fields/City'
 import State from './fields/State'
 import Street from './fields/Street'
 import PostalCode from './fields/PostalCode'
-import Label from '../Details/components/Label'
-import Loading from '../../components/Loading'
-import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
+import AddAddressModal from './components/AddAddressModal'
 
-const LABELS_OPTIONS = {
+export const LABELS_OPTIONS = {
   home: {
     title: 'Home Address'
   },
@@ -32,13 +38,31 @@ const LABELS_OPTIONS = {
 
 const Addresses = ({
   addresses,
+  isOpenModal,
+  setShowModal,
+  handleOnCloseModal,
   handleLabelOnChange,
   handleDeleteAddress,
+  handleAddNewAddress,
   handelOnChangePrimary,
   ...props
 }) => (
   <div className="c-contact-profile-card">
-    <h3 className="c-contact-profile-card__title">Addresses</h3>
+    <div
+      className="c-contact-profile-card__header"
+      style={{ position: 'relative' }}
+    >
+      <h3 className="c-contact-profile-card__title">Addresses</h3>
+      {addresses.length > 0 && (
+        <ActionButton
+          disabled={props.disabled}
+          onClick={() => setShowModal(true)}
+          style={{ position: 'absolute', top: '-6px', right: 0 }}
+        >
+          Add new address
+        </ActionButton>
+      )}
+    </div>
     <div className="c-contact-profile-card__body">
       {addresses.length > 0 ? (
         <div style={{ position: 'relative' }}>
@@ -46,8 +70,6 @@ const Addresses = ({
             const { id, fields, label, is_primary } = address
             const { street_name, city, state, postal_code } = fields
             const labelField = { id, label, type: 'label' }
-
-            console.log(address)
 
             return (
               <ul
@@ -112,9 +134,24 @@ const Addresses = ({
           {props.disabled && <Loading />}
         </div>
       ) : (
-        <div>No Address</div>
+        <div className="c-contact-details--address__no-address">
+          <p>
+            <i className="fa fa-building" />
+            <span>No Address</span>
+          </p>
+          <ActionButton onClick={() => setShowModal(true)}>
+            Add new address
+          </ActionButton>
+        </div>
       )}
     </div>
+
+    <AddAddressModal
+      isOpen={isOpenModal}
+      submitting={props.disabled}
+      handleOnSubmit={handleAddNewAddress}
+      handleOnClose={props.disabled ? () => {} : () => setShowModal(false)}
+    />
   </div>
 )
 
@@ -130,9 +167,11 @@ function mapStateToProps(state, props) {
 const enhance = compose(
   connect(mapStateToProps, {
     deleteAttributes,
+    addNewAttributes,
     upsertContactAttributes
   }),
   withState('disabled', 'setDisabled', false),
+  withState('isOpenModal', 'setShowModal', false),
   withHandlers({
     onChange: ({
       contact,
@@ -264,6 +303,28 @@ const enhance = compose(
         setDisabled(false)
       }
     }
+  }),
+  withHandlers({
+    handleAddNewAddress: ({
+      contactId,
+      setDisabled,
+      setShowModal,
+      addNewAttributes
+    }) => async values => {
+      setDisabled(true)
+
+      try {
+        const attributes = [{ type: 'address', ...values }]
+
+        await addNewAttributes({ contactId, attributes })
+      } catch (error) {
+        setDisabled(false)
+        throw error
+      } finally {
+        setDisabled(false)
+        setShowModal(false)
+      }
+    }
   })
 )
 
@@ -278,6 +339,10 @@ function getAddress({ fieldId, contact }) {
 function getAddresses(contact) {
   let addresses = Contact.get.addresses(contact)
 
+  if (addresses.length === 0) {
+    return []
+  }
+
   const addressFields = {
     street_name: '',
     city: '',
@@ -290,17 +355,6 @@ function getAddresses(contact) {
       .split('_')
       .map(i => i.charAt(0).toUpperCase() + i.substr(1, i.length))
       .join(' ')
-
-  if (addresses.length === 0) {
-    addresses = [
-      {
-        id: undefined,
-        label: 'Address',
-        fields: addressFields,
-        is_primary: true
-      }
-    ]
-  }
 
   return addresses.map(address => {
     const { id, is_primary, label } = address
