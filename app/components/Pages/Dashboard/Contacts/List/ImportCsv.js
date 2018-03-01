@@ -5,7 +5,7 @@ import HelpIcon from '../../Partials/Svgs/HelpIcon'
 import OutlookIcon from '../../Partials/Svgs/Outlook'
 import GoogleIcon from '../../Partials/Svgs/Google'
 import { Dropdown, MenuItem } from 'react-bootstrap'
-import { uplaodCsv } from '../../../../../store_actions/contacts/import-contacts'
+import { uplaodCsv, getContacts } from '../../../../../store_actions/contacts'
 
 class ImportCSV extends React.Component {
   async onDropFiles(files) {

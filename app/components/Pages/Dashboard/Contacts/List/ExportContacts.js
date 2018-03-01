@@ -3,12 +3,9 @@ import { connect } from 'react-redux'
 import {
   getContacts,
   removeImportResult
-} from '../../../../../store_actions/contact'
+} from '../../../../../store_actions/contacts'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
-import ModalImportLoading from './ModalImportLoading'
 import config from '../../../../../../config/public'
-import { getActiveTeamId } from '../../../../../utils/user-teams'
-import Excel from '../../Partials/Svgs/Excel'
 
 class ImportOutlook extends React.Component {
   constructor(props) {
