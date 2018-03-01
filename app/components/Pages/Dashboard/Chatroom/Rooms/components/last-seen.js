@@ -31,10 +31,6 @@ class LastSeen extends React.Component {
       return 'Online'
     }
 
-    if (userStatus.last_seen_at) {
-      return this.agoTime(userStatus.last_seen_at)
-    }
-
     if (!user.last_seen_at) {
       return 'Offline'
     }

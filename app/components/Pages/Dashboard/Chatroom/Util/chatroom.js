@@ -39,8 +39,9 @@ export default class Chatroom {
     }
 
     // sort messages list based on
-    const messages = _.sortBy(chatroom.messages,
-      (list, roomId) => priorityList.indexOf(roomId))
+    const messages = _.sortBy(chatroom.messages, (list, roomId) =>
+      priorityList.indexOf(roomId)
+    )
 
     messages.forEach(async object => {
       const { list } = object
@@ -66,12 +67,14 @@ export default class Chatroom {
     // send request server to remove this room
     ChatroomModel.leaveRoom(userId, room)
 
-    store.dispatch(batchActions([
-      removeRoom(room.id),
-      removeRoomMessages(room.id),
-      closeChatPopup(room.id),
-      changeActiveRoom(null)
-    ]))
+    store.dispatch(
+      batchActions([
+        removeRoom(room.id),
+        removeRoomMessages(room.id),
+        closeChatPopup(room.id),
+        changeActiveRoom(null)
+      ])
+    )
   }
 
   /**
@@ -95,10 +98,10 @@ export default class Chatroom {
   /**
    * open chat popup
    */
-  static openPopup(room, activate = true) {
+  static openPopup(room, forceOpen = true) {
     store.dispatch(addChatPopup(room))
 
-    if (activate) {
+    if (forceOpen) {
       store.dispatch(changeActiveRoom(room))
       Chatroom.focusOnPopupInput(room)
     }
@@ -127,19 +130,21 @@ export default class Chatroom {
   /**
    * open new chat
    */
-  static openChat(room, activate = true) {
-    if (activate) {
+  static openChat(room, forceOpen = true) {
+    if (forceOpen) {
       ChatNotification.clear(room)
     }
 
     if (window && window.location.pathname.includes('/recents/')) {
       browserHistory.push(`/dashboard/recents/${room}?redirect=room`)
       store.dispatch(changeActiveRoom(room))
-    } else {
-      // open popup if not minimized (if activate=true open it anyway)
-      if (!Chatroom.isMinimized(room) || activate) {
-        Chatroom.openPopup(room, activate)
-      }
+
+      return true
+    }
+
+    // open popup if not minimized (if forceOpen=true open it anyway)
+    if (!Chatroom.isMinimized(room) || forceOpen) {
+      Chatroom.openPopup(room, forceOpen)
     }
   }
 }

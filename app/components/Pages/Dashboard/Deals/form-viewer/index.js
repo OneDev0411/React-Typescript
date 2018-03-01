@@ -3,9 +3,10 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import extractDocumentOfTask from '../utils/extract-document-of-task'
-import { getDeal } from '../../../../../store_actions/deals'
+import { getDeal, displaySplitter } from '../../../../../store_actions/deals'
 import FileView from './file-view'
 import EnvelopeView from './envelope-view'
+import uuid from '../../../../../utils/uuid'
 import config from '../../../../../../config/public'
 
 class FormViewer extends React.Component {
@@ -150,7 +151,19 @@ class FormViewer extends React.Component {
     )
   }
 
-  onClose() {
+  splitPDF(file) {
+    this.props.displaySplitter([
+      {
+        id: uuid(),
+        file: { url: file.url },
+        properties: { name: file.name }
+      }
+    ])
+
+    this.closeForm()
+  }
+
+  closeForm() {
     const { deal, location } = this.props
     const { query } = location
     let url = `/dashboard/deals/${deal.id}`
@@ -180,7 +193,7 @@ class FormViewer extends React.Component {
       return (
         <EnvelopeView
           deal={deal}
-          onClose={() => this.onClose()}
+          onClose={() => this.closeForm()}
           file={file}
           envelope={envelopes[params.objectId]}
         />
@@ -190,10 +203,11 @@ class FormViewer extends React.Component {
     return (
       <FileView
         deal={deal}
-        onClose={() => this.onClose()}
+        onClose={() => this.closeForm()}
         toggleFactsheet={() => this.toggleFactsheet()}
         toggleComments={() => this.toggleComments()}
-        editForm={() => this.editForm()}
+        editFormHandler={() => this.editForm()}
+        splitPdfHandler={file => this.splitPDF(file)}
         file={file}
         fileType={params.type || 'digital-form'}
         task={tasks[params.taskId]}
@@ -218,4 +232,6 @@ function mapStateToProps({ user, deals }, props) {
   }
 }
 
-export default connect(mapStateToProps, { getDeal })(FormViewer)
+export default connect(mapStateToProps, { getDeal, displaySplitter })(
+  FormViewer
+)

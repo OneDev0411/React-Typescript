@@ -1,4 +1,5 @@
 import React from 'react'
+import cn from 'classnames'
 import ManualAddress from './manual-address'
 import MlsSearch from '../dashboard/mls-listing/search'
 
@@ -40,11 +41,11 @@ export default class DealAddress extends React.Component {
 
   render() {
     const { showManualAddress, showMlsSearch } = this.state
-    const { dealAddress, dealSide, onRemoveAddress } = this.props
+    const { hasError, dealAddress, dealSide, onRemoveAddress } = this.props
 
     return (
       <div className="form-section deal-address">
-        <div className="hero">
+        <div className={cn('hero', { hasError })}>
           What is the address of the subject property?&nbsp;
           <span className="required">*</span>
         </div>
@@ -62,55 +63,49 @@ export default class DealAddress extends React.Component {
           onSelectListing={mls => this.onCreateAddress(mls)}
         />
 
-        {
-          dealAddress ?
-            <div className="address-info">
-              <img
-                alt="listing not available"
-                src={this.getListingImage(dealAddress)}
-              />
-              <span className="name">
-                {dealAddress.address_components.street_number}&nbsp;
-                {dealAddress.address_components.street_name}&nbsp;
-                {dealAddress.address_components.street_suffix}
-              </span>
+        {dealAddress ? (
+          <div className="address-info">
+            <img
+              alt="listing not available"
+              src={this.getListingImage(dealAddress)}
+            />
+            <span className="name">
+              {dealAddress.address_components.street_number}&nbsp;
+              {dealAddress.address_components.street_name}&nbsp;
+              {dealAddress.address_components.street_suffix}
+            </span>
 
-              <span
-                className="remove-address"
-                onClick={onRemoveAddress}
-              >
+            <span className="remove-address" onClick={onRemoveAddress}>
               Remove Address
-              </span>
-            </div> :
-            <div>
-
-              {
-                dealSide === BUYING &&
-                <div
-                  className="entity-item address new"
-                  onClick={() => this.toggleMlsModal()}
-                >
-                  <span className="add-item">
-                    <span className="icon">+</span>
-                    <span className="text">Enter MLS #</span>
-                  </span>
-                </div>
-              }
-
+            </span>
+          </div>
+        ) : (
+          <div>
+            {dealSide === BUYING && (
               <div
                 className="entity-item address new"
-                onClick={() => this.toggleManualAddressModal()}
+                onClick={() => this.toggleMlsModal()}
               >
                 <span className="add-item">
                   <span className="icon">+</span>
-                  <span className="text">
-                    { dealSide === BUYING ? 'Or manually input' : 'Add address' }
-                  </span>
+                  <span className="text">Enter MLS #</span>
                 </span>
               </div>
-            </div>
-        }
+            )}
 
+            <div
+              className="entity-item address new"
+              onClick={() => this.toggleManualAddressModal()}
+            >
+              <span className="add-item">
+                <span className="icon">+</span>
+                <span className="text">
+                  {dealSide === BUYING ? 'Or manually input' : 'Add address'}
+                </span>
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     )
   }

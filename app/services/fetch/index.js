@@ -1,6 +1,5 @@
 import _ from 'underscore'
 import SuperAgent from 'superagent'
-import nock from 'nock'
 import store from '../../stores'
 import config from '../../../config/public'
 
@@ -74,14 +73,6 @@ export default class Fetch {
       .split(/[?#]/)[0] // remove query string
       .replace('/', '') // change first slash to null
       .replace(/(?!^)\//g, '-') // change the rest slashes to dash
-  }
-
-  mock({ endpoint, method, statusCode, response }) {
-    const endpointKey = this.getEndpointKey(endpoint)
-
-    return nock(`${config.app.url}/api/proxifier`)
-      [method || 'post'](`/${endpointKey}`)
-      .reply(statusCode || 200, response)
   }
 
   get(endpoint) {

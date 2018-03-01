@@ -33,7 +33,8 @@ const ComposeWrapper = ({
   onChangeRecipients,
   OnLeaveClick,
   directRoom,
-  confirmation
+  confirmation,
+  roomUsers
 }) =>
   (
     <div style={{ display: inline ? 'inline' : 'block' }}>
@@ -102,6 +103,7 @@ const ComposeWrapper = ({
             <Compose
               dropDownBox={dropDownBox}
               onChangeRecipients={recipients => onChangeRecipients(recipients)}
+              roomUsers={roomUsers}
             />
           }
 

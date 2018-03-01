@@ -39,7 +39,11 @@ webpackConfig.plugins.push(
   }),
   new webpack.optimize.UglifyJsPlugin({
     sourceMap: true,
-    output: { comments: false }
+    parallel: true,
+    cache: true,
+    uglifyOptions: {
+      output: { comments: false }
+    }
   }),
   new ExtractTextPlugin({
     filename: appConfig.compile.cssBundle,

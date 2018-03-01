@@ -52,7 +52,7 @@ class Compose extends React.Component {
       rooms = await this.searchInRooms(this.criteria)
     }
 
-    const contacts = await this.searchInContacts(this.criteria)
+    const contacts = await this.searchInContacts(this.criteria.toLowerCase())
 
     this.createListView(rooms, contacts)
 
@@ -67,13 +67,27 @@ class Compose extends React.Component {
     // flatten sources
     const entries = [].concat.apply([], sources)
 
+    const { roomUsers } = this.props
+
+    let existingUserIds = {}
+    let filtered = false
+
+    roomUsers.forEach(item => (existingUserIds[item.id] = item.id))
+
     // remove duplicates
     let viewList = _.chain(entries)
       .sortBy(entry => ['user', 'email', 'phone_number'].indexOf(entry.type))
       .uniq(entry => entry.email || entry.phone_number || entry.id)
+      .filter(entry => {
+        if (!existingUserIds[entry.id]) {
+          return true
+        } else if (!filtered) {
+          filtered = true
+        }
+      })
       .value()
 
-    if (_.size(viewList) === 0) {
+    if (_.size(viewList) === 0 && !filtered) {
       viewList = await this.createNewEntry()
     }
 
@@ -149,13 +163,13 @@ class Compose extends React.Component {
       // search in contact's users
       const users_list = contact.users || []
       const users = users_list
-        .filter(user => user.display_name.includes(q))
+        .filter(user => user.display_name.toLowerCase().includes(q))
         .map(user => this.createListItem('user', user))
 
       // search in contact's emails
       const emails_list = Contact.get.emails(contact) || []
       const emails = emails_list
-        .filter(item => item.email.includes(q))
+        .filter(item => item.email.toLowerCase().includes(q))
         .map(email => this.createListItem('email', email))
 
       // search in contact's phone
@@ -308,7 +322,12 @@ class Compose extends React.Component {
 Compose.propTypes = {
   searchInRooms: PropTypes.bool,
   dropDownBox: PropTypes.bool,
-  onChangeRecipients: PropTypes.func.isRequired
+  onChangeRecipients: PropTypes.func.isRequired,
+  roomUsers: PropTypes.array
+}
+
+Compose.defaultProps = {
+  roomUsers: []
 }
 
 function mapStateToProps({ contacts: { list } }) {

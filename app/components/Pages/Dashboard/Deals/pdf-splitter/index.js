@@ -14,6 +14,10 @@ class PDFSplitter extends React.Component {
     super(props)
   }
 
+  componentWillUnmount() {
+    this.props.resetSplitter()
+  }
+
   closeSplitter() {
     const { splitter, confirmation, resetSplitter } = this.props
 
@@ -54,7 +58,10 @@ class PDFSplitter extends React.Component {
               <PDFList />
             </div>
 
-            <div className="workspace" ref={ref => (this.workspaceContainer = ref)}>
+            <div
+              className="workspace"
+              ref={ref => (this.workspaceContainer = ref)}
+            >
               <Workspace deal={deal} />
             </div>
           </div>

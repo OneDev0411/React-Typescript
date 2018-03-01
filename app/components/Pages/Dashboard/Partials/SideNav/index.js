@@ -67,7 +67,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
 
         <SideNavItem isActive={activePath === 'MAP'}>
           <Link to="/dashboard/mls" className="c-app-sidenav__item__title">
-            MLS
+          Properties
           </Link>
         </SideNavItem>
 

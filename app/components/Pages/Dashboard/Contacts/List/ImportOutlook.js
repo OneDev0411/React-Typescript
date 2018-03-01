@@ -55,7 +55,7 @@ class ImportOutlook extends React.Component {
           }
         >
           <button
-            className="c-button--shadow "
+            className="button c-button--shadow"
             onClick={() => {
               this.loginWindows = window.open(
                 this.url,

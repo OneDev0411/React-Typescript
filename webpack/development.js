@@ -18,10 +18,7 @@ webpackConfig.entry = [
   appConfig.compile.entry
 ]
 
-webpackConfig.plugins.push(
-  new webpack.HotModuleReplacementPlugin()
-  // new webpack.NoEmitOnErrorsPlugin(),
-)
+webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
 
 if (process.env.notify) {
   webpackConfig.plugins.push(new WebpackNotifierPlugin({ alwaysNotify: true }))

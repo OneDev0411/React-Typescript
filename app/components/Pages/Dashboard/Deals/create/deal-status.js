@@ -1,36 +1,47 @@
 import React from 'react'
-import _ from 'underscore'
+import cn from 'classnames'
 import RadioButton from '../components/radio'
-
-// list of statuses
-const statuses = [
-  'Active Contingent',
-  'Active Kick Out',
-  'Active Option Contract',
-  'Pending'
-]
+import { getStatusColorClass } from '../../../../../utils/listing'
 
 export default ({
-  clients, dealStatus, onChangeDealStatus, display
-}) => (
-  <div className="form-section deal-status">
-    <div className="hero">
-      What is the status of the deal? <span className="required">*</span>
-    </div>
+  hasError,
+  property_type,
+  dealStatus,
+  onChangeDealStatus
+}) => {
+  const statuses = property_type.includes('Lease')
+    ? ['Lease', 'Lease Contract', 'Leased']
+    : [
+        'Active Contingent',
+        'Active Kick Out',
+        'Active Option Contract',
+        'Pending'
+      ]
 
-    {statuses.map((name, key) => (
-      <div key={key} className="inline">
-        <RadioButton
-          selected={dealStatus === name}
-          title={
-            <span>
-              <span className="status-color" />
-              {name}
-            </span>
-          }
-          onClick={() => onChangeDealStatus(name)}
-        />
+  return (
+    <div className="form-section deal-status">
+      <div className={cn('hero', { hasError })}>
+        What is the status of the deal? <span className="required">*</span>
       </div>
-    ))}
-  </div>
-)
+
+      {statuses.map((name, key) => (
+        <div key={key} className="inline">
+          <RadioButton
+            selected={dealStatus === name}
+            title={
+              <span>
+                <span
+                  className="status-color"
+                  style={{ background: getStatusColorClass(name) }}
+                />
+
+                {name}
+              </span>
+            }
+            onClick={() => onChangeDealStatus(name)}
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
