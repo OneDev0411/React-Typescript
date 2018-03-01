@@ -124,7 +124,7 @@ export function deleteBrand(brand) {
 
     dispatch({ type: types.HIDE_SPINNER })
 
-    if (response && !response.error && response.body.status === 'success') {
+    if (response && !response.error) {
       dispatch(_deleteBrand(brand))
     } else {
       dispatch(
