@@ -10,7 +10,6 @@ import ListingsPanel from '../components/ListingsPanels'
 import DeleteAlertModal from './components/DeleteAlertModal'
 
 import actions from '../../../../../store_actions/listings/alerts'
-import getAlert from '../../../../../models/listings/alerts/get-alert'
 import { selectListings as selectAlerts } from '../../../../../reducers/listings'
 
 class Alerts extends Component {
@@ -43,10 +42,11 @@ class Alerts extends Component {
     }
   }
 
-  _getAlertFeed(alert) {
+  async _getAlertFeed(alert) {
     const { getAlertFeed, clearAlertNotification } = this.props
     const { id, room, new_recommendations } = alert
-    getAlertFeed(id, room)
+
+    await getAlertFeed(id, room)
 
     if (parseInt(new_recommendations, 10) > 0) {
       setTimeout(() => clearAlertNotification(id, room), 5000)
@@ -117,6 +117,7 @@ const mapStateToProps = ({ data, alerts }) => {
   let selectedAlertListings = []
   const feedIsFetching = feed.isFetching
   const feedIsLoaded = Object.keys(feed.byAlertId).length > 0
+
   if (selectedAlertId && feedIsLoaded && !feedIsFetching) {
     selectedAlertListings = feed.byAlertId[selectedAlertId] || []
   }

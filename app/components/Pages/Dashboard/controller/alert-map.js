@@ -1,7 +1,7 @@
 // controller/alert-map.js
 import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
-import ContactModel from '../../../../models/Contact'
+import ContactModel from '../../../../models/contacts'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import Brand from '../../../../controllers/Brand'
 
@@ -16,6 +16,7 @@ const controller = {
 
     // TODO refactor notifications
     let summaries
+
     if (data.notifications && data.notifications.summary) {
       summaries = data.notifications.summary.room_notification_summaries
     }
@@ -24,9 +25,11 @@ const controller = {
       return false
     }
 
-    summaries.forEach((summary) => {
+    summaries.forEach(summary => {
       const user_created_alert_ids = summary.user_created_alert_ids
-      if (user_created_alert_ids &&
+
+      if (
+        user_created_alert_ids &&
         user_created_alert_ids.indexOf(alert_id) !== -1
       ) {
         result = true
@@ -54,9 +57,11 @@ const controller = {
   getBounds(points) {
     const google = window.google
     const bound = new google.maps.LatLngBounds()
-    points.forEach((point) => {
+
+    points.forEach(point => {
       bound.extend(new google.maps.LatLng(point.latitude, point.longitude))
     })
+
     return bound.getCenter()
   },
 
@@ -109,7 +114,8 @@ const controller = {
 
     if (alert.mls_areas) {
       const mls_areas = []
-      alert.mls_areas.forEach((mls_area) => {
+
+      alert.mls_areas.forEach(mls_area => {
         mls_areas.push([mls_area.number, mls_area.parent])
       })
       options.mls_areas = mls_areas
@@ -134,6 +140,7 @@ const controller = {
     // Fit points on map
     const google = window.google
     const bounds = new google.maps.LatLngBounds()
+
     // Reset poly
     if (window.poly) {
       window.poly.setMap(null)
@@ -141,9 +148,9 @@ const controller = {
     }
 
     if (alert.points) {
-      alert.points.forEach((point) => {
-        const location = new google.maps
-          .LatLng(point.latitude, point.longitude)
+      alert.points.forEach(point => {
+        const location = new google.maps.LatLng(point.latitude, point.longitude)
+
         bounds.extend(location)
       })
 
@@ -167,6 +174,7 @@ const controller = {
     }
 
     const history = require('../../../../utils/history')
+
     history.default.push(`/dashboard/mls/alerts/${alert.id}`)
 
     if (AppStore.data.show_alert_viewer) {
@@ -203,6 +211,7 @@ const controller = {
   markAsRead(alert_id, room_id) {
     const data = AppStore.data
     const user = data.user
+
     ListingDispatcher.dispatch({
       action: 'mark-recs-as-read',
       alert_id,
@@ -213,6 +222,7 @@ const controller = {
 
   showAlertViewer() {
     AppStore.data.show_alert_viewer = true
+
     const data = AppStore.data
     const current_alert = data.current_alert
 

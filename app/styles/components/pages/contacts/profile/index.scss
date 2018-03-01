@@ -3,30 +3,20 @@
 @import './card';
 @import './note';
 @import './activities';
+@import './detailes';
+@import './c-editable-textarea';
+@import './new-address-modal';
 
 .profile {
-  @extend %contact-editable;
-  @extend %contact-header;
   @extend %contact-activities;
-  @extend %contact-card;
   @extend %contact-timeline;
-  @extend %contact-note;
 
   .content {
     display: flex;
     flex-direction: row;
-    margin: 0 21px;
+    padding: 2em;
     min-height: calc(100vh - 85px);
-
-    .stage {
-      padding: 5px 0 20px 0;
-      .title {
-        border-bottom: none;
-        font-weight: normal;
-        margin-bottom: 0px;
-      }
-    }
-
+    
     .left-pane {
       width: 31%;
       margin-right: 20px;

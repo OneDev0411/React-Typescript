@@ -1,104 +1,214 @@
 import React from 'react'
-import TextInput from './textinput'
-import TextArea from './textarea'
 import cn from 'classnames'
+import PropTypes from 'prop-types'
 
-class Editable extends React.Component {
+const propTypes = {
+  handleParse: PropTypes.func,
+  handleFormat: PropTypes.func
+}
+
+const defaultProps = {
+  handleParse: t => t,
+  handleFormat: t => t
+}
+
+class EditableInput extends React.Component {
   constructor(props) {
     super(props)
+
+    const { field, handleFormat } = props
+
+    const value = field[field.type]
+    const text = handleFormat(value) || ''
+
     this.state = {
-      editMode: false,
-      text: props.text
+      text,
+      error: false,
+      isActive: false
     }
 
-    this.input = props.multiline ? TextArea : TextInput
+    this.onChange = this.onChange.bind(this)
+    this.handelOnDelete = this.handelOnDelete.bind(this)
   }
 
-  onClickEdit() {
-    this.setState({ editMode: true }, () => {
-      // select all texts inside input
-      this.text_input.select()
-    })
-  }
+  async onChange(event) {
+    const { validator } = this.props
+    const text = event.target.value
 
-  onClickAdd() {
-    const { onAdd, type, attributeName } = this.props
+    if (typeof validator === 'function') {
+      if (text) {
+        const error = await validator(text)
 
-    if (onAdd) {
-      onAdd({ attributeName, attributeType: type })
-    }
-  }
-
-  onCloseEdit() {
-    const { onChange, type, id } = this.props
-    const { text } = this.state
-
-    if (onChange && text.length > 0 && text !== this.props.text) {
-      onChange(type, id, text)
-    } else if (text.length === 0) {
-      this.setState({ text: '-' })
+        this.setState({ text, error: !error })
+      } else {
+        this.setState({ text, error: true })
+      }
     }
 
-    this.setState({ editMode: false })
+    this.setState({ text })
   }
 
-  nl2br(input) {
-    return input
-      .split('\n')
-      .map((text, key) => <div key={`editable_item___line_${key}`}>{text}</div>)
+  onFocus = event => {
+    event.target.select()
+
+    this.setState({ isActive: true })
+  }
+
+  onBlur = () => {
+    const { error, text } = this.state
+    const { field, handleFormat } = this.props
+    const fieldValue = field[field.type]
+
+    if (error || !text) {
+      return this.setState(
+        {
+          error: false,
+          isActive: false,
+          text: fieldValue || text
+        },
+        () => this.$input.blur()
+      )
+    }
+
+    if (handleFormat(fieldValue) !== text) {
+      return this.onSubmit()
+    }
+
+    this.setState(
+      {
+        error: false,
+        isActive: false
+      },
+      () => this.$input.blur()
+    )
+  }
+
+  onSubmit = () => {
+    const { text, error } = this.state
+    const { onChange, field, handleParse, handleFormat } = this.props
+    const { type } = field
+    const fieldPreviousValue = field[type]
+
+    if (error || !text) {
+      return false
+    }
+
+    if (
+      typeof onChange === 'function' &&
+      handleFormat(fieldPreviousValue) !== text
+    ) {
+      onChange([{ ...field, [type]: handleParse(text) }])
+    }
+
+    this.setState({ isActive: false })
+  }
+
+  onClickEdit = () => {
+    this.$input.focus()
+  }
+
+  handelOnDelete() {
+    const { field, onDelete } = this.props
+
+    this.setState(
+      {
+        text: ''
+      },
+      () => {
+        onDelete(field)
+      }
+    )
+  }
+
+  handleOnKeyUp = event => {
+    const { field, handleFormat } = this.props
+
+    if (event.keyCode === 27) {
+      this.setState(
+        {
+          text: handleFormat(field[field.type]) || '',
+          error: false,
+          isActive: false
+        },
+        () => {
+          this.$input.blur()
+        }
+      )
+    }
+
+    if (event.keyCode === 13) {
+      this.onSubmit()
+    }
   }
 
   render() {
     const {
-      multiline,
-      placeholder,
+      field,
+      onAdd,
       showAdd,
-      showEdit,
-      validate,
-      error,
-      index
+      disabled,
+      placeholder,
+      validationText
     } = this.props
-    const { text, editMode } = this.state
-    const TextInput = this.input
-
-    if (editMode) {
-      return (
-        <div className={cn('contact-editable', { error })}>
-          <TextInput
-            value={text}
-            placeholder={placeholder}
-            lines={text.split('\n').length || 1}
-            onChange={e => {
-              this.setState({ text: e.target.value })
-
-              if (e.target.value !== '' && e.target.value !== '-') {
-                validate(index, e.target.value)
-              }
-            }}
-            onBlur={() => this.onCloseEdit()}
-            onClose={() => this.onCloseEdit()}
-            inputRef={el => (this.text_input = el)}
-          />
-        </div>
-      )
-    }
+    const { text, error, isActive } = this.state
 
     return (
-      <div className={cn('contact-editable', { error })}>
-        <div onClick={() => this.onClickEdit()} className="text">
-          {multiline ? this.nl2br(text) : text}
-        </div>
+      <div
+        className={cn('c-editable-field', {
+          error,
+          'is-active': isActive,
+          disabled
+        })}
+      >
+        <input
+          value={text}
+          disabled={disabled}
+          onBlur={this.onBlur}
+          onFocus={this.onFocus}
+          onChange={this.onChange}
+          onKeyUp={this.handleOnKeyUp}
+          placeholder={placeholder}
+          ref={el => (this.$input = el)}
+          className="c-editable-field__input"
+        />
 
-        <div className={`control ${multiline ? 'multiline' : ''}`}>
-          {showEdit && (
-            <i className="fa fa-pencil" onClick={() => this.onClickEdit()} />
-          )}
+        {error && (
+          <span
+            data-balloon-visible
+            data-balloon-pos="up"
+            data-balloon-length="large"
+            data-balloon={validationText}
+            className="c-field-balloon c-field-balloon--error"
+          />
+        )}
+
+        <div className={cn('c-editable-field__controlers')}>
+          <span
+            data-balloon="Edit"
+            data-balloon-pos="up"
+            className="c-editable-field__controlers__item"
+          >
+            <i className="fa fa-pencil" onClick={this.onClickEdit} />
+          </span>
 
           {showAdd && (
-            <i
-              className="fa fa-plus-circle"
-              onClick={() => this.onClickAdd()}
-            />
+            <span
+              data-balloon-pos="up"
+              data-balloon={`Add new ${field.type}`}
+              className="c-editable-field__controlers__item"
+            >
+              <i onClick={onAdd} className="fa fa-plus-circle" />
+            </span>
+          )}
+
+          {field.id && (
+            <span
+              data-balloon-pos="up"
+              data-balloon="Delete"
+              className="c-editable-field__controlers__item"
+            >
+              <i onClick={this.handelOnDelete} className="fa fa-trash" />
+            </span>
           )}
         </div>
       </div>
@@ -106,9 +216,7 @@ class Editable extends React.Component {
   }
 }
 
-Editable.defaultProps = {
-  validate: () => {},
-  error: false
-}
+EditableInput.propTypes = propTypes
+EditableInput.defaultProps = defaultProps
 
-export default Editable
+export default EditableInput

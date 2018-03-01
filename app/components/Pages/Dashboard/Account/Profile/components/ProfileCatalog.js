@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import FormCard from './FormCard'
 import AvatarUploader from './AvatarUploader'
 

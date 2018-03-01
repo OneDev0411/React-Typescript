@@ -38,7 +38,9 @@
       min-height: 30px;
       align-items: center;
       cursor: pointer;
-
+      &.disabled {
+        cursor: inherit;
+      }
       &:not(.disabled):hover {
         border: 1px dashed #2196f3;
         padding: 0 3px;

@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Avatar from '../../../Avatar/index'
-import { extractUserInfoFromContact } from '../../../../../models/Contact'
 
 const Container = styled.div`
   height: 48px;
@@ -29,9 +28,7 @@ const propTypes = {
 
 function ContactItem(props) {
   const { item, onClickHandler } = props
-  const {
-    phone_number, legal_full_name, email, display_name
-  } = item
+  const { phone_number, legal_full_name, email, display_name } = item
   const title = legal_full_name || display_name
   const summary = [email, phone_number].filter(i => i && i !== title).join(', ')
 

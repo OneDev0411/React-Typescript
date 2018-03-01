@@ -6,7 +6,8 @@ const Container = styled.div`
   height: 48px;
   display: flex;
   align-items: center;
-  padding: 0 2rem;
+  justify-content: flex-end;
+  padding: 0 16px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 `
 

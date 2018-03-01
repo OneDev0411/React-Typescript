@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
 
-import Avatar from 'react-avatar'
-import Contact from '../../../../../../models/Contact'
+import Avatar from './components/Avatar'
+import Contact from '../../../../../../models/contacts'
 import LastSeen from '../../../Chatroom/Rooms/components/last-seen'
 import Chatroom from '../../../Chatroom/Util/chatroom'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 class Info extends React.Component {
   constructor(props) {
@@ -74,33 +74,25 @@ class Info extends React.Component {
     const { contact } = this.props
 
     return (
-      <div className="card contact-info">
-        <Avatar
-          className="avatar"
-          round
-          name={Contact.get.name(contact)}
-          src={Contact.get.avatar(contact)}
-          size={90}
-        />
+      <div className="c-contact-info c-contact-profile-card">
+        <Avatar contact={contact} />
 
-        <div className="detail">
-          <div className="name">{Contact.get.name(contact)}</div>
+        <div className="c-contact-info__detail">
+          <div className="c-contact-info__name">
+            {Contact.get.name(contact)}
+          </div>
 
-          <div className="status">
+          <div className="c-contact-info__status">
             {contact.users && <LastSeen user={contact.users[0]} />}
           </div>
 
-          <Button
-            bsStyle="primary"
+          <ActionButton
             disabled={isCreatingRoom}
             onClick={this.handleOnClickChat}
-            style={{
-              marginTop: '1em',
-              padding: '0.25em 1em'
-            }}
+            style={{ marginTop: '1em' }}
           >
             {isCreatingRoom ? 'Connecting...' : 'Chat'}
-          </Button>
+          </ActionButton>
         </div>
       </div>
     )

@@ -14,7 +14,7 @@ const getAlertFeed = (alertId, roomId) => (dispatch, getState) => {
 
   const feedListings = feed.byAlertId[alertId]
 
-  if (feedListings && Array.isArray(feedListings)) {
+  if (Array.isArray(feedListings) && feedListings.length > 0) {
     return Promise.resolve()
   }
 

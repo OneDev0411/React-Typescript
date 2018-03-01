@@ -1,10 +1,10 @@
-import types from '../../constants/contact'
+import * as types from '../../constants/contacts'
 
 export default (state = false, action) => {
   switch (action.type) {
-    case types.SHOW_SPINNER:
+    case types.CONTACTS__SHOW_SPINNER:
       return true
-    case types.HIDE_SPINNER:
+    case types.CONTACTS__HIDE_SPINNER:
       return false
     default:
       return state

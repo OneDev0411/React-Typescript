@@ -14,5 +14,5 @@ const Container = styled.div`
 `
 
 export default function Body(props) {
-  return <Container style={props.style}>{props.children}</Container>
+  return <Container {...props}>{props.children}</Container>
 }

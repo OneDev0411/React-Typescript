@@ -1,0 +1,78 @@
+.c-editable-textarea {
+  width: 100%;
+  position: relative;
+
+  &.is-active,
+  &:hover {
+    outline: 1px dashed #2196f3;
+  }
+
+  &.is-saving,
+  &:not(.disabled):not(.is-active):hover .c-editable-field__controlers {
+    visibility: visible;
+  }
+}
+
+.c-editable-textarea__input {
+  width: 100%;
+  height: 150px;
+  display: block;
+  padding: 0.5em;
+  font-size: 1.6rem;
+  resize: none;
+  outline: none;
+  overflow: auto;  // Removes scrollbar
+  border-width: 0;
+
+  &[disabled] {
+    color: #eaeaea;
+  }
+}
+
+.c-editable-textarea__ghost-mode {
+  position: relative;
+  cursor: pointer;
+  font-size: 1.6rem;
+
+  &:hover {
+    color: #eaeaea;
+
+    .c-editable-textarea__ghost-mode__text:before {
+      @extend %absolute-wrapper;
+      content: '';
+      background-color: rgba(255,255,255, 0.7);
+    }
+  
+    .c-editable-textarea__ghost-mode__text:after {
+      @extend %absolute-wrapper;
+      content: 'Click For Edit';
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      color: #444;
+    }
+
+    .c-editable-field__controlers {
+      background-color: transparent;
+    }
+  }
+
+  .c-editable-field__controlers {
+    top: auto;
+    bottom: 4px;
+  }
+}
+
+.c-editable-textarea__ghost-mode__text {
+  position: relative;
+  padding: 0.5em;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.c-editable-textarea__edit-mode__submit-btn {
+  position: absolute;
+  bottom: -31px;
+  right: 0;
+}

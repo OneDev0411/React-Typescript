@@ -8,8 +8,10 @@ import {
   createRoles,
   updateRole
 } from '../../../../../../../store_actions/deals'
-import { addContact } from '../../../../../../../store_actions/contact/add-contact'
-import { upsertAttributes } from '../../../../../../../store_actions/contact/index'
+import {
+  createNewContact,
+  upsertContactAttributes
+} from '../../../../../../../store_actions/contacts'
 import {
   getNewAttributes,
   getUpdatedNameAttribute,
@@ -52,8 +54,8 @@ class AddRoleModal extends React.Component {
       createRoles,
       updateRole,
       notify,
-      addContact,
-      upsertAttributes
+      createNewContact,
+      upsertContactAttributes
     } = this.props
     const { form } = this.state
     const { contact, legal_first_name, legal_last_name } = form
@@ -74,7 +76,7 @@ class AddRoleModal extends React.Component {
         if (!contact) {
           const copyFormData = Object.assign({}, form)
 
-          await addContact(normalizedFormDataAsContact(copyFormData))
+          await createNewContact(normalizedFormDataAsContact(copyFormData))
           this.notifySuccess(`${fullName} has been added to your Contacts.`)
         } else {
           const newAttributes = await getNewAttributes(form)
@@ -85,17 +87,19 @@ class AddRoleModal extends React.Component {
           }
 
           if (nameAttribute || newAttributes.length > 0) {
+            const contactId = form.contact.id
+
             if (nameAttribute && nameAttribute.id) {
-              await upsertAttributes(
-                form.contact.id,
-                'name',
-                [nameAttribute],
-                true
-              )
+              await upsertContactAttributes({
+                contactId,
+                attributes: [nameAttribute]})
             }
 
             if (newAttributes.length > 0) {
-              await upsertAttributes(form.contact.id, '', newAttributes, true)
+              await upsertContactAttributes({
+                contactId,
+                attributes: newAttributes
+              })
             }
 
             this.notifySuccess(
@@ -191,8 +195,8 @@ class AddRoleModal extends React.Component {
 
 export default connect(null, {
   notify,
-  addContact,
   updateRole,
   createRoles,
-  upsertAttributes
+  createNewContact,
+  upsertContactAttributes
 })(AddRoleModal)

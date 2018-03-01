@@ -4,9 +4,10 @@ import PropTypes from 'prop-types'
 import validator from 'validator'
 import _ from 'underscore'
 import Fetch from '../../../services/fetch'
-import Contact from '../../../models/Contact'
+import Contact from '../../../models/contacts'
 import Recipients from './recipients'
 import Suggestions from './suggestions'
+import { selectContacts } from '../../../reducers/contacts/list'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -156,8 +157,9 @@ class Compose extends React.Component {
    */
   async searchInContacts(q) {
     let contacts = []
+    const { contactsList } = this.props
 
-    _.each(this.props.contacts, contact => {
+    _.each(contactsList, contact => {
       // search in contact's users
       const users_list = contact.users || []
       const users = users_list
@@ -328,6 +330,10 @@ Compose.defaultProps = {
   roomUsers: []
 }
 
-export default connect(({ contacts }) => ({
-  contacts: contacts.list
-}))(Compose)
+function mapStateToProps({ contacts: { list } }) {
+  return {
+    contactsList: selectContacts(list)
+  }
+}
+
+export default connect(mapStateToProps)(Compose)

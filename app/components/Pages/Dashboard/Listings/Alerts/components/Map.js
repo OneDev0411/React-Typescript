@@ -15,6 +15,8 @@ import {
 } from '../../../../../../utils/map'
 import { getBounds } from '../../../../../../utils/extendedBounds'
 import * as actions from '../../../../../../store_actions/listings/map'
+import logUserActivity from '../../../../../../models/user/post-new-activity'
+import { setActivityLog } from '../../../../../../store_actions/listings/alerts/set-alert-activity-log'
 
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
@@ -99,18 +101,23 @@ const mapHOC = compose(
       height: 'calc(100vh - 56px)'
     }
   }),
-  connect(({ user, data, alerts }) => {
-    const { map } = alerts
+  connect(
+    ({ user, data, alerts }) => {
+      const { map, loggedAlert } = alerts
 
-    return {
-      map,
-      user,
-      appData: data,
-      mapProps: map.props
-    }
-  }, actions),
+      return {
+        map,
+        user,
+        loggedAlert,
+        appData: data,
+        mapProps: map.props
+      }
+    },
+    { setActivityLog, ...actions }
+  ),
+  withState('isLoggedActivity', 'setIsLoggedActivity', null),
   withHandlers({
-    onGoogleApiLoaded: ({ markers }) => ({ map }) => {
+    onGoogleApiLoaded: () => ({ map }) => {
       window.currentMap = map
 
       if (markersOverlay) {
@@ -129,7 +136,13 @@ const mapHOC = compose(
   }),
   withPropsOnChange(
     (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),
-    ({ markers = [], mapProps, setMapProps, selectedAlert }) => {
+    ({
+      markers = [],
+      mapProps,
+      loggedAlert,
+      selectedAlert,
+      setActivityLog
+    }) => {
       markers = setCssPositionToListingsWithSameBuilding(
         markers.map(marker => ({
           lat: marker.lat,
@@ -137,6 +150,15 @@ const mapHOC = compose(
           points: [marker]
         }))
       )
+
+      if (selectedAlert && selectedAlert.id !== loggedAlert) {
+        logUserActivity({
+          object: selectedAlert,
+          object_class: 'alert',
+          action: 'UserViewedAlert'
+        })
+        setActivityLog(selectedAlert.id)
+      }
 
       if (markersOverlay && markers.length === 0) {
         markersOverlay.setMap(null)

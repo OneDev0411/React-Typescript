@@ -1,66 +1,75 @@
-%contact-editable {
-  .contact-editable {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 4px;
-    position: relative;
-    justify-content: space-between;
+.c-editable-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px;
+  position: relative;
+  justify-content: space-between;
+  cursor: pointer;
 
-    input,
-    textarea {
-      border: none;
-      width: 100%;
-      color: #000;
-      resize: none;
-      padding: 0;
-      &:focus,
-      &:hover {
-        outline: none;
-        box-shadow: none;
-        border: none;
-      }
-    }
+  form {
+    width: 100%;
+  }
 
-    .text {
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    }
+  &.is-active,
+  &:not(.disabled):not(.error):hover {
+    border: 1px dashed #2196f3;
+  }
+  
+  &.error {
+    border: 1px dashed red;
+  }
+}
 
-    .control {
-      display: none;
-      text-align: right;
-      i {
-        cursor: pointer;
-        margin-left: 8px;
-        color: #2196f3;
-        &:hover {
-          color: green;
-        }
-      }
-      &.multiline {
-        i {
-          position: absolute;
-          right: 5px;
-          top: 5px;
-        }
-      }
-    }
 
-    &:hover {
-      border: 1px dashed #2196f3;
-      border-radius: 3px;
-      padding: 3px;
-    }
+.c-editable-field__input {
+  width: 100%;
+  padding: 0;
+  border: none;
+  color: #000;
+  
+  &:focus,
+  &:hover {
+    outline: none;
+    box-shadow: none;
+    border: none;
+  }
 
-    &:hover .control {
-      display: flex;
-    }
-    &.error {
-      border: 1px dashed red;
-      border-radius: 3px;
-      padding: 3px;
-    }
+  &::placeholder {
+    color:#cacaca
+  }
+}
+
+
+
+.c-editable-field__controlers {
+  position: absolute;
+  right: 0;
+  top: 5px;
+  padding-right: 4px;
+  text-align: right;
+  visibility: hidden;
+  background-color: #fff;
+
+  &.is-saving,
+  .c-editable-field:not(.disabled):not(.is-active):hover & {
+    visibility: visible;
+  }
+}
+
+.c-editable-field__controlers__item { 
+  display: inline-block;
+  margin-left: 4px;
+  cursor: pointer;
+  color: #2196f3;
+}
+
+.c-editable-field {
+  [data-balloon][data-balloon-pos="up"]:hover:before, [data-balloon][data-balloon-pos="up"][data-balloon-visible]:before {
+    transform: translate(-50%, -11px);
+  }
+
+  [data-balloon][data-balloon-pos="up"]:hover:after, [data-balloon][data-balloon-pos="up"][data-balloon-visible]:after {
+    transform: translate(-50%, -9px);
   }
 }

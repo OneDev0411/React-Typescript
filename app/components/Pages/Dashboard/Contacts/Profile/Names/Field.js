@@ -1,54 +1,28 @@
 import React from 'react'
-import { compose, withState } from 'recompose'
 import Editable from '../Editable'
 
-const labelStyle = {
-  width: '40%',
-  margin: 0,
-  lineHeight: 2,
-  fontWeight: 'normal'
-}
+function Field({ field, isSaving, onChange, onDelete }) {
+  const { name } = field
 
-function Field({ field, onChange, setErrorIdItem, errorIdItems }) {
-  const { id, name, value, title } = field
-
-  const isValidName = name =>
-    name && name.trim().length > 0 && new RegExp(/^[A-Za-z\s]+$/).exec(name)
-
-  const validate = (index, name) => {
-    if (!isValidName(name)) {
-      setErrorIdItem(errorIdItems.concat(index))
-    } else {
-      setErrorIdItem(errorIdItems.filter(e => e !== index))
-    }
-  }
-
-  const handleOnChange = (type, id, text) => {
-    if (isValidName(text)) {
-      onChange(type, id, text)
-    }
-  }
+  const validator = name => new RegExp(/^[A-Za-z\s]+$/).exec(name)
 
   return (
-    <li>
-      <label htmlFor={name} style={labelStyle} className="name">
-        {title}
-      </label>
-      <div className="data">
+    <li className="c-contact-details-item">
+      <label className="c-contact-details-item__label">{name}</label>
+      <span className="c-contact-details-item__field">
         <Editable
-          id={id}
           showEdit
-          type={name}
-          text={value}
-          index={name}
-          showAdd={false}
-          validate={validate}
-          onChange={handleOnChange}
-          error={errorIdItems.includes(name)}
+          field={field}
+          placeholder="-"
+          disabled={isSaving}
+          onChange={onChange}
+          onDelete={onDelete}
+          validator={field.type === 'nickname' ? null : validator}
+          validationText="Please include only letters and space. You have added a number or special character."
         />
-      </div>
+      </span>
     </li>
   )
 }
 
-export default compose(withState('errorIdItems', 'setErrorIdItem', []))(Field)
+export default Field

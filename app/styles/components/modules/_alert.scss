@@ -39,3 +39,7 @@
   background: url('data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjZDAwMTFiIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik03IDEwbDUgNSA1LTV6Ii8+CiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+Cjwvc3ZnPg==')
     center center no-repeat;
 }
+
+[data-balloon][data-balloon-pos="up"]:hover:before, [data-balloon][data-balloon-pos="up"][data-balloon-visible]:before {
+  transform: translate(-50%, -1px);
+}
