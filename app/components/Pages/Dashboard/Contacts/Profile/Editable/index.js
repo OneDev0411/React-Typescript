@@ -201,15 +201,16 @@ class EditableInput extends React.Component {
             </span>
           )}
 
-          {field.id && (
-            <span
-              data-balloon-pos="up"
-              data-balloon="Delete"
-              className="c-editable-field__controlers__item"
-            >
-              <i onClick={this.handelOnDelete} className="fa fa-trash" />
-            </span>
-          )}
+          {field.id &&
+            text && (
+              <span
+                data-balloon-pos="up"
+                data-balloon="Delete"
+                className="c-editable-field__controlers__item"
+              >
+                <i onClick={this.handelOnDelete} className="fa fa-trash" />
+              </span>
+            )}
         </div>
       </div>
     )

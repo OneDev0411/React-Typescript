@@ -43,7 +43,7 @@ function mapStateToProps(state, props) {
   const { contact: { id: contactId, sub_contacts } } = props
   let { names } = sub_contacts[0].attributes
 
-  names = names ? getNames(names[0]) : []
+  names = Array.isArray(names) ? getNames(names[0]) : getNames()
 
   return { contactId, names }
 }
@@ -63,17 +63,29 @@ const enhance = compose(
       setIsSaving(true)
 
       try {
+        let attributes
         const [field] = fields
         const { type } = field
-        const { names } = contact.sub_contacts[0].attributes
+        let { names } = contact.sub_contacts[0].attributes
 
-        const attributes = [
-          {
-            ...names[0],
-            [type]: field[type],
-            is_primary: true
-          }
-        ]
+        if (names && Object.keys(names).length > 0) {
+          attributes = [
+            {
+              ...names[0],
+              [type]: field[type],
+              is_primary: true
+            }
+          ]
+        } else {
+          attributes = [
+            {
+              type: 'name',
+              id: undefined,
+              is_primary: true,
+              [type]: field[type]
+            }
+          ]
+        }
 
         await upsertContactAttributes({
           contactId,
@@ -120,21 +132,30 @@ const enhance = compose(
 export default enhance(Names)
 
 function getNames(names) {
-  const { id } = names
+  let id
+  let nameAttribute
+
   const nameFields = {
-    legal_prefix: '-',
-    first_name: '-',
-    middle_name: '-',
-    last_name: '-',
-    legal_first_name: '-',
-    legal_middle_name: '-',
-    legal_last_name: '-',
-    nickname: '-'
+    legal_prefix: '',
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    legal_first_name: '',
+    legal_middle_name: '',
+    legal_last_name: '',
+    nickname: ''
   }
 
-  const nameAttribute = {
-    ...nameFields,
-    ...pick(names, Object.keys(nameFields))
+  if (names && Object.keys(names).length > 0) {
+    // eslint-disable-next-line
+    id = names.id
+
+    nameAttribute = {
+      ...nameFields,
+      ...pick(names, Object.keys(nameFields))
+    }
+  } else {
+    nameAttribute = nameFields
   }
 
   const getTitle = name =>
