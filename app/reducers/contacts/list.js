@@ -15,6 +15,15 @@ const byId = (state = {}, action) => {
         ...state,
         ...action.response.entities.contacts
       }
+
+    case actionTypes.DELETE_CONTACT_SUCCESS:
+      const { contacts } = action.response.entities
+
+      if (!contacts) {
+        return {}
+      }
+
+      return contacts
     default:
       return state
   }
@@ -30,6 +39,9 @@ const ids = (state = [], action) => {
 
       // removing duplicates
       return [...new Set(newState)]
+
+    case actionTypes.DELETE_CONTACT_SUCCESS:
+      return action.response.result.contacts
     default:
       return state
   }
