@@ -83,9 +83,7 @@ class ContactsList extends React.Component {
         Cell: ({ original: contact }) => (
           <Stage
             defaultTitle={Contact.get.stage(contact).name}
-            handleOnSelect={stage =>
-              this.onChangeStage(stage, contact, props.upsertContactAttributes)
-            }
+            handleOnSelect={stage => this.onChangeStage(stage, contact)}
           />
         )
       },
@@ -102,9 +100,12 @@ class ContactsList extends React.Component {
         Cell: ({ original: contact }) => Contact.get.source(contact).label
       }
     ]
+
+    this.onChangeStage = this.onChangeStage.bind(this)
   }
 
-  onChangeStage = (stage, contact, handler) => {
+  async onChangeStage(stage, contact) {
+    const { upsertContactAttributes } = this.props
     const { id: contactId } = contact
     const attributes = [
       {
@@ -114,7 +115,7 @@ class ContactsList extends React.Component {
       }
     ]
 
-    handler({ contactId, attributes })
+    await upsertContactAttributes({ contactId, attributes })
   }
 
   onInputChange = filter => this.setState({ filter })

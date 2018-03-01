@@ -66,7 +66,9 @@
     "express": "^4.16.2",
     "express-session": "^1.15.2",
     "extract-text-webpack-plugin": "^3.0.2",
+    "fecha": "^2.3.3",
     "file-loader": "^1.1.6",
+    "final-form": "^4.2.1",
     "flux": "^3.1.3",
     "forever": "^0.15.3",
     "fs-extra": "^5.0.0",
@@ -128,6 +130,7 @@
     "react-dnd-html5-backend": "^2.5.4",
     "react-dom": "^16.2.0",
     "react-dropzone": "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
+    "react-final-form": "^3.1.2",
     "react-ga": "^2.3.5",
     "react-hot-loader": "^3.1.3",
     "react-images": "^0.5.11",
@@ -177,6 +180,7 @@
     "superagent-mocker": "^0.5.2",
     "swipe-js-iso": "^2.0.3",
     "text-mask-addons": "^3.7.1",
+    "timeago.js": "^3.0.2",
     "underscore": "^1.8.3",
     "universal-cookie": "^2.1.2",
     "validator": "^9.2.0",
@@ -215,7 +219,6 @@
     "webpack-dev-middleware": "^2.0.3",
     "webpack-dev-server": "^2.9.7",
     "webpack-hot-middleware": "^2.21.0",
-    "webpack-jarvis": "^0.2.2",
     "webpack-notifier": "^1.5.0"
   }
 }

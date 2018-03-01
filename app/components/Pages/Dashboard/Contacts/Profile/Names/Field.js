@@ -1,39 +1,28 @@
 import React from 'react'
-import { compose, withState } from 'recompose'
 import Editable from '../Editable'
 
-function Field({ field, onChange, setErrorIdItem, errorIdItems }) {
-  const { id, name, value, title } = field
+function Field({ field, isSaving, onChange, onDelete }) {
+  const { name } = field
 
-  const isValidName = name =>
-    name && name.trim().length > 0 && new RegExp(/^[A-Za-z\s]+$/).exec(name)
-
-  const validate = (index, name) => {
-    if (!isValidName(name)) {
-      setErrorIdItem(errorIdItems.concat(index))
-    } else {
-      setErrorIdItem(errorIdItems.filter(e => e !== index))
-    }
-  }
+  const validator = name => new RegExp(/^[A-Za-z\s]+$/).exec(name)
 
   return (
-    <li className="c-contact-detail-item">
-      <label className="c-contact-detail-item__label">{title}</label>
-      <span className="c-contact-detail-item__field">
+    <li className="c-contact-details-item">
+      <label className="c-contact-details-item__label">{name}</label>
+      <span className="c-contact-details-item__field">
         <Editable
-          id={id}
           showEdit
-          type={name}
-          text={value}
-          index={name}
-          showAdd={false}
-          validate={validate}
+          field={field}
+          placeholder="-"
+          disabled={isSaving}
           onChange={onChange}
-          error={errorIdItems.includes(name)}
+          onDelete={onDelete}
+          validator={field.type === 'nickname' ? null : validator}
+          validationText="Please include only letters and space. You have added a number or special character."
         />
       </span>
     </li>
   )
 }
 
-export default compose(withState('errorIdItems', 'setErrorIdItem', []))(Field)
+export default Field

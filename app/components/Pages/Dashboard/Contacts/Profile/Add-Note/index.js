@@ -1,7 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
-import addNewAttributes from '../../../../../../store_actions/contacts/add-new-attributes'
+import AddNoteIcon from '../../../../../../views/components/SvgIcons/AddNote'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 class AddNote extends React.Component {
   constructor(props) {
@@ -9,68 +8,66 @@ class AddNote extends React.Component {
 
     this.state = {
       note: '',
-      saving: false
+      isSaving: false
     }
 
-    this.handelAddNote = this.handelAddNote.bind(this)
+    this.handleAddNote = this.handleAddNote.bind(this)
   }
 
-  async handelAddNote() {
-    const { note } = this.state
-    const { contactId, addNewAttributes } = this.props
+  handleOnChange = event => {
+    this.setState({ note: event.target.value })
+  }
 
-    if (note.trim().length === 0) {
+  async handleAddNote(event) {
+    event.preventDefault()
+
+    const { note } = this.state
+    const { onSubmit } = this.props
+
+    if (!note) {
       return
     }
 
-    this.setState({ saving: true })
+    this.setState({ isSaving: true })
 
     // save note
-    await addNewAttributes({
-      contactId,
-      attributes: [
-        {
-          note,
-          type: 'note'
-        }
-      ]
-    })
+    await onSubmit(note.trim())
 
     this.setState({
-      saving: false,
+      isSaving: false,
       note: ''
     })
-
-    // trigger onSave function
-    this.props.onSave()
   }
 
   render() {
-    const { note, saving } = this.state
+    const { note, isSaving } = this.state
 
     return (
-      <div className="note">
-        <div className="head">
-          <img src="/static/images/contacts/notepad.svg" />
-          New Note
+      <form
+        onSubmit={this.handleAddNote}
+        className="c-add-note c-contact-profile-card"
+      >
+        <div className="c-add-note__header">
+          <AddNoteIcon color="#4A4A4A" />
+          <h3 className="c-add-note__title">New Note</h3>
         </div>
-        <textarea
-          placeholder="Leave a note for yourself."
-          value={note}
-          onChange={e => this.setState({ note: e.target.value })}
-        />
-        <div className="footer">
-          <Button
-            bsStyle="primary"
-            onClick={this.handelAddNote}
-            disabled={saving}
-          >
-            {saving ? 'Saving...' : 'Save'}
-          </Button>
+        <div className="c-add-note__body">
+          <textarea
+            value={note}
+            disabled={isSaving}
+            placeholder="Leave a note for yourself."
+            onChange={this.handleOnChange}
+            className="c-add-note__textarea"
+          />
         </div>
-      </div>
+        <div className="c-add-note__footer">
+          <ActionButton type="submit" disabled={isSaving || !note}>
+            {isSaving ? 'Saving...' : 'Save'}
+          </ActionButton>
+        </div>
+      </form>
     )
   }
 }
 
-export default connect(null, { addNewAttributes })(AddNote)
+export default AddNote

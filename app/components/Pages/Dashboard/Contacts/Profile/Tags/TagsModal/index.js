@@ -13,10 +13,10 @@ export default class extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      _.size(nextProps.tags) !== _.size(this.props.tags) &&
-      _.size(this.props.tags) === _.size(this.state.tags)
-    ) {
+    const nextActiveTags = _.filter(nextProps.tags, item => item.active)
+    const previousActiveTags = _.filter(this.props.tags, item => item.active)
+
+    if (nextActiveTags.length !== previousActiveTags.length) {
       this.setState({
         tags: nextProps.tags
       })

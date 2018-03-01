@@ -1,3 +1,13 @@
+%absolute-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .c-contact-profile-card {
   padding: 1em;
   margin-bottom: 2em;
@@ -15,26 +25,3 @@
   border-bottom: solid 1px #e5e7ea;
 }
 
-.c-contact-detail-item {
-  margin-bottom: .5em;
-  display: flex;
-  align-items: center;
-}
-
-.c-contact-detail-item__label {
-  width: 40%;
-  margin: 0;
-  color: #5b6469;
-  display: inline-block;
-  font-weight: normal;
-}
-
-.c-contact-detail-item__field {
-  width: 60%;
-  color: #9b9b9b;
-  display: inline-block;
-
-  .contact-editable {
-    height: 29px;
-  }
-}

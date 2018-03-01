@@ -10,7 +10,9 @@ import Title from '../components/Title'
 import Name from './Name'
 import Emails from './Emails'
 import Phones from './Phones'
-import createNewContact from '../../../../../store_actions/contacts/create-new-contact'
+
+// eslint-disable-next-line
+import { createNewContact } from '../../../../../store_actions/contacts/create-new-contact'
 
 const HalfColumnContainer = styled.div`
   width: 50%;
@@ -222,16 +224,14 @@ class AddContactModal extends React.Component {
               <HalfColumnContainer>
                 <span style={{ marginRight: '1rem' }}>Stage:</span>
                 <Stage
-                  defaultTitle="General"
-                  selectedItem={this.state.stage}
+                  defaultTitle={this.state.stage}
                   handleOnSelect={stage => this.setState({ stage })}
                 />
               </HalfColumnContainer>
               <HalfColumnContainer>
                 <span style={{ marginRight: '1rem' }}>Title:</span>
                 <Title
-                  defaultTitle="Mr"
-                  selectedItem={this.state.title}
+                  defaultTitle={this.state.title}
                   handleOnSelect={title => this.setState({ title })}
                 />
               </HalfColumnContainer>

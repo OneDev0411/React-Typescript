@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
+import timeago from 'timeago.js'
 import _ from 'underscore'
 import TimelineItem from './item'
 import * as userActions from './userActionsHelper'
@@ -18,7 +18,7 @@ class Timeline extends React.Component {
 
     return {
       ...attributes,
-      ...{ time: moment.unix(activity.created_at).fromNow() }
+      ...{ time: timeago().format(activity.created_at * 1000) }
     }
   }
 

@@ -1,76 +1,29 @@
 import React from 'react'
-import Contact from '../../../../../../models/contacts'
-import Phones from './phones'
-import Emails from './emails'
-import Birthdays from './birthdays'
-import Companies from './companies'
-import Jobs from './jobs'
-import Websites from './websites'
+import Phones from './fields/Phones'
+import Emails from './fields/Emails'
+import Birthdays from './fields/Birthdays'
+import Companies from './fields/Companies'
+import JobTitles from './fields/JobTitles'
+import Websites from './fields/Websites'
+import OrginalSource from './OrginalSource'
 
-export default function Details({ contact, onChangeAttribute }) {
+export default function Details({ contact }) {
   return (
     <div className="c-contact-profile-card">
       <h3 className="c-contact-profile-card__title">Details</h3>
-      <Emails
-        items={Contact.get.attribute({
-          contact,
-          name: 'emails',
-          type: 'email'
-        })}
-        onChangeAttribute={onChangeAttribute}
-      />
+      <Emails contact={contact} />
 
-      <Phones
-        items={Contact.get.attribute({
-          contact,
-          name: 'phone_numbers',
-          type: 'phone_number'
-        })}
-        onChangeAttribute={onChangeAttribute}
-      />
+      <Phones contact={contact} />
 
-      <Birthdays
-        birthdays={Contact.get.attribute({
-          contact,
-          name: 'birthdays',
-          type: 'birthday'
-        })}
-        onChangeAttribute={onChangeAttribute}
-      />
+      <JobTitles contact={contact} />
 
-      <Companies
-        items={Contact.get.attribute({
-          contact,
-          name: 'companies',
-          type: 'company'
-        })}
-        onChangeAttribute={onChangeAttribute}
-      />
+      <Companies contact={contact} />
 
-      <Websites
-        items={Contact.get.attribute({
-          contact,
-          name: 'websites',
-          type: 'website'
-        })}
-        onChangeAttribute={onChangeAttribute}
-      />
+      <Birthdays contact={contact} />
 
-      <Jobs
-        items={Contact.get.attribute({
-          contact,
-          name: 'job_titles',
-          type: 'job_title'
-        })}
-        onChangeAttribute={onChangeAttribute}
-      />
+      <Websites contact={contact} />
 
-      <div className="c-contact-detail-item" style={{ marginBottom: 0 }}>
-        <span className="c-contact-detail-item__label">Original Source</span>
-        <span className="c-contact-detail-item__field">
-          {Contact.get.source(contact).label || '-'}
-        </span>
-      </div>
+      <OrginalSource contact={contact} />
     </div>
   )
 }
