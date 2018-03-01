@@ -5,7 +5,7 @@ import { Dropdown, MenuItem } from 'react-bootstrap'
 const propTypes = {
   name: PropTypes.string.isRequired,
   options: PropTypes.shape({
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     icon: PropTypes.shape({
       color: PropTypes.string,
       name: PropTypes.string.isRequired

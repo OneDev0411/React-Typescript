@@ -34,7 +34,7 @@ const INITIAL_STATE = {
   last_name: '',
   emails: [''],
   phones: [''],
-  title: null,
+  title: 'Mr',
   saving: false,
   invalidFields: [],
   isFormCompleted: false,
@@ -121,6 +121,8 @@ class AddContactModal extends React.Component {
 
   handleAddNewAttribute = attributeName => {
     const fieldName = `${attributeName}s`
+
+    console.log(attributeName)
 
     // The empty string value that have been added,
     // it is just to mapping over the items for generate item in react.

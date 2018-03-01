@@ -15,7 +15,6 @@ export function normalizeNewContact(formData = {}) {
     legal_middle_name,
     legal_last_name,
     stage,
-    legal_prefix,
     emails,
     phone_numbers
   } = formData
@@ -30,7 +29,7 @@ export function normalizeNewContact(formData = {}) {
           first_name,
           middle_name,
           last_name,
-          legal_prefix,
+          legal_prefix: title,
           legal_first_name,
           legal_middle_name,
           legal_last_name
@@ -97,8 +96,9 @@ export function normalizeNewContact(formData = {}) {
 }
 
 function attributeNormalizer({ attributeName, attributeValue }) {
-  return attributeValue.filter(item => item).map(item => ({
+  return attributeValue.filter(item => item).map((item, index) => ({
     type: attributeName,
-    [attributeName]: item
+    [attributeName]: item,
+    is_primary: index === 0
   }))
 }
