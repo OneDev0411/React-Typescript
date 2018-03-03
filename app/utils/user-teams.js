@@ -9,7 +9,14 @@ export function getActiveTeam(user) {
     return []
   }
 
-  return teams.find(team => team.brand.id === getActiveTeamId(user))
+  let activeTeam = teams.find(team => team.brand.id === getActiveTeamId(user))
+
+  if (!activeTeam) {
+    activeTeam = user.teams[0]
+    setActiveTeam(activeTeam.id)
+  }
+
+  return activeTeam
 }
 
 export function getActiveTeamACL(user) {
