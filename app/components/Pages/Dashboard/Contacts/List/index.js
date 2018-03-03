@@ -1,21 +1,31 @@
 import React, { Fragment } from 'react'
+import _ from 'underscore'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import Avatar from 'react-avatar'
-import _ from 'underscore'
-import Contact from '../../../../../models/contacts'
-import Stage from '../components/Stage'
-import NoContact from './no-contact'
-import Header from './header'
 import ReactTable from 'react-table'
-import Loading from '../../../../Partials/Loading'
-import { Container } from '../components/Container'
-import NoSearchResults from '../../../../Partials/no-search-results'
+import Avatar from 'react-avatar'
+import { Dropdown, MenuItem } from 'react-bootstrap'
+import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
+import { confirmation } from '../../../../../store_actions/confirmation'
+
+import Contact from '../../../../../models/contacts'
+
 import {
   selectContacts,
   isFetchingContactsList
 } from '../../../../../reducers/contacts/list'
-import { upsertContactAttributes } from '../../../../../store_actions/contacts'
+import {
+  deleteContact,
+  upsertContactAttributes
+} from '../../../../../store_actions/contacts'
+
+import Header from './header'
+import NoContact from './no-contact'
+import Stage from '../components/Stage'
+import Loading from '../../../../Partials/Loading'
+import { Container } from '../components/Container'
+import NoSearchResults from '../../../../Partials/no-search-results'
+import ShadowButton from '../../../../../views/components/Button/ShadowButton'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -24,9 +34,13 @@ function openContact(id) {
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      filter: ''
+      filter: '',
+      confirmation: null,
+      deletingContact: null
     }
+
     this.columns = [
       {
         Header: () => (
@@ -98,10 +112,70 @@ class ContactsList extends React.Component {
         id: 'source',
         accessor: contact => Contact.get.source(contact).label,
         Cell: ({ original: contact }) => Contact.get.source(contact).label
+      },
+      {
+        id: 'td-delete',
+        Header: '',
+        accessor: '',
+        // accessor: contact => contact.id,
+        className: 'td--dropdown-container',
+        width: 30,
+        Cell: ({ original: contact }) => {
+          const { id: contactId } = contact
+
+          return (
+            <Dropdown
+              pullRight
+              className="c-react-table-menu"
+              id={`cotnact_${contactId}__dropdown`}
+            >
+              <ShadowButton
+                bsRole="toggle"
+                style={{ marginTop: '5px' }}
+                onClick={e => e.stopPropagation()}
+              >
+                <VerticalDotsIcon fill="#D7DEE2" />
+              </ShadowButton>
+
+              <Dropdown.Menu bsRole="menu">
+                <MenuItem
+                  eventKey="Delete"
+                  key={`cotnact_${contactId}__dropdown__item_delete`}
+                  style={{ width: '100%', textAlign: 'left' }}
+                  onClick={event => this.handleOnDelete(event, contact.id)}
+                >
+                  Delete
+                </MenuItem>
+              </Dropdown.Menu>
+            </Dropdown>
+          )
+        }
       }
     ]
 
+    this.handleOnDelete = this.handleOnDelete.bind(this)
     this.onChangeStage = this.onChangeStage.bind(this)
+  }
+
+  handleOnDelete(event, contactId) {
+    event.stopPropagation()
+
+    this.props.confirmation({
+      show: true,
+      confirmLabel: 'Delete',
+      message: 'Delete Cotnact',
+      onConfirm: () => this.handleDeleteContact({ contactId }),
+      description: 'Are you sure you want to delete this contact?'
+    })
+  }
+
+  async handleDeleteContact({ contactId }) {
+    this.setState({ deletingContact: contactId })
+
+    const { deleteContact } = this.props
+
+    await deleteContact(contactId)
+    this.setState({ deletingContact: null })
   }
 
   async onChangeStage(stage, contact) {
@@ -153,6 +227,7 @@ class ContactsList extends React.Component {
   }
 
   render() {
+    const { deletingContact } = this.state
     const { user, isFetching, contactsList, loadingImport } = this.props
     const contactsCount = contactsList.length
 
@@ -200,9 +275,20 @@ class ContactsList extends React.Component {
             showPaginationBottom={false}
             data={Object.values(filteredContacts)}
             columns={this.columns}
-            getTdProps={(state, rowInfo) => ({
-              onClick: () => openContact(rowInfo.original.id)
-            })}
+            getTrProps={(state, { original: { id: contactId } }) => {
+              if (deletingContact === contactId) {
+                return {
+                  style: {
+                    opacity: 0.5,
+                    ponterEvents: 'none'
+                  }
+                }
+              }
+
+              return {
+                onClick: () => openContact(contactId)
+              }
+            }}
           />
         )}
       </div>
@@ -223,6 +309,8 @@ function mapStateToProps({ user, contacts }) {
   }
 }
 
-export default connect(mapStateToProps, { upsertContactAttributes })(
-  ContactsList
-)
+export default connect(mapStateToProps, {
+  confirmation,
+  deleteContact,
+  upsertContactAttributes
+})(ContactsList)

@@ -146,3 +146,19 @@
     }
   }
 }
+
+.td--dropdown-container {
+  .dropdown-menu-right {
+    width: 150px !important;
+  }
+}
+
+.c-react-table-menu {
+  .dropdown-menu {
+    border-width: 0 !important;
+    
+    > li > a {
+      color: red !important;
+    }
+  }
+}
