@@ -153,7 +153,7 @@ const mapHOC = compose(
 
       if (selectedAlert && selectedAlert.id !== loggedAlert) {
         logUserActivity({
-          object: selectedAlert,
+          object: selectedAlert.id,
           object_class: 'alert',
           action: 'UserViewedAlert'
         })

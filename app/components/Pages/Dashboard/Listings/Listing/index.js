@@ -35,7 +35,7 @@ class Listing extends React.Component {
     if (!listing.id) {
       await getListing(listingId)
     } else {
-      this.logActivity(listing)
+      this.logActivity(listingId)
     }
   }
 
