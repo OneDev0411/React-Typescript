@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import ReactTable from 'react-table'
 import Avatar from 'react-avatar'
+import { Dropdown } from 'react-bootstrap'
+import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 
 import Contact from '../../../../../models/contacts'
 
@@ -22,7 +24,7 @@ import Stage from '../components/Stage'
 import Loading from '../../../../Partials/Loading'
 import { Container } from '../components/Container'
 import NoSearchResults from '../../../../Partials/no-search-results'
-import TrachIcon from '../../../../../views/components/SvgIcons/TrashIcon'
+import ShadowButton from '../../../../../views/components/Button/ShadowButton'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -112,21 +114,47 @@ class ContactsList extends React.Component {
         Cell: ({ original: contact }) => Contact.get.source(contact).label
       },
       {
-        id: 'delete',
-        width: 36,
-        className: 'c-contacts-list__delete',
-        accessor: contact => contact.id,
+        id: 'td-delete',
+        Header: '',
+        accessor: '',
+        // accessor: contact => contact.id,
+        className: 'td--dropdown-container',
+        width: 30,
         Cell: ({ original: contact }) => {
           const isDisabled = this.state.deletingContact === contact.id
 
           return (
-            <button
-              disabled={isDisabled}
-              className="c-button--shadow"
-              onClick={event => this.handleOnDelete(event, contact.id)}
+            <Dropdown
+              pullRight
+              id={`file_${contact.id}`}
+              className="deal-file-cta-menu"
             >
-              <TrachIcon size={24} color="#cecece" />
-            </button>
+              <ShadowButton
+                bsRole="toggle"
+                className="cta-btn btn-link"
+                style={{ marginTop: '5px' }}
+                onClick={e => e.stopPropagation()}
+              >
+                <VerticalDotsIcon fill="#D7DEE2" />
+              </ShadowButton>
+
+              <Dropdown.Menu>
+                <li>
+                  {isDisabled ? (
+                    <span>
+                      <i className="fa fa-spinner fa-spin" /> Deleting ...
+                    </span>
+                  ) : (
+                    <ShadowButton
+                      style={{ width: '100%', textAlign: 'left' }}
+                      onClick={event => this.handleOnDelete(event, contact.id)}
+                    >
+                      Delete
+                    </ShadowButton>
+                  )}
+                </li>
+              </Dropdown.Menu>
+            </Dropdown>
           )
         }
       }
