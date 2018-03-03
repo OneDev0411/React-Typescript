@@ -6,6 +6,7 @@ import ReactTable from 'react-table'
 import Avatar from 'react-avatar'
 import { Dropdown, MenuItem } from 'react-bootstrap'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
+import { confirmation } from '../../../../../store_actions/confirmation'
 
 import Contact from '../../../../../models/contacts'
 
@@ -36,6 +37,7 @@ class ContactsList extends React.Component {
 
     this.state = {
       filter: '',
+      confirmation: null,
       deletingContact: null
     }
 
@@ -155,9 +157,19 @@ class ContactsList extends React.Component {
     this.onChangeStage = this.onChangeStage.bind(this)
   }
 
-  async handleOnDelete(event, contactId) {
+  handleOnDelete(event, contactId) {
     event.stopPropagation()
 
+    this.props.confirmation({
+      show: true,
+      confirmLabel: 'Delete',
+      message: 'Delete Cotnact',
+      onConfirm: () => this.handleDeleteContact({ contactId }),
+      description: 'Are you sure you want to delete this contact?'
+    })
+  }
+
+  async handleDeleteContact({ contactId }) {
     this.setState({ deletingContact: contactId })
 
     const { deleteContact } = this.props
@@ -298,6 +310,7 @@ function mapStateToProps({ user, contacts }) {
 }
 
 export default connect(mapStateToProps, {
+  confirmation,
   deleteContact,
   upsertContactAttributes
 })(ContactsList)
