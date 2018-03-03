@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import ReactTable from 'react-table'
 import Avatar from 'react-avatar'
-import { Dropdown } from 'react-bootstrap'
+import { Dropdown, MenuItem } from 'react-bootstrap'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 
 import Contact from '../../../../../models/contacts'
@@ -38,8 +38,6 @@ class ContactsList extends React.Component {
       filter: '',
       deletingContact: null
     }
-
-    this.handleOnDelete = this.handleOnDelete.bind(this)
 
     this.columns = [
       {
@@ -121,38 +119,31 @@ class ContactsList extends React.Component {
         className: 'td--dropdown-container',
         width: 30,
         Cell: ({ original: contact }) => {
-          const isDisabled = this.state.deletingContact === contact.id
+          const { id: contactId } = contact
 
           return (
             <Dropdown
               pullRight
-              id={`file_${contact.id}`}
-              className="deal-file-cta-menu"
+              className="c-react-table-menu"
+              id={`cotnact_${contactId}__dropdown`}
             >
               <ShadowButton
                 bsRole="toggle"
-                className="cta-btn btn-link"
                 style={{ marginTop: '5px' }}
                 onClick={e => e.stopPropagation()}
               >
                 <VerticalDotsIcon fill="#D7DEE2" />
               </ShadowButton>
 
-              <Dropdown.Menu>
-                <li>
-                  {isDisabled ? (
-                    <span>
-                      <i className="fa fa-spinner fa-spin" /> Deleting ...
-                    </span>
-                  ) : (
-                    <ShadowButton
-                      style={{ width: '100%', textAlign: 'left' }}
-                      onClick={event => this.handleOnDelete(event, contact.id)}
-                    >
-                      Delete
-                    </ShadowButton>
-                  )}
-                </li>
+              <Dropdown.Menu bsRole="menu">
+                <MenuItem
+                  eventKey="Delete"
+                  key={`cotnact_${contactId}__dropdown__item_delete`}
+                  style={{ width: '100%', textAlign: 'left' }}
+                  onClick={event => this.handleOnDelete(event, contact.id)}
+                >
+                  Delete
+                </MenuItem>
               </Dropdown.Menu>
             </Dropdown>
           )
@@ -160,6 +151,7 @@ class ContactsList extends React.Component {
       }
     ]
 
+    this.handleOnDelete = this.handleOnDelete.bind(this)
     this.onChangeStage = this.onChangeStage.bind(this)
   }
 
