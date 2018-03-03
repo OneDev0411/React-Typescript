@@ -36,12 +36,8 @@ class Info extends React.Component {
   }
 
   async handleDeleteContact() {
-    console.log(this.props)
-
     const { contact, deleteContact } = this.props
     const { id: contactId } = contact
-
-    console.log(contact)
 
     this.setState({
       isDeleting: true
