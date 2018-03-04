@@ -104,6 +104,9 @@ $border_left_color_2: #f7f7f7;
       &:last-child {
         overflow: hidden;
       }
+      &:focus {
+        outline: none;
+      }
     }
     .rt-resizable-header-content {
       overflow: hidden;
