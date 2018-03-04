@@ -77,7 +77,10 @@
         outline: none;
       }
 
-      &::placeholder {
+      &::placeholder,
+      &::-moz-placeholder, /* Firefox 19+ */
+      &:-ms-input-placeholder, /* IE 10+ */
+      &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
         color: #c6d1db;
         opacity: 1;
       }

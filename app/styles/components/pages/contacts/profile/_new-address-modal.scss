@@ -39,10 +39,6 @@
   border-radius: 3px;
   border: 1px solid #cecece;
 
-  &::placeholder {
-    color:#cacaca
-  }
-
   &:focus {
     outline-width: 2px;
     border-width: 0;
@@ -51,6 +47,8 @@
   .hasError &:focus {
     outline-color: red;
   }
+
+  @include placeholder(#cacaca);
 }
 
 .c-new-address-modal__field--inline {
