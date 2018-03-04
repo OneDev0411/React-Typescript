@@ -21,5 +21,16 @@ export default props => (
       /\d/
     ]}
     {...props}
+    onChange={e => {
+      const maskedValue = e.target.value
+      const originalValue = maskedValue
+        ? maskedValue
+            .replace('(', '')
+            .replace(')', '')
+            .replace(/\-/gi, '')
+        : ''
+
+      props.onChange(e, originalValue)
+    }}
   />
 )
