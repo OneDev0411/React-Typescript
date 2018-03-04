@@ -12,7 +12,7 @@ export default ({ message }) => (
         fontSize: '18px',
         color: '#ec4b35'
       }}
-      className="fa fa-times-circle"
+      className="fa fa-warning"
     />
   </span>
 )
