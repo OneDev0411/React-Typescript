@@ -34,7 +34,7 @@ export default props => {
   }
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', display: 'inline' }}>
       <Input
         placeholder={props.placeholder || ''}
         style={style}
