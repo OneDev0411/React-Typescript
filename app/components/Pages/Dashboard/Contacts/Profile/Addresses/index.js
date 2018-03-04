@@ -26,13 +26,16 @@ import AddAddressModal from './components/AddAddressModal'
 
 export const LABELS_OPTIONS = {
   home: {
+    name: 'Home',
     title: 'Home Address'
   },
-  office: {
-    title: 'Office Address'
+  work: {
+    name: 'Work',
+    title: 'Work Address'
   },
   default: {
-    title: 'Address'
+    name: 'Other',
+    title: 'Other Address'
   }
 }
 
