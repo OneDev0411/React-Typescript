@@ -89,22 +89,24 @@ class Forms extends React.Component {
   async onDropFiles(files) {
     const { newTaskTitle } = this
 
-    const form = {
-      isNew: true,
-      id: null,
-      name: newTaskTitle
-    }
+    if (files && files.length > 0) {
+      const form = {
+        isNew: true,
+        id: null,
+        name: newTaskTitle
+      }
 
-    // create task
-    const task = await this.createTask(form)
+      // create task
+      const task = await this.createTask(form)
 
-    if (task) {
-      this.newTaskTitle = ''
-      this.setState({
-        showNewTaskModal: false
-      })
+      if (task) {
+        this.newTaskTitle = ''
+        this.setState({
+          showNewTaskModal: false
+        })
 
-      this.props.setUploadFiles(files, task)
+        this.props.setUploadFiles(files, task)
+      }
     }
   }
 
