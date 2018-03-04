@@ -15,7 +15,7 @@ export default props => {
 
   return (
     <Input
-      placeholder="$000,000.00"
+      placeholder="$0.00"
       mask={createNumberMask({
         prefix: '$',
         suffix: opt.suffix,
