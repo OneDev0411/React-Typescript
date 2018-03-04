@@ -1,6 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import PropTypes from 'prop-types'
+import { uppercaseFirstLetter } from '../../../../../../utils/helpers'
 
 const propTypes = {
   handleParse: PropTypes.func,
@@ -194,7 +195,10 @@ class EditableInput extends React.Component {
           {showAdd && (
             <span
               data-balloon-pos="up"
-              data-balloon={`Add new ${field.type}`}
+              data-balloon={`Add new ${field.type
+                .split('_')
+                .map(uppercaseFirstLetter)
+                .join(' ')}`}
               className="c-editable-field__controlers__item"
             >
               <i onClick={onAdd} className="fa fa-plus-circle" />
