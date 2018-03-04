@@ -3,16 +3,24 @@ import MultiFields from '../components/MultiFields'
 
 const LABEL_OPTIONS = {
   mobile: {
-    title: 'Cell Phone'
+    name: 'Mobile',
+    title: 'Mobile Phone'
   },
   home: {
+    name: 'Home',
     title: 'Home Phone'
   },
-  office: {
-    title: 'Office Phone'
+  work: {
+    name: 'Work',
+    title: 'Work Phone'
+  },
+  main: {
+    name: 'Main',
+    title: 'Main Phone'
   },
   default: {
-    title: 'Phone'
+    name: 'Other',
+    title: 'Other Phone'
   }
 }
 

@@ -2,9 +2,18 @@ import React from 'react'
 import MultiFields from '../components/MultiFields'
 
 const LABEL_OPTIONS = {
-  default: { title: 'Email' },
-  personal: { title: 'Personal Email' },
-  business: { title: 'Business Email' }
+  personal: {
+    name: 'Personal',
+    title: 'Personal Email'
+  },
+  work: {
+    name: 'Work',
+    title: 'Work Email'
+  },
+  default: {
+    name: 'Other',
+    title: 'Other Email'
+  }
 }
 
 export default function Emails({ contact }) {

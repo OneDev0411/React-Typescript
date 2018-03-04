@@ -31,9 +31,11 @@ function DropDownWithIcon({
   handleOnSelect
 }) {
   let selectedOption = 'default'
-  const selectedOptions = Object.keys(options).filter(
-    option => options[option].title === defaultTitle
-  )
+  const selectedOptions = Object.keys(options).filter(option => {
+    const { name, title } = options[option]
+
+    return name === defaultTitle || title === defaultTitle
+  })
 
   if (selectedOptions.length === 1) {
     ;[selectedOption] = selectedOptions
@@ -60,9 +62,9 @@ function DropDownWithIcon({
         id={`${name}__dropdown`}
         title={selectedOptionTitle}
         onSelect={(option, event) => {
-          const { title } = options[option]
+          const { name, title } = options[option]
 
-          handleOnSelect(handleParse(title))
+          handleOnSelect(handleParse(name || title))
           event.stopPropagation()
         }}
         onClick={event => {
