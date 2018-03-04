@@ -1,10 +1,11 @@
 .c-editable-textarea {
   width: 100%;
   position: relative;
+  border: 1px dashed #fff;
 
   &.is-active,
   &:hover {
-    border: 1px dashed #2196f3;
+    border-color: #2196f3;
   }
 
   &.is-saving,
