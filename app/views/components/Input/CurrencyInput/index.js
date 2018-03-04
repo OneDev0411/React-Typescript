@@ -1,6 +1,7 @@
 import React from 'react'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import Input from 'react-text-mask'
+import _ from 'underscore'
 
 export default props => {
   const opt = Object.assign(
@@ -23,7 +24,7 @@ export default props => {
         allowLeadingZeroes: opt.allowLeadingZeroes,
         allowDecimal: opt.allowDecimal
       })}
-      {...props}
+      {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
       onChange={e => {
         const maskedValue = e.target.value
         const originalValue = maskedValue
