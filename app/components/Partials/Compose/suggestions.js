@@ -4,7 +4,11 @@ import cn from 'classnames'
 import UserAvatar from '../UserAvatar'
 
 export default ({
-  dropDownBox, searching, viewList, onBlurDropDownBox, onAdd
+  dropDownBox,
+  searching,
+  viewList,
+  onBlurDropDownBox,
+  onAdd
 }) => {
   /**
    * get entry hint
@@ -35,7 +39,10 @@ export default ({
   const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
   return (
-    <div className="sg-container u-scrollbar" data-simplebar={!isWebkit || null}>
+    <div
+      className="sg-container u-scrollbar"
+      data-simplebar={!isWebkit || null}
+    >
       <div
         className={cn('suggestions', { dropdown: dropDownBox === true })}
         style={getStyles()}
@@ -46,6 +53,7 @@ export default ({
           <img
             className="loader"
             src="/static/images/loading-states/three-dots-blue.svg"
+            alt=""
           />
         )}
 
@@ -55,7 +63,13 @@ export default ({
             className="item"
             onClick={() => onAdd(recp)}
           >
-            <Col sm={1} xs={1} md={1} className="vcenter" style={{ padding: 0 }}>
+            <Col
+              sm={1}
+              xs={1}
+              md={1}
+              className="vcenter"
+              style={{ padding: 0 }}
+            >
               <UserAvatar
                 showStateIndicator={false}
                 name={recp.display_name}
