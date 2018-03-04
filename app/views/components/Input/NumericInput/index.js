@@ -19,7 +19,15 @@ function validate(props) {
 }
 
 export default props => {
-  const { min, max, ErrorMessageHandler } = props
+  const {
+    min,
+    max,
+    mask,
+    value,
+    placeholder,
+    options,
+    ErrorMessageHandler
+  } = props
   const isValid = validate(props)
 
   const opts = Object.assign(
@@ -27,7 +35,7 @@ export default props => {
       allowNegative: false,
       allowDecimal: false
     },
-    props.options || {}
+    options || {}
   )
 
   const ErrorMessageComponent = ErrorMessageHandler ? (
@@ -41,22 +49,25 @@ export default props => {
   return (
     <div style={{ position: 'relative', display: 'inline' }}>
       <Input
-        placeholder={props.placeholder || ''}
+        placeholder={placeholder || ''}
         style={{
           border: isValid ? '' : '1px solid #ec4b35'
         }}
-        mask={createNumberMask({
-          prefix: '',
-          suffix: '',
-          includeThousandsSeparator: false,
-          allowNegative: opts.allowNegative,
-          allowLeadingZeroes: false,
-          allowDecimal: opts.allowDecimal
-        })}
+        mask={
+          mask ||
+          createNumberMask({
+            prefix: '',
+            suffix: '',
+            includeThousandsSeparator: false,
+            allowNegative: opts.allowNegative,
+            allowLeadingZeroes: false,
+            allowDecimal: opts.allowDecimal
+          })
+        }
         {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
       />
 
-      {props.value && !isValid && ErrorMessageComponent}
+      {value && !isValid && ErrorMessageComponent}
     </div>
   )
 }
