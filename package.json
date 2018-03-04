@@ -8,8 +8,7 @@
   "license": "ISC",
   "scripts": {
     "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
-    "developClient":
-      "NODE_ENV=development notify=true babel-node ./bin/server webpack-dev-server --progress --hot",
+    "developClient": "NODE_ENV=development notify=true babel-node ./bin/server webpack-dev-server --progress --hot",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
     "serve": "NODE_ENV=production forever node_modules/babel-cli/bin/babel-node.js ./bin/server",
@@ -138,7 +137,6 @@
     "react-intercom": "^1.0.14",
     "react-lazy-load": "^3.0.13",
     "react-loadable": "^5.3.1",
-    "react-maskedinput": "^4.0.0",
     "react-modal": "^3.1.11",
     "react-motion": "^0.5.2",
     "react-redux": "^5.0.6",
@@ -150,7 +148,7 @@
     "react-swipe": "5.1.1",
     "react-table": "^6.7.6",
     "react-telephone-input": "^4.3.4",
-    "react-text-mask": "^5.0.1",
+    "react-text-mask": "^5.1.0",
     "react-textarea-autosize": "^5.2.1",
     "react-transition-group": "^2.2.1",
     "react-typist": "^2.0.4",
