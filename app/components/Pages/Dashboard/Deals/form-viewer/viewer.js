@@ -9,13 +9,7 @@ export default ({ width, file, disableKeyboardShortcuts = false }) => {
   const { name, type, url, downloadUrl } = file
 
   return (
-    <div
-      style={{
-        minWidth: width,
-        maxWidth: width
-      }}
-      className="file-viewer"
-    >
+    <div style={{ width }} className="c-deal-form-viewer__viewer">
       {file &&
         type === 'pdf' && (
           <PdfViewer
