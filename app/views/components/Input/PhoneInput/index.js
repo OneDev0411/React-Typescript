@@ -27,6 +27,7 @@ export default props => (
         ? maskedValue
             .replace('(', '')
             .replace(')', '')
+            .replace(/\s/g, '')
             .replace(/\-/gi, '')
         : ''
 
