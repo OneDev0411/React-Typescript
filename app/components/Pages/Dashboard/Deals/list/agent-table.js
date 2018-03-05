@@ -138,7 +138,7 @@ class AgentTable extends BaseTable {
                     </div>
                     <div className="info">
                       <span className="name">
-                        {`${role.legal_first_name} ${role.legal_last_name}`},
+                        {`${role.legal_first_name} ${role.legal_last_name}, `}
                       </span>
 
                       <span className="role">{roleName(role.role)}</span>
