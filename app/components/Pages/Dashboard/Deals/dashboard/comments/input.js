@@ -37,7 +37,11 @@ class CommentCreate extends React.Component {
    */
   async sendComment(attention_requested = null, task_status = null) {
     const {
-      task, user, changeTaskStatus, changeNeedsAttention, notify
+      task,
+      user,
+      changeTaskStatus,
+      changeNeedsAttention,
+      notify
     } = this.props
     const { comment } = this.state
 
@@ -86,16 +90,14 @@ class CommentCreate extends React.Component {
   }
 
   render() {
-    const {
-      comment, rows, height, isSaving
-    } = this.state
-    const { task, onFocus, onBlur } = this.props
+    const { comment, rows, height, isSaving } = this.state
+    const { task, autoFocus, onFocus, onBlur } = this.props
     const hasComment = comment.length > 0
 
     return (
       <div className="deal-comment-create">
         <Textarea
-          autoFocus
+          autoFocus={autoFocus}
           dir="auto"
           placeholder="Write a comment ..."
           rows={rows}
@@ -124,6 +126,10 @@ class CommentCreate extends React.Component {
       </div>
     )
   }
+}
+
+CommentCreate.defaultProps = {
+  autoFocus: true
 }
 
 export default connect(
