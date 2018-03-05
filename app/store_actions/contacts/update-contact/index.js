@@ -4,10 +4,10 @@ import patchContact from '../../../models/contacts/update-contact'
 import * as actionTypes from '../../../constants/contacts'
 import { selectContact } from '../../../reducers/contacts/list'
 
-export function updateContact({ contactId = '', attributes = [] }) {
+export function updateContact({ contactId, attributes }) {
   return async (dispatch, getState) => {
     if (!contactId || attributes.length === 0) {
-      return Promise.resolve()
+      throw new Error('Invalid arguments.')
     }
 
     try {
