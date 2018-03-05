@@ -31,7 +31,12 @@ export default props => {
           ? parseFloat(maskedValue.replace('$', '').replace(/\,/gi, ''))
           : ''
 
-        props.onChange(e, originalValue)
+        const data = {
+          value: originalValue,
+          maskedValue
+        }
+
+        props.onChange(e, data)
       }}
     />
   )
