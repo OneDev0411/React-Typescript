@@ -185,9 +185,9 @@ export default class Editable extends React.Component {
                     maxLength={15}
                     value={this.getValue()}
                     onKeyPress={e => this.onKeyPress(e)}
-                    onChange={(e, originalValue) =>
+                    onChange={(e, data = {}) =>
                       this.setState({
-                        value: originalValue || e.target.value
+                        value: data.value || e.target.value
                       })
                     }
                   />

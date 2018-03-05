@@ -80,10 +80,10 @@ export default class extends React.Component {
                         !field.validate(field, contexts[field.name])
                     })}
                     value={contexts[field.name] || ''}
-                    onChange={(e, originalValue) =>
+                    onChange={(e, data = {}) =>
                       this.onChangeStringContext(
                         field.name,
-                        originalValue || e.target.value
+                        data.value || e.target.value
                       )
                     }
                   />
