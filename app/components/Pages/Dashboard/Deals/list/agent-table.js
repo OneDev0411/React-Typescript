@@ -52,7 +52,7 @@ class AgentTable extends BaseTable {
         className: 'col-md-1 hidden-xs',
         getText: deal =>
           Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0),
-        getValue: this.getPriceValue
+        getValue: deal => this.getPriceValue(deal)
       },
       side: {
         caption: 'SIDE',
@@ -88,15 +88,11 @@ class AgentTable extends BaseTable {
     }
   }
 
-  getPriceValue = deal => {
-    let price = Deal.get.field(deal, 'sales_price')
-
-    if (!price) {
-      price = Deal.get.field(deal, 'list_price')
-    }
-
-    return price
+  getPriceValue(deal) {
+    return Deal.get.field(deal, 'sales_price') || 
+        Deal.get.field(deal, 'list_price')
   }
+  
   getSide(deal, rowId, rowsCount) {
     const { roles } = this.props
 
