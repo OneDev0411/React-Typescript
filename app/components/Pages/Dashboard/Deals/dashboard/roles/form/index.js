@@ -341,8 +341,8 @@ export default class Form extends React.Component {
 
         <InputWithSelect
           title="Email"
+          inputType="Email"
           errorText="Enter a valid email"
-          placeholder="example@gmail.com"
           defaultSelectedItem={form.email}
           isRequired={this.isEmailRequired()}
           isInvalid={invalidFields.includes('email')}
@@ -356,8 +356,8 @@ export default class Form extends React.Component {
 
         <InputWithSelect
           title="Phone"
-          errorText="Enter a valid phone"
-          placeholder="(###) - ### ####"
+          inputType="Phone"
+          errorText="The value is not a valid U.S phone number"
           defaultSelectedItem={form.phone_number}
           isInvalid={invalidFields.includes('phone_number')}
           onChangeHandler={value => this.setForm('phone_number', value)}
@@ -386,6 +386,7 @@ export default class Form extends React.Component {
         {shouldShowCompany && (
           <InputWithSelect
             title="Company"
+            inputType="Text"
             placeholder="Company Name"
             defaultSelectedItem={form.companies}
             onChangeHandler={value => this.setForm('company_title', value)}
