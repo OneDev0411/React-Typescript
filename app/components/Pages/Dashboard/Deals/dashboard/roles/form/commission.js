@@ -1,5 +1,6 @@
 import React from 'react'
-import { toNumber } from '../../../../../../../utils/helpers'
+import NumericInput from '../../../../../../../views/components/Input/NumericInput'
+import CurrencyInput from '../../../../../../../views/components/Input/CurrencyInput'
 
 export default class Commission extends React.Component {
   constructor(props) {
@@ -15,11 +16,9 @@ export default class Commission extends React.Component {
   setCommission(value) {
     const { onChange, validateCommission } = this.props
 
-    if (!validateCommission(value)) {
-      return false
-    }
+    const number = validateCommission(value) ? value : this.getCommissionValue()
 
-    onChange(this.getCommissionField(), parseFloat(value))
+    onChange(this.getCommissionField(), number)
   }
 
   /**
@@ -89,6 +88,10 @@ export default class Commission extends React.Component {
       return false
     }
 
+    const placeholder = `Enter commission for this agent ${
+      isRequired ? '*' : ''
+    }`
+
     return (
       <div className="commission-row">
         <input
@@ -106,15 +109,31 @@ export default class Commission extends React.Component {
           onChange={() => this.setCommissionType('$')}
         />&nbsp;&nbsp;$
         <div className="commission">
-          <input
-            name="commission"
-            type="text"
-            placeholder={`Enter commission for this agent ${
-              isRequired ? '*' : ''
-            }`}
-            value={this.getCommissionValue()}
-            onChange={e => this.setCommission(toNumber(e.target.value))}
-          />
+          {commission_type === '%' ? (
+            <NumericInput
+              name="commission"
+              min={0}
+              max={100}
+              options={{
+                allowDecimal: true,
+                includeThousandsSeparator: false,
+                integerLimit: 3
+              }}
+              placeholder={placeholder}
+              value={this.getCommissionValue()}
+              onChange={e => {
+                this.setCommission(e.target.value)
+              }}
+            />
+          ) : (
+            <CurrencyInput
+              name="commission"
+              value={this.getCommissionValue()}
+              onChange={(e, data) => {
+                this.setCommission(data.value)
+              }}
+            />
+          )}
         </div>
       </div>
     )
