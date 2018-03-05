@@ -13,17 +13,11 @@ const TaskStatus = ({ task, noTip, isBackoffice }) => {
 
     const { created_at } = review
 
-    let reviewTime = moment.unix(created_at)
-
-    let reviewTimeFormat
-
-    if (reviewTime.isValid()) {
-      reviewTimeFormat = reviewTime.format('MMMM DD, YY [at] hh:mm A')
-    }
+    const reviewTime = moment.unix(created_at)
 
     tooltip = 'Status: '
-    tooltip += reviewTimeFormat
-      ? `(${status}, ${reviewTimeFormat})`
+    tooltip += reviewTime.isValid()
+      ? `(${status}, ${reviewTime.format('MMMM DD, YY [at] hh:mm A')})`
       : `${status}`
   }
 
