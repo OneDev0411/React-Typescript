@@ -89,10 +89,11 @@ class AgentTable extends BaseTable {
   }
 
   getPriceValue(deal) {
-    return Deal.get.field(deal, 'sales_price') || 
-        Deal.get.field(deal, 'list_price')
+    return (
+      Deal.get.field(deal, 'sales_price') || Deal.get.field(deal, 'list_price')
+    )
   }
-  
+
   getSide(deal, rowId, rowsCount) {
     const { roles } = this.props
 
@@ -104,7 +105,11 @@ class AgentTable extends BaseTable {
       return Deal.get.side(deal)
     }
 
-    const { user: relatedRoleUser } = roles[relatedRole]
+    let relatedRoleUser
+
+    if (roles && roles[relatedRole]) {
+      relatedRoleUser = roles[relatedRole].user
+    }
 
     return (
       <OverlayTrigger
