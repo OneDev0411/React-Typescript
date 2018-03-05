@@ -127,7 +127,7 @@ class ContactsList extends React.Component {
             <Dropdown
               pullRight
               className="c-react-table-menu"
-              id={`cotnact_${contactId}__dropdown`}
+              id={`contact_${contactId}__dropdown`}
             >
               <ShadowButton
                 bsRole="toggle"
@@ -140,7 +140,7 @@ class ContactsList extends React.Component {
               <Dropdown.Menu bsRole="menu">
                 <MenuItem
                   eventKey="Delete"
-                  key={`cotnact_${contactId}__dropdown__item_delete`}
+                  key={`contact_${contactId}__dropdown__item_delete`}
                   style={{ width: '100%', textAlign: 'left' }}
                   onClick={event => this.handleOnDelete(event, contact.id)}
                 >
@@ -163,7 +163,7 @@ class ContactsList extends React.Component {
     this.props.confirmation({
       show: true,
       confirmLabel: 'Delete',
-      message: 'Delete Cotnact',
+      message: 'Delete Contact',
       onConfirm: () => this.handleDeleteContact({ contactId }),
       description: 'Are you sure you want to delete this contact?'
     })
