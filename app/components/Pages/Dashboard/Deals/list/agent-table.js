@@ -100,11 +100,11 @@ class AgentTable extends BaseTable {
     const relatedRole =
       deal.roles && deal.roles.find(id => roles[id].role === sideName)
 
-    if (!deal.roles || !relatedRole) {
+    if (!deal.roles) {
       return Deal.get.side(deal)
     }
 
-    const { user: relatedRoleUser } = relatedRole
+    const { user: relatedRoleUser } = roles[relatedRole]
 
     return (
       <OverlayTrigger
@@ -159,7 +159,7 @@ class AgentTable extends BaseTable {
             }}
           >
             {relatedRoleUser && relatedRoleUser.last_name
-              ? `: ${relatedRole.user.last_name}`
+              ? `: ${relatedRoleUser.last_name}`
               : ''}
           </span>
         </div>
