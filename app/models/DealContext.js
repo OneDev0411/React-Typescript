@@ -118,6 +118,7 @@ export function getRequiredItems(
       ...ctx,
       validate: getValidationFunction(ctx.name),
       properties: getFieldProperties(ctx.name),
+      getFormattedValue: getFormattedValue.bind(ctx),
       mandatory: true
     }))
 }
@@ -138,6 +139,7 @@ export function getOptionalItems(
       ...ctx,
       validate: getValidationFunction(ctx.name),
       properties: getFieldProperties(ctx.name),
+      getFormattedValue: getFormattedValue.bind(ctx),
       mandatory: false
     }))
 }
@@ -154,6 +156,7 @@ export function query(deal, criteria) {
       ...ctx,
       validate: getValidationFunction(ctx.name),
       properties: getFieldProperties(ctx.name),
+      getFormattedValue: getFormattedValue.bind(ctx),
       disabled: isDisabled(deal, ctx),
       needs_approval: ctx.needs_approval || false
     }))
@@ -301,7 +304,9 @@ export function getFieldProperties(name) {
     {
       year_built: {
         min: 1790,
-        max: 2018
+        max: 2018,
+        placeholder: 'YYYY',
+        mask: [/[1-2]/, /\d/, /\d/, /\d/]
       }
     }[name] || {}
   )
@@ -344,6 +349,20 @@ export function getValidItems(
   )
 
   return _.pick(list, (value, name) => validate(dealContexts[name], value))
+}
+
+function getFormattedValue(value) {
+  if (!value) {
+    return value
+  }
+
+  if (this.format === 'Currency') {
+    return `$${parseFloat(value)
+      .toFixed(2)
+      .replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}`
+  }
+
+  return value
 }
 
 export default {

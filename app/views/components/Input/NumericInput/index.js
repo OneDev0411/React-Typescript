@@ -1,6 +1,8 @@
 import React from 'react'
 import Input from 'react-text-mask'
+import _ from 'underscore'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+import InputErrorMessage from '../components/InputErrorMessage'
 
 function validate(props) {
   const { value, min, max } = props
@@ -17,55 +19,55 @@ function validate(props) {
 }
 
 export default props => {
-  const { min, max } = props
-  const style = {}
-  const opt = Object.assign(
+  const {
+    min,
+    max,
+    mask,
+    value,
+    placeholder,
+    options,
+    ErrorMessageHandler
+  } = props
+  const isValid = validate(props)
+
+  const opts = Object.assign(
     {
       allowNegative: false,
       allowDecimal: false
     },
-    props.options || {}
+    options || {}
   )
 
-  const isValid = validate(props)
-
-  if (!isValid) {
-    style.border = '1px solid red'
-  }
+  const ErrorMessageComponent = ErrorMessageHandler ? (
+    <ErrorMessageHandler {...props} />
+  ) : (
+    <InputErrorMessage
+      message={`value must be greater than ${min} and lower than ${max}`}
+    />
+  )
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', display: 'inline' }}>
       <Input
-        placeholder={props.placeholder || ''}
-        style={style}
-        mask={createNumberMask({
-          prefix: '',
-          suffix: '',
-          includeThousandsSeparator: false,
-          allowNegative: opt.allowNegative,
-          allowLeadingZeroes: false,
-          allowDecimal: opt.allowDecimal
-        })}
-        {...props}
+        placeholder={placeholder || ''}
+        style={{
+          border: isValid ? '' : '1px solid #ec4b35'
+        }}
+        mask={
+          mask ||
+          createNumberMask({
+            prefix: '',
+            suffix: '',
+            includeThousandsSeparator: false,
+            allowNegative: opts.allowNegative,
+            allowLeadingZeroes: false,
+            allowDecimal: opts.allowDecimal
+          })
+        }
+        {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
       />
 
-      {props.value &&
-        !isValid && (
-          <span
-            style={{ position: 'absolute', right: '5px', top: '30%' }}
-            data-balloon={`value must be greater than ${min} and lower than ${max}`}
-            data-balloon-pos="up"
-          >
-            <i
-              style={{
-                verticalAlign: 'middle',
-                fontSize: '18px',
-                color: '#ec4b35'
-              }}
-              className="fa fa-times-circle"
-            />
-          </span>
-        )}
+      {value && !isValid && ErrorMessageComponent}
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import moment, { invalid } from 'moment'
 import cn from 'classnames'
-import Context from '../../../../../models/DealContext'
 import DatePicker from '../components/date-picker'
 import Input from '../../../../../views/components/Input'
 
