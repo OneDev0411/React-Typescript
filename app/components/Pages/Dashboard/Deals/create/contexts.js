@@ -1,6 +1,7 @@
 import React from 'react'
-import moment, { invalid } from 'moment'
+import moment from 'moment'
 import cn from 'classnames'
+import _ from 'underscore'
 import DatePicker from '../components/date-picker'
 import Input from '../../../../../views/components/Input'
 
@@ -83,7 +84,7 @@ export default class extends React.Component {
                     onChange={(e, data = {}) =>
                       this.onChangeStringContext(
                         field.name,
-                        data.value || e.target.value
+                        !_.isUndefined(data.value) ? data.value : e.target.value
                       )
                     }
                   />

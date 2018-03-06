@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Downshift from 'downshift'
 import styled from 'styled-components'
 import matchSorter from 'match-sorter'
+import _ from 'underscore'
 import Input from '../../../../../../../views/components/Input'
 
 const ErrorMessage = styled.span`
@@ -114,7 +115,9 @@ class InputWithSelect extends Component {
                 {...getInputProps({
                   placeholder,
                   onChange: (e, data = {}) =>
-                    this.props.onChangeHandler(data.value || e.target.value),
+                    this.props.onChangeHandler(
+                      !_.isUndefined(data.value) ? data.value : e.target.value
+                    ),
                   style: { width: '100%' }
                 })}
               />
