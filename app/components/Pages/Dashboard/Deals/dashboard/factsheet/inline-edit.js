@@ -180,6 +180,7 @@ export default class Editable extends React.Component {
                 >
                   <Input
                     data-type={field.format || field.data_type}
+                    autoFocus
                     {...field.properties}
                     className="input-edit"
                     maxLength={15}
