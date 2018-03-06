@@ -1,6 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
+import _ from 'underscore'
 import DatePicker from '../../components/date-picker'
 import ToolTip from '../../components/tooltip'
 import Input from '../../../../../../views/components/Input'
@@ -29,7 +30,7 @@ export default class Editable extends React.Component {
     })
 
     if (
-      fieldValue &&
+      !_.isUndefined(fieldValue) &&
       fieldValue !== this.getContextValue() &&
       field.validate(field, fieldValue)
     ) {
@@ -180,15 +181,35 @@ export default class Editable extends React.Component {
                 >
                   <Input
                     data-type={field.format || field.data_type}
-                    autoFocus
                     {...field.properties}
                     className="input-edit"
                     maxLength={15}
                     value={this.getValue()}
                     onKeyPress={e => this.onKeyPress(e)}
+                    ErrorMessageHandler={({ message }) => (
+                      <span
+                        style={{
+                          position: 'absolute',
+                          right: '5px'
+                        }}
+                        data-balloon={message}
+                        data-balloon-pos="left"
+                      >
+                        <i
+                          style={{
+                            verticalAlign: 'middle',
+                            fontSize: '14px',
+                            color: '#ec4b35'
+                          }}
+                          className="fa fa-warning"
+                        />
+                      </span>
+                    )}
                     onChange={(e, data = {}) =>
                       this.setState({
-                        value: data.value || e.target.value
+                        value: !_.isUndefined(data.value)
+                          ? data.value
+                          : e.target.value
                       })
                     }
                   />
