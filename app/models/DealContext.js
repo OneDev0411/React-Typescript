@@ -294,9 +294,13 @@ export function validate(ctx, value) {
 }
 
 function validateYearBuilt(ctx, value) {
-  const { min, max } = ctx.properties
+  const { max } = ctx.properties
 
-  return parseFloat(value) >= min && parseFloat(value) <= max
+  if (value === undefined || value === null || value.length === 0) {
+    return !ctx.mandatory
+  }
+
+  return parseFloat(value) <= max
 }
 
 export function getFieldProperties(name) {
