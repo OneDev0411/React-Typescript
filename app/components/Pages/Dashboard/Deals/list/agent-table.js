@@ -50,8 +50,9 @@ class AgentTable extends BaseTable {
         caption: 'PRICE $',
         sortable: true,
         className: 'col-md-1 hidden-xs',
-        getText: this.getPrice,
-        getValue: deal => Deal.get.field(deal, 'list_price')
+        getText: deal =>
+          Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0),
+        getValue: deal => this.getPriceValue(deal)
       },
       side: {
         caption: 'SIDE',
@@ -87,23 +88,12 @@ class AgentTable extends BaseTable {
     }
   }
 
-  getPrice = deal => {
-    let price = Deal.get.formattedPrice(
-      Deal.get.field(deal, 'sales_price'),
-      'currency',
-      0
+  getPriceValue(deal) {
+    return (
+      Deal.get.field(deal, 'sales_price') || Deal.get.field(deal, 'list_price')
     )
-
-    if (!price) {
-      price = Deal.get.formattedPrice(
-        Deal.get.field(deal, 'list_price'),
-        'currency',
-        0
-      )
-    }
-
-    return price
   }
+
   getSide(deal, rowId, rowsCount) {
     const { roles } = this.props
 
@@ -111,11 +101,15 @@ class AgentTable extends BaseTable {
     const relatedRole =
       deal.roles && deal.roles.find(id => roles[id].role === sideName)
 
-    if (!deal.roles || !relatedRole) {
+    if (!deal.roles) {
       return Deal.get.side(deal)
     }
 
-    const { user: relatedRoleUser } = relatedRole
+    let relatedRoleUser
+
+    if (roles && roles[relatedRole]) {
+      relatedRoleUser = roles[relatedRole].user
+    }
 
     return (
       <OverlayTrigger
@@ -144,7 +138,7 @@ class AgentTable extends BaseTable {
                     </div>
                     <div className="info">
                       <span className="name">
-                        {`${role.legal_first_name} ${role.legal_last_name}`},
+                        {`${role.legal_first_name} ${role.legal_last_name}, `}
                       </span>
 
                       <span className="role">{roleName(role.role)}</span>
@@ -170,7 +164,7 @@ class AgentTable extends BaseTable {
             }}
           >
             {relatedRoleUser && relatedRoleUser.last_name
-              ? `: ${relatedRole.user.last_name}`
+              ? `: ${relatedRoleUser.last_name}`
               : ''}
           </span>
         </div>

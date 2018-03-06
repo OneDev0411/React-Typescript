@@ -19,21 +19,18 @@ function validate(props) {
 }
 
 export default props => {
-  const {
-    min,
-    max,
-    mask,
-    value,
-    placeholder,
-    options,
-    ErrorMessageHandler
-  } = props
+  const { min, max, value, placeholder, options, ErrorMessageHandler } = props
   const isValid = validate(props)
 
   const opts = Object.assign(
     {
+      includeThousandsSeparator: false,
       allowNegative: false,
-      allowDecimal: false
+      allowDecimal: false,
+      decimalSymbol: '.',
+      decimalLimit: 2,
+      integerLimit: null,
+      requireDecimal: false
     },
     options || {}
   )
@@ -53,18 +50,25 @@ export default props => {
         style={{
           border: isValid ? '' : '1px solid #ec4b35'
         }}
-        mask={
-          mask ||
-          createNumberMask({
-            prefix: '',
-            suffix: '',
-            includeThousandsSeparator: false,
-            allowNegative: opts.allowNegative,
-            allowLeadingZeroes: false,
-            allowDecimal: opts.allowDecimal
+        value={value}
+        mask={createNumberMask({
+          prefix: '',
+          suffix: '',
+          includeThousandsSeparator: opts.includeThousandsSeparator,
+          allowNegative: opts.allowNegative,
+          allowLeadingZeroes: false,
+          allowDecimal: opts.allowDecimal,
+          decimalSymbol: opts.decimalSymbol,
+          decimalLimit: opts.decimalLimit,
+          integerLimit: opts.integerLimit,
+          requireDecimal: opts.requireDecimal
+        })}
+        {..._.omit(props, 'ErrorMessageHandler', 'data-type', 'options')}
+        onChange={e => {
+          props.onChange(e, {
+            isValid: props.value && validate(props)
           })
-        }
-        {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
+        }}
       />
 
       {value && !isValid && ErrorMessageComponent}

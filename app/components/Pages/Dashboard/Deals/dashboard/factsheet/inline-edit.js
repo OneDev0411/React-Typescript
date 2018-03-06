@@ -180,14 +180,15 @@ export default class Editable extends React.Component {
                 >
                   <Input
                     data-type={field.format || field.data_type}
+                    autoFocus
                     {...field.properties}
                     className="input-edit"
                     maxLength={15}
                     value={this.getValue()}
                     onKeyPress={e => this.onKeyPress(e)}
-                    onChange={(e, originalValue) =>
+                    onChange={(e, data = {}) =>
                       this.setState({
-                        value: originalValue || e.target.value
+                        value: data.value || e.target.value
                       })
                     }
                   />

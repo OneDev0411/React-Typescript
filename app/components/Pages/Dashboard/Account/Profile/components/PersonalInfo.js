@@ -23,6 +23,7 @@ let PersonalInfoForm = ({
 }) => {
   const { brandColor } = getBrandInfo(brand)
   const isDisabled = isSubmitting || invalid || pristine
+
   return (
     <FormCard title="Personal Info">
       <form
@@ -47,6 +48,7 @@ let PersonalInfoForm = ({
           type="email"
           label="Email"
           component={SimpleField}
+          placeholder="example@gmail.com"
         />
         <Field
           name="phone_number"
@@ -83,6 +85,7 @@ let PersonalInfoForm = ({
 
 const validate = values => {
   const errors = {}
+  const { email, phone_number, first_name, last_name } = values
 
   const NAME_CHARACHTER_LIMIT = 1
 
@@ -92,7 +95,14 @@ const validate = values => {
   const invalidCharactersError =
     'Invalid charachter. You are allowed use alphabet character and space in this field.'
 
-  const isValidName = name => new RegExp(/^[A-Za-z\s]+$/).exec(name)
+  const isValidName = name => name && new RegExp(/^[A-Za-z\s]+$/).exec(name)
+
+  const isValidEmail = email => {
+    // eslint-disable-next-line max-len
+    const regular = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+    return !email || new RegExp(regular).exec(email)
+  }
 
   const isNotValidPhoneNumber = phoneNumber => {
     if (phoneNumber.length === 12 || phoneNumber.length === 0) {
@@ -102,23 +112,23 @@ const validate = values => {
     return true
   }
 
-  if (!isValidName(values.first_name)) {
+  if (!isValidName(first_name)) {
     errors.first_name = invalidCharactersError
-  } else if (values.first_name.length < NAME_CHARACHTER_LIMIT) {
+  } else if (first_name && first_name.length < NAME_CHARACHTER_LIMIT) {
     errors.first_name = minimumCharactersError(NAME_CHARACHTER_LIMIT)
   }
 
-  if (!isValidName(values.last_name)) {
+  if (!isValidName(last_name)) {
     errors.last_name = invalidCharactersError
-  } else if (values.last_name.length < NAME_CHARACHTER_LIMIT) {
+  } else if (last_name && last_name.length < NAME_CHARACHTER_LIMIT) {
     errors.last_name = minimumCharactersError(NAME_CHARACHTER_LIMIT)
   }
 
-  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+  if (!isValidEmail(email)) {
     errors.email = 'Invalid email address.'
   }
 
-  if (isNotValidPhoneNumber(values.phone_number)) {
+  if (phone_number && isNotValidPhoneNumber(phone_number)) {
     errors.phone_number = 'Invalid Number!'
   }
 
@@ -128,7 +138,7 @@ const validate = values => {
 export default compose(
   connect(
     ({ brand, user }) => {
-      const { first_name, last_name, display_name, email, phone_number } = user
+      const { first_name, last_name, email, phone_number } = user
 
       return {
         brand,
@@ -158,6 +168,7 @@ export default compose(
       setSubmitSuccessfully
     }) => async fields => {
       setSubmitError('')
+
       const userInfo = {}
 
       try {
@@ -169,8 +180,10 @@ export default compose(
           if (initialValues[field] !== fields[field]) {
             if (field === 'phone_number' && !fields.phone_number) {
               userInfo.phone_number = null
+
               return
             }
+
             userInfo[field] = fields[field]
           }
         })
@@ -179,6 +192,7 @@ export default compose(
           setIsSubmitting(true)
 
           const user = await editUser(userInfo)
+
           if (user instanceof Error) {
             throw user
           }

@@ -31,18 +31,16 @@ export default props => {
   return (
     <div style={{ position: 'relative', display: 'inline' }}>
       <Input
-        placeholder="(xxx)xxx-xxxx"
+        placeholderChar="#"
         value={props.value}
         style={{
           border: isValid ? '' : '1px solid #ec4b35'
         }}
         mask={[
-          '(',
           /[1-9]/,
           /\d/,
           /\d/,
-          ')',
-          ' ',
+          '-',
           /\d/,
           /\d/,
           /\d/,
@@ -53,17 +51,22 @@ export default props => {
           /\d/
         ]}
         {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
+        placeholder="###-###-####"
         onChange={e => {
           const maskedValue = e.target.value
           const originalValue = maskedValue
             ? maskedValue
-                .replace('(', '')
-                .replace(')', '')
+                .replace(/#/g, '')
                 .replace(/\s/g, '')
                 .replace(/\-/gi, '')
             : ''
 
-          props.onChange(e, originalValue)
+          const data = {
+            value: originalValue,
+            isValid: validate(originalValue)
+          }
+
+          props.onChange(e, data)
         }}
       />
 
