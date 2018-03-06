@@ -18,8 +18,23 @@ function validate(props) {
   return true
 }
 
+function getErrorMessage(props) {
+  const { min, max } = props
+  const errors = []
+
+  if (min) {
+    errors.push(`greater than ${min}`)
+  }
+
+  if (max) {
+    errors.push(`lower than ${max}`)
+  }
+
+  return `value must be ${errors.join(' and ')}`
+}
+
 export default props => {
-  const { min, max, value, placeholder, options, ErrorMessageHandler } = props
+  const { value, placeholder, options, ErrorMessageHandler } = props
   const isValid = validate(props)
 
   const opts = Object.assign(
@@ -36,11 +51,9 @@ export default props => {
   )
 
   const ErrorMessageComponent = ErrorMessageHandler ? (
-    <ErrorMessageHandler {...props} />
+    <ErrorMessageHandler message={getErrorMessage(props)} {...props} />
   ) : (
-    <InputErrorMessage
-      message={`value must be greater than ${min} and lower than ${max}`}
-    />
+    <InputErrorMessage message={getErrorMessage(props)} />
   )
 
   return (
@@ -65,9 +78,17 @@ export default props => {
         })}
         {..._.omit(props, 'ErrorMessageHandler', 'data-type', 'options')}
         onChange={e => {
-          props.onChange(e, {
+          const maskedValue = e.target.value
+          const originalValue = maskedValue
+            ? maskedValue.replace(/\_/g, '')
+            : maskedValue
+
+          const data = {
+            value: originalValue,
             isValid: props.value && validate(props)
-          })
+          }
+
+          props.onChange(e, data)
         }}
       />
 
