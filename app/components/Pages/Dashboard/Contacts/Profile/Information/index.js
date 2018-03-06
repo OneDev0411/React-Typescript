@@ -29,7 +29,7 @@ class Info extends React.Component {
     this.props.confirmation({
       show: true,
       confirmLabel: 'Delete',
-      message: 'Delete Cotnact',
+      message: 'Delete Contact',
       onConfirm: () => this.handleDeleteContact(),
       description: 'Are you sure you want to delete this contact?'
     })

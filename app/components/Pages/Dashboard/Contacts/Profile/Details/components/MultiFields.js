@@ -10,7 +10,9 @@ import { isEqual } from 'lodash'
 import Label from './Label'
 import Editable from '../../Editable'
 import Loading from '../../../components/Loading'
-import Contact from '../../../../../../../models/contacts'
+import Contact, {
+  getMostRecentlyAttribute
+} from '../../../../../../../models/contacts'
 import {
   deleteAttributes,
   upsertContactAttributes
@@ -226,15 +228,21 @@ const enhance = compose(
 export default enhance(MultiFields)
 
 function initializeFields(props) {
-  const { name, type, contact, defaultLabel } = props
+  const { name, type, contact, defaultLabel, isSingle } = props
 
-  const fields = Contact.get.attributes({
-    type,
-    name,
-    contact
-  })
+  let fields
 
-  if (Array.isArray(fields) && fields.length > 0) {
+  if (!isSingle) {
+    fields = Contact.get.attributes({
+      type,
+      name,
+      contact
+    })
+  } else {
+    fields = getMostRecentlyAttribute({ contact, attributeName: 'birthdays' })
+  }
+
+  if (fields && Array.isArray(fields) && fields.length > 0) {
     return fields
   }
 

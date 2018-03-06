@@ -6,11 +6,13 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import { upsertContactAttributes } from '../../../../../../store_actions/contacts'
+import { getMostRecentlyAttribute } from '../../../../../../models/contacts'
+
 import Field from './Field'
 import Title from './Title'
 import Loading from '../../components/Loading'
 
-const Names = ({ names, upsertAttribute, handelOnDelete, isSaving }) => (
+const Names = ({ fields, upsertAttribute, handelOnDelete, isSaving }) => (
   <div className="c-contact-profile-card">
     <h3 className="c-contact-profile-card__title">Names</h3>
     <div className="c-contact-profile-card__body">
@@ -18,17 +20,17 @@ const Names = ({ names, upsertAttribute, handelOnDelete, isSaving }) => (
         <Title
           disabled={isSaving}
           key="names__legal_prefix"
-          field={names.legal_prefix}
+          field={fields.legal_prefix}
           onChange={upsertAttribute}
         />
-        {names &&
-          Object.keys(names)
+        {fields &&
+          Object.keys(fields)
             .filter(name => name !== 'legal_prefix')
             .map(name => (
               <Field
-                field={names[name]}
+                field={fields[name]}
                 isSaving={isSaving}
-                key={`names_${names[name].type}`}
+                key={`names_${fields[name].type}`}
                 onChange={upsertAttribute}
                 onDelete={handelOnDelete}
               />
@@ -39,13 +41,12 @@ const Names = ({ names, upsertAttribute, handelOnDelete, isSaving }) => (
   </div>
 )
 
-function mapStateToProps(state, props) {
-  const { contact: { id: contactId, sub_contacts } } = props
-  let { names } = sub_contacts[0].attributes
+function mapStateToProps(state, { contact }) {
+  const { id: contactId } = contact
+  const names = getMostRecentlyAttribute({ contact, attributeName: 'names' })
+  const fields = getNames(names)
 
-  names = Array.isArray(names) ? getNames(names[0]) : getNames()
-
-  return { contactId, names }
+  return { contactId, names, fields }
 }
 
 const enhance = compose(
@@ -55,6 +56,7 @@ const enhance = compose(
   withState('isSaving', 'setIsSaving', false),
   withHandlers({
     upsertAttribute: ({
+      names,
       contact,
       contactId,
       setIsSaving,
@@ -63,15 +65,27 @@ const enhance = compose(
       setIsSaving(true)
 
       try {
+        let id
         let attributes
         const [field] = fields
         const { type } = field
-        let { names } = contact.sub_contacts[0].attributes
+        const {
+          names: firstSubContactNames
+        } = contact.sub_contacts[0].attributes
 
-        if (names && Object.keys(names).length > 0) {
+        if (
+          Array.isArray(firstSubContactNames) &&
+          Object.keys(firstSubContactNames[0]).length > 0
+        ) {
+          // eslint-disable-next-line
+          id = firstSubContactNames[0].id
+        }
+
+        if (id) {
           attributes = [
             {
-              ...names[0],
+              ...names,
+              id,
               [type]: field[type],
               is_primary: true
             }
@@ -80,7 +94,7 @@ const enhance = compose(
           attributes = [
             {
               type: 'name',
-              id: undefined,
+              id,
               is_primary: true,
               [type]: field[type]
             }
@@ -100,6 +114,7 @@ const enhance = compose(
   }),
   withHandlers({
     handelOnDelete: ({
+      names,
       contact,
       contactId,
       setIsSaving,
@@ -108,10 +123,23 @@ const enhance = compose(
       setIsSaving(true)
 
       try {
-        let { names } = contact.sub_contacts[0].attributes
+        let id
+        const {
+          names: firstSubContactNames
+        } = contact.sub_contacts[0].attributes
+
+        if (
+          Array.isArray(firstSubContactNames) &&
+          Object.keys(firstSubContactNames[0]).length > 0
+        ) {
+          // eslint-disable-next-line
+          id = firstSubContactNames[0].id
+        }
+
         const attributes = [
           {
-            ...names[0],
+            ...names,
+            id,
             [type]: ''
           }
         ]

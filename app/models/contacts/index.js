@@ -26,12 +26,32 @@ const Contact = {
 //   })
 // }
 
+export const getAllAttributes = ({ contact, attributeName }) => {
+  const result = []
+
+  _.each(contact.sub_contacts, sub => {
+    const attributes = sub.attributes[attributeName]
+
+    if (attributes && attributes.length > 0) {
+      result.push(...attributes)
+    }
+  })
+
+  return result
+}
+
+export const getMostRecentlyAttribute = ({ contact, attributeName }) => {
+  const attributes = getAllAttributes({ contact, attributeName })
+
+  return Contact.get._sort(attributes)
+}
+
 /**
  * Helper class to get Contact fields
  */
 Contact.get = {
   _sort: (list, sort_by = 'updated_at', order = 'desc') => {
-    if (!list) {
+    if (!list || list.length === 0) {
       return null
     }
 
