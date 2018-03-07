@@ -5,7 +5,6 @@ import cn from 'classnames'
 import Deal from '../../../../../../models/Deal'
 import { getStatusColorClass } from '../../../../../../utils/listing'
 import StatusModal from './listing-status-modal'
-import ToolTip from '../../components/tooltip'
 import Message from '../../../Chatroom/Util/message'
 import {
   updateContext,

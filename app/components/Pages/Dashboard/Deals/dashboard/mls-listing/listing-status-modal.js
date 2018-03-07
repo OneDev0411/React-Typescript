@@ -44,7 +44,13 @@ export default class extends React.Component {
           'Pending'
         ]
   }
+  componentWillReceiveProps(nextProps) {
+    const { show, status } = nextProps
 
+    if (show && show !== this.props.show) {
+      this.setState({ selectedStatus: status })
+    }
+  }
   render() {
     const { show, onClose, isBackOffice, saveText, onChangeStatus } = this.props
     const { selectedStatus } = this.state
