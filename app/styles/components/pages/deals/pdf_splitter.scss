@@ -501,20 +501,17 @@ $splitter-header: 56px;
  */
 %pdf-splitter-page-preview {
   position: fixed;
-  border-radius: 8px;
   background-color: #fff;
-  border: solid 1px #cad0d4;
-  width: 70vh;
-  height: 95vh;
-  top: 2.5vh;
-  left: calc((100% - 500px) / 2);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1053;
 
   .header {
-    height: 32px;
-    line-height: 32px;
+    height: 54px;
+    line-height: 54px;
     vertical-align: middle;
-    border-radius: 8px 8px 0 0;
     background-color: #f0f4f7;
     border-bottom: solid 1px #cad0d4;
     text-align: center;
@@ -523,6 +520,7 @@ $splitter-header: 56px;
     white-space: nowrap;
     overflow: hidden;
     color: #62778c;
+    border-bottom: 1px solid #dde2e6;
 
     .exit {
       font-size: 15px;
@@ -535,7 +533,7 @@ $splitter-header: 56px;
   }
 
   .preview {
-    max-height: calc(100% - 32px);
+    max-height: calc(100% - 54px);
     overflow: auto;
   }
 }

@@ -360,7 +360,9 @@ function getFormattedValue(value) {
   }
 
   if (this.format === 'Currency') {
-    return `$${value.replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}`
+    return `$${parseFloat(value)
+      .toFixed()
+      .replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}`
   }
 
   return value
