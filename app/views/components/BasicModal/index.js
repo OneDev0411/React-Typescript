@@ -18,9 +18,7 @@ const defaultProps = {
 }
 
 function BasicModal(props) {
-  const {
-    title, isOpen, className, children, handleOnClose
-  } = props
+  const { title, isOpen, className, children, handleOnClose } = props
 
   return (
     <BareModal

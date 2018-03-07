@@ -1,61 +1,73 @@
 import React from 'react'
-import { Button } from 'react-bootstrap'
-import store from '../../../../../../stores'
-import { addNote } from '../../../../../../store_actions/contact'
+import AddNoteIcon from '../../../../../../views/components/SvgIcons/AddNote'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
-export default class AddNote extends React.Component {
+class AddNote extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
       note: '',
-      saving: false
+      isSaving: false
     }
+
+    this.handleAddNote = this.handleAddNote.bind(this)
   }
 
-  async onAddNote() {
+  handleOnChange = event => {
+    this.setState({ note: event.target.value })
+  }
+
+  async handleAddNote(event) {
+    event.preventDefault()
+
     const { note } = this.state
-    const { contact_id } = this.props
+    const { onSubmit } = this.props
 
-    if (note.trim().length === 0)
+    if (!note) {
       return
+    }
 
-    this.setState({ saving: true })
+    this.setState({ isSaving: true })
 
     // save note
-    await store.dispatch(addNote(contact_id, note))
+    await onSubmit(note.trim())
 
     this.setState({
-      saving: false,
+      isSaving: false,
       note: ''
     })
-
-    // trigger onSave function
-    this.props.onSave()
   }
 
   render() {
-    const { note, saving } = this.state
+    const { note, isSaving } = this.state
+
     return (
-      <div className="note">
-        <div className="head">
-          <img src="/static/images/contacts/notepad.svg" />
-          New Note
+      <form
+        onSubmit={this.handleAddNote}
+        className="c-add-note c-contact-profile-card"
+      >
+        <div className="c-add-note__header">
+          <AddNoteIcon color="#4A4A4A" />
+          <h3 className="c-add-note__title">New Note</h3>
         </div>
-        <textarea
-          placeholder="Leave a note for yourself."
-          value={note}
-          onChange={e => this.setState({ note: e.target.value })}
-        />
-        <div className="footer">
-          <Button
-            bsStyle="primary"
-            onClick={() => this.onAddNote()}
-            disabled={saving}
-          >
-            { saving ? 'Saving...' : 'Enter' }
-          </Button>
+        <div className="c-add-note__body">
+          <textarea
+            value={note}
+            disabled={isSaving}
+            placeholder="Leave a note for yourself."
+            onChange={this.handleOnChange}
+            className="c-add-note__textarea"
+          />
         </div>
-      </div>
+        <div className="c-add-note__footer">
+          <ActionButton type="submit" disabled={isSaving || !note}>
+            {isSaving ? 'Saving...' : 'Save'}
+          </ActionButton>
+        </div>
+      </form>
     )
   }
 }
+
+export default AddNote

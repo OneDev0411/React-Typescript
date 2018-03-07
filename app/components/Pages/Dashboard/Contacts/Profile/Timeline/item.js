@@ -1,24 +1,15 @@
 import React from 'react'
 import Avatar from 'react-avatar'
 
-export default({
-  attributes,
-  name,
-  avatar
-}) => {
+export default ({ attributes, name, avatar }) => {
   const activity = (
     <div className="event">
       <div className="image">
-        {
-          attributes.image ?
-            <img src={attributes.image} /> :
-            <Avatar
-              round
-              name={name}
-              src={avatar}
-              size={34}
-            />
-        }
+        {attributes.image ? (
+          <img src={attributes.image} />
+        ) : (
+          <Avatar round name={name} src={avatar} size={34} />
+        )}
       </div>
 
       <div className="info">
@@ -29,7 +20,7 @@ export default({
 
         <div className="time">
           <img src={`/static/images/contacts/${attributes.icon}@3x.png`} />
-          { attributes.time }
+          {attributes.time}
         </div>
       </div>
     </div>
@@ -37,11 +28,13 @@ export default({
 
   return (
     <div>
-      {
-        attributes.url ?
-          <a href={attributes.url} target="_blank">{ activity }</a> :
-          activity
-      }
+      {attributes.url ? (
+        <a href={attributes.url} target="_blank">
+          {activity}
+        </a>
+      ) : (
+        activity
+      )}
     </div>
   )
 }

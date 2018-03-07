@@ -4,9 +4,10 @@ import PropTypes from 'prop-types'
 import validator from 'validator'
 import _ from 'underscore'
 import Fetch from '../../../services/fetch'
-import Contact from '../../../models/Contact'
+import Contact from '../../../models/contacts'
 import Recipients from './recipients'
 import Suggestions from './suggestions'
+import { selectContacts } from '../../../reducers/contacts/list'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -66,13 +67,27 @@ class Compose extends React.Component {
     // flatten sources
     const entries = [].concat.apply([], sources)
 
+    const { roomUsers } = this.props
+
+    let existingUserIds = {}
+    let filtered = false
+
+    roomUsers.forEach(item => (existingUserIds[item.id] = item.id))
+
     // remove duplicates
     let viewList = _.chain(entries)
       .sortBy(entry => ['user', 'email', 'phone_number'].indexOf(entry.type))
       .uniq(entry => entry.email || entry.phone_number || entry.id)
+      .filter(entry => {
+        if (!existingUserIds[entry.id]) {
+          return true
+        } else if (!filtered) {
+          filtered = true
+        }
+      })
       .value()
 
-    if (_.size(viewList) === 0) {
+    if (_.size(viewList) === 0 && !filtered) {
       viewList = await this.createNewEntry()
     }
 
@@ -142,8 +157,9 @@ class Compose extends React.Component {
    */
   async searchInContacts(q) {
     let contacts = []
+    const { contactsList } = this.props
 
-    _.each(this.props.contacts, contact => {
+    _.each(contactsList, contact => {
       // search in contact's users
       const users_list = contact.users || []
       const users = users_list
@@ -306,9 +322,18 @@ class Compose extends React.Component {
 Compose.propTypes = {
   searchInRooms: PropTypes.bool,
   dropDownBox: PropTypes.bool,
-  onChangeRecipients: PropTypes.func.isRequired
+  onChangeRecipients: PropTypes.func.isRequired,
+  roomUsers: PropTypes.array
 }
 
-export default connect(({ contacts }) => ({
-  contacts: contacts.list
-}))(Compose)
+Compose.defaultProps = {
+  roomUsers: []
+}
+
+function mapStateToProps({ contacts: { list } }) {
+  return {
+    contactsList: selectContacts(list)
+  }
+}
+
+export default connect(mapStateToProps)(Compose)

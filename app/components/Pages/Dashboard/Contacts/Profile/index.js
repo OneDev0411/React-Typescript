@@ -1,171 +1,131 @@
 import React from 'react'
-import pick from 'lodash/pick'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
-import Stepper from '../../../../Partials/Stepper'
-import Contact from '../../../../../models/Contact'
+
+import { Container } from '../components/Container'
+import Stage from './Stage'
+import Contact from '../../../../../models/contacts'
 import Header from './Header'
 import Information from './Information'
 import Names from './Names'
 import Tags from './Tags'
 import Details from './Details'
-import Address from './Address'
+import Addresses from './Addresses'
 import AddNote from './Add-Note'
 import Activities from './Activities'
+
 import {
-  getTimeline,
-  updateContact,
-  upsertAttributes
-} from '../../../../../store_actions/contact'
+  getContact,
+  getContactActivities,
+  upsertContactAttributes
+} from '../../../../../store_actions/contacts'
+import { selectContact } from '../../../../../reducers/contacts/list'
+import { selectTags } from '../../../../../reducers/contacts/tags'
+import { selectContactError } from '../../../../../reducers/contacts/contact'
+import Loading from '../../../../Partials/Loading'
 
 class ContactProfile extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
       activeTab: 'timeline'
     }
+
+    this.handleAddNote = this.handleAddNote.bind(this)
+    this.handleChangeStage = this.handleChangeStage.bind(this)
+    this.onChangeAttribute = this.onChangeAttribute.bind(this)
   }
 
   componentDidMount() {
-    const { getTimeline } = this.props
-    const contact = this.getContact()
+    this.initializeContact()
+  }
 
-    if (!contact.timeline) {
-      getTimeline(contact.id)
+  async initializeContact() {
+    const {
+      user,
+      contact,
+      getContact,
+      getContactActivities,
+      params: { id: contactId }
+    } = this.props
+
+    if (!contact) {
+      await getContact(user, contactId)
+      await getContactActivities(contactId)
+    } else if (!contact.activities) {
+      await getContactActivities(contactId)
     }
   }
 
-  goBack() {
-    browserHistory.push('/dashboard/contacts')
-  }
+  goBack = () => browserHistory.push('/dashboard/contacts')
 
-  getContact() {
-    const { contacts, params } = this.props
-    const contact = contacts[params.id]
-
-    return contact || this.goBack()
-  }
-
-  getStageIndex(contact) {
-    const list = [
-      'General',
-      'UnqualifiedLead',
-      'QualifiedLead',
-      'Active',
-      'PastClient'
-    ]
-    const stage = Contact.get.stage(contact)
-
-    return list.indexOf(stage.name)
-  }
-
-  onChangeAttribute(type, id, text) {
-    this.upsertAttributes(type, [
-      {
-        id,
-        type,
-        [type]: text
-      }
-    ])
-  }
-
-  onChangeAddress(address, field, id, text) {
-    const { street_name, city, state, postal_code } = address
-    const attributes = [
-      {
-        type: 'address',
-        id,
-        street_name,
-        city,
-        state,
-        postal_code
-      }
-    ]
-
-    // set field
-    attributes[0][field] = text
-
-    this.upsertAttributes('address', attributes)
-  }
-
-  onAddAttribute({ attributeName, attributeType }) {
-    const { updateContact } = this.props
-    const contact = this.getContact()
-    const { attributes } = contact.sub_contacts[0]
-
-    if (!attributes[attributeName]) {
-      attributes[attributeName] = []
-    }
-
-    attributes[attributeName].push({
-      type: attributeType,
-      [attributeType]: `Enter ${attributeType} #${attributes[attributeName]
-        .length + 1}`
-    })
-
-    updateContact({
-      ...contact,
-      ...attributes
+  async onChangeAttribute({ contactId, attributes }) {
+    return this.props.upsertContactAttributes({
+      contactId,
+      attributes
     })
   }
 
-  upsertAttributes(type, attributes, disableNotify) {
-    const { params, upsertAttributes } = this.props
+  async handleChangeStage(stage) {
+    const { contact, upsertContactAttributes } = this.props
+    const { id: contactId } = contact
 
-    upsertAttributes(params.id, type, attributes, disableNotify)
-  }
+    const { id: attributeId } = Contact.get.stage(contact)
 
-  changeStage(stage, contact) {
     const attributes = [
       {
-        id: Contact.get.stage(contact).id,
         type: 'stage',
+        id: attributeId || undefined,
         stage: stage.replace(/\s/g, '')
       }
     ]
 
-    this.upsertAttributes('stage', attributes)
+    return upsertContactAttributes({
+      contactId,
+      attributes
+    })
   }
 
-  getNames = names => {
-    const { id } = names
+  async handleAddNote(note) {
+    const { contact, upsertContactAttributes } = this.props
+    const { id: contactId } = contact
 
-    const nameFields = {
-      first_name: '-',
-      middle_name: '-',
-      last_name: '-',
-      legal_first_name: '-',
-      legal_middle_name: '-',
-      legal_last_name: '-'
-    }
+    await upsertContactAttributes({
+      contactId,
+      attributes: [
+        {
+          note,
+          type: 'note'
+        }
+      ]
+    })
 
-    const nameAttribute = {
-      ...nameFields,
-      ...pick(names, Object.keys(nameFields))
-    }
+    this.setState({ activeTab: 'notes' })
 
-    const getTitle = name =>
-      name
-        .split('_')
-        .map(i => i.charAt(0).toUpperCase() + i.substr(1, i.length))
-        .join(' ')
-
-    if (Object.keys(nameAttribute).length > 0) {
-      return Object.keys(nameAttribute).map(name => ({
-        id,
-        name,
-        value: nameAttribute[name],
-        title: getTitle(name)
-      }))
-    }
+    return true
   }
 
   render() {
-    const { user, params, defaultTags } = this.props
-    const { activeTab } = this.state
+    const { contact, fetchError, defaultTags } = this.props
 
-    const contact = this.getContact()
-    const { names } = contact.sub_contacts[0].attributes
+    if (fetchError) {
+      if (fetchError.status === 404) {
+        browserHistory.push('/404')
+      }
+
+      return <Container>{fetchError.message}</Container>
+    }
+
+    if (!contact) {
+      return (
+        <Container>
+          <Loading />
+        </Container>
+      )
+    }
+
+    const { activeTab } = this.state
 
     return (
       <div className="profile">
@@ -175,68 +135,31 @@ class ContactProfile extends React.Component {
           <div className="left-pane">
             <Information contact={contact} />
 
-            <div className="card stage">
-              <div className="title">Stage:</div>
-              <Stepper
-                steps={[
-                  'General',
-                  'Unqualified Lead',
-                  'Qualified Lead',
-                  'Active',
-                  'Past Client'
-                ]}
-                active={this.getStageIndex(contact)}
-                onChange={stage => this.changeStage(stage, contact)}
-              />
-            </div>
+            <Stage
+              contact={contact}
+              handleOnChange={stage => this.handleChangeStage(stage)}
+            />
 
-            {Array.isArray(names) && (
-              <Names
-                names={this.getNames(names[0])}
-                onChangeAttribute={(type, id, text) => {
-                  const attributes = [
-                    {
-                      ...names[0],
-                      [type]: text,
-                      id: id || undefined
-                    }
-                  ]
-
-                  this.upsertAttributes('name', attributes, true)
-                }}
-              />
-            )}
+            <Names contact={contact} />
 
             <Tags
-              contact_id={contact.id}
-              user={user}
+              contactId={contact.id}
               tags={Contact.get.tags(contact, defaultTags)}
             />
 
-            <Details
-              contact={contact}
-              onChangeAttribute={(...args) => this.onChangeAttribute(...args)}
-              onAddAttribute={type => this.onAddAttribute(type)}
-            />
+            <Details contact={contact} />
 
-            <Address
-              contact={contact}
-              onChangeAddress={(...args) => this.onChangeAddress(...args)}
-            />
+            <Addresses contact={contact} />
           </div>
 
           <div className="right-pane">
-            <AddNote
-              user={user}
-              contact_id={params.id}
-              onSave={() => this.setState({ activeTab: 'notes' })}
-            />
+            <AddNote contact={contact} onSubmit={this.handleAddNote} />
 
             <Activities
               contact={contact}
               activeTab={activeTab}
+              onChangeAttribute={this.onChangeAttribute}
               onChangeTab={activeTab => this.setState({ activeTab })}
-              onChangeAttribute={(...args) => this.onChangeAttribute(...args)}
             />
           </div>
         </div>
@@ -245,11 +168,21 @@ class ContactProfile extends React.Component {
   }
 }
 
-export default connect(
-  ({ contacts, user }) => ({
+const mapStateToProps = ({ contacts, user }, { params: { id: contactId } }) => {
+  const { list, contact, tags } = contacts
+
+  const defaultTags = selectTags(tags)
+
+  return {
     user,
-    defaultTags: contacts.tags,
-    contacts: contacts.list
-  }),
-  { getTimeline, upsertAttributes, updateContact }
-)(ContactProfile)
+    defaultTags,
+    contact: selectContact(list, contactId),
+    fetchError: selectContactError(contact)
+  }
+}
+
+export default connect(mapStateToProps, {
+  getContact,
+  getContactActivities,
+  upsertContactAttributes
+})(ContactProfile)

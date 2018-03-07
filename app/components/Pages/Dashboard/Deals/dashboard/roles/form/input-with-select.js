@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Downshift from 'downshift'
 import styled from 'styled-components'
 import matchSorter from 'match-sorter'
+import _ from 'underscore'
+import Input from '../../../../../../../views/components/Input'
 
 const ErrorMessage = styled.span`
   color: red;
@@ -52,17 +54,6 @@ class InputWithSelect extends Component {
     }
   }
 
-  handleInputChange = value => {
-    const nextState = { selectedItem: value }
-
-    this.setState(nextState)
-    this.props.onChangeHandler(value)
-  }
-
-  changeHandler = selectedItem => {
-    this.setState({ selectedItem })
-  }
-
   handleItemToString = item => (typeof item !== 'string' ? '' : item)
 
   render() {
@@ -70,6 +61,7 @@ class InputWithSelect extends Component {
       isRequired,
       isInvalid,
       title,
+      inputType,
       items,
       errorText,
       placeholder,
@@ -81,11 +73,10 @@ class InputWithSelect extends Component {
     return (
       <Downshift
         selectedItem={selectedItem}
-        onChange={this.changeHandler}
+        onChange={selectedItem => this.setState({ selectedItem })}
         itemToString={this.handleItemToString}
-        onStateChange={this.stateChangeHandler}
         defaultSelectedItem={defaultSelectedItem}
-        onInputValueChange={this.handleInputChange}
+        onInputValueChange={value => this.setState({ selectedItem: value })}
         render={({
           getInputProps,
           getItemProps,
@@ -118,27 +109,36 @@ class InputWithSelect extends Component {
                 )}
                 {isInvalid && <ErrorMessage>{errorText}</ErrorMessage>}
               </div>
-              <input
+
+              <Input
+                data-type={inputType}
                 {...getInputProps({
                   placeholder,
+                  onChange: (e, data = {}) =>
+                    this.props.onChangeHandler(
+                      !_.isUndefined(data.value) ? data.value : e.target.value
+                    ),
                   style: { width: '100%' }
                 })}
               />
+
               {isOpen &&
                 items && (
                   <Options>
-                    {(inputValue ? matchSorter(items, inputValue) : items).map((item, index) => (
-                      <Item
-                        key={item}
-                        {...getItemProps({
+                    {(inputValue ? matchSorter(items, inputValue) : items).map(
+                      (item, index) => (
+                        <Item
+                          key={item}
+                          {...getItemProps({
                             item,
                             isSelected: selectedItem === item,
                             isActive: highlightedIndex === index
                           })}
-                      >
-                        {item}
-                      </Item>
-                      ))}
+                        >
+                          {item}
+                        </Item>
+                      )
+                    )}
                   </Options>
                 )}
             </Container>

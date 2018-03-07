@@ -79,7 +79,6 @@
   text-align: left;
   color: #263445;
   font-weight: normal;
-
   &:hover {
     color: #8da2b5;
   }
@@ -91,18 +90,21 @@
     color: #263445;
     border: 1px dashed #fff;
     padding: 0 1.5rem 0 0.5rem;
-
+    display: flex;
+    justify-content: space-between;
+    &:after {
+      content: 'EDIT';
+      font-size: 1.4rem;
+      font-weight: normal;
+      color: #2196f3;
+      align-self: flex-end;
+      visibility: hidden;
+    }
     &:hover {
       border: 1px dashed #2196f3;
 
       &:after {
-        content: 'EDIT';
-        position: absolute;
-        bottom: 0;
-        right: 0.5rem;
-        font-size: 1.4rem;
-        font-weight: normal;
-        color: #2196f3;
+        visibility: visible;
       }
     }
   }

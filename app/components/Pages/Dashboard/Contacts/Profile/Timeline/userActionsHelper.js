@@ -1,4 +1,4 @@
-import Contact from '../../../../../../models/Contact'
+import Contact from '../../../../../../models/contacts'
 
 function getListingTitle(activity) {
   const { type } = activity.object

@@ -2,11 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
+import { addNotification as notify } from 'reapop'
 import PageThumbnail from './page/thumbnail'
 import PageSelector from './page/selector'
 import {
   selectSplitterPage,
-  setSplitterPdfObject
+  setSplitterPdfObject,
+  resetSplitter
 } from '../../../../../store_actions/deals'
 
 class PDF extends React.Component {
@@ -19,20 +21,45 @@ class PDF extends React.Component {
   }
 
   async initialize() {
+    const { notify } = this.props
+
     /* eslint-disable max-len */
     await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */)
 
     /* eslint-disable max-len */
     await import('pdfjs-dist/web/compatibility' /* webpackChunkName: "pdf.comp" */)
 
-    const { splitter, setSplitterPdfObject } = this.props
+    const { splitter, setSplitterPdfObject, resetSplitter } = this.props
+
+    let invalidFilesCount = 0
 
     _.each(splitter.files, async pdf => {
       const url = pdf.file.preview || pdf.file.url
 
-      const doc = await PDFJS.getDocument(url)
+      try {
+        const doc = await PDFJS.getDocument(url)
 
-      setSplitterPdfObject(pdf.id, doc)
+        setSplitterPdfObject(pdf.id, doc)
+      } catch (e) {
+        invalidFilesCount += 1
+
+        const message =
+          e.name === 'PasswordException'
+            ? `Sorry "${pdf.file.name}" is password protected.`
+            : `Sorry we can't open "${
+                pdf.file.name
+              }". it's damaged or not readable. ${e.message}`
+
+        notify({
+          title: 'Cannot open pdf file',
+          message,
+          status: 'warning'
+        })
+
+        if (invalidFilesCount === _.size(splitter.files)) {
+          resetSplitter()
+        }
+      }
     })
   }
 
@@ -112,5 +139,7 @@ function mapStateToProps({ deals }) {
 
 export default connect(mapStateToProps, {
   selectSplitterPage,
-  setSplitterPdfObject
+  setSplitterPdfObject,
+  notify,
+  resetSplitter
 })(PDF)

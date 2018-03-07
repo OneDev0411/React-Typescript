@@ -1,12 +1,12 @@
 %contact-activities {
   .activities {
-    background-color: #fff;
-    margin-top: 20px;
     min-height: 40vh;
     @extend %activities-nav-tabs;
 
     .tab-content {
+      padding: 1em;
       .timeline {
+        padding-top: 1em;
         @extend %contact-timeline;
       }
 
@@ -20,13 +20,16 @@
 %activities-nav-tabs {
   ul.nav-tabs {
     border: none;
-    margin: 2% 2% 3% 2%;
+    padding: 0;
+    margin-bottom: 1em;
+
     li {
-      padding: 0 !important;
+      font-size: 1.8rem;
+      margin-right: 1em;
       a {
+        margin: 0;
+        padding: 0;
         color: #9b9b9b;
-        margin: 0 10px 0 0;
-        padding: 0 0 0 0;
         &:hover {
           border-color: transparent;
           background-color: transparent;
@@ -40,10 +43,10 @@
       }
 
       .bdg {
-        color: #9b9b9b;
-        font-weight: normal;
-        font-size: 10px;
+        font-size: 1.2rem;
         margin-left: 5px;
+        font-weight: normal;
+        color: #9b9b9b;
       }
     }
 
@@ -56,7 +59,7 @@
           color: #2196f3;
           font-weight: bold;
           border-bottom: 2px solid #2196f3;
-          padding-bottom: 10px;
+          padding-bottom: 0.5em;
         }
       }
     }
@@ -64,21 +67,8 @@
 }
 
 %contact-notes {
-  padding: 0;
   .no-note {
     @extend %empty-state;
-  }
-
-  .item {
-    border-bottom: 1px solid #f6f6f6;
-    font-size: 16px;
-    padding: 2% 2% 2% 3%;
-    .time {
-      display: block;
-      color: gray;
-      font-size: 14px;
-      padding-left: 4px;
-    }
   }
 }
 
@@ -98,8 +88,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 14px;
-    padding: 1% 2%;
+    margin-bottom: 1em;
     &:hover {
       background-color: rgba(32, 150, 243, 0.05);
     }
@@ -141,4 +130,31 @@
       }
     }
   }
+}
+
+.c-notes-timeline {
+  position: relative;
+  margin-bottom: 1em;
+
+  .fa:not(.fa-trash) {
+    margin-right: .5em;
+  }
+}
+
+.c-notes-timeline__loading {
+  @extend %absolute-wrapper;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2196f3;
+  background-color: rgba(255,255,255, 0.7)
+}
+
+.c-notes-timeline__time {
+  padding: 0.5em 1em;
+  color: #777;
+  border-radius: 3px;
+  background-color: #f7f7f7;
 }

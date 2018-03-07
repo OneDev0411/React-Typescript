@@ -1,22 +1,55 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
+import { browserHistory } from 'react-router'
 
-import Avatar from 'react-avatar'
-import Contact from '../../../../../../models/Contact'
+import Avatar from './components/Avatar'
+import Contact from '../../../../../../models/contacts'
 import LastSeen from '../../../Chatroom/Rooms/components/last-seen'
 import Chatroom from '../../../Chatroom/Util/chatroom'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
+import { deleteContact } from '../../../../../../store_actions/contacts'
+import { confirmation } from '../../../../../../store_actions/confirmation'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
+import TrashIcon from '../../../../../../views/components/SvgIcons/TrashIcon'
 
 class Info extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      isDeleting: false,
       isCreatingRoom: false
     }
 
     this.handleOnClickChat = this.handleOnClickChat.bind(this)
+  }
+
+  handleOnDelete = () => {
+    this.props.confirmation({
+      show: true,
+      confirmLabel: 'Delete',
+      message: 'Delete Contact',
+      onConfirm: () => this.handleDeleteContact(),
+      description: 'Are you sure you want to delete this contact?'
+    })
+  }
+
+  async handleDeleteContact() {
+    const { contact, deleteContact } = this.props
+    const { id: contactId } = contact
+
+    this.setState({
+      isDeleting: true
+    })
+
+    try {
+      await deleteContact(contactId)
+
+      browserHistory.push('/dashboard/contacts')
+    } catch (error) {
+      throw error
+    }
   }
 
   async handleOnClickChat() {
@@ -70,41 +103,74 @@ class Info extends React.Component {
   }
 
   render() {
-    const { isCreatingRoom } = this.state
+    const { isCreatingRoom, isDeleting } = this.state
     const { contact } = this.props
 
+    if (isDeleting) {
+      return (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1000,
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontWeight: 'bold',
+            fontSize: '3.6rem',
+            color: 'red',
+            backgroundColor: 'rgba(255, 255, 255, 0.6)'
+          }}
+        >
+          Deleting ...
+        </div>
+      )
+    }
+
     return (
-      <div className="card contact-info">
-        <Avatar
-          className="avatar"
-          round
-          name={Contact.get.name(contact)}
-          src={Contact.get.avatar(contact)}
-          size={90}
-        />
+      <div className="c-contact-info c-contact-profile-card">
+        <Avatar contact={contact} />
 
-        <div className="detail">
-          <div className="name">{Contact.get.name(contact)}</div>
+        <div className="c-contact-info__detail">
+          <div className="c-contact-info__name">
+            {Contact.get.name(contact)}
+          </div>
 
-          <div className="status">
+          <div className="c-contact-info__status">
             {contact.users && <LastSeen user={contact.users[0]} />}
           </div>
 
-          <Button
-            bsStyle="primary"
+          <ActionButton
             disabled={isCreatingRoom}
             onClick={this.handleOnClickChat}
-            style={{
-              marginTop: '1em',
-              padding: '0.25em 1em'
-            }}
+            style={{ marginTop: '1em' }}
           >
             {isCreatingRoom ? 'Connecting...' : 'Chat'}
-          </Button>
+          </ActionButton>
+
+          <ShadowButton
+            style={{
+              position: 'absolute',
+              top: '1em',
+              right: '1em'
+            }}
+            onClick={this.handleOnDelete}
+          >
+            <TrashIcon color="#2196f3" size={24} />
+          </ShadowButton>
         </div>
       </div>
     )
   }
 }
 
-export default connect(({ user }) => ({ user }), { createRoom })(Info)
+export default connect(({ user }) => ({ user }), {
+  confirmation,
+  createRoom,
+  deleteContact
+})(Info)

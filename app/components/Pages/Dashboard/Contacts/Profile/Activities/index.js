@@ -1,20 +1,14 @@
 import React from 'react'
 import { Tabs, Tab } from 'react-bootstrap'
-import _ from 'underscore'
 import Timeline from '../Timeline'
 import Notes from '../Notes'
-import Contact from '../../../../../../models/Contact'
+import Contact from '../../../../../../models/contacts'
 
-export default ({
-  contact,
-  activeTab,
-  onChangeTab,
-  onChangeAttribute
-}) => {
+export default ({ contact, activeTab, onChangeTab }) => {
   const notes = Contact.get.notes(contact)
 
   return (
-    <div className="card activities">
+    <div className="c-contact-profile-card activities">
       <Tabs
         activeKey={activeTab}
         animation={false}
@@ -33,7 +27,7 @@ export default ({
           <Timeline
             name={Contact.get.name(contact)}
             avatar={Contact.get.avatar(contact)}
-            activities={contact.timeline || {}}
+            activities={contact.activities || {}}
           />
         </Tab>
 
@@ -42,15 +36,12 @@ export default ({
           title={
             <div>
               <span className="name">Notes</span>
-              <span className="bdg">{_.size(notes)}</span>
+              <span className="bdg">{`( ${notes.length} )`}</span>
             </div>
           }
           className="notes"
         >
-          <Notes
-            notes={notes}
-            onNoteChange={onChangeAttribute}
-          />
+          <Notes notes={notes} contact={contact} />
         </Tab>
       </Tabs>
     </div>

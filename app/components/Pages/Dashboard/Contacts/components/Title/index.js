@@ -2,13 +2,23 @@ import React from 'react'
 import Dropdown from '../Dropdown'
 
 const OPTIONS = {
-  Mr: 'Mr',
-  Ms: 'Ms',
-  Mrs: 'Mrs',
-  Miss: 'Miss',
-  Dr: 'Dr'
+  default: {
+    title: 'Mr'
+  },
+  ms: {
+    title: 'Ms'
+  },
+  mrs: {
+    title: 'Mrs'
+  },
+  miss: {
+    title: 'Miss'
+  },
+  dr: {
+    title: 'Dr'
+  }
 }
 
 export default function TitleDropDown(props) {
-  return <Dropdown options={OPTIONS} {...props} />
+  return <Dropdown name="user-titles" options={OPTIONS} {...props} />
 }

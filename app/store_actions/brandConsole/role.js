@@ -10,15 +10,24 @@ function _getRoles(roles) {
 }
 
 export function getRoles(brand) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch({ type: types.SHOW_SPINNER })
+
     const response = await BrandConsole.getRoles(brand)
+
     dispatch({ type: types.HIDE_SPINNER })
+
     if (response && !response.error) {
       const { data } = response.body
+
       dispatch(_getRoles(data))
     } else {
-      dispatch(notify({ message: `getRoles: ${response.error.message}`, status: 'error' }))
+      dispatch(
+        notify({
+          message: `getRoles: ${response.error.message}`,
+          status: 'error'
+        })
+      )
     }
   }
 }
@@ -31,15 +40,24 @@ function _addRole(role) {
 }
 
 export function addRole(brand, role) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch({ type: types.SHOW_SPINNER })
+
     const response = await BrandConsole.addRole(brand, role)
+
     dispatch({ type: types.HIDE_SPINNER })
+
     if (response && !response.error) {
       const { data } = response.body
+
       dispatch(_addRole(data))
     } else {
-      dispatch(notify({ message: `addRole: ${response.error.message}`, status: 'error' }))
+      dispatch(
+        notify({
+          message: `addRole: ${response.error.message}`,
+          status: 'error'
+        })
+      )
     }
   }
 }
@@ -52,16 +70,22 @@ function _deleteRole(role_id) {
 }
 
 export function deleteRole(role) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch({ type: types.SHOW_SPINNER })
+
     const response = await BrandConsole.deleteRole(role)
+
     dispatch({ type: types.HIDE_SPINNER })
-    if (response
-      && !response.error
-      && response.body.status === 'success') {
+
+    if (response && !response.error) {
       dispatch(_deleteRole(role.id))
     } else {
-      dispatch(notify({ message: `deleteRoles: ${response.error.message}`, status: 'error' }))
+      dispatch(
+        notify({
+          message: `deleteRoles: ${response.error.message}`,
+          status: 'error'
+        })
+      )
     }
   }
 }
@@ -74,15 +98,24 @@ function _editRole(role) {
 }
 
 export function editRole(role) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch({ type: types.SHOW_SPINNER })
+
     const response = await BrandConsole.editRole(role)
+
     dispatch({ type: types.HIDE_SPINNER })
+
     if (response && !response.error) {
       const { data } = response.body
+
       dispatch(_editRole(data))
     } else {
-      dispatch(notify({ message: `editRole: ${response.error.message}`, status: 'error' }))
+      dispatch(
+        notify({
+          message: `editRole: ${response.error.message}`,
+          status: 'error'
+        })
+      )
     }
   }
 }

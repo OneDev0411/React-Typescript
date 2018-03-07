@@ -1,0 +1,94 @@
+.c-new-address-modal {
+  @media screen and (min-width: 48em) {
+    height: 490px !important;
+  }
+
+  @media screen and (min-height: 50em) and (min-width: 48em) { // 800 * 768
+    height: 590px !important;
+  }
+}
+
+.c-new-address-modal__body {
+  @media screen and (min-width: 48em) {
+    height: 393px !important;
+  }
+
+  @media screen and (min-height: 50em) and (min-width: 48em) {
+    height: 493px !important;
+  }
+}
+
+.c-new-address-modal__field {
+  margin-bottom: 1em;
+}
+
+.c-new-address-modal__field__label {
+  font-weight: normal;
+  cursor: pointer;
+
+  & + input[type=text] {
+    display: block;
+  }
+}
+
+.c-new-address-modal__field__input {
+  width: 100%;
+  height: 36px;
+  font-size: 1.5rem;
+  padding: 0.5em;
+  border-radius: 3px;
+  border: 1px solid #cecece;
+
+  &:focus {
+    outline-width: 2px;
+    border-width: 0;
+  }
+
+  .hasError &:focus {
+    outline-color: red;
+  }
+
+  @include placeholder(#cacaca);
+}
+
+.c-new-address-modal__field--inline {
+  width: 50%
+}
+
+.c-contact-details--address__no-address {
+  padding: 5rem 0;
+  text-align: center;
+  color: #cecece;
+  font-size: 1.7rem;
+
+  > p {
+    font-size: 2.2rem;
+    > .fa {
+      margin-right: 0.5em;
+      font-size: 3.6rem;
+      display: inline-block;
+      vertical-align: baseline;
+    }
+  }
+}
+
+.c-new-address-modal__cancel-btn {
+  @extend .c-button--shadow;
+  margin: 0;
+  padding: 0.25em 1em;
+  border-radius: 3px;
+  border: 1px solid #2196f3;
+
+  &:focus,
+  &:hover {
+    color: #fff;
+    background-color: #2196f3;
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    color: #444;
+    background-color: #cecece;
+    border-color: #cecece;
+  }
+}

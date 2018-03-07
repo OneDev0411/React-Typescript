@@ -1,3 +1,7 @@
+export function uppercaseFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
 async function getPhoneNumberUtil() {
   const {
     PhoneNumberUtil
@@ -26,7 +30,9 @@ export function getParameterByName(name) {
   let regex = new RegExp(`[\\?&]${name}=([^&#]*)`),
     results = regex.exec(location.search)
 
-  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '))
+  return results === null
+    ? ''
+    : decodeURIComponent(results[1].replace(/\+/g, ' '))
 }
 
 export function prepareToken(token) {
@@ -35,7 +41,8 @@ export function prepareToken(token) {
 
 export function convertDateToTimefunction(date) {
   let date_arr = date.split('-')
-  let time = new Date(date_arr[0], date_arr[1] - 1, date_arr[2]).getTime() / 1000
+  let time =
+    new Date(date_arr[0], date_arr[1] - 1, date_arr[2]).getTime() / 1000
 
   return time
 }

@@ -10,8 +10,9 @@ import Title from '../components/Title'
 import Name from './Name'
 import Emails from './Emails'
 import Phones from './Phones'
-import store from '../../../../../stores'
-import { addContact } from '../../../../../store_actions/contact'
+
+// eslint-disable-next-line
+import { createNewContact } from '../../../../../store_actions/contacts/create-new-contact'
 
 const HalfColumnContainer = styled.div`
   width: 50%;
@@ -33,7 +34,7 @@ const INITIAL_STATE = {
   last_name: '',
   emails: [''],
   phones: [''],
-  title: null,
+  title: 'Mr',
   saving: false,
   invalidFields: [],
   isFormCompleted: false,
@@ -102,7 +103,9 @@ class AddContactModal extends React.Component {
 
   handleOnChangeAttribute = (name, index, value) => {
     const attributeName = `${name}s`
-    const attribute = update(this.state[attributeName], { $splice: [[index, 1]] })
+    const attribute = update(this.state[attributeName], {
+      $splice: [[index, 1]]
+    })
     const newAttribute = [...attribute, value]
 
     const fieldForValidator = {
@@ -112,11 +115,14 @@ class AddContactModal extends React.Component {
     }
 
     this.setState({ [attributeName]: newAttribute }, () =>
-      this.validate(fieldForValidator))
+      this.validate(fieldForValidator)
+    )
   }
 
   handleAddNewAttribute = attributeName => {
     const fieldName = `${attributeName}s`
+
+    console.log(attributeName)
 
     // The empty string value that have been added,
     // it is just to mapping over the items for generate item in react.
@@ -135,9 +141,15 @@ class AddContactModal extends React.Component {
 
   async handleSubmit() {
     const {
-      title, first_name, middle_name, last_name, stage, phones, emails
+      title,
+      first_name,
+      middle_name,
+      last_name,
+      stage,
+      phones,
+      emails
     } = this.state
-    const { onNewContact } = this.props
+    const { onNewContact, createNewContact } = this.props
 
     this.setState({ saving: true })
 
@@ -152,12 +164,12 @@ class AddContactModal extends React.Component {
         stage
       }
 
-      const id = await store.dispatch(addContact(contact))
+      const newContact = await createNewContact(contact)
 
       this.setState(INITIAL_STATE)
 
       // trigger
-      onNewContact(id)
+      onNewContact(newContact.id)
     } catch (e) {
       if (e.response) {
         this.props.notify({
@@ -214,16 +226,14 @@ class AddContactModal extends React.Component {
               <HalfColumnContainer>
                 <span style={{ marginRight: '1rem' }}>Stage:</span>
                 <Stage
-                  defaultTitle="General"
-                  selectedItem={this.state.stage}
+                  defaultTitle={this.state.stage}
                   handleOnSelect={stage => this.setState({ stage })}
                 />
               </HalfColumnContainer>
               <HalfColumnContainer>
                 <span style={{ marginRight: '1rem' }}>Title:</span>
                 <Title
-                  defaultTitle="Mr"
-                  selectedItem={this.state.title}
+                  defaultTitle={this.state.title}
                   handleOnSelect={title => this.setState({ title })}
                 />
               </HalfColumnContainer>
@@ -308,13 +318,15 @@ class AddContactModal extends React.Component {
   }
 }
 
-export default connect(null, { notify })(AddContactModal)
+export default connect(null, { notify, createNewContact })(AddContactModal)
 
 /**
  * validate email
  */
 function isEmail(email) {
-  return new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).exec(email)
+  return new RegExp(
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  ).exec(email)
 }
 
 /**
