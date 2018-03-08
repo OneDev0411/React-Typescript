@@ -1,3 +1,4 @@
+import _ from 'underscore'
 import Socket from '../../../../../services/socket'
 import store from '../../../../../stores'
 import {
@@ -55,6 +56,12 @@ export default class DealSocket extends Socket {
     const { action, deal } = response
 
     console.log(`[ ${action} ] got a deals socket event`)
+
+    if (!_.isObject(deal)) {
+      console.warn('[ Deal Socket ] received deal is not an object', deal)
+
+      return false
+    }
 
     switch (action) {
       case 'Updated':
