@@ -20,6 +20,7 @@ export default class extends React.Component {
     const { disableKeyboardShortcuts } = this.state
     const {
       deal,
+      isBackOffice,
       showFactsheet,
       showComments,
       toggleFactsheet,
@@ -69,23 +70,25 @@ export default class extends React.Component {
               </Button>
             )}
 
-            {file.type === 'pdf' && (
-              <Button
-                className="deal-button split"
-                onClick={() => splitPdfHandler(file)}
-              >
-                Split PDF
-              </Button>
-            )}
+            {!isBackOffice &&
+              file.type === 'pdf' && (
+                <Button
+                  className="deal-button split"
+                  onClick={() => splitPdfHandler(file)}
+                >
+                  Split PDF
+                </Button>
+              )}
 
-            {fileType === 'digital-form' && (
-              <Button
-                className="deal-button edit-form"
-                onClick={editFormHandler}
-              >
-                Edit Form
-              </Button>
-            )}
+            {!isBackOffice &&
+              fileType === 'digital-form' && (
+                <Button
+                  className="deal-button edit-form"
+                  onClick={editFormHandler}
+                >
+                  Edit Form
+                </Button>
+              )}
           </div>
         </div>
 

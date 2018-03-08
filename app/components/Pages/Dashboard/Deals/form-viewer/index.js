@@ -179,7 +179,7 @@ class FormViewer extends React.Component {
 
   render() {
     const { file, showFactsheet, showComments } = this.state
-    const { deal, tasks, envelopes, params } = this.props
+    const { isBackOffice, deal, tasks, envelopes, params } = this.props
 
     if (!file) {
       return (
@@ -202,6 +202,7 @@ class FormViewer extends React.Component {
 
     return (
       <FileView
+        isBackOffice={isBackOffice}
         deal={deal}
         onClose={() => this.closeForm()}
         toggleFactsheet={() => this.toggleFactsheet()}
