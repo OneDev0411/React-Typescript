@@ -51,6 +51,7 @@
     font-weight: 600;
     line-height: 1.47;
     color: #1d364b;
+    display: flex;
 
     .title {
       text-overflow: ellipsis;
@@ -59,9 +60,6 @@
     }
 
     .open-listing {
-      position: absolute;
-      top: 0;
-      right: 0;
       cursor: pointer;
       opacity: 0.8;
     }
