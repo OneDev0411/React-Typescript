@@ -21,7 +21,9 @@ class PageSelector extends React.Component {
     if (selectedOption === 'All') {
       this.addAllPages()
     } else {
-      this.getSelectedPages().forEach(number => selectSplitterPage(pdfId, number))
+      this.getSelectedPages().forEach(number =>
+        selectSplitterPage(pdfId, number)
+      )
     }
 
     this.setState({

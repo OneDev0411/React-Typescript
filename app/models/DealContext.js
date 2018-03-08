@@ -360,9 +360,11 @@ function getFormattedValue(value) {
   }
 
   if (this.format === 'Currency') {
-    return `$${parseFloat(value)
-      .toFixed(2)
-      .replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}`
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0
+    }).format(value)
   }
 
   return value

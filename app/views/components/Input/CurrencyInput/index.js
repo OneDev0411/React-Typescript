@@ -6,7 +6,7 @@ import _ from 'underscore'
 export default props => {
   const opt = Object.assign(
     {
-      suffix: '.00',
+      suffix: '',
       allowNegative: false,
       allowLeadingZeroes: false,
       allowDecimal: false
