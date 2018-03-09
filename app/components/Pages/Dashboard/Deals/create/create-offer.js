@@ -144,6 +144,7 @@ class CreateOffer extends React.Component {
       contexts,
       agents,
       clients,
+      escrowOfficers,
       buyerName,
       enderType,
       dealStatus
@@ -158,6 +159,7 @@ class CreateOffer extends React.Component {
       enderType !== -1 &&
       _.size(clients) > 0 && // validate clients
       _.size(agents) > 0 && // validate agents
+      _.size(escrowOfficers) > 0 &&
       dealStatus.length > 0 &&
       DealContext.validateList(
         contexts,

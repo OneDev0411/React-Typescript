@@ -1,9 +1,10 @@
 import React from 'react'
 import _ from 'underscore'
+import cn from 'classnames'
 import CrudRole from './crud-role'
-import RoleItem from './role-item'
 
 export default ({
+  hasError,
   escrowOfficers,
   onRemoveEscrowOfficer,
   onUpsertEscrowOfficer
@@ -12,8 +13,9 @@ export default ({
 
   return (
     <div className="form-section deal-people deal-client">
-      <div className="hero">
-        Do you have Title company and Escrow officer information?
+      <div className={cn('hero', { hasError })}>
+        Do you have Title company and Escrow officer information? &nbsp;
+        <span className="required">*</span>
       </div>
 
       <div className="people-container">

@@ -99,7 +99,8 @@ class CreateDeal extends React.Component {
       agents,
       sellingAgents,
       clients,
-      sellingClients
+      sellingClients,
+      escrowOfficers
     } = this.state
 
     const validationTable = {
@@ -124,6 +125,10 @@ class CreateDeal extends React.Component {
         // on Buying side, user should add SellerClient
         validator: () =>
           dealSide === 'Buying' ? _.size(sellingClients) > 0 : true
+      },
+      escrow_officer: {
+        validator: () =>
+          dealSide === 'Buying' ? _.size(escrowOfficers) > 0 : true
       },
       agents: {
         validator: () => _.size(agents) > 0
@@ -526,6 +531,7 @@ class CreateDeal extends React.Component {
                     />
 
                     <EscrowOfficers
+                      hasError={this.hasError('escrow_officer')}
                       escrowOfficers={escrowOfficers}
                       onUpsertEscrowOfficer={form =>
                         this.onUpsertRole(form, 'escrowOfficers')
