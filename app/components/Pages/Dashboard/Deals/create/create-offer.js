@@ -110,12 +110,20 @@ class CreateOffer extends React.Component {
   }
 
   changeContext(field, value) {
-    this.setState({
-      contexts: {
-        ...this.state.contexts,
-        [field]: value
-      }
-    })
+    let { contexts } = this.state
+
+    if (value) {
+      this.setState({
+        contexts: {
+          ...contexts,
+          [field]: value
+        }
+      })
+    } else if (contexts[field]) {
+      this.setState({
+        contexts: _.omit(contexts, field)
+      })
+    }
   }
 
   openDeal(id) {
