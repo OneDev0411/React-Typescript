@@ -110,20 +110,12 @@ class CreateOffer extends React.Component {
   }
 
   changeContext(field, value) {
-    let { contexts } = this.state
-
-    if (value) {
-      this.setState({
-        contexts: {
-          ...contexts,
-          [field]: value
-        }
-      })
-    } else if (contexts[field]) {
-      this.setState({
-        contexts: _.omit(contexts, field)
-      })
-    }
+    this.setState({
+      contexts: {
+        ...this.state.contexts,
+        [field]: value
+      }
+    })
   }
 
   openDeal(id) {
@@ -257,8 +249,12 @@ class CreateOffer extends React.Component {
     const contextsObject = {}
 
     _.each(contexts, (value, name) => {
+      if (_.isUndefined(value) || value === null || value.length === 0) {
+        return false    
+      }
+      
       const field = Deal.get.context(deal, name)
-
+      
       contextsObject[name] = {
         value,
         approved: field ? field.approved_at !== null : false
