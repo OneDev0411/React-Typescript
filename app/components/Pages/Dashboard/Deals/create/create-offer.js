@@ -251,8 +251,12 @@ class CreateOffer extends React.Component {
     const contextsObject = {}
 
     _.each(contexts, (value, name) => {
+      if (_.isUndefined(value) || value === null || value.length === 0) {
+        return false    
+      }
+      
       const field = Deal.get.context(deal, name)
-
+      
       contextsObject[name] = {
         value,
         approved: field ? field.approved_at !== null : false

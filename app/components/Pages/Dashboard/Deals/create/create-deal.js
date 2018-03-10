@@ -347,6 +347,10 @@ class CreateDeal extends React.Component {
     const dealContexts = _.indexBy(this.getDealContexts(), 'name')
 
     _.each(contexts, (value, name) => {
+      if (_.isUndefined(value) || value === null || value.length === 0) {
+        return false
+      }
+
       const needsApproval = dealContexts[name]
         ? dealContexts[name].needs_approval
         : false
