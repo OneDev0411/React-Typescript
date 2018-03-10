@@ -252,11 +252,11 @@ class CreateOffer extends React.Component {
 
     _.each(contexts, (value, name) => {
       if (_.isUndefined(value) || value === null || value.length === 0) {
-        return false    
+        return false
       }
-      
+
       const field = Deal.get.context(deal, name)
-      
+
       contextsObject[name] = {
         value,
         approved: field ? field.approved_at !== null : false
@@ -304,6 +304,19 @@ class CreateOffer extends React.Component {
     const { deal } = this.props
 
     browserHistory.push(`/dashboard/deals/${deal.id}`)
+  }
+
+  /**
+   * check commission is required or not
+   */
+  getIsCommissionRequired() {
+    const { enderType } = this.state
+
+    if (enderType === 'AgentDoubleEnder' || enderType === 'OfficeDoubleEnder') {
+      return true
+    }
+
+    return false
   }
 
   render() {
@@ -366,6 +379,7 @@ class CreateOffer extends React.Component {
                 scenario="CreateOffer"
                 dealSide="Buying"
                 shouldPrepopulateAgent={isDoubleEnderAgent}
+                isCommissionRequired={this.getIsCommissionRequired()}
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                 onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
