@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import Deal from '../../../../../../models/Deal'
+import DealContext from '../../../../../../models/DealContext'
 import Editable from './inline-edit'
 import { updateContext } from '../../../../../../store_actions/deals'
 
@@ -13,9 +14,12 @@ class Table extends React.Component {
     }
   }
 
-  approveField(e, field, ctx) {
+  approveField(e, field) {
     e.stopPropagation()
-    this.updateField(field, ctx.rawValue || ctx.value)
+
+    const { deal } = this.props
+
+    this.updateField(field, DealContext.getOriginalValue(deal, field))
   }
 
   onChangeContext(field, value) {
@@ -79,7 +83,7 @@ class Table extends React.Component {
                       saving !== field.name && (
                         <button
                           className="btn-approve"
-                          onClick={e => this.approveField(e, field, fieldCtx)}
+                          onClick={e => this.approveField(e, field)}
                         >
                           Approve
                         </button>
