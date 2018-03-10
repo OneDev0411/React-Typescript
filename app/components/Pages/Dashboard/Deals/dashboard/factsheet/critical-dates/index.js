@@ -48,7 +48,7 @@ const CriticalDates = ({ deal, showTitle = true }) => {
 /**
  * get next date
  */
-CriticalDates.getNextDate = function(deal) {
+CriticalDates.getNextDate = function getNextDate(deal) {
   const date = getNextDateField(deal)
 
   if (!date) {
