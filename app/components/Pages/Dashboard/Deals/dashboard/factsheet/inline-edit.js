@@ -108,7 +108,13 @@ export default class Editable extends React.Component {
   getContextValue() {
     const { context } = this.props
 
-    return (context.rawValue || context.value || '').toString()
+    if (!_.isUndefined(context.rawValue) && context.rawValue !== null) {
+      return context.rawValue.toString()
+    } else if (!_.isUndefined(context.value) && context.value !== null) {
+      return context.value.toString()
+    }
+
+    return ''
   }
 
   getFormattedValue() {
