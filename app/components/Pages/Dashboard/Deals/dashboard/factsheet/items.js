@@ -43,6 +43,10 @@ class Table extends React.Component {
     this.setState({ saving: null })
   }
 
+  isSet(value) {
+    return !_.isUndefined(value) && value !== null
+  }
+
   render() {
     const { saving } = this.state
     const { table, deal, isBackOffice, showTitle, title, getValue } = this.props
@@ -77,7 +81,7 @@ class Table extends React.Component {
 
                   <div className="approve-row">
                     {isBackOffice &&
-                      fieldCtx.value &&
+                      this.isSet(fieldCtx.value) &&
                       !disabled &&
                       !approved &&
                       saving !== field.name && (
