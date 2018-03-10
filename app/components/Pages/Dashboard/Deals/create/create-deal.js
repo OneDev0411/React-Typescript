@@ -403,6 +403,19 @@ class CreateDeal extends React.Component {
   }
 
   /**
+   * check commission is required or not
+   */
+  getIsCommissionRequired() {
+    const { enderType } = this.state
+
+    if (enderType === 'AgentDoubleEnder' || enderType === 'OfficeDoubleEnder') {
+      return true
+    }
+
+    return false
+  }
+
+  /**
    * flatten all entered roles
    */
   getRoles() {
@@ -512,7 +525,7 @@ class CreateDeal extends React.Component {
                       dealSide="Selling"
                       agents={sellingAgents}
                       shouldPrepopulateAgent={false}
-                      isCommissionRequired={false}
+                      isCommissionRequired={this.getIsCommissionRequired()}
                       onUpsertAgent={form =>
                         this.onUpsertRole(form, 'sellingAgents')
                       }
