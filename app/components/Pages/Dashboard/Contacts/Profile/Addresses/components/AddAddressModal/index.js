@@ -32,7 +32,7 @@ function AddAddressModal({
     >
       <Form
         onSubmit={handleOnSubmit}
-        initialValues={{ label: 'Address' }}
+        initialValues={{ label: 'Other' }}
         render={({ handleSubmit, pristine, invalid, values, reset }) => (
           <div>
             <BasicModal.Header title="Add New Address" />
