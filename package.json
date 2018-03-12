@@ -7,11 +7,14 @@
   "repository": "git@gitlab.com:rechat/web.git",
   "license": "ISC",
   "scripts": {
-    "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
-    "developClient": "NODE_ENV=development notify=true babel-node ./bin/server webpack-dev-server --progress --hot",
+    "develop":
+      "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
+    "developClient":
+      "NODE_ENV=development notify=true babel-node ./bin/server webpack-dev-server --progress --hot",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
-    "serve": "NODE_ENV=production forever node_modules/babel-cli/bin/babel-node.js ./bin/server",
+    "serve":
+      "NODE_ENV=production forever node_modules/babel-cli/bin/babel-node.js ./bin/server",
     "serve:stage": "NODE_ENV=stage babel-node ./bin/server",
     "lint": "npm run lint:app && npm run lint:server",
     "lint:app": "eslint ./app",
@@ -22,7 +25,8 @@
     "test:watch": "npm test -- --watch",
     "test:e2e": "nightwatch",
     "e2e-setup": "selenium-standalone install",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "postinstall": "node ./npm-postinstall.js"
   },
   "engines": {
     "node": "9.2.0"
@@ -128,7 +132,8 @@
     "react-dnd": "^2.5.4",
     "react-dnd-html5-backend": "^2.5.4",
     "react-dom": "^16.2.0",
-    "react-dropzone": "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
+    "react-dropzone":
+      "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
     "react-final-form": "^3.1.2",
     "react-ga": "^2.3.5",
     "react-hot-loader": "^3.1.3",
@@ -168,7 +173,8 @@
     "sass-loader": "^6.0.6",
     "scissors": "git+https://github.com/raminious/scissors.git",
     "shorti": "^1.2.6",
-    "simplebar": "github:izadmehr/simplebar#35b9bf51a13adf85e705c972a3d4a5e6e0df5fbd",
+    "simplebar":
+      "github:izadmehr/simplebar#35b9bf51a13adf85e705c972a3d4a5e6e0df5fbd",
     "socket.io": "^1.7.3",
     "socket.io-client": "^1.7.3",
     "stream-to-promise": "^2.2.0",
