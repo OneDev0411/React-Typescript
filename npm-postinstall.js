@@ -4,7 +4,7 @@ const colors = require('colors')
 function patchPDFJS() {
   const path = 'node_modules/pdfjs-dist/build/pdf.combined.js'
 
-  fs.readFile(path, 'utf8', (err, data) => {
+  fs.readFile(path, 'utf8', (err, fileData) => {
     if (err) {
       throw new Error(err)
     }
@@ -13,18 +13,20 @@ function patchPDFJS() {
       _this2.setFlags(_util.AnnotationFlag.HIDDEN);
     }`
 
-    if (data.includes(`/*${patchCode}*/`)) {
+    if (fileData.includes(`/*${patchCode}*/`)) {
       console.log(colors.green('The PDF.js is patched already'))
 
       return false
     }
 
-    if (!data.includes(patchCode)) {
+    if (!fileData.includes(patchCode)) {
       console.log(colors.red.bold('Can not find patch code in PDF.js project'))
+      console.log(`file data: ${fileData}`)
+      console.log(colors.red(`Code: ${patchCode}`))
       throw new Error('Can not find the code to patch')
     }
 
-    const result = data.replace(patchCode, `/*${patchCode}*/`)
+    const result = fileData.replace(patchCode, `/*${patchCode}*/`)
 
     fs.writeFile(path, result, 'utf8', err => {
       if (err) {
