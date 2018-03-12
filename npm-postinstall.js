@@ -21,9 +21,6 @@ function patchPDFJS() {
 
     if (!fileData.includes(patchCode)) {
       console.log(colors.red.bold('Can not find patch code in PDF.js project'))
-      // console.log(`file data: ${fileData}`)
-      console.log(colors.red(`Code: ${patchCode}`))
-      // throw new Error('Can not find the code to patch')
     }
 
     const result = fileData.replace(patchCode, `/*${patchCode}*/`)
