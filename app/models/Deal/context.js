@@ -1,4 +1,5 @@
 import Fetch from '../../services/fetch'
+import context from '../../constants/deals/context'
 
 /**
  * get contexts info
@@ -37,7 +38,23 @@ export async function updateContext(dealId, context) {
   }
 }
 
+/**
+ * approve deal context
+ */
+export async function approveContext(dealId, contextId) {
+  try {
+    const response = await new Fetch()
+      .patch(`/deals/${dealId}/context/${contextId}/approved`)
+      .send({ approved: true })
+
+    return response.body.data
+  } catch (e) {
+    return false
+  }
+}
+
 export default {
   getContexts,
-  updateContext
+  updateContext,
+  approveContext
 }
