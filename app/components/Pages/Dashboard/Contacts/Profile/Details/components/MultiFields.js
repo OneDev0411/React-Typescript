@@ -239,7 +239,9 @@ function initializeFields(props) {
       contact
     })
   } else {
-    fields = getMostRecentlyAttribute({ contact, attributeName: 'birthdays' })
+    const field = getMostRecentlyAttribute({ contact, attributeName: name })
+
+    fields = field != null ? [field] : undefined
   }
 
   if (fields && Array.isArray(fields) && fields.length > 0) {
