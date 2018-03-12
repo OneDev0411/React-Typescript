@@ -2,9 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import Deal from '../../../../../../models/Deal'
-import DealContext from '../../../../../../models/DealContext'
 import Editable from './inline-edit'
-import { updateContext } from '../../../../../../store_actions/deals'
+import {
+  updateContext,
+  approveContext
+} from '../../../../../../store_actions/deals'
 
 class Table extends React.Component {
   constructor(props) {
@@ -14,12 +16,22 @@ class Table extends React.Component {
     }
   }
 
-  approveField(e, field) {
+  async approveField(e, name, context) {
     e.stopPropagation()
 
-    const { deal } = this.props
+    const { deal, isBackOffice, approveContext } = this.props
 
-    this.updateField(field, DealContext.getOriginalValue(deal, field))
+    if (!isBackOffice) {
+      return false
+    }
+
+    // set state
+    this.setState({ saving: name })
+
+    await approveContext(deal.id, context.id)
+
+    // set state
+    this.setState({ saving: false })
   }
 
   onChangeContext(field, value) {
@@ -81,13 +93,15 @@ class Table extends React.Component {
 
                   <div className="approve-row">
                     {isBackOffice &&
-                      this.isSet(fieldCtx.value) &&
+                      context &&
                       !disabled &&
                       !approved &&
                       saving !== field.name && (
                         <button
                           className="btn-approve"
-                          onClick={e => this.approveField(e, field)}
+                          onClick={e =>
+                            this.approveField(e, field.name, context)
+                          }
                         >
                           Approve
                         </button>
@@ -107,5 +121,5 @@ export default connect(
   ({ deals }) => ({
     isBackOffice: deals.backoffice
   }),
-  { updateContext }
+  { updateContext, approveContext }
 )(Table)

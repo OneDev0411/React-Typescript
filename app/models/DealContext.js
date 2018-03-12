@@ -219,23 +219,6 @@ export function isDisabled(deal, field) {
 }
 
 /**
- * returns raw value of context
- */
-export function getOriginalValue(deal, field) {
-  if (field.name === 'property_type') {
-    return deal.property_type
-  }
-
-  const contextValue = Deal.get.field(deal, field.name)
-
-  if (field.data_type === 'Date') {
-    return moment.unix(contextValue).format()
-  }
-
-  return contextValue
-}
-
-/**
  * returns value of context
  */
 export function getValue(deal, field) {
@@ -402,7 +385,6 @@ export default {
   isCurrency,
   isDisabled,
   getValue,
-  getOriginalValue,
   getDateValue,
   parseDate,
   validate,

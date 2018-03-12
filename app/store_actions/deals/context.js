@@ -10,6 +10,14 @@ export function updateContext(dealId, ctx) {
   }
 }
 
+export function approveContext(dealId, contextId) {
+  return async dispatch => {
+    const deal = await Deal.approveContext(dealId, contextId)
+
+    dispatch(updateDeal(deal))
+  }
+}
+
 export function getContexts(user = {}) {
   return async dispatch => {
     const contexts = await Deal.getContexts(user)
