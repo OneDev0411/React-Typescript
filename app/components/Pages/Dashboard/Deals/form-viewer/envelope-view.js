@@ -1,60 +1,27 @@
 import React from 'react'
-import { Row, Col, Modal, Button } from 'react-bootstrap'
-import PdfViewer from '../../../../Partials/Pdf/Viewer'
+import { Button } from 'react-bootstrap'
 import Viewer from './viewer'
 import WhoSigned from './who-signed'
 
-export default ({
-  deal,
-  onClose,
-  editForm,
-  envelope,
-  task,
-  file
-}) => {
-  const { name, type, url, downloadUrl } = file
+export default ({ deal, onClose, envelope, file }) => (
+  <div className="c-deal-form-viewer">
+    <div className="c-deal-form-viewer__header">
+      <div>
+        <h1 className="c-deal-form-viewer__header__title">{file.name}</h1>
+      </div>
+      <div className="c-deal-form-viewer__header__cta">
+        <Button onClick={onClose} className="close-btn">
+          X
+        </Button>
+      </div>
+    </div>
 
-  return (
-    <Modal
-      className="deal-form-viewer-modal"
-      show
-      onHide={onClose}
-    >
-      <Modal.Header>
-        <span className="title">
-          { name }
-        </span>
+    <div className="c-deal-form-viewer__body show-envelopes">
+      <Viewer width="calc(100% - 375px)" file={file} />
 
-        <div className="cta">
-          <Button
-            onClick={onClose}
-            className="close-btn"
-          >
-            X
-          </Button>
-        </div>
-      </Modal.Header>
-
-      <Modal.Body>
-        <div className="fw-wrapper show-envelopes">
-          <Viewer
-            width="calc(100% - 375px)"
-            file={file}
-          />
-
-          <div
-            className="envelopes"
-            style={{ width: '375px' }}
-          >
-            <WhoSigned
-              deal={deal}
-              envelope={envelope}
-              onClose={onClose}
-            />
-          </div>
-        </div>
-
-      </Modal.Body>
-    </Modal>
-  )
-}
+      <div className="envelopes" style={{ width: '375px' }}>
+        <WhoSigned deal={deal} envelope={envelope} onClose={onClose} />
+      </div>
+    </div>
+  </div>
+)
