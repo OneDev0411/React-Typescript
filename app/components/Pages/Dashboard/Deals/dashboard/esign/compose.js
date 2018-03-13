@@ -199,9 +199,7 @@ class SendSignatures extends React.Component {
         showDocusignBanner: isDocusignError
       })
 
-      if (isDocusignError === false) {
-        console.log(err)
-
+      if (!isDocusignError) {
         this.setState({
           failure: {
             code: 500,
@@ -213,9 +211,7 @@ class SendSignatures extends React.Component {
   }
 
   render() {
-    const {
-      tasks, esign, deal, user, showAttachments
-    } = this.props
+    const { tasks, esign, deal, user, showAttachments } = this.props
     const { isSending, showDocusignBanner, failure } = this.state
     const { recipients } = esign
     const hasRecipients = Object.keys(recipients).length > 0

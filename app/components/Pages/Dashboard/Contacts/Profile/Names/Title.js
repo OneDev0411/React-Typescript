@@ -26,10 +26,10 @@ class Title extends React.Component {
     this.handleOnSelect = this.handleOnSelect.bind(this)
   }
 
-  async handleOnSelect(legal_prefix) {
+  async handleOnSelect(title) {
     const { onChange } = this.props
 
-    await onChange([{ type: 'legal_prefix', legal_prefix }])
+    await onChange([{ type: 'title', title }])
   }
 
   render() {
@@ -46,7 +46,7 @@ class Title extends React.Component {
             name="title"
             options={OPTIONS}
             disabled={disabled}
-            defaultTitle={field.legal_prefix}
+            defaultTitle={field.title}
             handleOnSelect={this.handleOnSelect}
           />
         </span>
