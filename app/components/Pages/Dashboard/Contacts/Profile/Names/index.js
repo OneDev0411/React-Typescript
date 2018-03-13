@@ -186,7 +186,7 @@ function getNames(names) {
     nameAttribute = nameFields
   }
 
-  if (names.legal_prefix && !nameAttribute.title) {
+  if (names && names.legal_prefix && !nameAttribute.title) {
     nameAttribute.title = names.legal_prefix
   }
 
