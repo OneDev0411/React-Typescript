@@ -29,8 +29,8 @@ export default ({ user, contactsCount, onNewContact, onInputChange }) => {
 
           <div className="list--header-row--col">
             <ExportContacts user={user} />
-            <ImportCSV />
-            <ImportOutlook userId={user.id} />
+            {/* <ImportCSV /> */}
+            {/* <ImportOutlook userId={user.id} /> */}
             <AddContactModal
               user={user}
               onNewContact={id => onNewContact(id)}
