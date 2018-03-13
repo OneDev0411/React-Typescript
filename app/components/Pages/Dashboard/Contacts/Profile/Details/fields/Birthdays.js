@@ -17,8 +17,8 @@ export default function Birthdays({ contact }) {
   }
 
   const handleFormat = unix_timestamp => {
-    if (!unix_timestamp) {
-      return unix_timestamp
+    if (!unix_timestamp || !validator(unix_timestamp)) {
+      return null
     }
 
     return format(unix_timestamp * 1000, 'MM/DD/YYYY')
