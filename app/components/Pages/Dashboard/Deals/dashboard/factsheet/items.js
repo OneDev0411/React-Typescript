@@ -19,7 +19,11 @@ class Table extends React.Component {
   async approveField(e, name, context) {
     e.stopPropagation()
 
-    const { deal, approveContext } = this.props
+    const { deal, isBackOffice, approveContext } = this.props
+
+    if (!isBackOffice) {
+      return false
+    }
 
     // set state
     this.setState({ saving: name })
