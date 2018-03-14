@@ -30,8 +30,8 @@ export const LABELS_OPTIONS = {
     title: 'Home Address'
   },
   work: {
-    name: 'Work',
-    title: 'Work Address'
+    name: 'Business',
+    title: 'Business Address'
   },
   default: {
     name: 'Other',
