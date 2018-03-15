@@ -97,32 +97,29 @@ Contact.get = {
     }
   },
   source: context => {
-    const source_types = context.sub_contacts[0].attributes.source_types
+    const { source_types } = context.sub_contacts[0].attributes
     const item = Contact.get._sort(source_types, 'updated_at')
 
     if (!item) {
       return {}
     }
 
-    let label
-
-    switch (item.source_type) {
-      case 'BrokerageWidget':
-        label = 'Created from a brokerage widget'
-        break
-      case 'ExplicitlyCreated':
-        label = 'Created by you'
-        break
-      case 'IOSAddressBook':
-        label = 'From your address book'
-        break
-      case 'SharesRoom':
-        label = 'Created because you share a room'
-        break
-      case 'Unknown':
-        label = 'Unknown'
-        break
-    }
+    const label = (() => {
+      switch (item.source_type) {
+        case 'BrokerageWidget':
+          return 'Created from a brokerage widget'
+        case 'ExplicitlyCreated':
+          return 'Created by you'
+        case 'IOSAddressBook':
+          return 'From your address book'
+        case 'SharesRoom':
+          return 'Created because you share a room'
+        case 'External/Outlook':
+          return 'Imported from outlook'
+        default:
+          return 'Unknown'
+      }
+    })()
 
     return {
       name: item.source_type,

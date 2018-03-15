@@ -19,7 +19,11 @@ class Table extends React.Component {
   async approveField(e, name, context) {
     e.stopPropagation()
 
-    const { deal, approveContext } = this.props
+    const { deal, isBackOffice, approveContext } = this.props
+
+    if (!isBackOffice) {
+      return false
+    }
 
     // set state
     this.setState({ saving: name })
@@ -67,6 +71,7 @@ class Table extends React.Component {
           {_.chain(table)
             .map(field => {
               const context = Deal.get.context(deal, field.name)
+              const discrepency = Deal.get.discrepency(deal, field.name)
               const fieldCtx = getValue(deal, field)
               const disabled = field.disabled === true
               const approved =
@@ -76,6 +81,7 @@ class Table extends React.Component {
                 <div key={`CRITICAL_DATE_${field.name}`}>
                   <Editable
                     field={field}
+                    discrepency={discrepency}
                     saving={saving}
                     context={fieldCtx}
                     disabled={disabled}
@@ -86,7 +92,6 @@ class Table extends React.Component {
                       this.onChangeContext(field, value)
                     }
                   />
-
                   <div className="approve-row">
                     {isBackOffice &&
                       context &&

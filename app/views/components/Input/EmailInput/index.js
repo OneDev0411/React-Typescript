@@ -13,7 +13,7 @@ export default props => (
   <Input
     mask={emailMask}
     {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
-    placeholder="dan@rechat.com"
+    placeholder="example@gmail.com"
     onChange={e => {
       props.onChange(e, {
         isValid: validate(e.target.value)

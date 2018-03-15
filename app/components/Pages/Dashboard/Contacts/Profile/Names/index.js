@@ -19,13 +19,13 @@ const Names = ({ fields, upsertAttribute, handelOnDelete, isSaving }) => (
       <ul className="c-contact-details u-unstyled-list">
         <Title
           disabled={isSaving}
-          key="names__legal_prefix"
-          field={fields.legal_prefix}
+          key="names__title"
+          field={fields.title}
           onChange={upsertAttribute}
         />
         {fields &&
           Object.keys(fields)
-            .filter(name => name !== 'legal_prefix')
+            .filter(name => name !== 'title')
             .map(name => (
               <Field
                 field={fields[name]}
@@ -164,7 +164,7 @@ function getNames(names) {
   let nameAttribute
 
   const nameFields = {
-    legal_prefix: '',
+    title: '',
     first_name: '',
     middle_name: '',
     last_name: '',
@@ -184,6 +184,10 @@ function getNames(names) {
     }
   } else {
     nameAttribute = nameFields
+  }
+
+  if (names && names.legal_prefix && !nameAttribute.title) {
+    nameAttribute.title = names.legal_prefix
   }
 
   const getTitle = name =>

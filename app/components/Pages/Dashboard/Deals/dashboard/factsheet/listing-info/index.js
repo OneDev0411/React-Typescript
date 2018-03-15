@@ -13,6 +13,7 @@ export default ({ deal }) => {
   return (
     <div className="deal-info-section">
       <Items
+        id="listing"
         deal={deal}
         title="LISTING INFORMATION"
         table={table}

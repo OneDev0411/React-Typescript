@@ -5,6 +5,7 @@ import Items from '../items'
 
 export default ({ deal }) => {
   const table = Context.getFactsheetSection(deal, 'CDA')
+
   if (table.length === 0) {
     return false
   }
@@ -12,6 +13,7 @@ export default ({ deal }) => {
   return (
     <div className="deal-info-section">
       <Items
+        id="cda"
         deal={deal}
         title="CDA INFORMATION"
         table={table}
