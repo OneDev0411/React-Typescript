@@ -1,0 +1,46 @@
+#deal-context-discrepency-overview-popover {
+  @extend .popover;
+  width: 320px;
+  min-height: 200px;
+  color: #fff;
+  background-color: #303e4d;
+  box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+  &.top > .arrow {
+    border-top-color: #303e4d;
+    // left: 50%;
+    // margin-left: -$popover-arrow-outer-width;
+    // border-bottom-width: 0;
+    // border-top-color: $popover-arrow-outer-fallback-color; // IE8 fallback
+    // border-top-color: $popover-arrow-outer-color;
+    // bottom: -$popover-arrow-outer-width;
+    &:after {
+      border-top-color: #303e4d;
+
+      // content: " ";
+      // bottom: 1px;
+      // margin-left: -$popover-arrow-width;
+      // border-bottom-width: 0;
+      // border-top-color: $popover-arrow-color;
+    }
+  }
+
+  &.bottom > .arrow {
+    border-bottom-color: #303e4d;
+
+    // left: 50%;
+    // margin-left: -$popover-arrow-outer-width;
+    // border-top-width: 0;
+    // border-bottom-color: $popover-arrow-outer-fallback-color; // IE8 fallback
+    // border-bottom-color: $popover-arrow-outer-color;
+    // top: -$popover-arrow-outer-width;
+    &:after {
+      border-bottom-color: #303e4d;
+      // content: " ";
+      // top: 1px;
+      // margin-left: -$popover-arrow-width;
+      // border-top-width: 0;
+      // border-bottom-color: $popover-arrow-color;
+    }
+  }
+}

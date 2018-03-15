@@ -5,6 +5,7 @@ import _ from 'underscore'
 import DatePicker from '../../components/date-picker'
 import ToolTip from '../../components/tooltip'
 import Input from '../../../../../../views/components/Input'
+import ContextDiscrepencyOverview from '../context-discrepency/overview'
 
 export default class Editable extends React.Component {
   constructor(props) {
@@ -130,6 +131,7 @@ export default class Editable extends React.Component {
   render() {
     const {
       field,
+      discrepency,
       approved,
       needsApproval,
       disabled,
@@ -144,7 +146,15 @@ export default class Editable extends React.Component {
       return (
         <div className={cn('fact-row', { disabled })}>
           <div className="name">{field.label}</div>
-          <span className="disabeld-field">{this.getFormattedValue()}</span>
+          <span className="disabeld-field">
+            {discrepency && (
+              <ContextDiscrepencyOverview
+                placement="top"
+                context={discrepency}
+              />
+            )}
+            {this.getFormattedValue()}
+          </span>
         </div>
       )
     }
@@ -154,6 +164,7 @@ export default class Editable extends React.Component {
         <div className="name" onClick={() => this.editField()}>
           {field.label}
         </div>
+
         <div className={cn('field editable', { approved, disabled })}>
           <DatePicker
             show={editMode && isDateType}
@@ -174,6 +185,14 @@ export default class Editable extends React.Component {
                 }
               >
                 <span style={{ opacity: saving ? 0.8 : 1 }}>
+                  {discrepency && (
+                    <ContextDiscrepencyOverview
+                      context={discrepency}
+                      placement="top"
+                      onClick={e => e.stopPropagation()}
+                    />
+                  )}
+
                   {this.getFormattedValue()}
                 </span>
               </ToolTip>
