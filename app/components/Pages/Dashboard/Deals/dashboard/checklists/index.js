@@ -26,6 +26,43 @@ class Checklist extends React.Component {
     })
   }
 
+  componentWillReceiveProps(props) {
+    /*
+     * If there is a terminated or deactivated checklist
+     * that has an unread notification
+     * then we must show them so user wont miss it
+     * web#813
+     */
+
+    const { tasks, deal, checklists } = props
+
+    const hasNotifications = checklist_id => {
+      return _.keys(tasks).some(task_id => {
+        const task = tasks[task_id]
+        if (task.checklist != checklist_id)
+          return false
+
+        return task.room.new_notifications > 0
+      })
+    }
+
+
+    const showTerminatedChecklists = _.keys(checklists).some(checklist_id => {
+      const checklist = checklists[checklist_id]
+      if (checklist.deal !== deal.id)
+        return false
+
+      if (!checklist.is_terminated)
+        return false
+
+      return hasNotifications(checklist_id)
+    })
+
+    this.setState({
+      showTerminatedChecklists
+    })
+  }
+
   render() {
     let terminatedChecklistsCount = 0
     let deactivatedChecklistsCount = 0
@@ -100,5 +137,6 @@ class Checklist extends React.Component {
 
 export default connect(({ deals }) => ({
   isBackOffice: deals.backoffice,
-  checklists: deals.checklists
+  checklists: deals.checklists,
+  tasks: deals.tasks
 }))(Checklist)
