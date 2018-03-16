@@ -11,28 +11,15 @@ export function envelopeCreated(deal_id, envelope) {
   }
 }
 
-export function createEnvelope(deal_id, subject, message, attachments, recipients) {
+export function createEnvelope(envelope) {
   return async (dispatch) => {
-    try {
-      const envelope = await Deal.sendEnvelope(
-        deal_id,
-        subject,
-        message,
-        attachments,
-        recipients
-      )
+    // create indexed envelops
+    const indexedEnvelops = _.indexBy([envelope], 'id')
 
-      // create indexed envelops
-      const indexedEnvelops = _.indexBy([envelope], 'id')
-
-      batchActions([
-        dispatch(setEnvelopes(indexedEnvelops)),
-        dispatch(envelopeCreated(deal_id, envelope))
-      ])
-
-    } catch (e) {
-      throw e
-    }
+    batchActions([
+      dispatch(setEnvelopes(indexedEnvelops)),
+      dispatch(envelopeCreated(envelope.deal, envelope))
+    ])
   }
 }
 
