@@ -52,6 +52,8 @@ class Envelope extends React.Component {
     const { showDropDown } = this.state
     const { recipients } = envelope
     const isVoided = envelope.status === 'Voided'
+    const isDraft = envelope.status === 'Created'
+    const isCompleted = envelope.status === 'Completed'
     const areSigned = recipients.filter(r => r.status === 'Completed')
     const notSigned = recipients.filter(r => r.status !== 'Completed')
     const recipientsNames = this.getRecipientsNames(recipients)
@@ -59,7 +61,7 @@ class Envelope extends React.Component {
     return (
       <div
         className={cn('item eSign', {
-          voided: isVoided
+          disabled: isVoided
         })}
         key={`eSign_${envelope.id}`}
       >
@@ -72,13 +74,21 @@ class Envelope extends React.Component {
           onClick={() => !isVoided && this.openFormViewer()}
         >
           <span>{recipientsNames}</span>
-          <p>{areSigned.length} of {recipients.length} signed</p>
+          {isDraft && (
+            <p className="text-danger">Draft</p>
+          )}
+          {isVoided && (
+            <p className="text-danger">Voided</p>
+          )}
+          {!isDraft && !isVoided && (
+            <p
+              className={cn({
+                'text-success': isCompleted,
+                'text-secondary': !isCompleted
+              })}
+            >{areSigned.length} of {recipients.length} signed</p>
+          )}
         </div>
-
-        {
-          isVoided &&
-          <span className="void-label">VOIDED</span>
-        }
       </div>
     )
   }
