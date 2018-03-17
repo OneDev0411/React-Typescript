@@ -112,7 +112,14 @@ export function getDeal(deal_id) {
 
       dispatch(updateDeal(deal))
     } catch (e) {
-      console.log(e)
+      dispatch(
+        notify({
+          title: e.message,
+          message:
+            e.response && e.response.body ? e.response.body.message : null,
+          status: 'error'
+        })
+      )
     }
   }
 }

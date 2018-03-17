@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import UploadPromptModal from './upload/prompt'
@@ -18,14 +17,12 @@ class DealDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { deal, getDeal } = this.props
+    const { deal, getDeal, params } = this.props
 
-    if (!deal) {
-      return browserHistory.push('/dashboard/deals')
-    }
-
-    if (!deal.checklists) {
+    if (deal && !deal.checklists) {
       getDeal(deal.id)
+    } else if (!deal) {
+      getDeal(params.id)
     }
   }
 
