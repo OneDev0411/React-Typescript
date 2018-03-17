@@ -131,7 +131,10 @@ class CreateDeal extends React.Component {
           dealSide === 'Buying' ? _.size(escrowOfficers) > 0 : true
       },
       agents: {
-        validator: () => _.size(agents) > 0
+        validator: () =>
+          dealSide === 'Buying'
+            ? !!_.find(agents, agent => agent.role === 'BuyerAgent')
+            : !!_.find(agents, agent => agent.role === 'SellerAgent')
       },
       clients: {
         validator: () => _.size(clients) > 0
