@@ -1,7 +1,6 @@
 import React from 'react'
-import Deal from '../../../../../../../models/Deal'
 import Context from '../../../../../../../models/DealContext'
-import Items from '../items'
+import Render from '../renderer'
 
 export default ({ deal }) => {
   const table = Context.getFactsheetSection(deal, 'CDA')
@@ -12,7 +11,7 @@ export default ({ deal }) => {
 
   return (
     <div className="deal-info-section">
-      <Items
+      <Render
         id="cda"
         deal={deal}
         title="CDA INFORMATION"

@@ -58,18 +58,21 @@ export function getField(deal, field, ctx = null) {
  * a helper that returns context discrepencies between deal and mls contexts
  */
 export function getContextDiscrepency(deal, field) {
-  const mlsContext = getContext(deal, field, 'mls_context')
-  const mlsContextValue = getField(deal, field, mlsContext)
-
   const dealContext = getContext(deal, field, 'deal_context')
-  const dealContextValue = getField(deal, field, dealContext)
 
-  if (!mlsContextValue || mlsContextValue === dealContextValue) {
+  if (!dealContext) {
     return null
   }
 
+  const dealContextValue = getField(deal, field, dealContext)
+
+  const mlsContext = getContext(deal, field, 'mls_context')
+  const mlsContextValue = getField(deal, field, mlsContext)
+
   return {
-    field,
+    id: dealContext.id,
+    name: field,
+    hasDiff: mlsContextValue && mlsContextValue !== dealContextValue,
     mls: {
       context: mlsContext,
       value: mlsContextValue

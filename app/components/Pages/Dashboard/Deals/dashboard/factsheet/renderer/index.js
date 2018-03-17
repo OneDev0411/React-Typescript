@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import Deal from '../../../../../../models/Deal'
-import Editable from './inline-edit'
+import Deal from '../../../../../../../models/Deal'
+import Editable from './editable'
 import {
   updateContext,
   approveContext
-} from '../../../../../../store_actions/deals'
+} from '../../../../../../../store_actions/deals'
 
 class Table extends React.Component {
   constructor(props) {
@@ -71,7 +71,6 @@ class Table extends React.Component {
           {_.chain(table)
             .map(field => {
               const context = Deal.get.context(deal, field.name)
-              const discrepency = Deal.get.discrepency(deal, field.name)
               const fieldCtx = getValue(deal, field)
               const disabled = field.disabled === true
               const approved =
@@ -80,8 +79,8 @@ class Table extends React.Component {
               return (
                 <div key={`CRITICAL_DATE_${field.name}`}>
                   <Editable
+                    deal={deal}
                     field={field}
-                    discrepency={discrepency}
                     saving={saving}
                     context={fieldCtx}
                     disabled={disabled}

@@ -1,5 +1,4 @@
 import Fetch from '../../services/fetch'
-import context from '../../constants/deals/context'
 
 /**
  * get contexts info
@@ -53,8 +52,26 @@ export async function approveContext(dealId, contextId) {
   }
 }
 
+/**
+ * get deal context history
+ */
+export async function getContextHistory(dealId, name) {
+  try {
+    const response = await new Fetch()
+      .get(`/deals/${dealId}/context/${name}`)
+      .query({ 'associations[]': ['deal_context_item.approved_by'] })
+      .query({ 'associations[]': ['deal_context_item.created_by'] })
+      .query({ 'associations[]': ['deal_context_item.submission'] })
+
+    return response.body.data
+  } catch (e) {
+    return false
+  }
+}
+
 export default {
   getContexts,
+  getContextHistory,
   updateContext,
   approveContext
 }
