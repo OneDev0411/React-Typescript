@@ -11,6 +11,6 @@ const Container = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 `
 
-export default function Footer(props) {
-  return <Container style={props.style}>{props.children}</Container>
-}
+export default props => (
+  <Container style={props.style}>{props.children}</Container>
+)
