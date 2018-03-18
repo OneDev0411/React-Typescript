@@ -13,7 +13,7 @@ export function getActiveTeam(user) {
     team => team.brand.id === getActiveTeamFromCookieOrUser(user)
   )
 
-  if (!activeTeam) {
+  if (!activeTeam && user.brand) {
     activeTeam = user.teams[0]
     setActiveTeam(activeTeam.id)
   }
@@ -38,7 +38,7 @@ function getActiveTeamFromCookieOrUser(user) {
 export function getActiveTeamId(user) {
   const id = getActiveTeamFromCookieOrUser(user)
 
-  if (!id && user.teams) {
+  if (!id && user.teams && user.brand) {
     return user.teams[0].brand.id
   } else if (!user.teams) {
     return user.brand
