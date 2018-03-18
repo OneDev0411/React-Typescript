@@ -41,8 +41,6 @@ export default class Form extends React.Component {
       isNewRecord,
       invalidFields: []
     }
-
-    // this.validate = _.debounce(this.validate, 200)
   }
 
   componentDidMount() {

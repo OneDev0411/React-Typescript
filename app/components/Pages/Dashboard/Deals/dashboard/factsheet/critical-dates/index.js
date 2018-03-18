@@ -35,6 +35,7 @@ const CriticalDates = ({ deal, showTitle = true }) => {
   return (
     <div className="deal-info-section">
       <Items
+        id="critical-dates"
         title="CRITICAL DATES"
         showTitle={showTitle}
         table={table}

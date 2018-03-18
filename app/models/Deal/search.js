@@ -5,19 +5,15 @@ import { getActiveTeamId, getActiveTeamACL } from '../../utils/user-teams'
  * Search through all deals
  */
 export async function searchAllDeals(query, isBackOffice) {
-  try {
-    let url = '/deals/filter'
+  let url = '/deals/filter'
 
-    if (isBackOffice) {
-      url += '?associations=deal.created_by'
-    }
-
-    const response = await new Fetch().post(url).send({ query })
-
-    return response.body.data
-  } catch (error) {
-    throw error
+  if (isBackOffice) {
+    url += '?associations[]=deal.created_by&associations[]=deal.brand'
   }
+
+  const response = await new Fetch().post(url).send({ query })
+
+  return response.body.data
 }
 
 /**

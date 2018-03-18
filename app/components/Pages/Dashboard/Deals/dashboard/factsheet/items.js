@@ -71,6 +71,7 @@ class Table extends React.Component {
           {_.chain(table)
             .map(field => {
               const context = Deal.get.context(deal, field.name)
+              const discrepency = Deal.get.discrepency(deal, field.name)
               const fieldCtx = getValue(deal, field)
               const disabled = field.disabled === true
               const approved =
@@ -80,6 +81,7 @@ class Table extends React.Component {
                 <div key={`CRITICAL_DATE_${field.name}`}>
                   <Editable
                     field={field}
+                    discrepency={discrepency}
                     saving={saving}
                     context={fieldCtx}
                     disabled={disabled}
@@ -87,10 +89,9 @@ class Table extends React.Component {
                     isBackOffice={isBackOffice}
                     needsApproval={!isBackOffice && field.needs_approval}
                     onChange={(field, value) =>
-                      this.onChangeContext(field, value)
+                      this.onChangeContext(field, value || null)
                     }
                   />
-
                   <div className="approve-row">
                     {isBackOffice &&
                       context &&
