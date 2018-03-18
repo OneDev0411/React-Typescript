@@ -34,7 +34,7 @@ class Table extends React.Component {
     this.setState({ saving: false })
   }
 
-  onChangeContext(field, value) {
+  onChangeContext(field, value = null) {
     this.updateField(field, value)
   }
 
