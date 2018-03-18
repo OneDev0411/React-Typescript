@@ -125,7 +125,10 @@
       margin-top: 8px;
       font-size: 13px;
       text-align: left;
-      color: #8da2b5;
+
+      &.text-secondary {
+        color: #8da2b5;
+      }
     }
 
     &:hover span {
@@ -133,7 +136,7 @@
     }
   }
 
-  &.voided {
+  &.disabled {
     position: relative;
 
     &:hover span {
@@ -144,22 +147,6 @@
     img {
       opacity: 0.4;
       cursor: auto;
-    }
-
-    .void-label {
-      position: absolute;
-      top: 10px;
-      right: 0px;
-      width: 65px;
-      height: 20px;
-      line-height: 20px;
-      font-weight: 500;
-      vertical-align: middle;
-      text-align: center;
-      color: #fff;
-      background-color: red;
-      border-radius: 5px 0 0 5px;
-      letter-spacing: 0.5px;
     }
   }
 }

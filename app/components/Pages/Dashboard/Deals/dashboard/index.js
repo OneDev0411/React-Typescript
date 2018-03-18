@@ -15,23 +15,48 @@ import { getDeal } from '../../../../../store_actions/deals'
 class DealDetails extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      isFetchingDeal: false
+    }
   }
 
   componentDidMount() {
-    const { deal, getDeal } = this.props
+    this.initialize()
+  }
 
-    if (!deal) {
-      return browserHistory.push('/dashboard/deals')
+  async initialize() {
+    const { deal, getDeal, params } = this.props
+
+    if (deal && !deal.checklists) {
+      return getDeal(deal.id)
     }
 
-    if (!deal.checklists) {
-      getDeal(deal.id)
+    try {
+      if (!deal) {
+        this.setState({ isFetchingDeal: true })
+
+        // try to get deal by id
+        await getDeal(params.id)
+
+        this.setState({ isFetchingDeal: false })
+      }
+    } catch (e) {
+      browserHistory.push('/dashboard/deals')
     }
   }
 
   render() {
+    const { isFetchingDeal } = this.state
     const { deal, selectedTask } = this.props
     const selectedTaskId = selectedTask ? selectedTask.id : null
+
+    if (!deal && isFetchingDeal) {
+      return (
+        <div className="deal-dashboard loading-deal">
+          <i className="fa fa-spin fa-spinner fa-2x" /> Loading Deal ...
+        </div>
+      )
+    }
 
     if (!deal) {
       return false
