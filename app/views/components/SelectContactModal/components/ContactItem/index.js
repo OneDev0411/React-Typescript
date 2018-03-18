@@ -28,8 +28,7 @@ const propTypes = {
 
 function ContactItem(props) {
   const { item, onClickHandler } = props
-  const { phone_number, legal_full_name, email, display_name } = item
-  const title = legal_full_name || display_name
+  const { phone_number, email, display_name: title } = item
   const summary = [email, phone_number].filter(i => i && i !== title).join(', ')
 
   return (
