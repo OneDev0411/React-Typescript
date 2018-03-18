@@ -50,9 +50,7 @@ class SelectDocumentModal extends React.Component {
     return _.filter(
       tasks,
       task =>
-        task.task_type === 'Form' &&
-        task.deal === deal.id &&
-        task.submission
+        task.task_type === 'Form' && task.deal === deal.id && task.submission
     )
   }
 
@@ -118,13 +116,11 @@ class SelectDocumentModal extends React.Component {
 
                     <div className="date">
                       {isCompleted && (
-                        <span className="text-success">
-                          Completed &nbsp;
-                        </span>
+                        <span className="text-success">Completed &nbsp;</span>
                       )}
 
                       {!isCompleted && (
-                        <span  className="text-danger">
+                        <span className="text-danger">
                           May have incomplete fields &nbsp;
                         </span>
                       )}
