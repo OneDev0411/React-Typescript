@@ -41,7 +41,7 @@ export function getActiveTeamId(user) {
   if (!id && user.teams) {
     return user.teams[0].brand.id
   } else if (!user.teams) {
-    return id
+    return user.brand
   }
 
   let activeTeam = user.teams.find(team => team.brand.id === id)
