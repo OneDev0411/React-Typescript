@@ -40,7 +40,7 @@ class Title extends React.Component {
         <label className="c-contact-details-item__label">Title</label>
         <span
           style={{ paddingLeft: '4px' }}
-          className="c-contact-details-item__field"
+          className="c-contact-details-item__field__label-select"
         >
           <Dropdown
             name="title"
