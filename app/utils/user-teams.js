@@ -15,7 +15,7 @@ export function getActiveTeam(user) {
 
   if (!activeTeam && teams) {
     activeTeam = user.teams[0]
-    setActiveTeam(activeTeam.id)
+    setActiveTeam(activeTeam.brand.id)
   }
 
   return activeTeam
