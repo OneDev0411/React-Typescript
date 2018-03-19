@@ -6,10 +6,29 @@ export function getActiveTeam(user) {
   const { teams } = user
 
   if (!teams) {
-    return []
+    return null
   }
 
-  return teams.find(team => team.brand.id === getActiveTeamId(user))
+  let activeTeam = teams.find(
+    team => team.brand.id === getActiveTeamFromCookieOrUser(user)
+  )
+
+  if (!activeTeam && teams) {
+    activeTeam = user.teams[0]
+    setActiveTeam(activeTeam.id)
+  }
+
+  return activeTeam
+}
+
+export function getActiveTeamId(user) {
+  const activeTeam = getActiveTeam(user)
+
+  if (!activeTeam && user.brand) {
+    return user.brand
+  }
+
+  return activeTeam.brand.id
 }
 
 export function getActiveTeamACL(user) {
@@ -22,14 +41,8 @@ export function hasUserAccess(user, action) {
   return getActiveTeamACL(user).includes(action)
 }
 
-export function getActiveTeamId(user) {
-  const id = cookie.get(ACTIVE_TEAM_COOKIE) || user.activeTeam || user.brand
-
-  if (!id && user.teams) {
-    return user.teams[0].brand.id
-  }
-
-  return id
+function getActiveTeamFromCookieOrUser(user) {
+  return cookie.get(ACTIVE_TEAM_COOKIE) || user.activeTeam || user.brand
 }
 
 export function setActiveTeam(id) {
