@@ -44,7 +44,7 @@ class PdfViewer extends React.Component {
   }
 
   docKeyboardShortcutHandler(event) {
-    const { disableKeyboardShortcuts } = this.props
+    const { disableKeyboardShortcuts, onZoomIn, onZoomOut } = this.props
 
     if (disableKeyboardShortcuts) {
       return false
@@ -74,9 +74,11 @@ class PdfViewer extends React.Component {
         break
       case 187:
         this.zoomIn()
+        onZoomIn && onZoomIn()
         break
       case 189:
         this.zoomOut()
+        onZoomOut && onZoomOut()
         break
       case 48:
         this.fitWindow()
@@ -135,6 +137,7 @@ class PdfViewer extends React.Component {
   }
 
   zoomIn() {
+    const { onZoomIn } = this.props
     const zoom = this.state.zoom || 0
 
     if (zoom >= 0.6) {
@@ -145,9 +148,14 @@ class PdfViewer extends React.Component {
       fitWindow: false,
       zoom: parseFloat((zoom + 0.3).toFixed(1))
     })
+
+    if (onZoomIn) {
+      onZoomIn()
+    }
   }
 
   zoomOut() {
+    const { onZoomOut } = this.props
     const zoom = this.state.zoom || 0
 
     if (zoom <= -0.3) {
@@ -158,6 +166,10 @@ class PdfViewer extends React.Component {
       fitWindow: false,
       zoom: parseFloat((zoom - 0.3).toFixed(1))
     })
+
+    if (onZoomOut) {
+      onZoomOut()
+    }
   }
 
   fitWindow() {

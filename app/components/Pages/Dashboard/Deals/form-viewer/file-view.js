@@ -27,6 +27,8 @@ export default class extends React.Component {
       toggleComments,
       editFormHandler,
       splitPdfHandler,
+      onPdfZoomIn,
+      onPdfZoomOut,
       task,
       file,
       fileType
@@ -111,6 +113,8 @@ export default class extends React.Component {
             file={file}
             width={PDF_WIDTH}
             disableKeyboardShortcuts={disableKeyboardShortcuts}
+            onPdfZoomIn={onPdfZoomIn}
+            onPdfZoomOut={onPdfZoomOut}
           />
 
           {task && (
