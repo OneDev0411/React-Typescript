@@ -3,19 +3,17 @@ import cookie from 'js-cookie'
 const ACTIVE_TEAM_COOKIE = 'rechat-active-team'
 
 export function getActiveTeam(user) {
-  console.log('>>>>', user)
-
   const { teams } = user
 
   if (!teams) {
-    return []
+    return null
   }
 
   let activeTeam = teams.find(
     team => team.brand.id === getActiveTeamFromCookieOrUser(user)
   )
 
-  if (!activeTeam && user.brand) {
+  if (!activeTeam && teams) {
     activeTeam = user.teams[0]
     setActiveTeam(activeTeam.id)
   }
@@ -24,17 +22,13 @@ export function getActiveTeam(user) {
 }
 
 export function getActiveTeamId(user) {
-  // const id = getActiveTeamFromCookieOrUser(user)
-  // if (!id && user.teams && user.brand) {
-  //   return user.teams[0].brand.id
-  // } else if (!user.teams) {
-  //   return user.brand
-  // }
-  // let activeTeam = user.teams.find(team => team.brand.id === id)
-  // if (activeTeam) {
-  //   return id
-  // }
-  // return user.teams[0].brand.id
+  const activeTeam = getActiveTeam(user)
+
+  if (!activeTeam && user.brand) {
+    return user.brand
+  }
+
+  return activeTeam.brand.id
 }
 
 export function getActiveTeamACL(user) {
