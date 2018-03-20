@@ -103,8 +103,7 @@ class SendSignatures extends React.Component {
       return false
     }
 
-    const { deal, tasks } = this.props
-    const { attachments } = esign
+    const { deal } = this.props
     const roleNames = this.getFormsRoles()
 
     _.each(deal.roles, item => {
@@ -129,7 +128,10 @@ class SendSignatures extends React.Component {
     const { user } = this.props
     const { access_token } = user
 
-    window.open(DealModel.getEnvelopeEditLink(envelope_id, access_token), '_blank')
+    window.open(
+      DealModel.getEnvelopeEditLink(envelope_id, access_token),
+      '_blank'
+    )
   }
 
   /**
@@ -196,7 +198,6 @@ class SendSignatures extends React.Component {
         recipients
       )
 
-
       await createEnvelope(envelope)
 
       // close esign
@@ -208,12 +209,12 @@ class SendSignatures extends React.Component {
       const { confirmation } = this.props
 
       confirmation({
-        description: 'Would you like to review and finalize this envelope on Docusign?',
+        description:
+          'Would you like to review and finalize this envelope on Docusign?',
         confirmLabel: 'Yes',
         cancelLabel: 'Later',
         onConfirm: () => this.openEditWindow(envelope.id)
       })
-
     } catch (err) {
       const isDocusignError = ~~err.status === 412
 
@@ -223,7 +224,6 @@ class SendSignatures extends React.Component {
       })
 
       if (!isDocusignError) {
-        console.log(err)
         this.setState({
           failure: {
             code: 500,
