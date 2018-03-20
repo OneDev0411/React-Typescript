@@ -196,21 +196,17 @@ class SendSignatures extends React.Component {
         recipients
       )
 
-      console.log('1')
+
       await createEnvelope(envelope)
 
-      console.log('2')
       // close esign
       closeEsignWizard()
 
-      console.log('3')
       // reset recipients
       this.setState({ isSending: false })
 
-      console.log('4')
       const { confirmation } = this.props
 
-      console.log('5')
       confirmation({
         description: 'Would you like to review and finalize this envelope on Docusign?',
         confirmLabel: 'Yes',
@@ -218,7 +214,6 @@ class SendSignatures extends React.Component {
         onConfirm: () => this.openEditWindow(envelope.id)
       })
 
-      console.log('6')
     } catch (err) {
       const isDocusignError = ~~err.status === 412
 
@@ -228,7 +223,7 @@ class SendSignatures extends React.Component {
       })
 
       if (!isDocusignError) {
-        console.trace(err)
+        throw error
         this.setState({
           failure: {
             code: 500,
