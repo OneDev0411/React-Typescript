@@ -185,13 +185,13 @@ export default class Editable extends React.Component {
                 }
               >
                 <span style={{ opacity: saving ? 0.8 : 1 }}>
-                  {discrepency && (
+                  {/* {discrepency && (
                     <ContextDiscrepencyOverview
                       context={discrepency}
                       placement="top"
                       onClick={e => e.stopPropagation()}
                     />
-                  )}
+                  )} */}
 
                   {this.getFormattedValue()}
                 </span>
