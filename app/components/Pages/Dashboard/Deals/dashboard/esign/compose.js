@@ -223,6 +223,7 @@ class SendSignatures extends React.Component {
       })
 
       if (!isDocusignError) {
+        console.log(err)
         this.setState({
           failure: {
             code: 500,
