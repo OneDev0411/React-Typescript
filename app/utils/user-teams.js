@@ -19,7 +19,7 @@ export function getActiveTeam(user) {
 export function getActiveTeamId(user) {
   const activeTeam = getActiveTeam(user)
 
-  if (!activeTeam && user.brand) {
+  if (!activeTeam) {
     return user.brand
   }
 
