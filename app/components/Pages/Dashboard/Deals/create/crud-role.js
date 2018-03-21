@@ -7,10 +7,10 @@ import RoleItem from './role-item'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import {
   roleName,
-  normalizeContact,
   getNewAttributes,
+  normalizeContactAsRole,
   getUpdatedNameAttribute,
-  normalizedFormDataAsContact
+  normalizeNewRoleFormDataAsContact
 } from '../utils/roles'
 import SelectContactModal from '../../../../../views/components/SelectContactModal'
 import {
@@ -75,7 +75,9 @@ class CrudRole extends React.Component {
         if (!contact) {
           const copyFormData = Object.assign({}, form)
 
-          await createNewContact(normalizedFormDataAsContact(copyFormData))
+          await createNewContact(
+            normalizeNewRoleFormDataAsContact(copyFormData)
+          )
           this.notifySuccess(`${fullName} has been added to your Contacts.`)
         } else {
           const newAttributes = await getNewAttributes(form)
@@ -173,9 +175,9 @@ class CrudRole extends React.Component {
 
   handleSelectedContact = contact => {
     this.setState({
-      form: normalizeContact(contact),
       showFormModal: true,
-      showSelectContactModal: false
+      showSelectContactModal: false,
+      form: normalizeContactAsRole(contact)
     })
   }
 
