@@ -16,7 +16,7 @@ export default ({ deal, showBackButton = true }) => {
         <ListingCard deal={deal} showBackButton={showBackButton} />
 
         <MlsListing deal={deal} />
-        <DealEmail deal={deal} />
+        <DealEmail dealEmail={deal.email} />
 
         <div className="deal-fact-sheet">
           <CriticalDates deal={deal} />
