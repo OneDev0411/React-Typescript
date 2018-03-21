@@ -17,6 +17,7 @@ $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
 @import './dashboard/_comment';
 @import './dashboard/_files';
 @import './dashboard/_mls';
+@import './dashboard/_deal_side';
 @import './dashboard/_edit_form';
 @import './dashboard/_form_viewer';
 @import './dashboard/_form_context';

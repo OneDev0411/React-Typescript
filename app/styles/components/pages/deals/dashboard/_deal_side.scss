@@ -1,0 +1,14 @@
+.deal-fact.deal-side {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+
+  .field {
+    width: 10%;
+  }
+
+  .value {
+    width: 90%;
+    text-align: right;
+  }
+}
