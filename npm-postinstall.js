@@ -2,7 +2,7 @@ const fs = require('fs')
 const colors = require('colors')
 
 function patchPDFJS() {
-  const path = 'node_modules/pdfjs-dist/build/pdf.combined.js'
+  const path = 'node_modules/pdfjs-dist/build/pdf.worker.js'
 
   fs.readFile(path, 'utf8', (err, fileData) => {
     if (err) {
