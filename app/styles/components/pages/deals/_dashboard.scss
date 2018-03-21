@@ -23,7 +23,7 @@ $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
 @import './dashboard/_date_picker';
 @import './dashboard/_mls_status_modal';
 @import './dashboard/_upload';
-@import './dashboard/_bulk_submit';
+@import './dashboard/_deal_email';
 
 %deal-dashboard {
   margin-left: 0;
