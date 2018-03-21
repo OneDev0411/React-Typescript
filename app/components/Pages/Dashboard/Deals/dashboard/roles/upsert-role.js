@@ -1,7 +1,7 @@
 import React from 'react'
 import SelectContactModal from '../../../../../../views/components/SelectContactModal'
 import AddRoleModal from './add-role-modal'
-import { normalizeContact } from '../../utils/roles'
+import { normalizeContactAsRole } from '../../utils/roles'
 
 const initialState = {
   fakeRole: null,
@@ -33,9 +33,9 @@ class UpsertRole extends React.Component {
 
   handleSelectedContact = contact => {
     this.setState({
-      fakeRole: normalizeContact(contact),
       showAddRoleModal: true,
-      showAddToDealModal: false
+      showAddToDealModal: false,
+      fakeRole: normalizeContactAsRole(contact)
     })
   }
 

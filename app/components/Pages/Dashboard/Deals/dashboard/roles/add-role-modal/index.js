@@ -15,7 +15,7 @@ import {
 import {
   getNewAttributes,
   getUpdatedNameAttribute,
-  normalizedFormDataAsContact
+  normalizeNewRoleFormDataAsContact
 } from '../../../utils/roles'
 
 const initialState = {
@@ -76,7 +76,9 @@ class AddRoleModal extends React.Component {
         if (!contact) {
           const copyFormData = Object.assign({}, form)
 
-          await createNewContact(normalizedFormDataAsContact(copyFormData))
+          await createNewContact(
+            normalizeNewRoleFormDataAsContact(copyFormData)
+          )
           this.notifySuccess(`${fullName} has been added to your Contacts.`)
         } else {
           const newAttributes = await getNewAttributes(form)
@@ -92,7 +94,8 @@ class AddRoleModal extends React.Component {
             if (nameAttribute && nameAttribute.id) {
               await upsertContactAttributes({
                 contactId,
-                attributes: [nameAttribute]})
+                attributes: [nameAttribute]
+              })
             }
 
             if (newAttributes.length > 0) {
