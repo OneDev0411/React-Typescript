@@ -28,7 +28,7 @@ const DealEmail = ({ dealEmail, notify }) => (
       <p className="deal-email__label">Email: </p>
       <p className="deal-email__text">{dealEmail}</p>
       <button
-        className="c-button--shadow"
+        className="c-button--shadow deal-email__share-button"
         onClick={() => {
           copy(dealEmail)
           notify({
