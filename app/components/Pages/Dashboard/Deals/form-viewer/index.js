@@ -177,9 +177,22 @@ class FormViewer extends React.Component {
     browserHistory.push(url)
   }
 
+  onPdfZoomIn() {
+    const { showComments, showFactsheet } = this.state
+
+    if (showComments === true || showFactsheet === true) {
+      this.setState({
+        showFactsheet: false,
+        showComments: false
+      })
+    }
+  }
+
+  onPdfZoomOut() {}
+
   render() {
     const { file, showFactsheet, showComments } = this.state
-    const { deal, tasks, envelopes, params } = this.props
+    const { isBackOffice, deal, tasks, envelopes, params } = this.props
 
     if (!file) {
       return (
@@ -202,12 +215,15 @@ class FormViewer extends React.Component {
 
     return (
       <FileView
+        isBackOffice={isBackOffice}
         deal={deal}
         onClose={() => this.closeForm()}
         toggleFactsheet={() => this.toggleFactsheet()}
         toggleComments={() => this.toggleComments()}
         editFormHandler={() => this.editForm()}
         splitPdfHandler={file => this.splitPDF(file)}
+        onPdfZoomIn={() => this.onPdfZoomIn()}
+        onPdfZoomOut={() => this.onPdfZoomOut()}
         file={file}
         fileType={params.type || 'digital-form'}
         task={tasks[params.taskId]}

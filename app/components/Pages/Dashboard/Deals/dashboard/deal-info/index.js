@@ -5,6 +5,7 @@ import ListingInfo from '../factsheet/listing-info'
 import Commission from '../factsheet/commission'
 import Roles from '../roles'
 import MlsListing from '../mls-listing'
+import DealSide from './side'
 import DealEmail from '../deal-email'
 
 export default ({ deal, showBackButton = true }) => {
@@ -16,6 +17,7 @@ export default ({ deal, showBackButton = true }) => {
         <ListingCard deal={deal} showBackButton={showBackButton} />
 
         <MlsListing deal={deal} />
+        <DealSide deal={deal} />
         <DealEmail dealEmail={deal.email} />
 
         <div className="deal-fact-sheet">

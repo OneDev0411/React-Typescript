@@ -15,7 +15,6 @@ export function getActiveTeam(user) {
 
   if (!activeTeam && teams) {
     activeTeam = user.teams[0]
-    setActiveTeam(activeTeam.id)
   }
 
   return activeTeam
@@ -24,7 +23,7 @@ export function getActiveTeam(user) {
 export function getActiveTeamId(user) {
   const activeTeam = getActiveTeam(user)
 
-  if (!activeTeam && user.brand) {
+  if (!activeTeam) {
     return user.brand
   }
 

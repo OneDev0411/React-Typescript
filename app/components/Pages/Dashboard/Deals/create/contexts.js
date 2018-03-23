@@ -1,8 +1,9 @@
 import React from 'react'
 import moment from 'moment'
 import cn from 'classnames'
-import Context from '../../../../../models/DealContext'
+import _ from 'underscore'
 import DatePicker from '../components/date-picker'
+import Input from '../../../../../views/components/Input'
 
 const ContextValue = ({ name, date, onRemove, onEdit }) => (
   <div className="selected-field">
@@ -42,8 +43,8 @@ export default class extends React.Component {
     this.cancelEditing()
   }
 
-  onChangeStringContext(field, date) {
-    this.props.onChangeContext(field, date)
+  onChangeStringContext(field, value) {
+    this.props.onChangeContext(field, value)
   }
 
   render() {
@@ -70,16 +71,21 @@ export default class extends React.Component {
                       {field.label} {field.mandatory && <sup>*</sup>}
                     </span>
                   </div>
-
-                  <input
+                  <Input
+                    data-type={field.format || field.data_type}
+                    name={field.name}
+                    {...field.properties}
                     className={cn({
                       invalid:
                         contexts[field.name] &&
-                        !Context.validate(field, contexts[field.name])
+                        !field.validate(field, contexts[field.name])
                     })}
                     value={contexts[field.name] || ''}
-                    onChange={e =>
-                      this.onChangeStringContext(field.name, e.target.value)
+                    onChange={(e, data = {}) =>
+                      this.onChangeStringContext(
+                        field.name,
+                        !_.isUndefined(data.value) ? data.value : e.target.value
+                      )
                     }
                   />
                 </div>

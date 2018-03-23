@@ -18,6 +18,7 @@ import {
   addEsignRecipient,
   removeEsignRecipient
 } from '../../../../../../store_actions/deals'
+import { confirmation } from '../../../../../../store_actions/confirmation'
 
 const ERROR_MESSAGES = {
   attachments: 'Please select a document to attach.',
@@ -102,8 +103,7 @@ class SendSignatures extends React.Component {
       return false
     }
 
-    const { deal, tasks } = this.props
-    const { attachments } = esign
+    const { deal } = this.props
     const roleNames = this.getFormsRoles()
 
     _.each(deal.roles, item => {
@@ -122,6 +122,16 @@ class SendSignatures extends React.Component {
 
     // close form
     this.props.closeEsignWizard()
+  }
+
+  openEditWindow(envelope_id) {
+    const { user } = this.props
+    const { access_token } = user
+
+    window.open(
+      DealModel.getEnvelopeEditLink(envelope_id, access_token),
+      '_blank'
+    )
   }
 
   /**
@@ -179,18 +189,32 @@ class SendSignatures extends React.Component {
 
     try {
       // add envelope to list of envelopes
-      await createEnvelope(deal.id, subject, message, attachments, recipients)
+
+      const envelope = await DealModel.sendEnvelope(
+        deal.id,
+        subject,
+        message,
+        attachments,
+        recipients
+      )
+
+      await createEnvelope(envelope)
 
       // close esign
       closeEsignWizard()
 
-      notify({
-        message: 'eSign has been sent',
-        status: 'success'
-      })
-
       // reset recipients
       this.setState({ isSending: false })
+
+      const { confirmation } = this.props
+
+      confirmation({
+        description:
+          'Would you like to review and finalize this envelope on Docusign?',
+        confirmLabel: 'Yes',
+        cancelLabel: 'Later',
+        onConfirm: () => this.openEditWindow(envelope.id)
+      })
     } catch (err) {
       const isDocusignError = ~~err.status === 412
 
@@ -199,9 +223,7 @@ class SendSignatures extends React.Component {
         showDocusignBanner: isDocusignError
       })
 
-      if (isDocusignError === false) {
-        console.log(err)
-
+      if (!isDocusignError) {
         this.setState({
           failure: {
             code: 500,
@@ -213,9 +235,7 @@ class SendSignatures extends React.Component {
   }
 
   render() {
-    const {
-      tasks, esign, deal, user, showAttachments
-    } = this.props
+    const { tasks, esign, deal, user, showAttachments } = this.props
     const { isSending, showDocusignBanner, failure } = this.state
     const { recipients } = esign
     const hasRecipients = Object.keys(recipients).length > 0
@@ -285,7 +305,7 @@ class SendSignatures extends React.Component {
                   className="btn-send"
                   onClick={() => this.send()}
                 >
-                  {isSending ? 'Sending ...' : 'Send'}
+                  {isSending ? 'Creating...' : 'Review'}
                 </Button>
 
                 <Button
@@ -317,6 +337,7 @@ export default connect(
     showAttachments,
     closeEsignWizard,
     createEnvelope,
-    notify
+    notify,
+    confirmation
   }
 )(SendSignatures)

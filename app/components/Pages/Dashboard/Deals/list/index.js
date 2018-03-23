@@ -10,15 +10,19 @@ class DealsDashboard extends React.Component {
     super(props)
 
     const { isBackOffice } = props
-    const activeFilters = {}
+
+    this.primitiveFilters = {}
 
     // initial filters
-    if (!isBackOffice) {
-      activeFilters.status = (status, deal) => !deal.deleted_at
+    if (isBackOffice) {
+      this.primitiveFilters.__attention_requests__ = deal =>
+        deal.attention_requests > 0
+    } else {
+      this.primitiveFilters.status = (status, deal) => !deal.deleted_at
     }
 
     this.state = {
-      activeFilters,
+      activeFilters: this.primitiveFilters,
       emptySearchPageIsOpen: false
     }
   }
@@ -33,6 +37,7 @@ class DealsDashboard extends React.Component {
     if (isBackOffice) {
       this.setState({
         activeFilters: {
+          ...this.primitiveFilters,
           __inbox__: deal =>
             deal.inboxes && deal.inboxes.indexOf(params.filter) > -1,
           ..._.omit(filters, 'searchResult')
@@ -41,7 +46,7 @@ class DealsDashboard extends React.Component {
     } else {
       this.setState({
         activeFilters: {
-          status: (status, deal) => !deal.deleted_at,
+          ...this.primitiveFilters,
           ..._.omit(filters, 'searchResult')
         }
       })
@@ -55,6 +60,7 @@ class DealsDashboard extends React.Component {
     if (isBackOffice) {
       this.setState({
         activeFilters: {
+          ...this.primitiveFilters,
           __inbox__: deal =>
             deal.inboxes && deal.inboxes.indexOf(params.filter) > -1,
           ..._.omit(activeFilters, 'searchResult')
@@ -63,7 +69,7 @@ class DealsDashboard extends React.Component {
     } else {
       this.setState({
         activeFilters: {
-          status: (status, deal) => !deal.deleted_at,
+          ...this.primitiveFilters,
           ..._.omit(activeFilters, 'searchResult')
         }
       })

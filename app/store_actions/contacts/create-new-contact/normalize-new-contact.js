@@ -11,6 +11,7 @@ export function normalizeNewContact(formData = {}) {
     last_name,
     title,
     middle_name,
+    legal_prefix,
     legal_first_name,
     legal_middle_name,
     legal_last_name,
@@ -25,14 +26,10 @@ export function normalizeNewContact(formData = {}) {
       names: [
         {
           type: 'name',
-          title,
-          first_name,
-          middle_name,
-          last_name,
-          legal_prefix: title,
-          legal_first_name,
-          legal_middle_name,
-          legal_last_name
+          title: title || legal_prefix,
+          first_name: first_name || legal_first_name,
+          middle_name: middle_name || legal_middle_name,
+          last_name: last_name || legal_last_name
         }
       ],
       source_types: [

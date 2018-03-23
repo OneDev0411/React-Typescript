@@ -144,6 +144,7 @@ class CreateOffer extends React.Component {
       contexts,
       agents,
       clients,
+      escrowOfficers,
       buyerName,
       enderType,
       dealStatus
@@ -158,6 +159,7 @@ class CreateOffer extends React.Component {
       enderType !== -1 &&
       _.size(clients) > 0 && // validate clients
       _.size(agents) > 0 && // validate agents
+      _.size(escrowOfficers) > 0 &&
       dealStatus.length > 0 &&
       DealContext.validateList(
         contexts,
@@ -249,6 +251,10 @@ class CreateOffer extends React.Component {
     const contextsObject = {}
 
     _.each(contexts, (value, name) => {
+      if (_.isUndefined(value) || value === null || value.length === 0) {
+        return false
+      }
+
       const field = Deal.get.context(deal, name)
 
       contextsObject[name] = {
@@ -298,6 +304,19 @@ class CreateOffer extends React.Component {
     const { deal } = this.props
 
     browserHistory.push(`/dashboard/deals/${deal.id}`)
+  }
+
+  /**
+   * check commission is required or not
+   */
+  getIsCommissionRequired() {
+    const { enderType } = this.state
+
+    if (enderType === 'AgentDoubleEnder' || enderType === 'OfficeDoubleEnder') {
+      return true
+    }
+
+    return false
   }
 
   render() {
@@ -360,6 +379,7 @@ class CreateOffer extends React.Component {
                 scenario="CreateOffer"
                 dealSide="Buying"
                 shouldPrepopulateAgent={isDoubleEnderAgent}
+                isCommissionRequired={this.getIsCommissionRequired()}
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                 onRemoveAgent={id => this.onRemoveRole(id, 'agents')}

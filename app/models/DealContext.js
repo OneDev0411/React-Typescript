@@ -116,7 +116,9 @@ export function getRequiredItems(
     )
     .map(ctx => ({
       ...ctx,
-      validate,
+      validate: getValidationFunction(ctx.name),
+      properties: getFieldProperties(ctx.name),
+      getFormattedValue: getFormattedValue.bind(ctx),
       mandatory: true
     }))
 }
@@ -135,7 +137,9 @@ export function getOptionalItems(
     )
     .map(ctx => ({
       ...ctx,
-      validate,
+      validate: getValidationFunction(ctx.name),
+      properties: getFieldProperties(ctx.name),
+      getFormattedValue: getFormattedValue.bind(ctx),
       mandatory: false
     }))
 }
@@ -150,7 +154,9 @@ export function query(deal, criteria) {
     .filter(ctx => criteria(ctx))
     .map(ctx => ({
       ...ctx,
-      validate,
+      validate: getValidationFunction(ctx.name),
+      properties: getFieldProperties(ctx.name),
+      getFormattedValue: getFormattedValue.bind(ctx),
       disabled: isDisabled(deal, ctx),
       needs_approval: ctx.needs_approval || false
     }))
@@ -257,6 +263,17 @@ export function parseDate(date) {
 }
 
 /**
+ * get validation function based on given field
+ */
+function getValidationFunction(name) {
+  return (
+    {
+      year_built: validateYearBuilt
+    }[name] || validate
+  )
+}
+
+/**
  * validate a context
  */
 export function validate(ctx, value) {
@@ -266,12 +283,36 @@ export function validate(ctx, value) {
 
   switch (ctx.data_type) {
     case 'Number':
+    case 'Numeric':
       return /^\d*\.?\d*$/.test(value)
     case 'String':
+    case 'Text':
       return value.length > 0
     case 'Date':
       return validateDate(value)
   }
+}
+
+function validateYearBuilt(ctx, value) {
+  const { max } = ctx.properties
+
+  if (value === undefined || value === null || value.length === 0) {
+    return !ctx.mandatory
+  }
+
+  return parseFloat(value) <= max
+}
+
+export function getFieldProperties(name) {
+  return (
+    {
+      year_built: {
+        max: 2018,
+        placeholder: 'YYYY',
+        mask: [/[1-2]/, /\d/, /\d/, /\d/]
+      }
+    }[name] || {}
+  )
 }
 
 /**
@@ -311,6 +352,22 @@ export function getValidItems(
   )
 
   return _.pick(list, (value, name) => validate(dealContexts[name], value))
+}
+
+function getFormattedValue(value) {
+  if (!value) {
+    return value
+  }
+
+  if (this.format === 'Currency') {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0
+    }).format(value)
+  }
+
+  return value
 }
 
 export default {

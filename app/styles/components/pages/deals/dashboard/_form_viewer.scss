@@ -1,214 +1,203 @@
-.deal-form-viewer-modal {
-  z-index: 999;
-  .modal-dialog {
-    height: 100%;
-    width: 100%;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: 0;
-    transform: none !important;
-    overflow: hidden;
-  }
+.c-deal-form-viewer__header {
+  width: 100%;
+  height: $deal-dashboard-header-height;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1em;
+  background-color: #fff;
+  border-bottom: 1px solid #dde2e6;
 
-  .modal-header {
+  & > div {
+    display: flex;
+    color: #1c364c;
+    align-items: center;
+  }
+}
+
+.c-deal-form-viewer__header__title {
+  font-size: 17px;
+  font-weight: 500;
+  margin: 0 0 0 16px;
+  line-height: 1;
+}
+
+.c-deal-form-viewer__header__back-btn {
+  font-size: 2.4rem;
+}
+
+.c-deal-form-viewer__header__cta {
+  button {
+    margin-left: 5px;
+    height: 34px;
+    line-height: 1px;
+    border-radius: 4px;
     background-color: #fff;
-    padding-top: 10px !important;
-    height: $deal-dashboard-header-height;
-    vertical-align: middle;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: solid 1px #dde2e6;
+    font-size: 13px;
+    font-weight: 500;
+    color: #8da2b5;
 
-    .close-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 3px;
-      background-color: #ffffff;
-      border: solid 1px #dde2e6;
-      font-weight: 700;
-      color: gray;
-      text-align: center;
-      line-height: 3px;
+    &:focus,
+    &:hover {
+      outline: none;
+      color: #2196f3 !important;
+      border-color: #2196f3 !important;
+      background-color: #fff !important;
     }
 
-    .title {
-      font-size: 17px;
-      font-weight: 500;
-      color: #1c364c;
-      margin-left: 20px;
-    }
-
-    .cta {
-      display: inline;
-      float: right;
-      button {
-        margin-left: 5px;
-        height: 34px;
-        line-height: 1px;
-        border-radius: 4px;
-        background-color: #fff;
-        border: solid 1px #dde2e6;
-        font-size: 13px;
-        font-weight: 500;
-        color: #8da2b5;
-        &:hover {
-          color: #2196f3;
-          border-color: #2196f3;
-        }
-        &:focus {
-          outline: none;
-        }
-      }
-
-      .edit-form {
-        background-color: #2196f3;
-        border-color: #2196f3;
-        color: #fff;
-        &:hover {
-          background: #fff;
-          color: #2196f3;
-        }
-      }
+    &.is-active {
+      color: #fff !important;
+      border-color: #2196f3 !important;
+      background-color: #2196f3 !important;
     }
   }
 
-  .modal-content {
-    border: none;
-    border-radius: 0;
-    padding: 0;
+  .edit-form {
+    background-color: #2196f3;
+    border-color: #2196f3;
+    color: #fff;
+    &:hover {
+      background: #fff;
+      color: #2196f3;
+    }
+  }
+}
+
+.c-deal-form-viewer__body {
+  @include scrollbar();
+  width: 100%;
+  display: flex;
+  overflow: hidden;
+  background-color: #f0f4f7;
+
+  &.show-comments {
+    .pdf-toolbar {
+      right: 316px;
+    }
+  }
+
+  &.show-envelopes {
+    .pdf-toolbar {
+      right: 390px;
+    }
+  }
+
+  .envelopes {
+    @extend .u-scrollbar--thinner;
+    border-left: 1px solid #dce5eb;
+    background: #fff;
+    .who-signed {
+      @extend %deal-envelopes-who-signed;
+    }
+  }
+
+  .file-viewer,
+  .c-pdf-viewer {
     width: 100%;
-    min-height: 100vh;
-    background-color: #f0f4f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: scroll;
+  }
+}
+
+.c-deal-form-viewer__viewer {
+  width: 100%;
+  height: calc(100vh - #{$deal-dashboard-header-height} - 1px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .c-pdf-viewer {
+    padding-top: 2em;
+    height: calc(100vh - #{$deal-dashboard-header-height});
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: scroll;
   }
 
-  .modal-body {
-    padding: 0;
+  .pdf-context {
+    width: auto;
+  }
+
+  .loading {
+    text-align: center;
+    font-weight: 600;
+    i {
+      margin-bottom: 10px;
+    }
+  }
+
+  .image {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .pdf-container {
+    margin: 0 auto 40px auto !important;
+  }
+
+  .pdf-page {
+    border: 2px solid gray;
+  }
+
+  .no-preview {
+    font-size: 17px;
+    margin-top: 30vh;
+    .file-name {
+      margin: 5px 0 20px 0;
+      color: gray;
+    }
+  }
+
+  .pagination {
+    position: fixed;
+    bottom: 4%;
+    left: 44%;
+  }
+}
+
+.c-deal-form-viewer__factsheet {
+  @extend %deal-info;
+  @extend .u-scrollbar--thinner;
+  border-right: 1px solid #c9d7df;
+}
+
+.c-deal-form-viewer__comments {
+  @extend %deal-comments;
+  @extend %deal-comment-create;
+  @extend .u-scrollbar--thinner;
+  position: relative;
+  overflow: auto;
+  padding: 1em;
+  margin: 0 !important;
+  overflow-x: hidden !important;
+  background-color: #fff;
+  border-left: 1px solid #c9d7df;
+
+  .comment-heading {
     margin: 0;
-    @extend %deal-dashboard;
-    overflow: hidden;
-    box-shadow: none;
-    @include scrollbar();
+    padding: 0;
+    font-size: 17px;
+    font-weight: bold;
+    color: #1c364c;
+    background-color: transparent;
+    border: none;
+  }
 
-    .fw-wrapper {
-      width: 100%;
-      display: flex;
-      flex-direction: row;
-      @extend .u-scrollbar--thinner;
-
-      &.show-comments {
-        .pdf-toolbar {
-          right: 316px;
-        }
-      }
-
-      &.show-envelopes {
-        .pdf-toolbar {
-          right: 390px;
-        }
-      }
-    }
-
-    .factsheet {
-      @extend %deal-info;
-      @extend .u-scrollbar--thinner;
-      padding: 0;
-      background-color: #fff;
-      border-right: 1px solid #c9d7df;
-    }
-
-    .envelopes {
-      @extend .u-scrollbar--thinner;
-      border-left: 1px solid #dce5eb;
-      box-shadow: -1px 0 0 0 #dce5eb;
-      background-color: #fff;
-      .who-signed {
-        @extend %deal-envelopes-who-signed;
-      }
-    }
-
-    .comments {
-      @extend %deal-comments;
-      @extend %deal-comment-create;
-      @extend .u-scrollbar--thinner;
-
+  .deal-comments {
+    margin-top: 0 !important;
+    background-color: #fff;
+    .messages {
+      overflow: auto;
+      border: none;
       padding: 0 !important;
       margin: 0 !important;
-      overflow-x: hidden !important;
-      background-color: #fff;
-      border-left: 1px solid #c9d7df;
-      position: relative;
-      min-height: 91vh;
-      max-height: 91vh;
-      overflow: auto;
-
-      .comment-heading {
-        margin: 20px 10px;
-        font-size: 17px;
-        font-weight: bold;
-        color: #1c364c;
-        background-color: transparent;
-        border: none;
-      }
-
-      .deal-comments {
-        margin-top: 0 !important;
-        background-color: #fff;
-        .messages {
-          min-height: 68vh !important;
-          max-height: 68vh !important;
-          overflow: auto;
-          border: none;
-          padding: 0 !important;
-          margin: 0 !important;
-        }
-      }
     }
 
-    .file-viewer {
-      min-height: 93vh;
-      max-height: 93vh;
-      overflow: scroll;
-      margin: 0px auto;
-      background-color: #f0f4f7;
-      padding: 2rem;
-      text-align: center;
-
-      .loading {
-        text-align: center;
-        margin-top: 10%;
-        font-weight: 600;
-        i {
-          margin-bottom: 10px;
-        }
-      }
-
-      .image {
-        max-width: 100%;
-        margin: 0 auto;
-      }
-
-      .pdf-container {
-        margin: 0 auto 40px auto !important;
-      }
-
-      .pdf-page {
-        border: 2px solid gray;
-      }
-
-      .no-preview {
-        font-size: 17px;
-        margin-top: 30vh;
-        .file-name {
-          margin: 5px 0 20px 0;
-          color: gray;
-        }
-      }
-
-      .pagination {
-        position: fixed;
-        bottom: 4%;
-        left: 44%;
-      }
+    .message-item {
+      margin: 0 0 1em 0 !important;
     }
   }
 }

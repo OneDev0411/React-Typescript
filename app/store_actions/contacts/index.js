@@ -1,5 +1,6 @@
 export * from './get-contact'
 export * from './get-contacts'
+export * from './delete-contact'
 export * from './update-contact'
 export * from './import-contacts'
 export * from './get-contacts-tags'

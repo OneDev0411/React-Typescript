@@ -17,11 +17,15 @@ export default function Birthdays({ contact }) {
   }
 
   const handleFormat = unix_timestamp => {
-    if (!unix_timestamp) {
+    if (typeof unix_timestamp === 'number') {
+      return format(unix_timestamp * 1000, 'MM/DD/YYYY')
+    }
+
+    if (typeof unix_timestamp === 'string' && validator(unix_timestamp)) {
       return unix_timestamp
     }
 
-    return format(unix_timestamp * 1000, 'MM/DD/YYYY')
+    return null
   }
 
   const handleParse = date => new Date(date).getTime() / 1000

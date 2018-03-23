@@ -26,10 +26,10 @@ class Title extends React.Component {
     this.handleOnSelect = this.handleOnSelect.bind(this)
   }
 
-  async handleOnSelect(legal_prefix) {
+  async handleOnSelect(title) {
     const { onChange } = this.props
 
-    await onChange([{ type: 'legal_prefix', legal_prefix }])
+    await onChange([{ type: 'title', title }])
   }
 
   render() {
@@ -40,13 +40,13 @@ class Title extends React.Component {
         <label className="c-contact-details-item__label">Title</label>
         <span
           style={{ paddingLeft: '4px' }}
-          className="c-contact-details-item__field"
+          className="c-contact-details-item__field__label-select"
         >
           <Dropdown
             name="title"
             options={OPTIONS}
             disabled={disabled}
-            defaultTitle={field.legal_prefix}
+            defaultTitle={field.title}
             handleOnSelect={this.handleOnSelect}
           />
         </span>

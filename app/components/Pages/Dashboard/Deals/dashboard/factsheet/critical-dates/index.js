@@ -35,6 +35,7 @@ const CriticalDates = ({ deal, showTitle = true }) => {
   return (
     <div className="deal-info-section">
       <Items
+        id="critical-dates"
         title="CRITICAL DATES"
         showTitle={showTitle}
         table={table}
@@ -48,7 +49,7 @@ const CriticalDates = ({ deal, showTitle = true }) => {
 /**
  * get next date
  */
-CriticalDates.getNextDate = function(deal) {
+CriticalDates.getNextDate = function getNextDate(deal) {
   const date = getNextDateField(deal)
 
   if (!date) {

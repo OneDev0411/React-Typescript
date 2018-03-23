@@ -5,23 +5,25 @@ function getExtensionName(file) {
   return file.name.split('.').pop()
 }
 
-export default ({ width, file, disableKeyboardShortcuts = false }) => {
+export default ({
+  width,
+  file,
+  onPdfZoomIn,
+  onPdfZoomOut,
+  disableKeyboardShortcuts = false
+}) => {
   const { name, type, url, downloadUrl } = file
 
   return (
-    <div
-      style={{
-        minWidth: width,
-        maxWidth: width
-      }}
-      className="file-viewer"
-    >
+    <div style={{ width }} className="c-deal-form-viewer__viewer">
       {file &&
         type === 'pdf' && (
           <PdfViewer
             uri={url}
             downloadUrl={downloadUrl}
             defaultContainerHeight="85vh"
+            onZoomIn={onPdfZoomIn}
+            onZoomOut={onPdfZoomOut}
             disableKeyboardShortcuts={disableKeyboardShortcuts}
           />
         )}

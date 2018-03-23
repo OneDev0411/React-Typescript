@@ -3,7 +3,10 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import Deal from '../../../../../../models/Deal'
 import Editable from './inline-edit'
-import { updateContext } from '../../../../../../store_actions/deals'
+import {
+  updateContext,
+  approveContext
+} from '../../../../../../store_actions/deals'
 
 class Table extends React.Component {
   constructor(props) {
@@ -13,9 +16,22 @@ class Table extends React.Component {
     }
   }
 
-  approveField(e, field, ctx) {
+  async approveField(e, name, context) {
     e.stopPropagation()
-    this.updateField(field, ctx.rawValue || ctx.value)
+
+    const { deal, isBackOffice, approveContext } = this.props
+
+    if (!isBackOffice) {
+      return false
+    }
+
+    // set state
+    this.setState({ saving: name })
+
+    await approveContext(deal.id, context.id)
+
+    // set state
+    this.setState({ saving: false })
   }
 
   onChangeContext(field, value) {
@@ -39,6 +55,10 @@ class Table extends React.Component {
     this.setState({ saving: null })
   }
 
+  isSet(value) {
+    return !_.isUndefined(value) && value !== null
+  }
+
   render() {
     const { saving } = this.state
     const { table, deal, isBackOffice, showTitle, title, getValue } = this.props
@@ -51,6 +71,7 @@ class Table extends React.Component {
           {_.chain(table)
             .map(field => {
               const context = Deal.get.context(deal, field.name)
+              const discrepency = Deal.get.discrepency(deal, field.name)
               const fieldCtx = getValue(deal, field)
               const disabled = field.disabled === true
               const approved =
@@ -60,6 +81,7 @@ class Table extends React.Component {
                 <div key={`CRITICAL_DATE_${field.name}`}>
                   <Editable
                     field={field}
+                    discrepency={discrepency}
                     saving={saving}
                     context={fieldCtx}
                     disabled={disabled}
@@ -67,19 +89,20 @@ class Table extends React.Component {
                     isBackOffice={isBackOffice}
                     needsApproval={!isBackOffice && field.needs_approval}
                     onChange={(field, value) =>
-                      this.onChangeContext(field, value)
+                      this.onChangeContext(field, value || null)
                     }
                   />
-
                   <div className="approve-row">
                     {isBackOffice &&
-                      fieldCtx.value &&
+                      context &&
                       !disabled &&
                       !approved &&
                       saving !== field.name && (
                         <button
                           className="btn-approve"
-                          onClick={e => this.approveField(e, field, fieldCtx)}
+                          onClick={e =>
+                            this.approveField(e, field.name, context)
+                          }
                         >
                           Approve
                         </button>
@@ -99,5 +122,5 @@ export default connect(
   ({ deals }) => ({
     isBackOffice: deals.backoffice
   }),
-  { updateContext }
+  { updateContext, approveContext }
 )(Table)

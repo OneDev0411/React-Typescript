@@ -44,7 +44,7 @@ class PdfViewer extends React.Component {
   }
 
   docKeyboardShortcutHandler(event) {
-    const { disableKeyboardShortcuts } = this.props
+    const { disableKeyboardShortcuts, onZoomIn, onZoomOut } = this.props
 
     if (disableKeyboardShortcuts) {
       return false
@@ -74,9 +74,11 @@ class PdfViewer extends React.Component {
         break
       case 187:
         this.zoomIn()
+        onZoomIn && onZoomIn()
         break
       case 189:
         this.zoomOut()
+        onZoomOut && onZoomOut()
         break
       case 48:
         this.fitWindow()
@@ -92,8 +94,7 @@ class PdfViewer extends React.Component {
     }
 
     // lazy load
-    await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */)
-    await import('pdfjs-dist/web/compatibility' /* webpackChunkName: "pdf.comp" */)
+    const PDFJS = await import('pdfjs-dist' /* webpackChunkName: "pdf.combined" */)
 
     this.setState({
       uri,
@@ -135,6 +136,7 @@ class PdfViewer extends React.Component {
   }
 
   zoomIn() {
+    const { onZoomIn } = this.props
     const zoom = this.state.zoom || 0
 
     if (zoom >= 0.6) {
@@ -145,9 +147,14 @@ class PdfViewer extends React.Component {
       fitWindow: false,
       zoom: parseFloat((zoom + 0.3).toFixed(1))
     })
+
+    if (onZoomIn) {
+      onZoomIn()
+    }
   }
 
   zoomOut() {
+    const { onZoomOut } = this.props
     const zoom = this.state.zoom || 0
 
     if (zoom <= -0.3) {
@@ -158,6 +165,10 @@ class PdfViewer extends React.Component {
       fitWindow: false,
       zoom: parseFloat((zoom - 0.3).toFixed(1))
     })
+
+    if (onZoomOut) {
+      onZoomOut()
+    }
   }
 
   fitWindow() {
@@ -168,13 +179,11 @@ class PdfViewer extends React.Component {
   }
 
   render() {
-    const {
-      doc, fitWindow, rotation, zoom, loading, isFailed
-    } = this.state
+    const { doc, fitWindow, rotation, zoom, loading, isFailed } = this.state
     const { defaultContainerHeight, downloadUrl, uri } = this.props
 
     return (
-      <div>
+      <div className="c-pdf-viewer">
         {loading && (
           <div className="loading center">
             <i className="fa fa-spin fa-spinner fa-2x" />
@@ -199,17 +208,19 @@ class PdfViewer extends React.Component {
         {doc && (
           <div className="pdf-context" ref={ref => (this.$pdfContext = ref)}>
             <div className="wrapper">
-              {Array.apply(null, { length: doc.pdfInfo.numPages }).map((v, i) => (
-                <Page
-                  key={`page-${i}`}
-                  doc={doc}
-                  fitWindow={fitWindow}
-                  rotation={rotation}
-                  zoom={zoom}
-                  defaultContainerHeight={defaultContainerHeight || '85vh'}
-                  pageNumber={i + 1}
-                />
-              ))}
+              {Array.apply(null, { length: doc.pdfInfo.numPages }).map(
+                (v, i) => (
+                  <Page
+                    key={`page-${i}`}
+                    doc={doc}
+                    fitWindow={fitWindow}
+                    rotation={rotation}
+                    zoom={zoom}
+                    defaultContainerHeight={defaultContainerHeight || '85vh'}
+                    pageNumber={i + 1}
+                  />
+                )
+              )}
             </div>
 
             <div className="pdf-toolbar">
@@ -217,22 +228,40 @@ class PdfViewer extends React.Component {
                 placement="left"
                 overlay={<Tooltip>Rotate Pdf</Tooltip>}
               >
-                <i className="fa fa-rotate-right" onClick={() => this.rotate()} />
+                <i
+                  className="fa fa-rotate-right"
+                  onClick={() => this.rotate()}
+                />
               </OverlayTrigger>
 
-              <OverlayTrigger placement="left" overlay={<Tooltip>Zoom In</Tooltip>}>
-                <i className="fa fa-plus-circle" onClick={() => this.zoomIn()} />
+              <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip>Zoom In</Tooltip>}
+              >
+                <i
+                  className="fa fa-plus-circle"
+                  onClick={() => this.zoomIn()}
+                />
               </OverlayTrigger>
 
-              <OverlayTrigger placement="left" overlay={<Tooltip>Zoom Out</Tooltip>}>
-                <i className="fa fa-minus-circle" onClick={() => this.zoomOut()} />
+              <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip>Zoom Out</Tooltip>}
+              >
+                <i
+                  className="fa fa-minus-circle"
+                  onClick={() => this.zoomOut()}
+                />
               </OverlayTrigger>
 
               <OverlayTrigger
                 placement="left"
                 overlay={<Tooltip>Automatic Zoom</Tooltip>}
               >
-                <i className="fa fa-square-o" onClick={() => this.fitWindow()} />
+                <i
+                  className="fa fa-square-o"
+                  onClick={() => this.fitWindow()}
+                />
               </OverlayTrigger>
 
               <OverlayTrigger

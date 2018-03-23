@@ -6,29 +6,31 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import { upsertContactAttributes } from '../../../../../../store_actions/contacts'
+import { getMostRecentlyAttribute } from '../../../../../../models/contacts'
+
 import Field from './Field'
 import Title from './Title'
 import Loading from '../../components/Loading'
 
-const Names = ({ names, upsertAttribute, handelOnDelete, isSaving }) => (
+const Names = ({ fields, upsertAttribute, handelOnDelete, isSaving }) => (
   <div className="c-contact-profile-card">
     <h3 className="c-contact-profile-card__title">Names</h3>
     <div className="c-contact-profile-card__body">
       <ul className="c-contact-details u-unstyled-list">
         <Title
           disabled={isSaving}
-          key="names__legal_prefix"
-          field={names.legal_prefix}
+          key="names__title"
+          field={fields.title}
           onChange={upsertAttribute}
         />
-        {names &&
-          Object.keys(names)
-            .filter(name => name !== 'legal_prefix')
+        {fields &&
+          Object.keys(fields)
+            .filter(name => name !== 'title')
             .map(name => (
               <Field
-                field={names[name]}
+                field={fields[name]}
                 isSaving={isSaving}
-                key={`names_${names[name].type}`}
+                key={`names_${fields[name].type}`}
                 onChange={upsertAttribute}
                 onDelete={handelOnDelete}
               />
@@ -39,13 +41,12 @@ const Names = ({ names, upsertAttribute, handelOnDelete, isSaving }) => (
   </div>
 )
 
-function mapStateToProps(state, props) {
-  const { contact: { id: contactId, sub_contacts } } = props
-  let { names } = sub_contacts[0].attributes
+function mapStateToProps(state, { contact }) {
+  const { id: contactId } = contact
+  const names = getMostRecentlyAttribute({ contact, attributeName: 'names' })
+  const fields = getNames(names)
 
-  names = names ? getNames(names[0]) : []
-
-  return { contactId, names }
+  return { contactId, names, fields }
 }
 
 const enhance = compose(
@@ -55,6 +56,7 @@ const enhance = compose(
   withState('isSaving', 'setIsSaving', false),
   withHandlers({
     upsertAttribute: ({
+      names,
       contact,
       contactId,
       setIsSaving,
@@ -63,17 +65,40 @@ const enhance = compose(
       setIsSaving(true)
 
       try {
+        let id
+        let attributes
         const [field] = fields
         const { type } = field
-        const { names } = contact.sub_contacts[0].attributes
+        const {
+          names: firstSubContactNames
+        } = contact.sub_contacts[0].attributes
 
-        const attributes = [
-          {
-            ...names[0],
-            [type]: field[type],
-            is_primary: true
-          }
-        ]
+        if (
+          Array.isArray(firstSubContactNames) &&
+          Object.keys(firstSubContactNames[0]).length > 0
+        ) {
+          id = firstSubContactNames[0].id
+        }
+
+        if (id) {
+          attributes = [
+            {
+              ...names,
+              id,
+              [type]: field[type],
+              is_primary: true
+            }
+          ]
+        } else {
+          attributes = [
+            {
+              type: 'name',
+              id,
+              is_primary: true,
+              [type]: field[type]
+            }
+          ]
+        }
 
         await upsertContactAttributes({
           contactId,
@@ -88,6 +113,7 @@ const enhance = compose(
   }),
   withHandlers({
     handelOnDelete: ({
+      names,
       contact,
       contactId,
       setIsSaving,
@@ -96,10 +122,22 @@ const enhance = compose(
       setIsSaving(true)
 
       try {
-        let { names } = contact.sub_contacts[0].attributes
+        let id
+        const {
+          names: firstSubContactNames
+        } = contact.sub_contacts[0].attributes
+
+        if (
+          Array.isArray(firstSubContactNames) &&
+          Object.keys(firstSubContactNames[0]).length > 0
+        ) {
+          id = firstSubContactNames[0].id
+        }
+
         const attributes = [
           {
-            ...names[0],
+            ...names,
+            id,
             [type]: ''
           }
         ]
@@ -120,21 +158,26 @@ const enhance = compose(
 export default enhance(Names)
 
 function getNames(names) {
-  const { id } = names
+  let id
+  let nameAttribute
+
   const nameFields = {
-    legal_prefix: '-',
-    first_name: '-',
-    middle_name: '-',
-    last_name: '-',
-    legal_first_name: '-',
-    legal_middle_name: '-',
-    legal_last_name: '-',
-    nickname: '-'
+    title: '',
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    nickname: ''
   }
 
-  const nameAttribute = {
-    ...nameFields,
-    ...pick(names, Object.keys(nameFields))
+  if (names && Object.keys(names).length > 0) {
+    id = names.id
+
+    nameAttribute = {
+      ...nameFields,
+      ...pick(names, Object.keys(nameFields))
+    }
+  } else {
+    nameAttribute = nameFields
   }
 
   const getTitle = name =>

@@ -1,6 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getDeals, getAgents, getContexts } from '../../../../store_actions/deals'
+import {
+  getDeals,
+  getAgents,
+  getContexts
+} from '../../../../store_actions/deals'
 import { hasUserAccess } from '../../../../utils/user-teams'
 import DealsError from './error'
 
@@ -17,7 +21,6 @@ class DealsContainer extends React.Component {
       contexts,
       deals,
       agents,
-      forms,
       user
     } = this.props
 

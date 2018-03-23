@@ -269,7 +269,7 @@ class AddContactModal extends React.Component {
               <Name
                 id="last_name"
                 name="last_name"
-                placeholder="last Name *"
+                placeholder="Last Name *"
                 value={last_name}
                 isInvalid={invalidFields.includes('last_name')}
                 onChange={last_name =>

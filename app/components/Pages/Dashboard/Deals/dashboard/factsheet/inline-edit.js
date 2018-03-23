@@ -1,15 +1,18 @@
 import React from 'react'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
+import _ from 'underscore'
 import DatePicker from '../../components/date-picker'
 import ToolTip from '../../components/tooltip'
+import Input from '../../../../../../views/components/Input'
+import ContextDiscrepencyOverview from '../context-discrepency/overview'
 
 export default class Editable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      editMode: false,
-      error: false
+      value: null,
+      editMode: false
     }
   }
 
@@ -21,34 +24,33 @@ export default class Editable extends React.Component {
   onFinishEditing(value = null) {
     const { field, onChange } = this.props
 
-    let fieldValue = value
-
-    if (value === null && this.input) {
-      fieldValue = this.input.value
-    }
+    const fieldValue = value || this.state.value
 
     this.setState({
-      editMode: false,
-      error: false
+      editMode: false
     })
 
     if (
-      fieldValue &&
-      fieldValue !== this.getValue() &&
+      !_.isUndefined(fieldValue) &&
+      fieldValue !== this.getContextValue() &&
       field.validate(field, fieldValue)
     ) {
       onChange(field, fieldValue)
+    } else {
+      this.setState({
+        value: this.getContextValue()
+      })
     }
   }
 
   cancelEdit(e) {
     e && e.stopPropagation()
-    this.input.value = this.getValue()
     this.setState({
-      editMode: false,
-      error: false
+      value: this.getValue(),
+      editMode: false
     })
   }
+
   onKeyPress(e) {
     if (e.which === 13 || e.keyCode === 13) {
       this.onFinishEditing()
@@ -56,12 +58,9 @@ export default class Editable extends React.Component {
   }
 
   editField() {
-    this.setState(
-      {
-        editMode: true
-      },
-      () => this.input && this.input.focus()
-    )
+    this.setState({
+      editMode: true
+    })
   }
 
   getCtas() {
@@ -102,10 +101,25 @@ export default class Editable extends React.Component {
   }
 
   getValue() {
-    const { context } = this.props
-    const value = context.rawValue || context.value || ''
+    const { value } = this.state
 
-    return value.toString()
+    return value !== null ? value : this.getContextValue()
+  }
+
+  getContextValue() {
+    const { context } = this.props
+
+    if (!_.isUndefined(context.rawValue) && context.rawValue !== null) {
+      return context.rawValue.toString()
+    } else if (!_.isUndefined(context.value) && context.value !== null) {
+      return context.value.toString()
+    }
+
+    return ''
+  }
+
+  getFormattedValue() {
+    return this.props.field.getFormattedValue(this.getValue())
   }
 
   removeEditMode() {
@@ -117,14 +131,14 @@ export default class Editable extends React.Component {
   render() {
     const {
       field,
-      context,
+      discrepency,
       approved,
       needsApproval,
       disabled,
       saving,
       isBackOffice
     } = this.props
-    const { editMode, error } = this.state
+    const { editMode } = this.state
     const isDateType = field.data_type === 'Date'
     const isStringType = !isDateType
 
@@ -132,7 +146,15 @@ export default class Editable extends React.Component {
       return (
         <div className={cn('fact-row', { disabled })}>
           <div className="name">{field.label}</div>
-          <span className="disabeld-field">{context.value}</span>
+          <span className="disabeld-field">
+            {discrepency && (
+              <ContextDiscrepencyOverview
+                placement="top"
+                context={discrepency}
+              />
+            )}
+            {this.getFormattedValue()}
+          </span>
         </div>
       )
     }
@@ -142,7 +164,8 @@ export default class Editable extends React.Component {
         <div className="name" onClick={() => this.editField()}>
           {field.label}
         </div>
-        <div className={cn('field editable', { approved, disabled, error })}>
+
+        <div className={cn('field editable', { approved, disabled })}>
           <DatePicker
             show={editMode && isDateType}
             saveText={needsApproval ? 'Notify Office' : 'Update'}
@@ -162,7 +185,15 @@ export default class Editable extends React.Component {
                 }
               >
                 <span style={{ opacity: saving ? 0.8 : 1 }}>
-                  {context.value}
+                  {discrepency && (
+                    <ContextDiscrepencyOverview
+                      context={discrepency}
+                      placement="top"
+                      onClick={e => e.stopPropagation()}
+                    />
+                  )}
+
+                  {this.getFormattedValue()}
                 </span>
               </ToolTip>
             )}
@@ -173,19 +204,41 @@ export default class Editable extends React.Component {
                   onClickOutside={() => this.onFinishEditing()}
                   className="inline"
                 >
-                  <input
+                  <Input
+                    data-type={field.format || field.data_type}
+                    {...field.properties}
                     className="input-edit"
-                    defaultValue={this.getValue()}
-                    onKeyPress={e => this.onKeyPress(e)}
-                    onChange={e => {
-                      const error =
-                        this.input && !field.validate(field, e.target.value)
-
-                      this.setState({ error })
-                    }}
-                    ref={input => (this.input = input)}
                     maxLength={15}
+                    value={this.getValue()}
+                    onKeyPress={e => this.onKeyPress(e)}
+                    ErrorMessageHandler={({ message }) => (
+                      <span
+                        style={{
+                          position: 'absolute',
+                          right: '5px'
+                        }}
+                        data-balloon={message}
+                        data-balloon-pos="left"
+                      >
+                        <i
+                          style={{
+                            verticalAlign: 'middle',
+                            fontSize: '14px',
+                            color: '#ec4b35'
+                          }}
+                          className="fa fa-warning"
+                        />
+                      </span>
+                    )}
+                    onChange={(e, data = {}) =>
+                      this.setState({
+                        value: !_.isUndefined(data.value)
+                          ? data.value
+                          : e.target.value
+                      })
+                    }
                   />
+
                   <button
                     className="c-button--shadow"
                     onClick={e => {
@@ -195,6 +248,7 @@ export default class Editable extends React.Component {
                   >
                     SAVE
                   </button>
+
                   <button
                     className="c-button--shadow ico-remove fa fa-times-circle"
                     onClick={e => this.cancelEdit(e)}
@@ -204,6 +258,7 @@ export default class Editable extends React.Component {
 
             <span className="cta">{this.getCtas()}</span>
           </div>
+
           {saving &&
             saving === field.name && (
               <i
