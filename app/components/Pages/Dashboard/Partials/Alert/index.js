@@ -2,9 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import WentWrong from '../UserMessages/WentWrong'
 
-const Alert = ({
-  children, code, message, style, supportHandler, type
-}) => {
+const Alert = ({ children, code, message, style, supportHandler, type }) => {
   let content = message
 
   if (code === 500) {
