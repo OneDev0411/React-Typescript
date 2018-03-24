@@ -65,7 +65,7 @@ class EditableInput extends React.Component {
         {
           error: false,
           isActive: false,
-          text: fieldValue || text
+          text: fieldValue || ''
         },
         () => this.$input.blur()
       )
