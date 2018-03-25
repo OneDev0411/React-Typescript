@@ -1,46 +1,62 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
-import _ from 'underscore'
+import request from 'request'
+import config from '../../../../config/private'
 
-const fileParser = require('async-busboy')
+// const fileParser = require('async-busboy')
 const router = require('koa-router')()
 
 import updateSession from '../update-session'
-import config from '../../../../config/private'
 
 const app = new Koa()
 
-router.post('/proxifier/upload/:endpointKey', bodyParser(), async ctx => {
+function upload(ctx) {
   const { headers } = ctx
-  const { files } = await fileParser(ctx.req)
 
+  // remove base url because current fetcher middleware add it by itself
+  const endpoint = headers['x-endpoint'].replace(config.api.url, '')
+
+  // get method
+  const method = headers['x-method'] || 'post'
+
+  const api_url = config.api.url
+  const { access_token } = ctx.session.user
+
+  return new Promise((resolve, reject) => {
+    ctx.req.pipe(
+      request(
+        {
+          uri: `${api_url}${endpoint}`,
+          json: true,
+          method,
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            'User-Agent': config.app_name,
+            'X-REAL-AGENT': headers['user-agent']
+          }
+        },
+        (error, response, body) => {
+          if (error) {
+            return reject(error)
+          }
+
+          const { data } = body
+
+          if (method !== 'get' && data && data.type === 'user') {
+            updateSession(ctx, body)
+          }
+
+          resolve(body)
+        }
+      )
+    )
+  })
+}
+
+router.post('/proxifier/upload/:endpointKey', bodyParser(), async ctx => {
   try {
-    // remove base url because current fetcher middleware add it by itself
-    const endpoint = headers['x-endpoint'].replace(config.api.url, '')
-
-    // get method
-    const method = headers['x-method'] || 'post'
-
-    const request = ctx.fetch(endpoint, method, 'multipart/form-data')
-
-    _.each(files, file => {
-      request.attach(file.filename, file.path, file.filename)
-    })
-
-    if (headers.authorization) {
-      request.set({ Authorization: headers.authorization })
-    }
-
-    const response = await request
-
     // update user session
-    const { data } = response.body
-
-    if (method !== 'get' && data && data.type === 'user') {
-      updateSession(ctx, response.body)
-    }
-
-    ctx.body = response.body
+    ctx.body = await upload(ctx)
   } catch (e) {
     e.response = e.response || {
       status: 500,
