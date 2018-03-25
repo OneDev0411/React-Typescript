@@ -2,7 +2,7 @@
   @extend %deal-roles;
 }
 
-.modal-deal-select-role {
+.modal-deal-team-agents {
   .modal-content {
     border-radius: 6px;
     overflow: auto;
@@ -19,6 +19,16 @@
     overflow: auto;
     .deal-roles {
       @extend %deal-roles;
+      padding: 10px !important;
+      .deal-roles-empty-state {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80px;
+        font-weight: 500;
+        font-size: 16px;
+      }
+
       .item {
         cursor: pointer;
       }
@@ -80,7 +90,8 @@
       &::placeholder,
       &::-moz-placeholder, /* Firefox 19+ */
       &:-ms-input-placeholder, /* IE 10+ */
-      &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+      &::-webkit-input-placeholder {
+        /* Chrome/Opera/Safari */
         color: #c6d1db;
         opacity: 1;
       }

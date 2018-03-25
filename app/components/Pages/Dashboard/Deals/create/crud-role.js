@@ -4,9 +4,8 @@ import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import RoleForm from '../dashboard/roles/form'
 import RoleItem from './role-item'
-import UserAvatar from '../../../../Partials/UserAvatar'
+import TeamAgents from './deal-team-agents'
 import {
-  roleName,
   getNewAttributes,
   normalizeContactAsRole,
   getUpdatedNameAttribute,
@@ -35,9 +34,9 @@ class CrudRole extends React.Component {
   }
 
   handleShowModal = () => {
-    const { teamAgents, shouldPrepopulateAgent, role } = this.props
+    const { shouldPrepopulateAgent, role } = this.props
 
-    if (shouldPrepopulateAgent && teamAgents.length > 0) {
+    if (shouldPrepopulateAgent) {
       return this.setState({ showAgentsModal: true })
     }
 
@@ -242,6 +241,13 @@ class CrudRole extends React.Component {
           handleSelectedItem={this.handleSelectedContact}
         />
 
+        <TeamAgents
+          show={showAgentsModal}
+          handleOnClose={this.handlOnHide}
+          handleSelectAgent={user => this.onSelectAgent(user)}
+          teamAgents={teamAgents}
+        />
+
         <Modal
           show={showFormModal}
           onHide={this.handlOnHide}
@@ -270,54 +276,12 @@ class CrudRole extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-
-        <Modal
-          backdrop="static"
-          show={showAgentsModal}
-          dialogClassName="modal-deal-select-role"
-          onHide={this.handlOnHide}
-        >
-          <Modal.Header closeButton>Choose primary agent</Modal.Header>
-
-          <Modal.Body>
-            <div className="deal-roles">
-              {teamAgents &&
-                teamAgents.map(user => (
-                  <div
-                    key={user.id}
-                    className="item"
-                    onClick={() => this.onSelectAgent(user)}
-                  >
-                    <div className="role-avatar">
-                      <UserAvatar
-                        name={user.display_name}
-                        image={user.profile_image_url}
-                        size={32}
-                        showStateIndicator={false}
-                      />
-                    </div>
-
-                    <div className="name">
-                      <div>{user.display_name}</div>
-                      <div className="role">{roleName(user.role || '')}</div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </Modal.Body>
-        </Modal>
       </div>
     )
   }
 }
 
-function mapToProps({ deals }) {
-  const { agents: teamAgents } = deals
-
-  return { teamAgents }
-}
-
-export default connect(mapToProps, {
+export default connect(null, {
   notify,
   createNewContact,
   upsertContactAttributes
