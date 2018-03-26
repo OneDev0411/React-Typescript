@@ -17,7 +17,8 @@ export function normalizeNewContact(formData = {}) {
     legal_last_name,
     stage,
     emails,
-    phone_numbers
+    phone_numbers,
+    companies
   } = formData
 
   const contact = {
@@ -84,6 +85,20 @@ export function normalizeNewContact(formData = {}) {
     const attributes = {
       ...contact.attributes,
       emails: normalizedEmails
+    }
+
+    contact.attributes = attributes
+  }
+
+  if (companies && Array.isArray(companies) && companies.length > 0) {
+    const normalizedCompanies = attributeNormalizer({
+      attributeName: 'company',
+      attributeValue: companies
+    })
+
+    const attributes = {
+      ...contact.attributes,
+      companies: normalizedCompanies
     }
 
     contact.attributes = attributes

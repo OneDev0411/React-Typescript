@@ -2,7 +2,7 @@
 import React from 'react'
 
 const getNameInitials = user => {
-  let initials
+  let initials = ''
   const { first_name, last_name } = user
 
   if (first_name) {
