@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import RoleForm from '../form'
@@ -20,9 +19,8 @@ import {
 
 const initialState = {
   form: null,
-  saving: false,
-  isUpdateModal: false,
-  isFormCompleted: false
+  isSaving: false,
+  isUpdateModal: false
 }
 
 class AddRoleModal extends React.Component {
@@ -38,8 +36,8 @@ class AddRoleModal extends React.Component {
     return role && role.role
   }
 
-  onFormChange = ({ form, isFormCompleted }) => {
-    this.setState({ form, isFormCompleted })
+  onFormChange = form => {
+    this.setState({ form })
   }
 
   notifySuccess = message =>
@@ -58,15 +56,21 @@ class AddRoleModal extends React.Component {
       upsertContactAttributes
     } = this.props
     const { form } = this.state
-    const { contact, legal_first_name, legal_last_name } = form
-    const fullName = `${legal_first_name} ${legal_last_name}`
+    const { contact, legal_first_name, legal_last_name, company_title } = form
+    let fullName
+
+    if (legal_first_name || legal_last_name) {
+      fullName = `${legal_first_name} ${legal_last_name}`
+    } else if (company_title) {
+      fullName = company_title
+    }
 
     if (!deal) {
       return false
     }
 
     this.setState({
-      saving: true
+      isSaving: true
     })
 
     try {
@@ -134,18 +138,18 @@ class AddRoleModal extends React.Component {
     }
 
     this.setState({
-      saving: false
+      isSaving: false
     })
   }
 
   setSubmitButtonText = () => {
-    const { saving } = this.state
+    const { isSaving } = this.state
 
     const isUpdate = this.isUpdateModal()
 
     let text = isUpdate ? 'Update' : 'Add'
 
-    if (saving) {
+    if (isSaving) {
       return isUpdate ? 'Updating...' : 'Adding...'
     }
 
@@ -158,40 +162,23 @@ class AddRoleModal extends React.Component {
   }
 
   render() {
-    const { form, saving, isFormCompleted } = this.state
+    const { form, isSaving } = this.state
     const { deal, allowedRoles, isOpen, role } = this.props
-    const disabled = !isFormCompleted || saving === true
     const modalTitle = this.isUpdateModal() ? 'Update Contact' : 'Add to Deal'
 
     return (
-      <Modal
-        show={isOpen}
-        backdrop="static"
-        onHide={this.handleCloseModal}
-        dialogClassName="modal-deal-add-role"
-      >
-        <Modal.Header closeButton>{modalTitle}</Modal.Header>
-
-        <Modal.Body>
-          <RoleForm
-            deal={deal}
-            form={form || role}
-            allowedRoles={allowedRoles}
-            onFormChange={this.onFormChange}
-          />
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button
-            disabled={disabled}
-            onClick={this.submit}
-            bsStyle={disabled ? 'link' : 'primary'}
-            className={`btn-deal ${disabled ? 'disabled' : ''}`}
-          >
-            {this.setSubmitButtonText()}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <RoleForm
+        showFormModal={isOpen}
+        handlOnHide={this.handleCloseModal}
+        modalTitle={modalTitle}
+        onSubmit={this.submit}
+        isSaving={isSaving}
+        deal={deal}
+        form={form || role}
+        allowedRoles={allowedRoles}
+        onFormChange={this.onFormChange}
+        submitButtonText={this.setSubmitButtonText()}
+      />
     )
   }
 }
