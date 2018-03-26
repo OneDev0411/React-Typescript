@@ -23,39 +23,39 @@ function upload(ctx) {
   const { access_token } = ctx.session.user
 
   return new Promise((resolve, reject) => {
-    ctx.req.pipe(
-      request(
-        {
-          uri: `${api_url}${endpoint}`,
-          json: true,
-          method,
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-            'User-Agent': config.app_name,
-            'X-REAL-AGENT': headers['user-agent']
-          }
-        },
-        (error, response, body) => {
-          if (error) {
-            return reject(error)
-          }
-
-          const { data } = body
-
-          if (method !== 'get' && data && data.type === 'user') {
-            updateSession(ctx, body)
-          }
-
-          resolve(body)
+    const uploadRequeast = request(
+      {
+        uri: `${api_url}${endpoint}`,
+        json: true,
+        method,
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          'User-Agent': config.app_name,
+          'X-REAL-AGENT': headers['user-agent']
         }
-      )
+      },
+      (error, response, body) => {
+        if (error) {
+          return reject(error)
+        }
+
+        const { data } = body
+
+        // update user session
+        if (method !== 'get' && data && data.type === 'user') {
+          updateSession(ctx, body)
+        }
+
+        resolve(body)
+      }
     )
+
+    ctx.req.pipe(uploadRequeast)
   })
 }
 
 router.post('/proxifier/upload/:endpointKey', bodyParser(), async ctx => {
   try {
-    // update user session
     ctx.body = await upload(ctx)
   } catch (e) {
     e.response = e.response || {
