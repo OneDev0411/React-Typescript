@@ -11,7 +11,7 @@ export async function searchAllDeals(query, isBackOffice) {
     url += '?associations[]=deal.created_by&associations[]=deal.brand'
   }
 
-  const response = await new Fetch().post(url).send({ query })
+  const response = await new Fetch().post(url).send(query)
 
   return response.body.data
 }
