@@ -27,8 +27,15 @@ export function normalizeContactAsRole(contact) {
     first_name = ''
   }
 
+  let { company_title } = contact
+
+  if (!contact.company_title && contact.companies && contact.companies[0]) {
+    company_title = contact.companies[0].company
+  }
+
   const fakeRole = {
     ...newContact,
+    company_title,
     legal_prefix: title,
     legal_first_name: first_name,
     legal_middle_name: middle_name,
@@ -41,6 +48,7 @@ export function normalizeContactAsRole(contact) {
 export function normalizeNewRoleFormDataAsContact(formData = {}) {
   let emails
   let phone_numbers
+  let companies
   const {
     email,
     phone_number,
@@ -61,10 +69,15 @@ export function normalizeNewRoleFormDataAsContact(formData = {}) {
     delete formData.phone_number
   }
 
+  if (company_title) {
+    companies = [company_title]
+    delete formData.company_title
+  }
+
   return {
     emails,
     phone_numbers,
-    company_title,
+    companies,
     title: legal_prefix,
     first_name: legal_first_name,
     middle_name: legal_middle_name,

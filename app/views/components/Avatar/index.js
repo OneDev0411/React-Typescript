@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const getNameInitials = user => {
-  let initials
+  let initials = ''
   const { first_name, last_name, display_name } = user
 
   if (first_name) {
@@ -15,7 +15,7 @@ const getNameInitials = user => {
 
   if (!initials && display_name) {
     initials = display_name.charAt(0)
- 
+
     // eslint-disable-next-line
     if (isNaN(initials)) {
       return initials.toUpperCase()

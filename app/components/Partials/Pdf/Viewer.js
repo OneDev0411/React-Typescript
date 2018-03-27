@@ -51,7 +51,7 @@ class PdfViewer extends React.Component {
     }
 
     const keyCode = event.keyCode || event.which
-    const $viewerContainer = this.$pdfContext.parentElement.parentElement
+    const $viewerContainer = this.$pdfContext.parentElement
     const pdfPageHeight =
       this.$pdfContext.firstElementChild.firstElementChild.offsetHeight + 45
 

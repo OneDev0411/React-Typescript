@@ -73,12 +73,23 @@ class Forms extends React.Component {
     }
   }
 
-  async createNewTask(taskName) {
+  async createNewTaskAndUploadFile(taskName) {
     // open file select modal
-
     this.newTaskTitle = taskName
-
     this.dropzone.open()
+  }
+
+  async createNewTask(taskName) {
+    // create task
+    const task = await this.createTask({
+      isNew: true,
+      id: null,
+      name: taskName
+    })
+
+    if (task) {
+      this.resetNewTaskModal()
+    }
   }
 
   showNewTaskModal() {
@@ -90,24 +101,25 @@ class Forms extends React.Component {
     const { newTaskTitle } = this
 
     if (files && files.length > 0) {
-      const form = {
+      // create task
+      const task = await this.createTask({
         isNew: true,
         id: null,
         name: newTaskTitle
-      }
-
-      // create task
-      const task = await this.createTask(form)
+      })
 
       if (task) {
-        this.newTaskTitle = ''
-        this.setState({
-          showNewTaskModal: false
-        })
-
+        this.resetNewTaskModal()
         this.props.setUploadFiles(files, task)
       }
     }
+  }
+
+  resetNewTaskModal() {
+    this.newTaskTitle = ''
+    this.setState({
+      showNewTaskModal: false
+    })
   }
 
   render() {
@@ -179,7 +191,10 @@ class Forms extends React.Component {
           onClose={() => this.setState({ showNewTaskModal: false })}
           isCreatingTask={isCreatingTask}
           isFailed={this.state.createTaskIsFailed}
-          onCreateNewTask={name => this.createNewTask(name)}
+          handleCreateTask={name => this.createNewTask(name)}
+          handleCreateTaskAndUploadFile={name =>
+            this.createNewTaskAndUploadFile(name)
+          }
         />
 
         <Dropzone

@@ -29,6 +29,7 @@ export default class extends React.Component {
       splitPdfHandler,
       onPdfZoomIn,
       onPdfZoomOut,
+      onClose,
       task,
       file,
       fileType
@@ -42,12 +43,12 @@ export default class extends React.Component {
       <div className="c-deal-form-viewer">
         <div className="c-deal-form-viewer__header">
           <div>
-            <Link
-              to={`/dashboard/deals/${deal.id}`}
+            <span
+              onClick={onClose}
               className="c-deal-form-viewer__header__back-btn"
             >
               <i className="fa fa-angle-left" />
-            </Link>
+            </span>
             <h1 className="c-deal-form-viewer__header__title">
               {task ? task.title : file.name}
             </h1>
