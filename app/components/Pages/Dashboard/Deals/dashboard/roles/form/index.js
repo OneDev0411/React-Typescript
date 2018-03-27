@@ -312,7 +312,7 @@ export default class Form extends React.Component {
 
     const pluralValues = form[pluralName]
 
-    if (pluralValues && _.isArray(pluralValues)) {
+    if (pluralValues && _.isArray(pluralValues) && pluralValues.length > 0) {
       const values = []
 
       singularName.forEach(name => {
