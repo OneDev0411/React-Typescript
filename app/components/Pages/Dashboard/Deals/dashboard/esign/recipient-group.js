@@ -15,7 +15,7 @@ class RecipientGroup extends React.Component {
 
     return (
       <div className="rcp-group">
-        <div className="rcp-step">Sining Order {order}</div>
+        <div className="rcp-step">Signing Order {order}</div>
 
         <div className="rcp-list">
           {_.map(group, (recp, index) => {
@@ -44,11 +44,13 @@ class RecipientGroup extends React.Component {
           })}
 
           <span onClick={onAddRecipient} className="recp add">
-            <span className="recp-title">Add Signer</span>
+            <span className="recp-title">
+              <i className="fa fa-plus" />
+              &nbsp; Add Signer
+            </span>
 
             <span className="recp-description">
-              <i className="fa fa-plus" />
-              &nbsp; With signing order {order}
+              Signing order {order}
             </span>
           </span>
         </div>
