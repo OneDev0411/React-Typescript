@@ -342,7 +342,7 @@ export default class Form extends React.Component {
     if (
       !form.legal_first_name &&
       !form.legal_last_name &&
-      !form.company_title
+      (!form.company_title || !form.company_title.trim())
     ) {
       nameErrorMessage = 'Please add a name or a company to continue'
       nameErrorFields = ['legal_first_name', 'legal_last_name', 'company_title']
