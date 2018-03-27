@@ -8,6 +8,10 @@ export default ({ person, onClick, onRemove }) => {
   if (person.legal_full_name) {
     name += person.legal_prefix ? `${person.legal_prefix} ` : ''
     name += person.legal_full_name
+  } else if (person.legal_first_name || person.legal_last_name) {
+    name += person.legal_prefix ? `${person.legal_prefix} ` : ''
+    name += person.legal_first_name ? `${person.legal_first_name} ` : ''
+    name += person.legal_last_name ? `${person.legal_last_name} ` : ''
   } else {
     name = person.company_title
   }
