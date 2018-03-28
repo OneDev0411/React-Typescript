@@ -63,9 +63,10 @@ export default class Form extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.form &&
-      Object.keys(nextProps.form).length !== 0 &&
-      nextProps.form !== this.props.form
+      (nextProps.form &&
+        Object.keys(nextProps.form).length !== 0 &&
+        nextProps.form !== this.props.form) ||
+      (nextProps.showFormModal && Object.keys(this.state.form).length === 0)
     ) {
       const isNewRecord = typeof nextProps.form.role === 'undefined'
 
@@ -74,6 +75,10 @@ export default class Form extends React.Component {
           this.validate(field, nextProps.form[field])
         })
       } else {
+        this.setState({
+          nameErrorFields: [],
+          nameErrorMessage: ''
+        })
         this.preselectRoles()
       }
 
@@ -83,7 +88,7 @@ export default class Form extends React.Component {
       })
     }
 
-    if (!nextProps.form) {
+    if (!nextProps.form || !nextProps.showFormModal) {
       this.setState({
         form: {},
         invalidFields: []
