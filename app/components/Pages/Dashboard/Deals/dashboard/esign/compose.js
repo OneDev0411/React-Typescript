@@ -1,11 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
-import { Row, Col, Modal, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
-import moment from 'moment'
 import _ from 'underscore'
-import cn from 'classnames'
 import Recipients from './recipients'
 import ComposeAttachments from './compose-attachments'
 import Docusign from './docusign'
@@ -51,8 +49,8 @@ class SendSignatures extends React.Component {
   /**
    * add new recipinet
    */
-  addRecipients(recipient) {
-    this.props.addEsignRecipient({ role: recipient.id })
+  addRecipients(recipient, order) {
+    this.props.addEsignRecipient({ role: recipient.id, order })
 
     if (this.state.failure === ERROR_MESSAGES.recipinets) {
       this.setState({
@@ -103,8 +101,7 @@ class SendSignatures extends React.Component {
       return false
     }
 
-    const { deal, tasks } = this.props
-    const { attachments } = esign
+    const { deal } = this.props
     const roleNames = this.getFormsRoles()
 
     _.each(deal.roles, item => {
@@ -129,23 +126,18 @@ class SendSignatures extends React.Component {
     const { user } = this.props
     const { access_token } = user
 
-    window.open(DealModel.getEnvelopeEditLink(envelope_id, access_token), '_blank')
+    window.open(
+      DealModel.getEnvelopeEditLink(envelope_id, access_token),
+      '_blank'
+    )
   }
 
   /**
    * send envelope
    */
   async send() {
-    const { isSending, failure } = this.state
-    const {
-      notify,
-      createEnvelope,
-      closeEsignWizard,
-      user,
-      deal,
-      esign,
-      tasks
-    } = this.props
+    const { failure } = this.state
+    const { createEnvelope, closeEsignWizard, deal, esign, tasks } = this.props
     const { recipients } = esign
 
     const subject = this.subject.value
@@ -196,7 +188,6 @@ class SendSignatures extends React.Component {
         recipients
       )
 
-
       await createEnvelope(envelope)
 
       // close esign
@@ -208,12 +199,12 @@ class SendSignatures extends React.Component {
       const { confirmation } = this.props
 
       confirmation({
-        description: 'Would you like to review and finalize this envelope on Docusign?',
+        description:
+          'Would you like to review and finalize this envelope on Docusign?',
         confirmLabel: 'Yes',
         cancelLabel: 'Later',
         onConfirm: () => this.openEditWindow(envelope.id)
       })
-
     } catch (err) {
       const isDocusignError = ~~err.status === 412
 
@@ -260,12 +251,11 @@ class SendSignatures extends React.Component {
           </div>
 
           <div className="recipients">
-            <span className="item-title to">To: </span>
             <Recipients
               deal={deal}
               recipients={recipients}
               allowedRoles={this.getFormsRoles()}
-              onAddRecipient={recp => this.addRecipients(recp)}
+              onAddRecipient={(recp, order) => this.addRecipients(recp, order)}
               onRemoveRecipient={email => this.removeRecipient(email)}
             />
           </div>

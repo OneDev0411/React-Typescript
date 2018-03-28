@@ -51,7 +51,7 @@ class PdfViewer extends React.Component {
     }
 
     const keyCode = event.keyCode || event.which
-    const $viewerContainer = this.$pdfContext.parentElement.parentElement
+    const $viewerContainer = this.$pdfContext.parentElement
     const pdfPageHeight =
       this.$pdfContext.firstElementChild.firstElementChild.offsetHeight + 45
 
@@ -94,8 +94,7 @@ class PdfViewer extends React.Component {
     }
 
     // lazy load
-    await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */)
-    await import('pdfjs-dist/web/compatibility' /* webpackChunkName: "pdf.comp" */)
+    const PDFJS = await import('pdfjs-dist' /* webpackChunkName: "pdf.combined" */)
 
     this.setState({
       uri,

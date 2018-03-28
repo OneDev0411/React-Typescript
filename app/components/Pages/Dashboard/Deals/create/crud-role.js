@@ -1,16 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import RoleForm from '../dashboard/roles/form'
 import RoleItem from './role-item'
-import UserAvatar from '../../../../Partials/UserAvatar'
+import TeamAgents from './deal-team-agents'
 import {
-  roleName,
-  normalizeContact,
   getNewAttributes,
+  normalizeContactAsRole,
   getUpdatedNameAttribute,
-  normalizedFormDataAsContact
+  normalizeNewRoleFormDataAsContact
 } from '../utils/roles'
 import SelectContactModal from '../../../../../views/components/SelectContactModal'
 import {
@@ -23,7 +21,6 @@ const initialState = {
   isSaving: false,
   showFormModal: false,
   showAgentsModal: false,
-  isFormCompleted: false,
   showSelectContactModal: false
 }
 
@@ -35,9 +32,9 @@ class CrudRole extends React.Component {
   }
 
   handleShowModal = () => {
-    const { teamAgents, shouldPrepopulateAgent, role } = this.props
+    const { shouldPrepopulateAgent, role } = this.props
 
-    if (shouldPrepopulateAgent && teamAgents.length > 0) {
+    if (shouldPrepopulateAgent) {
       return this.setState({ showAgentsModal: true })
     }
 
@@ -63,8 +60,20 @@ class CrudRole extends React.Component {
   addRole = async () => {
     const { form } = this.state
     const { notify, createNewContact, upsertContactAttributes } = this.props
-    const { contact, legal_first_name, legal_last_name, isAgent } = form
-    const fullName = `${legal_first_name} ${legal_last_name}`
+    const {
+      contact,
+      legal_first_name,
+      legal_last_name,
+      isAgent,
+      company_title
+    } = form
+    let fullName
+
+    if (legal_first_name || legal_last_name) {
+      fullName = `${legal_first_name} ${legal_last_name}`
+    } else if (company_title) {
+      fullName = company_title
+    }
 
     try {
       if (!isAgent && !this.isUpdateModal()) {
@@ -75,7 +84,9 @@ class CrudRole extends React.Component {
         if (!contact) {
           const copyFormData = Object.assign({}, form)
 
-          await createNewContact(normalizedFormDataAsContact(copyFormData))
+          await createNewContact(
+            normalizeNewRoleFormDataAsContact(copyFormData)
+          )
           this.notifySuccess(`${fullName} has been added to your Contacts.`)
         } else {
           const newAttributes = await getNewAttributes(form)
@@ -156,10 +167,9 @@ class CrudRole extends React.Component {
     })
   }
 
-  onFormChange = ({ form, isFormCompleted }) => {
+  onFormChange = form => {
     this.setState({
-      form,
-      isFormCompleted
+      form
     })
   }
 
@@ -173,9 +183,9 @@ class CrudRole extends React.Component {
 
   handleSelectedContact = contact => {
     this.setState({
-      form: normalizeContact(contact),
       showFormModal: true,
-      showSelectContactModal: false
+      showSelectContactModal: false,
+      form: normalizeContactAsRole(contact)
     })
   }
 
@@ -198,7 +208,6 @@ class CrudRole extends React.Component {
       isSaving,
       showFormModal,
       showAgentsModal,
-      isFormCompleted,
       showSelectContactModal
     } = this.state
 
@@ -226,7 +235,7 @@ class CrudRole extends React.Component {
               onClick={this.handleShowModal}
               className="c-button--shadow add-item"
             >
-              <span className="icon">+</span>
+              <span className="icon test">+</span>
               <span className="text">{ctaTitle}</span>
             </button>
           </div>
@@ -240,82 +249,31 @@ class CrudRole extends React.Component {
           handleSelectedItem={this.handleSelectedContact}
         />
 
-        <Modal
-          show={showFormModal}
-          onHide={this.handlOnHide}
-          dialogClassName="modal-deal-add-role"
-          backdrop="static"
-        >
-          <Modal.Header closeButton>{modalTitle}</Modal.Header>
-
-          <Modal.Body>
-            <RoleForm
-              form={role || form}
-              allowedRoles={allowedRoles}
-              isCommissionRequired={isCommissionRequired}
-              onFormChange={data => this.onFormChange(data)}
-            />
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button
-              onClick={this.addRole}
-              disabled={!isFormCompleted || isSaving}
-              bsStyle={!isFormCompleted ? 'link' : 'primary'}
-              className={`btn-deal ${!isFormCompleted ? 'disabled' : ''}`}
-            >
-              {this.setSubmitButtonText()}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <Modal
-          backdrop="static"
+        <TeamAgents
           show={showAgentsModal}
-          dialogClassName="modal-deal-select-role"
-          onHide={this.handlOnHide}
-        >
-          <Modal.Header closeButton>Choose primary agent</Modal.Header>
+          handleOnClose={this.handlOnHide}
+          handleSelectAgent={user => this.onSelectAgent(user)}
+          teamAgents={teamAgents}
+        />
 
-          <Modal.Body>
-            <div className="deal-roles">
-              {teamAgents &&
-                teamAgents.map(user => (
-                  <div
-                    key={user.id}
-                    className="item"
-                    onClick={() => this.onSelectAgent(user)}
-                  >
-                    <div className="role-avatar">
-                      <UserAvatar
-                        name={user.display_name}
-                        image={user.profile_image_url}
-                        size={32}
-                        showStateIndicator={false}
-                      />
-                    </div>
-
-                    <div className="name">
-                      <div>{user.display_name}</div>
-                      <div className="role">{roleName(user.role || '')}</div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </Modal.Body>
-        </Modal>
+        <RoleForm
+          showFormModal={showFormModal}
+          handlOnHide={this.handlOnHide}
+          onSubmit={this.addRole}
+          submitButtonText={this.setSubmitButtonText()}
+          modalTitle={modalTitle}
+          isSaving={isSaving}
+          form={role || form}
+          allowedRoles={allowedRoles}
+          isCommissionRequired={isCommissionRequired}
+          onFormChange={data => this.onFormChange(data)}
+        />
       </div>
     )
   }
 }
 
-function mapToProps({ deals }) {
-  const { agents: teamAgents } = deals
-
-  return { teamAgents }
-}
-
-export default connect(mapToProps, {
+export default connect(null, {
   notify,
   createNewContact,
   upsertContactAttributes

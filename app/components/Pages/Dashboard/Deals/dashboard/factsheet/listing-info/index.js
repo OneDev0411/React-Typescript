@@ -1,5 +1,4 @@
 import React from 'react'
-import Deal from '../../../../../../../models/Deal'
 import Context from '../../../../../../../models/DealContext'
 import Items from '../items'
 

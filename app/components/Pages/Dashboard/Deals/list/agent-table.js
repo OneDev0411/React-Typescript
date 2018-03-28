@@ -90,7 +90,9 @@ class AgentTable extends BaseTable {
 
   getPriceValue(deal) {
     return (
-      Deal.get.field(deal, 'sales_price') || Deal.get.field(deal, 'list_price')
+      Deal.get.field(deal, 'sales_price') ||
+      Deal.get.field(deal, 'list_price') ||
+      Deal.get.field(deal, 'lease_price')
     )
   }
 

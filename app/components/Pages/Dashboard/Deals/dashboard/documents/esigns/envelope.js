@@ -1,15 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { Dropdown, Button } from 'react-bootstrap'
 import cn from 'classnames'
 
 class Envelope extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      showDropDown: false
-    }
   }
 
   getName(role) {
@@ -17,8 +13,8 @@ class Envelope extends React.Component {
       return role.user.display_name
     }
 
-    return `${role.legal_prefix || ''} ${role.legal_first_name || ''} ${role.legal_last_name || ''}`
-      .trim()
+    return `${role.legal_prefix || ''} ${role.legal_first_name ||
+      ''} ${role.legal_last_name || ''}`.trim()
   }
 
   getRecipientsNames(recipients) {
@@ -31,25 +27,18 @@ class Envelope extends React.Component {
     return names.join(', ')
   }
 
-  toggleShowDropDown(show) {
-    this.setState({ showDropDown: show })
-  }
-
-  getFormUrl() {
-    const { user, task, envelope } = this.props
-  }
-
   openFormViewer() {
     const { deal, envelope, task } = this.props
 
     browserHistory.push(
-      `/dashboard/deals/${deal.id}/form-viewer/${task.id}/envelope/${envelope.id}`
+      `/dashboard/deals/${deal.id}/form-viewer/${task.id}/envelope/${
+        envelope.id
+      }`
     )
   }
 
   render() {
-    const { deal, task, envelope } = this.props
-    const { showDropDown } = this.state
+    const { envelope } = this.props
     const { recipients } = envelope
     const isVoided = envelope.status === 'Voided'
     const isDraft = envelope.status === 'Created'
@@ -74,20 +63,19 @@ class Envelope extends React.Component {
           onClick={() => !isVoided && this.openFormViewer()}
         >
           <span>{recipientsNames}</span>
-          {isDraft && (
-            <p className="text-danger">Draft</p>
-          )}
-          {isVoided && (
-            <p className="text-danger">Voided</p>
-          )}
-          {!isDraft && !isVoided && (
-            <p
-              className={cn({
-                'text-success': isCompleted,
-                'text-secondary': !isCompleted
-              })}
-            >{areSigned.length} of {recipients.length} signed</p>
-          )}
+          {isDraft && <p className="text-danger">Draft</p>}
+          {isVoided && <p className="text-danger">Voided</p>}
+          {!isDraft &&
+            !isVoided && (
+              <p
+                className={cn({
+                  'text-success': isCompleted,
+                  'text-secondary': !isCompleted
+                })}
+              >
+                {areSigned.length} of {recipients.length} signed
+              </p>
+            )}
         </div>
       </div>
     )

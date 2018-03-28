@@ -9,6 +9,11 @@ class NewTaskModal extends Component {
     this.state = {
       title: ''
     }
+
+    this.handleCreateTask = this.handleCreateTask.bind(this)
+    this.handleCreateTaskAndUploadFile = this.handleCreateTaskAndUploadFile.bind(
+      this
+    )
   }
 
   setTitle(title) {
@@ -17,11 +22,21 @@ class NewTaskModal extends Component {
     })
   }
 
+  handleCreateTask() {
+    this.props.handleCreateTask(this.state.title)
+    this.setTitle('')
+  }
+
+  handleCreateTaskAndUploadFile() {
+    this.props.handleCreateTaskAndUploadFile(this.state.title)
+    this.setTitle('')
+  }
+
   render() {
-    const {
-      show, onClose, onCreateNewTask, isCreatingTask, isFailed
-    } = this.props
+    const { show, onClose, isCreatingTask, isFailed } = this.props
+
     const { title } = this.state
+    const canCreateTask = title && title.length > 0 && !isCreatingTask
 
     return (
       <Modal
@@ -37,11 +52,13 @@ class NewTaskModal extends Component {
           <input
             type="text"
             readOnly={isCreatingTask}
+            value={title}
             onChange={e => this.setTitle(e.target.value)}
           />
 
           <span className="note">
-            Accurate titles help with context when glancing through your checklist.
+            Accurate titles help with context when glancing through your
+            checklist.
           </span>
         </Modal.Body>
 
@@ -58,13 +75,23 @@ class NewTaskModal extends Component {
             />
           )}
 
+          {!isCreatingTask && (
+            <Button
+              className="c-new-task-modal__submit-btn inverse"
+              disabled={!canCreateTask}
+              onClick={this.handleCreateTask}
+            >
+              Create Task
+            </Button>
+          )}
+
           <Button
             bsStyle="primary"
             className="c-new-task-modal__submit-btn"
-            disabled={isCreatingTask || title.length === 0}
-            onClick={() => onCreateNewTask(title)}
+            disabled={!canCreateTask}
+            onClick={this.handleCreateTaskAndUploadFile}
           >
-            {isCreatingTask ? 'Creating Task ...' : 'Create Task'}
+            {isCreatingTask ? 'Creating Task ...' : 'Create & Upload'}
           </Button>
         </Modal.Footer>
       </Modal>

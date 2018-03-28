@@ -65,7 +65,8 @@ class InputWithSelect extends Component {
       items,
       errorText,
       placeholder,
-      defaultSelectedItem
+      defaultSelectedItem,
+      lableColorError
     } = this.props
 
     const { selectedItem } = this.state
@@ -91,7 +92,10 @@ class InputWithSelect extends Component {
               <div>
                 <label
                   {...getLabelProps({
-                    style: { cursor: 'pointer' }
+                    style: {
+                      cursor: 'pointer',
+                      color: lableColorError ? 'red' : undefined
+                    }
                   })}
                 >
                   {title}
