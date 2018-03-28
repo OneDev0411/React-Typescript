@@ -63,10 +63,10 @@ export default class Form extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (
-      (nextProps.form &&
-        Object.keys(nextProps.form).length !== 0 &&
-        nextProps.form !== this.props.form) ||
-      (nextProps.showFormModal && Object.keys(this.state.form).length === 0)
+      nextProps.form &&
+      Object.keys(nextProps.form).length !== 0 &&
+      (nextProps.form !== this.props.form ||
+        (nextProps.showFormModal && Object.keys(this.state.form).length === 0))
     ) {
       const isNewRecord = typeof nextProps.form.role === 'undefined'
 
