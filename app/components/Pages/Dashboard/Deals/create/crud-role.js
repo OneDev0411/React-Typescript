@@ -261,6 +261,7 @@ class CrudRole extends React.Component {
           handlOnHide={this.handlOnHide}
           onSubmit={this.addRole}
           submitButtonText={this.setSubmitButtonText()}
+          formNotChanged={!form}
           modalTitle={modalTitle}
           isSaving={isSaving}
           form={role || form}
