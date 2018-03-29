@@ -15,7 +15,7 @@ export default ({ user, contactsCount }) => {
       <div className="no-contacts--button-container">
         <AddContact user={user} onNewContact={id => onNewContact(id)} />
         <ImportOutlook userId={user.id} />
-        <ImportCsv />
+        {/* <ImportCsv /> */}
       </div>
     </div>
   )
