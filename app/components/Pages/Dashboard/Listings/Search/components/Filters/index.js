@@ -29,6 +29,7 @@ const INITIAL_VALUES = {
   listing_statuses: {
     active: 'Active'
   },
+  property_subtypes,
   minimum_sold_date: '3', // unit is month but it need to timestamp
   priceZeroCleaner: false,
   minimum_bedrooms: 'any',
