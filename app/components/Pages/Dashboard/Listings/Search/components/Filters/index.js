@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
 import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../../../controllers/Brand'
@@ -29,8 +29,6 @@ const INITIAL_VALUES = {
   listing_statuses: {
     active: 'Active'
   },
-  property_subtypes,
-  architectural_styles,
   minimum_sold_date: '3', // unit is month but it need to timestamp
   priceZeroCleaner: false,
   minimum_bedrooms: 'any',
@@ -52,7 +50,10 @@ const Filters = ({
 }) => (
   <div className={`c-filters ${isOpen ? 'c-filters--isOpen' : ''}`}>
     <div className="c-filters__inner-wrapper u-scrollbar--thinner">
-      <form onSubmit={handleSubmit(onSubmitHandler)} className="c-filters__content">
+      <form
+        onSubmit={handleSubmit(onSubmitHandler)}
+        className="c-filters__content"
+      >
         <div>
           <FiltersListingsStatusRow
             name="listing_statuses.sold"
