@@ -105,7 +105,7 @@ export function uploadStashFile(dealId, file, fileName = null) {
 
       return fileData
     } catch (e) {
-      return null
+      throw e
     }
   }
 }

@@ -133,11 +133,35 @@ class WorkspaceForm extends React.Component {
     return fileCreated
   }
 
+  async onBeforeSplit() {
+    if (this.areDocumentsUploaded()) {
+      return true
+    }
+
+    try {
+      await this.uploadDocuments()
+    } catch (e) {
+      this.props.notify({
+        title: 'Could not upload files.',
+        message: e.message,
+        status: 'error'
+      })
+
+      this.setState({
+        saving: false
+      })
+
+      throw e
+    }
+  }
+
   async saveAndQuit() {
     const { resetSplitter, resetUploadFiles } = this.props
 
-    if (this.areDocumentsUploaded() === false) {
-      await this.uploadDocuments()
+    try {
+      await this.onBeforeSplit()
+    } catch (e) {
+      return false
     }
 
     const saved = await this.save()
@@ -160,8 +184,10 @@ class WorkspaceForm extends React.Component {
 
     const { pages } = splitter
 
-    if (this.areDocumentsUploaded() === false) {
-      await this.uploadDocuments()
+    try {
+      await this.onBeforeSplit()
+    } catch (e) {
+      return false
     }
 
     const saved = await this.save()
@@ -190,35 +216,39 @@ class WorkspaceForm extends React.Component {
       statusMessage: `Uploading selected documents (${counter} / ${filesCount})`
     })
 
-    await Promise.all(
-      _.map(files, async (item, documentId) => {
-        const { name } = item.properties
-        let file
+    try {
+      await Promise.all(
+        _.map(files, async (item, documentId) => {
+          const { name } = item.properties
+          let file
 
-        if (item.file instanceof File) {
-          // upload files to stash not task
-          file = await uploadStashFile(deal.id, item.file, name)
+          if (item.file instanceof File) {
+            // upload files to stash not task
+            file = await uploadStashFile(deal.id, item.file, name)
 
-          // increase counter
-          counter += 1
+            // increase counter
+            counter += 1
 
-          this.setState({
-            statusMessage: `Uploading selected documents (${counter} / ${filesCount})`,
-            uploadProgressPercents: Math.floor(counter / filesCount * 100)
-          })
+            this.setState({
+              statusMessage: `Uploading selected documents (${counter} / ${filesCount})`,
+              uploadProgressPercents: Math.floor(counter / filesCount * 100)
+            })
 
-          notify({
-            message: `"${name}" Uploaded`,
-            status: 'success'
-          })
-        } else {
-          /* eslint-disable prefer-destructuring */
-          file = item.file
-        }
+            notify({
+              message: `"${name}" Uploaded`,
+              status: 'success'
+            })
+          } else {
+            /* eslint-disable prefer-destructuring */
+            file = item.file
+          }
 
-        stashFiles[documentId] = file
-      })
-    )
+          stashFiles[documentId] = file
+        })
+      )
+    } catch (e) {
+      throw e
+    }
 
     this.setState({
       stashFiles,
@@ -256,6 +286,7 @@ class WorkspaceForm extends React.Component {
           <div className="inner">
             {statusMessage ||
               'Creating and uploading splitted PDF... (It might take a few moments)'}
+
             <ProgressBar
               now={uploadProgressPercents}
               bsStyle="success"
