@@ -175,6 +175,7 @@ class AddRoleModal extends React.Component {
         isSaving={isSaving}
         deal={deal}
         form={form || role}
+        formNotChanged={!form}
         allowedRoles={allowedRoles}
         onFormChange={this.onFormChange}
         submitButtonText={this.setSubmitButtonText()}
