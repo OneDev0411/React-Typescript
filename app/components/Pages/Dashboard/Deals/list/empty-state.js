@@ -9,8 +9,8 @@ export default ({ isBackOffice }) => {
           <img src="/static/images/deals/coffee-icon.svg" />
           <div className="title">You’ve done it. Inbox zero.</div>
           <div className="descr">
-            Sit back and relax. Get a coffee. We’ll notify you when a deal needs your
-            attention.
+            Sit back and relax. Get a coffee. We’ll notify you when a deal needs
+            your attention.
           </div>
         </div>
       </div>

@@ -147,12 +147,12 @@ export default class Editable extends React.Component {
         <div className={cn('fact-row', { disabled })}>
           <div className="name">{field.label}</div>
           <span className="disabeld-field">
-            {discrepency && (
-              <ContextDiscrepencyOverview
-                placement="top"
-                context={discrepency}
-              />
-            )}
+            {/* {discrepency && ( */}
+            {/* <ContextDiscrepencyOverview */}
+            {/* placement="top" */}
+            {/* context={discrepency} */}
+            {/* /> */}
+            {/* )} */}
             {this.getFormattedValue()}
           </span>
         </div>
@@ -185,13 +185,13 @@ export default class Editable extends React.Component {
                 }
               >
                 <span style={{ opacity: saving ? 0.8 : 1 }}>
-                  {discrepency && (
+                  {/* {discrepency && (
                     <ContextDiscrepencyOverview
                       context={discrepency}
                       placement="top"
                       onClick={e => e.stopPropagation()}
                     />
-                  )}
+                  )} */}
 
                   {this.getFormattedValue()}
                 </span>

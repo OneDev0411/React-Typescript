@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button, Modal } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import RoleForm from '../dashboard/roles/form'
 import RoleItem from './role-item'
@@ -249,6 +248,7 @@ class CrudRole extends React.Component {
           handleAddManually={this.handleOpenFormModal}
           handleSelectedItem={this.handleSelectedContact}
         />
+
         <TeamAgents
           show={showAgentsModal}
           handleOnClose={this.handlOnHide}
@@ -261,6 +261,7 @@ class CrudRole extends React.Component {
           handlOnHide={this.handlOnHide}
           onSubmit={this.addRole}
           submitButtonText={this.setSubmitButtonText()}
+          formNotChanged={!form}
           modalTitle={modalTitle}
           isSaving={isSaving}
           form={role || form}
@@ -268,42 +269,6 @@ class CrudRole extends React.Component {
           isCommissionRequired={isCommissionRequired}
           onFormChange={data => this.onFormChange(data)}
         />
-
-        <Modal
-          backdrop="static"
-          show={showAgentsModal}
-          dialogClassName="modal-deal-select-role"
-          onHide={this.handlOnHide}
-        >
-          <Modal.Header closeButton>Choose primary agent</Modal.Header>
-
-          <Modal.Body>
-            <div className="deal-roles">
-              {teamAgents &&
-                teamAgents.map(user => (
-                  <div
-                    key={user.id}
-                    className="item"
-                    onClick={() => this.onSelectAgent(user)}
-                  >
-                    <div className="role-avatar">
-                      <UserAvatar
-                        name={user.display_name}
-                        image={user.profile_image_url}
-                        size={32}
-                        showStateIndicator={false}
-                      />
-                    </div>
-
-                    <div className="name">
-                      <div>{user.display_name}</div>
-                      <div className="role">{roleName(user.role || '')}</div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </Modal.Body>
-        </Modal>
       </div>
     )
   }

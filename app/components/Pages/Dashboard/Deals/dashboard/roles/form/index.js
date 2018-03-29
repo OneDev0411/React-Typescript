@@ -65,7 +65,8 @@ export default class Form extends React.Component {
     if (
       nextProps.form &&
       Object.keys(nextProps.form).length !== 0 &&
-      nextProps.form !== this.props.form
+      (nextProps.form !== this.props.form ||
+        (nextProps.showFormModal && Object.keys(this.state.form).length === 0))
     ) {
       const isNewRecord = typeof nextProps.form.role === 'undefined'
 
@@ -74,6 +75,10 @@ export default class Form extends React.Component {
           this.validate(field, nextProps.form[field])
         })
       } else {
+        this.setState({
+          nameErrorFields: [],
+          nameErrorMessage: ''
+        })
         this.preselectRoles()
       }
 
@@ -83,7 +88,7 @@ export default class Form extends React.Component {
       })
     }
 
-    if (!nextProps.form) {
+    if (!nextProps.form || !nextProps.showFormModal) {
       this.setState({
         form: {},
         invalidFields: []
@@ -373,7 +378,8 @@ export default class Form extends React.Component {
       handlOnHide,
       modalTitle,
       isSaving,
-      submitButtonText
+      submitButtonText,
+      formNotChanged
     } = this.props
 
     return (
@@ -493,7 +499,7 @@ export default class Form extends React.Component {
           <p className="modal-footer-error">{nameErrorMessage}</p>
           <Button
             onClick={this.submit}
-            disabled={!isFormCompleted || isSaving}
+            disabled={!isFormCompleted || isSaving || formNotChanged}
             bsStyle={!isFormCompleted ? 'link' : 'primary'}
             className={`btn-deal ${!isFormCompleted ? 'disabled' : ''}`}
           >
