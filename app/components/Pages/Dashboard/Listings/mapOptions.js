@@ -72,8 +72,7 @@ export const queryOptions = {
       longitude: -96.89115626525879
     }
   ],
-  property_subtypes: objectValueToArray(property_subtypes),
-  architectural_styles: objectValueToArray(architectural_styles)
+  property_subtypes: objectValueToArray(property_subtypes)
 }
 
 export const mapOptions = {
