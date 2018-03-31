@@ -123,11 +123,7 @@ export async function getUpdatedNameAttribute(formData) {
 
   const updatedFieldsList = Object.keys(formNameFields)
     .filter(attr => fieldsList.includes(attr))
-    .filter(attr => {
-      if (formNameFields[attr]) {
-        return !name[attr] || formNameFields[attr] !== name[attr]
-      }
-    })
+    .filter(attr => !name[attr] || formNameFields[attr] !== name[attr])
 
   if (updatedFieldsList.length > 0) {
     const updatedFields = {}
