@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Avatar from '../../../Avatar/index'
+
+import Avatar from '../../../Avatar'
 
 const Container = styled.div`
   height: 48px;
@@ -34,7 +35,7 @@ function ContactItem(props) {
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
       <div style={{ width: '32px', height: '32px', borderRadius: '50%' }}>
-        <Avatar user={item} size={32} />
+        <Avatar {...getAvatarProps(item)} />
       </div>
       <div style={{ paddingLeft: '2rem', height: '32px' }}>
         <Title>{title}</Title>
@@ -47,3 +48,17 @@ function ContactItem(props) {
 ContactItem.propTypes = propTypes
 
 export default ContactItem
+
+function getAvatarProps(user) {
+  const { email, phone_number, display_name, profile_image_url } = user
+
+  return {
+    size: 32,
+    borderRadius: 100,
+    image: profile_image_url,
+    title:
+      email !== display_name && phone_number !== display_name
+        ? display_name
+        : ''
+  }
+}

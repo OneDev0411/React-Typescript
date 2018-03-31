@@ -15,6 +15,10 @@ const ShadowButton = styled.button`
   border-width: 0;
   background: transparent;
 
+  &:focus {
+    outline-width: 2px;
+  }
+
   ${props =>
     !props.disabled &&
     `&:hover {

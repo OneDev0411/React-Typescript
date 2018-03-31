@@ -1,0 +1,229 @@
+$border: 1px solid #ecf1f5;
+
+.c-new-task {
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .c-new-task--page & {
+    max-width: 73em;
+    margin: 0 auto;
+  }
+}
+
+.c-new-task--page .c-full-screen-modal__body {
+  background-color:  #f0f4f7;
+}
+
+.c-new-task__form {
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  
+  .c-new-task--page & {
+    border: $border;
+
+    @media screen and (min-height: 67.5em) and (min-width: 56em) { // 1080
+      height: calc(100vh - 56px);
+    }
+  }
+}
+
+.c-new-task__header {
+  @media screen and (min-width: 56em) {
+    display: flex;
+    border-bottom: $border;
+  }
+}
+
+.c-new-task__field {
+  padding: 0 1em;
+  border-bottom: $border;
+
+  &.is-active {
+    background-color: #fbfdff;
+  }
+}
+
+.c-new-task__field__label {
+  display: block;
+  padding-top: 1em;
+  margin-bottom: 0.5em;
+  line-height: 1;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c-new-task__field__input {
+  width: 100%;
+  display: block;
+  padding: 0 0 1.4rem;
+  line-height: 1;
+  border-width: 0;
+  font-size: 2rem;
+  border-width: 0;
+  color: #26465e;
+  
+  &:focus {
+    outline-width: 0;
+    background-color: #fbfdff;
+  }
+
+  .c-new-task__field--textarea & {
+    height: 150px;
+    resize: none;
+    padding: 0;
+    overflow: auto;
+    line-height: 1.5;
+  }
+
+  .has-error > & {
+    padding: 0;
+    margin-bottom: 1.6rem;
+  }
+}
+
+.c-new-task__status {
+  align-self: center;
+  padding: 0 1em;
+}
+
+.c-new-task__title,
+.c-new-task__date-time--due-date {
+  @media screen and (min-width: 56em) {
+    border-width: 0;
+  }
+}
+
+.c-new-task__title {
+  @media screen and (min-width: 56em) {
+    width: calc(100% - 20.5em);
+  }
+}
+
+.c-new-task__field__error {
+  margin-bottom: 1em;
+  line-height: 1;
+  color: red;
+}
+
+.c-new-task__date-time__inputs {
+  display: flex;
+  margin-bottom: 0.5em;
+
+  .has-error & {
+    margin-bottom: 1em;
+  }
+}
+
+.c-new-task__date-picker__trigger {
+  padding: 0;
+}
+
+
+
+
+.c-new-task__description {
+  padding: 0;
+
+  .c-new-task__field__input {
+    padding: 1.6rem;
+  }
+}
+
+.c-new-task__field--textarea,
+.c-new-task__field--textarea .c-new-task__field__input {
+  .c-new-task--page & {
+    @media screen and (min-height: 67.5em) and (min-width: 56em) { // 1080 * 896 // 640px
+      height: 300px;
+      border-bottom: $border;
+    }
+  }
+}
+
+
+
+.c-new-task__details {
+  @media screen and (min-width: 37em) { // 600px
+    width: 100%;
+    display: flex;
+    border-bottom: $border;
+  }
+}
+
+.c-new-task__type,
+.c-new-task__date-time--reminder {
+  @media screen and (min-width: 37em) {
+    border-width: 0;
+  }
+}
+
+
+.c-new-task__associations {
+  .c-new-task--page & {
+    @media screen and (min-height: 67.5em) and (min-width: 56em) { // 1080
+      border-width: 0;
+    }
+  }
+}
+
+
+
+
+.c-new-task__footer {
+  padding: 1em;
+  text-align: right;
+  border-radius: 0 0 3px 3px;
+  background-color: #f8fafb;
+
+  & > button {
+    line-height: 1;
+    padding: 0.5em 2em;
+  }
+
+  .c-new-task--page & {
+    @media screen and (min-height: 67.5em) and (min-width: 56em) { // 1080
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  }
+}
+
+
+
+
+.DayPicker-wrapper,
+.DayPicker .DayPicker-NavBar {
+  padding: 0 !important;
+}
+
+.DayPicker-Caption > div {
+  font-size: 1.6rem !important;
+}
+
+.DayPicker-Weekday {
+  font-size: 1.4rem !important;
+}
+
+.DayPicker-Month {
+  margin: 0.5em 1em 0 !important;
+}
+
+.DayPicker-Day.DayPicker-Day--disabled {
+  pointer-events: none;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  color: #fff !important;
+  border-radius: 3px !important;
+  background-color: #1d364b !important;
+}
+
+.DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
+  border-radius: 3px !important;
+}
