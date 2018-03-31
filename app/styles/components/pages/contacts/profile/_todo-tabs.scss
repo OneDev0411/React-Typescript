@@ -1,0 +1,85 @@
+$color: #758a9e;
+$active-color: #2196f3;
+
+.c-contact-profile-todo-tabs {
+  padding: 0;
+}
+
+.c-contact-profile-todo-tabs__tabs-list {
+  display: flex;
+  border-radius: 3px;
+  background-color: #f8fafb;
+  border-bottom: solid 1px #eaeaea;
+}
+
+.c-contact-profile-todo-tabs__tab {
+  > a {
+    position: relative;
+    height: 5.6rem;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2em !important;
+    font-size: 1.6rem;
+    line-height: 1;
+
+    > svg {
+      fill: $color;
+    }
+
+    &:hover {
+      background-color: transparent !important;
+
+      > svg {
+        fill: $active-color;
+      }
+
+      > .c-contact-profile-todo-tabs__tab__indicator {
+        opacity: 1;
+        z-index: 1;
+      }
+    }
+
+    &:focus {
+      outline-width: 0 !important;
+      background-color: transparent !important;;
+    }
+  }
+
+  > a[aria-selected=true] {
+    font-weight: 500;
+    pointer-events: none;
+
+    > svg {
+      fill: $active-color;
+    }
+
+    > .c-contact-profile-todo-tabs__tab__indicator {
+      opacity: 1;
+      z-index: 1;
+    }
+  }
+}
+
+.c-contact-profile-todo-tabs__tab__title {
+  color: $color;
+  margin-left: 0.5em;
+
+  
+  a:hover > &,
+  a[aria-selected=true] > & {
+    color: $active-color;
+  }
+}
+
+.c-contact-profile-todo-tabs__tab__indicator {
+  width: 100%;
+  height: 4px;
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  opacity: 0;
+  will-change: opacity;
+  transition: all .15s ease-out;
+  background-color: $active-color;
+}

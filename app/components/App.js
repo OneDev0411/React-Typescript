@@ -186,9 +186,7 @@ class App extends Component {
       google_analytics_id = brand.assets.google_analytics_id
     }
 
-    ReactGA.initialize(google_analytics_id, {
-      debug: true
-    })
+    ReactGA.initialize(google_analytics_id)
     ReactGA.ga(
       'create',
       google_analytics_id,
