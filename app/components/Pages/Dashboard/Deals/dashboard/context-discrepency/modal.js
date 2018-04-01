@@ -11,65 +11,59 @@ function getContextLabel(name) {
   return context.label
 }
 
-export default ({ isOpen, field, history, handleOnClose }) => {
-  if (!isOpen) {
-    return false
-  }
-
-  return (
-    <Modal
-      isOpen
-      shouldCloseOnOverlayClick={false}
+export default ({ isOpen, field, history, handleOnClose }) => (
+  <Modal
+    isOpen={isOpen}
+    shouldCloseOnOverlayClick={false}
+    handleOnClose={handleOnClose}
+    className="deal-factsheet-context-history"
+  >
+    <Modal.Header
+      title={`${getContextLabel(field.name)} History`}
+      showClose
       handleOnClose={handleOnClose}
-      className="deal-factsheet-context-history"
-    >
-      <Modal.Header
-        title={`${getContextLabel(field.name)} History`}
-        showClose
-        handleOnClose={handleOnClose}
-      />
+    />
 
-      <Modal.Body className="modal-body" noFooter>
-        {history &&
-          history.map(ctx => {
-            const context = {
-              value: Deal.get.field(null, null, ctx)
-            }
+    <Modal.Body className="modal-body u-scrollbar--thinner" noFooter>
+      {history &&
+        history.map(ctx => {
+          const context = {
+            value: Deal.get.field(null, null, ctx)
+          }
 
-            return (
-              <div className="context-row" key={ctx.id}>
-                <div className="item">
-                  <div>Creation Time:</div>
-                  <div>
-                    {moment
-                      .unix(ctx.created_at)
-                      .format('MMMM DD, YY [at] hh:mm A')}
-                  </div>
-                </div>
-
-                <div className="item">
-                  <div>On Rechat:</div>
-                  <div>{DealContext.getValueByContext(ctx.key, context)}</div>
-                </div>
-
-                <div className="item">
-                  <div>Provided By:</div>
-                  <div>{ContextHistory.getCreatorName(ctx)}</div>
-                </div>
-
-                <div className="item">
-                  <div>Form:</div>
-                  <div>{ContextHistory.getFormName(ctx)}</div>
-                </div>
-
-                <div className="item">
-                  <div>Approved By:</div>
-                  <div>{ContextHistory.getApproverName(ctx)}</div>
+          return (
+            <div className="context-row" key={ctx.id}>
+              <div className="item">
+                <div>Creation Time:</div>
+                <div>
+                  {moment
+                    .unix(ctx.created_at)
+                    .format('MMMM DD, YY [at] hh:mm A')}
                 </div>
               </div>
-            )
-          })}
-      </Modal.Body>
-    </Modal>
-  )
-}
+
+              <div className="item">
+                <div>On Rechat:</div>
+                <div>{DealContext.getValueByContext(ctx.key, context)}</div>
+              </div>
+
+              <div className="item">
+                <div>Provided By:</div>
+                <div>{ContextHistory.getCreatorName(ctx)}</div>
+              </div>
+
+              <div className="item">
+                <div>Form:</div>
+                <div>{ContextHistory.getFormName(ctx)}</div>
+              </div>
+
+              <div className="item">
+                <div>Approved By:</div>
+                <div>{ContextHistory.getApproverName(ctx)}</div>
+              </div>
+            </div>
+          )
+        })}
+    </Modal.Body>
+  </Modal>
+)
