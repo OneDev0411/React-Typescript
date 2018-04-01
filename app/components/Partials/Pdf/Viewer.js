@@ -1,6 +1,5 @@
 import React from 'react'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
-import _ from 'underscore'
 import Page from './Page'
 
 class PdfViewer extends React.Component {
@@ -89,6 +88,8 @@ class PdfViewer extends React.Component {
   }
 
   async load(uri) {
+    const { onLoad } = this.props
+
     if (this.state.loading || uri === this.state.uri) {
       return false
     }
@@ -118,8 +119,8 @@ class PdfViewer extends React.Component {
       })
 
       // trigger onLoaded event
-      if (this.props.onLoad && typeof this.props.onLoad === 'function') {
-        this.props.onLoad()
+      if (onLoad) {
+        onLoad()
       }
     } catch (e) {
       this.setState({ uri: null, loading: false, isFailed: true })
