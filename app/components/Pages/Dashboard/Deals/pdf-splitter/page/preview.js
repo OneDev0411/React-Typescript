@@ -28,7 +28,7 @@ class PagePreview extends React.Component {
     return (
       <div className="page-preview">
         <div className="header">
-          {pdf.properties.name || pdf.file.name}
+          {pdf.file.name}
 
           <span className="exit" onClick={() => this.closeModal()}>
             <i className="fa fa-times" />
