@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { setPagePreview } from '../../../../../../store_actions/deals'
-import Page from '.'
+// import Page from '.'
+import PdfViewer from '../../../../../Partials/Pdf/Viewer'
 
 class PagePreview extends React.Component {
   constructor(props) {
@@ -12,14 +13,22 @@ class PagePreview extends React.Component {
     this.props.setPagePreview(null)
   }
 
+  onLoad() {
+    const { splitter } = this.props
+    const { pageNumber } = splitter.pagePreview
+
+    window.location.hash = `#p${pageNumber}`
+  }
+
   render() {
     const { splitter } = this.props
-    const { pdfId, doc, pageNumber } = splitter.pagePreview
+    const { pdfId } = splitter.pagePreview
+    const pdf = splitter.files[pdfId]
 
     return (
       <div className="page-preview">
         <div className="header">
-          {splitter.files[pdfId].name}
+          {pdf.properties.name || pdf.file.name}
 
           <span className="exit" onClick={() => this.closeModal()}>
             <i className="fa fa-times" />
@@ -27,12 +36,10 @@ class PagePreview extends React.Component {
         </div>
 
         <div className="preview">
-          <Page
-            containerHeight="95%"
-            zoom={0.9}
-            pdfId={pdfId}
-            doc={doc}
-            pageNumber={pageNumber}
+          <PdfViewer
+            uri={pdf.file.url || pdf.file.preview}
+            defaultContainerHeight="85vh"
+            onLoad={() => this.onLoad()}
           />
         </div>
       </div>
