@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import {
   getDeals,
   getAgents,
-  getContexts
+  getContexts,
+  getForms
 } from '../../../../store_actions/deals'
 import { getActiveTeam } from '../../../../utils/user-teams'
 import { hasUserAccess } from '../../../../utils/user-teams'
@@ -21,7 +22,9 @@ class DealsContainer extends React.Component {
       getDeals,
       getAgents,
       getContexts,
+      getForms,
       contexts,
+      forms,
       deals,
       agents,
       user
@@ -37,6 +40,10 @@ class DealsContainer extends React.Component {
 
     if (!agents) {
       getAgents(user)
+    }
+
+    if (!forms) {
+      getForms()
     }
   }
 
@@ -76,5 +83,5 @@ export default connect(
     forms: deals.forms,
     user
   }),
-  { getDeals, getAgents, getContexts }
+  { getDeals, getAgents, getContexts, getForms }
 )(DealsContainer)

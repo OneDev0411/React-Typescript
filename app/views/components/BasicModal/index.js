@@ -14,23 +14,29 @@ const propTypes = {
 }
 
 const defaultProps = {
-  title: 'Select Contact'
+  title: ''
 }
 
-function BasicModal(props) {
-  const { title, isOpen, className, children, handleOnClose } = props
-
-  return (
-    <BareModal
-      isOpen={isOpen}
-      contentLabel={title}
-      onRequestClose={handleOnClose}
-      className={className}
-    >
-      {children}
-    </BareModal>
-  )
-}
+const BasicModal = ({
+  title,
+  isOpen,
+  children,
+  className,
+  handleOnClose,
+  noFooter = false,
+  shouldCloseOnOverlayClick = false
+}) => (
+  <BareModal
+    isOpen={isOpen}
+    shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
+    contentLabel={title}
+    onRequestClose={handleOnClose}
+    noFooter={noFooter}
+    className={className}
+  >
+    {children}
+  </BareModal>
+)
 
 BasicModal.propTypes = propTypes
 BasicModal.defaultProps = defaultProps
