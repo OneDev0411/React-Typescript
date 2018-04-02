@@ -116,6 +116,8 @@ Contact.get = {
           return 'Created because you share a room'
         case 'External/Outlook':
           return 'Imported from outlook'
+        case 'CSV':
+          return 'Imported from CSV'
         default:
           return 'Unknown'
       }

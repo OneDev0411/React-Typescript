@@ -3,7 +3,7 @@ import * as actionTypes from '../../constants/contacts'
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case actionTypes.CONTACTS__UPLOAD_CVS:
+    // case actionTypes.CONTACTS__UPLOAD_CVS:
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.PATCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
@@ -31,7 +31,7 @@ const byId = (state = {}, action) => {
 
 const ids = (state = [], action) => {
   switch (action.type) {
-    case actionTypes.CONTACTS__UPLOAD_CVS:
+    // case actionTypes.CONTACTS__UPLOAD_CVS:
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.POST_NEW_CONTACTS_SUCCESS:

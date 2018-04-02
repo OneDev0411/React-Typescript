@@ -1,14 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
+import { Dropdown, MenuItem } from 'react-bootstrap'
 import {
   getContacts,
   removeImportResult
 } from '../../../../../store_actions/contacts'
-import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import ModalImportLoading from './ModalImportLoading'
 import config from '../../../../../../config/public'
 
-class ImportOutlook extends React.Component {
+class Import extends React.Component {
   constructor(props) {
     super(props)
 
@@ -46,27 +47,38 @@ class ImportOutlook extends React.Component {
 
     return (
       <div className="list--secondary-button">
-        <OverlayTrigger
-          placement="bottom"
-          overlay={
-            <Tooltip id="tooltip">
-              Integrate with Outlook to auto-import your contacts
-            </Tooltip>
-          }
-        >
-          <button
-            className="button c-button--shadow"
-            onClick={() => {
-              this.loginWindows = window.open(
-                this.url,
-                'myWindow',
-                'width=300,height=500'
-              )
-            }}
-          >
-            Import from Outlook
-          </button>
-        </OverlayTrigger>
+        <Dropdown id="import-csv-dropdown">
+          <Dropdown.Toggle className="button c-button--shadow">
+            Import
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu className="import-dropdown">
+            <MenuItem
+              eventKey="2"
+              className="import-dropdown--item"
+              onClick={() =>
+                browserHistory.push('/dashboard/contacts/import/csv')
+              }
+            >
+              Import From CSV
+            </MenuItem>
+
+            <MenuItem
+              eventKey="3"
+              className="import-dropdown--item"
+              onClick={() => {
+                this.loginWindows = window.open(
+                  this.url,
+                  'myWindow',
+                  'width=300,height=500'
+                )
+              }}
+            >
+              Connect to Outlook
+            </MenuItem>
+          </Dropdown.Menu>
+        </Dropdown>
+
         <ModalImportLoading show={SuccessfulLogin} />
       </div>
     )
@@ -83,5 +95,5 @@ function mapStateToProps({ user, contacts }) {
 }
 
 export default connect(mapStateToProps, { getContacts, removeImportResult })(
-  ImportOutlook
+  Import
 )

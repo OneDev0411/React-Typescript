@@ -109,6 +109,7 @@
     "normalizr": "^3.2.4",
     "nunjucks": "^3.0.0",
     "offline-js": "^0.7.19",
+    "papaparse": "^4.3.7",
     "parse-address": "^0.0.6",
     "pdfjs-dist": "^2.0.449",
     "points-cluster": "^0.1.4",
