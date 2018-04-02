@@ -3,9 +3,7 @@ import Roles from '../roles'
 import Modal from '../../../../../../views/components/BasicModal'
 import CancelButton from '../../../../../../views/components/Button/CancelButton'
 
-export default ({
-  show, deal, onHide, allowedRoles, onAddRecipient
-}) => (
+export default ({ show, deal, onHide, allowedRoles, onAddRecipient }) => (
   <Modal
     isOpen={show}
     className="c-add-signer-modal"
@@ -19,7 +17,7 @@ export default ({
         isRequiredEmail
         allowDeleteRole={false}
         allowedRoles={allowedRoles}
-        onSelect={role => onAddRecipient(role)}
+        onSelect={onAddRecipient}
       />
     </Modal.Body>
     <Modal.Footer style={{ flexDirection: 'row-reverse' }}>

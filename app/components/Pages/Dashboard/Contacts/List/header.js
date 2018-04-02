@@ -1,7 +1,6 @@
 import React from 'react'
 import AddContactModal from '../AddContactModal'
-import ImportOutlook from './ImportOutlook'
-import ImportCSV from './ImportCsv'
+import Import from './Import'
 import ExportContacts from './ExportContacts'
 import HeaderSearch from '../../../../Partials/headerSearch'
 import cn from 'classnames'
@@ -29,8 +28,7 @@ export default ({ user, contactsCount, onNewContact, onInputChange }) => {
 
           <div className="list--header-row--col">
             <ExportContacts user={user} />
-            <ImportCSV />
-            <ImportOutlook userId={user.id} />
+            <Import userId={user.id} />
             <AddContactModal
               user={user}
               onNewContact={id => onNewContact(id)}

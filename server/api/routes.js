@@ -9,7 +9,8 @@ const routes = {
     ['docusign-login'],
     ['envelope-sign'],
     ['download-pdf'],
-    ['pdf-splitter']
+    ['pdf-splitter'],
+    ['envelope-edit']
   ],
   notification: [
     ['all'],

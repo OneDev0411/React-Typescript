@@ -1,13 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import {
   getDeals,
   getAgents,
   getContexts,
   getForms
 } from '../../../../store_actions/deals'
+import { getActiveTeam } from '../../../../utils/user-teams'
 import { hasUserAccess } from '../../../../utils/user-teams'
 import DealsError from './error'
+import { TrainingModeBanner } from '../Partials/TrainingModeBanner'
 
 class DealsContainer extends React.Component {
   constructor(props) {
@@ -45,10 +48,17 @@ class DealsContainer extends React.Component {
   }
 
   render() {
-    const { deals, contexts, error } = this.props
+    const { deals, contexts, error, user } = this.props
+    const activeTeam = getActiveTeam(user)
 
     return (
       <div className="deals">
+        {deals &&
+          contexts &&
+          activeTeam &&
+          activeTeam.brand &&
+          activeTeam.brand.training && <TrainingModeBanner user={user} />}
+
         <DealsError deals={deals} error={error} />
 
         {deals === null && (

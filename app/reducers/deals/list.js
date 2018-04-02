@@ -115,7 +115,10 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          envelopes: [...state[action.deal_id].envelopes, action.envelope.id]
+          envelopes: [
+            ...(state[action.deal_id].envelopes || []),
+            action.envelope.id
+          ]
         }
       }
 

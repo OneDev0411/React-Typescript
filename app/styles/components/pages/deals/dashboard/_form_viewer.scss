@@ -23,6 +23,10 @@
 
 .c-deal-form-viewer__header__back-btn {
   font-size: 2.4rem;
+  cursor: pointer;
+  &:hover {
+    color: #2196f3;
+  }
 }
 
 .c-deal-form-viewer__header__cta {

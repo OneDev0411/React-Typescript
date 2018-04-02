@@ -5,7 +5,7 @@ import VerticalDotsIcon from '../../../Partials/Svgs/VerticalDots'
 import TaskTermination from './termination'
 import TaskDeactivation from './deactivation'
 import Labels from './labels'
-import Folder from '../../../Partials/Svgs/Folder'
+import FolderIcon from '../../../Partials/Svgs/Folder'
 
 class ChecklistPanel extends React.Component {
   constructor(props) {
@@ -48,22 +48,17 @@ class ChecklistPanel extends React.Component {
               <i className="fa fa-caret-down p-icon" />
             </div>
             <div className="crt">
-              <Folder />
+              <FolderIcon />
             </div>
             <div className="s-info">
-              <span className="p-title">
-                {`${checklist.title} Folder`}
-              </span>
+              <span className="p-title">{`${checklist.title} Folder`}</span>
             </div>
 
             <div className="s-label">
-              <Labels
-                checklist={checklist}
-              />
+              <Labels checklist={checklist} />
             </div>
 
-            {
-              _.filter(actions, available => available).length > 0 &&
+            {_.filter(actions, available => available).length > 0 && (
               <div className="cta">
                 <Dropdown
                   id={`CHKLST_CTA_${checklist.id}`}
@@ -77,14 +72,10 @@ class ChecklistPanel extends React.Component {
                     bsRole="toggle"
                     onClick={e => e.stopPropagation()}
                   >
-                    <VerticalDotsIcon
-                      width={20}
-                      height={20}
-                      fill="#8da2b5"
-                    />
+                    <VerticalDotsIcon width={20} height={20} fill="#8da2b5" />
                   </Button>
 
-                  <Dropdown.Menu >
+                  <Dropdown.Menu>
                     <TaskTermination
                       hasPermission={actions.termination}
                       deal={deal}
@@ -102,11 +93,11 @@ class ChecklistPanel extends React.Component {
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
-            }
+            )}
           </div>
         }
       >
-        { this.props.children }
+        {this.props.children}
       </Panel>
     )
   }
@@ -115,4 +106,3 @@ class ChecklistPanel extends React.Component {
 export default connect(({ deals }) => ({
   isBackoffice: deals.backoffice
 }))(ChecklistPanel)
-

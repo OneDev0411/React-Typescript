@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { Link } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
 import _ from 'underscore'
 import { deleteFile } from '../../../../../../../store_actions/deals'
@@ -35,14 +35,6 @@ class FileAttachments extends React.Component {
     return 'unknown'
   }
 
-  openDoc(fileId) {
-    const { deal, task } = this.props
-
-    browserHistory.push(
-      `/dashboard/deals/${deal.id}/form-viewer/${task.id}/attachment/${fileId}`
-    )
-  }
-
   async deleteFile(e, task, file) {
     const { deal, deleteFile } = this.props
     const { deleting } = this.state
@@ -69,7 +61,7 @@ class FileAttachments extends React.Component {
   }
 
   render() {
-    const { attachments, task } = this.props
+    const { attachments, deal, task } = this.props
     const { deleting } = this.state
 
     const files = attachments.map(file => ({
@@ -83,11 +75,13 @@ class FileAttachments extends React.Component {
     return (
       <div>
         {files.map(file => (
-          <div
+          <Link
             key={`PDF_FILE_${file.id}`}
             className="item attachment"
             style={{ cursor: 'pointer' }}
-            onClick={() => this.openDoc(file.id)}
+            to={`/dashboard/deals/${deal.id}/form-viewer/${
+              task.id
+            }/attachment/${file.id}`}
           >
             <div className="image">
               <img src={file.preview_url} alt="" />
@@ -123,7 +117,7 @@ class FileAttachments extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     )

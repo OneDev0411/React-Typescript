@@ -84,6 +84,7 @@
         "order": ["constructor", "lifecycle", "everything-else", "render"]
       }
     ],
+    "prefer-destructuring": 0,
     "padding-line-between-statements": [
       2,
       // Always require blank lines after directive (like "use-strict"), except between directives

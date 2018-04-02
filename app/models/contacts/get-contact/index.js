@@ -1,6 +1,6 @@
 import Fetch from '../../../services/fetch'
 
-async function fetchContact(user = {}, contactId) {
+async function fetchContact(user, contactId) {
   const { access_token } = user
 
   if (!access_token) {

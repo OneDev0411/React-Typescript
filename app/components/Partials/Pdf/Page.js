@@ -1,16 +1,12 @@
 import React from 'react'
-import ReactResizeDetector from 'react-resize-detector'
 import _ from 'underscore'
 
 class PdfPage extends React.Component {
-
   constructor(props) {
     super(props)
     this.renderTask = null
 
     this.state = {
-      page: null,
-      width: 0,
       height: 0,
       fitScale: null
     }
@@ -21,12 +17,9 @@ class PdfPage extends React.Component {
     window.addEventListener('resize', this.delayedWindowResize.bind(this))
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.delayedWindowResize.bind(this))
-  }
-
   componentDidMount() {
     const { pageNumber, fitWindow } = this.props
+
     this.renderPage(pageNumber, 0, fitWindow)
   }
 
@@ -37,13 +30,18 @@ class PdfPage extends React.Component {
     const currentZoom = this.props.zoom
     const currentFitWindow = this.props.fitWindow
 
-    if (pageNumber !== currentPageNumber ||
+    if (
+      pageNumber !== currentPageNumber ||
       scale !== currentScale ||
       zoom !== currentZoom ||
-      fitWindow != currentFitWindow
+      fitWindow !== currentFitWindow
     ) {
       this.renderPage(pageNumber, zoom, fitWindow)
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.delayedWindowResize.bind(this))
   }
 
   async setStateSync(states) {
@@ -52,6 +50,7 @@ class PdfPage extends React.Component {
 
   onResize() {
     const { pageNumber, zoom, fitWindow } = this.props
+
     this.renderPage(pageNumber, zoom, fitWindow)
   }
 
@@ -81,7 +80,7 @@ class PdfPage extends React.Component {
     let newScale = 1
 
     if (fitWindow) {
-      newScale = fitScale || await this.calculateScale(pageNumber)
+      newScale = fitScale || (await this.calculateScale(pageNumber))
 
       if (!fitScale) {
         this.setState({ fitScale: newScale })
@@ -108,6 +107,7 @@ class PdfPage extends React.Component {
     }
 
     const context = canvas.getContext('2d')
+
     canvas.width = width
     canvas.height = height
 
@@ -122,34 +122,27 @@ class PdfPage extends React.Component {
 
   render() {
     const { height } = this.state
-    const {
-      pageNumber,
-      rotation,
-      zoom,
-      defaultContainerHeight
-    } = this.props
+    const { pageNumber, rotation, zoom, defaultContainerHeight } = this.props
 
     return (
       <div
         className="pdf-container"
         style={{
-          height: (height > 0 && zoom !== null) ? height : defaultContainerHeight
+          height: height > 0 && zoom !== null ? height : defaultContainerHeight
         }}
-        ref={ref => this.container = ref}
+        ref={ref => (this.container = ref)}
       >
-        <canvas
-          className={`pdf-page rotate${rotation}`}
-          id="pdf-canvas"
-          ref={ref => this.canvas = ref}
-        />
-
-        <div className="page-number">
-          {pageNumber}
-        </div>
+        <a name={`p${pageNumber}`}>
+          <canvas
+            className={`pdf-page rotate${rotation}`}
+            id="pdf-canvas"
+            ref={ref => (this.canvas = ref)}
+          />
+          <div className="page-number">{pageNumber}</div>
+        </a>
       </div>
     )
   }
 }
 
 export default PdfPage
-

@@ -1,9 +1,7 @@
 import React from 'react'
 import NotificationDispatcher from '../../../../dispatcher/NotificationDispatcher'
 import S from 'shorti'
-import _ from 'lodash'
 import { getTimeAgo } from '../../../../utils/helpers'
-import AppStore from '../../../../stores/AppStore'
 import { browserHistory } from 'react-router'
 
 export default class extends React.Component {
@@ -30,26 +28,36 @@ export default class extends React.Component {
       id: notification.id
     })
 
-    // Deals
-    if (notification.notification_type === 'DealRoleReactedToEnvelope') {
-      browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
-    }
+    switch (notification.notification_type) {
+      case 'DealRoleReactedToEnvelope':
+        browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
+        break
+      case 'UserReactedToEnvelope':
+        browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
+        break
 
-    // Listings
-    if (notification.notification_type === 'ListingPriceDroppedUser') {
-      browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-    }
+      case 'ListingPriceDroppedUser':
+        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+        break
+      case 'ListingStatusChangedUser':
+        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+        break
+      case 'ListingBecameAvailableUser':
+        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+        break
+      case 'OpenHouseAvailableListing':
+        browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
+        break
 
-    if (notification.notification_type === 'ListingStatusChangedUser') {
-      browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-    }
+      case 'CrmTaskIsDueCrmTask':
+        browserHistory.push(`/crm/tasks/${notification.object}`)
+        break
+      case 'ReminderIsDueCrmTask':
+        browserHistory.push(`/crm/tasks/${notification.object}`)
+        break
 
-    if (notification.notification_type === 'ListingBecameAvailableUser') {
-      browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-    }
-
-    if (notification.notification_type === 'OpenHouseAvailableListing') {
-      browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
+      default:
+        break
     }
   }
   notificationIcon(notification) {
@@ -62,7 +70,8 @@ export default class extends React.Component {
     }
 
     let icon
-    const common_image_style = 'bg-center bg-cover w-50 h-50 absolute br-100 t-15'
+    const common_image_style =
+      'bg-center bg-cover w-50 h-50 absolute br-100 t-15'
 
     switch (type) {
       case 'UserSentMessage':
@@ -90,7 +99,9 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(`bg-url(${subject.profile_image_url}) ${common_image_style}`)}
+              style={S(
+                `bg-url(${subject.profile_image_url}) ${common_image_style}`
+              )}
             />
           </div>
         )
@@ -99,7 +110,9 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(`bg-url(${subject.profile_image_url}) ${common_image_style}`)}
+              style={S(
+                `bg-url(${subject.profile_image_url}) ${common_image_style}`
+              )}
             />
           </div>
         )
@@ -108,7 +121,9 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(`bg-url(${object.cover_image_url}) ${common_image_style}`)}
+              style={S(
+                `bg-url(${object.cover_image_url}) ${common_image_style}`
+              )}
             />
           </div>
         )
@@ -117,7 +132,9 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(`bg-url(${subject.profile_image_url}) ${common_image_style}`)}
+              style={S(
+                `bg-url(${subject.profile_image_url}) ${common_image_style}`
+              )}
             />
           </div>
         )
@@ -189,7 +206,9 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(`bg-url(${object.cover_image_url}) ${common_image_style}`)}
+              style={S(
+                `bg-url(${object.cover_image_url}) ${common_image_style}`
+              )}
             />
           </div>
         )
@@ -198,7 +217,9 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(`bg-url(${subject.profile_image_url}) ${common_image_style}`)}
+              style={S(
+                `bg-url(${subject.profile_image_url}) ${common_image_style}`
+              )}
             />
           </div>
         )
@@ -207,7 +228,9 @@ export default class extends React.Component {
         icon = (
           <div>
             <div
-              style={S(`bg-url(${subject.profile_image_url}) ${common_image_style}`)}
+              style={S(
+                `bg-url(${subject.profile_image_url}) ${common_image_style}`
+              )}
             />
           </div>
         )
@@ -247,7 +270,9 @@ export default class extends React.Component {
           >
             {this.notificationIcon(notification)}
             <div style={S('relative ml-70')}>
-              <div style={S('color-263445 font-17')}>{notification.message}</div>
+              <div style={S('color-263445 font-17')}>
+                {notification.message}
+              </div>
               <div style={S('color-c6c6c6')}>
                 {getTimeAgo(notification.created_at)} ago
               </div>

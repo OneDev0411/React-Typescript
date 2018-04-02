@@ -26,7 +26,7 @@ export default class Fetch {
     )
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
-      .retry(2)
+    // .retry(2)
 
     // auto append access-token
     if (this._autoLogin && this._isLoggedIn) {

@@ -88,7 +88,7 @@ class Table extends React.Component {
                     isBackOffice={isBackOffice}
                     needsApproval={!isBackOffice && field.needs_approval}
                     onChange={(field, value) =>
-                      this.onChangeContext(field, value)
+                      this.onChangeContext(field, value || null)
                     }
                   />
                   <div className="approve-row">
