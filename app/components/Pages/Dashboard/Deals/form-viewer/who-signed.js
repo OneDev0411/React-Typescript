@@ -16,14 +16,6 @@ class WhoSigned extends React.Component {
     }
   }
 
-  getSignLink(envelopeId, recipientId) {
-    const { user } = this.props
-    const token = user.access_token
-
-    return `/api/deals/envelope/${envelopeId}/sign/${recipientId}\
-?access_token=${token}`
-  }
-
   getName(role) {
     if (role.legal_last_name || role.legal_first_name) {
       return `${role.legal_prefix || ''} ${role.legal_first_name ||
@@ -86,30 +78,52 @@ class WhoSigned extends React.Component {
   render() {
     const { resending } = this.state
     const { envelope, user } = this.props
+    const { access_token } = user
     const { recipients } = envelope
     const areSigned = recipients.filter(r => r.status === 'Completed')
     const notSigned = recipients.filter(r => r.status !== 'Completed')
     const declineds = recipients.filter(r => r.status === 'Declined')
 
+    const isDraft = envelope.status === 'Created'
+    const isVoided = envelope.status === 'Voided'
+    const isCompleted = envelope.status === 'Completed'
+    const isSent = envelope.status === 'Sent'
+
     return (
       <div className="who-signed">
         <div className="ws-head">
-          <div className="ttl">Who signed</div>
+          <div className="ttl">
+            {isDraft ? 'Draft' : 'Who signed'}
+          </div>
           <div className="cta">
-            <Button
-              className="deal-button"
-              disabled={resending}
-              onClick={() => this.resendDocs(envelope.id)}
-            >
-              {resending ? 'Resending ...' : 'Resend docs'}
-            </Button>
+            {isSent && (
+              <Button
+                className="deal-button"
+                disabled={resending}
+                onClick={() => this.resendDocs(envelope.id)}
+              >
+                {resending ? 'Resending ...' : 'Resend docs'}
+              </Button>
+            )}
 
-            <Button
-              className="deal-button void"
-              onClick={() => this.requestVoidEnvelope(envelope.id)}
-            >
-              Void
-            </Button>
+            {isDraft && (
+              <a
+                href={Deal.getEnvelopeEditLink(envelope.id, access_token)}
+                target="_blank"
+                className="btn btn-primary btn-sm btn-outline"
+              >
+                Review & Send
+              </a>
+            )}
+
+            {(isDraft || isSent) && (
+              <Button
+                className="deal-button void"
+                onClick={() => this.requestVoidEnvelope(envelope.id)}
+              >
+                Void
+              </Button>
+            )}
           </div>
         </div>
 
@@ -146,7 +160,7 @@ class WhoSigned extends React.Component {
           </div>
         )}
 
-        {notSigned.length > 0 && (
+        {!isDraft && notSigned.length > 0 && (
           <div className="ws-section">
             <div className="ws-section-title">
               <img src="/static/images/deals/ws.svg" alt="" />
@@ -173,7 +187,7 @@ class WhoSigned extends React.Component {
                   {signer.role.user &&
                     signer.role.user.id === user.id && (
                       <a
-                        href={this.getSignLink(envelope.id, signer.id)}
+                        href={Deal.getEnvelopeSignLink(envelope.id, signer.id, access_token)}
                         target="_blank"
                         className="sign-button"
                       >

@@ -19,14 +19,13 @@ export default ({
       onClick={() => onChangeEnderType(null)}
     />
 
-    {
-      showAgentDoubleEnder &&
+    {showAgentDoubleEnder && (
       <RadioButton
         selected={enderType === 'AgentDoubleEnder'}
         title="Yes, I represent both sides"
         onClick={() => onChangeEnderType('AgentDoubleEnder')}
       />
-    }
+    )}
 
     <RadioButton
       selected={enderType === 'OfficeDoubleEnder'}

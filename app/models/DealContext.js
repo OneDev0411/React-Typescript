@@ -248,6 +248,23 @@ export function getValue(deal, field) {
 }
 
 /**
+ * returns value of a origin
+ * name is field name
+ * origin is context origin (mls or deal)
+ */
+export function getValueByContext(name, context) {
+  const contextInfo = getList().find(ctx => ctx.name === name)
+
+  if (contextInfo.data_type === 'Date') {
+    return moment.unix(context.value).format('MMM DD, YYYY')
+  } else if (isCurrency({ name })) {
+    return Deal.get.formattedPrice(context.value)
+  }
+
+  return context.value
+}
+
+/**
  * returns date value of context
  */
 export function getDateValue(deal, field) {
@@ -360,9 +377,11 @@ function getFormattedValue(value) {
   }
 
   if (this.format === 'Currency') {
-    return `$${parseFloat(value)
-      .toFixed(2)
-      .replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}`
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0
+    }).format(value)
   }
 
   return value
@@ -383,6 +402,7 @@ export default {
   isCurrency,
   isDisabled,
   getValue,
+  getValueByContext,
   getDateValue,
   parseDate,
   validate,

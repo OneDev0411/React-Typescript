@@ -62,7 +62,11 @@ class Checklist extends React.Component {
             })
             .filter(id => {
               // dont display Backup contracts in BackOffice dashboard
-              if (isBackOffice && checklists[id].is_deactivated) {
+              if (checklists[id].is_deactivated) {
+                if (isBackOffice) {
+                  return false
+                }
+
                 return showDeactivatedChecklists
               }
 
@@ -87,7 +91,7 @@ class Checklist extends React.Component {
 
         <button
           className={cn('show-terminated-btn', {
-            hide: deactivatedChecklistsCount === 0
+            hide: isBackOffice || deactivatedChecklistsCount === 0
           })}
           onClick={() => this.toggleDisplayDeactivatedChecklists()}
         >

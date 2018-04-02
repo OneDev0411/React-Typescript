@@ -19,13 +19,13 @@ const Names = ({ fields, upsertAttribute, handelOnDelete, isSaving }) => (
       <ul className="c-contact-details u-unstyled-list">
         <Title
           disabled={isSaving}
-          key="names__legal_prefix"
-          field={fields.legal_prefix}
+          key="names__title"
+          field={fields.title}
           onChange={upsertAttribute}
         />
         {fields &&
           Object.keys(fields)
-            .filter(name => name !== 'legal_prefix')
+            .filter(name => name !== 'title')
             .map(name => (
               <Field
                 field={fields[name]}
@@ -77,7 +77,6 @@ const enhance = compose(
           Array.isArray(firstSubContactNames) &&
           Object.keys(firstSubContactNames[0]).length > 0
         ) {
-          // eslint-disable-next-line
           id = firstSubContactNames[0].id
         }
 
@@ -132,7 +131,6 @@ const enhance = compose(
           Array.isArray(firstSubContactNames) &&
           Object.keys(firstSubContactNames[0]).length > 0
         ) {
-          // eslint-disable-next-line
           id = firstSubContactNames[0].id
         }
 
@@ -164,18 +162,14 @@ function getNames(names) {
   let nameAttribute
 
   const nameFields = {
-    legal_prefix: '',
+    title: '',
     first_name: '',
     middle_name: '',
     last_name: '',
-    legal_first_name: '',
-    legal_middle_name: '',
-    legal_last_name: '',
     nickname: ''
   }
 
   if (names && Object.keys(names).length > 0) {
-    // eslint-disable-next-line
     id = names.id
 
     nameAttribute = {

@@ -71,7 +71,9 @@
     border: none;
   }
 
-  .nav-tabs > .active > [data-toggle='tab'], .nav-tabs > .active > [data-toggle='tab']:hover, .nav-tabs > .active > [data-toggle='tab']:focus {
+  .nav-tabs > .active > [data-toggle='tab'],
+  .nav-tabs > .active > [data-toggle='tab']:hover,
+  .nav-tabs > .active > [data-toggle='tab']:focus {
     color: #e3e3e3;
     cursor: default;
     border: none;
@@ -106,11 +108,16 @@
   .completed .round-tab {
     background: #2196f3;
     border: 2px solid #2196f3;
+
     &:hover {
       border: 2px solid #2196f3;
     }
     &::after {
       display: none;
     }
+  }
+
+  .active .round-tab {
+    background: #fff;
   }
 }

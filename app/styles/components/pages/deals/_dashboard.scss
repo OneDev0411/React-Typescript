@@ -17,6 +17,7 @@ $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
 @import './dashboard/_comment';
 @import './dashboard/_files';
 @import './dashboard/_mls';
+@import './dashboard/_deal_side';
 @import './dashboard/_edit_form';
 @import './dashboard/_form_viewer';
 @import './dashboard/_form_context';
@@ -24,12 +25,26 @@ $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
 @import './dashboard/_mls_status_modal';
 @import './dashboard/_upload';
 @import './dashboard/_bulk_submit';
+@import './dashboard/_context_discrepency';
 
 %deal-dashboard {
   margin-left: 0;
   margin-right: 0;
   display: flex;
   flex-direction: column;
+
+  &.loading-deal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    font-size: 18px;
+    font-weight: bold;
+    i {
+      margin-bottom: 10px;
+    }
+  }
 
   .deal-content {
     display: flex;

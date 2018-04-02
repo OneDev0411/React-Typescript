@@ -14,7 +14,6 @@
   }
 }
 
-
 .c-deal-form-viewer__header__title {
   font-size: 17px;
   font-weight: 500;
@@ -24,6 +23,10 @@
 
 .c-deal-form-viewer__header__back-btn {
   font-size: 2.4rem;
+  cursor: pointer;
+  &:hover {
+    color: #2196f3;
+  }
 }
 
 .c-deal-form-viewer__header__cta {
@@ -37,7 +40,7 @@
     font-size: 13px;
     font-weight: 500;
     color: #8da2b5;
-    
+
     &:focus,
     &:hover {
       outline: none;
@@ -86,6 +89,7 @@
   .envelopes {
     @extend .u-scrollbar--thinner;
     border-left: 1px solid #dce5eb;
+    background: #fff;
     .who-signed {
       @extend %deal-envelopes-who-signed;
     }
@@ -101,15 +105,13 @@
   }
 }
 
-
-  
 .c-deal-form-viewer__viewer {
   width: 100%;
   height: calc(100vh - #{$deal-dashboard-header-height} - 1px);
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   .c-pdf-viewer {
     padding-top: 2em;
     height: calc(100vh - #{$deal-dashboard-header-height});
@@ -125,7 +127,6 @@
 
   .loading {
     text-align: center;
-    margin-top: 10%;
     font-weight: 600;
     i {
       margin-bottom: 10px;

@@ -37,7 +37,6 @@ class ContactsList extends React.Component {
 
     this.state = {
       filter: '',
-      confirmation: null,
       deletingContact: null
     }
 

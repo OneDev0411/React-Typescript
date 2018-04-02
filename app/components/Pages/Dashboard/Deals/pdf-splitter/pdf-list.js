@@ -24,10 +24,7 @@ class PDF extends React.Component {
     const { notify } = this.props
 
     /* eslint-disable max-len */
-    await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */)
-
-    /* eslint-disable max-len */
-    await import('pdfjs-dist/web/compatibility' /* webpackChunkName: "pdf.comp" */)
+    const PDFJS = await import('pdfjs-dist' /* webpackChunkName: "pdfjs" */)
 
     const { splitter, setSplitterPdfObject, resetSplitter } = this.props
 

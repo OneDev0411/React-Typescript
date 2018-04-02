@@ -52,7 +52,14 @@ export default class extends React.Component {
     }
   }
   render() {
-    const { show, onClose, isBackOffice, saveText, onChangeStatus } = this.props
+    const {
+      show,
+      onClose,
+      isBackOffice,
+      saveText,
+      onChangeStatus,
+      status: oldStatus
+    } = this.props
     const { selectedStatus } = this.state
 
     return (
@@ -97,12 +104,13 @@ export default class extends React.Component {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button className="deal-button cancel" onClick={onClose}>
+          <Button className="select-status__button cancel" onClick={onClose}>
             Cancel
           </Button>
 
           <Button
-            className="deal-button"
+            disabled={selectedStatus === oldStatus}
+            className="select-status__button"
             onClick={() => onChangeStatus(selectedStatus)}
           >
             {saveText || 'Update'}

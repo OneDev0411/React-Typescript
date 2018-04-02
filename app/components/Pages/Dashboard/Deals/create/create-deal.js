@@ -99,7 +99,8 @@ class CreateDeal extends React.Component {
       agents,
       sellingAgents,
       clients,
-      sellingClients
+      sellingClients,
+      escrowOfficers
     } = this.state
 
     const validationTable = {
@@ -125,8 +126,15 @@ class CreateDeal extends React.Component {
         validator: () =>
           dealSide === 'Buying' ? _.size(sellingClients) > 0 : true
       },
+      escrow_officer: {
+        validator: () =>
+          dealSide === 'Buying' ? _.size(escrowOfficers) > 0 : true
+      },
       agents: {
-        validator: () => _.size(agents) > 0
+        validator: () =>
+          dealSide === 'Buying'
+            ? !!_.find(agents, agent => agent.role === 'BuyerAgent')
+            : !!_.find(agents, agent => agent.role === 'SellerAgent')
       },
       clients: {
         validator: () => _.size(clients) > 0
@@ -342,6 +350,10 @@ class CreateDeal extends React.Component {
     const dealContexts = _.indexBy(this.getDealContexts(), 'name')
 
     _.each(contexts, (value, name) => {
+      if (_.isUndefined(value) || value === null || value.length === 0) {
+        return false
+      }
+
       const needsApproval = dealContexts[name]
         ? dealContexts[name].needs_approval
         : false
@@ -391,6 +403,19 @@ class CreateDeal extends React.Component {
     }
 
     return DealContext.getItems(dealSide, dealPropertyType)
+  }
+
+  /**
+   * check commission is required or not
+   */
+  getIsCommissionRequired() {
+    const { enderType } = this.state
+
+    if (enderType === 'AgentDoubleEnder' || enderType === 'OfficeDoubleEnder') {
+      return true
+    }
+
+    return false
   }
 
   /**
@@ -503,7 +528,7 @@ class CreateDeal extends React.Component {
                       dealSide="Selling"
                       agents={sellingAgents}
                       shouldPrepopulateAgent={false}
-                      isCommissionRequired={false}
+                      isCommissionRequired={this.getIsCommissionRequired()}
                       onUpsertAgent={form =>
                         this.onUpsertRole(form, 'sellingAgents')
                       }
@@ -526,6 +551,7 @@ class CreateDeal extends React.Component {
                     />
 
                     <EscrowOfficers
+                      hasError={this.hasError('escrow_officer')}
                       escrowOfficers={escrowOfficers}
                       onUpsertEscrowOfficer={form =>
                         this.onUpsertRole(form, 'escrowOfficers')

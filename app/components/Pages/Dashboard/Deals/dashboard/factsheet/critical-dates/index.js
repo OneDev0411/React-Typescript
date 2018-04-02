@@ -1,7 +1,7 @@
 import React from 'react'
 import Deal from '../../../../../../../models/Deal'
 import Context from '../../../../../../../models/DealContext'
-import Items from '../items'
+import Render from '../renderer'
 
 /**
  * get field of upcoming (next) date
@@ -34,7 +34,8 @@ const CriticalDates = ({ deal, showTitle = true }) => {
 
   return (
     <div className="deal-info-section">
-      <Items
+      <Render
+        id="critical-dates"
         title="CRITICAL DATES"
         showTitle={showTitle}
         table={table}
@@ -48,7 +49,7 @@ const CriticalDates = ({ deal, showTitle = true }) => {
 /**
  * get next date
  */
-CriticalDates.getNextDate = function(deal) {
+CriticalDates.getNextDate = function getNextDate(deal) {
   const date = getNextDateField(deal)
 
   if (!date) {

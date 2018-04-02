@@ -20,12 +20,16 @@ export default class extends React.Component {
     const { disableKeyboardShortcuts } = this.state
     const {
       deal,
+      isBackOffice,
       showFactsheet,
       showComments,
       toggleFactsheet,
       toggleComments,
       editFormHandler,
       splitPdfHandler,
+      onPdfZoomIn,
+      onPdfZoomOut,
+      onClose,
       task,
       file,
       fileType
@@ -39,12 +43,12 @@ export default class extends React.Component {
       <div className="c-deal-form-viewer">
         <div className="c-deal-form-viewer__header">
           <div>
-            <Link
-              to={`/dashboard/deals/${deal.id}`}
+            <span
+              onClick={onClose}
               className="c-deal-form-viewer__header__back-btn"
             >
               <i className="fa fa-angle-left" />
-            </Link>
+            </span>
             <h1 className="c-deal-form-viewer__header__title">
               {task ? task.title : file.name}
             </h1>
@@ -69,23 +73,25 @@ export default class extends React.Component {
               </Button>
             )}
 
-            {file.type === 'pdf' && (
-              <Button
-                className="deal-button split"
-                onClick={() => splitPdfHandler(file)}
-              >
-                Split PDF
-              </Button>
-            )}
+            {!isBackOffice &&
+              file.type === 'pdf' && (
+                <Button
+                  className="deal-button split"
+                  onClick={() => splitPdfHandler(file)}
+                >
+                  Split PDF
+                </Button>
+              )}
 
-            {fileType === 'digital-form' && (
-              <Button
-                className="deal-button edit-form"
-                onClick={editFormHandler}
-              >
-                Edit Form
-              </Button>
-            )}
+            {!isBackOffice &&
+              fileType === 'digital-form' && (
+                <Button
+                  className="deal-button edit-form"
+                  onClick={editFormHandler}
+                >
+                  Edit Form
+                </Button>
+              )}
           </div>
         </div>
 
@@ -108,6 +114,8 @@ export default class extends React.Component {
             file={file}
             width={PDF_WIDTH}
             disableKeyboardShortcuts={disableKeyboardShortcuts}
+            onPdfZoomIn={onPdfZoomIn}
+            onPdfZoomOut={onPdfZoomOut}
           />
 
           {task && (

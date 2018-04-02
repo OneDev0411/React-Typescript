@@ -19,8 +19,10 @@ function validate(props) {
 }
 
 export default props => {
-  const { ErrorMessageHandler } = props
+  const { value, ErrorMessageHandler } = props
   const isValid = validate(props)
+  const filteredValue =
+    value && value.startsWith('+') ? value.substr(value.length - 10) : value
 
   const ErrorMessageComponent = ErrorMessageHandler ? (
     <ErrorMessageHandler {...props} />
@@ -32,7 +34,6 @@ export default props => {
     <div style={{ position: 'relative', display: 'inline' }}>
       <Input
         placeholderChar="#"
-        value={props.value}
         style={{
           border: isValid ? '' : '1px solid #ec4b35'
         }}
@@ -51,6 +52,7 @@ export default props => {
           /\d/
         ]}
         {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
+        value={filteredValue}
         placeholder="###-###-####"
         onChange={e => {
           const maskedValue = e.target.value
@@ -70,7 +72,7 @@ export default props => {
         }}
       />
 
-      {props.value && !isValid && ErrorMessageComponent}
+      {filteredValue && !isValid && ErrorMessageComponent}
     </div>
   )
 }

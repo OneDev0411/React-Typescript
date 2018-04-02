@@ -56,8 +56,31 @@ export async function voidEnvelope(envelope_id) {
   }
 }
 
+export async function editEnvelope(envelope_id) {
+  try {
+    const response = await new Fetch()
+      .get(`/envelopes/${envelope_id}/edit`)
+
+    return response.body.data
+  } catch (e) {
+    return null
+  }
+}
+
+export function getEnvelopeEditLink(envelope_id, token) {
+  return `/api/deals/envelope/${envelope_id}/edit?access_token=${token}`
+}
+
+export function getEnvelopeSignLink(envelope_id, recipient_id, token) {
+  return `/api/deals/envelope/${envelope_id}/sign/${recipient_id}\
+?access_token=${token}`
+}
+
 export default {
   sendEnvelope,
   resendEnvelope,
-  voidEnvelope
+  voidEnvelope,
+  editEnvelope,
+  getEnvelopeEditLink,
+  getEnvelopeSignLink
 }

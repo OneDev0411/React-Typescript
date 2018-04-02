@@ -44,16 +44,13 @@ class SelectDocumentModal extends React.Component {
     batchActions([showCompose(true), showAttachments(false)])
   }
 
-  getCompletedDocuments() {
+  getDocuments() {
     const { tasks, deal } = this.props
 
     return _.filter(
       tasks,
       task =>
-        task.task_type === 'Form' &&
-        task.deal === deal.id &&
-        task.submission &&
-        task.submission.state === 'Fair'
+        task.task_type === 'Form' && task.deal === deal.id && task.submission
     )
   }
 
@@ -68,7 +65,7 @@ class SelectDocumentModal extends React.Component {
   render() {
     const { esign } = this.props
     const { attachments } = esign
-    const documents = this.getCompletedDocuments()
+    const documents = this.getDocuments()
 
     return (
       <Modal
@@ -86,13 +83,14 @@ class SelectDocumentModal extends React.Component {
               <div className="empty-state">
                 <div className="title">Whoops!</div>
                 <div className="descr">
-                  You don't have any completed forms to send for signatures.
+                  You don't have any forms to collect signatures for
                 </div>
               </div>
             )}
 
             {_.map(documents, task => {
               const isSelected = attachments.indexOf(task.id) > -1
+              const isCompleted = task.submission.state === 'Fair'
 
               return (
                 <Row
@@ -117,7 +115,16 @@ class SelectDocumentModal extends React.Component {
                     </div>
 
                     <div className="date">
-                      Completed{' '}
+                      {isCompleted && (
+                        <span className="text-success">Completed &nbsp;</span>
+                      )}
+
+                      {!isCompleted && (
+                        <span className="text-danger">
+                          May have incomplete fields &nbsp;
+                        </span>
+                      )}
+
                       {moment
                         .unix(task.submission.updated_at)
                         .format('MMMM DD, YYYY')}

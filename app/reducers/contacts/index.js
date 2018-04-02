@@ -5,6 +5,7 @@ import spinner from './spinner'
 import contact from './contact'
 import activities from './activities'
 import importOutlook from './importOutlook'
+import importCsv from './importCsv'
 
 export default combineReducers({
   list,
@@ -12,5 +13,6 @@ export default combineReducers({
   spinner,
   contact,
   activities,
-  importOutlook
+  importOutlook,
+  importCsv
 })

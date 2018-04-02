@@ -2,13 +2,10 @@ import React from 'react'
 import { Form, Field } from 'react-final-form'
 
 import BasicModal from '../../../../../../../../views/components/BasicModal'
-import CancelButton from '../../../../../../../../views/components/Button/CancelButton'
 import ActionButton from '../../../../../../../../views/components/Button/ActionButton'
 import TextField from './TextField'
 import { LABELS_OPTIONS } from '../../index'
 import Dropdown from '../../../../components/Dropdown'
-
-const required = value => (value ? undefined : 'Required')
 
 const isPostalCode = value =>
   !value || new RegExp(/(^\d{5}$)|(^\d{5}-\d{4}$)/).exec(value)
@@ -17,6 +14,26 @@ const isPostalCode = value =>
 
 // const composeValidators = (...validators) => value =>
 //   validators.reduce((error, validator) => error || validator(value), undefined)
+
+const validate = values => {
+  const errors = {}
+
+  if (!values.street_name) {
+    errors.street_name = 'Required'
+  }
+
+  if (!values.city) {
+    errors.city = 'Required'
+  }
+
+  const postal_code = isPostalCode(values.postal_code)
+
+  if (postal_code) {
+    errors.postal_code = postal_code
+  }
+
+  return errors
+}
 
 function AddAddressModal({
   isOpen,
@@ -31,9 +48,10 @@ function AddAddressModal({
       className="c-new-address-modal"
     >
       <Form
+        validate={validate}
         onSubmit={handleOnSubmit}
-        initialValues={{ label: 'Address' }}
-        render={({ handleSubmit, pristine, invalid, values, reset }) => (
+        initialValues={{ label: 'Other' }}
+        render={({ reset, values, pristine, validating, handleSubmit }) => (
           <div>
             <BasicModal.Header title="Add New Address" />
             <BasicModal.Body className="c-new-address-modal__body">
@@ -94,7 +112,6 @@ function AddAddressModal({
                 disabled={submitting}
                 title="Street Name"
                 placeholder="Buyers Club"
-                validate={required}
               />
 
               <Field
@@ -104,7 +121,6 @@ function AddAddressModal({
                 disabled={submitting}
                 title="City"
                 placeholder="Dallas"
-                validate={required}
               />
 
               <Field
@@ -121,7 +137,6 @@ function AddAddressModal({
                 disabled={submitting}
                 title="Postal Code"
                 placeholder="65619 or 34353-2323"
-                validate={isPostalCode}
               />
             </BasicModal.Body>
             <BasicModal.Footer style={{ justifyContent: 'space-between' }}>
@@ -143,7 +158,7 @@ function AddAddressModal({
                   Reset
                 </ActionButton>
                 <ActionButton
-                  disabled={pristine || invalid}
+                  disabled={submitting || validating}
                   onClick={() => handleSubmit(handleOnSubmit)}
                 >
                   {submitting ? 'Adding ...' : 'Add'}

@@ -4,7 +4,6 @@
   }
 
   .modal-body {
-
     .radio {
       display: inline-block;
       width: 20px;
@@ -42,7 +41,7 @@
   }
 
   .modal-footer {
-    .deal-button {
+    .select-status__button {
       min-width: 100px;
       height: 33px;
       line-height: 17px;
@@ -59,7 +58,7 @@
       &:focus {
         outline: none;
       }
-      &:hover {
+      &:not(:disabled):hover {
         opacity: 0.9;
       }
     }
