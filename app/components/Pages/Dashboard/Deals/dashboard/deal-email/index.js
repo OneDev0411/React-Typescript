@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Tooltip from '../../components/tooltip'
 import LinkIcon from '../../../../../../views/components/SvgIcons/LinkIcon'
-import copy from 'copy-text-to-clipboard'
+import copy from '../../../../../../utils/copy-text-to-clipboard'
 import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
 
