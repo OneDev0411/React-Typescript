@@ -4,8 +4,9 @@ import Tooltip from '../../components/tooltip'
 import LinkIcon from '../../../../../../views/components/SvgIcons/LinkIcon'
 import copy from 'copy-text-to-clipboard'
 import { addNotification as notify } from 'reapop'
+import cn from 'classnames'
 
-const DealEmail = ({ dealEmail, notify }) => (
+const DealEmail = ({ dealEmail, notify, marginBottom = false }) => (
   <Tooltip
     captionIsHTML
     tooltipStyles={{
@@ -24,7 +25,7 @@ const DealEmail = ({ dealEmail, notify }) => (
     placement="bottom"
     multiline
   >
-    <div className="deal-email">
+    <div className={cn('deal-email', { marginBottom })}>
       <p className="deal-email__label">Email: </p>
       <p className="deal-email__text">{dealEmail}</p>
       <button

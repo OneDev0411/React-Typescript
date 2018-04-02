@@ -25,6 +25,9 @@
     display: flex;
     align-items: center;
   }
+  &.marginBottom {
+    margin-bottom: 16px;
+  }
 }
 
 .deal-email__tooltip {
