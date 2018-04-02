@@ -172,6 +172,11 @@ const AsyncContactProfile = Load({
     import('../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */)
 })
 
+const AsyncContactsImportCsv = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
+})
+
 /* ==================================== */
 //  CRM Tasks
 /* ==================================== */
@@ -382,6 +387,10 @@ export default (
       <Route path="/dashboard/contacts" component={AsyncContacts}>
         <IndexRoute component={AsyncContactsList} />
         <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
+        <Route
+          path="/dashboard/contacts/import/csv"
+          component={AsyncContactsImportCsv}
+        />
       </Route>
 
       <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
