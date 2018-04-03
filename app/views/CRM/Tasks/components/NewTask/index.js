@@ -86,13 +86,13 @@ class Task extends Component {
     const { notify, updateTask, createTask, submitCallback } = this.props
 
     try {
+      const query = 'associations[]=crm_task.reminders'
+
       if (task.id) {
-        newTask = await updateTask(task, {
-          'associations[]': 'crm_task.reminders'
-        })
+        newTask = await updateTask(task, query)
         action = 'updated'
       } else {
-        newTask = await createTask(task)
+        newTask = await createTask(task, query)
       }
 
       notify({

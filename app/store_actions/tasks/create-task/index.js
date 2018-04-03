@@ -6,7 +6,7 @@ import { tasksSchema } from '../../../models/tasks/schema'
 import { selectTasks } from '../../../reducers/tasks/list'
 import { createTask as createNewTask } from '../../../models/tasks'
 
-export function createTask(task) {
+export function createTask(task, query) {
   return async (dispatch, getState) => {
     if (!task || Object.keys(task).length === 0) {
       const error = new Error('New task has not any data.')
@@ -23,7 +23,7 @@ export function createTask(task) {
         type: actionTypes.CREATE_TASK_REQUEST
       })
 
-      const newTask = await createNewTask(task)
+      const newTask = await createNewTask(task, query)
       const { tasks: { list } } = getState()
       const tasks = [newTask, ...selectTasks(list)]
       const response = normalize({ tasks }, tasksSchema)
