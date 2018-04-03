@@ -29,7 +29,7 @@ function Associations({
         className="c-new-task__field__label"
         style={{ marginBottom: '1em', cursor: 'initial' }}
       >
-        Associations recordes
+        Associated Records
       </div>
       <div style={{ display: 'flex' }}>
         <Field
