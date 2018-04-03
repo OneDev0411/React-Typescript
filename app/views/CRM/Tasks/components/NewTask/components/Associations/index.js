@@ -91,9 +91,8 @@ function Associations({
               } else {
                 newAssociations = associations.filter(
                   a =>
-                    a.association_type === association.association_type &&
                     a[a.association_type].id !==
-                      association[association.association_type].id
+                    association[association.association_type].id
                 )
               }
 
