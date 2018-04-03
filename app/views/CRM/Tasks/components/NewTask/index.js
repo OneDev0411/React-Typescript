@@ -205,17 +205,19 @@ class Task extends Component {
           }) => (
             <form onSubmit={handleSubmit} className="c-new-task__form">
               <div className="c-new-task__header">
-                {!this.isNew && (
-                  <div className="c-new-task__status">
-                    <Field
-                      size={36}
-                      name="status"
-                      id="task-status"
-                      component={CircleCheckbox}
-                    />
-                  </div>
-                )}
-                <Field name="title" component={Title} />
+                <div className="c-new-task__title-wrapper">
+                  {!this.isNew && (
+                    <div className="c-new-task__status">
+                      <Field
+                        size={36}
+                        name="status"
+                        id="task-status"
+                        component={CircleCheckbox}
+                      />
+                    </div>
+                  )}
+                  <Field name="title" component={Title} />
+                </div>
                 <DueDate selectedDate={values.dueDate} />
               </div>
               <div className="c-new-task__body">

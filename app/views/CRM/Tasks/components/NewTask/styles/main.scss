@@ -85,9 +85,30 @@ $border: 1px solid #ecf1f5;
   }
 }
 
+.c-new-task__title-wrapper {
+  position: relative;
+
+  @media screen and (min-width: 56em) {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 15.5em);
+  }
+}
+
 .c-new-task__status {
-  align-self: center;
-  padding: 0 1em;
+  position: absolute;
+  top: 50%;
+  right: 1em;
+  transform: translateY(-50%);
+
+  @media screen and (min-width: 56em) {
+    position: static;
+    top: auto;
+    right: auto;
+    align-self: center;
+    transform: none;
+    padding: 0 1em;
+  }
 }
 
 .c-new-task__title,
@@ -98,9 +119,7 @@ $border: 1px solid #ecf1f5;
 }
 
 .c-new-task__title {
-  @media screen and (min-width: 56em) {
-    width: calc(100% - 21em);
-  }
+  width: 100%;
 }
 
 .c-new-task__field__error {
