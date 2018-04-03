@@ -17,8 +17,8 @@ import AddNote from './Add-Note'
 import Activities from './Activities'
 import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
-import NewNoteIcon from '../../../../../views/components/SvgIcons/NewNote'
-import NewTaskIcon from '../../../../../views/components/SvgIcons/NewTask'
+import IconNote from '../../../../../views/components/SvgIcons/Note/IconNote'
+import IconTodo from '../../../../../views/components/SvgIcons/Todo/IconTodo'
 import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
 
 import { getTasks } from '../../../../../models/tasks'
@@ -200,7 +200,7 @@ class ContactProfile extends React.Component {
                     className="c-contact-profile-todo-tabs__tab"
                     eventKey="note"
                   >
-                    <NewNoteIcon size={18} />
+                    <IconNote />
                     <span className="c-contact-profile-todo-tabs__tab__title">
                       New Note
                     </span>
@@ -210,7 +210,7 @@ class ContactProfile extends React.Component {
                     className="c-contact-profile-todo-tabs__tab"
                     eventKey="task"
                   >
-                    <NewTaskIcon size={24} />
+                    <IconTodo />
                     <span className="c-contact-profile-todo-tabs__tab__title">
                       Create Task
                     </span>

@@ -8,7 +8,7 @@ export default function Header() {
     <PageHeader title="Tasks" backButton={false}>
       <PageHeader.Menu>
         <ActionButton onClick={() => browserHistory.push('/crm/tasks/new')}>
-          New Task
+          Create Task
         </ActionButton>
       </PageHeader.Menu>
     </PageHeader>

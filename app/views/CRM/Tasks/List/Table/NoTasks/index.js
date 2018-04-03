@@ -11,7 +11,7 @@ export default function NoTasks() {
         Looks like you don’t have any tasks.
       </h2>
       <ActionButton onClick={() => browserHistory.push('/crm/tasks/new')}>
-        New Task
+        Create Task
       </ActionButton>
     </div>
   )
