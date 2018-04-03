@@ -1,16 +1,22 @@
 import React from 'react'
 import ReactModal from 'react-modal'
 
-ReactModal.setAppElement('#app')
+export default class BareModal extends React.Component {
+  componentDidMount() {
+    if (document) {
+      ReactModal.setAppElement('#app')
+    }
+  }
 
-export default function BareModal(props) {
-  return (
-    <ReactModal
-      {...props}
-      overlayClassName={`c-modal__overlay ${props.overlayClassName}`}
-      className={`c-modal__content ${props.className}`}
-    >
-      {props.children}
-    </ReactModal>
-  )
+  render() {
+    return (
+      <ReactModal
+        {...this.props}
+        className={`c-modal__content ${this.props.className}`}
+        overlayClassName={`c-modal__overlay ${this.props.overlayClassName}`}
+      >
+        {this.props.children}
+      </ReactModal>
+    )
+  }
 }

@@ -7,6 +7,7 @@ import Fetch from '../../../services/fetch'
 const requestVerify = async type => {
   try {
     const response = await new Fetch().post(`/${type}_verifications`)
+
     return response.statusCode
   } catch ({ status }) {
     throw status
