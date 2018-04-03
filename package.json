@@ -126,7 +126,7 @@
     "react-burger-menu": "^2.1.11",
     "react-click-outside": "github:tj/react-click-outside",
     "react-color": "^2.14.0",
-    "react-day-picker": "^7.1.2",
+    "react-day-picker": "^7.1.4",
     "react-dnd": "^2.5.4",
     "react-dnd-html5-backend": "^2.5.4",
     "react-dom": "^16.2.0",

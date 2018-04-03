@@ -8,7 +8,7 @@ import { getTimes } from '../../../../../../../utils/get-times'
 const oneDay = 24 * 3600 * 1000
 const today = getTodayDate()
 
-const getItems = (dueDate = today) => {
+const getItems = (dueDate = today, selectedDate) => {
   const timeDifference = getTimeDifference(dueDate)
   let items = [
     {
@@ -24,8 +24,8 @@ const getItems = (dueDate = today) => {
 
   const customDateOption = {
     title: 'Custom Date',
-    value: offsetDate(dueDate, -1),
-    needsDatePicker: true
+    needsDatePicker: true,
+    value: selectedDate.value || offsetDate(dueDate, -1)
   }
 
   if (timeDifference >= 1) {
@@ -54,7 +54,7 @@ const getItems = (dueDate = today) => {
 }
 
 export default function Reminder({ dueDate, dueTime, selectedDate }) {
-  const dateItems = getItems(dueDate)
+  const dateItems = getItems(dueDate, selectedDate)
   const now = getTime(new Date().getTime())
   const timeItems = getTimes().filter(
     time =>

@@ -9,27 +9,31 @@ const today = getTodayDate()
 
 const tomorrow = today + 24 * 60 * 60 * 1000
 
-const DATE_ITEMS = [
-  {
-    title: 'Today',
-    value: today
-  },
-  {
-    title: 'Tomorrow',
-    value: tomorrow
-  },
-  {
-    title: 'Custom Date',
-    value: tomorrow,
-    needsDatePicker: true
-  }
-]
+function getDateOptions(customDateValue = tomorrow) {
+  return [
+    {
+      title: 'Today',
+      value: today
+    },
+    {
+      title: 'Tomorrow',
+      value: tomorrow
+    },
+    {
+      title: 'Custom Date',
+      value: customDateValue,
+      needsDatePicker: true
+    }
+  ]
+}
 
 export default function DueDate({ selectedDate }) {
   const timeItems = getTimes().filter(
     time =>
       selectedDate.value !== today || time.value > getTime(new Date() || time)
   )
+
+  const dateOptions = getDateOptions(selectedDate.value)
 
   return (
     <DateTimeField
@@ -38,9 +42,9 @@ export default function DueDate({ selectedDate }) {
       id="due-date"
       title="Due Date"
       timeItems={timeItems}
-      dateItems={DATE_ITEMS}
+      dateItems={dateOptions}
       selectedDate={selectedDate}
-      defaultSelectedDate={DATE_ITEMS[1]}
+      defaultSelectedDate={dateOptions[1]}
       datePickerModifiers={{
         disabled: {
           before: new Date()
