@@ -12,6 +12,7 @@ export const Button = styled.button`
   padding: 0;
   color: #2196f3;
   border-width: 0;
+  background: transparent;
 
   &:focus {
     outline-width: 2px;
