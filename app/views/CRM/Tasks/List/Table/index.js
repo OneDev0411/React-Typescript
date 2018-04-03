@@ -12,6 +12,7 @@ import FlexContainer from '../../../../components/FlexContainer'
 import { updateTask, deleteTask } from '../../../../../store_actions/tasks'
 import { confirmation } from '../../../../../store_actions/confirmation'
 
+import NoTasks from './NoTasks'
 import { ColumnHeader } from './get-header'
 import {
   TitleCell,
@@ -136,7 +137,7 @@ class TasksListTable extends Component {
     if (tasksCount === 0) {
       return (
         <Container fullHeight center>
-          NO TASKS
+          <NoTasks />
         </Container>
       )
     }
