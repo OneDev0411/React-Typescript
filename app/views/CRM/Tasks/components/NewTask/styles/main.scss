@@ -67,7 +67,7 @@ $border: 1px solid #ecf1f5;
   color: #26465e;
   
   &:focus {
-    outline-width: 0;
+    outline: none;
     background-color: #fbfdff;
   }
 
