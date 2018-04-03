@@ -10,6 +10,8 @@ import { Item } from '../../../DropdownItem'
 import { Button, Icon } from '../../../../../../../../components/Dropdown'
 import ActionButton from '../../../../../../../../components/Button/ActionButton'
 
+const formatDate = date => fecha.format(new Date(date), 'MM/DD/YYYY')
+
 class Dropdown extends React.Component {
   state = {
     isOpenMenu: false,
@@ -85,7 +87,7 @@ class Dropdown extends React.Component {
   }
 
   handleOnSelectDate = date => {
-    const title = fecha.format(new Date(date), 'MM/DD/YYYY')
+    const title = formatDate(date)
     const value = new Date(date).getTime()
 
     const selectedItem = {
@@ -125,74 +127,82 @@ class Dropdown extends React.Component {
           getItemProps,
           getButtonProps,
           highlightedIndex
-        }) => (
-          <div style={{ marginRight: '0.5em' }}>
-            <Button
-              {...getButtonProps({
-                id: buttonId,
-                name: input.name,
-                onFocus: this.handleOnFocus
-              })}
-            >
-              {selectedItem.title}
-              <Icon isOpen={isOpenMenu || isOpenDatePicker} />
-            </Button>
-            <div style={{ position: 'relative' }}>
-              <Card
-                depth={3}
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: 3,
-                  zIndex: 1,
-                  overflow: 'hidden'
-                }}
-              >
-                {isOpenMenu &&
-                  items.map((item, index) => {
-                    const props = {
-                      item,
-                      ...getItemProps({
-                        item,
-                        isActive: highlightedIndex === index,
-                        isSelected: selectedItem === item
-                      })
-                    }
+        }) => {
+          const initialDate = selectedItem.value
+            ? new Date(selectedItem.value)
+            : new Date()
 
-                    return (
-                      <Item {...props} key={item.title}>
-                        {item.title}
-                      </Item>
-                    )
-                  })}
-                {isOpenDatePicker && (
-                  <ClickOutSide onClickOutside={this.handleOnCloseDatePicker}>
-                    <DayPicker
-                      modifiers={datePickerModifiers}
-                      onDayClick={this.handleOnSelectDate}
-                      month={getInitialMonth(selectedItem)}
-                      selectedDays={new Date(selectedItem.value)}
-                    />
-                    <div style={{ textAlign: 'center', marginBottom: '1em' }}>
-                      <ActionButton
-                        onClick={() => this.handleOnSelectDate(new Date())}
-                      >
-                        Today
-                      </ActionButton>
-                      <button
-                        style={{ marginLeft: '1em' }}
-                        onClick={this.handleClearCalendar}
-                        className="c-new-address-modal__cancel-btn"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </ClickOutSide>
-                )}
-              </Card>
+          return (
+            <div style={{ marginRight: '0.5em' }}>
+              <Button
+                {...getButtonProps({
+                  id: buttonId,
+                  name: input.name,
+                  onFocus: this.handleOnFocus
+                })}
+              >
+                {selectedItem.title !== 'Custom Date'
+                  ? selectedItem.title
+                  : formatDate(selectedItem.value)}
+                <Icon isOpen={isOpenMenu || isOpenDatePicker} />
+              </Button>
+              <div style={{ position: 'relative' }}>
+                <Card
+                  depth={3}
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 3,
+                    zIndex: 1,
+                    overflow: 'hidden'
+                  }}
+                >
+                  {isOpenMenu &&
+                    items.map((item, index) => {
+                      const props = {
+                        item,
+                        ...getItemProps({
+                          item,
+                          isActive: highlightedIndex === index,
+                          isSelected: selectedItem === item
+                        })
+                      }
+
+                      return (
+                        <Item {...props} key={item.title}>
+                          {item.title}
+                        </Item>
+                      )
+                    })}
+                  {isOpenDatePicker && (
+                    <ClickOutSide onClickOutside={this.handleOnCloseDatePicker}>
+                      <DayPicker
+                        initialMonth={initialDate}
+                        selectedDays={initialDate}
+                        modifiers={datePickerModifiers}
+                        onDayClick={this.handleOnSelectDate}
+                      />
+                      <div style={{ textAlign: 'center', marginBottom: '1em' }}>
+                        <ActionButton
+                          onClick={() => this.handleOnSelectDate(new Date())}
+                        >
+                          Today
+                        </ActionButton>
+                        <button
+                          style={{ marginLeft: '1em' }}
+                          onClick={this.handleClearCalendar}
+                          className="c-new-address-modal__cancel-btn"
+                        >
+                          Clear
+                        </button>
+                      </div>
+                    </ClickOutSide>
+                  )}
+                </Card>
+              </div>
             </div>
-          </div>
-        )}
+          )
+        }}
       />
     )
   }

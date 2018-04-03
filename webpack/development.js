@@ -5,7 +5,11 @@ import WebpackNotifierPlugin from 'webpack-notifier'
 
 const postcss = function postcss() {
   return [
-    require('postcss-cssnext')({}),
+    require('postcss-cssnext')({
+      features: {
+        rem: false
+      }
+    }),
     require('postcss-browser-reporter')({}),
     require('postcss-reporter')({})
   ]
