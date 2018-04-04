@@ -25,7 +25,7 @@ export function defaultTimeOption(timestamp, defaultTime) {
   }
 
   if (defaultTime) {
-    getTimes().map(time => (times[time.title] = time))
+    getTimes().forEach(time => (times[time.title] = time))
 
     const time = times[defaultTime]
 

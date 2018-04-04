@@ -28,9 +28,7 @@ class DateTimeField extends React.Component {
       timeItems,
       isRequired,
       selectedDate,
-      datePickerModifiers,
-      defaultSelectedDate,
-      defaultSelectedTime
+      datePickerModifiers
     } = this.props
 
     return (
@@ -52,7 +50,6 @@ class DateTimeField extends React.Component {
             component={DateField}
             id={`new-task__${id}`}
             datePickerModifiers={datePickerModifiers}
-            defaultSelectedItem={defaultSelectedDate}
           />
           {selectedDate.value && (
             <Field
@@ -60,7 +57,6 @@ class DateTimeField extends React.Component {
               name={`${name}Time`}
               component={Dropdown}
               itemToString={({ title }) => title}
-              defaultSelectedItem={defaultSelectedTime}
               itemRenderer={({ item, ...props }) => (
                 <Item key={item.value} {...props}>
                   {item.title}

@@ -13,12 +13,12 @@ export async function postLoadFormat(task, defaultAssociation) {
   const tomorrow = today + 24 * 60 * 60 * 1000
 
   let dueDate = createDateOptions(today, tomorrow, 'due-date')
-  let dueTime = defaultTimeOption()
+  let dueTime = defaultTimeOption(null, '08:00 AM')
   let reminderDate = {
     title: 'No reminder',
     value: null
   }
-  let reminderTime = defaultTimeOption(null, 'Add time')
+  let reminderTime = defaultTimeOption()
   let task_type = { title: 'Todo', value: 'Todo' }
   let associations = []
 

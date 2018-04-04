@@ -73,9 +73,7 @@ export default function Reminder({ dueDate, dueTime, selectedDate }) {
       dateItems={dateItems}
       timeItems={timeItems}
       selectedDate={selectedDate}
-      defaultSelectedDate={dateItems[0]}
       isRequired={typeof selectedDate.value === 'number'}
-      defaultSelectedTime={timeItems[timeItems.length - 1]}
       datePickerModifiers={{
         disabled: {
           before: new Date(),
