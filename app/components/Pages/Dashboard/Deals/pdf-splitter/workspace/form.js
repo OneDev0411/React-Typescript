@@ -96,7 +96,7 @@ class WorkspaceForm extends React.Component {
       fileCreated = true
 
       notify({
-        message: `Splitted PDF, "${task.title}" created and uploaded`,
+        message: `The PDF, "${task.title}" created and uploaded`,
         status: 'success'
       })
 
@@ -118,7 +118,7 @@ class WorkspaceForm extends React.Component {
       }
 
       notify({
-        title: 'Could not create the splitted pdf file. please try again.',
+        title: 'Could not create the split pdf file. please try again.',
         message: e.message,
         status: 'error'
       })
@@ -255,7 +255,7 @@ class WorkspaceForm extends React.Component {
         <div className="splitter-saving">
           <div className="inner">
             {statusMessage ||
-              'Creating and uploading splitted PDF... (It might take a few moments)'}
+              'Creating and uploading split PDF... (It might take a few moments)'}
             <ProgressBar
               now={uploadProgressPercents}
               bsStyle="success"
