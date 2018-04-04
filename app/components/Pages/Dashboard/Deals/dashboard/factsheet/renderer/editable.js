@@ -105,7 +105,6 @@ export default class Editable extends React.Component {
       context,
       approved,
       needsApproval,
-      disabled,
       saving,
       isBackOffice
     } = this.props
@@ -113,17 +112,8 @@ export default class Editable extends React.Component {
     const isDateType = field.data_type === 'Date'
     const isStringType = !isDateType
 
-    if (disabled) {
-      return (
-        <div className={cn('fact-row', { disabled })}>
-          <div className="name">{field.label}</div>
-          <span className="disabeld-field">{this.getFormattedValue()}</span>
-        </div>
-      )
-    }
-
     return (
-      <div className={cn('fact-row', { disabled })}>
+      <div className="fact-row">
         <DatePicker
           show={editMode && isDateType}
           saveText={needsApproval ? 'Notify Office' : 'Update'}
@@ -136,7 +126,7 @@ export default class Editable extends React.Component {
           {field.label}
         </div>
 
-        <div className={cn('field editable', { approved, disabled })}>
+        <div className={cn('field editable', { approved })}>
           <div style={{ display: 'inline-block', minWidth: '80%' }}>
             <ContextDiscrepency
               disabled={editMode}

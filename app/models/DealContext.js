@@ -157,7 +157,6 @@ export function query(deal, criteria) {
       validate: getValidationFunction(ctx.name),
       properties: getFieldProperties(ctx.name),
       getFormattedValue: getFormattedValue.bind(ctx),
-      disabled: isDisabled(deal, ctx),
       needs_approval: ctx.needs_approval || false
     }))
     .value()
@@ -205,17 +204,6 @@ export function filterByFlags(
  */
 export function isCurrency(field) {
   return ['list_price', 'sales_price'].indexOf(field.name) > -1
-}
-
-/**
- * returns check context is disabled
- */
-export function isDisabled(deal, field) {
-  if (field.name === 'list_price' && deal.listing) {
-    return true
-  }
-
-  return false
 }
 
 /**
@@ -400,7 +388,6 @@ export default {
   getHasActiveOffer,
   filterByFlags,
   isCurrency,
-  isDisabled,
   getValue,
   getValueByContext,
   getDateValue,
