@@ -3,6 +3,7 @@ import {
   getAddress as getDealAddress
 } from '../../../models/Deal/context-helper'
 import ContactModel from '../../../models/contacts'
+import { getListingAddress } from '../../../utils/listing'
 
 /**
  * Normalizing associations
@@ -84,11 +85,18 @@ export const normalizeListing = listing => {
   const {
     id,
     type = 'listing',
-    full_address: title,
+    full_address,
     price,
     status,
-    image
+    image,
+    property
   } = listing
+
+  let title = full_address
+
+  if (!title && property) {
+    title = getListingAddress(property.address)
+  }
 
   return {
     id,
