@@ -72,7 +72,6 @@ class Table extends React.Component {
             .map(field => {
               const context = Deal.get.context(deal, field.name)
               const fieldCtx = getValue(deal, field)
-              const disabled = field.disabled === true
               const approved =
                 (context && context.approved_at !== null) || field.approved
 
@@ -83,7 +82,6 @@ class Table extends React.Component {
                     field={field}
                     saving={saving}
                     context={fieldCtx}
-                    disabled={disabled}
                     approved={approved}
                     isBackOffice={isBackOffice}
                     needsApproval={!isBackOffice && field.needs_approval}
@@ -94,7 +92,6 @@ class Table extends React.Component {
                   <div className="approve-row">
                     {isBackOffice &&
                       context &&
-                      !disabled &&
                       !approved &&
                       saving !== field.name && (
                         <button
