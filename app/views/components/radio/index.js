@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
-import ToolTip from '../tooltip'
-import Checkmark from '../../../Partials/Svgs/Checkmark'
+import ToolTip from '../../../components/Pages/Dashboard/Deals/components/tooltip/index'
+import Checkmark from '../../../components/Pages/Dashboard/Partials/Svgs/Checkmark'
 
 export default ({
   square = false,

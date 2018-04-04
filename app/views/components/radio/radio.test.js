@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer'
 import { expect } from 'chai'
 import { shallow, mount, render } from 'enzyme'
 import ReactTestUtils from 'react-dom/test-utils'
-import Radio from '.'
+import Radio from './index'
 
 describe('Test radio button component', () => {
   test('Should render radio button with title', () => {
