@@ -14,14 +14,10 @@ import {
   selectContacts,
   isFetchingContactsList
 } from '../../../../../reducers/contacts/list'
-import {
-  deleteContact,
-  upsertContactAttributes
-} from '../../../../../store_actions/contacts'
+import { deleteContact } from '../../../../../store_actions/contacts'
 
 import Header from './header'
 import NoContact from './no-contact'
-import Stage from '../components/Stage'
 import Loading from '../../../../Partials/Loading'
 import { Container } from '../components/Container'
 import NoSearchResults from '../../../../Partials/no-search-results'
@@ -73,44 +69,23 @@ class ContactsList extends React.Component {
           </Fragment>
         ),
         id: 'email',
-        accessor: contact => Contact.get.email(contact),
-        Cell: ({ original: contact }) => Contact.get.email(contact)
+        accessor: contact => Contact.get.email(contact)
       },
       {
         Header: 'PHONE',
         id: 'phone',
-        accessor: contact => Contact.get.phone(contact),
-        Cell: ({ original: contact }) => Contact.get.phone(contact)
+        accessor: contact => Contact.get.phone(contact)
       },
       {
         Header: () => (
           <Fragment>
-            STAGE
+            TAGS
             <i className="fa fa-caret-down" />
             <i className="fa fa-caret-up" />
           </Fragment>
         ),
-        id: 'stage',
-        accessor: contact => Contact.get.stage(contact).name,
-        className: 'td--dropdown-container',
-        Cell: ({ original: contact }) => (
-          <Stage
-            defaultTitle={Contact.get.stage(contact).name}
-            handleOnSelect={stage => this.onChangeStage(stage, contact)}
-          />
-        )
-      },
-      {
-        Header: () => (
-          <Fragment>
-            SOURCE
-            <i className="fa fa-caret-down" />
-            <i className="fa fa-caret-up" />
-          </Fragment>
-        ),
-        id: 'source',
-        accessor: contact => Contact.get.source(contact).label,
-        Cell: ({ original: contact }) => Contact.get.source(contact).label
+        id: 'tag',
+        Cell: ({ original: contact }) => this.getTagsTitle(contact)
       },
       {
         id: 'td-delete',
@@ -153,7 +128,6 @@ class ContactsList extends React.Component {
     ]
 
     this.handleOnDelete = this.handleOnDelete.bind(this)
-    this.onChangeStage = this.onChangeStage.bind(this)
   }
 
   handleOnDelete(event, contactId) {
@@ -175,20 +149,6 @@ class ContactsList extends React.Component {
 
     await deleteContact(contactId)
     this.setState({ deletingContact: null })
-  }
-
-  async onChangeStage(stage, contact) {
-    const { upsertContactAttributes } = this.props
-    const { id: contactId } = contact
-    const attributes = [
-      {
-        id: Contact.get.stage(contact).id,
-        type: 'stage',
-        stage
-      }
-    ]
-
-    await upsertContactAttributes({ contactId, attributes })
   }
 
   onInputChange = filter => this.setState({ filter })
@@ -225,6 +185,38 @@ class ContactsList extends React.Component {
     return matched
   }
 
+  getTagsTitle = contact => {
+    const tags = Contact.get.tags(contact)
+
+    if (Object.keys(tags).length === 0) {
+      return <p style={{ color: '#8da2b5', marginBottom: 0 }}>No Tags</p>
+    }
+
+    let tagString = ''
+    // We can't break forEach.
+    let stopForeach = false
+
+    Object.keys(tags).forEach((key, index) => {
+      if (!stopForeach) {
+        let tag = tags[key].tag
+
+        // max kength 28 came from design
+        if (tagString.length + tag.length <= 28) {
+          tagString +=
+            tag +
+            // Add ', ' if it is not the last item in  the object
+            (index !== Object.keys(tags).length - 1 ? ', ' : '')
+        } else {
+          stopForeach = true
+          // remove the last ', '
+          tagString = tagString.slice(0, -2)
+          tagString += ` and ${Object.keys(tags).length - index} more`
+        }
+      }
+    })
+
+    return tagString
+  }
   render() {
     const { deletingContact } = this.state
     const { user, isFetching, contactsList, loadingImport } = this.props
@@ -310,6 +302,5 @@ function mapStateToProps({ user, contacts }) {
 
 export default connect(mapStateToProps, {
   confirmation,
-  deleteContact,
-  upsertContactAttributes
+  deleteContact
 })(ContactsList)
