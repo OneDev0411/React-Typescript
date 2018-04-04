@@ -211,9 +211,10 @@ export function isCurrency(field) {
  * returns check context is disabled
  */
 export function isDisabled(deal, field) {
-  if (field.name === 'list_price' && deal.listing) {
-    return true
-  }
+  // https://gitlab.com/rechat/product/issues/236
+  // if (field.name === 'list_price' && deal.listing) {
+  //   return true
+  // }
 
   return false
 }
