@@ -111,8 +111,40 @@ export const fields = [
     pluralName: 'job_titles'
   },
   {
+    value: 'street_number',
+    label: 'Street Number',
+    dataType: 'string',
+    singularName: 'address',
+    pluralName: 'addresses',
+    hasLabel: true
+  },
+  {
+    value: 'street_prefix',
+    label: 'Street Prefix',
+    dataType: 'string',
+    singularName: 'address',
+    pluralName: 'addresses',
+    hasLabel: true
+  },
+  {
+    value: 'street_suffix',
+    label: 'Street Suffix',
+    dataType: 'string',
+    singularName: 'address',
+    pluralName: 'addresses',
+    hasLabel: true
+  },
+  {
     value: 'street_name',
     label: 'Street Name',
+    dataType: 'string',
+    singularName: 'address',
+    pluralName: 'addresses',
+    hasLabel: true
+  },
+  {
+    value: 'unit_number',
+    label: 'Unit',
     dataType: 'string',
     singularName: 'address',
     pluralName: 'addresses',

@@ -28,7 +28,11 @@ const LabelOptions = {
     { label: 'Twitter', value: 'Twitter' },
     { label: 'Blog', value: 'Blog' }
   ],
+  street_number: AddressLabelOptions,
+  street_prefix: AddressLabelOptions,
   street_name: AddressLabelOptions,
+  street_suffix: AddressLabelOptions,
+  unit_number: AddressLabelOptions,
   city: AddressLabelOptions,
   state: AddressLabelOptions,
   country: AddressLabelOptions,
