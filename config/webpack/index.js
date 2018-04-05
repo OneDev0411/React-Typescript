@@ -1,6 +1,5 @@
 /* eslint-disable object-shorthand */
 const path = require('path')
-const packages = require('../../package.json').dependencies
 
 const env = process.env.NODE_ENV || 'development'
 const __DEV__ = env === 'development'
@@ -29,7 +28,6 @@ const config = {
   },
   globals: {
     'process.env': {
-      PDFJS_VERSION: JSON.stringify(packages['pdfjs-dist'].substring(1)),
       NODE_ENV: JSON.stringify(env),
       APP_URL: JSON.stringify(process.env.APP_URL),
       RECHAT_API_URL: JSON.stringify(process.env.RECHAT_API_URL),
