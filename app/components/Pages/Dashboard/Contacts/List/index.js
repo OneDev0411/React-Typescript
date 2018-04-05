@@ -7,7 +7,7 @@ import Avatar from 'react-avatar'
 import { Dropdown, MenuItem } from 'react-bootstrap'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import { confirmation } from '../../../../../store_actions/confirmation'
-
+import Radio from '../../../../../views/components/radio'
 import Contact from '../../../../../models/contacts'
 
 import {
@@ -33,10 +33,27 @@ class ContactsList extends React.Component {
 
     this.state = {
       filter: '',
-      deletingContact: null
+      deletingContact: null,
+      selectedRows: []
     }
 
     this.columns = [
+      {
+        id: 'td-select',
+        accessor: '',
+        width: 40,
+        sortable: false,
+        Cell: ({ original: contact }) => (
+          <Radio
+            className="select-row"
+            selected={this.state.selectedRows[contact.id]}
+            onClick={e => {
+              e.stopPropagation()
+              this.toggleSelectedRow(contact)
+            }}
+          />
+        )
+      },
       {
         Header: () => (
           <Fragment>
@@ -216,6 +233,22 @@ class ContactsList extends React.Component {
     })
 
     return tagString
+  }
+
+  toggleSelectedRow = contact => {
+    const { selectedRows } = this.state
+    let newSelectedRows = []
+
+    if (selectedRows[contact.id]) {
+      newSelectedRows = _.omit(selectedRows, row => row.id === contact.id)
+    } else {
+      newSelectedRows = {
+        ...selectedRows,
+        [contact.id]: contact
+      }
+    }
+
+    this.setState({ selectedRows: newSelectedRows })
   }
   render() {
     const { deletingContact } = this.state

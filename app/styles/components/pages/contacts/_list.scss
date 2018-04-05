@@ -66,6 +66,17 @@
 %contacts-list--table {
   .contacts-list-table {
     padding: 2em 2em 0;
+    .select-row {
+      visibility: hidden;
+      &.selected {
+        visibility: visible;
+      }
+    }
+    .rt-tr:hover {
+      .select-row {
+        visibility: visible;
+      }
+    }
   }
 }
 

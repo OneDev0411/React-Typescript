@@ -9,16 +9,23 @@ export default ({
   title,
   tooltip = null,
   disabled = false,
+  className,
   onClick = () => null
 }) => (
-  <div className="deal-radio" onClick={onClick}>
+  <div
+    className={cn('deal-radio', { [className]: className, selected })}
+    onClick={onClick}
+  >
     <ToolTip caption={tooltip}>
       <div className="inline">
         <span className={cn('radio-button', { selected, square, disabled })}>
           <Checkmark color={selected ? '#fff' : 'transparent'} />
         </span>
 
-        <span className={cn('radio-label', { disabled })} data-test="radio-label">
+        <span
+          className={cn('radio-label', { disabled })}
+          data-test="radio-label"
+        >
           {title}
         </span>
       </div>
