@@ -1,5 +1,4 @@
 import React from 'react'
-import AddNoteIcon from '../../../../../../views/components/SvgIcons/AddNote'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 class AddNote extends React.Component {
@@ -43,14 +42,7 @@ class AddNote extends React.Component {
     const { note, isSaving } = this.state
 
     return (
-      <form
-        onSubmit={this.handleAddNote}
-        className="c-add-note c-contact-profile-card"
-      >
-        <div className="c-add-note__header">
-          <AddNoteIcon color="#4A4A4A" />
-          <h3 className="c-add-note__title">New Note</h3>
-        </div>
+      <form onSubmit={this.handleAddNote} className="c-add-note">
         <div className="c-add-note__body">
           <textarea
             value={note}

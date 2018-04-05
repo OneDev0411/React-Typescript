@@ -35,8 +35,6 @@ export default class Form extends React.Component {
 
     const isNewRecord = typeof form.role === 'undefined'
 
-    // console.log('isNewRecord', isNewRecord, form)
-
     this.state = {
       form,
       isNewRecord,
@@ -65,7 +63,8 @@ export default class Form extends React.Component {
     if (
       nextProps.form &&
       Object.keys(nextProps.form).length !== 0 &&
-      nextProps.form !== this.props.form
+      (nextProps.form !== this.props.form ||
+        (nextProps.showFormModal && Object.keys(this.state.form).length === 0))
     ) {
       const isNewRecord = typeof nextProps.form.role === 'undefined'
 
@@ -74,6 +73,10 @@ export default class Form extends React.Component {
           this.validate(field, nextProps.form[field])
         })
       } else {
+        this.setState({
+          nameErrorFields: [],
+          nameErrorMessage: ''
+        })
         this.preselectRoles()
       }
 
@@ -83,7 +86,7 @@ export default class Form extends React.Component {
       })
     }
 
-    if (!nextProps.form) {
+    if (!nextProps.form || !nextProps.showFormModal) {
       this.setState({
         form: {},
         invalidFields: []
@@ -148,6 +151,22 @@ export default class Form extends React.Component {
     )
   }
 
+  setCommission(field, value) {
+    const { form } = this.state
+
+    const removeField =
+      field === 'commission_percentage'
+        ? 'commission_dollar'
+        : 'commission_percentage'
+
+    this.setState(
+      {
+        form: _.omit(form, removeField)
+      },
+      () => this.setForm(field, value)
+    )
+  }
+
   /**
    * validate email
    */
@@ -206,7 +225,7 @@ export default class Form extends React.Component {
    * https://gitlab.com/rechat/web/issues/691
    */
   isCommissionRequired(form) {
-    const { deal } = this.props
+    const { deal, isCommissionRequired } = this.props
 
     // https://gitlab.com/rechat/web/issues/760
     if (deal && deal.deal_type === 'Buying' && form.role === 'SellerAgent') {
@@ -214,8 +233,7 @@ export default class Form extends React.Component {
     }
 
     return (
-      Commission.shouldShowCommission(form) &&
-      this.props.isCommissionRequired !== false
+      Commission.shouldShowCommission(form) && isCommissionRequired !== false
     )
   }
 
@@ -373,7 +391,8 @@ export default class Form extends React.Component {
       handlOnHide,
       modalTitle,
       isSaving,
-      submitButtonText
+      submitButtonText,
+      formNotChanged
     } = this.props
 
     return (
@@ -484,7 +503,7 @@ export default class Form extends React.Component {
               form={form}
               isRequired={this.isCommissionRequired(form)}
               validateCommission={this.validateCommission.bind(this)}
-              onChange={(field, value) => this.setForm(field, value)}
+              onChange={(field, value) => this.setCommission(field, value)}
             />
           </div>
         </Modal.Body>
@@ -493,7 +512,7 @@ export default class Form extends React.Component {
           <p className="modal-footer-error">{nameErrorMessage}</p>
           <Button
             onClick={this.submit}
-            disabled={!isFormCompleted || isSaving}
+            disabled={!isFormCompleted || isSaving || formNotChanged}
             bsStyle={!isFormCompleted ? 'link' : 'primary'}
             className={`btn-deal ${!isFormCompleted ? 'disabled' : ''}`}
           >

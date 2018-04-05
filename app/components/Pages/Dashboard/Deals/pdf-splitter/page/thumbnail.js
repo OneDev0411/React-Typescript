@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import cn from 'classnames'
 import { DragSource } from 'react-dnd'
 import {
   selectSplitterPage,
@@ -19,10 +18,10 @@ const pageSource = {
       pageNumber: props.pageNumber
     }
   },
-  canDrag(props, monitor) {
+  canDrag(props) {
     return !props.inUse
   },
-  endDrag(props, monitor, component) {
+  endDrag(props, monitor) {
     if (!monitor.didDrop()) {
       return
     }
@@ -49,9 +48,7 @@ class PageThumbnail extends React.Component {
   }
 
   previewPage() {
-    const {
-      pdfId, doc, pageNumber, setPagePreview
-    } = this.props
+    const { pdfId, doc, pageNumber, setPagePreview } = this.props
 
     setPagePreview({ pdfId, doc, pageNumber })
   }
@@ -94,4 +91,6 @@ class PageThumbnail extends React.Component {
 }
 
 const connectedPageThumbnail = connect(null, { setPagePreview })(PageThumbnail)
-export default DragSource('SPLITTER_PDF_PAGE', pageSource, collect)(connectedPageThumbnail)
+export default DragSource('SPLITTER_PDF_PAGE', pageSource, collect)(
+  connectedPageThumbnail
+)

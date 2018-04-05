@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
 import Deal from '../../../../../../models/Deal'
+import DealContext from '../../../../../../models/DealContext'
 import { getStatusColorClass } from '../../../../../../utils/listing'
 import StatusModal from './listing-status-modal'
-import ToolTip from '../../components/tooltip'
 import Message from '../../../Chatroom/Util/message'
 import {
   updateContext,
@@ -67,8 +67,14 @@ class ListingStatus extends React.Component {
 
     const title = `Change listing status to ${status}`
 
-    const checklist = checklists[deal.checklists[0]]
-    const task = await createGenericTask(deal.id, title, checklist.id)
+    const activeOfferChecklistId = deal.checklists.find(
+      id =>
+        !checklists[id].is_deactivated &&
+        !checklists[id].is_terminated &&
+        checklists[id].checklist_type === 'Buying'
+    )
+
+    const task = await createGenericTask(deal.id, title, activeOfferChecklistId)
 
     const message = {
       comment: `Hello, Please change listing status to ${status}`,
@@ -141,16 +147,17 @@ class ListingStatus extends React.Component {
           )}
         </div>
 
-        {!isBackOffice && (
-          <div>
-            <button
-              onClick={() => this.toggleModal()}
-              className="btn-change-status"
-            >
-              Change Status
-            </button>
-          </div>
-        )}
+        {!isBackOffice &&
+          DealContext.getHasActiveOffer(deal) && (
+            <div>
+              <button
+                onClick={() => this.toggleModal()}
+                className="btn-change-status"
+              >
+                Change Status
+              </button>
+            </div>
+          )}
       </Fragment>
     )
   }

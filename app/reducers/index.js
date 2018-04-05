@@ -9,6 +9,7 @@ import socket from './socket'
 import contacts from './contacts'
 import chatroom from './chatroom'
 import deals from './deals'
+import { tasks } from './tasks'
 import brandConsole from './brandConsole'
 import search from './listings/search'
 import alerts from './listings/alerts'
@@ -26,6 +27,7 @@ const appReducer = combineReducers({
   user,
   auth,
   brand,
+  tasks,
   contacts,
   chatroom,
   widgets,

@@ -1,5 +1,4 @@
 import _ from 'underscore'
-import { browserHistory } from 'react-router'
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
 
@@ -11,7 +10,7 @@ function initializeForms(forms) {
 }
 
 export function getForms() {
-  return async (dispatch) => {
+  return async dispatch => {
     const forms = await Deal.getForms()
     const indexedForms = _.indexBy(forms, 'id')
 
@@ -27,7 +26,7 @@ function formCreated(checklist) {
 }
 
 export function addForm(brandId, checklistId, formId) {
-  return async (dispatch) => {
+  return async dispatch => {
     const response = await Deal.addForm(brandId, checklistId, formId)
 
     dispatch(formCreated(response))
@@ -43,7 +42,7 @@ function formDeleted(checklistId, formId) {
 }
 
 export function deleteForm(checklist, formId) {
-  return async (dispatch) => {
+  return async dispatch => {
     await Deal.deleteForm(checklist, formId)
     dispatch(formDeleted(checklist.id, formId))
   }
@@ -58,7 +57,7 @@ export function updateSubmission(taskId, submission) {
 }
 
 export function saveSubmission(taskId, formId, state, values) {
-  return async (dispatch) => {
+  return async dispatch => {
     const submission = await Deal.saveSubmission(taskId, formId, state, values)
 
     dispatch(updateSubmission(taskId, submission))

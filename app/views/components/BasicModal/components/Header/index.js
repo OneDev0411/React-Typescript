@@ -21,18 +21,28 @@ const Title = styled.h3`
   color: #26465e;
 `
 
+const CloseButton = styled.i`
+  float: right;
+  cursor: pointer;
+  :hover {
+    color: red;
+  }
+`
+
 const propTypes = {
   title: PropTypes.string
 }
 
-function Header(props) {
-  return (
-    <Container>
-      <Title>{props.title}</Title>
-      {props.children}
-    </Container>
-  )
-}
+const Header = ({ title, children, showClose, handleOnClose }) => (
+  <Container>
+    <Title>{title}</Title>
+    {children}
+
+    {showClose && (
+      <CloseButton className="fa fa-times" onClick={handleOnClose} />
+    )}
+  </Container>
+)
 
 Header.propTypes = propTypes
 

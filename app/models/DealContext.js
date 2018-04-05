@@ -157,7 +157,6 @@ export function query(deal, criteria) {
       validate: getValidationFunction(ctx.name),
       properties: getFieldProperties(ctx.name),
       getFormattedValue: getFormattedValue.bind(ctx),
-      disabled: isDisabled(deal, ctx),
       needs_approval: ctx.needs_approval || false
     }))
     .value()
@@ -208,17 +207,6 @@ export function isCurrency(field) {
 }
 
 /**
- * returns check context is disabled
- */
-export function isDisabled(deal, field) {
-  if (field.name === 'list_price' && deal.listing) {
-    return true
-  }
-
-  return false
-}
-
-/**
  * returns value of context
  */
 export function getValue(deal, field) {
@@ -245,6 +233,23 @@ export function getValue(deal, field) {
   }
 
   return dataObject
+}
+
+/**
+ * returns value of a origin
+ * name is field name
+ * origin is context origin (mls or deal)
+ */
+export function getValueByContext(name, context) {
+  const contextInfo = getList().find(ctx => ctx.name === name)
+
+  if (contextInfo.data_type === 'Date') {
+    return moment.unix(context.value).format('MMM DD, YYYY')
+  } else if (isCurrency({ name })) {
+    return Deal.get.formattedPrice(context.value)
+  }
+
+  return context.value
 }
 
 /**
@@ -383,8 +388,8 @@ export default {
   getHasActiveOffer,
   filterByFlags,
   isCurrency,
-  isDisabled,
   getValue,
+  getValueByContext,
   getDateValue,
   parseDate,
   validate,

@@ -14,8 +14,8 @@ import CancelButton from '../Button/CancelButton'
 const propTypes = {
   title: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
+  handleAddManually: PropTypes.func,
   handleOnClose: PropTypes.func.isRequired,
-  handleAddManually: PropTypes.func.isRequired,
   handleSelectedItem: PropTypes.func.isRequired,
   list: PropTypes.arrayOf(PropTypes.shape)
 }
@@ -41,9 +41,10 @@ function SelectContactModal(props) {
       onRequestClose={handleOnClose}
     >
       <Header title={title}>
-        {contactsList.length > 0 && (
-          <AddManuallyButton onClick={handleAddManually} />
-        )}
+        {handleAddManually &&
+          contactsList.length > 0 && (
+            <AddManuallyButton onClick={handleAddManually} />
+          )}
       </Header>
       <Body
         list={contactsList}

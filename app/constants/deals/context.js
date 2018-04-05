@@ -1,3 +1,1 @@
-export default [
-  'GET_CONTEXTS'
-]
+export default ['GET_CONTEXTS']

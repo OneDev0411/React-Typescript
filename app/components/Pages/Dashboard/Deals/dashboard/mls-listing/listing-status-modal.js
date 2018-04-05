@@ -14,6 +14,14 @@ export default class extends React.Component {
     this.statusList = this.getStatues()
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { show, status } = nextProps
+
+    if (show && show !== this.props.show) {
+      this.setState({ selectedStatus: status })
+    }
+  }
+
   getStatues() {
     const { deal, isBackOffice } = this.props
     const isLeaseDeal = deal.property_type.includes('Lease')

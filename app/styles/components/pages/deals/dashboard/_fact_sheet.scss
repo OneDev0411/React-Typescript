@@ -32,6 +32,10 @@
 
     @extend %deal-fact-approve-row;
 
+    .deal-context-discrepency > .icon-trigger {
+      margin-right: 5px;
+    }
+
     .fact-row {
       display: flex;
       flex-direction: row;

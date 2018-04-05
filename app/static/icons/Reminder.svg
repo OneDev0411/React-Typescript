@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Reminder</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Reminder" fill="#000000" fill-rule="nonzero">
+            <path d="M50.004,0 C22.391,0 0.004,22.383 0.004,50 C0.004,77.613 22.391,100 50.004,100 C77.613,100 100,77.613 100,50 C99.996094,22.383 77.613,0 50.004,0 Z M50.004,88.656 C28.649,88.656 11.332,71.347 11.332,50 C11.332,28.645 28.648,11.336 50.004,11.336 C71.356,11.336 88.668,28.645 88.668,50 C88.668,71.348 71.356,88.656 50.004,88.656 Z" id="Shape"></path>
+            <polygon id="Shape" points="55.668 22.723 44.34 22.723 44.34 55.664 72.281 67.484 76.7107 57.05 55.6677 48.1203"></polygon>
+        </g>
+    </g>
+</svg>

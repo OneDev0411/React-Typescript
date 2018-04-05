@@ -34,6 +34,8 @@ const getActivePath = path => {
       return 'STORE'
     case checkPath(/\/dashboard\/deals/):
       return 'DEALS'
+    case checkPath(/\/crm\/tasks/):
+      return 'TASKS'
     default:
       return ''
   }
@@ -67,7 +69,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
 
         <SideNavItem isActive={activePath === 'MAP'}>
           <Link to="/dashboard/mls" className="c-app-sidenav__item__title">
-          Properties
+            Properties
           </Link>
         </SideNavItem>
 
@@ -87,6 +89,14 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
             <Link to="/dashboard/deals" className="c-app-sidenav__item__title">
               Deals
               <DealsNotifications />
+            </Link>
+          </SideNavItem>
+        )}
+
+        {hasContactsPermission && (
+          <SideNavItem isActive={activePath === 'TASKS'}>
+            <Link to="/crm/tasks" className="c-app-sidenav__item__title">
+              Tasks
             </Link>
           </SideNavItem>
         )}

@@ -44,6 +44,7 @@ import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
 import { inactiveIntercom } from '../store_actions/intercom'
+import VerifyPhoneNumber from './Partials/VerifyPhoneNumber'
 
 class App extends Component {
   componentWillMount() {
@@ -186,9 +187,7 @@ class App extends Component {
       google_analytics_id = brand.assets.google_analytics_id
     }
 
-    ReactGA.initialize(google_analytics_id, {
-      debug: true
-    })
+    ReactGA.initialize(google_analytics_id)
     ReactGA.ga(
       'create',
       google_analytics_id,
@@ -314,6 +313,8 @@ class App extends Component {
         <main className={`l-app__main ${user ? 'is-logged-in' : ''}`}>
           {children}
         </main>
+
+        {user && <VerifyPhoneNumber user={user} unclosable />}
       </div>
     )
   }

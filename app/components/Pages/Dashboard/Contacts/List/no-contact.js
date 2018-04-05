@@ -1,7 +1,6 @@
 import React from 'react'
 import AddContact from '../AddContactModal'
-import ImportOutlook from './ImportOutlook'
-import ImportCsv from './ImportCsv'
+import Import from './Import'
 
 export default ({ user, contactsCount }) => {
   if (contactsCount > 0) {
@@ -14,8 +13,7 @@ export default ({ user, contactsCount }) => {
       <p>To get started, click the blue button to add contact</p>
       <div className="no-contacts--button-container">
         <AddContact user={user} onNewContact={id => onNewContact(id)} />
-        <ImportOutlook userId={user.id} />
-        {/* <ImportCsv /> */}
+        <Import userId={user.id} />
       </div>
     </div>
   )

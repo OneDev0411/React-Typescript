@@ -2,6 +2,8 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 
+import { Tab, Nav, NavItem } from 'react-bootstrap'
+
 import { Container } from '../components/Container'
 import Stage from './Stage'
 import Contact from '../../../../../models/contacts'
@@ -13,22 +15,30 @@ import Details from './Details'
 import Addresses from './Addresses'
 import AddNote from './Add-Note'
 import Activities from './Activities'
+import Loading from '../../../../Partials/Loading'
+import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
+import IconNote from '../../../../../views/components/SvgIcons/Note/IconNote'
+import IconTodo from '../../../../../views/components/SvgIcons/Todo/IconTodo'
+import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
+
+import { getTasks } from '../../../../../models/tasks'
 
 import {
   getContact,
   getContactActivities,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
-import { selectContact } from '../../../../../reducers/contacts/list'
 import { selectTags } from '../../../../../reducers/contacts/tags'
+import { selectContact } from '../../../../../reducers/contacts/list'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
-import Loading from '../../../../Partials/Loading'
+import { normalizeContact } from '../../../../../views/utils/association-normalizers'
 
 class ContactProfile extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      tasks: [],
       activeTab: 'timeline'
     }
 
@@ -56,6 +66,18 @@ class ContactProfile extends React.Component {
     } else if (!contact.activities) {
       await getContactActivities(contactId)
     }
+
+    const query = [
+      'order=-updated_at',
+      `contact=${contactId}`,
+      'associations[]=crm_task.reminders',
+      'associations[]=crm_task.associations'
+    ].join('&')
+
+    const response = await getTasks(query)
+    const { data: tasks } = response
+
+    this.setState({ tasks })
   }
 
   goBack = () => browserHistory.push('/dashboard/contacts')
@@ -101,12 +123,26 @@ class ContactProfile extends React.Component {
       ]
     })
 
-    this.setState({ activeTab: 'notes' })
+    return this.setState({ activeTab: 'notes-list' })
+  }
 
-    return true
+  setNewTask = task => {
+    this.setState(({ tasks }) => ({
+      tasks: [task, ...tasks],
+      activeTab: 'tasks-list'
+    }))
+  }
+
+  removeTask = taskId => {
+    goBackFromEditTask()
+
+    this.setState(state => ({
+      tasks: state.tasks.filter(task => task.id !== taskId)
+    }))
   }
 
   render() {
+    const { tasks } = this.state
     const { contact, fetchError, defaultTags } = this.props
 
     if (fetchError) {
@@ -153,9 +189,64 @@ class ContactProfile extends React.Component {
           </div>
 
           <div className="right-pane">
-            <AddNote contact={contact} onSubmit={this.handleAddNote} />
+            <Tab.Container
+              id="profile-todo-tabs"
+              defaultActiveKey="note"
+              className="c-contact-profile-todo-tabs c-contact-profile-card"
+            >
+              <div>
+                <Nav className="c-contact-profile-todo-tabs__tabs-list">
+                  <NavItem
+                    className="c-contact-profile-todo-tabs__tab"
+                    eventKey="note"
+                  >
+                    <IconNote />
+                    <span className="c-contact-profile-todo-tabs__tab__title">
+                      New Note
+                    </span>
+                    <span className="c-contact-profile-todo-tabs__tab__indicator" />
+                  </NavItem>
+                  <NavItem
+                    className="c-contact-profile-todo-tabs__tab"
+                    eventKey="task"
+                  >
+                    <IconTodo />
+                    <span className="c-contact-profile-todo-tabs__tab__title">
+                      Create Task
+                    </span>
+                    <span className="c-contact-profile-todo-tabs__tab__indicator" />
+                  </NavItem>
+                </Nav>
+
+                <Tab.Content
+                  animation
+                  className="c-contact-profile-todo-tabs__pane-container"
+                >
+                  <Tab.Pane
+                    eventKey="note"
+                    className="c-contact-profile-todo-tabs__pane"
+                  >
+                    <AddNote contact={contact} onSubmit={this.handleAddNote} />
+                  </Tab.Pane>
+                  <Tab.Pane
+                    eventKey="task"
+                    className="c-contact-profile-todo-tabs__pane"
+                  >
+                    <NewTask
+                      submitCallback={this.setNewTask}
+                      deleteCallback={this.removeTask}
+                      defaultAssociation={{
+                        association_type: 'contact',
+                        contact: normalizeContact(contact)
+                      }}
+                    />
+                  </Tab.Pane>
+                </Tab.Content>
+              </div>
+            </Tab.Container>
 
             <Activities
+              tasks={tasks}
               contact={contact}
               activeTab={activeTab}
               onChangeAttribute={this.onChangeAttribute}
@@ -168,7 +259,7 @@ class ContactProfile extends React.Component {
   }
 }
 
-const mapStateToProps = ({ contacts, user }, { params: { id: contactId } }) => {
+const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
   const { list, contact, tags } = contacts
 
   const defaultTags = selectTags(tags)

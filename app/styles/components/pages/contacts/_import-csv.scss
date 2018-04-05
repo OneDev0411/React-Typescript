@@ -1,0 +1,172 @@
+.contact__import-csv {
+  padding-bottom: 30px;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  .c-stepper {
+    margin: 0 auto;
+    width: 500px;
+  }
+}
+
+.contact__import-csv > .contact__import-csv__container {
+  max-height: 85vh;
+  min-height: 85vh;
+  overflow: auto;
+
+  .current-step {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 500;
+  }
+}
+
+.contact__import-csv--mapper {
+  margin: 50px 0 40px 0;
+  padding: 0 16px;
+  min-height: 300px;
+
+  .column-row {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #17283a;
+    margin-bottom: 10px;
+    height: 56px;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: solid 1px #e7eef2;
+    padding: 0 15px;
+
+    &.heading {
+      padding: 0;
+      background-color: transparent;
+      border: none;
+      font-weight: 500;
+      color: #8da2b5;
+    }
+
+    .name {
+      width: 40%;
+      &.is-empty {
+        color: gray;
+      }
+
+      &.show-empty-cta {
+        cursor: pointer;
+        color: #62778c;
+        text-decoration: underline;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    .map-list {
+      width: 35%;
+    }
+
+    .map-label {
+      width: 25%;
+      padding-left: 10px;
+      position: relative;
+      .isInvalid {
+        border: 1px solid red;
+        border-radius: 4px;
+      }
+      .required {
+        background-color: red;
+        color: #fff;
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-radius: 0 4px 0 4px;
+        padding: 4px 3px;
+      }
+    }
+  }
+}
+
+.contact__import-csv--upload {
+  padding: 0 12%;
+}
+
+.contact__import-csv--upload-info {
+  color: #62778c;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 500;
+
+  .sk-circle {
+    margin-bottom: 40px;
+  }
+}
+
+.contact__import-csv__footer {
+  position: absolute;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  padding-right: 16px;
+  background-color: #f8fafb;
+  border-top: solid 1px #dce5eb;
+
+  button {
+    min-width: 90px;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .contact__import-csv--upload__cancel-btn {
+    margin-right: 10px;
+  }
+}
+
+.contact__import-csv--select-file {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 65vh;
+}
+
+.contact__import-csv--select-file
+  > .contact__import-csv--select-file__dropzone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 90%;
+  height: 210px;
+  border-radius: 3px;
+  background-color: #f0f4f7;
+  border: 1px dashed #62778c;
+  &.hasFile {
+    background-color: rgba(33, 150, 243, 0.05);
+  }
+
+  &.isActive {
+    background-color: #fff;
+  }
+
+  .inner {
+    font-size: 14px;
+    color: #758a9e;
+  }
+
+  .inner > img {
+    width: 50px;
+    margin-bottom: 15px;
+  }
+
+  .inner .link {
+    color: #2196f3;
+    cursor: pointer;
+  }
+}

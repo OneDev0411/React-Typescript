@@ -6,6 +6,7 @@ import Commission from '../factsheet/commission'
 import Roles from '../roles'
 import MlsListing from '../mls-listing'
 import DealSide from './side'
+import DealEmail from '../deal-email'
 
 export default ({ deal, showBackButton = true }) => {
   const isWebkit = 'WebkitAppearance' in document.documentElement.style
@@ -17,6 +18,7 @@ export default ({ deal, showBackButton = true }) => {
 
         <MlsListing deal={deal} />
         <DealSide deal={deal} />
+        <DealEmail dealEmail={deal.email} marginBottom />
 
         <div className="deal-fact-sheet">
           <CriticalDates deal={deal} />

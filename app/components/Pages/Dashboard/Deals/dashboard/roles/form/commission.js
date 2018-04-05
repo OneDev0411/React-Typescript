@@ -25,12 +25,7 @@ export default class Commission extends React.Component {
    * set form commission type
    */
   setCommissionType(type) {
-    const { onChange } = this.props
-
-    // reset current value
-    onChange(this.getCommissionField(), 0)
-
-    this.setState({ commission_type: type }, () => this.setCommission(''))
+    this.setState({ commission_type: type }, () => this.setCommission(0))
   }
 
   /**
