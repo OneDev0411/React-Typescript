@@ -44,7 +44,6 @@ import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
 import { inactiveIntercom } from '../store_actions/intercom'
-import VerifyPhoneNumber from './Partials/VerifyPhoneNumber'
 
 class App extends Component {
   componentWillMount() {
@@ -313,8 +312,6 @@ class App extends Component {
         <main className={`l-app__main ${user ? 'is-logged-in' : ''}`}>
           {children}
         </main>
-
-        {/* {user && <VerifyPhoneNumber user={user} unclosable />} */}
       </div>
     )
   }
