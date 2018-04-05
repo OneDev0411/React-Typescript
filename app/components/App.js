@@ -314,7 +314,7 @@ class App extends Component {
           {children}
         </main>
 
-        {user && <VerifyPhoneNumber user={user} unclosable />}
+        {/* {user && <VerifyPhoneNumber user={user} unclosable />} */}
       </div>
     )
   }

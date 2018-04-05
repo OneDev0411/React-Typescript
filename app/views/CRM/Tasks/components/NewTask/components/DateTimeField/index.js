@@ -28,7 +28,8 @@ class DateTimeField extends React.Component {
       timeItems,
       isRequired,
       selectedDate,
-      datePickerModifiers
+      datePickerModifiers,
+      defaultSelectedDate
     } = this.props
 
     return (
@@ -49,6 +50,7 @@ class DateTimeField extends React.Component {
             name={`${name}Date`}
             component={DateField}
             id={`new-task__${id}`}
+            defaultSelectedItem={defaultSelectedDate}
             datePickerModifiers={datePickerModifiers}
           />
           {selectedDate.value && (
