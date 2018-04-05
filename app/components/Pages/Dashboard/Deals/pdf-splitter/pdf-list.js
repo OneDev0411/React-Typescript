@@ -10,6 +10,7 @@ import {
   setSplitterPdfObject,
   resetSplitter
 } from '../../../../../store_actions/deals'
+import importPdfJs from '../../../../../utils/import-pdf-js'
 
 class PDF extends React.Component {
   constructor(props) {
@@ -23,9 +24,7 @@ class PDF extends React.Component {
   async initialize() {
     const { notify } = this.props
 
-    /* eslint-disable max-len */
-    const PDFJS = await import('pdfjs-dist' /* webpackChunkName: "pdfjs" */)
-
+    const PDFJS = await importPdfJs()
     const { splitter, setSplitterPdfObject, resetSplitter } = this.props
 
     let invalidFilesCount = 0
