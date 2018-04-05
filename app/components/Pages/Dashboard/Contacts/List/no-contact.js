@@ -13,7 +13,7 @@ export default ({ user, contactsCount }) => {
       <p>To get started, click the blue button to add contact</p>
       <div className="no-contacts--button-container">
         <AddContact user={user} onNewContact={id => onNewContact(id)} />
-        {/*<Import userId={user.id} />*/}
+        <Import userId={user.id} />
       </div>
     </div>
   )
