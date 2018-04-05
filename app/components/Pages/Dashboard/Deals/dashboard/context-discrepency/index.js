@@ -61,6 +61,16 @@ class ContextDiscrepency extends React.Component {
     return null
   }
 
+  getApproverName() {
+    const { history } = this.state
+
+    if (history && history.length > 0) {
+      return ContextHistory.getApproverName(history[0])
+    }
+
+    return null
+  }
+
   async loadHistory() {
     const { deal, contextName } = this.props
 
@@ -123,7 +133,7 @@ class ContextDiscrepency extends React.Component {
 
           <div className="item">
             <div>Approved By</div>
-            <div>{ContextHistory.getApproverName(discrepency)}</div>
+            <div>{this.getApproverName()}</div>
           </div>
         </div>
 
