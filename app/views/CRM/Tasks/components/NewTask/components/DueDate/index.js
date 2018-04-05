@@ -44,6 +44,7 @@ export default function DueDate({ selectedDate }) {
       timeItems={timeItems}
       dateItems={dateOptions}
       selectedDate={selectedDate}
+      defaultSelectedDate={dateOptions[1]}
       datePickerModifiers={{
         disabled: {
           before: new Date()

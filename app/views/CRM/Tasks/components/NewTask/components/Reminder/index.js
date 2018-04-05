@@ -54,7 +54,7 @@ const getItems = (dueDate = today, selectedDate) => {
 }
 
 export default function Reminder({ dueDate, dueTime, selectedDate }) {
-  const dateItems = getItems(dueDate, selectedDate)
+  const dateOptions = getItems(dueDate, selectedDate)
   const now = getTime(new Date().getTime())
   const timeItems = getTimes().filter(
     time =>
@@ -70,9 +70,10 @@ export default function Reminder({ dueDate, dueTime, selectedDate }) {
       id="reminder"
       name="reminder"
       title="Reminder"
-      dateItems={dateItems}
       timeItems={timeItems}
+      dateItems={dateOptions}
       selectedDate={selectedDate}
+      defaultSelectedDate={dateOptions[0]}
       isRequired={typeof selectedDate.value === 'number'}
       datePickerModifiers={{
         disabled: {
