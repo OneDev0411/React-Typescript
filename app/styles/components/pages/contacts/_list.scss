@@ -1,5 +1,6 @@
 .contacts {
   .list {
+    @extend %contacts-list--table;
     @extend %contacts-list--toolbar;
     @extend %contacts-list--no-contact;
   }
@@ -59,6 +60,12 @@
         cursor: pointer;
       }
     }
+  }
+}
+
+%contacts-list--table {
+  .contacts-list-table {
+    padding: 2em 2em 0;
   }
 }
 

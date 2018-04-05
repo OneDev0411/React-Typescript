@@ -261,7 +261,7 @@ class ContactsList extends React.Component {
           <NoSearchResults description="Try typing another name, email, phone or tag." />
         ) : (
           <ReactTable
-            className="list-table"
+            className="contacts-list-table"
             pageSize={Object.keys(filteredContacts).length}
             showPaginationBottom={false}
             data={Object.values(filteredContacts)}
