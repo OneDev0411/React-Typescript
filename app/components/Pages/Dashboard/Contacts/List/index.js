@@ -313,7 +313,7 @@ class ContactsList extends React.Component {
                 {selectedRowsLength > 0 ? `${selectedRowsLength} of ` : ''}
                 {`${filteredContacts.length} Contacts`}
               </SecondHeaderText>
-              <ExportContacts user={user} />
+              <ExportContacts selectedRows={selectedRows} />
             </SecondHeader>
             <ReactTable
               className="contacts-list-table"
