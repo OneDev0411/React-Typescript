@@ -127,15 +127,13 @@ class Landing extends Component {
           </div>
           {user ? (
             <div>
-              {window.innerWidth > 1200 && (
-                <Link
-                  to={getDefaultHomePage(user)}
-                  className="btn btn-default"
-                  style={{ ...BUTTON_STYLE, marginRight: '1em' }}
-                >
-                  DASHBOARD
-                </Link>
-              )}
+              <Link
+                to={getDefaultHomePage(user)}
+                className="btn btn-default"
+                style={{ ...BUTTON_STYLE, marginRight: '1em' }}
+              >
+                DASHBOARD
+              </Link>
               <a
                 className="btn btn-default"
                 style={BUTTON_STYLE}

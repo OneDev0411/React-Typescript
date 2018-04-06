@@ -1,6 +1,7 @@
 import React from 'react'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import Page from './Page'
+import importPdfJs from '../../../utils/import-pdf-js'
 
 class PdfViewer extends React.Component {
   constructor(props) {
@@ -95,7 +96,7 @@ class PdfViewer extends React.Component {
     }
 
     // lazy load
-    const PDFJS = await import('pdfjs-dist' /* webpackChunkName: "pdf.combined" */)
+    const PDFJS = await importPdfJs()
 
     this.setState({
       uri,
