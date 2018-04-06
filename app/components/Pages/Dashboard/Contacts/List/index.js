@@ -46,7 +46,7 @@ class ContactsList extends React.Component {
 
     this.state = {
       filter: '',
-      deletingContact: null,
+      deletingContacts: [],
       selectedRows: {}
     }
 
@@ -146,7 +146,7 @@ class ContactsList extends React.Component {
                   eventKey="Delete"
                   key={`contact_${contactId}__dropdown__item_delete`}
                   style={{ width: '100%', textAlign: 'left' }}
-                  onClick={event => this.handleOnDelete(event, contact.id)}
+                  onClick={event => this.handleOnDelete(event, [contact.id])}
                 >
                   Delete
                 </MenuItem>
@@ -160,25 +160,27 @@ class ContactsList extends React.Component {
     this.handleOnDelete = this.handleOnDelete.bind(this)
   }
 
-  handleOnDelete(event, contactId) {
+  handleOnDelete(event, contactIds) {
     event.stopPropagation()
 
     this.props.confirmation({
       show: true,
       confirmLabel: 'Delete',
-      message: 'Delete Contact',
-      onConfirm: () => this.handleDeleteContact({ contactId }),
-      description: 'Are you sure you want to delete this contact?'
+      message: `Delete ${contactIds.length > 1 ? 'contacts' : 'contact'}`,
+      onConfirm: () => this.handleDeleteContact({ contactIds }),
+      description: `Are you sure you want to delete ${
+        contactIds.length > 1 ? 'these contacts' : 'this contact'
+      }?`
     })
   }
 
-  async handleDeleteContact({ contactId }) {
-    this.setState({ deletingContact: contactId })
+  async handleDeleteContact({ contactIds }) {
+    this.setState({ deletingContacts: contactIds })
 
     const { deleteContacts } = this.props
 
-    await deleteContacts([contactId])
-    this.setState({ deletingContact: null })
+    await deleteContacts(contactIds)
+    this.setState({ deletingContacts: [] })
   }
 
   onInputChange = filter => this.setState({ filter })
@@ -264,7 +266,7 @@ class ContactsList extends React.Component {
     this.setState({ selectedRows: newSelectedRows })
   }
   render() {
-    const { deletingContact, selectedRows } = this.state
+    const { deletingContacts, selectedRows } = this.state
     const { user, isFetching, contactsList, loadingImport } = this.props
     const contactsCount = contactsList.length
 
@@ -314,6 +316,18 @@ class ContactsList extends React.Component {
                 {`${filteredContacts.length} Contacts`}
               </SecondHeaderText>
               <ExportContacts selectedRows={selectedRows} />
+              {selectedRowsLength > 0 && (
+                <div className="list--secondary-button">
+                  <button
+                    className="button c-button--shadow"
+                    onClick={event =>
+                      this.handleOnDelete(event, Object.keys(selectedRows))
+                    }
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
             </SecondHeader>
             <ReactTable
               className="contacts-list-table"
@@ -322,7 +336,7 @@ class ContactsList extends React.Component {
               data={Object.values(filteredContacts)}
               columns={this.columns}
               getTrProps={(state, { original: { id: contactId } }) => {
-                if (deletingContact === contactId) {
+                if (deletingContacts.includes(contactId)) {
                   return {
                     style: {
                       opacity: 0.5,
