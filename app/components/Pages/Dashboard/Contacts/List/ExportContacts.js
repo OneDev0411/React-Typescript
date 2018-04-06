@@ -12,13 +12,13 @@ export default ({ selectedRows }) => {
     <div className="list--secondary-button">
       <OverlayTrigger
         placement="bottom"
-        overlay={<Tooltip id="tooltip">Export to CSV</Tooltip>}
+        overlay={<Tooltip id="tooltip">Export contacts to a CSV file</Tooltip>}
       >
         <a
           href={`/api/export/contacts/outlook.csv?${idsQuery}`}
           className="button c-button--shadow"
         >
-          Export Contacts
+          Export to CSV
         </a>
       </OverlayTrigger>
     </div>
