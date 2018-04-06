@@ -9,7 +9,7 @@ import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import Radio from '../../../../../views/components/radio'
 import Contact from '../../../../../models/contacts'
-
+import styled from 'styled-components'
 import {
   selectContacts,
   isFetchingContactsList
@@ -27,6 +27,17 @@ function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
 }
 
+const SecondHeader = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+`
+const SecondHeaderText = styled.p`
+  font-size: 17px;
+  margin-bottom: 0;
+  margin-right: 8px;
+`
+
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
@@ -34,7 +45,7 @@ class ContactsList extends React.Component {
     this.state = {
       filter: '',
       deletingContact: null,
-      selectedRows: []
+      selectedRows: {}
     }
 
     this.columns = [
@@ -237,7 +248,7 @@ class ContactsList extends React.Component {
 
   toggleSelectedRow = contact => {
     const { selectedRows } = this.state
-    let newSelectedRows = []
+    let newSelectedRows = {}
 
     if (selectedRows[contact.id]) {
       newSelectedRows = _.omit(selectedRows, row => row.id === contact.id)
@@ -251,7 +262,7 @@ class ContactsList extends React.Component {
     this.setState({ selectedRows: newSelectedRows })
   }
   render() {
-    const { deletingContact } = this.state
+    const { deletingContact, selectedRows } = this.state
     const { user, isFetching, contactsList, loadingImport } = this.props
     const contactsCount = contactsList.length
 
@@ -278,6 +289,7 @@ class ContactsList extends React.Component {
     const filteredContacts = contactsList.filter(contact =>
       this.applyFilters(contact)
     )
+    const selectedRowsLength = Object.keys(selectedRows).length
 
     return (
       <div className="list">
@@ -293,27 +305,35 @@ class ContactsList extends React.Component {
         {_.size(filteredContacts) === 0 ? (
           <NoSearchResults description="Try typing another name, email, phone or tag." />
         ) : (
-          <ReactTable
-            className="contacts-list-table"
-            pageSize={Object.keys(filteredContacts).length}
-            showPaginationBottom={false}
-            data={Object.values(filteredContacts)}
-            columns={this.columns}
-            getTrProps={(state, { original: { id: contactId } }) => {
-              if (deletingContact === contactId) {
-                return {
-                  style: {
-                    opacity: 0.5,
-                    ponterEvents: 'none'
+          <Fragment>
+            <SecondHeader>
+              <SecondHeaderText>
+                {selectedRowsLength > 0 ? `${selectedRowsLength} of ` : ''}
+                {`${filteredContacts.length} Contacts`}
+              </SecondHeaderText>
+            </SecondHeader>
+            <ReactTable
+              className="contacts-list-table"
+              pageSize={Object.keys(filteredContacts).length}
+              showPaginationBottom={false}
+              data={Object.values(filteredContacts)}
+              columns={this.columns}
+              getTrProps={(state, { original: { id: contactId } }) => {
+                if (deletingContact === contactId) {
+                  return {
+                    style: {
+                      opacity: 0.5,
+                      ponterEvents: 'none'
+                    }
                   }
                 }
-              }
 
-              return {
-                onClick: () => openContact(contactId)
-              }
-            }}
-          />
+                return {
+                  onClick: () => openContact(contactId)
+                }
+              }}
+            />
+          </Fragment>
         )}
       </div>
     )
