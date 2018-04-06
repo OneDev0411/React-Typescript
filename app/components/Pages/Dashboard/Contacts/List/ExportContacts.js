@@ -37,7 +37,7 @@ class ImportOutlook extends React.Component {
       <div className="list--secondary-button">
         <OverlayTrigger
           placement="bottom"
-          overlay={<Tooltip id="tooltip">Export Contacts</Tooltip>}
+          overlay={<Tooltip id="tooltip">Export to CSV</Tooltip>}
         >
           <a
             href="/api/export/contacts/outlook.csv?fileName=contacts.csv"

@@ -17,6 +17,8 @@ import {
 import { deleteContact } from '../../../../../store_actions/contacts'
 
 import Header from './header'
+import ExportContacts from './ExportContacts'
+
 import NoContact from './no-contact'
 import Loading from '../../../../Partials/Loading'
 import { Container } from '../components/Container'
@@ -311,6 +313,7 @@ class ContactsList extends React.Component {
                 {selectedRowsLength > 0 ? `${selectedRowsLength} of ` : ''}
                 {`${filteredContacts.length} Contacts`}
               </SecondHeaderText>
+              <ExportContacts user={user} />
             </SecondHeader>
             <ReactTable
               className="contacts-list-table"
