@@ -1,18 +1,18 @@
 import Fetch from '../../../services/fetch'
 
 /**
- * Deleting a contact.
- * @param {string} contactId The contact's id.
+ * Deleting contacts.
+ * @param {array} contactIds The contacts ids array to be deleted.
  * @returns {object} Returns response - actually nothing. it returns 204.
  */
 
-export default async function deleteContact({ contactId }) {
-  if (!contactId) {
-    throw new Error('Contact id is required.')
+export default async function deleteContacts({ contactIds }) {
+  if (!contactIds || contactIds.length === 0) {
+    throw new Error('Contacts id is required.')
   }
 
   try {
-    return new Fetch().delete(`/contacts/${contactId}`)
+    return new Fetch().delete('/contacts/').send({ ids: contactIds })
   } catch (error) {
     throw error
   }

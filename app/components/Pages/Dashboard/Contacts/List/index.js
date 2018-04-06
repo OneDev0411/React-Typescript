@@ -14,7 +14,7 @@ import {
   selectContacts,
   isFetchingContactsList
 } from '../../../../../reducers/contacts/list'
-import { deleteContact } from '../../../../../store_actions/contacts'
+import { deleteContacts } from '../../../../../store_actions/contacts'
 
 import Header from './header'
 import ExportContacts from './ExportContacts'
@@ -175,9 +175,9 @@ class ContactsList extends React.Component {
   async handleDeleteContact({ contactId }) {
     this.setState({ deletingContact: contactId })
 
-    const { deleteContact } = this.props
+    const { deleteContacts } = this.props
 
-    await deleteContact(contactId)
+    await deleteContacts([contactId])
     this.setState({ deletingContact: null })
   }
 
@@ -358,5 +358,5 @@ function mapStateToProps({ user, contacts }) {
 
 export default connect(mapStateToProps, {
   confirmation,
-  deleteContact
+  deleteContacts
 })(ContactsList)
