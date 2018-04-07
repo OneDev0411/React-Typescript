@@ -104,8 +104,10 @@ export default class Form extends React.Component {
     const dealType = deal ? deal.deal_type : null
 
     if (
-      (name === 'BuyerAgent' && dealType === 'Buying') ||
-      (name === 'SellerAgent' && dealType === 'Selling')
+      ((name === 'BuyerAgent' || form.role === 'BuyerAgent') &&
+        dealType === 'Buying') ||
+      ((name === 'SellerAgent' || form.role === 'SellerAgent') &&
+        dealType === 'Selling')
     ) {
       return false
     }
