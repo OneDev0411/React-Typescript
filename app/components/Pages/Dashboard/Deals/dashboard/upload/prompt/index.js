@@ -52,7 +52,7 @@ class UploadModal extends React.Component {
   }
 
   getSelectedTask(file) {
-    const { upload, selectedTaskInDeal, tasks } = this.props
+    const { selectedTaskInDeal, tasks } = this.props
 
     // tasks-dropdown search filter has cleared by user
     if (file.properties.taskId === null) {

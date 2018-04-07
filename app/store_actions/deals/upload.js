@@ -135,6 +135,8 @@ export function uploadTaskFile(user, task, file, fileName = null) {
 
       return fileData
     } catch (e) {
+      console.log(e)
+
       return null
     }
   }
