@@ -1,4 +1,6 @@
 .deal-email {
+  width: 100%;
+  margin-left: 0;
   color: #263445;
   font-weight: normal;
   background-color: #e1eaef;
@@ -22,7 +24,8 @@
     margin-bottom: 0px;
     margin-left: 8px;
   }
-  .deal-email__share-button {
+  .deal-email__share-icon {
+    margin-left: 8px;
     display: flex;
     align-items: center;
   }
