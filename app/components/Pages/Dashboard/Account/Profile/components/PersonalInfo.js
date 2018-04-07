@@ -8,6 +8,8 @@ import { Field, reduxForm } from 'redux-form'
 import FormCard from './FormCard'
 import SimpleField from './SimpleField'
 import PhoneNumberField from './PhoneNumberField'
+import VerifyMobileNumber from './VerifyPhoneNumber'
+
 import { getBrandInfo } from '../../../../Auth/SignIn'
 import editUser from '../../../../../../store_actions/user/edit'
 
@@ -53,10 +55,11 @@ let PersonalInfoForm = ({
         <Field
           name="phone_number"
           type="tel"
-          label="Phone Number"
+          label="Mobile Number"
           component={PhoneNumberField}
           normalize={value => value.replace(/[^+\d]*/g, '')}
         />
+        <VerifyMobileNumber />
         {submitError && (
           <div className="c-auth__submit-error-alert">{submitError}</div>
         )}

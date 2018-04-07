@@ -159,14 +159,19 @@ class VerifyPhoneNumberModal extends Component {
         <Container>
           {!unclosable && <CloseButton onClick={this.handleOnClose} />}
 
-          <Title>Please check your phone</Title>
+          <Title>Please check your mobile phone</Title>
 
           <p style={{ marginBottom: '24px' }}>
+            <span>We sent a verification code to the number </span>
+            <b>
+              {!unclosable
+                ? user.phone_number
+                : `ending in ******${user.phone_number.substr(-4, 4)}`}
+            </b>
             <span>
-              We sent a verification code to the number ending in ******
+              . Enter it below to unlock your full Rechat account in your mobile
+              phone.
             </span>
-            <b>{user.phone_number.substr(-4, 4)}</b>
-            <span>. Enter it below to unlock your full Rechat account.</span>
           </p>
 
           <div className="c-simple-field">
