@@ -22,30 +22,33 @@ export function TrainingModeBanner({ user }) {
       }}
     >
       <span>Training Mode On</span>
-      <Dropdown
-        dropdown
-        id="account-dropdown"
-        style={{ width: 228, marginTop: 0 }}
-        className="c-app-sidenav__account-dropdown"
-      >
-        <Dropdown.Toggle
-          style={{
-            background: '#fff',
-            color: '#f5a623',
-            fontSize: '1.6rem',
-            padding: '0.25em 0.75em',
-            marginLeft: '1em',
-            borderWidth: 0,
-            width: 'auto'
-          }}
-        >
-          Switch Teams
-        </Dropdown.Toggle>
+      {Array.isArray(user.teams) &&
+        user.teams.length > 1 && (
+          <Dropdown
+            dropdown
+            id="account-dropdown"
+            style={{ width: 228, marginTop: 0 }}
+            className="c-app-sidenav__account-dropdown"
+          >
+            <Dropdown.Toggle
+              style={{
+                background: '#fff',
+                color: '#f5a623',
+                fontSize: '1.6rem',
+                padding: '0.25em 0.75em',
+                marginLeft: '1em',
+                borderWidth: 0,
+                width: 'auto'
+              }}
+            >
+              Switch Teams
+            </Dropdown.Toggle>
 
-        <Dropdown.Menu style={{ top: '2.5em', left: '2em' }}>
-          <TeamSwitcher user={user} />
-        </Dropdown.Menu>
-      </Dropdown>
+            <Dropdown.Menu style={{ top: '2.5em', left: '2em' }}>
+              <TeamSwitcher user={user} />
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
     </div>
   )
 }
