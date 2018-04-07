@@ -219,30 +219,24 @@ class BaseTable extends React.Component {
    *
    */
   hasNotification(deal) {
-    if (deal.new_notifications > 0) {
+    const { isBackOffice } = this.props
+    const notificationCount = isBackOffice
+      ? deal.attention_requests
+      : deal.new_notifications
+
+    if (notificationCount > 0) {
       return (
         <ToolTip
-          caption={`You have ${
-            deal.new_notifications
-          } unread messages in this deal`}
+          caption={`You have ${notificationCount} unread messages in this deal`}
         >
-          <div className="inline unread-notifications">
-            <img src="/static/images/deals/comments.svg" />
-            <span>{deal.new_notifications}</span>
-          </div>
+          <div className="unread-notifications">{notificationCount}</div>
         </ToolTip>
       )
     }
   }
 
   render() {
-    const {
-      deals,
-      tabName,
-      isBackOffice,
-      emptySearchPageIsOpen,
-      filters
-    } = this.props
+    const { deals, isBackOffice, emptySearchPageIsOpen, filters } = this.props
     const { sortBy, sortOrder } = this.state
 
     // apply filter to deals

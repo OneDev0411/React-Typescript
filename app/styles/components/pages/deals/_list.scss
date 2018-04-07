@@ -103,24 +103,14 @@
     }
 
     td.notification-container {
-      padding-right: 16px;
+      padding: 0 16px 0 0;
       .unread-notifications {
-        position: relative;
-        span {
-          position: absolute;
-          top: -6px;
-          right: -6px;
-          background-color: #ff4747;
-          display: block;
-          width: 15px;
-          height: 15px;
-          border-radius: 50px;
-          line-height: 15px;
-          vertical-align: middle;
-          color: #fff;
-          font-size: 10px;
-          text-align: center;
-        }
+        background-color: #ff4747;
+        border-radius: 50%;
+        color: #fff;
+        text-align: center;
+        min-width: 25px;
+        padding: 2px;
       }
     }
     tr.header td {
