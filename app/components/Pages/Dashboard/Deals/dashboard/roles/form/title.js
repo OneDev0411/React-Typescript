@@ -9,7 +9,7 @@ export default ({ form, onChange, isInvalid }) => (
         data-balloon-pos="up"
         data-balloon-length="large"
         className="c-field-balloon c-field-balloon--error"
-        data-balloon="Please select the prefix from the drop-down."
+        data-balloon="Please re-select the prefix from the drop-down."
       />
     )}
     <label>Title</label>
