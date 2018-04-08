@@ -15,7 +15,9 @@ const ROLE_NAMES = [
   'SellerReferral',
   'CoSellerAgent',
   'Buyer',
+  'BuyerPowerOfAttorney',
   'Seller',
+  'SellerPowerOfAttorney',
   'Title',
   'BuyerLawyer',
   'SellerLawyer',
@@ -24,7 +26,9 @@ const ROLE_NAMES = [
   'Appraiser',
   'Inspector',
   'Tenant',
-  'Landlord'
+  'LandlordPowerOfAttorney',
+  'Landlord',
+  'TenantPowerOfAttorney'
 ]
 
 export default class Form extends React.Component {
@@ -49,48 +53,52 @@ export default class Form extends React.Component {
     const { form, isNewRecord } = this.state
 
     if (isNewRecord) {
-      Object.keys(form).forEach(field => {
+      _.keys(form, field => {
         this.validate(field, form[field])
       })
-
-      return
     }
 
     this.preselectRoles()
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.form &&
-      Object.keys(nextProps.form).length !== 0 &&
-      (nextProps.form !== this.props.form ||
-        (nextProps.showFormModal && Object.keys(this.state.form).length === 0))
-    ) {
-      const isNewRecord = typeof nextProps.form.role === 'undefined'
+    const { form, showFormModal } = nextProps
 
-      if (isNewRecord) {
-        Object.keys(nextProps.form).forEach(field => {
-          this.validate(field, nextProps.form[field])
+    if (
+      form &&
+      _.size(form) > 0 &&
+      (form !== this.props.form ||
+        (showFormModal && _.size(this.state.form) === 0))
+    ) {
+      const isNewRecord = typeof form.role === 'undefined'
+
+      if (!isNewRecord) {
+        _.keys(form, field => {
+          this.validate(field, form[field])
         })
       } else {
         this.setState({
           nameErrorFields: [],
           nameErrorMessage: ''
         })
+
         this.preselectRoles()
       }
 
       this.setState({
-        form: nextProps.form,
+        form,
         isNewRecord
       })
     }
 
-    if (!nextProps.form || !nextProps.showFormModal) {
-      this.setState({
-        form: {},
-        invalidFields: []
-      })
+    if (!form || !showFormModal) {
+      this.setState(
+        {
+          form: {},
+          invalidFields: []
+        },
+        () => this.preselectRoles()
+      )
     }
   }
 
@@ -104,8 +112,10 @@ export default class Form extends React.Component {
     const dealType = deal ? deal.deal_type : null
 
     if (
-      (name === 'BuyerAgent' && dealType === 'Buying') ||
-      (name === 'SellerAgent' && dealType === 'Selling')
+      ((name === 'BuyerAgent' || form.role === 'BuyerAgent') &&
+        dealType === 'Buying') ||
+      ((name === 'SellerAgent' || form.role === 'SellerAgent') &&
+        dealType === 'Selling')
     ) {
       return false
     }
@@ -124,14 +134,16 @@ export default class Form extends React.Component {
     const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
     const preselectedRole = availableRoles.length === 1 && availableRoles[0]
 
-    if (preselectedRole) {
-      this.setState({
-        form: {
-          ...this.state.form,
-          role: preselectedRole
-        }
-      })
+    if (!preselectedRole) {
+      return false
     }
+
+    this.setState({
+      form: {
+        ...this.state.form,
+        role: preselectedRole
+      }
+    })
   }
 
   /**

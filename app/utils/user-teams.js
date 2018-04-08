@@ -40,6 +40,25 @@ export function hasUserAccess(user, action) {
   return getActiveTeamACL(user).includes(action)
 }
 
+export function isTrainingAccount(user) {
+  const activeTeam = getActiveTeam(user) || {}
+  let { brand } = activeTeam
+
+  if (!activeTeam || !brand) {
+    return false
+  }
+
+  do {
+    if (brand.training) {
+      return true
+    }
+
+    brand = brand.parent
+  } while (brand)
+
+  return false
+}
+
 function getActiveTeamFromCookieOrUser(user) {
   return cookie.get(ACTIVE_TEAM_COOKIE) || user.activeTeam || user.brand
 }

@@ -25,22 +25,22 @@ const DealEmail = ({ dealEmail, notify, marginBottom = false }) => (
     placement="bottom"
     multiline
   >
-    <div className={cn('deal-email', { marginBottom })}>
+    <button
+      className={cn('c-button--shadow deal-email', { marginBottom })}
+      onClick={() => {
+        copy(dealEmail)
+        notify({
+          message: 'Link Copied',
+          status: 'success'
+        })
+      }}
+    >
       <p className="deal-email__label">Email: </p>
       <p className="deal-email__text">{dealEmail}</p>
-      <button
-        className="c-button--shadow deal-email__share-button"
-        onClick={() => {
-          copy(dealEmail)
-          notify({
-            message: 'Link Copied',
-            status: 'success'
-          })
-        }}
-      >
+      <div className=" deal-email__share-icon">
         <LinkIcon />
-      </button>
-    </div>
+      </div>
+    </button>
   </Tooltip>
 )
 

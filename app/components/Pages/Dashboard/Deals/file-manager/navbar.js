@@ -33,7 +33,7 @@ export class FileManager extends React.Component {
         <div className="deal-navbar">
           <div className="back" onClick={() => this.backToDeal()}>
             <i className="fa fa-chevron-left" />
-            Document List
+            Files
           </div>
 
           <div className="ctas">
