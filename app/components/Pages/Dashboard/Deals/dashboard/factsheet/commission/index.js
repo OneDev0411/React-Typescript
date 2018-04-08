@@ -12,7 +12,7 @@ export default ({ deal }) => {
   return (
     <div className="deal-info-section">
       <Render
-        id="cda"
+        sectionId="cda"
         deal={deal}
         title="CDA INFORMATION"
         table={table}

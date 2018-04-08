@@ -35,7 +35,7 @@ const CriticalDates = ({ deal, showTitle = true }) => {
   return (
     <div className="deal-info-section">
       <Render
-        id="critical-dates"
+        sectionId="critical-dates"
         title="CRITICAL DATES"
         showTitle={showTitle}
         table={table}
