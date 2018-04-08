@@ -420,6 +420,7 @@ export default class Form extends React.Component {
           <div className="deal-roles-form">
             <div className="row-name">
               <Title
+                isInvalid={invalidFields.includes('legal_prefix')}
                 form={form}
                 onChange={value => this.setForm('legal_prefix', value)}
               />
