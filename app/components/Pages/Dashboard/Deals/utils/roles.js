@@ -1,6 +1,10 @@
 const aliases = {
   Title: 'Escrow Officer',
-  Lender: 'Lending Agent'
+  Lender: 'Lending Agent',
+  BuyerPowerOfAttorney: 'Power of Attorney - Buyer',
+  SellerPowerOfAttorney: 'Power of Attorney - Seller',
+  LandlordPowerOfAttorney: 'Power of Attorney - Landlord',
+  TenantPowerOfAttorney: 'Power of Attorney - Tenant'
 }
 
 export function roleName(role) {

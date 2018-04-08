@@ -15,7 +15,9 @@ const ROLE_NAMES = [
   'SellerReferral',
   'CoSellerAgent',
   'Buyer',
+  'BuyerPowerOfAttorney',
   'Seller',
+  'SellerPowerOfAttorney',
   'Title',
   'BuyerLawyer',
   'SellerLawyer',
@@ -24,7 +26,9 @@ const ROLE_NAMES = [
   'Appraiser',
   'Inspector',
   'Tenant',
-  'Landlord'
+  'LandlordPowerOfAttorney',
+  'Landlord',
+  'TenantPowerOfAttorney'
 ]
 
 export default class Form extends React.Component {

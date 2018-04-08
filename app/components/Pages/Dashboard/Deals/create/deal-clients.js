@@ -8,9 +8,14 @@ const SELLING = 'Selling'
 
 function getRoles(side) {
   if (side === BUYING) {
-    return ['Buyer', 'Tenant']
+    return ['Buyer', 'BuyerPowerOfAttorney', 'Tenant', 'TenantPowerOfAttorney']
   } else if (side === SELLING) {
-    return ['Seller', 'Landlord']
+    return [
+      'Seller',
+      'SellerPowerOfAttorney',
+      'Landlord',
+      'LandlordPowerOfAttorney'
+    ]
   }
 
   return []
