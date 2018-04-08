@@ -127,8 +127,13 @@ class CreateDeal extends React.Component {
           dealSide === 'Buying' ? _.size(sellingClients) > 0 : true
       },
       escrow_officer: {
-        validator: () =>
-          dealSide === 'Buying' ? _.size(escrowOfficers) > 0 : true
+        validator: () => {
+          if (dealPropertyType && dealPropertyType.includes('Lease')) {
+            return true
+          }
+
+          return dealSide === 'Buying' ? _.size(escrowOfficers) > 0 : true
+        }
       },
       agents: {
         validator: () =>
@@ -223,6 +228,18 @@ class CreateDeal extends React.Component {
       },
       () => this.validateForm()
     )
+  }
+
+  /**
+   * handles change deal property type
+   */
+  changePropertyType(dealPropertyType) {
+    this.setState({
+      dealPropertyType,
+      dealStatus: '',
+      contexts: {},
+      escrowOfficers: {}
+    })
   }
 
   /**
@@ -446,8 +463,6 @@ class CreateDeal extends React.Component {
   }
 
   render() {
-    const dealContexts = this.getDealContexts()
-
     const {
       saving,
       dealSide,
@@ -465,6 +480,9 @@ class CreateDeal extends React.Component {
       submitError
     } = this.state
 
+    const dealContexts = this.getDealContexts()
+    const isLeaseDeal = dealPropertyType && dealPropertyType.includes('Lease')
+
     return (
       <div className="deal-create">
         <Navbar title="Create New Deal" />
@@ -479,9 +497,7 @@ class CreateDeal extends React.Component {
 
           <DealPropertyType
             selectedType={dealPropertyType}
-            onChangeDealType={dealPropertyType =>
-              this.setState({ dealPropertyType, dealStatus: '' })
-            }
+            onChangeDealType={type => this.changePropertyType(type)}
           />
 
           {dealSide.length > 0 &&
@@ -550,16 +566,18 @@ class CreateDeal extends React.Component {
                       }
                     />
 
-                    <EscrowOfficers
-                      hasError={this.hasError('escrow_officer')}
-                      escrowOfficers={escrowOfficers}
-                      onUpsertEscrowOfficer={form =>
-                        this.onUpsertRole(form, 'escrowOfficers')
-                      }
-                      onRemoveEscrowOfficer={id =>
-                        this.onRemoveRole(id, 'escrowOfficers')
-                      }
-                    />
+                    {!isLeaseDeal && (
+                      <EscrowOfficers
+                        hasError={this.hasError('escrow_officer')}
+                        escrowOfficers={escrowOfficers}
+                        onUpsertEscrowOfficer={form =>
+                          this.onUpsertRole(form, 'escrowOfficers')
+                        }
+                        onRemoveEscrowOfficer={id =>
+                          this.onRemoveRole(id, 'escrowOfficers')
+                        }
+                      />
+                    )}
 
                     <DealStatus
                       hasError={this.hasError('status')}
