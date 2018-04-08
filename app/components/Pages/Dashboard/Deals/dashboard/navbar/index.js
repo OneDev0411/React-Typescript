@@ -48,7 +48,7 @@ class NavBar extends React.Component {
               Get Signatures
             </button>
 
-            {!isBackOffice && <BulkSubmit deal={deal} />}
+            {/* {!isBackOffice && <BulkSubmit deal={deal} />} */}
           </div>
         )}
       </div>
