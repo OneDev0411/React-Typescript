@@ -392,6 +392,10 @@ $margin: 20px;
       font-size: 15px;
       color: #263445;
       font-weight: 400;
+      &.hasError {
+        color: #ec4b35;
+        font-weight: 500;
+      }
     }
 
     input {
