@@ -180,7 +180,7 @@ class ContactsList extends React.Component {
     const { deleteContacts } = this.props
 
     await deleteContacts(contactIds)
-    this.setState({ deletingContacts: [] })
+    this.setState({ deletingContacts: [], selectedRows: [] })
   }
 
   onInputChange = filter => this.setState({ filter })
