@@ -7,7 +7,7 @@ import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 import CriticalDates from '../dashboard/factsheet/critical-dates'
 import EmptyState from './empty-state'
-import ToolTip from '../components/tooltip'
+
 import OpenDeal from '../utils/open-deal'
 import NoSearchResults from './no-search-results'
 import EmptySearch from './empty-search'
@@ -213,26 +213,6 @@ class BaseTable extends React.Component {
     }
 
     OpenDeal(id)
-  }
-
-  /**
-   *
-   */
-  hasNotification(deal) {
-    const { isBackOffice } = this.props
-    const notificationCount = isBackOffice
-      ? deal.attention_requests
-      : deal.new_notifications
-
-    if (notificationCount > 0) {
-      return (
-        <ToolTip
-          caption={`You have ${notificationCount} unread messages in this deal`}
-        >
-          <div className="unread-notifications">{notificationCount}</div>
-        </ToolTip>
-      )
-    }
   }
 
   render() {

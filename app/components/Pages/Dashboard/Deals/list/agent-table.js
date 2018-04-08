@@ -5,6 +5,7 @@ import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import { roleName } from '../utils/roles'
+import ToolTip from '../components/tooltip'
 import {
   closeEsignWizard,
   setSelectedTask
@@ -189,6 +190,20 @@ class AgentTable extends BaseTable {
       })
 
     return `: ${names.join(', ')}`
+  }
+
+  hasNotification(deal) {
+    const notificationCount = deal.new_notifications
+
+    if (notificationCount > 0) {
+      return (
+        <ToolTip
+          caption={`You have ${notificationCount} unread messages in this deal`}
+        >
+          <div className="unread-notifications">{notificationCount}</div>
+        </ToolTip>
+      )
+    }
   }
 }
 
