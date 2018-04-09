@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import RadioButton from '../components/radio'
+import RadioButton from '../../../../../views/components/radio'
 import { getStatusColorClass } from '../../../../../utils/listing'
 
 export default ({

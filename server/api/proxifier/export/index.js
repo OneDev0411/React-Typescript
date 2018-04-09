@@ -6,15 +6,13 @@ const app = new Koa()
 router.get('/export/*', async ctx => {
   try {
     const { user } = ctx.session
-    const url = `/${ctx.params[0]}`
-    const { fileName } = ctx.query
+    const url = `/${ctx.params[0]}?${ctx.querystring}`
 
     if (!user) {
       ctx.throw(401, 'Unauthorized')
     }
 
     ctx.set('Content-Disposition', 'attachment')
-    ctx.attachment(fileName)
 
     const response = ctx
       .fetch(url)

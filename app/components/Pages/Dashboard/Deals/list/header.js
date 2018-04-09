@@ -150,7 +150,7 @@ class Header extends React.Component {
 
               <Tooltip placement="bottom" caption="Download Report">
                 <a
-                  href={`/api/export/brands/${activeTeamId}/deals.xlsx?fileName=deals.xlsx`}
+                  href={`/api/export/brands/${activeTeamId}/deals.xlsx`}
                   className="search-button"
                 >
                   <Excel />

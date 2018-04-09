@@ -14,7 +14,7 @@ import {
 } from '../../../../../../../store_actions/deals'
 import TasksDropDown from '../../../components/tasks-dropdown'
 import ToolTip from '../../../components/tooltip'
-import Checkbox from '../../../components/radio'
+import Checkbox from '../../../../../../../views/components/radio'
 import FileName from './file-name'
 
 const STATUS_UPLOADING = 'uploading'

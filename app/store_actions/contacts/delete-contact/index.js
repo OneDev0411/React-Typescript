@@ -4,9 +4,9 @@ import removeContact from '../../../models/contacts/delete-contact'
 import * as actionTypes from '../../../constants/contacts'
 import { selectContacts } from '../../../reducers/contacts/list'
 
-export function deleteContact(contactId) {
+export function deleteContacts(contactIds) {
   return async (dispatch, getState) => {
-    if (!contactId) {
+    if (!contactIds) {
       throw new Error('Contact id is required.')
     }
 
@@ -15,11 +15,11 @@ export function deleteContact(contactId) {
         type: actionTypes.DELETE_CONTACT_REQUEST
       })
 
-      await removeContact({ contactId })
+      await removeContact({ contactIds })
 
       const { contacts: { list } } = getState()
       const contactsList = selectContacts(list)
-      const contacts = contactsList.filter(({ id }) => id !== contactId)
+      const contacts = contactsList.filter(({ id }) => !contactIds.includes(id))
       const response = normalize({ contacts }, contactsSchema)
 
       dispatch({
