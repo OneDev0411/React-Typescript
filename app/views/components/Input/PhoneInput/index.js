@@ -51,9 +51,9 @@ export default props => {
           /\d/,
           /\d/
         ]}
+        placeholder="###-###-####"
         {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
         value={filteredValue}
-        placeholder="###-###-####"
         onChange={e => {
           const maskedValue = e.target.value
           const originalValue = maskedValue
