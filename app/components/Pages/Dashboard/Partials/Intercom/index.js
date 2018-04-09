@@ -4,8 +4,19 @@ import IntercomSDK from 'react-intercom'
 
 import { inactiveIntercom } from '../../../../../store_actions/intercom'
 
-import Button from '../../../../../views/components/Button/IconButton'
+import IconButton from '../../../../../views/components/Button/IconButton'
 import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
+
+const Button = IconButton.extend`
+  width: 5rem;
+  height: 5rem;
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  z-index: 3860017101;
+  border-radius: 100%;
+  background: #2196f3;
+`
 
 const Intercom = ({ user, intercomIsActive, inactiveIntercom }) => {
   const intercomUser = {
@@ -26,7 +37,7 @@ const Intercom = ({ user, intercomIsActive, inactiveIntercom }) => {
           onClick={inactiveIntercom}
           className="intercom__close-btn"
         >
-          <IconClose style={{ width: 36, hieght: 36 }} />
+          <IconClose />
         </Button>
       )}
     </div>
