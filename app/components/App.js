@@ -43,6 +43,8 @@ import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
+
+import Intercom from './Pages/Dashboard/Partials/Intercom'
 import { inactiveIntercom } from '../store_actions/intercom'
 
 class App extends Component {
@@ -312,6 +314,8 @@ class App extends Component {
         <main className={`l-app__main ${user ? 'is-logged-in' : ''}`}>
           {children}
         </main>
+
+        <Intercom />
       </div>
     )
   }
