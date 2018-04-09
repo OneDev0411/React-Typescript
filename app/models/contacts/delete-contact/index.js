@@ -7,7 +7,7 @@ import Fetch from '../../../services/fetch'
  */
 
 export default async function deleteContacts({ contactIds }) {
-  if (!contactIds || contactIds.length === 0) {
+  if (!Array.isArray(contactIds) || contactIds.length === 0) {
     throw new Error('Contacts id is required.')
   }
 
