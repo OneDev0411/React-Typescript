@@ -1,5 +1,5 @@
 import React from 'react'
-import RadioButton from '../components/radio'
+import RadioButton from '../../../../../views/components/radio'
 
 export default ({
   deal,

@@ -5,7 +5,7 @@ import cn from 'classnames'
 import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 import TaskStatus from '../tasks/status'
-import CheckBox from '../../components/radio'
+import CheckBox from '../../../../../../views/components/radio'
 import Alert from '../../../Partials/Alert'
 import { bulkSubmit, updatesTasks } from '../../../../../../store_actions/deals'
 

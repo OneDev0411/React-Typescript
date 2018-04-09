@@ -7,7 +7,7 @@ import Contact from '../../../../../../models/contacts'
 import LastSeen from '../../../Chatroom/Rooms/components/last-seen'
 import Chatroom from '../../../Chatroom/Util/chatroom'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
-import { deleteContact } from '../../../../../../store_actions/contacts'
+import { deleteContacts } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
@@ -36,7 +36,7 @@ class Info extends React.Component {
   }
 
   async handleDeleteContact() {
-    const { contact, deleteContact } = this.props
+    const { contact, deleteContacts } = this.props
     const { id: contactId } = contact
 
     this.setState({
@@ -44,7 +44,7 @@ class Info extends React.Component {
     })
 
     try {
-      await deleteContact(contactId)
+      await deleteContacts([contactId])
 
       browserHistory.push('/dashboard/contacts')
     } catch (error) {
@@ -172,5 +172,5 @@ class Info extends React.Component {
 export default connect(({ user }) => ({ user }), {
   confirmation,
   createRoom,
-  deleteContact
+  deleteContacts
 })(Info)
