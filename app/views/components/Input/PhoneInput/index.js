@@ -33,7 +33,7 @@ export default props => {
   return (
     <div style={{ position: 'relative', display: 'inline' }}>
       <Input
-        placeholderChar="#"
+        placeholderChar=" "
         style={{
           border: isValid ? '' : '1px solid #ec4b35'
         }}
