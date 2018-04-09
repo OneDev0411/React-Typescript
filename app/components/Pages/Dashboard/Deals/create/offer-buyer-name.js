@@ -1,12 +1,9 @@
 import React from 'react'
 
-export default ({
-  buyerName,
-  onChangeBuyerName
-}) => (
+export default ({ buyerName, onChangeBuyerName }) => (
   <div className="form-section buyer-name">
     <div className="hero">
-        What is the buyer name? <span className="required">*</span>
+      What is the buyer name? <span className="required">*</span>
     </div>
 
     <input

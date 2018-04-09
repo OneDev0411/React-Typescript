@@ -1,12 +1,7 @@
 import React from 'react'
 import RadioButton from '../../../../../views/components/radio'
 
-export default ({
-  deal,
-  dealHasPrimaryOffer,
-  offerType,
-  onChangeOfferType
-}) => (
+export default ({ dealHasPrimaryOffer, offerType, onChangeOfferType }) => (
   <div className="form-section deal-offer">
     <div className="hero">
       Is this a primary or backup offer? <span className="required">*</span>
@@ -14,7 +9,9 @@ export default ({
 
     <RadioButton
       selected={offerType === 'primary'}
-      tooltip={dealHasPrimaryOffer ? 'This deal already has a primary offer' : null}
+      tooltip={
+        dealHasPrimaryOffer ? 'This deal already has a primary offer' : null
+      }
       disabled={dealHasPrimaryOffer === true}
       title="Primary Offer"
       onClick={() => !dealHasPrimaryOffer && onChangeOfferType('primary')}

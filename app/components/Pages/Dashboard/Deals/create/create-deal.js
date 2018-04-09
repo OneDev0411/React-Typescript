@@ -557,7 +557,7 @@ class CreateDeal extends React.Component {
                       hasError={this.hasError('selling_clients')}
                       dealSide="Selling"
                       clients={sellingClients}
-                      ctaTitle="Add seller"
+                      title="Seller (Landlord)"
                       onUpsertClient={form =>
                         this.onUpsertRole(form, 'sellingClients')
                       }

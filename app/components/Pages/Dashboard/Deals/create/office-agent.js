@@ -1,10 +1,7 @@
 import React from 'react'
 import RadioButton from '../../../../../views/components/radio'
 
-export default ({
-  isOfficeAgent,
-  onChangeOfficeAgent
-}) => (
+export default ({ isOfficeAgent, onChangeOfficeAgent }) => (
   <div className="form-section office-agent">
     <div className="hero">
       Is the listing agent from your office? <span className="required">*</span>
@@ -23,4 +20,3 @@ export default ({
     />
   </div>
 )
-
