@@ -35,25 +35,24 @@ const secretQuestionModal = ({
         'is-confirming'}`}
     >
       <Modal.Body>
-        <div style={{ marginBottom: '4rem' }}>
-          <h2 style={{ marginBottom: '4rem' }} className="c-confirm-modal__title">
+        <div style={{ marginBottom: '2rem' }}>
+          <h2
+            style={{ marginBottom: '4rem' }}
+            className="c-confirm-modal__title"
+          >
             Confirm Your Contact Information
           </h2>
-          <p className="c-confirm-modal__message">
-            {`We found the following contact details associated with agent license ${mlsid}.`}
-          </p>
-          <p style={{ color: '#333', fontSize: '1.8rem', fontWeight: 'bold' }}>
-            {question}
-          </p>
-          <p className="c-confirm-modal__message">
-            Answering the question, it might be your email or phone number.
+          <p>Enter the complete mobile number or email address below:</p>
+
+          <p>
+            Hint:{' '}
+            <span style={{ color: '#333', fontWeight: 'bold' }}>
+              {question}
+            </span>
           </p>
         </div>
         <form onSubmit={onConfirmHandler}>
-          <div
-            style={{ marginBottom: '2rem' }}
-            className="c-auth__field__input-wrapper"
-          >
+          <div className="c-auth__field__input-wrapper">
             <input
               id="secret"
               type="text"
@@ -68,9 +67,7 @@ const secretQuestionModal = ({
               }}
               className={`c-auth__field__input ${secret ? 'has-content' : ''}`}
             />
-            <label htmlFor="secret" className="c-auth__field__label">
-              Enter the answer:
-            </label>
+            <label htmlFor="secret" className="c-auth__field__label" />
             <span className="focus-border">
               <i />
             </span>

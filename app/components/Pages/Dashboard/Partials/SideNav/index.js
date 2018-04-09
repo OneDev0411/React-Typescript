@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Dropdown } from 'react-bootstrap'
 import Avatar from './components/Avatar'
-import Intercom from '../Intercom'
 import IntercomTrigger from '../IntercomTrigger'
 import TeamSwitcher from './components/TeamSwitcher'
 import Brand from '../../../../../controllers/Brand'
@@ -180,8 +179,6 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
           </Dropdown.Menu>
         </Dropdown>
       </ul>
-
-      <Intercom />
     </aside>
   )
 }
