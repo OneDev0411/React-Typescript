@@ -81,14 +81,15 @@ export default class Form extends React.Component {
           nameErrorFields: [],
           nameErrorMessage: ''
         })
-
-        this.preselectRoles()
       }
 
-      this.setState({
-        form,
-        isNewRecord
-      })
+      this.setState(
+        {
+          form,
+          isNewRecord
+        },
+        () => this.preselectRoles()
+      )
     }
 
     if (!form || !showFormModal) {
