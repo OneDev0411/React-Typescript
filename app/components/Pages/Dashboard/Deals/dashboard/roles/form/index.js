@@ -217,8 +217,8 @@ export default class Form extends React.Component {
     return form.commission_percentage ? value >= 0 && value <= 100 : value >= 0
   }
 
-  isValidName(name, regular = /^[A-Za-z\s]+$/) {
-    return name && name.trim().length > 0 && new RegExp(regular).exec(name)
+  isValidName(name) {
+    return name && name.trim().length > 0
   }
 
   /**

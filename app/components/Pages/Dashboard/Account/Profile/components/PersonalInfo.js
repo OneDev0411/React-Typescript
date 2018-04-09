@@ -95,7 +95,7 @@ const validate = values => {
   const invalidCharactersError =
     'Invalid charachter. You are allowed use alphabet character and space in this field.'
 
-  const isValidName = name => name && new RegExp(/^[A-Za-z\s]+$/).exec(name)
+  const isValidName = name => name && name.trim().length > 0
 
   const isValidEmail = email => {
     // eslint-disable-next-line max-len
