@@ -431,7 +431,6 @@ export default class Form extends React.Component {
                 lableColorError={nameErrorFields.includes('legal_first_name')}
                 isRequired={false}
                 title="Legal First Name"
-                placeholder="Legal First"
                 value={form.legal_first_name}
                 isInvalid={invalidFields.includes('legal_first_name')}
                 onChange={value => this.setForm('legal_first_name', value)}
@@ -442,7 +441,6 @@ export default class Form extends React.Component {
                 name="middle_name"
                 isRequired={false}
                 title="Legal Middle Name"
-                placeholder="Legal Middle"
                 value={form.legal_middle_name}
                 isInvalid={invalidFields.includes('legal_middle_name')}
                 onChange={value => this.setForm('legal_middle_name', value)}
@@ -454,7 +452,6 @@ export default class Form extends React.Component {
                 lableColorError={nameErrorFields.includes('legal_last_name')}
                 isRequired={false}
                 title="Legal Last Name"
-                placeholder="Legal Last"
                 value={form.legal_last_name}
                 isInvalid={invalidFields.includes('legal_last_name')}
                 onChange={value => this.setForm('legal_last_name', value)}
@@ -465,7 +462,6 @@ export default class Form extends React.Component {
               lableColorError={nameErrorFields.includes('company_title')}
               title="Company"
               inputType="Text"
-              placeholder="Company Name"
               defaultSelectedItem={form.companies}
               onChangeHandler={value => this.setForm('company_title', value)}
               items={this.extractItems({
