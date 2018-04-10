@@ -6,6 +6,7 @@ import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 import {
   uploadTaskFile,
+  uploadStashFile,
   resetUploadFiles,
   setUploadAttributes,
   displaySplitter,
@@ -66,13 +67,15 @@ class UploadModal extends React.Component {
       return selectedTaskInDeal
     }
 
-    return null
+    return undefined
   }
 
   async upload({ id, fileObject, properties }, task) {
     const {
       user,
+      deal,
       uploadTaskFile,
+      uploadStashFile,
       setUploadAttributes,
       changeNeedsAttention,
       notify
@@ -92,7 +95,9 @@ class UploadModal extends React.Component {
     setUploadAttributes(id, { status: STATUS_UPLOADING })
 
     // upload file
-    const file = await uploadTaskFile(user, task, fileObject, filename)
+    const file = task
+      ? await uploadTaskFile(user, task, fileObject, filename)
+      : await uploadStashFile(deal.id, fileObject, filename)
 
     if (!file) {
       setUploadAttributes(id, { status: null })
@@ -113,7 +118,7 @@ class UploadModal extends React.Component {
     // set status
     setUploadAttributes(id, { status: STATUS_UPLOADED })
 
-    if (properties.notifyOffice === true && !isBackupContract) {
+    if (task && properties.notifyOffice === true && !isBackupContract) {
       changeNeedsAttention(task.deal, task.id, true)
     }
   }
@@ -206,6 +211,7 @@ class UploadModal extends React.Component {
                     <div className="file-task">
                       <TasksDropDown
                         searchable
+                        showStashOption
                         deal={deal}
                         onSelectTask={taskId => this.onSelectTask(file, taskId)}
                         selectedTask={selectedTask}
@@ -219,10 +225,10 @@ class UploadModal extends React.Component {
                       <Button
                         bsStyle="primary"
                         className={cn({
-                          disabled: isUploading || !selectedTask,
+                          disabled: isUploading || _.isUndefined(selectedTask),
                           uploaded: isUploaded
                         })}
-                        disabled={isUploading || !selectedTask}
+                        disabled={isUploading || _.isUndefined(selectedTask)}
                         onClick={() => this.upload(file, selectedTask)}
                       >
                         {this.getButtonCaption(file)}
@@ -290,6 +296,7 @@ function mapStateToProps({ deals, user }) {
 export default connect(mapStateToProps, {
   notify,
   uploadTaskFile,
+  uploadStashFile,
   resetUploadFiles,
   resetSplitter,
   displaySplitter,
