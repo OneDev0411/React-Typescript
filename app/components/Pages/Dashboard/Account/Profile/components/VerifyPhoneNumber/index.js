@@ -57,7 +57,10 @@ class VerifyPhoneNumber extends Component {
           isReSending: false
         },
         () =>
-          this.notify('success', 'The new code texted to your mobile phone.')
+          this.notify(
+            'success',
+            'A new 4-digit code has been texted to your mobile number.'
+          )
       )
     } catch (errorCode) {
       this.setState(
@@ -86,8 +89,8 @@ class VerifyPhoneNumber extends Component {
       <Fragment>
         <div className="c-auth__submit-error-alert">
           <p>
-            We sent a verification code to the top number,{' '}
-            <Button onClick={this.handleOpenModal}>submit the code</Button>
+            We sent a verification code to your mobile number.{' '}
+            <Button onClick={this.handleOpenModal}>Submit the code</Button>
           </p>
           <p>
             Didn't receive a code?{' '}

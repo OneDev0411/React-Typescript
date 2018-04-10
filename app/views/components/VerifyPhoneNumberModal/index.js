@@ -15,10 +15,11 @@ import VerifyPhoneNumber from '../../../models/verify/confirm'
 
 const INVALID_CODE_MESSAGE = 'Code is invalid! Please try again.'
 
-const validator = code => new RegExp(/\d{4}$/).exec(code)
+const onChangeValidator = code => new RegExp(/\d/).exec(code)
+const submitValidator = code => new RegExp(/\d{4}$/).exec(code)
 
 const INITIAL_STATE = {
-  code: null,
+  code: '',
   isVerify: false,
   verifyError: null,
   isReSending: false
@@ -43,8 +44,16 @@ class VerifyPhoneNumberModal extends Component {
     }
   }
 
-  handleOnChangeCode = event => {
-    this.setState({ code: event.target.value })
+  handleOnChangeCode = ({ target }) => {
+    const { value: code } = target
+
+    if (!code && this.state.code.length > 0) {
+      this.setState({ code: '' })
+    }
+
+    if (onChangeValidator(code) && code.length <= 4) {
+      this.setState({ code })
+    }
   }
 
   notify = (status, message, dismissAfter = 4000) =>
@@ -72,7 +81,7 @@ class VerifyPhoneNumberModal extends Component {
       return
     }
 
-    if (!validator(code)) {
+    if (!submitValidator(code)) {
       return this.setState({
         verifyError: INVALID_CODE_MESSAGE
       })
@@ -127,7 +136,11 @@ class VerifyPhoneNumberModal extends Component {
         {
           isReSending: false
         },
-        () => this.notify('success', 'The new code texted to your phone.')
+        () =>
+          this.notify(
+            'success',
+            'A new 4-digit code has been texted to your mobile number.'
+          )
       )
     } catch (errorCode) {
       this.setState(
@@ -147,7 +160,7 @@ class VerifyPhoneNumberModal extends Component {
 
   render() {
     const { user, isOpen, unclosable } = this.props
-    const { isReSending, verifyError, isVerify } = this.state
+    const { code, isReSending, verifyError, isVerify } = this.state
 
     return (
       <BareModal
@@ -179,12 +192,13 @@ class VerifyPhoneNumberModal extends Component {
               htmlFor="phone-code"
               style={{ cursor: 'pointer', fontWeight: 'normal' }}
             >
-              Verification Code
+              4-Digit Verification Code
             </label>
             <div style={{ display: 'flex' }}>
               <input
                 id="phone-code"
                 type="text"
+                value={code}
                 disabled={isVerify}
                 placeholder="Enter Code"
                 className="c-simple-field__input"
