@@ -32,7 +32,11 @@ class ComposeMessage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.draft) {
+    if (
+      nextProps.draft &&
+      this.props.draft !== nextProps.draft &&
+      !this.text_message.value
+    ) {
       this.text_message.value = nextProps.draft
     }
   }
@@ -99,7 +103,7 @@ class ComposeMessage extends React.Component {
   }
 
   render() {
-    const { members, isInstantChat, user } = this.props
+    const { members, isInstantChat, user, draft } = this.props
 
     return (
       <MessageInput
@@ -109,12 +113,18 @@ class ComposeMessage extends React.Component {
         isInstantChat={isInstantChat}
         inputRef={ref => (this.text_message = ref)}
         onHeightChange={this.props.onHeightChange}
-        onBlur={message =>
-          this.props.insertDraft({
-            roomId: this.props.roomId,
-            message
-          })
-        }
+        onBlur={message => {
+          if (
+            message ||
+            // /clean drft
+            (!message && draft)
+          ) {
+            this.props.insertDraft({
+              roomId: this.props.roomId,
+              message
+            })
+          }
+        }}
       />
     )
   }

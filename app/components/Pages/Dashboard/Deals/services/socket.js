@@ -1,12 +1,7 @@
 import _ from 'underscore'
 import Socket from '../../../../../services/socket'
 import store from '../../../../../stores'
-import {
-  // getDeals,
-  createDeal,
-  updateDeal,
-  dealArchived
-} from '../../../../../store_actions/deals'
+import { getDeal, dealArchived } from '../../../../../store_actions/deals'
 import {
   getActiveTeamACL,
   getActiveTeamId
@@ -53,23 +48,23 @@ export default class DealSocket extends Socket {
    * action: ['Updated, 'Created', 'Deleted']
    */
   onDealChange(response) {
-    const { action, deal } = response
+    const { action, deal: dealId } = response
 
     console.log(`[ ${action} ] got a deals socket event`)
 
-    if (!_.isObject(deal)) {
-      console.warn('[ Deal Socket ] received deal is not an object', deal)
+    if (!dealId) {
+      console.warn('[ Deal Socket ] received deal is not valid', deal)
 
       return false
     }
 
     switch (action) {
       case 'Updated':
-        return this.onUpdateDeal(deal)
+        return this.onUpdateDeal(dealId)
       case 'Created':
-        return this.onCreateDeal(deal)
+        return this.onCreateDeal(dealId)
       case 'Deleted':
-        return this.onArchiveDeal(deal)
+        return this.onArchiveDeal(dealId)
       default:
         return false
     }
@@ -78,39 +73,33 @@ export default class DealSocket extends Socket {
   /**
    * on update deal
    */
-  async onUpdateDeal(deal) {
-    await store.dispatch(updateDeal(deal))
+  async onUpdateDeal(dealId) {
+    store.dispatch(getDeal(dealId))
   }
 
   /**
    * on create deal
    */
-  onCreateDeal(deal) {
-    store.dispatch(createDeal(deal))
+  onCreateDeal(dealId) {
+    store.dispatch(getDeal(dealId))
   }
 
   /**
    * on delete/archive deal
    */
-  onArchiveDeal(deal) {
-    store.dispatch(dealArchived(deal.id))
+  onArchiveDeal(dealId) {
+    store.dispatch(dealArchived(dealId))
   }
 
   /**
    * on reconnect
    */
   onReconnected() {
-    // const state = store.getState()
-    // const { deals } = state
     const { user } = this
 
     console.log('[ + ] Deal socket reconnected')
 
     // register brand
     DealSocket.registerBrand(user)
-
-    // if (user) {
-    //   store.dispatch(getDeals(user, deals.backoffice, false))
-    // }
   }
 }
