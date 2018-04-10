@@ -2,12 +2,7 @@ import React, { Fragment } from 'react'
 import _ from 'underscore'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import ReactTable from 'react-table'
-import Avatar from 'react-avatar'
-import { Dropdown, MenuItem } from 'react-bootstrap'
-import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import { confirmation } from '../../../../../store_actions/confirmation'
-import Radio from '../../../../../views/components/radio'
 import Contact from '../../../../../models/contacts'
 import styled from 'styled-components'
 import {
@@ -23,7 +18,7 @@ import NoContact from './no-contact'
 import Loading from '../../../../Partials/Loading'
 import { Container } from '../components/Container'
 import NoSearchResults from '../../../../Partials/no-search-results'
-import ShadowButton from '../../../../../views/components/Button/ShadowButton'
+import Table from './Table'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -49,113 +44,6 @@ class ContactsList extends React.Component {
       deletingContacts: [],
       selectedRows: {}
     }
-
-    this.columns = [
-      {
-        id: 'td-select',
-        accessor: '',
-        width: 40,
-        sortable: false,
-        Cell: ({ original: contact }) => (
-          <Radio
-            className="select-row"
-            selected={this.state.selectedRows[contact.id]}
-            onClick={e => {
-              e.stopPropagation()
-              this.toggleSelectedRow(contact)
-            }}
-          />
-        )
-      },
-      {
-        Header: () => (
-          <Fragment>
-            Name
-            <i className="fa fa-caret-down" />
-            <i className="fa fa-caret-up" />
-          </Fragment>
-        ),
-        id: 'name',
-        accessor: contact => Contact.get.name(contact),
-        Cell: ({ original: contact }) => (
-          <div className="name">
-            <Avatar
-              className="avatar"
-              round
-              name={Contact.get.name(contact)}
-              src={Contact.get.avatar(contact)}
-              size={35}
-            />
-            <span className="contact-name">{Contact.get.name(contact)}</span>
-          </div>
-        )
-      },
-      {
-        Header: () => (
-          <Fragment>
-            EMAIL
-            <i className="fa fa-caret-down" />
-            <i className="fa fa-caret-up" />
-          </Fragment>
-        ),
-        id: 'email',
-        accessor: contact => Contact.get.email(contact)
-      },
-      {
-        Header: 'PHONE',
-        id: 'phone',
-        accessor: contact => Contact.get.phone(contact)
-      },
-      {
-        Header: () => (
-          <Fragment>
-            TAGS
-            <i className="fa fa-caret-down" />
-            <i className="fa fa-caret-up" />
-          </Fragment>
-        ),
-        id: 'tag',
-        Cell: ({ original: contact }) => this.getTagsTitle(contact)
-      },
-      {
-        id: 'td-delete',
-        Header: '',
-        accessor: '',
-        // accessor: contact => contact.id,
-        className: 'td--dropdown-container',
-        width: 30,
-        Cell: ({ original: contact }) => {
-          const { id: contactId } = contact
-
-          return (
-            <Dropdown
-              pullRight
-              className="c-react-table-menu"
-              id={`contact_${contactId}__dropdown`}
-            >
-              <ShadowButton
-                bsRole="toggle"
-                style={{ marginTop: '5px' }}
-                onClick={e => e.stopPropagation()}
-              >
-                <VerticalDotsIcon fill="#D7DEE2" />
-              </ShadowButton>
-
-              <Dropdown.Menu bsRole="menu">
-                <MenuItem
-                  eventKey="Delete"
-                  key={`contact_${contactId}__dropdown__item_delete`}
-                  style={{ width: '100%', textAlign: 'left' }}
-                  onClick={event => this.handleOnDelete(event, [contact.id])}
-                >
-                  Delete
-                </MenuItem>
-              </Dropdown.Menu>
-            </Dropdown>
-          )
-        }
-      }
-    ]
 
     this.handleOnDelete = this.handleOnDelete.bind(this)
   }
@@ -215,39 +103,6 @@ class ContactsList extends React.Component {
     }
 
     return matched
-  }
-
-  getTagsTitle = contact => {
-    const tags = Contact.get.tags(contact)
-
-    if (Object.keys(tags).length === 0) {
-      return <p style={{ color: '#8da2b5', marginBottom: 0 }}>No Tags</p>
-    }
-
-    let tagString = ''
-    // We can't break forEach.
-    let stopForeach = false
-
-    Object.keys(tags).forEach((key, index) => {
-      if (!stopForeach) {
-        let tag = tags[key].tag
-
-        // max kength 28 came from design
-        if (tagString.length + tag.length <= 28) {
-          tagString +=
-            tag +
-            // Add ', ' if it is not the last item in  the object
-            (index !== Object.keys(tags).length - 1 ? ', ' : '')
-        } else {
-          stopForeach = true
-          // remove the last ', '
-          tagString = tagString.slice(0, -2)
-          tagString += ` and ${Object.keys(tags).length - index} more`
-        }
-      }
-    })
-
-    return tagString
   }
 
   toggleSelectedRow = contact => {
@@ -329,26 +184,11 @@ class ContactsList extends React.Component {
                 </div>
               )}
             </SecondHeader>
-            <ReactTable
-              className="contacts-list-table"
-              pageSize={Object.keys(filteredContacts).length}
-              showPaginationBottom={false}
-              data={Object.values(filteredContacts)}
-              columns={this.columns}
-              getTrProps={(state, { original: { id: contactId } }) => {
-                if (deletingContacts.includes(contactId)) {
-                  return {
-                    style: {
-                      opacity: 0.5,
-                      ponterEvents: 'none'
-                    }
-                  }
-                }
-
-                return {
-                  onClick: () => openContact(contactId)
-                }
-              }}
+            <Table
+              filteredContacts={filteredContacts}
+              toggleSelectedRow={this.toggleSelectedRow}
+              handleOnDelete={this.handleOnDelete}
+              deletingContacts={deletingContacts}
             />
           </Fragment>
         )}
