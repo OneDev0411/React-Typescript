@@ -14,34 +14,26 @@ import { getDeal } from '../../../../../store_actions/deals'
 import { isTrainingAccount } from '../../../../../utils/user-teams'
 import styled from 'styled-components'
 
-const DealContent = styled.div`
+const getDashboardHeight = isTraining =>
+  `calc(100vh - 56px ${isTraining ? ' - 48px' : ''})`
+
+const DealTasks = styled.div`
+  min-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
+  max-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
+`
+
+const DealContent = DealTasks.extend`
+  position: relative;
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  backface-visibility: hidden;
-  -webkit-overflow-scrolling: touch;
-  -ms-overflow-style: none;
   will-change: overflow;
-  position: relative;
-  min-height: calc(
-    100vh - 54px - 2px ${props => (props.traningAccount ? ' - 48px' : '')}
-  );
-  max-height: calc(
-    100vh - 54px - 2px ${props => (props.traningAccount ? ' - 48px' : '')}
-  );
+  backface-visibility: hidden;
+
   .column {
     padding: 0;
     height: auto;
   }
-`
-
-const DealTasks = styled.div`
-  min-height: calc(
-    100vh - 54px - 2px ${props => (props.traningAccount ? ' - 48px' : '')}
-  );
-  max-height: calc(
-    100vh - 54px - 2px ${props => (props.traningAccount ? ' - 48px' : '')}
-  );
 `
 
 class DealDetails extends React.Component {
@@ -80,6 +72,8 @@ class DealDetails extends React.Component {
   render() {
     const { isFetchingDeal } = this.state
     const { deal, selectedTask, user } = this.props
+
+    const traningAccount = isTrainingAccount(user)
     const selectedTaskId = selectedTask ? selectedTask.id : null
 
     if (!deal && isFetchingDeal) {
@@ -93,8 +87,6 @@ class DealDetails extends React.Component {
     if (!deal) {
       return false
     }
-
-    const traningAccount = isTrainingAccount(user)
 
     return (
       <div className="deal-dashboard u-scrollbar--thinner">
