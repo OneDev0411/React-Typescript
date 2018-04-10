@@ -25,7 +25,8 @@ webpackConfig.performance = {
 
 webpackConfig.entry = {
   app: ['babel-polyfill', appConfig.compile.entry],
-  vendor: appConfig.compile.vendors
+  vendor: appConfig.compile.vendors,
+  pdfjsWorker: 'pdfjs-dist/build/pdf.worker.entry'
 }
 
 webpackConfig.plugins.push(
@@ -43,6 +44,9 @@ webpackConfig.plugins.push(
     cache: true,
     uglifyOptions: {
       output: { comments: false }
+    },
+    compressor: {
+      screw_ie8: true
     }
   }),
   new ExtractTextPlugin({
