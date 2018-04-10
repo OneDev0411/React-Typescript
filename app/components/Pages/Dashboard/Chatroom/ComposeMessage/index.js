@@ -103,7 +103,7 @@ class ComposeMessage extends React.Component {
   }
 
   render() {
-    const { members, isInstantChat, user } = this.props
+    const { members, isInstantChat, user, draft } = this.props
 
     return (
       <MessageInput
