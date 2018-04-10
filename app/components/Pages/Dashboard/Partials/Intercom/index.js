@@ -19,16 +19,19 @@ const Button = IconButton.extend`
 `
 
 const Intercom = ({ user, intercomIsActive, inactiveIntercom }) => {
-  const intercomUser = {
-    user_id: user.id,
-    email: user.email,
-    name: `${user.first_name} ${user.last_name}`
-  }
+  const getUserInfo =
+    user && user.id
+      ? {
+          user_id: user.id,
+          email: user.email,
+          name: `${user.first_name} ${user.last_name}`
+        }
+      : {}
 
   return (
     <div>
       {window.INTERCOM_ID && (
-        <IntercomSDK appID={window.INTERCOM_ID} {...intercomUser} />
+        <IntercomSDK appID={window.INTERCOM_ID} {...getUserInfo} />
       )}
       {intercomIsActive && (
         <Button
