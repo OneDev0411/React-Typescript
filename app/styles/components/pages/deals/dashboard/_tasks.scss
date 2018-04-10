@@ -5,8 +5,6 @@
 %deal-tasks {
   min-width: $deal-tasks-width;
   max-width: $deal-tasks-width;
-  min-height: $column-height;
-  max-height: $column-height;
   overflow: auto;
 
   &.expanded {

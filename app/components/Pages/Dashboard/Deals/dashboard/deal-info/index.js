@@ -7,12 +7,23 @@ import Roles from '../roles'
 import MlsListing from '../mls-listing'
 import DealSide from './side'
 import DealEmail from '../deal-email'
+import styled from 'styled-components'
 
-export default ({ deal, showBackButton = true }) => {
+const DealInfosScrollable = styled.div`
+  height: calc(
+    100vh - 54px - 2px ${props => (props.traningAccount ? ' - 48px' : '')}
+  );
+  overflow-x: hidden;
+`
+
+export default ({ deal, showBackButton = true, traningAccount = false }) => {
   const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
   return (
-    <div className="scrollable" data-simplebar={!isWebkit || null}>
+    <DealInfosScrollable
+      data-simplebar={!isWebkit || null}
+      traningAccount={traningAccount}
+    >
       <div className="deal-info__inner">
         <ListingCard deal={deal} showBackButton={showBackButton} />
 
@@ -32,6 +43,6 @@ export default ({ deal, showBackButton = true }) => {
           <Commission deal={deal} />
         </div>
       </div>
-    </div>
+    </DealInfosScrollable>
   )
 }

@@ -1,12 +1,6 @@
 %file-manager {
   overflow: hidden;
 
-  .content {
-    min-height: $column-height;
-    max-height: $column-height;
-    overflow: auto;
-  }
-
   .button {
     min-width: 100px;
     min-height: 32px;
