@@ -11,7 +11,8 @@ import styled from 'styled-components'
 
 const DealInfosScrollable = styled.div`
   height: calc(
-    100vh - 54px - 2px ${props => (props.traningAccount ? ' - 48px' : '')}
+    100vh - 54px - 2px
+      ${({ traningAccount }) => (traningAccount ? ' - 48px' : '')}
   );
   overflow-x: hidden;
 `

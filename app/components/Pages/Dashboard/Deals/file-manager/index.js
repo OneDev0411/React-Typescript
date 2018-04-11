@@ -9,13 +9,12 @@ import FilesTable from './table'
 import { isTrainingAccount } from '../../../../../utils/user-teams'
 import styled from 'styled-components'
 
+const getDashboardHeight = isTraining =>
+  `calc(100vh - 56px ${isTraining ? ' - 48px' : ''})`
+
 const FileManagerContent = styled.div`
-  min-height: calc(
-    100vh - 54px - 2px ${props => (props.traningAccount ? ' - 48px' : '')}
-  );
-  max-height: calc(
-    100vh - 54px - 2px ${props => (props.traningAccount ? ' - 48px' : '')}
-  );
+  min-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
+  max-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
   overflow: auto;
 `
 export class FileManager extends React.Component {
