@@ -150,13 +150,14 @@ export default class Form extends React.Component {
   /**
    * set form field's value
    */
-  setForm(field, value) {
+  setForm(field, value, removeField = null) {
     const { form } = this.state
+    const newForm = removeField ? _.omit(form, removeField) : form
 
     this.setState(
       {
         form: {
-          ...form,
+          ...newForm,
           [field]: value
         }
       },
@@ -165,19 +166,12 @@ export default class Form extends React.Component {
   }
 
   setCommission(field, value) {
-    const { form } = this.state
-
     const removeField =
       field === 'commission_percentage'
         ? 'commission_dollar'
         : 'commission_percentage'
 
-    this.setState(
-      {
-        form: _.omit(form, removeField)
-      },
-      () => this.setForm(field, value)
-    )
+    this.setForm(field, value, removeField)
   }
 
   /**
