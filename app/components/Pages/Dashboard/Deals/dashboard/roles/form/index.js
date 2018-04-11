@@ -150,7 +150,7 @@ export default class Form extends React.Component {
   /**
    * set form field's value
    */
-  setForm(field, value, removeField) {
+  setForm(field, value, removeField = null) {
     const { form } = this.state
     const newForm = removeField ? _.omit(form, removeField) : form
 
