@@ -242,7 +242,7 @@ class CrudRole extends React.Component {
         )}
 
         <SelectContactModal
-          title="Add to Deal"
+          title={modalTitle}
           isOpen={showSelectContactModal}
           handleOnClose={this.handlOnHide}
           handleAddManually={this.handleOpenFormModal}

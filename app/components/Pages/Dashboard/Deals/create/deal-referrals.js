@@ -1,12 +1,15 @@
 import React from 'react'
 import _ from 'underscore'
 import CrudRole from './crud-role'
-import RoleItem from './role-item'
 
 export default ({
-  referrals, dealSide, onUpsertReferral, onRemoveReferral
+  referrals,
+  dealSide,
+  onUpsertReferral,
+  onRemoveReferral
 }) => {
-  const allowedRoles = dealSide === 'Buying' ? ['BuyerReferral'] : ['SellerReferral']
+  const allowedRoles =
+    dealSide === 'Buying' ? ['BuyerReferral'] : ['SellerReferral']
 
   return (
     <div className="form-section deal-people deal-referral">
@@ -19,7 +22,7 @@ export default ({
           <CrudRole
             key={id}
             role={agent}
-            modalTitle="Edit referral"
+            modalTitle="Update Referral"
             allowedRoles={allowedRoles}
             onRemoveRole={id => onRemoveReferral(id)}
             onUpsertRole={newRole => onUpsertReferral({ ...agent, ...newRole })}
@@ -27,8 +30,8 @@ export default ({
         ))}
 
         <CrudRole
-          modalTitle="Add referral"
-          ctaTitle="Add referral"
+          modalTitle="Add Referral"
+          ctaTitle="Add Referral"
           allowedRoles={allowedRoles}
           onUpsertRole={onUpsertReferral}
         />

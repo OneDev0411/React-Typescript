@@ -63,7 +63,13 @@ export function normalizeNewContact(formData = {}) {
     Array.isArray(phone_numbers) &&
     phone_numbers.length > 0
   ) {
+    const defaultLabel = {
+      main: 'Main Phone',
+      default: 'Other Phone'
+    }
+
     const phoneNumbers = attributeNormalizer({
+      defaultLabel,
       attributeName: 'phone_number',
       attributeValue: phone_numbers
     })
@@ -77,7 +83,13 @@ export function normalizeNewContact(formData = {}) {
   }
 
   if (emails && Array.isArray(emails) && emails.length > 0) {
+    const defaultLabel = {
+      main: 'Personal Email',
+      default: 'Other Email'
+    }
+
     const normalizedEmails = attributeNormalizer({
+      defaultLabel,
       attributeName: 'email',
       attributeValue: emails
     })
@@ -107,10 +119,24 @@ export function normalizeNewContact(formData = {}) {
   return contact
 }
 
-function attributeNormalizer({ attributeName, attributeValue }) {
-  return attributeValue.filter(item => item).map((item, index) => ({
-    type: attributeName,
-    [attributeName]: item,
-    is_primary: index === 0
-  }))
+function attributeNormalizer({ attributeName, attributeValue, defaultLabel }) {
+  return attributeValue.filter(item => item).map((item, index) => {
+    const field = {
+      type: attributeName,
+      [attributeName]: item,
+      is_primary: index === 0
+    }
+
+    if (defaultLabel) {
+      if (attributeValue.length === 1 || index === 0) {
+        field.label = defaultLabel.main
+
+        return field
+      }
+
+      field.label = defaultLabel.default
+    }
+
+    return field
+  })
 }

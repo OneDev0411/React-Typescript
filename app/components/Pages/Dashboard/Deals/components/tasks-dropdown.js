@@ -120,6 +120,21 @@ class DropDownTasks extends React.Component {
     )
   }
 
+  getSearchValue() {
+    const { filter } = this.state
+    const { selectedTask, showStashOption } = this.props
+
+    if (filter) {
+      return filter
+    } else if (selectedTask) {
+      return selectedTask.title.trim()
+    } else if (selectedTask === null && showStashOption) {
+      return 'Upload directly to my Files'
+    }
+
+    return ''
+  }
+
   render() {
     const {
       showMenu,
@@ -134,7 +149,8 @@ class DropDownTasks extends React.Component {
       selectedTask,
       checklists,
       tasks,
-      searchable
+      searchable,
+      showStashOption
     } = this.props
 
     return (
@@ -152,9 +168,7 @@ class DropDownTasks extends React.Component {
           {searchable ? (
             <input
               placeholder="Document Title"
-              value={
-                filter || (selectedTask && selectedTask.title.trim()) || ''
-              }
+              value={this.getSearchValue()}
               onChange={e => this.onChangeFilter(e.target.value)}
             />
           ) : (
@@ -167,6 +181,17 @@ class DropDownTasks extends React.Component {
         </Button>
 
         <Dropdown.Menu className="deal-task-dropdown-list">
+          {showStashOption && (
+            <li
+              className={cn('is-bold', {
+                selected: selectedTask === null
+              })}
+              onClick={() => this.onSelectTask(null)}
+            >
+              Upload directly to my Files
+            </li>
+          )}
+
           {deal.checklists.map(chId => {
             const checklist = checklists[chId]
 
@@ -200,7 +225,7 @@ class DropDownTasks extends React.Component {
                     ) : (
                       <div className="create-task-input">
                         <input
-                          className="new-task"
+                          className="input-new-task"
                           placeholder="Name this task and press enter"
                           onChange={e => this.onTaskTitleChange(e.target.value)}
                           value={taskTitle}
@@ -245,7 +270,7 @@ class DropDownTasks extends React.Component {
                       .value()}
 
                     <li
-                      className="new-task"
+                      className="is-bold"
                       onClick={() => this.setState({ newTaskMode: chId })}
                     >
                       Add new task to {checklist.title}

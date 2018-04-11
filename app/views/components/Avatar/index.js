@@ -10,6 +10,7 @@ const getNameInitials = title => {
   return title
     .split(' ')
     .map(t => t.charAt(0).toUpperCase())
+    .slice(0, 2)
     .join('')
 }
 

@@ -35,7 +35,7 @@ export default ({
   const isPrimaryAgent =
     ['BuyerAgent', 'SellerAgent'].indexOf(allowedRoles[0]) > -1
 
-  const title = isPrimaryAgent ? 'Add primary agent' : 'Add co-agent'
+  const title = isPrimaryAgent ? 'Add Primary Agent' : 'Add Co-Agent'
 
   return (
     <div className="form-section deal-people deal-agent">
@@ -51,7 +51,7 @@ export default ({
             key={id}
             role={agent}
             isCommissionRequired={isCommissionRequired}
-            modalTitle="Edit Agent"
+            modalTitle="Update Agent"
             allowedRoles={allowedRoles}
             onRemoveRole={id => onRemoveAgent(id)}
             onUpsertRole={newRole => onUpsertAgent({ ...agent, ...newRole })}

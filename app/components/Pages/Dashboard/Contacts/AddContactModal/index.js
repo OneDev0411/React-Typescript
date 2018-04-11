@@ -60,8 +60,7 @@ class AddContactModal extends React.Component {
   async validate({ fieldName, fieldValue, validatorName }) {
     const { invalidFields } = this.state
 
-    const isValidName = name =>
-      name && name.trim().length > 0 && new RegExp(/^[A-Za-z\s]+$/).exec(name)
+    const isValidName = name => name && name.trim().length > 0
 
     const fields = {
       email: email => email && isEmail(email),

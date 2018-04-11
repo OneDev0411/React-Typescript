@@ -24,7 +24,7 @@ export default ({
             key={id}
             role={agent}
             allowedRoles={allowedRoles}
-            modalTitle="Edit Escrow Officer"
+            modalTitle="Update Escrow Officer"
             onRemoveRole={id => onRemoveEscrowOfficer(id)}
             onUpsertRole={onUpsertEscrowOfficer}
           />

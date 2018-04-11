@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ProgressBar } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
 import cn from 'classnames'
 import Deal from '../../../../../../models/Deal'

@@ -64,7 +64,6 @@ class InputWithSelect extends Component {
       inputType,
       items,
       errorText,
-      placeholder,
       defaultSelectedItem,
       lableColorError
     } = this.props
@@ -117,11 +116,11 @@ class InputWithSelect extends Component {
               <Input
                 data-type={inputType}
                 {...getInputProps({
-                  placeholder,
                   onChange: (e, data = {}) =>
                     this.props.onChangeHandler(
                       !_.isUndefined(data.value) ? data.value : e.target.value
                     ),
+                  placeholder: '',
                   style: { width: '100%' }
                 })}
               />

@@ -27,9 +27,13 @@ export default ({
   dealSide,
   onUpsertClient,
   onRemoveClient,
-  ctaTitle = 'Add client'
+  title
 }) => {
   const allowedRoles = getRoles(dealSide)
+
+  if (!title) {
+    title = dealSide === 'Buying' ? 'Buyer (Tenant)' : 'Seller (Landlord)'
+  }
 
   return (
     <div className="form-section deal-people deal-client">
@@ -46,7 +50,7 @@ export default ({
           <CrudRole
             key={id}
             role={agent}
-            modalTitle="Edit client"
+            modalTitle={`Update ${title}`}
             allowedRoles={allowedRoles}
             onRemoveRole={id => onRemoveClient(id)}
             onUpsertRole={newRole => onUpsertClient({ ...agent, ...newRole })}
@@ -54,8 +58,8 @@ export default ({
         ))}
 
         <CrudRole
-          modalTitle="Add a client"
-          ctaTitle={ctaTitle}
+          modalTitle={`Add ${title}`}
+          ctaTitle={`Add ${title}`}
           allowedRoles={allowedRoles}
           onUpsertRole={onUpsertClient}
         />

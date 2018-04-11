@@ -21,6 +21,7 @@ import Loading from '../../components/Loading'
 import City from './fields/City'
 import State from './fields/State'
 import Street from './fields/Street'
+import Country from './fields/Country'
 import PostalCode from './fields/PostalCode'
 import AddAddressModal from './components/AddAddressModal'
 
@@ -71,7 +72,7 @@ const Addresses = ({
         <div style={{ position: 'relative' }}>
           {addresses.map((address, index) => {
             const { id, fields, label, is_primary } = address
-            const { street_name, city, state, postal_code } = fields
+            const { street_name, city, state, country, postal_code } = fields
             const labelField = { id, label, type: 'label' }
 
             return (
@@ -130,6 +131,7 @@ const Addresses = ({
                 <Street {...props} field={street_name} />
                 <City {...props} field={city} />
                 <State {...props} field={state} />
+                <Country {...props} field={country} />
                 <PostalCode {...props} field={postal_code} />
               </ul>
             )
@@ -350,6 +352,7 @@ function getAddresses(contact) {
     street_name: '',
     city: '',
     state: '',
+    country: '',
     postal_code: ''
   }
 
