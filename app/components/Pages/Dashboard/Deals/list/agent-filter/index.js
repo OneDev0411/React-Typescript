@@ -32,11 +32,7 @@ const filters = {
   Pending: (status, deal) =>
     FILTER_PENDING.indexOf(status) > -1 && !deal.deleted_at,
   Archive: (status, deal) =>
-    FILTER_ARCHIVE.indexOf(status) > -1 || !!deal.deleted_at,
-  Test: (status, deal) =>
-    !(FILTER_ACTIVE.indexOf(status) > -1) &&
-    !(FILTER_PENDING.indexOf(status) > -1) &&
-    !(FILTER_ARCHIVE.indexOf(status) > -1)
+    FILTER_ARCHIVE.indexOf(status) > -1 || !!deal.deleted_at
 }
 
 export class AgentFilter extends React.Component {
