@@ -19,12 +19,13 @@ class ContactsList extends React.Component {
       nextProps.filteredContacts,
       this.props.filteredContacts
     )
-    const deletingContactsChanged = !_.isEqual(
-      nextProps.deletingContacts,
-      this.props.deletingContacts
-    )
+    const deletingContactsChanged =
+      nextProps.deletingContacts.length !== this.props.deletingContacts.length
 
-    return filteredContactsChanged || deletingContactsChanged
+    return (
+      (filteredContactsChanged && nextProps.deletingContacts === 0) ||
+      deletingContactsChanged
+    )
   }
   columns = [
     {
@@ -35,6 +36,7 @@ class ContactsList extends React.Component {
       Cell: ({ original: contact }) => (
         <Radio
           className="select-row"
+          selected={!!this.props.selectedRows[contact.id]}
           onClick={e => {
             e.stopPropagation()
             this.props.toggleSelectedRow(contact)

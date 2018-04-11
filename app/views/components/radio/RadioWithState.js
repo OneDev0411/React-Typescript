@@ -1,25 +1,33 @@
 import React from 'react'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 
 import Radio from './index'
 
-const RadioWithState = props => {
-  const { selected, stateSelected, setStateSlected, onClick } = props
-  const isSelected = !!selected || stateSelected
+class RadioWithState extends React.PureComponent {
+  state = { stateSelected: false }
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.selected && nextProps.selected !== this.props.selected) {
+      this.setState({ stateSelected: false })
+    }
+  }
+  render() {
+    const { selected, onClick } = this.props
+    const { stateSelected } = this.state
 
-  return (
-    <Radio
-      {...props}
-      selected={isSelected}
-      onClick={e => {
-        setStateSlected(!stateSelected)
-        onClick && onClick(e)
-      }}
-    />
-  )
+    const isSelected = !!selected || stateSelected
+
+    console.log('here')
+
+    return (
+      <Radio
+        {...this.props}
+        selected={isSelected}
+        onClick={e => {
+          this.setState({ stateSelected: !stateSelected })
+          onClick && onClick(e)
+        }}
+      />
+    )
+  }
 }
 
-export default compose(withState('stateSelected', 'setStateSlected', false))(
-  RadioWithState
-)
+export default RadioWithState
