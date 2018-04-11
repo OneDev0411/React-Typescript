@@ -15,8 +15,6 @@ class RadioWithState extends React.PureComponent {
 
     const isSelected = !!selected || stateSelected
 
-    console.log('here')
-
     return (
       <Radio
         {...this.props}
