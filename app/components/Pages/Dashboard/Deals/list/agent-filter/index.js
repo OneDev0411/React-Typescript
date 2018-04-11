@@ -5,13 +5,14 @@ import _ from 'underscore'
 import ToolTip from '../../components/tooltip'
 import Deal from '../../../../../../models/Deal'
 
-const FILTER_ACTIVE = ['Active', 'Coming Soon']
+const FILTER_ACTIVE = ['Active', 'Coming Soon', 'Lease']
 
 const FILTER_PENDING = [
   'Active Contingent',
   'Active Kick Out',
   'Active Option Contract',
-  'Pending'
+  'Pending',
+  'Lease Contract'
 ]
 
 const FILTER_ARCHIVE = [
@@ -20,7 +21,8 @@ const FILTER_ARCHIVE = [
   'Expired',
   'Cancelled',
   'Withdrawn',
-  'Archived'
+  'Archived',
+  'Leased'
 ]
 
 const filters = {
@@ -30,7 +32,11 @@ const filters = {
   Pending: (status, deal) =>
     FILTER_PENDING.indexOf(status) > -1 && !deal.deleted_at,
   Archive: (status, deal) =>
-    FILTER_ARCHIVE.indexOf(status) > -1 || !!deal.deleted_at
+    FILTER_ARCHIVE.indexOf(status) > -1 || !!deal.deleted_at,
+  Test: (status, deal) =>
+    !(FILTER_ACTIVE.indexOf(status) > -1) &&
+    !(FILTER_PENDING.indexOf(status) > -1) &&
+    !(FILTER_ARCHIVE.indexOf(status) > -1)
 }
 
 export class AgentFilter extends React.Component {
