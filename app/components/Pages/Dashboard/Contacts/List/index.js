@@ -189,6 +189,7 @@ class ContactsList extends React.Component {
               toggleSelectedRow={this.toggleSelectedRow}
               handleOnDelete={this.handleOnDelete}
               deletingContacts={deletingContacts}
+              selectedRows={selectedRows}
             />
           </Fragment>
         )}
