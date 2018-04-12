@@ -1,12 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 import { browserHistory } from 'react-router'
+
+import { getDashboardHeight } from '../utils/get-dashboard-height'
+import { isTrainingAccount } from '../../../../../utils/user-teams'
+
 import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
 import UploadPromptModal from '../dashboard/upload/prompt'
 import PDFSplitterModal from '../pdf-splitter'
 import Navbar from './navbar'
 import FilesTable from './table'
 
+const FileManagerContent = styled.div`
+  min-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
+  max-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
+  overflow: auto;
+`
 export class FileManager extends React.Component {
   constructor(props) {
     super(props)
@@ -25,12 +35,16 @@ export class FileManager extends React.Component {
   }
 
   render() {
-    const { deal } = this.props
+    const { deal, user } = this.props
+    const traningAccount = isTrainingAccount(user)
 
     return (
       <div className="file-manager">
         <Navbar deal={deal} />
-        <div className="content u-scrollbar--thinner">
+        <FileManagerContent
+          className="u-scrollbar--thinner"
+          traningAccount={traningAccount}
+        >
           <div className="table-container">
             {deal.checklists ? (
               <FilesTable deal={deal} />
@@ -43,15 +57,16 @@ export class FileManager extends React.Component {
 
           <UploadPromptModal deal={deal} />
           <PDFSplitterModal deal={deal} />
-        </div>
+        </FileManagerContent>
       </div>
     )
   }
 }
 
-function mapStateToProps({ deals }, props) {
+function mapStateToProps({ deals, user }, props) {
   return {
-    deal: deals && deals.list ? deals.list[props.params.id] : null
+    deal: deals && deals.list ? deals.list[props.params.id] : null,
+    user
   }
 }
 
