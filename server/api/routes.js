@@ -11,7 +11,8 @@ const routes = {
     'envelope-sign',
     'download-pdf',
     'pdf-splitter',
-    'envelope-edit'
+    'envelope-edit',
+    'export'
   ],
   notification: ['all', 'delete', 'delete-room-notifications', 'mark-seen']
 }
