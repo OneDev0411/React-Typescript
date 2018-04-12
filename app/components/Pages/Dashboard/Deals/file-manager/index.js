@@ -1,16 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 import { browserHistory } from 'react-router'
+
+import { getDashboardHeight } from '../utils/get-dashboard-height'
+import { isTrainingAccount } from '../../../../../utils/user-teams'
+
 import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
 import UploadPromptModal from '../dashboard/upload/prompt'
 import PDFSplitterModal from '../pdf-splitter'
 import Navbar from './navbar'
 import FilesTable from './table'
-import { isTrainingAccount } from '../../../../../utils/user-teams'
-import styled from 'styled-components'
-
-const getDashboardHeight = isTraining =>
-  `calc(100vh - 56px ${isTraining ? ' - 48px' : ''})`
 
 const FileManagerContent = styled.div`
   min-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};

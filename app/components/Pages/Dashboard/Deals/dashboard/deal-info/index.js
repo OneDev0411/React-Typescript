@@ -1,4 +1,8 @@
 import React from 'react'
+import styled from 'styled-components'
+
+import { getDashboardHeight } from '../../utils/get-dashboard-height'
+
 import ListingCard from '../mls-listing/listing-card'
 import CriticalDates from '../factsheet/critical-dates'
 import ListingInfo from '../factsheet/listing-info'
@@ -7,13 +11,9 @@ import Roles from '../roles'
 import MlsListing from '../mls-listing'
 import DealSide from './side'
 import DealEmail from '../deal-email'
-import styled from 'styled-components'
 
 const DealInfosScrollable = styled.div`
-  height: calc(
-    100vh - 54px - 2px
-      ${({ traningAccount }) => (traningAccount ? ' - 48px' : '')}
-  );
+  height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
   overflow-x: hidden;
 `
 

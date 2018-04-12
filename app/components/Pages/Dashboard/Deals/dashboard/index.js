@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 import { browserHistory } from 'react-router'
+
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import UploadPromptModal from './upload/prompt'
@@ -12,10 +14,7 @@ import Upload from './upload'
 import NavBar from './navbar'
 import { getDeal } from '../../../../../store_actions/deals'
 import { isTrainingAccount } from '../../../../../utils/user-teams'
-import styled from 'styled-components'
-
-const getDashboardHeight = isTraining =>
-  `calc(100vh - 56px ${isTraining ? ' - 48px' : ''})`
+import { getDashboardHeight } from '../utils/get-dashboard-height'
 
 const DealTasks = styled.div`
   min-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
