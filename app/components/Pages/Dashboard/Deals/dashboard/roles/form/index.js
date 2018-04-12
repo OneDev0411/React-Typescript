@@ -15,7 +15,9 @@ const ROLE_NAMES = [
   'SellerReferral',
   'CoSellerAgent',
   'Buyer',
+  'BuyerPowerOfAttorney',
   'Seller',
+  'SellerPowerOfAttorney',
   'Title',
   'BuyerLawyer',
   'SellerLawyer',
@@ -24,7 +26,9 @@ const ROLE_NAMES = [
   'Appraiser',
   'Inspector',
   'Tenant',
-  'Landlord'
+  'LandlordPowerOfAttorney',
+  'Landlord',
+  'TenantPowerOfAttorney'
 ]
 
 export default class Form extends React.Component {
@@ -49,48 +53,53 @@ export default class Form extends React.Component {
     const { form, isNewRecord } = this.state
 
     if (isNewRecord) {
-      Object.keys(form).forEach(field => {
+      _.keys(form, field => {
         this.validate(field, form[field])
       })
-
-      return
     }
 
     this.preselectRoles()
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.form &&
-      Object.keys(nextProps.form).length !== 0 &&
-      (nextProps.form !== this.props.form ||
-        (nextProps.showFormModal && Object.keys(this.state.form).length === 0))
-    ) {
-      const isNewRecord = typeof nextProps.form.role === 'undefined'
+    const { form, showFormModal } = nextProps
 
-      if (isNewRecord) {
-        Object.keys(nextProps.form).forEach(field => {
-          this.validate(field, nextProps.form[field])
+    if (
+      form &&
+      _.size(form) > 0 &&
+      (form !== this.props.form ||
+        (showFormModal && _.size(this.state.form) === 0))
+    ) {
+      const isNewRecord = typeof form.role === 'undefined'
+
+      if (!isNewRecord) {
+        _.keys(form, field => {
+          this.validate(field, form[field])
         })
       } else {
         this.setState({
           nameErrorFields: [],
           nameErrorMessage: ''
         })
-        this.preselectRoles()
       }
 
-      this.setState({
-        form: nextProps.form,
-        isNewRecord
-      })
+      this.setState(
+        {
+          form,
+          isNewRecord
+        },
+        () => this.preselectRoles()
+      )
     }
 
-    if (!nextProps.form || !nextProps.showFormModal) {
-      this.setState({
-        form: {},
-        invalidFields: []
-      })
+    if (!form || !showFormModal) {
+      this.setState(
+        {
+          form: {},
+          invalidFields: []
+        },
+        () => this.preselectRoles()
+      )
     }
   }
 
@@ -104,8 +113,10 @@ export default class Form extends React.Component {
     const dealType = deal ? deal.deal_type : null
 
     if (
-      (name === 'BuyerAgent' && dealType === 'Buying') ||
-      (name === 'SellerAgent' && dealType === 'Selling')
+      ((name === 'BuyerAgent' || form.role === 'BuyerAgent') &&
+        dealType === 'Buying') ||
+      ((name === 'SellerAgent' || form.role === 'SellerAgent') &&
+        dealType === 'Selling')
     ) {
       return false
     }
@@ -124,26 +135,29 @@ export default class Form extends React.Component {
     const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
     const preselectedRole = availableRoles.length === 1 && availableRoles[0]
 
-    if (preselectedRole) {
-      this.setState({
-        form: {
-          ...this.state.form,
-          role: preselectedRole
-        }
-      })
+    if (!preselectedRole) {
+      return false
     }
+
+    this.setState({
+      form: {
+        ...this.state.form,
+        role: preselectedRole
+      }
+    })
   }
 
   /**
    * set form field's value
    */
-  setForm(field, value) {
+  setForm(field, value, removeField = null) {
     const { form } = this.state
+    const newForm = removeField ? _.omit(form, removeField) : form
 
     this.setState(
       {
         form: {
-          ...form,
+          ...newForm,
           [field]: value
         }
       },
@@ -152,19 +166,12 @@ export default class Form extends React.Component {
   }
 
   setCommission(field, value) {
-    const { form } = this.state
-
     const removeField =
       field === 'commission_percentage'
         ? 'commission_dollar'
         : 'commission_percentage'
 
-    this.setState(
-      {
-        form: _.omit(form, removeField)
-      },
-      () => this.setForm(field, value)
-    )
+    this.setForm(field, value, removeField)
   }
 
   /**
@@ -205,8 +212,8 @@ export default class Form extends React.Component {
     return form.commission_percentage ? value >= 0 && value <= 100 : value >= 0
   }
 
-  isValidName(name, regular = /^[A-Za-z\s]+$/) {
-    return name && name.trim().length > 0 && new RegExp(regular).exec(name)
+  isValidName(name) {
+    return name && name.trim().length > 0
   }
 
   /**
@@ -408,6 +415,7 @@ export default class Form extends React.Component {
           <div className="deal-roles-form">
             <div className="row-name">
               <Title
+                isInvalid={invalidFields.includes('legal_prefix')}
                 form={form}
                 onChange={value => this.setForm('legal_prefix', value)}
               />
@@ -418,7 +426,6 @@ export default class Form extends React.Component {
                 lableColorError={nameErrorFields.includes('legal_first_name')}
                 isRequired={false}
                 title="Legal First Name"
-                placeholder="Legal First"
                 value={form.legal_first_name}
                 isInvalid={invalidFields.includes('legal_first_name')}
                 onChange={value => this.setForm('legal_first_name', value)}
@@ -429,7 +436,6 @@ export default class Form extends React.Component {
                 name="middle_name"
                 isRequired={false}
                 title="Legal Middle Name"
-                placeholder="Legal Middle"
                 value={form.legal_middle_name}
                 isInvalid={invalidFields.includes('legal_middle_name')}
                 onChange={value => this.setForm('legal_middle_name', value)}
@@ -441,7 +447,6 @@ export default class Form extends React.Component {
                 lableColorError={nameErrorFields.includes('legal_last_name')}
                 isRequired={false}
                 title="Legal Last Name"
-                placeholder="Legal Last"
                 value={form.legal_last_name}
                 isInvalid={invalidFields.includes('legal_last_name')}
                 onChange={value => this.setForm('legal_last_name', value)}
@@ -452,7 +457,6 @@ export default class Form extends React.Component {
               lableColorError={nameErrorFields.includes('company_title')}
               title="Company"
               inputType="Text"
-              placeholder="Company Name"
               defaultSelectedItem={form.companies}
               onChangeHandler={value => this.setForm('company_title', value)}
               items={this.extractItems({

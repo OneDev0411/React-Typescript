@@ -100,6 +100,7 @@ export default class Editable extends React.Component {
 
   render() {
     const {
+      sectionId,
       deal,
       field,
       context,
@@ -132,7 +133,7 @@ export default class Editable extends React.Component {
               disabled={editMode}
               deal={deal}
               contextName={field.name}
-              placement="top"
+              placement={sectionId === 'critical-dates' ? 'bottom' : 'top'}
             />
 
             {(!editMode || (editMode && isDateType)) && (

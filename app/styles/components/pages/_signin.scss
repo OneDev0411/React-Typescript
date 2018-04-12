@@ -120,7 +120,7 @@
   border-radius: 3px;
   color: #15374d;
   background: transparent;
-  border: 1px solid #dce5eb;
+  border: 1px solid #A9BBCB;
 
   &:focus {
     outline: none;
@@ -135,7 +135,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: darken(#dce5eb, 10%);
+  background-color: #2196f3;
   transition: 0.3s;
 }
 
@@ -153,7 +153,7 @@
   left: 0;
   width: 2px;
   height: 0;
-  background-color: darken(#dce5eb, 10%);
+  background-color: #2196f3;
   transition: 0.4s;
 }
 
@@ -188,14 +188,14 @@
   font-size: 1.7rem;
   font-weight: inherit;
   letter-spacing: 0.5px;
-  color: #d1d7dc;
+  color: #768694;
 
   .c-auth__field__input:focus + &,
   .has-content.c-auth__field__input + & {
     top: -18px;
     left: 0;
     font-size: 1.4rem;
-    color: darken(#dce5eb, 10%);
+    color: darken(#A9BBCB, 10%);
     transition: 0.3s;
 
     > sup {
@@ -298,7 +298,7 @@
   text-align: center;
   font-weight: normal;
   color: #aaa;
-  border: 1px solid #ccc;
+  border: 1px solid #A9BBCB;
   display: flex;
   align-items: center;
   transition: 0.3s;

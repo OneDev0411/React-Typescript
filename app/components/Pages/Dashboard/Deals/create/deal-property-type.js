@@ -1,7 +1,7 @@
 import React from 'react'
 import { Dropdown, MenuItem } from 'react-bootstrap'
 import cn from 'classnames'
-import RadioButton from '../components/radio'
+import RadioButton from '../../../../../views/components/radio'
 
 const properties = [
   'Resale',
@@ -12,10 +12,7 @@ const properties = [
   'Commercial Lease'
 ]
 
-export default ({
-  selectedType,
-  onChangeDealType
-}) => (
+export default ({ selectedType, onChangeDealType }) => (
   <div className="form-section deal-type">
     <div className="hero">
       Select a checklist type. <span className="required">*</span>
@@ -27,24 +24,19 @@ export default ({
           selected: selectedType.length > 0
         })}
       >
-        { selectedType || 'Choose a checklist type' }
+        {selectedType || 'Choose a checklist type'}
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="deal-type-dropdown-list">
-        {
-          properties.map((item, key) =>
-            <MenuItem
-              key={`MENU_ITEM_${key}`}
-              onClick={() => onChangeDealType(item)}
-              eventKey={key + 1}
-            >
-              <RadioButton
-                selected={selectedType === item}
-                title={item}
-              />
-            </MenuItem>
-          )
-        }
+        {properties.map((item, key) => (
+          <MenuItem
+            key={`MENU_ITEM_${key}`}
+            onClick={() => onChangeDealType(item)}
+            eventKey={key + 1}
+          >
+            <RadioButton selected={selectedType === item} title={item} />
+          </MenuItem>
+        ))}
       </Dropdown.Menu>
     </Dropdown>
   </div>

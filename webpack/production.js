@@ -1,9 +1,8 @@
 import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import ImageminPlugin from 'imagemin-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import Visualizer from 'webpack-visualizer-plugin'
-import path from 'path'
+import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
@@ -49,6 +48,8 @@ webpackConfig.plugins.push(
       screw_ie8: true
     }
   }),
+  // reduce moment bundle size by removing unnecessary locales
+  new MomentLocalesPlugin(),
   new ExtractTextPlugin({
     filename: appConfig.compile.cssBundle,
     allChunks: true

@@ -4,7 +4,7 @@ import Editable from '../Editable'
 function Field({ field, isSaving, onChange, onDelete }) {
   const { name } = field
 
-  const validator = name => new RegExp(/^[A-Za-z\s]+$/).exec(name)
+  const validator = name => name && name.trim().length > 0
 
   return (
     <li className="c-contact-details-item">

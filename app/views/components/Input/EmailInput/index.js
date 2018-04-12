@@ -12,8 +12,8 @@ function validate(email) {
 export default props => (
   <Input
     mask={emailMask}
-    {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
     placeholder="example@gmail.com"
+    {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
     onChange={e => {
       props.onChange(e, {
         isValid: validate(e.target.value)

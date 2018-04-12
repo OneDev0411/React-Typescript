@@ -33,7 +33,7 @@ export default props => {
   return (
     <div style={{ position: 'relative', display: 'inline' }}>
       <Input
-        placeholderChar="#"
+        placeholderChar=" "
         style={{
           border: isValid ? '' : '1px solid #ec4b35'
         }}
@@ -51,9 +51,9 @@ export default props => {
           /\d/,
           /\d/
         ]}
+        placeholder="###-###-####"
         {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
         value={filteredValue}
-        placeholder="###-###-####"
         onChange={e => {
           const maskedValue = e.target.value
           const originalValue = maskedValue

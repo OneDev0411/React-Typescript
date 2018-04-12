@@ -20,7 +20,14 @@ export function importFail() {
 
 export function importDone() {
   return dispatch => {
-    dispatch(notifyResult({}))
+    dispatch(
+      notify({
+        allowHTML: true,
+        title: 'Contact import complete!',
+        message: 'Contacts have been imported successfuly!',
+        status: 'success'
+      })
+    )
 
     dispatch({ type: types.CONTACTS__IMPORT_DONE })
   }

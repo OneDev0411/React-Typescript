@@ -1,7 +1,6 @@
 import React from 'react'
 import AddContactModal from '../AddContactModal'
 import Import from './Import'
-import ExportContacts from './ExportContacts'
 import HeaderSearch from '../../../../Partials/headerSearch'
 import cn from 'classnames'
 
@@ -13,7 +12,7 @@ export default ({ user, contactsCount, onNewContact, onInputChange }) => {
   const isBackOffice = false
 
   return (
-    <div className={cn('list--header', { agent: !isBackOffice })}>
+    <div className={cn('list--header no-box-shadow', { agent: !isBackOffice })}>
       <div style={{ height: '57px' }}>
         <div className={cn('list--header-row', { agent: !isBackOffice })}>
           <div className="list--header-row--col">
@@ -27,8 +26,7 @@ export default ({ user, contactsCount, onNewContact, onInputChange }) => {
           </div>
 
           <div className="list--header-row--col">
-            <ExportContacts user={user} />
-            {/*<Import userId={user.id} />*/}
+            <Import userId={user.id} />
             <AddContactModal
               user={user}
               onNewContact={id => onNewContact(id)}

@@ -53,6 +53,8 @@ async function display(file, renderProps) {
       await store.dispatch(getTeams(initialState.user))
     } catch (e) {
       if (e.response && e.response.status === 401) {
+        console.log('Can not get user teams. signing out...')
+
         return this.redirect('/signout')
       }
     }

@@ -132,6 +132,14 @@ function AddAddressModal({
               />
 
               <Field
+                name="country"
+                component={TextField}
+                disabled={submitting}
+                title="Country"
+                placeholder="USA"
+              />
+
+              <Field
                 name="postal_code"
                 component={TextField}
                 disabled={submitting}

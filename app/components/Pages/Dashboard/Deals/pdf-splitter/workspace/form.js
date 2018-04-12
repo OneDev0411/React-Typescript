@@ -6,7 +6,7 @@ import cn from 'classnames'
 import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 import TasksDropDown from '../../components/tasks-dropdown'
-import Checkbox from '../../components/radio'
+import Checkbox from '../../../../../../views/components/radio'
 import Deal from '../../../../../../models/Deal'
 import {
   resetSplitterSelectedPages,
@@ -44,7 +44,7 @@ class WorkspaceForm extends React.Component {
     return false
   }
 
-  waitFor(ms) {
+  sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
 
@@ -112,7 +112,7 @@ class WorkspaceForm extends React.Component {
         console.log('Failed: ', e.message)
 
         this.saveAttempts += 1
-        await this.waitFor(3000 * this.saveAttempts)
+        await this.sleep(3000 * this.saveAttempts)
 
         return this.save()
       }

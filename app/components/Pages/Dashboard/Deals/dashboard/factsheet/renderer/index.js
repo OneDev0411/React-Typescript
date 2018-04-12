@@ -61,7 +61,15 @@ class Table extends React.Component {
 
   render() {
     const { saving } = this.state
-    const { table, deal, isBackOffice, showTitle, title, getValue } = this.props
+    const {
+      sectionId,
+      table,
+      deal,
+      isBackOffice,
+      showTitle,
+      title,
+      getValue
+    } = this.props
 
     return (
       <div>
@@ -78,6 +86,7 @@ class Table extends React.Component {
               return (
                 <div key={`CRITICAL_DATE_${field.name}`}>
                   <Editable
+                    sectionId={sectionId}
                     deal={deal}
                     field={field}
                     saving={saving}
