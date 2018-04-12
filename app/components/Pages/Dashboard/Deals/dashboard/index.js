@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 import { browserHistory } from 'react-router'
+
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import UploadPromptModal from './upload/prompt'
@@ -11,6 +13,27 @@ import ESignCompose from './esign/compose'
 import Upload from './upload'
 import NavBar from './navbar'
 import { getDeal } from '../../../../../store_actions/deals'
+import { isTrainingAccount } from '../../../../../utils/user-teams'
+import { getDashboardHeight } from '../utils/get-dashboard-height'
+
+const DealTasks = styled.div`
+  min-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
+  max-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
+`
+
+const DealContent = DealTasks.extend`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  will-change: overflow;
+  backface-visibility: hidden;
+
+  .column {
+    padding: 0;
+    height: auto;
+  }
+`
 
 class DealDetails extends React.Component {
   constructor(props) {
@@ -47,7 +70,9 @@ class DealDetails extends React.Component {
 
   render() {
     const { isFetchingDeal } = this.state
-    const { deal, selectedTask } = this.props
+    const { deal, selectedTask, user } = this.props
+
+    const traningAccount = isTrainingAccount(user)
     const selectedTaskId = selectedTask ? selectedTask.id : null
 
     if (!deal && isFetchingDeal) {
@@ -66,20 +91,25 @@ class DealDetails extends React.Component {
       <div className="deal-dashboard u-scrollbar--thinner">
         <NavBar deal={deal} />
 
-        <div className="deal-content">
+        <DealContent traningAccount={traningAccount}>
           <div className="column deal-info">
-            <DealInfo deal={deal} showBackButton />
+            <DealInfo
+              deal={deal}
+              showBackButton
+              traningAccount={traningAccount}
+            />
           </div>
 
-          <div
+          <DealTasks
             className={`column deal-tasks ${
               selectedTaskId ? 'collapsed' : 'expanded'
             }`}
+            traningAccount={traningAccount}
           >
             <Upload disableClick deal={deal}>
               <Checklists deal={deal} />
             </Upload>
-          </div>
+          </DealTasks>
 
           <div
             className="column deal-task-detail"
@@ -91,7 +121,7 @@ class DealDetails extends React.Component {
               onCloseTask={() => this.onCloseTask()}
             />
           </div>
-        </div>
+        </DealContent>
 
         <ESignAttachments deal={deal} />
         <ESignCompose deal={deal} />
@@ -102,12 +132,13 @@ class DealDetails extends React.Component {
   }
 }
 
-function mapStateToProps({ deals }, props) {
+function mapStateToProps({ deals, user }, props) {
   const { id } = props.params
 
   return {
     selectedTask: deals.selectedTask,
-    deal: deals.list ? deals.list[id] : null
+    deal: deals.list ? deals.list[id] : null,
+    user
   }
 }
 
