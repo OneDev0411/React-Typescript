@@ -45,7 +45,7 @@ import ReactGA from 'react-ga'
 import config from '../../config/public'
 
 import Intercom from './Pages/Dashboard/Partials/Intercom'
-import { inactiveIntercom } from '../store_actions/intercom'
+import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 
 class App extends Component {
   componentWillMount() {
@@ -53,6 +53,12 @@ class App extends Component {
 
     // check branding
     this.getBrand()
+
+    if (window) {
+      window.Intercom('onShow', () => {
+        this.props.dispatch(activeIntercom())
+      })
+    }
 
     if (typeof window !== 'undefined') {
       import('offline-js')
