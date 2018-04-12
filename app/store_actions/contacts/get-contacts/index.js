@@ -1,3 +1,4 @@
+import _ from 'underscore'
 import { normalize } from 'normalizr'
 import * as actionTypes from '../../../constants/contacts'
 import { contactsSchema } from '../../../models/contacts/schema'
@@ -22,8 +23,32 @@ export function getContacts(user = {}, params) {
       })
 
       let response = await fetchContacts(user, params)
-      const { data, info } = response
-      const contacts = { contacts: data }
+      const { data, contact_attribute_defs, info } = response
+
+      const indexedAttrbuteDefs = _.indexBy(contact_attribute_defs, 'id')
+
+      const contacts = {
+        contacts: data.map(item => {
+          const subContacts = item.sub_contacts.map(sub => {
+            const { attributes } = sub
+            const newAttributes = attributes.map(attr => ({
+              ...attr,
+              attribute_def: indexedAttrbuteDefs[attr.attribute_def]
+            }))
+
+            return {
+              ...sub,
+              attributes: newAttributes
+            }
+          })
+
+          return {
+            ...item,
+            sub_contacts: subContacts
+          }
+        })
+      }
+
       const normalizedData = normalize(contacts, contactsSchema)
 
       response = {
