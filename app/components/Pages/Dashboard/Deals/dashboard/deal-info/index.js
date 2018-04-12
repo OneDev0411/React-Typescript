@@ -1,4 +1,8 @@
 import React from 'react'
+import styled from 'styled-components'
+
+import { getDashboardHeight } from '../../utils/get-dashboard-height'
+
 import ListingCard from '../mls-listing/listing-card'
 import CriticalDates from '../factsheet/critical-dates'
 import ListingInfo from '../factsheet/listing-info'
@@ -8,11 +12,19 @@ import MlsListing from '../mls-listing'
 import DealSide from './side'
 import DealEmail from '../deal-email'
 
-export default ({ deal, showBackButton = true }) => {
+const DealInfosScrollable = styled.div`
+  height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
+  overflow-x: hidden;
+`
+
+export default ({ deal, showBackButton = true, traningAccount = false }) => {
   const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
   return (
-    <div className="scrollable" data-simplebar={!isWebkit || null}>
+    <DealInfosScrollable
+      data-simplebar={!isWebkit || null}
+      traningAccount={traningAccount}
+    >
       <div className="deal-info__inner">
         <ListingCard deal={deal} showBackButton={showBackButton} />
 
@@ -32,6 +44,6 @@ export default ({ deal, showBackButton = true }) => {
           <Commission deal={deal} />
         </div>
       </div>
-    </div>
+    </DealInfosScrollable>
   )
 }
