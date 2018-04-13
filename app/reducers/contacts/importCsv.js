@@ -44,6 +44,13 @@ export default (state = initialState, action) => {
       }
 
     case types.CONTACTS__IMPORT_CSV__UPDATE_MAPPING:
+      if (action.data.hasOwnProperty('field') && action.data.field === null) {
+        return {
+          ...state,
+          mappedFields: _.omit(state.mappedFields, action.column)
+        }
+      }
+
       return {
         ...state,
         mappedFields: {
