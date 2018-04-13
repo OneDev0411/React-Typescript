@@ -48,7 +48,7 @@ class ImportCsv extends React.Component {
 
           <Stepper
             disableClick
-            isCurrentStageFinished={isCurrentStepValid}
+            isActiveStageFinished={isCurrentStepValid}
             steps={['Choose File', 'Upload', 'Properties']}
             active={currentWizardStep}
           />
