@@ -49,18 +49,15 @@ import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 
 class App extends Component {
   componentWillMount() {
-    const { user } = this.props
+    const { user, dispatch } = this.props
 
     // check branding
     this.getBrand()
 
-    if (window) {
-      window.Intercom('onShow', () => {
-        this.props.dispatch(activeIntercom())
-      })
-    }
-
     if (typeof window !== 'undefined') {
+      window.Intercom &&
+        window.Intercom('onShow', () => dispatch(activeIntercom()))
+
       import('offline-js')
 
       if (!('WebkitAppearance' in document.documentElement.style)) {
