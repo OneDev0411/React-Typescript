@@ -31,10 +31,13 @@ export function getContacts(user = {}, params) {
         contacts: data.map(item => {
           const subContacts = item.sub_contacts.map(sub => {
             const { attributes } = sub
-            const newAttributes = attributes.map(attr => ({
-              ...attr,
-              attribute_def: indexedAttrbuteDefs[attr.attribute_def]
-            }))
+            const newAttributes = _.chain(attributes)
+              .map(attr => ({
+                ...attr,
+                attribute_def: indexedAttrbuteDefs[attr.attribute_def]
+              }))
+              .groupBy(attribute => attribute.attribute_def.section)
+              .value()
 
             return {
               ...sub,
