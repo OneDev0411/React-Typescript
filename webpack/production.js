@@ -35,7 +35,8 @@ webpackConfig.plugins.push(
   }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
-    filename: appConfig.compile.jsVendorBundle
+    filename: appConfig.compile.jsVendorBundle,
+    minChunks: Infinity
   }),
   new webpack.optimize.UglifyJsPlugin({
     sourceMap: true,
