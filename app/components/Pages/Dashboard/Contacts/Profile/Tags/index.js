@@ -2,8 +2,8 @@ import React from 'react'
 import _ from 'underscore'
 import { connect } from 'react-redux'
 import {
+  addAttributes,
   getContactsTags,
-  addNewAttributes,
   deleteAttributes
 } from '../../../../../../store_actions/contacts'
 import TagsModal from './TagsModal'
@@ -22,8 +22,8 @@ class Tags extends React.Component {
   async handleSubmitChanges({ newTags = [], removedTags = [] }) {
     const {
       contactId,
+      addAttributes,
       getContactsTags,
-      addNewAttributes,
       deleteAttributes
     } = this.props
 
@@ -46,7 +46,7 @@ class Tags extends React.Component {
         tag: item.tag
       }))
 
-      await addNewAttributes({ contactId, attributes })
+      await addAttributes(contactId, attributes)
     }
 
     if (removedTags.length > 0) {
@@ -120,5 +120,5 @@ class Tags extends React.Component {
 export default connect(null, {
   getContactsTags,
   deleteAttributes,
-  addNewAttributes
+  addAttributes
 })(Tags)

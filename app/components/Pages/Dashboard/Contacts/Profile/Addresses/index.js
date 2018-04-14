@@ -6,7 +6,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import {
-  addNewAttributes,
+  addAttributes,
   deleteAttributes,
   upsertContactAttributes
 } from '../../../../../../store_actions/contacts'
@@ -172,7 +172,7 @@ function mapStateToProps(state, props) {
 const enhance = compose(
   connect(mapStateToProps, {
     deleteAttributes,
-    addNewAttributes,
+    addAttributes,
     upsertContactAttributes
   }),
   withState('disabled', 'setDisabled', false),
@@ -314,14 +314,14 @@ const enhance = compose(
       contactId,
       setDisabled,
       setShowModal,
-      addNewAttributes
+      addAttributes
     }) => async values => {
       setDisabled(true)
 
       try {
         const attributes = [{ type: 'address', ...values }]
 
-        await addNewAttributes({ contactId, attributes })
+        await addAttributes(contactId, attributes)
       } catch (error) {
         setDisabled(false)
         throw error

@@ -9,7 +9,7 @@ import Uploader from '../../../../../../../../views/components/AvatarUploader/in
 import uploadAttachments from '../../../../../../../../models/contacts/upload-attachments/index.js'
 
 import {
-  addNewAttributes,
+  addAttributes,
   deleteAttributes
 } from '../../../../../../../../store_actions/contacts'
 import { getContactProfileImage } from '../../../../../../../../models/contacts/helpers'
@@ -24,7 +24,7 @@ function mapStateToProps(state, props) {
 }
 
 export default compose(
-  connect(mapStateToProps, { addNewAttributes, deleteAttributes }),
+  connect(mapStateToProps, { addAttributes, deleteAttributes }),
   withState('uploading', 'setUploading', false),
   withState('avatar', 'setAvatar', ({ contact }) =>
     getContactProfileImage(contact)
@@ -34,7 +34,7 @@ export default compose(
       contactId,
       setAvatar,
       setUploading,
-      addNewAttributes
+      addAttributes
     }) => async event => {
       const file = event.target.files[0]
 
@@ -58,7 +58,7 @@ export default compose(
             }
           ]
 
-          await addNewAttributes({ contactId, attributes })
+          await addAttributes(contactId, attributes)
         } catch (error) {
           setAvatar(null)
         } finally {

@@ -2,7 +2,7 @@ import _ from 'underscore'
 import { normalize } from 'normalizr'
 import { contactsSchema } from '../../../models/contacts/schema'
 
-function normalizeContactAttribute(response) {
+export function normalizeContactAttribute(response) {
   const { data, contact_attribute_defs } = response
   const indexedAttrbuteDefs = _.indexBy(contact_attribute_defs, 'id')
   const contacts = Array.isArray(data) ? data : [data]

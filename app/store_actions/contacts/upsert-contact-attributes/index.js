@@ -1,5 +1,5 @@
 // import { addNotification as notify } from 'reapop'
-import { addNewAttributes, updateContact } from '../'
+import { addAttributes, updateContact } from '../'
 
 export function upsertContactAttributes({ contactId, attributes }) {
   const updates = attributes.filter(attr => attr.id)
@@ -9,55 +9,19 @@ export function upsertContactAttributes({ contactId, attributes }) {
     // insert new attributes
     if (inserts.length > 0) {
       try {
-        await dispatch(addNewAttributes({ contactId, attributes: inserts }))
-
-        // if (!notifyIsDisabled) {
-        //   dispatch(
-        //     notify({
-        //       message: `New ${typeName} created.`,
-        //       status: 'success'
-        //     })
-        //   )
-        // }
+        await dispatch(addAttributes(contactId, inserts))
       } catch (error) {
         throw error
-        // dispatch(
-        //   notify({
-        //     title: `Can not create ${typeName}`,
-        //     message: getErrorMessage(error),
-        //     status: 'error'
-        //   })
-        // )
       }
     }
 
     // update attributes
     if (updates.length > 0) {
       try {
-        await dispatch(updateContact({ contactId, attributes: updates }))
-
-        // if (!notifyIsDisabled) {
-        //   dispatch(
-        //     notify({
-        //       message: `${typeName} updated`,
-        //       status: 'success'
-        //     })
-        //   )
-        // }
+        await dispatch(updateContact(contactId, updates))
       } catch (error) {
         throw error
-        // dispatch(
-        //   notify({
-        //     title: `Can not update ${typeName}`,
-        //     message: getErrorMessage(error),
-        //     status: 'error'
-        //   })
-        // )
       }
     }
   }
 }
-
-// function getErrorMessage(e) {
-//   return e.response ? e.response.body.attributes[type][0] : 'Field is not valid'
-// }

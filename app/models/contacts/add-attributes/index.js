@@ -7,16 +7,17 @@ import Fetch from '../../../services/fetch'
  * @returns {object} Returns updated contact.
  */
 
-export default async function postNewAttributes({
-  contactId = '',
-  attributes = []
-}) {
+export async function addAttributes(contactId, attributes) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }
 
+  if (!Array.isArray(attributes)) {
+    throw new Error('Attribute is invalid!')
+  }
+
   if (attributes.length === 0) {
-    throw new Error('There is not any attribute!')
+    throw new Error('Attribute is empty!')
   }
 
   try {
@@ -26,7 +27,7 @@ export default async function postNewAttributes({
         attributes
       })
 
-    return response.body.data
+    return response.body
   } catch (error) {
     throw error
   }
