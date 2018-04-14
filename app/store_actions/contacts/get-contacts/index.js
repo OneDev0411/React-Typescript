@@ -1,16 +1,10 @@
-import _ from 'underscore'
-import { normalize } from 'normalizr'
 import * as actionTypes from '../../../constants/contacts'
-import { contactsSchema } from '../../../models/contacts/schema'
-import fetchContacts from '../../../models/contacts/get-contacts'
+import { getContacts as fetchContacts } from '../../../models/contacts/get-contacts'
 import { isFetchingContactsList } from '../../../reducers/contacts/list'
+import { normalizeContacts } from '../helpers/normalize-contacts'
 
-export function getContacts(user = {}, params) {
+export function getContacts(query) {
   return async (dispatch, getState) => {
-    if (Object.keys(user).length === 0) {
-      ;({ user } = getState())
-    }
-
     const { contacts: { list } } = getState()
 
     if (isFetchingContactsList(list)) {
@@ -22,41 +16,12 @@ export function getContacts(user = {}, params) {
         type: actionTypes.FETCH_CONTACTS_REQUEST
       })
 
-      let response = await fetchContacts(user, params)
-      const { data, contact_attribute_defs, info } = response
-
-      const indexedAttrbuteDefs = _.indexBy(contact_attribute_defs, 'id')
-
-      const contacts = {
-        contacts: data.map(item => {
-          const subContacts = item.sub_contacts.map(sub => {
-            const { attributes } = sub
-            const newAttributes = _.chain(attributes)
-              .map(attr => ({
-                ...attr,
-                attribute_def: indexedAttrbuteDefs[attr.attribute_def]
-              }))
-              .groupBy(attribute => attribute.attribute_def.section)
-              .value()
-
-            return {
-              ...sub,
-              attributes: newAttributes
-            }
-          })
-
-          return {
-            ...item,
-            sub_contacts: subContacts
-          }
-        })
-      }
-
-      const normalizedData = normalize(contacts, contactsSchema)
+      let response = await fetchContacts(query)
+      const normalizedContacts = normalizeContacts(response)
 
       response = {
-        info,
-        ...normalizedData
+        info: response.info,
+        ...normalizedContacts
       }
 
       dispatch({
@@ -72,5 +37,3 @@ export function getContacts(user = {}, params) {
     }
   }
 }
-
-export default getContacts

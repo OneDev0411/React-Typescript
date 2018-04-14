@@ -1,9 +1,10 @@
 import { normalize } from 'normalizr'
+
 import { contactsSchema } from '../../../models/contacts/schema'
-import fetchContact from '../../../models/contacts/get-contact'
 import removeAttribute from '../../../models/contacts/delete-attribute'
 import * as actionTypes from '../../../constants/contacts'
 import { selectContact } from '../../../reducers/contacts/list'
+import { getContact as fetchContact } from '../../../models/contacts/get-contact'
 
 export function deleteAttributes({ contactId, attributesIds }) {
   return async (dispatch, getState) => {

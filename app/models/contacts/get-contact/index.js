@@ -1,30 +1,15 @@
 import Fetch from '../../../services/fetch'
 
-async function fetchContact(user, contactId) {
-  const { access_token } = user
-
-  if (!access_token) {
-    throw new Error('Unauthorized access.')
-  }
-
+export async function getContact(contactId) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }
 
   try {
-    const fetchContact = new Fetch().get(`/contacts/${contactId}`)
+    const response = await new Fetch().get(`/contacts/${contactId}`)
 
-    // required on ssr
-    if (access_token) {
-      fetchContact.set({ Authorization: `Bearer ${access_token}` })
-    }
-
-    const response = await fetchContact
-
-    return response.body.data
+    return response.body
   } catch (error) {
     throw error
   }
 }
-
-export default fetchContact

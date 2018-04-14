@@ -1,16 +1,18 @@
-import { normalize } from 'normalizr'
-import { contactsSchema } from '../../../models/contacts/schema'
-import fetchContact from '../../../models/contacts/get-contact'
+import { getContact as fetchContact } from '../../../models/contacts/get-contact'
 import * as actionTypes from '../../../constants/contacts'
+import { normalizeContacts } from '../helpers/normalize-contacts'
 
-export function getContact(user = {}, contactId = '') {
-  return async (dispatch, getState) => {
-    if (Object.keys(user).length === 0) {
-      ;({ user } = getState())
-    }
-
+export function getContact(contactId) {
+  return async dispatch => {
     if (!contactId) {
-      return Promise.resolve()
+      const error = new Error('Contact id is required.')
+
+      dispatch({
+        error,
+        type: actionTypes.FETCH_CONTACT_FAILURE
+      })
+
+      throw error
     }
 
     try {
@@ -18,9 +20,9 @@ export function getContact(user = {}, contactId = '') {
         type: actionTypes.FETCH_CONTACT_REQUEST
       })
 
-      const contact = await fetchContact(user, contactId)
-      const contacts = { contacts: [contact] }
-      const response = normalize(contacts, contactsSchema)
+      let response = await fetchContact(contactId)
+
+      response = normalizeContacts(response)
 
       dispatch({
         response,
@@ -35,5 +37,3 @@ export function getContact(user = {}, contactId = '') {
     }
   }
 }
-
-export default getContact
