@@ -158,13 +158,7 @@ const AsyncDealFormEdit = Load({
 
 const AsyncContacts = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */),
-  fetchData: (dispatch, { user }) => dispatch(getContacts(user))
-})
-
-const AsyncContactsList = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Contacts/List' /* webpackChunkName: "contact_l" */)
+    import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */)
 })
 
 const AsyncContactProfile = Load({
@@ -384,14 +378,12 @@ export default (
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
-      <Route path="/dashboard/contacts" component={AsyncContacts}>
-        <IndexRoute component={AsyncContactsList} />
-        <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
-        <Route
-          path="/dashboard/contacts/import/csv"
-          component={AsyncContactsImportCsv}
-        />
-      </Route>
+      <Route path="/dashboard/contacts" component={AsyncContacts} />
+      <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
+      <Route
+        path="/dashboard/contacts/import/csv"
+        component={AsyncContactsImportCsv}
+      />
 
       <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
       <Route path="/crm/tasks" component={AsyncCrmTasksList} />
