@@ -1,7 +1,7 @@
 // import { addNotification as notify } from 'reapop'
 import { addAttributes, updateContact } from '../'
 
-export function upsertContactAttributes({ contactId, attributes }) {
+export function upsertContactAttributes(contactId, attributes) {
   const updates = attributes.filter(attr => attr.id)
   const inserts = attributes.filter(attr => !attr.id)
 

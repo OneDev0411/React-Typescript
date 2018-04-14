@@ -72,7 +72,7 @@ const enhance = compose(
       setActionStatus({ status: 'Saving ...', item: attributes[0].id })
 
       try {
-        await upsertContactAttributes({ contactId, attributes })
+        await upsertContactAttributes(contactId, attributes)
       } catch (error) {
         throw error
       } finally {

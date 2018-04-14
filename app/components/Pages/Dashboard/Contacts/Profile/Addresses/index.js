@@ -205,10 +205,7 @@ const enhance = compose(
           }
         ]
 
-        await upsertContactAttributes({
-          contactId,
-          attributes
-        })
+        await upsertContactAttributes(contactId, attributes)
       } catch (error) {
         throw error
       } finally {
@@ -247,10 +244,7 @@ const enhance = compose(
           return { ...address, is_primary: false }
         })
 
-        await upsertContactAttributes({
-          contactId,
-          attributes
-        })
+        await upsertContactAttributes(contactId, attributes)
       } catch (error) {
         throw error
       } finally {
@@ -278,10 +272,7 @@ const enhance = compose(
           }
         ]
 
-        await upsertContactAttributes({
-          contactId,
-          attributes
-        })
+        await upsertContactAttributes(contactId, attributes)
       } catch (error) {
         throw error
       } finally {
@@ -298,10 +289,7 @@ const enhance = compose(
       setDisabled(true)
 
       try {
-        await deleteAttributes({
-          contactId,
-          attributesIds
-        })
+        await deleteAttributes(contactId, attributesIds)
       } catch (error) {
         throw error
       } finally {

@@ -100,17 +100,11 @@ class CrudRole extends React.Component {
             const contactId = form.contact.id
 
             if (nameAttribute && nameAttribute.id) {
-              await upsertContactAttributes({
-                contactId,
-                attributes: [nameAttribute]
-              })
+              await upsertContactAttributes(contactId, [nameAttribute])
             }
 
             if (newAttributes.length > 0) {
-              await upsertContactAttributes({
-                contactId,
-                attributes: newAttributes
-              })
+              await upsertContactAttributes(contactId, newAttributes)
             }
 
             this.notifySuccess(

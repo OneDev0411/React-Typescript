@@ -149,7 +149,7 @@ const enhance = compose(
           attributes = [field]
         }
 
-        await upsertContactAttributes({ contactId, attributes })
+        await upsertContactAttributes(contactId, attributes)
       } catch (error) {
         throw error
       } finally {
@@ -168,7 +168,7 @@ const enhance = compose(
       try {
         if (field.id) {
           setIsSaving(true)
-          await upsertContactAttributes({ contactId, attributes: [field] })
+          await upsertContactAttributes(contactId, [field])
         } else {
           const newFields = fields.filter(f => f.id)
 

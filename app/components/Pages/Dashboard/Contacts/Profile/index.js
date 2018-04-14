@@ -83,10 +83,7 @@ class ContactProfile extends React.Component {
   goBack = () => browserHistory.push('/dashboard/contacts')
 
   async onChangeAttribute({ contactId, attributes }) {
-    return this.props.upsertContactAttributes({
-      contactId,
-      attributes
-    })
+    return this.props.upsertContactAttributes(contactId, attributes)
   }
 
   async handleChangeStage(stage) {
@@ -112,16 +109,14 @@ class ContactProfile extends React.Component {
   async handleAddNote(note) {
     const { contact, upsertContactAttributes } = this.props
     const { id: contactId } = contact
-
-    await upsertContactAttributes({
-      contactId,
-      attributes: [
+    const attributes = [
         {
           note,
           type: 'note'
         }
       ]
-    })
+
+    await upsertContactAttributes(contactId, attributes)
 
     return this.setState({ activeTab: 'notes-list' })
   }
