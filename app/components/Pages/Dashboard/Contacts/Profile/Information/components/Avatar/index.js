@@ -12,7 +12,7 @@ import {
   addNewAttributes,
   deleteAttributes
 } from '../../../../../../../../store_actions/contacts'
-import Contact from '../../../../../../../../models/contacts'
+import { getContactProfileImage } from '../../../../../../../../models/contacts/helpers'
 
 const AvatarUploader = props => <Uploader {...props} />
 
@@ -26,10 +26,8 @@ function mapStateToProps(state, props) {
 export default compose(
   connect(mapStateToProps, { addNewAttributes, deleteAttributes }),
   withState('uploading', 'setUploading', false),
-  withState(
-    'avatar',
-    'setAvatar',
-    ({ contact }) => Contact.get.avatar(contact) || null
+  withState('avatar', 'setAvatar', ({ contact }) =>
+    getContactProfileImage(contact)
   ),
   withHandlers({
     handleChange: ({
@@ -60,12 +58,9 @@ export default compose(
             }
           ]
 
-          // console.log(attributes, image)
-
           await addNewAttributes({ contactId, attributes })
         } catch (error) {
           setAvatar(null)
-          // console.log(error)
         } finally {
           setUploading(false)
         }
@@ -93,7 +88,7 @@ export default compose(
         await deleteAttributes({ contactId, attributesIds })
         setAvatar(null)
       } catch (error) {
-        // console.log(error)
+        throw error
       }
     }
   })

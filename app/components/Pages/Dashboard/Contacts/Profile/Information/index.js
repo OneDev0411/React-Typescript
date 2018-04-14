@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
 import Avatar from './components/Avatar'
-import Contact from '../../../../../../models/contacts'
 import LastSeen from '../../../Chatroom/Rooms/components/last-seen'
 import Chatroom from '../../../Chatroom/Util/chatroom'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
@@ -12,6 +11,7 @@ import { confirmation } from '../../../../../../store_actions/confirmation'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
 import TrashIcon from '../../../../../../views/components/SvgIcons/TrashIcon'
+import DeletingMessage from './components/DeletingMessage'
 
 class Info extends React.Component {
   constructor(props) {
@@ -49,6 +49,10 @@ class Info extends React.Component {
       browserHistory.push('/dashboard/contacts')
     } catch (error) {
       throw error
+    } finally {
+      this.setState({
+        isDeleting: false
+      })
     }
   }
 
@@ -105,31 +109,10 @@ class Info extends React.Component {
   render() {
     const { isCreatingRoom, isDeleting } = this.state
     const { contact } = this.props
+    const displayName = contact.summary.display_name
 
     if (isDeleting) {
-      return (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1000,
-            width: '100%',
-            height: '100vh',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            fontWeight: 'bold',
-            fontSize: '3.6rem',
-            color: 'red',
-            backgroundColor: 'rgba(255, 255, 255, 0.6)'
-          }}
-        >
-          Deleting ...
-        </div>
-      )
+      return <DeletingMessage />
     }
 
     return (
@@ -137,13 +120,13 @@ class Info extends React.Component {
         <Avatar contact={contact} />
 
         <div className="c-contact-info__detail">
-          <div className="c-contact-info__name">
-            {Contact.get.name(contact)}
-          </div>
+          <div className="c-contact-info__name">{displayName}</div>
 
-          <div className="c-contact-info__status">
-            {contact.users && <LastSeen user={contact.users[0]} />}
-          </div>
+          {contact.users && (
+            <div className="c-contact-info__status">
+              <LastSeen user={contact.users[0]} />
+            </div>
+          )}
 
           <ActionButton
             disabled={isCreatingRoom}

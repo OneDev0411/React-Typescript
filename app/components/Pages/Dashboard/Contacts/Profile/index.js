@@ -61,10 +61,10 @@ class ContactProfile extends React.Component {
     } = this.props
 
     if (!contact) {
-      await getContact(user, contactId)
-      await getContactActivities(contactId)
+      // await getContact(contactId)
+      // await getContactActivities(contactId)
     } else if (!contact.activities) {
-      await getContactActivities(contactId)
+      // await getContactActivities(contactId)
     }
 
     const query = [
@@ -74,10 +74,10 @@ class ContactProfile extends React.Component {
       'associations[]=crm_task.associations'
     ].join('&')
 
-    const response = await getTasks(query)
-    const { data: tasks } = response
+    // const response = await getTasks(query)
+    // const { data: tasks } = response
 
-    this.setState({ tasks })
+    // this.setState({ tasks })
   }
 
   goBack = () => browserHistory.push('/dashboard/contacts')
@@ -171,7 +171,7 @@ class ContactProfile extends React.Component {
           <div className="left-pane">
             <Information contact={contact} />
 
-            <Stage
+            {/* <Stage
               contact={contact}
               handleOnChange={stage => this.handleChangeStage(stage)}
             />
@@ -185,11 +185,11 @@ class ContactProfile extends React.Component {
 
             <Details contact={contact} />
 
-            <Addresses contact={contact} />
+            <Addresses contact={contact} /> */}
           </div>
 
           <div className="right-pane">
-            <Tab.Container
+            {/* <Tab.Container
               id="profile-todo-tabs"
               defaultActiveKey="note"
               className="c-contact-profile-todo-tabs c-contact-profile-card"
@@ -243,15 +243,15 @@ class ContactProfile extends React.Component {
                   </Tab.Pane>
                 </Tab.Content>
               </div>
-            </Tab.Container>
+            </Tab.Container> */}
 
-            <Activities
+            {/* <Activities
               tasks={tasks}
               contact={contact}
               activeTab={activeTab}
               onChangeAttribute={this.onChangeAttribute}
               onChangeTab={activeTab => this.setState({ activeTab })}
-            />
+            /> */}
           </div>
         </div>
       </div>
