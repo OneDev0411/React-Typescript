@@ -1,8 +1,10 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
-
 import { Tab, Nav, NavItem } from 'react-bootstrap'
+
+import { getContactStage } from '../../../../../models/contacts/helpers/get-contact-stage'
+import { selectDefinitionId } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
 import Stage from './Stage'
@@ -86,35 +88,38 @@ class ContactProfile extends React.Component {
     return this.props.upsertContactAttributes(contactId, attributes)
   }
 
-  async handleChangeStage(stage) {
-    const { contact, upsertContactAttributes } = this.props
+  async handleChangeStage(value) {
+    const { contact, attributeDefs, upsertContactAttributes } = this.props
     const { id: contactId } = contact
+    const text = value.replace(/\s/g, '')
+    let stage = getContactStage(contact)
+    const attribute_def = selectDefinitionId(attributeDefs, 'stage')
 
-    const { id: attributeId } = Contact.get.stage(contact)
-
-    const attributes = [
-      {
-        type: 'stage',
-        id: attributeId || undefined,
-        stage: stage.replace(/\s/g, '')
+    if (stage && stage.id) {
+      stage = {
+        text,
+        id: stage.id
       }
-    ]
+    } else {
+      stage = {
+        text,
+        attribute_def,
+        is_primary: true
+      }
+    }
 
-    return upsertContactAttributes({
-      contactId,
-      attributes
-    })
+    return upsertContactAttributes(contactId, [stage])
   }
 
   async handleAddNote(note) {
     const { contact, upsertContactAttributes } = this.props
     const { id: contactId } = contact
     const attributes = [
-        {
-          note,
-          type: 'note'
-        }
-      ]
+      {
+        note,
+        type: 'note'
+      }
+    ]
 
     await upsertContactAttributes(contactId, attributes)
 
@@ -159,19 +164,19 @@ class ContactProfile extends React.Component {
     const { activeTab } = this.state
 
     return (
-      <div className="profile">
+      <div className="profile" style={{ backgroundColor: '#f8fafb' }}>
         <Header goBackHandler={this.goBack} />
 
-        <div className="content">
+        <div className="content" style={{ minHeight: 'calc(100vh - 55px)' }}>
           <div className="left-pane">
             <Information contact={contact} />
 
-            {/* <Stage
+            <Stage
               contact={contact}
-              handleOnChange={stage => this.handleChangeStage(stage)}
+              onChange={stage => this.handleChangeStage(stage)}
             />
 
-            <Names contact={contact} />
+            {/* <Names contact={contact} />
 
             <Tags
               contactId={contact.id}
@@ -255,13 +260,14 @@ class ContactProfile extends React.Component {
 }
 
 const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
-  const { list, contact, tags } = contacts
+  const { list, contact, tags, attributeDefs } = contacts
 
   const defaultTags = selectTags(tags)
 
   return {
     user,
     defaultTags,
+    attributeDefs,
     contact: selectContact(list, contactId),
     fetchError: selectContactError(contact)
   }
