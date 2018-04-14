@@ -1,11 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import {
   getDeals,
   getAgents,
-  getContexts
+  getContexts,
+  getForms
 } from '../../../../store_actions/deals'
-import { hasUserAccess } from '../../../../utils/user-teams'
+import { TrainingModeBanner } from '../Partials/TrainingModeBanner'
+import { hasUserAccess, isTrainingAccount } from '../../../../utils/user-teams'
+
 import DealsError from './error'
 
 class DealsContainer extends React.Component {
@@ -18,7 +22,9 @@ class DealsContainer extends React.Component {
       getDeals,
       getAgents,
       getContexts,
+      getForms,
       contexts,
+      forms,
       deals,
       agents,
       user
@@ -35,13 +41,21 @@ class DealsContainer extends React.Component {
     if (!agents) {
       getAgents(user)
     }
+
+    if (!forms) {
+      getForms()
+    }
   }
 
   render() {
-    const { deals, contexts, error } = this.props
+    const { deals, contexts, error, user } = this.props
 
     return (
       <div className="deals">
+        {deals &&
+          contexts &&
+          isTrainingAccount(user) && <TrainingModeBanner user={user} />}
+
         <DealsError deals={deals} error={error} />
 
         {deals === null && (
@@ -66,5 +80,5 @@ export default connect(
     forms: deals.forms,
     user
   }),
-  { getDeals, getAgents, getContexts }
+  { getDeals, getAgents, getContexts, getForms }
 )(DealsContainer)

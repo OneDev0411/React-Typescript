@@ -58,7 +58,8 @@ const field = ({
       ref={node => (inputNode = node)}
       onFocus={onFocus}
       onChange={event =>
-        dispatch(searchActions.setSearchInput(event.target.value))}
+        dispatch(searchActions.setSearchInput(event.target.value))
+      }
       placeholder="Search location or MLS#"
       className="c-mls-toolbar__search-box__field__input"
       style={{ paddingRight: searchInput === submitedValue && '39px' }}
@@ -165,6 +166,8 @@ const fieldHOC = compose(
       if (!autocompleteInstance) {
         const google = window.google
         const autocomplete = new google.maps.places.Autocomplete(inputNode)
+
+        autocomplete.setComponentRestrictions({ country: ['us'] })
 
         const circle = new google.maps.Circle({
           center: mapCenter,

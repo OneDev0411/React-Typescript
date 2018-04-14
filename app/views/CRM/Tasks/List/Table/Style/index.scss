@@ -1,0 +1,39 @@
+.ReactTable.tasks-list-table {
+  width: 100%;
+  padding: 16px;
+
+  .rt-th {
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+  }
+
+  .rt-th,
+  .rt-td {
+    padding: 0 16px;
+  }
+
+  .rt-tbody {
+    .rt-tr-group {
+      height: 70px;
+    }
+
+     .rt-tr:hover {
+      border-radius: 5px;
+    }
+  }
+
+  .-pagination {
+    padding: 1em;
+    
+    .-btn {
+      color: #fff;
+      background: #2196f3 !important;
+    }
+  }
+}
+
+// .td--dropdown-container {
+//   .dropdown-menu-right {
+//     width: 150px !important;
+//   }
+// }

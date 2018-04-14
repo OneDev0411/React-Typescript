@@ -1,6 +1,6 @@
 /* eslint-disable object-shorthand */
-
 const path = require('path')
+const packages = require('../../package.json').dependencies
 
 const env = process.env.NODE_ENV || 'development'
 const __DEV__ = env === 'development'
@@ -12,7 +12,7 @@ const config = {
     output: path.resolve(__dirname, '../../dist'),
     publicDirName: 'static',
     publicPath: __DEV__ ? '/static' : '/',
-    jsBundle: __DEV__ ? 'app.js' : 'app.[hash].js',
+    jsBundle: __DEV__ ? 'app.js' : '[name].[hash].js',
     jsVendorBundle: 'core.[hash].js',
     cssBundle: 'app.[hash].css',
     template: path.resolve(__dirname, '../../app/templates/app.html'),
@@ -23,12 +23,14 @@ const config = {
       'react-redux',
       'moment',
       'lodash',
+      'underscore',
       'whatwg-fetch',
       'offline-js'
     ]
   },
   globals: {
     'process.env': {
+      PDFJS_VERSION: JSON.stringify(packages['pdfjs-dist'].substring(1)),
       NODE_ENV: JSON.stringify(env),
       APP_URL: JSON.stringify(process.env.APP_URL),
       RECHAT_API_URL: JSON.stringify(process.env.RECHAT_API_URL),

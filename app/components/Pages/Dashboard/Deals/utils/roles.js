@@ -1,8 +1,10 @@
-import pick from 'lodash/pick'
-
 const aliases = {
   Title: 'Escrow Officer',
-  Lender: 'Lending Agent'
+  Lender: 'Lending Agent',
+  BuyerPowerOfAttorney: 'Power of Attorney - Buyer',
+  SellerPowerOfAttorney: 'Power of Attorney - Seller',
+  LandlordPowerOfAttorney: 'Power of Attorney - Landlord',
+  TenantPowerOfAttorney: 'Power of Attorney - Tenant'
 }
 
 export function roleName(role) {
@@ -11,16 +13,12 @@ export function roleName(role) {
   return name.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/Co\s/g, 'Co-')
 }
 
-export function normalizeContact(contact) {
+export function normalizeContactAsRole(contact) {
   const newContact = contact
 
   delete newContact.id
 
-  const {
-    legal_prefix,
-    legal_last_name,
-    legal_middle_name,
-    legal_first_name,
+  let {
     title,
     last_name,
     middle_name,
@@ -29,28 +27,41 @@ export function normalizeContact(contact) {
     phone_number
   } = contact
 
-  const firstName =
-    first_name !== email && first_name !== phone_number && first_name
-  const legalFirstName =
-    legal_first_name !== email &&
-    legal_first_name !== phone_number &&
-    legal_first_name
+  if (first_name === email || first_name === phone_number) {
+    first_name = ''
+  }
+
+  let { company_title } = contact
+
+  if (!contact.company_title && contact.companies && contact.companies[0]) {
+    company_title = contact.companies[0].company
+  }
 
   const fakeRole = {
     ...newContact,
-    legal_prefix: legal_prefix || title,
-    legal_first_name: legalFirstName || firstName,
-    legal_middle_name: legal_middle_name || middle_name,
-    legal_last_name: legal_last_name || last_name
+    company_title,
+    legal_prefix: title,
+    legal_first_name: first_name,
+    legal_middle_name: middle_name,
+    legal_last_name: last_name
   }
 
   return fakeRole
 }
 
-export function normalizedFormDataAsContact(formData = {}) {
-  const { email, phone_number } = formData
+export function normalizeNewRoleFormDataAsContact(formData = {}) {
   let emails
   let phone_numbers
+  let companies
+  const {
+    email,
+    phone_number,
+    company_title,
+    legal_prefix,
+    legal_first_name,
+    legal_middle_name,
+    legal_last_name
+  } = formData
 
   if (email) {
     emails = [email]
@@ -62,60 +73,72 @@ export function normalizedFormDataAsContact(formData = {}) {
     delete formData.phone_number
   }
 
+  if (company_title) {
+    companies = [company_title]
+    delete formData.company_title
+  }
+
   return {
-    ...formData,
     emails,
-    phone_numbers
+    phone_numbers,
+    companies,
+    title: legal_prefix,
+    first_name: legal_first_name,
+    middle_name: legal_middle_name,
+    last_name: legal_last_name
   }
 }
 
-export async function getUpdatedNameAttribute(formData = {}) {
+export async function getUpdatedNameAttribute(formData) {
   const { contact } = formData
-  const { summary, sub_contacts } = contact
-  const updateList = [
-    'legal_prefix',
-    'legal_first_name',
-    'legal_middle_name',
-    'legal_last_name'
-  ]
 
-  const { names } = sub_contacts[0].attributes
-  const namesId = Array.isArray(names) ? names[0].id : undefined
+  if (!contact) {
+    return null
+  }
 
-  const nameFields = [
-    'title',
-    'nickname',
-    'first_name',
-    'middle_name',
-    'last_name',
-    'legal_prefix',
-    'legal_first_name',
-    'legal_middle_name',
-    'legal_last_name'
-  ]
+  const {
+    legal_prefix: title,
+    legal_first_name: first_name,
+    legal_middle_name: middle_name,
+    legal_last_name: last_name
+  } = formData
 
-  const nameAttribute = pick(summary, nameFields)
+  const formNameFields = {
+    title,
+    first_name,
+    middle_name,
+    last_name
+  }
 
-  const updatedNamesList = Object.keys(formData)
-    .filter(attr => updateList.includes(attr))
-    .filter(attr => {
-      if (formData[attr]) {
-        return !nameAttribute[attr] || formData[attr] !== nameAttribute[attr]
-      }
+  let name = {
+    id: undefined,
+    type: 'name'
+  }
+  const { names } = contact.sub_contacts[0].attributes
+
+  if (Array.isArray(names) && names.length > 0) {
+    name = {
+      ...name,
+      ...names[0]
+    }
+  }
+
+  const fieldsList = ['title', 'first_name', 'middle_name', 'last_name']
+
+  const updatedFieldsList = Object.keys(formNameFields)
+    .filter(attr => fieldsList.includes(attr))
+    .filter(attr => !name[attr] || formNameFields[attr] !== name[attr])
+
+  if (updatedFieldsList.length > 0) {
+    const updatedFields = {}
+
+    updatedFieldsList.forEach(field => {
+      updatedFields[field] = formNameFields[field]
     })
 
-  const updatedNames = {}
-
-  updatedNamesList.forEach(name => {
-    updatedNames[name] = formData[name]
-  })
-
-  if (Object.keys(updatedNames).length > 0) {
     return {
-      ...nameAttribute,
-      ...updatedNames,
-      id: namesId,
-      type: 'name'
+      ...name,
+      ...updatedFields
     }
   }
 

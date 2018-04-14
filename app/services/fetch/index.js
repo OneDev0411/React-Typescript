@@ -7,12 +7,15 @@ export default class Fetch {
   constructor() {
     const isServerSide = typeof window === 'undefined'
     const isTestEnv = process.env.NODE_ENV === 'test'
+    const isProductionEnv = process.env.NODE_ENV === 'production'
 
     this._middlewares = {}
     this._autoLogin = true
     this._isServerSide = isServerSide
     this._baseUrl = isServerSide || isTestEnv ? config.app.url : ''
     this._proxyUrl = `${this._baseUrl}/api/proxifier`
+    this._isProductionEnv = isProductionEnv
+    this._startTime = null
   }
 
   _create(method, endpoint) {
@@ -21,12 +24,18 @@ export default class Fetch {
 
     this._isLoggedIn = user && user.access_token !== undefined
 
+    if (this._isProductionEnv) {
+      console.log(`${method.toUpperCase()} ${endpoint}`)
+    }
+
+    this._startTime = Date.now()
+
     const agent = SuperAgent.post(
       `${this._proxyUrl}/${this.getEndpointKey(endpoint)}`
     )
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
-      .retry(2)
+    // .retry(2)
 
     // auto append access-token
     if (this._autoLogin && this._isLoggedIn) {
@@ -42,6 +51,9 @@ export default class Fetch {
 
     agent.on('error', error => {
       const errorCode = error.response && ~~error.response.statusCode
+
+      // create error log
+      this.createErrorLog(errorCode, error)
 
       if (errorCode === 401) {
         this.handle401Error(error)
@@ -105,6 +117,21 @@ export default class Fetch {
     if (~~response.status < 200 || ~~response.status > 207) {
       return response
     }
+  }
+
+  createErrorLog(code, error = {}) {
+    if (!this._isProductionEnv) {
+      return
+    }
+
+    const now = Date.now()
+    const diff = now - this._startTime
+
+    console.error(
+      `Error ${code}: `,
+      error.response ? error.response.text : error.message,
+      `(Response Time: ${diff / 1000}s)`
+    )
   }
 
   middleware(name, options) {

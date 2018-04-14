@@ -18,8 +18,8 @@ class Comment extends React.Component {
   }
 
   getRoom(task, rooms) {
-    const { deal, addNewRoom } = this.props
-    const room = rooms[task.room.id]
+    const { addNewRoom } = this.props
+    const room = rooms && rooms[task.room.id]
 
     if (task && !room) {
       addNewRoom(task.room)

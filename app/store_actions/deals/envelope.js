@@ -12,7 +12,7 @@ export function envelopeCreated(deal_id, envelope) {
 }
 
 export function createEnvelope(envelope) {
-  return async (dispatch) => {
+  return async dispatch => {
     // create indexed envelops
     const indexedEnvelops = _.indexBy([envelope], 'id')
 
@@ -39,7 +39,7 @@ function setEnvelopeStatus(envelope_id, status) {
 }
 
 export function voidEnvelope(deal_id, envelope_id) {
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       dispatch(setEnvelopeStatus(envelope_id, 'Voided'))
       await Deal.voidEnvelope(envelope_id)

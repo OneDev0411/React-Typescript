@@ -36,5 +36,8 @@
   resize: none;
   border-width: 0;
   font-size: 1.6rem;
-  outline-width: 2px;
+  
+  &:focus {
+    outline-width: 0;
+  }
 }

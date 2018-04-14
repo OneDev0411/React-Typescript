@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import cn from 'classnames'
-import Radio from '../../components/radio'
+import Radio from '../../../../../../views/components/radio'
 import { selectSplitterPage } from '../../../../../../store_actions/deals'
 
 class PageSelector extends React.Component {

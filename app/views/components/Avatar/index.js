@@ -1,62 +1,60 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import pure from 'recompose/pure'
 
-const getNameInitials = user => {
-  let initials
-  const { first_name, last_name, display_name } = user
-
-  if (first_name) {
-    initials = first_name.charAt(0).toUpperCase()
+const getNameInitials = title => {
+  if (!title) {
+    return
   }
 
-  if (last_name) {
-    initials += last_name.charAt(0).toUpperCase()
-  }
-
-  if (!initials && display_name) {
-    initials = display_name.charAt(0)
- 
-    // eslint-disable-next-line
-    if (isNaN(initials)) {
-      return initials.toUpperCase()
-    }
-  }
-
-  return initials
+  return title
+    .split(' ')
+    .map(t => t.charAt(0).toUpperCase())
+    .slice(0, 2)
+    .join('')
 }
 
 const propTypes = {
   size: PropTypes.number,
-  user: PropTypes.object.isRequired
+  title: PropTypes.string,
+  image: PropTypes.string,
+  borderRadius: PropTypes.number,
+  placeHolderImage: PropTypes.string
 }
 
 const defaultProps = {
-  size: 48
+  size: 48,
+  image: '',
+  title: '*',
+  borderRadius: 100,
+  placeHolderImage: ''
 }
 
-const Avatar = ({ user, size }) => {
-  const { profile_image_url } = user
+const Avatar = ({ image, title, size, placeHolderImage, borderRadius }) => {
   const style = {
-    width: `${size}px`,
-    height: `${size}px`,
-    lineHeight: `${size}px`
+    width: size,
+    height: size,
+    lineHeight: `${size}px`,
+    borderRadius
   }
 
-  if (profile_image_url) {
+  if (image || placeHolderImage) {
     style.background = 'transparent'
 
     return (
-      <img
-        alt="rechat avatar"
-        src={profile_image_url}
-        className="c-avatar__image"
-      />
+      <div className="c-avatar" style={style}>
+        <img
+          alt="rechat avatar"
+          className="c-avatar__image"
+          src={image || placeHolderImage}
+        />
+      </div>
     )
   }
 
   return (
-    <div className="c-avatar" style={style}>
-      {getNameInitials(user)}
+    <div style={style} className="c-avatar">
+      {getNameInitials(title)}
     </div>
   )
 }
@@ -64,4 +62,4 @@ const Avatar = ({ user, size }) => {
 Avatar.propTypes = propTypes
 Avatar.defaultProps = defaultProps
 
-export default Avatar
+export default pure(Avatar)

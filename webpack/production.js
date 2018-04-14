@@ -1,9 +1,8 @@
 import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import ImageminPlugin from 'imagemin-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import Visualizer from 'webpack-visualizer-plugin'
-import path from 'path'
+import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
@@ -25,7 +24,8 @@ webpackConfig.performance = {
 
 webpackConfig.entry = {
   app: ['babel-polyfill', appConfig.compile.entry],
-  vendor: appConfig.compile.vendors
+  vendor: appConfig.compile.vendors,
+  pdfjsWorker: 'pdfjs-dist/build/pdf.worker.entry'
 }
 
 webpackConfig.plugins.push(
@@ -35,7 +35,8 @@ webpackConfig.plugins.push(
   }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
-    filename: appConfig.compile.jsVendorBundle
+    filename: appConfig.compile.jsVendorBundle,
+    minChunks: Infinity
   }),
   new webpack.optimize.UglifyJsPlugin({
     sourceMap: true,
@@ -43,8 +44,13 @@ webpackConfig.plugins.push(
     cache: true,
     uglifyOptions: {
       output: { comments: false }
+    },
+    compressor: {
+      screw_ie8: true
     }
   }),
+  // reduce moment bundle size by removing unnecessary locales
+  new MomentLocalesPlugin(),
   new ExtractTextPlugin({
     filename: appConfig.compile.cssBundle,
     allChunks: true

@@ -1,6 +1,6 @@
 %deals-list {
   overflow-x: hidden;
-  height: 100vh;
+  // height: 100vh;
   .table-container {
     @extend %deal-list--table;
   }
@@ -43,7 +43,11 @@
   }
 
   &.backoffice {
-    margin-top: 12%;
+    margin-top: 0;
+    position: fixed;
+    top: 50%;
+    left: calc(50% + #{$app-sidenav-width}/2);
+    transform: translate(-50%, -50%);
     .title {
       font-size: 26px;
       font-weight: bold;
@@ -135,7 +139,6 @@
       }
 
       .sortable {
-
         &:hover {
           color: #9399a2;
         }

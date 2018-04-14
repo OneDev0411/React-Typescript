@@ -22,11 +22,14 @@ class Roles extends React.Component {
   }
 
   getUserFullName = role =>
-    role.legal_full_name || (role.user && role.user.display_name)
+    role.legal_full_name ||
+    (role.user && role.user.display_name) ||
+    role.company_title
 
   getUserFullNameForAvatar = role => {
-    const { user, legal_first_name, legal_last_name } = role
-    const fullName = `${legal_first_name} ${legal_last_name}`.trim()
+    const { user, legal_first_name, legal_last_name, company_title } = role
+    const fullName =
+      `${legal_first_name} ${legal_last_name}`.trim() || company_title
 
     return fullName || (user && user.display_name)
   }

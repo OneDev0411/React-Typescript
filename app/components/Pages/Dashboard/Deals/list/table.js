@@ -258,7 +258,7 @@ class BaseTable extends React.Component {
       emptySearch = true
     } else if (searchBoxIsOpen && !hasRows) {
       noSearchResults = true
-    } else if (!hasRows && tabName === 'All') {
+    } else if (!hasRows) {
       emptyState = true
     }
 

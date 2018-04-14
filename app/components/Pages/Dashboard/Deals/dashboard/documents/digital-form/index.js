@@ -1,7 +1,7 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
+import { Link } from 'react-router'
 
-const Form = ({ deal, task }) => {
+export default ({ deal, task }) => {
   if (!task || !task.form) {
     return false
   }
@@ -14,19 +14,12 @@ const Form = ({ deal, task }) => {
           <img src="/static/images/deals/digital-form.svg" alt="" />
         </div>
 
-        <div
-          className="name"
-          onClick={() =>
-            browserHistory.push(
-              `/dashboard/deals/${deal.id}/form-viewer/${task.id}`
-            )
-          }
-        >
-          <span className="link">{task.title}</span>
+        <div className="name">
+          <Link to={`/dashboard/deals/${deal.id}/form-viewer/${task.id}`}>
+            <span className="link">{task.title}</span>
+          </Link>
         </div>
       </div>
     </div>
   )
 }
-
-export default Form

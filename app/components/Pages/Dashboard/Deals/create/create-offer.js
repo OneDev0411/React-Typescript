@@ -154,12 +154,15 @@ class CreateOffer extends React.Component {
       return buyerName.length > 0
     }
 
+    if (!this.isLeaseDeal()) {
+      return _.size(escrowOfficers) > 0
+    }
+
     return (
       offerType.length > 0 &&
       enderType !== -1 &&
       _.size(clients) > 0 && // validate clients
       _.size(agents) > 0 && // validate agents
-      _.size(escrowOfficers) > 0 &&
       dealStatus.length > 0 &&
       DealContext.validateList(
         contexts,
@@ -294,6 +297,12 @@ class CreateOffer extends React.Component {
     return this.state.offerType === 'primary'
   }
 
+  isLeaseDeal() {
+    const { deal } = this.props
+
+    return deal.property_type.includes('Lease')
+  }
+
   getDealContexts() {
     const { deal } = this.props
 
@@ -385,15 +394,17 @@ class CreateOffer extends React.Component {
                 onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
               />
 
-              <EscrowOfficers
-                escrowOfficers={escrowOfficers}
-                onUpsertEscrowOfficer={form =>
-                  this.onUpsertRole(form, 'escrowOfficers')
-                }
-                onRemoveEscrowOfficer={id =>
-                  this.onRemoveRole(id, 'escrowOfficers')
-                }
-              />
+              {!this.isLeaseDeal() && (
+                <EscrowOfficers
+                  escrowOfficers={escrowOfficers}
+                  onUpsertEscrowOfficer={form =>
+                    this.onUpsertRole(form, 'escrowOfficers')
+                  }
+                  onRemoveEscrowOfficer={id =>
+                    this.onRemoveRole(id, 'escrowOfficers')
+                  }
+                />
+              )}
 
               <DealStatus
                 property_type={deal.property_type}

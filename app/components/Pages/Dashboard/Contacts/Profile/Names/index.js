@@ -77,7 +77,6 @@ const enhance = compose(
           Array.isArray(firstSubContactNames) &&
           Object.keys(firstSubContactNames[0]).length > 0
         ) {
-          // eslint-disable-next-line
           id = firstSubContactNames[0].id
         }
 
@@ -132,7 +131,6 @@ const enhance = compose(
           Array.isArray(firstSubContactNames) &&
           Object.keys(firstSubContactNames[0]).length > 0
         ) {
-          // eslint-disable-next-line
           id = firstSubContactNames[0].id
         }
 
@@ -168,14 +166,10 @@ function getNames(names) {
     first_name: '',
     middle_name: '',
     last_name: '',
-    legal_first_name: '',
-    legal_middle_name: '',
-    legal_last_name: '',
     nickname: ''
   }
 
   if (names && Object.keys(names).length > 0) {
-    // eslint-disable-next-line
     id = names.id
 
     nameAttribute = {
@@ -184,10 +178,6 @@ function getNames(names) {
     }
   } else {
     nameAttribute = nameFields
-  }
-
-  if (names && names.legal_prefix && !nameAttribute.title) {
-    nameAttribute.title = names.legal_prefix
   }
 
   const getTitle = name =>

@@ -5,6 +5,7 @@ import Role from './role'
 import Title from './title'
 import Commission from './commission'
 import InputWithSelect from './input-with-select'
+import { Button, Modal } from 'react-bootstrap'
 
 const ROLE_NAMES = [
   'BuyerAgent',
@@ -14,7 +15,9 @@ const ROLE_NAMES = [
   'SellerReferral',
   'CoSellerAgent',
   'Buyer',
+  'BuyerPowerOfAttorney',
   'Seller',
+  'SellerPowerOfAttorney',
   'Title',
   'BuyerLawyer',
   'SellerLawyer',
@@ -23,7 +26,9 @@ const ROLE_NAMES = [
   'Appraiser',
   'Inspector',
   'Tenant',
-  'Landlord'
+  'LandlordPowerOfAttorney',
+  'Landlord',
+  'TenantPowerOfAttorney'
 ]
 
 export default class Form extends React.Component {
@@ -34,29 +39,68 @@ export default class Form extends React.Component {
 
     const isNewRecord = typeof form.role === 'undefined'
 
-    // console.log('isNewRecord', isNewRecord, form)
-
     this.state = {
       form,
       isNewRecord,
-      invalidFields: []
+      invalidFields: [],
+      isFormCompleted: false,
+      nameErrorMessage: undefined,
+      nameErrorFields: []
     }
-
-    // this.validate = _.debounce(this.validate, 200)
   }
 
   componentDidMount() {
     const { form, isNewRecord } = this.state
 
     if (isNewRecord) {
-      Object.keys(form).forEach(field => {
+      _.keys(form, field => {
         this.validate(field, form[field])
       })
-
-      return
     }
 
     this.preselectRoles()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { form, showFormModal } = nextProps
+
+    if (
+      form &&
+      _.size(form) > 0 &&
+      (form !== this.props.form ||
+        (showFormModal && _.size(this.state.form) === 0))
+    ) {
+      const isNewRecord = typeof form.role === 'undefined'
+
+      if (!isNewRecord) {
+        _.keys(form, field => {
+          this.validate(field, form[field])
+        })
+      } else {
+        this.setState({
+          nameErrorFields: [],
+          nameErrorMessage: ''
+        })
+      }
+
+      this.setState(
+        {
+          form,
+          isNewRecord
+        },
+        () => this.preselectRoles()
+      )
+    }
+
+    if (!form || !showFormModal) {
+      this.setState(
+        {
+          form: {},
+          invalidFields: []
+        },
+        () => this.preselectRoles()
+      )
+    }
   }
 
   /**
@@ -69,8 +113,10 @@ export default class Form extends React.Component {
     const dealType = deal ? deal.deal_type : null
 
     if (
-      (name === 'BuyerAgent' && dealType === 'Buying') ||
-      (name === 'SellerAgent' && dealType === 'Selling')
+      ((name === 'BuyerAgent' || form.role === 'BuyerAgent') &&
+        dealType === 'Buying') ||
+      ((name === 'SellerAgent' || form.role === 'SellerAgent') &&
+        dealType === 'Selling')
     ) {
       return false
     }
@@ -89,31 +135,43 @@ export default class Form extends React.Component {
     const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
     const preselectedRole = availableRoles.length === 1 && availableRoles[0]
 
-    if (preselectedRole) {
-      this.setState({
-        form: {
-          ...this.state.form,
-          role: preselectedRole
-        }
-      })
+    if (!preselectedRole) {
+      return false
     }
+
+    this.setState({
+      form: {
+        ...this.state.form,
+        role: preselectedRole
+      }
+    })
   }
 
   /**
    * set form field's value
    */
-  setForm(field, value) {
+  setForm(field, value, removeField = null) {
     const { form } = this.state
+    const newForm = removeField ? _.omit(form, removeField) : form
 
     this.setState(
       {
         form: {
-          ...form,
+          ...newForm,
           [field]: value
         }
       },
       () => this.validate(field, value)
     )
+  }
+
+  setCommission(field, value) {
+    const removeField =
+      field === 'commission_percentage'
+        ? 'commission_dollar'
+        : 'commission_percentage'
+
+    this.setForm(field, value, removeField)
   }
 
   /**
@@ -154,8 +212,8 @@ export default class Form extends React.Component {
     return form.commission_percentage ? value >= 0 && value <= 100 : value >= 0
   }
 
-  isValidName(name, regular = /^[A-Za-z\s]+$/) {
-    return name && name.trim().length > 0 && new RegExp(regular).exec(name)
+  isValidName(name) {
+    return name && name.trim().length > 0
   }
 
   /**
@@ -174,7 +232,7 @@ export default class Form extends React.Component {
    * https://gitlab.com/rechat/web/issues/691
    */
   isCommissionRequired(form) {
-    const { deal } = this.props
+    const { deal, isCommissionRequired } = this.props
 
     // https://gitlab.com/rechat/web/issues/760
     if (deal && deal.deal_type === 'Buying' && form.role === 'SellerAgent') {
@@ -182,8 +240,7 @@ export default class Form extends React.Component {
     }
 
     return (
-      Commission.shouldShowCommission(form) &&
-      this.props.isCommissionRequired !== false
+      Commission.shouldShowCommission(form) && isCommissionRequired !== false
     )
   }
 
@@ -192,7 +249,7 @@ export default class Form extends React.Component {
    */
   async validate(field, value) {
     const { form, invalidFields } = this.state
-    const requiredFields = ['legal_first_name', 'legal_last_name', 'role']
+    const requiredFields = ['role']
 
     if (this.isEmailRequired()) {
       requiredFields.push('email')
@@ -237,12 +294,24 @@ export default class Form extends React.Component {
     }
 
     if (value) {
+      if (
+        ['legal_first_name', 'legal_last_name', 'company_title'].includes(field)
+      ) {
+        this.setState({
+          nameErrorFields: [],
+          nameErrorMessage: ''
+        })
+      }
+
       if (typeof validator === 'function' && (await validator(value))) {
         // validated! so remove field from invalidFields
         if (invalidFields.length > 0 && invalidFields.includes(field)) {
           removeField()
         }
-      } else if (!invalidFields.includes(field)) {
+      } else if (
+        typeof validator === 'function' &&
+        !invalidFields.includes(field)
+      ) {
         // add field to invalidfields
         newInvalidFields = [...invalidFields, field]
         this.setState({
@@ -255,12 +324,10 @@ export default class Form extends React.Component {
 
     const isFormCompleted =
       _.every(requiredFields, name => fields[name](form[name])) &&
-      !newInvalidFields.includes(field)
+      newInvalidFields.length === 0
 
-    this.props.onFormChange({
-      isFormCompleted,
-      form
-    })
+    this.setState({ isFormCompleted })
+    this.props.onFormChange(form)
   }
 
   extractItems({ form = {}, singularName, pluralName }) {
@@ -270,7 +337,7 @@ export default class Form extends React.Component {
 
     const pluralValues = form[pluralName]
 
-    if (pluralValues && _.isArray(pluralValues)) {
+    if (pluralValues && _.isArray(pluralValues) && pluralValues.length > 0) {
       const values = []
 
       singularName.forEach(name => {
@@ -291,113 +358,172 @@ export default class Form extends React.Component {
     return singleValues.filter(i => i)
   }
 
-  render() {
-    const { form, invalidFields } = this.state
-    const { deal } = this.props
-    const { role } = form
+  submit = () => {
+    const { onSubmit } = this.props
+    const { form } = this.state
+    let nameErrorMessage
+    let nameErrorFields = []
 
-    const shouldShowCompany =
-      role && !['Buyer', 'Seller', 'Landlord', 'Tenant'].includes(role)
+    if (
+      !form.legal_first_name &&
+      !form.legal_last_name &&
+      (!form.company_title || !form.company_title.trim())
+    ) {
+      nameErrorMessage = 'Please add a name or a company to continue'
+      nameErrorFields = ['legal_first_name', 'legal_last_name', 'company_title']
+    } else if (form.legal_first_name && !form.legal_last_name) {
+      nameErrorMessage = 'Legal last name is required'
+      nameErrorFields = ['legal_last_name']
+    } else if (!form.legal_first_name && form.legal_last_name) {
+      nameErrorMessage = 'Legal first name is required'
+      nameErrorFields = ['legal_first_name']
+    } else {
+      onSubmit()
+    }
+
+    this.setState({ nameErrorMessage, nameErrorFields })
+  }
+
+  render() {
+    const {
+      form,
+      invalidFields,
+      isFormCompleted,
+      nameErrorMessage,
+      nameErrorFields
+    } = this.state
+    const {
+      deal,
+      showFormModal,
+      handlOnHide,
+      modalTitle,
+      isSaving,
+      submitButtonText,
+      formNotChanged
+    } = this.props
 
     return (
-      <div className="deal-roles-form">
-        <div className="row-name">
-          <Title
-            form={form}
-            onChange={value => this.setForm('legal_prefix', value)}
-          />
+      <Modal
+        show={showFormModal}
+        onHide={handlOnHide}
+        dialogClassName="modal-deal-add-role"
+        backdrop="static"
+      >
+        <Modal.Header closeButton>{modalTitle}</Modal.Header>
 
-          <Name
-            id="first_name"
-            name="first_name"
-            title="Legal First Name"
-            placeholder="Legal First"
-            value={form.legal_first_name}
-            isInvalid={invalidFields.includes('legal_first_name')}
-            onChange={value => this.setForm('legal_first_name', value)}
-          />
+        <Modal.Body>
+          <div className="deal-roles-form">
+            <div className="row-name">
+              <Title
+                isInvalid={invalidFields.includes('legal_prefix')}
+                form={form}
+                onChange={value => this.setForm('legal_prefix', value)}
+              />
 
-          <Name
-            id="middle_name"
-            name="middle_name"
-            isRequired={false}
-            title="Legal Middle Name"
-            placeholder="Legal Middle"
-            value={form.legal_middle_name}
-            isInvalid={invalidFields.includes('legal_middle_name')}
-            onChange={value => this.setForm('legal_middle_name', value)}
-          />
+              <Name
+                id="first_name"
+                name="first_name"
+                lableColorError={nameErrorFields.includes('legal_first_name')}
+                isRequired={false}
+                title="Legal First Name"
+                value={form.legal_first_name}
+                isInvalid={invalidFields.includes('legal_first_name')}
+                onChange={value => this.setForm('legal_first_name', value)}
+              />
 
-          <Name
-            id="last_name"
-            name="last_name"
-            title="Legal Last Name"
-            placeholder="Legal Last"
-            value={form.legal_last_name}
-            isInvalid={invalidFields.includes('legal_last_name')}
-            onChange={value => this.setForm('legal_last_name', value)}
-          />
-        </div>
+              <Name
+                id="middle_name"
+                name="middle_name"
+                isRequired={false}
+                title="Legal Middle Name"
+                value={form.legal_middle_name}
+                isInvalid={invalidFields.includes('legal_middle_name')}
+                onChange={value => this.setForm('legal_middle_name', value)}
+              />
 
-        <InputWithSelect
-          title="Email"
-          inputType="Email"
-          errorText="Enter a valid email"
-          defaultSelectedItem={form.email}
-          isRequired={this.isEmailRequired()}
-          isInvalid={invalidFields.includes('email')}
-          onChangeHandler={value => this.setForm('email', value)}
-          items={this.extractItems({
-            form,
-            singularName: ['email'],
-            pluralName: 'emails'
-          })}
-        />
+              <Name
+                id="last_name"
+                name="last_name"
+                lableColorError={nameErrorFields.includes('legal_last_name')}
+                isRequired={false}
+                title="Legal Last Name"
+                value={form.legal_last_name}
+                isInvalid={invalidFields.includes('legal_last_name')}
+                onChange={value => this.setForm('legal_last_name', value)}
+              />
+            </div>
 
-        <InputWithSelect
-          title="Phone"
-          inputType="Phone"
-          errorText="The value is not a valid U.S phone number"
-          defaultSelectedItem={form.phone_number}
-          isInvalid={invalidFields.includes('phone_number')}
-          onChangeHandler={value => this.setForm('phone_number', value)}
-          items={this.extractItems({
-            form,
-            singularName: ['phone_number'],
-            pluralName: 'phones'
-          })}
-        />
+            <InputWithSelect
+              lableColorError={nameErrorFields.includes('company_title')}
+              title="Company"
+              inputType="Text"
+              defaultSelectedItem={form.companies}
+              onChangeHandler={value => this.setForm('company_title', value)}
+              items={this.extractItems({
+                form,
+                singularName: ['company', 'company_title'],
+                pluralName: 'companies'
+              })}
+            />
 
-        <Role
-          deal={deal}
-          form={form}
-          role_names={ROLE_NAMES}
-          onChange={value => this.setForm('role', value)}
-          isAllowed={this.isAllowedRole.bind(this)}
-        />
+            <InputWithSelect
+              title="Email"
+              inputType="Email"
+              errorText="Enter a valid email"
+              defaultSelectedItem={form.email}
+              isRequired={this.isEmailRequired()}
+              isInvalid={invalidFields.includes('email')}
+              onChangeHandler={value => this.setForm('email', value)}
+              items={this.extractItems({
+                form,
+                singularName: ['email'],
+                pluralName: 'emails'
+              })}
+            />
 
-        <Commission
-          form={form}
-          isRequired={this.isCommissionRequired(form)}
-          validateCommission={this.validateCommission.bind(this)}
-          onChange={(field, value) => this.setForm(field, value)}
-        />
+            <InputWithSelect
+              title="Phone"
+              inputType="Phone"
+              errorText="The value is not a valid U.S phone number"
+              defaultSelectedItem={form.phone_number}
+              isInvalid={invalidFields.includes('phone_number')}
+              onChangeHandler={value => this.setForm('phone_number', value)}
+              items={this.extractItems({
+                form,
+                singularName: ['phone_number'],
+                pluralName: 'phones'
+              })}
+            />
 
-        {shouldShowCompany && (
-          <InputWithSelect
-            title="Company"
-            inputType="Text"
-            placeholder="Company Name"
-            defaultSelectedItem={form.companies}
-            onChangeHandler={value => this.setForm('company_title', value)}
-            items={this.extractItems({
-              form,
-              singularName: ['company', 'company_title'],
-              pluralName: 'companies'
-            })}
-          />
-        )}
-      </div>
+            <Role
+              deal={deal}
+              form={form}
+              role_names={ROLE_NAMES}
+              onChange={value => this.setForm('role', value)}
+              isAllowed={this.isAllowedRole.bind(this)}
+            />
+
+            <Commission
+              form={form}
+              isRequired={this.isCommissionRequired(form)}
+              validateCommission={this.validateCommission.bind(this)}
+              onChange={(field, value) => this.setCommission(field, value)}
+            />
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <p className="modal-footer-error">{nameErrorMessage}</p>
+          <Button
+            onClick={this.submit}
+            disabled={!isFormCompleted || isSaving || formNotChanged}
+            bsStyle={!isFormCompleted ? 'link' : 'primary'}
+            className={`btn-deal ${!isFormCompleted ? 'disabled' : ''}`}
+          >
+            {submitButtonText}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     )
   }
 }

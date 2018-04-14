@@ -49,11 +49,13 @@ class Header extends React.Component {
       searchBOFilters,
       showEmptySearchPage,
       isBackOffice,
-      removeSearchFilter
+      removeSearchFilter,
+      user
     } = this.props
+    const brandId = getActiveTeamId(user)
 
     if (value && value.length > 3) {
-      searchAllDeals(value, isBackOffice)
+      searchAllDeals({ query: value, brand: brandId }, isBackOffice)
       showEmptySearchPage(false)
       searchBOFilters()
     } else if (!value && !isBackOffice) {
@@ -148,7 +150,7 @@ class Header extends React.Component {
 
               <Tooltip placement="bottom" caption="Download Report">
                 <a
-                  href={`/api/export/brands/${activeTeamId}/deals.xlsx?fileName=deals.xlsx`}
+                  href={`/api/deals/export/${activeTeamId}`}
                   className="search-button"
                 >
                   <Excel />

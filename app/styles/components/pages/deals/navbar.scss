@@ -8,9 +8,9 @@
   flex-direction: row;
   align-items: center;
   padding: 0 13px;
+  justify-content: space-between;
 
   .back {
-    width: 20%;
     font-size: 17px;
     font-weight: bold;
     color: #2196f3;
@@ -26,8 +26,8 @@
   }
 
   .ctas {
-    width: 80%;
     text-align: right;
+    display: flex;
 
     .navbar-button {
       min-width: 80px;

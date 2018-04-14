@@ -11,12 +11,14 @@ export function normalizeNewContact(formData = {}) {
     last_name,
     title,
     middle_name,
+    legal_prefix,
     legal_first_name,
     legal_middle_name,
     legal_last_name,
     stage,
     emails,
-    phone_numbers
+    phone_numbers,
+    companies
   } = formData
 
   const contact = {
@@ -25,14 +27,10 @@ export function normalizeNewContact(formData = {}) {
       names: [
         {
           type: 'name',
-          title,
-          first_name,
-          middle_name,
-          last_name,
-          legal_prefix: title,
-          legal_first_name,
-          legal_middle_name,
-          legal_last_name
+          title: title || legal_prefix,
+          first_name: first_name || legal_first_name,
+          middle_name: middle_name || legal_middle_name,
+          last_name: last_name || legal_last_name
         }
       ],
       source_types: [
@@ -65,7 +63,13 @@ export function normalizeNewContact(formData = {}) {
     Array.isArray(phone_numbers) &&
     phone_numbers.length > 0
   ) {
+    const defaultLabel = {
+      main: 'Main Phone',
+      default: 'Other Phone'
+    }
+
     const phoneNumbers = attributeNormalizer({
+      defaultLabel,
       attributeName: 'phone_number',
       attributeValue: phone_numbers
     })
@@ -79,7 +83,13 @@ export function normalizeNewContact(formData = {}) {
   }
 
   if (emails && Array.isArray(emails) && emails.length > 0) {
+    const defaultLabel = {
+      main: 'Personal Email',
+      default: 'Other Email'
+    }
+
     const normalizedEmails = attributeNormalizer({
+      defaultLabel,
       attributeName: 'email',
       attributeValue: emails
     })
@@ -92,13 +102,41 @@ export function normalizeNewContact(formData = {}) {
     contact.attributes = attributes
   }
 
+  if (companies && Array.isArray(companies) && companies.length > 0) {
+    const normalizedCompanies = attributeNormalizer({
+      attributeName: 'company',
+      attributeValue: companies
+    })
+
+    const attributes = {
+      ...contact.attributes,
+      companies: normalizedCompanies
+    }
+
+    contact.attributes = attributes
+  }
+
   return contact
 }
 
-function attributeNormalizer({ attributeName, attributeValue }) {
-  return attributeValue.filter(item => item).map((item, index) => ({
-    type: attributeName,
-    [attributeName]: item,
-    is_primary: index === 0
-  }))
+function attributeNormalizer({ attributeName, attributeValue, defaultLabel }) {
+  return attributeValue.filter(item => item).map((item, index) => {
+    const field = {
+      type: attributeName,
+      [attributeName]: item,
+      is_primary: index === 0
+    }
+
+    if (defaultLabel) {
+      if (attributeValue.length === 1 || index === 0) {
+        field.label = defaultLabel.main
+
+        return field
+      }
+
+      field.label = defaultLabel.default
+    }
+
+    return field
+  })
 }

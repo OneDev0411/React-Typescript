@@ -9,6 +9,14 @@ export default class Stepper extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { active } = nextProps
+
+    if (active !== this.state.active) {
+      this.setState({ active })
+    }
+  }
+
   changeStep(step, key) {
     this.setState({
       active: key
@@ -18,7 +26,12 @@ export default class Stepper extends React.Component {
   }
 
   render() {
-    const { steps } = this.props
+    const {
+      steps,
+      disableClick,
+      isProcessing,
+      isActiveStageFinished = true
+    } = this.props
     const { active } = this.state
 
     return (
@@ -32,8 +45,11 @@ export default class Stepper extends React.Component {
                 active: active === key,
                 completed: key <= active
               })}
-              style={{ width: `${100 / steps.length}%` }}
-              onClick={() => this.changeStep(step, key)}
+              style={{
+                width: `${100 / steps.length}%`,
+                cursor: disableClick ? 'auto' : 'pointer'
+              }}
+              onClick={() => !disableClick && this.changeStep(step, key)}
             >
               <a
                 className="persistant-disabled"
@@ -42,8 +58,31 @@ export default class Stepper extends React.Component {
                 role="tab"
                 title={step}
               >
-                <span className="round-tab">
-                  {key <= active && <i className="fa fa-check fa-1x" />}
+                <span
+                  className={cn('round-tab', {
+                    'is-pending':
+                      key === active && !isActiveStageFinished && !isProcessing
+                  })}
+                >
+                  {(key < active ||
+                    (key === active && isActiveStageFinished)) && (
+                    <i
+                      className={`fa ${
+                        isProcessing && active === key
+                          ? 'fa-spin fa-spinner'
+                          : 'fa-check'
+                      }`}
+                    />
+                  )}
+
+                  {key === active &&
+                    !isActiveStageFinished && (
+                      <i
+                        className={`fa ${
+                          isProcessing ? 'fa-spin fa-spinner' : ''
+                        }`}
+                      />
+                    )}
                 </span>
               </a>
               <span className="name">{step}</span>

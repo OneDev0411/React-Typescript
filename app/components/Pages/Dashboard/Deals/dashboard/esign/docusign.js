@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import config from '../../../../../../../config/public'
 
 /**
@@ -40,7 +39,7 @@ export default ({ user, show, onAuthorize }) => {
       >
         Login
       </button>
-      <img src="/static/images/deals/docusign.png" />
+      <img src="/static/images/deals/docusign.png" alt="" />
     </div>
   )
 }

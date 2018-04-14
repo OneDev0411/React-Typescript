@@ -105,6 +105,20 @@ export function updateDeal(deal) {
   }
 }
 
+export function createDeal(deal) {
+  return async dispatch => {
+    const { entities } = normalize(deal, schema.dealSchema)
+    const { deals, roles, checklists, tasks } = entities
+
+    batchActions([
+      dispatch(setTasks(tasks)),
+      dispatch(setChecklists(checklists)),
+      dispatch(setRoles(roles)),
+      dispatch(addNewDeal(deals[deal.id]))
+    ])
+  }
+}
+
 export function getDeal(deal_id) {
   return async dispatch => {
     try {
@@ -112,7 +126,16 @@ export function getDeal(deal_id) {
 
       dispatch(updateDeal(deal))
     } catch (e) {
-      console.log(e)
+      dispatch(
+        notify({
+          title: e.message,
+          message:
+            e.response && e.response.body ? e.response.body.message : null,
+          status: 'error'
+        })
+      )
+
+      throw e
     }
   }
 }
@@ -148,20 +171,6 @@ export function getDeals(user, backoffice = false, errorOnFail = true) {
         })
       }
     }
-  }
-}
-
-export function createDeal(deal) {
-  return async dispatch => {
-    const { entities } = normalize(deal, schema.dealSchema)
-    const { deals, roles, checklists, tasks } = entities
-
-    batchActions([
-      dispatch(setTasks(tasks)),
-      dispatch(setChecklists(checklists)),
-      dispatch(setRoles(roles)),
-      dispatch(addNewDeal(deals[deal.id]))
-    ])
   }
 }
 

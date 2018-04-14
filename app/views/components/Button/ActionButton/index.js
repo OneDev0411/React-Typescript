@@ -16,6 +16,9 @@ const ActionButton = styled.button`
   border-radius: 3px;
   color: ${props => (props.disabled ? '#333' : '#fff')};
   background: ${props => (props.disabled ? '#cecece' : '#2196f3')};
+  :focus {
+    outline: none;
+  }
 
   ${props =>
     !props.disabled &&

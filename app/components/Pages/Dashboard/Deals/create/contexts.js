@@ -67,7 +67,12 @@ export default class extends React.Component {
               <div className="entity-item string new">
                 <div className="add-item text-input">
                   <div>
-                    <span className="text">
+                    <span
+                      className={cn('text', {
+                        hasError:
+                          hasError && field.mandatory && !contexts[field.name]
+                      })}
+                    >
                       {field.label} {field.mandatory && <sup>*</sup>}
                     </span>
                   </div>
@@ -110,7 +115,11 @@ export default class extends React.Component {
                 >
                   <div className="add-item">
                     <span className="icon">+</span>
-                    <span className="text">
+                    <span
+                      className={cn('text', {
+                        hasError: hasError && field.mandatory
+                      })}
+                    >
                       {field.label} {field.mandatory && <sup>*</sup>}
                     </span>
                   </div>

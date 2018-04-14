@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import { browserHistory } from 'react-router'
+import { browserHistory, Link } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
@@ -12,7 +12,7 @@ import {
   deleteFile
 } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
-import Radio from '../components/radio'
+import Radio from '../../../../../views/components/radio'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import Search from '../../../../Partials/headerSearch'
 import Upload from '../dashboard/upload'
@@ -225,14 +225,16 @@ export class FileManager extends React.Component {
   }
 
   openFile(file) {
+    browserHistory.push(this.getFileLink(file))
+  }
+
+  getFileLink(file) {
     const { deal } = this.props
     const taskId = file.taskId || 'stash'
 
-    browserHistory.push(
-      `/dashboard/deals/${deal.id}/form-viewer/${taskId}/attachment/${
-        file.id
-      }?backTo=files`
-    )
+    return `/dashboard/deals/${deal.id}/form-viewer/${taskId}/attachment/${
+      file.id
+    }?backTo=files`
   }
 
   getColumns(rows) {
@@ -260,8 +262,10 @@ export class FileManager extends React.Component {
         accessor: 'name',
         Cell: ({ original: file }) => (
           <Fragment>
-            {this.getDocumentIcon(file)}
-            {file.name}
+            <Link to={this.getFileLink(file)}>
+              {this.getDocumentIcon(file)}
+              {file.name}
+            </Link>
           </Fragment>
         )
       },

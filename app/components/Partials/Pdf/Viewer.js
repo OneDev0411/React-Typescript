@@ -1,7 +1,7 @@
 import React from 'react'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
-import _ from 'underscore'
 import Page from './Page'
+import importPdfJs from '../../../utils/import-pdf-js'
 
 class PdfViewer extends React.Component {
   constructor(props) {
@@ -44,14 +44,14 @@ class PdfViewer extends React.Component {
   }
 
   docKeyboardShortcutHandler(event) {
-    const { disableKeyboardShortcuts } = this.props
+    const { disableKeyboardShortcuts, onZoomIn, onZoomOut } = this.props
 
     if (disableKeyboardShortcuts) {
       return false
     }
 
     const keyCode = event.keyCode || event.which
-    const $viewerContainer = this.$pdfContext.parentElement.parentElement
+    const $viewerContainer = this.$pdfContext.parentElement
     const pdfPageHeight =
       this.$pdfContext.firstElementChild.firstElementChild.offsetHeight + 45
 
@@ -74,9 +74,11 @@ class PdfViewer extends React.Component {
         break
       case 187:
         this.zoomIn()
+        onZoomIn && onZoomIn()
         break
       case 189:
         this.zoomOut()
+        onZoomOut && onZoomOut()
         break
       case 48:
         this.fitWindow()
@@ -87,13 +89,14 @@ class PdfViewer extends React.Component {
   }
 
   async load(uri) {
+    const { onLoad } = this.props
+
     if (this.state.loading || uri === this.state.uri) {
       return false
     }
 
     // lazy load
-    await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */)
-    await import('pdfjs-dist/web/compatibility' /* webpackChunkName: "pdf.comp" */)
+    const PDFJS = await importPdfJs()
 
     this.setState({
       uri,
@@ -117,8 +120,8 @@ class PdfViewer extends React.Component {
       })
 
       // trigger onLoaded event
-      if (this.props.onLoad && typeof this.props.onLoad === 'function') {
-        this.props.onLoad()
+      if (onLoad) {
+        onLoad()
       }
     } catch (e) {
       this.setState({ uri: null, loading: false, isFailed: true })
@@ -135,6 +138,7 @@ class PdfViewer extends React.Component {
   }
 
   zoomIn() {
+    const { onZoomIn } = this.props
     const zoom = this.state.zoom || 0
 
     if (zoom >= 0.6) {
@@ -145,9 +149,14 @@ class PdfViewer extends React.Component {
       fitWindow: false,
       zoom: parseFloat((zoom + 0.3).toFixed(1))
     })
+
+    if (onZoomIn) {
+      onZoomIn()
+    }
   }
 
   zoomOut() {
+    const { onZoomOut } = this.props
     const zoom = this.state.zoom || 0
 
     if (zoom <= -0.3) {
@@ -158,6 +167,10 @@ class PdfViewer extends React.Component {
       fitWindow: false,
       zoom: parseFloat((zoom - 0.3).toFixed(1))
     })
+
+    if (onZoomOut) {
+      onZoomOut()
+    }
   }
 
   fitWindow() {

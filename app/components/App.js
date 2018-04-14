@@ -43,16 +43,21 @@ import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
-import { inactiveIntercom } from '../store_actions/intercom'
+
+import Intercom from './Pages/Dashboard/Partials/Intercom'
+import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 
 class App extends Component {
   componentWillMount() {
-    const { user } = this.props
+    const { user, dispatch } = this.props
 
     // check branding
     this.getBrand()
 
     if (typeof window !== 'undefined') {
+      window.Intercom &&
+        window.Intercom('onShow', () => dispatch(activeIntercom()))
+
       import('offline-js')
 
       if (!('WebkitAppearance' in document.documentElement.style)) {
@@ -186,9 +191,7 @@ class App extends Component {
       google_analytics_id = brand.assets.google_analytics_id
     }
 
-    ReactGA.initialize(google_analytics_id, {
-      debug: true
-    })
+    ReactGA.initialize(google_analytics_id)
     ReactGA.ga(
       'create',
       google_analytics_id,
@@ -314,6 +317,8 @@ class App extends Component {
         <main className={`l-app__main ${user ? 'is-logged-in' : ''}`}>
           {children}
         </main>
+
+        <Intercom />
       </div>
     )
   }

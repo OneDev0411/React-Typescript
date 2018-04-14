@@ -8,10 +8,18 @@ export default ({
   onChange,
   isInvalid,
   placeholder,
-  isRequired = true
+  isRequired = true,
+  lableColorError
 }) => (
   <div className={name} style={{ position: 'relative' }}>
-    <label htmlFor={id} style={{ display: 'block', cursor: 'pointer' }}>
+    <label
+      htmlFor={id}
+      style={{
+        display: 'block',
+        cursor: 'pointer',
+        color: lableColorError ? 'red' : undefined
+      }}
+    >
       {title} {isRequired && <sup>*</sup>}
     </label>
 

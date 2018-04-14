@@ -70,6 +70,24 @@ export const addressTitle = address =>
     address.unit_number ? `Unit ${address.unit_number}` : ''
   }`
 
+export const getListingAddress = address => {
+  if (!address) {
+    throw new Error('address parameter in empty')
+  }
+
+  const { street_number, street_name, street_suffix, unit_number } = address
+
+  let result = [street_number, street_name, street_suffix]
+    .filter(s => s)
+    .join(' ')
+
+  if (unit_number) {
+    result += ` Unit ${address.unit_number}`
+  }
+
+  return result
+}
+
 export const getDOM = dom => Math.floor(dom)
 // return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
 

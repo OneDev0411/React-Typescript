@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import Dropzone from 'react-dropzone'
 import { setUploadFiles } from '../../../../../store_actions/deals'
 import Deal from '../../../../../models/Deal'
+import DealEmail from '../dashboard/deal-email'
 
 export class FileManager extends React.Component {
   constructor(props) {
@@ -25,15 +26,18 @@ export class FileManager extends React.Component {
   }
 
   render() {
+    const { deal } = this.props
+
     return (
       <Fragment>
         <div className="deal-navbar">
           <div className="back" onClick={() => this.backToDeal()}>
             <i className="fa fa-chevron-left" />
-            Document List
+            Files
           </div>
 
           <div className="ctas">
+            <DealEmail dealEmail={deal.email} />
             <button
               className="navbar-button"
               onClick={() => this.openUploadDialog()}
