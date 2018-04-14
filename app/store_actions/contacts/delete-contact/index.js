@@ -1,8 +1,9 @@
 import { normalize } from 'normalizr'
+
 import { contactsSchema } from '../../../models/contacts/schema'
-import removeContact from '../../../models/contacts/delete-contact'
 import * as actionTypes from '../../../constants/contacts'
 import { selectContacts } from '../../../reducers/contacts/list'
+import { deleteContacts as removeContacts } from '../../../models/contacts/delete-contact'
 
 export function deleteContacts(contactIds) {
   return async (dispatch, getState) => {
@@ -15,7 +16,7 @@ export function deleteContacts(contactIds) {
         type: actionTypes.DELETE_CONTACT_REQUEST
       })
 
-      await removeContact({ contactIds })
+      await removeContacts(contactIds)
 
       const { contacts: { list } } = getState()
       const contactsList = selectContacts(list)
