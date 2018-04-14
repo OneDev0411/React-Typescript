@@ -31,7 +31,7 @@ const InstantChat = Load({
 })
 
 // contacts
-import { getContacts } from '../store_actions/contacts/get-contacts'
+import { getContacts, getAttributeDefs } from '../store_actions/contacts'
 import { selectContacts } from '../reducers/contacts/list'
 
 // favorites
@@ -100,6 +100,7 @@ class App extends Component {
       // load contacts
       if (contactsList.length === 0) {
         dispatch(getContacts())
+        dispatch(getAttributeDefs())
       }
 
       // load notifications

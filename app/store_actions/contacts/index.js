@@ -1,3 +1,4 @@
+export * from './get-attribute-defs'
 export * from './get-contact'
 export * from './get-contacts'
 export * from './delete-contact'

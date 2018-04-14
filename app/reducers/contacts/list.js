@@ -97,4 +97,4 @@ export const getContactsinfo = state => state.info
 
 export const isFetchingContactsList = state => state.isFetching
 
-export const getContactsListError = state => state.errorMessage
+export const getContactsListError = state => state.error
