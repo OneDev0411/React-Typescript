@@ -46,7 +46,9 @@ class UploadContacts extends React.Component {
     const indexedContactFields = _.indexBy(contactFields, 'value')
 
     isValid = _.every(mappedFields, (mapData, csvField) => {
-      if (indexedContactFields[mapData.field].hasLabel && !mapData.label) {
+      const field = indexedContactFields[mapData.field]
+
+      if (field && field.hasLabel && !mapData.label) {
         errorMessage = `Select a label for "${csvField}" field`
         this.onError(errorMessage, 'Validation Error')
 
