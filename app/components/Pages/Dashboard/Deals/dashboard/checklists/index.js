@@ -14,6 +14,35 @@ class Checklist extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.getShowTerminatedChecklists(nextProps)
+  }
+
+  getShowTerminatedChecklists({ deal, checklists, tasks }) {
+    if (this.state.showTerminatedChecklists === true) {
+      return true
+    }
+
+    const showTerminatedChecklists = _.some(deal.checklists || [], chId => {
+      const checklist = checklists[chId]
+
+      if (!checklist.is_terminated) {
+        return false
+      }
+
+      return this.hasNotifications(checklist, tasks)
+    })
+
+    this.setState({ showTerminatedChecklists })
+  }
+
+  hasNotifications(checklist, tasks) {
+    return _.some(
+      checklist.tasks || [],
+      id => tasks[id].room.new_notifications > 0
+    )
+  }
+
   toggleDisplayTerminatedChecklists() {
     this.setState({
       showTerminatedChecklists: !this.state.showTerminatedChecklists
@@ -41,24 +70,24 @@ class Checklist extends React.Component {
               <i className="fa fa-spin fa-spinner fa-3x" />
             </div>
           )}
+
           {_.chain(deal.checklists)
             .sortBy(id => {
-              const list = checklists[id]
-              const isTerminated = list.is_terminated
+              const checklist = checklists[id]
 
-              if (isTerminated) {
+              if (checklist.is_terminated) {
                 terminatedChecklistsCount += 1
 
-                return 100000
+                return 1000
               }
 
-              if (checklists[id].is_deactivated) {
+              if (checklist.is_deactivated) {
                 deactivatedChecklistsCount += 1
 
-                return 200000
+                return 2000
               }
 
-              return list.order
+              return checklist.order
             })
             .filter(id => {
               // dont display Backup contracts in BackOffice dashboard
@@ -104,5 +133,6 @@ class Checklist extends React.Component {
 
 export default connect(({ deals }) => ({
   isBackOffice: deals.backoffice,
-  checklists: deals.checklists
+  checklists: deals.checklists,
+  tasks: deals.tasks
 }))(Checklist)
