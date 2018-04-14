@@ -5,9 +5,8 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import Uploader from '../../../../../../../../views/components/AvatarUploader/index.js'
-
 import uploadAttachments from '../../../../../../../../models/contacts/upload-attachments/index.js'
-
+import { selectDefinitionId } from '../../../../../../../../reducers/contacts/attributeDefs'
 import {
   addAttributes,
   deleteAttributes
@@ -19,8 +18,9 @@ const AvatarUploader = props => <Uploader {...props} />
 function mapStateToProps(state, props) {
   const { contact } = props
   const { id: contactId } = contact
+  const { contacts: { attributeDefs } } = state
 
-  return { contactId }
+  return { contactId, attributeDefs }
 }
 
 export default compose(
@@ -34,6 +34,7 @@ export default compose(
       contactId,
       setAvatar,
       setUploading,
+      attributeDefs,
       addAttributes
     }) => async event => {
       const file = event.target.files[0]
@@ -49,17 +50,29 @@ export default compose(
           setUploading(true)
 
           const image = await uploadAttachments({ contactId, file })
-          const { url: profile_image_url } = image
+          const { url: text } = image
+
+          const attribute_def = selectDefinitionId(
+            attributeDefs,
+            'profile_image_url'
+          )
+
+          if (!attribute_def) {
+            throw new Error(
+              'Something went wrong. Attribute definition is not found!'
+            )
+          }
 
           const attributes = [
             {
-              profile_image_url,
-              type: 'profile_image_url'
+              text,
+              attribute_def
             }
           ]
 
           await addAttributes(contactId, attributes)
         } catch (error) {
+          console.log(error)
           setAvatar(null)
         } finally {
           setUploading(false)

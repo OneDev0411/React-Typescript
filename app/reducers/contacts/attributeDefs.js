@@ -9,3 +9,13 @@ export const attributeDefs = (state = [], action) => {
       return state
   }
 }
+
+export function selectDefinitionId(state, name) {
+  const def = state.filter(defs => defs.name === name)[0]
+
+  if (def && def.id) {
+    return def.id
+  }
+
+  return null
+}
