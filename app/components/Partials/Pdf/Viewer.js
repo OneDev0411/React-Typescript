@@ -12,8 +12,8 @@ class PdfViewer extends React.Component {
       loading: false,
       isFailed: false,
       doc: null,
-      zoom: null,
-      fitWindow: true
+      zoom: 0,
+      fitWindow: false
     }
 
     this.load = this.load.bind(this)
@@ -41,51 +41,6 @@ class PdfViewer extends React.Component {
   componentWillUnmount() {
     this.mounted = false
     document.removeEventListener('keydown', this.docKeyboardShortcutHandler)
-  }
-
-  docKeyboardShortcutHandler(event) {
-    const { disableKeyboardShortcuts, onZoomIn, onZoomOut } = this.props
-
-    if (disableKeyboardShortcuts) {
-      return false
-    }
-
-    const keyCode = event.keyCode || event.which
-    const $viewerContainer = this.$pdfContext.parentElement
-    const pdfPageHeight =
-      this.$pdfContext.firstElementChild.firstElementChild.offsetHeight + 45
-
-    switch (keyCode) {
-      case 40:
-        // arrow down
-        $viewerContainer.scrollTo(0, $viewerContainer.scrollTop + 50)
-        break
-      case 38:
-        // arrow up
-        $viewerContainer.scrollTo(0, $viewerContainer.scrollTop - 50)
-        break
-      case 37:
-        // arrow backward = previous page
-        $viewerContainer.scrollTo(0, $viewerContainer.scrollTop - pdfPageHeight)
-        break
-      case 39:
-        // arrow forward = next page
-        $viewerContainer.scrollTo(0, $viewerContainer.scrollTop + pdfPageHeight)
-        break
-      case 187:
-        this.zoomIn()
-        onZoomIn && onZoomIn()
-        break
-      case 189:
-        this.zoomOut()
-        onZoomOut && onZoomOut()
-        break
-      case 48:
-        this.fitWindow()
-        break
-      default:
-        break
-    }
   }
 
   async load(uri) {
@@ -125,6 +80,55 @@ class PdfViewer extends React.Component {
       }
     } catch (e) {
       this.setState({ uri: null, loading: false, isFailed: true })
+    }
+  }
+
+  docKeyboardShortcutHandler(event) {
+    const { disableKeyboardShortcuts, onZoomIn, onZoomOut } = this.props
+
+    if (disableKeyboardShortcuts) {
+      return false
+    }
+
+    const keyCode = event.keyCode || event.which
+    const viewerContainer = this.pdfContext.parentElement
+    const pdfPageHeight =
+      this.pdfContext.firstElementChild.firstElementChild.offsetHeight + 45
+
+    switch (keyCode) {
+      case 40:
+        // arrow down
+        viewerContainer.scrollTo &&
+          viewerContainer.scrollTo(0, viewerContainer.scrollTop + 50)
+        break
+      case 38:
+        // arrow up
+        viewerContainer.scrollTo &&
+          viewerContainer.scrollTo(0, viewerContainer.scrollTop - 50)
+        break
+      case 37:
+        // arrow backward = previous page
+        viewerContainer.scrollTo &&
+          viewerContainer.scrollTo(0, viewerContainer.scrollTop - pdfPageHeight)
+        break
+      case 39:
+        // arrow forward = next page
+        viewerContainer.scrollTo &&
+          viewerContainer.scrollTo(0, viewerContainer.scrollTop + pdfPageHeight)
+        break
+      case 187:
+        this.zoomIn()
+        onZoomIn && onZoomIn()
+        break
+      case 189:
+        this.zoomOut()
+        onZoomOut && onZoomOut()
+        break
+      case 48:
+        this.fitWindow()
+        break
+      default:
+        break
     }
   }
 
@@ -208,7 +212,7 @@ class PdfViewer extends React.Component {
         )}
 
         {doc && (
-          <div className="pdf-context" ref={ref => (this.$pdfContext = ref)}>
+          <div className="pdf-context" ref={ref => (this.pdfContext = ref)}>
             <div className="wrapper">
               {Array.apply(null, { length: doc.pdfInfo.numPages }).map(
                 (v, i) => (
