@@ -130,7 +130,11 @@ export default class Editable extends React.Component {
           onSelectDate={date => this.onChangeDateContext(date)}
         />
 
-        <div className="name" onClick={() => this.editField()}>
+        <div
+          className="name"
+          data-name={field.name}
+          onClick={() => this.editField()}
+        >
           {field.label}
         </div>
 
