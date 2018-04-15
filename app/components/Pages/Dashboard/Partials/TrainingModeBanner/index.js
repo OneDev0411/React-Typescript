@@ -18,7 +18,7 @@ export function TrainingModeBanner({ user }) {
         justifyContent: 'center',
         fontSize: '2.4rem',
         color: '#fff',
-        background: 'rgb(245, 166, 35, 0.8)'
+        background: '#f4b656'
       }}
     >
       <span>Training Mode On</span>
