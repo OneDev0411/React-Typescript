@@ -6,12 +6,12 @@ import withHandlers from 'recompose/withHandlers'
 
 import Uploader from '../../../../../../../../views/components/AvatarUploader/index.js'
 import uploadAttachments from '../../../../../../../../models/contacts/upload-attachments/index.js'
-import { selectDefinitionId } from '../../../../../../../../reducers/contacts/attributeDefs'
+import { selectDefinition } from '../../../../../../../../reducers/contacts/attributeDefs'
 import {
-  addAttributes,
-  deleteAttributes
+  deleteAttributes,
+  upsertContactAttributes
 } from '../../../../../../../../store_actions/contacts'
-import { getContactProfileImage } from '../../../../../../../../models/contacts/helpers'
+import { getAttributeFromSummary } from '../../../../../../../../models/contacts/helpers'
 
 const AvatarUploader = props => <Uploader {...props} />
 
@@ -24,10 +24,10 @@ function mapStateToProps(state, props) {
 }
 
 export default compose(
-  connect(mapStateToProps, { addAttributes, deleteAttributes }),
+  connect(mapStateToProps, { upsertContactAttributes, deleteAttributes }),
   withState('uploading', 'setUploading', false),
   withState('avatar', 'setAvatar', ({ contact }) =>
-    getContactProfileImage(contact)
+    getAttributeFromSummary(contact, 'profile_image_url')
   ),
   withHandlers({
     handleChange: ({
@@ -35,7 +35,7 @@ export default compose(
       setAvatar,
       setUploading,
       attributeDefs,
-      addAttributes
+      upsertContactAttributes
     }) => async event => {
       const file = event.target.files[0]
 
@@ -52,7 +52,7 @@ export default compose(
           const image = await uploadAttachments({ contactId, file })
           const { url: text } = image
 
-          const attribute_def = selectDefinitionId(
+          const attribute_def = selectDefinition(
             attributeDefs,
             'profile_image_url'
           )
@@ -66,11 +66,13 @@ export default compose(
           const attributes = [
             {
               text,
-              attribute_def
+              index: 1,
+              attribute_def,
+              is_primary: true
             }
           ]
 
-          await addAttributes(contactId, attributes)
+          await upsertContactAttributes(contactId, attributes)
         } catch (error) {
           console.log(error)
           setAvatar(null)

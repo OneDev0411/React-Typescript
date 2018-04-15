@@ -1,2 +1,1 @@
-export * from './get-contact-profile-image'
-export * from './get-contact-stage'
+export * from './get-attribute-from-summary'

@@ -10,11 +10,11 @@ export const attributeDefs = (state = [], action) => {
   }
 }
 
-export function selectDefinitionId(state, name) {
-  const def = state.filter(defs => defs.name === name)[0]
+export function selectDefinition(state, name) {
+  const def = state.filter(defs => defs.name === name)
 
-  if (def && def.id) {
-    return def.id
+  if (def.length > 0) {
+    return def[0]
   }
 
   return null

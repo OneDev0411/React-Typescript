@@ -1,6 +1,6 @@
 import React from 'react'
 import Stepper from '../../../../../Partials/Stepper'
-import { getContactStage } from '../../../../../../models/contacts/helpers/get-contact-stage'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers/get-attribute-from-summary'
 
 const STEPS = [
   'General',
@@ -16,7 +16,7 @@ export default class Stage extends React.Component {
 
   getStageIndex = () =>
     STEPS.map(s => s.replace(/\s/g, '')).indexOf(
-      getContactStage(this.props.contact).text
+      getAttributeFromSummary(this.props.contact, 'stage')
     )
 
   onChange = async stage => {

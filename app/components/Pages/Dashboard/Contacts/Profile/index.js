@@ -3,8 +3,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 
-import { getContactStage } from '../../../../../models/contacts/helpers/get-contact-stage'
-import { selectDefinitionId } from '../../../../../reducers/contacts/attributeDefs'
+import { selectDefinition } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
 import Stage from './Stage'
@@ -92,20 +91,13 @@ class ContactProfile extends React.Component {
     const { contact, attributeDefs, upsertContactAttributes } = this.props
     const { id: contactId } = contact
     const text = value.replace(/\s/g, '')
-    let stage = getContactStage(contact)
-    const attribute_def = selectDefinitionId(attributeDefs, 'stage')
+    const attribute_def = selectDefinition(attributeDefs, 'stage')
 
-    if (stage && stage.id) {
-      stage = {
-        text,
-        id: stage.id
-      }
-    } else {
-      stage = {
-        text,
-        attribute_def,
-        is_primary: true
-      }
+    const stage = {
+      text,
+      index: 1,
+      attribute_def,
+      is_primary: true
     }
 
     return upsertContactAttributes(contactId, [stage])
