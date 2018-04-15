@@ -5,7 +5,7 @@ import ToolTip from '../../../components/tooltip'
 export default ({
   showCTA,
   needsApproval,
-  context,
+  contextData,
   handleEditField,
   handleDeleteField
 }) => (
@@ -32,7 +32,8 @@ export default ({
         className={cn(
           'c-button--shadow cta__button ico-remove fa fa-times-circle',
           {
-            hide: !showCTA || !context.value || context.value.length === 0
+            hide:
+              !showCTA || !contextData.value || contextData.value.length === 0
           }
         )}
         onClick={handleDeleteField}

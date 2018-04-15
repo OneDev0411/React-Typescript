@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import Deal from '../../../../../../../models/Deal'
+import DealContext from '../../../../../../../models/DealContext'
 import Editable from './editable'
 import {
   updateContext,
@@ -79,7 +80,8 @@ class Table extends React.Component {
           {_.chain(table)
             .map(field => {
               const context = Deal.get.context(deal, field.name)
-              const fieldCtx = getValue(deal, field)
+
+              const fieldData = DealContext.getValue(deal, field)
               const approved =
                 (context && context.approved_at !== null) || field.approved
 
@@ -90,7 +92,7 @@ class Table extends React.Component {
                     deal={deal}
                     field={field}
                     saving={saving}
-                    context={fieldCtx}
+                    contextData={fieldData}
                     approved={approved}
                     isBackOffice={isBackOffice}
                     needsApproval={!isBackOffice && field.needs_approval}

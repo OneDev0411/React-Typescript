@@ -16,7 +16,6 @@ export default ({ deal }) => {
         deal={deal}
         title="LISTING INFORMATION"
         table={table}
-        getValue={Context.getValue}
       />
     </div>
   )
