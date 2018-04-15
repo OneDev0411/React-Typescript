@@ -141,3 +141,36 @@ export function uploadTaskFile(user, task, file, fileName = null) {
     }
   }
 }
+
+/**
+ * copy a file into a task from a task
+ */
+export function copyTaskFile(user, task, file) {
+  return async dispatch => {
+    try {
+      const response = await Deal.copyTaskFile(task.id, { file: file.id })
+
+      const fileData = response.body.data
+
+      await dispatch(
+        deleteFile(task.deal, {
+          [file.id]: file.taskId ? { id: file.taskId } : null
+        })
+      )
+      Deal.createTaskMessage(task.id, {
+        author: user.id,
+        room: task.room.id,
+        attachments: [fileData.id]
+      }).then(() => null)
+
+      // add files to attachments list
+      dispatch(taskFileCreated(task.deal, task.checklist, task.id, fileData))
+
+      return fileData
+    } catch (e) {
+      console.log(e)
+
+      return null
+    }
+  }
+}
