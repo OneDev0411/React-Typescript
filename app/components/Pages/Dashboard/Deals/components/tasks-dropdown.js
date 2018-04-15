@@ -263,9 +263,10 @@ class DropDownTasks extends React.Component {
                       .map(form => (
                         <li
                           key={form.id}
-                          onClick={() =>
+                          onClick={e => {
+                            e.stopPropagation()
                             this.onSelectFormTask(checklist.id, form)
-                          }
+                          }}
                         >
                           {form.name}
                         </li>
