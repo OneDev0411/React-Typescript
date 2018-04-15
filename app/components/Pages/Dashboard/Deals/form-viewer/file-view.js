@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router'
 import { Button } from 'react-bootstrap'
 import cn from 'classnames'
 
@@ -96,9 +95,10 @@ export default class extends React.Component {
         </div>
 
         <div
-          className={`c-deal-form-viewer__body ${
-            showFactsheet ? 'show-factsheet' : ''
-          } ${showComments ? 'show-comments' : ''}`}
+          className={cn('c-deal-form-viewer__body', {
+            'show-factsheet': showFactsheet === true,
+            'show-comments': showComments === true
+          })}
         >
           <div
             className="c-deal-form-viewer__factsheet"
