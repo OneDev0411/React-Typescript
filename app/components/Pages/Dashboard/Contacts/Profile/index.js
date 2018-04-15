@@ -95,7 +95,6 @@ class ContactProfile extends React.Component {
 
     const stage = {
       text,
-      index: 1,
       attribute_def,
       is_primary: true
     }
