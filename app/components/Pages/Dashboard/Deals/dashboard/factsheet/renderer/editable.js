@@ -2,6 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
 import _ from 'underscore'
+import moment from 'moment'
 import DatePicker from '../../../components/date-picker'
 import ToolTip from '../../../components/tooltip'
 import Input from '../../../../../../../views/components/Input'
@@ -20,6 +21,13 @@ export default class Editable extends React.Component {
   deleteField(e, field) {
     e.stopPropagation()
     this.props.onChange(field, null)
+  }
+
+  onChangeDateContext(date) {
+    this.onFinishEditing(date)
+    this.setState({
+      value: null
+    })
   }
 
   onFinishEditing(value = null) {
@@ -72,7 +80,7 @@ export default class Editable extends React.Component {
   }
 
   getContextValue() {
-    const { context } = this.props
+    const { contextData: context } = this.props
 
     if (!_.isUndefined(context.rawValue) && context.rawValue !== null) {
       return context.rawValue.toString()
@@ -95,7 +103,6 @@ export default class Editable extends React.Component {
 
   showDiscrepencyPopover(e) {
     e.stopPropagation()
-    // this.popoverRef.show()
   }
 
   render() {
@@ -103,7 +110,7 @@ export default class Editable extends React.Component {
       sectionId,
       deal,
       field,
-      context,
+      contextData,
       approved,
       needsApproval,
       saving,
@@ -120,7 +127,7 @@ export default class Editable extends React.Component {
           saveText={needsApproval ? 'Notify Office' : 'Update'}
           initialDate={this.getValue()}
           onClose={() => this.removeEditMode()}
-          onSelectDate={date => this.onFinishEditing(date)}
+          onSelectDate={date => this.onChangeDateContext(date)}
         />
 
         <div className="name" onClick={() => this.editField()}>
@@ -211,7 +218,7 @@ export default class Editable extends React.Component {
 
             <EditableCta
               needsApproval={needsApproval}
-              context={context}
+              contextData={contextData}
               showCTA={saving !== field.name && !editMode}
               handleEditField={() => this.editField()}
               handleDeleteField={e => this.deleteField(e, field)}
