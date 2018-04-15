@@ -245,15 +245,17 @@ export class FileManager extends React.Component {
 
     const { isTaskChanging } = this.state
 
-    this.setState({
-      isTaskChanging: [...isTaskChanging, file.id]
-    })
+    if (taskId) {
+      this.setState({
+        isTaskChanging: [...isTaskChanging, file.id]
+      })
 
-    await copyTaskFile(user, tasks[taskId], file)
+      await copyTaskFile(user, tasks[taskId], file)
 
-    this.setState({
-      isTaskChanging: _.filter(isTaskChanging, id => id !== file.id)
-    })
+      this.setState({
+        isTaskChanging: _.filter(isTaskChanging, id => id !== file.id)
+      })
+    }
   }
 
   getColumns(rows) {
