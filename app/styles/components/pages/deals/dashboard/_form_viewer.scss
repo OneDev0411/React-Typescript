@@ -74,16 +74,12 @@
   overflow: hidden;
   background-color: #f0f4f7;
 
-  &.show-comments {
-    .pdf-toolbar {
-      right: 316px;
-    }
+  &.show-comments .pdf-toolbar {
+    right: 316px !important;
   }
 
-  &.show-envelopes {
-    .pdf-toolbar {
-      right: 390px;
-    }
+  &.show-envelopes .pdf-toolbar {
+    right: 390px !important;
   }
 
   .envelopes {
