@@ -196,7 +196,7 @@ class DropDownTasks extends React.Component {
             const checklist = checklists[chId]
 
             return (
-              <div key={chId}>
+              <Fragment key={chId}>
                 <div className="checklist">{checklist.title}</div>
 
                 {checklist.tasks &&
@@ -212,7 +212,10 @@ class DropDownTasks extends React.Component {
                         className={cn({
                           selected: selectedTask && selectedTask.id === tId
                         })}
-                        onClick={() => this.onSelectTask(tId)}
+                        onClick={e => {
+                          e.stopPropagation()
+                          this.onSelectTask(tId)
+                        }}
                       >
                         {tasks[tId].title}
                       </li>
@@ -277,7 +280,7 @@ class DropDownTasks extends React.Component {
                     </li>
                   </Fragment>
                 )}
-              </div>
+              </Fragment>
             )
           })}
         </Dropdown.Menu>
