@@ -64,12 +64,7 @@ export default class Form extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { form, showFormModal } = nextProps
 
-    if (
-      form &&
-      _.size(form) > 0 &&
-      (form !== this.props.form ||
-        (showFormModal && _.size(this.state.form) === 0))
-    ) {
+    if (form && showFormModal && _.size(form) > 0) {
       const isNewRecord = typeof form.role === 'undefined'
 
       if (!isNewRecord) {
@@ -132,25 +127,19 @@ export default class Form extends React.Component {
    * preselect role, if there is any
    */
   preselectRoles = () => {
+    const { form } = this.state
     const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
     const preselectedRole = availableRoles.length === 1 && availableRoles[0]
 
-    if (!preselectedRole) {
-      return false
+    if (!form.role && preselectedRole) {
+      this.setForm('role', preselectedRole, null, false)
     }
-
-    this.setState({
-      form: {
-        ...this.state.form,
-        role: preselectedRole
-      }
-    })
   }
 
   /**
    * set form field's value
    */
-  setForm(field, value, removeField = null) {
+  setForm(field, value, removeField = null, triggerFormChange = true) {
     const { form } = this.state
     const newForm = removeField ? _.omit(form, removeField) : form
 
@@ -161,7 +150,7 @@ export default class Form extends React.Component {
           [field]: value
         }
       },
-      () => this.validate(field, value)
+      () => this.validate(field, value, triggerFormChange)
     )
   }
 
@@ -247,7 +236,7 @@ export default class Form extends React.Component {
   /**
    * validate form
    */
-  async validate(field, value) {
+  async validate(field, value, triggerFormChange = true) {
     const { form, invalidFields } = this.state
     const requiredFields = ['role']
 
@@ -327,7 +316,10 @@ export default class Form extends React.Component {
       newInvalidFields.length === 0
 
     this.setState({ isFormCompleted })
-    this.props.onFormChange(form)
+
+    if (triggerFormChange) {
+      this.props.onFormChange(form)
+    }
   }
 
   extractItems({ form = {}, singularName, pluralName }) {
