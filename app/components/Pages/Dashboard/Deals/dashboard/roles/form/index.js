@@ -93,7 +93,7 @@ export default class Form extends React.Component {
           form: {},
           invalidFields: []
         },
-        () => this.preselectRoles()
+        () => showFormModal && this.preselectRoles()
       )
     }
   }
@@ -132,7 +132,7 @@ export default class Form extends React.Component {
     const preselectedRole = availableRoles.length === 1 && availableRoles[0]
 
     if (!form.role && preselectedRole) {
-      this.setForm('role', preselectedRole, null, false)
+      this.setForm('role', preselectedRole, null, true)
     }
   }
 
