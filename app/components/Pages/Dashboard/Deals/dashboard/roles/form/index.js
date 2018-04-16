@@ -132,14 +132,14 @@ export default class Form extends React.Component {
     const preselectedRole = availableRoles.length === 1 && availableRoles[0]
 
     if (!form.role && preselectedRole) {
-      this.setForm('role', preselectedRole, null, true)
+      this.setForm('role', preselectedRole)
     }
   }
 
   /**
    * set form field's value
    */
-  setForm(field, value, removeField = null, triggerFormChange = true) {
+  setForm(field, value, removeField = null) {
     const { form } = this.state
     const newForm = removeField ? _.omit(form, removeField) : form
 
@@ -317,9 +317,7 @@ export default class Form extends React.Component {
 
     this.setState({ isFormCompleted })
 
-    if (triggerFormChange) {
-      this.props.onFormChange(form)
-    }
+    this.props.onFormChange(form)
   }
 
   extractItems({ form = {}, singularName, pluralName }) {
