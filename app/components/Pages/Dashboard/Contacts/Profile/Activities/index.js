@@ -1,16 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Tabs, Tab } from 'react-bootstrap'
+
+import { getNotes } from '../../../../../../models/contacts/helpers/get-notes'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers/get-attribute-from-summary'
+import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
 import Timeline from '../Timeline'
 import Notes from '../Notes'
-import Contact from '../../../../../../models/contacts'
 import TasksTimeLine from '../../../../../../views/CRM/Tasks/components/TasksTimeLine'
-import { getNotes } from '../../../../../../models/contacts/helpers/get-notes'
-import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers/get-attribute-from-summary'
 
-export default function Activities({ contact, tasks, activeTab, onChangeTab }) {
-  const notes = getNotes(contact)
-
+function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
   return (
     <div className="c-contact-profile-card activities">
       <Tabs
@@ -64,3 +64,19 @@ export default function Activities({ contact, tasks, activeTab, onChangeTab }) {
     </div>
   )
 }
+
+function mapStateToProps(state, props) {
+  let notes = []
+  const { contacts: { attributeDefs } } = state
+  const noteAttributeDef = selectDefinitionByName(attributeDefs, 'note')
+
+  if (noteAttributeDef) {
+    notes = getNotes(props.contact, noteAttributeDef.id)
+  }
+
+  return {
+    notes
+  }
+}
+
+export default connect(mapStateToProps)(Activities)

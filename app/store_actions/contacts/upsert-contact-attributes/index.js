@@ -17,7 +17,7 @@ export function upsertContactAttributes(contactId, attributes) {
       updates.push(normalizedAttribute)
     } else if (attribute_def) {
       // todo: add new singular attribute
-      if (attribute_def.singular) {
+      if (attribute_def.singular === true) {
         updates.push(normalizedAttribute)
       } else {
         inserts.push(normalizedAttribute)

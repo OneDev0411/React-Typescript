@@ -1,21 +1,43 @@
+import _ from 'underscore'
+import { combineReducers } from 'redux'
+
 import * as actionTypes from '../../constants/contacts'
 
-export const attributeDefs = (state = [], action) => {
+const byId = (state = {}, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
-      return action.definitions
+      return _.indexBy(action.definitions, 'id')
 
     default:
       return state
   }
 }
 
-export function selectDefinition(state, name) {
-  const def = state.filter(defs => defs.name === name)
+const byName = (state = {}, action) => {
+  switch (action.type) {
+    case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
+      const names = {}
 
-  if (def.length > 0) {
-    return def[0]
+      action.definitions.forEach(def => {
+        names[def.name] = def.id
+      })
+
+      return names
+
+    default:
+      return state
   }
+}
 
-  return null
+export const attributeDefs = combineReducers({
+  byId,
+  byName
+})
+
+export function selectDefinition(state, id) {
+  return state.byId[id] || null
+}
+
+export function selectDefinitionByName(state, name) {
+  return state.byId[state.byName[name]] || null
 }

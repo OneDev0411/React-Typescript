@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 
-import { selectDefinition } from '../../../../../reducers/contacts/attributeDefs'
+import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
 import Stage from './Stage'
@@ -78,7 +78,7 @@ class ContactProfile extends React.Component {
     const { contact, attributeDefs, upsertContactAttributes } = this.props
     const { id: contactId } = contact
     const text = value.replace(/\s/g, '')
-    const attribute_def = selectDefinition(attributeDefs, 'stage')
+    const attribute_def = selectDefinitionByName(attributeDefs, 'stage')
 
     const stage = {
       text,
@@ -93,7 +93,7 @@ class ContactProfile extends React.Component {
     const { contact, upsertContactAttributes, attributeDefs } = this.props
     const { id: contactId } = contact
 
-    const attribute_def = selectDefinition(attributeDefs, 'note')
+    const attribute_def = selectDefinitionByName(attributeDefs, 'note')
 
     const attributes = [
       {

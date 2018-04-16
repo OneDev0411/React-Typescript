@@ -6,7 +6,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import Uploader from '../../../../../../../../views/components/AvatarUploader/index.js'
 import uploadAttachments from '../../../../../../../../models/contacts/upload-attachments/index.js'
-import { selectDefinition } from '../../../../../../../../reducers/contacts/attributeDefs'
+import { selectDefinitionByName } from '../../../../../../../../reducers/contacts/attributeDefs'
 import {
   deleteAttributes,
   upsertContactAttributes
@@ -52,7 +52,7 @@ export default compose(
           const image = await uploadAttachments({ contactId, file })
           const { url: text } = image
 
-          const attribute_def = selectDefinition(
+          const attribute_def = selectDefinitionByName(
             attributeDefs,
             'profile_image_url'
           )

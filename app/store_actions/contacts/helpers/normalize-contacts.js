@@ -8,19 +8,26 @@ export function normalizeContactAttribute(response) {
   const contacts = Array.isArray(data) ? data : [data]
 
   return contacts.map(item => {
-    const subContacts = item.sub_contacts.map(sub => {
-      const { attributes } = sub
-      const newAttributes = _.chain(attributes)
-        .map(attr => ({
-          ...attr,
-          attribute_def: indexedAttrbuteDefs[attr.attribute_def]
-        }))
-        .groupBy(attribute => attribute.attribute_def.section)
-        .value()
+    const subContacts = item.sub_contacts.map(subContact => {
+      const newAttributes = subContact.attributes.map(attribute => ({
+        ...attribute,
+        attribute_def: indexedAttrbuteDefs[attribute.attribute_def]
+      }))
+
+      const groupByAttributeDef = _.groupBy(
+        newAttributes,
+        attribute => attribute.attribute_def.id
+      )
+
+      const groupBySections = _.groupBy(
+        newAttributes,
+        attribute => attribute.attribute_def.section
+      )
 
       return {
-        ...sub,
-        attributes: newAttributes
+        ...subContact,
+        sections: groupBySections,
+        attributes: groupByAttributeDef
       }
     })
 
