@@ -7,6 +7,11 @@ const app = new Koa()
 router.get('/contacts/export/outlook', async ctx => {
   try {
     const { user } = ctx.session
+    let { 'ids[]': ids } = ctx.query
+
+    if (ids && typeof ids === 'string') {
+      ids = [ids]
+    }
 
     if (!user) {
       ctx.status = 401
@@ -16,8 +21,9 @@ router.get('/contacts/export/outlook', async ctx => {
     }
 
     ctx.body = ctx
-      .fetch(`/contacts/outlook.csv?${ctx.querystring}`)
+      .fetch('/contacts/outlook.csv', ids ? 'POST' : 'get')
       .set('Authorization', `Bearer ${user.access_token}`)
+      .send({ ids })
       .on('response', res => {
         ctx.set('Content-Disposition', res.headers['content-disposition'])
       })
