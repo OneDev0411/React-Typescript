@@ -150,7 +150,7 @@ export default class Form extends React.Component {
           [field]: value
         }
       },
-      () => this.validate(field, value, triggerFormChange)
+      () => this.validate(field, value)
     )
   }
 
@@ -236,7 +236,7 @@ export default class Form extends React.Component {
   /**
    * validate form
    */
-  async validate(field, value, triggerFormChange = true) {
+  async validate(field, value) {
     const { form, invalidFields } = this.state
     const requiredFields = ['role']
 
@@ -316,7 +316,6 @@ export default class Form extends React.Component {
       newInvalidFields.length === 0
 
     this.setState({ isFormCompleted })
-
     this.props.onFormChange(form)
   }
 
