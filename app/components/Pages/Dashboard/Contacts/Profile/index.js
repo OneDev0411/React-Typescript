@@ -35,17 +35,9 @@ import { selectContactError } from '../../../../../reducers/contacts/contact'
 import { normalizeContact } from '../../../../../views/utils/association-normalizers'
 
 class ContactProfile extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      tasks: [],
-      activeTab: 'timeline'
-    }
-
-    this.handleAddNote = this.handleAddNote.bind(this)
-    this.handleChangeStage = this.handleChangeStage.bind(this)
-    this.onChangeAttribute = this.onChangeAttribute.bind(this)
+  state = {
+    tasks: [],
+    activeTab: 'timeline'
   }
 
   componentDidMount() {
@@ -54,19 +46,18 @@ class ContactProfile extends React.Component {
 
   async initializeContact() {
     const {
-      user,
       contact,
       getContact,
       getContactActivities,
       params: { id: contactId }
     } = this.props
 
-    if (!contact) {
-      // await getContact(contactId)
-      // await getContactActivities(contactId)
-    } else if (!contact.activities) {
-      // await getContactActivities(contactId)
-    }
+    // if (!contact) {
+    // await getContact(contactId)
+    //   await getContactActivities(contactId)
+    // } else if (!contact.activities) {
+    await getContactActivities(contactId)
+    // }
 
     const query = [
       'order=-updated_at',
@@ -75,19 +66,15 @@ class ContactProfile extends React.Component {
       'associations[]=crm_task.associations'
     ].join('&')
 
-    // const response = await getTasks(query)
-    // const { data: tasks } = response
+    const response = await getTasks(query)
+    const { data: tasks } = response
 
-    // this.setState({ tasks })
+    this.setState({ tasks })
   }
 
   goBack = () => browserHistory.push('/dashboard/contacts')
 
-  async onChangeAttribute({ contactId, attributes }) {
-    return this.props.upsertContactAttributes(contactId, attributes)
-  }
-
-  async handleChangeStage(value) {
+  handleChangeStage = async value => {
     const { contact, attributeDefs, upsertContactAttributes } = this.props
     const { id: contactId } = contact
     const text = value.replace(/\s/g, '')
@@ -102,13 +89,16 @@ class ContactProfile extends React.Component {
     return upsertContactAttributes(contactId, [stage])
   }
 
-  async handleAddNote(note) {
-    const { contact, upsertContactAttributes } = this.props
+  handleAddNote = async text => {
+    const { contact, upsertContactAttributes, attributeDefs } = this.props
     const { id: contactId } = contact
+
+    const attribute_def = selectDefinition(attributeDefs, 'note')
+
     const attributes = [
       {
-        note,
-        type: 'note'
+        text,
+        attribute_def
       }
     ]
 
@@ -180,7 +170,7 @@ class ContactProfile extends React.Component {
           </div>
 
           <div className="right-pane">
-            {/* <Tab.Container
+            <Tab.Container
               id="profile-todo-tabs"
               defaultActiveKey="note"
               className="c-contact-profile-todo-tabs c-contact-profile-card"
@@ -234,15 +224,14 @@ class ContactProfile extends React.Component {
                   </Tab.Pane>
                 </Tab.Content>
               </div>
-            </Tab.Container> */}
+            </Tab.Container>
 
-            {/* <Activities
+            <Activities
               tasks={tasks}
               contact={contact}
               activeTab={activeTab}
-              onChangeAttribute={this.onChangeAttribute}
               onChangeTab={activeTab => this.setState({ activeTab })}
-            /> */}
+            />
           </div>
         </div>
       </div>

@@ -5,9 +5,11 @@ import Timeline from '../Timeline'
 import Notes from '../Notes'
 import Contact from '../../../../../../models/contacts'
 import TasksTimeLine from '../../../../../../views/CRM/Tasks/components/TasksTimeLine'
+import { getNotes } from '../../../../../../models/contacts/helpers/get-notes'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers/get-attribute-from-summary'
 
-export default ({ contact, tasks, activeTab, onChangeTab }) => {
-  const notes = Contact.get.notes(contact)
+export default function Activities({ contact, tasks, activeTab, onChangeTab }) {
+  const notes = getNotes(contact)
 
   return (
     <div className="c-contact-profile-card activities">
@@ -27,8 +29,8 @@ export default ({ contact, tasks, activeTab, onChangeTab }) => {
           className="timeline"
         >
           <Timeline
-            name={Contact.get.name(contact)}
-            avatar={Contact.get.avatar(contact)}
+            name={getAttributeFromSummary(contact, 'display_name')}
+            avatar={getAttributeFromSummary(contact, 'profile_image_url')}
             activities={contact.activities || {}}
           />
         </Tab>
