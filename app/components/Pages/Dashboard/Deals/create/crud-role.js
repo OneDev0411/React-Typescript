@@ -264,7 +264,7 @@ class CrudRole extends React.Component {
           formNotChanged={!form}
           modalTitle={modalTitle}
           isSaving={isSaving}
-          form={role || form}
+          form={form || role}
           allowedRoles={allowedRoles}
           isCommissionRequired={isCommissionRequired}
           onFormChange={data => this.onFormChange(data)}
