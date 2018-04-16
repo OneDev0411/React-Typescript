@@ -20,7 +20,7 @@ export async function uploadTaskFile(taskId, file, fileName = null) {
   }
 }
 
-export async function copyTaskFile(taskId, file) {
+export async function moveTaskFile(taskId, file) {
   try {
     return await new Fetch().post(`/tasks/${taskId}/attachments`).send(file)
   } catch (e) {
@@ -45,5 +45,5 @@ export default {
   uploadStashFile,
   uploadTaskFile,
   deleteStashFile,
-  copyTaskFile
+  moveTaskFile
 }

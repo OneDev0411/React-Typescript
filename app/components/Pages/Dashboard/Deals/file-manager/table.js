@@ -10,7 +10,7 @@ import {
   getDeal,
   displaySplitter,
   deleteFile,
-  copyTaskFile
+  moveTaskFile
 } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import Radio from '../../../../../views/components/radio'
@@ -240,26 +240,28 @@ export class FileManager extends React.Component {
     }?backTo=files`
   }
 
-  onSelectTask = async (file, taskId) => {
-    const { user, tasks, copyTaskFile } = this.props
+  async onSelectTask(file, taskId) {
+    const { user, tasks, moveTaskFile } = this.props
 
     const { isTaskChanging } = this.state
 
-    if (taskId) {
-      this.setState({
-        isTaskChanging: [...isTaskChanging, file.id]
-      })
-
-      await copyTaskFile(user, tasks[taskId], file)
-
-      this.setState({
-        isTaskChanging: _.filter(isTaskChanging, id => id !== file.id)
-      })
+    if (!taskId) {
+      return
     }
+
+    this.setState({
+      isTaskChanging: [...isTaskChanging, file.id]
+    })
+
+    await moveTaskFile(user, tasks[taskId], file)
+
+    this.setState({
+      isTaskChanging: _.omit(isTaskChanging, id => id === file.id)
+    })
   }
 
   getColumns(rows) {
-    const { selectedRows, isDeleting } = this.state
+    const { selectedRows, isDeleting, isTaskChanging } = this.state
     const { deal, tasks } = this.props
 
     return [
@@ -309,7 +311,8 @@ export class FileManager extends React.Component {
               onSelectTask={taskId => this.onSelectTask(file, taskId)}
               selectedTask={tasks[file.taskId]}
             />
-            {this.state.isTaskChanging.indexOf(file.id) > -1 && (
+
+            {isTaskChanging.includes(file.id) && (
               <i
                 className="fa fa-spinner fa-spin"
                 style={{ marginLeft: '16px' }}
@@ -464,6 +467,6 @@ export default connect(
     getDeal,
     deleteFile,
     displaySplitter,
-    copyTaskFile
+    moveTaskFile
   }
 )(FileManager)

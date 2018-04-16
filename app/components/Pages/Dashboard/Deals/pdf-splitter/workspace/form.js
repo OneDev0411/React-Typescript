@@ -86,7 +86,7 @@ class WorkspaceForm extends React.Component {
       )
 
       // add files to attachments list
-      taskFileCreated(task.deal, task.checklist, task.id, file)
+      taskFileCreated(task.id, file)
 
       if (notifyOffice) {
         changeNeedsAttention(task.deal, task.id, true)
