@@ -11,7 +11,10 @@ import {
   deleteAttributes,
   upsertContactAttributes
 } from '../../../../../../../../store_actions/contacts'
-import { getAttributeFromSummary } from '../../../../../../../../models/contacts/helpers'
+import {
+  getContactAvatar,
+  getAttributeFromSummary
+} from '../../../../../../../../models/contacts/helpers'
 
 const AvatarUploader = props => <Uploader {...props} />
 
@@ -31,6 +34,7 @@ export default compose(
   ),
   withHandlers({
     handleChange: ({
+      contact,
       contactId,
       setAvatar,
       setUploading,
@@ -63,19 +67,31 @@ export default compose(
             )
           }
 
-          const attributes = [
-            {
-              text,
-              index: 1,
-              attribute_def,
-              is_primary: true
-            }
-          ]
+          let attribute
+          const avatar = getContactAvatar(contact, attribute_def.id)
 
-          await upsertContactAttributes(contactId, attributes)
+          if (avatar) {
+            attribute = [
+              {
+                text,
+                id: avatar.id
+              }
+            ]
+          } else {
+            attribute = [
+              {
+                text,
+                index: 1,
+                attribute_def,
+                is_primary: true
+              }
+            ]
+          }
+
+          await upsertContactAttributes(contactId, attribute)
         } catch (error) {
-          console.log(error)
           setAvatar(null)
+          throw error
         } finally {
           setUploading(false)
         }

@@ -7,21 +7,14 @@ export function upsertContactAttributes(contactId, attributes) {
 
   // Filter attributes based on their fields.
   // If attribute had a id so it is a patch.
-  // Also if it is a singular attribute, it should be patch.
   // But otherwise it is a new attribute and it has to insert.
   attributes.forEach(attribute => {
-    const { id, attribute_def } = attribute
     const normalizedAttribute = normalizeAttribute(attribute)
 
-    if (id) {
+    if (attribute.id) {
       updates.push(normalizedAttribute)
-    } else if (attribute_def) {
-      // todo: add new singular attribute
-      if (attribute_def.singular === true) {
-        updates.push(normalizedAttribute)
-      } else {
-        inserts.push(normalizedAttribute)
-      }
+    } else {
+      inserts.push(normalizedAttribute)
     }
   })
 
