@@ -167,7 +167,7 @@ class DropDownTasks extends React.Component {
         >
           {searchable ? (
             <input
-              placeholder="Document Title"
+              placeholder="Folder"
               value={this.getSearchValue()}
               onChange={e => this.onChangeFilter(e.target.value)}
             />
