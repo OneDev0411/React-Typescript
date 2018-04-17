@@ -104,11 +104,7 @@ export default class Editable extends React.Component {
   showDiscrepencyPopover(e) {
     e.stopPropagation()
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.context.value !== this.props.context.value) {
-      this.setState({ value: nextProps.context.value })
-    }
-  }
+
   render() {
     const {
       sectionId,
