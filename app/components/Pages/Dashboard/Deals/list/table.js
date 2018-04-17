@@ -7,7 +7,7 @@ import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 import CriticalDates from '../dashboard/factsheet/critical-dates'
 import EmptyState from './empty-state'
-import ToolTip from '../components/tooltip'
+
 import OpenDeal from '../utils/open-deal'
 import NoSearchResults from './no-search-results'
 import EmptySearch from './empty-search'
@@ -215,34 +215,8 @@ class BaseTable extends React.Component {
     OpenDeal(id)
   }
 
-  /**
-   *
-   */
-  hasNotification(deal) {
-    if (deal.new_notifications > 0) {
-      return (
-        <ToolTip
-          caption={`You have ${
-            deal.new_notifications
-          } unread messages in this deal`}
-        >
-          <div className="inline unread-notifications">
-            <img src="/static/images/deals/comments.svg" />
-            <span>{deal.new_notifications}</span>
-          </div>
-        </ToolTip>
-      )
-    }
-  }
-
   render() {
-    const {
-      deals,
-      tabName,
-      isBackOffice,
-      emptySearchPageIsOpen,
-      filters
-    } = this.props
+    const { deals, isBackOffice, emptySearchPageIsOpen, filters } = this.props
     const { sortBy, sortOrder } = this.state
 
     // apply filter to deals
