@@ -38,15 +38,12 @@ const pageSource = {
 function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()
   }
 }
 
 class PageThumbnail extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   previewPage() {
     const { pdfId, doc, pageNumber, setPagePreview } = this.props
 
@@ -56,17 +53,20 @@ class PageThumbnail extends React.Component {
   render() {
     const {
       connectDragSource,
+      connectDragPreview,
       inUse,
       canvasClassName,
       pageNumber,
       pdfId,
-      doc
+      doc,
+      size = 'small'
     } = this.props
 
     const DragComponent = (
       <div className="inline">
         <Page
-          containerHeight={158}
+          containerHeight={size === 'small' ? 200 : '100%'}
+          size={size}
           zoom={2}
           canvasClassName={canvasClassName}
           pdfId={pdfId}
@@ -86,7 +86,16 @@ class PageThumbnail extends React.Component {
       </div>
     )
 
-    return connectDragSource(DragComponent)
+    connectDragPreview(<div>ABCDEDFS</div>)
+
+    return connectDragSource(DragComponent, {
+      dragPreview: {
+        anchorX: 0,
+        anchorY: 0,
+        offsetX: 0,
+        offsetY: 0
+      }
+    })
   }
 }
 

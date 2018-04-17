@@ -30,9 +30,7 @@ class WorkspacePdfList extends React.Component {
   }
 
   render() {
-    const {
-      isOver, canDrop, connectDropTarget, splitter
-    } = this.props
+    const { isOver, canDrop, connectDropTarget, splitter } = this.props
     const { pdfObjects } = splitter
 
     const DropTarget = (
@@ -43,6 +41,7 @@ class WorkspacePdfList extends React.Component {
           <PageThumbnail
             key={`pdf-page-${id}`}
             inUse
+            size="small"
             canvasClassName="no-drag"
             pdfId={page.documentId}
             doc={pdfObjects[page.documentId]}
@@ -50,7 +49,9 @@ class WorkspacePdfList extends React.Component {
           >
             <span
               className="page-cta remove"
-              onClick={() => this.deselectPage(page.documentId, page.pageNumber)}
+              onClick={() =>
+                this.deselectPage(page.documentId, page.pageNumber)
+              }
             >
               Remove
             </span>
@@ -63,6 +64,10 @@ class WorkspacePdfList extends React.Component {
   }
 }
 
-const connectedWorkSpacePdfList = connect(null, { deselectSplitterPage })(WorkspacePdfList)
+const connectedWorkSpacePdfList = connect(null, { deselectSplitterPage })(
+  WorkspacePdfList
+)
 
-export default DropTarget('SPLITTER_PDF_PAGE', {}, collect)(connectedWorkSpacePdfList)
+export default DropTarget('SPLITTER_PDF_PAGE', {}, collect)(
+  connectedWorkSpacePdfList
+)

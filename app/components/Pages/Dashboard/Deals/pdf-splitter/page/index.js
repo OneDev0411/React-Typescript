@@ -58,14 +58,17 @@ class Page extends React.Component {
   }
 
   render() {
-    const { pageNumber, canvasClassName } = this.props
+    const { pageNumber, size, canvasClassName } = this.props
 
     return (
-      <div className="page-container" ref={ref => (this.container = ref)}>
+      <div
+        className={cn('page-container', size)}
+        ref={ref => (this.container = ref)}
+      >
         <canvas
           id={`pdf-page-canvas-${pageNumber}`}
           ref={ref => (this.canvas = ref)}
-          className={cn('page-canvas', canvasClassName)}
+          className={cn('page-canvas', canvasClassName, size)}
         />
 
         {this.props.children}

@@ -150,7 +150,8 @@ class DropDownTasks extends React.Component {
       checklists,
       tasks,
       searchable,
-      showStashOption
+      showStashOption,
+      placeholder = 'Folder'
     } = this.props
 
     return (
@@ -167,7 +168,7 @@ class DropDownTasks extends React.Component {
         >
           {searchable ? (
             <input
-              placeholder="Folder"
+              placeholder={placeholder}
               value={this.getSearchValue()}
               onChange={e => this.onChangeFilter(e.target.value)}
             />
