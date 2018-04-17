@@ -82,7 +82,9 @@ class PDF extends React.Component {
         {_.map(pdfObjects, (doc, id) => (
           <div key={id} className="pdf-section">
             <div className="heading">
-              <span className="page-title">{files[id].properties.name}</span>
+              <span className="page-title">
+                {files[id] && files[id].properties.name}
+              </span>
 
               <span className="pages-count">
                 ({doc.pdfInfo.numPages} pages)
@@ -100,6 +102,7 @@ class PDF extends React.Component {
                 <PageThumbnail
                   key={`page-${i}`}
                   inUse={inUse}
+                  size="big"
                   canvasClassName={cn({ inUse })}
                   pdfId={id}
                   doc={doc}
