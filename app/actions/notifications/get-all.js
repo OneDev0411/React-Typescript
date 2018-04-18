@@ -19,7 +19,7 @@ export default user => {
     }
 
     AppStore.data.notifications = response.data
-    AppStore.data.new_notifications_count = response.info.new || 5
+    AppStore.data.new_notifications_count = response.info.new
     AppStore.data.notifications_retrieved = true
     AppStore.emitChange()
   })
