@@ -131,7 +131,7 @@ class Mapper extends React.Component {
         </div>
 
         {_.chain(columns)
-          .pick(({ hasValue }) => hasValue)
+          .pick(({ hasValue }, name) => hasValue && name.length > 0)
           .map((info, name) => (
             <div key={info.index} className="column-row">
               <div className="name">{name}</div>
