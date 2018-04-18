@@ -93,8 +93,10 @@ class UploadContacts extends React.Component {
           contact.attributes[pluralName] = []
         }
 
-        contact.attributes[pluralName][label] = {
-          ...contact.attributes[pluralName][label],
+        const labelName = label || contact.attributes[pluralName].length
+
+        contact.attributes[pluralName][labelName] = {
+          ...contact.attributes[pluralName][labelName],
           type: singularName,
           label,
           [rechatField]: this.parseValue(
