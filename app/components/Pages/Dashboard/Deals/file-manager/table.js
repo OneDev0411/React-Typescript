@@ -300,7 +300,7 @@ export class FileManager extends React.Component {
         Cell: ({ value }) => this.getDate(value)
       },
       {
-        Header: () => this.getCellTitle('TASK'),
+        Header: () => this.getCellTitle('FOLDER'),
         accessor: 'task',
         className: 'file-table__task',
         Cell: ({ original: file }) => (

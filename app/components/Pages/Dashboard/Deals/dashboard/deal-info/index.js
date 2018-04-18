@@ -10,7 +10,6 @@ import Commission from '../factsheet/commission'
 import Roles from '../roles'
 import MlsListing from '../mls-listing'
 import DealSide from './side'
-import DealEmail from '../deal-email'
 
 const DealInfosScrollable = styled.div`
   height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
@@ -30,7 +29,6 @@ export default ({ deal, showBackButton = true, traningAccount = false }) => {
 
         <MlsListing deal={deal} />
         <DealSide deal={deal} />
-        <DealEmail dealEmail={deal.email} marginBottom />
 
         <div className="deal-fact-sheet">
           <CriticalDates deal={deal} />
