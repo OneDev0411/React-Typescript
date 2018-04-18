@@ -97,7 +97,12 @@ class UploadContacts extends React.Component {
           ...contact.attributes[pluralName][label],
           type: singularName,
           label,
-          [rechatField]: this.parseValue(rechatField, dataType, fieldValue)
+          [rechatField]: this.parseValue(
+            csvField,
+            rechatField,
+            dataType,
+            fieldValue
+          )
         }
       })
 
@@ -149,13 +154,16 @@ class UploadContacts extends React.Component {
     return normalizedContact
   }
 
-  parseValue = (fieldName, dataType, value) => {
+  parseValue = (csvField, fieldName, dataType, value) => {
     switch (fieldName) {
       case 'birthday':
         return moment(value).unix() // unix timestamp in seconds
 
       case 'phone':
         return value.replace(/\s/g, '').replace(/^00/, '+')
+
+      case 'note':
+        return `${csvField}: ${value}`
     }
 
     return value
