@@ -1,34 +1,33 @@
 import React from 'react'
+import _ from 'underscore'
 
 const TagsString = ({ tags }) => {
-  if (Object.keys(tags).length === 0) {
+  const tagsCount = _.size(tags)
+  const showingTags = []
+  const getShowingTags = () => showingTags.join(', ')
+
+  if (tagsCount === 0) {
     return <p style={{ color: '#8da2b5', marginBottom: 0 }}>No Tags</p>
   }
 
-  let tagString = ''
-  // We can't break forEach.
-  let stopForeach = false
+  _.every(tags, item => {
+    if (getShowingTags().length + item.tag.length <= 28) {
+      showingTags.push(item.tag)
 
-  Object.keys(tags).forEach((key, index) => {
-    if (!stopForeach) {
-      let tag = tags[key].tag
-
-      // max kength 28 came from design
-      if (tagString.length + tag.length <= 28) {
-        tagString +=
-          tag +
-          // Add ', ' if it is not the last item in  the object
-          (index !== Object.keys(tags).length - 1 ? ', ' : '')
-      } else {
-        stopForeach = true
-        // remove the last ', '
-        tagString = tagString.slice(0, -2)
-        tagString += ` and ${Object.keys(tags).length - index} more`
-      }
+      return true
     }
+
+    return false
   })
 
-  return <div>{tagString}</div>
+  const invisibleTagsCount = tagsCount - showingTags.length
+
+  return (
+    <div>
+      {getShowingTags()}
+      {invisibleTagsCount > 0 && <span> and {invisibleTagsCount} more</span>}
+    </div>
+  )
 }
 
 export default TagsString
