@@ -190,7 +190,7 @@ const enhance = compose(
       setIsSaving(true)
 
       try {
-        await deleteAttributes({ contactId, attributesIds: [field.id] })
+        await deleteAttributes(contactId, [field.id])
       } catch (error) {
         throw error
       } finally {

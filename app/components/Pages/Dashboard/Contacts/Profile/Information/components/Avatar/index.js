@@ -100,23 +100,29 @@ export default compose(
       reader.readAsDataURL(file)
     },
     handleDelete: ({
-      avatar,
+      setAvatar,
       contactId,
-      deleteAttributes,
-      setAvatar
+      attributeDefs,
+      deleteAttributes
     }) => async () => {
       try {
-        const avatars = Contact.get.attributes({
-          contact,
-          name: 'profile_image_urls',
-          type: 'profile_image_url'
-        })
+        const attribute_def = selectDefinitionByName(
+          attributeDefs,
+          'profile_image_url'
+        )
 
-        const attribute = avatars.filter(a => a.profile_image_url === avatar)
-        const { id } = attribute
-        const attributesIds = [id]
+        if (!attribute_def) {
+          throw new Error(
+            'Something went wrong. Attribute definition is not found!'
+          )
+        }
 
-        await deleteAttributes({ contactId, attributesIds })
+        const avatar = getContactAvatar(contact, attribute_def.id)
+
+        if (avatar && avatar.id) {
+          await deleteAttributes(contactId, [avatar.id])
+        }
+
         setAvatar(null)
       } catch (error) {
         throw error

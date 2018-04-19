@@ -89,7 +89,7 @@ const enhance = compose(
       setActionStatus({ status: 'Deleting ...', item: note.id })
 
       try {
-        await deleteAttributes({ contactId, attributesIds: [note.id] })
+        await deleteAttributes(contactId, [note.id])
       } catch (error) {
         throw error
       } finally {

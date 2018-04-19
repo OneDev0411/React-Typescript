@@ -7,10 +7,7 @@ import Fetch from '../../../services/fetch'
  * @returns {object} Returns updated contact.
  */
 
-export default async function postNewAttributes({
-  contactId = '',
-  attributeId = ''
-}) {
+export async function deleteAttribute(contactId, attributeId) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }
@@ -24,7 +21,7 @@ export default async function postNewAttributes({
       `/contacts/${contactId}/attributes/${attributeId}`
     )
 
-    return response.body.data
+    return response.body
   } catch (error) {
     throw error
   }
