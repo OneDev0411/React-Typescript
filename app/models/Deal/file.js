@@ -37,7 +37,7 @@ export async function createDealFile(dealId, file) {
 }
 
 /**
- * delete attachment
+ * delete files from stash
  */
 export async function deleteStashFile(dealId, files) {
   try {
