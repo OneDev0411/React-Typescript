@@ -102,11 +102,11 @@ class Names extends Component {
 function mapStateToProps(state, { contact }) {
   const { contacts: { attributeDefs } } = state
   const { id: contactId, sub_contacts } = contact
-  const { sections: { Names: names } } = sub_contacts[0]
+  const { sections: { Names } } = sub_contacts[0]
 
-  const fields = getNames(names, attributeDefs)
+  const fields = getNames(Names, attributeDefs)
 
-  return { contactId, names, fields, attributeDefs }
+  return { contactId, fields, attributeDefs }
 }
 
 export default connect(mapStateToProps, {
