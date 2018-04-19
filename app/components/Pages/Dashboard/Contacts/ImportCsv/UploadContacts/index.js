@@ -178,6 +178,7 @@ class UploadContacts extends React.Component {
       status: 'success'
     })
 
+    // browserHistory.push('/dashboard/contacts')
     window.location.href = '/dashboard/contacts'
   }
 

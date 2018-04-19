@@ -48,6 +48,15 @@ export function uploadCsvContacts(contacts) {
   return async () => {
     try {
       await postBulkContacts(contacts)
+      // const { data: newContacts, info } = response
+
+      // dispatch({
+      //   response: {
+      //     info,
+      //     ...normalize(newContacts, contactsSchema)
+      //   },
+      //   type: types.FETCH_CONTACTS_SUCCESS
+      // })
     } catch (e) {
       throw e
     }
