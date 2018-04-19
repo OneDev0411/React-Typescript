@@ -240,14 +240,10 @@ export class FileManager extends React.Component {
     }?backTo=files`
   }
 
-  async onSelectTask(file, taskId) {
+  async onSelectTask(file, taskId = null) {
     const { user, tasks, moveTaskFile, deal } = this.props
 
     const { isTaskChanging } = this.state
-
-    if (!taskId) {
-      return
-    }
 
     this.setState({
       isTaskChanging: [...isTaskChanging, file.id]
@@ -306,8 +302,7 @@ export class FileManager extends React.Component {
         Cell: ({ original: file }) => (
           <Fragment>
             <TasksDropDown
-              moveToParentFolder="moveToParentFolder"
-              showStashOption={!!file.taskId}
+              showStashOption={file.taskId !== null}
               searchable
               deal={deal}
               onSelectTask={taskId => this.onSelectTask(file, taskId)}
@@ -364,7 +359,7 @@ export class FileManager extends React.Component {
 
             <Dropdown.Menu>
               <li>
-                {isDeleting.indexOf(file.id) > -1 ? (
+                {isDeleting.includes(file.id) ? (
                   <span>
                     <i className="fa fa-spinner fa-spin" /> Deleting ...
                   </span>
