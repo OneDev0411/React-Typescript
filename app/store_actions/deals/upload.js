@@ -149,34 +149,28 @@ export function uploadTaskFile(user, task, file, fileName = null) {
 export function moveTaskFile(user, dealId, task, file) {
   return async dispatch => {
     try {
-      let response
+      const response = Deal[task ? 'createTaskFile' : 'createDealFile'].call(
+        null,
+        dealId,
+        [file.id]
+      )
 
-      if (task) {
-        response = await Deal.copyTaskFile(task.id, { file: file.id })
-      } else {
-        response = await Deal.copyDealFile(dealId, { file: file.id })
-      }
+      const { data: fileData } = response.body
 
-      const fileData = response.body.data
-
-      await Deal.deleteStashFile(dealId, [file.id])
-
-      task &&
-        (await Deal.createTaskMessage(task.id, {
-          author: user.id,
-          room: task.room.id,
-          attachments: [fileData.id]
-        }))
-
-      // add files to attachments list
       if (file.taskId) {
         dispatch(taskFileDeleted({ id: file.taskId }, file.id))
       } else {
+        await Deal.deleteStashFile(dealId, [file.id])
         dispatch(stashFileDeleted(dealId, file.id))
       }
 
       if (task) {
         dispatch(taskFileCreated(task.id, fileData))
+        await Deal.createTaskMessage(task.id, {
+          author: user.id,
+          room: task.room.id,
+          attachments: [fileData.id]
+        })
       } else {
         dispatch(stashFileCreated(dealId, fileData))
       }
