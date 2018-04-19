@@ -241,7 +241,7 @@ export class FileManager extends React.Component {
   }
 
   async onSelectTask(file, taskId) {
-    const { user, tasks, moveTaskFile } = this.props
+    const { user, tasks, moveTaskFile, deal } = this.props
 
     const { isTaskChanging } = this.state
 
@@ -253,10 +253,10 @@ export class FileManager extends React.Component {
       isTaskChanging: [...isTaskChanging, file.id]
     })
 
-    await moveTaskFile(user, tasks[taskId], file)
+    await moveTaskFile(user, deal.id, tasks[taskId], file)
 
     this.setState({
-      isTaskChanging: _.omit(isTaskChanging, id => id === file.id)
+      isTaskChanging: isTaskChanging.filter(id => id !== file.id)
     })
   }
 
@@ -306,10 +306,13 @@ export class FileManager extends React.Component {
         Cell: ({ original: file }) => (
           <Fragment>
             <TasksDropDown
+              moveToParentFolder="moveToParentFolder"
+              showStashOption={!!file.taskId}
               searchable
               deal={deal}
               onSelectTask={taskId => this.onSelectTask(file, taskId)}
               selectedTask={tasks[file.taskId]}
+              stashOptionText="Move it to my Files"
             />
 
             {isTaskChanging.includes(file.id) && (
