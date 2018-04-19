@@ -173,8 +173,6 @@ export function moveTaskFile(user, dealId, task, file) {
 
       /*
       * remove file from it's current place (task or stash based on given task)
-      * (we don't need to wait for this action, since it makes
-      * the flow faster and also it don't block the entire process)
       */
       await dispatch(
         deleteFile(dealId, {
