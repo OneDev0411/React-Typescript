@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Dropzone from 'react-dropzone'
 import { batchActions } from 'redux-batched-actions'
 import cn from 'classnames'
+import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 import {
   addCsvFile,
   updateWizardStep,
@@ -19,6 +20,16 @@ class SelectFile extends React.Component {
   }
 
   onDropFiles = files => {
+    if (files.length === 0) {
+      return this.props.showMessageModal({
+        message: 'Invalid File',
+        description: 'You are only allowed to import csv files',
+        hideCancelButton: true,
+        confirmLabel: 'Okay',
+        onConfirm: () => null
+      })
+    }
+
     batchActions([
       this.props.addCsvFile(files[0]),
       this.props.updateWizardStep(CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE),
@@ -96,5 +107,6 @@ function mapStateToProps({ contacts }) {
 export default connect(mapStateToProps, {
   addCsvFile,
   updateWizardStep,
+  showMessageModal,
   setCurrentStepValidation
 })(SelectFile)
