@@ -45,15 +45,11 @@ export function resetCsvImport() {
 }
 
 export function uploadCsvContacts(contacts) {
-  return async dispatch => {
+  return async () => {
     try {
       await postBulkContacts(contacts)
     } catch (e) {
       throw e
     }
-
-    // get contacts again, because server doesn't respond
-    // contacts list in bulk requests
-    await dispatch(getContacts())
   }
 }
