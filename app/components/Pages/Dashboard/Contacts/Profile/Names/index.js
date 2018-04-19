@@ -1,197 +1,159 @@
-import React from 'react'
-import { pick } from 'lodash'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
+import _ from 'underscore'
 
 import { upsertContactAttributes } from '../../../../../../store_actions/contacts'
-import { getMostRecentlyAttribute } from '../../../../../../models/contacts'
+import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
 import Field from './Field'
 import Title from './Title'
 import Loading from '../../components/Loading'
 
-const Names = ({ fields, upsertAttribute, handelOnDelete, isSaving }) => (
-  <div className="c-contact-profile-card">
-    <h3 className="c-contact-profile-card__title">Names</h3>
-    <div className="c-contact-profile-card__body">
-      <ul className="c-contact-details u-unstyled-list">
-        <Title
-          disabled={isSaving}
-          key="names__title"
-          field={fields.title}
-          onChange={upsertAttribute}
-        />
-        {fields &&
-          Object.keys(fields)
-            .filter(name => name !== 'title')
-            .map(name => (
-              <Field
-                field={fields[name]}
-                isSaving={isSaving}
-                key={`names_${fields[name].type}`}
-                onChange={upsertAttribute}
-                onDelete={handelOnDelete}
-              />
-            ))}
-        {isSaving && <Loading />}
-      </ul>
-    </div>
-  </div>
-)
+class Names extends Component {
+  state = {
+    isSaving: false
+  }
 
-function mapStateToProps(state, { contact }) {
-  const { id: contactId } = contact
-  const names = getMostRecentlyAttribute({ contact, attributeName: 'names' })
-  const fields = getNames(names)
+  upsertAttribute = async attribute => {
+    const { contactId, upsertContactAttributes } = this.props
 
-  return { contactId, names, fields }
+    this.setState(
+      {
+        isSaving: true
+      },
+      async () => {
+        try {
+          await upsertContactAttributes(contactId, [attribute])
+        } catch (error) {
+          throw error
+        } finally {
+          this.setState({
+            isSaving: false
+          })
+        }
+      }
+    )
+  }
+
+  handelOnDelete = async field => {
+    const { contactId, upsertContactAttributes } = this.props
+
+    this.setState(
+      {
+        isSaving: true
+      },
+      async () => {
+        try {
+          const attributes = [
+            {
+              text: '',
+              id: field.id
+            }
+          ]
+
+          await upsertContactAttributes(contactId, attributes)
+        } catch (error) {
+          throw error
+        } finally {
+          this.setState({
+            isSaving: false
+          })
+        }
+      }
+    )
+  }
+
+  render() {
+    const { fields } = this.props
+    const { isSaving } = this.state
+
+    return (
+      <div className="c-contact-profile-card">
+        <h3 className="c-contact-profile-card__title">Names</h3>
+        <div className="c-contact-profile-card__body">
+          <ul className="c-contact-details u-unstyled-list">
+            <Title
+              key="names__title"
+              disabled={isSaving}
+              field={fields.title}
+              onChange={this.upsertAttribute}
+            />
+            {fields &&
+              Object.keys(fields)
+                .filter(field => field !== 'title')
+                .sort((a, b) => b.index - a.index)
+                .map(field => (
+                  <Field
+                    isSaving={isSaving}
+                    field={fields[field]}
+                    key={`names_${field}`}
+                    onChange={this.upsertAttribute}
+                    onDelete={this.handelOnDelete}
+                  />
+                ))}
+            {isSaving && <Loading />}
+          </ul>
+        </div>
+      </div>
+    )
+  }
 }
 
-const enhance = compose(
-  connect(mapStateToProps, {
-    upsertContactAttributes
-  }),
-  withState('isSaving', 'setIsSaving', false),
-  withHandlers({
-    upsertAttribute: ({
+function mapStateToProps(state, { contact }) {
+  const { contacts: { attributeDefs } } = state
+  const { id: contactId, sub_contacts } = contact
+  const { sections: { Names: names } } = sub_contacts[0]
+
+  const fields = getNames(names, attributeDefs)
+
+  return { contactId, names, fields, attributeDefs }
+}
+
+export default connect(mapStateToProps, {
+  upsertContactAttributes
+})(Names)
+
+function getNames(names, attributeDefs) {
+  let nameAttributes = names
+  const nameFields = [
+    'title',
+    'first_name',
+    'middle_name',
+    'last_name',
+    'nickname'
+  ]
+
+  nameFields.forEach((name, index) => {
+    const indexedNames = _.indexBy(
       names,
-      contact,
-      contactId,
-      setIsSaving,
-      upsertContactAttributes
-    }) => async fields => {
-      setIsSaving(true)
+      attribute => attribute.attribute_def.name
+    )
 
-      try {
-        let id
-        let attributes
-        const [field] = fields
-        const { type } = field
-        const {
-          names: firstSubContactNames
-        } = contact.sub_contacts[0].attributes
+    let field = indexedNames[name]
 
-        if (
-          Array.isArray(firstSubContactNames) &&
-          Object.keys(firstSubContactNames[0]).length > 0
-        ) {
-          id = firstSubContactNames[0].id
-        }
-
-        if (id) {
-          attributes = [
-            {
-              ...names,
-              id,
-              [type]: field[type],
-              is_primary: true
-            }
-          ]
-        } else {
-          attributes = [
-            {
-              type: 'name',
-              id,
-              is_primary: true,
-              [type]: field[type]
-            }
-          ]
-        }
-
-        await upsertContactAttributes(contactId, attributes)
-      } catch (error) {
-        throw error
-      } finally {
-        setIsSaving(false)
-      }
-    }
-  }),
-  withHandlers({
-    handelOnDelete: ({
-      names,
-      contact,
-      contactId,
-      setIsSaving,
-      upsertContactAttributes
-    }) => async ({ type }) => {
-      setIsSaving(true)
-
-      try {
-        let id
-        const {
-          names: firstSubContactNames
-        } = contact.sub_contacts[0].attributes
-
-        if (
-          Array.isArray(firstSubContactNames) &&
-          Object.keys(firstSubContactNames[0]).length > 0
-        ) {
-          id = firstSubContactNames[0].id
-        }
-
-        const attributes = [
-          {
-            ...names,
-            id,
-            [type]: ''
-          }
-        ]
-
-        await upsertContactAttributes(contactId, attributes)
-      } catch (error) {
-        throw error
-      } finally {
-        setIsSaving(false)
-      }
+    if (!field) {
+      nameAttributes.push({
+        index,
+        text: '',
+        attribute_def: selectDefinitionByName(attributeDefs, field)
+      })
     }
   })
-)
 
-export default enhance(Names)
+  return _.chain(nameAttributes)
+    .map(attribute => {
+      if (attribute.index) {
+        return attribute
+      }
 
-function getNames(names) {
-  let id
-  let nameAttribute
+      const index = nameFields.indexOf(attribute.attribute_def.name)
 
-  const nameFields = {
-    title: '',
-    first_name: '',
-    middle_name: '',
-    last_name: '',
-    nickname: ''
-  }
-
-  if (names && Object.keys(names).length > 0) {
-    id = names.id
-
-    nameAttribute = {
-      ...nameFields,
-      ...pick(names, Object.keys(nameFields))
-    }
-  } else {
-    nameAttribute = nameFields
-  }
-
-  const getTitle = name =>
-    name
-      .split('_')
-      .map(i => i.charAt(0).toUpperCase() + i.substr(1, i.length))
-      .join(' ')
-
-  if (Object.keys(nameAttribute).length > 0) {
-    const fields = {}
-
-    Object.keys(nameAttribute).forEach(name => {
-      fields[name] = {
-        id,
-        type: name,
-        [name]: nameAttribute[name],
-        name: getTitle(name)
+      return {
+        ...attribute,
+        index: index === -1 ? null : index
       }
     })
-
-    return fields
-  }
+    .sort((a, b) => a.index - b.index)
+    .indexBy(attribute => attribute.attribute_def.name)
+    .value()
 }

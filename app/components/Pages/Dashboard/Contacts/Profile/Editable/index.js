@@ -19,7 +19,7 @@ class EditableInput extends React.Component {
 
     const { field, handleFormat } = props
 
-    const value = field[field.type]
+    const value = field[field.attribute_def.data_type]
     const text = handleFormat(value) || ''
 
     this.state = {
@@ -34,19 +34,15 @@ class EditableInput extends React.Component {
 
   async onChange(event) {
     const { validator } = this.props
-    const text = event.target.value
+    const text = event.target.value.trim()
 
-    if (typeof validator === 'function') {
-      if (text) {
-        const error = await validator(text)
+    if (typeof validator === 'function' && text) {
+      const error = await validator(text)
 
-        this.setState({ text, error: !error })
-      } else {
-        this.setState({ text, error: true })
-      }
+      this.setState({ text, error: !error })
     }
 
-    this.setState({ text })
+    this.setState({ text, error: false })
   }
 
   onFocus = event => {
@@ -58,9 +54,9 @@ class EditableInput extends React.Component {
   onBlur = () => {
     const { error, text } = this.state
     const { field, handleFormat } = this.props
-    const fieldValue = field[field.type]
+    const fieldValue = field[field.attribute_def.data_type]
 
-    if (error || !text) {
+    if (error) {
       return this.setState(
         {
           error: false,
@@ -87,10 +83,10 @@ class EditableInput extends React.Component {
   onSubmit = () => {
     const { text, error } = this.state
     const { onChange, field, handleParse, handleFormat } = this.props
-    const { type } = field
-    const fieldPreviousValue = field[type]
+    const { data_type } = field.attribute_def
+    const fieldPreviousValue = field[data_type]
 
-    if (error || !text) {
+    if (error) {
       return false
     }
 
@@ -98,7 +94,7 @@ class EditableInput extends React.Component {
       typeof onChange === 'function' &&
       handleFormat(fieldPreviousValue) !== text
     ) {
-      onChange([{ ...field, [type]: handleParse(text) }])
+      onChange({ ...field, [data_type]: handleParse(text) })
     }
 
     this.setState({ isActive: false })
@@ -127,9 +123,9 @@ class EditableInput extends React.Component {
     if (event.keyCode === 27) {
       this.setState(
         {
-          text: handleFormat(field[field.type]) || '',
           error: false,
-          isActive: false
+          isActive: false,
+          text: handleFormat(field[field.attribute_def.data_type]) || ''
         },
         () => {
           this.$input.blur()

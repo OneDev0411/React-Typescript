@@ -167,9 +167,9 @@ class ContactProfile extends React.Component {
               onChange={stage => this.handleChangeStage(stage)}
             />
 
-            {/* <Names contact={contact} />
+            <Names contact={contact} />
 
-            <Tags
+            {/* <Tags
               contactId={contact.id}
               tags={Contact.get.tags(contact, defaultTags)}
             />
