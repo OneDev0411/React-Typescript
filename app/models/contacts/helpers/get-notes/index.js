@@ -1,4 +1,4 @@
-export function getNotes(contact, attributeDef) {
+export function getNotes(contact) {
   if (!contact) {
     throw new Error('Contact object is required!')
   }
@@ -6,10 +6,10 @@ export function getNotes(contact, attributeDef) {
   let list = []
 
   contact.sub_contacts.forEach(subContact => {
-    const notes = subContact.attributes[attributeDef]
+    const { Notes } = subContact.sections
 
-    if (Array.isArray(notes) && notes.length > 0) {
-      list = [...list, ...notes]
+    if (Array.isArray(Notes) && Notes.length > 0) {
+      list = [...list, ...Notes]
     }
   })
 
