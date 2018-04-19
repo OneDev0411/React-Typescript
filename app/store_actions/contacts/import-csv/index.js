@@ -47,18 +47,18 @@ export function resetCsvImport() {
 }
 
 export function uploadCsvContacts(contacts) {
-  return async dispatch => {
+  return async () => {
     try {
-      const response = await postBulkContacts(contacts)
-      const { data, info } = response
+      await postBulkContacts(contacts)
+      // const { data: newContacts, info } = response
 
-      dispatch({
-        response: {
-          info,
-          ...normalize({ contacts: data }, contactsSchema)
-        },
-        type: types.FETCH_CONTACTS_SUCCESS
-      })
+      // dispatch({
+      //   response: {
+      //     info,
+      //     ...normalize(newContacts, contactsSchema)
+      //   },
+      //   type: types.FETCH_CONTACTS_SUCCESS
+      // })
     } catch (e) {
       throw e
     }

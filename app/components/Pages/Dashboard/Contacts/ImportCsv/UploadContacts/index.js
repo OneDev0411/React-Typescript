@@ -172,13 +172,14 @@ class UploadContacts extends React.Component {
   }
 
   onFinish = () => {
-    browserHistory.push('/dashboard/contacts')
-
     this.props.notify({
       title: 'Contacts Imported',
       message: `Awesome! You’ve imported ${this.props.rowsCount} contacts`,
       status: 'success'
     })
+
+    // browserHistory.push('/dashboard/contacts')
+    window.location.href = '/dashboard/contacts'
   }
 
   onError = (errorMessage, title) => {
