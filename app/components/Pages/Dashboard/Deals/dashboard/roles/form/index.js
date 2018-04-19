@@ -58,7 +58,7 @@ export default class Form extends React.Component {
       })
     }
 
-    this.preselectRoles()
+    // this.preselectRoles()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -82,8 +82,8 @@ export default class Form extends React.Component {
         {
           form,
           isNewRecord
-        },
-        () => this.preselectRoles()
+        }
+        // () => this.preselectRoles()
       )
     }
 
@@ -92,8 +92,8 @@ export default class Form extends React.Component {
         {
           form: {},
           invalidFields: []
-        },
-        () => showFormModal && this.preselectRoles()
+        }
+        // () => showFormModal && this.preselectRoles()
       )
     }
   }
