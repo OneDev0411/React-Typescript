@@ -1,7 +1,8 @@
 import { normalize } from 'normalizr'
-import { tagsSchema } from '../../../models/contacts/schema'
-import fetchContactsTags from '../../../models/contacts/get-contacts-tags'
+
 import * as actionTypes from '../../../constants/contacts'
+import { tagsSchema } from '../../../models/contacts/schema'
+import { getContactsTags as fetchTags } from '../../../models/contacts/get-contacts-tags'
 
 export function getContactsTags() {
   return async dispatch => {
@@ -10,7 +11,7 @@ export function getContactsTags() {
         type: actionTypes.FETCH_CONTACTS_TAGS_REQUEST
       })
 
-      const responseBody = await fetchContactsTags()
+      const responseBody = await fetchTags()
       const { data, info } = responseBody
       const tags = normalize({ tags: data }, tagsSchema)
       const response = {
@@ -31,5 +32,3 @@ export function getContactsTags() {
     }
   }
 }
-
-export default getContactsTags

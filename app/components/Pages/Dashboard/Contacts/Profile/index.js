@@ -29,8 +29,10 @@ import {
   getContactActivities,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
-import { selectTags } from '../../../../../reducers/contacts/tags'
-import { selectContact } from '../../../../../reducers/contacts/list'
+import {
+  selectContact,
+  isFetchingContactsList
+} from '../../../../../reducers/contacts/list'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import { normalizeContact } from '../../../../../views/utils/association-normalizers'
 
@@ -49,15 +51,18 @@ class ContactProfile extends React.Component {
       contact,
       getContact,
       getContactActivities,
+      isFetchingContactsList,
       params: { id: contactId }
     } = this.props
 
-    // if (!contact) {
-    // await getContact(contactId)
-    //   await getContactActivities(contactId)
-    // } else if (!contact.activities) {
-    await getContactActivities(contactId)
-    // }
+    if (!contact && !isFetchingContactsList) {
+      await getContact(contactId)
+      getContactActivities(contactId)
+    }
+
+    if (contact && !contact.activities) {
+      getContactActivities(contactId)
+    }
 
     const query = [
       'order=-updated_at',
@@ -134,7 +139,7 @@ class ContactProfile extends React.Component {
 
   render() {
     const { tasks } = this.state
-    const { contact, fetchError, defaultTags } = this.props
+    const { contact, fetchError } = this.props
 
     if (fetchError) {
       if (fetchError.status === 404) {
@@ -169,12 +174,9 @@ class ContactProfile extends React.Component {
 
             <Names contact={contact} />
 
-            {/* <Tags
-              contactId={contact.id}
-              tags={Contact.get.tags(contact, defaultTags)}
-            />
+            <Tags contact={contact} />
 
-            <Details contact={contact} />
+            {/* <Details contact={contact} />
 
             <Addresses contact={contact} /> */}
           </div>
@@ -250,16 +252,14 @@ class ContactProfile extends React.Component {
 }
 
 const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
-  const { list, contact, tags, attributeDefs } = contacts
-
-  const defaultTags = selectTags(tags)
+  const { list, contact, attributeDefs } = contacts
 
   return {
     user,
-    defaultTags,
     attributeDefs,
     contact: selectContact(list, contactId),
-    fetchError: selectContactError(contact)
+    fetchError: selectContactError(contact),
+    isFetchingContactsList: isFetchingContactsList(list)
   }
 }
 

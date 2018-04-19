@@ -1,29 +1,50 @@
 import React from 'react'
 import _ from 'underscore'
 import { connect } from 'react-redux'
-import {
-  addAttributes,
-  getContactsTags,
-  deleteAttributes
-} from '../../../../../../store_actions/contacts'
+
 import TagsModal from './TagsModal'
 
-class Tags extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      saving: false,
-      isOpenModal: false
-    }
+import {
+  addAttributes,
+  deleteAttributes,
+  getContactsTags as getExistingTags
+} from '../../../../../../store_actions/contacts'
+import { getContactTags } from '../../../../../../models/contacts/helpers/get-contact-tags'
+import { selectTags } from '../../../../../../reducers/contacts/tags'
+import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
-    this.handleSubmitChanges = this.handleSubmitChanges.bind(this)
+class Tags extends React.Component {
+  state = {
+    loading: false,
+    isOpenModal: false
   }
 
-  async handleSubmitChanges({ newTags = [], removedTags = [] }) {
+  componentDidMount() {
+    this.fetchTags()
+  }
+
+  fetchTags = async () => {
+    const { existingTags, getExistingTags } = this.props
+
+    if (existingTags.length === 0 && !this.state.loading) {
+      this.setState({
+        loading: 'Loading'
+      })
+
+      await getExistingTags()
+
+      this.setState({
+        loading: false
+      })
+    }
+  }
+
+  handleSubmitChanges = async ({ newTags = [], removedTags = [] }) => {
     const {
-      contactId,
+      contact,
+      attribute_def,
       addAttributes,
-      getContactsTags,
+      getExistingTags,
       deleteAttributes
     } = this.props
 
@@ -34,31 +55,30 @@ class Tags extends React.Component {
     }
 
     this.setState({
-      isOpenModal: false,
-      saving: true
+      loading: 'Saving',
+      isOpenModal: false
     })
 
     // insert new tags
     if (newTags.length > 0) {
-      const attributes = _.map(newTags, item => ({
-        id: undefined,
-        type: 'tag',
-        tag: item.tag
+      const attributes = newTags.map(({ text }) => ({
+        text,
+        attribute_def: attribute_def.id
       }))
 
-      await addAttributes(contactId, attributes)
+      await addAttributes(contact.id, attributes)
     }
 
     if (removedTags.length > 0) {
       const attributesIds = removedTags.map(({ id }) => id)
 
-      await deleteAttributes({ contactId, attributesIds })
+      await deleteAttributes(contact.id, attributesIds)
     }
 
-    await getContactsTags()
+    await getExistingTags()
 
     this.setState({
-      saving: false
+      loading: false
     })
   }
 
@@ -68,31 +88,30 @@ class Tags extends React.Component {
 
   render() {
     const { tags } = this.props
-    const { isOpenModal, saving } = this.state
+    const { isOpenModal, loading } = this.state
 
     return (
       <div className="c-contact-profile-card tags">
         <h3 className="c-contact-profile-card__title">Tags</h3>
         <div className="c-contact-profile-card__body">
-          {saving ? (
+          {loading ? (
             <span style={{ color: '#2196f3' }}>
               <i className="fa fa-spin fa-spinner" />
-              {'  '}
-              Saving ...
+              {`   ${loading}...`}
             </span>
           ) : (
             <div className="tags">
               {_.chain(tags)
-                .filter(item => item.active)
-                .map(item => (
+                .filter(tag => tag.active)
+                .map(tag => (
                   <button
-                    key={`tag_${item.id}`}
+                    key={`tag_${tag.id}`}
                     className="c-contact__tag active"
                     onClick={() =>
-                      this.handleSubmitChanges({ removedTags: [item] })
+                      this.handleSubmitChanges({ removedTags: [tag] })
                     }
                   >
-                    {item.tag}
+                    {tag.text}
                   </button>
                 ))
                 .value()}
@@ -117,8 +136,16 @@ class Tags extends React.Component {
   }
 }
 
-export default connect(null, {
-  getContactsTags,
-  deleteAttributes,
-  addAttributes
+const mapStateToProps = ({ contacts }, { contact }) => {
+  const existingTags = selectTags(contacts.tags)
+  const attribute_def = selectDefinitionByName(contacts.attributeDefs, 'tag')
+  const tags = getContactTags(contact, attribute_def, existingTags)
+
+  return { tags, existingTags, attribute_def }
+}
+
+export default connect(mapStateToProps, {
+  addAttributes,
+  getExistingTags,
+  deleteAttributes
 })(Tags)

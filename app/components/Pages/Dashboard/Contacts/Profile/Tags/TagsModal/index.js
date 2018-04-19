@@ -1,20 +1,17 @@
-import React from 'react'
-import { Modal, Button, FormControl } from 'react-bootstrap'
+import React, { Component } from 'react'
 import _ from 'underscore'
 import cn from 'classnames'
+import { Modal, Button, FormControl } from 'react-bootstrap'
 
-export default class extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      newTag: null,
-      tags: props.tags
-    }
+export default class extends Component {
+  state = {
+    newTag: null,
+    tags: this.props.tags
   }
 
   componentWillReceiveProps(nextProps) {
-    const nextActiveTags = _.filter(nextProps.tags, item => item.active)
-    const previousActiveTags = _.filter(this.props.tags, item => item.active)
+    const nextActiveTags = _.filter(nextProps.tags, tag => tag.active)
+    const previousActiveTags = _.filter(this.props.tags, tag => tag.active)
 
     if (nextActiveTags.length !== previousActiveTags.length) {
       this.setState({
@@ -23,14 +20,14 @@ export default class extends React.Component {
     }
   }
 
-  handleToggleTag = item => {
+  handleToggleTag = tag => {
     const { tags } = this.state
 
     const newTags = {
       ...tags,
-      [item.tag]: {
-        ...tags[item.tag],
-        active: !item.active
+      [tag.text]: {
+        ...tags[tag.text],
+        active: !tag.active
       }
     }
 
@@ -40,22 +37,20 @@ export default class extends React.Component {
   }
 
   handleSubmitNewTag = () => {
-    const { tags, newTag } = this.state
+    let { tags, newTag } = this.state
 
-    if (newTag == null || tags[newTag]) {
+    newTag = newTag.trim()
+
+    if (!newTag || tags[newTag]) {
       return false
     }
 
-    const _newTag = newTag.trim()
-
     const newTags = {
       ...tags,
-      [_newTag]: {
+      [newTag]: {
         is_new: true,
-        id: newTag,
         active: true,
-        type: 'tag',
-        tag: newTag
+        text: newTag
       }
     }
 
@@ -71,10 +66,10 @@ export default class extends React.Component {
 
     const filterNewTags = item =>
       (item.is_new && item.active) ||
-      (tags[item.tag] && !tags[item.tag].active && item.active)
+      (tags[item.text] && !tags[item.text].active && item.active)
 
     const filterDeletedTags = item =>
-      tags[item.tag] && tags[item.tag].active && !item.active && !item.is_new
+      tags[item.text] && tags[item.text].active && !item.active && !item.is_new
 
     const newTags = _.filter(_tags, filterNewTags)
 
@@ -101,11 +96,15 @@ export default class extends React.Component {
     const { isOpen } = this.props
     const { tags, newTag } = this.state
 
+    if (!isOpen) {
+      return null
+    }
+
     return (
       <Modal
-        dialogClassName="modal-add-tag"
         show={isOpen}
         onHide={this.handleHideModal}
+        dialogClassName="modal-add-tag"
       >
         <Modal.Body>
           <Modal.Header>
@@ -121,14 +120,14 @@ export default class extends React.Component {
 
           <div className="tags-container">
             <div className="tags">
-              {_.map(tags, item => (
+              {_.map(tags, tag => (
                 <button
-                  key={`tag_${item.id}`}
-                  className={cn('c-contact__tag', { active: item.active })}
-                  title={item.active ? 'Remove tag' : 'Add tag'}
-                  onClick={() => this.handleToggleTag(item)}
+                  key={`tag_${tag.id}`}
+                  onClick={() => this.handleToggleTag(tag)}
+                  title={tag.active ? 'Remove tag' : 'Add tag'}
+                  className={cn('c-contact__tag', { active: tag.active })}
                 >
-                  {item.tag}
+                  {tag.text}
                 </button>
               ))}
 
