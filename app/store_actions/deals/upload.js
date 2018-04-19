@@ -149,28 +149,41 @@ export function uploadTaskFile(user, task, file, fileName = null) {
 export function moveTaskFile(user, dealId, task, file) {
   return async dispatch => {
     try {
-      const response = Deal[task ? 'createTaskFile' : 'createDealFile'].call(
-        null,
-        dealId,
-        [file.id]
-      )
+      let response
+      let fileData
 
-      const { data: fileData } = response.body
-
-      if (file.taskId) {
-        dispatch(taskFileDeleted({ id: file.taskId }, file.id))
-      } else {
-        await Deal.deleteStashFile(dealId, [file.id])
-        dispatch(stashFileDeleted(dealId, file.id))
-      }
-
+      /*
+      * if task is defined, file should create inside the given task
+      * if task isn't defined, file should create on deal stash
+      */
       if (task) {
-        dispatch(taskFileCreated(task.id, fileData))
-        await Deal.createTaskMessage(task.id, {
+        response = await Deal.createTaskFile(task.id, { file: file.id })
+        fileData = response.body.data
+
+        // post file logs into task's comments
+        Deal.createTaskMessage(task.id, {
           author: user.id,
           room: task.room.id,
           attachments: [fileData.id]
+        }).then(() => null)
+      } else {
+        response = await Deal.createDealFile(dealId, { file: file.id })
+        fileData = response.body.data
+      }
+
+      /*
+      * remove file from it's current place (task or stash based on given task)
+      * (we don't need to wait for this action, since it makes
+      * the flow faster and also it don't block the entire process)
+      */
+      await dispatch(
+        deleteFile(dealId, {
+          [file.id]: file.taskId ? { id: file.taskId } : null
         })
+      )
+
+      if (task) {
+        dispatch(taskFileCreated(task.id, fileData))
       } else {
         dispatch(stashFileCreated(dealId, fileData))
       }
