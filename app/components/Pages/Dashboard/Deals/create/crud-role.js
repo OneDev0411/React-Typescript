@@ -148,7 +148,7 @@ class CrudRole extends React.Component {
   }
 
   onSelectAgent = user => {
-    const { agent, first_name, last_name, email, phone_number } = user
+    const { agent = {}, first_name, last_name, email, phone_number } = user
     const { office, work_phone } = agent
 
     const form = {
