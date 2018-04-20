@@ -10,95 +10,97 @@ import { isEqual } from 'lodash'
 import Label from './Label'
 import Editable from '../../Editable'
 import Loading from '../../../components/Loading'
-import Contact, {
-  getMostRecentlyAttribute
-} from '../../../../../../../models/contacts'
+import { getContactAttribute } from '../../../../../../../models/contacts/helpers'
 import {
   deleteAttributes,
   upsertContactAttributes
 } from '../../../../../../../store_actions/contacts'
+import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 
 const MultiFields = ({
-  name,
-  title,
   fields,
-  labels,
-  isSingle,
+  defaultLabels,
   isSaving,
-  validator,
-  placeholder,
   handleParse,
   handleFormat,
-  validationText,
-  handelOnDelete,
-  upsertAttribute,
+  handleOnDelete,
   handleAddNewField,
   handleLabelOnChange,
-  handelOnChangePrimary
+  handleOnChangePrimary,
+  placeholder,
+  upsertAttribute,
+  validator,
+  validationText
 }) => (
   <ul className="c-contact-details u-unstyled-list">
-    {fields.map((item, index) => {
+    {fields.map((field, index) => {
+      const { id, attribute_def, is_primary } = field
+      const { name, singular, label, editable, data_type } = attribute_def
+
       const showAdd =
-        item.id &&
-        !isSingle &&
+        id &&
+        !singular &&
         fields.length > 0 &&
         fields.length === index + 1 &&
         fields.every(({ id }) => id)
 
       return (
         <li
-          key={`${name}_${item.id}`}
+          key={`${name}_${id}`}
           className={cn('c-contact-details-item', { disabled: isSaving })}
         >
           <span className="c-contact-details-item--multi__name-wrapper">
             {fields.length > 1 &&
-              item.id && (
+              id && (
                 <input
                   type="radio"
                   name={`${name}`}
                   disabled={isSaving}
-                  checked={item.is_primary}
-                  onChange={() => handelOnChangePrimary(item.id)}
+                  checked={is_primary}
+                  onChange={() => handleOnChangePrimary(id)}
                   className="c-contact-details-item--multi__primary"
                   data-balloon-pos="right"
-                  data-balloon={item.is_primary ? 'Primary' : 'Set Primary'}
+                  data-balloon={is_primary ? 'Primary' : 'Set Primary'}
                 />
               )}
-            {labels ? (
+            {defaultLabels ? (
               <Label
-                name={name}
-                field={item}
-                labels={labels}
                 disabled={isSaving}
+                field={field}
+                labels={defaultLabels}
                 onChange={handleLabelOnChange}
+                name={name}
               />
             ) : (
               <label
                 className="c-contact-details-item--multi__label"
                 style={{
-                  fontWeight: item.id && item.is_primary ? 'bold' : 'normal'
+                  fontWeight: id && is_primary ? 'bold' : 'normal'
                 }}
               >
-                {title}
+                {label}
               </label>
             )}
           </span>
-          <span className="c-contact-details-item__field">
-            <Editable
-              showEdit
-              field={item}
-              disabled={isSaving}
-              validator={validator}
-              placeholder={placeholder}
-              onAdd={handleAddNewField}
-              onChange={upsertAttribute}
-              showAdd={showAdd}
-              onDelete={handelOnDelete}
-              handleParse={handleParse}
-              handleFormat={handleFormat}
-              validationText={validationText}
-            />
-          </span>
+          {editable ? (
+            <span className="c-contact-details-item__field">
+              <Editable
+                disabled={isSaving}
+                field={field}
+                handleFormat={handleFormat}
+                handleParse={handleParse}
+                onAdd={handleAddNewField}
+                onChange={upsertAttribute}
+                onDelete={handleOnDelete}
+                placeholder={placeholder}
+                showAdd={showAdd}
+                validator={validator}
+                validationText={validationText}
+              />
+            </span>
+          ) : (
+            <span>{handleFormat(field[data_type])}</span>
+          )}
         </li>
       )
     })}
@@ -107,10 +109,21 @@ const MultiFields = ({
 )
 
 function mapStateToProps(state, props) {
-  const { contact: { id: contactId } } = props
-  const _fields = initializeFields(props)
+  let _fields = []
+  const { contact, attributeName } = props
+  const { contacts: { attributeDefs } } = state
 
-  return { contactId, _fields }
+  const attributeDef = selectDefinitionByName(attributeDefs, attributeName)
+
+  if (attributeDef) {
+    _fields = getContactAttribute(contact, attributeDef)
+
+    if (_fields.length === 0) {
+      _fields = defaultField(attributeDef)
+    }
+  }
+
+  return { contactId: contact.id, _fields }
 }
 
 const enhance = compose(
@@ -121,9 +134,9 @@ const enhance = compose(
   withState('isSaving', 'setIsSaving', false),
   withState('fields', 'addNewfields', ({ _fields }) => _fields),
   withHandlers({
-    handleAddNewField: ({ addNewfields, fields, type }) => () => {
+    handleAddNewField: ({ addNewfields, fields }) => attribute_def => {
       const newField = {
-        type,
+        attribute_def,
         id: undefined,
         is_primary: false,
         label: 'default'
@@ -138,18 +151,18 @@ const enhance = compose(
       contactId,
       setIsSaving,
       upsertContactAttributes
-    }) => async attributes => {
+    }) => async attribute => {
       setIsSaving(true)
 
       try {
         if (fields.length === 1 && !fields[0].is_primary) {
-          let [field] = attributes
-
-          field = { ...field, is_primary: true }
-          attributes = [field]
+          attribute = {
+            ...attribute,
+            is_primary: true
+          }
         }
 
-        await upsertContactAttributes(contactId, attributes)
+        await upsertContactAttributes(contactId, [attribute])
       } catch (error) {
         throw error
       } finally {
@@ -172,7 +185,7 @@ const enhance = compose(
         } else {
           const newFields = fields.filter(f => f.id)
 
-          return addNewfields([...newFields, field])
+          addNewfields([...newFields, field])
         }
       } catch (error) {
         throw error
@@ -182,14 +195,17 @@ const enhance = compose(
     }
   }),
   withHandlers({
-    handelOnDelete: ({
+    handleOnDelete: ({
       contactId,
       setIsSaving,
       deleteAttributes
     }) => async field => {
-      setIsSaving(true)
+      if (!field || !field.id) {
+        throw new Error('Attribute is not valid.')
+      }
 
       try {
+        setIsSaving(true)
         await deleteAttributes(contactId, [field.id])
       } catch (error) {
         throw error
@@ -199,20 +215,33 @@ const enhance = compose(
     }
   }),
   withHandlers({
-    handelOnChangePrimary: ({ upsertAttribute, fields }) => fieldId => {
+    handleOnChangePrimary: ({
+      contactId,
+      fields,
+      setIsSaving,
+      upsertContactAttributes
+    }) => async fieldId => {
       if (!fieldId) {
-        return
+        throw new Error('Attribute id is required.')
       }
 
-      const attributes = fields.filter(({ id }) => id).map(field => {
-        if (field.id === fieldId) {
-          return { ...field, is_primary: true }
-        }
+      try {
+        const attributes = fields.filter(({ id }) => id).map(field => {
+          if (field.id === fieldId) {
+            return { ...field, is_primary: true }
+          }
 
-        return { ...field, is_primary: false }
-      })
+          return { ...field, is_primary: false }
+        })
 
-      upsertAttribute(attributes)
+        setIsSaving(true)
+
+        await upsertContactAttributes(contactId, attributes)
+      } catch (error) {
+        throw error
+      } finally {
+        setIsSaving(false)
+      }
     }
   }),
   withPropsOnChange(
@@ -227,33 +256,12 @@ const enhance = compose(
 
 export default enhance(MultiFields)
 
-function initializeFields(props) {
-  const { name, type, contact, defaultLabel, isSingle } = props
-
-  let fields
-
-  if (!isSingle) {
-    fields = Contact.get.attributes({
-      type,
-      name,
-      contact
-    })
-  } else {
-    const field = getMostRecentlyAttribute({ contact, attributeName: name })
-
-    fields = field != null ? [field] : undefined
-  }
-
-  if (fields && Array.isArray(fields) && fields.length > 0) {
-    return fields
-  }
-
+function defaultField(attribute_def) {
   return [
     {
-      type,
+      attribute_def,
       id: undefined,
-      is_primary: true,
-      label: defaultLabel
+      is_primary: true
     }
   ]
 }

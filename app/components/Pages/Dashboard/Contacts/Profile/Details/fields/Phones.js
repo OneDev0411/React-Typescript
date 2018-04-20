@@ -1,7 +1,8 @@
 import React from 'react'
+
 import MultiFields from '../components/MultiFields'
 
-const LABEL_OPTIONS = {
+const DEFAULT_LABELS = {
   mobile: {
     name: 'Mobile',
     title: 'Mobile Phone'
@@ -48,12 +49,11 @@ export default function Phones({ contact }) {
 
   return (
     <MultiFields
+      attributeName="phone_number"
       contact={contact}
-      type="phone_number"
-      name="phone_numbers"
-      validator={validator}
-      labels={LABEL_OPTIONS}
+      defaultLabels={DEFAULT_LABELS}
       placeholder="313-444-9898"
+      validator={validator}
       validationText="Invalid phone number."
     />
   )

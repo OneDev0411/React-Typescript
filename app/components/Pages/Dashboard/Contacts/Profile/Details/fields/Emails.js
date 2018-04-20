@@ -1,7 +1,8 @@
 import React from 'react'
+
 import MultiFields from '../components/MultiFields'
 
-const LABEL_OPTIONS = {
+const DEFAULT_LABELS = {
   personal: {
     name: 'Personal',
     title: 'Personal Email'
@@ -25,12 +26,11 @@ export default function Emails({ contact }) {
 
   return (
     <MultiFields
-      type="email"
-      name="emails"
+      attributeName="email"
       contact={contact}
-      validator={validator}
-      labels={LABEL_OPTIONS}
+      defaultLabels={DEFAULT_LABELS}
       placeholder="example@gmail.com"
+      validator={validator}
       validationText="Invalid email."
     />
   )

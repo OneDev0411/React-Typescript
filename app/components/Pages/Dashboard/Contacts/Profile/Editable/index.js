@@ -27,19 +27,16 @@ class EditableInput extends React.Component {
       error: false,
       isActive: false
     }
-
-    this.onChange = this.onChange.bind(this)
-    this.handelOnDelete = this.handelOnDelete.bind(this)
   }
 
-  async onChange(event) {
+  onChange = async event => {
     const { validator } = this.props
     const text = event.target.value.trim()
 
     if (typeof validator === 'function' && text) {
       const error = await validator(text)
 
-      this.setState({ text, error: !error })
+      return this.setState({ text, error: !error })
     }
 
     this.setState({ text, error: false })
@@ -54,20 +51,20 @@ class EditableInput extends React.Component {
   onBlur = () => {
     const { error, text } = this.state
     const { field, handleFormat } = this.props
-    const fieldValue = field[field.attribute_def.data_type]
+    const previousValue = handleFormat(field[field.attribute_def.data_type])
 
-    if (error) {
+    if (error || !text) {
       return this.setState(
         {
           error: false,
           isActive: false,
-          text: fieldValue || ''
+          text: previousValue || ''
         },
         () => this.$input.blur()
       )
     }
 
-    if (handleFormat(fieldValue) !== text) {
+    if (previousValue !== text) {
       return this.onSubmit()
     }
 
@@ -104,7 +101,7 @@ class EditableInput extends React.Component {
     this.$input.focus()
   }
 
-  handelOnDelete() {
+  handelOnDelete = () => {
     const { field, onDelete } = this.props
 
     this.setState(
@@ -197,7 +194,10 @@ class EditableInput extends React.Component {
                 .join(' ')}`}
               className="c-editable-field__controlers__item"
             >
-              <i onClick={onAdd} className="fa fa-plus-circle" />
+              <i
+                onClick={() => onAdd(field.attribute_def)}
+                className="fa fa-plus-circle"
+              />
             </span>
           )}
 

@@ -176,9 +176,9 @@ class ContactProfile extends React.Component {
 
             <Tags contact={contact} />
 
-            {/* <Details contact={contact} />
+            <Details contact={contact} />
 
-            <Addresses contact={contact} /> */}
+            {/* <Addresses contact={contact} /> */}
           </div>
 
           <div className="right-pane">

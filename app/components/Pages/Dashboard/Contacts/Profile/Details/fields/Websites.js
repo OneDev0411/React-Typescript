@@ -1,7 +1,8 @@
 import React from 'react'
+
 import MultiFields from '../components/MultiFields'
 
-const LABEL_OPTIONS = {
+const DEFAULT_LABELS = {
   default: {
     title: 'Website',
     icon: {
@@ -40,21 +41,12 @@ const LABEL_OPTIONS = {
 }
 
 export default function Websites({ contact }) {
-  const validator = url => {
-    const regular = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
-
-    return new RegExp(regular).exec(url)
-  }
-
   return (
     <MultiFields
-      type="website"
-      name="websites"
+      attributeName="website"
       contact={contact}
-      validator={validator}
-      labels={LABEL_OPTIONS}
+      defaultLabels={DEFAULT_LABELS}
       placeholder="rechat.com"
-      validationText="Invalid URL."
     />
   )
 }

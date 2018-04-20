@@ -1,5 +1,6 @@
 import React from 'react'
 import { format } from 'fecha'
+
 import MultiFields from '../components/MultiFields'
 
 export default function Birthdays({ contact }) {
@@ -32,15 +33,12 @@ export default function Birthdays({ contact }) {
 
   return (
     <MultiFields
-      isSingle
-      type="birthday"
-      name="birthdays"
-      title="Birthday"
+      attributeName="birthday"
       contact={contact}
-      validator={validator}
-      placeholder="MM/DD/YYYY"
-      handleParse={handleParse}
       handleFormat={handleFormat}
+      handleParse={handleParse}
+      placeholder="MM/DD/YYYY"
+      validator={validator}
       validationText="Invalid format. Valid format MM/DD/YYYY"
     />
   )
