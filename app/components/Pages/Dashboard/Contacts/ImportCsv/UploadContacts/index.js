@@ -81,9 +81,12 @@ class UploadContacts extends React.Component {
 
         const fieldInfo = columns[csvField]
         const fieldValue = row[fieldInfo.index].trim()
-        const { pluralName, singularName, dataType } = indexedContactFields[
-          rechatField
-        ]
+        const {
+          pluralName,
+          singularName,
+          isSingleObject,
+          dataType
+        } = indexedContactFields[rechatField]
 
         if (!fieldValue) {
           return false
@@ -93,10 +96,17 @@ class UploadContacts extends React.Component {
           contact.attributes[pluralName] = []
         }
 
-        const labelName = label || contact.attributes[pluralName].length
+        let labelId
 
-        contact.attributes[pluralName][labelName] = {
-          ...contact.attributes[pluralName][labelName],
+        // name and address fields should merge into a single object
+        if (label || isSingleObject === true) {
+          labelId = label
+        } else {
+          labelId = contact.attributes[pluralName].length
+        }
+
+        contact.attributes[pluralName][labelId] = {
+          ...contact.attributes[pluralName][labelId],
           type: singularName,
           label,
           [rechatField]: this.parseValue(
