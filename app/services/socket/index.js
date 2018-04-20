@@ -101,7 +101,7 @@ export default class Socket {
   /**
    * on internet offline
    */
-  onInternetOffline() {
+  onInternetOnline() {
     console.log('[Socket] Online')
     this.onReconnect()
   }
