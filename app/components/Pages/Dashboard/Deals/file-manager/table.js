@@ -256,7 +256,7 @@ export class FileManager extends React.Component {
     await moveTaskFile(user, tasks[taskId], file)
 
     this.setState({
-      isTaskChanging: _.omit(isTaskChanging, id => id === file.id)
+      isTaskChanging: isTaskChanging.filter(id => id !== file.id)
     })
   }
 
