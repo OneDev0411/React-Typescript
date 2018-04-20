@@ -242,14 +242,14 @@ export class FileManager extends React.Component {
 
   async onSelectTask(file, taskId = null) {
     const { user, tasks, moveTaskFile, deal } = this.props
-
     const { isTaskChanging } = this.state
+    const task = taskId ? tasks[taskId] : null
 
     this.setState({
       isTaskChanging: [...isTaskChanging, file.id]
     })
 
-    await moveTaskFile(user, deal.id, tasks[taskId], file)
+    await moveTaskFile(user, deal.id, task, file)
 
     this.setState({
       isTaskChanging: isTaskChanging.filter(id => id !== file.id)
