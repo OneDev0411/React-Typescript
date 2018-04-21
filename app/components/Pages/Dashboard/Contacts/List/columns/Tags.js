@@ -4,7 +4,10 @@ import _ from 'underscore'
 import { getContactTags } from '../../../../../../models/contacts/helpers'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
-const TagsString = ({ tags }) => {
+const TagsString = ({ contact, attributeDefs }) => {
+  const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
+  const tags = getContactTags(contact, attribute_def)
+
   const tagsCount = _.size(tags)
   const showingTags = []
   const getShowingTags = () => showingTags.join(', ')
@@ -33,11 +36,10 @@ const TagsString = ({ tags }) => {
   )
 }
 
-function mapStateToProps({ contacts: { attributeDefs } }, { contact }) {
-  const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
-  const tags = getContactTags(contact, attribute_def)
+function mapStateToProps(state) {
+  const { contacts: { attributeDefs } } = state
 
-  return { tags }
+  return { attributeDefs }
 }
 
 export default connect(mapStateToProps)(TagsString)
