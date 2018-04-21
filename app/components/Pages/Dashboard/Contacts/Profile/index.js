@@ -178,7 +178,7 @@ class ContactProfile extends React.Component {
 
             <Details contact={contact} />
 
-            {/* <Addresses contact={contact} /> */}
+            <Addresses contact={contact} />
           </div>
 
           <div className="right-pane">
