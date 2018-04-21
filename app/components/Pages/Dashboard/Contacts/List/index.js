@@ -19,6 +19,10 @@ import Loading from '../../../../Partials/Loading'
 import { Container } from '../components/Container'
 import NoSearchResults from '../../../../Partials/no-search-results'
 import Table from './Table'
+import {
+  getAttributeFromSummary,
+  getAttributsByDefId
+} from '../../../../../models/contacts/helpers'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -76,6 +80,12 @@ class ContactsList extends React.Component {
   applyFilters = contact => {
     let matched = false
     const { filter } = this.state
+    const { attributeDefs } = this.props
+
+    if (!filter) {
+      return true
+    }
+
     let regex = new RegExp(
       // / First reomoving some charater that break the regex
       filter.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'),
@@ -122,10 +132,21 @@ class ContactsList extends React.Component {
   }
   render() {
     const { deletingContacts, selectedRows } = this.state
-    const { user, isFetching, contactsList, loadingImport } = this.props
+    const {
+      user,
+      isFetching,
+      contactsList,
+      loadingImport,
+      attributeDefs
+    } = this.props
     const contactsCount = contactsList.length
 
-    if (isFetching && contactsCount === 0) {
+    console.log(attributeDefs, contactsList)
+
+    if (
+      (isFetching && contactsCount === 0) ||
+      _.size(attributeDefs.byName) === 0
+    ) {
       return (
         <Container>
           <Loading />
@@ -199,7 +220,7 @@ class ContactsList extends React.Component {
 }
 
 function mapStateToProps({ user, contacts }) {
-  const { list, spinner: loadingImport } = contacts
+  const { list, spinner: loadingImport, attributeDefs } = contacts
   const contactsList = selectContacts(list)
   const isFetching = isFetchingContactsList(list)
 
@@ -207,7 +228,8 @@ function mapStateToProps({ user, contacts }) {
     user,
     isFetching,
     contactsList,
-    loadingImport
+    loadingImport,
+    attributeDefs
   }
 }
 

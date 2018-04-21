@@ -3,11 +3,14 @@ import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import ReactTable from 'react-table'
 import Radio from '../../../../../views/components/radio/RadioWithState'
-import Contact from '../../../../../models/contacts'
 import TrComponent from './Trcomponent'
 import DropDown from './columns/Dropdown'
 import TagsString from './columns/Tags'
 import Name from './columns/Name'
+import {
+  getAttributeFromSummary,
+  getContactTags
+} from '../../../../../models/contacts/helpers'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -24,6 +27,13 @@ class ContactsList extends React.Component {
 
     return filteredContactsChanged || deletingContactsChanged
   }
+  getCellTitle = title => (
+    <Fragment>
+      {title}
+      <i className="fa fa-caret-down" />
+      <i className="fa fa-caret-up" />
+    </Fragment>
+  )
   columns = [
     {
       id: 'td-select',
@@ -42,49 +52,26 @@ class ContactsList extends React.Component {
       )
     },
     {
-      Header: () => (
-        <Fragment>
-          Name
-          <i className="fa fa-caret-down" />
-          <i className="fa fa-caret-up" />
-        </Fragment>
-      ),
+      Header: this.getCellTitle('NAME'),
       id: 'name',
-      accessor: contact => Contact.get.name(contact),
-      Cell: ({ original: contact }) => (
-        <Name
-          name={Contact.get.name(contact)}
-          avatar={Contact.get.avatar(contact)}
-        />
-      )
+      accessor: contact => getAttributeFromSummary(contact, 'display_name'),
+      Cell: ({ original: contact }) => <Name contact={contact} />
     },
     {
-      Header: () => (
-        <Fragment>
-          EMAIL
-          <i className="fa fa-caret-down" />
-          <i className="fa fa-caret-up" />
-        </Fragment>
-      ),
+      Header: this.getCellTitle('EMAIL'),
       id: 'email',
-      accessor: contact => Contact.get.email(contact)
+      accessor: contact => getAttributeFromSummary(contact, 'email')
     },
     {
       Header: 'PHONE',
       id: 'phone',
-      accessor: contact => Contact.get.phone(contact)
+      accessor: contact => getAttributeFromSummary(contact, 'phone_number')
     },
     {
-      Header: () => (
-        <Fragment>
-          TAGS
-          <i className="fa fa-caret-down" />
-          <i className="fa fa-caret-up" />
-        </Fragment>
-      ),
+      Header: this.getCellTitle('TAGS'),
       id: 'tag',
       Cell: ({ original: contact }) => (
-        <TagsString tags={Contact.get.tags(contact)} />
+        <TagsString tags={getContactTags(contact)} />
       )
     },
     {
