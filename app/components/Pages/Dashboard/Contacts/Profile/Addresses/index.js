@@ -127,9 +127,10 @@ const Addresses = ({
                 </li>
                 {fields.map(field => (
                   <Field
+                    field={field}
+                    key={`${label}_address_${index}__${field.attribute_def.id}`}
                     {...props}
                     {...FIELDS[field.attribute_def.name]}
-                    field={field}
                   />
                 ))}
               </ul>
@@ -359,14 +360,14 @@ function getAddresses(attributeDefs, allAddressFields) {
 
   const addressFields = [
     'unit_number',
+    'street_number',
     'street_prefix',
     'street_name',
     'street_suffix',
-    'street_number',
-    'zip_code',
     'postal_code',
     'city',
     'state',
+    'zip_code',
     'country'
   ]
 
