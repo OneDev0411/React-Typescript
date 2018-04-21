@@ -96,7 +96,7 @@ const Addresses = ({
                         data-balloon-pos="right"
                         data-balloon={is_primary ? 'Primary' : 'Set Primary'}
                         disabled={props.disabled}
-                        onChange={() => handelOnChangePrimary(fields)}
+                        onChange={() => handelOnChangePrimary(fields[0].index)}
                         type="radio"
                       />
                     )}
@@ -235,7 +235,7 @@ const enhance = compose(
       setDisabled,
       allAddressFields,
       upsertContactAttributes
-    }) => async ({ index }) => {
+    }) => async index => {
       try {
         setDisabled(true)
 
