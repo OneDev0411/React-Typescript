@@ -5,7 +5,7 @@ import { selectDefinitionByName } from '../../../../../../reducers/contacts/attr
 
 import {
   getAttributeFromSummary,
-  getAttributTextByDefId
+  getContactAttribute
 } from '../../../../../../models/contacts/helpers'
 
 const ContactsListName = ({ contact, attributeDefs }) => {
@@ -20,7 +20,8 @@ const ContactsListName = ({ contact, attributeDefs }) => {
     )
   }
 
-  const avatar = getAttributTextByDefId(contact, attribute_def.id)
+  const avatars = getContactAttribute(contact, attribute_def)
+  const avatar = avatars && avatars[0] ? avatars[0].text : ''
   const name = getAttributeFromSummary(contact, 'display_name')
 
   return (
