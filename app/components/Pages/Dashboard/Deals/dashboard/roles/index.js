@@ -150,6 +150,7 @@ class Roles extends React.Component {
                   <div className="role-avatar">
                     <UserAvatar
                       size={32}
+                      color="#8DA2B5"
                       showStateIndicator={false}
                       name={this.getUserFullNameForAvatar(role)}
                       image={user ? user.profile_image_url : null}

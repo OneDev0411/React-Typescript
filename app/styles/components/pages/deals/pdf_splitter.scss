@@ -63,12 +63,13 @@ $splitter-header: 56px;
   min-height: calc(100vh - #{$splitter-header});
 
   .pdfs {
-    width: 57%;
+    height: 100%;
+    width: 50%;
     @extend %pdf-splitter-pdfs-section;
   }
 
   .workspace {
-    width: 43%;
+    width: 50%;
     @extend %pdf-splitter-workspace-section;
   }
 }
@@ -183,7 +184,7 @@ $splitter-header: 56px;
  *
  */
 %pdf-splitter-workspace-section {
-  $detailsHeight: 190px;
+  $detailsHeight: 165px;
 
   .splitter-saving {
     position: fixed;
@@ -218,6 +219,19 @@ $splitter-header: 56px;
     background-color: #f0f4f7;
     padding: 16px;
 
+    .field-caption {
+      margin-bottom: 5px;
+      .required {
+        color: #fe3824;
+      }
+    }
+
+    .error-caption {
+      margin: 5px 0 8px 0;
+      min-height: 20px;
+      color: #fe3824;
+    }
+
     input.title {
       height: 40px;
       border-radius: 3px;
@@ -243,8 +257,7 @@ $splitter-header: 56px;
     }
 
     .deal-radio {
-      display: block;
-      margin-top: 10px;
+      display: inline;
       .radio-label {
         font-size: 14px;
         color: #62778c;
@@ -253,7 +266,7 @@ $splitter-header: 56px;
 
     .buttons {
       text-align: right;
-      margin-top: 5px;
+      margin-top: 16px;
 
       .prg {
         margin-top: 10px;
@@ -364,6 +377,12 @@ $splitter-header: 56px;
     border: solid 1px #dce5eb;
     margin: 0 9px 9px 0;
 
+    &.big {
+      width: 48%;
+      height: 60%;
+      border-width: 2.5px;
+    }
+
     .overlay {
       position: absolute;
       left: 0;
@@ -389,6 +408,11 @@ $splitter-header: 56px;
       width: 136px;
       height: 156px;
       border-radius: 4px;
+
+      &.big {
+        width: 100%;
+        height: 100%;
+      }
 
       &.inUse {
         cursor: auto;
@@ -435,6 +459,20 @@ $splitter-header: 56px;
       }
     }
 
+    &.big .page-zoom-in {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      padding: 0;
+      left: calc((100% - 60px)/2);
+      top: calc((100% - 60px)/2);
+      i {
+        font-size: 26px;
+      }
+    }
+
     .page-number {
       position: absolute;
       display: block;
@@ -450,6 +488,13 @@ $splitter-header: 56px;
       font-size: 12px;
       font-weight: 600;
       color: #1d364b;
+    }
+
+    &.big .page-number {
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 16px;
     }
 
     .page-cta {
@@ -493,6 +538,16 @@ $splitter-header: 56px;
           opacity: 1;
         }
       }
+    }
+
+    &.big .page-cta {
+      width: 104px;
+      height: 48px;
+      line-height: 48px;
+      left: calc((100% - 104px) /2);
+      bottom: 5%;
+      font-size: 16px;
+      font-weight: 600;
     }
   }
 }

@@ -2,9 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Col } from 'react-bootstrap'
 import cn from 'classnames'
+import { browserHistory } from 'react-router'
 import Teams from './SubBrands/Teams'
 import { getBrand } from '../../../../store_actions/brandConsole/index'
 import { getActiveTeamId } from '../../../../utils/user-teams'
+import { getActiveTeamACL } from '../../../../utils/user-teams'
 
 class SubBrands extends React.Component {
   constructor(props) {
@@ -14,6 +16,13 @@ class SubBrands extends React.Component {
     }
     this.onSelectItem = this.onSelectItem.bind(this)
     this.brandParent = getActiveTeamId(this.props.user)
+  }
+  componentWillMount() {
+    const { user } = this.props
+    const acl = getActiveTeamACL(user)
+    const hasBackOfficePermission = acl.includes('BackOffice')
+
+    !hasBackOfficePermission && browserHistory.push('/dashboard/mls')
   }
 
   componentDidMount() {

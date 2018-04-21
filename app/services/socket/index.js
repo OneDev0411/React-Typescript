@@ -38,9 +38,9 @@ export default class Socket {
     // bind Reconnecting and Reconnect socket
     window.socket.on('reconnecting', this.onReconnecting.bind(this))
     window.socket.on('reconnect', this.onReconnect.bind(this))
-    window.socket.on('disconnect', this.onReconnecting.bind(this))
+    window.socket.on('disconnect', this.onDisconnected.bind(this))
 
-    window.addEventListener('online', this.onReconnect.bind(this))
+    window.addEventListener('online', this.onInternetOnline.bind(this))
     window.addEventListener('offline', this.onInternetOffline.bind(this))
 
     // bind ping
@@ -51,13 +51,17 @@ export default class Socket {
    * authenticate user
    */
   static authenticate(user) {
+    console.log('[Socket] Authenticating')
+
     if (!user || !user.access_token) {
-      console.error('Can not authenticate user socket')
+      console.error('[Socket] Can not authenticate user socket')
 
       return false
     }
 
     socket.emit('Authenticate', user.access_token, (err, user) => {
+      console.log('[Socket] Authentication done', err)
+
       if (err || !user) {
         return false
       }
@@ -71,9 +75,18 @@ export default class Socket {
   }
 
   /**
+   * on disconnected
+   */
+  onDisconnected() {
+    console.log('[Socket] Disconnected')
+    this.onReconnecting()
+  }
+
+  /**
    * on reconnecting
    */
   onReconnecting() {
+    console.log('[Socket] Reconnecting')
     store.dispatch(changeSocketStatus('Reconnecting'))
   }
 
@@ -81,13 +94,24 @@ export default class Socket {
    * on internet offline
    */
   onInternetOffline() {
+    console.log('[Socket] Offline')
     store.dispatch(changeSocketStatus('No Internet'))
+  }
+
+  /**
+   * on internet offline
+   */
+  onInternetOnline() {
+    console.log('[Socket] Online')
+    this.onReconnect()
   }
 
   /**
    * on reconnect
    */
   onReconnect() {
+    console.log('[Socket] Reconnected')
+
     // authenticate again
     Socket.authenticate(this.user)
 

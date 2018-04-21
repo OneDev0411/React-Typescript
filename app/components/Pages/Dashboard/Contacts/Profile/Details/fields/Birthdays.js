@@ -17,8 +17,10 @@ export default function Birthdays({ contact }) {
   }
 
   const handleFormat = unix_timestamp => {
+    const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000
+
     if (typeof unix_timestamp === 'number') {
-      return format(unix_timestamp * 1000, 'MM/DD/YYYY')
+      return format(unix_timestamp * 1000 - timezoneOffset, 'MM/DD/YYYY')
     }
 
     if (typeof unix_timestamp === 'string' && validator(unix_timestamp)) {

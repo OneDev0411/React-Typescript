@@ -4,6 +4,7 @@ import moment from 'moment'
 import merge from 'merge'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
+import ToolTip from '../components/tooltip'
 import {
   closeEsignWizard,
   setSelectedTask
@@ -153,6 +154,18 @@ class BackOfficeTable extends BaseTable {
     })
 
     return merged
+  }
+
+  hasNotification(deal) {
+    const notificationCount = deal.attention_requests
+
+    if (notificationCount > 0) {
+      return (
+        <ToolTip caption={`${notificationCount} tasks need your attention`}>
+          <div className="unread-notifications">{notificationCount}</div>
+        </ToolTip>
+      )
+    }
   }
 }
 

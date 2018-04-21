@@ -41,7 +41,7 @@ class ChecklistPanel extends React.Component {
       <Panel
         collapsible
         defaultExpanded
-        className="checklist"
+        className="checklist-panel"
         header={
           <div>
             <div className="crt">

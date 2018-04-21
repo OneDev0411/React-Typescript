@@ -29,8 +29,8 @@ export default class Stepper extends React.Component {
     const {
       steps,
       disableClick,
-      isWorking,
-      isCurrentStageFinished = true
+      isProcessing,
+      isActiveStageFinished = true
     } = this.props
     const { active } = this.state
 
@@ -58,26 +58,29 @@ export default class Stepper extends React.Component {
                 role="tab"
                 title={step}
               >
-                <span className="round-tab">
+                <span
+                  className={cn('round-tab', {
+                    'is-pending':
+                      key === active && !isActiveStageFinished && !isProcessing
+                  })}
+                >
                   {(key < active ||
-                    (key === active && isCurrentStageFinished)) && (
+                    (key === active && isActiveStageFinished)) && (
                     <i
                       className={`fa ${
-                        isWorking && active === key
+                        isProcessing && active === key
                           ? 'fa-spin fa-spinner'
                           : 'fa-check'
-                      } fa-1x`}
+                      }`}
                     />
                   )}
 
                   {key === active &&
-                    !isCurrentStageFinished && (
+                    !isActiveStageFinished && (
                       <i
                         className={`fa ${
-                          isWorking && active === key
-                            ? 'fa-spin fa-spinner'
-                            : ''
-                        } fa-1x`}
+                          isProcessing ? 'fa-spin fa-spinner' : ''
+                        }`}
                       />
                     )}
                 </span>

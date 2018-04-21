@@ -22,10 +22,7 @@ class ContactsList extends React.Component {
     const deletingContactsChanged =
       nextProps.deletingContacts.length !== this.props.deletingContacts.length
 
-    return (
-      (filteredContactsChanged && nextProps.deletingContacts === 0) ||
-      deletingContactsChanged
-    )
+    return filteredContactsChanged || deletingContactsChanged
   }
   columns = [
     {

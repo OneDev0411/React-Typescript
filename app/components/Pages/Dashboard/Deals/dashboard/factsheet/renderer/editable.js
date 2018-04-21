@@ -22,6 +22,13 @@ export default class Editable extends React.Component {
     this.props.onChange(field, null)
   }
 
+  onChangeDateContext(date) {
+    this.onFinishEditing(date)
+    this.setState({
+      value: null
+    })
+  }
+
   onFinishEditing(value = null) {
     const { field, onChange } = this.props
 
@@ -72,7 +79,7 @@ export default class Editable extends React.Component {
   }
 
   getContextValue() {
-    const { context } = this.props
+    const { contextData: context } = this.props
 
     if (!_.isUndefined(context.rawValue) && context.rawValue !== null) {
       return context.rawValue.toString()
@@ -95,7 +102,6 @@ export default class Editable extends React.Component {
 
   showDiscrepencyPopover(e) {
     e.stopPropagation()
-    // this.popoverRef.show()
   }
 
   render() {
@@ -103,7 +109,7 @@ export default class Editable extends React.Component {
       sectionId,
       deal,
       field,
-      context,
+      contextData,
       approved,
       needsApproval,
       saving,
@@ -120,10 +126,14 @@ export default class Editable extends React.Component {
           saveText={needsApproval ? 'Notify Office' : 'Update'}
           initialDate={this.getValue()}
           onClose={() => this.removeEditMode()}
-          onSelectDate={date => this.onFinishEditing(date)}
+          onSelectDate={date => this.onChangeDateContext(date)}
         />
 
-        <div className="name" onClick={() => this.editField()}>
+        <div
+          className="name"
+          data-name={field.name}
+          onClick={() => this.editField()}
+        >
           {field.label}
         </div>
 
@@ -211,7 +221,7 @@ export default class Editable extends React.Component {
 
             <EditableCta
               needsApproval={needsApproval}
-              context={context}
+              contextData={contextData}
               showCTA={saving !== field.name && !editMode}
               handleEditField={() => this.editField()}
               handleDeleteField={e => this.deleteField(e, field)}

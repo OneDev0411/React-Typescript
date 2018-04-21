@@ -131,7 +131,7 @@ class ComposeMessage extends React.Component {
 }
 
 function mapStateToProps({ chatroom }, props) {
-  const room = chatroom.rooms[props.roomId]
+  const room = chatroom.rooms && chatroom.rooms[props.roomId]
   const draft = chatroom.drafts[props.roomId]
 
   return {

@@ -9,13 +9,15 @@ import _ from 'underscore'
 import {
   getDeal,
   displaySplitter,
-  deleteFile
+  deleteFile,
+  moveTaskFile
 } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import Radio from '../../../../../views/components/radio'
 import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import Search from '../../../../Partials/headerSearch'
 import Upload from '../dashboard/upload'
+import TasksDropDown from '../components/tasks-dropdown'
 
 export class FileManager extends React.Component {
   constructor(props) {
@@ -23,6 +25,7 @@ export class FileManager extends React.Component {
     this.state = {
       filter: '',
       isDeleting: [],
+      isTaskChanging: [],
       selectedRows: {}
     }
 
@@ -237,8 +240,29 @@ export class FileManager extends React.Component {
     }?backTo=files`
   }
 
+  async onSelectTask(file, taskId) {
+    const { user, tasks, moveTaskFile, deal } = this.props
+
+    const { isTaskChanging } = this.state
+
+    if (!taskId) {
+      return
+    }
+
+    this.setState({
+      isTaskChanging: [...isTaskChanging, file.id]
+    })
+
+    await moveTaskFile(user, deal.id, tasks[taskId], file)
+
+    this.setState({
+      isTaskChanging: isTaskChanging.filter(id => id !== file.id)
+    })
+  }
+
   getColumns(rows) {
-    const { selectedRows, isDeleting } = this.state
+    const { selectedRows, isDeleting, isTaskChanging } = this.state
+    const { deal, tasks } = this.props
 
     return [
       {
@@ -276,8 +300,29 @@ export class FileManager extends React.Component {
         Cell: ({ value }) => this.getDate(value)
       },
       {
-        Header: () => this.getCellTitle('TASK'),
-        accessor: 'task'
+        Header: () => this.getCellTitle('FOLDER'),
+        accessor: 'task',
+        className: 'file-table__task',
+        Cell: ({ original: file }) => (
+          <Fragment>
+            <TasksDropDown
+              moveToParentFolder="moveToParentFolder"
+              showStashOption={!!file.taskId}
+              searchable
+              deal={deal}
+              onSelectTask={taskId => this.onSelectTask(file, taskId)}
+              selectedTask={tasks[file.taskId]}
+              stashOptionText="Move it to my Files"
+            />
+
+            {isTaskChanging.includes(file.id) && (
+              <i
+                className="fa fa-spinner fa-spin"
+                style={{ marginLeft: '16px' }}
+              />
+            )}
+          </Fragment>
+        )
       },
       {
         id: 'td-split',
@@ -415,14 +460,16 @@ export class FileManager extends React.Component {
 }
 
 export default connect(
-  ({ deals }) => ({
+  ({ deals, user }) => ({
     checklists: deals.checklists,
-    tasks: deals.tasks
+    tasks: deals.tasks,
+    user
   }),
   {
     confirmation,
     getDeal,
     deleteFile,
-    displaySplitter
+    displaySplitter,
+    moveTaskFile
   }
 )(FileManager)

@@ -1,96 +1,42 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { DragSource } from 'react-dnd'
-import {
-  selectSplitterPage,
-  setPagePreview
-} from '../../../../../../store_actions/deals'
-import store from '../../../../../../stores'
+import { setPagePreview } from '../../../../../../store_actions/deals'
 import Page from '.'
 
-/**
- * Specifies the drag source contract.
- */
-const pageSource = {
-  beginDrag(props) {
-    return {
-      documentId: props.pdfId,
-      pageNumber: props.pageNumber
-    }
-  },
-  canDrag(props) {
-    return !props.inUse
-  },
-  endDrag(props, monitor) {
-    if (!monitor.didDrop()) {
-      return
-    }
+const PageThumbnail = ({
+  setPagePreview,
+  inUse,
+  canvasClassName,
+  pageNumber,
+  pdfId,
+  doc,
+  children,
+  size = 'small'
+}) => (
+  <Page
+    isDraggable
+    inUse={inUse}
+    containerHeight={size === 'small' ? 200 : '100%'}
+    size={size}
+    zoom={2}
+    canvasClassName={canvasClassName}
+    pdfId={pdfId}
+    doc={doc}
+    pageNumber={pageNumber}
+  >
+    {!inUse && <div className="overlay" />}
 
-    const item = monitor.getItem()
+    <span
+      className="page-zoom-in"
+      onClick={() => setPagePreview({ pdfId, doc, pageNumber })}
+    >
+      <i className="fa fa-search" />
+    </span>
 
-    store.dispatch(selectSplitterPage(item.documentId, item.pageNumber))
-  }
-}
+    <span className="page-number">{pageNumber}</span>
 
-/**
- * Specifies which props to inject into your component.
- */
-function collect(connect, monitor) {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  }
-}
-
-class PageThumbnail extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  previewPage() {
-    const { pdfId, doc, pageNumber, setPagePreview } = this.props
-
-    setPagePreview({ pdfId, doc, pageNumber })
-  }
-
-  render() {
-    const {
-      connectDragSource,
-      inUse,
-      canvasClassName,
-      pageNumber,
-      pdfId,
-      doc
-    } = this.props
-
-    const DragComponent = (
-      <div className="inline">
-        <Page
-          containerHeight={158}
-          zoom={2}
-          canvasClassName={canvasClassName}
-          pdfId={pdfId}
-          doc={doc}
-          pageNumber={pageNumber}
-        >
-          {!inUse && <div className="overlay" />}
-
-          <span className="page-zoom-in" onClick={() => this.previewPage()}>
-            <i className="fa fa-search" />
-          </span>
-
-          <span className="page-number">{pageNumber}</span>
-
-          {this.props.children}
-        </Page>
-      </div>
-    )
-
-    return connectDragSource(DragComponent)
-  }
-}
-
-const connectedPageThumbnail = connect(null, { setPagePreview })(PageThumbnail)
-export default DragSource('SPLITTER_PDF_PAGE', pageSource, collect)(
-  connectedPageThumbnail
+    {children}
+  </Page>
 )
+
+export default connect(null, { setPagePreview })(PageThumbnail)

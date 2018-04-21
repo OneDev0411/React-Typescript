@@ -365,11 +365,7 @@ function getFormattedValue(value) {
   }
 
   if (this.format === 'Currency') {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(value)
+    return Deal.get.formattedPrice(value, 'currency', 0)
   }
 
   return value

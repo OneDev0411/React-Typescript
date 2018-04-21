@@ -15,7 +15,7 @@ export default ({ selectedRows }) => {
         overlay={<Tooltip id="tooltip">Export contacts to a CSV file</Tooltip>}
       >
         <a
-          href={`/api/export/contacts/outlook.csv?${idsQuery}`}
+          href={`/api/contacts/export/outlook?${idsQuery}`}
           className="button c-button--shadow"
         >
           Export to CSV

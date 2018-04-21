@@ -40,7 +40,6 @@ const CriticalDates = ({ deal, showTitle = true }) => {
         showTitle={showTitle}
         table={table}
         deal={deal}
-        getValue={Context.getValue}
       />
     </div>
   )

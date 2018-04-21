@@ -150,7 +150,10 @@ class DropDownTasks extends React.Component {
       checklists,
       tasks,
       searchable,
-      showStashOption
+      showStashOption,
+      placeholder = 'Folder',
+      stashOptionText,
+      moveToParentFolder = null
     } = this.props
 
     return (
@@ -167,7 +170,7 @@ class DropDownTasks extends React.Component {
         >
           {searchable ? (
             <input
-              placeholder="Document Title"
+              placeholder={placeholder}
               value={this.getSearchValue()}
               onChange={e => this.onChangeFilter(e.target.value)}
             />
@@ -186,9 +189,12 @@ class DropDownTasks extends React.Component {
               className={cn('is-bold', {
                 selected: selectedTask === null
               })}
-              onClick={() => this.onSelectTask(null)}
+              onClick={e => {
+                e.stopPropagation()
+                this.onSelectTask(moveToParentFolder)
+              }}
             >
-              Upload directly to my Files
+              {stashOptionText || 'Upload directly to my Files'}
             </li>
           )}
 
@@ -196,7 +202,7 @@ class DropDownTasks extends React.Component {
             const checklist = checklists[chId]
 
             return (
-              <div key={chId}>
+              <Fragment key={chId}>
                 <div className="checklist">{checklist.title}</div>
 
                 {checklist.tasks &&
@@ -212,7 +218,10 @@ class DropDownTasks extends React.Component {
                         className={cn({
                           selected: selectedTask && selectedTask.id === tId
                         })}
-                        onClick={() => this.onSelectTask(tId)}
+                        onClick={e => {
+                          e.stopPropagation()
+                          this.onSelectTask(tId)
+                        }}
                       >
                         {tasks[tId].title}
                       </li>
@@ -260,9 +269,10 @@ class DropDownTasks extends React.Component {
                       .map(form => (
                         <li
                           key={form.id}
-                          onClick={() =>
+                          onClick={e => {
+                            e.stopPropagation()
                             this.onSelectFormTask(checklist.id, form)
-                          }
+                          }}
                         >
                           {form.name}
                         </li>
@@ -277,7 +287,7 @@ class DropDownTasks extends React.Component {
                     </li>
                   </Fragment>
                 )}
-              </div>
+              </Fragment>
             )
           })}
         </Dropdown.Menu>

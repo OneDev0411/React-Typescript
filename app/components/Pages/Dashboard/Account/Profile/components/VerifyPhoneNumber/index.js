@@ -19,10 +19,26 @@ const Button = ShadowButton.extend`
 `
 
 class VerifyPhoneNumber extends Component {
-  state = {
-    isOpen: false,
-    isReSending: false
+  constructor(props) {
+    super(props)
+
+    this.needConfirm = this.needConfirm.bind(this)
+
+    this.state = {
+      isReSending: false,
+      isOpen: this.needConfirm(this.props.user)
+    }
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.isOpen && this.needConfirm(nextProps.user)) {
+      this.setState({
+        isOpen: true
+      })
+    }
+  }
+
+  needConfirm = user => user.phone_number && !user.phone_confirmed
 
   notify = (status, message, dismissAfter = 4000) =>
     this.props.notify({
@@ -81,13 +97,13 @@ class VerifyPhoneNumber extends Component {
     const { user } = this.props
     const { isReSending, isOpen } = this.state
 
-    if (!user.phone_number || user.phone_confirmed) {
+    if (!this.needConfirm(user)) {
       return null
     }
 
     return (
       <Fragment>
-        <div className="c-auth__submit-error-alert">
+        <div className="c-auth__submit-alert--success">
           <p>
             We sent a verification code to your mobile number.{' '}
             <Button onClick={this.handleOpenModal}>Submit the code</Button>
