@@ -13,7 +13,7 @@ export function getContactAttribute(contact, attributeDef) {
     const attributes = contact.sub_contacts[0].attributes[attributeDef.id]
 
     if (!isEmpty(attributes)) {
-      result = [attributes[attributes.length - 1]]
+      result = [attributes[0]]
     }
   } else {
     contact.sub_contacts.forEach(subContact => {
