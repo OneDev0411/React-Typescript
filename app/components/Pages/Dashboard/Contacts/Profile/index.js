@@ -26,7 +26,6 @@ import { getTasks } from '../../../../../models/tasks'
 
 import {
   getContact,
-  getContactActivities,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
 import {
@@ -50,18 +49,12 @@ class ContactProfile extends React.Component {
     const {
       contact,
       getContact,
-      getContactActivities,
       isFetchingContactsList,
       params: { id: contactId }
     } = this.props
 
     if (!contact && !isFetchingContactsList) {
       await getContact(contactId)
-      getContactActivities(contactId)
-    }
-
-    if (contact && !contact.activities) {
-      getContactActivities(contactId)
     }
 
     const query = [
@@ -265,6 +258,5 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
 
 export default connect(mapStateToProps, {
   getContact,
-  getContactActivities,
   upsertContactAttributes
 })(ContactProfile)

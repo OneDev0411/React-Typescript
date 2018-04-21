@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Tabs, Tab } from 'react-bootstrap'
 
 import { getNotes } from '../../../../../../models/contacts/helpers/get-notes'
-import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers/get-attribute-from-summary'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
 import Timeline from '../Timeline'
@@ -28,11 +27,7 @@ function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
           }
           className="timeline"
         >
-          <Timeline
-            name={getAttributeFromSummary(contact, 'display_name')}
-            avatar={getAttributeFromSummary(contact, 'profile_image_url')}
-            activities={contact.activities || {}}
-          />
+          <Timeline contact={contact} />
         </Tab>
 
         <Tab
