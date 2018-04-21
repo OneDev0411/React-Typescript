@@ -360,14 +360,14 @@ function getAddresses(attributeDefs, allAddressFields) {
 
   const addressFields = [
     'unit_number',
+    'street_number',
     'street_prefix',
     'street_name',
     'street_suffix',
-    'street_number',
-    'zip_code',
     'postal_code',
     'city',
     'state',
+    'zip_code',
     'country'
   ]
 
