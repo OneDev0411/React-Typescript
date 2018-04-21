@@ -141,8 +141,6 @@ class ContactsList extends React.Component {
     } = this.props
     const contactsCount = contactsList.length
 
-    console.log(attributeDefs, contactsList)
-
     if (
       (isFetching && contactsCount === 0) ||
       _.size(attributeDefs.byName) === 0
