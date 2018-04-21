@@ -17,8 +17,8 @@ const TagsString = ({ contact, attributeDefs }) => {
   }
 
   _.every(tags, item => {
-    if (getShowingTags().length + item.tag.length <= 28) {
-      showingTags.push(item.tag)
+    if (getShowingTags().length + item.text.length <= 28) {
+      showingTags.push(item.text)
 
       return true
     }
