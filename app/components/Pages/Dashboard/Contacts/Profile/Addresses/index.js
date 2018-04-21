@@ -127,9 +127,10 @@ const Addresses = ({
                 </li>
                 {fields.map(field => (
                   <Field
+                    field={field}
+                    key={`${label}_address_${index}__${field.attribute_def.id}`}
                     {...props}
                     {...FIELDS[field.attribute_def.name]}
-                    field={field}
                   />
                 ))}
               </ul>
