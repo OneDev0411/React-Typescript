@@ -1,5 +1,8 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import _ from 'underscore'
+import { getContactTags } from '../../../../../../models/contacts/helpers'
+import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
 const TagsString = ({ tags }) => {
   const tagsCount = _.size(tags)
@@ -30,4 +33,11 @@ const TagsString = ({ tags }) => {
   )
 }
 
-export default TagsString
+function mapStateToProps({ contacts: { attributeDefs } }, { contact }) {
+  const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
+  const tags = getContactTags(contact, attribute_def)
+
+  return { tags }
+}
+
+export default connect(mapStateToProps)(TagsString)

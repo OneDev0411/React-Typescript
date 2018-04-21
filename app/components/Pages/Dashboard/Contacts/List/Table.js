@@ -70,9 +70,7 @@ class ContactsList extends React.Component {
     {
       Header: this.getCellTitle('TAGS'),
       id: 'tag',
-      Cell: ({ original: contact }) => (
-        <TagsString tags={getContactTags(contact)} />
-      )
+      Cell: ({ original: contact }) => <TagsString contact={contact} />
     },
     {
       id: 'td-delete',
