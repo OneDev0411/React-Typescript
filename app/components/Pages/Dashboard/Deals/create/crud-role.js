@@ -143,7 +143,8 @@ class CrudRole extends React.Component {
 
   onSelectAgent = user => {
     const { agent, first_name, last_name, email, phone_number } = user
-    const { office, work_phone } = agent
+
+    const { office, work_phone } = agent || {}
 
     const form = {
       email,
@@ -258,7 +259,7 @@ class CrudRole extends React.Component {
           formNotChanged={!form}
           modalTitle={modalTitle}
           isSaving={isSaving}
-          form={role || form}
+          form={form || role}
           allowedRoles={allowedRoles}
           isCommissionRequired={isCommissionRequired}
           onFormChange={data => this.onFormChange(data)}

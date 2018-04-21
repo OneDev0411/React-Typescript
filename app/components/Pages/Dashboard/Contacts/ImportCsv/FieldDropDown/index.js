@@ -6,6 +6,7 @@ export const fields = [
     value: 'title',
     label: 'Name Title',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'name',
     pluralName: 'names'
   },
@@ -13,6 +14,7 @@ export const fields = [
     value: 'first_name',
     label: 'First Name',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'name',
     pluralName: 'names'
   },
@@ -20,6 +22,7 @@ export const fields = [
     value: 'middle_name',
     label: 'Middle Name',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'name',
     pluralName: 'names'
   },
@@ -27,6 +30,7 @@ export const fields = [
     value: 'last_name',
     label: 'Last Name',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'name',
     pluralName: 'names'
   },
@@ -34,6 +38,7 @@ export const fields = [
     value: 'nickname',
     label: 'Nick Name',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'name',
     pluralName: 'names'
   },
@@ -114,6 +119,7 @@ export const fields = [
     value: 'street_number',
     label: 'Street Number',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'address',
     pluralName: 'addresses',
     hasLabel: true
@@ -122,6 +128,7 @@ export const fields = [
     value: 'street_prefix',
     label: 'Street Prefix',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'address',
     pluralName: 'addresses',
     hasLabel: true
@@ -130,6 +137,7 @@ export const fields = [
     value: 'street_suffix',
     label: 'Street Suffix',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'address',
     pluralName: 'addresses',
     hasLabel: true
@@ -138,6 +146,7 @@ export const fields = [
     value: 'street_name',
     label: 'Street Name',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'address',
     pluralName: 'addresses',
     hasLabel: true
@@ -146,6 +155,7 @@ export const fields = [
     value: 'unit_number',
     label: 'Unit',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'address',
     pluralName: 'addresses',
     hasLabel: true
@@ -154,6 +164,7 @@ export const fields = [
     value: 'city',
     label: 'City',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'address',
     pluralName: 'addresses',
     hasLabel: true
@@ -162,6 +173,7 @@ export const fields = [
     value: 'state',
     label: 'State',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'address',
     pluralName: 'addresses',
     hasLabel: true
@@ -170,6 +182,7 @@ export const fields = [
     value: 'country',
     label: 'Country',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'address',
     pluralName: 'addresses',
     hasLabel: true
@@ -178,6 +191,7 @@ export const fields = [
     value: 'postal_code',
     label: 'Postal Code',
     dataType: 'string',
+    isSingleObject: true,
     singularName: 'address',
     pluralName: 'addresses',
     hasLabel: true

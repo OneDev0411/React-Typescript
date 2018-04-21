@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { showAttachments } from '../../../../../../store_actions/deals'
 import BulkSubmit from '../bulk-submit'
+import DealEmail from '../../dashboard/deal-email'
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class NavBar extends React.Component {
 
         {deal.checklists && (
           <div className="ctas">
+            <DealEmail dealEmail={deal.email} />
             {deal.deal_type === 'Selling' && (
               <Link
                 className="navbar-button"

@@ -35,7 +35,8 @@ webpackConfig.plugins.push(
   }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
-    filename: appConfig.compile.jsVendorBundle
+    filename: appConfig.compile.jsVendorBundle,
+    minChunks: Infinity
   }),
   new webpack.optimize.UglifyJsPlugin({
     sourceMap: true,
@@ -43,9 +44,6 @@ webpackConfig.plugins.push(
     cache: true,
     uglifyOptions: {
       output: { comments: false }
-    },
-    compressor: {
-      screw_ie8: true
     }
   }),
   // reduce moment bundle size by removing unnecessary locales

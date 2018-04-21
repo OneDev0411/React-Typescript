@@ -104,7 +104,6 @@
     }
   }
 
-  .active .round-tab,
   .completed .round-tab {
     background: #2196f3;
     border: 2px solid #2196f3;
@@ -117,7 +116,7 @@
     }
   }
 
-  .active .round-tab {
+  .round-tab.is-pending {
     background: #fff;
   }
 }

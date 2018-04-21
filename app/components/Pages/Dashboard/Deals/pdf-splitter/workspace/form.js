@@ -27,21 +27,26 @@ class WorkspaceForm extends React.Component {
       notifyOffice: true,
       uploadProgressPercents: 0,
       stashFiles: {},
+      validationErrors: {},
       statusMessage: null
     }
 
     this.saveAttempts = 0
   }
 
-  isFormValidated() {
+  validateForm() {
     const { task } = this.state
-    const { splitter } = this.props
+    const validationErrors = {}
 
-    if (task !== null && _.size(splitter.pages) > 0) {
-      return true
+    if (task === null) {
+      validationErrors.title = 'Please give this a ducment title'
     }
 
-    return false
+    this.setState({
+      validationErrors
+    })
+
+    return _.size(validationErrors) === 0
   }
 
   sleep(ms) {
@@ -86,7 +91,7 @@ class WorkspaceForm extends React.Component {
       )
 
       // add files to attachments list
-      taskFileCreated(task.deal, task.checklist, task.id, file)
+      taskFileCreated(task.id, file)
 
       if (notifyOffice) {
         changeNeedsAttention(task.deal, task.id, true)
@@ -158,6 +163,10 @@ class WorkspaceForm extends React.Component {
   async saveAndQuit() {
     const { resetSplitter, resetUploadFiles } = this.props
 
+    if (!this.validateForm()) {
+      return false
+    }
+
     try {
       await this.onBeforeSplit()
     } catch (e) {
@@ -183,6 +192,10 @@ class WorkspaceForm extends React.Component {
     } = this.props
 
     const { pages } = splitter
+
+    if (!this.validateForm()) {
+      return false
+    }
 
     try {
       await this.onBeforeSplit()
@@ -265,20 +278,21 @@ class WorkspaceForm extends React.Component {
   onSelectTask(taskId) {
     const { tasks } = this.props
 
-    this.setState({ task: tasks[taskId] })
+    this.setState({ task: tasks[taskId] }, () => this.validateForm())
   }
 
   render() {
-    const { deal } = this.props
+    const { deal, splitter } = this.props
     const {
       task,
       notifyOffice,
       statusMessage,
       uploadProgressPercents,
+      validationErrors,
       saving
     } = this.state
 
-    const formValidated = this.isFormValidated()
+    const isAnyPageSelected = _.size(splitter.pages) > 0
 
     if (saving) {
       return (
@@ -298,32 +312,38 @@ class WorkspaceForm extends React.Component {
 
     return (
       <div className="details">
+        <div className="field-caption">
+          Document Title <span className="required">*</span>
+        </div>
         <TasksDropDown
           searchable
+          placeholder="Document"
           deal={deal}
           onSelectTask={taskId => this.onSelectTask(taskId)}
           selectedTask={task}
         />
 
-        <Checkbox
-          square
-          selected={notifyOffice}
-          title="Notify Office"
-          onClick={() => this.setState({ notifyOffice: !notifyOffice })}
-        />
+        <div className="error-caption">{validationErrors.title}</div>
 
         <div className="buttons">
+          <Checkbox
+            square
+            selected={notifyOffice}
+            title="Notify Office"
+            onClick={() => this.setState({ notifyOffice: !notifyOffice })}
+          />
+
           <button
             onClick={() => this.saveAndQuit()}
-            disabled={!formValidated}
-            className={cn('save-quit', { disabled: !formValidated })}
+            disabled={!isAnyPageSelected}
+            className={cn('save-quit', { disabled: !isAnyPageSelected })}
           >
             Save and quit
           </button>
 
           <button
-            className={cn('save-new', { disabled: !formValidated })}
-            disabled={!formValidated}
+            className={cn('save-new', { disabled: !isAnyPageSelected })}
+            disabled={!isAnyPageSelected}
             onClick={() => this.saveAndNew()}
           >
             Save and create another

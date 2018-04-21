@@ -2,7 +2,6 @@ $col-padding: 20px;
 $deal-info-width: 300px;
 $deal-tasks-width: 388px;
 $deal-dashboard-header-height: 54px;
-$column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
 
 @import './dashboard/_info';
 @import './dashboard/_create_offer';
@@ -44,24 +43,6 @@ $column-height: calc(100vh - #{$deal-dashboard-header-height} - 2px);
     font-weight: bold;
     i {
       margin-bottom: 10px;
-    }
-  }
-
-  .deal-content {
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
-    backface-visibility: hidden;
-    -webkit-overflow-scrolling: touch;
-    -ms-overflow-style: none;
-    will-change: overflow;
-    position: relative;
-    min-height: $column-height;
-    max-height: $column-height;
-
-    .column {
-      padding: 0;
-      height: auto;
     }
   }
 }

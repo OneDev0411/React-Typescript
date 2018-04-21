@@ -54,7 +54,7 @@ class PdfPage extends React.Component {
     this.renderPage(pageNumber, zoom, fitWindow)
   }
 
-  async calculateScale(pageNumber) {
+  async calculateScale(pageNumber, ratio = 'height') {
     const { doc } = this.props
     const { container } = this
 
@@ -63,11 +63,16 @@ class PdfPage extends React.Component {
     }
 
     const height = container.clientHeight
+    const width = container.clientWidth
 
     const page = await doc.getPage(pageNumber)
     const viewport = page.getViewport(1)
 
-    return height / viewport.height
+    if (ratio === 'height') {
+      return height / viewport.height
+    }
+
+    return width / 1.25 / viewport.width
   }
 
   /**
@@ -81,10 +86,12 @@ class PdfPage extends React.Component {
 
     if (fitWindow) {
       newScale = fitScale || (await this.calculateScale(pageNumber))
+    } else {
+      newScale = await this.calculateScale(pageNumber, 'width')
+    }
 
-      if (!fitScale) {
-        this.setState({ fitScale: newScale })
-      }
+    if (!fitScale) {
+      this.setState({ fitScale: newScale })
     }
 
     if (zoom && zoom !== 0) {

@@ -199,6 +199,7 @@ class VerifyPhoneNumberModal extends Component {
                 id="phone-code"
                 type="text"
                 value={code}
+                autoFocus
                 disabled={isVerify}
                 placeholder="Enter Code"
                 className="c-simple-field__input"

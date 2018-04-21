@@ -45,16 +45,19 @@ import ReactGA from 'react-ga'
 import config from '../../config/public'
 
 import Intercom from './Pages/Dashboard/Partials/Intercom'
-import { inactiveIntercom } from '../store_actions/intercom'
+import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 
 class App extends Component {
   componentWillMount() {
-    const { user } = this.props
+    const { user, dispatch } = this.props
 
     // check branding
     this.getBrand()
 
     if (typeof window !== 'undefined') {
+      window.Intercom &&
+        window.Intercom('onShow', () => dispatch(activeIntercom()))
+
       import('offline-js')
 
       if (!('WebkitAppearance' in document.documentElement.style)) {

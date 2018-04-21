@@ -1,4 +1,6 @@
+import { normalize } from 'normalizr'
 import * as types from '../../../constants/contacts'
+import { contactsSchema } from '../../../models/contacts/schema'
 import postBulkContacts from '../../../models/contacts/post-bulk-contacts'
 import { getContacts } from '../get-contacts'
 
@@ -45,15 +47,20 @@ export function resetCsvImport() {
 }
 
 export function uploadCsvContacts(contacts) {
-  return async dispatch => {
+  return async () => {
     try {
       await postBulkContacts(contacts)
+      // const { data: newContacts, info } = response
+
+      // dispatch({
+      //   response: {
+      //     info,
+      //     ...normalize(newContacts, contactsSchema)
+      //   },
+      //   type: types.FETCH_CONTACTS_SUCCESS
+      // })
     } catch (e) {
       throw e
     }
-
-    // get contacts again, because server doesn't respond
-    // contacts list in bulk requests
-    await dispatch(getContacts())
   }
 }

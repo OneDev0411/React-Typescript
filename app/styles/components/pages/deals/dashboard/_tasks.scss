@@ -1,12 +1,6 @@
 .deal-tasks {
-  @extend %deal-tasks;
-}
-
-%deal-tasks {
   min-width: $deal-tasks-width;
   max-width: $deal-tasks-width;
-  min-height: $column-height;
-  max-height: $column-height;
   overflow: auto;
 
   &.expanded {
@@ -14,29 +8,21 @@
     min-width: $expanded-width;
     max-width: $expanded-width;
   }
+}
 
-  .checklists-container {
-    padding: $col-padding !important;
+.deal-tasks .checklists-container {
+  padding: $col-padding !important;
+  &[data-simplebar] {
+    height: calc(100vh - 56px);
+  }
 
-    .loading {
-      text-align: center;
-      margin-top: 35vh;
-    }
-
-    .checklist {
-      @extend %deal-task-checklist;
-    }
-
-    .show-terminated-btn {
-      @extend %terminated-btn;
-    }
-    &[data-simplebar] {
-      height: calc(100vh - 56px);
-    }
+  .loading {
+    text-align: center;
+    margin-top: 35vh;
   }
 }
 
-%terminated-btn {
+.deal-tasks .checklists-container .show-terminated-btn {
   padding: 5px 10px;
   border-radius: 4px;
   background-color: #f8fafb;
@@ -54,7 +40,7 @@
   }
 }
 
-%deal-task-checklist {
+.deal-tasks .checklists-container .checklist-panel {
   border-radius: 4px;
   border: solid 1px #dce5eb;
   margin-bottom: 20px;

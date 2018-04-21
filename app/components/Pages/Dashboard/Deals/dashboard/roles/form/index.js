@@ -58,18 +58,13 @@ export default class Form extends React.Component {
       })
     }
 
-    this.preselectRoles()
+    // this.preselectRoles()
   }
 
   componentWillReceiveProps(nextProps) {
     const { form, showFormModal } = nextProps
 
-    if (
-      form &&
-      _.size(form) > 0 &&
-      (form !== this.props.form ||
-        (showFormModal && _.size(this.state.form) === 0))
-    ) {
+    if (form && showFormModal && _.size(form) > 0) {
       const isNewRecord = typeof form.role === 'undefined'
 
       if (!isNewRecord) {
@@ -87,8 +82,8 @@ export default class Form extends React.Component {
         {
           form,
           isNewRecord
-        },
-        () => this.preselectRoles()
+        }
+        // () => this.preselectRoles()
       )
     }
 
@@ -97,8 +92,8 @@ export default class Form extends React.Component {
         {
           form: {},
           invalidFields: []
-        },
-        () => this.preselectRoles()
+        }
+        // () => showFormModal && this.preselectRoles()
       )
     }
   }
@@ -132,19 +127,13 @@ export default class Form extends React.Component {
    * preselect role, if there is any
    */
   preselectRoles = () => {
+    const { form } = this.state
     const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
     const preselectedRole = availableRoles.length === 1 && availableRoles[0]
 
-    if (!preselectedRole) {
-      return false
+    if (!form.role && preselectedRole) {
+      this.setForm('role', preselectedRole)
     }
-
-    this.setState({
-      form: {
-        ...this.state.form,
-        role: preselectedRole
-      }
-    })
   }
 
   /**

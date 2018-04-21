@@ -39,7 +39,11 @@ export default class DealSocket extends Socket {
     const acl = getActiveTeamACL(user)
 
     if (acl.indexOf('Deals') > -1 || acl.indexOf('BackOffice') > -1) {
-      window.socket.emit('Brand.Register', getActiveTeamId(user))
+      const id = getActiveTeamId(user)
+      console.log('[Deal Socket]', 'Registering Brand', id)
+      window.socket.emit('Brand.Register', id, err => {
+        console.log('[Deal Socket]', 'Registered Brand', id, err)
+      })
     }
   }
 
@@ -50,10 +54,10 @@ export default class DealSocket extends Socket {
   onDealChange(response) {
     const { action, deal: dealId } = response
 
-    console.log(`[ ${action} ] got a deals socket event`)
+    console.log('[Deal Socket] Deal Changed', action, dealId)
 
     if (!dealId) {
-      console.warn('[ Deal Socket ] received deal is not valid', deal)
+      console.warn('[Deal Socket] received deal is not valid', deal)
 
       return false
     }
@@ -97,7 +101,7 @@ export default class DealSocket extends Socket {
   onReconnected() {
     const { user } = this
 
-    console.log('[ + ] Deal socket reconnected')
+    console.log('[Deal Socket] Reconnected')
 
     // register brand
     DealSocket.registerBrand(user)

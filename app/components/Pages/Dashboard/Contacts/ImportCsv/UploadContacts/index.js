@@ -46,7 +46,9 @@ class UploadContacts extends React.Component {
     const indexedContactFields = _.indexBy(contactFields, 'value')
 
     isValid = _.every(mappedFields, (mapData, csvField) => {
-      if (indexedContactFields[mapData.field].hasLabel && !mapData.label) {
+      const field = indexedContactFields[mapData.field]
+
+      if (field && field.hasLabel && !mapData.label) {
         errorMessage = `Select a label for "${csvField}" field`
         this.onError(errorMessage, 'Validation Error')
 
@@ -79,9 +81,12 @@ class UploadContacts extends React.Component {
 
         const fieldInfo = columns[csvField]
         const fieldValue = row[fieldInfo.index].trim()
-        const { pluralName, singularName, dataType } = indexedContactFields[
-          rechatField
-        ]
+        const {
+          pluralName,
+          singularName,
+          isSingleObject,
+          dataType
+        } = indexedContactFields[rechatField]
 
         if (!fieldValue) {
           return false
@@ -91,11 +96,25 @@ class UploadContacts extends React.Component {
           contact.attributes[pluralName] = []
         }
 
-        contact.attributes[pluralName][label] = {
-          ...contact.attributes[pluralName][label],
+        let labelId
+
+        // name and address fields should merge into a single object
+        if (label || isSingleObject === true) {
+          labelId = label
+        } else {
+          labelId = contact.attributes[pluralName].length
+        }
+
+        contact.attributes[pluralName][labelId] = {
+          ...contact.attributes[pluralName][labelId],
           type: singularName,
           label,
-          [rechatField]: this.parseValue(rechatField, dataType, fieldValue)
+          [rechatField]: this.parseValue(
+            csvField,
+            rechatField,
+            dataType,
+            fieldValue
+          )
         }
       })
 
@@ -147,26 +166,30 @@ class UploadContacts extends React.Component {
     return normalizedContact
   }
 
-  parseValue = (fieldName, dataType, value) => {
+  parseValue = (csvField, fieldName, dataType, value) => {
     switch (fieldName) {
       case 'birthday':
         return moment(value).unix() // unix timestamp in seconds
 
       case 'phone':
         return value.replace(/\s/g, '').replace(/^00/, '+')
+
+      case 'note':
+        return `${csvField}: ${value}`
     }
 
     return value
   }
 
   onFinish = () => {
-    browserHistory.push('/dashboard/contacts')
-
     this.props.notify({
       title: 'Contacts Imported',
       message: `Awesome! You’ve imported ${this.props.rowsCount} contacts`,
       status: 'success'
     })
+
+    // browserHistory.push('/dashboard/contacts')
+    window.location.href = '/dashboard/contacts'
   }
 
   onError = (errorMessage, title) => {
