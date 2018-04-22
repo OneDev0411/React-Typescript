@@ -15,7 +15,7 @@ class Names extends Component {
   }
 
   upsertAttribute = async attribute => {
-    const { contactId, upsertContactAttributes } = this.props
+    const { contact, upsertContactAttributes } = this.props
 
     this.setState(
       {
@@ -23,7 +23,7 @@ class Names extends Component {
       },
       async () => {
         try {
-          await upsertContactAttributes(contactId, [attribute])
+          await upsertContactAttributes(contact.id, [attribute])
         } catch (error) {
           throw error
         } finally {
@@ -36,7 +36,7 @@ class Names extends Component {
   }
 
   handelOnDelete = async field => {
-    const { contactId, upsertContactAttributes } = this.props
+    const { contact, upsertContactAttributes } = this.props
 
     this.setState(
       {
@@ -51,7 +51,7 @@ class Names extends Component {
             }
           ]
 
-          await upsertContactAttributes(contactId, attributes)
+          await upsertContactAttributes(contact.id, attributes)
         } catch (error) {
           throw error
         } finally {
@@ -63,9 +63,61 @@ class Names extends Component {
     )
   }
 
+  getNameFields = () => {
+    let indexedNames = {}
+    let { nameAttributes, attributeDefs } = this.props
+    const nameFields = [
+      'title',
+      'first_name',
+      'middle_name',
+      'last_name',
+      'nickname'
+    ]
+
+    if (nameAttributes.length > 0) {
+      indexedNames = _.indexBy(
+        nameAttributes,
+        attribute => attribute.attribute_def.name
+      )
+    }
+
+    nameFields.forEach((name, index) => {
+      let field = indexedNames[name]
+
+      if (!field) {
+        const attribute_def = selectDefinitionByName(attributeDefs, name)
+
+        if (attribute_def) {
+          nameAttributes.push({
+            index,
+            attribute_def,
+            [attribute_def.data_type]: null
+          })
+        }
+      }
+    })
+
+    return _.chain(nameAttributes)
+      .map(attribute => {
+        if (attribute.index) {
+          return attribute
+        }
+
+        const index = nameFields.indexOf(attribute.attribute_def.name)
+
+        return {
+          ...attribute,
+          index: index === -1 ? null : index
+        }
+      })
+      .sort((a, b) => a.index - b.index)
+      .indexBy(attribute => attribute.attribute_def.name)
+      .value()
+  }
+
   render() {
-    const { fields } = this.props
     const { isSaving } = this.state
+    const fields = this.getNameFields()
 
     return (
       <div className="c-contact-profile-card">
@@ -100,60 +152,17 @@ class Names extends Component {
 }
 
 function mapStateToProps(state, { contact }) {
-  const { contacts: { attributeDefs } } = state
-  const { id: contactId, sub_contacts } = contact
-  const { sections: { Names } } = sub_contacts[0]
+  const { attributeDefs } = state.contacts
+  const { sections } = contact.sub_contacts[0]
+  let nameAttributes = []
 
-  const fields = getNames(Names, attributeDefs)
+  if (sections && sections.Names) {
+    nameAttributes = sections.Names
+  }
 
-  return { contactId, fields, attributeDefs }
+  return { nameAttributes, attributeDefs }
 }
 
 export default connect(mapStateToProps, {
   upsertContactAttributes
 })(Names)
-
-function getNames(names, attributeDefs) {
-  let nameAttributes = names
-  const nameFields = [
-    'title',
-    'first_name',
-    'middle_name',
-    'last_name',
-    'nickname'
-  ]
-
-  nameFields.forEach((name, index) => {
-    const indexedNames = _.indexBy(
-      names,
-      attribute => attribute.attribute_def.name
-    )
-
-    let field = indexedNames[name]
-
-    if (!field) {
-      nameAttributes.push({
-        index,
-        text: '',
-        attribute_def: selectDefinitionByName(attributeDefs, field)
-      })
-    }
-  })
-
-  return _.chain(nameAttributes)
-    .map(attribute => {
-      if (attribute.index) {
-        return attribute
-      }
-
-      const index = nameFields.indexOf(attribute.attribute_def.name)
-
-      return {
-        ...attribute,
-        index: index === -1 ? null : index
-      }
-    })
-    .sort((a, b) => a.index - b.index)
-    .indexBy(attribute => attribute.attribute_def.name)
-    .value()
-}
