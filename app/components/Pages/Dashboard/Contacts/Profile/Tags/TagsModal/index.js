@@ -120,9 +120,9 @@ export default class extends Component {
 
           <div className="tags-container">
             <div className="tags">
-              {_.map(tags, tag => (
+              {Object.values(tags).map((tag, index) => (
                 <button
-                  key={`tag_${tag.id}`}
+                  key={`tag_${index}_${tag.text}`}
                   onClick={() => this.handleToggleTag(tag)}
                   title={tag.active ? 'Remove tag' : 'Add tag'}
                   className={cn('c-contact__tag', { active: tag.active })}
