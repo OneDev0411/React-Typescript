@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { upsertContactAttributes } from '../../../../../../store_actions/contacts'
-import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
+import { selectDefsBySection } from '../../../../../../reducers/contacts/attributeDefs'
 
 import Field from './Field'
 import Title from './Title'
@@ -66,13 +66,12 @@ class Names extends Component {
   getNameFields = () => {
     let indexedNames = {}
     let { nameAttributes, attributeDefs } = this.props
-    const nameFields = [
-      'title',
-      'first_name',
-      'middle_name',
-      'last_name',
-      'nickname'
-    ]
+
+    let nameSectionDefs = selectDefsBySection(attributeDefs, 'Names')
+
+    if (nameSectionDefs.length === 0) {
+      return {}
+    }
 
     if (nameAttributes.length > 0) {
       indexedNames = _.indexBy(
@@ -81,36 +80,19 @@ class Names extends Component {
       )
     }
 
-    nameFields.forEach((name, index) => {
-      let field = indexedNames[name]
+    nameSectionDefs.forEach(attribute_def => {
+      let field = indexedNames[attribute_def.name]
 
       if (!field) {
-        const attribute_def = selectDefinitionByName(attributeDefs, name)
-
-        if (attribute_def) {
-          nameAttributes.push({
-            index,
-            attribute_def,
-            [attribute_def.data_type]: null
-          })
-        }
+        nameAttributes.push({
+          attribute_def,
+          [attribute_def.data_type]: null
+        })
       }
     })
 
     return _.chain(nameAttributes)
-      .map(attribute => {
-        if (attribute.index) {
-          return attribute
-        }
-
-        const index = nameFields.indexOf(attribute.attribute_def.name)
-
-        return {
-          ...attribute,
-          index: index === -1 ? null : index
-        }
-      })
-      .sort((a, b) => a.index - b.index)
+      .filter(attribute => attribute.attribute_def.show)
       .indexBy(attribute => attribute.attribute_def.name)
       .value()
   }

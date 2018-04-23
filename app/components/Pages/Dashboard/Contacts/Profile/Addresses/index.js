@@ -12,7 +12,10 @@ import {
 
 import { getContactAddresses } from '../../../../../../models/contacts/helpers/get-contact-addresses'
 
-import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
+import {
+  selectDefsBySection,
+  selectDefinitionByName
+} from '../../../../../../reducers/contacts/attributeDefs'
 
 import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
@@ -129,6 +132,7 @@ const Addresses = ({
                   <Field
                     field={field}
                     key={`${label}_address_${index}__${field.attribute_def.id}`}
+                    placeholder="-"
                     {...props}
                     {...FIELDS[field.attribute_def.name]}
                   />
@@ -355,65 +359,41 @@ function getAddresses(attributeDefs, allAddressFields) {
     return []
   }
 
-  let result = []
-  let addresses = _.groupBy(allAddressFields, 'index')
+  let addressesSectionDefs = selectDefsBySection(attributeDefs, 'Addresses')
 
-  const addressFields = [
-    'unit_number',
-    'street_number',
-    'street_prefix',
-    'street_name',
-    'street_suffix',
-    'postal_code',
-    'city',
-    'state',
-    'zip_code',
-    'country'
-  ]
+  if (addressesSectionDefs.length === 0) {
+    return []
+  }
+
+  let result = []
+
+  const addresses = _.groupBy(allAddressFields, 'index')
 
   _.each(addresses, address => {
     let fields = address
 
-    addressFields.forEach(name => {
-      const indexedFields = _.indexBy(
-        address,
-        attribute => attribute.attribute_def.name
-      )
+    const indexedFields = _.indexBy(
+      address,
+      attribute => attribute.attribute_def.name
+    )
 
-      let field = indexedFields[name]
+    addressesSectionDefs.forEach(attribute_def => {
+      let field = indexedFields[attribute_def.name]
 
       if (!field) {
         fields.push({
-          text: '',
+          attribute_def,
           index: address[0].index,
-          attribute_def: selectDefinitionByName(attributeDefs, name)
+          [attribute_def.data_type]: null
         })
       }
     })
 
-    fields = fields
-      .map(field => {
-        if (field.index) {
-          return field
-        }
+    fields = fields.filter(field => field.attribute_def.show)
 
-        const index = addressFields.indexOf(field.attribute_def.name)
+    const { label, index, is_primary } = fields[0]
 
-        return {
-          ...field,
-          index: index === -1 ? null : index
-        }
-      })
-      .sort((a, b) => a.index - b.index)
-
-    const { label, index } = fields[0]
-
-    result.push({
-      index,
-      label,
-      fields,
-      is_primary: fields.every(field => field.is_primary)
-    })
+    result.push({ index, label, fields, is_primary })
   })
 
   return result
