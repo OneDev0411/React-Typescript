@@ -8,7 +8,10 @@ export default class HeaderSearch extends React.Component {
   constructor(props) {
     super(props)
 
-    this.debouncedOnInputChange = debounce(props.onInputChange, props.debounceTime)
+    this.debouncedOnInputChange = debounce(
+      props.onInputChange,
+      props.debounceTime
+    )
 
     this.state = {
       inputFocused: false
