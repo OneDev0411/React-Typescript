@@ -1,6 +1,6 @@
 import React from 'react'
 import SelectContactModal from '../../../../../../views/components/SelectContactModal'
-import RoleCrmIntegration from './crm-inegration'
+import RoleCrmIntegration from './crm-integration'
 import { convertContactToRole } from '../../utils/roles'
 
 const initialState = {

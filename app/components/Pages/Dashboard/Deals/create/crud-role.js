@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import RoleCrmIntegration from '../dashboard/roles/crm-inegration'
+import RoleCrmIntegration from '../dashboard/roles/crm-integration'
 import AgentModal from './deal-team-agents'
 import RoleItem from './role-item'
 import ContactModal from '../../../../../views/components/SelectContactModal'
