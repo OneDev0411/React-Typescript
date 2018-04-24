@@ -49,12 +49,12 @@ export default ({
         {_.map(agents, (agent, id) => (
           <CrudRole
             key={id}
-            role={agent}
+            user={agent}
             isCommissionRequired={isCommissionRequired}
             modalTitle="Update Agent"
             allowedRoles={allowedRoles}
-            onRemoveRole={id => onRemoveAgent(id)}
-            onUpsertRole={newRole => onUpsertAgent({ ...agent, ...newRole })}
+            onRemoveUser={id => onRemoveAgent(id)}
+            onUpsertUser={onUpsertAgent}
           />
         ))}
 
@@ -64,7 +64,7 @@ export default ({
           modalTitle={title}
           ctaTitle={title}
           allowedRoles={allowedRoles}
-          onUpsertRole={onUpsertAgent}
+          onUpsertUser={onUpsertAgent}
         />
       </div>
     </div>
