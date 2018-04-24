@@ -5,7 +5,7 @@ import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import { roleName } from '../utils/roles'
-import ToolTip from '../components/tooltip'
+import ToolTip from '../../../../../views/components/tooltip/index'
 import {
   closeEsignWizard,
   setSelectedTask

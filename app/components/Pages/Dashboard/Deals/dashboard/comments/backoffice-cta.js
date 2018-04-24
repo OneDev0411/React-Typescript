@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import cn from 'classnames'
-import ToolTip from '../../components/tooltip'
+import ToolTip from '../../../../../../views/components/tooltip/index'
 
 export default ({
   task, onSendComment, hasComment, isSaving

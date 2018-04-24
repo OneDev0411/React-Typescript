@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import ToolTip from '../../components/tooltip'
+import ToolTip from '../../../../../../views/components/tooltip/index'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
 function getSubmitButtonLabel(isSaving, hasComment) {
