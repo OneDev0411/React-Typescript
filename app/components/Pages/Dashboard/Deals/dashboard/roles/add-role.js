@@ -1,6 +1,6 @@
 import React from 'react'
 import SelectContactModal from '../../../../../../views/components/SelectContactModal'
-import RoleFormWrapper from './form/wrapper'
+import RoleCrmIntegration from './crm-inegration'
 import { convertContactToRole } from '../../utils/roles'
 
 const initialState = {
@@ -61,7 +61,7 @@ class UpsertRole extends React.Component {
           handleSelectedItem={this.onSelectContact}
         />
 
-        <RoleFormWrapper
+        <RoleCrmIntegration
           deal={deal}
           user={user}
           modalTitle="Add to Deal"

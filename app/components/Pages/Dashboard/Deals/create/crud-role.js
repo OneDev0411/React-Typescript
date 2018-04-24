@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import RoleModal from '../dashboard/roles/form/wrapper'
+import RoleCrmIntegration from '../dashboard/roles/crm-inegration'
 import AgentModal from './deal-team-agents'
 import RoleItem from './role-item'
 import ContactModal from '../../../../../views/components/SelectContactModal'
@@ -130,7 +130,7 @@ class CrudRole extends React.Component {
           teamAgents={teamAgents}
         />
 
-        <RoleModal
+        <RoleCrmIntegration
           isSubmitting={isSaving}
           isOpen={showRoleModal}
           user={role}
