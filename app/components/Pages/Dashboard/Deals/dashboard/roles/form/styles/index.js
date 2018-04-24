@@ -14,14 +14,6 @@ export const InputField = styled.input`
     opacity: 1;
   }
 
-  :-ms-input-placeholder {
-    color: #cad4db;
-  }
-
-  ::-ms-input-placeholder {
-    color: #cad4db;
-  }
-
   :focus {
     outline: none;
   }
