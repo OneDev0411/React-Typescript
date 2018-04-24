@@ -156,6 +156,11 @@ export class RoleFormModal extends React.Component {
       list.push('commission')
     }
 
+    // when adding an agent, company should be mandatory
+    if (role && role.includes('Agent') && !list.includes('company_title')) {
+      list.push('company_title')
+    }
+
     return list
   }
 
