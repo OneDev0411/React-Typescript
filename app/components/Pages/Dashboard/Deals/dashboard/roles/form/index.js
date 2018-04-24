@@ -142,7 +142,10 @@ export class RoleFormModal extends React.Component {
 
     const { company_title, role } = values
 
-    if (company_title && this.isValidString(company_title)) {
+    if (
+      company_title &&
+      this.isValidString(company_title, [], 'company_title')
+    ) {
       list.push('company_title')
     } else {
       list.push('legal_first_name', 'legal_last_name')
@@ -157,11 +160,11 @@ export class RoleFormModal extends React.Component {
     }
 
     // when adding an agent, company should be mandatory
-    if (role && role.includes('Agent') && !list.includes('company_title')) {
-      list.push('company_title')
+    if (role && role.includes('Agent')) {
+      list.push('legal_first_name', 'legal_last_name', 'company_title')
     }
 
-    return list
+    return _.uniq(list)
   }
 
   /**
