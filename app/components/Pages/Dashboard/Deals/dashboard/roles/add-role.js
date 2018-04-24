@@ -9,7 +9,7 @@ const initialState = {
   showContactModal: false
 }
 
-class UpsertRole extends React.Component {
+class AddRole extends React.Component {
   state = initialState
 
   showRoleModal = () => {
@@ -74,4 +74,4 @@ class UpsertRole extends React.Component {
   }
 }
 
-export default UpsertRole
+export default AddRole

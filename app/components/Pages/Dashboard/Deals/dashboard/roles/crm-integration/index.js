@@ -14,7 +14,7 @@ import {
   convertRoleToContact,
   getUpsertedAttributes
 } from '../../../utils/roles'
-import RoleForm from '..'
+import RoleForm from '../form'
 
 const initialState = {
   isSaving: false

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { Form } from 'react-final-form'
 import _ from 'underscore'
-import { FormContainer } from './form-container'
+import { RoleFormContainer } from './form-container'
 import { Modal } from 'react-bootstrap'
 import { ROLE_NAMES } from '../../../utils/roles'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
@@ -370,7 +370,7 @@ export class RoleFormModal extends React.Component {
                 className="u-scrollbar--thinner"
                 style={{ padding: 0 }}
               >
-                <FormContainer
+                <RoleFormContainer
                   form={form}
                   values={values}
                   handleSubmit={handleSubmit}

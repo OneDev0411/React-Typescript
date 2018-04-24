@@ -36,7 +36,7 @@ const getDropDownItems = ({ form = {}, singularName, pluralName }) => {
   return singleValues
 }
 
-export const RoleForm = ({
+export const RoleFormContainer = ({
   form,
   handleSubmit,
   values,
