@@ -6,7 +6,7 @@ import AddRole from './add-role'
 import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import { roleName } from '../../utils/roles'
-import RoleFormWrapper from './form/wrapper'
+import RoleCrmIntegration from './crm-integration'
 
 class Roles extends React.Component {
   state = {
@@ -171,7 +171,7 @@ class Roles extends React.Component {
             )
           })}
 
-        <RoleFormWrapper
+        <RoleCrmIntegration
           deal={deal}
           user={user}
           modalTitle="Update Contact"
