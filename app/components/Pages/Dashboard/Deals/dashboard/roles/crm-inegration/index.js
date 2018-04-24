@@ -4,17 +4,17 @@ import { addNotification as notify } from 'reapop'
 import {
   createRoles,
   updateRole
-} from '../../../../../../../../store_actions/deals'
+} from '../../../../../../../store_actions/deals'
 import {
   createNewContact,
   upsertContactAttributes
-} from '../../../../../../../../store_actions/contacts'
+} from '../../../../../../../store_actions/contacts'
 import {
   getLegalFullName,
   convertRoleToContact,
   getUpsertedAttributes
-} from '../../../../utils/roles'
-import RoleForm from '../'
+} from '../../../utils/roles'
+import RoleForm from '..'
 
 const initialState = {
   isSaving: false
