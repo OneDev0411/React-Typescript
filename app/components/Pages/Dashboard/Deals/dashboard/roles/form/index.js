@@ -116,6 +116,7 @@ export class RoleFormModal extends React.Component {
   normalizeForm = values => {
     const newValues = {}
     const { commission, commission_type } = values
+    const ingoreFields = ['commission', 'commission_type', 'user']
 
     if (commission_type === 'commission_dollar') {
       newValues.commission_dollar = parseFloat(commission)
@@ -128,8 +129,7 @@ export class RoleFormModal extends React.Component {
         ...values,
         ...newValues
       },
-      (fieldValue, fieldName) =>
-        ['commission', 'commission_type', 'user'].includes(fieldName)
+      (fieldValue, fieldName) => ingoreFields.includes(fieldName)
     )
   }
 
