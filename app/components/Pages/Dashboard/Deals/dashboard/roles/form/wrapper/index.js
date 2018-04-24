@@ -69,7 +69,7 @@ class RoleFormWrapper extends React.Component {
           await createRoles(deal.id, [form])
           this.showNotification('Contact added to the deal.')
         }
-      } else {
+      } else if (deal) {
         await updateRole(deal.id, form)
       }
 
