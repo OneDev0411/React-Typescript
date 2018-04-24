@@ -24,8 +24,7 @@ webpackConfig.performance = {
 
 webpackConfig.entry = {
   app: ['babel-polyfill', appConfig.compile.entry],
-  vendor: appConfig.compile.vendors,
-  pdfjsWorker: 'pdfjs-dist/build/pdf.worker.entry'
+  vendor: appConfig.compile.vendors
 }
 
 webpackConfig.plugins.push(
@@ -35,8 +34,7 @@ webpackConfig.plugins.push(
   }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
-    filename: appConfig.compile.jsVendorBundle,
-    minChunks: Infinity
+    filename: appConfig.compile.jsVendorBundle
   }),
   new webpack.optimize.UglifyJsPlugin({
     sourceMap: true,
