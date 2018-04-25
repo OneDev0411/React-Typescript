@@ -140,7 +140,7 @@ export default class Editable extends React.Component {
         <div className={cn('field editable', { approved })}>
           <div style={{ display: 'inline-block', minWidth: '80%' }}>
             <ContextDiscrepency
-              disabled={editMode}
+              disabled={editMode || !isBackOffice}
               deal={deal}
               contextName={field.name}
               placement={sectionId === 'critical-dates' ? 'bottom' : 'top'}
