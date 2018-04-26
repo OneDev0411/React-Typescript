@@ -4,7 +4,7 @@ import moment from 'moment'
 import merge from 'merge'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
-import ToolTip from '../components/tooltip'
+import ToolTip from '../../../../../views/components/tooltip/index'
 import {
   closeEsignWizard,
   setSelectedTask

@@ -3,7 +3,7 @@ import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
 import _ from 'underscore'
 import DatePicker from '../../../components/date-picker'
-import ToolTip from '../../../components/tooltip'
+import ToolTip from '../../../../../../../views/components/tooltip/index'
 import Input from '../../../../../../../views/components/Input'
 import EditableCta from './editable-cta'
 import ContextDiscrepency from '../../context-discrepency'
@@ -140,7 +140,7 @@ export default class Editable extends React.Component {
         <div className={cn('field editable', { approved })}>
           <div style={{ display: 'inline-block', minWidth: '80%' }}>
             <ContextDiscrepency
-              disabled={editMode}
+              disabled={editMode || !isBackOffice}
               deal={deal}
               contextName={field.name}
               placement={sectionId === 'critical-dates' ? 'bottom' : 'top'}

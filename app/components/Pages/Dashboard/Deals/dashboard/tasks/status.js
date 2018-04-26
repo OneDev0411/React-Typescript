@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import ToolTip from '../../components/tooltip'
+import ToolTip from '../../../../../../views/components/tooltip/index'
 
 const TaskStatus = ({ task, noTip, isBackoffice }) => {
   const { review } = task

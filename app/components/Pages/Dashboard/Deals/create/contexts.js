@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import moment from 'moment'
 import cn from 'classnames'
 import _ from 'underscore'
@@ -97,34 +97,34 @@ export default class extends React.Component {
               </div>
             )}
 
-            {contexts[field.name] &&
-              field.data_type === 'Date' && (
-                <ContextValue
-                  name={field.label}
-                  date={contexts[field.name]}
-                  onRemove={() => onChangeContext(field.name, null)}
-                  onEdit={() => this.setSelectedField(field.name)}
-                />
-              )}
-
-            {!contexts[field.name] &&
-              field.data_type === 'Date' && (
-                <div
-                  className="entity-item date new"
-                  onClick={() => this.setSelectedField(field.name)}
-                >
-                  <div className="add-item">
-                    <span className="icon">+</span>
-                    <span
-                      className={cn('text', {
-                        hasError: hasError && field.mandatory
-                      })}
-                    >
-                      {field.label} {field.mandatory && <sup>*</sup>}
-                    </span>
+            {field.data_type === 'Date' && (
+              <Fragment>
+                {contexts[field.name] ? (
+                  <ContextValue
+                    name={field.label}
+                    date={contexts[field.name]}
+                    onRemove={() => onChangeContext(field.name, null)}
+                    onEdit={() => this.setSelectedField(field.name)}
+                  />
+                ) : (
+                  <div
+                    className="entity-item date new"
+                    onClick={() => this.setSelectedField(field.name)}
+                  >
+                    <div className="add-item">
+                      <span className="icon">+</span>
+                      <span
+                        className={cn('text', {
+                          hasError: hasError && field.mandatory
+                        })}
+                      >
+                        {field.label} {field.mandatory && <sup>*</sup>}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </Fragment>
+            )}
           </div>
         ))}
 

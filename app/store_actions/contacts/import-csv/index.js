@@ -1,4 +1,6 @@
+import { normalize } from 'normalizr'
 import * as types from '../../../constants/contacts'
+import { contactsSchema } from '../../../models/contacts/schema'
 import postBulkContacts from '../../../models/contacts/post-bulk-contacts'
 import { getContacts } from '../get-contacts'
 

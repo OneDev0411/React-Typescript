@@ -151,7 +151,9 @@ class DropDownTasks extends React.Component {
       tasks,
       searchable,
       showStashOption,
-      placeholder = 'Folder'
+      placeholder = 'Folder',
+      stashOptionText,
+      moveToParentFolder = null
     } = this.props
 
     return (
@@ -187,9 +189,12 @@ class DropDownTasks extends React.Component {
               className={cn('is-bold', {
                 selected: selectedTask === null
               })}
-              onClick={() => this.onSelectTask(null)}
+              onClick={e => {
+                e.stopPropagation()
+                this.onSelectTask(moveToParentFolder)
+              }}
             >
-              Upload directly to my Files
+              {stashOptionText || 'Upload directly to my Files'}
             </li>
           )}
 

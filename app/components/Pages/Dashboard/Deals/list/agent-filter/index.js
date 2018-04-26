@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
-import ToolTip from '../../components/tooltip'
+import ToolTip from '../../../../../../views/components/tooltip/index'
 import Deal from '../../../../../../models/Deal'
 
 const FILTER_ACTIVE = ['Active', 'Coming Soon', 'Lease']

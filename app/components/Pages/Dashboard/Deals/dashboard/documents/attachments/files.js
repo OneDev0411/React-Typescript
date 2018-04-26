@@ -39,7 +39,7 @@ class FileAttachments extends React.Component {
     const { deal, deleteFile } = this.props
     const { deleting } = this.state
 
-    e.stopPropagation()
+    e.preventDefault()
 
     if (deleting) {
       return false
@@ -97,7 +97,7 @@ class FileAttachments extends React.Component {
                 pullRight
               >
                 <Button
-                  onClick={e => e.stopPropagation()}
+                  onClick={e => e.preventDefault()}
                   className="cta-btn btn-link"
                   bsRole="toggle"
                 >
