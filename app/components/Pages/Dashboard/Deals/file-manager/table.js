@@ -88,7 +88,7 @@ export class FileManager extends React.Component {
     deal.checklists.forEach(chId => {
       const checklist = checklists[chId] || []
 
-      if (!checklist.tasks) {
+      if (!checklist.tasks || checklist.is_terminated) {
         return []
       }
 
