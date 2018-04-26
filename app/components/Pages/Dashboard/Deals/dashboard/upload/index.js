@@ -5,6 +5,7 @@ import cn from 'classnames'
 import Deal from '../../../../../../models/Deal'
 import ChatMessage from '../../../Chatroom/Util/message'
 import { setUploadFiles } from '../../../../../../store_actions/deals'
+import { confirmation } from '../../../../../../store_actions/confirmation'
 
 class UploadDocument extends React.Component {
   constructor(props) {
@@ -15,11 +16,21 @@ class UploadDocument extends React.Component {
   }
 
   async onDrop(files) {
-    const { onDrop, setUploadFiles } = this.props
+    const { onDrop, setUploadFiles, activeChecklist, confirmation } = this.props
 
     this.setState({
       dropzoneActive: false
     })
+
+    if (activeChecklist && activeChecklist.is_terminated) {
+      return confirmation({
+        message: 'Folder Is Terminated',
+        description: 'You cannot upload file in terminated folders',
+        onConfirm: () => null,
+        hideCancelButton: true,
+        confirmLabel: 'Okay'
+      })
+    }
 
     if (onDrop) {
       return onDrop(files)
@@ -103,9 +114,16 @@ class UploadDocument extends React.Component {
   }
 }
 
-export default connect(
-  ({ user }) => ({
-    user
-  }),
-  { setUploadFiles }
-)(UploadDocument)
+function mapStateToProps({ user, deals }) {
+  const { checklists, selectedTask } = deals
+
+  return {
+    user,
+    activeChecklist:
+      selectedTask && checklists ? checklists[selectedTask.checklist] : null
+  }
+}
+
+export default connect(mapStateToProps, { setUploadFiles, confirmation })(
+  UploadDocument
+)
