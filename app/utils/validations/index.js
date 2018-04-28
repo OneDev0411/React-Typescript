@@ -1,1 +1,2 @@
-export * from './required'
+export * from './email'
+export * from './phone-number'

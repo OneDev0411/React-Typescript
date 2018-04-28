@@ -8,7 +8,7 @@ import {
   updateRole
 } from '../../../../../../../store_actions/deals'
 import {
-  createNewContact,
+  createContacts,
   upsertContactAttributes
 } from '../../../../../../../store_actions/contacts'
 import {
@@ -52,7 +52,7 @@ class AddRoleModal extends React.Component {
       createRoles,
       updateRole,
       notify,
-      createNewContact,
+      createContacts,
       upsertContactAttributes
     } = this.props
     const { form } = this.state
@@ -80,9 +80,9 @@ class AddRoleModal extends React.Component {
         if (!contact) {
           const copyFormData = Object.assign({}, form)
 
-          await createNewContact(
+          await createContacts([
             normalizeNewRoleFormDataAsContact(copyFormData)
-          )
+          ])
           this.notifySuccess(`${fullName} has been added to your Contacts.`)
         } else {
           const newAttributes = await getNewAttributes(form)
@@ -182,6 +182,6 @@ export default connect(null, {
   notify,
   updateRole,
   createRoles,
-  createNewContact,
+  createContacts,
   upsertContactAttributes
 })(AddRoleModal)

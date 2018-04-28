@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Form, Field } from 'react-final-form'
 
 import BasicModal from '../../../../../../../../views/components/BasicModal'
@@ -52,7 +52,7 @@ function AddAddressModal({
         onSubmit={handleOnSubmit}
         initialValues={{ label: 'Other' }}
         render={({ reset, values, pristine, validating, handleSubmit }) => (
-          <div>
+          <Fragment>
             <BasicModal.Header title="Add New Address" />
             <BasicModal.Body className="c-new-address-modal__body">
               <div
@@ -206,7 +206,7 @@ function AddAddressModal({
                 </ActionButton>
               </div>
             </BasicModal.Footer>
-          </div>
+          </Fragment>
         )}
       />
     </BasicModal>

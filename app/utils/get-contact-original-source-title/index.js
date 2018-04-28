@@ -1,8 +1,4 @@
 export const getContactOriginalSourceTitle = source => {
-  if (!source) {
-    throw new Error('Source type is required.')
-  }
-
   switch (source) {
     case 'BrokerageWidget':
       return 'Created from a brokerage widget'
