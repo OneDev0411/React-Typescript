@@ -84,7 +84,7 @@ class CreateOffer extends React.Component {
       }
 
       if (type) {
-        item.disabled = true
+        item.readOnly = true
         this.onUpsertRole(item, type)
       }
     })
@@ -185,7 +185,7 @@ class CreateOffer extends React.Component {
       _.each(referrals, referral => roles.push(_.omit(referral, 'id')))
     }
 
-    return roles.filter(role => role.disabled !== true)
+    return roles.filter(role => role.readOnly !== true)
   }
 
   async createOffer() {

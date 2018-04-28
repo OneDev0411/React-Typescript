@@ -18,8 +18,8 @@ export default ({ person, onClick, onRemove }) => {
 
   return (
     <div
-      className={cn('entity-item people', { disabled: person.disabled })}
-      onClick={() => !person.disabled && onClick()}
+      className={cn('entity-item people', { disabled: person.readOnly })}
+      onClick={() => !person.readOnly && onClick()}
     >
       <UserAvatar
         name={`${person.legal_first_name} ${person.legal_last_name}`}
@@ -30,17 +30,15 @@ export default ({ person, onClick, onRemove }) => {
 
       <span className="name">{name}</span>
 
-      {!person.disabled && (
-        <span
-          className="remove"
-          onClick={e => {
-            e.stopPropagation()
-            onRemove(person.id)
-          }}
-        >
-          <i className="fa fa-times" />
-        </span>
-      )}
+      <span
+        className="remove"
+        onClick={e => {
+          e.stopPropagation()
+          onRemove(person.id)
+        }}
+      >
+        <i className="fa fa-times" />
+      </span>
     </div>
   )
 }
