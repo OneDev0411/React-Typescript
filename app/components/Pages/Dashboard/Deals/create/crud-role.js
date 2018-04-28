@@ -12,7 +12,7 @@ import {
 } from '../utils/roles'
 import SelectContactModal from '../../../../../views/components/SelectContactModal'
 import {
-  createNewContact,
+  createContacts,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
 
@@ -59,7 +59,7 @@ class CrudRole extends React.Component {
 
   addRole = async () => {
     const { form } = this.state
-    const { notify, createNewContact, upsertContactAttributes } = this.props
+    const { notify, createContacts, upsertContactAttributes } = this.props
     const {
       contact,
       legal_first_name,
@@ -84,9 +84,9 @@ class CrudRole extends React.Component {
         if (!contact) {
           const copyFormData = Object.assign({}, form)
 
-          await createNewContact(
+          await createContacts([
             normalizeNewRoleFormDataAsContact(copyFormData)
-          )
+          ])
           this.notifySuccess(`${fullName} has been added to your Contacts.`)
         } else {
           const newAttributes = await getNewAttributes(form)
@@ -271,6 +271,6 @@ class CrudRole extends React.Component {
 
 export default connect(null, {
   notify,
-  createNewContact,
+  createContacts,
   upsertContactAttributes
 })(CrudRole)

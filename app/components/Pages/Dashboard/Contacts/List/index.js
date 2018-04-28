@@ -184,7 +184,6 @@ class ContactsList extends React.Component {
         <Header
           user={user}
           contactsCount={contactsCount}
-          onNewContact={id => openContact(id)}
           onInputChange={this.onInputChange}
         />
         {loadingImport && (
