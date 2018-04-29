@@ -8,9 +8,17 @@ export default ({ listings, onSelectListing }) => {
     return false
   }
 
-  const listview = _.filter(
-    listings,
-    item => item.status.startsWith('Active') || item.status === 'Pending'
+  // These filters list suggested in here: web#1028
+  const filterStatus = [
+    'Active',
+    'Pending',
+    'ActiveOptionContract',
+    'ActiveContingent',
+    'ActiveKickOut',
+    'Leased'
+  ]
+  const listview = _.filter(listings, item =>
+    filterStatus.includes(item.status)
   )
 
   return (
@@ -33,6 +41,7 @@ export default ({ listings, onSelectListing }) => {
           >
             <Col md={1} sm={1} xs={1}>
               <img
+                alt=""
                 src={item.image || '/static/images/deals/home.svg'}
                 className="listing-image"
               />

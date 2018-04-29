@@ -62,4 +62,17 @@ CriticalDates.getNextDate = function getNextDate(deal) {
   return field && `${field.short_label}. ${date.value.format('MMM DD, YYYY')}`
 }
 
+/**
+ * get next date value
+ */
+CriticalDates.getNextDateValue = function getNextDate(deal) {
+  const date = getNextDateField(deal)
+
+  if (!date) {
+    return ''
+  }
+
+  return date.value.format('x')
+}
+
 export default CriticalDates
