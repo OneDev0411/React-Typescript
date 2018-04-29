@@ -65,8 +65,10 @@ class BackOfficeTable extends BaseTable {
       },
       critical_dates: {
         caption: 'CRITICAL DATES',
+        sortable: true,
         className: 'col-md-1 hidden-sm hidden-xs',
-        getText: deal => this.getNextDate(deal)
+        getText: deal => this.getNextDate(deal),
+        getValue: deal => this.getNextDateValue(deal)
       },
       searchResult: {
         caption: '',
