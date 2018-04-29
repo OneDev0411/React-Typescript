@@ -59,7 +59,7 @@ export const Dropdown = ({
             name: input.name
           })}
         >
-          {selectedItem.title}
+          {selectedItem && selectedItem.title}
           <Icon isOpen={isOpen} />
         </Button>
         <div style={{ position: 'relative' }}>

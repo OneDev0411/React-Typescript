@@ -46,14 +46,14 @@ export default ({
       </div>
 
       <div className="people-container">
-        {_.map(clients, (agent, id) => (
+        {_.map(clients, (client, id) => (
           <CrudRole
             key={id}
-            role={agent}
+            user={client}
             modalTitle={`Update ${title}`}
             allowedRoles={allowedRoles}
-            onRemoveRole={id => onRemoveClient(id)}
-            onUpsertRole={newRole => onUpsertClient({ ...agent, ...newRole })}
+            onRemoveUser={id => onRemoveClient(id)}
+            onUpsertUser={onUpsertClient}
           />
         ))}
 
@@ -61,7 +61,7 @@ export default ({
           modalTitle={`Add ${title}`}
           ctaTitle={`Add ${title}`}
           allowedRoles={allowedRoles}
-          onUpsertRole={onUpsertClient}
+          onUpsertUser={onUpsertClient}
         />
       </div>
     </div>
