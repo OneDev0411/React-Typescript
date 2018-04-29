@@ -73,8 +73,6 @@ function createOptions(attributes, mappedFields) {
     ...newOptions
   }
 
-  console.log(attributes.byName)
-
   return _.chain(options)
     .filter(({ editable, show }) => editable || show)
     .map(({ id, label, index = 0 }) => ({
