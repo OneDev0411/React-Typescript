@@ -60,12 +60,12 @@ class UploadContacts extends React.Component {
 
   uploadContacts = async () => {
     const { rows, columns, mappedFields, attributeDefs } = this.props
-    const contacts = {
-      attributes: []
-    }
+    const contacts = []
 
     _.each(rows, row => {
-      const contact = []
+      const contact = {
+        attributes: []
+      }
 
       _.each(mappedFields, ({ definitionId, label, index = 0 }, csvField) => {
         const definition = selectDefinition(attributeDefs, definitionId)
@@ -89,10 +89,10 @@ class UploadContacts extends React.Component {
           contactItem.index = index + 1
         }
 
-        contact.push(contactItem)
+        contact.attributes.push(contactItem)
       })
 
-      contacts.attributes.push(this.getNormalizedContact(contact))
+      contacts.push(this.getNormalizedContact(contact))
     })
 
     try {
@@ -115,12 +115,12 @@ class UploadContacts extends React.Component {
       'source_type'
     )
 
-    const source = {
+    contact.attributes.push({
       attribute_def: sourceDefinition.id,
       [sourceDefinition.data_type]: 'CSV'
-    }
+    })
 
-    return [...contact, source]
+    return contact
   }
 
   parseValue = (csvField, fieldName, value) => {
