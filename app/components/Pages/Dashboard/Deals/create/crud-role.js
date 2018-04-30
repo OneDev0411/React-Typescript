@@ -45,7 +45,7 @@ class CrudRole extends React.Component {
     this.setState({
       ...initialState,
       showRoleModal: true,
-      role: convertContactToRole(contact)
+      role: convertContactToRole(contact, this.props.attributeDefs)
     })
   }
 
@@ -145,6 +145,12 @@ class CrudRole extends React.Component {
   }
 }
 
-export default connect(null, {
+function mapStateToProps({ contacts }) {
+  return {
+    attributeDefs: contacts.attributeDefs
+  }
+}
+
+export default connect(mapStateToProps, {
   notify
 })(CrudRole)
