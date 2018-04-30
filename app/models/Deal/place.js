@@ -29,6 +29,7 @@ export async function searchListings(criteria) {
   const isMlsNumber = /[0-9]{8}/.test(criteria)
   const normalizeMlsObject = data => ({
     ...data.property,
+    is_mls_search: true,
     price: data.price,
     status: data.status,
     cover_image_url: data.cover_image_url
