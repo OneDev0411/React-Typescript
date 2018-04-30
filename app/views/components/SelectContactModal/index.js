@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { extractUserInfoFromContact } from '../../../models/contacts'
 import { selectContacts } from '../../../reducers/contacts/list'
-
 import BareModal from '../BareModal'
 import Header from './components/Header'
 import Body from './components/Body'
@@ -62,10 +60,8 @@ SelectContactModal.propTypes = propTypes
 SelectContactModal.defaultProps = defaultProps
 
 function mapStateToProps({ contacts: { list } }) {
-  const contactsList = selectContacts(list).map(extractUserInfoFromContact)
-
   return {
-    contactsList
+    contactsList: selectContacts(list)
   }
 }
 
