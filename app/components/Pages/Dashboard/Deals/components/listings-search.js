@@ -9,16 +9,11 @@ export default ({ listings, onSelectListing }) => {
   }
 
   // These filters list suggested in here: web#1028
-  const filterStatus = [
-    'Active',
-    'Pending',
-    'ActiveOptionContract',
-    'ActiveContingent',
-    'ActiveKickOut',
-    'Leased'
-  ]
-  const listview = _.filter(listings, item =>
-    filterStatus.includes(item.status)
+  const listview = _.filter(
+    listings,
+    item =>
+      item.status.includes('Active') ||
+      ['Pending', 'Leased'].includes(item.status)
   )
 
   return (
