@@ -33,9 +33,9 @@ export default class extends React.Component {
           listing.length > 0
             ? null
             : {
-              type: 'warning',
-              message: `Your input is too short! ${WARNING_MESSAGE}`
-            }
+                type: 'warning',
+                message: `Your input is too short! ${WARNING_MESSAGE}`
+              }
       })
 
       return false
@@ -48,7 +48,7 @@ export default class extends React.Component {
       // search in mls listings
       const response = await Deal.searchListings(address)
 
-      const listings = response.data.map(item => ({
+      const listings = response.map(item => ({
         id: item.id,
         full_address: listingsHelper.addressTitle(item.address),
         address_components: item.address,
@@ -71,9 +71,9 @@ export default class extends React.Component {
             listing.length > 0
               ? null
               : {
-                type: 'warning',
-                message: `We were unable to locate the address. ${WARNING_MESSAGE}`
-              }
+                  type: 'warning',
+                  message: `We were unable to locate the address. ${WARNING_MESSAGE}`
+                }
         })
       }
     } catch (err) {
@@ -135,7 +135,6 @@ export default class extends React.Component {
             )}
             <div className="list">
               <ListingsView
-                type={null}
                 listings={listings}
                 onSelectListing={item => this.onSelectListing(item)}
               />
