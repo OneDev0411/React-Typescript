@@ -215,6 +215,10 @@ export function convertRoleToContact(form = {}, attributeDefs) {
   }
 
   _.each(getContactFields(), (roleAttribute, contactAttribute) => {
+    if (!form[roleAttribute]) {
+      return
+    }
+
     const definition = selectDefinitionByName(attributeDefs, contactAttribute)
 
     contact.attributes.push({
