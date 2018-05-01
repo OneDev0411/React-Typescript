@@ -50,6 +50,15 @@ class NewContactForm extends Component {
     const multipleFields = ['email', 'phone_number']
     const textFields = ['first_name', 'middle_name', 'last_name']
 
+    const sourceTypeDef = selectDefinitionByName(attributeDefs, 'source_type')
+
+    if (sourceTypeDef) {
+      attributes.push({
+        text: 'ExplicitlyCreated',
+        attribute_def: sourceTypeDef.id
+      })
+    }
+
     textFields.forEach(field => {
       if (values[field]) {
         const attribute_def = selectDefinitionByName(attributeDefs, field)
