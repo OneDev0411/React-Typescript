@@ -154,8 +154,8 @@ class CreateOffer extends React.Component {
       return buyerName.length > 0
     }
 
-    if (!this.isLeaseDeal()) {
-      return _.size(escrowOfficers) > 0
+    if (!this.isLeaseDeal() && _.size(escrowOfficers) === 0) {
+      return false
     }
 
     return (
