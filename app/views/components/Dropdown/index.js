@@ -1,18 +1,18 @@
 import React from 'react'
-import styled from 'styled-components'
 import Downshift from 'downshift'
 
 import Card from '../Card'
 import { Item } from './Item'
+import ShadowButton from '../Button/ShadowButton'
 import ArrowDropDown from '../SvgIcons/ArrowDropDown/IconArrowDropDown'
 
-export const Button = styled.button`
+export const Button = ShadowButton.extend`
+  position: relative;
+  width: ${props => (props.fullWidth ? '100%' : 'auto')};
   display: flex;
   align-items: center;
-  padding: 0;
-  color: #2196f3;
-  border-width: 0;
-  background: transparent;
+  justify-content: ${props => (props.fullWidth ? 'space-between' : 'initial')};
+  font-weight: normal;
 
   &:focus {
     outline-width: 2px;
@@ -21,6 +21,8 @@ export const Button = styled.button`
 
 export const Icon = ArrowDropDown.extend`
   position: relative;
+  align-self: flex-end;
+  display: flex;
   width: 2em;
   height: 2em;
   fill: #8da2b5;
@@ -32,6 +34,7 @@ export const Dropdown = ({
   input,
   style,
   onSelect,
+  fullWidth,
   id: buttonId,
   itemToString,
   itemRenderer,
@@ -55,6 +58,7 @@ export const Dropdown = ({
       <div style={style}>
         <Button
           {...getButtonProps({
+            fullWidth,
             id: buttonId,
             name: input.name
           })}
@@ -67,6 +71,7 @@ export const Dropdown = ({
             <Card
               depth={3}
               style={{
+                width: fullWidth ? '100%' : 'auto',
                 maxHeight: 200,
                 position: 'absolute',
                 left: 0,

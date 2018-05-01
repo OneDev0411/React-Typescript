@@ -98,13 +98,18 @@ export function getNormalizedContact(contact, attributeDefs) {
   })
 
   _.each(contact.summary, (value, name) => {
-    const attribute = getObjectOfContractAttribute(contact, attributeDefs, name)
+    const attributes = getObjectOfContractAttribute(
+      contact,
+      attributeDefs,
+      name
+    )
 
-    if (!attribute) {
+    if (!attributes) {
       return false
     }
 
-    normalizedContact[name] = attribute.length === 1 ? attribute[0] : attribute
+    normalizedContact[name] =
+      attributes.length === 1 ? attributes[0] : attributes
   })
 
   return normalizedContact
@@ -116,19 +121,19 @@ export function getNormalizedContact(contact, attributeDefs) {
  * @param {String} attributeName - name of attribute
  */
 function getValueOfContactAttribute(contact, attributeDefs, attributeName) {
-  const attributeObject = getObjectOfContractAttribute(
+  const attributes = getObjectOfContractAttribute(
     contact,
     attributeDefs,
     attributeName
   )
 
-  if (!attributeObject || attributeObject.length === 0) {
+  if (!attributes || attributes.length === 0) {
     return ''
   }
 
-  const dataType = attributeObject.attribute_def.data_type
+  const dataType = attributes[0].attribute_def.data_type
 
-  return attributeObject[dataType]
+  return attributes[0][dataType]
 }
 
 /**
@@ -146,9 +151,7 @@ function getObjectOfContractAttribute(contact, attributeDefs, attributeName) {
 
   const attributes = getContactAttribute(contact, definition)
 
-  return attributes && Array.isArray(attributes) && attributes.length === 1
-    ? attributes[0]
-    : attributes
+  return attributes
 }
 
 /**
@@ -188,29 +191,39 @@ export function convertContactToRole(contact, attributeDefs) {
 }
 
 /**
+ * returns list of contact fields (mapped to equivalent role fields)
+ */
+function getContactFields() {
+  return {
+    title: 'legal_prefix',
+    first_name: 'legal_first_name',
+    middle_name: 'legal_middle_name',
+    last_name: 'legal_last_name',
+    email: 'email',
+    phone_number: 'phone_number',
+    company: 'company_title'
+  }
+}
+
+/**
  * Converts a role object to a contact model
  * @param {Object} formData - Role's object
  */
-export function convertRoleToContact(form = {}) {
-  const {
-    email,
-    phone_number,
-    company_title,
-    legal_prefix,
-    legal_first_name,
-    legal_middle_name,
-    legal_last_name
-  } = form
-
-  return {
-    emails: email ? [email] : [],
-    phone_numbers: phone_number ? [phone_number] : [],
-    companies: company_title ? [company_title] : [],
-    title: legal_prefix,
-    first_name: legal_first_name,
-    middle_name: legal_middle_name,
-    last_name: legal_last_name
+export function convertRoleToContact(form = {}, attributeDefs) {
+  const contact = {
+    attributes: []
   }
+
+  _.each(getContactFields(), (roleAttribute, contactAttribute) => {
+    const definition = selectDefinitionByName(attributeDefs, contactAttribute)
+
+    contact.attributes.push({
+      attribute_def: definition.id,
+      [definition.data_type]: form[roleAttribute]
+    })
+  })
+
+  return contact
 }
 
 /**
@@ -220,44 +233,43 @@ export function convertRoleToContact(form = {}) {
 export function getContactDiff(form = {}, attributeDefs) {
   const diff = []
 
-  const contactFields = {
-    title: 'legal_prefix',
-    first_name: 'legal_first_name',
-    middle_name: 'legal_middle_name',
-    last_name: 'legal_last_name',
-    email: 'email',
-    phone_number: 'phone_number',
-    company_title: 'company'
-  }
-
-  _.each(contactFields, (roleAttribute, contactAttribute) => {
+  _.each(getContactFields(), (roleAttribute, contactAttribute) => {
     const attributes = getObjectOfContractAttribute(
       form.contact,
       attributeDefs,
       contactAttribute
     )
+    const definition = selectDefinitionByName(attributeDefs, contactAttribute)
+    const roleFieldValue = form[roleAttribute]
 
-    if (!attributes) {
+    if (!attributes || !roleFieldValue) {
       return false
     }
 
-    const definition = selectDefinitionByName(attributeDefs, contactAttribute)
+    const valueIndex = _.findIndex(
+      attributes,
+      attr => attr[definition.data_type] === roleFieldValue
+    )
 
-    // is new attribute
-    if (form[roleAttribute] && attributes.length === 0) {
+    if (valueIndex > -1) {
+      return
+    }
+
+    if (definition.singular && attributes.length === 1) {
       diff.push({
-        definitionId: definition.id,
-        [definition.data_type]: form[roleAttribute]
+        id: attributes[0].id,
+        attribute_def: definition.id,
+        [definition.data_type]: roleFieldValue
+      })
+    } else {
+      diff.push({
+        attribute_def: definition.id,
+        [definition.data_type]: roleFieldValue
       })
     }
-
-    if (attributes.length > 0) {
-    }
-
-    console.log('>>>>', contactAttribute, form[roleAttribute], attributes)
   })
 
-  console.log('=====>', diff)
+  return diff
 }
 
 /**

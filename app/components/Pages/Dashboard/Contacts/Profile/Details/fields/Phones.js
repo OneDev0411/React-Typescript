@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { isPhoneNumber } from '../../../../../../../utils/validations'
 import MultiFields from '../components/MultiFields'
 
 const DEFAULT_LABELS = {
@@ -26,34 +27,13 @@ const DEFAULT_LABELS = {
 }
 
 export default function Phones({ contact }) {
-  const validator = async phone => {
-    if (phone) {
-      const {
-        PhoneNumberUtil
-      } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
-      const phoneUtil = PhoneNumberUtil.getInstance()
-
-      try {
-        let phoneNumber = phoneUtil.parse(phone, 'US')
-
-        const isValid = await phoneUtil.isValidNumber(phoneNumber)
-
-        return isValid
-      } catch (error) {
-        return false
-      }
-    } else {
-      return false
-    }
-  }
-
   return (
     <MultiFields
       attributeName="phone_number"
       contact={contact}
       defaultLabels={DEFAULT_LABELS}
       placeholder="313-444-9898"
-      validator={validator}
+      validator={isPhoneNumber}
       validationText="Invalid phone number."
     />
   )

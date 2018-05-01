@@ -161,6 +161,11 @@ const AsyncContacts = Load({
     import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */)
 })
 
+const AsyncNewContact = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Contacts/NewContact' /* webpackChunkName: "contact" */)
+})
+
 const AsyncContactProfile = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */)
@@ -379,6 +384,7 @@ export default (
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
       <Route path="/dashboard/contacts" component={AsyncContacts} />
+      <Route path="/dashboard/contacts/new" component={AsyncNewContact} />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route
         path="/dashboard/contacts/import/csv"

@@ -6,7 +6,7 @@ import {
   updateRole
 } from '../../../../../../../store_actions/deals'
 import {
-  createNewContact,
+  createContacts,
   upsertContactAttributes
 } from '../../../../../../../store_actions/contacts'
 import {
@@ -35,7 +35,7 @@ class RoleFormWrapper extends React.Component {
       user,
       attributeDefs,
       upsertContactAttributes,
-      createNewContact,
+      createContacts,
       updateRole,
       createRoles,
       onUpsertRole = () => null,
@@ -44,57 +44,55 @@ class RoleFormWrapper extends React.Component {
     const fullName = getLegalFullName(form)
     const isNewRecord = !user || !user.role
 
-    // try {
-    this.setState({
-      isSaving: true
-    })
+    try {
+      this.setState({
+        isSaving: true
+      })
 
-    if (isNewRecord) {
-      if (form.contact) {
-        const upsertedAttributes = getContactDiff(form, attributeDefs)
+      if (isNewRecord) {
+        if (form.contact) {
+          const upsertedAttributes = getContactDiff(form, attributeDefs)
 
-        return false
+          if (upsertedAttributes.length > 0) {
+            await upsertContactAttributes(form.contact.id, upsertedAttributes)
 
-        if (upsertedAttributes.length > 0) {
-          await upsertContactAttributes(form.contact.id, upsertedAttributes)
-
-          this.showNotification(`${fullName} Updated.`)
+            this.showNotification(`${fullName} Updated.`)
+          }
         }
+
+        await createContacts(convertRoleToContact(form, attributeDefs))
+        this.showNotification(`New Contact Created: ${fullName}`)
+
+        if (deal) {
+          await createRoles(deal.id, [form])
+          this.showNotification('Contact added to the deal.')
+        }
+      } else if (deal) {
+        await updateRole(deal.id, form)
       }
 
-      await createNewContact(convertRoleToContact(form))
-      this.showNotification(`New Contact Created: ${fullName}`)
+      onUpsertRole({
+        id: new Date().getTime(),
+        ...form
+      })
 
-      if (deal) {
-        await createRoles(deal.id, [form])
-        this.showNotification('Contact added to the deal.')
+      onHide()
+    } catch (e) {
+      console.log(e)
+
+      if (!e.response) {
+        return this.showNotification(`Error: ${e.message}`, 'error')
       }
-    } else if (deal) {
-      await updateRole(deal.id, form)
+
+      const { attributes } = e.response.body
+      const field = attributes && Object.keys(attributes)[0]
+
+      this.showNotification(`${field || 'Entered data'} is invalid`, 'error')
+    } finally {
+      this.setState({
+        isSaving: false
+      })
     }
-
-    onUpsertRole({
-      id: new Date().getTime(),
-      ...form
-    })
-
-    onHide()
-    // } catch (e) {
-    //   console.log(e)
-
-    //   if (!e.response) {
-    //     return this.showNotification(`Error: ${e.message}`, 'error')
-    //   }
-
-    //   const { attributes } = e.response.body
-    //   const field = attributes && Object.keys(attributes)[0]
-
-    //   this.showNotification(`${field || 'Entered data'} is invalid`, 'error')
-    // } finally {
-    //   this.setState({
-    //     isSaving: false
-    //   })
-    // }
   }
 
   render() {
@@ -126,6 +124,6 @@ export default connect(mapStateToProps, {
   notify,
   updateRole,
   createRoles,
-  createNewContact,
+  createContacts,
   upsertContactAttributes
 })(RoleFormWrapper)

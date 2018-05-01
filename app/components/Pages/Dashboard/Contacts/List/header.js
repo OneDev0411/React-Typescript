@@ -1,10 +1,12 @@
 import React from 'react'
-import AddContactModal from '../AddContactModal'
-import Import from './Import'
-import HeaderSearch from '../../../../Partials/headerSearch'
+import { browserHistory } from 'react-router'
 import cn from 'classnames'
 
-export default ({ user, contactsCount, onNewContact, onInputChange }) => {
+import Import from './Import'
+import HeaderSearch from '../../../../Partials/headerSearch'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
+
+function Header({ user, contactsCount, onInputChange }) {
   if (contactsCount === 0) {
     return false
   }
@@ -27,10 +29,12 @@ export default ({ user, contactsCount, onNewContact, onInputChange }) => {
 
           <div className="list--header-row--col">
             <Import userId={user.id} />
-            <AddContactModal
-              user={user}
-              onNewContact={id => onNewContact(id)}
-            />
+            <ActionButton
+              style={{ padding: '0.75em' }}
+              onClick={() => browserHistory.push('/dashboard/contacts/new')}
+            >
+              New Contact
+            </ActionButton>
           </div>
         </div>
       </div>
@@ -41,3 +45,5 @@ export default ({ user, contactsCount, onNewContact, onInputChange }) => {
     </div>
   )
 }
+
+export default Header
