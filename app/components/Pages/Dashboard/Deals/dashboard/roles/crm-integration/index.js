@@ -58,10 +58,10 @@ class RoleFormWrapper extends React.Component {
 
             this.showNotification(`${fullName} Updated.`)
           }
+        } else {
+          await createContacts(convertRoleToContact(form, attributeDefs))
+          this.showNotification(`New Contact Created: ${fullName}`)
         }
-
-        await createContacts(convertRoleToContact(form, attributeDefs))
-        this.showNotification(`New Contact Created: ${fullName}`)
 
         if (deal) {
           await createRoles(deal.id, [form])
