@@ -154,7 +154,11 @@ function getContactAttributeObject(contact, attributeDefs, attributeName) {
  * @param {Object} attributeDefs - list of definitions
  */
 export function convertContactToRole(contact, attributeDefs) {
-  const normalizedContact = getNormalizedContact(contact, attributeDefs)
+  const { summary, emails, phones, companies } = getNormalizedContact(
+    contact,
+    attributeDefs
+  )
+
   const form = {
     contact
   }
@@ -174,14 +178,15 @@ export function convertContactToRole(contact, attributeDefs) {
     )
   })
 
-  form.email = normalizedContact.summary.email
-  form.phone_number = normalizedContact.summary.phone_number
-  form.company = normalizedContact.summary.company
-  form.emails = normalizedContact.emails
-  form.phones = normalizedContact.phones
-  form.companies = normalizedContact.companies
-
-  return form
+  return {
+    ...form,
+    emails,
+    phones,
+    companies,
+    email: summary.email,
+    phone_number: summary.phone_number,
+    company: summary.company
+  }
 }
 
 /**
