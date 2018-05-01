@@ -98,7 +98,7 @@ export function getNormalizedContact(contact, attributeDefs) {
   })
 
   _.each(contact.summary, (value, name) => {
-    const attributes = getObjectOfContactAttribute(contact, attributeDefs, name)
+    const attributes = getContactAttributeObject(contact, attributeDefs, name)
 
     if (!attributes) {
       return false
@@ -116,8 +116,8 @@ export function getNormalizedContact(contact, attributeDefs) {
  * @param {Object} contact - the contact object
  * @param {String} attributeName - name of attribute
  */
-function getValueOfContactAttribute(contact, attributeDefs, attributeName) {
-  const attributes = getObjectOfContactAttribute(
+function getContactAttributeValue(contact, attributeDefs, attributeName) {
+  const attributes = getContactAttributeObject(
     contact,
     attributeDefs,
     attributeName
@@ -138,7 +138,7 @@ function getValueOfContactAttribute(contact, attributeDefs, attributeName) {
  * @param {Object} attributeDefs - list of definitions
  * @param {String} attributeName - attribute name
  */
-function getObjectOfContactAttribute(contact, attributeDefs, attributeName) {
+function getContactAttributeObject(contact, attributeDefs, attributeName) {
   const definition = selectDefinitionByName(attributeDefs, attributeName)
 
   if (!definition) {
@@ -167,7 +167,7 @@ export function convertContactToRole(contact, attributeDefs) {
   }
 
   _.each(roleFields, (contactAttribute, roleAttribute) => {
-    form[roleAttribute] = getValueOfContactAttribute(
+    form[roleAttribute] = getContactAttributeValue(
       contact,
       attributeDefs,
       contactAttribute
@@ -232,7 +232,7 @@ export function getContactDiff(form = {}, attributeDefs) {
   const diff = []
 
   _.each(getContactFields(), (roleAttribute, contactAttribute) => {
-    const attributes = getObjectOfContactAttribute(
+    const attributes = getContactAttributeObject(
       form.contact,
       attributeDefs,
       contactAttribute
