@@ -98,7 +98,7 @@ export function getNormalizedContact(contact, attributeDefs) {
   })
 
   _.each(contact.summary, (value, name) => {
-    const attribute = getObjectOfContractAttribute(contact, name)
+    const attribute = getObjectOfContractAttribute(contact, attributeDefs, name)
 
     if (!attribute) {
       return false
@@ -122,13 +122,13 @@ function getValueOfContactAttribute(contact, attributeDefs, attributeName) {
     attributeName
   )
 
-  if (!attributeObject) {
+  if (!attributeObject || attributeObject.length === 0) {
     return ''
   }
 
-  const definition = attributeObject.attribute_def
+  const dataType = attributeObject.attribute_def.data_type
 
-  return contact[attributeName][definition.data_type]
+  return attributeObject[dataType]
 }
 
 /**
@@ -138,15 +138,17 @@ function getValueOfContactAttribute(contact, attributeDefs, attributeName) {
  * @param {String} attributeName - attribute name
  */
 function getObjectOfContractAttribute(contact, attributeDefs, attributeName) {
-  console.log('>>>>', attributeDefs, attributeName)
-
   const definition = selectDefinitionByName(attributeDefs, attributeName)
 
   if (!definition) {
     return null
   }
 
-  return getContactAttribute(contact, definition)
+  const attributes = getContactAttribute(contact, definition)
+
+  return attributes && Array.isArray(attributes) && attributes.length === 1
+    ? attributes[0]
+    : attributes
 }
 
 /**
@@ -182,8 +184,6 @@ export function convertContactToRole(contact, attributeDefs) {
   form.phones = normalizedContact.phones
   form.companies = normalizedContact.companies
 
-  console.log(form)
-
   return form
 }
 
@@ -218,7 +218,7 @@ export function convertRoleToContact(form = {}) {
  * @param {Object} form - role form data
  */
 export function getContactDiff(form = {}, attributeDefs) {
-  const diff = {}
+  const diff = []
 
   const contactFields = {
     title: 'legal_prefix',
@@ -231,42 +231,33 @@ export function getContactDiff(form = {}, attributeDefs) {
   }
 
   _.each(contactFields, (roleAttribute, contactAttribute) => {
-    const attribute = getObjectOfContractAttribute(
-      contact,
+    const attributes = getObjectOfContractAttribute(
+      form.contact,
       attributeDefs,
       contactAttribute
     )
 
-    if (!attribute) {
+    if (!attributes) {
       return false
     }
 
-    console.log('>>>>', contactAttribute, form[roleAttribute], attribute)
+    const definition = selectDefinitionByName(attributeDefs, contactAttribute)
+
+    // is new attribute
+    if (form[roleAttribute] && attributes.length === 0) {
+      diff.push({
+        definitionId: definition.id,
+        [definition.data_type]: form[roleAttribute]
+      })
+    }
+
+    if (attributes.length > 0) {
+    }
+
+    console.log('>>>>', contactAttribute, form[roleAttribute], attributes)
   })
 
-  // const attributes = []
-  // const types = [
-  //   { singularName: 'email', pluralName: 'emails' },
-  //   { singularName: 'phone_number', pluralName: 'phones' },
-  //   { singularName: 'company', pluralName: 'companies' }
-  // ]
-  // types.forEach(({ singularName, pluralName }) => {
-  //   const isNew =
-  //     form[singularName] &&
-  //     form[pluralName] &&
-  //     form[pluralName]
-  //       .map(item => item[singularName])
-  //       .includes(form[singularName]) === false
-  //   if (isNew) {
-  //     const definition = selectDefinitionByName(attributeDefs, singularName)
-  //     attributes.push({
-  //       definitionId: definition.id,
-  //       [definition.data_type]: form[singularName],
-  //       is_primary: form[pluralName].length === 0
-  //     })
-  //   }
-  // })
-  // return attributes
+  console.log('=====>', diff)
 }
 
 /**
