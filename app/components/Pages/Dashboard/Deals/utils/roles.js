@@ -145,9 +145,7 @@ function getObjectOfContactAttribute(contact, attributeDefs, attributeName) {
     return null
   }
 
-  const attributes = getContactAttribute(contact, definition)
-
-  return attributes
+  return getContactAttribute(contact, definition)
 }
 
 /**
