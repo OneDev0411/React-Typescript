@@ -12,9 +12,10 @@ const defaultOptions = {
  * we wish receiving from server.
  * @returns {Array} Returns new contacts.
  */
-
-export async function createContacts(contact, options = defaultOptions) {
-  const contacts = Array.isArray(contact) ? contact : [contact]
+export async function createContacts(contacts, options = defaultOptions) {
+  if (!Array.isArray(contacts)) {
+    throw new Error(`contacts is ${contacts}. It must be array of contacts.`)
+  }
 
   if (contacts.length === 0) {
     throw new Error('contacts is empty!')
