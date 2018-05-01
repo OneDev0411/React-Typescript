@@ -63,12 +63,6 @@ class App extends Component {
       if (!('WebkitAppearance' in document.documentElement.style)) {
         import('simplebar')
       }
-
-      if (user) {
-        this.initializeContactSocket(user)
-        this.initializeChatSocket(user)
-        this.initializeDealSocket(user)
-      }
     }
   }
 
@@ -91,6 +85,9 @@ class App extends Component {
           teams: await dispatch(getTeams())
         }
       }
+
+      // init sockets
+      this.initializeSockets(user)
 
       // load rooms
       this.initialRooms()
@@ -140,6 +137,12 @@ class App extends Component {
 
   getBrand() {
     this.props.dispatch(getBrand())
+  }
+
+  initializeSockets(user) {
+    this.initializeChatSocket(user)
+    this.initializeDealSocket(user)
+    this.initializeContactSocket(user)
   }
 
   initializeContactSocket(user) {

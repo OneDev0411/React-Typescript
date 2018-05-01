@@ -1,4 +1,5 @@
 import io from 'socket.io-client'
+import { EventEmitter } from 'events'
 import store from '../../stores'
 import { changeSocketStatus } from '../../store_actions/socket'
 import config from '../../../config/public'
@@ -19,7 +20,6 @@ export default class Socket {
   static authenticated = false
 
   constructor(user) {
-    // set user
     this.user = user
 
     // singleton pattern
@@ -27,13 +27,16 @@ export default class Socket {
       return false
     }
 
+    // bind socket to window
+    window.socket = socket
+
+    // create emitter instance
+    Socket.events = new EventEmitter()
+
     // create authentication
     if (Socket.authenticated === false) {
       Socket.authenticate(user)
     }
-
-    // bind socket to window
-    window.socket = socket
 
     // bind Reconnecting and Reconnect socket
     window.socket.on('reconnecting', this.onReconnecting.bind(this))
@@ -59,18 +62,23 @@ export default class Socket {
       return false
     }
 
-    socket.emit('Authenticate', user.access_token, (err, user) => {
-      console.log('[Socket] Authentication done', err)
+    socket.emit('Authenticate', user.access_token, (err, response) => {
+      console.log('[Socket] Authentication Done')
 
-      if (err || !user) {
+      if (err || !response) {
+        console.log('[Socket] Authentication Failed - e: ', err)
+
         return false
       }
 
-      // update app store
-      store.dispatch(changeSocketStatus('connected'))
-
       // update authenticated flag
       Socket.authenticated = true
+
+      // broadcast UserAuthenticated event
+      Socket.events.emit('UserAuthenticated', user)
+
+      // update app store
+      store.dispatch(changeSocketStatus('connected'))
     })
   }
 
