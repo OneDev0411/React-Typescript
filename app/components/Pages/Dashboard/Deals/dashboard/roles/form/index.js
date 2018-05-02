@@ -192,13 +192,11 @@ export default class Form extends React.Component {
    * validate commission value
    */
   validateCommission(value) {
-    const { form } = this.state
-
-    if (!/^[0-9.]*$/.test(value)) {
+    if (!/\d+(\.\d+)?$/.test(value)) {
       return false
     }
 
-    return form.commission_percentage ? value >= 0 && value <= 100 : value >= 0
+    return true
   }
 
   isValidName(name) {
