@@ -74,7 +74,8 @@ export default class Form extends React.Component {
       } else {
         this.setState({
           nameErrorFields: [],
-          nameErrorMessage: ''
+          nameErrorMessage: '',
+          isFormCompleted: false
         })
       }
 
@@ -91,7 +92,8 @@ export default class Form extends React.Component {
       this.setState(
         {
           form: {},
-          invalidFields: []
+          invalidFields: [],
+          isFormCompleted: false
         }
         // () => showFormModal && this.preselectRoles()
       )
