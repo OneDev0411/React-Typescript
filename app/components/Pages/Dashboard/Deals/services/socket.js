@@ -37,7 +37,7 @@ export default class DealSocket extends Socket {
       const id = getActiveTeamId(user)
 
       window.socket.emit('Brand.Register', id, err => {
-        console.log('[Deal Socket]', 'Registered Brand', id, err)
+        console.log('[Deal Socket]', 'Brand Registered - ', id, err)
       })
     }
   }

@@ -2,6 +2,7 @@ import io from 'socket.io-client'
 import { EventEmitter } from 'events'
 import store from '../../stores'
 import { changeSocketStatus } from '../../store_actions/socket'
+import getTeams from '../../models/user/get-teams'
 import config from '../../../config/public'
 
 // create socket
@@ -35,7 +36,7 @@ export default class Socket {
 
     // create authentication
     if (Socket.authenticated === false) {
-      Socket.authenticate(user)
+      this.authenticate()
     }
 
     // bind Reconnecting and Reconnect socket
@@ -53,8 +54,10 @@ export default class Socket {
   /**
    * authenticate user
    */
-  static authenticate(user) {
+  authenticate() {
     console.log('[Socket] Authenticating')
+
+    const { user } = this
 
     if (!user || !user.access_token) {
       console.error('[Socket] Can not authenticate user socket')
@@ -74,8 +77,9 @@ export default class Socket {
       // update authenticated flag
       Socket.authenticated = true
 
-      // broadcast UserAuthenticated event
-      Socket.events.emit('UserAuthenticated', user)
+      this.getUserWithTeams(user).then(userWithTeams =>
+        Socket.events.emit('UserAuthenticated', userWithTeams)
+      )
 
       // update app store
       store.dispatch(changeSocketStatus('connected'))
@@ -121,10 +125,30 @@ export default class Socket {
     console.log('[Socket] Reconnected')
 
     // authenticate again
-    Socket.authenticate(this.user)
+    this.authenticate()
 
     // emit connected message
     store.dispatch(changeSocketStatus('connected'))
+  }
+
+  /**
+   * returns user with its teams
+   */
+  async getUserWithTeams(user) {
+    if (user.teams) {
+      return user
+    }
+
+    const userState = store.getState().user
+
+    if (userState.teams) {
+      return userState
+    }
+
+    return {
+      ...user,
+      teams: await getTeams()
+    }
   }
 
   /**

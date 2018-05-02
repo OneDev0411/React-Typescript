@@ -54,6 +54,9 @@ class App extends Component {
     // check branding
     this.getBrand()
 
+    // init sockets
+    this.initializeSockets(user)
+
     if (typeof window !== 'undefined') {
       window.Intercom &&
         window.Intercom('onShow', () => dispatch(activeIntercom()))
@@ -85,9 +88,6 @@ class App extends Component {
           teams: await dispatch(getTeams())
         }
       }
-
-      // init sockets
-      this.initializeSockets(user)
 
       // load rooms
       this.initialRooms()

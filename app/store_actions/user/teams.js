@@ -1,7 +1,7 @@
 import * as actionsType from '../../constants/user'
 import getTeams from '../../models/user/get-teams'
 
-export default function getUser(user = {}) {
+export default function getUserTeams(user = {}) {
   return async dispatch => {
     const teams = await getTeams(user)
 
