@@ -1,7 +1,7 @@
 .c-filters {
   position: fixed;
   top: 13.2rem;
-  left: 6rem;
+  left: 12rem;
   width: 400px;
   height: calc(100vh - 15.8rem);
   overflow: hidden;
@@ -11,7 +11,7 @@
   border-radius: 5px;
   background-color: #f8f8f8;
   .l-listings--logged & {
-    left: 21rem;
+    left: 23rem;
   }
   &.c-filters--isOpen {
     pointer-events: auto;
