@@ -25,7 +25,7 @@ export class FileManager extends React.Component {
     this.state = {
       filter: '',
       isDeleting: [],
-      isTaskChanging: [],
+      updatingFiles: {},
       selectedRows: {}
     }
 
@@ -240,28 +240,30 @@ export class FileManager extends React.Component {
     }?backTo=files`
   }
 
-  async onSelectTask(file, taskId) {
+  async onSelectTask(file, taskId = null) {
     const { user, tasks, moveTaskFile, deal } = this.props
-
-    const { isTaskChanging } = this.state
-
-    if (!taskId) {
-      return
-    }
+    const { updatingFiles } = this.state
+    const task = taskId ? tasks[taskId] : null
 
     this.setState({
-      isTaskChanging: [...isTaskChanging, file.id]
+      updatingFiles: {
+        ...updatingFiles,
+        [file.id]: {
+          id: file.id,
+          taskId
+        }
+      }
     })
 
-    await moveTaskFile(user, deal.id, tasks[taskId], file)
+    await moveTaskFile(user, deal.id, task, file)
 
     this.setState({
-      isTaskChanging: isTaskChanging.filter(id => id !== file.id)
+      updatingFiles: _.omit(updatingFiles, ({ id }) => id === file.id)
     })
   }
 
   getColumns(rows) {
-    const { selectedRows, isDeleting, isTaskChanging } = this.state
+    const { selectedRows, isDeleting, updatingFiles } = this.state
     const { deal, tasks } = this.props
 
     return [
@@ -306,16 +308,19 @@ export class FileManager extends React.Component {
         Cell: ({ original: file }) => (
           <Fragment>
             <TasksDropDown
-              moveToParentFolder="moveToParentFolder"
-              showStashOption={!!file.taskId}
+              showStashOption={file.taskId !== null}
               searchable
               deal={deal}
               onSelectTask={taskId => this.onSelectTask(file, taskId)}
-              selectedTask={tasks[file.taskId]}
+              selectedTask={
+                updatingFiles[file.id]
+                  ? tasks[updatingFiles[file.id].taskId]
+                  : tasks[file.taskId]
+              }
               stashOptionText="Move it to my Files"
             />
 
-            {isTaskChanging.includes(file.id) && (
+            {updatingFiles[file.id] && (
               <i
                 className="fa fa-spinner fa-spin"
                 style={{ marginLeft: '16px' }}
@@ -364,7 +369,7 @@ export class FileManager extends React.Component {
 
             <Dropdown.Menu>
               <li>
-                {isDeleting.indexOf(file.id) > -1 ? (
+                {isDeleting.includes(file.id) ? (
                   <span>
                     <i className="fa fa-spinner fa-spin" /> Deleting ...
                   </span>
