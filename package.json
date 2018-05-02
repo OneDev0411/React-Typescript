@@ -76,7 +76,7 @@
     "forever": "^0.15.3",
     "fs-extra": "^5.0.0",
     "google-libphonenumber": "^3.0.9",
-    "google-map-react": "^0.26.0",
+    "google-map-react": "^0.34.0",
     "google-maps": "^3.2.1",
     "history": "^4.7.2",
     "hogan.js": "^3.0.2",

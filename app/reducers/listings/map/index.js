@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import drawing from './drawing'
+import userLocation from './user-location'
 import * as actionsType from '../../../constants/listings/map'
 
 // initial map options(props) schema
@@ -59,6 +60,7 @@ const hoveredMarkerId = (state = -1, action) => {
 const map = combineReducers({
   props,
   drawing,
+  userLocation,
   autoMove,
   hoveredMarkerId
 })
