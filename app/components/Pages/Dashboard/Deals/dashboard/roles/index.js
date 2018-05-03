@@ -2,31 +2,25 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import UserAvatar from '../../../../../Partials/UserAvatar'
-import UpsertRole from './upsert-role'
+import AddRole from './add-role'
 import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import { roleName } from '../../utils/roles'
-import AddRoleModal from './add-role-modal'
+import RoleCrmIntegration from './crm-integration'
 
 class Roles extends React.Component {
   state = {
+    user: null,
     deletingRoleId: null,
-    showAddRoleModal: false
+    showRoleModal: false
   }
 
-  setSelectedRole = role => {
-    this.setState({
-      form: role,
-      showAddRoleModal: true
-    })
-  }
-
-  getUserFullName = role =>
+  getFullName = role =>
     role.legal_full_name ||
     (role.user && role.user.display_name) ||
     role.company_title
 
-  getUserFullNameForAvatar = role => {
+  getAvatarTitle = role => {
     const { user, legal_first_name, legal_last_name, company_title } = role
     const fullName =
       `${legal_first_name} ${legal_last_name}`.trim() || company_title
@@ -34,33 +28,11 @@ class Roles extends React.Component {
     return fullName || (user && user.display_name)
   }
 
-  handleOnClick = role => {
-    const { confirmation, isRequiredEmail, onSelect } = this.props
-
-    if (!role.email && isRequiredEmail) {
-      return confirmation({
-        message: `${role.legal_first_name} has no email!`,
-        description: `Add ${role.legal_first_name}'s email to continue.`,
-        confirmLabel: 'Add Email',
-        onConfirm: () => this.setSelectedRole(role)
-      })
-    }
-
-    if (typeof onSelect === 'function') {
-      onSelect(role)
-
-      return
-    }
-
-    this.setSelectedRole(role)
-  }
-
   onRequestRemoveRole = (e, user) => {
+    e.stopPropagation()
+
     const { deal, confirmation } = this.props
     const { deal_type } = deal
-
-    // stop propagating
-    e.stopPropagation()
 
     if (
       (deal_type === 'Buying' && user.role === 'BuyerAgent') ||
@@ -113,97 +85,114 @@ class Roles extends React.Component {
     }
   }
 
-  closeAddRoleModal = () => {
-    this.setState({ showAddRoleModal: false })
+  onSelectRole = role => {
+    const { confirmation, isEmailRequired, onSelect } = this.props
+
+    if (!role.email && isEmailRequired) {
+      return confirmation({
+        message: `${role.legal_first_name} has no email!`,
+        description: `Add ${role.legal_first_name}'s email to continue.`,
+        confirmLabel: 'Add Email',
+        onConfirm: () => this.setSelectedRole(role)
+      })
+    }
+
+    if (typeof onSelect === 'function') {
+      return onSelect(role)
+    }
+
+    this.setSelectedRole(role)
+  }
+
+  setSelectedRole = user => {
+    this.setState({
+      user,
+      showRoleModal: true
+    })
+  }
+
+  closeRoleModal = () => {
+    this.setState({ showRoleModal: false })
   }
 
   render() {
-    const {
-      deal,
-      allowedRoles,
-      roles,
-      allowDeleteRole,
-      isRequiredEmail
-    } = this.props
-    const { deletingRoleId, form, showAddRoleModal } = this.state
+    const { deal, roles, allowedRoles, allowDeleteRole } = this.props
+    const { user, deletingRoleId, showRoleModal } = this.state
 
     return (
       <div className="deal-info-section deal-roles">
         <div className="deal-info-title">CONTACTS</div>
 
-        {deal.roles &&
-          deal.roles
-            .filter(
-              roleId =>
-                !allowedRoles || allowedRoles.includes(roles[roleId].role)
-            )
-            .map(roleId => {
-              const role = roles[roleId]
-              const { id, user } = role
+        {(deal.roles || [])
+          .filter(
+            roleId => !allowedRoles || allowedRoles.includes(roles[roleId].role)
+          )
+          .map(roleId => {
+            const role = roles[roleId]
+            const { id, user } = role
 
-              return (
-                <div
-                  key={id}
-                  className="item"
-                  onClick={() => this.handleOnClick(role)}
-                >
-                  <div className="role-avatar">
-                    <UserAvatar
-                      size={32}
-                      color="#8DA2B5"
-                      showStateIndicator={false}
-                      name={this.getUserFullNameForAvatar(role)}
-                      image={user ? user.profile_image_url : null}
-                    />
-                  </div>
-
-                  <div className="name">
-                    <div className="title">{this.getUserFullName(role)}</div>
-                    <div className="role">{roleName(role.role)}</div>
-                  </div>
-
-                  {allowDeleteRole && (
-                    <div className="cta">
-                      {deletingRoleId &&
-                        id === deletingRoleId && (
-                          <i className="fa fa-spinner fa-spin" />
-                        )}
-
-                      {!deletingRoleId && (
-                        <i
-                          onClick={e => this.onRequestRemoveRole(e, role)}
-                          className="fa fa-delete fa-times"
-                        />
-                      )}
-                    </div>
-                  )}
+            return (
+              <div
+                key={id}
+                className="item"
+                onClick={() => this.onSelectRole(role)}
+              >
+                <div className="role-avatar">
+                  <UserAvatar
+                    size={32}
+                    color="#8DA2B5"
+                    showStateIndicator={false}
+                    name={this.getAvatarTitle(role)}
+                    image={user ? user.profile_image_url : null}
+                  />
                 </div>
-              )
-            })}
 
-        <AddRoleModal
+                <div className="name">
+                  <div className="title">{this.getFullName(role)}</div>
+                  <div className="role">{roleName(role.role)}</div>
+                </div>
+
+                {allowDeleteRole && (
+                  <div className="cta">
+                    {deletingRoleId &&
+                      id === deletingRoleId && (
+                        <i className="fa fa-spinner fa-spin" />
+                      )}
+
+                    {!deletingRoleId && (
+                      <i
+                        onClick={e => this.onRequestRemoveRole(e, role)}
+                        className="fa fa-delete fa-times"
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+
+        <RoleCrmIntegration
           deal={deal}
-          role={form}
-          isOpen={showAddRoleModal}
+          user={user}
+          modalTitle="Update Contact"
+          isOpen={showRoleModal}
           allowedRoles={allowedRoles}
-          isRequiredEmail={isRequiredEmail}
-          closeHandler={this.closeAddRoleModal}
+          onHide={this.closeRoleModal}
         />
 
-        <UpsertRole deal={deal} allowedRoles={allowedRoles} />
+        <AddRole deal={deal} allowedRoles={allowedRoles} />
       </div>
     )
   }
 }
 
-function mapToProps({ deals }) {
-  const { roles } = deals
-
-  return { roles }
-}
-
-export default connect(mapToProps, {
-  notify,
-  deleteRole,
-  confirmation
-})(Roles)
+export default connect(
+  ({ deals }) => ({
+    roles: deals.roles
+  }),
+  {
+    notify,
+    deleteRole,
+    confirmation
+  }
+)(Roles)

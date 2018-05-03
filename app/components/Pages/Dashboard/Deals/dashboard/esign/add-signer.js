@@ -14,7 +14,7 @@ export default ({ show, deal, onHide, allowedRoles, onAddRecipient }) => (
     <Modal.Body>
       <Roles
         deal={deal}
-        isRequiredEmail
+        isEmailRequired
         allowDeleteRole={false}
         allowedRoles={allowedRoles}
         onSelect={onAddRecipient}
