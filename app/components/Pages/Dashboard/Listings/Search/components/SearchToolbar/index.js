@@ -9,6 +9,7 @@ const SearchToolbar = () => (
     <LocationButton />
     <SearchBox />
     <DrawingButton />
+    <LocationButton />
     <StatusBar />
   </div>
 )
