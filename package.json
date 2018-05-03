@@ -76,7 +76,7 @@
     "forever": "^0.15.3",
     "fs-extra": "^5.0.0",
     "google-libphonenumber": "^3.0.9",
-    "google-map-react": "^0.26.0",
+    "google-map-react": "^0.34.0",
     "google-maps": "^3.2.1",
     "history": "^4.7.2",
     "hogan.js": "^3.0.2",
@@ -226,6 +226,7 @@
     "webpack-dev-middleware": "^2.0.3",
     "webpack-dev-server": "^2.9.7",
     "webpack-hot-middleware": "^2.21.0",
-    "webpack-notifier": "^1.5.0"
+    "webpack-notifier": "^1.5.0",
+    "webpackbar": "^2.6.1"
   }
 }

@@ -61,7 +61,7 @@ export default class extends React.Component {
 
     return (
       <Fragment>
-        <li className="separator">Switch Accounts</li>
+        <li className="separator">Team Switcher</li>
         {user.teams.map(team => {
           const isActiveTeam = team.brand.id === getActiveTeamId(user)
 

@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import { updateTask, setSelectedTask } from '../../../../../../store_actions/deals'
+import {
+  updateTask,
+  setSelectedTask
+} from '../../../../../../store_actions/deals'
 import TaskStatus from '../tasks/status'
 import DeleteTask from './delete-task'
 
@@ -84,28 +87,30 @@ class Header extends React.Component {
             className={cn('title', { isEditingTitle })}
             onClick={() => this.toggleEdit()}
           >
-            {isEditingTitle ? (
-              <div className="cta">
-                <span className="save" onClick={e => this.onSave(e)}>
-                  Save
-                </span>
-              </div>
-            ) : (
-              <div className="cta">
-                <i className="fa fa-pencil" />
-              </div>
+            {!isEditingTitle && (
+              <Fragment>
+                <span>{task.title}</span>
+                <div className="cta">
+                  <i className="fa fa-pencil" />
+                </div>
+              </Fragment>
             )}
 
-            {isEditingTitle ? (
-              <textarea
-                autoFocus
-                onClick={e => e.stopPropagation()}
-                defaultValue={task.title}
-                onKeyPress={e => this.onKeyPress(e)}
-                ref={ref => (this.titleInput = ref)}
-              />
-            ) : (
-              <span>{task.title}</span>
+            {isEditingTitle && (
+              <Fragment>
+                <textarea
+                  autoFocus
+                  onClick={e => e.stopPropagation()}
+                  defaultValue={task.title}
+                  onKeyPress={e => this.onKeyPress(e)}
+                  ref={ref => (this.titleInput = ref)}
+                />
+                <div className="cta">
+                  <div className="save" onClick={e => this.onSave(e)}>
+                    Save
+                  </div>
+                </div>
+              </Fragment>
             )}
           </div>
         )}

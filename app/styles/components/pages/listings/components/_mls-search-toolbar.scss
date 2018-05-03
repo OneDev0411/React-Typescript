@@ -5,7 +5,7 @@
   display: flex;
 }
 
-.c-mls-toolbar__drawing-btn,
+.c-mls-toolbar__btn,
 .c-mls-toolbar__search-box {
   display: inline-block;
   border-radius: 5px;
@@ -138,7 +138,7 @@
   }
 }
 
-.c-mls-toolbar__drawing-btn,
+.c-mls-toolbar__btn,
 .c-mls-toolbar__search-box__filter-btn,
 .c-mls-toolbar__search-box__field__input,
 .c-mls-toolbar__search-box__field__clear-btn,
@@ -148,18 +148,17 @@
   }
 }
 
-.c-mls-toolbar__drawing-btn {
+.c-mls-toolbar__btn {
   position: relative;
   height: 4.8rem;
   width: 4.8rem;
-  margin-left: 1rem;
   padding: 0;
   background-color: #fff;
   > svg {
     display: inline-block;
     vertical-align: middle;
   }
-  &[disabled] {
+  &.c-mls-toolbar__btn--disabled {
     cursor: not-allowed;
     &:after {
       content: '';
@@ -171,6 +170,12 @@
       border-radius: inherit;
       background: rgba(0, 0, 0, 0.1);
     }
+  }
+  &.c-mls-toolbar__btn--drawing {
+    margin-left: 1rem;
+  }
+  &.c-mls-toolbar__btn--location {
+    margin-right: 1rem;
   }
 }
 

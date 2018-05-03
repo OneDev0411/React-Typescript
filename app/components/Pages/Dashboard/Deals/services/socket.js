@@ -11,9 +11,6 @@ export default class DealSocket extends Socket {
   constructor(user) {
     super(user)
 
-    // register brand
-    DealSocket.registerBrand(user)
-
     // bind chatroom socket events
     this.bindEvents()
   }
@@ -21,28 +18,26 @@ export default class DealSocket extends Socket {
   async bindEvents() {
     const { socket } = window
 
-    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
+    // event listeners
+    Socket.events.on('UserAuthenticated', this.onUserAuthenticated.bind(this))
 
-    // bind User.Typing
+    // bind socket events
     socket.on('Deal', this.onDealChange.bind(this))
-
-    // on reconnect
-    Rx.Observable.fromEvent(socket, 'reconnect')
-      .throttleTime(20 * 1000)
-      .subscribe(() => this.onReconnected())
   }
 
   /**
    * authenticate user brand
    */
   static registerBrand(user) {
+    console.log('[Deal Socket] Registering Brand')
+
     const acl = getActiveTeamACL(user)
 
-    if (acl.indexOf('Deals') > -1 || acl.indexOf('BackOffice') > -1) {
+    if (acl.includes('Deals') || acl.includes('BackOffice')) {
       const id = getActiveTeamId(user)
-      console.log('[Deal Socket]', 'Registering Brand', id)
+
       window.socket.emit('Brand.Register', id, err => {
-        console.log('[Deal Socket]', 'Registered Brand', id, err)
+        console.log('[Deal Socket]', 'Brand Registered - ', id, err)
       })
     }
   }
@@ -96,13 +91,9 @@ export default class DealSocket extends Socket {
   }
 
   /**
-   * on reconnect
+   * on socket connect
    */
-  onReconnected() {
-    const { user } = this
-
-    console.log('[Deal Socket] Reconnected')
-
+  onUserAuthenticated(user) {
     // register brand
     DealSocket.registerBrand(user)
   }

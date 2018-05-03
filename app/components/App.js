@@ -54,6 +54,9 @@ class App extends Component {
     // check branding
     this.getBrand()
 
+    // init sockets
+    this.initializeSockets(user)
+
     if (typeof window !== 'undefined') {
       window.Intercom &&
         window.Intercom('onShow', () => dispatch(activeIntercom()))
@@ -62,12 +65,6 @@ class App extends Component {
 
       if (!('WebkitAppearance' in document.documentElement.style)) {
         import('simplebar')
-      }
-
-      if (user) {
-        this.initializeContactSocket(user)
-        this.initializeChatSocket(user)
-        this.initializeDealSocket(user)
       }
     }
   }
@@ -140,6 +137,12 @@ class App extends Component {
 
   getBrand() {
     this.props.dispatch(getBrand())
+  }
+
+  initializeSockets(user) {
+    this.initializeChatSocket(user)
+    this.initializeDealSocket(user)
+    this.initializeContactSocket(user)
   }
 
   initializeContactSocket(user) {

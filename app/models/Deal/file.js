@@ -20,7 +20,7 @@ export async function uploadTaskFile(taskId, file, fileName = null) {
   }
 }
 
-export async function copyTaskFile(taskId, file) {
+export async function createTaskFile(taskId, file) {
   try {
     return await new Fetch().post(`/tasks/${taskId}/attachments`).send(file)
   } catch (e) {
@@ -28,7 +28,7 @@ export async function copyTaskFile(taskId, file) {
   }
 }
 
-export async function copyDealFile(dealId, file) {
+export async function createDealFile(dealId, file) {
   try {
     return await new Fetch().post(`/deals/${dealId}/files`).send(file)
   } catch (e) {
@@ -37,7 +37,7 @@ export async function copyDealFile(dealId, file) {
 }
 
 /**
- * delete attachment
+ * delete files from stash
  */
 export async function deleteStashFile(dealId, files) {
   try {
@@ -53,6 +53,6 @@ export default {
   uploadStashFile,
   uploadTaskFile,
   deleteStashFile,
-  copyTaskFile,
-  copyDealFile
+  createTaskFile,
+  createDealFile
 }

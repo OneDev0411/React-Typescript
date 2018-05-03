@@ -21,10 +21,9 @@ const config = {
       'react-dom',
       'react-router',
       'react-redux',
-      // 'moment',
-      // 'lodash',
-      // 'underscore',
-      // 'whatwg-fetch',
+      'moment',
+      'lodash',
+      'underscore',
       'offline-js'
     ]
   },

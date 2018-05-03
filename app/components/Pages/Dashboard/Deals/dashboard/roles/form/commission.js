@@ -14,11 +14,11 @@ export default class Commission extends React.Component {
    * set form commission
    */
   setCommission(value) {
-    const { onChange, validateCommission } = this.props
+    const { onChange } = this.props
 
-    const number = validateCommission(value) ? value : this.getCommissionValue()
+    // const number = validateCommission(value) ? value : this.getCommissionValue()
 
-    onChange(this.getCommissionField(), number)
+    onChange(this.getCommissionField(), value)
   }
 
   /**
@@ -108,11 +108,11 @@ export default class Commission extends React.Component {
             <NumericInput
               name="commission"
               min={0}
-              max={100}
               options={{
                 allowDecimal: true,
                 includeThousandsSeparator: false,
-                integerLimit: 3
+                integerLimit: 5,
+                decimalLimit: 2
               }}
               placeholder={placeholder}
               value={this.getCommissionValue()}

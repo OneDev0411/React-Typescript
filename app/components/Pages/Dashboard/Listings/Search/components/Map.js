@@ -5,7 +5,6 @@ import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import supercluster from 'points-cluster'
-import shallowEqual from 'recompose/shallowEqual'
 import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
@@ -16,7 +15,7 @@ import NotLoggedInMessage from '../../components/NotLoggedInMessage'
 import DrawingRemoveButton from '../../components/DrawingRemoveButton'
 
 import { reset as resetSearchType } from '../../../../../../store_actions/listings/search/set-type'
-
+import { getLocationFromCookies } from '../../../../../../store_actions/listings/map/user-location'
 import {
   setCssPositionToListingsWithSameBuilding,
   normalizeListingsForMarkers
@@ -37,7 +36,8 @@ const actions = {
   ...mapActions,
   ...drawingActions,
   resetSearchType,
-  getListingsByMapBounds
+  getListingsByMapBounds,
+  getLocationFromCookies
 }
 
 let mapOnChangeDebounce = 0
@@ -142,7 +142,9 @@ const mapHOC = compose(
   ),
   // describe events
   withHandlers({
-    onGoogleApiLoaded: ({ map }) => ({ map: googleMap }) => {
+    onGoogleApiLoaded: ({ map, getLocationFromCookies }) => ({
+      map: googleMap
+    }) => {
       googleMap.id = cuid()
       window.currentMap = googleMap
 
@@ -151,6 +153,8 @@ const mapHOC = compose(
       if (points.length) {
         shape.setMap(googleMap)
       }
+
+      getLocationFromCookies()
     },
     onChange: ({
       map,

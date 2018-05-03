@@ -150,30 +150,35 @@ export function moveTaskFile(user, dealId, task, file) {
   return async dispatch => {
     try {
       let response
+      let fileData
 
+      /*
+      * if task is defined, file should create inside the given task
+      * if task isn't defined, file should create on deal stash
+      */
       if (task) {
-        response = await Deal.copyTaskFile(task.id, { file: file.id })
-      } else {
-        response = await Deal.copyDealFile(dealId, { file: file.id })
-      }
+        response = await Deal.createTaskFile(task.id, { file: file.id })
+        fileData = response.body.data
 
-      const fileData = response.body.data
-
-      await Deal.deleteStashFile(dealId, [file.id])
-
-      task &&
-        (await Deal.createTaskMessage(task.id, {
+        // post file logs into task's comments
+        Deal.createTaskMessage(task.id, {
           author: user.id,
           room: task.room.id,
           attachments: [fileData.id]
-        }))
-
-      // add files to attachments list
-      if (file.taskId) {
-        dispatch(taskFileDeleted({ id: file.taskId }, file.id))
+        }).then(() => null)
       } else {
-        dispatch(stashFileDeleted(dealId, file.id))
+        response = await Deal.createDealFile(dealId, { file: file.id })
+        fileData = response.body.data
       }
+
+      /*
+      * remove file from it's current place (task or stash based on given task)
+      */
+      await dispatch(
+        deleteFile(dealId, {
+          [file.id]: file.taskId ? { id: file.taskId } : null
+        })
+      )
 
       if (task) {
         dispatch(taskFileCreated(task.id, fileData))
