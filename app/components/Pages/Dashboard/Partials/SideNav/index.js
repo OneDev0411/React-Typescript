@@ -115,7 +115,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
             to="/dashboard/notifications"
             className="c-app-sidenav__item__title"
           >
-            Updates
+            Notifications
             {appNotifications > 0 && (
               <span className="c-app-sidenav__notification-badge">
                 {appNotifications}
