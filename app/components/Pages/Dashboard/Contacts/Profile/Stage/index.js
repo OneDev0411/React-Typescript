@@ -15,7 +15,7 @@ export default class Stage extends React.Component {
   }
 
   getStageIndex = () =>
-    STEPS.map(s => s.replace(/\s/g, '')).indexOf(
+    STEPS.indexOf(
       getAttributeFromSummary(this.props.contact, 'stage') || 'General'
     )
 

@@ -1,4 +1,5 @@
 import Fetch from '../../../services/fetch'
+import { defaultQuery } from '../helpers/default-query'
 
 /**
  * Updating a contact (its attributes).
@@ -7,7 +8,11 @@ import Fetch from '../../../services/fetch'
  * @returns {object} Returns updated contact.
  */
 
-export async function updateContact(contactId, attributes) {
+export async function updateContact(
+  contactId,
+  attributes,
+  query = defaultQuery
+) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }
@@ -21,9 +26,12 @@ export async function updateContact(contactId, attributes) {
   }
 
   try {
-    const response = await new Fetch().patch(`/contacts/${contactId}`).send({
-      attributes
-    })
+    const response = await new Fetch()
+      .patch(`/contacts/${contactId}`)
+      .send({
+        attributes
+      })
+      .query(query)
 
     return response.body
   } catch (error) {

@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
   margin: 0 auto;
 `
 
-export const FormContainer = styled.div`
+export const FormContainer = styled.form`
   width: 100%;
   position: relative;
   background-color: #fff;

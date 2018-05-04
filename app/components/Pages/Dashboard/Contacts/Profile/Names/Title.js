@@ -40,7 +40,7 @@ class Title extends React.Component {
             name="title"
             options={OPTIONS}
             disabled={disabled}
-            defaultTitle={field.text}
+            defaultTitle={(field && field.text) || 'Mr'}
             handleOnSelect={this.handleOnSelect}
           />
         </span>

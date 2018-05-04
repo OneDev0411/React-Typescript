@@ -5,6 +5,8 @@ import { browserHistory } from 'react-router'
 import Avatar from './components/Avatar'
 import LastSeen from '../../../Chatroom/Rooms/components/last-seen'
 import Chatroom from '../../../Chatroom/Util/chatroom'
+
+import { getContactUsers } from '../../../../../../models/contacts/helpers'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
 import { deleteContacts } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
@@ -87,13 +89,11 @@ class Info extends React.Component {
 
     const { email: userEmail, phone_number: userPhone, id: userId } = user
     const {
-      summary: { email: contactEmail, phone_number: contactPhone },
-      users: contactUsers
+      summary: { email: contactEmail, phone_number: contactPhone }
     } = contact
-    const [contactUser] = contactUsers
-    const { id: contactUserId } = contactUser
+    const contactUsersId = getContactUsers(contact).map(user => user.id)
 
-    const users = [userId, contactUserId].filter(i => i)
+    const users = [userId, ...contactUsersId].filter(i => i)
     const emails = [userEmail, contactEmail].filter(i => i)
     const phone_numbers = [userPhone, contactPhone].filter(i => i)
 

@@ -39,10 +39,6 @@ const validate = values => {
 }
 
 class NewContactForm extends Component {
-  state = {
-    isSubmitting: false
-  }
-
   formatPreSave = values => {
     const attributes = []
     const { attributeDefs } = this.props
@@ -104,10 +100,9 @@ class NewContactForm extends Component {
     return attributes
   }
 
+  // todo: handle submit error
   handleOnSubmit = async values => {
     try {
-      this.setState({ isSubmitting: true })
-
       const attributes = this.formatPreSave(values)
 
       const contacts = await createContacts([{ attributes }])
@@ -115,14 +110,10 @@ class NewContactForm extends Component {
       browserHistory.push(`/dashboard/contacts/${contacts.data[0]}`)
     } catch (error) {
       throw error
-    } finally {
-      this.setState({ isSubmitting: false })
     }
   }
 
   render() {
-    const { isSubmitting } = this.state
-
     return (
       <Wrapper>
         <Form
@@ -139,8 +130,15 @@ class NewContactForm extends Component {
           mutators={{
             ...arrayMutators
           }}
-          render={({ reset, pristine, validating, handleSubmit, mutators }) => (
-            <FormContainer>
+          render={({
+            reset,
+            pristine,
+            validating,
+            handleSubmit,
+            mutators,
+            submitting
+          }) => (
+            <FormContainer onSubmit={handleSubmit}>
               <div>
                 <Field
                   defaultOptions={TITLES}
@@ -176,17 +174,15 @@ class NewContactForm extends Component {
               </div>
               <Footer style={{ justifyContent: 'space-between' }}>
                 <ActionButton
+                  type="button"
                   onClick={reset}
                   style={{ marginRight: '1em' }}
-                  disabled={isSubmitting || pristine}
+                  disabled={submitting || pristine}
                 >
                   Reset
                 </ActionButton>
-                <ActionButton
-                  disabled={isSubmitting || validating}
-                  onClick={() => handleSubmit(this.handleOnSubmit)}
-                >
-                  {isSubmitting ? 'Adding...' : 'Add'}
+                <ActionButton type="submit" disabled={submitting || validating}>
+                  {submitting ? 'Adding...' : 'Add'}
                 </ActionButton>
               </Footer>
             </FormContainer>

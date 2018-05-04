@@ -72,11 +72,10 @@ class ContactProfile extends React.Component {
 
   goBack = () => browserHistory.push('/dashboard/contacts')
 
-  handleChangeStage = async value => {
+  handleChangeStage = async text => {
     const { contact, attributeDefs, upsertContactAttributes } = this.props
     const { id: contactId } = contact
     const is_primary = true
-    const text = value.replace(/\s/g, '')
     let stage = getContactStage(contact)
     const attribute_def = selectDefinitionByName(attributeDefs, 'stage')
 
