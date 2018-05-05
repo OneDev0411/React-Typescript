@@ -1,8 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { extractUserInfoFromContact } from '../../../models/contacts'
-import { selectContacts } from '../../../reducers/contacts/list'
 
 import BareModal from '../BareModal'
 import Header from './components/Header'
@@ -28,7 +25,6 @@ function SelectContactModal(props) {
   const {
     title,
     isOpen,
-    contactsList,
     handleOnClose,
     handleAddManually,
     handleSelectedItem
@@ -41,13 +37,11 @@ function SelectContactModal(props) {
       onRequestClose={handleOnClose}
     >
       <Header title={title}>
-        {handleAddManually &&
-          contactsList.length > 0 && (
-            <AddManuallyButton onClick={handleAddManually} />
-          )}
+        {handleAddManually && (
+          <AddManuallyButton onClick={handleAddManually} />
+        )} 
       </Header>
       <Body
-        list={contactsList}
         handleAddManually={handleAddManually}
         handleSelectedItem={handleSelectedItem}
       />
@@ -61,12 +55,4 @@ function SelectContactModal(props) {
 SelectContactModal.propTypes = propTypes
 SelectContactModal.defaultProps = defaultProps
 
-function mapStateToProps({ contacts: { list } }) {
-  const contactsList = selectContacts(list).map(extractUserInfoFromContact)
-
-  return {
-    contactsList
-  }
-}
-
-export default connect(mapStateToProps)(SelectContactModal)
+export default SelectContactModal
