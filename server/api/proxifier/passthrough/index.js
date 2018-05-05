@@ -9,7 +9,9 @@ import config from '../../../../config/private'
 
 const app = new Koa()
 
-router.post('/proxifier/:endpointKey', bodyParser(), async ctx => {
+router.post('/proxifier/:endpointKey', bodyParser({
+  jsonLimit: '5mb'
+}), async ctx => {
   const headers = ctx.headers
   const queryString = ctx.request.querystring
 
