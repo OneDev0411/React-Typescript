@@ -22,7 +22,7 @@ export default ({
         {_.map(escrowOfficers, (agent, id) => (
           <CrudRole
             key={id}
-            role={agent}
+            user={agent}
             allowedRoles={allowedRoles}
             modalTitle="Update Escrow Officer"
             onRemoveUser={onRemoveEscrowOfficer}
