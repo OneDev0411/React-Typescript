@@ -22,7 +22,7 @@ export const CommissionInput = ({
 }) => (
   <CommissionContainer>
     <CommissionRadioContainer>
-      <InputLabel>
+      <InputLabel hasError={meta.submitFailed && meta.error}>
         {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
       </InputLabel>
       <div>
@@ -60,7 +60,6 @@ export const CommissionInput = ({
       <InputField
         {...input}
         {...rest}
-        type="number"
         autocomplete={false}
         placeholder="Enter commission for this agent"
       />

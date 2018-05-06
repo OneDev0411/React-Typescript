@@ -29,7 +29,7 @@ export const RolesDropDown = ({
 
   return (
     <InputContainer>
-      <InputLabel>
+      <InputLabel hasError={meta.submitFailed && meta.error}>
         {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
       </InputLabel>
       <Select
