@@ -6,9 +6,7 @@ const OPTIONS = ['Mr', 'Ms', 'Mrs', 'Miss', 'Dr']
 
 export const TitleDropDown = ({ input, placeholder, isRequired }) => (
   <InputContainer>
-    <InputLabel>
-      {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
-    </InputLabel>
+    <InputLabel>{placeholder}</InputLabel>
     <Select
       className="deals__role-form--select"
       clearable={false}

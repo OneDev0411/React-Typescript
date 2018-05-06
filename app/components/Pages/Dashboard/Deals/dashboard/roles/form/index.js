@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { Form } from 'react-final-form'
 import _ from 'underscore'
-import { FormContainer } from './form-container'
+import { RoleFormContainer } from './form-container'
 import { Modal } from 'react-bootstrap'
 import { ROLE_NAMES } from '../../../utils/roles'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
@@ -120,8 +120,10 @@ export class RoleFormModal extends React.Component {
 
     if (commission_type === 'commission_dollar') {
       newValues.commission_dollar = parseFloat(commission)
+      newValues.commission_percentage = null
     } else if (commission_type === 'commission_percentage') {
       newValues.commission_percentage = parseFloat(commission)
+      newValues.commission_dollar = null
     }
 
     return _.omit(
@@ -192,6 +194,8 @@ export class RoleFormModal extends React.Component {
    */
   get errorNames() {
     return {
+      legal_first_name: 'Invalid Legal First Name',
+      legal_last_name: 'Invalid Legal Last Name',
       email: 'Invalid Email Address',
       phone_number: 'Phone Number is invalid (###)###-####',
       commission: 'Invalid Commission value'
@@ -274,7 +278,8 @@ export class RoleFormModal extends React.Component {
       return true
     }
 
-    if (/[0-9]{1,10}(\.[0-9]{1,2})?/.test(commission)) {
+    // eslint-disable-next-line no-restricted-globals
+    if (!isNaN(parseFloat(commission)) && isFinite(commission)) {
       return true
     }
 
@@ -370,7 +375,7 @@ export class RoleFormModal extends React.Component {
                 className="u-scrollbar--thinner"
                 style={{ padding: 0 }}
               >
-                <FormContainer
+                <RoleFormContainer
                   form={form}
                   values={values}
                   handleSubmit={handleSubmit}
@@ -386,7 +391,7 @@ export class RoleFormModal extends React.Component {
                 <ActionButton
                   onClick={() => handleSubmit(this.onSubmit)}
                   type="submit"
-                  disabled={isSubmitting || pristine || invalid}
+                  disabled={isSubmitting}
                 >
                   {this.submitCaption}
                 </ActionButton>

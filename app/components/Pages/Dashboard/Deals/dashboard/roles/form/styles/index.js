@@ -32,9 +32,10 @@ export const InputContainer = styled.div`
 `
 
 export const InputLabel = styled.label`
-  color: #26465e;
   font-weight: 400;
   font-size: 13px;
+  color: ${props => (props.hasError ? 'red' : '#26465e')};
+  font-weight: ${props => (props.hasError ? '500' : 'normal')};
 `
 
 export const InputError = styled.span`

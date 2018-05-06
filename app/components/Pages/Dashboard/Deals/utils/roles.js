@@ -100,7 +100,8 @@ export function convertContactToRole(contact) {
     legal_prefix: title,
     legal_first_name: first_name,
     legal_middle_name: middle_name,
-    legal_last_name: last_name
+    legal_last_name: last_name,
+    role: null
   }
 
   delete role.id
