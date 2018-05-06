@@ -192,6 +192,8 @@ export class RoleFormModal extends React.Component {
    */
   get errorNames() {
     return {
+      legal_first_name: 'Invalid Legal First Name',
+      legal_last_name: 'Invalid Legal Last Name',
       email: 'Invalid Email Address',
       phone_number: 'Phone Number is invalid (###)###-####',
       commission: 'Invalid Commission value'
@@ -274,7 +276,8 @@ export class RoleFormModal extends React.Component {
       return true
     }
 
-    if (/[0-9]{1,10}(\.[0-9]{1,2})?/.test(commission)) {
+    // eslint-disable-next-line no-restricted-globals
+    if (!isNaN(parseFloat(commission)) && isFinite(commission)) {
       return true
     }
 
@@ -386,7 +389,7 @@ export class RoleFormModal extends React.Component {
                 <ActionButton
                   onClick={() => handleSubmit(this.onSubmit)}
                   type="submit"
-                  disabled={isSubmitting || pristine || invalid}
+                  disabled={isSubmitting}
                 >
                   {this.submitCaption}
                 </ActionButton>
