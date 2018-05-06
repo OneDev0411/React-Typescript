@@ -2,23 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Downshift from 'downshift'
+import _ from 'underscore'
+
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
-import NoContacts from '../NoContacts'
-
-function filterKeywords({ item, keyword }) {
-  if (!keyword || keyword.length < 2) {
-    return true
-  }
-
-  return Object.keys(item).some(fieldName => {
-    const fieldValue = item[fieldName]
-
-    if (typeof fieldValue === 'string') {
-      return fieldValue.toLowerCase().includes(keyword.toLowerCase())
-    }
-  })
-}
+import Loading from '../../../../../components/Partials/Loading'
+import { extractUserInfoFromContact } from '../../../../../models/contacts'
+import { searchContacts } from '../../../../../models/contacts/search-contacts'
 
 const ContactsListContainer = styled.div`
   position: relative;
@@ -40,19 +30,42 @@ const ContactsList = styled.div`
 `
 
 const propTypes = {
-  handleSelectedItem: PropTypes.func.isRequired,
-  list: PropTypes.arrayOf(PropTypes.shape).isRequired
+  handleSelectedItem: PropTypes.func.isRequired
 }
 
 class Body extends Component {
-  constructor(props) {
-    super(props)
+  state = {
+    items: [],
+    isSearching: false
+  }
 
-    const { list } = this.props
+  fetchRepository = _.debounce(async value => {
+    try {
+      this.setState({ isSearching: true })
 
-    this.state = {
-      items: list || []
+      const response = await searchContacts(value)
+
+      if (Array.isArray(response.data)) {
+        this.setState({
+          items: response.data
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      this.setState({ isSearching: false })
     }
+  }, 300)
+
+  handleOnChange = async event => {
+    const { value } = event.target
+
+    if (!value) {
+      return
+    }
+
+    // call the debounce function
+    this.fetchRepository(value)
   }
 
   handleItemToString = item => {
@@ -65,52 +78,44 @@ class Body extends Component {
     return display_name || 'unknown'
   }
 
+  selectedItemHandler = item =>
+    this.props.handleSelectedItem(extractUserInfoFromContact(item))
+
   render() {
-    const { items } = this.state
-    const { handleSelectedItem, handleAddManually } = this.props
+    const { items, isSearching } = this.state
 
     return (
       <Downshift
-        onChange={handleSelectedItem}
         itemToString={this.handleItemToString}
-        render={({
-          getInputProps,
-          getItemProps,
-          inputValue,
-          highlightedIndex
-        }) => (
+        render={({ getInputProps, getItemProps, highlightedIndex }) => (
           <div style={{ paddingTop: '2rem' }}>
             <div style={{ padding: '0 2rem' }}>
               <SearchInput
                 style={{ marginBottom: '12px' }}
                 inputProps={{
                   ...getInputProps({
-                    disabled: items.length === 0,
+                    onChange: this.handleOnChange,
                     placeholder: 'Search for a contact...'
                   })
                 }}
               />
             </div>
             <ContactsListContainer>
-              {items.length > 0 ? (
-                <ContactsList className="u-scrollbar--thinner">
-                  {items
-                    .filter(item =>
-                      filterKeywords({ item, keyword: inputValue })
-                    )
-                    .map((item, index) => (
+              {isSearching && <Loading />}
+              {!isSearching &&
+                items.length > 0 && (
+                  <ContactsList className="u-scrollbar--thinner">
+                    {items.map((item, index) => (
                       <ContactItem
                         item={item}
                         key={item.id || `downshift_search_result_item_${index}`}
                         {...getItemProps({ item })}
-                        onClickHandler={handleSelectedItem}
+                        onClickHandler={this.selectedItemHandler}
                         isHighlighted={highlightedIndex === index}
                       />
                     ))}
-                </ContactsList>
-              ) : (
-                <NoContacts handleAddManually={handleAddManually} />
-              )}
+                  </ContactsList>
+                )}
             </ContactsListContainer>
           </div>
         )}
