@@ -9,6 +9,7 @@ import {
   closeEsignWizard,
   setSelectedTask
 } from '../../../../../store_actions/deals'
+import { getPrimaryAgent } from '../utils/roles'
 
 class BackOfficeTable extends BaseTable {
   constructor(props) {
@@ -54,8 +55,8 @@ class BackOfficeTable extends BaseTable {
         caption: 'AGENT NAME',
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: deal => (deal.created_by ? deal.created_by.display_name : ''),
-        getValue: deal => (deal.created_by ? deal.created_by.display_name : '')
+        getText: deal => getPrimaryAgent(deal, this.props.roles),
+        getValue: deal => getPrimaryAgent(deal, this.props.roles)
       },
       office: {
         caption: 'OFFICE',

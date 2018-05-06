@@ -54,7 +54,8 @@ export default class extends React.Component {
         address_components: item.address,
         price: item.price,
         status: item.status,
-        image: item.cover_image_url
+        image: item.cover_image_url,
+        is_mls_search: item.is_mls_search || false
       }))
 
       // hide loading
