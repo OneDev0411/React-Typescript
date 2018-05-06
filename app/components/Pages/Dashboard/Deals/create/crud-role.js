@@ -26,7 +26,7 @@ class CrudRole extends React.Component {
     const { shouldPrepopulateAgent, user } = this.props
 
     if (shouldPrepopulateAgent) {
-      return this.setState({ showAgentModal: true })
+      return this.showAgentsModal()
     } else if (user) {
       return this.setState({ showRoleModal: true, role: user })
     }
@@ -39,6 +39,18 @@ class CrudRole extends React.Component {
       ...initialState,
       showRoleModal: true
     })
+  }
+
+  showAgentsModal = () => {
+    const { teamAgents } = this.props
+
+    // For primary agent if only one agent available automatically select them
+    // issue: web#1148
+    if (teamAgents && teamAgents.length === 1) {
+      return this.onSelectAgent(teamAgents[0])
+    }
+
+    this.setState({ showAgentModal: true })
   }
 
   onSelectContactUser = contact => {
@@ -145,6 +157,10 @@ class CrudRole extends React.Component {
   }
 }
 
-export default connect(null, {
+function mapStateToProps({ deals }) {
+  return { teamAgents: deals.agents }
+}
+
+export default connect(mapStateToProps, {
   notify
 })(CrudRole)

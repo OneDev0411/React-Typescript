@@ -54,8 +54,8 @@ class TeamAgents extends React.Component {
   }
 }
 
-function mapToProps({ deals }) {
+function mapStateToProps({ deals }) {
   return { teamAgents: deals.agents }
 }
 
-export default connect(mapToProps, null)(TeamAgents)
+export default connect(mapStateToProps, null)(TeamAgents)
