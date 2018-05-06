@@ -120,8 +120,10 @@ export class RoleFormModal extends React.Component {
 
     if (commission_type === 'commission_dollar') {
       newValues.commission_dollar = parseFloat(commission)
+      newValues.commission_percentage = null
     } else if (commission_type === 'commission_percentage') {
       newValues.commission_percentage = parseFloat(commission)
+      newValues.commission_dollar = null
     }
 
     return _.omit(
