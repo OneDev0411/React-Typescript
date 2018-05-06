@@ -45,17 +45,19 @@ export function roleName(role) {
 
 /**
  * returns user legal name based on given fields
- * @param {Object} userRole - the roles including name parts
+ * @param {Object} role - the roles including name parts
+ * @param {Boolean} withPrefix - should prepend legal prefix or not
  */
-export function getLegalFullName(userRole) {
+export function getLegalFullName(role, withPrefix = true) {
   let name = []
   const {
     legal_full_name,
-    legal_prefix,
     legal_first_name,
     legal_last_name,
     company_title
-  } = userRole
+  } = role
+
+  const legal_prefix = withPrefix ? role.legal_prefix : ''
 
   if (legal_full_name) {
     name = [legal_prefix, legal_full_name]

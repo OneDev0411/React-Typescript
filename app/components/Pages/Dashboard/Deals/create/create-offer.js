@@ -23,6 +23,7 @@ import {
   createOffer,
   updateContext
 } from '../../../../../store_actions/deals'
+import { getLegalFullName } from '../utils/roles'
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -208,9 +209,8 @@ class CreateOffer extends React.Component {
     let { buyerName } = this.state
 
     if (!isBackupOffer) {
-      buyerName = _.map(
-        clients,
-        client => `${client.legal_first_name} ${client.legal_last_name}`
+      buyerName = _.map(clients, client =>
+        getLegalFullName(client, false)
       ).join(', ')
     }
 
