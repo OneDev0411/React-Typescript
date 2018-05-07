@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import validator from 'validator'
 import _ from 'underscore'
@@ -7,7 +6,7 @@ import Fetch from '../../../services/fetch'
 import Contact from '../../../models/contacts'
 import Recipients from './recipients'
 import Suggestions from './suggestions'
-import { selectContacts } from '../../../reducers/contacts/list'
+import { searchContacts } from '../../../models/contacts/search-contacts'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -24,6 +23,11 @@ class Compose extends React.Component {
     this.onBlurDropDownBox = this.onBlurDropDownBox.bind(this)
   }
 
+  componentDidMount() {
+    // if component reopen, clear recipient
+    this.onChangeRecipients()
+  }
+
   /**
    * search recipients
    */
@@ -33,6 +37,9 @@ class Compose extends React.Component {
     if (text === this.criteria) {
       return false
     }
+
+    // On each search remove default recipient
+    this.onChangeRecipients()
 
     // set this variable to detect non characters like shift, ctrl, ...
     this.criteria = text
@@ -58,6 +65,13 @@ class Compose extends React.Component {
 
     // hide loader
     this.setState({ searching: false })
+
+    // Make default recipient if it is valid.
+    const viewList = await this.createNewEntry()
+
+    if (viewList) {
+      this.onChangeRecipients(viewList)
+    }
   }
 
   /**
@@ -157,7 +171,13 @@ class Compose extends React.Component {
    */
   async searchInContacts(q) {
     let contacts = []
-    const { contactsList } = this.props
+
+    const response = await searchContacts(this.criteria.toLowerCase())
+    let contactsList = []
+
+    if (Array.isArray(response.data)) {
+      contactsList = response.data
+    }
 
     _.each(contactsList, contact => {
       // search in contact's users
@@ -249,14 +269,14 @@ class Compose extends React.Component {
   /**
    * on change recipients
    */
-  onChangeRecipients() {
+  onChangeRecipients(viewList) {
     const recipients = {
       users: [],
       emails: [],
       phone_numbers: []
     }
 
-    _.each(this.state.recipients, recp => {
+    _.each({ ...this.state.recipients, ...viewList }, recp => {
       switch (recp.type) {
         case 'user':
           recipients.users.push(recp.id)
@@ -272,6 +292,7 @@ class Compose extends React.Component {
           break
       }
     })
+    console.log(recipients, this.state.recipients)
 
     this.props.onChangeRecipients(recipients)
   }
@@ -330,10 +351,4 @@ Compose.defaultProps = {
   roomUsers: []
 }
 
-function mapStateToProps({ contacts: { list } }) {
-  return {
-    contactsList: selectContacts(list)
-  }
-}
-
-export default connect(mapStateToProps)(Compose)
+export default Compose
