@@ -38,7 +38,6 @@ import { selectContacts } from '../reducers/contacts/list'
 import { selectListings } from '../reducers/listings'
 import getFavorites from '../store_actions/listings/favorites/get-favorites'
 
-import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
@@ -46,6 +45,7 @@ import config from '../../config/public'
 
 import Intercom from './Pages/Dashboard/Partials/Intercom'
 import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
+import { getAllNotifications } from '../store_actions/notifications'
 
 class App extends Component {
   componentWillMount() {
@@ -103,7 +103,7 @@ class App extends Component {
       }
 
       // load notifications
-      this.loadNotifications(data)
+      dispatch(getAllNotifications())
 
       // load saved listings
       dispatch(getFavorites(user))
@@ -170,20 +170,6 @@ class App extends Component {
     AppDispatcher.dispatch({
       action: 'check-for-mobile'
     })
-  }
-
-  loadNotifications(data) {
-    if (data.getting_notifications || data.notifications_retrieved) {
-      return false
-    }
-
-    NotificationDispatcher.dispatch({
-      action: 'get-all',
-      user: data.user
-    })
-
-    AppStore.data.getting_notifications = true
-    AppStore.emitChange()
   }
 
   initialGoogleAnalytics(data) {
