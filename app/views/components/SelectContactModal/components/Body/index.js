@@ -43,11 +43,11 @@ class Body extends Component {
     const { defaultSearchFilter } = this.props
 
     if (defaultSearchFilter) {
-      this.fetchRepository(defaultSearchFilter)
+      this.search(defaultSearchFilter)
     }
   }
 
-  fetchRepository = _.debounce(async value => {
+  search = _.debounce(async value => {
     try {
       this.setState({ isSearching: true })
 
@@ -73,7 +73,7 @@ class Body extends Component {
     }
 
     // call the debounce function
-    this.fetchRepository(value)
+    this.search(value)
   }
 
   handleItemToString = item => {
