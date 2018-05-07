@@ -58,11 +58,26 @@ export default class extends React.Component {
     const { recipients } = this.props
 
     return (
-      <div className="tags-container">
+      <div
+        className="tags-container"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'wrap'
+        }}
+      >
         <span className="to">To: </span>
 
         {_.map(recipients, recp => (
-          <div key={`ITEM_${recp.id}`} className="tag">
+          <div
+            key={`ITEM_${recp.id}`}
+            className="tag"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              overflow: 'hidden'
+            }}
+          >
             <UserAvatar
               showStateIndicator={false}
               name={recp.display_name}
@@ -70,7 +85,15 @@ export default class extends React.Component {
               size={22}
             />
 
-            <span>{recp.display_name}</span>
+            <div
+              style={{
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden'
+              }}
+            >
+              {recp.display_name}
+            </div>
             <i
               className="fa fa-times"
               onClick={() => this.props.onRemove(recp)}
