@@ -4,6 +4,7 @@ import cn from 'classnames'
 import _ from 'underscore'
 import DatePicker from '../components/date-picker'
 import Input from '../../../../../views/components/Input'
+import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 const ContextValue = ({ name, date, onRemove, onEdit }) => (
   <div className="selected-field">
@@ -55,6 +56,7 @@ export default class extends React.Component {
       <div className="form-section contexts">
         <div className={cn('hero no-margin-bottom', { hasError })}>
           Please provide the following information:&nbsp;
+          {hasError && <RequiredIcon />}
         </div>
 
         <div className="hero-description">

@@ -14,7 +14,9 @@ $margin: 20px;
 
 %deal-create {
   background-color: #fff;
+  position: relative;
   min-height: 100vh;
+  overflow: hidden;
 
   .nav {
     @extend %deal-create-nav;
@@ -22,6 +24,10 @@ $margin: 20px;
 
   .form {
     @extend %deal-create-form;
+  }
+
+  .footer {
+    @extend %deal-create-footer;
   }
 }
 
@@ -53,12 +59,36 @@ $margin: 20px;
   }
 }
 
+%deal-create-footer {
+  height: 60px;
+  position: absolute;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-right: 16px;
+  background-color: #ffffff;
+  border-top: 1px solid #d4dfe6;
+  text-align: right;
+
+  .error-summary {
+    color: #fe3824;
+    font-size: 14px;
+    margin-right: 16px;
+  }
+}
+
 /**
 *
 */
 %deal-create-form {
   padding: 20px 50px;
-  $required-color: #d0021b;
+  $required-color: #fe3824;
+  min-height: calc(100vh - 115px);
+  max-height: calc(100vh - 115px);
+  overflow: auto;
 
   .swoosh {
     font-size: 14px;
@@ -69,7 +99,7 @@ $margin: 20px;
   .form-section {
     margin-bottom: 30px;
     sup {
-      color: red;
+      color: #fe3824;
     }
   }
 
@@ -85,10 +115,11 @@ $margin: 20px;
 
     .required {
       color: $required-color;
+      margin-right: 16px;
     }
 
     &.hasError {
-      color: #ec4b35;
+      color: #fe3824;
     }
   }
 

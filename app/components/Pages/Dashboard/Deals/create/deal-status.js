@@ -2,6 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import RadioButton from '../../../../../views/components/radio'
 import { getStatusColorClass } from '../../../../../utils/listing'
+import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 export default ({
   hasError,
@@ -22,6 +23,7 @@ export default ({
     <div className="form-section deal-status">
       <div className={cn('hero', { hasError })}>
         What is the status of the deal? <span className="required">*</span>
+        {hasError && <RequiredIcon />}
       </div>
 
       {statuses.map((name, key) => (

@@ -2,6 +2,7 @@ import React from 'react'
 import _ from 'underscore'
 import cn from 'classnames'
 import CrudRole from './crud-role'
+import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 export default ({
   hasError,
@@ -16,6 +17,7 @@ export default ({
       <div className={cn('hero', { hasError })}>
         Do you have Title company and Escrow officer information? &nbsp;
         <span className="required">*</span>
+        {hasError && <RequiredIcon />}
       </div>
 
       <div className="people-container">

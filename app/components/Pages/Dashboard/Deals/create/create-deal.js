@@ -89,7 +89,6 @@ class CreateDeal extends React.Component {
    * validate form
    */
   validateForm(showConfirmationMessage = false) {
-    const { confirmation } = this.props
     const {
       dealSide,
       dealPropertyType,
@@ -163,17 +162,6 @@ class CreateDeal extends React.Component {
     this.setState({
       validationErrors
     })
-
-    if (validationErrors.length > 0 && showConfirmationMessage) {
-      confirmation({
-        message: 'Validation Error',
-        description: `You are missing ${
-          validationErrors.length
-        } or more required fields.`,
-        confirmLabel: 'Okay',
-        hideCancelButton: true
-      })
-    }
 
     return validationErrors.length === 0
   }
@@ -477,11 +465,14 @@ class CreateDeal extends React.Component {
       sellingClients,
       referrals,
       enderType,
-      submitError
+      submitError,
+      validationErrors
     } = this.state
 
     const dealContexts = this.getDealContexts()
     const isLeaseDeal = dealPropertyType && dealPropertyType.includes('Lease')
+    const canCreateDeal =
+      !saving && dealSide.length > 0 && dealPropertyType.length > 0
 
     return (
       <div className="deal-create">
@@ -621,19 +612,28 @@ class CreateDeal extends React.Component {
                 style={{ float: 'left', marginBottom: '2rem' }}
               />
             )}
+        </div>
 
-          {dealSide.length > 0 &&
-            dealPropertyType.length > 0 && (
-              <Button
-                className={cn('btn btn-primary create-deal-button', {
-                  disabled: saving
-                })}
-                onClick={() => this.createDeal()}
-                disabled={saving}
-              >
-                {saving ? 'Creating ...' : 'Create Deal'}
-              </Button>
-            )}
+        <div className="footer">
+          <Button
+            className={cn('btn btn-primary create-deal-button', {
+              disabled: !canCreateDeal
+            })}
+            onClick={() => this.createDeal()}
+            disabled={!canCreateDeal}
+          >
+            {saving ? 'Creating ...' : 'Create Deal'}
+          </Button>
+
+          <div className="error-summary">
+            {this.isFormSubmitted &&
+              validationErrors.length > 0 && (
+                <span>
+                  {validationErrors.length} required fields remaining to
+                  complete.
+                </span>
+              )}
+          </div>
         </div>
       </div>
     )
