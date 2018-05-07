@@ -20,6 +20,8 @@ class Import extends React.Component {
 &authSuccessEvent=importSuccesfullLogin\
 &client=web`
     this.loginWindows = undefined
+
+    console.log('api_url in import: ', config.api_url)
   }
 
   componentWillReceiveProps(nextProps) {
