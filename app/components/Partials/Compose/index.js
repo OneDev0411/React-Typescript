@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import validator from 'validator'
 import _ from 'underscore'
@@ -7,7 +6,7 @@ import Fetch from '../../../services/fetch'
 import Contact from '../../../models/contacts'
 import Recipients from './recipients'
 import Suggestions from './suggestions'
-import { selectContacts } from '../../../reducers/contacts/list'
+import { searchContacts } from '../../../models/contacts/search-contacts'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -172,7 +171,13 @@ class Compose extends React.Component {
    */
   async searchInContacts(q) {
     let contacts = []
-    const { contactsList } = this.props
+
+    const response = await searchContacts(this.criteria.toLowerCase())
+    let contactsList = []
+
+    if (Array.isArray(response.data)) {
+      contactsList = response.data
+    }
 
     _.each(contactsList, contact => {
       // search in contact's users
@@ -346,10 +351,4 @@ Compose.defaultProps = {
   roomUsers: []
 }
 
-function mapStateToProps({ contacts: { list } }) {
-  return {
-    contactsList: selectContacts(list)
-  }
-}
-
-export default connect(mapStateToProps)(Compose)
+export default Compose
