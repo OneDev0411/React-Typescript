@@ -6,13 +6,16 @@ import AgentModal from './deal-team-agents'
 import RoleItem from './role-item'
 import ContactModal from '../../../../../views/components/SelectContactModal'
 import { convertContactToRole } from '../utils/roles'
+import { extractUserInfoFromContact } from '../../../../../models/contacts'
+import { selectContacts } from '../../../../../reducers/contacts/list'
 
 const initialState = {
   role: null,
   isSaving: false,
   showRoleModal: false,
   showAgentModal: false,
-  showContactModal: false
+  showContactModal: false,
+  selectedAgent: null
 }
 
 class CrudRole extends React.Component {
@@ -50,23 +53,42 @@ class CrudRole extends React.Component {
   }
 
   onSelectAgent = user => {
-    const { agent, first_name, last_name, email, phone_number } = user
+    const contacts = this.searchContactByEmail(user.email)
+    let newState
 
-    const { office, work_phone } = agent || {}
-
-    const role = {
-      email,
-      legal_last_name: last_name,
-      legal_first_name: first_name,
-      phone: phone_number || work_phone,
-      company: office ? office.name : ''
+    if (contacts.length === 0) {
+      newState = {
+        showRoleModal: true
+      }
+    } else if (contacts.length === 1) {
+      newState = {
+        showRoleModal: true,
+        role: convertContactToRole(contacts[0])
+      }
+    } else if (contacts.length > 1) {
+      newState = {
+        selectedAgent: user,
+        showContactModal: true
+      }
     }
 
     this.setState({
       ...initialState,
-      role,
-      showRoleModal: true
+      ...newState
     })
+  }
+
+  searchContactByEmail = email => {
+    const { contacts } = this.props
+    const contactsList = selectContacts(contacts).map(
+      extractUserInfoFromContact
+    )
+
+    if (!contactsList) {
+      return []
+    }
+
+    return contactsList.filter(contact => contact.email === email)
   }
 
   showNotification = (message, status = 'success') =>
@@ -81,7 +103,8 @@ class CrudRole extends React.Component {
       isSaving,
       showRoleModal,
       showAgentModal,
-      showContactModal
+      showContactModal,
+      selectedAgent
     } = this.state
 
     const {
@@ -119,7 +142,8 @@ class CrudRole extends React.Component {
           title={modalTitle}
           isOpen={showContactModal}
           handleOnClose={this.resetStates}
-          handleAddManually={this.showRoleModal}
+          handleAddManually={selectedAgent ? null : this.showRoleModal}
+          defaultSearchFilter={selectedAgent && selectedAgent.email}
           handleSelectedItem={this.onSelectContactUser}
         />
 
@@ -145,6 +169,12 @@ class CrudRole extends React.Component {
   }
 }
 
-export default connect(null, {
+function mapStateToProps({ contacts }) {
+  return {
+    contacts: contacts.list
+  }
+}
+
+export default connect(mapStateToProps, {
   notify
 })(CrudRole)

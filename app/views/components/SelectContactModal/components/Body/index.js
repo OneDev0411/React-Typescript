@@ -67,12 +67,17 @@ class Body extends Component {
 
   render() {
     const { items } = this.state
-    const { handleSelectedItem, handleAddManually } = this.props
+    const {
+      handleSelectedItem,
+      handleAddManually,
+      defaultSearchFilter
+    } = this.props
 
     return (
       <Downshift
         onChange={handleSelectedItem}
         itemToString={this.handleItemToString}
+        defaultInputValue={defaultSearchFilter}
         render={({
           getInputProps,
           getItemProps,
