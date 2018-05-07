@@ -13,8 +13,7 @@ const routes = {
     'pdf-splitter',
     'envelope-edit',
     'export'
-  ],
-  notification: ['all', 'delete', 'delete-room-notifications', 'mark-seen']
+  ]
 }
 
 _.each(routes, (group, name) => {

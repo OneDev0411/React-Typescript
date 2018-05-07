@@ -24,7 +24,6 @@ const config = {
       'moment',
       'lodash',
       'underscore',
-      'whatwg-fetch',
       'offline-js'
     ]
   },

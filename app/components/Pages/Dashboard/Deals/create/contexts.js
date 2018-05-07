@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import moment from 'moment'
 import cn from 'classnames'
 import _ from 'underscore'
 import DatePicker from '../components/date-picker'
 import Input from '../../../../../views/components/Input'
+import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 const ContextValue = ({ name, date, onRemove, onEdit }) => (
   <div className="selected-field">
@@ -55,6 +56,7 @@ export default class extends React.Component {
       <div className="form-section contexts">
         <div className={cn('hero no-margin-bottom', { hasError })}>
           Please provide the following information:&nbsp;
+          {hasError && <RequiredIcon />}
         </div>
 
         <div className="hero-description">
@@ -97,34 +99,34 @@ export default class extends React.Component {
               </div>
             )}
 
-            {contexts[field.name] &&
-              field.data_type === 'Date' && (
-                <ContextValue
-                  name={field.label}
-                  date={contexts[field.name]}
-                  onRemove={() => onChangeContext(field.name, null)}
-                  onEdit={() => this.setSelectedField(field.name)}
-                />
-              )}
-
-            {!contexts[field.name] &&
-              field.data_type === 'Date' && (
-                <div
-                  className="entity-item date new"
-                  onClick={() => this.setSelectedField(field.name)}
-                >
-                  <div className="add-item">
-                    <span className="icon">+</span>
-                    <span
-                      className={cn('text', {
-                        hasError: hasError && field.mandatory
-                      })}
-                    >
-                      {field.label} {field.mandatory && <sup>*</sup>}
-                    </span>
+            {field.data_type === 'Date' && (
+              <Fragment>
+                {contexts[field.name] ? (
+                  <ContextValue
+                    name={field.label}
+                    date={contexts[field.name]}
+                    onRemove={() => onChangeContext(field.name, null)}
+                    onEdit={() => this.setSelectedField(field.name)}
+                  />
+                ) : (
+                  <div
+                    className="entity-item date new"
+                    onClick={() => this.setSelectedField(field.name)}
+                  >
+                    <div className="add-item">
+                      <span className="icon">+</span>
+                      <span
+                        className={cn('text', {
+                          hasError: hasError && field.mandatory
+                        })}
+                      >
+                        {field.label} {field.mandatory && <sup>*</sup>}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </Fragment>
+            )}
           </div>
         ))}
 

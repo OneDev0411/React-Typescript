@@ -5,7 +5,7 @@ import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import { roleName } from '../utils/roles'
-import ToolTip from '../components/tooltip'
+import ToolTip from '../../../../../views/components/tooltip/index'
 import {
   closeEsignWizard,
   setSelectedTask
@@ -65,9 +65,11 @@ class AgentTable extends BaseTable {
       },
       critical_dates: {
         caption: 'CRITICAL DATES',
+        sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
         getText: (deal, rowId, rowsCount) =>
-          this.getNextDate(deal, rowId, rowsCount)
+          this.getNextDate(deal, rowId, rowsCount),
+        getValue: deal => this.getNextDateValue(deal)
       },
       agent_name: {
         caption: 'AGENT NAME',

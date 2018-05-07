@@ -4,11 +4,12 @@ import moment from 'moment'
 import merge from 'merge'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
-import ToolTip from '../components/tooltip'
+import ToolTip from '../../../../../views/components/tooltip/index'
 import {
   closeEsignWizard,
   setSelectedTask
 } from '../../../../../store_actions/deals'
+import { getPrimaryAgent } from '../utils/roles'
 
 class BackOfficeTable extends BaseTable {
   constructor(props) {
@@ -54,8 +55,8 @@ class BackOfficeTable extends BaseTable {
         caption: 'AGENT NAME',
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: deal => (deal.created_by ? deal.created_by.display_name : ''),
-        getValue: deal => (deal.created_by ? deal.created_by.display_name : '')
+        getText: deal => getPrimaryAgent(deal, this.props.roles),
+        getValue: deal => getPrimaryAgent(deal, this.props.roles)
       },
       office: {
         caption: 'OFFICE',
@@ -65,8 +66,10 @@ class BackOfficeTable extends BaseTable {
       },
       critical_dates: {
         caption: 'CRITICAL DATES',
+        sortable: true,
         className: 'col-md-1 hidden-sm hidden-xs',
-        getText: deal => this.getNextDate(deal)
+        getText: deal => this.getNextDate(deal),
+        getValue: deal => this.getNextDateValue(deal)
       },
       searchResult: {
         caption: '',

@@ -14,7 +14,7 @@ import {
   resetSplitter
 } from '../../../../../../../store_actions/deals'
 import TasksDropDown from '../../../components/tasks-dropdown'
-import ToolTip from '../../../components/tooltip'
+import ToolTip from '../../../../../../../views/components/tooltip/index'
 import Checkbox from '../../../../../../../views/components/radio'
 import FileName from './file-name'
 

@@ -38,23 +38,31 @@ class DropDownTasks extends React.Component {
     })
   }
 
+  /**
+   * creates a new checklist item (type: form-task)
+   * @param {Integer} checklistId - check list id
+   * @param {Object} form - form data
+   */
   async onSelectFormTask(checklistId, form) {
     const { deal, onSelectTask, createFormTask } = this.props
 
-    onSelectTask(null)
     this.toggleMenu()
 
     this.setState({
-      filter: form.name.trim()
+      filter: form.name.trim(),
+      isCreatingTask: true,
+      newTaskMode: checklistId
     })
 
     const task = await createFormTask(deal.id, form.id, form.name, checklistId)
 
-    onSelectTask(task.id)
-
     this.setState({
-      filter: ''
+      filter: '',
+      isCreatingTask: false,
+      newTaskMode: false
     })
+
+    onSelectTask(task.id)
   }
 
   onKeyPress(e, checklistId) {
@@ -151,9 +159,8 @@ class DropDownTasks extends React.Component {
       tasks,
       searchable,
       showStashOption,
-      placeholder = 'Folder',
       stashOptionText,
-      moveToParentFolder = null
+      placeholder = 'Folder'
     } = this.props
 
     return (
@@ -191,7 +198,7 @@ class DropDownTasks extends React.Component {
               })}
               onClick={e => {
                 e.stopPropagation()
-                this.onSelectTask(moveToParentFolder)
+                this.onSelectTask(null)
               }}
             >
               {stashOptionText || 'Upload directly to my Files'}
@@ -238,6 +245,7 @@ class DropDownTasks extends React.Component {
                           placeholder="Name this task and press enter"
                           onChange={e => this.onTaskTitleChange(e.target.value)}
                           value={taskTitle}
+                          onClick={e => e.stopPropagation()}
                           onKeyPress={e => this.onKeyPress(e, chId)}
                           onBlur={e => this.discardEdit(e)}
                           autoFocus
@@ -281,7 +289,10 @@ class DropDownTasks extends React.Component {
 
                     <li
                       className="is-bold"
-                      onClick={() => this.setState({ newTaskMode: chId })}
+                      onClick={e => {
+                        e.stopPropagation()
+                        this.setState({ newTaskMode: chId })
+                      }}
                     >
                       Add new task to {checklist.title}
                     </li>

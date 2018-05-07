@@ -69,6 +69,10 @@ class BaseTable extends React.Component {
     )
   }
 
+  getNextDateValue(deal) {
+    return CriticalDates.getNextDateValue(deal)
+  }
+
   getNextDate(deal, rowId, rowsCount) {
     const table = DealContext.getFactsheetSection(deal, 'CriticalDates')
 

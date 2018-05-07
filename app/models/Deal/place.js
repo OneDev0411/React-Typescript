@@ -11,7 +11,9 @@ export async function searchPlaces(address) {
       `address=${address}&region=us&components=administrative_area:texas` +
       `&key=${config.google.api_key}`
 
-    const response = await agent.get(`https://maps.googleapis.com/maps/api/geocode/json?${params}`)
+    const response = await agent.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?${params}`
+    )
 
     return response.body
   } catch (e) {
@@ -22,11 +24,30 @@ export async function searchPlaces(address) {
 /**
  * search listings
  */
-export async function searchListings(address) {
-  try {
-    const response = await new Fetch().get(`/listings/search?q=${address}`)
+export async function searchListings(criteria) {
+  let queryName = 'q'
+  const isMlsNumber = /[0-9]{8}/.test(criteria)
+  const normalizeMlsObject = data => ({
+    ...data.property,
+    id: data.id,
+    is_mls_search: true,
+    price: data.price,
+    status: data.status,
+    cover_image_url: data.cover_image_url
+  })
 
-    return response.body
+  try {
+    if (isMlsNumber) {
+      queryName = 'mls_number'
+    }
+
+    const response = await new Fetch().get(
+      `/listings/search?${queryName}=${criteria}`
+    )
+
+    const { data } = response.body
+
+    return isMlsNumber ? [normalizeMlsObject(data)] : data
   } catch (e) {
     throw e
   }

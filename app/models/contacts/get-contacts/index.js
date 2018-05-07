@@ -1,12 +1,13 @@
 import Fetch from '../../../services/fetch'
 
-async function fetchContacts(user) {
+async function fetchContacts(user, start = 0, limit = 10000) {
   const { access_token } = user
 
   try {
     const fetchContacts = new Fetch()
       .get('/contacts')
-      .query({ limit: 10000 })
+      .query({ start })
+      .query({ limit })
       .query({ sorting_value: 'Update' })
       .query({ 'associations[]': ['user.last_seen_by'] })
 

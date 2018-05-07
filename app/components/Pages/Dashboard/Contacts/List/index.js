@@ -34,6 +34,11 @@ const SecondHeaderText = styled.p`
   margin-bottom: 0;
   margin-right: 8px;
 `
+const CustomLoading = styled(Loading)`
+  position: absolute !important;
+  left: 50%;
+  margin: auto !important;
+`
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -184,6 +189,8 @@ class ContactsList extends React.Component {
                 </div>
               )}
             </SecondHeader>
+            {isFetching && <CustomLoading />}
+
             <Table
               filteredContacts={filteredContacts}
               toggleSelectedRow={this.toggleSelectedRow}

@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import ToolTip from '../../../components/tooltip'
+import ToolTip from '../../../../../../../views/components/tooltip/index'
 
 export default ({
   showCTA,

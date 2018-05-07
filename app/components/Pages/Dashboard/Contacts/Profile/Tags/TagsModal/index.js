@@ -42,15 +42,13 @@ export default class extends React.Component {
   handleSubmitNewTag = () => {
     const { tags, newTag } = this.state
 
-    if (newTag == null || tags[newTag]) {
+    if (!newTag || tags[newTag]) {
       return false
     }
 
-    const _newTag = newTag.trim()
-
     const newTags = {
       ...tags,
-      [_newTag]: {
+      [newTag]: {
         is_new: true,
         id: newTag,
         active: true,
@@ -84,9 +82,12 @@ export default class extends React.Component {
   }
 
   handleOnChange = event => {
-    const newTag = event.target.value.trim()
+    const newTag = event.target.value
 
-    this.setState({ newTag })
+    // for controlling space and also backspace
+    if (newTag.trim().length > 0 || this.state.newTag) {
+      this.setState({ newTag })
+    }
   }
 
   handleHideModal = () => {

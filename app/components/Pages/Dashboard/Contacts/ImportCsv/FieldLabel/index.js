@@ -4,7 +4,7 @@ import cn from 'classnames'
 
 const AddressLabelOptions = [
   { label: 'Home Address', value: 'Home' },
-  { label: 'Work Address', value: 'Work' },
+  { label: 'Work Address', value: 'Business' },
   { label: 'Other Address', value: 'Other' }
 ]
 
