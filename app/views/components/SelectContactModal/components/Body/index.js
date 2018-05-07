@@ -39,6 +39,14 @@ class Body extends Component {
     isSearching: false
   }
 
+  componentDidMount() {
+    const { defaultSearchFilter } = this.props
+
+    if (defaultSearchFilter) {
+      this.fetchRepository(defaultSearchFilter)
+    }
+  }
+
   fetchRepository = _.debounce(async value => {
     try {
       this.setState({ isSearching: true })
@@ -83,10 +91,12 @@ class Body extends Component {
 
   render() {
     const { items, isSearching } = this.state
+    const { defaultSearchFilter = '' } = this.props
 
     return (
       <Downshift
         itemToString={this.handleItemToString}
+        defaultInputValue={defaultSearchFilter}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
           <div style={{ paddingTop: '2rem' }}>
             <div style={{ padding: '0 2rem' }}>
