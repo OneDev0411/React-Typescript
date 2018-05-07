@@ -1,32 +1,28 @@
-import React from 'react'
-import NotificationDispatcher from '../../../../dispatcher/NotificationDispatcher'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import S from 'shorti'
 import { getTimeAgo } from '../../../../utils/helpers'
 import { browserHistory } from 'react-router'
+import Header from './Header'
+import {
+  selectNotifications,
+  selectNotificationIsFetching
+} from '../../../../reducers/notifications'
+import {
+  deleteNewNotifications,
+  markNotificationAsSeen
+} from '../../../../store_actions/notifications'
 
-export default class extends React.Component {
-  constructor(props) {
-    super(props)
-  }
+class Notifications extends Component {
   componentDidMount() {
-    const { data } = this.props
-    const { user } = data
+    const { deleteNewNotifications } = this.props
 
-    // delete notifications
-    NotificationDispatcher.dispatch({
-      action: 'delete-all',
-      user
-    })
+    deleteNewNotifications()
   }
   handleNotifClick(notification) {
-    const { data } = this.props
-    const { user } = data
+    const { markNotificationAsSeen } = this.props
 
-    NotificationDispatcher.dispatch({
-      action: 'mark-seen',
-      user,
-      id: notification.id
-    })
+    markNotificationAsSeen(notification.id)
 
     switch (notification.notification_type) {
       case 'DealRoleReactedToEnvelope':
@@ -242,8 +238,7 @@ export default class extends React.Component {
     return icon
   }
   getNotifications() {
-    const { data } = this.props
-    const { notifications } = data
+    const { notifications, isFetching } = this.props
 
     if (notifications && notifications.length) {
       return notifications.map((notification, i) => {
@@ -282,7 +277,7 @@ export default class extends React.Component {
       })
     }
 
-    if (data.notifications_retrieved) {
+    if (notifications.length === 0 && !isFetching) {
       return <div style={S('text-center mt-40')}>No Notifications Yet</div>
     }
 
@@ -291,18 +286,7 @@ export default class extends React.Component {
   render() {
     return (
       <div>
-        <h1
-          style={{
-            height: '54px',
-            lineHeight: '54px',
-            margin: 0,
-            fontSize: '2.1rem',
-            padding: '0 2rem',
-            borderBottom: '1px solid #ececec'
-          }}
-        >
-          Notifications
-        </h1>
+        <Header />
         <div style={{ position: 'relative', height: '100vh' }}>
           <div
             style={{
@@ -320,3 +304,11 @@ export default class extends React.Component {
     )
   }
 }
+
+export default connect(
+  ({ globalNotifications }) => ({
+    notifications: selectNotifications(globalNotifications),
+    isFetching: selectNotificationIsFetching(globalNotifications)
+  }),
+  { deleteNewNotifications, markNotificationAsSeen }
+)(Notifications)
