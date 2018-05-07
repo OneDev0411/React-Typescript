@@ -51,6 +51,7 @@ class App extends Component {
   componentWillMount() {
     const { user, dispatch } = this.props
 
+    console.log('api_url: ', config.api_url)
     // check branding
     this.getBrand()
 
