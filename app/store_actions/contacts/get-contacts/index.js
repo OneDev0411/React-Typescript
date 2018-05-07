@@ -17,24 +17,33 @@ export function getContacts(user = {}, params) {
     }
 
     try {
-      dispatch({
-        type: actionTypes.FETCH_CONTACTS_REQUEST
-      })
+      let startPoint = 0
+      let limit = 1000
+      let count = 0
 
-      let response = await fetchContacts(user, params)
-      const { data, info } = response
-      const contacts = { contacts: data }
-      const normalizedData = normalize(contacts, contactsSchema)
+      do {
+        dispatch({
+          type: actionTypes.FETCH_CONTACTS_REQUEST
+        })
 
-      response = {
-        info,
-        ...normalizedData
-      }
+        let response = await fetchContacts(user, startPoint, limit)
 
-      dispatch({
-        response,
-        type: actionTypes.FETCH_CONTACTS_SUCCESS
-      })
+        const { data, info } = response
+        const contacts = { contacts: data }
+        const normalizedData = normalize(contacts, contactsSchema)
+
+        startPoint += limit
+        count = info.total
+        response = {
+          info,
+          ...normalizedData
+        }
+
+        dispatch({
+          response,
+          type: actionTypes.FETCH_CONTACTS_SUCCESS
+        })
+      } while (count > startPoint)
     } catch (error) {
       dispatch({
         error,
