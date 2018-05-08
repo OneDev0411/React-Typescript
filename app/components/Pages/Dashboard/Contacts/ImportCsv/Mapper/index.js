@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import FieldDropDown, { fields as contactFields } from '../FieldDropDown'
+import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
 import CsvParser from 'papaparse'
 import {
@@ -11,6 +11,7 @@ import {
   setCurrentStepValidation
 } from '../../../../../../store_actions/contacts'
 import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from '../../../../../../constants/contacts'
+import { selectDefinition } from '../../../../../../reducers/contacts/attributeDefs'
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 
 class Mapper extends React.Component {
@@ -87,8 +88,22 @@ class Mapper extends React.Component {
     return list
   }
 
-  onChangeField = (fieldName, field) =>
-    this.props.updateCsvFieldsMap(fieldName, { field })
+  shouldShowLabel = colName => this.getMappedField(colName).definition.has_label
+
+  onChangeField = (fieldName, fieldValue) => {
+    const { updateCsvFieldsMap } = this.props
+
+    if (!fieldValue) {
+      return updateCsvFieldsMap(fieldName, { definitionId: null, label: 0 })
+    }
+
+    const [definitionId, index] = fieldValue.split(':')
+
+    updateCsvFieldsMap(fieldName, {
+      definitionId,
+      index: parseInt(index, 10)
+    })
+  }
 
   onChangeLabel = (fieldName, label) =>
     this.props.updateCsvFieldsMap(fieldName, { label })
@@ -98,20 +113,19 @@ class Mapper extends React.Component {
       showEmptyColumns: !this.state.showEmptyColumns
     })
 
-  shouldShowLabel = name => {
-    const fieldName = this.getMapValue(name, 'field')
+  getMappedField = name => {
+    const { attributeDefs: defs, mappedFields } = this.props
+    const field = mappedFields[name]
+    let definition = {}
 
-    if (!fieldName) {
-      return false
+    if (field && field.definitionId) {
+      definition = selectDefinition(defs, field.definitionId)
     }
 
-    return contactFields.find(row => row.value === fieldName).hasLabel
-  }
-
-  getMapValue = (name, field) => {
-    const { mappedFields } = this.props
-
-    return mappedFields[name] && mappedFields[name][field]
+    return {
+      ...field,
+      definition
+    }
   }
 
   render() {
@@ -131,38 +145,44 @@ class Mapper extends React.Component {
         </div>
 
         {_.chain(columns)
-          .pick(({ hasValue }, name) => hasValue && name.length > 0)
-          .map((info, name) => (
-            <div key={info.index} className="column-row">
-              <div className="name">{name}</div>
-              <div className="map-list">
-                <FieldDropDown
-                  fieldName={name}
-                  value={this.getMapValue(name, 'field')}
-                  onChange={this.onChangeField}
-                />
-              </div>
+          .pick(({ hasValue }, colName) => hasValue && colName.length > 0)
+          .map((info, colName) => {
+            const mappedField = this.getMappedField(colName)
 
-              <div className="map-label">
-                {this.shouldShowLabel(name) && (
-                  <FieldLabel
-                    fieldName={name}
-                    contactField={this.getMapValue(name, 'field')}
-                    fieldValue={this.getMapValue(name, 'label')}
-                    onChange={this.onChangeLabel}
+            return (
+              <div key={info.index} className="column-row">
+                <div className="name">{colName}</div>
+                <div className="map-list">
+                  <FieldDropDown
+                    fieldName={colName}
+                    selectedField={mappedField.definitionId}
+                    selectedFieldIndex={mappedField.index}
+                    onChange={this.onChangeField}
                   />
-                )}
+                </div>
+
+                <div className="map-label">
+                  {this.shouldShowLabel(colName) && (
+                    <FieldLabel
+                      fieldName={colName}
+                      fieldValue={mappedField.label}
+                      columnName={colName}
+                      labels={mappedField.definition.labels}
+                      onChange={this.onChangeLabel}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-          ))
+            )
+          })
           .value()}
 
         {showEmptyColumns &&
           _.chain(columns)
             .pick(({ hasValue }) => !hasValue)
-            .map((info, name) => (
+            .map((info, colName) => (
               <div key={info.index} className="column-row">
-                <div className="name is-empty">{name}</div>
+                <div className="name is-empty">{colName}</div>
               </div>
             ))
             .value()}
@@ -181,13 +201,14 @@ class Mapper extends React.Component {
 }
 
 function mapStateToProps({ contacts }) {
-  const { importCsv } = contacts
+  const { importCsv, attributeDefs } = contacts
   const { file, columns, mappedFields, isCurrentStepValid } = importCsv
 
   return {
     file,
-    mappedFields,
     columns,
+    mappedFields,
+    attributeDefs,
     isCurrentStepValid
   }
 }
