@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
 import { selectContacts } from '../../../reducers/contacts/list'
+
 import BareModal from '../BareModal'
 import Header from './components/Header'
 import Body from './components/Body'
@@ -15,7 +17,7 @@ const propTypes = {
   handleAddManually: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   handleOnClose: PropTypes.func.isRequired,
   handleSelectedItem: PropTypes.func.isRequired,
-  list: PropTypes.arrayOf(PropTypes.shape),
+  contacts: PropTypes.arrayOf(PropTypes.shape),
   defaultSearchFilter: PropTypes.string
 }
 
@@ -28,6 +30,7 @@ function SelectContactModal(props) {
   const {
     title,
     isOpen,
+    contacts,
     handleOnClose,
     handleAddManually,
     handleSelectedItem,
@@ -44,6 +47,7 @@ function SelectContactModal(props) {
         {handleAddManually && <AddManuallyButton onClick={handleAddManually} />}
       </Header>
       <Body
+        contacts={contacts}
         handleAddManually={handleAddManually}
         handleSelectedItem={handleSelectedItem}
         defaultSearchFilter={defaultSearchFilter}
@@ -60,7 +64,8 @@ SelectContactModal.defaultProps = defaultProps
 
 function mapStateToProps({ contacts: { list } }) {
   return {
-    contactsList: selectContacts(list)
+    // loading first 100 contacts in initial load of modal
+    contacts: selectContacts(list).slice(0, 100)
   }
 }
 

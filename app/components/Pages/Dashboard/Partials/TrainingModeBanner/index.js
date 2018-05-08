@@ -25,7 +25,6 @@ export function TrainingModeBanner({ user }) {
       {Array.isArray(user.teams) &&
         user.teams.length > 1 && (
           <Dropdown
-            dropdown
             id="account-dropdown"
             style={{ width: 228, marginTop: 0 }}
             className="c-app-sidenav__account-dropdown"
