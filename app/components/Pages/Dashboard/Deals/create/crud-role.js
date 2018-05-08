@@ -207,9 +207,10 @@ class CrudRole extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ deals, contacts }) {
   return {
-    contacts: contacts.list
+    contacts: contacts.list,
+    teamAgents: deals.agents
   }
 }
 
