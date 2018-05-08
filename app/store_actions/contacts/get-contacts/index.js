@@ -3,7 +3,7 @@ import { getContacts as fetchContacts } from '../../../models/contacts/get-conta
 import { isFetchingContactsList } from '../../../reducers/contacts/list'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 
-export function getContacts(query) {
+export function getContacts() {
   return async (dispatch, getState) => {
     const { contacts: { list } } = getState()
 
@@ -12,22 +12,31 @@ export function getContacts(query) {
     }
 
     try {
-      dispatch({
-        type: actionTypes.FETCH_CONTACTS_REQUEST
-      })
+      let start = 0
+      let limit = 1000
+      let count = 0
 
-      let response = await fetchContacts(query)
-      const normalizedContacts = normalizeContacts(response)
+      do {
+        dispatch({
+          type: actionTypes.FETCH_CONTACTS_REQUEST
+        })
 
-      response = {
-        info: response.info,
-        ...normalizedContacts
-      }
+        let response = await fetchContacts(start, limit)
+        const normalizedContacts = normalizeContacts(response)
 
-      dispatch({
-        response,
-        type: actionTypes.FETCH_CONTACTS_SUCCESS
-      })
+        start += limit
+        count = response.info.total
+
+        response = {
+          info: response.info,
+          ...normalizedContacts
+        }
+
+        dispatch({
+          response,
+          type: actionTypes.FETCH_CONTACTS_SUCCESS
+        })
+      } while (count > start)
     } catch (error) {
       dispatch({
         error,

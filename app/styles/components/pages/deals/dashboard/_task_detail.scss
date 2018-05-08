@@ -89,6 +89,9 @@
     text-align: left;
     color: #1d364b;
     padding: 1px 20px 1px 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     textarea {
       width: 100%;
@@ -101,10 +104,7 @@
     }
 
     .cta {
-      position: absolute;
       cursor: pointer;
-      top: 6px;
-      right: 10px;
       color: #2196f3;
       font-size: 13px;
 

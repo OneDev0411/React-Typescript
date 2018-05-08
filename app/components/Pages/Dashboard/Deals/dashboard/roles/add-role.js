@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import SelectContactModal from '../../../../../../views/components/SelectContactModal'
 import RoleCrmIntegration from './crm-integration'
 import { convertContactToRole } from '../../utils/roles'
@@ -13,24 +12,32 @@ const initialState = {
 class AddRole extends React.Component {
   state = initialState
 
-  resetStates = () => this.setState(initialState)
-
-  showContactModal = () => this.setState({ showContactModal: true })
-
-  hideContactModal = () => this.setState({ showContactModal: false })
-
-  showRoleModal = () =>
+  showRoleModal = () => {
     this.setState({
       showRoleModal: true,
       showContactModal: false
     })
+  }
 
-  onSelectContact = contact =>
+  resetStates = () => {
+    this.setState(initialState)
+  }
+
+  showContactModal = () => {
+    this.setState({ showContactModal: true })
+  }
+
+  hideContactModal = () => {
+    this.setState({ showContactModal: false })
+  }
+
+  onSelectContact = contact => {
     this.setState({
       showRoleModal: true,
       showContactModal: false,
-      user: convertContactToRole(contact, this.props.attributeDefs)
+      user: convertContactToRole(contact)
     })
+  }
 
   render() {
     const { user, showRoleModal, showContactModal } = this.state
@@ -67,10 +74,4 @@ class AddRole extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts }) {
-  return {
-    attributeDefs: contacts.attributeDefs
-  }
-}
-
-export default connect(mapStateToProps)(AddRole)
+export default AddRole

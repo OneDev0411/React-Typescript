@@ -15,7 +15,7 @@ export default ({ deal, task }) => {
         </div>
 
         <div className="name">
-          <Link to={`/dashboard/deals/${deal.id}/form-viewer/${task.id}`}>
+          <Link to={`/dashboard/deals/${deal.id}/form-edit/${task.id}`}>
             <span className="link">{task.title}</span>
           </Link>
         </div>

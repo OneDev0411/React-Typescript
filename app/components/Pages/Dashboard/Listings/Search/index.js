@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 

@@ -7,7 +7,7 @@ import Upload from '../upload'
 import Comments from '../comments'
 import CommentInput from '../comments/input'
 
-const TaskManager = ({ deal, task }) => {
+const TaskManager = ({ deal, task, checklist }) => {
   const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
   if (!task) {
@@ -20,7 +20,7 @@ const TaskManager = ({ deal, task }) => {
         <div className="scrollable" id="deals-task-scrollable">
           <Header deal={deal} key={task.id} task={task} />
 
-          <Documents deal={deal} task={task} />
+          <Documents deal={deal} task={task} checklist={checklist} />
 
           <Comments deal={deal} task={task} />
         </div>
@@ -32,8 +32,14 @@ const TaskManager = ({ deal, task }) => {
 }
 
 function mapStateTopProps({ deals }, { taskId }) {
+  const { tasks, checklists } = deals
+
+  const task = taskId ? tasks[taskId] : null
+  const checklist = task ? checklists[task.checklist] : null
+
   return {
-    task: taskId ? deals.tasks[taskId] : null
+    task,
+    checklist
   }
 }
 

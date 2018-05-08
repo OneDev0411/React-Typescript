@@ -105,7 +105,15 @@ class Info extends React.Component {
 
     return recipients
   }
+  // User  can chat just with contacts which at least has email or phone or user attribute.
+  shouldShowChatButton(contact) {
+    const {
+      summary: { email: contactEmail, phone_number: contactPhone },
+      users: contactUsers
+    } = contact
 
+    return contactEmail || contactPhone || contactUsers
+  }
   render() {
     const { isCreatingRoom, isDeleting } = this.state
     const { contact } = this.props
@@ -122,20 +130,18 @@ class Info extends React.Component {
         <div className="c-contact-info__detail">
           <div className="c-contact-info__name">{displayName}</div>
 
-          {contact.users && (
-            <div className="c-contact-info__status">
-              <LastSeen user={contact.users[0]} />
-            </div>
+          <div className="c-contact-info__status">
+            {contact.users && <LastSeen user={contact.users[0]} />}
+          </div>
+          {this.shouldShowChatButton(contact) && (
+            <ActionButton
+              disabled={isCreatingRoom}
+              onClick={this.handleOnClickChat}
+              style={{ marginTop: '1em' }}
+            >
+              {isCreatingRoom ? 'Connecting...' : 'Chat'}
+            </ActionButton>
           )}
-
-          <ActionButton
-            disabled={isCreatingRoom}
-            onClick={this.handleOnClickChat}
-            style={{ marginTop: '1em' }}
-          >
-            {isCreatingRoom ? 'Connecting...' : 'Chat'}
-          </ActionButton>
-
           <ShadowButton
             style={{
               position: 'absolute',

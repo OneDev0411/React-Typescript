@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-
+import cn from 'classnames'
 import DrawIcon from '../../../../Partials/Svgs/PolygonDraw'
 import Brand from '../../../../../../../controllers/Brand'
 import {
@@ -20,7 +20,9 @@ const DrawingButton = ({
   isLoggedIn && (
     <button
       onClick={onClick}
-      className="c-mls-toolbar__drawing-btn"
+      className={cn('c-mls-toolbar__btn c-mls-toolbar__btn--drawing', {
+        'c-mls-toolbar__btn--disabled': isFetching
+      })}
       disabled={hasPolygon.length || isFetching}
     >
       <DrawIcon

@@ -15,12 +15,12 @@ import { selectDefinition } from '../../../../../../reducers/contacts/attributeD
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 
 class Mapper extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      showEmptyColumns: false
-    }
-  }
+  // constructor(props) {
+  //   super(props)
+  //   this.state = {
+  //     // showEmptyColumns: false
+  //   }
+  // }
 
   componentDidMount() {
     this.analyze()
@@ -108,10 +108,10 @@ class Mapper extends React.Component {
   onChangeLabel = (fieldName, label) =>
     this.props.updateCsvFieldsMap(fieldName, { label })
 
-  toggleShowEmptyColumns = () =>
-    this.setState({
-      showEmptyColumns: !this.state.showEmptyColumns
-    })
+  // toggleShowEmptyColumns = () =>
+  //   this.setState({
+  //     showEmptyColumns: !this.state.showEmptyColumns
+  //   })
 
   getMappedField = name => {
     const { attributeDefs: defs, mappedFields } = this.props
@@ -130,7 +130,7 @@ class Mapper extends React.Component {
 
   render() {
     const { columns } = this.props
-    const { showEmptyColumns } = this.state
+    // const { showEmptyColumns } = this.state
 
     if (columns.length === 0) {
       return false
@@ -177,7 +177,7 @@ class Mapper extends React.Component {
           })
           .value()}
 
-        {showEmptyColumns &&
+        {/* {showEmptyColumns &&
           _.chain(columns)
             .pick(({ hasValue }) => !hasValue)
             .map((info, colName) => (
@@ -194,7 +194,7 @@ class Mapper extends React.Component {
           >
             {showEmptyColumns ? 'Hide' : 'Show'} Empty Columns
           </div>
-        </div>
+        </div> */}
       </div>
     )
   }

@@ -12,7 +12,7 @@ import {
 import {
   getLegalFullName,
   convertRoleToContact,
-  getContactDiff
+  getUpsertedAttributes
 } from '../../../utils/roles'
 import RoleForm from '../form'
 
@@ -33,7 +33,6 @@ class RoleFormWrapper extends React.Component {
     const {
       deal,
       user,
-      attributeDefs,
       upsertContactAttributes,
       createContacts,
       updateRole,
@@ -51,15 +50,18 @@ class RoleFormWrapper extends React.Component {
 
       if (isNewRecord) {
         if (form.contact) {
-          const upsertedAttributes = getContactDiff(form, attributeDefs)
+          const upsertedAttributes = getUpsertedAttributes(form)
 
           if (upsertedAttributes.length > 0) {
-            await upsertContactAttributes(form.contact.id, upsertedAttributes)
+            await upsertContactAttributes({
+              contactId: form.contact.id,
+              attributes: upsertedAttributes
+            })
 
             this.showNotification(`${fullName} Updated.`)
           }
         } else {
-          await createContacts(convertRoleToContact(form, attributeDefs))
+          await createContacts(convertRoleToContact(form))
           this.showNotification(`New Contact Created: ${fullName}`)
         }
 
@@ -114,13 +116,7 @@ class RoleFormWrapper extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts }) {
-  return {
-    attributeDefs: contacts.attributeDefs
-  }
-}
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   notify,
   updateRole,
   createRoles,

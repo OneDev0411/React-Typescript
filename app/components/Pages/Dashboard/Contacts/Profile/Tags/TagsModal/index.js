@@ -79,9 +79,12 @@ export default class extends Component {
   }
 
   handleOnChange = event => {
-    const newTag = event.target.value.trim()
+    const newTag = event.target.value
 
-    this.setState({ newTag })
+    // for controlling space and also backspace
+    if (newTag.trim().length > 0 || this.state.newTag) {
+      this.setState({ newTag })
+    }
   }
 
   handleHideModal = () => {

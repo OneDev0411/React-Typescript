@@ -183,6 +183,9 @@ class WhoSigned extends React.Component {
                   <div className="sname">{this.getName(signer.role)}</div>
                 </div>
 
+                {/*
+                 * Disabled due to web#1178
+                 *
                 <div className="sign-now">
                   {signer.role.user &&
                     signer.role.user.id === user.id && (
@@ -195,6 +198,7 @@ class WhoSigned extends React.Component {
                       </a>
                     )}
                 </div>
+                */}
               </div>
             ))}
           </div>

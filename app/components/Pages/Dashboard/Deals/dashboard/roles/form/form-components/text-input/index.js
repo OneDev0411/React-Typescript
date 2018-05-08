@@ -15,7 +15,7 @@ export const TextInput = ({
   ...rest
 }) => (
   <InputContainer>
-    <InputLabel>
+    <InputLabel hasError={meta.submitFailed && meta.error}>
       {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
     </InputLabel>
 

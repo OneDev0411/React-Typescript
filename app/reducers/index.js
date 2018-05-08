@@ -18,6 +18,7 @@ import favorites from './listings/favorites'
 import widgets from './widgets'
 import { intercom } from './intercom'
 import confirmation from './confirmation'
+import { notifications as globalNotifications } from './notifications'
 import { createNamedWrapperReducer } from '../utils/redux-utils'
 import { reducer as reduxFormReducer } from 'redux-form'
 
@@ -33,7 +34,7 @@ const appReducer = combineReducers({
   widgets,
   intercom,
   confirmation,
-
+  globalNotifications,
   /* deals reducers */
   deals,
   brandConsole,

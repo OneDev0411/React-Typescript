@@ -7,7 +7,6 @@ import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
 // actions
 import { getDeals, getContexts } from '../store_actions/deals'
-import getContacts from '../store_actions/contacts/get-contacts'
 
 // utils
 import { hasUserAccess } from '../utils/user-teams'

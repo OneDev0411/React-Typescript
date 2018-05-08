@@ -2,6 +2,7 @@ import webpack from 'webpack'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 import WebpackNotifierPlugin from 'webpack-notifier'
+import Webpackbar from 'webpackbar'
 
 const postcss = function postcss() {
   return [
@@ -22,7 +23,10 @@ webpackConfig.entry = [
   appConfig.compile.entry
 ]
 
-webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
+webpackConfig.plugins.push(
+  new webpack.HotModuleReplacementPlugin(),
+  new Webpackbar()
+)
 
 if (process.env.notify) {
   webpackConfig.plugins.push(new WebpackNotifierPlugin({ alwaysNotify: true }))
