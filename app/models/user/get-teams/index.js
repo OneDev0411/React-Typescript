@@ -1,6 +1,8 @@
 import Fetch from '../../../services/fetch'
 
-const getTeams = async ({ access_token }) => {
+const getTeams = async (user = {}) => {
+  const { access_token } = user
+
   try {
     const fetchTeams = new Fetch().get('/users/self/roles')
 
