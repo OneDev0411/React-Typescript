@@ -1,0 +1,39 @@
+.deals__role-form--select {
+  .Select-control,
+  &.is-focused .Select-control {
+    border: none;
+    font-size: 17px;
+    box-shadow: none;
+
+    &:hover {
+      box-shadow: none;
+    }
+
+    .Select-placeholder,
+    .Select-value,
+    .Select-input {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+.deals__role-form--modal {
+  .modal-header {
+    font-size: 17px;
+    font-weight: 600;
+    color: #263445;
+  }
+
+  .modal-content {
+    border: none;
+    box-shadow: 1px 1px 1px #ccc;
+  }
+
+  .modal-footer {
+    button {
+      margin-left: 10px;
+      min-width: 80px;
+    }
+  }
+}

@@ -11,14 +11,16 @@ import CancelButton from '../Button/CancelButton'
 const propTypes = {
   title: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
-  handleAddManually: PropTypes.func,
+  handleAddManually: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   handleOnClose: PropTypes.func.isRequired,
   handleSelectedItem: PropTypes.func.isRequired,
-  list: PropTypes.arrayOf(PropTypes.shape)
+  list: PropTypes.arrayOf(PropTypes.shape),
+  defaultSearchFilter: PropTypes.string
 }
 
 const defaultProps = {
-  title: 'Select Contact'
+  title: 'Select Contact',
+  defaultSearchFilter: ''
 }
 
 function SelectContactModal(props) {
@@ -27,7 +29,8 @@ function SelectContactModal(props) {
     isOpen,
     handleOnClose,
     handleAddManually,
-    handleSelectedItem
+    handleSelectedItem,
+    defaultSearchFilter
   } = props
 
   return (
@@ -37,13 +40,12 @@ function SelectContactModal(props) {
       onRequestClose={handleOnClose}
     >
       <Header title={title}>
-        {handleAddManually && (
-          <AddManuallyButton onClick={handleAddManually} />
-        )} 
+        {handleAddManually && <AddManuallyButton onClick={handleAddManually} />}
       </Header>
       <Body
         handleAddManually={handleAddManually}
         handleSelectedItem={handleSelectedItem}
+        defaultSearchFilter={defaultSearchFilter}
       />
       <Footer>
         <CancelButton onClick={handleOnClose}>Cancel</CancelButton>

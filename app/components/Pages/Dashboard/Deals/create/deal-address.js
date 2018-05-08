@@ -2,6 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import ManualAddress from './manual-address'
 import MlsSearch from '../dashboard/mls-listing/search'
+import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 const BUYING = 'Buying'
 
@@ -48,6 +49,7 @@ export default class DealAddress extends React.Component {
         <div className={cn('hero', { hasError })}>
           What is the address of the subject property?&nbsp;
           <span className="required">*</span>
+          {hasError && <RequiredIcon />}
         </div>
 
         <ManualAddress

@@ -1,239 +1,173 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import RoleForm from '../dashboard/roles/form'
+import RoleCrmIntegration from '../dashboard/roles/crm-integration'
+import AgentModal from './deal-team-agents'
 import RoleItem from './role-item'
-import TeamAgents from './deal-team-agents'
-import {
-  getNewAttributes,
-  normalizeContactAsRole,
-  getUpdatedNameAttribute,
-  normalizeNewRoleFormDataAsContact
-} from '../utils/roles'
-import SelectContactModal from '../../../../../views/components/SelectContactModal'
-import {
-  createNewContact,
-  upsertContactAttributes
-} from '../../../../../store_actions/contacts'
+import ContactModal from '../../../../../views/components/SelectContactModal'
+import { convertContactToRole } from '../utils/roles'
+import { extractUserInfoFromContact } from '../../../../../models/contacts'
+import { selectContacts } from '../../../../../reducers/contacts/list'
 
 const initialState = {
-  form: null,
+  role: null,
   isSaving: false,
-  showFormModal: false,
-  showAgentsModal: false,
-  showSelectContactModal: false
+  showRoleModal: false,
+  showAgentModal: false,
+  showContactModal: false,
+  selectedAgent: null
 }
 
 class CrudRole extends React.Component {
   state = initialState
 
-  handlOnHide = () => {
+  resetStates = () => {
     this.setState(initialState)
   }
 
-  handleShowModal = () => {
-    const { shouldPrepopulateAgent, role } = this.props
+  showModal = () => {
+    const { shouldPrepopulateAgent, user } = this.props
 
     if (shouldPrepopulateAgent) {
-      return this.setState({ showAgentsModal: true })
+      return this.showAgentsModal()
+    } else if (user) {
+      return this.setState({ showRoleModal: true, role: user })
     }
 
-    if (role) {
-      return this.setState({ showFormModal: true })
-    }
-
-    return this.setState({ showSelectContactModal: true })
+    return this.setState({ showContactModal: true })
   }
 
-  isUpdateModal = () => {
-    const { role } = this.props
-
-    return role && role.role
-  }
-
-  notifySuccess = message =>
-    this.props.notify({
-      message,
-      status: 'success'
+  showRoleModal = () => {
+    this.setState({
+      ...initialState,
+      showRoleModal: true
     })
+  }
 
-  addRole = async () => {
-    const { form } = this.state
-    const { notify, createNewContact, upsertContactAttributes } = this.props
-    const {
-      contact,
-      legal_first_name,
-      legal_last_name,
-      isAgent,
-      company_title
-    } = form
-    let fullName
+  showAgentsModal = () => {
+    const { teamAgents } = this.props
 
-    if (legal_first_name || legal_last_name) {
-      fullName = `${legal_first_name} ${legal_last_name}`
-    } else if (company_title) {
-      fullName = company_title
+    // For primary agent if only one agent available automatically select them
+    // issue: web#1148
+    if (teamAgents && teamAgents.length === 1) {
+      return this.onSelectAgent(teamAgents[0])
     }
 
-    try {
-      if (!isAgent && !this.isUpdateModal()) {
-        this.setState({
-          isSaving: true
-        })
+    this.setState({ showAgentModal: true })
+  }
 
-        if (!contact) {
-          const copyFormData = Object.assign({}, form)
-
-          await createNewContact(
-            normalizeNewRoleFormDataAsContact(copyFormData)
-          )
-          this.notifySuccess(`${fullName} has been added to your Contacts.`)
-        } else {
-          const newAttributes = await getNewAttributes(form)
-          const nameAttribute = await getUpdatedNameAttribute(form)
-
-          if (nameAttribute && !nameAttribute.id) {
-            newAttributes.push(nameAttribute)
-          }
-
-          if (nameAttribute || newAttributes.length > 0) {
-            const contactId = form.contact.id
-
-            if (nameAttribute && nameAttribute.id) {
-              await upsertContactAttributes({
-                contactId,
-                attributes: [nameAttribute]
-              })
-            }
-
-            if (newAttributes.length > 0) {
-              await upsertContactAttributes({
-                contactId,
-                attributes: newAttributes
-              })
-            }
-
-            this.notifySuccess(
-              `${fullName}'s contact profile has been updated.`
-            )
-          }
-        }
-      }
-
-      this.props.onUpsertRole({
-        id: new Date().getTime(),
-        ...form
-      })
-      this.handlOnHide()
-    } catch (e) {
-      this.setState({
-        isSaving: false
-      })
-
-      if (!e.response) {
-        return notify({
-          message: `Error: ${e.message}`,
-          status: 'error'
-        })
-      }
-
-      const { attributes } = e.response.body
-      const field = attributes && Object.keys(attributes)[0]
-
-      notify({
-        message: `${field || 'entered data'} is invalid`,
-        status: 'error'
-      })
-    }
+  onSelectContactUser = contact => {
+    this.setState({
+      ...initialState,
+      showRoleModal: true,
+      role: convertContactToRole(contact)
+    })
   }
 
   onSelectAgent = user => {
-    const { agent, first_name, last_name, email, phone_number } = user
+    const contacts = this.searchContactByEmail(user.email)
+    let newState
 
-    const { office, work_phone } = agent || {}
+    /**
+     * if there is no related contact for this agent:
+     * populate role form with agent data
+     */
+    if (contacts.length === 0) {
+      let { agent, first_name, last_name, email, phone_number } = user
+      let { office, work_phone } = agent || {}
 
-    const form = {
-      email,
-      isAgent: true,
-      legal_last_name: last_name,
-      legal_first_name: first_name,
-      phone: phone_number || work_phone,
-      company: office ? office.name : ''
+      newState = {
+        role: {
+          email,
+          legal_last_name: last_name,
+          legal_first_name: first_name,
+          phone: phone_number || work_phone,
+          company: office ? office.name : ''
+        },
+        showRoleModal: true
+      }
+    }
+
+    /**
+     * if there is one related contact for the agent:
+     * populate role form with the relevant contact record
+     */
+    if (contacts.length === 1) {
+      newState = {
+        showRoleModal: true,
+        role: convertContactToRole(contacts[0])
+      }
+    }
+
+    /**
+     * if there are more than one related contacts for the agent:
+     * show contacts modal to user be able select one of them
+     */
+    if (contacts.length > 1) {
+      newState = {
+        selectedAgent: user,
+        showContactModal: true
+      }
     }
 
     this.setState({
-      form,
-      showAgentsModal: false,
-      showFormModal: true
+      ...initialState,
+      ...newState
     })
   }
 
-  onFormChange = form => {
-    this.setState({
-      form
-    })
-  }
+  searchContactByEmail = email => {
+    const { contacts } = this.props
+    const contactsList = selectContacts(contacts).map(
+      extractUserInfoFromContact
+    )
 
-  handleOpenFormModal = () => {
-    this.setState({
-      showFormModal: true,
-      showAgentsModal: false,
-      showSelectContactModal: false
-    })
-  }
-
-  handleSelectedContact = contact => {
-    this.setState({
-      showFormModal: true,
-      showSelectContactModal: false,
-      form: normalizeContactAsRole(contact)
-    })
-  }
-
-  setSubmitButtonText = () => {
-    const { isSaving } = this.state
-    const isUpdate = this.isUpdateModal()
-
-    let text = isUpdate ? 'Update' : 'Add'
-
-    if (isSaving) {
-      return isUpdate ? 'Updating...' : 'Adding...'
+    if (!contactsList) {
+      return []
     }
 
-    return text
+    return contactsList.filter(contact => contact.email === email)
   }
+
+  showNotification = (message, status = 'success') =>
+    this.props.notify({
+      message,
+      status
+    })
 
   render() {
     const {
-      form,
+      role,
       isSaving,
-      showFormModal,
-      showAgentsModal,
-      showSelectContactModal
+      showRoleModal,
+      showAgentModal,
+      showContactModal,
+      selectedAgent
     } = this.state
 
     const {
-      role,
+      user,
       ctaTitle,
       modalTitle,
       teamAgents,
-      onRemoveRole,
+      onUpsertUser,
+      onRemoveUser,
       allowedRoles,
       isCommissionRequired
     } = this.props
 
     return (
-      <div>
-        {role ? (
+      <Fragment>
+        {user ? (
           <RoleItem
-            person={role}
-            onRemove={onRemoveRole}
-            onClick={this.handleShowModal}
+            user={user}
+            onRemove={onRemoveUser}
+            onClick={this.showModal}
           />
         ) : (
           <div className="entity-item people new">
             <button
-              onClick={this.handleShowModal}
+              onClick={this.showModal}
               className="c-button--shadow add-item"
             >
               <span className="icon test">+</span>
@@ -242,41 +176,43 @@ class CrudRole extends React.Component {
           </div>
         )}
 
-        <SelectContactModal
+        <ContactModal
           title={modalTitle}
-          isOpen={showSelectContactModal}
-          handleOnClose={this.handlOnHide}
-          handleAddManually={this.handleOpenFormModal}
-          handleSelectedItem={this.handleSelectedContact}
+          isOpen={showContactModal}
+          handleOnClose={this.resetStates}
+          handleAddManually={selectedAgent ? null : this.showRoleModal}
+          defaultSearchFilter={selectedAgent && selectedAgent.email}
+          handleSelectedItem={this.onSelectContactUser}
         />
 
-        <TeamAgents
-          show={showAgentsModal}
-          handleOnClose={this.handlOnHide}
-          handleSelectAgent={user => this.onSelectAgent(user)}
+        <AgentModal
+          isOpen={showAgentModal}
+          onHide={this.resetStates}
+          onSelectAgent={this.onSelectAgent}
           teamAgents={teamAgents}
         />
 
-        <RoleForm
-          showFormModal={showFormModal}
-          handlOnHide={this.handlOnHide}
-          onSubmit={this.addRole}
-          submitButtonText={this.setSubmitButtonText()}
-          formNotChanged={!form}
+        <RoleCrmIntegration
+          isSubmitting={isSaving}
+          isOpen={showRoleModal}
+          user={role}
+          onHide={this.resetStates}
+          onUpsertRole={onUpsertUser}
           modalTitle={modalTitle}
-          isSaving={isSaving}
-          form={form || role}
           allowedRoles={allowedRoles}
           isCommissionRequired={isCommissionRequired}
-          onFormChange={data => this.onFormChange(data)}
         />
-      </div>
+      </Fragment>
     )
   }
 }
 
-export default connect(null, {
-  notify,
-  createNewContact,
-  upsertContactAttributes
+function mapStateToProps({ contacts }) {
+  return {
+    contacts: contacts.list
+  }
+}
+
+export default connect(mapStateToProps, {
+  notify
 })(CrudRole)

@@ -23,6 +23,11 @@ class Compose extends React.Component {
     this.onBlurDropDownBox = this.onBlurDropDownBox.bind(this)
   }
 
+  componentDidMount() {
+    // if component reopen, clear recipient
+    this.onChangeRecipients()
+  }
+
   /**
    * search recipients
    */
@@ -32,6 +37,9 @@ class Compose extends React.Component {
     if (text === this.criteria) {
       return false
     }
+
+    // On each search remove default recipient
+    this.onChangeRecipients()
 
     // set this variable to detect non characters like shift, ctrl, ...
     this.criteria = text
@@ -57,6 +65,13 @@ class Compose extends React.Component {
 
     // hide loader
     this.setState({ searching: false })
+
+    // Make default recipient if it is valid.
+    const viewList = await this.createNewEntry()
+
+    if (viewList) {
+      this.onChangeRecipients(viewList)
+    }
   }
 
   /**
@@ -254,14 +269,14 @@ class Compose extends React.Component {
   /**
    * on change recipients
    */
-  onChangeRecipients() {
+  onChangeRecipients(viewList) {
     const recipients = {
       users: [],
       emails: [],
       phone_numbers: []
     }
 
-    _.each(this.state.recipients, recp => {
+    _.each({ ...this.state.recipients, ...viewList }, recp => {
       switch (recp.type) {
         case 'user':
           recipients.users.push(recp.id)
@@ -277,6 +292,7 @@ class Compose extends React.Component {
           break
       }
     })
+    console.log(recipients, this.state.recipients)
 
     this.props.onChangeRecipients(recipients)
   }

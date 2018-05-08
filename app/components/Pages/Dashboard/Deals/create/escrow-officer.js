@@ -2,6 +2,7 @@ import React from 'react'
 import _ from 'underscore'
 import cn from 'classnames'
 import CrudRole from './crud-role'
+import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 export default ({
   hasError,
@@ -16,17 +17,18 @@ export default ({
       <div className={cn('hero', { hasError })}>
         Do you have Title company and Escrow officer information? &nbsp;
         <span className="required">*</span>
+        {hasError && <RequiredIcon />}
       </div>
 
       <div className="people-container">
         {_.map(escrowOfficers, (agent, id) => (
           <CrudRole
             key={id}
-            role={agent}
+            user={agent}
             allowedRoles={allowedRoles}
             modalTitle="Update Escrow Officer"
-            onRemoveRole={id => onRemoveEscrowOfficer(id)}
-            onUpsertRole={onUpsertEscrowOfficer}
+            onRemoveUser={onRemoveEscrowOfficer}
+            onUpsertUser={onUpsertEscrowOfficer}
           />
         ))}
 
@@ -34,7 +36,7 @@ export default ({
           modalTitle="Add Escrow Officer"
           ctaTitle="Add Escrow Officer"
           allowedRoles={allowedRoles}
-          onUpsertRole={onUpsertEscrowOfficer}
+          onUpsertUser={onUpsertEscrowOfficer}
         />
       </div>
     </div>

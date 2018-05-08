@@ -88,6 +88,8 @@ class FormViewer extends React.Component {
   getFileType(file) {
     if (file.mime === 'application/pdf') {
       return 'pdf'
+    } else if (file.mime === 'text/html') {
+      return 'html'
     } else if (file.mime.includes('image/')) {
       return 'image'
     }

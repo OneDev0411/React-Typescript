@@ -23,6 +23,7 @@ import {
   createOffer,
   updateContext
 } from '../../../../../store_actions/deals'
+import { getLegalFullName } from '../utils/roles'
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -58,6 +59,7 @@ class CreateOffer extends React.Component {
 
   prepopulateRoles(list) {
     const { roles } = this.props
+    const newState = {}
 
     list.forEach(id => {
       let type
@@ -83,11 +85,20 @@ class CreateOffer extends React.Component {
           break
       }
 
-      if (type) {
-        item.readOnly = true
-        this.onUpsertRole(item, type)
+      if (!type) {
+        return false
+      }
+
+      newState[type] = {
+        ...newState[type],
+        [item.id]: {
+          ...item,
+          readOnly: true
+        }
       }
     })
+
+    this.setState(newState)
   }
 
   onUpsertRole(form, type) {
@@ -198,9 +209,8 @@ class CreateOffer extends React.Component {
     let { buyerName } = this.state
 
     if (!isBackupOffer) {
-      buyerName = _.map(
-        clients,
-        client => `${client.legal_first_name} ${client.legal_last_name}`
+      buyerName = _.map(clients, client =>
+        getLegalFullName(client, false)
       ).join(', ')
     }
 

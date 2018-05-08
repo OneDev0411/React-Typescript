@@ -1,3 +1,29 @@
+import _ from 'underscore'
+
+export const ROLE_NAMES = [
+  'BuyerAgent',
+  'BuyerReferral',
+  'CoBuyerAgent',
+  'SellerAgent',
+  'SellerReferral',
+  'CoSellerAgent',
+  'Buyer',
+  'BuyerPowerOfAttorney',
+  'Seller',
+  'SellerPowerOfAttorney',
+  'Title',
+  'BuyerLawyer',
+  'SellerLawyer',
+  'Lender',
+  'TeamLead',
+  'Appraiser',
+  'Inspector',
+  'Tenant',
+  'LandlordPowerOfAttorney',
+  'Landlord',
+  'TenantPowerOfAttorney'
+]
+
 const aliases = {
   Title: 'Escrow Officer',
   Lender: 'Lending Agent',
@@ -7,52 +33,89 @@ const aliases = {
   TenantPowerOfAttorney: 'Power of Attorney - Tenant'
 }
 
+/**
+ * returns a human readable role name
+ * @param {string} role - server role name
+ */
 export function roleName(role) {
   const name = aliases[role] || role
 
   return name.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/Co\s/g, 'Co-')
 }
 
-export function normalizeContactAsRole(contact) {
-  const newContact = contact
+/**
+ * returns user legal name based on given fields
+ * @param {Object} role - the roles including name parts
+ * @param {Boolean} withPrefix - should prepend legal prefix or not
+ */
+export function getLegalFullName(role, withPrefix = true) {
+  let name = []
+  const {
+    legal_full_name,
+    legal_first_name,
+    legal_last_name,
+    company_title
+  } = role
 
-  delete newContact.id
+  const legal_prefix = withPrefix ? role.legal_prefix : ''
 
-  let {
+  if (legal_full_name) {
+    name = [legal_prefix, legal_full_name]
+  } else if (legal_first_name || legal_last_name) {
+    name = [legal_prefix, legal_first_name, legal_last_name]
+  } else {
+    name = [company_title]
+  }
+
+  return name.join(' ')
+}
+
+/**
+ * Converts a contact object to a role contact
+ * @param {Object} contact - The contact object
+ */
+export function convertContactToRole(contact) {
+  let role = {}
+
+  const {
     title,
     last_name,
     middle_name,
     first_name,
     email,
-    phone_number
+    companies,
+    phone_number,
+    company_title
   } = contact
 
   if (first_name === email || first_name === phone_number) {
-    first_name = ''
+    role.first_name = ''
   }
 
-  let { company_title } = contact
-
-  if (!contact.company_title && contact.companies && contact.companies[0]) {
-    company_title = contact.companies[0].company
+  if (!company_title && companies && companies[0]) {
+    role.company_title = contact.companies[0].company
   }
 
-  const fakeRole = {
-    ...newContact,
-    company_title,
+  role = {
+    ...contact,
+    ...role,
     legal_prefix: title,
     legal_first_name: first_name,
     legal_middle_name: middle_name,
-    legal_last_name: last_name
+    legal_last_name: last_name,
+    role: null
   }
 
-  return fakeRole
+  delete role.id
+
+  return role
 }
 
-export function normalizeNewRoleFormDataAsContact(formData = {}) {
-  let emails
-  let phone_numbers
-  let companies
+/**
+ * Converts a role object to a contact model
+ * @param {Object} formData - Role's object
+ */
+export function convertRoleToContact(form = {}) {
   const {
     email,
     phone_number,
@@ -61,27 +124,12 @@ export function normalizeNewRoleFormDataAsContact(formData = {}) {
     legal_first_name,
     legal_middle_name,
     legal_last_name
-  } = formData
-
-  if (email) {
-    emails = [email]
-    delete formData.email
-  }
-
-  if (phone_number) {
-    phone_numbers = [phone_number]
-    delete formData.phone_number
-  }
-
-  if (company_title) {
-    companies = [company_title]
-    delete formData.company_title
-  }
+  } = form
 
   return {
-    emails,
-    phone_numbers,
-    companies,
+    emails: email ? [email] : [],
+    phone_numbers: phone_number ? [phone_number] : [],
+    companies: company_title ? [company_title] : [],
     title: legal_prefix,
     first_name: legal_first_name,
     middle_name: legal_middle_name,
@@ -89,32 +137,27 @@ export function normalizeNewRoleFormDataAsContact(formData = {}) {
   }
 }
 
-export async function getUpdatedNameAttribute(formData) {
-  const { contact } = formData
-
-  if (!contact) {
+/**
+ * returns updated Name attribute
+ * @param {Object} form - role form
+ */
+export function getUpdatedNameAttribute(form) {
+  if (!form.contact) {
     return null
   }
 
-  const {
-    legal_prefix: title,
-    legal_first_name: first_name,
-    legal_middle_name: middle_name,
-    legal_last_name: last_name
-  } = formData
-
-  const formNameFields = {
-    title,
-    first_name,
-    middle_name,
-    last_name
+  const { names } = form.contact.sub_contacts[0].attributes
+  const nameFields = {
+    title: form.legal_prefix,
+    first_name: form.legal_first_name,
+    middle_name: form.legal_middle_name,
+    last_name: form.legal_last_name
   }
 
   let name = {
     id: undefined,
     type: 'name'
   }
-  const { names } = contact.sub_contacts[0].attributes
 
   if (Array.isArray(names) && names.length > 0) {
     name = {
@@ -123,75 +166,80 @@ export async function getUpdatedNameAttribute(formData) {
     }
   }
 
-  const fieldsList = ['title', 'first_name', 'middle_name', 'last_name']
+  const updatedFields = {}
 
-  const updatedFieldsList = Object.keys(formNameFields)
-    .filter(attr => fieldsList.includes(attr))
-    .filter(attr => !name[attr] || formNameFields[attr] !== name[attr])
+  _.each(nameFields, (value, attr) => {
+    const isValidField = _.keys(nameFields).includes(attr)
 
-  if (updatedFieldsList.length > 0) {
-    const updatedFields = {}
-
-    updatedFieldsList.forEach(field => {
-      updatedFields[field] = formNameFields[field]
-    })
-
-    return {
-      ...name,
-      ...updatedFields
+    if (isValidField && (!name[attr] || name[attr] !== value)) {
+      updatedFields[attr] = value
     }
+  })
+
+  if (_.size(updatedFields) === 0) {
+    return null
   }
 
-  return null
+  return {
+    ...name,
+    ...updatedFields
+  }
 }
 
-export async function getNewAttributes(formData = {}) {
-  const {
-    email,
-    phone_number,
-    emails,
-    phones,
-    company_title: company,
-    companies
-  } = formData
-  const newAttributes = []
+/**
+ * returns changed attributes
+ * @param {Object} form - role form data
+ */
+export function getNewAttributes(form = {}) {
+  const attributes = []
+  const types = [
+    { singularName: 'email', pluralName: 'emails' },
+    { singularName: 'phone_number', pluralName: 'phones' },
+    { singularName: 'company_title', pluralName: 'companies', alias: 'company' }
+  ]
 
-  const isNewEmail = email && !emails.map(item => item.email).includes(email)
+  types.forEach(({ singularName, pluralName, alias }) => {
+    const contactName = alias || singularName
 
-  const isNewCompany =
-    company && !companies.map(item => item.company).includes(company)
+    const isNew =
+      form[singularName] &&
+      form[pluralName] &&
+      form[pluralName]
+        .map(item => item[contactName])
+        .includes(form[singularName]) === false
 
-  const isNewPhoneNumber =
-    phone_number &&
-    !phones.map(item => item.phone_number).includes(phone_number)
+    if (isNew) {
+      attributes.push({
+        type: contactName,
+        [contactName]: form[singularName],
+        is_primary: form[pluralName].length === 0
+      })
+    }
+  })
 
-  if (isNewEmail) {
-    newAttributes.push({
-      email,
-      type: 'email',
-      is_primary: emails.length === 0
-    })
-  }
-
-  if (isNewCompany) {
-    newAttributes.push({
-      company,
-      type: 'company',
-      is_primary: companies.length === 0
-    })
-  }
-
-  if (isNewPhoneNumber) {
-    newAttributes.push({
-      phone_number,
-      type: 'phone_number',
-      is_primary: phones.length === 0
-    })
-  }
-
-  return newAttributes
+  return attributes
 }
 
+/**
+ * returns combined objects of getNewAttributes and  getUpdatedNameAttribute
+ * @param {Object} form - role form
+ */
+export function getUpsertedAttributes(form) {
+  const attributes = getNewAttributes(form)
+  const nameAttribute = getUpdatedNameAttribute(form)
+
+  if (nameAttribute) {
+    attributes.push(nameAttribute)
+  }
+
+  return attributes
+}
+
+/**
+ *
+ * @param {Object} deal - deal object
+ * @param {Object} roles - objects of roles
+ */
 export function getPrimaryAgent(deal, roles) {
   const roleType = deal.deal_type === 'Buying' ? 'BuyerAgent' : 'SellerAgent'
 
