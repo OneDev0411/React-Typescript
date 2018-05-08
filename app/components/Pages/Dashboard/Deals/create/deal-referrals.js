@@ -18,14 +18,14 @@ export default ({
       </div>
 
       <div className="people-container">
-        {_.map(referrals, (agent, id) => (
+        {_.map(referrals, (referral, id) => (
           <CrudRole
             key={id}
-            role={agent}
+            user={referral}
             modalTitle="Update Referral"
             allowedRoles={allowedRoles}
-            onRemoveRole={id => onRemoveReferral(id)}
-            onUpsertRole={newRole => onUpsertReferral({ ...agent, ...newRole })}
+            onRemoveUser={onRemoveReferral}
+            onUpsertUser={onUpsertReferral}
           />
         ))}
 
@@ -33,7 +33,7 @@ export default ({
           modalTitle="Add Referral"
           ctaTitle="Add Referral"
           allowedRoles={allowedRoles}
-          onUpsertRole={onUpsertReferral}
+          onUpsertUser={onUpsertReferral}
         />
       </div>
     </div>

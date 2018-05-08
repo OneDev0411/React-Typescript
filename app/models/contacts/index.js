@@ -233,23 +233,3 @@ Contact.get = {
 }
 
 export default Contact
-
-export function extractUserInfoFromContact(contact) {
-  const { summary, id } = contact
-  const emails = Contact.get.emails(contact)
-  const phones = Contact.get.phones(contact)
-  const companies = Contact.get.companies(contact)
-  const profile_image_url = Contact.get.avatar(contact)
-
-  const user = {
-    id,
-    emails,
-    phones,
-    contact,
-    companies,
-    profile_image_url,
-    ...summary
-  }
-
-  return user
-}
