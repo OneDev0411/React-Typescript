@@ -13,7 +13,7 @@ export function getContacts() {
 
     try {
       let start = 0
-      let limit = 1000
+      let limit = 100
       let count = 0
 
       do {
