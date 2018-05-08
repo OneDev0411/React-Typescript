@@ -123,7 +123,7 @@ class Body extends Component {
                         item={item}
                         key={item.id || `downshift_search_result_item_${index}`}
                         {...getItemProps({ item })}
-                        onClickHandler={handleSelectedItem}
+                        onClickHandler={this.props.handleSelectedItem}
                         isHighlighted={highlightedIndex === index}
                       />
                     ))}
