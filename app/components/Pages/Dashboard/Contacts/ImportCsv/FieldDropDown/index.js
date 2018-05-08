@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Select from 'react-select'
 import _ from 'underscore'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
-import { isAddressField, addressFields } from '../helpers/address'
+import { isAddressField, getAddressFields } from '../helpers/address'
 
 /**
  * returns last address index in the map object
@@ -37,7 +37,7 @@ function createNewAddressOptions(attributes, max) {
   const options = {}
 
   for (let index = 1; index <= max; index++) {
-    addressFields.forEach(name => {
+    getAddressFields(attributes).forEach(name => {
       const definition = selectDefinitionByName(attributes, name)
 
       if (!definition) {

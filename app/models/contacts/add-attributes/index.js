@@ -1,4 +1,5 @@
 import Fetch from '../../../services/fetch'
+import { defaultQuery } from '../helpers/default-query'
 
 /**
  * Adding new attributes to an existing contact.
@@ -7,7 +8,11 @@ import Fetch from '../../../services/fetch'
  * @returns {object} Returns updated contact.
  */
 
-export async function addAttributes(contactId, attributes) {
+export async function addAttributes(
+  contactId,
+  attributes,
+  query = defaultQuery
+) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }
@@ -26,6 +31,7 @@ export async function addAttributes(contactId, attributes) {
       .send({
         attributes
       })
+      .query(query)
 
     return response.body
   } catch (error) {

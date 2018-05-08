@@ -3,7 +3,7 @@ import * as actionTypes from '../../../constants/contacts'
 import { deleteAttribute as removeAttribute } from '../../../models/contacts/delete-attribute'
 import { getContact as fetchContact } from '../../../models/contacts/get-contact'
 
-export function deleteAttributes(contactId, ids) {
+export function deleteAttributes(contactId, ids, query) {
   return async dispatch => {
     if (!contactId) {
       const error = new Error('ContactId is not valid!')
@@ -31,7 +31,7 @@ export function deleteAttributes(contactId, ids) {
       let updatedContact
 
       if (ids.length === 1) {
-        updatedContact = await removeAttribute(contactId, ids[0])
+        updatedContact = await removeAttribute(contactId, ids[0], query)
       } else {
         await Promise.all(
           ids.map(async attributeId => {
@@ -41,7 +41,7 @@ export function deleteAttributes(contactId, ids) {
 
         // because of parallel deletion requests,
         // when all of them will be done, updated contact will be requested.
-        updatedContact = await fetchContact(contactId)
+        updatedContact = await fetchContact(contactId, query)
       }
 
       if (updatedContact) {

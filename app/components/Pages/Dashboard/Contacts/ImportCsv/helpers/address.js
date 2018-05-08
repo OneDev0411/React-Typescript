@@ -1,19 +1,13 @@
 import { selectDefinition } from '../../../../../../reducers/contacts/attributeDefs'
 
-export const addressFields = [
-  'street_name',
-  'street_number',
-  'street_prefix',
-  'street_suffix',
-  'unit_number',
-  'city',
-  'state',
-  'country',
-  'postal_code',
-  'zip_code'
-]
+export function getAddressFields(attributes) {
+  return attributes.bySection.Addresses.map(
+    id => selectDefinition(attributes, id).name
+  )
+}
 
 export function isAddressField(attributes, id) {
+  const addressFields = getAddressFields(attributes)
   const definition = selectDefinition(attributes, id)
 
   return addressFields.includes(definition.name)

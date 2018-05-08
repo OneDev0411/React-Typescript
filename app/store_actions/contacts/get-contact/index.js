@@ -2,7 +2,7 @@ import { getContact as fetchContact } from '../../../models/contacts/get-contact
 import * as actionTypes from '../../../constants/contacts'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 
-export function getContact(contactId) {
+export function getContact(contactId, query) {
   return async dispatch => {
     if (!contactId) {
       const error = new Error('Contact id is required.')
@@ -20,7 +20,7 @@ export function getContact(contactId) {
         type: actionTypes.FETCH_CONTACT_REQUEST
       })
 
-      let response = await fetchContact(contactId)
+      let response = await fetchContact(contactId, query)
 
       response = normalizeContacts(response)
 

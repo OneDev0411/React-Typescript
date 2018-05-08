@@ -4,7 +4,7 @@ import _ from 'underscore'
 import moment from 'moment'
 import { addNotification as notify } from 'reapop'
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
-import postNewContacts from '../../../../../../models/contacts/post-new-contact'
+import { createContacts } from '../../../../../../store_actions/contacts/create-contacts'
 import { updateWizardStep } from '../../../../../../store_actions/contacts'
 import { CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS } from '../../../../../../constants/contacts'
 import {
@@ -59,7 +59,13 @@ class UploadContacts extends React.Component {
   getIndex = () => {}
 
   uploadContacts = async () => {
-    const { rows, columns, mappedFields, attributeDefs } = this.props
+    const {
+      rows,
+      columns,
+      mappedFields,
+      attributeDefs,
+      createContacts
+    } = this.props
     const contacts = []
 
     _.each(rows, row => {
@@ -96,7 +102,7 @@ class UploadContacts extends React.Component {
     })
 
     try {
-      await postNewContacts(contacts)
+      await createContacts(contacts)
       this.onFinish()
     } catch (e) {
       this.onError(e.response ? e.response.body.message : e.message)
@@ -192,5 +198,6 @@ function mapStateToProps({ contacts }) {
 export default connect(mapStateToProps, {
   showMessageModal,
   updateWizardStep,
+  createContacts,
   notify
 })(UploadContacts)

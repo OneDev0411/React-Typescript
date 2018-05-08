@@ -6,7 +6,7 @@ import { selectContact } from '../../../reducers/contacts/list'
 import { normalizeContactAttribute } from '../helpers/normalize-contacts'
 import { addAttributes as createAttributes } from '../../../models/contacts/add-attributes'
 
-export function addAttributes(contactId, attributes) {
+export function addAttributes(contactId, attributes, query) {
   return async (dispatch, getState) => {
     if (!contactId || attributes.length === 0) {
       return Promise.resolve()
@@ -17,7 +17,7 @@ export function addAttributes(contactId, attributes) {
         type: actionTypes.POST_NEW_ATTRIBUTES_REQUEST
       })
 
-      const response = await createAttributes(contactId, attributes)
+      const response = await createAttributes(contactId, attributes, query)
       const updatedContact = normalizeContactAttribute(response)
       const { contacts: { list } } = getState()
       const contact = selectContact(list, contactId)

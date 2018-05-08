@@ -1,7 +1,7 @@
 // import { addNotification as notify } from 'reapop'
 import { addAttributes, updateContact } from '../'
 
-export function upsertContactAttributes(contactId, attributes) {
+export function upsertContactAttributes(contactId, attributes, query) {
   let inserts = []
   let updates = []
 
@@ -21,7 +21,7 @@ export function upsertContactAttributes(contactId, attributes) {
   return async dispatch => {
     if (inserts.length > 0) {
       try {
-        await dispatch(addAttributes(contactId, inserts))
+        await dispatch(addAttributes(contactId, inserts, query))
       } catch (error) {
         throw error
       }
@@ -29,7 +29,7 @@ export function upsertContactAttributes(contactId, attributes) {
 
     if (updates.length > 0) {
       try {
-        await dispatch(updateContact(contactId, updates))
+        await dispatch(updateContact(contactId, updates, query))
       } catch (error) {
         throw error
       }

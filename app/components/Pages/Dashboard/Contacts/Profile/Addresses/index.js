@@ -190,10 +190,20 @@ const enhance = compose(
       try {
         setDisabled(true)
 
+        let attribute
         const { data_type } = field.attribute_def
-        const attribute = {
-          id: field.id,
-          [data_type]: field[data_type]
+
+        if (field.id) {
+          attribute = {
+            id: field.id,
+            [data_type]: field[data_type]
+          }
+        } else {
+          attribute = {
+            index: field.index,
+            [data_type]: field[data_type],
+            attribute_def: field.attribute_def.id
+          }
         }
 
         await upsertContactAttributes(contact.id, [attribute])
@@ -393,7 +403,9 @@ function getAddresses(attributeDefs, allAddressFields) {
 
     const { label, index, is_primary } = fields[0]
 
-    result.push({ index, label, fields, is_primary })
+    if (fields.some(field => field[field.attribute_def.data_type])) {
+      result.push({ index, label, fields, is_primary })
+    }
   })
 
   return result
