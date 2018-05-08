@@ -47,7 +47,7 @@ export default class Stepper extends React.Component {
               })}
               style={{
                 width: `${100 / steps.length}%`,
-                cursor: disableClick ? 'auto' : 'pointer'
+                cursor: disableClick ? 'not-allowed' : 'pointer'
               }}
               onClick={() => !disableClick && this.changeStep(step, key)}
             >

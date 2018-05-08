@@ -1,7 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import _ from 'underscore'
+import { getContactTags } from '../../../../../../models/contacts/helpers'
+import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
-const TagsString = ({ tags }) => {
+const TagsString = ({ contact, attributeDefs }) => {
+  const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
+  const tags = getContactTags(contact, attribute_def)
+
   const tagsCount = _.size(tags)
   const showingTags = []
   const getShowingTags = () => showingTags.join(', ')
@@ -11,8 +17,8 @@ const TagsString = ({ tags }) => {
   }
 
   _.every(tags, item => {
-    if (getShowingTags().length + item.tag.length <= 28) {
-      showingTags.push(item.tag)
+    if (getShowingTags().length + item.text.length <= 28) {
+      showingTags.push(item.text)
 
       return true
     }
@@ -30,4 +36,10 @@ const TagsString = ({ tags }) => {
   )
 }
 
-export default TagsString
+function mapStateToProps(state) {
+  const { contacts: { attributeDefs } } = state
+
+  return { attributeDefs }
+}
+
+export default connect(mapStateToProps)(TagsString)

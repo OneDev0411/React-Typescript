@@ -1,6 +1,6 @@
 import React from 'react'
 import Stepper from '../../../../../Partials/Stepper'
-import Contact from '../../../../../../models/contacts'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers/get-attribute-from-summary'
 
 const STEPS = [
   'General',
@@ -9,31 +9,45 @@ const STEPS = [
   'Active',
   'Past Client'
 ]
-
-export default function Stage({ contact, handleOnChange }) {
-  const getStageIndex = () => {
-    const list = [
-      'General',
-      'UnqualifiedLead',
-      'QualifiedLead',
-      'Active',
-      'PastClient'
-    ]
-    const stage = Contact.get.stage(contact)
-
-    return list.indexOf(stage.name)
+export default class Stage extends React.Component {
+  state = {
+    isSaving: false
   }
 
-  return (
-    <div className="c-contact-profile-card stage">
-      <h3 className="c-contact-profile-card__title">Stage</h3>
-      <div className="c-contact-profile-card__body">
-        <Stepper
-          steps={STEPS}
-          active={getStageIndex()}
-          onChange={handleOnChange}
-        />
+  getStageIndex = () =>
+    STEPS.indexOf(
+      getAttributeFromSummary(this.props.contact, 'stage') || 'General'
+    )
+
+  onChange = async stage => {
+    if (this.state.isSaving) {
+      return
+    }
+
+    try {
+      this.setState({ isSaving: true })
+
+      await this.props.onChange(stage)
+    } catch (error) {
+      throw error
+    } finally {
+      this.setState({ isSaving: false })
+    }
+  }
+
+  render() {
+    return (
+      <div className="c-contact-profile-card stage">
+        <h3 className="c-contact-profile-card__title">Stage</h3>
+        <div className="c-contact-profile-card__body">
+          <Stepper
+            steps={STEPS}
+            onChange={this.onChange}
+            active={this.getStageIndex()}
+            disableClick={this.state.isSaving}
+          />
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import MultiFields from '../components/MultiFields'
 
 export default function Jobs({ contact }) {
@@ -14,9 +15,7 @@ export default function Jobs({ contact }) {
 
   return (
     <MultiFields
-      type="job_title"
-      name="job_titles"
-      title="Job Title"
+      attributeName="job_title"
       contact={contact}
       placeholder="Lawyer"
       validator={validator}

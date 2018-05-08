@@ -1,4 +1,5 @@
 import Fetch from '../../../services/fetch'
+import { defaultQuery } from '../helpers/default-query'
 
 /**
  * Deleting an attribute from existing contact.
@@ -7,10 +8,11 @@ import Fetch from '../../../services/fetch'
  * @returns {object} Returns updated contact.
  */
 
-export default async function postNewAttributes({
-  contactId = '',
-  attributeId = ''
-}) {
+export async function deleteAttribute(
+  contactId,
+  attributeId,
+  query = defaultQuery
+) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }
@@ -20,11 +22,11 @@ export default async function postNewAttributes({
   }
 
   try {
-    const response = await new Fetch().delete(
-      `/contacts/${contactId}/attributes/${attributeId}`
-    )
+    const response = await new Fetch()
+      .delete(`/contacts/${contactId}/attributes/${attributeId}`)
+      .query(query)
 
-    return response.body.data
+    return response.body
   } catch (error) {
     throw error
   }

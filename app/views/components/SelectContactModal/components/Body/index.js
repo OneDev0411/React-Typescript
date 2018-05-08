@@ -7,7 +7,6 @@ import _ from 'underscore'
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
 import Loading from '../../../../../components/Partials/Loading'
-import { extractUserInfoFromContact } from '../../../../../models/contacts'
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
 
 const ContactsListContainer = styled.div`
@@ -86,12 +85,9 @@ class Body extends Component {
     return display_name || 'unknown'
   }
 
-  selectedItemHandler = item =>
-    this.props.handleSelectedItem(extractUserInfoFromContact(item))
-
   render() {
     const { items, isSearching } = this.state
-    const { defaultSearchFilter = '' } = this.props
+    const { defaultSearchFilter = '', handleSelectedItem } = this.props
 
     return (
       <Downshift
@@ -120,7 +116,7 @@ class Body extends Component {
                         item={item}
                         key={item.id || `downshift_search_result_item_${index}`}
                         {...getItemProps({ item })}
-                        onClickHandler={this.selectedItemHandler}
+                        onClickHandler={handleSelectedItem}
                         isHighlighted={highlightedIndex === index}
                       />
                     ))}

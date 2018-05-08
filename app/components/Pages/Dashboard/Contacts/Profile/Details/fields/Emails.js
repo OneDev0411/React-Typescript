@@ -1,7 +1,8 @@
 import React from 'react'
+
 import MultiFields from '../components/MultiFields'
 
-const LABEL_OPTIONS = {
+const DEFAULT_LABELS = {
   personal: {
     name: 'Personal',
     title: 'Personal Email'
@@ -17,7 +18,7 @@ const LABEL_OPTIONS = {
 }
 
 export default function Emails({ contact }) {
-  const validator = email => {
+  const isEmail = email => {
     const regular = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
     return new RegExp(regular).exec(email)
@@ -25,12 +26,11 @@ export default function Emails({ contact }) {
 
   return (
     <MultiFields
-      type="email"
-      name="emails"
+      attributeName="email"
       contact={contact}
-      validator={validator}
-      labels={LABEL_OPTIONS}
+      defaultLabels={DEFAULT_LABELS}
       placeholder="example@gmail.com"
+      validator={isEmail}
       validationText="Invalid email."
     />
   )

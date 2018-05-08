@@ -72,6 +72,7 @@
     "fecha": "^2.3.3",
     "file-loader": "^1.1.6",
     "final-form": "^4.2.1",
+    "final-form-arrays": "^1.0.4",
     "flux": "^3.1.3",
     "forever": "^0.15.3",
     "fs-extra": "^5.0.0",
@@ -82,6 +83,7 @@
     "hogan.js": "^3.0.2",
     "html-webpack-plugin": "^2.30.1",
     "icloud": "^0.1.0",
+    "idx": "^2.3.0",
     "imagemin-webpack-plugin": "^1.5.2",
     "immutability-helper": "^2.6.4",
     "intercom-client": "^2.9.1",
@@ -136,6 +138,7 @@
     "react-dropzone":
       "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
     "react-final-form": "^3.1.2",
+    "react-final-form-arrays": "^1.0.4",
     "react-ga": "^2.3.5",
     "react-hot-loader": "^3.1.3",
     "react-images": "^0.5.11",

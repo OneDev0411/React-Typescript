@@ -6,7 +6,7 @@ import {
   updateRole
 } from '../../../../../../../store_actions/deals'
 import {
-  createNewContact,
+  createContacts,
   upsertContactAttributes
 } from '../../../../../../../store_actions/contacts'
 import {
@@ -34,7 +34,7 @@ class RoleFormWrapper extends React.Component {
       deal,
       user,
       upsertContactAttributes,
-      createNewContact,
+      createContacts,
       updateRole,
       createRoles,
       onUpsertRole = () => null,
@@ -61,7 +61,7 @@ class RoleFormWrapper extends React.Component {
             this.showNotification(`${fullName} Updated.`)
           }
         } else {
-          await createNewContact(convertRoleToContact(form))
+          await createContacts(convertRoleToContact(form))
           this.showNotification(`New Contact Created: ${fullName}`)
         }
 
@@ -120,6 +120,6 @@ export default connect(null, {
   notify,
   updateRole,
   createRoles,
-  createNewContact,
+  createContacts,
   upsertContactAttributes
 })(RoleFormWrapper)

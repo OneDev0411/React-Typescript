@@ -1,15 +1,10 @@
-import { normalize } from 'normalizr'
 import * as actionTypes from '../../../constants/contacts'
-import { contactsSchema } from '../../../models/contacts/schema'
-import fetchContacts from '../../../models/contacts/get-contacts'
+import { getContacts as fetchContacts } from '../../../models/contacts/get-contacts'
 import { isFetchingContactsList } from '../../../reducers/contacts/list'
+import { normalizeContacts } from '../helpers/normalize-contacts'
 
-export function getContacts(user = {}, params) {
+export function getContacts() {
   return async (dispatch, getState) => {
-    if (Object.keys(user).length === 0) {
-      ;({ user } = getState())
-    }
-
     const { contacts: { list } } = getState()
 
     if (isFetchingContactsList(list)) {
@@ -17,7 +12,7 @@ export function getContacts(user = {}, params) {
     }
 
     try {
-      let startPoint = 0
+      let start = 0
       let limit = 1000
       let count = 0
 
@@ -26,24 +21,22 @@ export function getContacts(user = {}, params) {
           type: actionTypes.FETCH_CONTACTS_REQUEST
         })
 
-        let response = await fetchContacts(user, startPoint, limit)
+        let response = await fetchContacts(start, limit)
+        const normalizedContacts = normalizeContacts(response)
 
-        const { data, info } = response
-        const contacts = { contacts: data }
-        const normalizedData = normalize(contacts, contactsSchema)
+        start += limit
+        count = response.info.total
 
-        startPoint += limit
-        count = info.total
         response = {
-          info,
-          ...normalizedData
+          info: response.info,
+          ...normalizedContacts
         }
 
         dispatch({
           response,
           type: actionTypes.FETCH_CONTACTS_SUCCESS
         })
-      } while (count > startPoint)
+      } while (count > start)
     } catch (error) {
       dispatch({
         error,
@@ -53,5 +46,3 @@ export function getContacts(user = {}, params) {
     }
   }
 }
-
-export default getContacts

@@ -7,7 +7,7 @@ export async function searchContacts(q) {
 
   try {
     const response = await new Fetch()
-      .get('/contacts/search')
+      .get('/contacts/filter')
       .query({ 'q[]': q })
 
     return response.body

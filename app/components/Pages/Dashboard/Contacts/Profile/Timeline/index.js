@@ -9,10 +9,19 @@ import {
   isFetchingContactActivities,
   selectContactActivitiesError
 } from '../../../../../../reducers/contacts/activities'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers/get-attribute-from-summary'
+import { getContactActivities } from '../../../../../../store_actions/contacts'
 
 class Timeline extends React.Component {
-  getAttributes(activity) {
-    const { name } = this.props
+  componentDidMount() {
+    const { getContactActivities, contact } = this.props
+
+    if (contact && !contact.activities) {
+      getContactActivities(contact.id)
+    }
+  }
+
+  getAttributes = (name, activity) => {
     const actionFn = userActions[activity.action]
     const attributes = actionFn ? actionFn(activity, name) : {}
 
@@ -23,7 +32,16 @@ class Timeline extends React.Component {
   }
 
   render() {
-    const { activities, name, avatar, isFetching, activitiesError } = this.props
+    let name
+    let avatar
+    let activities = {}
+    const { contact, isFetching, activitiesError } = this.props
+
+    if (contact) {
+      name = getAttributeFromSummary(contact, 'display_name')
+      avatar = getAttributeFromSummary(contact, 'profile_image_url')
+      activities = contact.activities
+    }
 
     if (isFetching) {
       return <Loading />
@@ -55,7 +73,7 @@ class Timeline extends React.Component {
             return (
               <TimelineItem
                 key={`timeline_item_${id}`}
-                attributes={this.getAttributes(activity)}
+                attributes={this.getAttributes(name, activity)}
                 name={name}
                 avatar={avatar}
               />
@@ -72,4 +90,6 @@ const mapStateToProps = ({ contacts: { activities } }) => ({
   activitiesError: selectContactActivitiesError(activities)
 })
 
-export default connect(mapStateToProps)(Timeline)
+export default connect(mapStateToProps, {
+  getContactActivities
+})(Timeline)
