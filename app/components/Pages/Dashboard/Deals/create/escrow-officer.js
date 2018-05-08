@@ -25,8 +25,8 @@ export default ({
             role={agent}
             allowedRoles={allowedRoles}
             modalTitle="Update Escrow Officer"
-            onRemoveRole={id => onRemoveEscrowOfficer(id)}
-            onUpsertRole={onUpsertEscrowOfficer}
+            onRemoveUser={onRemoveEscrowOfficer}
+            onUpsertUser={onUpsertEscrowOfficer}
           />
         ))}
 
@@ -34,7 +34,7 @@ export default ({
           modalTitle="Add Escrow Officer"
           ctaTitle="Add Escrow Officer"
           allowedRoles={allowedRoles}
-          onUpsertRole={onUpsertEscrowOfficer}
+          onUpsertUser={onUpsertEscrowOfficer}
         />
       </div>
     </div>

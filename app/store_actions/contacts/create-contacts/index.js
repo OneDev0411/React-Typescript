@@ -18,7 +18,9 @@ export function createContacts(contacts) {
         type: actionTypes.CREATE_CONTACTS_REQUEST
       })
 
-      const response = await postNewContacts(contacts)
+      const response = await postNewContacts(
+        Array.isArray(contacts) ? contacts : [contacts]
+      )
 
       return response
     } catch (error) {

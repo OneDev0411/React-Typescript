@@ -6,14 +6,14 @@ import { roleName } from '../utils/roles'
 
 class TeamAgents extends React.Component {
   render() {
-    const { show, teamAgents, handleOnClose, handleSelectAgent } = this.props
+    const { isOpen, teamAgents, onHide, onSelectAgent } = this.props
 
     return (
       <Modal
-        backdrop="static"
-        show={show}
         dialogClassName="modal-deal-team-agents"
-        onHide={handleOnClose}
+        backdrop="static"
+        show={isOpen}
+        onHide={onHide}
       >
         <Modal.Header closeButton>Choose primary agent</Modal.Header>
 
@@ -30,7 +30,7 @@ class TeamAgents extends React.Component {
                 <div
                   key={user.id}
                   className="item"
-                  onClick={() => handleSelectAgent(user)}
+                  onClick={() => onSelectAgent(user)}
                 >
                   <div className="role-avatar">
                     <UserAvatar

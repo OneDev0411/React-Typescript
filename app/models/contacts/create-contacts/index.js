@@ -8,10 +8,10 @@ const defaultOptions = {
 
 /**
  * Create a new contacts.
- * @param {array} contacts Array of new contacts object.
- * @param {object} options The options of response form that
+ * @param {Array} contacts - Array of new contacts object.
+ * @param {Object} options - The options of response form that
  * we wish receiving from server.
- * @returns {array} Returns new contacts.
+ * @returns {Array} Returns new contacts.
  */
 
 export async function createContacts(
