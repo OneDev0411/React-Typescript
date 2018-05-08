@@ -35,6 +35,9 @@
 }
 
 %compose--tags-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   min-height: 50px;
   padding: 12px 16.5px;
   border-radius: 3px;
@@ -48,7 +51,9 @@
     margin-right: 5px;
   }
   .tag {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
     height: 43px;
     line-height: 43px;
     margin: 0px 5px 3px 0;
@@ -60,6 +65,11 @@
     font-size: 14px;
     font-weight: bold;
     color: #4a494a;
+    .display-name {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
     .user-avatar {
       float: left;
       margin-right: 5px;
