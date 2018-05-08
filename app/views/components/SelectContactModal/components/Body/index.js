@@ -55,12 +55,10 @@ class Body extends Component {
     try {
       this.setState({ isSearching: true })
 
-      const response = await searchContacts(value)
+      const items = await searchContacts(value)
 
-      if (Array.isArray(response.data)) {
-        this.setState({
-          items: response.data
-        })
+      if (Array.isArray(items)) {
+        this.setState({ items })
       }
     } catch (error) {
       console.log(error)
