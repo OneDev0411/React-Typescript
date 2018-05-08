@@ -3,7 +3,6 @@ import _ from 'underscore'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { confirmation } from '../../../../../store_actions/confirmation'
-import Contact from '../../../../../models/contacts'
 import styled from 'styled-components'
 import {
   selectContacts,
@@ -19,6 +18,11 @@ import Loading from '../../../../Partials/Loading'
 import { Container } from '../components/Container'
 import NoSearchResults from '../../../../Partials/no-search-results'
 import Table from './Table'
+import {
+  getAttributeFromSummary,
+  getContactAttribute
+} from '../../../../../models/contacts/helpers'
+import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -79,35 +83,51 @@ class ContactsList extends React.Component {
   onInputChange = filter => this.setState({ filter })
 
   applyFilters = contact => {
-    let matched = false
     const { filter } = this.state
+    const { attributeDefs } = this.props
+
+    if (!filter) {
+      return true
+    }
+
     let regex = new RegExp(
       // / First reomoving some charater that break the regex
       filter.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'),
       'i'
     )
 
-    if (regex.test(Contact.get.name(contact))) {
-      matched = true
+    if (regex.test(getAttributeFromSummary(contact, 'display_name'))) {
+      return true
     }
 
-    if (!matched && Object.keys(Contact.get.emails(contact)).length !== 0) {
-      matched = _.some(Contact.get.emails(contact), item =>
-        regex.test(item.email)
-      )
+    const email_attribute_def = selectDefinitionByName(attributeDefs, 'email')
+    const emails = getContactAttribute(contact, email_attribute_def)
+
+    if (emails.length !== 0 && _.some(emails, item => regex.test(item.text))) {
+      return true
     }
 
-    if (!matched && Object.keys(Contact.get.phones(contact)).length !== 0) {
-      matched = _.some(Contact.get.phones(contact), item =>
-        item.phone_number.includes(filter)
-      )
+    const phone_attribute_def = selectDefinitionByName(
+      attributeDefs,
+      'phone_number'
+    )
+    const phones = getContactAttribute(contact, phone_attribute_def)
+
+    if (
+      phones.length !== 0 &&
+      _.some(phones, item => item.text.includes(filter))
+    ) {
+      return true
     }
 
-    if (!matched && Object.keys(Contact.get.tags(contact)).length !== 0) {
-      matched = _.some(Contact.get.tags(contact), item => regex.test(item.tag))
+    const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
+    const tags = getContactAttribute(contact, attribute_def)
+
+    if (tags.length !== 0 && _.some(tags, item => regex.test(item.text))) {
+      return true
     }
 
-    return matched
+    return false
   }
 
   toggleSelectedRow = contact => {
@@ -127,10 +147,19 @@ class ContactsList extends React.Component {
   }
   render() {
     const { deletingContacts, selectedRows } = this.state
-    const { user, isFetching, contactsList, loadingImport } = this.props
+    const {
+      user,
+      isFetching,
+      contactsList,
+      loadingImport,
+      attributeDefs
+    } = this.props
     const contactsCount = contactsList.length
 
-    if (isFetching && contactsCount === 0) {
+    if (
+      (isFetching && contactsCount === 0) ||
+      _.size(attributeDefs.byName) === 0
+    ) {
       return (
         <Container>
           <Loading />
@@ -160,7 +189,6 @@ class ContactsList extends React.Component {
         <Header
           user={user}
           contactsCount={contactsCount}
-          onNewContact={id => openContact(id)}
           onInputChange={this.onInputChange}
         />
         {loadingImport && (
@@ -206,7 +234,7 @@ class ContactsList extends React.Component {
 }
 
 function mapStateToProps({ user, contacts }) {
-  const { list, spinner: loadingImport } = contacts
+  const { list, spinner: loadingImport, attributeDefs } = contacts
   const contactsList = selectContacts(list)
   const isFetching = isFetchingContactsList(list)
 
@@ -214,7 +242,8 @@ function mapStateToProps({ user, contacts }) {
     user,
     isFetching,
     contactsList,
-    loadingImport
+    loadingImport,
+    attributeDefs
   }
 }
 

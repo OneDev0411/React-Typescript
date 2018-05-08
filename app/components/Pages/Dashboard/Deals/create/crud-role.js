@@ -6,7 +6,6 @@ import AgentModal from './deal-team-agents'
 import RoleItem from './role-item'
 import ContactModal from '../../../../../views/components/SelectContactModal'
 import { convertContactToRole } from '../utils/roles'
-import { extractUserInfoFromContact } from '../../../../../models/contacts'
 import { selectContacts } from '../../../../../reducers/contacts/list'
 
 const initialState = {
@@ -118,9 +117,7 @@ class CrudRole extends React.Component {
 
   searchContactByEmail = email => {
     const { contacts } = this.props
-    const contactsList = selectContacts(contacts).map(
-      extractUserInfoFromContact
-    )
+    const contactsList = selectContacts(contacts)
 
     if (!contactsList) {
       return []

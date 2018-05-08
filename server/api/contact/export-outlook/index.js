@@ -21,7 +21,7 @@ router.get('/contacts/export/outlook', async ctx => {
     }
 
     ctx.body = ctx
-      .fetch('/contacts/outlook.csv', ids ? 'POST' : 'get')
+      .fetch('/contacts/outlook.csv', 'POST')
       .set('Authorization', `Bearer ${user.access_token}`)
       .send({ ids })
       .on('response', res => {

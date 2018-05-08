@@ -1,63 +1,51 @@
 // import { addNotification as notify } from 'reapop'
-import { addNewAttributes, updateContact } from '../'
+import { addAttributes, updateContact } from '../'
 
-export function upsertContactAttributes({ contactId, attributes }) {
-  const updates = attributes.filter(attr => attr.id)
-  const inserts = attributes.filter(attr => !attr.id)
+export function upsertContactAttributes(contactId, attributes, query) {
+  let inserts = []
+  let updates = []
+
+  // Filter attributes based on their fields.
+  // If attribute had a id so it is a patch.
+  // But otherwise it is a new attribute and it has to insert.
+  attributes.forEach(attribute => {
+    const normalizedAttribute = normalizeAttribute(attribute)
+
+    if (attribute.id) {
+      updates.push(normalizedAttribute)
+    } else {
+      inserts.push(normalizedAttribute)
+    }
+  })
 
   return async dispatch => {
-    // insert new attributes
     if (inserts.length > 0) {
       try {
-        await dispatch(addNewAttributes({ contactId, attributes: inserts }))
-
-        // if (!notifyIsDisabled) {
-        //   dispatch(
-        //     notify({
-        //       message: `New ${typeName} created.`,
-        //       status: 'success'
-        //     })
-        //   )
-        // }
+        await dispatch(addAttributes(contactId, inserts, query))
       } catch (error) {
         throw error
-        // dispatch(
-        //   notify({
-        //     title: `Can not create ${typeName}`,
-        //     message: getErrorMessage(error),
-        //     status: 'error'
-        //   })
-        // )
       }
     }
 
-    // update attributes
     if (updates.length > 0) {
       try {
-        await dispatch(updateContact({ contactId, attributes: updates }))
-
-        // if (!notifyIsDisabled) {
-        //   dispatch(
-        //     notify({
-        //       message: `${typeName} updated`,
-        //       status: 'success'
-        //     })
-        //   )
-        // }
+        await dispatch(updateContact(contactId, updates, query))
       } catch (error) {
         throw error
-        // dispatch(
-        //   notify({
-        //     title: `Can not update ${typeName}`,
-        //     message: getErrorMessage(error),
-        //     status: 'error'
-        //   })
-        // )
       }
     }
   }
 }
 
-// function getErrorMessage(e) {
-//   return e.response ? e.response.body.attributes[type][0] : 'Field is not valid'
-// }
+function normalizeAttribute(attribute) {
+  const { attribute_def } = attribute
+
+  if (attribute_def && attribute_def.id) {
+    return {
+      ...attribute,
+      attribute_def: attribute_def.id
+    }
+  }
+
+  return attribute
+}

@@ -5,38 +5,41 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import Uploader from '../../../../../../../../views/components/AvatarUploader/index.js'
-
 import uploadAttachments from '../../../../../../../../models/contacts/upload-attachments/index.js'
-
+import { selectDefinitionByName } from '../../../../../../../../reducers/contacts/attributeDefs'
 import {
-  addNewAttributes,
-  deleteAttributes
+  deleteAttributes,
+  upsertContactAttributes
 } from '../../../../../../../../store_actions/contacts'
-import Contact from '../../../../../../../../models/contacts'
+import {
+  getContactAvatar,
+  getAttributeFromSummary
+} from '../../../../../../../../models/contacts/helpers'
 
 const AvatarUploader = props => <Uploader {...props} />
 
 function mapStateToProps(state, props) {
   const { contact } = props
   const { id: contactId } = contact
+  const { contacts: { attributeDefs } } = state
 
-  return { contactId }
+  return { contactId, attributeDefs }
 }
 
 export default compose(
-  connect(mapStateToProps, { addNewAttributes, deleteAttributes }),
+  connect(mapStateToProps, { upsertContactAttributes, deleteAttributes }),
   withState('uploading', 'setUploading', false),
-  withState(
-    'avatar',
-    'setAvatar',
-    ({ contact }) => Contact.get.avatar(contact) || null
+  withState('avatar', 'setAvatar', ({ contact }) =>
+    getAttributeFromSummary(contact, 'profile_image_url')
   ),
   withHandlers({
     handleChange: ({
+      contact,
       contactId,
       setAvatar,
       setUploading,
-      addNewAttributes
+      attributeDefs,
+      upsertContactAttributes
     }) => async event => {
       const file = event.target.files[0]
 
@@ -51,21 +54,44 @@ export default compose(
           setUploading(true)
 
           const image = await uploadAttachments({ contactId, file })
-          const { url: profile_image_url } = image
+          const { url: text } = image
 
-          const attributes = [
-            {
-              profile_image_url,
-              type: 'profile_image_url'
-            }
-          ]
+          const attribute_def = selectDefinitionByName(
+            attributeDefs,
+            'profile_image_url'
+          )
 
-          // console.log(attributes, image)
+          if (!attribute_def) {
+            throw new Error(
+              'Something went wrong. Attribute definition is not found!'
+            )
+          }
 
-          await addNewAttributes({ contactId, attributes })
+          let attribute
+          const avatar = getContactAvatar(contact, attribute_def.id)
+
+          if (avatar) {
+            attribute = [
+              {
+                text,
+                id: avatar.id
+              }
+            ]
+          } else {
+            attribute = [
+              {
+                text,
+                index: 1,
+                attribute_def,
+                is_primary: true
+              }
+            ]
+          }
+
+          await upsertContactAttributes(contactId, attribute)
         } catch (error) {
           setAvatar(null)
-          // console.log(error)
+          throw error
         } finally {
           setUploading(false)
         }
@@ -74,26 +100,32 @@ export default compose(
       reader.readAsDataURL(file)
     },
     handleDelete: ({
-      avatar,
+      setAvatar,
       contactId,
-      deleteAttributes,
-      setAvatar
+      attributeDefs,
+      deleteAttributes
     }) => async () => {
       try {
-        const avatars = Contact.get.attributes({
-          contact,
-          name: 'profile_image_urls',
-          type: 'profile_image_url'
-        })
+        const attribute_def = selectDefinitionByName(
+          attributeDefs,
+          'profile_image_url'
+        )
 
-        const attribute = avatars.filter(a => a.profile_image_url === avatar)
-        const { id } = attribute
-        const attributesIds = [id]
+        if (!attribute_def) {
+          throw new Error(
+            'Something went wrong. Attribute definition is not found!'
+          )
+        }
 
-        await deleteAttributes({ contactId, attributesIds })
+        const avatar = getContactAvatar(contact, attribute_def.id)
+
+        if (avatar && avatar.id) {
+          await deleteAttributes(contactId, [avatar.id])
+        }
+
         setAvatar(null)
       } catch (error) {
-        // console.log(error)
+        throw error
       }
     }
   })

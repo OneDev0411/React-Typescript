@@ -8,7 +8,7 @@ const byId = (state = {}, action) => {
     case actionTypes.PATCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.DELETE_ATTRIBUTE_SUCCESS:
-    case actionTypes.POST_NEW_CONTACTS_SUCCESS:
+    case actionTypes.CREATE_CONTACTS_SUCCESS:
     case actionTypes.POST_NEW_ATTRIBUTES_SUCCESS:
     case actionTypes.FETCH_CONTACT_ACTIVITIES_SUCCESS:
       return {
@@ -34,7 +34,7 @@ const ids = (state = [], action) => {
     // case actionTypes.CONTACTS__UPLOAD_CVS:
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
-    case actionTypes.POST_NEW_CONTACTS_SUCCESS:
+    case actionTypes.CREATE_CONTACTS_SUCCESS:
       const newState = [...state, ...action.response.result.contacts]
 
       // removing duplicates
@@ -97,4 +97,4 @@ export const getContactsinfo = state => state.info
 
 export const isFetchingContactsList = state => state.isFetching
 
-export const getContactsListError = state => state.errorMessage
+export const getContactsListError = state => state.error

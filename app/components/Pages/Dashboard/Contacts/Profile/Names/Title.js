@@ -20,16 +20,10 @@ const OPTIONS = {
 }
 
 class Title extends React.Component {
-  constructor(props) {
-    super(props)
+  handleOnSelect = text => {
+    const { onChange, field } = this.props
 
-    this.handleOnSelect = this.handleOnSelect.bind(this)
-  }
-
-  async handleOnSelect(title) {
-    const { onChange } = this.props
-
-    await onChange([{ type: 'title', title }])
+    onChange({ ...field, text })
   }
 
   render() {
@@ -46,7 +40,7 @@ class Title extends React.Component {
             name="title"
             options={OPTIONS}
             disabled={disabled}
-            defaultTitle={field.title}
+            defaultTitle={(field && field.text) || 'Mr'}
             handleOnSelect={this.handleOnSelect}
           />
         </span>

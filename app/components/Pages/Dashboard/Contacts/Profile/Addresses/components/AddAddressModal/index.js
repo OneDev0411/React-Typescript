@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Form, Field } from 'react-final-form'
 
 import BasicModal from '../../../../../../../../views/components/BasicModal'
@@ -52,7 +52,7 @@ function AddAddressModal({
         onSubmit={handleOnSubmit}
         initialValues={{ label: 'Other' }}
         render={({ reset, values, pristine, validating, handleSubmit }) => (
-          <div>
+          <Fragment>
             <BasicModal.Header title="Add New Address" />
             <BasicModal.Body className="c-new-address-modal__body">
               <div
@@ -105,6 +105,26 @@ function AddAddressModal({
                   </Field>
                 </div>
               </div>
+
+              <Field
+                name="unit_number"
+                component={TextField}
+                disabled={submitting}
+                title="Unit Number"
+              />
+
+              <Field
+                name="street_number"
+                component={TextField}
+                disabled={submitting}
+                title="Street Number"
+              />
+              <Field
+                name="street_prefix"
+                component={TextField}
+                disabled={submitting}
+                title="Street Prefix"
+              />
               <Field
                 name="street_name"
                 isRequired
@@ -112,6 +132,20 @@ function AddAddressModal({
                 disabled={submitting}
                 title="Street Name"
                 placeholder="Buyers Club"
+              />
+              <Field
+                name="street_suffix"
+                component={TextField}
+                disabled={submitting}
+                title="Street Suffix"
+              />
+
+              <Field
+                name="postal_code"
+                component={TextField}
+                disabled={submitting}
+                title="Postal Code"
+                placeholder="65619 or 34353-2323"
               />
 
               <Field
@@ -132,19 +166,18 @@ function AddAddressModal({
               />
 
               <Field
+                name="zip_code"
+                component={TextField}
+                disabled={submitting}
+                title="Zip Code"
+              />
+
+              <Field
                 name="country"
                 component={TextField}
                 disabled={submitting}
                 title="Country"
                 placeholder="USA"
-              />
-
-              <Field
-                name="postal_code"
-                component={TextField}
-                disabled={submitting}
-                title="Postal Code"
-                placeholder="65619 or 34353-2323"
               />
             </BasicModal.Body>
             <BasicModal.Footer style={{ justifyContent: 'space-between' }}>
@@ -173,7 +206,7 @@ function AddAddressModal({
                 </ActionButton>
               </div>
             </BasicModal.Footer>
-          </div>
+          </Fragment>
         )}
       />
     </BasicModal>

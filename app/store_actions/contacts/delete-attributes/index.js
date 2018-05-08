@@ -1,18 +1,26 @@
-import { normalize } from 'normalizr'
-import { contactsSchema } from '../../../models/contacts/schema'
-import fetchContact from '../../../models/contacts/get-contact'
-import removeAttribute from '../../../models/contacts/delete-attribute'
+import { normalizeContacts } from '../helpers/normalize-contacts'
 import * as actionTypes from '../../../constants/contacts'
-import { selectContact } from '../../../reducers/contacts/list'
+import { deleteAttribute as removeAttribute } from '../../../models/contacts/delete-attribute'
+import { getContact as fetchContact } from '../../../models/contacts/get-contact'
 
-export function deleteAttributes({ contactId, attributesIds }) {
-  return async (dispatch, getState) => {
+export function deleteAttributes(contactId, ids, query) {
+  return async dispatch => {
     if (!contactId) {
-      return Promise.reject()
+      const error = new Error('ContactId is not valid!')
+
+      return dispatch({
+        error,
+        type: actionTypes.DELETE_ATTRIBUTE_FAILURE
+      })
     }
 
-    if (!Array.isArray(attributesIds) || attributesIds.length === 0) {
-      return Promise.reject()
+    if (!Array.isArray(ids) || ids.length === 0) {
+      const error = new Error('Invalid array of ids')
+
+      return dispatch({
+        error,
+        type: actionTypes.DELETE_ATTRIBUTE_FAILURE
+      })
     }
 
     try {
@@ -22,36 +30,23 @@ export function deleteAttributes({ contactId, attributesIds }) {
 
       let updatedContact
 
-      if (attributesIds.length === 1) {
-        const [attributeId] = attributesIds
-
-        updatedContact = await removeAttribute({ contactId, attributeId })
+      if (ids.length === 1) {
+        updatedContact = await removeAttribute(contactId, ids[0], query)
       } else {
         await Promise.all(
-          attributesIds.map(async attributeId => {
-            await removeAttribute({ contactId, attributeId })
+          ids.map(async attributeId => {
+            await removeAttribute(contactId, attributeId)
           })
         )
 
-        const { user } = getState()
-
         // because of parallel deletion requests,
         // when all of them will be done, updated contact will be requested.
-        updatedContact = await fetchContact(user, contactId)
+        updatedContact = await fetchContact(contactId, query)
       }
 
       if (updatedContact) {
-        const { contacts: { list } } = getState()
-        const contact = selectContact(list, contactId)
-        const newContact = {
-          ...contact,
-          ...updatedContact
-        }
-
-        const response = normalize({ contacts: [newContact] }, contactsSchema)
-
         dispatch({
-          response,
+          response: normalizeContacts(updatedContact),
           type: actionTypes.DELETE_ATTRIBUTE_SUCCESS
         })
       } else {

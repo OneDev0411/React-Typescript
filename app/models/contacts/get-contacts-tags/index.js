@@ -1,6 +1,6 @@
 import Fetch from '../../../services/fetch'
 
-async function fetchContactsTags() {
+export async function getContactsTags() {
   try {
     const response = await new Fetch().get('/contacts/tags')
 
@@ -9,5 +9,3 @@ async function fetchContactsTags() {
     throw error
   }
 }
-
-export default fetchContactsTags

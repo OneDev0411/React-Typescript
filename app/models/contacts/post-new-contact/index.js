@@ -11,10 +11,10 @@ export default async function postNewContact(contact = {}) {
     throw new Error('New contact has not any data.')
   }
 
+  const contacts = Array.isArray(contact) ? contact : [contact]
+
   try {
-    const response = await new Fetch()
-      .post('/contacts')
-      .send({ contacts: [contact] })
+    const response = await new Fetch().post('/contacts').send({ contacts })
 
     return response.body.data
   } catch (error) {

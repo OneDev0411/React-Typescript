@@ -1,10 +1,10 @@
 import React from 'react'
 import Select from 'react-select'
-import { InputContainer, InputLabel, InputRequired } from '../../styles'
+import { InputContainer, InputLabel } from '../../styles'
 
 const OPTIONS = ['Mr', 'Ms', 'Mrs', 'Miss', 'Dr']
 
-export const TitleDropDown = ({ input, placeholder, isRequired }) => (
+export const TitleDropDown = ({ input, placeholder }) => (
   <InputContainer>
     <InputLabel>{placeholder}</InputLabel>
     <Select
