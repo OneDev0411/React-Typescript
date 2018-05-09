@@ -104,6 +104,37 @@
         text-align: right;
         width: 2%;
       }
+
+      .actions .button {
+        margin-left: 2px;
+        border-radius: 3px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #2196f3;
+        border: 1px solid #2196f3;
+        background-color: #ffffff;
+        padding: 8px 15px;
+
+        &:focus {
+          outline: none;
+        }
+
+        &:hover {
+          background-color: #f1f7fb;
+          text-decoration: none;
+        }
+      }
+    }
+
+    .item.digital-form {
+      .name {
+        width: 50%;
+      }
+
+      .actions {
+        width: 50%;
+      }
     }
   }
   .drag-drop-container {

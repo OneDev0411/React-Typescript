@@ -19,6 +19,22 @@ export default ({ deal, task }) => {
             <span className="link">{task.title}</span>
           </Link>
         </div>
+
+        <div className="actions">
+          <Link
+            className="button"
+            to={`/dashboard/deals/${deal.id}/form-viewer/${task.id}`}
+          >
+            View
+          </Link>
+
+          <Link
+            className="button"
+            to={`/dashboard/deals/${deal.id}/form-edit/${task.id}`}
+          >
+            Edit
+          </Link>
+        </div>
       </div>
     </div>
   )
