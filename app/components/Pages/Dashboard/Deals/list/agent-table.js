@@ -78,7 +78,7 @@ class AgentTable extends BaseTable {
         getText: deal => getPrimaryAgent(deal, this.props.roles),
         getValue: deal => getPrimaryAgent(deal, this.props.roles)
       },
-      notificiation: {
+      notification: {
         caption: '',
         className: 'notification-container hidden-sm hidden-xs',
         getText: deal => this.hasNotification(deal)
@@ -142,14 +142,15 @@ class AgentTable extends BaseTable {
                       />
                     </div>
                     <div className="info">
-                      <span className="name">
-                        {`${role.legal_first_name} ${role.legal_last_name}, `}
-                      </span>
+                      <div className="role-name-container">
+                        <div className="name">
+                          {`${role.legal_first_name} ${role.legal_last_name},`}
+                        </div>
 
-                      <span className="role">{roleName(role.role)}</span>
-
+                        <div className="role">{roleName(role.role)}</div>
+                      </div>
                       {role.user && (
-                        <span className="email">{role.user.email}</span>
+                        <div className="email">{role.user.email}</div>
                       )}
                     </div>
                   </div>
