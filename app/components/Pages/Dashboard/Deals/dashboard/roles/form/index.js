@@ -383,7 +383,7 @@ export class RoleFormModal extends React.Component {
           onSubmit={this.onSubmit}
           validate={this.validate}
           initialValues={this.getInitialValues()}
-          render={({ handleSubmit, values, pristine, invalid }) => (
+          render={({ handleSubmit, values }) => (
             <Fragment>
               <Modal.Body
                 className="u-scrollbar--thinner"
