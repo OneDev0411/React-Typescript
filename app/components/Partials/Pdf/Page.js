@@ -129,7 +129,9 @@ class PdfPage extends React.Component {
 
   render() {
     const { height } = this.state
-    const { pageNumber, rotation, zoom, defaultContainerHeight } = this.props
+    const { doc, pageNumber, rotation, zoom, defaultContainerHeight } = this.props
+    const { pdfInfo } = doc
+    const { numPages } = pdfInfo
 
     return (
       <div
@@ -145,7 +147,7 @@ class PdfPage extends React.Component {
             id="pdf-canvas"
             ref={ref => (this.canvas = ref)}
           />
-          <div className="page-number">{pageNumber}</div>
+          <div className="page-number">{pageNumber} / {numPages}</div>
         </a>
       </div>
     )
