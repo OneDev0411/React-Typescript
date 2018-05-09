@@ -1,5 +1,6 @@
 .deals__role-form--select {
-  font-size: 17px !important;
+  font-size: 16px !important;
+  color: #26465e !important;
 
   .Select-control,
   &.is-focused .Select-control {
@@ -8,6 +9,10 @@
 
     &:hover {
       box-shadow: none !important;
+    }
+
+    .Select-placeholder {
+      color: #cad4db !important;
     }
 
     .Select-placeholder,
