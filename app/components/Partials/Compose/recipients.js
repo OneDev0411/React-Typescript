@@ -70,7 +70,7 @@ export default class extends React.Component {
               size={22}
             />
 
-            <span>{recp.display_name}</span>
+            <div className="display-name">{recp.display_name}</div>
             <i
               className="fa fa-times"
               onClick={() => this.props.onRemove(recp)}

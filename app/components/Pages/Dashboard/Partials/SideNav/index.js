@@ -15,6 +15,7 @@ import Inbox from '../../Chatroom/Shared/instant-trigger'
 
 // deals notification badge counter
 import DealsNotifications from '../../Deals/components/SideNavBadge'
+import { selectNotificationNewCount } from '../../../../../reducers/notifications'
 
 const ACTIVE_COLOR = `#${Brand.color('primary', '3388ff')}`
 // const DEFAULT_COLOR = '#8da2b5'
@@ -115,7 +116,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
             to="/dashboard/notifications"
             className="c-app-sidenav__item__title"
           >
-            Updates
+            Notifications
             {appNotifications > 0 && (
               <span className="c-app-sidenav__notification-badge">
                 {appNotifications}
@@ -183,8 +184,8 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
   )
 }
 
-export default connect(({ data, user }, { location }) => ({
+export default connect(({ globalNotifications, user }, { location }) => ({
   user,
   activePath: getActivePath(location.pathname),
-  appNotifications: data.new_notifications_count || 0
+  appNotifications: selectNotificationNewCount(globalNotifications)
 }))(appSideNav)

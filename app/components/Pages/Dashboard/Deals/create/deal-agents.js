@@ -2,6 +2,7 @@ import React from 'react'
 import _ from 'underscore'
 import cn from 'classnames'
 import CrudRole from './crud-role'
+import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 const BUYING = 'Buying'
 const SELLING = 'Selling'
@@ -43,18 +44,19 @@ export default ({
         Enter {dealSide === BUYING ? 'buyer' : 'listing'} agent’s
         information.&nbsp;
         <span className="required">*</span>
+        {hasError && <RequiredIcon />}
       </div>
 
       <div className="people-container">
         {_.map(agents, (agent, id) => (
           <CrudRole
             key={id}
-            role={agent}
+            user={agent}
             isCommissionRequired={isCommissionRequired}
             modalTitle="Update Agent"
             allowedRoles={allowedRoles}
-            onRemoveRole={id => onRemoveAgent(id)}
-            onUpsertRole={newRole => onUpsertAgent({ ...agent, ...newRole })}
+            onRemoveUser={id => onRemoveAgent(id)}
+            onUpsertUser={onUpsertAgent}
           />
         ))}
 
@@ -64,7 +66,7 @@ export default ({
           modalTitle={title}
           ctaTitle={title}
           allowedRoles={allowedRoles}
-          onUpsertRole={onUpsertAgent}
+          onUpsertUser={onUpsertAgent}
         />
       </div>
     </div>

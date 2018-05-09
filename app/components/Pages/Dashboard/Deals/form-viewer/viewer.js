@@ -32,6 +32,9 @@ export default ({
         type === 'image' && <img className="image" src={url} alt={name} />}
 
       {file &&
+        type === 'html' && <iframe frameBorder="0" src={url} width="90%" height="90%" />}
+
+      {file &&
         type === 'unknown' && (
           <div className="no-preview">
             Can not preview <strong>.{getExtensionName(file)}</strong> files

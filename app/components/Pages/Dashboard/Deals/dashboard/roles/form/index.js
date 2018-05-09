@@ -1,124 +1,225 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import { Form } from 'react-final-form'
 import _ from 'underscore'
-import Name from './name'
-import Role from './role'
-import Title from './title'
-import Commission from './commission'
-import InputWithSelect from './input-with-select'
-import { Button, Modal } from 'react-bootstrap'
+import { RoleFormContainer } from './form-container'
+import { Modal } from 'react-bootstrap'
+import { ROLE_NAMES } from '../../../utils/roles'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import CancelButton from '../../../../../../../views/components/Button/CancelButton'
 
-const ROLE_NAMES = [
-  'BuyerAgent',
-  'BuyerReferral',
-  'CoBuyerAgent',
-  'SellerAgent',
-  'SellerReferral',
-  'CoSellerAgent',
-  'Buyer',
-  'BuyerPowerOfAttorney',
-  'Seller',
-  'SellerPowerOfAttorney',
-  'Title',
-  'BuyerLawyer',
-  'SellerLawyer',
-  'Lender',
-  'TeamLead',
-  'Appraiser',
-  'Inspector',
-  'Tenant',
-  'LandlordPowerOfAttorney',
-  'Landlord',
-  'TenantPowerOfAttorney'
-]
+export class RoleFormModal extends React.Component {
+  getInitialValues = () => {
+    const { form, isSubmitting } = this.props
 
-export default class Form extends React.Component {
-  constructor(props) {
-    super(props)
+    if (isSubmitting) {
+      return this.formObject
+    }
 
-    const form = props.form || {}
+    this.formObject = {
+      ...form,
+      ...this.preselectRole,
+      ...this.commissionAttributes
+    }
 
-    const isNewRecord = typeof form.role === 'undefined'
+    return this.formObject
+  }
 
-    this.state = {
-      form,
-      isNewRecord,
-      invalidFields: [],
-      isFormCompleted: false,
-      nameErrorMessage: undefined,
-      nameErrorFields: []
+  /**
+   * preselect role, if there is only one allowed role to select
+   */
+  get preselectRole() {
+    const { form } = this.props
+    const formRole = form && form.role
+
+    if (formRole) {
+      return {}
+    }
+
+    const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
+    const preselectedRole = availableRoles.length === 1 && availableRoles[0]
+
+    if (!preselectedRole) {
+      return {}
+    }
+
+    return {
+      role: preselectedRole
     }
   }
 
-  componentDidMount() {
-    const { form, isNewRecord } = this.state
+  /**
+   * returns commission attributes
+   */
+  get commissionAttributes() {
+    const { form } = this.props
 
-    if (isNewRecord) {
-      _.keys(form, field => {
-        this.validate(field, form[field])
-      })
-    }
-
-    // this.preselectRoles()
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { form, showFormModal } = nextProps
-
-    if (form && showFormModal && _.size(form) > 0) {
-      const isNewRecord = typeof form.role === 'undefined'
-
-      if (!isNewRecord) {
-        _.keys(form, field => {
-          this.validate(field, form[field])
-        })
-      } else {
-        this.setState({
-          nameErrorFields: [],
-          nameErrorMessage: '',
-          isFormCompleted: false
-        })
+    if (form && form.commission_percentage) {
+      return {
+        commission: form.commission_percentage,
+        commission_type: 'commission_percentage'
       }
-
-      this.setState(
-        {
-          form,
-          isNewRecord
-        }
-        // () => this.preselectRoles()
-      )
     }
 
-    if (!form || !showFormModal) {
-      this.setState(
-        {
-          form: {},
-          invalidFields: [],
-          isFormCompleted: false
+    if (form && form.commission_dollar) {
+      return {
+        commission: form.commission_dollar,
+        commission_type: 'commission_dollar'
+      }
+    }
+
+    return {
+      commission: '',
+      commission_type: 'commission_percentage'
+    }
+  }
+
+  onSubmit = values => {
+    // keeps the last object of submitted form
+    this.formObject = values
+
+    // send form to the parent
+    this.props.onFormSubmit(this.normalizeForm(values))
+  }
+
+  validate = async values => {
+    const errors = {}
+    const requiredFields = this.getRequiredFields(values)
+    const validators = this.getFormValidators(requiredFields)
+
+    requiredFields.forEach(fieldName => {
+      if (!values[fieldName]) {
+        errors[fieldName] = 'Required'
+      }
+    })
+
+    await Promise.all(
+      _.map(values, async (fieldValue, fieldName) => {
+        const validator = validators[fieldName]
+
+        if (!validator) {
+          return false
         }
-        // () => showFormModal && this.preselectRoles()
-      )
+
+        if (!errors[fieldName] && !await validator(fieldValue)) {
+          errors[fieldName] = this.errorNames[fieldName]
+        }
+      })
+    )
+
+    return errors
+  }
+
+  /**
+   * get normalized form
+   * commission logic: commission_type + commission = commission_<type>
+   */
+  normalizeForm = values => {
+    const newValues = {}
+    const { commission, commission_type } = values
+    const ingoreFields = ['commission', 'commission_type', 'user']
+
+    if (commission_type === 'commission_dollar') {
+      newValues.commission_dollar = parseFloat(commission)
+      newValues.commission_percentage = null
+    } else if (commission_type === 'commission_percentage') {
+      newValues.commission_percentage = parseFloat(commission)
+      newValues.commission_dollar = null
+    }
+
+    return _.omit(
+      {
+        ...values,
+        ...newValues
+      },
+      (fieldValue, fieldName) => ingoreFields.includes(fieldName)
+    )
+  }
+
+  /**
+   * get required fields based on different scenarios
+   * @param {Object} values - couples of form {Field:Value}
+   */
+  getRequiredFields = values => {
+    const list = ['role']
+
+    const { company_title, role } = values
+
+    if (
+      company_title &&
+      this.isValidString(company_title, [], 'company_title')
+    ) {
+      list.push('company_title')
+    } else {
+      list.push('legal_first_name', 'legal_last_name')
+    }
+
+    if (this.isEmailRequired(role)) {
+      list.push('email')
+    }
+
+    if (this.isCommissionRequired(role)) {
+      list.push('commission')
+    }
+
+    // when adding an agent, company should be mandatory
+    if (role && role.includes('Agent')) {
+      list.push('legal_first_name', 'legal_last_name', 'company_title')
+    }
+
+    return _.uniq(list)
+  }
+
+  /**
+   * get form validators
+   */
+  getFormValidators = requiredFields => ({
+    role: role => role,
+    legal_prefix: value => this.isValidLegalPrefix(value, requiredFields),
+    legal_last_name: name =>
+      this.isValidString(name, requiredFields, 'legal_last_name'),
+    legal_middle_name: name =>
+      this.isValidString(name, requiredFields, 'legal_middle_name'),
+    legal_first_name: name =>
+      this.isValidString(name, requiredFields, 'legal_first_name'),
+    company_title: name =>
+      this.isValidString(name, requiredFields, 'company_title'),
+    email: email => this.isValidEmail(email, requiredFields),
+    phone_number: phoneNumber =>
+      this.isValidPhoneNumber(phoneNumber, requiredFields),
+    commission: value => this.isValidCommission(value, requiredFields)
+  })
+
+  /**
+   * get error names
+   */
+  get errorNames() {
+    return {
+      legal_first_name: 'Invalid Legal First Name',
+      legal_last_name: 'Invalid Legal Last Name',
+      email: 'Invalid Email Address',
+      phone_number: 'Phone Number is invalid (###)###-####',
+      commission: 'Invalid Commission value'
     }
   }
 
   /**
    * check role type is allowed to select or not
    */
-  isAllowedRole = name => {
-    const { deal, allowedRoles } = this.props
-    const { form, isNewRecord } = this.state
+  isAllowedRole = (name, formRole) => {
+    const { deal, form, allowedRoles } = this.props
 
     const dealType = deal ? deal.deal_type : null
 
     if (
-      ((name === 'BuyerAgent' || form.role === 'BuyerAgent') &&
+      ((name === 'BuyerAgent' || formRole === 'BuyerAgent') &&
         dealType === 'Buying') ||
-      ((name === 'SellerAgent' || form.role === 'SellerAgent') &&
+      ((name === 'SellerAgent' || formRole === 'SellerAgent') &&
         dealType === 'Selling')
     ) {
       return false
     }
 
-    if (!allowedRoles || (!isNewRecord && form.role === name)) {
+    if (!allowedRoles || (!this.isNewRecord && form.role === name)) {
       return true
     }
 
@@ -126,58 +227,37 @@ export default class Form extends React.Component {
   }
 
   /**
-   * preselect role, if there is any
-   */
-  preselectRoles = () => {
-    const { form } = this.state
-    const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
-    const preselectedRole = availableRoles.length === 1 && availableRoles[0]
-
-    if (!form.role && preselectedRole) {
-      this.setForm('role', preselectedRole)
-    }
-  }
-
-  /**
-   * set form field's value
-   */
-  setForm(field, value, removeField = null) {
-    const { form } = this.state
-    const newForm = removeField ? _.omit(form, removeField) : form
-
-    this.setState(
-      {
-        form: {
-          ...newForm,
-          [field]: value
-        }
-      },
-      () => this.validate(field, value)
-    )
-  }
-
-  setCommission(field, value) {
-    const removeField =
-      field === 'commission_percentage'
-        ? 'commission_dollar'
-        : 'commission_percentage'
-
-    this.setForm(field, value, removeField)
-  }
-
-  /**
    * validate email
    */
-  isEmail(email) {
+  isValidEmail = (email, requiredFields) => {
+    if (!email && !requiredFields.includes('email')) {
+      return true
+    }
+
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
     return re.test(email)
   }
 
   /**
+   * validate legal prefix
+   */
+  isValidLegalPrefix = (prefix, requiredFields) => {
+    if (!prefix && !requiredFields.includes('legal_prefix')) {
+      return true
+    }
+
+    return ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].includes(prefix)
+  }
+
+  /**
    * validate phone number
    */
-  async isValidPhoneNumber(phoneNumber) {
+  isValidPhoneNumber = async (phoneNumber, requiredFields) => {
+    if (!phoneNumber && !requiredFields.includes('phone_number')) {
+      return true
+    }
+
     const {
       PhoneNumberUtil
     } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
@@ -193,326 +273,135 @@ export default class Form extends React.Component {
   /**
    * validate commission value
    */
-  validateCommission(value) {
-    if (!/\d+(\.\d+)?$/.test(value)) {
-      return false
+  isValidCommission = (commission, requiredFields) => {
+    if (!commission && !requiredFields.includes('commission')) {
+      return true
     }
 
-    return true
+    // eslint-disable-next-line no-restricted-globals
+    if (!isNaN(parseFloat(commission)) && isFinite(commission)) {
+      return true
+    }
+
+    return false
   }
 
-  isValidName(name) {
-    return name && name.trim().length > 0
+  /**
+   * validate string value
+   */
+  isValidString = (str, requiredFields, fieldName) => {
+    if (!str && !requiredFields.includes(fieldName)) {
+      return true
+    }
+
+    return str && str.trim().length > 0
   }
 
   /**
    * check email is required or not
    * https://gitlab.com/rechat/web/issues/563
    */
-  isEmailRequired() {
-    const { form } = this.state
-
-    return ['BuyerAgent', 'SellerAgent'].indexOf(form.role) > -1
-  }
+  isEmailRequired = role => ['BuyerAgent', 'SellerAgent'].includes(role)
 
   /**
    * check whether commission is required or not
    * it's required by default
    * https://gitlab.com/rechat/web/issues/691
    */
-  isCommissionRequired(form) {
+  isCommissionRequired = role => {
     const { deal, isCommissionRequired } = this.props
 
     // https://gitlab.com/rechat/web/issues/760
-    if (deal && deal.deal_type === 'Buying' && form.role === 'SellerAgent') {
+    if (deal && deal.deal_type === 'Buying' && role === 'SellerAgent') {
       return false
     }
 
-    return (
-      Commission.shouldShowCommission(form) && isCommissionRequired !== false
-    )
+    return this.shouldShowCommission(role) && isCommissionRequired !== false
   }
 
   /**
-   * validate form
+   * check whether should show commission or not
    */
-  async validate(field, value) {
-    const { form, invalidFields } = this.state
-    const requiredFields = ['role']
+  shouldShowCommission = role =>
+    [
+      'CoBuyerAgent',
+      'BuyerAgent',
+      'BuyerReferral',
+      'CoSellerAgent',
+      'SellerAgent',
+      'SellerReferral'
+    ].includes(role)
 
-    if (this.isEmailRequired()) {
-      requiredFields.push('email')
+  /**
+   * returns Submit button's caption
+   */
+  get submitCaption() {
+    const { isSubmitting } = this.props
+
+    if (isSubmitting) {
+      return this.isNewRecord ? 'Saving...' : 'Updating...'
     }
 
-    const fields = {
-      role: role => role,
-      legal_prefix(value) {
-        return ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr'].includes(value)
-      },
-      legal_last_name: name => this.isValidName(name),
-      legal_middle_name: name => this.isValidName(name),
-      legal_first_name: name => this.isValidName(name),
-      email: email => email && this.isEmail(email),
-      phone_number: phoneNumber =>
-        phoneNumber && this.isValidPhoneNumber(phoneNumber),
-      commission_percentage: value => value && this.validateCommission(value),
-      commission_dollar: value => value && this.validateCommission(value),
-      company_title: name => name
-    }
-
-    if (this.isCommissionRequired(form)) {
-      let commission_field = 'commission_percentage'
-
-      if (form.commission_dollar > 0) {
-        commission_field = 'commission_dollar'
-      }
-
-      requiredFields.push(commission_field)
-    }
-
-    // validate field
-    const validator = fields[field]
-
-    let newInvalidFields = invalidFields
-
-    const removeField = () => {
-      newInvalidFields = invalidFields.filter(f => field !== f)
-      this.setState({
-        invalidFields: newInvalidFields
-      })
-    }
-
-    if (value) {
-      if (
-        ['legal_first_name', 'legal_last_name', 'company_title'].includes(field)
-      ) {
-        this.setState({
-          nameErrorFields: [],
-          nameErrorMessage: ''
-        })
-      }
-
-      if (typeof validator === 'function' && (await validator(value))) {
-        // validated! so remove field from invalidFields
-        if (invalidFields.length > 0 && invalidFields.includes(field)) {
-          removeField()
-        }
-      } else if (
-        typeof validator === 'function' &&
-        !invalidFields.includes(field)
-      ) {
-        // add field to invalidfields
-        newInvalidFields = [...invalidFields, field]
-        this.setState({
-          invalidFields: newInvalidFields
-        })
-      }
-    } else if (invalidFields.includes(field)) {
-      removeField()
-    }
-
-    const isFormCompleted =
-      _.every(requiredFields, name => fields[name](form[name])) &&
-      newInvalidFields.length === 0
-
-    this.setState({ isFormCompleted })
-    this.props.onFormChange(form)
+    return this.isNewRecord ? 'Add' : 'Update'
   }
 
-  extractItems({ form = {}, singularName, pluralName }) {
-    if (_.size(form) === 0) {
-      return []
-    }
+  /**
+   * get form is new record or not
+   */
+  get isNewRecord() {
+    const { form } = this.props
 
-    const pluralValues = form[pluralName]
-
-    if (pluralValues && _.isArray(pluralValues) && pluralValues.length > 0) {
-      const values = []
-
-      singularName.forEach(name => {
-        pluralValues.forEach(item => values.push(item[name]))
-      })
-
-      return values.filter(i => i)
-    }
-
-    const singleValues = []
-
-    singularName.forEach(name => {
-      if (form[name]) {
-        singleValues.push(form[name])
-      }
-    })
-
-    return singleValues.filter(i => i)
-  }
-
-  submit = () => {
-    const { onSubmit } = this.props
-    const { form } = this.state
-    let nameErrorMessage
-    let nameErrorFields = []
-
-    if (
-      !form.legal_first_name &&
-      !form.legal_last_name &&
-      (!form.company_title || !form.company_title.trim())
-    ) {
-      nameErrorMessage = 'Please add a name or a company to continue'
-      nameErrorFields = ['legal_first_name', 'legal_last_name', 'company_title']
-    } else if (form.legal_first_name && !form.legal_last_name) {
-      nameErrorMessage = 'Legal last name is required'
-      nameErrorFields = ['legal_last_name']
-    } else if (!form.legal_first_name && form.legal_last_name) {
-      nameErrorMessage = 'Legal first name is required'
-      nameErrorFields = ['legal_first_name']
-    } else {
-      onSubmit()
-    }
-
-    this.setState({ nameErrorMessage, nameErrorFields })
+    return !form || !form.role
   }
 
   render() {
-    const {
-      form,
-      invalidFields,
-      isFormCompleted,
-      nameErrorMessage,
-      nameErrorFields
-    } = this.state
-    const {
-      deal,
-      showFormModal,
-      handlOnHide,
-      modalTitle,
-      isSaving,
-      submitButtonText,
-      formNotChanged
-    } = this.props
+    const { form, isOpen, modalTitle, onHide, isSubmitting } = this.props
 
     return (
       <Modal
-        show={showFormModal}
-        onHide={handlOnHide}
-        dialogClassName="modal-deal-add-role"
+        dialogClassName="deals__role-form--modal"
+        show={isOpen}
+        onHide={onHide}
         backdrop="static"
       >
         <Modal.Header closeButton>{modalTitle}</Modal.Header>
-
-        <Modal.Body>
-          <div className="deal-roles-form">
-            <div className="row-name">
-              <Title
-                isInvalid={invalidFields.includes('legal_prefix')}
-                form={form}
-                onChange={value => this.setForm('legal_prefix', value)}
-              />
-
-              <Name
-                id="first_name"
-                name="first_name"
-                lableColorError={nameErrorFields.includes('legal_first_name')}
-                isRequired={false}
-                title="Legal First Name"
-                value={form.legal_first_name}
-                isInvalid={invalidFields.includes('legal_first_name')}
-                onChange={value => this.setForm('legal_first_name', value)}
-              />
-
-              <Name
-                id="middle_name"
-                name="middle_name"
-                isRequired={false}
-                title="Legal Middle Name"
-                value={form.legal_middle_name}
-                isInvalid={invalidFields.includes('legal_middle_name')}
-                onChange={value => this.setForm('legal_middle_name', value)}
-              />
-
-              <Name
-                id="last_name"
-                name="last_name"
-                lableColorError={nameErrorFields.includes('legal_last_name')}
-                isRequired={false}
-                title="Legal Last Name"
-                value={form.legal_last_name}
-                isInvalid={invalidFields.includes('legal_last_name')}
-                onChange={value => this.setForm('legal_last_name', value)}
-              />
-            </div>
-
-            <InputWithSelect
-              lableColorError={nameErrorFields.includes('company_title')}
-              title="Company"
-              inputType="Text"
-              defaultSelectedItem={form.companies}
-              onChangeHandler={value => this.setForm('company_title', value)}
-              items={this.extractItems({
-                form,
-                singularName: ['company', 'company_title'],
-                pluralName: 'companies'
-              })}
-            />
-
-            <InputWithSelect
-              title="Email"
-              inputType="Email"
-              errorText="Enter a valid email"
-              defaultSelectedItem={form.email}
-              isRequired={this.isEmailRequired()}
-              isInvalid={invalidFields.includes('email')}
-              onChangeHandler={value => this.setForm('email', value)}
-              items={this.extractItems({
-                form,
-                singularName: ['email'],
-                pluralName: 'emails'
-              })}
-            />
-
-            <InputWithSelect
-              title="Phone"
-              inputType="Phone"
-              errorText="The value is not a valid U.S phone number"
-              defaultSelectedItem={form.phone_number}
-              isInvalid={invalidFields.includes('phone_number')}
-              onChangeHandler={value => this.setForm('phone_number', value)}
-              items={this.extractItems({
-                form,
-                singularName: ['phone_number'],
-                pluralName: 'phones'
-              })}
-            />
-
-            <Role
-              deal={deal}
-              form={form}
-              role_names={ROLE_NAMES}
-              onChange={value => this.setForm('role', value)}
-              isAllowed={this.isAllowedRole.bind(this)}
-            />
-
-            <Commission
-              form={form}
-              isRequired={this.isCommissionRequired(form)}
-              validateCommission={this.validateCommission.bind(this)}
-              onChange={(field, value) => this.setCommission(field, value)}
-            />
-          </div>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <p className="modal-footer-error">{nameErrorMessage}</p>
-          <Button
-            onClick={this.submit}
-            disabled={!isFormCompleted || isSaving || formNotChanged}
-            bsStyle={!isFormCompleted ? 'link' : 'primary'}
-            className={`btn-deal ${!isFormCompleted ? 'disabled' : ''}`}
-          >
-            {submitButtonText}
-          </Button>
-        </Modal.Footer>
+        <Form
+          onSubmit={this.onSubmit}
+          validate={this.validate}
+          initialValues={this.getInitialValues()}
+          render={({ handleSubmit, values, pristine, invalid }) => (
+            <Fragment>
+              <Modal.Body
+                className="u-scrollbar--thinner"
+                style={{ padding: 0 }}
+              >
+                <RoleFormContainer
+                  form={form}
+                  values={values}
+                  handleSubmit={handleSubmit}
+                  shouldShowCommission={this.shouldShowCommission}
+                  isAllowedRole={this.isAllowedRole}
+                  requiredFields={this.getRequiredFields(values)}
+                />
+              </Modal.Body>
+              <Modal.Footer>
+                <CancelButton disabled={isSubmitting} onClick={onHide}>
+                  Canecl
+                </CancelButton>
+                <ActionButton
+                  onClick={() => handleSubmit(this.onSubmit)}
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {this.submitCaption}
+                </ActionButton>
+              </Modal.Footer>
+            </Fragment>
+          )}
+        />
       </Modal>
     )
   }
 }
+
+export default RoleFormModal

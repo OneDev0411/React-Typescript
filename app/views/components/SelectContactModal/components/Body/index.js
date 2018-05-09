@@ -30,16 +30,29 @@ const ContactsList = styled.div`
 `
 
 const propTypes = {
+  contacts: PropTypes.arrayOf(PropTypes.shape),
   handleSelectedItem: PropTypes.func.isRequired
+}
+
+const defaultProps = {
+  contacts: []
 }
 
 class Body extends Component {
   state = {
-    items: [],
+    items: this.props.contacts,
     isSearching: false
   }
 
-  fetchRepository = _.debounce(async value => {
+  componentDidMount() {
+    const { defaultSearchFilter } = this.props
+
+    if (defaultSearchFilter) {
+      this.search(defaultSearchFilter)
+    }
+  }
+
+  search = _.debounce(async value => {
     try {
       this.setState({ isSearching: true })
 
@@ -65,7 +78,7 @@ class Body extends Component {
     }
 
     // call the debounce function
-    this.fetchRepository(value)
+    this.search(value)
   }
 
   handleItemToString = item => {
@@ -83,10 +96,14 @@ class Body extends Component {
 
   render() {
     const { items, isSearching } = this.state
+    const { defaultSearchFilter } = this.props
+    const defaultInputValue =
+      typeof defaultSearchFilter !== 'string' ? '' : defaultSearchFilter
 
     return (
       <Downshift
         itemToString={this.handleItemToString}
+        defaultInputValue={defaultInputValue}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
           <div style={{ paddingTop: '2rem' }}>
             <div style={{ padding: '0 2rem' }}>
@@ -125,5 +142,6 @@ class Body extends Component {
 }
 
 Body.propTypes = propTypes
+Body.defaultProps = defaultProps
 
 export default Body
