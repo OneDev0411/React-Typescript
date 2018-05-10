@@ -1,11 +1,13 @@
 import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
 import { Form, Field } from 'react-final-form'
 
 import BasicModal from '../../../../../../../../views/components/BasicModal'
 import ActionButton from '../../../../../../../../views/components/Button/ActionButton'
 import TextField from './TextField'
-import { LABELS_OPTIONS } from '../../index'
 import Dropdown from '../../../../components/Dropdown'
+
+import { getAddressLabels } from '../../../../../../../../models/contacts/helpers/get-attribute-labels'
 
 const isPostalCode = value =>
   !value || new RegExp(/(^\d{5}$)|(^\d{5}-\d{4}$)/).exec(value)
@@ -38,6 +40,7 @@ const validate = values => {
 function AddAddressModal({
   isOpen,
   submitting,
+  attributeDefs,
   handleOnClose,
   handleOnSubmit
 }) {
@@ -95,7 +98,7 @@ function AddAddressModal({
                         </label>
                         <Dropdown
                           name="add-new-address_label"
-                          options={LABELS_OPTIONS}
+                          options={getAddressLabels(attributeDefs)}
                           disabled={submitting}
                           defaultTitle={values.label}
                           handleOnSelect={value => onChange(value)}
@@ -213,4 +216,8 @@ function AddAddressModal({
   )
 }
 
-export default AddAddressModal
+function mapStateToProps({ contacts }) {
+  return { attributeDefs: contacts.attributeDefs }
+}
+
+export default connect(mapStateToProps)(AddAddressModal)
