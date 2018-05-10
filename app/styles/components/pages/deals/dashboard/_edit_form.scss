@@ -37,17 +37,35 @@
       color: #000000;
     }
 
-    .btns {
+    .actions {
       text-align: right;
       .save {
         background-color: #2196f3;
         border-color: #2196f3;
         color: #fff;
+        min-width: 80px;
+        margin-left: 8px;
+        font-weight: 500;
+      }
+
+      .preview {
+        background-color: #fff;
+        border-color: #2196f3;
+        color: #2196f3;
         min-width: 100px;
+        font-weight: 500;
+        line-height: 17px;
+        vertical-align: middle;
+
+        svg {
+          margin-right: 8px;
+          vertical-align: middle;
+          height: 15px;
+        }
 
         &:hover {
           color: #2196f3;
-          background-color: #fff;
+          background-color: #f1f7fb;
         }
       }
     }

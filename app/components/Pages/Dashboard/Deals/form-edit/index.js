@@ -201,6 +201,16 @@ class FormEdit extends React.Component {
   /**
    *
    */
+  handleOpenPreview() {
+    const { params } = this.props
+    const { id, taskId } = params
+
+    browserHistory.push(`/dashboard/deals/${id}/form-viewer/${taskId}`)
+  }
+
+  /**
+   *
+   */
   getButtonCaption() {
     const { saving, loaded, incompleteFields } = this.state
 
@@ -233,6 +243,7 @@ class FormEdit extends React.Component {
         onFrameRef={ref => (this.frame = ref)}
         onSave={() => this.onSave()}
         onClose={() => this.close()}
+        handleOpenPreview={() => this.handleOpenPreview()}
       />
     )
   }

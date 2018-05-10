@@ -6,6 +6,7 @@ import DealInfo from '../dashboard/deal-info'
 import Comments from '../dashboard/comments'
 import CommentInput from '../dashboard/comments/input'
 import Viewer from './viewer'
+import IconEdit from '../../../../../views/components/SvgIcons/Edit/IconEdit'
 
 export default class extends React.Component {
   constructor(props) {
@@ -54,6 +55,17 @@ export default class extends React.Component {
           </div>
 
           <div className="c-deal-form-viewer__header__cta">
+            {!isBackOffice &&
+              fileType === 'digital-form' && (
+                <Button
+                  className="deal-button edit-form"
+                  onClick={editFormHandler}
+                >
+                  <IconEdit />
+                  <span>Edit Form</span>
+                </Button>
+              )}
+
             <Button
               className={cn('deal-button', { 'is-active': showFactsheet })}
               onClick={toggleFactsheet}
@@ -79,16 +91,6 @@ export default class extends React.Component {
                   onClick={() => splitPdfHandler(file)}
                 >
                   Split PDF
-                </Button>
-              )}
-
-            {!isBackOffice &&
-              fileType === 'digital-form' && (
-                <Button
-                  className="deal-button edit-form"
-                  onClick={editFormHandler}
-                >
-                  Edit Form
                 </Button>
               )}
           </div>
