@@ -399,10 +399,14 @@ function getAddresses(attributeDefs, allAddressFields) {
 }
 
 function getIndex(allAddressFields) {
-  const index = allAddressFields
-    .filter(({ index }) => index != null)
-    .map(({ index }) => index)
-    .reduce((a, b) => (a >= b ? a : b))
+  if (allAddressFields.length > 0) {
+    const index = allAddressFields
+      .filter(({ index }) => index != null)
+      .map(({ index }) => index)
+      .reduce((a, b) => (a >= b ? a : b))
 
-  return index + 1
+    return index + 1
+  }
+
+  return 0
 }
