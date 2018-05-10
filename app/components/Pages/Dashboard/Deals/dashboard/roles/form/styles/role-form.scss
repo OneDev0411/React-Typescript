@@ -1,19 +1,25 @@
 .deals__role-form--select {
+  font-size: 16px !important;
+  color: #26465e !important;
+
   .Select-control,
   &.is-focused .Select-control {
-    border: none;
-    font-size: 17px;
-    box-shadow: none;
+    border: none !important;
+    box-shadow: none !important;
 
     &:hover {
-      box-shadow: none;
+      box-shadow: none !important;
+    }
+
+    .Select-placeholder {
+      color: #cad4db !important;
     }
 
     .Select-placeholder,
     .Select-value,
     .Select-input {
-      padding-left: 0;
-      padding-right: 0;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
     }
   }
 }

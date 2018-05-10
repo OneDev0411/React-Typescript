@@ -33,36 +33,43 @@
   button {
     margin-left: 5px;
     height: 34px;
-    line-height: 1px;
+    line-height: 17px;
+    vertical-align: middle;
     border-radius: 4px;
     background-color: #fff;
-    border: solid 1px #dde2e6;
+    border: solid 1px #2196f3;
     font-size: 13px;
     font-weight: 500;
-    color: #8da2b5;
+    color: #2196f3;
 
-    &:focus,
+    svg {
+      vertical-align: middle;
+      margin-right: 5px;
+      height: 15px;
+    }
+
+    &:focus {
+      outline: none;
+      color: #2196f3;
+      border-color: #2196f3;
+      background-color: #fff;
+    }
+
     &:hover {
       outline: none;
-      color: #2196f3 !important;
+      background-color: #2196f3 !important;
       border-color: #2196f3 !important;
-      background-color: #fff !important;
+      color: #fff !important;
+
+      svg g > g {
+        fill: #fff;
+      }
     }
 
     &.is-active {
       color: #fff !important;
       border-color: #2196f3 !important;
       background-color: #2196f3 !important;
-    }
-  }
-
-  .edit-form {
-    background-color: #2196f3;
-    border-color: #2196f3;
-    color: #fff;
-    &:hover {
-      background: #fff;
-      color: #2196f3;
     }
   }
 }

@@ -39,7 +39,7 @@ class WorkspaceForm extends React.Component {
     const validationErrors = {}
 
     if (task === null) {
-      validationErrors.title = 'Please give this a ducment title'
+      validationErrors.title = 'Please give this a document title'
     }
 
     this.setState({

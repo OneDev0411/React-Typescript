@@ -383,7 +383,7 @@ export class RoleFormModal extends React.Component {
           onSubmit={this.onSubmit}
           validate={this.validate}
           initialValues={this.getInitialValues()}
-          render={({ handleSubmit, values, pristine, invalid }) => (
+          render={({ handleSubmit, values }) => (
             <Fragment>
               <Modal.Body
                 className="u-scrollbar--thinner"
@@ -400,7 +400,7 @@ export class RoleFormModal extends React.Component {
               </Modal.Body>
               <Modal.Footer>
                 <CancelButton disabled={isSubmitting} onClick={onHide}>
-                  Canecl
+                  Cancel
                 </CancelButton>
                 <ActionButton
                   onClick={() => handleSubmit(this.onSubmit)}
