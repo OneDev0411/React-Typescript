@@ -240,10 +240,14 @@ export class FileManager extends React.Component {
     }?backTo=files`
   }
 
-  async onSelectTask(file, taskId = null) {
+  async onSelectTask(file, taskId = null, notifyOffice = false) {
     const { user, tasks, moveTaskFile, deal } = this.props
     const { updatingFiles } = this.state
     const task = taskId ? tasks[taskId] : null
+
+    if (file.taskId === taskId) {
+      return false
+    }
 
     this.setState({
       updatingFiles: {
@@ -255,7 +259,7 @@ export class FileManager extends React.Component {
       }
     })
 
-    await moveTaskFile(user, deal.id, task, file)
+    await moveTaskFile(user, deal.id, task, file, notifyOffice)
 
     this.setState({
       updatingFiles: _.omit(updatingFiles, ({ id }) => id === file.id)
@@ -310,8 +314,11 @@ export class FileManager extends React.Component {
             <TasksDropDown
               showStashOption={file.taskId !== null}
               searchable
+              showNotifyOption
               deal={deal}
-              onSelectTask={taskId => this.onSelectTask(file, taskId)}
+              onSelectTask={(taskId, notifyOffice) =>
+                this.onSelectTask(file, taskId, notifyOffice)
+              }
               selectedTask={
                 updatingFiles[file.id]
                   ? tasks[updatingFiles[file.id].taskId]
