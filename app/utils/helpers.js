@@ -252,3 +252,18 @@ export const toNumber = (value, formated = false) => {
 
   return value
 }
+
+//  For using math round
+//  This proposed solution avoids the floating-number arithmetic issue
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round#A_better_solution
+export function round(number, precision) {
+  const shift = function(number, precision) {
+    const numArray = `${number}`.split('e')
+
+    return +`${numArray[0]}e${
+      numArray[1] ? +numArray[1] + precision : precision
+    }`
+  }
+
+  return shift(Math.round(shift(number, +precision)), -precision)
+}
