@@ -24,13 +24,12 @@ export const SearchInput = ({
   placeholder,
   value,
   onClick,
-  onFocus,
-  onChange
+  onFocus
 }) => (
   <SearchContainer>
     {searchable && (
       <Input
-        {...getInputProps({ placeholder, value, onChange })}
+        {...getInputProps({ placeholder, value })}
         onClick={onClick}
         onFocus={onFocus}
       />
