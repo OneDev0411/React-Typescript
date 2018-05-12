@@ -8,6 +8,7 @@ export const SearchContainer = styled.div`
   border-radius: 3px;
   border: 1px solid #eee;
   padding: 7px 5px;
+  background-color: #fff;
 
   &:hover {
     background-color: #fff;
