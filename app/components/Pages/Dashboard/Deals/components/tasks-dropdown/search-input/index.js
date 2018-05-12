@@ -37,7 +37,7 @@ export const SearchInput = ({
 
     {!searchable && (
       <Title onClick={onClick} hasTask={selectedTask !== undefined}>
-        {(selectedTask && selectedTask.title) || filterValue || 'Select a task'}
+        {(selectedTask && selectedTask.title) || value || 'Select a task'}
       </Title>
     )}
 
