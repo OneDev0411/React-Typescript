@@ -17,6 +17,7 @@ export const SearchContainer = styled.div`
 export const Input = styled.input`
   width: 95%;
   border: none;
+  cursor: pointer;
   background-color: transparent;
 
   :focus {
