@@ -1,7 +1,7 @@
 import React from 'react'
 import { ChecklistItemContainer, ChecklistItemTitle } from '../../styled'
 
-export const CreateTaskCta = ({ checklist, onSelect }) => (
+export const CreateTaskItem = ({ checklist, onSelect }) => (
   <ChecklistItemContainer
     onClick={e => {
       e.stopPropagation()
