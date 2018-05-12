@@ -315,6 +315,7 @@ class DropDownTasks extends React.Component {
                           {showCreateTaskForm === chId ? (
                             <CreateTaskForm
                               isSaving={isCreatingNewTask}
+                              showNotifyOption={showNotifyOption}
                               checklist={checklists[chId]}
                               onCancel={this.onCancelNewTask}
                               onFinish={this.createNewTask}

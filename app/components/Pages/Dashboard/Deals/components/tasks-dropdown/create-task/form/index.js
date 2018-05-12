@@ -37,7 +37,7 @@ export class CreateTaskForm extends React.Component {
 
   render() {
     const { notifyOffice } = this.state
-    const { checklist, onCancel, isSaving } = this.props
+    const { checklist, showNotifyOption, onCancel, isSaving } = this.props
 
     if (isSaving) {
       return (
@@ -51,7 +51,7 @@ export class CreateTaskForm extends React.Component {
 
     return (
       <ChecklistItemContainer onClick={e => e.stopPropagation()}>
-        <ChecklistItemTitle>
+        <ChecklistItemTitle fullWidth={!showNotifyOption}>
           <ChecklistNewItemInputContainer>
             <ChecklistNewItemInput
               autoFocus
@@ -64,13 +64,15 @@ export class CreateTaskForm extends React.Component {
           </ChecklistNewItemInputContainer>
         </ChecklistItemTitle>
 
-        <ChecklistItemNotifyOffice isSelected>
-          <NotifyOffice
-            checklist={checklist}
-            isSelected={notifyOffice}
-            onChange={this.toggleNotifyOffice}
-          />
-        </ChecklistItemNotifyOffice>
+        {showNotifyOption && (
+          <ChecklistItemNotifyOffice isSelected>
+            <NotifyOffice
+              checklist={checklist}
+              isSelected={notifyOffice}
+              onChange={this.toggleNotifyOffice}
+            />
+          </ChecklistItemNotifyOffice>
+        )}
       </ChecklistItemContainer>
     )
   }
