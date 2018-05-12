@@ -56,6 +56,7 @@ const Timezone = ({ brand, timezone, notify }) => {
                   <label className="c-simple-field__label">Timezones</label>
                   <Dropdown
                     input={input}
+                    hasSearch
                     items={timezones}
                     itemToString={handleItemToString}
                   />
