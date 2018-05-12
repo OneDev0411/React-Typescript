@@ -9,10 +9,9 @@ import {
   changeNeedsAttention
 } from '../../../../../../store_actions/deals'
 
-// import { Checklists } from './checklists'
 import { Tasks } from './checklist-tasks'
 import { Forms } from './checklist-forms'
-import { CreateTaskCta } from './create-task/cta'
+import { CreateTaskItem } from './create-task/new-item'
 import { CreateTaskForm } from './create-task/form'
 import { ChecklistStash } from './checklist-stash'
 import { ChecklistTitle } from './styled'
