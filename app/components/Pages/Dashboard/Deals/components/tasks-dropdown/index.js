@@ -33,6 +33,11 @@ class DropDownTasks extends React.Component {
    */
   stopPropagation = e => e.stopPropagation()
 
+  /**
+   * set a needs_attention for given task
+   * @param {Object} deal - the deal object
+   * @param {Object} task - the task object
+   */
   notifyOffice = (deal, task) => {
     const { changeNeedsAttention, notify } = this.props
 
@@ -64,9 +69,20 @@ class DropDownTasks extends React.Component {
     })
   }
 
+  /**
+   * handle when user clicks on "Add new task to <Checklist>"
+   * @param {UUID} id - the checklist id
+   */
   onRequestNewTask = id => this.setState({ showCreateTaskForm: id })
+
+  /**
+   * cancel new task creation
+   */
   onCancelNewTask = () => this.setState({ showCreateTaskForm: null })
 
+  /**
+   * returns suitable value for dropdown's title
+   */
   getSearchValue = () => {
     const { filterValue } = this.state
     const { selectedTask, showStashOption } = this.props
@@ -83,15 +99,19 @@ class DropDownTasks extends React.Component {
   }
 
   /**
-   * @param {UUID} value - the filter's value
+   * handles when search input changes
+   * @param {String} value - the filter's value
    */
-  onInputValueChange = value =>
+  onInputValueChange = value => {
     this.setState({
-      filterValue: value.trim()
+      filterValue: value.trim(),
+      isMenuOpen: true
     })
+  }
 
   /**
-   *
+   * handle when selected notify office changes
+   * @param {taskId} taskId - the task id
    */
   onChangeNotifyOffice = taskId =>
     this.setState({
@@ -99,12 +119,21 @@ class DropDownTasks extends React.Component {
         this.state.selectedNotifyOffice === taskId ? null : taskId
     })
 
+  /**
+   * open/closes the dropdown
+   */
   toggleMenuState = () =>
     this.setState({
       isMenuOpen: !this.state.isMenuOpen,
       filterValue: null
     })
 
+  /**
+   * creates a new task for given checklist
+   * @param {UUID} checklistId - the checklist id
+   * @param {String} title - the task title
+   * @param {Boolean} notifyOffice - whether should notify office or not
+   */
   createNewTask = async (checklistId, title, notifyOffice) => {
     const { deal, notify, createFormTask, onSelectTask } = this.props
 
@@ -143,16 +172,11 @@ class DropDownTasks extends React.Component {
     }
   }
 
-  onSearchInputChange = () => {
-    if (this.state.isMenuOpen) {
-      return true
-    }
-
-    this.setState({
-      isMenuOpen: true
-    })
-  }
-
+  /**
+   * creates a new form for given checklist
+   * @param {Object} form - the given form object
+   * @param {UUID} checklistId - the checklist id
+   */
   onSelectChecklistForm = async (form, checklistId) => {
     const { deal, onSelectTask, createFormTask } = this.props
     const { selectedNotifyOffice } = this.state
@@ -235,7 +259,6 @@ class DropDownTasks extends React.Component {
                 selectedTask={selectedTask}
                 placeholder={placeholder}
                 value={this.getSearchValue()}
-                onChange={this.onSearchInputChange}
                 onClick={e => {
                   this.stopPropagation(e)
                   this.toggleMenuState()
