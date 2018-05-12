@@ -2,6 +2,7 @@ import _ from 'underscore'
 import types from '../../constants/deals'
 import uuid from '../../utils/uuid'
 import Deal from '../../models/Deal'
+import { changeNeedsAttention } from './task'
 import { addNotification as notify } from 'reapop'
 
 export function setUploadFiles(files) {
@@ -146,7 +147,7 @@ export function uploadTaskFile(user, task, file, fileName = null) {
 /**
  * move a file from a task to another task
  */
-export function moveTaskFile(user, dealId, task, file) {
+export function moveTaskFile(user, dealId, task, file, notifyOffice) {
   return async dispatch => {
     try {
       let response
@@ -184,6 +185,10 @@ export function moveTaskFile(user, dealId, task, file) {
         dispatch(taskFileCreated(task.id, fileData))
       } else {
         dispatch(stashFileCreated(dealId, fileData))
+      }
+
+      if (notifyOffice) {
+        dispatch(changeNeedsAttention(dealId, task.id, true))
       }
 
       return fileData
