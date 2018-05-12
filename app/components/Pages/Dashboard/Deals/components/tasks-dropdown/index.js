@@ -102,7 +102,7 @@ class DropDownTasks extends React.Component {
   toggleMenuState = () =>
     this.setState({
       isMenuOpen: !this.state.isMenuOpen,
-      filterValue: this.state.isMenuOpen ? this.state.filterValue : null
+      filterValue: null
     })
 
   createNewTask = async (checklistId, title, notifyOffice) => {
@@ -143,16 +143,14 @@ class DropDownTasks extends React.Component {
     }
   }
 
-  closeMenu = () => {
-    const { selectedTask } = this.props
-
-    if (selectedTask) {
-      this.setState({
-        filterValue: selectedTask.title
-      })
+  onSearchInputChange = () => {
+    if (this.state.isMenuOpen) {
+      return true
     }
 
-    this.toggleMenuState()
+    this.setState({
+      isMenuOpen: true
+    })
   }
 
   onSelectChecklistForm = async (form, checklistId) => {
@@ -222,7 +220,7 @@ class DropDownTasks extends React.Component {
     return (
       <Downshift
         isOpen={isMenuOpen}
-        onOuterClick={this.closeMenu}
+        onOuterClick={this.toggleMenuState}
         defaultInputValue={filterValue}
         onInputValueChange={this.onInputValueChange}
       >
@@ -237,6 +235,7 @@ class DropDownTasks extends React.Component {
                 selectedTask={selectedTask}
                 placeholder={placeholder}
                 value={this.getSearchValue()}
+                onChange={this.onSearchInputChange}
                 onClick={e => {
                   this.stopPropagation(e)
                   this.toggleMenuState()
@@ -298,7 +297,7 @@ class DropDownTasks extends React.Component {
                               onFinish={this.createNewTask}
                             />
                           ) : (
-                            <CreateTaskCta
+                            <CreateTaskItem
                               checklist={checklists[chId]}
                               onSelect={this.onRequestNewTask}
                             />
