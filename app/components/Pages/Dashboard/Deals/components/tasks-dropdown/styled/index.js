@@ -13,7 +13,7 @@ export const DropDownMenu = styled.div`
   overflow-x: hidden;
   background: #fff;
   padding: 0;
-  width: 400px;
+  width: 100%;
   border: none;
   border-radius: 4px;
   max-height: 250px;
