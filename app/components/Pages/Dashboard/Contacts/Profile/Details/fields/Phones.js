@@ -1,31 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import MultiFields from '../components/MultiFields'
 
-const DEFAULT_LABELS = {
-  mobile: {
-    name: 'Mobile',
-    title: 'Mobile Phone'
-  },
-  home: {
-    name: 'Home',
-    title: 'Home Phone'
-  },
-  work: {
-    name: 'Work',
-    title: 'Work Phone'
-  },
-  main: {
-    name: 'Main',
-    title: 'Main Phone'
-  },
-  default: {
-    name: 'Other',
-    title: 'Other Phone'
-  }
-}
+import { getPhoneNumberLabels } from '../../../../../../../models/contacts/helpers/get-attribute-labels'
+import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 
-export default function Phones({ contact }) {
+function Phones({ contact, attributeDef }) {
   const isPhoneNumber = async value => {
     const {
       PhoneNumberUtil
@@ -45,10 +26,18 @@ export default function Phones({ contact }) {
     <MultiFields
       attributeName="phone_number"
       contact={contact}
-      defaultLabels={DEFAULT_LABELS}
+      defaultLabels={getPhoneNumberLabels(attributeDef)}
       placeholder="313-444-9898"
       validator={isPhoneNumber}
       validationText="Invalid phone number."
     />
   )
 }
+
+function mapStateToProps({ contacts }) {
+  return {
+    attributeDef: selectDefinitionByName(contacts.attributeDefs, 'phone_number')
+  }
+}
+
+export default connect(mapStateToProps)(Phones)

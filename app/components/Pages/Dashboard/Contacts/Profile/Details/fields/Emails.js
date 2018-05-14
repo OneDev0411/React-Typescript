@@ -1,23 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import MultiFields from '../components/MultiFields'
 
-const DEFAULT_LABELS = {
-  personal: {
-    name: 'Personal',
-    title: 'Personal Email'
-  },
-  work: {
-    name: 'Work',
-    title: 'Work Email'
-  },
-  default: {
-    name: 'Other',
-    title: 'Other Email'
-  }
-}
+import { getEmailLabels } from '../../../../../../../models/contacts/helpers/get-attribute-labels'
+import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 
-export default function Emails({ contact }) {
+function Emails({ contact, attributeDef }) {
   const isEmail = email => {
     const regular = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -28,10 +17,18 @@ export default function Emails({ contact }) {
     <MultiFields
       attributeName="email"
       contact={contact}
-      defaultLabels={DEFAULT_LABELS}
+      defaultLabels={getEmailLabels(attributeDef)}
       placeholder="example@gmail.com"
       validator={isEmail}
       validationText="Invalid email."
     />
   )
 }
+
+function mapStateToProps({ contacts }) {
+  return {
+    attributeDef: selectDefinitionByName(contacts.attributeDefs, 'email')
+  }
+}
+
+export default connect(mapStateToProps)(Emails)

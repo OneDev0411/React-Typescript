@@ -70,10 +70,11 @@ class NewContactForm extends Component {
 
     selectFields.forEach(field => {
       const attribute_def = selectDefinitionByName(attributeDefs, field)
+      const text = values[field].value
 
-      if (attribute_def) {
+      if (attribute_def && text) {
         attributes.push({
-          text: values[field].value,
+          text,
           attribute_def: attribute_def.id
         })
       }
@@ -120,7 +121,7 @@ class NewContactForm extends Component {
           validate={validate}
           onSubmit={this.handleOnSubmit}
           initialValues={{
-            title: { title: 'Mr', value: 'Mr' },
+            title: { title: '-Select-', value: null },
             stage: { title: 'General', value: 'General' },
             email: [{ label: { title: 'Personal Email', value: 'Personal' } }],
             phone_number: [

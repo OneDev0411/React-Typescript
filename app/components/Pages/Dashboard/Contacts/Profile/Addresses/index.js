@@ -11,6 +11,7 @@ import {
 } from '../../../../../../store_actions/contacts'
 
 import { getContactAddresses } from '../../../../../../models/contacts/helpers/get-contact-addresses'
+import { getAddressLabels } from '../../../../../../models/contacts/helpers/get-attribute-labels'
 
 import {
   selectDefsBySection,
@@ -26,21 +27,6 @@ import Loading from '../../components/Loading'
 import Field from './components/Field'
 import AddAddressModal from './components/AddAddressModal'
 
-export const LABELS_OPTIONS = {
-  home: {
-    name: 'Home',
-    title: 'Home Address'
-  },
-  work: {
-    name: 'Business',
-    title: 'Business Address'
-  },
-  default: {
-    name: 'Other',
-    title: 'Other Address'
-  }
-}
-
 const FIELDS = {
   postal_code: {
     validator: code => new RegExp(/(^\d{5}$)|(^\d{5}-\d{4}$)/).exec(code),
@@ -53,6 +39,7 @@ const Addresses = ({
   addresses,
   isOpenModal,
   setShowModal,
+  attributeDefs,
   handleOnChangeLabel,
   handleDeleteAddress,
   handleAddNewAddress,
@@ -107,7 +94,7 @@ const Addresses = ({
                     <Label
                       name={`address_${label}_${index}`}
                       field={fields[0]}
-                      labels={LABELS_OPTIONS}
+                      labels={getAddressLabels(attributeDefs)}
                       disabled={props.disabled}
                       onChange={handleOnChangeLabel}
                     />
@@ -412,10 +399,14 @@ function getAddresses(attributeDefs, allAddressFields) {
 }
 
 function getIndex(allAddressFields) {
-  const index = allAddressFields
-    .filter(({ index }) => index != null)
-    .map(({ index }) => index)
-    .reduce((a, b) => (a >= b ? a : b))
+  if (allAddressFields.length > 0) {
+    const index = allAddressFields
+      .filter(({ index }) => index != null)
+      .map(({ index }) => index)
+      .reduce((a, b) => (a >= b ? a : b))
 
-  return index + 1
+    return index + 1
+  }
+
+  return 0
 }

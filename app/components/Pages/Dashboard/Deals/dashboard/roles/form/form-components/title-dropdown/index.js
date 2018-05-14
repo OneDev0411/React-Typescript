@@ -9,6 +9,7 @@ export const TitleDropDown = ({ input, placeholder }) => (
     <InputLabel>{placeholder}</InputLabel>
     <Select
       className="deals__role-form--select"
+      searchable={false}
       clearable={false}
       placeholder="Select a title"
       value={input.value}

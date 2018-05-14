@@ -1,6 +1,7 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import Frame from './frame'
+import IconDocument from '../../../../../views/components/SvgIcons/Document/IconDocument'
 
 export default ({
   task,
@@ -10,6 +11,7 @@ export default ({
   saving,
   onSave,
   onClose,
+  handleOpenPreview,
   onFrameRef
 }) => (
   <div className="deal-edit-form">
@@ -18,7 +20,14 @@ export default ({
         <span className="name">{task.title}</span>
       </Col>
 
-      <Col md={6} sm={6} xs={6} className="btns">
+      <Col md={6} sm={6} xs={6} className="actions">
+        {loaded && (
+          <button className="deal-button preview" onClick={handleOpenPreview}>
+            <IconDocument />
+            <span>Preview PDF</span>
+          </button>
+        )}
+
         {saving || !loaded ? (
           <span style={{ marginRight: '20px' }}>
             <i className="fa fa-spin fa-spinner" />&nbsp;

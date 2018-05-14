@@ -1,8 +1,13 @@
 import React from 'react'
 import Dropdown from '../../components/Dropdown'
 
+const DEFAULT_OPTION_TEXT = '-Select-'
+
 const OPTIONS = {
   default: {
+    title: DEFAULT_OPTION_TEXT
+  },
+  mr: {
     title: 'Mr'
   },
   ms: {
@@ -23,6 +28,10 @@ class Title extends React.Component {
   handleOnSelect = text => {
     const { onChange, field } = this.props
 
+    if (text === DEFAULT_OPTION_TEXT) {
+      return onChange({ ...field, text: '' })
+    }
+
     onChange({ ...field, text })
   }
 
@@ -40,7 +49,7 @@ class Title extends React.Component {
             name="title"
             options={OPTIONS}
             disabled={disabled}
-            defaultTitle={(field && field.text) || 'Mr'}
+            defaultTitle={(field && field.text) || '--Select--'}
             handleOnSelect={this.handleOnSelect}
           />
         </span>

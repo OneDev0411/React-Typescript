@@ -10,10 +10,9 @@ export default class extends React.Component {
     const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
 
-    this.searchHandler = Observable
-      .fromEvent(this.search_input, 'keyup')
+    this.searchHandler = Observable.fromEvent(this.search_input, 'keyup')
       .debounceTime(1000)
-      .subscribe((e) => this.props.subscribe(e.target.value))
+      .subscribe(e => this.props.subscribe(e.target.value))
   }
 
   componentWillUnmount() {
@@ -27,8 +26,8 @@ export default class extends React.Component {
       <FormControl
         className="rx-input"
         value={this.props.value}
-        onChange={(e) => this.props.onChange(e)}
-        inputRef={ref => this.search_input = ref}
+        onChange={e => this.props.onChange(e)}
+        inputRef={ref => (this.search_input = ref)}
         placeholder={this.props.placeholder}
       />
     )

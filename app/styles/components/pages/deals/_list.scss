@@ -297,11 +297,11 @@
  *
  */
 .deal-list--popover {
+  max-width: inherit;
   background-color: #303e4d;
   border: none;
   box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
   color: #fff;
-  min-width: 300px;
 
   &.push-left {
     margin-left: -5px;
@@ -317,7 +317,6 @@
   }
 
   .roles {
-    width: 350px !important;
     .item {
       display: flex;
       flex-direction: row;
@@ -330,8 +329,14 @@
 
       .info {
         padding-left: 8px;
-        .role {
-          color: #78909c;
+        .role-name-container {
+          display: flex;
+          flex-direction: row;
+          white-space: nowrap;
+          .role {
+            color: #78909c;
+            padding-left: 4px;
+          }
         }
         .email {
           display: block;

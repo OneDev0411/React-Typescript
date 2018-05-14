@@ -14,26 +14,17 @@ const getDropDownItems = ({ form = {}, singularName, pluralName }) => {
     return []
   }
 
-  const pluralValues = form[pluralName] || []
-  const singleValues = []
+  const values = form[pluralName] || []
 
-  if (_.size(pluralValues) > 0) {
-    const values = []
+  if (_.size(values) > 0) {
+    return values.map(item => {
+      const definition = item.attribute_def
 
-    singularName.forEach(name => {
-      pluralValues.forEach(item => item[name] && values.push(item[name]))
+      return item[definition.data_type]
     })
-
-    return values
   }
 
-  singularName.forEach(name => {
-    if (form[name]) {
-      singleValues.push(form[name])
-    }
-  })
-
-  return singleValues
+  return form[singularName] || []
 }
 
 export const RoleFormContainer = ({
@@ -72,7 +63,7 @@ export const RoleFormContainer = ({
       isRequired={requiredFields.includes('company_title')}
       items={getDropDownItems({
         form,
-        singularName: ['company', 'company_title'],
+        singularName: 'company',
         pluralName: 'companies'
       })}
     />
@@ -85,7 +76,7 @@ export const RoleFormContainer = ({
       isRequired={requiredFields.includes('email')}
       items={getDropDownItems({
         form,
-        singularName: ['email'],
+        singularName: 'email',
         pluralName: 'emails'
       })}
     />
@@ -98,7 +89,7 @@ export const RoleFormContainer = ({
       isRequired={requiredFields.includes('phone_number')}
       items={getDropDownItems({
         form,
-        singularName: ['phone_number'],
+        singularName: 'phone_number',
         pluralName: 'phones'
       })}
     />

@@ -29,12 +29,17 @@ const ContactsList = styled.div`
 `
 
 const propTypes = {
+  contacts: PropTypes.arrayOf(PropTypes.shape),
   handleSelectedItem: PropTypes.func.isRequired
+}
+
+const defaultProps = {
+  contacts: []
 }
 
 class Body extends Component {
   state = {
-    items: [],
+    items: this.props.contacts,
     isSearching: false
   }
 
@@ -50,12 +55,10 @@ class Body extends Component {
     try {
       this.setState({ isSearching: true })
 
-      const response = await searchContacts(value)
+      const items = await searchContacts(value)
 
-      if (Array.isArray(response.data)) {
-        this.setState({
-          items: response.data
-        })
+      if (Array.isArray(items)) {
+        this.setState({ items })
       }
     } catch (error) {
       console.log(error)
@@ -87,12 +90,14 @@ class Body extends Component {
 
   render() {
     const { items, isSearching } = this.state
-    const { defaultSearchFilter = '', handleSelectedItem } = this.props
+    const { defaultSearchFilter } = this.props
+    const defaultInputValue =
+      typeof defaultSearchFilter !== 'string' ? '' : defaultSearchFilter
 
     return (
       <Downshift
         itemToString={this.handleItemToString}
-        defaultInputValue={defaultSearchFilter}
+        defaultInputValue={defaultInputValue}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
           <div style={{ paddingTop: '2rem' }}>
             <div style={{ padding: '0 2rem' }}>
@@ -116,7 +121,7 @@ class Body extends Component {
                         item={item}
                         key={item.id || `downshift_search_result_item_${index}`}
                         {...getItemProps({ item })}
-                        onClickHandler={handleSelectedItem}
+                        onClickHandler={this.props.handleSelectedItem}
                         isHighlighted={highlightedIndex === index}
                       />
                     ))}
@@ -131,5 +136,6 @@ class Body extends Component {
 }
 
 Body.propTypes = propTypes
+Body.defaultProps = defaultProps
 
 export default Body

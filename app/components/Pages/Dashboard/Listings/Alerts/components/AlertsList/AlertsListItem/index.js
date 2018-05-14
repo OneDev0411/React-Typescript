@@ -60,7 +60,7 @@ const AlertListItem = ({
           {alert.created_by.first_name}
         </p>
       )}
-      {alert.user && alert.user.length > 0 && <SharedWith alert={alert} />}
+      {alert.users && alert.users.length > 0 && <SharedWith alert={alert} />}
     </div>
     {alert.new_recommendations &&
       parseInt(alert.new_recommendations, 10) > 0 && (

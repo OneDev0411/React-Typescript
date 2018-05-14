@@ -166,6 +166,20 @@ export class RoleFormModal extends React.Component {
       list.push('legal_first_name', 'legal_last_name', 'company_title')
     }
 
+    /**
+     * Required fields for EscrowOfficer according to web#1192
+     * https://gitlab.com/rechat/web/issues/1192
+     */
+    if (role === 'Title') {
+      list.push(
+        'legal_first_name',
+        'legal_last_name',
+        'company_title',
+        'email',
+        'phone_number'
+      )
+    }
+
     return _.uniq(list)
   }
 
@@ -369,7 +383,7 @@ export class RoleFormModal extends React.Component {
           onSubmit={this.onSubmit}
           validate={this.validate}
           initialValues={this.getInitialValues()}
-          render={({ handleSubmit, values, pristine, invalid }) => (
+          render={({ handleSubmit, values }) => (
             <Fragment>
               <Modal.Body
                 className="u-scrollbar--thinner"
@@ -386,7 +400,7 @@ export class RoleFormModal extends React.Component {
               </Modal.Body>
               <Modal.Footer>
                 <CancelButton disabled={isSubmitting} onClick={onHide}>
-                  Canecl
+                  Cancel
                 </CancelButton>
                 <ActionButton
                   onClick={() => handleSubmit(this.onSubmit)}

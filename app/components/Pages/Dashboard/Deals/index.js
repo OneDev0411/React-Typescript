@@ -58,12 +58,13 @@ class DealsContainer extends React.Component {
 
         <DealsError deals={deals} error={error} />
 
-        {deals === null && (
-          <div className="deal-fetch-loading">
-            <i className="fa fa-spin fa-spinner fa-4x" />
-            <p>Loading deals</p>
-          </div>
-        )}
+        {deals === null &&
+          !error && (
+            <div className="deal-fetch-loading">
+              <i className="fa fa-spin fa-spinner fa-4x" />
+              <p>Loading deals</p>
+            </div>
+          )}
 
         {deals && contexts && this.props.children}
       </div>

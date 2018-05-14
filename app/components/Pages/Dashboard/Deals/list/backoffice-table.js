@@ -95,7 +95,7 @@ class BackOfficeTable extends BaseTable {
           return ''
         }
       },
-      notificiation: {
+      notification: {
         caption: '',
         className: 'notification-container',
         getText: deal => this.hasNotification(deal)
