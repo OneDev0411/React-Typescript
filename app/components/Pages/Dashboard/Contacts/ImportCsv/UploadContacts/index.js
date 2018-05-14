@@ -3,10 +3,17 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import moment from 'moment'
 import { addNotification as notify } from 'reapop'
+
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
+
 import { createContacts } from '../../../../../../store_actions/contacts/create-contacts'
+
 import { updateWizardStep } from '../../../../../../store_actions/contacts'
 import { CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS } from '../../../../../../constants/contacts'
+
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import CancelButton from '../../../../../../views/components/Button/CancelButton'
+
 import {
   selectDefinition,
   selectDefinitionByName
@@ -16,7 +23,9 @@ import Loading from '../../../../../Partials/Loading'
 
 class UploadContacts extends React.Component {
   state = {
-    isImporting: false
+    isImporting: false,
+    isImportFailed: false,
+    importErrorMessage: null
   }
 
   componentDidMount() {
@@ -56,8 +65,6 @@ class UploadContacts extends React.Component {
     return isValid
   }
 
-  getIndex = () => {}
-
   uploadContacts = async () => {
     const {
       rows,
@@ -68,13 +75,24 @@ class UploadContacts extends React.Component {
     } = this.props
     const contacts = []
 
+    this.setState({
+      isImporting: true,
+      isImportFailed: false,
+      importErrorMessage: null
+    })
+
     _.each(rows, row => {
       const contact = {
         attributes: []
       }
 
       _.each(mappedFields, ({ definitionId, label, index = 0 }, csvField) => {
+        if (!definitionId) {
+          return false
+        }
+
         const definition = selectDefinition(attributeDefs, definitionId)
+
         const fieldValue = row[columns[csvField].index].trim()
         const parsedValue = this.parseValue(
           csvField,
@@ -102,10 +120,10 @@ class UploadContacts extends React.Component {
     })
 
     try {
-      await createContacts(contacts)
+      await createContacts(contacts, { relax: true }, '')
       this.onFinish()
     } catch (e) {
-      this.onError(e.response ? e.response.body.message : e.message)
+      this.onError(e)
     } finally {
       this.setState({
         isImporting: false
@@ -154,28 +172,46 @@ class UploadContacts extends React.Component {
     window.location.href = '/dashboard/contacts'
   }
 
-  onError = (errorMessage, title) => {
-    this.props.showMessageModal({
-      message: title || 'Something Wrong',
-      description: errorMessage,
-      hideCancelButton: true,
-      confirmLabel: 'Okay',
-      onConfirm: () =>
-        this.props.updateWizardStep(CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS)
+  onError = e => {
+    console.log(e, e.response, e.message, e.text)
+    this.setState({
+      isImportFailed: true,
+      importErrorMessage: {
+        title: 'Upload Failed',
+        description: e.response ? e.response.body.message : e.message
+      }
     })
   }
 
+  goBack = () =>
+    this.props.updateWizardStep(CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS)
+
   render() {
-    const { isImporting } = this.state
+    const { isImporting, isImportFailed, importErrorMessage } = this.state
     const { rowsCount } = this.props
 
     return (
       <div className="contact__import-csv--upload-info">
-        <Loading />
         {isImporting && (
-          <span>
+          <div>
+            <Loading />
             Uploading {rowsCount} contacts. It may takes a few seconds.
-          </span>
+          </div>
+        )}
+
+        {isImportFailed && (
+          <div className="error-message">
+            <div className="title">{importErrorMessage.title}</div>
+
+            <div className="description">{importErrorMessage.description}</div>
+            <div className="cta-buttons">
+              <CancelButton onClick={this.goBack}>Properties</CancelButton>
+
+              <ActionButton onClick={this.uploadContacts}>
+                Try Again
+              </ActionButton>
+            </div>
+          </div>
         )}
       </div>
     )

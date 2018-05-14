@@ -2,7 +2,7 @@ import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
 
 const defaultOptions = {
-  get: true, // not works
+  get: true,
   relax: true
 }
 
@@ -28,7 +28,7 @@ export async function createContacts(
   }
 
   try {
-    const response = await new Fetch()
+    const response = await new Fetch({ stream: true })
       .post('/contacts')
       .send({ contacts, options })
       .query(query)

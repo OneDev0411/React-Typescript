@@ -95,12 +95,27 @@
 
 .contact__import-csv--upload-info {
   color: #62778c;
-  font-size: 14px;
+  font-size: 18px;
   text-align: center;
   font-weight: 500;
+  margin-top: 10%;
+
+  button {
+    margin-left: 8px;
+  }
 
   .sk-circle {
+    margin-top: 25px;
     margin-bottom: 40px;
+  }
+
+  .error-message {
+    color: #fe3824;
+
+    .description {
+      margin: 10px 0 15px 0;
+      font-size: 20px;
+    }
   }
 }
 

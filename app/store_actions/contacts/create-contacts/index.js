@@ -1,7 +1,7 @@
 import * as actionTypes from '../../../constants/contacts'
 import { createContacts as postNewContacts } from '../../../models/contacts/create-contacts'
 
-export function createContacts(contacts) {
+export function createContacts(contacts, options, query) {
   return async dispatch => {
     if (!contacts) {
       const error = new Error(`contact is ${contacts}`)
@@ -19,7 +19,9 @@ export function createContacts(contacts) {
       })
 
       const response = await postNewContacts(
-        Array.isArray(contacts) ? contacts : [contacts]
+        Array.isArray(contacts) ? contacts : [contacts],
+        options,
+        query
       )
 
       return response
