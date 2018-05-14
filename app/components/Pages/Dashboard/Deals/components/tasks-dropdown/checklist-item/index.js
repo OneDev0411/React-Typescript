@@ -24,21 +24,22 @@ export const ChecklistItem = ({
     })}
   >
     <ChecklistItemTitle
-      fullWidth={!showNotifyOption}
+      fullWidth={!showNotifyOption || selectedItem === id}
       onClick={() => onSelect(id)}
     >
       {title}
     </ChecklistItemTitle>
 
-    {showNotifyOption && (
-      <ChecklistItemNotifyOffice isSelected={selectedNotifyOffice === id}>
-        <NotifyOffice
-          id={id}
-          checklist={checklist}
-          isSelected={selectedNotifyOffice === id}
-          onChange={onChangeNotifyOffice}
-        />
-      </ChecklistItemNotifyOffice>
-    )}
+    {showNotifyOption &&
+      selectedItem !== id && (
+        <ChecklistItemNotifyOffice isSelected={selectedNotifyOffice === id}>
+          <NotifyOffice
+            id={id}
+            checklist={checklist}
+            isSelected={selectedNotifyOffice === id}
+            onChange={onChangeNotifyOffice}
+          />
+        </ChecklistItemNotifyOffice>
+      )}
   </ChecklistItemContainer>
 )
