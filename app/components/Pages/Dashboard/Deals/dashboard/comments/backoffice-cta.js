@@ -3,14 +3,12 @@ import { Button } from 'react-bootstrap'
 import cn from 'classnames'
 import ToolTip from '../../../../../../views/components/tooltip/index'
 
-export default ({
-  task, onSendComment, hasComment, isSaving
-}) => {
+const BackOfficeCta = ({ task, onSendComment, hasComment, isSaving }) => {
   const status = task.review ? task.review.status : ''
   const { attention_requested } = task
-  const isDeclined = status === 'Declined'
-  const isApproved = status === 'Approved'
-  const isNotReviewed = !isDeclined && !isApproved
+  const isDeclined = !attention_requested && status === 'Declined'
+  const isApproved = !attention_requested && status === 'Approved'
+  const isNotReviewed = !isDeclined && !isApproved && !attention_requested
 
   return (
     <div>
@@ -73,3 +71,5 @@ export default ({
     </div>
   )
 }
+
+export default BackOfficeCta
