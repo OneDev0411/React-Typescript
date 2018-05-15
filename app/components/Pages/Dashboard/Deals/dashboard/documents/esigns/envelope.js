@@ -17,12 +17,13 @@ class Envelope extends React.Component {
       ''} ${role.legal_last_name || ''}`.trim()
   }
 
-  getRecipientsNames(recipients = []) {
+  getRecipientsNames(recipients) {
     const names = []
 
-    recipients.forEach(recp => {
-      names.push(this.getName(recp.role))
-    })
+    recipients &&
+      recipients.forEach(recp => {
+        names.push(this.getName(recp.role))
+      })
 
     return names.join(', ')
   }
