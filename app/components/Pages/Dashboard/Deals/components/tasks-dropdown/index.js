@@ -25,7 +25,7 @@ class DropDownTasks extends React.Component {
     isCreatingNewTask: false,
     filterValue: null,
     showCreateTaskForm: false,
-    selectedNotifyOffice: null
+    notifyOffice: true
   }
 
   /**
@@ -54,9 +54,8 @@ class DropDownTasks extends React.Component {
    */
   onSelectTask = id => {
     const { tasks, onSelectTask } = this.props
-    const { selectedNotifyOffice } = this.state
+    const { notifyOffice } = this.state
     const task = id && tasks[id]
-    const notifyOffice = task && selectedNotifyOffice === id
 
     onSelectTask(id, notifyOffice)
 
@@ -65,7 +64,7 @@ class DropDownTasks extends React.Component {
 
     this.setState({
       filterValue: task ? task.title : null,
-      selectedNotifyOffice: null
+      notifyOffice: true
     })
   }
 
@@ -110,13 +109,11 @@ class DropDownTasks extends React.Component {
   }
 
   /**
-   * handle when selected notify office changes
-   * @param {taskId} taskId - the task id
+   * handle when notify office changes
    */
-  onChangeNotifyOffice = taskId =>
+  onChangeNotifyOffice = () =>
     this.setState({
-      selectedNotifyOffice:
-        this.state.selectedNotifyOffice === taskId ? null : taskId
+      notifyOffice: !this.state.notifyOffice
     })
 
   /**
@@ -179,7 +176,7 @@ class DropDownTasks extends React.Component {
    */
   onSelectChecklistForm = async (form, checklistId) => {
     const { deal, onSelectTask, createFormTask } = this.props
-    const { selectedNotifyOffice } = this.state
+    const { notifyOffice } = this.state
 
     this.toggleMenuState()
 
@@ -195,7 +192,7 @@ class DropDownTasks extends React.Component {
         checklistId
       )
 
-      if (selectedNotifyOffice === form.id) {
+      if (notifyOffice) {
         this.notifyOffice(deal, task)
       }
 
@@ -227,8 +224,9 @@ class DropDownTasks extends React.Component {
       isCreatingNewTask,
       showCreateTaskForm,
       filterValue,
-      selectedNotifyOffice
+      notifyOffice
     } = this.state
+
     const {
       deal,
       checklists,
@@ -299,7 +297,7 @@ class DropDownTasks extends React.Component {
                             selectedTask={selectedTask}
                             showNotifyOption={showNotifyOption}
                             onChangeNotifyOffice={this.onChangeNotifyOffice}
-                            selectedNotifyOffice={selectedNotifyOffice}
+                            notifyOffice={notifyOffice}
                           />
 
                           <Forms
@@ -309,7 +307,7 @@ class DropDownTasks extends React.Component {
                             onSelectItem={this.onSelectChecklistForm}
                             showNotifyOption={showNotifyOption}
                             onChangeNotifyOffice={this.onChangeNotifyOffice}
-                            selectedNotifyOffice={selectedNotifyOffice}
+                            notifyOffice={notifyOffice}
                           />
 
                           {showCreateTaskForm === chId ? (
