@@ -61,6 +61,7 @@ export const CommissionInput = ({
         {...input}
         {...rest}
         autocomplete={false}
+        hasError={meta.submitFailed && meta.error}
         placeholder="Enter commission for this agent"
       />
 
