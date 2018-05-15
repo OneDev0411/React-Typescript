@@ -8,7 +8,7 @@ export const Tasks = ({
   onSelectItem,
   selectedTask,
   showNotifyOption,
-  notifyOffice,
+  shouldNotifyOffice,
   onChangeNotifyOffice
 }) => (
   <div>
@@ -28,7 +28,7 @@ export const Tasks = ({
             selectedItem={selectedTask && selectedTask.id}
             onSelect={onSelectItem}
             showNotifyOption={showNotifyOption}
-            notifyOffice={notifyOffice}
+            shouldNotifyOffice={shouldNotifyOffice}
             onChangeNotifyOffice={onChangeNotifyOffice}
           />
         ))}
