@@ -37,9 +37,9 @@ export async function createDealFile(dealId, file) {
 }
 
 /**
- * delete files from stash
+ * delete files from a deal
  */
-export async function deleteStashFile(dealId, files) {
+export async function deleteFiles(dealId, files) {
   try {
     await new Fetch()
       .delete(`/deals/${dealId}/files`)
@@ -52,7 +52,7 @@ export async function deleteStashFile(dealId, files) {
 export default {
   uploadStashFile,
   uploadTaskFile,
-  deleteStashFile,
+  deleteFiles,
   createTaskFile,
   createDealFile
 }
