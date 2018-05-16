@@ -4,16 +4,42 @@
     "browser": true,
     "node": true
   },
-  "extends": ["airbnb", "plugin:prettier/recommended"],
-  "plugins": ["react"],
+  "extends": [
+    "airbnb",
+    "prettier",
+    "prettier/react",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": [
+    "react",
+    "prettier"
+  ],
   "rules": {
     "no-new": 0,
-    "curly": [2, "all"],
-    "no-unused-expressions": ["error", { "allowShortCircuit": true }],
-    "max-len": ["error", 85],
-    "comma-dangle": [2, "never"],
+    "curly": [
+      2,
+      "all"
+    ],
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true
+      }
+    ],
+    "max-len": [
+      "error",
+      85
+    ],
+    "comma-dangle": [
+      2,
+      "never"
+    ],
     "jsx-a11y/click-events-have-key-events": 0,
-    "semi": [2, "never"],
+    "semi": [
+      2,
+      "never"
+    ],
     "jsx-a11y/no-noninteractive-element-interactions": 0,
     "camelcase": 0,
     "new-cap": 0,
@@ -22,7 +48,10 @@
     "no-underscore-dangle": 0,
     "no-use-before-define": 0,
     "eol-last": 0,
-    "quotes": [2, "single"],
+    "quotes": [
+      2,
+      "single"
+    ],
     "import/newline-after-import": 0,
     "import/first": 0,
     "class-methods-use-this": 0,
@@ -81,47 +110,116 @@
     "react/sort-comp": [
       1,
       {
-        "order": ["constructor", "lifecycle", "everything-else", "render"]
+        "order": [
+          "constructor",
+          "lifecycle",
+          "everything-else",
+          "render"
+        ]
       }
     ],
     "prefer-destructuring": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "semi": false,
+        "singleQuote": true,
+        "printWidth": 80
+      }
+    ],
     "padding-line-between-statements": [
       2,
       // Always require blank lines after directive (like "use-strict"), except between directives
-      { "blankLine": "always", "prev": "directive", "next": "*" },
-      { "blankLine": "any", "prev": "directive", "next": "directive" },
-      // Always require blank lines after import, except between imports
-      { "blankLine": "always", "prev": "import", "next": "*" },
-      { "blankLine": "any", "prev": "import", "next": "import" },
-      // Always require blank lines before and after every sequence of variable declarations and export
       {
         "blankLine": "always",
-        "prev": "*",
-        "next": ["const", "let", "var", "export"]
-      },
-      {
-        "blankLine": "always",
-        "prev": ["const", "let", "var", "export"],
+        "prev": "directive",
         "next": "*"
       },
       {
         "blankLine": "any",
-        "prev": ["const", "let", "var", "export"],
-        "next": ["const", "let", "var", "export"]
+        "prev": "directive",
+        "next": "directive"
+      },
+      // Always require blank lines after import, except between imports
+      {
+        "blankLine": "always",
+        "prev": "import",
+        "next": "*"
+      },
+      {
+        "blankLine": "any",
+        "prev": "import",
+        "next": "import"
+      },
+      // Always require blank lines before and after every sequence of variable declarations and export
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": [
+          "const",
+          "let",
+          "var",
+          "export"
+        ]
+      },
+      {
+        "blankLine": "always",
+        "prev": [
+          "const",
+          "let",
+          "var",
+          "export"
+        ],
+        "next": "*"
+      },
+      {
+        "blankLine": "any",
+        "prev": [
+          "const",
+          "let",
+          "var",
+          "export"
+        ],
+        "next": [
+          "const",
+          "let",
+          "var",
+          "export"
+        ]
       },
       // Always require blank lines before and after class declaration, if, do/while, switch, try
       {
         "blankLine": "always",
         "prev": "*",
-        "next": ["if", "class", "for", "do", "while", "switch", "try"]
+        "next": [
+          "if",
+          "class",
+          "for",
+          "do",
+          "while",
+          "switch",
+          "try"
+        ]
       },
       {
         "blankLine": "always",
-        "prev": ["if", "class", "for", "do", "while", "switch", "try"],
+        "prev": [
+          "if",
+          "class",
+          "for",
+          "do",
+          "while",
+          "switch",
+          "try"
+        ],
         "next": "*"
       },
       // Always require blank lines before return statements
-      { "blankLine": "always", "prev": "*", "next": "return" }
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": "return"
+      }
     ]
   }
 }

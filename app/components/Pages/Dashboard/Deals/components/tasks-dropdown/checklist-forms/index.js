@@ -8,7 +8,7 @@ export const Forms = ({
   filterValue,
   onSelectItem,
   showNotifyOption,
-  notifyOffice,
+  shouldNotifyOffice,
   onChangeNotifyOffice
 }) => (
   <div>
@@ -32,7 +32,7 @@ export const Forms = ({
           title={form.name}
           onSelect={onSelectItem.bind(null, form, checklist.id)}
           showNotifyOption={showNotifyOption}
-          notifyOffice={notifyOffice}
+          shouldNotifyOffice={shouldNotifyOffice}
           onChangeNotifyOffice={onChangeNotifyOffice}
         />
       ))

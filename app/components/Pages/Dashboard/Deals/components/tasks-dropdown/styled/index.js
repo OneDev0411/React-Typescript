@@ -46,7 +46,7 @@ export const ChecklistItemTitle = styled.div`
 export const ChecklistItemNotifyOffice = styled.div`
   width: 25%;
   margin-top: 5px;
-  opacity: ${props => (props.isSelected ? 1 : 0.1)};
+  opacity: ${props => (props.isSelected ? 1 : 0)};
 `
 
 export const ChecklistItemContainer = styled.div`

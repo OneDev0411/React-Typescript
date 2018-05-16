@@ -14,7 +14,7 @@ export const ChecklistItem = ({
   selectedItem,
   onSelect,
   showNotifyOption,
-  notifyOffice,
+  shouldNotifyOffice,
   onChangeNotifyOffice
 }) => (
   <ChecklistItemContainer
@@ -32,11 +32,11 @@ export const ChecklistItem = ({
 
     {showNotifyOption &&
       selectedItem !== id && (
-        <ChecklistItemNotifyOffice isSelected={notifyOffice}>
+        <ChecklistItemNotifyOffice>
           <NotifyOffice
             id={id}
             checklist={checklist}
-            isSelected={notifyOffice}
+            isSelected={shouldNotifyOffice}
             onChange={onChangeNotifyOffice}
           />
         </ChecklistItemNotifyOffice>
