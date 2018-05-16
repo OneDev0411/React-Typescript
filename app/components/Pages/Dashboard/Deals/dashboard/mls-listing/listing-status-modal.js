@@ -27,7 +27,23 @@ export default class extends React.Component {
     const isLeaseDeal = deal.property_type.includes('Lease')
 
     if (isLeaseDeal) {
-      return ['Lease', 'Lease Contract', 'Leased']
+      if (isBackOffice)
+        return [
+          'Active',
+          'Lease',
+          'Lease Contract',
+          'Leased',
+          'Cancelled',
+          'Withdrawn',
+          'Temp Off Market'
+        ]
+
+      return [
+          'Active',
+          'Lease',
+          'Lease Contract',
+          'Leased'
+        ]
     }
 
     return isBackOffice
