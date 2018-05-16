@@ -164,7 +164,8 @@ export function convertContactToRole(contact, attributeDefs) {
     legal_prefix: 'title',
     legal_first_name: 'first_name',
     legal_middle_name: 'middle_name',
-    legal_last_name: 'last_name'
+    legal_last_name: 'last_name',
+    company_title: 'company'
   }
 
   _.each(roleFields, (contactAttribute, roleAttribute) => {
