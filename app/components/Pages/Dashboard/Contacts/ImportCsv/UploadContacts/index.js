@@ -100,6 +100,10 @@ class UploadContacts extends React.Component {
           fieldValue
         )
 
+        if (parsedValue === null) {
+          return false
+        }
+
         const contactItem = {
           attribute_def: definitionId,
           [definition.data_type]: parsedValue
@@ -120,7 +124,7 @@ class UploadContacts extends React.Component {
     })
 
     try {
-      await createContacts(contacts, { relax: true }, '')
+      await createContacts(contacts, { relax: true })
       this.onFinish()
     } catch (e) {
       this.onError(e)
@@ -150,10 +154,10 @@ class UploadContacts extends React.Component {
   parseValue = (csvField, fieldName, value) => {
     switch (fieldName) {
       case 'birthday':
-        return moment(value).unix() // unix timestamp in seconds
+        return value && moment(value).isValid() ? moment(value).unix() : null
 
       case 'phone':
-        return value.replace(/\s/g, '').replace(/^00/, '+')
+        return value && value.replace(/\s/g, '').replace(/^00/, '+')
 
       case 'note':
         return `${csvField}: ${value}`
@@ -172,8 +176,7 @@ class UploadContacts extends React.Component {
     window.location.href = '/dashboard/contacts'
   }
 
-  onError = e => {
-    console.log(e, e.response, e.message, e.text)
+  onError = e =>
     this.setState({
       isImportFailed: true,
       importErrorMessage: {
@@ -181,7 +184,6 @@ class UploadContacts extends React.Component {
         description: e.response ? e.response.body.message : e.message
       }
     })
-  }
 
   goBack = () =>
     this.props.updateWizardStep(CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS)
