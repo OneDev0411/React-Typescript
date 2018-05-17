@@ -80,17 +80,18 @@ class UploadContacts extends React.Component {
         }
 
         const fieldInfo = columns[csvField]
-        const fieldValue = row[fieldInfo.index].trim()
+        const fieldValue = row[fieldInfo.index]
+
+        if (!fieldValue) {
+          return false
+        }
+
         const {
           pluralName,
           singularName,
           isSingleObject,
           dataType
         } = indexedContactFields[rechatField]
-
-        if (!fieldValue) {
-          return false
-        }
 
         if (!contact.attributes[pluralName]) {
           contact.attributes[pluralName] = []
@@ -113,7 +114,7 @@ class UploadContacts extends React.Component {
             csvField,
             rechatField,
             dataType,
-            fieldValue
+            fieldValue.trim()
           )
         }
       })
