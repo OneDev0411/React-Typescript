@@ -1,4 +1,4 @@
-.ReactTable.tasks-list-table {
+.tasks-list-table {
   width: 100%;
   padding: 16px;
 
@@ -22,6 +22,18 @@
     }
   }
 
+  .-pagination {
+    padding: 1em;
+    
+    .-btn {
+      color: #fff;
+      background: #2196f3 !important;
+    }
+  }
+}
+
+.tasks-list-table,
+.contacts-list-table {
   .-pagination {
     padding: 1em;
     

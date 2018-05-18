@@ -7,17 +7,22 @@ import TrComponent from './Trcomponent'
 import DropDown from './columns/Dropdown'
 import TagsString from './columns/Tags'
 import Name from './columns/Name'
-import {
-  getAttributeFromSummary,
-  getContactTags
-} from '../../../../../models/contacts/helpers'
+import { getAttributeFromSummary } from '../../../../../models/contacts/helpers'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
 }
 
 class ContactsList extends React.Component {
-  shouldComponentUpdate(nextProps) {
+  state = {
+    pageSize: 25
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.pageSize !== nextState.pageSize) {
+      return true
+    }
+
     const filteredContactsChanged = !_.isEqual(
       nextProps.filteredContacts,
       this.props.filteredContacts
@@ -27,6 +32,7 @@ class ContactsList extends React.Component {
 
     return filteredContactsChanged || deletingContactsChanged
   }
+
   getCellTitle = title => (
     <Fragment>
       {title}
@@ -90,17 +96,32 @@ class ContactsList extends React.Component {
       }
     }
   ]
+
+  handleOnPageSizeChange = pageSize => {
+    this.setState({
+      pageSize
+    })
+  }
+
   render() {
+    const defaultPageSize = 25
+    const { pageSize } = this.state
     const { filteredContacts, deletingContacts } = this.props
+    const contactCounts = Object.keys(filteredContacts).length
 
     return (
       <ReactTable
-        className="contacts-list-table"
-        pageSize={Object.keys(filteredContacts).length}
-        showPaginationBottom={false}
         data={filteredContacts}
         columns={this.columns}
         TdComponent={TrComponent}
+        minRows={0}
+        pageSize={pageSize}
+        defaultPageSize={defaultPageSize}
+        pageSizeOptions={[25, 50, 100]}
+        showPaginationBottom
+        showPagination={defaultPageSize < contactCounts}
+        onPageSizeChange={this.handleOnPageSizeChange}
+        className="contacts-list-table tasks-list-table"
         getTrProps={(state, { original: { id: contactId } }) => {
           if (deletingContacts.includes(contactId)) {
             return {
