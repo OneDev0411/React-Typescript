@@ -2,12 +2,15 @@ import React, { Fragment } from 'react'
 import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import ReactTable from 'react-table'
-import Radio from '../../../../../views/components/radio/RadioWithState'
-import TrComponent from './Trcomponent'
+
+import './style.scss'
+
+import Radio from '../../../../../../views/components/radio/RadioWithState'
+import TrComponent from './components/Trcomponent'
 import DropDown from './columns/Dropdown'
 import TagsString from './columns/Tags'
 import Name from './columns/Name'
-import { getAttributeFromSummary } from '../../../../../models/contacts/helpers'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -121,7 +124,7 @@ class ContactsList extends React.Component {
         showPaginationBottom
         showPagination={defaultPageSize < contactCounts}
         onPageSizeChange={this.handleOnPageSizeChange}
-        className="contacts-list-table tasks-list-table"
+        className="contacts-list-table"
         getTrProps={(state, { original: { id: contactId } }) => {
           if (deletingContacts.includes(contactId)) {
             return {

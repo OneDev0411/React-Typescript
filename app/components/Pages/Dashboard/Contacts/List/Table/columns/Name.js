@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Avatar from 'react-avatar'
-import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
+
+import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 
 import {
   getAttributeFromSummary,
   getContactAttribute
-} from '../../../../../../models/contacts/helpers'
+} from '../../../../../../../models/contacts/helpers'
 
 const ContactsListName = ({ contact, attributeDefs }) => {
   const attribute_def = selectDefinitionByName(
@@ -33,7 +34,9 @@ const ContactsListName = ({ contact, attributeDefs }) => {
 }
 
 function mapStateToProps(state) {
-  const { contacts: { attributeDefs } } = state
+  const {
+    contacts: { attributeDefs }
+  } = state
 
   return { attributeDefs }
 }

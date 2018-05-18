@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import styled from 'styled-components'
+
 import {
   selectContacts,
   isFetchingContactsList
