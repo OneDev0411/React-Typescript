@@ -1,6 +1,8 @@
+import idx from 'idx'
+
 import * as actionTypes from '../../../constants/contacts'
+import { normalizeContacts } from '../helpers/normalize-contacts'
 import { createContacts as postNewContacts } from '../../../models/contacts/create-contacts'
-import { getContacts } from '../get-contacts'
 
 export function createContacts(contacts, query) {
   return async dispatch => {
@@ -23,9 +25,16 @@ export function createContacts(contacts, query) {
         contacts = [contacts]
       }
 
-      await postNewContacts(contacts, query)
+      const response = await postNewContacts(contacts, query)
 
-      return dispatch(getContacts())
+      if (idx(response, c => c.data[0].id)) {
+        dispatch({
+          response: normalizeContacts(response),
+          type: actionTypes.CREATE_CONTACTS_SUCCESS
+        })
+      }
+
+      return response
     } catch (error) {
       dispatch({
         error,

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import arrayMutators from 'final-form-arrays'
 import { Form, Field } from 'react-final-form'
+import idx from 'idx'
 
 import { createContacts } from '../../../../../../models/contacts/create-contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
@@ -108,7 +109,11 @@ class NewContactForm extends Component {
 
       const contacts = await createContacts([{ attributes }])
 
-      browserHistory.push(`/dashboard/contacts/${contacts.data[0]}`)
+      if (idx(contacts, c => c.data[0].id)) {
+        browserHistory.push(`/dashboard/contacts/${contacts.data[0].id}`)
+      } else {
+        browserHistory.push('/dashboard/contacts')
+      }
     } catch (error) {
       throw error
     }
@@ -195,7 +200,9 @@ class NewContactForm extends Component {
 }
 
 function mapStateToProps(state) {
-  const { contacts: { attributeDefs } } = state
+  const {
+    contacts: { attributeDefs }
+  } = state
 
   return {
     attributeDefs
