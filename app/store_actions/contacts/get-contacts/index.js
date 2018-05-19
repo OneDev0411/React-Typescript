@@ -5,7 +5,7 @@ import { normalizeContacts } from '../helpers/normalize-contacts'
 
 const defaultOptions = {
   start: 0,
-  limit: 500
+  limit: 50
 }
 
 export function getContacts(options = defaultOptions) {

@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import {
   selectContacts,
+  getContactsinfo,
   isFetchingContactsList
 } from '../../../../../reducers/contacts/list'
 import { deleteContacts } from '../../../../../store_actions/contacts'
@@ -38,11 +39,6 @@ const SecondHeaderText = styled.p`
   font-size: 17px;
   margin-bottom: 0;
   margin-right: 8px;
-`
-const CustomLoading = styled(Loading)`
-  position: absolute !important;
-  left: 50%;
-  margin: auto !important;
 `
 
 class ContactsList extends React.Component {
@@ -150,15 +146,17 @@ class ContactsList extends React.Component {
     const { deletingContacts, selectedRows } = this.state
     const {
       user,
+      listInfo,
       isFetching,
       contactsList,
       loadingImport,
       attributeDefs
     } = this.props
-    const contactsCount = contactsList.length
+
+    const { total: totalCount } = listInfo
 
     if (
-      (isFetching && contactsCount === 0) ||
+      (isFetching && totalCount === 0) ||
       _.size(attributeDefs.byName) === 0
     ) {
       return (
@@ -168,12 +166,12 @@ class ContactsList extends React.Component {
       )
     }
 
-    if (contactsCount === 0) {
+    if (totalCount === 0) {
       return (
         <div className="list">
           <NoContact
             user={user}
-            contactsCount={contactsCount}
+            contactsCount={totalCount}
             onNewContact={id => openContact(id)}
           />
         </div>
@@ -189,7 +187,7 @@ class ContactsList extends React.Component {
       <div className="list">
         <Header
           user={user}
-          contactsCount={contactsCount}
+          contactsCount={totalCount}
           onInputChange={this.onInputChange}
         />
         {loadingImport && (
@@ -202,7 +200,7 @@ class ContactsList extends React.Component {
             <SecondHeader>
               <SecondHeaderText>
                 {selectedRowsLength > 0 ? `${selectedRowsLength} of ` : ''}
-                {`${filteredContacts.length} Contacts`}
+                {`${totalCount} Contacts`}
               </SecondHeaderText>
               <ExportContacts selectedRows={selectedRows} />
               {selectedRowsLength > 0 && (
@@ -218,9 +216,9 @@ class ContactsList extends React.Component {
                 </div>
               )}
             </SecondHeader>
-            {isFetching && <CustomLoading />}
 
             <Table
+              listInfo={listInfo}
               filteredContacts={filteredContacts}
               toggleSelectedRow={this.toggleSelectedRow}
               handleOnDelete={this.handleOnDelete}
@@ -236,11 +234,13 @@ class ContactsList extends React.Component {
 
 function mapStateToProps({ user, contacts }) {
   const { list, spinner: loadingImport, attributeDefs } = contacts
+  const listInfo = getContactsinfo(list)
   const contactsList = selectContacts(list)
   const isFetching = isFetchingContactsList(list)
 
   return {
     user,
+    listInfo,
     isFetching,
     contactsList,
     loadingImport,
