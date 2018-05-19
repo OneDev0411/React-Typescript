@@ -2,12 +2,16 @@ import React, { Fragment } from 'react'
 import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import ReactTable from 'react-table'
-import Radio from '../../../../../views/components/radio/RadioWithState'
-import TrComponent from './Trcomponent'
+
+import './style.scss'
+
+import Radio from '../../../../../../views/components/radio/RadioWithState'
+import Pagination from './components/Pagination'
+import TrComponent from './components/Trcomponent'
 import DropDown from './columns/Dropdown'
 import TagsString from './columns/Tags'
 import Name from './columns/Name'
-import { getAttributeFromSummary } from '../../../../../models/contacts/helpers'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
@@ -15,22 +19,8 @@ function openContact(id) {
 
 class ContactsList extends React.Component {
   state = {
-    pageSize: 25
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.pageSize !== nextState.pageSize) {
-      return true
-    }
-
-    const filteredContactsChanged = !_.isEqual(
-      nextProps.filteredContacts,
-      this.props.filteredContacts
-    )
-    const deletingContactsChanged =
-      nextProps.deletingContacts.length !== this.props.deletingContacts.length
-
-    return filteredContactsChanged || deletingContactsChanged
+    page: 0,
+    pageSize: 50
   }
 
   getCellTitle = title => (
@@ -97,31 +87,39 @@ class ContactsList extends React.Component {
     }
   ]
 
-  handleOnPageSizeChange = pageSize => {
+  setPageSize = pageSize => {
     this.setState({
       pageSize
     })
   }
 
+  setPage = page => {
+    this.setState({ page })
+  }
+
   render() {
-    const defaultPageSize = 25
-    const { pageSize } = this.state
-    const { filteredContacts, deletingContacts } = this.props
-    const contactCounts = Object.keys(filteredContacts).length
+    const defaultPageSize = 50
+    const { pageSize, page } = this.state
+    const { filteredContacts, deletingContacts, listInfo } = this.props
 
     return (
       <ReactTable
+        listInfo={listInfo}
         data={filteredContacts}
         columns={this.columns}
         TdComponent={TrComponent}
         minRows={0}
+        page={page}
         pageSize={pageSize}
         defaultPageSize={defaultPageSize}
         pageSizeOptions={[25, 50, 100]}
         showPaginationBottom
-        showPagination={defaultPageSize < contactCounts}
-        onPageSizeChange={this.handleOnPageSizeChange}
-        className="contacts-list-table tasks-list-table"
+        onPageChange={this.setPage}
+        onFetchData={this.fetchPage}
+        showPagination={defaultPageSize < listInfo.total}
+        onPageSizeChange={this.setPageSize}
+        PaginationComponent={Pagination}
+        className="contacts-list-table"
         getTrProps={(state, { original: { id: contactId } }) => {
           if (deletingContacts.includes(contactId)) {
             return {

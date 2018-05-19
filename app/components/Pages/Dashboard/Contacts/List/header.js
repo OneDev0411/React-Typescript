@@ -19,10 +19,10 @@ function Header({ user, contactsCount, onInputChange }) {
         <div className={cn('list--header-row', { agent: !isBackOffice })}>
           <div className="list--header-row--col">
             <ul className="filter">
-              <li>
-                <span className="title">All Contacts</span>
+              <li style={{ cursor: 'initial' }}>
+                <h4 className="title">All Contacts</h4>
 
-                <span className="badge counter">{contactsCount} Contacts</span>
+                {/* <span className="badge counter">{contactsCount} Contacts</span> */}
               </li>
             </ul>
           </div>
