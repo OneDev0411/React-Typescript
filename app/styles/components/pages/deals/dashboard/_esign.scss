@@ -81,47 +81,33 @@
 /**
 * styles of esign documents list
 */
-.modal-deal-esign-documents {
-  .modal-content {
-    border: none;
-  }
+.deal__esign-documents--modal {
 
   .modal-body {
-    padding: 0;
-    max-height: 400px;
-    overflow: auto;
+    padding: 16px 0;
   }
 
-  .modal-deal-esign-documents--submit {
-    width: 70px;
-    height: 34px;
-    line-height: 17px;
-    vertical-align: middle;
+  .documents .document-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 8px 16px 8px 16px;
 
-    border-radius: 3px;
-    font-weight: 600;
-    letter-spacing: .5px;
-    border: 1px solid #dce5eb;
-    color: #dce5eb;
-    &.active {
-      color: #2196f3;
-
-      &:hover {
-        background-color: #f1f7fb;
-        text-decoration: none;
-      }
+    &:hover {
+      background-color: #f1f7fb;
     }
   }
 
-  .count {
-    margin-right: 21px;
-    color: #8da2b5;
-    font-size: 15px;
+  .documents .document-item .col-select {
+    width: 6%;
   }
 
-  .documents {
-    margin: 0;
-    padding: 0;
+  .documents .document-item .col-info {
+    width: 94%;
+    font-size: 15px;
+    color: #1d364b;
+    cursor: pointer;
 
     .empty-state {
       text-align: center;
@@ -139,49 +125,19 @@
       }
     }
 
-    .item {
-      margin-right: 0;
-      margin-left: 0;
-      padding: 9px 0;
-      cursor: pointer;
-
-      .radio {
-        display: block;
-        width: 20px;
-        height: 20px;
-        background-color: #ffffff;
-        border: solid 1px #e9e9e9;
-        border-radius: 40px;
-        text-align: center;
-        &.selected {
-          background-color: #2196f3;
-          border-color: #2196f3;
-          i {
-            color: #fff;
-            font-size: 12px;
-          }
-        }
-      }
-
-      .name {
-        font-size: 15px;
-        color: #1d364b;
-        .file-name {
-          cursor: pointer;
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-
-        .date {
-          font-size: 13px;
-          color: #8da2b5;
-        }
-      }
-
-      &:hover {
-        background: #eff5fa;
-      }
+    .title {
+      font-size: 16px;
     }
+
+    .description {
+      font-size: 14px;
+      color: #8da2b5;
+    }
+  }
+
+  .count {
+    margin-right: 21px;
+    color: #8da2b5;
+    font-size: 15px;
   }
 }
