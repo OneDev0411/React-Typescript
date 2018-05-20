@@ -2,7 +2,6 @@ import {
   getField as getDealfield,
   getAddress as getDealAddress
 } from '../../../models/Deal/context-helper'
-import ContactModel from '../../../models/contacts'
 import { getListingAddress } from '../../../utils/listing'
 
 /**
@@ -51,16 +50,21 @@ export function normalizeContact(contact) {
   }
 
   const { type, id, summary } = contact
-  const { email, phone_number, display_name } = summary
+  const {
+    email,
+    phone_number,
+    display_name,
+    profile_image_url: image
+  } = summary
 
   return {
     id,
     type,
     title: display_name,
     avatar: {
+      image,
       size: 32,
       borderRadius: 100,
-      image: ContactModel.get.avatar(contact),
       placeHolderImage: '/static/images/contacts/ic_person_black_24dp_2x.png',
       title:
         email !== display_name && phone_number !== display_name
