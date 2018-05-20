@@ -13,7 +13,7 @@ export const TitleDropDown = ({ input, placeholder }) => (
       clearable={false}
       placeholder="Select a title"
       value={input.value}
-      onChange={({ value }) => input.onChange(value)}
+      onChange={data => data && input.onChange(data.value)}
       options={OPTIONS.map(value => ({
         value,
         label: value
