@@ -1,12 +1,13 @@
 import React from 'react'
 import { Field } from 'react-final-form'
+
 import {
   CommissionContainer,
   CommissionRadioContainer,
   CommissionInputContainer,
   InputRadio,
   RadioLabel
-} from '../../styles'
+} from './styles'
 
 import {
   InputLabel,
