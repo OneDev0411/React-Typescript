@@ -1,59 +1,172 @@
-import React from 'react'
-import { Modal, Button, FormControl } from 'react-bootstrap'
-import cn from 'classnames'
+import React, { Fragment } from 'react'
+import { Form, Field } from 'react-final-form'
 import _ from 'underscore'
+
+import Modal from '../../../../../views/components/BasicModal'
+
+import { TextInput } from '../../../../../views/components/Forms/TextInput'
+import { SelectInput } from '../../../../../views/components/Forms/SelectInput'
+
+import ActionButton from '../../../../../views/components/Button/ActionButton'
+import CancelButton from '../../../../../views/components/Button/CancelButton'
+
+import {
+  stateToAbbreviated,
+  STREET_SUFFIX,
+  STREET_PREFIX,
+  STATES
+} from '../utils/address'
 import Deal from '../../../../../models/Deal'
 
-export default class extends React.Component {
-  constructor(props) {
-    super(props)
+const defaultState = 'Texas'
 
-    this.state = this.getPopulatedForm(props.deal)
-    this.postalCodePattern = /(^\d{4,}$)/
+export default class ManualAddress extends React.Component {
+  /**
+   *
+   */
+  onClose = () => this.props.onHide()
+
+  /**
+   *
+   */
+  onSubmit = values =>
+    this.props.onCreateAddress({
+      type: 'listing',
+      address_components: this.getAddressComponent(values)
+    })
+
+  /**
+   *
+   */
+  get RequiredFields() {
+    return ['street_name', 'city', 'state', 'postal_code']
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { show, deal } = nextProps
-    const { isFormPopulated } = this.state
+  /**
+   *
+   */
+  getInitialValues = () => {
+    const { deal, saving } = this.props
 
-    if (show && !isFormPopulated) {
-      this.setState(this.getPopulatedForm(deal))
+    if (saving) {
+      return this.form
     }
-  }
 
-  getPopulatedForm(deal) {
-    return {
-      isFormPopulated: true,
+    this.form = {
+      street_suffix: this.getAddressField(deal, 'street_suffix'),
+      street_dir_prefix: this.getAddressField(deal, 'street_dir_prefix'),
       street_number: this.getAddressField(deal, 'street_number'),
       street_name: this.getAddressField(deal, 'street_name'),
       unit_number: this.getAddressField(deal, 'unit_number'),
       city: this.getAddressField(deal, 'city'),
-      state: this.getAddressField(deal, 'state'),
+      state: this.getAddressField(deal, 'state', defaultState),
       postal_code: this.getAddressField(deal, 'postal_code')
+    }
+
+    return this.form
+  }
+
+  /**
+   *
+   */
+  validate = values => {
+    const errors = {}
+
+    this.RequiredFields.forEach(fieldName => {
+      if (!values[fieldName]) {
+        errors[fieldName] = 'Required'
+      }
+    })
+
+    _.each(values, async (fieldValue, fieldName) => {
+      const validator = this.FormValidators[fieldName]
+
+      if (!validator) {
+        return false
+      }
+
+      if (!errors[fieldName] && !validator(fieldValue, fieldName)) {
+        errors[fieldName] = this.ErrorNames[fieldName] || 'Invalid'
+      }
+    })
+
+    return errors
+  }
+
+  /**
+   *
+   */
+  get FormValidators() {
+    return {
+      street_number: this.isValidString,
+      street_name: this.isValidString,
+      unit_number: this.isValidString,
+      city: this.isValidString,
+      state: this.isValidState,
+      postal_code: this.isValidPostalCode
     }
   }
 
-  getAddressField(deal, field) {
+  /**
+   *
+   */
+  get ErrorNames() {
+    return {
+      postal_code: 'Enter a valid zipcode',
+      state: 'Select State'
+    }
+  }
+
+  /**
+   *
+   */
+  isValidString = (value, fieldName) => {
+    if (!value && !this.RequiredFields[fieldName]) {
+      return true
+    }
+
+    return value && value.length > 0
+  }
+
+  /**
+   *
+   */
+  isValidPostalCode = value => /(^\d{4,}$)/.test(value)
+
+  /**
+   *
+   */
+  isValidState = value => _.some(STATES, name => name === value)
+
+  /**
+   *
+   */
+  getAddressField = (deal, field, defaultValue = '') => {
     if (!deal) {
-      return ''
+      return defaultValue
     }
 
     if (deal.listing) {
-      return deal.mls_context[field] || ''
+      return deal.mls_context[field] || defaultValue
     }
 
-    return Deal.get.field(deal, field) || ''
+    return Deal.get.field(deal, field) || defaultValue
   }
 
-  getAddressComponent() {
+  /**
+   *
+   */
+  getAddressComponent = values => {
     const {
+      street_dir_prefix,
+      street_suffix,
       street_number,
       street_name,
       city,
       state,
       unit_number,
       postal_code
-    } = this.state
+    } = values
 
     const full_address = [
       street_number || '',
@@ -69,151 +182,160 @@ export default class extends React.Component {
       .replace(/,,/gi, ',')
 
     return {
+      street_dir_prefix,
+      street_suffix,
       street_number,
       street_name,
       unit_number,
       city,
       state,
+      state_code: stateToAbbreviated(state),
       postal_code,
       full_address
     }
   }
 
-  onAdd() {
-    this.props.onCreateAddress({
-      type: 'listing',
-      address_components: this.getAddressComponent()
-    })
-
-    this.clearStates()
-  }
-
-  clearStates() {
-    this.setState({
-      isFormPopulated: false,
-      street_number: '',
-      street_name: '',
-      unit_number: '',
-      city: '',
-      state: '',
-      postal_code: ''
-    })
-  }
-
-  isValidated() {
-    const { street_name, city, state, postal_code } = this.state
-
-    return (
-      street_name.trim().length > 0 &&
-      city.trim().length > 0 &&
-      state.trim().length > 0 &&
-      this.postalCodePattern.test(postal_code)
-    )
-  }
-
-  areValuesChanged(deal) {
-    const {
-      street_number,
-      street_name,
-      unit_number,
-      city,
-      state,
-      postal_code
-    } = this.state
-
-    return (
-      street_number !== this.getAddressField(deal, 'street_number') ||
-      street_name !== this.getAddressField(deal, 'street_name') ||
-      unit_number !== this.getAddressField(deal, 'unit_number') ||
-      city !== this.getAddressField(deal, 'city') ||
-      state !== this.getAddressField(deal, 'state') ||
-      postal_code !== this.getAddressField(deal, 'postal_code')
-    )
-  }
-
   render() {
     const { show, deal, saving } = this.props
-    const {
-      street_number,
-      street_name,
-      unit_number,
-      city,
-      state,
-      postal_code
-    } = this.state
-
-    const isPostalCodeValid =
-      !postal_code || this.postalCodePattern.test(postal_code)
 
     return (
       <Modal
-        show={show}
-        backdrop="static"
-        dialogClassName="modal-deal-listing"
-        onHide={() => {
-          this.clearStates()
-          this.props.onHide()
-        }}
+        isOpen={show}
+        shouldCloseOnOverlayClick={false}
+        handleOnClose={this.onClose}
       >
-        <Modal.Header closeButton>Address</Modal.Header>
-
-        <Modal.Body>
-          <div className="place-create">
-            <div className="row_one">
-              <FormControl
-                placeholder="Street #"
-                className="street_number"
-                value={street_number}
-                onChange={e => this.setState({ street_number: e.target.value })}
-              />
-              <FormControl
-                placeholder="Street Name *"
-                className="street_name"
-                value={street_name}
-                onChange={e => this.setState({ street_name: e.target.value })}
-              />
-              <FormControl
-                placeholder="Apartment/Unit number"
-                className="unit_number"
-                value={unit_number}
-                onChange={e => this.setState({ unit_number: e.target.value })}
-              />
-            </div>
-            <div className="row_two">
-              <FormControl
-                placeholder="City *"
-                className="city"
-                value={city}
-                onChange={e => this.setState({ city: e.target.value })}
-              />
-              <FormControl
-                placeholder="State *"
-                className="state"
-                value={state}
-                onChange={e => this.setState({ state: e.target.value })}
-              />
-              <FormControl
-                placeholder="Zipcode *"
-                className={cn('zipcode', { error: !isPostalCodeValid })}
-                value={postal_code}
-                onChange={e => this.setState({ postal_code: e.target.value })}
-              />
-            </div>
-
-            <div style={{ textAlign: 'right' }}>
-              <Button
-                bsStyle="primary"
-                style={{ margin: '20px' }}
-                onClick={() => this.onAdd()}
-                disabled={
-                  saving || !this.isValidated() || !this.areValuesChanged(deal)
-                }
+        <Modal.Header
+          title="Select Documents"
+          showClose
+          handleOnClose={this.onClose}
+        />
+        <Form
+          onSubmit={this.onSubmit}
+          validate={this.validate}
+          initialValues={this.getInitialValues()}
+          render={({ handleSubmit }) => (
+            <Fragment>
+              <Modal.Body
+                className="u-scrollbar--thinner"
+                style={{ padding: 0 }}
               >
-                {deal ? 'Update Address' : 'Add'}
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
+                <Field
+                  name="street_dir_prefix"
+                  component={({ meta, input }) => (
+                    <SelectInput
+                      input={input}
+                      meta={meta}
+                      clearable
+                      placeholder="Street Prefix"
+                      onChange={data =>
+                        input.onChange(data ? data.value : null)
+                      }
+                      options={STREET_PREFIX.map(value => ({
+                        value,
+                        label: value
+                      }))}
+                    />
+                  )}
+                />
+
+                <Field
+                  name="street_suffix"
+                  component={({ meta, input }) => (
+                    <SelectInput
+                      input={input}
+                      meta={meta}
+                      clearable
+                      searchable
+                      placeholder="Street Suffix"
+                      onChange={data =>
+                        input.onChange(data ? data.value : null)
+                      }
+                      options={STREET_SUFFIX.map(value => ({
+                        value,
+                        label: value
+                      }))}
+                    />
+                  )}
+                />
+
+                <Field
+                  name="street_number"
+                  placeholder="Street #"
+                  isRequired={false}
+                  component={TextInput}
+                />
+
+                <Field
+                  name="street_name"
+                  placeholder="Street Name"
+                  isRequired
+                  component={TextInput}
+                />
+
+                <Field
+                  name="unit_number"
+                  placeholder="Apartment/Unit Number"
+                  isRequired={false}
+                  component={TextInput}
+                />
+
+                <Field
+                  name="city"
+                  placeholder="City"
+                  isRequired
+                  component={TextInput}
+                />
+
+                <Field
+                  name="state"
+                  component={({ meta, input }) => (
+                    <SelectInput
+                      input={input}
+                      meta={meta}
+                      isRequired
+                      clearable
+                      searchable
+                      placeholder="State"
+                      onChange={data =>
+                        input.onChange(data ? data.value : null)
+                      }
+                      options={_.map(STATES, name => ({
+                        value: name,
+                        label: name
+                      }))}
+                    />
+                  )}
+                />
+
+                <Field
+                  name="postal_code"
+                  placeholder="Zipcode"
+                  isRequired
+                  component={TextInput}
+                />
+              </Modal.Body>
+
+              <Modal.Footer>
+                <CancelButton
+                  disabled={saving}
+                  onClick={this.onClose}
+                  style={{
+                    marginRight: '10px'
+                  }}
+                >
+                  Cancel
+                </CancelButton>
+
+                <ActionButton
+                  disabled={saving}
+                  onClick={() => handleSubmit(this.onSubmit)}
+                >
+                  {deal ? 'Update Address' : 'Add'}
+                </ActionButton>
+              </Modal.Footer>
+            </Fragment>
+          )}
+        />
       </Modal>
     )
   }
