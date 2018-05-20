@@ -18,9 +18,11 @@ export const SelectInput = ({
   isRequired = false,
   className = '',
   searchable = false,
-  clearable = false
+  clearable = false,
+  Container = InputContainer,
+  ...rest
 }) => (
-  <InputContainer>
+  <Container>
     <InputLabel hasError={meta.submitFailed && meta.error}>
       {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
     </InputLabel>
@@ -33,8 +35,9 @@ export const SelectInput = ({
       value={input.value || defaultValue}
       onChange={onChange}
       options={options}
+      {...rest}
     />
 
     {meta.error && meta.touched && <InputError>{meta.error}</InputError>}
-  </InputContainer>
+  </Container>
 )

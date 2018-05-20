@@ -4,13 +4,16 @@ import {
   CommissionContainer,
   CommissionRadioContainer,
   CommissionInputContainer,
-  InputField,
   InputRadio,
-  RadioLabel,
-  InputLabel,
-  InputError,
-  InputRequired
+  RadioLabel
 } from '../../styles'
+
+import {
+  InputLabel,
+  InputRequired
+} from '../../../../../../../../../views/components/Forms/styled'
+
+import { TextInput } from '../../../../../../../../../views/components/Forms/TextInput'
 
 export const CommissionInput = ({
   input,
@@ -56,16 +59,13 @@ export const CommissionInput = ({
       </div>
     </CommissionRadioContainer>
 
-    <CommissionInputContainer>
-      <InputField
-        {...input}
-        {...rest}
-        autocomplete={false}
-        hasError={meta.submitFailed && meta.error}
-        placeholder="Enter commission for this agent"
-      />
-
-      {meta.error && meta.touched && <InputError>{meta.error}</InputError>}
-    </CommissionInputContainer>
+    <TextInput
+      {...input}
+      {...rest}
+      Container={CommissionInputContainer}
+      meta={meta}
+      autocomplete={false}
+      placeholder="Enter commission for this agent"
+    />
   </CommissionContainer>
 )

@@ -13,20 +13,21 @@ export const TextInput = ({
   meta,
   isRequired,
   placeholder,
+  Container = InputContainer,
   ...rest
 }) => (
-  <InputContainer>
+  <Container>
     <InputLabel hasError={meta.submitFailed && meta.error}>
       {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
     </InputLabel>
 
     <InputField
       {...input}
-      {...rest}
       autocomplete={false}
       placeholder={placeholder}
+      {...rest}
     />
 
     {meta.error && meta.touched && <InputError>{meta.error}</InputError>}
-  </InputContainer>
+  </Container>
 )

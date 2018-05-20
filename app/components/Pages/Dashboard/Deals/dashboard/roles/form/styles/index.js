@@ -5,51 +5,8 @@ export const FormContainer = styled.form`
   padding: 0;
 `
 
-export const InputField = styled.input`
-  border: none;
-  font-size: 16px;
-  width: 100%;
-  border-radius: 4px;
-
-  ::placeholder {
-    color: #cad4db;
-    opacity: 1;
-  }
-
-  :focus {
-    outline: none;
-  }
-
-  background: ${props => (props.hasError ? '#fff5f4' : 'transparent')};
-`
-
-export const InputRadio = InputField.extend`
+export const InputRadio = styled.input`
   width: auto;
-`
-
-export const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-bottom: 1px solid #dce5eb;
-  padding: 4px 10px;
-`
-
-export const InputLabel = styled.label`
-  font-weight: 400;
-  font-size: 13px;
-  color: ${props => (props.hasError ? 'red' : '#26465e')};
-  font-weight: ${props => (props.hasError ? '500' : 'normal')};
-`
-
-export const InputError = styled.span`
-  color: #fe3824;
-  font-size: 13px;
-  margin-top: 8px;
-`
-
-export const InputRequired = InputError.extend`
-  font-size: 15px;
 `
 
 export const CommissionContainer = styled.div`

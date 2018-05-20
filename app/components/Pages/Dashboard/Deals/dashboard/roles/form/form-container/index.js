@@ -1,7 +1,7 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 import _ from 'underscore'
-import { TextInput } from '../form-components/text-input'
+import { TextInput } from '../../../../../../../../views/components/Forms/TextInput'
 import { CommissionInput } from '../form-components/commission-input'
 import { TitleDropDown } from '../form-components/title-dropdown'
 import { RolesDropDown } from '../form-components/roles-dropdown'
