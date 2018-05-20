@@ -45,6 +45,7 @@ class AddRecipients extends React.Component {
         <div className="rcp-container">
           {Array.apply(null, { length: next }).map((empty, order) => (
             <RecipientGroup
+              key={order}
               group={groups[order]}
               order={order + 1}
               onAddRecipient={() => this.showRolesModal(order)}
