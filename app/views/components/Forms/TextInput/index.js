@@ -13,21 +13,31 @@ export const TextInput = ({
   meta,
   isRequired,
   placeholder,
+  labelText,
+  hasLabel = true,
+  showError = true,
+  highlightOnError = false,
   Container = InputContainer,
   ...rest
 }) => (
   <Container>
-    <InputLabel hasError={meta.submitFailed && meta.error}>
-      {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
-    </InputLabel>
+    {hasLabel && (
+      <InputLabel hasError={meta.submitFailed && meta.error}>
+        {labelText || placeholder}&nbsp;
+        <InputRequired>{isRequired && '*'}</InputRequired>
+      </InputLabel>
+    )}
 
     <InputField
       {...input}
       autocomplete={false}
       placeholder={placeholder}
+      hasError={highlightOnError && meta.submitFailed && meta.error}
       {...rest}
     />
 
-    {meta.error && meta.touched && <InputError>{meta.error}</InputError>}
+    {showError &&
+      meta.error &&
+      meta.touched && <InputError>{meta.error}</InputError>}
   </Container>
 )
