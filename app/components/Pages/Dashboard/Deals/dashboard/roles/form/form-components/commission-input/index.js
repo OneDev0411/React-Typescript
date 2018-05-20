@@ -63,8 +63,10 @@ export const CommissionInput = ({
     <TextInput
       {...input}
       {...rest}
-      Container={CommissionInputContainer}
       meta={meta}
+      hasLabel={false}
+      highlightOnError
+      Container={CommissionInputContainer}
       autocomplete={false}
       placeholder="Enter commission for this agent"
     />
