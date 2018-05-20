@@ -7,7 +7,7 @@ export async function searchContacts(filter, query = defaultQuery) {
     throw new Error(`filter value is ${filter}.`)
   }
 
-  const keywords = query
+  const keywords = filter
     .trim()
     .split(' ')
     .map(i => `q[]=${i}`)
