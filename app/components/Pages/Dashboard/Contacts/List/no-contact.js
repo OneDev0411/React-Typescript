@@ -4,11 +4,7 @@ import { browserHistory } from 'react-router'
 import Import from './Import'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
-export default ({ user, contactsCount }) => {
-  if (contactsCount > 0) {
-    return false
-  }
-
+export default function NoContact({ user }) {
   return (
     <div className="no-contacts">
       <p className="title">You don't have contacts yet</p>
