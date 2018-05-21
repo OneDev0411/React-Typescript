@@ -124,7 +124,11 @@ class UploadContacts extends React.Component {
     })
 
     try {
-      await createContacts(contacts, { relax: true })
+      await createContacts(contacts, {
+        get: false,
+        relax: true,
+        activity: false
+      })
       this.onFinish()
     } catch (e) {
       this.onError(e)
