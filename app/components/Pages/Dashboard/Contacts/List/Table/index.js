@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react'
-import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import ReactTable from 'react-table'
 
 import './style.scss'
-
+import { LoadingComponent } from './components/LoadingComponent'
+import NoSearchResults from '../../../../../Partials/no-search-results'
 import Radio from '../../../../../../views/components/radio/RadioWithState'
 import Pagination from './components/Pagination'
 import TrComponent from './components/Trcomponent'
@@ -100,14 +100,14 @@ class ContactsList extends React.Component {
   render() {
     const defaultPageSize = 50
     const { pageSize, page } = this.state
-    const { filteredContacts, deletingContacts, listInfo } = this.props
+    const { data, loading, totalCount, deletingContacts } = this.props
 
     return (
       <ReactTable
-        listInfo={listInfo}
-        data={filteredContacts}
+        data={data}
+        loading={loading}
         columns={this.columns}
-        TdComponent={TrComponent}
+        totalCount={totalCount}
         minRows={0}
         page={page}
         pageSize={pageSize}
@@ -116,10 +116,18 @@ class ContactsList extends React.Component {
         showPaginationBottom
         onPageChange={this.setPage}
         onFetchData={this.fetchPage}
-        showPagination={defaultPageSize < listInfo.total}
+        showPagination={defaultPageSize < data.length}
         onPageSizeChange={this.setPageSize}
         PaginationComponent={Pagination}
+        TdComponent={TrComponent}
+        LoadingComponent={LoadingComponent}
+        NoDataComponent={() => (
+          <NoSearchResults description="Try typing another name, email, phone or tag." />
+        )}
         className="contacts-list-table"
+        getLoadingProps={(...rest) => {
+          console.log(rest)
+        }}
         getTrProps={(state, { original: { id: contactId } }) => {
           if (deletingContacts.includes(contactId)) {
             return {
