@@ -35,8 +35,7 @@ class Pagination extends React.Component {
 
   render() {
     let buttons = []
-    const { page, pageSize, listInfo } = this.props
-    const { total: totalCount } = listInfo
+    const { page, pageSize, totalCount } = this.props
 
     if (totalCount > 5 * pageSize) {
       buttons.push(this.getPreviousButton())
