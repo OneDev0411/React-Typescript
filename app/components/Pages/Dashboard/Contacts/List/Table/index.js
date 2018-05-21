@@ -125,9 +125,6 @@ class ContactsList extends React.Component {
           <NoSearchResults description="Try typing another name, email, phone or tag." />
         )}
         className="contacts-list-table"
-        getLoadingProps={(...rest) => {
-          console.log(rest)
-        }}
         getTrProps={(state, { original: { id: contactId } }) => {
           if (deletingContacts.includes(contactId)) {
             return {

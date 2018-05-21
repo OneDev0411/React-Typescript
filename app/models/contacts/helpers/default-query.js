@@ -1,6 +1,8 @@
-export const defaultQuery = [
-  'associations[]=contact.summary',
-  'associations[]=sub_contact.users',
-  'associations[]=contact.sub_contacts',
-  'associations[]=contact_attribute.attribute_def'
-].join('&')
+export const defaultQuery = {
+  associations: [
+    'contact.summary',
+    'sub_contact.users',
+    'contact.sub_contacts',
+    'contact_attribute.attribute_def'
+  ]
+}

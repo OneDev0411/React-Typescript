@@ -320,7 +320,6 @@ class Compose extends React.Component {
           break
       }
     })
-    console.log(recipients, this.state.recipients)
 
     this.props.onChangeRecipients(recipients)
   }
