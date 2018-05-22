@@ -199,9 +199,19 @@ class CreateOffer extends React.Component {
     return roles.filter(role => role.readOnly !== true)
   }
 
+  getBuyerNames() {
+    const { clients } = this.state
+
+    return _.chain(clients)
+      .pick(client => !client.readOnly)
+      .map(client => getLegalFullName(client, false))
+      .join(', ')
+      .value()
+  }
+
   async createOffer() {
     const { deal, notify, createOffer, createRoles } = this.props
-    const { enderType, dealStatus, contexts, clients } = this.state
+    const { enderType, dealStatus, contexts } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
     const order = isPrimaryOffer ? -1 : this.getMaxOrder() + 1
@@ -209,9 +219,7 @@ class CreateOffer extends React.Component {
     let { buyerName } = this.state
 
     if (!isBackupOffer) {
-      buyerName = _.map(clients, client =>
-        getLegalFullName(client, false)
-      ).join(', ')
+      buyerName = this.getBuyerNames()
     }
 
     this.setState({ saving: true })

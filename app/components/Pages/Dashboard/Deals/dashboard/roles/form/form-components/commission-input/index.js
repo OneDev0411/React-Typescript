@@ -1,16 +1,20 @@
 import React from 'react'
 import { Field } from 'react-final-form'
+
 import {
   CommissionContainer,
   CommissionRadioContainer,
   CommissionInputContainer,
-  InputField,
   InputRadio,
-  RadioLabel,
+  RadioLabel
+} from './styles'
+
+import {
   InputLabel,
-  InputError,
   InputRequired
-} from '../../styles'
+} from '../../../../../../../../../views/components/Forms/styled'
+
+import { TextInput } from '../../../../../../../../../views/components/Forms/TextInput'
 
 export const CommissionInput = ({
   input,
@@ -56,15 +60,15 @@ export const CommissionInput = ({
       </div>
     </CommissionRadioContainer>
 
-    <CommissionInputContainer>
-      <InputField
-        {...input}
-        {...rest}
-        autocomplete={false}
-        placeholder="Enter commission for this agent"
-      />
-
-      {meta.error && meta.touched && <InputError>{meta.error}</InputError>}
-    </CommissionInputContainer>
+    <TextInput
+      {...input}
+      {...rest}
+      meta={meta}
+      hasLabel={false}
+      highlightOnError
+      Container={CommissionInputContainer}
+      autocomplete={false}
+      placeholder="Enter commission for this agent"
+    />
   </CommissionContainer>
 )

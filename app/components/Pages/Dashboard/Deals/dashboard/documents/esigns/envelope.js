@@ -20,9 +20,10 @@ class Envelope extends React.Component {
   getRecipientsNames(recipients) {
     const names = []
 
-    recipients.forEach(recp => {
-      names.push(this.getName(recp.role))
-    })
+    recipients &&
+      recipients.forEach(recp => {
+        names.push(this.getName(recp.role))
+      })
 
     return names.join(', ')
   }
@@ -39,13 +40,15 @@ class Envelope extends React.Component {
 
   render() {
     const { envelope } = this.props
-    const { recipients } = envelope
+    const { recipients = [] } = envelope
     const isVoided = envelope.status === 'Voided'
     const isDraft = envelope.status === 'Created'
     const isCompleted = envelope.status === 'Completed'
-    const areSigned = recipients.filter(r => r.status === 'Completed')
-    const notSigned = recipients.filter(r => r.status !== 'Completed')
     const recipientsNames = this.getRecipientsNames(recipients)
+    const totalRecipients = recipients ? recipients.length : 0
+    const areSigned = recipients
+      ? recipients.filter(r => r.status === 'Completed')
+      : []
 
     return (
       <div
@@ -55,7 +58,7 @@ class Envelope extends React.Component {
         key={`eSign_${envelope.id}`}
       >
         <div className="image">
-          <img src="/static/images/deals/signature.svg" />
+          <img src="/static/images/deals/signature.svg" alt="" />
         </div>
 
         <div
@@ -73,7 +76,7 @@ class Envelope extends React.Component {
                   'text-secondary': !isCompleted
                 })}
               >
-                {areSigned.length} of {recipients.length} signed
+                {areSigned.length} of {totalRecipients} signed
               </p>
             )}
         </div>

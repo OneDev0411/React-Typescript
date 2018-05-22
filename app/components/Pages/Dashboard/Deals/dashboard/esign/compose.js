@@ -137,13 +137,14 @@ class SendSignatures extends React.Component {
    */
   async send() {
     const { failure } = this.state
-    const { createEnvelope, closeEsignWizard, deal, esign, tasks } = this.props
+    const { createEnvelope, closeEsignWizard, deal, esign } = this.props
     const { recipients } = esign
 
     const subject = this.subject.value
     const message = this.message.value
-    const attachments = esign.attachments.map(id => ({
-      revision: tasks[id].submission.last_revision
+    const attachments = esign.attachments.map(attachment => ({
+      revision: attachment.revision,
+      file: attachment.file_id
     }))
 
     if (failure) {
@@ -179,7 +180,6 @@ class SendSignatures extends React.Component {
 
     try {
       // add envelope to list of envelopes
-
       const envelope = await DealModel.sendEnvelope(
         deal.id,
         subject,

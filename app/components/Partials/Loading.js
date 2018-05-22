@@ -2,8 +2,8 @@
 import React from 'react'
 import cn from 'classnames'
 
-export const Spinner = ({ className = '' }) => (
-  <div className={cn(className, 'sk-circle')}>
+export const Spinner = props => (
+  <div className={cn(props.className, 'sk-circle')} {...props}>
     <div className="sk-circle1 sk-child" />
     <div className="sk-circle2 sk-child" />
     <div className="sk-circle3 sk-child" />
