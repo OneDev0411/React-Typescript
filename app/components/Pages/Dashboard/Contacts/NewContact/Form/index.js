@@ -5,7 +5,7 @@ import arrayMutators from 'final-form-arrays'
 import { Form, Field } from 'react-final-form'
 import idx from 'idx'
 
-import { createContacts } from '../../../../../../models/contacts/create-contacts'
+import { createContacts } from '../../../../../../store_actions/contacts/create-contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
 import { Wrapper, FormContainer, Footer } from './styled-components/form'
@@ -107,7 +107,7 @@ class NewContactForm extends Component {
     try {
       const attributes = this.formatPreSave(values)
 
-      const contacts = await createContacts([{ attributes }])
+      const contacts = await this.props.createContacts([{ attributes }])
 
       if (idx(contacts, c => c.data[0].id)) {
         browserHistory.push(`/dashboard/contacts/${contacts.data[0].id}`)
@@ -209,7 +209,7 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(NewContactForm)
+export default connect(mapStateToProps, { createContacts })(NewContactForm)
 
 function getDefaultOptions(options) {
   return options.map(item => ({

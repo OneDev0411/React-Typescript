@@ -50,6 +50,7 @@ const ids = (state = [], action) => {
 export const info = (state = { total: 0, count: 0 }, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.CREATE_CONTACTS_SUCCESS:
       return action.response.info
     default:
       return state
