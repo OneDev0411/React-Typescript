@@ -204,11 +204,7 @@ export default class ManualAddress extends React.Component {
         shouldCloseOnOverlayClick={false}
         handleOnClose={this.onClose}
       >
-        <Modal.Header
-          title="Select Documents"
-          showClose
-          handleOnClose={this.onClose}
-        />
+        <Modal.Header title="Address" showClose handleOnClose={this.onClose} />
         <Form
           onSubmit={this.onSubmit}
           validate={this.validate}
