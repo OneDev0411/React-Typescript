@@ -19,7 +19,6 @@ function openContact(id) {
 
 class ContactsList extends React.Component {
   state = {
-    page: 0,
     pageSize: 50
   }
 
@@ -93,14 +92,17 @@ class ContactsList extends React.Component {
     })
   }
 
-  setPage = page => {
-    this.setState({ page })
-  }
-
   render() {
     const defaultPageSize = 50
-    const { pageSize, page } = this.state
-    const { data, loading, totalCount, deletingContacts } = this.props
+    const { pageSize } = this.state
+    const {
+      data,
+      deletingContacts,
+      loading,
+      onPageChange,
+      page,
+      totalCount
+    } = this.props
 
     return (
       <ReactTable
@@ -114,7 +116,7 @@ class ContactsList extends React.Component {
         defaultPageSize={defaultPageSize}
         pageSizeOptions={[25, 50, 100]}
         showPaginationBottom
-        onPageChange={this.setPage}
+        onPageChange={onPageChange}
         onFetchData={this.fetchPage}
         showPagination={defaultPageSize < data.length}
         onPageSizeChange={this.setPageSize}

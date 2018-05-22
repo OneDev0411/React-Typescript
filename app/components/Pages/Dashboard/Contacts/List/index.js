@@ -33,6 +33,7 @@ const SecondHeaderText = styled.p`
 
 class ContactsList extends React.Component {
   state = {
+    page: 0,
     isSearching: false,
     filteredContacts: null,
     deletingContacts: [],
@@ -72,11 +73,11 @@ class ContactsList extends React.Component {
 
       const items = await searchContacts(keyword)
 
-      this.setState({ filteredContacts: items })
+      this.setState({ filteredContacts: items, page: 0 })
     } catch (error) {
       console.log(error)
     } finally {
-      this.setState({ isSearching: false })
+      this.setState({ isSearching: false, page: 0 })
     }
   }
 
@@ -96,8 +97,13 @@ class ContactsList extends React.Component {
     this.setState({ selectedRows: newSelectedRows })
   }
 
+  onPageChange = page => {
+    this.setState({ page })
+  }
+
   render() {
     const {
+      page,
       isSearching,
       filteredContacts,
       deletingContacts,
@@ -173,12 +179,14 @@ class ContactsList extends React.Component {
 
           <Table
             data={data}
+            deletingContacts={deletingContacts}
+            handleOnDelete={this.handleOnDelete}
             loading={isSearching}
+            onPageChange={this.onPageChange}
+            page={page}
+            selectedRows={selectedRows}
             totalCount={totalCount}
             toggleSelectedRow={this.toggleSelectedRow}
-            handleOnDelete={this.handleOnDelete}
-            deletingContacts={deletingContacts}
-            selectedRows={selectedRows}
           />
         </Fragment>
       </div>
