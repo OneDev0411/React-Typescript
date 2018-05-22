@@ -3,7 +3,7 @@ import idx from 'idx'
 import * as actionTypes from '../../../constants/contacts'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 import { createContacts as postNewContacts } from '../../../models/contacts/create-contacts'
-import { getContactsinfo } from '../../../reducers/contacts/list'
+import { selectContactsInfo } from '../../../reducers/contacts/list'
 
 export function createContacts(contacts, query) {
   return async (dispatch, getState) => {
@@ -29,7 +29,7 @@ export function createContacts(contacts, query) {
       const response = await postNewContacts(contacts, query)
 
       if (idx(response, c => c.data[0].id)) {
-        const info = getContactsinfo(getState().contacts.list)
+        const info = selectContactsInfo(getState().contacts.list)
 
         dispatch({
           response: {

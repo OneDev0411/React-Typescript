@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import {
   selectContacts,
-  getContactsinfo,
+  selectContactsInfo,
   isFetchingContactsList
 } from '../../../../../reducers/contacts/list'
 import { deleteContacts } from '../../../../../store_actions/contacts'
@@ -55,12 +55,36 @@ class ContactsList extends React.Component {
   }
 
   handleDeleteContact = async ({ contactIds }) => {
-    this.setState({ deletingContacts: contactIds })
+    try {
+      const { deleteContacts } = this.props
+      const { filteredContacts } = this.state
+      const deletedState = { deletingContacts: [], selectedRows: [] }
 
-    const { deleteContacts } = this.props
+      this.setState({ deletingContacts: contactIds })
 
-    await deleteContacts(contactIds)
-    this.setState({ deletingContacts: [], selectedRows: [] })
+      await deleteContacts(contactIds)
+
+      if (filteredContacts) {
+        if (filteredContacts.length === contactIds.length) {
+          return this.setState({
+            ...deletedState,
+            page: 0,
+            filteredContacts: null
+          })
+        }
+
+        this.setState({
+          ...deletedState,
+          filteredContacts: filteredContacts.filter(
+            c => !contactIds.includes(c.id)
+          )
+        })
+      } else {
+        this.setState(deletedState)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   search = async keyword => {
@@ -202,7 +226,7 @@ function mapStateToProps({ user, contacts }) {
     loadingImport,
     attributeDefs,
     contacts: selectContacts(list),
-    listInfo: getContactsinfo(list),
+    listInfo: selectContactsInfo(list),
     isFetching: isFetchingContactsList(list)
   }
 }

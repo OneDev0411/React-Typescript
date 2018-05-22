@@ -49,6 +49,7 @@ const ids = (state = [], action) => {
 
 export const info = (state = { total: 0, count: 0 }, action) => {
   switch (action.type) {
+    case actionTypes.DELETE_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.CREATE_CONTACTS_SUCCESS:
       return action.response.info
@@ -94,7 +95,7 @@ export const selectContact = (state, id) => state.byId[id]
 
 export const selectContacts = state => state.ids.map(id => state.byId[id])
 
-export const getContactsinfo = state => state.info
+export const selectContactsInfo = state => state.info
 
 export const isFetchingContactsList = state => state.isFetching
 

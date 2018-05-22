@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import arrayMutators from 'final-form-arrays'
 import { Form, Field } from 'react-final-form'
-import idx from 'idx'
 
 import { createContacts } from '../../../../../../store_actions/contacts/create-contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
+import { defaultQuery } from '../../../../../../models/contacts/helpers/default-query'
 
 import { Wrapper, FormContainer, Footer } from './styled-components/form'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
@@ -106,11 +106,26 @@ class NewContactForm extends Component {
   handleOnSubmit = async values => {
     try {
       const attributes = this.formatPreSave(values)
+      const query = {
+        ...defaultQuery,
+        get: true,
+        activity: false
+      }
 
-      const contacts = await this.props.createContacts([{ attributes }])
+      const contacts = await this.props.createContacts([{ attributes }], query)
 
-      if (idx(contacts, c => c.data[0].id)) {
-        browserHistory.push(`/dashboard/contacts/${contacts.data[0].id}`)
+      if (
+        contacts &&
+        Array.isArray(contacts.data) &&
+        contacts.data.length === 1
+      ) {
+        const id = contacts.data[0].id || contacts.data[0]
+
+        const isId = /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
+
+        if (new RegExp(isId).test(id)) {
+          browserHistory.push(`/dashboard/contacts/${id}`)
+        }
       } else {
         browserHistory.push('/dashboard/contacts')
       }
