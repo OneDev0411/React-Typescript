@@ -134,7 +134,6 @@ function AddAddressModal({
                 component={TextField}
                 disabled={submitting}
                 title="Street Name"
-                placeholder="Buyers Club"
               />
               <Field
                 name="street_suffix"
@@ -144,10 +143,10 @@ function AddAddressModal({
               />
 
               <Field
-                name="postal_code"
+                name="zip_code"
                 component={TextField}
                 disabled={submitting}
-                title="Postal Code"
+                title="Zip Code"
                 placeholder="65619 or 34353-2323"
               />
 
@@ -157,7 +156,6 @@ function AddAddressModal({
                 component={TextField}
                 disabled={submitting}
                 title="City"
-                placeholder="Dallas"
               />
 
               <Field
@@ -165,14 +163,6 @@ function AddAddressModal({
                 component={TextField}
                 disabled={submitting}
                 title="State"
-                placeholder="Texas"
-              />
-
-              <Field
-                name="zip_code"
-                component={TextField}
-                disabled={submitting}
-                title="Zip Code"
               />
 
               <Field
@@ -180,7 +170,6 @@ function AddAddressModal({
                 component={TextField}
                 disabled={submitting}
                 title="Country"
-                placeholder="USA"
               />
             </BasicModal.Body>
             <BasicModal.Footer style={{ justifyContent: 'space-between' }}>
