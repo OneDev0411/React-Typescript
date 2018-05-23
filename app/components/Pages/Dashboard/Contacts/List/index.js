@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import {
   selectContacts,
-  getContactsinfo,
+  selectContactsInfo,
   isFetchingContactsList
 } from '../../../../../reducers/contacts/list'
 import { deleteContacts } from '../../../../../store_actions/contacts'
@@ -33,6 +33,7 @@ const SecondHeaderText = styled.p`
 
 class ContactsList extends React.Component {
   state = {
+    page: 0,
     isSearching: false,
     filteredContacts: null,
     deletingContacts: [],
@@ -54,12 +55,36 @@ class ContactsList extends React.Component {
   }
 
   handleDeleteContact = async ({ contactIds }) => {
-    this.setState({ deletingContacts: contactIds })
+    try {
+      const { deleteContacts } = this.props
+      const { filteredContacts } = this.state
+      const deletedState = { deletingContacts: [], selectedRows: [] }
 
-    const { deleteContacts } = this.props
+      this.setState({ deletingContacts: contactIds })
 
-    await deleteContacts(contactIds)
-    this.setState({ deletingContacts: [], selectedRows: [] })
+      await deleteContacts(contactIds)
+
+      if (filteredContacts) {
+        if (filteredContacts.length === contactIds.length) {
+          return this.setState({
+            ...deletedState,
+            page: 0,
+            filteredContacts: null
+          })
+        }
+
+        this.setState({
+          ...deletedState,
+          filteredContacts: filteredContacts.filter(
+            c => !contactIds.includes(c.id)
+          )
+        })
+      } else {
+        this.setState(deletedState)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   search = async keyword => {
@@ -72,11 +97,11 @@ class ContactsList extends React.Component {
 
       const items = await searchContacts(keyword)
 
-      this.setState({ filteredContacts: items })
+      this.setState({ filteredContacts: items, page: 0 })
     } catch (error) {
       console.log(error)
     } finally {
-      this.setState({ isSearching: false })
+      this.setState({ isSearching: false, page: 0 })
     }
   }
 
@@ -96,8 +121,13 @@ class ContactsList extends React.Component {
     this.setState({ selectedRows: newSelectedRows })
   }
 
+  onPageChange = page => {
+    this.setState({ page })
+  }
+
   render() {
     const {
+      page,
       isSearching,
       filteredContacts,
       deletingContacts,
@@ -173,12 +203,14 @@ class ContactsList extends React.Component {
 
           <Table
             data={data}
+            deletingContacts={deletingContacts}
+            handleOnDelete={this.handleOnDelete}
             loading={isSearching}
+            onPageChange={this.onPageChange}
+            page={page}
+            selectedRows={selectedRows}
             totalCount={totalCount}
             toggleSelectedRow={this.toggleSelectedRow}
-            handleOnDelete={this.handleOnDelete}
-            deletingContacts={deletingContacts}
-            selectedRows={selectedRows}
           />
         </Fragment>
       </div>
@@ -194,7 +226,7 @@ function mapStateToProps({ user, contacts }) {
     loadingImport,
     attributeDefs,
     contacts: selectContacts(list),
-    listInfo: getContactsinfo(list),
+    listInfo: selectContactsInfo(list),
     isFetching: isFetchingContactsList(list)
   }
 }

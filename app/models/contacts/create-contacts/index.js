@@ -1,7 +1,11 @@
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
 
-const DEFAULT_QUERY = `${defaultQuery}&get=true&relax=true`
+const DEFAULT_QUERY = {
+  ...defaultQuery,
+  relax: true,
+  activity: false
+}
 
 /**
  * Create a new contacts.
