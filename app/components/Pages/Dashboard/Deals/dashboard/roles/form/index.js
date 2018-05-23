@@ -100,7 +100,7 @@ export class RoleFormModal extends React.Component {
           return false
         }
 
-        if (!errors[fieldName] && !await validator(fieldValue)) {
+        if (!errors[fieldName] && !(await validator(fieldValue))) {
           errors[fieldName] = this.errorNames[fieldName]
         }
       })
@@ -116,7 +116,22 @@ export class RoleFormModal extends React.Component {
   normalizeForm = values => {
     const newValues = {}
     const { commission, commission_type } = values
-    const ingoreFields = ['commission', 'commission_type', 'user']
+
+    const validFields = [
+      'id',
+      'contact',
+      'legal_prefix',
+      'legal_first_name',
+      'legal_middle_name',
+      'legal_last_name',
+      'company_title',
+      'email',
+      'phone_number',
+      'role',
+      'commission',
+      'commission_dollar',
+      'commission_percentage'
+    ]
 
     if (commission_type === 'commission_dollar') {
       newValues.commission_dollar = parseFloat(commission)
@@ -126,12 +141,12 @@ export class RoleFormModal extends React.Component {
       newValues.commission_dollar = null
     }
 
-    return _.omit(
+    return _.pick(
       {
         ...values,
         ...newValues
       },
-      (fieldValue, fieldName) => ingoreFields.includes(fieldName)
+      validFields
     )
   }
 
