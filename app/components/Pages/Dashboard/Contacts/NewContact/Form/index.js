@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import arrayMutators from 'final-form-arrays'
 import { Form, Field } from 'react-final-form'
+import { FORM_ERROR } from 'final-form'
 
 import { createContacts } from '../../../../../../store_actions/contacts/create-contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
@@ -15,6 +16,8 @@ import { Select } from './components/Select'
 import { Emails } from './Emails'
 import { Phones } from './Phones'
 
+import Alert from '../../..//Partials/Alert'
+
 const TITLES = getDefaultOptions(['Mr', 'Ms', 'Mrs', 'Miss', 'Dr'])
 
 const STAGE_OPTIONS = getDefaultOptions([
@@ -24,20 +27,6 @@ const STAGE_OPTIONS = getDefaultOptions([
   'Qualified Lead',
   'Unqualified Lead'
 ])
-
-const validate = values => {
-  const errors = {}
-
-  if (!values.first_name) {
-    errors.first_name = 'Required'
-  }
-
-  if (!values.last_name) {
-    errors.last_name = 'Required'
-  }
-
-  return errors
-}
 
 class NewContactForm extends Component {
   formatPreSave = values => {
@@ -104,6 +93,21 @@ class NewContactForm extends Component {
 
   // todo: handle submit error
   handleOnSubmit = async values => {
+    const isEmptyFieldArray = fields => fields.every(field => !field.text)
+
+    if (
+      !values.first_name &&
+      !values.middle_name &&
+      !values.last_name &&
+      isEmptyFieldArray(values.email) &&
+      isEmptyFieldArray(values.phone_number)
+    ) {
+      return {
+        [FORM_ERROR]:
+          'Please fill in any of the contacts profile fields to add your contact.'
+      }
+    }
+
     try {
       const attributes = this.formatPreSave(values)
       const query = {
@@ -138,7 +142,6 @@ class NewContactForm extends Component {
     return (
       <Wrapper>
         <Form
-          validate={validate}
           onSubmit={this.handleOnSubmit}
           initialValues={{
             title: { title: '-Select-', value: null },
@@ -157,7 +160,8 @@ class NewContactForm extends Component {
             validating,
             handleSubmit,
             mutators,
-            submitting
+            submitting,
+            submitError
           }) => (
             <FormContainer onSubmit={handleSubmit}>
               <div>
@@ -169,7 +173,6 @@ class NewContactForm extends Component {
                 />
                 <Field
                   component={TextField}
-                  isRequired
                   name="first_name"
                   title="First Name"
                 />
@@ -179,7 +182,6 @@ class NewContactForm extends Component {
                   title="Middle Name"
                 />
                 <Field
-                  isRequired
                   component={TextField}
                   name="last_name"
                   title="Last Name"
@@ -194,6 +196,14 @@ class NewContactForm extends Component {
                 />
               </div>
               <Footer style={{ justifyContent: 'space-between' }}>
+                {submitError && (
+                  <Alert
+                    type="error"
+                    style={{ textAlign: 'left', marginBottom: '2em' }}
+                  >
+                    {submitError}
+                  </Alert>
+                )}
                 <ActionButton
                   type="button"
                   onClick={reset}
