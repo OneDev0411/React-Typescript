@@ -223,9 +223,6 @@ export default class ManualAddress extends React.Component {
                       meta={meta}
                       clearable
                       placeholder="Street Prefix"
-                      onChange={data =>
-                        input.onChange(data ? data.value : null)
-                      }
                       options={STREET_PREFIX.map(value => ({
                         value,
                         label: value
@@ -243,9 +240,6 @@ export default class ManualAddress extends React.Component {
                       clearable
                       searchable
                       placeholder="Street Suffix"
-                      onChange={data =>
-                        input.onChange(data ? data.value : null)
-                      }
                       options={STREET_SUFFIX.map(value => ({
                         value,
                         label: value
@@ -292,9 +286,6 @@ export default class ManualAddress extends React.Component {
                       clearable
                       searchable
                       placeholder="State"
-                      onChange={data =>
-                        input.onChange(data ? data.value : null)
-                      }
                       options={_.map(STATES, name => ({
                         value: name,
                         label: name
