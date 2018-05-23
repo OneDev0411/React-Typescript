@@ -8,19 +8,16 @@ const OPTIONS = {
     title: DEFAULT_OPTION_TEXT
   },
   mr: {
-    title: 'Mr'
+    title: 'Mr.'
   },
   ms: {
-    title: 'Ms'
+    title: 'Ms.'
   },
   mrs: {
-    title: 'Mrs'
-  },
-  miss: {
-    title: 'Miss'
+    title: 'Mrs.'
   },
   dr: {
-    title: 'Dr'
+    title: 'Dr.'
   }
 }
 
