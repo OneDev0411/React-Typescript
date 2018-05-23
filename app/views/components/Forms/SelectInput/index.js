@@ -8,6 +8,14 @@ import {
   InputError
 } from '../styled'
 
+function handleChange(data, input, onChange) {
+  if (onChange) {
+    return onChange(data)
+  }
+
+  input.onChange(data ? data.value : null)
+}
+
 export const SelectInput = ({
   input,
   meta,
@@ -33,7 +41,7 @@ export const SelectInput = ({
       clearable={clearable}
       placeholder={placeholder}
       value={input.value || defaultValue}
-      onChange={onChange}
+      onChange={data => handleChange(data, input, onChange)}
       options={options}
       {...rest}
     />
