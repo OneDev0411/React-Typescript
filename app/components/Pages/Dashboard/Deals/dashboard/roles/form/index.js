@@ -53,14 +53,14 @@ export class RoleFormModal extends React.Component {
   get commissionAttributes() {
     const { form } = this.props
 
-    if (form && form.commission_percentage) {
+    if (form && form.commission_percentage !== null) {
       return {
         commission: form.commission_percentage,
         commission_type: 'commission_percentage'
       }
     }
 
-    if (form && form.commission_dollar) {
+    if (form && form.commission_dollar !== null) {
       return {
         commission: form.commission_dollar,
         commission_type: 'commission_dollar'
@@ -87,7 +87,9 @@ export class RoleFormModal extends React.Component {
     const validators = this.getFormValidators(requiredFields)
 
     requiredFields.forEach(fieldName => {
-      if (!values[fieldName]) {
+      let value = values[fieldName]
+
+      if (value === undefined || value === null || value.length === 0) {
         errors[fieldName] = 'Required'
       }
     })
