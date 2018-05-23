@@ -217,35 +217,25 @@ export default class ManualAddress extends React.Component {
               >
                 <Field
                   name="street_dir_prefix"
-                  component={({ meta, input }) => (
-                    <SelectInput
-                      input={input}
-                      meta={meta}
-                      clearable
-                      placeholder="Street Prefix"
-                      options={STREET_PREFIX.map(value => ({
-                        value,
-                        label: value
-                      }))}
-                    />
-                  )}
+                  clearable
+                  placeholder="Street Prefix"
+                  options={STREET_PREFIX.map(value => ({
+                    value,
+                    label: value
+                  }))}
+                  component={SelectInput}
                 />
 
                 <Field
                   name="street_suffix"
-                  component={({ meta, input }) => (
-                    <SelectInput
-                      input={input}
-                      meta={meta}
-                      clearable
-                      searchable
-                      placeholder="Street Suffix"
-                      options={STREET_SUFFIX.map(value => ({
-                        value,
-                        label: value
-                      }))}
-                    />
-                  )}
+                  clearable
+                  searchable
+                  placeholder="Street Suffix"
+                  options={STREET_SUFFIX.map(value => ({
+                    value,
+                    label: value
+                  }))}
+                  component={SelectInput}
                 />
 
                 <Field
@@ -278,20 +268,15 @@ export default class ManualAddress extends React.Component {
 
                 <Field
                   name="state"
-                  component={({ meta, input }) => (
-                    <SelectInput
-                      input={input}
-                      meta={meta}
-                      isRequired
-                      clearable
-                      searchable
-                      placeholder="State"
-                      options={_.map(STATES, name => ({
-                        value: name,
-                        label: name
-                      }))}
-                    />
-                  )}
+                  searchable
+                  clearable
+                  isRequired
+                  placeholder="State"
+                  options={_.map(STATES, name => ({
+                    value: name,
+                    label: name
+                  }))}
+                  component={SelectInput}
                 />
 
                 <Field
