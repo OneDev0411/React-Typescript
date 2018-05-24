@@ -20,7 +20,7 @@ class AgentTable extends BaseTable {
       address: {
         caption: 'ADDRESS',
         sortable: true,
-        className: 'address col-md-4',
+        className: 'address col-md-3',
         getText: deal => this.getAddress(deal),
         getValue: deal => Deal.get.address(deal)
       },
@@ -46,6 +46,12 @@ class AgentTable extends BaseTable {
           'Cancelled',
           'Withdrawn'
         ]
+      },
+      property_type: {
+        caption: 'CHECKLIST TYPE',
+        sortable: true,
+        className: 'col-md-1 hidden-xs',
+        getText: deal => deal.property_type
       },
       price: {
         caption: 'PRICE $',
