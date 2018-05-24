@@ -26,8 +26,8 @@ $margin: 20px;
     @extend %deal-create-form;
   }
 
-  .footer {
-    @extend %deal-create-footer;
+  .actions {
+    @extend %deal-create-actions;
   }
 }
 
@@ -59,24 +59,18 @@ $margin: 20px;
   }
 }
 
-%deal-create-footer {
-  height: 60px;
-  position: absolute;
+%deal-create-actions {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   align-items: center;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding-right: 16px;
+  padding: 20px 50px;
   background-color: #ffffff;
-  border-top: 1px solid #d4dfe6;
-  text-align: right;
 
   .error-summary {
     color: #fe3824;
+    font-weight: 500;
     font-size: 14px;
-    margin-right: 16px;
+    margin: 0 16px;
   }
 }
 
@@ -86,9 +80,6 @@ $margin: 20px;
 %deal-create-form {
   padding: 20px 50px;
   $required-color: #fe3824;
-  min-height: calc(100vh - 115px);
-  max-height: calc(100vh - 115px);
-  overflow: auto;
 
   .swoosh {
     font-size: 14px;

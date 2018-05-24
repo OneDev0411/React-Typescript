@@ -604,7 +604,9 @@ class CreateDeal extends React.Component {
                 )}
               </div>
             )}
+        </div>
 
+        <div className="actions">
           {!saving &&
             submitError && (
               <Alert
@@ -613,9 +615,7 @@ class CreateDeal extends React.Component {
                 style={{ float: 'left', marginBottom: '2rem' }}
               />
             )}
-        </div>
 
-        <div className="footer">
           <Button
             className={cn('btn btn-primary create-deal-button', {
               disabled: !canCreateDeal

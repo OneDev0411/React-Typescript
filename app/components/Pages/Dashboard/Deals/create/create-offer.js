@@ -452,7 +452,7 @@ class CreateOffer extends React.Component {
           )}
         </div>
 
-        <div className="footer">
+        <div className="actions">
           {!saving &&
             submitError && (
               <div
