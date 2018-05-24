@@ -12,7 +12,7 @@ import { getAddressLabels } from '../../../../../../../../models/contacts/helper
 const isPostalCode = value =>
   !value || new RegExp(/(^\d{5}$)|(^\d{5}-\d{4}$)/).exec(value)
     ? undefined
-    : 'Please include numbers. You have added a letter or special character.'
+    : 'You only have allowed to using numbers and dash. Like 75233 or 65132-2312.'
 
 // const composeValidators = (...validators) => value =>
 //   validators.reduce((error, validator) => error || validator(value), undefined)
@@ -143,10 +143,10 @@ function AddAddressModal({
               />
 
               <Field
-                name="zip_code"
+                name="postal_code"
                 component={TextField}
                 disabled={submitting}
-                title="Zip Code"
+                title="Postal Code"
                 placeholder="65619 or 34353-2323"
               />
 
