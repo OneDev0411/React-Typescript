@@ -88,7 +88,7 @@ class CreateDeal extends React.Component {
   /**
    * validate form
    */
-  validateForm(showConfirmationMessage = false) {
+  validateForm() {
     const {
       dealSide,
       dealPropertyType,
