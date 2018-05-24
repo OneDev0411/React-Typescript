@@ -13,12 +13,11 @@ import { Wrapper, FormContainer, Footer } from './styled-components/form'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import { TextField } from './components/TextField'
 import { Select } from './components/Select'
+import { Autocomplete } from './components/Autocomplete'
 import { Emails } from './Emails'
 import { Phones } from './Phones'
 
 import Alert from '../../..//Partials/Alert'
-
-const TITLES = getDefaultOptions(['Mr', 'Ms', 'Mrs', 'Miss', 'Dr'])
 
 const STAGE_OPTIONS = getDefaultOptions([
   'General',
@@ -60,7 +59,7 @@ class NewContactForm extends Component {
 
     selectFields.forEach(field => {
       const attribute_def = selectDefinitionByName(attributeDefs, field)
-      const text = values[field].value
+      const text = (values[field] && values[field].value) || values[field]
 
       if (attribute_def && text) {
         attributes.push({
@@ -138,13 +137,18 @@ class NewContactForm extends Component {
     }
   }
 
+  titleOptions = () => {
+    const options = selectDefinitionByName(this.props.attributeDefs, 'title')
+
+    return (options && options.labels) || []
+  }
+
   render() {
     return (
       <Wrapper>
         <Form
           onSubmit={this.handleOnSubmit}
           initialValues={{
-            title: { title: '-Select-', value: null },
             stage: { title: 'General', value: 'General' },
             email: [{ label: { title: 'Personal Email', value: 'Personal' } }],
             phone_number: [
@@ -166,10 +170,11 @@ class NewContactForm extends Component {
             <FormContainer onSubmit={handleSubmit}>
               <div>
                 <Field
-                  defaultOptions={TITLES}
-                  component={Select}
+                  component={Autocomplete}
+                  items={this.titleOptions()}
                   name="title"
                   title="Title"
+                  placeholder="Title"
                 />
                 <Field
                   component={TextField}
