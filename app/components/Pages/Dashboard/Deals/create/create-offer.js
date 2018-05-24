@@ -365,7 +365,7 @@ class CreateOffer extends React.Component {
 
     const canCreateOffer = this.isFormValidated() && !saving
     const dealContexts = this.getDealContexts()
-    const isDoubleEnderAgent = enderType === 'AgentDoubleEnder'
+    const isDoubleEndedAgent = enderType === 'AgentDoubleEnder'
 
     return (
       <div className="deal-create-offer">
@@ -405,7 +405,7 @@ class CreateOffer extends React.Component {
               <DealAgents
                 scenario="CreateOffer"
                 dealSide="Buying"
-                shouldPrepopulateAgent={isDoubleEnderAgent}
+                shouldPrepopulateAgent={isDoubleEndedAgent}
                 isCommissionRequired={this.getIsCommissionRequired()}
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
@@ -430,7 +430,7 @@ class CreateOffer extends React.Component {
                 onChangeDealStatus={status => this.changeDealStatus(status)}
               />
 
-              {isDoubleEnderAgent && (
+              {isDoubleEndedAgent && (
                 <DealReferrals
                   dealSide="Buying"
                   referrals={referrals}
@@ -450,7 +450,9 @@ class CreateOffer extends React.Component {
               />
             </div>
           )}
+        </div>
 
+        <div className="footer">
           {!saving &&
             submitError && (
               <div
