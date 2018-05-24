@@ -92,12 +92,15 @@ class NewContactForm extends Component {
 
   // todo: handle submit error
   handleOnSubmit = async values => {
-    const isEmptyFieldArray = fields => fields.every(field => !field.text)
+    const isEmptyTextField = field => !values[field] || !values[field].trim()
+    const isEmptyFieldArray = fields =>
+      fields.every(field => !field.text || !field.text.trim())
 
     if (
-      !values.first_name &&
-      !values.middle_name &&
-      !values.last_name &&
+      isEmptyTextField('title') &&
+      isEmptyTextField('first_name') &&
+      isEmptyTextField('middle_name') &&
+      isEmptyTextField('last_name') &&
       isEmptyFieldArray(values.email) &&
       isEmptyFieldArray(values.phone_number)
     ) {
