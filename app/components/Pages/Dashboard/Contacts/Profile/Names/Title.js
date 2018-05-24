@@ -1,35 +1,11 @@
 import React from 'react'
+
 import Dropdown from '../../components/Dropdown'
-
-const DEFAULT_OPTION_TEXT = '-Select-'
-
-const OPTIONS = {
-  default: {
-    title: DEFAULT_OPTION_TEXT
-  },
-  mr: {
-    title: 'Mr.'
-  },
-  ms: {
-    title: 'Ms.'
-  },
-  mrs: {
-    title: 'Mrs.'
-  },
-  dr: {
-    title: 'Dr.'
-  }
-}
+import { getAttributeLabels } from '../../../../../../models/contacts/helpers'
 
 class Title extends React.Component {
   handleOnSelect = text => {
-    const { onChange, field } = this.props
-
-    if (text === DEFAULT_OPTION_TEXT) {
-      return onChange({ ...field, text: '' })
-    }
-
-    onChange({ ...field, text })
+    this.props.onChange({ ...this.props.field, text })
   }
 
   render() {
@@ -43,11 +19,11 @@ class Title extends React.Component {
           className="c-contact-details-item__field__label-select"
         >
           <Dropdown
-            name="title"
-            options={OPTIONS}
+            defaultTitle={(field && field.text) || '-Select-'}
             disabled={disabled}
-            defaultTitle={(field && field.text) || '--Select--'}
             handleOnSelect={this.handleOnSelect}
+            name="title"
+            options={getAttributeLabels(field.attribute_def)}
           />
         </span>
       </li>

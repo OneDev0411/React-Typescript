@@ -59,7 +59,7 @@ class NewContactForm extends Component {
 
     selectFields.forEach(field => {
       const attribute_def = selectDefinitionByName(attributeDefs, field)
-      const text = values[field].value
+      const text = (values[field] && values[field].value) || values[field]
 
       if (attribute_def && text) {
         attributes.push({
