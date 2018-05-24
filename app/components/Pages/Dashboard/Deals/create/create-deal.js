@@ -532,7 +532,8 @@ class CreateDeal extends React.Component {
                     <DealAgents
                       hasError={this.hasError('selling_agents')}
                       scenario="CreateDeal"
-                      dealSide="Selling"
+                      dealSide={dealSide}
+                      showDealSideAs="Selling"
                       agents={sellingAgents}
                       shouldPrepopulateAgent={false}
                       isCommissionRequired={this.getIsCommissionRequired()}
