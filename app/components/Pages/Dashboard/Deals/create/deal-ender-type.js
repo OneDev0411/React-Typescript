@@ -1,16 +1,20 @@
 import React from 'react'
+import cn from 'classnames'
 import RadioButton from '../../../../../views/components/radio'
+import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 export default ({
   enderType,
   isRequired,
+  hasError,
   showAgentDoubleEnder,
   onChangeEnderType
 }) => (
   <div className="form-section deal-offer">
-    <div className="hero">
+    <div className={cn('hero', { hasError })}>
       Is this an in-house deal?&nbsp;
       {isRequired && <span className="required">*</span>}
+      {hasError && <RequiredIcon />}
     </div>
 
     <RadioButton

@@ -45,8 +45,11 @@ class CreateOffer extends React.Component {
       clients: {},
       escrowOfficers: {},
       referrals: {},
-      submitError: null
+      submitError: null,
+      validationErrors: []
     }
+
+    this.isFormSubmitted = false
   }
 
   componentDidMount() {
@@ -102,31 +105,40 @@ class CreateOffer extends React.Component {
   }
 
   onUpsertRole(form, type) {
-    this.setState({
-      [type]: {
-        ...this.state[type],
-        [form.id || form.user.id]: form
-      }
-    })
+    this.setState(
+      {
+        [type]: {
+          ...this.state[type],
+          [form.id || form.user.id]: form
+        }
+      },
+      () => this.validateForm()
+    )
   }
 
   onRemoveRole(id, type) {
-    this.setState({
-      [type]: _.omit(this.state[type], role => role.id === id)
-    })
+    this.setState(
+      {
+        [type]: _.omit(this.state[type], role => role.id === id)
+      },
+      () => this.validateForm()
+    )
   }
 
-  onCreateAddress(component, type) {
-    this.setState({ dealAddress: component })
+  onChangeBuyerName(buyerName) {
+    this.setState({ buyerName }, () => this.validateForm())
   }
 
   changeContext(field, value) {
-    this.setState({
-      contexts: {
-        ...this.state.contexts,
-        [field]: value
-      }
-    })
+    this.setState(
+      {
+        contexts: {
+          ...this.state.contexts,
+          [field]: value
+        }
+      },
+      () => this.validateForm()
+    )
   }
 
   openDeal(id) {
@@ -134,21 +146,23 @@ class CreateOffer extends React.Component {
   }
 
   changeOfferType(offerType) {
-    this.setState({ offerType })
+    this.isFormSubmitted = false
+    this.setState({ offerType, validationErrors: [] })
   }
 
   changeEnderType(enderType) {
-    this.setState({ enderType })
+    this.setState({ enderType }, () => this.validateForm())
   }
 
   /**
    * handles deal status change
    */
   changeDealStatus(status) {
-    this.setState({ dealStatus: status })
+    this.setState({ dealStatus: status }, () => this.validateForm())
   }
 
-  isFormValidated() {
+  validateForm() {
+    let validationTable = {}
     const { deal } = this.props
     const {
       offerType,
@@ -162,26 +176,46 @@ class CreateOffer extends React.Component {
     } = this.state
 
     if (this.isBackupOffer()) {
-      return buyerName.length > 0
+      validationTable = {
+        buyer_name: () => buyerName.length > 0
+      }
+    } else {
+      validationTable = {
+        offer_type: () => offerType.length > 0,
+        ender_type: () => enderType !== -1,
+        clients: () => _.size(clients) > 0,
+        agents: () => _.size(agents) > 0,
+        escrow_officers: () => {
+          if (!this.isLeaseDeal()) {
+            return _.size(escrowOfficers) > 0
+          }
+
+          return true
+        },
+        deal_status: () => dealStatus.length > 0,
+        contexts: () =>
+          DealContext.validateList(
+            contexts,
+            'Buying',
+            deal.property_type,
+            DealContext.getHasActiveOffer(deal)
+          )
+      }
     }
 
-    if (!this.isLeaseDeal() && _.size(escrowOfficers) === 0) {
-      return false
-    }
+    const validationErrors = []
 
-    return (
-      offerType.length > 0 &&
-      enderType !== -1 &&
-      _.size(clients) > 0 && // validate clients
-      _.size(agents) > 0 && // validate agents
-      dealStatus.length > 0 &&
-      DealContext.validateList(
-        contexts,
-        'Buying',
-        deal.property_type,
-        DealContext.getHasActiveOffer(deal)
-      )
-    )
+    _.each(validationTable, (validate, name) => {
+      if (validate() === false) {
+        validationErrors.push(name)
+      }
+    })
+
+    this.setState({
+      validationErrors
+    })
+
+    return validationErrors.length === 0
   }
 
   getAllRoles() {
@@ -210,6 +244,12 @@ class CreateOffer extends React.Component {
   }
 
   async createOffer() {
+    this.isFormSubmitted = true
+
+    if (!this.validateForm(true)) {
+      return false
+    }
+
     const { deal, notify, createOffer, createRoles } = this.props
     const { enderType, dealStatus, contexts } = this.state
     const isBackupOffer = this.isBackupOffer()
@@ -234,7 +274,6 @@ class CreateOffer extends React.Component {
       )
 
       if (isPrimaryOffer) {
-        // create roles
         await createRoles(deal.id, this.getAllRoles())
 
         // create/update contexts
@@ -334,6 +373,15 @@ class CreateOffer extends React.Component {
   }
 
   /**
+   * check an specific field has error or not
+   */
+  hasError(field) {
+    const { validationErrors } = this.state
+
+    return this.isFormSubmitted && validationErrors.includes(field)
+  }
+
+  /**
    * check commission is required or not
    */
   getIsCommissionRequired() {
@@ -359,11 +407,11 @@ class CreateOffer extends React.Component {
       agents,
       clients,
       buyerName,
-      dealHasPrimaryOffer
+      dealHasPrimaryOffer,
+      validationErrors
     } = this.state
     const { deal } = this.props
 
-    const canCreateOffer = this.isFormValidated() && !saving
     const dealContexts = this.getDealContexts()
     const isDoubleEndedAgent = enderType === 'AgentDoubleEnder'
 
@@ -373,6 +421,7 @@ class CreateOffer extends React.Component {
 
         <div className="form">
           <OfferType
+            hasError={this.hasError('offer_type')}
             dealHasPrimaryOffer={dealHasPrimaryOffer}
             offerType={offerType}
             deal={deal}
@@ -381,14 +430,16 @@ class CreateOffer extends React.Component {
 
           {this.isBackupOffer() && (
             <BuyerName
+              hasError={this.hasError('buyer_name')}
               buyerName={buyerName}
-              onChangeBuyerName={buyerName => this.setState({ buyerName })}
+              onChangeBuyerName={name => this.onChangeBuyerName(name)}
             />
           )}
 
           {this.isPrimaryOffer() && (
             <div>
               <DealClients
+                hasError={this.hasError('clients')}
                 dealSide="Buying"
                 clients={clients}
                 onUpsertClient={form => this.onUpsertRole(form, 'clients')}
@@ -397,12 +448,14 @@ class CreateOffer extends React.Component {
 
               <EnderType
                 isRequired
+                hasError={this.hasError('ender_type')}
                 enderType={enderType}
                 showAgentDoubleEnder
                 onChangeEnderType={type => this.changeEnderType(type)}
               />
 
               <DealAgents
+                hasError={this.hasError('agents')}
                 scenario="CreateOffer"
                 dealSide="Buying"
                 shouldPrepopulateAgent={isDoubleEndedAgent}
@@ -414,6 +467,7 @@ class CreateOffer extends React.Component {
 
               {!this.isLeaseDeal() && (
                 <EscrowOfficers
+                  hasError={this.hasError('escrow_officers')}
                   escrowOfficers={escrowOfficers}
                   onUpsertEscrowOfficer={form =>
                     this.onUpsertRole(form, 'escrowOfficers')
@@ -425,6 +479,7 @@ class CreateOffer extends React.Component {
               )}
 
               <DealStatus
+                hasError={this.hasError('deal_status')}
                 property_type={deal.property_type}
                 dealStatus={dealStatus}
                 onChangeDealStatus={status => this.changeDealStatus(status)}
@@ -442,6 +497,7 @@ class CreateOffer extends React.Component {
               )}
 
               <Contexts
+                hasError={this.hasError('contexts')}
                 contexts={contexts}
                 onChangeContext={(field, value) =>
                   this.changeContext(field, value)
@@ -481,13 +537,23 @@ class CreateOffer extends React.Component {
 
           <Button
             className={cn('btn btn-primary create-offer-button', {
-              disabled: !canCreateOffer
+              disabled: saving || offerType.length === 0
             })}
+            disabled={saving || offerType.length === 0}
             onClick={() => this.createOffer()}
-            disabled={!canCreateOffer}
           >
             {saving ? 'Creating Offer ...' : 'Create Offer'}
           </Button>
+
+          <div className="error-summary">
+            {this.isFormSubmitted &&
+              validationErrors.length > 0 && (
+                <span>
+                  {validationErrors.length} required fields remaining to
+                  complete.
+                </span>
+              )}
+          </div>
         </div>
       </div>
     )
