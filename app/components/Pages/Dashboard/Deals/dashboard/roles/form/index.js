@@ -159,7 +159,16 @@ export class RoleFormModal extends React.Component {
   getRequiredFields = values => {
     const list = ['role']
 
-    const { role } = values
+    const { role, company_title } = values
+
+    if (
+      company_title &&
+      this.isValidString(company_title, [], 'company_title')
+    ) {
+      list.push('company_title')
+    } else {
+      list.push('legal_first_name', 'legal_last_name')
+    }
 
     if (this.isEmailRequired(role)) {
       list.push('email')
@@ -176,8 +185,6 @@ export class RoleFormModal extends React.Component {
 
     if (this.isCompanyRequired(role)) {
       list.push('company_title')
-    } else {
-      list.push('legal_first_name', 'legal_last_name')
     }
 
     /**
