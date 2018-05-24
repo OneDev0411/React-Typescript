@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux'
+
 import * as actionTypes from '../../constants/contacts'
+import { contactPagination } from '../pagination'
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -86,7 +88,8 @@ const contactsList = combineReducers({
   byId,
   info,
   error,
-  isFetching
+  isFetching,
+  pagination: contactPagination
 })
 
 export default contactsList
@@ -100,3 +103,15 @@ export const selectContactsInfo = state => state.info
 export const isFetchingContactsList = state => state.isFetching
 
 export const getContactsListError = state => state.error
+
+export const selectContactsPage = (state, page) => {
+  if (state.pagination.pages[page] == null) {
+    return null
+  }
+
+  const { ids } = state.pagination.pages[page]
+
+  if (Array.isArray(ids)) {
+    return ids.map(id => state.byId[id])
+  }
+}
