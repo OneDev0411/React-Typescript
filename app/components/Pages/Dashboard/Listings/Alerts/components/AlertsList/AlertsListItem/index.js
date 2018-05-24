@@ -8,17 +8,23 @@ import Brand from '../../../../../../../../controllers/Brand'
 import actions from '../../../../../../../../store_actions/listings/alerts'
 
 import AlertListItemMenu from './components/AlertsListItemMenu'
+import Follow from '../../../../../../../../views/components/Follow'
 
 const SharedWith = ({ alert }) => {
   const { users, created_by } = alert
+  const usersText = users
+    .filter(user => user.id !== created_by.id)
+    .map(user => user.first_name || user.phone_number)
+    .join(', ')
+
+  if (!usersText) {
+    return null
+  }
 
   return (
     <p className="c-alertList__item__shared-by san-fran">
       <span>Shared With: </span>
-      {users
-        .filter(user => user.id !== created_by.id)
-        .map(user => user.first_name || user.phone_number)
-        .join(', ')}
+      {usersText}
     </p>
   )
 }
@@ -28,35 +34,23 @@ const AlertListItem = ({
   alert,
   isSelected,
   onClickAlert,
-  onClickDelete
+  onClickDelete,
+  onClickFollow
 }) => (
-  <div
+  <IndexLink
     className={`c-alertList__item ${
       isSelected ? 'c-alertList__item--selected' : ''
     }`}
+    to={`/dashboard/mls/alerts/${alert.id}`}
+    onClick={() => onClickAlert(alert)}
   >
-    <IndexLink
-      onClick={() => onClickAlert(alert)}
-      className="c-alertList__item__link"
-      to={`/dashboard/mls/alerts/${alert.id}`}
-    />
-    <div className="c-alertList__item__thumbnail">
-      <img
-        alt="mls alert list item - rechat"
-        src={
-          alert.cover_image_url
-            ? alert.cover_image_url
-            : '/static/images/deals/home.svg'
-        }
-      />
-    </div>
     <div className="c-alertList__item__info">
       <h3 className="c-alertList__item__title san-fran ellipses">
         {alert.title || alert.proposed_title || 'without title'}
       </h3>
       {user.id !== alert.created_by.id && (
         <p className="c-alertList__item__shared-by san-fran">
-          <span>Created By: </span>
+          <span>Shared By: </span>
           {alert.created_by.first_name}
         </p>
       )}
@@ -71,11 +65,19 @@ const AlertListItem = ({
           {alert.new_recommendations}
         </span>
       )}
+    <Follow
+      isFollowing={
+        alert.alert_setting && alert.alert_setting.status === 'Enabled'
+      }
+      isFetching={alert.isFetching}
+      onClick={onClickFollow}
+    />
+
     <AlertListItemMenu
       alertId={alert.id}
       onClickDelete={() => onClickDelete(alert)}
     />
-  </div>
+  </IndexLink>
 )
 
 export default compose(
@@ -89,6 +91,18 @@ export default compose(
       if (parseInt(new_recommendations, 10) > 0) {
         setTimeout(() => clearAlertNotification(id, room), 5000)
       }
+    },
+    onClickFollow: ({
+      changeAlertFollowStatus = actions.changeAlertFollowStatus,
+      alert
+    }) => () => {
+      !alert.isFetching &&
+        changeAlertFollowStatus(
+          alert.id,
+          alert.alert_setting && alert.alert_setting.status === 'Enabled'
+            ? 'Disabled'
+            : 'Enabled'
+        )
     }
   })
 )(AlertListItem)

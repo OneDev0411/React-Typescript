@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import ToolTip from '../tooltip/index'
+import ToolTip from '../tooltip'
 import Checkmark from '../../../components/Pages/Dashboard/Partials/Svgs/Checkmark'
 
 export default ({

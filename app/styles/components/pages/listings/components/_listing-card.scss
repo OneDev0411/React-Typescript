@@ -109,8 +109,7 @@
   background: rgba(0, 0, 0, 0.2);
 }
 
-.c-listing-card__link,
-.c-alertList__item__link {
+.c-listing-card__link {
   @extend %full-absolute;
   display: block;
 }
