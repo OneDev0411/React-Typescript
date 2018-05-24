@@ -31,7 +31,7 @@ const FIELDS = {
   postal_code: {
     validator: code => new RegExp(/(^\d{5}$)|(^\d{5}-\d{4}$)/).exec(code),
     validationText:
-      'Please include numbers and dash. You have added a letter or special character.'
+      'You only have allowed to using numbers and a dash. Like 75233 or 65132-2312.'
   }
 }
 
