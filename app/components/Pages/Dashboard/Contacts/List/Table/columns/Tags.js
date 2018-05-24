@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import { getContactTags } from '../../../../../../models/contacts/helpers'
-import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
+
+import { getContactTags } from '../../../../../../../models/contacts/helpers'
+import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 
 const TagsString = ({ contact, attributeDefs }) => {
   const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
@@ -37,7 +38,9 @@ const TagsString = ({ contact, attributeDefs }) => {
 }
 
 function mapStateToProps(state) {
-  const { contacts: { attributeDefs } } = state
+  const {
+    contacts: { attributeDefs }
+  } = state
 
   return { attributeDefs }
 }

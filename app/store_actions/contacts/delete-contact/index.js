@@ -2,7 +2,10 @@ import { normalize } from 'normalizr'
 
 import { contactsSchema } from '../../../models/contacts/schema'
 import * as actionTypes from '../../../constants/contacts'
-import { selectContacts } from '../../../reducers/contacts/list'
+import {
+  selectContacts,
+  selectContactsInfo
+} from '../../../reducers/contacts/list'
 import { deleteContacts as removeContacts } from '../../../models/contacts/delete-contact'
 
 export function deleteContacts(contactIds) {
@@ -18,10 +21,17 @@ export function deleteContacts(contactIds) {
 
       await removeContacts(contactIds)
 
-      const { contacts: { list } } = getState()
+      const { list } = getState().contacts
       const contactsList = selectContacts(list)
+      const contactsListInfo = selectContactsInfo(list)
       const contacts = contactsList.filter(({ id }) => !contactIds.includes(id))
-      const response = normalize({ contacts }, contactsSchema)
+      const response = {
+        info: {
+          count: contactsListInfo.count,
+          total: contactsListInfo.total - contactIds.length
+        },
+        ...normalize({ contacts }, contactsSchema)
+      }
 
       dispatch({
         response,

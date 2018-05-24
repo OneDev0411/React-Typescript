@@ -101,13 +101,21 @@ $splitter-header: 56px;
 
   .pdf-section {
     display: block;
-    padding: 16px;
+    .sticky {
+      padding: 6px 0;
+      z-index: 1;
+      background-color: #fff;
+      font-size: 17px;
+      position: sticky;
+      top: 0px;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 3px;
+    }
 
-    .heading {
+    .sticky .heading {
       border-bottom: 1px solid #e7eef2;
       margin-bottom: 10px;
-      padding-bottom: 4px;
-      font-size: 17px;
+      padding: 2px 16px 4px 16px;
 
       .page-title {
         display: inline-block;
@@ -126,8 +134,13 @@ $splitter-header: 56px;
       }
     }
 
-    .page-selector {
+    .sticky .page-selector {
+      padding: 0 10px;
       @extend %pdf-splitter-page-selector;
+    }
+
+    .pdf-list-container {
+      padding: 16px;
     }
 
     @extend %pdf-splitter-page;

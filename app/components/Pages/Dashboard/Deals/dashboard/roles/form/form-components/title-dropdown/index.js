@@ -1,23 +1,20 @@
 import React from 'react'
-import Select from 'react-select'
-import { InputContainer, InputLabel } from '../../styles'
+import { SelectInput } from '../../../../../../../../../views/components/Forms/SelectInput'
 
 const OPTIONS = ['Mr', 'Ms', 'Mrs', 'Miss', 'Dr']
 
-export const TitleDropDown = ({ input, placeholder }) => (
-  <InputContainer>
-    <InputLabel>{placeholder}</InputLabel>
-    <Select
-      className="deals__role-form--select"
-      searchable={false}
-      clearable={false}
-      placeholder="Select a title"
-      value={input.value}
-      onChange={({ value }) => input.onChange(value)}
-      options={OPTIONS.map(value => ({
-        value,
-        label: value
-      }))}
-    />
-  </InputContainer>
+export const TitleDropDown = ({ input, meta }) => (
+  <SelectInput
+    className="deals__role-form--select"
+    searchable={false}
+    clearable={false}
+    input={input}
+    meta={meta}
+    placeholder="Select a title"
+    onChange={data => data && input.onChange(data.value)}
+    options={OPTIONS.map(value => ({
+      value,
+      label: value
+    }))}
+  />
 )

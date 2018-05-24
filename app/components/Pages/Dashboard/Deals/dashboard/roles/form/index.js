@@ -53,14 +53,14 @@ export class RoleFormModal extends React.Component {
   get commissionAttributes() {
     const { form } = this.props
 
-    if (form && form.commission_percentage) {
+    if (form && form.commission_percentage !== null) {
       return {
         commission: form.commission_percentage,
         commission_type: 'commission_percentage'
       }
     }
 
-    if (form && form.commission_dollar) {
+    if (form && form.commission_dollar !== null) {
       return {
         commission: form.commission_dollar,
         commission_type: 'commission_dollar'
@@ -87,7 +87,9 @@ export class RoleFormModal extends React.Component {
     const validators = this.getFormValidators(requiredFields)
 
     requiredFields.forEach(fieldName => {
-      if (!values[fieldName]) {
+      let value = values[fieldName]
+
+      if (value === undefined || value === null || value.length === 0) {
         errors[fieldName] = 'Required'
       }
     })
@@ -100,7 +102,7 @@ export class RoleFormModal extends React.Component {
           return false
         }
 
-        if (!errors[fieldName] && !await validator(fieldValue)) {
+        if (!errors[fieldName] && !(await validator(fieldValue))) {
           errors[fieldName] = this.errorNames[fieldName]
         }
       })
@@ -116,7 +118,22 @@ export class RoleFormModal extends React.Component {
   normalizeForm = values => {
     const newValues = {}
     const { commission, commission_type } = values
-    const ingoreFields = ['commission', 'commission_type', 'user']
+
+    const validFields = [
+      'id',
+      'contact',
+      'legal_prefix',
+      'legal_first_name',
+      'legal_middle_name',
+      'legal_last_name',
+      'company_title',
+      'email',
+      'phone_number',
+      'role',
+      'commission',
+      'commission_dollar',
+      'commission_percentage'
+    ]
 
     if (commission_type === 'commission_dollar') {
       newValues.commission_dollar = parseFloat(commission)
@@ -126,12 +143,12 @@ export class RoleFormModal extends React.Component {
       newValues.commission_dollar = null
     }
 
-    return _.omit(
+    return _.pick(
       {
         ...values,
         ...newValues
       },
-      (fieldValue, fieldName) => ingoreFields.includes(fieldName)
+      validFields
     )
   }
 

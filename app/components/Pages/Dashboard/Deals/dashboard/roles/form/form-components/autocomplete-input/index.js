@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
-import { TextInput } from '../text-input'
+import { TextInput } from '../../../../../../../../../views/components/Forms/TextInput'
 import {
   AutoCompleteInputContainer,
   AutoCompleteInputOptions,
   AutoCompleteInputItem
-} from '../../styles'
+} from './styles'
 
 export class AutoCompleteInput extends Component {
   constructor(props) {

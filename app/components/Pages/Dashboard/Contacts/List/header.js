@@ -6,9 +6,9 @@ import Import from './Import'
 import HeaderSearch from '../../../../Partials/headerSearch'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
-function Header({ user, contactsCount, onInputChange }) {
+function Header({ user, contactsCount, onInputChange, isSearching }) {
   if (contactsCount === 0) {
-    return false
+    return null
   }
 
   const isBackOffice = false
@@ -19,8 +19,8 @@ function Header({ user, contactsCount, onInputChange }) {
         <div className={cn('list--header-row', { agent: !isBackOffice })}>
           <div className="list--header-row--col">
             <ul className="filter">
-              <li>
-                <span className="title">All Contacts</span>
+              <li style={{ cursor: 'initial' }}>
+                <h4 className="title">All Contacts</h4>
 
                 <span className="badge counter">{contactsCount} Contacts</span>
               </li>
@@ -39,6 +39,7 @@ function Header({ user, contactsCount, onInputChange }) {
         </div>
       </div>
       <HeaderSearch
+        isSearching={isSearching}
         onInputChange={text => onInputChange(text)}
         placeholder="Search all contacts ..."
       />

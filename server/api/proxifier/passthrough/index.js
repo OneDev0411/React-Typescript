@@ -22,7 +22,7 @@ const handleErrorObject = text => {
   try {
     return JSON.parse(text)
   } catch (e) {
-    return text
+    return { text }
   }
 }
 
@@ -121,14 +121,6 @@ router.post(
       }
 
       const { status, text } = e.response
-
-      if (shouldStream) {
-        return finishStream({
-          success: false,
-          statusCode: status,
-          ...handleErrorObject(text)
-        })
-      }
 
       ctx.status = status
       ctx.body = {

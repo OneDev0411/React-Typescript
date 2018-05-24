@@ -5,7 +5,7 @@ import UserAvatar from '../../../../../Partials/UserAvatar'
 import AddRole from './add-role'
 import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
-import { roleName } from '../../utils/roles'
+import { roleName, getLegalFullName } from '../../utils/roles'
 import RoleCrmIntegration from './crm-integration'
 
 class Roles extends React.Component {
@@ -14,11 +14,6 @@ class Roles extends React.Component {
     deletingRoleId: null,
     showRoleModal: false
   }
-
-  getFullName = role =>
-    role.legal_full_name ||
-    (role.user && role.user.display_name) ||
-    role.company_title
 
   getAvatarTitle = role => {
     const { user, legal_first_name, legal_last_name, company_title } = role
@@ -148,7 +143,7 @@ class Roles extends React.Component {
                 </div>
 
                 <div className="name">
-                  <div className="title">{this.getFullName(role)}</div>
+                  <div className="title">{getLegalFullName(role)}</div>
                   <div className="role">{roleName(role.role)}</div>
                 </div>
 

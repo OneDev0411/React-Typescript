@@ -3,7 +3,7 @@ import { Modal, Button, Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import { getStatusColorClass } from '../../../../../../utils/listing'
 
-export default class extends React.Component {
+export default class ListingStatusModal extends React.Component {
   constructor(props) {
     super(props)
 
@@ -27,7 +27,17 @@ export default class extends React.Component {
     const isLeaseDeal = deal.property_type.includes('Lease')
 
     if (isLeaseDeal) {
-      return ['Lease', 'Lease Contract', 'Leased']
+      return isBackOffice
+        ? [
+            'Active',
+            'Lease',
+            'Lease Contract',
+            'Leased',
+            'Cancelled',
+            'Withdrawn',
+            'Temp Off Market'
+          ]
+        : ['Active', 'Lease', 'Lease Contract', 'Leased']
     }
 
     return isBackOffice

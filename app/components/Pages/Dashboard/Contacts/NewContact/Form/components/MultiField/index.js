@@ -78,7 +78,7 @@ export function MultiField({
                   <IconButton
                     type="button"
                     color="#2196f3"
-                    onClick={() => mutators.pop(name, undefined)}
+                    onClick={() => fields.remove(index)}
                   >
                     <RemoveIcon />
                   </IconButton>
