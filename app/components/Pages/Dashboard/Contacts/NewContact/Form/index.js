@@ -147,9 +147,12 @@ class NewContactForm extends Component {
   }
 
   titleOptions = () => {
-    const options = selectDefinitionByName(this.props.attributeDefs, 'title')
+    const titleAttribute = selectDefinitionByName(
+      this.props.attributeDefs,
+      'title'
+    )
 
-    return (options && options.labels) || []
+    return (titleAttribute && titleAttribute.enum_values) || []
   }
 
   render() {
