@@ -7,9 +7,14 @@ import styled from 'styled-components'
 import {
   selectContacts,
   selectContactsInfo,
+  selectContactsPage,
+  selectContactsPages,
   isFetchingContactsList
 } from '../../../../../reducers/contacts/list'
-import { deleteContacts } from '../../../../../store_actions/contacts'
+import {
+  deleteContacts,
+  getContacts
+} from '../../../../../store_actions/contacts'
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
 
 import Header from './header'
@@ -121,8 +126,16 @@ class ContactsList extends React.Component {
     this.setState({ selectedRows: newSelectedRows })
   }
 
+  fetchPage = async page => {
+    this.props.getContacts(page)
+  }
+
   onPageChange = page => {
     this.setState({ page })
+
+    if (!selectContactsPage(this.props.list, page + 1)) {
+      this.fetchPage(page + 1)
+    }
   }
 
   render() {
@@ -133,14 +146,11 @@ class ContactsList extends React.Component {
       deletingContacts,
       selectedRows
     } = this.state
-    const {
-      user,
-      listInfo,
-      contacts,
-      isFetching,
-      loadingImport,
-      attributeDefs
-    } = this.props
+    const { user, list, loadingImport, attributeDefs } = this.props
+    const contacts = selectContacts(list)
+    const listInfo = selectContactsInfo(list)
+    const pages = _.size(selectContactsPages(list))
+    const isFetching = isFetchingContactsList(list)
     const data = filteredContacts || contacts
     let { total: totalCount } = listInfo
 
@@ -167,7 +177,7 @@ class ContactsList extends React.Component {
       )
     }
 
-    const selectedRowsLength = Object.keys(selectedRows).length
+    const selectedRowsLength = _.size(selectedRows)
 
     return (
       <div className="list">
@@ -205,9 +215,10 @@ class ContactsList extends React.Component {
             data={data}
             deletingContacts={deletingContacts}
             handleOnDelete={this.handleOnDelete}
-            loading={isSearching}
+            loading={isSearching || isFetching}
             onPageChange={this.onPageChange}
             page={page}
+            pages={pages}
             selectedRows={selectedRows}
             totalCount={totalCount}
             toggleSelectedRow={this.toggleSelectedRow}
@@ -223,15 +234,14 @@ function mapStateToProps({ user, contacts }) {
 
   return {
     user,
+    list,
     loadingImport,
-    attributeDefs,
-    contacts: selectContacts(list),
-    listInfo: selectContactsInfo(list),
-    isFetching: isFetchingContactsList(list)
+    attributeDefs
   }
 }
 
 export default connect(mapStateToProps, {
+  getContacts,
   confirmation,
   deleteContacts
 })(ContactsList)

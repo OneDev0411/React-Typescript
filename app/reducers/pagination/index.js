@@ -28,7 +28,10 @@ const currentPage = (currentPage = 0, action = {}) =>
   action.type === 'REQUEST_PAGE' ? action.payload.page : currentPage
 
 function createPaginationReducer(resultKey) {
-  const onlyForKey = reducer => (state = {}, action = {}) => {
+  const onlyForKey = reducer => (
+    state = { pages: {}, currentPage: 0 },
+    action = {}
+  ) => {
     if (typeof action.meta === 'undefined') {
       return state
     }

@@ -104,14 +104,6 @@ export const isFetchingContactsList = state => state.isFetching
 
 export const getContactsListError = state => state.error
 
-export const selectContactsPage = (state, page) => {
-  if (state.pagination.pages[page] == null) {
-    return null
-  }
+export const selectContactsPage = (state, page) => state.pagination.pages[page]
 
-  const { ids } = state.pagination.pages[page]
-
-  if (Array.isArray(ids)) {
-    return ids.map(id => state.byId[id])
-  }
-}
+export const selectContactsPages = state => state.pagination.pages

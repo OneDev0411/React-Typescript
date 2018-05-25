@@ -31,8 +31,7 @@ const InstantChat = Load({
 })
 
 // contacts
-import { getContacts, getAttributeDefs } from '../store_actions/contacts'
-import { selectContacts } from '../reducers/contacts/list'
+import { getAttributeDefs } from '../store_actions/contacts'
 
 // favorites
 import { selectListings } from '../reducers/listings'
@@ -78,7 +77,7 @@ class App extends Component {
   }
 
   async initializeApp() {
-    const { data, deals, dispatch, contactsList } = this.props
+    const { data, deals, dispatch } = this.props
     let { user } = this.props
 
     if (user) {
@@ -98,10 +97,7 @@ class App extends Component {
       }
 
       // load contacts
-      if (contactsList.length === 0) {
-        dispatch(getContacts())
-        dispatch(getAttributeDefs())
-      }
+      dispatch(getAttributeDefs())
 
       // load notifications
       dispatch(getAllNotifications())
@@ -315,16 +311,14 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user, data, favorites, deals, contacts, chatroom } = state
-  const { list: contactsList } = contacts
+  const { user, data, favorites, deals, chatroom } = state
 
   return {
     data,
     user,
     deals: deals.list,
     rooms: chatroom.rooms,
-    favoritesListings: selectListings(favorites.listings),
-    contactsList: selectContacts(contactsList)
+    favoritesListings: selectListings(favorites.listings)
   }
 }
 

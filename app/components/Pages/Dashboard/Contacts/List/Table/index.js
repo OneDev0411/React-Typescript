@@ -101,6 +101,7 @@ class ContactsList extends React.Component {
       loading,
       onPageChange,
       page,
+      pages,
       totalCount
     } = this.props
 
@@ -112,6 +113,7 @@ class ContactsList extends React.Component {
         totalCount={totalCount}
         minRows={0}
         page={page}
+        pages={pages}
         pageSize={pageSize}
         defaultPageSize={defaultPageSize}
         pageSizeOptions={[25, 50, 100]}
@@ -123,9 +125,11 @@ class ContactsList extends React.Component {
         PaginationComponent={Pagination}
         TdComponent={TrComponent}
         LoadingComponent={LoadingComponent}
-        NoDataComponent={() => (
-          <NoSearchResults description="Try typing another name, email, phone or tag." />
-        )}
+        NoDataComponent={() =>
+          loading ? null : (
+            <NoSearchResults description="Try typing another name, email, phone or tag." />
+          )
+        }
         className="contacts-list-table"
         getTrProps={(state, { original: { id: contactId } }) => {
           if (deletingContacts.includes(contactId)) {
