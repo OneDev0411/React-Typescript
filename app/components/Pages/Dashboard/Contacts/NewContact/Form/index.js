@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import arrayMutators from 'final-form-arrays'
 import { Form, Field } from 'react-final-form'
+import { FORM_ERROR } from 'final-form'
 
 import { createContacts } from '../../../../../../store_actions/contacts/create-contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
@@ -12,10 +13,11 @@ import { Wrapper, FormContainer, Footer } from './styled-components/form'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import { TextField } from './components/TextField'
 import { Select } from './components/Select'
+import { Autocomplete } from './components/Autocomplete'
 import { Emails } from './Emails'
 import { Phones } from './Phones'
 
-const TITLES = getDefaultOptions(['Mr', 'Ms', 'Mrs', 'Miss', 'Dr'])
+import Alert from '../../..//Partials/Alert'
 
 const STAGE_OPTIONS = getDefaultOptions([
   'General',
@@ -25,18 +27,10 @@ const STAGE_OPTIONS = getDefaultOptions([
   'Unqualified Lead'
 ])
 
-const validate = values => {
-  const errors = {}
-
-  if (!values.first_name) {
-    errors.first_name = 'Required'
-  }
-
-  if (!values.last_name) {
-    errors.last_name = 'Required'
-  }
-
-  return errors
+const INITIAL_VALUES = {
+  stage: { title: 'General', value: 'General' },
+  email: [{ label: { title: 'Personal Email', value: 'Personal' } }],
+  phone_number: [{ label: { title: 'Mobile Phone', value: 'Mobile' } }]
 }
 
 class NewContactForm extends Component {
@@ -71,7 +65,7 @@ class NewContactForm extends Component {
 
     selectFields.forEach(field => {
       const attribute_def = selectDefinitionByName(attributeDefs, field)
-      const text = values[field].value
+      const text = (values[field] && values[field].value) || values[field]
 
       if (attribute_def && text) {
         attributes.push({
@@ -104,6 +98,24 @@ class NewContactForm extends Component {
 
   // todo: handle submit error
   handleOnSubmit = async values => {
+    const isEmptyTextField = field => !values[field] || !values[field].trim()
+    const isEmptyFieldArray = fields =>
+      fields.every(field => !field.text || !field.text.trim())
+
+    if (
+      isEmptyTextField('title') &&
+      isEmptyTextField('first_name') &&
+      isEmptyTextField('middle_name') &&
+      isEmptyTextField('last_name') &&
+      isEmptyFieldArray(values.email) &&
+      isEmptyFieldArray(values.phone_number)
+    ) {
+      return {
+        [FORM_ERROR]:
+          'Please fill in any of the contacts profile fields to add your contact.'
+      }
+    }
+
     try {
       const attributes = this.formatPreSave(values)
       const query = {
@@ -134,42 +146,44 @@ class NewContactForm extends Component {
     }
   }
 
+  titleOptions = () => {
+    const titleAttribute = selectDefinitionByName(
+      this.props.attributeDefs,
+      'title'
+    )
+
+    return (titleAttribute && titleAttribute.enum_values) || []
+  }
+
   render() {
     return (
       <Wrapper>
         <Form
-          validate={validate}
           onSubmit={this.handleOnSubmit}
-          initialValues={{
-            title: { title: '-Select-', value: null },
-            stage: { title: 'General', value: 'General' },
-            email: [{ label: { title: 'Personal Email', value: 'Personal' } }],
-            phone_number: [
-              { label: { title: 'Mobile Phone', value: 'Mobile' } }
-            ]
-          }}
           mutators={{
             ...arrayMutators
           }}
+          initialValues={INITIAL_VALUES}
           render={({
             reset,
             pristine,
             validating,
             handleSubmit,
             mutators,
-            submitting
+            submitting,
+            submitError
           }) => (
             <FormContainer onSubmit={handleSubmit}>
               <div>
                 <Field
-                  defaultOptions={TITLES}
-                  component={Select}
+                  component={Autocomplete}
+                  items={this.titleOptions()}
                   name="title"
                   title="Title"
+                  placeholder="Title"
                 />
                 <Field
                   component={TextField}
-                  isRequired
                   name="first_name"
                   title="First Name"
                 />
@@ -179,7 +193,6 @@ class NewContactForm extends Component {
                   title="Middle Name"
                 />
                 <Field
-                  isRequired
                   component={TextField}
                   name="last_name"
                   title="Last Name"
@@ -194,9 +207,17 @@ class NewContactForm extends Component {
                 />
               </div>
               <Footer style={{ justifyContent: 'space-between' }}>
+                {submitError && (
+                  <Alert
+                    type="error"
+                    style={{ textAlign: 'left', marginBottom: '2em' }}
+                  >
+                    {submitError}
+                  </Alert>
+                )}
                 <ActionButton
                   type="button"
-                  onClick={reset}
+                  onClick={() => reset(INITIAL_VALUES)}
                   style={{ marginRight: '1em' }}
                   disabled={submitting || pristine}
                 >

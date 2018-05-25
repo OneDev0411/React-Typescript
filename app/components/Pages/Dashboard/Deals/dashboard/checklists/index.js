@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import { PanelGroup } from 'react-bootstrap'
 import cn from 'classnames'
+
 import Tasks from '../tasks'
 
 class Checklist extends React.Component {
@@ -59,12 +59,12 @@ class Checklist extends React.Component {
     let terminatedChecklistsCount = 0
     let deactivatedChecklistsCount = 0
     const { showTerminatedChecklists, showDeactivatedChecklists } = this.state
-    const { deal, checklists, isBackOffice } = this.props
+    const { deal, checklists } = this.props
     const isWebkit = 'WebkitAppearance' in document.documentElement.style
 
     return (
       <div className="checklists-container" data-simplebar={!isWebkit || null}>
-        <PanelGroup>
+        <div>
           {!deal.checklists && (
             <div className="loading">
               <i className="fa fa-spin fa-spinner fa-3x" />
@@ -104,7 +104,7 @@ class Checklist extends React.Component {
               <Tasks key={id} deal={deal} checklist={checklists[id]} />
             ))
             .value()}
-        </PanelGroup>
+        </div>
 
         <button
           className={cn('show-terminated-btn', {

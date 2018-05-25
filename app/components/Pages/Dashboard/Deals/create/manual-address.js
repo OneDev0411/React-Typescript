@@ -204,11 +204,7 @@ export default class ManualAddress extends React.Component {
         shouldCloseOnOverlayClick={false}
         handleOnClose={this.onClose}
       >
-        <Modal.Header
-          title="Select Documents"
-          showClose
-          handleOnClose={this.onClose}
-        />
+        <Modal.Header title="Address" showClose handleOnClose={this.onClose} />
         <Form
           onSubmit={this.onSubmit}
           validate={this.validate}
@@ -221,41 +217,25 @@ export default class ManualAddress extends React.Component {
               >
                 <Field
                   name="street_dir_prefix"
-                  component={({ meta, input }) => (
-                    <SelectInput
-                      input={input}
-                      meta={meta}
-                      clearable
-                      placeholder="Street Prefix"
-                      onChange={data =>
-                        input.onChange(data ? data.value : null)
-                      }
-                      options={STREET_PREFIX.map(value => ({
-                        value,
-                        label: value
-                      }))}
-                    />
-                  )}
+                  clearable
+                  placeholder="Street Prefix"
+                  options={STREET_PREFIX.map(value => ({
+                    value,
+                    label: value
+                  }))}
+                  component={SelectInput}
                 />
 
                 <Field
                   name="street_suffix"
-                  component={({ meta, input }) => (
-                    <SelectInput
-                      input={input}
-                      meta={meta}
-                      clearable
-                      searchable
-                      placeholder="Street Suffix"
-                      onChange={data =>
-                        input.onChange(data ? data.value : null)
-                      }
-                      options={STREET_SUFFIX.map(value => ({
-                        value,
-                        label: value
-                      }))}
-                    />
-                  )}
+                  clearable
+                  searchable
+                  placeholder="Street Suffix"
+                  options={STREET_SUFFIX.map(value => ({
+                    value,
+                    label: value
+                  }))}
+                  component={SelectInput}
                 />
 
                 <Field
@@ -288,23 +268,15 @@ export default class ManualAddress extends React.Component {
 
                 <Field
                   name="state"
-                  component={({ meta, input }) => (
-                    <SelectInput
-                      input={input}
-                      meta={meta}
-                      isRequired
-                      clearable
-                      searchable
-                      placeholder="State"
-                      onChange={data =>
-                        input.onChange(data ? data.value : null)
-                      }
-                      options={_.map(STATES, name => ({
-                        value: name,
-                        label: name
-                      }))}
-                    />
-                  )}
+                  searchable
+                  clearable
+                  isRequired
+                  placeholder="State"
+                  options={_.map(STATES, name => ({
+                    value: name,
+                    label: name
+                  }))}
+                  component={SelectInput}
                 />
 
                 <Field

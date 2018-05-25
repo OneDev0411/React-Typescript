@@ -22,7 +22,9 @@ function Header({ user, contactsCount, onInputChange, isSearching }) {
               <li style={{ cursor: 'initial' }}>
                 <h4 className="title">All Contacts</h4>
 
-                <span className="badge counter">{contactsCount} Contacts</span>
+                <span className="badge counter">
+                  {contactsCount.toLocaleString()} Contacts
+                </span>
               </li>
             </ul>
           </div>

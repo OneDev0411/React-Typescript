@@ -1,38 +1,31 @@
 import React from 'react'
+
 import Dropdown from '../../components/Dropdown'
-
-const DEFAULT_OPTION_TEXT = '-Select-'
-
-const OPTIONS = {
-  default: {
-    title: DEFAULT_OPTION_TEXT
-  },
-  mr: {
-    title: 'Mr'
-  },
-  ms: {
-    title: 'Ms'
-  },
-  mrs: {
-    title: 'Mrs'
-  },
-  miss: {
-    title: 'Miss'
-  },
-  dr: {
-    title: 'Dr'
-  }
-}
 
 class Title extends React.Component {
   handleOnSelect = text => {
-    const { onChange, field } = this.props
+    this.props.onChange({ ...this.props.field, text })
+  }
 
-    if (text === DEFAULT_OPTION_TEXT) {
-      return onChange({ ...field, text: '' })
+  getOptions = field => {
+    const options = {}
+
+    if (
+      !field ||
+      !field.attribute_def ||
+      !Array.isArray(field.attribute_def.enum_values)
+    ) {
+      return options
     }
 
-    onChange({ ...field, text })
+    field.attribute_def.enum_values.forEach(value => {
+      options[value] = {
+        name: value,
+        title: value
+      }
+    })
+
+    return options
   }
 
   render() {
@@ -46,11 +39,11 @@ class Title extends React.Component {
           className="c-contact-details-item__field__label-select"
         >
           <Dropdown
-            name="title"
-            options={OPTIONS}
+            defaultTitle={(field && field.text) || '-Select-'}
             disabled={disabled}
-            defaultTitle={(field && field.text) || '--Select--'}
             handleOnSelect={this.handleOnSelect}
+            name="title"
+            options={this.getOptions(field)}
           />
         </span>
       </li>

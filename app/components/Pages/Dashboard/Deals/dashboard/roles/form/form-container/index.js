@@ -46,6 +46,7 @@ export const RoleFormContainer = ({
       (label, name) => (
         <Field
           key={name}
+          parse={value => value || ''}
           name={name}
           placeholder={label}
           isRequired={requiredFields.includes(name)}
@@ -57,6 +58,7 @@ export const RoleFormContainer = ({
     <Field
       name="company_title"
       placeholder="Company"
+      parse={value => value || ''}
       component={AutoCompleteInput}
       defaultSelectedItem={form && form.email}
       isRequired={requiredFields.includes('company_title')}
@@ -70,6 +72,7 @@ export const RoleFormContainer = ({
     <Field
       name="email"
       placeholder="Email"
+      parse={value => value || ''}
       component={AutoCompleteInput}
       defaultSelectedItem={form && form.email}
       isRequired={requiredFields.includes('email')}
@@ -83,6 +86,7 @@ export const RoleFormContainer = ({
     <Field
       name="phone_number"
       placeholder="Phone"
+      parse={value => value || ''}
       component={AutoCompleteInput}
       defaultSelectedItem={form && form.phone_number}
       isRequired={requiredFields.includes('phone_number')}
