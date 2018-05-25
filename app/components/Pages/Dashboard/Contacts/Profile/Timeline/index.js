@@ -2,7 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import timeago from 'timeago.js'
 import _ from 'underscore'
+
 import TimelineItem from './item'
+import CRMTaskItem from './crm-item'
 import * as userActions from './userActionsHelper'
 import Loading from '../../../../../Partials/Loading'
 import {
@@ -27,7 +29,7 @@ class Timeline extends React.Component {
 
     return {
       ...attributes,
-      ...{ time: timeago().format(activity.created_at * 1000) }
+      time: timeago().format(activity.created_at * 1000)
     }
   }
 
@@ -66,13 +68,22 @@ class Timeline extends React.Component {
 
     return (
       <div>
-        {_.map(activities, (activity, id) => {
-          const { object } = activity
+        {_.map(activities, activity => {
+          if (activity.type === 'crm_task') {
+            console.log('what')
 
-          if (object && _.size(activity.object) > 0) {
+            return (
+              <CRMTaskItem
+                task={activity}
+                key={`timeline_item_${activity.id}`}
+              />
+            )
+          }
+
+          if (activity.object && !_.isEmpty(activity.object)) {
             return (
               <TimelineItem
-                key={`timeline_item_${id}`}
+                key={`timeline_item_${activity.id}`}
                 attributes={this.getAttributes(name, activity)}
                 name={name}
                 avatar={avatar}
