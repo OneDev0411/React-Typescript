@@ -31,7 +31,7 @@ function getLastAddressIndex(attributes, mappedFields) {
 /**
  * return new created options for new indexs
  * @param {Object} attributes - all attributes definitions
- * @param {*} max - last address index
+ * @param {Integer} max - last address index
  */
 function createNewAddressOptions(attributes, max) {
   const options = {}
@@ -56,6 +56,25 @@ function createNewAddressOptions(attributes, max) {
 }
 
 /**
+ * checks whether an option is disabled or not
+ * mapped address fileds should be disabled
+ * @param {Object} attributes - all attributes definitions
+ * @param {Object} mappedFields - list of mapped fields
+ * @param {Integer} definitionId - attribute definition id
+ * @param {Integer} index - the option index
+ */
+function isOptionDisabled(attributes, mappedFields, definitionId, index) {
+  if (!isAddressField(attributes, definitionId)) {
+    return false
+  }
+
+  return _.some(mappedFields, {
+    definitionId,
+    index
+  })
+}
+
+/**
  * create field options based on indexing system
  * @param {Object} attributes - all attributes definitions
  * @param {Object} mappedFields - list of mapped fields
@@ -76,6 +95,7 @@ function createOptions(attributes, mappedFields) {
   return _.chain(options)
     .filter(({ editable, show }) => editable || show)
     .map(({ id, label, index = 0 }) => ({
+      disabled: isOptionDisabled(attributes, mappedFields, id, index),
       value: `${id}:${index}`,
       label: index > 0 ? `${label} ${index}` : label
     }))
