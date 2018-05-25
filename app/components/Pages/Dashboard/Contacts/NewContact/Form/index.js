@@ -27,6 +27,12 @@ const STAGE_OPTIONS = getDefaultOptions([
   'Unqualified Lead'
 ])
 
+const INITIAL_VALUES = {
+  stage: { title: 'General', value: 'General' },
+  email: [{ label: { title: 'Personal Email', value: 'Personal' } }],
+  phone_number: [{ label: { title: 'Mobile Phone', value: 'Mobile' } }]
+}
+
 class NewContactForm extends Component {
   formatPreSave = values => {
     const attributes = []
@@ -151,16 +157,10 @@ class NewContactForm extends Component {
       <Wrapper>
         <Form
           onSubmit={this.handleOnSubmit}
-          initialValues={{
-            stage: { title: 'General', value: 'General' },
-            email: [{ label: { title: 'Personal Email', value: 'Personal' } }],
-            phone_number: [
-              { label: { title: 'Mobile Phone', value: 'Mobile' } }
-            ]
-          }}
           mutators={{
             ...arrayMutators
           }}
+          initialValues={INITIAL_VALUES}
           render={({
             reset,
             pristine,
@@ -214,7 +214,7 @@ class NewContactForm extends Component {
                 )}
                 <ActionButton
                   type="button"
-                  onClick={reset}
+                  onClick={() => reset(INITIAL_VALUES)}
                   style={{ marginRight: '1em' }}
                   disabled={submitting || pristine}
                 >
