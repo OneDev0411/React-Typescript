@@ -9,7 +9,11 @@ TypeCell.propTypes = {
 }
 
 export function TypeCell({ type }) {
-  const Icon = icons.filter(i => i.title === type)[0].icon
+  if (!icons[type]) {
+    return null
+  }
+
+  const Icon = icons[type].icon
 
   return (
     <FlexContainer>

@@ -88,7 +88,7 @@ class CreateDeal extends React.Component {
   /**
    * validate form
    */
-  validateForm(showConfirmationMessage = false) {
+  validateForm() {
     const {
       dealSide,
       dealPropertyType,
@@ -532,7 +532,8 @@ class CreateDeal extends React.Component {
                     <DealAgents
                       hasError={this.hasError('selling_agents')}
                       scenario="CreateDeal"
-                      dealSide="Selling"
+                      dealSide={dealSide}
+                      showDealSideAs="Selling"
                       agents={sellingAgents}
                       shouldPrepopulateAgent={false}
                       isCommissionRequired={this.getIsCommissionRequired()}
@@ -603,7 +604,9 @@ class CreateDeal extends React.Component {
                 )}
               </div>
             )}
+        </div>
 
+        <div className="actions">
           {!saving &&
             submitError && (
               <Alert
@@ -612,9 +615,7 @@ class CreateDeal extends React.Component {
                 style={{ float: 'left', marginBottom: '2rem' }}
               />
             )}
-        </div>
 
-        <div className="footer">
           <Button
             className={cn('btn btn-primary create-deal-button', {
               disabled: !canCreateDeal

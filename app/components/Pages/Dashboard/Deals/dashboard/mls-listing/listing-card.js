@@ -109,7 +109,9 @@ class ListingCard extends React.Component {
               {isSavingAddress ? (
                 <i className="fa fa-spin fa-spinner" />
               ) : (
-                Deal.get.address(deal, roles)
+                <div className="deal-listing-card__address__text">
+                  {Deal.get.address(deal, roles)}
+                </div>
               )}
             </div>
           </Tooltip>

@@ -184,7 +184,7 @@ class ContactsList extends React.Component {
           <SecondHeader>
             <SecondHeaderText>
               {selectedRowsLength > 0 ? `${selectedRowsLength} of ` : ''}
-              {`${totalCount} Contacts`}
+              {`${totalCount.toLocaleString()} Contacts`}
             </SecondHeaderText>
             <ExportContacts selectedRows={selectedRows} />
             {selectedRowsLength > 0 && (
