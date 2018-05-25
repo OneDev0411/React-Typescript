@@ -1,16 +1,18 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
 import { Form, Field } from 'react-final-form'
 
 import BasicModal from '../../../../../../../../views/components/BasicModal'
 import ActionButton from '../../../../../../../../views/components/Button/ActionButton'
 import TextField from './TextField'
-import { LABELS_OPTIONS } from '../../index'
 import Dropdown from '../../../../components/Dropdown'
+
+import { getAddressLabels } from '../../../../../../../../models/contacts/helpers/get-attribute-labels'
 
 const isPostalCode = value =>
   !value || new RegExp(/(^\d{5}$)|(^\d{5}-\d{4}$)/).exec(value)
     ? undefined
-    : 'Please include numbers. You have added a letter or special character.'
+    : 'You only have allowed to using numbers and dash. Like 75233 or 65132-2312.'
 
 // const composeValidators = (...validators) => value =>
 //   validators.reduce((error, validator) => error || validator(value), undefined)
@@ -38,6 +40,7 @@ const validate = values => {
 function AddAddressModal({
   isOpen,
   submitting,
+  attributeDefs,
   handleOnClose,
   handleOnSubmit
 }) {
@@ -52,7 +55,7 @@ function AddAddressModal({
         onSubmit={handleOnSubmit}
         initialValues={{ label: 'Other' }}
         render={({ reset, values, pristine, validating, handleSubmit }) => (
-          <div>
+          <Fragment>
             <BasicModal.Header title="Add New Address" />
             <BasicModal.Body className="c-new-address-modal__body">
               <div
@@ -95,7 +98,7 @@ function AddAddressModal({
                         </label>
                         <Dropdown
                           name="add-new-address_label"
-                          options={LABELS_OPTIONS}
+                          options={getAddressLabels(attributeDefs)}
                           disabled={submitting}
                           defaultTitle={values.label}
                           handleOnSelect={value => onChange(value)}
@@ -105,38 +108,38 @@ function AddAddressModal({
                   </Field>
                 </div>
               </div>
+
+              <Field
+                name="unit_number"
+                component={TextField}
+                disabled={submitting}
+                title="Unit Number"
+              />
+
+              <Field
+                name="street_number"
+                component={TextField}
+                disabled={submitting}
+                title="Street Number"
+              />
+              <Field
+                name="street_prefix"
+                component={TextField}
+                disabled={submitting}
+                title="Street Prefix"
+              />
               <Field
                 name="street_name"
                 isRequired
                 component={TextField}
                 disabled={submitting}
                 title="Street Name"
-                placeholder="Buyers Club"
               />
-
               <Field
-                name="city"
-                isRequired
+                name="street_suffix"
                 component={TextField}
                 disabled={submitting}
-                title="City"
-                placeholder="Dallas"
-              />
-
-              <Field
-                name="state"
-                component={TextField}
-                disabled={submitting}
-                title="State"
-                placeholder="Texas"
-              />
-
-              <Field
-                name="country"
-                component={TextField}
-                disabled={submitting}
-                title="Country"
-                placeholder="USA"
+                title="Street Suffix"
               />
 
               <Field
@@ -145,6 +148,28 @@ function AddAddressModal({
                 disabled={submitting}
                 title="Postal Code"
                 placeholder="65619 or 34353-2323"
+              />
+
+              <Field
+                name="city"
+                isRequired
+                component={TextField}
+                disabled={submitting}
+                title="City"
+              />
+
+              <Field
+                name="state"
+                component={TextField}
+                disabled={submitting}
+                title="State"
+              />
+
+              <Field
+                name="country"
+                component={TextField}
+                disabled={submitting}
+                title="Country"
               />
             </BasicModal.Body>
             <BasicModal.Footer style={{ justifyContent: 'space-between' }}>
@@ -173,11 +198,15 @@ function AddAddressModal({
                 </ActionButton>
               </div>
             </BasicModal.Footer>
-          </div>
+          </Fragment>
         )}
       />
     </BasicModal>
   )
 }
 
-export default AddAddressModal
+function mapStateToProps({ contacts }) {
+  return { attributeDefs: contacts.attributeDefs }
+}
+
+export default connect(mapStateToProps)(AddAddressModal)

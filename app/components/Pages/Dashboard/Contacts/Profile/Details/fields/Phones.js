@@ -1,60 +1,43 @@
 import React from 'react'
+import { connect } from 'react-redux'
+
 import MultiFields from '../components/MultiFields'
 
-const LABEL_OPTIONS = {
-  mobile: {
-    name: 'Mobile',
-    title: 'Mobile Phone'
-  },
-  home: {
-    name: 'Home',
-    title: 'Home Phone'
-  },
-  work: {
-    name: 'Work',
-    title: 'Work Phone'
-  },
-  main: {
-    name: 'Main',
-    title: 'Main Phone'
-  },
-  default: {
-    name: 'Other',
-    title: 'Other Phone'
-  }
-}
+import { getPhoneNumberLabels } from '../../../../../../../models/contacts/helpers/get-attribute-labels'
+import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 
-export default function Phones({ contact }) {
-  const validator = async phone => {
-    if (phone) {
-      const {
-        PhoneNumberUtil
-      } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
-      const phoneUtil = PhoneNumberUtil.getInstance()
+function Phones({ contact, attributeDef }) {
+  const isPhoneNumber = async value => {
+    const {
+      PhoneNumberUtil
+    } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+    const phoneUtil = PhoneNumberUtil.getInstance()
 
-      try {
-        let phoneNumber = phoneUtil.parse(phone, 'US')
+    try {
+      let phoneNumber = phoneUtil.parse(value, 'US')
 
-        const isValid = await phoneUtil.isValidNumber(phoneNumber)
-
-        return isValid
-      } catch (error) {
-        return false
-      }
-    } else {
+      return phoneUtil.isValidNumber(phoneNumber)
+    } catch (error) {
       return false
     }
   }
 
   return (
     <MultiFields
+      attributeName="phone_number"
       contact={contact}
-      type="phone_number"
-      name="phone_numbers"
-      validator={validator}
-      labels={LABEL_OPTIONS}
+      defaultLabels={getPhoneNumberLabels(attributeDef)}
       placeholder="313-444-9898"
+      validator={isPhoneNumber}
       validationText="Invalid phone number."
     />
   )
 }
+
+function mapStateToProps({ contacts }) {
+  return {
+    attributeDef: selectDefinitionByName(contacts.attributeDefs, 'phone_number')
+  }
+}
+
+export default connect(mapStateToProps)(Phones)

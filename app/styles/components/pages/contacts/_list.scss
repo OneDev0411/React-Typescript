@@ -65,6 +65,9 @@
 
 %contacts-list--table {
   .contacts-list-table {
+    .rt-tbody{
+      padding-bottom: 2em;
+    }
     padding: 2em 2em 0;
     .select-row {
       visibility: hidden;

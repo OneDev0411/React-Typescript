@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
 import { selectContacts } from '../../../reducers/contacts/list'
 
 import BareModal from '../BareModal'
@@ -63,7 +64,8 @@ SelectContactModal.defaultProps = defaultProps
 
 function mapStateToProps({ contacts: { list } }) {
   return {
-    contacts: selectContacts(list).slice(0, 500)
+    // loading first 100 contacts in initial load of modal
+    contacts: selectContacts(list).slice(0, 100)
   }
 }
 

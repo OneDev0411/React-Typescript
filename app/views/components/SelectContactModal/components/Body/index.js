@@ -7,7 +7,6 @@ import _ from 'underscore'
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
 import Loading from '../../../../../components/Partials/Loading'
-import { extractUserInfoFromContact } from '../../../../../models/contacts'
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
 
 const ContactsListContainer = styled.div`
@@ -53,15 +52,17 @@ class Body extends Component {
   }
 
   search = _.debounce(async value => {
+    if (!value) {
+      return this.setState({ items: this.props.contacts })
+    }
+
     try {
       this.setState({ isSearching: true })
 
-      const response = await searchContacts(value)
+      const items = await searchContacts(value)
 
-      if (Array.isArray(response.data)) {
-        this.setState({
-          items: response.data
-        })
+      if (Array.isArray(items)) {
+        this.setState({ items })
       }
     } catch (error) {
       console.log(error)
@@ -71,14 +72,8 @@ class Body extends Component {
   }, 300)
 
   handleOnChange = async event => {
-    const { value } = event.target
-
-    if (!value) {
-      return
-    }
-
     // call the debounce function
-    this.search(value)
+    this.search(event.target.value)
   }
 
   handleItemToString = item => {
@@ -90,9 +85,6 @@ class Body extends Component {
 
     return display_name || 'unknown'
   }
-
-  selectedItemHandler = item =>
-    this.props.handleSelectedItem(extractUserInfoFromContact(item))
 
   render() {
     const { items, isSearching } = this.state
@@ -127,7 +119,7 @@ class Body extends Component {
                         item={item}
                         key={item.id || `downshift_search_result_item_${index}`}
                         {...getItemProps({ item })}
-                        onClickHandler={this.selectedItemHandler}
+                        onClickHandler={this.props.handleSelectedItem}
                         isHighlighted={highlightedIndex === index}
                       />
                     ))}

@@ -2,12 +2,20 @@ import _ from 'underscore'
 import SuperAgent from 'superagent'
 import store from '../../stores'
 import config from '../../../config/public'
+import decodeStream from './middlewares/decode-stream'
 
 export default class Fetch {
-  constructor() {
+  constructor(options) {
     const isServerSide = typeof window === 'undefined'
     const isTestEnv = process.env.NODE_ENV === 'test'
     const isProductionEnv = process.env.NODE_ENV === 'production'
+
+    this.options = Object.assign(
+      {
+        stream: false
+      },
+      options
+    )
 
     this._middlewares = {}
     this._autoLogin = true
@@ -35,7 +43,7 @@ export default class Fetch {
     )
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
-    // .retry(2)
+      .set('X-Stream', this.options.stream)
 
     // auto append access-token
     if (this._autoLogin && this._isLoggedIn) {
@@ -114,9 +122,9 @@ export default class Fetch {
   }
 
   onResponse(response) {
-    if (~~response.status < 200 || ~~response.status > 207) {
-      return response
-    }
+    response = decodeStream(response, this.options)
+
+    return response
   }
 
   createErrorLog(code, error = {}) {

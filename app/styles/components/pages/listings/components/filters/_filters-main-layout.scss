@@ -11,7 +11,7 @@
   border-radius: 5px;
   background-color: #f8f8f8;
   .l-listings--logged & {
-    left: 23rem;
+    left: $app-sidenav-width + 12rem;
   }
   &.c-filters--isOpen {
     pointer-events: auto;

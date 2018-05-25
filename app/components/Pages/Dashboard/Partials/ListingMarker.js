@@ -72,7 +72,7 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
     price = listing.close_price
   }
 
-  const price_small = listing_util.getSmallPrice(price)
+  const price_small = listing_util.shortPrice(price)
 
   let active_class = ''
 

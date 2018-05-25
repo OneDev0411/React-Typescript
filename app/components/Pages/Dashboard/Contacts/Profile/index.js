@@ -1,12 +1,13 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
-
 import { Tab, Nav, NavItem } from 'react-bootstrap'
+
+import { getContactStage } from '../../../../../models/contacts/helpers/get-contact-stage'
+import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
 import Stage from './Stage'
-import Contact from '../../../../../models/contacts'
 import Header from './Header'
 import Information from './Information'
 import Names from './Names'
@@ -25,26 +26,19 @@ import { getTasks } from '../../../../../models/tasks'
 
 import {
   getContact,
-  getContactActivities,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
-import { selectTags } from '../../../../../reducers/contacts/tags'
-import { selectContact } from '../../../../../reducers/contacts/list'
+import {
+  selectContact,
+  isFetchingContactsList
+} from '../../../../../reducers/contacts/list'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import { normalizeContact } from '../../../../../views/utils/association-normalizers'
 
 class ContactProfile extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      tasks: [],
-      activeTab: 'timeline'
-    }
-
-    this.handleAddNote = this.handleAddNote.bind(this)
-    this.handleChangeStage = this.handleChangeStage.bind(this)
-    this.onChangeAttribute = this.onChangeAttribute.bind(this)
+  state = {
+    tasks: [],
+    activeTab: 'timeline'
   }
 
   componentDidMount() {
@@ -53,18 +47,14 @@ class ContactProfile extends React.Component {
 
   async initializeContact() {
     const {
-      user,
       contact,
       getContact,
-      getContactActivities,
+      isFetchingContactsList,
       params: { id: contactId }
     } = this.props
 
-    if (!contact) {
-      await getContact(user, contactId)
-      await getContactActivities(contactId)
-    } else if (!contact.activities) {
-      await getContactActivities(contactId)
+    if (!contact && !isFetchingContactsList) {
+      await getContact(contactId)
     }
 
     const query = [
@@ -82,46 +72,44 @@ class ContactProfile extends React.Component {
 
   goBack = () => browserHistory.push('/dashboard/contacts')
 
-  async onChangeAttribute({ contactId, attributes }) {
-    return this.props.upsertContactAttributes({
-      contactId,
-      attributes
-    })
+  handleChangeStage = async text => {
+    const { contact, attributeDefs, upsertContactAttributes } = this.props
+    const { id: contactId } = contact
+    const is_primary = true
+    let stage = getContactStage(contact)
+    const attribute_def = selectDefinitionByName(attributeDefs, 'stage')
+
+    if (stage && stage.id) {
+      stage = {
+        text,
+        is_primary,
+        id: stage.id
+      }
+    } else {
+      stage = {
+        text,
+        is_primary,
+        attribute_def
+      }
+    }
+
+    return upsertContactAttributes(contactId, [stage])
   }
 
-  async handleChangeStage(stage) {
-    const { contact, upsertContactAttributes } = this.props
+  handleAddNote = async text => {
+    const { contact, upsertContactAttributes, attributeDefs } = this.props
     const { id: contactId } = contact
 
-    const { id: attributeId } = Contact.get.stage(contact)
+    const attribute_def = selectDefinitionByName(attributeDefs, 'note')
 
     const attributes = [
       {
-        type: 'stage',
-        id: attributeId || undefined,
-        stage: stage.replace(/\s/g, '')
+        text,
+        attribute_def
       }
     ]
 
-    return upsertContactAttributes({
-      contactId,
-      attributes
-    })
-  }
-
-  async handleAddNote(note) {
-    const { contact, upsertContactAttributes } = this.props
-    const { id: contactId } = contact
-
-    await upsertContactAttributes({
-      contactId,
-      attributes: [
-        {
-          note,
-          type: 'note'
-        }
-      ]
-    })
+    await upsertContactAttributes(contactId, attributes)
 
     return this.setState({ activeTab: 'notes-list' })
   }
@@ -143,7 +131,7 @@ class ContactProfile extends React.Component {
 
   render() {
     const { tasks } = this.state
-    const { contact, fetchError, defaultTags } = this.props
+    const { contact, fetchError } = this.props
 
     if (fetchError) {
       if (fetchError.status === 404) {
@@ -164,24 +152,21 @@ class ContactProfile extends React.Component {
     const { activeTab } = this.state
 
     return (
-      <div className="profile">
+      <div className="profile" style={{ backgroundColor: '#f8fafb' }}>
         <Header goBackHandler={this.goBack} />
 
-        <div className="content">
+        <div className="content" style={{ minHeight: 'calc(100vh - 55px)' }}>
           <div className="left-pane">
             <Information contact={contact} />
 
             <Stage
               contact={contact}
-              handleOnChange={stage => this.handleChangeStage(stage)}
+              onChange={stage => this.handleChangeStage(stage)}
             />
 
             <Names contact={contact} />
 
-            <Tags
-              contactId={contact.id}
-              tags={Contact.get.tags(contact, defaultTags)}
-            />
+            <Tags contact={contact} />
 
             <Details contact={contact} />
 
@@ -249,7 +234,6 @@ class ContactProfile extends React.Component {
               tasks={tasks}
               contact={contact}
               activeTab={activeTab}
-              onChangeAttribute={this.onChangeAttribute}
               onChangeTab={activeTab => this.setState({ activeTab })}
             />
           </div>
@@ -260,20 +244,18 @@ class ContactProfile extends React.Component {
 }
 
 const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
-  const { list, contact, tags } = contacts
-
-  const defaultTags = selectTags(tags)
+  const { list, contact, attributeDefs } = contacts
 
   return {
     user,
-    defaultTags,
+    attributeDefs,
     contact: selectContact(list, contactId),
-    fetchError: selectContactError(contact)
+    fetchError: selectContactError(contact),
+    isFetchingContactsList: isFetchingContactsList(list)
   }
 }
 
 export default connect(mapStateToProps, {
   getContact,
-  getContactActivities,
   upsertContactAttributes
 })(ContactProfile)

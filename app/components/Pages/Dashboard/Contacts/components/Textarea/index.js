@@ -7,7 +7,9 @@ class EditableTextarea extends React.Component {
     super(props)
 
     const { item } = props
-    const value = item[item.type] || ''
+
+    const value =
+      (item.attribute_def && item[item.attribute_def.data_type]) || ''
 
     this.state = {
       value,
@@ -21,16 +23,16 @@ class EditableTextarea extends React.Component {
   async handleSubmit() {
     const { value } = this.state
     const { item, onSubmit } = this.props
-    const { type } = item
 
     if (!value) {
       return false
     }
 
-    const itemPreviousValue = item[type]
+    const dataType = item.attribute_def.data_type
+    const itemPreviousValue = item[dataType]
 
     if (typeof onSubmit === 'function' && value !== itemPreviousValue) {
-      await onSubmit([{ ...item, [type]: value }])
+      await onSubmit([{ ...item, [dataType]: value }])
     }
 
     this.setState({ isActive: false })

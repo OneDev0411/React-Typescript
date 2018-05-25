@@ -1,12 +1,14 @@
 import React from 'react'
-import AddContactModal from '../AddContactModal'
-import Import from './Import'
-import HeaderSearch from '../../../../Partials/headerSearch'
+import { browserHistory } from 'react-router'
 import cn from 'classnames'
 
-export default ({ user, contactsCount, onNewContact, onInputChange }) => {
+import Import from './Import'
+import HeaderSearch from '../../../../Partials/headerSearch'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
+
+function Header({ user, contactsCount, onInputChange, isSearching }) {
   if (contactsCount === 0) {
-    return false
+    return null
   }
 
   const isBackOffice = false
@@ -17,27 +19,34 @@ export default ({ user, contactsCount, onNewContact, onInputChange }) => {
         <div className={cn('list--header-row', { agent: !isBackOffice })}>
           <div className="list--header-row--col">
             <ul className="filter">
-              <li>
-                <span className="title">All Contacts</span>
+              <li style={{ cursor: 'initial' }}>
+                <h4 className="title">All Contacts</h4>
 
-                <span className="badge counter">{contactsCount} Contacts</span>
+                <span className="badge counter">
+                  {contactsCount.toLocaleString()} Contacts
+                </span>
               </li>
             </ul>
           </div>
 
           <div className="list--header-row--col">
             <Import userId={user.id} />
-            <AddContactModal
-              user={user}
-              onNewContact={id => onNewContact(id)}
-            />
+            <ActionButton
+              style={{ padding: '0.75em' }}
+              onClick={() => browserHistory.push('/dashboard/contacts/new')}
+            >
+              New Contact
+            </ActionButton>
           </div>
         </div>
       </div>
       <HeaderSearch
+        isSearching={isSearching}
         onInputChange={text => onInputChange(text)}
         placeholder="Search all contacts ..."
       />
     </div>
   )
 }
+
+export default Header

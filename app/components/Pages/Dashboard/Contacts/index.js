@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import {
   getContacts,
   getContactsTags
 } from '../../../../store_actions/contacts'
 import { selectTags } from '../../../../reducers/contacts/tags'
 import { selectContacts } from '../../../../reducers/contacts/list'
+import ContactsList from './List'
 
 class Contacts extends React.Component {
   componentDidMount() {
@@ -25,20 +27,9 @@ class Contacts extends React.Component {
   }
 
   render() {
-    const { contactsList } = this.props
-
     return (
       <div className="contacts">
-        {contactsList ? (
-          this.props.children
-        ) : (
-          <div className="loading-list">
-            <div>
-              <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
-            </div>
-            <b>Loading contacts ...</b>
-          </div>
-        )}
+        <ContactsList />
       </div>
     )
   }

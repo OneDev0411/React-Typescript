@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
-import _ from 'underscore'
+import { PassThrough } from 'stream'
+import FakeStream from '../../../util/fake-stream'
 
 const router = require('koa-router')()
 
@@ -8,6 +9,22 @@ import updateSession from '../update-session'
 import config from '../../../../config/private'
 
 const app = new Koa()
+
+/**
+ * returns error object if possible
+ * @param {String} text - the error text
+ */
+const handleErrorObject = text => {
+  if (!text) {
+    return {}
+  }
+
+  try {
+    return JSON.parse(text)
+  } catch (e) {
+    return { text }
+  }
+}
 
 router.post(
   '/proxifier/:endpointKey',
@@ -17,6 +34,28 @@ router.post(
   async ctx => {
     const headers = ctx.headers
     const queryString = ctx.request.querystring
+
+    const shouldStream = headers['x-stream'] === 'true'
+
+    let fakeInterval
+    let fakeStream
+
+    /**
+     * finishes a request
+     * @param {Object} data - the response object
+     */
+    const finishStream = data => {
+      clearInterval(fakeInterval)
+      fakeStream.push(JSON.stringify(data))
+      fakeStream.emit('end')
+    }
+
+    if (shouldStream) {
+      fakeStream = new FakeStream()
+      fakeInterval = setInterval(() => fakeStream.push('\n'), 1500)
+
+      ctx.body = fakeStream.pipe(PassThrough())
+    }
 
     try {
       let request
@@ -58,6 +97,7 @@ router.post(
       }
 
       const response = await request
+
       // update user session
       const { data } = response.body
 
@@ -65,10 +105,15 @@ router.post(
         updateSession(ctx, response.body)
       }
 
-      ctx.body = {
-        ...response.body,
-        statusCode: response.statusCode
+      if (shouldStream) {
+        return finishStream({
+          success: true,
+          ...response.body
+        })
       }
+
+      ctx.status = response.statusCode
+      ctx.body = response.body
     } catch (e) {
       e.response = e.response || {
         status: 500,
@@ -78,17 +123,9 @@ router.post(
       const { status, text } = e.response
 
       ctx.status = status
-
-      try {
-        ctx.body = {
-          statusCode: status,
-          ...JSON.parse(text)
-        }
-      } catch (error) {
-        ctx.body = {
-          text,
-          statusCode: status
-        }
+      ctx.body = {
+        statusCode: status,
+        ...handleErrorObject(text)
       }
     }
   }

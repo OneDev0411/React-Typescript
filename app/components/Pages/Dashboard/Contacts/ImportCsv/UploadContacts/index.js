@@ -1,25 +1,31 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import moment from 'moment'
 import { addNotification as notify } from 'reapop'
+
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
-import { fields as contactFields } from '../FieldDropDown'
-import {
-  uploadCsvContacts,
-  updateWizardStep
-} from '../../../../../../store_actions/contacts'
+
+import { createContacts } from '../../../../../../store_actions/contacts/create-contacts'
+
+import { updateWizardStep } from '../../../../../../store_actions/contacts'
 import { CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS } from '../../../../../../constants/contacts'
+
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import CancelButton from '../../../../../../views/components/Button/CancelButton'
+
+import {
+  selectDefinition,
+  selectDefinitionByName
+} from '../../../../../../reducers/contacts/attributeDefs'
+import { isAddressField } from '../helpers/address'
 import Loading from '../../../../../Partials/Loading'
 
 class UploadContacts extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isImporting: false
-    }
+  state = {
+    isImporting: false,
+    isImportFailed: false,
+    importErrorMessage: null
   }
 
   componentDidMount() {
@@ -29,10 +35,10 @@ class UploadContacts extends React.Component {
   }
 
   validate = () => {
-    const { mappedFields } = this.props
+    const { mappedFields, attributeDefs } = this.props
     let errorMessage
 
-    let isValid = _.some(mappedFields, mapData => mapData.field)
+    let isValid = _.some(mappedFields, field => field.definitionId)
 
     if (!isValid) {
       this.onError(
@@ -43,12 +49,10 @@ class UploadContacts extends React.Component {
       return false
     }
 
-    const indexedContactFields = _.indexBy(contactFields, 'value')
+    isValid = _.every(mappedFields, (field, csvField) => {
+      const definition = selectDefinition(attributeDefs, field.definitionId)
 
-    isValid = _.every(mappedFields, (mapData, csvField) => {
-      const field = indexedContactFields[mapData.field]
-
-      if (field && field.hasLabel && !mapData.label) {
+      if (definition && definition.has_label && !field.label) {
         errorMessage = `Select a label for "${csvField}" field`
         this.onError(errorMessage, 'Validation Error')
 
@@ -62,75 +66,72 @@ class UploadContacts extends React.Component {
   }
 
   uploadContacts = async () => {
-    const { rows, columns, mappedFields, uploadCsvContacts } = this.props
-    const indexedContactFields = _.indexBy(contactFields, 'value')
+    const {
+      rows,
+      columns,
+      mappedFields,
+      attributeDefs,
+      createContacts
+    } = this.props
     const contacts = []
 
-    rows.forEach(row => {
+    this.setState({
+      isImporting: true,
+      isImportFailed: false,
+      importErrorMessage: null
+    })
+
+    _.each(rows, row => {
       const contact = {
-        attributes: {}
+        attributes: []
       }
 
-      _.each(mappedFields, (mapData, csvField) => {
-        const { field: rechatField, label } = mapData
-
-        // ignore unmapped fields
-        if (rechatField === null) {
+      _.each(mappedFields, ({ definitionId, label, index = 0 }, csvField) => {
+        if (!definitionId) {
           return false
         }
 
-        const fieldInfo = columns[csvField]
-        const fieldValue = row[fieldInfo.index]
+        const definition = selectDefinition(attributeDefs, definitionId)
 
-        if (!fieldValue) {
+        const fieldValue = row[columns[csvField].index].trim()
+        const parsedValue = this.parseValue(
+          csvField,
+          definition.name,
+          fieldValue
+        )
+
+        if (parsedValue === null) {
           return false
         }
 
-        const {
-          pluralName,
-          singularName,
-          isSingleObject,
-          dataType
-        } = indexedContactFields[rechatField]
-
-        if (!contact.attributes[pluralName]) {
-          contact.attributes[pluralName] = []
+        const contactItem = {
+          attribute_def: definitionId,
+          [definition.data_type]: parsedValue
         }
 
-        let labelId
-
-        // name and address fields should merge into a single object
-        if (label || isSingleObject === true) {
-          labelId = label
-        } else {
-          labelId = contact.attributes[pluralName].length
+        if (label) {
+          contactItem.label = label
         }
 
-        contact.attributes[pluralName][labelId] = {
-          ...contact.attributes[pluralName][labelId],
-          type: singularName,
-          label,
-          [rechatField]: this.parseValue(
-            csvField,
-            rechatField,
-            dataType,
-            fieldValue.trim()
-          )
+        if (isAddressField(attributeDefs, definitionId)) {
+          contactItem.index = index + 1
         }
+
+        contact.attributes.push(contactItem)
       })
 
       contacts.push(this.getNormalizedContact(contact))
     })
 
-    this.setState({
-      isImporting: true
-    })
-
     try {
-      await uploadCsvContacts(contacts)
+      await createContacts(contacts, {
+        get: false,
+        relax: true,
+        activity: false
+      })
       this.onFinish()
     } catch (e) {
-      this.onError(e.response ? e.response.body.message : e.message)
+      this.onError(e)
     } finally {
       this.setState({
         isImporting: false
@@ -139,41 +140,28 @@ class UploadContacts extends React.Component {
   }
 
   getNormalizedContact = contact => {
-    const normalizedContact = {
-      attributes: {}
-    }
+    const { attributeDefs } = this.props
 
-    _.each(contact.attributes, (fields, pluralName) => {
-      normalizedContact.attributes[pluralName] = _.values(fields)
+    const sourceDefinition = selectDefinitionByName(
+      attributeDefs,
+      'source_type'
+    )
 
-      const contactField = contactFields.find(
-        item => item.pluralName === pluralName
-      )
-
-      if (contactField.hasLabel) {
-        normalizedContact.attributes[pluralName][0].is_primary = true
-      }
+    contact.attributes.push({
+      attribute_def: sourceDefinition.id,
+      [sourceDefinition.data_type]: 'CSV'
     })
 
-    if (!normalizedContact.attributes.source_types) {
-      normalizedContact.attributes.source_types = [
-        {
-          type: 'source_type',
-          source_type: 'CSV'
-        }
-      ]
-    }
-
-    return normalizedContact
+    return contact
   }
 
-  parseValue = (csvField, fieldName, dataType, value) => {
+  parseValue = (csvField, fieldName, value) => {
     switch (fieldName) {
       case 'birthday':
-        return moment(value).unix() // unix timestamp in seconds
+        return value && moment(value).isValid() ? moment(value).unix() : null
 
       case 'phone':
-        return value.replace(/\s/g, '').replace(/^00/, '+')
+        return value && value.replace(/\s/g, '').replace(/^00/, '+')
 
       case 'note':
         return `${csvField}: ${value}`
@@ -189,32 +177,47 @@ class UploadContacts extends React.Component {
       status: 'success'
     })
 
-    // browserHistory.push('/dashboard/contacts')
     window.location.href = '/dashboard/contacts'
   }
 
-  onError = (errorMessage, title) => {
-    this.props.showMessageModal({
-      message: title || 'Something Wrong',
-      description: errorMessage,
-      hideCancelButton: true,
-      confirmLabel: 'Okay',
-      onConfirm: () =>
-        this.props.updateWizardStep(CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS)
+  onError = e =>
+    this.setState({
+      isImportFailed: true,
+      importErrorMessage: {
+        title: 'Upload Failed',
+        description: e.response ? e.response.body.message : e.message
+      }
     })
-  }
+
+  goBack = () =>
+    this.props.updateWizardStep(CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS)
 
   render() {
-    const { isImporting } = this.state
+    const { isImporting, isImportFailed, importErrorMessage } = this.state
     const { rowsCount } = this.props
 
     return (
       <div className="contact__import-csv--upload-info">
-        <Loading />
         {isImporting && (
-          <span>
+          <div>
+            <Loading />
             Uploading {rowsCount} contacts. It may takes a few seconds.
-          </span>
+          </div>
+        )}
+
+        {isImportFailed && (
+          <div className="error-message">
+            <div className="title">{importErrorMessage.title}</div>
+
+            <div className="description">{importErrorMessage.description}</div>
+            <div className="cta-buttons">
+              <CancelButton onClick={this.goBack}>Properties</CancelButton>
+
+              <ActionButton onClick={this.uploadContacts}>
+                Try Again
+              </ActionButton>
+            </div>
+          </div>
         )}
       </div>
     )
@@ -222,10 +225,11 @@ class UploadContacts extends React.Component {
 }
 
 function mapStateToProps({ contacts }) {
-  const { importCsv } = contacts
+  const { importCsv, attributeDefs } = contacts
   const { columns, rows, mappedFields, rowsCount } = importCsv
 
   return {
+    attributeDefs,
     rowsCount,
     mappedFields,
     columns,
@@ -234,8 +238,8 @@ function mapStateToProps({ contacts }) {
 }
 
 export default connect(mapStateToProps, {
-  uploadCsvContacts,
   showMessageModal,
   updateWizardStep,
+  createContacts,
   notify
 })(UploadContacts)

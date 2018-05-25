@@ -1,28 +1,24 @@
 import React, { Fragment } from 'react'
 import _ from 'underscore'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import { confirmation } from '../../../../../store_actions/confirmation'
-import Contact from '../../../../../models/contacts'
 import styled from 'styled-components'
+
 import {
   selectContacts,
+  selectContactsInfo,
   isFetchingContactsList
 } from '../../../../../reducers/contacts/list'
 import { deleteContacts } from '../../../../../store_actions/contacts'
+import { searchContacts } from '../../../../../models/contacts/search-contacts'
 
 import Header from './header'
 import ExportContacts from './ExportContacts'
 
+import Table from './Table'
 import NoContact from './no-contact'
 import Loading from '../../../../Partials/Loading'
 import { Container } from '../components/Container'
-import NoSearchResults from '../../../../Partials/no-search-results'
-import Table from './Table'
-
-function openContact(id) {
-  browserHistory.push(`/dashboard/contacts/${id}`)
-}
 
 const SecondHeader = styled.div`
   display: flex;
@@ -34,26 +30,17 @@ const SecondHeaderText = styled.p`
   margin-bottom: 0;
   margin-right: 8px;
 `
-const CustomLoading = styled(Loading)`
-  position: absolute !important;
-  left: 50%;
-  margin: auto !important;
-`
 
 class ContactsList extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      filter: '',
-      deletingContacts: [],
-      selectedRows: {}
-    }
-
-    this.handleOnDelete = this.handleOnDelete.bind(this)
+  state = {
+    page: 0,
+    isSearching: false,
+    filteredContacts: null,
+    deletingContacts: [],
+    selectedRows: {}
   }
 
-  handleOnDelete(event, contactIds) {
+  handleOnDelete = (event, contactIds) => {
     event.stopPropagation()
 
     this.props.confirmation({
@@ -67,47 +54,55 @@ class ContactsList extends React.Component {
     })
   }
 
-  async handleDeleteContact({ contactIds }) {
-    this.setState({ deletingContacts: contactIds })
+  handleDeleteContact = async ({ contactIds }) => {
+    try {
+      const { deleteContacts } = this.props
+      const { filteredContacts } = this.state
+      const deletedState = { deletingContacts: [], selectedRows: [] }
 
-    const { deleteContacts } = this.props
+      this.setState({ deletingContacts: contactIds })
 
-    await deleteContacts(contactIds)
-    this.setState({ deletingContacts: [], selectedRows: [] })
+      await deleteContacts(contactIds)
+
+      if (filteredContacts) {
+        if (filteredContacts.length === contactIds.length) {
+          return this.setState({
+            ...deletedState,
+            page: 0,
+            filteredContacts: null
+          })
+        }
+
+        this.setState({
+          ...deletedState,
+          filteredContacts: filteredContacts.filter(
+            c => !contactIds.includes(c.id)
+          )
+        })
+      } else {
+        this.setState(deletedState)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  onInputChange = filter => this.setState({ filter })
-
-  applyFilters = contact => {
-    let matched = false
-    const { filter } = this.state
-    let regex = new RegExp(
-      // / First reomoving some charater that break the regex
-      filter.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'),
-      'i'
-    )
-
-    if (regex.test(Contact.get.name(contact))) {
-      matched = true
+  search = async keyword => {
+    if (keyword.length === 0) {
+      return this.setState({ filteredContacts: null })
     }
 
-    if (!matched && Object.keys(Contact.get.emails(contact)).length !== 0) {
-      matched = _.some(Contact.get.emails(contact), item =>
-        regex.test(item.email)
-      )
-    }
+    try {
+      this.setState({ isSearching: true })
 
-    if (!matched && Object.keys(Contact.get.phones(contact)).length !== 0) {
-      matched = _.some(Contact.get.phones(contact), item =>
-        item.phone_number.includes(filter)
-      )
-    }
+      const items = await searchContacts(keyword)
 
-    if (!matched && Object.keys(Contact.get.tags(contact)).length !== 0) {
-      matched = _.some(Contact.get.tags(contact), item => regex.test(item.tag))
+      this.setState({ filteredContacts: items, page: 0 })
+    } catch (error) {
+      console.log(error)
+    } finally {
+      this.setState({ isSearching: false, page: 0 })
     }
-
-    return matched
   }
 
   toggleSelectedRow = contact => {
@@ -125,12 +120,38 @@ class ContactsList extends React.Component {
 
     this.setState({ selectedRows: newSelectedRows })
   }
-  render() {
-    const { deletingContacts, selectedRows } = this.state
-    const { user, isFetching, contactsList, loadingImport } = this.props
-    const contactsCount = contactsList.length
 
-    if (isFetching && contactsCount === 0) {
+  onPageChange = page => {
+    this.setState({ page })
+  }
+
+  render() {
+    const {
+      page,
+      isSearching,
+      filteredContacts,
+      deletingContacts,
+      selectedRows
+    } = this.state
+    const {
+      user,
+      listInfo,
+      contacts,
+      isFetching,
+      loadingImport,
+      attributeDefs
+    } = this.props
+    const data = filteredContacts || contacts
+    let { total: totalCount } = listInfo
+
+    if (filteredContacts != null) {
+      totalCount = filteredContacts.length
+    }
+
+    if (
+      (isFetching && contacts.length === 0) ||
+      _.size(attributeDefs.byName) === 0
+    ) {
       return (
         <Container>
           <Loading />
@@ -138,83 +159,75 @@ class ContactsList extends React.Component {
       )
     }
 
-    if (contactsCount === 0) {
+    if (contacts.length === 0) {
       return (
         <div className="list">
-          <NoContact
-            user={user}
-            contactsCount={contactsCount}
-            onNewContact={id => openContact(id)}
-          />
+          <NoContact user={user} />
         </div>
       )
     }
 
-    const filteredContacts = contactsList.filter(contact =>
-      this.applyFilters(contact)
-    )
     const selectedRowsLength = Object.keys(selectedRows).length
 
     return (
       <div className="list">
         <Header
+          contactsCount={listInfo.total}
+          isSearching={isSearching}
+          onInputChange={this.search}
           user={user}
-          contactsCount={contactsCount}
-          onNewContact={id => openContact(id)}
-          onInputChange={this.onInputChange}
         />
         {loadingImport && (
           <i className="fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading" />
         )}
-        {_.size(filteredContacts) === 0 ? (
-          <NoSearchResults description="Try typing another name, email, phone or tag." />
-        ) : (
-          <Fragment>
-            <SecondHeader>
-              <SecondHeaderText>
-                {selectedRowsLength > 0 ? `${selectedRowsLength} of ` : ''}
-                {`${filteredContacts.length} Contacts`}
-              </SecondHeaderText>
-              <ExportContacts selectedRows={selectedRows} />
-              {selectedRowsLength > 0 && (
-                <div className="list--secondary-button">
-                  <button
-                    className="button c-button--shadow"
-                    onClick={event =>
-                      this.handleOnDelete(event, Object.keys(selectedRows))
-                    }
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
-            </SecondHeader>
-            {isFetching && <CustomLoading />}
+        <Fragment>
+          <SecondHeader>
+            <SecondHeaderText>
+              {selectedRowsLength > 0 ? `${selectedRowsLength} of ` : ''}
+              {`${totalCount.toLocaleString()} Contacts`}
+            </SecondHeaderText>
+            <ExportContacts selectedRows={selectedRows} />
+            {selectedRowsLength > 0 && (
+              <div className="list--secondary-button">
+                <button
+                  className="button c-button--shadow"
+                  onClick={event =>
+                    this.handleOnDelete(event, Object.keys(selectedRows))
+                  }
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </SecondHeader>
 
-            <Table
-              filteredContacts={filteredContacts}
-              toggleSelectedRow={this.toggleSelectedRow}
-              handleOnDelete={this.handleOnDelete}
-              deletingContacts={deletingContacts}
-              selectedRows={selectedRows}
-            />
-          </Fragment>
-        )}
+          <Table
+            data={data}
+            deletingContacts={deletingContacts}
+            handleOnDelete={this.handleOnDelete}
+            loading={isSearching}
+            onPageChange={this.onPageChange}
+            page={page}
+            selectedRows={selectedRows}
+            totalCount={totalCount}
+            toggleSelectedRow={this.toggleSelectedRow}
+          />
+        </Fragment>
       </div>
     )
   }
 }
 
 function mapStateToProps({ user, contacts }) {
-  const { list, spinner: loadingImport } = contacts
-  const contactsList = selectContacts(list)
-  const isFetching = isFetchingContactsList(list)
+  const { list, spinner: loadingImport, attributeDefs } = contacts
 
   return {
     user,
-    isFetching,
-    contactsList,
-    loadingImport
+    loadingImport,
+    attributeDefs,
+    contacts: selectContacts(list),
+    listInfo: selectContactsInfo(list),
+    isFetching: isFetchingContactsList(list)
   }
 }
 

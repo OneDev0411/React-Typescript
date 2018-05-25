@@ -16,10 +16,10 @@ export function showCompose(display = true) {
   }
 }
 
-export function updateAttachments(attachments) {
+export function addAttachment(attachment) {
   return {
-    type: types.UPDATE_ATTACHMENTS,
-    attachments
+    type: types.ADD_ATTACHMENT,
+    attachment
   }
 }
 
@@ -37,10 +37,10 @@ export function removeEsignRecipient(id) {
   }
 }
 
-export function removeAttachment(id) {
+export function removeAttachment(attachment) {
   return {
     type: types.REMOVE_ATTACHMENT,
-    id
+    attachment
   }
 }
 

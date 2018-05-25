@@ -30,20 +30,19 @@ function DropDownWithIcon({
   defaultTitle,
   handleOnSelect
 }) {
-  let selectedOption = 'default'
-  const selectedOptions = Object.keys(options).filter(option => {
-    const { name, title } = options[option]
+  let selectedOption = options.default
 
-    return name === defaultTitle || title === defaultTitle
-  })
-
-  if (selectedOptions.length === 1) {
-    ;[selectedOption] = selectedOptions
+  if (defaultTitle) {
+    selectedOption = options[defaultTitle] || {
+      title: defaultTitle,
+      icon: (options.default && options.default.icon) || null
+    }
   }
 
-  const { icon: selectedOptionIcon, title: selectedOptionTitle } = options[
-    selectedOption
-  ]
+  const {
+    icon: selectedOptionIcon,
+    title: selectedOptionTitle
+  } = selectedOption
 
   const getIcon = ({ name, color }) => (
     <i

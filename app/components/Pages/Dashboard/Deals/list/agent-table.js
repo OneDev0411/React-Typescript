@@ -20,7 +20,7 @@ class AgentTable extends BaseTable {
       address: {
         caption: 'ADDRESS',
         sortable: true,
-        className: 'address col-md-4',
+        className: 'address col-md-3',
         getText: deal => this.getAddress(deal),
         getValue: deal => Deal.get.address(deal)
       },
@@ -46,6 +46,12 @@ class AgentTable extends BaseTable {
           'Cancelled',
           'Withdrawn'
         ]
+      },
+      property_type: {
+        caption: 'CHECKLIST TYPE',
+        sortable: true,
+        className: 'col-md-1 hidden-xs',
+        getText: deal => deal.property_type
       },
       price: {
         caption: 'PRICE $',
@@ -78,7 +84,7 @@ class AgentTable extends BaseTable {
         getText: deal => getPrimaryAgent(deal, this.props.roles),
         getValue: deal => getPrimaryAgent(deal, this.props.roles)
       },
-      notificiation: {
+      notification: {
         caption: '',
         className: 'notification-container hidden-sm hidden-xs',
         getText: deal => this.hasNotification(deal)
@@ -142,14 +148,15 @@ class AgentTable extends BaseTable {
                       />
                     </div>
                     <div className="info">
-                      <span className="name">
-                        {`${role.legal_first_name} ${role.legal_last_name}, `}
-                      </span>
+                      <div className="role-name-container">
+                        <div className="name">
+                          {`${role.legal_first_name} ${role.legal_last_name},`}
+                        </div>
 
-                      <span className="role">{roleName(role.role)}</span>
-
+                        <div className="role">{roleName(role.role)}</div>
+                      </div>
                       {role.user && (
-                        <span className="email">{role.user.email}</span>
+                        <div className="email">{role.user.email}</div>
                       )}
                     </div>
                   </div>

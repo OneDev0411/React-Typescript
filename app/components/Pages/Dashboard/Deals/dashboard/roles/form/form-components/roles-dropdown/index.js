@@ -1,19 +1,13 @@
 import React from 'react'
-import Select from 'react-select'
 import _ from 'underscore'
-import {
-  InputContainer,
-  InputError,
-  InputLabel,
-  InputRequired
-} from '../../styles'
 import { roleName } from '../../../../../utils/roles'
+
+import { SelectInput } from '../../../../../../../../../views/components/Forms/SelectInput'
 
 export const RolesDropDown = ({
   input,
   meta,
   formRole,
-  placeholder,
   isRequired,
   options,
   isAllowed
@@ -28,19 +22,16 @@ export const RolesDropDown = ({
     .value()
 
   return (
-    <InputContainer>
-      <InputLabel hasError={meta.submitFailed && meta.error}>
-        {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
-      </InputLabel>
-      <Select
-        className="deals__role-form--select"
-        clearable={false}
-        placeholder="Select a role"
-        value={input.value}
-        onChange={({ value = null }) => input.onChange(value)}
-        options={sortedOptions}
-      />
-      {meta.error && meta.touched && <InputError>{meta.error}</InputError>}
-    </InputContainer>
+    <SelectInput
+      isRequired={isRequired}
+      className="deals__role-form--select"
+      searchable={false}
+      clearable={false}
+      input={input}
+      meta={meta}
+      placeholder="Select a role"
+      onChange={({ value = null }) => input.onChange(value)}
+      options={sortedOptions}
+    />
   )
 }

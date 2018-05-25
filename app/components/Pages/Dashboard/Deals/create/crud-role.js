@@ -6,7 +6,6 @@ import AgentModal from './deal-team-agents'
 import RoleItem from './role-item'
 import ContactModal from '../../../../../views/components/SelectContactModal'
 import { convertContactToRole } from '../utils/roles'
-import { extractUserInfoFromContact } from '../../../../../models/contacts'
 import { selectContacts } from '../../../../../reducers/contacts/list'
 
 const initialState = {
@@ -60,7 +59,7 @@ class CrudRole extends React.Component {
     this.setState({
       ...initialState,
       showRoleModal: true,
-      role: convertContactToRole(contact)
+      role: convertContactToRole(contact, this.props.attributeDefs)
     })
   }
 
@@ -118,9 +117,7 @@ class CrudRole extends React.Component {
 
   searchContactByEmail = email => {
     const { contacts } = this.props
-    const contactsList = selectContacts(contacts).map(
-      extractUserInfoFromContact
-    )
+    const contactsList = selectContacts(contacts)
 
     if (!contactsList) {
       return []
@@ -147,6 +144,7 @@ class CrudRole extends React.Component {
 
     const {
       user,
+      dealSide,
       ctaTitle,
       modalTitle,
       teamAgents,
@@ -196,11 +194,12 @@ class CrudRole extends React.Component {
           isSubmitting={isSaving}
           isOpen={showRoleModal}
           user={role}
-          onHide={this.resetStates}
-          onUpsertRole={onUpsertUser}
+          dealSide={dealSide}
           modalTitle={modalTitle}
           allowedRoles={allowedRoles}
           isCommissionRequired={isCommissionRequired}
+          onHide={this.resetStates}
+          onUpsertRole={onUpsertUser}
         />
       </Fragment>
     )
@@ -210,7 +209,8 @@ class CrudRole extends React.Component {
 function mapStateToProps({ deals, contacts }) {
   return {
     contacts: contacts.list,
-    teamAgents: deals.agents
+    teamAgents: deals.agents,
+    attributeDefs: contacts.attributeDefs
   }
 }
 

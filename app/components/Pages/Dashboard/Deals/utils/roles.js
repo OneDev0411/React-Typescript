@@ -1,4 +1,6 @@
 import _ from 'underscore'
+import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
+import { getContactAttribute } from '../../../../../models/contacts/helpers/get-contact-attribute'
 
 export const ROLE_NAMES = [
   'BuyerAgent',
@@ -45,23 +47,18 @@ export function roleName(role) {
 
 /**
  * returns user legal name based on given fields
- * @param {Object} role - the roles including name parts
- * @param {Boolean} withPrefix - should prepend legal prefix or not
+ * @param {Object} userRole - the roles including name parts
  */
-export function getLegalFullName(role, withPrefix = true) {
+export function getLegalFullName(userRole) {
   let name = []
   const {
-    legal_full_name,
+    legal_prefix,
     legal_first_name,
     legal_last_name,
     company_title
-  } = role
+  } = userRole
 
-  const legal_prefix = withPrefix ? role.legal_prefix : ''
-
-  if (legal_full_name) {
-    name = [legal_prefix, legal_full_name]
-  } else if (legal_first_name || legal_last_name) {
+  if (legal_first_name || legal_last_name) {
     name = [legal_prefix, legal_first_name, legal_last_name]
   } else {
     name = [company_title]
@@ -71,168 +68,206 @@ export function getLegalFullName(role, withPrefix = true) {
 }
 
 /**
+ *
+ * @param {Object} contact - the contact
+ * @param {Object} attributeDefs - list of definitions
+ */
+export function getNormalizedContact(contact, attributeDefs) {
+  const normalizedContact = {
+    summary: contact.summary
+  }
+
+  const pluralFields = [
+    { singular: 'email', plural: 'emails' },
+    { singular: 'phone_number', plural: 'phones' },
+    { singular: 'company', plural: 'companies' },
+    { singular: 'profile_image_url', plural: 'profile_image_url' }
+  ]
+
+  pluralFields.forEach(({ singular, plural }) => {
+    normalizedContact[plural] = getContactAttribute(
+      contact,
+      selectDefinitionByName(attributeDefs, singular)
+    )
+  })
+
+  _.each(contact.summary, (value, name) => {
+    const attributes = getContactAttributeObject(contact, attributeDefs, name)
+
+    if (!attributes) {
+      return false
+    }
+
+    normalizedContact[name] =
+      attributes.length === 1 ? attributes[0] : attributes
+  })
+
+  return normalizedContact
+}
+
+/**
+ * returns value of give attribute
+ * @param {Object} contact - the contact object
+ * @param {String} attributeName - name of attribute
+ */
+function getContactAttributeValue(contact, attributeDefs, attributeName) {
+  const attributes = getContactAttributeObject(
+    contact,
+    attributeDefs,
+    attributeName
+  )
+
+  if (!attributes || attributes.length === 0) {
+    return ''
+  }
+
+  const dataType = attributes[0].attribute_def.data_type
+
+  return attributes[0][dataType]
+}
+
+/**
+ *
+ * @param {Object} contact - contact object
+ * @param {Object} attributeDefs - list of definitions
+ * @param {String} attributeName - attribute name
+ */
+function getContactAttributeObject(contact, attributeDefs, attributeName) {
+  const definition = selectDefinitionByName(attributeDefs, attributeName)
+
+  if (!definition) {
+    return null
+  }
+
+  return getContactAttribute(contact, definition)
+}
+
+/**
  * Converts a contact object to a role contact
  * @param {Object} contact - The contact object
+ * @param {Object} attributeDefs - list of definitions
  */
-export function convertContactToRole(contact) {
-  let role = {}
+export function convertContactToRole(contact, attributeDefs) {
+  const { summary, emails, phones, companies } = getNormalizedContact(
+    contact,
+    attributeDefs
+  )
 
-  const {
-    title,
-    last_name,
-    middle_name,
-    first_name,
-    email,
+  const form = {
+    contact
+  }
+
+  const roleFields = {
+    legal_prefix: 'title',
+    legal_first_name: 'first_name',
+    legal_middle_name: 'middle_name',
+    legal_last_name: 'last_name',
+    company_title: 'company'
+  }
+
+  _.each(roleFields, (contactAttribute, roleAttribute) => {
+    form[roleAttribute] = getContactAttributeValue(
+      contact,
+      attributeDefs,
+      contactAttribute
+    )
+  })
+
+  return {
+    ...form,
+    emails,
+    phones,
     companies,
-    phone_number,
-    company_title
-  } = contact
-
-  if (first_name === email || first_name === phone_number) {
-    role.first_name = ''
+    email: summary.email,
+    phone_number: summary.phone_number,
+    company: summary.company
   }
+}
 
-  if (!company_title && companies && companies[0]) {
-    role.company_title = contact.companies[0].company
+/**
+ * returns list of contact fields (mapped to equivalent role fields)
+ */
+function getContactFields() {
+  return {
+    title: 'legal_prefix',
+    first_name: 'legal_first_name',
+    middle_name: 'legal_middle_name',
+    last_name: 'legal_last_name',
+    email: 'email',
+    phone_number: 'phone_number',
+    company: 'company_title'
   }
-
-  role = {
-    ...contact,
-    ...role,
-    legal_prefix: title,
-    legal_first_name: first_name,
-    legal_middle_name: middle_name,
-    legal_last_name: last_name,
-    role: null
-  }
-
-  delete role.id
-
-  return role
 }
 
 /**
  * Converts a role object to a contact model
  * @param {Object} formData - Role's object
  */
-export function convertRoleToContact(form = {}) {
-  const {
-    email,
-    phone_number,
-    company_title,
-    legal_prefix,
-    legal_first_name,
-    legal_middle_name,
-    legal_last_name
-  } = form
-
-  return {
-    emails: email ? [email] : [],
-    phone_numbers: phone_number ? [phone_number] : [],
-    companies: company_title ? [company_title] : [],
-    title: legal_prefix,
-    first_name: legal_first_name,
-    middle_name: legal_middle_name,
-    last_name: legal_last_name
-  }
-}
-
-/**
- * returns updated Name attribute
- * @param {Object} form - role form
- */
-export function getUpdatedNameAttribute(form) {
-  if (!form.contact) {
-    return null
+export function convertRoleToContact(form = {}, attributeDefs) {
+  const contact = {
+    attributes: []
   }
 
-  const { names } = form.contact.sub_contacts[0].attributes
-  const nameFields = {
-    title: form.legal_prefix,
-    first_name: form.legal_first_name,
-    middle_name: form.legal_middle_name,
-    last_name: form.legal_last_name
-  }
-
-  let name = {
-    id: undefined,
-    type: 'name'
-  }
-
-  if (Array.isArray(names) && names.length > 0) {
-    name = {
-      ...name,
-      ...names[0]
+  _.each(getContactFields(), (roleAttribute, contactAttribute) => {
+    if (!form[roleAttribute]) {
+      return
     }
-  }
 
-  const updatedFields = {}
+    const definition = selectDefinitionByName(attributeDefs, contactAttribute)
 
-  _.each(nameFields, (value, attr) => {
-    const isValidField = _.keys(nameFields).includes(attr)
-
-    if (isValidField && (!name[attr] || name[attr] !== value)) {
-      updatedFields[attr] = value
-    }
+    contact.attributes.push({
+      attribute_def: definition.id,
+      [definition.data_type]: form[roleAttribute]
+    })
   })
 
-  if (_.size(updatedFields) === 0) {
-    return null
-  }
-
-  return {
-    ...name,
-    ...updatedFields
-  }
+  return contact
 }
 
 /**
  * returns changed attributes
  * @param {Object} form - role form data
  */
-export function getNewAttributes(form = {}) {
-  const attributes = []
-  const types = [
-    { singularName: 'email', pluralName: 'emails' },
-    { singularName: 'phone_number', pluralName: 'phones' },
-    { singularName: 'company_title', pluralName: 'companies', alias: 'company' }
-  ]
+export function getContactDiff(form = {}, attributeDefs) {
+  const diff = []
 
-  types.forEach(({ singularName, pluralName, alias }) => {
-    const contactName = alias || singularName
+  _.each(getContactFields(), (roleAttribute, contactAttribute) => {
+    const attributes = getContactAttributeObject(
+      form.contact,
+      attributeDefs,
+      contactAttribute
+    )
+    const definition = selectDefinitionByName(attributeDefs, contactAttribute)
+    const roleFieldValue = form[roleAttribute]
 
-    const isNew =
-      form[singularName] &&
-      form[pluralName] &&
-      form[pluralName]
-        .map(item => item[contactName])
-        .includes(form[singularName]) === false
+    if (!attributes || !roleFieldValue) {
+      return false
+    }
 
-    if (isNew) {
-      attributes.push({
-        type: contactName,
-        [contactName]: form[singularName],
-        is_primary: form[pluralName].length === 0
+    const valueIndex = _.findIndex(
+      attributes,
+      attr => attr[definition.data_type] === roleFieldValue
+    )
+
+    if (valueIndex > -1) {
+      return
+    }
+
+    if (definition.singular && attributes.length === 1) {
+      diff.push({
+        id: attributes[0].id,
+        attribute_def: definition.id,
+        [definition.data_type]: roleFieldValue
+      })
+    } else {
+      diff.push({
+        attribute_def: definition.id,
+        [definition.data_type]: roleFieldValue
       })
     }
   })
 
-  return attributes
-}
-
-/**
- * returns combined objects of getNewAttributes and  getUpdatedNameAttribute
- * @param {Object} form - role form
- */
-export function getUpsertedAttributes(form) {
-  const attributes = getNewAttributes(form)
-  const nameAttribute = getUpdatedNameAttribute(form)
-
-  if (nameAttribute) {
-    attributes.push(nameAttribute)
-  }
-
-  return attributes
+  return diff
 }
 
 /**

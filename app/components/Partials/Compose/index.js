@@ -1,12 +1,19 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import validator from 'validator'
 import _ from 'underscore'
+
 import Fetch from '../../../services/fetch'
-import Contact from '../../../models/contacts'
 import Recipients from './recipients'
 import Suggestions from './suggestions'
+import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
 import { searchContacts } from '../../../models/contacts/search-contacts'
+import {
+  getContactUsers,
+  getContactAvatar,
+  getContactAttribute
+} from '../../../models/contacts/helpers'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -170,38 +177,59 @@ class Compose extends React.Component {
    * search recipients in contacts
    */
   async searchInContacts(q) {
-    let contacts = []
+    let emails = []
+    let phones = []
+    let result = []
+    const { attributeDefs } = this.props
 
-    const response = await searchContacts(this.criteria.toLowerCase())
-    let contactsList = []
+    const contacts = await searchContacts(this.criteria.toLowerCase())
 
-    if (Array.isArray(response.data)) {
-      contactsList = response.data
-    }
-
-    _.each(contactsList, contact => {
+    contacts.forEach(contact => {
+      const avatar = getContactAvatar(
+        contact,
+        selectDefinitionByName(attributeDefs, 'profile_image_url').id
+      )
       // search in contact's users
-      const users_list = contact.users || []
-      const users = users_list
+      const users = getContactUsers(contact)
         .filter(user => user.display_name.toLowerCase().includes(q))
         .map(user => this.createListItem('user', user))
 
       // search in contact's emails
-      const emails_list = Contact.get.emails(contact) || []
-      const emails = emails_list
-        .filter(item => item.email.toLowerCase().includes(q))
-        .map(email => this.createListItem('email', email))
+      const emailAttDef = selectDefinitionByName(attributeDefs, 'email')
+
+      if (emailAttDef) {
+        emails = getContactAttribute(contact, emailAttDef)
+          .filter(email => email.text.toLowerCase().includes(q))
+          .map(email =>
+            this.createListItem('email', {
+              id: email.id,
+              email: email.text,
+              display_name: contact.summary.display_name,
+              profile_image_url: (avatar && avatar.text) || ''
+            })
+          )
+      }
 
       // search in contact's phone
-      const phone_list = Contact.get.phones(contact) || []
-      const phones = phone_list
-        .filter(item => item.phone_number.includes(q))
-        .map(phone => this.createListItem('phone_number', phone))
+      const phoneAttDef = selectDefinitionByName(attributeDefs, 'email')
 
-      contacts = contacts.concat(users, emails, phones)
+      if (phoneAttDef) {
+        phones = getContactAttribute(contact, phoneAttDef)
+          .filter(phone => phone.text.includes(q))
+          .map(phone =>
+            this.createListItem('phone_number', {
+              id: phone.id,
+              phone_number: phone.text,
+              display_name: contact.summary.display_name,
+              profile_image_url: (avatar && avatar.text) || ''
+            })
+          )
+      }
+
+      result = result.concat(users, emails, phones)
     })
 
-    return contacts
+    return result
   }
 
   /**
@@ -292,7 +320,6 @@ class Compose extends React.Component {
           break
       }
     })
-    console.log(recipients, this.state.recipients)
 
     this.props.onChangeRecipients(recipients)
   }
@@ -351,4 +378,12 @@ Compose.defaultProps = {
   roomUsers: []
 }
 
-export default Compose
+function mapStateToProps({ contacts }) {
+  const { attributeDefs } = contacts
+
+  return {
+    attributeDefs
+  }
+}
+
+export default connect(mapStateToProps)(Compose)

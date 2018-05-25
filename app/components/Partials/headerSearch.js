@@ -1,20 +1,10 @@
 import React from 'react'
-import { Panel } from 'react-bootstrap'
+import _ from 'underscore'
 import cn from 'classnames'
-import debounce from 'lodash/debounce'
 import PropTypes from 'prop-types'
+import { Panel } from 'react-bootstrap'
 
 export default class HeaderSearch extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.debouncedOnInputChange = debounce(props.onInputChange, props.debounceTime)
-
-    this.state = {
-      inputFocused: false
-    }
-  }
-
   static propTypes = {
     onInputChange: PropTypes.func.isRequired,
     collapsible: PropTypes.bool,
@@ -28,37 +18,51 @@ export default class HeaderSearch extends React.Component {
     debounceTime: 700
   }
 
-  render() {
-    const { inputFocused } = this.state
-    const { placeholder, collapsible, expanded } = this.props
+  state = {
+    inputValue: '',
+    isFocused: false
+  }
 
+  debouncedOnInputChange = _.debounce(
+    this.props.onInputChange,
+    this.props.debounceTime
+  )
+
+  onChange = event => {
+    const inputValue = event.target.value
+
+    this.setState({ inputValue }, () => this.debouncedOnInputChange(inputValue))
+  }
+
+  onBlur = () => this.setState({ isFocused: false })
+  onFocus = () => this.setState({ isFocused: true })
+
+  render() {
     return (
       <Panel
         className="list--header no-box-shadow"
-        collapsible={collapsible}
-        expanded={expanded}
-        onEntered={() => this.searchInput.focus()}
+        collapsible={this.props.collapsible}
+        expanded={this.props.expanded}
+        onEntered={() => this.state.inputValue}
       >
         <div
           className={cn('list--header--searchBox', {
-            active: inputFocused
+            active: this.state.isFocused
           })}
         >
           <i className="fa fa-search" aria-hidden="true" />
           <input
-            onChange={event => this.debouncedOnInputChange(event.target.value)}
-            onFocus={() => this.setState({ inputFocused: true })}
-            onBlur={() => this.setState({ inputFocused: false })}
-            ref={ref => (this.searchInput = ref)}
+            onBlur={this.onBlur}
+            onFocus={this.onFocus}
+            onChange={this.onChange}
             type="text"
-            placeholder={placeholder}
+            placeholder={this.props.placeholder}
           />
+          {this.props.isSearching && (
+            <i className="fa fa-spin fa-spinner fa-2x" />
+          )}
         </div>
       </Panel>
     )
   }
-}
-
-HeaderSearch.propTypes = {
-  onInputChange: PropTypes.func.isRequired
 }

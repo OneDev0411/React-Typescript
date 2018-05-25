@@ -6,11 +6,17 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import {
-  addNewAttributes,
   deleteAttributes,
   upsertContactAttributes
 } from '../../../../../../store_actions/contacts'
-import Contact from '../../../../../../models/contacts'
+
+import { getContactAddresses } from '../../../../../../models/contacts/helpers/get-contact-addresses'
+import { getAddressLabels } from '../../../../../../models/contacts/helpers/get-attribute-labels'
+
+import {
+  selectDefsBySection,
+  selectDefinitionByName
+} from '../../../../../../reducers/contacts/attributeDefs'
 
 import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
@@ -18,25 +24,14 @@ import ActionButton from '../../../../../../views/components/Button/ActionButton
 import Label from '../Details/components/Label'
 import Loading from '../../components/Loading'
 
-import City from './fields/City'
-import State from './fields/State'
-import Street from './fields/Street'
-import Country from './fields/Country'
-import PostalCode from './fields/PostalCode'
+import Field from './components/Field'
 import AddAddressModal from './components/AddAddressModal'
 
-export const LABELS_OPTIONS = {
-  home: {
-    name: 'Home',
-    title: 'Home Address'
-  },
-  work: {
-    name: 'Business',
-    title: 'Business Address'
-  },
-  default: {
-    name: 'Other',
-    title: 'Other Address'
+const FIELDS = {
+  postal_code: {
+    validator: code => new RegExp(/(^\d{5}$)|(^\d{5}-\d{4}$)/).exec(code),
+    validationText:
+      'You only have allowed to using numbers and a dash. Like 75233 or 65132-2312.'
   }
 }
 
@@ -44,8 +39,8 @@ const Addresses = ({
   addresses,
   isOpenModal,
   setShowModal,
-  handleOnCloseModal,
-  handleLabelOnChange,
+  attributeDefs,
+  handleOnChangeLabel,
   handleDeleteAddress,
   handleAddNewAddress,
   handelOnChangePrimary,
@@ -70,69 +65,65 @@ const Addresses = ({
     <div className="c-contact-profile-card__body">
       {addresses.length > 0 ? (
         <div style={{ position: 'relative' }}>
-          {addresses.map((address, index) => {
-            const { id, fields, label, is_primary } = address
-            const { street_name, city, state, country, postal_code } = fields
-            const labelField = { id, label, type: 'label' }
+          {addresses.map(address => {
+            const { fields, label, index, is_primary } = address
 
             return (
               <ul
-                key={`address__${id}`}
+                key={`${label}_address_${index}`}
                 className="c-contact-details u-unstyled-list c-contact-details--address"
               >
-                {id && (
-                  <li
-                    key={`address_${id}_label`}
-                    style={{ marginBottom: '1em' }}
-                    className="c-contact-details-item"
-                  >
-                    <span className="c-contact-details-item--multi__name-wrapper">
-                      {addresses.length > 1 &&
-                        id && (
-                          <input
-                            type="radio"
-                            name={`Address__${index}`}
-                            disabled={props.disabled}
-                            checked={is_primary}
-                            onChange={() => handelOnChangePrimary(id)}
-                            className="c-contact-details-item--multi__primary"
-                            data-balloon-pos="right"
-                            data-balloon={
-                              is_primary ? 'Primary' : 'Set Primary'
-                            }
-                          />
-                        )}
-
-                      <Label
-                        name={`address_${id}_label`}
-                        field={labelField}
-                        labels={LABELS_OPTIONS}
+                <li
+                  key={`${label}_address__label`}
+                  style={{ marginBottom: '1em' }}
+                  className="c-contact-details-item"
+                >
+                  <span className="c-contact-details-item--multi__name-wrapper">
+                    {addresses.length > 1 && (
+                      <input
+                        checked={is_primary}
+                        className="c-contact-details-item--multi__primary"
+                        data-balloon-pos="right"
+                        data-balloon={is_primary ? 'Primary' : 'Set Primary'}
                         disabled={props.disabled}
-                        onChange={handleLabelOnChange}
+                        onChange={() => handelOnChangePrimary(fields[0].index)}
+                        type="radio"
                       />
-                    </span>
-                    <span
-                      style={{ textAlign: 'right' }}
-                      className="c-contact-details-item__field"
+                    )}
+
+                    <Label
+                      name={`address_${label}_${index}`}
+                      field={fields[0]}
+                      labels={getAddressLabels(attributeDefs)}
+                      disabled={props.disabled}
+                      onChange={handleOnChangeLabel}
+                    />
+                  </span>
+                  <span
+                    style={{ textAlign: 'right' }}
+                    className="c-contact-details-item__field"
+                  >
+                    <ShadowButton
+                      onClick={() => handleDeleteAddress(fields)}
+                      hoverColor="#2196f3"
                     >
-                      <ShadowButton
-                        onClick={() => handleDeleteAddress([id])}
-                        hoverColor="#2196f3"
-                      >
-                        <i
-                          className="fa fa-trash"
-                          style={{ marginRight: '.5em' }}
-                        />
-                        <span>Delete Address</span>
-                      </ShadowButton>
-                    </span>
-                  </li>
-                )}
-                <Street {...props} field={street_name} />
-                <City {...props} field={city} />
-                <State {...props} field={state} />
-                <Country {...props} field={country} />
-                <PostalCode {...props} field={postal_code} />
+                      <i
+                        className="fa fa-trash"
+                        style={{ marginRight: '.5em' }}
+                      />
+                      <span>Delete Address</span>
+                    </ShadowButton>
+                  </span>
+                </li>
+                {fields.map(field => (
+                  <Field
+                    field={field}
+                    key={`${label}_address_${index}__${field.attribute_def.id}`}
+                    placeholder="-"
+                    {...props}
+                    {...FIELDS[field.attribute_def.name]}
+                  />
+                ))}
               </ul>
             )
           })}
@@ -151,28 +142,28 @@ const Addresses = ({
       )}
     </div>
 
-    <AddAddressModal
-      isOpen={isOpenModal}
-      submitting={props.disabled}
-      handleOnSubmit={handleAddNewAddress}
-      handleOnClose={props.disabled ? () => {} : () => setShowModal(false)}
-    />
+    {isOpenModal && (
+      <AddAddressModal
+        isOpen={isOpenModal}
+        submitting={props.disabled}
+        handleOnSubmit={handleAddNewAddress}
+        handleOnClose={props.disabled ? () => {} : () => setShowModal(false)}
+      />
+    )}
   </div>
 )
 
 function mapStateToProps(state, props) {
-  const { contact } = props
-  const { id: contactId } = contact
+  const { attributeDefs } = state.contacts
+  const allAddressFields = getContactAddresses(props.contact)
+  const addresses = getAddresses(attributeDefs, allAddressFields)
 
-  const addresses = getAddresses(contact)
-
-  return { contactId, addresses }
+  return { allAddressFields, addresses, attributeDefs }
 }
 
 const enhance = compose(
   connect(mapStateToProps, {
     deleteAttributes,
-    addNewAttributes,
     upsertContactAttributes
   }),
   withState('disabled', 'setDisabled', false),
@@ -180,35 +171,29 @@ const enhance = compose(
   withHandlers({
     onChange: ({
       contact,
-      contactId,
       setDisabled,
       upsertContactAttributes
-    }) => async fields => {
-      setDisabled(true)
-
+    }) => async field => {
       try {
-        const [field] = fields
-        const { type: fieldType, id: fieldId } = field
-        const address = getAddress({ fieldId, contact })
-        let { is_primary } = address
+        setDisabled(true)
 
-        if (is_primary == null) {
-          is_primary = true
+        let attribute
+        const { data_type } = field.attribute_def
+
+        if (field.id) {
+          attribute = {
+            id: field.id,
+            [data_type]: field[data_type]
+          }
+        } else {
+          attribute = {
+            index: field.index,
+            [data_type]: field[data_type],
+            attribute_def: field.attribute_def.id
+          }
         }
 
-        const attributes = [
-          {
-            ...address,
-            is_primary,
-            type: 'address',
-            [fieldType]: field[fieldType]
-          }
-        ]
-
-        await upsertContactAttributes({
-          contactId,
-          attributes
-        })
+        await upsertContactAttributes(contact.id, [attribute])
       } catch (error) {
         throw error
       } finally {
@@ -217,40 +202,53 @@ const enhance = compose(
     }
   }),
   withHandlers({
-    handleLabelOnChange: ({ onChange }) => field => {
-      if (field.id) {
-        onChange([field])
+    handleOnChangeLabel: ({
+      contact,
+      setDisabled,
+      allAddressFields,
+      upsertContactAttributes
+    }) => async ({ index, label }) => {
+      if (index == null) {
+        throw new Error(`The index is ${index}`)
+      }
+
+      if (label == null) {
+        throw new Error(`The label is ${index}`)
+      }
+
+      const attributes = allAddressFields
+        .filter(field => field.index === index)
+        .map(field => ({ ...field, label }))
+
+      try {
+        setDisabled(true)
+        await upsertContactAttributes(contact.id, attributes)
+      } catch (error) {
+        throw error
+      } finally {
+        setDisabled(false)
       }
     }
   }),
   withHandlers({
     handelOnChangePrimary: ({
       contact,
-      contactId,
       setDisabled,
+      allAddressFields,
       upsertContactAttributes
-    }) => async addressId => {
-      if (!addressId) {
-        return
-      }
-
-      setDisabled(true)
-
+    }) => async index => {
       try {
-        const addresses = Contact.get.addresses(contact)
+        setDisabled(true)
 
-        const attributes = addresses.filter(({ id }) => id).map(address => {
-          if (address.id === addressId) {
-            return { ...address, is_primary: true }
+        const attributes = allAddressFields.map(field => {
+          if (field.index === index) {
+            return { ...field, is_primary: true }
           }
 
-          return { ...address, is_primary: false }
+          return { ...field, is_primary: false }
         })
 
-        await upsertContactAttributes({
-          contactId,
-          attributes
-        })
+        await upsertContactAttributes(contact.id, attributes)
       } catch (error) {
         throw error
       } finally {
@@ -261,27 +259,20 @@ const enhance = compose(
   withHandlers({
     onDelete: ({
       contact,
-      contactId,
       setDisabled,
       upsertContactAttributes
-    }) => async field => {
-      setDisabled(true)
-
+    }) => async attribute => {
       try {
-        const { type, id: fieldId } = field
-        const address = getAddress({ fieldId, contact })
+        setDisabled(true)
 
         const attributes = [
           {
-            ...address,
-            [type]: ''
+            ...attribute,
+            [attribute.attribute_def.data_type]: ''
           }
         ]
 
-        await upsertContactAttributes({
-          contactId,
-          attributes
-        })
+        await upsertContactAttributes(contact.id, attributes)
       } catch (error) {
         throw error
       } finally {
@@ -291,17 +282,18 @@ const enhance = compose(
   }),
   withHandlers({
     handleDeleteAddress: ({
-      contactId,
+      contact,
       setDisabled,
       deleteAttributes
-    }) => async attributesIds => {
+    }) => async fields => {
       setDisabled(true)
 
       try {
-        await deleteAttributes({
-          contactId,
-          attributesIds
-        })
+        const ids = fields
+          .filter(field => field && field.id)
+          .map(({ id }) => id)
+
+        await deleteAttributes(contact.id, ids)
       } catch (error) {
         throw error
       } finally {
@@ -311,17 +303,41 @@ const enhance = compose(
   }),
   withHandlers({
     handleAddNewAddress: ({
-      contactId,
+      contact,
       setDisabled,
       setShowModal,
-      addNewAttributes
+      attributeDefs,
+      allAddressFields,
+      upsertContactAttributes
     }) => async values => {
-      setDisabled(true)
-
       try {
-        const attributes = [{ type: 'address', ...values }]
+        setDisabled(true)
 
-        await addNewAttributes({ contactId, attributes })
+        const attributes = []
+        const index = getIndex(allAddressFields)
+
+        Object.keys(values).forEach(key => {
+          const attribute_def = selectDefinitionByName(attributeDefs, key)
+
+          if (attribute_def) {
+            attributes.push({
+              index,
+              attribute_def,
+              label: values.label,
+              is_primary: values.is_primary,
+              [attribute_def.data_type]: values[key]
+            })
+          }
+        })
+
+        allAddressFields.forEach(attribute => {
+          attributes.push({
+            ...attribute,
+            is_primary: false
+          })
+        })
+
+        await upsertContactAttributes(contact.id, attributes)
       } catch (error) {
         setDisabled(false)
         throw error
@@ -335,58 +351,62 @@ const enhance = compose(
 
 export default enhance(Addresses)
 
-function getAddress({ fieldId, contact }) {
-  const addresses = _.indexBy(Contact.get.addresses(contact), 'id')
-
-  return addresses[fieldId]
-}
-
-function getAddresses(contact) {
-  let addresses = Contact.get.addresses(contact)
-
-  if (addresses.length === 0) {
+function getAddresses(attributeDefs, allAddressFields) {
+  if (allAddressFields.length === 0) {
     return []
   }
 
-  const addressFields = {
-    street_name: '',
-    city: '',
-    state: '',
-    country: '',
-    postal_code: ''
+  let addressesSectionDefs = selectDefsBySection(attributeDefs, 'Addresses')
+
+  if (addressesSectionDefs.length === 0) {
+    return []
   }
 
-  const getTitle = field =>
-    field
-      .split('_')
-      .map(i => i.charAt(0).toUpperCase() + i.substr(1, i.length))
-      .join(' ')
+  let result = []
 
-  return addresses.map(address => {
-    const { id, is_primary, label } = address
-    const addressAttribute = {
-      ...addressFields,
-      ..._.pick(address, Object.keys(addressFields))
-    }
+  const addresses = _.groupBy(allAddressFields, 'index')
 
-    const fields = {}
+  _.each(addresses, address => {
+    let fields = address
 
-    if (Object.keys(addressAttribute).length > 0) {
-      Object.keys(addressAttribute).forEach(field => {
-        fields[field] = {
-          id,
-          type: field,
-          [field]: addressAttribute[field],
-          title: getTitle(field)
-        }
-      })
-    }
+    const indexedFields = _.indexBy(
+      address,
+      attribute => attribute.attribute_def.name
+    )
 
-    return {
-      id,
-      label,
-      fields,
-      is_primary
+    addressesSectionDefs.forEach(attribute_def => {
+      let field = indexedFields[attribute_def.name]
+
+      if (!field) {
+        fields.push({
+          attribute_def,
+          index: address[0].index,
+          [attribute_def.data_type]: null
+        })
+      }
+    })
+
+    fields = fields.filter(field => field.attribute_def.show)
+
+    const { label, index, is_primary } = fields[0]
+
+    if (fields.some(field => field[field.attribute_def.data_type])) {
+      result.push({ index, label, fields, is_primary })
     }
   })
+
+  return result
+}
+
+function getIndex(allAddressFields) {
+  if (allAddressFields.length > 0) {
+    const index = allAddressFields
+      .filter(({ index }) => index != null)
+      .map(({ index }) => index)
+      .reduce((a, b) => (a >= b ? a : b))
+
+    return index + 1
+  }
+
+  return 0
 }

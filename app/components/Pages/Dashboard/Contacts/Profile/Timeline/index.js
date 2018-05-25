@@ -2,28 +2,48 @@ import React from 'react'
 import { connect } from 'react-redux'
 import timeago from 'timeago.js'
 import _ from 'underscore'
+
 import TimelineItem from './item'
+import CRMTaskItem from './crm-item'
 import * as userActions from './userActionsHelper'
 import Loading from '../../../../../Partials/Loading'
 import {
   isFetchingContactActivities,
   selectContactActivitiesError
 } from '../../../../../../reducers/contacts/activities'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers/get-attribute-from-summary'
+import { getContactActivities } from '../../../../../../store_actions/contacts'
 
 class Timeline extends React.Component {
-  getAttributes(activity) {
-    const { name } = this.props
+  componentDidMount() {
+    const { getContactActivities, contact } = this.props
+
+    if (contact && !contact.activities) {
+      getContactActivities(contact.id)
+    }
+  }
+
+  getAttributes = (name, activity) => {
     const actionFn = userActions[activity.action]
     const attributes = actionFn ? actionFn(activity, name) : {}
 
     return {
       ...attributes,
-      ...{ time: timeago().format(activity.created_at * 1000) }
+      time: timeago().format(activity.created_at * 1000)
     }
   }
 
   render() {
-    const { activities, name, avatar, isFetching, activitiesError } = this.props
+    let name
+    let avatar
+    let activities = {}
+    const { contact, isFetching, activitiesError } = this.props
+
+    if (contact) {
+      name = getAttributeFromSummary(contact, 'display_name')
+      avatar = getAttributeFromSummary(contact, 'profile_image_url')
+      activities = contact.activities
+    }
 
     if (isFetching) {
       return <Loading />
@@ -48,14 +68,23 @@ class Timeline extends React.Component {
 
     return (
       <div>
-        {_.map(activities, (activity, id) => {
-          const { object } = activity
+        {_.map(activities, activity => {
+          if (activity.type === 'crm_task') {
+            console.log('what')
 
-          if (object && _.size(activity.object) > 0) {
+            return (
+              <CRMTaskItem
+                task={activity}
+                key={`timeline_item_${activity.id}`}
+              />
+            )
+          }
+
+          if (activity.object && !_.isEmpty(activity.object)) {
             return (
               <TimelineItem
-                key={`timeline_item_${id}`}
-                attributes={this.getAttributes(activity)}
+                key={`timeline_item_${activity.id}`}
+                attributes={this.getAttributes(name, activity)}
                 name={name}
                 avatar={avatar}
               />
@@ -72,4 +101,6 @@ const mapStateToProps = ({ contacts: { activities } }) => ({
   activitiesError: selectContactActivitiesError(activities)
 })
 
-export default connect(mapStateToProps)(Timeline)
+export default connect(mapStateToProps, {
+  getContactActivities
+})(Timeline)
