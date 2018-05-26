@@ -14,11 +14,11 @@ class Pagination extends React.Component {
   }
 
   getNextButton = () => {
-    const { page, onPageChange, canNext } = this.props
+    const { page, onPageChange, totalCount, pageSize } = this.props
 
     return {
       text: 'Next',
-      disabled: !canNext,
+      disabled: Math.round(totalCount / pageSize) === page,
       onClick: () => onPageChange(page + 1)
     }
   }
