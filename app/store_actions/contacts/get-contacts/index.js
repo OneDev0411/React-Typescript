@@ -30,7 +30,10 @@ export function getContacts(page = 1, limit = 50) {
       batchActions([
         dispatch({
           response: {
-            info: response.info,
+            info: {
+              ...response.info,
+              type: 'general'
+            },
             ...normalizeContacts(response)
           },
           type: actionTypes.FETCH_CONTACTS_SUCCESS

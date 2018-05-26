@@ -1,26 +1,35 @@
-const requestPage = (resultKey, page) => ({
-  type: 'REQUEST_PAGE',
+import * as actionTypes from '../../constants/pagination'
+
+const requestPage = (list, page) => ({
+  type: actionTypes.REQUEST_PAGE,
   payload: {
     page
   },
   meta: {
-    resultKey
+    list
   }
 })
 
-const receivePage = (resultKey, page, ids) => ({
-  type: 'RECEIVE_PAGE',
+const receivePage = (list, page, ids) => ({
+  type: actionTypes.RECEIVE_PAGE,
   payload: {
     page,
     ids
   },
   meta: {
-    resultKey
+    list
   }
 })
 
-export const createRequestPageActionCreator = resultKey => page =>
-  requestPage(resultKey, page)
+export const clearPagination = list => ({
+  type: actionTypes.CLEAR_PAGINATION,
+  meta: {
+    list
+  }
+})
 
-export const createReceivePageActionCreator = resultKey => (page, ids) =>
-  receivePage(resultKey, page, ids)
+export const createRequestPageActionCreator = list => page =>
+  requestPage(list, page)
+
+export const createReceivePageActionCreator = list => (page, ids) =>
+  receivePage(list, page, ids)

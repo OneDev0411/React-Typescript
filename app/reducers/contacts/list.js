@@ -9,6 +9,7 @@ const byId = (state = {}, action) => {
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.PATCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.DELETE_ATTRIBUTE_SUCCESS:
     case actionTypes.CREATE_CONTACTS_SUCCESS:
     case actionTypes.POST_NEW_ATTRIBUTES_SUCCESS:
@@ -26,6 +27,9 @@ const byId = (state = {}, action) => {
       }
 
       return contacts
+
+    case actionTypes.CLEAR_CONTACTS_LIST:
+      return {}
     default:
       return state
   }
@@ -36,6 +40,7 @@ const ids = (state = [], action) => {
     // case actionTypes.CONTACTS__UPLOAD_CVS:
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.CREATE_CONTACTS_SUCCESS:
       const newState = [...state, ...action.response.result.contacts]
 
@@ -44,17 +49,23 @@ const ids = (state = [], action) => {
 
     case actionTypes.DELETE_CONTACT_SUCCESS:
       return action.response.result.contacts
+    case actionTypes.CLEAR_CONTACTS_LIST:
+      return []
     default:
       return state
   }
 }
 
-export const info = (state = { total: 0, count: 0 }, action) => {
+const listInfoInitialState = { total: 0, count: 0, type: 'general', filter: '' }
+export const info = (state = listInfoInitialState, action) => {
   switch (action.type) {
     case actionTypes.DELETE_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.CREATE_CONTACTS_SUCCESS:
       return action.response.info
+    case actionTypes.CLEAR_CONTACTS_LIST:
+      return listInfoInitialState
     default:
       return state
   }
@@ -63,9 +74,12 @@ export const info = (state = { total: 0, count: 0 }, action) => {
 const isFetching = (state = false, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACTS_REQUEST:
+    case actionTypes.SEARCH_CONTACTS_REQUEST:
       return true
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.FETCH_CONTACTS_FAILURE:
+    case actionTypes.SEARCH_CONTACTS_SUCCESS:
+    case actionTypes.SEARCH_CONTACTS_FAILURE:
       return false
     default:
       return state
@@ -75,8 +89,10 @@ const isFetching = (state = false, action) => {
 const error = (state = null, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACTS_FAILURE:
+    case actionTypes.SEARCH_CONTACTS_FAILURE:
       return action.error
     case actionTypes.FETCH_CONTACTS_SUCCESS:
+    case actionTypes.SEARCH_CONTACTS_SUCCESS:
       return null
     default:
       return state

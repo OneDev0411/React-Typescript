@@ -9,17 +9,19 @@ export default class HeaderSearch extends React.Component {
     onInputChange: PropTypes.func.isRequired,
     collapsible: PropTypes.bool,
     expanded: PropTypes.bool,
-    debounceTime: PropTypes.number
+    debounceTime: PropTypes.number,
+    inputValue: PropTypes.string
   }
 
   static defaultProps = {
     collapsible: true,
     expanded: true,
-    debounceTime: 700
+    debounceTime: 700,
+    inputValue: ''
   }
 
   state = {
-    inputValue: '',
+    inputValue: this.props.inputValue,
     isFocused: false
   }
 
@@ -55,8 +57,9 @@ export default class HeaderSearch extends React.Component {
             onBlur={this.onBlur}
             onFocus={this.onFocus}
             onChange={this.onChange}
-            type="text"
             placeholder={this.props.placeholder}
+            type="text"
+            value={this.state.inputValue}
           />
           {this.props.isSearching && (
             <i className="fa fa-spin fa-spinner fa-2x" />

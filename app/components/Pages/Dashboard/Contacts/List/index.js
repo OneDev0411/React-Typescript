@@ -12,10 +12,11 @@ import {
   isFetchingContactsList
 } from '../../../../../reducers/contacts/list'
 import {
+  getContacts,
+  searchContacts,
   deleteContacts,
-  getContacts
+  clearContactSearchResult
 } from '../../../../../store_actions/contacts'
-import { searchContacts } from '../../../../../models/contacts/search-contacts'
 
 import Header from './header'
 import ExportContacts from './ExportContacts'
@@ -39,8 +40,7 @@ const SecondHeaderText = styled.p`
 class ContactsList extends React.Component {
   state = {
     page: 0,
-    isSearching: false,
-    filteredContacts: null,
+    filter: '',
     deletingContacts: [],
     selectedRows: {}
   }
@@ -61,52 +61,47 @@ class ContactsList extends React.Component {
 
   handleDeleteContact = async ({ contactIds }) => {
     try {
+      const { page } = this.state
       const { deleteContacts } = this.props
-      const { filteredContacts } = this.state
       const deletedState = { deletingContacts: [], selectedRows: [] }
 
       this.setState({ deletingContacts: contactIds })
 
       await deleteContacts(contactIds)
 
-      if (filteredContacts) {
-        if (filteredContacts.length === contactIds.length) {
-          return this.setState({
-            ...deletedState,
-            page: 0,
-            filteredContacts: null
-          })
-        }
+      const currentPageIdsLength = selectContactsPage(this.props.list, page).ids
+        .length
 
-        this.setState({
+      if (currentPageIdsLength === contactIds.length) {
+        return this.setState({
           ...deletedState,
-          filteredContacts: filteredContacts.filter(
-            c => !contactIds.includes(c.id)
-          )
+          page: page > 0 ? 0 : page - 1
         })
-      } else {
-        this.setState(deletedState)
       }
+
+      this.setState(deletedState)
     } catch (error) {
       console.log(error)
     }
   }
 
-  search = async keyword => {
-    if (keyword.length === 0) {
-      return this.setState({ filteredContacts: null })
+  search = async (filter, page = 1) => {
+    if (filter.length === 0) {
+      return this.setState(
+        { filter: '', isSearching: false },
+        this.props.clearContactSearchResult
+      )
     }
 
     try {
-      this.setState({ isSearching: true })
+      this.setState({ filter, isSearching: true })
 
-      const items = await searchContacts(keyword)
+      await this.props.searchContacts(filter, page)
 
-      this.setState({ filteredContacts: items, page: 0 })
+      this.setState({ isSearching: false, page: page - 1 })
     } catch (error) {
-      console.log(error)
-    } finally {
-      this.setState({ isSearching: false, page: 0 })
+      this.setState({ isSearching: false })
+      throw error
     }
   }
 
@@ -134,29 +129,22 @@ class ContactsList extends React.Component {
     this.setState({ page })
 
     if (!selectContactsPage(this.props.list, page + 1)) {
+      if (selectContactsInfo(this.props.list).type === 'search') {
+        return this.search(this.state.filter, page + 1)
+      }
+
       this.fetchPage(page + 1)
     }
   }
 
   render() {
-    const {
-      page,
-      isSearching,
-      filteredContacts,
-      deletingContacts,
-      selectedRows
-    } = this.state
+    const { page, isSearching, deletingContacts, selectedRows } = this.state
     const { user, list, loadingImport, attributeDefs } = this.props
     const contacts = selectContacts(list)
     const listInfo = selectContactsInfo(list)
     const pages = _.size(selectContactsPages(list))
     const isFetching = isFetchingContactsList(list)
-    const data = filteredContacts || contacts
     let { total: totalCount } = listInfo
-
-    if (filteredContacts != null) {
-      totalCount = filteredContacts.length
-    }
 
     if (
       (isFetching && contacts.length === 0) ||
@@ -169,7 +157,7 @@ class ContactsList extends React.Component {
       )
     }
 
-    if (contacts.length === 0) {
+    if (contacts.length === 0 && listInfo.type === 'general') {
       return (
         <div className="list">
           <NoContact user={user} />
@@ -182,6 +170,7 @@ class ContactsList extends React.Component {
     return (
       <div className="list">
         <Header
+          filter={this.state.filter}
           contactsCount={listInfo.total}
           isSearching={isSearching}
           onInputChange={this.search}
@@ -212,10 +201,10 @@ class ContactsList extends React.Component {
           </SecondHeader>
 
           <Table
-            data={data}
+            data={contacts}
             deletingContacts={deletingContacts}
             handleOnDelete={this.handleOnDelete}
-            loading={isSearching || isFetching}
+            loading={isFetching}
             onPageChange={this.onPageChange}
             page={page}
             pages={pages}
@@ -241,7 +230,9 @@ function mapStateToProps({ user, contacts }) {
 }
 
 export default connect(mapStateToProps, {
-  getContacts,
+  clearContactSearchResult,
   confirmation,
-  deleteContacts
+  deleteContacts,
+  getContacts,
+  searchContacts
 })(ContactsList)

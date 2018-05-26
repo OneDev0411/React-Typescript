@@ -1,0 +1,3 @@
+export const REQUEST_PAGE = 'REQUEST_PAGE'
+export const RECEIVE_PAGE = 'RECEIVE_PAGE'
+export const CLEAR_PAGINATION = 'CLEAR_PAGINATION'

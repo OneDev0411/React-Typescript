@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux'
 
+const INITIAL_STATE = { pages: {}, currentPage: 0 }
+
 const pages = (pages = {}, action = {}) => {
   switch (action.type) {
     case 'REQUEST_PAGE':
@@ -19,24 +21,31 @@ const pages = (pages = {}, action = {}) => {
         }
       }
     }
+    case 'CLEAR_PAGINATION':
+      return {}
     default:
       return pages
   }
 }
 
-const currentPage = (currentPage = 0, action = {}) =>
-  action.type === 'REQUEST_PAGE' ? action.payload.page : currentPage
+const currentPage = (currentPage = 0, action = {}) => {
+  switch (action.type) {
+    case 'REQUEST_PAGE':
+      return action.payload.page
+    case 'CLEAR_PAGINATION':
+      return 0
+    default:
+      return currentPage
+  }
+}
 
-function createPaginationReducer(resultKey) {
-  const onlyForKey = reducer => (
-    state = { pages: {}, currentPage: 0 },
-    action = {}
-  ) => {
+function createPaginationReducer(list) {
+  const onlyForKey = reducer => (state = INITIAL_STATE, action = {}) => {
     if (typeof action.meta === 'undefined') {
       return state
     }
 
-    if (action.meta.resultKey === resultKey) {
+    if (action.meta.list === list) {
       return reducer(state, action)
     }
 
