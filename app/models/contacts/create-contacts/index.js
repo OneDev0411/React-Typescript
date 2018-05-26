@@ -1,24 +1,19 @@
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
 
-const defaultOptions = {
-  get: true, // not works
-  relax: true
+const DEFAULT_QUERY = {
+  ...defaultQuery,
+  relax: true,
+  activity: false
 }
 
 /**
  * Create a new contacts.
  * @param {Array} contacts - Array of new contacts object.
- * @param {Object} options - The options of response form that
- * we wish receiving from server.
  * @returns {Array} Returns new contacts.
  */
 
-export async function createContacts(
-  contacts,
-  options = defaultOptions,
-  query = defaultQuery
-) {
+export async function createContacts(contacts, query = DEFAULT_QUERY) {
   if (!Array.isArray(contacts)) {
     throw new Error(`contacts is ${contacts}. It must be array of contacts.`)
   }
@@ -28,9 +23,9 @@ export async function createContacts(
   }
 
   try {
-    const response = await new Fetch()
+    const response = await new Fetch({ stream: true })
       .post('/contacts')
-      .send({ contacts, options })
+      .send({ contacts })
       .query(query)
 
     return response.body

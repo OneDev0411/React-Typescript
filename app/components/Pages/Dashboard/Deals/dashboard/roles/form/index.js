@@ -53,14 +53,14 @@ export class RoleFormModal extends React.Component {
   get commissionAttributes() {
     const { form } = this.props
 
-    if (form && form.commission_percentage) {
+    if (form && form.commission_percentage !== null) {
       return {
         commission: form.commission_percentage,
         commission_type: 'commission_percentage'
       }
     }
 
-    if (form && form.commission_dollar) {
+    if (form && form.commission_dollar !== null) {
       return {
         commission: form.commission_dollar,
         commission_type: 'commission_dollar'
@@ -87,7 +87,9 @@ export class RoleFormModal extends React.Component {
     const validators = this.getFormValidators(requiredFields)
 
     requiredFields.forEach(fieldName => {
-      if (!values[fieldName]) {
+      let value = values[fieldName]
+
+      if (value === undefined || value === null || value.length === 0) {
         errors[fieldName] = 'Required'
       }
     })
@@ -100,7 +102,7 @@ export class RoleFormModal extends React.Component {
           return false
         }
 
-        if (!errors[fieldName] && !await validator(fieldValue)) {
+        if (!errors[fieldName] && !(await validator(fieldValue))) {
           errors[fieldName] = this.errorNames[fieldName]
         }
       })
@@ -116,7 +118,22 @@ export class RoleFormModal extends React.Component {
   normalizeForm = values => {
     const newValues = {}
     const { commission, commission_type } = values
-    const ingoreFields = ['commission', 'commission_type', 'user']
+
+    const validFields = [
+      'id',
+      'contact',
+      'legal_prefix',
+      'legal_first_name',
+      'legal_middle_name',
+      'legal_last_name',
+      'company_title',
+      'email',
+      'phone_number',
+      'role',
+      'commission',
+      'commission_dollar',
+      'commission_percentage'
+    ]
 
     if (commission_type === 'commission_dollar') {
       newValues.commission_dollar = parseFloat(commission)
@@ -126,12 +143,12 @@ export class RoleFormModal extends React.Component {
       newValues.commission_dollar = null
     }
 
-    return _.omit(
+    return _.pick(
       {
         ...values,
         ...newValues
       },
-      (fieldValue, fieldName) => ingoreFields.includes(fieldName)
+      validFields
     )
   }
 
@@ -142,7 +159,7 @@ export class RoleFormModal extends React.Component {
   getRequiredFields = values => {
     const list = ['role']
 
-    const { company_title, role } = values
+    const { role, company_title } = values
 
     if (
       company_title &&
@@ -163,7 +180,11 @@ export class RoleFormModal extends React.Component {
 
     // when adding an agent, company should be mandatory
     if (role && role.includes('Agent')) {
-      list.push('legal_first_name', 'legal_last_name', 'company_title')
+      list.push('legal_first_name', 'legal_last_name')
+    }
+
+    if (this.isCompanyRequired(role)) {
+      list.push('company_title')
     }
 
     /**
@@ -316,6 +337,30 @@ export class RoleFormModal extends React.Component {
    * https://gitlab.com/rechat/web/issues/563
    */
   isEmailRequired = role => ['BuyerAgent', 'SellerAgent'].includes(role)
+
+  /**
+   * check company is required or not
+   * see https://gitlab.com/rechat/web/issues/1217
+   */
+  isCompanyRequired = role => {
+    let otherSideAgents = []
+    const { deal, dealSide } = this.props
+    const side = deal ? deal.deal_type : dealSide
+
+    if (!side) {
+      return false
+    }
+
+    if (side === 'Selling') {
+      otherSideAgents = ['BuyerAgent', 'CoBuyerAgent']
+    }
+
+    if (side === 'Buying') {
+      otherSideAgents = ['SellerAgent', 'CoSellerAgent']
+    }
+
+    return otherSideAgents.includes(role)
+  }
 
   /**
    * check whether commission is required or not

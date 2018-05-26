@@ -21,27 +21,24 @@ export default (state = initialState, action) => {
         showCompose: action.display
       }
 
-    case types.UPDATE_ATTACHMENTS:
+    case types.ADD_ATTACHMENT:
       return {
         ...state,
-        attachments: action.attachments
+        attachments: [...state.attachments, action.attachment]
       }
 
     case types.REMOVE_ATTACHMENT:
       return {
         ...state,
-        ...{
-          attachments: state.attachments.filter(id => id !== action.id)
-        }
+        attachments: state.attachments.filter(
+          attachment => attachment.id !== action.attachment.id
+        )
       }
 
     case types.SET_RECIPIENT:
       return {
         ...state,
-        recipients: [
-          ...state.recipients,
-          action.recipient
-        ]
+        recipients: [...state.recipients, action.recipient]
       }
 
     case types.REMOVE_RECIPIENT:

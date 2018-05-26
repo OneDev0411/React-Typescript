@@ -17,6 +17,10 @@ export async function getAssociations(task) {
 
       if (value && value.length > 0) {
         query.push(`${queryName}${type}`)
+
+        if (type === 'contact') {
+          query.push('associations[]=contact.summary')
+        }
       }
     })
 

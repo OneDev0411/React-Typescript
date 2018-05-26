@@ -76,7 +76,7 @@ function taskFileDeleted(task, file_id) {
 
 export function deleteFile(dealId, files) {
   return async dispatch => {
-    await Deal.deleteStashFile(dealId, _.keys(files))
+    Deal.deleteFiles(dealId, _.keys(files)).then(() => null)
 
     _.each(files, (task, fileId) => {
       if (task) {
@@ -172,6 +172,12 @@ export function moveTaskFile(user, dealId, task, file, notifyOffice) {
         fileData = response.body.data
       }
 
+      if (task) {
+        dispatch(taskFileCreated(task.id, fileData))
+      } else {
+        dispatch(stashFileCreated(dealId, fileData))
+      }
+
       /*
       * remove file from it's current place (task or stash based on given task)
       */
@@ -181,20 +187,12 @@ export function moveTaskFile(user, dealId, task, file, notifyOffice) {
         })
       )
 
-      if (task) {
-        dispatch(taskFileCreated(task.id, fileData))
-      } else {
-        dispatch(stashFileCreated(dealId, fileData))
-      }
-
       if (notifyOffice) {
         dispatch(changeNeedsAttention(dealId, task.id, true))
       }
 
       return fileData
     } catch (e) {
-      console.log(e)
-
       dispatch(
         notify({
           title: e.message,

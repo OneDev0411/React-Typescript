@@ -65,7 +65,7 @@ export function getPhoneNumberLabels(attributeDef) {
  * @param {Object} attributeDefs - list of all definitions
  */
 export function getEmailLabels(attributeDef) {
-  return getPhoneNumberLabels(attributeDef, 'Email')
+  return getAttributeLabels(attributeDef, 'Email')
 }
 
 /**

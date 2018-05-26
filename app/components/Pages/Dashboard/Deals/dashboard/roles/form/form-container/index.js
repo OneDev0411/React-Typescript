@@ -1,7 +1,7 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 import _ from 'underscore'
-import { TextInput } from '../form-components/text-input'
+import { TextInput } from '../../../../../../../../views/components/Forms/TextInput'
 import { CommissionInput } from '../form-components/commission-input'
 import { TitleDropDown } from '../form-components/title-dropdown'
 import { RolesDropDown } from '../form-components/roles-dropdown'
@@ -17,14 +17,13 @@ const getDropDownItems = ({ form = {}, singularName, pluralName }) => {
   const values = form[pluralName] || []
 
   if (_.size(values) > 0) {
-    return values.map(item => {
-      const definition = item.attribute_def
-
-      return item[definition.data_type]
-    })
+    return values.map(item => item[item.attribute_def.data_type])
   }
 
-  return form[singularName] || []
+  // get single value
+  const value = form[singularName]
+
+  return value ? [value] : []
 }
 
 export const RoleFormContainer = ({
@@ -47,6 +46,7 @@ export const RoleFormContainer = ({
       (label, name) => (
         <Field
           key={name}
+          parse={value => value || ''}
           name={name}
           placeholder={label}
           isRequired={requiredFields.includes(name)}
@@ -58,6 +58,7 @@ export const RoleFormContainer = ({
     <Field
       name="company_title"
       placeholder="Company"
+      parse={value => value || ''}
       component={AutoCompleteInput}
       defaultSelectedItem={form && form.email}
       isRequired={requiredFields.includes('company_title')}
@@ -71,6 +72,7 @@ export const RoleFormContainer = ({
     <Field
       name="email"
       placeholder="Email"
+      parse={value => value || ''}
       component={AutoCompleteInput}
       defaultSelectedItem={form && form.email}
       isRequired={requiredFields.includes('email')}
@@ -84,6 +86,7 @@ export const RoleFormContainer = ({
     <Field
       name="phone_number"
       placeholder="Phone"
+      parse={value => value || ''}
       component={AutoCompleteInput}
       defaultSelectedItem={form && form.phone_number}
       isRequired={requiredFields.includes('phone_number')}

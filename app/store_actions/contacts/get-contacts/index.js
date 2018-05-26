@@ -3,18 +3,24 @@ import { getContacts as fetchContacts } from '../../../models/contacts/get-conta
 import { isFetchingContactsList } from '../../../reducers/contacts/list'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 
-export function getContacts() {
+const defaultOptions = {
+  start: 0,
+  limit: 50
+}
+
+export function getContacts(options = defaultOptions) {
   return async (dispatch, getState) => {
-    const { contacts: { list } } = getState()
+    const {
+      contacts: { list }
+    } = getState()
 
     if (isFetchingContactsList(list)) {
       return Promise.resolve()
     }
 
     try {
-      let start = 0
-      let limit = 100
       let count = 0
+      let { start, limit } = options
 
       do {
         dispatch({

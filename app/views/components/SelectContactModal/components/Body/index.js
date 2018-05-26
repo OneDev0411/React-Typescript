@@ -52,6 +52,10 @@ class Body extends Component {
   }
 
   search = _.debounce(async value => {
+    if (!value) {
+      return this.setState({ items: this.props.contacts })
+    }
+
     try {
       this.setState({ isSearching: true })
 
@@ -68,14 +72,8 @@ class Body extends Component {
   }, 300)
 
   handleOnChange = async event => {
-    const { value } = event.target
-
-    if (!value) {
-      return
-    }
-
     // call the debounce function
-    this.search(value)
+    this.search(event.target.value)
   }
 
   handleItemToString = item => {

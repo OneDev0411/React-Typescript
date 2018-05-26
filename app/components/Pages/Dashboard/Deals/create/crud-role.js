@@ -144,6 +144,7 @@ class CrudRole extends React.Component {
 
     const {
       user,
+      dealSide,
       ctaTitle,
       modalTitle,
       teamAgents,
@@ -193,11 +194,12 @@ class CrudRole extends React.Component {
           isSubmitting={isSaving}
           isOpen={showRoleModal}
           user={role}
-          onHide={this.resetStates}
-          onUpsertRole={onUpsertUser}
+          dealSide={dealSide}
           modalTitle={modalTitle}
           allowedRoles={allowedRoles}
           isCommissionRequired={isCommissionRequired}
+          onHide={this.resetStates}
+          onUpsertRole={onUpsertUser}
         />
       </Fragment>
     )

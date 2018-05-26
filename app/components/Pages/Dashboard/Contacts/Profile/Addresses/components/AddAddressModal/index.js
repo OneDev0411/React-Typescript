@@ -12,7 +12,7 @@ import { getAddressLabels } from '../../../../../../../../models/contacts/helper
 const isPostalCode = value =>
   !value || new RegExp(/(^\d{5}$)|(^\d{5}-\d{4}$)/).exec(value)
     ? undefined
-    : 'Please include numbers. You have added a letter or special character.'
+    : 'You only have allowed to using numbers and dash. Like 75233 or 65132-2312.'
 
 // const composeValidators = (...validators) => value =>
 //   validators.reduce((error, validator) => error || validator(value), undefined)
@@ -134,7 +134,6 @@ function AddAddressModal({
                 component={TextField}
                 disabled={submitting}
                 title="Street Name"
-                placeholder="Buyers Club"
               />
               <Field
                 name="street_suffix"
@@ -157,7 +156,6 @@ function AddAddressModal({
                 component={TextField}
                 disabled={submitting}
                 title="City"
-                placeholder="Dallas"
               />
 
               <Field
@@ -165,14 +163,6 @@ function AddAddressModal({
                 component={TextField}
                 disabled={submitting}
                 title="State"
-                placeholder="Texas"
-              />
-
-              <Field
-                name="zip_code"
-                component={TextField}
-                disabled={submitting}
-                title="Zip Code"
               />
 
               <Field
@@ -180,7 +170,6 @@ function AddAddressModal({
                 component={TextField}
                 disabled={submitting}
                 title="Country"
-                placeholder="USA"
               />
             </BasicModal.Body>
             <BasicModal.Footer style={{ justifyContent: 'space-between' }}>

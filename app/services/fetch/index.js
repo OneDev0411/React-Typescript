@@ -2,6 +2,7 @@ import _ from 'underscore'
 import SuperAgent from 'superagent'
 import store from '../../stores'
 import config from '../../../config/public'
+import decodeStream from './middlewares/decode-stream'
 
 export default class Fetch {
   constructor(options) {
@@ -121,12 +122,7 @@ export default class Fetch {
   }
 
   onResponse(response) {
-    try {
-      response.body = JSON.parse(response.text)
-      response.text = null
-    } catch (e) {
-      /* nothing */
-    }
+    response = decodeStream(response, this.options)
 
     return response
   }

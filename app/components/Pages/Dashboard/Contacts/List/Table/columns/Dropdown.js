@@ -1,7 +1,8 @@
 import React from 'react'
 import { Dropdown, MenuItem } from 'react-bootstrap'
-import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
-import VerticalDotsIcon from '../../../Partials/Svgs/VerticalDots'
+
+import ShadowButton from '../../../../../../../views/components/Button/ShadowButton'
+import VerticalDotsIcon from '../../../../Partials/Svgs/VerticalDots'
 
 const ContactsDropDown = ({ contactId, handleOnDelete }) => (
   <Dropdown

@@ -1,32 +1,27 @@
 import React, { Fragment } from 'react'
-import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import ReactTable from 'react-table'
-import Radio from '../../../../../views/components/radio/RadioWithState'
-import TrComponent from './Trcomponent'
+
+import './style.scss'
+import { LoadingComponent } from './components/LoadingComponent'
+import NoSearchResults from '../../../../../Partials/no-search-results'
+import Radio from '../../../../../../views/components/radio/RadioWithState'
+import Pagination from './components/Pagination'
+import TrComponent from './components/Trcomponent'
 import DropDown from './columns/Dropdown'
 import TagsString from './columns/Tags'
 import Name from './columns/Name'
-import {
-  getAttributeFromSummary,
-  getContactTags
-} from '../../../../../models/contacts/helpers'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
 function openContact(id) {
   browserHistory.push(`/dashboard/contacts/${id}`)
 }
 
 class ContactsList extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    const filteredContactsChanged = !_.isEqual(
-      nextProps.filteredContacts,
-      this.props.filteredContacts
-    )
-    const deletingContactsChanged =
-      nextProps.deletingContacts.length !== this.props.deletingContacts.length
-
-    return filteredContactsChanged || deletingContactsChanged
+  state = {
+    pageSize: 50
   }
+
   getCellTitle = title => (
     <Fragment>
       {title}
@@ -90,17 +85,48 @@ class ContactsList extends React.Component {
       }
     }
   ]
+
+  setPageSize = pageSize => {
+    this.setState({
+      pageSize
+    })
+  }
+
   render() {
-    const { filteredContacts, deletingContacts } = this.props
+    const defaultPageSize = 50
+    const { pageSize } = this.state
+    const {
+      data,
+      deletingContacts,
+      loading,
+      onPageChange,
+      page,
+      totalCount
+    } = this.props
 
     return (
       <ReactTable
-        className="contacts-list-table"
-        pageSize={Object.keys(filteredContacts).length}
-        showPaginationBottom={false}
-        data={filteredContacts}
+        data={data}
+        loading={loading}
         columns={this.columns}
+        totalCount={totalCount}
+        minRows={0}
+        page={page}
+        pageSize={pageSize}
+        defaultPageSize={defaultPageSize}
+        pageSizeOptions={[25, 50, 100]}
+        showPaginationBottom
+        onPageChange={onPageChange}
+        onFetchData={this.fetchPage}
+        showPagination={defaultPageSize < data.length}
+        onPageSizeChange={this.setPageSize}
+        PaginationComponent={Pagination}
         TdComponent={TrComponent}
+        LoadingComponent={LoadingComponent}
+        NoDataComponent={() => (
+          <NoSearchResults description="Try typing another name, email, phone or tag." />
+        )}
+        className="contacts-list-table"
         getTrProps={(state, { original: { id: contactId } }) => {
           if (deletingContacts.includes(contactId)) {
             return {
