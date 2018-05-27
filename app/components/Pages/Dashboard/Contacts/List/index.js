@@ -63,16 +63,15 @@ class ContactsList extends React.Component {
     try {
       const { page } = this.state
       const { deleteContacts } = this.props
-      const deletedState = { deletingContacts: [], selectedRows: [] }
+      const deletedState = { deletingContacts: [], selectedRows: {} }
 
       this.setState({ deletingContacts: contactIds })
 
       await deleteContacts(contactIds)
 
-      const currentPageIdsLength = selectContactsPage(this.props.list, page).ids
-        .length
+      const currentPage = selectContactsPage(this.props.list, page)
 
-      if (currentPageIdsLength === contactIds.length) {
+      if (currentPage && currentPage.ids.length === contactIds.length) {
         return this.setState({
           ...deletedState,
           page: page > 0 ? 0 : page - 1
@@ -88,7 +87,7 @@ class ContactsList extends React.Component {
   search = async (filter, page = 1) => {
     if (filter.length === 0) {
       return this.setState(
-        { filter: '', isSearching: false },
+        { filter: '', isSearching: false, page: 0 },
         this.props.clearContactSearchResult
       )
     }
@@ -129,7 +128,7 @@ class ContactsList extends React.Component {
     this.setState({ page })
 
     if (!selectContactsPage(this.props.list, page + 1)) {
-      if (selectContactsInfo(this.props.list).type === 'search') {
+      if (selectContactsInfo(this.props.list).type === 'filter') {
         return this.search(this.state.filter, page + 1)
       }
 
@@ -147,7 +146,7 @@ class ContactsList extends React.Component {
     let { total: totalCount } = listInfo
 
     if (
-      (isFetching && contacts.length === 0) ||
+      (isFetching && contacts.length === 0 && listInfo.type !== 'filter') ||
       _.size(attributeDefs.byName) === 0
     ) {
       return (
@@ -157,7 +156,7 @@ class ContactsList extends React.Component {
       )
     }
 
-    if (contacts.length === 0 && listInfo.type === 'general') {
+    if (contacts.length === 0 && listInfo.type !== 'filter') {
       return (
         <div className="list">
           <NoContact user={user} />

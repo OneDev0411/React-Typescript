@@ -6,11 +6,7 @@ import Import from './Import'
 import HeaderSearch from '../../../../Partials/headerSearch'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
-function Header({ user, contactsCount, onInputChange, isSearching, filter }) {
-  if (contactsCount === 0 && !filter) {
-    return null
-  }
-
+function Header({ user, onInputChange, isSearching, filter }) {
   const isBackOffice = false
 
   return (

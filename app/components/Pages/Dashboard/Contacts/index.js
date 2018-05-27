@@ -22,7 +22,7 @@ class Contacts extends React.Component {
     }
 
     if (tagsList.length === 0) {
-      await getContactsTags()
+      getContactsTags()
     }
   }
 

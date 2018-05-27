@@ -54,7 +54,7 @@ export function searchContacts(filter, page = 1, limit = 50) {
             info: {
               ...response.info,
               filter,
-              type: 'search'
+              type: 'filter'
             },
             ...normalizeContacts(response)
           },
