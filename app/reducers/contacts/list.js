@@ -60,6 +60,7 @@ const listInfoInitialState = { total: 0, count: 0, type: 'general', filter: '' }
 export const info = (state = listInfoInitialState, action) => {
   switch (action.type) {
     case actionTypes.DELETE_CONTACT_SUCCESS:
+    case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.CREATE_CONTACTS_SUCCESS:
