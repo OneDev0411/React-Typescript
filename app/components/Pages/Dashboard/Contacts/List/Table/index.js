@@ -119,7 +119,7 @@ class ContactsList extends React.Component {
         showPaginationBottom
         onPageChange={onPageChange}
         onFetchData={this.fetchPage}
-        showPagination={defaultPageSize <= data.length}
+        showPagination={defaultPageSize < data.length}
         onPageSizeChange={this.setPageSize}
         PaginationComponent={Pagination}
         TdComponent={TrComponent}
