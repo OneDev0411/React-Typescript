@@ -24,7 +24,6 @@ import { Toolbar } from './Toolbar'
 
 import Table from './Table'
 import { NoContact } from './NoContact'
-import Loading from '../../../../Partials/Loading'
 
 class ContactsList extends React.Component {
   state = {
@@ -135,49 +134,43 @@ class ContactsList extends React.Component {
     const isFetching = isFetchingContactsList(list)
     let { total: totalCount } = listInfo
 
-    const noContact = contacts.length === 0 && listInfo.type !== 'filter'
+    const noContact =
+      (!isFetching && contacts.length === 0 && listInfo.type !== 'filter') ||
+      _.size(this.props.attributeDefs.byName) === 0
 
     return (
       <Fragment>
         <Header user={user} />
-        {this.props.loadingImport && (
-          <i className="fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading" />
-        )}
-        {(isFetching && noContact) ||
-        _.size(this.props.attributeDefs.byName) === 0 ? (
-          <Loading />
-        ) : (
-          <div style={{ padding: '2rem' }}>
-            {noContact ? (
-              <NoContact user={user} />
-            ) : (
-              <Fragment>
-                <Filters
-                  inputValue={this.state.filter}
-                  isSearching={this.state.isSearching}
-                  handleOnChange={this.search}
-                />
-                <Toolbar
-                  onDelete={this.handleOnDelete}
-                  selectedRows={selectedRows}
-                  totalCount={totalCount}
-                />
-                <Table
-                  data={contacts}
-                  deletingContacts={this.state.deletingContacts}
-                  handleOnDelete={this.handleOnDelete}
-                  loading={isFetching}
-                  onPageChange={this.onPageChange}
-                  page={page}
-                  pages={pages}
-                  selectedRows={selectedRows}
-                  totalCount={totalCount}
-                  toggleSelectedRow={this.toggleSelectedRow}
-                />
-              </Fragment>
-            )}
-          </div>
-        )}
+        <div style={{ padding: '2rem' }}>
+          <Filters
+            disabled={noContact}
+            inputValue={this.state.filter}
+            isSearching={this.state.isSearching}
+            handleOnChange={this.search}
+          />
+          <Toolbar
+            disabled={noContact || isFetching || this.state.isSearching}
+            onDelete={this.handleOnDelete}
+            selectedRows={selectedRows}
+            totalCount={totalCount}
+          />
+          {noContact ? (
+            <NoContact user={user} />
+          ) : (
+            <Table
+              data={contacts}
+              deletingContacts={this.state.deletingContacts}
+              handleOnDelete={this.handleOnDelete}
+              loading={isFetching}
+              onPageChange={this.onPageChange}
+              page={page}
+              pages={pages}
+              selectedRows={selectedRows}
+              totalCount={totalCount}
+              toggleSelectedRow={this.toggleSelectedRow}
+            />
+          )}
+        </div>
       </Fragment>
     )
   }

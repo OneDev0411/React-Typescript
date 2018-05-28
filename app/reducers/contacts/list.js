@@ -101,7 +101,7 @@ const error = (state = null, action) => {
 
 const filters = (state = { text: '' }, action) => {
   switch (action.type) {
-    case actionTypes.SET_CONTACT_FILTER:
+    case actionTypes.SET_CONTACT_FILTERS:
       return {
         ...state,
         ...action.filters

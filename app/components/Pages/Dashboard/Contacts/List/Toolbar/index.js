@@ -5,9 +5,14 @@ import Flex from 'styled-flex-component'
 import ExportContacts from '../ExportContacts'
 
 Toolbar.propTypes = {
+  disabled: PropTypes.bool,
   selectedRows: PropTypes.shape().isRequired,
   totalCount: PropTypes.number.isRequired,
   onDelete: PropTypes.func.isRequired
+}
+
+Toolbar.defaultProps = {
+  disabled: false
 }
 
 export function Toolbar(props) {
@@ -20,7 +25,10 @@ export function Toolbar(props) {
         {selectedRowsLength > 0 ? `${selectedRowsLength} of ` : ''}
         {`${props.totalCount.toLocaleString()} Contacts`}
       </span>
-      <ExportContacts selectedRows={props.selectedRows} />
+      <ExportContacts
+        disabled={props.disabled}
+        selectedRows={props.selectedRows}
+      />
       {selectedRowsLength > 0 && (
         <div className="list--secondary-button">
           <button
