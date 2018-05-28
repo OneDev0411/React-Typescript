@@ -47,12 +47,7 @@ class Pagination extends React.Component {
     // }
 
     return (
-      <div
-        style={{
-          textAlign: 'center',
-          marginBottom: '2em'
-        }}
-      >
+      <div style={{ textAlign: 'center', marginTop: '1em' }}>
         {/* <span style={{ marginRight: '1em' }}>
           <b>{`${page * pageSize + 1}-${
             (page + 1) * pageSize > totalCount

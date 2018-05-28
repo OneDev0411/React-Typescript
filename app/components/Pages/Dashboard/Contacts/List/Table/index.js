@@ -2,7 +2,6 @@ import React, { Fragment } from 'react'
 import { browserHistory } from 'react-router'
 import ReactTable from 'react-table'
 
-import './style.scss'
 import { LoadingComponent } from './components/LoadingComponent'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 import Radio from '../../../../../../views/components/radio/RadioWithState'
