@@ -227,18 +227,6 @@ export default class ManualAddress extends React.Component {
                 />
 
                 <Field
-                  name="street_suffix"
-                  clearable
-                  searchable
-                  placeholder="Street Suffix"
-                  options={STREET_SUFFIX.map(value => ({
-                    value,
-                    label: value
-                  }))}
-                  component={SelectInput}
-                />
-
-                <Field
                   name="street_number"
                   placeholder="Street #"
                   isRequired={false}
@@ -250,6 +238,18 @@ export default class ManualAddress extends React.Component {
                   placeholder="Street Name"
                   isRequired
                   component={TextInput}
+                />
+
+                <Field
+                  name="street_suffix"
+                  clearable
+                  searchable
+                  placeholder="Street Suffix"
+                  options={STREET_SUFFIX.map(value => ({
+                    value,
+                    label: value
+                  }))}
+                  component={SelectInput}
                 />
 
                 <Field
