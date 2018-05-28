@@ -84,7 +84,7 @@ class PDF extends React.Component {
             <div className="sticky">
               <div className="heading">
                 <span className="page-title">
-                  {files[id] && files[id].properties.name}
+                  {files[id] && decodeURI(files[id].properties.name)}
                 </span>
 
                 <span className="pages-count">
