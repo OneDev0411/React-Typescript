@@ -135,8 +135,7 @@ class ContactsList extends React.Component {
     let { total: totalCount } = listInfo
 
     const noContact =
-      (!isFetching && contacts.length === 0 && listInfo.type !== 'filter') ||
-      _.size(this.props.attributeDefs.byName) === 0
+      !isFetching && contacts.length === 0 && listInfo.type !== 'filter'
 
     return (
       <Fragment>
@@ -176,14 +175,10 @@ class ContactsList extends React.Component {
   }
 }
 
-function mapStateToProps({ user, contacts }) {
-  const { list, spinner: loadingImport, attributeDefs } = contacts
-
+function mapStateToProps(state) {
   return {
-    user,
-    list,
-    loadingImport,
-    attributeDefs
+    list: state.contacts.list,
+    user: state.user
   }
 }
 
