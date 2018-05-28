@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
-import _ from 'underscore'
 import { connect } from 'react-redux'
+import _ from 'underscore'
+
 import { confirmation } from '../../../../../store_actions/confirmation'
-import styled from 'styled-components'
 
 import {
   selectContacts,
@@ -18,29 +18,19 @@ import {
   clearContactSearchResult
 } from '../../../../../store_actions/contacts'
 
-import Header from './header'
-import ExportContacts from './ExportContacts'
+import { Header } from './Header'
+import { Filters } from './Filters'
+import { Toolbar } from './Toolbar'
 
 import Table from './Table'
-import NoContact from './no-contact'
+import { NoContact } from './NoContact'
 import Loading from '../../../../Partials/Loading'
-import { Container } from '../components/Container'
-
-const SecondHeader = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 2rem;
-`
-const SecondHeaderText = styled.p`
-  font-size: 17px;
-  margin-bottom: 0;
-  margin-right: 8px;
-`
 
 class ContactsList extends React.Component {
   state = {
     page: 0,
-    filter: '',
+    filter: selectContactsInfo(this.props.list).filter,
+    isSearching: false,
     deletingContacts: [],
     selectedRows: {}
   }
@@ -137,82 +127,58 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const { page, isSearching, deletingContacts, selectedRows } = this.state
-    const { user, list, loadingImport, attributeDefs } = this.props
+    const { page, selectedRows } = this.state
+    const { user, list } = this.props
     const contacts = selectContacts(list)
     const listInfo = selectContactsInfo(list)
     const pages = _.size(selectContactsPages(list))
     const isFetching = isFetchingContactsList(list)
     let { total: totalCount } = listInfo
 
-    if (
-      (isFetching && contacts.length === 0 && listInfo.type !== 'filter') ||
-      _.size(attributeDefs.byName) === 0
-    ) {
-      return (
-        <Container>
-          <Loading />
-        </Container>
-      )
-    }
-
-    if (contacts.length === 0 && listInfo.type !== 'filter') {
-      return (
-        <div className="list">
-          <NoContact user={user} />
-        </div>
-      )
-    }
-
-    const selectedRowsLength = _.size(selectedRows)
+    const noContact = contacts.length === 0 && listInfo.type !== 'filter'
 
     return (
-      <div className="list">
-        <Header
-          filter={this.state.filter}
-          contactsCount={listInfo.total}
-          isSearching={isSearching}
-          onInputChange={this.search}
-          user={user}
-        />
-        {loadingImport && (
+      <Fragment>
+        <Header user={user} />
+        {this.props.loadingImport && (
           <i className="fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading" />
         )}
-        <Fragment>
-          <SecondHeader>
-            <SecondHeaderText>
-              {selectedRowsLength > 0 ? `${selectedRowsLength} of ` : ''}
-              {`${totalCount.toLocaleString()} Contacts`}
-            </SecondHeaderText>
-            <ExportContacts selectedRows={selectedRows} />
-            {selectedRowsLength > 0 && (
-              <div className="list--secondary-button">
-                <button
-                  className="button c-button--shadow"
-                  onClick={event =>
-                    this.handleOnDelete(event, Object.keys(selectedRows))
-                  }
-                >
-                  Delete
-                </button>
-              </div>
+        {(isFetching && noContact) ||
+        _.size(this.props.attributeDefs.byName) === 0 ? (
+          <Loading />
+        ) : (
+          <div style={{ padding: '2rem' }}>
+            {noContact ? (
+              <NoContact user={user} />
+            ) : (
+              <Fragment>
+                <Filters
+                  inputValue={this.state.filter}
+                  isSearching={this.state.isSearching}
+                  handleOnChange={this.search}
+                />
+                <Toolbar
+                  onDelete={this.handleOnDelete}
+                  selectedRows={selectedRows}
+                  totalCount={totalCount}
+                />
+                <Table
+                  data={contacts}
+                  deletingContacts={this.state.deletingContacts}
+                  handleOnDelete={this.handleOnDelete}
+                  loading={isFetching}
+                  onPageChange={this.onPageChange}
+                  page={page}
+                  pages={pages}
+                  selectedRows={selectedRows}
+                  totalCount={totalCount}
+                  toggleSelectedRow={this.toggleSelectedRow}
+                />
+              </Fragment>
             )}
-          </SecondHeader>
-
-          <Table
-            data={contacts}
-            deletingContacts={deletingContacts}
-            handleOnDelete={this.handleOnDelete}
-            loading={isFetching}
-            onPageChange={this.onPageChange}
-            page={page}
-            pages={pages}
-            selectedRows={selectedRows}
-            totalCount={totalCount}
-            toggleSelectedRow={this.toggleSelectedRow}
-          />
-        </Fragment>
-      </div>
+          </div>
+        )}
+      </Fragment>
     )
   }
 }

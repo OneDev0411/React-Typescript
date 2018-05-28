@@ -7,8 +7,9 @@ const Container = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  top: 2em;
+  top: 0.5em;
   bottom: 0;
+  min-height: 20vh;
   opacity: ${props => (props.loading ? 1 : 0)};
   z-index: ${props => (props.loading ? 2 : -1)};
   pointer-events: ${props => (props.loading ? 'all' : 'none')};
@@ -20,7 +21,7 @@ const Container = styled.div`
 export function LoadingComponent(props) {
   return (
     <Container {...props}>
-      <Loading style={{ marginTop: '1.5em' }} />
+      <Loading style={{ marginTop: '7.5vh' }} />
     </Container>
   )
 }

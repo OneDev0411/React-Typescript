@@ -99,11 +99,24 @@ const error = (state = null, action) => {
   }
 }
 
+const filters = (state = { text: '' }, action) => {
+  switch (action.type) {
+    case actionTypes.SET_CONTACT_FILTER:
+      return {
+        ...state,
+        ...action.filters
+      }
+    default:
+      return state
+  }
+}
+
 const contactsList = combineReducers({
   ids,
   byId,
   info,
   error,
+  filters,
   isFetching,
   pagination: contactPagination
 })
@@ -123,3 +136,5 @@ export const getContactsListError = state => state.error
 export const selectContactsPage = (state, page) => state.pagination.pages[page]
 
 export const selectContactsPages = state => state.pagination.pages
+
+export const selectContactsFilters = state => state.filters
