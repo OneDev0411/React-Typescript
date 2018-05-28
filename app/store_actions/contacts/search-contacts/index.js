@@ -4,7 +4,7 @@ import * as actionTypes from '../../../constants/contacts'
 import {
   requestContactPage,
   receiveContactPage,
-  clearContactsPages
+  clearContactPages
 } from '../pagination'
 import { searchContacts as search } from '../../../models/contacts/search-contacts'
 import { defaultQuery } from '../../../models/contacts/helpers'
@@ -29,7 +29,7 @@ export function searchContacts(filter, page = 1, limit = 50) {
       const listInfo = selectContactsInfo(list)
 
       if (listInfo.type === 'general' || listInfo.filter !== filter) {
-        dispatch(clearContactsPages)
+        dispatch(clearContactPages)
       }
 
       batchActions([

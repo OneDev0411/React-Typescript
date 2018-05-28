@@ -138,3 +138,5 @@ export const selectContactsPage = (state, page) => state.pagination.pages[page]
 export const selectContactsPages = state => state.pagination.pages
 
 export const selectContactFilters = state => state.filters
+
+export const selectContactsCurrentPage = state => state.pagination.currentPage

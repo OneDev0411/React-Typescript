@@ -21,6 +21,26 @@ const receivePage = (list, page, ids) => ({
   }
 })
 
+const removePage = (list, page) => ({
+  type: actionTypes.REMOVE_PAGE,
+  payload: {
+    page
+  },
+  meta: {
+    list
+  }
+})
+
+const setCurrentPage = (list, page) => ({
+  type: actionTypes.SET_CURRENT_PAGE,
+  payload: {
+    page
+  },
+  meta: {
+    list
+  }
+})
+
 export const clearPagination = list => ({
   type: actionTypes.CLEAR_PAGINATION,
   meta: {
@@ -33,3 +53,9 @@ export const createRequestPageActionCreator = list => page =>
 
 export const createReceivePageActionCreator = list => (page, ids) =>
   receivePage(list, page, ids)
+
+export const createRemovePageActionCreator = list => page =>
+  removePage(list, page)
+
+export const createCurrentPageActionCreator = list => page =>
+  setCurrentPage(list, page)

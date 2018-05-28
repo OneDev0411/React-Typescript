@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
 
+import * as actionTypes from '../../constants/pagination'
+
 const INITIAL_STATE = { pages: {}, currentPage: 0 }
 
 const pages = (pages = {}, action = {}) => {
   switch (action.type) {
-    case 'REQUEST_PAGE':
+    case actionTypes.REQUEST_PAGE:
       return {
         ...pages,
         [action.payload.page]: {
@@ -12,7 +14,7 @@ const pages = (pages = {}, action = {}) => {
           fetching: true
         }
       }
-    case 'RECEIVE_PAGE': {
+    case actionTypes.RECEIVE_PAGE: {
       return {
         ...pages,
         [action.payload.page]: {
@@ -21,19 +23,26 @@ const pages = (pages = {}, action = {}) => {
         }
       }
     }
-    case 'CLEAR_PAGINATION':
+    case actionTypes.REMOVE_PAGE: {
+      return {
+        ...pages,
+        [action.payload.page]: undefined
+      }
+    }
+    case actionTypes.CLEAR_PAGINATION:
       return {}
     default:
       return pages
   }
 }
 
-const currentPage = (currentPage = 0, action = {}) => {
+const currentPage = (currentPage = 1, action = {}) => {
   switch (action.type) {
-    case 'REQUEST_PAGE':
+    case actionTypes.SET_CURRENT_PAGE:
+    case actionTypes.REQUEST_PAGE:
       return action.payload.page
-    case 'CLEAR_PAGINATION':
-      return 0
+    case actionTypes.CLEAR_PAGINATION:
+      return 1
     default:
       return currentPage
   }

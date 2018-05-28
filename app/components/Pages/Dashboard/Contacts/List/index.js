@@ -9,12 +9,15 @@ import {
   selectContactsInfo,
   selectContactsPage,
   selectContactsPages,
-  isFetchingContactsList
+  isFetchingContactsList,
+  selectContactsCurrentPage
 } from '../../../../../reducers/contacts/list'
 import {
   getContacts,
   searchContacts,
   deleteContacts,
+  removeContactPage,
+  setContactCurrentPage,
   clearContactSearchResult
 } from '../../../../../store_actions/contacts'
 
@@ -25,10 +28,11 @@ import { Toolbar } from './Toolbar'
 import Table from './Table'
 import { NoContact } from './NoContact'
 
+const deletedState = { deletingContacts: [], selectedRows: {} }
+
 class ContactsList extends React.Component {
   state = {
-    page: 0,
-    filter: selectContactsInfo(this.props.list).filter,
+    filter: selectContactsInfo(this.props.list).filter || '',
     isSearching: false,
     deletingContacts: [],
     selectedRows: {}
@@ -50,21 +54,25 @@ class ContactsList extends React.Component {
 
   handleDeleteContact = async ({ contactIds }) => {
     try {
-      const { page } = this.state
-      const { deleteContacts } = this.props
-      const deletedState = { deletingContacts: [], selectedRows: {} }
+      const { deleteContacts, currentPage } = this.props
 
       this.setState({ deletingContacts: contactIds })
 
       await deleteContacts(contactIds)
 
-      const currentPage = selectContactsPage(this.props.list, page)
+      const currentPageContacts = selectContactsPage(
+        this.props.list,
+        currentPage
+      )
 
-      if (currentPage && currentPage.ids.length === contactIds.length) {
-        return this.setState({
-          ...deletedState,
-          page: page > 0 ? 0 : page - 1
-        })
+      if (
+        currentPageContacts &&
+        currentPageContacts.ids.length === contactIds.length
+      ) {
+        const page = currentPage <= 1 ? 1 : currentPage - 1
+
+        this.props.setContactCurrentPage(page)
+        this.props.removeContactPage(currentPage)
       }
 
       this.setState(deletedState)
@@ -76,20 +84,25 @@ class ContactsList extends React.Component {
   search = async (filter, page = 1) => {
     if (filter.length === 0) {
       return this.setState(
-        { filter: '', isSearching: false, page: 0 },
+        { ...deletedState, filter: '', isSearching: false },
         this.props.clearContactSearchResult
       )
     }
 
     try {
-      this.setState({ filter, isSearching: true })
+      let nextState = { filter, isSearching: true }
+
+      if (filter !== selectContactsInfo(this.props.list).filter) {
+        nextState = { ...nextState, ...deletedState }
+      }
+
+      this.setState(nextState)
 
       await this.props.searchContacts(filter, page)
-
-      this.setState({ isSearching: false, page: page - 1 })
     } catch (error) {
+      console.log(error)
+    } finally {
       this.setState({ isSearching: false })
-      throw error
     }
   }
 
@@ -114,20 +127,20 @@ class ContactsList extends React.Component {
   }
 
   onPageChange = page => {
-    this.setState({ page })
-
     if (!selectContactsPage(this.props.list, page + 1)) {
       if (selectContactsInfo(this.props.list).type === 'filter') {
         return this.search(this.state.filter, page + 1)
       }
 
       this.fetchPage(page + 1)
+    } else {
+      this.props.setContactCurrentPage(page + 1)
     }
   }
 
   render() {
-    const { page, selectedRows } = this.state
     const { user, list } = this.props
+    const { selectedRows } = this.state
     const contacts = selectContacts(list)
     const listInfo = selectContactsInfo(list)
     const pages = _.size(selectContactsPages(list))
@@ -162,7 +175,7 @@ class ContactsList extends React.Component {
               handleOnDelete={this.handleOnDelete}
               loading={isFetching}
               onPageChange={this.onPageChange}
-              page={page}
+              page={this.props.currentPage - 1}
               pages={pages}
               selectedRows={selectedRows}
               totalCount={totalCount}
@@ -177,6 +190,7 @@ class ContactsList extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    currentPage: selectContactsCurrentPage(state.contacts.list),
     list: state.contacts.list,
     user: state.user
   }
@@ -187,5 +201,7 @@ export default connect(mapStateToProps, {
   confirmation,
   deleteContacts,
   getContacts,
-  searchContacts
+  removeContactPage,
+  searchContacts,
+  setContactCurrentPage
 })(ContactsList)
