@@ -18,7 +18,7 @@ class Pagination extends React.Component {
 
     return {
       text: 'Next',
-      disabled: Math.round(totalCount / pageSize) === page + 1,
+      disabled: Math.ceil(totalCount / pageSize) === page + 1,
       onClick: () => onPageChange(page + 1)
     }
   }
@@ -35,7 +35,7 @@ class Pagination extends React.Component {
 
   render() {
     let buttons = [this.getPreviousButton(), this.getNextButton()]
-    const pages = Math.round(this.props.totalCount / this.props.pageSize)
+    const pages = Math.ceil(this.props.totalCount / this.props.pageSize)
 
     // if (totalCount > 5 * pageSize) {
     // buttons.push(this.getPreviousButton())
