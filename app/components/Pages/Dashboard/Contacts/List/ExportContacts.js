@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 
-export default ({ selectedRows }) => {
+export default ({ selectedRows, disabled }) => {
   let idsQuery = ''
 
   Object.keys(selectedRows).forEach(contctId => {
@@ -17,6 +17,10 @@ export default ({ selectedRows }) => {
         <a
           href={`/api/contacts/export/outlook?${idsQuery}`}
           className="button c-button--shadow"
+          style={{
+            opacity: disabled ? 0.7 : 1,
+            pointerEvents: disabled ? 'none' : 'initial'
+          }}
         >
           Export to CSV
         </a>

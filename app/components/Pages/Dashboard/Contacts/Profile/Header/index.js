@@ -7,7 +7,7 @@ export default function Header() {
       <h1 className="profile__header__title">
         <Link to="/dashboard/contacts">
           <i className="fa fa-angle-left" />
-          <span>All Contacts</span>
+          <span>Contacts</span>
         </Link>
       </h1>
     </div>
