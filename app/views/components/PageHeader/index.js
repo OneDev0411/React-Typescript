@@ -10,8 +10,11 @@ const Container = styled.div`
   display: flex;
   padding: 0 16px;
   justify-content: space-between;
-  background-color: #fff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background-color: ${props => (props.isFlat ? 'transparent' : '#fff')};
+  box-shadow: ${props =>
+    props.isFlat
+      ? 'none'
+      : '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05)'};
 `
 
 const propTypes = {
@@ -23,11 +26,11 @@ const defaultProps = {
   backButton: true
 }
 
-function PageHeader({ title, backButton, children }) {
+function PageHeader({ title, backButton, children, isFlat = false }) {
   return (
-    <Container>
-      <PageTitle backButton={backButton} title={title} />
-      {children}
+    <Container isFlat={isFlat}>
+      {title && <PageTitle backButton={backButton} title={title} />}
+      {React.Children.map(children, children => children)}
     </Container>
   )
 }
@@ -36,5 +39,6 @@ PageHeader.propTypes = propTypes
 PageHeader.defaultProps = defaultProps
 
 PageHeader.Menu = Menu
+PageHeader.Title = PageTitle
 
 export default PageHeader
