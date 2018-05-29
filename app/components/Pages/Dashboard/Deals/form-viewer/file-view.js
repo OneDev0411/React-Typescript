@@ -50,7 +50,7 @@ export default class extends React.Component {
               <i className="fa fa-angle-left" />
             </span>
             <h1 className="c-deal-form-viewer__header__title">
-              {task ? task.title : file.name}
+              {decodeURI(file.name)}
             </h1>
           </div>
 

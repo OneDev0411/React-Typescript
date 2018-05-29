@@ -10,7 +10,7 @@ export async function searchContacts(filter, query = defaultQuery) {
   const keywords = filter
     .trim()
     .split(' ')
-    .map(i => `q[]=${i}`)
+    .map(i => `q[]=${encodeURIComponent(i)}`)
     .join('&')
 
   try {
