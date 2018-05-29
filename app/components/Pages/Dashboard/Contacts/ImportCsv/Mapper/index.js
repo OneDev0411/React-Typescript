@@ -88,11 +88,7 @@ class Mapper extends React.Component {
     return list
   }
 
-  shouldShowLabel = colName => {
-    const { definition } = this.getMappedField(colName)
-
-    return definition.has_label && definition.labels
-  }
+  shouldShowLabel = colName => this.getMappedField(colName).definition.has_label
 
   onChangeField = (fieldName, fieldValue) => {
     const { updateCsvFieldsMap } = this.props
