@@ -24,6 +24,7 @@ import {
   updateContext
 } from '../../../../../store_actions/deals'
 import { getLegalFullName } from '../utils/roles'
+import { confirmation } from '../../../../../store_actions/confirmation'
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -366,10 +367,16 @@ class CreateOffer extends React.Component {
     return DealContext.getItems('Buying', deal.property_type, true)
   }
 
-  backToDeal() {
-    const { deal } = this.props
+  backToDeal = () => {
+    const { deal, confirmation } = this.props
 
-    browserHistory.push(`/dashboard/deals/${deal.id}`)
+    confirmation({
+      message: 'Cancel deal creation?',
+      description: 'By canceling you will lose your work.',
+      confirmLabel: 'Yes, cancel',
+      cancelLabel: "No, don't cancel",
+      onConfirm: () => browserHistory.push(`/dashboard/deals/${deal.id}`)
+    })
   }
 
   /**
@@ -417,7 +424,7 @@ class CreateOffer extends React.Component {
 
     return (
       <div className="deal-create-offer">
-        <Navbar title="Add New Offer" onClose={() => this.backToDeal()} />
+        <Navbar title="Add New Offer" onClose={this.backToDeal} />
 
         <div className="form">
           <OfferType
@@ -572,5 +579,6 @@ export default connect(mapStateToProps, {
   createOffer,
   createRoles,
   updateContext,
-  notify
+  notify,
+  confirmation
 })(CreateOffer)
