@@ -69,3 +69,7 @@ export function selectDefsBySection(state, section) {
     ? ids.map(id => selectDefinition(state, id)).filter(i => i)
     : []
 }
+
+export function contactDefsIsLoaded(state) {
+  return Object.keys(state.byId).length > 0
+}

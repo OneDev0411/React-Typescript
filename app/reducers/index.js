@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { reducer as notificationsReducer } from 'reapop'
+import { reducer as reduxFormReducer } from 'redux-form'
+
 import data from './data'
 import auth from './auth'
 import user from './user'
@@ -20,7 +22,6 @@ import { intercom } from './intercom'
 import confirmation from './confirmation'
 import { notifications as globalNotifications } from './notifications'
 import { createNamedWrapperReducer } from '../utils/redux-utils'
-import { reducer as reduxFormReducer } from 'redux-form'
 
 const appReducer = combineReducers({
   socket,
