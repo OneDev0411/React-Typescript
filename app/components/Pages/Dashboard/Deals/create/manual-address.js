@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { Form, Field } from 'react-final-form'
 import _ from 'underscore'
 
-import Modal from '../../../../../views/components/BasicModal'
+import { Modal } from 'react-bootstrap'
 
 import { TextInput } from '../../../../../views/components/Forms/TextInput'
 import { SelectInput } from '../../../../../views/components/Forms/SelectInput'
@@ -125,7 +125,7 @@ export default class ManualAddress extends React.Component {
       return true
     }
 
-    return value && value.length > 0
+    return value && value.trim().length > 0
   }
 
   /**
@@ -199,12 +199,11 @@ export default class ManualAddress extends React.Component {
     const { show, deal, saving } = this.props
 
     return (
-      <Modal
-        isOpen={show}
-        shouldCloseOnOverlayClick={false}
-        handleOnClose={this.onClose}
-      >
-        <Modal.Header title="Address" showClose handleOnClose={this.onClose} />
+      <Modal show={show} backdrop="static" onHide={this.onClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Address</Modal.Title>
+        </Modal.Header>
+
         <Form
           onSubmit={this.onSubmit}
           validate={this.validate}
