@@ -12,7 +12,7 @@ const Container = styled.div`
 `
 
 const Title = styled.h1`
-  margin: 0 5px 0 0;
+  margin: 0;
   font-size: 17px;
   line-height: 1;
 `
@@ -28,7 +28,7 @@ const propTypes = {
   title: PropTypes.string.isRequired
 }
 
-function PageHeader({ children, title, backButton, backUrl }) {
+function PageHeader({ title, backButton, backUrl }) {
   function handleOnBack() {
     const currentLocation = browserHistory.getCurrentLocation()
 
@@ -52,7 +52,6 @@ function PageHeader({ children, title, backButton, backUrl }) {
         </IconButton>
       )}
       <Title>{title}</Title>
-      {children}
     </Container>
   )
 }
