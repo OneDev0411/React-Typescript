@@ -1,41 +1,39 @@
 import React, { Fragment } from 'react'
-import _ from 'underscore'
 import { connect } from 'react-redux'
+import _ from 'underscore'
+
 import { confirmation } from '../../../../../store_actions/confirmation'
-import styled from 'styled-components'
 
 import {
   selectContacts,
   selectContactsInfo,
-  isFetchingContactsList
+  selectContactsPage,
+  selectContactsPages,
+  isFetchingContactsList,
+  selectContactsCurrentPage
 } from '../../../../../reducers/contacts/list'
-import { deleteContacts } from '../../../../../store_actions/contacts'
-import { searchContacts } from '../../../../../models/contacts/search-contacts'
+import {
+  getContacts,
+  searchContacts,
+  deleteContacts,
+  removeContactPage,
+  setContactCurrentPage,
+  clearContactSearchResult
+} from '../../../../../store_actions/contacts'
 
-import Header from './header'
-import ExportContacts from './ExportContacts'
+import { Header } from './Header'
+import { Filters } from './Filters'
+import { Toolbar } from './Toolbar'
 
 import Table from './Table'
-import NoContact from './no-contact'
-import Loading from '../../../../Partials/Loading'
-import { Container } from '../components/Container'
+import { NoContact } from './NoContact'
 
-const SecondHeader = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 2rem;
-`
-const SecondHeaderText = styled.p`
-  font-size: 17px;
-  margin-bottom: 0;
-  margin-right: 8px;
-`
+const deletedState = { deletingContacts: [], selectedRows: {} }
 
 class ContactsList extends React.Component {
   state = {
-    page: 0,
+    filter: selectContactsInfo(this.props.list).filter || '',
     isSearching: false,
-    filteredContacts: null,
     deletingContacts: [],
     selectedRows: {}
   }
@@ -56,52 +54,55 @@ class ContactsList extends React.Component {
 
   handleDeleteContact = async ({ contactIds }) => {
     try {
-      const { deleteContacts } = this.props
-      const { filteredContacts } = this.state
-      const deletedState = { deletingContacts: [], selectedRows: [] }
+      const { deleteContacts, currentPage } = this.props
 
       this.setState({ deletingContacts: contactIds })
 
       await deleteContacts(contactIds)
 
-      if (filteredContacts) {
-        if (filteredContacts.length === contactIds.length) {
-          return this.setState({
-            ...deletedState,
-            page: 0,
-            filteredContacts: null
-          })
-        }
+      const currentPageContacts = selectContactsPage(
+        this.props.list,
+        currentPage
+      )
 
-        this.setState({
-          ...deletedState,
-          filteredContacts: filteredContacts.filter(
-            c => !contactIds.includes(c.id)
-          )
-        })
-      } else {
-        this.setState(deletedState)
+      if (
+        currentPageContacts &&
+        currentPageContacts.ids.length === contactIds.length
+      ) {
+        const page = currentPage <= 1 ? 1 : currentPage - 1
+
+        this.props.setContactCurrentPage(page)
+        this.props.removeContactPage(currentPage)
       }
+
+      this.setState(deletedState)
     } catch (error) {
       console.log(error)
     }
   }
 
-  search = async keyword => {
-    if (keyword.length === 0) {
-      return this.setState({ filteredContacts: null })
+  search = async (filter, page = 1) => {
+    if (filter.length === 0) {
+      return this.setState(
+        { ...deletedState, filter: '', isSearching: false },
+        this.props.clearContactSearchResult
+      )
     }
 
     try {
-      this.setState({ isSearching: true })
+      let nextState = { filter, isSearching: true }
 
-      const items = await searchContacts(keyword)
+      if (filter !== selectContactsInfo(this.props.list).filter) {
+        nextState = { ...nextState, ...deletedState }
+      }
 
-      this.setState({ filteredContacts: items, page: 0 })
+      this.setState(nextState)
+
+      await this.props.searchContacts(filter, page)
     } catch (error) {
       console.log(error)
     } finally {
-      this.setState({ isSearching: false, page: 0 })
+      this.setState({ isSearching: false })
     }
   }
 
@@ -121,117 +122,86 @@ class ContactsList extends React.Component {
     this.setState({ selectedRows: newSelectedRows })
   }
 
+  fetchPage = async page => {
+    this.props.getContacts(page)
+  }
+
   onPageChange = page => {
-    this.setState({ page })
+    if (!selectContactsPage(this.props.list, page + 1)) {
+      if (selectContactsInfo(this.props.list).type === 'filter') {
+        return this.search(this.state.filter, page + 1)
+      }
+
+      this.fetchPage(page + 1)
+    } else {
+      this.props.setContactCurrentPage(page + 1)
+    }
   }
 
   render() {
-    const {
-      page,
-      isSearching,
-      filteredContacts,
-      deletingContacts,
-      selectedRows
-    } = this.state
-    const {
-      user,
-      listInfo,
-      contacts,
-      isFetching,
-      loadingImport,
-      attributeDefs
-    } = this.props
-    const data = filteredContacts || contacts
+    const { user, list } = this.props
+    const { selectedRows } = this.state
+    const contacts = selectContacts(list)
+    const listInfo = selectContactsInfo(list)
+    const pages = _.size(selectContactsPages(list))
+    const isFetching = isFetchingContactsList(list)
     let { total: totalCount } = listInfo
 
-    if (filteredContacts != null) {
-      totalCount = filteredContacts.length
-    }
-
-    if (
-      (isFetching && contacts.length === 0) ||
-      _.size(attributeDefs.byName) === 0
-    ) {
-      return (
-        <Container>
-          <Loading />
-        </Container>
-      )
-    }
-
-    if (contacts.length === 0) {
-      return (
-        <div className="list">
-          <NoContact user={user} />
-        </div>
-      )
-    }
-
-    const selectedRowsLength = Object.keys(selectedRows).length
+    const noContact =
+      !isFetching && contacts.length === 0 && listInfo.type !== 'filter'
 
     return (
-      <div className="list">
-        <Header
-          contactsCount={listInfo.total}
-          isSearching={isSearching}
-          onInputChange={this.search}
-          user={user}
-        />
-        {loadingImport && (
-          <i className="fa fa-spinner fa-pulse fa-fw fa-3x spinner__loading" />
-        )}
-        <Fragment>
-          <SecondHeader>
-            <SecondHeaderText>
-              {selectedRowsLength > 0 ? `${selectedRowsLength} of ` : ''}
-              {`${totalCount.toLocaleString()} Contacts`}
-            </SecondHeaderText>
-            <ExportContacts selectedRows={selectedRows} />
-            {selectedRowsLength > 0 && (
-              <div className="list--secondary-button">
-                <button
-                  className="button c-button--shadow"
-                  onClick={event =>
-                    this.handleOnDelete(event, Object.keys(selectedRows))
-                  }
-                >
-                  Delete
-                </button>
-              </div>
-            )}
-          </SecondHeader>
-
-          <Table
-            data={data}
-            deletingContacts={deletingContacts}
-            handleOnDelete={this.handleOnDelete}
-            loading={isSearching}
-            onPageChange={this.onPageChange}
-            page={page}
+      <Fragment>
+        <Header user={user} />
+        <div style={{ padding: '2rem' }}>
+          <Filters
+            disabled={noContact}
+            inputValue={this.state.filter}
+            isSearching={this.state.isSearching}
+            handleOnChange={this.search}
+          />
+          <Toolbar
+            disabled={noContact || isFetching || this.state.isSearching}
+            onDelete={this.handleOnDelete}
             selectedRows={selectedRows}
             totalCount={totalCount}
-            toggleSelectedRow={this.toggleSelectedRow}
           />
-        </Fragment>
-      </div>
+          {noContact ? (
+            <NoContact user={user} />
+          ) : (
+            <Table
+              data={contacts}
+              deletingContacts={this.state.deletingContacts}
+              handleOnDelete={this.handleOnDelete}
+              loading={isFetching}
+              onPageChange={this.onPageChange}
+              page={this.props.currentPage - 1}
+              pages={pages}
+              selectedRows={selectedRows}
+              totalCount={totalCount}
+              toggleSelectedRow={this.toggleSelectedRow}
+            />
+          )}
+        </div>
+      </Fragment>
     )
   }
 }
 
-function mapStateToProps({ user, contacts }) {
-  const { list, spinner: loadingImport, attributeDefs } = contacts
-
+function mapStateToProps(state) {
   return {
-    user,
-    loadingImport,
-    attributeDefs,
-    contacts: selectContacts(list),
-    listInfo: selectContactsInfo(list),
-    isFetching: isFetchingContactsList(list)
+    currentPage: selectContactsCurrentPage(state.contacts.list),
+    list: state.contacts.list,
+    user: state.user
   }
 }
 
 export default connect(mapStateToProps, {
+  clearContactSearchResult,
   confirmation,
-  deleteContacts
+  deleteContacts,
+  getContacts,
+  removeContactPage,
+  searchContacts,
+  setContactCurrentPage
 })(ContactsList)

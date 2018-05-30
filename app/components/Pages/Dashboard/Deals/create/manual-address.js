@@ -125,7 +125,7 @@ export default class ManualAddress extends React.Component {
       return true
     }
 
-    return value && value.length > 0
+    return value && value.trim().length > 0
   }
 
   /**

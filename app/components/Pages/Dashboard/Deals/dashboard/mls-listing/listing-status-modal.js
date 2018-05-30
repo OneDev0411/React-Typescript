@@ -30,36 +30,37 @@ export default class ListingStatusModal extends React.Component {
       return isBackOffice
         ? [
             'Active',
-            'Lease',
-            'Lease Contract',
+            'Temp Off Market',
             'Leased',
-            'Cancelled',
             'Withdrawn',
-            'Temp Off Market'
+            'Expired',
+            'Cancelled',
+            'Contract Terminated'
           ]
-        : ['Active', 'Lease', 'Lease Contract', 'Leased']
+        : ['Active', 'Leased', 'Contract Terminated']
     }
 
     return isBackOffice
       ? [
           'Active',
-          'Cancelled',
-          'Active Contingent',
-          'Expired',
-          'Active Kick Out',
-          'Archived',
-          'Active Option Contract',
-          'Temp Off Market',
-          'Pending',
-          'Withdrawn',
           'Sold',
-          'Withdrawn Sublisting'
+          'Pending',
+          'Temp Off Market',
+          'Active Option Contract',
+          'Active Contingent',
+          'Active Kick Out',
+          'Withdrawn',
+          'Expired',
+          'Cancelled',
+          'Contract Terminated'
         ]
       : [
+          'Active',
+          'Pending',
+          'Active Option Contract',
           'Active Contingent',
           'Active Kick Out',
-          'Active Option Contract',
-          'Pending'
+          'Contract Terminated'
         ]
   }
 

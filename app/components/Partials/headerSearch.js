@@ -6,20 +6,24 @@ import { Panel } from 'react-bootstrap'
 
 export default class HeaderSearch extends React.Component {
   static propTypes = {
+    disabled: PropTypes.bool,
     onInputChange: PropTypes.func.isRequired,
     collapsible: PropTypes.bool,
     expanded: PropTypes.bool,
-    debounceTime: PropTypes.number
+    debounceTime: PropTypes.number,
+    inputValue: PropTypes.string
   }
 
   static defaultProps = {
     collapsible: true,
+    disabled: false,
     expanded: true,
-    debounceTime: 700
+    debounceTime: 700,
+    inputValue: ''
   }
 
   state = {
-    inputValue: '',
+    inputValue: this.props.inputValue,
     isFocused: false
   }
 
@@ -38,12 +42,15 @@ export default class HeaderSearch extends React.Component {
   onFocus = () => this.setState({ isFocused: true })
 
   render() {
+    const { disabled } = this.props
+
     return (
       <Panel
         className="list--header no-box-shadow"
         collapsible={this.props.collapsible}
         expanded={this.props.expanded}
         onEntered={() => this.state.inputValue}
+        style={{ opacity: disabled ? 0.7 : 1 }}
       >
         <div
           className={cn('list--header--searchBox', {
@@ -52,11 +59,14 @@ export default class HeaderSearch extends React.Component {
         >
           <i className="fa fa-search" aria-hidden="true" />
           <input
+            disabled={disabled}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
             onChange={this.onChange}
-            type="text"
             placeholder={this.props.placeholder}
+            type="text"
+            value={this.state.inputValue}
+            style={{ cursor: disabled ? 'not-allowed' : 'initial' }}
           />
           {this.props.isSearching && (
             <i className="fa fa-spin fa-spinner fa-2x" />

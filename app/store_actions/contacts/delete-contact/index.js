@@ -27,7 +27,8 @@ export function deleteContacts(contactIds) {
       const contacts = contactsList.filter(({ id }) => !contactIds.includes(id))
       const response = {
         info: {
-          count: contactsListInfo.count,
+          ...contactsListInfo,
+          count: contactsListInfo.count - contactIds.length,
           total: contactsListInfo.total - contactIds.length
         },
         ...normalize({ contacts }, contactsSchema)
