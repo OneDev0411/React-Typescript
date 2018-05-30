@@ -1,35 +1,51 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { browserHistory } from 'react-router'
-import Import from './Import'
-// import HeaderSearch from '../../../../Partials/headerSearch'
-import ActionButton from '../../../../../views/components/Button/ActionButton'
-import PageHeader from '../../../../../views/components/PageHeader'
+import cn from 'classnames'
 
-function Header({ user, contactsCount }) {
+import Import from './Import'
+import HeaderSearch from '../../../../Partials/headerSearch'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
+
+function Header({ user, contactsCount, onInputChange, isSearching }) {
   if (contactsCount === 0) {
     return null
   }
 
-  return (
-    <PageHeader isFlat>
-      <PageHeader.Title title="All Contacts" backButton={false}>
-        <span className="badge counter">
-          {contactsCount.toLocaleString()} Contacts
-        </span>
-      </PageHeader.Title>
+  const isBackOffice = false
 
-      <PageHeader.Menu>
-        <Fragment>
-          <Import userId={user.id} />
-          <ActionButton
-            style={{ padding: '0.75em' }}
-            onClick={() => browserHistory.push('/dashboard/contacts/new')}
-          >
-            New Contact
-          </ActionButton>
-        </Fragment>
-      </PageHeader.Menu>
-    </PageHeader>
+  return (
+    <div className={cn('list--header no-box-shadow', { agent: !isBackOffice })}>
+      <div style={{ height: '57px' }}>
+        <div className={cn('list--header-row', { agent: !isBackOffice })}>
+          <div className="list--header-row--col">
+            <ul className="filter">
+              <li style={{ cursor: 'initial' }}>
+                <h4 className="title">All Contacts</h4>
+
+                <span className="badge counter">
+                  {contactsCount.toLocaleString()} Contacts
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="list--header-row--col">
+            <Import userId={user.id} />
+            <ActionButton
+              style={{ padding: '0.75em' }}
+              onClick={() => browserHistory.push('/dashboard/contacts/new')}
+            >
+              New Contact
+            </ActionButton>
+          </div>
+        </div>
+      </div>
+      <HeaderSearch
+        isSearching={isSearching}
+        onInputChange={text => onInputChange(text)}
+        placeholder="Search all contacts ..."
+      />
+    </div>
   )
 }
 
