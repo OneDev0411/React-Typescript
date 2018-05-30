@@ -11,10 +11,11 @@ const Container = styled.div`
   align-items: center;
 `
 
-const Title = styled.h1`
-  margin: 0;
-  font-size: 17px;
+export const Heading = styled.h1`
+  margin: 0 16px;
+  font-size: 24px;
   line-height: 1;
+  color: #263445;
 `
 
 const defaultProps = {
@@ -25,10 +26,10 @@ const defaultProps = {
 const propTypes = {
   backUrl: PropTypes.string,
   backButton: PropTypes.bool,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string
 }
 
-function PageHeader({ title, backButton, backUrl }) {
+export function PageTitle({ children, title, backButton, backUrl }) {
   function handleOnBack() {
     const currentLocation = browserHistory.getCurrentLocation()
 
@@ -51,12 +52,12 @@ function PageHeader({ title, backButton, backUrl }) {
           <BackButton style={{ width: 32, height: 32 }} />
         </IconButton>
       )}
-      <Title>{title}</Title>
+
+      {title && <Heading>{title}</Heading>}
+      {children}
     </Container>
   )
 }
 
-PageHeader.propTypes = propTypes
-PageHeader.defaultProps = defaultProps
-
-export default PageHeader
+PageTitle.propTypes = propTypes
+PageTitle.defaultProps = defaultProps
