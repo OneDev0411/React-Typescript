@@ -438,14 +438,14 @@ class CreateDeal extends React.Component {
 
     const roles = []
 
-    _.each(clients, client => roles.push(_.omit(client, 'id')))
-    _.each(sellingClients, client => roles.push(_.omit(client, 'id')))
+    _.each(clients, client => roles.push(_.omit(client, ['id', 'contact'])))
+    _.each(sellingClients, client => roles.push(_.omit(client, ['id', 'contact'])))
 
-    _.each(agents, agent => roles.push(_.omit(agent, 'id')))
-    _.each(sellingAgents, agent => roles.push(_.omit(agent, 'id')))
+    _.each(agents, agent => roles.push(_.omit(agent, ['id', 'contact'])))
+    _.each(sellingAgents, agent => roles.push(_.omit(agent, ['id', 'contact'])))
 
-    _.each(referrals, referral => roles.push(_.omit(referral, 'id')))
-    _.each(escrowOfficers, officer => roles.push(_.omit(officer, 'id')))
+    _.each(referrals, referral => roles.push(_.omit(referral, ['id', 'contact'])))
+    _.each(escrowOfficers, officer => roles.push(_.omit(officer, ['id', 'contact'])))
 
     return roles
   }

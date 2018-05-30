@@ -33,7 +33,7 @@ function DropDownWithIcon({
   let selectedOption = options.default
 
   if (defaultTitle) {
-    selectedOption = options[defaultTitle] || {
+    selectedOption = options[defaultTitle.toLowerCase()] || {
       title: defaultTitle,
       icon: (options.default && options.default.icon) || null
     }

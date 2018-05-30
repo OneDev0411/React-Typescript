@@ -8,6 +8,7 @@ import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
 import Loading from '../../../../../components/Partials/Loading'
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
+import { normalizeContactAttribute } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
 
 const ContactsListContainer = styled.div`
   position: relative;
@@ -59,7 +60,8 @@ class Body extends Component {
     try {
       this.setState({ isSearching: true })
 
-      const items = await searchContacts(value)
+      const response = await searchContacts(value)
+      const items = normalizeContactAttribute(response)
 
       if (Array.isArray(items)) {
         this.setState({ items })
