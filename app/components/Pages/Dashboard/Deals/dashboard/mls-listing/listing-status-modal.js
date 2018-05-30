@@ -35,9 +35,10 @@ export default class ListingStatusModal extends React.Component {
             'Leased',
             'Cancelled',
             'Withdrawn',
-            'Temp Off Market'
+            'Temp Off Market',
+            'Contract Terminated'
           ]
-        : ['Active', 'Lease', 'Lease Contract', 'Leased']
+        : ['Active', 'Lease', 'Lease Contract', 'Leased', 'Contract Terminated']
     }
 
     return isBackOffice
@@ -53,13 +54,15 @@ export default class ListingStatusModal extends React.Component {
           'Pending',
           'Withdrawn',
           'Sold',
-          'Withdrawn Sublisting'
+          'Withdrawn Sublisting',
+          'Contract Terminated'
         ]
       : [
           'Active Contingent',
           'Active Kick Out',
           'Active Option Contract',
-          'Pending'
+          'Pending',
+          'Contract Terminated'
         ]
   }
 
