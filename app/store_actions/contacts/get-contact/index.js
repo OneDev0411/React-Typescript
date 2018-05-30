@@ -1,9 +1,10 @@
-import { getContact as fetchContact } from '../../../models/contacts/get-contact'
 import * as actionTypes from '../../../constants/contacts'
 import { normalizeContacts } from '../helpers/normalize-contacts'
+import { selectContactsInfo } from '../../../reducers/contacts/list'
+import { getContact as fetchContact } from '../../../models/contacts/get-contact'
 
 export function getContact(contactId, query) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     if (!contactId) {
       const error = new Error('Contact id is required.')
 
@@ -22,10 +23,17 @@ export function getContact(contactId, query) {
 
       let response = await fetchContact(contactId, query)
 
-      response = normalizeContacts(response)
+      const listInfo = selectContactsInfo(getState().contacts.list)
+      const info = {
+        ...listInfo,
+        total: listInfo.total + 1
+      }
 
       dispatch({
-        response,
+        response: {
+          info,
+          ...normalizeContacts(response)
+        },
         type: actionTypes.FETCH_CONTACT_SUCCESS
       })
     } catch (error) {

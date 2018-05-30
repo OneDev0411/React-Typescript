@@ -17,12 +17,12 @@ class Contacts extends React.Component {
   async initializeContacts() {
     const { getContacts, getContactsTags, contactsList, tagsList } = this.props
 
-    if (contactsList.length === 0) {
+    if (contactsList.length <= 1) {
       await getContacts()
     }
 
     if (tagsList.length === 0) {
-      await getContactsTags()
+      getContactsTags()
     }
   }
 
