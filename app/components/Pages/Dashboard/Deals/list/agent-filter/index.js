@@ -5,14 +5,13 @@ import _ from 'underscore'
 import ToolTip from '../../../../../../views/components/tooltip/index'
 import Deal from '../../../../../../models/Deal'
 
-const FILTER_ACTIVE = ['Active', 'Coming Soon', 'Lease']
+const FILTER_ACTIVE = ['Active']
 
 const FILTER_PENDING = [
   'Active Contingent',
   'Active Kick Out',
   'Active Option Contract',
-  'Pending',
-  'Lease Contract'
+  'Pending'
 ]
 
 const FILTER_ARCHIVE = [
@@ -21,8 +20,8 @@ const FILTER_ARCHIVE = [
   'Expired',
   'Cancelled',
   'Withdrawn',
-  'Archived',
-  'Leased'
+  'Leased',
+  'Contract Terminated'
 ]
 
 const filters = {
