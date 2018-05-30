@@ -457,7 +457,8 @@ class CreateOffer extends React.Component {
               <DealAgents
                 hasError={this.hasError('agents')}
                 scenario="CreateOffer"
-                dealSide="Buying"
+                showDealSideAs="Buying"
+                dealSide={deal.deal_type}
                 shouldPrepopulateAgent={isDoubleEndedAgent}
                 isCommissionRequired={this.getIsCommissionRequired()}
                 agents={agents}
