@@ -21,8 +21,15 @@ import {
   clearContactSearchResult
 } from '../../../../../store_actions/contacts'
 
+import {
+  Container as PageContainer,
+  Menu as SideMenu,
+  Content as PageContent
+} from '../../../../../views/components/SlideMenu'
+import { Filters } from '../../../../../views/components/Grid/Filters'
+
 import { Header } from './Header'
-import { Filters } from './Filters'
+// import { Filters } from './Filters'
 import { Toolbar } from './Toolbar'
 
 import Table from './Table'
@@ -34,6 +41,7 @@ class ContactsList extends React.Component {
   state = {
     filter: selectContactsInfo(this.props.list).filter || '',
     isSearching: false,
+    isSideMenuOpen: false,
     deletingContacts: [],
     selectedRows: {}
   }
@@ -80,6 +88,11 @@ class ContactsList extends React.Component {
       console.log(error)
     }
   }
+
+  toggleSideMenu = () =>
+    this.setState({
+      isSideMenuOpen: !this.state.isSideMenuOpen
+    })
 
   search = async (filter, page = 1) => {
     if (filter.length === 0) {
@@ -140,7 +153,7 @@ class ContactsList extends React.Component {
 
   render() {
     const { user, list } = this.props
-    const { selectedRows } = this.state
+    const { selectedRows, isSideMenuOpen } = this.state
     const contacts = selectContacts(list)
     const listInfo = selectContactsInfo(list)
     const pages = _.size(selectContactsPages(list))
@@ -151,21 +164,23 @@ class ContactsList extends React.Component {
       !isFetching && contacts.length === 0 && listInfo.type !== 'filter'
 
     return (
-      <Fragment>
-        <Header user={user} />
-        <div style={{ padding: '2rem' }}>
-          <Filters
-            disabled={noContact}
-            inputValue={this.state.filter}
-            isSearching={this.state.isSearching}
-            handleOnChange={this.search}
+      <PageContainer>
+        <SideMenu isOpen={isSideMenuOpen}>
+          ITEM 1<br />
+          ITEM 2<br />
+          ITEM 3<br />
+          ITEM 4<br />
+        </SideMenu>
+
+        <PageContent>
+          <Header
+            contactsCount={listInfo.total}
+            user={user}
+            onMenuTriggerChange={this.toggleSideMenu}
           />
-          <Toolbar
-            disabled={noContact || isFetching || this.state.isSearching}
-            onDelete={this.handleOnDelete}
-            selectedRows={selectedRows}
-            totalCount={totalCount}
-          />
+
+          <Filters />
+
           {noContact ? (
             <NoContact user={user} />
           ) : (
@@ -182,9 +197,44 @@ class ContactsList extends React.Component {
               toggleSelectedRow={this.toggleSelectedRow}
             />
           )}
-        </div>
-      </Fragment>
+        </PageContent>
+      </PageContainer>
     )
+    // return (
+    //   <Fragment>
+    //     <Header user={user} />
+    //     <div style={{ padding: '2rem' }}>
+    //       <Filters
+    //         disabled={noContact}
+    //         inputValue={this.state.filter}
+    //         isSearching={this.state.isSearching}
+    //         handleOnChange={this.search}
+    //       />
+    //       <Toolbar
+    //         disabled={noContact || isFetching || this.state.isSearching}
+    //         onDelete={this.handleOnDelete}
+    //         selectedRows={selectedRows}
+    //         totalCount={totalCount}
+    //       />
+    //       {noContact ? (
+    //         <NoContact user={user} />
+    //       ) : (
+    //         <Table
+    //           data={contacts}
+    //           deletingContacts={this.state.deletingContacts}
+    //           handleOnDelete={this.handleOnDelete}
+    //           loading={isFetching}
+    //           onPageChange={this.onPageChange}
+    //           page={this.props.currentPage - 1}
+    //           pages={pages}
+    //           selectedRows={selectedRows}
+    //           totalCount={totalCount}
+    //           toggleSelectedRow={this.toggleSelectedRow}
+    //         />
+    //       )}
+    //     </div>
+    //   </Fragment>
+    // )
   }
 }
 
