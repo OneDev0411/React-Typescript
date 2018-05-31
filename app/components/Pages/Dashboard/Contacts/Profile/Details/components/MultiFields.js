@@ -28,6 +28,7 @@ const MultiFields = ({
   handleLabelOnChange,
   handleOnChangePrimary,
   placeholder,
+  showSuffix,
   upsertAttribute,
   validator,
   validationText
@@ -70,6 +71,7 @@ const MultiFields = ({
                 labels={defaultLabels}
                 onChange={handleLabelOnChange}
                 name={name}
+                showSuffix={showSuffix}
               />
             ) : (
               <label
@@ -111,7 +113,9 @@ const MultiFields = ({
 function mapStateToProps(state, props) {
   let _fields = []
   const { contact, attributeName } = props
-  const { contacts: { attributeDefs } } = state
+  const {
+    contacts: { attributeDefs }
+  } = state
 
   const attributeDef = selectDefinitionByName(attributeDefs, attributeName)
 
