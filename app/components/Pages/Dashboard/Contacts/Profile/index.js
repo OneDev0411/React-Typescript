@@ -12,7 +12,7 @@ import Stage from './Stage'
 import { Header } from './Header'
 import Information from './Information'
 import ImportantDates from './ImportantDates'
-import Deals from './Deals'
+import { DealsListWidget } from './Deals'
 import Names from './Names'
 import Tags from './Tags'
 import Details from './Details'
@@ -241,7 +241,7 @@ class ContactProfile extends React.Component {
 
           <div style={{ width: '30%' }}>
             <ImportantDates contact={contact} />
-            <Deals contact={contact} />
+            <DealsListWidget contact={contact} />
           </div>
         </Flex>
       </div>
