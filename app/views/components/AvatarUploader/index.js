@@ -51,7 +51,7 @@ export function AvatarUploader({
       <Trigger htmlFor="avatarImage" hasImage={avatar.src}>
         <TriggerText>{avatar.src ? 'Change' : 'Upload'}</TriggerText>
       </Trigger>
-      {isUploading && <Loading />}
+      {isUploading && <Loading>Uploading</Loading>}
       {!isUploading && (
         <Input
           type="file"

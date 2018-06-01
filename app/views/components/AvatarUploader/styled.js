@@ -76,7 +76,7 @@ export const Loading = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
+  color: #2196f3;
   border-radius: 100%;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgb(54, 71, 85, 0.9);
 `
