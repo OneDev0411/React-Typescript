@@ -10,6 +10,10 @@ const Container = styled.div`
   display: flex;
   margin-bottom: 1em;
 
+  &:last-of-type {
+    margin: 0;
+  }
+
   &:hover {
     cursor: pointer;
   }
