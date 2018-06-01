@@ -28,11 +28,11 @@ export class DealsListWidget extends React.Component {
     try {
       this.setState({ isLoading: true })
 
-      const contact = await getContact(id, {
+      const response = await getContact(id, {
         associations: ['contact.sub_contacts', 'sub_contact.deals']
       })
 
-      const list = getContactDeals(contact)
+      const list = getContactDeals(response.data)
 
       if (list) {
         this.setState({ list, isLoading: false })
