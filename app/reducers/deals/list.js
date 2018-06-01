@@ -135,3 +135,5 @@ export default (state = null, action) => {
       return state
   }
 }
+
+export const selectDeals = state => (state == null ? [] : Object.values(state))
