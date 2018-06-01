@@ -1,12 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import fecha from 'fecha'
+import timeago from 'timeago.js'
+import Flex from 'styled-flex-component'
 
 import Avatar from './components/Avatar'
-import LastSeen from '../../../Chatroom/Rooms/components/last-seen'
 import Chatroom from '../../../Chatroom/Util/chatroom'
 
-import { getContactUsers } from '../../../../../../models/contacts/helpers'
+import { Title, LastSeen } from './styled'
+
+import {
+  getContactUsers,
+  getContactStatus,
+  getAttributeFromSummary
+} from '../../../../../../models/contacts/helpers'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
 import { deleteContacts } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
@@ -114,43 +122,51 @@ class Info extends React.Component {
   render() {
     const { isCreatingRoom, isDeleting } = this.state
     const { contact } = this.props
-    const displayName = contact.summary.display_name
+    const lastSeen = getContactStatus(contact)
+
+    console.log(lastSeen)
 
     if (isDeleting) {
       return <DeletingMessage />
     }
 
     return (
-      <div className="c-contact-info c-contact-profile-card">
+      <Flex column center className="c-contact-profile-card">
         <Avatar contact={contact} />
 
-        <div className="c-contact-info__detail">
-          <div className="c-contact-info__name">{displayName}</div>
+        <Title>{getAttributeFromSummary(contact, 'display_name')}</Title>
 
-          <div className="c-contact-info__status">
-            {contact.users && <LastSeen user={contact.users[0]} />}
-          </div>
+        {lastSeen && (
+          <LastSeen>{`last seen ${timeago().format(
+            lastSeen.last_seen_at * 1000
+          )} @${fecha.format(
+            lastSeen.last_seen_at * 1000,
+            'MM:DD A'
+          )}`}</LastSeen>
+        )}
+
+        <div>
           {this.shouldShowChatButton(contact) && (
             <ActionButton
               disabled={isCreatingRoom}
               onClick={this.handleOnClickChat}
-              style={{ marginTop: '1em' }}
             >
               {isCreatingRoom ? 'Connecting...' : 'Chat'}
             </ActionButton>
           )}
-          <ShadowButton
-            style={{
-              position: 'absolute',
-              top: '1em',
-              right: '1em'
-            }}
-            onClick={this.handleOnDelete}
-          >
-            <TrashIcon color="#2196f3" size={24} />
-          </ShadowButton>
         </div>
-      </div>
+
+        <ShadowButton
+          style={{
+            position: 'absolute',
+            top: '1em',
+            right: '1em'
+          }}
+          onClick={this.handleOnDelete}
+        >
+          <TrashIcon color="#2196f3" size={24} />
+        </ShadowButton>
+      </Flex>
     )
   }
 }

@@ -18,7 +18,7 @@ export const Status = styled.div`
   width: 1em;
   height: 1em;
   background-color: ${props =>
-    props.status === 'online' ? '#35b863' : '#cad4db'};
+    props.status === 'online' ? '#35b863' : '#8DA2B5'};
   border: solid 8px #f4f6f9;
   border-radius: 1000%;
 `
