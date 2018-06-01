@@ -16,15 +16,9 @@ import TrashIcon from '../../../../../../views/components/SvgIcons/TrashIcon'
 import DeletingMessage from './components/DeletingMessage'
 
 class Info extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isDeleting: false,
-      isCreatingRoom: false
-    }
-
-    this.handleOnClickChat = this.handleOnClickChat.bind(this)
+  state = {
+    isDeleting: false,
+    isCreatingRoom: false
   }
 
   handleOnDelete = () => {
@@ -37,7 +31,7 @@ class Info extends React.Component {
     })
   }
 
-  async handleDeleteContact() {
+  handleDeleteContact = async () => {
     const { contact, deleteContacts } = this.props
     const { id: contactId } = contact
 
@@ -58,7 +52,7 @@ class Info extends React.Component {
     }
   }
 
-  async handleOnClickChat() {
+  handleOnClickChat = async () => {
     const { createRoom } = this.props
 
     try {
@@ -105,7 +99,9 @@ class Info extends React.Component {
 
     return recipients
   }
-  // User  can chat just with contacts which at least has email or phone or user attribute.
+
+  // User  can chat just with contacts which at least has
+  // email or phone or user attribute.
   shouldShowChatButton(contact) {
     const {
       summary: { email: contactEmail, phone_number: contactPhone },
@@ -114,6 +110,7 @@ class Info extends React.Component {
 
     return contactEmail || contactPhone || contactUsers
   }
+
   render() {
     const { isCreatingRoom, isDeleting } = this.state
     const { contact } = this.props

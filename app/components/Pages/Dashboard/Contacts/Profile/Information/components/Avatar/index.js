@@ -4,7 +4,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import Uploader from '../../../../../../../../views/components/AvatarUploader/index.js'
+import { AvatarUploader as Uploader } from '../../../../../../../../views/components/AvatarUploader/index.js'
 import uploadAttachments from '../../../../../../../../models/contacts/upload-attachments/index.js'
 import { selectDefinitionByName } from '../../../../../../../../reducers/contacts/attributeDefs'
 import {
@@ -16,24 +16,35 @@ import {
   getAttributeFromSummary
 } from '../../../../../../../../models/contacts/helpers'
 
-const AvatarUploader = props => <Uploader {...props} />
+// export class ContactAvatar extends React.Component {
+//   state = {
+//     isUploading: false,
+//     avatarImageSrc: getContactAvatar(this.props.contact)
+//   }
+// }
+
+const AvatarUploader = props => (
+  <Uploader {...props} avatar={{ src: props.avatar }} />
+)
 
 function mapStateToProps(state, props) {
   const { contact } = props
   const { id: contactId } = contact
-  const { contacts: { attributeDefs } } = state
+  const {
+    contacts: { attributeDefs }
+  } = state
 
   return { contactId, attributeDefs }
 }
 
 export default compose(
   connect(mapStateToProps, { upsertContactAttributes, deleteAttributes }),
-  withState('uploading', 'setUploading', false),
+  withState('isUploading', 'setUploading', false),
   withState('avatar', 'setAvatar', ({ contact }) =>
     getAttributeFromSummary(contact, 'profile_image_url')
   ),
   withHandlers({
-    handleChange: ({
+    handleOnChange: ({
       contact,
       contactId,
       setAvatar,
@@ -99,7 +110,7 @@ export default compose(
 
       reader.readAsDataURL(file)
     },
-    handleDelete: ({
+    handleOnDelete: ({
       setAvatar,
       contactId,
       attributeDefs,
