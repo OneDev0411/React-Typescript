@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { selectTags } from '../../../../../reducers/contacts/tags'
 import { confirmation } from '../../../../../store_actions/confirmation'
 
 import {
@@ -27,6 +28,7 @@ import {
   Content as PageContent
 } from '../../../../../views/components/SlideMenu'
 import { Filters } from '../../../../../views/components/Grid/Filters'
+import { SavedSegments } from '../../../../../views/components/Grid/Segments/List'
 
 import { Header } from './Header'
 // import { Filters } from './Filters'
@@ -151,8 +153,20 @@ class ContactsList extends React.Component {
     }
   }
 
+  getUniqTags = () => {
+    const { tags } = this.props
+
+    if (!tags || tags.length === 0) {
+      return []
+    }
+
+    const allTags = tags.map(tag => ({ name: tag.text, value: tag.text }))
+
+    return _.uniq(allTags, item => item.value)
+  }
+
   render() {
-    const { user, list } = this.props
+    const { user, list, tags } = this.props
     const { selectedRows, isSideMenuOpen } = this.state
     const contacts = selectContacts(list)
     const listInfo = selectContactsInfo(list)
@@ -163,13 +177,26 @@ class ContactsList extends React.Component {
     const noContact =
       !isFetching && contacts.length === 0 && listInfo.type !== 'filter'
 
+    console.log('>>>> RENDER')
+
     return (
       <PageContainer>
         <SideMenu isOpen={isSideMenuOpen}>
-          ITEM 1<br />
-          ITEM 2<br />
-          ITEM 3<br />
-          ITEM 4<br />
+          <SavedSegments
+            list={[
+              {
+                id: 0,
+                title: 'All Contacts',
+                count: 503,
+                selected: true
+              },
+              {
+                id: 1,
+                title: 'Good Contacts',
+                count: 5
+              }
+            ]}
+          />
         </SideMenu>
 
         <PageContent>
@@ -179,24 +206,40 @@ class ContactsList extends React.Component {
             onMenuTriggerChange={this.toggleSideMenu}
           />
 
-          <Filters />
+          <Filters
+            allowSaveSegment
+            currentFilter="All Contacts"
+            config={[
+              {
+                name: 'tag',
+                label: 'Tag',
+                type: 'List',
+                multi: false,
+                options: this.getUniqTags(),
+                hint:
+                  'A group a person belongs to, based on a tag you’ve manually applied to them.'
+              }
+            ]}
+          />
 
-          {noContact ? (
-            <NoContact user={user} />
-          ) : (
-            <Table
-              data={contacts}
-              deletingContacts={this.state.deletingContacts}
-              handleOnDelete={this.handleOnDelete}
-              loading={isFetching}
-              onPageChange={this.onPageChange}
-              page={this.props.currentPage - 1}
-              pages={pages}
-              selectedRows={selectedRows}
-              totalCount={totalCount}
-              toggleSelectedRow={this.toggleSelectedRow}
-            />
-          )}
+          <div style={{ margin: '0 20px' }}>
+            {noContact ? (
+              <NoContact user={user} />
+            ) : (
+              <Table
+                data={contacts}
+                deletingContacts={this.state.deletingContacts}
+                handleOnDelete={this.handleOnDelete}
+                loading={isFetching}
+                onPageChange={this.onPageChange}
+                page={this.props.currentPage - 1}
+                pages={pages}
+                selectedRows={selectedRows}
+                totalCount={totalCount}
+                toggleSelectedRow={this.toggleSelectedRow}
+              />
+            )}
+          </div>
         </PageContent>
       </PageContainer>
     )
@@ -239,10 +282,14 @@ class ContactsList extends React.Component {
 }
 
 function mapStateToProps(state) {
+  const { contacts, user } = state
+  const { tags, list } = contacts
+
   return {
-    currentPage: selectContactsCurrentPage(state.contacts.list),
-    list: state.contacts.list,
-    user: state.user
+    currentPage: selectContactsCurrentPage(list),
+    tags: selectTags(tags),
+    list,
+    user
   }
 }
 
