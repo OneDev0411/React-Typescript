@@ -1,13 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
-import styled from 'styled-components'
-
-const Icon = styled.i`
-  cursor: pointer;
-  font-size: 17px;
-  color: #263445;
-`
+import IconNav from '../../SvgIcons/NavMenu/IconNav'
+import { Container } from './styled'
 
 const propTypes = {
   onClick: PropTypes.func
@@ -16,7 +10,9 @@ const propTypes = {
 const defaultProps = {}
 
 export const Trigger = ({ onClick }) => (
-  <Icon className="fa fa-th-list" onClick={onClick} />
+  <Container>
+    <IconNav onClick={onClick} />
+  </Container>
 )
 
 Trigger.propTypes = propTypes
