@@ -7,11 +7,19 @@ import ActionButton from '../../../../../../views/components/Button/ActionButton
 
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 
-export function Header({ user, contactsCount, onMenuTriggerChange }) {
+export function Header({
+  user,
+  contactsCount,
+  isSideMenuOpen,
+  onMenuTriggerChange
+}) {
   return (
     <PageHeader isFlat>
       <PageHeader.Title backButton={false}>
-        <MenuTrigger onClick={onMenuTriggerChange} />
+        <MenuTrigger
+          tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}
+          onClick={onMenuTriggerChange}
+        />
         <PageHeader.Heading>All Contacts</PageHeader.Heading>
         <span className="badge counter">
           {contactsCount.toLocaleString()} Contacts
