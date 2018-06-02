@@ -35,7 +35,7 @@ import { Toolbar } from './Toolbar'
 
 import Table from './Table'
 import { NoContact } from './NoContact'
-import ContactFilters from './Filter'
+import ContactFilters from './Filters'
 
 const deletedState = { deletingContacts: [], selectedRows: {} }
 
