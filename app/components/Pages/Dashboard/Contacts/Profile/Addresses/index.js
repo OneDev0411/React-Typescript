@@ -92,11 +92,12 @@ const Addresses = ({
                     )}
 
                     <Label
-                      name={`address_${label}_${index}`}
+                      disabled={props.disabled}
                       field={fields[0]}
                       labels={getAddressLabels(attributeDefs)}
-                      disabled={props.disabled}
                       onChange={handleOnChangeLabel}
+                      name={`address_${label}_${index}`}
+                      showSuffix={false}
                     />
                   </span>
                   <span
