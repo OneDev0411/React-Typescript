@@ -24,6 +24,7 @@ const defaultProps = {
     <g fill="none" fillRule="evenodd" key="key-0">
       <path d="M-4-6h24v24H-4z" />
       <path
+        className="icon-nav--bars"
         fill="#263445"
         fillRule="nonzero"
         d="M12.667 5.27H0v2.811h12.667zM16 0H0v2.811h16zm0 10.189H0V13h16z"
