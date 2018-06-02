@@ -33,7 +33,7 @@ export class SaveSegment extends React.Component {
 
         <Modal
           isOpen={showModal}
-          onRequestClose={this.toggleShowModal}
+          handleOnClose={this.toggleShowModal}
           className="half-size"
         >
           <Modal.Header title="Save list" />

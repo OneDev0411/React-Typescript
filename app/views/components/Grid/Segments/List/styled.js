@@ -12,27 +12,17 @@ export const ListTitle = styled.div`
 `
 
 export const ListItemName = styled.div`
-  width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `
 
-export const ListItemCount = styled.div`
-  width: 20%;
-  text-align: right;
-`
-
 export const ListItem = styled.div`
   display: flex;
-  margin-bottom: 15px;
-  font-size: 14px;
+  margin-bottom: 12px;
+  font-size: 15px;
   cursor: pointer;
 
   color: ${props => (props.isSelected ? '#2196f3' : '#17283a')};
   font-weight: ${props => (props.isSelected ? 600 : 'normal')};
-
-  ${ListItemCount} {
-    color: ${props => (props.isSelected ? '#2196f3' : '#5a7390')};
-  }
 `

@@ -1,12 +1,6 @@
 import React from 'react'
 
-import {
-  Container,
-  ListTitle,
-  ListItem,
-  ListItemName,
-  ListItemCount
-} from './styled'
+import { Container, ListTitle, ListItem, ListItemName } from './styled'
 
 export const SavedSegments = ({ list }) => (
   <Container>
@@ -15,7 +9,6 @@ export const SavedSegments = ({ list }) => (
     {list.map(item => (
       <ListItem key={item.id} isSelected={item.selected}>
         <ListItemName>{item.title}</ListItemName>
-        <ListItemCount>{item.count}</ListItemCount>
       </ListItem>
     ))}
   </Container>
