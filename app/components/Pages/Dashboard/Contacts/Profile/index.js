@@ -241,7 +241,7 @@ class ContactProfile extends React.Component {
 
           <div style={{ width: '30%' }}>
             <ImportantDates contact={contact} />
-            <DealsListWidget contact={contact} />
+            <DealsListWidget contactId={contact.id} />
           </div>
         </Flex>
       </div>

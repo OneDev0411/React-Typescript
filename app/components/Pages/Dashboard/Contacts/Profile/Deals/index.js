@@ -14,13 +14,14 @@ import { getContactDeals } from '../../../../../../models/contacts/helpers/get-c
 export class DealsListWidget extends React.Component {
   state = {
     // isOpen: false,
+    contact: {},
     isLoading: false,
     list: []
   }
 
   componentDidMount() {
-    if (this.props.contact && this.props.contact.id) {
-      this.fetchDeals(this.props.contact.id)
+    if (this.props.contactId) {
+      this.fetchDeals(this.props.contactId)
     }
   }
 
@@ -35,7 +36,7 @@ export class DealsListWidget extends React.Component {
       const list = getContactDeals(response.data)
 
       if (list) {
-        this.setState({ list, isLoading: false })
+        this.setState({ contact: response.data, list, isLoading: false })
       }
     } catch (error) {
       console.log(error)
@@ -75,8 +76,9 @@ export class DealsListWidget extends React.Component {
             <Loading style={{ margin: '4em auto' }} />
           ) : this.state.list.length > 0 ? (
             <List
-              list={this.state.list}
+              contact={this.state.contact}
               handleOnClickItem={this.handleOnClickItem}
+              list={this.state.list}
             />
           ) : (
             <Flex center full style={{ height: '2em' }}>
