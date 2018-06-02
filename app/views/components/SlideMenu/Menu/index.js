@@ -8,7 +8,7 @@ const Container = styled.div`
   opacity: ${props => (props.isOpen ? 1 : 0)};
   max-height: 100vh;
   overflow: auto;
-  transition: 0.5s all ease-in;
+  transition: 0.3s all ease-in;
 `
 
 export const Menu = ({ children, isOpen }) => (

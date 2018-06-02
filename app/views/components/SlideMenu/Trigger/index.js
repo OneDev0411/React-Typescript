@@ -1,17 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import IconNav from '../../SvgIcons/NavMenu/IconNav'
+import Tooltip from '../../tooltip'
+
 import { Container } from './styled'
 
 const propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func.isRequired,
+  tooltip: PropTypes.string
 }
 
-const defaultProps = {}
+const defaultProps = {
+  tooltip: null
+}
 
-export const Trigger = ({ onClick }) => (
+export const Trigger = ({ onClick, tooltip }) => (
   <Container>
-    <IconNav onClick={onClick} />
+    <Tooltip caption={tooltip} placement="bottom">
+      <IconNav onClick={onClick} />
+    </Tooltip>
   </Container>
 )
 
