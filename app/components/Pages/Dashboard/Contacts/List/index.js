@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import { selectTags } from '../../../../../reducers/contacts/tags'
 import { confirmation } from '../../../../../store_actions/confirmation'
 
 import {
@@ -27,7 +26,7 @@ import {
   Menu as SideMenu,
   Content as PageContent
 } from '../../../../../views/components/SlideMenu'
-import { Filters } from '../../../../../views/components/Grid/Filters'
+
 import { SavedSegments } from '../../../../../views/components/Grid/Segments/List'
 
 import { Header } from './Header'
@@ -36,6 +35,7 @@ import { Toolbar } from './Toolbar'
 
 import Table from './Table'
 import { NoContact } from './NoContact'
+import ContactFilters from './Filter'
 
 const deletedState = { deletingContacts: [], selectedRows: {} }
 
@@ -43,7 +43,7 @@ class ContactsList extends React.Component {
   state = {
     filter: selectContactsInfo(this.props.list).filter || '',
     isSearching: false,
-    isSideMenuOpen: false,
+    isSideMenuOpen: true,
     deletingContacts: [],
     selectedRows: {}
   }
@@ -153,20 +153,8 @@ class ContactsList extends React.Component {
     }
   }
 
-  getUniqTags = () => {
-    const { tags } = this.props
-
-    if (!tags || tags.length === 0) {
-      return []
-    }
-
-    const allTags = tags.map(tag => ({ name: tag.text, value: tag.text }))
-
-    return _.uniq(allTags, item => item.value)
-  }
-
   render() {
-    const { user, list, tags } = this.props
+    const { user, list } = this.props
     const { selectedRows, isSideMenuOpen } = this.state
     const contacts = selectContacts(list)
     const listInfo = selectContactsInfo(list)
@@ -176,8 +164,6 @@ class ContactsList extends React.Component {
 
     const noContact =
       !isFetching && contacts.length === 0 && listInfo.type !== 'filter'
-
-    console.log('>>>> RENDER')
 
     return (
       <PageContainer>
@@ -201,26 +187,13 @@ class ContactsList extends React.Component {
 
         <PageContent>
           <Header
+            isSideMenuOpen={isSideMenuOpen}
             contactsCount={listInfo.total}
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
           />
 
-          <Filters
-            allowSaveSegment
-            currentFilter="All Contacts"
-            config={[
-              {
-                name: 'tag',
-                label: 'Tag',
-                type: 'List',
-                multi: false,
-                options: this.getUniqTags(),
-                hint:
-                  'A group a person belongs to, based on a tag you’ve manually applied to them.'
-              }
-            ]}
-          />
+          <ContactFilters onFilterChange={this.search} />
 
           <div style={{ margin: '0 20px' }}>
             {noContact ? (
@@ -281,14 +254,10 @@ class ContactsList extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { contacts, user } = state
-  const { tags, list } = contacts
-
+function mapStateToProps({ contacts, user }) {
   return {
-    currentPage: selectContactsCurrentPage(list),
-    tags: selectTags(tags),
-    list,
+    currentPage: selectContactsCurrentPage(contacts.list),
+    list: contacts.list,
     user
   }
 }
