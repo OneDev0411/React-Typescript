@@ -2,14 +2,17 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
+import Flex from 'styled-flex-component'
 
 import { getContactStage } from '../../../../../models/contacts/helpers/get-contact-stage'
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
 import Stage from './Stage'
-import Header from './Header'
+import { Header } from './Header'
 import Information from './Information'
+import ImportantDates from './ImportantDates'
+import { DealsListWidget } from './Deals'
 import Names from './Names'
 import Tags from './Tags'
 import Details from './Details'
@@ -69,8 +72,6 @@ class ContactProfile extends React.Component {
 
     this.setState({ tasks })
   }
-
-  goBack = () => browserHistory.push('/dashboard/contacts')
 
   handleChangeStage = async text => {
     const { contact, attributeDefs, upsertContactAttributes } = this.props
@@ -153,10 +154,10 @@ class ContactProfile extends React.Component {
 
     return (
       <div className="profile" style={{ backgroundColor: '#f8fafb' }}>
-        <Header goBackHandler={this.goBack} />
+        <Header />
 
-        <div className="content" style={{ minHeight: 'calc(100vh - 55px)' }}>
-          <div className="left-pane">
+        <Flex full style={{ padding: '2em' }}>
+          <div style={{ width: '30%' }}>
             <Information contact={contact} />
 
             <Stage
@@ -173,7 +174,7 @@ class ContactProfile extends React.Component {
             <Addresses contact={contact} />
           </div>
 
-          <div className="right-pane">
+          <div style={{ width: 'calc(70% - 4em)', margin: '0 2em' }}>
             <Tab.Container
               id="profile-todo-tabs"
               defaultActiveKey="note"
@@ -237,7 +238,12 @@ class ContactProfile extends React.Component {
               onChangeTab={activeTab => this.setState({ activeTab })}
             />
           </div>
-        </div>
+
+          <div style={{ width: '30%' }}>
+            <ImportantDates contact={contact} />
+            <DealsListWidget contact={contact} />
+          </div>
+        </Flex>
       </div>
     )
   }
