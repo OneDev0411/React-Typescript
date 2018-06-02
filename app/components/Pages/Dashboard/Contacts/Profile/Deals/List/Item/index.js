@@ -43,8 +43,6 @@ Item.propTypes = {
 export function Item(props) {
   const { item, handleOnClickItem } = props
 
-  console.log('render', item)
-
   const status = Deal.getStatus(item) || 'Unknown'
   const clientTitle = ''
   const address = Deal.getAddress(item)
