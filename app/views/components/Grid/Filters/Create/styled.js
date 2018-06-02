@@ -42,8 +42,10 @@ export const AddItem = styled.div`
   font-weight: 600;
   letter-spacing: 0.4px;
   color: #2196f3;
-  cursor: pointer;
+  opacity: ${props => (props.disabled ? 0.7 : 1)};
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+
   &:hover {
-    color: #186cb0;
+    color: ${props => (props.disabled ? '#2196f3' : '#186cb0')};
   }
 `

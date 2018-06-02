@@ -82,10 +82,10 @@ export class DropDownList extends React.Component {
   }
 
   getDefaultInputValue = () => {
-    const { defaultValue, currentFilters } = this.props
+    const { defaultValue, conditions } = this.props
 
-    if (currentFilters && currentFilters.length > 0) {
-      return currentFilters[0].value
+    if (conditions && conditions.length > 0) {
+      return conditions[0].value
     }
 
     if (defaultValue) {
@@ -96,10 +96,10 @@ export class DropDownList extends React.Component {
   }
 
   getDefaultSelectedItem = () => {
-    const { currentFilters, defaultValue } = this.props
+    const { conditions, defaultValue } = this.props
 
-    if (currentFilters && currentFilters.length > 0) {
-      return _.indexBy(currentFilters, 'value')
+    if (conditions && conditions.length > 0) {
+      return _.indexBy(conditions, 'value')
     }
 
     if (defaultValue) {

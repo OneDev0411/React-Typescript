@@ -3,7 +3,7 @@ import _ from 'underscore'
 
 import { FilterOperators } from '../../Oparators'
 
-export const filterOperators = [
+export const operators = [
   {
     id: 'is',
     name: 'is',
@@ -32,12 +32,12 @@ function getNormalizedOptions(options) {
 
 export const ListFilter = props => (
   <FilterOperators
-    operators={props.operators || filterOperators}
+    allowedOperators={props.operators || operators}
     options={getNormalizedOptions(props.options)}
     defaultValue={props.defaultValue}
     allowMultipleSelections={props.multi}
     onFilterChange={props.onFilterChange}
-    currentFilters={props.currentFilters}
-    currentOperator={props.currentOperator}
+    conditions={props.conditions}
+    operator={props.operator}
   />
 )

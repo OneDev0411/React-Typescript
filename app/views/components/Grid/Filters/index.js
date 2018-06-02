@@ -6,6 +6,8 @@ import { AddFilter } from './Create'
 import { SaveSegment } from '../Segments/Create'
 import { FilterItem } from './Item'
 
+import createFilterCriteria from './helpers/create-filter-criteria'
+
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -18,6 +20,9 @@ export class Filters extends React.Component {
     activeFilters: []
   }
 
+  /**
+   *
+   */
   createFilter = ({ name }) => {
     const uniqueId = _.uniqueId(`${name}-`)
 
@@ -31,6 +36,9 @@ export class Filters extends React.Component {
     })
   }
 
+  /**
+   *
+   */
   toggleFilterActive = id => {
     const filter = this.state.activeFilters[id]
 
@@ -47,31 +55,60 @@ export class Filters extends React.Component {
     })
   }
 
-  removeFilter = id =>
+  /**
+   *
+   */
+  removeFilter = id => {
+    const { config } = this.props
+    const { activeFilters } = this.state
+
+    const isIncompleteFilter = activeFilters[id].isIncomplete === true
+    const nextFilters = _.omit(activeFilters, filter => filter.id === id)
+
     this.setState({
-      activeFilters: _.omit(
-        this.state.activeFilters,
-        filter => filter.id === id
-      )
+      activeFilters: nextFilters
     })
 
-  onFilterChange = (id, filters, operator) => {
+    if (!isIncompleteFilter) {
+      this.props.onChange(createFilterCriteria(nextFilters, config))
+    }
+  }
+
+  /**
+   *
+   */
+  findFilterByName = name =>
+    this.props.config.find(filter => filter.name === name)
+
+  /**
+   *
+   */
+  onFilterChange = (id, conditions, operator) => {
+    const { config } = this.props
+
+    const isIncomplete = !operator || conditions.length === 0
+
     const activeFilters = {
       ...this.state.activeFilters,
       [id]: {
         ...this.state.activeFilters[id],
-        currentFilters: filters,
-        currentOperator: operator
+        isIncomplete,
+        conditions,
+        operator
       }
     }
 
     this.setState({
       activeFilters
     })
+
+    if (!isIncomplete) {
+      this.props.onChange(createFilterCriteria(activeFilters, config))
+    }
   }
 
-  findFilterByName = name =>
-    this.props.config.find(filter => filter.name === name)
+  hasMissingValue = () =>
+    _.some(this.state.activeFilters, filter => filter.isIncomplete)
 
   render() {
     const { config, allowSaveSegment, currentFilter } = this.props
@@ -92,7 +129,11 @@ export class Filters extends React.Component {
           />
         ))}
 
-        <AddFilter config={config} onNewFilter={this.createFilter} />
+        <AddFilter
+          hasMissingValue={this.hasMissingValue()}
+          config={config}
+          onNewFilter={this.createFilter}
+        />
 
         {allowSaveSegment &&
           _.size(activeFilters) > 0 && (

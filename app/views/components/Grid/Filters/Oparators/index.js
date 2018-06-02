@@ -12,28 +12,30 @@ export class FilterOperators extends React.Component {
   }
 
   getOperator = () => {
-    const { operators, currentOperator } = this.props
+    const { allowedOperators, operator } = this.props
 
     return (
-      currentOperator ||
-      Object.values(operators).find(
+      operator ||
+      Object.values(allowedOperators).find(
         operator => operator.defaultSelected === true
       ) ||
-      operators[0]
+      allowedOperators[0]
     )
   }
 
   get DefaultState() {
-    const { defaultValue, currentFilters, onFilterChange } = this.props
+    const { defaultValue, conditions = [], onFilterChange } = this.props
 
     const selectedOperator = this.getOperator()
 
-    if (defaultValue && !currentFilters) {
-      onFilterChange(
-        defaultValue ? [{ name: defaultValue, value: defaultValue }] : [],
-        selectedOperator
-      )
+    if (defaultValue) {
+      conditions.push({
+        name: defaultValue,
+        value: defaultValue
+      })
     }
+
+    onFilterChange(conditions, selectedOperator)
 
     return {
       selectedOperator
@@ -72,12 +74,12 @@ export class FilterOperators extends React.Component {
   }
 
   render() {
-    const { operators } = this.props
+    const { allowedOperators } = this.props
     const { selectedOperator } = this.state
 
     return (
       <Container>
-        {operators.map(item => (
+        {allowedOperators.map(item => (
           <Operator key={item.id} onClick={() => this.onOperatorChange(item)}>
             <Input
               type="radio"

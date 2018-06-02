@@ -1,5 +1,17 @@
 import styled from 'styled-components'
 
+function getItemColor(props, defaultColor = '#2196f3') {
+  if (props.isIncomplete && !props.isActive) {
+    return '#fd3a57'
+  }
+
+  if (props.isActive) {
+    return '#2196f3'
+  }
+
+  return defaultColor
+}
+
 export const TitleContainer = styled.div`
   display: flex;
   align-items: center;
@@ -9,7 +21,6 @@ export const TitleContainer = styled.div`
 export const ItemTitle = styled.div`
   font-weight: 500;
   width: 95%;
-  color: #262626;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -38,7 +49,7 @@ export const Container = styled.div`
   cursor: pointer;
 
   ${ItemTitle} {
-    color: ${props => (props.isActive ? '#2196f3' : '#262626')};
+    color: ${props => getItemColor(props, '#262626')};
   }
 
   ${RemoveIcon} {
@@ -47,11 +58,11 @@ export const Container = styled.div`
 
   &:hover {
     background-color: #fff;
-    border: solid 1px #2196f3;
+    border: solid 1px ${props => getItemColor(props)};
   }
 
   &:hover ${ItemTitle} {
-    color: #2196f3;
+    color: ${props => getItemColor(props)};
   }
 
   &:hover ${RemoveIcon} {

@@ -16,12 +16,12 @@ import {
 } from './styled'
 
 const getComponent = (filterConfig, props) => {
-  const { onFilterChange, currentFilters, currentOperator } = props
+  const { onFilterChange, conditions, operator } = props
 
   const data = {
     ...filterConfig,
-    currentFilters,
-    currentOperator,
+    conditions,
+    operator,
     onFilterChange
   }
 
@@ -31,29 +31,35 @@ const getComponent = (filterConfig, props) => {
   }
 }
 
-const getCurrentFiltersNames = currentFilters =>
-  _.pluck(currentFilters, 'name').join(' OR ')
+const getCurrentConditionsString = (isActive, conditions) => {
+  if (!isActive && conditions && conditions.length === 0) {
+    return 'Missing value'
+  }
+
+  return _.pluck(conditions, 'name').join(' OR ')
+}
 
 export const FilterItem = props => {
   const {
     filterConfig,
     isActive,
-    currentFilters,
-    currentOperator,
+    isIncomplete,
+    conditions,
+    operator,
     onToggleFilterActive,
     onRemove
   } = props
 
   return (
-    <Container isActive={isActive}>
+    <Container isActive={isActive} isIncomplete={isIncomplete}>
       <Downshift isOpen={isActive} onOuterClick={onToggleFilterActive}>
         {({ isOpen }) => (
           <div>
             <TitleContainer>
               <ItemTitle onClick={onToggleFilterActive}>
                 <b>{filterConfig.label} </b>
-                {currentOperator && currentOperator.name}&nbsp;
-                {getCurrentFiltersNames(currentFilters)}
+                {operator && operator.name}&nbsp;
+                {getCurrentConditionsString(isActive, conditions)}
               </ItemTitle>
               <IconContainer>
                 <RemoveIcon className="fa fa-times" onClick={onRemove} />

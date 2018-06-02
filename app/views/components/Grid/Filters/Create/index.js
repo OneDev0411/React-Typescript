@@ -1,6 +1,7 @@
 import React from 'react'
 import Downshift from 'downshift'
 
+import { FilterItemToolTip, MissingValueToolTip } from './tooltip'
 import { Container, List, ListItem, AddItem } from './styled'
 
 export class AddFilter extends React.Component {
@@ -8,10 +9,15 @@ export class AddFilter extends React.Component {
     isMenuOpen: false
   }
 
-  toggleMenu = () =>
+  toggleMenu = () => {
+    if (this.props.hasMissingValue) {
+      return false
+    }
+
     this.setState({
       isMenuOpen: !this.state.isMenuOpen
     })
+  }
 
   onSelectFilter = item => {
     this.setState({
@@ -25,7 +31,7 @@ export class AddFilter extends React.Component {
 
   render() {
     const { isMenuOpen } = this.state
-    const { config } = this.props
+    const { config, hasMissingValue } = this.props
 
     return (
       <Container>
@@ -37,20 +43,25 @@ export class AddFilter extends React.Component {
         >
           {({ isOpen, getItemProps }) => (
             <div>
-              <AddItem onClick={this.toggleMenu}>+ Add Filter</AddItem>
+              <AddItem onClick={this.toggleMenu} disabled={hasMissingValue}>
+                <MissingValueToolTip enabled={hasMissingValue}>
+                  <span>+ Add Filter</span>
+                </MissingValueToolTip>
+              </AddItem>
 
               {isOpen && (
                 <List>
                   {config.map((item, index) => (
-                    <ListItem
-                      key={index}
-                      {...getItemProps({
-                        index,
-                        item
-                      })}
-                    >
-                      {item.label}
-                    </ListItem>
+                    <FilterItemToolTip key={index} item={item}>
+                      <ListItem
+                        {...getItemProps({
+                          index,
+                          item
+                        })}
+                      >
+                        {item.label}
+                      </ListItem>
+                    </FilterItemToolTip>
                   ))}
                 </List>
               )}
