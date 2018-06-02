@@ -6,6 +6,7 @@ export const Container = styled.div`
   flex-direction: row;
   will-change: overflow;
   backface-visibility: hidden;
+  min-height: 100vh;
   max-height: 100vh;
   overflow: hidden;
 `
