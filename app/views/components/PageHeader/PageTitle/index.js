@@ -19,7 +19,7 @@ const Title = styled.h1`
 
 const defaultProps = {
   backButton: true,
-  backUrl: '/dashboard/mls'
+  backUrl: ''
 }
 
 const propTypes = {
@@ -30,12 +30,14 @@ const propTypes = {
 
 function PageHeader({ title, backButton, backUrl }) {
   function handleOnBack() {
+    if (backUrl) {
+      return browserHistory.push(backUrl)
+    }
+
     const currentLocation = browserHistory.getCurrentLocation()
 
     if (currentLocation.key) {
       browserHistory.goBack()
-    } else {
-      browserHistory.push(backUrl)
     }
   }
 
