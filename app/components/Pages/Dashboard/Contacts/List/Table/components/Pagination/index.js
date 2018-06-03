@@ -2,69 +2,73 @@ import React from 'react'
 
 import { Button } from './styled'
 
-class Pagination extends React.Component {
-  getPreviousButton = () => {
-    const { page, onPageChange, canPrevious } = this.props
+export class Pagination extends React.Component {
+  getPreviousButton = () => ({
+    text: 'Prev',
+    disabled: this.props.currentPage === 1,
+    onClick: () => this.props.onPageChange(this.props.currentPage - 1)
+  })
 
-    return {
-      text: 'Prev',
-      disabled: !canPrevious,
-      onClick: () => onPageChange(page - 1)
+  getNextButton = () => ({
+    text: 'Next',
+    disabled:
+      Math.ceil(this.props.totalCount / this.props.pageSize) ===
+      this.props.currentPage,
+    onClick: () => this.props.onPageChange(this.props.currentPage + 1)
+  })
+
+  getNumberButton = page => ({
+    text: page,
+    selected: this.props.currentPage === page,
+    onClick: () => this.props.onPageChange(page)
+  })
+
+  getButtons(current, last) {
+    const delta = 2
+    const left = current - delta
+    const right = current + delta + 1
+    let range = []
+    let buttons = []
+    let l
+
+    for (let i = 1; i <= last; i++) {
+      if (i === 1 || i === last || (i >= left && i < right)) {
+        range.push(i)
+      }
     }
-  }
 
-  getNextButton = () => {
-    const { page, onPageChange, totalCount, pageSize } = this.props
+    buttons.push(this.getPreviousButton())
+    range.forEach(i => {
+      if (l) {
+        if (i - l === 2) {
+          buttons.push(this.getNumberButton(l + 1))
+        } else if (i - l !== 1) {
+          buttons.push({ text: '...', disabled: true })
+        }
+      }
 
-    return {
-      text: 'Next',
-      disabled: Math.ceil(totalCount / pageSize) === page + 1,
-      onClick: () => onPageChange(page + 1)
-    }
-  }
+      buttons.push(this.getNumberButton(i))
 
-  getNumberButton = pageNumber => {
-    const { page, onPageChange } = this.props
+      l = i
+    })
+    buttons.push(this.getNextButton())
 
-    return {
-      text: pageNumber + 1,
-      selected: page === pageNumber,
-      onClick: () => onPageChange(pageNumber)
-    }
+    return buttons
   }
 
   render() {
-    let buttons = [this.getPreviousButton(), this.getNextButton()]
-    const pages = Math.ceil(this.props.totalCount / this.props.pageSize)
+    let buttons = []
 
-    // if (totalCount > 5 * pageSize) {
-    // buttons.push(this.getPreviousButton())
-    // buttons.push(this.getNextButton())
-    // } else {
-    //   for (let i = 0; i < Math.ceil(totalCount / pageSize); i++) {
-    //     buttons.push(this.getNumberButton(i))
-    //   }
-    // }
+    if (this.props.totalCount > 5 * this.props.pageSize) {
+      buttons = this.getButtons(this.props.currentPage, this.props.pages)
+    } else {
+      for (let i = 1; i <= this.props.pages; i++) {
+        buttons.push(this.getNumberButton(i))
+      }
+    }
 
     return (
       <div style={{ textAlign: 'center', marginTop: '1em' }}>
-        {/* <span style={{ marginRight: '1em' }}>
-          <b>{`${page * pageSize + 1}-${
-            (page + 1) * pageSize > totalCount
-              ? totalCount
-              : (page + 1) * pageSize
-          }`}</b>
-          <span> of </span>
-          <b>{`${totalCount}`}</b>
-        </span> */}
-        {pages > 1 && (
-          <span style={{ marginRight: '1em' }}>
-            <span>
-              page <b>{`${this.props.page + 1}`}</b> of
-            </span>
-            <b>{`  ${pages}`}</b>
-          </span>
-        )}
         {buttons.map((props, index) => (
           <Button {...props} key={index}>
             {props.text}
@@ -74,5 +78,3 @@ class Pagination extends React.Component {
     )
   }
 }
-
-export default Pagination

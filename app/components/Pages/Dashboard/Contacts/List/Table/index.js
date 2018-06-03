@@ -5,7 +5,7 @@ import ReactTable from 'react-table'
 import { LoadingComponent } from './components/LoadingComponent'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 import Radio from '../../../../../../views/components/radio/RadioWithState'
-import Pagination from './components/Pagination'
+import { Pagination } from './components/Pagination'
 import TrComponent from './components/Trcomponent'
 import DropDown from './columns/Dropdown'
 import TagsString from './columns/Tags'
@@ -17,10 +17,6 @@ function openContact(id) {
 }
 
 class ContactsList extends React.Component {
-  state = {
-    pageSize: 50
-  }
-
   getCellTitle = title => (
     <Fragment>
       {title}
@@ -85,66 +81,53 @@ class ContactsList extends React.Component {
     }
   ]
 
-  setPageSize = pageSize => {
-    this.setState({
-      pageSize
-    })
-  }
-
   render() {
-    const defaultPageSize = 50
-    const { pageSize } = this.state
-    const {
-      data,
-      deletingContacts,
-      loading,
-      onPageChange,
-      page,
-      pages,
-      totalCount
-    } = this.props
+    const { loading } = this.props
 
     return (
-      <ReactTable
-        data={data}
-        loading={loading}
-        columns={this.columns}
-        totalCount={totalCount}
-        minRows={0}
-        page={page}
-        pages={pages}
-        pageSize={pageSize}
-        defaultPageSize={defaultPageSize}
-        pageSizeOptions={[25, 50, 100]}
-        showPaginationBottom
-        onPageChange={onPageChange}
-        onFetchData={this.fetchPage}
-        showPagination={defaultPageSize < totalCount}
-        onPageSizeChange={this.setPageSize}
-        PaginationComponent={Pagination}
-        TdComponent={TrComponent}
-        LoadingComponent={LoadingComponent}
-        NoDataComponent={() =>
-          loading ? null : (
-            <NoSearchResults description="Try typing another name, email, phone or tag." />
-          )
-        }
-        className="contacts-list-table"
-        getTrProps={(state, { original: { id: contactId } }) => {
-          if (deletingContacts.includes(contactId)) {
-            return {
-              style: {
-                opacity: 0.5,
-                ponterEvents: 'none'
+      <Fragment>
+        <ReactTable
+          data={this.props.data}
+          loading={loading}
+          columns={this.columns}
+          totalCount={this.props.totalCount}
+          minRows={0}
+          page={0}
+          currentPage={this.props.currentPage}
+          pages={this.props.pages}
+          defaultPageSize={50}
+          showPagination={false}
+          onPageChange={this.props.onPageChange}
+          TdComponent={TrComponent}
+          LoadingComponent={LoadingComponent}
+          NoDataComponent={() =>
+            loading ? null : (
+              <NoSearchResults description="Try typing another name, email, phone or tag." />
+            )
+          }
+          className="contacts-list-table"
+          getTrProps={(state, { original: { id: contactId } }) => {
+            if (this.props.deletingContacts.includes(contactId)) {
+              return {
+                style: {
+                  opacity: 0.5,
+                  ponterEvents: 'none'
+                }
               }
             }
-          }
 
-          return {
-            onClick: () => openContact(contactId)
-          }
-        }}
-      />
+            return {
+              onClick: () => openContact(contactId)
+            }
+          }}
+        />
+
+        {!loading &&
+          this.props.pages > 1 &&
+          this.props.data.length > 0 && (
+            <Pagination pageSize={50} {...this.props} />
+          )}
+      </Fragment>
     )
   }
 }

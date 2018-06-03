@@ -10,7 +10,7 @@ import { searchContacts as search } from '../../../models/contacts/search-contac
 import { defaultQuery } from '../../../models/contacts/helpers'
 
 import {
-  isFetchingContactsList,
+  selectContactsListFetching,
   selectContactsInfo
 } from '../../../reducers/contacts/list'
 import { normalizeContacts } from '../helpers/normalize-contacts'
@@ -21,7 +21,7 @@ export function searchContacts(filter, page = 1, limit = 50) {
       contacts: { list }
     } = getState()
 
-    if (isFetchingContactsList(list)) {
+    if (selectContactsListFetching(list)) {
       return Promise.resolve()
     }
 

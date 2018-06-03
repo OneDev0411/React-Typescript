@@ -382,7 +382,10 @@ export default (
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
-      <Route path="/dashboard/contacts" component={AsyncContacts} />
+      <Route
+        component={AsyncContacts}
+        path="/dashboard/contacts(/page/:page)"
+      />
       <Route path="/dashboard/contacts/new" component={AsyncNewContact} />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route

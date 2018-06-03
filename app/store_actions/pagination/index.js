@@ -1,52 +1,74 @@
 import * as actionTypes from '../../constants/pagination'
 
-const requestPage = (list, page) => ({
-  type: actionTypes.REQUEST_PAGE,
-  payload: {
-    page
-  },
-  meta: {
-    list
+function requestPage(list, page) {
+  return {
+    type: actionTypes.REQUEST_PAGE,
+    payload: {
+      page
+    },
+    meta: {
+      list
+    }
   }
-})
+}
 
-const receivePage = (list, page, ids) => ({
-  type: actionTypes.RECEIVE_PAGE,
-  payload: {
-    page,
-    ids
-  },
-  meta: {
-    list
+function receivePage(list, page, ids) {
+  return {
+    type: actionTypes.RECEIVE_PAGE,
+    payload: {
+      page,
+      ids
+    },
+    meta: {
+      list
+    }
   }
-})
+}
 
-const removePage = (list, page) => ({
-  type: actionTypes.REMOVE_PAGE,
-  payload: {
-    page
-  },
-  meta: {
-    list
+function removePage(list, page) {
+  return {
+    type: actionTypes.REMOVE_PAGE,
+    payload: {
+      page
+    },
+    meta: {
+      list
+    }
   }
-})
+}
 
-const setCurrentPage = (list, page) => ({
-  type: actionTypes.SET_CURRENT_PAGE,
-  payload: {
-    page
-  },
-  meta: {
-    list
+function updatePages(list, pages) {
+  return {
+    type: actionTypes.UPDATE_PAGINATION,
+    payload: {
+      pages
+    },
+    meta: {
+      list
+    }
   }
-})
+}
 
-export const clearPagination = list => ({
-  type: actionTypes.CLEAR_PAGINATION,
-  meta: {
-    list
+function setCurrentPage(list, page) {
+  return {
+    type: actionTypes.SET_CURRENT_PAGE,
+    payload: {
+      page
+    },
+    meta: {
+      list
+    }
   }
-})
+}
+
+export function clearPagination(list) {
+  return {
+    type: actionTypes.CLEAR_PAGINATION,
+    meta: {
+      list
+    }
+  }
+}
 
 export const createRequestPageActionCreator = list => page =>
   requestPage(list, page)
@@ -56,6 +78,9 @@ export const createReceivePageActionCreator = list => (page, ids) =>
 
 export const createRemovePageActionCreator = list => page =>
   removePage(list, page)
+
+export const createUpdatePagesActionCreator = list => pages =>
+  updatePages(list, pages)
 
 export const createCurrentPageActionCreator = list => page =>
   setCurrentPage(list, page)
