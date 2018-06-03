@@ -14,7 +14,8 @@ const pages = (pages = {}, action = {}) => {
           fetching: true
         }
       }
-    case actionTypes.RECEIVE_PAGE: {
+
+    case actionTypes.RECEIVE_PAGE:
       return {
         ...pages,
         [action.payload.page]: {
@@ -22,15 +23,19 @@ const pages = (pages = {}, action = {}) => {
           fetching: false
         }
       }
-    }
-    case actionTypes.REMOVE_PAGE: {
+
+    case actionTypes.REMOVE_PAGE:
       return {
         ...pages,
         [action.payload.page]: undefined
       }
-    }
+
+    case actionTypes.UPDATE_PAGINATION:
+      return action.payload.pages
+
     case actionTypes.CLEAR_PAGINATION:
       return {}
+
     default:
       return pages
   }
@@ -41,8 +46,10 @@ const currentPage = (currentPage = 1, action = {}) => {
     case actionTypes.SET_CURRENT_PAGE:
     case actionTypes.REQUEST_PAGE:
       return action.payload.page
+
     case actionTypes.CLEAR_PAGINATION:
       return 1
+
     default:
       return currentPage
   }

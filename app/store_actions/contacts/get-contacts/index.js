@@ -3,7 +3,7 @@ import { batchActions } from 'redux-batched-actions'
 import * as actionTypes from '../../../constants/contacts'
 import { requestContactPage, receiveContactPage } from '../pagination'
 import { getContacts as fetchContacts } from '../../../models/contacts/get-contacts'
-import { isFetchingContactsList } from '../../../reducers/contacts/list'
+import { selectContactsListFetching } from '../../../reducers/contacts/list'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 
 export function getContacts(page = 1, limit = 50) {
@@ -12,7 +12,7 @@ export function getContacts(page = 1, limit = 50) {
       contacts: { list }
     } = getState()
 
-    if (isFetchingContactsList(list)) {
+    if (selectContactsListFetching(list)) {
       return Promise.resolve()
     }
 

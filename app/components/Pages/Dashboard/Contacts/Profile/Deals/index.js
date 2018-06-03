@@ -94,5 +94,5 @@ export class DealsListWidget extends React.Component {
 }
 
 DealsListWidget.propTypes = {
-  contact: PropTypes.shape().isRequired
+  contactId: PropTypes.string.isRequired
 }

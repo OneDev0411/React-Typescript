@@ -15,6 +15,7 @@ const Container = styled.div`
 `
 
 const propTypes = {
+  backUrl: PropTypes.string,
   backButton: PropTypes.bool,
   title: PropTypes.string.isRequired
 }
@@ -23,10 +24,10 @@ const defaultProps = {
   backButton: true
 }
 
-function PageHeader({ title, backButton, children }) {
+function PageHeader({ title, backButton, backUrl, children }) {
   return (
     <Container>
-      <PageTitle backButton={backButton} title={title} />
+      <PageTitle backButton={backButton} title={title} backUrl={backUrl} />
       {children}
     </Container>
   )

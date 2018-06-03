@@ -21,8 +21,13 @@ export const Button = ActionButton.extend`
   }
 
   ${props =>
-    !props.disabled
+    props.disabled
       ? `
+        pointer-event: none; 
+        color: ${props.text === '...' ? '#17283a' : '#d4dfe6'};
+        background: #f0f4f7;
+        `
+      : `
         font-weight: 600;
         color: ${props.selected ? '#fff' : '#17283a'};
         background: ${props.selected ? SELECTED_BGC : '#fff'};
@@ -32,10 +37,6 @@ export const Button = ActionButton.extend`
           background: ${SELECTED_BGC};
           border-color: ${SELECTED_BGC};
         }
-        `
-      : `
-        pointer-event: none; 
-        color: #d4dfe6;
-        background: #f0f4f7;
+        
     `};
 `

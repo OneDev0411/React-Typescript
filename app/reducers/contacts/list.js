@@ -66,7 +66,12 @@ export const info = (state = listInfoInitialState, action) => {
     case actionTypes.CREATE_CONTACTS_SUCCESS:
       return action.response.info
     case actionTypes.CLEAR_CONTACTS_LIST:
-      return listInfoInitialState
+      return {
+        ...listInfoInitialState,
+        type: state.type
+      }
+    case actionTypes.UPDATE_CONTACT_LIST_INFO:
+      return action.info
     default:
       return state
   }
@@ -130,14 +135,22 @@ export const selectContacts = state => state.ids.map(id => state.byId[id])
 
 export const selectContactsInfo = state => state.info
 
-export const isFetchingContactsList = state => state.isFetching
+export const selectContactsListFetching = state => state.isFetching
 
 export const getContactsListError = state => state.error
 
-export const selectContactsPage = (state, page) => state.pagination.pages[page]
-
-export const selectContactsPages = state => state.pagination.pages
-
 export const selectContactFilters = state => state.filters
 
-export const selectContactsCurrentPage = state => state.pagination.currentPage
+export const selectPage = (state, page) => state.pagination.pages[page]
+
+export const selectPageContacts = (state, page) => {
+  if (state.pagination.pages[page]) {
+    return state.pagination.pages[page].ids.map(id => state.byId[id])
+  }
+
+  return []
+}
+
+export const selectPages = state => state.pagination.pages
+
+export const selectCurrentPage = state => state.pagination.currentPage
