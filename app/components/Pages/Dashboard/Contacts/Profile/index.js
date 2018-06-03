@@ -9,7 +9,7 @@ import { selectDefinitionByName } from '../../../../../reducers/contacts/attribu
 
 import { Container } from '../components/Container'
 import Stage from './Stage'
-import { Header } from './Header'
+import Header from './Header'
 import Information from './Information'
 import ImportantDates from './ImportantDates'
 import { DealsListWidget } from './Deals'
@@ -33,7 +33,7 @@ import {
 } from '../../../../../store_actions/contacts'
 import {
   selectContact,
-  isFetchingContactsList
+  selectContactsListFetching
 } from '../../../../../reducers/contacts/list'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import { normalizeContact } from '../../../../../views/utils/association-normalizers'
@@ -52,11 +52,11 @@ class ContactProfile extends React.Component {
     const {
       contact,
       getContact,
-      isFetchingContactsList,
+      selectContactsListFetching,
       params: { id: contactId }
     } = this.props
 
-    if (!contact && !isFetchingContactsList) {
+    if (!contact && !selectContactsListFetching) {
       await getContact(contactId)
     }
 
@@ -154,7 +154,7 @@ class ContactProfile extends React.Component {
 
     return (
       <div className="profile" style={{ backgroundColor: '#f8fafb' }}>
-        <Header />
+        <Header currentPage={this.props.currentPage} />
 
         <Flex full style={{ padding: '2em' }}>
           <div style={{ width: '30%' }}>
@@ -257,7 +257,7 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
     attributeDefs,
     contact: selectContact(list, contactId),
     fetchError: selectContactError(contact),
-    isFetchingContactsList: isFetchingContactsList(list)
+    selectContactsListFetching: selectContactsListFetching(list)
   }
 }
 
