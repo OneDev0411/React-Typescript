@@ -25,7 +25,7 @@ export class AddFilter extends React.Component {
     })
 
     this.props.onNewFilter({
-      name: item.name
+      id: item.id
     })
   }
 

@@ -16,27 +16,27 @@ import {
 } from './styled'
 
 const getComponent = (filterConfig, props) => {
-  const { onFilterChange, conditions, operator } = props
+  const { onFilterChange, values, operator } = props
 
   const data = {
     ...filterConfig,
-    conditions,
+    values,
     operator,
     onFilterChange
   }
 
   switch (filterConfig.type) {
-    case 'List':
+    case 'Set':
       return <ListFilter {...data} />
   }
 }
 
-const getCurrentConditionsString = (isActive, conditions) => {
-  if (!isActive && conditions && conditions.length === 0) {
+const getCurrentValues = (isActive, values) => {
+  if (!isActive && values && values.length === 0) {
     return 'Missing value'
   }
 
-  return _.pluck(conditions, 'name').join(' OR ')
+  return _.isArray(values) && values.join(' OR ')
 }
 
 export const FilterItem = props => {
@@ -44,7 +44,7 @@ export const FilterItem = props => {
     filterConfig,
     isActive,
     isIncomplete,
-    conditions,
+    values,
     operator,
     onToggleFilterActive,
     onRemove
@@ -59,7 +59,7 @@ export const FilterItem = props => {
               <ItemTitle onClick={onToggleFilterActive}>
                 <b>{filterConfig.label} </b>
                 {operator && operator.name}&nbsp;
-                {getCurrentConditionsString(isActive, conditions)}
+                {getCurrentValues(isActive, values)}
               </ItemTitle>
               <IconContainer>
                 <RemoveIcon className="fa fa-times" onClick={onRemove} />

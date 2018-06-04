@@ -17,25 +17,24 @@ export class FilterOperators extends React.Component {
     return (
       operator ||
       Object.values(allowedOperators).find(
-        operator => operator.defaultSelected === true
+        operator => operator.default === true
       ) ||
       allowedOperators[0]
     )
   }
 
   get DefaultState() {
-    const { defaultValue, conditions = [], onFilterChange } = this.props
+    const { defaultValue, values = [], onFilterChange } = this.props
 
     const selectedOperator = this.getOperator()
 
     if (defaultValue) {
-      conditions.push({
-        name: defaultValue,
+      values.push({
         value: defaultValue
       })
     }
 
-    onFilterChange(conditions, selectedOperator)
+    onFilterChange(values, selectedOperator)
 
     return {
       selectedOperator
@@ -45,7 +44,7 @@ export class FilterOperators extends React.Component {
   onOperatorChange = operator => {
     const { selectedOperator } = this.state
 
-    if (selectedOperator && selectedOperator.id === operator.id) {
+    if (selectedOperator && selectedOperator.name === operator.name) {
       return false
     }
 
@@ -56,17 +55,17 @@ export class FilterOperators extends React.Component {
   onFilterChange = filters =>
     this.props.onFilterChange(_.values(filters), this.state.selectedOperator)
 
-  getOperatorComponent = componentType => {
+  getOperatorComponent = type => {
     const props = {
       ...this.props,
       onFilterChange: this.onFilterChange
     }
 
-    switch (componentType) {
-      case 'List':
+    switch (type) {
+      case 'Set':
         return <DropDownList {...props} />
 
-      case 'Text':
+      case 'Scalar':
         return <TextInput {...props} />
     }
 
@@ -74,25 +73,25 @@ export class FilterOperators extends React.Component {
   }
 
   render() {
-    const { allowedOperators } = this.props
+    const { allowedOperators, type } = this.props
     const { selectedOperator } = this.state
 
     return (
       <Container>
-        {allowedOperators.map(item => (
-          <Operator key={item.id} onClick={() => this.onOperatorChange(item)}>
+        {allowedOperators.map((item, index) => (
+          <Operator key={index} onClick={() => this.onOperatorChange(item)}>
             <Input
               type="radio"
               name="operator"
               onChange={() => null}
-              value={item.id}
-              checked={selectedOperator && selectedOperator.id === item.id}
+              value={item.name}
+              checked={selectedOperator && selectedOperator.name === item.name}
             />
             <Title>{item.name}</Title>
             <div>
               {selectedOperator &&
-                selectedOperator.id === item.id &&
-                this.getOperatorComponent(item.componentType)}
+                selectedOperator.name === item.name &&
+                this.getOperatorComponent(type)}
             </div>
           </Operator>
         ))}

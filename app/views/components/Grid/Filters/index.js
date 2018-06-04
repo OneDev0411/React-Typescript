@@ -1,12 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'underscore'
 
+import { selectActiveSavedSegment } from '../../../../reducers/filter-segments'
+
 import { AddFilter } from './Create'
-import { SaveSegment } from '../Segments/Create'
 import { FilterItem } from './Item'
 
 import createFilterCriteria from './helpers/create-filter-criteria'
+import createSegmentFilters from './helpers/create-segment-filters'
 
 const Container = styled.div`
   display: flex;
@@ -15,20 +18,45 @@ const Container = styled.div`
   margin-left: 15px;
 `
 
-export class Filters extends React.Component {
+class Filters extends React.Component {
   state = {
     activeFilters: []
   }
 
+  componentDidMount() {
+    const { segment } = this.props
+
+    if (segment) {
+      this.createFiltersFromSegment(segment)
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.shouldReCreateFilters(nextProps)
+  }
+
+  shouldReCreateFilters = ({ segment: nextSegment }) => {
+    const { segment } = this.props
+
+    if (segment && nextSegment && segment.id !== nextSegment.id) {
+      return this.createFiltersFromSegment(nextSegment)
+    }
+  }
+
+  createFiltersFromSegment = segment =>
+    this.setState({
+      activeFilters: createSegmentFilters(segment.filters)
+    })
+
   /**
    *
    */
-  createFilter = ({ name }) => {
-    const uniqueId = _.uniqueId(`${name}-`)
+  createFilter = ({ id }) => {
+    const uniqueId = _.uniqueId(`${id}-`)
 
     const activeFilters = {
       ...this.state.activeFilters,
-      [uniqueId]: { id: uniqueId, name, isActive: true }
+      [uniqueId]: { id, isActive: true }
     }
 
     this.setState({
@@ -58,12 +86,12 @@ export class Filters extends React.Component {
   /**
    *
    */
-  removeFilter = id => {
+  removeFilter = filterId => {
     const { config } = this.props
     const { activeFilters } = this.state
 
-    const isIncompleteFilter = activeFilters[id].isIncomplete === true
-    const nextFilters = _.omit(activeFilters, filter => filter.id === id)
+    const isIncompleteFilter = activeFilters[filterId].isIncomplete === true
+    const nextFilters = _.omit(activeFilters, (filter, id) => id === filterId)
 
     this.setState({
       activeFilters: nextFilters
@@ -77,41 +105,50 @@ export class Filters extends React.Component {
   /**
    *
    */
-  findFilterByName = name =>
-    this.props.config.find(filter => filter.name === name)
-
-  /**
-   *
-   */
-  onFilterChange = (id, conditions, operator) => {
+  onFilterChange = (id, values, operator) => {
     const { config } = this.props
 
-    const isIncomplete = !operator || conditions.length === 0
+    const current = this.state.activeFilters[id]
+    const isCompleted = this.isFilterCompleted({ values, operator })
 
-    const activeFilters = {
+    const nextFilters = {
       ...this.state.activeFilters,
       [id]: {
         ...this.state.activeFilters[id],
-        isIncomplete,
-        conditions,
+        isIncomplete: !isCompleted,
+        values,
         operator
       }
     }
 
-    this.setState({
-      activeFilters
-    })
-
-    if (!isIncomplete) {
-      this.props.onChange(createFilterCriteria(activeFilters, config))
+    if (isCompleted && this.isFilterChanged(current, { values, operator })) {
+      this.props.onChange(createFilterCriteria(nextFilters, config))
     }
+
+    this.setState({
+      activeFilters: nextFilters
+    })
   }
+
+  isFilterChanged = (current, next) =>
+    (current.values && current.values.join('')) !==
+      (next.values && next.values.join('')) ||
+    current.operator.name !== next.operator.name
 
   hasMissingValue = () =>
     _.some(this.state.activeFilters, filter => filter.isIncomplete)
 
+  isFilterCompleted = filter =>
+    filter.operator && filter.values && filter.values.length > 0
+
+  /**
+   *
+   */
+  findFilterById = id => this.props.config.find(filter => filter.id === id)
+
   render() {
-    const { config, allowSaveSegment, currentFilter } = this.props
+    const { children, ...rest } = this.props
+    const { config } = rest
     const { activeFilters } = this.state
 
     return (
@@ -120,11 +157,11 @@ export class Filters extends React.Component {
           <FilterItem
             key={id}
             {...filter}
-            filterConfig={this.findFilterByName(filter.name)}
+            filterConfig={this.findFilterById(filter.id)}
             onToggleFilterActive={() => this.toggleFilterActive(id)}
             onRemove={() => this.removeFilter(id)}
-            onFilterChange={(filters, operator) =>
-              this.onFilterChange(id, filters, operator)
+            onFilterChange={(values, operator) =>
+              this.onFilterChange(id, values, operator)
             }
           />
         ))}
@@ -135,11 +172,25 @@ export class Filters extends React.Component {
           onNewFilter={this.createFilter}
         />
 
-        {allowSaveSegment &&
-          _.size(activeFilters) > 0 && (
-            <SaveSegment currentFilter={currentFilter} />
-          )}
+        {React.Children.map(children, child =>
+          React.cloneElement(child, {
+            filters: activeFilters,
+            ...rest
+          })
+        )}
       </Container>
     )
   }
 }
+
+function mapStateToProps(state, { name, plugins }) {
+  const states = {}
+
+  if (plugins.includes('segments')) {
+    states.segment = selectActiveSavedSegment(state[name].filterSegments, name)
+  }
+
+  return states
+}
+
+export default connect(mapStateToProps)(Filters)

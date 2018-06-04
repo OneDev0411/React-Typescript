@@ -26,6 +26,20 @@ export class DropDownList extends React.Component {
     }
   }
 
+  getDefaultSelectedItem = () => {
+    const { values, defaultValue } = this.props
+
+    if (values && values.length > 0) {
+      return values
+    }
+
+    if (defaultValue) {
+      return [defaultValue]
+    }
+
+    return []
+  }
+
   toggleMenu = () => this.setState({ isMenuOpen: !this.state.isMenuOpen })
 
   onSelectItem = item => {
@@ -45,22 +59,17 @@ export class DropDownList extends React.Component {
     const { allowMultipleSelections } = this.props
 
     if (allowMultipleSelections === false) {
-      return {
-        [item.value]: item
-      }
+      return [item]
     }
 
-    if (selectedItems[item.value]) {
-      return _.omit(selectedItems, i => i.value === item.value)
+    if (selectedItems.includes(item)) {
+      return _.without(selectedItems, item)
     }
 
-    return {
-      ...selectedItems,
-      [item.value]: item
-    }
+    return [...selectedItems, item]
   }
 
-  onInputValueChange = value =>
+  onInputValueChange = (value = '') =>
     this.setState({ filterValue: value.trim(), isMenuOpen: true })
 
   getFilteredOptions = filter => {
@@ -71,21 +80,21 @@ export class DropDownList extends React.Component {
     }
 
     return options.filter(item =>
-      item.name.toLowerCase().includes(filter.toLowerCase())
+      item.toLowerCase().includes(filter.toLowerCase())
     )
   }
 
   isItemSelected = item => {
     const { selectedItems } = this.state
 
-    return selectedItems[item.value] !== undefined
+    return selectedItems.includes(item)
   }
 
   getDefaultInputValue = () => {
-    const { defaultValue, conditions } = this.props
+    const { defaultValue, values } = this.props
 
-    if (conditions && conditions.length > 0) {
-      return conditions[0].value
+    if (values && values.length > 0) {
+      return values[0]
     }
 
     if (defaultValue) {
@@ -93,25 +102,6 @@ export class DropDownList extends React.Component {
     }
 
     return ''
-  }
-
-  getDefaultSelectedItem = () => {
-    const { conditions, defaultValue } = this.props
-
-    if (conditions && conditions.length > 0) {
-      return _.indexBy(conditions, 'value')
-    }
-
-    if (defaultValue) {
-      return {
-        [defaultValue]: {
-          name: defaultValue,
-          value: defaultValue
-        }
-      }
-    }
-
-    return {}
   }
 
   render() {
@@ -123,8 +113,7 @@ export class DropDownList extends React.Component {
         <Downshift
           isOpen={isMenuOpen}
           defaultInputValue={this.getDefaultInputValue()}
-          itemToString={item => (item ? item.value : '')}
-          onChange={this.onSelectItem}
+          onSelect={this.onSelectItem}
           onOuterClick={this.toggleMenu}
           onInputValueChange={this.onInputValueChange}
         >
@@ -132,12 +121,12 @@ export class DropDownList extends React.Component {
             <div>
               <ItemsContainer>
                 {allowMultipleSelections &&
-                  _.map(selectedItems, item => (
+                  _.map(selectedItems, (value, index) => (
                     <SelectedItem
-                      key={item.value}
-                      onClick={() => this.onSelectItem(item)}
+                      key={index}
+                      onClick={() => this.onSelectItem(value)}
                     >
-                      {item.name}
+                      {value}
                     </SelectedItem>
                   ))}
 
@@ -170,7 +159,7 @@ export class DropDownList extends React.Component {
                         item
                       })}
                     >
-                      <ListItemTitle>{item.name}</ListItemTitle>
+                      <ListItemTitle>{item}</ListItemTitle>
                       <ListItemIconContainer>
                         {this.isItemSelected(item) && (
                           <i className="fa fa-check" />

@@ -1,13 +1,9 @@
 import _ from 'underscore'
 
-function isNegativeOperator(operator) {
-  return ['is-not'].includes(operator.id)
-}
-
-function getCriteriaParams(config, filterName) {
+function getCriteriaParams(config, id) {
   return _.find(config, {
-    name: filterName
-  }).criteriaParams
+    id
+  }).additionalParams
 }
 
 export default function(filters, config) {
@@ -18,11 +14,11 @@ export default function(filters, config) {
       return false
     }
 
-    _.each(filter.conditions, condition => {
+    _.each(filter.values, value => {
       criteria.push({
-        value: condition.value,
-        invert: isNegativeOperator(filter.operator),
-        ...getCriteriaParams(config, filter.name)
+        value,
+        invert: filter.operator.invert === true,
+        ...getCriteriaParams(config, filter.id)
       })
     })
   })
