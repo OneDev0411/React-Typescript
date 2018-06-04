@@ -275,6 +275,7 @@ export class FileManager extends React.Component {
         id: 'td-select',
         Header: () => (
           <Radio
+            square
             selected={rows.length > 0 && rows.length === _.size(selectedRows)}
             onClick={() => this.toggleSelectAll(rows)}
           />
@@ -283,7 +284,9 @@ export class FileManager extends React.Component {
         width: 40,
         className: 'select-row',
         sortable: false,
-        Cell: ({ original: file }) => <Radio selected={selectedRows[file.id]} />
+        Cell: ({ original: file }) => (
+          <Radio square selected={selectedRows[file.id]} />
+        )
       },
       {
         id: 'name',
