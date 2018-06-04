@@ -10,7 +10,8 @@ import createFilterCriteria from '../../Filters/helpers/create-filter-criteria'
 
 import {
   createFilterSegment,
-  updateFilterSegment
+  updateFilterSegment,
+  changeActiveFilterSegment
 } from '../../../../../store_actions/filter-segments'
 
 const CURRENT_SEGMENT = 0
@@ -71,6 +72,7 @@ class SaveSegment extends React.Component {
   }
 
   saveList = async () => {
+    const { changeActiveFilterSegment, name } = this.props
     const segment = this.getSegmentObject()
 
     this.setState({
@@ -81,7 +83,9 @@ class SaveSegment extends React.Component {
       if (segment.id) {
         await this.updateSegment(segment)
       } else {
-        await this.createSegment(segment)
+        const newSegmentId = await this.createSegment(segment)
+
+        changeActiveFilterSegment(name, newSegmentId)
       }
 
       this.setState({
@@ -113,10 +117,20 @@ class SaveSegment extends React.Component {
     return this.props.createFilterSegment(name, segment)
   }
 
+  getButtonCaption = () => {
+    const { selectedOption, isSaving } = this.state
+
+    if (isSaving) {
+      return 'Saving ...'
+    }
+
+    return selectedOption === CURRENT_SEGMENT ? 'Update list' : 'Save new list'
+  }
+
   render() {
     const { showModal, selectedOption, newFilterName, isSaving } = this.state
     const { filters, segment } = this.props
-    const hasFilters = _.size(filters) > 0
+    const hasFilters = _.size(filters) > 0 || this.isEditable(segment)
 
     return (
       <Container>
@@ -171,7 +185,7 @@ class SaveSegment extends React.Component {
               padLeft={5}
               onClick={this.saveList}
             >
-              {isSaving ? 'Saving ...' : 'Save new list'}
+              {this.getButtonCaption()}
             </SaveButton>
           </Modal.Footer>
         </Modal>
@@ -182,5 +196,6 @@ class SaveSegment extends React.Component {
 
 export default connect(null, {
   createFilterSegment,
-  updateFilterSegment
+  updateFilterSegment,
+  changeActiveFilterSegment
 })(SaveSegment)
