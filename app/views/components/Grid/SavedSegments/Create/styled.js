@@ -4,12 +4,12 @@ import ActionButton from '../../../Button/ActionButton'
 export const Container = styled.div``
 
 export const SaveButton = ActionButton.extend`
-  border: solid 1px #2196f3;
+  border: solid 1px ${props => (props.disabled ? '#cecece' : '#2196f3')};
   margin-left: ${props => props.padLeft || 0}px;
 
   &:hover {
-    background-color: #fff;
-    color: #2196f3;
+    background-color: ${props => (props.disabled ? '#cecece' : '#fff')};
+    color: ${props => (props.disabled ? '#333' : '#2196f3')};
   }
 `
 
