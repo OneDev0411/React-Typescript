@@ -15,6 +15,7 @@ import contexts from './contexts'
 import selectedRole from './selected-role'
 import error from './error'
 import spinner from './spinner'
+import { dealsFilterSegments } from '../filter-segments'
 
 export default combineReducers({
   list,
@@ -32,5 +33,6 @@ export default combineReducers({
   agents,
   splitter,
   error,
-  spinner
+  spinner,
+  filterSegments: dealsFilterSegments
 })
