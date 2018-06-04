@@ -1,61 +1,134 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { changeActiveFilterSegment } from '../../../../../store_actions/filter-segments'
+import {
+  getSavedSegments,
+  deleteFilterSegment,
+  changeActiveFilterSegment
+} from '../../../../../store_actions/filter-segments'
 
 import {
   selectActiveSavedSegment,
-  getSavedSegments
+  getSegments,
+  getDefaultList
 } from '../../../../../reducers/filter-segments'
 
-import { Container, ListTitle, ListItem, ListItemName } from './styled'
+import { confirmation } from '../../../../../store_actions/confirmation'
 
-const onSelectList = (props, item) => {
-  const { changeActiveFilterSegment, onChange, name } = props
+import {
+  Container,
+  ListTitle,
+  ListItem,
+  ListItemName,
+  ListIconContainer,
+  Icon
+} from './styled'
 
-  changeActiveFilterSegment(name, item.id)
-
-  if (onChange) {
-    onChange(item)
+class SegmentsList extends React.Component {
+  state = {
+    isDeleting: []
   }
-}
 
-const SegmentsList = props => {
-  const { list, activeItem, isFetching } = props
+  componentDidMount() {
+    this.init()
+  }
 
-  return (
-    <Container>
-      <ListTitle>Lists</ListTitle>
+  init = () => {
+    const { getSavedSegments, isFetched, name } = this.props
 
-      {list.map((item, index) => (
-        <ListItem
-          key={index}
-          isSelected={activeItem && activeItem.id === item.id}
-          onClick={() => onSelectList(props, item)}
-        >
-          <ListItemName>{item.name}</ListItemName>
-        </ListItem>
-      ))}
+    if (isFetched === false) {
+      getSavedSegments(name)
+    }
+  }
 
-      {isFetching && (
-        <ListItem>
-          <i className="fa fa-spin fa-spinner" />
-        </ListItem>
-      )}
-    </Container>
-  )
+  onSelectList = item => {
+    const { changeActiveFilterSegment, onChange, name } = this.props
+
+    changeActiveFilterSegment(name, item.id)
+
+    if (onChange) {
+      onChange(item)
+    }
+  }
+
+  onRequestDelete = item =>
+    this.props.confirmation({
+      message: `Delete '${item.name}'?`,
+      confirmLabel: 'Yes',
+      onConfirm: () => this.deleteList(item)
+    })
+
+  deleteList = async item => {
+    const { isDeleting } = this.state
+    const { activeItem, name } = this.props
+
+    this.setState({
+      isDeleting: [...isDeleting, item.id]
+    })
+
+    try {
+      await this.props.deleteFilterSegment(name, item)
+
+      if (activeItem.id === item.id) {
+        this.onSelectList(getDefaultList(name))
+      }
+    } catch (e) {
+      // todo
+      console.log(e)
+    } finally {
+      this.setState({
+        isDeleting: _.without(isDeleting, item.id)
+      })
+    }
+  }
+
+  render() {
+    const { list, activeItem, isFetching } = this.props
+    const { isDeleting } = this.state
+
+    return (
+      <Container>
+        <ListTitle>Lists</ListTitle>
+
+        {list.map((item, index) => (
+          <ListItem
+            key={index}
+            isDeleting={isDeleting.includes(item.id)}
+            isSelected={activeItem && activeItem.id === item.id}
+          >
+            <ListItemName onClick={() => this.onSelectList(item)}>
+              {item.name}
+            </ListItemName>
+            <ListIconContainer onClick={() => this.onRequestDelete(item)}>
+              {item.editable !== false && <Icon className="fa fa-times" />}
+            </ListIconContainer>
+          </ListItem>
+        ))}
+
+        {isFetching && (
+          <ListItem>
+            <i className="fa fa-spin fa-spinner" />
+          </ListItem>
+        )}
+      </Container>
+    )
+  }
 }
 
 function mapStateToProps(state, { name }) {
   const { filterSegments } = state[name]
 
   return {
+    isFetched: filterSegments.isFetched,
     isFetching: filterSegments.isFetching,
-    list: getSavedSegments(filterSegments, name),
+    list: getSegments(filterSegments, name),
     activeItem: selectActiveSavedSegment(filterSegments, name)
   }
 }
 
-export default connect(mapStateToProps, { changeActiveFilterSegment })(
-  SegmentsList
-)
+export default connect(mapStateToProps, {
+  changeActiveFilterSegment,
+  deleteFilterSegment,
+  getSavedSegments,
+  confirmation
+})(SegmentsList)

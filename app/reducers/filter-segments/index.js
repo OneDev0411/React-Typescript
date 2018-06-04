@@ -1,7 +1,8 @@
 import * as types from '../../constants/filter-segments'
+import _ from 'underscore'
 
 const initialState = {
-  list: [],
+  list: {},
   isFetching: false,
   isFetched: false,
   activeSegmentId: 'default',
@@ -43,6 +44,7 @@ const filterSegments = (state, action) => {
         fetchError: action.error,
         isFetching: false
       }
+
     case types.SAVE_FILTER_SEGMENTS:
       return {
         ...state,
@@ -51,6 +53,12 @@ const filterSegments = (state, action) => {
           ...state.list,
           [action.list.id]: action.list
         }
+      }
+
+    case types.DELETE_FILTER_SEGMENTS:
+      return {
+        ...state,
+        list: _.omit(state.list, item => item.id === action.segmentId)
       }
 
     default:
@@ -79,7 +87,7 @@ export const isFetchingSavedSegments = state => state.isFetching
 export const selectActiveSavedSegment = (state, listName = '') =>
   (state.list && state.list[state.activeSegmentId]) || getDefaultList(listName)
 
-export const getSavedSegments = (state, listName) =>
+export const getSegments = (state, listName) =>
   [].concat([getDefaultList(listName)], Object.values(state.list))
 
 export const selectSavedSegmentById = (state, id) =>
