@@ -7,12 +7,7 @@ import ActionButton from '../../../../../../views/components/Button/ActionButton
 
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 
-export function Header({
-  user,
-  contactsCount,
-  isSideMenuOpen,
-  onMenuTriggerChange
-}) {
+export function Header({ user, isSideMenuOpen, onMenuTriggerChange }) {
   return (
     <PageHeader isFlat>
       <PageHeader.Title backButton={false}>
@@ -21,9 +16,6 @@ export function Header({
           onClick={onMenuTriggerChange}
         />
         <PageHeader.Heading>All Contacts</PageHeader.Heading>
-        <span className="badge counter">
-          {contactsCount.toLocaleString()} Contacts
-        </span>
       </PageHeader.Title>
 
       <PageHeader.Menu>

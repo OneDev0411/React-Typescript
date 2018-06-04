@@ -12,6 +12,7 @@ import {
   isFetchingContactsList,
   selectContactsCurrentPage
 } from '../../../../../reducers/contacts/list'
+
 import {
   getContacts,
   searchContacts,
@@ -27,7 +28,7 @@ import {
   Content as PageContent
 } from '../../../../../views/components/SlideMenu'
 
-import { SavedSegments } from '../../../../../views/components/Grid/Segments/List'
+import SavedSegments from '../../../../../views/components/Grid/SavedSegments/List'
 
 import { Header } from './Header'
 // import { Filters } from './Filters'
@@ -169,26 +170,14 @@ class ContactsList extends React.Component {
       <PageContainer>
         <SideMenu isOpen={isSideMenuOpen}>
           <SavedSegments
-            list={[
-              {
-                id: 0,
-                title: 'All Contacts',
-                count: 503,
-                selected: true
-              },
-              {
-                id: 1,
-                title: 'Good Contacts',
-                count: 5
-              }
-            ]}
+            name="contacts"
+            onChange={segment => this.search(segment.filters)}
           />
         </SideMenu>
 
         <PageContent>
           <Header
             isSideMenuOpen={isSideMenuOpen}
-            contactsCount={listInfo.total}
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
           />

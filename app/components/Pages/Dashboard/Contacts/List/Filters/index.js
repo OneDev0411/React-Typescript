@@ -5,48 +5,57 @@ import _ from 'underscore'
 import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
-import { Filters } from '../../../../../../views/components/Grid/Filters'
+import Filters from '../../../../../../views/components/Grid/Filters'
+import SaveSegment from '../../../../../../views/components/Grid/SavedSegments/Create'
 
-function getUniqTags(tags) {
-  if (!tags || tags.length === 0) {
-    return []
+class ContactFilters extends React.PureComponent {
+  getUniqTags = tags => {
+    if (!tags || tags.length === 0) {
+      return []
+    }
+
+    return _.uniq(_.pluck(tags, 'text'))
   }
 
-  const allTags = tags.map(tag => ({ name: tag.text, value: tag.text }))
+  getDef = (attributeDefs, name) => {
+    const definition = selectDefinitionByName(attributeDefs, name)
 
-  return _.uniq(allTags, item => item.value)
-}
+    return definition ? definition.id : null
+  }
 
-function getDef(attributeDefs, name) {
-  const definition = selectDefinitionByName(attributeDefs, name)
+  get Config() {
+    const { tags, attributeDefs } = this.props
 
-  return definition ? definition.id : null
-}
+    return [
+      {
+        id: 'tag',
+        label: 'Tag',
+        type: 'Set',
+        multi: false,
+        options: this.getUniqTags(tags),
+        additionalParams: {
+          attribute_def: this.getDef(attributeDefs, 'tag')
+        },
+        tooltip:
+          'A group a person belongs to, based on a tag you’ve manually applied to them.'
+      }
+    ]
+  }
 
-const ContactFilters = ({ tags, attributeDefs, onFilterChange }) => {
-  const config = [
-    {
-      name: 'tag',
-      label: 'Tag',
-      type: 'List',
-      multi: false,
-      options: getUniqTags(tags),
-      criteriaParams: {
-        attribute_def: getDef(attributeDefs, 'tag')
-      },
-      tooltip:
-        'A group a person belongs to, based on a tag you’ve manually applied to them.'
-    }
-  ]
+  render() {
+    const { onFilterChange } = this.props
 
-  return (
-    <Filters
-      allowSaveSegment
-      currentFilter="All Contacts"
-      onChange={onFilterChange}
-      config={config}
-    />
-  )
+    return (
+      <Filters
+        name="contacts"
+        plugins={['segments']}
+        config={this.Config}
+        onChange={onFilterChange}
+      >
+        <SaveSegment />
+      </Filters>
+    )
+  }
 }
 
 function mapStateToProps({ contacts }) {
