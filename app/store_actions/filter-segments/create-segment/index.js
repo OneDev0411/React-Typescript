@@ -16,6 +16,8 @@ export function createFilterSegment(nameId, segment) {
         id: nameId,
         list
       })
+
+      return id
     } catch (error) {
       throw error
     }
