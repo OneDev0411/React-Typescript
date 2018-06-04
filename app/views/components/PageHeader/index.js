@@ -18,6 +18,7 @@ const Container = styled.div`
 `
 
 const propTypes = {
+  backUrl: PropTypes.string,
   backButton: PropTypes.bool,
   isFlat: PropTypes.bool,
   title: PropTypes.string
@@ -28,10 +29,12 @@ const defaultProps = {
   isFlat: true
 }
 
-function PageHeader({ title, backButton, children, isFlat }) {
+function PageHeader({ title, backButton, backUrl, children, isFlat }) {
   return (
     <Container isFlat={isFlat}>
-      {title && <PageTitle backButton={backButton} title={title} />}
+      {title && (
+        <PageTitle backButton={backButton} backUrl={backUrl} title={title} />
+      )}
       {React.Children.map(children, children => children)}
     </Container>
   )

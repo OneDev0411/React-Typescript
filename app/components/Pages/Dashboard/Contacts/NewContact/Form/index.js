@@ -136,7 +136,7 @@ class NewContactForm extends Component {
         const isId = /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
 
         if (new RegExp(isId).test(id)) {
-          browserHistory.push(`/dashboard/contacts/${id}`)
+          browserHistory.push(`/dashboard/contacts/${id}?backurl=1`)
         }
       } else {
         browserHistory.push('/dashboard/contacts')

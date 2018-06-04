@@ -1,14 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import {
-  getContacts,
-  getContactsTags,
-  getContactsSavedSegments
-} from '../../../../store_actions/contacts'
+import { getContactsTags } from '../../../../store_actions/contacts'
 
 import { selectTags } from '../../../../reducers/contacts/tags'
-import { selectContacts } from '../../../../reducers/contacts/list'
 import ContactsList from './List'
 
 class Contacts extends React.Component {
@@ -17,25 +12,10 @@ class Contacts extends React.Component {
   }
 
   async initializeContacts() {
-    const {
-      getContacts,
-      getContactsTags,
-      getContactsSavedSegments,
-      contactsList,
-      tagsList,
-      filterSegments
-    } = this.props
-
-    if (contactsList.length <= 1) {
-      await getContacts()
-    }
+    const { getContactsTags, tagsList } = this.props
 
     if (tagsList.length === 0) {
       getContactsTags()
-    }
-
-    if (filterSegments.isFetched === false) {
-      getContactsSavedSegments()
     }
   }
 
@@ -48,19 +28,14 @@ class Contacts extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts: { list, tags, filterSegments } }) {
-  const contactsList = selectContacts(list)
+function mapStateToProps({ contacts: { tags } }) {
   const tagsList = selectTags(tags)
 
   return {
-    tagsList,
-    contactsList,
-    filterSegments
+    tagsList
   }
 }
 
 export default connect(mapStateToProps, {
-  getContacts,
-  getContactsTags,
-  getContactsSavedSegments
+  getContactsTags
 })(Contacts)

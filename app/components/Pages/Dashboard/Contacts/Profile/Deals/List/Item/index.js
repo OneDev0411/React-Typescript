@@ -8,14 +8,16 @@ import * as Deal from '../../../../../../../../models/Deal/context-helper'
 
 const Container = styled.div`
   display: flex;
-  margin-bottom: 1em;
+  margin: 0 -0.5em 0.5em;
+  padding: 0.5em;
 
   &:last-of-type {
-    margin: 0;
+    margin-bottom: 0;
   }
 
   &:hover {
     cursor: pointer;
+    background-color: #f5f5f5;
   }
 `
 
@@ -33,18 +35,20 @@ const Status = styled.span`
 `
 
 Item.propTypes = {
+  contact: PropTypes.shape().isRequired,
   item: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired
+  handleOnClickItem: PropTypes.func.isRequired
 }
 
 export function Item(props) {
-  const { item, onClick } = props
+  const { item, handleOnClickItem } = props
+
   const status = Deal.getStatus(item) || 'Unknown'
-  const dealSide = Deal.getSide(item)
+  const clientTitle = ''
   const address = Deal.getAddress(item)
 
   return (
-    <Container {...props} onClick={() => onClick(item)}>
+    <Container onClick={() => handleOnClickItem(item)}>
       <div style={{ width: '48px', height: '48px', borderRadius: '50%' }}>
         <img src={getPhoto(item)} alt="home" style={{ width: '100%' }} />
       </div>
@@ -53,17 +57,16 @@ export function Item(props) {
           <Price>{getPrice(item)}</Price>
           <Status status={status}>{status}</Status>
         </Flex>
-        {dealSide ||
-          (address && (
-            <div style={{ color: '#758a9e' }}>
-              {dealSide && (
-                <div>
-                  <b>{dealSide}</b>
-                </div>
-              )}
-              {address && <div>{address}</div>}
-            </div>
-          ))}
+        {clientTitle && (
+          <div>
+            <b>{clientTitle}</b>
+          </div>
+        )}
+        {address && (
+          <div style={{ color: '#758a9e' }}>
+            {address && <div>{address}</div>}
+          </div>
+        )}
       </div>
     </Container>
   )
