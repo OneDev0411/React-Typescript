@@ -27,11 +27,22 @@ class ContactsList extends React.Component {
   columns = [
     {
       id: 'td-select',
+      Header: () => (
+        <Radio
+          square
+          selected={
+            this.props.data.length > 0 &&
+            this.props.data.length === _.size(this.props.selectedRows)
+          }
+          onClick={() => this.props.toggleSelectedAllRows()}
+        />
+      ),
       accessor: '',
       width: 40,
       sortable: false,
       Cell: ({ original: contact }) => (
         <Radio
+          square
           className="select-row"
           selected={!!this.props.selectedRows[contact.id]}
           onClick={e => {
