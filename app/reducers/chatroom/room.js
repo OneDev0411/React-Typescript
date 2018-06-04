@@ -45,7 +45,9 @@ function addRoomMembers(state, action) {
  * remove member from specific room
  */
 function removeRoomMember(state, action) {
-  const users = state[action.roomId].users.filter(user => user.id !== action.memberId)
+  const users = state[action.roomId].users.filter(
+    user => user.id !== action.memberId
+  )
 
   return {
     ...state,
@@ -96,8 +98,8 @@ function removeRoom(state, action) {
  * add "user is typing" for a specific room
  */
 function addMessageTyping(state, action) {
-  let typing = state[action.roomId] && state[action.roomId].typing
-  const users = state[action.roomId] && state[action.roomId].users
+  let typing = state && state[action.roomId] && state[action.roomId].typing
+  const users = state && state[action.roomId] && state[action.roomId].users
 
   if (users) {
     return updateRoom(state, action.roomId, {
