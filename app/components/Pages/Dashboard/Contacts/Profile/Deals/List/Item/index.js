@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
-
+import _ from 'underscore'
 import { getStatusColor } from '../../../../../../../../utils/listing'
 import * as Deal from '../../../../../../../../models/Deal/context-helper'
+import { roleName } from '../../../../../Deals/utils/roles'
 
 const Container = styled.div`
   display: flex;
@@ -34,6 +35,16 @@ const Status = styled.span`
   color: ${props => `#${getStatusColor(props.status)}`};
 `
 
+const Address = styled.div`
+  color: #758a9e;
+`
+
+const Role = styled.div`
+  color: #758a9e;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+`
+
 Item.propTypes = {
   contact: PropTypes.shape().isRequired,
   item: PropTypes.object.isRequired,
@@ -41,11 +52,21 @@ Item.propTypes = {
 }
 
 export function Item(props) {
-  const { item, handleOnClickItem } = props
+  const { item, handleOnClickItem, contact } = props
 
   const status = Deal.getStatus(item) || 'Unknown'
   const clientTitle = ''
   const address = Deal.getAddress(item)
+
+  const role = _.find(
+    item.roles,
+    role =>
+      (role.user && role.user.id === contact.id) ||
+      contact.summary.email === role.email ||
+      contact.summary.phone_number === role.phone_number
+  )
+
+  const contactRoleName = roleName(role.role)
 
   return (
     <Container onClick={() => handleOnClickItem(item)}>
@@ -62,11 +83,8 @@ export function Item(props) {
             <b>{clientTitle}</b>
           </div>
         )}
-        {address && (
-          <div style={{ color: '#758a9e' }}>
-            {address && <div>{address}</div>}
-          </div>
-        )}
+        {contactRoleName && <Role>{contactRoleName}</Role>}
+        {address && <Address>{address}</Address>}
       </div>
     </Container>
   )
