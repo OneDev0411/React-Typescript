@@ -65,7 +65,7 @@
 
       &.cancel {
         color: #78909c;
-        width: 110px;
+        min-width: 110px;
         &:hover {
           background-color: transparent;
           color: #2196f3;
