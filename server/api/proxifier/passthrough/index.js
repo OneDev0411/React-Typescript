@@ -29,7 +29,7 @@ const handleErrorObject = text => {
 router.post(
   '/proxifier/:endpointKey',
   bodyParser({
-    jsonLimit: '10mb'
+    jsonLimit: '30mb'
   }),
   async ctx => {
     const headers = ctx.headers
