@@ -170,7 +170,9 @@ export default class ManualAddress extends React.Component {
 
     const full_address = [
       street_number || '',
+      street_dir_prefix || '',
       street_name || '',
+      street_suffix || '',
       unit_number ? `, Unit ${unit_number},` : '',
       city ? `, ${city}` : '',
       state ? `, ${state}` : '',
