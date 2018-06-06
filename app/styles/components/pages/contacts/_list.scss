@@ -64,6 +64,9 @@
     .rt-tbody{
       padding-bottom: 2em;
     }
+    .rt-th.select-row-header {
+      margin-left: 1px;
+    }
     .select-row {
       visibility: hidden;
       &.selected {
