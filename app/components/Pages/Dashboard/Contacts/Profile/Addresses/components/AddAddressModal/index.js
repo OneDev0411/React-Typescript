@@ -12,7 +12,7 @@ import { getAddressLabels } from '../../../../../../../../models/contacts/helper
 const isPostalCode = value =>
   !value || new RegExp(/(^\d{5}$)|(^\d{5}-\d{4}$)/).exec(value)
     ? undefined
-    : 'Please include numbers. You have added a letter or special character.'
+    : 'You only have allowed to using numbers and dash. Like 75233 or 65132-2312.'
 
 // const composeValidators = (...validators) => value =>
 //   validators.reduce((error, validator) => error || validator(value), undefined)
@@ -28,10 +28,10 @@ const validate = values => {
     errors.city = 'Required'
   }
 
-  const postal_code = isPostalCode(values.postal_code)
+  const zip_code = isPostalCode(values.zip_code)
 
-  if (postal_code) {
-    errors.postal_code = postal_code
+  if (zip_code) {
+    errors.zip_code = zip_code
   }
 
   return errors

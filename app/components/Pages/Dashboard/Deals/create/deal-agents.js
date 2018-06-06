@@ -26,13 +26,15 @@ function getRoles(agents, side) {
 export default ({
   hasError,
   agents,
+  showDealSideAs,
   dealSide,
   shouldPrepopulateAgent = true,
   isCommissionRequired,
   onUpsertAgent,
   onRemoveAgent
 }) => {
-  const allowedRoles = getRoles(agents, dealSide)
+  const sideName = showDealSideAs || dealSide
+  const allowedRoles = getRoles(agents, sideName)
   const isPrimaryAgent =
     ['BuyerAgent', 'SellerAgent'].indexOf(allowedRoles[0]) > -1
 
@@ -41,7 +43,7 @@ export default ({
   return (
     <div className="form-section deal-people deal-agent">
       <div className={cn('hero', { hasError })}>
-        Enter {dealSide === BUYING ? 'buyer' : 'listing'} agent’s
+        Enter {sideName === BUYING ? 'buyer' : 'listing'} agent’s
         information.&nbsp;
         <span className="required">*</span>
         {hasError && <RequiredIcon />}
@@ -53,6 +55,7 @@ export default ({
             key={id}
             user={agent}
             isCommissionRequired={isCommissionRequired}
+            dealSide={dealSide}
             modalTitle="Update Agent"
             allowedRoles={allowedRoles}
             onRemoveUser={id => onRemoveAgent(id)}
@@ -63,6 +66,7 @@ export default ({
         <CrudRole
           shouldPrepopulateAgent={shouldPrepopulateAgent && isPrimaryAgent}
           isCommissionRequired={isCommissionRequired}
+          dealSide={dealSide}
           modalTitle={title}
           ctaTitle={title}
           allowedRoles={allowedRoles}

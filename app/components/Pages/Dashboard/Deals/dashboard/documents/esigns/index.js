@@ -4,16 +4,21 @@ import _ from 'underscore'
 import Envelope from './envelope'
 
 const Envelopes = ({ deal, task, envelopes }) => {
-  if (!task.submission) {
-    return false
-  }
+  const { room } = task
+  const attachments = room.attachments ? new Set(room.attachments.map(a => a.id)) : new Set()
 
   const filteredEnvelopes = _.filter(
     deal.envelopes,
     id =>
       envelopes[id].documents &&
       envelopes[id].documents.filter(
-        doc => doc.submission === task.submission.id
+        doc => {
+
+          if (task.submission && doc.submission === task.submission.id)
+            return true
+
+          return attachments.has(doc.file)
+        }
       ).length > 0
   )
 

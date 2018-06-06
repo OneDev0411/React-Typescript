@@ -27,6 +27,12 @@ const STAGE_OPTIONS = getDefaultOptions([
   'Unqualified Lead'
 ])
 
+const INITIAL_VALUES = {
+  stage: { title: 'General', value: 'General' },
+  email: [{ label: { title: 'Personal Email', value: 'Personal' } }],
+  phone_number: [{ label: { title: 'Mobile Phone', value: 'Mobile' } }]
+}
+
 class NewContactForm extends Component {
   formatPreSave = values => {
     const attributes = []
@@ -92,12 +98,15 @@ class NewContactForm extends Component {
 
   // todo: handle submit error
   handleOnSubmit = async values => {
-    const isEmptyFieldArray = fields => fields.every(field => !field.text)
+    const isEmptyTextField = field => !values[field] || !values[field].trim()
+    const isEmptyFieldArray = fields =>
+      fields.every(field => !field.text || !field.text.trim())
 
     if (
-      !values.first_name &&
-      !values.middle_name &&
-      !values.last_name &&
+      isEmptyTextField('title') &&
+      isEmptyTextField('first_name') &&
+      isEmptyTextField('middle_name') &&
+      isEmptyTextField('last_name') &&
       isEmptyFieldArray(values.email) &&
       isEmptyFieldArray(values.phone_number)
     ) {
@@ -127,7 +136,7 @@ class NewContactForm extends Component {
         const isId = /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
 
         if (new RegExp(isId).test(id)) {
-          browserHistory.push(`/dashboard/contacts/${id}`)
+          browserHistory.push(`/dashboard/contacts/${id}?backurl=1`)
         }
       } else {
         browserHistory.push('/dashboard/contacts')
@@ -138,9 +147,12 @@ class NewContactForm extends Component {
   }
 
   titleOptions = () => {
-    const options = selectDefinitionByName(this.props.attributeDefs, 'title')
+    const titleAttribute = selectDefinitionByName(
+      this.props.attributeDefs,
+      'title'
+    )
 
-    return (options && options.labels) || []
+    return (titleAttribute && titleAttribute.enum_values) || []
   }
 
   render() {
@@ -148,16 +160,10 @@ class NewContactForm extends Component {
       <Wrapper>
         <Form
           onSubmit={this.handleOnSubmit}
-          initialValues={{
-            stage: { title: 'General', value: 'General' },
-            email: [{ label: { title: 'Personal Email', value: 'Personal' } }],
-            phone_number: [
-              { label: { title: 'Mobile Phone', value: 'Mobile' } }
-            ]
-          }}
           mutators={{
             ...arrayMutators
           }}
+          initialValues={INITIAL_VALUES}
           render={({
             reset,
             pristine,
@@ -211,7 +217,7 @@ class NewContactForm extends Component {
                 )}
                 <ActionButton
                   type="button"
-                  onClick={reset}
+                  onClick={() => reset(INITIAL_VALUES)}
                   style={{ marginRight: '1em' }}
                   disabled={submitting || pristine}
                 >

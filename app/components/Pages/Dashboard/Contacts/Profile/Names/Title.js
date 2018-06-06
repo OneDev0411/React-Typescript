@@ -1,11 +1,31 @@
 import React from 'react'
 
 import Dropdown from '../../components/Dropdown'
-import { getAttributeLabels } from '../../../../../../models/contacts/helpers'
 
 class Title extends React.Component {
   handleOnSelect = text => {
     this.props.onChange({ ...this.props.field, text })
+  }
+
+  getOptions = field => {
+    const options = {}
+
+    if (
+      !field ||
+      !field.attribute_def ||
+      !Array.isArray(field.attribute_def.enum_values)
+    ) {
+      return options
+    }
+
+    field.attribute_def.enum_values.forEach(value => {
+      options[value] = {
+        name: value,
+        title: value
+      }
+    })
+
+    return options
   }
 
   render() {
@@ -23,7 +43,7 @@ class Title extends React.Component {
             disabled={disabled}
             handleOnSelect={this.handleOnSelect}
             name="title"
-            options={getAttributeLabels(field.attribute_def)}
+            options={this.getOptions(field)}
           />
         </span>
       </li>

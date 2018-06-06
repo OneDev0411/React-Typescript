@@ -40,12 +40,16 @@
   border: 1px solid #cecece;
 
   &:focus {
-    outline-width: 2px;
-    border-width: 0;
+    outline: none;
+    border-color: #2196f3;
   }
 
   .hasError &:focus {
-    outline-color: red;
+    border-color: red;
+  }
+
+  &::-ms-clear {
+      display: none;
   }
 
   @include placeholder(#cacaca);

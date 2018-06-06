@@ -8,41 +8,52 @@ import IconOpenHouse from '../../../../../../components/SvgIcons/OpenHouse/IconO
 import IconListingAppointment from '../../../../../../components/SvgIcons/Time/IconTime'
 import IconTodo from '../../../../../../components/SvgIcons/Todo/IconTodo'
 
-export const icons = [
-  {
-    title: 'Todo',
-    icon: IconTodo
-  },
-  {
-    title: 'Call',
-    icon: IconCall
-  },
-  {
-    title: 'Message',
-    icon: IconMessage
-  },
-  {
-    title: 'Tour',
-    icon: IconTour
-  },
-  {
-    title: 'Open House',
-    icon: IconOpenHouse
-  },
-  {
-    title: 'Listing appointment',
-    icon: IconListingAppointment
-  },
-  {
-    title: 'Follow up',
-    icon: IconFollowUp
-  },
-  {
-    title: 'Inspection',
-    icon: IconInspection
-  },
-  {
-    title: 'Closing',
-    icon: IconClosing
-  }
-]
+function getIcons() {
+  const icons = {}
+  const iconsArray = [
+    {
+      name: 'Todo',
+      icon: IconTodo
+    },
+    {
+      name: 'Call',
+      icon: IconCall
+    },
+    {
+      name: 'Message',
+      icon: IconMessage
+    },
+    {
+      name: 'Tour',
+      icon: IconTour
+    },
+    {
+      name: 'Open House',
+      icon: IconOpenHouse
+    },
+    {
+      name: 'Listing appointment',
+      icon: IconListingAppointment
+    },
+    {
+      name: 'Follow up',
+      icon: IconFollowUp
+    },
+    {
+      name: 'Inspection',
+      icon: IconInspection
+    },
+    {
+      name: 'Closing',
+      icon: IconClosing
+    }
+  ]
+
+  iconsArray.forEach(icon => {
+    icons[icon.name] = icon
+  })
+
+  return icons
+}
+
+export const icons = getIcons()

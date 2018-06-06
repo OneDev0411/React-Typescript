@@ -2,7 +2,7 @@
  * get accepted documents in file upload
  */
 export function getAcceptedDocuments() {
-  return ['image/*', 'application/*'].join(',')
+  return ['image/*', 'application/*', '.csv', '.xls', '.xlsx'].join(',')
 }
 
 export default {

@@ -1,6 +1,5 @@
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
-import { normalizeContactAttribute } from '../../../store_actions/contacts/helpers/normalize-contacts'
 
 export async function searchContacts(filter, query = defaultQuery) {
   if (!filter || typeof filter !== 'string') {
@@ -10,7 +9,7 @@ export async function searchContacts(filter, query = defaultQuery) {
   const keywords = filter
     .trim()
     .split(' ')
-    .map(i => `q[]=${i}`)
+    .map(i => `q[]=${encodeURIComponent(i)}`)
     .join('&')
 
   try {
@@ -19,7 +18,7 @@ export async function searchContacts(filter, query = defaultQuery) {
       .query(keywords)
       .query(query)
 
-    return normalizeContactAttribute(response.body)
+    return response.body
   } catch (error) {
     throw error
   }

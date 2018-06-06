@@ -45,7 +45,7 @@ export default opts => {
       {
         loading: LoadingHandler,
         delay: 2000,
-        timeout: 20000
+        timeout: 40000
       },
       opts
     )

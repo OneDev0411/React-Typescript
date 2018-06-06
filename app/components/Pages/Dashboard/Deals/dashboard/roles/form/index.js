@@ -159,7 +159,7 @@ export class RoleFormModal extends React.Component {
   getRequiredFields = values => {
     const list = ['role']
 
-    const { company_title, role } = values
+    const { role, company_title } = values
 
     if (
       company_title &&
@@ -180,7 +180,11 @@ export class RoleFormModal extends React.Component {
 
     // when adding an agent, company should be mandatory
     if (role && role.includes('Agent')) {
-      list.push('legal_first_name', 'legal_last_name', 'company_title')
+      list.push('legal_first_name', 'legal_last_name')
+    }
+
+    if (this.isCompanyRequired(role)) {
+      list.push('company_title')
     }
 
     /**
@@ -227,6 +231,7 @@ export class RoleFormModal extends React.Component {
     return {
       legal_first_name: 'Invalid Legal First Name',
       legal_last_name: 'Invalid Legal Last Name',
+      company_title: 'Invalid Company',
       email: 'Invalid Email Address',
       phone_number: 'Phone Number is invalid (###)###-####',
       commission: 'Invalid Commission value'
@@ -333,6 +338,30 @@ export class RoleFormModal extends React.Component {
    * https://gitlab.com/rechat/web/issues/563
    */
   isEmailRequired = role => ['BuyerAgent', 'SellerAgent'].includes(role)
+
+  /**
+   * check company is required or not
+   * see https://gitlab.com/rechat/web/issues/1217
+   */
+  isCompanyRequired = role => {
+    let otherSideAgents = []
+    const { deal, dealSide } = this.props
+    const side = deal ? deal.deal_type : dealSide
+
+    if (!side) {
+      return false
+    }
+
+    if (side === 'Selling') {
+      otherSideAgents = ['BuyerAgent', 'CoBuyerAgent']
+    }
+
+    if (side === 'Buying') {
+      otherSideAgents = ['SellerAgent', 'CoSellerAgent']
+    }
+
+    return otherSideAgents.includes(role)
+  }
 
   /**
    * check whether commission is required or not

@@ -9,6 +9,7 @@ import Recipients from './recipients'
 import Suggestions from './suggestions'
 import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
 import { searchContacts } from '../../../models/contacts/search-contacts'
+import { normalizeContactAttribute } from '../../../store_actions/contacts/helpers/normalize-contacts'
 import {
   getContactUsers,
   getContactAvatar,
@@ -182,7 +183,8 @@ class Compose extends React.Component {
     let result = []
     const { attributeDefs } = this.props
 
-    const contacts = await searchContacts(this.criteria.toLowerCase())
+    const response = await searchContacts(this.criteria.toLowerCase())
+    const contacts = normalizeContactAttribute(response)
 
     contacts.forEach(contact => {
       const avatar = getContactAvatar(

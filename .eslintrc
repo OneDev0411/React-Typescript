@@ -52,6 +52,7 @@
       2,
       "single"
     ],
+    "no-nested-ternary": 0,
     "import/newline-after-import": 0,
     "import/first": 0,
     "class-methods-use-this": 0,
@@ -67,6 +68,7 @@
     "no-return-assign": 0,
     "jsx-a11y/href-no-hash": 0,
     "jsx-a11y/label-has-for": 0,
+    "react/display-name": 0,
     "react/no-string-refs": 0,
     "no-mixed-operators": 0,
     "no-param-reassign": 0,
