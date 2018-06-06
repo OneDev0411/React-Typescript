@@ -273,6 +273,7 @@ export class FileManager extends React.Component {
     return [
       {
         id: 'td-select',
+        headerClassName: 'select-row-header',
         Header: () => (
           <Radio
             square

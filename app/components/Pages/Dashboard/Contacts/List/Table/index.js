@@ -27,6 +27,7 @@ class ContactsList extends React.Component {
   columns = [
     {
       id: 'td-select',
+      headerClassName: 'select-row-header',
       Header: () => (
         <Radio
           square
