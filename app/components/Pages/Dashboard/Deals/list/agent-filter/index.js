@@ -11,6 +11,7 @@ const FILTER_PENDING = [
   'Active Contingent',
   'Active Kick Out',
   'Active Option Contract',
+  'Lease Contract',
   'Pending'
 ]
 
