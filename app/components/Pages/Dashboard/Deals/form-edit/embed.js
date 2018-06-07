@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
-import Frame from './frame'
+import Frame from '../../../../../views/components/Deals/EmbedFormEdit'
 import IconDocument from '../../../../../views/components/SvgIcons/Document/IconDocument'
 
 export default ({
@@ -47,7 +47,7 @@ export default ({
 
     <Row>
       <Col md={12} sm={12} xs={12} style={{ overflow: 'none' }}>
-        <Frame task={task} frameRef={ref => onFrameRef(ref)} />
+        <Frame formId={task.form} frameRef={ref => onFrameRef(ref)} />
       </Col>
     </Row>
   </div>
