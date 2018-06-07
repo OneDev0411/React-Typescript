@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import config from '../../../../../../config/public'
+import config from '../../../../../config/public'
 
 class EditFormFrame extends React.PureComponent {
   constructor(props) {
@@ -12,16 +12,17 @@ class EditFormFrame extends React.PureComponent {
   }
 
   render() {
-    const { task, user } = this.props
+    const { formId, user } = this.props
     const { access_token } = user
     const host = window.location.hostname
 
     return (
       <iframe
+        title="form"
         className="form-iframe"
-        src={`${config.forms.url}/embed/${
-          task.form
-        }?domain=${host}&access_token=${access_token}`}
+        src={`${
+          config.forms.url
+        }/embed/${formId}?domain=${host}&access_token=${access_token}`}
         frameBorder="0"
         ref={ref => this.props.frameRef(ref)}
       />
