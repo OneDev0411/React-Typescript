@@ -12,7 +12,8 @@ export default ({
   onSave,
   onClose,
   handleOpenPreview,
-  onFrameRef
+  onFrameRef,
+  onReceiveMessage
 }) => (
   <div className="deal-edit-form">
     <Row className="header">
@@ -47,7 +48,11 @@ export default ({
 
     <Row>
       <Col md={12} sm={12} xs={12} style={{ overflow: 'none' }}>
-        <Frame formId={task.form} frameRef={ref => onFrameRef(ref)} />
+        <Frame
+          formId={task.form}
+          frameRef={onFrameRef}
+          onReceiveMessage={onReceiveMessage}
+        />
       </Col>
     </Row>
   </div>

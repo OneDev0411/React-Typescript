@@ -42,7 +42,7 @@ class DealTemplates extends React.Component {
       {
         id: 'name',
         Header: 'Name',
-        style: { width: '80%' },
+        style: { paddingLeft: '15px' },
         accessor: 'name',
         Cell: ({ original: form }) => form.name
       },
@@ -82,8 +82,7 @@ class DealTemplates extends React.Component {
             columns={this.Columns}
             defaultSorted={[
               {
-                id: 'created_at',
-                desc: true
+                id: 'name'
               }
             ]}
             sortable
