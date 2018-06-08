@@ -7,6 +7,7 @@ import contact from './contact'
 import activities from './activities'
 import importOutlook from './importOutlook'
 import importCsv from './importCsv'
+import { contactsFilterSegments } from '../filter-segments'
 
 export default combineReducers({
   attributeDefs,
@@ -16,5 +17,6 @@ export default combineReducers({
   contact,
   activities,
   importOutlook,
-  importCsv
+  importCsv,
+  filterSegments: contactsFilterSegments
 })

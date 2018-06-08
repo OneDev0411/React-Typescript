@@ -33,6 +33,10 @@
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 5px;
+
+    &.half-size {
+      height: 205px;
+    }
   }
 
   &.c-full-screen-modal {
