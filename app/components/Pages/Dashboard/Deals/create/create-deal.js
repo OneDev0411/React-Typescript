@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
+import { browserHistory } from 'react-router'
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 import Navbar from './nav'
@@ -165,6 +166,15 @@ class CreateDeal extends React.Component {
 
     return validationErrors.length === 0
   }
+
+  onClosePage = () =>
+    this.props.confirmation({
+      message: 'Cancel deal creation?',
+      description: 'By canceling you will lose your work.',
+      confirmLabel: 'Yes, cancel',
+      cancelLabel: "No, don't cancel",
+      onConfirm: () => browserHistory.push('/dashboard/deals')
+    })
 
   /**
    * when user tries to change deal side, we should show a confirmation modal
@@ -439,13 +449,19 @@ class CreateDeal extends React.Component {
     const roles = []
 
     _.each(clients, client => roles.push(_.omit(client, ['id', 'contact'])))
-    _.each(sellingClients, client => roles.push(_.omit(client, ['id', 'contact'])))
+    _.each(sellingClients, client =>
+      roles.push(_.omit(client, ['id', 'contact']))
+    )
 
     _.each(agents, agent => roles.push(_.omit(agent, ['id', 'contact'])))
     _.each(sellingAgents, agent => roles.push(_.omit(agent, ['id', 'contact'])))
 
-    _.each(referrals, referral => roles.push(_.omit(referral, ['id', 'contact'])))
-    _.each(escrowOfficers, officer => roles.push(_.omit(officer, ['id', 'contact'])))
+    _.each(referrals, referral =>
+      roles.push(_.omit(referral, ['id', 'contact']))
+    )
+    _.each(escrowOfficers, officer =>
+      roles.push(_.omit(officer, ['id', 'contact']))
+    )
 
     return roles
   }
@@ -476,7 +492,7 @@ class CreateDeal extends React.Component {
 
     return (
       <div className="deal-create">
-        <Navbar title="Create New Deal" />
+        <Navbar title="Create New Deal" onClose={this.onClosePage} />
 
         <div className="form">
           <div className="swoosh">Swoosh! Another one in the bag.</div>
