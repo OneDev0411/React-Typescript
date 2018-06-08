@@ -251,8 +251,6 @@ class ContactsList extends React.Component {
               onDelete={this.handleOnDelete}
               selectedRows={selectedRows}
               totalCount={listInfo.total}
-              toggleSelectedRow={this.toggleSelectedRow}
-              toggleSelectedAllRows={this.toggleSelectedAllRows}
             />
             {noContact ? (
               <NoContact user={user} />
@@ -268,6 +266,7 @@ class ContactsList extends React.Component {
                 selectedRows={selectedRows}
                 totalCount={listInfo.total}
                 toggleSelectedRow={this.toggleSelectedRow}
+                toggleSelectedAllRows={this.toggleSelectedAllRows}
               />
             )}
           </div>
