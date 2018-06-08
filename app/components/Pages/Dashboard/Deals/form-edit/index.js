@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import { saveSubmission } from '../../../../../store_actions/deals'
 import Deal from '../../../../../models/Deal'
+import { getActiveTeamId } from '../../../../../utils/user-teams'
 import EmbedForm from './embed'
 
 class FormEdit extends React.Component {
@@ -16,16 +17,19 @@ class FormEdit extends React.Component {
     }
   }
 
-  componentDidMount() {
-    // connect to iframe
-    this.connect()
-  }
-
   shouldComponentUpdate(nextProps) {
     const task = this.props.task || {}
     const nextTask = nextProps.task || {}
 
     return this.frame !== null || task.form !== nextTask.form
+  }
+
+  onReceiveMessage = (functionName, args) => {
+    try {
+      this[functionName](args)
+    } catch (e) {
+      console.warn(e.message)
+    }
   }
 
   /**
@@ -42,7 +46,7 @@ class FormEdit extends React.Component {
     }
 
     // set deal
-    this.sendMessage('setDeal', [dealWithMappedRoles])
+    this.frame.sendMessage('setDeal', [dealWithMappedRoles])
   }
 
   /**
@@ -62,21 +66,56 @@ class FormEdit extends React.Component {
       )
     }
 
-    this.sendMessage('setValues', [submission.values])
+    const templateValues = await this.getTemplates()
+
+    this.frame.sendMessage('setValues', [
+      Object.assign({}, templateValues, submission.values)
+    ])
+  }
+
+  /**
+   *
+   */
+  async getTemplates() {
+    const { user, task } = this.props
+    const brandId = getActiveTeamId(user)
+
+    try {
+      const templates = await Deal.getFormTemplates(brandId, task.form)
+
+      return this.getTemplatesValues(templates)
+    } catch (e) {
+      console.log(e)
+
+      return {}
+    }
+  }
+
+  /**
+   *
+   */
+  getTemplatesValues(templates) {
+    let values = {}
+
+    templates.forEach(
+      template => (values = Object.assign({}, values, template.values))
+    )
+
+    return values
   }
 
   /**
    *
    */
   onUpdate() {
-    this.sendMessage('incompleteFields')
+    this.frame.sendMessage('incompleteFields')
   }
 
   /**
    *
    */
   onSubmit() {
-    this.sendMessage('incompleteFields')
+    this.frame.sendMessage('incompleteFields')
   }
 
   /**
@@ -116,46 +155,7 @@ class FormEdit extends React.Component {
    *
    */
   onSave() {
-    this.sendMessage('getValues')
-  }
-
-  /**
-   *
-   */
-  connect() {
-    window.addEventListener('message', this.receiveMessage.bind(this), false)
-  }
-
-  /**
-   *
-   */
-  sendMessage(fn, args) {
-    if (!this.frame) {
-      return
-    }
-
-    const win = this.frame.contentWindow
-
-    win.postMessage({ fn, args }, '*')
-  }
-
-  /**
-   *
-   */
-  receiveMessage(event) {
-    const { fn, args } = event.data
-
-    if (!fn) {
-      return
-    }
-
-    // make first case of function uppercase
-    const func = `on${fn.charAt(0).toUpperCase()}${fn.slice(1)}`
-
-    // call function
-    if (this[func]) {
-      this[func](args)
-    }
+    this.frame.sendMessage('getValues')
   }
 
   /**
@@ -241,6 +241,7 @@ class FormEdit extends React.Component {
         saving={saving}
         buttonCaption={this.getButtonCaption()}
         onFrameRef={ref => (this.frame = ref)}
+        onReceiveMessage={this.onReceiveMessage}
         onSave={() => this.onSave()}
         onClose={() => this.close()}
         handleOpenPreview={() => this.handleOpenPreview()}
@@ -249,11 +250,12 @@ class FormEdit extends React.Component {
   }
 }
 
-function mapStateToProps({ deals }, props) {
+function mapStateToProps({ deals, user }, props) {
   const { list, tasks } = deals
   const { id, taskId } = props.params
 
   return {
+    user,
     task: tasks && tasks[taskId],
     deal: list && list[id],
     roles: deals.roles

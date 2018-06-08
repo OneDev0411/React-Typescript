@@ -26,7 +26,7 @@ const propTypes = {
 
 const defaultProps = {
   backButton: true,
-  isFlat: true
+  isFlat: false
 }
 
 function PageHeader({ title, backButton, backUrl, children, isFlat }) {
