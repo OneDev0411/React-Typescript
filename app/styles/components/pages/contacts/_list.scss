@@ -1,9 +1,7 @@
 .contacts {
-  .list {
-    @extend %contacts-list--table;
-    @extend %contacts-list--toolbar;
-    @extend %contacts-list--no-contact;
-  }
+  @extend %contacts-list--table;
+  @extend %contacts-list--toolbar;
+  @extend %contacts-list--no-contact;
 }
 
 %contacts-list--no-contact {
@@ -66,7 +64,9 @@
     .rt-tbody{
       padding-bottom: 2em;
     }
-    padding: 2em 2em 0;
+    .rt-th.select-row-header {
+      margin-left: 1px;
+    }
     .select-row {
       visibility: hidden;
       &.selected {

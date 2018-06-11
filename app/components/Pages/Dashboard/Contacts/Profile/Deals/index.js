@@ -30,7 +30,7 @@ export class DealsListWidget extends React.Component {
       this.setState({ isLoading: true })
 
       const response = await getContact(id, {
-        associations: ['contact.sub_contacts', 'sub_contact.deals']
+        associations: ['contact.sub_contacts', 'sub_contact.deals', 'contact.summary']
       })
 
       const list = getContactDeals(response.data)

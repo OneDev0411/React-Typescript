@@ -31,13 +31,14 @@ export default class ListingStatusModal extends React.Component {
         ? [
             'Active',
             'Temp Off Market',
+            'Lease Contract',
             'Leased',
             'Withdrawn',
             'Expired',
             'Cancelled',
             'Contract Terminated'
           ]
-        : ['Active', 'Leased', 'Contract Terminated']
+        : ['Active', 'Leased', 'Lease Contract', 'Contract Terminated']
     }
 
     return isBackOffice

@@ -143,11 +143,38 @@ class ContactsList extends React.Component {
     }
   }
 
+  toggleSelectedAllRows = () => {
+    const { selectedRows } = this.state
+    const { list, currentPage } = this.props
+    const contacts = selectPageContacts(list, currentPage)
+    const shouldSelectAll = _.size(selectedRows) < contacts.length
+    let newSelectedRows = {}
+
+    if (shouldSelectAll) {
+      contacts.forEach(contact => {
+        newSelectedRows[contact.id] = contact
+      })
+    }
+
+    this.setState({
+      selectedRows: newSelectedRows
+    })
+  }
+
+  deselectAllRows = () => {
+    this.setState({
+      selectedRows: {}
+    })
+  }
   fetchPage = async page => {
     this.props.getContacts(page)
   }
 
   onPageChange = page => {
+    // Delesect on selected contacts on page change
+    // https://gitlab.com/rechat/web/issues/1307#note_76362718
+    this.deselectAllRows()
+
     const { list } = this.props
     const listInfo = selectContactsInfo(list)
 
@@ -239,6 +266,7 @@ class ContactsList extends React.Component {
                 selectedRows={selectedRows}
                 totalCount={listInfo.total}
                 toggleSelectedRow={this.toggleSelectedRow}
+                toggleSelectedAllRows={this.toggleSelectedAllRows}
               />
             )}
           </div>
