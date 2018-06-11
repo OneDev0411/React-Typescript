@@ -42,7 +42,7 @@ class DealTemplates extends React.Component {
       {
         id: 'name',
         Header: 'Name',
-        style: { paddingLeft: '15px' },
+        style: { paddingLeft: '15px', cursor: 'auto' },
         accessor: 'name',
         Cell: ({ original: form }) => form.name
       },
