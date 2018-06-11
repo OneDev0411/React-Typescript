@@ -151,6 +151,16 @@ const AsyncDealFormEdit = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Deals/form-edit' /* webpackChunkName: "deal_fe" */)
 })
+
+/* ==================================== */
+//  Calendar
+/* ==================================== */
+
+const AsyncCalendar = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Calendar' /* webpackChunkName: "calendar" */)
+})
+
 /* ==================================== */
 //  Contacts
 /* ==================================== */
@@ -221,6 +231,16 @@ const AsyncProfile = Load({
 const AsyncPayment = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/Payment' /* webpackChunkName: "payment" */)
+})
+
+const AsyncDealTemplates = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/DealTemplates' /* webpackChunkName: "deal_templates" */)
+})
+
+const AsyncEditDealTemplate = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/DealTemplates/EditTemplate' /* webpackChunkName: "deal_templates_edit" */)
 })
 
 const AsyncUpgradeAccount = Load({
@@ -396,6 +416,8 @@ export default (
       <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
       <Route path="/crm/tasks" component={AsyncCrmTasksList} />
 
+      <Route path="/dashboard/calendar" component={AsyncCalendar} />
+
       <Route
         path="/dashboard/deals(/filter/:filter)"
         component={AsyncDealsLayout}
@@ -433,6 +455,9 @@ export default (
       <Route path="dashboard/account" component={AsyncAccountLayout}>
         <IndexRoute component={AsyncProfile} />
         <Route path="upgrade" component={AsyncUpgradeAccount} />
+
+        <Route path="deal/templates" component={AsyncDealTemplates} />
+        <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
       </Route>
 
       <Route path="/dashboard/brands">
