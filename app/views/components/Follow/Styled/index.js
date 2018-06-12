@@ -3,20 +3,17 @@ import ShadowButton from '../../Button/ShadowButton'
 
 export const DropDownContainer = styled.div`
   position: relative;
-  width: 100%;
   cursor: pointer;
   display: flex;
   border: solid 1px
     ${({ isFollowing }) => (isFollowing ? '#d4dfe6' : '#2196f3')};
   border-radius: 3px;
-  &:hover {
-    background-color: #eff5fa;
-  }
+  background-color: #ffffff;
 `
 
 export const DropDownMenu = styled.div`
   position: absolute;
-  right: 40px;
+  right: ${({ rightAlign }) => (rightAlign ? '40px' : 'inherit')};
   z-index: 1000;
   background: #fff;
   width: 280px;
@@ -54,8 +51,11 @@ export const FollowButton = styled.div`
   .followCloseIcon {
     display: none;
     width: 16px;
+    margin-left: 8px;
+    margin-right: 8px;
   }
   &:hover {
+    background-color: #eff5fa;
     .followBellIcon {
       display: none;
     }
@@ -80,5 +80,8 @@ export const ArrowButton = ShadowButton.extend`
   padding-right: 6px;
   &:focus {
     outline: none;
+  }
+  &:hover {
+    background-color: #eff5fa;
   }
 `

@@ -71,12 +71,10 @@ const AlertListItem = ({
         </span>
       )}
     <Follow
+      rightAlign
       statuses={alertStatuses}
       activeStatuses={
         alert.user_alert_setting && alert.user_alert_setting.status
-      }
-      isFollowing={
-        alert.alert_setting && alert.alert_setting.status === 'Enabled'
       }
       isFetching={alert.isFetching}
       onClick={onClickFollow}

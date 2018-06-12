@@ -39,7 +39,8 @@ const FollowComponent = ({
   onChangeMenuOpen,
   statuses,
   activeStatuses = [],
-  onFollowClick
+  onFollowClick,
+  rightAlign = false
 }) => {
   const isFollowing = activeStatuses.length > 0
 
@@ -83,7 +84,7 @@ const FollowComponent = ({
             )}
           </DropDownContainer>
           {isOpen ? (
-            <DropDownMenu>
+            <DropDownMenu rightAlign={rightAlign}>
               <DropDownMenuHeader>Notify me when:</DropDownMenuHeader>
               {statuses.map(item => (
                 <DropDownMenuItem key={item.value}>
