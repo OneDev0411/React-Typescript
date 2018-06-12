@@ -6,7 +6,7 @@ import {
   FETCH_CHANGE_ALERT_FOLLOW_FAILURE
 } from '../../../constants/listings/alerts'
 
-const changeAlertFollowStatus = (id, status) => async dispatch => {
+const changeAlertFollowStatuses = (id, statuses) => async dispatch => {
   dispatch({
     id,
     tabName: 'ALERTS',
@@ -14,7 +14,7 @@ const changeAlertFollowStatus = (id, status) => async dispatch => {
   })
 
   try {
-    const response = await api.changeAlertFollowStatus(id, status)
+    const response = await api.changeAlertFollowStatuses(id, statuses)
 
     dispatch({
       alert: response.body.data,
@@ -40,4 +40,4 @@ const changeAlertFollowStatus = (id, status) => async dispatch => {
   }
 }
 
-export default changeAlertFollowStatus
+export default changeAlertFollowStatuses

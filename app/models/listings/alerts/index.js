@@ -4,7 +4,7 @@ import deleteAlert from './delete-alert'
 import createAlert from './create-alert'
 import getAlertFeed from './get-alert-feed'
 import clearAlertNotification from './clear-alert-notification'
-import changeAlertFollowStatus from './change-alert-follow-status'
+import changeAlertFollowStatuses from './change-alert-follow-status'
 
 export default {
   getAlert,
@@ -13,5 +13,5 @@ export default {
   createAlert,
   getAlertFeed,
   clearAlertNotification,
-  changeAlertFollowStatus
+  changeAlertFollowStatuses
 }

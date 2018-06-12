@@ -1,10 +1,10 @@
 import Fetch from '../../../services/fetch'
 
-const changeAlertFollowStatus = async (id, status) => {
+const changeAlertFollowStatuses = async (id, statuses) => {
   try {
     const response = await new Fetch()
       .patch(`/alerts/${id}/status`)
-      .send({ status })
+      .send({ status: statuses })
 
     return response
   } catch (error) {
@@ -12,4 +12,4 @@ const changeAlertFollowStatus = async (id, status) => {
   }
 }
 
-export default changeAlertFollowStatus
+export default changeAlertFollowStatuses

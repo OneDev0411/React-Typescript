@@ -28,7 +28,12 @@ const SharedWith = ({ alert }) => {
     </p>
   )
 }
-
+const alertStatuses = [
+  { key: 'AlertHit', value: 'Hit the Market' },
+  { key: 'AlertPriceDrop', value: 'Price Dropped' },
+  { key: 'AlertStatusChange', value: 'Status Change' },
+  { key: 'AlertOpenHouse', value: 'Open House' }
+]
 const AlertListItem = ({
   user,
   alert,
@@ -66,6 +71,10 @@ const AlertListItem = ({
         </span>
       )}
     <Follow
+      statuses={alertStatuses}
+      activeStatuses={
+        alert.user_alert_setting && alert.user_alert_setting.status
+      }
       isFollowing={
         alert.alert_setting && alert.alert_setting.status === 'Enabled'
       }
@@ -93,16 +102,10 @@ export default compose(
       }
     },
     onClickFollow: ({
-      changeAlertFollowStatus = actions.changeAlertFollowStatus,
+      changeAlertFollowStatuses = actions.changeAlertFollowStatuses,
       alert
-    }) => () => {
-      !alert.isFetching &&
-        changeAlertFollowStatus(
-          alert.id,
-          alert.alert_setting && alert.alert_setting.status === 'Enabled'
-            ? 'Disabled'
-            : 'Enabled'
-        )
+    }) => statuses => {
+      !alert.isFetching && changeAlertFollowStatuses(alert.id, statuses)
     }
   })
 )(AlertListItem)
