@@ -28,10 +28,10 @@ const validate = values => {
     errors.city = 'Required'
   }
 
-  const zip_code = isPostalCode(values.zip_code)
+  const postal_code = isPostalCode(values.postal_code)
 
-  if (zip_code) {
-    errors.zip_code = zip_code
+  if (postal_code) {
+    errors.postal_code = postal_code
   }
 
   return errors
@@ -143,7 +143,7 @@ function AddAddressModal({
               />
 
               <Field
-                name="zip_code"
+                name="postal_code"
                 component={TextField}
                 disabled={submitting}
                 title="Zip Code"
