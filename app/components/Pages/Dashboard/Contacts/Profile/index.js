@@ -3,15 +3,17 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 import Flex from 'styled-flex-component'
-
+// eslint-disable-next-line
 import { getContactStage } from '../../../../../models/contacts/helpers/get-contact-stage'
+
+// eslint-disable-next-line
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
 import Stage from './Stage'
 import Header from './Header'
 import Information from './Information'
-import ImportantDates from './ImportantDates'
+import { ImportantDates } from './ImportantDates'
 import { DealsListWidget } from './Deals'
 import Names from './Names'
 import Tags from './Tags'
@@ -23,6 +25,8 @@ import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 import IconNote from '../../../../../views/components/SvgIcons/Note/IconNote'
 import IconTodo from '../../../../../views/components/SvgIcons/Todo/IconTodo'
+
+// eslint-disable-next-line
 import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
 
 import { getTasks } from '../../../../../models/tasks'
@@ -261,7 +265,10 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
   }
 }
 
-export default connect(mapStateToProps, {
-  getContact,
-  upsertContactAttributes
-})(ContactProfile)
+export default connect(
+  mapStateToProps,
+  {
+    getContact,
+    upsertContactAttributes
+  }
+)(ContactProfile)

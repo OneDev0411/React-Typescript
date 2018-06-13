@@ -2,7 +2,6 @@ import React from 'react'
 
 import Emails from './fields/Emails'
 import Phones from './fields/Phones'
-import Birthdays from './fields/Birthdays'
 import Companies from './fields/Companies'
 import JobTitles from './fields/JobTitles'
 import { Source } from './fields/Source'
@@ -20,8 +19,6 @@ export default function Details({ contact }) {
       <JobTitles contact={contact} />
 
       <Companies contact={contact} />
-
-      <Birthdays contact={contact} />
 
       <Source contact={contact} />
 
