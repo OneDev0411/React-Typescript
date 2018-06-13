@@ -5,6 +5,7 @@ import Phones from './fields/Phones'
 import Birthdays from './fields/Birthdays'
 import Companies from './fields/Companies'
 import JobTitles from './fields/JobTitles'
+import { Source } from './fields/Source'
 import Websites from './fields/Websites'
 import OrginalSource from './fields/OrginalSource'
 
@@ -21,6 +22,8 @@ export default function Details({ contact }) {
       <Companies contact={contact} />
 
       <Birthdays contact={contact} />
+
+      <Source contact={contact} />
 
       <Websites contact={contact} />
 
