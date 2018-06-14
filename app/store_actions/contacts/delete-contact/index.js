@@ -47,7 +47,7 @@ export function deleteContacts(contactIds) {
         browserHistory.push(url)
       }
 
-      const moveToPrevPage = () => {
+      const moveToLastCachedPage = () => {
         const prevPage = currentPage - 1
 
         dispatch(removeContactPage(currentPage))
@@ -65,7 +65,7 @@ export function deleteContacts(contactIds) {
         // console.log(`to previous ${listInfo.type} page: ${prevPage}`)
       }
 
-      const moveToNextPage = () => {
+      const moveToNextCachedPage = () => {
         const nextPages = {}
         const pages = selectPages(list)
 
@@ -130,7 +130,7 @@ export function deleteContacts(contactIds) {
           // console.log('last page')
 
           if (selectPage(list, currentPage - 1)) {
-            return moveToPrevPage() // pass filter and general
+            return moveToLastCachedPage() // pass filter and general
           }
 
           return requestPage(currentPage - 1) // pass filter and general
@@ -141,7 +141,7 @@ export function deleteContacts(contactIds) {
         if (nextPage) {
           // console.log('total is big has cache')
 
-          return moveToNextPage(nextPage) // pass filter and general
+          return moveToNextCachedPage(nextPage) // pass filter and general
         }
       }
 

@@ -68,7 +68,7 @@ export class Pagination extends React.Component {
     }
 
     return (
-      <div style={{ textAlign: 'center', marginTop: '1em' }}>
+      <div style={{ textAlign: 'center', marginBottom: '1em' }}>
         {buttons.map((props, index) => (
           <Button {...props} key={index}>
             {props.text}
