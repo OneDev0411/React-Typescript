@@ -95,6 +95,7 @@ class UploadContacts extends React.Component {
 
         const fieldValue = row[columns[csvField].index].trim()
         const parsedValue = this.parseValue(
+          definition,
           csvField,
           definition.name,
           fieldValue
@@ -155,16 +156,24 @@ class UploadContacts extends React.Component {
     return contact
   }
 
-  parseValue = (csvField, fieldName, value) => {
+  parseValue = (definition, csvField, fieldName, value) => {
     switch (fieldName) {
-      case 'birthday':
-        return value && moment(value).isValid() ? moment(value).unix() : null
-
-      case 'phone':
+      case 'phone_number':
         return value && value.replace(/\s/g, '').replace(/^00/, '+')
 
       case 'note':
         return `${csvField}: ${value}`
+    }
+
+    switch (definition.data_type) {
+      case 'date':
+        return value && moment(value).isValid() ? moment(value).unix() : null
+
+      case 'number':
+        return value && parseFloat(value)
+
+      case 'text':
+        return value
     }
 
     return value
