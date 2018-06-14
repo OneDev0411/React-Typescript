@@ -15,13 +15,6 @@ import { selectDefinition } from '../../../../../../reducers/contacts/attributeD
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 
 class Mapper extends React.Component {
-  // constructor(props) {
-  //   super(props)
-  //   this.state = {
-  //     // showEmptyColumns: false
-  //   }
-  // }
-
   componentDidMount() {
     this.analyze()
   }
@@ -59,7 +52,7 @@ class Mapper extends React.Component {
       })
     }
 
-    const columns = this.findEmptyColumns(colNames, contacts)
+    const columns = this.analyzeColumns(colNames, contacts)
 
     updateCsvInfo({
       columns,
@@ -71,7 +64,7 @@ class Mapper extends React.Component {
     setCurrentStepValidation(true)
   }
 
-  findEmptyColumns = (columns, fields) => {
+  analyzeColumns = (columns, fields) => {
     const list = {}
 
     columns.forEach((name, index) => {
@@ -108,11 +101,6 @@ class Mapper extends React.Component {
   onChangeLabel = (fieldName, label) =>
     this.props.updateCsvFieldsMap(fieldName, { label })
 
-  // toggleShowEmptyColumns = () =>
-  //   this.setState({
-  //     showEmptyColumns: !this.state.showEmptyColumns
-  //   })
-
   getMappedField = name => {
     const { attributeDefs: defs, mappedFields } = this.props
     const field = mappedFields[name]
@@ -130,7 +118,6 @@ class Mapper extends React.Component {
 
   render() {
     const { columns } = this.props
-    // const { showEmptyColumns } = this.state
 
     if (columns.length === 0) {
       return false
@@ -176,25 +163,6 @@ class Mapper extends React.Component {
             )
           })
           .value()}
-
-        {/* {showEmptyColumns &&
-          _.chain(columns)
-            .pick(({ hasValue }) => !hasValue)
-            .map((info, colName) => (
-              <div key={info.index} className="column-row">
-                <div className="name is-empty">{colName}</div>
-              </div>
-            ))
-            .value()}
-
-        <div className="column-row heading">
-          <div
-            className="name show-empty-cta"
-            onClick={this.toggleShowEmptyColumns}
-          >
-            {showEmptyColumns ? 'Hide' : 'Show'} Empty Columns
-          </div>
-        </div> */}
       </div>
     )
   }
