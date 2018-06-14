@@ -9,6 +9,7 @@ const Container = styled.div`
   opacity: ${props => (props.isOpen ? 1 : 0)};
   max-height: 100vh;
   overflow: auto;
+  overflow-x: hidden;
   transition: 0.3s all ease-in;
 `
 
