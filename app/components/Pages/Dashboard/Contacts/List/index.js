@@ -231,13 +231,14 @@ class ContactsList extends React.Component {
   }
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state, { params, location }) {
+  const { page } = params
   const { list } = state.contacts
-  const currentPage =
-    (props.params.page && Number(props.params.page)) || selectCurrentPage(list)
+
+  const currentPage = page || selectCurrentPage(list) || 1
 
   const filter =
-    (props.location.query && props.location.query.filter) ||
+    (location.query && location.query.filter) ||
     selectContactsInfo(list).filter ||
     ''
 
@@ -250,19 +251,16 @@ function mapStateToProps(state, props) {
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      clearContactSearchResult,
-      confirmation,
-      deleteContacts,
-      getContacts,
-      removeContactPage,
-      receiveContactPage,
-      searchContacts,
-      setContactCurrentPage,
-      toggleRow,
-      toggleAllRows
-    }
-  )(ContactsList)
+  connect(mapStateToProps, {
+    clearContactSearchResult,
+    confirmation,
+    deleteContacts,
+    getContacts,
+    removeContactPage,
+    receiveContactPage,
+    searchContacts,
+    setContactCurrentPage,
+    toggleRow,
+    toggleAllRows
+  })(ContactsList)
 )
