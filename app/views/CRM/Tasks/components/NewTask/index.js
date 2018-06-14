@@ -195,7 +195,7 @@ class Task extends Component {
           save={this.save}
         >
           {({
-            reset,
+            form,
             values,
             invalid,
             pristine,
@@ -271,7 +271,7 @@ class Task extends Component {
                 {this.isNew && (
                   <button
                     type="button"
-                    onClick={reset}
+                    onClick={() => form.reset()}
                     disabled={submitting || pristine || isDeleting}
                     className="c-new-address-modal__cancel-btn"
                   >
