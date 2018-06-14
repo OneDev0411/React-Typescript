@@ -318,16 +318,18 @@ const enhance = compose(
         const index = getIndex(allAddressFields)
 
         Object.keys(values).forEach(key => {
-          const attribute_def = selectDefinitionByName(attributeDefs, key)
+          if (values[key]) {
+            const attribute_def = selectDefinitionByName(attributeDefs, key)
 
-          if (attribute_def) {
-            attributes.push({
-              index,
-              attribute_def,
-              label: values.label,
-              is_primary: values.is_primary,
-              [attribute_def.data_type]: values[key]
-            })
+            if (attribute_def) {
+              attributes.push({
+                index,
+                attribute_def,
+                label: values.label,
+                is_primary: values.is_primary,
+                [attribute_def.data_type]: values[key]
+              })
+            }
           }
         })
 
