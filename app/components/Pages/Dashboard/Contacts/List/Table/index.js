@@ -33,9 +33,9 @@ class ContactsList extends React.Component {
           square
           selected={
             this.props.data.length > 0 &&
-            this.props.data.length === _.size(this.props.selectedRows)
+            this.props.data.length === this.props.selectedRows.length
           }
-          onClick={() => this.props.toggleSelectedAllRows()}
+          onClick={() => this.props.toggleAllRows(this.props.currentPage)}
         />
       ),
       accessor: '',
@@ -45,10 +45,10 @@ class ContactsList extends React.Component {
         <Radio
           square
           className="select-row"
-          selected={!!this.props.selectedRows[contact.id]}
+          selected={!!this.props.selectedRows.includes(contact.id)}
           onClick={e => {
             e.stopPropagation()
-            this.props.toggleSelectedRow(contact)
+            this.props.toggleRow(this.props.currentPage, contact.id)
           }}
         />
       )
@@ -118,8 +118,8 @@ class ContactsList extends React.Component {
             )
           }
           className="contacts-list-table"
-          getTrProps={(state, { original: { id: contactId } }) => {
-            if (this.props.deletingContacts.includes(contactId)) {
+          getTrProps={(state, { original: { id } }) => {
+            if (this.props.deleting && this.props.selectedRows.includes(id)) {
               return {
                 style: {
                   opacity: 0.5,
@@ -129,7 +129,7 @@ class ContactsList extends React.Component {
             }
 
             return {
-              onClick: () => openContact(contactId)
+              onClick: () => openContact(id)
             }
           }}
         />

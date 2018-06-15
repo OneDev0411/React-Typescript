@@ -170,7 +170,7 @@ class EditableInput extends React.Component {
           <span
             data-balloon-visible
             data-balloon-pos="up"
-            data-balloon-length="large"
+            data-balloon-length="medium"
             data-balloon={validationText}
             className="c-field-balloon c-field-balloon--error"
           />

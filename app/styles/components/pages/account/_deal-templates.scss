@@ -1,0 +1,35 @@
+.c-deal-templates {
+  margin-bottom: 6rem;
+  padding: 0 3.2rem;
+}
+
+.c-deal-templates > .list--header {
+  padding: 0 !important;
+}
+
+.c-deal-templates .rt-noData {
+  margin-top: 80px;
+  background-color: transparent;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.c-deal-templates--edit {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1001;
+  background-color: #fff;
+
+  .icon-save {
+    margin-right: 10px;
+  }
+}
+
+.c-deal-templates--edit .form-iframe {
+  width: 100%;
+  height: calc(100vh - 56px);
+  border-top: 1px solid #ccc;
+}

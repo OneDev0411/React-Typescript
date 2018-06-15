@@ -223,6 +223,16 @@ const AsyncPayment = Load({
     import('../components/Pages/Dashboard/Account/Payment' /* webpackChunkName: "payment" */)
 })
 
+const AsyncDealTemplates = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/DealTemplates' /* webpackChunkName: "deal_templates" */)
+})
+
+const AsyncEditDealTemplate = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/DealTemplates/EditTemplate' /* webpackChunkName: "deal_templates_edit" */)
+})
+
 const AsyncUpgradeAccount = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/Upgrade' /* webpackChunkName: "upgrade" */)
@@ -433,6 +443,9 @@ export default (
       <Route path="dashboard/account" component={AsyncAccountLayout}>
         <IndexRoute component={AsyncProfile} />
         <Route path="upgrade" component={AsyncUpgradeAccount} />
+
+        <Route path="deal/templates" component={AsyncDealTemplates} />
+        <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
       </Route>
 
       <Route path="/dashboard/brands">

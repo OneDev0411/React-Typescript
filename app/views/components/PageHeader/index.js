@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Menu from './Menu'
-import PageTitle from './PageTitle'
+import { PageTitle, Heading } from './PageTitle'
 
 const Container = styled.div`
   width: 100%;
@@ -10,25 +10,32 @@ const Container = styled.div`
   display: flex;
   padding: 0 16px;
   justify-content: space-between;
-  background-color: #fff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background-color: ${props => (props.isFlat ? 'transparent' : '#fff')};
+  box-shadow: ${props =>
+    props.isFlat
+      ? 'none'
+      : '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05)'};
 `
 
 const propTypes = {
   backUrl: PropTypes.string,
   backButton: PropTypes.bool,
-  title: PropTypes.string.isRequired
+  isFlat: PropTypes.bool,
+  title: PropTypes.string
 }
 
 const defaultProps = {
-  backButton: true
+  backButton: true,
+  isFlat: false
 }
 
-function PageHeader({ title, backButton, backUrl, children }) {
+function PageHeader({ title, backButton, backUrl, children, isFlat }) {
   return (
-    <Container>
-      <PageTitle backButton={backButton} title={title} backUrl={backUrl} />
-      {children}
+    <Container isFlat={isFlat}>
+      {title && (
+        <PageTitle backButton={backButton} backUrl={backUrl} title={title} />
+      )}
+      {React.Children.map(children, children => children)}
     </Container>
   )
 }
@@ -37,5 +44,7 @@ PageHeader.propTypes = propTypes
 PageHeader.defaultProps = defaultProps
 
 PageHeader.Menu = Menu
+PageHeader.Title = PageTitle
+PageHeader.Heading = Heading
 
 export default PageHeader
