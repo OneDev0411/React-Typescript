@@ -14,9 +14,6 @@ const isPostalCode = value =>
     ? undefined
     : 'You only have allowed to using numbers and dash. Like 75233 or 65132-2312.'
 
-// const composeValidators = (...validators) => value =>
-//   validators.reduce((error, validator) => error || validator(value), undefined)
-
 const validate = values => {
   const errors = {}
 
@@ -28,10 +25,10 @@ const validate = values => {
     errors.city = 'Required'
   }
 
-  const zip_code = isPostalCode(values.zip_code)
+  const postal_code = isPostalCode(values.postal_code)
 
-  if (zip_code) {
-    errors.zip_code = zip_code
+  if (postal_code) {
+    errors.postal_code = postal_code
   }
 
   return errors
@@ -143,7 +140,7 @@ function AddAddressModal({
               />
 
               <Field
-                name="zip_code"
+                name="postal_code"
                 component={TextField}
                 disabled={submitting}
                 title="Zip Code"
