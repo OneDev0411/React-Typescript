@@ -137,7 +137,11 @@ class ContactsList extends React.Component {
       this.props.setContactCurrentPage(page)
     }
 
-    let url = `${BASE_URL}/page/${page}`
+    let url = `${BASE_URL}`
+
+    if (page > 1) {
+      url = `${BASE_URL}/page/${page}`
+    }
 
     if (listInfo.filter) {
       url = `${url}?filter=${listInfo.filter}`
@@ -231,14 +235,11 @@ class ContactsList extends React.Component {
   }
 }
 
-function mapStateToProps(state, { params, location }) {
-  const { page } = params
+function mapStateToProps(state, props) {
   const { list } = state.contacts
-
-  const currentPage = page || selectCurrentPage(list) || 1
-
+  const currentPage = Number(props.params.page) || 1
   const filter =
-    (location.query && location.query.filter) ||
+    (props.location.query && props.location.query.filter) ||
     selectContactsInfo(list).filter ||
     ''
 
@@ -251,16 +252,19 @@ function mapStateToProps(state, { params, location }) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, {
-    clearContactSearchResult,
-    confirmation,
-    deleteContacts,
-    getContacts,
-    removeContactPage,
-    receiveContactPage,
-    searchContacts,
-    setContactCurrentPage,
-    toggleRow,
-    toggleAllRows
-  })(ContactsList)
+  connect(
+    mapStateToProps,
+    {
+      clearContactSearchResult,
+      confirmation,
+      deleteContacts,
+      getContacts,
+      removeContactPage,
+      receiveContactPage,
+      searchContacts,
+      setContactCurrentPage,
+      toggleRow,
+      toggleAllRows
+    }
+  )(ContactsList)
 )

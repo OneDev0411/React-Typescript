@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 
 import * as actionTypes from '../../constants/pagination'
 
-const INITIAL_STATE = { pages: {}, currentPage: 0 }
+const INITIAL_STATE = { pages: {}, currentPage: 1 }
 
 const pages = (state = {}, action = {}) => {
   switch (action.type) {
