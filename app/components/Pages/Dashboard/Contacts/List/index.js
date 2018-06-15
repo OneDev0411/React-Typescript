@@ -55,6 +55,20 @@ class ContactsList extends React.Component {
     this.onPageChange(this.props.currentPage, this.props.filter)
   }
 
+  componentWillReceiveProps(nextProps) {
+    // For fixing web#1318
+    if (
+      nextProps.currentPage == 1 &&
+      this.props.currentPage != nextProps.currentPage
+    ) {
+      const page = selectPage(this.props.list, nextProps.currentPage)
+
+      if (!page) {
+        this.onPageChange(nextProps.currentPage)
+      }
+    }
+  }
+
   handleOnDelete = (event, selectedRows) => {
     event.stopPropagation()
 
