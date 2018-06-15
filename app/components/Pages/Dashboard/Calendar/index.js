@@ -59,11 +59,11 @@ class CalendarContainer extends React.Component {
   componentDidMount() {
     this.handleDateChange(this.props.selectedDate)
 
-    this.observer = new IntersectionObserver(this.onEventObserve, {
-      root: this.calendarTableContainer,
-      rootMargin: '100px',
-      threshold: 0.8
-    })
+    // this.observer = new IntersectionObserver(this.onEventObserve, {
+    //   root: this.calendarTableContainer,
+    //   rootMargin: '100px',
+    //   threshold: 0.8
+    // })
   }
 
   onEventObserve = entities => {
@@ -94,9 +94,9 @@ class CalendarContainer extends React.Component {
       [refId]: ref
     }
 
-    if (this.observer && ref !== null) {
-      this.observer.observe(ref)
-    }
+    // if (this.observer && ref !== null) {
+    //   this.observer.observe(ref)
+    // }
   }
 
   /**
