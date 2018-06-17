@@ -99,7 +99,7 @@ class ContactsList extends React.Component {
 
   toggleSideMenu = () =>
     this.setState(state => ({
-      isSideMenuOpen: state.isSideMenuOpen
+      isSideMenuOpen: !state.isSideMenuOpen
     }))
 
   search = async (filter, page = 1) => {
@@ -266,19 +266,16 @@ function mapStateToProps(state, props) {
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      clearContactSearchResult,
-      confirmation,
-      deleteContacts,
-      getContacts,
-      removeContactPage,
-      receiveContactPage,
-      searchContacts,
-      setContactCurrentPage,
-      toggleRow,
-      toggleAllRows
-    }
-  )(ContactsList)
+  connect(mapStateToProps, {
+    clearContactSearchResult,
+    confirmation,
+    deleteContacts,
+    getContacts,
+    removeContactPage,
+    receiveContactPage,
+    searchContacts,
+    setContactCurrentPage,
+    toggleRow,
+    toggleAllRows
+  })(ContactsList)
 )
