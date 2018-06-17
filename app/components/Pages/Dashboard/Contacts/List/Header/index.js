@@ -7,7 +7,7 @@ import ActionButton from '../../../../../../views/components/Button/ActionButton
 
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 
-export function Header({ user, isSideMenuOpen, onMenuTriggerChange }) {
+export function Header({ user, title, isSideMenuOpen, onMenuTriggerChange }) {
   return (
     <PageHeader isFlat>
       <PageHeader.Title backButton={false}>
@@ -15,7 +15,7 @@ export function Header({ user, isSideMenuOpen, onMenuTriggerChange }) {
           tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}
           onClick={onMenuTriggerChange}
         />
-        <PageHeader.Heading>All Contacts</PageHeader.Heading>
+        <PageHeader.Heading>{title}</PageHeader.Heading>
       </PageHeader.Title>
 
       <PageHeader.Menu>
