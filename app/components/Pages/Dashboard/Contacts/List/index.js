@@ -200,6 +200,14 @@ class ContactsList extends React.Component {
     const noContact =
       !isFetching && contacts.length === 0 && listInfo.type !== 'filter'
 
+    let exportIds
+
+    if (selectedRows.length === 0 && listInfo.type !== 'general') {
+      exportIds = contacts.map(contact => contact.id)
+    } else {
+      exportIds = selectedRows
+    }
+
     return (
       <PageContainer>
         <SideMenu isOpen={isSideMenuOpen}>
@@ -232,6 +240,7 @@ class ContactsList extends React.Component {
               onDelete={this.handleOnDelete}
               deleting={this.state.isDeleting}
               selectedRows={selectedRows}
+              exportIds={exportIds}
               totalCount={listInfo.total}
               pageSize={currentPageData ? currentPageData.ids.length : 0}
             />
@@ -276,16 +285,19 @@ function mapStateToProps(state, props) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, {
-    clearContactSearchResult,
-    confirmation,
-    deleteContacts,
-    getContacts,
-    removeContactPage,
-    receiveContactPage,
-    searchContacts,
-    setContactCurrentPage,
-    toggleRow,
-    toggleAllRows
-  })(ContactsList)
+  connect(
+    mapStateToProps,
+    {
+      clearContactSearchResult,
+      confirmation,
+      deleteContacts,
+      getContacts,
+      removeContactPage,
+      receiveContactPage,
+      searchContacts,
+      setContactCurrentPage,
+      toggleRow,
+      toggleAllRows
+    }
+  )(ContactsList)
 )

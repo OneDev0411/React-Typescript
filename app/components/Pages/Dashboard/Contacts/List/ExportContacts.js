@@ -1,11 +1,11 @@
 import React from 'react'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 
-export default ({ selectedRows, disabled }) => {
+export default ({ exportIds, disabled }) => {
   let url = '/api/contacts/export/outlook'
 
-  if (Array.isArray(selectedRows) && selectedRows.length > 0) {
-    url = `${url}?ids[]=${selectedRows.join('&ids[]=')}`
+  if (Array.isArray(exportIds) && exportIds.length > 0) {
+    url = `${url}?ids[]=${exportIds.join('&ids[]=')}`
   }
 
   return (
