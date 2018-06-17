@@ -5,10 +5,11 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import LazyLoad from 'react-lazy-load'
 import styled from 'styled-components'
-
-import Follow from '../../../../../../../views/components/Follow/index.js'
+import FavoriteHeart from '../../FavoriteHeart'
+import Follow from '../../../../../../../views/components/Follow'
 import prepareProps from '../prepareListingViewItemProps'
 import { setMapHoveredMarkerId } from '../../../../../../../store_actions/listings/map'
+import { listingStatuses } from '../../../../../../../constants/listings/listing'
 import changeListingFollowStatuses from '../../../../../../../store_actions/listings/listing/change-listing-follow-status'
 
 const FollowContainer = styled.div`
@@ -16,11 +17,6 @@ const FollowContainer = styled.div`
   left: 1rem;
   top: 1rem;
 `
-const listingStatuses = [
-  { key: 'ListingOpenHouse', value: 'Open House' },
-  { key: 'ListingPriceDrop', value: ' Price Drop' },
-  { key: 'ListingStatusChange', value: 'Status Change' }
-]
 
 const ListingCard = ({
   user,
@@ -95,6 +91,9 @@ const ListingCard = ({
             className="c-listing-card__link"
           />
         )}
+        <div className="c-listing-card__favorite-heart">
+          <FavoriteHeart listing={listing} />
+        </div>
         {user && (
           <FollowContainer>
             <Follow
@@ -128,8 +127,13 @@ export default compose(
     onMouseLeave: ({ setMapHoveredMarkerId, tabName }) => () => {
       setMapHoveredMarkerId(tabName, -1)
     },
-    onClickFollow: ({ changeListingFollowStatuses, listing }) => statuses => {
-      !listing.isFetching && changeListingFollowStatuses(listing.id, statuses)
+    onClickFollow: ({
+      changeListingFollowStatuses,
+      listing,
+      tabName
+    }) => statuses => {
+      !listing.isFetching &&
+        changeListingFollowStatuses(listing.id, statuses, tabName)
     }
   })
 )(ListingCard)

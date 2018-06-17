@@ -6,10 +6,14 @@ import {
   FETCH_CHANGE_LISTING_FOLLOW_FAILURE
 } from '../../../constants/listings/listing'
 
-const changeListingFollowStatuses = (id, statuses) => async dispatch => {
+const changeListingFollowStatuses = (
+  id,
+  statuses,
+  tabName
+) => async dispatch => {
   dispatch({
     id,
-    tabName: 'FAVORITES',
+    tabName,
     type: FETCH_CHANGE_LISTING_FOLLOW_REQUEST
   })
 
@@ -18,7 +22,7 @@ const changeListingFollowStatuses = (id, statuses) => async dispatch => {
 
     dispatch({
       listing: response.body.data,
-      tabName: 'FAVORITES',
+      tabName,
       type: FETCH_CHANGE_LISTING_FOLLOW_SUCCESS
     })
   } catch ({ response, message }) {
@@ -34,7 +38,7 @@ const changeListingFollowStatuses = (id, statuses) => async dispatch => {
     )
     dispatch({
       id,
-      tabName: 'FAVORITES',
+      tabName,
       type: FETCH_CHANGE_LISTING_FOLLOW_FAILURE
     })
   }

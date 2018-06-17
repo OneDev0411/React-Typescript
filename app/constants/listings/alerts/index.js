@@ -35,3 +35,10 @@ export const FETCH_CHANGE_ALERT_FOLLOW_SUCCESS =
   'FETCH_CHANGE_ALERT_FOLLOW_SUCCESS'
 export const FETCH_CHANGE_ALERT_FOLLOW_FAILURE =
   'FETCH_CHANGE_ALERT_FOLLOW_FAILURE'
+
+export const alertStatuses = [
+  { key: 'AlertHit', value: 'Hit the Market' },
+  { key: 'AlertPriceDrop', value: 'Price Dropped' },
+  { key: 'AlertStatusChange', value: 'Status Change' },
+  { key: 'AlertOpenHouse', value: 'Open House' }
+]

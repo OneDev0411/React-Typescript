@@ -9,7 +9,7 @@ import { selectListings } from '../../../../../reducers/listings'
 
 class Favorites extends Component {
   componentDidMount() {
-    const { user, listings, isFetching, getFavorites } = this.props
+    const { user, isFetching, getFavorites } = this.props
 
     if (user && !isFetching) {
       getFavorites(user)

@@ -6,6 +6,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../../../../controllers/Brand'
 import actions from '../../../../../../../../store_actions/listings/alerts'
+import { alertStatuses } from '../../../../../../../../constants/listings/alerts'
 
 import AlertListItemMenu from './components/AlertsListItemMenu'
 import Follow from '../../../../../../../../views/components/Follow'
@@ -28,12 +29,7 @@ const SharedWith = ({ alert }) => {
     </p>
   )
 }
-const alertStatuses = [
-  { key: 'AlertHit', value: 'Hit the Market' },
-  { key: 'AlertPriceDrop', value: 'Price Dropped' },
-  { key: 'AlertStatusChange', value: 'Status Change' },
-  { key: 'AlertOpenHouse', value: 'Open House' }
-]
+
 const AlertListItem = ({
   user,
   alert,
@@ -71,7 +67,7 @@ const AlertListItem = ({
         </span>
       )}
     <Follow
-      rightAlign
+      dropdownRightAlign="40px"
       statuses={alertStatuses}
       activeStatuses={
         alert.user_alert_setting && alert.user_alert_setting.status

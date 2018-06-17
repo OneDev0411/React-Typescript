@@ -32,9 +32,9 @@ class Listing extends React.Component {
       return
     }
 
-    if (!listing.id) {
-      await getListing(listingId)
-    } else {
+    await getListing(listingId)
+
+    if (listing.id) {
       this.logActivity(listingId)
     }
   }
@@ -63,7 +63,9 @@ class Listing extends React.Component {
 
 function mapStateToProps(state, props) {
   const { user, listing } = state
-  const { params: { id: listingId } } = props
+  const {
+    params: { id: listingId }
+  } = props
 
   return {
     user,

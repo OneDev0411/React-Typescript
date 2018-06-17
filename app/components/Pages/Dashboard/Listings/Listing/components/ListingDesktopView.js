@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import S from 'shorti'
 import ReactDOM from 'react-dom'
+import { connect } from 'react-redux'
 import Map from 'google-map-react'
 import React from 'react'
 import { browserHistory, Link } from 'react-router'
@@ -45,13 +46,28 @@ export const renderFeatures = (title, value) => {
 import {
   Col,
   Modal,
-  Button,
   Tooltip,
   Carousel,
   CarouselItem,
   OverlayTrigger
 } from 'react-bootstrap'
-import { errorMessage } from '../../../../../../reducers/listings/shared/index';
+import { errorMessage } from '../../../../../../reducers/listings/shared/index'
+import Follow from '../../../../../../views/components/Follow'
+import { listingStatuses } from '../../../../../../constants/listings/listing'
+import changeListingFollowStatuses from '../../../../../../store_actions/listings/listing/change-listing-follow-status'
+import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
+
+const ShareButton = ShadowButton.extend`
+  background-color: #${() => Brand.color('primary', '006aff')};
+  border: 1px solid #${() => Brand.color('primary', '006aff')};
+  color: rgb(255, 255, 255);
+  position: absolute;
+  right: 20px;
+  top: 8px;
+  padding: 0 12px;
+  height: 32px;
+  border-radius: 3px;
+`
 
 export const fadeIn = node => {
   const elem = ReactDOM.findDOMNode(node)
@@ -75,6 +91,7 @@ const ListingDesktopView = ({
   container,
   isFetching,
   errorMessage,
+  onClickFollow,
   showShareModal,
   onHideShareModal,
   showModalGallery,
@@ -95,7 +112,7 @@ const ListingDesktopView = ({
     viewer_width = window.innerWidth
 
     if (user && !data.is_widget && container !== 'modal') {
-      viewer_width -= 110
+      viewer_width -= 130
     }
   }
 
@@ -132,15 +149,21 @@ const ListingDesktopView = ({
   }
 
   let listing_images = (
-    <div style={S('bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292')}>
+    <div
+      style={S(
+        'bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292'
+      )}
+    >
       No image
     </div>
   )
 
   let main_content = isFetching && <Loading />
 
-  main_content = !isFetching && errorMessage &&
-    <FetchError message={errorMessage} backButtonHandler={hideModal} />
+  main_content = !isFetching &&
+    errorMessage && (
+      <FetchError message={errorMessage} backButtonHandler={hideModal} />
+    )
 
   if (listing && listing.property) {
     property = listing.property
@@ -172,8 +195,8 @@ const ListingDesktopView = ({
     )
 
     if (property.square_meters) {
-      price_sq_foot = (Number(price.replace(/,/g, '')) /
-        Number(square_feet.replace(/,/g, ''))
+      price_sq_foot = (
+        Number(price.replace(/,/g, '')) / Number(square_feet.replace(/,/g, ''))
       ).toFixed(2)
     }
 
@@ -186,7 +209,8 @@ const ListingDesktopView = ({
     const { gallery_image_urls } = listing
     const gallery_chunks = _.chunk(gallery_image_urls, 4)
 
-    const carouselItemDivStyle = `border-right-1-solid-fff w-25p h-300 pull-left text-center bg-efefef bg-cover bg-center`
+    const carouselItemDivStyle =
+      'border-right-1-solid-fff w-25p h-300 pull-left text-center bg-efefef bg-cover bg-center'
 
     listing_images = (
       <Carousel
@@ -203,19 +227,27 @@ const ListingDesktopView = ({
           >
             <div
               onClick={() => showModalGallery(gallery_image_url[0])}
-              style={S(`${carouselItemDivStyle} bg-url(${gallery_image_url[0]})`)}
+              style={S(
+                `${carouselItemDivStyle} bg-url(${gallery_image_url[0]})`
+              )}
             />
             <div
               onClick={() => showModalGallery(gallery_image_url[1])}
-              style={S(`${carouselItemDivStyle} bg-url(${gallery_image_url[1]})`)}
+              style={S(
+                `${carouselItemDivStyle} bg-url(${gallery_image_url[1]})`
+              )}
             />
             <div
               onClick={() => showModalGallery(gallery_image_url[2])}
-              style={S(`${carouselItemDivStyle} bg-url(${gallery_image_url[2]})`)}
+              style={S(
+                `${carouselItemDivStyle} bg-url(${gallery_image_url[2]})`
+              )}
             />
             <div
               onClick={() => showModalGallery(gallery_image_url[3])}
-              style={S(`${carouselItemDivStyle} bg-url(${gallery_image_url[3]})`)}
+              style={S(
+                `${carouselItemDivStyle} bg-url(${gallery_image_url[3]})`
+              )}
             />
           </CarouselItem>
         ))}
@@ -240,8 +272,9 @@ const ListingDesktopView = ({
       </div>
     ))
 
-    listing_subtitle = `${listing.property.address.city}, ${listing.property.address
-      .state} ${listing.property.address.postal_code}`
+    listing_subtitle = `${listing.property.address.city}, ${
+      listing.property.address.state
+    } ${listing.property.address.postal_code}`
 
     const status_color = listing_util.getStatusColor(listing.status)
 
@@ -250,17 +283,19 @@ const ListingDesktopView = ({
     if (listing.close_date) {
       const sold_date_obj = friendlyDate(listing.close_date)
 
-      sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
+      sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${
+        sold_date_obj.year
+      }`
     }
 
     const listing_status_indicator = (
       <div
         className="pull-left"
         style={S(
-          `relative 
-          font-14 
-          br-3 pt-5 pb-5 pl-10 pr-10 mt-3 
-          border-1-solid-${status_color} 
+          `relative
+          font-14
+          br-3 pt-5 pb-5 pl-10 pr-10 mt-3
+          border-1-solid-${status_color}
           bg-${status_color} color-fff`
         )}
       >
@@ -399,21 +434,25 @@ const ListingDesktopView = ({
               {listing.list_agent_full_name}, Seller Agent
             </span>
           </div>
-          <div style={S('font-15 mb-5')}>{listing.list_agent_direct_work_phone}</div>
+          <div style={S('font-15 mb-5')}>
+            {listing.list_agent_direct_work_phone}
+          </div>
           <div style={S('font-15 mb-5')}>{listing.list_office_name}</div>
           {showing_instructions}
           <div style={email_style}>
             <a
               href={`mailto:${listing.list_agent_email}
               ?subject=Your listing on Rechat.com&body=
-              I saw your listing (${listing_title}) on Rechat.com and 
+              I saw your listing (${listing_title}) on Rechat.com and
               I'm interested in getting more information.`}
               style={S('color-748090')}
             >
               {listing.list_agent_email}
             </a>
           </div>
-          <div style={S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5')} />
+          <div
+            style={S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5')}
+          />
         </div>
       )
     }
@@ -434,7 +473,7 @@ const ListingDesktopView = ({
       listing_map_small = (
         <Map
           zoom={12}
-          key={'map'}
+          key="map"
           center={center}
           options={{
             zoomControl: true,
@@ -504,8 +543,10 @@ const ListingDesktopView = ({
                       <div style={S('text-center w-50p pull-left')}>
                         <a
                           target="_blank"
-                          href={`http://maps.google.com/?q=${listing.property.address
-                            .geo_source_formatted_address_google}`}
+                          href={`http://maps.google.com/?q=${
+                            listing.property.address
+                              .geo_source_formatted_address_google
+                          }`}
                         >
                           Google Maps
                         </a>
@@ -514,10 +555,12 @@ const ListingDesktopView = ({
                       <div style={S('text-center w-50p pull-left')}>
                         <a
                           target="_blank"
-                          href={`http://maps.google.com/?q=${listing.property.address
-                            .geo_source_formatted_address_google}&layer=c&cbll=${listing
-                            .property.address.location.latitude},${listing.property
-                            .address.location.longitude}`}
+                          href={`http://maps.google.com/?q=${
+                            listing.property.address
+                              .geo_source_formatted_address_google
+                          }&layer=c&cbll=${
+                            listing.property.address.location.latitude
+                          },${listing.property.address.location.longitude}`}
                         >
                           Street View
                         </a>
@@ -550,7 +593,10 @@ const ListingDesktopView = ({
                   <div style={S('font-15 color-4a4a4a mb-10')}>
                     <span>{bedroom_count} Beds</span>
                     &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-                    <span data-balloon-pos="down" data-balloon={bathroomBaloonText}>
+                    <span
+                      data-balloon-pos="down"
+                      data-balloon={bathroomBaloonText}
+                    >
                       {bathroom_count} Baths
                     </span>
                     &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
@@ -567,11 +613,15 @@ const ListingDesktopView = ({
                 <div style={S('mb-30 font-15')}>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('mb-30')}>
-                      <div style={S('fw-600 mb-10 font-18')}>Cost Breakdown</div>
+                      <div style={S('fw-600 mb-10 font-18')}>
+                        Cost Breakdown
+                      </div>
                       {renderFeatures('Price/sqt', `$${price_sq_foot}`)}
                       {renderFeatures(
                         'Unexempt Taxes',
-                        listing.unexempt_taxes ? `$${listing.unexempt_taxes}` : '0'
+                        listing.unexempt_taxes
+                          ? `$${listing.unexempt_taxes}`
+                          : '0'
                       )}
                       {renderFeatures(
                         'HOA Fee',
@@ -590,7 +640,10 @@ const ListingDesktopView = ({
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('fw-600 mb-10 font-18')}>Key Facts</div>
                     {renderFeatures('Year Built', property.year_built)}
-                    {renderFeatures('Style of House', property.architectural_style)}
+                    {renderFeatures(
+                      'Style of House',
+                      property.architectural_style
+                    )}
                     {renderFeatures('Subdivition', property.subdivition_name)}
                     {renderFeatures('Acres', property.lot_size_area)}
                     {renderFeatures('Stories', property.number_of_stories)}
@@ -645,25 +698,40 @@ const ListingDesktopView = ({
                         'Interior Features',
                         property.interior_features
                       )}
-                      {renderFeatures('Alarm/Security', property.security_features)}
+                      {renderFeatures(
+                        'Alarm/Security',
+                        property.security_features
+                      )}
                       {renderFeatures('Flooring', property.flooring)}
                     </div>
                   </div>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('h-35')} />
-                    {renderFeatures('Exterior Features', property.exterior_features)}
-                    {renderFeatures('Construction', property.construction_materials)}
+                    {renderFeatures(
+                      'Exterior Features',
+                      property.exterior_features
+                    )}
+                    {renderFeatures(
+                      'Construction',
+                      property.construction_materials
+                    )}
                     {renderFeatures('Foundation', property.foundation_details)}
                     {renderFeatures('Roof', property.roof)}
                   </div>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('fw-600 font-18 mb-10')}>Schools</div>
-                    {renderFeatures('School District', property.school_district)}
+                    {renderFeatures(
+                      'School District',
+                      property.school_district
+                    )}
                     {renderFeatures(
                       'Elementary School',
                       property.elementary_school_name
                     )}
-                    {renderFeatures('Middle School', property.middle_school_name)}
+                    {renderFeatures(
+                      'Middle School',
+                      property.middle_school_name
+                    )}
                     {renderFeatures(
                       'Junior High School',
                       property.junior_high_school_name
@@ -688,7 +756,7 @@ const ListingDesktopView = ({
   }
 
   let viewer_wrap_style = S(
-    `absolute h-100p bg-fff t-0 l-0 z-10 ml-110 w-${viewer_width}`
+    `absolute h-100p bg-fff t-0 l-0 z-10 ml-130 w-${viewer_width}`
   )
 
   if (!user || data.is_widget) {
@@ -724,8 +792,8 @@ const ListingDesktopView = ({
           <CarouselItem key={`gallery-image-${gallery_image_url[0]}${i}`}>
             <div
               style={S(
-                `w-100p h-500 
-                pull-left text-center 
+                `w-100p h-500
+                pull-left text-center
                 bg-efefef bg-cover bg-center bg-url(${gallery_image_url})`
               )}
             />
@@ -774,22 +842,35 @@ const ListingDesktopView = ({
   let right_area
 
   if (user && Object.keys(listing).length > 0) {
-    const login_btn_color = Brand.color('primary', '006aff')
-
     right_area = (
       <div style={nav_bar_style}>
-        <div style={S('absolute r-120 t-8')}>
-          <FavoriteHeart listing={listing} width="40px" height="40px" />
-        </div>
-        <Button
-          onClick={showShareModal}
-          style={S(
-            `absolute color-fff r-20 t-10 bg-${login_btn_color} border-1-solid-${login_btn_color}`
-          )}
-          type="button"
+        <div
+          style={{
+            position: 'absolute',
+            right: '120px',
+            top: '4px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
         >
+          <div style={{ marginRight: '16px' }}>
+            <FavoriteHeart listing={listing} width="40px" height="40px" />
+          </div>
+          <Follow
+            dropdownRightAlign="0px"
+            statuses={listingStatuses}
+            activeStatuses={
+              (listing.user_listing_notification_setting &&
+                listing.user_listing_notification_setting.status) ||
+              []
+            }
+            isFetching={listing.isFetching}
+            onClick={onClickFollow}
+          />
+        </div>
+        <ShareButton onClick={showShareModal}>
           Share &nbsp;&nbsp;<i className="fa fa-share" />
-        </Button>
+        </ShareButton>
       </div>
     )
   }
@@ -833,8 +914,8 @@ const ListingDesktopView = ({
 
     claim_account_message = (
       <div style={S('bg-2196f3 color-fff w-100p font-17 p-20 text-center')}>
-        This listing was shared to {contact_info}. Claim your account to save this
-        listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
+        This listing was shared to {contact_info}. Claim your account to save
+        this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
         <Link
           style={{
             padding: '1rem',
@@ -866,8 +947,9 @@ const ListingDesktopView = ({
               className="btn btn-primary"
               to={`/signin?redirectTo=${encodeURIComponent(
                 window.location.pathname
-              )}${contact_info ? `&username=${contact_info}` : ''}${window.location
-                .search}`}
+              )}${contact_info ? `&username=${contact_info}` : ''}${
+                window.location.search
+              }`}
             >
               Log in
             </Link>
@@ -887,8 +969,8 @@ const ListingDesktopView = ({
       profile_image_area = (
         <div
           style={S(
-            `w-300 h-300 
-            center-block br-300 
+            `w-300 h-300
+            center-block br-300
             bg-cover bg-top bg-url(${brand_agent.cover_image_url})`
           )}
         />
@@ -898,7 +980,9 @@ const ListingDesktopView = ({
     let phone_area
 
     if (brand_agent.phone_number) {
-      phone_area = <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
+      phone_area = (
+        <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
+      )
     }
 
     brand_agent_area = (
@@ -979,6 +1063,9 @@ const ListingDesktopView = ({
 }
 
 export default compose(
+  connect(null, {
+    changeListingFollowStatuses
+  }),
   withState('shareModalIsActive', 'setShareModalIsActive', false),
   withState('galleryModalIsActive', 'setGalleryModalState', false),
   withState('galleryModalDirection', 'setGalleryModalDirection', ''),
@@ -1054,7 +1141,11 @@ export default compose(
       galleryModalIsActive,
       handleModalGalleryNav
     }) => event => {
-      if (event.keyCode === 27 && !galleryModalIsActive && container !== 'modal') {
+      if (
+        event.keyCode === 27 &&
+        !galleryModalIsActive &&
+        container !== 'modal'
+      ) {
         browserHistory.goBack()
       }
 
@@ -1067,11 +1158,19 @@ export default compose(
           handleModalGalleryNav(null, 'next')
         }
       }
+    },
+    onClickFollow: ({ changeListingFollowStatuses, listing }) => statuses => {
+      !listing.isFetching &&
+        changeListingFollowStatuses(listing.id, statuses, 'LISTING')
     }
   }),
   lifecycle({
     componentDidMount() {
-      document.addEventListener('keydown', this.props.windowKeyDownHandler, false)
+      document.addEventListener(
+        'keydown',
+        this.props.windowKeyDownHandler,
+        false
+      )
 
       if (typeof window !== 'undefined') {
         const clipboard = require('clipboard')

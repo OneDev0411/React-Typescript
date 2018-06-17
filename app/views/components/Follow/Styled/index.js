@@ -9,11 +9,12 @@ export const DropDownContainer = styled.div`
     ${({ isFollowing }) => (isFollowing ? '#d4dfe6' : '#2196f3')};
   border-radius: 3px;
   background-color: #ffffff;
+  height: 32px;
 `
 
 export const DropDownMenu = styled.div`
   position: absolute;
-  right: ${({ rightAlign }) => (rightAlign ? '40px' : 'inherit')};
+  right: ${({ dropdownRightAlign }) => dropdownRightAlign || 'inherit'};
   z-index: 1000;
   background: #fff;
   width: 280px;
