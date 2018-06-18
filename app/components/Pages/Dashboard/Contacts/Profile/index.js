@@ -9,7 +9,6 @@ import { getContactStage } from '../../../../../models/contacts/helpers/get-cont
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
-import Stage from './Stage'
 import Header from './Header'
 import Information from './Information'
 import { ImportantDates } from './ImportantDates'
@@ -99,29 +98,7 @@ class ContactProfile extends React.Component {
     this.setState({ tasks })
   }
 
-  handleChangeStage = async text => {
-    const { contact, attributeDefs, upsertContactAttributes } = this.props
-    const { id: contactId } = contact
-    const is_primary = true
-    let stage = getContactStage(contact)
-    const attribute_def = selectDefinitionByName(attributeDefs, 'stage')
-
-    if (stage && stage.id) {
-      stage = {
-        text,
-        is_primary,
-        id: stage.id
-      }
-    } else {
-      stage = {
-        text,
-        is_primary,
-        attribute_def
-      }
-    }
-
-    return upsertContactAttributes(contactId, [stage])
-  }
+  goBack = () => browserHistory.push('/dashboard/contacts')
 
   handleAddNote = async text => {
     const { contact, upsertContactAttributes, attributeDefs } = this.props
@@ -193,11 +170,6 @@ class ContactProfile extends React.Component {
           <SideColumnWrapper>
             <div>
               <Information contact={contact} />
-
-              <Stage
-                contact={contact}
-                onChange={stage => this.handleChangeStage(stage)}
-              />
 
               <Names contact={contact} />
 
@@ -294,10 +266,7 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    getContact,
-    upsertContactAttributes
-  }
-)(ContactProfile)
+export default connect(mapStateToProps, {
+  getContact,
+  upsertContactAttributes
+})(ContactProfile)
