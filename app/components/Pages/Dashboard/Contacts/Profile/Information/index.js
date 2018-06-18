@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import fecha from 'fecha'
 import timeago from 'timeago.js'
 import Flex from 'styled-flex-component'
 
@@ -12,7 +11,7 @@ import { Title, LastSeen } from './styled'
 
 import {
   getContactUsers,
-  getContactStatus,
+  getContactOnlineMeta,
   getAttributeFromSummary
 } from '../../../../../../models/contacts/helpers'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
@@ -123,7 +122,7 @@ class Info extends React.Component {
   render() {
     const { isCreatingRoom, isDeleting } = this.state
     const { contact } = this.props
-    const lastSeen = getContactStatus(contact)
+    const lastSeen = getContactOnlineMeta(contact)
 
     if (isDeleting) {
       return <DeletingMessage />
@@ -138,7 +137,7 @@ class Info extends React.Component {
         {lastSeen && (
           <LastSeen>{`last seen ${timeago().format(
             lastSeen.last_seen_at * 1000
-          )}`}</LastSeen>
+          )} on ${lastSeen.last_seen_by}`}</LastSeen>
         )}
 
         <Flex full>
