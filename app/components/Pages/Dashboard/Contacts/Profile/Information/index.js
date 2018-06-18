@@ -22,6 +22,7 @@ import ActionButton from '../../../../../../views/components/Button/ActionButton
 import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
 import TrashIcon from '../../../../../../views/components/SvgIcons/TrashIcon'
 import DeletingMessage from './components/DeletingMessage'
+import Stage from '../../../../../../views/components/ContactStage'
 
 class Info extends React.Component {
   state = {
@@ -124,7 +125,7 @@ class Info extends React.Component {
     const { contact } = this.props
     const lastSeen = getContactStatus(contact)
 
-    console.log(lastSeen)
+    // console.log(lastSeen)
 
     if (isDeleting) {
       return <DeletingMessage />
@@ -145,16 +146,33 @@ class Info extends React.Component {
           )}`}</LastSeen>
         )}
 
-        <div>
+        <Flex full>
+          <Stage
+            style={{
+              width: 'calc(100% - 57px)'
+            }}
+            buttonStyle={{
+              width: '100%',
+              padding: '0 0.5em',
+              color: '#17283a',
+              background: '#fff',
+              borderRadius: '3px',
+              border: '1px solid #e1e9ef'
+            }}
+            contact={contact}
+          />
           {this.shouldShowChatButton(contact) && (
             <ActionButton
               disabled={isCreatingRoom}
               onClick={this.handleOnClickChat}
+              style={{
+                marginLeft: '1em'
+              }}
             >
               {isCreatingRoom ? 'Connecting...' : 'Chat'}
             </ActionButton>
           )}
-        </div>
+        </Flex>
 
         <ShadowButton
           style={{

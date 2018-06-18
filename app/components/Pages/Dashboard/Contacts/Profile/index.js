@@ -72,30 +72,6 @@ class ContactProfile extends React.Component {
 
   goBack = () => browserHistory.push('/dashboard/contacts')
 
-  handleChangeStage = async text => {
-    const { contact, attributeDefs, upsertContactAttributes } = this.props
-    const { id: contactId } = contact
-    const is_primary = true
-    let stage = getContactStage(contact)
-    const attribute_def = selectDefinitionByName(attributeDefs, 'stage')
-
-    if (stage && stage.id) {
-      stage = {
-        text,
-        is_primary,
-        id: stage.id
-      }
-    } else {
-      stage = {
-        text,
-        is_primary,
-        attribute_def
-      }
-    }
-
-    return upsertContactAttributes(contactId, [stage])
-  }
-
   handleAddNote = async text => {
     const { contact, upsertContactAttributes, attributeDefs } = this.props
     const { id: contactId } = contact
@@ -158,11 +134,6 @@ class ContactProfile extends React.Component {
         <div className="content" style={{ minHeight: 'calc(100vh - 55px)' }}>
           <div className="left-pane">
             <Information contact={contact} />
-
-            <Stage
-              contact={contact}
-              onChange={stage => this.handleChangeStage(stage)}
-            />
 
             <Names contact={contact} />
 
