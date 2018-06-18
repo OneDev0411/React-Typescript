@@ -5,11 +5,21 @@ import Import from '../Import'
 import PageHeader from '../../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
-export function Header(props) {
+import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
+
+export function Header({ user, title, isSideMenuOpen, onMenuTriggerChange }) {
   return (
-    <PageHeader title="Contacts" backButton={false}>
+    <PageHeader isFlat>
+      <PageHeader.Title backButton={false}>
+        <MenuTrigger
+          tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}
+          onClick={onMenuTriggerChange}
+        />
+        <PageHeader.Heading>{title}</PageHeader.Heading>
+      </PageHeader.Title>
+
       <PageHeader.Menu>
-        <Import userId={props.user.id} />
+        <Import userId={user.id} />
         <ActionButton
           style={{ padding: '0.75em' }}
           onClick={() => browserHistory.push('/dashboard/contacts/new')}

@@ -1,12 +1,12 @@
 import React from 'react'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 
-export default ({ selectedRows, disabled }) => {
-  let idsQuery = ''
+export default ({ exportIds, disabled }) => {
+  let url = '/api/contacts/export/outlook'
 
-  Object.keys(selectedRows).forEach(contctId => {
-    idsQuery += `&ids[]=${contctId}`
-  })
+  if (Array.isArray(exportIds) && exportIds.length > 0) {
+    url = `${url}?ids[]=${exportIds.join('&ids[]=')}`
+  }
 
   return (
     <div className="list--secondary-button">
@@ -15,7 +15,7 @@ export default ({ selectedRows, disabled }) => {
         overlay={<Tooltip id="tooltip">Export contacts to a CSV file</Tooltip>}
       >
         <a
-          href={`/api/contacts/export/outlook?${idsQuery}`}
+          href={url}
           className="button c-button--shadow"
           style={{
             opacity: disabled ? 0.7 : 1,

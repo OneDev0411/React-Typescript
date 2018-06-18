@@ -8,7 +8,9 @@ const Container = styled.div`
 `
 
 function PageMenu({ children }) {
-  return <Container>{children}</Container>
+  return (
+    <Container>{React.Children.map(children, children => children)}</Container>
+  )
 }
 
 export default PageMenu

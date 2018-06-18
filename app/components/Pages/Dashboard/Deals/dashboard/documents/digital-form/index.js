@@ -21,12 +21,14 @@ export default ({ deal, task }) => {
         </div>
 
         <div className="actions">
-          <Link
-            className="button"
-            to={`/dashboard/deals/${deal.id}/form-viewer/${task.id}`}
-          >
-            View
-          </Link>
+          {task.submission && (
+            <Link
+              className="button"
+              to={`/dashboard/deals/${deal.id}/form-viewer/${task.id}`}
+            >
+              View
+            </Link>
+          )}
 
           <Link
             className="button"

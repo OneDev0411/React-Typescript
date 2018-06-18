@@ -11,7 +11,7 @@ export default ({
   onChangeDealStatus
 }) => {
   const statuses = property_type.includes('Lease')
-    ? ['Lease', 'Lease Contract', 'Leased']
+    ? ['Active', 'Lease Contract']
     : [
         'Active Contingent',
         'Active Kick Out',

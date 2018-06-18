@@ -80,7 +80,12 @@ class Task extends React.Component {
           onClick={() => this.handleStatus(!isDone)}
         />
         <div className="c-tasks-timeline__item__info">
-          <h4 className="c-tasks-timeline__item__title">{title}</h4>
+          <h4
+            className="c-tasks-timeline__item__title"
+            style={{ textDecoration: isDone ? 'line-through' : 'initial' }}
+          >
+            {title}
+          </h4>
           <div>
             {[task_type, formatedDueTime].filter(i => i).map((item, index) => (
               <span

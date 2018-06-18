@@ -21,6 +21,21 @@ class Filter extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { active } = nextProps
+
+    if (!active) {
+      const tabs = this.getTabs()
+
+      // get active tab
+      const activeTab = tabs && tabs[0]
+
+      if (activeTab) {
+        this.setFilter(activeTab)
+      }
+    }
+  }
+
   /**
    * set filter tab tooltip
    */
@@ -60,21 +75,6 @@ class Filter extends React.Component {
     })
 
     return counter
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { active } = nextProps
-
-    if (!active) {
-      const tabs = this.getTabs()
-
-      // get active tab
-      const activeTab = tabs && tabs[0]
-
-      if (activeTab) {
-        this.setFilter(activeTab)
-      }
-    }
   }
 
   render() {

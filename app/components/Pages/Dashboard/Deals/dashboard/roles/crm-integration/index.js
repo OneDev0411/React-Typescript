@@ -104,7 +104,8 @@ class RoleFormWrapper extends React.Component {
       modalTitle,
       allowedRoles,
       onHide,
-      isOpen
+      isOpen,
+      isCommissionRequired
     } = this.props
 
     return (
@@ -114,6 +115,7 @@ class RoleFormWrapper extends React.Component {
         dealSide={dealSide}
         modalTitle={modalTitle}
         isSubmitting={isSaving}
+        isCommissionRequired={isCommissionRequired}
         isOpen={isOpen}
         onHide={onHide}
         onFormSubmit={this.onSubmit}

@@ -8,13 +8,16 @@
         background-color: transparent;
       }
       .caret {
-        margin-left: 10px;
+        margin-left: 5px;
       }
     }
   }
 
   %drp-menu {
     ul {
+      max-height: 10em;
+      overflow: auto;
+
       li {
         border-bottom: 1px solid #eaeaea;
         padding: 5px 0;
@@ -27,6 +30,10 @@
             color: #2196f3;
           }
         }
+      }
+
+      @media (min-width: 100em) {
+        max-height: initial;
       }
     }
   }
