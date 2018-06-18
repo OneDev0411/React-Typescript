@@ -13,28 +13,19 @@ import {
 } from '../../../../../../../../store_actions/contacts'
 import {
   getContactAvatar,
+  getContactOnlineStatus,
   getAttributeFromSummary
 } from '../../../../../../../../models/contacts/helpers'
-
-// export class ContactAvatar extends React.Component {
-//   state = {
-//     isUploading: false,
-//     avatarImageSrc: getContactAvatar(this.props.contact)
-//   }
-// }
 
 const AvatarUploader = props => (
   <Uploader {...props} avatar={{ src: props.avatar }} />
 )
 
 function mapStateToProps(state, props) {
-  const { contact } = props
-  const { id: contactId } = contact
-  const {
-    contacts: { attributeDefs }
-  } = state
-
-  return { contactId, attributeDefs }
+  return {
+    attributeDefs: state.contacts.attributeDefs,
+    isOnline: getContactOnlineStatus(props.contact)
+  }
 }
 
 export default compose(
@@ -45,11 +36,10 @@ export default compose(
   ),
   withHandlers({
     handleOnChange: ({
+      attributeDefs,
       contact,
-      contactId,
       setAvatar,
       setUploading,
-      attributeDefs,
       upsertContactAttributes
     }) => async event => {
       const file = event.target.files[0]
@@ -64,7 +54,7 @@ export default compose(
           setAvatar(reader.result)
           setUploading(true)
 
-          const image = await uploadAttachments({ contactId, file })
+          const image = await uploadAttachments({ contactId: contact.id, file })
           const { url: text } = image
 
           const attribute_def = selectDefinitionByName(
@@ -99,7 +89,7 @@ export default compose(
             ]
           }
 
-          await upsertContactAttributes(contactId, attribute)
+          await upsertContactAttributes(contact.id, attribute)
         } catch (error) {
           setAvatar(null)
           throw error
@@ -111,10 +101,10 @@ export default compose(
       reader.readAsDataURL(file)
     },
     handleOnDelete: ({
-      setAvatar,
-      contactId,
       attributeDefs,
-      deleteAttributes
+      contact,
+      deleteAttributes,
+      setAvatar
     }) => async () => {
       try {
         const attribute_def = selectDefinitionByName(
@@ -131,7 +121,7 @@ export default compose(
         const avatar = getContactAvatar(contact, attribute_def.id)
 
         if (avatar && avatar.id) {
-          await deleteAttributes(contactId, [avatar.id])
+          await deleteAttributes(contact.id, [avatar.id])
         }
 
         setAvatar(null)

@@ -9,18 +9,21 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 1000%;
+  border-radius: 100%;
   border: solid 8px #f4f6f9;
   background-color: #cad4db;
 `
 
 export const Status = styled.div`
-  width: 1em;
-  height: 1em;
-  background-color: ${props =>
-    props.status === 'online' ? '#35b863' : '#8DA2B5'};
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  width: 32px;
+  height: 32px;
+  z-index: 1;
   border: solid 8px #f4f6f9;
-  border-radius: 1000%;
+  border-radius: 100%;
+  background-color: ${props => (props.isOnline ? '#35b863' : '#8DA2B5')};
 `
 
 export const Image = styled.img`

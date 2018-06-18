@@ -125,8 +125,6 @@ class Info extends React.Component {
     const { contact } = this.props
     const lastSeen = getContactStatus(contact)
 
-    // console.log(lastSeen)
-
     if (isDeleting) {
       return <DeletingMessage />
     }
@@ -140,9 +138,6 @@ class Info extends React.Component {
         {lastSeen && (
           <LastSeen>{`last seen ${timeago().format(
             lastSeen.last_seen_at * 1000
-          )} @${fecha.format(
-            lastSeen.last_seen_at * 1000,
-            'MM:DD A'
           )}`}</LastSeen>
         )}
 

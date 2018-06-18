@@ -35,10 +35,9 @@ AvatarUploader.defaultProps = {
 
 export function AvatarUploader({
   avatar,
-  status,
+  isOnline,
   isUploading,
-  handleOnChange,
-  handleOnDelete
+  handleOnChange
 }) {
   return (
     <Container size={avatar.size}>
@@ -47,7 +46,7 @@ export function AvatarUploader({
       ) : (
         <Initials>NH</Initials>
       )}
-      {status && <Status status={status} />}
+      <Status isOnline={isOnline} />
       <Trigger htmlFor="avatarImage" hasImage={avatar.src}>
         <TriggerText>{avatar.src ? 'Change' : 'Upload'}</TriggerText>
       </Trigger>
