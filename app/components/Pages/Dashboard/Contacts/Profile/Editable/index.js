@@ -31,9 +31,13 @@ class EditableInput extends React.Component {
 
   onChange = async event => {
     const { validator } = this.props
-    const text = event.target.value.trim()
+    let text = event.target.value
 
-    if (typeof validator === 'function' && text) {
+    if (typeof text === 'string' && text.trim().length === 0) {
+      return this.setState({ text: '', error: false })
+    }
+
+    if (typeof validator === 'function') {
       const error = await validator(text)
 
       return this.setState({ text, error: !error })
@@ -78,14 +82,14 @@ class EditableInput extends React.Component {
   }
 
   onSubmit = () => {
-    const { text, error } = this.state
+    if (this.state.error) {
+      return false
+    }
+
     const { onChange, field, handleParse, handleFormat } = this.props
     const { data_type } = field.attribute_def
     const fieldPreviousValue = field[data_type]
-
-    if (error) {
-      return false
-    }
+    const text = this.state.text.replace(/^\s+|\s+$|\s+(?=\s)/g, '')
 
     if (
       typeof onChange === 'function' &&
@@ -94,7 +98,7 @@ class EditableInput extends React.Component {
       onChange({ ...field, [data_type]: handleParse(text) })
     }
 
-    this.setState({ isActive: false })
+    this.setState({ isActive: false, text })
   }
 
   onClickEdit = () => {
