@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Comments from '../../../Chatroom/Messages/light'
-import TaskRoom from '../../../Chatroom/Services/notification'
+import TaskRoom from '../../../../../../services/notification/chat'
 import { addNewRoom } from '../../../../../../store_actions/chatroom/room'
 
 class Comment extends React.Component {

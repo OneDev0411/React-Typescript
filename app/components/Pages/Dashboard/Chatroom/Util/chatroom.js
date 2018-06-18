@@ -4,7 +4,7 @@ import _ from 'underscore'
 
 import store from '../../../../../stores'
 import ChatroomModel from '../../../../../models/Chatroom'
-import ChatNotification from '../Services/notification'
+import ChatNotification from '../../../../../services/notification/chat'
 import {
   getRooms,
   getMessages,
