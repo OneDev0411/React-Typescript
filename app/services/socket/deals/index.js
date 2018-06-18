@@ -1,11 +1,8 @@
 import _ from 'underscore'
-import Socket from '../../../../../services/socket'
-import store from '../../../../../stores'
-import { getDeal, dealArchived } from '../../../../../store_actions/deals'
-import {
-  getActiveTeamACL,
-  getActiveTeamId
-} from '../../../../../utils/user-teams'
+import Socket from '..'
+import store from '../../../stores'
+import { getDeal, dealArchived } from '../../../store_actions/deals'
+import { getActiveTeamACL, getActiveTeamId } from '../../../utils/user-teams'
 
 export default class DealSocket extends Socket {
   constructor(user) {

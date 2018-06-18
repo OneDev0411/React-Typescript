@@ -5,10 +5,13 @@ import { batchActions } from 'redux-batched-actions'
 import _ from 'underscore'
 
 import PopupWindow from './window'
-import ChatNotification from '../Services/notification'
+import ChatNotification from '../../../../../services/notification/chat'
 
 import * as popupActionCreators from '../../../../../store_actions/chatroom/popups'
-import { changeActiveRoom, toggleInstantMode } from '../../../../../store_actions/chatroom'
+import {
+  changeActiveRoom,
+  toggleInstantMode
+} from '../../../../../store_actions/chatroom'
 
 /**
  * when user clicks on minimize icon
@@ -31,10 +34,7 @@ const onToggleMinimize = (props, roomId, settings) => {
     newActiveRoom = roomId
   }
 
-  batchActions([
-    minimizeChatPopup(roomId),
-    changeActiveRoom(newActiveRoom)
-  ])
+  batchActions([minimizeChatPopup(roomId), changeActiveRoom(newActiveRoom)])
 }
 
 /**
@@ -59,25 +59,20 @@ const onClose = (props, roomId) => {
   let newActiveRoom = activeRoom === roomId ? null : activeRoom
 
   /**
-  * when user closes a popup:
-  * if the room was active and there are more that one popups then
-  * make first popup active
-  */
+   * when user closes a popup:
+   * if the room was active and there are more that one popups then
+   * make first popup active
+   */
   if (newActiveRoom === null && _.size(popups) >= 2) {
-    const rooms = Object
-      .keys(popups)
-      .filter(room => room !== roomId)
+    const rooms = Object.keys(popups).filter(room => room !== roomId)
 
     newActiveRoom = rooms[0]
   }
 
-  batchActions([
-    changeActiveRoom(newActiveRoom),
-    closeChatPopup(roomId)
-  ])
+  batchActions([changeActiveRoom(newActiveRoom), closeChatPopup(roomId)])
 }
 
-const ChatPopups = (props) => {
+const ChatPopups = props => {
   const {
     user,
     rooms,
@@ -87,15 +82,17 @@ const ChatPopups = (props) => {
     changeActiveRoom
   } = props
 
-  if (!popups) { return false }
+  if (!popups) {
+    return false
+  }
 
   // counter for popups
   let counter = 1
 
   return (
     <div>
-      {
-        _.map(popups, (settings, roomId) => <PopupWindow
+      {_.map(popups, (settings, roomId) => (
+        <PopupWindow
           key={`CHAT_POPUP_${roomId}`}
           number={counter++}
           user={user}
@@ -107,8 +104,8 @@ const ChatPopups = (props) => {
           onMaximize={roomId => onMaximize(props, roomId)}
           onClose={roomId => onClose(props, roomId)}
           onChangeActive={roomId => changeActiveRoom(roomId)}
-        />)
-      }
+        />
+      ))}
     </div>
   )
 }
@@ -121,11 +118,14 @@ function mapStateToProps({ chatroom }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    ...popupActionCreators,
-    ...{ changeActiveRoom },
-    ...{ toggleInstantMode }
-  }, dispatch)
+  return bindActionCreators(
+    {
+      ...popupActionCreators,
+      ...{ changeActiveRoom },
+      ...{ toggleInstantMode }
+    },
+    dispatch
+  )
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatPopups)

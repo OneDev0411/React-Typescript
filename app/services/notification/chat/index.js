@@ -1,7 +1,7 @@
 import _ from 'underscore'
-import store from '../../../../../stores'
-import Chatroom from '../Util/chatroom'
-import NotificationService from '../../../../../services/notification'
+import store from '../../../stores'
+import Chatroom from '../../../components/Pages/Dashboard/Chatroom/Util/chatroom'
+import NotificationService from '../../../services/notification'
 import {
   fetchAndCreateExistingRoom,
   addMembersToRoom,
@@ -10,7 +10,7 @@ import {
   updateMessageDeliveries,
   acknowledgeRoom,
   updateRoomTime
-} from '../../../../../store_actions/chatroom'
+} from '../../../store_actions/chatroom'
 
 export default class ChatNotification extends NotificationService {
   constructor(user) {
