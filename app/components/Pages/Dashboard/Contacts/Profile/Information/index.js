@@ -134,11 +134,14 @@ class Info extends React.Component {
 
         <Title>{getAttributeFromSummary(contact, 'display_name')}</Title>
 
-        {lastSeen && (
-          <LastSeen>{`last seen ${timeago().format(
-            lastSeen.last_seen_at * 1000
-          )} on ${lastSeen.last_seen_by}`}</LastSeen>
-        )}
+        {lastSeen &&
+          lastSeen.last_seen_at && (
+            <LastSeen>{`last seen ${timeago().format(
+              lastSeen.last_seen_at * 1000
+            )}${
+              lastSeen.last_seen_type ? ` on ${lastSeen.last_seen_type}` : ''
+            }`}</LastSeen>
+          )}
 
         <Flex full>
           <Stage
@@ -183,8 +186,11 @@ class Info extends React.Component {
   }
 }
 
-export default connect(({ user }) => ({ user }), {
-  confirmation,
-  createRoom,
-  deleteContacts
-})(Info)
+export default connect(
+  ({ user }) => ({ user }),
+  {
+    confirmation,
+    createRoom,
+    deleteContacts
+  }
+)(Info)

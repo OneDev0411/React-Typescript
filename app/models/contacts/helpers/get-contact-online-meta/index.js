@@ -15,10 +15,12 @@ export function getContactOnlineMeta(contact) {
     (a, b) => (a.last_seen_at > b.last_seen_at ? a : b)
   )
 
+  console.log(latestOnlineUser)
+
   if (latestOnlineUser) {
     return {
       last_seen_at: latestOnlineUser.last_seen_at,
-      last_seen_by: latestOnlineUser.last_seen_type
+      last_seen_type: latestOnlineUser.last_seen_type
     }
   }
 
