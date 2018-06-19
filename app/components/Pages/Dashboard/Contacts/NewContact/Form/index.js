@@ -203,7 +203,7 @@ class NewContactForm extends Component {
                   defaultOptions={STAGE_OPTIONS}
                   component={Select}
                   name="stage"
-                  title="State"
+                  title="Stage"
                 />
               </div>
               <Footer style={{ justifyContent: 'space-between' }}>
@@ -245,7 +245,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { createContacts })(NewContactForm)
+export default connect(
+  mapStateToProps,
+  { createContacts }
+)(NewContactForm)
 
 function getDefaultOptions(options) {
   return options.map(item => ({

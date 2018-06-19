@@ -6,7 +6,6 @@ export const Container = styled.div`
   height: 32px;
   line-height: 32px;
   vertical-align: middle;
-  margin-bottom: 5px;
 `
 export const List = styled.div`
   position: absolute;
@@ -20,6 +19,7 @@ export const List = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   z-index: 1000;
+  background: #fff;
 `
 
 export const ListItem = styled.div`

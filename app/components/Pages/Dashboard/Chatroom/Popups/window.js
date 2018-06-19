@@ -2,7 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import Messages from '../Messages'
 import Toolbar from './toolbar'
-import ChatNotification from '../Services/notification'
+import ChatNotification from '../../../../../services/notification/chat'
 import ClickOutside from 'react-click-outside'
 
 /**

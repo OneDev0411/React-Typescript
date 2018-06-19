@@ -61,6 +61,56 @@ function setCurrentPage(list, page) {
   }
 }
 
+function selectRow(list, page, id) {
+  return {
+    type: actionTypes.SELECT_ROW,
+    payload: {
+      page,
+      id
+    },
+    meta: {
+      list
+    }
+  }
+}
+
+function deselectRow(list, page, id) {
+  return {
+    type: actionTypes.DESELECT_ROW,
+    payload: {
+      page,
+      id
+    },
+    meta: {
+      list
+    }
+  }
+}
+
+function selectAllRows(list, page) {
+  return {
+    type: actionTypes.SELECT_ALL_ROWS,
+    payload: {
+      page
+    },
+    meta: {
+      list
+    }
+  }
+}
+
+function deselectAllRows(list, page) {
+  return {
+    type: actionTypes.DESELECT_ALL_ROWS,
+    payload: {
+      page
+    },
+    meta: {
+      list
+    }
+  }
+}
+
 export function clearPagination(list) {
   return {
     type: actionTypes.CLEAR_PAGINATION,
@@ -84,3 +134,15 @@ export const createUpdatePagesActionCreator = list => pages =>
 
 export const createCurrentPageActionCreator = list => page =>
   setCurrentPage(list, page)
+
+export const createSelectRowActionCreator = list => (page, id) =>
+  selectRow(list, page, id)
+
+export const createDeselectRowActionCreator = list => (page, id) =>
+  deselectRow(list, page, id)
+
+export const createSelectAllRowsActionCreator = list => page =>
+  selectAllRows(list, page)
+
+export const createDeselectAllRowsActionCreator = list => page =>
+  deselectAllRows(list, page)

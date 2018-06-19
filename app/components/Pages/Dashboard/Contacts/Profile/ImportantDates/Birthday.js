@@ -1,9 +1,9 @@
 import React from 'react'
 import { format } from 'fecha'
 
-import MultiFields from '../components/MultiFields'
+import MultiFields from '../Details/components/MultiFields'
 
-export default function Birthdays({ contact }) {
+export function Birthday(props) {
   const validator = date => {
     /*
       Match dates (M/D/YY, M/D/YYY, MM/DD/YY, MM/DD/YYYY)
@@ -36,7 +36,7 @@ export default function Birthdays({ contact }) {
   return (
     <MultiFields
       attributeName="birthday"
-      contact={contact}
+      contact={props.contact}
       handleFormat={handleFormat}
       handleParse={handleParse}
       placeholder="MM/DD/YYYY"

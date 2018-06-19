@@ -1,41 +1,38 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { batchActions } from 'redux-batched-actions'
+
+import CsvParser from 'papaparse'
 import _ from 'underscore'
+
 import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
-import CsvParser from 'papaparse'
+
 import {
   updateCsvFieldsMap,
   updateCsvInfo,
   updateWizardStep,
   setCurrentStepValidation
 } from '../../../../../../store_actions/contacts'
+
 import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from '../../../../../../constants/contacts'
+
 import { selectDefinition } from '../../../../../../reducers/contacts/attributeDefs'
+
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 
 class Mapper extends React.Component {
-  // constructor(props) {
-  //   super(props)
-  //   this.state = {
-  //     // showEmptyColumns: false
-  //   }
-  // }
-
   componentDidMount() {
     this.analyze()
   }
 
-  analyze = () => {
-    const { file } = this.props
-
-    CsvParser.parse(file, {
+  analyze = () =>
+    CsvParser.parse(this.props.file, {
       skipEmptyLines: true,
       complete: results => this.onCsvParseComplete(results)
     })
-  }
 
-  onCsvParseComplete = ({ data, meta, errors }) => {
+  onCsvParseComplete = ({ data, errors }) => {
     const {
       updateCsvInfo,
       showMessageModal,
@@ -59,19 +56,17 @@ class Mapper extends React.Component {
       })
     }
 
-    const columns = this.findEmptyColumns(colNames, contacts)
-
-    updateCsvInfo({
-      columns,
-      meta,
-      errors,
-      rows: contacts
-    })
-
-    setCurrentStepValidation(true)
+    batchActions([
+      updateCsvInfo({
+        errors,
+        columns: this.analyzeColumns(colNames, contacts),
+        rowsCount: contacts.length
+      }),
+      setCurrentStepValidation(true)
+    ])
   }
 
-  findEmptyColumns = (columns, fields) => {
+  analyzeColumns = (columns, fields) => {
     const list = {}
 
     columns.forEach((name, index) => {
@@ -108,11 +103,6 @@ class Mapper extends React.Component {
   onChangeLabel = (fieldName, label) =>
     this.props.updateCsvFieldsMap(fieldName, { label })
 
-  // toggleShowEmptyColumns = () =>
-  //   this.setState({
-  //     showEmptyColumns: !this.state.showEmptyColumns
-  //   })
-
   getMappedField = name => {
     const { attributeDefs: defs, mappedFields } = this.props
     const field = mappedFields[name]
@@ -130,7 +120,6 @@ class Mapper extends React.Component {
 
   render() {
     const { columns } = this.props
-    // const { showEmptyColumns } = this.state
 
     if (columns.length === 0) {
       return false
@@ -176,25 +165,6 @@ class Mapper extends React.Component {
             )
           })
           .value()}
-
-        {/* {showEmptyColumns &&
-          _.chain(columns)
-            .pick(({ hasValue }) => !hasValue)
-            .map((info, colName) => (
-              <div key={info.index} className="column-row">
-                <div className="name is-empty">{colName}</div>
-              </div>
-            ))
-            .value()}
-
-        <div className="column-row heading">
-          <div
-            className="name show-empty-cta"
-            onClick={this.toggleShowEmptyColumns}
-          >
-            {showEmptyColumns ? 'Hide' : 'Show'} Empty Columns
-          </div>
-        </div> */}
       </div>
     )
   }

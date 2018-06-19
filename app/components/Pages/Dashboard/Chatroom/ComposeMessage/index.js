@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Message from '../Util/message'
 import Mention from '../Util/mention'
-import Socket from '../Services/socket'
+import Socket from '../../../../../services/socket/chat'
 import MessageInput from './input'
 import { insertDraft } from '../../../../../store_actions/chatroom'
 
