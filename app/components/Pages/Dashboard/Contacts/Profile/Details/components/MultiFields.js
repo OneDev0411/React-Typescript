@@ -28,6 +28,7 @@ const MultiFields = ({
   handleLabelOnChange,
   handleOnChangePrimary,
   placeholder,
+  showPrimary = true,
   showSuffix,
   upsertAttribute,
   validator,
@@ -52,7 +53,8 @@ const MultiFields = ({
         >
           <span className="c-contact-details-item--multi__name-wrapper">
             {fields.length > 1 &&
-              id && (
+              id &&
+              showPrimary && (
                 <input
                   type="radio"
                   name={`${name}`}
@@ -131,10 +133,13 @@ function mapStateToProps(state, props) {
 }
 
 const enhance = compose(
-  connect(mapStateToProps, {
-    deleteAttributes,
-    upsertContactAttributes
-  }),
+  connect(
+    mapStateToProps,
+    {
+      deleteAttributes,
+      upsertContactAttributes
+    }
+  ),
   withState('isSaving', 'setIsSaving', false),
   withState('fields', 'addNewfields', ({ _fields }) => _fields),
   withHandlers({
