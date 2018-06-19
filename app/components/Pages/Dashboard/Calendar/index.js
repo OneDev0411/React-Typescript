@@ -57,13 +57,24 @@ class CalendarContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.handleDateChange(this.props.selectedDate)
+    this.initializeCalendar()
 
     // this.observer = new IntersectionObserver(this.onEventObserve, {
     //   root: this.calendarTableContainer,
     //   rootMargin: '100px',
     //   threshold: 0.8
     // })
+  }
+
+  initializeCalendar() {
+    const { selectedDate, setDate, getCalendar } = this.props
+
+    const [newStartRange, newEndRange] = createDateRange(selectedDate)
+
+    batchActions([
+      setDate(selectedDate),
+      getCalendar(newStartRange, newEndRange)
+    ])
   }
 
   onEventObserve = entities => {
