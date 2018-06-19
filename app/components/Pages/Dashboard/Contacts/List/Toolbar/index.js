@@ -27,7 +27,7 @@ export function Toolbar(props) {
       </span>
       <ExportContacts
         disabled={props.disabled}
-        selectedRows={props.selectedRows}
+        exportIds={props.exportIds}
       />
       {selectedRowsLength > 0 && (
         <div className="list--secondary-button">
