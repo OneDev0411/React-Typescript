@@ -19,7 +19,7 @@ router.get('/contacts/export/outlook', async ctx => {
         data = { ids }
       }
     } else if (filters) {
-      if (typeof ids === 'string') {
+      if (typeof filters === 'string') {
         data = { filter: [JSON.parse(decodeURIComponent(filters))] }
       } else if (Array.isArray(filters)) {
         data = {
