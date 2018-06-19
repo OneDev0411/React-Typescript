@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
@@ -91,22 +91,24 @@ const ListingCard = ({
             className="c-listing-card__link"
           />
         )}
-        <div className="c-listing-card__favorite-heart">
-          <FavoriteHeart listing={listing} />
-        </div>
         {user && (
-          <FollowContainer>
-            <Follow
-              statuses={listingStatuses}
-              activeStatuses={
-                (listing.user_listing_notification_setting &&
-                  listing.user_listing_notification_setting.status) ||
-                []
-              }
-              isFetching={listing.isFetching}
-              onClick={onClickFollow}
-            />
-          </FollowContainer>
+          <Fragment>
+            <div className="c-listing-card__favorite-heart">
+              <FavoriteHeart listing={listing} />
+            </div>
+            <FollowContainer>
+              <Follow
+                statuses={listingStatuses}
+                activeStatuses={
+                  (listing.user_listing_notification_setting &&
+                    listing.user_listing_notification_setting.status) ||
+                  []
+                }
+                isFetching={listing.isFetching}
+                onClick={onClickFollow}
+              />
+            </FollowContainer>
+          </Fragment>
         )}
 
         {children}
@@ -116,10 +118,13 @@ const ListingCard = ({
 }
 
 export default compose(
-  connect(({ user }) => ({ user }), {
-    setMapHoveredMarkerId,
-    changeListingFollowStatuses
-  }),
+  connect(
+    ({ user }) => ({ user }),
+    {
+      setMapHoveredMarkerId,
+      changeListingFollowStatuses
+    }
+  ),
   withHandlers({
     onMouseEnter: ({ setMapHoveredMarkerId, tabName }) => id => {
       setMapHoveredMarkerId(tabName, id)
