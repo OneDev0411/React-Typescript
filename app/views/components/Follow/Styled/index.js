@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 import ShadowButton from '../../Button/ShadowButton'
+import UpArrow from '../../SvgIcons/UpArrow/UpArrow'
+import DownArrow from '../../SvgIcons/DownArrow/DownArrow'
 
 export const DropDownContainer = styled.div`
   position: relative;
@@ -17,7 +19,7 @@ export const DropDownMenu = styled.div`
   right: ${({ dropdownRightAlign }) => dropdownRightAlign || 'inherit'};
   z-index: 1000;
   background: #fff;
-  width: 280px;
+  width: 210px;
   border: 1px solid #eee;
   color: black;
   padding: 16px;
@@ -34,8 +36,13 @@ export const DropDownMenuHeader = styled.div`
 
 export const DropDownMenuItem = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: center;
   margin-top: 16px;
+`
+
+export const DropDownMenuItemText = styled.div`
+  margin-left: 11px;
 `
 
 export const FollowButton = styled.div`
@@ -85,4 +92,14 @@ export const ArrowButton = ShadowButton.extend`
   &:hover {
     background-color: #eff5fa;
   }
+`
+
+export const DownArrowFollow = DownArrow.extend`
+> path {
+fill: #506379
+`
+
+export const UpArrowFollow = UpArrow.extend`
+> path {
+fill: #506379
 `

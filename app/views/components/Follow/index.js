@@ -7,8 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import Radio from '../radio'
 import IconBell from '../SvgIcons/Bell/IconBell'
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
-import UpArrow from '../SvgIcons/UpArrow/UpArrow'
-import DownArrow from '../SvgIcons/DownArrow/DownArrow'
+
 import ToolTip from '../tooltip'
 import {
   DropDownContainer,
@@ -16,22 +15,16 @@ import {
   DropDownMenuItem,
   DropDownMenuHeader,
   FollowButton,
-  ArrowButton
+  ArrowButton,
+  DownArrowFollow,
+  UpArrowFollow,
+  DropDownMenuItemText
 } from './Styled'
 
 const propTypes = {
   isFetching: PropTypes.bool
 }
 
-const DownArrowFollow = DownArrow.extend`
-> path {
-fill: #506379
-`
-
-const UpArrowFollow = UpArrow.extend`
-> path {
-fill: #506379
-`
 const FollowComponent = ({
   onClick,
   isFetching,
@@ -48,7 +41,6 @@ const FollowComponent = ({
     <Downshift
       isOpen={isMenuOpen}
       onOuterClick={onChangeMenuOpen}
-      onChange={selection => alert(`You selected ${selection.value}`)}
       itemToString={item => (item ? item.value : '')}
     >
       {({ isOpen }) => (
@@ -88,7 +80,6 @@ const FollowComponent = ({
               <DropDownMenuHeader>Notify me when:</DropDownMenuHeader>
               {statuses.map(item => (
                 <DropDownMenuItem key={item.value}>
-                  {item.value}
                   <Radio
                     selected={activeStatuses.includes(item.key)}
                     square
@@ -106,6 +97,7 @@ const FollowComponent = ({
                       onClick(newActiveStatuses)
                     }}
                   />
+                  <DropDownMenuItemText>{item.value}</DropDownMenuItemText>
                 </DropDownMenuItem>
               ))}
             </DropDownMenu>
