@@ -71,10 +71,10 @@
 }
 
 .c-alertList__item__menu-trigger-btn {
+  margin-left: 1rem;
   @extend .c-alertList__item__btn;
   text-align: center;
   border-radius: 100%;
-  margin-top: -4px;
 
   &:focus,
   &:hover {
@@ -89,7 +89,8 @@
 }
 
 .c-alertList__item__menu {
-  right: 5rem;
+  position: absolute;
+  right: 1rem;
   width: 200px;
   height: auto;
   display: none;
