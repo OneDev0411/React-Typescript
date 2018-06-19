@@ -1,39 +1,77 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import moment from 'moment'
 import { addNotification as notify } from 'reapop'
 
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 
-import { createContacts } from '../../../../../../store_actions/contacts/create-contacts'
-
-import { updateWizardStep } from '../../../../../../store_actions/contacts'
 import { CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS } from '../../../../../../constants/contacts'
+
+import {
+  updateWizardStep,
+  uploadCsvFile,
+  requestImportCsv,
+  getWorkerState
+} from '../../../../../../store_actions/contacts'
+
+import { selectDefinition } from '../../../../../../reducers/contacts/attributeDefs'
 
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import CancelButton from '../../../../../../views/components/Button/CancelButton'
 
-import {
-  selectDefinition,
-  selectDefinitionByName
-} from '../../../../../../reducers/contacts/attributeDefs'
-import { isAddressField } from '../helpers/address'
 import Loading from '../../../../../Partials/Loading'
 
 class UploadContacts extends React.Component {
   state = {
     isImporting: false,
     isImportFailed: false,
-    importErrorMessage: null
+    importError: null
   }
 
   componentDidMount() {
+    this.workerStateTimer = null
+
     if (this.validate()) {
-      this.uploadContacts()
+      this.startImporting()
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.handleWorkerStatus(nextProps.workerState)
+  }
+
+  componentWillUnmount() {
+    this.unregisterTimer()
+  }
+
+  /**
+   * unregister the object registered with setTimeout
+   */
+  unregisterTimer = () => clearTimeout(this.workerStateTimer)
+
+  /**
+   *
+   * @param {String} workerState - the worker state
+   */
+  handleWorkerStatus = workerState => {
+    if (workerState === this.props.workerState) {
+      return false
+    }
+
+    this.unregisterTimer()
+
+    if (workerState === 'complete') {
+      this.onFinish()
+    } else if (workerState === 'failed') {
+      this.onError({})
+    }
+
+    return false
+  }
+
+  /**
+   * validates csv file and mappings before start importing to server
+   */
   validate = () => {
     const { mappedFields, attributeDefs } = this.props
     let errorMessage
@@ -41,12 +79,12 @@ class UploadContacts extends React.Component {
     let isValid = _.some(mappedFields, field => field.definitionId)
 
     if (!isValid) {
-      this.onError(
-        'You should connect at least one field to be able upload contacts',
-        'Validation Error'
-      )
-
-      return false
+      return this.onError({
+        isValidationError: true,
+        title: 'Validation Error',
+        message:
+          'You should connect at least one field to be able upload contacts'
+      })
     }
 
     isValid = _.every(mappedFields, (field, csvField) => {
@@ -54,9 +92,12 @@ class UploadContacts extends React.Component {
 
       if (definition && definition.has_label && !field.label) {
         errorMessage = `Select a label for "${csvField}" field`
-        this.onError(errorMessage, 'Validation Error')
 
-        return false
+        return this.onError({
+          isValidationError: true,
+          title: 'Validation Error',
+          message: errorMessage
+        })
       }
 
       return true
@@ -65,120 +106,76 @@ class UploadContacts extends React.Component {
     return isValid
   }
 
-  uploadContacts = async () => {
-    const {
-      rows,
-      columns,
-      mappedFields,
-      attributeDefs,
-      createContacts
-    } = this.props
-    const contacts = []
+  /**
+   * handles worker status manually when the socket sucks
+   */
+  getWorkerStatus = async () => {
+    const { workerId, getWorkerState } = this.props
+
+    try {
+      const state = await getWorkerState(workerId)
+
+      this.handleWorkerStatus(state)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  /**
+   * starts importing contact steps (including upload and import mappings)
+   */
+  startImporting = async () => {
+    const { csvFileId } = this.props
 
     this.setState({
       isImporting: true,
       isImportFailed: false,
-      importErrorMessage: null
+      importError: null
     })
 
-    _.each(rows, row => {
-      const contact = {
-        attributes: []
-      }
+    // checks whether should upload the csv file, or is uploaded already
+    if (!csvFileId) {
+      this.uploadFile()
+    } else {
+      this.importCsvMappings(csvFileId)
+    }
+  }
 
-      _.each(mappedFields, ({ definitionId, label, index = 0 }, csvField) => {
-        if (!definitionId) {
-          return false
-        }
-
-        const definition = selectDefinition(attributeDefs, definitionId)
-
-        const fieldValue = row[columns[csvField].index].trim()
-        const parsedValue = this.parseValue(
-          definition,
-          csvField,
-          definition.name,
-          fieldValue
-        )
-
-        if (parsedValue === null) {
-          return false
-        }
-
-        const contactItem = {
-          attribute_def: definitionId,
-          [definition.data_type]: parsedValue
-        }
-
-        if (label) {
-          contactItem.label = label
-        }
-
-        if (isAddressField(attributeDefs, definitionId)) {
-          contactItem.index = index + 1
-        }
-
-        contact.attributes.push(contactItem)
-      })
-
-      contacts.push(this.getNormalizedContact(contact))
-    })
+  /**
+   * uploads the csv file on server
+   */
+  uploadFile = async () => {
+    const { file, uploadCsvFile } = this.props
 
     try {
-      await createContacts(contacts, {
-        get: false,
-        relax: true,
-        activity: false
-      })
-      this.onFinish()
+      const fileId = await uploadCsvFile(file)
+
+      return this.importCsvMappings(fileId)
     } catch (e) {
       this.onError(e)
-    } finally {
-      this.setState({
-        isImporting: false
-      })
     }
   }
 
-  getNormalizedContact = contact => {
-    const { attributeDefs } = this.props
+  /**
+   * sends mappings and fileId to server to start creating contacts
+   * @param {String} fileId - the file id uuid
+   */
+  importCsvMappings = async fileId => {
+    const { mappedFields, requestImportCsv } = this.props
 
-    const sourceDefinition = selectDefinitionByName(
-      attributeDefs,
-      'source_type'
-    )
+    try {
+      await requestImportCsv(fileId, mappedFields)
 
-    contact.attributes.push({
-      attribute_def: sourceDefinition.id,
-      [sourceDefinition.data_type]: 'CSV'
-    })
-
-    return contact
+      // check worker state manually if socket didn't respond
+      this.workerStateTimer = setTimeout(this.getWorkerStatus, 60000)
+    } catch (e) {
+      this.onError(e)
+    }
   }
 
-  parseValue = (definition, csvField, fieldName, value) => {
-    switch (fieldName) {
-      case 'phone_number':
-        return value && value.replace(/\s/g, '').replace(/^00/, '+')
-
-      case 'note':
-        return `${csvField}: ${value}`
-    }
-
-    switch (definition.data_type) {
-      case 'date':
-        return value && moment(value).isValid() ? moment(value).unix() : null
-
-      case 'number':
-        return value && parseFloat(value)
-
-      case 'text':
-        return value
-    }
-
-    return value
-  }
-
+  /**
+   * handles success scenarios
+   */
   onFinish = () => {
     this.props.notify({
       title: 'Contacts Imported',
@@ -189,11 +186,16 @@ class UploadContacts extends React.Component {
     window.location.href = '/dashboard/contacts'
   }
 
+  /**
+   * handles failure scenarios
+   */
   onError = e =>
     this.setState({
+      isImporting: false,
       isImportFailed: true,
-      importErrorMessage: {
-        title: 'Upload Failed',
+      importError: {
+        isValidationError: e.isValidationError === true,
+        title: (e && e.title) || 'Import Failed',
         description: e.response ? e.response.body.message : e.message
       }
     })
@@ -202,7 +204,7 @@ class UploadContacts extends React.Component {
     this.props.updateWizardStep(CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS)
 
   render() {
-    const { isImporting, isImportFailed, importErrorMessage } = this.state
+    const { isImporting, isImportFailed, importError } = this.state
     const { rowsCount } = this.props
 
     return (
@@ -216,13 +218,16 @@ class UploadContacts extends React.Component {
 
         {isImportFailed && (
           <div className="error-message">
-            <div className="title">{importErrorMessage.title}</div>
+            <div className="title">{importError.title}</div>
 
-            <div className="description">{importErrorMessage.description}</div>
+            <div className="description">{importError.description}</div>
             <div className="cta-buttons">
               <CancelButton onClick={this.goBack}>Properties</CancelButton>
 
-              <ActionButton onClick={this.uploadContacts}>
+              <ActionButton
+                onClick={this.startImporting}
+                disabled={importError.isValidationError === true}
+              >
                 Try Again
               </ActionButton>
             </div>
@@ -235,20 +240,18 @@ class UploadContacts extends React.Component {
 
 function mapStateToProps({ contacts }) {
   const { importCsv, attributeDefs } = contacts
-  const { columns, rows, mappedFields, rowsCount } = importCsv
 
   return {
-    attributeDefs,
-    rowsCount,
-    mappedFields,
-    columns,
-    rows
+    ...importCsv,
+    attributeDefs
   }
 }
 
 export default connect(mapStateToProps, {
   showMessageModal,
   updateWizardStep,
-  createContacts,
+  requestImportCsv,
+  uploadCsvFile,
+  getWorkerState,
   notify
 })(UploadContacts)
