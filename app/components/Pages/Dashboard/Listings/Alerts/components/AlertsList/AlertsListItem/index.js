@@ -67,7 +67,7 @@ const AlertListItem = ({
         </span>
       )}
     <Follow
-      dropdownRightAlign="40px"
+      dropdownStyle={{ right: '40px' }}
       statuses={alertStatuses}
       activeStatuses={
         alert.user_alert_setting && alert.user_alert_setting.status
@@ -84,7 +84,10 @@ const AlertListItem = ({
 )
 
 export default compose(
-  connect(null, actions),
+  connect(
+    null,
+    actions
+  ),
   withHandlers({
     onClickAlert: ({ getAlertFeed, clearAlertNotification }) => alert => {
       const { id, room, new_recommendations } = alert

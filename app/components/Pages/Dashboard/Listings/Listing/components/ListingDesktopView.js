@@ -857,7 +857,7 @@ const ListingDesktopView = ({
             <FavoriteHeart listing={listing} width="40px" height="40px" />
           </div>
           <Follow
-            dropdownRightAlign="0px"
+            dropdownStyle={{ right: '0px' }}
             statuses={listingStatuses}
             activeStatuses={
               (listing.user_listing_notification_setting &&
@@ -1063,9 +1063,12 @@ const ListingDesktopView = ({
 }
 
 export default compose(
-  connect(null, {
-    changeListingFollowStatuses
-  }),
+  connect(
+    null,
+    {
+      changeListingFollowStatuses
+    }
+  ),
   withState('shareModalIsActive', 'setShareModalIsActive', false),
   withState('galleryModalIsActive', 'setGalleryModalState', false),
   withState('galleryModalDirection', 'setGalleryModalDirection', ''),

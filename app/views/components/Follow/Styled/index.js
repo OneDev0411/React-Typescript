@@ -16,7 +16,6 @@ export const DropDownContainer = styled.div`
 
 export const DropDownMenu = styled.div`
   position: absolute;
-  right: ${({ dropdownRightAlign }) => dropdownRightAlign || 'inherit'};
   z-index: 1000;
   background: #fff;
   width: 210px;

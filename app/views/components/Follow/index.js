@@ -33,7 +33,7 @@ const FollowComponent = ({
   statuses,
   activeStatuses = [],
   onFollowClick,
-  dropdownRightAlign
+  dropdownStyle
 }) => {
   const isFollowing = activeStatuses.length > 0
 
@@ -76,7 +76,7 @@ const FollowComponent = ({
             )}
           </DropDownContainer>
           {isOpen ? (
-            <DropDownMenu dropdownRightAlign={dropdownRightAlign}>
+            <DropDownMenu style={dropdownStyle}>
               <DropDownMenuHeader>Notify me when:</DropDownMenuHeader>
               {statuses.map(item => (
                 <DropDownMenuItem key={item.value}>
