@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import ShadowButton from '../../Button/ShadowButton'
-import UpArrow from '../../SvgIcons/UpArrow/UpArrow'
-import DownArrow from '../../SvgIcons/DownArrow/DownArrow'
+import UpArrow from '../../SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
+import DownArrow from '../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 export const DropDownContainer = styled.div`
   position: relative;
@@ -81,9 +81,9 @@ export const FollowButton = styled.div`
   }
 `
 export const ArrowButton = ShadowButton.extend`
+  display: flex;
   border-left: solid 1px #d4dfe6;
   padding-left: 6px;
-  padding-top: 2px;
   padding-right: 6px;
   &:focus {
     outline: none;
@@ -94,11 +94,13 @@ export const ArrowButton = ShadowButton.extend`
 `
 
 export const DownArrowFollow = DownArrow.extend`
-> path {
-fill: #506379
+  > path {
+    fill: #506379;
+  }
 `
 
 export const UpArrowFollow = UpArrow.extend`
-> path {
-fill: #506379
+  > path {
+    fill: #506379;
+  }
 `

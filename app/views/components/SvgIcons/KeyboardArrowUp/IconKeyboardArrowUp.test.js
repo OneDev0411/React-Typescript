@@ -1,9 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
-import Image from './DownArrow.js'
+import Image from './IconKeyboardArrowUp.js'
 
-describe('DownArrow.svg generated styled component', () => {
+describe('IconKeyboardArrowUp.svg generated styled component', () => {
   let wrapper
   beforeEach(() => {
     wrapper = shallow(<Image />)
