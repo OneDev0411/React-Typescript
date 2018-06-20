@@ -368,14 +368,20 @@ class CreateOffer extends React.Component {
   }
 
   backToDeal = () => {
-    const { deal, confirmation } = this.props
+    const { deal } = this.props
+
+    browserHistory.push(`/dashboard/deals/${deal.id}`)
+  }
+
+  cancelCreateOffer = () => {
+    const { confirmation } = this.props
 
     confirmation({
       message: 'Cancel deal creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
       cancelLabel: "No, don't cancel",
-      onConfirm: () => browserHistory.push(`/dashboard/deals/${deal.id}`)
+      onConfirm: this.backToDeal
     })
   }
 
@@ -424,7 +430,7 @@ class CreateOffer extends React.Component {
 
     return (
       <div className="deal-create-offer">
-        <Navbar title="Add New Offer" onClose={this.backToDeal} />
+        <Navbar title="Add New Offer" onClose={this.cancelCreateOffer} />
 
         <div className="form">
           <OfferType
@@ -576,10 +582,13 @@ function mapStateToProps({ deals }, props) {
   }
 }
 
-export default connect(mapStateToProps, {
-  createOffer,
-  createRoles,
-  updateContext,
-  notify,
-  confirmation
-})(CreateOffer)
+export default connect(
+  mapStateToProps,
+  {
+    createOffer,
+    createRoles,
+    updateContext,
+    notify,
+    confirmation
+  }
+)(CreateOffer)
