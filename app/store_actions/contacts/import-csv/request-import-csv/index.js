@@ -6,9 +6,10 @@ import { setWorkerId } from '../set-worker-id'
 function normalizeMappedFields(fields) {
   const list = {}
 
-  _.each(fields, ({ definitionId, index }, name) => {
+  _.each(fields, ({ definitionId, label, index }, name) => {
     list[name] = {
       attribute_def: definitionId,
+      label,
       index
     }
   })
