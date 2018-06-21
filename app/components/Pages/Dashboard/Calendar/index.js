@@ -269,6 +269,7 @@ class CalendarContainer extends React.Component {
     _.each(days, (list, date) => {
       if (list.length === 0) {
         return table.push({
+          key: date,
           ...this.getDayHeader(date),
           refId: date,
           data: []
@@ -276,6 +277,7 @@ class CalendarContainer extends React.Component {
       }
 
       return table.push({
+        key: date,
         ...this.getDayHeader(date),
         refId: date,
         data: list.map(id => ({
@@ -365,6 +367,11 @@ class CalendarContainer extends React.Component {
         break
 
       case 'crm_task':
+        props.style =
+          row.status === 'DONE'
+            ? { textDecoration: 'line-through', opacity: 0.5 }
+            : {}
+
         props.onClick = () =>
           this.setState({
             showCreateTaskMenu: true,
@@ -376,6 +383,7 @@ class CalendarContainer extends React.Component {
     return {
       ...props,
       style: {
+        ...props.style,
         cursor: 'pointer'
       }
     }
