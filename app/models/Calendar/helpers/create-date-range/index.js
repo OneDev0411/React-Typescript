@@ -28,7 +28,7 @@ export function createPastRange(startRange) {
   const base = moment.unix(startRange).utcOffset(0)
 
   const start = moment(base)
-    .subtract(RANGE, 'day')
+    .subtract(RANGE * 5, 'day')
     .startOf('day')
     .format('X')
 
@@ -53,7 +53,7 @@ export function createFutureRange(endRange) {
 
   const end = moment
     .unix(start)
-    .add(RANGE, 'day')
+    .add(RANGE * 5, 'day')
     .endOf('day')
     .format('X')
 
