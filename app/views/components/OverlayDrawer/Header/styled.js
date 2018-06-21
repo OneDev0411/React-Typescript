@@ -14,11 +14,11 @@ export const Container = styled.div`
 `
 
 export const Title = styled.div`
-  width: 90%;
+  width: 95%;
 `
 
 export const IconContainer = styled.div`
-  width: 10%;
+  width: 5%;
   text-align: right;
   cursor: pointer;
 

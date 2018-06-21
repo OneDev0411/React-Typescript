@@ -7,8 +7,8 @@ const Header = ({ title, onClose }) => (
   <Container>
     <Title>{title}</Title>
 
-    <IconContainer onClick={onClose}>
-      <CloseIcon color="#7b91a6" />
+    <IconContainer>
+      <CloseIcon color="#7b91a6" onClick={onClose} />
     </IconContainer>
   </Container>
 )

@@ -19,6 +19,7 @@ export const Content = styled.div`
 `
 
 export const Backdrop = styled.div`
+  display: ${props => (props.show ? 'block' : 'none')};
   position: fixed;
   top: 0;
   bottom: 0;

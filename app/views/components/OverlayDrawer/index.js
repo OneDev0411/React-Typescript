@@ -10,13 +10,15 @@ import { Content, Backdrop } from './styled'
 const propTypes = {
   width: PropTypes.number,
   isOpen: PropTypes.bool,
-  showFooter: PropTypes.bool
+  showFooter: PropTypes.bool,
+  closeOnBackdropClick: PropTypes.bool
 }
 
 const defaultProps = {
   width: 300,
   isOpen: false,
-  showFooter: true
+  showFooter: true,
+  closeOnBackdropClick: true
 }
 
 function renderChildren(children, { onClose, showFooter }) {
@@ -41,12 +43,22 @@ function renderChildren(children, { onClose, showFooter }) {
   })
 }
 
-const OverlayDrawer = ({ children, isOpen, width, ...rest }) => (
+const OverlayDrawer = ({
+  children,
+  isOpen,
+  width,
+  closeOnBackdropClick,
+  ...rest
+}) => (
   <div>
     <Content width={width} isOpen={isOpen}>
       {renderChildren(children, rest)}
     </Content>
-    {isOpen && <Backdrop />}
+
+    <Backdrop
+      show={isOpen}
+      onClick={() => closeOnBackdropClick && rest.onClose()}
+    />
   </div>
 )
 
