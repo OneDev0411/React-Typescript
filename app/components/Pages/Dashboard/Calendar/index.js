@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { batchActions } from 'redux-batched-actions'
+import { browserHistory } from 'react-router'
 
 import moment from 'moment'
 import _ from 'underscore'
@@ -26,8 +27,7 @@ import {
   Trigger
 } from '../../../../views/components/SlideMenu'
 
-import OverlayDrawer from '../../../../views/components/OverlayDrawer'
-
+import TaskOverlay from './TaskOverlay'
 import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
 
@@ -40,7 +40,6 @@ import {
   HeroTitle
 } from './styled'
 
-import CreateTask from '../../../../views/CRM/Tasks/components/NewTask'
 import ActionButton from '../../../../views/components/Button/ActionButton'
 
 const LOADING_POSITIONS = {
@@ -55,11 +54,13 @@ class CalendarContainer extends React.Component {
     this.state = {
       isMenuOpen: true,
       showCreateTaskMenu: false,
+      selectedTask: null,
       loadingPosition: LOADING_POSITIONS.Middle
     }
 
     this.isObserverEnabled = false
     this.onEventObserve = _.debounce(this.onEventObserve, 150)
+    this.getGridTrProps = this.getGridTrProps.bind(this)
   }
 
   componentDidMount() {
@@ -70,17 +71,6 @@ class CalendarContainer extends React.Component {
     //   rootMargin: '100px',
     //   threshold: 0.8
     // })
-  }
-
-  initializeCalendar() {
-    const { selectedDate, setDate, getCalendar } = this.props
-
-    const [newStartRange, newEndRange] = createDateRange(selectedDate)
-
-    batchActions([
-      setDate(selectedDate),
-      getCalendar(newStartRange, newEndRange)
-    ])
   }
 
   onEventObserve = entities => {
@@ -110,7 +100,8 @@ class CalendarContainer extends React.Component {
    */
   toggleShowCreateTask = () =>
     this.setState(state => ({
-      showCreateTaskMenu: !state.showCreateTaskMenu
+      showCreateTaskMenu: !state.showCreateTaskMenu,
+      selectedTask: null
     }))
 
   /**
@@ -135,6 +126,19 @@ class CalendarContainer extends React.Component {
     this.setState({
       loadingPosition: position
     })
+
+  initializeCalendar = async () => {
+    const { selectedDate, setDate, getCalendar } = this.props
+
+    const [newStartRange, newEndRange] = createDateRange(selectedDate)
+
+    batchActions([
+      setDate(selectedDate),
+      await getCalendar(newStartRange, newEndRange)
+    ])
+
+    this.scrollIntoView(selectedDate)
+  }
 
   restartCalendar = async selectedDate => {
     const { resetCalendar, setDate, getCalendar } = this.props
@@ -182,7 +186,7 @@ class CalendarContainer extends React.Component {
     ])
   }
 
-  handleNewTask = async task => {
+  handleChangeTask = async task => {
     const { startRange, endRange, getCalendar, setDate } = this.props
     const timestamp = task.due_date
     const newSelectedDate = new Date(timestamp * 1000)
@@ -199,6 +203,10 @@ class CalendarContainer extends React.Component {
 
       this.scrollIntoView(newSelectedDate)
     }
+
+    this.setState({
+      showCreateTaskMenu: false
+    })
   }
 
   scrollIntoView = date => {
@@ -270,15 +278,9 @@ class CalendarContainer extends React.Component {
       return table.push({
         ...this.getDayHeader(date),
         refId: date,
-        data: list.map(id => {
-          const event = calendar[id]
-
-          return {
-            type: event.type_label,
-            title: event.title,
-            time: moment.unix(event.timestamp).format('hh:mm A')
-          }
-        })
+        data: list.map(id => ({
+          ...calendar[id]
+        }))
       })
     })
 
@@ -291,7 +293,7 @@ class CalendarContainer extends React.Component {
         id: 'type',
         header: 'Type',
         width: '20%',
-        render: ({ rowData }) => <Fragment>{rowData.type}</Fragment>
+        render: ({ rowData }) => <Fragment>{rowData.type_label}</Fragment>
       },
       {
         id: 'name',
@@ -302,7 +304,8 @@ class CalendarContainer extends React.Component {
       {
         id: 'time',
         header: 'Time',
-        render: ({ rowData }) => rowData.time
+        render: ({ rowData }) =>
+          moment.unix(rowData.timestamp).format('hh:mm A')
       },
       {
         id: 'menu',
@@ -347,12 +350,55 @@ class CalendarContainer extends React.Component {
     }
   }
 
+  getGridTrProps(rowIndex, { original: row }) {
+    const props = {}
+
+    switch (row.object_type) {
+      case 'deal_context':
+        props.onClick = () =>
+          browserHistory.push(`/dashboard/deals/${row.deal}`)
+        break
+
+      case 'contact_attribute':
+        props.onClick = () =>
+          browserHistory.push(`/dashboard/contacts/${row.contact}`)
+        break
+
+      case 'crm_task':
+        props.onClick = () =>
+          this.setState({
+            showCreateTaskMenu: true,
+            selectedTask: row.crm_task
+          })
+        break
+    }
+
+    return {
+      ...props,
+      style: {
+        cursor: 'pointer'
+      }
+    }
+  }
+
   render() {
-    const { isMenuOpen, showCreateTaskMenu, loadingPosition } = this.state
+    const {
+      isMenuOpen,
+      showCreateTaskMenu,
+      loadingPosition,
+      selectedTask
+    } = this.state
     const { user, selectedDate, isFetching } = this.props
 
     return (
       <Container>
+        <TaskOverlay
+          isOpen={showCreateTaskMenu}
+          selectedTask={selectedTask}
+          onClose={this.toggleShowCreateTask}
+          onChangeTask={this.handleChangeTask}
+        />
+
         <Menu isOpen={isMenuOpen} width={265}>
           <MenuContainer>
             <DatePicker
@@ -390,26 +436,12 @@ class CalendarContainer extends React.Component {
                 onScrollTop={this.loadPreviousItems}
                 onScrollBottom={this.loadNextItems}
                 onContainerScroll={e => this.handleContainerScroll(e.target)}
+                getTrProps={this.getGridTrProps}
                 onRef={this.onTableRef}
               />
             </div>
           </CalendarContent>
         </PageContent>
-
-        <OverlayDrawer
-          isOpen={showCreateTaskMenu}
-          width={50}
-          showFooter={false}
-          onClose={this.toggleShowCreateTask}
-        >
-          <OverlayDrawer.Header title="Add Task" />
-          <OverlayDrawer.Body>
-            <CreateTask
-              className="overlay-drawer"
-              submitCallback={this.handleNewTask}
-            />
-          </OverlayDrawer.Body>
-        </OverlayDrawer>
       </Container>
     )
   }

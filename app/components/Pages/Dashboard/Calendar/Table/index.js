@@ -14,6 +14,7 @@ const Table = ({
   positions,
   onScrollTop,
   onScrollBottom,
+  getTrProps,
   onRef
 }) => (
   <ScrollDetector
@@ -39,7 +40,8 @@ const Table = ({
         columns={columns}
         data={data}
         emptyState={<EmptyState />}
-        onRef={onRef}
+        onGroupRef={onRef}
+        getTrProps={getTrProps}
         nested
       />
 
