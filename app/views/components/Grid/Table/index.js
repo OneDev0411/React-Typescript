@@ -32,10 +32,12 @@ class Grid extends React.Component {
    * decides to render which kind of tables
    */
   renderTable = sizes => {
-    const { nested, onRef } = this.props
+    const { nested, onGroupRef } = this.props
 
     if (nested) {
-      return <NestedTable {...this.props} sizes={sizes} onRef={onRef} />
+      return (
+        <NestedTable {...this.props} sizes={sizes} onGroupRef={onGroupRef} />
+      )
     }
 
     return <BasicTable {...this.props} />

@@ -12,10 +12,10 @@ const NestedTable = ({ data, ...rest }) => (
   </Fragment>
 )
 
-const TableGroup = ({ group, onRef, ...rest }) => (
+const TableGroup = ({ group, onGroupRef, ...rest }) => (
   <Body
     data-refid={group.refId}
-    innerRef={ref => onRef && onRef(group.refId, ref)}
+    innerRef={ref => onGroupRef && onGroupRef(group.refId, ref)}
   >
     <BodyHeader
       header={group.header}
