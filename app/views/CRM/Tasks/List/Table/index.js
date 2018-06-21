@@ -122,7 +122,7 @@ class TasksListTable extends Component {
 
   render() {
     const { pageSize } = this.state
-    const { isFetching, tasks } = this.props
+    const { isFetching, tasks, onSelectTask } = this.props
     const tasksCount = tasks.length
     const defaultPageSize = 10
 
@@ -168,7 +168,7 @@ class TasksListTable extends Component {
           }
 
           return {
-            onClick: () => browserHistory.push(`/crm/tasks/${task.id}`)
+            onClick: () => onSelectTask(task.id)
           }
         }}
       />
