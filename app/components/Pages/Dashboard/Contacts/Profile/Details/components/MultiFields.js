@@ -79,7 +79,8 @@ const MultiFields = ({
               <label
                 className="c-contact-details-item--multi__label"
                 style={{
-                  fontWeight: id && is_primary ? 'bold' : 'normal'
+                  fontWeight:
+                    id && is_primary && showPrimary ? 'bold' : 'normal'
                 }}
               >
                 {label}
