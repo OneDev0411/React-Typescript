@@ -12,7 +12,7 @@ const BasicTable = ({ data, columns, sizes, emptyState, getTrProps }) => {
     <Fragment>
       {data.map((row, rowIndex) => (
         <BodyRow
-          key={row.id || rowIndex}
+          key={row.key || rowIndex}
           firstRow={rowIndex === 0}
           lastRow={rowIndex === data.length - 1}
           {...getTrProps(rowIndex, {

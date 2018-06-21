@@ -7,7 +7,7 @@ import BasicTable from '../Basic'
 const NestedTable = ({ data, ...rest }) => (
   <Fragment>
     {_.map(data, (group, key) => (
-      <TableGroup key={key} group={group} {...rest} />
+      <TableGroup key={group.key || key} group={group} {...rest} />
     ))}
   </Fragment>
 )
