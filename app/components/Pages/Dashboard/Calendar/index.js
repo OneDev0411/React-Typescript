@@ -59,7 +59,7 @@ class CalendarContainer extends React.Component {
     }
 
     this.isObserverEnabled = false
-    this.onEventObserve = _.debounce(this.onEventObserve, 150)
+    // this.onEventObserve = _.debounce(this.onEventObserve, 150)
     this.getGridTrProps = this.getGridTrProps.bind(this)
   }
 
@@ -73,19 +73,19 @@ class CalendarContainer extends React.Component {
     // })
   }
 
-  onEventObserve = entities => {
-    const { setDate, selectedDate } = this.props
-    const ref = entities && entities[0].target
-    const { refid } = ref.dataset
+  // onEventObserve = entities => {
+  //   const { setDate, selectedDate } = this.props
+  //   const ref = entities && entities[0].target
+  //   const { refid } = ref.dataset
 
-    if (this.isObserverEnabled === false) {
-      return false
-    }
+  //   if (this.isObserverEnabled === false) {
+  //     return false
+  //   }
 
-    if (refid !== moment(selectedDate).format('YYYY-MM-DD')) {
-      setDate(moment(refid).toDate())
-    }
-  }
+  //   if (refid !== moment(selectedDate).format('YYYY-MM-DD')) {
+  //     setDate(moment(refid).toDate())
+  //   }
+  // }
 
   /**
    * close/open side menu
@@ -167,7 +167,9 @@ class CalendarContainer extends React.Component {
     // check the new range is inside current range or not
     if (timestamp >= startRange && timestamp <= endRange) {
       setDate(selectedDate)
-      this.scrollIntoView(selectedDate)
+      this.scrollIntoView(selectedDate, {
+        behavior: 'smooth'
+      })
 
       return false
     }
@@ -178,7 +180,9 @@ class CalendarContainer extends React.Component {
     }
 
     this.setLoadingPosition(LOADING_POSITIONS.Middle)
-    this.scrollIntoView(selectedDate)
+    this.scrollIntoView(selectedDate, {
+      behavior: 'smooth'
+    })
 
     batchActions([
       setDate(selectedDate),
@@ -209,14 +213,14 @@ class CalendarContainer extends React.Component {
     })
   }
 
-  scrollIntoView = date => {
+  scrollIntoView = (date, options = {}) => {
     const refId = moment(date).format('YYYY-MM-DD')
 
     this.isObserverEnabled = false
 
     this.refs[refId] &&
       this.refs[refId].scrollIntoView({
-        behavior: 'instant',
+        behavior: options.behavior || 'instant',
         block: 'start'
       })
 
