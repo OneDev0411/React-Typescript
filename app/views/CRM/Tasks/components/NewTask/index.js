@@ -124,7 +124,7 @@ class Task extends Component {
         message: `${task.title}`
       })
 
-      deleteCallback(task.id)
+      deleteCallback(task.id, task)
     } catch (error) {
       throw error
     } finally {
