@@ -163,7 +163,7 @@ class ContactProfile extends React.Component {
     )
 
     return (
-      <div className="profile" style={{ backgroundColor: '#f8fafb' }}>
+      <div className="profile">
         <Header currentPage={this.props.currentPage} />
 
         <ColumnsContainer>
@@ -266,7 +266,10 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
   }
 }
 
-export default connect(mapStateToProps, {
-  getContact,
-  upsertContactAttributes
-})(ContactProfile)
+export default connect(
+  mapStateToProps,
+  {
+    getContact,
+    upsertContactAttributes
+  }
+)(ContactProfile)
