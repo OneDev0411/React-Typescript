@@ -8,7 +8,6 @@ import {
   selectContactsInfo,
   selectPage,
   selectPageContacts,
-  selectCurrentPage,
   selectContactsListFetching
 } from '../../../../../reducers/contacts/list'
 
@@ -185,7 +184,7 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const { isSideMenuOpen, pageTitle } = this.state
+    const { isSideMenuOpen, pageTitle, filter } = this.state
     const { user, list, currentPage } = this.props
 
     const contacts = selectPageContacts(list, currentPage)
@@ -199,14 +198,6 @@ class ContactsList extends React.Component {
 
     const noContact =
       !isFetching && contacts.length === 0 && listInfo.type !== 'filter'
-
-    let exportIds
-
-    if (selectedRows.length === 0 && listInfo.type !== 'general') {
-      exportIds = contacts.map(contact => contact.id)
-    } else {
-      exportIds = selectedRows
-    }
 
     return (
       <PageContainer>
@@ -240,7 +231,7 @@ class ContactsList extends React.Component {
               onDelete={this.handleOnDelete}
               deleting={this.state.isDeleting}
               selectedRows={selectedRows}
-              exportIds={exportIds}
+              filters={filter}
               totalCount={listInfo.total}
               pageSize={currentPageData ? currentPageData.ids.length : 0}
             />

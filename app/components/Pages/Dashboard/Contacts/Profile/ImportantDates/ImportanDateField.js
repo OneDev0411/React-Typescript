@@ -39,13 +39,14 @@ function ImportanDateField({ contact, attributeDef }) {
 
   return (
     <MultiFields
-      showSuffix={false}
       attributeName="important_date"
       contact={contact}
       defaultLabels={getAttributeLabels(attributeDef)}
       handleFormat={handleFormat}
       handleParse={handleParse}
       placeholder="MM/DD/YYYY"
+      showPrimary={false}
+      showSuffix={false}
       validator={validator}
       validationText="Invalid format. Valid format MM/DD/YYYY"
     />
