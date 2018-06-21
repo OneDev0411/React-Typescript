@@ -20,7 +20,7 @@ const Table = ({
   <ScrollDetector
     onScrollTop={onScrollTop}
     onScrollBottom={onScrollBottom}
-    accuracy={30}
+    accuracy={60}
     debounceTime={50}
   >
     <GridContainer>
