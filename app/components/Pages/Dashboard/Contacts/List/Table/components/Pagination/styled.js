@@ -5,7 +5,7 @@ const SELECTED_BGC = '#2196f3'
 export const Button = ActionButton.extend`
   border-width: 1px;
   border-style: solid;
-  border-color: ${props => (props.selected ? SELECTED_BGC : '#e1eaef')};
+  border-color: ${props => (props.selected ? SELECTED_BGC : '#CAD4DB')};
 
   &:not(:last-of-type) {
     border-radius: 0;
