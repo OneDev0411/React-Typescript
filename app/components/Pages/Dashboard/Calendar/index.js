@@ -25,11 +25,13 @@ import {
   Menu,
   Trigger
 } from '../../../../views/components/SlideMenu'
+
+import OverlayDrawer from '../../../../views/components/OverlayDrawer'
+
 import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
 
 import CalendarTable from './Table'
-import AddTask from './AddTask'
 
 import {
   MenuContainer,
@@ -37,6 +39,9 @@ import {
   PageContent,
   HeroTitle
 } from './styled'
+
+import CreateTask from '../../../../views/CRM/Tasks/components/NewTask'
+import ActionButton from '../../../../views/components/Button/ActionButton'
 
 const LOADING_POSITIONS = {
   Top: 0,
@@ -49,6 +54,7 @@ class CalendarContainer extends React.Component {
     super(props)
     this.state = {
       isMenuOpen: true,
+      showCreateTaskMenu: false,
       loadingPosition: LOADING_POSITIONS.Middle
     }
 
@@ -94,7 +100,18 @@ class CalendarContainer extends React.Component {
   /**
    * close/open side menu
    */
-  toggleSideMenu = () => this.setState({ isMenuOpen: !this.state.isMenuOpen })
+  toggleSideMenu = () =>
+    this.setState(state => ({
+      isMenuOpen: !state.isMenuOpen
+    }))
+
+  /**
+   * close/open create task menu
+   */
+  toggleShowCreateTask = () =>
+    this.setState(state => ({
+      showCreateTaskMenu: !state.showCreateTaskMenu
+    }))
 
   /**
    * sets calendar references
@@ -331,7 +348,7 @@ class CalendarContainer extends React.Component {
   }
 
   render() {
-    const { isMenuOpen, loadingPosition } = this.state
+    const { isMenuOpen, showCreateTaskMenu, loadingPosition } = this.state
     const { user, selectedDate, isFetching } = this.props
 
     return (
@@ -354,7 +371,9 @@ class CalendarContainer extends React.Component {
             </PageHeader.Title>
 
             <PageHeader.Menu>
-              <AddTask onNewTask={this.handleNewTask} />
+              <ActionButton inverse onClick={this.toggleShowCreateTask}>
+                Add Task
+              </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
 
@@ -376,6 +395,21 @@ class CalendarContainer extends React.Component {
             </div>
           </CalendarContent>
         </PageContent>
+
+        <OverlayDrawer
+          isOpen={showCreateTaskMenu}
+          width={50}
+          showFooter={false}
+          onClose={this.toggleShowCreateTask}
+        >
+          <OverlayDrawer.Header title="Add Task" />
+          <OverlayDrawer.Body>
+            <CreateTask
+              className="overlay-drawer"
+              submitCallback={this.handleNewTask}
+            />
+          </OverlayDrawer.Body>
+        </OverlayDrawer>
       </Container>
     )
   }
