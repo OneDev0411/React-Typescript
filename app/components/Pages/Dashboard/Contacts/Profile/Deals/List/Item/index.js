@@ -1,10 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 import { getStatusColor } from '../../../../../../../../utils/listing'
 import * as Deal from '../../../../../../../../models/Deal/context-helper'
 import { roleName } from '../../../../../Deals/utils/roles'
+import {
+  getContactUsers,
+  getContactAttribute
+} from '../../../../../../../../models/contacts/helpers'
+import { selectDefinitionByName } from '../../../../../../../../reducers/contacts/attributeDefs'
 
 const Container = styled.div`
   display: flex;
@@ -57,28 +63,35 @@ function getPrice(deal) {
   return Deal.getFormattedPrice(price) || '$0'
 }
 
-export class Item extends React.Component {
+class Item extends React.Component {
   state = {
     roles: []
   }
   componentDidMount() {
-    const { item, contact } = this.props
-    const { roles } = item
-
-    this.searchRoles(roles, contact)
+    this.searchRoles()
   }
 
-  searchRoles = async (roles, contact) => {
+  searchRoles = async () => {
+    const { item, contact, attributeDefs } = this.props
+    const { roles } = item
     let matchedRoles = []
+    const emailAttDef = selectDefinitionByName(attributeDefs, 'email')
+    const phoneAttDef = selectDefinitionByName(attributeDefs, 'phone_number')
+    const contactUsers = getContactUsers(contact)
+    const contactEmails = getContactAttribute(contact, emailAttDef)
+    const contactPhones = getContactAttribute(contact, phoneAttDef)
 
     for (let index = 0; index < roles.length; index++) {
       if (
-        (roles[index].user && roles[index].user.id === contact.id) ||
-        roles[index].email === contact.summary.email ||
-        (await this.compareTwoPhoneNumber(
-          contact.summary.phone_number,
-          roles[index].phone_number
-        ))
+        (roles[index].user &&
+          _.find(contactUsers, ({ id }) => id === roles[index].user.id)) ||
+        (roles[index].email &&
+          _.find(contactEmails, ({ id }) => id === roles[index].email)) ||
+        (roles[index].phone_number &&
+          (await this.compareTwoPhoneNumber(
+            contactPhones,
+            roles[index].phone_number
+          )))
       ) {
         matchedRoles.push(roles[index])
       }
@@ -147,3 +160,13 @@ Item.propTypes = {
   item: PropTypes.object.isRequired,
   handleOnClickItem: PropTypes.func.isRequired
 }
+
+function mapStateToProps({ contacts }) {
+  const { attributeDefs } = contacts
+
+  return {
+    attributeDefs
+  }
+}
+
+export default connect(mapStateToProps)(Item)
