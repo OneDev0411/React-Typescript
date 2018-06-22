@@ -171,11 +171,11 @@ class ContactProfile extends React.Component {
             <div>
               <Information contact={contact} />
 
-              <Names contact={contact} />
-
               <Tags contact={contact} />
 
               <Details contact={contact} />
+
+              <Names contact={contact} />
 
               <Addresses contact={contact} />
             </div>
