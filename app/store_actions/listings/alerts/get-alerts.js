@@ -19,6 +19,7 @@ const getAlerts = params => (dispatch, getState) => {
         tabName: 'ALERTS',
         type: actionsType.FETCH_ALERTS_SUCCESS
       })
+
       return response
     },
     ({ message }) => {

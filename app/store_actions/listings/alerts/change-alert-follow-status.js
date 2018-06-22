@@ -1,23 +1,45 @@
 import { addNotification as notify } from 'reapop'
 import api from '../../../models/listings/alerts/'
+import { normalize } from 'normalizr'
+import * as schema from '../../../models/listings/schema'
 import {
   FETCH_CHANGE_ALERT_FOLLOW_REQUEST,
   FETCH_CHANGE_ALERT_FOLLOW_SUCCESS,
   FETCH_CHANGE_ALERT_FOLLOW_FAILURE
 } from '../../../constants/listings/alerts'
+import { selectAlert } from '../../../reducers/listings/alerts/list'
 
-const changeAlertFollowStatuses = (id, statuses) => async dispatch => {
-  dispatch({
-    id,
-    tabName: 'ALERTS',
-    type: FETCH_CHANGE_ALERT_FOLLOW_REQUEST
-  })
+const changeAlertFollowStatuses = (id, statuses) => async (
+  dispatch,
+  getState
+) => {
+  const {
+    alerts: { list }
+  } = getState()
+
+  let oldAlert = selectAlert(list, id)
 
   try {
-    const response = await api.changeAlertFollowStatuses(id, statuses)
+    const normalizedAlert = {
+      ...normalize([{ ...oldAlert, isFetching: true }], schema.listingsList)
+    }
 
     dispatch({
-      alert: response.body.data,
+      response: normalizedAlert,
+      tabName: 'ALERTS',
+      type: FETCH_CHANGE_ALERT_FOLLOW_REQUEST
+    })
+
+    const response = await api.changeAlertFollowStatuses(id, statuses)
+
+    const newAlert = { ...response.body.data, isFetching: false }
+
+    const normalizedResponse = {
+      ...normalize([newAlert], schema.listingsList)
+    }
+
+    dispatch({
+      response: normalizedResponse,
       tabName: 'ALERTS',
       type: FETCH_CHANGE_ALERT_FOLLOW_SUCCESS
     })
@@ -32,8 +54,13 @@ const changeAlertFollowStatuses = (id, statuses) => async dispatch => {
         status: 'error'
       })
     )
+
+    const normalizedAlert = {
+      ...normalize([{ ...oldAlert, isFetching: false }], schema.listingsList)
+    }
+
     dispatch({
-      id,
+      response: normalizedAlert,
       tabName: 'ALERTS',
       type: FETCH_CHANGE_ALERT_FOLLOW_FAILURE
     })
