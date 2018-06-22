@@ -7,9 +7,9 @@ import getBrand from '../store_actions/brand'
 import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'
 
 // services
-import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
+import ChatSocket from '../services/socket/chat'
+import DealSocket from '../services/socket/deals'
 import ContactSocket from '../services/socket/contacts'
-import DealSocket from './Pages/Dashboard/Deals/services/socket'
 
 // utils
 import { hasUserAccess } from '../utils/user-teams'

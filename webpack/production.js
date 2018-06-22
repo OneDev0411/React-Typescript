@@ -23,7 +23,7 @@ webpackConfig.performance = {
 }
 
 webpackConfig.entry = {
-  app: ['babel-polyfill', appConfig.compile.entry],
+  app: ['babel-polyfill', 'intersection-observer', appConfig.compile.entry],
   vendor: appConfig.compile.vendors
 }
 

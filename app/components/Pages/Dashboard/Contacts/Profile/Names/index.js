@@ -5,9 +5,11 @@ import _ from 'underscore'
 import { upsertContactAttributes } from '../../../../../../store_actions/contacts'
 import { selectDefsBySection } from '../../../../../../reducers/contacts/attributeDefs'
 
-import Field from './Field'
 import Title from './Title'
 import Loading from '../../components/Loading'
+import Companies from '../Details/fields/Companies'
+import JobTitles from '../Details/fields/JobTitles'
+import MultiFields from '../Details/components/MultiFields'
 
 class Names extends Component {
   state = {
@@ -24,34 +26,6 @@ class Names extends Component {
       async () => {
         try {
           await upsertContactAttributes(contact.id, [attribute])
-        } catch (error) {
-          throw error
-        } finally {
-          this.setState({
-            isSaving: false
-          })
-        }
-      }
-    )
-  }
-
-  handelOnDelete = async field => {
-    const { contact, upsertContactAttributes } = this.props
-
-    this.setState(
-      {
-        isSaving: true
-      },
-      async () => {
-        try {
-          const attributes = [
-            {
-              text: '',
-              id: field.id
-            }
-          ]
-
-          await upsertContactAttributes(contact.id, attributes)
         } catch (error) {
           throw error
         } finally {
@@ -98,35 +72,38 @@ class Names extends Component {
   }
 
   render() {
-    const { isSaving } = this.state
+    const { contact } = this.props
     const fields = this.getNameFields()
 
     return (
       <div className="c-contact-profile-card">
-        <h3 className="c-contact-profile-card__title">Names</h3>
+        <h3 className="c-contact-profile-card__title">Details</h3>
         <div className="c-contact-profile-card__body">
-          <ul className="c-contact-details u-unstyled-list">
+          <div style={{ position: 'relative' }}>
             <Title
               key="names__title"
-              disabled={isSaving}
+              disabled={this.state.isSaving}
               field={fields.title}
               onChange={this.upsertAttribute}
             />
-            {fields &&
-              Object.keys(fields)
-                .filter(field => field !== 'title')
-                .sort((a, b) => b.index - a.index)
-                .map(field => (
-                  <Field
-                    isSaving={isSaving}
-                    field={fields[field]}
-                    key={`names_${field}`}
-                    onChange={this.upsertAttribute}
-                    onDelete={this.handelOnDelete}
-                  />
-                ))}
-            {isSaving && <Loading />}
-          </ul>
+            {this.state.isSaving && <Loading />}
+          </div>
+          {fields &&
+            Object.keys(fields)
+              .filter(field => field !== 'title')
+              .sort((a, b) => b.index - a.index)
+              .map(field => (
+                <MultiFields
+                  attributeName={fields[field].attribute_def.name}
+                  contact={contact}
+                  key={fields[field].attribute_def.name}
+                  showPrimary={false}
+                  placeholder="-"
+                />
+              ))}
+
+          <JobTitles contact={contact} />
+          <Companies contact={contact} />
         </div>
       </div>
     )
@@ -145,6 +122,9 @@ function mapStateToProps(state, { contact }) {
   return { nameAttributes, attributeDefs }
 }
 
-export default connect(mapStateToProps, {
-  upsertContactAttributes
-})(Names)
+export default connect(
+  mapStateToProps,
+  {
+    upsertContactAttributes
+  }
+)(Names)

@@ -6,7 +6,9 @@ export const Container = styled.div`
   height: 32px;
   line-height: 32px;
   vertical-align: middle;
+  margin-bottom: 5px;
 `
+
 export const List = styled.div`
   position: absolute;
   width: 170px;

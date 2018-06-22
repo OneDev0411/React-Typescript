@@ -151,6 +151,16 @@ const AsyncDealFormEdit = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Deals/form-edit' /* webpackChunkName: "deal_fe" */)
 })
+
+/* ==================================== */
+//  Calendar
+/* ==================================== */
+
+const AsyncCalendar = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Calendar' /* webpackChunkName: "calendar" */)
+})
+
 /* ==================================== */
 //  Contacts
 /* ==================================== */
@@ -182,11 +192,6 @@ const AsyncContactsImportCsv = Load({
 const AsyncCrmTasksList = Load({
   loader: () =>
     import('../views/CRM/Tasks' /* webpackChunkName: "ctm_tasks_list" */)
-})
-
-const AsyncCrmTask = Load({
-  loader: () =>
-    import('../views/CRM/Tasks/TaskPage' /* webpackChunkName: "ctm_task_page" */)
 })
 
 /* ==================================== */
@@ -403,8 +408,9 @@ export default (
         component={AsyncContactsImportCsv}
       />
 
-      <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
       <Route path="/crm/tasks" component={AsyncCrmTasksList} />
+
+      <Route path="/dashboard/calendar" component={AsyncCalendar} />
 
       <Route
         path="/dashboard/deals(/filter/:filter)"

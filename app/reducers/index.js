@@ -11,6 +11,7 @@ import socket from './socket'
 import contacts from './contacts'
 import chatroom from './chatroom'
 import deals from './deals'
+import calendar from './calendar'
 import { tasks } from './tasks'
 import brandConsole from './brandConsole'
 import search from './listings/search'
@@ -39,6 +40,9 @@ const appReducer = combineReducers({
   /* deals reducers */
   deals,
   brandConsole,
+
+  /* calendar */
+  calendar,
 
   /* mls reducers */
   search,

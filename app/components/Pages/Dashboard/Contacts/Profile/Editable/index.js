@@ -29,7 +29,7 @@ class EditableInput extends React.Component {
     }
   }
 
-  onChange = async event => {
+  onChange = event => {
     const { validator } = this.props
     let text = event.target.value
 
@@ -38,12 +38,16 @@ class EditableInput extends React.Component {
     }
 
     if (typeof validator === 'function') {
-      const error = await validator(text)
+      return this.setState({ text }, async () => {
+        const error = await validator(text)
 
-      return this.setState({ text, error: !error })
+        this.setState({
+          error: !error
+        })
+      })
     }
 
-    this.setState({ text, error: false })
+    return this.setState({ text, error: false })
   }
 
   onFocus = event => {

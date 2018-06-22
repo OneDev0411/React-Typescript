@@ -18,6 +18,7 @@ const postcss = function postcss() {
 
 webpackConfig.entry = [
   'babel-polyfill',
+  'intersection-observer',
   'react-hot-loader/patch',
   'webpack-hot-middleware/client',
   appConfig.compile.entry

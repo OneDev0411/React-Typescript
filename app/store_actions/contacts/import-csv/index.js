@@ -1,43 +1,16 @@
-import * as types from '../../../constants/contacts'
+export * from './add-csv-file'
+export * from './update-wizard-step'
+export * from './set-step-validation'
+export * from './update-csv-info'
+export * from './update-csv-map'
 
-export function addCsvFile(file) {
-  return {
-    type: types.CONTACTS__IMPORT_CSV__ADD_FILE,
-    file
-  }
-}
+export * from './set-worker-id'
+export * from './set-worker-state'
 
-export function updateWizardStep(step) {
-  return {
-    type: types.CONTACTS__IMPORT_CSV__UPDATE_WIZARD_STEP,
-    step
-  }
-}
+export * from './request-import-csv'
+export * from './get-worker-state'
 
-export function setCurrentStepValidation(isValid) {
-  return {
-    type: types.CONTACTS__IMPORT_CSV__SET_STEP_VALIDATION,
-    isValid
-  }
-}
+export * from './upload-csv-file'
+export * from './set-csv-file'
 
-export function updateCsvInfo(info) {
-  return {
-    type: types.CONTACTS__IMPORT_CSV__SET_INFO,
-    info
-  }
-}
-
-export function updateCsvFieldsMap(column, data) {
-  return {
-    type: types.CONTACTS__IMPORT_CSV__UPDATE_MAPPING,
-    column,
-    data
-  }
-}
-
-export function resetCsvImport() {
-  return {
-    type: types.CONTACTS__IMPORT_CSV__RESET
-  }
-}
+export * from './reset'

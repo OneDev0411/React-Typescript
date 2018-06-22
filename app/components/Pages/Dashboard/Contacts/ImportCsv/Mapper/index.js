@@ -1,17 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { batchActions } from 'redux-batched-actions'
+
+import CsvParser from 'papaparse'
 import _ from 'underscore'
+
 import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
-import CsvParser from 'papaparse'
+
 import {
   updateCsvFieldsMap,
   updateCsvInfo,
   updateWizardStep,
   setCurrentStepValidation
 } from '../../../../../../store_actions/contacts'
+
 import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from '../../../../../../constants/contacts'
+
 import { selectDefinition } from '../../../../../../reducers/contacts/attributeDefs'
+
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 
 class Mapper extends React.Component {
@@ -19,16 +26,13 @@ class Mapper extends React.Component {
     this.analyze()
   }
 
-  analyze = () => {
-    const { file } = this.props
-
-    CsvParser.parse(file, {
+  analyze = () =>
+    CsvParser.parse(this.props.file, {
       skipEmptyLines: true,
       complete: results => this.onCsvParseComplete(results)
     })
-  }
 
-  onCsvParseComplete = ({ data, meta, errors }) => {
+  onCsvParseComplete = ({ data, errors }) => {
     const {
       updateCsvInfo,
       showMessageModal,
@@ -52,16 +56,14 @@ class Mapper extends React.Component {
       })
     }
 
-    const columns = this.analyzeColumns(colNames, contacts)
-
-    updateCsvInfo({
-      columns,
-      meta,
-      errors,
-      rows: contacts
-    })
-
-    setCurrentStepValidation(true)
+    batchActions([
+      updateCsvInfo({
+        errors,
+        columns: this.analyzeColumns(colNames, contacts),
+        rowsCount: contacts.length
+      }),
+      setCurrentStepValidation(true)
+    ])
   }
 
   analyzeColumns = (columns, fields) => {

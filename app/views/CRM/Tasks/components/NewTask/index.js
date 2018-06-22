@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Field } from 'react-final-form'
 import { addNotification as notify } from 'reapop'
+import cn from 'classnames'
 
 import './styles/main.scss'
 
@@ -123,7 +124,7 @@ class Task extends Component {
         message: `${task.title}`
       })
 
-      deleteCallback(task.id)
+      deleteCallback(task.id, task)
     } catch (error) {
       throw error
     } finally {
@@ -183,10 +184,10 @@ class Task extends Component {
 
   render() {
     const { isDeleting } = this.state
-    const { defaultAssociation } = this.props
+    const { defaultAssociation, className } = this.props
 
     return (
-      <div className="c-new-task">
+      <div className={cn('c-new-task', className)}>
         <LoadSaveReinitializeForm
           load={this.load}
           validate={validate}
@@ -195,7 +196,7 @@ class Task extends Component {
           save={this.save}
         >
           {({
-            reset,
+            form,
             values,
             invalid,
             pristine,
@@ -204,38 +205,40 @@ class Task extends Component {
             handleSubmit
           }) => (
             <form onSubmit={handleSubmit} className="c-new-task__form">
-              <div className="c-new-task__header">
-                <div className="c-new-task__title-wrapper">
-                  {!this.isNew && (
-                    <div className="c-new-task__status">
-                      <Field
-                        size={36}
-                        name="status"
-                        id="task-status"
-                        component={CircleCheckbox}
-                      />
-                    </div>
-                  )}
-                  <Field name="title" component={Title} />
-                </div>
-                <DueDate selectedDate={values.dueDate} />
-              </div>
               <div className="c-new-task__body">
-                <Field name="description" component={Description} />
-                <div className="c-new-task__details">
-                  <TaskType />
-                  <Reminder
-                    dueTime={values.dueTime.value}
-                    dueDate={values.dueDate.value}
-                    selectedDate={values.reminderDate}
+                <div className="c-new-task__header">
+                  <div className="c-new-task__title-wrapper">
+                    {!this.isNew && (
+                      <div className="c-new-task__status">
+                        <Field
+                          size={36}
+                          name="status"
+                          id="task-status"
+                          component={CircleCheckbox}
+                        />
+                      </div>
+                    )}
+                    <Field name="title" component={Title} />
+                  </div>
+                  <DueDate selectedDate={values.dueDate} />
+                </div>
+                <div>
+                  <Field name="description" component={Description} />
+                  <div className="c-new-task__details">
+                    <TaskType />
+                    <Reminder
+                      dueTime={values.dueTime.value}
+                      dueDate={values.dueDate.value}
+                      selectedDate={values.reminderDate}
+                    />
+                  </div>
+                  <Associations
+                    associations={values.associations}
+                    handleCreate={this.handleCreateAssociation}
+                    handleDelete={this.handleDeleteAssociation}
+                    defaultAssociation={defaultAssociation}
                   />
                 </div>
-                <Associations
-                  associations={values.associations}
-                  handleCreate={this.handleCreateAssociation}
-                  handleDelete={this.handleDeleteAssociation}
-                  defaultAssociation={defaultAssociation}
-                />
               </div>
               <div
                 className="c-new-task__footer"
@@ -271,7 +274,7 @@ class Task extends Component {
                 {this.isNew && (
                   <button
                     type="button"
-                    onClick={reset}
+                    onClick={() => form.reset()}
                     disabled={submitting || pristine || isDeleting}
                     className="c-new-address-modal__cancel-btn"
                   >
