@@ -6,7 +6,7 @@ import DealInfo from '../dashboard/deal-info'
 import Comments from '../dashboard/comments'
 import CommentInput from '../dashboard/comments/input'
 import Viewer from './viewer'
-import IconEdit from '../../../../../views/components/SvgIcons/Edit/IconEdit'
+import IconEdit from '../../../../../views/components/SvgIcons/EditFile/IconEditFile'
 
 export default class extends React.Component {
   constructor(props) {

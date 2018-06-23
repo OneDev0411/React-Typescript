@@ -1,9 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-const width = '15'
-const height = '16'
-const viewBox = '0 0 15 16'
+const width = '0'
+const height = '0'
+const viewBox = '0 0 0 0'
 
 const getDimensions = () => ({
   height,
@@ -36,5 +36,5 @@ export default Object.assign(Image, {
   getDimensions,
   getDimensionsCss,
   defaultProps,
-  displayName: 'Edit'
+  displayName: 'IconEditFile'
 })
