@@ -10,7 +10,7 @@ import Follow from '../../../../../../../views/components/Follow'
 import prepareProps from '../prepareListingViewItemProps'
 import { setMapHoveredMarkerId } from '../../../../../../../store_actions/listings/map'
 import { listingStatuses } from '../../../../../../../constants/listings/listing'
-import changeListingFollowStatuses from '../../../../../../../store_actions/listings/listing/change-listing-follow-status'
+import changeListingFollowStatuses from '../../../../../../../store_actions/listings/change-listing-follow-status'
 
 const FollowContainer = styled.div`
   position: absolute;

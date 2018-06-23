@@ -17,7 +17,7 @@ const changeAlertFollowStatuses = (id, statuses) => async (
     alerts: { list }
   } = getState()
 
-  let oldAlert = selectAlert(list, id)
+  const oldAlert = selectAlert(list, id)
 
   try {
     const normalizedAlert = {

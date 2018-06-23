@@ -41,45 +41,6 @@ export const byId = (state = {}, action) => {
   return state
 }
 
-export const byIdWithFollow = (state = {}, action) => {
-  let extendedState = state
-
-  switch (action.type) {
-    case FETCH_CHANGE_LISTING_FOLLOW_SUCCESS:
-      extendedState = {
-        ...state,
-        [action.listing.id]: {
-          ...state[action.listing.id],
-          ...action.listing,
-          isFetching: false
-        }
-      }
-      break
-    case FETCH_CHANGE_LISTING_FOLLOW_REQUEST:
-      extendedState = {
-        ...state,
-        [action.id]: {
-          ...state[action.id],
-          isFetching: true
-        }
-      }
-      break
-    case FETCH_CHANGE_LISTING_FOLLOW_FAILURE:
-      extendedState = {
-        ...state,
-        [action.id]: {
-          ...state[action.id],
-          isFetching: false
-        }
-      }
-      break
-    default:
-      extendedState = state
-  }
-
-  return byId(extendedState, action)
-}
-
 export const allIds = (state = [], action) => {
   switch (action.type) {
     case TOGGLE_FAVORITE:
@@ -147,3 +108,5 @@ export const errorMessage = (state = null, action) => {
       return state
   }
 }
+
+export const selectTabListing = (state, id) => state.byId[id]

@@ -1,14 +1,8 @@
 import { combineReducers } from 'redux'
-import {
-  byIdWithFollow,
-  info,
-  allIds,
-  isFetching,
-  errorMessage
-} from './shared'
+import { byId, info, allIds, isFetching, errorMessage } from './shared'
 
 const listings = combineReducers({
-  byId: byIdWithFollow,
+  byId,
   info,
   allIds,
   isFetching,
