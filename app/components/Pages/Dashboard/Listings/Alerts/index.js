@@ -94,7 +94,7 @@ class Alerts extends Component {
         <div className="l-listings__map">
           <Map markers={feed} selectedAlert={selectedAlert} />
           <ListingsPanel
-            tabName="ALERTS"
+            tabName="alerts"
             listings={{ data: feed }}
             isLoggedIn={isLoggedIn}
             activePanel={activePanel}

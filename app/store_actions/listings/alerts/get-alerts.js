@@ -8,7 +8,7 @@ const getAlerts = params => (dispatch, getState) => {
   }
 
   dispatch({
-    tabName: 'ALERTS',
+    tabName: 'alerts',
     type: actionsType.FETCH_ALERTS_REQUEST
   })
 
@@ -16,7 +16,7 @@ const getAlerts = params => (dispatch, getState) => {
     response => {
       dispatch({
         response,
-        tabName: 'ALERTS',
+        tabName: 'alerts',
         type: actionsType.FETCH_ALERTS_SUCCESS
       })
 
@@ -24,7 +24,7 @@ const getAlerts = params => (dispatch, getState) => {
     },
     ({ message }) => {
       dispatch({
-        tabName: 'ALERTS',
+        tabName: 'alerts',
         type: actionsType.FETCH_ALERTS_FAILURE,
         message: message || 'Something went wrong.'
       })

@@ -5,9 +5,9 @@ import listings from './list'
 import { createNamedWrapperReducer } from '../../../utils/redux-utils'
 
 const favorites = combineReducers({
-  map: createNamedWrapperReducer(map, 'FAVORITES'),
-  panels: createNamedWrapperReducer(panels, 'FAVORITES'),
-  listings: createNamedWrapperReducer(listings, 'FAVORITES')
+  map: createNamedWrapperReducer(map, 'favorites'),
+  panels: createNamedWrapperReducer(panels, 'favorites'),
+  listings: createNamedWrapperReducer(listings, 'favorites')
 })
 
 export default favorites

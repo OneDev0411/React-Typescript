@@ -28,7 +28,7 @@ class Favorites extends Component {
         </div>
         <div className="l-listings__panel">
           <ListingsPanel
-            tabName="FAVORITES"
+            tabName="favorites"
             listings={listings}
             isLoggedIn={isLoggedIn}
             activePanel={activePanel}

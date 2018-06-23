@@ -20,11 +20,11 @@ const ListingPanel = props => {
   return (
     <div className={panelClassName}>
       <PanelsSwitch activePanel={activePanel} tabName={tabName} />
-      {(tabName !== 'ALERTS' ||
-        (tabName === 'ALERTS' && activePanel !== 'map')) && (
+      {(tabName !== 'alerts' ||
+        (tabName === 'alerts' && activePanel !== 'map')) && (
         <div className="l-listings__panel__container">
-          {(tabName !== 'ALERTS' ||
-            (tabName === 'ALERTS' && activePanel === 'table')) && (
+          {(tabName !== 'alerts' ||
+            (tabName === 'alerts' && activePanel === 'table')) && (
             <PanelHeader {...props} info={listings.info} />
           )}
           <div className="c-panel__list-container">
@@ -41,15 +41,18 @@ const ListingPanel = props => {
 }
 
 const ListingPanelHOC = compose(
-  connect((state, { tabName }) => {
-    const { panels } = state[tabName.toLowerCase()]
+  connect(
+    (state, { tabName }) => {
+      const { panels } = state[tabName.toLowerCase()]
 
-    if (panels) {
-      return { ...panels }
-    }
+      if (panels) {
+        return { ...panels }
+      }
 
-    return null
-  }, actions),
+      return null
+    },
+    actions
+  ),
   withHandlers({
     onClickDropdownItem: ({ setPanelSortingIndex, tabName }) => index => {
       setPanelSortingIndex(tabName, index)

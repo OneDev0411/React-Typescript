@@ -10,10 +10,10 @@ import { createNamedWrapperReducer } from '../../../utils/redux-utils'
 const alerts = combineReducers({
   loggedAlert,
   selectedAlertId,
-  map: createNamedWrapperReducer(map, 'ALERTS'),
-  list: createNamedWrapperReducer(list, 'ALERTS'),
+  map: createNamedWrapperReducer(map, 'alerts'),
+  list: createNamedWrapperReducer(list, 'alerts'),
   feed: createNamedWrapperReducer(feed, 'ALERT_FEED'),
-  panels: createNamedWrapperReducer(panels, 'ALERTS')
+  panels: createNamedWrapperReducer(panels, 'alerts')
 })
 
 export default alerts

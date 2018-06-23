@@ -26,7 +26,7 @@ const changeAlertFollowStatuses = (id, statuses) => async (
 
     dispatch({
       response: normalizedAlert,
-      tabName: 'ALERTS',
+      tabName: 'alerts',
       type: FETCH_CHANGE_ALERT_FOLLOW_REQUEST
     })
 
@@ -40,7 +40,7 @@ const changeAlertFollowStatuses = (id, statuses) => async (
 
     dispatch({
       response: normalizedResponse,
-      tabName: 'ALERTS',
+      tabName: 'alerts',
       type: FETCH_CHANGE_ALERT_FOLLOW_SUCCESS
     })
   } catch ({ response, message }) {
@@ -61,7 +61,7 @@ const changeAlertFollowStatuses = (id, statuses) => async (
 
     dispatch({
       response: normalizedAlert,
-      tabName: 'ALERTS',
+      tabName: 'alerts',
       type: FETCH_CHANGE_ALERT_FOLLOW_FAILURE
     })
   }

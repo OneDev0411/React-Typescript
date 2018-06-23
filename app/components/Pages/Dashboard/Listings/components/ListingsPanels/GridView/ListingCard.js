@@ -32,7 +32,7 @@ const ListingCard = ({
 }) => {
   const props = prepareProps(user, listing)
   const mouseEventIsActive =
-    tabName && tabName !== 'ALERTS' && activePanel && activePanel === 'map'
+    tabName && tabName !== 'alerts' && activePanel && activePanel === 'map'
 
   const target = user && !isWidget ? '' : '_blank'
 
