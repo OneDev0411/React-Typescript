@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import S from 'shorti'
 import ReactDOM from 'react-dom'
-import { connect } from 'react-redux'
 import Map from 'google-map-react'
 import React from 'react'
 import { browserHistory, Link } from 'react-router'
@@ -51,10 +50,8 @@ import {
   CarouselItem,
   OverlayTrigger
 } from 'react-bootstrap'
-import { errorMessage } from '../../../../../../reducers/listings/shared/index'
 import Follow from '../../../../../../views/components/Follow'
 import { listingStatuses } from '../../../../../../constants/listings/listing'
-import changeListingFollowStatuses from '../../../../../../store_actions/listings/listing/change-listing-follow-status'
 import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
 
 const ShareButton = ShadowButton.extend`
@@ -864,7 +861,7 @@ const ListingDesktopView = ({
                 listing.user_listing_notification_setting.status) ||
               []
             }
-            isFetching={listing.isFetching}
+            isFetching={isFetching}
             onClick={onClickFollow}
           />
         </div>
@@ -1063,12 +1060,6 @@ const ListingDesktopView = ({
 }
 
 export default compose(
-  connect(
-    null,
-    {
-      changeListingFollowStatuses
-    }
-  ),
   withState('shareModalIsActive', 'setShareModalIsActive', false),
   withState('galleryModalIsActive', 'setGalleryModalState', false),
   withState('galleryModalDirection', 'setGalleryModalDirection', ''),
@@ -1161,10 +1152,6 @@ export default compose(
           handleModalGalleryNav(null, 'next')
         }
       }
-    },
-    onClickFollow: ({ changeListingFollowStatuses, listing }) => statuses => {
-      !listing.isFetching &&
-        changeListingFollowStatuses(listing.id, statuses, 'LISTING')
     }
   }),
   lifecycle({
