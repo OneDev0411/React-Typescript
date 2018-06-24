@@ -165,11 +165,10 @@ class NewContactForm extends Component {
           }}
           initialValues={INITIAL_VALUES}
           render={({
-            reset,
+            form,
             pristine,
             validating,
             handleSubmit,
-            mutators,
             submitting,
             submitError
           }) => (
@@ -197,8 +196,8 @@ class NewContactForm extends Component {
                   name="last_name"
                   title="Last Name"
                 />
-                <Emails mutators={mutators} />
-                <Phones mutators={mutators} />
+                <Emails mutators={form.mutators} />
+                <Phones mutators={form.mutators} />
                 <Field
                   defaultOptions={STAGE_OPTIONS}
                   component={Select}
@@ -217,7 +216,7 @@ class NewContactForm extends Component {
                 )}
                 <ActionButton
                   type="button"
-                  onClick={() => reset(INITIAL_VALUES)}
+                  onClick={() => form.reset(INITIAL_VALUES)}
                   style={{ marginRight: '1em' }}
                   disabled={submitting || pristine}
                 >
