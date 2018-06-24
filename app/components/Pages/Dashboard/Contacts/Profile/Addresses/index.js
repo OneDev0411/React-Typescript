@@ -47,10 +47,7 @@ const Addresses = ({
   ...props
 }) => (
   <div className="c-contact-profile-card">
-    <div
-      className="c-contact-profile-card__header"
-      style={{ position: 'relative' }}
-    >
+    <div className="c-contact-profile-card__header">
       <h3 className="c-contact-profile-card__title">Addresses</h3>
       {addresses.length > 0 && (
         <ActionButton
@@ -163,10 +160,13 @@ function mapStateToProps(state, props) {
 }
 
 const enhance = compose(
-  connect(mapStateToProps, {
-    deleteAttributes,
-    upsertContactAttributes
-  }),
+  connect(
+    mapStateToProps,
+    {
+      deleteAttributes,
+      upsertContactAttributes
+    }
+  ),
   withState('disabled', 'setDisabled', false),
   withState('isOpenModal', 'setShowModal', false),
   withHandlers({

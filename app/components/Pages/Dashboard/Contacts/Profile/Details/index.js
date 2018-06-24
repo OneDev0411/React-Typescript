@@ -6,7 +6,7 @@ import { Source } from './fields/Source'
 import Websites from './fields/Websites'
 import OrginalSource from './fields/OrginalSource'
 
-export default function Details({ contact }) {
+export function ContactInfo({ contact }) {
   return (
     <div className="c-contact-profile-card">
       <h3 className="c-contact-profile-card__title">Contact info</h3>

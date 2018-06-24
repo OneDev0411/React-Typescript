@@ -13,9 +13,9 @@ import Header from './Header'
 import Information from './Information'
 import { ImportantDates } from './ImportantDates'
 import { DealsListWidget } from './Deals'
-import Names from './Names'
+import { Details } from './Names'
 import Tags from './Tags'
-import Details from './Details'
+import { ContactInfo } from './Details'
 import Addresses from './Addresses'
 import AddNote from './Add-Note'
 import Activities from './Activities'
@@ -173,11 +173,11 @@ class ContactProfile extends React.Component {
 
               <Tags contact={contact} />
 
-              <Details contact={contact} />
-
-              <Names contact={contact} />
+              <ContactInfo contact={contact} />
 
               <Addresses contact={contact} />
+
+              <Details contact={contact} />
             </div>
             {!this.state.isDesktopScreen && thirdColumn}
           </SideColumnWrapper>
