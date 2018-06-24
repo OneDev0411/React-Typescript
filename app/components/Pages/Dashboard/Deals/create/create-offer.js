@@ -320,7 +320,7 @@ class CreateOffer extends React.Component {
 
       contextsObject[name] = {
         value,
-        approved: field ? field.approved_at !== null : false
+        approved: field ? field.needs_approval : false
       }
     })
 
@@ -380,7 +380,7 @@ class CreateOffer extends React.Component {
       message: 'Cancel deal creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: "No, don't cancel",
+      cancelLabel: 'No, don\'t cancel',
       onConfirm: this.backToDeal
     })
   }
@@ -582,13 +582,10 @@ function mapStateToProps({ deals }, props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    createOffer,
-    createRoles,
-    updateContext,
-    notify,
-    confirmation
-  }
-)(CreateOffer)
+export default connect(mapStateToProps, {
+  createOffer,
+  createRoles,
+  updateContext,
+  notify,
+  confirmation
+})(CreateOffer)
