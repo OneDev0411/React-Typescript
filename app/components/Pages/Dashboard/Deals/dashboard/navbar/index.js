@@ -1,59 +1,53 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
+import { browserHistory } from 'react-router'
 import { showAttachments } from '../../../../../../store_actions/deals'
-import BulkSubmit from '../bulk-submit'
 import DealEmail from '../../dashboard/deal-email'
+import PageHeader from '../../../../../../views/components/PageHeader'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 class NavBar extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  getSignatures() {
-    this.props.showAttachments()
-  }
-
   render() {
-    const { deal, isBackOffice } = this.props
+    const { deal } = this.props
+    const buttonStyle = {
+      marginLeft: '10px',
+      padding: '0.70em 1.5em'
+    }
 
     return (
-      <div className="deal-navbar">
-        <Link className="back" to="/dashboard/deals">
-          <i className="fa fa-chevron-left" />
-          Deals
-        </Link>
-
-        {deal.checklists && (
-          <div className="ctas">
-            <DealEmail dealEmail={deal.email} />
-            {deal.deal_type === 'Selling' && (
-              <Link
-                className="navbar-button"
-                to={`/dashboard/deals/${deal.id}/create-offer`}
-              >
-                Add New Offer
-              </Link>
-            )}
-
-            <Link
-              className="navbar-button"
-              to={`/dashboard/deals/${deal.id}/files`}
+      <PageHeader title="Deals">
+        <PageHeader.Menu>
+          <DealEmail dealEmail={deal.email} />
+          {deal.deal_type === 'Selling' && (
+            <ActionButton
+              style={buttonStyle}
+              onClick={() =>
+                browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)
+              }
             >
-              View & Upload Files
-            </Link>
+              Add New Offer
+            </ActionButton>
+          )}
 
-            <button
-              className="navbar-button"
-              onClick={() => this.getSignatures()}
-            >
-              Get Signatures
-            </button>
+          <ActionButton
+            inverse
+            style={buttonStyle}
+            onClick={() =>
+              browserHistory.push(`/dashboard/deals/${deal.id}/files`)
+            }
+          >
+            View & Upload Files
+          </ActionButton>
 
-            {/* {!isBackOffice && <BulkSubmit deal={deal} />} */}
-          </div>
-        )}
-      </div>
+          <ActionButton
+            inverse
+            style={buttonStyle}
+            onClick={() => this.props.showAttachments()}
+          >
+            Get Signatures
+          </ActionButton>
+        </PageHeader.Menu>
+      </PageHeader>
     )
   }
 }
