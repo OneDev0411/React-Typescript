@@ -266,82 +266,6 @@ class CalendarContainer extends React.Component {
     getCalendar(...createFutureRange(endRange))
   }
 
-  get Data() {
-    const { calendar, calendarDays: days } = this.props
-    const table = []
-
-    _.each(days, (list, date) => {
-      if (list.length === 0) {
-        return table.push({
-          key: date,
-          ...this.getDayHeader(date),
-          refId: date,
-          data: []
-        })
-      }
-
-      return table.push({
-        key: date,
-        ...this.getDayHeader(date),
-        refId: date,
-        data: list.map(id => ({
-          ...calendar[id]
-        }))
-      })
-    })
-
-    return table
-  }
-
-  get Columns() {
-    return [
-      {
-        id: 'type',
-        header: 'Type',
-        width: '20%',
-        render: ({ rowData }) => <Fragment>{rowData.type_label}</Fragment>
-      },
-      {
-        id: 'name',
-        header: 'Name',
-        width: '30%',
-        render: ({ rowData }) => rowData.title
-      },
-      {
-        id: 'time',
-        header: 'Time',
-        render: ({ rowData }) =>
-          moment.unix(rowData.timestamp).format('hh:mm A')
-      },
-      {
-        id: 'menu',
-        header: '',
-        width: '10%'
-      }
-    ]
-  }
-
-  getDayHeader = date => {
-    const day = moment(date)
-
-    const isSelectedDay =
-      moment(this.props.selectedDate).format('YYYY-MM-DD') ===
-      moment(date).format('YYYY-MM-DD')
-
-    const format = day.format('dddd, MMM DD, YYYY')
-
-    return {
-      header: format,
-      headerStyle: {
-        position: 'sticky',
-        top: '10px',
-        fontWeight: isSelectedDay ? '500' : '400',
-        backgroundColor: isSelectedDay ? '#eff5fa' : '#dce5eb',
-        color: isSelectedDay ? '#2196f3' : '#1d364b'
-      }
-    }
-  }
-
   get SelectedRange() {
     const { startRange, endRange } = this.props
     const offset = new Date().getTimezoneOffset() * 60
@@ -441,8 +365,7 @@ class CalendarContainer extends React.Component {
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
                 positions={LOADING_POSITIONS}
-                columns={this.Columns}
-                data={this.Data}
+                selectedDate={selectedDate}
                 isFetching={isFetching}
                 loadingPosition={loadingPosition}
                 onScrollTop={this.loadPreviousItems}
@@ -464,7 +387,6 @@ function mapStateToProps({ user, calendar }) {
     user,
     isFetching: calendar.isFetching,
     selectedDate: new Date(calendar.selectedDate),
-    calendar: calendar.list,
     calendarDays: calendar.byDay,
     startRange: getStartRange(calendar),
     endRange: getEndRange(calendar)
