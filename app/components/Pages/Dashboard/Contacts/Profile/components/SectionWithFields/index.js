@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { upsertContactAttributes } from '../../../../../../../store_actions/contacts'
+import {
+  upsertContactAttributes,
+  deleteAttributes
+} from '../../../../../../../store_actions/contacts'
 import { selectDefsBySection } from '../../../../../../../reducers/contacts/attributeDefs'
 import { getContactAttributesBySection } from '../../../../../../../models/contacts/helpers'
 
 import { FinalFormModal } from '../../../../../../../views/components/FinalFormModal'
 import { Section } from '../Section'
-import { orderFields } from './helpers/order-fields'
+import { orderFields, formatPreSave } from './helpers'
 
 class SectionWithFields extends Component {
   state = {
@@ -15,29 +18,43 @@ class SectionWithFields extends Component {
     isSaving: false
   }
 
-  upsertAttribute = async attribute => {
-    const { contact, upsertContactAttributes } = this.props
+  handleOpenModal = () => this.setState({ isOpen: true })
+  handleCloseModal = () => {
+    if (this.state.isSaving) {
+      return
+    }
 
-    this.setState(
-      {
-        isSaving: true
-      },
-      async () => {
-        try {
-          await upsertContactAttributes(contact.id, [attribute])
-        } catch (error) {
-          throw error
-        } finally {
-          this.setState({
-            isSaving: false
-          })
-        }
-      }
-    )
+    this.setState({ isOpen: false })
   }
 
-  handleOpenModal = () => this.setState({ isOpen: true })
-  handleCloseModal = () => this.setState({ isOpen: false })
+  handleOnSubmit = async values => {
+    try {
+      this.setState({ isSaving: true })
+
+      const { upsertedAttributeList, deletedAttributesList } = formatPreSave(
+        this.props.fields,
+        values
+      )
+
+      if (upsertedAttributeList.length > 0) {
+        await this.props.upsertContactAttributes(
+          this.props.contact.id,
+          upsertedAttributeList
+        )
+      }
+
+      if (deletedAttributesList.length > 0) {
+        await this.props.deleteAttributes(
+          this.props.contact.id,
+          deletedAttributesList
+        )
+      }
+
+      this.setState({ isSaving: false })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   getModalFields = () => {
     const emptyFields = this.props.sectionAttributesDef
@@ -68,24 +85,32 @@ class SectionWithFields extends Component {
         onEdit={this.handleOpenModal}
       >
         <dl style={{ marginBottom: '1em' }}>
-          {orderedFields.map(field => [
-            <dt
-              key={`${field.id}_title`}
-              style={{
-                color: '#758a9e',
-                fontWeight: '500',
-                marginBottom: '0.25em'
-              }}
-            >
-              {field.attribute_def.label}
-            </dt>,
-            <dd
-              key={`${field.id}_value`}
-              style={{ color: '#17283a', marginBottom: '1em' }}
-            >
-              {field[field.attribute_def.data_type]}
-            </dd>
-          ])}
+          {orderedFields.map(field => {
+            const value = field[field.attribute_def.data_type]
+
+            if (!value) {
+              return null
+            }
+
+            return [
+              <dt
+                key={`${field.id}_title`}
+                style={{
+                  color: '#758a9e',
+                  fontWeight: '500',
+                  marginBottom: '0.25em'
+                }}
+              >
+                {field.attribute_def.label}
+              </dt>,
+              <dd
+                key={`${field.id}_value`}
+                style={{ color: '#17283a', marginBottom: '1em' }}
+              >
+                {value}
+              </dd>
+            ]
+          })}
         </dl>
 
         <FinalFormModal
@@ -93,10 +118,8 @@ class SectionWithFields extends Component {
           isOpen={this.state.isOpen}
           onClose={this.handleCloseModal}
           submitting={this.state.isSaving}
-          title="Edit Contact Details"
-          onSubmit={values => {
-            console.log(values)
-          }}
+          title="Edit Details"
+          onSubmit={this.handleOnSubmit}
         />
       </Section>
     )
@@ -116,7 +139,5 @@ function mapStateToProps(state, props) {
 
 export default connect(
   mapStateToProps,
-  {
-    upsertContactAttributes
-  }
+  { upsertContactAttributes, deleteAttributes }
 )(SectionWithFields)

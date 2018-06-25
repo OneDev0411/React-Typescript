@@ -42,11 +42,7 @@ export function FinalFormModal({
   validate
 }) {
   return (
-    <BasicModal
-      isOpen={isOpen}
-      handleOnClose={onClose}
-      className="c-new-address-modal"
-    >
+    <BasicModal isOpen={isOpen} handleOnClose={onClose}>
       <Form
         validate={validate}
         onSubmit={onSubmit}
@@ -61,6 +57,7 @@ export function FinalFormModal({
             <BasicModal.Footer style={{ justifyContent: 'space-between' }}>
               <div>
                 <button
+                  type="button"
                   disabled={submitting}
                   onClick={onClose}
                   className="c-new-address-modal__cancel-btn"
@@ -70,6 +67,7 @@ export function FinalFormModal({
               </div>
               <div>
                 <ActionButton
+                  type="button"
                   onClick={() => form.reset(getInitialValues(fields))}
                   style={{ marginRight: '1em' }}
                   disabled={submitting || pristine}
@@ -77,10 +75,11 @@ export function FinalFormModal({
                   Reset
                 </ActionButton>
                 <ActionButton
+                  type="button"
                   disabled={submitting || validating}
                   onClick={() => handleSubmit(onSubmit)}
                 >
-                  {submitting ? 'Adding ...' : 'Add'}
+                  {submitting ? 'Saving ...' : 'Save'}
                 </ActionButton>
               </div>
             </BasicModal.Footer>
@@ -91,35 +90,38 @@ export function FinalFormModal({
   )
 }
 
-const getAllFields = (fields, mutators) => {
+const getAllFields = (attributes, mutators) => {
   let allFields = []
 
-  fields.forEach((field, index) => {
-    const { attribute_def } = field
+  attributes.forEach((attribute, index) => {
+    const { attribute_def } = attribute
 
     if (!attribute_def.show) {
       return
     }
 
     const key = `${attribute_def.section}_modal__${attribute_def.name}`
+    const validate = validators[attribute.attribute_def.name]
 
     if (attribute_def.singular) {
-      if (Array.isArray(attribute_def.enum_values)) {
-        return allFields.push(<Select key={key} field={field} />)
+      if (attribute_def.enum_values) {
+        return allFields.push(<Select key={key} attribute={attribute} />)
       }
 
-      return allFields.push(<TextField field={field} key={key} />)
+      return allFields.push(
+        <TextField key={key} attribute={attribute} validate={validate} />
+      )
     } else if (
       !allFields.some(
-        c => c.props.field.attribute_def.name === attribute_def.name
+        c => c.props.attribute.attribute_def.name === attribute_def.name
       )
     ) {
       allFields.push(
         <MultiField
-          field={field}
+          attribute={attribute}
           key={`${key}_${index}`}
           mutators={mutators}
-          validate={validators[field.attribute_def.name]}
+          validate={validate}
         />
       )
     }

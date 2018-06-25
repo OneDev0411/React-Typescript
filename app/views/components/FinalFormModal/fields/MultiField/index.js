@@ -9,9 +9,26 @@ import IconButton from '../../../Button/IconButton'
 import AddIcon from '../../../SvgIcons/AddCircleOutline/IconAddCircleOutline'
 import RemoveIcon from '../../../SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
-export function MultiField({ field, mutators, validate }) {
-  const { attribute_def } = field
+export function MultiField({ attribute, mutators, validate }) {
+  const { attribute_def } = attribute
   let defaultOptions
+  const newAttribute = {
+    attribute_def,
+    id: undefined,
+    [attribute_def.data_type]: ''
+  }
+  const newMultiFieldWithoutLabel = {
+    attribute: newAttribute,
+    value: ''
+  }
+  const newMultiField = {
+    attribute: newAttribute,
+    label: {
+      title: '-Select-',
+      value: '-Select-'
+    },
+    value: ''
+  }
 
   if (attribute_def.labels) {
     defaultOptions = attribute_def.labels.map(label => ({
@@ -58,9 +75,10 @@ export function MultiField({ field, mutators, validate }) {
               <Field
                 component={TextField}
                 id={field}
-                name={`${field}.text`}
+                name={`${field}.value`}
                 placeholder={attribute_def.label}
                 validate={validate}
+                parse={value => value || ''}
               />
               <div
                 style={{
@@ -75,11 +93,12 @@ export function MultiField({ field, mutators, validate }) {
                     color="#2196f3"
                     onClick={() => {
                       if (defaultOptions) {
-                        mutators.push(attribute_def.name, {
-                          label: attribute_def.labels[0]
-                        })
+                        mutators.push(attribute_def.name, newMultiField)
                       } else {
-                        mutators.push(attribute_def.name, { text: '' })
+                        mutators.push(
+                          attribute_def.name,
+                          newMultiFieldWithoutLabel
+                        )
                       }
                     }}
                   >

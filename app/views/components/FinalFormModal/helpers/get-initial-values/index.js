@@ -1,29 +1,33 @@
-export function getInitialValues(fields) {
+export function getInitialValues(attributes) {
   const initialValues = {}
 
-  fields.forEach(field => {
-    const { attribute_def } = field
+  attributes.forEach(attribute => {
+    const { attribute_def } = attribute
     const { name, data_type, singular, labels } = attribute_def
 
     const isSelectField = singular && attribute_def.enum_values
     const isMultiFields = !singular && labels
     const isMultiFieldsWithoutLabels = !singular && !labels
 
-    const value = field[data_type]
+    const value = attribute[data_type]
 
     if (value) {
       if (isSelectField) {
         initialValues[name] = {
-          value,
-          title: value
+          attribute,
+          value: {
+            value,
+            title: value
+          }
         }
       } else if (isMultiFields) {
         const newField = {
+          attribute,
           label: {
-            title: field.label,
-            value: field.label
+            title: attribute.label,
+            value: attribute.label
           },
-          text: value
+          value
         }
 
         if (Array.isArray(initialValues[name])) {
@@ -32,7 +36,7 @@ export function getInitialValues(fields) {
           initialValues[name] = [newField]
         }
       } else if (isMultiFieldsWithoutLabels) {
-        const newField = { text: value }
+        const newField = { attribute, value }
 
         if (Array.isArray(initialValues[name])) {
           initialValues[name] = [...initialValues[name], newField]
@@ -40,7 +44,7 @@ export function getInitialValues(fields) {
           initialValues[name] = [newField]
         }
       } else {
-        initialValues[name] = value
+        initialValues[name] = { attribute, value }
       }
 
       return initialValues
@@ -48,23 +52,27 @@ export function getInitialValues(fields) {
 
     if (isSelectField) {
       initialValues[name] = {
-        title: '-Select-',
-        value: '-Select-'
+        attribute,
+        value: {
+          title: '-Select-',
+          value: '-Select-'
+        }
       }
     } else if (isMultiFields) {
       initialValues[name] = [
         {
+          attribute,
           label: {
             title: '-Select-',
             value: '-Select-'
           },
-          text: ''
+          value: ''
         }
       ]
     } else if (isMultiFieldsWithoutLabels) {
-      initialValues[name] = [{ text: '' }]
+      initialValues[name] = [{ attribute, value: '' }]
     } else {
-      initialValues[name] = ''
+      initialValues[name] = { attribute, value: '' }
     }
   })
 

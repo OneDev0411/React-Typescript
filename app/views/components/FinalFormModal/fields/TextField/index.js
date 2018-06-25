@@ -21,7 +21,7 @@ const TextInput = styled.input`
 `
 
 TextField.propTypes = {
-  field: PropTypes.shape().isRequired,
+  attribute: PropTypes.shape().isRequired,
   validate: PropTypes.func
 }
 
@@ -30,13 +30,18 @@ TextField.defaultTypes = {
 }
 
 export function TextField(props) {
-  const { attribute_def } = props.field
+  const { attribute_def } = props.attribute
   const id = `${attribute_def.section}_modal__${attribute_def.name}`
 
   return (
     <Field
       validate={props.validate}
       name={attribute_def.name}
+      format={value => value && value.value}
+      parse={value => ({
+        attribute: props.attribute,
+        value: value == null ? '' : value
+      })}
       render={({ input, meta }) => {
         const { error, touched } = meta
         const hasError = error && touched
