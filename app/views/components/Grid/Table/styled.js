@@ -5,19 +5,6 @@ export const Container = styled.div`
   margin-top: 16px;
 `
 
-export const SubHeader = styled.div`
-  display: flex;
-  align-items: center;
-  height: 32px;
-  border-radius: 4px;
-  background-color: #eff5fa;
-  padding: 0 16px;
-  margin: 15px 0;
-  color: #2196f3;
-  font-size: 17px;
-  font-weight: 600;
-`
-
 export const Header = styled.div``
 export const Body = styled.div``
 

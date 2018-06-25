@@ -3,7 +3,7 @@ import React from 'react'
 import { Container, Header, HeaderRow, HeaderCell } from './styled'
 
 import BasicTable from './Tables/Basic'
-import NestedTable from './Tables/Nested'
+import MultipleTable from './Tables/Multiple'
 
 class Grid extends React.Component {
   /**
@@ -32,11 +32,11 @@ class Grid extends React.Component {
    * decides to render which kind of tables
    */
   renderTable = sizes => {
-    const { nested, onGroupRef } = this.props
+    const { multiple, onTableRef } = this.props
 
-    if (nested) {
+    if (multiple) {
       return (
-        <NestedTable {...this.props} sizes={sizes} onGroupRef={onGroupRef} />
+        <MultipleTable {...this.props} sizes={sizes} onTableRef={onTableRef} />
       )
     }
 
