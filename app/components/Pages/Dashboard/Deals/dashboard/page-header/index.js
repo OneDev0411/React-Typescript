@@ -6,7 +6,7 @@ import DealEmail from '../../dashboard/deal-email'
 import PageHeader from '../../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
-class NavBar extends React.Component {
+class Header extends React.Component {
   render() {
     const { deal } = this.props
     const buttonStyle = {
@@ -57,4 +57,4 @@ export default connect(
     isBackOffice: deals.backoffice
   }),
   { showAttachments }
-)(NavBar)
+)(Header)

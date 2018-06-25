@@ -8,7 +8,7 @@ import DealEmail from '../dashboard/deal-email'
 import PageHeader from '../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
-export class FileManager extends React.Component {
+export class Header extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -58,4 +58,4 @@ export class FileManager extends React.Component {
 
 export default connect(null, {
   setUploadFiles
-})(FileManager)
+})(Header)
