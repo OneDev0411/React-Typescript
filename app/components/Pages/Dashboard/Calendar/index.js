@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { batchActions } from 'redux-batched-actions'
-import { browserHistory } from 'react-router'
 
 import moment from 'moment'
 import _ from 'underscore'
@@ -60,7 +59,6 @@ class CalendarContainer extends React.Component {
 
     this.isObserverEnabled = false
     // this.onEventObserve = _.debounce(this.onEventObserve, 150)
-    this.getGridTrProps = this.getGridTrProps.bind(this)
   }
 
   componentDidMount() {
@@ -280,41 +278,11 @@ class CalendarContainer extends React.Component {
     }
   }
 
-  getGridTrProps(rowIndex, { original: row }) {
-    const props = {}
-
-    switch (row.object_type) {
-      case 'deal_context':
-        props.onClick = () =>
-          browserHistory.push(`/dashboard/deals/${row.deal}`)
-        break
-
-      case 'contact_attribute':
-        props.onClick = () =>
-          browserHistory.push(`/dashboard/contacts/${row.contact}`)
-        break
-
-      case 'crm_task':
-        props.style =
-          row.status === 'DONE'
-            ? { textDecoration: 'line-through', opacity: 0.5 }
-            : {}
-
-        props.onClick = () =>
-          this.setState({
-            showCreateTaskMenu: true,
-            selectedTask: row.crm_task
-          })
-        break
-    }
-
-    return {
-      ...props,
-      style: {
-        ...props.style,
-        cursor: 'pointer'
-      }
-    }
+  handleSelectTask = row => {
+    this.setState({
+      showCreateTaskMenu: true,
+      selectedTask: row.crm_task
+    })
   }
 
   render() {
@@ -371,7 +339,7 @@ class CalendarContainer extends React.Component {
                 onScrollTop={this.loadPreviousItems}
                 onScrollBottom={this.loadNextItems}
                 onContainerScroll={e => this.handleContainerScroll(e.target)}
-                getTrProps={this.getGridTrProps}
+                onSelectTask={this.handleSelectTask}
                 onRef={this.onTableRef}
               />
             </div>

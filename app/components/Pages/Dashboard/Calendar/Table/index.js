@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
+
 import ScrollDetector from 'react-scroll-detector'
 import moment from 'moment'
 import _ from 'underscore'
@@ -10,6 +12,12 @@ import EmptyState from './EmptyState'
 import Fetching from './Fetching'
 
 export class Table extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.getGridTrProps = this.getGridTrProps.bind(this)
+  }
+
   getDayHeader = date => moment(date).format('dddd, MMM DD, YYYY')
 
   isSelectedDay = date =>
@@ -60,8 +68,15 @@ export class Table extends React.Component {
       {
         id: 'time',
         header: 'Time',
-        render: ({ rowData }) =>
-          moment.unix(rowData.timestamp).format('hh:mm A')
+        render: ({ rowData }) => {
+          const date = moment.unix(rowData.timestamp)
+
+          if (rowData.object_type !== 'crm_task') {
+            date.utcOffset(0)
+          }
+
+          return date.format('hh:mm A')
+        }
       },
       {
         id: 'menu',
@@ -69,6 +84,39 @@ export class Table extends React.Component {
         width: '10%'
       }
     ]
+  }
+
+  getGridTrProps(rowIndex, { original: row }) {
+    const props = {}
+
+    switch (row.object_type) {
+      case 'deal_context':
+        props.onClick = () =>
+          browserHistory.push(`/dashboard/deals/${row.deal}`)
+        break
+
+      case 'contact_attribute':
+        props.onClick = () =>
+          browserHistory.push(`/dashboard/contacts/${row.contact}`)
+        break
+
+      case 'crm_task':
+        props.style =
+          row.status === 'DONE'
+            ? { textDecoration: 'line-through', opacity: 0.5 }
+            : {}
+
+        props.onClick = () => this.props.onSelectTask(row)
+        break
+    }
+
+    return {
+      ...props,
+      style: {
+        ...props.style,
+        cursor: 'pointer'
+      }
+    }
   }
 
   render() {
@@ -110,7 +158,7 @@ export class Table extends React.Component {
             data={data}
             emptyState={<EmptyState />}
             onTableRef={onRef}
-            getTrProps={getTrProps}
+            getTrProps={this.getGridTrProps}
             SubComponent={({ date }) => (
               <TableHeader isSelectedDay={this.isSelectedDay(date)}>
                 {this.getDayHeader(date)}
