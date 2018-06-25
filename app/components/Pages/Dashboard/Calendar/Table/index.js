@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import ScrollDetector from 'react-scroll-detector'
 import moment from 'moment'
+import _ from 'underscore'
 
 import Grid from '../../../../../views/components/Grid/Table'
 import { GridContainer, TableHeader } from './styled'
