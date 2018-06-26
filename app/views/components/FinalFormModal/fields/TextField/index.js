@@ -54,6 +54,7 @@ export function TextField(props) {
             <TextInput
               {...input}
               id={id}
+              readOnly={!attribute_def.editable}
               placeholder={attribute_def.label}
               type="text"
             />
