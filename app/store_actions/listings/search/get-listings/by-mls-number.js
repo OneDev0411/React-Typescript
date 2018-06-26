@@ -8,7 +8,7 @@ const getListingsByMlsNumber = mlsNumber => (dispatch, getState) => {
   }
 
   dispatch({
-    tabName: 'SEARCH',
+    tabName: 'search',
     type: listingsTypes.FETCH_LISTINGS_REQUEST
   })
 
@@ -16,17 +16,19 @@ const getListingsByMlsNumber = mlsNumber => (dispatch, getState) => {
     response => {
       dispatch({
         response,
-        tabName: 'SEARCH',
+        tabName: 'search',
         type: listingsTypes.FETCH_LISTINGS_SUCCESS
       })
+
       return Promise.resolve(response)
     },
     ({ message }) => {
       dispatch({
-        tabName: 'SEARCH',
+        tabName: 'search',
         type: listingsTypes.FETCH_LISTINGS_FAILURE,
         message: message || 'Something went wrong.'
       })
+
       return Promise.reject(message)
     }
   )
