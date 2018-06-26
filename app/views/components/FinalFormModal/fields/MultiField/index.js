@@ -37,6 +37,14 @@ export function MultiField({ attribute, mutators, validate }) {
     }))
   }
 
+  function addNewField() {
+    if (defaultOptions) {
+      mutators.push(attribute_def.name, newMultiField)
+    } else {
+      mutators.push(attribute_def.name, newMultiFieldWithoutLabel)
+    }
+  }
+
   return (
     <FieldArray name={attribute_def.name}>
       {({ fields }) =>
@@ -73,12 +81,17 @@ export function MultiField({ attribute, mutators, validate }) {
               }}
             >
               <Field
+                attributeDef={attribute_def}
                 component={TextField}
                 id={field}
                 name={`${field}.value`}
-                placeholder={attribute_def.label}
                 validate={validate}
                 parse={value => value || ''}
+                onBlur={(newValue, initialValue) => {
+                  if (newValue && newValue !== initialValue) {
+                    addNewField()
+                  }
+                }}
               />
               <div
                 style={{
@@ -91,16 +104,7 @@ export function MultiField({ attribute, mutators, validate }) {
                   <IconButton
                     type="button"
                     color="#2196f3"
-                    onClick={() => {
-                      if (defaultOptions) {
-                        mutators.push(attribute_def.name, newMultiField)
-                      } else {
-                        mutators.push(
-                          attribute_def.name,
-                          newMultiFieldWithoutLabel
-                        )
-                      }
-                    }}
+                    onClick={addNewField}
                   >
                     <AddIcon />
                   </IconButton>
