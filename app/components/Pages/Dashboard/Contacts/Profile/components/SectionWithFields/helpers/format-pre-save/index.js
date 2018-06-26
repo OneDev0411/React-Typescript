@@ -37,7 +37,7 @@ export function formatPreSave(previousFields, nextFields) {
 
     if (previousAttribute) {
       previousValue = previousAttribute[type]
-      previousLabel = previousAttribute[label]
+      previousLabel = previousAttribute.label
     }
 
     let newValue = typeof value === 'string' ? value : value.value
@@ -47,39 +47,43 @@ export function formatPreSave(previousFields, nextFields) {
     }
 
     if (attribute.id) {
-      if (newValue !== undefined || (label && label.value !== previousLabel)) {
-        if (attribute_def.has_label) {
-          if (!newValue) {
-            deletedAttributesList.push(attribute.id)
-          } else {
-            upsertedAttributeList.push({
-              id: attribute.id,
-              [type]: newValue,
-              label: label && label.value
-            })
-          }
-        } else if (attribute_def.enum_values) {
-          if (newValue === selectInitialValue) {
-            deletedAttributesList.push(attribute.id)
-          } else {
-            upsertedAttributeList.push({
-              id: attribute.id,
-              [type]: newValue
-            })
-          }
+      if (
+        value &&
+        label &&
+        attribute_def.has_label &&
+        label.value !== previousLabel
+      ) {
+        upsertedAttributeList.push({
+          id: attribute.id,
+          [type]: value,
+          label: label && label.value
+        })
+      } else if (attribute_def.enum_values && newValue) {
+        if (newValue === selectInitialValue) {
+          deletedAttributesList.push(attribute.id)
         } else {
           upsertedAttributeList.push({
             id: attribute.id,
             [type]: newValue
           })
         }
+      } else if (newValue) {
+        upsertedAttributeList.push({
+          id: attribute.id,
+          [type]: newValue
+        })
       }
     } else if (newValue && newValue !== selectInitialValue) {
-      if (attribute_def.has_label && label.value !== selectInitialValue) {
+      if (attribute_def.has_label) {
         upsertedAttributeList.push({
           attribute_def,
           [type]: newValue,
-          label: label && label.value
+          label:
+            label && label.value
+              ? label.value === selectInitialValue
+                ? attribute_def.labels[0]
+                : label.value
+              : attribute_def.labels[0]
         })
       } else {
         upsertedAttributeList.push({
