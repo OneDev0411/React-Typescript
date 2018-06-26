@@ -86,10 +86,19 @@ class SectionWithFields extends Component {
       >
         <dl style={{ marginBottom: '1em' }}>
           {orderedFields.map(field => {
-            const value = field[field.attribute_def.data_type]
+            const { attribute_def } = field
+            const value = field[attribute_def.data_type]
 
             if (!value) {
               return null
+            }
+
+            let title = attribute_def.label
+
+            if (field.label) {
+              title = `${field.label}${
+                attribute_def.name !== 'website' ? ` ${title}` : ''
+              }`
             }
 
             return [
@@ -101,7 +110,7 @@ class SectionWithFields extends Component {
                   marginBottom: '0.25em'
                 }}
               >
-                {field.attribute_def.label}
+                {title}
               </dt>,
               <dd
                 key={`${field.id}_value`}
