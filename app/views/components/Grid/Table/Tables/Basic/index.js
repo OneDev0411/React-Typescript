@@ -3,13 +3,22 @@ import PropTypes from 'prop-types'
 
 import { BodyCell, BodyRow } from '../../styled'
 
-const BasicTable = ({ data, columns, sizes, emptyState, getTrProps }) => {
+const BasicTable = ({
+  data,
+  columns,
+  sizes,
+  emptyState,
+  getTrProps,
+  SubComponent
+}) => {
   if (data.length === 0) {
     return emptyState
   }
 
   return (
     <Fragment>
+      {SubComponent && <SubComponent data={data} columns={columns} />}
+
       {data.map((row, rowIndex) => (
         <BodyRow
           key={row.key || rowIndex}

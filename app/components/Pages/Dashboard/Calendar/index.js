@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { batchActions } from 'redux-batched-actions'
-import { browserHistory } from 'react-router'
 
 import moment from 'moment'
 import _ from 'underscore'
@@ -60,7 +59,6 @@ class CalendarContainer extends React.Component {
 
     this.isObserverEnabled = false
     // this.onEventObserve = _.debounce(this.onEventObserve, 150)
-    this.getGridTrProps = this.getGridTrProps.bind(this)
   }
 
   componentDidMount() {
@@ -266,82 +264,6 @@ class CalendarContainer extends React.Component {
     getCalendar(...createFutureRange(endRange))
   }
 
-  get Data() {
-    const { calendar, calendarDays: days } = this.props
-    const table = []
-
-    _.each(days, (list, date) => {
-      if (list.length === 0) {
-        return table.push({
-          key: date,
-          ...this.getDayHeader(date),
-          refId: date,
-          data: []
-        })
-      }
-
-      return table.push({
-        key: date,
-        ...this.getDayHeader(date),
-        refId: date,
-        data: list.map(id => ({
-          ...calendar[id]
-        }))
-      })
-    })
-
-    return table
-  }
-
-  get Columns() {
-    return [
-      {
-        id: 'type',
-        header: 'Type',
-        width: '20%',
-        render: ({ rowData }) => <Fragment>{rowData.type_label}</Fragment>
-      },
-      {
-        id: 'name',
-        header: 'Name',
-        width: '30%',
-        render: ({ rowData }) => rowData.title
-      },
-      {
-        id: 'time',
-        header: 'Time',
-        render: ({ rowData }) =>
-          moment.unix(rowData.timestamp).format('hh:mm A')
-      },
-      {
-        id: 'menu',
-        header: '',
-        width: '10%'
-      }
-    ]
-  }
-
-  getDayHeader = date => {
-    const day = moment(date)
-
-    const isSelectedDay =
-      moment(this.props.selectedDate).format('YYYY-MM-DD') ===
-      moment(date).format('YYYY-MM-DD')
-
-    const format = day.format('dddd, MMM DD, YYYY')
-
-    return {
-      header: format,
-      headerStyle: {
-        position: 'sticky',
-        top: '10px',
-        fontWeight: isSelectedDay ? '500' : '400',
-        backgroundColor: isSelectedDay ? '#eff5fa' : '#dce5eb',
-        color: isSelectedDay ? '#2196f3' : '#1d364b'
-      }
-    }
-  }
-
   get SelectedRange() {
     const { startRange, endRange } = this.props
     const offset = new Date().getTimezoneOffset() * 60
@@ -356,41 +278,11 @@ class CalendarContainer extends React.Component {
     }
   }
 
-  getGridTrProps(rowIndex, { original: row }) {
-    const props = {}
-
-    switch (row.object_type) {
-      case 'deal_context':
-        props.onClick = () =>
-          browserHistory.push(`/dashboard/deals/${row.deal}`)
-        break
-
-      case 'contact_attribute':
-        props.onClick = () =>
-          browserHistory.push(`/dashboard/contacts/${row.contact}`)
-        break
-
-      case 'crm_task':
-        props.style =
-          row.status === 'DONE'
-            ? { textDecoration: 'line-through', opacity: 0.5 }
-            : {}
-
-        props.onClick = () =>
-          this.setState({
-            showCreateTaskMenu: true,
-            selectedTask: row.crm_task
-          })
-        break
-    }
-
-    return {
-      ...props,
-      style: {
-        ...props.style,
-        cursor: 'pointer'
-      }
-    }
+  handleSelectTask = row => {
+    this.setState({
+      showCreateTaskMenu: true,
+      selectedTask: row.crm_task
+    })
   }
 
   render() {
@@ -441,14 +333,13 @@ class CalendarContainer extends React.Component {
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
                 positions={LOADING_POSITIONS}
-                columns={this.Columns}
-                data={this.Data}
+                selectedDate={selectedDate}
                 isFetching={isFetching}
                 loadingPosition={loadingPosition}
                 onScrollTop={this.loadPreviousItems}
                 onScrollBottom={this.loadNextItems}
                 onContainerScroll={e => this.handleContainerScroll(e.target)}
-                getTrProps={this.getGridTrProps}
+                onSelectTask={this.handleSelectTask}
                 onRef={this.onTableRef}
               />
             </div>
@@ -464,7 +355,6 @@ function mapStateToProps({ user, calendar }) {
     user,
     isFetching: calendar.isFetching,
     selectedDate: new Date(calendar.selectedDate),
-    calendar: calendar.list,
     calendarDays: calendar.byDay,
     startRange: getStartRange(calendar),
     endRange: getEndRange(calendar)

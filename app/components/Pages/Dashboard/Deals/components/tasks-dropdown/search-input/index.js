@@ -26,17 +26,13 @@ export const SearchInput = ({
   onClick,
   onFocus
 }) => (
-  <SearchContainer>
+  <SearchContainer onClick={onClick}>
     {searchable && (
-      <Input
-        {...getInputProps({ placeholder, value })}
-        onClick={onClick}
-        onFocus={onFocus}
-      />
+      <Input {...getInputProps({ placeholder, value })} onFocus={onFocus} />
     )}
 
     {!searchable && (
-      <Title onClick={onClick} hasTask={selectedTask !== undefined}>
+      <Title hasTask={selectedTask !== undefined}>
         {(selectedTask && selectedTask.title) || value || 'Select a task'}
       </Title>
     )}
