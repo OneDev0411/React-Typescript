@@ -6,7 +6,7 @@ const propTypes = {
   inverse: PropTypes.bool
 }
 
-const defaultTypes = {
+const defaultProps = {
   onClick: () => {},
   inverse: false
 }
@@ -44,6 +44,6 @@ const ActionButton = styled.button`
 `
 
 ActionButton.propTypes = propTypes
-ActionButton.defaultProps = defaultTypes
+ActionButton.defaultProps = defaultProps
 
 export default ActionButton
