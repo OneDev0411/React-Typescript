@@ -1,5 +1,3 @@
-import _ from 'underscore'
-
 export function getContactAddresses(contact) {
   if (!contact) {
     throw new Error('Contact object is required!')
