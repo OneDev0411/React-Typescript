@@ -16,7 +16,7 @@ export function Section(props) {
     <Container>
       {props.title && (
         <Header>
-          <Title>Details</Title>
+          <Title>{props.title}</Title>
           {typeof props.onEdit === 'function' && (
             <EditButton onClick={props.onEdit}>
               <EditIcon

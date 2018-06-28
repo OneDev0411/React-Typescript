@@ -1,5 +1,7 @@
 import { flatten, indexBy } from 'underscore'
 
+import { getParser } from '../get-parser'
+
 export function formatPreSave(previousFields, nextFields) {
   let upsertedAttributeList = []
   let deletedAttributesList = []
@@ -44,6 +46,8 @@ export function formatPreSave(previousFields, nextFields) {
 
     if (newValue === previousValue) {
       newValue = undefined
+    } else {
+      newValue = getParser(attribute)(newValue)
     }
 
     if (attribute.id) {
@@ -55,7 +59,7 @@ export function formatPreSave(previousFields, nextFields) {
       ) {
         upsertedAttributeList.push({
           id: attribute.id,
-          [type]: value,
+          [type]: getParser(attribute)(value),
           label: label && label.value
         })
       } else if (attribute_def.enum_values && newValue) {

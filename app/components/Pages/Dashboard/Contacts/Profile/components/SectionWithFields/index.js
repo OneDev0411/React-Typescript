@@ -10,7 +10,7 @@ import { getContactAttributesBySection } from '../../../../../../../models/conta
 
 import { FinalFormModal } from '../../../../../../../views/components/FinalFormModal'
 import { Section } from '../Section'
-import { orderFields, formatPreSave } from './helpers'
+import { orderFields, formatPreSave, getFormater } from './helpers'
 
 class SectionWithFields extends Component {
   state = {
@@ -77,13 +77,11 @@ class SectionWithFields extends Component {
   }
 
   render() {
+    const sectionTitle = this.props.title || this.props.section
     const orderedFields = orderFields(this.props.fields, this.props.fieldsOrder)
 
     return (
-      <Section
-        title={`Edit ${this.props.section}`}
-        onEdit={this.handleOpenModal}
-      >
+      <Section title={sectionTitle} onEdit={this.handleOpenModal}>
         <dl style={{ marginBottom: '1em' }}>
           {orderedFields.map(field => {
             const { attribute_def } = field
@@ -116,7 +114,7 @@ class SectionWithFields extends Component {
                 key={`${field.id}_value`}
                 style={{ color: '#17283a', marginBottom: '1em' }}
               >
-                {value}
+                {getFormater(field)(value)}
               </dd>
             ]
           })}
@@ -127,7 +125,7 @@ class SectionWithFields extends Component {
           isOpen={this.state.isOpen}
           onClose={this.handleCloseModal}
           submitting={this.state.isSaving}
-          title="Edit Details"
+          title={`Edit ${sectionTitle}`}
           onSubmit={this.handleOnSubmit}
         />
       </Section>
