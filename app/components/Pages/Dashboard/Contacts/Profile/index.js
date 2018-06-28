@@ -11,7 +11,7 @@ import { selectDefinitionByName } from '../../../../../reducers/contacts/attribu
 import { Container } from '../components/Container'
 import Header from './Header'
 import Information from './Information'
-import { ImportantDates } from './ImportantDates'
+import { Dates } from './Dates'
 import { DealsListWidget } from './Deals'
 import { Details } from './Names'
 import Tags from './Tags'
@@ -157,7 +157,7 @@ class ContactProfile extends React.Component {
 
     const thirdColumn = (
       <ThirdColumn>
-        <ImportantDates contact={contact} />
+        <Dates contact={contact} />
         <DealsListWidget contactId={contact.id} />
       </ThirdColumn>
     )
