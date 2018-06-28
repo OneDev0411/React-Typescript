@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 
@@ -9,8 +10,24 @@ import IconButton from '../../../Button/IconButton'
 import AddIcon from '../../../SvgIcons/AddCircleOutline/IconAddCircleOutline'
 import RemoveIcon from '../../../SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
-export function MultiField({ attribute, mutators, validate }) {
-  const { attribute_def } = attribute
+MultiField.propTypes = {
+  attribute: PropTypes.shape().isRequired,
+  format: PropTypes.func,
+  mutators: PropTypes.shape().isRequired,
+  parse: PropTypes.func,
+  placeholder: PropTypes.string,
+  validate: PropTypes.func
+}
+
+MultiField.defaultProps = {
+  placeholder: '',
+  format: t => t,
+  parse: t => t,
+  validate: () => undefined
+}
+
+export function MultiField(props) {
+  const { attribute_def } = props.attribute
   let defaultOptions
   const newAttribute = {
     attribute_def,
@@ -39,9 +56,9 @@ export function MultiField({ attribute, mutators, validate }) {
 
   function addNewField() {
     if (defaultOptions) {
-      mutators.push(attribute_def.name, newMultiField)
+      props.mutators.push(attribute_def.name, newMultiField)
     } else {
-      mutators.push(attribute_def.name, newMultiFieldWithoutLabel)
+      props.mutators.push(attribute_def.name, newMultiFieldWithoutLabel)
     }
   }
 
@@ -56,7 +73,7 @@ export function MultiField({ attribute, mutators, validate }) {
               display: 'flex'
             }}
           >
-            <Container withoutLabel={!defaultOptions} style={{ width: '30%' }}>
+            <Container withoutLabel={!defaultOptions} style={{ width: '40%' }}>
               <Title htmlFor={field}>{attribute_def.label}</Title>
               {defaultOptions && (
                 <Field
@@ -71,7 +88,7 @@ export function MultiField({ attribute, mutators, validate }) {
             </Container>
             <div
               style={{
-                width: '70%',
+                width: '60%',
                 display: 'flex',
                 alignItems: 'flex-end',
                 padding: '1em',
@@ -81,17 +98,14 @@ export function MultiField({ attribute, mutators, validate }) {
               }}
             >
               <Field
-                attributeDef={attribute_def}
                 component={TextField}
                 id={field}
+                format={props.format}
                 name={`${field}.value`}
-                validate={validate}
-                parse={value => value || ''}
-                onBlur={(newValue, initialValue) => {
-                  if (newValue && newValue !== initialValue) {
-                    addNewField()
-                  }
-                }}
+                parse={props.parse}
+                placeholder={props.placeholder}
+                readOnly={!attribute_def.editable}
+                validate={props.validate}
               />
               <div
                 style={{

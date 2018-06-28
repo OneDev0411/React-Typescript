@@ -1,3 +1,5 @@
+import { getFormater } from '../get-formater'
+
 export function getInitialValues(attributes) {
   const initialValues = {}
 
@@ -9,7 +11,7 @@ export function getInitialValues(attributes) {
     const isMultiFields = !singular && labels
     const isMultiFieldsWithoutLabels = !singular && !labels
 
-    const value = attribute[data_type]
+    const value = getFormater(attribute)(attribute[data_type])
 
     if (value) {
       if (isSelectField) {

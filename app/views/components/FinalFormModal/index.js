@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 
-import { isEmail } from '../../../utils/validations'
-
 import BasicModal from '../BasicModal'
 import ActionButton from '../Button/ActionButton'
 
@@ -12,11 +10,7 @@ import { Select } from './fields/Select'
 import { TextField } from './fields/TextField'
 import { MultiField } from './fields/MultiField'
 
-import { getInitialValues } from './helpers'
-
-const validators = {
-  email: isEmail
-}
+import { getInitialValues, getPlaceholder, getValidator } from './helpers'
 
 FinalFormModal.propTypes = {
   fields: PropTypes.arrayOf(PropTypes.shape()).isRequired,
@@ -42,7 +36,7 @@ export function FinalFormModal({
   validate
 }) {
   return (
-    <BasicModal isOpen={isOpen} handleOnClose={onClose}>
+    <BasicModal isOpen={isOpen} handleOnClose={onClose} title={title}>
       <Form
         validate={validate}
         onSubmit={onSubmit}
@@ -101,7 +95,8 @@ const getAllFields = (attributes, mutators) => {
     }
 
     const key = `${attribute_def.section}_modal__${attribute_def.name}`
-    const validate = validators[attribute.attribute_def.name]
+    const placeholder = getPlaceholder(attribute)
+    const validate = getValidator(attribute)
 
     if (attribute_def.singular) {
       if (attribute_def.enum_values) {
@@ -109,7 +104,12 @@ const getAllFields = (attributes, mutators) => {
       }
 
       return allFields.push(
-        <TextField key={key} attribute={attribute} validate={validate} />
+        <TextField
+          attribute={attribute}
+          key={key}
+          placeholder={placeholder}
+          validate={validate}
+        />
       )
     } else if (
       !allFields.some(
@@ -121,6 +121,7 @@ const getAllFields = (attributes, mutators) => {
           attribute={attribute}
           key={`${key}_${index}`}
           mutators={mutators}
+          placeholder={placeholder}
           validate={validate}
         />
       )

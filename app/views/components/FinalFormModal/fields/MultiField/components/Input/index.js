@@ -3,7 +3,7 @@ import React from 'react'
 import { ErrorMessage, Input } from '../../../../styled-components/field'
 
 export function TextField(props) {
-  const { meta, attributeDef } = props
+  const { meta } = props
   const hasError = meta.error && meta.touched
 
   return (
@@ -11,13 +11,14 @@ export function TextField(props) {
       <Input
         {...props.input}
         id={props.id || `new-contact__${input.name}`}
-        placeholder={attributeDef.label}
+        placeholder={props.placeholder}
+        readOnly={props.readOnly}
         type="text"
-        readOnly={!attributeDef.editable}
-        onBlur={event => props.onBlur(event.target.value, meta.initial)}
       />
       {hasError && (
-        <ErrorMessage style={{ wordWrap: 'break-word' }}>{error}</ErrorMessage>
+        <ErrorMessage style={{ wordWrap: 'break-word' }}>
+          {meta.error}
+        </ErrorMessage>
       )}
     </div>
   )

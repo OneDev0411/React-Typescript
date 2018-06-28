@@ -22,11 +22,17 @@ const TextInput = styled.input`
 
 TextField.propTypes = {
   attribute: PropTypes.shape().isRequired,
+  format: PropTypes.func,
+  parse: PropTypes.func,
+  placeholder: PropTypes.string,
   validate: PropTypes.func
 }
 
-TextField.defaultTypes = {
-  validate: () => ({})
+TextField.defaultProps = {
+  format: t => t,
+  parse: t => t,
+  placeholder: '',
+  validate: () => undefined
 }
 
 export function TextField(props) {
@@ -35,16 +41,20 @@ export function TextField(props) {
 
   return (
     <Field
-      validate={props.validate}
       name={attribute_def.name}
-      format={value => value && value.value}
+      format={value => {
+        value =
+          (value && value.value) || (typeof value === 'string' && value) || ''
+
+        return props.format(value)
+      }}
       parse={value => ({
         attribute: props.attribute,
-        value: value == null ? '' : value
+        value: value ? props.parse(value) : ''
       })}
+      validate={value => props.validate(value.value || value)}
       render={({ input, meta }) => {
-        const { error, touched } = meta
-        const hasError = error && touched
+        const hasError = meta.error && meta.touched
 
         return (
           <Container>
@@ -55,10 +65,10 @@ export function TextField(props) {
               {...input}
               id={id}
               readOnly={!attribute_def.editable}
-              placeholder={attribute_def.label}
+              placeholder={props.placeholder}
               type="text"
             />
-            {hasError && <ErrorMessage>{error}</ErrorMessage>}
+            {hasError && <ErrorMessage>{meta.error}</ErrorMessage>}
           </Container>
         )
       }}
