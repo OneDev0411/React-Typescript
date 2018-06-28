@@ -20,7 +20,7 @@ import { confirmation } from '../../../../../../store_actions/confirmation'
 
 import DeletingMessage from './components/DeletingMessage'
 import Stage from '../../../../../../views/components/ContactStage'
-import TrashIcon from '../../../../../../views/components/SvgIcons/TrashIcon'
+import DeleteIcon from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import Tooltip from '../../../../../../views/components/tooltip'
 
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
@@ -179,7 +179,7 @@ class Info extends React.Component {
             hoverColor="#2196f3"
             onClick={this.handleOnDelete}
           >
-            <TrashIcon size={24} />
+            <DeleteIcon size={24} />
           </DeleteButton>
         </Tooltip>
       </Flex>
