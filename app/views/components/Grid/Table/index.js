@@ -40,7 +40,7 @@ class Grid extends React.Component {
       )
     }
 
-    return <BasicTable {...this.props} />
+    return <BasicTable {...this.props} sizes={sizes} />
   }
 
   render() {

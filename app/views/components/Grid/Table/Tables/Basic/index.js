@@ -9,6 +9,7 @@ const BasicTable = ({
   sizes,
   emptyState,
   getTrProps,
+  getTdProps,
   SubComponent
 }) => {
   if (data.length === 0) {
@@ -30,10 +31,20 @@ const BasicTable = ({
         >
           {columns &&
             columns.map((column, colIndex) => (
-              <BodyCell key={column.id || colIndex} width={sizes[colIndex]}>
+              <BodyCell
+                key={column.id || colIndex}
+                width={sizes[colIndex]}
+                {...getTdProps(colIndex, {
+                  column,
+                  rowIndex,
+                  rowData: row
+                })}
+              >
                 {column.render &&
                   column.render({
-                    rowData: row
+                    rowData: row,
+                    totalRows: data.length,
+                    rowIndex
                   })}
               </BodyCell>
             ))}
@@ -44,11 +55,13 @@ const BasicTable = ({
 }
 
 BasicTable.propTypes = {
-  getTrProps: PropTypes.func
+  getTrProps: PropTypes.func,
+  getTdProps: PropTypes.func
 }
 
 BasicTable.defaultProps = {
-  getTrProps: () => {}
+  getTrProps: () => {},
+  getTdProps: () => {}
 }
 
 export default BasicTable
