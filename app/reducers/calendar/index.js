@@ -5,7 +5,9 @@ import * as types from '../../constants/calendar'
 
 const initialState = {
   isFetching: false,
-  selectedDate: new Date(),
+  selectedDate: moment()
+    .utcOffset(0)
+    .toDate(),
   byDay: {},
   list: []
 }

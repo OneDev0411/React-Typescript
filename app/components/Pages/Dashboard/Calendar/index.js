@@ -354,7 +354,9 @@ function mapStateToProps({ user, calendar }) {
   return {
     user,
     isFetching: calendar.isFetching,
-    selectedDate: new Date(calendar.selectedDate),
+    selectedDate: moment(calendar.selectedDate)
+      .utcOffset(0)
+      .toDate(),
     calendarDays: calendar.byDay,
     startRange: getStartRange(calendar),
     endRange: getEndRange(calendar)
