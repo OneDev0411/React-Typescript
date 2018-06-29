@@ -15,7 +15,7 @@ class Header extends React.Component {
     }
 
     return (
-      <PageHeader title="Deals">
+      <PageHeader title="Deals" backUrl="/dashboard/deals">
         <PageHeader.Menu>
           <DealEmail dealEmail={deal.email} />
           {deal.deal_type === 'Selling' && (
