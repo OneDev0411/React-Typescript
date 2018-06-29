@@ -99,7 +99,13 @@ class EditableInput extends React.Component {
       typeof onChange === 'function' &&
       handleFormat(fieldPreviousValue) !== text
     ) {
-      onChange({ ...field, [data_type]: handleParse(text) })
+      const attribute = { ...field, [data_type]: handleParse(text) }
+
+      if (field.attribute_def.has_label && !field.label) {
+        attribute.label = field.attribute_def.labels[0]
+      }
+
+      onChange(attribute)
     }
 
     this.setState({ isActive: false, text })
