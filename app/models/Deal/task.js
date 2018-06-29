@@ -75,7 +75,7 @@ export async function changeTaskStatus(task_id, status) {
  */
 export async function needsAttention(deal_id, task_id, status) {
   try {
-    const response = await new Fetch().put(`/deals/${dealId}/tasks`).send([
+    const response = await new Fetch().put(`/deals/${deal_id}/tasks`).send([
       {
         id: task_id,
         attention_requested: status
