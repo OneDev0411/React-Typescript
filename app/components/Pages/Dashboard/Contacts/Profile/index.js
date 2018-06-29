@@ -155,6 +155,7 @@ class ContactProfile extends React.Component {
     }
 
     const { activeTab } = this.state
+    const hasAddress = getContactAddresses(contact)
 
     const thirdColumn = (
       <ThirdColumn>
