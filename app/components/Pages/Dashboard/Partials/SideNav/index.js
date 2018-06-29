@@ -66,11 +66,11 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
   return (
     <aside className="c-app-sidenav">
       <ul className="c-app-sidenav__list c-app-sidenav__list--top">
-        <SideNavItem isActive={activePath === 'CALENDAR'}>
+        {/* <SideNavItem isActive={activePath === 'CALENDAR'}>
           <Link to="/dashboard/calendar" className="c-app-sidenav__item__title">
             Calendar
           </Link>
-        </SideNavItem>
+        </SideNavItem> */}
 
         <SideNavItem>
           <Inbox />
