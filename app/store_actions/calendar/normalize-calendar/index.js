@@ -1,7 +1,5 @@
 import moment from 'moment'
 
-const utcUnix = timestamp => moment.utc(timestamp * 1000)
-
 /**
  * create a key for the given event
  * @param {Object} event - event
@@ -9,14 +7,14 @@ const utcUnix = timestamp => moment.utc(timestamp * 1000)
  * @param {Object} toUnix - end date
  */
 function createEventKey(event, fromUnix, toUnix) {
-  const eventTime = utcUnix(event.timestamp)
+  const eventTime = moment.unix(event.timestamp).utcOffset(0)
 
   if (!event.recurring) {
     return eventTime.format('YYYY-MM-DD')
   }
 
-  const fromDate = utcUnix(fromUnix)
-  const toDate = utcUnix(toUnix)
+  const fromDate = moment.unix(fromUnix).utcOffset(0)
+  const toDate = moment.unix(toUnix).utcOffset(0)
   const year =
     fromDate.year() === toDate.year() || eventTime.month() >= fromDate.month()
       ? fromDate.format('YYYY')
@@ -32,8 +30,8 @@ function createEventKey(event, fromUnix, toUnix) {
  */
 function getDays(fromUnix, toUnix) {
   const days = {}
-  const cursor = utcUnix(fromUnix)
-  const toDate = utcUnix(toUnix)
+  const cursor = moment.unix(fromUnix).utcOffset(0)
+  const toDate = moment.unix(toUnix).utcOffset(0)
 
   while (cursor.isBefore(toDate)) {
     days[cursor.format('YYYY-MM-DD')] = []
