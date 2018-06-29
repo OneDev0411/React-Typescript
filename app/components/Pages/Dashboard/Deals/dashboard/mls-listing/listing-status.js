@@ -13,6 +13,8 @@ import {
   changeNeedsAttention
 } from '../../../../../../store_actions/deals'
 
+import { isBackOffice } from '../../../../../../utils/user-teams'
+
 class ListingStatus extends React.Component {
   constructor(props) {
     super(props)
@@ -166,7 +168,7 @@ class ListingStatus extends React.Component {
 export default connect(
   ({ deals, user }) => ({
     user,
-    isBackOffice: deals.backoffice,
+    isBackOffice: isBackOffice(user),
     checklists: deals.checklists
   }),
   {

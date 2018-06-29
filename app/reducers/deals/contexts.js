@@ -1,8 +1,8 @@
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {
   switch (action.type) {
-    case types.GET_CONTEXTS:
+    case actionTypes.GET_CONTEXTS:
       return action.contexts
 
     default:

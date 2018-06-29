@@ -13,7 +13,11 @@ import {
   ListItem
 } from '../../../../../../../views/components/Grid/SavedSegments/List/styled'
 
-import { ListItemName, ListIconContainer, BadgeCounter } from './styled'
+import {
+  ListItemName,
+  ListIconContainer,
+  BadgeCounter
+} from '../../styles/filters/styled'
 
 const FilterNames = {
   Active: ['Active'],

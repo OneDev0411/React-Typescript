@@ -27,7 +27,7 @@ const Address = ({ deal, roles }) => {
   const address = Deal.get.address(deal, roles)
 
   return (
-    <Container className="address-row">
+    <Container>
       <Image src={getListingPhoto(deal)} alt="" />
       <Name>{address}</Name>
     </Container>

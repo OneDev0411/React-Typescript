@@ -1,12 +1,19 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import { Container, Menu } from '../../../../../../views/components/SlideMenu'
+import Search from '../../../../../../views/components/Grid/Search'
 
-import { PageContent, GridContainer } from './styled'
+import {
+  PageContent,
+  GridContainer,
+  SearchContainer
+} from '../styles/page-container/styled'
 
-import Header from './header'
+import Header from '../components/page-header'
 import Grid from './grid'
 import AgentFilters from './filters'
+import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
 
 class AgentTable extends React.Component {
   state = {
@@ -18,9 +25,23 @@ class AgentTable extends React.Component {
       isSideMenuOpen: !state.isSideMenuOpen
     }))
 
+  handleSearch = value => {
+    const { user, isFetchingDeals, getDeals, searchDeals } = this.props
+
+    if (isFetchingDeals) {
+      return false
+    }
+
+    if (value.length === 0) {
+      return getDeals(user)
+    }
+
+    searchDeals(user, value)
+  }
+
   render() {
     const { isSideMenuOpen } = this.state
-    const { params } = this.props
+    const { params, isFetchingDeals } = this.props
 
     return (
       <Container>
@@ -36,6 +57,18 @@ class AgentTable extends React.Component {
           <Header onMenuTriggerChange={this.toggleSideMenu} />
 
           <GridContainer>
+            <SearchContainer>
+              <Search
+                disableOnSearch
+                showLoadingOnSearch
+                isSearching={isFetchingDeals}
+                placeholder="Search deals by address, MLS # or agent name…"
+                onChange={this.handleSearch}
+                debounceTime={700}
+                minimumLength={3}
+              />
+            </SearchContainer>
+
             <Grid activeFilter={params.filter} />
           </GridContainer>
         </PageContent>
@@ -44,4 +77,8 @@ class AgentTable extends React.Component {
   }
 }
 
-export default AgentTable
+function mapStateToProps({ user, deals }) {
+  return { user, isFetchingDeals: deals.properties.isFetchingDeals }
+}
+
+export default connect(mapStateToProps, { searchDeals, getDeals })(AgentTable)

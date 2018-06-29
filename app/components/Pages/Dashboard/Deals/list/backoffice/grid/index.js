@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import merge from 'merge'
+import moment from 'moment'
 
 import { Container } from './styled'
-
-import Deal from '../../../../../../../models/Deal'
 
 import Table from '../../../../../../../views/components/Grid/Table'
 import EmptyState from './empty-state'
@@ -11,12 +11,10 @@ import LoadingState from '../../components/loading-state'
 
 import Address from '../../components/table-columns/address'
 import Status from '../../components/table-columns/status'
-import DealSide from '../../components/table-columns/side'
 import CriticalDate from '../../components/table-columns/critical-date'
-import Notification from '../../components/table-columns/notification-badge'
+import Notifications from '../../components/table-columns/notification-badge'
 
 import { getPrimaryAgent } from '../../../utils/roles'
-import { Filters } from '../filters'
 
 class Grid extends React.Component {
   get Columns() {
@@ -26,7 +24,7 @@ class Grid extends React.Component {
       {
         id: 'addres',
         header: 'ADDRESS',
-        width: '28%',
+        width: '24%',
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
       {
@@ -36,27 +34,19 @@ class Grid extends React.Component {
         render: ({ rowData: deal }) => <Status deal={deal} />
       },
       {
-        id: 'checklist-type',
-        header: 'CHECKLIST TYPE',
+        id: 'property-type',
+        header: 'PROPERTY TYPE',
         render: ({ rowData: deal }) => deal.property_type
       },
       {
-        id: 'price',
-        header: 'PRICE $',
-        render: ({ rowData: deal }) =>
-          Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0)
+        id: 'agent-name',
+        header: 'AGENT NAME',
+        render: ({ rowData: deal }) => getPrimaryAgent(deal, roles)
       },
       {
-        id: 'side',
-        header: 'SIDE',
-        render: ({ rowData: deal, totalRows, rowIndex }) => (
-          <DealSide
-            deal={deal}
-            roles={roles}
-            rowId={rowIndex + 1}
-            rowsCount={totalRows}
-          />
-        )
+        id: 'office',
+        header: 'OFFICE',
+        render: ({ rowData: deal }) => this.getOffice(deal)
       },
       {
         id: 'critical-dates',
@@ -70,44 +60,77 @@ class Grid extends React.Component {
         )
       },
       {
-        id: 'agent-name',
-        header: 'AGENT NAME',
-        render: ({ rowData: deal }) => getPrimaryAgent(deal, roles)
+        id: 'submitted-at',
+        header: 'SUBMITTED AT',
+        render: ({ rowData: deal }) =>
+          this.getSubmitTime(deal.attention_requested_at)
       },
       {
         id: 'notification',
         header: '',
         width: '40px',
         render: ({ rowData: deal }) => (
-          <Notification
-            count={deal.new_notifications ? deal.new_notifications.length : 0}
-            caption="You have $count unread messages in this deal"
+          <Notifications
+            count={deal.attention_requests}
+            caption="$count tasks need your attention"
           />
         )
       }
     ]
   }
 
-  getPriceValue = deal =>
-    Deal.get.field(deal, 'sales_price') ||
-    Deal.get.field(deal, 'list_price') ||
-    Deal.get.field(deal, 'lease_price')
-
   get Data() {
-    const { deals, activeFilter } = this.props
+    const { deals } = this.props
 
     if (!deals) {
       return []
     }
 
-    if (!activeFilter) {
-      return Object.values(deals)
-    }
-
-    return Object.values(deals).filter(deal => Filters[activeFilter](deal))
+    return Object.values(deals)
   }
 
-  getGridTrProps = () => ({})
+  getOffice = deal => {
+    const brand = this.flattenBrand(deal.brand)
+
+    return brand && brand.messages ? brand.messages.branch_title : 'N/A'
+  }
+
+  getSubmitTime = attention_requested_at => {
+    if (attention_requested_at) {
+      const dateTime = moment.unix(attention_requested_at).local()
+
+      if (dateTime.calendar().includes('Today')) {
+        return dateTime.calendar()
+      }
+
+      return dateTime.format('MMM DD, YYYY [at] hh:mm A')
+    }
+
+    return ''
+  }
+
+  flattenBrand = brand => {
+    if (!brand) {
+      return null
+    }
+
+    const brands = [brand]
+
+    while (brand.parent) {
+      brands.push(brand.parent)
+      brand = brand.parent
+    }
+
+    brands.reverse()
+
+    let merged = {}
+
+    brands.forEach(brand_loop => {
+      merge.recursive(merged, { ...brand_loop, parent: undefined })
+    })
+
+    return merged
+  }
 
   render() {
     const { isFetchingDeals } = this.props

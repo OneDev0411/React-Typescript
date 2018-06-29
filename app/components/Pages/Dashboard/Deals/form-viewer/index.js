@@ -2,12 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
+
 import extractDocumentOfTask from '../utils/extract-document-of-task'
 import { getDeal, displaySplitter } from '../../../../../store_actions/deals'
 import FileView from './file-view'
 import EnvelopeView from './envelope-view'
+
 import uuid from '../../../../../utils/uuid'
 import config from '../../../../../../config/public'
+
+import { isBackOffice } from '../../../../../utils/user-teams'
 
 class FormViewer extends React.Component {
   constructor(props) {
@@ -243,7 +247,7 @@ function mapStateToProps({ user, deals }, props) {
   return {
     user,
     formViewer: deals.formViewer,
-    isBackOffice: deals.backoffice,
+    isBackOffice: isBackOffice(user),
     deal: list && list[dealId] ? list[dealId] : null,
     tasks: deals.tasks,
     envelopes: deals.envelopes

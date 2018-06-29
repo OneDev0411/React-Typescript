@@ -7,17 +7,20 @@ const BasicTable = ({
   data,
   columns,
   sizes,
-  emptyState,
+  isFetching,
+  EmptyState,
+  LoadingState,
   getTrProps,
   getTdProps,
   SubComponent
 }) => {
-  if (data.length === 0) {
-    return emptyState
+  if (data.length === 0 && !isFetching) {
+    return <EmptyState />
   }
 
   return (
     <Fragment>
+      {isFetching && <LoadingState />}
       {SubComponent && <SubComponent data={data} columns={columns} />}
 
       {data.map((row, rowIndex) => (
@@ -55,11 +58,13 @@ const BasicTable = ({
 }
 
 BasicTable.propTypes = {
+  isFetching: PropTypes.bool,
   getTrProps: PropTypes.func,
   getTdProps: PropTypes.func
 }
 
 BasicTable.defaultProps = {
+  isFetching: false,
   getTrProps: () => {},
   getTdProps: () => {}
 }

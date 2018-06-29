@@ -8,15 +8,9 @@ import {
   getForms
 } from '../../../../store_actions/deals'
 import { TrainingModeBanner } from '../Partials/TrainingModeBanner'
-import { hasUserAccess, isTrainingAccount } from '../../../../utils/user-teams'
-
-import DealsError from './error'
+import { isTrainingAccount } from '../../../../utils/user-teams'
 
 class DealsContainer extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
     const {
       getDeals,
@@ -31,7 +25,7 @@ class DealsContainer extends React.Component {
     } = this.props
 
     if (!deals) {
-      getDeals(user, hasUserAccess(user, 'BackOffice'))
+      getDeals(user)
     }
 
     if (!contexts) {
@@ -48,25 +42,14 @@ class DealsContainer extends React.Component {
   }
 
   render() {
-    const { deals, contexts, error, user } = this.props
+    const { contexts, user } = this.props
 
     return (
       <div className="deals">
-        {deals &&
-          contexts &&
+        {contexts &&
           isTrainingAccount(user) && <TrainingModeBanner user={user} />}
 
-        <DealsError deals={deals} error={error} />
-
-        {deals === null &&
-          !error && (
-            <div className="deal-fetch-loading">
-              <i className="fa fa-spin fa-spinner fa-4x" />
-              <p>Loading deals</p>
-            </div>
-          )}
-
-        {deals && contexts && this.props.children}
+        {this.props.children}
       </div>
     )
   }

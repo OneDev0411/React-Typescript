@@ -1,11 +1,11 @@
 import _ from 'underscore'
 import { batchActions } from 'redux-batched-actions'
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 import Deal from '../../models/Deal'
 
 export function envelopeCreated(deal_id, envelope) {
   return {
-    type: types.CREATE_ENVELOPE,
+    type: actionTypes.CREATE_ENVELOPE,
     deal_id,
     envelope
   }
@@ -25,14 +25,14 @@ export function createEnvelope(envelope) {
 
 export function setEnvelopes(envelopes) {
   return {
-    type: types.SET_ENVELOPES,
+    type: actionTypes.SET_ENVELOPES,
     envelopes
   }
 }
 
 function setEnvelopeStatus(envelope_id, status) {
   return {
-    type: types.SET_ENVELOPE_STATUS,
+    type: actionTypes.SET_ENVELOPE_STATUS,
     envelope_id,
     status
   }

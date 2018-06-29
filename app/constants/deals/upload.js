@@ -1,5 +1,0 @@
-export default [
-  'SET_UPLOAD_FILES',
-  'RESET_UPLOAD_FILES',
-  'SET_UPLOAD_ATTRIBUTES'
-]

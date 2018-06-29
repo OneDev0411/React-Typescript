@@ -1,4 +1,4 @@
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 import Deal from '../../models/Deal'
 import { updateDeal } from './deal'
 
@@ -23,7 +23,7 @@ export function getContexts(user = {}) {
     const contexts = await Deal.getContexts(user)
 
     dispatch({
-      type: types.GET_CONTEXTS,
+      type: actionTypes.GET_CONTEXTS,
       contexts
     })
   }

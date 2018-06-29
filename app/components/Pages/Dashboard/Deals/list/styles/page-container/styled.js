@@ -1,5 +1,9 @@
 import styled from 'styled-components'
-import { Content } from '../../../../../../views/components/SlideMenu'
+
+export const PageContent = styled.div`
+  width: 100%;
+  overflow: hidden;
+`
 
 export const GridContainer = styled.div`
   min-height: calc(100vh - 56px);
@@ -7,6 +11,6 @@ export const GridContainer = styled.div`
   overflow: auto;
 `
 
-export const PageContent = Content.extend`
-  overflow: hidden;
+export const SearchContainer = styled.div`
+  padding: 16px;
 `

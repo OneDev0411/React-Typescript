@@ -1,5 +1,5 @@
 import _ from 'underscore'
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 import uuid from '../../utils/uuid'
 import Deal from '../../models/Deal'
 import { changeNeedsAttention } from './task'
@@ -23,14 +23,14 @@ export function setUploadFiles(files) {
   })
 
   return {
-    type: types.SET_UPLOAD_FILES,
+    type: actionTypes.SET_UPLOAD_FILES,
     files: indexedFiles
   }
 }
 
 export function setUploadAttributes(fileId, attributes) {
   return {
-    type: types.SET_UPLOAD_ATTRIBUTES,
+    type: actionTypes.SET_UPLOAD_ATTRIBUTES,
     fileId,
     attributes
   }
@@ -38,13 +38,13 @@ export function setUploadAttributes(fileId, attributes) {
 
 export function resetUploadFiles() {
   return {
-    type: types.RESET_UPLOAD_FILES
+    type: actionTypes.RESET_UPLOAD_FILES
   }
 }
 
 export function stashFileCreated(deal_id, file) {
   return {
-    type: types.ADD_STASH_FILE,
+    type: actionTypes.ADD_STASH_FILE,
     deal_id,
     file
   }
@@ -52,7 +52,7 @@ export function stashFileCreated(deal_id, file) {
 
 export function stashFileDeleted(deal_id, file_id) {
   return {
-    type: types.DELETE_STASH_FILE,
+    type: actionTypes.DELETE_STASH_FILE,
     deal_id,
     file_id
   }
@@ -60,7 +60,7 @@ export function stashFileDeleted(deal_id, file_id) {
 
 export function taskFileCreated(task_id, file) {
   return {
-    type: types.ADD_TASK_FILE,
+    type: actionTypes.ADD_TASK_FILE,
     task_id,
     file
   }
@@ -68,7 +68,7 @@ export function taskFileCreated(task_id, file) {
 
 function taskFileDeleted(task, file_id) {
   return {
-    type: types.DELETE_TASK_FILE,
+    type: actionTypes.DELETE_TASK_FILE,
     task_id: task.id,
     file_id
   }
