@@ -15,7 +15,6 @@ const propTypes = {
 }
 
 const defaultProps = {
-  width: 300,
   isOpen: false,
   showFooter: true,
   closeOnBackdropClick: true
