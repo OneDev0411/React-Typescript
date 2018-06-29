@@ -2,11 +2,13 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 const propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  inverse: PropTypes.bool
 }
 
 const defaultTypes = {
-  onClick: () => {}
+  onClick: () => {},
+  inverse: false
 }
 
 const ActionButton = styled.button`
@@ -25,6 +27,20 @@ const ActionButton = styled.button`
     `&:hover {
     background: #107CEB;
   }`};
+
+  ${props =>
+    props.inverse &&
+    !props.disabled &&
+    `
+   background-color: #fff;
+   border: 1px solid #2196f3;
+   color: #2196f3;
+
+   &:hover {
+     background-color: #2196f3;
+     color: #fff;
+   }
+  `};
 `
 
 ActionButton.propTypes = propTypes

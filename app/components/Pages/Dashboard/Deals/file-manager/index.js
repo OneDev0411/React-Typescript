@@ -9,7 +9,7 @@ import { isTrainingAccount } from '../../../../../utils/user-teams'
 import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
 import UploadPromptModal from '../dashboard/upload/prompt'
 import PDFSplitterModal from '../pdf-splitter'
-import Navbar from './navbar'
+import Header from './header'
 import FilesTable from './table'
 
 const FileManagerContent = styled.div`
@@ -40,7 +40,7 @@ export class FileManager extends React.Component {
 
     return (
       <div className="file-manager">
-        <Navbar deal={deal} />
+        <Header deal={deal} />
         <FileManagerContent
           className="u-scrollbar--thinner"
           traningAccount={traningAccount}

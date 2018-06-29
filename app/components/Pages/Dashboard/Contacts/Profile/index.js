@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 // eslint-disable-next-line
-import { getContactStage } from '../../../../../models/contacts/helpers/get-contact-stage'
+import { getContactStage, getContactAddresses } from '../../../../../models/contacts/helpers'
 
 // eslint-disable-next-line
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
@@ -136,6 +136,7 @@ class ContactProfile extends React.Component {
   render() {
     const { tasks } = this.state
     const { contact, fetchError } = this.props
+    const hasAddress = getContactAddresses(contact)
 
     if (fetchError) {
       if (fetchError.status === 404) {
@@ -175,9 +176,11 @@ class ContactProfile extends React.Component {
 
               <Details contact={contact} />
 
+              {hasAddress.length > 0 && <Addresses contact={contact} />}
+
               <Names contact={contact} />
 
-              <Addresses contact={contact} />
+              {hasAddress.length === 0 && <Addresses contact={contact} />}
             </div>
             {!this.state.isDesktopScreen && thirdColumn}
           </SideColumnWrapper>

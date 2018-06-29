@@ -41,7 +41,7 @@ class Names extends Component {
     let indexedNames = {}
     let { nameAttributes, attributeDefs } = this.props
 
-    let nameSectionDefs = selectDefsBySection(attributeDefs, 'Names')
+    let nameSectionDefs = selectDefsBySection(attributeDefs, 'Details')
 
     if (nameSectionDefs.length === 0) {
       return {}
@@ -101,9 +101,6 @@ class Names extends Component {
                   placeholder="-"
                 />
               ))}
-
-          <JobTitles contact={contact} />
-          <Companies contact={contact} />
         </div>
       </div>
     )
