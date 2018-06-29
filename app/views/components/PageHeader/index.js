@@ -11,10 +11,7 @@ const Container = styled.div`
   padding: 0 16px;
   justify-content: space-between;
   background-color: ${props => (props.isFlat ? 'transparent' : '#fff')};
-  box-shadow: ${props =>
-    props.isFlat
-      ? 'none'
-      : '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05)'};
+  border-bottom: ${props => (props.isFlat ? 'none' : '1px solid #e2e4e5')};
 `
 
 const propTypes = {

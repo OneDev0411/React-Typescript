@@ -34,9 +34,9 @@ const UserAvatar = ({
       value: normalizedName.toString()
     }
   } else {
-    const splitName = name.split(' ')
+    const splitName = name && name.split(' ')
 
-    if (splitName.length > 2) {
+    if (splitName && splitName.length > 2) {
       normalizedName = `${splitName[0]} ${splitName[1]}`
     }
 
@@ -88,7 +88,9 @@ function mapStateToProps({ chatroom }, ownProps) {
     return {}
   }
 
-  const state = states[ownProps.userId] ? states[ownProps.userId].state : 'Offline'
+  const state = states[ownProps.userId]
+    ? states[ownProps.userId].state
+    : 'Offline'
 
   return { state }
 }

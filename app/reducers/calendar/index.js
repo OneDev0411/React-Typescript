@@ -70,14 +70,6 @@ export default (state = initialState, action) => {
           ...state.byDay,
           ...action.byDay
         })
-        // startRange:
-        //   !state.startRange || action.startRange <= state.startRange
-        //     ? action.startRange
-        //     : state.startRange,
-        // endRange:
-        //   !state.endRange || action.endRange >= state.endRange
-        //     ? action.endRange
-        //     : state.endRange
       }
 
     case types.CALENDAR__SET_DATE:

@@ -85,6 +85,7 @@ class SegmentsList extends React.Component {
   render() {
     const { list, activeItem, isFetching } = this.props
     const { isDeleting } = this.state
+    const isSelected = id => activeItem && activeItem.id === id
 
     return (
       <Container>
@@ -94,9 +95,11 @@ class SegmentsList extends React.Component {
           <ListItem
             key={index}
             isDeleting={isDeleting.includes(item.id)}
-            isSelected={activeItem && activeItem.id === item.id}
+            isSelected={isSelected(item.id)}
           >
-            <ListItemName onClick={() => this.onSelectList(item)}>
+            <ListItemName
+              onClick={() => !isSelected(item.id) && this.onSelectList(item)}
+            >
               {item.name}
             </ListItemName>
             <ListIconContainer onClick={() => this.onRequestDelete(item)}>

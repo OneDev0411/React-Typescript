@@ -29,17 +29,25 @@ class EditableInput extends React.Component {
     }
   }
 
-  onChange = async event => {
+  onChange = event => {
     const { validator } = this.props
-    const text = event.target.value.trim()
+    let text = event.target.value
 
-    if (typeof validator === 'function' && text) {
-      const error = await validator(text)
-
-      return this.setState({ text, error: !error })
+    if (typeof text === 'string' && text.trim().length === 0) {
+      return this.setState({ text: '', error: false })
     }
 
-    this.setState({ text, error: false })
+    if (typeof validator === 'function') {
+      return this.setState({ text }, async () => {
+        const error = await validator(text)
+
+        this.setState({
+          error: !error
+        })
+      })
+    }
+
+    return this.setState({ text, error: false })
   }
 
   onFocus = event => {
@@ -78,23 +86,29 @@ class EditableInput extends React.Component {
   }
 
   onSubmit = () => {
-    const { text, error } = this.state
+    if (this.state.error) {
+      return false
+    }
+
     const { onChange, field, handleParse, handleFormat } = this.props
     const { data_type } = field.attribute_def
     const fieldPreviousValue = field[data_type]
-
-    if (error) {
-      return false
-    }
+    const text = this.state.text.replace(/^\s+|\s+$|\s+(?=\s)/g, '')
 
     if (
       typeof onChange === 'function' &&
       handleFormat(fieldPreviousValue) !== text
     ) {
-      onChange({ ...field, [data_type]: handleParse(text) })
+      const attribute = { ...field, [data_type]: handleParse(text) }
+
+      if (field.attribute_def.has_label && !field.label) {
+        attribute.label = field.attribute_def.labels[0]
+      }
+
+      onChange(attribute)
     }
 
-    this.setState({ isActive: false })
+    this.setState({ isActive: false, text })
   }
 
   onClickEdit = () => {

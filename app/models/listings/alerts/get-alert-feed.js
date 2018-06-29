@@ -51,7 +51,7 @@ const getAlertFeed = async (alertId, roomId) => {
       [alertId]: []
     }
   } catch (error) {
-    console.log('wtf')
+    console.log(error)
     throw error
   }
 }

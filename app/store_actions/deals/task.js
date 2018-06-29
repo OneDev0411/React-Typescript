@@ -64,20 +64,6 @@ export function setSelectedTask(task) {
   }
 }
 
-export function bulkSubmit(dealId, tasksList) {
-  return async () => {
-    const tasks = await Deal.bulkSubmit(dealId, tasksList)
-
-    if (!tasks) {
-      return false
-    }
-
-    const { entities } = normalize(tasks, schema.taskSchema)
-
-    return entities.tasks
-  }
-}
-
 export function deleteTask(checklistId, taskId) {
   return async dispatch => {
     Deal.deleteTask(taskId)

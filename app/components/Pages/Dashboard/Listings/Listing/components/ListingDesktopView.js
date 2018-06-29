@@ -670,10 +670,10 @@ const ListingDesktopView = ({
                 <div className="clearfix" />
               </div>
             </Col>
-            <Col sm={3} style={S('p-0 pull-right')}>
+            <div style={S('mr-16 p-0 pull-right')}>
               {brand_agent_area}
               {list_agent_area}
-            </Col>
+            </div>
           </div>
           <div className="clearfix" />
           <div style={S('pl-0 bg-f8f8f8 w-100p')}>

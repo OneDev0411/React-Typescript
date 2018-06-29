@@ -5,8 +5,8 @@ export async function getContacts(start = 0, limit = 50) {
   const query = {
     start,
     limit,
-    sorting_value: 'update',
-    associations: [...defaultQuery.associations, 'user.last_seen_by']
+    sorting_value: 'update_at',
+    ...defaultQuery
   }
 
   try {

@@ -63,7 +63,7 @@ class Messages extends React.Component {
 
   componentWillUnmount() {
     window.socket.removeEventListener('Message.Sent', this.messageListener)
-    this.messagesObservable.unsubscribe()
+    this.messagesObservable && this.messagesObservable.unsubscribe()
   }
 
   async initializeScroller() {
@@ -75,7 +75,7 @@ class Messages extends React.Component {
     )
       .debounceTime(500)
       .scan(
-        top => this.messagesList.scrollTop - this.messagesList.clientTop,
+        () => this.messagesList.scrollTop - this.messagesList.clientTop,
         10000
       )
       .filter(top => {
@@ -215,7 +215,8 @@ class Messages extends React.Component {
     const { showToolbar, showComposeMessage } = this.props
     let { toolbarHeight, baseHeight } = this.props
 
-    //       `${330 - 9 - 4 - 4}px` : // popup height - compose message bottom - 2*input border: 330px - 9px -4px - 4px
+    // `${330 - 9 - 4 - 4}px` :
+    // popup height - compose message bottom - 2*input border: 330px - 9px -4px - 4px
     if (showToolbar === false) {
       toolbarHeight = '0px'
     }

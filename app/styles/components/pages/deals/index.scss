@@ -4,11 +4,10 @@
 @import './file_manager';
 @import './pdf_splitter';
 @import './components';
-@import './navbar';
 
 .deals {
   min-height: 100vh;
-  background-color: #f0f4f7;
+  background-color: #fff;
 
   .deals-list {
     @extend %deals-list;
@@ -16,10 +15,6 @@
 
   .deal-dashboard {
     @extend %deal-dashboard;
-  }
-
-  .deal-navbar {
-    @extend %deal-navbar;
   }
 
   .file-manager {

@@ -4,7 +4,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import Uploader from '../../../../../../../../views/components/AvatarUploader/index.js'
+import { AvatarUploader as Uploader } from '../../../../../../../../views/components/AvatarUploader/index.js'
 import uploadAttachments from '../../../../../../../../models/contacts/upload-attachments/index.js'
 import { selectDefinitionByName } from '../../../../../../../../reducers/contacts/attributeDefs'
 import {
@@ -13,32 +13,33 @@ import {
 } from '../../../../../../../../store_actions/contacts'
 import {
   getContactAvatar,
+  getContactOnlineStatus,
   getAttributeFromSummary
 } from '../../../../../../../../models/contacts/helpers'
 
-const AvatarUploader = props => <Uploader {...props} />
+const AvatarUploader = props => (
+  <Uploader {...props} avatar={{ src: props.avatar }} />
+)
 
 function mapStateToProps(state, props) {
-  const { contact } = props
-  const { id: contactId } = contact
-  const { contacts: { attributeDefs } } = state
-
-  return { contactId, attributeDefs }
+  return {
+    attributeDefs: state.contacts.attributeDefs,
+    isOnline: getContactOnlineStatus(props.contact)
+  }
 }
 
 export default compose(
   connect(mapStateToProps, { upsertContactAttributes, deleteAttributes }),
-  withState('uploading', 'setUploading', false),
+  withState('isUploading', 'setUploading', false),
   withState('avatar', 'setAvatar', ({ contact }) =>
     getAttributeFromSummary(contact, 'profile_image_url')
   ),
   withHandlers({
-    handleChange: ({
+    handleOnChange: ({
+      attributeDefs,
       contact,
-      contactId,
       setAvatar,
       setUploading,
-      attributeDefs,
       upsertContactAttributes
     }) => async event => {
       const file = event.target.files[0]
@@ -53,7 +54,7 @@ export default compose(
           setAvatar(reader.result)
           setUploading(true)
 
-          const image = await uploadAttachments({ contactId, file })
+          const image = await uploadAttachments({ contactId: contact.id, file })
           const { url: text } = image
 
           const attribute_def = selectDefinitionByName(
@@ -88,7 +89,7 @@ export default compose(
             ]
           }
 
-          await upsertContactAttributes(contactId, attribute)
+          await upsertContactAttributes(contact.id, attribute)
         } catch (error) {
           setAvatar(null)
           throw error
@@ -99,11 +100,11 @@ export default compose(
 
       reader.readAsDataURL(file)
     },
-    handleDelete: ({
-      setAvatar,
-      contactId,
+    handleOnDelete: ({
       attributeDefs,
-      deleteAttributes
+      contact,
+      deleteAttributes,
+      setAvatar
     }) => async () => {
       try {
         const attribute_def = selectDefinitionByName(
@@ -120,7 +121,7 @@ export default compose(
         const avatar = getContactAvatar(contact, attribute_def.id)
 
         if (avatar && avatar.id) {
-          await deleteAttributes(contactId, [avatar.id])
+          await deleteAttributes(contact.id, [avatar.id])
         }
 
         setAvatar(null)

@@ -13,7 +13,7 @@ export const Container = styled.div`
 
   .DayPicker-Day--selected {
     background-color: #2196f3 !important;
-    border-radius: 0 !important;
+    border-radius: 100px !important;
   }
 
   .DayPicker-Day--range {

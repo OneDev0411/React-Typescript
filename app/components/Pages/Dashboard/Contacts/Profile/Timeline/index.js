@@ -70,8 +70,6 @@ class Timeline extends React.Component {
       <div>
         {_.map(activities, activity => {
           if (activity.type === 'crm_task') {
-            console.log('what')
-
             return (
               <CRMTaskItem
                 task={activity}
@@ -101,6 +99,9 @@ const mapStateToProps = ({ contacts: { activities } }) => ({
   activitiesError: selectContactActivitiesError(activities)
 })
 
-export default connect(mapStateToProps, {
-  getContactActivities
-})(Timeline)
+export default connect(
+  mapStateToProps,
+  {
+    getContactActivities
+  }
+)(Timeline)

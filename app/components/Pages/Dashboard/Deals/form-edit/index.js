@@ -11,10 +11,12 @@ class FormEdit extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      loaded: false,
-      saving: false,
+      isLoaded: false,
+      isSaving: false,
       incompleteFields: []
     }
+
+    this.submissionValues = {}
   }
 
   shouldComponentUpdate(nextProps) {
@@ -35,29 +37,14 @@ class FormEdit extends React.Component {
   /**
    *
    */
-  onLoad() {
-    const { deal, roles } = this.props
-
-    this.setState({ loaded: true })
-
-    const dealWithMappedRoles = {
-      ...deal,
-      roles: (deal.roles || []).map(role => roles[role])
-    }
-
-    // set deal
-    this.frame.sendMessage('setDeal', [dealWithMappedRoles])
-  }
-
-  /**
-   *
-   */
-  async onSetDeal() {
-    const { task } = this.props
+  async onLoad() {
+    const { deal, task, roles } = this.props
 
     let submission = {
       values: {}
     }
+
+    const templateValues = await this.getTemplates()
 
     if (task && task.submission) {
       submission = await Deal.getSubmissionForm(
@@ -66,11 +53,29 @@ class FormEdit extends React.Component {
       )
     }
 
-    const templateValues = await this.getTemplates()
+    this.setState({ isLoaded: true })
+    this.submissionValues = submission.values
 
+    // set combination of template and submission
     this.frame.sendMessage('setValues', [
       Object.assign({}, templateValues, submission.values)
     ])
+
+    // set deal
+    this.frame.sendMessage('setDeal', [
+      {
+        ...deal,
+        roles: (deal.roles || []).map(role => roles[role])
+      }
+    ])
+  }
+
+  /**
+   *
+   */
+  async onSetDeal() {
+    console.log(this.submissionValues)
+    this.frame.sendMessage('setValues', [this.submissionValues])
   }
 
   /**
@@ -137,15 +142,15 @@ class FormEdit extends React.Component {
    */
   onGetValues(data) {
     const { task } = this.props
-    const { saving } = this.state
+    const { isSaving } = this.state
 
-    if (!task || saving) {
+    if (!task || isSaving) {
       return false
     }
 
     this.setState(
       {
-        saving: true
+        isSaving: true
       },
       () => this.saveForm(data)
     )
@@ -186,7 +191,7 @@ class FormEdit extends React.Component {
     }
 
     // don't show saving
-    this.setState({ saving: false })
+    this.setState({ isSaving: false })
   }
 
   /**
@@ -212,11 +217,11 @@ class FormEdit extends React.Component {
    *
    */
   getButtonCaption() {
-    const { saving, loaded, incompleteFields } = this.state
+    const { isSaving, isLoaded, incompleteFields } = this.state
 
-    if (saving) {
+    if (isSaving) {
       return 'Saving ...'
-    } else if (!loaded) {
+    } else if (!isLoaded) {
       return 'Loading ...'
     }
 
@@ -225,7 +230,7 @@ class FormEdit extends React.Component {
 
   render() {
     const { task } = this.props
-    const { loaded, saving, incompleteFields } = this.state
+    const { isLoaded, isSaving, incompleteFields } = this.state
 
     const isValidForm = task && task.form && task.task_type === 'Form'
 
@@ -236,9 +241,9 @@ class FormEdit extends React.Component {
     return (
       <EmbedForm
         task={task}
-        loaded={loaded}
+        loaded={isLoaded}
         incompleteFields={incompleteFields}
-        saving={saving}
+        saving={isSaving}
         buttonCaption={this.getButtonCaption()}
         onFrameRef={ref => (this.frame = ref)}
         onReceiveMessage={this.onReceiveMessage}

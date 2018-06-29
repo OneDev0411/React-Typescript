@@ -135,12 +135,13 @@
   .message {
     padding: 1rem $pad-size;
     max-height: 100px;
+    min-height: 100px;
     overflow: auto;
 
     textarea {
       border: none;
       width: 100%;
-      min-height: 30px;
+      min-height: 56px;
       resize: none;
       padding-left: 0;
       &:focus {
