@@ -2,7 +2,7 @@ import {
   isEmail,
   isPhoneNumber,
   isFormatedDate
-} from '../../../../../utils/validations'
+} from '../../../../../../../../../../utils/validations'
 
 const validators = {
   date: isFormatedDate,

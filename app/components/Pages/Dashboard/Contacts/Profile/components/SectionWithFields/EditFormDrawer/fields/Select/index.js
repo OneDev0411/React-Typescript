@@ -1,8 +1,8 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 
-import { Dropdown } from '../../../Dropdown'
-import { Container, Title, ErrorMessage } from '../../styled-components/field'
+import { Dropdown } from '../../../../../../../../../../views/components/Dropdown'
+import { Container, Title, ErrorMessage } from '../styled'
 
 export function Select(props) {
   const { attribute_def } = props.attribute

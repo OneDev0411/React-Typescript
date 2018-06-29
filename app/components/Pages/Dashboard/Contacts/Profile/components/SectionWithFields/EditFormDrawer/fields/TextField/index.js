@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
-import { Container, Title, ErrorMessage } from '../../styled-components/field'
+import { Container, Title, ErrorMessage } from '../styled'
 
 const TextInput = styled.input`
   width: 100%;

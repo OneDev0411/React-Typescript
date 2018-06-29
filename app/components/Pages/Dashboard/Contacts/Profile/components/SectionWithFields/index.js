@@ -8,7 +8,7 @@ import {
 import { selectDefsBySection } from '../../../../../../../reducers/contacts/attributeDefs'
 import { getContactAttributesBySection } from '../../../../../../../models/contacts/helpers'
 
-import { FinalFormModal } from '../../../../../../../views/components/FinalFormModal'
+import { EditForm } from './EditFormDrawer'
 import { Section } from '../Section'
 import { orderFields, formatPreSave, getFormater } from './helpers'
 
@@ -120,7 +120,7 @@ class SectionWithFields extends Component {
           })}
         </dl>
 
-        <FinalFormModal
+        <EditForm
           fields={this.getModalFields()}
           isOpen={this.state.isOpen}
           onClose={this.handleCloseModal}

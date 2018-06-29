@@ -1,4 +1,4 @@
-import { getFormater } from '../get-formater'
+import { getFormater } from '../../../helpers/get-formater'
 
 export function getInitialValues(attributes) {
   const initialValues = {}

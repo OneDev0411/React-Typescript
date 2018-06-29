@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ErrorMessage, Input } from '../../../../styled-components/field'
+import { ErrorMessage, Input } from '../../styled'
 
 export function TextField(props) {
   const { meta } = props
