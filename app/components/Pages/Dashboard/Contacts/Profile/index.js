@@ -136,7 +136,6 @@ class ContactProfile extends React.Component {
   render() {
     const { tasks } = this.state
     const { contact, fetchError } = this.props
-    const hasAddress = getContactAddresses(contact)
 
     if (fetchError) {
       if (fetchError.status === 404) {
