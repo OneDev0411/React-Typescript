@@ -4,7 +4,8 @@ import store from '../../../stores'
 import {
   importDone,
   importFail,
-  loginSuccessful
+  loginSuccessful,
+  setWorkerState
 } from '../../../store_actions/contacts'
 
 export default class ContactSocket extends Socket {
@@ -19,8 +20,10 @@ export default class ContactSocket extends Socket {
     const { socket } = window
 
     socket.on('importDone', () => store.dispatch(importDone()))
-
     socket.on('importSuccesfullLogin', () => store.dispatch(loginSuccessful()))
     socket.on('importFail', () => store.dispatch(importFail()))
+    socket.on('contact:import', ({ state }) =>
+      store.dispatch(setWorkerState(state))
+    )
   }
 }

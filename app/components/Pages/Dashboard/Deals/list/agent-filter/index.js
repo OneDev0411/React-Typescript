@@ -11,6 +11,7 @@ const FILTER_PENDING = [
   'Active Contingent',
   'Active Kick Out',
   'Active Option Contract',
+  'Lease Contract',
   'Pending'
 ]
 
@@ -25,7 +26,8 @@ const FILTER_ARCHIVE = [
 ]
 
 const filters = {
-  All: (status, deal) => !deal.deleted_at,
+  All: (status, deal) =>
+    FILTER_ARCHIVE.indexOf(status) === -1 && !deal.deleted_at,
   Listings: (status, deal) =>
     FILTER_ACTIVE.indexOf(status) > -1 && !deal.deleted_at,
   Pending: (status, deal) =>
@@ -40,13 +42,13 @@ export class AgentFilter extends React.Component {
   }
 
   componentDidMount() {
-    const { active } = this.props
+    const { active = 'All' } = this.props
 
     if (!_.find(filters, (fn, name) => name === active)) {
       return browserHistory.push('/dashboard/deals')
     }
 
-    if (active && active !== 'All') {
+    if (active) {
       this.setFilter(active)
     }
   }

@@ -41,12 +41,32 @@
 
 .c-contact-details-item__field__label-select {
   button.dropdown-toggle {
+    position: relative;
+    padding-right: 12px;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: #444;
+
+    > .caret {
+      position: absolute;
+      top: 7px;
+      right: 0;
+      display: block;
+      width: 0;
+      height: 0;
+      border-top: 4px dashed;
+      border-top: 4px solid \9;
+      border-right: 4px solid transparent;
+      border-left: 4px solid transparent;
+    }
   }
 
-  &.is-active {
-    button.dropdown-toggle {
-      font-weight: 500;
+  button.dropdown-toggle[aria-expanded=true] {
+    font-weight: 500;
+
+    > .caret {
+      transform: rotateX(180deg)
     }
   }
 }

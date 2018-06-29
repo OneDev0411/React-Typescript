@@ -32,13 +32,13 @@ function setPosition(location) {
 
   cookies.set('userLocation', center)
 
-  return setMapProps('SEARCH', { center, zoom: 15 })
+  return setMapProps('search', { center, zoom: 15 })
 }
 
 const showError = error => dispatch => {
   let message
 
-  dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'SEARCH' })
+  dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'search' })
 
   switch (error.code) {
     case error.POSITION_UNAVAILABLE:
@@ -63,11 +63,11 @@ const showError = error => dispatch => {
 
 export const getLocation = () => dispatch => {
   if (navigator.geolocation) {
-    dispatch({ type: types.START_GET_USER_LOCATION, tabName: 'SEARCH' })
+    dispatch({ type: types.START_GET_USER_LOCATION, tabName: 'search' })
     navigator.geolocation.getCurrentPosition(
       location => {
         dispatch(setPosition(location))
-        dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'SEARCH' })
+        dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'search' })
       },
       error => {
         dispatch(showError(error))
@@ -87,7 +87,7 @@ export const getLocationFromCookies = () => dispatch => {
   const userLocation = cookies.get('userLocation')
 
   if (!_.isEmpty(userLocation)) {
-    dispatch(setMapProps('SEARCH', { center: userLocation }))
+    dispatch(setMapProps('search', { center: userLocation }))
   } else {
     dispatch(getLocation())
   }

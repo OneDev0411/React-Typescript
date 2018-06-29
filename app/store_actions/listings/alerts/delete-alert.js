@@ -20,14 +20,14 @@ const deleteAlert = alert => (dispatch, getState) => {
   }
 
   dispatch({
-    tabName: 'ALERTS',
+    tabName: 'alerts',
     type: actionsType.DELETE_ALERT_REQUEST
   })
 
   return api.deleteAlert(alertId, alertRoom).then(
     response => {
       dispatch({
-        tabName: 'ALERTS',
+        tabName: 'alerts',
         response: deleteHandler(),
         type: actionsType.DELETE_ALERT_SUCCESS
       })
@@ -39,7 +39,7 @@ const deleteAlert = alert => (dispatch, getState) => {
     },
     ({ message }) => {
       dispatch({
-        tabName: 'ALERTS',
+        tabName: 'alerts',
         type: actionsType.DELETE_ALERT_FAILURE,
         message: message || 'Something went wrong.'
       })

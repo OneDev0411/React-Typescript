@@ -13,9 +13,9 @@ const search = combineReducers({
   input,
   filters,
   options,
-  map: createNamedWrapperReducer(map, 'SEARCH'),
-  panels: createNamedWrapperReducer(panels, 'SEARCH'),
-  listings: createNamedWrapperReducer(listings, 'SEARCH')
+  map: createNamedWrapperReducer(map, 'search'),
+  panels: createNamedWrapperReducer(panels, 'search'),
+  listings: createNamedWrapperReducer(listings, 'search')
 })
 
 export default search

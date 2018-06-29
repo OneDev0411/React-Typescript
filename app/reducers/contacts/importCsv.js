@@ -3,13 +3,14 @@ import _ from 'underscore'
 
 const initialState = {
   file: null,
+  csvFileId: null,
   currentWizardStep: types.CONTACTS__IMPORT_CSV__STEP_SELECT_FILE,
   isCurrentStepValid: false,
   columns: [],
-  rows: {},
-  meta: {},
   rowsCount: 0,
-  mappedFields: {}
+  mappedFields: {},
+  workerId: null,
+  workerState: null
 }
 
 export default (state = initialState, action) => {
@@ -36,11 +37,9 @@ export default (state = initialState, action) => {
     case types.CONTACTS__IMPORT_CSV__SET_INFO:
       return {
         ...state,
-        columns: action.info.columns,
-        meta: action.info.meta,
-        errors: action.info.errors,
-        rows: action.info.rows,
-        rowsCount: _.size(action.info.rows)
+        columns: action.columns,
+        errors: action.errors,
+        rowsCount: action.rowsCount
       }
 
     case types.CONTACTS__IMPORT_CSV__UPDATE_MAPPING:
@@ -53,6 +52,25 @@ export default (state = initialState, action) => {
             ...action.data
           }
         }
+      }
+
+    case types.CONTACTS__IMPORT_CSV__SET_WORKER_ID:
+      return {
+        ...state,
+        workerState: null,
+        workerId: action.id
+      }
+
+    case types.CONTACTS__IMPORT_CSV__SET_WORKER_STATE:
+      return {
+        ...state,
+        workerState: action.state
+      }
+
+    case types.CONTACTS__IMPORT_CSV__SET_CSV_FILE:
+      return {
+        ...state,
+        csvFileId: action.csvFileId
       }
 
     case types.CONTACTS__IMPORT_CSV__RESET:

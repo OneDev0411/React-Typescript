@@ -4,6 +4,7 @@ import getAlertFeed from './get-alert-feed'
 import setSelectedAlertId from './set-selected-alert-id'
 import { setActivityLog } from './set-alert-activity-log'
 import clearAlertNotification from './clear-alert-notification'
+import changeAlertFollowStatuses from './change-alert-follow-status'
 
 export default {
   getAlerts,
@@ -11,5 +12,6 @@ export default {
   getAlertFeed,
   setActivityLog,
   setSelectedAlertId,
-  clearAlertNotification
+  clearAlertNotification,
+  changeAlertFollowStatuses
 }

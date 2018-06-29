@@ -26,7 +26,7 @@ const map = ({
   onClickZoomHandler,
   map: { hoveredMarkerId },
   mapProps: { zoom, center }
-}) =>
+}) => (
   <Map
     zoom={zoom}
     style={style}
@@ -41,6 +41,7 @@ const map = ({
   >
     {markers.map(marker => {
       const { id, lat, lng } = marker
+
       return (
         <Marker
           lat={lat}
@@ -56,6 +57,7 @@ const map = ({
       )
     })}
   </Map>
+)
 
 const mapHOC = compose(
   defaultProps({
@@ -68,28 +70,32 @@ const mapHOC = compose(
       height: 'calc(100vh - 56px)'
     }
   }),
-  connect(({ user, data, favorites }) => {
-    const { map } = favorites
-    return {
-      map,
-      user,
-      appData: data,
-      mapProps: map.props
-    }
-  }, actions),
+  connect(
+    ({ user, data, favorites }) => {
+      const { map } = favorites
+
+      return {
+        map,
+        user,
+        appData: data,
+        mapProps: map.props
+      }
+    },
+    actions
+  ),
   // describe events
   withHandlers({
     onGoogleApiLoaded: () => ({ map }) => {
       window.currentMap = map
     },
     onChange: ({ setMapProps }) => mapProps => {
-      setMapProps('FAVORITES', mapProps)
+      setMapProps('favorites', mapProps)
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('FAVORITES', -1)
+      setMapHoveredMarkerId('favorites', -1)
     },
     onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('FAVORITES', id)
+      setMapHoveredMarkerId('favorites', id)
     }
   }),
   withPropsOnChange(
@@ -102,6 +108,7 @@ const mapHOC = compose(
       const googleMaps = window.google.maps
 
       const bounds = new googleMaps.LatLngBounds()
+
       markers.forEach(point => bounds.extend(point))
 
       window.currentMap.fitBounds(bounds)

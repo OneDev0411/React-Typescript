@@ -3,7 +3,13 @@ import cn from 'classnames'
 
 import Dropdown from '../../../components/Dropdown'
 
-export default function Label({ field, labels, onChange, ...props }) {
+export default function Label({
+  field,
+  labels,
+  onChange,
+  showSuffix = true,
+  ...props
+}) {
   const handleOnSelect = async label => {
     try {
       await onChange({ ...field, label })
@@ -15,7 +21,10 @@ export default function Label({ field, labels, onChange, ...props }) {
   const getDefaultTitle = () => {
     const name = field.label || field.attribute_def.labels[0]
 
-    if (field.attribute_def.labels.includes(field.attribute_def.label)) {
+    if (
+      !showSuffix ||
+      field.attribute_def.labels.includes(field.attribute_def.label)
+    ) {
       return name
     }
 
@@ -29,10 +38,10 @@ export default function Label({ field, labels, onChange, ...props }) {
       })}
     >
       <Dropdown
-        {...props}
-        options={labels}
         defaultTitle={getDefaultTitle()}
         handleOnSelect={handleOnSelect}
+        options={labels}
+        {...props}
       />
     </span>
   )

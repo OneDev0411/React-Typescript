@@ -11,17 +11,16 @@ import socket from './socket'
 import contacts from './contacts'
 import chatroom from './chatroom'
 import deals from './deals'
+import calendar from './calendar'
 import { tasks } from './tasks'
 import brandConsole from './brandConsole'
 import search from './listings/search'
 import alerts from './listings/alerts'
-import listing from './listings/listing'
 import favorites from './listings/favorites'
 import widgets from './widgets'
 import { intercom } from './intercom'
 import confirmation from './confirmation'
 import { notifications as globalNotifications } from './notifications'
-import { createNamedWrapperReducer } from '../utils/redux-utils'
 
 const appReducer = combineReducers({
   socket,
@@ -40,11 +39,13 @@ const appReducer = combineReducers({
   deals,
   brandConsole,
 
+  /* calendar */
+  calendar,
+
   /* mls reducers */
   search,
   alerts,
   favorites,
-  listing: createNamedWrapperReducer(listing, 'LISTING'),
 
   /* third party reducers */
   notifications: notificationsReducer(),

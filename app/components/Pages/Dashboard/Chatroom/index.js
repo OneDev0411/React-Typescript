@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import Rooms from './Rooms'
 import Messages from './Messages'
-import ChatNotification from './Services/notification'
+import ChatNotification from '../../../../services/notification/chat'
 import {
   changeActiveRoom,
   toggleInstantMode
@@ -33,31 +33,6 @@ class Chatroom extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    const {
-      activeRoom, location, isInstant, instantMode
-    } = this.props
-
-    // when user switch from popup to full screen (= instant) chat
-    if (isInstant && instantMode !== nextProps.instantMode) {
-      return nextProps.activeRoom !== undefined
-    }
-
-    // when user works in full screen mode
-    if (isInstant && instantMode === nextProps.instantMode) {
-      return nextProps.activeRoom !== undefined &&
-        nextProps.instantMode === true &&
-        activeRoom !== nextProps.activeRoom
-    }
-
-    // when user works in router mode
-    return nextProps.activeRoom !== undefined &&
-      nextProps.location !== undefined &&
-      activeRoom !== nextProps.activeRoom &&
-      (nextProps.location.query.redirect !== undefined
-        || location.key !== nextProps.location.key)
-  }
-
   componentWillReceiveProps(nextProps) {
     const { isInstant, instantMode } = this.props
 
@@ -69,6 +44,33 @@ class Chatroom extends React.Component {
     ) {
       browserHistory.push('/dashboard/mls')
     }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const { activeRoom, location, isInstant, instantMode } = this.props
+
+    // when user switch from popup to full screen (= instant) chat
+    if (isInstant && instantMode !== nextProps.instantMode) {
+      return nextProps.activeRoom !== undefined
+    }
+
+    // when user works in full screen mode
+    if (isInstant && instantMode === nextProps.instantMode) {
+      return (
+        nextProps.activeRoom !== undefined &&
+        nextProps.instantMode === true &&
+        activeRoom !== nextProps.activeRoom
+      )
+    }
+
+    // when user works in router mode
+    return (
+      nextProps.activeRoom !== undefined &&
+      nextProps.location !== undefined &&
+      activeRoom !== nextProps.activeRoom &&
+      (nextProps.location.query.redirect !== undefined ||
+        location.key !== nextProps.location.key)
+    )
   }
 
   changeRoom(id) {
@@ -139,11 +141,9 @@ class Chatroom extends React.Component {
 }
 
 export default connect(
-  ({ chatroom }) => {
-    return {
-      instantMode: chatroom.instantMode,
-      activeRoom: chatroom.activeRoom
-    }
-  },
+  ({ chatroom }) => ({
+    instantMode: chatroom.instantMode,
+    activeRoom: chatroom.activeRoom
+  }),
   { changeActiveRoom, toggleInstantMode }
 )(Chatroom)

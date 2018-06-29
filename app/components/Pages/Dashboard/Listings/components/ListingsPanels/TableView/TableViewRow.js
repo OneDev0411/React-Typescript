@@ -18,7 +18,7 @@ const TableViewRow = ({
 }) => {
   const props = prepareListingViewItemProps(user, listing)
   const mouseEventIsActive =
-    tabName !== 'ALERTS' && activePanel === 'table' && window.innerWidth >= 1920
+    tabName !== 'alerts' && activePanel === 'table' && window.innerWidth >= 1920
 
   return (
     <tr

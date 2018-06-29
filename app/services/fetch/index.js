@@ -1,7 +1,8 @@
-import _ from 'underscore'
 import SuperAgent from 'superagent'
+
 import store from '../../stores'
 import config from '../../../config/public'
+import { getActiveTeamId } from '../../utils/user-teams'
 import decodeStream from './middlewares/decode-stream'
 
 export default class Fetch {
@@ -28,7 +29,8 @@ export default class Fetch {
 
   _create(method, endpoint) {
     const state = store.getState()
-    const { user, brand } = state.data
+    const { user } = state.data
+    const branId = user ? getActiveTeamId(user) : null
 
     this._isLoggedIn = user && user.access_token !== undefined
 
@@ -50,8 +52,8 @@ export default class Fetch {
       agent.set('Authorization', `Bearer ${user.access_token}`)
     }
 
-    if (brand) {
-      agent.set('X-RECHAT-BRAND', brand.id)
+    if (branId) {
+      agent.set('X-RECHAT-BRAND', branId)
     }
 
     // register events

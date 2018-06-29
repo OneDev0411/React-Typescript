@@ -14,7 +14,37 @@ export async function getForms() {
 }
 
 /**
- * add a form
+ * returns list of all templates is belonged to brand and form
+ */
+export async function getFormTemplates(brandId, formId) {
+  try {
+    const response = await new Fetch().get(
+      `/brands/${brandId}/templates/${formId}`
+    )
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+ * saves form template
+ */
+export async function saveFormTemplate(brandId, formId, values) {
+  try {
+    const response = await new Fetch()
+      .post(`/brands/${brandId}/templates/${formId}`)
+      .send({ values })
+
+    return response.body.data
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+/**
+ * adds a form
  */
 export async function addForm(brandId, checklistId, formId) {
   if (!brandId) {
@@ -41,7 +71,9 @@ export async function deleteForm(checklist, formId) {
   }
 
   try {
-    await new Fetch().delete(`/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`)
+    await new Fetch().delete(
+      `/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`
+    )
   } catch (e) {
     return null
   }
@@ -49,6 +81,8 @@ export async function deleteForm(checklist, formId) {
 
 export default {
   getForms,
+  getFormTemplates,
   addForm,
+  saveFormTemplate,
   deleteForm
 }

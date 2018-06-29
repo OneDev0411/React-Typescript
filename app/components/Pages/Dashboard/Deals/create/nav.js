@@ -1,10 +1,6 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
 
-export default ({
-  title,
-  onClose = () => browserHistory.push('/dashboard/deals')
-}) => (
+export default ({ title, onClose }) => (
   <div className="nav">
     <div className="title">{title}</div>
     <div className="cta">

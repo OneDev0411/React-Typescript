@@ -24,7 +24,7 @@ const getListingsByValert = options => (dispatch, getState) => {
     dispatch(setSearchListingsOptions(options))
 
     dispatch({
-      tabName: 'SEARCH',
+      tabName: 'search',
       type: listingsTypes.FETCH_LISTINGS_REQUEST
     })
 
@@ -32,13 +32,13 @@ const getListingsByValert = options => (dispatch, getState) => {
       response => {
         dispatch({
           response,
-          tabName: 'SEARCH',
+          tabName: 'search',
           type: listingsTypes.FETCH_LISTINGS_SUCCESS
         })
       },
       ({ message }) => {
         dispatch({
-          tabName: 'SEARCH',
+          tabName: 'search',
           type: listingsTypes.FETCH_LISTINGS_FAILURE,
           message: message || 'Something went wrong.'
         })
@@ -46,7 +46,7 @@ const getListingsByValert = options => (dispatch, getState) => {
     )
   } catch (error) {
     dispatch({
-      tabName: 'SEARCH',
+      tabName: 'search',
       type: listingsTypes.FETCH_LISTINGS_FAILURE,
       message: error.message || 'Something went wrong.'
     })

@@ -136,7 +136,7 @@ class NewContactForm extends Component {
         const isId = /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
 
         if (new RegExp(isId).test(id)) {
-          browserHistory.push(`/dashboard/contacts/${id}`)
+          browserHistory.push(`/dashboard/contacts/${id}?backurl=1`)
         }
       } else {
         browserHistory.push('/dashboard/contacts')
@@ -203,7 +203,7 @@ class NewContactForm extends Component {
                   defaultOptions={STAGE_OPTIONS}
                   component={Select}
                   name="stage"
-                  title="State"
+                  title="Stage"
                 />
               </div>
               <Footer style={{ justifyContent: 'space-between' }}>
@@ -245,7 +245,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { createContacts })(NewContactForm)
+export default connect(
+  mapStateToProps,
+  { createContacts }
+)(NewContactForm)
 
 function getDefaultOptions(options) {
   return options.map(item => ({

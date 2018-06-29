@@ -151,6 +151,16 @@ const AsyncDealFormEdit = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Deals/form-edit' /* webpackChunkName: "deal_fe" */)
 })
+
+/* ==================================== */
+//  Calendar
+/* ==================================== */
+
+const AsyncCalendar = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Calendar' /* webpackChunkName: "calendar" */)
+})
+
 /* ==================================== */
 //  Contacts
 /* ==================================== */
@@ -182,11 +192,6 @@ const AsyncContactsImportCsv = Load({
 const AsyncCrmTasksList = Load({
   loader: () =>
     import('../views/CRM/Tasks' /* webpackChunkName: "ctm_tasks_list" */)
-})
-
-const AsyncCrmTask = Load({
-  loader: () =>
-    import('../views/CRM/Tasks/TaskPage' /* webpackChunkName: "ctm_task_page" */)
 })
 
 /* ==================================== */
@@ -221,6 +226,16 @@ const AsyncProfile = Load({
 const AsyncPayment = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/Payment' /* webpackChunkName: "payment" */)
+})
+
+const AsyncDealTemplates = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/DealTemplates' /* webpackChunkName: "deal_templates" */)
+})
+
+const AsyncEditDealTemplate = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/DealTemplates/EditTemplate' /* webpackChunkName: "deal_templates_edit" */)
 })
 
 const AsyncUpgradeAccount = Load({
@@ -382,7 +397,10 @@ export default (
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
-      <Route path="/dashboard/contacts" component={AsyncContacts} />
+      <Route
+        component={AsyncContacts}
+        path="/dashboard/contacts(/page/:page)"
+      />
       <Route path="/dashboard/contacts/new" component={AsyncNewContact} />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route
@@ -390,8 +408,9 @@ export default (
         component={AsyncContactsImportCsv}
       />
 
-      <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
       <Route path="/crm/tasks" component={AsyncCrmTasksList} />
+
+      <Route path="/dashboard/calendar" component={AsyncCalendar} />
 
       <Route
         path="/dashboard/deals(/filter/:filter)"
@@ -430,6 +449,9 @@ export default (
       <Route path="dashboard/account" component={AsyncAccountLayout}>
         <IndexRoute component={AsyncProfile} />
         <Route path="upgrade" component={AsyncUpgradeAccount} />
+
+        <Route path="deal/templates" component={AsyncDealTemplates} />
+        <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
       </Route>
 
       <Route path="/dashboard/brands">

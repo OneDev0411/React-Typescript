@@ -14,9 +14,9 @@ const Input = styled.input`
   border: solid 1px #dce5eb;
 
   &:focus {
-    color: #333;
-    background-color: hsla(54, 100%, 62%, 0.15);
     outline-width: 1px;
+    color: #333;
+    background-color: #fff;
   }
 
   ::-webkit-input-placeholder {

@@ -2,14 +2,18 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
-
+// eslint-disable-next-line
 import { getContactStage } from '../../../../../models/contacts/helpers/get-contact-stage'
+
+// eslint-disable-next-line
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
 import Stage from './Stage'
 import Header from './Header'
 import Information from './Information'
+import { ImportantDates } from './ImportantDates'
+import { DealsListWidget } from './Deals'
 import Names from './Names'
 import Tags from './Tags'
 import Details from './Details'
@@ -20,6 +24,14 @@ import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 import IconNote from '../../../../../views/components/SvgIcons/Note/IconNote'
 import IconTodo from '../../../../../views/components/SvgIcons/Todo/IconTodo'
+import {
+  ColumnsContainer,
+  SideColumnWrapper,
+  SecondColumn,
+  ThirdColumn
+} from './styled'
+
+// eslint-disable-next-line
 import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
 
 import { getTasks } from '../../../../../models/tasks'
@@ -30,7 +42,7 @@ import {
 } from '../../../../../store_actions/contacts'
 import {
   selectContact,
-  isFetchingContactsList
+  selectContactsListFetching
 } from '../../../../../reducers/contacts/list'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import { normalizeContact } from '../../../../../views/utils/association-normalizers'
@@ -38,22 +50,39 @@ import { normalizeContact } from '../../../../../views/utils/association-normali
 class ContactProfile extends React.Component {
   state = {
     tasks: [],
-    activeTab: 'timeline'
+    activeTab: 'timeline',
+    isDesktopScreen: true
   }
 
   componentDidMount() {
+    this.detectScreenSize()
+    window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.detectScreenSize)
+  }
+
+  detectScreenSize = () => {
+    if (window.innerWidth < 1600 && this.state.isDesktopScreen) {
+      return this.setState({ isDesktopScreen: false })
+    }
+
+    if (window.innerWidth >= 1600 && !this.state.isDesktopScreen) {
+      return this.setState({ isDesktopScreen: true })
+    }
   }
 
   async initializeContact() {
     const {
       contact,
       getContact,
-      isFetchingContactsList,
+      selectContactsListFetching,
       params: { id: contactId }
     } = this.props
 
-    if (!contact && !isFetchingContactsList) {
+    if (!contact && !selectContactsListFetching) {
       await getContact(contactId)
     }
 
@@ -69,8 +98,6 @@ class ContactProfile extends React.Component {
 
     this.setState({ tasks })
   }
-
-  goBack = () => browserHistory.push('/dashboard/contacts')
 
   handleChangeStage = async text => {
     const { contact, attributeDefs, upsertContactAttributes } = this.props
@@ -151,29 +178,39 @@ class ContactProfile extends React.Component {
 
     const { activeTab } = this.state
 
+    const thirdColumn = (
+      <ThirdColumn>
+        <ImportantDates contact={contact} />
+        <DealsListWidget contactId={contact.id} />
+      </ThirdColumn>
+    )
+
     return (
       <div className="profile" style={{ backgroundColor: '#f8fafb' }}>
-        <Header goBackHandler={this.goBack} />
+        <Header currentPage={this.props.currentPage} />
 
-        <div className="content" style={{ minHeight: 'calc(100vh - 55px)' }}>
-          <div className="left-pane">
-            <Information contact={contact} />
+        <ColumnsContainer>
+          <SideColumnWrapper>
+            <div>
+              <Information contact={contact} />
 
-            <Stage
-              contact={contact}
-              onChange={stage => this.handleChangeStage(stage)}
-            />
+              <Stage
+                contact={contact}
+                onChange={stage => this.handleChangeStage(stage)}
+              />
 
-            <Names contact={contact} />
+              <Names contact={contact} />
 
-            <Tags contact={contact} />
+              <Tags contact={contact} />
 
-            <Details contact={contact} />
+              <Details contact={contact} />
 
-            <Addresses contact={contact} />
-          </div>
+              <Addresses contact={contact} />
+            </div>
+            {!this.state.isDesktopScreen && thirdColumn}
+          </SideColumnWrapper>
 
-          <div className="right-pane">
+          <SecondColumn>
             <Tab.Container
               id="profile-todo-tabs"
               defaultActiveKey="note"
@@ -236,8 +273,10 @@ class ContactProfile extends React.Component {
               activeTab={activeTab}
               onChangeTab={activeTab => this.setState({ activeTab })}
             />
-          </div>
-        </div>
+          </SecondColumn>
+
+          {this.state.isDesktopScreen && thirdColumn}
+        </ColumnsContainer>
       </div>
     )
   }
@@ -251,11 +290,14 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
     attributeDefs,
     contact: selectContact(list, contactId),
     fetchError: selectContactError(contact),
-    isFetchingContactsList: isFetchingContactsList(list)
+    selectContactsListFetching: selectContactsListFetching(list)
   }
 }
 
-export default connect(mapStateToProps, {
-  getContact,
-  upsertContactAttributes
-})(ContactProfile)
+export default connect(
+  mapStateToProps,
+  {
+    getContact,
+    upsertContactAttributes
+  }
+)(ContactProfile)

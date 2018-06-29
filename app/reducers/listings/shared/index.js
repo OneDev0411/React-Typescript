@@ -4,9 +4,9 @@ import {
   FETCH_LISTINGS_FAILURE
 } from '../../../constants/listings'
 import {
-  FETCH_LISTING_SUCCESS,
-  FETCH_LISTING_REQUEST,
-  FETCH_LISTING_FAILURE
+  FETCH_CHANGE_LISTING_FOLLOW_REQUEST,
+  FETCH_CHANGE_LISTING_FOLLOW_SUCCESS,
+  FETCH_CHANGE_LISTING_FOLLOW_FAILURE
 } from '../../../constants/listings/listing'
 import {
   ADD_ALERT_FAILURE,
@@ -37,6 +37,7 @@ export const byId = (state = {}, action) => {
       ...action.response.entities.listings
     }
   }
+
   return state
 }
 
@@ -67,15 +68,12 @@ export const info = (state = { total: 0, count: 0 }, action) => {
 export const isFetching = (state = false, action) => {
   switch (action.type) {
     case FETCH_ALERTS_REQUEST:
-    case FETCH_LISTING_REQUEST:
     case FETCH_LISTINGS_REQUEST:
     case TOGGLE_FAVORITE_REQUEST:
     case FETCH_ALERT_FEED_REQUEST:
       return true
     case FETCH_ALERTS_SUCCESS:
     case FETCH_ALERTS_FAILURE:
-    case FETCH_LISTING_SUCCESS:
-    case FETCH_LISTING_FAILURE:
     case FETCH_LISTINGS_SUCCESS:
     case FETCH_LISTINGS_FAILURE:
     case TOGGLE_FAVORITE_SUCCESS:
@@ -91,7 +89,6 @@ export const isFetching = (state = false, action) => {
 export const errorMessage = (state = null, action) => {
   switch (action.type) {
     case FETCH_ALERTS_FAILURE:
-    case FETCH_LISTING_FAILURE:
     case FETCH_LISTINGS_FAILURE:
     case TOGGLE_FAVORITE_FAILURE:
     case ADD_ALERT_FAILURE:
@@ -100,8 +97,6 @@ export const errorMessage = (state = null, action) => {
       return action.message
     case FETCH_ALERTS_REQUEST:
     case FETCH_ALERTS_SUCCESS:
-    case FETCH_LISTING_REQUEST:
-    case FETCH_LISTING_SUCCESS:
     case FETCH_LISTINGS_REQUEST:
     case FETCH_LISTINGS_SUCCESS:
     case TOGGLE_FAVORITE_REQUEST:
@@ -113,3 +108,5 @@ export const errorMessage = (state = null, action) => {
       return state
   }
 }
+
+export const selectTabListing = (state, id) => state.byId[id]
