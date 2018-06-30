@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-
 import { Container } from './styled'
 
 import Deal from '../../../../../../../models/Deal'
@@ -18,13 +17,16 @@ import Notification from '../../components/table-columns/notification-badge'
 import { getPrimaryAgent } from '../../../utils/roles'
 import { Filters } from '../filters'
 
+import getGridTrProps from '../../helpers/get-tr-props'
+import getGridTdProps from '../../helpers/get-td-props'
+
 class Grid extends React.Component {
   get Columns() {
     const { roles } = this.props
 
     return [
       {
-        id: 'addres',
+        id: 'address',
         header: 'ADDRESS',
         width: '28%',
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
@@ -107,8 +109,6 @@ class Grid extends React.Component {
     return Object.values(deals).filter(deal => Filters[activeFilter](deal))
   }
 
-  getGridTrProps = () => ({})
-
   render() {
     const { isFetchingDeals } = this.props
     const columns = this.Columns
@@ -120,7 +120,8 @@ class Grid extends React.Component {
           isFetching={isFetchingDeals}
           columns={columns}
           data={data}
-          getTrProps={this.getGridTrProps}
+          getTrProps={getGridTrProps}
+          getTdProps={getGridTdProps}
           EmptyState={EmptyState}
           LoadingState={LoadingState}
         />

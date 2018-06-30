@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import merge from 'merge'
 import moment from 'moment'
 
@@ -14,6 +15,9 @@ import Status from '../../components/table-columns/status'
 import CriticalDate from '../../components/table-columns/critical-date'
 import Notifications from '../../components/table-columns/notification-badge'
 
+import getGridTrProps from '../../helpers/get-tr-props'
+import getGridTdProps from '../../helpers/get-td-props'
+
 import { getPrimaryAgent } from '../../../utils/roles'
 
 class Grid extends React.Component {
@@ -22,7 +26,7 @@ class Grid extends React.Component {
 
     return [
       {
-        id: 'addres',
+        id: 'address',
         header: 'ADDRESS',
         width: '24%',
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
@@ -143,7 +147,8 @@ class Grid extends React.Component {
           isFetching={isFetchingDeals}
           columns={columns}
           data={data}
-          getTrProps={this.getGridTrProps}
+          getTrProps={getGridTrProps}
+          getGridTdProps={getGridTdProps}
           EmptyState={EmptyState}
           LoadingState={LoadingState}
         />

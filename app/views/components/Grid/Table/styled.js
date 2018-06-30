@@ -21,6 +21,14 @@ export const BodyRow = Row.extend`
   min-height: 48px;
   align-items: center;
   border-bottom: 1px solid #dce5eb;
+
+  ${props =>
+    props.hoverStyle &&
+    `
+    :hover {
+      ${props.hoverStyle}
+    }
+  `};
 `
 
 const Cell = styled.div`
@@ -30,6 +38,14 @@ const Cell = styled.div`
     props.width &&
     `
     width: ${props.width}
+  `};
+
+  ${props =>
+    props.hoverStyle &&
+    `
+    :hover {
+      ${props.hoverStyle}
+    }
   `};
 `
 
