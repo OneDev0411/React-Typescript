@@ -115,16 +115,26 @@ class FormViewer extends React.Component {
     const envelope = envelopes[objectId]
     const task = tasks[taskId]
 
-    if (!task || !task.submission || !envelope.documents) {
+    if (!task || !envelope.documents) {
       return null
     }
 
     // get document index
-    const doc = envelope.documents.find(
-      doc => doc.submission === task.submission.id
-    )
+    let document
 
-    if (!doc) {
+    if (task.submission) {
+      document = envelope.documents.find(
+        doc => doc.submission === task.submission.id
+      )
+    }
+
+    if (!document) {
+      document = envelope.documents.find(doc =>
+        task.room.attachments.find(file => file.id === doc.file)
+      )
+    }
+
+    if (!document) {
       return null
     }
 
@@ -132,7 +142,7 @@ class FormViewer extends React.Component {
       name: envelope.title,
       type: 'pdf',
       url: `${config.api_url}/envelopes/${envelope.id}/${
-        doc.document_id
+        document.document_id
       }.pdf?access_token=${user.access_token}`
     }
   }
