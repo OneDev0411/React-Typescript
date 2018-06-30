@@ -128,6 +128,7 @@ class FormViewer extends React.Component {
       )
     }
 
+    // if couldn't find the file, try to find that in attachments
     if (!document) {
       document = envelope.documents.find(doc =>
         task.room.attachments.find(file => file.id === doc.file)
