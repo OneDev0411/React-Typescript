@@ -1,6 +1,7 @@
 import _ from 'underscore'
 import { batchActions } from 'redux-batched-actions'
 
+import * as actionTypes from '../../../../constants/deals'
 import { setEnvelopes } from '../set-envelopes'
 
 export function createEnvelope(envelope) {

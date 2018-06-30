@@ -6,10 +6,7 @@ import Load from '../loader'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
 // actions
-import { getContexts } from '../store_actions/deals'
-
-// utils
-import { hasUserAccess } from '../utils/user-teams'
+import { getDeals, getContexts } from '../store_actions/deals'
 
 // Containers
 import AppLayout from '../components/App'
@@ -110,7 +107,10 @@ const AsyncDealsLayout = Load({
       return Promise.resolve()
     }
 
-    return dispatch(getContexts(user))
+    return batchActions([
+      await dispatch(getContexts(user)),
+      await dispatch(getDeals(user))
+    ])
   }
 })
 

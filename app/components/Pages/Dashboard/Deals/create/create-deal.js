@@ -173,7 +173,7 @@ class CreateDeal extends React.Component {
       message: 'Cancel deal creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: () => browserHistory.push('/dashboard/deals')
     })
 
@@ -341,6 +341,7 @@ class CreateDeal extends React.Component {
 
       return OpenDeal(deal.id)
     } catch (e) {
+      console.log(e)
       this.setState({
         saving: false,
         submitError: true

@@ -1,8 +1,11 @@
 import { normalize } from 'normalizr'
 import { batchActions } from 'redux-batched-actions'
+
 import Deal from '../../../../models/Deal'
 import { appendChecklist } from '../../deal'
 import { setTasks } from '../../task'
+import { setChecklists } from '../../checklist'
+
 import * as schema from '../../schema'
 
 export function createOffer(dealId, name, order, isBackup, propertyType) {

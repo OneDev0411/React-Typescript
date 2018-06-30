@@ -1,13 +1,15 @@
 import { normalize } from 'normalizr'
 import { batchActions } from 'redux-batched-actions'
 
-import * as actionTypes from '../../../../constants/deals'
 import Deal from '../../../../models/Deal'
 
+import { setDeals } from '../set-deals'
 import { setTasks } from '../../task'
 import { setChecklists } from '../../checklist'
 import { setRoles } from '../../role'
+
 import * as schema from '../../schema'
+import * as actionTypes from '../../../../constants/deals'
 
 export function getDeals(user) {
   return async dispatch => {
@@ -33,6 +35,7 @@ export function getDeals(user) {
         dispatch(setDeals(deals))
       ])
     } catch (e) {
+      console.log(e)
       dispatch({
         type: actionTypes.GET_DEALS_FAILED,
         name: 'get-deals',

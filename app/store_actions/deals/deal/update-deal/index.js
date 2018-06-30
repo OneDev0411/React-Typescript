@@ -6,6 +6,7 @@ import { setChecklists } from '../../checklist'
 import { setRoles } from '../../role'
 import { setEnvelopes } from '../../envelope'
 
+import * as actionTypes from '../../../../constants/deals'
 import * as schema from '../../schema'
 
 export function updateDeal(deal) {
@@ -18,7 +19,10 @@ export function updateDeal(deal) {
       dispatch(setChecklists(checklists)),
       dispatch(setRoles(roles)),
       dispatch(setEnvelopes(envelopes)),
-      dispatch(dealUpdated(deals[deal.id]))
+      dispatch({
+        type: actionTypes.UPDATE_DEAL,
+        deal: deals[deal.id]
+      })
     ])
   }
 }

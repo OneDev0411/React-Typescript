@@ -9,7 +9,7 @@ import _ from 'underscore'
 import {
   getDeal,
   displaySplitter,
-  deleteFile,
+  syncDeleteFile,
   moveTaskFile
 } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
@@ -214,14 +214,14 @@ export class FileManager extends React.Component {
   }
 
   async deleteFiles(files) {
-    const { deal, deleteFile } = this.props
+    const { deal, syncDeleteFile } = this.props
     const { isDeleting } = this.state
 
     this.setState({
       isDeleting: [...isDeleting, ..._.keys(files)]
     })
 
-    await deleteFile(deal.id, files)
+    await syncDeleteFile(deal.id, files)
 
     this.setState({
       selectedRows: [],
@@ -486,7 +486,7 @@ export default connect(
   {
     confirmation,
     getDeal,
-    deleteFile,
+    syncDeleteFile,
     displaySplitter,
     moveTaskFile
   }

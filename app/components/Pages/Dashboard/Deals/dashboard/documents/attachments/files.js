@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
 import _ from 'underscore'
-import { deleteFile } from '../../../../../../../store_actions/deals'
+import { syncDeleteFile } from '../../../../../../../store_actions/deals'
 import VerticalDotsIcon from '../../../../Partials/Svgs/VerticalDots'
 
 /**
@@ -36,7 +36,7 @@ class FileAttachments extends React.Component {
   }
 
   async deleteFile(e, task, file) {
-    const { deal, deleteFile } = this.props
+    const { deal, syncDeleteFile } = this.props
     const { deleting } = this.state
 
     e.preventDefault()
@@ -50,7 +50,7 @@ class FileAttachments extends React.Component {
     })
 
     try {
-      await deleteFile(deal.id, {
+      await syncDeleteFile(deal.id, {
         [file.id]: task
       })
     } catch (e) {}
@@ -124,4 +124,4 @@ class FileAttachments extends React.Component {
   }
 }
 
-export default connect(null, { deleteFile })(FileAttachments)
+export default connect(null, { syncDeleteFile })(FileAttachments)

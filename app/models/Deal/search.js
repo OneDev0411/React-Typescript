@@ -47,6 +47,7 @@ export async function searchDeals(user, value) {
  * get deals list
  */
 export async function getAll(user) {
+  const { access_token } = user
   const brandId = getActiveTeamId(user)
   const acl = getActiveTeamACL(user)
   const isBackOffice = acl.includes('BackOffice')
@@ -81,7 +82,14 @@ export async function getAll(user) {
   }
 
   try {
-    const response = await new Fetch().get(`${endpoint}?${params}`)
+    const fetchDeals = new Fetch().get(`${endpoint}?${params}`)
+
+    // required on ssr
+    if (access_token) {
+      fetchDeals.set({ Authorization: `Bearer ${access_token}` })
+    }
+
+    const response = await fetchDeals
 
     return response.body.data
   } catch (e) {

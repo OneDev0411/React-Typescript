@@ -3,7 +3,7 @@ import { addNotification as notify } from 'reapop'
 import * as actionTypes from '../../../../constants/deals'
 import Deal from '../../../../models/Deal'
 
-import { deleteFile } from '../delete-file'
+import { asyncDeleteFile } from '../delete-file'
 import { changeNeedsAttention } from '../../task'
 
 /**
@@ -52,17 +52,18 @@ export function moveTaskFile(user, dealId, task, file, notifyOffice) {
       * remove file from it's current place (task or stash based on given task)
       */
       await dispatch(
-        deleteFile(dealId, {
+        asyncDeleteFile(dealId, {
           [file.id]: file.taskId ? { id: file.taskId } : null
         })
       )
 
-      if (notifyOffice) {
+      if (notifyOffice && task) {
         dispatch(changeNeedsAttention(dealId, task.id, true))
       }
 
       return fileData
     } catch (e) {
+      console.log(e)
       dispatch(
         notify({
           title: e.message,

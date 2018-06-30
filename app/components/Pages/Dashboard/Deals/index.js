@@ -21,10 +21,11 @@ class DealsContainer extends React.Component {
       forms,
       deals,
       agents,
+      isFetchingDeals,
       user
     } = this.props
 
-    if (!deals) {
+    if (!deals && !isFetchingDeals) {
       getDeals(user)
     }
 
@@ -57,11 +58,12 @@ class DealsContainer extends React.Component {
 
 export default connect(
   ({ deals, user }) => ({
-    error: deals.error,
+    error: deals.properties.error,
     deals: deals.list,
     contexts: deals.contexts,
     agents: deals.agents,
     forms: deals.forms,
+    isFetchingDeals: deals.properties.isFetchingDeals,
     user
   }),
   { getDeals, getAgents, getContexts, getForms }
