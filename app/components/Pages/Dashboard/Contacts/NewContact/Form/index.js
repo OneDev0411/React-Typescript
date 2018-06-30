@@ -126,21 +126,7 @@ class NewContactForm extends Component {
 
       const contacts = await this.props.createContacts([{ attributes }], query)
 
-      if (
-        contacts &&
-        Array.isArray(contacts.data) &&
-        contacts.data.length === 1
-      ) {
-        const id = contacts.data[0].id || contacts.data[0]
-
-        const isId = /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
-
-        if (new RegExp(isId).test(id)) {
-          browserHistory.push(`/dashboard/contacts/${id}?backurl=1`)
-        }
-      } else {
-        browserHistory.push('/dashboard/contacts')
-      }
+      browserHistory.push(`/dashboard/contacts/${contacts.data[0].id}`)
     } catch (error) {
       throw error
     }
