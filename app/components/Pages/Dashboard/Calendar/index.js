@@ -62,7 +62,9 @@ class CalendarContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.initializeCalendar()
+    const { selectedDate } = this.props
+
+    this.restartCalendar(selectedDate)
 
     // this.observer = new IntersectionObserver(this.onEventObserve, {
     //   root: this.calendarTableContainer,
@@ -124,19 +126,6 @@ class CalendarContainer extends React.Component {
     this.setState({
       loadingPosition: position
     })
-
-  initializeCalendar = async () => {
-    const { selectedDate, setDate, getCalendar } = this.props
-
-    const [newStartRange, newEndRange] = createDateRange(selectedDate)
-
-    batchActions([
-      setDate(selectedDate),
-      await getCalendar(newStartRange, newEndRange)
-    ])
-
-    this.scrollIntoView(selectedDate)
-  }
 
   restartCalendar = async selectedDate => {
     const { resetCalendar, setDate, getCalendar } = this.props
@@ -354,7 +343,9 @@ function mapStateToProps({ user, calendar }) {
   return {
     user,
     isFetching: calendar.isFetching,
-    selectedDate: new Date(calendar.selectedDate),
+    selectedDate: moment(calendar.selectedDate)
+      .utcOffset(0)
+      .toDate(),
     calendarDays: calendar.byDay,
     startRange: getStartRange(calendar),
     endRange: getEndRange(calendar)

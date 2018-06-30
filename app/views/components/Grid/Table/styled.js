@@ -17,8 +17,8 @@ export const HeaderRow = Row.extend`
 `
 
 export const BodyRow = Row.extend`
-  min-height: 48px;
   display: flex;
+  min-height: 48px;
   align-items: center;
   border-bottom: 1px solid #dce5eb;
 `

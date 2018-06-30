@@ -1,5 +1,7 @@
 import React from 'react'
 import { format } from 'fecha'
+import moment from 'moment'
+
 import { connect } from 'react-redux'
 
 import MultiFields from '../Details/components/MultiFields'
@@ -35,7 +37,7 @@ function ImportanDateField({ contact, attributeDef }) {
     return null
   }
 
-  const handleParse = date => new Date(date).getTime() / 1000
+  const handleParse = date => ~~moment.utc(date).format('X')
 
   return (
     <MultiFields

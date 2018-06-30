@@ -7,7 +7,7 @@ import Flex from 'styled-flex-component'
 import Avatar from './components/Avatar'
 import Chatroom from '../../../Chatroom/Util/chatroom'
 
-import { Title, LastSeen } from './styled'
+import { Title, LastSeen, DeleteButton } from './styled'
 
 import {
   getContactUsers,
@@ -17,11 +17,13 @@ import {
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
 import { deleteContacts } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
-import TrashIcon from '../../../../../../views/components/SvgIcons/TrashIcon'
+
 import DeletingMessage from './components/DeletingMessage'
 import Stage from '../../../../../../views/components/ContactStage'
+import DeleteIcon from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import Tooltip from '../../../../../../views/components/tooltip'
+
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 class Info extends React.Component {
   state = {
@@ -171,16 +173,15 @@ class Info extends React.Component {
           )}
         </Flex>
 
-        <ShadowButton
-          style={{
-            position: 'absolute',
-            top: '1em',
-            right: '1em'
-          }}
-          onClick={this.handleOnDelete}
-        >
-          <TrashIcon color="#2196f3" size={24} />
-        </ShadowButton>
+        <Tooltip caption="Delete contact">
+          <DeleteButton
+            color="#8da2b5"
+            hoverColor="#2196f3"
+            onClick={this.handleOnDelete}
+          >
+            <DeleteIcon size={24} />
+          </DeleteButton>
+        </Tooltip>
       </Flex>
     )
   }
