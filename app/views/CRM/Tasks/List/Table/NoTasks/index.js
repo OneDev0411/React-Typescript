@@ -16,15 +16,17 @@ export default class NoTasks extends React.Component {
 
   render() {
     return (
-      <div style={{ textAlign: 'center' }}>
-        <IconTodo style={{ width: 112, height: 112, fill: '#8DA2B5' }} />
-        <h2 style={{ color: '#62778c', margin: '0 0 0.5em' }}>
-          Looks like you don’t have any tasks.
-        </h2>
+      <div>
+        <div style={{ textAlign: 'center' }}>
+          <IconTodo style={{ width: 112, height: 112, fill: '#8DA2B5' }} />
+          <h2 style={{ color: '#62778c', margin: '0 0 0.5em' }}>
+            Looks like you don’t have any tasks.
+          </h2>
 
-        <ActionButton onClick={this.toggleShowCreateTask}>
-          Create Task
-        </ActionButton>
+          <ActionButton onClick={this.toggleShowCreateTask}>
+            Create Task
+          </ActionButton>
+        </div>
 
         <OverlayDrawer
           isOpen={this.state.showCreateTask}
