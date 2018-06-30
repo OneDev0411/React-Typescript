@@ -6,6 +6,7 @@ import Flex from 'styled-flex-component'
 import IconButton from '../../Button/IconButton'
 import BackButton from '../../SvgIcons/KeyboardArrowLeft/IconKeyboardArrowLeft'
 import { Title } from './styled'
+import { goTo } from '../../../../utils/go-to'
 
 PageTitle.propTypes = {
   backUrl: PropTypes.string,
@@ -24,7 +25,7 @@ export function PageTitle(props) {
 
   function handleOnBack() {
     if (backUrl) {
-      return browserHistory.push(backUrl, { previousPage: null })
+      return goTo(backUrl)
     }
 
     const currentLocation = browserHistory.getCurrentLocation()
