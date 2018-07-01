@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Container, Header, HeaderRow, HeaderCell } from './styled'
+import { Container } from './styled'
 
 import BasicTable from './Tables/Basic'
 import MultipleTable from './Tables/Multiple'
@@ -28,39 +28,25 @@ class Grid extends React.Component {
     )
   }
 
-  /**
-   * decides to render which kind of tables
-   */
-  renderTable = sizes => {
+  render() {
     const { multiple, onTableRef } = this.props
+    const sizes = this.RowsSize
 
     if (multiple) {
       return (
-        <MultipleTable {...this.props} sizes={sizes} onTableRef={onTableRef} />
+        <Container>
+          <MultipleTable
+            {...this.props}
+            sizes={sizes}
+            onTableRef={onTableRef}
+          />
+        </Container>
       )
     }
 
-    return <BasicTable {...this.props} sizes={sizes} />
-  }
-
-  render() {
-    const { columns } = this.props
-    const sizes = this.RowsSize
-
     return (
       <Container>
-        <Header>
-          <HeaderRow>
-            {columns &&
-              columns.map((item, index) => (
-                <HeaderCell key={item.id || index} width={sizes[index]}>
-                  {item.header}
-                </HeaderCell>
-              ))}
-          </HeaderRow>
-        </Header>
-
-        {this.renderTable(sizes)}
+        <BasicTable {...this.props} sizes={sizes} />
       </Container>
     )
   }

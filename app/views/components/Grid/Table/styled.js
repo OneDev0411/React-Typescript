@@ -54,6 +54,15 @@ export const HeaderCell = Cell.extend`
   font-weight: 500;
   color: #5a7390;
   padding: 0 4px;
+
+  ${props =>
+    props.isSortable &&
+    `
+    cursor: pointer;
+    :hover {
+      opacity: 0.8;
+    }
+  `};
 `
 
 export const BodyCell = Cell.extend`
