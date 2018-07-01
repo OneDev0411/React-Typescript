@@ -7,6 +7,7 @@ import Deal from '../../../../models/Deal'
 import { setTasks } from '../../task'
 import { setChecklists } from '../../checklist'
 import { setRoles } from '../../role'
+import { setDeals } from '../set-deals'
 
 import * as schema from '../../schema'
 
@@ -39,6 +40,7 @@ export function searchDeals(user, value) {
         dispatch(setDeals(deals))
       ])
     } catch (e) {
+      console.log(e)
       dispatch(
         notify({
           title: 'Server Error',
