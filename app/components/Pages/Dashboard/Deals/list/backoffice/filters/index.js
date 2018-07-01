@@ -17,9 +17,19 @@ import {
 
 class BackofficeFilters extends React.Component {
   componentDidMount() {
-    const { activeFilter } = this.props
+    const { deals, activeFilter } = this.props
 
-    const tabs = this.getTabs()
+    this.findActiveTab(deals, activeFilter)
+  }
+
+  componentWillReceiveProps({ deals, activeFilter }) {
+    if (!this.props.activeFilter && !activeFilter) {
+      this.findActiveTab(deals, null)
+    }
+  }
+
+  findActiveTab = (deals, activeFilter) => {
+    const tabs = this.getTabs(deals)
 
     // get active tab
     const activeTab = activeFilter || (tabs && tabs[0])
@@ -38,8 +48,8 @@ class BackofficeFilters extends React.Component {
     browserHistory.push(`/dashboard/deals${arg}`)
   }
 
-  getTabs() {
-    return _.chain(this.props.deals)
+  getTabs(deals = {}) {
+    return _.chain(deals)
       .pluck('inboxes')
       .flatten()
       .uniq()
@@ -71,7 +81,7 @@ class BackofficeFilters extends React.Component {
       <Container>
         <ListTitle>Lists</ListTitle>
 
-        {this.getTabs().map(tabName => {
+        {this.getTabs(this.props.deals).map(tabName => {
           const counter = this.getBadgeCounter(tabName)
 
           if (counter === 0) {
