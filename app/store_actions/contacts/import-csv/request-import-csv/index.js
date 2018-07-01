@@ -7,6 +7,10 @@ function normalizeMappedFields(fields) {
   const list = {}
 
   _.each(fields, ({ definitionId, label, index }, name) => {
+    if (!definitionId) {
+      return false
+    }
+
     list[name] = {
       attribute_def: definitionId,
       label,

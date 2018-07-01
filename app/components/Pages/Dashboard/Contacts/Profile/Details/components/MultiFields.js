@@ -28,6 +28,7 @@ const MultiFields = ({
   handleLabelOnChange,
   handleOnChangePrimary,
   placeholder,
+  showPrimary = true,
   showSuffix,
   upsertAttribute,
   validator,
@@ -52,7 +53,8 @@ const MultiFields = ({
         >
           <span className="c-contact-details-item--multi__name-wrapper">
             {fields.length > 1 &&
-              id && (
+              id &&
+              showPrimary && (
                 <input
                   type="radio"
                   name={`${name}`}
@@ -77,7 +79,8 @@ const MultiFields = ({
               <label
                 className="c-contact-details-item--multi__label"
                 style={{
-                  fontWeight: id && is_primary ? 'bold' : 'normal'
+                  fontWeight:
+                    id && is_primary && showPrimary ? 'bold' : 'normal'
                 }}
               >
                 {label}
@@ -131,10 +134,13 @@ function mapStateToProps(state, props) {
 }
 
 const enhance = compose(
-  connect(mapStateToProps, {
-    deleteAttributes,
-    upsertContactAttributes
-  }),
+  connect(
+    mapStateToProps,
+    {
+      deleteAttributes,
+      upsertContactAttributes
+    }
+  ),
   withState('isSaving', 'setIsSaving', false),
   withState('fields', 'addNewfields', ({ _fields }) => _fields),
   withHandlers({
@@ -142,8 +148,11 @@ const enhance = compose(
       const newField = {
         attribute_def,
         id: undefined,
-        is_primary: false,
-        label: 'default'
+        is_primary: false
+      }
+
+      if (attribute_def.labels) {
+        newField.label = attribute_def.labels[0]
       }
 
       addNewfields([...fields, newField])
@@ -185,7 +194,12 @@ const enhance = compose(
       try {
         if (field.id) {
           setIsSaving(true)
-          await upsertContactAttributes(contactId, [field])
+          await upsertContactAttributes(contactId, [
+            {
+              id: field.id,
+              label: field.label
+            }
+          ])
         } else {
           const newFields = fields.filter(f => f.id)
 
@@ -232,10 +246,10 @@ const enhance = compose(
       try {
         const attributes = fields.filter(({ id }) => id).map(field => {
           if (field.id === fieldId) {
-            return { ...field, is_primary: true }
+            return { id: field.id, is_primary: true }
           }
 
-          return { ...field, is_primary: false }
+          return { id: field.id, is_primary: false }
         })
 
         setIsSaving(true)

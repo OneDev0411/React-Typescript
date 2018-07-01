@@ -199,14 +199,15 @@ class SendSignatures extends React.Component {
       const { confirmation } = this.props
 
       confirmation({
-        description:
-          'Would you like to review and finalize this envelope on Docusign?',
+        description: 'Review and send this envelope?',
         confirmLabel: 'Yes',
-        cancelLabel: 'Later',
+        cancelLabel: 'No, Save Draft',
         onConfirm: () => this.openEditWindow(envelope.id)
       })
-    } catch (err) {
-      const isDocusignError = ~~err.status === 412
+    } catch (e) {
+      console.log(e)
+
+      const isDocusignError = ~~e.status === 412
 
       this.setState({
         isSending: false,

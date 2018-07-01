@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { Container, Header, HeaderRow, HeaderCell } from './styled'
+import { Container } from './styled'
 
 import BasicTable from './Tables/Basic'
-import NestedTable from './Tables/Nested'
+import MultipleTable from './Tables/Multiple'
 
 class Grid extends React.Component {
   /**
@@ -28,39 +28,25 @@ class Grid extends React.Component {
     )
   }
 
-  /**
-   * decides to render which kind of tables
-   */
-  renderTable = sizes => {
-    const { nested, onGroupRef } = this.props
+  render() {
+    const { multiple, onTableRef } = this.props
+    const sizes = this.RowsSize
 
-    if (nested) {
+    if (multiple) {
       return (
-        <NestedTable {...this.props} sizes={sizes} onGroupRef={onGroupRef} />
+        <Container>
+          <MultipleTable
+            {...this.props}
+            sizes={sizes}
+            onTableRef={onTableRef}
+          />
+        </Container>
       )
     }
 
-    return <BasicTable {...this.props} />
-  }
-
-  render() {
-    const { columns } = this.props
-    const sizes = this.RowsSize
-
     return (
       <Container>
-        <Header>
-          <HeaderRow>
-            {columns &&
-              columns.map((item, index) => (
-                <HeaderCell key={item.id || index} width={sizes[index]}>
-                  {item.header}
-                </HeaderCell>
-              ))}
-          </HeaderRow>
-        </Header>
-
-        {this.renderTable(sizes)}
+        <BasicTable {...this.props} sizes={sizes} />
       </Container>
     )
   }

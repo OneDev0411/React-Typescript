@@ -38,7 +38,7 @@ export async function deleteTask(taskId) {
   try {
     const response = await new Fetch().delete(`/tasks/${taskId}`)
 
-    return response.body.data
+    return response.body && response.body.data
   } catch (e) {
     throw e
   }
@@ -74,20 +74,13 @@ export async function changeTaskStatus(task_id, status) {
  * set notify office flag
  */
 export async function needsAttention(deal_id, task_id, status) {
-  return bulkSubmit(deal_id, [
-    {
-      id: task_id,
-      attention_requested: status
-    }
-  ])
-}
-
-/**
- * bulk submit for review
- */
-export async function bulkSubmit(dealId, tasks) {
   try {
-    const response = await new Fetch().put(`/deals/${dealId}/tasks`).send(tasks)
+    const response = await new Fetch().put(`/deals/${deal_id}/tasks`).send([
+      {
+        id: task_id,
+        attention_requested: status
+      }
+    ])
 
     return response.body.data
   } catch (e) {
@@ -101,6 +94,5 @@ export default {
   deleteTask,
   updateTask,
   changeTaskStatus,
-  needsAttention,
-  bulkSubmit
+  needsAttention
 }

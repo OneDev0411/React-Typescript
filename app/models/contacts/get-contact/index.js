@@ -1,7 +1,10 @@
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
 
-export async function getContact(contactId, query = defaultQuery) {
+export async function getContact(
+  contactId,
+  query = { associations: [...defaultQuery.associations, 'user.last_seen_by'] }
+) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }

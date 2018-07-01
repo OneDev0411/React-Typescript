@@ -1,13 +1,13 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  padding: 20px 16px;
+  padding: 12px 16px;
 `
 
 export const ListTitle = styled.div`
   font-size: 18px;
   color: #17283a;
-  margin-bottom: 32px;
+  margin-bottom: 14px;
   font-weight: 500;
 `
 
@@ -32,11 +32,11 @@ export const ListItem = styled.div`
   align-items: center;
   margin-bottom: 12px;
   font-size: 15px;
-  cursor: pointer;
 
   color: ${props => (props.isSelected ? '#2196f3' : '#17283a')};
   font-weight: ${props => (props.isSelected ? 600 : 'normal')};
   opacity: ${props => (props.isDeleting ? 0.3 : 1)};
+  cursor: ${props => (props.isSelected ? 'normal' : 'pointer')};
 
   :hover ${Icon} {
     display: block;

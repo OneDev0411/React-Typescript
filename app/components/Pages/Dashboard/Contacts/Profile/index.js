@@ -3,14 +3,13 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 // eslint-disable-next-line
-import { getContactStage } from '../../../../../models/contacts/helpers/get-contact-stage'
+import { getContactStage, getContactAddresses } from '../../../../../models/contacts/helpers'
 
 // eslint-disable-next-line
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
-import Stage from './Stage'
-import Header from './Header'
+import PageHeader from '../../../../../views/components/PageHeader'
 import Information from './Information'
 import { ImportantDates } from './ImportantDates'
 import { DealsListWidget } from './Deals'
@@ -99,29 +98,7 @@ class ContactProfile extends React.Component {
     this.setState({ tasks })
   }
 
-  handleChangeStage = async text => {
-    const { contact, attributeDefs, upsertContactAttributes } = this.props
-    const { id: contactId } = contact
-    const is_primary = true
-    let stage = getContactStage(contact)
-    const attribute_def = selectDefinitionByName(attributeDefs, 'stage')
-
-    if (stage && stage.id) {
-      stage = {
-        text,
-        is_primary,
-        id: stage.id
-      }
-    } else {
-      stage = {
-        text,
-        is_primary,
-        attribute_def
-      }
-    }
-
-    return upsertContactAttributes(contactId, [stage])
-  }
+  goBack = () => browserHistory.push('/dashboard/contacts')
 
   handleAddNote = async text => {
     const { contact, upsertContactAttributes, attributeDefs } = this.props
@@ -177,6 +154,7 @@ class ContactProfile extends React.Component {
     }
 
     const { activeTab } = this.state
+    const hasAddress = getContactAddresses(contact)
 
     const thirdColumn = (
       <ThirdColumn>
@@ -186,26 +164,23 @@ class ContactProfile extends React.Component {
     )
 
     return (
-      <div className="profile" style={{ backgroundColor: '#f8fafb' }}>
-        <Header currentPage={this.props.currentPage} />
+      <div className="profile">
+        <PageHeader title="All Contacts" backUrl="/dashboard/contacts" />
 
         <ColumnsContainer>
           <SideColumnWrapper>
             <div>
               <Information contact={contact} />
 
-              <Stage
-                contact={contact}
-                onChange={stage => this.handleChangeStage(stage)}
-              />
-
-              <Names contact={contact} />
-
               <Tags contact={contact} />
 
               <Details contact={contact} />
 
-              <Addresses contact={contact} />
+              {hasAddress.length > 0 && <Addresses contact={contact} />}
+
+              <Names contact={contact} />
+
+              {hasAddress.length === 0 && <Addresses contact={contact} />}
             </div>
             {!this.state.isDesktopScreen && thirdColumn}
           </SideColumnWrapper>

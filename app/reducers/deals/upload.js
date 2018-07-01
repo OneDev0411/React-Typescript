@@ -1,4 +1,4 @@
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 
 const initialState = {
   files: []
@@ -6,15 +6,15 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.SET_UPLOAD_FILES:
+    case actionTypes.SET_UPLOAD_FILES:
       return {
         files: action.files
       }
 
-    case types.RESET_UPLOAD_FILES:
+    case actionTypes.RESET_UPLOAD_FILES:
       return initialState
 
-    case types.SET_UPLOAD_ATTRIBUTES:
+    case actionTypes.SET_UPLOAD_ATTRIBUTES:
       const { fileId } = action
       const file = state.files[fileId]
       const properties = {

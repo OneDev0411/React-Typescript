@@ -11,7 +11,7 @@ import DealInfo from './deal-info'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
 import Upload from './upload'
-import NavBar from './navbar'
+import PageHeader from './page-header'
 import { getDeal } from '../../../../../store_actions/deals'
 import { isTrainingAccount } from '../../../../../utils/user-teams'
 import { getDashboardHeight } from '../utils/get-dashboard-height'
@@ -89,7 +89,7 @@ class DealDetails extends React.Component {
 
     return (
       <div className="deal-dashboard u-scrollbar--thinner">
-        <NavBar deal={deal} />
+        <PageHeader deal={deal} />
 
         <DealContent traningAccount={traningAccount}>
           <div className="column deal-info">
@@ -136,7 +136,7 @@ function mapStateToProps({ deals, user }, props) {
   const { id } = props.params
 
   return {
-    selectedTask: deals.selectedTask,
+    selectedTask: deals.properties.selectedTask,
     deal: deals.list ? deals.list[id] : null,
     user
   }

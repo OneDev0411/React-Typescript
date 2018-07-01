@@ -30,7 +30,7 @@ export default class Fetch {
   _create(method, endpoint) {
     const state = store.getState()
     const { user } = state.data
-    const branId = user ? getActiveTeamId(user) : null
+    const brandId = user ? getActiveTeamId(user) : null
 
     this._isLoggedIn = user && user.access_token !== undefined
 
@@ -52,8 +52,8 @@ export default class Fetch {
       agent.set('Authorization', `Bearer ${user.access_token}`)
     }
 
-    if (branId) {
-      agent.set('X-RECHAT-BRAND', branId)
+    if (brandId) {
+      agent.set('X-RECHAT-BRAND', brandId)
     }
 
     // register events

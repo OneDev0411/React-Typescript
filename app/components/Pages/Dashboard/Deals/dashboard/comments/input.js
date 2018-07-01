@@ -28,7 +28,9 @@ class CommentCreate extends React.Component {
     // scroll to the end
     const el = document.getElementById('deals-task-scrollable')
 
-    el.scrollTop = el.scrollHeight
+    if (el) {
+      el.scrollTop = el.scrollHeight
+    }
   }
 
   /**

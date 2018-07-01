@@ -7,10 +7,25 @@ const app = new Koa()
 router.get('/contacts/export/outlook', async ctx => {
   try {
     const { user } = ctx.session
-    let { 'ids[]': ids } = ctx.query
+    const { 'ids[]': ids, 'filters[]': filters } = ctx.query
+    let data = {}
 
-    if (ids && typeof ids === 'string') {
-      ids = [ids]
+    if (ids) {
+      if (typeof ids === 'string') {
+        data = {
+          ids: [ids]
+        }
+      } else if (Array.isArray(ids)) {
+        data = { ids }
+      }
+    } else if (filters) {
+      if (typeof filters === 'string') {
+        data = { filter: [JSON.parse(decodeURIComponent(filters))] }
+      } else if (Array.isArray(filters)) {
+        data = {
+          filter: filters.map(filter => JSON.parse(decodeURIComponent(filter)))
+        }
+      }
     }
 
     if (!user) {
@@ -23,7 +38,7 @@ router.get('/contacts/export/outlook', async ctx => {
     ctx.body = ctx
       .fetch('/contacts/outlook.csv', 'POST')
       .set('Authorization', `Bearer ${user.access_token}`)
-      .send(ids ? { ids } : {})
+      .send(data)
       .on('response', res => {
         ctx.set('Content-Disposition', res.headers['content-disposition'])
       })

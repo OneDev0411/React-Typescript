@@ -8,7 +8,6 @@ import {
   selectContactsInfo,
   selectPage,
   selectPageContacts,
-  selectCurrentPage,
   selectContactsListFetching
 } from '../../../../../reducers/contacts/list'
 
@@ -46,6 +45,7 @@ const deletedState = { deletingContacts: [], selectedRows: {} }
 class ContactsList extends React.Component {
   state = {
     filter: this.props.filter,
+    pageTitle: 'All Contacts',
     isSearching: false,
     isDeleting: false,
     isSideMenuOpen: true
@@ -99,7 +99,7 @@ class ContactsList extends React.Component {
 
   toggleSideMenu = () =>
     this.setState(state => ({
-      isSideMenuOpen: state.isSideMenuOpen
+      isSideMenuOpen: !state.isSideMenuOpen
     }))
 
   search = async (filter, page = 1) => {
@@ -175,8 +175,16 @@ class ContactsList extends React.Component {
     return Math.ceil(total / pageDefaultSize)
   }
 
+  handleChangeSavedSegment = segment => {
+    this.search(segment.filters)
+
+    this.setState({
+      pageTitle: segment.name
+    })
+  }
+
   render() {
-    const { isSideMenuOpen } = this.state
+    const { isSideMenuOpen, pageTitle, filter } = this.state
     const { user, list, currentPage } = this.props
 
     const contacts = selectPageContacts(list, currentPage)
@@ -196,12 +204,13 @@ class ContactsList extends React.Component {
         <SideMenu isOpen={isSideMenuOpen}>
           <SavedSegments
             name="contacts"
-            onChange={segment => this.search(segment.filters)}
+            onChange={this.handleChangeSavedSegment}
           />
         </SideMenu>
 
         <PageContent>
           <Header
+            title={pageTitle}
             isSideMenuOpen={isSideMenuOpen}
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
@@ -222,6 +231,7 @@ class ContactsList extends React.Component {
               onDelete={this.handleOnDelete}
               deleting={this.state.isDeleting}
               selectedRows={selectedRows}
+              filters={filter}
               totalCount={listInfo.total}
               pageSize={currentPageData ? currentPageData.ids.length : 0}
             />
@@ -266,19 +276,16 @@ function mapStateToProps(state, props) {
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      clearContactSearchResult,
-      confirmation,
-      deleteContacts,
-      getContacts,
-      removeContactPage,
-      receiveContactPage,
-      searchContacts,
-      setContactCurrentPage,
-      toggleRow,
-      toggleAllRows
-    }
-  )(ContactsList)
+  connect(mapStateToProps, {
+    clearContactSearchResult,
+    confirmation,
+    deleteContacts,
+    getContacts,
+    removeContactPage,
+    receiveContactPage,
+    searchContacts,
+    setContactCurrentPage,
+    toggleRow,
+    toggleAllRows
+  })(ContactsList)
 )

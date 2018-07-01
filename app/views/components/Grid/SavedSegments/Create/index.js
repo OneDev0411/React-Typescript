@@ -135,7 +135,7 @@ class SaveSegment extends React.Component {
     return (
       <Container>
         {hasFilters && (
-          <SaveButton onClick={this.toggleShowModal}>Save Search</SaveButton>
+          <SaveButton onClick={this.toggleShowModal}>Save List</SaveButton>
         )}
 
         <Modal

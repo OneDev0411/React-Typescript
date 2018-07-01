@@ -32,7 +32,7 @@ class Title extends React.Component {
     const { field, disabled } = this.props
 
     return (
-      <li className="c-contact-details-item">
+      <div className="c-contact-details-item" style={{ marginBottom: '1em' }}>
         <label className="c-contact-details-item__label">Title</label>
         <span
           style={{ paddingLeft: '4px' }}
@@ -46,7 +46,7 @@ class Title extends React.Component {
             options={this.getOptions(field)}
           />
         </span>
-      </li>
+      </div>
     )
   }
 }

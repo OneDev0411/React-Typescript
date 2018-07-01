@@ -5,19 +5,6 @@ export const Container = styled.div`
   margin-top: 16px;
 `
 
-export const SubHeader = styled.div`
-  display: flex;
-  align-items: center;
-  height: 32px;
-  border-radius: 4px;
-  background-color: #eff5fa;
-  padding: 0 16px;
-  margin: 15px 0;
-  color: #2196f3;
-  font-size: 17px;
-  font-weight: 600;
-`
-
 export const Header = styled.div``
 export const Body = styled.div``
 
@@ -25,13 +12,23 @@ const Row = styled.div`
   display: flex;
 `
 
-export const HeaderRow = Row.extend``
+export const HeaderRow = Row.extend`
+  margin-bottom: 32px;
+`
 
 export const BodyRow = Row.extend`
-  height: 48px;
-  line-height: 48px;
-  vertical-align: middle;
+  display: flex;
+  min-height: 48px;
+  align-items: center;
   border-bottom: 1px solid #dce5eb;
+
+  ${props =>
+    props.hoverStyle &&
+    `
+    :hover {
+      ${props.hoverStyle}
+    }
+  `};
 `
 
 const Cell = styled.div`
@@ -42,16 +39,35 @@ const Cell = styled.div`
     `
     width: ${props.width}
   `};
+
+  ${props =>
+    props.hoverStyle &&
+    `
+    :hover {
+      ${props.hoverStyle}
+    }
+  `};
 `
 
 export const HeaderCell = Cell.extend`
   font-size: 14px;
   font-weight: 500;
   color: #5a7390;
+  padding: 0 4px;
+
+  ${props =>
+    props.isSortable &&
+    `
+    cursor: pointer;
+    :hover {
+      opacity: 0.8;
+    }
+  `};
 `
 
 export const BodyCell = Cell.extend`
   font-size: 14px;
   font-weight: 400;
   color: #1d364b;
+  padding: 0 4px;
 `

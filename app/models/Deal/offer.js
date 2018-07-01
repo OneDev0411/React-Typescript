@@ -3,7 +3,13 @@ import Fetch from '../../services/fetch'
 /**
  * create a new offer
  */
-export async function createOffer(deal_id, name, order, is_backup, property_type) {
+export async function createOffer(
+  deal_id,
+  name,
+  order,
+  is_backup,
+  property_type
+) {
   try {
     const response = await new Fetch()
       .post(`/deals/${deal_id}/checklists/offer`)

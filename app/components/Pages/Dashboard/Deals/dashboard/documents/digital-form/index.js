@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-export default ({ deal, task }) => {
+import { isBackOffice } from '../../../../../../../utils/user-teams'
+
+const DigitalForm = ({ deal, task, isBackOffice }) => {
   if (!task || !task.form) {
     return false
   }
@@ -21,12 +24,26 @@ export default ({ deal, task }) => {
         </div>
 
         <div className="actions">
-          <Link
-            className="button"
-            to={`/dashboard/deals/${deal.id}/form-viewer/${task.id}`}
-          >
-            View
-          </Link>
+          {task.submission && (
+            <Fragment>
+              {isBackOffice ? (
+                <Link
+                  className="button"
+                  to={`/dashboard/deals/${deal.id}/form-viewer/${task.id}`}
+                >
+                  View
+                </Link>
+              ) : (
+                <a
+                  href={task.submission.file.url}
+                  className="button"
+                  target="_blank"
+                >
+                  View
+                </a>
+              )}
+            </Fragment>
+          )}
 
           <Link
             className="button"
@@ -39,3 +56,7 @@ export default ({ deal, task }) => {
     </div>
   )
 }
+
+export default connect(({ user }) => ({
+  isBackOffice: isBackOffice(user)
+}))(DigitalForm)

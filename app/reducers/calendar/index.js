@@ -5,7 +5,9 @@ import * as types from '../../constants/calendar'
 
 const initialState = {
   isFetching: false,
-  selectedDate: new Date(),
+  selectedDate: moment()
+    .utcOffset(0)
+    .toDate(),
   byDay: {},
   list: []
 }
@@ -70,14 +72,6 @@ export default (state = initialState, action) => {
           ...state.byDay,
           ...action.byDay
         })
-        // startRange:
-        //   !state.startRange || action.startRange <= state.startRange
-        //     ? action.startRange
-        //     : state.startRange,
-        // endRange:
-        //   !state.endRange || action.endRange >= state.endRange
-        //     ? action.endRange
-        //     : state.endRange
       }
 
     case types.CALENDAR__SET_DATE:

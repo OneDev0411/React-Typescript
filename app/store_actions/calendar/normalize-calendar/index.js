@@ -3,15 +3,24 @@ import moment from 'moment'
 /**
  * create a key for the given event
  * @param {Object} event - event
+ * @param {Object} fromUnix - start date
+ * @param {Object} toUnix - end date
  */
-function createEventKey(event) {
-  const eventTime = moment.unix(event.timestamp)
+function createEventKey(event, fromUnix, toUnix) {
+  const eventTime = moment.unix(event.timestamp).utcOffset(0)
 
   if (!event.recurring) {
     return eventTime.format('YYYY-MM-DD')
   }
 
-  return `${moment().format('YYYY')}-${eventTime.format('MM-DD')}`
+  const fromDate = moment.unix(fromUnix).utcOffset(0)
+  const toDate = moment.unix(toUnix).utcOffset(0)
+  const year =
+    fromDate.year() === toDate.year() || eventTime.month() >= fromDate.month()
+      ? fromDate.format('YYYY')
+      : toDate.format('YYYY')
+
+  return `${year}-${eventTime.format('MM-DD')}`
 }
 
 /**
@@ -37,7 +46,7 @@ export function normalizeByDays(fromUnix, toUnix, calendar) {
 
   calendar &&
     calendar.forEach(event => {
-      const key = createEventKey(event)
+      const key = createEventKey(event, fromUnix, toUnix)
 
       days[key] = [...(days[key] || []), event.id]
     })

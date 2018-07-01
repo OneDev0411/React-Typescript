@@ -1,6 +1,12 @@
+$border-color: #CAD4DB;
+
 .tasks-list-table {
   width: 100%;
   padding: 16px;
+
+  &.ReactTable .rt-tbody .rt-tr-group {
+    border-color: $border-color !important;
+  }
 
   .rt-th {
     font-size: 1.6rem;

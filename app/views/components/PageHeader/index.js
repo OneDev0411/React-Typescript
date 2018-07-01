@@ -1,8 +1,11 @@
 import React from 'react'
+import { withRouter } from 'react-router'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+
 import Menu from './Menu'
-import { PageTitle, Heading } from './PageTitle'
+import { PageTitle } from './PageTitle'
+import { Title } from './PageTitle/styled'
 
 const Container = styled.div`
   width: 100%;
@@ -11,10 +14,7 @@ const Container = styled.div`
   padding: 0 16px;
   justify-content: space-between;
   background-color: ${props => (props.isFlat ? 'transparent' : '#fff')};
-  box-shadow: ${props =>
-    props.isFlat
-      ? 'none'
-      : '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05)'};
+  border-bottom: ${props => (props.isFlat ? 'none' : '1px solid #e2e4e5')};
 `
 
 const propTypes = {
@@ -29,13 +29,24 @@ const defaultProps = {
   isFlat: false
 }
 
-function PageHeader({ title, backButton, backUrl, children, isFlat }) {
+function PageHeader(props) {
+  let { title, backUrl, location } = props
+
+  if (location.state && location.state.previousPage) {
+    backUrl = location.state.previousPage.url
+    title = location.state.previousPage.title
+  }
+
   return (
-    <Container isFlat={isFlat}>
+    <Container isFlat={props.isFlat}>
       {title && (
-        <PageTitle backButton={backButton} backUrl={backUrl} title={title} />
+        <PageTitle
+          backButton={props.backButton}
+          backUrl={backUrl}
+          title={title}
+        />
       )}
-      {React.Children.map(children, children => children)}
+      {React.Children.map(props.children, children => children)}
     </Container>
   )
 }
@@ -45,6 +56,6 @@ PageHeader.defaultProps = defaultProps
 
 PageHeader.Menu = Menu
 PageHeader.Title = PageTitle
-PageHeader.Heading = Heading
+PageHeader.Heading = Title
 
-export default PageHeader
+export default withRouter(PageHeader)

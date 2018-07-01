@@ -1,13 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
+
+import { goTo } from '../../../../../../utils/go-to'
 
 import { List } from './List'
 import Loading from '../../../../../Partials/Loading'
 
 import { getContact } from '../../../../../../models/contacts/get-contact'
 import { getContactDeals } from '../../../../../../models/contacts/helpers/get-contact-deals'
+import { normalizeContacts } from '../../../../../../store_actions/contacts/helpers/normalize-contacts'
 // import SelectDealModal from '../../../../../../views/components/SelectDealModal'
 // import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
@@ -30,13 +32,24 @@ export class DealsListWidget extends React.Component {
       this.setState({ isLoading: true })
 
       const response = await getContact(id, {
-        associations: ['contact.sub_contacts', 'sub_contact.deals', 'contact.summary']
+        associations: [
+          'contact.sub_contacts',
+          'sub_contact.deals',
+          'contact.summary',
+          'sub_contact.users',
+          'contact_attribute.attribute_def'
+        ]
       })
 
       const list = getContactDeals(response.data)
+      const normalizedContact = normalizeContacts(response)
 
       if (list) {
-        this.setState({ contact: response.data, list, isLoading: false })
+        this.setState({
+          contact: normalizedContact.entities.contacts[id],
+          list,
+          isLoading: false
+        })
       }
     } catch (error) {
       console.log(error)
@@ -64,7 +77,10 @@ export class DealsListWidget extends React.Component {
       return
     }
 
-    browserHistory.push(`/dashboard/deals/${deal.id}`)
+    goTo(
+      `/dashboard/deals/${deal.id}`,
+      `Contact - ${this.state.contact.display_name}`
+    )
   }
 
   render() {

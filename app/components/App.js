@@ -11,9 +11,6 @@ import ChatSocket from '../services/socket/chat'
 import DealSocket from '../services/socket/deals'
 import ContactSocket from '../services/socket/contacts'
 
-// utils
-import { hasUserAccess } from '../utils/user-teams'
-
 // navs
 import SideNav from './Pages/Dashboard/Partials/SideNav'
 
@@ -94,7 +91,7 @@ class App extends Component {
 
       // load deals
       if (!deals) {
-        dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
+        dispatch(getDeals(user))
       }
 
       // load contacts

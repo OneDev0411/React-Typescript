@@ -13,3 +13,13 @@ export function getResizeAvatarUrl(full_size_url) {
 export default {
   getResizeAvatarUrl
 }
+
+export function isOnline(user) {
+  // Enums: ['Online', 'Background', 'Offline'] - P.S: Background also is
+
+  if (user.online_state === 'Offline') {
+    return false
+  }
+
+  return true
+}
