@@ -23,4 +23,28 @@ const Status = ({ deal }) => {
   )
 }
 
+export const statusSortMethod = ({ accessor }) => {
+  const list = [
+    'Incoming',
+    'Coming Soon',
+    'Active',
+    'Active Option Contract',
+    'Active Contingent',
+    'Active Kick Out',
+    'Lease Contract',
+    'Pending',
+    'Sold',
+    'Leased',
+    'Expired',
+    'Temp Off Market',
+    'Cancelled',
+    'Withdrawn',
+    'Archived'
+  ]
+
+  const order = list.indexOf(accessor)
+
+  return order > -1 ? order : list.length + 1
+}
+
 export default Status

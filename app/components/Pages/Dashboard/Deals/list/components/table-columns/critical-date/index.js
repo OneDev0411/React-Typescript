@@ -4,6 +4,8 @@ import { Popover, OverlayTrigger } from 'react-bootstrap'
 import DealContext from '../../../../../../../../models/DealContext'
 import CriticalDates from '../../../../dashboard/factsheet/critical-dates'
 
+export const getNextDateValue = deal => CriticalDates.getNextDateValue(deal)
+
 const CriticalDate = ({ deal, rowId, rowsCount }) => {
   const table = DealContext.getFactsheetSection(deal, 'CriticalDates')
 

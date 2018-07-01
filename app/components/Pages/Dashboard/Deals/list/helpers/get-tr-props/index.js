@@ -1,8 +1,8 @@
-import { browserHistory } from 'react-router'
+import OpenDeal from '../../../utils/open-deal'
 
-export default function(rowIndex, { original: row }) {
+export default function(rowIndex, { original: deal }) {
   return {
-    onClick: () => browserHistory.push(`/dashboard/deals/${row.id}`),
+    onClick: () => OpenDeal(deal.id),
     style: {
       cursor: 'pointer'
     }

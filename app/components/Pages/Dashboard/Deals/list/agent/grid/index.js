@@ -9,9 +9,11 @@ import EmptyState from './empty-state'
 import LoadingState from '../../components/loading-state'
 
 import Address from '../../components/table-columns/address'
-import Status from '../../components/table-columns/status'
+import Status, { statusSortMethod } from '../../components/table-columns/status'
 import DealSide from '../../components/table-columns/side'
-import CriticalDate from '../../components/table-columns/critical-date'
+import CriticalDate, {
+  getNextDateValue
+} from '../../components/table-columns/critical-date'
 import Notification from '../../components/table-columns/notification-badge'
 
 import { getPrimaryAgent } from '../../../utils/roles'
@@ -29,28 +31,33 @@ class Grid extends React.Component {
         id: 'address',
         header: 'ADDRESS',
         width: '28%',
+        accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
       {
         id: 'status',
         header: 'STATUS',
         width: '15%',
+        accessor: deal => Deal.get.status(deal),
+        sortMethod: statusSortMethod,
         render: ({ rowData: deal }) => <Status deal={deal} />
       },
       {
         id: 'checklist-type',
         header: 'CHECKLIST TYPE',
-        render: ({ rowData: deal }) => deal.property_type
+        accessor: 'property_type'
       },
       {
         id: 'price',
         header: 'PRICE $',
+        accessor: deal => this.getPriceValue(deal),
         render: ({ rowData: deal }) =>
           Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0)
       },
       {
         id: 'side',
         header: 'SIDE',
+        accessor: deal => deal.deal_type,
         render: ({ rowData: deal, totalRows, rowIndex }) => (
           <DealSide
             deal={deal}
@@ -63,6 +70,7 @@ class Grid extends React.Component {
       {
         id: 'critical-dates',
         header: 'CRITICAL DATES',
+        accessor: deal => getNextDateValue(deal),
         render: ({ rowData: deal, totalRows, rowIndex }) => (
           <CriticalDate
             deal={deal}
@@ -74,7 +82,7 @@ class Grid extends React.Component {
       {
         id: 'agent-name',
         header: 'AGENT NAME',
-        render: ({ rowData: deal }) => getPrimaryAgent(deal, roles)
+        accessor: deal => getPrimaryAgent(deal, roles)
       },
       {
         id: 'notification',

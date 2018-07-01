@@ -6,13 +6,17 @@ import moment from 'moment'
 
 import { Container } from './styled'
 
+import Deal from '../../../../../../../models/Deal'
+
 import Table from '../../../../../../../views/components/Grid/Table'
 import EmptyState from './empty-state'
 import LoadingState from '../../components/loading-state'
 
 import Address from '../../components/table-columns/address'
-import Status from '../../components/table-columns/status'
-import CriticalDate from '../../components/table-columns/critical-date'
+import Status, { statusSortMethod } from '../../components/table-columns/status'
+import CriticalDate, {
+  getNextDateValue
+} from '../../components/table-columns/critical-date'
 import Notifications from '../../components/table-columns/notification-badge'
 
 import getGridTrProps from '../../helpers/get-tr-props'
@@ -29,32 +33,36 @@ class Grid extends React.Component {
         id: 'address',
         header: 'ADDRESS',
         width: '24%',
+        accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
       {
         id: 'status',
         header: 'STATUS',
         width: '15%',
+        accessor: deal => Deal.get.status(deal),
+        sortMethod: statusSortMethod,
         render: ({ rowData: deal }) => <Status deal={deal} />
       },
       {
         id: 'property-type',
         header: 'PROPERTY TYPE',
-        render: ({ rowData: deal }) => deal.property_type
+        accessor: 'property_type'
       },
       {
         id: 'agent-name',
         header: 'AGENT NAME',
-        render: ({ rowData: deal }) => getPrimaryAgent(deal, roles)
+        accessor: deal => getPrimaryAgent(deal, roles)
       },
       {
         id: 'office',
         header: 'OFFICE',
-        render: ({ rowData: deal }) => this.getOffice(deal)
+        accessor: deal => this.getOffice(deal)
       },
       {
         id: 'critical-dates',
         header: 'CRITICAL DATES',
+        accessor: deal => getNextDateValue(deal),
         render: ({ rowData: deal, totalRows, rowIndex }) => (
           <CriticalDate
             deal={deal}
@@ -66,6 +74,7 @@ class Grid extends React.Component {
       {
         id: 'submitted-at',
         header: 'SUBMITTED AT',
+        accessor: 'attention_requested_at',
         render: ({ rowData: deal }) =>
           this.getSubmitTime(deal.attention_requested_at)
       },
@@ -84,13 +93,18 @@ class Grid extends React.Component {
   }
 
   get Data() {
-    const { deals } = this.props
+    const { deals, activeFilter } = this.props
 
     if (!deals) {
       return []
     }
 
-    return Object.values(deals)
+    return Object.values(deals).filter(
+      deal =>
+        deal.attention_requests > 0 &&
+        deal.inboxes &&
+        deal.inboxes.includes(activeFilter)
+    )
   }
 
   getOffice = deal => {
