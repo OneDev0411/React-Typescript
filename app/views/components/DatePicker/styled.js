@@ -18,6 +18,8 @@ export const Container = styled.div`
 
   .DayPicker-Day {
     padding: 0 !important;
+    min-width: 27px !important;
+    max-width: 27px !important;
   }
 
   .DayPicker-Day--selected {
