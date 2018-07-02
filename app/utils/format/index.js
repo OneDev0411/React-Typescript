@@ -1,9 +1,7 @@
 import moment from 'moment'
 
 export function formatDate(date, pattern = 'MM/DD/YYYY') {
-  if (moment.invalid(date)) {
-    return date
-  }
+  const formatedDate = moment.utc(date * 1000).format(pattern)
 
-  return moment.utc(date * 1000).format(pattern)
+  return moment(formatDate).isValid() ? formatedDate : ''
 }
