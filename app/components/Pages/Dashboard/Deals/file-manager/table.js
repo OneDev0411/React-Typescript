@@ -56,7 +56,9 @@ export class FileManager extends React.Component {
   onCellClick(state, rowInfo, column) {
     return {
       onClick: (e, handleOriginal) => {
-        if (['td-select', 'td-delete', 'td-split'].includes(column.id)) {
+        if (
+          ['td-select', 'td-delete', 'td-split'].includes(column.id) === false
+        ) {
           return this.openFile(rowInfo.original)
         }
 

@@ -1,11 +1,9 @@
-import { format } from 'fecha'
+import moment from 'moment'
 
-export function formatDate(date, pattern) {
-  if (!date || new Date(date) === 'Invalid date') {
-    return ''
+export function formatDate(date, pattern = 'MM/DD/YYYY') {
+  if (moment.invalid(date)) {
+    return date
   }
 
-  const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000
-
-  return format(date * 1000 - timezoneOffset, 'MM/DD/YYYY')
+  return moment.utc(date * 1000).format(pattern)
 }

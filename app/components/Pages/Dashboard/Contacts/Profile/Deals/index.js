@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
+
+import { goTo } from '../../../../../../utils/go-to'
 
 import { List } from './List'
 import Loading from '../../../../../Partials/Loading'
@@ -76,7 +77,10 @@ export class DealsListWidget extends React.Component {
       return
     }
 
-    browserHistory.push(`/dashboard/deals/${deal.id}`)
+    goTo(
+      `/dashboard/deals/${deal.id}`,
+      `Contact - ${this.state.contact.display_name}`
+    )
   }
 
   render() {

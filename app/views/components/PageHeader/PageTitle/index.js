@@ -1,38 +1,31 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { browserHistory } from 'react-router'
+import Flex from 'styled-flex-component'
+
 import IconButton from '../../Button/IconButton'
 import BackButton from '../../SvgIcons/KeyboardArrowLeft/IconKeyboardArrowLeft'
+import { Title } from './styled'
+import { goTo } from '../../../../utils/go-to'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  align-items: center;
-`
-
-export const Heading = styled.h1`
-  margin: 0 16px;
-  font-size: 24px;
-  line-height: 1;
-  color: #263445;
-`
-
-const defaultProps = {
-  backButton: true,
-  backUrl: ''
-}
-
-const propTypes = {
+PageTitle.propTypes = {
   backUrl: PropTypes.string,
   backButton: PropTypes.bool,
   title: PropTypes.string
 }
 
-export function PageTitle({ children, title, backButton, backUrl }) {
+PageTitle.defaultProps = {
+  backButton: true,
+  backUrl: '',
+  title: ''
+}
+
+export function PageTitle(props) {
+  const { title, backUrl } = props
+
   function handleOnBack() {
     if (backUrl) {
-      return browserHistory.push(backUrl)
+      return goTo(backUrl)
     }
 
     const currentLocation = browserHistory.getCurrentLocation()
@@ -43,23 +36,16 @@ export function PageTitle({ children, title, backButton, backUrl }) {
   }
 
   return (
-    <Container>
-      {backButton && (
-        <IconButton
-          size={32}
-          color="#333"
-          hoverColor="#2196f3"
-          onClick={handleOnBack}
-        >
-          <BackButton style={{ width: 32, height: 32 }} />
-        </IconButton>
-      )}
-
-      {title && <Heading>{title}</Heading>}
-      {children}
-    </Container>
+    <Flex alignCenter>
+      <Flex alignCenter>
+        {props.backButton && (
+          <IconButton color="#333" hoverColor="#2196f3" onClick={handleOnBack}>
+            <BackButton style={{ width: 32, height: 32 }} />
+          </IconButton>
+        )}
+        {title && <Title>{title}</Title>}
+      </Flex>
+      {props.children}
+    </Flex>
   )
 }
-
-PageTitle.propTypes = propTypes
-PageTitle.defaultProps = defaultProps

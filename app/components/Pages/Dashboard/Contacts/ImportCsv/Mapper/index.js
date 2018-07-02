@@ -29,6 +29,7 @@ class Mapper extends React.Component {
   analyze = () =>
     CsvParser.parse(this.props.file, {
       skipEmptyLines: true,
+      trimHeaders: true,
       complete: results => this.onCsvParseComplete(results)
     })
 

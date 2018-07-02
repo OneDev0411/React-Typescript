@@ -3,13 +3,13 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 // eslint-disable-next-line
-import { getContactStage } from '../../../../../models/contacts/helpers/get-contact-stage'
+import { getContactStage, getContactAddresses } from '../../../../../models/contacts/helpers'
 
 // eslint-disable-next-line
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
-import Header from './Header'
+import PageHeader from '../../../../../views/components/PageHeader'
 import Information from './Information'
 import { Dates } from './Dates'
 import { DealsListWidget } from './Deals'
@@ -154,6 +154,7 @@ class ContactProfile extends React.Component {
     }
 
     const { activeTab } = this.state
+    const hasAddress = getContactAddresses(contact)
 
     const thirdColumn = (
       <ThirdColumn>
@@ -164,7 +165,7 @@ class ContactProfile extends React.Component {
 
     return (
       <div className="profile">
-        <Header currentPage={this.props.currentPage} />
+        <PageHeader title="All Contacts" backUrl="/dashboard/contacts" />
 
         <ColumnsContainer>
           <SideColumnWrapper>
@@ -175,9 +176,11 @@ class ContactProfile extends React.Component {
 
               <ContactInfo contact={contact} />
 
-              <Addresses contact={contact} />
+              {hasAddress.length > 0 && <Addresses contact={contact} />}
 
               <Details contact={contact} />
+
+              {hasAddress.length === 0 && <Addresses contact={contact} />}
             </div>
             {!this.state.isDesktopScreen && thirdColumn}
           </SideColumnWrapper>

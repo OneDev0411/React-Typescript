@@ -1,18 +1,49 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
 import ActionButton from '../../../../../components/Button/ActionButton'
 import IconTodo from '../../../../../components/SvgIcons/Todo/IconTodo'
+import OverlayDrawer from '../../../../../components/OverlayDrawer'
+import NewTask from '../../../components/NewTask'
 
-export default function NoTasks() {
-  return (
-    <div style={{ textAlign: 'center' }}>
-      <IconTodo style={{ width: 112, height: 112, fill: '#8DA2B5' }} />
-      <h2 style={{ color: '#62778c', margin: '0 0 0.5em' }}>
-        Looks like you don’t have any tasks.
-      </h2>
-      <ActionButton onClick={() => browserHistory.push('/crm/tasks/new')}>
-        Create Task
-      </ActionButton>
-    </div>
-  )
+export default class NoTasks extends React.Component {
+  state = {
+    showCreateTask: false
+  }
+
+  toggleShowCreateTask = () =>
+    this.setState(state => ({
+      showCreateTask: !state.showCreateTask
+    }))
+
+  render() {
+    return (
+      <div>
+        <div style={{ textAlign: 'center' }}>
+          <IconTodo style={{ width: 112, height: 112, fill: '#8DA2B5' }} />
+          <h2 style={{ color: '#62778c', margin: '0 0 0.5em' }}>
+            Looks like you don’t have any tasks.
+          </h2>
+
+          <ActionButton onClick={this.toggleShowCreateTask}>
+            Create Task
+          </ActionButton>
+        </div>
+
+        <OverlayDrawer
+          isOpen={this.state.showCreateTask}
+          width={50}
+          showFooter={false}
+          onClose={this.toggleShowCreateTask}
+        >
+          <OverlayDrawer.Header title="Add Task" />
+          <OverlayDrawer.Body>
+            <NewTask
+              className="overlay-drawer"
+              submitCallback={this.toggleShowCreateTask}
+              deleteCallback={this.toggleShowCreateTask}
+            />
+          </OverlayDrawer.Body>
+        </OverlayDrawer>
+      </div>
+    )
+  }
 }

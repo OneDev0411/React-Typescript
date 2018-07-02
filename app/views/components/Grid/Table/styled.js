@@ -15,9 +15,9 @@ const Row = styled.div`
 export const HeaderRow = Row.extend``
 
 export const BodyRow = Row.extend`
-  height: 48px;
-  line-height: 48px;
-  vertical-align: middle;
+  display: flex;
+  min-height: 48px;
+  align-items: center;
   border-bottom: 1px solid #dce5eb;
 `
 

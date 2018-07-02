@@ -1,3 +1,3 @@
 export function parseDate(date) {
-  return new Date(date).getTime() / 1000
+  return date => moment.utc(date).unix()
 }
