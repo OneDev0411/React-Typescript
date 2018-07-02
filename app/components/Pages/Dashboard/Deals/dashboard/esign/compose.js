@@ -204,8 +204,10 @@ class SendSignatures extends React.Component {
         cancelLabel: 'No, Save Draft',
         onConfirm: () => this.openEditWindow(envelope.id)
       })
-    } catch (err) {
-      const isDocusignError = ~~err.status === 412
+    } catch (e) {
+      console.log(e)
+
+      const isDocusignError = ~~e.status === 412
 
       this.setState({
         isSending: false,

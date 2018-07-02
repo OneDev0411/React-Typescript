@@ -1,30 +1,31 @@
 import _ from 'underscore'
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {
   switch (action.type) {
-    case types.GET_DEALS_FAILED:
+    case actionTypes.GET_DEALS_FAILED:
+    case actionTypes.CLEAR_DEALS:
       return {}
 
-    case types.ARCHIVE_DEAL:
+    case actionTypes.ARCHIVE_DEAL:
       return _.omit(state, role => role.deal === action.deal_id)
 
-    case types.GET_ROLES:
+    case actionTypes.GET_ROLES:
       return {
         ...state,
         ...action.roles
       }
 
-    case types.DELETE_ROLE:
+    case actionTypes.DELETE_ROLE:
       return _.omit(state, role => role.id === action.role_id)
 
-    case types.CREATE_ROLES:
+    case actionTypes.CREATE_ROLES:
       return {
         ...state,
         ..._.indexBy(action.roles, 'id')
       }
 
-    case types.UPDATE_ROLE:
+    case actionTypes.UPDATE_ROLE:
       return {
         ...state,
         [action.role.id]: action.role

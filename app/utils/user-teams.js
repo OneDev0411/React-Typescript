@@ -2,7 +2,7 @@ import cookie from 'js-cookie'
 
 const ACTIVE_TEAM_COOKIE = 'rechat-active-team'
 
-export function getActiveTeam(user) {
+export function getActiveTeam(user = {}) {
   const { teams } = user
 
   if (!teams) {
@@ -38,6 +38,10 @@ export function getActiveTeamACL(user) {
 
 export function hasUserAccess(user, action) {
   return getActiveTeamACL(user).includes(action)
+}
+
+export function isBackOffice(user) {
+  return hasUserAccess(user, 'BackOffice')
 }
 
 export function isTrainingAccount(user) {

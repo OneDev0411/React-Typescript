@@ -26,6 +26,7 @@ import {
   setSelectedTask
 } from '../../../../../store_actions/deals'
 import OpenDeal from '../utils/open-deal'
+import { isBackOffice } from '../../../../../utils/user-teams'
 
 class CreateDeal extends React.Component {
   constructor(props) {
@@ -340,6 +341,7 @@ class CreateDeal extends React.Component {
 
       return OpenDeal(deal.id)
     } catch (e) {
+      console.log(e)
       this.setState({
         saving: false,
         submitError: true
@@ -658,10 +660,10 @@ class CreateDeal extends React.Component {
 }
 
 export default connect(
-  ({ deals, user }) => ({
+  ({ user }) => ({
     user,
     confirmation,
-    isBackOffice: deals.backoffice
+    isBackOffice: isBackOffice(user)
   }),
   {
     confirmation,

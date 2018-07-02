@@ -7,6 +7,8 @@ import TaskDeactivation from './deactivation'
 import Labels from './labels'
 import FolderIcon from '../../../Partials/Svgs/Folder'
 
+import { isBackOffice } from '../../../../../../utils/user-teams'
+
 class ChecklistPanel extends React.Component {
   constructor(props) {
     super(props)
@@ -103,6 +105,6 @@ class ChecklistPanel extends React.Component {
   }
 }
 
-export default connect(({ deals }) => ({
-  isBackoffice: deals.backoffice
+export default connect(({ user }) => ({
+  isBackoffice: isBackOffice(user)
 }))(ChecklistPanel)

@@ -14,7 +14,7 @@ import { Spinner } from '../../../Partials/Loading'
 import { updateUser } from '../../../../store_actions/user'
 
 const ERROR_MESSAGE =
-  'You have encountered an unknown system issue. We\'re working on it. In the meantime, connect with our support.'
+  "You have encountered an unknown system issue. We're working on it. In the meantime, connect with our support."
 
 const confirmVerify = ({
   brand,
@@ -71,36 +71,43 @@ const confirmVerify = ({
 }
 
 export default compose(
-  connect(({ brand }, { location: { query }, params: { verifyType } }) => {
-    const {
-      email, email_code, phone_code, phone_number, receivingUserEmail
-    } = query
-
-    const verifyQueryParams = {
-      verifyType,
-      receivingUserEmail
-    }
-
-    if (verifyType === 'email') {
-      verifyQueryParams.body = {
+  connect(
+    ({ brand }, { location: { query }, params: { verifyType } }) => {
+      const {
         email,
-        email_code
-      }
-    }
-
-    if (verifyType === 'phone') {
-      verifyQueryParams.body = {
+        email_code,
+        phone_code,
         phone_number,
-        code: phone_code
-      }
-    }
+        receivingUserEmail
+      } = query
 
-    return {
-      brand,
-      verifyType,
-      verifyQueryParams
-    }
-  }, { updateUser }),
+      const verifyQueryParams = {
+        verifyType,
+        receivingUserEmail
+      }
+
+      if (verifyType === 'email') {
+        verifyQueryParams.body = {
+          email,
+          email_code
+        }
+      }
+
+      if (verifyType === 'phone') {
+        verifyQueryParams.body = {
+          phone_number,
+          code: phone_code
+        }
+      }
+
+      return {
+        brand,
+        verifyType,
+        verifyQueryParams
+      }
+    },
+    { updateUser }
+  ),
   withState('userMessage', 'setUserMessage', null),
   withState('isSubmitting', 'setIsSubmitting', true),
   withHandlers({
@@ -154,7 +161,9 @@ export default compose(
           setIsSubmitting(false)
           setUserMessage({
             type: 'success',
-            text: `${verifyType === 'email' ? 'Email' : 'Phone number'} is verified.`
+            text: `${
+              verifyType === 'email' ? 'Email' : 'Phone number'
+            } is verified.`
           })
         })
         .catch(errorCode => {

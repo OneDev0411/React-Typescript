@@ -123,7 +123,7 @@ class Item extends React.Component {
   }
 
   render() {
-    const { item, handleOnClickItem } = this.props
+    const { item } = this.props
     const { roles } = this.state
 
     const status = Deal.getStatus(item) || 'Unknown'
@@ -133,7 +133,7 @@ class Item extends React.Component {
     const contactRoleName = roles.map(role => roleName(role.role)).join(', ')
 
     return (
-      <Container onClick={() => handleOnClickItem(item)}>
+      <Container onClick={() => this.props.handleOnClickItem(item)}>
         <div style={{ width: '48px', height: '48px', borderRadius: '50%' }}>
           <img src={getPhoto(item)} alt="home" style={{ width: '100%' }} />
         </div>

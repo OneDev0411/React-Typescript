@@ -9,7 +9,7 @@ import { getContactStage, getContactAddresses } from '../../../../../models/cont
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
-import Header from './Header'
+import PageHeader from '../../../../../views/components/PageHeader'
 import Information from './Information'
 import { ImportantDates } from './ImportantDates'
 import { DealsListWidget } from './Deals'
@@ -165,7 +165,7 @@ class ContactProfile extends React.Component {
 
     return (
       <div className="profile">
-        <Header currentPage={this.props.currentPage} />
+        <PageHeader title="All Contacts" backUrl="/dashboard/contacts" />
 
         <ColumnsContainer>
           <SideColumnWrapper>

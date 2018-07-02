@@ -10,6 +10,8 @@ import {
   updateDealNotifications
 } from '../../../../../../store_actions/deals'
 
+import { isBackOffice } from '../../../../../../utils/user-teams'
+
 const List = ({
   tasks,
   rooms,
@@ -101,11 +103,11 @@ const List = ({
 }
 
 export default connect(
-  ({ deals, chatroom }) => ({
+  ({ deals, chatroom, user }) => ({
     rooms: chatroom.rooms,
     tasks: deals.tasks,
-    selectedTask: deals.selectedTask,
-    isBackOffice: deals.backoffice
+    selectedTask: deals.properties.selectedTask,
+    isBackOffice: isBackOffice(user)
   }),
   { setSelectedTask, updateDealNotifications }
 )(List)

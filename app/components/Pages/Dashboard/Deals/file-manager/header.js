@@ -8,7 +8,7 @@ import DealEmail from '../dashboard/deal-email'
 import PageHeader from '../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
-export class Header extends React.Component {
+class Header extends React.Component {
   constructor(props) {
     super(props)
   }

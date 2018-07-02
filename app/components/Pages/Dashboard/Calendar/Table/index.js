@@ -156,9 +156,9 @@ export class Table extends React.Component {
           <Grid
             columns={columns}
             data={data}
-            emptyState={<EmptyState />}
             onTableRef={onRef}
             getTrProps={this.getGridTrProps}
+            EmptyState={EmptyState}
             SubComponent={({ date }) => (
               <TableHeader isSelectedDay={this.isSelectedDay(date)}>
                 {this.getDayHeader(date)}

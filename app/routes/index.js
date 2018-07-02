@@ -8,9 +8,6 @@ import UserIsNotAuthenticated from './userIsNotAuthenticated'
 // actions
 import { getDeals, getContexts } from '../store_actions/deals'
 
-// utils
-import { hasUserAccess } from '../utils/user-teams'
-
 // Containers
 import AppLayout from '../components/App'
 
@@ -112,7 +109,7 @@ const AsyncDealsLayout = Load({
 
     return batchActions([
       await dispatch(getContexts(user)),
-      await dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
+      await dispatch(getDeals(user))
     ])
   }
 })

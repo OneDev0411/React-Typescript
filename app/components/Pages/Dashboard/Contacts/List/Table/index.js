@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
-import { browserHistory } from 'react-router'
 import ReactTable from 'react-table'
 
+import { goTo } from '../../../../../../utils/go-to'
 import { LoadingComponent } from './components/LoadingComponent'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 import Radio from '../../../../../../views/components/radio/RadioWithState'
@@ -13,7 +13,7 @@ import Name from './columns/Name'
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
 function openContact(id) {
-  browserHistory.push(`/dashboard/contacts/${id}`)
+  goTo(`/dashboard/contacts/${id}`, 'All Contacts')
 }
 
 class ContactsList extends React.Component {
