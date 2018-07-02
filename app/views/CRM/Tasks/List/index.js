@@ -12,7 +12,7 @@ import OverlayDrawer from '../../../components/OverlayDrawer'
 
 class TasksList extends Component {
   state = {
-    showCreateTask: false,
+    isOpen: false,
     selectedTaskId: null
   }
 
@@ -34,42 +34,42 @@ class TasksList extends Component {
     }
   }
 
-  toggleShowCreateTask = () =>
-    this.setState(state => ({
-      showCreateTask: !state.showCreateTask,
-      selectedTaskId: null
-    }))
+  onOpen = () => this.setState({ isOpen: true })
+  onClose = () => {
+    console.log('close', this.state)
+    this.setState({ isOpen: false, selectedTaskId: null })
+  }
 
   handleSelectTask = taskId =>
     this.setState({
-      showCreateTask: true,
+      isOpen: true,
       selectedTaskId: taskId
     })
 
   render() {
-    const { showCreateTask, selectedTaskId } = this.state
+    const { isOpen, selectedTaskId } = this.state
     const { isFetching, tasks } = this.props
 
     return (
       <Fragment>
-        <Header onCreateTask={this.toggleShowCreateTask} />
+        <Header onCreateTask={this.onOpen} />
 
         <OverlayDrawer
-          isOpen={showCreateTask}
+          isOpen={isOpen}
           width={50}
           showFooter={false}
-          onClose={this.toggleShowCreateTask}
+          onClose={this.onClose}
         >
           <OverlayDrawer.Header
             title={selectedTaskId ? 'Edit Task' : 'Add Task'}
           />
           <OverlayDrawer.Body>
-            {showCreateTask && (
+            {isOpen && (
               <NewTask
                 className="overlay-drawer"
                 taskId={selectedTaskId}
-                submitCallback={this.toggleShowCreateTask}
-                deleteCallback={this.toggleShowCreateTask}
+                submitCallback={this.onClose}
+                deleteCallback={this.onClose}
               />
             )}
           </OverlayDrawer.Body>
@@ -96,4 +96,7 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { getTasks })(TasksList)
+export default connect(
+  mapStateToProps,
+  { getTasks }
+)(TasksList)
