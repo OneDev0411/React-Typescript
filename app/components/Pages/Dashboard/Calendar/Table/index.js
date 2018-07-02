@@ -11,6 +11,8 @@ import { GridContainer, TableHeader } from './styled'
 import EmptyState from './EmptyState'
 import Fetching from './Fetching'
 
+import EventIcon from './EventIcon'
+
 export class Table extends React.Component {
   constructor(props) {
     super(props)
@@ -57,7 +59,12 @@ export class Table extends React.Component {
         id: 'type',
         header: 'Type',
         width: '20%',
-        render: ({ rowData }) => <Fragment>{rowData.type_label}</Fragment>
+        render: ({ rowData }) => (
+          <Fragment>
+            <EventIcon event={rowData} />
+            {rowData.type_label}
+          </Fragment>
+        )
       },
       {
         id: 'name',
