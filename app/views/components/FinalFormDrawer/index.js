@@ -27,8 +27,6 @@ FinalFormDrawer.defaultProps = {
 export function FinalFormDrawer(props) {
   const { submitting } = props
 
-  console.log(props)
-
   return (
     <Form
       validate={props.validate}
