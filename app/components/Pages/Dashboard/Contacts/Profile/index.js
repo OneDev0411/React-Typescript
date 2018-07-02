@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 // eslint-disable-next-line
-import { getContactStage, getContactAddresses } from '../../../../../models/contacts/helpers'
+import { getContactAddresses } from '../../../../../models/contacts/helpers'
 
 // eslint-disable-next-line
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
