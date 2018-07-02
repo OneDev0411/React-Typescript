@@ -35,10 +35,7 @@ class TasksList extends Component {
   }
 
   onOpen = () => this.setState({ isOpen: true })
-  onClose = () => {
-    console.log('close', this.state)
-    this.setState({ isOpen: false, selectedTaskId: null })
-  }
+  onClose = () => this.setState({ isOpen: false, selectedTaskId: null })
 
   handleSelectTask = taskId =>
     this.setState({
