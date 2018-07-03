@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import { saveSubmission } from '../../../../../store_actions/deals'
 import Deal from '../../../../../models/Deal'
-import { getActiveTeamId } from '../../../../../utils/user-teams'
 import EmbedForm from './embed'
 
 class FormEdit extends React.Component {
@@ -82,11 +81,10 @@ class FormEdit extends React.Component {
    *
    */
   async getTemplates() {
-    const { user, task } = this.props
-    const brandId = getActiveTeamId(user)
+    const { user, task, deal } = this.props
 
     try {
-      const templates = await Deal.getFormTemplates(brandId, task.form)
+      const templates = await Deal.getFormTemplates(deal.brand, task.form)
 
       return this.getTemplatesValues(templates)
     } catch (e) {
