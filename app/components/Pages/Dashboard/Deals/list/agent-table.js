@@ -203,6 +203,8 @@ class AgentTable extends BaseTable {
 
   hasNotification(deal) {
     const notificationCount = deal.new_notifications
+      ? deal.new_notifications.length
+      : 0
 
     if (notificationCount > 0) {
       return (
