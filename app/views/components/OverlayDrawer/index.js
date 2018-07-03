@@ -21,21 +21,15 @@ const defaultProps = {
   closeOnBackdropClick: true
 }
 
-function renderChildren(children, { onClose, showFooter }) {
-  return React.Children.map(children, child => {
-    function getProps(name) {
-      switch (name) {
-        case 'Header':
-          return { onClose }
-        case 'Body':
-          return { showFooter }
-        case 'Footer':
-          return { showFooter }
-      }
-    }
-
-    return React.cloneElement(child, getProps(child.type.displayName))
-  })
+function getComponentProps(name, { onClose, showFooter }) {
+  switch (name) {
+    case 'Header':
+      return { onClose }
+    case 'Body':
+      return { showFooter }
+    case 'Footer':
+      return { showFooter }
+  }
 }
 
 const OverlayDrawer = ({
@@ -47,7 +41,12 @@ const OverlayDrawer = ({
 }) => (
   <div>
     <Content width={width} isOpen={isOpen}>
-      {renderChildren(children, rest)}
+      {React.Children.map(children, child =>
+        React.cloneElement(
+          child,
+          getComponentProps(child.type.displayName, rest)
+        )
+      )}
     </Content>
 
     <Backdrop
