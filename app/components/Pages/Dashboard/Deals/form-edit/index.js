@@ -84,7 +84,7 @@ class FormEdit extends React.Component {
     const { user, task, deal } = this.props
 
     try {
-      const templates = await Deal.getFormTemplates(deal.brand, task.form)
+      const templates = await Deal.getFormTemplates(deal.brand.id, task.form)
 
       return this.getTemplatesValues(templates)
     } catch (e) {
