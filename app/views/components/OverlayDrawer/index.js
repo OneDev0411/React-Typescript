@@ -23,23 +23,18 @@ const defaultProps = {
 
 function renderChildren(children, { onClose, showFooter }) {
   return React.Children.map(children, child => {
-    let props = {}
-
-    switch (child.type.displayName) {
-      case 'Header':
-        props = { onClose }
-        break
-
-      case 'Body':
-        props = { showFooter }
-        break
-
-      case 'Footer':
-        props = { showFooter }
-        break
+    function getProps(name) {
+      switch (name) {
+        case 'Header':
+          return { onClose }
+        case 'Body':
+          return { showFooter }
+        case 'Footer':
+          return { showFooter }
+      }
     }
 
-    return React.cloneElement(child, props)
+    return React.cloneElement(child, getProps(child.type.displayName))
   })
 }
 
