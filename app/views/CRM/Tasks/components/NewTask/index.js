@@ -278,7 +278,7 @@ class Task extends Component {
                     disabled={submitting || pristine || isDeleting}
                     className="c-new-address-modal__cancel-btn"
                   >
-                    Cancel
+                    Reset
                   </button>
                 )}
                 <ActionButton
@@ -300,9 +300,10 @@ class Task extends Component {
 Task.propTypes = propTypes
 Task.defaultProps = defaultProps
 
-export default connect(null, { createTask, updateTask, deleteTask, notify })(
-  Task
-)
+export default connect(
+  null,
+  { createTask, updateTask, deleteTask, notify }
+)(Task)
 
 /**
  * Fields validator
