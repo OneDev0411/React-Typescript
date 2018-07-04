@@ -8,8 +8,13 @@ import { selectDefinitionByName } from '../../../../../../reducers/contacts/attr
 import Timeline from '../Timeline'
 import Notes from '../Notes'
 import TasksTimeLine from '../../../../../../views/CRM/Tasks/components/TasksTimeLine'
+import { goTo } from '../../../../../../utils/go-to'
 
 function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
+  function handleOnClickTask(task) {
+    goTo(`/crm/tasks/${task.id}`, `Contact - ${contact.display_name}`)
+  }
+
   return (
     <div className="c-contact-profile-card activities">
       <Tabs
@@ -53,7 +58,7 @@ function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
           }
           className="notes"
         >
-          <TasksTimeLine tasks={tasks} />
+          <TasksTimeLine tasks={tasks} handleOnClick={handleOnClickTask} />
         </Tab>
       </Tabs>
     </div>
@@ -62,7 +67,9 @@ function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
 
 function mapStateToProps(state, props) {
   let notes = []
-  const { contacts: { attributeDefs } } = state
+  const {
+    contacts: { attributeDefs }
+  } = state
   const noteAttributeDef = selectDefinitionByName(attributeDefs, 'note')
 
   if (noteAttributeDef) {
