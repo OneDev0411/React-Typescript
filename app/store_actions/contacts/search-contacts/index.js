@@ -15,7 +15,7 @@ import {
 } from '../../../reducers/contacts/list'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 
-export function searchContacts(filter, page = 1, limit = 50) {
+export function searchContacts(filter, page = 1, limit = 50, searchInputValue) {
   return async (dispatch, getState) => {
     const {
       contacts: { list }
@@ -28,7 +28,11 @@ export function searchContacts(filter, page = 1, limit = 50) {
     try {
       const listInfo = selectContactsInfo(list)
 
-      if (listInfo.type === 'general' || listInfo.filter !== filter) {
+      if (
+        listInfo.type === 'general' ||
+        listInfo.filter !== filter ||
+        listInfo.searchInputValue !== searchInputValue
+      ) {
         dispatch(clearContactPages)
       }
 
@@ -40,9 +44,17 @@ export function searchContacts(filter, page = 1, limit = 50) {
       ])
 
       const start = page - 1 > 0 ? (page - 1) * limit : 0
-      const response = await search(filter, { ...defaultQuery, start, limit })
+      const response = await search(searchInputValue, filter, {
+        ...defaultQuery,
+        start,
+        limit
+      })
 
-      if (listInfo.type === 'general' || listInfo.filter !== filter) {
+      if (
+        listInfo.type === 'general' ||
+        listInfo.filter !== filter ||
+        listInfo.searchInputValue !== searchInputValue
+      ) {
         dispatch({
           type: actionTypes.CLEAR_CONTACTS_LIST
         })
@@ -54,6 +66,7 @@ export function searchContacts(filter, page = 1, limit = 50) {
             info: {
               ...response.info,
               filter,
+              searchInputValue,
               type: 'filter'
             },
             ...normalizeContacts(response)

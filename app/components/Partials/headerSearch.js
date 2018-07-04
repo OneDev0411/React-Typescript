@@ -27,6 +27,12 @@ export default class HeaderSearch extends React.Component {
     isFocused: false
   }
 
+  componentWillReceiveProps(nextProps, nextState) {
+    if (nextProps.inputValue !== nextState.inputValue) {
+      this.setState({ inputValue: nextProps.inputValue })
+    }
+  }
+
   debouncedOnInputChange = _.debounce(
     this.props.onInputChange,
     this.props.debounceTime

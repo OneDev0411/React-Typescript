@@ -32,7 +32,7 @@ import {
 import SavedSegments from '../../../../../views/components/Grid/SavedSegments/List'
 
 import { Header } from './Header'
-// import { Search } from './Search'
+import { Search } from './Search'
 import { Toolbar } from './Toolbar'
 
 import Table from './Table'
@@ -40,11 +40,16 @@ import { NoContact } from './NoContact'
 import ContactFilters from './Filters'
 
 const BASE_URL = '/dashboard/contacts'
-const deletedState = { deletingContacts: [], selectedRows: {} }
+const deletedState = {
+  deletingContacts: [],
+  selectedRows: {},
+  searchInputValue: ''
+}
 
 class ContactsList extends React.Component {
   state = {
     filter: this.props.filter,
+    searchInputValue: '',
     pageTitle: 'All Contacts',
     isSearching: false,
     isDeleting: false,
@@ -102,21 +107,13 @@ class ContactsList extends React.Component {
       isSideMenuOpen: !state.isSideMenuOpen
     }))
 
-  search = async (filter, page = 1) => {
-    if (typeof filter === 'string' && filter.length === 0) {
-      return this.setState(
-        { ...deletedState, filter: '', isSearching: false },
-        () => {
-          this.props.clearContactSearchResult()
-          browserHistory.push(BASE_URL)
-        }
-      )
-    }
+  onFilterChange = async (filter, page = 1) => {
+    const { searchInputValue } = this.state
 
     try {
-      let nextState = { filter, isSearching: true }
+      let nextState = { filter, isSearching: true, searchInputValue }
 
-      if (filter !== selectContactsInfo(this.props.list).filter) {
+      if (filter && filter !== selectContactsInfo(this.props.list).filter) {
         nextState = { ...nextState, ...deletedState }
       }
 
@@ -125,13 +122,23 @@ class ContactsList extends React.Component {
         browserHistory.push(`${BASE_URL}/page/${page}`)
       )
 
-      await this.props.searchContacts(filter, page)
+      await this.props.searchContacts(
+        filter,
+        page,
+        undefined,
+        nextState.searchInputValue
+      )
     } catch (error) {
       console.log(error)
     } finally {
       this.setState({ isSearching: false })
     }
   }
+
+  search = searchInputValue =>
+    this.setState({ ...deletedState, searchInputValue }, () => {
+      this.onFilterChange(this.state.filter)
+    })
 
   fetchPage = async page => {
     this.props.getContacts(page)
@@ -143,7 +150,7 @@ class ContactsList extends React.Component {
 
     if (!selectPage(list, page)) {
       if (filter || listInfo.type === 'filter') {
-        return this.search(this.state.filter, page)
+        return this.onFilterChange(this.state.filter, page)
       }
 
       this.fetchPage(page)
@@ -176,7 +183,7 @@ class ContactsList extends React.Component {
   }
 
   handleChangeSavedSegment = segment => {
-    this.search(segment.filters)
+    this.onFilterChange(segment.filters)
 
     this.setState({
       pageTitle: segment.name
@@ -184,7 +191,13 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const { isSideMenuOpen, pageTitle, filter } = this.state
+    const {
+      isSideMenuOpen,
+      pageTitle,
+      filter,
+      isSearching,
+      searchInputValue
+    } = this.state
     const { user, list, currentPage } = this.props
 
     const contacts = selectPageContacts(list, currentPage)
@@ -216,18 +229,18 @@ class ContactsList extends React.Component {
             onMenuTriggerChange={this.toggleSideMenu}
           />
 
-          <ContactFilters onFilterChange={this.search} />
+          <ContactFilters onFilterChange={this.onFilterChange} />
 
           <div style={{ padding: '0 1em' }}>
-            {/* <Search
+            <Search
               disabled={noContact}
-              inputValue={this.state.filter}
-              isSearching={this.state.isSearching}
+              inputValue={searchInputValue}
+              isSearching={isSearching}
               handleOnChange={this.search}
-            /> */}
+            />
 
             <Toolbar
-              disabled={noContact || isFetching || this.state.isSearching}
+              disabled={noContact || isFetching || isSearching}
               onDelete={this.handleOnDelete}
               deleting={this.state.isDeleting}
               selectedRows={selectedRows}
