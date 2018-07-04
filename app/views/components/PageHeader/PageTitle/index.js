@@ -10,12 +10,13 @@ import { goTo } from '../../../../utils/go-to'
 
 PageTitle.propTypes = {
   backUrl: PropTypes.string,
-  backButton: PropTypes.bool,
+  showBackButton: PropTypes.bool,
+  onClickBackButton: PropTypes.func,
   title: PropTypes.string
 }
 
 PageTitle.defaultProps = {
-  backButton: true,
+  showBackButton: true,
   backUrl: '',
   title: ''
 }
@@ -38,8 +39,12 @@ export function PageTitle(props) {
   return (
     <Flex alignCenter>
       <Flex alignCenter>
-        {props.backButton && (
-          <IconButton color="#333" hoverColor="#2196f3" onClick={handleOnBack}>
+        {props.showBackButton && (
+          <IconButton
+            color="#333"
+            hoverColor="#2196f3"
+            onClick={props.onClickBackButton || handleOnBack}
+          >
             <BackButton style={{ width: 32, height: 32 }} />
           </IconButton>
         )}
