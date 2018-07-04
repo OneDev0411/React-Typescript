@@ -25,10 +25,10 @@ class CrudRole extends React.Component {
   }
 
   showModal = () => {
-    const { shouldPrepopulateAgent, user } = this.props
+    const { user } = this.props
 
-    if (shouldPrepopulateAgent) {
-      return this.showAgentsModal()
+    if (this.props.shouldSelectRoleFromAgentsList) {
+      return this.setState({ showAgentModal: true })
     } else if (user) {
       return this.setState({ showRoleModal: true, role: user })
     }
@@ -43,18 +43,6 @@ class CrudRole extends React.Component {
     })
   }
 
-  showAgentsModal = () => {
-    const { teamAgents } = this.props
-
-    // For primary agent if only one agent available automatically select them
-    // issue: web#1148
-    if (teamAgents && teamAgents.length === 1) {
-      return this.onSelectAgent(teamAgents[0])
-    }
-
-    this.setState({ showAgentModal: true })
-  }
-
   onSelectContactUser = contact => {
     this.setState({
       ...initialState,
@@ -63,15 +51,14 @@ class CrudRole extends React.Component {
     })
   }
 
-  onSelectAgent = user => {
-    const contacts = this.searchContactByEmail(user.email)
+  onSelectAgent = (user, relatedContacts) => {
     let newState
 
     /**
      * if there is no related contact for this agent:
      * populate role form with agent data
      */
-    if (contacts.length === 0) {
+    if (relatedContacts.length === 0) {
       let { agent, first_name, last_name, email, phone_number } = user
       let { office, work_phone } = agent || {}
 
@@ -91,10 +78,10 @@ class CrudRole extends React.Component {
      * if there is one related contact for the agent:
      * populate role form with the relevant contact record
      */
-    if (contacts.length === 1) {
+    if (relatedContacts.length === 1) {
       newState = {
         showRoleModal: true,
-        role: convertContactToRole(contacts[0])
+        role: convertContactToRole(relatedContacts[0], this.props.attributeDefs)
       }
     }
 
@@ -102,7 +89,7 @@ class CrudRole extends React.Component {
      * if there are more than one related contacts for the agent:
      * show contacts modal to user be able select one of them
      */
-    if (contacts.length > 1) {
+    if (relatedContacts.length > 1) {
       newState = {
         selectedAgent: user,
         showContactModal: true
@@ -183,12 +170,13 @@ class CrudRole extends React.Component {
           handleSelectedItem={this.onSelectContactUser}
         />
 
-        <AgentModal
-          isOpen={showAgentModal}
-          onHide={this.resetStates}
-          onSelectAgent={this.onSelectAgent}
-          teamAgents={teamAgents}
-        />
+        {showAgentModal && (
+          <AgentModal
+            onHide={this.resetStates}
+            onSelectAgent={this.onSelectAgent}
+            teamAgents={teamAgents}
+          />
+        )}
 
         <RoleCrmIntegration
           isSubmitting={isSaving}
