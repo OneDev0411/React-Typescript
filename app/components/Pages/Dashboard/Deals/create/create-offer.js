@@ -1,13 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
-import Navbar from './nav'
+
+import PageHeader from '../../../../../views/components/PageHeader'
+import Button from '../../../../../views/components/Button/ActionButton'
+
 import OfferType from './offer-type'
 import EnderType from './deal-ender-type'
 import DealClients from './deal-clients'
@@ -377,10 +379,10 @@ class CreateOffer extends React.Component {
     const { confirmation } = this.props
 
     confirmation({
-      message: 'Cancel deal creation?',
+      message: 'Cancel offer creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: this.backToDeal
     })
   }
@@ -430,7 +432,10 @@ class CreateOffer extends React.Component {
 
     return (
       <div className="deal-create-offer">
-        <Navbar title="Add New Offer" onClose={this.cancelCreateOffer} />
+        <PageHeader
+          title="Add New Offer"
+          onClickBackButton={this.cancelCreateOffer}
+        />
 
         <div className="form">
           <OfferType
@@ -550,7 +555,7 @@ class CreateOffer extends React.Component {
             )}
 
           <Button
-            className={cn('btn btn-primary create-offer-button', {
+            className={cn('create-offer-button', {
               disabled: saving || offerType.length === 0
             })}
             disabled={saving || offerType.length === 0}
