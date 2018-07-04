@@ -22,10 +22,6 @@ $margin: 20px;
   z-index: 100;
   overflow-y: scroll;
 
-  .nav {
-    @extend %deal-create-nav;
-  }
-
   .form {
     @extend %deal-create-form;
   }
@@ -35,33 +31,6 @@ $margin: 20px;
   }
 }
 
-/**
-*
-*/
-%deal-create-nav {
-  height: 55px;
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-
-  .title {
-    width: 90%;
-    font-size: 17px;
-    font-weight: 500;
-    color: #000000;
-  }
-
-  .cta {
-    width: 10%;
-    text-align: right;
-    .deal-button.cancel {
-      width: 34px;
-      height: 34px;
-    }
-  }
-}
 
 %deal-create-actions {
   display: flex;
