@@ -7,36 +7,62 @@ import RequiredIcon from '../../../../../views/components/SvgIcons/Required/Icon
 const BUYING = 'Buying'
 const SELLING = 'Selling'
 
-function getRoles(agents, side) {
+function getAllowedRole(agents, side) {
   if (side === BUYING) {
     const hasBuyerAgent = _.find(agents, agent => agent.role === 'BuyerAgent')
 
-    return hasBuyerAgent ? ['CoBuyerAgent'] : ['BuyerAgent']
+    return hasBuyerAgent ? 'CoBuyerAgent' : 'BuyerAgent'
   }
 
   if (side === SELLING) {
     const hasSellerAgent = _.find(agents, agent => agent.role === 'SellerAgent')
 
-    return hasSellerAgent ? ['CoSellerAgent'] : ['SellerAgent']
+    return hasSellerAgent ? 'CoSellerAgent' : 'SellerAgent'
   }
 
   return []
 }
 
-export default ({
-  hasError,
-  agents,
-  showDealSideAs,
+/**
+ * Co-agents or office double-enders should be chosen from agents list
+ * https://gitlab.com/rechat/web/issues/1319
+ */
+function getShouldShowAgentModal(
+  forceSelectRolesFromContactsList,
   dealSide,
-  shouldPrepopulateAgent = true,
-  isCommissionRequired,
-  onUpsertAgent,
-  onRemoveAgent
-}) => {
-  const sideName = showDealSideAs || dealSide
-  const allowedRoles = getRoles(agents, sideName)
-  const isPrimaryAgent =
-    ['BuyerAgent', 'SellerAgent'].indexOf(allowedRoles[0]) > -1
+  isPrimaryAgent,
+  isDoubleEnded,
+  allowedRole
+) {
+  if (forceSelectRolesFromContactsList) {
+    return false
+  }
+
+  if (
+    isPrimaryAgent ||
+    isDoubleEnded ||
+    (dealSide === SELLING && allowedRole === 'CoSellerAgent') ||
+    (dealSide === BUYING && allowedRole === 'CoBuyerAgent')
+  ) {
+    return true
+  }
+
+  return false
+}
+
+export default props => {
+  const {
+    hasError,
+    agents,
+    dealSide,
+    isCommissionRequired,
+    onUpsertAgent,
+    onRemoveAgent
+  } = props
+
+  const sideName = props.showDealSideAs || dealSide
+  const allowedRole = getAllowedRole(agents, sideName)
+  const isPrimaryAgent = ['BuyerAgent', 'SellerAgent'].includes(allowedRole)
 
   const title = isPrimaryAgent ? 'Add Primary Agent' : 'Add Co-Agent'
 
@@ -57,19 +83,25 @@ export default ({
             isCommissionRequired={isCommissionRequired}
             dealSide={dealSide}
             modalTitle="Update Agent"
-            allowedRoles={allowedRoles}
+            allowedRoles={[allowedRole]}
             onRemoveUser={id => onRemoveAgent(id)}
             onUpsertUser={onUpsertAgent}
           />
         ))}
 
         <CrudRole
-          shouldPrepopulateAgent={shouldPrepopulateAgent && isPrimaryAgent}
+          shouldSelectRoleFromAgentsList={getShouldShowAgentModal(
+            props.forceSelectRolesFromContactsList,
+            dealSide,
+            isPrimaryAgent,
+            props.isDoubleEnded,
+            allowedRole
+          )}
           isCommissionRequired={isCommissionRequired}
           dealSide={dealSide}
           modalTitle={title}
           ctaTitle={title}
-          allowedRoles={allowedRoles}
+          allowedRoles={[allowedRole]}
           onUpsertUser={onUpsertAgent}
         />
       </div>

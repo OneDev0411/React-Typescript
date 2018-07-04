@@ -382,7 +382,7 @@ class CreateOffer extends React.Component {
       message: 'Cancel offer creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: "No, don't cancel",
+      cancelLabel: 'No, don\'t cancel',
       onConfirm: this.backToDeal
     })
   }
@@ -399,14 +399,10 @@ class CreateOffer extends React.Component {
   /**
    * check commission is required or not
    */
-  getIsCommissionRequired() {
-    const { enderType } = this.state
-
-    if (enderType === 'AgentDoubleEnder' || enderType === 'OfficeDoubleEnder') {
-      return true
-    }
-
-    return false
+  get IsDoubleEnded() {
+    return ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
+      this.state.enderType
+    )
   }
 
   render() {
@@ -477,8 +473,8 @@ class CreateOffer extends React.Component {
                 scenario="CreateOffer"
                 showDealSideAs="Buying"
                 dealSide={deal.deal_type}
-                shouldPrepopulateAgent={isDoubleEndedAgent}
-                isCommissionRequired={this.getIsCommissionRequired()}
+                isDoubleEnded={this.IsDoubleEnded}
+                isCommissionRequired={this.IsDoubleEnded}
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                 onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
