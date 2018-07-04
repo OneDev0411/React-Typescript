@@ -8,7 +8,8 @@ import {
   selectContactsInfo,
   selectPage,
   selectPageContacts,
-  selectContactsListFetching
+  selectContactsListFetching,
+  selectContact
 } from '../../../../../reducers/contacts/list'
 
 import {
@@ -191,7 +192,6 @@ class ContactsList extends React.Component {
     const listInfo = selectContactsInfo(list)
     const currentPageData = selectPage(list, currentPage)
     const selectedRows = currentPageData ? currentPageData.selectedIds : []
-
     const isFetching =
       (currentPageData && currentPageData.fetching) ||
       selectContactsListFetching(list)
