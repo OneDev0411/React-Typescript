@@ -4,9 +4,10 @@ import Cookies from 'universal-cookie'
 
 import CloseIcon from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
 
-export const Container = Flex.extend`
+export const TaginfoContainer = Flex.extend`
   border-radius: 3px;
   background-color: #dce5eb;
+  margin-bottom: 1em;
   padding: 1em;
   font-size: 16px;
   line-height: 1.5;
@@ -41,13 +42,13 @@ export default class TagsOverlay extends React.Component {
     }
 
     return (
-      <Container alignCenter justifyBetween>
+      <TaginfoContainer alignCenter justifyBetween>
         Tags are unique identifiers that you can use to make your contacts more
         human and allow you to filter contacts easier.
         <IconContainer center>
           <CloseIcon color="#7b91a6" onClick={this.onclick} />
         </IconContainer>
-      </Container>
+      </TaginfoContainer>
     )
   }
 }

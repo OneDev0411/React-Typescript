@@ -3,11 +3,10 @@ import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 import TagIcon from '../../../../../../../views/components/SvgIcons/Tag/TagIcon'
 
-export const Container = styled.form`
+export const CustomTagContainer = styled.form`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1em;
   height: 48px;
   border-radius: 3px;
   background-color: #ffffff;
@@ -84,7 +83,7 @@ export default class CustomTag extends React.Component {
     const { inputFocused, inputValue } = this.state
 
     return (
-      <Container inputFocused={inputFocused} onSubmit={this.onUpsert}>
+      <CustomTagContainer inputFocused={inputFocused} onSubmit={this.onUpsert}>
         <IconContainer center>
           <TagIcon color="#263445" />
         </IconContainer>
@@ -99,7 +98,7 @@ export default class CustomTag extends React.Component {
         <AddButton inputFocused={inputFocused} type="submit">
           Add
         </AddButton>
-      </Container>
+      </CustomTagContainer>
     )
   }
 }
