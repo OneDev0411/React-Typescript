@@ -1,7 +1,6 @@
 export * from './default-query'
 export * from './get-attribute-from-summary'
 export * from './get-contact-avatar'
-export * from './get-contact-stage'
 export * from './get-notes'
 export * from './get-contact-details'
 export * from './get-contact-attribute'

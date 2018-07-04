@@ -48,6 +48,12 @@ export default class extends React.Component {
     this.props.onChangeContext(field, value)
   }
 
+  getContextValue(field) {
+    const value = this.props.contexts[field.name]
+
+    return !_.isUndefined(value) ? value : ''
+  }
+
   render() {
     const { hasError, contexts, fields, onChangeContext } = this.props
     const { selectedField } = this.state
@@ -72,7 +78,9 @@ export default class extends React.Component {
                     <span
                       className={cn('text', {
                         hasError:
-                          hasError && field.mandatory && !contexts[field.name]
+                          hasError &&
+                          field.mandatory &&
+                          _.isUndefined(contexts[field.name])
                       })}
                     >
                       {field.label} {field.mandatory && <sup>*</sup>}
@@ -87,7 +95,7 @@ export default class extends React.Component {
                         contexts[field.name] &&
                         !field.validate(field, contexts[field.name])
                     })}
-                    value={contexts[field.name] || ''}
+                    value={this.getContextValue(field)}
                     onChange={(e, data = {}) =>
                       this.onChangeStringContext(
                         field.name,

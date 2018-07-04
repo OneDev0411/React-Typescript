@@ -11,6 +11,17 @@ export const Container = styled.div`
     box-shadow: none !important;
   }
 
+  .DayPicker-Week {
+    display: table-row;
+    height: 27px !important;
+  }
+
+  .DayPicker-Day {
+    padding: 0 !important;
+    min-width: 27px !important;
+    max-width: 27px !important;
+  }
+
   .DayPicker-Day--selected {
     background-color: #2196f3 !important;
     border-radius: 100px !important;

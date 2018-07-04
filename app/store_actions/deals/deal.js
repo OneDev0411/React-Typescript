@@ -1,6 +1,6 @@
 import { normalize } from 'normalizr'
 import { batchActions } from 'redux-batched-actions'
-import _ from 'underscore'
+
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
 import * as schema from './schema'
