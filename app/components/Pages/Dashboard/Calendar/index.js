@@ -304,7 +304,7 @@ class CalendarContainer extends React.Component {
 
         <PageContent>
           <PageHeader isFlat>
-            <PageHeader.Title backButton={false}>
+            <PageHeader.Title showBackButton={false}>
               <Trigger onClick={this.toggleSideMenu} />
               <PageHeader.Heading>Calendar</PageHeader.Heading>
             </PageHeader.Title>
