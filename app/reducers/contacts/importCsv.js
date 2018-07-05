@@ -37,9 +37,7 @@ export default (state = initialState, action) => {
     case types.CONTACTS__IMPORT_CSV__SET_INFO:
       return {
         ...state,
-        columns: action.columns,
-        errors: action.errors,
-        rowsCount: action.rowsCount
+        ...action
       }
 
     case types.CONTACTS__IMPORT_CSV__UPDATE_MAPPING:
