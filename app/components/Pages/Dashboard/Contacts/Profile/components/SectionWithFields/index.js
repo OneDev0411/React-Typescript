@@ -135,6 +135,10 @@ class SectionWithFields extends React.Component {
   }
 
   render() {
+    const {
+      addNewFieldButtonText,
+      showAddNewCustomAttributeButton
+    } = this.props
     const sectionTitle = this.props.title || this.props.section
     const sectionFields = this.getSectionFields()
 
@@ -144,27 +148,30 @@ class SectionWithFields extends React.Component {
         onEdit={sectionFields ? this.openEditAttributeDrawer : undefined}
       >
         {sectionFields}
-        <div
-          style={{
-            textAlign: 'center',
-            marginBottom: '1em'
-          }}
-        >
-          {this.props.addNewFieldButtonText && (
-            <ActionButton
-              inverse
-              onClick={this.openEditAttributeDrawer}
-              style={{ marginRight: '1em' }}
-            >
-              {this.props.addNewFieldButtonText}
-            </ActionButton>
-          )}
-          {this.props.showAddNewCustomAttributeButton && (
-            <ActionButton inverse onClick={this.openEditAttributeDrawer}>
-              Add new property
-            </ActionButton>
-          )}
-        </div>
+        {(addNewFieldButtonText || showAddNewCustomAttributeButton) && (
+          <div
+            style={{
+              textAlign: 'center',
+              marginTop: sectionFields ? 0 : '0.5em',
+              marginBottom: '1.5em'
+            }}
+          >
+            {addNewFieldButtonText && (
+              <ActionButton
+                inverse
+                onClick={this.openEditAttributeDrawer}
+                style={{ marginRight: '1em' }}
+              >
+                {addNewFieldButtonText}
+              </ActionButton>
+            )}
+            {showAddNewCustomAttributeButton && (
+              <ActionButton inverse onClick={this.openEditAttributeDrawer}>
+                Add new property
+              </ActionButton>
+            )}
+          </div>
+        )}
 
         <EditForm
           fields={this.getModalFields()}

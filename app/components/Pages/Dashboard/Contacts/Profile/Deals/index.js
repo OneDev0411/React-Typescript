@@ -96,8 +96,8 @@ export class DealsListWidget extends React.Component {
             list={this.state.list}
           />
         ) : (
-          <Flex center full style={{ height: '2em' }}>
-            <div style={{ color: '#8da2b5' }}>
+          <Flex center full>
+            <div style={{ color: '#8da2b5', padding: '0.5em 0 1.5em' }}>
               No deals connected to this contact.
             </div>
           </Flex>

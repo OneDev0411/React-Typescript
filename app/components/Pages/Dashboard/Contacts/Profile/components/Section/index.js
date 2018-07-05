@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import EditButton from '../../../../../../../views/components/Button/IconButton'
 import EditIcon from '../../../../../../../views/components/SvgIcons/Edit/EditIcon'
 
-import { Container, Header, Title } from './styled'
+import { Container, Header, Title, Body } from './styled'
 
 Section.propTypes = {
   onEdit: PropTypes.func,
@@ -26,7 +26,7 @@ export function Section(props) {
           )}
         </Header>
       )}
-      <div style={{ padding: '0 1em' }}>{props.children}</div>
+      <Body style={{ padding: '1em 1em 0' }}>{props.children}</Body>
     </Container>
   )
 }

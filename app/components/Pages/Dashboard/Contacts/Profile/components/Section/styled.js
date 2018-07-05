@@ -3,18 +3,18 @@ import styled from 'styled-components'
 export const Container = styled.div`
   position: relative;
   margin-bottom: 1em;
-  border-radius: 3px;
-  background: #fff;
-  border: 1px solid #cad4db;
 `
 
 export const Header = styled.div`
-  height: 4.8rem;
+  height: 3.6rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 1em 1em;
-  border-bottom: solid 1px #e5e7ea;
+`
+
+export const Body = styled.div`
+  border-radius: 3px;
+  border: 1px solid #cad4db;
 `
 
 export const Title = styled.h3`
