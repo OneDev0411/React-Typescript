@@ -1,13 +1,16 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
 import { browserHistory } from 'react-router'
+
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
-import Navbar from './nav'
+
+import PageHeader from '../../../../../views/components/PageHeader'
+import Button from '../../../../../views/components/Button/ActionButton'
+
 import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
 import DealClients from './deal-clients'
@@ -494,7 +497,10 @@ class CreateDeal extends React.Component {
 
     return (
       <div className="deal-create">
-        <Navbar title="Create New Deal" onClose={this.onClosePage} />
+        <PageHeader
+          title="Create New Deal"
+          onClickBackButton={this.onClosePage}
+        />
 
         <div className="form">
           <div className="swoosh">Swoosh! Another one in the bag.</div>
@@ -548,12 +554,12 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealAgents
+                      forceSelectRolesFromContactsList
                       hasError={this.hasError('selling_agents')}
                       scenario="CreateDeal"
                       dealSide={dealSide}
                       showDealSideAs="Selling"
                       agents={sellingAgents}
-                      shouldPrepopulateAgent={false}
                       isCommissionRequired={this.getIsCommissionRequired()}
                       onUpsertAgent={form =>
                         this.onUpsertRole(form, 'sellingAgents')
@@ -635,7 +641,7 @@ class CreateDeal extends React.Component {
             )}
 
           <Button
-            className={cn('btn btn-primary create-deal-button', {
+            className={cn('create-deal-button', {
               disabled: !canCreateDeal
             })}
             onClick={() => this.createDeal()}

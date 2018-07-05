@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { BasicDropdown } from '../BasicDropdown'
 
-import { getContactStage } from '../../../models/contacts/helpers/get-contact-stage'
+import { getContactAttribute } from '../../../models/contacts/helpers/get-contact-attribute'
 import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
 import { upsertContactAttributes } from '../../../store_actions/contacts/upsert-contact-attributes'
 
@@ -20,27 +20,27 @@ const defaultSelectedItem = { label: 'General', value: 'General' }
 class Stage extends React.Component {
   state = {
     isSaving: false,
-    selectedItem: getInitialSelectedItem(this.props.contact)
+    selectedItem: getInitialSelectedItem(
+      this.props.contact,
+      this.props.attribute_def
+    )
   }
 
   handleOnChange = async selectedItem => {
+    const { contact, attribute_def } = this.props
+
     try {
       this.setState({ isSaving: true, selectedItem })
 
       const { value: text } = selectedItem
-
-      const attribute_def = selectDefinitionByName(
-        this.props.attributeDefs,
-        'stage'
-      )
       const is_primary = true
-      let stage = getContactStage(this.props.contact)
+      let stage = getContactAttribute(contact, attribute_def)
 
-      if (stage && stage.id) {
+      if (stage.length > 0 && stage[0].id) {
         stage = {
           text,
           is_primary,
-          id: stage.id
+          id: stage[0].id
         }
       } else {
         stage = {
@@ -57,7 +57,7 @@ class Stage extends React.Component {
       console.error(error)
       this.setState({
         isSaving: false,
-        selectedItem: getInitialSelectedItem(this.props.contact)
+        selectedItem: getInitialSelectedItem(contact, attribute_def)
       })
     }
   }
@@ -80,20 +80,28 @@ class Stage extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, { upsertContactAttributes })(Stage)
+export default connect(
+  mapStateToProps,
+  { upsertContactAttributes }
+)(Stage)
 
 function mapStateToProps(state) {
+  const attribute_def = selectDefinitionByName(
+    state.contacts.attributeDefs,
+    'stage'
+  )
+
   return {
-    attributeDefs: state.contacts.attributeDefs
+    attribute_def
   }
 }
 
-function getInitialSelectedItem(contact) {
-  const stage = getContactStage(contact)
+function getInitialSelectedItem(contact, attribute_def) {
+  const stage = getContactAttribute(contact, attribute_def)
   let selectedItem = defaultSelectedItem
 
-  if (stage != null) {
-    selectedItem = { label: stage.text, value: stage.text }
+  if (stage.length > 0) {
+    selectedItem = { label: stage[0].text, value: stage[0].text }
   }
 
   return selectedItem

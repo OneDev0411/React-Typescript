@@ -1,13 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
-import Navbar from './nav'
+
+import PageHeader from '../../../../../views/components/PageHeader'
+import Button from '../../../../../views/components/Button/ActionButton'
+
 import OfferType from './offer-type'
 import EnderType from './deal-ender-type'
 import DealClients from './deal-clients'
@@ -377,7 +379,7 @@ class CreateOffer extends React.Component {
     const { confirmation } = this.props
 
     confirmation({
-      message: 'Cancel deal creation?',
+      message: 'Cancel offer creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
       cancelLabel: "No, don't cancel",
@@ -397,14 +399,10 @@ class CreateOffer extends React.Component {
   /**
    * check commission is required or not
    */
-  getIsCommissionRequired() {
-    const { enderType } = this.state
-
-    if (enderType === 'AgentDoubleEnder' || enderType === 'OfficeDoubleEnder') {
-      return true
-    }
-
-    return false
+  get IsDoubleEnded() {
+    return ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
+      this.state.enderType
+    )
   }
 
   render() {
@@ -430,7 +428,10 @@ class CreateOffer extends React.Component {
 
     return (
       <div className="deal-create-offer">
-        <Navbar title="Add New Offer" onClose={this.cancelCreateOffer} />
+        <PageHeader
+          title="Add New Offer"
+          onClickBackButton={this.cancelCreateOffer}
+        />
 
         <div className="form">
           <OfferType
@@ -472,8 +473,8 @@ class CreateOffer extends React.Component {
                 scenario="CreateOffer"
                 showDealSideAs="Buying"
                 dealSide={deal.deal_type}
-                shouldPrepopulateAgent={isDoubleEndedAgent}
-                isCommissionRequired={this.getIsCommissionRequired()}
+                isDoubleEnded={this.IsDoubleEnded}
+                isCommissionRequired={this.IsDoubleEnded}
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                 onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
@@ -550,7 +551,7 @@ class CreateOffer extends React.Component {
             )}
 
           <Button
-            className={cn('btn btn-primary create-offer-button', {
+            className={cn('create-offer-button', {
               disabled: saving || offerType.length === 0
             })}
             disabled={saving || offerType.length === 0}

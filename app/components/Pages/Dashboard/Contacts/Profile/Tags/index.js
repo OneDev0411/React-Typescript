@@ -2,8 +2,6 @@ import React from 'react'
 import _ from 'underscore'
 import { connect } from 'react-redux'
 
-import TagsModal from './TagsModal'
-
 import {
   addAttributes,
   deleteAttributes,
@@ -12,11 +10,12 @@ import {
 import { getContactTags } from '../../../../../../models/contacts/helpers/get-contact-tags'
 import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
+import TagsOverlay from '../../components/TagsOverlay'
 
 class Tags extends React.Component {
   state = {
     loading: false,
-    isOpenModal: false
+    overlayIsOpen: false
   }
 
   componentDidMount() {
@@ -48,15 +47,8 @@ class Tags extends React.Component {
       deleteAttributes
     } = this.props
 
-    if (newTags.length === 0 && removedTags.length === 0) {
-      return this.setState({
-        isOpenModal: false
-      })
-    }
-
     this.setState({
-      loading: 'Saving',
-      isOpenModal: false
+      loading: 'Saving'
     })
 
     // insert new tags
@@ -82,13 +74,12 @@ class Tags extends React.Component {
     })
   }
 
-  handelOpenModal = () => this.setState({ isOpenModal: true })
+  openOverLay = () => this.setState({ overlayIsOpen: true })
 
-  handleCloseModal = () => this.setState({ isOpenModal: false })
-
+  closeOverlay = () => this.setState({ overlayIsOpen: false })
   render() {
-    const { tags } = this.props
-    const { isOpenModal, loading } = this.state
+    const { tags, contact } = this.props
+    const { overlayIsOpen, loading } = this.state
 
     return (
       <div className="c-contact-profile-card tags">
@@ -117,19 +108,17 @@ class Tags extends React.Component {
                 .value()}
               <button
                 className="c-contact__tag--new"
-                onClick={this.handelOpenModal}
+                onClick={this.openOverLay}
               >
                 +
               </button>
             </div>
           )}
         </div>
-
-        <TagsModal
-          tags={tags}
-          isOpen={isOpenModal}
-          handleClose={this.handleCloseModal}
-          handleSubmit={this.handleSubmitChanges}
+        <TagsOverlay
+          selectedContactsIds={[contact.id]}
+          isOpen={overlayIsOpen}
+          closeOverlay={this.closeOverlay}
         />
       </div>
     )
@@ -144,8 +133,11 @@ const mapStateToProps = ({ contacts }, { contact }) => {
   return { tags, existingTags, attribute_def }
 }
 
-export default connect(mapStateToProps, {
-  addAttributes,
-  getExistingTags,
-  deleteAttributes
-})(Tags)
+export default connect(
+  mapStateToProps,
+  {
+    addAttributes,
+    getExistingTags,
+    deleteAttributes
+  }
+)(Tags)

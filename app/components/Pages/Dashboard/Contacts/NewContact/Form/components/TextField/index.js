@@ -31,6 +31,7 @@ export function TextField({ input, meta, title, isRequired }) {
         {...input}
         id={`new-contact__${input.name}`}
         placeholder={title}
+        autoComplete="off"
         type="text"
       />
       {hasError && <ErrorMessage>{error}</ErrorMessage>}

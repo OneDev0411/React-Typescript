@@ -7,5 +7,5 @@ export const Container = styled.div`
   height: 63px;
   background-color: #f8fafb;
   box-shadow: 0 -1px 0 0 #dce5eb;
-  padding: 0 8px;
+  padding: 0 1em;
 `

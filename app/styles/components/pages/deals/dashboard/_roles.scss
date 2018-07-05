@@ -4,7 +4,8 @@
 
 .modal-deal-team-agents {
   .modal-content {
-    border-radius: 6px;
+    border: none;
+    box-shadow: 1px 1px 1px #ccc;
     overflow: auto;
   }
 
@@ -14,24 +15,40 @@
 
   .modal-body {
     padding: 0;
-    min-height: 80px;
+    min-height: 200px;
     max-height: 400px;
     overflow: auto;
+    position: relative;
     .deal-roles {
       @extend %deal-roles;
       padding: 10px !important;
-      .deal-roles-empty-state {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 80px;
-        font-weight: 500;
-        font-size: 16px;
-      }
+    }
 
-      .item {
-        cursor: pointer;
-      }
+    .deal-roles .item {
+      cursor: pointer;
+    }
+
+    .deal-roles .deal-roles-empty-state {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 80px;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .deal-roles .search-overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 0 0 5px 5px;
     }
   }
 }

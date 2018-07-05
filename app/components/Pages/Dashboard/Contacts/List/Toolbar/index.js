@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import ExportContacts from '../ExportContacts'
+import ExportContacts from './ExportContactsButton'
+import TagContacts from './TagContacts'
 
 Toolbar.propTypes = {
   disabled: PropTypes.bool,
@@ -25,6 +26,8 @@ export function Toolbar(props) {
         {selectedRowsLength > 0 && `${selectedRowsLength} of `}
         {`${props.totalCount.toLocaleString()} Contacts`}
       </span>
+
+      <TagContacts selectedRows={props.selectedRows} />
       <ExportContacts
         disabled={props.disabled}
         filters={props.filters}

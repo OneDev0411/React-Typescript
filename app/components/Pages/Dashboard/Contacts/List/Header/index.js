@@ -10,7 +10,7 @@ import { Trigger as MenuTrigger } from '../../../../../../views/components/Slide
 export function Header({ user, title, isSideMenuOpen, onMenuTriggerChange }) {
   return (
     <PageHeader isFlat>
-      <PageHeader.Title backButton={false}>
+      <PageHeader.Title showBackButton={false}>
         <MenuTrigger
           tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}
           onClick={onMenuTriggerChange}

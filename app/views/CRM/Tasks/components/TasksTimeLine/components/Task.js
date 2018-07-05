@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import timeago from 'timeago.js'
 import fecha from 'fecha'
 
@@ -50,13 +49,6 @@ class Task extends React.Component {
     }
   }
 
-  handleOpenTask = task => {
-    browserHistory.push({
-      state: { task },
-      pathname: `/crm/tasks/${task.id}`
-    })
-  }
-
   render() {
     const { task } = this.props
     const { disabled, isDone } = this.state
@@ -101,7 +93,7 @@ class Task extends React.Component {
           size={32}
           color="#cecece"
           hoverColor="#2196f3"
-          onClick={() => this.handleOpenTask(task)}
+          onClick={() => this.props.onClick(task)}
         >
           <ArrowRightIcon style={{ width: 32, height: 32 }} />
         </OpenTaskButton>
@@ -110,4 +102,7 @@ class Task extends React.Component {
   }
 }
 
-export default connect(null, { updateTask })(Task)
+export default connect(
+  null,
+  { updateTask }
+)(Task)

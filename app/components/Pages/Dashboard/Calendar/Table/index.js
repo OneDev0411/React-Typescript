@@ -1,15 +1,17 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 
 import ScrollDetector from 'react-scroll-detector'
 import moment from 'moment'
 import _ from 'underscore'
 
+import { goTo } from '../../../../../utils/go-to'
 import Grid from '../../../../../views/components/Grid/Table'
 import { GridContainer, TableHeader } from './styled'
 import EmptyState from './EmptyState'
 import Fetching from './Fetching'
+
+import EventIcon from './EventIcon'
 
 export class Table extends React.Component {
   constructor(props) {
@@ -57,7 +59,12 @@ export class Table extends React.Component {
         id: 'type',
         header: 'Type',
         width: '20%',
-        render: ({ rowData }) => <Fragment>{rowData.type_label}</Fragment>
+        render: ({ rowData }) => (
+          <Fragment>
+            <EventIcon event={rowData} />
+            {rowData.type_label}
+          </Fragment>
+        )
       },
       {
         id: 'name',
@@ -91,13 +98,12 @@ export class Table extends React.Component {
 
     switch (row.object_type) {
       case 'deal_context':
-        props.onClick = () =>
-          browserHistory.push(`/dashboard/deals/${row.deal}`)
+        props.onClick = () => goTo(`/dashboard/deals/${row.deal}`, 'Calendar')
         break
 
       case 'contact_attribute':
         props.onClick = () =>
-          browserHistory.push(`/dashboard/contacts/${row.contact}`)
+          goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
         break
 
       case 'crm_task':
@@ -126,7 +132,6 @@ export class Table extends React.Component {
       positions,
       onScrollTop,
       onScrollBottom,
-      getTrProps,
       onRef
     } = this.props
 

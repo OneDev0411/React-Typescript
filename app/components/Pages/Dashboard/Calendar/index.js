@@ -26,7 +26,7 @@ import {
   Trigger
 } from '../../../../views/components/SlideMenu'
 
-import TaskOverlay from './TaskOverlay'
+import TaskDrawer from './TaskDrawer'
 import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
 
@@ -285,7 +285,7 @@ class CalendarContainer extends React.Component {
 
     return (
       <Container>
-        <TaskOverlay
+        <TaskDrawer
           isOpen={showCreateTaskMenu}
           selectedTask={selectedTask}
           onClose={this.toggleShowCreateTask}
@@ -304,7 +304,7 @@ class CalendarContainer extends React.Component {
 
         <PageContent>
           <PageHeader isFlat>
-            <PageHeader.Title backButton={false}>
+            <PageHeader.Title showBackButton={false}>
               <Trigger onClick={this.toggleSideMenu} />
               <PageHeader.Heading>Calendar</PageHeader.Heading>
             </PageHeader.Title>
