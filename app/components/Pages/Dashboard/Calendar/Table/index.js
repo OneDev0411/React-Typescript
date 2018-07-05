@@ -76,11 +76,11 @@ export class Table extends React.Component {
         id: 'time',
         header: 'Time',
         render: ({ rowData }) => {
-          const date = moment.unix(rowData.timestamp)
-
           if (rowData.object_type !== 'crm_task') {
-            date.utcOffset(0)
+            return 'All day'
           }
+
+          const date = moment.unix(rowData.timestamp)
 
           return date.format('hh:mm A')
         }
