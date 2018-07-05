@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
+import unionBy from 'lodash/unionBy'
 import OverlayDrawer from '../../../../../../views/components/OverlayDrawer'
 import DrawerHeader from './DrawerHeader'
 import Info from './Info'
@@ -13,7 +14,8 @@ import {
   deleteAttributesFromContacts,
   addAttributes,
   deleteAttributes,
-  getContacts
+  getContacts,
+  getContactsTags
 } from '../../../../../../store_actions/contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 import {
@@ -25,6 +27,7 @@ import {
   selectCurrentPage
 } from '../../../../../../reducers/contacts/list'
 import intersectionBy from 'lodash/intersectionBy'
+import { selectTags } from '../../../../../../reducers/contacts/tags'
 
 const defaultTags = [
   'Seller',
@@ -41,10 +44,10 @@ class TagsOverlay extends React.Component {
   constructor(props) {
     super(props)
 
-    const { selectedContactsIds, list } = this.props
+    const { selectedContactsIds, list, existingTags } = this.props
 
     this.state = {
-      tags: this.getCommonTags(selectedContactsIds, list),
+      tags: this.getCommonTags(selectedContactsIds, list, existingTags),
       isSubmitting: false
     }
   }
@@ -52,11 +55,13 @@ class TagsOverlay extends React.Component {
   componentWillReceiveProps(nextProps) {
     const newTags = this.getCommonTags(
       nextProps.selectedContactsIds,
-      nextProps.list
+      nextProps.list,
+      nextProps.existingTags
     )
     const oldTags = this.getCommonTags(
       this.props.selectedContactsIds,
-      this.props.list
+      this.props.list,
+      this.props.existingTags
     )
 
     if (!_.isEqual(newTags, oldTags)) {
@@ -118,6 +123,7 @@ class TagsOverlay extends React.Component {
       addAttributes,
       deleteAttributes,
       getContacts,
+      getContactsTags,
       selectedContactsIds,
       attributeDefs,
       list
@@ -169,13 +175,14 @@ class TagsOverlay extends React.Component {
       await getContacts(currentPage)
     }
 
+    await getContactsTags()
     this.setState({ isSubmitting: false })
 
     closeOverlay()
   }
 
   // get common tags between selected contacts & default tags
-  getCommonTags = (selectedContactsIds, list) => {
+  getCommonTags = (selectedContactsIds, list, existingTags) => {
     if (selectedContactsIds.length === 0) {
       return []
     }
@@ -192,17 +199,18 @@ class TagsOverlay extends React.Component {
       ...tag,
       isSelected: true
     }))
-
-    return _.uniq(
-      filteredTags.concat(
-        defaultTags.map(tagText => ({
+    const defaultsWithExisting = defaultTags
+      .concat(existingTags.map(tag => tag[attribute_def.data_type]))
+      .map(
+        tagText => ({
           [attribute_def.data_type]: tagText,
           attribute_def: attribute_def.id,
           isSelected: false
-        }))
-      ),
-      attribute_def.data_type
-    )
+        }),
+        existingTags
+      )
+
+    return unionBy(filteredTags, defaultsWithExisting, attribute_def.data_type)
   }
 
   render() {
@@ -254,10 +262,11 @@ class TagsOverlay extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    contacts: { attributeDefs, list }
+    contacts: { attributeDefs, list, tags }
   } = state
+  const existingTags = selectTags(tags)
 
-  return { attributeDefs, list }
+  return { attributeDefs, list, existingTags }
 }
 
 export default connect(
@@ -267,6 +276,7 @@ export default connect(
     deleteAttributesFromContacts,
     addAttributes,
     deleteAttributes,
-    getContacts
+    getContacts,
+    getContactsTags
   }
 )(TagsOverlay)
