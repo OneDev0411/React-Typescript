@@ -188,7 +188,12 @@ const AsyncContactsImportCsv = Load({
 
 const AsyncCrmTasksList = Load({
   loader: () =>
-    import('../views/CRM/Tasks' /* webpackChunkName: "ctm_tasks_list" */)
+    import('../views/CRM/Tasks' /* webpackChunkName: "crm_tasks_list" */)
+})
+
+const AsyncCrmTask = Load({
+  loader: () =>
+    import('../views/CRM/Tasks/TaskPage' /* webpackChunkName: "crm_task_page" */)
 })
 
 /* ==================================== */
@@ -406,6 +411,7 @@ export default (
       />
 
       <Route path="/crm/tasks" component={AsyncCrmTasksList} />
+      <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
 
       <Route path="/dashboard/calendar" component={AsyncCalendar} />
 

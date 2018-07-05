@@ -4,7 +4,7 @@ import ActionButton from '../../../../components/Button/ActionButton'
 
 export default function Header({ onCreateTask }) {
   return (
-    <PageHeader title="Tasks" backButton={false}>
+    <PageHeader title="Tasks" showBackButton={false}>
       <PageHeader.Menu>
         <ActionButton onClick={onCreateTask}>Create Task</ActionButton>
       </PageHeader.Menu>

@@ -86,6 +86,8 @@ const isFetching = (state = false, action) => {
     case actionTypes.FETCH_CONTACTS_FAILURE:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_FAILURE:
+    case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
+    case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_FAILURE:
       return false
     default:
       return state
@@ -96,9 +98,11 @@ const error = (state = null, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACTS_FAILURE:
     case actionTypes.SEARCH_CONTACTS_FAILURE:
+    case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_FAILURE:
       return action.error
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
+    case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
       return null
     default:
       return state

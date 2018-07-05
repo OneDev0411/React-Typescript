@@ -3,7 +3,7 @@ import React from 'react'
 import OverlayDrawer from '../../../../../views/components/OverlayDrawer'
 import CreateTask from '../../../../../views/CRM/Tasks/components/NewTask'
 
-const TaskOverlay = ({ isOpen, selectedTask, onClose, onChangeTask }) => (
+const TaskDrawer = ({ isOpen, selectedTask, onClose, onChangeTask }) => (
   <OverlayDrawer
     isOpen={isOpen}
     width={50}
@@ -24,4 +24,4 @@ const TaskOverlay = ({ isOpen, selectedTask, onClose, onChangeTask }) => (
   </OverlayDrawer>
 )
 
-export default TaskOverlay
+export default TaskDrawer

@@ -6,7 +6,7 @@ import { markAllNotificationsAsSeen } from '../../../../../store_actions/notific
 import { selectNotificationIsFetching } from '../../../../../reducers/notifications'
 
 const NotificationsHeader = ({ isFetching, markAllNotificationsAsSeen }) => (
-  <PageHeader title="Notifications" backButton={false}>
+  <PageHeader title="Notifications" showBackButton={false}>
     <PageHeader.Menu>
       <ActionButton
         disabled={isFetching}

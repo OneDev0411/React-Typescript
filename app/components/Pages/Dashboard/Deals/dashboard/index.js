@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 import { browserHistory } from 'react-router'
+import _ from 'underscore'
+
+import { deleteNotifications } from '../../../../../models/Deal/notification'
 
 import Checklists from './checklists'
 import TaskDetail from './task-detail'
@@ -14,57 +16,53 @@ import Upload from './upload'
 import PageHeader from './page-header'
 import { getDeal } from '../../../../../store_actions/deals'
 import { isTrainingAccount } from '../../../../../utils/user-teams'
-import { getDashboardHeight } from '../utils/get-dashboard-height'
 
-const DealTasks = styled.div`
-  min-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
-  max-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
-`
-
-const DealContent = DealTasks.extend`
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-  will-change: overflow;
-  backface-visibility: hidden;
-
-  .column {
-    padding: 0;
-    height: auto;
-  }
-`
+import { DealContent, DealTasks } from './styled'
 
 class DealDetails extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isFetchingDeal: false
-    }
+  state = {
+    isFetchingDeal: false
   }
 
   componentDidMount() {
     this.initialize()
+    this.handleNotifications(this.props.deal)
   }
 
   async initialize() {
     const { deal, getDeal, params } = this.props
+
+    if (deal && deal.checklists) {
+      return
+    }
 
     if (deal && !deal.checklists) {
       return getDeal(deal.id)
     }
 
     try {
-      if (!deal) {
-        this.setState({ isFetchingDeal: true })
+      this.setState({ isFetchingDeal: true })
 
-        // try to get deal by id
-        await getDeal(params.id)
+      // try to get deal by id
+      await getDeal(params.id)
 
-        this.setState({ isFetchingDeal: false })
-      }
+      this.setState({ isFetchingDeal: false })
     } catch (e) {
       browserHistory.push('/dashboard/deals')
+    }
+  }
+
+  handleNotifications(deal) {
+    if (!deal.new_notifications) {
+      return false
+    }
+
+    const notifications = deal.new_notifications.filter(
+      notification => !notification.room
+    )
+
+    if (notifications.length > 0) {
+      deleteNotifications(_.pluck(notifications, 'id'))
     }
   }
 

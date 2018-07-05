@@ -1,15 +1,16 @@
 import React from 'react'
-import { Container, Title, IconContainer } from './styled'
 
+import { Title, Container } from './styled'
+import IconButton from '../../Button/IconButton'
 import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 
-const Header = ({ title, onClose }) => (
+const Header = ({ title, children, onClose }) => (
   <Container>
-    <Title>{title}</Title>
-
-    <IconContainer>
-      <CloseIcon color="#7b91a6" onClick={onClose} />
-    </IconContainer>
+    {title && <Title>{title}</Title>}
+    {children}
+    <IconButton color="#7b91a6" hoverColor="#fff" onClick={onClose}>
+      <CloseIcon />
+    </IconButton>
   </Container>
 )
 

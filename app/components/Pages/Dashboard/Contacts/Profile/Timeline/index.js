@@ -72,8 +72,9 @@ class Timeline extends React.Component {
           if (activity.type === 'crm_task') {
             return (
               <CRMTaskItem
-                task={activity}
+                contact={contact}
                 key={`timeline_item_${activity.id}`}
+                task={activity}
               />
             )
           }

@@ -8,30 +8,15 @@ import DealEmail from '../dashboard/deal-email'
 import PageHeader from '../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
-class Header extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  backToDeal() {
-    const { deal } = this.props
-
-    browserHistory.push(`/dashboard/deals/${deal.id}`)
-  }
-
-  openUploadDialog() {
-    this.dropzone.open()
-  }
-
-  onDrop(files) {
-    this.props.setUploadFiles(files, null)
-  }
+export class Header extends React.Component {
+  openUploadDialog = () => this.dropzone.open()
+  onDrop = files => this.props.setUploadFiles(files, null)
 
   render() {
     const { deal } = this.props
 
     return (
-      <PageHeader title="Files">
+      <PageHeader title="Files" backUrl={`/dashboard/deals/${deal.id}`}>
         <PageHeader.Menu>
           <DealEmail dealEmail={deal.email} />
           <ActionButton
