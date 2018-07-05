@@ -92,6 +92,8 @@ class BasicTable extends React.Component {
       isFetching,
       EmptyState,
       LoadingState,
+      getHeaderProps,
+      getHeaderRowProps,
       getTrProps,
       getTdProps,
       showTableHeader,
@@ -111,6 +113,8 @@ class BasicTable extends React.Component {
             columns={columns}
             sizes={sizes}
             onClickCell={this.handleClickHeaderCell}
+            getHeaderProps={getHeaderProps}
+            getHeaderRowProps={getHeaderRowProps}
           />
         )}
 

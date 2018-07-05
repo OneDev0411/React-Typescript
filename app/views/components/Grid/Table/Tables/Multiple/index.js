@@ -8,7 +8,12 @@ import TableHeader from '../../Header'
 
 const MultipleTable = ({ data, ...rest }) => (
   <Fragment>
-    <TableHeader columns={rest.columns} sizes={rest.sizes} />
+    <TableHeader
+      columns={rest.columns}
+      sizes={rest.sizes}
+      getHeaderProps={rest.getHeaderProps}
+      getHeaderRowProps={rest.getHeaderRowProps}
+    />
 
     {_.map(data, (group, key) => (
       <TableGroup key={group.key || key} group={group} {...rest} />

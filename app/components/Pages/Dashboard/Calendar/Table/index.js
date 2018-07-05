@@ -59,6 +59,7 @@ export class Table extends React.Component {
         id: 'type',
         header: 'Type',
         width: '20%',
+        isSortable: false,
         render: ({ rowData }) => (
           <Fragment>
             <EventIcon event={rowData} />
@@ -70,11 +71,13 @@ export class Table extends React.Component {
         id: 'name',
         header: 'Name',
         width: '30%',
-        render: ({ rowData }) => rowData.title
+        isSortable: false,
+        accessor: 'title'
       },
       {
         id: 'time',
         header: 'Time',
+        isSortable: false,
         render: ({ rowData }) => {
           if (rowData.object_type !== 'crm_task') {
             return 'All day'
@@ -93,7 +96,23 @@ export class Table extends React.Component {
     ]
   }
 
-  getGridTrProps(rowIndex, { original: row }) {
+  getGridHeaderProps = () => ({
+    style: {
+      position: 'sticky',
+      top: '0',
+      zIndex: 5,
+      backgroundColor: '#fff',
+      padding: '5px 0'
+    }
+  })
+
+  getGridHeaderRowProps = () => ({
+    style: {
+      marginBottom: 0
+    }
+  })
+
+  getGridTrProps = (rowIndex, { original: row }) => {
     const props = {}
 
     switch (row.object_type) {
@@ -161,9 +180,11 @@ export class Table extends React.Component {
           <Grid
             columns={columns}
             data={data}
-            emptyState={<EmptyState />}
+            EmptyState={EmptyState}
             onTableRef={onRef}
             getTrProps={this.getGridTrProps}
+            getHeaderProps={this.getGridHeaderProps}
+            getHeaderRowProps={this.getGridHeaderRowProps}
             SubComponent={({ date }) => (
               <TableHeader isSelectedDay={this.isSelectedDay(date)}>
                 {this.getDayHeader(date)}
