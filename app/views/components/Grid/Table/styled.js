@@ -12,13 +12,23 @@ const Row = styled.div`
   display: flex;
 `
 
-export const HeaderRow = Row.extend``
+export const HeaderRow = Row.extend`
+  margin-bottom: 32px;
+`
 
 export const BodyRow = Row.extend`
   display: flex;
   min-height: 48px;
   align-items: center;
   border-bottom: 1px solid #dce5eb;
+
+  ${props =>
+    props.hoverStyle &&
+    `
+    :hover {
+      ${props.hoverStyle}
+    }
+  `};
 `
 
 const Cell = styled.div`
@@ -29,16 +39,35 @@ const Cell = styled.div`
     `
     width: ${props.width}
   `};
+
+  ${props =>
+    props.hoverStyle &&
+    `
+    :hover {
+      ${props.hoverStyle}
+    }
+  `};
 `
 
 export const HeaderCell = Cell.extend`
   font-size: 14px;
   font-weight: 500;
   color: #5a7390;
+  padding: 0 4px;
+
+  ${props =>
+    props.isSortable &&
+    `
+    cursor: pointer;
+    :hover {
+      opacity: 0.8;
+    }
+  `};
 `
 
 export const BodyCell = Cell.extend`
   font-size: 14px;
   font-weight: 400;
   color: #1d364b;
+  padding: 0 4px;
 `

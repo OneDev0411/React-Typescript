@@ -83,17 +83,13 @@ const FieldLabel = ({
   )
 
   return (
-    <Fragment>
-      <Select
-        className={cn({ isInvalid: !selectedLabel })}
-        name="form-field-label"
-        placeholder="Select Label"
-        value={selectedLabel}
-        onChange={handleChangeValue}
-        options={options}
-      />
-      {!selectedLabel && <span className="required">Required</span>}
-    </Fragment>
+    <Select
+      name="form-field-label"
+      placeholder="Select Label"
+      value={selectedLabel}
+      onChange={handleChangeValue}
+      options={options}
+    />
   )
 }
 

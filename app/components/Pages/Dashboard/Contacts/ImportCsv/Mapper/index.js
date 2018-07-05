@@ -5,6 +5,8 @@ import { batchActions } from 'redux-batched-actions'
 import CsvParser from 'papaparse'
 import _ from 'underscore'
 
+import { compareTwoStrings } from '../../../../../../utils/dice-coefficient'
+
 import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
 
@@ -65,6 +67,71 @@ class Mapper extends React.Component {
       }),
       setCurrentStepValidation(true)
     ])
+
+    // async compute
+    setTimeout(() => {
+      this.autoMap(colNames)
+    }, 0)
+  }
+
+  autoMap = csvColoumns => {
+    const mappedFields = {}
+
+    csvColoumns.forEach(columnName => {
+      const attribute = this.findMatchedAttribute(columnName)
+
+      if (!attribute) {
+        return false
+      }
+
+      mappedFields[columnName] = {
+        definitionId: attribute.id,
+        index: 0
+      }
+    })
+
+    this.props.updateCsvInfo({
+      mappedFields
+    })
+  }
+
+  /**
+   * find most similar attribute for given csv column name
+   * based on levenshtein algorithm
+   */
+  findMatchedAttribute = csvColoumnName => {
+    const { attributeDefs } = this.props
+    const list = []
+
+    _.some(attributeDefs.byId, definition => {
+      const rate = compareTwoStrings(
+        csvColoumnName.toLowerCase(),
+        definition.label.toLowerCase()
+      )
+
+      list.push({
+        id: definition.id,
+        label: definition.label,
+        rate
+      })
+
+      if (rate === 1) {
+        return true
+      }
+    })
+
+    if (list.length === 0) {
+      return null
+    }
+
+    const bestMatches = _.sortBy(list, item => item.rate * -1)
+    const bestMatch = bestMatches[0]
+
+    if (bestMatch.rate >= 0.25) {
+      return bestMatch
+    }
+
+    return null
   }
 
   analyzeColumns = (columns, fields) => {
