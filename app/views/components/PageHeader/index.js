@@ -19,13 +19,13 @@ const Container = styled.div`
 
 const propTypes = {
   backUrl: PropTypes.string,
-  backButton: PropTypes.bool,
+  showBackButton: PropTypes.bool,
   isFlat: PropTypes.bool,
   title: PropTypes.string
 }
 
 const defaultProps = {
-  backButton: true,
+  showBackButton: true,
   isFlat: false
 }
 
@@ -41,7 +41,8 @@ function PageHeader(props) {
     <Container isFlat={props.isFlat}>
       {title && (
         <PageTitle
-          backButton={props.backButton}
+          showBackButton={props.showBackButton}
+          onClickBackButton={props.onClickBackButton}
           backUrl={backUrl}
           title={title}
         />

@@ -98,13 +98,12 @@ export class Table extends React.Component {
 
     switch (row.object_type) {
       case 'deal_context':
-        props.onClick = () =>
-          goTo(`/dashboard/deals/${row.deal}`, 'Back To Calendar')
+        props.onClick = () => goTo(`/dashboard/deals/${row.deal}`, 'Calendar')
         break
 
       case 'contact_attribute':
         props.onClick = () =>
-          goTo(`/dashboard/contacts/${row.contact}`, 'Back To Calendar')
+          goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
         break
 
       case 'crm_task':

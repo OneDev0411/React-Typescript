@@ -70,13 +70,10 @@ class TagsOverlay extends React.Component {
   }
 
   onTagSelectionChange = (tagIndex, isSelected) => {
-    const { attributeDefs } = this.props
-    const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
     let tags = [...this.state.tags]
     const newTag = {
       ...tags[tagIndex],
-      isSelected,
-      attribute_def: attribute_def.id
+      isSelected
     }
 
     tags[tagIndex] = newTag
@@ -90,7 +87,16 @@ class TagsOverlay extends React.Component {
     if (tagIndex > -1) {
       this.onTagSelectionChange(tagIndex, true)
     } else {
-      this.setState({ tags: tags.concat({ text: newTag, isSelected: true }) })
+      const { attributeDefs } = this.props
+      const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
+
+      this.setState({
+        tags: tags.concat({
+          [attribute_def.data_type]: newTag,
+          attribute_def: attribute_def.id,
+          isSelected: true
+        })
+      })
     }
   }
 
@@ -191,6 +197,7 @@ class TagsOverlay extends React.Component {
       filteredTags.concat(
         defaultTags.map(tagText => ({
           [attribute_def.data_type]: tagText,
+          attribute_def: attribute_def.id,
           isSelected: false
         }))
       ),

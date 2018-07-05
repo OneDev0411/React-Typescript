@@ -2,8 +2,9 @@ import React from 'react'
 import timeago from 'timeago.js'
 
 import { icons } from '../../../../../../views/CRM/Tasks/List/Table/columns/Type/icons'
+import { goTo } from '../../../../../../utils/go-to'
 
-export default ({ task }) => {
+export default ({ contact, task }) => {
   const { task_type } = task
   const Icon = icons[task_type] ? icons[task_type].icon : icons.Todo
 
@@ -52,10 +53,12 @@ export default ({ task }) => {
   )
 
   return (
-    <div>
-      <a href={`/crm/tasks/${task.id}`} target="_blank">
-        {activity}
-      </a>
+    <div
+      onClick={() =>
+        goTo(`/crm/tasks/${task.id}`, `Contact - ${contact.display_name}`)
+      }
+    >
+      {activity}
     </div>
   )
 }
