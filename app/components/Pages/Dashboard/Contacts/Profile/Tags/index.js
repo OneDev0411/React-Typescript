@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { getContactAttribute } from '../../../../../../models/contacts/helpers/get-contact-attribute'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import { getContactAttribute } from '../../../../../../models/contacts/helpers/get-contact-attribute'
+
 import { Section } from '../components/Section'
 import TagsOverlay from '../../components/TagsOverlay'
+import { AddNewButton } from '../components/AddNewButton'
 import { TagsList } from './TagsList'
 
 class Tags extends React.Component {
@@ -22,16 +23,7 @@ class Tags extends React.Component {
         {this.props.tags.length > 0 ? (
           <TagsList tags={this.props.tags} />
         ) : (
-          <div
-            style={{
-              textAlign: 'center',
-              marginBottom: '1em'
-            }}
-          >
-            <ActionButton inverse onClick={this.openOverLay}>
-              Add new property
-            </ActionButton>
-          </div>
+          <AddNewButton onClick={this.openOverLay} text="Add new property" />
         )}
 
         <TagsOverlay
