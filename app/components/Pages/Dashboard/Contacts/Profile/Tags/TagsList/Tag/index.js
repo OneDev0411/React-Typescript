@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 Tag.propTypes = {
-  text: PropTypes.shape().isRequired
+  text: PropTypes.string.isRequired
 }
 
 export function Tag(props) {
