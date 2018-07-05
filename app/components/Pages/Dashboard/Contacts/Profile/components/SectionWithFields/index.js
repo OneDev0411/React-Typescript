@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import {
@@ -7,19 +8,30 @@ import {
 } from '../../../../../../../store_actions/contacts'
 import { selectDefsBySection } from '../../../../../../../reducers/contacts/attributeDefs'
 import { getContactAttributesBySection } from '../../../../../../../models/contacts/helpers'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 
 import { EditForm } from './EditFormDrawer'
 import { Section } from '../Section'
 import { orderFields, formatPreSave, getFormater } from './helpers'
 
-class SectionWithFields extends Component {
+const propTypes = {
+  addNewFieldButtonText: PropTypes.string,
+  showAddNewCustomAttributeButton: PropTypes.bool
+}
+
+const defaultProps = {
+  addNewFieldButtonText: '',
+  showAddNewCustomAttributeButton: false
+}
+
+class SectionWithFields extends React.Component {
   state = {
     isOpen: false,
     isSaving: false
   }
 
-  handleOpenModal = () => this.setState({ isOpen: true })
-  handleCloseModal = () => {
+  openEditAttributeDrawer = () => this.setState({ isOpen: true })
+  closeEditAttributeDrawer = () => {
     if (this.state.isSaving) {
       return
     }
@@ -76,54 +88,88 @@ class SectionWithFields extends Component {
     )
   }
 
-  render() {
-    const sectionTitle = this.props.title || this.props.section
+  getSectionFields = () => {
     const orderedFields = orderFields(this.props.fields, this.props.fieldsOrder)
 
+    const fields = orderedFields.map(field => {
+      const { attribute_def } = field
+      const value = field[attribute_def.data_type]
+
+      if (!value) {
+        return null
+      }
+
+      let title = attribute_def.label
+
+      if (field.label) {
+        title = `${field.label}${
+          attribute_def.name !== 'website' ? ` ${title}` : ''
+        }`
+      }
+
+      return [
+        <dt
+          key={`${field.id}_title`}
+          style={{
+            color: '#758a9e',
+            fontWeight: '500',
+            marginBottom: '0.25em'
+          }}
+        >
+          {title}
+        </dt>,
+        <dd
+          key={`${field.id}_value`}
+          style={{ color: '#17283a', marginBottom: '1em' }}
+        >
+          {getFormater(field)(value)}
+        </dd>
+      ]
+    })
+
+    if (fields.length > 0) {
+      return <dl style={{ marginBottom: '1em' }}>{fields}</dl>
+    }
+
+    return null
+  }
+
+  render() {
+    const sectionTitle = this.props.title || this.props.section
+    const sectionFields = this.getSectionFields()
+
     return (
-      <Section title={sectionTitle} onEdit={this.handleOpenModal}>
-        <dl style={{ marginBottom: '1em' }}>
-          {orderedFields.map(field => {
-            const { attribute_def } = field
-            const value = field[attribute_def.data_type]
-
-            if (!value) {
-              return null
-            }
-
-            let title = attribute_def.label
-
-            if (field.label) {
-              title = `${field.label}${
-                attribute_def.name !== 'website' ? ` ${title}` : ''
-              }`
-            }
-
-            return [
-              <dt
-                key={`${field.id}_title`}
-                style={{
-                  color: '#758a9e',
-                  fontWeight: '500',
-                  marginBottom: '0.25em'
-                }}
-              >
-                {title}
-              </dt>,
-              <dd
-                key={`${field.id}_value`}
-                style={{ color: '#17283a', marginBottom: '1em' }}
-              >
-                {getFormater(field)(value)}
-              </dd>
-            ]
-          })}
-        </dl>
+      <Section
+        title={sectionTitle}
+        onEdit={sectionFields ? this.openEditAttributeDrawer : undefined}
+      >
+        {sectionFields}
+        <div
+          style={{
+            textAlign: 'center',
+            marginBottom: '1em'
+          }}
+        >
+          {this.props.addNewFieldButtonText && (
+            <ActionButton
+              inverse
+              onClick={this.openEditAttributeDrawer}
+              style={{ marginRight: '1em' }}
+            >
+              {this.props.addNewFieldButtonText}
+            </ActionButton>
+          )}
+          {this.props.showAddNewCustomAttributeButton && (
+            <ActionButton inverse onClick={this.openEditAttributeDrawer}>
+              Add new property
+            </ActionButton>
+          )}
+        </div>
 
         <EditForm
           fields={this.getModalFields()}
           isOpen={this.state.isOpen}
-          onClose={this.handleCloseModal}
+          onClose={this.closeEditAttributeDrawer}
           submitting={this.state.isSaving}
           title={`Edit ${sectionTitle}`}
           onSubmit={this.handleOnSubmit}
@@ -132,6 +178,9 @@ class SectionWithFields extends Component {
     )
   }
 }
+
+SectionWithFields.propTypes = propTypes
+SectionWithFields.defaultProps = defaultProps
 
 function mapStateToProps(state, props) {
   return {

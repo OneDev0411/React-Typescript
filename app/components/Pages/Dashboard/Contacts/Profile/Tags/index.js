@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 import { getContactAttribute } from '../../../../../../models/contacts/helpers/get-contact-attribute'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 import { Section } from '../components/Section'
 import TagsOverlay from '../../components/TagsOverlay'
-import { AddNewButton } from '../components/AddNewButton'
 import { TagsList } from './TagsList'
 
 class Tags extends React.Component {
@@ -18,12 +18,23 @@ class Tags extends React.Component {
   closeOverlay = () => this.setState({ overlayIsOpen: false })
 
   render() {
+    const hasTags = this.props.tags.length > 0
+
     return (
-      <Section onEdit={this.openOverLay} title="Tags">
-        {this.props.tags.length > 0 ? (
+      <Section onEdit={hasTags ? this.openOverLay : undefined} title="Tags">
+        {hasTags ? (
           <TagsList tags={this.props.tags} />
         ) : (
-          <AddNewButton onClick={this.openOverLay} text="Add new property" />
+          <div
+            style={{
+              textAlign: 'center',
+              marginBottom: '1em'
+            }}
+          >
+            <ActionButton inverse onClick={this.openOverLay}>
+              Add tags
+            </ActionButton>
+          </div>
         )}
 
         <TagsOverlay

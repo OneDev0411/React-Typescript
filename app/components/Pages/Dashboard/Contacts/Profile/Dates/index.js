@@ -7,6 +7,7 @@ const fieldsOrder = ['birthday', 'important_date']
 export function Dates(props) {
   return (
     <SectionWithFields
+      addNewFieldButtonText="Add important date"
       contact={props.contact}
       fieldsOrder={fieldsOrder}
       section="Dates"
