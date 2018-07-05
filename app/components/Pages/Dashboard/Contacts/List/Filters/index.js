@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { getContactsTags } from '../../../../../../store_actions/contacts/get-contacts-tags'
 import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
@@ -9,6 +10,12 @@ import Filters from '../../../../../../views/components/Grid/Filters'
 import SaveSegment from '../../../../../../views/components/Grid/SavedSegments/Create'
 
 class ContactFilters extends React.PureComponent {
+  componentDidMount() {
+    if (this.props.tags.length === 0) {
+      this.props.getContactsTags()
+    }
+  }
+
   getUniqTags = tags => {
     if (!tags || tags.length === 0) {
       return []
@@ -67,4 +74,7 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(mapStateToProps)(ContactFilters)
+export default connect(
+  mapStateToProps,
+  { getContactsTags }
+)(ContactFilters)
