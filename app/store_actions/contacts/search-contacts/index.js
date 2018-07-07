@@ -2,7 +2,11 @@ import { batchActions } from 'redux-batched-actions'
 import { isEqual } from 'underscore'
 
 import * as actionTypes from '../../../constants/contacts'
-import { requestContactPage, receiveContactPage } from '../pagination'
+import {
+  requestContactPage,
+  receiveContactPage,
+  clearContactPages
+} from '../pagination'
 import { searchContacts as search } from '../../../models/contacts/search-contacts'
 import { defaultQuery } from '../../../models/contacts/helpers'
 
@@ -29,6 +33,8 @@ export function searchContacts(filter, page = 1, limit = 50, searchText) {
         !isEqual(listInfo.filter, filter) ||
         listInfo.searchText !== searchText
       ) {
+        dispatch(clearContactPages)
+
         dispatch({
           type: actionTypes.CLEAR_CONTACTS_LIST
         })
