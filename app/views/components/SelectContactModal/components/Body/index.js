@@ -31,11 +31,13 @@ const ContactsList = styled.div`
 
 const propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.shape),
-  handleSelectedItem: PropTypes.func.isRequired
+  handleSelectedItem: PropTypes.func.isRequired,
+  showSearchInput: PropTypes.bool
 }
 
 const defaultProps = {
-  contacts: []
+  contacts: [],
+  showSearchInput: true
 }
 
 class Body extends Component {
@@ -90,7 +92,7 @@ class Body extends Component {
 
   render() {
     const { items, isSearching } = this.state
-    const { defaultSearchFilter } = this.props
+    const { defaultSearchFilter, showSearchInput } = this.props
     const defaultInputValue =
       typeof defaultSearchFilter !== 'string' ? '' : defaultSearchFilter
 
@@ -100,17 +102,19 @@ class Body extends Component {
         defaultInputValue={defaultInputValue}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
           <div style={{ paddingTop: '2rem' }}>
-            <div style={{ padding: '0 2rem' }}>
-              <SearchInput
-                style={{ marginBottom: '12px' }}
-                inputProps={{
-                  ...getInputProps({
-                    onChange: this.handleOnChange,
-                    placeholder: 'Search for a contact...'
-                  })
-                }}
-              />
-            </div>
+            {showSearchInput && (
+              <div style={{ padding: '0 2rem' }}>
+                <SearchInput
+                  style={{ marginBottom: '12px' }}
+                  inputProps={{
+                    ...getInputProps({
+                      onChange: this.handleOnChange,
+                      placeholder: 'Search for a contact...'
+                    })
+                  }}
+                />
+              </div>
+            )}
             <ContactsListContainer>
               {isSearching && <Loading />}
               {!isSearching &&

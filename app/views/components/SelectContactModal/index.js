@@ -46,7 +46,8 @@ class SelectContactModal extends React.Component {
       handleOnClose,
       handleAddManually,
       handleSelectedItem,
-      defaultSearchFilter
+      defaultSearchFilter,
+      showSearchInput
     } = this.props
 
     return (
@@ -65,6 +66,7 @@ class SelectContactModal extends React.Component {
           handleAddManually={handleAddManually}
           handleSelectedItem={handleSelectedItem}
           defaultSearchFilter={defaultSearchFilter}
+          showSearchInput={showSearchInput}
         />
         <Footer>
           <CancelButton onClick={handleOnClose}>Cancel</CancelButton>
@@ -84,4 +86,7 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { getContacts })(SelectContactModal)
+export default connect(
+  mapStateToProps,
+  { getContacts }
+)(SelectContactModal)
