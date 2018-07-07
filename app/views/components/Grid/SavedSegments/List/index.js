@@ -8,6 +8,7 @@ import {
 } from '../../../../../store_actions/filter-segments'
 
 import {
+  isListFetched,
   selectActiveSavedSegment,
   getSegments,
   getDefaultList
@@ -122,7 +123,7 @@ function mapStateToProps(state, { name }) {
   const { filterSegments } = state[name]
 
   return {
-    isListFetched: filterSegments.isListFetched,
+    isListFetched: isListFetched(filterSegments),
     isFetching: filterSegments.isFetching,
     list: getSegments(filterSegments, name),
     activeItem: selectActiveSavedSegment(filterSegments, name)
