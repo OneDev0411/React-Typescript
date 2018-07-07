@@ -33,11 +33,12 @@ export function searchContacts(filter, page = 1, limit = 50, searchText) {
         !isEqual(listInfo.filter, filter) ||
         listInfo.searchText !== searchText
       ) {
-        dispatch(clearContactPages)
-
-        dispatch({
-          type: actionTypes.CLEAR_CONTACTS_LIST
-        })
+        batchActions([
+          dispatch(clearContactPages),
+          dispatch({
+            type: actionTypes.CLEAR_CONTACTS_LIST
+          })
+        ])
       }
 
       batchActions([
