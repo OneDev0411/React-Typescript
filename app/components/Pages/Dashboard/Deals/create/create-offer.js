@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
+
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 
@@ -43,7 +44,7 @@ class CreateOffer extends React.Component {
       dealStatus: '',
       offerType: dealHasPrimaryOffer ? 'backup' : '',
       enderType: -1,
-      contexts: {},
+      contexts: this.initializeContexts(),
       agents: {},
       clients: {},
       escrowOfficers: {},
@@ -59,11 +60,19 @@ class CreateOffer extends React.Component {
     const { deal } = this.props
 
     if (deal.roles) {
-      this.prepopulateRoles(deal.roles)
+      this.initializeRoles(deal.roles)
     }
   }
 
-  prepopulateRoles(list) {
+  initializeContexts() {
+    const { deal } = this.props
+
+    return {
+      year_built: Deal.get.field(deal, 'year_built')
+    }
+  }
+
+  initializeRoles(list) {
     const { roles } = this.props
     const newState = {}
 
@@ -583,10 +592,13 @@ function mapStateToProps({ deals }, props) {
   }
 }
 
-export default connect(mapStateToProps, {
-  createOffer,
-  createRoles,
-  updateContext,
-  notify,
-  confirmation
-})(CreateOffer)
+export default connect(
+  mapStateToProps,
+  {
+    createOffer,
+    createRoles,
+    updateContext,
+    notify,
+    confirmation
+  }
+)(CreateOffer)
