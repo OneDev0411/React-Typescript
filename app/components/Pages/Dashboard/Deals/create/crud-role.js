@@ -1,145 +1,26 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import RoleCrmIntegration from '../dashboard/roles/crm-integration'
-import AgentModal from './deal-team-agents'
+import RoleAgentIntegration from '../dashboard/roles/agent-integration'
 import RoleItem from './role-item'
-import ContactModal from '../../../../../views/components/SelectContactModal'
-import { convertContactToRole } from '../utils/roles'
-import { selectContacts } from '../../../../../reducers/contacts/list'
-
-const initialState = {
-  role: null,
-  isSaving: false,
-  showRoleModal: false,
-  showAgentModal: false,
-  showContactModal: false,
-  selectedAgent: null
-}
 
 class CrudRole extends React.Component {
-  state = initialState
-
-  resetStates = () => {
-    this.setState(initialState)
+  state = {
+    isModalOpen: false
   }
 
-  showModal = () => {
-    const { user } = this.props
-
-    if (this.props.shouldSelectRoleFromAgentsList) {
-      return this.setState({ showAgentModal: true })
-    } else if (user) {
-      return this.setState({ showRoleModal: true, role: user })
-    }
-
-    return this.setState({ showContactModal: true })
-  }
-
-  showRoleModal = () => {
+  closeModal = () =>
     this.setState({
-      ...initialState,
-      showRoleModal: true
+      isModalOpen: false
     })
-  }
 
-  onSelectContactUser = contact => {
+  showModal = () =>
     this.setState({
-      ...initialState,
-      showRoleModal: true,
-      role: convertContactToRole(contact, this.props.attributeDefs)
-    })
-  }
-
-  onSelectAgent = (user, relatedContacts) => {
-    let newState
-
-    /**
-     * if there is no related contact for this agent:
-     * populate role form with agent data
-     */
-    if (relatedContacts.length === 0) {
-      let { agent, first_name, last_name, email, phone_number } = user
-      let { office, work_phone } = agent || {}
-
-      newState = {
-        role: {
-          email,
-          legal_last_name: last_name,
-          legal_first_name: first_name,
-          phone: phone_number || work_phone,
-          company: office ? office.name : ''
-        },
-        showRoleModal: true
-      }
-    }
-
-    /**
-     * if there is one related contact for the agent:
-     * populate role form with the relevant contact record
-     */
-    if (relatedContacts.length === 1) {
-      newState = {
-        showRoleModal: true,
-        role: convertContactToRole(relatedContacts[0], this.props.attributeDefs)
-      }
-    }
-
-    /**
-     * if there are more than one related contacts for the agent:
-     * show contacts modal to user be able select one of them
-     */
-    if (relatedContacts.length > 1) {
-      newState = {
-        selectedAgent: user,
-        showContactModal: true
-      }
-    }
-
-    this.setState({
-      ...initialState,
-      ...newState
-    })
-  }
-
-  searchContactByEmail = email => {
-    const { contacts } = this.props
-    const contactsList = selectContacts(contacts)
-
-    if (!contactsList) {
-      return []
-    }
-
-    return contactsList.filter(contact => contact.email === email)
-  }
-
-  showNotification = (message, status = 'success') =>
-    this.props.notify({
-      message,
-      status
+      isModalOpen: true
     })
 
   render() {
-    const {
-      role,
-      isSaving,
-      showRoleModal,
-      showAgentModal,
-      showContactModal,
-      selectedAgent
-    } = this.state
-
-    const {
-      user,
-      dealSide,
-      ctaTitle,
-      modalTitle,
-      teamAgents,
-      onUpsertUser,
-      onRemoveUser,
-      allowedRoles,
-      isCommissionRequired
-    } = this.props
+    const { user, ctaTitle, onRemoveUser, onUpsertUser, ...rest } = this.props
 
     return (
       <Fragment>
@@ -161,47 +42,27 @@ class CrudRole extends React.Component {
           </div>
         )}
 
-        <ContactModal
-          title={modalTitle}
-          isOpen={showContactModal}
-          handleOnClose={this.resetStates}
-          handleAddManually={selectedAgent ? null : this.showRoleModal}
-          defaultSearchFilter={selectedAgent && selectedAgent.email}
-          handleSelectedItem={this.onSelectContactUser}
-        />
-
-        {showAgentModal && (
-          <AgentModal
-            onHide={this.resetStates}
-            onSelectAgent={this.onSelectAgent}
-            teamAgents={teamAgents}
-          />
-        )}
-
-        <RoleCrmIntegration
-          isSubmitting={isSaving}
-          isOpen={showRoleModal}
-          user={role}
-          dealSide={dealSide}
-          modalTitle={modalTitle}
-          allowedRoles={allowedRoles}
-          isCommissionRequired={isCommissionRequired}
-          onHide={this.resetStates}
+        <RoleAgentIntegration
+          isOpen={this.state.isModalOpen}
+          onHide={this.closeModal}
           onUpsertRole={onUpsertUser}
+          {...rest}
         />
       </Fragment>
     )
   }
 }
 
-function mapStateToProps({ deals, contacts }) {
+function mapStateToProps({ contacts }) {
   return {
     contacts: contacts.list,
-    teamAgents: deals.agents,
     attributeDefs: contacts.attributeDefs
   }
 }
 
-export default connect(mapStateToProps, {
-  notify
-})(CrudRole)
+export default connect(
+  mapStateToProps,
+  {
+    notify
+  }
+)(CrudRole)

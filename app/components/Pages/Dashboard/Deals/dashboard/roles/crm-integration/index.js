@@ -131,10 +131,13 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  notify,
-  updateRole,
-  createRoles,
-  createContacts,
-  upsertContactAttributes
-})(RoleFormWrapper)
+export default connect(
+  mapStateToProps,
+  {
+    notify,
+    updateRole,
+    createRoles,
+    createContacts,
+    upsertContactAttributes
+  }
+)(RoleFormWrapper)

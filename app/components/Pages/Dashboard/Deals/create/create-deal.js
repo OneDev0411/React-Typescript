@@ -175,7 +175,7 @@ class CreateDeal extends React.Component {
       message: 'Cancel deal creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: "No, don't cancel",
+      cancelLabel: 'No, don\'t cancel',
       onConfirm: () => browserHistory.push('/dashboard/deals')
     })
 
@@ -552,7 +552,7 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealAgents
-                      forceSelectRolesFromContactsList
+                      disableAgentsList
                       hasError={this.hasError('selling_agents')}
                       scenario="CreateDeal"
                       dealSide={dealSide}

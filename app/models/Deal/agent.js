@@ -1,12 +1,9 @@
 import Fetch from '../../services/fetch'
-import { getActiveTeamId } from '../../utils/user-teams'
 
 /**
  * get all agents of brand
  */
-export async function getAgents(user) {
-  const brandId = getActiveTeamId(user)
-
+export async function getAgents(brandId) {
   if (!brandId) {
     throw new Error('This user does not belong to any brand')
   }
