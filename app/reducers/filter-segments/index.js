@@ -4,7 +4,7 @@ import _ from 'underscore'
 const initialState = {
   list: {},
   isFetching: false,
-  isFetched: false,
+  isListFetched: false,
   activeSegmentId: 'default',
   fetchError: null
 }
@@ -34,7 +34,7 @@ const filterSegments = (state, action) => {
       return {
         ...state,
         isFetching: false,
-        isFetched: true,
+        isListFetched: true,
         list: action.list
       }
 
@@ -42,7 +42,7 @@ const filterSegments = (state, action) => {
       return {
         ...state,
         fetchError: action.error,
-        isFetching: false
+        isListFetched: false
       }
 
     case types.SAVE_FILTER_SEGMENTS:

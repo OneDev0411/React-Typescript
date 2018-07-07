@@ -34,9 +34,9 @@ class SegmentsList extends React.Component {
   }
 
   init = () => {
-    const { getSavedSegments, isFetched, name } = this.props
+    const { getSavedSegments, isListFetched, name } = this.props
 
-    if (isFetched === false) {
+    if (isListFetched === false) {
       getSavedSegments(name)
     }
   }
@@ -122,16 +122,19 @@ function mapStateToProps(state, { name }) {
   const { filterSegments } = state[name]
 
   return {
-    isFetched: filterSegments.isFetched,
+    isListFetched: filterSegments.isListFetched,
     isFetching: filterSegments.isFetching,
     list: getSegments(filterSegments, name),
     activeItem: selectActiveSavedSegment(filterSegments, name)
   }
 }
 
-export default connect(mapStateToProps, {
-  changeActiveFilterSegment,
-  deleteFilterSegment,
-  getSavedSegments,
-  confirmation
-})(SegmentsList)
+export default connect(
+  mapStateToProps,
+  {
+    changeActiveFilterSegment,
+    deleteFilterSegment,
+    getSavedSegments,
+    confirmation
+  }
+)(SegmentsList)
