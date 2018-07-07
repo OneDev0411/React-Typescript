@@ -1,16 +1,12 @@
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
 
-export async function searchContacts(
-  searchInput,
-  filter,
-  query = defaultQuery
-) {
+export async function searchContacts(searchText, filter, query = defaultQuery) {
   try {
     const request = new Fetch().post('/contacts/filter').query(query)
 
-    if (searchInput) {
-      const keywords = searchInput
+    if (searchText) {
+      const keywords = searchText
         .trim()
         .split(' ')
         .map(i => `q[]=${encodeURIComponent(i)}`)

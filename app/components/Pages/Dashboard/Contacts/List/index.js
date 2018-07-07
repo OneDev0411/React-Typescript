@@ -1,4 +1,5 @@
 import React from 'react'
+import { isEqual } from 'underscore'
 import { connect } from 'react-redux'
 import { withRouter, browserHistory } from 'react-router'
 
@@ -42,14 +43,13 @@ import ContactFilters from './Filters'
 const BASE_URL = '/dashboard/contacts'
 const deletedState = {
   deletingContacts: [],
-  selectedRows: {},
-  searchInputValue: ''
+  selectedRows: {}
 }
 
 class ContactsList extends React.Component {
   state = {
     filter: this.props.filter,
-    searchInputValue: '',
+    searchText: this.props.searchText,
     pageTitle: 'All Contacts',
     isSearching: false,
     isDeleting: false,
@@ -108,12 +108,14 @@ class ContactsList extends React.Component {
     }))
 
   onFilterChange = async (filter, page = 1) => {
-    const { searchInputValue } = this.state
-
     try {
-      let nextState = { filter, isSearching: true, searchInputValue }
+      let nextState = {
+        filter,
+        isSearching: true,
+        searchText: this.state.searchText
+      }
 
-      if (filter && filter !== selectContactsInfo(this.props.list).filter) {
+      if (!isEqual(filter, selectContactsInfo(this.props.list).filter)) {
         nextState = { ...nextState, ...deletedState }
       }
 
@@ -126,7 +128,7 @@ class ContactsList extends React.Component {
         filter,
         page,
         undefined,
-        nextState.searchInputValue
+        nextState.searchText
       )
     } catch (error) {
       console.log(error)
@@ -135,8 +137,8 @@ class ContactsList extends React.Component {
     }
   }
 
-  search = searchInputValue =>
-    this.setState({ ...deletedState, searchInputValue }, () => {
+  search = searchText =>
+    this.setState({ ...deletedState, searchText }, () => {
       this.onFilterChange(this.state.filter)
     })
 
@@ -164,9 +166,9 @@ class ContactsList extends React.Component {
       url = `${BASE_URL}/page/${page}`
     }
 
-    if (listInfo.filter) {
-      url = `${url}?filter=${listInfo.filter}`
-    }
+    // if (listInfo.filter) {
+    //   url = `${url}?filter=${listInfo.filter}`
+    // }
 
     browserHistory.push(url)
   }
@@ -196,7 +198,7 @@ class ContactsList extends React.Component {
       pageTitle,
       filter,
       isSearching,
-      searchInputValue
+      searchText
     } = this.state
     const { user, list, currentPage } = this.props
 
@@ -234,7 +236,7 @@ class ContactsList extends React.Component {
           <div style={{ padding: '0 1em' }}>
             <Search
               disabled={noContact}
-              inputValue={searchInputValue}
+              inputValue={searchText}
               isSearching={isSearching}
               handleOnChange={this.search}
             />
@@ -275,14 +277,13 @@ class ContactsList extends React.Component {
 function mapStateToProps(state, props) {
   const { list } = state.contacts
   const currentPage = Number(props.params.page) || 1
-  const filter =
-    (props.location.query && props.location.query.filter) ||
-    selectContactsInfo(list).filter ||
-    ''
+  const filter = selectContactsInfo(list).filter || []
+  const searchText = selectContactsInfo(list).searchText || ''
 
   return {
     currentPage,
     filter,
+    searchText,
     list,
     user: state.user
   }

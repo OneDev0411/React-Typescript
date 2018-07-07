@@ -1,11 +1,8 @@
 import { batchActions } from 'redux-batched-actions'
+import { isEqual } from 'underscore'
 
 import * as actionTypes from '../../../constants/contacts'
-import {
-  requestContactPage,
-  receiveContactPage,
-  clearContactPages
-} from '../pagination'
+import { requestContactPage, receiveContactPage } from '../pagination'
 import { searchContacts as search } from '../../../models/contacts/search-contacts'
 import { defaultQuery } from '../../../models/contacts/helpers'
 
@@ -15,7 +12,7 @@ import {
 } from '../../../reducers/contacts/list'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 
-export function searchContacts(filter, page = 1, limit = 50, searchInputValue) {
+export function searchContacts(filter, page = 1, limit = 50, searchText) {
   return async (dispatch, getState) => {
     const {
       contacts: { list }
@@ -29,11 +26,12 @@ export function searchContacts(filter, page = 1, limit = 50, searchInputValue) {
       const listInfo = selectContactsInfo(list)
 
       if (
-        listInfo.type === 'general' ||
-        listInfo.filter !== filter ||
-        listInfo.searchInputValue !== searchInputValue
+        !isEqual(listInfo.filter, filter) ||
+        listInfo.searchText !== searchText
       ) {
-        dispatch(clearContactPages)
+        dispatch({
+          type: actionTypes.CLEAR_CONTACTS_LIST
+        })
       }
 
       batchActions([
@@ -44,29 +42,19 @@ export function searchContacts(filter, page = 1, limit = 50, searchInputValue) {
       ])
 
       const start = page - 1 > 0 ? (page - 1) * limit : 0
-      const response = await search(searchInputValue, filter, {
+      const response = await search(searchText, filter, {
         ...defaultQuery,
         start,
         limit
       })
-
-      if (
-        listInfo.type === 'general' ||
-        listInfo.filter !== filter ||
-        listInfo.searchInputValue !== searchInputValue
-      ) {
-        dispatch({
-          type: actionTypes.CLEAR_CONTACTS_LIST
-        })
-      }
 
       batchActions([
         dispatch({
           response: {
             info: {
               ...response.info,
+              searchText,
               filter,
-              searchInputValue,
               type: 'filter'
             },
             ...normalizeContacts(response)
