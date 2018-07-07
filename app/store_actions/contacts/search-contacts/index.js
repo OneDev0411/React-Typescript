@@ -1,4 +1,5 @@
 import { batchActions } from 'redux-batched-actions'
+import { isEqual } from 'underscore'
 
 import * as actionTypes from '../../../constants/contacts'
 import {
@@ -15,7 +16,7 @@ import {
 } from '../../../reducers/contacts/list'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 
-export function searchContacts(filter, page = 1, limit = 50) {
+export function searchContacts(filter, page = 1, limit = 50, searchText) {
   return async (dispatch, getState) => {
     const {
       contacts: { list }
@@ -28,8 +29,16 @@ export function searchContacts(filter, page = 1, limit = 50) {
     try {
       const listInfo = selectContactsInfo(list)
 
-      if (listInfo.type === 'general' || listInfo.filter !== filter) {
-        dispatch(clearContactPages)
+      if (
+        !isEqual(listInfo.filter, filter) ||
+        listInfo.searchText !== searchText
+      ) {
+        batchActions([
+          dispatch(clearContactPages),
+          dispatch({
+            type: actionTypes.CLEAR_CONTACTS_LIST
+          })
+        ])
       }
 
       batchActions([
@@ -40,19 +49,18 @@ export function searchContacts(filter, page = 1, limit = 50) {
       ])
 
       const start = page - 1 > 0 ? (page - 1) * limit : 0
-      const response = await search(filter, { ...defaultQuery, start, limit })
-
-      if (listInfo.type === 'general' || listInfo.filter !== filter) {
-        dispatch({
-          type: actionTypes.CLEAR_CONTACTS_LIST
-        })
-      }
+      const response = await search(searchText, filter, {
+        ...defaultQuery,
+        start,
+        limit
+      })
 
       batchActions([
         dispatch({
           response: {
             info: {
               ...response.info,
+              searchText,
               filter,
               type: 'filter'
             },

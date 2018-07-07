@@ -39,10 +39,7 @@ import {
   getContact,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
-import {
-  selectContact,
-  selectContactsListFetching
-} from '../../../../../reducers/contacts/list'
+import { selectContact } from '../../../../../reducers/contacts/list'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import { normalizeContact } from '../../../../../views/utils/association-normalizers'
 
@@ -77,11 +74,10 @@ class ContactProfile extends React.Component {
     const {
       contact,
       getContact,
-      selectContactsListFetching,
       params: { id: contactId }
     } = this.props
 
-    if (!contact && !selectContactsListFetching) {
+    if (!contact) {
       await getContact(contactId)
     }
 
@@ -264,8 +260,7 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
     user,
     attributeDefs,
     contact: selectContact(list, contactId),
-    fetchError: selectContactError(contact),
-    selectContactsListFetching: selectContactsListFetching(list)
+    fetchError: selectContactError(contact)
   }
 }
 
