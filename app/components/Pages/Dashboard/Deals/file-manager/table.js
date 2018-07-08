@@ -6,6 +6,7 @@ import { browserHistory, Link } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
+import styled from 'styled-components'
 import {
   getDeal,
   displaySplitter,
@@ -20,6 +21,9 @@ import Upload from '../dashboard/upload'
 import TasksDropDown from '../components/tasks-dropdown'
 import Envelope from './envelope'
 
+const EnvelopeName = styled.div`
+  white-space: initial;
+`
 export class FileManager extends React.Component {
   constructor(props) {
     super(props)
@@ -327,6 +331,26 @@ export class FileManager extends React.Component {
 
           if (envelope && envelope.length) {
             return <Envelope envelope={envelopes[envelope[0]]} />
+          }
+
+          return null
+        }
+      },
+      {
+        id: 'envelope_name',
+        Header: () => this.getCellTitle('ENVELOPE NAME'),
+        accessor: 'envelope_name',
+        Cell: ({ original: file }) => {
+          const envelope =
+            deal.envelopes &&
+            deal.envelopes.filter(envelopeId =>
+              envelopes[envelopeId].documents.some(
+                ({ file: fileId }) => fileId === file.id
+              )
+            )
+
+          if (envelope && envelope.length) {
+            return <EnvelopeName>{envelopes[envelope[0]].title}</EnvelopeName>
           }
 
           return null

@@ -1,7 +1,11 @@
-import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
+import styled from 'styled-components'
 
-class Envelope extends React.Component {
+const ESignature = styled.div`
+  white-space: initial;
+`
+
+export default class Envelope extends React.Component {
   getName(role) {
     if (role.user) {
       return role.user.display_name
@@ -12,14 +16,14 @@ class Envelope extends React.Component {
   }
 
   getRecipientsNames(recipients) {
-    const names = []
+    if (!recipients) {
+      return ''
+    }
 
-    recipients &&
-      recipients.forEach(recp => {
-        names.push(this.getName(recp.role))
-      })
-
-    return names.join(', ')
+    return recipients
+      .filter(r => r.status === 'Completed')
+      .map(r => this.getName(r.role))
+      .join(', ')
   }
 
   render() {
@@ -34,7 +38,12 @@ class Envelope extends React.Component {
         signatureText = `Signed by ${recipientsNames}`
         break
       case 'Sent':
-        signatureText = 'Sent, not signed'
+        if (recipientsNames) {
+          signatureText = `Signed by ${recipientsNames}`
+        } else {
+          signatureText = 'Sent, No signatures captured'
+        }
+
         break
       case 'Created':
         signatureText = 'Draft'
@@ -44,11 +53,6 @@ class Envelope extends React.Component {
         signatureText = envelope.status
     }
 
-    return <Fragment>{signatureText}</Fragment>
+    return <ESignature>{signatureText}</ESignature>
   }
 }
-
-export default connect(({ deals, user }) => ({
-  roles: deals.roles,
-  user
-}))(Envelope)
