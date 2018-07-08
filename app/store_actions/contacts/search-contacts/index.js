@@ -10,10 +10,7 @@ import {
 import { searchContacts as search } from '../../../models/contacts/search-contacts'
 import { defaultQuery } from '../../../models/contacts/helpers'
 
-import {
-  selectContactsListFetching,
-  selectContactsInfo
-} from '../../../reducers/contacts/list'
+import { selectContactsInfo } from '../../../reducers/contacts/list'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 
 export function searchContacts(filter, page = 1, limit = 50, searchText) {
@@ -21,10 +18,6 @@ export function searchContacts(filter, page = 1, limit = 50, searchText) {
     const {
       contacts: { list }
     } = getState()
-
-    if (selectContactsListFetching(list)) {
-      return Promise.resolve()
-    }
 
     try {
       const listInfo = selectContactsInfo(list)
