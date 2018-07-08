@@ -9,8 +9,7 @@ import {
   selectContactsInfo,
   selectPage,
   selectPageContacts,
-  selectContactsListFetching,
-  selectContact
+  selectContactsListFetching
 } from '../../../../../reducers/contacts/list'
 
 import {

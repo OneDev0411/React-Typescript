@@ -28,7 +28,10 @@ export default class HeaderSearch extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextState) {
-    if (nextProps.inputValue !== nextState.inputValue) {
+    if (
+      !nextProps.isSearching &&
+      nextProps.inputValue !== nextState.inputValue
+    ) {
       this.setState({ inputValue: nextProps.inputValue })
     }
   }
