@@ -8,9 +8,9 @@ import { browserHistory } from 'react-router'
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 
-import PageHeader from '../../../../../views/components/PageHeader'
 import Button from '../../../../../views/components/Button/ActionButton'
 
+import PageHeader from './page-header'
 import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
 import DealClients from './deal-clients'
@@ -175,7 +175,7 @@ class CreateDeal extends React.Component {
       message: 'Cancel deal creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: () => browserHistory.push('/dashboard/deals')
     })
 
@@ -519,10 +519,7 @@ class CreateDeal extends React.Component {
 
     return (
       <div className="deal-create">
-        <PageHeader
-          title="Create New Deal"
-          onClickBackButton={this.onClosePage}
-        />
+        <PageHeader title="Create New Deal" handleOnClose={this.onClosePage} />
 
         <div className="form">
           <div className="swoosh">Swoosh! Another one in the bag.</div>
