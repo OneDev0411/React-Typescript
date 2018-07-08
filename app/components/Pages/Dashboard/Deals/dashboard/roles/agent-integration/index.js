@@ -22,10 +22,17 @@ class RoleAgentIntegration extends React.Component {
   }
 
   getModalStates = props => {
-    const { isOpen } = props
+    const { isOpen, user } = props
 
     if (!isOpen) {
       return initialState
+    }
+
+    if (user) {
+      return {
+        showRoleModal: true,
+        role: user
+      }
     }
 
     if (this.ShouldSelectRoleFromAgentsList) {
