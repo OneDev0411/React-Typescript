@@ -273,6 +273,23 @@ export class FileManager extends React.Component {
     })
   }
 
+  getEnvelope = file => {
+    const { deal, envelopes } = this.props
+
+    const envelope =
+      deal.envelopes &&
+      deal.envelopes.filter(envelopeId =>
+        envelopes[envelopeId].documents.some(
+          ({ file: fileId }) => fileId === file.id
+        )
+      )
+
+    if (envelope && envelope.length) {
+      return envelopes[envelope[0]]
+    }
+
+    return undefined
+  }
   getColumns(rows) {
     const { selectedRows, isDeleting, updatingFiles } = this.state
     const { deal, tasks, envelopes } = this.props
@@ -321,16 +338,10 @@ export class FileManager extends React.Component {
         Header: () => this.getCellTitle('eSignature'),
         accessor: 'e_signature',
         Cell: ({ original: file }) => {
-          const envelope =
-            deal.envelopes &&
-            deal.envelopes.filter(envelopeId =>
-              envelopes[envelopeId].documents.some(
-                ({ file: fileId }) => fileId === file.id
-              )
-            )
+          const envelope = this.getEnvelope(file)
 
-          if (envelope && envelope.length) {
-            return <Envelope envelope={envelopes[envelope[0]]} />
+          if (envelope) {
+            return <Envelope envelope={envelope} />
           }
 
           return null
@@ -341,16 +352,10 @@ export class FileManager extends React.Component {
         Header: () => this.getCellTitle('ENVELOPE NAME'),
         accessor: 'envelope_name',
         Cell: ({ original: file }) => {
-          const envelope =
-            deal.envelopes &&
-            deal.envelopes.filter(envelopeId =>
-              envelopes[envelopeId].documents.some(
-                ({ file: fileId }) => fileId === file.id
-              )
-            )
+          const envelope = this.getEnvelope(file)
 
-          if (envelope && envelope.length) {
-            return <EnvelopeName>{envelopes[envelope[0]].title}</EnvelopeName>
+          if (envelope) {
+            return <EnvelopeName>{envelope.title}</EnvelopeName>
           }
 
           return null
@@ -363,6 +368,7 @@ export class FileManager extends React.Component {
         Cell: ({ original: file }) => (
           <Fragment>
             <TasksDropDown
+              disabled={!!this.getEnvelope(file)}
               showStashOption={file.taskId !== null}
               searchable
               showNotifyOption
