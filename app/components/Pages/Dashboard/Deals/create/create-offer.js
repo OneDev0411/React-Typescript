@@ -8,9 +8,9 @@ import cn from 'classnames'
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 
-import PageHeader from '../../../../../views/components/PageHeader'
 import Button from '../../../../../views/components/Button/ActionButton'
 
+import PageHeader from './page-header'
 import OfferType from './offer-type'
 import EnderType from './deal-ender-type'
 import DealClients from './deal-clients'
@@ -391,7 +391,7 @@ class CreateOffer extends React.Component {
       message: 'Cancel offer creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: this.backToDeal
     })
   }
@@ -439,7 +439,7 @@ class CreateOffer extends React.Component {
       <div className="deal-create-offer">
         <PageHeader
           title="Add New Offer"
-          onClickBackButton={this.cancelCreateOffer}
+          handleOnClose={this.cancelCreateOffer}
         />
 
         <div className="form">
