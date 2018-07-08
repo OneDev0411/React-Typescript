@@ -22,7 +22,8 @@ import TasksDropDown from '../components/tasks-dropdown'
 import Envelope from './envelope'
 
 const EnvelopeName = styled.div`
-  white-space: initial;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 export class FileManager extends React.Component {
   constructor(props) {

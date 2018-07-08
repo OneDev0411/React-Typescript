@@ -2,7 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 const ESignature = styled.div`
-  white-space: initial;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 export default class Envelope extends React.Component {
