@@ -18,6 +18,7 @@ import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import Search from '../../../../Partials/headerSearch'
 import Upload from '../dashboard/upload'
 import TasksDropDown from '../components/tasks-dropdown'
+import Envelope from './envelope'
 
 export class FileManager extends React.Component {
   constructor(props) {
@@ -74,7 +75,7 @@ export class FileManager extends React.Component {
   }
 
   getAllFiles() {
-    const { deal, checklists, tasks } = this.props
+    const { deal, checklists, tasks, envelopes } = this.props
 
     const files = []
     const stashFiles = deal.files || []
@@ -270,7 +271,7 @@ export class FileManager extends React.Component {
 
   getColumns(rows) {
     const { selectedRows, isDeleting, updatingFiles } = this.state
-    const { deal, tasks } = this.props
+    const { deal, tasks, envelopes } = this.props
 
     return [
       {
@@ -310,6 +311,26 @@ export class FileManager extends React.Component {
         Header: () => this.getCellTitle('DATE UPLOADED'),
         accessor: 'created_at',
         Cell: ({ value }) => this.getDate(value)
+      },
+      {
+        id: 'e_signature',
+        Header: () => this.getCellTitle('eSignature'),
+        accessor: 'e_signature',
+        Cell: ({ original: file }) => {
+          const envelope =
+            deal.envelopes &&
+            deal.envelopes.filter(envelopeId =>
+              envelopes[envelopeId].documents.some(
+                ({ file: fileId }) => fileId === file.id
+              )
+            )
+
+          if (envelope && envelope.length) {
+            return <Envelope envelope={envelopes[envelope[0]]} />
+          }
+
+          return null
+        }
       },
       {
         Header: () => this.getCellTitle('FOLDER'),
@@ -481,6 +502,7 @@ export default connect(
   ({ deals, user }) => ({
     checklists: deals.checklists,
     tasks: deals.tasks,
+    envelopes: deals.envelopes,
     user
   }),
   {
