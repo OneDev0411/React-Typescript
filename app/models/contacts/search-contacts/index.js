@@ -1,7 +1,14 @@
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
 
-export async function searchContacts(searchText, filter, query = defaultQuery) {
+export async function searchContacts(
+  searchText,
+  filter,
+  query = {
+    ...defaultQuery,
+    order: '-updated_at'
+  }
+) {
   try {
     const request = new Fetch().post('/contacts/filter').query(query)
 
