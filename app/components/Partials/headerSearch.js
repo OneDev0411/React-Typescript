@@ -27,12 +27,13 @@ export default class HeaderSearch extends React.Component {
     isFocused: false
   }
 
-  componentWillReceiveProps(nextProps, nextState) {
+  static getDerivedStateFromProps(nextProps, nextState) {
     if (
       !nextProps.isSearching &&
+      !nextState.isFocused &&
       nextProps.inputValue !== nextState.inputValue
     ) {
-      this.setState({ inputValue: nextProps.inputValue })
+      return { inputValue: nextProps.inputValue }
     }
   }
 
