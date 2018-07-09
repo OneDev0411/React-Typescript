@@ -1,85 +1,10 @@
-.c-deal-form-viewer__header {
-  width: 100%;
-  height: $deal-dashboard-header-height;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 1em;
-  background-color: #fff;
-  border-bottom: 1px solid #dde2e6;
-
-  & > div {
-    display: flex;
-    color: #1c364c;
-    align-items: center;
-  }
-}
-
-.c-deal-form-viewer__header__title {
-  font-size: 17px;
-  font-weight: 500;
-  margin: 0 0 0 16px;
-  line-height: 1;
-}
-
-.c-deal-form-viewer__header__back-btn {
-  font-size: 2.4rem;
-  cursor: pointer;
-  &:hover {
-    color: #2196f3;
-  }
-}
-
-.c-deal-form-viewer__header__cta {
-  button {
-    margin-left: 5px;
-    height: 34px;
-    line-height: 17px;
-    vertical-align: middle;
-    border-radius: 4px;
-    background-color: #fff;
-    border: solid 1px #2196f3;
-    font-size: 13px;
-    font-weight: 500;
-    color: #2196f3;
-
-    svg {
-      vertical-align: middle;
-      margin-right: 5px;
-      height: 15px;
-    }
-
-    &:focus {
-      outline: none;
-      color: #2196f3;
-      border-color: #2196f3;
-      background-color: #fff;
-    }
-
-    &:hover {
-      outline: none;
-      background-color: #2196f3 !important;
-      border-color: #2196f3 !important;
-      color: #fff !important;
-
-      svg g > g {
-        fill: #fff;
-      }
-    }
-
-    &.is-active {
-      color: #fff !important;
-      border-color: #2196f3 !important;
-      background-color: #2196f3 !important;
-    }
-  }
-}
-
 .c-deal-form-viewer__body {
   @include scrollbar();
   width: 100%;
   display: flex;
   overflow: hidden;
   background-color: #f0f4f7;
+  max-height: calc(100vh - 56px);
 
   &.show-comments .pdf-toolbar {
     right: 316px !important;
@@ -178,9 +103,9 @@
   overflow: auto;
   padding: 1em;
   margin: 0 !important;
-  overflow-x: hidden !important;
   background-color: #fff;
   border-left: 1px solid #c9d7df;
+  overflow: hidden !important;
 
   .comment-heading {
     margin: 0;
@@ -196,6 +121,7 @@
     margin-top: 0 !important;
     background-color: #fff;
     .messages {
+      max-height: 73vh;
       overflow: auto;
       border: none;
       padding: 0 !important;
