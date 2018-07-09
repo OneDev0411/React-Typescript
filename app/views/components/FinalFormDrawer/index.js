@@ -7,7 +7,7 @@ import Drawer from '../OverlayDrawer'
 import ActionButton from '../Button/ActionButton'
 
 FinalFormDrawer.propTypes = {
-  initialValues: PropTypes.shape().isRequired,
+  initialValues: PropTypes.shape(),
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
@@ -19,6 +19,7 @@ FinalFormDrawer.propTypes = {
 }
 
 FinalFormDrawer.defaultProps = {
+  initialValues: {},
   showReset: true,
   showFooter: true,
   validate: () => ({})
