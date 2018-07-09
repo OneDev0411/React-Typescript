@@ -6,9 +6,9 @@ class EditFormFrame extends React.PureComponent {
   constructor(props) {
     super(props)
 
-    // if (process.env.NODE_ENV === 'development') {
-    //   config.forms.url = 'http://localhost:3000'
-    // }
+    if (process.env.NODE_ENV === 'development') {
+      config.forms.url = 'http://localhost:3000'
+    }
 
     this.receiveMessageHandler = this.receiveMessage.bind(this)
   }
