@@ -40,7 +40,8 @@ class Mapper extends React.Component {
       updateCsvInfo,
       showMessageModal,
       updateWizardStep,
-      setCurrentStepValidation
+      setCurrentStepValidation,
+      mappedFields
     } = this.props
     const colNames = data[0]
     const contacts = data.slice(1)
@@ -70,7 +71,9 @@ class Mapper extends React.Component {
 
     // async compute
     setTimeout(() => {
-      this.autoMap(colNames)
+      if (_.size(mappedFields) === 0) {
+        this.autoMap(colNames)
+      }
     }, 0)
   }
 
@@ -86,7 +89,10 @@ class Mapper extends React.Component {
 
       mappedFields[columnName] = {
         definitionId: attribute.id,
-        index: 0
+        index: _.filter(
+          mappedFields,
+          ({ definitionId }) => definitionId === attribute.id
+        ).length
       }
     })
 
@@ -127,7 +133,7 @@ class Mapper extends React.Component {
     const bestMatches = _.sortBy(list, item => item.rate * -1)
     const bestMatch = bestMatches[0]
 
-    if (bestMatch.rate >= 0.25) {
+    if (bestMatch.rate >= 0.27) {
       return bestMatch
     }
 
@@ -189,10 +195,6 @@ class Mapper extends React.Component {
   render() {
     const { columns } = this.props
 
-    if (columns.length === 0) {
-      return false
-    }
-
     return (
       <div className="contact__import-csv--mapper">
         <div className="column-row heading">
@@ -201,38 +203,39 @@ class Mapper extends React.Component {
           <div className="map-label">Assign Label</div>
         </div>
 
-        {_.chain(columns)
-          .pick(({ hasValue }, colName) => hasValue && colName.length > 0)
-          .map((info, colName) => {
-            const mappedField = this.getMappedField(colName)
+        {columns &&
+          _.chain(columns)
+            .pick(({ hasValue }, colName) => hasValue && colName.length > 0)
+            .map((info, colName) => {
+              const mappedField = this.getMappedField(colName)
 
-            return (
-              <div key={info.index} className="column-row">
-                <div className="name">{colName}</div>
-                <div className="map-list">
-                  <FieldDropDown
-                    fieldName={colName}
-                    selectedField={mappedField.definitionId}
-                    selectedFieldIndex={mappedField.index}
-                    onChange={this.onChangeField}
-                  />
-                </div>
-
-                <div className="map-label">
-                  {this.shouldShowLabel(colName) && (
-                    <FieldLabel
+              return (
+                <div key={info.index} className="column-row">
+                  <div className="name">{colName}</div>
+                  <div className="map-list">
+                    <FieldDropDown
                       fieldName={colName}
-                      fieldValue={mappedField.label}
-                      columnName={colName}
-                      labels={mappedField.definition.labels}
-                      onChange={this.onChangeLabel}
+                      selectedField={mappedField.definitionId}
+                      selectedFieldIndex={mappedField.index}
+                      onChange={this.onChangeField}
                     />
-                  )}
+                  </div>
+
+                  <div className="map-label">
+                    {this.shouldShowLabel(colName) && (
+                      <FieldLabel
+                        fieldName={colName}
+                        fieldValue={mappedField.label}
+                        columnName={colName}
+                        labels={mappedField.definition.labels}
+                        onChange={this.onChangeLabel}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            )
-          })
-          .value()}
+              )
+            })
+            .value()}
       </div>
     )
   }
@@ -251,10 +254,13 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  updateCsvFieldsMap,
-  updateCsvInfo,
-  updateWizardStep,
-  showMessageModal,
-  setCurrentStepValidation
-})(Mapper)
+export default connect(
+  mapStateToProps,
+  {
+    updateCsvFieldsMap,
+    updateCsvInfo,
+    updateWizardStep,
+    showMessageModal,
+    setCurrentStepValidation
+  }
+)(Mapper)
