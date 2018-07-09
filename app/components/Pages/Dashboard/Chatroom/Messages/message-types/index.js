@@ -7,7 +7,13 @@ import ActivityMessage from './activity'
 import UploadingFile from './uploading'
 import Message from '../../Util/message'
 
-const MessageTypes = ({ author, user, members, message }) => {
+const MessageTypes = ({
+  author,
+  user,
+  members,
+  message,
+  openFilesInNewTab
+}) => {
   const comment = Message.getText(message, members, user)
 
   // simple comment
@@ -42,7 +48,11 @@ const MessageTypes = ({ author, user, members, message }) => {
 
   if (hasAttachments) {
     message_object = (
-      <AttachementMessage comment={comment} attachments={message.attachments} />
+      <AttachementMessage
+        comment={comment}
+        attachments={message.attachments}
+        openFilesInNewTab={openFilesInNewTab}
+      />
     )
   }
 

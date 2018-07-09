@@ -1,20 +1,8 @@
 import React from 'react'
 import Message from '../message-types'
 
-export default ({
-  user,
-  roomId,
-  author,
-  message,
-  previousMessage
-}) => (
+export default props => (
   <div className="message-info">
-    <Message
-      user={user}
-      roomId={roomId}
-      author={author}
-      message={message}
-      previousMessage={previousMessage}
-    />
+    <Message {...props} />
   </div>
 )
