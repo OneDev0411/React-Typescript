@@ -7,6 +7,8 @@ import { ROLE_NAMES } from '../../../utils/roles'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 import CancelButton from '../../../../../../../views/components/Button/CancelButton'
 
+import { TYPE_PERSON, TYPE_COMPANY } from './form-components/type-input'
+
 export class RoleFormModal extends React.Component {
   getInitialValues = () => {
     const { form, isSubmitting } = this.props
@@ -17,17 +19,26 @@ export class RoleFormModal extends React.Component {
 
     this.formObject = {
       ...form,
-      ...this.preselectRole,
-      ...this.commissionAttributes
+      ...this.FormType,
+      ...this.PreselectRole,
+      ...this.CommissionAttributes
     }
 
     return this.formObject
   }
 
+  get FormType() {
+    const { form } = this.props
+
+    return {
+      user_type: form && form.company_title ? TYPE_COMPANY : TYPE_PERSON
+    }
+  }
+
   /**
    * preselect role, if there is only one allowed role to select
    */
-  get preselectRole() {
+  get PreselectRole() {
     const { form } = this.props
     const formRole = form && form.role
 
@@ -50,7 +61,7 @@ export class RoleFormModal extends React.Component {
   /**
    * returns commission attributes
    */
-  get commissionAttributes() {
+  get CommissionAttributes() {
     const { form } = this.props
 
     if (form && form.commission_percentage !== null) {
@@ -159,12 +170,9 @@ export class RoleFormModal extends React.Component {
   getRequiredFields = values => {
     const list = ['role']
 
-    const { role, company_title } = values
+    const { role, user_type } = values
 
-    if (
-      company_title &&
-      this.isValidString(company_title, [], 'company_title')
-    ) {
+    if (user_type === TYPE_COMPANY) {
       list.push('company_title')
     } else {
       list.push('legal_first_name', 'legal_last_name')

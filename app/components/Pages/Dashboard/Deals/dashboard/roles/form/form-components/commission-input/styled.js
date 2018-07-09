@@ -17,13 +17,3 @@ export const CommissionInputContainer = styled.div`
   width: calc(100% - 120px);
   padding: 0 10px;
 `
-
-export const InputRadio = styled.input`
-  width: auto;
-`
-
-export const RadioLabel = styled.label`
-  margin: 0 6px;
-  font-size: 14px;
-  font-weight: 400;
-`
