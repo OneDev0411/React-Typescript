@@ -1,0 +1,9 @@
+.template-thumbnail {
+  border: 1px solid #eee;
+  overflow: hidden;
+
+  &:hover {
+    background: #eee;
+    cursor: pointer;
+  }
+}
