@@ -84,21 +84,19 @@ export const RoleFormContainer = ({
         />
       )}
 
-      {(user_type === TYPE_COMPANY || isCompanyRequired) && (
-        <Field
-          name="company_title"
-          placeholder="Company/Trust"
-          parse={value => value || ''}
-          component={AutoCompleteInput}
-          defaultSelectedItem={form && form.email}
-          isRequired={isCompanyRequired}
-          items={getDropDownItems({
-            form,
-            singularName: 'company',
-            pluralName: 'companies'
-          })}
-        />
-      )}
+      <Field
+        name="company_title"
+        placeholder="Company/Trust"
+        parse={value => value || ''}
+        component={AutoCompleteInput}
+        defaultSelectedItem={form && form.email}
+        isRequired={isCompanyRequired}
+        items={getDropDownItems({
+          form,
+          singularName: 'company',
+          pluralName: 'companies'
+        })}
+      />
 
       <Field
         name="email"
