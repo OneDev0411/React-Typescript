@@ -26,7 +26,7 @@ const defaultProps = {
   defaultSearchFilter: ''
 }
 
-class SelectContactModal extends React.Component {
+class SelectDealModal extends React.Component {
   render() {
     const { handleAddManually } = this.props
 
@@ -56,8 +56,8 @@ class SelectContactModal extends React.Component {
   }
 }
 
-SelectContactModal.propTypes = propTypes
-SelectContactModal.defaultProps = defaultProps
+SelectDealModal.propTypes = propTypes
+SelectDealModal.defaultProps = defaultProps
 
 function mapStateToProps(state) {
   return {
@@ -66,4 +66,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(SelectContactModal)
+export default connect(mapStateToProps)(SelectDealModal)

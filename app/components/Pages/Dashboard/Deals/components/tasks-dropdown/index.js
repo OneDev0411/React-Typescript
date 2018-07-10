@@ -237,7 +237,8 @@ class DropDownTasks extends React.Component {
       placeholder = 'Folder',
       showNotifyOption,
       showStashOption,
-      stashOptionText
+      stashOptionText,
+      disabled = false
     } = this.props
 
     return (
@@ -251,6 +252,7 @@ class DropDownTasks extends React.Component {
           <div style={{ width: '100%' }}>
             <DropDownContainer>
               <SearchInput
+                disabled={disabled}
                 getInputProps={getInputProps}
                 isSaving={isCreatingNewTask}
                 isMenuOpen={isMenuOpen}
@@ -344,8 +346,11 @@ function mapStateToProps({ deals }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  notify,
-  createFormTask,
-  changeNeedsAttention
-})(DropDownTasks)
+export default connect(
+  mapStateToProps,
+  {
+    notify,
+    createFormTask,
+    changeNeedsAttention
+  }
+)(DropDownTasks)

@@ -83,9 +83,7 @@ export class Table extends React.Component {
             return 'All day'
           }
 
-          const date = moment.unix(rowData.timestamp)
-
-          return date.format('hh:mm A')
+          return moment.unix(rowData.timestamp).format('hh:mm A')
         }
       },
       {

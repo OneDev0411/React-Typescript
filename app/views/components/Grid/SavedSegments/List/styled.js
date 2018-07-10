@@ -15,12 +15,9 @@ export const ListItemName = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 95%;
 `
 
-export const ListIconContainer = styled.div`
-  width: 5%;
-`
+export const ListIconContainer = styled.div``
 
 export const Icon = styled.i`
   display: none;
@@ -32,6 +29,7 @@ export const ListItem = styled.div`
   align-items: center;
   margin-bottom: 12px;
   font-size: 15px;
+  justify-content: space-between;
 
   color: ${props => (props.isSelected ? '#2196f3' : '#17283a')};
   font-weight: ${props => (props.isSelected ? 600 : 'normal')};

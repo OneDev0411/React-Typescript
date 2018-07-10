@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 
 import {
   getDeals,
-  getAgents,
   getContexts,
   getForms
 } from '../../../../store_actions/deals'
@@ -20,13 +19,11 @@ class DealsContainer extends React.Component {
   componentDidMount() {
     const {
       getDeals,
-      getAgents,
       getContexts,
       getForms,
       contexts,
       forms,
       deals,
-      agents,
       user
     } = this.props
 
@@ -36,10 +33,6 @@ class DealsContainer extends React.Component {
 
     if (!contexts) {
       getContexts()
-    }
-
-    if (!agents) {
-      getAgents(user)
     }
 
     if (!forms) {
@@ -77,9 +70,8 @@ export default connect(
     error: deals.error,
     deals: deals.list,
     contexts: deals.contexts,
-    agents: deals.agents,
     forms: deals.forms,
     user
   }),
-  { getDeals, getAgents, getContexts, getForms }
+  { getDeals, getContexts, getForms }
 )(DealsContainer)

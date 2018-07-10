@@ -40,6 +40,10 @@ export function hasUserAccess(user, action) {
   return getActiveTeamACL(user).includes(action)
 }
 
+export function isBackOffice(user) {
+  return hasUserAccess(user, 'BackOffice')
+}
+
 export function isTrainingAccount(user) {
   const activeTeam = getActiveTeam(user) || {}
   let { brand } = activeTeam

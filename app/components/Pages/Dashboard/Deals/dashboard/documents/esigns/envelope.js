@@ -4,10 +4,6 @@ import { browserHistory } from 'react-router'
 import cn from 'classnames'
 
 class Envelope extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   getName(role) {
     if (role.user) {
       return role.user.display_name

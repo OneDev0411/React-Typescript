@@ -64,9 +64,9 @@ class ImportCsv extends React.Component {
           {currentWizardStep === CONTACTS__IMPORT_CSV__STEP_UPLOAD_CONTACTS && (
             <UploadContacts />
           )}
-        </div>
 
-        <Footer />
+          <Footer />
+        </div>
       </div>
     )
   }
@@ -83,4 +83,7 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(mapStateToProps, { resetCsvImport })(ImportCsv)
+export default connect(
+  mapStateToProps,
+  { resetCsvImport }
+)(ImportCsv)

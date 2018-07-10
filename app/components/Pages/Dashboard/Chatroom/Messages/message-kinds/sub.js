@@ -3,31 +3,17 @@ import Message from '../message-types'
 import DeliveryReport from '../components/delivery-report'
 import MessageDate from '../components/message-date'
 
-export default ({
-  user,
-  roomId,
-  author,
-  message,
-  previousMessage
-}) => (
+export default props => (
   <div className="message-subitem">
-    <MessageDate message={message} />
+    <MessageDate message={props.message} />
 
-    <div
-      className="content"
-    >
-      <Message
-        user={user}
-        roomId={roomId}
-        author={author}
-        message={message}
-        previousMessage={previousMessage}
-      />
+    <div className="content">
+      <Message {...props} />
 
       <DeliveryReport
-        author={author}
-        user={user}
-        message={message}
+        author={props.author}
+        user={props.user}
+        message={props.message}
       />
     </div>
   </div>
