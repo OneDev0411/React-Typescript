@@ -334,34 +334,34 @@ export class FileManager extends React.Component {
         accessor: 'created_at',
         Cell: ({ value }) => this.getDate(value)
       },
-      {
-        id: 'e_signature',
-        Header: () => this.getCellTitle('eSignature'),
-        accessor: 'e_signature',
-        Cell: ({ original: file }) => {
-          const envelope = this.getEnvelope(file)
+      // {
+      //   id: 'e_signature',
+      //   Header: () => this.getCellTitle('eSignature'),
+      //   accessor: 'e_signature',
+      //   Cell: ({ original: file }) => {
+      //     const envelope = this.getEnvelope(file)
 
-          if (envelope) {
-            return <Envelope envelope={envelope} />
-          }
+      //     if (envelope) {
+      //       return <Envelope envelope={envelope} />
+      //     }
 
-          return null
-        }
-      },
-      {
-        id: 'envelope_name',
-        Header: () => this.getCellTitle('ENVELOPE NAME'),
-        accessor: 'envelope_name',
-        Cell: ({ original: file }) => {
-          const envelope = this.getEnvelope(file)
+      //     return null
+      //   }
+      // },
+      // {
+      //   id: 'envelope_name',
+      //   Header: () => this.getCellTitle('ENVELOPE NAME'),
+      //   accessor: 'envelope_name',
+      //   Cell: ({ original: file }) => {
+      //     const envelope = this.getEnvelope(file)
 
-          if (envelope) {
-            return <EnvelopeName>{envelope.title}</EnvelopeName>
-          }
+      //     if (envelope) {
+      //       return <EnvelopeName>{envelope.title}</EnvelopeName>
+      //     }
 
-          return null
-        }
-      },
+      //     return null
+      //   }
+      // },
       {
         Header: () => this.getCellTitle('FOLDER'),
         accessor: 'task',
@@ -369,7 +369,7 @@ export class FileManager extends React.Component {
         Cell: ({ original: file }) => (
           <Fragment>
             <TasksDropDown
-              disabled={!!this.getEnvelope(file)}
+              // disabled={!!this.getEnvelope(file)}
               showStashOption={file.taskId !== null}
               searchable
               showNotifyOption
