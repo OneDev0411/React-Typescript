@@ -67,6 +67,13 @@ const AddButton = styled.button`
 `
 export default class CustomTag extends React.Component {
   state = { inputFocused: false, inputValue: '', error: false }
+
+  static getDerivedStateFromProps(props) {
+    if (!props.isOpen) {
+      return { inputValue: '' }
+    }
+  }
+
   onFocus = () => {
     this.setState({ inputFocused: true })
   }

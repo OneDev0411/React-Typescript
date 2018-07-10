@@ -64,7 +64,7 @@ class TagsOverlay extends React.Component {
       this.props.existingTags
     )
 
-    if (!_.isEqual(newTags, oldTags)) {
+    if (!_.isEqual(newTags, oldTags) || !nextProps.isOpen) {
       this.setState({ tags: newTags })
     }
   }
@@ -239,7 +239,7 @@ class TagsOverlay extends React.Component {
         <OverlayDrawer.Body>
           <SubHeaderContainer>
             <Info />
-            <CustomTag onUpsert={this.onUpsert} />
+            <CustomTag isOpen={isOpen} onUpsert={this.onUpsert} />
           </SubHeaderContainer>
           <Tags
             tags={tags}
