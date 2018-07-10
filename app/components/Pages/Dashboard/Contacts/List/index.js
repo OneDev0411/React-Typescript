@@ -185,11 +185,16 @@ class ContactsList extends React.Component {
   }
 
   handleChangeSavedSegment = segment => {
-    this.onFilterChange(segment.filters)
-
-    this.setState({
-      pageTitle: segment.name
-    })
+    this.setState(
+      {
+        ...deletedState,
+        searchText: '',
+        pageTitle: segment.name
+      },
+      () => {
+        this.onFilterChange(segment.filters)
+      }
+    )
   }
 
   render() {
