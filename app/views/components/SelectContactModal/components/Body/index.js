@@ -7,6 +7,7 @@ import _ from 'underscore'
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
 import Loading from '../../../../../components/Partials/Loading'
+import { getContacts } from '../../../../../models/contacts/get-contacts'
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
 import { normalizeContactAttribute } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
 
@@ -30,48 +31,67 @@ const ContactsList = styled.div`
 `
 
 const propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.shape),
+  defaultSearchFilter: PropTypes.string,
   handleSelectedItem: PropTypes.func.isRequired,
-  showSearchInput: PropTypes.bool
+  isSearchDisabled: PropTypes.bool
 }
 
 const defaultProps = {
-  contacts: [],
-  showSearchInput: true
+  isSearchDisabled: false,
+  defaultSearchFilter: ''
 }
 
 class Body extends Component {
   state = {
-    items: this.props.contacts,
-    isSearching: false
+    isLoading: false,
+    list: []
   }
 
   componentDidMount() {
-    const { defaultSearchFilter } = this.props
+    this.initializingList()
+  }
 
-    if (defaultSearchFilter) {
-      this.search(defaultSearchFilter)
+  initializingList = () => {
+    if (this.props.defaultSearchFilter) {
+      this.search(this.props.defaultSearchFilter)
+    } else {
+      this.fetchInitialList()
+    }
+  }
+
+  fetchInitialList = async () => {
+    try {
+      this.setState({ isLoading: true })
+
+      const response = await getContacts(0, 15)
+
+      this.setState({
+        isLoading: false,
+        list: normalizeContactAttribute(response)
+      })
+    } catch (error) {
+      console.log(error)
+      this.setState({ isLoading: false })
     }
   }
 
   search = _.debounce(async value => {
     if (!value) {
-      return this.setState({ items: this.props.contacts })
+      return this.fetchInitialList()
     }
 
     try {
-      this.setState({ isSearching: true })
+      this.setState({ isLoading: true })
 
       const response = await searchContacts(value)
-      const items = normalizeContactAttribute(response)
 
-      if (Array.isArray(items)) {
-        this.setState({ items })
-      }
+      this.setState({
+        isLoading: false,
+        list: normalizeContactAttribute(response)
+      })
     } catch (error) {
       console.log(error)
-    } finally {
-      this.setState({ isSearching: false })
+      this.setState({ isLoading: false })
     }
   }, 300)
 
@@ -91,8 +111,8 @@ class Body extends Component {
   }
 
   render() {
-    const { items, isSearching } = this.state
-    const { defaultSearchFilter, showSearchInput } = this.props
+    const { list, isLoading } = this.state
+    const { defaultSearchFilter } = this.props
     const defaultInputValue =
       typeof defaultSearchFilter !== 'string' ? '' : defaultSearchFilter
 
@@ -102,7 +122,7 @@ class Body extends Component {
         defaultInputValue={defaultInputValue}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
           <div style={{ paddingTop: '2rem' }}>
-            {showSearchInput && (
+            {!this.props.isSearchDisabled && (
               <div style={{ padding: '0 2rem' }}>
                 <SearchInput
                   style={{ marginBottom: '12px' }}
@@ -116,11 +136,11 @@ class Body extends Component {
               </div>
             )}
             <ContactsListContainer>
-              {isSearching && <Loading />}
-              {!isSearching &&
-                items.length > 0 && (
+              {isLoading && <Loading />}
+              {!isLoading &&
+                list.length > 0 && (
                   <ContactsList className="u-scrollbar--thinner">
-                    {items.map((item, index) => (
+                    {list.map((item, index) => (
                       <ContactItem
                         item={item}
                         key={item.id || `downshift_search_result_item_${index}`}

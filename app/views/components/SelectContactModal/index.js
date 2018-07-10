@@ -1,9 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-
-import { selectContacts } from '../../../reducers/contacts/list'
-import { getContacts } from '../../../store_actions/contacts'
 
 import BareModal from '../BareModal'
 import Header from './components/Header'
@@ -18,7 +14,6 @@ const propTypes = {
   handleAddManually: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   handleOnClose: PropTypes.func.isRequired,
   handleSelectedItem: PropTypes.func.isRequired,
-  contacts: PropTypes.arrayOf(PropTypes.shape),
   defaultSearchFilter: PropTypes.string
 }
 
@@ -27,66 +22,30 @@ const defaultProps = {
   defaultSearchFilter: ''
 }
 
-class SelectContactModal extends React.Component {
-  componentDidMount() {
-    if (this.props.contacts.length < 2) {
-      this.fetchContacts()
-    }
-  }
+function SelectContactModal(props) {
+  const { title, handleOnClose, handleAddManually } = props
 
-  fetchContacts = async () => {
-    await this.props.getContacts()
-  }
-
-  render() {
-    const {
-      title,
-      isOpen,
-      contacts,
-      handleOnClose,
-      handleAddManually,
-      handleSelectedItem,
-      defaultSearchFilter,
-      showSearchInput
-    } = this.props
-
-    return (
-      <BareModal
-        isOpen={isOpen}
-        contentLabel={title}
-        onRequestClose={handleOnClose}
-      >
-        <Header title={title}>
-          {handleAddManually && (
-            <AddManuallyButton onClick={handleAddManually} />
-          )}
-        </Header>
-        <Body
-          contacts={contacts}
-          handleAddManually={handleAddManually}
-          handleSelectedItem={handleSelectedItem}
-          defaultSearchFilter={defaultSearchFilter}
-          showSearchInput={showSearchInput}
-        />
-        <Footer>
-          <CancelButton onClick={handleOnClose}>Cancel</CancelButton>
-        </Footer>
-      </BareModal>
-    )
-  }
+  return (
+    <BareModal
+      isOpen={props.isOpen}
+      contentLabel={title}
+      onRequestClose={handleOnClose}
+    >
+      <Header title={title}>
+        {handleAddManually && <AddManuallyButton onClick={handleAddManually} />}
+      </Header>
+      <Body
+        handleSelectedItem={props.handleSelectedItem}
+        defaultSearchFilter={props.defaultSearchFilter}
+      />
+      <Footer>
+        <CancelButton onClick={handleOnClose}>Cancel</CancelButton>
+      </Footer>
+    </BareModal>
+  )
 }
 
 SelectContactModal.propTypes = propTypes
 SelectContactModal.defaultProps = defaultProps
 
-function mapStateToProps(state) {
-  return {
-    // loading first 50 contacts in initial load of modal
-    contacts: selectContacts(state.contacts.list).slice(0, 50)
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  { getContacts }
-)(SelectContactModal)
+export default SelectContactModal

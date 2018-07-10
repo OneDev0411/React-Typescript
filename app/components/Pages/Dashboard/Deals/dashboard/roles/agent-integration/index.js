@@ -188,7 +188,7 @@ class RoleAgentIntegration extends React.Component {
           handleOnClose={onHide}
           handleAddManually={selectedAgent ? null : this.showRoleModal}
           defaultSearchFilter={selectedAgent && selectedAgent.email}
-          showSearchInput={selectedAgent === null}
+          isSearchDisabled={selectedAgent != null}
           handleSelectedItem={this.onSelectContactUser}
         />
       </Fragment>
