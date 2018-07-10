@@ -187,7 +187,6 @@ class ContactsList extends React.Component {
   handleChangeSavedSegment = segment => {
     this.setState(
       {
-        ...deletedState,
         searchText: '',
         pageTitle: segment.name
       },
