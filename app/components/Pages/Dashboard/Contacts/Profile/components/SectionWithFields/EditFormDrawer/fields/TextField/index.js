@@ -37,11 +37,11 @@ TextField.defaultProps = {
 
 export function TextField(props) {
   const { attribute_def } = props.attribute
-  const id = `${attribute_def.section}_modal__${attribute_def.name}`
+  const id = `${attribute_def.section}_modal__${attribute_def.id}`
 
   return (
     <Field
-      name={attribute_def.name}
+      name={attribute_def.id}
       format={value => {
         value =
           (value && value.value) || (typeof value === 'string' && value) || ''

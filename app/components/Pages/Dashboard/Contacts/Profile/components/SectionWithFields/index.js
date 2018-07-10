@@ -11,6 +11,7 @@ import { getContactAttributesBySection } from '../../../../../../../models/conta
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 
 import { EditForm } from './EditFormDrawer'
+import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 import { Section } from '../Section'
 import { orderFields, formatPreSave, getFormater } from './helpers'
 
@@ -21,23 +22,29 @@ const propTypes = {
 
 const defaultProps = {
   addNewFieldButtonText: '',
-  showAddNewCustomAttributeButton: false
+  showAddNewCustomAttributeButton: true
 }
 
 class SectionWithFields extends React.Component {
   state = {
-    isOpen: false,
+    isOpenEditDrawer: false,
+    isOpenNewAttributeDrawer: false,
     isSaving: false
   }
 
-  openEditAttributeDrawer = () => this.setState({ isOpen: true })
+  openEditAttributeDrawer = () => this.setState({ isOpenEditDrawer: true })
   closeEditAttributeDrawer = () => {
     if (this.state.isSaving) {
       return
     }
 
-    this.setState({ isOpen: false })
+    this.setState({ isOpenEditDrawer: false })
   }
+
+  openNewAttributeDrawer = () =>
+    this.setState({ isOpenNewAttributeDrawer: true })
+  closeNewAttributeDrawer = () =>
+    this.setState({ isOpenNewAttributeDrawer: false })
 
   handleOnSubmit = async values => {
     try {
@@ -62,9 +69,10 @@ class SectionWithFields extends React.Component {
         )
       }
 
-      this.setState({ isSaving: false })
+      this.setState({ isSaving: false }, this.closeEditAttributeDrawer)
     } catch (error) {
       console.log(error)
+      this.setState({ isSaving: false })
     }
   }
 
@@ -73,7 +81,7 @@ class SectionWithFields extends React.Component {
       .filter(
         attribute_def =>
           !this.props.fields.some(
-            field => field.attribute_def.name === attribute_def.name
+            field => field.attribute_def.id === attribute_def.id
           )
       )
       .map(attribute_def => ({
@@ -82,9 +90,13 @@ class SectionWithFields extends React.Component {
         [attribute_def.data_type]: ''
       }))
 
-    return orderFields(
+    const orderedFields = orderFields(
       [...this.props.fields, ...emptyFields],
       this.props.fieldsOrder
+    )
+
+    return orderedFields.filter(
+      ({ attribute_def }) => attribute_def.show && attribute_def.editable
     )
   }
 
@@ -156,17 +168,18 @@ class SectionWithFields extends React.Component {
               marginBottom: '1.5em'
             }}
           >
-            {addNewFieldButtonText && (
-              <ActionButton
-                inverse
-                onClick={this.openEditAttributeDrawer}
-                style={{ marginRight: '1em' }}
-              >
-                {addNewFieldButtonText}
-              </ActionButton>
-            )}
+            {addNewFieldButtonText &&
+              !sectionFields && (
+                <ActionButton
+                  inverse
+                  onClick={this.openEditAttributeDrawer}
+                  style={{ marginRight: '1em' }}
+                >
+                  {addNewFieldButtonText}
+                </ActionButton>
+              )}
             {showAddNewCustomAttributeButton && (
-              <ActionButton inverse onClick={this.openEditAttributeDrawer}>
+              <ActionButton inverse onClick={this.openNewAttributeDrawer}>
                 Add new property
               </ActionButton>
             )}
@@ -175,11 +188,17 @@ class SectionWithFields extends React.Component {
 
         <EditForm
           fields={this.getModalFields()}
-          isOpen={this.state.isOpen}
+          isOpen={this.state.isOpenEditDrawer}
           onClose={this.closeEditAttributeDrawer}
           submitting={this.state.isSaving}
           title={`Edit ${sectionTitle}`}
           onSubmit={this.handleOnSubmit}
+        />
+
+        <CustomAttributeDrawer
+          isOpen={this.state.isOpenNewAttributeDrawer}
+          onClose={this.closeNewAttributeDrawer}
+          section={this.props.section}
         />
       </Section>
     )

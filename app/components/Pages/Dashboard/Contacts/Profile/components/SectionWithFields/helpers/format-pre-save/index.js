@@ -42,12 +42,15 @@ export function formatPreSave(previousFields, nextFields) {
       previousLabel = previousAttribute.label
     }
 
-    let newValue = typeof value === 'string' ? value : value.value
+    let newValue =
+      typeof value === 'string'
+        ? getParser(attribute)(value)
+        : getParser(attribute)(value.value)
+
+    previousValue = previousValue == null ? '' : previousValue
 
     if (newValue === previousValue) {
       newValue = undefined
-    } else {
-      newValue = getParser(attribute)(newValue)
     }
 
     if (attribute.id) {
@@ -71,7 +74,7 @@ export function formatPreSave(previousFields, nextFields) {
             [type]: newValue
           })
         }
-      } else if (newValue) {
+      } else if (newValue || newValue !== previousValue) {
         upsertedAttributeList.push({
           id: attribute.id,
           [type]: newValue

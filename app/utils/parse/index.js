@@ -1,3 +1,9 @@
+import moment from 'moment'
+
 export function parseDate(date) {
-  return date => moment.utc(date).unix()
+  if (date.length === 0) {
+    return 0
+  }
+
+  return moment.utc(date).unix()
 }

@@ -13,7 +13,7 @@ export function Select(props) {
 
   return (
     <Field
-      name={attribute_def.name}
+      name={attribute_def.id}
       format={value => value && value.value}
       parse={value =>
         value && {

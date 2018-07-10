@@ -43,7 +43,7 @@ const getAllFields = (attributes, mutators) => {
       return
     }
 
-    const key = `${attribute_def.section}_modal__${attribute_def.name}`
+    const key = `${attribute_def.section}_modal__${attribute_def.id}`
     const placeholder = getPlaceholder(attribute)
     const validate = getValidator(attribute)
 
@@ -62,7 +62,7 @@ const getAllFields = (attributes, mutators) => {
       )
     } else if (
       !allFields.some(
-        c => c.props.attribute.attribute_def.name === attribute_def.name
+        c => c.props.attribute.attribute_def.id === attribute_def.id
       )
     ) {
       allFields.push(

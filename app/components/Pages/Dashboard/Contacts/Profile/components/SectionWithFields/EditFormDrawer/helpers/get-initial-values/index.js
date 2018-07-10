@@ -5,7 +5,7 @@ export function getInitialValues(attributes) {
 
   attributes.forEach(attribute => {
     const { attribute_def } = attribute
-    const { name, data_type, singular, labels } = attribute_def
+    const { id, data_type, singular, labels } = attribute_def
 
     const isSelectField = singular && attribute_def.enum_values
     const isMultiFields = !singular && labels
@@ -15,7 +15,7 @@ export function getInitialValues(attributes) {
 
     if (value) {
       if (isSelectField) {
-        initialValues[name] = {
+        initialValues[id] = {
           attribute,
           value: {
             value,
@@ -32,28 +32,28 @@ export function getInitialValues(attributes) {
           value
         }
 
-        if (Array.isArray(initialValues[name])) {
-          initialValues[name] = [...initialValues[name], newField]
+        if (Array.isArray(initialValues[id])) {
+          initialValues[id] = [...initialValues[id], newField]
         } else {
-          initialValues[name] = [newField]
+          initialValues[id] = [newField]
         }
       } else if (isMultiFieldsWithoutLabels) {
         const newField = { attribute, value }
 
-        if (Array.isArray(initialValues[name])) {
-          initialValues[name] = [...initialValues[name], newField]
+        if (Array.isArray(initialValues[id])) {
+          initialValues[id] = [...initialValues[id], newField]
         } else {
-          initialValues[name] = [newField]
+          initialValues[id] = [newField]
         }
       } else {
-        initialValues[name] = { attribute, value }
+        initialValues[id] = { attribute, value }
       }
 
       return initialValues
     }
 
     if (isSelectField) {
-      initialValues[name] = {
+      initialValues[id] = {
         attribute,
         value: {
           title: '-Select-',
@@ -61,7 +61,7 @@ export function getInitialValues(attributes) {
         }
       }
     } else if (isMultiFields) {
-      initialValues[name] = [
+      initialValues[id] = [
         {
           attribute,
           label: {
@@ -72,9 +72,9 @@ export function getInitialValues(attributes) {
         }
       ]
     } else if (isMultiFieldsWithoutLabels) {
-      initialValues[name] = [{ attribute, value: '' }]
+      initialValues[id] = [{ attribute, value: '' }]
     } else {
-      initialValues[name] = { attribute, value: '' }
+      initialValues[id] = { attribute, value: '' }
     }
   })
 

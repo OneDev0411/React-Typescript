@@ -56,14 +56,14 @@ export function MultiField(props) {
 
   function addNewField() {
     if (defaultOptions) {
-      props.mutators.push(attribute_def.name, newMultiField)
+      props.mutators.push(attribute_def.id, newMultiField)
     } else {
-      props.mutators.push(attribute_def.name, newMultiFieldWithoutLabel)
+      props.mutators.push(attribute_def.id, newMultiFieldWithoutLabel)
     }
   }
 
   return (
-    <FieldArray name={attribute_def.name}>
+    <FieldArray name={attribute_def.id}>
       {({ fields }) =>
         fields.map((field, index) => (
           <div
