@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
-import { Container, Title, ErrorMessage } from '../styled'
+import { Container, Label, LabelNote, ErrorMessage } from '../styled'
 
 const TextInput = styled.input`
   width: 100%;
@@ -23,6 +23,7 @@ const TextInput = styled.input`
 TextField.propTypes = {
   format: PropTypes.func,
   label: PropTypes.string.isRequired,
+  labelNote: PropTypes.string,
   name: PropTypes.string.isRequired,
   parse: PropTypes.func,
   placeholder: PropTypes.string,
@@ -32,6 +33,7 @@ TextField.propTypes = {
 
 TextField.defaultProps = {
   format: t => t,
+  labelNote: '',
   parse: t => t,
   placeholder: '',
   required: false,
@@ -52,9 +54,11 @@ export function TextField(props) {
 
         return (
           <Container>
-            <Title required={props.required} htmlFor={id}>
+            <Label htmlFor={id} required={props.required}>
               {props.label}
-            </Title>
+              {props.labelNote &&
+                !props.required && <LabelNote>{props.labelNote}</LabelNote>}
+            </Label>
             <TextInput
               {...input}
               id={id}

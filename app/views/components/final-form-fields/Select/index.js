@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
 import { Dropdown } from '../../Dropdown'
-import { Container, Title, ErrorMessage } from '../styled'
+import { Container, Label, LabelNote, ErrorMessage } from '../styled'
 
 Select.propTypes = {
   format: PropTypes.func,
@@ -14,6 +14,7 @@ Select.propTypes = {
     }).isRequired
   ).isRequired,
   label: PropTypes.string.isRequired,
+  labelNote: PropTypes.string,
   name: PropTypes.string.isRequired,
   parse: PropTypes.func,
   required: PropTypes.bool,
@@ -22,6 +23,7 @@ Select.propTypes = {
 
 Select.defaultProps = {
   format: t => t,
+  labelNote: '',
   parse: t => t,
   required: false,
   validate: () => undefined
@@ -40,7 +42,11 @@ export function Select(props) {
 
         return (
           <Container>
-            <Title required={props.required}>{props.label}</Title>
+            <Label required={props.required}>
+              <span>{props.label}</span>
+              {props.labelNote &&
+                !props.required && <LabelNote>{props.labelNote}</LabelNote>}
+            </Label>
             <Dropdown
               fullWidth
               input={input}

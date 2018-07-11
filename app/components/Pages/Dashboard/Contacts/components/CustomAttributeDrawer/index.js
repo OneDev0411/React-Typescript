@@ -75,10 +75,20 @@ class CustomAttributeDrawer extends React.Component {
               required
             />
 
-            <TextFieldArray label="Add Label" name="labels" />
+            {values.data_type.value !== '-Select-' && (
+              <TextFieldArray
+                label="Add Label"
+                labelNote="(optional)"
+                name="labels"
+              />
+            )}
 
             {values.data_type.value === 'text' && (
-              <TextFieldArray label="Add Value" name="enum_values" />
+              <TextFieldArray
+                label="Default Values"
+                labelNote="(optional)"
+                name="enum_values"
+              />
             )}
           </React.Fragment>
         )}

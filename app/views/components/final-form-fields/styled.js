@@ -8,10 +8,14 @@ export const Container = styled.div`
   justify-content: ${props => (props.withoutLabel ? 'flex-end' : 'initial')};
 `
 
-export const Title = styled.label`
+export const Label = styled.label`
   font-weight: normal;
   cursor: pointer;
   color: #485c6b;
+
+  > span {
+    display: inline-block;
+  }
 
   &::after {
     content: '${props => (props.required ? '*' : '')}';
@@ -20,6 +24,12 @@ export const Title = styled.label`
     font-weight: bold;
     color: #f00;
   }
+`
+
+export const LabelNote = styled.span`
+  font-size: small;
+  color: #7b91a6;
+  margin-left: 0.5em;
 `
 
 export const ErrorMessage = styled.div`
