@@ -8,10 +8,10 @@ import {
   Select,
   TextFieldArray
 } from '../../../../../../views/components/final-form-fields'
+import { createAttributeDefinition } from '../../../../../../store_actions/contacts/create-attribute-definition'
 
 import { preSaveFormat, validate } from './helpers'
-
-import { createAttributeDefinition } from '../../../../../../store_actions/contacts/create-attribute-definition'
+import { TipsBanner } from './TipsBanner'
 
 const propTypes = { section: PropTypes.string.isRequired }
 
@@ -53,6 +53,8 @@ class CustomAttributeDrawer extends React.Component {
         validate={validate}
         render={({ values }) => (
           <React.Fragment>
+            <TipsBanner />
+
             <TextField label="Name" name="label" required />
 
             <Select
