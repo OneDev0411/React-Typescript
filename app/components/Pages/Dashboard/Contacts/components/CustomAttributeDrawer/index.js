@@ -53,12 +53,7 @@ class CustomAttributeDrawer extends React.Component {
         validate={validate}
         render={({ values }) => (
           <React.Fragment>
-            <TextField
-              label="Name"
-              placeholder="Military service"
-              name="label"
-              required
-            />
+            <TextField label="Name" name="label" required />
 
             <Select
               items={[
@@ -82,18 +77,10 @@ class CustomAttributeDrawer extends React.Component {
               required
             />
 
-            <TextFieldArray
-              label="Add Label"
-              placeholder="Marines"
-              name="labels"
-            />
+            <TextFieldArray label="Add Label" name="labels" />
 
             {values.data_type.value === 'text' && (
-              <TextFieldArray
-                label="Add Value"
-                placeholder="Active"
-                name="enum_values"
-              />
+              <TextFieldArray label="Add Value" name="enum_values" />
             )}
           </React.Fragment>
         )}
