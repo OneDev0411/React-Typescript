@@ -48,7 +48,7 @@ class CustomAttributeDrawer extends React.Component {
         isOpen={this.props.isOpen}
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
-        title="Add New Property"
+        title="Add a Custom Field"
         submitting={this.state.submitting}
         validate={validate}
         render={({ values }) => (
