@@ -175,7 +175,7 @@ class CreateDeal extends React.Component {
       message: 'Cancel deal creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: "No, don't cancel",
+      cancelLabel: 'No, don\'t cancel',
       onConfirm: () => browserHistory.push('/dashboard/deals')
     })
 
@@ -451,13 +451,9 @@ class CreateDeal extends React.Component {
    * check commission is required or not
    */
   getIsCommissionRequired() {
-    const { enderType } = this.state
-
-    if (enderType === 'AgentDoubleEnder' || enderType === 'OfficeDoubleEnder') {
-      return true
-    }
-
-    return false
+    return ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
+      this.state.enderType
+    )
   }
 
   /**

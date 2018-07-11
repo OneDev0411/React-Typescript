@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Field } from 'react-final-form'
 import _ from 'underscore'
 import { TextInput } from '../../../../../../../../views/components/Forms/TextInput'
@@ -10,7 +10,7 @@ import { FormType } from '../form-components/type-input'
 import { FormContainer } from '../styles'
 import { ROLE_NAMES } from '../../../../utils/roles'
 
-import { TYPE_PERSON, TYPE_COMPANY } from '../form-components/type-input'
+import { TYPE_PERSON } from '../form-components/type-input'
 
 const getDropDownItems = ({ form = {}, singularName, pluralName }) => {
   if (_.size(form) === 0) {
