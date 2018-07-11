@@ -13,8 +13,7 @@ import { preSaveFormat, validate } from './helpers'
 
 import { createAttributeDefinition } from '../../../../../../store_actions/contacts/create-attribute-definition'
 
-const propTypes = { section: PropTypes.string }
-const defaultProps = { section: '-Select-' }
+const propTypes = { section: PropTypes.string.isRequired }
 
 class CustomAttributeDrawer extends React.Component {
   state = {
@@ -41,7 +40,7 @@ class CustomAttributeDrawer extends React.Component {
       <FinalFormDrawer
         initialValues={{
           label: '',
-          section: { title: this.props.section, value: this.props.section },
+          section: this.props.section,
           data_type: { title: '-Select-', value: '-Select-' },
           labels: [''],
           enum_values: ['']
@@ -83,16 +82,6 @@ class CustomAttributeDrawer extends React.Component {
               required
             />
 
-            <Select
-              items={['Contact Info', 'Details', 'Dates'].map(value => ({
-                title: value,
-                value
-              }))}
-              label="Section"
-              name="section"
-              required
-            />
-
             <TextFieldArray
               label="Add Label"
               placeholder="Marines"
@@ -114,6 +103,5 @@ class CustomAttributeDrawer extends React.Component {
 }
 
 CustomAttributeDrawer.propTypes = propTypes
-CustomAttributeDrawer.defaultProps = defaultProps
 
 export default connect()(CustomAttributeDrawer)
