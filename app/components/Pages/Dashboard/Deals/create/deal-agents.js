@@ -36,7 +36,6 @@ export default props => {
     roleType: 'agent',
     dealSide,
     isPrimaryAgent,
-    disableAgentsList: props.disableAgentsList,
     isDoubleEnded: props.isDoubleEnded,
     isCommissionRequired: props.isCommissionRequired,
     allowedRoles: [allowedRole],

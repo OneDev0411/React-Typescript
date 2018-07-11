@@ -450,7 +450,7 @@ class CreateDeal extends React.Component {
   /**
    * check commission is required or not
    */
-  getIsCommissionRequired() {
+  get IsDoubleEnded() {
     return ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
       this.state.enderType
     )
@@ -555,6 +555,7 @@ class CreateDeal extends React.Component {
                   scenario="CreateDeal"
                   dealSide={dealSide}
                   agents={agents}
+                  isDoubleEnded={this.IsDoubleEnded}
                   onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                   onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
                 />
@@ -569,13 +570,13 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealAgents
-                      disableAgentsList
                       hasError={this.hasError('selling_agents')}
                       scenario="CreateDeal"
                       dealSide={dealSide}
                       showDealSideAs="Selling"
                       agents={sellingAgents}
-                      isCommissionRequired={this.getIsCommissionRequired()}
+                      isCommissionRequired={this.IsDoubleEnded}
+                      isDoubleEnded={this.IsDoubleEnded}
                       onUpsertAgent={form =>
                         this.onUpsertRole(form, 'sellingAgents')
                       }
