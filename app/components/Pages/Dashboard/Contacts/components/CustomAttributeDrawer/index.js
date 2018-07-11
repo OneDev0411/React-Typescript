@@ -58,17 +58,15 @@ class CustomAttributeDrawer extends React.Component {
             <Select
               items={[
                 {
-                  title:
-                    'text (use this if your property is a word, number or character)',
+                  title: 'Text',
                   value: 'text'
                 },
                 {
-                  title: 'number (use this if your property is only a number)',
+                  title: 'Number',
                   value: 'number'
                 },
                 {
-                  title:
-                    'date (use this if your property is a date 01/05/2018)',
+                  title: 'Date',
                   value: 'date'
                 }
               ]}
