@@ -158,6 +158,7 @@ class SectionWithFields extends React.Component {
       <Section
         title={sectionTitle}
         onEdit={sectionFields ? this.openEditAttributeDrawer : undefined}
+        onAdd={this.openNewAttributeDrawer}
       >
         {sectionFields}
         {(addNewFieldButtonText || showAddNewCustomAttributeButton) && (
@@ -178,11 +179,6 @@ class SectionWithFields extends React.Component {
                   {addNewFieldButtonText}
                 </ActionButton>
               )}
-            {showAddNewCustomAttributeButton && (
-              <ActionButton inverse onClick={this.openNewAttributeDrawer}>
-                Add new property
-              </ActionButton>
-            )}
           </div>
         )}
 
