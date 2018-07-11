@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+
 import RoleAgentIntegration from '../dashboard/roles/agent-integration'
 import RoleItem from './role-item'
 
@@ -54,16 +53,4 @@ class CrudRole extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts }) {
-  return {
-    contacts: contacts.list,
-    attributeDefs: contacts.attributeDefs
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  {
-    notify
-  }
-)(CrudRole)
+export default CrudRole

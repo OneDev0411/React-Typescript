@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
 
 import ContactModal from '../../../../../../../views/components/SelectContactModal'
-import { convertContactToRole } from '../../../utils/roles'
+import { convertContactToRole, AGENT_ROLES } from '../../../utils/roles'
 
 import RoleCrmIntegration from '../crm-integration'
 import AgentModal from './agents-list'
@@ -35,7 +36,7 @@ class RoleAgentIntegration extends React.Component {
       }
     }
 
-    if (this.ShouldSelectRoleFromAgentsList) {
+    if (this.getShouldSelectRoleFromAgentsList(props)) {
       return {
         showAgentModal: true
       }
@@ -56,13 +57,17 @@ class RoleAgentIntegration extends React.Component {
 
   onUpsertRole = role => {
     const { selectedAgent } = this.state
+    const { onUpsertRole } = this.props
 
     if (role && selectedAgent) {
       role.user = selectedAgent.id
     }
 
     this.setState(initialState)
-    this.props.onUpsertRole(role)
+
+    if (onUpsertRole) {
+      onUpsertRole(role)
+    }
   }
 
   showRoleModal = () =>
@@ -71,28 +76,20 @@ class RoleAgentIntegration extends React.Component {
       showRoleModal: true
     })
 
-  get ShouldSelectRoleFromAgentsList() {
-    const { dealSide, allowedRoles, roleType } = this.props
+  getShouldSelectRoleFromAgentsList(props) {
+    const { deal, allowedRoles } = props
+    const dealSide = deal ? deal.deal_type : props.dealSide
+    const role = allowedRoles && allowedRoles[0]
 
-    if (this.props.disableAgentsList || roleType !== 'agent') {
+    if (!role || !AGENT_ROLES.includes(role) || props.disableAgentsList) {
       return false
     }
 
-    const isCoSellerAgent =
-      dealSide === 'Selling' &&
-      allowedRoles.length === 1 &&
-      allowedRoles[0] === 'CoSellerAgent'
-
-    const isCoBuyerAgent =
-      dealSide === 'Buying' &&
-      allowedRoles.length === 1 &&
-      allowedRoles[0] === 'CoBuyerAgent'
-
     if (
-      this.props.isPrimaryAgent ||
-      this.props.isDoubleEnded ||
-      isCoSellerAgent ||
-      isCoBuyerAgent
+      props.isDoubleEnded ||
+      (dealSide === 'Selling' &&
+        ['SellerAgent', 'CoSellerAgent'].includes(role)) ||
+      (dealSide === 'Buying' && ['BuyerAgent', 'CoBuyerAgent'].includes(role))
     ) {
       return true
     }
@@ -123,24 +120,10 @@ class RoleAgentIntegration extends React.Component {
       }
     }
 
-    /**
-     * if there is one related contact for the agent:
-     * populate role form with the relevant contact record
-     */
-    if (relatedContacts.length === 1) {
+    if (relatedContacts.length > 0) {
       newState = {
         showRoleModal: true,
         role: convertContactToRole(relatedContacts[0], this.props.attributeDefs)
-      }
-    }
-
-    /**
-     * if there are more than one related contacts for the agent:
-     * show contacts modal to user be able select one of them
-     */
-    if (relatedContacts.length > 1) {
-      newState = {
-        showContactModal: true
       }
     }
 
@@ -159,7 +142,7 @@ class RoleAgentIntegration extends React.Component {
       role,
       selectedAgent
     } = this.state
-    const { modalTitle, onHide } = this.props
+    const { deal, modalTitle, onHide } = this.props
 
     return (
       <Fragment>
@@ -172,6 +155,7 @@ class RoleAgentIntegration extends React.Component {
         )}
 
         <RoleCrmIntegration
+          deal={deal}
           isOpen={showRoleModal}
           user={role}
           dealSide={this.props.dealSide}
@@ -187,8 +171,6 @@ class RoleAgentIntegration extends React.Component {
           isOpen={showContactModal}
           handleOnClose={onHide}
           handleAddManually={selectedAgent ? null : this.showRoleModal}
-          defaultSearchFilter={selectedAgent && selectedAgent.email}
-          isSearchDisabled={selectedAgent != null}
           handleSelectedItem={this.onSelectContactUser}
         />
       </Fragment>
@@ -196,4 +178,10 @@ class RoleAgentIntegration extends React.Component {
   }
 }
 
-export default RoleAgentIntegration
+function mapStateToProps({ contacts }) {
+  return {
+    attributeDefs: contacts.attributeDefs
+  }
+}
+
+export default connect(mapStateToProps)(RoleAgentIntegration)

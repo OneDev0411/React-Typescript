@@ -72,10 +72,15 @@ class TeamAgents extends React.Component {
       isSearchingContacts: true
     })
 
-    const response = await searchContacts(user.email)
-    const contacts = normalizeContactAttribute(response).filter(
-      contact => contact.summary.email === user.email
-    )
+    let contacts = []
+
+    try {
+      const response = await searchContacts(user.email)
+
+      contacts = normalizeContactAttribute(response).filter(
+        contact => contact.summary.email === user.email
+      )
+    } catch (e) {}
 
     this.setState({
       isSearchingContacts: false
