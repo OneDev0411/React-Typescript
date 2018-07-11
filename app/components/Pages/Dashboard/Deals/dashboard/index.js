@@ -53,7 +53,7 @@ class DealDetails extends React.Component {
   }
 
   handleNotifications(deal) {
-    if (!deal.new_notifications) {
+    if (!deal || !deal.new_notifications) {
       return false
     }
 
@@ -140,4 +140,7 @@ function mapStateToProps({ deals, user }, props) {
   }
 }
 
-export default connect(mapStateToProps, { getDeal })(DealDetails)
+export default connect(
+  mapStateToProps,
+  { getDeal }
+)(DealDetails)
