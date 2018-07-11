@@ -148,7 +148,10 @@ class RoleAgentIntegration extends React.Component {
       <Fragment>
         {showAgentModal && (
           <AgentModal
-            isPrimaryAgent={this.props.isPrimaryAgent}
+            isPrimaryAgent={
+              this.props.isPrimaryAgent &&
+              this.props.dealEnderType !== 'OfficeDoubleEnder'
+            }
             onHide={onHide}
             onSelectAgent={this.onSelectAgent}
           />
