@@ -14,7 +14,12 @@ import ActionButton from '../../../../../../../views/components/Button/ActionBut
 import { EditForm } from './EditFormDrawer'
 import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 import { Section } from '../Section'
-import { orderFields, formatPreSave, getFormater } from './helpers'
+import {
+  orderFields,
+  formatPreSave,
+  getFormater,
+  getInitialValues
+} from './helpers'
 
 const propTypes = {
   addNewFieldButtonText: PropTypes.string,
@@ -27,10 +32,17 @@ const defaultProps = {
 }
 
 class SectionWithFields extends React.Component {
-  state = {
-    isOpenEditDrawer: false,
-    isOpenNewAttributeDrawer: false,
-    isSaving: false
+  constructor(props) {
+    super(props)
+
+    this.getModalFields = this.getModalFields.bind(this)
+
+    this.state = {
+      isOpenEditDrawer: false,
+      isOpenNewAttributeDrawer: false,
+      isSaving: false,
+      editFormInitialValues: getInitialValues(this.getModalFields())
+    }
   }
 
   openEditAttributeDrawer = () => this.setState({ isOpenEditDrawer: true })
@@ -49,7 +61,7 @@ class SectionWithFields extends React.Component {
 
   handleOnSubmit = async values => {
     try {
-      this.setState({ isSaving: true })
+      this.setState({ isSaving: true, editFormInitialValues: values })
 
       const { upsertedAttributeList, deletedAttributesList } = formatPreSave(
         this.props.fields,
@@ -192,6 +204,7 @@ class SectionWithFields extends React.Component {
 
         <EditForm
           fields={this.getModalFields()}
+          initialValues={this.state.editFormInitialValues}
           isOpen={this.state.isOpenEditDrawer}
           onClose={this.closeEditAttributeDrawer}
           submitting={this.state.isSaving}

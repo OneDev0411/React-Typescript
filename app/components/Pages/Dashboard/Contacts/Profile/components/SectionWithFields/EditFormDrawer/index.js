@@ -7,10 +7,11 @@ import { Select } from './fields/Select'
 import { TextField } from './fields/TextField'
 import { MultiField } from './fields/MultiField'
 
-import { getInitialValues, getPlaceholder, getValidator } from './helpers'
+import { getPlaceholder, getValidator } from './helpers'
 
 EditForm.propTypes = {
   fields: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  initialValues: PropTypes.shape().isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
@@ -27,7 +28,6 @@ export function EditForm({ fields, ...props }) {
   return (
     <FinalFormDrawer
       {...props}
-      initialValues={getInitialValues(fields)}
       render={({ form }) => getAllFields(fields, form.mutators)}
     />
   )
