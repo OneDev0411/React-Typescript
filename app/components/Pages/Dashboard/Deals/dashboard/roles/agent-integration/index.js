@@ -81,7 +81,7 @@ class RoleAgentIntegration extends React.Component {
     const dealSide = deal ? deal.deal_type : props.dealSide
     const role = allowedRoles && allowedRoles[0]
 
-    if (!role || !AGENT_ROLES.includes(role) || props.disableAgentsList) {
+    if (!role || !AGENT_ROLES.includes(role)) {
       return false
     }
 
@@ -148,7 +148,10 @@ class RoleAgentIntegration extends React.Component {
       <Fragment>
         {showAgentModal && (
           <AgentModal
-            isPrimaryAgent={this.props.isPrimaryAgent}
+            isPrimaryAgent={
+              this.props.isPrimaryAgent &&
+              this.props.dealEnderType !== 'OfficeDoubleEnder'
+            }
             onHide={onHide}
             onSelectAgent={this.onSelectAgent}
           />
