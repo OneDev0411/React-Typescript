@@ -52,6 +52,12 @@ class TagsOverlay extends React.Component {
     }
   }
 
+  componentDidMount() {
+    if (this.props.existingTags.length === 0) {
+      this.props.getContactsTags()
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const newTags = this.getCommonTags(
       nextProps.selectedContactsIds,

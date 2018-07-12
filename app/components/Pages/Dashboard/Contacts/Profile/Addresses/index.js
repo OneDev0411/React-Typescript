@@ -21,7 +21,9 @@ import {
 import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
-import Label from '../Details/components/Label'
+import { Section } from '../components/Section'
+
+import Label from './components/Label'
 import Loading from '../../components/Loading'
 
 import Field from './components/Field'
@@ -45,24 +47,14 @@ const Addresses = ({
   handleAddNewAddress,
   handelOnChangePrimary,
   ...props
-}) => (
-  <div className="c-contact-profile-card">
-    <div
-      className="c-contact-profile-card__header"
-      style={{ position: 'relative' }}
+}) => {
+  const hasAddresses = addresses.length > 0
+
+  return (
+    <Section
+      onEdit={hasAddresses ? () => setShowModal(true) : undefined}
+      title="Addresses"
     >
-      <h3 className="c-contact-profile-card__title">Addresses</h3>
-      {addresses.length > 0 && (
-        <ActionButton
-          disabled={props.disabled}
-          onClick={() => setShowModal(true)}
-          style={{ position: 'absolute', top: '-6px', right: 0 }}
-        >
-          Add new address
-        </ActionButton>
-      )}
-    </div>
-    <div className="c-contact-profile-card__body">
       {addresses.length > 0 ? (
         <div style={{ position: 'relative' }}>
           {addresses.map(address => {
@@ -136,23 +128,23 @@ const Addresses = ({
             <i className="fa fa-building" />
             <span>No Address</span>
           </p>
-          <ActionButton onClick={() => setShowModal(true)}>
+          <ActionButton inverse onClick={() => setShowModal(true)}>
             Add new address
           </ActionButton>
         </div>
       )}
-    </div>
 
-    {isOpenModal && (
-      <AddAddressModal
-        isOpen={isOpenModal}
-        submitting={props.disabled}
-        handleOnSubmit={handleAddNewAddress}
-        handleOnClose={props.disabled ? () => {} : () => setShowModal(false)}
-      />
-    )}
-  </div>
-)
+      {isOpenModal && (
+        <AddAddressModal
+          isOpen={isOpenModal}
+          submitting={props.disabled}
+          handleOnSubmit={handleAddNewAddress}
+          handleOnClose={props.disabled ? () => {} : () => setShowModal(false)}
+        />
+      )}
+    </Section>
+  )
+}
 
 function mapStateToProps(state, props) {
   const { attributeDefs } = state.contacts
@@ -163,10 +155,13 @@ function mapStateToProps(state, props) {
 }
 
 const enhance = compose(
-  connect(mapStateToProps, {
-    deleteAttributes,
-    upsertContactAttributes
-  }),
+  connect(
+    mapStateToProps,
+    {
+      deleteAttributes,
+      upsertContactAttributes
+    }
+  ),
   withState('disabled', 'setDisabled', false),
   withState('isOpenModal', 'setShowModal', false),
   withHandlers({

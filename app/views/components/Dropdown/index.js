@@ -39,7 +39,7 @@ export const Dropdown = ({
   fullWidth,
   hasSearch,
   id: buttonId,
-  itemToString,
+  itemToString = item => item.title,
   itemRenderer,
   defaultSelectedItem
 }) => (

@@ -6,7 +6,7 @@ const propTypes = {
   inverse: PropTypes.bool
 }
 
-const defaultTypes = {
+const defaultProps = {
   onClick: () => {},
   inverse: false
 }
@@ -18,9 +18,6 @@ const ActionButton = styled.button`
   border-radius: 3px;
   color: ${props => (props.disabled ? '#333' : '#fff')};
   background: ${props => (props.disabled ? '#cecece' : '#2196f3')};
-  :focus {
-    outline: none;
-  }
 
   ${props =>
     !props.disabled &&
@@ -44,6 +41,6 @@ const ActionButton = styled.button`
 `
 
 ActionButton.propTypes = propTypes
-ActionButton.defaultProps = defaultTypes
+ActionButton.defaultProps = defaultProps
 
 export default ActionButton

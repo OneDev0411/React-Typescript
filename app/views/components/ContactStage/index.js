@@ -7,14 +7,6 @@ import { getContactAttribute } from '../../../models/contacts/helpers/get-contac
 import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
 import { upsertContactAttributes } from '../../../store_actions/contacts/upsert-contact-attributes'
 
-const ITEMS = [
-  'General',
-  'Unqualified Lead',
-  'Qualified Lead',
-  'Active',
-  'Past Client'
-]
-
 const defaultSelectedItem = { label: 'General', value: 'General' }
 
 class Stage extends React.Component {
@@ -70,7 +62,7 @@ class Stage extends React.Component {
         buttonStyle={this.props.buttonStyle}
         disabled={this.state.isSaving}
         fullWidth
-        items={getItems(ITEMS)}
+        items={getItems(this.props.attribute_def.enum_values)}
         itemToString={this.itemToString}
         onChange={this.handleOnChange}
         selectedItem={this.state.selectedItem}
