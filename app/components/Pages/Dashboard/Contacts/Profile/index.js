@@ -10,12 +10,12 @@ import { selectDefinitionByName } from '../../../../../reducers/contacts/attribu
 
 import { Container } from '../components/Container'
 import PageHeader from '../../../../../views/components/PageHeader'
-import Information from './Information'
+import { Catalog } from './Catalog'
 import { Dates } from './Dates'
 import { DealsListWidget } from './Deals'
-import { Details } from './Names'
+import { Details } from './Details'
 import Tags from './Tags'
-import { ContactInfo } from './Details'
+import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
 import AddNote from './Add-Note'
 import Activities from './Activities'
@@ -166,7 +166,7 @@ class ContactProfile extends React.Component {
         <ColumnsContainer>
           <SideColumnWrapper>
             <div>
-              <Information contact={contact} />
+              <Catalog contact={contact} />
 
               <Tags contact={contact} />
 

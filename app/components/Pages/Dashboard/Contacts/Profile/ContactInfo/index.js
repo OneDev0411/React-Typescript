@@ -3,21 +3,19 @@ import React from 'react'
 import SectionWithFields from '../components/SectionWithFields'
 
 const fieldsOrder = [
-  'title',
-  'first_name',
-  'middle_name',
-  'last_name',
-  'nickname',
-  'job_title',
-  'company'
+  'email',
+  'phone_number',
+  'source',
+  'website',
+  'source_type'
 ]
 
-export function Details(props) {
+export function ContactInfo(props) {
   return (
     <SectionWithFields
       contact={props.contact}
       fieldsOrder={fieldsOrder}
-      section="Details"
+      section="Contact Info"
     />
   )
 }

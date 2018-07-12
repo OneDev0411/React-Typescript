@@ -23,7 +23,7 @@ import ActionButton from '../../../../../../views/components/Button/ActionButton
 
 import { Section } from '../components/Section'
 
-import Label from '../Details/components/Label'
+import Label from './components/Label'
 import Loading from '../../components/Loading'
 
 import Field from './components/Field'

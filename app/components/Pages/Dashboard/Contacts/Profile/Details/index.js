@@ -3,19 +3,22 @@ import React from 'react'
 import SectionWithFields from '../components/SectionWithFields'
 
 const fieldsOrder = [
-  'email',
-  'phone_number',
-  'source',
-  'website',
-  'source_type'
+  'title',
+  'first_name',
+  'middle_name',
+  'last_name',
+  'nickname',
+  'job_title',
+  'company'
 ]
 
-export function ContactInfo(props) {
+export function Details(props) {
   return (
     <SectionWithFields
+      addNewFieldButtonText="Add Details"
       contact={props.contact}
       fieldsOrder={fieldsOrder}
-      section="Contact Info"
+      section="Details"
     />
   )
 }

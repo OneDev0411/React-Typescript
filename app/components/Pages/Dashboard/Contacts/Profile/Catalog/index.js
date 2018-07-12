@@ -25,7 +25,7 @@ import Tooltip from '../../../../../../views/components/tooltip'
 
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
-class Info extends React.Component {
+export class Catalog extends React.Component {
   state = {
     isDeleting: false,
     isCreatingRoom: false
@@ -194,4 +194,4 @@ export default connect(
     createRoom,
     deleteContacts
   }
-)(Info)
+)(Catalog)
