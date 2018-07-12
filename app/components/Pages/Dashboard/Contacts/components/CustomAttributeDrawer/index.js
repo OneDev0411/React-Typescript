@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 
 import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDrawer'
 import {
@@ -28,7 +29,17 @@ class CustomAttributeDrawer extends React.Component {
         createAttributeDefinition(preSaveFormat(values))
       )
 
-      this.setState({ submitting: false }, this.props.onClose)
+      this.setState({ submitting: false }, () => {
+        this.props.onClose()
+        this.props.dispatch(
+          notify({
+            status: 'success',
+            dismissAfter: 4000,
+            title: `Custom field added to ${this.props.section}.`,
+            message: `${values.label}`
+          })
+        )
+      })
     } catch (error) {
       console.log(error)
       this.setState({ submitting: false })
