@@ -43,6 +43,11 @@ class Header extends React.Component {
   }
 
   onInputChange() {
+    // #1472
+    if (!this.searchInput) {
+      return null
+    }
+
     const { value } = this.searchInput
     const {
       searchAllDeals,
