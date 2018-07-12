@@ -43,6 +43,7 @@ function PageHeader(props) {
         <PageTitle
           showBackButton={props.showBackButton}
           onClickBackButton={props.onClickBackButton}
+          onClickCloseButton={props.onClickCloseButton}
           backUrl={backUrl}
           title={title}
         />
