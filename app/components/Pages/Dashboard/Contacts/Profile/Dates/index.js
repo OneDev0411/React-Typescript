@@ -11,7 +11,7 @@ export function Dates(props) {
       contact={props.contact}
       fieldsOrder={fieldsOrder}
       section="Dates"
-      title="Dates"
+      title="Important Dates"
     />
   )
 }
