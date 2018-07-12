@@ -31,7 +31,10 @@ export class RoleFormModal extends React.Component {
     const { form } = this.props
 
     return {
-      user_type: form && form.company_title ? TYPE_COMPANY : TYPE_PERSON
+      user_type:
+        !form || form.legal_first_name || form.legal_last_name
+          ? TYPE_PERSON
+          : TYPE_COMPANY
     }
   }
 
