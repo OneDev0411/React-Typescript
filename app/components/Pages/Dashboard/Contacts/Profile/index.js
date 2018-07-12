@@ -10,12 +10,12 @@ import { selectDefinitionByName } from '../../../../../reducers/contacts/attribu
 
 import { Container } from '../components/Container'
 import PageHeader from '../../../../../views/components/PageHeader'
-import Information from './Information'
-import { ImportantDates } from './ImportantDates'
+import { Catalog } from './Catalog'
+import { Dates } from './Dates'
 import { DealsListWidget } from './Deals'
-import Names from './Names'
+import { Details } from './Details'
 import Tags from './Tags'
-import Details from './Details'
+import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
 import AddNote from './Add-Note'
 import Activities from './Activities'
@@ -154,7 +154,7 @@ class ContactProfile extends React.Component {
 
     const thirdColumn = (
       <ThirdColumn>
-        <ImportantDates contact={contact} />
+        <Dates contact={contact} />
         <DealsListWidget contactId={contact.id} />
       </ThirdColumn>
     )
@@ -166,15 +166,15 @@ class ContactProfile extends React.Component {
         <ColumnsContainer>
           <SideColumnWrapper>
             <div>
-              <Information contact={contact} />
+              <Catalog contact={contact} />
 
               <Tags contact={contact} />
 
-              <Details contact={contact} />
+              <ContactInfo contact={contact} />
 
               {hasAddress.length > 0 && <Addresses contact={contact} />}
 
-              <Names contact={contact} />
+              <Details contact={contact} />
 
               {hasAddress.length === 0 && <Addresses contact={contact} />}
             </div>

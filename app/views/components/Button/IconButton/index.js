@@ -8,20 +8,26 @@ import PropTypes from 'prop-types'
 import ShadowButton from '../ShadowButton'
 
 const propTypes = {
-  size: PropTypes.number
+  size: PropTypes.string
+}
+
+const defaultProps = {
+  size: '24px'
 }
 
 const IconButton = ShadowButton.extend`
   width: ${props => props.size};
-  width: ${props => props.size};
+  height: ${props => props.size};
   font-size: 0;
 
   > svg {
+    width: ${props => props.size};
+    height: ${props => props.size};
     fill: ${props => props.color};
   }
 
   ${props =>
-    !props.disabled &&
+    (!props.disabled || props.hoverColor) &&
     `&:hover {
       > svg {
         fill: ${props.hoverColor};
@@ -30,5 +36,6 @@ const IconButton = ShadowButton.extend`
 `
 
 IconButton.propTypes = propTypes
+IconButton.defaultProps = defaultProps
 
 export default IconButton

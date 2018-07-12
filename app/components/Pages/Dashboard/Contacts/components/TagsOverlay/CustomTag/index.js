@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Flex from 'styled-flex-component'
 import TagIcon from '../../../../../../../views/components/SvgIcons/Tag/TagIcon'
 
 const borderColor = (inputFocused, error) => {
@@ -13,7 +12,8 @@ const borderColor = (inputFocused, error) => {
 
   return '#d4dfe6'
 }
-export const CustomTagContainer = styled.form`
+
+const Container = styled.form`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,19 +25,6 @@ export const CustomTagContainer = styled.form`
     borderColor(inputFocused, error)};
 `
 
-const IconContainer = Flex.extend`
-  cursor: pointer;
-  margin-left: 1em;
-  svg {
-    height: 16px;
-    width: 16px;
-  }
-  :hover {
-    svg > path.svg-icon--close {
-      fill: #262626;
-    }
-  }
-`
 const Input = styled.input`
   width: 100%;
   margin-left: 12px;
@@ -95,14 +82,12 @@ export default class CustomTag extends React.Component {
     const { inputFocused, inputValue, error } = this.state
 
     return (
-      <CustomTagContainer
+      <Container
         inputFocused={inputFocused}
         onSubmit={this.onUpsert}
         error={error}
       >
-        <IconContainer center>
-          <TagIcon color="#263445" />
-        </IconContainer>
+        <TagIcon color="#263445" style={{ marginLeft: '1em' }} />
         <Input
           value={inputValue}
           type="text"
@@ -118,7 +103,7 @@ export default class CustomTag extends React.Component {
         >
           Add
         </AddButton>
-      </CustomTagContainer>
+      </Container>
     )
   }
 }

@@ -15,7 +15,6 @@ const propTypes = {
 }
 
 const defaultProps = {
-  width: 300,
   isOpen: false,
   showFooter: true,
   closeOnBackdropClick: true
@@ -28,7 +27,7 @@ const OverlayDrawer = ({
   closeOnBackdropClick,
   ...rest
 }) => (
-  <div>
+  <div style={{ position: 'relative' }}>
     <Content width={width} isOpen={isOpen}>
       {React.Children.map(children, child => React.cloneElement(child, rest))}
     </Content>
