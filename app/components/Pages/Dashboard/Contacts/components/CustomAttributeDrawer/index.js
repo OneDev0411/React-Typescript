@@ -18,12 +18,19 @@ const propTypes = { section: PropTypes.string.isRequired }
 
 class CustomAttributeDrawer extends React.Component {
   state = {
-    submitting: false
+    submitting: false,
+    initialValues: {
+      label: '',
+      section: this.props.section,
+      data_type: { title: '-Select-', value: '-Select-' },
+      labels: [''],
+      enum_values: ['']
+    }
   }
 
   onSubmit = async values => {
     try {
-      this.setState({ submitting: true })
+      this.setState({ submitting: true, initialValues: values })
 
       await this.props.dispatch(
         createAttributeDefinition(preSaveFormat(values))
@@ -49,13 +56,7 @@ class CustomAttributeDrawer extends React.Component {
   render() {
     return (
       <FinalFormDrawer
-        initialValues={{
-          label: '',
-          section: this.props.section,
-          data_type: { title: '-Select-', value: '-Select-' },
-          labels: [''],
-          enum_values: ['']
-        }}
+        initialValues={this.state.initialValues}
         isOpen={this.props.isOpen}
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
