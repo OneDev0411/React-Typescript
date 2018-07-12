@@ -18,7 +18,10 @@ import {
 } from '../../../../../../../../models/contacts/helpers'
 
 const AvatarUploader = props => (
-  <Uploader {...props} avatar={{ src: props.avatar }} />
+  <Uploader
+    {...props}
+    avatar={{ src: props.avatar, display_name: props.contact.display_name }}
+  />
 )
 
 function mapStateToProps(state, props) {
@@ -29,7 +32,10 @@ function mapStateToProps(state, props) {
 }
 
 export default compose(
-  connect(mapStateToProps, { upsertContactAttributes, deleteAttributes }),
+  connect(
+    mapStateToProps,
+    { upsertContactAttributes, deleteAttributes }
+  ),
   withState('isUploading', 'setUploading', false),
   withState('avatar', 'setAvatar', ({ contact }) =>
     getAttributeFromSummary(contact, 'profile_image_url')
