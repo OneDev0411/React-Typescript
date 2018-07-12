@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 
 import {
   upsertContactAttributes,
@@ -69,7 +70,14 @@ class SectionWithFields extends React.Component {
         )
       }
 
-      this.setState({ isSaving: false }, this.closeEditAttributeDrawer)
+      this.setState({ isSaving: false }, () => {
+        this.closeEditAttributeDrawer()
+        this.props.notify({
+          status: 'success',
+          dismissAfter: 4000,
+          message: `${this.props.section} updated.`
+        })
+      })
     } catch (error) {
       console.log(error)
       this.setState({ isSaving: false })
@@ -217,5 +225,5 @@ function mapStateToProps(state, props) {
 
 export default connect(
   mapStateToProps,
-  { upsertContactAttributes, deleteAttributes }
+  { upsertContactAttributes, deleteAttributes, notify }
 )(SectionWithFields)
