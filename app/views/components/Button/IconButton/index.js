@@ -8,7 +8,11 @@ import PropTypes from 'prop-types'
 import ShadowButton from '../ShadowButton'
 
 const propTypes = {
-  size: PropTypes.number
+  size: PropTypes.string
+}
+
+const defaultProps = {
+  size: '24px'
 }
 
 const IconButton = ShadowButton.extend`
@@ -32,5 +36,6 @@ const IconButton = ShadowButton.extend`
 `
 
 IconButton.propTypes = propTypes
+IconButton.defaultProps = defaultProps
 
 export default IconButton
