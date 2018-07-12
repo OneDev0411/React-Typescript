@@ -96,8 +96,11 @@ class SectionWithFields extends React.Component {
     }
   }
 
-  getModalFields = () => {
-    const emptyFields = this.props.sectionAttributesDef
+  filterHiddenFields = field =>
+    field.attribute_def.show && field.attribute_def.editable
+
+  getEmptyFields = () =>
+    this.props.sectionAttributesDef
       .filter(
         attribute_def =>
           !this.props.fields.some(
@@ -110,26 +113,24 @@ class SectionWithFields extends React.Component {
         [attribute_def.data_type]: ''
       }))
 
+  getModalFields = () => {
     const orderedFields = orderFields(
-      [...this.props.fields, ...emptyFields],
+      [...this.props.fields, ...this.getEmptyFields()],
       this.props.fieldsOrder
     )
 
-    return orderedFields.filter(
-      ({ attribute_def }) => attribute_def.show && attribute_def.editable
-    )
+    return orderedFields.filter(this.filterHiddenFields)
   }
 
   getSectionFields = () => {
-    const orderedFields = orderFields(this.props.fields, this.props.fieldsOrder)
+    const orderedFields = orderFields(
+      [...this.props.fields, ...this.getEmptyFields()],
+      this.props.fieldsOrder
+    )
 
-    const fields = orderedFields.map(field => {
+    const fields = orderedFields.filter(this.filterHiddenFields).map(field => {
       const { attribute_def } = field
       const value = field[attribute_def.data_type]
-
-      if (!value) {
-        return null
-      }
 
       let title = attribute_def.label
 
@@ -154,7 +155,7 @@ class SectionWithFields extends React.Component {
           key={`${field.id}_value`}
           style={{ color: '#17283a', marginBottom: '1em' }}
         >
-          {getFormater(field)(value)}
+          {value ? getFormater(field)(value) : '-'}
         </dd>
       ]
     })
@@ -173,6 +174,8 @@ class SectionWithFields extends React.Component {
     } = this.props
     const sectionTitle = this.props.title || this.props.section
     const sectionFields = this.getSectionFields()
+
+    console.log(sectionFields)
 
     return (
       <Section

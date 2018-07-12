@@ -16,12 +16,18 @@ export function orderFields(fields, orders) {
   })
 
   if (customAttributeList.length > 0) {
-    customAttributeList.reverse().forEach(field => {
-      orderedList.push({
-        ...field,
-        order: orderedList.length
+    customAttributeList
+      .sort(
+        (a, b) =>
+          a[a.attribute_def.data_type] - b[b.attribute_def.data_type] &&
+          a.attribute_def.label - b.attribute_def.label
+      )
+      .forEach(field => {
+        orderedList.push({
+          ...field,
+          order: orderedList.length
+        })
       })
-    })
   }
 
   return orderedList.sort((a, b) => a.order - b.order)
