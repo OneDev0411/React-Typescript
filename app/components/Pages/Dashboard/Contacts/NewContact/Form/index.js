@@ -19,14 +19,6 @@ import { Phones } from './Phones'
 
 import Alert from '../../..//Partials/Alert'
 
-const STAGE_OPTIONS = getDefaultOptions([
-  'General',
-  'Active',
-  'Past Client',
-  'Qualified Lead',
-  'Unqualified Lead'
-])
-
 const INITIAL_VALUES = {
   stage: { title: 'General', value: 'General' },
   email: [{ label: { title: 'Personal Email', value: 'Personal' } }],
@@ -132,13 +124,13 @@ class NewContactForm extends Component {
     }
   }
 
-  titleOptions = () => {
-    const titleAttribute = selectDefinitionByName(
+  getDefaultValues = attributeName => {
+    const attribute = selectDefinitionByName(
       this.props.attributeDefs,
-      'title'
+      attributeName
     )
 
-    return (titleAttribute && titleAttribute.enum_values) || []
+    return (attribute && attribute.enum_values) || []
   }
 
   render() {
@@ -162,7 +154,7 @@ class NewContactForm extends Component {
               <div>
                 <Field
                   component={Autocomplete}
-                  items={this.titleOptions()}
+                  items={this.getDefaultValues('title')}
                   name="title"
                   title="Title"
                   placeholder="Title"
@@ -185,7 +177,7 @@ class NewContactForm extends Component {
                 <Emails mutators={form.mutators} />
                 <Phones mutators={form.mutators} />
                 <Field
-                  defaultOptions={STAGE_OPTIONS}
+                  defaultOptions={this.getDefaultValues('stage')}
                   component={Select}
                   name="stage"
                   title="Stage"
