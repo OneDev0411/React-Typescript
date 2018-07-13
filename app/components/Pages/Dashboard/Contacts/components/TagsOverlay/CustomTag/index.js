@@ -66,12 +66,14 @@ const AddButton = styled.button`
   }
 `
 export default class CustomTag extends React.Component {
-  state = { inputFocused: false, inputValue: '', error: false }
+  state = { inputFocused: false, error: false }
 
-  static getDerivedStateFromProps(props) {
-    if (!props.isOpen) {
-      return { inputValue: '' }
-    }
+  shouldComponentUpdate(nextProps, nextStates) {
+    return (
+      nextStates.inputFocused !== this.state.inputFocused ||
+      nextStates.error !== this.state.error ||
+      nextProps.inputValue !== this.props.inputValue
+    )
   }
 
   onFocus = () => {
@@ -84,27 +86,20 @@ export default class CustomTag extends React.Component {
   onChange = event => {
     const inputValue = event.target.value
 
-    this.setState({ inputValue, error: inputValue.length > 28 })
-  }
-
-  onUpsert = event => {
-    const { inputValue } = this.state
-
-    event.preventDefault()
-
-    if (inputValue) {
-      this.props.onUpsert(inputValue)
-      this.setState({ inputValue: '' })
-    }
+    this.props.newTagChange(inputValue)
+    this.setState({ error: inputValue.length > 28 })
   }
 
   render() {
-    const { inputFocused, inputValue, error } = this.state
+    console.log('render')
+
+    const { inputFocused, error } = this.state
+    const { inputValue } = this.props
 
     return (
       <CustomTagContainer
         inputFocused={inputFocused}
-        onSubmit={this.onUpsert}
+        onSubmit={this.props.onUpsert}
         error={error}
       >
         <IconContainer center>

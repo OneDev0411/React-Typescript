@@ -48,7 +48,8 @@ class TagsOverlay extends React.Component {
 
     this.state = {
       tags: this.getCommonTags(selectedContactsIds, list, existingTags),
-      isSubmitting: false
+      isSubmitting: false,
+      newTagValue: ''
     }
   }
 
@@ -67,6 +68,10 @@ class TagsOverlay extends React.Component {
     if (!_.isEqual(newTags, oldTags) || !nextProps.isOpen) {
       this.setState({ tags: newTags })
     }
+
+    if (!nextProps.isOpen) {
+      this.setState({ newTagValue: '' })
+    }
   }
 
   shouldComponentUpdate(nextProps, nextSate) {
@@ -84,23 +89,30 @@ class TagsOverlay extends React.Component {
     tags[tagIndex] = newTag
     this.setState({ tags })
   }
+  newTagChange = newTagValue => this.setState({ newTagValue })
 
-  onUpsert = newTag => {
-    const { tags } = this.state
-    const tagIndex = tags.findIndex(tag => tag.text === newTag)
+  onUpsert = event => {
+    event.preventDefault()
+
+    const { tags, newTagValue } = this.state
+    const tagIndex = tags.findIndex(tag => tag.text === newTagValue)
 
     if (tagIndex > -1) {
       this.onTagSelectionChange(tagIndex, true)
+      this.setState({
+        newTagValue: ''
+      })
     } else {
       const { attributeDefs } = this.props
       const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
 
       this.setState({
         tags: tags.concat({
-          [attribute_def.data_type]: newTag,
+          [attribute_def.data_type]: newTagValue,
           attribute_def: attribute_def.id,
           isSelected: true
-        })
+        }),
+        newTagValue: ''
       })
     }
   }
@@ -215,7 +227,7 @@ class TagsOverlay extends React.Component {
 
   render() {
     const { closeOverlay, selectedContactsIds, list, isOpen } = this.props
-    const { tags, isSubmitting } = this.state
+    const { tags, isSubmitting, newTagValue } = this.state
     const { attributeDefs } = this.props
     const { data_type: tagDataType } =
       selectDefinitionByName(attributeDefs, 'tag') || {}
@@ -239,7 +251,11 @@ class TagsOverlay extends React.Component {
         <OverlayDrawer.Body>
           <SubHeaderContainer>
             <Info />
-            <CustomTag isOpen={isOpen} onUpsert={this.onUpsert} />
+            <CustomTag
+              onUpsert={this.onUpsert}
+              newTagChange={this.newTagChange}
+              inputValue={newTagValue}
+            />
           </SubHeaderContainer>
           <Tags
             tags={tags}
