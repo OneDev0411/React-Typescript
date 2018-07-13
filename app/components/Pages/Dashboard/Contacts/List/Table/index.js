@@ -11,12 +11,17 @@ import DropDown from './columns/Dropdown'
 import TagsString from './columns/Tags'
 import Name from './columns/Name'
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
+import TagsOverlay from '../../components/TagsOverlay'
 
 function openContact(id) {
   goTo(`/dashboard/contacts/${id}`, 'All Contacts')
 }
 
 class ContactsList extends React.Component {
+  state = { selectedTagContact: [] }
+  onSelectTagContact = selectedTagContact =>
+    this.setState({ selectedTagContact: [selectedTagContact] })
+  closeTagsOverlay = () => this.setState({ selectedTagContact: [] })
   getCellTitle = title => (
     <Fragment>
       {title}
@@ -72,7 +77,12 @@ class ContactsList extends React.Component {
     {
       Header: this.getCellTitle('TAGS'),
       id: 'tag',
-      Cell: ({ original: contact }) => <TagsString contact={contact} />
+      Cell: ({ original: contact }) => (
+        <TagsString
+          contact={contact}
+          onSelectTagContact={this.onSelectTagContact}
+        />
+      )
     },
     {
       id: 'td-delete',
@@ -133,7 +143,11 @@ class ContactsList extends React.Component {
             }
           }}
         />
-
+        <TagsOverlay
+          selectedContactsIds={this.state.selectedTagContact}
+          isOpen={this.state.selectedTagContact.length > 0}
+          closeOverlay={this.closeTagsOverlay}
+        />
         {!loading &&
           this.props.pages > 1 &&
           this.props.data.length > 0 && (
