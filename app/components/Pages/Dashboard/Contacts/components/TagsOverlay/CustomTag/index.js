@@ -91,8 +91,6 @@ export default class CustomTag extends React.Component {
   }
 
   render() {
-    console.log('render')
-
     const { inputFocused, error } = this.state
     const { inputValue } = this.props
 

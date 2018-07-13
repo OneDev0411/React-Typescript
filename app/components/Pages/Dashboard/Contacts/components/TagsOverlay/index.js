@@ -28,6 +28,7 @@ import {
 } from '../../../../../../reducers/contacts/list'
 import intersectionBy from 'lodash/intersectionBy'
 import { selectTags } from '../../../../../../reducers/contacts/tags'
+import { confirmation } from '../../../../../../store_actions/confirmation'
 
 const defaultTags = [
   'Seller',
@@ -118,10 +119,19 @@ class TagsOverlay extends React.Component {
   }
 
   onSubmit = async () => {
-    const { isSubmitting } = this.state
+    const { isSubmitting, newTagValue } = this.state
 
     if (isSubmitting) {
       return
+    }
+
+    if (/\S/.test(newTagValue)) {
+      return this.props.confirmation({
+        description:
+          'We noticed you have un-added tag. Please select the \'Add\' link before saving',
+        hideCancelButton: true,
+        confirmLabel: 'Ok'
+      })
     }
 
     const { closeOverlay } = this.props
@@ -293,6 +303,7 @@ export default connect(
     addAttributes,
     deleteAttributes,
     getContacts,
-    getContactsTags
+    getContactsTags,
+    confirmation
   }
 )(TagsOverlay)
