@@ -1,9 +1,7 @@
 .template-thumbnail {
   border: 1px solid #eee;
   overflow: hidden;
-
-  &:hover {
-    background: #eee;
-    cursor: pointer;
-  }
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: contain;
 }

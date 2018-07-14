@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { showAttachments } from '../../../../../../store_actions/deals'
+import { showAttachments, showTemplates } from '../../../../../../store_actions/deals'
 import DealEmail from '../../dashboard/deal-email'
 import PageHeader from '../../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
@@ -46,6 +46,14 @@ class Header extends React.Component {
           >
             Get Signatures
           </ActionButton>
+
+          <ActionButton
+            inverse
+            style={buttonStyle}
+            onClick={() => this.props.showTemplates(true)}
+          >
+            Promote
+          </ActionButton>
         </PageHeader.Menu>
       </PageHeader>
     )
@@ -56,5 +64,5 @@ export default connect(
   ({ deals }) => ({
     isBackOffice: deals.backoffice
   }),
-  { showAttachments }
+{ showAttachments, showTemplates }
 )(Header)

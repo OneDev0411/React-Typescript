@@ -1,38 +1,47 @@
 import React from 'react'
 import './style.scss'
+import superagent from 'superagent'
 
 class TemplateBuilder extends React.Component {
   constructor(props) {
     super(props)
 
-    this.svg = React.createRef()
-
-    this.originalWidth = 1000
-    this.originalHeight = 1000
+    this.el = React.createRef()
   }
 
   componentDidMount() {
-    const svg = this.svg.current
-
-    window.svg = svg
-
-    this.resize()
+    this.load()
   }
 
-  resize() {
-    const { width, height } = this.props // Target sizes
+  async load() {
+    const res = await superagent
+    .post('http://localhost:3000/screenshot')
+    .responseType('blob')
+    .send({
+      html: this.props.template.template,
+      viewport: {
+        width: 600,
+        height: 300
+      },
+      width: this.props.width,
+      height: this.props.height
+    })
 
-    const scale = width / this.originalWidth
 
-    this.svg.current.style.transform = `scale(${scale})`
-    this.svg.current.style.transformOrigin = 'top left'
+    const reader  = new FileReader()
+    reader.addEventListener('load', () => {
+      this.el.current.style.backgroundImage = `url(${reader.result})`
+    })
+
+    reader.readAsDataURL(res.body)
+  }
+
+  onClick() {
+    this.props.onClick()
   }
 
   render() {
-    const { template, width, height } = this.props
-    const markup = {
-      __html: template
-    }
+    const { width, height } = this.props
 
     const style = {
       width,
@@ -40,16 +49,12 @@ class TemplateBuilder extends React.Component {
     }
 
     return (
-      <div className="template-thumbnail" style={ style }>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          ref={ this.svg }
-          width={ this.originalWidth }
-          height={ this.originalHeight }
-        >
-          <foreignObject width="100%" height="100%" dangerouslySetInnerHTML={ markup } />
-        </svg>
-      </div>
+      <div
+        className="template-thumbnail"
+        onClick={ this.onClick.bind(this) }
+        style={ style }
+        ref={ this.el }
+      />
     )
   }
 }

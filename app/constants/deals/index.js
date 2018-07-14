@@ -10,6 +10,7 @@ import agent from './agent'
 import role from './role'
 import context from './context'
 import error from './error'
+import templates from './templates'
 
 const ActionTypes = {}
 
@@ -25,7 +26,8 @@ new Array(
   ...agent,
   ...context,
   ...role,
-  ...error
+  ...error,
+  ...templates
 )
 .forEach(action => {
   ActionTypes[action] = `DEALS___${action}`

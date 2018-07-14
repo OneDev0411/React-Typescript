@@ -14,24 +14,50 @@ class TemplateBuilder extends React.Component {
   }
 
   componentDidMount() {
-    const { template } = this.props
+    const { template, assets } = this.props
 
     this.editor = grapesjs.init({
       container : '#canvas',
       components: template,
       panels: config,
+      assetManager: {
+        assets
+      },
       styleManager,
-//       deviceManager: {
-//         devices: [],
-//         deviceLabel: 'Foo'
-//       }
+      storageManager: {
+        autoload: 0
+      },
+      showDevices: false
     })
 
-    this.setup()
+    this.editor.on('load', this.setup.bind(this))
+  }
+
+  onClose() {
+    this.props.onClose()
+  }
+
+  addButtons() {
+    this.addCloseButton()
   }
 
   setup() {
+    this.addButtons()
+  }
 
+  addCloseButton() {
+    const command = {
+      id: 'close-builder',
+      run: this.onClose.bind(this)
+    }
+
+    const button = {
+      id: 'close-builder',
+      className: 'fa fa-close',
+      command: command,
+    }
+
+    this.editor.Panels.addButton('views', button)
   }
 
   render() {
