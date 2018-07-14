@@ -3,23 +3,26 @@ import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import 'styles/components/modules/template-builder.scss'
 import config from './config'
-// import './inline-asset-manager'
+import Picker from './Picker'
 
 class TemplateBuilder extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {}
+    this.state = {
+      template: null
+    }
+
     this.editor = null
   }
 
   componentDidMount() {
-    const { template, assets } = this.props
+    const { assets } = this.props
 
     this.editor = grapesjs.init({
       ...config,
       container : '#canvas',
-      components: template,
+      components: null,
       assetManager: {
         assets
       },
@@ -59,10 +62,21 @@ class TemplateBuilder extends React.Component {
     this.editor.Panels.addButton('views', button)
   }
 
+  templatePicked(template) {
+    console.log(this.editor)
+  }
+
   render() {
+    const { templates } = this.props
     return (
       <div className="template-builder">
-        <div id="canvas" />
+        <Picker
+          templates={ templates }
+          picked={ this.templatePicked.bind(this) }
+        />
+        <div className="wrapper">
+          <div id="canvas" />
+        </div>
       </div>
     )
   }

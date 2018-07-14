@@ -23,8 +23,6 @@ class Templates extends React.Component {
     this.state = {
       templates: [],
       is_loading: true,
-      showBuilder: false,
-      selectedTemplate: null,
       listing: null
     }
   }
@@ -41,92 +39,36 @@ class Templates extends React.Component {
 
     const templates = await Template.getAll()
 
+    templates.forEach(template => {
+      template.template = nunjucks.renderString(template.template, {
+        listing
+      })
+    })
+
     this.setState({
       is_loading: false,
       templates
     })
   }
 
-  templateClicked(template) {
-    this.setState({
-      showBuilder: true,
-      selectedTemplate: template
-    })
-  }
-
   builderClosed() {
     this.setState({
-      showBuilder: false,
       selectedTemplate: null
     })
   }
 
-  body() {
-    const { deal } = this.props
-
-    if (this.state.is_loading)
-      return (
-        <div className="loading">
-          <i className="fa fa-spin fa-spinner fa-3x" />
-        </div>
-      )
-
-    const { listing } = this.state
-
-    const thumbnails = this.state.templates.map(template => {
-      const rendered = nunjucks.renderString(template.template, {
-        listing
-      })
-
-      console.log(rendered)
-
-      template.template = rendered
-
-      return (
-        <TemplateThumbnail
-          key={ template.id }
-          template={ template }
-          width={ 200 }
-          height={ 100 }
-          onClick={ this.templateClicked.bind(this, template) }
-        />
-      )
-    })
-
-    return (
-      <div>
-        {thumbnails}
-      </div>
-    )
-  }
-
   render() {
-    const { templates } = this.props
-    const { showBuilder, selectedTemplate, listing } = this.state
+    const { listing, is_loading, templates } = this.state
 
-    if (showBuilder)
-      return (
-        <TemplateBuilder
-          template={ selectedTemplate.template }
-          onClose={ this.builderClosed.bind(this) }
-          assets={ listing.gallery_image_urls }
-        />
-      )
+    if (is_loading)
+      return null
 
     return (
-      <Modal
-        isOpen={ templates.showTemplates }
-        handleOnClose={ this.onClose }
-      >
-        <Modal.Header
-          title="Pick a Template"
-          handleOnClose={this.onClose}
-        />
-
-        <Modal.Body className="modal-body">
-          {this.body()}
-        </Modal.Body>
-      </Modal>
+      <TemplateBuilder
+        templates={ templates }
+        onClose={ this.builderClosed.bind(this) }
+        assets={ listing.gallery_image_urls }
+      />
     )
   }
 }

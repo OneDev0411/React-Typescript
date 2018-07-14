@@ -6,15 +6,31 @@
   height: 100%;
   z-index: 100;
 
+  .template-picker {
+    width: 20%;
+    height: 100%;
+    float: left;
+    background: white;
+  }
+
+  .wrapper {
+    width: 80%;
+    float: left;
+  }
+
   .gjs-clm-tags {
     display: none;
   }
-}
 
-.gjs-one-bg, .gjs-three-bg {
-  background: #e7e7e7;
-}
+  .gjs-one-bg, .gjs-three-bg {
+    background: #e7e7e7;
+  }
 
-.gjs-two-color, .gjs-color-warn, .gjs-four-color, .gjs-color-main, .gjs-color-contrast {
-  color: black;
+  .gjs-two-color, .gjs-color-warn, .gjs-four-color, .gjs-color-main, .gjs-color-contrast {
+    color: black;
+  }
+
+  .gjs-toolbar {
+    display: none
+  }
 }
