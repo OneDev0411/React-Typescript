@@ -93,13 +93,10 @@ class Mapper extends React.Component {
       let index = 0
 
       if (isAddressField(this.props.attributeDefs, attribute.id)) {
-        index = Math.max(
-          0,
-          _.filter(
-            mappedFields,
-            ({ definitionId }) => definitionId === attribute.id
-          ).length - 1
-        )
+        index = _.filter(
+          mappedFields,
+          ({ definitionId }) => definitionId === attribute.id
+        ).length
       }
 
       mappedFields[columnName] = {
