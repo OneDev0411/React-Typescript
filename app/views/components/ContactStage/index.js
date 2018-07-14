@@ -11,45 +11,44 @@ const defaultSelectedItem = { label: 'General', value: 'General' }
 
 class Stage extends React.Component {
   state = {
-    isSaving: false,
-    selectedItem: getInitialSelectedItem(
-      this.props.contact,
-      this.props.attribute_def
-    )
+    isSaving: false
   }
 
-  handleOnChange = async selectedItem => {
+  prepareStageAttribute = text => {
+    const is_primary = true
     const { contact, attribute_def } = this.props
+    let stage = getContactAttribute(contact, attribute_def)
 
-    try {
-      this.setState({ isSaving: true, selectedItem })
-
-      const { value: text } = selectedItem
-      const is_primary = true
-      let stage = getContactAttribute(contact, attribute_def)
-
-      if (stage.length > 0 && stage[0].id) {
-        stage = {
-          text,
-          is_primary,
-          id: stage[0].id
-        }
-      } else {
-        stage = {
-          text,
-          is_primary,
-          attribute_def
-        }
+    if (stage.length > 0 && stage[0].id) {
+      stage = {
+        text,
+        is_primary,
+        id: stage[0].id
       }
+    } else {
+      stage = {
+        text,
+        is_primary,
+        attribute_def
+      }
+    }
 
-      await this.props.upsertContactAttributes(this.props.contact.id, [stage])
+    return stage
+  }
+
+  handleOnChange = async ({ value }) => {
+    try {
+      this.setState({ isSaving: true })
+
+      await this.props.upsertContactAttributes(this.props.contact.id, [
+        this.prepareStageAttribute(value)
+      ])
 
       this.setState({ isSaving: false })
     } catch (error) {
       console.error(error)
       this.setState({
-        isSaving: false,
-        selectedItem: getInitialSelectedItem(contact, attribute_def)
+        isSaving: false
       })
     }
   }
@@ -65,7 +64,10 @@ class Stage extends React.Component {
         items={getItems(this.props.attribute_def.enum_values)}
         itemToString={this.itemToString}
         onChange={this.handleOnChange}
-        selectedItem={this.state.selectedItem}
+        defaultSelectedItem={getInitialSelectedItem(
+          this.props.contact,
+          this.props.attribute_def
+        )}
         style={this.props.style}
       />
     )
