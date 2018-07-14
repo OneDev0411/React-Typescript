@@ -10,7 +10,7 @@ TagsList.propTypes = {
 
 export function TagsList(props) {
   return (
-    <Flex wrap>
+    <Flex wrap="true">
       {props.tags.map(tag => <Tag key={`tag_${tag.id}`} text={tag.text} />)}
     </Flex>
   )
