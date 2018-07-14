@@ -172,7 +172,6 @@ class FieldDropDown extends React.Component {
         <CustomAttributeDrawer
           isOpen={this.state.isDrawerOpen}
           onClose={this.toggleOpenDrawer}
-          section=""
         />
       </div>
     )
