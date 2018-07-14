@@ -10,7 +10,7 @@ import { selectDefinitionByName } from '../../../../../reducers/contacts/attribu
 
 import { Container } from '../components/Container'
 import PageHeader from '../../../../../views/components/PageHeader'
-import { Catalog } from './Catalog'
+import Catalog from './Catalog'
 import { Dates } from './Dates'
 import { DealsListWidget } from './Deals'
 import { Details } from './Details'

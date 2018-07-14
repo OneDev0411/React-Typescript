@@ -175,8 +175,6 @@ class SectionWithFields extends React.Component {
     const sectionTitle = this.props.title || this.props.section
     const sectionFields = this.getSectionFields()
 
-    console.log(sectionFields)
-
     return (
       <Section
         title={sectionTitle}

@@ -25,7 +25,7 @@ import Tooltip from '../../../../../../views/components/tooltip'
 
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
-export class Catalog extends React.Component {
+class Catalog extends React.Component {
   state = {
     isDeleting: false,
     isCreatingRoom: false
@@ -42,15 +42,12 @@ export class Catalog extends React.Component {
   }
 
   handleDeleteContact = async () => {
-    const { contact, deleteContacts } = this.props
-    const { id: contactId } = contact
-
     this.setState({
       isDeleting: true
     })
 
     try {
-      await deleteContacts([contactId])
+      await this.props.deleteContacts([this.props.contact.id])
 
       browserHistory.push('/dashboard/contacts')
     } catch (error) {
@@ -63,15 +60,13 @@ export class Catalog extends React.Component {
   }
 
   handleOnClickChat = async () => {
-    const { createRoom } = this.props
-
     try {
       this.setState({
         isCreatingRoom: true
       })
 
       const recipients = this.getRecipients()
-      const room = await createRoom(recipients)
+      const room = await this.props.createRoom(recipients)
 
       this.setState(
         {
@@ -89,12 +84,18 @@ export class Catalog extends React.Component {
   }
 
   getRecipients = () => {
-    const { user, contact } = this.props
+    const { contact } = this.props
 
-    const { email: userEmail, phone_number: userPhone, id: userId } = user
+    const {
+      email: userEmail,
+      phone_number: userPhone,
+      id: userId
+    } = this.props.user
+
     const {
       summary: { email: contactEmail, phone_number: contactPhone }
     } = contact
+
     const contactUsersId = getContactUsers(contact).map(user => user.id)
 
     const users = [userId, ...contactUsersId].filter(i => i)
@@ -122,11 +123,10 @@ export class Catalog extends React.Component {
   }
 
   render() {
-    const { isCreatingRoom, isDeleting } = this.state
     const { contact } = this.props
     const lastSeen = getContactOnlineMeta(contact)
 
-    if (isDeleting) {
+    if (this.state.isDeleting) {
       return <DeletingMessage />
     }
 
@@ -162,13 +162,13 @@ export class Catalog extends React.Component {
           />
           {this.shouldShowChatButton(contact) && (
             <ActionButton
-              disabled={isCreatingRoom}
+              disabled={this.state.isCreatingRoom}
               onClick={this.handleOnClickChat}
               style={{
                 marginLeft: '1em'
               }}
             >
-              {isCreatingRoom ? 'Connecting...' : 'Chat'}
+              {this.state.isCreatingRoom ? 'Connecting...' : 'Chat'}
             </ActionButton>
           )}
         </Flex>
