@@ -60,6 +60,9 @@ class Templates extends React.Component {
   render() {
     const { listing, is_loading, templates } = this.state
 
+    if (!this.props.templates.showTemplates)
+      return null
+
     if (is_loading)
       return null
 

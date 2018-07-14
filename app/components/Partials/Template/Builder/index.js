@@ -63,7 +63,7 @@ class TemplateBuilder extends React.Component {
   }
 
   templatePicked(template) {
-    console.log(this.editor)
+    this.editor.setComponents(template.template)
   }
 
   render() {
