@@ -3,7 +3,7 @@ import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import 'styles/components/modules/template-builder.scss'
 import config from './config'
-import './inline-asset-manager'
+// import './inline-asset-manager'
 
 class TemplateBuilder extends React.Component {
   constructor(props) {
