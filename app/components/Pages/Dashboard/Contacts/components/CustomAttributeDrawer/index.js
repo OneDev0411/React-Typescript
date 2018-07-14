@@ -14,15 +14,17 @@ import { createAttributeDefinition } from '../../../../../../store_actions/conta
 import { preSaveFormat, validate } from './helpers'
 import { TipsBanner } from './TipsBanner'
 
-const propTypes = { section: PropTypes.string.isRequired }
+const propTypes = { section: PropTypes.string }
+
+const defaultSelectedItem = { title: '-Select-', value: '-Select-' }
 
 class CustomAttributeDrawer extends React.Component {
   state = {
     submitting: false,
     initialValues: {
       label: '',
-      section: this.props.section,
-      data_type: { title: '-Select-', value: '-Select-' },
+      section: this.props.section || defaultSelectedItem,
+      data_type: defaultSelectedItem,
       labels: [''],
       enum_values: ['']
     }
@@ -88,6 +90,32 @@ class CustomAttributeDrawer extends React.Component {
               name="data_type"
               required
             />
+
+            {!this.props.section && (
+              <Select
+                items={[
+                  {
+                    title: 'Contact Info',
+                    value: 'Contact Info'
+                  },
+                  {
+                    title: 'Details',
+                    value: 'Details'
+                  },
+                  {
+                    title: 'Dates',
+                    value: 'Dates'
+                  },
+                  {
+                    title: 'Addresses',
+                    value: 'Addresses'
+                  }
+                ]}
+                label="Section"
+                name="section"
+                required
+              />
+            )}
 
             {values.data_type.value !== '-Select-' && (
               <TextFieldArray
