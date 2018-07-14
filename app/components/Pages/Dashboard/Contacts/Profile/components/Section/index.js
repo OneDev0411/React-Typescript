@@ -7,6 +7,7 @@ import EditIcon from '../../../../../../../views/components/SvgIcons/Edit/EditIc
 import AddIcon from '../../../../../../../views/components/SvgIcons/Add/AddIcon'
 
 import { Container, Header, Title, Body } from './styled'
+import Tooltip from '../../../../../../../views/components/tooltip'
 
 Section.propTypes = {
   onAdd: PropTypes.func,
@@ -22,18 +23,25 @@ export function Section(props) {
           <Title>{props.title}</Title>
           <Flex alignCenter>
             {typeof props.onAdd === 'function' && (
-              <IconButton onClick={props.onAdd}>
-                <AddIcon
-                  style={{ fill: '#2196f3', width: '20px', height: '20px' }}
-                />
-              </IconButton>
+              <Tooltip caption="Add a custom field">
+                <IconButton onClick={props.onAdd}>
+                  <AddIcon
+                    style={{ fill: '#2196f3', width: '20px', height: '20px' }}
+                  />
+                </IconButton>
+              </Tooltip>
             )}
             {typeof props.onEdit === 'function' && (
-              <IconButton onClick={props.onEdit} style={{ marginLeft: '1rem' }}>
-                <EditIcon
-                  style={{ fill: '#2196f3', width: '16px', height: '16px' }}
-                />
-              </IconButton>
+              <Tooltip caption={`Edit ${props.title.toLowerCase()}`}>
+                <IconButton
+                  onClick={props.onEdit}
+                  style={{ marginLeft: '1rem' }}
+                >
+                  <EditIcon
+                    style={{ fill: '#2196f3', width: '16px', height: '16px' }}
+                  />
+                </IconButton>
+              </Tooltip>
             )}
           </Flex>
         </Header>
