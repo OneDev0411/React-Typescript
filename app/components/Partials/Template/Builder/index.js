@@ -3,7 +3,7 @@ import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import 'styles/components/modules/template-builder.scss'
 import config from './config'
-import styleManager from './styles.js'
+import './inline-asset-manager'
 
 class TemplateBuilder extends React.Component {
   constructor(props) {
@@ -17,13 +17,12 @@ class TemplateBuilder extends React.Component {
     const { template, assets } = this.props
 
     this.editor = grapesjs.init({
+      ...config,
       container : '#canvas',
       components: template,
-      panels: config,
       assetManager: {
         assets
       },
-      styleManager,
       storageManager: {
         autoload: 0
       },
