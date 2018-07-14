@@ -52,9 +52,7 @@ class Templates extends React.Component {
   }
 
   builderClosed() {
-    this.setState({
-      selectedTemplate: null
-    })
+    this.props.showTemplates(false)
   }
 
   render() {
