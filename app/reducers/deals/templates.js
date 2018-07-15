@@ -1,4 +1,4 @@
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 
 const initialState = {
   showTemplates: false,
@@ -7,13 +7,13 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.SHOW_TEMPLATES:
+    case actionTypes.SHOW_TEMPLATES:
       return {
         ...state,
         showTemplates: action.display
       }
 
-    case types.SHOW_BUILDER:
+    case actionTypes.SHOW_BUILDER:
       return {
         ...state,
         showBuilder: action.display

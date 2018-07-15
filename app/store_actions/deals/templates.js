@@ -1,15 +1,15 @@
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 
 export function showTemplates(display = true) {
   return {
-    type: types.SHOW_TEMPLATES,
+    type: actionTypes.SHOW_TEMPLATES,
     display
   }
 }
 
 export function showBuilder(display = true) {
   return {
-    type: types.SHOW_BUILDER,
+    type: actionTypes.SHOW_BUILDER,
     display
   }
 }
