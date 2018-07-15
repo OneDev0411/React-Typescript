@@ -4,6 +4,7 @@ import 'grapesjs/dist/css/grapes.min.css'
 import 'styles/components/modules/template-builder.scss'
 import config from './config'
 import Picker from './Picker'
+import './asset-manager'
 
 class TemplateBuilder extends React.Component {
   constructor(props) {
@@ -29,7 +30,8 @@ class TemplateBuilder extends React.Component {
       storageManager: {
         autoload: 0
       },
-      showDevices: false
+      showDevices: false,
+      plugins: ['asset-blocks']
     })
 
     this.editor.on('load', this.setup.bind(this))
