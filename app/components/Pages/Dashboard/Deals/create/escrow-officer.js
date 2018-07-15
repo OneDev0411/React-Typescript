@@ -10,7 +10,11 @@ export default ({
   onRemoveEscrowOfficer,
   onUpsertEscrowOfficer
 }) => {
-  const allowedRoles = ['Title'] // Title == Escrow Officer
+  const sharedProps = {
+    roleType: 'title',
+    allowedRoles: ['Title'],
+    onUpsertUser: onUpsertEscrowOfficer
+  }
 
   return (
     <div className="form-section deal-people deal-client">
@@ -25,18 +29,16 @@ export default ({
           <CrudRole
             key={id}
             user={agent}
-            allowedRoles={allowedRoles}
             modalTitle="Update Escrow Officer"
             onRemoveUser={onRemoveEscrowOfficer}
-            onUpsertUser={onUpsertEscrowOfficer}
+            {...sharedProps}
           />
         ))}
 
         <CrudRole
           modalTitle="Add Escrow Officer"
           ctaTitle="Add Escrow Officer"
-          allowedRoles={allowedRoles}
-          onUpsertUser={onUpsertEscrowOfficer}
+          {...sharedProps}
         />
       </div>
     </div>

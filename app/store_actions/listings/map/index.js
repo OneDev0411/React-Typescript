@@ -3,12 +3,12 @@ import { isAutoMove } from '../../../reducers/listings/map'
 import { getFetchingStatus } from '../../../reducers/listings'
 
 export const setOffMapAutoMove = () => ({
-  tabName: 'SEARCH',
+  tabName: 'search',
   type: types.SET_OFF_MAP_AUTO_MOVE
 })
 
 export const setOnMapAutoMove = () => ({
-  tabName: 'SEARCH',
+  tabName: 'search',
   type: types.SET_ON_MAP_AUTO_MOVE
 })
 
@@ -37,5 +37,5 @@ export const goToPlace = mapProps => (dispatch, getState) => {
   }
 
   dispatch(setOnMapAutoMove())
-  dispatch(setMapProps('SEARCH', mapProps))
+  dispatch(setMapProps('search', mapProps))
 }

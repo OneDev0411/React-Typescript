@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import Select from 'react-select'
-import cn from 'classnames'
 import _ from 'underscore'
+
+import DropDown from '../components/DropDown'
 import { isAddressField } from '../helpers/address'
 
 /**
@@ -66,9 +66,7 @@ const FieldLabel = ({
 }) => {
   const { definitionId, index, label: selectedLabel } = mappedFields[columnName]
 
-  const handleChangeValue = data => {
-    const value = data ? data.value : null
-
+  const handleChangeValue = value => {
     if (value !== selectedLabel) {
       onChange(fieldName, value)
     }
@@ -82,13 +80,18 @@ const FieldLabel = ({
     index
   )
 
+  const selectedField = {
+    value: selectedLabel,
+    label: selectedLabel
+  }
+
   return (
-    <Select
-      name="form-field-label"
-      placeholder="Select Label"
-      value={selectedLabel}
-      onChange={handleChangeValue}
+    <DropDown
       options={options}
+      selectedField={selectedField}
+      showSearchInput={false}
+      onChange={handleChangeValue}
+      contentStyle={{ height: '170px' }}
     />
   )
 }

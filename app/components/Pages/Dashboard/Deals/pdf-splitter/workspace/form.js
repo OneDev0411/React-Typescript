@@ -15,7 +15,7 @@ import {
   setSplitterUsedPages,
   changeNeedsAttention,
   uploadStashFile,
-  taskFileCreated
+  addTaskFile
 } from '../../../../../../store_actions/deals'
 
 class WorkspaceForm extends React.Component {
@@ -58,12 +58,7 @@ class WorkspaceForm extends React.Component {
 
     console.log(`Start Splitting, Attempt ${this.saveAttempts + 1}`)
 
-    const {
-      notify,
-      splitter,
-      taskFileCreated,
-      changeNeedsAttention
-    } = this.props
+    const { notify, splitter, addTaskFile, changeNeedsAttention } = this.props
     const { pages } = splitter
     let fileCreated = false
 
@@ -91,7 +86,7 @@ class WorkspaceForm extends React.Component {
       )
 
       // add files to attachments list
-      taskFileCreated(task.id, file)
+      addTaskFile(task.id, file)
 
       if (notifyOffice) {
         changeNeedsAttention(task.deal, task.id, true)
@@ -369,6 +364,6 @@ export default connect(mapStateToProps, {
   resetSplitterSelectedPages,
   setSplitterUsedPages,
   changeNeedsAttention,
-  taskFileCreated,
+  addTaskFile,
   uploadStashFile
 })(WorkspaceForm)

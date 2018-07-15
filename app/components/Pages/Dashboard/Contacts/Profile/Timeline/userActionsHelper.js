@@ -1,5 +1,3 @@
-import Contact from '../../../../../../models/contacts'
-
 function getListingTitle(activity) {
   const { type } = activity.object
   let listing
@@ -173,27 +171,27 @@ export function UserSignedUp(activity, name) {
   }
 }
 
-export function UserCreatedContact(activity) {
-  const sourceType = Contact.get.source(activity.object).name
-  let title = 'Contact created'
+// export function UserCreatedContact(activity) {
+//   const sourceType = Contact.get.source(activity.object).name
+//   let title = 'Contact created'
 
-  switch (sourceType) {
-    case 'BrokerageWidget':
-      title += ' from brokerage widget'
-      break
-    case 'IOSAddressBook':
-      title += ' from your address book'
-      break
-    case 'SharesRoom':
-      title += ' because you shared a room with this user'
-      break
-    case 'ExplicitlyCreated':
-      title += ' by you'
-      break
-  }
+//   switch (sourceType) {
+//     case 'BrokerageWidget':
+//       title += ' from brokerage widget'
+//       break
+//     case 'IOSAddressBook':
+//       title += ' from your address book'
+//       break
+//     case 'SharesRoom':
+//       title += ' because you shared a room with this user'
+//       break
+//     case 'ExplicitlyCreated':
+//       title += ' by you'
+//       break
+//   }
 
-  return {
-    title,
-    icon: 'alert-fill'
-  }
-}
+//   return {
+//     title,
+//     icon: 'alert-fill'
+//   }
+// }

@@ -6,6 +6,7 @@ import * as actionTypes from '../../constants/contacts'
 const byId = (state = {}, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
+    case actionTypes.CREATE_CONTACT_ATTR_DEF_SUCCESS:
       return _.indexBy(action.definitions, 'id')
 
     default:
@@ -19,7 +20,9 @@ const byName = (state = {}, action) => {
       const names = {}
 
       action.definitions.forEach(def => {
-        names[def.name] = def.id
+        if (def.name) {
+          names[def.name] = def.id
+        }
       })
 
       return names
@@ -32,6 +35,7 @@ const byName = (state = {}, action) => {
 const bySection = (state = {}, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
+    case actionTypes.CREATE_CONTACT_ATTR_DEF_SUCCESS:
       const groupBySection = _.groupBy(action.definitions, 'section')
 
       const result = {}
@@ -54,6 +58,10 @@ export const attributeDefs = combineReducers({
 
 export function selectDefinition(state, id) {
   return state.byId[id] || null
+}
+
+export function selectDefinitions(state) {
+  return Object.values(state.byId)
 }
 
 export function selectDefinitionByName(state, name) {

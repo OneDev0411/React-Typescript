@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Flex from 'styled-flex-component'
 import TagIcon from '../../../../../../../views/components/SvgIcons/Tag/TagIcon'
 
 const borderColor = (inputFocused, error) => {
@@ -13,7 +12,8 @@ const borderColor = (inputFocused, error) => {
 
   return '#d4dfe6'
 }
-export const CustomTagContainer = styled.form`
+
+const Container = styled.form`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,19 +25,6 @@ export const CustomTagContainer = styled.form`
     borderColor(inputFocused, error)};
 `
 
-const IconContainer = Flex.extend`
-  cursor: pointer;
-  margin-left: 1em;
-  svg {
-    height: 16px;
-    width: 16px;
-  }
-  :hover {
-    svg > path.svg-icon--close {
-      fill: #262626;
-    }
-  }
-`
 const Input = styled.input`
   width: 100%;
   margin-left: 12px;
@@ -66,7 +53,16 @@ const AddButton = styled.button`
   }
 `
 export default class CustomTag extends React.Component {
-  state = { inputFocused: false, inputValue: '', error: false }
+  state = { inputFocused: false, error: false }
+
+  shouldComponentUpdate(nextProps, nextStates) {
+    return (
+      nextStates.inputFocused !== this.state.inputFocused ||
+      nextStates.error !== this.state.error ||
+      nextProps.inputValue !== this.props.inputValue
+    )
+  }
+
   onFocus = () => {
     this.setState({ inputFocused: true })
   }
@@ -77,32 +73,21 @@ export default class CustomTag extends React.Component {
   onChange = event => {
     const inputValue = event.target.value
 
-    this.setState({ inputValue, error: inputValue.length > 28 })
-  }
-
-  onUpsert = event => {
-    const { inputValue } = this.state
-
-    event.preventDefault()
-
-    if (inputValue) {
-      this.props.onUpsert(inputValue)
-      this.setState({ inputValue: '' })
-    }
+    this.props.newTagChange(inputValue)
+    this.setState({ error: inputValue.length > 28 })
   }
 
   render() {
-    const { inputFocused, inputValue, error } = this.state
+    const { inputFocused, error } = this.state
+    const { inputValue } = this.props
 
     return (
-      <CustomTagContainer
+      <Container
         inputFocused={inputFocused}
-        onSubmit={this.onUpsert}
+        onSubmit={this.props.onUpsert}
         error={error}
       >
-        <IconContainer center>
-          <TagIcon color="#263445" />
-        </IconContainer>
+        <TagIcon color="#263445" style={{ marginLeft: '1em' }} />
         <Input
           value={inputValue}
           type="text"
@@ -118,7 +103,7 @@ export default class CustomTag extends React.Component {
         >
           Add
         </AddButton>
-      </CustomTagContainer>
+      </Container>
     )
   }
 }

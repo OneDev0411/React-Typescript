@@ -18,13 +18,12 @@ Search.defaultProps = {
 
 export function Search(props) {
   return (
-    <div />
-    // <HeaderSearch
-    //   disabled={props.disabled}
-    //   inputValue={props.inputValue}
-    //   isSearching={props.isSearching}
-    //   onInputChange={props.handleOnChange}
-    //   placeholder="Search all contacts ..."
-    // />
+    <HeaderSearch
+      disabled={props.disabled}
+      inputValue={props.inputValue}
+      isSearching={props.isSearching}
+      onInputChange={props.handleOnChange}
+      placeholder="Search all contacts ..."
+    />
   )
 }

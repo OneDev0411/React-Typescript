@@ -17,6 +17,10 @@
   border: 1px solid #CAD4DB;
 }
 
+.c-contact-profile-card__header {
+  position: relative;
+}
+
 .c-contact-profile-card__title {
   color: #444;
   margin: 0 0 1em;
@@ -25,4 +29,3 @@
   line-height: 1;
   border-bottom: solid 1px #e5e7ea;
 }
-

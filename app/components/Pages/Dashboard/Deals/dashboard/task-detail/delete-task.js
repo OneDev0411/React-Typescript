@@ -7,6 +7,7 @@ import {
   deleteTask,
   changeNeedsAttention
 } from '../../../../../../store_actions/deals'
+import { isBackOffice } from '../../../../../../utils/user-teams'
 
 class DeleteTask extends React.Component {
   constructor(props) {
@@ -31,7 +32,9 @@ class DeleteTask extends React.Component {
     // scroll to the end
     const el = document.getElementById('deals-task-scrollable')
 
-    el.scrollTop = el.scrollHeight
+    if (el) {
+      el.scrollTop = el.scrollHeight
+    }
   }
 
   requestDeleteTask(task) {
@@ -73,7 +76,7 @@ class DeleteTask extends React.Component {
         onClick={() => this.requestDeleteTask(task)}
         title="Delete Task"
       >
-        <img src="/static/images/deals/trashcan.png" />
+        <img src="/static/images/deals/trashcan.png" alt="" />
       </span>
     )
   }
@@ -83,7 +86,7 @@ export default connect(
   ({ deals, user }) => ({
     user,
     checklists: deals.checklists,
-    isBackOffice: deals.backoffice
+    isBackOffice: isBackOffice(user)
   }),
   {
     setSelectedTask,

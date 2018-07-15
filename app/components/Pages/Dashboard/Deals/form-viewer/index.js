@@ -2,12 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
+
 import extractDocumentOfTask from '../utils/extract-document-of-task'
 import { getDeal, displaySplitter } from '../../../../../store_actions/deals'
 import FileView from './file-view'
 import EnvelopeView from './envelope-view'
+
 import uuid from '../../../../../utils/uuid'
 import config from '../../../../../../config/public'
+
+import { isBackOffice } from '../../../../../utils/user-teams'
 
 class FormViewer extends React.Component {
   constructor(props) {
@@ -111,16 +115,27 @@ class FormViewer extends React.Component {
     const envelope = envelopes[objectId]
     const task = tasks[taskId]
 
-    if (!task || !task.submission || !envelope.documents) {
+    if (!task || !envelope.documents) {
       return null
     }
 
     // get document index
-    const doc = envelope.documents.find(
-      doc => doc.submission === task.submission.id
-    )
+    let document
 
-    if (!doc) {
+    if (task.submission) {
+      document = envelope.documents.find(
+        doc => doc.submission === task.submission.id
+      )
+    }
+
+    // if couldn't find the file, try to find that in attachments
+    if (!document) {
+      document = envelope.documents.find(doc =>
+        task.room.attachments.find(file => file.id === doc.file)
+      )
+    }
+
+    if (!document) {
       return null
     }
 
@@ -128,7 +143,7 @@ class FormViewer extends React.Component {
       name: envelope.title,
       type: 'pdf',
       url: `${config.api_url}/envelopes/${envelope.id}/${
-        doc.document_id
+        document.document_id
       }.pdf?access_token=${user.access_token}`
     }
   }
@@ -243,13 +258,14 @@ function mapStateToProps({ user, deals }, props) {
   return {
     user,
     formViewer: deals.formViewer,
-    isBackOffice: deals.backoffice,
+    isBackOffice: isBackOffice(user),
     deal: list && list[dealId] ? list[dealId] : null,
     tasks: deals.tasks,
     envelopes: deals.envelopes
   }
 }
 
-export default connect(mapStateToProps, { getDeal, displaySplitter })(
-  FormViewer
-)
+export default connect(
+  mapStateToProps,
+  { getDeal, displaySplitter }
+)(FormViewer)

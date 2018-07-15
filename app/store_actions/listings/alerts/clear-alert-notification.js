@@ -21,7 +21,7 @@ const clearAlertNotification = (alertId, roomId) => (dispatch, getState) => {
 
   dispatch({
     response,
-    tabName: 'ALERTS',
+    tabName: 'alerts',
     type: actionsType.CLEAR_ALERT_NOTIFICATION
   })
 

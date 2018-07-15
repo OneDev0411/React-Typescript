@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
 import _ from 'underscore'
-import { deleteFile } from '../../../../../../../store_actions/deals'
+import { syncDeleteFile } from '../../../../../../../store_actions/deals'
 import VerticalDotsIcon from '../../../../Partials/Svgs/VerticalDots'
+import FileLink from './link'
 
 /**
  * render pdf attachments
@@ -36,7 +36,7 @@ class FileAttachments extends React.Component {
   }
 
   async deleteFile(e, task, file) {
-    const { deal, deleteFile } = this.props
+    const { deal, syncDeleteFile } = this.props
     const { deleting } = this.state
 
     e.preventDefault()
@@ -50,7 +50,7 @@ class FileAttachments extends React.Component {
     })
 
     try {
-      await deleteFile(deal.id, {
+      await syncDeleteFile(deal.id, {
         [file.id]: task
       })
     } catch (e) {}
@@ -75,11 +75,11 @@ class FileAttachments extends React.Component {
     return (
       <div>
         {files.map(file => (
-          <Link
+          <FileLink
             key={`PDF_FILE_${file.id}`}
-            className="item attachment"
-            style={{ cursor: 'pointer' }}
-            to={`/dashboard/deals/${deal.id}/form-viewer/${
+            fileType={file.type}
+            externalUrl={file.src}
+            internalUrl={`/dashboard/deals/${deal.id}/form-viewer/${
               task.id
             }/attachment/${file.id}`}
           >
@@ -117,11 +117,14 @@ class FileAttachments extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-          </Link>
+          </FileLink>
         ))}
       </div>
     )
   }
 }
 
-export default connect(null, { deleteFile })(FileAttachments)
+export default connect(
+  null,
+  { syncDeleteFile }
+)(FileAttachments)

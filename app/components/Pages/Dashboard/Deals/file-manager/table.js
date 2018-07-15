@@ -6,10 +6,11 @@ import { browserHistory, Link } from 'react-router'
 import { Dropdown, Button } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
+import styled from 'styled-components'
 import {
   getDeal,
   displaySplitter,
-  deleteFile,
+  syncDeleteFile,
   moveTaskFile
 } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
@@ -18,7 +19,12 @@ import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import Search from '../../../../Partials/headerSearch'
 import Upload from '../dashboard/upload'
 import TasksDropDown from '../components/tasks-dropdown'
+import Envelope from './envelope'
 
+const EnvelopeName = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
 export class FileManager extends React.Component {
   constructor(props) {
     super(props)
@@ -74,7 +80,7 @@ export class FileManager extends React.Component {
   }
 
   getAllFiles() {
-    const { deal, checklists, tasks } = this.props
+    const { deal, checklists, tasks, envelopes } = this.props
 
     const files = []
     const stashFiles = deal.files || []
@@ -214,14 +220,14 @@ export class FileManager extends React.Component {
   }
 
   async deleteFiles(files) {
-    const { deal, deleteFile } = this.props
+    const { deal, syncDeleteFile } = this.props
     const { isDeleting } = this.state
 
     this.setState({
       isDeleting: [...isDeleting, ..._.keys(files)]
     })
 
-    await deleteFile(deal.id, files)
+    await syncDeleteFile(deal.id, files)
 
     this.setState({
       selectedRows: [],
@@ -268,9 +274,26 @@ export class FileManager extends React.Component {
     })
   }
 
+  getEnvelope = file => {
+    const { deal, envelopes } = this.props
+
+    const envelope =
+      deal.envelopes &&
+      deal.envelopes.filter(envelopeId =>
+        envelopes[envelopeId].documents.some(
+          ({ file: fileId }) => fileId === file.id
+        )
+      )
+
+    if (envelope && envelope.length) {
+      return envelopes[envelope[0]]
+    }
+
+    return undefined
+  }
   getColumns(rows) {
     const { selectedRows, isDeleting, updatingFiles } = this.state
-    const { deal, tasks } = this.props
+    const { deal, tasks, envelopes } = this.props
 
     return [
       {
@@ -311,6 +334,34 @@ export class FileManager extends React.Component {
         accessor: 'created_at',
         Cell: ({ value }) => this.getDate(value)
       },
+      // {
+      //   id: 'e_signature',
+      //   Header: () => this.getCellTitle('eSignature'),
+      //   accessor: 'e_signature',
+      //   Cell: ({ original: file }) => {
+      //     const envelope = this.getEnvelope(file)
+
+      //     if (envelope) {
+      //       return <Envelope envelope={envelope} />
+      //     }
+
+      //     return null
+      //   }
+      // },
+      // {
+      //   id: 'envelope_name',
+      //   Header: () => this.getCellTitle('ENVELOPE NAME'),
+      //   accessor: 'envelope_name',
+      //   Cell: ({ original: file }) => {
+      //     const envelope = this.getEnvelope(file)
+
+      //     if (envelope) {
+      //       return <EnvelopeName>{envelope.title}</EnvelopeName>
+      //     }
+
+      //     return null
+      //   }
+      // },
       {
         Header: () => this.getCellTitle('FOLDER'),
         accessor: 'task',
@@ -318,6 +369,7 @@ export class FileManager extends React.Component {
         Cell: ({ original: file }) => (
           <Fragment>
             <TasksDropDown
+              // disabled={!!this.getEnvelope(file)}
               showStashOption={file.taskId !== null}
               searchable
               showNotifyOption
@@ -481,12 +533,13 @@ export default connect(
   ({ deals, user }) => ({
     checklists: deals.checklists,
     tasks: deals.tasks,
+    envelopes: deals.envelopes,
     user
   }),
   {
     confirmation,
     getDeal,
-    deleteFile,
+    syncDeleteFile,
     displaySplitter,
     moveTaskFile
   }

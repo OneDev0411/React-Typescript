@@ -56,7 +56,13 @@ const ids = (state = [], action) => {
   }
 }
 
-const listInfoInitialState = { total: 0, count: 0, type: 'general', filter: '' }
+const listInfoInitialState = {
+  total: 0,
+  count: 0,
+  type: 'general',
+  filter: [],
+  searchText: ''
+}
 export const info = (state = listInfoInitialState, action) => {
   switch (action.type) {
     case actionTypes.DELETE_CONTACT_SUCCESS:

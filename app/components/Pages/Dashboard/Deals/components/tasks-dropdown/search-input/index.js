@@ -24,11 +24,16 @@ export const SearchInput = ({
   placeholder,
   value,
   onClick,
-  onFocus
+  onFocus,
+  disabled
 }) => (
-  <SearchContainer onClick={onClick}>
+  <SearchContainer onClick={onClick} disabled={disabled}>
     {searchable && (
-      <Input {...getInputProps({ placeholder, value })} onFocus={onFocus} />
+      <Input
+        {...getInputProps({ placeholder, value })}
+        onFocus={onFocus}
+        disabled={disabled}
+      />
     )}
 
     {!searchable && (

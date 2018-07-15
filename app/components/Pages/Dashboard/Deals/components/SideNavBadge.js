@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import SvgDeals from '../../Partials/Svgs/Deals'
+
+import { isBackOffice } from '../../../../../utils/user-teams'
 
 class BadgeCounter extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class BadgeCounter extends React.Component {
     let counter = 0
 
     _.each(this.props.deals, deal => {
-      if (deal.new_notifications > 0) {
+      if (deal.new_notifications && deal.new_notifications.length > 0) {
         counter += 1
       }
     })
@@ -51,10 +52,10 @@ class BadgeCounter extends React.Component {
   }
 }
 
-export default connect(({ deals, chatroom }) => ({
+export default connect(({ deals, chatroom, user }) => ({
   deals: deals.list,
   tasks: deals.tasks,
   checklists: deals.checklists,
-  isBackOffice: deals.backoffice,
+  isBackOffice: isBackOffice(user),
   rooms: chatroom.rooms
 }))(BadgeCounter)

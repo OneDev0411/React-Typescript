@@ -81,7 +81,7 @@ class FormEdit extends React.Component {
    *
    */
   async getTemplates() {
-    const { user, task, deal } = this.props
+    const { task, deal } = this.props
 
     try {
       const templates = await Deal.getFormTemplates(deal.brand.id, task.form)
@@ -265,4 +265,7 @@ function mapStateToProps({ deals, user }, props) {
   }
 }
 
-export default connect(mapStateToProps, { saveSubmission, notify })(FormEdit)
+export default connect(
+  mapStateToProps,
+  { saveSubmission, notify }
+)(FormEdit)

@@ -40,9 +40,9 @@ export function deleteContacts(contactIds) {
       const updateUrl = page => {
         let url = `/dashboard/contacts/page/${page}`
 
-        if (listInfo.filter) {
-          url = `${url}?filter=${listInfo.filter}`
-        }
+        // if (listInfo.filter) {
+        //   url = `${url}?filter=${listInfo.filter}`
+        // }
 
         browserHistory.push(url)
       }

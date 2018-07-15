@@ -1,5 +1,5 @@
 import _ from 'underscore'
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 
 const initialState = {
   files: {}, // keeps files list
@@ -11,19 +11,19 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.SET_SPLITTER_DISPLAY:
+    case actionTypes.SET_SPLITTER_DISPLAY:
       return {
         ...state,
         files: action.files
       }
 
-    case types.SET_PAGE_PREVIEW:
+    case actionTypes.SET_PAGE_PREVIEW:
       return {
         ...state,
         pagePreview: action.preview
       }
 
-    case types.SET_SPLITTER_PDF_OBJECT:
+    case actionTypes.SET_SPLITTER_PDF_OBJECT:
       return {
         ...state,
         pdfObjects: {
@@ -32,7 +32,7 @@ export default (state = initialState, action) => {
         }
       }
 
-    case types.SELECT_SPLITTER_PAGE:
+    case actionTypes.SELECT_SPLITTER_PAGE:
       return {
         ...state,
         pages: {
@@ -44,7 +44,7 @@ export default (state = initialState, action) => {
         }
       }
 
-    case types.SET_SPLITTER_USED_PAGES:
+    case actionTypes.SET_SPLITTER_USED_PAGES:
       return {
         ...state,
         usedPages: {
@@ -53,23 +53,24 @@ export default (state = initialState, action) => {
         }
       }
 
-    case types.DESELECT_SPLITTER_PAGE:
+    case actionTypes.DESELECT_SPLITTER_PAGE:
       return {
         ...state,
         pages: _.omit(
           state.pages,
           page =>
-            page.documentId === action.docId && page.pageNumber === action.pageNumber
+            page.documentId === action.docId &&
+            page.pageNumber === action.pageNumber
         )
       }
 
-    case types.RESET_SPLITTER_PAGES:
+    case actionTypes.RESET_SPLITTER_PAGES:
       return {
         ...state,
         pages: {}
       }
 
-    case types.RESET_SPLITTER:
+    case actionTypes.RESET_SPLITTER:
       return initialState
 
     default:

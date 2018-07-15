@@ -5,6 +5,7 @@ import { showAttachments, showTemplates } from '../../../../../../store_actions/
 import DealEmail from '../../dashboard/deal-email'
 import PageHeader from '../../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import { isBackOffice } from '../../../../../../utils/user-teams'
 
 class Header extends React.Component {
   render() {
@@ -61,8 +62,8 @@ class Header extends React.Component {
 }
 
 export default connect(
-  ({ deals }) => ({
-    isBackOffice: deals.backoffice
+  ({ user }) => ({
+    isBackOffice: isBackOffice(user)
   }),
 { showAttachments, showTemplates }
 )(Header)

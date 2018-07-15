@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
+import { isBackOffice } from '../../../../../../../utils/user-teams'
+
 const DigitalForm = ({ deal, task, isBackOffice }) => {
   if (!task || !task.form) {
     return false
@@ -55,6 +57,6 @@ const DigitalForm = ({ deal, task, isBackOffice }) => {
   )
 }
 
-export default connect(({ deals }) => ({
-  isBackOffice: deals.backoffice
+export default connect(({ user }) => ({
+  isBackOffice: isBackOffice(user)
 }))(DigitalForm)

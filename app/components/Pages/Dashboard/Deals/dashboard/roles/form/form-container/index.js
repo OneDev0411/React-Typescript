@@ -6,8 +6,11 @@ import { CommissionInput } from '../form-components/commission-input'
 import { TitleDropDown } from '../form-components/title-dropdown'
 import { RolesDropDown } from '../form-components/roles-dropdown'
 import { AutoCompleteInput } from '../form-components/autocomplete-input'
+import { FormType } from '../form-components/type-input'
 import { FormContainer } from '../styles'
 import { ROLE_NAMES } from '../../../../utils/roles'
+
+import { TYPE_PERSON } from '../form-components/type-input'
 
 const getDropDownItems = ({ form = {}, singularName, pluralName }) => {
   if (_.size(form) === 0) {
@@ -33,88 +36,115 @@ export const RoleFormContainer = ({
   shouldShowCommission,
   isAllowedRole,
   requiredFields
-}) => (
-  <FormContainer onSubmit={handleSubmit}>
-    <Field name="legal_prefix" placeholder="Title" component={TitleDropDown} />
+}) => {
+  const { user_type } = values
+  const isCompanyRequired = requiredFields.includes('company_title')
+  const isFirstNameRequired = requiredFields.includes('legal_first_name')
+  const isLastNameRequired = requiredFields.includes('legal_last_name')
 
-    {_.map(
-      {
-        legal_first_name: 'Legal First Name',
-        legal_middle_name: 'Legal Middle Name',
-        legal_last_name: 'Legal Last Name'
-      },
-      (label, name) => (
+  return (
+    <FormContainer onSubmit={handleSubmit}>
+      <FormType name="user_type" selectedValue={values.user_type} />
+
+      {user_type === TYPE_PERSON && (
         <Field
-          key={name}
+          name="legal_prefix"
+          placeholder="Title"
+          component={TitleDropDown}
+        />
+      )}
+
+      {(user_type === TYPE_PERSON || isFirstNameRequired) && (
+        <Field
           parse={value => value || ''}
-          name={name}
-          placeholder={label}
-          isRequired={requiredFields.includes(name)}
+          name="legal_first_name"
+          placeholder="Legal First Name"
+          isRequired={isFirstNameRequired}
           component={TextInput}
         />
-      )
-    )}
+      )}
 
-    <Field
-      name="company_title"
-      placeholder="Company"
-      parse={value => value || ''}
-      component={AutoCompleteInput}
-      defaultSelectedItem={form && form.email}
-      isRequired={requiredFields.includes('company_title')}
-      items={getDropDownItems({
-        form,
-        singularName: 'company',
-        pluralName: 'companies'
-      })}
-    />
+      {user_type === TYPE_PERSON && (
+        <Field
+          parse={value => value || ''}
+          name="legal_middle_name"
+          placeholder="Legal Middle Name"
+          isRequired={false}
+          component={TextInput}
+        />
+      )}
 
-    <Field
-      name="email"
-      placeholder="Email"
-      parse={value => value || ''}
-      component={AutoCompleteInput}
-      defaultSelectedItem={form && form.email}
-      isRequired={requiredFields.includes('email')}
-      items={getDropDownItems({
-        form,
-        singularName: 'email',
-        pluralName: 'emails'
-      })}
-    />
+      {(user_type === TYPE_PERSON || isLastNameRequired) && (
+        <Field
+          parse={value => value || ''}
+          name="legal_last_name"
+          placeholder="Legal Last Name"
+          isRequired={isLastNameRequired}
+          component={TextInput}
+        />
+      )}
 
-    <Field
-      name="phone_number"
-      placeholder="Phone"
-      parse={value => value || ''}
-      component={AutoCompleteInput}
-      defaultSelectedItem={form && form.phone_number}
-      isRequired={requiredFields.includes('phone_number')}
-      items={getDropDownItems({
-        form,
-        singularName: 'phone_number',
-        pluralName: 'phones'
-      })}
-    />
-
-    <Field
-      name="role"
-      isRequired={requiredFields.includes('role')}
-      placeholder="Select Role"
-      options={ROLE_NAMES}
-      component={RolesDropDown}
-      formRole={values.role}
-      isAllowed={isAllowedRole}
-    />
-
-    {shouldShowCommission(values.role) && (
       <Field
-        isRequired={requiredFields.includes('commission')}
-        name="commission"
-        placeholder="Commission"
-        commissionType={values.commission_type}
-        component={CommissionInput}
+        name="company_title"
+        placeholder="Company/Trust"
+        parse={value => value || ''}
+        component={AutoCompleteInput}
+        defaultSelectedItem={form && form.email}
+        isRequired={isCompanyRequired}
+        items={getDropDownItems({
+          form,
+          singularName: 'company',
+          pluralName: 'companies'
+        })}
       />
-    )}
-  </FormContainer>
-)
+
+      <Field
+        name="email"
+        placeholder="Email"
+        parse={value => value || ''}
+        component={AutoCompleteInput}
+        defaultSelectedItem={form && form.email}
+        isRequired={requiredFields.includes('email')}
+        items={getDropDownItems({
+          form,
+          singularName: 'email',
+          pluralName: 'emails'
+        })}
+      />
+
+      <Field
+        name="phone_number"
+        placeholder="Phone"
+        parse={value => value || ''}
+        component={AutoCompleteInput}
+        defaultSelectedItem={form && form.phone_number}
+        isRequired={requiredFields.includes('phone_number')}
+        items={getDropDownItems({
+          form,
+          singularName: 'phone_number',
+          pluralName: 'phones'
+        })}
+      />
+
+      <Field
+        name="role"
+        isRequired={requiredFields.includes('role')}
+        placeholder="Select Role"
+        options={ROLE_NAMES}
+        component={RolesDropDown}
+        formRole={values.role}
+        isAllowed={isAllowedRole}
+      />
+
+      {shouldShowCommission(values.role) && (
+        <Field
+          isRequired={requiredFields.includes('commission')}
+          name="commission"
+          placeholder="Commission"
+          commissionType={values.commission_type}
+          component={CommissionInput}
+        />
+      )}
+    </FormContainer>
+  )
+}

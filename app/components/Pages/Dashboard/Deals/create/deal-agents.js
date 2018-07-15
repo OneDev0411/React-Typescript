@@ -23,48 +23,25 @@ function getAllowedRole(agents, side) {
   return []
 }
 
-/**
- * Co-agents or office double-enders should be chosen from agents list
- * https://gitlab.com/rechat/web/issues/1319
- */
-function getShouldShowAgentModal(
-  forceSelectRolesFromContactsList,
-  dealSide,
-  isPrimaryAgent,
-  isDoubleEnded,
-  allowedRole
-) {
-  if (forceSelectRolesFromContactsList) {
-    return false
-  }
-
-  if (
-    isPrimaryAgent ||
-    isDoubleEnded ||
-    (dealSide === SELLING && allowedRole === 'CoSellerAgent') ||
-    (dealSide === BUYING && allowedRole === 'CoBuyerAgent')
-  ) {
-    return true
-  }
-
-  return false
-}
-
 export default props => {
-  const {
-    hasError,
-    agents,
-    dealSide,
-    isCommissionRequired,
-    onUpsertAgent,
-    onRemoveAgent
-  } = props
+  const { hasError, agents, dealSide, onRemoveAgent } = props
 
   const sideName = props.showDealSideAs || dealSide
   const allowedRole = getAllowedRole(agents, sideName)
   const isPrimaryAgent = ['BuyerAgent', 'SellerAgent'].includes(allowedRole)
 
   const title = isPrimaryAgent ? 'Add Primary Agent' : 'Add Co-Agent'
+
+  const sharedProps = {
+    roleType: 'agent',
+    dealSide,
+    isPrimaryAgent,
+    dealEnderType: props.dealEnderType,
+    isDoubleEnded: props.isDoubleEnded,
+    isCommissionRequired: props.isCommissionRequired,
+    allowedRoles: [allowedRole],
+    onUpsertUser: props.onUpsertAgent
+  }
 
   return (
     <div className="form-section deal-people deal-agent">
@@ -80,30 +57,13 @@ export default props => {
           <CrudRole
             key={id}
             user={agent}
-            isCommissionRequired={isCommissionRequired}
-            dealSide={dealSide}
             modalTitle="Update Agent"
-            allowedRoles={[allowedRole]}
             onRemoveUser={id => onRemoveAgent(id)}
-            onUpsertUser={onUpsertAgent}
+            {...sharedProps}
           />
         ))}
 
-        <CrudRole
-          shouldSelectRoleFromAgentsList={getShouldShowAgentModal(
-            props.forceSelectRolesFromContactsList,
-            dealSide,
-            isPrimaryAgent,
-            props.isDoubleEnded,
-            allowedRole
-          )}
-          isCommissionRequired={isCommissionRequired}
-          dealSide={dealSide}
-          modalTitle={title}
-          ctaTitle={title}
-          allowedRoles={[allowedRole]}
-          onUpsertUser={onUpsertAgent}
-        />
+        <CrudRole modalTitle={title} ctaTitle={title} {...sharedProps} />
       </div>
     </div>
   )

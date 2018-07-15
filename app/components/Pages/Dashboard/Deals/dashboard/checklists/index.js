@@ -4,6 +4,7 @@ import _ from 'underscore'
 import cn from 'classnames'
 
 import Tasks from '../tasks'
+import { isBackOffice } from '../../../../../../utils/user-teams'
 
 class Checklist extends React.Component {
   constructor(props) {
@@ -127,8 +128,8 @@ class Checklist extends React.Component {
   }
 }
 
-export default connect(({ deals }) => ({
-  isBackOffice: deals.backoffice,
+export default connect(({ deals, user }) => ({
+  isBackOffice: isBackOffice(user),
   checklists: deals.checklists,
   tasks: deals.tasks
 }))(Checklist)
