@@ -34,7 +34,9 @@ class Messages extends React.Component {
     const keys = Object.keys(messages)
     const index = keys.indexOf(msg.id)
 
-    if (index === -1 || !keys[index - 1]) { return null }
+    if (index === -1 || !keys[index - 1]) {
+      return null
+    }
 
     return messages[keys[index - 1]]
   }
@@ -42,7 +44,7 @@ class Messages extends React.Component {
   /**
    * fetch messages
    */
-  async loadMessages(roomId, limit = 10000, max_value = null, scroll_to = null) {
+  async loadMessages(roomId, limit = 10000, max_value = null) {
     const { getMessages } = this.props
 
     if (!roomId) {
@@ -54,54 +56,57 @@ class Messages extends React.Component {
   }
 
   render() {
-    const { roomId, user, deliveryReportPlacement } = this.props
+    const {
+      roomId,
+      user,
+      deliveryReportPlacement,
+      openFilesInNewTab
+    } = this.props
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null
 
     return (
-      <div
-        className="messages"
-      >
+      <div className="messages">
         <SocketStatus />
 
-        {
-          roomId && !messages &&
-          <img
-            className="loading"
-            src="/static/images/loading-states/messages.svg"
-          />
-        }
+        {roomId &&
+          !messages && (
+            <img
+              className="loading"
+              src="/static/images/loading-states/messages.svg"
+              alt=""
+            />
+          )}
 
-        {
-          messages && _.size(messages.list) === 0 &&
-          <div className="no-messages">
-            There are no messages.
-          </div>
-        }
+        {messages &&
+          _.size(messages.list) === 0 && (
+            <div className="no-messages">There are no messages.</div>
+          )}
 
         <div className="messages-list">
-          {
-            messages &&
-            _.map(messages.list, msg =>
+          {messages &&
+            _.map(messages.list, msg => (
               <div key={`MESSAGE_${msg.id}`}>
                 <MessageItem
                   user={user}
                   roomId={roomId}
                   message={msg}
+                  openFilesInNewTab={openFilesInNewTab}
                   previousMessage={this.getPreviousMessage(messages.list, msg)}
                   deliveryReportPlacement={deliveryReportPlacement}
                 />
               </div>
-            )
-          }
+            ))}
         </div>
-
       </div>
     )
   }
 }
 
-export default connect(({ chatroom }) => ({
-  messages: chatroom.messages
-}), ({ getMessages }))(Messages)
+export default connect(
+  ({ chatroom }) => ({
+    messages: chatroom.messages
+  }),
+  { getMessages }
+)(Messages)

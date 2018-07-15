@@ -1,5 +1,4 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import Dropzone from 'react-dropzone'
 import { setUploadFiles } from '../../../../../store_actions/deals'
@@ -41,6 +40,9 @@ export class Header extends React.Component {
   }
 }
 
-export default connect(null, {
-  setUploadFiles
-})(Header)
+export default connect(
+  null,
+  {
+    setUploadFiles
+  }
+)(Header)

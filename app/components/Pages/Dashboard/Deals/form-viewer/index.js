@@ -265,6 +265,7 @@ function mapStateToProps({ user, deals }, props) {
   }
 }
 
-export default connect(mapStateToProps, { getDeal, displaySplitter })(
-  FormViewer
-)
+export default connect(
+  mapStateToProps,
+  { getDeal, displaySplitter }
+)(FormViewer)

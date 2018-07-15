@@ -225,11 +225,6 @@ const AsyncProfile = Load({
     import('../components/Pages/Dashboard/Account/Profile' /* webpackChunkName: "profile" */)
 })
 
-const AsyncPayment = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Account/Payment' /* webpackChunkName: "payment" */)
-})
-
 const AsyncDealTemplates = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/DealTemplates' /* webpackChunkName: "deal_templates" */)

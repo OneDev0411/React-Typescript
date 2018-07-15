@@ -4,12 +4,13 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import cn from 'classnames'
+
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 
-import PageHeader from '../../../../../views/components/PageHeader'
 import Button from '../../../../../views/components/Button/ActionButton'
 
+import PageHeader from './page-header'
 import OfferType from './offer-type'
 import EnderType from './deal-ender-type'
 import DealClients from './deal-clients'
@@ -43,7 +44,7 @@ class CreateOffer extends React.Component {
       dealStatus: '',
       offerType: dealHasPrimaryOffer ? 'backup' : '',
       enderType: -1,
-      contexts: {},
+      contexts: this.initializeContexts(),
       agents: {},
       clients: {},
       escrowOfficers: {},
@@ -59,11 +60,19 @@ class CreateOffer extends React.Component {
     const { deal } = this.props
 
     if (deal.roles) {
-      this.prepopulateRoles(deal.roles)
+      this.initializeRoles(deal.roles)
     }
   }
 
-  prepopulateRoles(list) {
+  initializeContexts() {
+    const { deal } = this.props
+
+    return {
+      year_built: Deal.get.field(deal, 'year_built')
+    }
+  }
+
+  initializeRoles(list) {
     const { roles } = this.props
     const newState = {}
 
@@ -430,7 +439,7 @@ class CreateOffer extends React.Component {
       <div className="deal-create-offer">
         <PageHeader
           title="Add New Offer"
-          onClickBackButton={this.cancelCreateOffer}
+          handleOnClose={this.cancelCreateOffer}
         />
 
         <div className="form">
@@ -473,6 +482,7 @@ class CreateOffer extends React.Component {
                 scenario="CreateOffer"
                 showDealSideAs="Buying"
                 dealSide={deal.deal_type}
+                dealEnderType={enderType}
                 isDoubleEnded={this.IsDoubleEnded}
                 isCommissionRequired={this.IsDoubleEnded}
                 agents={agents}
@@ -583,10 +593,13 @@ function mapStateToProps({ deals }, props) {
   }
 }
 
-export default connect(mapStateToProps, {
-  createOffer,
-  createRoles,
-  updateContext,
-  notify,
-  confirmation
-})(CreateOffer)
+export default connect(
+  mapStateToProps,
+  {
+    createOffer,
+    createRoles,
+    updateContext,
+    notify,
+    confirmation
+  }
+)(CreateOffer)

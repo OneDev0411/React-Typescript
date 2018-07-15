@@ -1,13 +1,17 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
+  width: 100%;
+  height: 56px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
   padding: 0 1em;
-  margin-bottom: 3px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 1px 2px 0px rgba(0, 0, 0, 0.2);
 `
 
 export const Title = styled.h2`

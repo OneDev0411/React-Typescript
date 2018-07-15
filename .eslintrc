@@ -79,7 +79,7 @@
     "no-empty": 0,
     "import/no-duplicates": 0,
     "default-case": 0,
-    "no-undef": 0,
+    "no-undef": 2,
     "no-case-declarations": 0,
     "no-useless-escape": 0,
     "no-bitwise": 0,

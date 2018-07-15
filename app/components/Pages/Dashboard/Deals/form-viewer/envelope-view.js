@@ -1,20 +1,12 @@
 import React from 'react'
-import { Button } from 'react-bootstrap'
 import Viewer from './viewer'
 import WhoSigned from './who-signed'
 
+import PageHeader from '../../../../../views/components/PageHeader'
+
 export default ({ deal, onClose, envelope, file }) => (
   <div className="c-deal-form-viewer">
-    <div className="c-deal-form-viewer__header">
-      <div>
-        <h1 className="c-deal-form-viewer__header__title">{file.name}</h1>
-      </div>
-      <div className="c-deal-form-viewer__header__cta">
-        <Button onClick={onClose} className="close-btn">
-          X
-        </Button>
-      </div>
-    </div>
+    <PageHeader title={file.name} />
 
     <div className="c-deal-form-viewer__body show-envelopes">
       <Viewer width="calc(100% - 375px)" file={file} />

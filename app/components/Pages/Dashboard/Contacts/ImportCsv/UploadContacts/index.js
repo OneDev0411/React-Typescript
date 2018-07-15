@@ -73,8 +73,7 @@ class UploadContacts extends React.Component {
    * validates csv file and mappings before start importing to server
    */
   validate = () => {
-    const { mappedFields, attributeDefs } = this.props
-    let errorMessage
+    const { mappedFields } = this.props
 
     let isValid = _.some(mappedFields, field => field.definitionId)
 
@@ -86,22 +85,6 @@ class UploadContacts extends React.Component {
           'You should connect at least one field to be able upload contacts'
       })
     }
-
-    isValid = _.every(mappedFields, (field, csvField) => {
-      const definition = selectDefinition(attributeDefs, field.definitionId)
-
-      if (definition && definition.has_label && !field.label) {
-        errorMessage = `Select a label for "${csvField}" field`
-
-        return this.onError({
-          isValidationError: true,
-          title: 'Validation Error',
-          message: errorMessage
-        })
-      }
-
-      return true
-    })
 
     return isValid
   }

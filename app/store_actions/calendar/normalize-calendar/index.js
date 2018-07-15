@@ -7,14 +7,20 @@ import moment from 'moment'
  * @param {Object} toUnix - end date
  */
 function createEventKey(event, fromUnix, toUnix) {
-  const eventTime = moment.unix(event.timestamp).utcOffset(0)
+  const eventTime = moment.unix(event.timestamp)
+  const fromDate = moment.unix(fromUnix)
+  const toDate = moment.unix(toUnix)
+
+  if (event.object_type !== 'crm_task') {
+    eventTime.utcOffset(0)
+    fromDate.utcOffset(0)
+    toDate.utcOffset(0)
+  }
 
   if (!event.recurring) {
     return eventTime.format('YYYY-MM-DD')
   }
 
-  const fromDate = moment.unix(fromUnix).utcOffset(0)
-  const toDate = moment.unix(toUnix).utcOffset(0)
   const year =
     fromDate.year() === toDate.year() || eventTime.month() >= fromDate.month()
       ? fromDate.format('YYYY')

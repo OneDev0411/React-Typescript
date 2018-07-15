@@ -8,9 +8,9 @@ import { browserHistory } from 'react-router'
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 
-import PageHeader from '../../../../../views/components/PageHeader'
 import Button from '../../../../../views/components/Button/ActionButton'
 
+import PageHeader from './page-header'
 import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
 import DealClients from './deal-clients'
@@ -226,7 +226,10 @@ class CreateDeal extends React.Component {
         sellingAgents: {},
         escrowOfficers: {},
         enderType: -1,
-        contexts: {}
+        contexts: this.getDefaultContextValues(
+          dealSide,
+          this.state.dealPropertyType
+        )
       },
       () => this.validateForm()
     )
@@ -239,7 +242,10 @@ class CreateDeal extends React.Component {
     this.setState({
       dealPropertyType,
       dealStatus: '',
-      contexts: {},
+      contexts: this.getDefaultContextValues(
+        this.state.dealSide,
+        dealPropertyType
+      ),
       escrowOfficers: {}
     })
   }
@@ -365,9 +371,13 @@ class CreateDeal extends React.Component {
    * create context object
    */
   createContextsObject(contexts) {
+    const { dealSide, dealPropertyType } = this.state
     const contextsObject = {}
     const { isBackOffice } = this.props
-    const dealContexts = _.indexBy(this.getDealContexts(), 'name')
+    const dealContexts = _.indexBy(
+      this.getDealContexts(dealSide, dealPropertyType),
+      'name'
+    )
 
     _.each(contexts, (value, name) => {
       if (_.isUndefined(value) || value === null || value.length === 0) {
@@ -415,9 +425,7 @@ class CreateDeal extends React.Component {
   /**
    * get context for deal side (Buying or Selling)
    */
-  getDealContexts() {
-    const { dealSide, dealPropertyType } = this.state
-
+  getDealContexts(dealSide, dealPropertyType) {
     if (dealSide.length === 0 || dealPropertyType.length === 0) {
       return []
     }
@@ -426,16 +434,28 @@ class CreateDeal extends React.Component {
   }
 
   /**
+   * get default context values
+   */
+  getDefaultContextValues(dealSide, dealPropertyType) {
+    const list = this.getDealContexts(dealSide, dealPropertyType)
+    const defaultValues = {}
+
+    list.forEach(context => {
+      if (!_.isUndefined(context.default_value)) {
+        defaultValues[context.name] = context.default_value
+      }
+    })
+
+    return defaultValues
+  }
+
+  /**
    * check commission is required or not
    */
-  getIsCommissionRequired() {
-    const { enderType } = this.state
-
-    if (enderType === 'AgentDoubleEnder' || enderType === 'OfficeDoubleEnder') {
-      return true
-    }
-
-    return false
+  get IsDoubleEnded() {
+    return ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
+      this.state.enderType
+    )
   }
 
   /**
@@ -490,17 +510,14 @@ class CreateDeal extends React.Component {
       validationErrors
     } = this.state
 
-    const dealContexts = this.getDealContexts()
+    const dealContexts = this.getDealContexts(dealSide, dealPropertyType)
     const isLeaseDeal = dealPropertyType && dealPropertyType.includes('Lease')
     const canCreateDeal =
       !saving && dealSide.length > 0 && dealPropertyType.length > 0
 
     return (
       <div className="deal-create">
-        <PageHeader
-          title="Create New Deal"
-          onClickBackButton={this.onClosePage}
-        />
+        <PageHeader title="Create New Deal" handleOnClose={this.onClosePage} />
 
         <div className="form">
           <div className="swoosh">Swoosh! Another one in the bag.</div>
@@ -540,6 +557,8 @@ class CreateDeal extends React.Component {
                   scenario="CreateDeal"
                   dealSide={dealSide}
                   agents={agents}
+                  dealEnderType={enderType}
+                  isDoubleEnded={this.IsDoubleEnded}
                   onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                   onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
                 />
@@ -554,13 +573,14 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealAgents
-                      forceSelectRolesFromContactsList
                       hasError={this.hasError('selling_agents')}
                       scenario="CreateDeal"
                       dealSide={dealSide}
                       showDealSideAs="Selling"
                       agents={sellingAgents}
-                      isCommissionRequired={this.getIsCommissionRequired()}
+                      isCommissionRequired={this.IsDoubleEnded}
+                      isDoubleEnded={this.IsDoubleEnded}
+                      dealEnderType={enderType}
                       onUpsertAgent={form =>
                         this.onUpsertRole(form, 'sellingAgents')
                       }

@@ -10,7 +10,6 @@ import forms from './forms'
 import esign from './esign'
 import upload from './upload'
 import splitter from './pdf-splitter'
-import agents from './agent'
 import contexts from './contexts'
 
 export default combineReducers({
@@ -24,6 +23,5 @@ export default combineReducers({
   esign,
   contexts,
   upload,
-  agents,
   splitter
 })

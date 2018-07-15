@@ -90,7 +90,7 @@ class Task extends React.Component {
           </div>
         </div>
         <OpenTaskButton
-          size={32}
+          size="32px"
           color="#cecece"
           hoverColor="#2196f3"
           onClick={() => this.props.onClick(task)}

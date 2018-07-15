@@ -2,9 +2,8 @@ import * as types from '../../constants/filter-segments'
 import _ from 'underscore'
 
 const initialState = {
-  list: {},
+  list: null,
   isFetching: false,
-  isFetched: false,
   activeSegmentId: 'default',
   fetchError: null
 }
@@ -34,15 +33,13 @@ const filterSegments = (state, action) => {
       return {
         ...state,
         isFetching: false,
-        isFetched: true,
         list: action.list
       }
 
     case types.FETCH_FILTER_SEGMENTS_FAILURE:
       return {
         ...state,
-        fetchError: action.error,
-        isFetching: false
+        fetchError: action.error
       }
 
     case types.SAVE_FILTER_SEGMENTS:
@@ -84,11 +81,13 @@ export const mlsFilterSegments = createReducer('mls')
 
 export const isFetchingSavedSegments = state => state.isFetching
 
+export const isListFetched = state => state.list !== null
+
 export const selectActiveSavedSegment = (state, listName = '') =>
   (state.list && state.list[state.activeSegmentId]) || getDefaultList(listName)
 
 export const getSegments = (state, listName) =>
-  [].concat([getDefaultList(listName)], Object.values(state.list))
+  [].concat([getDefaultList(listName)], Object.values(state.list || {}))
 
 export const selectSavedSegmentById = (state, id) =>
   state.list && state.list[id]

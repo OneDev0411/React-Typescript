@@ -9,6 +9,7 @@ export default ({
   roomId,
   message,
   previousMessage,
+  openFilesInNewTab,
   deliveryReportPlacement
 }) => {
   // get message author
@@ -24,12 +25,13 @@ export default ({
   const hasAttachments = message.attachments && message.attachments.length > 0
 
   // create props object
-  const props = {
+  const sharedProps = {
     user,
     roomId,
     author,
     message,
     previousMessage,
+    openFilesInNewTab,
     deliveryReportPlacement
   }
 
@@ -37,7 +39,7 @@ export default ({
    * check message is a a single/info message or not
    */
   if (message.activity) {
-    return <SingleMessage {...props} />
+    return <SingleMessage {...sharedProps} />
   }
 
   /*
@@ -45,7 +47,8 @@ export default ({
    * lead message has avatar and date
    * sub message comes without avatar (grouping concept)
    */
-  const isLeadMessage = previousMessage === null ||
+  const isLeadMessage =
+    previousMessage === null ||
     previousMessage.activity ||
     message.recommendation ||
     isAlert ||
@@ -54,5 +57,9 @@ export default ({
     previousMessageAuthor.id !== author.id ||
     messageUtil.getYMD(previousMessage) !== messageUtil.getYMD(message)
 
-  return isLeadMessage ? <LeadMessage {...props} /> : <SubMessage {...props} />
+  return isLeadMessage ? (
+    <LeadMessage {...sharedProps} />
+  ) : (
+    <SubMessage {...sharedProps} />
+  )
 }

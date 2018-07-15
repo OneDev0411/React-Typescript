@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { getNameInitials } from '../../..//utils/helpers'
+
 import {
   Container,
   Status,
@@ -44,7 +46,7 @@ export function AvatarUploader({
       {avatar.src ? (
         <Image src={avatar.src} alt="avatar" />
       ) : (
-        <Initials>NH</Initials>
+        <Initials>{getNameInitials(avatar.display_name)}</Initials>
       )}
       <Status isOnline={isOnline} />
       <Trigger htmlFor="avatarImage" hasImage={avatar.src}>

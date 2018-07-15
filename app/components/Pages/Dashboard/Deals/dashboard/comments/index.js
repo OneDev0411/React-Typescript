@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import Comments from '../../../Chatroom/Messages/light'
 import TaskRoom from '../../../../../../services/notification/chat'
 import { addNewRoom } from '../../../../../../store_actions/chatroom/room'
+import { isBackOffice } from '../../../../../../utils/user-teams'
 
 class Comment extends React.Component {
   componentDidMount() {
@@ -29,7 +31,7 @@ class Comment extends React.Component {
   }
 
   render() {
-    const { task, user } = this.props
+    const { task, user, isBackOffice } = this.props
 
     if (!task) {
       return false
@@ -42,6 +44,7 @@ class Comment extends React.Component {
           user={user}
           roomId={task.room.id}
           deliveryReportPlacement="bottom"
+          openFilesInNewTab={!isBackOffice}
         />
       </div>
     )
@@ -49,9 +52,10 @@ class Comment extends React.Component {
 }
 
 export default connect(
-  ({ data, chatroom }) => ({
+  ({ user, chatroom }) => ({
     rooms: chatroom.rooms,
-    user: data.user
+    isBackOffice: isBackOffice(user),
+    user
   }),
   { addNewRoom }
 )(Comment)
