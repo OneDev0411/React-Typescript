@@ -2,6 +2,7 @@ import React from 'react'
 
 import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
+import '../../../../styles/components/modules/template-builder.scss'
 
 import './AssetManager'
 import config from './config'
@@ -87,7 +88,7 @@ class Builder extends React.Component {
 
   render() {
     return (
-      <Container>
+      <Container className="template-builder">
         <TemplatesContainer>
           <Templates
             list={this.props.templates}
