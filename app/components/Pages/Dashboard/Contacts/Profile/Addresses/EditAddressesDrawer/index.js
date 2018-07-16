@@ -67,12 +67,6 @@ class EditAddressesForm extends React.Component {
     return null
   }
 
-  getLabelOptions = () =>
-    this.props.addressAttributeDefs[0].labels.map(value => ({
-      title: value,
-      value
-    }))
-
   render() {
     const { addresses, addressAttributeDefs } = this.props
 
@@ -153,7 +147,10 @@ class EditAddressesForm extends React.Component {
                     <div>
                       <Select
                         hasEmptyItem={false}
-                        items={this.getLabelOptions()}
+                        items={['Home', 'Work', 'Other'].map(value => ({
+                          title: value,
+                          value
+                        }))}
                         label="Address Type"
                         name={`${name}.label`}
                       />
