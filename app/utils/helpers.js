@@ -278,3 +278,7 @@ export function round(number, precision) {
 
   return shift(Math.round(shift(number, +precision)), -precision)
 }
+
+export function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}

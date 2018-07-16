@@ -1,3 +1,4 @@
-export * from './email'
-export * from './phone-number'
 export * from './date'
+export * from './email'
+export * from './number'
+export * from './phone-number'

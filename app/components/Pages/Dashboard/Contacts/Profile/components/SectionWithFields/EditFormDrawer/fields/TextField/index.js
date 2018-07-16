@@ -52,7 +52,9 @@ export function TextField(props) {
         attribute: props.attribute,
         value: value ? props.parse(value) : ''
       })}
-      validate={value => props.validate((value && value.value) || value)}
+      validate={value =>
+        props.validate(value.value == null ? value : value.value)
+      }
       render={({ input, meta }) => {
         const hasError = meta.error && meta.touched
 
