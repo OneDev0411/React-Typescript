@@ -164,7 +164,7 @@ class FieldDropDown extends React.Component {
           onChange={this.onFieldChange}
           callToActions={
             <ActionButton onClick={this.toggleOpenDrawer}>
-              Add custom title
+              Add custom field
             </ActionButton>
           }
         />
