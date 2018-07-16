@@ -11,6 +11,6 @@ export const Container = styled.div`
   background-color: #fff;
 `
 export const TemplatesContainer = styled.div`
-  width: 500px;
+  width: 300px;
   border-right: 1px solid #ccc;
 `

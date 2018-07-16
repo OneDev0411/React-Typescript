@@ -1,11 +1,11 @@
 export default {
   styleManager: {
     sectors: [
-//       {
-//         name: 'Color',
-//         open: true,
-//         buildProps: ['background-color', 'color']
-//       }
+      {
+        name: 'Color',
+        open: true,
+        buildProps: ['background-color', 'color']
+      }
     ]
   },
   panels: {

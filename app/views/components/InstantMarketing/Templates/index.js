@@ -5,14 +5,10 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   padding: 32px;
-  min-height: 100vh;
-  max-height: 100vh;
   overflow: auto;
 `
 
 const Image = styled.img`
-  width: 436px;
-  height: 250px;
   margin: 32px 0;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -24,10 +20,7 @@ const Image = styled.img`
 `
 
 const TemplateItem = styled.div`
-  width: 436px;
-  height: 40px;
-  font-size: 30px;
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
   border: 1px solid #ccc;
@@ -48,7 +41,7 @@ const Templates = props => (
         key={template.id}
         onClick={() => props.onTemplateSelect(template)}
       >
-        {template.name}
+        <img width="100%" src={ template.thumbnail } title={ template.name } />
       </TemplateItem>
     ))}
   </Container>

@@ -6,9 +6,41 @@
   height: 100%;
   z-index: 100;
 
+  * {
+    box-shadow: 0 0 0 !important;
+  }
+
+  .gjs-sm-title {
+    background-color: #f8fafb;
+    color: black;
+    font-size: 14px;
+
+    i {
+      display: none;
+    }
+  }
+
+  .gjs-sm-icon {
+    color: black;
+    font-size: 11px;
+  }
+
+  .gjs-field-color {
+    background: #f8fafb;
+    height:25px;
+    border: 1px solid #e0e8ed;
+    border-radius: 3px;
+    font-size: 11px;
+    color: black;
+  }
+
   .wrapper {
     width: 80%;
     float: left;
+  }
+
+  .gjs-pn-views {
+    border-width: 1px;
   }
 
   .gjs-clm-tags {
@@ -16,11 +48,11 @@
   }
 
   .gjs-one-bg, .gjs-three-bg {
-    background: #e7e7e7;
+    background: white;
   }
 
   .gjs-two-color, .gjs-color-warn, .gjs-four-color, .gjs-color-main, .gjs-color-contrast {
-    color: black;
+    color: #2196f3;
   }
 
   .gjs-toolbar {
@@ -29,5 +61,10 @@
 
   .gjs-pn-views, .gjs-pn-views-container {
     width: 25%;
+    border-left: 1px solid #e0e8ed;
+  }
+
+  .gjs-cv-canvas {
+    width: 75%;
   }
 }
