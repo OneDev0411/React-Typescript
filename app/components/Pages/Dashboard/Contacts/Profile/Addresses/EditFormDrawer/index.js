@@ -67,14 +67,18 @@ class EditForm extends React.Component {
     return null
   }
 
+  getLabelOptions = () =>
+    this.props.addressAttributeDefs[0].labels.map(value => ({
+      title: value,
+      value
+    }))
+
   render() {
-    const { addresses } = this.props
-    const labelOptions = addresses[0].fields[0].attribute_def.labels.map(
-      value => ({
-        title: value,
-        value
-      })
-    )
+    const { addresses, addressAttributeDefs } = this.props
+
+    if (addressAttributeDefs.length === 0) {
+      return null
+    }
 
     return (
       <FinalFormDrawer
@@ -150,7 +154,7 @@ class EditForm extends React.Component {
                     <div>
                       <Select
                         hasEmptyItem={false}
-                        items={labelOptions}
+                        items={this.getLabelOptions()}
                         label="Label"
                         name={`${name}.label`}
                       />
@@ -191,7 +195,7 @@ class EditForm extends React.Component {
                   onClick={() =>
                     fields.push(
                       getEmptyAddress(
-                        this.props.addressAttributeDefs,
+                        addressAttributeDefs,
                         getAddressIndex(addresses)
                       )
                     )

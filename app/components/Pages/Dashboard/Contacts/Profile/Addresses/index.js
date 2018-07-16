@@ -81,9 +81,9 @@ class Addresses extends React.Component {
   render() {
     const { addresses } = this.props
 
-    const hasAddresses = addresses[0].fields.some(
-      field => field[field.attribute_def.data_type]
-    )
+    const hasAddresses =
+      addresses.lenght > 0 &&
+      addresses[0].fields.some(field => field[field.attribute_def.data_type])
 
     return (
       <Section
