@@ -131,14 +131,16 @@ class EditForm extends React.Component {
                             name="is_primary"
                             component="input"
                             type="radio"
+                            parse={value => Number(value)}
                             value={
                               address != null
                                 ? address.index
                                 : getAddressIndex(addresses)
                             }
                           />
-                          {'    '}
-                          Set as primary address
+                          <span style={{ marginLeft: '0.5em' }}>
+                            Set as primary address
+                          </span>
                         </label>
                         {/* <DeleteButton
                             color="#778a9f"
