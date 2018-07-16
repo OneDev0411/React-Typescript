@@ -19,51 +19,42 @@ const propTypes = { section: PropTypes.string }
 const defaultSelectedItem = { title: '-Select-', value: '-Select-' }
 
 class CustomAttributeDrawer extends React.Component {
-  state = {
-    submitting: false,
-    initialValues: {
-      label: '',
-      section: this.props.section || defaultSelectedItem,
-      data_type: defaultSelectedItem,
-      labels: [''],
-      enum_values: ['']
-    }
+  initialValues = {
+    label: '',
+    section: this.props.section || defaultSelectedItem,
+    data_type: defaultSelectedItem,
+    labels: [''],
+    enum_values: ['']
   }
 
   onSubmit = async values => {
     try {
-      this.setState({ submitting: true, initialValues: values })
-
       await this.props.dispatch(
         createAttributeDefinition(preSaveFormat(values))
       )
 
-      this.setState({ submitting: false }, () => {
-        this.props.onClose()
-        this.props.dispatch(
-          notify({
-            status: 'success',
-            dismissAfter: 4000,
-            title: `Custom field added to ${this.props.section}.`,
-            message: `${values.label}`
-          })
-        )
-      })
+      this.props.onClose()
+      this.props.dispatch(
+        notify({
+          status: 'success',
+          dismissAfter: 4000,
+          title: `Custom field added to ${this.props.section}.`,
+          message: `${values.label}`
+        })
+      )
     } catch (error) {
       console.log(error)
-      this.setState({ submitting: false })
     }
   }
 
   render() {
     return (
       <FinalFormDrawer
-        initialValues={this.state.initialValues}
+        initialValues={this.initialValues}
         isOpen={this.props.isOpen}
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
         title="Add a Custom Field"
-        submitting={this.state.submitting}
         validate={validate}
         render={({ values }) => (
           <React.Fragment>

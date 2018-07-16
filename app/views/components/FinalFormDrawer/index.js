@@ -11,7 +11,6 @@ FinalFormDrawer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   showFooter: PropTypes.bool,
   showReset: PropTypes.bool,
@@ -26,8 +25,6 @@ FinalFormDrawer.defaultProps = {
 }
 
 export function FinalFormDrawer(props) {
-  const { submitting } = props
-
   return (
     <Form
       validate={props.validate}
@@ -35,12 +32,30 @@ export function FinalFormDrawer(props) {
       mutators={{ ...arrayMutators }}
       initialValues={props.initialValues}
       render={formProps => {
-        const { form, pristine, validating, handleSubmit } = formProps
+        const {
+          form,
+          pristine,
+          validating,
+          handleSubmit,
+          submitting
+        } = formProps
+
+        const handleOnClose = () => {
+          if (submitting) {
+            return
+          }
+
+          if (formProps.dirty) {
+            form.initialize(props.initialValues)
+          }
+
+          props.onClose()
+        }
 
         return (
           <Drawer
             isOpen={props.isOpen}
-            onClose={props.onClose}
+            onClose={handleOnClose}
             showFooter={props.showFooter}
           >
             <Drawer.Header title={props.title} />
@@ -55,7 +70,7 @@ export function FinalFormDrawer(props) {
                 <ActionButton
                   disabled={submitting}
                   inverse
-                  onClick={props.onClose}
+                  onClick={handleOnClose}
                   type="button"
                 >
                   Cancel
@@ -65,6 +80,7 @@ export function FinalFormDrawer(props) {
                 {props.showReset && (
                   <ActionButton
                     type="button"
+                    inverse
                     onClick={() => form.reset(props.initialValues)}
                     style={{ marginRight: '1em' }}
                     disabled={submitting || pristine}
