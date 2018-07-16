@@ -9,17 +9,24 @@ import ActionButton from '../../../../../../views/components/Button/ActionButton
 import Tooltip from '../../../../../../views/components/tooltip'
 import StarIcon from '../../../../../../views/components/SvgIcons/Star/StarIcon'
 
+import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
 import EditForm from './EditFormDrawer'
 import { Section } from '../components/Section'
 import { getAddresses, getFullAddress } from './helpers'
 
 class Addresses extends React.Component {
   state = {
-    isOpenEditDrawer: false
+    isOpenEditDrawer: false,
+    isOpenNewAttributeDrawer: false
   }
 
   openEditDrawer = () => this.setState({ isOpenEditDrawer: true })
   closeEditDrawer = () => this.setState({ isOpenEditDrawer: false })
+
+  openNewAttributeDrawer = () =>
+    this.setState({ isOpenNewAttributeDrawer: true })
+  closeNewAttributeDrawer = () =>
+    this.setState({ isOpenNewAttributeDrawer: false })
 
   getSectionContent = addresses => {
     let addressesItems = []
@@ -80,6 +87,7 @@ class Addresses extends React.Component {
 
     return (
       <Section
+        // onAdd={this.openNewAttributeDrawer}
         onEdit={hasAddresses ? this.openEditDrawer : undefined}
         title="Addresses"
       >
@@ -105,6 +113,12 @@ class Addresses extends React.Component {
           contact={this.props.contact}
           isOpen={this.state.isOpenEditDrawer}
           onClose={this.closeEditDrawer}
+        />
+
+        <CustomAttributeDrawer
+          isOpen={this.state.isOpenNewAttributeDrawer}
+          onClose={this.closeNewAttributeDrawer}
+          section="Addresses"
         />
       </Section>
     )
