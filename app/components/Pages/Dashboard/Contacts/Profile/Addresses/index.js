@@ -9,24 +9,17 @@ import ActionButton from '../../../../../../views/components/Button/ActionButton
 import Tooltip from '../../../../../../views/components/tooltip'
 import StarIcon from '../../../../../../views/components/SvgIcons/Star/StarIcon'
 
-import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
-import EditForm from './EditFormDrawer'
+import EditDrawer from './EditAddressesDrawer'
 import { Section } from '../components/Section'
 import { getAddresses, getFullAddress } from './helpers'
 
 class Addresses extends React.Component {
   state = {
-    isOpenEditDrawer: false,
-    isOpenNewAttributeDrawer: false
+    isOpenEditDrawer: false
   }
 
   openEditDrawer = () => this.setState({ isOpenEditDrawer: true })
   closeEditDrawer = () => this.setState({ isOpenEditDrawer: false })
-
-  openNewAttributeDrawer = () =>
-    this.setState({ isOpenNewAttributeDrawer: true })
-  closeNewAttributeDrawer = () =>
-    this.setState({ isOpenNewAttributeDrawer: false })
 
   getSectionContent = addresses => {
     let addressesItems = []
@@ -82,12 +75,11 @@ class Addresses extends React.Component {
     const { addresses } = this.props
 
     const hasAddresses =
-      addresses.lenght > 0 &&
+      addresses.length > 0 &&
       addresses[0].fields.some(field => field[field.attribute_def.data_type])
 
     return (
       <Section
-        // onAdd={this.openNewAttributeDrawer}
         onEdit={hasAddresses ? this.openEditDrawer : undefined}
         title="Addresses"
       >
@@ -107,18 +99,12 @@ class Addresses extends React.Component {
           </div>
         )}
 
-        <EditForm
+        <EditDrawer
           addresses={this.props.addresses}
           addressAttributeDefs={this.props.addressAttributeDefs}
           contact={this.props.contact}
           isOpen={this.state.isOpenEditDrawer}
           onClose={this.closeEditDrawer}
-        />
-
-        <CustomAttributeDrawer
-          isOpen={this.state.isOpenNewAttributeDrawer}
-          onClose={this.closeNewAttributeDrawer}
-          section="Addresses"
         />
       </Section>
     )

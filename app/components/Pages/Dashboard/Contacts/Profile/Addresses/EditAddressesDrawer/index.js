@@ -29,7 +29,7 @@ const propTypes = {
   onClose: PropTypes.func.isRequired
 }
 
-class EditForm extends React.Component {
+class EditAddressesForm extends React.Component {
   onSubmit = async values => {
     try {
       const attributes = preSaveFormat(values)
@@ -82,7 +82,7 @@ class EditForm extends React.Component {
 
     return (
       <FinalFormDrawer
-        initialValues={getInitialValues(addresses)}
+        initialValues={getInitialValues(addresses, addressAttributeDefs)}
         isOpen={this.props.isOpen}
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
@@ -95,15 +95,10 @@ class EditForm extends React.Component {
                 const address = this.getAddress(
                   fields.value[index].addressIndex
                 )
-                const isEmpty =
-                  address &&
-                  !address.fields.some(
-                    field => field[field.attribute_def.data_type]
-                  )
 
                 return (
                   <div key={name}>
-                    {(addresses.length > 1 || !isEmpty) && (
+                    {(addresses.length > 0 || fields.value.length > 1) && (
                       <div
                         style={{
                           position: 'relative',
@@ -111,11 +106,13 @@ class EditForm extends React.Component {
                           backgroundColor: '#ecf1f6'
                         }}
                       >
-                        <p style={{ color: '#778a9f' }}>
+                        <p style={{ color: '#778a9f', fontWeight: 500 }}>
                           {(address && address.label) || 'Other'}
                         </p>
-                        <p style={{ color: '#263d50' }}>
-                          {(address && getFullAddress(address.fields)) || '-'}
+                        <p style={{ color: '#263d50', fontSize: '1.6rem' }}>
+                          <b>
+                            {(address && getFullAddress(address.fields)) || '-'}
+                          </b>
                         </p>
                         <label
                           htmlFor={`is_primary_${index}`}
@@ -133,7 +130,9 @@ class EditForm extends React.Component {
                                 : getAddressIndex(addresses)
                             }
                           />
-                          <span style={{ marginLeft: '0.5em' }}>
+                          <span
+                            style={{ marginLeft: '0.5em', fontWeight: 400 }}
+                          >
                             Set as primary address
                           </span>
                         </label>
@@ -190,8 +189,10 @@ class EditForm extends React.Component {
                 )
               })}
 
-              <div style={{ padding: '1em' }}>
+              <div style={{ padding: '2em', textAlign: 'center' }}>
                 <AddButton
+                  inverse
+                  style={{ fontSize: '1.6rem' }}
                   onClick={() =>
                     fields.push(
                       getEmptyAddress(
@@ -212,6 +213,6 @@ class EditForm extends React.Component {
   }
 }
 
-EditForm.propTypes = propTypes
+EditAddressesForm.propTypes = propTypes
 
-export default connect()(EditForm)
+export default connect()(EditAddressesForm)

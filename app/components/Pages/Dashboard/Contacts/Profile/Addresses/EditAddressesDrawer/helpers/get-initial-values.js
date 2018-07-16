@@ -1,8 +1,17 @@
-export function getInitialValues(addresses) {
-  let addressesValues = []
+import { getEmptyAddress } from './get-empty-address'
+
+export function getInitialValues(addresses, addressAttributeDefs) {
   const initialValues = {
     is_primary: 0
   }
+
+  if (addresses.length === 0) {
+    initialValues.addresses = [getEmptyAddress(addressAttributeDefs)]
+
+    return initialValues
+  }
+
+  let addressesValues = []
 
   addresses.forEach(address => {
     const { index, label } = address

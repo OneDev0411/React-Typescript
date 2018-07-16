@@ -1,4 +1,15 @@
-export function getEmptyAddress(attributeDefs, addressIndex) {
+function getValue(type) {
+  switch (type) {
+    case 'number':
+      return 0
+    case 'date':
+      return new Date().getTime()
+    default:
+      return ''
+  }
+}
+
+export function getEmptyAddress(attributeDefs, addressIndex = 0) {
   const address = {
     addressIndex,
     label: { title: 'Other', value: 'Other' }
@@ -20,15 +31,4 @@ export function getEmptyAddress(attributeDefs, addressIndex) {
   })
 
   return address
-}
-
-function getValue(type) {
-  switch (type) {
-    case 'number':
-      return 0
-    case 'date':
-      return new Date().getTime()
-    default:
-      return ''
-  }
 }
