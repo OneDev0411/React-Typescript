@@ -34,16 +34,9 @@ const defaultProps = {
 }
 
 class SectionWithFields extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.getModalFields = this.getModalFields.bind(this)
-
-    this.state = {
-      isOpenEditDrawer: false,
-      isOpenNewAttributeDrawer: false,
-      editFormInitialValues: getInitialValues(this.getModalFields())
-    }
+  state = {
+    isOpenEditDrawer: false,
+    isOpenNewAttributeDrawer: false
   }
 
   openEditAttributeDrawer = () => this.setState({ isOpenEditDrawer: true })
@@ -56,8 +49,6 @@ class SectionWithFields extends React.Component {
 
   handleOnSubmit = async values => {
     try {
-      this.setState({ editFormInitialValues: values })
-
       const { upsertedAttributeList, deletedAttributesList } = formatPreSave(
         this.props.fields,
         values
@@ -194,6 +185,7 @@ class SectionWithFields extends React.Component {
       addNewFieldButtonText,
       showAddNewCustomAttributeButton
     } = this.props
+    const modalFields = this.getModalFields()
     const sectionTitle = this.props.title || this.props.section
     const sectionFields = this.getSectionFields()
 
@@ -226,8 +218,8 @@ class SectionWithFields extends React.Component {
         )}
 
         <EditForm
-          fields={this.getModalFields()}
-          initialValues={this.state.editFormInitialValues}
+          fields={modalFields}
+          initialValues={getInitialValues(modalFields)}
           isOpen={this.state.isOpenEditDrawer}
           onClose={this.closeEditAttributeDrawer}
           title={`Edit ${sectionTitle}`}

@@ -29,16 +29,16 @@ class CustomAttributeDrawer extends React.Component {
 
   onSubmit = async values => {
     try {
-      await this.props.dispatch(
-        createAttributeDefinition(preSaveFormat(values))
-      )
+      const formatedValues = preSaveFormat(values)
+
+      await this.props.dispatch(createAttributeDefinition(formatedValues))
 
       this.props.onClose()
       this.props.dispatch(
         notify({
           status: 'success',
           dismissAfter: 4000,
-          title: `Custom field added to ${values.section.value}.`,
+          title: `Custom field added to ${formatedValues.section}.`,
           message: `${values.label}`
         })
       )
@@ -65,16 +65,16 @@ class CustomAttributeDrawer extends React.Component {
             <Select
               items={[
                 {
-                  title: 'Text',
-                  value: 'text'
+                  title: 'Date',
+                  value: 'date'
                 },
                 {
                   title: 'Number',
                   value: 'number'
                 },
                 {
-                  title: 'Date',
-                  value: 'date'
+                  title: 'Text',
+                  value: 'text'
                 }
               ]}
               label="Type"

@@ -28,7 +28,11 @@ export function FinalFormDrawer(props) {
   return (
     <Form
       validate={props.validate}
-      onSubmit={props.onSubmit}
+      onSubmit={async (values, form) => {
+        form.initialize(values)
+        await props.onSubmit(values)
+        form.initialize(props.initialValues)
+      }}
       mutators={{ ...arrayMutators }}
       initialValues={props.initialValues}
       render={formProps => {
