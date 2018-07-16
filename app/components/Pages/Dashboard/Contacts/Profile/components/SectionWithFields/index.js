@@ -129,10 +129,11 @@ class SectionWithFields extends React.Component {
 
         let title = attribute_def.label
 
-        if (field.label) {
-          title = `${field.label}${
-            attribute_def.name !== 'website' ? ` ${title}` : ''
-          }`
+        if (
+          field.label &&
+          !['website', 'important_date'].includes(attribute_def.name)
+        ) {
+          title = `${field.label} ${title}`
         }
 
         return [
