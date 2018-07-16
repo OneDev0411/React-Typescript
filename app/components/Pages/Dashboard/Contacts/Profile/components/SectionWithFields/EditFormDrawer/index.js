@@ -15,7 +15,6 @@ EditForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   validate: PropTypes.func
 }

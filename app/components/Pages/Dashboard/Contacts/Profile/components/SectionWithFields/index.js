@@ -42,19 +42,12 @@ class SectionWithFields extends React.Component {
     this.state = {
       isOpenEditDrawer: false,
       isOpenNewAttributeDrawer: false,
-      isSaving: false,
       editFormInitialValues: getInitialValues(this.getModalFields())
     }
   }
 
   openEditAttributeDrawer = () => this.setState({ isOpenEditDrawer: true })
-  closeEditAttributeDrawer = () => {
-    if (this.state.isSaving) {
-      return
-    }
-
-    this.setState({ isOpenEditDrawer: false })
-  }
+  closeEditAttributeDrawer = () => this.setState({ isOpenEditDrawer: false })
 
   openNewAttributeDrawer = () =>
     this.setState({ isOpenNewAttributeDrawer: true })
@@ -63,7 +56,7 @@ class SectionWithFields extends React.Component {
 
   handleOnSubmit = async values => {
     try {
-      this.setState({ isSaving: true, editFormInitialValues: values })
+      this.setState({ editFormInitialValues: values })
 
       const { upsertedAttributeList, deletedAttributesList } = formatPreSave(
         this.props.fields,
@@ -84,17 +77,14 @@ class SectionWithFields extends React.Component {
         )
       }
 
-      this.setState({ isSaving: false }, () => {
-        this.closeEditAttributeDrawer()
-        this.props.notify({
-          status: 'success',
-          dismissAfter: 4000,
-          message: `${this.props.section} updated.`
-        })
+      this.closeEditAttributeDrawer()
+      this.props.notify({
+        status: 'success',
+        dismissAfter: 4000,
+        message: `${this.props.section} updated.`
       })
     } catch (error) {
       console.log(error)
-      this.setState({ isSaving: false })
     }
   }
 
@@ -228,7 +218,6 @@ class SectionWithFields extends React.Component {
           initialValues={this.state.editFormInitialValues}
           isOpen={this.state.isOpenEditDrawer}
           onClose={this.closeEditAttributeDrawer}
-          submitting={this.state.isSaving}
           title={`Edit ${sectionTitle}`}
           onSubmit={this.handleOnSubmit}
         />
