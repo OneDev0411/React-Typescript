@@ -40,7 +40,7 @@ export function PageTitle(props) {
     }
   }
 
-  if (onClickCloseButton) {
+  if (typeof onClickCloseButton === 'function') {
     return (
       <Flex justifyBetween style={{ width: '100%' }}>
         <Flex alignCenter>
@@ -50,6 +50,7 @@ export function PageTitle(props) {
 
         <Flex alignCenter>
           <IconButton
+            size="32px"
             color="#333"
             hoverColor="#2196f3"
             onClick={onClickCloseButton}
@@ -66,6 +67,7 @@ export function PageTitle(props) {
       <Flex alignCenter>
         {props.showBackButton && (
           <IconButton
+            size="32px"
             color="#333"
             hoverColor="#2196f3"
             onClick={props.onClickBackButton || handleOnBack}
