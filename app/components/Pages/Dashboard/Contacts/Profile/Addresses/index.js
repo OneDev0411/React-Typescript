@@ -73,14 +73,17 @@ class Addresses extends React.Component {
 
   render() {
     const { addresses } = this.props
-    const hasAddresses = addresses.length > 0
+
+    const hasAddresses = addresses[0].fields.some(
+      field => field[field.attribute_def.data_type]
+    )
 
     return (
       <Section
-        // onEdit={hasAddresses ? this.openEditDrawer : undefined}
+        onEdit={hasAddresses ? this.openEditDrawer : undefined}
         title="Addresses"
       >
-        {addresses.length > 0 ? (
+        {hasAddresses ? (
           this.getSectionContent(addresses)
         ) : (
           <div
@@ -90,7 +93,7 @@ class Addresses extends React.Component {
               marginBottom: '1.5em'
             }}
           >
-            <ActionButton inverse onClick={() => {}}>
+            <ActionButton inverse onClick={this.openEditDrawer}>
               Add Address
             </ActionButton>
           </div>

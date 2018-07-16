@@ -65,6 +65,7 @@ export function FinalFormDrawer(props) {
                 {props.showReset && (
                   <ActionButton
                     type="button"
+                    inverse
                     onClick={() => form.reset(props.initialValues)}
                     style={{ marginRight: '1em' }}
                     disabled={submitting || pristine}

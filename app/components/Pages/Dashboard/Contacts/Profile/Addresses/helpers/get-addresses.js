@@ -33,7 +33,7 @@ export function getAddresses(addressesFields, addressAttributeDefs) {
 
     const { label, index, is_primary } = fields[0]
 
-    addresses.push({ index, label, fields, is_primary })
+    addresses.push({ fields, index, is_primary, label })
   })
 
   return addresses
