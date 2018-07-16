@@ -127,13 +127,21 @@ class SectionWithFields extends React.Component {
         const value = field[attribute_def.data_type]
         const key = `${this.props.section}_field_${index}`
 
-        let title = attribute_def.label
+        const getTitle = () => {
+          let title = attribute_def.label
 
-        if (
-          field.label &&
-          !['website', 'important_date'].includes(attribute_def.name)
-        ) {
-          title = `${field.label} ${title}`
+          if (!field.label) {
+            return title
+          }
+
+          switch (attribute_def.name) {
+            case 'website':
+              return title
+            case 'important_date':
+              return field.label
+            default:
+              return `${field.label} ${title}`
+          }
         }
 
         return [
@@ -145,7 +153,7 @@ class SectionWithFields extends React.Component {
               marginBottom: '0.25em'
             }}
           >
-            {title}
+            {getTitle()}
           </dt>,
           <dd
             key={`${key}_value`}
