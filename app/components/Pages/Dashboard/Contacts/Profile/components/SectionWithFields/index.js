@@ -10,6 +10,7 @@ import {
 import { selectDefsBySection } from '../../../../../../../reducers/contacts/attributeDefs'
 import { getContactAttributesBySection } from '../../../../../../../models/contacts/helpers'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import { getContactOriginalSourceTitle } from '../../../../../../../utils/get-contact-original-source-title'
 
 import { EditForm } from './EditFormDrawer'
 import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
@@ -79,9 +80,6 @@ class SectionWithFields extends React.Component {
     }
   }
 
-  filterHiddenFields = field =>
-    field.attribute_def.show && field.attribute_def.editable
-
   getEmptyFields = () =>
     this.props.sectionAttributesDef
       .filter(
@@ -102,7 +100,9 @@ class SectionWithFields extends React.Component {
       this.props.fieldsOrder
     )
 
-    return orderedFields.filter(this.filterHiddenFields)
+    return orderedFields.filter(
+      field => field.attribute_def.show && field.attribute_def.editable
+    )
   }
 
   getSectionFields = () => {
@@ -112,10 +112,10 @@ class SectionWithFields extends React.Component {
     )
 
     const fields = orderedFields
-      .filter(this.filterHiddenFields)
+      .filter(field => field.attribute_def.show)
       .map((field, index) => {
         const { attribute_def } = field
-        const value = field[attribute_def.data_type]
+        let value = field[attribute_def.data_type]
         const key = `${this.props.section}_field_${index}`
 
         const getTitle = () => {
@@ -133,6 +133,11 @@ class SectionWithFields extends React.Component {
             default:
               return `${field.label} ${title}`
           }
+        }
+
+        if (attribute_def.name === 'source_type') {
+          console.log(field)
+          value = getContactOriginalSourceTitle(value)
         }
 
         return [
