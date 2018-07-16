@@ -30,14 +30,8 @@ const propTypes = {
 }
 
 class EditForm extends React.Component {
-  state = {
-    initialValues: getInitialValues(this.props.addresses)
-  }
-
   onSubmit = async values => {
     try {
-      this.setState({ initialValues: values })
-
       const attributes = preSaveFormat(values)
 
       await this.props.dispatch(
@@ -84,7 +78,7 @@ class EditForm extends React.Component {
 
     return (
       <FinalFormDrawer
-        initialValues={this.state.initialValues}
+        initialValues={getInitialValues(addresses)}
         isOpen={this.props.isOpen}
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
