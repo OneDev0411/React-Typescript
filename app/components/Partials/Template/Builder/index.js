@@ -22,7 +22,7 @@ class TemplateBuilder extends React.Component {
 
     this.editor = grapesjs.init({
       ...config,
-      container : '#canvas',
+      container: '#canvas',
       components: null,
       assetManager: {
         assets
@@ -58,7 +58,7 @@ class TemplateBuilder extends React.Component {
     const button = {
       id: 'close-builder',
       className: 'fa fa-close',
-      command: command,
+      command
     }
 
     this.editor.Panels.addButton('views', button)
@@ -70,12 +70,10 @@ class TemplateBuilder extends React.Component {
 
   render() {
     const { templates } = this.props
+
     return (
       <div className="template-builder">
-        <Picker
-          templates={ templates }
-          picked={ this.templatePicked.bind(this) }
-        />
+        <Picker templates={templates} picked={this.templatePicked.bind(this)} />
         <div className="wrapper">
           <div id="canvas" />
         </div>

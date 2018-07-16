@@ -15,20 +15,20 @@ class TemplateBuilder extends React.Component {
 
   async load() {
     const res = await superagent
-    .post('http://localhost:3000/screenshot')
-    .responseType('blob')
-    .send({
-      html: this.props.template.template,
-      viewport: {
-        width: 600,
-        height: 300
-      },
-      width: this.props.width,
-      height: this.props.height
-    })
+      .post('http://localhost:3000/screenshot')
+      .responseType('blob')
+      .send({
+        html: this.props.template.template,
+        viewport: {
+          width: 600,
+          height: 300
+        },
+        width: this.props.width,
+        height: this.props.height
+      })
 
+    const reader = new FileReader()
 
-    const reader  = new FileReader()
     reader.addEventListener('load', () => {
       this.el.current.style.backgroundImage = `url(${reader.result})`
     })
@@ -51,9 +51,9 @@ class TemplateBuilder extends React.Component {
     return (
       <div
         className="template-thumbnail"
-        onClick={ this.onClick.bind(this) }
-        style={ style }
-        ref={ this.el }
+        onClick={this.onClick.bind(this)}
+        style={style}
+        ref={this.el}
       />
     )
   }

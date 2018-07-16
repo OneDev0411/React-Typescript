@@ -11,7 +11,6 @@ import esign from './esign'
 import upload from './upload'
 import splitter from './pdf-splitter'
 import contexts from './contexts'
-import templates from './templates'
 
 export default combineReducers({
   properties,
@@ -24,6 +23,5 @@ export default combineReducers({
   esign,
   contexts,
   upload,
-  splitter,
-  templates
+  splitter
 })

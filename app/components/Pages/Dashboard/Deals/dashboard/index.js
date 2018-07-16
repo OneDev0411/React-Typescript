@@ -14,7 +14,6 @@ import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
 import Upload from './upload'
 import PageHeader from './page-header'
-import TemplatePicker from './template/picker'
 import { getDeal } from '../../../../../store_actions/deals'
 import { isTrainingAccount } from '../../../../../utils/user-teams'
 
@@ -126,7 +125,6 @@ class DealDetails extends React.Component {
         <ESignCompose deal={deal} />
         <UploadPromptModal deal={deal} />
         <PDFSplitterModal deal={deal} />
-        <TemplatePicker deal={ deal } />
       </div>
     )
   }

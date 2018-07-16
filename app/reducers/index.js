@@ -12,14 +12,15 @@ import contacts from './contacts'
 import chatroom from './chatroom'
 import deals from './deals'
 import calendar from './calendar'
-import { tasks } from './tasks'
+import instantMarketing from './instant-marketing'
 import brandConsole from './brandConsole'
 import search from './listings/search'
 import alerts from './listings/alerts'
 import favorites from './listings/favorites'
 import widgets from './widgets'
-import { intercom } from './intercom'
 import confirmation from './confirmation'
+import { intercom } from './intercom'
+import { tasks } from './tasks'
 import { notifications as globalNotifications } from './notifications'
 
 const appReducer = combineReducers({
@@ -38,6 +39,9 @@ const appReducer = combineReducers({
   /* deals reducers */
   deals,
   brandConsole,
+
+  /* instant marketing */
+  instantMarketing,
 
   /* calendar */
   calendar,
