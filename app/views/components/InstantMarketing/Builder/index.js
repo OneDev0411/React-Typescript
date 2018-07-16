@@ -12,6 +12,8 @@ import Templates from '../Templates'
 
 import sample from './sample'
 
+import './AssetManager'
+
 class Builder extends React.Component {
   componentDidMount() {
     this.editor = grapesjs.init({

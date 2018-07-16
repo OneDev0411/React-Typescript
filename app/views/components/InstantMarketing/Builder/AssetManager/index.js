@@ -41,28 +41,43 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
     `
   })
 
+  let target
+  const AssetView = Backbone.View.extend({
+    events: {
+      click: 'onClick',
+    },
+    onClick() {
+      target.set('src', this.model.get('src'))
+    },
+    initialize({ model }) {
+      this.model = model
+    },
+    render() {
+      this.$el.html(`<img src="${this.model.get('src')}" width="100%" />`)
+      return this
+    }
+  })
+
   const AssetsView = Backbone.View.extend({
     initialize({ coll }) {
-      this.listenTo(coll, 'reset', this.reset)
-      this.listenTo(coll, 'add', this.add)
-      this.listenTo(coll, 'remove', this.remove)
-
       this.collection = coll
     },
     reset() {
-      console.log('Reseting')
-      this.$el.html('')
-    },
-    add(asset) {
-      console.log('Added', asset)
-    },
-    remove(asset) {
-      console.log('Removed', asset)
+      this.$el.empty()
+      for(let i = 0; i<this.collection.length; i++) {
+        const asset = this.collection.at(i)
+        const view = new AssetView({model:asset})
+        view.render()
+        view.$el.appendTo(this.el)
+      }
     },
     render: () => this
   })
 
-  const view = new AssetsView({})
+
+  const view = new AssetsView({
+    coll: editor.AssetManager.getAll()
+  })
 
   view.render()
   view.$el.hide()
@@ -75,7 +90,14 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
     panels.set('appendContent', view.$el).trigger('change:appendContent')
   })
 
-  editor.on('component:selected', () => {
+  editor.on('component:selected', selected => {
+    if (selected.get('type') !== 'image') {
+      view.$el.hide()
+      return
+    }
+
+    target = selected
+    view.reset()
     view.$el.show()
   })
 })

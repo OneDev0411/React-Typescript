@@ -6,13 +6,6 @@
   height: 100%;
   z-index: 100;
 
-  .template-picker {
-    width: 20%;
-    height: 100%;
-    float: left;
-    background: white;
-  }
-
   .wrapper {
     width: 80%;
     float: left;
@@ -32,5 +25,9 @@
 
   .gjs-toolbar {
     display: none
+  }
+
+  .gjs-pn-views, .gjs-pn-views-container {
+    width: 25%;
   }
 }
