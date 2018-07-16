@@ -101,6 +101,8 @@ class Addresses extends React.Component {
 
         <EditForm
           addresses={this.props.addresses}
+          addressAttributeDefs={this.props.addressAttributeDefs}
+          contact={this.props.contact}
           isOpen={this.state.isOpenEditDrawer}
           onClose={this.closeEditDrawer}
         />
@@ -117,7 +119,7 @@ function mapStateToProps(state, props) {
   const addressesFields = getContactAddresses(props.contact)
   const addresses = getAddresses(addressesFields, addressAttributeDefs)
 
-  return { addresses }
+  return { addresses, addressAttributeDefs }
 }
 
 export default connect(mapStateToProps)(Addresses)

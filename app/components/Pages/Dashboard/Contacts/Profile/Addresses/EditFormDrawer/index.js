@@ -3,16 +3,18 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
+import { addNotification as notify } from 'reapop'
 
-import { selectDefsBySection } from '../../../../../../../reducers/contacts/attributeDefs'
-import { FinalFormDrawer } from '../../../../../../../views/components/FinalFormDrawer'
 import AddButton from '../../../../../../../views/components/Button/ActionButton'
-import DeleteButton from '../../../../../../../views/components/Button/IconButton'
-import DeleteIcon from '../../../../../../../views/components/SvgIcons/Delete/IconDelete'
+// import DeleteButton from '../../../../../../../views/components/Button/IconButton'
+// import DeleteIcon from '../../../../../../../views/components/SvgIcons/Delete/IconDelete'
+import { upsertContactAttributes } from '../../../../../../../store_actions/contacts/upsert-contact-attributes'
+import { FinalFormDrawer } from '../../../../../../../views/components/FinalFormDrawer'
 import {
   TextField,
   Select
 } from '../../../../../../../views/components/final-form-fields'
+
 import { getFullAddress } from '../helpers/get-full-address'
 import {
   getAddressIndex,
@@ -31,8 +33,30 @@ class EditForm extends React.Component {
   state = {
     submitting: false
   }
-  onSubmit = values => {
-    preSaveFormat(values)
+
+  onSubmit = async values => {
+    try {
+      this.setState({ submitting: true })
+
+      const attributes = preSaveFormat(values)
+
+      await this.props.dispatch(
+        upsertContactAttributes(this.props.contact.id, attributes)
+      )
+      this.setState({ submitting: false }, () => {
+        this.props.onClose()
+        this.props.dispatch(
+          notify({
+            status: 'success',
+            dismissAfter: 4000,
+            message: 'Addresses updated.'
+          })
+        )
+      })
+    } catch (error) {
+      console.log(error)
+      this.setState({ submitting: false })
+    }
   }
 
   getAddress = index => {
@@ -108,8 +132,9 @@ class EditForm extends React.Component {
                             component="input"
                             type="radio"
                             value={
-                              (address && address.addressIndex) ||
-                              getAddressIndex(addresses)
+                              address != null
+                                ? address.index
+                                : getAddressIndex(addresses)
                             }
                           />
                           {'    '}
@@ -192,13 +217,186 @@ class EditForm extends React.Component {
 
 EditForm.propTypes = propTypes
 
-function mapStateToProps(state) {
-  const addressAttributeDefs = selectDefsBySection(
-    state.contacts.attributeDefs,
-    'Addresses'
-  )
+export default connect()(EditForm)
 
-  return { addressAttributeDefs }
-}
+// withHandlers({
+//   onChange: ({
+//     contact,
+//     setDisabled,
+//     upsertContactAttributes
+//   }) => async field => {
+//     try {
+//       setDisabled(true)
 
-export default connect(mapStateToProps)(EditForm)
+//       let attribute
+//       const { data_type } = field.attribute_def
+
+//       if (field.id) {
+//         attribute = {
+//           id: field.id,
+//           [data_type]: field[data_type]
+//         }
+//       } else {
+//         attribute = {
+//           index: field.index,
+//           [data_type]: field[data_type],
+//           attribute_def: field.attribute_def.id
+//         }
+//       }
+
+//       await upsertContactAttributes(contact.id, [attribute])
+//     } catch (error) {
+//       throw error
+//     } finally {
+//       setDisabled(false)
+//     }
+//   }
+// }),
+// withHandlers({
+//   handleOnChangeLabel: ({
+//     contact,
+//     setDisabled,
+//     addressesFields,
+//     upsertContactAttributes
+//   }) => async ({ index, label }) => {
+//     if (index == null) {
+//       throw new Error(`The index is ${index}`)
+//     }
+
+//     if (label == null) {
+//       throw new Error(`The label is ${index}`)
+//     }
+
+//     const attributes = addressesFields
+//       .filter(field => field.index === index)
+//       .map(field => ({ ...field, label }))
+
+//     try {
+//       setDisabled(true)
+//       await upsertContactAttributes(contact.id, attributes)
+//     } catch (error) {
+//       throw error
+//     } finally {
+//       setDisabled(false)
+//     }
+//   }
+// }),
+// withHandlers({
+//   handelOnChangePrimary: ({
+//     contact,
+//     setDisabled,
+//     addressesFields,
+//     upsertContactAttributes
+//   }) => async index => {
+//     try {
+//       setDisabled(true)
+
+//       const attributes = addressesFields.map(field => {
+//         if (field.index === index) {
+//           return { ...field, is_primary: true }
+//         }
+
+//         return { ...field, is_primary: false }
+//       })
+
+//       await upsertContactAttributes(contact.id, attributes)
+//     } catch (error) {
+//       throw error
+//     } finally {
+//       setDisabled(false)
+//     }
+//   }
+// }),
+// withHandlers({
+//   onDelete: ({
+//     contact,
+//     setDisabled,
+//     upsertContactAttributes
+//   }) => async attribute => {
+//     try {
+//       setDisabled(true)
+
+//       const attributes = [
+//         {
+//           ...attribute,
+//           [attribute.attribute_def.data_type]: ''
+//         }
+//       ]
+
+//       await upsertContactAttributes(contact.id, attributes)
+//     } catch (error) {
+//       throw error
+//     } finally {
+//       setDisabled(false)
+//     }
+//   }
+// }),
+// withHandlers({
+//   handleDeleteAddress: ({
+//     contact,
+//     setDisabled,
+//     deleteAttributes
+//   }) => async fields => {
+//     setDisabled(true)
+
+//     try {
+//       const ids = fields
+//         .filter(field => field && field.id)
+//         .map(({ id }) => id)
+
+//       await deleteAttributes(contact.id, ids)
+//     } catch (error) {
+//       throw error
+//     } finally {
+//       setDisabled(false)
+//     }
+//   }
+// }),
+// withHandlers({
+//   handleAddNewAddress: ({
+//     contact,
+//     setDisabled,
+//     setShowModal,
+//     attributeDefs,
+//     addressesFields,
+//     upsertContactAttributes
+//   }) => async values => {
+//     try {
+//       setDisabled(true)
+
+//       const attributes = []
+//       const index = getIndex(addressesFields)
+
+//       Object.keys(values).forEach(key => {
+//         if (values[key]) {
+//           const attribute_def = selectDefinitionByName(attributeDefs, key)
+
+//           if (attribute_def) {
+//             attributes.push({
+//               index,
+//               attribute_def,
+//               label: values.label,
+//               is_primary: values.is_primary,
+//               [attribute_def.data_type]: values[key]
+//             })
+//           }
+//         }
+//       })
+
+//       addressesFields.forEach(attribute => {
+//         attributes.push({
+//           ...attribute,
+//           is_primary: false
+//         })
+//       })
+
+//       await upsertContactAttributes(contact.id, attributes)
+//     } catch (error) {
+//       setDisabled(false)
+//       throw error
+//     } finally {
+//       setDisabled(false)
+//       setShowModal(false)
+//     }
+//   }
+// })

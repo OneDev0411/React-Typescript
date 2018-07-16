@@ -8,18 +8,23 @@ export function preSaveFormat(values) {
       }
 
       const attributeType = field.attribute.attribute_def.data_type
+      const is_primary = values.is_primary === field.attribute.index
 
       const addField = field => {
         upsertList.push({
           ...field.attribute,
-          label: address.label.value,
-          is_primary: values.is_primary === field.attribute.index,
-          [attributeType]: field.value
+          [attributeType]: field.value,
+          is_primary,
+          label: address.label.value
         })
       }
 
       if (field.attribute.id) {
-        if (field.attribute[attributeType] !== field.value) {
+        if (
+          field.attribute[attributeType] !== field.value ||
+          field.attribute.is_primary !== is_primary ||
+          field.attribute.label !== address.label.value
+        ) {
           addField(field)
         }
       } else if (field.value) {
