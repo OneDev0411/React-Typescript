@@ -94,12 +94,8 @@ class CustomAttributeDrawer extends React.Component {
                     value: 'Details'
                   },
                   {
-                    title: 'Dates',
+                    title: 'Important Dates',
                     value: 'Dates'
-                  },
-                  {
-                    title: 'Addresses',
-                    value: 'Addresses'
                   }
                 ]}
                 label="Section"
