@@ -41,12 +41,36 @@ class TemplateBuilder extends React.Component {
     this.props.onClose()
   }
 
-  addButtons() {
+  setup() {
     this.addCloseButton()
+    this.addSaveButton()
   }
 
-  setup() {
-    this.addButtons()
+  onSave() {
+    const css = this.editor.getCss()
+    const js = this.editor.getJs()
+    const html = this.editor.getHtml()
+    const code = `<style>${css}</style><script type="text/javascript">${js}</script>${html}`
+
+    this.props.onSave && this.props.onSave(code)
+  }
+
+  addSaveButton() {
+    if (!this.props.onSave)
+      return
+
+    const command = {
+      id: 'save',
+      run: this.onSave.bind(this)
+    }
+
+    const button = {
+      id: 'save',
+      className: 'fa fa-check',
+      command: command,
+    }
+
+    this.editor.Panels.addButton('views', button)
   }
 
   addCloseButton() {
