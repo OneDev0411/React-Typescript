@@ -155,7 +155,7 @@ class EditForm extends React.Component {
                       <Select
                         hasEmptyItem={false}
                         items={this.getLabelOptions()}
-                        label="Label"
+                        label="Address Type"
                         name={`${name}.label`}
                       />
                       <TextField
