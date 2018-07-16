@@ -42,7 +42,7 @@ const getAllFields = (attributes, mutators) => {
       return
     }
 
-    const key = `${attribute_def.section}_modal__${attribute_def.id}`
+    const key = `${attribute_def.section}_modal_field_${index}`
     const placeholder = getPlaceholder(attribute)
     const validate = getValidator(attribute)
 

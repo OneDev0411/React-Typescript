@@ -120,55 +120,58 @@ class SectionWithFields extends React.Component {
       this.props.fieldsOrder
     )
 
-    const fields = orderedFields.filter(this.filterHiddenFields).map(field => {
-      const { attribute_def } = field
-      const value = field[attribute_def.data_type]
+    const fields = orderedFields
+      .filter(this.filterHiddenFields)
+      .map((field, index) => {
+        const { attribute_def } = field
+        const value = field[attribute_def.data_type]
+        const key = `${this.props.section}_field_${index}`
 
-      let title = attribute_def.label
+        let title = attribute_def.label
 
-      if (field.label) {
-        title = `${field.label}${
-          attribute_def.name !== 'website' ? ` ${title}` : ''
-        }`
-      }
+        if (field.label) {
+          title = `${field.label}${
+            attribute_def.name !== 'website' ? ` ${title}` : ''
+          }`
+        }
 
-      return [
-        <dt
-          key={`${field.id}_title`}
-          style={{
-            color: '#758a9e',
-            fontWeight: '500',
-            marginBottom: '0.25em'
-          }}
-        >
-          {title}
-        </dt>,
-        <dd
-          key={`${field.id}_value`}
-          style={{
-            color: '#17283a',
-            marginBottom: '1em',
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
-          {value ? getFormater(field)(value) : '-'}
-          {value &&
-            field.is_primary && (
-              <Tooltip caption="Primary">
-                <StarIcon
-                  style={{
-                    fill: '#f5a623',
-                    width: '16px',
-                    height: '16px',
-                    marginLeft: '5px'
-                  }}
-                />
-              </Tooltip>
-            )}
-        </dd>
-      ]
-    })
+        return [
+          <dt
+            key={`${key}_title`}
+            style={{
+              color: '#758a9e',
+              fontWeight: '500',
+              marginBottom: '0.25em'
+            }}
+          >
+            {title}
+          </dt>,
+          <dd
+            key={`${key}_value`}
+            style={{
+              color: '#17283a',
+              marginBottom: '1em',
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            {value ? getFormater(field)(value) : '-'}
+            {value &&
+              field.is_primary && (
+                <Tooltip caption="Primary">
+                  <StarIcon
+                    style={{
+                      fill: '#f5a623',
+                      width: '16px',
+                      height: '16px',
+                      marginLeft: '5px'
+                    }}
+                  />
+                </Tooltip>
+              )}
+          </dd>
+        ]
+      })
 
     if (fields.length > 0) {
       return <dl style={{ marginBottom: '1em' }}>{fields}</dl>
