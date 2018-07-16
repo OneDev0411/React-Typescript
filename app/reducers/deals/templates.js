@@ -1,8 +1,7 @@
-import types from '../../constants/deals'
+import * as types from '../../constants/deals'
 
 const initialState = {
   showTemplates: false,
-  showBuilder: false
 }
 
 export default (state = initialState, action) => {
@@ -11,12 +10,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         showTemplates: action.display
-      }
-
-    case types.SHOW_BUILDER:
-      return {
-        ...state,
-        showBuilder: action.display
       }
 
     default:
