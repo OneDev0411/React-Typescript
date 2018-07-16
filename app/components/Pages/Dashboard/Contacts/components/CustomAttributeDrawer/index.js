@@ -16,13 +16,13 @@ import { TipsBanner } from './TipsBanner'
 
 const propTypes = { section: PropTypes.string }
 
-const defaultSelectedItem = { title: '-Select-', value: '-Select-' }
+const selectFieldDefaultSelectedItem = { title: '-Select-', value: '-Select-' }
 
 class CustomAttributeDrawer extends React.Component {
   initialValues = {
     label: '',
-    section: this.props.section || defaultSelectedItem,
-    data_type: defaultSelectedItem,
+    section: this.props.section || selectFieldDefaultSelectedItem,
+    data_type: selectFieldDefaultSelectedItem,
     labels: [''],
     enum_values: ['']
   }
@@ -38,7 +38,7 @@ class CustomAttributeDrawer extends React.Component {
         notify({
           status: 'success',
           dismissAfter: 4000,
-          title: `Custom field added to ${this.props.section}.`,
+          title: `Custom field added to ${values.section.value}.`,
           message: `${values.label}`
         })
       )
