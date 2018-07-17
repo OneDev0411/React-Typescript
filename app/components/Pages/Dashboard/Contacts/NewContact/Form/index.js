@@ -2,31 +2,39 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import arrayMutators from 'final-form-arrays'
-import { Form, Field } from 'react-final-form'
+import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 
 import { createContacts } from '../../../../../../store_actions/contacts/create-contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 import { defaultQuery } from '../../../../../../models/contacts/helpers/default-query'
-
-import { Wrapper, FormContainer, Footer } from './styled-components/form'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import { TextField } from './components/TextField'
-import { Select } from './components/Select'
-import { Autocomplete } from './components/Autocomplete'
+import {
+  TextField,
+  Select
+} from '../../../../../../views/components/final-form-fields'
+import Alert from '../../../Partials/Alert'
+
 import { Emails } from './Emails'
 import { Phones } from './Phones'
+import { Wrapper, FormContainer, Footer } from './styled-components/form'
 
-import Alert from '../../..//Partials/Alert'
+function getDefaultOptions(options) {
+  return options.map(value => ({
+    title: value,
+    value
+  }))
+}
 
 const INITIAL_VALUES = {
+  email: [{ label: { title: 'Personal', value: 'Personal' } }],
+  phone_number: [{ label: { title: 'Mobile', value: 'Mobile' } }],
   stage: { title: 'General', value: 'General' },
-  email: [{ label: { title: 'Personal Email', value: 'Personal' } }],
-  phone_number: [{ label: { title: 'Mobile Phone', value: 'Mobile' } }]
+  title: { title: '-Select-', value: '-Select-' }
 }
 
 class NewContactForm extends Component {
-  formatPreSave = values => {
+  preSaveFormat = values => {
     const attributes = []
     const { attributeDefs } = this.props
     const selectFields = ['title', 'stage']
@@ -59,7 +67,7 @@ class NewContactForm extends Component {
       const attribute_def = selectDefinitionByName(attributeDefs, field)
       const text = (values[field] && values[field].value) || values[field]
 
-      if (attribute_def && text) {
+      if (attribute_def && text && text !== '-Select-') {
         attributes.push({
           text,
           attribute_def: attribute_def.id
@@ -90,12 +98,15 @@ class NewContactForm extends Component {
 
   // todo: handle submit error
   handleOnSubmit = async values => {
-    const isEmptyTextField = field => !values[field] || !values[field].trim()
+    const isEmptyTextField = fieldName =>
+      !values[fieldName] || !values[fieldName].trim()
+    const isEmptySelectField = fieldName =>
+      values[fieldName].value === '-Select-'
     const isEmptyFieldArray = fields =>
       fields.every(field => !field.text || !field.text.trim())
 
     if (
-      isEmptyTextField('title') &&
+      isEmptySelectField('title') &&
       isEmptyTextField('first_name') &&
       isEmptyTextField('middle_name') &&
       isEmptyTextField('last_name') &&
@@ -109,7 +120,7 @@ class NewContactForm extends Component {
     }
 
     try {
-      const attributes = this.formatPreSave(values)
+      const attributes = this.preSaveFormat(values)
       const query = {
         ...defaultQuery,
         get: true,
@@ -124,13 +135,17 @@ class NewContactForm extends Component {
     }
   }
 
-  getDefaultValues = attributeName => {
+  getDefaultValues = (attributeName, properyName) => {
     const attribute = selectDefinitionByName(
       this.props.attributeDefs,
       attributeName
     )
 
-    return (attribute && attribute.enum_values) || []
+    if (!attribute || !attribute[properyName]) {
+      return []
+    }
+
+    return getDefaultOptions(attribute[properyName])
   }
 
   render() {
@@ -152,35 +167,28 @@ class NewContactForm extends Component {
           }) => (
             <FormContainer onSubmit={handleSubmit}>
               <div>
-                <Field
-                  component={Autocomplete}
-                  items={this.getDefaultValues('title')}
+                <Select
+                  items={this.getDefaultValues('title', 'enum_values')}
                   name="title"
-                  title="Title"
+                  label="Title"
                   placeholder="Title"
                 />
-                <Field
-                  component={TextField}
-                  name="first_name"
-                  title="First Name"
+                <TextField name="first_name" label="First Name" />
+                <TextField name="middle_name" label="Middle Name" />
+                <TextField name="last_name" label="Last Name" />
+                <Emails
+                  labels={this.getDefaultValues('email', 'labels')}
+                  mutators={form.mutators}
                 />
-                <Field
-                  component={TextField}
-                  name="middle_name"
-                  title="Middle Name"
+                <Phones
+                  labels={this.getDefaultValues('phone_number', 'labels')}
+                  mutators={form.mutators}
                 />
-                <Field
-                  component={TextField}
-                  name="last_name"
-                  title="Last Name"
-                />
-                <Emails mutators={form.mutators} />
-                <Phones mutators={form.mutators} />
-                <Field
-                  defaultOptions={this.getDefaultValues('stage')}
-                  component={Select}
+                <Select
+                  items={this.getDefaultValues('stage', 'enum_values')}
                   name="stage"
-                  title="Stage"
+                  label="Stage"
+                  hasEmptyItem={false}
                 />
               </div>
               <Footer style={{ justifyContent: 'space-between' }}>
@@ -226,10 +234,3 @@ export default connect(
   mapStateToProps,
   { createContacts }
 )(NewContactForm)
-
-function getDefaultOptions(options) {
-  return options.map(item => ({
-    title: item,
-    value: item
-  }))
-}
