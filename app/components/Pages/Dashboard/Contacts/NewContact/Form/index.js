@@ -27,6 +27,9 @@ function getDefaultOptions(options) {
 }
 
 const INITIAL_VALUES = {
+  first_name: '',
+  last_name: '',
+  middle_name: '',
   email: [{ label: { title: 'Personal', value: 'Personal' } }],
   phone_number: [{ label: { title: 'Mobile', value: 'Mobile' } }],
   stage: { title: 'General', value: 'General' },
@@ -202,6 +205,7 @@ class NewContactForm extends Component {
                 )}
                 <ActionButton
                   type="button"
+                  inverse
                   onClick={() => form.reset(INITIAL_VALUES)}
                   style={{ marginRight: '1em' }}
                   disabled={submitting || pristine}
