@@ -194,7 +194,7 @@ class EditAddressesForm extends React.Component {
                     fields.push(
                       getEmptyAddress(
                         addressAttributeDefs,
-                        getAddressIndex(addresses)
+                        addresses.length === 0 ? 1 : getAddressIndex(addresses)
                       )
                     )
                   }

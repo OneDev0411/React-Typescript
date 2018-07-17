@@ -136,7 +136,6 @@ class SectionWithFields extends React.Component {
         }
 
         if (attribute_def.name === 'source_type') {
-          console.log(field)
           value = getContactOriginalSourceTitle(value)
         }
 
