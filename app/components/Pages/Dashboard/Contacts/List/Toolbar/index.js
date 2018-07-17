@@ -4,6 +4,7 @@ import Flex from 'styled-flex-component'
 
 import ExportContacts from './ExportContactsButton'
 import TagContacts from './TagContacts'
+import MergeContacts from './MergeContacts'
 
 Toolbar.propTypes = {
   disabled: PropTypes.bool,
@@ -27,12 +28,12 @@ export function Toolbar(props) {
         {`${props.totalCount.toLocaleString()} Contacts`}
       </span>
 
-      <TagContacts selectedRows={props.selectedRows} />
       <ExportContacts
         disabled={props.disabled}
         filters={props.filters}
         exportIds={props.selectedRows}
       />
+      <TagContacts selectedRows={props.selectedRows} />
       {selectedRowsLength > 0 && (
         <div className="list--secondary-button">
           <button
@@ -44,6 +45,7 @@ export function Toolbar(props) {
           </button>
         </div>
       )}
+      {/* <MergeContacts selectedRows={props.selectedRows} /> */}
     </Flex>
   )
 }

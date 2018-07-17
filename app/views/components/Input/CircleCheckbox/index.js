@@ -28,7 +28,7 @@ CircleCheckbox.propTypes = {
   input: PropTypes.shape().isRequired
 }
 
-CircleCheckbox.defaultTypes = {
+CircleCheckbox.defaultProps = {
   size: 32
 }
 

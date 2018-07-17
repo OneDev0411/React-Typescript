@@ -8,7 +8,7 @@ const Header = ({ title, children, onClose }) => (
   <Container>
     {title && <Title>{title}</Title>}
     {children}
-    <IconButton color="#7b91a6" hoverColor="#fff" onClick={onClose}>
+    <IconButton color="#7b91a6" hoverColor="#333" onClick={onClose}>
       <CloseIcon />
     </IconButton>
   </Container>

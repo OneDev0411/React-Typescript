@@ -1,24 +1,24 @@
 import React from 'react'
 
-import Emails from './fields/Emails'
-import Phones from './fields/Phones'
-import { Source } from './fields/Source'
-import Websites from './fields/Websites'
-import OrginalSource from './fields/OrginalSource'
+import SectionWithFields from '../components/SectionWithFields'
 
-export default function Details({ contact }) {
+const fieldsOrder = [
+  'title',
+  'first_name',
+  'middle_name',
+  'last_name',
+  'nickname',
+  'job_title',
+  'company'
+]
+
+export function Details(props) {
   return (
-    <div className="c-contact-profile-card">
-      <h3 className="c-contact-profile-card__title">Contact info</h3>
-      <Emails contact={contact} />
-
-      <Phones contact={contact} />
-
-      <Source contact={contact} />
-
-      <Websites contact={contact} />
-
-      <OrginalSource contact={contact} />
-    </div>
+    <SectionWithFields
+      addNewFieldButtonText="Add Details"
+      contact={props.contact}
+      fieldsOrder={fieldsOrder}
+      section="Details"
+    />
   )
 }

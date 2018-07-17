@@ -6,6 +6,7 @@ import CsvParser from 'papaparse'
 import _ from 'underscore'
 
 import { compareTwoStrings } from '../../../../../../utils/dice-coefficient'
+import { isAddressField } from '../helpers/address'
 
 import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
@@ -60,10 +61,12 @@ class Mapper extends React.Component {
       })
     }
 
+    const columns = this.analyzeColumns(colNames, contacts)
+
     batchActions([
       updateCsvInfo({
         errors,
-        columns: this.analyzeColumns(colNames, contacts),
+        columns,
         rowsCount: contacts.length
       }),
       setCurrentStepValidation(true)
@@ -72,7 +75,7 @@ class Mapper extends React.Component {
     // async compute
     setTimeout(() => {
       if (_.size(mappedFields) === 0) {
-        this.autoMap(colNames)
+        this.autoMap(columns)
       }
     }, 0)
   }
@@ -80,19 +83,25 @@ class Mapper extends React.Component {
   autoMap = csvColoumns => {
     const mappedFields = {}
 
-    csvColoumns.forEach(columnName => {
+    _.each(csvColoumns, ({ name: columnName }) => {
       const attribute = this.findMatchedAttribute(columnName)
 
       if (!attribute) {
         return false
       }
 
-      mappedFields[columnName] = {
-        definitionId: attribute.id,
-        index: _.filter(
+      let index = 0
+
+      if (isAddressField(this.props.attributeDefs, attribute.id)) {
+        index = _.filter(
           mappedFields,
           ({ definitionId }) => definitionId === attribute.id
         ).length
+      }
+
+      mappedFields[columnName] = {
+        definitionId: attribute.id,
+        index
       }
     })
 
@@ -133,7 +142,7 @@ class Mapper extends React.Component {
     const bestMatches = _.sortBy(list, item => item.rate * -1)
     const bestMatch = bestMatches[0]
 
-    if (bestMatch.rate >= 0.27) {
+    if (bestMatch.rate >= 0.3) {
       return bestMatch
     }
 
@@ -150,6 +159,7 @@ class Mapper extends React.Component {
 
       list[name] = {
         index,
+        name,
         hasValue
       }
     })

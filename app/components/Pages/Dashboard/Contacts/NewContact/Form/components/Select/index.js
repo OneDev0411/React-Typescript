@@ -11,7 +11,7 @@ export function Select({ input, title, defaultOptions, defaultSelectedItem }) {
         defaultSelectedItem={defaultSelectedItem}
         fullWidth
         input={input}
-        items={defaultOptions}
+        items={defaultOptions.map(item => ({ title: item, value: item }))}
         itemToString={({ title }) => title}
         style={{ width: '100%' }}
       />

@@ -20,10 +20,10 @@ router.get('/contacts/export/outlook', async ctx => {
       }
     } else if (filters) {
       if (typeof filters === 'string') {
-        data = { filter: [JSON.parse(decodeURIComponent(filters))] }
+        data = { filters: [JSON.parse(decodeURIComponent(filters))] }
       } else if (Array.isArray(filters)) {
         data = {
-          filter: filters.map(filter => JSON.parse(decodeURIComponent(filter)))
+          filters: filters.map(filter => JSON.parse(decodeURIComponent(filter)))
         }
       }
     }

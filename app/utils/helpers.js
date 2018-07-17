@@ -2,6 +2,17 @@ export function uppercaseFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
+export function getNameInitials(name) {
+  if (!name) {
+    return
+  }
+
+  return name
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase())
+    .join('')
+}
+
 async function getPhoneNumberUtil() {
   const {
     PhoneNumberUtil
@@ -266,4 +277,8 @@ export function round(number, precision) {
   }
 
   return shift(Math.round(shift(number, +precision)), -precision)
+}
+
+export function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }

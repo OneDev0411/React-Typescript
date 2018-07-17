@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Panel } from 'react-bootstrap'
 import { Link } from 'react-router'
 import { browserHistory } from 'react-router'
+import styled from 'styled-components'
 import Tooltip from '../../../../../views/components/tooltip/index'
 import debounce from 'lodash/debounce'
 import cn from 'classnames'
@@ -13,7 +14,46 @@ import {
   searchAllDeals,
   cleanSearchedDeals
 } from '../../../../../store_actions/deals'
-import Excel from '../../Partials/Svgs/Excel'
+import XlsxIcon from '../../../../../views/components/SvgIcons/Xlsx/XlsxIcon'
+
+const DealsSearchButton = styled.div`
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  .fa-search {
+    color: #8da2b5;
+    font-size: 20px;
+    &:hover,
+    &.active {
+      color: #2196f3;
+    }
+  }
+
+  &:hover svg > g {
+    fill: #2196f3;
+  }
+`
+
+const DealsDownloadButton = styled.a`
+  cursor: pointer;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  color: #2196f3;
+  border-radius: 4px;
+  border: solid 1px #2196f3;
+  padding: 8px 12px;
+  margin-right: 16px;
+
+  &:hover {
+    text-decoration: none;
+    color: #2196f3;
+    background-color: #f0f4f7;
+  }
+  svg {
+    margin-right: 5px;
+  }
+`
 
 class Header extends React.Component {
   constructor(props) {
@@ -130,7 +170,7 @@ class Header extends React.Component {
                   placement="bottom"
                   caption="Search deals by address,<br />MLS # or agent name…"
                 >
-                  <div
+                  <DealsSearchButton
                     onClick={() => {
                       if (searchBoxIsOpen) {
                         this.searchInput.value = ''
@@ -141,7 +181,6 @@ class Header extends React.Component {
                         searchBOFilters()
                       }
                     }}
-                    className="search-button"
                   >
                     <i
                       className={cn('fa fa-search', {
@@ -149,18 +188,14 @@ class Header extends React.Component {
                       })}
                       aria-hidden="true"
                     />
-                  </div>
+                  </DealsSearchButton>
                 </Tooltip>
               )}
 
-              <Tooltip placement="bottom" caption="Download Report">
-                <a
-                  href={`/api/deals/export/${activeTeamId}`}
-                  className="search-button"
-                >
-                  <Excel />
-                </a>
-              </Tooltip>
+              <DealsDownloadButton href={`/api/deals/export/${activeTeamId}`}>
+                <XlsxIcon />
+                Download Report
+              </DealsDownloadButton>
 
               {!isBackOffice && (
                 <Link

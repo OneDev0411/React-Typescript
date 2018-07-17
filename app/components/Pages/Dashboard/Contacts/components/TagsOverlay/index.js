@@ -28,6 +28,7 @@ import {
 } from '../../../../../../reducers/contacts/list'
 import intersectionBy from 'lodash/intersectionBy'
 import { selectTags } from '../../../../../../reducers/contacts/tags'
+import { confirmation } from '../../../../../../store_actions/confirmation'
 
 const defaultTags = [
   'Seller',
@@ -48,7 +49,14 @@ class TagsOverlay extends React.Component {
 
     this.state = {
       tags: this.getCommonTags(selectedContactsIds, list, existingTags),
-      isSubmitting: false
+      isSubmitting: false,
+      newTagValue: ''
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.existingTags.length === 0) {
+      this.props.getContactsTags()
     }
   }
 
@@ -64,8 +72,12 @@ class TagsOverlay extends React.Component {
       this.props.existingTags
     )
 
-    if (!_.isEqual(newTags, oldTags)) {
+    if (!_.isEqual(newTags, oldTags) || !nextProps.isOpen) {
       this.setState({ tags: newTags })
+    }
+
+    if (!nextProps.isOpen) {
+      this.setState({ newTagValue: '' })
     }
   }
 
@@ -84,32 +96,48 @@ class TagsOverlay extends React.Component {
     tags[tagIndex] = newTag
     this.setState({ tags })
   }
+  newTagChange = newTagValue => this.setState({ newTagValue })
 
-  onUpsert = newTag => {
-    const { tags } = this.state
-    const tagIndex = tags.findIndex(tag => tag.text === newTag)
+  onUpsert = event => {
+    event.preventDefault()
+
+    const { tags, newTagValue } = this.state
+    const tagIndex = tags.findIndex(tag => tag.text === newTagValue)
 
     if (tagIndex > -1) {
       this.onTagSelectionChange(tagIndex, true)
+      this.setState({
+        newTagValue: ''
+      })
     } else {
       const { attributeDefs } = this.props
       const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
 
       this.setState({
         tags: tags.concat({
-          [attribute_def.data_type]: newTag,
+          [attribute_def.data_type]: newTagValue,
           attribute_def: attribute_def.id,
           isSelected: true
-        })
+        }),
+        newTagValue: ''
       })
     }
   }
 
   onSubmit = async () => {
-    const { isSubmitting } = this.state
+    const { isSubmitting, newTagValue } = this.state
 
     if (isSubmitting) {
       return
+    }
+
+    if (/\S/.test(newTagValue)) {
+      return this.props.confirmation({
+        description:
+          'We noticed you have un-added tag. Please select the \'Add\' link before saving',
+        hideCancelButton: true,
+        confirmLabel: 'Ok'
+      })
     }
 
     const { closeOverlay } = this.props
@@ -215,7 +243,7 @@ class TagsOverlay extends React.Component {
 
   render() {
     const { closeOverlay, selectedContactsIds, list, isOpen } = this.props
-    const { tags, isSubmitting } = this.state
+    const { tags, isSubmitting, newTagValue } = this.state
     const { attributeDefs } = this.props
     const { data_type: tagDataType } =
       selectDefinitionByName(attributeDefs, 'tag') || {}
@@ -239,7 +267,11 @@ class TagsOverlay extends React.Component {
         <OverlayDrawer.Body>
           <SubHeaderContainer>
             <Info />
-            <CustomTag onUpsert={this.onUpsert} />
+            <CustomTag
+              onUpsert={this.onUpsert}
+              newTagChange={this.newTagChange}
+              inputValue={newTagValue}
+            />
           </SubHeaderContainer>
           <Tags
             tags={tags}
@@ -277,6 +309,7 @@ export default connect(
     addAttributes,
     deleteAttributes,
     getContacts,
-    getContactsTags
+    getContactsTags,
+    confirmation
   }
 )(TagsOverlay)

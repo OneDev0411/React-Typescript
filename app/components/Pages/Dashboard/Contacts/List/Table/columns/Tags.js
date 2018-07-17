@@ -1,11 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-
 import { getContactTags } from '../../../../../../../models/contacts/helpers'
 import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
+import ShadowButton from '../../../../../../../views/components/Button/ShadowButton'
 
-const TagsString = ({ contact, attributeDefs }) => {
+const TagsTextContainer = ShadowButton.extend`
+  font-weight: normal;
+  :hover {
+    text-decoration: underline;
+  }
+`
+
+const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
   const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
   const tags = getContactTags(contact, attribute_def)
 
@@ -30,10 +37,15 @@ const TagsString = ({ contact, attributeDefs }) => {
   const invisibleTagsCount = tagsCount - showingTags.length
 
   return (
-    <div>
+    <TagsTextContainer
+      onClick={event => {
+        event.stopPropagation()
+        onSelectTagContact(contact.id)
+      }}
+    >
       {getShowingTags()}
       {invisibleTagsCount > 0 && <span> and {invisibleTagsCount} more</span>}
-    </div>
+    </TagsTextContainer>
   )
 }
 
