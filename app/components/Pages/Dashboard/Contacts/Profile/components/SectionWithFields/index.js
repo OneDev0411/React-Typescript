@@ -48,10 +48,13 @@ class SectionWithFields extends React.Component {
   closeNewAttributeDrawer = () =>
     this.setState({ isOpenNewAttributeDrawer: false })
 
+  filterEditableFields = field =>
+    field.attribute_def.show && field.attribute_def.editable
+
   handleOnSubmit = async values => {
     try {
       const { upsertedAttributeList, deletedAttributesList } = formatPreSave(
-        this.props.fields,
+        this.props.fields.filter(this.filterEditableFields),
         values
       )
 
@@ -100,9 +103,7 @@ class SectionWithFields extends React.Component {
       this.props.fieldsOrder
     )
 
-    return orderedFields.filter(
-      field => field.attribute_def.show && field.attribute_def.editable
-    )
+    return orderedFields.filter(this.filterEditableFields)
   }
 
   getSectionFields = () => {
