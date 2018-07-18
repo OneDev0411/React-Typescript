@@ -13,7 +13,7 @@ class BadgeCounter extends React.Component {
     let counter = 0
 
     _.each(this.props.deals, deal => {
-      if (deal.new_notifications > 0) {
+      if (deal.new_notifications && deal.new_notifications.length > 0) {
         counter += 1
       }
     })

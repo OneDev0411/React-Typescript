@@ -26,6 +26,13 @@ export const ROLE_NAMES = [
   'TenantPowerOfAttorney'
 ]
 
+export const AGENT_ROLES = [
+  'BuyerAgent',
+  'CoBuyerAgent',
+  'SellerAgent',
+  'CoSellerAgent'
+]
+
 const aliases = {
   Title: 'Escrow Officer',
   Lender: 'Lending Agent',

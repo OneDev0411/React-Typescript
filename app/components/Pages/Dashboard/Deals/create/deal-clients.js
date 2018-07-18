@@ -30,10 +30,14 @@ export default ({
   onRemoveClient,
   title
 }) => {
-  const allowedRoles = getRoles(dealSide)
-
   if (!title) {
     title = dealSide === 'Buying' ? 'Buyer (Tenant)' : 'Seller (Landlord)'
+  }
+
+  const sharedProps = {
+    roleType: 'client',
+    allowedRoles: getRoles(dealSide),
+    onUpsertUser: onUpsertClient
   }
 
   return (
@@ -53,17 +57,15 @@ export default ({
             key={id}
             user={client}
             modalTitle={`Update ${title}`}
-            allowedRoles={allowedRoles}
             onRemoveUser={id => onRemoveClient(id)}
-            onUpsertUser={onUpsertClient}
+            {...sharedProps}
           />
         ))}
 
         <CrudRole
           modalTitle={`Add ${title}`}
           ctaTitle={`Add ${title}`}
-          allowedRoles={allowedRoles}
-          onUpsertUser={onUpsertClient}
+          {...sharedProps}
         />
       </div>
     </div>

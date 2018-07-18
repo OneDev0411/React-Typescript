@@ -9,9 +9,17 @@ function isSortable(column) {
   return column.isSortable !== false && column.header
 }
 
-const TableHeader = ({ columns, sizes, sortBy, isAscending, onClickCell }) => (
-  <Header>
-    <HeaderRow>
+const TableHeader = ({
+  columns,
+  sizes,
+  sortBy,
+  isAscending,
+  onClickCell,
+  getHeaderProps,
+  getHeaderRowProps
+}) => (
+  <Header {...getHeaderProps()}>
+    <HeaderRow {...getHeaderRowProps()}>
       {columns &&
         columns.map((col, index) => (
           <HeaderCell
@@ -36,11 +44,15 @@ const TableHeader = ({ columns, sizes, sortBy, isAscending, onClickCell }) => (
 TableHeader.propTypes = {
   columns: PropTypes.array.isRequired,
   sizes: PropTypes.array.isRequired,
-  onClickCell: PropTypes.func
+  onClickCell: PropTypes.func,
+  getHeaderProps: PropTypes.func,
+  getHeaderRowProps: PropTypes.func
 }
 
 TableHeader.defaultProps = {
-  onClickCell: () => {}
+  onClickCell: () => {},
+  getHeaderProps: () => {},
+  getHeaderRowProps: () => {}
 }
 
 export default TableHeader

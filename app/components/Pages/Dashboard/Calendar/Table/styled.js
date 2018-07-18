@@ -19,7 +19,7 @@ export const TableHeader = styled.div`
   font-size: 17px;
   font-weight: 600;
   position: sticky;
-  top: 10px;
+  top: 32px;
   font-weight: ${props => (props.isSelectedDay ? 500 : 400)};
   background-color: ${props => (props.isSelectedDay ? '#eff5fa' : '#dce5eb')};
   color: ${props => (props.isSelectedDay ? '#2196f3' : '#1d364b')};

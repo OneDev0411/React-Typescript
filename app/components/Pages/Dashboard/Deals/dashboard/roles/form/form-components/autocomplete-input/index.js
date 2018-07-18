@@ -6,7 +6,7 @@ import {
   AutoCompleteInputContainer,
   AutoCompleteInputOptions,
   AutoCompleteInputItem
-} from './styles'
+} from './styled'
 
 export class AutoCompleteInput extends Component {
   constructor(props) {

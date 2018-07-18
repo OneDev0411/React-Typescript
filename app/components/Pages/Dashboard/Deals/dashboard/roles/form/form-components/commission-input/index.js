@@ -4,10 +4,8 @@ import { Field } from 'react-final-form'
 import {
   CommissionContainer,
   CommissionRadioContainer,
-  CommissionInputContainer,
-  InputRadio,
-  RadioLabel
-} from './styles'
+  CommissionInputContainer
+} from './styled'
 
 import {
   InputLabel,
@@ -15,6 +13,8 @@ import {
 } from '../../../../../../../../../views/components/Forms/styled'
 
 import { TextInput } from '../../../../../../../../../views/components/Forms/TextInput'
+
+import { RadioGroup } from '../../../../../../../../../views/components/Forms/RadioGroupInput'
 
 export const CommissionInput = ({
   input,
@@ -29,35 +29,21 @@ export const CommissionInput = ({
       <InputLabel hasError={meta.submitFailed && meta.error}>
         {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
       </InputLabel>
-      <div>
-        <Field
-          name="commission_type"
-          render={({ input }) => (
-            <InputRadio
-              {...input}
-              type="radio"
-              value="commission_percentage"
-              checked={commissionType === 'commission_percentage'}
-            />
-          )}
-        />
 
-        <RadioLabel>%</RadioLabel>
-
-        <Field
-          name="commission_type"
-          render={({ input }) => (
-            <InputRadio
-              {...input}
-              type="radio"
-              value="commission_dollar"
-              checked={commissionType === 'commission_dollar'}
-            />
-          )}
-        />
-
-        <RadioLabel>$</RadioLabel>
-      </div>
+      <RadioGroup
+        name="commission_type"
+        selectedValue={commissionType}
+        options={[
+          {
+            name: 'commission_percentage',
+            label: '%'
+          },
+          {
+            name: 'commission_dollar',
+            label: '$'
+          }
+        ]}
+      />
     </CommissionRadioContainer>
 
     <TextInput

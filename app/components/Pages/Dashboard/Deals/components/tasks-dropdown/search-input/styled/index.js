@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const SearchContainer = styled.div`
+export const SearchContainer = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;

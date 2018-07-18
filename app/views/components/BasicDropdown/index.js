@@ -15,23 +15,17 @@ export const BasicDropdown = ({
   fullWidth,
   itemToString,
   itemRenderer,
-  selectedItem
+  defaultSelectedItem
 }) => (
   <Downshift
     onChange={onChange}
     onSelect={onSelect}
     itemToString={itemToString}
-    selectedItem={selectedItem}
-    render={({
-      isOpen,
-      selectedItem,
-      getItemProps,
-      getButtonProps,
-      highlightedIndex
-    }) => (
+    defaultSelectedItem={defaultSelectedItem}
+    render={downshift => (
       <div style={style}>
         <Button
-          {...getButtonProps({
+          {...downshift.getButtonProps({
             disabled,
             style: {
               width: '100%',
@@ -39,21 +33,21 @@ export const BasicDropdown = ({
               position: 'relative',
               pointerEvents: disabled ? 'none' : 'initial',
               ...buttonStyle,
-              backgroundColor: isOpen
+              backgroundColor: downshift.isOpen
                 ? '#f8fafb'
                 : buttonStyle.backgroundColor || '#fff'
             },
             fullWidth
           })}
         >
-          {selectedItem && selectedItem.label}
+          {downshift.selectedItem && downshift.selectedItem.label}
           <Icon
-            isOpen={isOpen}
+            isOpen={downshift.isOpen}
             style={{ fill: '#506379', width: '24px', height: '24px' }}
           />
         </Button>
         <div style={{ position: 'relative' }}>
-          {isOpen && (
+          {downshift.isOpen && (
             <Card
               depth={3}
               style={{
@@ -70,10 +64,10 @@ export const BasicDropdown = ({
               {items.map((item, index) => {
                 const props = {
                   item,
-                  ...getItemProps({
+                  ...downshift.getItemProps({
                     item,
-                    isActive: highlightedIndex === index,
-                    isSelected: selectedItem.label === item.label
+                    isActive: downshift.highlightedIndex === index,
+                    isSelected: downshift.selectedItem.label === item.label
                   })
                 }
 

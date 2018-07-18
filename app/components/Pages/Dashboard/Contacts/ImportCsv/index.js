@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+
 import Stepper from '../../../../Partials/Stepper'
 import Header from './Header'
 import Footer from './Footer'
@@ -63,9 +64,9 @@ class ImportCsv extends React.Component {
           {currentWizardStep === CONTACTS__IMPORT_CSV__STEP_UPLOAD_CONTACTS && (
             <UploadContacts />
           )}
-        </div>
 
-        <Footer />
+          <Footer />
+        </div>
       </div>
     )
   }
@@ -82,4 +83,7 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(mapStateToProps, { resetCsvImport })(ImportCsv)
+export default connect(
+  mapStateToProps,
+  { resetCsvImport }
+)(ImportCsv)

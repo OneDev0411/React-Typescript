@@ -8,8 +8,12 @@ export default ({
   onUpsertReferral,
   onRemoveReferral
 }) => {
-  const allowedRoles =
-    dealSide === 'Buying' ? ['BuyerReferral'] : ['SellerReferral']
+  const sharedProps = {
+    roleType: 'referral',
+    allowedRoles:
+      dealSide === 'Buying' ? ['BuyerReferral'] : ['SellerReferral'],
+    onUpsertUser: onUpsertReferral
+  }
 
   return (
     <div className="form-section deal-people deal-referral">
@@ -23,17 +27,15 @@ export default ({
             key={id}
             user={referral}
             modalTitle="Update Referral"
-            allowedRoles={allowedRoles}
             onRemoveUser={onRemoveReferral}
-            onUpsertUser={onUpsertReferral}
+            {...sharedProps}
           />
         ))}
 
         <CrudRole
           modalTitle="Add Referral"
           ctaTitle="Add Referral"
-          allowedRoles={allowedRoles}
-          onUpsertUser={onUpsertReferral}
+          {...sharedProps}
         />
       </div>
     </div>
