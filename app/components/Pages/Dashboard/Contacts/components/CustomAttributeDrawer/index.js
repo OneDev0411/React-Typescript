@@ -112,13 +112,13 @@ class CustomAttributeDrawer extends React.Component {
               />
             )}
 
-            {values.data_type.value === 'text' && (
+            {/* {values.data_type.value === 'text' && (
               <TextFieldArray
                 label="Default Values"
                 labelNote="(optional)"
                 name="enum_values"
               />
-            )}
+            )} */}
           </React.Fragment>
         )}
       />
