@@ -194,8 +194,11 @@ class SaveSegment extends React.Component {
   }
 }
 
-export default connect(null, {
-  createFilterSegment,
-  updateFilterSegment,
-  changeActiveFilterSegment
-})(SaveSegment)
+export default connect(
+  null,
+  {
+    createFilterSegment,
+    updateFilterSegment,
+    changeActiveFilterSegment
+  }
+)(SaveSegment)
