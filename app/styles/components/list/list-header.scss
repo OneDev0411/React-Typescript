@@ -92,26 +92,6 @@
         float: right;
       }
 
-      .search-button {
-        cursor: pointer;
-        padding: 10px;
-        white-space: pre-line;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        .fa-search {
-          color: #8da2b5;
-          font-size: 20px;
-          &:hover,
-          &.active {
-            color: #2196f3;
-          }
-        }
-
-        &:hover svg > g {
-          fill: #2196f3;
-        }
-      }
     }
   }
 }

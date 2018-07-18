@@ -1,12 +1,16 @@
 import Fetch from '../../../../services/fetch'
+
 /**
  * Reset password by email
- * @param {object} contain email address { email: <email> }
+ * @param {String} email email address.
  */
 const resetPassword = async email => {
   try {
-    const response = await new Fetch().post('/users/reset_password').send(email)
-    return response.body.data
+    const response = await new Fetch()
+      .post('/users/reset_password')
+      .send({ email })
+
+    return response
   } catch (error) {
     throw error
   }

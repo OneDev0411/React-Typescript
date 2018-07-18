@@ -1,5 +1,10 @@
 import { getFormater } from '../get-formater'
 
+const SELECT_FIELD_DEFAULT_VALUE = {
+  title: '-Select-',
+  value: '-Select-'
+}
+
 export function getInitialValues(attributes) {
   const initialValues = {}
 
@@ -12,6 +17,14 @@ export function getInitialValues(attributes) {
     const isMultiFieldsWithoutLabels = !singular && !labels
 
     const value = getFormater(attribute)(attribute[data_type])
+
+    const arrayFieldValue = value => {
+      if (attribute_def.enum_values) {
+        return value ? { title: value, value } : SELECT_FIELD_DEFAULT_VALUE
+      }
+
+      return value || ''
+    }
 
     if (value) {
       if (isSelectField) {
@@ -29,7 +42,7 @@ export function getInitialValues(attributes) {
             title: attribute.label,
             value: attribute.label
           },
-          value
+          value: arrayFieldValue(value)
         }
 
         if (Array.isArray(initialValues[id])) {
@@ -38,7 +51,7 @@ export function getInitialValues(attributes) {
           initialValues[id] = [newField]
         }
       } else if (isMultiFieldsWithoutLabels) {
-        const newField = { attribute, value }
+        const newField = { attribute, value: arrayFieldValue(value) }
 
         if (Array.isArray(initialValues[id])) {
           initialValues[id] = [...initialValues[id], newField]
@@ -55,24 +68,23 @@ export function getInitialValues(attributes) {
     if (isSelectField) {
       initialValues[id] = {
         attribute,
-        value: {
-          title: '-Select-',
-          value: '-Select-'
-        }
+        value: SELECT_FIELD_DEFAULT_VALUE
       }
     } else if (isMultiFields) {
       initialValues[id] = [
         {
           attribute,
-          label: {
-            title: '-Select-',
-            value: '-Select-'
-          },
-          value: ''
+          label: SELECT_FIELD_DEFAULT_VALUE,
+          value: arrayFieldValue()
         }
       ]
     } else if (isMultiFieldsWithoutLabels) {
-      initialValues[id] = [{ attribute, value: '' }]
+      initialValues[id] = [
+        {
+          attribute,
+          value: arrayFieldValue()
+        }
+      ]
     } else {
       initialValues[id] = { attribute, value: '' }
     }

@@ -7,6 +7,7 @@ import { Container, Label, LabelNote, ErrorMessage } from '../styled'
 
 Select.propTypes = {
   format: PropTypes.func,
+  hasEmptyItem: PropTypes.bool,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
@@ -23,6 +24,7 @@ Select.propTypes = {
 
 Select.defaultProps = {
   format: t => t,
+  hasEmptyItem: true,
   labelNote: '',
   parse: t => t,
   required: false,
@@ -30,6 +32,12 @@ Select.defaultProps = {
 }
 
 export function Select(props) {
+  let items = props.items
+
+  if (props.hasEmptyItem) {
+    items = [{ title: '-Select-', value: '-Select-' }, ...props.items]
+  }
+
   return (
     <Field
       name={props.name}
@@ -47,11 +55,7 @@ export function Select(props) {
               {props.labelNote &&
                 !props.required && <LabelNote>{props.labelNote}</LabelNote>}
             </Label>
-            <Dropdown
-              fullWidth
-              input={input}
-              items={[{ title: '-Select-', value: '-Select-' }, ...props.items]}
-            />
+            <Dropdown fullWidth input={input} items={items} />
             {hasError && <ErrorMessage>{error}</ErrorMessage>}
           </Container>
         )

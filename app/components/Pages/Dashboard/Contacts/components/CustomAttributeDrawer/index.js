@@ -16,54 +16,45 @@ import { TipsBanner } from './TipsBanner'
 
 const propTypes = { section: PropTypes.string }
 
-const defaultSelectedItem = { title: '-Select-', value: '-Select-' }
+const selectFieldDefaultSelectedItem = { title: '-Select-', value: '-Select-' }
 
 class CustomAttributeDrawer extends React.Component {
-  state = {
-    submitting: false,
-    initialValues: {
-      label: '',
-      section: this.props.section || defaultSelectedItem,
-      data_type: defaultSelectedItem,
-      labels: [''],
-      enum_values: ['']
-    }
+  initialValues = {
+    label: '',
+    section: this.props.section || selectFieldDefaultSelectedItem,
+    data_type: selectFieldDefaultSelectedItem,
+    labels: [''],
+    enum_values: ['']
   }
 
   onSubmit = async values => {
     try {
-      this.setState({ submitting: true, initialValues: values })
+      const formatedValues = preSaveFormat(values)
 
-      await this.props.dispatch(
-        createAttributeDefinition(preSaveFormat(values))
+      await this.props.dispatch(createAttributeDefinition(formatedValues))
+
+      this.props.onClose()
+      this.props.dispatch(
+        notify({
+          status: 'success',
+          dismissAfter: 4000,
+          title: `Custom field added to ${formatedValues.section}.`,
+          message: `${values.label}`
+        })
       )
-
-      this.setState({ submitting: false }, () => {
-        this.props.onClose()
-        this.props.dispatch(
-          notify({
-            status: 'success',
-            dismissAfter: 4000,
-            title: `Custom field added to ${this.props.section}.`,
-            message: `${values.label}`
-          })
-        )
-      })
     } catch (error) {
       console.log(error)
-      this.setState({ submitting: false })
     }
   }
 
   render() {
     return (
       <FinalFormDrawer
-        initialValues={this.state.initialValues}
+        initialValues={this.initialValues}
         isOpen={this.props.isOpen}
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
         title="Add a Custom Field"
-        submitting={this.state.submitting}
         validate={validate}
         render={({ values }) => (
           <React.Fragment>
@@ -74,16 +65,16 @@ class CustomAttributeDrawer extends React.Component {
             <Select
               items={[
                 {
-                  title: 'Text',
-                  value: 'text'
+                  title: 'Date',
+                  value: 'date'
                 },
                 {
                   title: 'Number',
                   value: 'number'
                 },
                 {
-                  title: 'Date',
-                  value: 'date'
+                  title: 'Text',
+                  value: 'text'
                 }
               ]}
               label="Type"
@@ -103,12 +94,8 @@ class CustomAttributeDrawer extends React.Component {
                     value: 'Details'
                   },
                   {
-                    title: 'Dates',
+                    title: 'Important Dates',
                     value: 'Dates'
-                  },
-                  {
-                    title: 'Addresses',
-                    value: 'Addresses'
                   }
                 ]}
                 label="Section"
@@ -125,13 +112,13 @@ class CustomAttributeDrawer extends React.Component {
               />
             )}
 
-            {values.data_type.value === 'text' && (
+            {/* {values.data_type.value === 'text' && (
               <TextFieldArray
                 label="Default Values"
                 labelNote="(optional)"
                 name="enum_values"
               />
-            )}
+            )} */}
           </React.Fragment>
         )}
       />

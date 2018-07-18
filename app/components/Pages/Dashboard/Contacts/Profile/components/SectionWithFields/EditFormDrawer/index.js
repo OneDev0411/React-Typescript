@@ -15,7 +15,6 @@ EditForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   validate: PropTypes.func
 }
@@ -43,7 +42,7 @@ const getAllFields = (attributes, mutators) => {
       return
     }
 
-    const key = `${attribute_def.section}_modal__${attribute_def.id}`
+    const key = `${attribute_def.section}_modal_field_${index}`
     const placeholder = getPlaceholder(attribute)
     const validate = getValidator(attribute)
 
