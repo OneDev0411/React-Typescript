@@ -37,7 +37,10 @@ export default class extends React.Component {
 
     return (
       <div className="c-deal-form-viewer">
-        <PageHeader title={decodeURI(file.name)}>
+        <PageHeader
+          title={decodeURI(file.name)}
+          backUrl={`/dashboard/deals/${deal.id}`}
+        >
           <PageHeader.Menu>
             <ActionButton
               className={cn({ 'is-active': showFactsheet })}
