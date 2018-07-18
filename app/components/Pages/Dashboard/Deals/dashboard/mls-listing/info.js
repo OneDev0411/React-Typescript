@@ -1,47 +1,28 @@
-import React, { Component } from 'react'
+import React from 'react'
 import ListingStatus from './listing-status'
 
-class Info extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isHovered: false
-    }
-
-    this._setHoverState = this._setHoverState.bind(this)
-  }
-
-  _setHoverState(isHovered) {
-    this.setState({
-      isHovered
-    })
-  }
-
+class Info extends React.Component {
   render() {
-    const { isHovered } = this.state
     const { deal, editMls, deleteMls } = this.props
-    const hasMLSAddress = deal && deal.mls_context
+    const hasListing = deal && deal.mls_context
 
     return (
       <div className="mls-info">
         <ListingStatus deal={deal} />
 
-        <div
-          className="item"
-          onMouseEnter={() => this._setHoverState(true)}
-          onMouseLeave={() => this._setHoverState(false)}
-        >
+        <div className="item">
           <div className="lbl">MLS#:</div>
           <div className="value mls-number">
-            {(hasMLSAddress && deal.mls_context.mls_number) || '-'}
+            {(hasListing && deal.mls_context.mls_number) || '-'}
 
-            {isHovered && (
-              <button className="c-button--shadow" onClick={editMls}>
-                EDIT
-              </button>
-            )}
+            <button
+              className="c-button--shadow deals-info__edit-cta hidden"
+              onClick={editMls}
+            >
+              EDIT
+            </button>
 
-            {hasMLSAddress && (
+            {hasListing && (
               <button onClick={deleteMls} className="c-button--shadow">
                 <i className="fa fa-times-circle" />
               </button>

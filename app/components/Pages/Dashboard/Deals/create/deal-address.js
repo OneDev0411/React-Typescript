@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import ManualAddress from './manual-address'
-import MlsSearch from '../dashboard/mls-listing/search'
+import MlsSearch from '../../../../../views/components/SearchListing'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 const BUYING = 'Buying'

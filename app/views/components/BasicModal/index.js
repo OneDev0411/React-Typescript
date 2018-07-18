@@ -24,7 +24,8 @@ const BasicModal = ({
   className,
   handleOnClose,
   noFooter = false,
-  shouldCloseOnOverlayClick = false
+  shouldCloseOnOverlayClick = false,
+  ...rest
 }) => (
   <BareModal
     isOpen={isOpen}
@@ -33,6 +34,7 @@ const BasicModal = ({
     onRequestClose={handleOnClose}
     noFooter={noFooter}
     className={className}
+    {...rest}
   >
     {children}
   </BareModal>

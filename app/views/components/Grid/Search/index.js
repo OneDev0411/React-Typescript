@@ -47,13 +47,14 @@ class Search extends React.Component {
   render() {
     const {
       placeholder,
+      style,
       isSearching,
       disableOnSearch,
       showLoadingOnSearch
     } = this.props
 
     return (
-      <Container>
+      <Container style={style}>
         <Icon isSearching={isSearching}>
           {isSearching && showLoadingOnSearch ? (
             <i className="fa fa-spin fa-spinner" />
