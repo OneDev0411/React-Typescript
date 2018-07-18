@@ -6,7 +6,7 @@ import { Tab, Nav, NavItem } from 'react-bootstrap'
 import { getContactAddresses } from '../../../../../models/contacts/helpers'
 
 // eslint-disable-next-line
-import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
+import { selectDefinitionByName, isLoadedContactAttrDefs } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
 import PageHeader from '../../../../../views/components/PageHeader'
@@ -141,7 +141,7 @@ class ContactProfile extends React.Component {
       return <Container>{fetchError.message}</Container>
     }
 
-    if (!contact) {
+    if (!isLoadedContactAttrDefs(this.props.attributeDefs) || !contact) {
       return (
         <Container>
           <Loading />
