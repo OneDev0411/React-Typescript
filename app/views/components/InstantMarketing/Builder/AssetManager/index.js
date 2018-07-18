@@ -14,15 +14,14 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
         defaults: {
           ...defaultModel.prototype.defaults,
           tagName: 'div',
-          draggable: true,
-          droppable: true
+          style: 'padding: 16px',
+          draggable: false,
+          droppable: false
         }
       },
       {
         isComponent(el) {
           if (el.tagName == 'DIV' && el.classList.contains('listing-image')) {
-            console.log('Returning LISTING IMAGE')
-
             return { type: 'listing-image' }
           }
         }
@@ -44,7 +43,7 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
   let target
   const AssetView = Backbone.View.extend({
     events: {
-      click: 'onClick',
+      click: 'onClick'
     },
     onClick() {
       target.set('src', this.model.get('src'))
@@ -53,7 +52,12 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
       this.model = model
     },
     render() {
-      this.$el.html(`<img src="${this.model.get('src')}" width="100%" />`)
+      this.$el.html(
+        `<img src="${this.model.get(
+          'src'
+        )}" style="margin: 16px 5% 0 5%; border-radius: 5px; width: 90%; cursor: pointer;"/>`
+      )
+
       return this
     }
   })
@@ -64,16 +68,17 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
     },
     reset() {
       this.$el.empty()
-      for(let i = 0; i<this.collection.length; i++) {
+
+      for (let i = 0; i < this.collection.length; i++) {
         const asset = this.collection.at(i)
-        const view = new AssetView({model:asset})
+        const view = new AssetView({ model: asset })
+
         view.render()
         view.$el.appendTo(this.el)
       }
     },
     render: () => this
   })
-
 
   const view = new AssetsView({
     coll: editor.AssetManager.getAll()
@@ -93,7 +98,8 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
   editor.on('component:selected', selected => {
     if (selected.get('type') !== 'image') {
       view.$el.hide()
-      return
+
+      return false
     }
 
     target = selected

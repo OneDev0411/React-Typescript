@@ -1,50 +1,65 @@
 import React from 'react'
-import styled from 'styled-components'
+import nunjucks from 'nunjucks'
 
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  padding: 32px;
-  overflow: auto;
-`
+import { getTemplates } from '../../../../models/instant-marketing/get-templates'
 
-const Image = styled.img`
-  margin: 32px 0;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  cursor: pointer;
+import { Container, TemplateImage, Title } from './styled'
+import Loader from '../../../../components/Partials/Loading'
 
-  :hover {
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+export default class Templates extends React.Component {
+  state = {
+    isLoading: true,
+    templates: []
   }
-`
 
-const TemplateItem = styled.div`
-  display: block;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #ccc;
-
-  cursor: pointer;
-
-  :hover {
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  componentDidMount() {
+    this.getTemplatesList()
   }
-`
 
-const Templates = props => (
-  <Container>
-    {/* {images.map((url, index) => <Image key={index} src={url} alt="" />)} */}
+  getTemplatesList = async () => {
+    try {
+      const templates = await getTemplates()
 
-    {props.list.map(template => (
-      <TemplateItem
-        key={template.id}
-        onClick={() => props.onTemplateSelect(template)}
-      >
-        <img width="100%" src={ template.thumbnail } title={ template.name } />
-      </TemplateItem>
-    ))}
-  </Container>
-)
+      const compiledTemplates = templates.map(item => ({
+        ...item,
+        template: nunjucks.renderString(item.template, {
+          ...this.props.templateData
+        })
+      }))
 
-export default Templates
+      this.setState({
+        templates: compiledTemplates
+      })
+
+      if (compiledTemplates.length > 0) {
+        this.props.onTemplateSelect(compiledTemplates[0])
+      }
+    } catch (e) {
+      console.log(e)
+    } finally {
+      this.setState({
+        isLoading: false
+      })
+    }
+  }
+
+  render() {
+    return (
+      <Container>
+        <Title>Page Templates</Title>
+
+        {this.state.isLoading && <Loader />}
+
+        {this.state.templates.map(template => (
+          <TemplateImage
+            key={template.id}
+            src={template.thumbnail}
+            title={template.name}
+            onClick={() => this.props.onTemplateSelect(template)}
+            alt=""
+          />
+        ))}
+      </Container>
+    )
+  }
+}

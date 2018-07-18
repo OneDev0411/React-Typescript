@@ -10,10 +10,6 @@ import config from './config'
 import { Container, TemplatesContainer } from './styled'
 import Templates from '../Templates'
 
-import sample from './sample'
-
-import './AssetManager'
-
 class Builder extends React.Component {
   componentDidMount() {
     this.editor = grapesjs.init({
@@ -31,7 +27,6 @@ class Builder extends React.Component {
     })
 
     this.editor.on('load', this.setup.bind(this))
-    this.editor.setComponents(sample)
   }
 
   setup = () => {
@@ -54,7 +49,7 @@ class Builder extends React.Component {
     this.editor.Panels.addButton('views', button)
   }
 
-  addSaveButton() {
+  addSaveButton = () => {
     if (!this.props.onSave) {
       return false
     }
@@ -66,14 +61,14 @@ class Builder extends React.Component {
 
     const button = {
       id: 'save',
-      className: 'fa fa-check',
+      className: 'fa fa-save',
       command
     }
 
     this.editor.Panels.addButton('views', button)
   }
 
-  onSave() {
+  onSave = () => {
     const css = this.editor.getCss()
     const js = this.editor.getJs()
     const html = this.editor.getHtml()
@@ -83,17 +78,15 @@ class Builder extends React.Component {
     this.props.onSave && this.props.onSave(code)
   }
 
-  handleSelectTemplate = template => {
-    console.log(template)
+  handleSelectTemplate = template =>
     this.editor.setComponents(template.template)
-  }
 
   render() {
     return (
       <Container className="template-builder">
         <TemplatesContainer>
           <Templates
-            list={this.props.templates}
+            templateData={this.props.templateData}
             onTemplateSelect={this.handleSelectTemplate}
           />
         </TemplatesContainer>
