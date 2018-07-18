@@ -62,11 +62,15 @@ class FormEdit extends React.Component {
 
     // set deal
     this.frame.sendMessage('setDeal', [
-      {
-        ...deal,
-        roles: (deal.roles || []).map(role => roles[role])
-      }
+        deal
     ])
+
+    // set roles
+    this.frame.sendMessage('setRoles', [
+      (deal.roles || []).map(role => roles[role])
+    ])
+
+    this.frame.sendMessage('prepare')
   }
 
   /**
