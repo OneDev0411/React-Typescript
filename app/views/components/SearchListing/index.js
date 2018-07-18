@@ -55,6 +55,7 @@ export default class ListingSearch extends React.Component {
         price: item.price,
         status: item.status,
         image: item.cover_image_url,
+        gallery_image_urls: item.gallery_image_urls,
         is_mls_search: item.is_mls_search || false
       }))
 
