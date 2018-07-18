@@ -78,6 +78,6 @@ export function selectDefsBySection(state, section) {
     : []
 }
 
-export function contactDefsIsLoaded(state) {
+export function isLoadedContactAttrDefs(state) {
   return Object.keys(state.byId).length > 0
 }
