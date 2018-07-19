@@ -92,9 +92,7 @@ class WhoSigned extends React.Component {
     return (
       <div className="who-signed">
         <div className="ws-head">
-          <div className="ttl">
-            {isDraft ? 'Draft' : 'Who signed'}
-          </div>
+          <div className="ttl">{isDraft ? 'Draft' : 'Who signed'}</div>
           <div className="cta">
             {isSent && (
               <Button
@@ -160,7 +158,7 @@ class WhoSigned extends React.Component {
           </div>
         )}
 
-        {!isDraft && notSigned.length > 0 && (
+        {notSigned.length > 0 && (
           <div className="ws-section">
             <div className="ws-section-title">
               <img src="/static/images/deals/ws.svg" alt="" />
@@ -182,23 +180,6 @@ class WhoSigned extends React.Component {
                 <div className="info">
                   <div className="sname">{this.getName(signer.role)}</div>
                 </div>
-
-                {/*
-                 * Disabled due to web#1178
-                 *
-                <div className="sign-now">
-                  {signer.role.user &&
-                    signer.role.user.id === user.id && (
-                      <a
-                        href={Deal.getEnvelopeSignLink(envelope.id, signer.id, access_token)}
-                        target="_blank"
-                        className="sign-button"
-                      >
-                        Sign now
-                      </a>
-                    )}
-                </div>
-                */}
               </div>
             ))}
           </div>
@@ -207,7 +188,7 @@ class WhoSigned extends React.Component {
         {declineds.length > 0 && (
           <div className="ws-section">
             <div className="ws-section-title">
-              <img src="/static/images/deals/ws.svg" />
+              <img src="/static/images/deals/ws.svg" alt="" />
               DECLINED TO SIGN
             </div>
 

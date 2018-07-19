@@ -11,9 +11,9 @@ const Documents = props => {
       {submission && <SubmissionDocument submission={submission} {...props} />}
 
       {attachments &&
-        attachments.map(file => (
-          <FileDocument key={file.id} file={file} {...props} />
-        ))}
+        attachments
+          .filter(file => file.mime === 'application/pdf')
+          .map(file => <FileDocument key={file.id} file={file} {...props} />)}
     </Fragment>
   )
 }
