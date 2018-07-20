@@ -6,7 +6,7 @@ export async function searchContacts(
   filter,
   query = {
     ...defaultQuery,
-    order: '-updated_at'
+    order: 'display_name'
   }
 ) {
   try {
