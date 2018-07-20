@@ -46,7 +46,9 @@ export function Toolbar(props) {
         </div>
       )}
 
-      {selectedRowsLength > 0 && <ShareListing />}
+      {selectedRowsLength > 0 && (
+        <ShareListing selectedContacts={props.selectedRows} />
+      )}
     </Flex>
   )
 }

@@ -1,16 +1,83 @@
 import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 
-import SearchListingModal from '../../../../../../views/components/SearchListing'
+import SearchListingDrawer from '../../../../../../views/components/SearchListingDrawer'
+
+import Compose from '../../../../../../views/components/EmailCompose'
 
 import InstantMarketing from '../../../../../../views/components/InstantMarketing'
 
-import Compose from '../../../../../../views/components/EmailCompose'
+import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
+import { getContactAttribute } from '../../../../../../models/contacts/helpers/get-contact-attribute'
+
+import { selectContact } from '../../../../../../reducers/contacts/list'
+
+import { sendContactsEmail } from '../../../../../../models/email-compose/send-contacts-email'
 
 class ShareListing extends React.Component {
   state = {
     listing: null,
     isListingsModalOpen: false,
-    isInstantMarketingBuilderOpen: false
+    isInstantMarketingBuilderOpen: false,
+    isComposeEmailOpen: false,
+    isSendingEmail: false,
+    htmlTemplate: ''
+  }
+
+  get Recipients() {
+    return this.props.selectedContacts
+      .map(id => {
+        const contact = selectContact(this.props.contacts, id)
+
+        if (!contact.summary.email) {
+          return null
+        }
+
+        const emails = getContactAttribute(
+          contact,
+          selectDefinitionByName(this.props.attributeDefs, 'email')
+        )
+
+        return {
+          contactId: contact.id,
+          name: contact.summary.display_name,
+          avatar: contact.summary.profile_image_url,
+          email: contact.summary.email,
+          emails: emails.map(email => email.text)
+        }
+      })
+      .filter(recipient => recipient !== null)
+  }
+
+  handleSendEmails = async values => {
+    this.setState({
+      isSendingEmail: true
+    })
+
+    const emails = values.recipients.map(recipient => ({
+      to: recipient.email,
+      subject: values.subject,
+      html: this.state.htmlTemplate,
+      contact: recipient.contactId
+    }))
+
+    try {
+      await sendContactsEmail(emails)
+
+      this.props.notify({
+        status: 'success',
+        message: `${emails.length} emails has been sent to your contacts`
+      })
+    } catch (e) {
+      console.log(e)
+      // todo
+    } finally {
+      this.setState({
+        isSendingEmail: false,
+        isComposeEmailOpen: false
+      })
+    }
   }
 
   toggleListingModal = () =>
@@ -23,18 +90,26 @@ class ShareListing extends React.Component {
       isInstantMarketingBuilderOpen: !state.isInstantMarketingBuilderOpen
     }))
 
-  onSelectListing = listing => {
+  toggleComposeEmail = () =>
+    this.setState(state => ({
+      isComposeEmailOpen: !state.isComposeEmailOpen
+    }))
+
+  onSelectListing = async listing =>
     this.setState({
       listing,
-      isInstantMarketingBuilderOpen: true,
-      isListingsModalOpen: false
+      isListingsModalOpen: false,
+      isInstantMarketingBuilderOpen: true
     })
-  }
 
-  handleSaveMarketingCard = template => {
+  handleSaveMarketingCard = async template => {
     this.toggleInstantMarketingBuilder()
 
-    console.log(template)
+    this.setState({
+      isComposeEmailOpen: true,
+      isInstantMarketingBuilderOpen: false,
+      htmlTemplate: `<!DOCTYPE html>${template}</html>`
+    })
   }
 
   render() {
@@ -47,14 +122,15 @@ class ShareListing extends React.Component {
             className="button c-button--shadow"
             onClick={this.toggleListingModal}
           >
-            Share Listing
+            Marketing Center
           </button>
         </div>
 
-        <SearchListingModal
-          show={this.state.isListingsModalOpen}
-          modalTitle="Select a Listing"
-          onHide={this.toggleListingModal}
+        <SearchListingDrawer
+          isOpen={this.state.isListingsModalOpen}
+          compact={false}
+          title="Select a Listing"
+          onClose={this.toggleListingModal}
           onSelectListing={this.onSelectListing}
         />
 
@@ -66,10 +142,24 @@ class ShareListing extends React.Component {
           assets={listing && listing.gallery_image_urls}
         />
 
-        <Compose />
+        <Compose
+          isOpen={this.state.isComposeEmailOpen}
+          onClose={this.toggleComposeEmail}
+          recipients={this.Recipients}
+          html={this.state.htmlTemplate}
+          onClickSend={this.handleSendEmails}
+          isSubmitting={this.state.isSendingEmail}
+        />
       </Fragment>
     )
   }
 }
 
-export default ShareListing
+function mapStateToProps({ contacts }) {
+  return { contacts: contacts.list, attributeDefs: contacts.attributeDefs }
+}
+
+export default connect(
+  mapStateToProps,
+  { notify }
+)(ShareListing)
