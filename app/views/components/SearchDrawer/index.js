@@ -1,5 +1,6 @@
 import React from 'react'
 import Downshift from 'downshift'
+import PropTypes from 'prop-types'
 
 import Drawer from '../OverlayDrawer'
 import Search from '../Grid/Search'
@@ -13,7 +14,7 @@ const initialState = {
   error: null
 }
 
-export default class SearchDrawer extends React.Component {
+class SearchDrawer extends React.Component {
   state = initialState
 
   handleSearch = async value => {
@@ -51,12 +52,30 @@ export default class SearchDrawer extends React.Component {
     }
   }
 
+  handleClose = () => {
+    this.setState(initialState)
+    this.searchInputRef.value = ''
+
+    this.props.onClose()
+  }
+
+  handleSelectItem = item => {
+    this.setState(initialState)
+    this.searchInputRef.value = ''
+
+    this.props.onSelectItem(item)
+  }
+
   render() {
     const { isSearching, error } = this.state
-    const { showLoadingIndicator, ItemRow, onSelectItem } = this.props
+    const { showLoadingIndicator, ItemRow } = this.props
 
     return (
-      <Drawer isOpen={this.props.isOpen} showFooter={false}>
+      <Drawer
+        isOpen={this.props.isOpen}
+        showFooter={false}
+        onClose={this.handleClose}
+      >
         <Drawer.Header title={this.props.title} />
         <Drawer.Body style={{ overflow: 'hidden' }}>
           <Downshift
@@ -66,6 +85,7 @@ export default class SearchDrawer extends React.Component {
                   {...this.props.searchInputOptions}
                   onChange={this.handleSearch}
                   isSearching={isSearching || showLoadingIndicator}
+                  inputRef={ref => (this.searchInputRef = ref)}
                   style={{
                     ...this.props.searchInputOptions.style,
                     margin: '16px'
@@ -89,7 +109,7 @@ export default class SearchDrawer extends React.Component {
                         isHighlighted={highlightedIndex === index}
                         {...getItemProps({
                           item,
-                          onClick: () => onSelectItem(item)
+                          onClick: () => this.handleSelectItem(item)
                         })}
                       />
                     ))}
@@ -102,3 +122,18 @@ export default class SearchDrawer extends React.Component {
     )
   }
 }
+
+SearchDrawer.defaultProps = {
+  showLoadingIndicator: false,
+  searchInputOptions: {}
+}
+
+SearchDrawer.propTypes = {
+  showLoadingIndicator: PropTypes.bool,
+  searchInputOptions: PropTypes.object,
+  searchFunction: PropTypes.func.isRequired,
+  ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
+  onSelectItem: PropTypes.func.isRequired
+}
+
+export default SearchDrawer
