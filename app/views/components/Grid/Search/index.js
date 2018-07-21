@@ -14,7 +14,8 @@ class Search extends React.Component {
     minimumLength: PropTypes.number,
     isSearching: PropTypes.bool,
     disableOnSearch: PropTypes.bool,
-    showLoadingOnSearch: PropTypes.bool
+    showLoadingOnSearch: PropTypes.bool,
+    inputRef: PropTypes.func
   }
 
   static defaultProps = {
@@ -23,7 +24,8 @@ class Search extends React.Component {
     minimumLength: 0,
     isSearching: false,
     showLoadingOnSearch: false,
-    disableOnSearch: true
+    disableOnSearch: true,
+    inputRef: () => null
   }
 
   constructor(props) {
@@ -50,7 +52,8 @@ class Search extends React.Component {
       style,
       isSearching,
       disableOnSearch,
-      showLoadingOnSearch
+      showLoadingOnSearch,
+      inputRef
     } = this.props
 
     return (
@@ -67,6 +70,7 @@ class Search extends React.Component {
           placeholder={placeholder}
           onChange={this.handleChange}
           readOnly={isSearching && disableOnSearch === true}
+          innerRef={ref => inputRef(ref)}
         />
       </Container>
     )
