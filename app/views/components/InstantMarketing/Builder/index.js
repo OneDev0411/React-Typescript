@@ -72,14 +72,23 @@ class Builder extends React.Component {
     const css = this.editor.getCss()
     const js = this.editor.getJs()
     const html = this.editor.getHtml()
-    const code = `
-    <style>${css}</style><script type="text/javascript">${js}</script>${html}`
+    const result = `
+    <!DOCTYPE html><style>${css}</style><script type="text/javascript">${js}</script>${html}</html>`
 
-    this.props.onSave && this.props.onSave(code)
+    if (this.props.onSave) {
+      this.props.onSave({
+        ...this.selectedTemplate,
+        result
+      })
+
+      this.selectedTemplate = null
+    }
   }
 
-  handleSelectTemplate = template =>
+  handleSelectTemplate = template => {
+    this.selectedTemplate = template
     this.editor.setComponents(template.template)
+  }
 
   render() {
     return (

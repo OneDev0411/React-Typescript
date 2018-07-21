@@ -1,7 +1,6 @@
-// models/template/index.js
 import Fetch from '../../../services/fetch'
 
-export const getTemplates = async () => {
+export async function getTemplates() {
   try {
     const response = await new Fetch().get('/templates')
 

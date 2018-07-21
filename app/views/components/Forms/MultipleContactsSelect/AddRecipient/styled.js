@@ -5,7 +5,7 @@ export const SearchInputContainer = styled.div`
 
   i {
     position: absolute;
-    left: 0;
+    left: ${props => props.textLength * 8}px;
     top: 10px;
     font-size: 10px;
   }
@@ -15,7 +15,6 @@ export const SearchInput = styled.input`
   width: 250px;
   height: 30px;
   border: none;
-  padding-left: 12px;
 
   :focus {
     outline: none;

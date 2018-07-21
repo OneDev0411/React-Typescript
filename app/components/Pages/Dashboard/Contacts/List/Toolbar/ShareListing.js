@@ -15,6 +15,8 @@ import { selectContact } from '../../../../../../reducers/contacts/list'
 
 import { sendContactsEmail } from '../../../../../../models/email-compose/send-contacts-email'
 
+import { getTemplateScreenshot } from '../../../../../../models/instant-marketing'
+
 class ShareListing extends React.Component {
   state = {
     listing: null,
@@ -22,7 +24,8 @@ class ShareListing extends React.Component {
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
     isSendingEmail: false,
-    htmlTemplate: ''
+    htmlTemplate: '',
+    templateScreenshot: null
   }
 
   get Recipients() {
@@ -104,11 +107,28 @@ class ShareListing extends React.Component {
 
   handleSaveMarketingCard = async template => {
     this.toggleInstantMarketingBuilder()
+    this.generatePreviewImage(template)
 
     this.setState({
       isComposeEmailOpen: true,
       isInstantMarketingBuilderOpen: false,
-      htmlTemplate: `<!DOCTYPE html>${template}</html>`
+      htmlTemplate: template.result,
+      templateScreenshot: null
+    })
+  }
+
+  generatePreviewImage = async template => {
+    const imageUrl = await getTemplateScreenshot(
+      template.result,
+      [template.width, template.height],
+      {
+        width: template.width / 2,
+        height: template.height / 2
+      }
+    )
+
+    this.setState({
+      templateScreenshot: `<img style="width: calc(100% - 2em); margin: 1em;" src="${imageUrl}" />`
     })
   }
 
@@ -146,7 +166,7 @@ class ShareListing extends React.Component {
           isOpen={this.state.isComposeEmailOpen}
           onClose={this.toggleComposeEmail}
           recipients={this.Recipients}
-          html={this.state.htmlTemplate}
+          html={this.state.templateScreenshot}
           onClickSend={this.handleSendEmails}
           isSubmitting={this.state.isSendingEmail}
         />

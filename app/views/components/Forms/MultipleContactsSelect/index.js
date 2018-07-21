@@ -1,6 +1,11 @@
 import React from 'react'
 
-import { InputContainer, InputLabel, InputRequired } from '../styled'
+import {
+  InputContainer,
+  InputLabel,
+  InputRequired,
+  InputError
+} from '../styled'
 import { RecipientContainer } from './styled'
 
 import AddRecipient from './AddRecipient'
@@ -9,6 +14,7 @@ import RecipientItem from './RecipientItem'
 export const MultipleContactsSelect = ({
   input,
   hasLabel = true,
+  showError = true,
   meta,
   isRequired,
   placeholder,
@@ -29,5 +35,9 @@ export const MultipleContactsSelect = ({
 
       <AddRecipient input={input} />
     </RecipientContainer>
+
+    {showError &&
+      meta.error &&
+      meta.touched && <InputError>{meta.error}</InputError>}
   </InputContainer>
 )

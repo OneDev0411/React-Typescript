@@ -91,7 +91,7 @@ class AddRecipient extends React.Component {
         onOuterClick={() => this.setState({ isListMenuOpen: false })}
         render={({ isOpen, getInputProps, getItemProps, highlightedIndex }) => (
           <div style={{ position: 'relative' }}>
-            <SearchInputContainer>
+            <SearchInputContainer textLength={this.state.searchText.length}>
               <SearchInput
                 {...getInputProps({
                   value: this.state.searchText,
