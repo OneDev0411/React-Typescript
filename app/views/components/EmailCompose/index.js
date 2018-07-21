@@ -2,16 +2,41 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Field } from 'react-final-form'
 
+import Loading from '../../../components/Partials/Loading'
+
 import { FinalFormDrawer } from '../FinalFormDrawer'
 import { TextInput } from '../Forms/TextInput'
 import { MultipleContactsSelect } from '../Forms/MultipleContactsSelect'
 
+import { EmailBody } from './styled'
+
 class EmailCompose extends React.Component {
   get InitialValues() {
-    return {
+    if (this.formObject || this.props.isSubmitting) {
+      return this.formObject
+    }
+
+    this.formObject = {
       from: this.props.user.email,
       recipients: this.props.recipients
     }
+
+    return this.formObject
+  }
+
+  validate = values => {
+    const errors = {}
+    const { subject, recipients } = values
+
+    if (!subject || subject.length === 0) {
+      errors.subject = 'Please enter the subject'
+    }
+
+    if (!recipients || recipients.length === 0) {
+      errors.recipients = 'You should select one recipient at least'
+    }
+
+    return errors
   }
 
   render() {
@@ -21,6 +46,7 @@ class EmailCompose extends React.Component {
         initialValues={this.InitialValues}
         onClose={this.props.onClose}
         onSubmit={this.props.onClickSend}
+        validate={this.validate}
         submitting={this.props.isSubmitting}
         showReset={false}
         submitButtonLabel="Send"
@@ -43,16 +69,15 @@ class EmailCompose extends React.Component {
               component={MultipleContactsSelect}
             />
 
-            <iframe
-              title="nothing"
-              style={{
-                border: 'none',
-                width: 'calc(100% - 40px)',
-                height: '200px',
-                margin: '20px'
-              }}
-              src={`data:text/html;charset=utf-8,${encodeURI(this.props.html)}`}
-            />
+            <EmailBody>
+              {this.props.html === null && <Loading />}
+
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: this.props.html
+                }}
+              />
+            </EmailBody>
           </Fragment>
         )}
       />
