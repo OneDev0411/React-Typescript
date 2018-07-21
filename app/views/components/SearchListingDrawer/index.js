@@ -14,14 +14,6 @@ class SearchListingDrawer extends React.Component {
     this.handleSelectListing = this.handleSelectListing.bind(this)
   }
 
-  static propTypes = {
-    compact: PropTypes.bool
-  }
-
-  static defaultProps = {
-    compact: true
-  }
-
   state = {
     isWorking: false
   }
@@ -91,6 +83,15 @@ class SearchListingDrawer extends React.Component {
       />
     )
   }
+}
+
+SearchListingDrawer.propTypes = {
+  compact: PropTypes.bool,
+  onSelectListing: PropTypes.func.isRequired
+}
+
+SearchListingDrawer.defaultProps = {
+  compact: true
 }
 
 export default SearchListingDrawer
