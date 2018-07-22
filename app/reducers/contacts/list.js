@@ -88,6 +88,9 @@ const isFetching = (state = false, action) => {
     case actionTypes.FETCH_CONTACTS_REQUEST:
     case actionTypes.SEARCH_CONTACTS_REQUEST:
     case actionTypes.FETCH_MERGE_CONTACTS_REQUEST:
+    case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_REQUEST:
+    case actionTypes.POST_NEW_ATTRIBUTES_REQUEST:
+    case actionTypes.PATCH_CONTACT_REQUEST:
       return true
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.FETCH_CONTACTS_FAILURE:
@@ -96,6 +99,10 @@ const isFetching = (state = false, action) => {
     case actionTypes.SEARCH_CONTACTS_FAILURE:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_FAILURE:
+    case actionTypes.POST_NEW_ATTRIBUTES_SUCCESS:
+    case actionTypes.POST_NEW_ATTRIBUTES_FAILURE:
+    case actionTypes.PATCH_CONTACT_SUCCESS:
+    case actionTypes.PATCH_CONTACT_FAILURE:
       return false
     default:
       return state

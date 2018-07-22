@@ -1,11 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
-
+import { addNotification as notify } from 'reapop'
 import { BasicDropdown } from '../BasicDropdown'
 
 import { getContactAttribute } from '../../../models/contacts/helpers/get-contact-attribute'
 import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
-import { upsertContactAttributes } from '../../../store_actions/contacts/upsert-contact-attributes'
+
+import {
+  upsertContactAttributes,
+  upsertAttributesToContacts,
+  getContacts,
+  deselectAllRows
+} from '../../../store_actions/contacts'
+import {
+  selectCurrentPage,
+  selectContact
+} from '../../../reducers/contacts/list'
 
 const defaultSelectedItem = { label: 'General', value: 'General' }
 
@@ -14,9 +24,9 @@ class Stage extends React.Component {
     isSaving: false
   }
 
-  prepareStageAttribute = text => {
+  prepareStageAttribute = (contact, text) => {
     const is_primary = true
-    const { contact, attribute_def } = this.props
+    const { attribute_def } = this.props
     let stage = getContactAttribute(contact, attribute_def)
 
     if (stage.length > 0 && stage[0].id) {
@@ -40,10 +50,35 @@ class Stage extends React.Component {
     try {
       this.setState({ isSaving: true })
 
-      await this.props.upsertContactAttributes(this.props.contact.id, [
-        this.prepareStageAttribute(value)
-      ])
+      const { contacts, ContactListStore } = this.props
+      const currentPage = selectCurrentPage(ContactListStore)
 
+      this.props.deselectAllRows(currentPage)
+
+      if (contacts.length === 1) {
+        const contact = selectContact(ContactListStore, contacts[0])
+
+        await this.props.upsertContactAttributes(contact.id, [
+          this.prepareStageAttribute(contact, value)
+        ])
+      } else {
+        const { attribute_def } = this.props
+
+        await this.props.upsertAttributesToContacts(contacts, [
+          {
+            text: value,
+            is_primary: true,
+            attribute_def: attribute_def.id
+          }
+        ])
+
+        await this.props.getContacts(currentPage)
+      }
+
+      this.props.notify({
+        status: 'success',
+        message: `Contact${contacts.length > 1 ? 's' : ''} stage updated.`
+      })
       this.setState({ isSaving: false })
     } catch (error) {
       console.error(error)
@@ -60,33 +95,47 @@ class Stage extends React.Component {
       <BasicDropdown
         buttonStyle={this.props.buttonStyle}
         disabled={this.state.isSaving}
-        fullWidth
+        fullWidth={this.props.fullWidth}
         items={getItems(this.props.attribute_def.enum_values)}
         itemToString={this.itemToString}
         onChange={this.handleOnChange}
-        defaultSelectedItem={getInitialSelectedItem(
-          this.props.contact,
-          this.props.attribute_def
-        )}
+        defaultSelectedItem={
+          this.props.defaultSelectedItem ||
+          getInitialSelectedItem(
+            selectContact(this.props.ContactListStore, this.props.contacts[0]),
+            this.props.attribute_def
+          )
+        }
         style={this.props.style}
       />
     )
   }
 }
 
+Stage.defaultProps = {
+  fullWidth: true
+}
+
 export default connect(
   mapStateToProps,
-  { upsertContactAttributes }
+  {
+    upsertContactAttributes,
+    upsertAttributesToContacts,
+    getContacts,
+    notify,
+    deselectAllRows
+  }
 )(Stage)
 
 function mapStateToProps(state) {
-  const attribute_def = selectDefinitionByName(
-    state.contacts.attributeDefs,
-    'stage'
-  )
+  const {
+    contacts: { attributeDefs, list: ContactListStore }
+  } = state
+  const attribute_def = selectDefinitionByName(attributeDefs, 'stage')
 
   return {
-    attribute_def
+    attribute_def,
+    ContactListStore
   }
 }
 

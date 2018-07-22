@@ -5,6 +5,7 @@ import Flex from 'styled-flex-component'
 import ExportContacts from './ExportContactsButton'
 import TagContacts from './TagContacts'
 import MergeContacts from './MergeContacts'
+import ChangeStageContacts from './ChangeStageContacts'
 
 Toolbar.propTypes = {
   disabled: PropTypes.bool,
@@ -46,6 +47,7 @@ export function Toolbar(props) {
         </div>
       )}
       <MergeContacts selectedRows={props.selectedRows} />
+      <ChangeStageContacts selectedRows={props.selectedRows} />
     </Flex>
   )
 }

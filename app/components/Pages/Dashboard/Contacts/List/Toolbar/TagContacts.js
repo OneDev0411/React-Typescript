@@ -15,16 +15,16 @@ export default class TagContacts extends React.Component {
 
     return (
       <Fragment>
-        <div className="list--secondary-button">
-          {selectedRows.length > 0 && (
+        {selectedRows.length > 0 && (
+          <div className="list--secondary-button">
             <button
               className="button c-button--shadow"
               onClick={this.openOverLay}
             >
               Tag
             </button>
-          )}
-        </div>
+          </div>
+        )}
         <TagsOverlay
           selectedContactsIds={selectedRows}
           isOpen={overlayIsOpen}
