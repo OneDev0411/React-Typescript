@@ -101,12 +101,10 @@ class EditAddressesForm extends React.Component {
                         }}
                       >
                         <p style={{ color: '#778a9f', fontWeight: 500 }}>
-                          {(address && address.label) || 'Other'}
+                          {address && address.label}
                         </p>
                         <p style={{ color: '#263d50', fontSize: '1.6rem' }}>
-                          <b>
-                            {(address && getFullAddress(address.fields)) || '-'}
-                          </b>
+                          <b>{address && getFullAddress(address.fields)}</b>
                         </p>
                         <label
                           htmlFor={`is_primary_${index}`}
@@ -121,7 +119,7 @@ class EditAddressesForm extends React.Component {
                             value={
                               address != null
                                 ? address.index
-                                : getAddressIndex(addresses)
+                                : getAddressIndex(addresses, fields)
                             }
                           />
                           <span
@@ -194,7 +192,7 @@ class EditAddressesForm extends React.Component {
                     fields.push(
                       getEmptyAddress(
                         addressAttributeDefs,
-                        addresses.length === 0 ? 1 : getAddressIndex(addresses)
+                        getAddressIndex(addresses, fields)
                       )
                     )
                   }

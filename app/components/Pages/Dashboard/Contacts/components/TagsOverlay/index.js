@@ -24,7 +24,8 @@ import {
 } from '../../../../../../models/contacts/helpers'
 import {
   selectContact,
-  selectCurrentPage
+  selectCurrentPage,
+  selectContactsInfo
 } from '../../../../../../reducers/contacts/list'
 import intersectionBy from 'lodash/intersectionBy'
 import { selectTags } from '../../../../../../reducers/contacts/tags'
@@ -211,7 +212,10 @@ class TagsOverlay extends React.Component {
 
   // get common tags between selected contacts & default tags
   getCommonTags = (selectedContactsIds, list, existingTags) => {
-    if (selectedContactsIds.length === 0) {
+    if (
+      selectedContactsIds.length === 0 ||
+      selectContactsInfo(list).count === 0
+    ) {
       return []
     }
 
@@ -247,11 +251,12 @@ class TagsOverlay extends React.Component {
     const { attributeDefs } = this.props
     const { data_type: tagDataType } =
       selectDefinitionByName(attributeDefs, 'tag') || {}
+    const { count: contactsCount } = selectContactsInfo(list)
     let DrawerHeaderText = ''
 
     if (selectedContactsIds.length > 1) {
       DrawerHeaderText = `${selectedContactsIds.length} contacts`
-    } else if (selectedContactsIds.length === 1) {
+    } else if (selectedContactsIds.length === 1 && contactsCount) {
       DrawerHeaderText = getAttributeFromSummary(
         selectContact(list, selectedContactsIds[0]),
         'display_name'
