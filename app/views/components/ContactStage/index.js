@@ -19,6 +19,21 @@ import {
 
 const defaultSelectedItem = { label: 'General', value: 'General' }
 
+function getInitialSelectedItem(contact, attribute_def) {
+  const stage = getContactAttribute(contact, attribute_def)
+  let selectedItem = defaultSelectedItem
+
+  if (stage.length > 0) {
+    selectedItem = { label: stage[0].text, value: stage[0].text }
+  }
+
+  return selectedItem
+}
+
+function getItems(items) {
+  return items.map(item => ({ label: item, value: item }))
+}
+
 class Stage extends React.Component {
   state = {
     isSaving: false
@@ -116,17 +131,6 @@ Stage.defaultProps = {
   fullWidth: true
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    upsertContactAttributes,
-    upsertAttributesToContacts,
-    getContacts,
-    notify,
-    deselectAllRows
-  }
-)(Stage)
-
 function mapStateToProps(state) {
   const {
     contacts: { attributeDefs, list: ContactListStore }
@@ -139,17 +143,13 @@ function mapStateToProps(state) {
   }
 }
 
-function getInitialSelectedItem(contact, attribute_def) {
-  const stage = getContactAttribute(contact, attribute_def)
-  let selectedItem = defaultSelectedItem
-
-  if (stage.length > 0) {
-    selectedItem = { label: stage[0].text, value: stage[0].text }
+export default connect(
+  mapStateToProps,
+  {
+    upsertContactAttributes,
+    upsertAttributesToContacts,
+    getContacts,
+    notify,
+    deselectAllRows
   }
-
-  return selectedItem
-}
-
-function getItems(items) {
-  return items.map(item => ({ label: item, value: item }))
-}
+)(Stage)
