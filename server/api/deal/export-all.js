@@ -21,6 +21,9 @@ router.get('/deals/export/:id', async ctx => {
     ctx.body = ctx
       .fetch(`/brands/${id}/deals.xlsx`)
       .set('Authorization', `Bearer ${user.access_token}`)
+      .on('response', res => {
+        ctx.set('Content-Disposition', res.headers['content-disposition'])
+      })
       .pipe(PassThrough())
   } catch (e) {
     console.log(e)
