@@ -18,7 +18,7 @@ class EmailCompose extends React.Component {
 
     this.formObject = {
       from: this.props.user.email,
-      recipients: this.props.recipients
+      recipients: this.props.recipients || []
     }
 
     return this.formObject
