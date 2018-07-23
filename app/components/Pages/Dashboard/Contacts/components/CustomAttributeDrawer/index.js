@@ -60,21 +60,32 @@ class CustomAttributeDrawer extends React.Component {
           <React.Fragment>
             <TipsBanner />
 
-            <TextField label="Name" name="label" required />
+            <TextField
+              label="Name"
+              name="label"
+              required
+              hint="A custom field name is your unique title name for your custom field. Examples of a custom title name could be Pet Name, Marital Status or Military Service."
+            />
 
             <Select
               items={[
                 {
                   title: 'Date',
-                  value: 'date'
+                  value: 'date',
+                  hint:
+                    'For custom fields that are date based when capturing values like a birthday or anniversary'
                 },
                 {
                   title: 'Number',
-                  value: 'number'
+                  value: 'number',
+                  hint:
+                    "For custom fields that are ONLY number based like 'Age' or 'Years retired'"
                 },
                 {
                   title: 'Text',
-                  value: 'text'
+                  value: 'text',
+                  hint:
+                    'For custom fields that can accept words, numbers and characters and have unique values and labels'
                 }
               ]}
               label="Type"
@@ -109,16 +120,18 @@ class CustomAttributeDrawer extends React.Component {
                 label="Add Label"
                 labelNote="(optional)"
                 name="labels"
+                hint="Use labels to add dropdown descriptions to the values you want to capture. For example, use the labels work, home & personal when capturing a phone number."
               />
             )}
 
-            {/* {values.data_type.value === 'text' && (
+            {values.data_type.value === 'text' && (
               <TextFieldArray
                 label="Default Values"
                 labelNote="(optional)"
                 name="enum_values"
+                hint="Use values to add dropdown options to the custom field you want to capture. For example, use the values Mr., Mrs. or Dr. when capturing a title."
               />
-            )} */}
+            )}
           </React.Fragment>
         )}
       />

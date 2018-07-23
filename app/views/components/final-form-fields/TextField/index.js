@@ -22,6 +22,7 @@ const TextInput = styled.input`
 
 TextField.propTypes = {
   format: PropTypes.func,
+  hint: PropTypes.string,
   label: PropTypes.string.isRequired,
   labelNote: PropTypes.string,
   name: PropTypes.string.isRequired,
@@ -33,6 +34,7 @@ TextField.propTypes = {
 
 TextField.defaultProps = {
   format: t => t,
+  hint: '',
   labelNote: '',
   parse: t => t,
   placeholder: '',
@@ -67,6 +69,19 @@ export function TextField(props) {
               autoComplete="off"
             />
             {hasError && <ErrorMessage>{meta.error}</ErrorMessage>}
+            {meta.active &&
+              props.hint && (
+                <div
+                  style={{
+                    marginTop: '0.5em',
+                    padding: '0.5em',
+                    borderRadius: 3,
+                    backgroundColor: '#f6fafb'
+                  }}
+                >
+                  {props.hint}
+                </div>
+              )}
           </Container>
         )
       }}
