@@ -41,7 +41,7 @@ export function deleteContacts(contactIds) {
   }
 }
 
-export function updateStoreBasedOnRemovedContacts(
+export async function updateStoreBasedOnRemovedContacts(
   dispatch,
   getState,
   contactIds
