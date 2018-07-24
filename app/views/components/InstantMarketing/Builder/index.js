@@ -10,6 +10,8 @@ import config from './config'
 import { Container, TemplatesContainer } from './styled'
 import Templates from '../Templates'
 
+import juice from 'juice'
+
 class Builder extends React.Component {
   componentDidMount() {
     this.editor = grapesjs.init({
@@ -72,13 +74,13 @@ class Builder extends React.Component {
     const css = this.editor.getCss()
     const js = this.editor.getJs()
     const html = this.editor.getHtml()
-    const result = `
-    <!DOCTYPE html><style>${css}</style><script type="text/javascript">${js}</script>${html}</html>`
+    const result = `<!DOCTYPE html><style>${css}</style><script type="text/javascript">${js}</script>${html}</html>`
+    const inlined = juice(result)
 
     if (this.props.onSave) {
       this.props.onSave({
         ...this.selectedTemplate,
-        result
+        inlined
       })
 
       this.selectedTemplate = null
