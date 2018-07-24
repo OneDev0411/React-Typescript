@@ -16,6 +16,8 @@ class Builder extends React.Component {
   componentDidMount() {
     this.editor = grapesjs.init({
       ...config,
+      avoidInlineStyle: false,
+      forceClass: false,
       container: '#grapesjs-canvas',
       components: null,
       assetManager: {
@@ -72,15 +74,18 @@ class Builder extends React.Component {
 
   onSave = () => {
     const css = this.editor.getCss()
-    const js = this.editor.getJs()
     const html = this.editor.getHtml()
-    const result = `<!DOCTYPE html><style>${css}</style><script type="text/javascript">${js}</script>${html}</html>`
-    const inlined = juice(result)
+
+    const assembled = `${html}<style>${css}</style>`
+
+    const result = juice(assembled)
+
+    debugger
 
     if (this.props.onSave) {
       this.props.onSave({
         ...this.selectedTemplate,
-        inlined
+        result
       })
 
       this.selectedTemplate = null
