@@ -77,7 +77,16 @@ class Builder extends React.Component {
     const css = this.editor.getCss()
     const html = this.editor.getHtml()
 
-    const assembled = `${html}<style>${css}</style>`
+    const assembled = `
+      <!doctype html>
+      <html>
+        <head>
+          <style>${css}</style>
+        </head>
+        <body>
+          ${html}
+        </body>
+      </html>`
 
     const result = juice(assembled)
 
