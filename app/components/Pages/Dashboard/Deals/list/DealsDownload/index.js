@@ -52,7 +52,7 @@ class DealsDownload extends React.Component {
             list_price: 'List Price',
             branch_title: 'Office'
           },
-          order: '-list_date'
+          order: 'list_date'
         })
       )}`
     },
@@ -92,7 +92,7 @@ class DealsDownload extends React.Component {
             closing_date: 'Closing Date',
             seller_agent: 'Seller Agent'
           },
-          order: '-contract_date'
+          order: 'contract_date'
         })
       )}`
     }
