@@ -17,6 +17,7 @@ class Builder extends React.Component {
     this.editor = grapesjs.init({
       ...config,
       avoidInlineStyle: false,
+      keepUnusedStyles: true,
       forceClass: false,
       container: '#grapesjs-canvas',
       components: null,
