@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router'
 import PageHeader from '../../../../../../../views/components/PageHeader'
 import ToolTip from '../../../../../../../views/components/tooltip'
 
-import Excel from '../../../../Partials/Svgs/Excel'
+// import Excel from '../../../../Partials/Svgs/Excel'
 
 import { Trigger as MenuTrigger } from '../../../../../../../views/components/SlideMenu'
 
@@ -28,14 +28,14 @@ const Header = ({
     </PageHeader.Title>
 
     <PageHeader.Menu>
-      <ToolTip placement="bottom" caption="Download Report">
+      {/* <ToolTip placement="bottom" caption="Download Report">
         <a
           href={`/api/deals/export/${getActiveTeamId(user)}`}
           className="search-button"
         >
           <Excel />
         </a>
-      </ToolTip>
+      </ToolTip> */}
 
       {showCreateDeal && (
         <ActionButton
