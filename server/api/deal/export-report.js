@@ -1,4 +1,5 @@
 import Koa from 'koa'
+import moment from 'moment'
 
 const router = require('koa-router')()
 const PassThrough = require('stream').PassThrough
@@ -17,7 +18,11 @@ router.get('/deals/report/:data', async ctx => {
       return
     }
 
-    ctx.set('Content-Disposition', 'attachment; filename=deals.csv')
+    const fileName = `Rechat ${convertedData.title} ${moment().format(
+      'MM-DD-YY'
+    )}`
+
+    ctx.set('Content-Disposition', `attachment; filename=${fileName}.csv`)
 
     ctx.body = ctx
       .fetch(
@@ -26,9 +31,6 @@ router.get('/deals/report/:data', async ctx => {
       )
       .set('Authorization', `Bearer ${user.access_token}`)
       .send({ filter: convertedData.filter, project: convertedData.project })
-      .on('response', res => {
-        ctx.set('Content-Disposition', res.headers['content-disposition'])
-      })
       .pipe(PassThrough())
   } catch (e) {
     console.log(e)
