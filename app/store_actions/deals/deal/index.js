@@ -10,3 +10,5 @@ export * from './get-deals'
 export * from './get-deal'
 
 export * from './search-deals'
+
+export * from './eject-draft-mode'
