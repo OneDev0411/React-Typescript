@@ -1,3 +1,7 @@
+export * from './DateField'
+export * from './DateTimeField'
+export * from './ErrorField'
 export * from './Select'
+export * from './TextAreaField'
 export * from './TextField'
 export * from './TextFieldArray'

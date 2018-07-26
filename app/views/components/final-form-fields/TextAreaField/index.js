@@ -5,71 +5,59 @@ import { Field } from 'react-final-form'
 
 import { Container, Label, LabelNote, ErrorMessage } from '../styled'
 
-const TextInput = styled.input`
+const TextArea = styled.textarea`
   width: 100%;
+  height: 150px;
+  display: block;
   padding: 0;
-  font-size: 1.8rem;
+  line-height: 1.5;
   border-width: 0;
+  font-size: 2rem;
+  resize: none;
+  overflow: auto;
+  color: #26465e;
 
   &:focus {
     outline: none;
   }
-
-  &::placeholder {
-    color: #cad4db;
-  }
 `
 
-TextField.propTypes = {
-  format: PropTypes.func,
+TextAreaField.propTypes = {
   hint: PropTypes.string,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   labelNote: PropTypes.string,
   name: PropTypes.string.isRequired,
-  parse: PropTypes.func,
   placeholder: PropTypes.string,
-  required: PropTypes.bool,
-  style: PropTypes.shape(),
-  validate: PropTypes.func
+  required: PropTypes.bool
 }
 
-TextField.defaultProps = {
-  format: t => t || '',
+TextAreaField.defaultProps = {
   hint: '',
+  label: '',
   labelNote: '',
-  parse: t => t || '',
   placeholder: '',
-  required: false,
-  style: {},
-  validate: () => undefined
+  required: false
 }
 
-export function TextField(props) {
+export function TextAreaField(props) {
   const id = `${props.name}_text-field`
 
   return (
     <Field
       name={props.name}
-      format={props.format}
-      parse={props.parse}
-      validate={props.validate}
       render={({ input, meta }) => {
         const hasError = meta.error && meta.touched
 
         return (
-          <Container style={props.style}>
-            <Label htmlFor={id} required={props.required}>
-              {props.label}
-              {props.labelNote &&
-                !props.required && <LabelNote>{props.labelNote}</LabelNote>}
-            </Label>
-            <TextInput
-              {...input}
-              id={id}
-              placeholder={props.placeholder}
-              type="text"
-              autoComplete="off"
-            />
+          <Container>
+            {props.label && (
+              <Label htmlFor={id} required={props.required}>
+                {props.label}
+                {props.labelNote &&
+                  !props.required && <LabelNote>{props.labelNote}</LabelNote>}
+              </Label>
+            )}
+            <TextArea {...input} id={id} placeholder={props.placeholder} />
             {hasError && <ErrorMessage>{meta.error}</ErrorMessage>}
             {meta.active &&
               props.hint && (

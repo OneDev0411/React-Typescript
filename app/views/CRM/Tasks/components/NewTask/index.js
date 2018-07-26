@@ -13,25 +13,28 @@ import {
   createTask,
   deleteTask
 } from '../../../../../store_actions/tasks'
+import { createTaskAssociation } from '../../../../../models/tasks/create-task-association'
+import { deleteTaskAssociation } from '../../../../../models/tasks/delete-task-association'
 
-import Title from './components/Title'
-import DueDate from './components/DueDate'
-import TaskType from './components/TaskType'
-import Reminder from './components/Reminder'
-import Description from './components/Description'
-import Associations from './components/Associations'
 import IconButton from '../../../../components/Button/IconButton'
 import ActionButton from '../../../../components/Button/ActionButton'
 import IconDelete from '../../../../components/SvgIcons/Delete/IconDelete'
 import { CircleCheckbox } from '../../../../components/Input/CircleCheckbox'
+import {
+  TextField,
+  TextAreaField
+} from '../../../../components/final-form-fields'
+
 import LoadSaveReinitializeForm from '../../../../utils/LoadSaveReinitializeForm'
 import { goBackFromEditTask } from '../../helpers/go-back-from-edit'
 
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
-import { createTaskAssociation } from '../../../../../models/tasks/create-task-association'
-import { deleteTaskAssociation } from '../../../../../models/tasks/delete-task-association'
+import DueDate from './components/DueDate'
+import Reminder from './components/Reminder'
+import { TaskType } from './components/TaskType'
+import Associations from './components/Associations'
 
 const propTypes = {
   task: PropTypes.shape(),
@@ -206,32 +209,40 @@ class Task extends Component {
           }) => (
             <form onSubmit={handleSubmit} className="c-new-task__form">
               <div className="c-new-task__body">
-                <div className="c-new-task__header">
-                  <div className="c-new-task__title-wrapper">
-                    {!this.isNew && (
-                      <div className="c-new-task__status">
-                        <Field
-                          size={36}
-                          name="status"
-                          id="task-status"
-                          component={CircleCheckbox}
-                        />
-                      </div>
-                    )}
-                    <Field name="title" component={Title} />
-                  </div>
-                  <DueDate selectedDate={values.dueDate} />
+                <div style={{ position: 'relative' }}>
+                  {!this.isNew && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '50%',
+                        right: '1em',
+                        transform: 'translateY(-50%)'
+                      }}
+                    >
+                      <Field
+                        size={36}
+                        name="status"
+                        id="task-status"
+                        component={CircleCheckbox}
+                      />
+                    </div>
+                  )}
+                  <TextField
+                    label="Title"
+                    name="title"
+                    required
+                    style={{ paddingRight: '4.5em' }}
+                  />
                 </div>
                 <div>
-                  <Field name="description" component={Description} />
-                  <div className="c-new-task__details">
-                    <TaskType />
-                    <Reminder
-                      dueTime={values.dueTime.value}
-                      dueDate={values.dueDate.value}
-                      selectedDate={values.reminderDate}
-                    />
-                  </div>
+                  <DueDate selectedDate={values.dueDate} />
+                  <TextAreaField label="Description" name="description" />
+                  <TaskType />
+                  <Reminder
+                    dueTime={values.dueTime.value}
+                    dueDate={values.dueDate.value}
+                    selectedDate={values.reminderDate}
+                  />
                   <Associations
                     associations={values.associations}
                     handleCreate={this.handleCreateAssociation}
@@ -271,16 +282,6 @@ class Task extends Component {
                   This is temporary until implemention of bulk
                   delete/add associations and attachments
                 */}
-                {this.isNew && (
-                  <button
-                    type="button"
-                    onClick={() => form.reset()}
-                    disabled={submitting || pristine || isDeleting}
-                    className="c-new-address-modal__cancel-btn"
-                  >
-                    Reset
-                  </button>
-                )}
                 <ActionButton
                   type="submit"
                   disabled={(!invalid && pristine) || isDeleting}
@@ -313,7 +314,7 @@ export default connect(
 function validate(values) {
   const errors = {}
   const requiredError = 'Required'
-  const timeRequiredError = 'Time is required,'
+  const timeRequiredError = 'Time is required'
 
   if (values.title == null || values.title.trim().length === 0) {
     errors.title = requiredError

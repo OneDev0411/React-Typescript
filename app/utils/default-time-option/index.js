@@ -1,7 +1,7 @@
 import fecha from 'fecha'
 
-import { getTime } from '../../../../../../utils/get-time'
-import { getTimes } from '../../../../../../utils/get-times'
+import { getTime } from '../get-time'
+import { getTimes } from '../get-times'
 
 /**
  * Generate Default Time optopn for dropdown

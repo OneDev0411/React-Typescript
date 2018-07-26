@@ -1,4 +1,4 @@
-export function getTodayDate() {
+export function todayDate() {
   const today = new Date()
 
   today.setHours(0)

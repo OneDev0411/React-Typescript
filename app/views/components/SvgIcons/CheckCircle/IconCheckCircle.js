@@ -1,6 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+const checkedColor = '#35B863'
+const unCheckedColor = '#cedae0'
+
 const width = '24'
 const height = '24'
 const viewBox = '0 0 24 24'
@@ -15,25 +18,25 @@ const getStyle = checked => css`
   height: ${height}px;
 
   .c-icon-check-circle {
-    fill: ${checked ? '#35B863' : '#fff'};
+    fill: ${checked ? checkedColor : '#fff'};
   }
 
   .c-icon-check-circle__border {
-    stroke: ${checked ? '#35B863' : '#e0eaef'};
+    stroke: ${checked ? checkedColor : unCheckedColor};
   }
 
   .c-icon-check-circle__check {
-    fill: ${checked ? '#fff' : '#e0eaef'};
+    fill: ${checked ? '#fff' : unCheckedColor};
   }
 
   ${!checked &&
     `&:hover {
     .c-icon-check-circle__border {
-      stroke: #35B863;
+      stroke: ${checkedColor};
     }
 
     .c-icon-check-circle__check {
-      fill: #35B863;
+      fill: ${checkedColor};
     }
   }`};
 `

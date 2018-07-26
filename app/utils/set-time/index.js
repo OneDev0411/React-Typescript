@@ -1,6 +1,6 @@
 /**
  * Set a fixed time to a Date
- * @param {Date} timestamp The Original date in timestamp
+ * @param {number} timestamp The Original date in timestamp
  * @param {number} time Fixed time of day
  * @returns {number} a timestamp time in seconds
  */

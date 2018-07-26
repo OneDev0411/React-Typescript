@@ -5,14 +5,14 @@ import Downshift from 'downshift'
 import fecha from 'fecha'
 import ClickOutSide from 'react-click-outside'
 
-import Card from '../../../../../../../../components/Card'
-import { Item } from '../../../DropdownItem'
-import { Button, Icon } from '../../../../../../../../components/Dropdown'
-import ActionButton from '../../../../../../../../components/Button/ActionButton'
+import Card from '../../../components/Card'
+import { Item } from '../../../components/Dropdown/Item'
+import { Button, Icon } from '../../../components/Dropdown'
+import ActionButton from '../../../components/Button/ActionButton'
 
 const formatDate = date => fecha.format(new Date(date), 'MM/DD/YYYY')
 
-class Dropdown extends React.Component {
+export class DateField extends React.Component {
   state = {
     isOpenMenu: false,
     isOpenDatePicker: false
@@ -34,8 +34,6 @@ class Dropdown extends React.Component {
       selectedItem = this.props.input.value,
       isOpen: isOpenMenu = this.state.isOpenMenu
     } = changes
-
-    // console.log(changes)
 
     if (
       selectedItem.needsDatePicker &&
@@ -70,23 +68,14 @@ class Dropdown extends React.Component {
     }
   }
 
-  toggleMenu = () => {
+  toggleMenu = () =>
     this.setState(({ isOpenMenu }) => ({ isOpenMenu: !isOpenMenu }))
-  }
 
-  handleOnCloseDatePicker = () => {
-    this.setState({
-      isOpenDatePicker: false
-    })
-  }
+  handleCloseDatePicker = () => this.setState({ isOpenDatePicker: false })
 
-  handleOnOpenDatePicker = () => {
-    this.setState({
-      isOpenDatePicker: true
-    })
-  }
+  handleOpenDatePicker = () => this.setState({ isOpenDatePicker: true })
 
-  handleOnSelectDate = date => {
+  handleSelectedDate = date => {
     const title = formatDate(date)
     const value = new Date(date).getTime()
 
@@ -105,15 +94,56 @@ class Dropdown extends React.Component {
   }
 
   handleClearCalendar = () => {
-    const { defaultSelectedItem, input: { onChange } } = this.props
+    const {
+      defaultSelectedItem,
+      input: { onChange }
+    } = this.props
 
-    this.handleOnCloseDatePicker()
+    this.handleCloseDatePicker()
     onChange(defaultSelectedItem)
   }
+
+  renderDatePicker = initialDate => (
+    <ClickOutSide onClickOutside={this.handleCloseDatePicker}>
+      <DayPicker
+        initialMonth={initialDate}
+        selectedDays={initialDate}
+        modifiers={this.props.datePickerModifiers}
+        onDayClick={this.handleSelectedDate}
+      />
+      <div style={{ textAlign: 'center', marginBottom: '1em' }}>
+        <ActionButton onClick={() => this.handleSelectedDate(new Date())}>
+          Today
+        </ActionButton>
+        <button
+          style={{ marginLeft: '1em' }}
+          onClick={this.handleClearCalendar}
+          className="c-new-address-modal__cancel-btn"
+        >
+          Clear
+        </button>
+      </div>
+    </ClickOutSide>
+  )
 
   render() {
     const { isOpenDatePicker, isOpenMenu } = this.state
     const { items, input, id: buttonId, datePickerModifiers } = this.props
+
+    if (items.length === 0) {
+      return (
+        <div style={{ marginRight: '0.5em' }}>
+          <Button
+            onClick={this.handleOpenDatePicker}
+            onFocus={this.handleOnFocus}
+          >
+            {formatDate(input.value)}
+            <Icon isOpen={isOpenDatePicker} />
+          </Button>
+          {isOpenDatePicker && this.renderDatePicker()}
+        </div>
+      )
+    }
 
     return (
       <Downshift
@@ -175,16 +205,16 @@ class Dropdown extends React.Component {
                       )
                     })}
                   {isOpenDatePicker && (
-                    <ClickOutSide onClickOutside={this.handleOnCloseDatePicker}>
+                    <ClickOutSide onClickOutside={this.handleCloseDatePicker}>
                       <DayPicker
                         initialMonth={initialDate}
                         selectedDays={initialDate}
                         modifiers={datePickerModifiers}
-                        onDayClick={this.handleOnSelectDate}
+                        onDayClick={this.handleSelectedDate}
                       />
                       <div style={{ textAlign: 'center', marginBottom: '1em' }}>
                         <ActionButton
-                          onClick={() => this.handleOnSelectDate(new Date())}
+                          onClick={() => this.handleSelectedDate(new Date())}
                         >
                           Today
                         </ActionButton>
@@ -206,21 +236,4 @@ class Dropdown extends React.Component {
       />
     )
   }
-}
-
-export default Dropdown
-
-function getInitialMonth(item) {
-  let date = new Date()
-
-  if (item.value) {
-    date = new Date(item.value)
-  }
-
-  let month = date.getMonth() + 1
-  const year = date.getFullYear().toString()
-
-  month = month < 10 ? `0${month}` : month
-
-  return new Date(`${year}, ${month}`)
 }
