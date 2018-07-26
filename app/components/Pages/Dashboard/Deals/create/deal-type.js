@@ -2,7 +2,7 @@ import React from 'react'
 
 import RadioButton from '../../../../../views/components/radio'
 
-export default ({ dealType, isRequired, onChangeDealType }) => (
+export default ({ isDraft, isRequired, onChangeDealType }) => (
   <div className="form-section">
     <div className="hero">
       What is the stage of this deal?&nbsp;
@@ -10,15 +10,15 @@ export default ({ dealType, isRequired, onChangeDealType }) => (
     </div>
 
     <RadioButton
-      selected={dealType === 'draft'}
+      selected={isDraft === true}
       title="Start as Draft (it's too early, just starting some paperwork)"
-      onClick={() => onChangeDealType('draft')}
+      onClick={() => onChangeDealType(true)}
     />
 
     <RadioButton
-      selected={dealType === 'live'}
+      selected={isDraft === false}
       title="Live deal (we are in businuess and I want to start submitting paperwork)"
-      onClick={() => onChangeDealType('live')}
+      onClick={() => onChangeDealType(false)}
     />
   </div>
 )
