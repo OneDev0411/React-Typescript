@@ -415,7 +415,10 @@ export default (
         component={AsyncDealsLayout}
       >
         <IndexRoute component={AsyncDealsList} />
-        <Route path="/dashboard/deals/create" component={AsyncDealCreate} />
+        <Route
+          path="/dashboard/deals/create(/:id)"
+          component={AsyncDealCreate}
+        />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
         <Route
           path="/dashboard/deals/:id/files"
