@@ -42,13 +42,19 @@ const FilterNames = {
 export const Filters = {
   All: deal =>
     FilterNames.Archive.includes(Deal.get.status(deal)) === false &&
+    !deal.is_draft &&
     !deal.deleted_at,
   Listings: deal =>
-    FilterNames.Active.includes(Deal.get.status(deal)) && !deal.deleted_at,
+    FilterNames.Active.includes(Deal.get.status(deal)) &&
+    !deal.is_draft &&
+    !deal.deleted_at,
   Pending: deal =>
-    FilterNames.Pending.includes(Deal.get.status(deal)) && !deal.deleted_at,
+    FilterNames.Pending.includes(Deal.get.status(deal)) &&
+    !deal.is_draft &&
+    !deal.deleted_at,
   Archive: deal =>
-    FilterNames.Archive.includes(Deal.get.status(deal)) || !!deal.deleted_at
+    FilterNames.Archive.includes(Deal.get.status(deal)) || !!deal.deleted_at,
+  Drafts: deal => deal.is_draft === true
 }
 
 class AgentFilters extends React.Component {

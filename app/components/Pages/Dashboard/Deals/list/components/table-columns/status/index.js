@@ -15,6 +15,10 @@ const StatusBullet = styled.span`
 const Status = ({ deal }) => {
   const status = Deal.get.status(deal)
 
+  if (deal.is_draft) {
+    return 'Draft'
+  }
+
   return (
     <Fragment>
       <StatusBullet style={{ background: getStatusColorClass(status) }} />
