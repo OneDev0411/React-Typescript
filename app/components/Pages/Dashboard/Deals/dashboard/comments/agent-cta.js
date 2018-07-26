@@ -4,18 +4,6 @@ import { Button } from 'react-bootstrap'
 import ToolTip from '../../../../../../views/components/tooltip/index'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
-function getSubmitButtonLabel(isSaving, hasComment) {
-  if (isSaving) {
-    return (
-      <span>
-        <i className="fa fa-spin fa-spinner" />&nbsp; Submitting ...
-      </span>
-    )
-  }
-
-  return hasComment ? '' : 'Submit for review'
-}
-
 const AgentCta = ({
   checklists,
   task,
@@ -29,7 +17,7 @@ const AgentCta = ({
 
     if (isBackupChecklist) {
       return confirmation({
-        message: "Sorry, can't send message",
+        message: 'Sorry, can\'t send message',
         description: 'You can not Notify Office for Backup Offers.',
         confirmLabel: 'Okay, got it!',
         hideCancelButton: true
