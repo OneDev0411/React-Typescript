@@ -24,14 +24,14 @@ class Info extends Component {
 
     return (
       <div className="mls-info">
-        <ListingStatus deal={deal} />
+        {!deal.is_draft && <ListingStatus deal={deal} />}
 
         <div
           className="item"
           onMouseEnter={() => this._setHoverState(true)}
           onMouseLeave={() => this._setHoverState(false)}
         >
-          <div className="lbl">MLS#:</div>
+          <div className="lbl">MLS#</div>
           <div className="value mls-number">
             {(hasMLSAddress && deal.mls_context.mls_number) || '-'}
 
