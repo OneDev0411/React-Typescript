@@ -37,7 +37,7 @@ class DropDown extends Component {
           {renderToggleButton(isOpen)}
         </ToggleButton>
 
-        {isOpen ? (
+        {isOpen && (
           <Card
             depth={3}
             style={{
@@ -51,7 +51,7 @@ class DropDown extends Component {
           >
             {items.map(item => renderItem(item, this.closeMenu))}
           </Card>
-        ) : null}
+        )}
       </ClickOutside>
     )
   }
