@@ -14,7 +14,7 @@ import {
   searchAllDeals,
   cleanSearchedDeals
 } from '../../../../../store_actions/deals'
-import DealsDownload from './DealsDownload'
+import ExportDeals from './ExportDeals'
 
 const DealsSearchButton = styled.div`
   cursor: pointer;
@@ -170,7 +170,7 @@ class Header extends React.Component {
                 </Tooltip>
               )}
 
-              <DealsDownload user={user} />
+              <ExportDeals user={user} />
               {!isBackOffice && (
                 <Link
                   to="/dashboard/deals/create"

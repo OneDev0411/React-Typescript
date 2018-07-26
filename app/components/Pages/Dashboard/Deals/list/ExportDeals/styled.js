@@ -7,7 +7,7 @@ export const DealsDownloadButton = styled.div`
   display: flex;
   align-items: center;
   color: #2196f3;
-  border-radius: 4px;
+  border-radius: 3px;
   border: solid 1px #2196f3;
   padding-left: 12px;
   margin-right: 16px;

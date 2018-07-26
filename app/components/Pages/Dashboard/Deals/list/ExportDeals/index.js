@@ -12,7 +12,7 @@ import {
   Icon
 } from './styled'
 
-class DealsDownload extends React.Component {
+class ExportDeals extends React.Component {
   items = [
     {
       title: 'All Deals',
@@ -97,9 +97,52 @@ class DealsDownload extends React.Component {
           title: 'New Offers'
         })
       )}`
+    },
+    {
+      title: 'New Offers',
+      subTitle: '(Past 7 days)',
+      url: `/api/deals/report/${encodeURIComponent(
+        JSON.stringify({
+          filter: [
+            {
+              key: 'deal_type',
+              type: 'point',
+              point: 'Buying',
+              invert: false
+            },
+            {
+              key: 'property_type',
+              type: 'set',
+              set: ['Residential Lease', 'Commercial Lease'],
+              invert: true
+            },
+            {
+              key: 'contract_date',
+              type: 'range',
+              high: moment().unix(),
+              low: moment()
+                .add(-7, 'days')
+                .startOf('day')
+                .unix()
+            }
+          ],
+          project: {
+            title: 'Address',
+            buyer_agent: 'Buyer Agent',
+            branch_title: 'Office',
+            sales_price: 'Sales Price',
+            closing_date: 'Closing Date',
+            seller_agent: 'Seller Agent'
+          },
+          order: 'contract_date',
+          title: 'New Offers'
+        })
+      )}`
     }
   ]
   render() {
+    this.items.map(item => console.log(item.url.length))
+
     return (
       <Dropdown
         renderToggleButton={isOpen => (
@@ -127,4 +170,4 @@ class DealsDownload extends React.Component {
   }
 }
 
-export default DealsDownload
+export default ExportDeals
