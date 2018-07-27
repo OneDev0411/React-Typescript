@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
+import { FORM_ERROR } from 'final-form'
+
 import { Spinner } from '../../../components/Partials/Loading'
 
 export default class LoadSaveReinitializeForm extends React.Component {
@@ -51,19 +53,29 @@ export default class LoadSaveReinitializeForm extends React.Component {
   }
 
   async save(values) {
-    const { postLoadFormat, preSaveFormat, save } = this.props
-    let valuesToSave = preSaveFormat
-      ? await preSaveFormat(values, this.state.originalValues)
-      : values
+    try {
+      const { postLoadFormat, preSaveFormat, save } = this.props
+      let valuesToSave = preSaveFormat
+        ? await preSaveFormat(values, this.state.originalValues)
+        : values
 
-    await save(valuesToSave)
+      await save(valuesToSave)
 
-    this.setState({
-      originalValues: valuesToSave,
-      initialValues: postLoadFormat
-        ? await postLoadFormat(valuesToSave.id ? valuesToSave : null)
-        : valuesToSave
-    })
+      this.setState({
+        originalValues: valuesToSave,
+        initialValues: postLoadFormat
+          ? await postLoadFormat(valuesToSave.id ? valuesToSave : null)
+          : valuesToSave
+      })
+    } catch (error) {
+      // Bad request
+      // if (error.status === 400) {
+      return {
+        [FORM_ERROR]:
+          'Something is wrong in our system. We are sorry about this. Please connect to support for resolving it.'
+      }
+      // }
+    }
   }
 
   render() {

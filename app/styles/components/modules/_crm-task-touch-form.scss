@@ -1,6 +1,7 @@
 $border: 1px solid #ecf1f5;
 
-.c-new-task {
+.c-new-task,
+.c-touch-form {
   width: 100%;
   display: flex;
   align-items: center;
@@ -16,7 +17,8 @@ $border: 1px solid #ecf1f5;
   background-color:  #f0f4f7;
 }
 
-.c-new-task__form {
+.c-new-task__form,
+.c-touch-form__form {
   width: 100%;
   position: relative;
   background-color: #fff;
@@ -36,7 +38,8 @@ $border: 1px solid #ecf1f5;
 
 
 
-.c-new-task__footer {
+.c-new-task__footer,
+.c-touch-form__footer {
   padding: 1em;
   text-align: right;
   border-radius: 0 0 3px 3px;
@@ -51,13 +54,15 @@ $border: 1px solid #ecf1f5;
 
 .c-new-task--page,
 .c-new-task.overlay-drawer {
-  .c-new-task__body {
+  .c-new-task__body,
+  .c-touch-form__body {
     height: calc(100vh - 59px);
     overflow: auto;
     padding-bottom: 56px;
   }
   
-  .c-new-task__footer {
+  .c-new-task__footer,
+  .c-touch-form__footer {
     height: 56px;
     position: absolute;
     bottom: 0;
@@ -66,7 +71,8 @@ $border: 1px solid #ecf1f5;
   }
 }
 
-.c-new-task {
+.c-new-task,
+.c-touch-form {
   .DayPicker-wrapper,
   .DayPicker .DayPicker-NavBar {
     padding: 0 !important;

@@ -5,8 +5,6 @@ import { Field } from 'react-final-form'
 import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
 
-import './styles/main.scss'
-
 import { getTask } from '../../../../../models/tasks/get-task'
 import {
   updateTask,

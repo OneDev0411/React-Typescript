@@ -103,44 +103,61 @@ export class DateField extends React.Component {
     onChange(defaultSelectedItem)
   }
 
-  renderDatePicker = initialDate => (
-    <ClickOutSide onClickOutside={this.handleCloseDatePicker}>
-      <DayPicker
-        initialMonth={initialDate}
-        selectedDays={initialDate}
-        modifiers={this.props.datePickerModifiers}
-        onDayClick={this.handleSelectedDate}
-      />
-      <div style={{ textAlign: 'center', marginBottom: '1em' }}>
-        <ActionButton onClick={() => this.handleSelectedDate(new Date())}>
-          Today
-        </ActionButton>
-        <button
-          style={{ marginLeft: '1em' }}
-          onClick={this.handleClearCalendar}
-          className="c-new-address-modal__cancel-btn"
-        >
-          Clear
-        </button>
-      </div>
-    </ClickOutSide>
-  )
-
   render() {
     const { isOpenDatePicker, isOpenMenu } = this.state
     const { items, input, id: buttonId, datePickerModifiers } = this.props
+    const cardStyle = {
+      position: 'absolute',
+      left: 0,
+      top: 3,
+      zIndex: 1,
+      overflow: 'hidden'
+    }
+
+    const initialDate =
+      input && input.value && input.value.value
+        ? new Date(input.value.value)
+        : new Date()
 
     if (items.length === 0) {
       return (
         <div style={{ marginRight: '0.5em' }}>
           <Button
+            type="button"
             onClick={this.handleOpenDatePicker}
             onFocus={this.handleOnFocus}
           >
-            {formatDate(input.value)}
+            {formatDate(input.value.value)}
             <Icon isOpen={isOpenDatePicker} />
           </Button>
-          {isOpenDatePicker && this.renderDatePicker()}
+          <div style={{ position: 'relative' }}>
+            <Card depth={3} style={cardStyle}>
+              {isOpenDatePicker && (
+                <ClickOutSide onClickOutside={this.handleCloseDatePicker}>
+                  <DayPicker
+                    initialMonth={initialDate}
+                    selectedDays={initialDate}
+                    modifiers={this.props.datePickerModifiers}
+                    onDayClick={this.handleSelectedDate}
+                  />
+                  <div style={{ textAlign: 'center', marginBottom: '1em' }}>
+                    <ActionButton
+                      onClick={() => this.handleSelectedDate(new Date())}
+                    >
+                      Today
+                    </ActionButton>
+                    <button
+                      style={{ marginLeft: '1em' }}
+                      onClick={this.handleCloseDatePicker}
+                      className="c-new-address-modal__cancel-btn"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </ClickOutSide>
+              )}
+            </Card>
+          </div>
         </div>
       )
     }
@@ -157,82 +174,67 @@ export class DateField extends React.Component {
           getItemProps,
           getButtonProps,
           highlightedIndex
-        }) => {
-          const initialDate = selectedItem.value
-            ? new Date(selectedItem.value)
-            : new Date()
-
-          return (
-            <div style={{ marginRight: '0.5em' }}>
-              <Button
-                {...getButtonProps({
-                  id: buttonId,
-                  name: input.name,
-                  onFocus: this.handleOnFocus
-                })}
-              >
-                {selectedItem.title !== 'Custom Date'
-                  ? selectedItem.title
-                  : formatDate(selectedItem.value)}
-                <Icon isOpen={isOpenMenu || isOpenDatePicker} />
-              </Button>
-              <div style={{ position: 'relative' }}>
-                <Card
-                  depth={3}
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: 3,
-                    zIndex: 1,
-                    overflow: 'hidden'
-                  }}
-                >
-                  {isOpenMenu &&
-                    items.map((item, index) => {
-                      const props = {
+        }) => (
+          <div style={{ marginRight: '0.5em' }}>
+            <Button
+              {...getButtonProps({
+                id: buttonId,
+                name: input.name,
+                onFocus: this.handleOnFocus
+              })}
+            >
+              {selectedItem.title !== 'Custom Date'
+                ? selectedItem.title
+                : formatDate(selectedItem.value)}
+              <Icon isOpen={isOpenMenu || isOpenDatePicker} />
+            </Button>
+            <div style={{ position: 'relative' }}>
+              <Card depth={3} style={cardStyle}>
+                {isOpenMenu &&
+                  items.map((item, index) => {
+                    const props = {
+                      item,
+                      ...getItemProps({
                         item,
-                        ...getItemProps({
-                          item,
-                          isActive: highlightedIndex === index,
-                          isSelected: selectedItem === item
-                        })
-                      }
+                        isActive: highlightedIndex === index,
+                        isSelected: selectedItem === item
+                      })
+                    }
 
-                      return (
-                        <Item {...props} key={item.title}>
-                          {item.title}
-                        </Item>
-                      )
-                    })}
-                  {isOpenDatePicker && (
-                    <ClickOutSide onClickOutside={this.handleCloseDatePicker}>
-                      <DayPicker
-                        initialMonth={initialDate}
-                        selectedDays={initialDate}
-                        modifiers={datePickerModifiers}
-                        onDayClick={this.handleSelectedDate}
-                      />
-                      <div style={{ textAlign: 'center', marginBottom: '1em' }}>
-                        <ActionButton
-                          onClick={() => this.handleSelectedDate(new Date())}
-                        >
-                          Today
-                        </ActionButton>
-                        <button
-                          style={{ marginLeft: '1em' }}
-                          onClick={this.handleClearCalendar}
-                          className="c-new-address-modal__cancel-btn"
-                        >
-                          Clear
-                        </button>
-                      </div>
-                    </ClickOutSide>
-                  )}
-                </Card>
-              </div>
+                    return (
+                      <Item {...props} key={item.title}>
+                        {item.title}
+                      </Item>
+                    )
+                  })}
+                {isOpenDatePicker && (
+                  <ClickOutSide onClickOutside={this.handleCloseDatePicker}>
+                    <DayPicker
+                      initialMonth={initialDate}
+                      selectedDays={initialDate}
+                      modifiers={datePickerModifiers}
+                      onDayClick={this.handleSelectedDate}
+                    />
+                    <div style={{ textAlign: 'center', marginBottom: '1em' }}>
+                      <ActionButton
+                        onClick={() => this.handleSelectedDate(new Date())}
+                      >
+                        Today
+                      </ActionButton>
+                      <button
+                        style={{ marginLeft: '1em' }}
+                        onClick={this.handleClearCalendar}
+                        className="c-new-address-modal__cancel-btn"
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </ClickOutSide>
+                )}
+              </Card>
             </div>
-          )
-        }}
+          </div>
+        )}
       />
     )
   }
