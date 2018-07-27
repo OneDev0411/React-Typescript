@@ -8,7 +8,7 @@ import Fetch from '../../../services/fetch'
  */
 export async function getTouch(touchId, query = {}) {
   if (!touchId) {
-    throw new Error('Task id is required.')
+    throw new Error('Touch id is required.')
   }
 
   try {
