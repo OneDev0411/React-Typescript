@@ -26,7 +26,7 @@ export async function updateTouch(touch, query = {}) {
     touch = _.omit(_.pick(touch, fields), value => value == null)
 
     const response = await new Fetch()
-      .put(`/crm/touchs/${touch.id}`)
+      .put(`/crm/touches/${touch.id}`)
       .query(query)
       .send(touch)
 

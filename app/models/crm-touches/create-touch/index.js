@@ -14,7 +14,7 @@ export async function createTouch(touch, query = {}) {
 
   try {
     const response = await new Fetch()
-      .post('/crm/touchs')
+      .post('/crm/touches')
       .send(touch)
       .query(query)
 
