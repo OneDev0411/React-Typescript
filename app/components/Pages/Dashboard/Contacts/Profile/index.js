@@ -21,6 +21,8 @@ import AddNote from './Add-Note'
 import Activities from './Activities'
 import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
+import Touch from '../../../../../views/CRM/Touch'
+import IconTouch from '../../../../../views/components/SvgIcons/AddAlarm/IconAddAlarm'
 import IconNote from '../../../../../views/components/SvgIcons/Note/IconNote'
 import IconTodo from '../../../../../views/components/SvgIcons/Todo/IconTodo'
 import {
@@ -151,6 +153,10 @@ class ContactProfile extends React.Component {
 
     const { activeTab } = this.state
     const hasAddress = getContactAddresses(contact)
+    const defaultAssociation = {
+      association_type: 'contact',
+      contact: normalizeContact(contact)
+    }
 
     const thirdColumn = (
       <ThirdColumn>
@@ -184,18 +190,28 @@ class ContactProfile extends React.Component {
           <SecondColumn>
             <Tab.Container
               id="profile-todo-tabs"
-              defaultActiveKey="note"
+              defaultActiveKey="touch"
               className="c-contact-profile-todo-tabs c-contact-profile-card"
             >
               <div>
                 <Nav className="c-contact-profile-todo-tabs__tabs-list">
                   <NavItem
                     className="c-contact-profile-todo-tabs__tab"
+                    eventKey="touch"
+                  >
+                    <IconTouch />
+                    <span className="c-contact-profile-todo-tabs__tab__title">
+                      Add a Touch
+                    </span>
+                    <span className="c-contact-profile-todo-tabs__tab__indicator" />
+                  </NavItem>
+                  <NavItem
+                    className="c-contact-profile-todo-tabs__tab"
                     eventKey="note"
                   >
                     <IconNote />
                     <span className="c-contact-profile-todo-tabs__tab__title">
-                      New Note
+                      Add a Note
                     </span>
                     <span className="c-contact-profile-todo-tabs__tab__indicator" />
                   </NavItem>
@@ -205,7 +221,7 @@ class ContactProfile extends React.Component {
                   >
                     <IconTodo />
                     <span className="c-contact-profile-todo-tabs__tab__title">
-                      Create Task
+                      Add a Task
                     </span>
                     <span className="c-contact-profile-todo-tabs__tab__indicator" />
                   </NavItem>
@@ -215,6 +231,12 @@ class ContactProfile extends React.Component {
                   animation
                   className="c-contact-profile-todo-tabs__pane-container"
                 >
+                  <Tab.Pane
+                    eventKey="touch"
+                    className="c-contact-profile-todo-tabs__pane"
+                  >
+                    <Touch defaultAssociation={defaultAssociation} />
+                  </Tab.Pane>
                   <Tab.Pane
                     eventKey="note"
                     className="c-contact-profile-todo-tabs__pane"
@@ -228,10 +250,7 @@ class ContactProfile extends React.Component {
                     <NewTask
                       submitCallback={this.setNewTask}
                       deleteCallback={this.removeTask}
-                      defaultAssociation={{
-                        association_type: 'contact',
-                        contact: normalizeContact(contact)
-                      }}
+                      defaultAssociation={defaultAssociation}
                     />
                   </Tab.Pane>
                 </Tab.Content>
