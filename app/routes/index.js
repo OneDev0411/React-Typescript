@@ -200,6 +200,15 @@ const AsyncCrmTask = Load({
 })
 
 /* ==================================== */
+//  CRM Touches
+/* ==================================== */
+
+const AsyncCrmTouchPage = Load({
+  loader: () =>
+    import('../views/CRM/touches/TouchPage' /* webpackChunkName: "crm_task_page" */)
+})
+
+/* ==================================== */
 //  Chatroom
 /* ==================================== */
 
@@ -410,6 +419,8 @@ export default (
 
       <Route path="/crm/tasks" component={AsyncCrmTasksList} />
       <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
+
+      <Route path="/crm/touches/:id" component={AsyncCrmTouchPage} />
 
       <Route path="/dashboard/calendar" component={AsyncCalendar} />
 
