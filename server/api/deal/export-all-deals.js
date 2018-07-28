@@ -16,8 +16,6 @@ router.get('/deals/export/:id', async ctx => {
       return
     }
 
-    ctx.set('Content-Disposition', 'attachment; filename=deals.xlsx')
-
     ctx.body = ctx
       .fetch(`/brands/${id}/deals.xlsx`)
       .set('Authorization', `Bearer ${user.access_token}`)
