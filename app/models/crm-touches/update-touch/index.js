@@ -14,14 +14,7 @@ export async function updateTouch(touch, query = {}) {
   }
 
   try {
-    const fields = [
-      'description',
-      'id',
-      'outcome',
-      'timestamp',
-      'touch_type',
-      'type'
-    ]
+    const fields = ['description', 'id', 'timestamp', 'activity_type', 'type']
 
     touch = _.omit(_.pick(touch, fields), value => value == null)
 
