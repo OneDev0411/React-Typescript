@@ -137,6 +137,7 @@ class ContactProfile extends React.Component {
       tasks: [task, ...tasks],
       activeTab: 'tasks'
     }))
+    this.props.getContactActivities(this.props.contact.id)
   }
 
   removeTask = taskId => {
