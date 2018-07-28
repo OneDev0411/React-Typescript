@@ -4,12 +4,13 @@ import timeago from 'timeago.js'
 import { icons } from '../../../../../../views/CRM/Tasks/List/Table/columns/Type/icons'
 import { goTo } from '../../../../../../utils/go-to'
 
-export default ({ contact, task }) => {
+export function CRMTaskItem(props) {
+  const { task } = props
   const { task_type } = task
   const Icon = icons[task_type] ? icons[task_type].icon : icons.Todo
 
   const activity = (
-    <div className="event">
+    <React.Fragment>
       <div className="image">
         <Icon style={{ width: 32, height: 32, fill: '#8da2b5' }} />
       </div>
@@ -49,16 +50,17 @@ export default ({ contact, task }) => {
           {timeago().format(task.created_at * 1000)}
         </div>
       </div>
-    </div>
+    </React.Fragment>
   )
 
   return (
-    <div
+    <a
+      className="c-contact-activities-list__item"
       onClick={() =>
-        goTo(`/crm/tasks/${task.id}`, `Contact - ${contact.display_name}`)
+        goTo(`/crm/tasks/${task.id}`, `Contact - ${props.contact.display_name}`)
       }
     >
       {activity}
-    </div>
+    </a>
   )
 }

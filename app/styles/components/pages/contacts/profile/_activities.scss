@@ -1,26 +1,26 @@
-%contact-activities {
-  .activities {
+
+  .c-contact-activities-list {
     min-height: 40vh;
-    @extend %activities-nav-tabs;
+    padding: 0;
 
-    .tab-content {
-      padding: 1em;
-      .timeline {
-        padding-top: 1em;
-        @extend %contact-timeline;
-      }
 
-      .notes {
-        @extend %contact-notes;
-      }
+
+  a {
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
     }
   }
-}
+  }
 
-%activities-nav-tabs {
+.c-contact-activities-list {
   ul.nav-tabs {
     border: none;
-    padding: 0;
+    padding: 1em;
     margin-bottom: 1em;
 
     li {
@@ -66,57 +66,56 @@
   }
 }
 
-%contact-notes {
+.c-contact-activities-list--notes,
+.c-contact-activities-list--crm-tasks {
   .no-note {
     @extend %empty-state;
   }
 }
 
-%contact-timeline {
+.c-contact-activities-list--timeline {
   .no-activity {
     @extend %empty-state;
   }
 
-  a {
-    &:hover,
-    &:focus {
-      text-decoration: none;
+  
+}
+.c-contact-activities-list__item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1em;
+
+  &:hover {
+    background-color: rgba(32, 150, 243, 0.05);
+  }
+
+  .image {
+    position: relative;
+    img {
+      width: 34px;
+      height: 34px;
+      border-radius: 3px;
+      &.round {
+        border-radius: 30px;
+      }
     }
   }
 
-  .event {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 1em;
-    &:hover {
-      background-color: rgba(32, 150, 243, 0.05);
-    }
-    .image {
-      position: relative;
-      img {
-        width: 34px;
-        height: 34px;
-        border-radius: 3px;
-        &.round {
-          border-radius: 30px;
-        }
-      }
-    }
-    .desc {
-      font-size: 14px;
-      color: #39393a;
-      margin-left: 10px;
-    }
-    .time {
-      font-size: 12px;
-      color: #c6c6c6;
-      margin-left: 10px;
-      img {
-        width: 8px;
-        height: 8px;
-        margin-right: 5px;
-      }
+  .desc {
+    font-size: 14px;
+    color: #39393a;
+    margin-left: 10px;
+  }
+  
+  .time {
+    font-size: 12px;
+    color: #c6c6c6;
+    margin-left: 10px;
+    img {
+      width: 8px;
+      height: 8px;
+      margin-right: 5px;
     }
   }
 }

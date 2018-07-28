@@ -1,14 +1,15 @@
 import React from 'react'
 import Avatar from 'react-avatar'
 
-export default ({ attributes, name, avatar }) => {
+export function CRMActivityTimelineItem(props) {
+  const { attributes } = props
   const activity = (
-    <div className="event">
+    <React.Fragment>
       <div className="image">
         {attributes.image ? (
-          <img src={attributes.image} />
+          <img src={attributes.image} alt="activity" />
         ) : (
-          <Avatar round name={name} src={avatar} size={34} />
+          <Avatar round name={props.name} src={props.avatar} size={34} />
         )}
       </div>
 
@@ -19,15 +20,18 @@ export default ({ attributes, name, avatar }) => {
         />
 
         <div className="time">
-          <img src={`/static/images/contacts/${attributes.icon}@3x.png`} />
+          <img
+            src={`/static/images/contacts/${attributes.icon}@3x.png`}
+            alt="time"
+          />
           {attributes.time}
         </div>
       </div>
-    </div>
+    </React.Fragment>
   )
 
   return (
-    <div>
+    <div className="c-contact-activities-list__item">
       {attributes.url ? (
         <a href={attributes.url} target="_blank">
           {activity}

@@ -16,7 +16,7 @@ function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
   }
 
   return (
-    <div className="c-contact-profile-card activities">
+    <div className="c-contact-activities-list c-contact-profile-card">
       <Tabs
         activeKey={activeTab}
         animation={false}
@@ -30,7 +30,7 @@ function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
               <span className="name">All Activity</span>
             </div>
           }
-          className="timeline"
+          className="c-contact-activities-list--timeline"
         >
           <Timeline contact={contact} />
         </Tab>
@@ -43,7 +43,7 @@ function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
               <span className="bdg">{`( ${notes.length} )`}</span>
             </div>
           }
-          className="notes"
+          className="c-contact-activities-list--notes"
         >
           <Notes notes={notes} contact={contact} />
         </Tab>
@@ -56,7 +56,7 @@ function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
               <span className="bdg">{`( ${tasks.length} )`}</span>
             </div>
           }
-          className="notes"
+          className="c-contact-activities-list--crm-tasks"
         >
           <TasksTimeLine tasks={tasks} handleOnClick={handleOnClickTask} />
         </Tab>

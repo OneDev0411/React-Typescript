@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import timeago from 'timeago.js'
 import _ from 'underscore'
 
-import TimelineItem from './item'
-import CRMTaskItem from './crm-item'
+import { CRMActivityTimelineItem } from './CRMActivityTimelineItem'
+import { CRMTaskItem } from './CRMTaskItem'
+import { CRMTouchItem } from './CRMTouchItem'
 import * as userActions from './userActionsHelper'
 import Loading from '../../../../../Partials/Loading'
 import {
@@ -69,23 +70,23 @@ class Timeline extends React.Component {
     return (
       <div>
         {_.map(activities, activity => {
+          const key = `timeline_item_${activity.id}`
+
           if (activity.type === 'crm_task') {
-            return (
-              <CRMTaskItem
-                contact={contact}
-                key={`timeline_item_${activity.id}`}
-                task={activity}
-              />
-            )
+            return <CRMTaskItem contact={contact} key={key} task={activity} />
+          }
+
+          if (activity.type === 'touch') {
+            return <CRMTouchItem contact={contact} key={key} touch={activity} />
           }
 
           if (activity.object && !_.isEmpty(activity.object)) {
             return (
-              <TimelineItem
-                key={`timeline_item_${activity.id}`}
+              <CRMActivityTimelineItem
                 attributes={this.getAttributes(name, activity)}
-                name={name}
                 avatar={avatar}
+                key={key}
+                name={name}
               />
             )
           }
