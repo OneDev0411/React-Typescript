@@ -21,7 +21,7 @@ class ExportDeals extends React.Component {
     {
       title: 'New Listings',
       subTitle: '(Past 7 days)',
-      url: `/api/deals/report/${btoa(
+      url: `/api/deals/report/${encodeURIComponent(
         JSON.stringify({
           filter: [
             {
@@ -54,47 +54,6 @@ class ExportDeals extends React.Component {
           },
           order: 'list_date',
           title: 'New Listings'
-        })
-      )}`
-    },
-    {
-      title: 'New Offers',
-      subTitle: '(Past 7 days)',
-      url: `/api/deals/report/${btoa(
-        JSON.stringify({
-          filter: [
-            {
-              key: 'deal_type',
-              type: 'point',
-              point: 'Buying',
-              invert: false
-            },
-            {
-              key: 'property_type',
-              type: 'set',
-              set: ['Residential Lease', 'Commercial Lease'],
-              invert: true
-            },
-            {
-              key: 'contract_date',
-              type: 'range',
-              high: moment().unix(),
-              low: moment()
-                .add(-7, 'days')
-                .startOf('day')
-                .unix()
-            }
-          ],
-          project: {
-            title: 'Address',
-            buyer_agent: 'Buyer Agent',
-            branch_title: 'Office',
-            sales_price: 'Sales Price',
-            closing_date: 'Closing Date',
-            seller_agent: 'Seller Agent'
-          },
-          order: 'contract_date',
-          title: 'New Offers'
         })
       )}`
     },

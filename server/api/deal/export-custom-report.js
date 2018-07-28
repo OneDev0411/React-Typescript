@@ -9,7 +9,7 @@ router.get('/deals/report/:data', async ctx => {
   try {
     const { user } = ctx.session
     const { data } = ctx.params
-    const convertedData = JSON.parse(Buffer.from(data, 'base64'))
+    const convertedData = JSON.parse(decodeURIComponent(data))
 
     if (!user) {
       ctx.status = 401
