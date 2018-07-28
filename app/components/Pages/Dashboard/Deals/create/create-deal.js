@@ -291,6 +291,10 @@ class CreateDeal extends React.Component {
     return validationErrors.length === 0
   }
 
+  get RequiredFields() {
+    return _.keys(this.Validators)
+  }
+
   /**
    * returns list of validators
    */
@@ -360,21 +364,28 @@ class CreateDeal extends React.Component {
     if (isDraft) {
       return {
         side: validations.side,
-        property_type: validations.property_type
+        property_type: validations.property_type,
+        clients: validations.clients
       }
     }
 
     return validations
   }
 
-  onClosePage = () =>
+  onClosePage = () => {
+    const { deal } = this.props
+
     this.props.confirmation({
-      message: 'Cancel deal creation?',
-      description: 'By canceling you will lose your work.',
+      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
+      description: deal
+        ? 'By canceling you will lose your deal updates'
+        : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
-      onConfirm: () => browserHistory.push('/dashboard/deals')
+      cancelLabel: "No, don't cancel",
+      onConfirm: () =>
+        browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
+  }
 
   /**
    * when user tries to change deal side, we should show a confirmation modal
@@ -411,7 +422,9 @@ class CreateDeal extends React.Component {
    */
   changeDealType = isDraft =>
     this.setState({
-      isDraft
+      isDraft,
+      validationErrors: [],
+      submitError: null
     })
 
   /**
@@ -540,12 +553,16 @@ class CreateDeal extends React.Component {
     this.setState({ saving: true })
 
     try {
-      await this.props.createRoles(dealId, newRoles)
+      if (newRoles.length > 0) {
+        await this.props.createRoles(dealId, newRoles)
+      }
 
       // create/update contexts
       await this.props.updateContext(dealId, contexts)
 
-      await this.props.ejectDraftMode(dealId)
+      if (this.state.isDraft === false) {
+        await this.props.ejectDraftMode(dealId)
+      }
 
       return OpenDeal(dealId)
     } catch (e) {
@@ -703,6 +720,24 @@ class CreateDeal extends React.Component {
   }
 
   /**
+   * get submit button label
+   */
+  get SubmitLabel() {
+    const { deal } = this.props
+    const { saving, isDraft } = this.state
+
+    if (!deal) {
+      return saving ? 'Creating ...' : 'Create Deal'
+    }
+
+    if (saving) {
+      return 'Updating Deal...'
+    }
+
+    return isDraft ? 'Save Updates' : 'Go Live'
+  }
+
+  /**
    * flatten all entered roles
    */
   get Roles() {
@@ -758,6 +793,7 @@ class CreateDeal extends React.Component {
     } = this.state
 
     const dealContexts = this.getDealContexts(dealSide, dealPropertyType)
+    const requiredFields = this.RequiredFields
     const isLeaseDeal = dealPropertyType && dealPropertyType.includes('Lease')
     const canCreateDeal =
       !saving && dealSide.length > 0 && dealPropertyType.length > 0
@@ -765,19 +801,25 @@ class CreateDeal extends React.Component {
     return (
       <div className="deal-create">
         <PageHeader
-          title={deal ? 'Go Live' : 'Create New Deal'}
+          title={
+            deal ? 'Update deal information to Go Live' : 'Create New Deal'
+          }
           handleOnClose={this.onClosePage}
         />
 
         <div className="form">
-          <div className="swoosh">Swoosh! Another one in the bag.</div>
+          {!deal && (
+            <div className="swoosh">Swoosh! Another one in the bag.</div>
+          )}
+
+          <DealType
+            isNewDeal={!deal}
+            isDraft={isDraft}
+            onChangeDealType={this.changeDealType}
+          />
 
           {!deal && (
             <Fragment>
-              <DealType
-                isDraft={isDraft}
-                onChangeDealType={this.changeDealType}
-              />
               <DealSide
                 selectedSide={dealSide}
                 onChangeDealSide={this.requestChangeDealSide}
@@ -794,6 +836,7 @@ class CreateDeal extends React.Component {
             dealPropertyType.length > 0 && (
               <div>
                 <DealClients
+                  isRequired={requiredFields.includes('clients')}
                   hasError={this.hasError('clients')}
                   dealSide={dealSide}
                   clients={clients}
@@ -811,6 +854,7 @@ class CreateDeal extends React.Component {
                 />
 
                 <DealAgents
+                  isRequired={requiredFields.includes('agents')}
                   hasError={this.hasError('agents')}
                   scenario="CreateDeal"
                   dealSide={dealSide}
@@ -831,6 +875,7 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealAgents
+                      isRequired={requiredFields.includes('selling_agents')}
                       hasError={this.hasError('selling_agents')}
                       scenario="CreateDeal"
                       dealSide={dealSide}
@@ -848,6 +893,7 @@ class CreateDeal extends React.Component {
                     />
 
                     <DealClients
+                      isRequired={requiredFields.includes('selling_clients')}
                       hasError={this.hasError('selling_clients')}
                       dealSide="Selling"
                       clients={sellingClients}
@@ -862,6 +908,7 @@ class CreateDeal extends React.Component {
 
                     {!isLeaseDeal && (
                       <EscrowOfficers
+                        isRequired={requiredFields.includes('escrow_officer')}
                         hasError={this.hasError('escrow_officer')}
                         escrowOfficers={escrowOfficers}
                         onUpsertEscrowOfficer={form =>
@@ -874,6 +921,7 @@ class CreateDeal extends React.Component {
                     )}
 
                     <DealStatus
+                      isRequired={requiredFields.includes('status')}
                       hasError={this.hasError('status')}
                       property_type={dealPropertyType}
                       dealStatus={dealStatus}
@@ -883,6 +931,7 @@ class CreateDeal extends React.Component {
                 )}
 
                 <DealAddress
+                  isRequired={requiredFields.includes('address')}
                   hasError={this.hasError('address')}
                   dealAddress={dealAddress}
                   dealSide={dealSide}
@@ -894,6 +943,7 @@ class CreateDeal extends React.Component {
 
                 {dealContexts.length > 0 && (
                   <Contexts
+                    areContextsRequired={requiredFields.includes('contexts')}
                     hasError={this.hasError('contexts')}
                     contexts={contexts}
                     onChangeContext={(field, value) =>
@@ -923,7 +973,7 @@ class CreateDeal extends React.Component {
             onClick={() => this.createDeal()}
             disabled={!canCreateDeal}
           >
-            {saving ? 'Creating ...' : 'Create Deal'}
+            {this.SubmitLabel}
           </Button>
 
           <div className="error-summary">

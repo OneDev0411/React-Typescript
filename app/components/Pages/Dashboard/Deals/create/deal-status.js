@@ -5,6 +5,7 @@ import { getStatusColorClass } from '../../../../../utils/listing'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 export default ({
+  isRequired,
   hasError,
   property_type,
   dealStatus,
@@ -22,7 +23,8 @@ export default ({
   return (
     <div className="form-section deal-status">
       <div className={cn('hero', { hasError })}>
-        What is the status of the deal? <span className="required">*</span>
+        What is the status of the deal?{' '}
+        {isRequired && <span className="required">*</span>}
         {hasError && <RequiredIcon />}
       </div>
 

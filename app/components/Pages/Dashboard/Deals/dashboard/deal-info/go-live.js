@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import styled from 'styled-components'
 
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import Tooltip from '../../../../../../views/components/tooltip'
 
 const Container = styled.div`
   display: flex;
@@ -19,10 +20,12 @@ export default function GoLive({ deal }) {
 
   return (
     <Container>
-      <div>Draft</div>
+      <div>Stage: Draft</div>
       <div>
         <Link to={`/dashboard/deals/create/${deal.id}`}>
-          <ActionButton inverse>Go Live</ActionButton>
+          <Tooltip caption="Go live to start executing and working with your admin.">
+            <ActionButton inverse>Go Live</ActionButton>
+          </Tooltip>
         </Link>
       </div>
     </Container>

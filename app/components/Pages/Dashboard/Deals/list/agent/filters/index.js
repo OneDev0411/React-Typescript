@@ -21,6 +21,7 @@ import {
 
 const FilterNames = {
   Active: ['Active'],
+  Drafts: ['Drafts'],
   Pending: [
     'Active Contingent',
     'Active Kick Out',
@@ -44,6 +45,7 @@ export const Filters = {
     FilterNames.Archive.includes(Deal.get.status(deal)) === false &&
     !deal.is_draft &&
     !deal.deleted_at,
+  Drafts: deal => deal.is_draft === true,
   Listings: deal =>
     FilterNames.Active.includes(Deal.get.status(deal)) &&
     !deal.is_draft &&
@@ -53,8 +55,7 @@ export const Filters = {
     !deal.is_draft &&
     !deal.deleted_at,
   Archive: deal =>
-    FilterNames.Archive.includes(Deal.get.status(deal)) || !!deal.deleted_at,
-  Drafts: deal => deal.is_draft === true
+    FilterNames.Archive.includes(Deal.get.status(deal)) || !!deal.deleted_at
 }
 
 class AgentFilters extends React.Component {
@@ -102,6 +103,10 @@ class AgentFilters extends React.Component {
 
       case 'Listings':
         tooltip = FilterNames.Active
+        break
+
+      case 'Drafts':
+        tooltip = FilterNames.Drafts
         break
 
       default:
