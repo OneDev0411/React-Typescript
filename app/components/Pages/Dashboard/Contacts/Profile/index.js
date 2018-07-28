@@ -66,7 +66,7 @@ class ContactProfile extends React.Component {
   }
 
   detectScreenSize = () => {
-    if (window.innerWidth < 1281 && this.state.isDesktopScreen) {
+    if (window.innerWidth < 1280 && this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: false })
     }
 

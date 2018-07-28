@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const ColumnsContainer = styled.div`
   padding: 1em;
 
+  /* 768px */
   @media (min-width: 48em) {
     display: flex;
   }
@@ -17,6 +18,7 @@ export const SideColumnWrapper = styled.div`
     flex-direction: column;
   }
 
+  /* 1280px */
   @media (min-width: 80em) {
     width: 25%;
     display: block;

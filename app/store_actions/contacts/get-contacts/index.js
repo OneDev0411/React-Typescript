@@ -3,19 +3,10 @@ import { batchActions } from 'redux-batched-actions'
 import * as actionTypes from '../../../constants/contacts'
 import { requestContactPage, receiveContactPage } from '../pagination'
 import { getContacts as fetchContacts } from '../../../models/contacts/get-contacts'
-import { selectContactsListFetching } from '../../../reducers/contacts/list'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 
 export function getContacts(page = 1, limit = 50) {
-  return async (dispatch, getState) => {
-    const {
-      contacts: { list }
-    } = getState()
-
-    if (selectContactsListFetching(list)) {
-      return Promise.resolve()
-    }
-
+  return async dispatch => {
     try {
       batchActions([
         dispatch({
