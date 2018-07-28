@@ -1,13 +1,11 @@
 import React from 'react'
 
-import { getTime } from '../../../../../utils/get-time'
-import { getTimes } from '../../../../../utils/get-times'
-import { DateTimeField } from '../../../../components/final-form-fields/DateTimeField'
+import { getTime } from '../../../../../../utils/get-time'
+import { getTimes } from '../../../../../../utils/get-times'
+import { DateTimeField } from '../../../../../components/final-form-fields/DateTimeField'
 
 export function TouchDateTime(props) {
-  const timeItems = getTimes().filter(
-    time => time.value < getTime(new Date() || time)
-  )
+  const timeItems = getTimes().filter(time => time.value < getTime(new Date()))
 
   return (
     <div>

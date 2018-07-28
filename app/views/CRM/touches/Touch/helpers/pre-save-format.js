@@ -1,11 +1,12 @@
-import { setTime } from '../../../../utils/set-time'
+import { setTime } from '../../../../../utils/set-time'
 
 /**
  * Format form data for api model
  * @param {object} values The form values
  * @returns {object} a formated object
  */
-export async function preSaveFormat(values) {
+export async function preSaveFormat(values, originalValues) {
+  const { description, associations } = values
   const activity_type = values.activity_type.value
   const timestamp =
     setTime(values.touchDate.value, values.touchTime.value) / 1000
@@ -15,13 +16,17 @@ export async function preSaveFormat(values) {
     timestamp
   }
 
-  if (typeof values.description === 'string' && values.description.length > 0) {
-    touch.description = values.description
+  if ((originalValues && originalValues.id) || description) {
+    touch.description = description || ''
   }
 
-  if (Array.isArray(values.associations) && values.associations.length > 0) {
+  if (
+    !originalValues &&
+    Array.isArray(associations) &&
+    associations.length > 0
+  ) {
     touch.associations = []
-    values.associations.forEach(item => {
+    associations.forEach(item => {
       const { association_type } = item
 
       if (association_type) {
@@ -33,5 +38,8 @@ export async function preSaveFormat(values) {
     })
   }
 
-  return touch
+  return {
+    ...originalValues,
+    ...touch
+  }
 }
