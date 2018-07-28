@@ -52,7 +52,7 @@ class Timeline extends React.Component {
 
     if (activitiesError) {
       return (
-        <div className="no-activity">
+        <div className="empty-list">
           <p>{activitiesError.message}</p>
         </div>
       )
@@ -60,7 +60,7 @@ class Timeline extends React.Component {
 
     if (_.size(activities) === 0) {
       return (
-        <div className="no-activity">
+        <div className="empty-list">
           <img src="/static/images/contacts/activity.svg" alt="timeline" />
           <p>{name} has no activity right now</p>
         </div>

@@ -7,11 +7,11 @@ const formatDate = date => fecha.format(date, 'MM/DD/YYYY')
 
 /**
  * Format form data for api model
- * @param {object} touch The Touch entity
- * @param {object} defaultAssociation The default association
+ * @param {Object} touch The Touch entity
+ * @param {Array} defaultAssociations The default associations
  * @returns {Promise} a formated Touch
  */
-export async function postLoadFormat(touch, defaultAssociation) {
+export async function postLoadFormat(touch, defaultAssociations) {
   let touchDate = {
     title: formatDate(new Date()),
     value: new Date().getTime()
@@ -28,7 +28,7 @@ export async function postLoadFormat(touch, defaultAssociation) {
       activity_type,
       touchDate,
       touchTime,
-      associations: [defaultAssociation]
+      associations: defaultAssociations
     }
   }
 

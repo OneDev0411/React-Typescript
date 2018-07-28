@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
@@ -18,6 +19,18 @@ import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { postLoadFormat, preSaveFormat } from './helpers'
 import { TextAreaField } from '../../../components/final-form-fields'
 
+const propTypes = {
+  defaultAssociations: PropTypes.arrayOf(PropTypes.shape()),
+  submitCallback: PropTypes.func,
+  touchId: PropTypes.string
+}
+
+const defaultProps = {
+  defaultAssociations: [],
+  submitCallback: () => {},
+  touchId: ''
+}
+
 class Touch extends React.Component {
   load = async () => {
     if (!this.props.touchId) {
@@ -33,14 +46,15 @@ class Touch extends React.Component {
     }
   }
   save = async touch => {
+    let newTouch
     let action = 'added'
 
     try {
       if (touch.id) {
-        await updateTouch(touch)
+        newTouch = await updateTouch(touch)
         action = 'updated'
       } else {
-        await createTouch(touch)
+        newTouch = await createTouch(touch)
       }
 
       this.props.dispatch(
@@ -49,6 +63,8 @@ class Touch extends React.Component {
           message: `Touch ${action}.`
         })
       )
+
+      this.props.submitCallback(newTouch)
     } catch (error) {
       throw error
     }
@@ -60,7 +76,7 @@ class Touch extends React.Component {
         <LoadSaveReinitializeForm
           load={this.load}
           postLoadFormat={touch =>
-            postLoadFormat(touch, this.props.defaultAssociation)
+            postLoadFormat(touch, this.props.defaultAssociations)
           }
           preSaveFormat={preSaveFormat}
           save={this.save}
@@ -105,5 +121,8 @@ class Touch extends React.Component {
     )
   }
 }
+
+Touch.propTypes = propTypes
+Touch.defaultProps = defaultProps
 
 export default connect()(Touch)

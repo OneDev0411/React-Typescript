@@ -8,11 +8,22 @@ import { selectDefinitionByName } from '../../../../../../reducers/contacts/attr
 import Timeline from '../Timeline'
 import Notes from '../Notes'
 import TasksTimeLine from '../../../../../../views/CRM/Tasks/components/TasksTimeLine'
+import { TouchesList } from '../../../../../../views/CRM/touches/TouchesList'
 import { goTo } from '../../../../../../utils/go-to'
 
-function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
+function Activities(props) {
+  const { contact, activeTab } = props
+
   function handleOnClickTask(task) {
     goTo(`/crm/tasks/${task.id}`, `Contact - ${contact.display_name}`)
+  }
+
+  function handleOnClickTouch(touch) {
+    goTo(`/crm/touches/${touch.id}`, `Contact - ${contact.display_name}`)
+  }
+
+  function getListLength(list) {
+    return `( ${list.length} )`
   }
 
   return (
@@ -21,44 +32,59 @@ function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
         activeKey={activeTab}
         animation={false}
         id="tabs"
-        onSelect={activeTab => onChangeTab(activeTab)}
+        onSelect={activeTab => props.onChangeTab(activeTab)}
       >
         <Tab
-          eventKey="timeline"
+          eventKey="all-activities"
           title={
             <div>
-              <span className="name">All Activity</span>
+              <span className="name">All Activities</span>
             </div>
           }
-          className="c-contact-activities-list--timeline"
         >
           <Timeline contact={contact} />
         </Tab>
 
         <Tab
-          eventKey="notes-list"
+          eventKey="touches"
           title={
             <div>
-              <span className="name">Notes</span>
-              <span className="bdg">{`( ${notes.length} )`}</span>
+              <span className="name">Touches</span>
+              <span className="bdg">{getListLength(props.touches)}</span>
             </div>
           }
-          className="c-contact-activities-list--notes"
         >
-          <Notes notes={notes} contact={contact} />
+          <TouchesList
+            touches={props.touches}
+            handleOnClick={handleOnClickTouch}
+          />
         </Tab>
 
         <Tab
-          eventKey="tasks-list"
+          eventKey="notes"
+          title={
+            <div>
+              <span className="name">Notes</span>
+              <span className="bdg">{getListLength(props.notes)}</span>
+            </div>
+          }
+        >
+          <Notes notes={props.notes} contact={contact} />
+        </Tab>
+
+        <Tab
+          eventKey="tasks"
           title={
             <div>
               <span className="name">Tasks</span>
-              <span className="bdg">{`( ${tasks.length} )`}</span>
+              <span className="bdg">{getListLength(props.tasks)}</span>
             </div>
           }
-          className="c-contact-activities-list--crm-tasks"
         >
-          <TasksTimeLine tasks={tasks} handleOnClick={handleOnClickTask} />
+          <TasksTimeLine
+            tasks={props.tasks}
+            handleOnClick={handleOnClickTask}
+          />
         </Tab>
       </Tabs>
     </div>
@@ -66,18 +92,13 @@ function Activities({ contact, notes, tasks, activeTab, onChangeTab }) {
 }
 
 function mapStateToProps(state, props) {
-  let notes = []
-  const {
-    contacts: { attributeDefs }
-  } = state
-  const noteAttributeDef = selectDefinitionByName(attributeDefs, 'note')
-
-  if (noteAttributeDef) {
-    notes = getNotes(props.contact, noteAttributeDef.id)
-  }
+  const noteAttributeDef = selectDefinitionByName(
+    state.contacts.attributeDefs,
+    'note'
+  )
 
   return {
-    notes
+    notes: noteAttributeDef ? getNotes(props.contact, noteAttributeDef.id) : []
   }
 }
 

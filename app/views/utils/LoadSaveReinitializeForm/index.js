@@ -68,13 +68,12 @@ export default class LoadSaveReinitializeForm extends React.Component {
           : valuesToSave
       })
     } catch (error) {
-      // Bad request
-      // if (error.status === 400) {
+      console.error(error)
+
       return {
         [FORM_ERROR]:
           'Something is wrong in our system. We are sorry about this. Please connect to support for resolving it.'
       }
-      // }
     }
   }
 

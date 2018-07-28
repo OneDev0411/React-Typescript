@@ -36,9 +36,11 @@ import {
 import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
 
 import { getTasks } from '../../../../../models/tasks'
+import { getTouches } from '../../../../../models/crm-touches/get-touches'
 
 import {
   getContact,
+  getContactActivities,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
 import { selectContact } from '../../../../../reducers/contacts/list'
@@ -48,7 +50,8 @@ import { normalizeContact } from '../../../../../views/utils/association-normali
 class ContactProfile extends React.Component {
   state = {
     tasks: [],
-    activeTab: 'timeline',
+    touches: [],
+    activeTab: 'all-activities',
     isDesktopScreen: true
   }
 
@@ -73,16 +76,17 @@ class ContactProfile extends React.Component {
   }
 
   async initializeContact() {
-    const {
-      contact,
-      getContact,
-      params: { id: contactId }
-    } = this.props
+    const contactId = this.props.params.id
 
-    if (!contact) {
-      await getContact(contactId)
+    if (!this.props.contact) {
+      await this.props.getContact(contactId)
     }
 
+    this.fetchTasks(contactId)
+    this.fetchTouches(contactId)
+  }
+
+  fetchTasks = async contactId => {
     const query = [
       'order=-updated_at',
       `contact=${contactId}`,
@@ -94,6 +98,18 @@ class ContactProfile extends React.Component {
     const { data: tasks } = response
 
     this.setState({ tasks })
+  }
+
+  fetchTouches = async contactId => {
+    const query = [
+      `contact=${contactId}`,
+      'associations[]=crm_touch.associations'
+    ].join('&')
+
+    const response = await getTouches(query)
+    const { data: touches } = response
+
+    this.setState({ touches })
   }
 
   goBack = () => browserHistory.push('/dashboard/contacts')
@@ -113,13 +129,13 @@ class ContactProfile extends React.Component {
 
     await upsertContactAttributes(contactId, attributes)
 
-    return this.setState({ activeTab: 'notes-list' })
+    return this.setState({ activeTab: 'notes' })
   }
 
   setNewTask = task => {
     this.setState(({ tasks }) => ({
       tasks: [task, ...tasks],
-      activeTab: 'tasks-list'
+      activeTab: 'tasks'
     }))
   }
 
@@ -132,7 +148,6 @@ class ContactProfile extends React.Component {
   }
 
   render() {
-    const { tasks } = this.state
     const { contact, fetchError } = this.props
 
     if (fetchError) {
@@ -235,7 +250,14 @@ class ContactProfile extends React.Component {
                     eventKey="touch"
                     className="c-contact-profile-todo-tabs__pane"
                   >
-                    <Touch defaultAssociation={defaultAssociation} />
+                    <Touch
+                      defaultAssociations={[defaultAssociation]}
+                      submitCallback={() => {
+                        this.setState({ activeTab: 'touches' })
+                        this.fetchTouches(contact.id)
+                        this.props.getContactActivities(contact.id)
+                      }}
+                    />
                   </Tab.Pane>
                   <Tab.Pane
                     eventKey="note"
@@ -258,7 +280,8 @@ class ContactProfile extends React.Component {
             </Tab.Container>
 
             <Activities
-              tasks={tasks}
+              tasks={this.state.tasks}
+              touches={this.state.touches}
               contact={contact}
               activeTab={activeTab}
               onChangeTab={activeTab => this.setState({ activeTab })}
@@ -287,6 +310,7 @@ export default connect(
   mapStateToProps,
   {
     getContact,
+    getContactActivities,
     upsertContactAttributes
   }
 )(ContactProfile)

@@ -3,7 +3,9 @@
     min-height: 40vh;
     padding: 0;
 
-
+    .empty-list {
+      @extend %empty-state;
+    }
 
   a {
     &:hover {
@@ -15,7 +17,7 @@
       text-decoration: none;
     }
   }
-  }
+}
 
 .c-contact-activities-list {
   ul.nav-tabs {
@@ -66,20 +68,6 @@
   }
 }
 
-.c-contact-activities-list--notes,
-.c-contact-activities-list--crm-tasks {
-  .no-note {
-    @extend %empty-state;
-  }
-}
-
-.c-contact-activities-list--timeline {
-  .no-activity {
-    @extend %empty-state;
-  }
-
-  
-}
 .c-contact-activities-list__item {
   display: flex;
   flex-direction: row;
@@ -123,6 +111,7 @@
 .c-notes-timeline {
   position: relative;
   margin-bottom: 1em;
+  padding: 0 1em;
 
   .fa:not(.fa-trash) {
     margin-right: .5em;
