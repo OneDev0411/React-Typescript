@@ -14,7 +14,7 @@ import Textarea from '../../components/Textarea'
 const Notes = ({ notes, handelOnDelete, upsertAttribute, actionStatus }) => (
   <div>
     {notes.length === 0 ? (
-      <div className="no-note">
+      <div className="empty-list">
         <img alt="notepad" src="/static/images/contacts/notepad-edit-231.svg" />
         <p>There are no notes yet</p>
       </div>
@@ -58,10 +58,13 @@ function mapStateToProps(state, props) {
 }
 
 const enhance = compose(
-  connect(mapStateToProps, {
-    deleteAttributes,
-    upsertContactAttributes
-  }),
+  connect(
+    mapStateToProps,
+    {
+      deleteAttributes,
+      upsertContactAttributes
+    }
+  ),
   withState('actionStatus', 'setActionStatus', null),
   withHandlers({
     upsertAttribute: ({

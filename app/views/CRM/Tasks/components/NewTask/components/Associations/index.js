@@ -24,11 +24,8 @@ function Associations({
   defaultAssociation
 }) {
   return (
-    <div className="c-new-task__associations c-new-task__field">
-      <div
-        className="c-new-task__field__label"
-        style={{ marginBottom: '1em', cursor: 'initial' }}
-      >
+    <div className="c-new-task__associations">
+      <div style={{ paddingTop: '0.5em', marginBottom: '1em' }}>
         Associated Records
       </div>
       <Field
