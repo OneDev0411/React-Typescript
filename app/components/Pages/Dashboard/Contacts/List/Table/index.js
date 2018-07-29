@@ -61,22 +61,26 @@ class ContactsList extends React.Component {
     {
       Header: this.getCellTitle('NAME'),
       id: 'name',
+      sortable: false,
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       Cell: ({ original: contact }) => <Name contact={contact} />
     },
     {
       Header: this.getCellTitle('EMAIL'),
       id: 'email',
+      sortable: false,
       accessor: contact => getAttributeFromSummary(contact, 'email')
     },
     {
       Header: 'PHONE',
       id: 'phone',
+      sortable: false,
       accessor: contact => getAttributeFromSummary(contact, 'phone_number')
     },
     {
       Header: this.getCellTitle('TAGS'),
       id: 'tag',
+      sortable: false,
       Cell: ({ original: contact }) => (
         <TagsString
           contact={contact}

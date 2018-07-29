@@ -29,7 +29,7 @@ const InstantChat = Load({
 
 // contacts definitions
 import { getAttributeDefs } from '../store_actions/contacts'
-import { contactDefsIsLoaded } from '../reducers/contacts/attributeDefs'
+import { isLoadedContactAttrDefs } from '../reducers/contacts/attributeDefs'
 
 // favorites
 import { selectListings } from '../reducers/listings'
@@ -95,7 +95,7 @@ class App extends Component {
       }
 
       // load contacts
-      if (!contactDefsIsLoaded(this.props.contactsAttributeDefs)) {
+      if (!isLoadedContactAttrDefs(this.props.contactsAttributeDefs)) {
         dispatch(getAttributeDefs())
       }
 

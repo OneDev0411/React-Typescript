@@ -9,7 +9,7 @@ function getValue(type) {
   }
 }
 
-export function getEmptyAddress(attributeDefs, addressIndex = 0) {
+export function getEmptyAddress(attributeDefs, addressIndex = 1) {
   const address = {
     addressIndex,
     label: { title: 'Other', value: 'Other' }

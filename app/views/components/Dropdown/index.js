@@ -60,7 +60,7 @@ export const Dropdown = ({
       getButtonProps,
       highlightedIndex
     }) => {
-      if (inputValue === selectedItem.title) {
+      if (inputValue === selectedItem && selectedItem.title) {
         inputValue = ''
       }
 

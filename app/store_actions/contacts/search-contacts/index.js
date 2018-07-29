@@ -45,7 +45,8 @@ export function searchContacts(filter, page = 1, limit = 50, searchText) {
       const response = await search(searchText, filter, {
         ...defaultQuery,
         start,
-        limit
+        limit,
+        order: 'display_name'
       })
 
       batchActions([

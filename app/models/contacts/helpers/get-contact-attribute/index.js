@@ -13,7 +13,11 @@ export function getContactAttribute(contact, attributeDef) {
     const attributes = contact.sub_contacts[0].attributes[attributeDef.id]
 
     if (!isEmpty(attributes)) {
-      result = [attributes[0]]
+      const sortedByUpdatedAt = attributes.sort(
+        (a, b) => a.updated_at < b.updated_at
+      )
+
+      result = [sortedByUpdatedAt[0]]
     }
   } else {
     contact.sub_contacts.forEach(subContact => {

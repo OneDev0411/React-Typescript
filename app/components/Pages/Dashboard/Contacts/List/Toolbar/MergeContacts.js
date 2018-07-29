@@ -19,13 +19,15 @@ class MergeContacts extends React.Component {
   render() {
     const { selectedRows } = this.props
 
+    if (selectedRows.length < 2) {
+      return null
+    }
+
     return (
       <div className="list--secondary-button">
-        {selectedRows.length > 1 && (
-          <button className="button c-button--shadow" onClick={this.onClick}>
-            Merge
-          </button>
-        )}
+        <button className="button c-button--shadow" onClick={this.onClick}>
+          Merge
+        </button>
       </div>
     )
   }

@@ -8,19 +8,17 @@ export const Button = ShadowButton.extend`
   align-items: center;
   justify-content: ${props => (props.fullWidth ? 'space-between' : 'initial')};
   font-weight: normal;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   &:focus {
-    outline-width: 2px;
+    outline: none;
   }
 `
 
 export const Icon = ArrowDown.extend`
-  position: absolute;
-  top: 50%;
-  right: 0.5em;
   width: 2em;
   height: 2em;
   fill: #8da2b5;
-  transform: ${({ isOpen }) =>
-    isOpen ? 'translateY(-50%) rotateX(180deg)' : 'translateY(-50%)'};
+  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'initial')};
 `

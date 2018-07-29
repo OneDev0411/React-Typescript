@@ -14,7 +14,7 @@ import {
   searchAllDeals,
   cleanSearchedDeals
 } from '../../../../../store_actions/deals'
-import XlsxIcon from '../../../../../views/components/SvgIcons/Xlsx/XlsxIcon'
+import ExportDeals from './ExportDeals'
 
 const DealsSearchButton = styled.div`
   cursor: pointer;
@@ -31,27 +31,6 @@ const DealsSearchButton = styled.div`
 
   &:hover svg > g {
     fill: #2196f3;
-  }
-`
-
-const DealsDownloadButton = styled.a`
-  cursor: pointer;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  color: #2196f3;
-  border-radius: 4px;
-  border: solid 1px #2196f3;
-  padding: 8px 12px;
-  margin-right: 16px;
-
-  &:hover {
-    text-decoration: none;
-    color: #2196f3;
-    background-color: #f0f4f7;
-  }
-  svg {
-    margin-right: 5px;
   }
 `
 
@@ -135,7 +114,6 @@ class Header extends React.Component {
       user
     } = this.props
 
-    const activeTeamId = getActiveTeamId(user)
     const searchBoxIsOpen = filters.searchResult
 
     let showSearchInput = true
@@ -192,11 +170,7 @@ class Header extends React.Component {
                 </Tooltip>
               )}
 
-              <DealsDownloadButton href={`/api/deals/export/${activeTeamId}`}>
-                <XlsxIcon />
-                Download Report
-              </DealsDownloadButton>
-
+              <ExportDeals user={user} />
               {!isBackOffice && (
                 <Link
                   to="/dashboard/deals/create"

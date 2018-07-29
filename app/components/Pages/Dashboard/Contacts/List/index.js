@@ -151,7 +151,10 @@ class ContactsList extends React.Component {
     const listInfo = selectContactsInfo(list)
 
     if (!selectPage(list, page)) {
-      if (filter || listInfo.type === 'filter') {
+      if (
+        (Array.isArray(filter) && filter.length > 0) ||
+        listInfo.type === 'filter'
+      ) {
         return this.onFilterChange(this.state.filter, page)
       }
 
