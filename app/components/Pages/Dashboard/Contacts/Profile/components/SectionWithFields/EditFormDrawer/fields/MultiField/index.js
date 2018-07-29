@@ -92,7 +92,6 @@ export function MultiField(props) {
                   items={defaultOptions}
                   itemToString={({ title }) => title}
                   name={`${field}.label`}
-                  style={{ width: '100%' }}
                 />
               )}
             </Container>

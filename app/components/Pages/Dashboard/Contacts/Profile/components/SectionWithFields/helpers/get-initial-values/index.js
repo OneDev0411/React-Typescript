@@ -36,12 +36,17 @@ export function getInitialValues(attributes) {
           }
         }
       } else if (isMultiFields) {
+        const label =
+          attribute.label == null
+            ? SELECT_FIELD_DEFAULT_VALUE
+            : {
+                title: attribute.label,
+                value: attribute.label
+              }
+
         const newField = {
           attribute,
-          label: {
-            title: attribute.label,
-            value: attribute.label
-          },
+          label,
           value: arrayFieldValue(value)
         }
 
