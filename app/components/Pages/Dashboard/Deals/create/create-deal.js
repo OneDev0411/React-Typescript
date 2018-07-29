@@ -376,12 +376,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
+      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: "No, don't cancel",
+      cancelLabel: 'No, don\'t cancel',
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -500,9 +500,33 @@ class CreateDeal extends React.Component {
   }
 
   /**
-   * creates deal
+   * updates or create a new deal
    */
-  createDeal = async () => {
+  updateOrCreateDeal = () => {
+    this.setState(
+      {
+        isDraft: this.props.deal ? true : this.state.isDraft
+      },
+      this.upsertDeal
+    )
+  }
+
+  /**
+   * updates a deal and ejects draft mode
+   */
+  goLive = () => {
+    this.setState(
+      {
+        isDraft: false
+      },
+      this.upsertDeal
+    )
+  }
+
+  /**
+   * upserts a deal
+   */
+  upsertDeal = async () => {
     this.isFormSubmitted = true
 
     if (!this.validateForm(true)) {
@@ -724,17 +748,13 @@ class CreateDeal extends React.Component {
    */
   get SubmitLabel() {
     const { deal } = this.props
-    const { saving, isDraft } = this.state
+    const { saving } = this.state
 
     if (!deal) {
       return saving ? 'Creating ...' : 'Create Deal'
     }
 
-    if (saving) {
-      return 'Updating Deal...'
-    }
-
-    return isDraft ? 'Save Updates' : 'Go Live'
+    return saving ? 'Updating Deal ...' : 'Save Updates'
   }
 
   /**
@@ -795,7 +815,7 @@ class CreateDeal extends React.Component {
     const dealContexts = this.getDealContexts(dealSide, dealPropertyType)
     const requiredFields = this.RequiredFields
     const isLeaseDeal = dealPropertyType && dealPropertyType.includes('Lease')
-    const canCreateDeal =
+    const canSaveDeal =
       !saving && dealSide.length > 0 && dealPropertyType.length > 0
 
     return (
@@ -812,14 +832,14 @@ class CreateDeal extends React.Component {
             <div className="swoosh">Swoosh! Another one in the bag.</div>
           )}
 
-          <DealType
-            isNewDeal={!deal}
-            isDraft={isDraft}
-            onChangeDealType={this.changeDealType}
-          />
-
           {!deal && (
             <Fragment>
+              <DealType
+                isNewDeal={!deal}
+                isDraft={isDraft}
+                onChangeDealType={this.changeDealType}
+              />
+
               <DealSide
                 selectedSide={dealSide}
                 onChangeDealSide={this.requestChangeDealSide}
@@ -968,13 +988,26 @@ class CreateDeal extends React.Component {
 
           <Button
             className={cn('create-deal-button', {
-              disabled: !canCreateDeal
+              disabled: !canSaveDeal
             })}
-            onClick={() => this.createDeal()}
-            disabled={!canCreateDeal}
+            style={{ marginRight: '10px' }}
+            onClick={this.updateOrCreateDeal}
+            disabled={!canSaveDeal}
           >
             {this.SubmitLabel}
           </Button>
+
+          {deal && (
+            <Button
+              className={cn('create-deal-button', {
+                disabled: !canSaveDeal
+              })}
+              onClick={this.goLive}
+              disabled={!canSaveDeal}
+            >
+              {saving ? 'Saving ...' : 'Go Live'}
+            </Button>
+          )}
 
           <div className="error-summary">
             {this.isFormSubmitted &&
