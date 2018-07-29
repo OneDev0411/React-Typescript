@@ -26,8 +26,9 @@ export const GridContainer = styled.div`
   min-height: ${props => getContainerHeight(props.isTrainingAccount)};
   max-height: ${props => getContainerHeight(props.isTrainingAccount)};
   overflow: auto;
+  padding: 40px;
 `
 
 export const SearchContainer = styled.div`
-  padding: 16px;
+  margin-bottom: 40px;
 `

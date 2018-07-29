@@ -29,14 +29,14 @@ class Grid extends React.Component {
     return [
       {
         id: 'address',
-        header: 'ADDRESS',
-        width: '28%',
+        header: 'Address',
+        width: '23%',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
       {
         id: 'status',
-        header: 'STATUS',
+        header: 'Status',
         width: '15%',
         accessor: deal => Deal.get.status(deal),
         sortMethod: statusSortMethod,
@@ -44,19 +44,19 @@ class Grid extends React.Component {
       },
       {
         id: 'checklist-type',
-        header: 'CHECKLIST TYPE',
+        header: 'Checklist Type',
         accessor: 'property_type'
       },
       {
         id: 'price',
-        header: 'PRICE $',
+        header: 'Price $',
         accessor: deal => this.getPriceValue(deal),
         render: ({ rowData: deal }) =>
           Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0)
       },
       {
         id: 'side',
-        header: 'SIDE',
+        header: 'Side',
         accessor: deal => deal.deal_type,
         render: ({ rowData: deal, totalRows, rowIndex }) => (
           <DealSide
@@ -69,7 +69,7 @@ class Grid extends React.Component {
       },
       {
         id: 'critical-dates',
-        header: 'CRITICAL DATES',
+        header: 'Critical Dates',
         accessor: deal => getNextDateValue(deal),
         render: ({ rowData: deal, totalRows, rowIndex }) => (
           <CriticalDate
@@ -81,7 +81,7 @@ class Grid extends React.Component {
       },
       {
         id: 'agent-name',
-        header: 'AGENT NAME',
+        header: 'Agent Name',
         accessor: deal => getPrimaryAgent(deal, roles)
       },
       {

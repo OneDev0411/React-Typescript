@@ -9,26 +9,27 @@ const Container = styled.div`
 `
 
 const Image = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   border-radius: 4px;
   margin-right: 12px;
 `
 
-const Name = styled.div``
-
-function getListingPhoto(deal) {
-  const photo = Deal.get.field(deal, 'photo')
-
-  return photo || '/static/images/deals/home.png'
-}
+const Name = styled.div`
+  font-weight: 500;
+`
 
 const Address = ({ deal, roles }) => {
-  const address = Deal.get.address(deal, roles)
+  const photo = Deal.get.field(deal, 'photo')
+  const address = Deal.get.shortAddress(deal, roles)
 
   return (
     <Container>
-      <Image src={getListingPhoto(deal)} alt="" />
+      <Image
+        src={photo || '/static/images/deals/home.png'}
+        hasPhoto={photo !== null}
+        alt=""
+      />
       <Name>{address}</Name>
     </Container>
   )

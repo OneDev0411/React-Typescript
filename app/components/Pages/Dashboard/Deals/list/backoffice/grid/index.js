@@ -31,14 +31,14 @@ class Grid extends React.Component {
     return [
       {
         id: 'address',
-        header: 'ADDRESS',
-        width: '24%',
+        header: 'Address',
+        width: '21%',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
       {
         id: 'status',
-        header: 'STATUS',
+        header: 'Status',
         width: '15%',
         accessor: deal => Deal.get.status(deal),
         sortMethod: statusSortMethod,
@@ -46,22 +46,22 @@ class Grid extends React.Component {
       },
       {
         id: 'property-type',
-        header: 'PROPERTY TYPE',
+        header: 'Property Type',
         accessor: 'property_type'
       },
       {
         id: 'agent-name',
-        header: 'AGENT NAME',
+        header: 'Agent Name',
         accessor: deal => getPrimaryAgent(deal, roles)
       },
       {
         id: 'office',
-        header: 'OFFICE',
+        header: 'Office',
         accessor: deal => this.getOffice(deal)
       },
       {
         id: 'critical-dates',
-        header: 'CRITICAL DATES',
+        header: 'Critical Dates',
         accessor: deal => getNextDateValue(deal),
         render: ({ rowData: deal, totalRows, rowIndex }) => (
           <CriticalDate
@@ -73,7 +73,7 @@ class Grid extends React.Component {
       },
       {
         id: 'submitted-at',
-        header: 'SUBMITTED AT',
+        header: 'Submitted At',
         accessor: 'attention_requested_at',
         render: ({ rowData: deal }) =>
           this.getSubmitTime(deal.attention_requested_at)

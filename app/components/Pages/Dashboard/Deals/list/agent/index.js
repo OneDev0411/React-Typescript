@@ -55,7 +55,10 @@ class AgentTable extends React.Component {
         </Menu>
 
         <PageContent>
-          <Header onMenuTriggerChange={this.toggleSideMenu} />
+          <Header
+            showBackButton={false}
+            onMenuTriggerChange={this.toggleSideMenu}
+          />
 
           <GridContainer isTrainingAccount={isTrainingAccount}>
             <SearchContainer>
@@ -82,4 +85,7 @@ function mapStateToProps({ user, deals }) {
   return { user, isFetchingDeals: deals.properties.isFetchingDeals }
 }
 
-export default connect(mapStateToProps, { searchDeals, getDeals })(AgentTable)
+export default connect(
+  mapStateToProps,
+  { searchDeals, getDeals }
+)(AgentTable)

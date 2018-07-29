@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+
 import PageHeader from '../../../../../../../views/components/PageHeader'
-import ToolTip from '../../../../../../../views/components/tooltip'
 import { Trigger as MenuTrigger } from '../../../../../../../views/components/SlideMenu'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
-import ExportDeals from './ExportDeals'
+import ExportDeals from './export-deals'
 
 const Header = ({
   user,
@@ -13,8 +13,8 @@ const Header = ({
   onMenuTriggerChange,
   showCreateDeal = true
 }) => (
-  <PageHeader isFlat>
-    <PageHeader.Title backButton={false}>
+  <PageHeader isFlat style={{ padding: '0 40px' }}>
+    <PageHeader.Title showBackButton={false}>
       <MenuTrigger
         tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}
         onClick={onMenuTriggerChange}

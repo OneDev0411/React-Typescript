@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Header, HeaderRow, HeaderCell } from '../styled'
+import { Header, HeaderRow, HeaderCell } from './styled'
 
 import SortIndicator from '../Plugins/Sorting/Indicator'
 
