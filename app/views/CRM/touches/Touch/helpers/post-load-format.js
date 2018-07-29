@@ -1,6 +1,6 @@
 import fecha from 'fecha'
 
-import { getAssociations } from './get-associations'
+// import { getAssociations } from './get-associations'
 import { defaultTimeOption } from '../../../../../utils/default-time-option'
 
 const formatDate = date => fecha.format(date, 'MM/DD/YYYY')
@@ -43,13 +43,13 @@ export async function postLoadFormat(touch, defaultAssociations) {
   }
   touchTime = defaultTimeOption(touch.timestamp * 1000)
 
-  const associations = await getAssociations(touch)
+  // const associations = await getAssociations(touch)
 
   return {
     ...touch,
     touchDate,
     touchTime,
     activity_type,
-    associations
+    associations: defaultAssociations
   }
 }
