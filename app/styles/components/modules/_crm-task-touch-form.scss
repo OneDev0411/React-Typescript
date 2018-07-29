@@ -7,14 +7,18 @@ $border: 1px solid #ecf1f5;
   align-items: center;
   justify-content: center;
 
+  .c-touch-page &,
   .c-new-task--page & {
     max-width: 73em;
     margin: 0 auto;
   }
 }
 
-.c-new-task--page .c-full-screen-modal__body {
-  background-color:  #f0f4f7;
+.c-touch-page,
+.c-new-task--page {
+  .c-full-screen-modal__body {
+    background-color:  #f0f4f7;
+  }
 }
 
 .c-new-task__form,
@@ -23,6 +27,7 @@ $border: 1px solid #ecf1f5;
   position: relative;
   background-color: #fff;
   
+  .c-touch-page &,
   .c-new-task--page & {
     @media screen and (min-height: 67.5em) and (min-width: 56em) { // 1080
       height: calc(100vh - 56px);
