@@ -9,6 +9,7 @@ const ITEMS = ['Meeting', 'Call', 'Text', 'Email', 'Mail', 'Social'].map(
 export function TouchType() {
   return (
     <Select
+      fullWidth={false}
       hasEmptyItem={false}
       items={ITEMS}
       label="Type"

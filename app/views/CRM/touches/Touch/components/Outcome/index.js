@@ -7,5 +7,13 @@ const ITEMS = ['Connected', 'No Answer', 'Left voicemail', 'Wrong number'].map(
 )
 
 export function Outcome() {
-  return <Select items={ITEMS} label="Outcome" name="outcome" required />
+  return (
+    <Select
+      fullWidth={false}
+      items={ITEMS}
+      label="Outcome"
+      name="outcome"
+      required
+    />
+  )
 }
