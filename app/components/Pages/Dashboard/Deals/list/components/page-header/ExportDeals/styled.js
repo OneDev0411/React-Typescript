@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import ArrowDown from '../../../../../../views/components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import ArrowDown from '../../../../../../../../views/components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 export const DealsDownloadButton = styled.div`
   cursor: pointer;

@@ -1,9 +1,9 @@
 import React from 'react'
 import moment from 'moment'
-import { getActiveTeamId } from '../../../../../../utils/user-teams'
+import { getActiveTeamId } from '../../../../../../../../utils/user-teams'
 
-import XlsxIcon from '../../../../../../views/components/SvgIcons/Xlsx/XlsxIcon'
-import Dropdown from '../../../../../../views/components/SimpleDropdown'
+import XlsxIcon from '../../../../../../../../views/components/SvgIcons/Xlsx/XlsxIcon'
+import Dropdown from '../../../../../../../../views/components/SimpleDropdown/index'
 
 import {
   DealsDownloadButton,

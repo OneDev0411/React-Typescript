@@ -14,7 +14,7 @@ import {
   searchAllDeals,
   cleanSearchedDeals
 } from '../../../../../store_actions/deals'
-import ExportDeals from './ExportDeals'
+import ExportDeals from './components/page-header/ExportDeals'
 
 const DealsSearchButton = styled.div`
   cursor: pointer;
