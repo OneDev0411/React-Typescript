@@ -10,7 +10,11 @@ export async function setUserTimezone(time_zone) {
   }
 
   try {
-    return await new Fetch().patch('/users/self/timezone').send({ time_zone })
+    const response = await new Fetch()
+      .patch('/users/self/timezone')
+      .send({ time_zone })
+
+    return response.body.data
   } catch (error) {
     throw error
   }

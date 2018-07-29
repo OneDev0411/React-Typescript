@@ -8,8 +8,12 @@ import FormCard from './FormCard'
 import { getBrandInfo } from '../../../../Auth/SignIn'
 import { Dropdown } from '../../../../../../views/components/Dropdown'
 import { setUserTimezone } from '../../../../../../models/user/set-user-timezone'
+import {
+  EDIT_USER_REQUEST,
+  EDIT_USER_SUCCESS
+} from '../../../../../../constants/user'
 
-const Timezone = ({ brand, timezone, notify }) => {
+const Timezone = ({ brand, timezone, dispatch }) => {
   let submitError = null
   const { brandColor } = getBrandInfo(brand)
 
@@ -27,12 +31,22 @@ const Timezone = ({ brand, timezone, notify }) => {
     }
 
     try {
-      await setUserTimezone(time_zone.value)
-
-      notify({
-        status: 'success',
-        message: `Timezone updated to ${time_zone.value}.`
+      dispatch({
+        type: EDIT_USER_REQUEST
       })
+
+      const user = await setUserTimezone(time_zone.value)
+
+      dispatch({
+        user,
+        type: EDIT_USER_SUCCESS
+      })
+      dispatch(
+        notify({
+          status: 'success',
+          message: `Timezone updated to ${time_zone.value}.`
+        })
+      )
     } catch (error) {
       console.log(error)
       submitError = error && error.message
@@ -86,4 +100,4 @@ const Timezone = ({ brand, timezone, notify }) => {
   )
 }
 
-export default connect(null, { notify })(Timezone)
+export default connect()(Timezone)
