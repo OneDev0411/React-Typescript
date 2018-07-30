@@ -1,53 +1,37 @@
 import _ from 'underscore'
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {
   switch (action.type) {
-    case types.NO_DEAL:
+    case actionTypes.NO_DEAL:
+    case actionTypes.CLEAR_DEALS:
       return {}
 
-    case types.GET_DEALS_FAILED:
+    case actionTypes.GET_DEALS_FAILED:
       return null
 
-    case types.ARCHIVE_DEAL:
+    case actionTypes.ARCHIVE_DEAL:
       return _.omit(state, deal => deal.id === action.deal_id)
 
-    case types.GET_DEALS:
+    case actionTypes.EJECT_DRAFT_MODE:
+      return {
+        ...state,
+        [action.dealId]: {
+          ...state[action.dealId],
+          is_draft: false
+        }
+      }
+
+    case actionTypes.GET_DEALS:
       return action.deals
 
-    case types.ADD_SEARCHED_DEALS: {
-      const notSearchedDeals = _.pick(
-        state,
-        deal => !deal.searchResult || deal.duplicateDeal
-      )
-
-      _.chain(notSearchedDeals)
-        .filter(deal => deal.duplicateDeal)
-        .each(deal => {
-          deal.duplicateDeal = false
-          deal.searchResult = false
-        })
-        .value()
-
-      _.map(action.deals, deal => {
-        deal.searchResult = true
-
-        if (notSearchedDeals[deal.id]) {
-          deal.duplicateDeal = true
-        }
-
-        notSearchedDeals[deal.id] = deal
-      })
-
-      return notSearchedDeals
-    }
-    case types.CREATE_DEAL:
+    case actionTypes.CREATE_DEAL:
       return {
         [action.deal.id]: action.deal,
         ...state
       }
 
-    case types.UPDATE_DEAL:
+    case actionTypes.UPDATE_DEAL:
       return {
         ...state,
         [action.deal.id]: {
@@ -56,7 +40,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.APPEND_CHECKLIST:
+    case actionTypes.APPEND_CHECKLIST:
       return {
         ...state,
         [action.deal_id]: {
@@ -68,7 +52,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.DELETE_ROLE:
+    case actionTypes.DELETE_ROLE:
       return {
         ...state,
         [action.deal_id]: {
@@ -77,7 +61,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.CREATE_ROLES:
+    case actionTypes.CREATE_ROLES:
       return {
         ...state,
         [action.deal_id]: {
@@ -89,7 +73,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.ADD_STASH_FILE:
+    case actionTypes.ADD_STASH_FILE:
       return {
         ...state,
         [action.deal_id]: {
@@ -98,7 +82,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.DELETE_STASH_FILE:
+    case actionTypes.DELETE_STASH_FILE:
       return {
         ...state,
         [action.deal_id]: {
@@ -110,7 +94,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.CREATE_ENVELOPE:
+    case actionTypes.CREATE_ENVELOPE:
       return {
         ...state,
         [action.deal_id]: {
@@ -122,7 +106,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.UPDATE_NOTIFICATIONS:
+    case actionTypes.UPDATE_NOTIFICATIONS:
       return {
         ...state,
         [action.deal_id]: {

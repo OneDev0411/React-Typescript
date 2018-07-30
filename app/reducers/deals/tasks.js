@@ -1,42 +1,43 @@
 import _ from 'underscore'
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {
   switch (action.type) {
-    case types.GET_DEALS_FAILED:
+    case actionTypes.GET_DEALS_FAILED:
+    case actionTypes.CLEAR_DEALS:
       return {}
 
-    case types.ARCHIVE_DEAL:
+    case actionTypes.ARCHIVE_DEAL:
       return _.omit(state, task => task.deal === action.deal_id)
 
-    case types.DELETE_TASK:
+    case actionTypes.DELETE_TASK:
       return _.omit(state, task => task.id === action.taskId)
 
-    case types.GET_TASKS:
+    case actionTypes.GET_TASKS:
       return {
         ...state,
         ...action.tasks
       }
 
-    case types.CREATE_TASK:
+    case actionTypes.CREATE_TASK:
       return {
         [action.task.id]: action.task,
         ...state
       }
 
-    case types.UPDATE_TASK:
+    case actionTypes.UPDATE_TASK:
       return {
         ...state,
         [action.task.id]: action.task
       }
 
-    case types.UPDATE_TASKS:
+    case actionTypes.UPDATE_TASKS:
       return {
         ...state,
         ...action.tasks
       }
 
-    case types.UPDATE_SUBMISSION:
+    case actionTypes.UPDATE_SUBMISSION:
       return {
         ...state,
         [action.taskId]: {
@@ -45,7 +46,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.CHANGE_TASK_STATUS:
+    case actionTypes.CHANGE_TASK_STATUS:
       return {
         ...state,
         [action.taskId]: {
@@ -57,7 +58,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.CHANGE_ATTENTION_REQUESTED:
+    case actionTypes.CHANGE_ATTENTION_REQUESTED:
       return {
         ...state,
         [action.taskId]: {
@@ -66,7 +67,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.ADD_TASK_FILE:
+    case actionTypes.ADD_TASK_FILE:
       return {
         ...state,
         [action.task_id]: {
@@ -81,7 +82,7 @@ export default (state = null, action) => {
         }
       }
 
-    case types.DELETE_TASK_FILE:
+    case actionTypes.DELETE_TASK_FILE:
       return {
         ...state,
         [action.task_id]: {

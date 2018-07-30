@@ -166,7 +166,7 @@ const mapHOC = compose(
     }) => (gmap = {}) => {
       const { marginBounds } = gmap
 
-      setMapProps('SEARCH', gmap)
+      setMapProps('search', gmap)
 
       if (map.autoMove) {
         setOffMapAutoMove()
@@ -202,10 +202,10 @@ const mapHOC = compose(
       }
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('SEARCH', -1)
+      setMapHoveredMarkerId('search', -1)
     },
     onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('SEARCH', id)
+      setMapHoveredMarkerId('search', id)
     },
     onClickRemovePolygon: ({
       map,

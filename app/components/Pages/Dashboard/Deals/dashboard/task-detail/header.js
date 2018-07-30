@@ -62,7 +62,7 @@ class Header extends React.Component {
       <div className="header">
         <div className="top">
           <div className="task-status">
-            <TaskStatus task={task} />
+            <TaskStatus task={task} isDraft={deal.is_draft} />
           </div>
 
           <div className="cta">
@@ -119,7 +119,10 @@ class Header extends React.Component {
   }
 }
 
-export default connect(null, {
-  updateTask,
-  setSelectedTask
-})(Header)
+export default connect(
+  null,
+  {
+    updateTask,
+    setSelectedTask
+  }
+)(Header)

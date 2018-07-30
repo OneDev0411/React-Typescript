@@ -296,19 +296,16 @@ function mapStateToProps(state, props) {
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      clearContactSearchResult,
-      confirmation,
-      deleteContacts,
-      getContacts,
-      removeContactPage,
-      receiveContactPage,
-      searchContacts,
-      setContactCurrentPage,
-      toggleRow,
-      toggleAllRows
-    }
-  )(ContactsList)
+  connect(mapStateToProps, {
+    clearContactSearchResult,
+    confirmation,
+    deleteContacts,
+    getContacts,
+    removeContactPage,
+    receiveContactPage,
+    searchContacts,
+    setContactCurrentPage,
+    toggleRow,
+    toggleAllRows
+  })(ContactsList)
 )

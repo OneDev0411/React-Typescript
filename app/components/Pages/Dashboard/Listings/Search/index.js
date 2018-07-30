@@ -92,7 +92,7 @@ class Search extends Component {
         </div>
         <div className="l-listings__panel">
           <ListingsPanel
-            tabName="SEARCH"
+            tabName="search"
             isWidget={isWidget}
             listings={listings}
             isLoggedIn={isLoggedIn}

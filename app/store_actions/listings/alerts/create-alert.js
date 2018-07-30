@@ -13,14 +13,14 @@ const createAlert = alertOptions => (dispatch, getState) => {
   }
 
   dispatch({
-    tabName: 'ALERTS',
+    tabName: 'alerts',
     type: actionsType.ADD_ALERT_REQUEST
   })
 
   return api.createAlert(alertOptions).then(
     response => {
       dispatch({
-        tabName: 'ALERTS',
+        tabName: 'alerts',
         response: addHandler(response),
         type: actionsType.ADD_ALERT_SUCCESS
       })
@@ -28,7 +28,7 @@ const createAlert = alertOptions => (dispatch, getState) => {
     },
     error => {
       dispatch({
-        tabName: 'ALERTS',
+        tabName: 'alerts',
         type: actionsType.ADD_ALERT_FAILURE,
         message: error.message || 'Something went wrong.'
       })

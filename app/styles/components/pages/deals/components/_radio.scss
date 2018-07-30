@@ -14,7 +14,8 @@ $border-color: #CAD4DB;
     background-color: #fff;
     border: solid 1px $border-color;
     text-align: center;
-
+    line-height: 17px;
+    
     &:hover {
       background-color: lighten($border-color, 10%);
       border: solid 1px darken($border-color, 20%);

@@ -2,11 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
 import { addNotification as notify } from 'reapop'
+
 import Message from '../../../Chatroom/Util/message'
 import {
   changeTaskStatus,
   changeNeedsAttention
 } from '../../../../../../store_actions/deals'
+import { confirmation } from '../../../../../../store_actions/confirmation'
+
 import ActionButtons from './cta'
 
 class CommentCreate extends React.Component {
@@ -28,7 +31,9 @@ class CommentCreate extends React.Component {
     // scroll to the end
     const el = document.getElementById('deals-task-scrollable')
 
-    el.scrollTop = el.scrollHeight
+    if (el) {
+      el.scrollTop = el.scrollHeight
+    }
   }
 
   /**
@@ -37,12 +42,14 @@ class CommentCreate extends React.Component {
    */
   async sendComment(attention_requested = null, task_status = null) {
     const {
+      deal,
       task,
       user,
       changeTaskStatus,
       changeNeedsAttention,
       notify
     } = this.props
+
     const { comment } = this.state
 
     if (comment) {
@@ -65,7 +72,16 @@ class CommentCreate extends React.Component {
 
     try {
       if (attention_requested !== null) {
-        await changeNeedsAttention(task.deal, task.id, attention_requested)
+        await changeNeedsAttention(deal.id, task.id, attention_requested)
+
+        if (deal.is_draft) {
+          this.props.confirmation({
+            description:
+              "We've captured your Notify Office request. As soon as this deal goes live, we'll forward it on to your back office.",
+            confirmLabel: 'Got it. Thanks.',
+            hideCancelButton: true
+          })
+        }
       }
 
       if (task_status !== null) {
@@ -136,5 +152,5 @@ export default connect(
   ({ data }) => ({
     user: data.user
   }),
-  { changeTaskStatus, changeNeedsAttention, notify }
+  { changeTaskStatus, changeNeedsAttention, notify, confirmation }
 )(CommentCreate)

@@ -12,7 +12,8 @@ const routes = {
     'download-pdf',
     'pdf-splitter',
     'envelope-edit',
-    'export'
+    'export-all-deals',
+    'export-custom-report'
   ]
 }
 

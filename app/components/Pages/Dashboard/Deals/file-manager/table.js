@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import {
   getDeal,
   displaySplitter,
-  deleteFile,
+  syncDeleteFile,
   moveTaskFile
 } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
@@ -19,9 +19,9 @@ import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import Search from '../../../../Partials/headerSearch'
 import Upload from '../dashboard/upload'
 import TasksDropDown from '../components/tasks-dropdown'
-import Envelope from './envelope'
+import { getEnvelopeStatus } from '../utils/get-envelop-status'
 
-const EnvelopeName = styled.div`
+const EllipsisColumn = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `
@@ -82,7 +82,7 @@ export class FileManager extends React.Component {
   getAllFiles() {
     const { deal, checklists, tasks, envelopes } = this.props
 
-    const files = []
+    let files = []
     const stashFiles = deal.files || []
 
     stashFiles.filter(file => this.applyFilter(file, null)).forEach(file => {
@@ -116,7 +116,51 @@ export class FileManager extends React.Component {
       })
     })
 
-    return files
+    let envelopesFiles = []
+
+    deal.envelopes &&
+      deal.envelopes.forEach(envelopeId => {
+        const envelope = envelopes[envelopeId]
+
+        const envelopeFiles = envelope.documents.map(doc => {
+          let file
+
+          if (doc.file) {
+            file = files.find(({ id }) => id === doc.file)
+          } else if (doc.submission) {
+            let submissionFile
+
+            deal.checklists.some(checklistId => {
+              const { tasks: checklistTasks } = checklists[checklistId]
+
+              const taskId = checklistTasks.find(taskId => {
+                const { submission } = tasks[taskId]
+
+                return submission && submission.id === doc.submission
+              })
+
+              if (taskId) {
+                submissionFile = {
+                  ...tasks[taskId].submission.file,
+                  name: decodeURI(tasks[taskId].submission.file.name),
+                  taskId,
+                  task: tasks[taskId].title
+                }
+
+                return true
+              }
+            })
+
+            file = submissionFile
+          }
+
+          return { ...file, envelope }
+        })
+
+        envelopesFiles = envelopesFiles.concat(envelopeFiles)
+      })
+
+    return files.concat(envelopesFiles)
   }
 
   getCellTitle(title) {
@@ -220,14 +264,14 @@ export class FileManager extends React.Component {
   }
 
   async deleteFiles(files) {
-    const { deal, deleteFile } = this.props
+    const { deal, syncDeleteFile } = this.props
     const { isDeleting } = this.state
 
     this.setState({
       isDeleting: [...isDeleting, ..._.keys(files)]
     })
 
-    await deleteFile(deal.id, files)
+    await syncDeleteFile(deal.id, files)
 
     this.setState({
       selectedRows: [],
@@ -242,10 +286,12 @@ export class FileManager extends React.Component {
   getFileLink(file) {
     const { deal } = this.props
     const taskId = file.taskId || 'stash'
+    const type = file.envelope ? 'envelope' : 'attachment'
+    const id = file.envelope ? file.envelope.id : file.id
 
-    return `/dashboard/deals/${deal.id}/form-viewer/${taskId}/attachment/${
-      file.id
-    }?backTo=files`
+    return `/dashboard/deals/${
+      deal.id
+    }/form-viewer/${taskId}/${type}/${id}?backTo=files`
   }
 
   async onSelectTask(file, taskId = null, notifyOffice = false) {
@@ -274,26 +320,9 @@ export class FileManager extends React.Component {
     })
   }
 
-  getEnvelope = file => {
-    const { deal, envelopes } = this.props
-
-    const envelope =
-      deal.envelopes &&
-      deal.envelopes.filter(envelopeId =>
-        envelopes[envelopeId].documents.some(
-          ({ file: fileId }) => fileId === file.id
-        )
-      )
-
-    if (envelope && envelope.length) {
-      return envelopes[envelope[0]]
-    }
-
-    return undefined
-  }
   getColumns(rows) {
     const { selectedRows, isDeleting, updatingFiles } = this.state
-    const { deal, tasks, envelopes } = this.props
+    const { deal, tasks } = this.props
 
     return [
       {
@@ -334,65 +363,72 @@ export class FileManager extends React.Component {
         accessor: 'created_at',
         Cell: ({ value }) => this.getDate(value)
       },
-      // {
-      //   id: 'e_signature',
-      //   Header: () => this.getCellTitle('eSignature'),
-      //   accessor: 'e_signature',
-      //   Cell: ({ original: file }) => {
-      //     const envelope = this.getEnvelope(file)
+      {
+        id: 'e_signature',
+        Header: () => this.getCellTitle('eSignature'),
+        accessor: 'e_signature',
+        Cell: ({ original: file }) => {
+          const envelope = file.envelope
 
-      //     if (envelope) {
-      //       return <Envelope envelope={envelope} />
-      //     }
+          if (envelope) {
+            return (
+              <EllipsisColumn>{getEnvelopeStatus(envelope)}</EllipsisColumn>
+            )
+          }
 
-      //     return null
-      //   }
-      // },
-      // {
-      //   id: 'envelope_name',
-      //   Header: () => this.getCellTitle('ENVELOPE NAME'),
-      //   accessor: 'envelope_name',
-      //   Cell: ({ original: file }) => {
-      //     const envelope = this.getEnvelope(file)
+          return null
+        }
+      },
+      {
+        id: 'envelope_name',
+        Header: () => this.getCellTitle('ENVELOPE NAME'),
+        accessor: 'envelope_name',
+        Cell: ({ original: file }) => {
+          const envelope = file.envelope
 
-      //     if (envelope) {
-      //       return <EnvelopeName>{envelope.title}</EnvelopeName>
-      //     }
+          if (envelope) {
+            return <EllipsisColumn>{envelope.title}</EllipsisColumn>
+          }
 
-      //     return null
-      //   }
-      // },
+          return null
+        }
+      },
       {
         Header: () => this.getCellTitle('FOLDER'),
         accessor: 'task',
         className: 'file-table__task',
-        Cell: ({ original: file }) => (
-          <Fragment>
-            <TasksDropDown
-              // disabled={!!this.getEnvelope(file)}
-              showStashOption={file.taskId !== null}
-              searchable
-              showNotifyOption
-              deal={deal}
-              onSelectTask={(taskId, notifyOffice) =>
-                this.onSelectTask(file, taskId, notifyOffice)
-              }
-              selectedTask={
-                updatingFiles[file.id]
-                  ? tasks[updatingFiles[file.id].taskId]
-                  : tasks[file.taskId]
-              }
-              stashOptionText="Move it to my Files"
-            />
+        Cell: ({ original: file }) => {
+          if (file.envelope) {
+            return <EllipsisColumn>{file.task}</EllipsisColumn>
+          }
 
-            {updatingFiles[file.id] && (
-              <i
-                className="fa fa-spinner fa-spin"
-                style={{ marginLeft: '16px' }}
+          return (
+            <Fragment>
+              <TasksDropDown
+                showStashOption={file.taskId !== null}
+                searchable
+                showNotifyOption
+                deal={deal}
+                onSelectTask={(taskId, notifyOffice) =>
+                  this.onSelectTask(file, taskId, notifyOffice)
+                }
+                selectedTask={
+                  updatingFiles[file.id]
+                    ? tasks[updatingFiles[file.id].taskId]
+                    : tasks[file.taskId]
+                }
+                stashOptionText="Move it to my Files"
               />
-            )}
-          </Fragment>
-        )
+
+              {updatingFiles[file.id] && (
+                <i
+                  className="fa fa-spinner fa-spin"
+                  style={{ marginLeft: '16px' }}
+                />
+              )}
+            </Fragment>
+          )
+        }
       },
       {
         id: 'td-split',
@@ -401,14 +437,15 @@ export class FileManager extends React.Component {
         width: 110,
         Cell: ({ original: file }) => (
           <Fragment>
-            {this.isPdfDocument(file.mime) && (
-              <button
-                className="button split-button hide"
-                onClick={() => this.splitSingleFile(file)}
-              >
-                Split PDF
-              </button>
-            )}
+            {!file.envelope &&
+              this.isPdfDocument(file.mime) && (
+                <button
+                  className="button split-button hide"
+                  onClick={() => this.splitSingleFile(file)}
+                >
+                  Split PDF
+                </button>
+              )}
           </Fragment>
         )
       },
@@ -539,7 +576,7 @@ export default connect(
   {
     confirmation,
     getDeal,
-    deleteFile,
+    syncDeleteFile,
     displaySplitter,
     moveTaskFile
   }

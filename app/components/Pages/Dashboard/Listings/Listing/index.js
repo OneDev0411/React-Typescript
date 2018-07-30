@@ -4,38 +4,42 @@ import { connect } from 'react-redux'
 import ListingMobileView from './components/ListingMobileView'
 import ListingDesktopView from './components/ListingDesktopView'
 import logUserActivity from '../../../../../models/user/post-new-activity'
-import getListing from '../../../../../store_actions/listings/listing/get-listing'
+import getListing from '../../../../../models/listings/listing/get-listing'
+import changeListingFollowStatuses from '../../../../../models/listings/listing/change-listing-follow-status'
 
 class Listing extends React.Component {
   state = {
-    isLoggedActivity: false
+    isFetching: false,
+    errorMessage: undefined,
+    listing: {}
   }
 
   componentDidMount() {
     this.initializeListing()
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.listing.id &&
-      !this.props.listing.id &&
-      !this.state.isLoggedActivity
-    ) {
-      this.logActivity(nextProps.listing)
-    }
-  }
-
   async initializeListing() {
-    const { listingId, listing, getListing } = this.props
+    const { id: listingId } = this.props.params
 
     if (!listingId) {
       return
     }
 
-    if (!listing.id) {
-      await getListing(listingId)
-    } else {
-      this.logActivity(listingId)
+    this.setState({ isFetching: true })
+
+    try {
+      const listing = await getListing(listingId)
+
+      this.setState({ listing, isFetching: false })
+
+      if (listing.id) {
+        this.logActivity(listingId)
+      }
+    } catch ({ response }) {
+      const errorMessage =
+        (response && response.body.message) || 'Something went wrong.'
+
+      this.setState({ isFetching: false, errorMessage })
     }
   }
 
@@ -45,33 +49,60 @@ class Listing extends React.Component {
       object_class: 'listing',
       action: 'UserViewedListing'
     })
-    this.setState({
-      isLoggedActivity: true
-    })
   }
 
+  onClickFollow = async statuses => {
+    const { listing, isFetching } = this.state
+
+    try {
+      if (!isFetching) {
+        this.setState({ isFetching: true })
+
+        const response = await changeListingFollowStatuses(listing.id, statuses)
+        const updatedListing = { ...listing, ...response.body.data }
+
+        this.setState({ listing: updatedListing, isFetching: false })
+      }
+    } catch ({ response }) {
+      const errorMessage =
+        (response && response.body.message) || 'Something went wrong.'
+
+      this.setState({ isFetching: false, errorMessage })
+    }
+  }
   render() {
-    let content = <ListingDesktopView {...this.props} />
+    const { listing, isFetching, errorMessage } = this.state
+    let content = (
+      <ListingDesktopView
+        {...this.props}
+        listing={listing}
+        isFetching={isFetching}
+        errorMessage={errorMessage}
+        onClickFollow={this.onClickFollow}
+      />
+    )
 
     if (this.props.data.is_mobile) {
-      content = <ListingMobileView {...this.props} />
+      content = (
+        <ListingMobileView
+          {...this.props}
+          listing={listing}
+          isFetching={isFetching}
+          errorMessage={errorMessage}
+        />
+      )
     }
 
     return content
   }
 }
 
-function mapStateToProps(state, props) {
-  const { user, listing } = state
-  const { params: { id: listingId } } = props
+function mapStateToProps(state) {
+  const { user } = state
 
   return {
-    user,
-    listingId: listingId || '',
-    isFetching: listing.isFetching,
-    errorMessage: listing.errorMessage,
-    listing: listing.data.id === listingId ? listing.data : {}
+    user
   }
 }
 
-export default connect(mapStateToProps, { getListing })(Listing)
+export default connect(mapStateToProps)(Listing)

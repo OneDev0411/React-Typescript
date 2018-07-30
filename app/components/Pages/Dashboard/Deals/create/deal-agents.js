@@ -48,7 +48,7 @@ export default props => {
       <div className={cn('hero', { hasError })}>
         Enter {sideName === BUYING ? 'buyer' : 'listing'} agent’s
         information.&nbsp;
-        <span className="required">*</span>
+        {props.isRequired && <span className="required">*</span>}
         {hasError && <RequiredIcon />}
       </div>
 

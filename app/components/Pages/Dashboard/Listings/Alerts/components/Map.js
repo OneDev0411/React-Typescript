@@ -125,13 +125,13 @@ const mapHOC = compose(
       }
     },
     onChange: ({ setMapProps }) => mapProps => {
-      setMapProps('ALERTS', mapProps)
+      setMapProps('alerts', mapProps)
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('ALERTS', -1)
+      setMapHoveredMarkerId('alerts', -1)
     },
     onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('ALERTS', id)
+      setMapHoveredMarkerId('alerts', id)
     }
   }),
   withPropsOnChange(

@@ -21,12 +21,14 @@ const propTypes = {
   backUrl: PropTypes.string,
   showBackButton: PropTypes.bool,
   isFlat: PropTypes.bool,
-  title: PropTypes.string
+  title: PropTypes.string,
+  style: PropTypes.object
 }
 
 const defaultProps = {
   showBackButton: true,
-  isFlat: false
+  isFlat: false,
+  style: {}
 }
 
 function PageHeader(props) {
@@ -38,7 +40,7 @@ function PageHeader(props) {
   }
 
   return (
-    <Container isFlat={props.isFlat}>
+    <Container isFlat={props.isFlat} style={props.style}>
       {title && (
         <PageTitle
           showBackButton={props.showBackButton}

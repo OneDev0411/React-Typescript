@@ -7,8 +7,7 @@ import _ from 'underscore'
 import { Item } from './Item'
 import SearchInput from './SearchInput'
 import Loading from '../../../../../components/Partials/Loading'
-import { searchAllDeals } from '../../../../../models/Deal/search'
-import { getActiveTeamId } from '../../../../../utils/user-teams'
+import { searchDeals } from '../../../../../models/Deal/search'
 
 const ListContainer = styled.div`
   position: relative;
@@ -65,8 +64,7 @@ class Body extends Component {
     try {
       this.setState({ isSearching: true, error: false })
 
-      const brandId = getActiveTeamId(this.props.user)
-      const items = await searchAllDeals({ query: value, brand: brandId })
+      const items = await searchDeals(this.props.user, value)
 
       if (Array.isArray(items)) {
         this.setState({ items })

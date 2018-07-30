@@ -15,6 +15,7 @@ import submission from './submission'
 import checklist from './checklist'
 import listing from './listing'
 import offer from './offer'
+import ejectDraft from './eject-draft'
 
 export default {
   get: contextHelper,
@@ -33,5 +34,6 @@ export default {
   ...submission,
   ...checklist,
   ...listing,
-  ...offer
+  ...offer,
+  ...ejectDraft
 }

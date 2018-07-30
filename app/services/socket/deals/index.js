@@ -1,8 +1,10 @@
-import _ from 'underscore'
 import Socket from '..'
 import store from '../../../stores'
-import { getDeal, dealArchived } from '../../../store_actions/deals'
+
 import { getActiveTeamACL, getActiveTeamId } from '../../../utils/user-teams'
+
+import { getDeal } from '../../../store_actions/deals'
+import * as actionTypes from '../../../constants/deals'
 
 export default class DealSocket extends Socket {
   constructor(user) {
@@ -84,7 +86,10 @@ export default class DealSocket extends Socket {
    * on delete/archive deal
    */
   onArchiveDeal(dealId) {
-    store.dispatch(dealArchived(dealId))
+    store.dispatch({
+      type: actionTypes.ARCHIVE_DEAL,
+      deal_id: dealId
+    })
   }
 
   /**

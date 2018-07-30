@@ -7,12 +7,9 @@ import RequiredIcon from '../../../../../views/components/SvgIcons/Required/Icon
 const BUYING = 'Buying'
 
 export default class DealAddress extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      showManualAddress: false,
-      showMlsSearch: false
-    }
+  state = {
+    showManualAddress: false,
+    showMlsSearch: false
   }
 
   toggleManualAddressModal() {
@@ -42,13 +39,19 @@ export default class DealAddress extends React.Component {
 
   render() {
     const { showManualAddress, showMlsSearch } = this.state
-    const { hasError, dealAddress, dealSide, onRemoveAddress } = this.props
+    const {
+      isRequired,
+      hasError,
+      dealAddress,
+      dealSide,
+      onRemoveAddress
+    } = this.props
 
     return (
       <div className="form-section deal-address">
         <div className={cn('hero', { hasError })}>
           What is the address of the subject property?&nbsp;
-          <span className="required">*</span>
+          {isRequired && <span className="required">*</span>}
           {hasError && <RequiredIcon />}
         </div>
 

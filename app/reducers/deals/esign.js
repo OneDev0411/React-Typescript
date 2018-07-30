@@ -1,4 +1,4 @@
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 
 const initialState = {
   showCompose: false,
@@ -9,25 +9,25 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.SHOW_ATTACHMENTS:
+    case actionTypes.SHOW_ATTACHMENTS:
       return {
         ...state,
         showAttachments: action.display
       }
 
-    case types.SHOW_COMPOSE:
+    case actionTypes.SHOW_COMPOSE:
       return {
         ...state,
         showCompose: action.display
       }
 
-    case types.ADD_ATTACHMENT:
+    case actionTypes.ADD_ATTACHMENT:
       return {
         ...state,
         attachments: [...state.attachments, action.attachment]
       }
 
-    case types.REMOVE_ATTACHMENT:
+    case actionTypes.REMOVE_ATTACHMENT:
       return {
         ...state,
         attachments: state.attachments.filter(
@@ -35,19 +35,19 @@ export default (state = initialState, action) => {
         )
       }
 
-    case types.SET_RECIPIENT:
+    case actionTypes.SET_RECIPIENT:
       return {
         ...state,
         recipients: [...state.recipients, action.recipient]
       }
 
-    case types.REMOVE_RECIPIENT:
+    case actionTypes.REMOVE_RECIPIENT:
       return {
         ...state,
         recipients: _.filter(state.recipients, recp => recp.role !== action.id)
       }
 
-    case types.CLOSE_ESIGN_WIZARD:
+    case actionTypes.CLOSE_ESIGN_WIZARD:
       return initialState
 
     default:

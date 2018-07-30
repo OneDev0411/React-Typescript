@@ -20,11 +20,8 @@ const ContextValue = ({ name, date, onRemove, onEdit }) => (
 )
 
 export default class extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selectedField: null
-    }
+  state = {
+    selectedField: null
   }
 
   setSelectedField(field) {
@@ -55,7 +52,13 @@ export default class extends React.Component {
   }
 
   render() {
-    const { hasError, contexts, fields, onChangeContext } = this.props
+    const {
+      areContextsRequired,
+      hasError,
+      contexts,
+      fields,
+      onChangeContext
+    } = this.props
     const { selectedField } = this.state
 
     return (
@@ -65,9 +68,12 @@ export default class extends React.Component {
           {hasError && <RequiredIcon />}
         </div>
 
-        <div className="hero-description">
-          Those marked with an <span className="required">*</span> are required.
-        </div>
+        {areContextsRequired && (
+          <div className="hero-description">
+            Those marked with an <span className="required">*</span> are
+            required.
+          </div>
+        )}
 
         {_.map(fields, field => (
           <div key={field.name}>
@@ -83,7 +89,8 @@ export default class extends React.Component {
                           _.isUndefined(contexts[field.name])
                       })}
                     >
-                      {field.label} {field.mandatory && <sup>*</sup>}
+                      {field.label}{' '}
+                      {areContextsRequired && field.mandatory && <sup>*</sup>}
                     </span>
                   </div>
                   <Input
@@ -128,7 +135,8 @@ export default class extends React.Component {
                           hasError: hasError && field.mandatory
                         })}
                       >
-                        {field.label} {field.mandatory && <sup>*</sup>}
+                        {field.label}{' '}
+                        {areContextsRequired && field.mandatory && <sup>*</sup>}
                       </span>
                     </div>
                   </div>
