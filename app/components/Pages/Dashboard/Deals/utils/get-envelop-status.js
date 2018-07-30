@@ -11,8 +11,7 @@ function getRecipientsNames(recipients) {
     .join(', ')
 }
 
-export function getESignature(props) {
-  const { envelope } = props
+export function getEnvelopeStatus({ envelope }) {
   const { recipients = [] } = envelope
   const recipientsNames = getRecipientsNames(recipients)
 

@@ -19,7 +19,7 @@ import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
 import Search from '../../../../Partials/headerSearch'
 import Upload from '../dashboard/upload'
 import TasksDropDown from '../components/tasks-dropdown'
-import { getESignature } from '../utils/get-eSignature'
+import { getEnvelopeStatus } from '../utils/get-envelop-status'
 
 const EllipsisColumn = styled.div`
   overflow: hidden;
@@ -371,7 +371,9 @@ export class FileManager extends React.Component {
           const envelope = file.envelope
 
           if (envelope) {
-            return <EllipsisColumn>{getESignature(envelope)}</EllipsisColumn>
+            return (
+              <EllipsisColumn>{getEnvelopeStatus(envelope)}</EllipsisColumn>
+            )
           }
 
           return null
