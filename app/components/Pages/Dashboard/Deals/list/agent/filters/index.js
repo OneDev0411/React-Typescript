@@ -20,7 +20,7 @@ import {
 } from '../../styles/filters/styled'
 
 const FilterNames = {
-  Active: ['Active'],
+  Active: ['Active', 'Lease'],
   Drafts: ['Drafts'],
   Pending: [
     'Active Contingent',
