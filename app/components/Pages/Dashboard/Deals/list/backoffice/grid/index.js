@@ -102,6 +102,7 @@ class Grid extends React.Component {
     return Object.values(deals).filter(
       deal =>
         deal.attention_requests > 0 &&
+        deal.is_draft === false &&
         deal.inboxes &&
         deal.inboxes.includes(activeFilter)
     )
