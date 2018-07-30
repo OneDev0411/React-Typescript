@@ -119,7 +119,9 @@ export async function updateStoreBasedOnRemovedContacts(
     if (listInfo.type === 'general') {
       await dispatch(getContacts(page))
     } else {
-      await dispatch(searchContacts(listInfo.filter, page))
+      await dispatch(
+        searchContacts(listInfo.filter, page, null, listInfo.searchText)
+      )
     }
 
     updateUrl(page)

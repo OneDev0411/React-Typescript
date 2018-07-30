@@ -37,6 +37,8 @@ const FollowComponent = ({
 }) => {
   const isFollowing = activeStatuses.length > 0
 
+  return null
+
   return (
     <Downshift
       isOpen={isMenuOpen}
