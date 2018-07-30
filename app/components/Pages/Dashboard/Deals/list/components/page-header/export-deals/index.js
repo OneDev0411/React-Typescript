@@ -100,8 +100,6 @@ class ExportDeals extends React.Component {
     }
   ]
   render() {
-    this.items.map(item => console.log(item.url.length))
-
     return (
       <Dropdown
         renderToggleButton={isOpen => (
