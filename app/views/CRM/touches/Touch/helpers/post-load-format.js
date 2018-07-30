@@ -16,7 +16,7 @@ export async function postLoadFormat(touch, defaultAssociations) {
     title: formatDate(new Date()),
     value: new Date().getTime()
   }
-  let touchTime = defaultTimeOption(null, '08:00 AM')
+  let touchTime = defaultTimeOption(new Date().getTime())
 
   let activity_type = {
     title: 'Call',
