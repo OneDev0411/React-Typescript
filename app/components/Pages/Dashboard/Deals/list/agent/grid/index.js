@@ -110,9 +110,12 @@ class Grid extends React.Component {
       return []
     }
 
-    return Object.values(deals).filter(deal =>
-      Filters[activeFilter || 'All'](deal)
-    )
+    const filterFn =
+      activeFilter && Filters[activeFilter]
+        ? Filters[activeFilter]
+        : Filters.All
+
+    return Object.values(deals).filter(deal => filterFn(deal))
   }
 
   render() {
