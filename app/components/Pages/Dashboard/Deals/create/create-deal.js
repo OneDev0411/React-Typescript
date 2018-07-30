@@ -376,12 +376,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
+      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -940,13 +940,15 @@ class CreateDeal extends React.Component {
                       />
                     )}
 
-                    <DealStatus
-                      isRequired={requiredFields.includes('status')}
-                      hasError={this.hasError('status')}
-                      property_type={dealPropertyType}
-                      dealStatus={dealStatus}
-                      onChangeDealStatus={this.changeDealStatus}
-                    />
+                    {!isDraft && (
+                      <DealStatus
+                        isRequired={requiredFields.includes('status')}
+                        hasError={this.hasError('status')}
+                        property_type={dealPropertyType}
+                        dealStatus={dealStatus}
+                        onChangeDealStatus={this.changeDealStatus}
+                      />
+                    )}
                   </Fragment>
                 )}
 
