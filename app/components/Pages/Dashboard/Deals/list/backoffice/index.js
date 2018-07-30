@@ -56,6 +56,7 @@ class BackofficeTable extends React.Component {
 
         <PageContent>
           <Header
+            title={params.filter}
             onMenuTriggerChange={this.toggleSideMenu}
             showCreateDeal={false}
           />
@@ -85,6 +86,7 @@ function mapStateToProps({ user, deals }) {
   return { user, isFetchingDeals: deals.properties.isFetchingDeals }
 }
 
-export default connect(mapStateToProps, { searchDeals, getDeals })(
-  BackofficeTable
-)
+export default connect(
+  mapStateToProps,
+  { searchDeals, getDeals }
+)(BackofficeTable)

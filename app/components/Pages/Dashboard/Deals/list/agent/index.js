@@ -56,6 +56,7 @@ class AgentTable extends React.Component {
 
         <PageContent>
           <Header
+            title={params.filter || 'All'}
             showBackButton={false}
             onMenuTriggerChange={this.toggleSideMenu}
           />

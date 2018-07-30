@@ -9,6 +9,7 @@ import ExportDeals from './export-deals'
 
 const Header = ({
   user,
+  title,
   isSideMenuOpen,
   onMenuTriggerChange,
   showCreateDeal = true
@@ -19,7 +20,7 @@ const Header = ({
         tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}
         onClick={onMenuTriggerChange}
       />
-      <PageHeader.Heading>Deals</PageHeader.Heading>
+      <PageHeader.Heading>{title}</PageHeader.Heading>
     </PageHeader.Title>
 
     <PageHeader.Menu>
