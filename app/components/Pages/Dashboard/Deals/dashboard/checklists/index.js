@@ -3,8 +3,10 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import cn from 'classnames'
 
+import { DraftBanner } from './draft-banner'
 import Tasks from '../tasks'
 import { isBackOffice } from '../../../../../../utils/user-teams'
+import AlertIcon from '../../../../../../views/components/SvgIcons/Alert/AlertIcon'
 
 class Checklist extends React.Component {
   constructor(props) {
@@ -65,6 +67,14 @@ class Checklist extends React.Component {
 
     return (
       <div className="checklists-container" data-simplebar={!isWebkit || null}>
+        {deal.is_draft && (
+          <DraftBanner>
+            <AlertIcon />
+            Your Notify Office requests have been saved and will be submitted
+            when your deal goes live.
+          </DraftBanner>
+        )}
+
         <div>
           {!deal.checklists && (
             <div className="loading">
