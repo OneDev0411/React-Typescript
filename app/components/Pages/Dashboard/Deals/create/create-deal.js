@@ -73,8 +73,8 @@ class CreateDeal extends React.Component {
       isDraft: false,
       dealSide: deal.deal_type,
       dealPropertyType: deal.property_type,
-      enderType: Deal.get.field('ender_type') || -1,
-      dealStatus: Deal.get.field('listing_status') || '',
+      enderType: Deal.get.field(deal, 'ender_type') || -1,
+      dealStatus: Deal.get.field(deal, 'listing_status') || '',
       contexts: this.generateContextsFromDeal(deal),
       dealAddress: this.generateAddressFromDeal(deal),
       ...this.generateRolesFromDeal(deal)
