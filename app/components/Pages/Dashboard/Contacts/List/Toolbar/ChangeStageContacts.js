@@ -5,7 +5,7 @@ const MergeContacts = ({ selectedRows }) => (
   <Fragment>
     {selectedRows.length > 0 && (
       <ContactStage
-        fullWidth={false}
+        fullWidth
         defaultSelectedItem={{ label: 'Change Stage', value: 'Change Stage' }}
         style={{
           borderRadius: '3px',
