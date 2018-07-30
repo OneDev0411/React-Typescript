@@ -9,12 +9,9 @@ import { isBackOffice } from '../../../../../../utils/user-teams'
 import AlertIcon from '../../../../../../views/components/SvgIcons/Alert/AlertIcon'
 
 class Checklist extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      showTerminatedChecklists: false,
-      showDeactivatedChecklists: false
-    }
+  state = {
+    showTerminatedChecklists: false,
+    showDeactivatedChecklists: false
   }
 
   componentWillReceiveProps(nextProps) {
