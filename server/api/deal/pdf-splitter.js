@@ -117,7 +117,7 @@ router.post('/deals/pdf-splitter', bodyParser(), async ctx => {
       }
     })
 
-    console.log('[ Splitter ] Uploade Done')
+    console.log('[ Splitter ] Attachment uplaod is done')
 
     // response is a file object
     if (response.statusCode !== 200) {
