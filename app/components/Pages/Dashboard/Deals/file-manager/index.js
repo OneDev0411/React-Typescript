@@ -70,7 +70,10 @@ function mapStateToProps({ deals, user }, props) {
   }
 }
 
-export default connect(mapStateToProps, {
-  getDeal,
-  setUploadFiles
-})(FileManager)
+export default connect(
+  mapStateToProps,
+  {
+    getDeal,
+    setUploadFiles
+  }
+)(FileManager)
