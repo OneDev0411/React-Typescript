@@ -14,14 +14,10 @@ import config from '../../../../../../config/public'
 import { isBackOffice } from '../../../../../utils/user-teams'
 
 class FormViewer extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      file: null,
-      showFactsheet: props.isBackOffice,
-      showComments: props.isBackOffice
-    }
+  state = {
+    file: null,
+    showFactsheet: this.props.isBackOffice,
+    showComments: this.props.isBackOffice
   }
 
   componentDidMount() {
@@ -44,10 +40,10 @@ class FormViewer extends React.Component {
 
   async getFile() {
     const { deal, getDeal, params } = this.props
-    const { type } = params
+    const { type, dealId } = params
 
-    if (!deal.checklists) {
-      getDeal(deal.id)
+    if (!deal || !deal.checklists) {
+      getDeal(dealId)
 
       return null
     }
@@ -211,7 +207,7 @@ class FormViewer extends React.Component {
     const { file, showFactsheet, showComments } = this.state
     const { isBackOffice, deal, tasks, envelopes, params } = this.props
 
-    if (!file) {
+    if (!file || !deal) {
       return (
         <div className="center-middle">
           <i className="fa fa-spin fa-spinner fa-3x" />
