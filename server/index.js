@@ -21,7 +21,7 @@ const app = new Koa()
 const __DEV__ = process.env.NODE_ENV === 'development'
 
 // webpack configs
-const { entry, publicPath } = appConfig.compile
+const { entry, output, publicPath } = appConfig.compile
 
 // app uses proxy
 app.proxy = true
