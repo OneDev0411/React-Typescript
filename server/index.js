@@ -7,6 +7,7 @@ import cookie from 'koa-cookie'
 import path from 'path'
 import webpack from 'webpack'
 import _ from 'underscore'
+import blocked from 'blocked-at'
 
 import config from '../config/private'
 import render from './util/render'
@@ -25,6 +26,18 @@ const { entry, output, publicPath } = appConfig.compile
 
 // app uses proxy
 app.proxy = true
+
+if (!__DEV__) {
+  let result = []
+
+  blocked(
+    (time, stack) => {
+      result = result.concat(stack)
+      console.log(time, stack)
+    },
+    { trimFalsePositives: true, threshold: 500 }
+  )
+}
 
 // handle application errors
 app.use(async (ctx, next) => {
