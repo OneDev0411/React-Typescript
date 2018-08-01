@@ -28,11 +28,8 @@ const { entry, output, publicPath } = appConfig.compile
 app.proxy = true
 
 if (!__DEV__) {
-  let result = []
-
   blocked(
     (time, stack) => {
-      result = result.concat(stack)
       console.log(time, stack)
     },
     { trimFalsePositives: true, threshold: 500 }
