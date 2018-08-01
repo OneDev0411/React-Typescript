@@ -21,7 +21,7 @@ const app = new Koa()
 const __DEV__ = process.env.NODE_ENV === 'development'
 
 // webpack configs
-const { entry, output, publicPath } = appConfig.compile
+const { entry, publicPath } = appConfig.compile
 
 // app uses proxy
 app.proxy = true
@@ -59,16 +59,18 @@ app.use(render())
  */
 app.keys = ['r3ch4t@re4ct_rocks!!!']
 
-app.use(session(
-  {
-    key: 'rechat-webapp:session',
-    maxAge: 60 * 86400 * 1000, // 60 days
-    overwrite: true,
-    httpOnly: true,
-    signed: true
-  },
-  app
-))
+app.use(
+  session(
+    {
+      key: 'rechat-webapp:session',
+      maxAge: 60 * 86400 * 1000, // 60 days
+      overwrite: true,
+      httpOnly: true,
+      signed: true
+    },
+    app
+  )
+)
 
 /**
  * middleware for time and initial appStore
@@ -107,10 +109,14 @@ if (__DEV__) {
 
   app.use(mount(publicPath, serve(path.join(entry, publicPath))))
 } else {
-  app.use(mount(serve(path.join(output), {
-    gzip: true,
-    maxage: 86400000
-  })))
+  // app.use(
+  //   mount(
+  //     serve(path.join(output), {
+  //       gzip: true,
+  //       maxage: 86400000
+  //     })
+  //   )
+  // )
 }
 
 // parse pages
