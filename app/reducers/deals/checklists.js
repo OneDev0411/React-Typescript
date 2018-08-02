@@ -1,15 +1,16 @@
-import types from '../../constants/deals'
+import * as actionTypes from '../../constants/deals'
 import _ from 'underscore'
 
 export default (state = null, action) => {
   switch (action.type) {
-    case types.GET_DEALS_FAILED:
+    case actionTypes.GET_DEALS_FAILED:
+    case actionTypes.CLEAR_DEALS:
       return {}
 
-    case types.ARCHIVE_DEAL:
+    case actionTypes.ARCHIVE_DEAL:
       return _.omit(state, checklist => checklist.deal === action.deal_id)
 
-    case types.DELETE_TASK:
+    case actionTypes.DELETE_TASK:
       return {
         ...state,
         [action.checklistId]: {
@@ -18,24 +19,27 @@ export default (state = null, action) => {
         }
       }
 
-    case types.GET_CHECKLISTS:
+    case actionTypes.GET_CHECKLISTS:
       return {
         ...state,
         ...action.checklists
       }
 
-    case types.UPDATE_CHECKLIST:
+    case actionTypes.UPDATE_CHECKLIST:
       return {
         ...state,
         [action.id]: action.checklist
       }
 
-    case types.CREATE_TASK:
+    case actionTypes.CREATE_TASK:
       return {
         ...state,
         [action.list_id]: {
           ...state[action.list_id],
-          tasks: _.uniq([action.task.id, ...(state[action.list_id].tasks || [])])
+          tasks: _.uniq([
+            action.task.id,
+            ...(state[action.list_id].tasks || [])
+          ])
         }
       }
 

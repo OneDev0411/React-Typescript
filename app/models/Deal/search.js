@@ -2,21 +2,6 @@ import Fetch from '../../services/fetch'
 import { getActiveTeamId, getActiveTeamACL } from '../../utils/user-teams'
 
 /**
- * Search through all deals
- */
-export async function searchAllDeals(query, isBackOffice) {
-  let url = '/deals/filter'
-
-  if (isBackOffice) {
-    url += '?associations[]=deal.created_by&associations[]=deal.brand'
-  }
-
-  const response = await new Fetch().post(url).send(query)
-
-  return response.body.data
-}
-
-/**
  * get deal by id
  */
 export async function getById(id) {
@@ -35,12 +20,40 @@ export async function getById(id) {
 }
 
 /**
+ * search deals
+ */
+export async function searchDeals(user, value) {
+  try {
+    const isBackOffice = getActiveTeamACL(user).includes('BackOffice')
+
+    let url = '/deals/filter'
+
+    if (isBackOffice) {
+      url += '?associations[]=deal.created_by&associations[]=deal.brand'
+    }
+
+    const response = await new Fetch().post(url).send({
+      query: value,
+      brand: getActiveTeamId(user)
+    })
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
  * get deals list
  */
-export async function getAll(user = {}, backoffice = false) {
+export async function getAll(user) {
   const { access_token } = user
   const brandId = getActiveTeamId(user)
   const acl = getActiveTeamACL(user)
+  const isBackOffice = acl.includes('BackOffice')
+  const isAgent = acl.includes('Deals')
+
+  const hasAccess = isAgent || isBackOffice
 
   let endpoint
   let params
@@ -49,15 +62,12 @@ export async function getAll(user = {}, backoffice = false) {
     throw new Error('This user does not belong to any brand')
   }
 
-  if (
-    (backoffice && acl.indexOf('BackOffice') === -1) ||
-    (!backoffice && acl.indexOf('Deals') === -1)
-  ) {
+  if (!hasAccess) {
     throw new Error('Access denied to brand resource')
   }
 
   // backoffice and agent has different endpoints and associations
-  if (backoffice) {
+  if (isBackOffice) {
     endpoint = `/brands/${brandId}/deals/inbox`
     params = 'associations[]=deal.brand&'
     params += 'associations[]=deal.created_by&'
@@ -90,5 +100,5 @@ export async function getAll(user = {}, backoffice = false) {
 export default {
   getAll,
   getById,
-  searchAllDeals
+  searchDeals
 }

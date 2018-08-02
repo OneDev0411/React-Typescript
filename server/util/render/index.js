@@ -17,7 +17,11 @@ function fetch(store, renderProps) {
 }
 
 function sanitize(state) {
-  return escape(JSON.stringify(state))
+  return new Promise(resolve => {
+    const newState = escape(JSON.stringify(state))
+
+    resolve(newState)
+  })
 }
 
 async function display(file, renderProps) {
@@ -72,7 +76,7 @@ async function display(file, renderProps) {
   }
 
   // get store initial data
-  const store_data = sanitize(store.getState())
+  const store_data = await sanitize(store.getState())
 
   if (['production', 'stage'].indexOf(process.env.NODE_ENV) > -1) {
     await this.render(file || 'app', {

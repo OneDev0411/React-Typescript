@@ -391,7 +391,7 @@ class CreateOffer extends React.Component {
       message: 'Cancel offer creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: this.backToDeal
     })
   }

@@ -9,7 +9,7 @@ import { selectListings } from '../../../../../reducers/listings'
 
 class Favorites extends Component {
   componentDidMount() {
-    const { user, listings, isFetching, getFavorites } = this.props
+    const { user, isFetching, getFavorites } = this.props
 
     if (user && !isFetching) {
       getFavorites(user)
@@ -28,7 +28,7 @@ class Favorites extends Component {
         </div>
         <div className="l-listings__panel">
           <ListingsPanel
-            tabName="FAVORITES"
+            tabName="favorites"
             listings={listings}
             isLoggedIn={isLoggedIn}
             activePanel={activePanel}

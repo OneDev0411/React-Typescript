@@ -1,14 +1,22 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import LazyLoad from 'react-lazy-load'
-import listingUtils from '../../../../../../../utils/listing'
-
+import styled from 'styled-components'
 import FavoriteHeart from '../../FavoriteHeart'
+import Follow from '../../../../../../../views/components/Follow'
 import prepareProps from '../prepareListingViewItemProps'
 import { setMapHoveredMarkerId } from '../../../../../../../store_actions/listings/map'
+import { listingStatuses } from '../../../../../../../constants/listings/listing'
+import changeListingFollowStatuses from '../../../../../../../store_actions/listings/change-listing-follow-status'
+
+const FollowContainer = styled.div`
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+`
 
 const ListingCard = ({
   user,
@@ -19,11 +27,12 @@ const ListingCard = ({
   children,
   activePanel,
   onMouseEnter,
-  onMouseLeave
+  onMouseLeave,
+  onClickFollow
 }) => {
   const props = prepareProps(user, listing)
   const mouseEventIsActive =
-    tabName && tabName !== 'ALERTS' && activePanel && activePanel === 'map'
+    tabName && tabName !== 'alerts' && activePanel && activePanel === 'map'
 
   const target = user && !isWidget ? '' : '_blank'
 
@@ -33,7 +42,9 @@ const ListingCard = ({
         style={props.backgroundImage}
         className="c-listing-card__inner"
         onMouseLeave={mouseEventIsActive ? onMouseLeave : () => {}}
-        onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : () => {}}
+        onMouseEnter={
+          mouseEventIsActive ? () => onMouseEnter(listing.id) : () => {}
+        }
       >
         <div className="c-listing-card__content-wrapper">
           {props.statusColor && (
@@ -55,7 +66,9 @@ const ListingCard = ({
             &nbsp;&nbsp;&middot;&nbsp;&nbsp;
             <span>{props.sqft} Sqft</span>
             {props.lotSizeArea && (
-              <span>&nbsp;&nbsp;&middot;&nbsp;&nbsp;{props.lotSizeArea} Acres</span>
+              <span>
+                &nbsp;&nbsp;&middot;&nbsp;&nbsp;{props.lotSizeArea} Acres
+              </span>
             )}
             &nbsp;&nbsp;&middot;&nbsp;&nbsp;
             <span>{props.builtYear}</span>
@@ -79,10 +92,25 @@ const ListingCard = ({
           />
         )}
         {user && (
-          <div className="c-listing-card__favorite-heart">
-            <FavoriteHeart listing={listing} />
-          </div>
+          <Fragment>
+            <div className="c-listing-card__favorite-heart">
+              <FavoriteHeart listing={listing} />
+            </div>
+            <FollowContainer>
+              <Follow
+                statuses={listingStatuses}
+                activeStatuses={
+                  (listing.user_listing_notification_setting &&
+                    listing.user_listing_notification_setting.status) ||
+                  []
+                }
+                isFetching={listing.isFetching}
+                onClick={onClickFollow}
+              />
+            </FollowContainer>
+          </Fragment>
         )}
+
         {children}
       </div>
     </LazyLoad>
@@ -90,13 +118,27 @@ const ListingCard = ({
 }
 
 export default compose(
-  connect(({ user }) => ({ user }), { setMapHoveredMarkerId }),
+  connect(
+    ({ user }) => ({ user }),
+    {
+      setMapHoveredMarkerId,
+      changeListingFollowStatuses
+    }
+  ),
   withHandlers({
     onMouseEnter: ({ setMapHoveredMarkerId, tabName }) => id => {
       setMapHoveredMarkerId(tabName, id)
     },
     onMouseLeave: ({ setMapHoveredMarkerId, tabName }) => () => {
       setMapHoveredMarkerId(tabName, -1)
+    },
+    onClickFollow: ({
+      changeListingFollowStatuses,
+      listing,
+      tabName
+    }) => statuses => {
+      !listing.isFetching &&
+        changeListingFollowStatuses(listing.id, statuses, tabName)
     }
   })
 )(ListingCard)

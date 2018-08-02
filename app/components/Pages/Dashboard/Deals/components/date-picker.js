@@ -3,11 +3,8 @@ import { Modal, Button } from 'react-bootstrap'
 import DatePicker from 'react-day-picker'
 
 export default class extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selectedDate: null
-    }
+  state = {
+    selectedDate: null
   }
 
   onDateChange(date) {
@@ -37,11 +34,10 @@ export default class extends React.Component {
     this.setState({ selectedDate: null }, onClose)
   }
 
-  onSelectDate() {
+  onSelectDate(date) {
     const { onSelectDate } = this.props
-    const { selectedDate } = this.state
 
-    onSelectDate(selectedDate)
+    onSelectDate(date)
     this.setState({ selectedDate: null })
   }
 
@@ -50,13 +46,9 @@ export default class extends React.Component {
     const { selectedDate } = this.state
     const date = this.getSelectedDate()
 
-    if (!show) {
-      return false
-    }
-
     return (
       <Modal
-        show
+        show={show}
         onHide={() => this.onClose()}
         dialogClassName="modal-deal-date-picker"
         backdrop="static"
@@ -76,7 +68,7 @@ export default class extends React.Component {
 
           <Button
             className="deal-button"
-            onClick={() => this.onSelectDate(selectedDate)}
+            onClick={() => this.onSelectDate(selectedDate || date)}
             disabled={!date}
           >
             {saveText || 'Update'}

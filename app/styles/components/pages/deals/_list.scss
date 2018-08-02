@@ -9,7 +9,7 @@
 .list-empty,
 .deals-error {
   text-align: center;
-  margin-top: 17%;
+  margin-top: 5%;
   img {
     width: 91px;
     margin-bottom: 21px;
@@ -20,10 +20,10 @@
     margin-bottom: 28px;
   }
   .title {
-    font-size: 17px;
-    font-weight: 600;
     color: #62778c;
     margin-bottom: 10px;
+    font-size: 26px;
+    font-weight: bold;
   }
 
   .descr {
@@ -39,18 +39,6 @@
     margin-left: 5px;
     &:hover {
       text-decoration: underline;
-    }
-  }
-
-  &.backoffice {
-    margin-top: 0;
-    position: fixed;
-    top: 50%;
-    left: calc(50% + #{$app-sidenav-width}/2);
-    transform: translate(-50%, -50%);
-    .title {
-      font-size: 26px;
-      font-weight: bold;
     }
   }
 

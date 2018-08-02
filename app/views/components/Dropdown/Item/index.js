@@ -5,6 +5,7 @@ export const Item = styled.div`
   line-height: 1em;
   padding: 0.5em 1em;
   white-space: nowrap;
+  font-size: 1.6rem;
   font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
   background-color: ${({ isActive }) => (isActive ? 'lightgrey' : 'white')};
 

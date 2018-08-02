@@ -1,16 +1,16 @@
 .c-alertList__item {
   position: relative;
-  padding: 2rem;
+  padding: 16px 8px 16px 16px;
   border-bottom: 1px solid #ececec;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  text-decoration: none;
+  &:hover, &:focus {
+    text-decoration: none;
+}
   &--selected {
     background-color: #f6f6f6;
-  }
-}
-
-.c-alertList__item__link {
-  .c-alertList__item--selected > & {
-    cursor: initial;
-    pointer-events: none;
   }
 }
 
@@ -34,26 +34,18 @@
 
 .c-alertList__item__title {
   margin-top: 0;
+  margin-bottom: 8px;
   line-height: 1;
   font-weight: normal;
   font-size: 1.6rem;
-  color: #4a4a4a;
+  font-weight: 600;
+  color: #263445;
 }
 
 .c-alertList__item__shared-by {
-  margin-bottom: 0;
-  color: #9b9b9b;
+  margin-bottom: 8px;
   line-height: 1;
-  padding-bottom: 4px;
-  > span {
-    color: lighten(#9b9b9b, 20%);
-  }
-  .c-alertList__item--selected & {
-    color: darken(#9b9b9b, 10%);
-    > span {
-      color: lighten(#9b9b9b, 10%);
-    }
-  }
+  color: #263445;
 }
 
 .c-alertList__item__menu,
@@ -61,15 +53,13 @@
 .c-alertList__item__menu-trigger-btn {
   width: 32px;
   height: 32px;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .c-alertList__item__badge {
-  right: 5rem;
   text-align: center;
   padding-top: 6px;
+  margin-top: -4px;
+  margin-right: 8px;
   color: #fff;
   border-radius: 50%;
 }
@@ -81,8 +71,8 @@
 }
 
 .c-alertList__item__menu-trigger-btn {
+  margin-left: 1rem;
   @extend .c-alertList__item__btn;
-  right: 1rem;
   text-align: center;
   border-radius: 100%;
 
@@ -99,7 +89,8 @@
 }
 
 .c-alertList__item__menu {
-  right: 5rem;
+  position: absolute;
+  right: 1rem;
   width: 200px;
   height: auto;
   display: none;
@@ -108,7 +99,8 @@
   border-radius: 3px;
   background: #fff;
   box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
-
+  z-index: 100;
+  
   .is-open > & {
     display: block;
   }

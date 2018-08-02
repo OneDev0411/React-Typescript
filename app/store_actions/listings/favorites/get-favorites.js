@@ -8,7 +8,7 @@ const getFavorites = user => (dispatch, getState) => {
   }
 
   dispatch({
-    tabName: 'FAVORITES',
+    tabName: 'favorites',
     type: listingsTypes.FETCH_LISTINGS_REQUEST
   })
 
@@ -16,13 +16,13 @@ const getFavorites = user => (dispatch, getState) => {
     response => {
       dispatch({
         response,
-        tabName: 'FAVORITES',
+        tabName: 'favorites',
         type: listingsTypes.FETCH_LISTINGS_SUCCESS
       })
     },
     ({ message }) => {
       dispatch({
-        tabName: 'FAVORITES',
+        tabName: 'favorites',
         type: listingsTypes.FETCH_LISTINGS_FAILURE,
         message: message || 'Something went wrong.'
       })

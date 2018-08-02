@@ -2,7 +2,6 @@ import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
@@ -21,12 +20,13 @@ const ListingPanel = props => {
   return (
     <div className={panelClassName}>
       <PanelsSwitch activePanel={activePanel} tabName={tabName} />
-      {(tabName !== 'ALERTS' || (tabName === 'ALERTS' && activePanel !== 'map')) && (
+      {(tabName !== 'alerts' ||
+        (tabName === 'alerts' && activePanel !== 'map')) && (
         <div className="l-listings__panel__container">
-          {(tabName !== 'ALERTS' ||
-            (tabName === 'ALERTS' && activePanel === 'table')) && (
-              <PanelHeader {...props} info={listings.info} />
-            )}
+          {(tabName !== 'alerts' ||
+            (tabName === 'alerts' && activePanel === 'table')) && (
+            <PanelHeader {...props} info={listings.info} />
+          )}
           <div className="c-panel__list-container">
             {activePanel === 'table' ? (
               <TableView {...props} />
@@ -41,20 +41,26 @@ const ListingPanel = props => {
 }
 
 const ListingPanelHOC = compose(
-  connect((state, { tabName }) => {
-    const { panels } = state[tabName.toLowerCase()]
+  connect(
+    (state, { tabName }) => {
+      const { panels } = state[tabName.toLowerCase()]
 
-    if (panels) {
-      return { ...panels }
-    }
+      if (panels) {
+        return { ...panels }
+      }
 
-    return null
-  }, actions),
+      return null
+    },
+    actions
+  ),
   withHandlers({
     onClickDropdownItem: ({ setPanelSortingIndex, tabName }) => index => {
       setPanelSortingIndex(tabName, index)
     },
-    onClickSortingDirection: ({ togglePanelSortingDirection, tabName }) => () => {
+    onClickSortingDirection: ({
+      togglePanelSortingDirection,
+      tabName
+    }) => () => {
       togglePanelSortingDirection(tabName)
     }
   }),
@@ -69,7 +75,8 @@ const ListingPanelHOC = compose(
       const sortedListings = _.sortBy(data, listing => {
         const getPropertyValue = prop =>
           ((listing.compact_property && listing.compact_property[prop]) ||
-            (listing.property && listing.property[prop])) * sortingDirection || 0
+            (listing.property && listing.property[prop])) * sortingDirection ||
+          0
 
         const getBathroomValue = () => {
           const { half_bathroom_count, full_bathroom_count } =

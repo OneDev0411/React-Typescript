@@ -86,4 +86,7 @@ class MlsListing extends React.Component {
   }
 }
 
-export default connect(null, { updateListing, confirmation })(MlsListing)
+export default connect(
+  null,
+  { updateListing, confirmation }
+)(MlsListing)

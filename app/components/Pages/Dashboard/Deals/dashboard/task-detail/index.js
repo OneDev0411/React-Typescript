@@ -25,7 +25,7 @@ const TaskManager = ({ deal, task, checklist }) => {
           <Comments deal={deal} task={task} />
         </div>
 
-        <CommentInput key={task.id} task={task} />
+        <CommentInput key={task.id} deal={deal} task={task} />
       </Upload>
     </div>
   )

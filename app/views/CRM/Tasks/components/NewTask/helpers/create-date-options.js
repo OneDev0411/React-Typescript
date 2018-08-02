@@ -1,5 +1,6 @@
 import fecha from 'fecha'
-import { setTime } from './set-time'
+
+import { setTime } from '../../../../../../utils/set-time'
 
 /**
  * Creating date field options

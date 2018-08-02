@@ -9,6 +9,8 @@ import {
   approveContext
 } from '../../../../../../../store_actions/deals'
 
+import { isBackOffice } from '../../../../../../../utils/user-teams'
+
 class Table extends React.Component {
   constructor(props) {
     super(props)
@@ -126,8 +128,8 @@ class Table extends React.Component {
 }
 
 export default connect(
-  ({ deals }) => ({
-    isBackOffice: deals.backoffice
+  ({ user }) => ({
+    isBackOffice: isBackOffice(user)
   }),
   { updateContext, approveContext }
 )(Table)

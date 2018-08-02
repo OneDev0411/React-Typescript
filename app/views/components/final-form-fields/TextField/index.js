@@ -29,16 +29,18 @@ TextField.propTypes = {
   parse: PropTypes.func,
   placeholder: PropTypes.string,
   required: PropTypes.bool,
+  style: PropTypes.shape(),
   validate: PropTypes.func
 }
 
 TextField.defaultProps = {
-  format: t => t,
+  format: t => t || '',
   hint: '',
   labelNote: '',
-  parse: t => t,
+  parse: t => t || '',
   placeholder: '',
   required: false,
+  style: {},
   validate: () => undefined
 }
 
@@ -55,7 +57,7 @@ export function TextField(props) {
         const hasError = meta.error && meta.touched
 
         return (
-          <Container>
+          <Container style={props.style}>
             <Label htmlFor={id} required={props.required}>
               {props.label}
               {props.labelNote &&

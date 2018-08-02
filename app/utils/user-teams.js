@@ -2,7 +2,7 @@ import cookie from 'js-cookie'
 
 const ACTIVE_TEAM_COOKIE = 'rechat-active-team'
 
-export function getActiveTeam(user) {
+export function getActiveTeam(user = {}) {
   const { teams } = user
 
   if (!teams) {

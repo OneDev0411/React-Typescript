@@ -10,6 +10,8 @@ import {
   updateDealNotifications
 } from '../../../../../../store_actions/deals'
 
+import { isBackOffice } from '../../../../../../utils/user-teams'
+
 const List = ({
   tasks,
   rooms,
@@ -77,7 +79,9 @@ const List = ({
                     <div className="icon" />
                     <div className="title">{task.title}</div>
 
-                    {hasStatus && <TaskStatus task={task} />}
+                    {hasStatus && (
+                      <TaskStatus task={task} isDraft={deal.is_draft} />
+                    )}
 
                     {room.new_notifications > 0 && (
                       <div className="notification">
@@ -101,11 +105,11 @@ const List = ({
 }
 
 export default connect(
-  ({ deals, chatroom }) => ({
+  ({ deals, chatroom, user }) => ({
     rooms: chatroom.rooms,
     tasks: deals.tasks,
-    selectedTask: deals.selectedTask,
-    isBackOffice: deals.backoffice
+    selectedTask: deals.properties.selectedTask,
+    isBackOffice: isBackOffice(user)
   }),
   { setSelectedTask, updateDealNotifications }
 )(List)

@@ -99,6 +99,21 @@ export function getAddress(deal, roles) {
   return address
 }
 
+/**
+ * a helper that extracts short address from deal
+ */
+export function getShortAddress(deal, roles) {
+  const address = deal.listing
+    ? deal.mls_context.street_address
+    : getField(deal, 'street_address')
+
+  if (!address || address.length === 0) {
+    return getClientNames(deal, roles)
+  }
+
+  return address
+}
+
 export function getStatus(deal) {
   return deal.deleted_at ? 'Archived' : getField(deal, 'listing_status')
 }
@@ -163,6 +178,7 @@ export default {
   formattedPrice: getFormattedPrice,
   clientNames: getClientNames,
   status: getStatus,
+  shortAddress: getShortAddress,
   address: getAddress,
   field: getField,
   context: getContext,

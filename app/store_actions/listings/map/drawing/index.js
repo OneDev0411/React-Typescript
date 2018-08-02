@@ -45,7 +45,7 @@ const setDrawingManager = (dispatch, getState) => {
 
 export const activeDrawing = isDrawing => (dispatch, getState) => {
   dispatch({
-    tabName: 'SEARCH',
+    tabName: 'search',
     type: types.ACTIVE_DRAWING
   })
 
@@ -58,7 +58,7 @@ export const inactiveDrawing = () => dispatch => {
   }
 
   dispatch({
-    tabName: 'SEARCH',
+    tabName: 'search',
     type: types.INACTIVE_DRAWING
   })
 }
@@ -67,7 +67,7 @@ export const removePolygon = polygon => (dispatch, getState) => {
   polygon.setMap(null)
 
   dispatch({
-    tabName: 'SEARCH',
+    tabName: 'search',
     type: types.REMOVE_POLYGON
   })
 
@@ -81,6 +81,6 @@ export const removePolygon = polygon => (dispatch, getState) => {
 
 export const setPolygon = polygon => ({
   polygon,
-  tabName: 'SEARCH',
+  tabName: 'search',
   type: types.SET_POLYGON
 })

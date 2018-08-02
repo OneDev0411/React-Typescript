@@ -46,8 +46,8 @@ export function Toolbar(props) {
           </button>
         </div>
       )}
-      {/* <MergeContacts selectedRows={props.selectedRows} /> */}
-      {/* <ChangeStageContacts selectedRows={props.selectedRows} /> */}
+      <MergeContacts selectedRows={props.selectedRows} />
+      <ChangeStageContacts selectedRows={props.selectedRows} />
     </Flex>
   )
 }

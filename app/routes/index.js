@@ -8,9 +8,6 @@ import UserIsNotAuthenticated from './userIsNotAuthenticated'
 // actions
 import { getDeals, getContexts } from '../store_actions/deals'
 
-// utils
-import { hasUserAccess } from '../utils/user-teams'
-
 // Containers
 import AppLayout from '../components/App'
 
@@ -112,7 +109,7 @@ const AsyncDealsLayout = Load({
 
     return batchActions([
       await dispatch(getContexts(user)),
-      await dispatch(getDeals(user, hasUserAccess(user, 'BackOffice')))
+      await dispatch(getDeals(user))
     ])
   }
 })
@@ -197,6 +194,15 @@ const AsyncCrmTasksList = Load({
 const AsyncCrmTask = Load({
   loader: () =>
     import('../views/CRM/Tasks/TaskPage' /* webpackChunkName: "crm_task_page" */)
+})
+
+/* ==================================== */
+//  CRM Touches
+/* ==================================== */
+
+const AsyncCrmTouchPage = Load({
+  loader: () =>
+    import('../views/CRM/touches/TouchPage' /* webpackChunkName: "crm_task_page" */)
 })
 
 /* ==================================== */
@@ -411,6 +417,8 @@ export default (
       <Route path="/crm/tasks" component={AsyncCrmTasksList} />
       <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
 
+      <Route path="/crm/touches/:id" component={AsyncCrmTouchPage} />
+
       <Route path="/dashboard/calendar" component={AsyncCalendar} />
 
       <Route
@@ -418,7 +426,10 @@ export default (
         component={AsyncDealsLayout}
       >
         <IndexRoute component={AsyncDealsList} />
-        <Route path="/dashboard/deals/create" component={AsyncDealCreate} />
+        <Route
+          path="/dashboard/deals/create(/:id)"
+          component={AsyncDealCreate}
+        />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
         <Route
           path="/dashboard/deals/:id/files"

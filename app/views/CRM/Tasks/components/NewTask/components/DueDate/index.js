@@ -1,11 +1,12 @@
 import React from 'react'
 
-import DateTimeField from '../DateTimeField'
 import { getTime } from '../../../../../../../utils/get-time'
 import { getTimes } from '../../../../../../../utils/get-times'
-import { getTodayDate } from '../../helpers/get-today-date'
+import { todayDate } from '../../../../../../../utils/today-date'
 
-const today = getTodayDate()
+import { DateTimeField } from '../../../../../../components/final-form-fields/DateTimeField'
+
+const today = todayDate()
 
 const tomorrow = today + 24 * 60 * 60 * 1000
 
