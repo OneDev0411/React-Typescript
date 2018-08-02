@@ -77,7 +77,7 @@ class CommentCreate extends React.Component {
         if (deal.is_draft) {
           this.props.confirmation({
             description:
-              "We've captured your Notify Office request. As soon as this deal goes live, we'll forward it on to your back office.",
+              'We\'ve captured your Notify Office request. As soon as this deal goes live, we\'ll forward it on to your back office.',
             confirmLabel: 'Got it. Thanks.',
             hideCancelButton: true
           })
@@ -93,6 +93,8 @@ class CommentCreate extends React.Component {
         })
       }
     } catch (e) {
+      console.log(e)
+
       notify({
         message: 'Can not complete this action. try again',
         status: 'error',

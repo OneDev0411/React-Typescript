@@ -100,6 +100,7 @@ export default class extends React.Component {
 
               <CommentInput
                 autoFocus={false}
+                deal={deal}
                 task={task}
                 onFocus={() =>
                   this.setState({ disableKeyboardShortcuts: true })
