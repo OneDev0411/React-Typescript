@@ -17,10 +17,10 @@ export default ({ dealHasPrimaryOffer, offerType, onChangeOfferType }) => (
       onClick={() => !dealHasPrimaryOffer && onChangeOfferType('primary')}
     />
 
-    <RadioButton
+    {/* <RadioButton
       selected={offerType === 'backup'}
       title="Backup Offer"
       onClick={() => onChangeOfferType('backup')}
-    />
+    /> */}
   </div>
 )
