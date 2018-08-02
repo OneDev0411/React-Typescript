@@ -1,4 +1,5 @@
 export default {
+  height: '100%',
   styleManager: {
     sectors: [
       {
