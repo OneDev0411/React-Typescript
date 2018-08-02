@@ -75,7 +75,25 @@ class BackofficeFilters extends React.Component {
   }
 
   render() {
-    const activeFilter = this.props.activeFilter
+    const { deals, searchCriteria, activeFilter } = this.props
+
+    if (searchCriteria) {
+      return (
+        <Container>
+          <ListTitle>List</ListTitle>
+
+          <ListItem isSelected>
+            <ListItemName>Search Results</ListItemName>
+
+            <ListIconContainer>
+              <BadgeCounter>
+                {deals ? Object.keys(deals).length : 0}
+              </BadgeCounter>
+            </ListIconContainer>
+          </ListItem>
+        </Container>
+      )
+    }
 
     return (
       <Container>

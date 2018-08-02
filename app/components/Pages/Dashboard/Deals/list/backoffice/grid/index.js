@@ -93,10 +93,14 @@ class Grid extends React.Component {
   }
 
   get Data() {
-    const { deals, activeFilter } = this.props
+    const { deals, activeFilter, searchCriteria } = this.props
 
     if (!deals) {
       return []
+    }
+
+    if (searchCriteria.length > 0) {
+      return Object.values(deals)
     }
 
     return Object.values(deals).filter(
