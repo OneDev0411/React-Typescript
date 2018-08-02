@@ -19,9 +19,8 @@ const Name = styled.div`
   font-weight: 500;
 `
 
-const Address = ({ deal, roles }) => {
+const Address = ({ deal }) => {
   const photo = Deal.get.field(deal, 'photo')
-  const address = Deal.get.shortAddress(deal, roles)
 
   return (
     <Container>
@@ -30,7 +29,7 @@ const Address = ({ deal, roles }) => {
         hasPhoto={photo !== null}
         alt=""
       />
-      <Name>{address}</Name>
+      <Name>{deal.title}</Name>
     </Container>
   )
 }
