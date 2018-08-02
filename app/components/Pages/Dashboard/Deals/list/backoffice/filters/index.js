@@ -77,10 +77,11 @@ class BackofficeFilters extends React.Component {
   render() {
     const { deals, searchCriteria, activeFilter } = this.props
 
+    // don't show backoffice filters when user is searching something
     if (searchCriteria) {
       return (
         <Container>
-          <ListTitle>List</ListTitle>
+          <ListTitle>Lists</ListTitle>
 
           <ListItem isSelected>
             <ListItemName>Search Results</ListItemName>
