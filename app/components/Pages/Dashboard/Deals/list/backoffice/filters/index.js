@@ -65,7 +65,8 @@ class BackofficeFilters extends React.Component {
       if (
         deal.inboxes &&
         deal.inboxes.includes(tabName) &&
-        deal.attention_requests > 0
+        deal.attention_requests > 0 &&
+        deal.is_draft !== false
       ) {
         counter += 1
       }
