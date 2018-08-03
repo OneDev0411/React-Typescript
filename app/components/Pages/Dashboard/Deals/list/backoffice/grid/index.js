@@ -99,8 +99,10 @@ class Grid extends React.Component {
       return []
     }
 
+    // when user searching something in backoffice, we should show all
+    // deals except draft items
     if (searchCriteria.length > 0) {
-      return Object.values(deals)
+      return Object.values(deals).filter(deal => deal.is_draft === false)
     }
 
     return Object.values(deals).filter(

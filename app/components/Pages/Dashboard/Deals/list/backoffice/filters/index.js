@@ -89,7 +89,10 @@ class BackofficeFilters extends React.Component {
 
             <ListIconContainer>
               <BadgeCounter>
-                {deals ? Object.keys(deals).length : 0}
+                {deals
+                  ? Object.values(deals).filter(deal => deal.is_draft === false)
+                      .length
+                  : 0}
               </BadgeCounter>
             </ListIconContainer>
           </ListItem>
