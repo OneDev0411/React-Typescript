@@ -65,7 +65,8 @@ class BackofficeFilters extends React.Component {
       if (
         deal.inboxes &&
         deal.inboxes.includes(tabName) &&
-        deal.attention_requests > 0
+        deal.attention_requests > 0 &&
+        deal.is_draft === false
       ) {
         counter += 1
       }
@@ -75,7 +76,29 @@ class BackofficeFilters extends React.Component {
   }
 
   render() {
-    const activeFilter = this.props.activeFilter
+    const { deals, searchCriteria, activeFilter } = this.props
+
+    // don't show backoffice filters when user is searching something
+    if (searchCriteria) {
+      return (
+        <Container>
+          <ListTitle>Lists</ListTitle>
+
+          <ListItem isSelected>
+            <ListItemName>Search Results</ListItemName>
+
+            <ListIconContainer>
+              <BadgeCounter>
+                {deals
+                  ? Object.values(deals).filter(deal => deal.is_draft === false)
+                      .length
+                  : 0}
+              </BadgeCounter>
+            </ListIconContainer>
+          </ListItem>
+        </Container>
+      )
+    }
 
     return (
       <Container>

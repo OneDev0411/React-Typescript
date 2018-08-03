@@ -18,7 +18,8 @@ import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
 
 class BackofficeTable extends React.Component {
   state = {
-    isSideMenuOpen: true
+    isSideMenuOpen: true,
+    searchCriteria: ''
   }
 
   toggleSideMenu = () =>
@@ -32,6 +33,10 @@ class BackofficeTable extends React.Component {
     if (isFetchingDeals) {
       return false
     }
+
+    this.setState({
+      searchCriteria: value
+    })
 
     if (value.length === 0) {
       return getDeals(user)
@@ -51,7 +56,10 @@ class BackofficeTable extends React.Component {
           isSideMenuOpen={isSideMenuOpen}
           isOpen={isSideMenuOpen}
         >
-          <BackofficeFilters activeFilter={params.filter} />
+          <BackofficeFilters
+            activeFilter={params.filter}
+            searchCriteria={this.state.searchCriteria}
+          />
         </Menu>
 
         <PageContent>
@@ -74,7 +82,10 @@ class BackofficeTable extends React.Component {
               />
             </SearchContainer>
 
-            <Grid activeFilter={params.filter} />
+            <Grid
+              activeFilter={params.filter}
+              searchCriteria={this.state.searchCriteria}
+            />
           </GridContainer>
         </PageContent>
       </PageContainer>
