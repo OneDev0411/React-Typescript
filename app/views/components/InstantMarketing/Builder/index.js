@@ -37,6 +37,7 @@ class Builder extends React.Component {
   setup = () => {
     this.addCloseButton()
     this.addSaveButton()
+    this.lockIn()
   }
 
   addCloseButton = () => {
@@ -73,6 +74,25 @@ class Builder extends React.Component {
     this.editor.Panels.addButton('views', button)
   }
 
+  lockIn = () => {
+    const updateAll = model => {
+      const editable = model && model.view && model.view.$el.attr('data-rechat-editable')
+
+      if (!editable)
+        model.set({
+          editable: false,
+          selectable: false,
+          hoverable: false
+        })
+
+      model.get('components').each(model => updateAll(model))
+    }
+
+    updateAll(this.editor.DomComponents.getWrapper())
+  }
+
+
+
   onSave = () => {
     const css = this.editor.getCss()
     const html = this.editor.getHtml()
@@ -90,8 +110,6 @@ class Builder extends React.Component {
 
     const result = juice(assembled)
 
-    debugger
-
     if (this.props.onSave) {
       this.props.onSave({
         ...this.selectedTemplate,
@@ -104,7 +122,11 @@ class Builder extends React.Component {
 
   handleSelectTemplate = template => {
     this.selectedTemplate = template
+    const components = this.editor.DomComponents
+    components.clear()
+    this.editor.setStyle('')
     this.editor.setComponents(template.template)
+    this.lockIn()
   }
 
   render() {
