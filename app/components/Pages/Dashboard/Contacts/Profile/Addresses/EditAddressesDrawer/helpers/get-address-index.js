@@ -1,6 +1,6 @@
-export function getAddressIndex(addresses, arrayfields) {
+export function getNewAddressIndex(addresses, arrayfields) {
   const addressesLength = addresses.length
-  const arrayFieldsLength = arrayfields.length
+  const arrayFieldsLength = arrayfields.value.length
 
   if (addressesLength === 0) {
     return arrayFieldsLength + 1
