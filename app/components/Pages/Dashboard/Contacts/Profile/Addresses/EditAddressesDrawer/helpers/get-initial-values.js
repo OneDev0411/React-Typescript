@@ -2,7 +2,7 @@ import { getEmptyAddress } from './get-empty-address'
 
 export function getInitialValues(addresses, addressAttributeDefs) {
   const initialValues = {
-    is_primary: 0
+    is_primary: 1
   }
 
   if (addresses.length === 0) {

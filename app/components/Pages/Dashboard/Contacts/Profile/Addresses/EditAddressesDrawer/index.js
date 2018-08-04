@@ -17,7 +17,7 @@ import {
 
 import { getFullAddress } from '../helpers/get-full-address'
 import {
-  getAddressIndex,
+  getNewAddressIndex,
   getEmptyAddress,
   getInitialValues,
   preSaveFormat
@@ -33,6 +33,10 @@ class EditAddressesForm extends React.Component {
   onSubmit = async values => {
     try {
       const attributes = preSaveFormat(values)
+
+      if (attributes.length === 0) {
+        return
+      }
 
       await this.props.dispatch(
         upsertContactAttributes(this.props.contact.id, attributes)
@@ -116,11 +120,7 @@ class EditAddressesForm extends React.Component {
                             component="input"
                             type="radio"
                             parse={value => Number(value)}
-                            value={
-                              address != null
-                                ? address.index
-                                : getAddressIndex(addresses, fields)
-                            }
+                            value={address != null ? address.index : index + 1}
                           />
                           <span
                             style={{ marginLeft: '0.5em', fontWeight: 400 }}
@@ -192,7 +192,7 @@ class EditAddressesForm extends React.Component {
                     fields.push(
                       getEmptyAddress(
                         addressAttributeDefs,
-                        getAddressIndex(addresses, fields)
+                        getNewAddressIndex(addresses, fields)
                       )
                     )
                   }
