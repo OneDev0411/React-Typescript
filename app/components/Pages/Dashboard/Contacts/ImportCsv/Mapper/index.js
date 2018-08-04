@@ -45,7 +45,9 @@ class Mapper extends React.Component {
       mappedFields
     } = this.props
     const colNames = data[0]
-    const contacts = data.slice(1)
+    const contacts = data
+      .slice(1)
+      .filter(columns => columns.join('').length > 0)
 
     if (contacts.length === 0 || errors.length > 0) {
       return showMessageModal({
