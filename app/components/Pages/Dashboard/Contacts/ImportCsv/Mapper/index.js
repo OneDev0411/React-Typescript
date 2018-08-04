@@ -81,18 +81,29 @@ class Mapper extends React.Component {
   }
 
   autoMap = csvColoumns => {
+    const { attributeDefs } = this.props
     const mappedFields = {}
 
     _.each(csvColoumns, ({ name: columnName }) => {
+      let index = 0
       const attribute = this.findMatchedAttribute(columnName)
 
       if (!attribute) {
         return false
       }
 
-      let index = 0
+      const isSingular = attributeDefs.byId[attribute.id]
+      const isAddress = isAddressField(attributeDefs, attribute.id)
 
-      if (isAddressField(this.props.attributeDefs, attribute.id)) {
+      // singular attrs can't be mapped more than once
+      if (
+        isSingular &&
+        _.some(mappedFields, field => field.definitionId === attribute.id)
+      ) {
+        return false
+      }
+
+      if (isAddress) {
         index = _.filter(
           mappedFields,
           ({ definitionId }) => definitionId === attribute.id
@@ -112,7 +123,7 @@ class Mapper extends React.Component {
 
   /**
    * find most similar attribute for given csv column name
-   * based on levenshtein algorithm
+   * based on sorenson algorithm
    */
   findMatchedAttribute = csvColoumnName => {
     const { attributeDefs } = this.props
@@ -142,7 +153,7 @@ class Mapper extends React.Component {
     const bestMatches = _.sortBy(list, item => item.rate * -1)
     const bestMatch = bestMatches[0]
 
-    if (bestMatch.rate >= 0.3) {
+    if (bestMatch.rate > 0.32) {
       return bestMatch
     }
 
