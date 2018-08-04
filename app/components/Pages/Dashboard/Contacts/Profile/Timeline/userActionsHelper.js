@@ -34,9 +34,11 @@ function getListingTitle(activity) {
 
 function getAlertTitle(activity) {
   const alert = activity.object
-  const { title, proposed_title } = alert
+  const { title } = alert
 
-  return title && title.length > 0 ? title : proposed_title
+  const text = title && title.length > 0 ? title : alert.proposed_title
+
+  return text.length > 23 ? `${text.slice(0, 23)}...` : text
 }
 
 function getListingPhoto({ cover_image_url }) {

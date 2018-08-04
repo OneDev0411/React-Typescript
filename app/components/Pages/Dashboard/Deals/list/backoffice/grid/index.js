@@ -93,10 +93,16 @@ class Grid extends React.Component {
   }
 
   get Data() {
-    const { deals, activeFilter } = this.props
+    const { deals, activeFilter, searchCriteria } = this.props
 
     if (!deals) {
       return []
+    }
+
+    // when user searching something in backoffice, we should show all
+    // deals except draft items
+    if (searchCriteria.length > 0) {
+      return Object.values(deals).filter(deal => deal.is_draft === false)
     }
 
     return Object.values(deals).filter(
