@@ -21,7 +21,8 @@ class GenerateUrl extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (
       this.state.feedURl !== '' &&
-      !_.isEqual(nextProps.selectedTypes, this.props.selectedTypes)
+      (nextProps.selectedBrandId !== this.props.selectedBrandId ||
+        !_.isEqual(nextProps.selectedTypes, this.props.selectedTypes))
     ) {
       this.setState({ feedURl: '' })
     }
