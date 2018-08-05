@@ -1,4 +1,5 @@
 import React from 'react'
+import timeago from 'timeago.js'
 import Flex from 'styled-flex-component'
 
 import { Section } from '../components/Section'
@@ -25,7 +26,7 @@ export function LastTouched(props) {
         />
         {last_touch ? (
           <div>
-            Last Touch was 3 days ago, you wanted to be in touch every 7 days.
+            Last Touch was <b>{timeago().format(last_touch * 1000)}</b>.
           </div>
         ) : (
           <div>You have not added any touches for this contact.</div>
