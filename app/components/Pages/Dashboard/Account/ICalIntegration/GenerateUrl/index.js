@@ -59,7 +59,12 @@ class GenerateUrl extends React.Component {
         {feedURl ? (
           <Fragment>
             <FeedUrl> {feedURl}</FeedUrl>
-            <LinkIcon />
+            <LinkIcon
+              style={{
+                position: 'absolute',
+                right: '1.4rem'
+              }}
+            />
           </Fragment>
         ) : (
           <GenerateUrlButton

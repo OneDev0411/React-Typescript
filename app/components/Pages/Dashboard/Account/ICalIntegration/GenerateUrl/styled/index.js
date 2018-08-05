@@ -7,6 +7,7 @@ export const GenerateUrlContainer = styled.div`
   background-color: #f0f4f7;
   padding: 1.4rem;
   align-items: center;
+  position: relative;
 `
 
 export const GenerateUrlText = styled.div`
@@ -24,4 +25,6 @@ export const FeedUrl = styled.a`
   overflow: hidden;
   text-overflow: ellipsis;
   margin-left: 1rem;
+  padding-right: 2rem;
+  white-space: nowrap;
 `
