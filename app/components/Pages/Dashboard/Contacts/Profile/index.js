@@ -12,6 +12,7 @@ import { Container } from '../components/Container'
 import PageHeader from '../../../../../views/components/PageHeader'
 import Catalog from './Catalog'
 import { Dates } from './Dates'
+import { LastTouched } from './LastTouched'
 import { DealsListWidget } from './Deals'
 import { Details } from './Details'
 import Tags from './Tags'
@@ -176,6 +177,7 @@ class ContactProfile extends React.Component {
 
     const thirdColumn = (
       <ThirdColumn>
+        {this.state.isDesktopScreen && <LastTouched contact={contact} />}
         <Dates contact={contact} />
         <DealsListWidget contactId={contact.id} />
       </ThirdColumn>
@@ -189,6 +191,8 @@ class ContactProfile extends React.Component {
           <SideColumnWrapper>
             <div>
               <Catalog contact={contact} />
+
+              {!this.state.isDesktopScreen && <LastTouched contact={contact} />}
 
               <Tags contact={contact} />
 
