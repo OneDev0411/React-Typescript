@@ -27,8 +27,8 @@ class DealTemplates extends React.Component {
       const setting = await getCalenderFeedSetting()
 
       this.setState({
-        selectedBrandId: setting[0].selected_brand || null,
-        selectedTypes: setting[0].selected_types || []
+        selectedBrandId: (setting[0] && setting[0].selected_brand) || null,
+        selectedTypes: (setting[0] && setting[0].selected_types) || []
       })
     } catch (e) {
       console.log(e)
