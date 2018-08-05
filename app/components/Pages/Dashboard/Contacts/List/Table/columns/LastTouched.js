@@ -11,6 +11,10 @@ export function LastTouchedCell(props) {
 
   const formatedLastTouch = timeago().format(contact.last_touch * 1000)
 
+  if (!contact.next_touch) {
+    return formatedLastTouch
+  }
+
   return (
     <OverlayTrigger
       trigger="hover"
