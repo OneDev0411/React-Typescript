@@ -17,7 +17,7 @@ Section.propTypes = {
 }
 
 Section.defaultProps = {
-  bodyStyle: {}
+  bodyStyle: { padding: '1em 1em 0' }
 }
 
 export function Section(props) {
@@ -51,15 +51,7 @@ export function Section(props) {
           </Flex>
         </Header>
       )}
-      <Body
-        style={
-          Object.keys(props.bodyStyle).length > 0
-            ? props.bodyStyle
-            : { padding: '1em 1em 0' }
-        }
-      >
-        {props.children}
-      </Body>
+      <Body style={props.bodyStyle}>{props.children}</Body>
     </Container>
   )
 }
