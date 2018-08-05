@@ -2,51 +2,30 @@ import grapesjs from 'grapesjs'
 import Backbone from 'backbone'
 
 export default grapesjs.plugins.add('asset-blocks', editor => {
-  const domc = editor.DomComponents
-  const defaultType = domc.getType('default')
-
-  const defaultModel = defaultType.model
-  const defaultView = defaultType.view
-
-  domc.addType('listing-image', {
-    model: defaultModel.extend(
-      {
-        defaults: {
-          ...defaultModel.prototype.defaults,
-          tagName: 'div',
-          style: 'padding: 16px',
-          draggable: false,
-          droppable: false
-        }
-      },
-      {
-        isComponent(el) {
-          if (el.tagName == 'DIV' && el.classList.contains('listing-image')) {
-            return { type: 'listing-image' }
-          }
-        }
-      }
-    ),
-    view: defaultView
-  })
-
-  const bm = editor.BlockManager
-
-  bm.add('listing-image', {
-    label: `
-    <div class="gjs-block-label">Listing Image</div>`,
-    content: `
-      <div class="listing-image">Foo</div>
-    `
-  })
-
   let target
   const AssetView = Backbone.View.extend({
     events: {
       click: 'onClick'
     },
     onClick() {
-      target.set('src', this.model.get('src'))
+      const url = this.model.get('src')
+
+      const setSrc = () => target.set('src', url)
+      const setBg  = () => {
+        const old = target.get('style')
+        const style = { ...old }
+        style['background-image'] = `url(${url})`
+        target.set('style', style)
+      }
+
+      const setters = {
+        image: setSrc,
+        cell:  setBg,
+        text:  setBg
+      }
+
+      const type = target.get('type')
+      setters[type]()
     },
     initialize({ model }) {
       this.model = model
@@ -96,7 +75,11 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
   })
 
   editor.on('component:selected', selected => {
-    if (selected.get('type') !== 'image') {
+    const type = selected.get('type')
+
+    const attributes = selected.get('attributes')
+
+    if (!attributes || !attributes['rechat-assets']) {
       view.$el.hide()
 
       return false
