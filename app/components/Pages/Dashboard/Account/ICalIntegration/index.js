@@ -15,7 +15,8 @@ class DealTemplates extends React.Component {
   state = {
     selectedBrandId: null,
     selectedTypes: [],
-    isFetchingSetting: true
+    isFetchingSetting: true,
+    feedURl: ''
   }
 
   componentDidMount() {
@@ -27,8 +28,9 @@ class DealTemplates extends React.Component {
       const setting = await getCalenderFeedSetting()
 
       this.setState({
-        selectedBrandId: (setting[0] && setting[0].selected_brand) || null,
-        selectedTypes: (setting[0] && setting[0].selected_types) || []
+        selectedBrandId: (setting && setting.selected_brand) || null,
+        selectedTypes: (setting && setting.selected_types) || [],
+        feedURl: (setting && setting.url) || ''
       })
     } catch (e) {
       console.log(e)
@@ -86,6 +88,7 @@ class DealTemplates extends React.Component {
           <GenerateUrl
             selectedTypes={selectedTypes}
             selectedBrandId={selectedBrandId}
+            feedURl={this.state.feedURl}
           />
           <UpdateGenerateUrlInfo />
         </ICalContainer>

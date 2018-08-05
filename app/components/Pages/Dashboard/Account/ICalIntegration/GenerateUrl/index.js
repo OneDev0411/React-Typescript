@@ -15,7 +15,7 @@ import {
 class GenerateUrl extends React.Component {
   state = {
     isFetchingFeed: false,
-    feedURl: ''
+    feedURl: this.props.feedURl
   }
 
   componentWillReceiveProps(nextProps) {
