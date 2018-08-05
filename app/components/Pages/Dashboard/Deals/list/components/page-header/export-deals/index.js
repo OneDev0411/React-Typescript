@@ -53,7 +53,8 @@ class ExportDeals extends React.Component {
             branch_title: 'Office'
           },
           order: 'list_date',
-          title: 'New Listings'
+          title: 'New Listings',
+          brand: getActiveTeamId(this.props.user)
         })
       )}`
     },
@@ -94,7 +95,8 @@ class ExportDeals extends React.Component {
             seller_agent: 'Seller Agent'
           },
           order: 'contract_date',
-          title: 'New Offers'
+          title: 'New Offers',
+          brand: getActiveTeamId(this.props.user)
         })
       )}`
     }
