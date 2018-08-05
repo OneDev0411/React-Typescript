@@ -1,23 +1,22 @@
 import React from 'react'
-import { Route, IndexRoute } from 'react-router'
+import { IndexRoute, Route } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
-import store from '../stores'
-import Load from '../loader'
-import UserIsNotAuthenticated from './userIsNotAuthenticated'
-
-// actions
-import { getDeals, getContexts } from '../store_actions/deals'
-
 // Containers
 import AppLayout from '../components/App'
+// Pages
+import Landing from '../components/Pages/Landing'
+import Load from '../loader'
+import store from '../stores'
+// actions
+import { getContexts, getDeals } from '../store_actions/deals'
+import UserIsNotAuthenticated from './userIsNotAuthenticated'
+
+
 
 const AsyncAuthenticationLayout = Load({
   loader: () =>
     import('./components/Authentication' /* webpackChunkName: "authlay" */)
 })
-
-// Pages
-import Landing from '../components/Pages/Landing'
 
 /* ==================================== */
 //  Auth
@@ -237,6 +236,11 @@ const AsyncProfile = Load({
 const AsyncDealTemplates = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/DealTemplates' /* webpackChunkName: "deal_templates" */)
+})
+
+const AsyncICALIntegration = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */)
 })
 
 const AsyncEditDealTemplate = Load({
@@ -464,6 +468,7 @@ export default (
 
         <Route path="deal/templates" component={AsyncDealTemplates} />
         <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
+        <Route path="deal/icalintegration" component={AsyncICALIntegration} />
       </Route>
 
       <Route path="/dashboard/brands">
