@@ -76,7 +76,7 @@ class Builder extends React.Component {
 
   lockIn = () => {
     const updateAll = model => {
-      const editable = model && model.view && model.view.$el.attr('data-rechat-editable')
+      const editable = model && model.view && model.view.$el.attr('rechat-editable')
 
       if (!editable)
         model.set({
