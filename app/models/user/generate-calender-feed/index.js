@@ -1,7 +1,7 @@
 import Fetch from '../../../services/fetch'
 
 const getCalenderFeed = async (types, brandId) => {
-  let url = `/calendar/feed?types[]=${types.join('&ids[]=')}`
+  let url = `/calendar/feed?types[]=${types.join('&types[]=')}`
 
   if (brandId) {
     url += `&brandId=${brandId}`
