@@ -72,19 +72,15 @@ class Grid extends React.Component {
   }
 
   get Columns() {
-    const { columns } = this.props
-    let selectableColumn
+    let columnsWithPlugins = this.props.columns
 
     if (this.selectablePlugin) {
-      selectableColumn = {
-        id: 'plugin--selectable',
-        width: '40px',
-        header: () => this.selectablePlugin.renderHeader(),
-        render: ({ rowData }) => this.selectablePlugin.renderCell(rowData)
-      }
+      columnsWithPlugins = this.selectablePlugin.registerColumn(
+        columnsWithPlugins
+      )
     }
 
-    return [selectableColumn, ...columns]
+    return columnsWithPlugins
   }
 
   render() {

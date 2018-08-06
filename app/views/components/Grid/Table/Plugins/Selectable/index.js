@@ -107,17 +107,24 @@ export class SelectablePlugin {
     })
   }
 
-  renderHeader = () => (
-    <CheckBoxButton
-      onClick={this.toggleSelectAllRows}
-      isSelected={this.isAllRowsSelected()}
-    />
-  )
+  registerColumn = columns => {
+    const column = {
+      id: 'plugin--selectable',
+      width: '40px',
+      header: () => (
+        <CheckBoxButton
+          onClick={this.toggleSelectAllRows}
+          isSelected={this.isAllRowsSelected()}
+        />
+      ),
+      render: ({ rowData: row }) => (
+        <CheckBoxButton
+          onClick={() => this.toggleSelectRow(row.id)}
+          isSelected={this.isAllRowsSelected() || this.isRowSelected(row.id)}
+        />
+      )
+    }
 
-  renderCell = row => (
-    <CheckBoxButton
-      onClick={() => this.toggleSelectRow(row.id)}
-      isSelected={this.isAllRowsSelected() || this.isRowSelected(row.id)}
-    />
-  )
+    return [column, ...columns]
+  }
 }
