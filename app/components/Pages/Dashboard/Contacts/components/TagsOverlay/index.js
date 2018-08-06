@@ -14,7 +14,7 @@ import {
   deleteAttributesFromContacts,
   addAttributes,
   deleteAttributes,
-  getContacts,
+  searchContacts,
   getContactsTags
 } from '../../../../../../store_actions/contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
@@ -46,10 +46,14 @@ class TagsOverlay extends React.Component {
   constructor(props) {
     super(props)
 
-    const { selectedContactsIds, list, existingTags } = this.props
+    const { selectedContactsIds, ContactListStore, existingTags } = this.props
 
     this.state = {
-      tags: this.getCommonTags(selectedContactsIds, list, existingTags),
+      tags: this.getCommonTags(
+        selectedContactsIds,
+        ContactListStore,
+        existingTags
+      ),
       isSubmitting: false,
       newTagValue: ''
     }
@@ -64,12 +68,12 @@ class TagsOverlay extends React.Component {
   componentWillReceiveProps(nextProps) {
     const newTags = this.getCommonTags(
       nextProps.selectedContactsIds,
-      nextProps.list,
+      nextProps.ContactListStore,
       nextProps.existingTags
     )
     const oldTags = this.getCommonTags(
       this.props.selectedContactsIds,
-      this.props.list,
+      this.props.ContactListStore,
       this.props.existingTags
     )
 
@@ -135,7 +139,7 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          'We noticed you have un-added tag. Please select the \'Add\' link before saving',
+          "We noticed you have un-added tag. Please select the 'Add' link before saving",
         hideCancelButton: true,
         confirmLabel: 'Ok'
       })
@@ -151,11 +155,11 @@ class TagsOverlay extends React.Component {
       deleteAttributesFromContacts,
       addAttributes,
       deleteAttributes,
-      getContacts,
+      searchContacts,
       getContactsTags,
       selectedContactsIds,
       attributeDefs,
-      list
+      ContactListStore
     } = this.props
     const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
 
@@ -176,7 +180,10 @@ class TagsOverlay extends React.Component {
 
     if (removedTags.length > 0) {
       const contactsTags = selectedContactsIds.map(contactId =>
-        getContactAttribute(selectContact(list, contactId), attribute_def)
+        getContactAttribute(
+          selectContact(ContactListStore, contactId),
+          attribute_def
+        )
       )
       const flattedContactsTags = [].concat(...contactsTags)
       const removedContactsTags = []
@@ -199,9 +206,14 @@ class TagsOverlay extends React.Component {
     }
 
     if (selectedContactsIds.length > 1) {
-      const currentPage = selectCurrentPage(list)
+      const currentPage = selectCurrentPage(ContactListStore)
 
-      await getContacts(currentPage)
+      await await searchContacts(
+        this.props.filter,
+        currentPage,
+        undefined,
+        this.props.searchText
+      )
     }
 
     await getContactsTags()
@@ -211,10 +223,10 @@ class TagsOverlay extends React.Component {
   }
 
   // get common tags between selected contacts & default tags
-  getCommonTags = (selectedContactsIds, list, existingTags) => {
+  getCommonTags = (selectedContactsIds, ContactListStore, existingTags) => {
     if (
       selectedContactsIds.length === 0 ||
-      selectContactsInfo(list).count === 0
+      selectContactsInfo(ContactListStore).count === 0
     ) {
       return []
     }
@@ -222,7 +234,10 @@ class TagsOverlay extends React.Component {
     const { attributeDefs } = this.props
     const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
     const contactsTags = selectedContactsIds.map(contactId =>
-      getContactAttribute(selectContact(list, contactId), attribute_def)
+      getContactAttribute(
+        selectContact(ContactListStore, contactId),
+        attribute_def
+      )
     )
     const filteredTags = intersectionBy(
       ...contactsTags,
@@ -246,19 +261,24 @@ class TagsOverlay extends React.Component {
   }
 
   render() {
-    const { closeOverlay, selectedContactsIds, list, isOpen } = this.props
+    const {
+      closeOverlay,
+      selectedContactsIds,
+      ContactListStore,
+      isOpen
+    } = this.props
     const { tags, isSubmitting, newTagValue } = this.state
     const { attributeDefs } = this.props
     const { data_type: tagDataType } =
       selectDefinitionByName(attributeDefs, 'tag') || {}
-    const { count: contactsCount } = selectContactsInfo(list)
+    const { count: contactsCount } = selectContactsInfo(ContactListStore)
     let DrawerHeaderText = ''
 
     if (selectedContactsIds.length > 1) {
       DrawerHeaderText = `${selectedContactsIds.length} contacts`
     } else if (selectedContactsIds.length === 1 && contactsCount) {
       DrawerHeaderText = getAttributeFromSummary(
-        selectContact(list, selectedContactsIds[0]),
+        selectContact(ContactListStore, selectedContactsIds[0]),
         'display_name'
       )
     }
@@ -299,11 +319,19 @@ class TagsOverlay extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    contacts: { attributeDefs, list, tags }
+    contacts: { attributeDefs, list: ContactListStore, tags }
   } = state
   const existingTags = selectTags(tags)
+  const filter = selectContactsInfo(ContactListStore).filter || []
+  const searchText = selectContactsInfo(ContactListStore).searchText || ''
 
-  return { attributeDefs, list, existingTags }
+  return {
+    attributeDefs,
+    ContactListStore,
+    existingTags,
+    filter,
+    searchText
+  }
 }
 
 export default connect(
@@ -313,7 +341,7 @@ export default connect(
     deleteAttributesFromContacts,
     addAttributes,
     deleteAttributes,
-    getContacts,
+    searchContacts,
     getContactsTags,
     confirmation
   }
