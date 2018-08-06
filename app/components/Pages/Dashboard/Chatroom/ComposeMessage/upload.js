@@ -4,6 +4,9 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import Message from '../Util/message'
 import Model from '../../../../../models/Chatroom'
+import { fileAccepted } from '../../../../../../node_modules/react-dropzone/src/utils'
+
+const acceptableFileTypes = 'application/pdf,image/*'
 
 class Upload extends React.Component {
   constructor(props) {
@@ -42,7 +45,22 @@ class Upload extends React.Component {
   onPasteFile(event) {
     const { files } = event.clipboardData || event.originalEvent.clipboardData
 
-    this.onDrop(files)
+    const fileList = Array.slice(files)
+    let acceptedFiles = []
+
+    fileList.forEach(file => {
+      try {
+        file.preview = window.URL.createObjectURL(file)
+      } catch (err) {
+        console.error('Failed to generate preview for file', file, err)
+      }
+
+      if (fileAccepted(file, acceptableFileTypes)) {
+        acceptedFiles.push(file)
+      }
+    })
+
+    this.onDrop(acceptedFiles)
   }
 
   /**
@@ -187,7 +205,7 @@ class Upload extends React.Component {
           onDragEnter={() => this.setState({ dropzoneActive: true })}
           onDragLeave={() => this.setState({ dropzoneActive: false })}
           multiple
-          accept="application/pdf,image/*"
+          accept={acceptableFileTypes}
           disableClick={disableClick || false}
           style={this.props.dropZoneStyle}
         >
@@ -207,6 +225,9 @@ class Upload extends React.Component {
   }
 }
 
-export default connect(null, {
-  notify
-})(Upload)
+export default connect(
+  null,
+  {
+    notify
+  }
+)(Upload)
