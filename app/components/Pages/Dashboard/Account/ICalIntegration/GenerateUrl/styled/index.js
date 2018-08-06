@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import ShadowButton from '../../../../../../../views/components/Button/ShadowButton'
 
 export const GenerateUrlContainer = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ export const GenerateUrlText = styled.div`
 export const GenerateUrlButton = ActionButton.extend`
   margin-left: 3.6rem;
 `
-export const FeedUrl = styled.a`
+export const FeedUrl = ShadowButton.extend`
   color: #2196f3;
   cursor: pointer;
   overflow: hidden;

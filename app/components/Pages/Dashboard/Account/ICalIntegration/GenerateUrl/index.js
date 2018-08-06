@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
+import copy from '../../../../../../utils/copy-text-to-clipboard'
 import IconCalendar from '../../../../../../views/components/SvgIcons/Calender/IconCalendar'
 import getCalenderFeed from '../../../../../../models/user/generate-calender-feed'
 import LinkIcon from '../../../../../../views/components/SvgIcons/LinkIcon'
@@ -58,15 +59,23 @@ class GenerateUrl extends React.Component {
         <IconCalendar />
         <GenerateUrlText> iCAL Feed URL:</GenerateUrlText>
         {feedURl ? (
-          <Fragment>
-            <FeedUrl> {feedURl}</FeedUrl>
+          <FeedUrl
+            onClick={() => {
+              copy(feedURl)
+              this.props.notify({
+                message: 'Link Copied',
+                status: 'success'
+              })
+            }}
+          >
+            {feedURl}
             <LinkIcon
               style={{
                 position: 'absolute',
                 right: '1.4rem'
               }}
             />
-          </Fragment>
+          </FeedUrl>
         ) : (
           <GenerateUrlButton
             onClick={this.generateUrlClick}
