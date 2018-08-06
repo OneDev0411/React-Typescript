@@ -11,16 +11,36 @@ export function Item(props) {
 
   return (
     <Container>
-      <h4
+      <div
         style={{
-          margin: '0 0 0.25em',
-          fontSize: '1.8rem',
-          fontWeight: 'normal',
-          color: '#1e364b'
+          display: 'inline-flex',
+          alignItems: 'center',
+          marginBottom: '.5em'
         }}
       >
-        {touch.activity_type}
-      </h4>
+        <span
+          style={{
+            fontSize: 'small',
+            marginRight: '0.5em',
+            padding: '0 0.5em',
+            borderRadius: 30,
+            color: '#fff',
+            background: '#8da2b5'
+          }}
+        >
+          {touch.activity_type}
+        </span>
+        <span
+          style={{
+            lineHeight: 1,
+            fontSize: '1.5rem'
+          }}
+        >
+          {touch.description.length > 33
+            ? `${touch.description.slice(0, 33)}...`
+            : touch.description}
+        </span>
+      </div>
       <div style={{ color: '#8da2b5' }}>
         {timeago().format(new Date(touch.timestamp * 1000))}
       </div>
@@ -31,9 +51,9 @@ export function Item(props) {
         onClick={() => props.onClick(touch)}
         style={{
           position: 'absolute',
-          top: '50%',
+          top: '35%',
           right: '1em',
-          transform: 'translateY(-50%)'
+          transform: 'translateY(-35%)'
         }}
       >
         <ArrowRightIcon style={{ width: 32, height: 32 }} />
