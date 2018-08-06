@@ -6,14 +6,10 @@ import TableHeader from '../../Header'
 
 class BasicTable extends React.Component {
   get Rows() {
-    const { data, columns } = this.props
+    const { data, columns, sortablePlugin } = this.props
 
-    if (this.sortablePlugin) {
-      return this.sortablePlugin.getSortedData(
-        data,
-        columns,
-        this.resolveAccessor
-      )
+    if (sortablePlugin) {
+      return sortablePlugin.getSortedData(data, columns, this.resolveAccessor)
     }
 
     return data
