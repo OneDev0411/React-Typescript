@@ -118,12 +118,16 @@ class TagsOverlay extends React.Component {
       const { attributeDefs } = this.props
       const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
 
-      this.setState({
-        tags: tags.concat({
+      const sortedTags = this.sortTags(
+        tags.concat({
           [attribute_def.data_type]: newTagValue,
           attribute_def: attribute_def.id,
           isSelected: true
-        }),
+        })
+      )
+
+      this.setState({
+        tags: sortedTags,
         newTagValue: ''
       })
     }
@@ -257,7 +261,31 @@ class TagsOverlay extends React.Component {
         existingTags
       )
 
-    return unionBy(filteredTags, defaultsWithExisting, attribute_def.data_type)
+    const sortedTags = this.sortTags(
+      unionBy(filteredTags, defaultsWithExisting, attribute_def.data_type)
+    )
+
+    return sortedTags
+  }
+
+  sortTags(tags) {
+    const { attributeDefs } = this.props
+    const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
+
+    return tags.sort((tag1, tag2) => {
+      const tag1Text = tag1[attribute_def.data_type].trim().toLowerCase()
+      const tag2Text = tag2[attribute_def.data_type].trim().toLowerCase()
+
+      if (tag1Text < tag2Text) {
+        return -1
+      }
+
+      if (tag1Text > tag2Text) {
+        return 1
+      }
+
+      return 0
+    })
   }
 
   render() {
