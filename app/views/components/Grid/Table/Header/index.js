@@ -4,36 +4,48 @@ import PropTypes from 'prop-types'
 import { Header, HeaderRow, HeaderCell } from './styled'
 
 import SortIndicator from '../Plugins/Sorting/Indicator'
+import { CheckBoxButton } from '../Plugins/Selectable'
 
-function isSortable(column) {
-  return column.isSortable !== false && column.header
+function isSortable(sortablePlugin, column) {
+  return sortablePlugin && column.isSortable !== false && column.header
 }
 
 const TableHeader = ({
   columns,
   sizes,
-  sortBy,
-  isAscending,
-  onClickCell,
+  plugins,
   getHeaderProps,
-  getHeaderRowProps
+  getHeaderRowProps,
+  selectablePlugin,
+  sortablePlugin
 }) => (
   <Header {...getHeaderProps()}>
     <HeaderRow {...getHeaderRowProps()}>
+      {plugins.selectable && (
+        <HeaderCell>
+          <CheckBoxButton
+            onClick={selectablePlugin.toggleSelectAllRows}
+            isSelected={selectablePlugin.isAllRowsSelected()}
+          />
+        </HeaderCell>
+      )}
+
       {columns &&
         columns.map((col, index) => (
           <HeaderCell
             key={col.id || index}
             width={sizes[index]}
-            isSortable={isSortable(col)}
-            onClick={() => isSortable(col) && onClickCell(col)}
+            isSortable={isSortable(sortablePlugin, col)}
+            onClick={() =>
+              isSortable(sortablePlugin, col) && sortablePlugin.changeSort(col)
+            }
           >
             {col.header}
 
             <SortIndicator
               column={col}
-              sortBy={sortBy}
-              isAscending={isAscending}
+              // sortBy={sortBy}
+              // isAscending={isAscending}
             />
           </HeaderCell>
         ))}
