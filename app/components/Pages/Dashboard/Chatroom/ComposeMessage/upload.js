@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import Message from '../Util/message'
 import Model from '../../../../../models/Chatroom'
-import { fileAccepted } from '../../../../../../node_modules/react-dropzone/src/utils'
 
 const acceptableFileTypes = 'application/pdf,image/*'
 
@@ -46,7 +45,6 @@ class Upload extends React.Component {
     const { files } = event.clipboardData || event.originalEvent.clipboardData
 
     const fileList = Array.slice(files)
-    let acceptedFiles = []
 
     fileList.forEach(file => {
       try {
@@ -54,13 +52,9 @@ class Upload extends React.Component {
       } catch (err) {
         console.error('Failed to generate preview for file', file, err)
       }
-
-      if (fileAccepted(file, acceptableFileTypes)) {
-        acceptedFiles.push(file)
-      }
     })
 
-    this.onDrop(acceptedFiles)
+    this.onDrop(fileList)
   }
 
   /**
