@@ -20,7 +20,10 @@
     "test:e2e": "nightwatch",
     "e2e-setup": "selenium-standalone install",
     "heroku-postbuild": "npm run build",
-    "postinstall": "node ./npm-postinstall.js"
+    "postinstall": "node ./npm-postinstall.js",
+    "storybook": "start-storybook -p 6006 -c stories",
+    "storybook:build": "build-storybook -c stories -o .tmp/stories",
+    "storybook:publish": "npm run storybook:build && surge -p .tmp/stories -d rechat-stories.surge.sh"
   },
   "engines": {
     "node": "9.2.0"
@@ -197,6 +200,7 @@
     "xss": "^0.3.8"
   },
   "devDependencies": {
+    "@storybook/react": "^3.4.10",
     "babel-eslint": "^8.2.5",
     "babel-jest": "^22.4.4",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -222,6 +226,7 @@
     "react-test-renderer": "^16.4.1",
     "redux-mock-store": "^1.5.3",
     "selenium-standalone": "^6.15.1",
+    "surge": "^0.20.1",
     "uglify-es": "git://github.com/mishoo/UglifyJS2.git#harmony",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "webpack-dev-middleware": "^2.0.3",
