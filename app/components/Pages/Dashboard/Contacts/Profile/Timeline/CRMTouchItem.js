@@ -41,16 +41,18 @@ export class CRMTouchItem extends React.Component {
             >
               {touch.activity_type}
             </span>
-            <span
-              style={{
-                lineHeight: 1,
-                fontSize: '1.5rem'
-              }}
-            >
-              {touch.description.length > 33
-                ? `${touch.description.slice(0, 33)}...`
-                : touch.description}
-            </span>
+            {touch.description && (
+              <span
+                style={{
+                  lineHeight: 1,
+                  fontSize: '1.5rem'
+                }}
+              >
+                {touch.description.length > 33
+                  ? `${touch.description.slice(0, 33)}...`
+                  : touch.description}
+              </span>
+            )}
           </div>
 
           <div className="time">
