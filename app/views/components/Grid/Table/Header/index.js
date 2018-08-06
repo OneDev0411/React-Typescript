@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Header, HeaderRow, HeaderCell } from './styled'
 
-import SortIndicator from '../Plugins/Sorting/Indicator'
+import SortIndicator from '../Plugins/Sortable/Indicator'
 import { CheckBoxButton } from '../Plugins/Selectable'
 
 function isSortable(sortablePlugin, column) {
