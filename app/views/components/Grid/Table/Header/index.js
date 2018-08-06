@@ -34,11 +34,13 @@ const TableHeader = ({
               ? column.header(column, index)
               : column.header}
 
-            <SortIndicator
-              column={column}
-              sortBy={sortablePlugin.sortBy}
-              isAscending={sortablePlugin.isAscending}
-            />
+            {sortablePlugin && (
+              <SortIndicator
+                column={column}
+                sortBy={sortablePlugin.sortBy}
+                isAscending={sortablePlugin.isAscendingSort}
+              />
+            )}
           </HeaderCell>
         ))}
     </HeaderRow>
