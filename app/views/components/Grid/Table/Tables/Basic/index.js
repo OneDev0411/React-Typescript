@@ -4,49 +4,7 @@ import PropTypes from 'prop-types'
 import { BodyCell as Cell, BodyRow as Row } from '../../styled'
 import TableHeader from '../../Header'
 
-import { CheckBoxButton, SelectablePlugin } from '../../Plugins/Selectable'
-import { SortablePlugin } from '../../Plugins/Sortable'
-
 class BasicTable extends React.Component {
-  constructor(props) {
-    super(props)
-
-    const { plugins } = props
-
-    if (plugins.sortable) {
-      this.sortablePlugin = new SortablePlugin({
-        options: this.props.plugins.sortable,
-        onChange: () => this.forceUpdate()
-      })
-    }
-
-    if (plugins.selectable) {
-      this.selectablePlugin = new SelectablePlugin({
-        options: this.props.plugins.selectable,
-        onChange: this.onChangeSelectedRows
-      })
-    }
-  }
-
-  onChangeSelectedRows = params => {
-    const { forceUpdate, selectedRows, selectAllRows } = params
-    const { plugins, data } = this.props
-
-    if (plugins.selectable.onChange) {
-      plugins.selectable.onChange(
-        selectAllRows
-          ? data.map(row => ({
-              id: row.id
-            }))
-          : selectedRows
-      )
-    }
-
-    if (forceUpdate) {
-      this.forceUpdate()
-    }
-  }
-
   get Rows() {
     const { data, columns } = this.props
 
@@ -114,6 +72,10 @@ class BasicTable extends React.Component {
       return <EmptyState />
     }
 
+    if (data.length === 0) {
+      return null
+    }
+
     return (
       <Fragment>
         {showTableHeader && (
@@ -123,8 +85,8 @@ class BasicTable extends React.Component {
             plugins={plugins}
             getHeaderProps={getHeaderProps}
             getHeaderRowProps={getHeaderRowProps}
-            selectablePlugin={this.selectablePlugin}
-            sortablePlugin={this.sortablePlugin}
+            selectablePlugin={this.props.selectablePlugin}
+            sortablePlugin={this.props.sortablePlugin}
           />
         )}
 
@@ -140,18 +102,6 @@ class BasicTable extends React.Component {
               original: row
             })}
           >
-            {plugins.selectable && (
-              <Cell>
-                <CheckBoxButton
-                  onClick={() => this.selectablePlugin.toggleSelectRow(row.id)}
-                  isSelected={
-                    this.selectablePlugin.isAllRowsSelected() ||
-                    this.selectablePlugin.isRowSelected(row.id)
-                  }
-                />
-              </Cell>
-            )}
-
             {columns &&
               columns.map((column, colIndex) => (
                 <Cell

@@ -13,39 +13,31 @@ function isSortable(sortablePlugin, column) {
 const TableHeader = ({
   columns,
   sizes,
-  plugins,
   getHeaderProps,
   getHeaderRowProps,
-  selectablePlugin,
   sortablePlugin
 }) => (
   <Header {...getHeaderProps()}>
     <HeaderRow {...getHeaderRowProps()}>
-      {plugins.selectable && (
-        <HeaderCell>
-          <CheckBoxButton
-            onClick={selectablePlugin.toggleSelectAllRows}
-            isSelected={selectablePlugin.isAllRowsSelected()}
-          />
-        </HeaderCell>
-      )}
-
       {columns &&
-        columns.map((col, index) => (
+        columns.map((column, index) => (
           <HeaderCell
-            key={col.id || index}
+            key={column.id || index}
             width={sizes[index]}
-            isSortable={isSortable(sortablePlugin, col)}
+            isSortable={isSortable(sortablePlugin, column)}
             onClick={() =>
-              isSortable(sortablePlugin, col) && sortablePlugin.changeSort(col)
+              isSortable(sortablePlugin, column) &&
+              sortablePlugin.changeSort(column)
             }
           >
-            {col.header}
+            {typeof column.header === 'function'
+              ? column.header(column, index)
+              : column.header}
 
             <SortIndicator
-              column={col}
-              // sortBy={sortBy}
-              // isAscending={isAscending}
+              column={column}
+              sortBy={sortablePlugin.sortBy}
+              isAscending={sortablePlugin.isAscending}
             />
           </HeaderCell>
         ))}

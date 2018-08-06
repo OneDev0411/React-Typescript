@@ -1,4 +1,5 @@
-export * from './Checkbox'
+import React from 'react'
+import { CheckBoxButton } from './Checkbox'
 
 const _externalStorageEngine = {}
 const _storageInterface = {
@@ -105,4 +106,18 @@ export class SelectablePlugin {
       selectAllRows: this.StorageEngine.selectAllRows
     })
   }
+
+  renderHeader = () => (
+    <CheckBoxButton
+      onClick={this.toggleSelectAllRows}
+      isSelected={this.isAllRowsSelected()}
+    />
+  )
+
+  renderCell = row => (
+    <CheckBoxButton
+      onClick={() => this.toggleSelectRow(row.id)}
+      isSelected={this.isAllRowsSelected() || this.isRowSelected(row.id)}
+    />
+  )
 }
