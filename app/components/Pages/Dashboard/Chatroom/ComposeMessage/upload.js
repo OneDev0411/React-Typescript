@@ -5,6 +5,8 @@ import { addNotification as notify } from 'reapop'
 import Message from '../Util/message'
 import Model from '../../../../../models/Chatroom'
 
+const acceptableFileTypes = 'application/pdf,image/*'
+
 class Upload extends React.Component {
   constructor(props) {
     super(props)
@@ -42,7 +44,17 @@ class Upload extends React.Component {
   onPasteFile(event) {
     const { files } = event.clipboardData || event.originalEvent.clipboardData
 
-    this.onDrop(files)
+    const fileList = Array.slice(files)
+
+    fileList.forEach(file => {
+      try {
+        file.preview = window.URL.createObjectURL(file)
+      } catch (err) {
+        console.error('Failed to generate preview for file', file, err)
+      }
+    })
+
+    this.onDrop(fileList)
   }
 
   /**
@@ -187,7 +199,7 @@ class Upload extends React.Component {
           onDragEnter={() => this.setState({ dropzoneActive: true })}
           onDragLeave={() => this.setState({ dropzoneActive: false })}
           multiple
-          accept="application/pdf,image/*"
+          accept={acceptableFileTypes}
           disableClick={disableClick || false}
           style={this.props.dropZoneStyle}
         >
@@ -207,6 +219,9 @@ class Upload extends React.Component {
   }
 }
 
-export default connect(null, {
-  notify
-})(Upload)
+export default connect(
+  null,
+  {
+    notify
+  }
+)(Upload)
