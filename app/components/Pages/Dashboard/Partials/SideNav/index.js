@@ -62,12 +62,11 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
   const hasContactsPermission =
     user.user_type !== 'Client' ||
     (user.features && user.features.includes('Contacts'))
-  const agentUser = user.user_type !== 'Agent'
 
   return (
     <aside className="c-app-sidenav">
       <ul className="c-app-sidenav__list c-app-sidenav__list--top">
-        {agentUser && (
+        {hasContactsPermission && (
           <SideNavItem isActive={activePath === 'CALENDAR'}>
             <Link
               to="/dashboard/calendar"
