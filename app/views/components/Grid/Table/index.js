@@ -8,6 +8,7 @@ import MultipleTable from './Tables/Multiple'
 
 import { SelectablePlugin } from './Plugins/Selectable'
 import { SortablePlugin } from './Plugins/Sortable'
+import { LoadablePlugin } from './Plugins/Loadable'
 
 class Grid extends React.Component {
   constructor(props) {
@@ -28,6 +29,16 @@ class Grid extends React.Component {
         onChange: this.onChangeSelectedRows
       })
     }
+
+    if (plugins.loadable) {
+      this.loadablePlugin = new LoadablePlugin({
+        options: this.props.plugins.loadable
+      })
+    }
+  }
+
+  componentWillUnmount() {
+    this.loadablePlugin && this.loadablePlugin.unregister()
   }
 
   onChangeSelectedRows = params => {

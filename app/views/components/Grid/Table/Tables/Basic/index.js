@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import _ from 'underscore'
 
 import { BodyCell as Cell, BodyRow as Row } from '../../styled'
 import TableHeader from '../../Header'
@@ -68,10 +69,6 @@ class BasicTable extends React.Component {
       return <EmptyState />
     }
 
-    if (data.length === 0) {
-      return null
-    }
-
     return (
       <Fragment>
         {showTableHeader && (
@@ -129,6 +126,8 @@ BasicTable.propTypes = {
   showTableHeader: PropTypes.bool,
   getTrProps: PropTypes.func,
   getTdProps: PropTypes.func,
+  onScrollBottom: PropTypes.func,
+  onScrollTop: PropTypes.func,
   plugins: PropTypes.object
 }
 
@@ -137,6 +136,8 @@ BasicTable.defaultProps = {
   showTableHeader: true,
   getTrProps: () => {},
   getTdProps: () => {},
+  onScrollBottom: () => {},
+  onScrollTop: () => {},
   plugins: {}
 }
 
