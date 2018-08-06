@@ -23,7 +23,7 @@ export const DealsTabs = ({ user }) => (
     />
     <Tab
       indexed
-      text="iCAL Integration"
+      text="iCAL Feed"
       to="/dashboard/account/deal/icalintegration"
     />
   </ul>
