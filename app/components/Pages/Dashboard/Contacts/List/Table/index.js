@@ -18,6 +18,8 @@ import TagsOverlay from '../../components/TagsOverlay'
 
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
+import { goTo } from '../../../../../../utils/go-to'
+
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
 
@@ -25,6 +27,10 @@ class ContactsList extends React.Component {
     this.setState({ selectedTagContact: [selectedTagContact] })
 
   closeTagsOverlay = () => this.setState({ selectedTagContact: [] })
+
+  openContact = id => {
+    goTo(`/dashboard/contacts/${id}`, 'All Contacts')
+  }
 
   columns = [
     {
@@ -109,7 +115,23 @@ class ContactsList extends React.Component {
     }
   ]
 
-  onChangeSelectedRows = () => {}
+  getGridTrProps = (rowIndex, { original: row, isSelected }) => {
+    if (this.props.isDeleting && isSelected) {
+      return {
+        style: {
+          opacity: 0.5,
+          ponterEvents: 'none'
+        }
+      }
+    }
+
+    return {
+      style: {
+        cursor: 'pointer'
+      },
+      onClick: () => this.openContact(row.id)
+    }
+  }
 
   render() {
     const selectedRowsCount = this.props.selectedRows.length
@@ -143,6 +165,7 @@ class ContactsList extends React.Component {
           isFetchingMore={this.props.isFetchingMore}
           columns={this.columns}
           LoadingState={LoadingComponent}
+          getTrProps={this.getGridTrProps}
           EmptyState={() => (
             <NoSearchResults description="Try typing another name, email, phone or tag." />
           )}
