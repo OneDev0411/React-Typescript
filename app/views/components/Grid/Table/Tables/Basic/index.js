@@ -91,7 +91,10 @@ class BasicTable extends React.Component {
             firstRow={rowIndex === 0}
             lastRow={rowIndex === data.length - 1}
             {...getTrProps(rowIndex, {
-              original: row
+              original: row,
+              isSelected: this.props.selectablePlugin
+                ? this.props.selectablePlugin.isRowSelected(row.id)
+                : false
             })}
           >
             {columns &&
