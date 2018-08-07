@@ -39,6 +39,10 @@ export class FileManager extends React.Component {
   }
 
   getDate(date) {
+    if (!date) {
+      return ''
+    }
+
     return moment.unix(date).format('MMMM DD, YY [at] hh:mm A')
   }
 
@@ -176,7 +180,7 @@ export class FileManager extends React.Component {
   getDocumentIcon(file) {
     let src
 
-    if (this.isPdfDocument(file.mime)) {
+    if (this.isPdfDocument(file.mime) || file.envelope) {
       src = '/static/images/deals/pdf-icon.svg'
     } else if (file.mime.includes('image/')) {
       src = file.preview_url
