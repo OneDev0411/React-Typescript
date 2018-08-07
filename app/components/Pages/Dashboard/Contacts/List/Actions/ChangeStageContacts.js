@@ -14,11 +14,11 @@ const MergeContacts = ({ selectedRows }) => (
           letterSpacing: '0.5px',
           color: '#2196f3',
           backgroundColor: '#ffffff',
-          border: 'solid 1px #e0e0e0'
+          border: 'solid 1px #2196f3'
         }}
         buttonStyle={{
-          paddingLeft: '15px',
-          paddingRight: '8px'
+          padding: '0 1.5em',
+          height: '34px'
         }}
         contacts={selectedRows}
       />

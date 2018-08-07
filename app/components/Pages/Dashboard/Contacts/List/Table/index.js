@@ -1,22 +1,22 @@
 import React, { Fragment } from 'react'
-import ReactTable from 'react-table'
+import Table from '../../../../../../views/components/Grid/Table'
 
-import { goTo } from '../../../../../../utils/go-to'
-import { LoadingComponent } from './components/LoadingComponent'
-import NoSearchResults from '../../../../../Partials/no-search-results'
-import Radio from '../../../../../../views/components/radio/RadioWithState'
-import { Pagination } from './components/Pagination'
-import TrComponent from './components/Trcomponent'
 import DropDown from './columns/Dropdown'
 import TagsString from './columns/Tags'
-import { LastTouchedCell } from './columns/LastTouched'
 import Name from './columns/Name'
-import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
+import { LastTouchedCell } from './columns/LastTouched'
+
+import { LoadingComponent } from './components/LoadingComponent'
+import NoSearchResults from '../../../../../Partials/no-search-results'
+
+import MergeContacts from '../Actions/MergeContacts'
+import ExportContacts from '../Actions/ExportContactsButton'
+import TagContacts from '../Actions/TagContacts'
+import ChangeStageContacts from '../Actions/ChangeStageContacts'
+
 import TagsOverlay from '../../components/TagsOverlay'
 
-function openContact(id) {
-  goTo(`/dashboard/contacts/${id}`, 'All Contacts')
-}
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -28,63 +28,31 @@ class ContactsList extends React.Component {
 
   columns = [
     {
-      id: 'td-select',
-      headerClassName: 'select-row-header',
-      Header: () => (
-        <Radio
-          square
-          selected={
-            this.props.data.length > 0 &&
-            this.props.data.length === this.props.selectedRows.length
-          }
-          onClick={() => this.props.toggleAllRows(this.props.currentPage)}
-        />
-      ),
-      accessor: '',
-      width: 40,
-      sortable: false,
-      Cell: ({ original: contact }) => (
-        <Radio
-          square
-          className="select-row"
-          selected={!!this.props.selectedRows.includes(contact.id)}
-          onClick={e => {
-            e.stopPropagation()
-            this.props.toggleRow(this.props.currentPage, contact.id)
-          }}
-        />
-      )
-    },
-    {
-      Header: 'NAME',
+      header: 'Name',
       id: 'name',
-      sortable: false,
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
-      Cell: ({ original: contact }) => <Name contact={contact} />
+      render: ({ rowData: contact }) => <Name contact={contact} />
     },
     {
-      Header: 'EMAIL',
+      header: 'Email',
       id: 'email',
-      sortable: false,
       accessor: contact => getAttributeFromSummary(contact, 'email')
     },
     {
-      Header: 'PHONE',
+      header: 'Phone',
       id: 'phone',
-      sortable: false,
       accessor: contact => getAttributeFromSummary(contact, 'phone_number')
     },
     {
-      Header: 'Last Touched',
+      header: 'Last Touched',
       id: 'last_touched',
       sortable: false,
-      Cell: row => <LastTouchedCell contact={row.original} />
+      render: ({ rowData: contact }) => <LastTouchedCell contact={contact} />
     },
     {
-      Header: 'TAGS',
+      header: 'Tags',
       id: 'tag',
-      sortable: false,
-      Cell: ({ original: contact }) => (
+      render: ({ rowData: contact }) => (
         <TagsString
           contact={contact}
           onSelectTagContact={this.onSelectTagContact}
@@ -93,73 +61,113 @@ class ContactsList extends React.Component {
     },
     {
       id: 'td-delete',
-      Header: '',
+      header: '',
       accessor: '',
       className: 'td--dropdown-container',
-      width: 30,
-      Cell: ({ original: contact }) => {
-        const { id: contactId } = contact
-
-        return (
-          <DropDown
-            contactId={contactId}
-            handleOnDelete={this.props.handleOnDelete}
-          />
-        )
-      }
+      width: '30px',
+      render: ({ rowData: contact }) => (
+        <DropDown
+          contactId={contact.id}
+          handleOnDelete={this.props.handleOnDelete}
+        />
+      )
     }
   ]
 
+  actions = [
+    {
+      render: ({ selectedRows }) => (
+        <ExportContacts
+          filters={this.props.filters}
+          exportIds={selectedRows}
+          disabled={selectedRows.length === 0 || this.props.isFetching}
+        />
+      )
+    },
+    {
+      type: 'button',
+      text: 'Delete',
+      inverse: true,
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      onClick: this.props.onRequestDelete
+    },
+    {
+      display: ({ selectedRows }) => selectedRows.length >= 2,
+      render: ({ selectedRows }) => (
+        <MergeContacts selectedRows={selectedRows} />
+      )
+    },
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: ({ selectedRows }) => <TagContacts selectedRows={selectedRows} />
+    },
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: ({ selectedRows }) => (
+        <ChangeStageContacts selectedRows={selectedRows} />
+      )
+    }
+  ]
+
+  onChangeSelectedRows = () => {}
+
   render() {
-    const { loading } = this.props
+    const selectedRowsCount = this.props.selectedRows.length
 
     return (
       <Fragment>
-        <ReactTable
-          data={this.props.data}
-          loading={loading}
-          columns={this.columns}
-          totalCount={this.props.totalCount}
-          minRows={0}
-          page={0}
-          currentPage={this.props.currentPage}
-          pages={this.props.pages}
-          defaultPageSize={50}
-          showPagination={false}
-          onPageChange={this.props.onPageChange}
-          TdComponent={TrComponent}
-          LoadingComponent={LoadingComponent}
-          NoDataComponent={() =>
-            loading ? null : (
-              <NoSearchResults description="Try typing another name, email, phone or tag." />
-            )
-          }
-          className="contacts-list-table"
-          getTrProps={(state, { original: { id } }) => {
-            if (this.props.deleting && this.props.selectedRows.includes(id)) {
-              return {
-                style: {
-                  opacity: 0.5,
-                  ponterEvents: 'none'
-                }
-              }
-            }
-
-            return {
-              onClick: () => openContact(id)
-            }
+        <Table
+          plugins={{
+            selectable: {
+              persistent: true,
+              storageKey: 'contacts',
+              onChange: this.props.onChangeSelectedRows
+            },
+            loadable: {
+              accuracy: 300, // px
+              debounceTime: 300, // ms
+              onTrigger: this.props.onRequestLoadMore
+            },
+            actionable: this.actions
           }}
+          data={this.props.data}
+          summary={{
+            text:
+              selectedRowsCount > 0
+                ? '[selectedRows] of <strong>[totalRows] Contacts</strong>'
+                : '<strong>[totalRows] Contacts</strong>',
+            selectedRows: selectedRowsCount,
+            totalRows: this.props.listInfo.total || 0
+          }}
+          isFetching={this.props.isFetching}
+          isFetchingMore={this.props.isFetchingMore}
+          columns={this.columns}
+          LoadingState={LoadingComponent}
+          EmptyState={() => (
+            <NoSearchResults description="Try typing another name, email, phone or tag." />
+          )}
+          // TdComponent={TrComponent}
+          // getTrProps={(state, { original: { id } }) => {
+          //   if (this.props.deleting && this.props.selectedRows.includes(id)) {
+          //     return {
+          //       style: {
+          //         opacity: 0.5,
+          //         ponterEvents: 'none'
+          //       }
+          //     }
+          //   }
+
+          //   return {
+          //     onClick: () => openContact(id)
+          //   }
+          // }}
         />
+
         <TagsOverlay
           selectedContactsIds={this.state.selectedTagContact}
           isOpen={this.state.selectedTagContact.length > 0}
           closeOverlay={this.closeTagsOverlay}
         />
-        {!loading &&
-          this.props.pages > 1 &&
-          this.props.data.length > 0 && (
-            <Pagination pageSize={50} {...this.props} />
-          )}
       </Fragment>
     )
   }

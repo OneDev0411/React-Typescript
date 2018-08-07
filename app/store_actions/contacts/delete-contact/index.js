@@ -48,67 +48,66 @@ export async function updateStoreBasedOnRemovedContacts(
 ) {
   const { list } = getState().contacts
   const listInfo = selectContactsInfo(list)
-  const pages = Math.ceil(listInfo.total / 50)
-  const currentPage = selectCurrentPage(list)
-  const currentPageContacts = selectPage(list, currentPage)
 
-  const updateUrl = page => {
-    let url = `/dashboard/contacts/page/${page}`
+  // const pages = Math.ceil(listInfo.total / 50)
+  // const currentPage = selectCurrentPage(list)
+  // const currentPageContacts = selectPage(list, currentPage)
 
-    // if (listInfo.filter) {
-    //   url = `${url}?filter=${listInfo.filter}`
-    // }
+  // const updateUrl = page => {
+  //   let url = `/dashboard/contacts/page/${page}`
 
-    browserHistory.push(url)
-  }
+  //   // if (listInfo.filter) {
+  //   //   url = `${url}?filter=${listInfo.filter}`
+  //   // }
 
-  const moveToLastCachedPage = () => {
-    const prevPage = currentPage - 1
+  //   browserHistory.push(url)
+  // }
 
-    dispatch(removeContactPage(currentPage))
-    dispatch({
-      info: {
-        ...listInfo,
-        total: listInfo.total - contactIds.length
-      },
-      type: actionTypes.UPDATE_CONTACT_LIST_INFO
-    })
-    dispatch(setContactCurrentPage(prevPage))
+  // const moveToLastCachedPage = () => {
+  //   const prevPage = currentPage - 1
 
-    updateUrl(prevPage)
+  //   dispatch(removeContactPage(currentPage))
+  //   dispatch({
+  //     info: {
+  //       ...listInfo,
+  //       total: listInfo.total - contactIds.length
+  //     },
+  //     type: actionTypes.UPDATE_CONTACT_LIST_INFO
+  //   })
+  //   dispatch(setContactCurrentPage(prevPage))
 
-    // console.log(`to previous ${listInfo.type} page: ${prevPage}`)
-  }
+  //   updateUrl(prevPage)
 
-  const moveToNextCachedPage = () => {
-    const nextPages = {}
-    const pages = selectPages(list)
+  //   // console.log(`to previous ${listInfo.type} page: ${prevPage}`)
+  // }
 
-    Object.keys(pages).forEach(page => {
-      page = Number(page)
+  // const moveToNextCachedPage = () => {
+  //   const nextPages = {}
+  //   const pages = selectPages(list)
 
-      if (page < currentPage) {
-        nextPages[page] = pages[page]
-      } else if (page > currentPage) {
-        nextPages[page - 1] = pages[page]
-      }
-    })
+  //   Object.keys(pages).forEach(page => {
+  //     page = Number(page)
 
-    dispatch({
-      info: {
-        ...listInfo,
-        total: listInfo.total - contactIds.length
-      },
-      type: actionTypes.UPDATE_CONTACT_LIST_INFO
-    })
-    dispatch(updateContactPages(nextPages))
+  //     if (page < currentPage) {
+  //       nextPages[page] = pages[page]
+  //     } else if (page > currentPage) {
+  //       nextPages[page - 1] = pages[page]
+  //     }
+  //   })
 
-    // console.log(`to next ${listInfo.type} page: ${currentPage}`)
-  }
+  //   dispatch({
+  //     info: {
+  //       ...listInfo,
+  //       total: listInfo.total - contactIds.length
+  //     },
+  //     type: actionTypes.UPDATE_CONTACT_LIST_INFO
+  //   })
+  //   dispatch(updateContactPages(nextPages))
 
-  const requestPage = async page => {
-    // console.log(`request ${listInfo.type} page: ${page}`)
+  //   // console.log(`to next ${listInfo.type} page: ${currentPage}`)
+  // }
 
+  const requestPage = async () => {
     batchActions([
       dispatch(clearContactPages),
       dispatch({
@@ -117,53 +116,53 @@ export async function updateStoreBasedOnRemovedContacts(
     ])
 
     if (listInfo.type === 'general') {
-      await dispatch(getContacts(page))
+      await dispatch(getContacts())
     } else {
       await dispatch(
-        searchContacts(listInfo.filter, page, null, listInfo.searchText)
+        searchContacts(listInfo.filter, 0, undefined, listInfo.searchInputValue)
       )
     }
 
-    updateUrl(page)
+    // updateUrl(page)
   }
 
-  if (
-    currentPageContacts &&
-    currentPageContacts.ids.length === contactIds.length
-  ) {
-    if (pages === 1) {
-      // pass general and filter
-      // console.log('first page')
+  // if (
+  //   currentPageContacts &&
+  //   currentPageContacts.ids.length === contactIds.length
+  // ) {
+  //   if (pages === 1) {
+  //     // pass general and filter
+  //     // console.log('first page')
 
-      return batchActions([
-        dispatch(clearContactPages),
-        dispatch({
-          type: actionTypes.CLEAR_CONTACTS_LIST
-        })
-      ])
-    }
+  //     return batchActions([
+  //       dispatch(clearContactPages),
+  //       dispatch({
+  //         type: actionTypes.CLEAR_CONTACTS_LIST
+  //       })
+  //     ])
+  //   }
 
-    if (pages === currentPage) {
-      // console.log('last page')
+  //   if (pages === currentPage) {
+  //     // console.log('last page')
 
-      if (selectPage(list, currentPage - 1)) {
-        return moveToLastCachedPage() // pass filter and general
-      }
+  //     if (selectPage(list, currentPage - 1)) {
+  //       return moveToLastCachedPage() // pass filter and general
+  //     }
 
-      return requestPage(currentPage - 1) // pass filter and general
-    }
+  //     return requestPage(currentPage - 1) // pass filter and general
+  //   }
 
-    const nextPage = selectPage(list, currentPage + 1)
+  //   const nextPage = selectPage(list, currentPage + 1)
 
-    if (nextPage) {
-      // console.log('total is big has cache')
+  //   if (nextPage) {
+  //     // console.log('total is big has cache')
 
-      return moveToNextCachedPage(nextPage) // pass filter and general
-    }
-  }
+  //     return moveToNextCachedPage(nextPage) // pass filter and general
+  //   }
+  // }
 
   // pass filter and general
   // console.log('if false', currentPageContacts)
 
-  requestPage(currentPage)
+  requestPage()
 }

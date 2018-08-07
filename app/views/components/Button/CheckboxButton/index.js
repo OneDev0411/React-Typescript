@@ -33,6 +33,10 @@ export class CheckBoxButton extends React.Component {
   }
 
   componentWillReceiveProps({ isSelected }) {
+    if (this.state.isSelected === isSelected) {
+      return false
+    }
+
     this.setState({
       isSelected
     })

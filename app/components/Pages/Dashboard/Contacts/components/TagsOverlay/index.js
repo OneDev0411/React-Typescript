@@ -24,7 +24,7 @@ import {
 } from '../../../../../../models/contacts/helpers'
 import {
   selectContact,
-  selectCurrentPage,
+  // selectCurrentPage,
   selectContactsInfo
 } from '../../../../../../reducers/contacts/list'
 import intersectionBy from 'lodash/intersectionBy'
@@ -135,7 +135,7 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          'We noticed you have un-added tag. Please select the \'Add\' link before saving',
+          "We noticed you have un-added tag. Please select the 'Add' link before saving",
         hideCancelButton: true,
         confirmLabel: 'Ok'
       })
@@ -199,9 +199,9 @@ class TagsOverlay extends React.Component {
     }
 
     if (selectedContactsIds.length > 1) {
-      const currentPage = selectCurrentPage(list)
+      // const currentPage = selectCurrentPage(list)
 
-      await getContacts(currentPage)
+      await getContacts()
     }
 
     await getContactsTags()
