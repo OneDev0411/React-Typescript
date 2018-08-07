@@ -1,9 +1,9 @@
 import _ from 'underscore'
 
 export class SortablePlugin {
-  constructor({ options, onChange }) {
+  constructor({ options, onRequestForceUpdate }) {
     this.options = options
-    this.onChange = onChange
+    this.onRequestForceUpdate = onRequestForceUpdate
 
     this.sortBy = null
     this.isAscendingSort = true
@@ -43,10 +43,7 @@ export class SortablePlugin {
     )
     this.sortBy = cell
 
-    this.onChange({
-      sortBy: this.sortBy,
-      isAscendingSort: this.isAscendingSort
-    })
+    this.onRequestForceUpdate()
   }
 
   getSortedData = (data, columns, resolveAccessor) => {

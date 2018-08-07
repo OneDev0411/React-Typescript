@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Container } from './styled'
+import { Container, ToolbarContainer, ActionsBar } from './styled'
 
 import BasicTable from './Tables/Basic'
 import MultipleTable from './Tables/Multiple'
@@ -9,6 +9,9 @@ import MultipleTable from './Tables/Multiple'
 import { SelectablePlugin } from './Plugins/Selectable'
 import { SortablePlugin } from './Plugins/Sortable'
 import { LoadablePlugin } from './Plugins/Loadable'
+import { ActionablePlugin } from './Plugins/Actionable'
+
+import { TableSummary } from './TableSummary'
 
 class Grid extends React.Component {
   constructor(props) {
@@ -18,46 +21,38 @@ class Grid extends React.Component {
 
     if (plugins.sortable) {
       this.sortablePlugin = new SortablePlugin({
-        options: this.props.plugins.sortable,
-        onChange: () => this.forceUpdate()
+        options: plugins.sortable,
+        onRequestForceUpdate: () => this.forceUpdate()
       })
     }
 
     if (plugins.selectable) {
       this.selectablePlugin = new SelectablePlugin({
-        options: this.props.plugins.selectable,
-        onChange: this.onChangeSelectedRows
+        options: plugins.selectable,
+        onRequestForceUpdate: () => this.forceUpdate()
       })
     }
 
     if (plugins.loadable) {
       this.loadablePlugin = new LoadablePlugin({
-        options: this.props.plugins.loadable
+        options: plugins.loadable
+      })
+    }
+
+    if (plugins.actionable) {
+      this.actionablePlugin = new ActionablePlugin({
+        actions: plugins.actionable,
+        selectablePlugin: this.selectablePlugin
       })
     }
   }
 
-  componentWillUnmount() {
-    this.loadablePlugin && this.loadablePlugin.unregister()
+  componentWillReceiveProps({ data }) {
+    this.selectablePlugin && this.selectablePlugin.setData(data)
   }
 
-  onChangeSelectedRows = params => {
-    const { forceUpdate, selectedRows, selectAllRows } = params
-    const { plugins, data } = this.props
-
-    if (forceUpdate) {
-      this.forceUpdate()
-    }
-
-    if (plugins.selectable.onChange) {
-      plugins.selectable.onChange(
-        selectAllRows
-          ? data.map(row => ({
-              id: row.id
-            }))
-          : selectedRows
-      )
-    }
+  componentWillUnmount() {
+    this.loadablePlugin && this.loadablePlugin.unregister()
   }
 
   /**
@@ -95,7 +90,7 @@ class Grid extends React.Component {
   }
 
   render() {
-    const { multiple, onTableRef } = this.props
+    const { multiple, onTableRef, Actions } = this.props
     const sizes = this.RowsSize
 
     if (multiple) {
@@ -115,6 +110,14 @@ class Grid extends React.Component {
 
     return (
       <Container>
+        <ToolbarContainer>
+          <TableSummary {...this.props.summary} />
+
+          <ActionsBar>
+            {this.actionablePlugin && this.actionablePlugin.render()}
+          </ActionsBar>
+        </ToolbarContainer>
+
         <BasicTable
           {...this.props}
           columns={this.Columns}
@@ -128,13 +131,31 @@ class Grid extends React.Component {
 }
 
 Grid.propTypes = {
-  plugins: PropTypes.object
-  // columns: PropTypes.func.isRequired,
-  // data: PropTypes.func.isRequired
+  Actions: PropTypes.element,
+  plugins: PropTypes.object,
+  isFetching: PropTypes.bool,
+  isFetchingMore: PropTypes.bool,
+  showTableHeader: PropTypes.bool,
+  getTrProps: PropTypes.func,
+  getTdProps: PropTypes.func,
+  onScrollBottom: PropTypes.func,
+  onScrollTop: PropTypes.func,
+  columns: PropTypes.array.isRequired,
+  data: PropTypes.array,
+  summary: PropTypes.object
 }
 
 Grid.defaultProps = {
-  plugins: {}
+  isFetching: false,
+  isFetchingMore: false,
+  showTableHeader: true,
+  getTrProps: () => {},
+  getTdProps: () => {},
+  onScrollBottom: () => {},
+  onScrollTop: () => {},
+  plugins: {},
+  data: [],
+  summary: {}
 }
 
 export default Grid

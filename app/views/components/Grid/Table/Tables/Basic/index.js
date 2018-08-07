@@ -1,6 +1,4 @@
 import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
-import _ from 'underscore'
 
 import { BodyCell as Cell, BodyRow as Row } from '../../styled'
 import TableHeader from '../../Header'
@@ -54,6 +52,7 @@ class BasicTable extends React.Component {
       columns,
       sizes,
       isFetching,
+      isFetchingMore,
       getHeaderProps,
       getHeaderRowProps,
       getTrProps,
@@ -83,7 +82,7 @@ class BasicTable extends React.Component {
           />
         )}
 
-        {isFetching && <LoadingState />}
+        {isFetching && !isFetchingMore && <LoadingState />}
         {SubComponent && <SubComponent data={data} columns={columns} />}
 
         {this.Rows.map((row, rowIndex) => (
@@ -116,29 +115,11 @@ class BasicTable extends React.Component {
               ))}
           </Row>
         ))}
+
+        {isFetchingMore && <LoadingState isFetchingMore />}
       </Fragment>
     )
   }
-}
-
-BasicTable.propTypes = {
-  isFetching: PropTypes.bool,
-  showTableHeader: PropTypes.bool,
-  getTrProps: PropTypes.func,
-  getTdProps: PropTypes.func,
-  onScrollBottom: PropTypes.func,
-  onScrollTop: PropTypes.func,
-  plugins: PropTypes.object
-}
-
-BasicTable.defaultProps = {
-  isFetching: false,
-  showTableHeader: true,
-  getTrProps: () => {},
-  getTdProps: () => {},
-  onScrollBottom: () => {},
-  onScrollTop: () => {},
-  plugins: {}
 }
 
 export default BasicTable

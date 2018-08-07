@@ -1,4 +1,6 @@
 import React from 'react'
+import _ from 'underscore'
+
 import { CheckBoxButton } from './Checkbox'
 
 const _externalStorageEngine = {}
@@ -23,9 +25,10 @@ export function resetGridSelectedItems(key) {
 }
 
 export class SelectablePlugin {
-  constructor({ options, onChange }) {
+  constructor({ options, onRequestForceUpdate }) {
     this.options = options
-    this.onChange = onChange
+    this.onRequestForceUpdate = onRequestForceUpdate
+    this.data = []
 
     if (options.persistent && !options.storageKey) {
       throw new Error(
@@ -38,6 +41,11 @@ export class SelectablePlugin {
     } else {
       this.internalStorage = getStorage(true)
     }
+  }
+
+  setData(data = []) {
+    // set new data
+    this.data = data
   }
 
   /**
@@ -56,6 +64,13 @@ export class SelectablePlugin {
    */
   get StorageKey() {
     return this.options.persistent ? this.options.storageKey : 0
+  }
+
+  /**
+   * returns all selected rows
+   */
+  get SelectedRows() {
+    return Object.keys(this.StorageEngine.selectedRows)
   }
 
   /**
@@ -86,25 +101,31 @@ export class SelectablePlugin {
       this.StorageEngine.selectedRows[id] = true
     }
 
-    this.onChange({
-      forceUpdate: false,
-      selectAllRows: this.StorageEngine.selectAllRows,
-      selectedRows: Object.keys(this.StorageEngine.selectedRows) || []
-    })
+    this.onChange()
+    this.onRequestForceUpdate()
   }
 
   /**
    * toggles selecting all rows
    */
   toggleSelectAllRows = () => {
-    this.StorageEngine.selectAllRows = !this.StorageEngine.selectAllRows
-    this.StorageEngine.selectedRows = {}
+    const selectedRows = {}
 
-    this.onChange({
-      forceUpdate: true,
-      selectedRows: [],
-      selectAllRows: this.StorageEngine.selectAllRows
-    })
+    this.StorageEngine.selectAllRows = !this.StorageEngine.selectAllRows
+
+    if (this.StorageEngine.selectAllRows) {
+      this.data.forEach(row => {
+        selectedRows[row.id] = true
+      })
+    }
+
+    this.StorageEngine.selectedRows = selectedRows
+
+    this.onChange()
+  }
+
+  onChange = () => {
+    this.options.onChange(this.SelectedRows)
   }
 
   registerColumn = columns => {
@@ -120,7 +141,7 @@ export class SelectablePlugin {
       render: ({ rowData: row }) => (
         <CheckBoxButton
           onClick={() => this.toggleSelectRow(row.id)}
-          isSelected={this.isAllRowsSelected() || this.isRowSelected(row.id)}
+          isSelected={this.isRowSelected(row.id)}
         />
       )
     }
