@@ -158,7 +158,7 @@ class ShareListing extends React.Component {
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
-          templateData={{ listing }}
+          templateData={{ listing, user: this.props.user }}
           assets={listing && listing.gallery_image_urls}
         />
 
@@ -175,8 +175,12 @@ class ShareListing extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts }) {
-  return { contacts: contacts.list, attributeDefs: contacts.attributeDefs }
+function mapStateToProps({ contacts, user }) {
+  return {
+    contacts: contacts.list,
+    attributeDefs: contacts.attributeDefs,
+    user
+  }
 }
 
 export default connect(

@@ -128,7 +128,7 @@ class DealInstantMarketing extends React.Component {
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
-          templateData={{ listing }}
+          templateData={{ listing, user: this.props.user }}
           assets={listing && listing.gallery_image_urls}
         />
 
@@ -145,7 +145,13 @@ class DealInstantMarketing extends React.Component {
   }
 }
 
+function mapStateToProps({ user }) {
+  return {
+    user
+  }
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { notify }
 )(DealInstantMarketing)
