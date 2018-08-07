@@ -30,6 +30,7 @@ router.get('/deals/report/:data', async ctx => {
         'POST'
       )
       .set('Authorization', `Bearer ${user.access_token}`)
+      .set('X-RECHAT-BRAND', convertedData.brand)
       .send({ filter: convertedData.filter, project: convertedData.project })
       .pipe(PassThrough())
   } catch (e) {
