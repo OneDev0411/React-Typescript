@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
@@ -57,9 +57,13 @@ class BackofficeFilters extends React.Component {
       .value()
   }
 
-  getBadgeCounter(tabName) {
-    const { deals } = this.props
+  getBadgeCounter(tabName = '') {
+    const { deals, searchCriteria } = this.props
     let counter = 0
+
+    if (searchCriteria.length > 0) {
+      return Object.values(deals).filter(deal => !deal.is_draft).length
+    }
 
     _.each(deals, deal => {
       if (
@@ -76,55 +80,45 @@ class BackofficeFilters extends React.Component {
   }
 
   render() {
-    const { deals, searchCriteria, activeFilter } = this.props
-
-    // don't show backoffice filters when user is searching something
-    if (searchCriteria) {
-      return (
-        <Container>
-          <ListTitle>Lists</ListTitle>
-
-          <ListItem isSelected>
-            <ListItemName>Search Results</ListItemName>
-
-            <ListIconContainer>
-              <BadgeCounter>
-                {deals
-                  ? Object.values(deals).filter(deal => deal.is_draft === false)
-                      .length
-                  : 0}
-              </BadgeCounter>
-            </ListIconContainer>
-          </ListItem>
-        </Container>
-      )
-    }
+    const { searchCriteria, activeFilter } = this.props
 
     return (
       <Container>
         <ListTitle>Lists</ListTitle>
 
-        {this.getTabs(this.props.deals).map(tabName => {
-          const counter = this.getBadgeCounter(tabName)
+        {searchCriteria.length > 0 ? (
+          <ListItem isSelected>
+            <ListItemName>Search Results</ListItemName>
 
-          if (counter === 0) {
-            return false
-          }
+            <ListIconContainer>
+              <BadgeCounter>{this.getBadgeCounter()}</BadgeCounter>
+            </ListIconContainer>
+          </ListItem>
+        ) : (
+          <Fragment>
+            {this.getTabs(this.props.deals).map(tabName => {
+              const counter = this.getBadgeCounter(tabName)
 
-          return (
-            <ListItem
-              key={`FILTER_${tabName}`}
-              isSelected={tabName === activeFilter}
-              onClick={() => this.setFilter(tabName)}
-            >
-              <ListItemName>{tabName}</ListItemName>
+              if (counter === 0) {
+                return false
+              }
 
-              <ListIconContainer>
-                <BadgeCounter>{counter}</BadgeCounter>
-              </ListIconContainer>
-            </ListItem>
-          )
-        })}
+              return (
+                <ListItem
+                  key={`FILTER_${tabName}`}
+                  isSelected={tabName === activeFilter}
+                  onClick={() => this.setFilter(tabName)}
+                >
+                  <ListItemName>{tabName}</ListItemName>
+
+                  <ListIconContainer>
+                    <BadgeCounter>{counter}</BadgeCounter>
+                  </ListIconContainer>
+                </ListItem>
+              )
+            })}
+          </Fragment>
+        )}
       </Container>
     )
   }

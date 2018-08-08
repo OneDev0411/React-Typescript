@@ -21,5 +21,10 @@ export const DealsTabs = ({ user }) => (
       to="/dashboard/account/deal/templates"
       disabled={user.user_type !== 'Agent'}
     />
+    <Tab
+      indexed
+      text="iCAL Feed"
+      to="/dashboard/account/deal/icalintegration"
+    />
   </ul>
 )

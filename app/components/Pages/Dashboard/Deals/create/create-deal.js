@@ -376,12 +376,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
+      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: "No, don't cancel",
+      cancelLabel: 'No, don\'t cancel',
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -536,6 +536,7 @@ class CreateDeal extends React.Component {
     const { isDraft } = this.state
     const { user, createDeal } = this.props
 
+    // deal is created before
     if (this.props.deal) {
       return this.updateDeal()
     }
@@ -632,7 +633,7 @@ class CreateDeal extends React.Component {
       } else {
         dealObject.deal_context = {
           ...dealObject.deal_context,
-          ...this.getAddressContext()
+          ...dealAddress.address_components
         }
       }
     }
@@ -678,33 +679,6 @@ class CreateDeal extends React.Component {
     })
 
     return contextsObject
-  }
-
-  /**
-   * create standard address context when user enters manual address
-   */
-  getAddressContext = () => {
-    const { dealAddress } = this.state
-    const address = dealAddress.address_components
-    const {
-      street_number,
-      street_name,
-      city,
-      state,
-      unit_number,
-      postal_code,
-      full_address
-    } = address
-
-    return {
-      full_address,
-      street_number,
-      unit_number,
-      city,
-      state,
-      street_name,
-      postal_code
-    }
   }
 
   /**

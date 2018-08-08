@@ -9,18 +9,22 @@ export default ({ isNewDeal, isDraft, isRequired, onChangeDealType }) => (
       {isRequired && <span className="required">*</span>}
     </div>
 
-    <RadioButton
-      selected={isDraft === true}
-      title={`${
-        isNewDeal ? 'Start as' : 'Update'
-      } draft (This deal is in an early stage & paperwork has just started)`}
-      onClick={() => onChangeDealType(true)}
-    />
+    <div className="deal-radio-row">
+      <RadioButton
+        selected={isDraft === true}
+        title={`${
+          isNewDeal ? 'Start as' : 'Update'
+        } draft (This deal is in an early stage & paperwork has just started)`}
+        onClick={() => onChangeDealType(true)}
+      />
+    </div>
 
-    <RadioButton
-      selected={isDraft === false}
-      title="Live deal (This deal is ready and I want to start submitting paperwork)"
-      onClick={() => onChangeDealType(false)}
-    />
+    <div className="deal-radio-row">
+      <RadioButton
+        selected={isDraft === false}
+        title="Live deal (This deal is ready and I want to start submitting paperwork)"
+        onClick={() => onChangeDealType(false)}
+      />
+    </div>
   </div>
 )
