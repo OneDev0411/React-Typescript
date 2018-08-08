@@ -38,6 +38,36 @@ class Builder extends React.Component {
     this.addCloseButton()
     this.addSaveButton()
     this.lockIn()
+    this.disableResize()
+  }
+
+  disableResize = () => {
+    const components = this.editor.DomComponents
+
+    const image = components.getType('image')
+
+    const defaults = image.model.prototype.defaults
+
+    const updated = image.model.extend(
+      {
+        defaults: Object.assign({}, defaults, {
+          resizable: false
+        })
+      },
+      {
+        isComponent: function(el) {
+          if (el.tagName === 'IMG')
+            return {
+              type: 'image'
+            }
+        }
+      }
+    )
+
+    components.addType('image', {
+      model: updated,
+      view: image.view
+    })
   }
 
   addCloseButton = () => {
