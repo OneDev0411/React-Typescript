@@ -53,14 +53,6 @@ class Builder extends React.Component {
         defaults: Object.assign({}, defaults, {
           resizable: false
         })
-      },
-      {
-        isComponent: function(el) {
-          if (el.tagName === 'IMG')
-            return {
-              type: 'image'
-            }
-        }
       }
     )
 
