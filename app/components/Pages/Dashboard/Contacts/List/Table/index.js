@@ -86,7 +86,7 @@ class ContactsList extends React.Component {
         <ExportContacts
           filters={this.props.filters}
           exportIds={selectedRows}
-          disabled={selectedRows.length === 0 || this.props.isFetching}
+          disabled={this.props.isFetching}
         />
       )
     },

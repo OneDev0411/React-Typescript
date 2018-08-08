@@ -33,10 +33,6 @@ export default ({ exportIds, disabled, filters }) => {
       .join('&filters[]=')}`
   }
 
-  if (disabled) {
-    url = '#'
-  }
-
   return (
     <OverlayTrigger
       placement="bottom"
