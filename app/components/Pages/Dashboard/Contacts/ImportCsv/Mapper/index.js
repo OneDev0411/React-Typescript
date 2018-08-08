@@ -96,11 +96,11 @@ class Mapper extends React.Component {
     const { attributeDefs } = this.props
     const mappedFields = {}
 
-    const total = Object.keys(csvColoumns).length
-    let counter = 0
-
-    _.each(csvColoumns, ({ name: columnName }) => {
-      counter += 1
+    _.each(csvColoumns, ({ name: columnName, hasValue }) => {
+      // skip empty columns
+      if (hasValue === false) {
+        return false
+      }
 
       let index = 0
       const attribute = this.findMatchedAttribute(columnName)
