@@ -10,6 +10,8 @@ import { isAddressField } from '../helpers/address'
 
 import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
+import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
+import Loading from '../../../../../Partials/Loading'
 
 import {
   updateCsvFieldsMap,
@@ -25,6 +27,11 @@ import { selectDefinition } from '../../../../../../reducers/contacts/attributeD
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 
 class Mapper extends React.Component {
+  state = {
+    isDrawerOpen: false,
+    isAutoMapping: false
+  }
+
   componentDidMount() {
     this.analyze()
   }
@@ -74,19 +81,27 @@ class Mapper extends React.Component {
       setCurrentStepValidation(true)
     ])
 
-    // async compute
-    setTimeout(() => {
-      if (_.size(mappedFields) === 0) {
+    if (_.size(mappedFields) === 0) {
+      this.setState({
+        isAutoMapping: true
+      })
+
+      setTimeout(() => {
         this.autoMap(columns)
-      }
-    }, 0)
+      }, 100)
+    }
   }
 
   autoMap = csvColoumns => {
     const { attributeDefs } = this.props
     const mappedFields = {}
 
+    const total = Object.keys(csvColoumns).length
+    let counter = 0
+
     _.each(csvColoumns, ({ name: columnName }) => {
+      counter += 1
+
       let index = 0
       const attribute = this.findMatchedAttribute(columnName)
 
@@ -120,6 +135,10 @@ class Mapper extends React.Component {
 
     this.props.updateCsvInfo({
       mappedFields
+    })
+
+    this.setState({
+      isAutoMapping: false
     })
   }
 
@@ -180,6 +199,11 @@ class Mapper extends React.Component {
     return list
   }
 
+  toggleOpenDrawer = () =>
+    this.setState(state => ({
+      isDrawerOpen: !state.isDrawerOpen
+    }))
+
   shouldShowLabel = colName => this.getMappedField(colName).definition.has_label
 
   onChangeField = (fieldName, fieldValue) => {
@@ -218,6 +242,18 @@ class Mapper extends React.Component {
   render() {
     const { columns } = this.props
 
+    if (this.state.isAutoMapping) {
+      return (
+        <div
+          className="contact__import-csv--mapper"
+          style={{ textAlign: 'center', fontWeight: 500, fontSize: '20px' }}
+        >
+          <Loading />
+          Trying to map the columns automatically. please wait...
+        </div>
+      )
+    }
+
     return (
       <div className="contact__import-csv--mapper">
         <div className="column-row heading">
@@ -240,6 +276,7 @@ class Mapper extends React.Component {
                       fieldName={colName}
                       selectedField={mappedField.definitionId}
                       selectedFieldIndex={mappedField.index}
+                      toggleOpenDrawer={this.toggleOpenDrawer}
                       onChange={this.onChangeField}
                     />
                   </div>
@@ -259,6 +296,11 @@ class Mapper extends React.Component {
               )
             })
             .value()}
+
+        <CustomAttributeDrawer
+          isOpen={this.state.isDrawerOpen}
+          onClose={this.toggleOpenDrawer}
+        />
       </div>
     )
   }
