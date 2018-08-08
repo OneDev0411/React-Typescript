@@ -64,7 +64,7 @@ class BasicTable extends React.Component {
       SubComponent
     } = this.props
 
-    if (EmptyState && data.length === 0 && !isFetching) {
+    if (data.length === 0 && EmptyState && !isFetching) {
       return <EmptyState />
     }
 

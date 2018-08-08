@@ -90,7 +90,7 @@ class Grid extends React.Component {
   }
 
   render() {
-    const { multiple, onTableRef, Actions } = this.props
+    const { multiple, onTableRef } = this.props
     const sizes = this.RowsSize
 
     if (multiple) {

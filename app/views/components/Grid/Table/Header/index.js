@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { Header, HeaderRow, HeaderCell } from './styled'
 
 import SortIndicator from '../Plugins/Sortable/Indicator'
-import { CheckBoxButton } from '../Plugins/Selectable'
 
 function isSortable(sortablePlugin, column) {
   return sortablePlugin && column.isSortable !== false && column.header
