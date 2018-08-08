@@ -29,7 +29,7 @@ export default ({
       </div>
 
       {statuses.map((name, key) => (
-        <div key={key} className="inline">
+        <div key={key} className="deal-radio-row">
           <RadioButton
             selected={dealStatus === name}
             title={

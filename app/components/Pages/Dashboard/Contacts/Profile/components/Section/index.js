@@ -12,7 +12,12 @@ import Tooltip from '../../../../../../../views/components/tooltip'
 Section.propTypes = {
   onAdd: PropTypes.func,
   onEdit: PropTypes.func,
-  title: PropTypes.string
+  title: PropTypes.string,
+  bodyStyle: PropTypes.shape()
+}
+
+Section.defaultProps = {
+  bodyStyle: { padding: '1em 1em 0' }
 }
 
 export function Section(props) {
@@ -46,7 +51,7 @@ export function Section(props) {
           </Flex>
         </Header>
       )}
-      <Body style={{ padding: '1em 1em 0' }}>{props.children}</Body>
+      <Body style={props.bodyStyle}>{props.children}</Body>
     </Container>
   )
 }

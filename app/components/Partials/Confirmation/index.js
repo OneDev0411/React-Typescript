@@ -57,13 +57,12 @@ class Confirmation extends React.Component {
             )}
 
             {confirmation.needsUserEntry && (
-              <div className="confirmation-input">
-                <textarea
-                  defaultValue={confirmation.inputDefaultValue}
-                  placeholder={confirmation.inputPlaceholder || ''}
-                  ref={ref => (this.input = ref)}
-                />
-              </div>
+              <textarea
+                className="confirmation-input"
+                defaultValue={confirmation.inputDefaultValue}
+                placeholder={confirmation.inputPlaceholder || ''}
+                ref={ref => (this.input = ref)}
+              />
             )}
 
             <div className="cta">

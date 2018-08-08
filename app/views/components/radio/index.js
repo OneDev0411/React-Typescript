@@ -10,10 +10,12 @@ export default ({
   tooltip = null,
   disabled = false,
   className,
-  onClick = () => null
+  onClick = () => null,
+  style = {}
 }) => (
   <div
     className={cn('deal-radio', { [className]: className, selected })}
+    style={style}
     onClick={onClick}
   >
     <ToolTip caption={tooltip}>

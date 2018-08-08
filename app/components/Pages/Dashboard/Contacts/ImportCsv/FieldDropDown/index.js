@@ -12,14 +12,8 @@ import DropDown from '../components/DropDown'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 class FieldDropDown extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isDrawerOpen: false
-    }
-
-    this.onFieldChange = this.onFieldChange.bind(this)
+  state = {
+    isDrawerOpen: false
   }
 
   toggleOpenDrawer = () =>
@@ -32,7 +26,7 @@ class FieldDropDown extends React.Component {
    * @param {Object} attributes - all attributes definitions
    * @param {Object} mappedFields - list of mapped fields
    */
-  getLastAddressIndex(attributes, mappedFields) {
+  getLastAddressIndex = (attributes, mappedFields) => {
     const mappedAddressFields = _.filter(mappedFields, field => {
       if (!field.definitionId) {
         return false
@@ -55,7 +49,7 @@ class FieldDropDown extends React.Component {
    * @param {Object} attributes - all attributes definitions
    * @param {Integer} max - last address index
    */
-  createNewAddressOptions(attributes, max) {
+  createNewAddressOptions = (attributes, max) => {
     const options = {}
 
     for (let index = 1; index <= max; index++) {
@@ -85,14 +79,19 @@ class FieldDropDown extends React.Component {
    * @param {Integer} definitionId - attribute definition id
    * @param {Integer} index - the option index
    */
-  isOptionDisabled(attributes, mappedFields, definitionId, index) {
-    if (!isAddressField(attributes, definitionId)) {
+  isOptionDisabled = (attributes, mappedFields, definitionId, index) => {
+    const { singular } = attributes.byId[definitionId]
+
+    if (!isAddressField(attributes, definitionId) && !singular) {
       return false
     }
 
-    return _.some(mappedFields, {
-      definitionId,
-      index
+    return _.some(mappedFields, field => {
+      if (singular && field.definitionId === definitionId) {
+        return true
+      }
+
+      return definitionId === field.definitionId && index === field.index
     })
   }
 
@@ -101,7 +100,7 @@ class FieldDropDown extends React.Component {
    * @param {Object} attributes - all attributes definitions
    * @param {Object} mappedFields - list of mapped fields
    */
-  createOptions(attributes, mappedFields) {
+  createOptions = (attributes, mappedFields) => {
     let newOptions = {}
     const lastAddressIndex = this.getLastAddressIndex(attributes, mappedFields)
 
@@ -115,8 +114,10 @@ class FieldDropDown extends React.Component {
     }
 
     return _.chain(options)
-      .filter(({ editable, show }) => editable || show)
-      .map(({ id, label, index = 0 }) => ({
+      .filter(
+        attr => !['stage'].includes(attr.name) && (attr.editable || attr.show)
+      )
+      .map(({ id, label, singular, index = 0 }) => ({
         disabled: this.isOptionDisabled(attributes, mappedFields, id, index),
         value: `${id}:${index}`,
         label: index > 0 ? `${label} ${index}` : label
@@ -127,9 +128,12 @@ class FieldDropDown extends React.Component {
   /**
    *
    */
-  getSelectedField(options) {
+  getSelectedField = options => {
     const { selectedField, selectedFieldIndex } = this.props
-    const value = `${selectedField}:${selectedFieldIndex}`
+    const value =
+      selectedField || selectedFieldIndex
+        ? `${selectedField}:${selectedFieldIndex}`
+        : ''
 
     const field =
       selectedField &&
@@ -146,7 +150,7 @@ class FieldDropDown extends React.Component {
   /**
    *
    */
-  onFieldChange(value) {
+  onFieldChange = value => {
     this.props.onChange(this.props.fieldName, value)
   }
 

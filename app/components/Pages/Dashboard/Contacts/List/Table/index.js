@@ -9,6 +9,7 @@ import { Pagination } from './components/Pagination'
 import TrComponent from './components/Trcomponent'
 import DropDown from './columns/Dropdown'
 import TagsString from './columns/Tags'
+import { LastTouchedCell } from './columns/LastTouched'
 import Name from './columns/Name'
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 import TagsOverlay from '../../components/TagsOverlay'
@@ -19,16 +20,12 @@ function openContact(id) {
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
+
   onSelectTagContact = selectedTagContact =>
     this.setState({ selectedTagContact: [selectedTagContact] })
+
   closeTagsOverlay = () => this.setState({ selectedTagContact: [] })
-  getCellTitle = title => (
-    <Fragment>
-      {title}
-      <i className="fa fa-caret-down" />
-      <i className="fa fa-caret-up" />
-    </Fragment>
-  )
+
   columns = [
     {
       id: 'td-select',
@@ -59,14 +56,14 @@ class ContactsList extends React.Component {
       )
     },
     {
-      Header: this.getCellTitle('NAME'),
+      Header: 'NAME',
       id: 'name',
       sortable: false,
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       Cell: ({ original: contact }) => <Name contact={contact} />
     },
     {
-      Header: this.getCellTitle('EMAIL'),
+      Header: 'EMAIL',
       id: 'email',
       sortable: false,
       accessor: contact => getAttributeFromSummary(contact, 'email')
@@ -78,7 +75,13 @@ class ContactsList extends React.Component {
       accessor: contact => getAttributeFromSummary(contact, 'phone_number')
     },
     {
-      Header: this.getCellTitle('TAGS'),
+      Header: 'Last Touched',
+      id: 'last_touched',
+      sortable: false,
+      Cell: row => <LastTouchedCell contact={row.original} />
+    },
+    {
+      Header: 'TAGS',
       id: 'tag',
       sortable: false,
       Cell: ({ original: contact }) => (
