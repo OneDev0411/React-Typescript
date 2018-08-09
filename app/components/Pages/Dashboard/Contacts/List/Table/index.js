@@ -106,6 +106,11 @@ class ContactsList extends React.Component {
           resetSelectedRows={this.props.resetSelectedRows}
         />
       )
+    },
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: ({ selectedRows }) => <TagContacts selectedRows={selectedRows} />
+    },
     }
   ]
 
