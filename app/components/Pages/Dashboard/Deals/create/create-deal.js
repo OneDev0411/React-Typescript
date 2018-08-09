@@ -36,28 +36,23 @@ import OpenDeal from '../utils/open-deal'
 import { isBackOffice } from '../../../../../utils/user-teams'
 
 class CreateDeal extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      saving: false,
-      isDraft: true,
-      dealSide: '',
-      dealPropertyType: '',
-      dealAddress: null,
-      dealStatus: '',
-      enderType: -1,
-      contexts: {},
-      agents: {},
-      sellingAgents: {},
-      clients: {},
-      sellingClients: {},
-      referrals: {},
-      escrowOfficers: {},
-      submitError: null,
-      validationErrors: []
-    }
-
-    this.isFormSubmitted = false
+  state = {
+    saving: false,
+    isDraft: true,
+    dealSide: '',
+    dealPropertyType: '',
+    dealAddress: null,
+    dealStatus: '',
+    enderType: -1,
+    contexts: {},
+    agents: {},
+    sellingAgents: {},
+    clients: {},
+    sellingClients: {},
+    referrals: {},
+    escrowOfficers: {},
+    submitError: null,
+    validationErrors: []
   }
 
   componentDidMount() {
@@ -66,14 +61,21 @@ class CreateDeal extends React.Component {
     }
   }
 
+  isFormSubmitted = false
+
   initializeDeal = async () => {
     const { deal } = this.props
+
+    const enderType =
+      typeof deal.deal_context.ender_type !== 'undefined'
+        ? Deal.get.field(deal, 'ender_type')
+        : -1
 
     this.setState({
       isDraft: false,
       dealSide: deal.deal_type,
       dealPropertyType: deal.property_type,
-      enderType: Deal.get.field(deal, 'ender_type') || -1,
+      enderType,
       dealStatus: Deal.get.field(deal, 'listing_status') || '',
       contexts: this.generateContextsFromDeal(deal),
       dealAddress: this.generateAddressFromDeal(deal),
@@ -666,7 +668,10 @@ class CreateDeal extends React.Component {
     )
 
     _.each(contexts, (value, name) => {
-      if (_.isUndefined(value) || value === null || value.length === 0) {
+      if (
+        _.isUndefined(value) ||
+        (typeof value === 'string' && value.length === 0)
+      ) {
         return false
       }
 
