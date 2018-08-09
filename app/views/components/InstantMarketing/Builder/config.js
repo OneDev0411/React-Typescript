@@ -11,6 +11,8 @@ export default {
   `,
   height: '100%',
   styleManager: {
+    textNoElement: '',
+
     sectors: [
       {
         name: 'Color',
