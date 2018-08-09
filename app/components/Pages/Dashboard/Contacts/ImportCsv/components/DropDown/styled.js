@@ -64,7 +64,7 @@ export const List = styled.div`
 export const ListItem = styled.div`
   padding: 8px 16px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: ${props => (props.selected ? 500 : 400)};
 
   :hover {
