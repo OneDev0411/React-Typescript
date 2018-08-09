@@ -111,7 +111,8 @@ class CreateDeal extends React.Component {
       // dont allow to modify users
       const user = {
         ...roleItem,
-        readOnly: true
+        isEditable: false,
+        isRemovable: false
       }
 
       if (roleName.includes('Referral')) {
@@ -378,12 +379,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
+      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
