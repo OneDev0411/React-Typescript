@@ -39,6 +39,15 @@ class Builder extends React.Component {
     this.addSaveButton()
     this.lockIn()
     this.disableResize()
+    this.singleClickTextEditing()
+  }
+
+  singleClickTextEditing = () => {
+    const components = this.editor.DomComponents
+
+    this.editor.on('component:selected', selected => {
+      selected.view.enableEditing(selected.view.el)
+    })
   }
 
   disableResize = () => {
