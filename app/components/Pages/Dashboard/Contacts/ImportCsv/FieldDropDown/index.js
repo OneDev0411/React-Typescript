@@ -2,8 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
-
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 import { isAddressField, getAddressFields } from '../helpers/address'
 
@@ -12,15 +10,6 @@ import DropDown from '../components/DropDown'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 class FieldDropDown extends React.Component {
-  state = {
-    isDrawerOpen: false
-  }
-
-  toggleOpenDrawer = () =>
-    this.setState(state => ({
-      isDrawerOpen: !state.isDrawerOpen
-    }))
-
   /**
    * returns last address index in the map object
    * @param {Object} attributes - all attributes definitions
@@ -167,15 +156,10 @@ class FieldDropDown extends React.Component {
           selectedField={selectedField}
           onChange={this.onFieldChange}
           callToActions={
-            <ActionButton onClick={this.toggleOpenDrawer}>
+            <ActionButton onClick={this.props.toggleOpenDrawer}>
               Add custom field
             </ActionButton>
           }
-        />
-
-        <CustomAttributeDrawer
-          isOpen={this.state.isDrawerOpen}
-          onClose={this.toggleOpenDrawer}
         />
       </div>
     )

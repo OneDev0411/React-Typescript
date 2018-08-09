@@ -26,6 +26,10 @@ function getSortColumn(columns, sortBy) {
 }
 
 function defaultSortMethod({ accessor }) {
+  if (typeof accessor === 'number') {
+    return accessor
+  }
+
   return accessor && accessor.toString().toLowerCase()
 }
 
