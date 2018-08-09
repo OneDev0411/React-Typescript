@@ -23,8 +23,8 @@ class BackofficeFilters extends React.Component {
   }
 
   componentWillReceiveProps({ deals, activeFilter }) {
-    if (!this.props.activeFilter && !activeFilter) {
-      this.findActiveTab(deals, null)
+    if (!activeFilter) {
+      this.findActiveTab(deals, this.props.activeFilter)
     }
   }
 
