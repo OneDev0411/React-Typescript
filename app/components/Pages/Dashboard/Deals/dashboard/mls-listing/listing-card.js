@@ -105,7 +105,7 @@ class ListingCard extends React.Component {
                 <i className="fa fa-spin fa-spinner" />
               ) : (
                 <div className="deal-listing-card__address__text">
-                  {Deal.get.address(deal, roles)}
+                  {deal.title}
                 </div>
               )}
             </div>
