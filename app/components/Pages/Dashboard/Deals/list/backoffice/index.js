@@ -16,10 +16,12 @@ import Grid from './grid'
 import BackofficeFilters from './filters'
 import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
 
+let persistentSearchInput = ''
+
 class BackofficeTable extends React.Component {
   state = {
     isSideMenuOpen: true,
-    searchCriteria: ''
+    searchCriteria: persistentSearchInput
   }
 
   toggleSideMenu = () =>
@@ -37,6 +39,9 @@ class BackofficeTable extends React.Component {
     this.setState({
       searchCriteria: value
     })
+
+    // set persistent search input
+    persistentSearchInput = value
 
     if (value.length === 0) {
       return getDeals(user)
@@ -74,6 +79,7 @@ class BackofficeTable extends React.Component {
               <Search
                 disableOnSearch
                 showLoadingOnSearch
+                defaultValue={persistentSearchInput}
                 isSearching={isFetchingDeals}
                 placeholder="Search deals by address, MLS # or agent name…"
                 onChange={this.handleSearch}
