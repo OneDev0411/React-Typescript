@@ -52,7 +52,7 @@
   }
 
   .gjs-two-color, .gjs-color-warn, .gjs-four-color, .gjs-color-main, .gjs-color-contrast {
-    color: #2196f3;
+    color: #003bdf;
   }
 
   .gjs-toolbar {
@@ -70,5 +70,13 @@
 
   .gjs-cv-canvas {
     width: 75%;
+  }
+
+  .gjs-badge {
+    /* They change display: block by code,
+     * but we want to hide it.
+     * We do it by setting visibility
+     */
+    visibility: hidden;
   }
 }
