@@ -39,7 +39,7 @@ class ContactsList extends React.Component {
     pageTitle: 'All Contacts',
     isFetchingContacts: false,
     isFetchingMoreContacts: false,
-    isDeleting: false,
+    isRowsUpdating: false,
     filter: this.props.filter,
     selectedRows: [],
     searchInputValue: this.props.searchInputValue
@@ -167,16 +167,18 @@ class ContactsList extends React.Component {
 
   handleDeleteContact = async ids => {
     try {
-      this.setState({ isDeleting: true })
+      this.rowsUpdating(true)
 
       await this.props.deleteContacts(ids)
 
-      this.setState({ isDeleting: false })
+      this.rowsUpdating(false)
       this.resetSelectedRows()
     } catch (error) {
       console.log(error)
     }
   }
+
+  rowsUpdating = isRowsUpdating => this.setState({ isRowsUpdating })
 
   resetSelectedRows = () => {
     resetGridSelectedItems('contacts')
@@ -219,8 +221,10 @@ class ContactsList extends React.Component {
               listInfo={this.props.listInfo}
               isFetching={this.state.isFetchingContacts}
               isFetchingMore={this.state.isFetchingMoreContacts}
-              isDeleting={this.state.isDeleting}
+              isRowsUpdating={this.state.isRowsUpdating}
               onRequestLoadMore={this.handleLoadMore}
+              rowsUpdating={this.rowsUpdating}
+              resetSelectedRows={this.resetSelectedRows}
               onChangeSelectedRows={this.onChangeSelectedRows}
               selectedRows={this.state.selectedRows}
               onRequestDelete={this.handleOnDelete}

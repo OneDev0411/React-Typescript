@@ -18,28 +18,7 @@ export function deleteContacts(contactIds) {
       })
 
       await removeContacts(contactIds)
-
-      const { list } = getState().contacts
-      const listInfo = selectContactsInfo(list)
-      const fetchedContactsLength = selectContacts(list).length
-
-      if (listInfo.type === 'general') {
-        await dispatch(getContacts(fetchedContactsLength, contactIds.length))
-      } else {
-        await dispatch(
-          searchContacts(
-            listInfo.filter,
-            fetchedContactsLength,
-            contactIds.length,
-            listInfo.searchText
-          )
-        )
-      }
-
-      dispatch({
-        type: actionTypes.DELETE_CONTACTS_SUCCESS,
-        contactIds
-      })
+      afterDeleteContactsFetch(dispatch, getState, contactIds)
     } catch (error) {
       dispatch({
         error,
@@ -48,4 +27,30 @@ export function deleteContacts(contactIds) {
       throw error
     }
   }
+}
+
+export async function afterDeleteContactsFetch(dispatch, getState, contactIds) {
+  const { list } = getState().contacts
+  const listInfo = selectContactsInfo(list)
+  const fetchedContactsLength = selectContacts(list).length
+
+  if (fetchedContactsLength < listInfo.total) {
+    if (listInfo.type === 'general') {
+      await dispatch(getContacts(fetchedContactsLength, contactIds.length))
+    } else {
+      await dispatch(
+        searchContacts(
+          listInfo.filter,
+          fetchedContactsLength,
+          contactIds.length,
+          listInfo.searchText
+        )
+      )
+    }
+  }
+
+  dispatch({
+    type: actionTypes.DELETE_CONTACTS_SUCCESS,
+    contactIds
+  })
 }

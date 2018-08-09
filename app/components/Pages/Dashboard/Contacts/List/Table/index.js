@@ -100,23 +100,17 @@ class ContactsList extends React.Component {
     {
       display: ({ selectedRows }) => selectedRows.length >= 2,
       render: ({ selectedRows }) => (
-        <MergeContacts selectedRows={selectedRows} />
-      )
-    },
-    {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => <TagContacts selectedRows={selectedRows} />
-    },
-    {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => (
-        <ChangeStageContacts selectedRows={selectedRows} />
+        <MergeContacts
+          selectedRows={selectedRows}
+          rowsUpdating={this.props.rowsUpdating}
+          resetSelectedRows={this.props.resetSelectedRows}
+        />
       )
     }
   ]
 
   getGridTrProps = (rowIndex, { original: row, isSelected }) => {
-    if (this.props.isDeleting && isSelected) {
+    if (this.props.isRowsUpdating && isSelected) {
       return {
         style: {
           opacity: 0.5,
