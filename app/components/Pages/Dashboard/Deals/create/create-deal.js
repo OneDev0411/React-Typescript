@@ -30,6 +30,7 @@ import {
   createDeal,
   updateContext,
   ejectDraftMode,
+  updateListing,
   createRoles
 } from '../../../../../store_actions/deals'
 import OpenDeal from '../utils/open-deal'
@@ -576,13 +577,16 @@ class CreateDeal extends React.Component {
   updateDeal = async () => {
     const { id: dealId } = this.props.deal
     const newRoles = _.filter(this.Roles, role => !role.deal)
-    const contexts = this.createDealObject().deal_context
+
+    const dealObject = this.createDealObject()
+    const contexts = dealObject.deal_context
 
     this.setState({ saving: true })
 
     try {
-      if (newRoles.length > 0) {
-        await this.props.createRoles(dealId, newRoles)
+      // update listing if provided
+      if (dealObject.listing) {
+        await this.props.updateListing(dealId, dealObject.listing)
       }
 
       // create/update contexts
@@ -590,6 +594,10 @@ class CreateDeal extends React.Component {
 
       if (this.state.isDraft === false) {
         await this.props.ejectDraftMode(dealId)
+      }
+
+      if (newRoles.length > 0) {
+        await this.props.createRoles(dealId, newRoles)
       }
 
       return OpenDeal(dealId)
@@ -1024,6 +1032,7 @@ export default connect(
     updateContext,
     ejectDraftMode,
     createRoles,
+    updateListing,
     notify
   }
 )(CreateDeal)
