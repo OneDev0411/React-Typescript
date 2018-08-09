@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-
+import _ from 'underscore'
 import * as actionTypes from '../../constants/contacts'
 
 const byId = (state = {}, action) => {
@@ -18,14 +18,8 @@ const byId = (state = {}, action) => {
         ...action.response.entities.contacts
       }
 
-    case actionTypes.DELETE_CONTACT_SUCCESS:
-      const { contacts } = action.response.entities
-
-      if (!contacts) {
-        return {}
-      }
-
-      return contacts
+    case actionTypes.DELETE_CONTACTS_SUCCESS:
+      return _.omit(state, (value, key) => action.contactIds.includes(key))
 
     case actionTypes.CLEAR_CONTACTS_LIST:
       return {}
@@ -46,8 +40,8 @@ const ids = (state = [], action) => {
       // removing duplicates
       return [...new Set(newState)]
 
-    case actionTypes.DELETE_CONTACT_SUCCESS:
-      return action.response.result.contacts
+    case actionTypes.DELETE_CONTACTS_SUCCESS:
+      return state.filter(id => !action.contactIds.includes(id))
     case actionTypes.CLEAR_CONTACTS_LIST:
       return []
     default:
@@ -64,7 +58,6 @@ const listInfoInitialState = {
 }
 export const info = (state = listInfoInitialState, action) => {
   switch (action.type) {
-    case actionTypes.DELETE_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
@@ -114,10 +107,12 @@ const error = (state = null, action) => {
     case actionTypes.FETCH_MERGE_CONTACTS_FAILURE:
     case actionTypes.SEARCH_CONTACTS_FAILURE:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_FAILURE:
+    case actionTypes.DELETE_CONTACTS_FAILURE:
       return action.error
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
+    case actionTypes.DELETE_CONTACTS_SUCCESS:
       return null
     default:
       return state

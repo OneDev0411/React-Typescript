@@ -172,6 +172,7 @@ class ContactsList extends React.Component {
       await this.props.deleteContacts(ids)
 
       this.setState({ isDeleting: false })
+      this.resetSelectedRows()
     } catch (error) {
       console.log(error)
     }
