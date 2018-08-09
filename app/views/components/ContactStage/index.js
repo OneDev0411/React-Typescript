@@ -9,12 +9,13 @@ import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs
 import {
   upsertContactAttributes,
   upsertAttributesToContacts,
-  getContacts,
+  searchContacts,
   deselectAllRows
 } from '../../../store_actions/contacts'
 import {
   selectCurrentPage,
-  selectContact
+  selectContact,
+  selectContactsInfo
 } from '../../../reducers/contacts/list'
 
 const defaultSelectedItem = { label: 'General', value: 'General' }
@@ -87,7 +88,12 @@ class Stage extends React.Component {
           }
         ])
 
-        await this.props.getContacts(currentPage)
+        await this.props.searchContacts(
+          this.props.filter,
+          currentPage,
+          undefined,
+          this.props.searchText
+        )
       }
 
       this.props.notify({
@@ -136,10 +142,14 @@ function mapStateToProps(state) {
     contacts: { attributeDefs, list: ContactListStore }
   } = state
   const attribute_def = selectDefinitionByName(attributeDefs, 'stage')
+  const filter = selectContactsInfo(ContactListStore).filter || []
+  const searchText = selectContactsInfo(ContactListStore).searchText || ''
 
   return {
     attribute_def,
-    ContactListStore
+    ContactListStore,
+    filter,
+    searchText
   }
 }
 
@@ -148,7 +158,7 @@ export default connect(
   {
     upsertContactAttributes,
     upsertAttributesToContacts,
-    getContacts,
+    searchContacts,
     notify,
     deselectAllRows
   }

@@ -21,8 +21,38 @@ export class CRMTouchItem extends React.Component {
         </div>
 
         <div className="info">
-          <div className="desc" style={{ marginBottom: '.5em' }}>
-            {touch.activity_type}
+          <div
+            className="desc"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              marginBottom: '.5em'
+            }}
+          >
+            <span
+              style={{
+                fontSize: 'small',
+                marginRight: '0.5em',
+                padding: '0 0.5em',
+                borderRadius: 30,
+                color: '#fff',
+                background: '#8da2b5'
+              }}
+            >
+              {touch.activity_type}
+            </span>
+            {touch.description && (
+              <span
+                style={{
+                  lineHeight: 1,
+                  fontSize: '1.5rem'
+                }}
+              >
+                {touch.description.length > 33
+                  ? `${touch.description.slice(0, 33)}...`
+                  : touch.description}
+              </span>
+            )}
           </div>
 
           <div className="time">

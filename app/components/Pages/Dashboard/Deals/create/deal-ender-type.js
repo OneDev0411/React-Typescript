@@ -17,24 +17,30 @@ export default ({
       {hasError && <RequiredIcon />}
     </div>
 
-    <RadioButton
-      selected={enderType === null}
-      title="No"
-      onClick={() => onChangeEnderType(null)}
-    />
+    <div className="deal-radio-row">
+      <RadioButton
+        selected={enderType === null}
+        title="No"
+        onClick={() => onChangeEnderType(null)}
+      />
+    </div>
 
     {showAgentDoubleEnder && (
-      <RadioButton
-        selected={enderType === 'AgentDoubleEnder'}
-        title="Yes, I represent both sides"
-        onClick={() => onChangeEnderType('AgentDoubleEnder')}
-      />
+      <div className="deal-radio-row">
+        <RadioButton
+          selected={enderType === 'AgentDoubleEnder'}
+          title="Yes, I represent both sides"
+          onClick={() => onChangeEnderType('AgentDoubleEnder')}
+        />
+      </div>
     )}
 
-    <RadioButton
-      selected={enderType === 'OfficeDoubleEnder'}
-      title="Yes, another agent from my office is on the other side of this deal"
-      onClick={() => onChangeEnderType('OfficeDoubleEnder')}
-    />
+    <div className="deal-radio-row">
+      <RadioButton
+        selected={enderType === 'OfficeDoubleEnder'}
+        title="Yes, another agent from my office is on the other side of this deal"
+        onClick={() => onChangeEnderType('OfficeDoubleEnder')}
+      />
+    </div>
   </div>
 )

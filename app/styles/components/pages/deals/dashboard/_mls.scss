@@ -72,8 +72,9 @@
         }
 
         &:hover i,
-        &:hover .deals-info__mls-status__edit-cta {
-          display: inline-block;
+        &:hover .deals-info__mls-status__edit-cta,
+        &:hover .deals-info__mls__edit-cta {
+          display: inline-block !important;
         }
       }
     }

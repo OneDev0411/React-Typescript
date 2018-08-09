@@ -13,7 +13,7 @@ export const BasicDropdown = ({
   onSelect,
   onChange,
   fullWidth,
-  itemToString,
+  itemToString = item => item.label,
   itemRenderer,
   defaultSelectedItem
 }) => (
@@ -74,7 +74,7 @@ export const BasicDropdown = ({
                 return itemRenderer ? (
                   itemRenderer(props)
                 ) : (
-                  <Item {...props} key={item.label}>
+                  <Item {...props} key={item.value}>
                     {item.label}
                   </Item>
                 )

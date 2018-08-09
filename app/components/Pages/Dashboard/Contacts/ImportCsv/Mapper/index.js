@@ -10,6 +10,8 @@ import { isAddressField } from '../helpers/address'
 
 import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
+import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
+import Loading from '../../../../../Partials/Loading'
 
 import {
   updateCsvFieldsMap,
@@ -25,9 +27,16 @@ import { selectDefinition } from '../../../../../../reducers/contacts/attributeD
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 
 class Mapper extends React.Component {
+  state = {
+    isCustomAttributeDrawerOpen: false,
+    isAutoMapping: false
+  }
+
   componentDidMount() {
     this.analyze()
   }
+
+  selectedColumn = null
 
   analyze = () =>
     CsvParser.parse(this.props.file, {
@@ -45,7 +54,9 @@ class Mapper extends React.Component {
       mappedFields
     } = this.props
     const colNames = data[0]
-    const contacts = data.slice(1)
+    const contacts = data
+      .slice(1)
+      .filter(columns => columns.join('').length > 0)
 
     if (contacts.length === 0 || errors.length > 0) {
       return showMessageModal({
@@ -72,27 +83,46 @@ class Mapper extends React.Component {
       setCurrentStepValidation(true)
     ])
 
-    // async compute
-    setTimeout(() => {
-      if (_.size(mappedFields) === 0) {
+    if (_.size(mappedFields) === 0) {
+      this.setState({
+        isAutoMapping: true
+      })
+
+      setTimeout(() => {
         this.autoMap(columns)
-      }
-    }, 0)
+      }, 100)
+    }
   }
 
   autoMap = csvColoumns => {
+    const { attributeDefs } = this.props
     const mappedFields = {}
 
+    const total = Object.keys(csvColoumns).length
+    let counter = 0
+
     _.each(csvColoumns, ({ name: columnName }) => {
+      counter += 1
+
+      let index = 0
       const attribute = this.findMatchedAttribute(columnName)
 
       if (!attribute) {
         return false
       }
 
-      let index = 0
+      const isSingular = attributeDefs.byId[attribute.id]
+      const isAddress = isAddressField(attributeDefs, attribute.id)
 
-      if (isAddressField(this.props.attributeDefs, attribute.id)) {
+      // singular attrs can't be mapped more than once
+      if (
+        isSingular &&
+        _.some(mappedFields, field => field.definitionId === attribute.id)
+      ) {
+        return false
+      }
+
+      if (isAddress) {
         index = _.filter(
           mappedFields,
           ({ definitionId }) => definitionId === attribute.id
@@ -108,11 +138,15 @@ class Mapper extends React.Component {
     this.props.updateCsvInfo({
       mappedFields
     })
+
+    this.setState({
+      isAutoMapping: false
+    })
   }
 
   /**
    * find most similar attribute for given csv column name
-   * based on levenshtein algorithm
+   * based on sorenson algorithm
    */
   findMatchedAttribute = csvColoumnName => {
     const { attributeDefs } = this.props
@@ -142,7 +176,7 @@ class Mapper extends React.Component {
     const bestMatches = _.sortBy(list, item => item.rate * -1)
     const bestMatch = bestMatches[0]
 
-    if (bestMatch.rate >= 0.3) {
+    if (bestMatch.rate > 0.32) {
       return bestMatch
     }
 
@@ -167,13 +201,25 @@ class Mapper extends React.Component {
     return list
   }
 
+  toggleOpenDrawer = e => {
+    const { field } = e ? e.target.dataset : {}
+
+    if (field) {
+      this.selectedColumn = field
+    }
+
+    this.setState(state => ({
+      isCustomAttributeDrawerOpen: !state.isCustomAttributeDrawerOpen
+    }))
+  }
+
   shouldShowLabel = colName => this.getMappedField(colName).definition.has_label
 
   onChangeField = (fieldName, fieldValue) => {
     const { updateCsvFieldsMap } = this.props
 
     if (!fieldValue) {
-      return updateCsvFieldsMap(fieldName, { definitionId: null, label: 0 })
+      return updateCsvFieldsMap(fieldName, { definitionId: null, label: null })
     }
 
     const [definitionId, index] = fieldValue.split(':')
@@ -202,8 +248,28 @@ class Mapper extends React.Component {
     }
   }
 
+  onNewCustomAttribute = attribute => {
+    this.props.updateCsvFieldsMap(this.selectedColumn, {
+      definitionId: attribute.id,
+      label: null,
+      index: 0
+    })
+  }
+
   render() {
     const { columns } = this.props
+
+    if (this.state.isAutoMapping) {
+      return (
+        <div
+          className="contact__import-csv--mapper"
+          style={{ textAlign: 'center', fontWeight: 500, fontSize: '20px' }}
+        >
+          <Loading />
+          Trying to map the columns automatically. please wait...
+        </div>
+      )
+    }
 
     return (
       <div className="contact__import-csv--mapper">
@@ -227,6 +293,7 @@ class Mapper extends React.Component {
                       fieldName={colName}
                       selectedField={mappedField.definitionId}
                       selectedFieldIndex={mappedField.index}
+                      toggleOpenDrawer={this.toggleOpenDrawer}
                       onChange={this.onChangeField}
                     />
                   </div>
@@ -246,6 +313,12 @@ class Mapper extends React.Component {
               )
             })
             .value()}
+
+        <CustomAttributeDrawer
+          isOpen={this.state.isCustomAttributeDrawerOpen}
+          onClose={this.toggleOpenDrawer}
+          submitCallback={this.onNewCustomAttribute}
+        />
       </div>
     )
   }
