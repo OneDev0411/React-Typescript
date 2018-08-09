@@ -40,6 +40,11 @@ class Builder extends React.Component {
     this.lockIn()
     this.disableResize()
     this.singleClickTextEditing()
+    this.disableAssetManager()
+  }
+
+  disableAssetManager = () => {
+    this.editor.on('run:open-assets', () => this.editor.Modal.close())
   }
 
   singleClickTextEditing = () => {
