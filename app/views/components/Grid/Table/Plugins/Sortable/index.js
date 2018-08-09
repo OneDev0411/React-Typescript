@@ -32,8 +32,13 @@ export class SortablePlugin {
 
   getSortColumn = (columns, sortBy) => columns.find(col => col.id === sortBy.id)
 
-  defaultSortMethod = ({ accessor }) =>
-    accessor && accessor.toString().toLowerCase()
+  defaultSortMethod = ({ accessor }) => {
+    if (typeof accessor === 'number') {
+      return accessor
+    }
+
+    return accessor && accessor.toString().toLowerCase()
+  }
 
   changeSort = cell => {
     this.isAscendingSort = !(
