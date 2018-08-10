@@ -69,6 +69,7 @@ class AgentTable extends React.Component {
                 isSearching={isFetchingDeals}
                 placeholder="Search deals by address, MLS # or agent name…"
                 onChange={this.handleSearch}
+                onClearSearch={this.handleSearch}
                 debounceTime={700}
                 minimumLength={3}
               />
