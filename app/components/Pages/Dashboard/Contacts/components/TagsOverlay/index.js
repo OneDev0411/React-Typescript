@@ -14,9 +14,8 @@ import {
   deleteAttributesFromContacts,
   addAttributes,
   deleteAttributes,
-  searchContacts,
-  getContactsTags,
-  getContacts
+  getContacts,
+  getContactsTags
 } from '../../../../../../store_actions/contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 import {
@@ -160,7 +159,6 @@ class TagsOverlay extends React.Component {
       deleteAttributesFromContacts,
       addAttributes,
       deleteAttributes,
-      searchContacts,
       getContactsTags,
       selectedContactsIds,
       attributeDefs,
@@ -210,9 +208,7 @@ class TagsOverlay extends React.Component {
       }
     }
 
-    if (selectedContactsIds.length > 1) {
-      // const currentPage = selectCurrentPage(list)
-
+    if (selectedContactsIds.length >= 50) {
       await this.props.getContacts()
     }
 
@@ -365,7 +361,6 @@ export default connect(
     deleteAttributesFromContacts,
     addAttributes,
     deleteAttributes,
-    searchContacts,
     getContactsTags,
     getContacts,
     confirmation

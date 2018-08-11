@@ -13,6 +13,7 @@ const byId = (state = {}, action) => {
     case actionTypes.CREATE_CONTACTS_SUCCESS:
     case actionTypes.POST_NEW_ATTRIBUTES_SUCCESS:
     case actionTypes.FETCH_CONTACT_ACTIVITIES_SUCCESS:
+    case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
       return {
         ...state,
         ...action.response.entities.contacts
@@ -35,6 +36,7 @@ const ids = (state = [], action) => {
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.CREATE_CONTACTS_SUCCESS:
+    case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
       const newState = [...state, ...action.response.result.contacts]
 
       // removing duplicates
@@ -90,6 +92,7 @@ const isFetching = (state = false, action) => {
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_FAILURE:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
+    case actionTypes.DELETE_ATTRIBUTES_FROM_CONTACTS_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_FAILURE:
     case actionTypes.POST_NEW_ATTRIBUTES_SUCCESS:
     case actionTypes.POST_NEW_ATTRIBUTES_FAILURE:
@@ -112,6 +115,7 @@ const error = (state = null, action) => {
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
+    case actionTypes.DELETE_ATTRIBUTES_FROM_CONTACTS_SUCCESS:
     case actionTypes.DELETE_CONTACTS_SUCCESS:
       return null
     default:
