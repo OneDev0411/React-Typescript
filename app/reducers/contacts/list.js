@@ -14,6 +14,7 @@ const byId = (state = {}, action) => {
     case actionTypes.POST_NEW_ATTRIBUTES_SUCCESS:
     case actionTypes.FETCH_CONTACT_ACTIVITIES_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
+    case actionTypes.DELETE_ATTRIBUTES_FROM_CONTACTS_SUCCESS:
       return {
         ...state,
         ...action.response.entities.contacts

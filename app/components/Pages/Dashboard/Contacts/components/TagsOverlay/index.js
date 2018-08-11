@@ -204,7 +204,11 @@ class TagsOverlay extends React.Component {
       if (selectedContactsIds.length === 1) {
         await deleteAttributes(selectedContactsIds[0], removedTagsIds)
       } else {
-        await deleteAttributesFromContacts(removedTagsIds)
+        await deleteAttributesFromContacts(
+          selectedContactsIds,
+          removedTagsIds,
+          attribute_def
+        )
       }
     }
 
