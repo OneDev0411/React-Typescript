@@ -55,7 +55,7 @@ class ShareListing extends React.Component {
       .filter(recipient => recipient !== null)
   }
 
-  handleSendEmails = async values => {
+  handleSendEmails = async (values, form) => {
     this.setState({
       isSendingEmail: true
     })
@@ -69,6 +69,9 @@ class ShareListing extends React.Component {
 
     try {
       await sendContactsEmail(emails)
+
+      // reset form
+      form.reset()
 
       this.props.notify({
         status: 'success',
@@ -132,8 +135,8 @@ class ShareListing extends React.Component {
       template.result,
       [template.width, template.height],
       {
-        width: template.width / 2,
-        height: template.height / 2
+        width: template.width,
+        height: template.height
       }
     )
 
