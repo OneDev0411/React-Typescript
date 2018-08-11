@@ -33,26 +33,31 @@ const defaultProps = {
   size: 'medium'
 }
 
-const getStylesDependedSize = size => {
-  switch (size) {
+const isOutline = props => props.appearance === 'outline' || props.inverse
+
+const getStylesDependedSize = props => {
+  switch (props.size) {
     case 'small':
       return {
+        height: '32px',
         fontSize: '14px',
-        lineHeight: '32px',
+        lineHeight: isOutline(props) ? '30px' : '32px',
         padding: '0 8px'
       }
 
     case 'large':
       return {
+        height: '48px',
         fontSize: '18px',
-        lineHeight: '48px',
+        lineHeight: isOutline(props) ? '46px' : '48px',
         padding: '0 16px'
       }
 
     default:
       return {
+        height: '40px',
         fontSize: '16px',
-        lineHeight: '40px',
+        lineHeight: isOutline(props) ? '38px' : '40px',
         padding: '0 16px'
       }
   }
@@ -67,7 +72,7 @@ const getAppearance = props => {
 
   return css`
     ${ButtonAppearances[appearance]} ${getStylesDependedSize(
-      props.size
+      props
     )}
 
     position: relative;
