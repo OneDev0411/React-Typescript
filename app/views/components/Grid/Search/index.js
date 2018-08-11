@@ -16,7 +16,7 @@ class Search extends React.Component {
     const { onChange, debounceTime, defaultValue } = props
 
     this.state = {
-      searchValue: defaultValue
+      searchValue: defaultValue || ''
     }
 
     this.onChangeHandler =
