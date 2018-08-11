@@ -51,6 +51,9 @@ class Builder extends React.Component {
     const components = this.editor.DomComponents
 
     this.editor.on('component:selected', selected => {
+      if (!selected.view.enableEditing)
+        return
+
       selected.view.enableEditing(selected.view.el)
     })
   }
