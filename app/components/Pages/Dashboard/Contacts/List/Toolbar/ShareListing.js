@@ -4,7 +4,7 @@ import { addNotification as notify } from 'reapop'
 
 import SearchListingDrawer from '../../../../../../views/components/SearchListingDrawer'
 
-import Compose from '../../../../../../views/components/EmailCompose'
+import EmailCompose from '../../../../../../views/components/EmailCompose'
 
 import InstantMarketing from '../../../../../../views/components/InstantMarketing'
 
@@ -16,6 +16,8 @@ import { selectContact } from '../../../../../../reducers/contacts/list'
 import { sendContactsEmail } from '../../../../../../models/email-compose/send-contacts-email'
 
 import { getTemplateScreenshot } from '../../../../../../models/instant-marketing'
+
+import { confirmation } from '../../../../../../store_actions/confirmation'
 
 class ShareListing extends React.Component {
   state = {
@@ -98,6 +100,14 @@ class ShareListing extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
+  requestCloseEmailDrawer = () =>
+    this.props.confirmation({
+      message: 'Cancel this email?',
+      cancelLabel: 'No',
+      confirmLabel: 'Yes, Cancel',
+      onConfirm: this.toggleComposeEmail
+    })
+
   onSelectListing = async listing =>
     this.setState({
       listing,
@@ -162,9 +172,9 @@ class ShareListing extends React.Component {
           assets={listing && listing.gallery_image_urls}
         />
 
-        <Compose
+        <EmailCompose
           isOpen={this.state.isComposeEmailOpen}
-          onClose={this.toggleComposeEmail}
+          onClose={this.requestCloseEmailDrawer}
           recipients={this.Recipients}
           html={this.state.templateScreenshot}
           onClickSend={this.handleSendEmails}
@@ -185,5 +195,5 @@ function mapStateToProps({ contacts, user }) {
 
 export default connect(
   mapStateToProps,
-  { notify }
+  { notify, confirmation }
 )(ShareListing)

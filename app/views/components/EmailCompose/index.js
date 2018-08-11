@@ -48,10 +48,12 @@ class EmailCompose extends React.Component {
         onSubmit={this.props.onClickSend}
         validate={this.validate}
         submitting={this.props.isSubmitting}
+        closeDrawerOnBackdropClick={false}
+        showCancel={false}
         showReset={false}
-        submitButtonLabel="Send"
+        submitButtonLabel="Send email"
         submittingButtonLabel="Sending ..."
-        title="New Message"
+        title="New Email"
         render={() => (
           <Fragment>
             <Field
