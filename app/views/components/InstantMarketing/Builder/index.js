@@ -38,6 +38,45 @@ class Builder extends React.Component {
     this.addCloseButton()
     this.addSaveButton()
     this.lockIn()
+    this.disableResize()
+    this.singleClickTextEditing()
+    this.disableAssetManager()
+  }
+
+  disableAssetManager = () => {
+    this.editor.on('run:open-assets', () => this.editor.Modal.close())
+  }
+
+  singleClickTextEditing = () => {
+    const components = this.editor.DomComponents
+
+    this.editor.on('component:selected', selected => {
+      if (!selected.view.enableEditing)
+        return
+
+      selected.view.enableEditing(selected.view.el)
+    })
+  }
+
+  disableResize = () => {
+    const components = this.editor.DomComponents
+
+    const image = components.getType('image')
+
+    const defaults = image.model.prototype.defaults
+
+    const updated = image.model.extend(
+      {
+        defaults: Object.assign({}, defaults, {
+          resizable: false
+        })
+      }
+    )
+
+    components.addType('image', {
+      model: updated,
+      view: image.view
+    })
   }
 
   addCloseButton = () => {

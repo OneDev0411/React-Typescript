@@ -1,6 +1,18 @@
 export default {
+  canvasCss: `
+  .gjs-comp-selected {
+    outline-color: #003bdf !important;
+  }
+
+  .gjs-hovered {
+    outline-color: #003bdf !important;
+    cursor: pointer;
+  }
+  `,
   height: '100%',
   styleManager: {
+    textNoElement: '',
+
     sectors: [
       {
         name: 'Color',
