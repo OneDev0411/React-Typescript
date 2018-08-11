@@ -1,46 +1,89 @@
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import styled, { css } from 'styled-components'
+
+import { ButtonAppearances } from '../styles/ButtonAppearances'
 
 const propTypes = {
-  onClick: PropTypes.func,
-  inverse: PropTypes.bool
+  /**
+   * The appearance of the button.  {default, ghost}
+   */
+  appearance: PropTypes.oneOf(Object.keys(ButtonAppearances)),
+
+  /**
+   * When true, the button is disabled.
+   */
+  disabled: PropTypes.bool,
+
+  /**
+   * DEPRECATED
+   * When true, the button appearances should be ghost.
+   */
+  inverse: PropTypes.bool,
+
+  /**
+   * The size of the button. {small, medium, large}
+   */
+  size: PropTypes.oneOf(['small', 'medium', 'large'])
 }
 
 const defaultProps = {
-  onClick: () => {},
-  inverse: false
+  appearance: 'default',
+  disabled: false,
+  inverse: false,
+  size: 'medium'
 }
 
-const ActionButton = styled.button`
-  padding: 0.5em 1em;
-  line-height: 1;
-  border-width: 0;
-  border-radius: 3px;
-  color: ${props => (props.disabled ? '#333' : '#fff')};
-  background: ${props => (props.disabled ? '#cecece' : '#2196f3')};
+const getStylesDependedSize = size => {
+  switch (size) {
+    case 'small':
+      return {
+        fontSize: '14px',
+        lineHeight: '32px',
+        padding: '0 8px'
+      }
 
-  ${props =>
-    !props.disabled &&
-    `&:hover {
-    background: #107CEB;
-  }`};
+    case 'large':
+      return {
+        fontSize: '18px',
+        lineHeight: '48px',
+        padding: '0 16px'
+      }
 
-  ${props =>
-    props.inverse &&
-    !props.disabled &&
-    `
-   background-color: #fff;
-   border: 1px solid #2196f3;
-   color: #2196f3;
+    default:
+      return {
+        fontSize: '16px',
+        lineHeight: '40px',
+        padding: '0 16px'
+      }
+  }
+}
 
-   &:hover {
-     background-color: #2196f3;
-     color: #fff;
-   }
-  `};
-`
+const getAppearance = props => {
+  let appearance = props.appearance
 
-ActionButton.propTypes = propTypes
-ActionButton.defaultProps = defaultProps
+  if (props.inverse) {
+    appearance = 'outline'
+  }
 
-export default ActionButton
+  return css`
+    ${ButtonAppearances[appearance]} ${getStylesDependedSize(
+      props.size
+    )}
+
+    position: relative;
+    font-family: Barlow;
+    font-weight: normal;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    border-radius: 3px;
+    margin: 0;
+  `
+}
+
+const Button = styled.button(getAppearance)
+
+export default Object.assign(Button, {
+  propTypes,
+  defaultProps
+})
