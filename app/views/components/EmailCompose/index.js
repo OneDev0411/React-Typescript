@@ -12,7 +12,10 @@ import { EmailBody } from './styled'
 
 class EmailCompose extends React.Component {
   get InitialValues() {
-    if (this.formObject || this.props.isSubmitting) {
+    if (
+      (this.formObject && !this.isRecipientsChanged()) ||
+      this.props.isSubmitting
+    ) {
       return this.formObject
     }
 
@@ -23,6 +26,10 @@ class EmailCompose extends React.Component {
 
     return this.formObject
   }
+
+  isRecipientsChanged = () =>
+    (this.formObject.recipients || []).length !==
+    (this.props.recipients || []).length
 
   validate = values => {
     const errors = {}
