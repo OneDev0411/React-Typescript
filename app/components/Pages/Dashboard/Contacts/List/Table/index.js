@@ -111,6 +111,11 @@ class ContactsList extends React.Component {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows }) => <TagContacts selectedRows={selectedRows} />
     },
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: ({ selectedRows }) => (
+        <ChangeStageContacts selectedRows={selectedRows} />
+      )
     }
   ]
 
