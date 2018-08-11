@@ -29,23 +29,41 @@ class AddRecipient extends React.Component {
     this.search = _.debounce(this.search, 500)
   }
 
+  isEmail = (email = '') => {
+    const regular = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+    return regular.test(email.trim())
+  }
+
   handleSelectNewContact = contact => {
+    let newRecipient
+
     const isEmailExists = this.props.input.value.some(
       recipient => recipient.email === contact.summary.email
     )
 
-    if (!isEmailExists && contact.summary.email) {
+    if (!isEmailExists && contact.id && contact.summary.email) {
       const emails = getContactAttribute(
         contact,
         selectDefinitionByName(this.props.attributeDefs, 'email')
       )
 
-      const newRecipient = {
+      newRecipient = {
         contactId: contact.id,
         name: contact.summary.display_name,
         avatar: contact.summary.profile_image_url,
         email: contact.summary.email,
         emails: emails.map(email => email.text)
+      }
+
+      this.props.input.onChange([...this.props.input.value, newRecipient])
+    }
+
+    if (!isEmailExists && !contact.id) {
+      newRecipient = {
+        name: contact.summary.display_name,
+        email: contact.summary.email,
+        emails: []
       }
 
       this.props.input.onChange([...this.props.input.value, newRecipient])
@@ -74,12 +92,24 @@ class AddRecipient extends React.Component {
 
       const response = await searchContacts(value)
 
+      const list = normalizeContactAttribute(response)
+
+      if (list.length === 0 && this.isEmail(value)) {
+        list.push({
+          summary: {
+            display_name: value.split('@')[0],
+            email: value
+          }
+        })
+      }
+
       this.setState({
         isLoading: false,
         isListMenuOpen: true,
-        list: normalizeContactAttribute(response)
+        list
       })
-    } catch (error) {
+    } catch (e) {
+      console.log(e)
       this.setState({ isLoading: false, isListMenuOpen: false })
     }
   }

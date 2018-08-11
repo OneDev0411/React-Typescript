@@ -25,7 +25,7 @@ export const SearchResults = styled.div`
   position: absolute;
   top: 30px;
   left: 0;
-  width: 100%;
+  min-width: 300px;
   max-height: 200px;
   overflow: auto;
   border-radius: 6px;
