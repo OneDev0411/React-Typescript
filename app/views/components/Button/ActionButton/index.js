@@ -5,7 +5,7 @@ import { ButtonAppearances } from '../styles/ButtonAppearances'
 
 const propTypes = {
   /**
-   * The appearance of the button.  {default, ghost}
+   * The appearance of the button.  {primary, outilne, icon}
    */
   appearance: PropTypes.oneOf(Object.keys(ButtonAppearances)),
 
@@ -27,7 +27,7 @@ const propTypes = {
 }
 
 const defaultProps = {
-  appearance: 'default',
+  appearance: 'primary',
   disabled: false,
   inverse: false,
   size: 'medium'

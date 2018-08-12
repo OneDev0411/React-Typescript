@@ -38,10 +38,7 @@ class TextIconButton extends PureComponent {
   }
 
   static defaultProps = {
-    appearance: 'default',
-    disabled: false,
-    inverse: false,
-    size: 'medium',
+    ...Button.defaultProps,
     text: '',
     iconLeftAim: 'none',
     iconRightAim: 'none'

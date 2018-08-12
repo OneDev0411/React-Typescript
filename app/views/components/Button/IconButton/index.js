@@ -4,38 +4,44 @@
   Don't use with any text or another element as sibling.
 */
 
-import PropTypes from 'prop-types'
-import ShadowButton from '../ShadowButton'
-
-const propTypes = {
-  size: PropTypes.string
-}
+import Button from '../ActionButton'
+import { isOutline, getIconSize, getIconStatesStyle } from '../helpers'
 
 const defaultProps = {
-  size: '24px'
+  ...Button.defaultProps,
+  appearance: 'icon'
 }
 
-const IconButton = ShadowButton.extend`
-  width: ${props => props.size};
-  height: ${props => props.size};
-  font-size: 0;
-
-  > svg {
-    width: ${props => props.size};
-    height: ${props => props.size};
-    fill: ${props => props.color};
+const getColor = props => {
+  if (isOutline(props)) {
+    return '#000'
   }
 
-  ${props =>
-    (!props.disabled || props.hoverColor) &&
-    `&:hover {
-      > svg {
-        fill: ${props.hoverColor};
-      }
-    }`};
+  if (props.appearance === 'primary') {
+    return '#fff'
+  }
+
+  return '#003bdf'
+}
+
+const getPadding = size => {
+  if (size === 'medium') {
+    return 'padding: 0 8px'
+  }
+}
+
+const IconButton = Button.extend`
+  ${props => getPadding(props.size)};
+
+  > svg {
+    width: ${props => getIconSize(props.size)};
+    height: ${props => getIconSize(props.size)};
+    fill: ${props => getColor(props)};
+  }
+
+  ${props => getIconStatesStyle(props)};
 `
 
-IconButton.propTypes = propTypes
-IconButton.defaultProps = defaultProps
-
-export default IconButton
+export default Object.assign(IconButton, {
+  defaultProps
+})

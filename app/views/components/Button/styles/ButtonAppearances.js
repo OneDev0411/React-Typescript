@@ -24,7 +24,7 @@ const baseStyle = css`
 const disableState = '&:not([disabled]):not([data-disabled]):'
 
 export const ButtonAppearances = {
-  default: css`
+  primary: css`
     ${baseStyle} color: #fff;
     background-color: #003bdf;
 
@@ -50,5 +50,9 @@ export const ButtonAppearances = {
       color: #003bdf
       border-color: #003bdf
     }
+  `,
+  icon: css`
+    ${baseStyle};
+    background-color: transparent;
   `
 }
