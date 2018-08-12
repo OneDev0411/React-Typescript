@@ -2,15 +2,25 @@ import { css } from 'styled-components'
 
 import { blue } from '../../../utils/colors'
 
-const baseStyle = css`
+export const buttonBaseStyle = css`
+  cursor: pointer;
   -webkit-appearance: none;
   -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-  vertical-align: middle;
-  text-decoration: none;
+
   border: none;
   outline: none;
-  cursor: pointer;
+  border-radius: 3px;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  vertical-align: middle;
+  margin: 0;
+
+  font-family: Barlow;
+  font-weight: normal;
+  text-decoration: none;
 
   &::-moz-focus-inner {
     border: 0;
@@ -26,7 +36,7 @@ const isNotDisableState = '&:not([disabled]):'
 
 export const ButtonAppearances = {
   primary: css`
-    ${baseStyle};
+    ${buttonBaseStyle};
     color: #fff;
     background-color: ${blue.A100};
 
@@ -40,7 +50,7 @@ export const ButtonAppearances = {
     }
   `,
   outline: css`
-    ${baseStyle} background-color: transparent;
+    ${buttonBaseStyle} background-color: transparent;
     border: 1px solid #000;
     color: #000;
 
@@ -50,7 +60,7 @@ export const ButtonAppearances = {
     }
   `,
   link: css`
-    ${baseStyle};
+    ${buttonBaseStyle};
     color: ${blue.A100};
 
     &[disabled] {
@@ -64,5 +74,5 @@ export const ButtonAppearances = {
       text-decoration: none;
     }
   `,
-  icon: baseStyle
+  icon: buttonBaseStyle
 }

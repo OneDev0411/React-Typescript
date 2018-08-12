@@ -71,18 +71,8 @@ const getAppearance = props => {
   }
 
   return css`
-    ${ButtonAppearances[appearance]} ${getStylesDependedSize(
-      props
-    )}
-
-    position: relative;
-    font-family: Barlow;
-    font-weight: normal;
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    border-radius: 3px;
-    margin: 0;
+    ${ButtonAppearances[appearance]};
+    ${getStylesDependedSize(props)};
   `
 }
 
