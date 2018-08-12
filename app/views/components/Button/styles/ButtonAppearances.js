@@ -1,5 +1,7 @@
 import { css } from 'styled-components'
 
+import { blue } from '../../../utils/colors'
+
 const baseStyle = css`
   -webkit-appearance: none;
   -webkit-font-smoothing: antialiased;
@@ -14,45 +16,53 @@ const baseStyle = css`
     border: 0;
   }
 
-  &[disabled],
-  &[data-disabled] {
+  &[disabled] {
     cursor: not-allowed;
     opacity: 0.3;
   }
 `
 
-const disableState = '&:not([disabled]):not([data-disabled]):'
+const isNotDisableState = '&:not([disabled]):'
 
 export const ButtonAppearances = {
   primary: css`
-    ${baseStyle} color: #fff;
-    background-color: #003bdf;
+    ${baseStyle};
+    color: #fff;
+    background-color: ${blue.A100};
 
-    &[disabled],
-    &[data-disabled] {
+    &[disabled] {
       background-color: #000;
       color: #fff;
     }
 
-    ${disableState}hover, ${disableState}focus {
-      background-color: #022ca0;
+    ${isNotDisableState}hover, ${isNotDisableState}focus {
+      background-color: ${blue.A200};
     }
   `,
   outline: css`
-    ${baseStyle}
-
-    background-color: transparent;
+    ${baseStyle} background-color: transparent;
     border: 1px solid #000;
     color: #000;
 
-    ${disableState}hover,
-    ${disableState}focus {
-      color: #003bdf
-      border-color: #003bdf
+    ${isNotDisableState}hover, ${isNotDisableState}focus {
+      color: ${blue.A100};
+      border-color: ${blue.A100};
     }
   `,
-  icon: css`
+  link: css`
     ${baseStyle};
-    background-color: transparent;
-  `
+    color: ${blue.A100};
+
+    &[disabled] {
+      color: #000;
+      text-decoration: none;
+    }
+
+    ${isNotDisableState}hover, ${isNotDisableState}focus {
+      color: ${blue.A200};
+      font-weight: 700;
+      text-decoration: none;
+    }
+  `,
+  icon: baseStyle
 }
