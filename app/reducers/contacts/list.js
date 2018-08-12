@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux'
-
+import _ from 'underscore'
 import * as actionTypes from '../../constants/contacts'
-import { contactPagination } from '../pagination'
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -14,19 +13,15 @@ const byId = (state = {}, action) => {
     case actionTypes.CREATE_CONTACTS_SUCCESS:
     case actionTypes.POST_NEW_ATTRIBUTES_SUCCESS:
     case actionTypes.FETCH_CONTACT_ACTIVITIES_SUCCESS:
+    case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
+    case actionTypes.DELETE_ATTRIBUTES_FROM_CONTACTS_SUCCESS:
       return {
         ...state,
         ...action.response.entities.contacts
       }
 
-    case actionTypes.DELETE_CONTACT_SUCCESS:
-      const { contacts } = action.response.entities
-
-      if (!contacts) {
-        return {}
-      }
-
-      return contacts
+    case actionTypes.DELETE_CONTACTS_SUCCESS:
+      return _.omit(state, (value, key) => action.contactIds.includes(key))
 
     case actionTypes.CLEAR_CONTACTS_LIST:
       return {}
@@ -42,13 +37,14 @@ const ids = (state = [], action) => {
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.CREATE_CONTACTS_SUCCESS:
+    case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
       const newState = [...state, ...action.response.result.contacts]
 
       // removing duplicates
       return [...new Set(newState)]
 
-    case actionTypes.DELETE_CONTACT_SUCCESS:
-      return action.response.result.contacts
+    case actionTypes.DELETE_CONTACTS_SUCCESS:
+      return state.filter(id => !action.contactIds.includes(id))
     case actionTypes.CLEAR_CONTACTS_LIST:
       return []
     default:
@@ -61,11 +57,10 @@ const listInfoInitialState = {
   count: 0,
   type: 'general',
   filter: [],
-  searchText: ''
+  searchInputValue: ''
 }
 export const info = (state = listInfoInitialState, action) => {
   switch (action.type) {
-    case actionTypes.DELETE_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
@@ -98,6 +93,7 @@ const isFetching = (state = false, action) => {
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_FAILURE:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
+    case actionTypes.DELETE_ATTRIBUTES_FROM_CONTACTS_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_FAILURE:
     case actionTypes.POST_NEW_ATTRIBUTES_SUCCESS:
     case actionTypes.POST_NEW_ATTRIBUTES_FAILURE:
@@ -115,10 +111,13 @@ const error = (state = null, action) => {
     case actionTypes.FETCH_MERGE_CONTACTS_FAILURE:
     case actionTypes.SEARCH_CONTACTS_FAILURE:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_FAILURE:
+    case actionTypes.DELETE_CONTACTS_FAILURE:
       return action.error
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
+    case actionTypes.DELETE_ATTRIBUTES_FROM_CONTACTS_SUCCESS:
+    case actionTypes.DELETE_CONTACTS_SUCCESS:
       return null
     default:
       return state
@@ -143,8 +142,7 @@ const contactsList = combineReducers({
   info,
   error,
   filters,
-  isFetching,
-  pagination: contactPagination
+  isFetching
 })
 
 export default contactsList
@@ -161,16 +159,16 @@ export const getContactsListError = state => state.error
 
 export const selectContactFilters = state => state.filters
 
-export const selectPage = (state, page) => state.pagination.pages[page]
+// export const selectPage = (state, page) => state.pagination.pages[page]
 
-export const selectPageContacts = (state, page) => {
-  if (state.pagination.pages[page]) {
-    return state.pagination.pages[page].ids.map(id => state.byId[id])
-  }
+// export const selectPageContacts = (state, page) => {
+//   if (state.pagination.pages[page]) {
+//     return state.pagination.pages[page].ids.map(id => state.byId[id])
+//   }
 
-  return []
-}
+//   return []
+// }
 
-export const selectPages = state => state.pagination.pages
+// export const selectPages = state => state.pagination.pages
 
-export const selectCurrentPage = state => state.pagination.currentPage
+// export const selectCurrentPage = state => state.pagination.currentPage

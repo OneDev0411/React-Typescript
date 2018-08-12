@@ -5,6 +5,18 @@ export const Container = styled.div`
   margin-top: 16px;
 `
 
+export const ToolbarContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+`
+
+export const ActionsBar = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
 export const Body = styled.div``
 
 export const Row = styled.div`

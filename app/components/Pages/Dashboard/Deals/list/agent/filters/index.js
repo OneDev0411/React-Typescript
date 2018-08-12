@@ -1,10 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-
-import Deal from '../../../../../../../models/Deal'
-
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
+
+import Deal from '../../../../../../../models/Deal'
 import ToolTip from '../../../../../../../views/components/tooltip'
 
 import {
