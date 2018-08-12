@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { css } from 'styled-components'
 
 import Button from '../ActionButton'
-import { isOutline, getIconSize, getStatesStyle } from './helpers'
+import { isOutline, getIconSize, getStatesStyle, iconAims } from './helpers'
 
 const propTypes = {
   /**
@@ -14,7 +13,27 @@ const propTypes = {
   /**
    * The button text.
    */
-  text: PropTypes.string
+  text: PropTypes.string,
+
+  /**
+   * Sets an icon before the text. Can be any icon from Rechat SVG icons.
+   */
+  iconLeft: PropTypes.func,
+
+  /**
+   * The aim of the left icon. Not a big use case for this.
+   */
+  iconLeftAim: PropTypes.oneOf(Object.keys(iconAims)),
+
+  /**
+   * Sets an icon after the text. Can be any icon from Rechat SVG icons.
+   */
+  iconRight: PropTypes.func,
+
+  /**
+   * The aim of the right icon. Useful to aim a triangle down.
+   */
+  iconRightAim: PropTypes.oneOf(Object.keys(iconAims))
 }
 
 const defaultProps = {
@@ -22,44 +41,51 @@ const defaultProps = {
   disabled: false,
   inverse: false,
   size: 'medium',
-  text: ''
+  text: '',
+  iconLeftAim: 'none',
+  iconRightAim: 'none'
 }
 
-const TextIconButton = props => {
-  let IconBeforeText = () => null
-  let IconAfterText = () => null
+class TextIconButton extends PureComponent {
+  render() {
+    const { iconLeft, iconRight, text } = this.props
+    let IconLeft = () => null
+    let IconRight = () => null
 
-  if (props.iconBeforeText) {
-    IconBeforeText = props.iconBeforeText.extend`
-      margin-right: ${props.text ? '8px' : 0};
-    `
-  }
-
-  if (props.iconAfterText) {
-    IconAfterText = props.iconAfterText.extend`
-      margin-left: ${props.text ? '8px' : 0};
-    `
-  }
-
-  const ExtendedButton = Button.extend`
-    > svg {
-      width: ${props => getIconSize(props.size)};
-      height: ${props => getIconSize(props.size)};
-      fill: ${props => (isOutline(props) ? '#000' : '#fff')};
+    if (iconLeft) {
+      IconLeft = iconLeft.extend`
+        margin-right: ${text ? '8px' : 0};
+        transform: rotate(${iconAims[this.props.iconLeftAim]});
+      `
     }
 
-    ${props => getStatesStyle(props)};
-  `
+    if (iconRight) {
+      IconRight = iconRight.extend`
+        margin-left: ${text ? '8px' : 0};
+        transform: rotate(${iconAims[this.props.iconRightAim]});
+      `
+    }
 
-  let text = props.text ? React.createElement('span', {}, props.text) : null
+    const ExtendedButton = Button.extend`
+      > svg {
+        width: ${props => getIconSize(props.size)};
+        height: ${props => getIconSize(props.size)};
+        fill: ${props => (isOutline(props) ? '#000' : '#fff')};
+      }
 
-  return (
-    <ExtendedButton {...props}>
-      <IconBeforeText />
-      {text}
-      <IconAfterText />
-    </ExtendedButton>
-  )
+      ${props => getStatesStyle(props)};
+    `
+
+    const $text = text ? React.createElement('span', {}, text) : null
+
+    return (
+      <ExtendedButton {...this.props}>
+        <IconLeft />
+        {$text}
+        <IconRight />
+      </ExtendedButton>
+    )
+  }
 }
 
 export default Object.assign(TextIconButton, {

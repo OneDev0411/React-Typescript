@@ -1,9 +1,20 @@
 import { css } from 'styled-components'
 
-export const isOutline = props =>
-  props.appearance === 'outline' || props.inverse
+export const iconAims = {
+  none: null,
+  top: '0deg',
+  up: '0deg',
+  right: '90deg',
+  bottom: '180deg',
+  down: '180deg',
+  left: '270deg'
+}
 
-export const getStatesStyle = props => {
+export function isOutline(props) {
+  return props.appearance === 'outline' || props.inverse
+}
+
+export function getStatesStyle(props) {
   if (props.disabled) {
     return
   }
@@ -20,7 +31,7 @@ export const getStatesStyle = props => {
   }
 }
 
-export const getIconSize = size => {
+export function getIconSize(size) {
   switch (size) {
     case 'small':
       return '12px'
@@ -31,14 +42,4 @@ export const getIconSize = size => {
     default:
       return '16px'
   }
-}
-
-export const iconAim = {
-  none: null,
-  top: '0deg',
-  up: '0deg',
-  right: '90deg',
-  bottom: '180deg',
-  down: '180deg',
-  left: '270deg'
 }
