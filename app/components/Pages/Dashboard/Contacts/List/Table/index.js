@@ -160,8 +160,8 @@ class ContactsList extends React.Component {
           summary={{
             text:
               selectedRowsCount > 0
-                ? '[selectedRows] of <strong>[totalRows] Contacts</strong>'
-                : '<strong>[totalRows] Contacts</strong>',
+                ? '<strong style="color:#000;">[selectedRows]</strong> of [totalRows] contacts'
+                : '[totalRows] contacts',
             selectedRows: selectedRowsCount,
             totalRows: this.props.listInfo.total || 0
           }}
