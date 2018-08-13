@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import Menu from './Menu'
 import { PageTitle } from './PageTitle'
-import { Title } from './PageTitle/styled'
+import { H1 } from '../Typography/headings'
 
 const Container = styled.div`
   width: 100%;
@@ -60,6 +60,6 @@ PageHeader.defaultProps = defaultProps
 
 PageHeader.Menu = Menu
 PageHeader.Title = PageTitle
-PageHeader.Heading = Title
+PageHeader.Heading = H1
 
 export default withRouter(PageHeader)

@@ -3,7 +3,7 @@ import { css } from 'styled-components'
 const color = '#000'
 
 export const barlowFamilyStyle = css`
-  font-family: 'Barlow';
+  font-family: 'Barlow', sans-serif;
   color: ${color};
 `
 
