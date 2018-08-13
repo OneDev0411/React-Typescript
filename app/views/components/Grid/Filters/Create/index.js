@@ -1,8 +1,27 @@
 import React from 'react'
 import Downshift from 'downshift'
+import Flex from 'styled-flex-component'
 
 import { FilterItemToolTip, MissingValueToolTip } from './tooltip'
-import { Container, List, ListItem, AddItem } from './styled'
+import { Container, List, ListItem } from './styled'
+import Button from '../../../Button/ActionButton'
+import { blue } from '../../../../utils/colors'
+import Icon from '../../../SvgIcons/Add/AddIcon'
+
+const IconAdd = Icon.extend`
+  margin-right: 8px;
+  fill: ${blue.A100};
+  width: 16px;
+  height: 16px;
+`
+
+const AddItem = Button.extend`
+  padding: 0;
+
+  &:hover > svg {
+    fill: ${blue.A200};
+  }
+`
 
 export class AddFilter extends React.Component {
   state = {
@@ -43,9 +62,16 @@ export class AddFilter extends React.Component {
         >
           {({ isOpen, getItemProps }) => (
             <div>
-              <AddItem onClick={this.toggleMenu} disabled={hasMissingValue}>
+              <AddItem
+                appearance="link"
+                onClick={this.toggleMenu}
+                disabled={hasMissingValue}
+              >
                 <MissingValueToolTip enabled={hasMissingValue}>
-                  <span>+ Add Filter</span>
+                  <Flex alignCenter>
+                    <IconAdd />
+                    <span>Add Filter</span>
+                  </Flex>
                 </MissingValueToolTip>
               </AddItem>
 
