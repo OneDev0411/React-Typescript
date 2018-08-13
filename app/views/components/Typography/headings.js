@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { barlowFamilyStyle, merriweatherFamilyStyle } from './styles/barlow'
+import { barlowFamilyStyle, merriweatherFamilyStyle } from './styles'
 
 export const H1 = styled.h1`
   ${merriweatherFamilyStyle};
