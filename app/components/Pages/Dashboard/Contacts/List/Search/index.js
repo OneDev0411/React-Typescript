@@ -14,7 +14,7 @@ export function SearchContacts({ onSearch, isSearching }) {
         disableOnSearch
         showLoadingOnSearch
         isSearching={isSearching}
-        placeholder="Search all contacts…"
+        placeholder="Search"
         onChange={onSearch}
         debounceTime={500}
         minimumLength={1}
