@@ -48,7 +48,15 @@ class Import extends React.Component {
     return (
       <div className="list--secondary-button">
         <Dropdown id="import-csv-dropdown">
-          <Dropdown.Toggle className="button c-button--shadow">
+          <Dropdown.Toggle
+            className="button c-button--shadow"
+            style={{
+              color: '#000',
+              border: '1px solid #000',
+              boxShadow: 'none',
+              height: '40px'
+            }}
+          >
             Import
           </Dropdown.Toggle>
 
@@ -94,6 +102,7 @@ function mapStateToProps({ user, contacts }) {
   }
 }
 
-export default connect(mapStateToProps, { getContacts, removeImportResult })(
-  Import
-)
+export default connect(
+  mapStateToProps,
+  { getContacts, removeImportResult }
+)(Import)
