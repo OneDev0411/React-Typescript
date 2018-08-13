@@ -1,4 +1,5 @@
 import Fetch from '../../../services/fetch'
+import { defaultQuery } from '../helpers/default-query'
 
 /**
  * Upserting attributes to contacts
@@ -16,12 +17,26 @@ export async function upsertAttributesToContacts(ids, attributes) {
     throw new Error('Attributes invalid!')
   }
 
+  let query = {}
+
+  if (ids.length < 50) {
+    query = {
+      ...defaultQuery,
+      get: true
+    }
+  }
+
   try {
     const response = await new Fetch({ stream: true })
       .patch('/contacts')
+      .query(query)
       .send({ ids, attributes })
 
-    return response.body
+    if (ids.length < 50) {
+      return response.body
+    }
+
+    return { data: [] }
   } catch (error) {
     throw error
   }

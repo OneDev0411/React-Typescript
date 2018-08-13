@@ -3,38 +3,43 @@ import PropTypes from 'prop-types'
 
 import { Header, HeaderRow, HeaderCell } from './styled'
 
-import SortIndicator from '../Plugins/Sorting/Indicator'
+import SortIndicator from '../Plugins/Sortable/Indicator'
 
-function isSortable(column) {
-  return column.isSortable !== false && column.header
+function isSortable(sortablePlugin, column) {
+  return sortablePlugin && column.isSortable !== false && column.header
 }
 
 const TableHeader = ({
   columns,
   sizes,
-  sortBy,
-  isAscending,
-  onClickCell,
   getHeaderProps,
-  getHeaderRowProps
+  getHeaderRowProps,
+  sortablePlugin
 }) => (
   <Header {...getHeaderProps()}>
     <HeaderRow {...getHeaderRowProps()}>
       {columns &&
-        columns.map((col, index) => (
+        columns.map((column, index) => (
           <HeaderCell
-            key={col.id || index}
+            key={column.id || index}
             width={sizes[index]}
-            isSortable={isSortable(col)}
-            onClick={() => isSortable(col) && onClickCell(col)}
+            isSortable={isSortable(sortablePlugin, column)}
+            onClick={() =>
+              isSortable(sortablePlugin, column) &&
+              sortablePlugin.changeSort(column)
+            }
           >
-            {col.header}
+            {typeof column.header === 'function'
+              ? column.header(column, index)
+              : column.header}
 
-            <SortIndicator
-              column={col}
-              sortBy={sortBy}
-              isAscending={isAscending}
-            />
+            {sortablePlugin && (
+              <SortIndicator
+                column={column}
+                sortBy={sortablePlugin.sortBy}
+                isAscending={sortablePlugin.isAscendingSort}
+              />
+            )}
           </HeaderCell>
         ))}
     </HeaderRow>

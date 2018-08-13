@@ -53,7 +53,7 @@ class DealDetails extends React.Component {
   }
 
   handleNotifications(deal) {
-    if (!deal || !deal.new_notifications) {
+    if (!deal || !Array.isArray(deal.new_notifications)) {
       return false
     }
 

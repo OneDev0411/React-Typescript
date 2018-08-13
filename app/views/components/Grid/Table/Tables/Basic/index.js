@@ -1,55 +1,17 @@
 import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
 
-import { BodyCell, BodyRow } from '../../styled'
+import { BodyCell as Cell, BodyRow as Row } from '../../styled'
 import TableHeader from '../../Header'
 
-import sortData from '../../Plugins/Sorting'
-
 class BasicTable extends React.Component {
-  static propTypes = {
-    isFetching: PropTypes.bool,
-    getTrProps: PropTypes.func,
-    getTdProps: PropTypes.func,
-    showTableHeader: PropTypes.bool
-  }
+  get Rows() {
+    const { data, columns, sortablePlugin } = this.props
 
-  static defaultProps = {
-    isFetching: false,
-    getTrProps: () => {},
-    getTdProps: () => {},
-    showTableHeader: true
-  }
-
-  state = {
-    sortBy: null,
-    isAscendingSort: true
-  }
-
-  handleClickHeaderCell = cell => {
-    const { sortBy, isAscendingSort } = this.state
-
-    this.setState({
-      sortBy: cell,
-      isAscendingSort: !(isAscendingSort && sortBy && sortBy.id === cell.id)
-    })
-  }
-
-  getSortedData = data => {
-    const { columns } = this.props
-    const { sortBy, isAscendingSort } = this.state
-
-    if (!sortBy) {
-      return data
+    if (sortablePlugin) {
+      return sortablePlugin.getSortedData(data, columns, this.resolveAccessor)
     }
 
-    return sortData({
-      data,
-      columns,
-      sortBy,
-      isAscendingSort,
-      resolveAccessor: this.resolveAccessor
-    })
+    return data
   }
 
   getCell = ({ column, row, rowIndex, total }) => {
@@ -90,17 +52,19 @@ class BasicTable extends React.Component {
       columns,
       sizes,
       isFetching,
-      EmptyState,
-      LoadingState,
+      isFetchingMore,
       getHeaderProps,
       getHeaderRowProps,
       getTrProps,
       getTdProps,
       showTableHeader,
+      plugins,
+      EmptyState,
+      LoadingState,
       SubComponent
     } = this.props
 
-    if (EmptyState && data.length === 0 && !isFetching) {
+    if (data.length === 0 && EmptyState && !isFetching) {
       return <EmptyState />
     }
 
@@ -108,31 +72,34 @@ class BasicTable extends React.Component {
       <Fragment>
         {showTableHeader && (
           <TableHeader
-            sortBy={this.state.sortBy}
-            isAscending={this.state.isAscendingSort}
             columns={columns}
             sizes={sizes}
-            onClickCell={this.handleClickHeaderCell}
+            plugins={plugins}
             getHeaderProps={getHeaderProps}
             getHeaderRowProps={getHeaderRowProps}
+            selectablePlugin={this.props.selectablePlugin}
+            sortablePlugin={this.props.sortablePlugin}
           />
         )}
 
-        {isFetching && <LoadingState />}
+        {isFetching && !isFetchingMore && <LoadingState />}
         {SubComponent && <SubComponent data={data} columns={columns} />}
 
-        {this.getSortedData(data).map((row, rowIndex) => (
-          <BodyRow
+        {this.Rows.map((row, rowIndex) => (
+          <Row
             key={row.key || rowIndex}
             firstRow={rowIndex === 0}
             lastRow={rowIndex === data.length - 1}
             {...getTrProps(rowIndex, {
-              original: row
+              original: row,
+              isSelected: this.props.selectablePlugin
+                ? this.props.selectablePlugin.isRowSelected(row.id)
+                : false
             })}
           >
             {columns &&
               columns.map((column, colIndex) => (
-                <BodyCell
+                <Cell
                   key={column.id || colIndex}
                   width={sizes[colIndex]}
                   {...getTdProps(colIndex, {
@@ -147,10 +114,12 @@ class BasicTable extends React.Component {
                     rowIndex,
                     total: data.length
                   })}
-                </BodyCell>
+                </Cell>
               ))}
-          </BodyRow>
+          </Row>
         ))}
+
+        {isFetchingMore && <LoadingState isFetchingMore />}
       </Fragment>
     )
   }

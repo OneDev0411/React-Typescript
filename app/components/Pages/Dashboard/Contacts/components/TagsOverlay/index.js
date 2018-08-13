@@ -14,7 +14,7 @@ import {
   deleteAttributesFromContacts,
   addAttributes,
   deleteAttributes,
-  searchContacts,
+  getContacts,
   getContactsTags
 } from '../../../../../../store_actions/contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
@@ -24,7 +24,7 @@ import {
 } from '../../../../../../models/contacts/helpers'
 import {
   selectContact,
-  selectCurrentPage,
+  // selectCurrentPage,
   selectContactsInfo
 } from '../../../../../../reducers/contacts/list'
 import intersectionBy from 'lodash/intersectionBy'
@@ -143,7 +143,7 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          "We noticed you have un-added tag. Please select the 'Add' link before saving",
+          'We noticed you have un-added tag. Please select the \'Add\' link before saving',
         hideCancelButton: true,
         confirmLabel: 'Ok'
       })
@@ -159,7 +159,6 @@ class TagsOverlay extends React.Component {
       deleteAttributesFromContacts,
       addAttributes,
       deleteAttributes,
-      searchContacts,
       getContactsTags,
       selectedContactsIds,
       attributeDefs,
@@ -205,19 +204,16 @@ class TagsOverlay extends React.Component {
       if (selectedContactsIds.length === 1) {
         await deleteAttributes(selectedContactsIds[0], removedTagsIds)
       } else {
-        await deleteAttributesFromContacts(removedTagsIds)
+        await deleteAttributesFromContacts(
+          selectedContactsIds,
+          removedTagsIds,
+          attribute_def
+        )
       }
     }
 
-    if (selectedContactsIds.length > 1) {
-      const currentPage = selectCurrentPage(ContactListStore)
-
-      await await searchContacts(
-        this.props.filter,
-        currentPage,
-        undefined,
-        this.props.searchText
-      )
+    if (selectedContactsIds.length >= 50) {
+      await this.props.getContacts()
     }
 
     await getContactsTags()
@@ -369,8 +365,8 @@ export default connect(
     deleteAttributesFromContacts,
     addAttributes,
     deleteAttributes,
-    searchContacts,
     getContactsTags,
+    getContacts,
     confirmation
   }
 )(TagsOverlay)

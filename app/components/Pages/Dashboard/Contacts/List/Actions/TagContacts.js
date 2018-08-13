@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import TagsOverlay from '../../components/TagsOverlay'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 export default class TagContacts extends React.Component {
   state = {
@@ -15,16 +16,14 @@ export default class TagContacts extends React.Component {
 
     return (
       <Fragment>
-        {selectedRows.length > 0 && (
-          <div className="list--secondary-button">
-            <button
-              className="button c-button--shadow"
-              onClick={this.openOverLay}
-            >
-              Tag
-            </button>
-          </div>
-        )}
+        <ActionButton
+          inverse
+          onClick={this.openOverLay}
+          style={{ padding: '0.70em 1.5em' }}
+        >
+          Tag
+        </ActionButton>
+
         <TagsOverlay
           selectedContactsIds={selectedRows}
           isOpen={overlayIsOpen}
