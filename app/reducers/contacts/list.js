@@ -10,7 +10,6 @@ const byId = (state = {}, action) => {
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.DELETE_ATTRIBUTE_SUCCESS:
-    case actionTypes.CREATE_CONTACTS_SUCCESS:
     case actionTypes.POST_NEW_ATTRIBUTES_SUCCESS:
     case actionTypes.FETCH_CONTACT_ACTIVITIES_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
@@ -18,6 +17,12 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         ...action.response.entities.contacts
+      }
+
+    case actionTypes.CREATE_CONTACTS_SUCCESS:
+      return {
+        ...action.response.entities.contacts,
+        ...state
       }
 
     case actionTypes.DELETE_CONTACTS_SUCCESS:
@@ -32,16 +37,17 @@ const byId = (state = {}, action) => {
 
 const ids = (state = [], action) => {
   switch (action.type) {
-    // case actionTypes.CONTACTS__UPLOAD_CVS:
     case actionTypes.FETCH_CONTACT_SUCCESS:
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
-    case actionTypes.CREATE_CONTACTS_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
       const newState = [...state, ...action.response.result.contacts]
 
       // removing duplicates
       return [...new Set(newState)]
+
+    case actionTypes.CREATE_CONTACTS_SUCCESS:
+      return [...action.response.result.contacts, ...state]
 
     case actionTypes.DELETE_CONTACTS_SUCCESS:
       return state.filter(id => !action.contactIds.includes(id))

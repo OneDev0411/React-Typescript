@@ -22,7 +22,7 @@ export function searchContacts(
         ...defaultQuery,
         start,
         limit,
-        order: 'display_name'
+        order: '-created_at'
       })
 
       dispatch({
