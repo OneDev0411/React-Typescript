@@ -9,7 +9,7 @@ import { Trigger as MenuTrigger } from '../../../../../../views/components/Slide
 
 export function Header({ user, title, isSideMenuOpen, onMenuTriggerChange }) {
   return (
-    <PageHeader isFlat>
+    <PageHeader isFlat style={{ marginBottom: '32px' }}>
       <PageHeader.Title showBackButton={false}>
         <MenuTrigger
           tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}
@@ -21,7 +21,6 @@ export function Header({ user, title, isSideMenuOpen, onMenuTriggerChange }) {
       <PageHeader.Menu>
         <Import userId={user.id} />
         <ActionButton
-          style={{ padding: '0.75em' }}
           onClick={() => browserHistory.push('/dashboard/contacts/new')}
         >
           New Contact
