@@ -59,17 +59,16 @@ class CommentCreate extends React.Component {
         room: task.room.id
       }
 
-      // clear message box
-      this.setState({
-        comment: '',
-        rows: 1,
-        isSaving: true
-      })
-
       // send message
-      await Message.postTaskComment(task, message)
-      this.onCommentSaved()
+      Message.postTaskComment(task, message).then(() => this.onCommentSaved())
     }
+
+    // clear message box
+    this.setState({
+      comment: '',
+      rows: 1,
+      isSaving: true
+    })
 
     try {
       if (attention_requested !== null) {
