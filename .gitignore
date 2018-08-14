@@ -183,6 +183,7 @@ config/public/development.js
 config/private/development.js
 desktop/builds
 dist
+.tmp
 .idea/
 package-lock.json
 

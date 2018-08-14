@@ -156,7 +156,10 @@ class FieldDropDown extends React.Component {
           selectedField={selectedField}
           onChange={this.onFieldChange}
           callToActions={
-            <ActionButton onClick={this.props.toggleOpenDrawer}>
+            <ActionButton
+              data-field={this.props.fieldName}
+              onClick={this.props.toggleOpenDrawer}
+            >
               Add custom field
             </ActionButton>
           }

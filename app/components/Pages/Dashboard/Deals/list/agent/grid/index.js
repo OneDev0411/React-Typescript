@@ -129,6 +129,9 @@ class Grid extends React.Component {
     return (
       <Container>
         <Table
+          plugins={{
+            sortable: {}
+          }}
           isFetching={isFetchingDeals}
           columns={columns}
           data={data}

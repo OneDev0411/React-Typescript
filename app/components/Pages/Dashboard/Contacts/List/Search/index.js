@@ -1,29 +1,24 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-import HeaderSearch from '../../../../../Partials/headerSearch'
+import Search from '../../../../../../views/components/Grid/Search'
 
-import './style.scss'
+const SearchContainer = styled.div`
+  margin-bottom: 40px;
+`
 
-Search.propTypes = {
-  disabled: PropTypes.bool,
-  handleOnChange: PropTypes.func.isRequired,
-  inputValue: PropTypes.string.isRequired,
-  isSearching: PropTypes.bool.isRequired
-}
-
-Search.defaultProps = {
-  disabled: false
-}
-
-export function Search(props) {
+export function SearchContacts({ onSearch, isSearching }) {
   return (
-    <HeaderSearch
-      disabled={props.disabled}
-      inputValue={props.inputValue}
-      isSearching={props.isSearching}
-      onInputChange={props.handleOnChange}
-      placeholder="Search all contacts ..."
-    />
+    <SearchContainer>
+      <Search
+        disableOnSearch
+        showLoadingOnSearch
+        isSearching={isSearching}
+        placeholder="Search all contacts…"
+        onChange={onSearch}
+        debounceTime={500}
+        minimumLength={1}
+      />
+    </SearchContainer>
   )
 }

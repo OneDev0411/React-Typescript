@@ -14,9 +14,15 @@ import { createAttributeDefinition } from '../../../../../../store_actions/conta
 import { preSaveFormat, validate } from './helpers'
 import { TipsBanner } from './TipsBanner'
 
-const propTypes = { section: PropTypes.string }
-
 const selectFieldDefaultSelectedItem = { title: '-Select-', value: '-Select-' }
+const propTypes = {
+  section: PropTypes.string,
+  submitCallback: PropTypes.func
+}
+const defaultProps = {
+  section: '',
+  submitCallback: () => {}
+}
 
 const getDataTypeInitialValue = props => {
   if (props.section && props.section === 'Dates') {
@@ -39,7 +45,9 @@ class CustomAttributeDrawer extends React.Component {
     try {
       const formatedValues = preSaveFormat(values)
 
-      await this.props.dispatch(createAttributeDefinition(formatedValues))
+      const customAttribute = await this.props.dispatch(
+        createAttributeDefinition(formatedValues)
+      )
 
       this.props.onClose()
       this.props.dispatch(
@@ -50,6 +58,8 @@ class CustomAttributeDrawer extends React.Component {
           message: `${values.label}`
         })
       )
+
+      this.props.submitCallback(customAttribute)
     } catch (error) {
       console.log(error)
     }
@@ -87,7 +97,7 @@ class CustomAttributeDrawer extends React.Component {
                   title: 'Number',
                   value: 'number',
                   hint:
-                    "For custom fields that are ONLY number based like 'Age' or 'Years retired'"
+                    'For custom fields that are ONLY number based like \'Age\' or \'Years retired\''
                 },
                 {
                   title: 'Text',
@@ -148,5 +158,6 @@ class CustomAttributeDrawer extends React.Component {
 }
 
 CustomAttributeDrawer.propTypes = propTypes
+CustomAttributeDrawer.defaultProps = defaultProps
 
 export default connect()(CustomAttributeDrawer)
