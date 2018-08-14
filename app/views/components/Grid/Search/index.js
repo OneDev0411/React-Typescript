@@ -51,7 +51,6 @@ class Search extends React.Component {
       disableOnSearch,
       showLoadingOnSearch,
       defaultValue = '',
-      showLoadingOnSearch,
       showClearSearch
     } = this.props
 
