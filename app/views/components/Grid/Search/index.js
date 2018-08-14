@@ -50,6 +50,8 @@ class Search extends React.Component {
       isSearching,
       disableOnSearch,
       showLoadingOnSearch,
+      defaultValue = '',
+      showLoadingOnSearch,
       showClearSearch
     } = this.props
 
@@ -64,6 +66,7 @@ class Search extends React.Component {
         </Icon>
 
         <TextInput
+          defaultValue={defaultValue}
           value={this.state.searchValue}
           placeholder={placeholder}
           onChange={this.handleChange}

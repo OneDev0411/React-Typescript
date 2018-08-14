@@ -6,4 +6,11 @@
   },
   "eslint.autoFixOnSave": true,
   "eslint.alwaysShowStatus": true,
+  "spellright.language": "en",
+  "spellright.documentTypes": [
+    "markdown",
+    "latex",
+    "plaintext",
+    "javascript"
+  ],
 }

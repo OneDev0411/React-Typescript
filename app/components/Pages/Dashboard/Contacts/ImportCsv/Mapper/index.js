@@ -28,13 +28,15 @@ import { confirmation as showMessageModal } from '../../../../../../store_action
 
 class Mapper extends React.Component {
   state = {
-    isDrawerOpen: false,
+    isCustomAttributeDrawerOpen: false,
     isAutoMapping: false
   }
 
   componentDidMount() {
     this.analyze()
   }
+
+  selectedColumn = null
 
   analyze = () =>
     CsvParser.parse(this.props.file, {
@@ -96,11 +98,11 @@ class Mapper extends React.Component {
     const { attributeDefs } = this.props
     const mappedFields = {}
 
-    _.each(csvColoumns, ({ name: columnName, hasValue }) => {
-      // skip empty columns
-      if (hasValue === false) {
-        return false
-      }
+    const total = Object.keys(csvColoumns).length
+    let counter = 0
+
+    _.each(csvColoumns, ({ name: columnName }) => {
+      counter += 1
 
       let index = 0
       const attribute = this.findMatchedAttribute(columnName)
@@ -199,10 +201,17 @@ class Mapper extends React.Component {
     return list
   }
 
-  toggleOpenDrawer = () =>
+  toggleOpenDrawer = e => {
+    const { field } = e ? e.target.dataset : {}
+
+    if (field) {
+      this.selectedColumn = field
+    }
+
     this.setState(state => ({
-      isDrawerOpen: !state.isDrawerOpen
+      isCustomAttributeDrawerOpen: !state.isCustomAttributeDrawerOpen
     }))
+  }
 
   shouldShowLabel = colName => this.getMappedField(colName).definition.has_label
 
@@ -210,7 +219,7 @@ class Mapper extends React.Component {
     const { updateCsvFieldsMap } = this.props
 
     if (!fieldValue) {
-      return updateCsvFieldsMap(fieldName, { definitionId: null, label: 0 })
+      return updateCsvFieldsMap(fieldName, { definitionId: null, label: null })
     }
 
     const [definitionId, index] = fieldValue.split(':')
@@ -237,6 +246,14 @@ class Mapper extends React.Component {
       ...field,
       definition
     }
+  }
+
+  onNewCustomAttribute = attribute => {
+    this.props.updateCsvFieldsMap(this.selectedColumn, {
+      definitionId: attribute.id,
+      label: null,
+      index: 0
+    })
   }
 
   render() {
@@ -298,8 +315,9 @@ class Mapper extends React.Component {
             .value()}
 
         <CustomAttributeDrawer
-          isOpen={this.state.isDrawerOpen}
+          isOpen={this.state.isCustomAttributeDrawerOpen}
           onClose={this.toggleOpenDrawer}
+          submitCallback={this.onNewCustomAttribute}
         />
       </div>
     )

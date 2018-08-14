@@ -1,28 +1,7 @@
 import React from 'react'
-import { isEqual } from 'underscore'
+import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { withRouter, browserHistory } from 'react-router'
-
 import { confirmation } from '../../../../../store_actions/confirmation'
-
-import {
-  selectContactsInfo,
-  selectPage,
-  selectPageContacts,
-  selectContactsListFetching
-} from '../../../../../reducers/contacts/list'
-
-import {
-  getContacts,
-  searchContacts,
-  deleteContacts,
-  removeContactPage,
-  receiveContactPage,
-  setContactCurrentPage,
-  clearContactSearchResult,
-  toggleRow,
-  toggleAllRows
-} from '../../../../../store_actions/contacts'
 
 import {
   Container as PageContainer,
@@ -32,49 +11,143 @@ import {
 
 import SavedSegments from '../../../../../views/components/Grid/SavedSegments/List'
 
-import { Header } from './Header'
-import { Search } from './Search'
-import { Toolbar } from './Toolbar'
-
-import Table from './Table'
-import { NoContact } from './NoContact'
 import ContactFilters from './Filters'
+import { Header } from './Header'
+import { SearchContacts } from './Search'
+import Table from './Table'
 
-const BASE_URL = '/dashboard/contacts'
-const deletedState = {
-  deletingContacts: [],
-  selectedRows: {}
-}
+import { resetGridSelectedItems } from '../../../../../views/components/Grid/Table/Plugins/Selectable'
+
+import {
+  selectContacts,
+  selectContactsInfo
+} from '../../../../../reducers/contacts/list'
+
+import {
+  getContacts,
+  searchContacts,
+  deleteContacts
+} from '../../../../../store_actions/contacts'
+
+const GridContainer = styled.div`
+  padding: 0 16px;
+`
 
 class ContactsList extends React.Component {
   state = {
-    filter: this.props.filter,
-    searchText: this.props.searchText,
+    isSideMenuOpen: true,
     pageTitle: 'All Contacts',
-    isSearching: false,
-    isDeleting: false,
-    isSideMenuOpen: true
+    isFetchingContacts: false,
+    isFetchingMoreContacts: false,
+    isRowsUpdating: false,
+    filter: this.props.filter,
+    selectedRows: [],
+    searchInputValue: this.props.searchInputValue
   }
 
   componentDidMount() {
-    this.onPageChange(this.props.currentPage, this.props.filter)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // For fixing web#1318
-    if (
-      nextProps.currentPage == 1 &&
-      this.props.currentPage != nextProps.currentPage
-    ) {
-      const page = selectPage(this.props.list, nextProps.currentPage)
-
-      if (!page) {
-        this.onPageChange(nextProps.currentPage)
-      }
+    if (this.props.list.ids.length === 0) {
+      this.fetchContacts()
     }
   }
 
-  handleOnDelete = (event, selectedRows) => {
+  fetchContacts = async (start = 0) => {
+    const { filter, searchInputValue } = this.state
+
+    this.setState({ isFetchingContacts: true })
+
+    if (start === 0) {
+      this.resetSelectedRows()
+    }
+
+    try {
+      if (this.hasSearchState()) {
+        await this.handleFilterChange(filter, searchInputValue, start)
+      } else {
+        await this.props.getContacts(start)
+      }
+    } catch (e) {
+      // todo
+    }
+
+    this.setState({ isFetchingContacts: false })
+  }
+
+  handleChangeSavedSegment = segment => {
+    this.setState(
+      {
+        pageTitle: segment.name
+      },
+      () => {
+        this.handleFilterChange(segment.filters, this.state.searchInputValue)
+      }
+    )
+  }
+
+  handleFilterChange = async (filter, searchInputValue, start = 0) => {
+    this.setState({ isFetchingContacts: true, filter })
+
+    if (start === 0) {
+      this.resetSelectedRows()
+    }
+
+    try {
+      await this.props.searchContacts(
+        filter,
+        start,
+        undefined,
+        searchInputValue
+      )
+    } catch (e) {
+      // todo
+    }
+
+    this.setState({ isFetchingContacts: false })
+  }
+
+  handleSearch = value => {
+    console.log(`[ Search ] ${value}`)
+    this.setState({ searchInputValue: value })
+    this.handleFilterChange(this.state.filter, value)
+  }
+
+  toggleSideMenu = () =>
+    this.setState(state => ({
+      isSideMenuOpen: !state.isSideMenuOpen
+    }))
+
+  handleLoadMore = async () => {
+    const { total } = this.props.listInfo
+    const startFrom = this.props.list.ids.length
+
+    if (this.state.isFetchingMoreContacts || startFrom === total) {
+      return false
+    }
+
+    console.log(`[ Loading More ] Start: ${startFrom}`)
+
+    this.setState({ isFetchingMoreContacts: true })
+
+    if (this.hasSearchState()) {
+      await this.fetchContacts(startFrom)
+    } else {
+      await this.handleFilterChange(
+        this.state.filter,
+        this.state.searchInputValue
+      )
+    }
+
+    this.setState({ isFetchingMoreContacts: false })
+  }
+
+  onChangeSelectedRows = selectedRows =>
+    this.setState({
+      selectedRows
+    })
+
+  hasSearchState = () => this.state.filter || this.state.searchInputValue
+
+  handleOnDelete = (event, { selectedRows }) => {
     event.stopPropagation()
 
     const selectedRowsLength = selectedRows.length
@@ -94,131 +167,30 @@ class ContactsList extends React.Component {
 
   handleDeleteContact = async ids => {
     try {
-      this.setState({ isDeleting: true })
+      this.rowsUpdating(true)
+
       await this.props.deleteContacts(ids)
-      this.setState({ isDeleting: false })
+
+      this.rowsUpdating(false)
+      this.resetSelectedRows()
     } catch (error) {
       console.log(error)
     }
   }
 
-  toggleSideMenu = () =>
-    this.setState(state => ({
-      isSideMenuOpen: !state.isSideMenuOpen
-    }))
+  rowsUpdating = isRowsUpdating => this.setState({ isRowsUpdating })
 
-  onFilterChange = async (filter, page = 1) => {
-    try {
-      let nextState = {
-        filter,
-        isSearching: true,
-        searchText: this.state.searchText
-      }
-
-      if (!isEqual(filter, selectContactsInfo(this.props.list).filter)) {
-        nextState = { ...nextState, ...deletedState }
-      }
-
-      this.setState(nextState, () =>
-        // browserHistory.push(`${BASE_URL}/page/${page}?filter=${filter}`)
-        browserHistory.push(`${BASE_URL}/page/${page}`)
-      )
-
-      await this.props.searchContacts(
-        filter,
-        page,
-        undefined,
-        nextState.searchText
-      )
-    } catch (error) {
-      console.log(error)
-    } finally {
-      this.setState({ isSearching: false })
-    }
-  }
-
-  search = searchText =>
-    this.setState({ ...deletedState, searchText }, () => {
-      this.onFilterChange(this.state.filter)
+  resetSelectedRows = () => {
+    resetGridSelectedItems('contacts')
+    this.setState({
+      selectedRows: []
     })
-
-  fetchPage = async page => {
-    this.props.getContacts(page)
-  }
-
-  onPageChange = (page, filter) => {
-    const { list } = this.props
-    const listInfo = selectContactsInfo(list)
-
-    if (!selectPage(list, page)) {
-      if (
-        (Array.isArray(filter) && filter.length > 0) ||
-        listInfo.type === 'filter'
-      ) {
-        return this.onFilterChange(this.state.filter, page)
-      }
-
-      this.fetchPage(page)
-    } else {
-      this.props.setContactCurrentPage(page)
-    }
-
-    let url = `${BASE_URL}`
-
-    if (page > 1) {
-      url = `${BASE_URL}/page/${page}`
-    }
-
-    // if (listInfo.filter) {
-    //   url = `${url}?filter=${listInfo.filter}`
-    // }
-
-    browserHistory.push(url)
-  }
-
-  getPages = () => {
-    const pageDefaultSize = 50
-    const { total } = selectContactsInfo(this.props.list)
-
-    if (total < pageDefaultSize) {
-      return 0
-    }
-
-    return Math.ceil(total / pageDefaultSize)
-  }
-
-  handleChangeSavedSegment = segment => {
-    this.setState(
-      {
-        searchText: '',
-        pageTitle: segment.name
-      },
-      () => {
-        this.onFilterChange(segment.filters)
-      }
-    )
   }
 
   render() {
-    const {
-      isSideMenuOpen,
-      pageTitle,
-      filter,
-      isSearching,
-      searchText
-    } = this.state
-    const { user, list, currentPage } = this.props
-
-    const contacts = selectPageContacts(list, currentPage)
-    const listInfo = selectContactsInfo(list)
-    const currentPageData = selectPage(list, currentPage)
-    const selectedRows = currentPageData ? currentPageData.selectedIds : []
-    const isFetching =
-      (currentPageData && currentPageData.fetching) ||
-      selectContactsListFetching(list)
-
-    const noContact =
-      !isFetching && contacts.length === 0 && listInfo.type !== 'filter'
+    const { isSideMenuOpen } = this.state
+    const { user, list } = this.props
+    const contacts = selectContacts(list)
 
     return (
       <PageContainer>
@@ -231,81 +203,52 @@ class ContactsList extends React.Component {
 
         <PageContent>
           <Header
-            title={pageTitle}
-            isSideMenuOpen={isSideMenuOpen}
+            title={this.state.pageTitle}
+            isSideMenuOpen={this.state.isSideMenuOpen}
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
           />
 
-          <ContactFilters onFilterChange={this.onFilterChange} />
+          <ContactFilters onFilterChange={this.handleFilterChange} />
 
-          <div style={{ padding: '0 1em' }}>
-            <Search
-              disabled={noContact}
-              inputValue={searchText}
-              isSearching={isSearching}
-              handleOnChange={this.search}
+          <GridContainer>
+            <SearchContacts
+              onSearch={this.handleSearch}
+              isSearching={this.state.isFetchingContacts}
             />
-
-            <Toolbar
-              disabled={noContact || isFetching || isSearching}
-              onDelete={this.handleOnDelete}
-              deleting={this.state.isDeleting}
-              selectedRows={selectedRows}
-              filters={filter}
-              totalCount={listInfo.total}
-              pageSize={currentPageData ? currentPageData.ids.length : 0}
+            <Table
+              data={contacts}
+              listInfo={this.props.listInfo}
+              isFetching={this.state.isFetchingContacts}
+              isFetchingMore={this.state.isFetchingMoreContacts}
+              isRowsUpdating={this.state.isRowsUpdating}
+              onRequestLoadMore={this.handleLoadMore}
+              rowsUpdating={this.rowsUpdating}
+              resetSelectedRows={this.resetSelectedRows}
+              onChangeSelectedRows={this.onChangeSelectedRows}
+              selectedRows={this.state.selectedRows}
+              onRequestDelete={this.handleOnDelete}
+              filters={this.state.filters}
             />
-            {noContact ? (
-              <NoContact user={user} />
-            ) : (
-              <Table
-                data={contacts}
-                deleting={this.state.isDeleting}
-                handleOnDelete={this.handleOnDelete}
-                loading={isFetching}
-                onPageChange={this.onPageChange}
-                currentPage={currentPage}
-                pages={this.getPages()}
-                selectedRows={selectedRows}
-                totalCount={listInfo.total}
-                toggleRow={this.props.toggleRow}
-                toggleAllRows={this.props.toggleAllRows}
-              />
-            )}
-          </div>
+          </GridContainer>
         </PageContent>
       </PageContainer>
     )
   }
 }
 
-function mapStateToProps(state, props) {
-  const { list } = state.contacts
-  const currentPage = Number(props.params.page) || 1
-  const filter = selectContactsInfo(list).filter || []
-  const searchText = selectContactsInfo(list).searchText || ''
+function mapStateToUser({ user, contacts }) {
+  const listInfo = selectContactsInfo(contacts.list)
 
   return {
-    currentPage,
-    filter,
-    searchText,
-    list,
-    user: state.user
+    listInfo,
+    user,
+    filter: listInfo.filter || [],
+    list: contacts.list
   }
 }
 
-export default withRouter(
-  connect(mapStateToProps, {
-    clearContactSearchResult,
-    confirmation,
-    deleteContacts,
-    getContacts,
-    removeContactPage,
-    receiveContactPage,
-    searchContacts,
-    setContactCurrentPage,
-    toggleRow,
-    toggleAllRows
-  })(ContactsList)
-)
+export default connect(
+  mapStateToUser,
+  { getContacts, searchContacts, deleteContacts, confirmation }
+)(ContactsList)

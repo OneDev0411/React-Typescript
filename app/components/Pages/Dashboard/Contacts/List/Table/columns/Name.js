@@ -27,8 +27,19 @@ const ContactsListName = ({ contact, attributeDefs }) => {
 
   return (
     <div className="name">
-      <Avatar className="avatar" round name={name} src={avatar} size={35} />
-      <span className="contact-name">{name}</span>
+      <Avatar
+        className="avatar"
+        round
+        name={name}
+        src={avatar}
+        size={35}
+        style={{
+          marginRight: '10px'
+        }}
+      />
+      <span className="contact-name" style={{ fontWeight: 500 }}>
+        {name}
+      </span>
     </div>
   )
 }

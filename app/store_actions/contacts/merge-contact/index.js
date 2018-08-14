@@ -5,7 +5,7 @@ import {
   FETCH_MERGE_CONTACTS_FAILURE
 } from '../../../constants/contacts'
 import { mergeContact as postMergeContacts } from '../../../models/contacts/merge-contact'
-import { updateStoreBasedOnRemovedContacts } from '../delete-contact'
+import { afterDeleteContactsFetch } from '../delete-contact'
 
 export function mergeContact(contactId, sub_contacts, query) {
   return async (dispatch, getState) => {
@@ -30,7 +30,7 @@ export function mergeContact(contactId, sub_contacts, query) {
 
       await postMergeContacts(contactId, sub_contacts, query)
 
-      await updateStoreBasedOnRemovedContacts(dispatch, getState, sub_contacts)
+      await afterDeleteContactsFetch(dispatch, getState, sub_contacts)
       dispatch(
         notify({
           message: 'The contacts have been successfully merged!',

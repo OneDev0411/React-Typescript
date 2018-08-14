@@ -30,34 +30,30 @@ import {
   createDeal,
   updateContext,
   ejectDraftMode,
+  updateListing,
   createRoles
 } from '../../../../../store_actions/deals'
 import OpenDeal from '../utils/open-deal'
 import { isBackOffice } from '../../../../../utils/user-teams'
 
 class CreateDeal extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      saving: false,
-      isDraft: true,
-      dealSide: '',
-      dealPropertyType: '',
-      dealAddress: null,
-      dealStatus: '',
-      enderType: -1,
-      contexts: {},
-      agents: {},
-      sellingAgents: {},
-      clients: {},
-      sellingClients: {},
-      referrals: {},
-      escrowOfficers: {},
-      submitError: null,
-      validationErrors: []
-    }
-
-    this.isFormSubmitted = false
+  state = {
+    saving: false,
+    isDraft: true,
+    dealSide: '',
+    dealPropertyType: '',
+    dealAddress: null,
+    dealStatus: '',
+    enderType: -1,
+    contexts: {},
+    agents: {},
+    sellingAgents: {},
+    clients: {},
+    sellingClients: {},
+    referrals: {},
+    escrowOfficers: {},
+    submitError: null,
+    validationErrors: []
   }
 
   componentDidMount() {
@@ -66,14 +62,21 @@ class CreateDeal extends React.Component {
     }
   }
 
+  isFormSubmitted = false
+
   initializeDeal = async () => {
     const { deal } = this.props
+
+    const enderType =
+      typeof deal.deal_context.ender_type !== 'undefined'
+        ? Deal.get.field(deal, 'ender_type')
+        : -1
 
     this.setState({
       isDraft: false,
       dealSide: deal.deal_type,
       dealPropertyType: deal.property_type,
-      enderType: Deal.get.field(deal, 'ender_type') || -1,
+      enderType,
       dealStatus: Deal.get.field(deal, 'listing_status') || '',
       contexts: this.generateContextsFromDeal(deal),
       dealAddress: this.generateAddressFromDeal(deal),
@@ -109,7 +112,8 @@ class CreateDeal extends React.Component {
       // dont allow to modify users
       const user = {
         ...roleItem,
-        readOnly: true
+        isEditable: false,
+        isRemovable: false
       }
 
       if (roleName.includes('Referral')) {
@@ -376,12 +380,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
+      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -573,13 +577,16 @@ class CreateDeal extends React.Component {
   updateDeal = async () => {
     const { id: dealId } = this.props.deal
     const newRoles = _.filter(this.Roles, role => !role.deal)
-    const contexts = this.createDealObject().deal_context
+
+    const dealObject = this.createDealObject()
+    const contexts = dealObject.deal_context
 
     this.setState({ saving: true })
 
     try {
-      if (newRoles.length > 0) {
-        await this.props.createRoles(dealId, newRoles)
+      // update listing if provided
+      if (dealObject.listing) {
+        await this.props.updateListing(dealId, dealObject.listing)
       }
 
       // create/update contexts
@@ -587,6 +594,10 @@ class CreateDeal extends React.Component {
 
       if (this.state.isDraft === false) {
         await this.props.ejectDraftMode(dealId)
+      }
+
+      if (newRoles.length > 0) {
+        await this.props.createRoles(dealId, newRoles)
       }
 
       return OpenDeal(dealId)
@@ -666,7 +677,10 @@ class CreateDeal extends React.Component {
     )
 
     _.each(contexts, (value, name) => {
-      if (_.isUndefined(value) || value === null || value.length === 0) {
+      if (
+        _.isUndefined(value) ||
+        (typeof value === 'string' && value.length === 0)
+      ) {
         return false
       }
 
@@ -1018,6 +1032,7 @@ export default connect(
     updateContext,
     ejectDraftMode,
     createRoles,
+    updateListing,
     notify
   }
 )(CreateDeal)

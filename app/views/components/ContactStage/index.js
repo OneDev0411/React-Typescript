@@ -9,11 +9,9 @@ import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs
 import {
   upsertContactAttributes,
   upsertAttributesToContacts,
-  searchContacts,
-  deselectAllRows
+  getContacts
 } from '../../../store_actions/contacts'
 import {
-  selectCurrentPage,
   selectContact,
   selectContactsInfo
 } from '../../../reducers/contacts/list'
@@ -67,9 +65,6 @@ class Stage extends React.Component {
       this.setState({ isSaving: true })
 
       const { contacts, ContactListStore } = this.props
-      const currentPage = selectCurrentPage(ContactListStore)
-
-      this.props.deselectAllRows(currentPage)
 
       if (contacts.length === 1) {
         const contact = selectContact(ContactListStore, contacts[0])
@@ -88,12 +83,9 @@ class Stage extends React.Component {
           }
         ])
 
-        await this.props.searchContacts(
-          this.props.filter,
-          currentPage,
-          undefined,
-          this.props.searchText
-        )
+        if (contacts.length >= 50) {
+          await this.props.getContacts()
+        }
       }
 
       this.props.notify({
@@ -158,8 +150,7 @@ export default connect(
   {
     upsertContactAttributes,
     upsertAttributesToContacts,
-    searchContacts,
-    notify,
-    deselectAllRows
+    getContacts,
+    notify
   }
 )(Stage)
