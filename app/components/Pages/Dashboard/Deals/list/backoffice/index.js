@@ -85,7 +85,7 @@ class BackofficeTable extends React.Component {
                 onChange={this.handleSearch}
                 onClearSearch={this.handleSearch}
                 debounceTime={700}
-                minimumLength={3}
+                minimumLength={4}
               />
             </SearchContainer>
 
