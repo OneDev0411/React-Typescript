@@ -69,7 +69,7 @@ class Search extends React.Component {
           value={this.state.searchValue}
           placeholder={placeholder}
           onChange={this.handleChange}
-          readOnly={isSearching && disableOnSearch === true}
+          readOnly={disableOnSearch && isSearching}
         />
 
         {showClearSearch &&
