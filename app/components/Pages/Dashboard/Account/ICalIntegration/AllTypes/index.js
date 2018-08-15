@@ -57,7 +57,7 @@ class ICalAllTypes extends React.Component {
       this.props.contactsAttributesDefs &&
       _.filter(
         this.props.contactsAttributesDefs,
-        def => def.data_type === 'date'
+        def => def.data_type === 'date' && def.show
       )
     const allTypes = taskTypes
       .map(type => type.name)
