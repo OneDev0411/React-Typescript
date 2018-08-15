@@ -16,11 +16,7 @@ export default class TagContacts extends React.Component {
 
     return (
       <Fragment>
-        <ActionButton
-          inverse
-          onClick={this.openOverLay}
-          style={{ padding: '0.70em 1.5em' }}
-        >
+        <ActionButton appearance="outline" onClick={this.openOverLay}>
           Tag
         </ActionButton>
 

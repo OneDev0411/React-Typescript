@@ -9,16 +9,18 @@ const MergeContacts = ({ selectedRows }) => (
         defaultSelectedItem={{ label: 'Change Stage', value: 'Change Stage' }}
         style={{
           borderRadius: '3px',
-          fontSize: '13px',
-          fontWeight: '600',
-          letterSpacing: '0.5px',
-          color: '#2196f3',
-          backgroundColor: '#ffffff',
-          border: 'solid 1px #2196f3'
+          height: '40px',
+          border: '1px solid #000',
+          display: 'inline-flex',
+          alignItems: 'center'
         }}
         buttonStyle={{
-          padding: '0 1.5em',
-          height: '34px'
+          display: 'flex',
+          alignItems: 'center',
+          fontSize: '16px',
+          color: '#000',
+          padding: '0 16px',
+          fontFamily: 'Barlow, sans-serif'
         }}
         contacts={selectedRows}
       />

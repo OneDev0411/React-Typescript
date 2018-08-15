@@ -43,7 +43,13 @@ export const BasicDropdown = ({
           {downshift.selectedItem && downshift.selectedItem.label}
           <Icon
             isOpen={downshift.isOpen}
-            style={{ fill: '#506379', width: '24px', height: '24px' }}
+            style={{
+              width: '20px',
+              height: '20px',
+              fill: '#000',
+              marginTop: '3px',
+              marginLeft: '8px'
+            }}
           />
         </Button>
         <div style={{ position: 'relative' }}>

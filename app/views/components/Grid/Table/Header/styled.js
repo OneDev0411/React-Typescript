@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 import { Row, Cell } from '../styled'
 
-export const Header = styled.div``
+export const Header = styled.div`
+  font-family: 'Barlow', sans-serif;
+`
 
 export const HeaderRow = Row.extend`
   margin-bottom: 32px;

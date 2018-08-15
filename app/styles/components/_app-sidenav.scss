@@ -9,8 +9,6 @@ $item-height: 3.4rem;
   top: 0;
   left: 0;
   z-index: 100;
-  background-color: #f8fafb;
-  border-right: 1px solid #e2e4e5;
 }
 
 .c-app-sidenav__list {
@@ -67,12 +65,12 @@ $item-height: 3.4rem;
   &:hover,
   &:active,
   .c-app-sidenav__item.is-active & {
-    color: #2196f3;
+    color: #003bdf;
     text-decoration: none;
   }
 
   .c-app-sidenav__item.is-active & {
-    color: #2196f3;
+    color: #003bdf;
     font-weight: bold;
   }
 }
@@ -107,9 +105,9 @@ $item-height: 3.4rem;
 }
 
 .c-app-sidenav__account-dropdown {
-  width: 90%;
-  padding-left: 1rem;
-  margin-top: 1rem;
+  width: 100%;
+  padding: 1em;
+  border-bottom: 1px solid rgba(212, 223, 230, 0);
 
   > .c-app-sidenav__item__title--button {
     &:hover,

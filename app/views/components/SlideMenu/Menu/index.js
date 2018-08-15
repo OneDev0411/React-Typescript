@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 const Container = styled.div`
-  background-color: #f8fafb;
+  background-color: #f2f2f2;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.09);
   width: ${props => (props.isOpen ? props.width : 0)}px;
   opacity: ${props => (props.isOpen ? 1 : 0)};
@@ -11,6 +11,8 @@ const Container = styled.div`
   overflow: auto;
   overflow-x: hidden;
   transition: 0.3s all ease-in;
+  padding-top: 1em;
+  font-family: 'Barlow', sans-serif;
 `
 
 const propTypes = {

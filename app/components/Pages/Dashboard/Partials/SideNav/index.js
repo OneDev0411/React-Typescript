@@ -65,6 +65,47 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
 
   return (
     <aside className="c-app-sidenav">
+      <Dropdown
+        dropup
+        id="account-dropdown"
+        className="c-app-sidenav__account-dropdown"
+      >
+        <Dropdown.Toggle className="c-app-sidenav__item__title--button">
+          <Avatar user={user} size={30} />
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <TeamSwitcher user={user} />
+
+          <li className="separator">Settings</li>
+
+          <li>
+            <Link to="/dashboard/account">Account</Link>
+          </li>
+
+          {hasBackOfficePermission && (
+            <li>
+              <Link to="/dashboard/brands">Brands</Link>
+            </li>
+          )}
+          {user.user_type === 'Admin' && (
+            <li>
+              <Link to="/dashboard/forms">Forms</Link>
+            </li>
+          )}
+          <li role="separator" className="divider" />
+          <li>
+            <a
+              href="/signout"
+              onClick={() => {
+                window.localStorage.removeItem('verificationBanner')
+              }}
+            >
+              Sign out
+            </a>
+          </li>
+        </Dropdown.Menu>
+      </Dropdown>
       <ul className="c-app-sidenav__list c-app-sidenav__list--top">
         {hasContactsPermission && (
           <SideNavItem isActive={activePath === 'CALENDAR'}>
@@ -150,48 +191,6 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
             </SideNavItem>
           )}
         />
-
-        <Dropdown
-          dropup
-          id="account-dropdown"
-          className="c-app-sidenav__account-dropdown"
-        >
-          <Dropdown.Toggle className="c-app-sidenav__item__title--button">
-            <Avatar user={user} size={30} />
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu>
-            <TeamSwitcher user={user} />
-
-            <li className="separator">Settings</li>
-
-            <li>
-              <Link to="/dashboard/account">Account</Link>
-            </li>
-
-            {hasBackOfficePermission && (
-              <li>
-                <Link to="/dashboard/brands">Brands</Link>
-              </li>
-            )}
-            {user.user_type === 'Admin' && (
-              <li>
-                <Link to="/dashboard/forms">Forms</Link>
-              </li>
-            )}
-            <li role="separator" className="divider" />
-            <li>
-              <a
-                href="/signout"
-                onClick={() => {
-                  window.localStorage.removeItem('verificationBanner')
-                }}
-              >
-                Sign out
-              </a>
-            </li>
-          </Dropdown.Menu>
-        </Dropdown>
       </ul>
     </aside>
   )
