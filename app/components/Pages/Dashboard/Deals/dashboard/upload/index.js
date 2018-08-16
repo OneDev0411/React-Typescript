@@ -33,9 +33,13 @@ class UploadDocument extends React.Component {
     }
 
     if (rejectedFiles && rejectedFiles.length > 0) {
+      const acceptedFiles = Deal.upload
+        .getAcceptedDocuments()
+        .replace(/,/gi, ', ')
+
       return confirmation({
         message: 'Cannot Upload this File',
-        description: `Some file formats are not supported. You can upload: ${Deal.upload.getAcceptedDocuments()}`,
+        description: `Some file formats are not supported. You can upload: ${acceptedFiles}`,
         onConfirm: () => null,
         hideCancelButton: true,
         confirmLabel: 'Okay'

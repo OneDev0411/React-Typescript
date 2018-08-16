@@ -3,14 +3,23 @@
  */
 export function getAcceptedDocuments() {
   return [
-    '.jpg',
-    '.jpeg',
     '.png',
     '.gif',
+    '.jpg',
+    '.jpeg',
+    '.docx',
+    '.doc',
     '.pdf',
-    '.csv',
     '.xls',
-    '.xlsx'
+    '.xlsx',
+    '.mp4',
+    '.mov',
+    '.txt',
+    '.csv',
+    '.heic',
+    '.mp4',
+    '.html',
+    '.pages'
   ].join(',')
 }
 
