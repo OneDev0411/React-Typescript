@@ -89,7 +89,7 @@ class UploadModal extends React.Component {
     const isBackupContract = this.isBackupContract(task)
 
     // get filename
-    const filename = properties.fileTitle || fileObject.name
+    const filename = this.getFileName({ fileObject, properties })
 
     // set status
     setUploadAttributes(id, { status: STATUS_UPLOADING })
@@ -121,6 +121,18 @@ class UploadModal extends React.Component {
     if (task && properties.notifyOffice === true && !isBackupContract) {
       changeNeedsAttention(task.deal, task.id, true)
     }
+  }
+
+  getFileName({ fileObject, properties }) {
+    // get file extension name
+    const extension = fileObject.name.split('.').pop()
+
+    // get file title
+    const filename = properties.fileTitle || fileObject.name
+
+    return filename.endsWith(`.${extension}`)
+      ? filename
+      : `${filename}.${extension}`
   }
 
   getButtonCaption(file) {
@@ -293,13 +305,16 @@ function mapStateToProps({ deals, user }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  notify,
-  uploadTaskFile,
-  uploadStashFile,
-  resetUploadFiles,
-  resetSplitter,
-  displaySplitter,
-  setUploadAttributes,
-  changeNeedsAttention
-})(UploadModal)
+export default connect(
+  mapStateToProps,
+  {
+    notify,
+    uploadTaskFile,
+    uploadStashFile,
+    resetUploadFiles,
+    resetSplitter,
+    displaySplitter,
+    setUploadAttributes,
+    changeNeedsAttention
+  }
+)(UploadModal)
