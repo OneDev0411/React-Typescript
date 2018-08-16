@@ -41,6 +41,9 @@ export const BodyRow = Row.extend`
 
 export const Cell = styled.div`
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   ${props =>
     props.width &&
@@ -55,6 +58,11 @@ export const Cell = styled.div`
       ${props.hoverStyle}
     }
   `};
+  > :first-child {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `
 
 export const BodyCell = Cell.extend`
