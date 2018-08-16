@@ -14,10 +14,10 @@ const CategoryTypes = ({
     {types.map(type => (
       <RadioButton
         square
-        key={type}
-        selected={selectedTypes.includes(type)}
-        title={type}
-        onClick={() => onChangeSelectedTypes(type)}
+        key={type.name}
+        selected={selectedTypes.includes(type.name)}
+        title={type.label}
+        onClick={() => onChangeSelectedTypes(type.name)}
         style={{ display: 'block', marginTop: '2rem' }}
       />
     ))}
