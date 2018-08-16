@@ -78,7 +78,6 @@ class Stage extends React.Component {
         await this.props.upsertAttributesToContacts(contacts, [
           {
             text: value,
-            is_primary: true,
             attribute_def: attribute_def.id
           }
         ])
