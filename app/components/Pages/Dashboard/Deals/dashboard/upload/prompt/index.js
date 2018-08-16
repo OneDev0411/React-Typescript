@@ -18,6 +18,8 @@ import ToolTip from '../../../../../../../views/components/tooltip/index'
 import Checkbox from '../../../../../../../views/components/radio'
 import FileName from './file-name'
 
+import Deal from '../../../../../../../models/Deal'
+
 const STATUS_UPLOADING = 'uploading'
 const STATUS_UPLOADED = 'uploaded'
 
@@ -94,6 +96,19 @@ class UploadModal extends React.Component {
     // set status
     setUploadAttributes(id, { status: STATUS_UPLOADING })
 
+    // check the file is allowed to upload or not
+    const isFileAllowed = Deal.upload
+      .getAcceptedDocuments()
+      .split(',')
+      .some(extname => this.getFileExtension(fileObject.name) === extname)
+
+    if (!isFileAllowed) {
+      return notify({
+        message: 'This file is not allowed to upload in your documents',
+        status: 'error'
+      })
+    }
+
     // upload file
     const file = task
       ? await uploadTaskFile(user, task, fileObject, filename)
@@ -121,6 +136,23 @@ class UploadModal extends React.Component {
     if (task && properties.notifyOffice === true && !isBackupContract) {
       changeNeedsAttention(task.deal, task.id, true)
     }
+  }
+
+  getFileName({ fileObject, properties }) {
+    // get file extension name
+    const extension = this.getFileExtension(fileObject.name)
+
+    // get file title
+    const filename = properties.fileTitle || fileObject.name
+
+    return filename.endsWith(extension) ? filename : `${filename}${extension}`
+  }
+
+  getFileExtension(filename) {
+    return `.${filename
+      .split('.')
+      .pop()
+      .toLowerCase()}`
   }
 
   getButtonCaption(file) {
@@ -293,13 +325,16 @@ function mapStateToProps({ deals, user }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  notify,
-  uploadTaskFile,
-  uploadStashFile,
-  resetUploadFiles,
-  resetSplitter,
-  displaySplitter,
-  setUploadAttributes,
-  changeNeedsAttention
-})(UploadModal)
+export default connect(
+  mapStateToProps,
+  {
+    notify,
+    uploadTaskFile,
+    uploadStashFile,
+    resetUploadFiles,
+    resetSplitter,
+    displaySplitter,
+    setUploadAttributes,
+    changeNeedsAttention
+  }
+)(UploadModal)

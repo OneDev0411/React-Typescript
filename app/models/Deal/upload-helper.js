@@ -3,9 +3,11 @@
  */
 export function getAcceptedDocuments() {
   return [
-    'image/*',
-    'application/pdf',
-    'application/*',
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.pdf',
     '.csv',
     '.xls',
     '.xlsx'
