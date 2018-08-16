@@ -12,7 +12,6 @@ export function getAcceptedDocuments() {
     '.pdf',
     '.xls',
     '.xlsx',
-    '.mp4',
     '.mov',
     '.txt',
     '.csv',
