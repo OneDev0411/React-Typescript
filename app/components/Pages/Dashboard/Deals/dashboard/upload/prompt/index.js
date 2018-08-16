@@ -91,7 +91,7 @@ class UploadModal extends React.Component {
     const isBackupContract = this.isBackupContract(task)
 
     // get filename
-    const filename = properties.fileTitle || fileObject.name
+    const filename = this.getFileName({ fileObject, properties })
 
     // set status
     setUploadAttributes(id, { status: STATUS_UPLOADING })
