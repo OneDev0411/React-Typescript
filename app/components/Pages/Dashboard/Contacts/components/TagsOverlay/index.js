@@ -143,7 +143,7 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          'We noticed you have un-added tag. Please select the \'Add\' link before saving',
+          "We noticed you have un-added tag. Please select the 'Add' link before saving",
         hideCancelButton: true,
         confirmLabel: 'Ok'
       })
@@ -233,12 +233,15 @@ class TagsOverlay extends React.Component {
 
     const { attributeDefs } = this.props
     const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
-    const contactsTags = selectedContactsIds.map(contactId =>
-      getContactAttribute(
-        selectContact(ContactListStore, contactId),
-        attribute_def
-      )
-    )
+    const contactsTags = selectedContactsIds.map(contactId => {
+      const contact = selectContact(ContactListStore, contactId)
+
+      if (contact) {
+        return getContactAttribute(contact, attribute_def)
+      }
+
+      return []
+    })
     const filteredTags = intersectionBy(
       ...contactsTags,
       attribute_def.data_type

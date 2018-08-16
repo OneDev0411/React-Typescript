@@ -16,9 +16,12 @@ import Grid from './grid'
 import AgentFilters from './filters'
 import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
 
+let persistentSearchInput = ''
+
 class AgentTable extends React.Component {
   state = {
-    isSideMenuOpen: true
+    isSideMenuOpen: true,
+    searchCriteria: persistentSearchInput
   }
 
   toggleSideMenu = () =>
@@ -32,6 +35,13 @@ class AgentTable extends React.Component {
     if (isFetchingDeals) {
       return false
     }
+
+    this.setState({
+      searchCriteria: value
+    })
+
+    // set persistent search input
+    persistentSearchInput = value
 
     if (value.length === 0) {
       return getDeals(user)
@@ -51,7 +61,10 @@ class AgentTable extends React.Component {
           isSideMenuOpen={isSideMenuOpen}
           isOpen={isSideMenuOpen}
         >
-          <AgentFilters activeFilter={params.filter} />
+          <AgentFilters
+            activeFilter={params.filter}
+            searchCriteria={this.state.searchCriteria}
+          />
         </Menu>
 
         <PageContent>
@@ -66,11 +79,13 @@ class AgentTable extends React.Component {
               <Search
                 disableOnSearch
                 showLoadingOnSearch
+                defaultValue={persistentSearchInput}
                 isSearching={isFetchingDeals}
                 placeholder="Search deals by address, MLS # or agent name…"
                 onChange={this.handleSearch}
+                onClearSearch={this.handleSearch}
                 debounceTime={700}
-                minimumLength={3}
+                minimumLength={4}
               />
             </SearchContainer>
 
