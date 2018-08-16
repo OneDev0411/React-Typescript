@@ -34,8 +34,8 @@ class UploadDocument extends React.Component {
 
     if (rejectedFiles && rejectedFiles.length > 0) {
       return confirmation({
-        message: 'You are trying to upload an invalid file',
-        description: `List of accepted files: ${Deal.upload.getAcceptedDocuments()}`,
+        message: 'Cannot Upload this File',
+        description: `Some file formats are not supported. You can upload: ${Deal.upload.getAcceptedDocuments()}`,
         onConfirm: () => null,
         hideCancelButton: true,
         confirmLabel: 'Okay'
