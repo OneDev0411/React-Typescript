@@ -7,18 +7,30 @@ const SearchContainer = styled.div`
   margin-bottom: 40px;
 `
 
-export function SearchContacts({ onSearch, isSearching }) {
-  return (
-    <SearchContainer>
-      <Search
-        disableOnSearch
-        showLoadingOnSearch
-        isSearching={isSearching}
-        placeholder="Search"
-        onChange={onSearch}
-        debounceTime={500}
-        minimumLength={1}
-      />
-    </SearchContainer>
-  )
+let persistentSearchInput = ''
+export class SearchContacts extends React.Component {
+  handleSearch = value => {
+    // set persistent search input
+    persistentSearchInput = value
+    this.props.onSearch(value)
+  }
+
+  render() {
+    return (
+      <SearchContainer>
+        <Search
+          disableOnSearch={false}
+          showLoadingOnSearch
+          isSearching={this.props.isSearching}
+          placeholder="Search"
+          onChange={this.handleSearch}
+          debounceTime={500}
+          minimumLength={1}
+          // /
+          defaultValue={persistentSearchInput}
+          onClearSearch={this.handleSearch}
+        />
+      </SearchContainer>
+    )
+  }
 }

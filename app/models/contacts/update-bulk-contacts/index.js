@@ -3,23 +3,19 @@ import { defaultQuery } from '../helpers/default-query'
 
 /**
  * Upserting attributes to contacts
- * @param {Array} ids - array of contact ids
+ * @param {Array} updatedContacts - array of contacts with attributes which should be updated
  * @param {Object} attributes - array of attributes to be add or update
  * @returns Returns 204
  */
 
-export async function upsertAttributesToContacts(ids, attributes) {
-  if (!Array.isArray(ids)) {
-    throw new Error('Contact ids required.')
-  }
-
-  if (!Array.isArray(attributes)) {
-    throw new Error('Attributes invalid!')
+export async function upsertAttributesToContacts(updatedContacts) {
+  if (!Array.isArray(updatedContacts)) {
+    throw new Error('updated contacts is required.')
   }
 
   let query = {}
 
-  if (ids.length < 50) {
+  if (updatedContacts.length < 50) {
     query = {
       ...defaultQuery,
       get: true
@@ -30,9 +26,9 @@ export async function upsertAttributesToContacts(ids, attributes) {
     const response = await new Fetch({ stream: true })
       .patch('/contacts')
       .query(query)
-      .send({ ids, attributes })
+      .send({ contacts: updatedContacts })
 
-    if (ids.length < 50) {
+    if (updatedContacts.length < 50) {
       return response.body
     }
 

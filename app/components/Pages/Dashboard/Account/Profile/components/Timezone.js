@@ -6,12 +6,9 @@ import moment from 'moment-timezone'
 
 import FormCard from './FormCard'
 import { getBrandInfo } from '../../../../Auth/SignIn'
-import { Dropdown } from '../../../../../../views/components/Dropdown'
-import { setUserTimezone } from '../../../../../../models/user/set-user-timezone'
-import {
-  EDIT_USER_REQUEST,
-  EDIT_USER_SUCCESS
-} from '../../../../../../constants/user'
+import { Dropdown } from 'components/Dropdown'
+import { setUserTimezone } from 'models/user/set-user-timezone'
+import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
 
 const Timezone = ({ brand, timezone, dispatch }) => {
   let submitError = null

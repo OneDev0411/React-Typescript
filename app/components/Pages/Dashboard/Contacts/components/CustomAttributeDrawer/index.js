@@ -24,11 +24,19 @@ const defaultProps = {
   submitCallback: () => {}
 }
 
+const getDataTypeInitialValue = props => {
+  if (props.section && props.section === 'Dates') {
+    return { title: 'Date', value: 'date' }
+  }
+
+  return selectFieldDefaultSelectedItem
+}
+
 class CustomAttributeDrawer extends React.Component {
   initialValues = {
     label: '',
     section: this.props.section || selectFieldDefaultSelectedItem,
-    data_type: selectFieldDefaultSelectedItem,
+    data_type: getDataTypeInitialValue(this.props),
     labels: [''],
     enum_values: ['']
   }
@@ -115,7 +123,7 @@ class CustomAttributeDrawer extends React.Component {
                     value: 'Details'
                   },
                   {
-                    title: 'Important Dates',
+                    title: 'Touch Dates',
                     value: 'Dates'
                   }
                 ]}

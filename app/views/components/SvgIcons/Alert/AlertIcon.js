@@ -1,8 +1,8 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-const width = '16'
-const height = '16'
+const width = '32'
+const height = '32'
 const viewBox = '0 0 16 16'
 
 const getDimensions = () => ({

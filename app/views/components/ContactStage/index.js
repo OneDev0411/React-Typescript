@@ -74,14 +74,26 @@ class Stage extends React.Component {
         ])
       } else {
         const { attribute_def } = this.props
+        const updatedContacts = contacts.map(contactId => {
+          const contact = selectContact(ContactListStore, contactId)
 
-        await this.props.upsertAttributesToContacts(contacts, [
-          {
+          const contactStages = getContactAttribute(contact, attribute_def)
+          const newStage = {
             text: value,
-            is_primary: true,
             attribute_def: attribute_def.id
           }
-        ])
+
+          if (contactStages.length > 0) {
+            newStage.id = contactStages[0].id
+          }
+
+          return {
+            id: contactId,
+            attributes: [newStage]
+          }
+        })
+
+        await this.props.upsertAttributesToContacts(updatedContacts)
 
         if (contacts.length >= 50) {
           await this.props.getContacts()

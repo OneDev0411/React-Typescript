@@ -5,8 +5,10 @@ import { getLegalFullName } from '../utils/roles'
 
 export default ({ user, onClick, onRemove }) => (
   <div
-    className={cn('entity-item people', { disabled: user.readOnly })}
-    onClick={() => !user.readOnly && onClick()}
+    className={cn('entity-item people', {
+      disabled: user.isEditable === false
+    })}
+    onClick={() => user.isEditable !== false && onClick()}
   >
     <UserAvatar
       name={`${user.legal_first_name} ${user.legal_last_name}`}
@@ -17,14 +19,16 @@ export default ({ user, onClick, onRemove }) => (
 
     <span className="name">{getLegalFullName(user)}</span>
 
-    <span
-      className="remove"
-      onClick={e => {
-        e.stopPropagation()
-        onRemove(user.id)
-      }}
-    >
-      <i className="fa fa-times" />
-    </span>
+    {user.isRemovable !== false && (
+      <span
+        className="remove"
+        onClick={e => {
+          e.stopPropagation()
+          onRemove(user.id, user)
+        }}
+      >
+        <i className="fa fa-times" />
+      </span>
+    )}
   </div>
 )

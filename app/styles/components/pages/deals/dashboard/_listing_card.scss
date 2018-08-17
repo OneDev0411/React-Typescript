@@ -43,6 +43,8 @@
   }
 
   .address-info {
+    display: flex;
+    justify-content: space-between;
     position: relative;
     width: calc(100% - 60px);
     padding-left: 10px;

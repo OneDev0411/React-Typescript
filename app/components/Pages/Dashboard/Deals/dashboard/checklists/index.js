@@ -55,6 +55,24 @@ class Checklist extends React.Component {
     })
   }
 
+  /**
+   * show banner when deal is draft and
+   * has one task with needs_attention at least
+   */
+  get ShowDraftBanner() {
+    const { deal, checklists, tasks } = this.props
+
+    return (
+      deal.is_draft &&
+      _.some(deal.checklists || [], chId =>
+        _.some(
+          checklists[chId].tasks || [],
+          id => tasks[id].attention_requested
+        )
+      )
+    )
+  }
+
   render() {
     let terminatedChecklistsCount = 0
     let deactivatedChecklistsCount = 0
@@ -64,7 +82,7 @@ class Checklist extends React.Component {
 
     return (
       <div className="checklists-container" data-simplebar={!isWebkit || null}>
-        {deal.is_draft && (
+        {this.ShowDraftBanner && (
           <DraftBanner>
             <AlertIcon />
             Your Notify Office requests have been saved and will be submitted

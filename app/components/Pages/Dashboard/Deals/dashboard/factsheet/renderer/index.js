@@ -37,8 +37,10 @@ class Table extends React.Component {
     this.setState({ saving: false })
   }
 
-  onChangeContext(field, value = null) {
-    this.updateField(field, value)
+  onChangeContext(field, value) {
+    const fieldValue = !_.isUndefined(value) && value !== null ? value : null
+
+    this.updateField(field, fieldValue)
   }
 
   async updateField(field, value) {
@@ -99,7 +101,7 @@ class Table extends React.Component {
                     isBackOffice={isBackOffice}
                     needsApproval={!isBackOffice && field.needs_approval}
                     onChange={(field, value) =>
-                      this.onChangeContext(field, value || null)
+                      this.onChangeContext(field, value)
                     }
                   />
                   <div className="approve-row">

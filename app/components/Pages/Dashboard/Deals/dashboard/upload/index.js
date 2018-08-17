@@ -15,7 +15,7 @@ class UploadDocument extends React.Component {
     }
   }
 
-  async onDrop(files) {
+  async onDrop(files, rejectedFiles) {
     const { onDrop, setUploadFiles, activeChecklist, confirmation } = this.props
 
     this.setState({
@@ -26,6 +26,20 @@ class UploadDocument extends React.Component {
       return confirmation({
         message: 'Folder Is Terminated',
         description: 'You cannot upload file in terminated folders',
+        onConfirm: () => null,
+        hideCancelButton: true,
+        confirmLabel: 'Okay'
+      })
+    }
+
+    if (rejectedFiles && rejectedFiles.length > 0) {
+      const acceptedFiles = Deal.upload
+        .getAcceptedDocuments()
+        .replace(/,/gi, ', ')
+
+      return confirmation({
+        message: 'Cannot Upload this File',
+        description: `Some file formats are not supported. You can upload: ${acceptedFiles}`,
         onConfirm: () => null,
         hideCancelButton: true,
         confirmLabel: 'Okay'
@@ -69,7 +83,7 @@ class UploadDocument extends React.Component {
       <Dropzone
         disableClick
         ref={node => (this.dropzone = node)}
-        onDrop={files => this.onDrop(files)}
+        onDrop={(files, rejectedFiles) => this.onDrop(files, rejectedFiles)}
         onDragEnter={() => this.setState({ dropzoneActive: true })}
         onDragLeave={() => this.setState({ dropzoneActive: false })}
         multiple
@@ -124,6 +138,7 @@ function mapStateToProps({ user, deals }) {
   }
 }
 
-export default connect(mapStateToProps, { setUploadFiles, confirmation })(
-  UploadDocument
-)
+export default connect(
+  mapStateToProps,
+  { setUploadFiles, confirmation }
+)(UploadDocument)
