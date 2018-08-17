@@ -19,6 +19,7 @@ import TagsOverlay from '../../components/TagsOverlay'
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
 import { goTo } from '../../../../../../utils/go-to'
+import { TruncatedColumn } from './styled'
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -42,12 +43,22 @@ class ContactsList extends React.Component {
     {
       header: 'Email',
       id: 'email',
-      accessor: contact => getAttributeFromSummary(contact, 'email')
+      accessor: contact => getAttributeFromSummary(contact, 'email'),
+      render: ({ rowData: contact }) => (
+        <TruncatedColumn>
+          {getAttributeFromSummary(contact, 'email')}
+        </TruncatedColumn>
+      )
     },
     {
       header: 'Phone',
       id: 'phone',
-      accessor: contact => getAttributeFromSummary(contact, 'phone_number')
+      accessor: contact => getAttributeFromSummary(contact, 'phone_number'),
+      render: ({ rowData: contact }) => (
+        <TruncatedColumn>
+          {getAttributeFromSummary(contact, 'phone_number')}
+        </TruncatedColumn>
+      )
     },
     {
       header: 'Last Touched',

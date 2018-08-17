@@ -8,6 +8,7 @@ import {
   getAttributeFromSummary,
   getContactAttribute
 } from '../../../../../../../models/contacts/helpers'
+import { TruncatedColumn } from '../styled'
 
 const ContactsListName = ({ contact, attributeDefs }) => {
   const attribute_def = selectDefinitionByName(
@@ -26,7 +27,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
   const name = getAttributeFromSummary(contact, 'display_name')
 
   return (
-    <div className="name">
+    <TruncatedColumn>
       <Avatar
         className="avatar"
         round
@@ -40,7 +41,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
       <span className="contact-name" style={{ fontWeight: 500 }}>
         {name}
       </span>
-    </div>
+    </TruncatedColumn>
   )
 }
 
