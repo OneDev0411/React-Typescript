@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
+import IconButton from '../../Button/IconButton'
 import IconClose from '../../SvgIcons/Close/CloseIcon'
 
 import { buttonBaseStyle } from '../styles/ButtonAppearances'
@@ -17,7 +18,12 @@ class TagButton extends React.Component {
     /**
      * Render an icon before the text. Can be any icon from Rechat SVG icons.
      */
-    RenderIcon: PropTypes.func
+    RenderIcon: PropTypes.func,
+
+    /**
+     * Close button handler.
+     */
+    handleRemove: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -42,6 +48,17 @@ class TagButton extends React.Component {
     const Button = styled.button`
       ${buttonBaseStyle};
 
+      padding: 0;
+      margin-left: 8px;
+      color: inherit;
+      background-color: inherit;
+
+      ${isNotDisableState}hover, ${isNotDisableState}focus {
+        color: inherit;
+      }
+    `
+
+    const Box = Flex.extend`
       height: 40px;
       font-size: 16px;
       line-height: 38px;
@@ -59,7 +76,7 @@ class TagButton extends React.Component {
         border: 1px solid #000;
       }
 
-      & > svg {
+      svg {
         width: 24px;
         height: 24px;
         fill: '#000';
@@ -67,25 +84,20 @@ class TagButton extends React.Component {
     `
 
     return (
-      <Button
-        {...rest}
-        onFocus={this.showCloseIcon}
-        onMouseEnter={this.showCloseIcon}
-        onMouseLeave={this.hideCloseIcon}
-      >
-        {RenderIcon && <RenderIcon style={{ marginRight: '8px' }} />}
-        <RenderText />
-        <Flex
-          center
-          style={{
-            width: '24px',
-            height: '24px',
-            marginLeft: '8px'
-          }}
+      <Box alignCenter>
+        <Button
+          {...rest}
+          onFocus={this.showCloseIcon}
+          onMouseEnter={this.showCloseIcon}
+          onMouseLeave={this.hideCloseIcon}
         >
+          {RenderIcon && <RenderIcon style={{ marginRight: '8px' }} />}
+          <RenderText />
+        </Button>
+        <IconButton inverse iconSize="large" onCLick={this.props.handleRemove}>
           {this.state.isShowClose && !rest.disabled && <IconClose />}
-        </Flex>
-      </Button>
+        </IconButton>
+      </Box>
     )
   }
 }
