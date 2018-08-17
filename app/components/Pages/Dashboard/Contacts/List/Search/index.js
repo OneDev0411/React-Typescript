@@ -26,7 +26,6 @@ export class SearchContacts extends React.Component {
           onChange={this.handleSearch}
           debounceTime={500}
           minimumLength={1}
-          // /
           defaultValue={persistentSearchInput}
           onClearSearch={this.handleSearch}
         />

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import Table from '../../../../../../views/components/Grid/Table'
 
-import DropDown from './columns/Dropdown'
+import Menu from './columns/Menu'
 import TagsString from './columns/Tags'
 import Name from './columns/Name'
 import { LastTouchedCell } from './columns/LastTouched'
@@ -70,9 +70,9 @@ class ContactsList extends React.Component {
       header: '',
       accessor: '',
       className: 'td--dropdown-container',
-      width: '30px',
+      width: '24px',
       render: ({ rowData: contact }) => (
-        <DropDown
+        <Menu
           contactId={contact.id}
           handleOnDelete={this.props.handleOnDelete}
         />
@@ -173,21 +173,6 @@ class ContactsList extends React.Component {
           EmptyState={() => (
             <NoSearchResults description="Try typing another name, email, phone or tag." />
           )}
-          // TdComponent={TrComponent}
-          // getTrProps={(state, { original: { id } }) => {
-          //   if (this.props.deleting && this.props.selectedRows.includes(id)) {
-          //     return {
-          //       style: {
-          //         opacity: 0.5,
-          //         ponterEvents: 'none'
-          //       }
-          //     }
-          //   }
-
-          //   return {
-          //     onClick: () => openContact(id)
-          //   }
-          // }}
         />
 
         <TagsOverlay
