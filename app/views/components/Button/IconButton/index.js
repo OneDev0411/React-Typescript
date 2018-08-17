@@ -4,38 +4,45 @@
   Don't use with any text or another element as sibling.
 */
 
+import { blue } from '../../../utils/colors'
 import Button from '../ActionButton'
-import { isOutline, getIconSize, getIconStatesStyle } from '../helpers'
+import { getIconSize, getIconStatesStyle } from '../helpers'
+
+const propTypes = {
+  ...Button.propTypes,
+  iconSize: Button.propTypes.size
+}
 
 const defaultProps = {
   ...Button.defaultProps,
-  appearance: 'icon'
+  appearance: 'icon',
+  iconSize: Button.defaultProps.size
 }
 
 const getColor = props => {
-  if (isOutline(props)) {
-    return '#000'
-  }
-
   if (props.appearance === 'primary') {
     return '#fff'
   }
 
-  return '#003bdf'
-}
-
-const getPadding = size => {
-  if (size === 'medium') {
-    return 'padding: 0 8px'
+  if (
+    props.appearance === 'outline' ||
+    (props.appearance === 'icon' && props.inverse)
+  ) {
+    return '#000'
   }
+
+  return blue.A100
 }
 
 const IconButton = Button.extend`
-  ${props => getPadding(props.size)};
+  padding: 0;
+
+  ${props =>
+    props.appearance === 'icon' && props.inverse ? 'border: none;' : ''};
 
   > svg {
-    width: ${props => getIconSize(props.size)};
-    height: ${props => getIconSize(props.size)};
+    width: ${props => getIconSize(props.iconSize || props.size)};
+    height: ${props => getIconSize(props.iconSize || props.size)};
     fill: ${props => getColor(props)};
   }
 
@@ -43,5 +50,6 @@ const IconButton = Button.extend`
 `
 
 export default Object.assign(IconButton, {
+  propTypes,
   defaultProps
 })
