@@ -30,7 +30,7 @@ export default class Editable extends React.Component {
   }
 
   onFinishEditing(value = null) {
-    const { field, onChange } = this.props
+    const { field } = this.props
 
     const fieldValue = value || this.state.value
 
@@ -43,7 +43,7 @@ export default class Editable extends React.Component {
       fieldValue !== this.getContextValue() &&
       field.validate(field, fieldValue)
     ) {
-      onChange(field, fieldValue)
+      this.props.onChange(field, fieldValue)
     } else {
       this.setState({
         value: this.getContextValue()

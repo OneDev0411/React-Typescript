@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ProfileTabs, DealsTabs } from './components/Tabs'
+import { ProfileTabs } from './components/Tabs'
 
 const AccountLayout = ({ user, children }) => (
   <div className="l-account">
@@ -9,11 +9,6 @@ const AccountLayout = ({ user, children }) => (
         <h1>Account Settings</h1>
       </header>
       <ProfileTabs user={user} />
-
-      <header className="l-account__sidenav__header">
-        <h1>Deals</h1>
-      </header>
-      <DealsTabs user={user} />
     </aside>
     <main className="l-account__main">{children}</main>
   </div>

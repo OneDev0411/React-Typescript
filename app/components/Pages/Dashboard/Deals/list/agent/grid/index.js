@@ -98,10 +98,13 @@ class Grid extends React.Component {
     ]
   }
 
-  getPriceValue = deal =>
-    Deal.get.field(deal, 'sales_price') ||
-    Deal.get.field(deal, 'list_price') ||
-    Deal.get.field(deal, 'lease_price')
+  getPriceValue = deal => {
+    const field = ['sales_price', 'list_price', 'lease_price'].find(
+      name => Deal.get.field(deal, name) !== null
+    )
+
+    return Deal.get.field(deal, field)
+  }
 
   get Data() {
     const { deals, activeFilter } = this.props

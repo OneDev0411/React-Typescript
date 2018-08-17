@@ -177,7 +177,31 @@ class TagsOverlay extends React.Component {
       if (selectedContactsIds.length === 1) {
         await addAttributes(selectedContactsIds[0], attributes)
       } else {
-        await upsertAttributesToContacts(selectedContactsIds, attributes)
+        const updatedContacts = []
+
+        selectedContactsIds.forEach(contactId => {
+          const contact = selectContact(ContactListStore, contactId)
+
+          const contactTags = getContactAttribute(contact, attribute_def)
+
+          const contactNewTags = attributes.filter(
+            tag =>
+              !contactTags.some(
+                contactTag =>
+                  tag[attribute_def.data_type] ===
+                  contactTag[attribute_def.data_type]
+              )
+          )
+
+          if (contactNewTags.length !== 0) {
+            updatedContacts.push({
+              id: contactId,
+              attributes: contactNewTags
+            })
+          }
+        })
+
+        await upsertAttributesToContacts(updatedContacts)
       }
     }
 
@@ -233,12 +257,15 @@ class TagsOverlay extends React.Component {
 
     const { attributeDefs } = this.props
     const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
-    const contactsTags = selectedContactsIds.map(contactId =>
-      getContactAttribute(
-        selectContact(ContactListStore, contactId),
-        attribute_def
-      )
-    )
+    const contactsTags = selectedContactsIds.map(contactId => {
+      const contact = selectContact(ContactListStore, contactId)
+
+      if (contact) {
+        return getContactAttribute(contact, attribute_def)
+      }
+
+      return []
+    })
     const filteredTags = intersectionBy(
       ...contactsTags,
       attribute_def.data_type

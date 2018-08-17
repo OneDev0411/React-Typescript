@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "19.0.0",
+  "version": "20.0.10",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -48,6 +48,7 @@
     "blocked-at": "^1.1.2",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
+    "bowser": "^2.0.0-alpha.4",
     "branch-sdk": "^2.37.0",
     "classnames": "^2.2.6",
     "clipboard": "^1.6.1",
