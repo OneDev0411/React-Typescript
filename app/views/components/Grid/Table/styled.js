@@ -8,13 +8,14 @@ export const Container = styled.div`
 export const ToolbarContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 32px;
 `
 
 export const ActionsBar = styled.div`
   display: flex;
   flex-direction: row;
+  margin-left: 8px;
 `
 
 export const Body = styled.div``
