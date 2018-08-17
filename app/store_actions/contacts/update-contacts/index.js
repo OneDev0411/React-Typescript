@@ -6,14 +6,14 @@ import {
 import { upsertAttributesToContacts as fetchUpsertAttributesToContacts } from '../../../models/contacts/update-bulk-contacts'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 
-export function upsertAttributesToContacts(ids, attributes) {
+export function upsertAttributesToContacts(updatedContacts) {
   return async dispatch => {
     try {
       dispatch({
         type: UPSERT_ATTRIBUTES_TO_CONTACTS_REQUEST
       })
 
-      const response = await fetchUpsertAttributesToContacts(ids, attributes)
+      const response = await fetchUpsertAttributesToContacts(updatedContacts)
 
       dispatch({
         response: normalizeContacts(response),

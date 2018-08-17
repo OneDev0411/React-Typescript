@@ -143,7 +143,7 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          "We noticed you have un-added tag. Please select the 'Add' link before saving",
+          'We noticed you have un-added tag. Please select the \'Add\' link before saving',
         hideCancelButton: true,
         confirmLabel: 'Ok'
       })
@@ -177,7 +177,31 @@ class TagsOverlay extends React.Component {
       if (selectedContactsIds.length === 1) {
         await addAttributes(selectedContactsIds[0], attributes)
       } else {
-        await upsertAttributesToContacts(selectedContactsIds, attributes)
+        const updatedContacts = []
+
+        selectedContactsIds.forEach(contactId => {
+          const contact = selectContact(ContactListStore, contactId)
+
+          const contactTags = getContactAttribute(contact, attribute_def)
+
+          const contactNewTags = attributes.filter(
+            tag =>
+              !contactTags.some(
+                contactTag =>
+                  tag[attribute_def.data_type] ===
+                  contactTag[attribute_def.data_type]
+              )
+          )
+
+          if (contactNewTags.length !== 0) {
+            updatedContacts.push({
+              id: contactId,
+              attributes: contactNewTags
+            })
+          }
+        })
+
+        await upsertAttributesToContacts(updatedContacts)
       }
     }
 
