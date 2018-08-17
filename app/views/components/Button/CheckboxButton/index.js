@@ -2,23 +2,23 @@ import React from 'react'
 import styled from 'styled-components'
 import { func } from 'prop-types'
 
-import Checkmark from '../../SvgIcons/Checkmark/IconCheckmark'
+import { blue, grey } from 'views/utils/colors'
+import Checkmark from 'components/SvgIcons/Checkmark/IconCheckmark'
 
 const CheckBox = styled.span`
+  width: 16px;
+  height: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 19px;
-  height: 19px;
-  border-radius: 3px;
-  background-color: ${props => (props.isSelected ? '#2196f3' : '#fff')};
-  border: solid 1px ${props => (props.isSelected ? '#2196f3' : '#cad4db')};
-  text-align: center;
   cursor: pointer;
+  border-radius: 3px;
+  background-color: ${props => (props.isSelected ? blue.A100 : '#fff')};
+  border: solid 1px ${props => (props.isSelected ? blue.A100 : grey.A200)};
 
   :hover {
-    background-color: ${props => (props.isSelected ? '#2196f3' : '#e8edf0')};
-    border-color: ${props => (props.isSelected ? '#2196f3' : '#8da3b2')};
+    background-color: ${props => (props.isSelected ? blue.A200 : grey.A100)};
+    border-color: ${props => (props.isSelected ? blue.A200 : '#000')};
     opacity: ${props => (props.isSelected ? 0.8 : 1)};
   }
 `
