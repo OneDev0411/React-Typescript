@@ -1,5 +1,10 @@
+import path from 'path'
 import webpack from 'webpack'
 import config from '../config/webpack'
+
+function resolvePath(dirPath) {
+  return path.resolve(__dirname, dirPath)
+}
 
 export default {
   devtool: 'inline-source-map',
@@ -11,8 +16,22 @@ export default {
     publicPath: config.compile.publicPath
   },
   resolve: {
-    extensions: ['.js', '.json', '.css', '.scss'],
-    modules: [config.compile.entry, 'node_modules']
+    modules: [resolvePath('../app'), 'node_modules'],
+    extensions: ['.js', '.jsx', '.json', '.css'],
+    alias: {
+      actions: resolvePath('../app/store_actions'),
+      assets: resolvePath('../app/static'),
+      components: resolvePath('../app/views/components'),
+      constants: resolvePath('../app/constants'),
+      dashboard: resolvePath('../app/components/Dashboard'),
+      models: resolvePath('../app/models'),
+      reducers: resolvePath('../app/reducers'),
+      routes: resolvePath('../app/routes'),
+      partials: resolvePath('../app/components/Partials'),
+      services: resolvePath('../app/services'),
+      utils: resolvePath('../app/utils'),
+      views: resolvePath('../app/views')
+    }
   },
   plugins: [new webpack.DefinePlugin(config.globals)],
   externals: {
