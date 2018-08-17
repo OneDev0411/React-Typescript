@@ -4,11 +4,8 @@ import styled from 'styled-components'
 const Container = styled.div``
 
 const Title = styled.div`
-  font-size: 16px;
-  font-family: 'Barlow', sans-serif;
-  font-weight: 500;
-  line-height: 1.5;
   color: rgba(0, 0, 0, 0.5);
+  font-weight: 500;
 `
 
 function parseText({ text, ...parameters }) {
