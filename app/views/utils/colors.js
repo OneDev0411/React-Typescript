@@ -4,7 +4,8 @@ export const blue = {
 }
 
 export const grey = {
-  A100: '#eaeaea',
-  A200: '#d4d4d4',
-  A300: '#c5c5c5'
+  A100: '#f2f2f2',
+  A200: '#eaeaea',
+  A300: '#d4d4d4',
+  A400: '#c5c5c5'
 }

@@ -14,10 +14,10 @@ const CheckBox = styled.span`
   cursor: pointer;
   border-radius: 3px;
   background-color: ${props => (props.isSelected ? blue.A100 : '#fff')};
-  border: solid 1px ${props => (props.isSelected ? blue.A100 : grey.A200)};
+  border: solid 1px ${props => (props.isSelected ? blue.A100 : grey.A300)};
 
   :hover {
-    background-color: ${props => (props.isSelected ? blue.A200 : grey.A100)};
+    background-color: ${props => (props.isSelected ? blue.A200 : grey.A200)};
     border-color: ${props => (props.isSelected ? blue.A200 : '#000')};
     opacity: ${props => (props.isSelected ? 0.8 : 1)};
   }
