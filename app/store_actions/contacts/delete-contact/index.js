@@ -33,20 +33,22 @@ export async function afterDeleteContactsFetch(dispatch, getState, contactIds) {
   const { list } = getState().contacts
   const listInfo = selectContactsInfo(list)
   const fetchedContactsLength = selectContacts(list).length
+  const startPoint =
+    fetchedContactsLength - contactIds.length > 0
+      ? fetchedContactsLength - contactIds.length
+      : 0
 
-  if (fetchedContactsLength < listInfo.total) {
-    if (listInfo.type === 'general') {
-      await dispatch(getContacts(fetchedContactsLength, contactIds.length))
-    } else {
-      await dispatch(
-        searchContacts(
-          listInfo.filter,
-          fetchedContactsLength,
-          contactIds.length,
-          listInfo.searchText
-        )
+  if (listInfo.type === 'general') {
+    await dispatch(getContacts(fetchedContactsLength, contactIds.length))
+  } else {
+    await dispatch(
+      searchContacts(
+        listInfo.filter,
+        startPoint,
+        contactIds.length,
+        listInfo.searchText
       )
-    }
+    )
   }
 
   dispatch({

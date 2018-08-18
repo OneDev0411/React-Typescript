@@ -328,10 +328,11 @@ class TagsOverlay extends React.Component {
     if (selectedContactsIds.length > 1) {
       DrawerHeaderText = `${selectedContactsIds.length} contacts`
     } else if (selectedContactsIds.length === 1 && contactsCount) {
-      DrawerHeaderText = getAttributeFromSummary(
-        selectContact(ContactListStore, selectedContactsIds[0]),
-        'display_name'
-      )
+      const contact = selectContact(ContactListStore, selectedContactsIds[0])
+
+      if (contact) {
+        DrawerHeaderText = getAttributeFromSummary(contact, 'display_name')
+      }
     }
 
     return (

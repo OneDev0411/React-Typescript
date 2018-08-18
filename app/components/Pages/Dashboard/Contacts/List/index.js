@@ -168,10 +168,11 @@ class ContactsList extends React.Component {
   handleDeleteContact = async ids => {
     try {
       this.rowsUpdating(true)
-
+      this.setState({ isFetchingContacts: true })
       await this.props.deleteContacts(ids)
 
       this.rowsUpdating(false)
+      this.setState({ isFetchingContacts: false })
       this.resetSelectedRows()
     } catch (error) {
       console.log(error)
