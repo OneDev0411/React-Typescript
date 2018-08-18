@@ -21,8 +21,8 @@ export default class Fetch {
     this._middlewares = {}
     this._autoLogin = true
     this._isServerSide = isServerSide
-    this._baseUrl = isServerSide || isTestEnv ? config.app.url : ''
-    this._proxyUrl = `${this._baseUrl}/api/proxifier`
+    this._apiUrl = isServerSide || isTestEnv ? '' : config.api_url
+    // this._proxyUrl = `${this._baseUrl}/api/proxifier`
     this._isProductionEnv = isProductionEnv
     this._startTime = null
   }
@@ -40,12 +40,7 @@ export default class Fetch {
 
     this._startTime = Date.now()
 
-    const agent = SuperAgent.post(
-      `${this._proxyUrl}/${this.getEndpointKey(endpoint)}`
-    )
-      .set('X-Method', method)
-      .set('X-Endpoint', endpoint)
-      .set('X-Stream', this.options.stream)
+    const agent = SuperAgent[method](`${this._apiUrl}${endpoint}`)
 
     // auto append access-token
     if (this._autoLogin && this._isLoggedIn) {
@@ -90,13 +85,6 @@ export default class Fetch {
     }
   }
 
-  getEndpointKey(url) {
-    return url
-      .split(/[?#]/)[0] // remove query string
-      .replace('/', '') // change first slash to null
-      .replace(/(?!^)\//g, '-') // change the rest slashes to dash
-  }
-
   get(endpoint) {
     return this._create('get', endpoint)
   }
@@ -118,8 +106,7 @@ export default class Fetch {
   }
 
   upload(endpoint, method = 'post') {
-    this._proxyUrl += '/upload'
-
+    // this._proxyUrl += '/upload'
     return this._create(method, endpoint)
   }
 
