@@ -1,6 +1,6 @@
 import Koa from 'koa'
 import Crypto from '../../../crypto'
-import listing_util from '../../../../../app/utils/listing'
+
 const router = require('koa-router')()
 const app = new Koa()
 
@@ -15,7 +15,7 @@ router.get('/dashboard/recents/:id', async (ctx, next) => {
   const { token, alert } = ctx.request.query
 
   if (!token) {
-    return await next()
+    return next()
   }
 
   const decoded_token = decodeURIComponent(token)
@@ -31,6 +31,7 @@ router.get('/dashboard/recents/:id', async (ctx, next) => {
   })
 
   const user = response.data
+
   user.access_token = access_token
   ctx.session.user = user
 

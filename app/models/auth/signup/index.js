@@ -19,8 +19,10 @@ const signupShadow = async email => {
       .send(user)
 
     const { type, email_confirmed } = response.body.data
+
     if (type === 'user_reference' && !email_confirmed) {
       const error = { http: 202 }
+
       throw error
     }
 

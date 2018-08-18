@@ -18,9 +18,14 @@ app.use(async (ctx, next) => {
   const isDashboard = url => url.toLowerCase().indexOf('dashboard') !== -1
 
   const isListingPage = url =>
-    new RegExp(/^\/dashboard\/mls\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/).test(url)
+    new RegExp(
+      /^\/dashboard\/mls\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
+    ).test(url)
 
-  if (!isDashboard(ctx.url) || (isDashboard(ctx.url) && isListingPage(ctx.url))) {
+  if (
+    !isDashboard(ctx.url) ||
+    (isDashboard(ctx.url) && isListingPage(ctx.url))
+  ) {
     // eslint-disable-next-line
     return await next()
   }

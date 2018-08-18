@@ -17,8 +17,7 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
     ).test(url)
 
   if (id == null || !isListingPage(ctx.url)) {
-    await next()
-    return
+    return next()
   }
 
   try {
@@ -29,8 +28,9 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
       og_image_url: listing.cover_image_url,
       og_description: listing.property.description,
       og_title: listing_util.addressTitle(listing.property.address),
-      og_url: `${ctx.request.protocol}://${ctx.request.hostname}${ctx.request
-        .url}`
+      og_url: `${ctx.request.protocol}://${ctx.request.hostname}${
+        ctx.request.url
+      }`
     }
 
     ctx.locals = {
@@ -45,7 +45,7 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
     console.log(error)
   }
 
-  await next()
+  return next()
 })
 
 module.exports = app.use(router.routes())
