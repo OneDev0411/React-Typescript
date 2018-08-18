@@ -9,7 +9,6 @@ import { blue } from '../../../../utils/colors'
 import Icon from '../../../SvgIcons/Add/AddIcon'
 
 const IconAdd = Icon.extend`
-  margin-right: 8px;
   fill: ${blue.A100};
   width: 16px;
   height: 16px;
@@ -17,6 +16,8 @@ const IconAdd = Icon.extend`
 
 const AddItem = Button.extend`
   padding: 0;
+  margin-right: 16px;
+  font-weight: 500;
 
   &:hover > svg {
     fill: ${blue.A200};
@@ -76,7 +77,7 @@ export class AddFilter extends React.Component {
               </AddItem>
 
               {isOpen && (
-                <List>
+                <List depth={3}>
                   {config.map((item, index) => (
                     <FilterItemToolTip key={index} item={item}>
                       <ListItem

@@ -4,15 +4,16 @@ import _ from 'underscore'
 
 import { ListFilter } from '../Types/List'
 
+import IconRemove from 'components/SvgIcons/Close/CloseIcon'
+
 import {
   Container,
   Menu,
   Content,
   ItemTitle,
   TitleContainer,
-  Button,
-  IconContainer,
-  RemoveIcon
+  RemoveButton,
+  Button
 } from './styled'
 
 const getComponent = (filterConfig, props) => {
@@ -57,17 +58,17 @@ export const FilterItem = props => {
           <div>
             <TitleContainer>
               <ItemTitle onClick={onToggleFilterActive}>
-                <b>{filterConfig.label} </b>
+                <span style={{ fontWeight: 600 }}>{filterConfig.label} </span>
                 {operator && operator.name}&nbsp;
                 {getCurrentValues(isActive, values)}
               </ItemTitle>
-              <IconContainer>
-                <RemoveIcon className="fa fa-times" onClick={onRemove} />
-              </IconContainer>
+              <RemoveButton iconSize="large" inverse onClick={onRemove}>
+                <IconRemove />
+              </RemoveButton>
             </TitleContainer>
 
             {isOpen && (
-              <Menu>
+              <Menu depth={3}>
                 <Content>{getComponent(filterConfig, props)}</Content>
                 <Button onClick={onToggleFilterActive}>Done</Button>
               </Menu>

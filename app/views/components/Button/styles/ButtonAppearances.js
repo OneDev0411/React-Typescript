@@ -63,6 +63,7 @@ export const ButtonAppearances = {
   link: css`
     ${buttonBaseStyle};
     color: ${blue.A100};
+    background-color: transparent;
 
     &[disabled] {
       color: #000;
