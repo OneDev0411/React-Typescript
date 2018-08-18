@@ -8,13 +8,14 @@ export const Container = styled.div`
 export const ToolbarContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 32px;
 `
 
 export const ActionsBar = styled.div`
   display: flex;
   flex-direction: row;
+  margin-left: 8px;
 `
 
 export const Body = styled.div``
@@ -41,9 +42,6 @@ export const BodyRow = Row.extend`
 
 export const Cell = styled.div`
   text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 
   ${props =>
     props.width &&
@@ -58,11 +56,6 @@ export const Cell = styled.div`
       ${props.hoverStyle}
     }
   `};
-  > :first-child {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
 `
 
 export const BodyCell = Cell.extend`
