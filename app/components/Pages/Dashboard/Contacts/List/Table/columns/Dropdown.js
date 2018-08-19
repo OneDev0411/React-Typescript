@@ -23,7 +23,11 @@ const ContactsDropDown = ({ contactId, handleOnDelete }) => (
         eventKey="Delete"
         key={`contact_${contactId}__dropdown__item_delete`}
         style={{ width: '100%', textAlign: 'left' }}
-        onClick={event => handleOnDelete(event, [contactId])}
+        onClick={e =>
+          handleOnDelete(e, {
+            selectedRows: [contactId]
+          })
+        }
       >
         Delete
       </MenuItem>

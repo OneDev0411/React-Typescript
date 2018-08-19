@@ -147,9 +147,7 @@ class ContactsList extends React.Component {
 
   hasSearchState = () => this.state.filter || this.state.searchInputValue
 
-  handleOnDelete = (event, { selectedRows }) => {
-    event.stopPropagation()
-
+  handleOnDelete = (e, { selectedRows }) => {
     const selectedRowsLength = selectedRows.length
 
     this.props.confirmation({
