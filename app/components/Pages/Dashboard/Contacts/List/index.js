@@ -46,7 +46,7 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.list.ids.length === 0) {
+    if (this.props.listInfo.count === 0) {
       this.fetchContacts()
     }
   }
