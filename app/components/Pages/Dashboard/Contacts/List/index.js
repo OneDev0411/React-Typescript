@@ -46,7 +46,7 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.list.ids.length === 0) {
+    if (this.props.listInfo.count === 0) {
       this.fetchContacts()
     }
   }
@@ -147,9 +147,7 @@ class ContactsList extends React.Component {
 
   hasSearchState = () => this.state.filter || this.state.searchInputValue
 
-  handleOnDelete = (event, { selectedRows }) => {
-    event.stopPropagation()
-
+  handleOnDelete = (e, { selectedRows }) => {
     const selectedRowsLength = selectedRows.length
 
     this.props.confirmation({
