@@ -15,7 +15,8 @@ export function Item(props) {
         style={{
           display: 'inline-flex',
           alignItems: 'center',
-          marginBottom: '.5em'
+          marginBottom: '.5em',
+          maxWidth: 'calc(100% - 24px)'
         }}
       >
         <span
@@ -34,12 +35,13 @@ export function Item(props) {
           <span
             style={{
               lineHeight: 1,
-              fontSize: '1.5rem'
+              fontSize: '1.5rem',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
             }}
           >
-            {touch.description.length > 33
-              ? `${touch.description.slice(0, 33)}...`
-              : touch.description}
+            {touch.description}
           </span>
         )}
       </div>
