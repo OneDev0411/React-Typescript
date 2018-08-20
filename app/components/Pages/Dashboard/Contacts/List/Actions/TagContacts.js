@@ -28,6 +28,7 @@ export default class TagContacts extends React.Component {
           selectedContactsIds={selectedRows}
           isOpen={overlayIsOpen}
           closeOverlay={this.closeOverlay}
+          resetSelectedRows={this.props.resetSelectedRows}
         />
       </Fragment>
     )

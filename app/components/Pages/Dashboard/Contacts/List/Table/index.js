@@ -120,12 +120,20 @@ class ContactsList extends React.Component {
     },
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => <TagContacts selectedRows={selectedRows} />
+      render: ({ selectedRows }) => (
+        <TagContacts
+          selectedRows={selectedRows}
+          resetSelectedRows={this.props.resetSelectedRows}
+        />
+      )
     },
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows }) => (
-        <ChangeStageContacts selectedRows={selectedRows} />
+        <ChangeStageContacts
+          selectedRows={selectedRows}
+          resetSelectedRows={this.props.resetSelectedRows}
+        />
       )
     }
   ]
