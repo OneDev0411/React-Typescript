@@ -34,21 +34,15 @@ export class FileManager extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.deal) {
+      browserHistory.push('/dashboard/deals')
+    }
+  }
+
   render() {
     const { deal, user } = this.props
     const traningAccount = isTrainingAccount(user)
-
-    if (!deal) {
-      return (
-        <div className="file-manager">
-          <div className="table-container">
-            <div className="loading">
-              <i className="fa fa-spin fa-spinner fa-3x" />
-            </div>
-          </div>
-        </div>
-      )
-    }
 
     return (
       <div className="file-manager">
