@@ -742,7 +742,7 @@ class CreateDeal extends React.Component {
       return saving ? 'Creating ...' : 'Create Deal'
     }
 
-    return saving ? 'Updating ...' : 'Draft'
+    return saving ? 'Updating Deal ...' : 'Save Updates'
   }
 
   /**
@@ -823,7 +823,6 @@ class CreateDeal extends React.Component {
           {!deal && (
             <Fragment>
               <DealType
-                isNewDeal={!deal}
                 isDraft={isDraft}
                 onChangeDealType={this.changeDealType}
               />
@@ -995,7 +994,7 @@ class CreateDeal extends React.Component {
               onClick={this.goLive}
               disabled={!canSaveDeal}
             >
-              {saving ? 'Saving ...' : 'Visible to admin'}
+              {saving ? 'Saving ...' : 'Make visible to admin'}
             </Button>
           )}
 
