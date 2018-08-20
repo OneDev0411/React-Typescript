@@ -30,6 +30,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
     <TruncatedColumn>
       <Avatar
         className="avatar"
+        color="#D4D4D4"
         round
         name={name}
         src={avatar}
