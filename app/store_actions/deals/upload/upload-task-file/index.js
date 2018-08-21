@@ -4,13 +4,20 @@ import Deal from '../../../../models/Deal'
 /**
  * uploads a file into a task
  */
-export function uploadTaskFile(user, task, file, fileName = null) {
+export function uploadTaskFile(
+  user,
+  task,
+  file,
+  fileName = null,
+  uploadProgressCallback
+) {
   return async dispatch => {
     try {
       const response = await Deal.uploadTaskFile(
         task.id,
         file,
-        fileName || file.name
+        fileName || file.name,
+        uploadProgressCallback
       )
 
       const fileData = response.body.data

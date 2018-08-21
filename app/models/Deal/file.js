@@ -1,20 +1,34 @@
 import Fetch from '../../services/fetch'
 
-export async function uploadStashFile(dealId, file, fileName = null) {
+export async function uploadStashFile(
+  dealId,
+  file,
+  fileName = null,
+  uploadProgressCallback
+) {
   try {
-    return await new Fetch()
+    return await new Fetch({
+      progress: uploadProgressCallback
+    })
       .upload(`/deals/${dealId}/files`)
-      .attach('file', file, fileName || file.name)
+      .attach('file', file, fileName)
   } catch (e) {
     return null
   }
 }
 
-export async function uploadTaskFile(taskId, file, fileName = null) {
+export async function uploadTaskFile(
+  taskId,
+  file,
+  fileName = null,
+  uploadProgressCallback
+) {
   try {
-    return await new Fetch()
+    return await new Fetch({
+      progress: uploadProgressCallback
+    })
       .upload(`/tasks/${taskId}/attachments`)
-      .attach('file', file, fileName || file.name)
+      .attach('file', file, fileName)
   } catch (e) {
     return null
   }
