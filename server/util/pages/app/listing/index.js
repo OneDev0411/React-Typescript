@@ -11,19 +11,14 @@ const app = new Koa()
 router.get('/dashboard/mls/:id', async (ctx, next) => {
   const { id } = ctx.params
 
-  const isListingPage = url =>
-    new RegExp(
-      /^\/dashboard\/mls\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
-    ).test(url)
-
-  if (id == null || !isListingPage(ctx.url)) {
+  if (!id) {
     return next()
   }
 
   try {
     const listing = await getListing(id)
 
-    const openGraphData = {
+    ctx.state.openGraph = {
       has_og: true,
       og_image_url: listing.cover_image_url,
       og_description: listing.property.description,
@@ -33,16 +28,11 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
       }`
     }
 
-    ctx.locals = {
-      ...ctx.locals,
-      ...openGraphData
-    }
-
     if (ctx.session.user && ctx.request.query.token) {
       ctx.session = null
     }
   } catch (error) {
-    console.log(error)
+    console.log('Listing Not Found!')
   }
 
   return next()

@@ -3,7 +3,7 @@ const _ = require('underscore')
 const list = []
 
 const routes = {
-  proxifier: ['passthrough', 'upload'],
+  proxifier: ['passthrough'],
   message: ['messages'],
   contact: ['export-outlook'],
   deal: [

@@ -1,16 +1,9 @@
 import Koa from 'koa'
 import mount from 'koa-mount'
-import url from 'url'
 import MobileDetect from 'mobile-detect'
-import config from '../../../config/private'
-
-const _ = require('underscore')
+import _ from 'underscore'
 
 const app = new Koa()
-
-const routes = {
-  app: [['signout'], ['reset_password'], ['listing']]
-}
 
 app.use(async (ctx, next) => {
   const isMobile = new MobileDetect(ctx.req.headers['user-agent'])
@@ -27,7 +20,7 @@ app.use(async (ctx, next) => {
     (isDashboard(ctx.url) && isListingPage(ctx.url))
   ) {
     // eslint-disable-next-line
-    return await next()
+    return next()
   }
 
   if (isMobile.phone()) {
@@ -40,49 +33,18 @@ app.use(async (ctx, next) => {
     return ctx.redirect(url)
   }
   // eslint-disable-next-line
-  return await next()
+  return next()
 })
 
-app.use(async (ctx, next) => {
-  let { session, locals } = ctx
-  let { appStore } = locals
-
-  const { data, user } = appStore
-
-  if (!session.user) {
-    if (user) {
-      delete appStore.user
-      delete appStore.data.user
-    }
-  } else {
-    appStore = {
-      ...appStore,
-      data: {
-        ...data,
-        user: session.user,
-        path: ctx.request.url,
-        location: { pathname: ctx.request.url }
-      },
-      user: session.user
-    }
-  }
-
-  const newLocals = {
-    ...locals,
-    appStore
-  }
-
-  ctx.config = config
-  ctx.locals = newLocals
-
-  await next()
-})
+const routes = {
+  app: ['signout', 'reset_password', 'listing']
+}
 
 _.each(routes, (group, name) => {
   _.each(group, route => {
     // eslint-disable-next-line
-    app.use(mount(require(`./${name}/${route[0]}`)))
+    app.use(mount(require(`./${name}/${route}`)))
   })
 })
 
-module.exports = app
+export default app
