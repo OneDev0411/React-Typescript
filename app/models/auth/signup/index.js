@@ -13,7 +13,7 @@ const signupShadow = async email => {
   }
 
   try {
-    const response = await new Fetch()
+    const response = await new Fetch({ proxy: true })
       .post('/users')
       .set({ 'x-auth-mode': 'client_id' })
       .send(user)

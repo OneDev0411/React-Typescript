@@ -7,7 +7,7 @@ const signin = async userInfo => {
   }
 
   try {
-    const response = await new Fetch()
+    const response = await new Fetch({ proxy: true })
       .post('/oauth2/token')
       .set({ 'x-auth-mode': 'client_id' })
       .send(requestBody)
