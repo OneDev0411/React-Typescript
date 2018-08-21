@@ -1,6 +1,6 @@
 // SideNav
 
-$item-height: 3.4rem;
+$item-height: 56px;
 
 .c-app-sidenav {
   width: $app-sidenav-width;
@@ -30,14 +30,16 @@ $item-height: 3.4rem;
 
 .c-app-sidenav__item {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: $item-height;
-  padding-left: 1rem;
   cursor: pointer;
   transition: background-color 0.2s ease-in;
 
-  // &:not(.is-active):hover {
-  //   background-color: rgba(#62778c, 0.4);
-  // }
+  &.is-active {
+    background-color: #f2f2f2;
+  }
 }
 
 .c-app-sidenav__item__active-sign {
@@ -56,29 +58,28 @@ $item-height: 3.4rem;
 
 .c-app-sidenav__item__title,
 .c-app-sidenav__item__title--button {
-  width: 100%;
-  display: block;
-  padding: 0;
-  color: #17283a;
+  color: #000;
+  font-size: 16px;
   line-height: $item-height;
-  font-size: 1.5rem;
+  padding: 0;
 
   &:hover,
   &:active,
   .c-app-sidenav__item.is-active & {
-    color: #003bdf;
-    text-decoration: none;
+      svg {
+        fill: #003bdf;
+    }
   }
 
   .c-app-sidenav__item.is-active & {
-    color: #003bdf;
-    font-weight: bold;
+    svg {
+      fill: #003bdf;
+    }
   }
 }
 
 .c-app-sidenav__item__title--button {
   border: none;
-  text-align: left;
   background: transparent;
 
   &:focus {
@@ -93,8 +94,8 @@ $item-height: 3.4rem;
 .c-app-sidenav__notification-badge {
   $size: 20px;
   position: absolute;
-  top: 0.7rem;
-  right: 1rem;
+  top: 14px;
+  right: 8px;
   width: $size;
   height: $size;
   text-align: center !important;
@@ -106,9 +107,10 @@ $item-height: 3.4rem;
 }
 
 .c-app-sidenav__account-dropdown {
+  text-align: center;
   width: 100%;
-  padding: 1em;
-  border-bottom: 1px solid rgba(212, 223, 230, 0);
+  padding: 16px 0;
+  border-bottom: 1px solid #d4d4d4;
   
   > .c-app-sidenav__item__title--button {
     &:hover,

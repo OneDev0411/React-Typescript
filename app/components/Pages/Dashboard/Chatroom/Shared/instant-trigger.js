@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import { toggleChatbar } from '../../../../../store_actions/chatroom'
 
+import IconButton from '../../../../../views/components/Button/IconButton'
+import ChatIcon from '../../../../../views/components/SvgIcons/Chat/IconChat'
+
 const openChatbar = toggleChatbar => {
   if (window && window.location.pathname.includes('/recents/')) {
     return false
@@ -23,17 +26,19 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
   })
 
   return (
-    <div>
-      <button
+    <React.Fragment>
+      <IconButton
+        size="large"
+        iconSize="large"
         className="c-app-sidenav__item__title--button"
         onClick={() => openChatbar(toggleChatbar)}
       >
-        Inbox
-        {counter > 0 && (
-          <span className="c-app-sidenav__notification-badge">{counter}</span>
-        )}
-      </button>
-    </div>
+        <ChatIcon />
+      </IconButton>
+      {counter > 0 && (
+        <span className="c-app-sidenav__notification-badge">{counter}</span>
+      )}
+    </React.Fragment>
   )
 }
 export default connect(

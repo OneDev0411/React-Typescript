@@ -1,11 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
 import { Dropdown } from 'react-bootstrap'
-import Avatar from './components/Avatar'
+
 import IntercomTrigger from '../IntercomTrigger'
 import TeamSwitcher from './components/TeamSwitcher'
-import Brand from '../../../../../controllers/Brand'
 
 // utils
 import { getActiveTeamACL } from '../../../../../utils/user-teams'
@@ -17,8 +15,18 @@ import Inbox from '../../Chatroom/Shared/instant-trigger'
 import DealsNotifications from '../../Deals/components/SideNavBadge'
 import { selectNotificationNewCount } from '../../../../../reducers/notifications'
 
-const ACTIVE_COLOR = `#${Brand.color('primary', '3388ff')}`
-// const DEFAULT_COLOR = '#8da2b5'
+import IconButton from '../../../../../views/components/Button/IconButton'
+import Link from '../../../../../views/components/Button/LinkButton'
+import DealsIcon from '../../../../../views/components/SvgIcons/Deals/IconDeal'
+import MarketingIcon from '../../../../../views/components/SvgIcons/Marketing/IconMarketing'
+import ContactsIcon from '../../../../../views/components/SvgIcons/Contacts/IconContacts'
+import NotificationsIcon from '../../../../../views/components/SvgIcons/Notifications/IconNotifications'
+import SupportIcon from '../../../../../views/components/SvgIcons/Support/IconSupport'
+import CalendarIcon from '../../../../../views/components/SvgIcons/Calendar2/IconCalendar'
+import IconProperties from '../../../../../views/components/SvgIcons/Properties/IconProperties'
+
+import { SideNavTooltip } from './components/Tooltip'
+import { SettingsDropdownButton } from './components/SettingsDropdownButton'
 
 const getActivePath = path => {
   const checkPath = filter => (path.match(filter) || {}).input
@@ -44,12 +52,8 @@ const getActivePath = path => {
   }
 }
 
-const SideNavItem = ({ children, isActive }) => (
+const SideNavItem = ({ isActive, children }) => (
   <li className={`c-app-sidenav__item ${isActive ? 'is-active' : ''}`}>
-    <span
-      className="c-app-sidenav__item__active-sign"
-      style={{ backgroundColor: ACTIVE_COLOR }}
-    />
     {children}
   </li>
 )
@@ -70,17 +74,15 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
         id="account-dropdown"
         className="c-app-sidenav__account-dropdown"
       >
-        <Dropdown.Toggle className="c-app-sidenav__item__title--button">
-          <Avatar user={user} size={30} />
-        </Dropdown.Toggle>
+        <SettingsDropdownButton user={user} bsRole="toggle" />
 
         <Dropdown.Menu>
           <TeamSwitcher user={user} />
 
-          <li className="separator">Settings</li>
+          <li className="separator">Account</li>
 
           <li>
-            <Link to="/dashboard/account">Account</Link>
+            <Link to="/dashboard/account">Settings</Link>
           </li>
 
           {hasBackOfficePermission && (
@@ -108,86 +110,100 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
       </Dropdown>
       <ul className="c-app-sidenav__list c-app-sidenav__list--top">
         {hasContactsPermission && (
-          <SideNavItem isActive={activePath === 'CALENDAR'}>
-            <Link
-              to="/dashboard/calendar"
-              className="c-app-sidenav__item__title"
-            >
-              Calendar
-            </Link>
+          <SideNavItem isActive={activePath === 'CALENDAR'} label="Calendar">
+            <SideNavTooltip label="Calendar">
+              <Link
+                to="/dashboard/calendar"
+                className="c-app-sidenav__item__title"
+              >
+                <CalendarIcon />
+              </Link>
+            </SideNavTooltip>
           </SideNavItem>
         )}
         <SideNavItem>
-          <Inbox />
+          <SideNavTooltip label="Chat">
+            <Inbox />
+          </SideNavTooltip>
         </SideNavItem>
 
         <SideNavItem isActive={activePath === 'MAP'}>
-          <Link to="/dashboard/mls" className="c-app-sidenav__item__title">
-            Properties
-          </Link>
+          <SideNavTooltip label="Properties">
+            <Link to="/dashboard/mls" className="c-app-sidenav__item__title">
+              <IconProperties />
+            </Link>
+          </SideNavTooltip>
         </SideNavItem>
 
         {hasContactsPermission && (
           <SideNavItem isActive={activePath === 'CONTACTS'}>
-            <Link
-              to="/dashboard/contacts"
-              className="c-app-sidenav__item__title"
-            >
-              Contacts
-            </Link>
+            <SideNavTooltip label="Contacts">
+              <Link
+                to="/dashboard/contacts"
+                className="c-app-sidenav__item__title"
+              >
+                <ContactsIcon />
+              </Link>
+            </SideNavTooltip>
           </SideNavItem>
         )}
 
         {(hasDealsPermission || hasBackOfficePermission) && (
           <SideNavItem isActive={activePath === 'DEALS'}>
-            <Link to="/dashboard/deals" className="c-app-sidenav__item__title">
-              Deals
-              <DealsNotifications />
-            </Link>
-          </SideNavItem>
-        )}
-
-        {hasContactsPermission && (
-          <SideNavItem isActive={activePath === 'TASKS'}>
-            <Link to="/crm/tasks" className="c-app-sidenav__item__title">
-              Tasks
-            </Link>
+            <SideNavTooltip label="Deals">
+              <Link
+                to="/dashboard/deals"
+                className="c-app-sidenav__item__title"
+              >
+                <DealsIcon />
+              </Link>
+            </SideNavTooltip>
+            <DealsNotifications />
           </SideNavItem>
         )}
 
         {user.agent &&
           user.user_type === 'Agent' &&
           user.agent.office_mlsid === 'CSTPP01' && (
-            <SideNavItem isActive={activePath === 'STORE'}>
-              <Link to="/dashboard/website">Store</Link>
+            <SideNavItem isActive={activePath === 'STORE'} label="Store">
+              <SideNavTooltip label="Store">
+                <Link to="/dashboard/website">
+                  <MarketingIcon />
+                </Link>
+              </SideNavTooltip>
             </SideNavItem>
           )}
       </ul>
 
       <ul className="c-app-sidenav__list c-app-sidenav__list--bottom">
-        <SideNavItem isActive={activePath === 'NOTIF'}>
-          <Link
-            to="/dashboard/notifications"
-            className="c-app-sidenav__item__title"
-          >
-            Notifications
-            {appNotifications > 0 && (
-              <span className="c-app-sidenav__notification-badge">
-                {appNotifications}
-              </span>
-            )}
-          </Link>
+        <SideNavItem isActive={activePath === 'NOTIF'} label="Notifications">
+          <SideNavTooltip label="Notifications">
+            <Link
+              to="/dashboard/notifications"
+              className="c-app-sidenav__item__title"
+            >
+              <NotificationsIcon />
+              {appNotifications > 0 && (
+                <span className="c-app-sidenav__notification-badge">
+                  {appNotifications}
+                </span>
+              )}
+            </Link>
+          </SideNavTooltip>
         </SideNavItem>
 
         <IntercomTrigger
           render={({ activeIntercom, intercomIsActive }) => (
             <SideNavItem isActive={false}>
-              <button
-                onClick={!intercomIsActive ? activeIntercom : () => false}
-                className="c-app-sidenav__item__title--button"
-              >
-                Support
-              </button>
+              <SideNavTooltip label="Support">
+                <IconButton
+                  iconSize="large"
+                  onClick={!intercomIsActive ? activeIntercom : () => false}
+                  className="c-app-sidenav__item__title--button"
+                >
+                  <SupportIcon />
+                </IconButton>
+              </SideNavTooltip>
             </SideNavItem>
           )}
         />
