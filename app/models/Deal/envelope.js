@@ -33,9 +33,7 @@ export async function sendEnvelope(
   }
 
   try {
-    const response = await new Fetch({ stream: true })
-      .post('/envelopes')
-      .send(data)
+    const response = await new Fetch().post('/envelopes').send(data)
 
     return response.body.data
   } catch (e) {

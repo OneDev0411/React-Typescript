@@ -11,12 +11,7 @@ export default class Fetch {
     const isTestEnv = process.env.NODE_ENV === 'test'
     const isProductionEnv = process.env.NODE_ENV === 'production'
 
-    this.options = Object.assign(
-      {
-        stream: false
-      },
-      options
-    )
+    this.options = Object.assign({}, options)
 
     this._middlewares = {}
     this._autoLogin = true
