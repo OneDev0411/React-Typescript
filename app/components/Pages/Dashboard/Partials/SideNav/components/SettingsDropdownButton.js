@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 import Avatar from './Avatar'
 
-import IconButton from 'components/Button/IconButton'
-import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import IconButton from '../../../../../../views/components/Button/IconButton'
+import ArrowDownIcon from '../../../../../../views/components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import { SideNavTooltip } from './Tooltip'
 

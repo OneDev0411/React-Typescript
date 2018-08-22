@@ -5,24 +5,24 @@ import { Dropdown } from 'react-bootstrap'
 import IntercomTrigger from '../IntercomTrigger'
 
 // utils
-import { getActiveTeamACL } from 'utils/user-teams'
+import { getActiveTeamACL } from '../../../../../utils/user-teams'
 
 // chatroom stuff
 import Inbox from '../../Chatroom/Shared/instant-trigger'
 
 // deals notification badge counter
 import DealsNotifications from '../../Deals/components/SideNavBadge'
-import { selectNotificationNewCount } from 'reducers/notifications'
+import { selectNotificationNewCount } from '../../../../../reducers/notifications'
 
-import IconButton from 'components/Button/IconButton'
-import Link from 'components/Button/LinkButton'
-import DealsIcon from 'components/SvgIcons/Deals/IconDeal'
-import MarketingIcon from 'components/SvgIcons/Marketing/IconMarketing'
-import ContactsIcon from 'components/SvgIcons/Contacts/IconContacts'
-import NotificationsIcon from 'components/SvgIcons/Notifications/IconNotifications'
-import SupportIcon from 'components/SvgIcons/Support/IconSupport'
-import CalendarIcon from 'components/SvgIcons/Calendar2/IconCalendar'
-import IconProperties from 'components/SvgIcons/Properties/IconProperties'
+import IconButton from '../../../../../views/components/Button/IconButton'
+import Link from '../../../../../views/components/Button/LinkButton'
+import DealsIcon from '../../../../../views/components/SvgIcons/Deals/IconDeal'
+import MarketingIcon from '../../../../../views/components/SvgIcons/Marketing/IconMarketing'
+import ContactsIcon from '../../../../../views/components/SvgIcons/Contacts/IconContacts'
+import NotificationsIcon from '../../../../../views/components/SvgIcons/Notifications/IconNotifications'
+import SupportIcon from '../../../../../views/components/SvgIcons/Support/IconSupport'
+import CalendarIcon from '../../../../../views/components/SvgIcons/Calendar2/IconCalendar'
+import IconProperties from '../../../../../views/components/SvgIcons/Properties/IconProperties'
 
 import TeamSwitcher from './components/TeamSwitcher'
 import { SideNavTooltip } from './components/Tooltip'

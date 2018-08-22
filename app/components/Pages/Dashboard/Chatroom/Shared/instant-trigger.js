@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
-import { toggleChatbar } from 'actions/chatroom'
+import { toggleChatbar } from '../../../../../store_actions/chatroom'
 
-import Tooltip from 'components/tooltip'
-import IconButton from 'components/Button/IconButton'
-import ChatIcon from 'components/SvgIcons/Chat/IconChat'
+import Tooltip from '../../../../../views/components/tooltip'
+import IconButton from '../../../../../views/components/Button/IconButton'
+import ChatIcon from '../../../../../views/components/SvgIcons/Chat/IconChat'
 
 const openChatbar = toggleChatbar => {
   if (window && window.location.pathname.includes('/recents/')) {
