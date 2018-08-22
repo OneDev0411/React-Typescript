@@ -3,28 +3,28 @@ import { connect } from 'react-redux'
 import { Dropdown } from 'react-bootstrap'
 
 import IntercomTrigger from '../IntercomTrigger'
-import TeamSwitcher from './components/TeamSwitcher'
 
 // utils
-import { getActiveTeamACL } from '../../../../../utils/user-teams'
+import { getActiveTeamACL } from 'utils/user-teams'
 
 // chatroom stuff
 import Inbox from '../../Chatroom/Shared/instant-trigger'
 
 // deals notification badge counter
 import DealsNotifications from '../../Deals/components/SideNavBadge'
-import { selectNotificationNewCount } from '../../../../../reducers/notifications'
+import { selectNotificationNewCount } from 'reducers/notifications'
 
-import IconButton from '../../../../../views/components/Button/IconButton'
-import Link from '../../../../../views/components/Button/LinkButton'
-import DealsIcon from '../../../../../views/components/SvgIcons/Deals/IconDeal'
-import MarketingIcon from '../../../../../views/components/SvgIcons/Marketing/IconMarketing'
-import ContactsIcon from '../../../../../views/components/SvgIcons/Contacts/IconContacts'
-import NotificationsIcon from '../../../../../views/components/SvgIcons/Notifications/IconNotifications'
-import SupportIcon from '../../../../../views/components/SvgIcons/Support/IconSupport'
-import CalendarIcon from '../../../../../views/components/SvgIcons/Calendar2/IconCalendar'
-import IconProperties from '../../../../../views/components/SvgIcons/Properties/IconProperties'
+import IconButton from 'components/Button/IconButton'
+import Link from 'components/Button/LinkButton'
+import DealsIcon from 'components/SvgIcons/Deals/IconDeal'
+import MarketingIcon from 'components/SvgIcons/Marketing/IconMarketing'
+import ContactsIcon from 'components/SvgIcons/Contacts/IconContacts'
+import NotificationsIcon from 'components/SvgIcons/Notifications/IconNotifications'
+import SupportIcon from 'components/SvgIcons/Support/IconSupport'
+import CalendarIcon from 'components/SvgIcons/Calendar2/IconCalendar'
+import IconProperties from 'components/SvgIcons/Properties/IconProperties'
 
+import TeamSwitcher from './components/TeamSwitcher'
 import { SideNavTooltip } from './components/Tooltip'
 import { SettingsDropdownButton } from './components/SettingsDropdownButton'
 
@@ -110,8 +110,8 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
       </Dropdown>
       <ul className="c-app-sidenav__list c-app-sidenav__list--top">
         {hasContactsPermission && (
-          <SideNavItem isActive={activePath === 'CALENDAR'} label="Calendar">
-            <SideNavTooltip label="Calendar">
+          <SideNavItem isActive={activePath === 'CALENDAR'}>
+            <SideNavTooltip caption="Calendar">
               <Link
                 to="/dashboard/calendar"
                 className="c-app-sidenav__item__title"
@@ -122,13 +122,11 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
           </SideNavItem>
         )}
         <SideNavItem>
-          <SideNavTooltip label="Chat">
-            <Inbox />
-          </SideNavTooltip>
+          <Inbox />
         </SideNavItem>
 
         <SideNavItem isActive={activePath === 'MAP'}>
-          <SideNavTooltip label="Properties">
+          <SideNavTooltip caption="Properties">
             <Link to="/dashboard/mls" className="c-app-sidenav__item__title">
               <IconProperties />
             </Link>
@@ -137,7 +135,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
 
         {hasContactsPermission && (
           <SideNavItem isActive={activePath === 'CONTACTS'}>
-            <SideNavTooltip label="Contacts">
+            <SideNavTooltip caption="Contacts">
               <Link
                 to="/dashboard/contacts"
                 className="c-app-sidenav__item__title"
@@ -150,7 +148,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
 
         {(hasDealsPermission || hasBackOfficePermission) && (
           <SideNavItem isActive={activePath === 'DEALS'}>
-            <SideNavTooltip label="Deals">
+            <SideNavTooltip caption="Deals">
               <Link
                 to="/dashboard/deals"
                 className="c-app-sidenav__item__title"
@@ -165,8 +163,8 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
         {user.agent &&
           user.user_type === 'Agent' &&
           user.agent.office_mlsid === 'CSTPP01' && (
-            <SideNavItem isActive={activePath === 'STORE'} label="Store">
-              <SideNavTooltip label="Store">
+            <SideNavItem isActive={activePath === 'STORE'} caption="Store">
+              <SideNavTooltip caption="Store">
                 <Link to="/dashboard/website">
                   <MarketingIcon />
                 </Link>
@@ -176,8 +174,8 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
       </ul>
 
       <ul className="c-app-sidenav__list c-app-sidenav__list--bottom">
-        <SideNavItem isActive={activePath === 'NOTIF'} label="Notifications">
-          <SideNavTooltip label="Notifications">
+        <SideNavItem isActive={activePath === 'NOTIF'}>
+          <SideNavTooltip caption="Notifications">
             <Link
               to="/dashboard/notifications"
               className="c-app-sidenav__item__title"
@@ -195,7 +193,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
         <IntercomTrigger
           render={({ activeIntercom, intercomIsActive }) => (
             <SideNavItem isActive={false}>
-              <SideNavTooltip label="Support">
+              <SideNavTooltip caption="Support">
                 <IconButton
                   iconSize="large"
                   onClick={!intercomIsActive ? activeIntercom : () => false}

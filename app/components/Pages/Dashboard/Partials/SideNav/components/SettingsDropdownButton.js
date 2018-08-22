@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 
 import Avatar from './Avatar'
 
-import IconButton from '../../../../../../views/components/Button/IconButton'
-import ArrowDownIcon from '../../../../../../views/components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import IconButton from 'components/Button/IconButton'
+import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+
+import { SideNavTooltip } from './Tooltip'
 
 export class SettingsDropdownButton extends Component {
   static propTypes = {
@@ -26,17 +28,19 @@ export class SettingsDropdownButton extends Component {
 
   render() {
     return (
-      <IconButton
-        iconSize="large"
-        inverse
-        onClick={this.handleClick}
-        style={{ alignItems: 'flex-end' }}
-      >
-        <Avatar user={this.props.user} size={32} />
-        <ArrowDownIcon
-          style={{ transform: this.state.isOpen ? 'rotate(180deg)' : 'none' }}
-        />
-      </IconButton>
+      <SideNavTooltip caption="Settings">
+        <IconButton
+          iconSize="large"
+          inverse
+          onClick={this.handleClick}
+          style={{ alignItems: 'flex-end' }}
+        >
+          <Avatar user={this.props.user} size={32} />
+          <ArrowDownIcon
+            style={{ transform: this.state.isOpen ? 'rotate(180deg)' : 'none' }}
+          />
+        </IconButton>
+      </SideNavTooltip>
     )
   }
 }

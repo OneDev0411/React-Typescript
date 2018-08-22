@@ -1,10 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import { toggleChatbar } from '../../../../../store_actions/chatroom'
+import Flex from 'styled-flex-component'
 
-import IconButton from '../../../../../views/components/Button/IconButton'
-import ChatIcon from '../../../../../views/components/SvgIcons/Chat/IconChat'
+import { toggleChatbar } from 'actions/chatroom'
+
+import Tooltip from 'components/tooltip'
+import IconButton from 'components/Button/IconButton'
+import ChatIcon from 'components/SvgIcons/Chat/IconChat'
 
 const openChatbar = toggleChatbar => {
   if (window && window.location.pathname.includes('/recents/')) {
@@ -26,19 +29,21 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
   })
 
   return (
-    <React.Fragment>
-      <IconButton
-        size="large"
-        iconSize="large"
-        className="c-app-sidenav__item__title--button"
-        onClick={() => openChatbar(toggleChatbar)}
-      >
-        <ChatIcon />
-      </IconButton>
+    <Flex alignCenter>
+      <Tooltip caption="Chat" placement="right">
+        <IconButton
+          size="large"
+          iconSize="large"
+          className="c-app-sidenav__item__title--button"
+          onClick={() => openChatbar(toggleChatbar)}
+        >
+          <ChatIcon />
+        </IconButton>
+      </Tooltip>
       {counter > 0 && (
         <span className="c-app-sidenav__notification-badge">{counter}</span>
       )}
-    </React.Fragment>
+    </Flex>
   )
 }
 export default connect(
