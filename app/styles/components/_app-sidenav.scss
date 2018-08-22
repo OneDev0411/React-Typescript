@@ -61,7 +61,7 @@ $item-height: 56px;
   color: #000;
   font-size: 16px;
   line-height: $item-height;
-  padding: 0;
+  padding: 0 !important;
 
   &:hover,
   &:active,
