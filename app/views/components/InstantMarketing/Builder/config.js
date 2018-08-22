@@ -1,12 +1,21 @@
 export default {
   canvasCss: `
+  .gjs-comp-selected[data-gjs-type=text] {
+    outline-offset: 5px;
+  }
+
   .gjs-comp-selected {
     outline-color: #003bdf !important;
   }
 
   .gjs-hovered {
-    outline-color: #003bdf !important;
+    outline: 3px dashed #003bdf !important;
     cursor: pointer;
+    outline-offset: 1px;
+  }
+
+  .gjs-hovered[data-gjs-type=text] {
+    outline-offset: 5px;
   }
   `,
   height: '100%',
