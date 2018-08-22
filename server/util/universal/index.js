@@ -9,7 +9,7 @@ function matcher(location) {
   })
 }
 
-export default async function(ctx, next) {
+export default async function(ctx) {
   const { error, redirectLocation, renderProps } = await matcher(
     ctx.request.url
   )
