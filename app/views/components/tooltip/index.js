@@ -17,7 +17,8 @@ export default ({
   multiline = false,
   overlayOptions = {},
   tooltipStyles = {},
-  children
+  children,
+  size = '' // just accepet large
 }) => {
   if (!caption) {
     return children
@@ -29,7 +30,9 @@ export default ({
       overlay={
         <Tooltip
           id="rechat-tooltip"
-          className={cn('rechat-tooltip', { 'is-customized': captionIsHTML })}
+          className={cn(`rechat-tooltip ${size}`, {
+            'is-customized': captionIsHTML
+          })}
           style={{ ...tooltipStyles }}
         >
           {multiline && !captionIsHTML ? br2nl(caption) : caption}
