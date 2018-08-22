@@ -6,6 +6,7 @@ export default function(filters) {
   filters.forEach(filter => {
     list[_.uniqueId()] = {
       id: 'tag',
+      attribute_def: filter.attribute_def,
       isActive: false,
       isIncomplete: false,
       values: [filter.value],

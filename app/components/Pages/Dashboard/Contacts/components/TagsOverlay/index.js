@@ -238,6 +238,7 @@ class TagsOverlay extends React.Component {
 
     if (selectedContactsIds.length >= 50) {
       await this.props.getContacts()
+      this.props.resetSelectedRows()
     }
 
     await getContactsTags()

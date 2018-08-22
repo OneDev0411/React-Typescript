@@ -97,6 +97,7 @@ class Stage extends React.Component {
 
         if (contacts.length >= 50) {
           await this.props.getContacts()
+          this.props.resetSelectedRows()
         }
       }
 

@@ -71,7 +71,7 @@ class Task extends React.Component {
           style={{ marginRight: '16px' }}
           onClick={() => this.handleStatus(!isDone)}
         />
-        <div className="c-tasks-timeline__item__info">
+        <div style={{ maxWidth: 'calc(100% - 64px)' }}>
           <h4
             className="c-tasks-timeline__item__title"
             style={{ textDecoration: isDone ? 'line-through' : 'initial' }}

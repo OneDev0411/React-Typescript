@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import ContactStage from '../../../../../../views/components/ContactStage'
 
-const MergeContacts = ({ selectedRows }) => (
+const MergeContacts = ({ selectedRows, resetSelectedRows }) => (
   <Fragment>
     {selectedRows.length > 0 && (
       <ContactStage
@@ -21,6 +21,7 @@ const MergeContacts = ({ selectedRows }) => (
           height: '34px'
         }}
         contacts={selectedRows}
+        resetSelectedRows={resetSelectedRows}
       />
     )}
   </Fragment>

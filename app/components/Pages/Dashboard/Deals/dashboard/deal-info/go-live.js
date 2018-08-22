@@ -23,8 +23,8 @@ export default function GoLive({ deal }) {
       <div>Stage: Draft</div>
       <div>
         <Link to={`/dashboard/deals/create/${deal.id}`}>
-          <Tooltip caption="Go live to start executing and working with your admin.">
-            <ActionButton inverse>Go Live</ActionButton>
+          <Tooltip caption="Make deal visible to start executing and working with your admin.">
+            <ActionButton inverse>Make Visible to Admin</ActionButton>
           </Tooltip>
         </Link>
       </div>
