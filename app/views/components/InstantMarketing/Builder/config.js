@@ -9,7 +9,7 @@ export default {
   }
 
   .gjs-hovered {
-    outline: 3px dashed #003bdf !important;
+    outline: 2px dashed #003bdf !important;
     cursor: pointer;
     outline-offset: 1px;
   }
