@@ -107,8 +107,9 @@ $item-height: 56px;
 }
 
 .c-app-sidenav__account-dropdown {
-  text-align: center;
   width: 100%;
+  display: flex;
+  justify-content: flex-end;
   padding: 16px 0;
   border-bottom: 1px solid #d4d4d4;
   
