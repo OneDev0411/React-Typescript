@@ -1,27 +1,38 @@
 import Fetch from '../../../services/fetch'
+import { defaultQuery } from '../helpers/default-query'
 
 /**
  * Upserting attributes to contacts
- * @param {Array} ids - array of contact ids
+ * @param {Array} updatedContacts - array of contacts with attributes which should be updated
  * @param {Object} attributes - array of attributes to be add or update
  * @returns Returns 204
  */
 
-export async function upsertAttributesToContacts(ids, attributes) {
-  if (!Array.isArray(ids)) {
-    throw new Error('Contact ids required.')
+export async function upsertAttributesToContacts(updatedContacts) {
+  if (!Array.isArray(updatedContacts)) {
+    throw new Error('updated contacts is required.')
   }
 
-  if (!Array.isArray(attributes)) {
-    throw new Error('Attributes invalid!')
+  let query = {}
+
+  if (updatedContacts.length < 50) {
+    query = {
+      ...defaultQuery,
+      get: true
+    }
   }
 
   try {
-    const response = await new Fetch({ stream: true })
+    const response = await new Fetch()
       .patch('/contacts')
-      .send({ ids, attributes })
+      .query(query)
+      .send({ contacts: updatedContacts })
 
-    return response.body
+    if (updatedContacts.length < 50) {
+      return response.body
+    }
+
+    return { data: [] }
   } catch (error) {
     throw error
   }

@@ -1,29 +1,36 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-import HeaderSearch from '../../../../../Partials/headerSearch'
+import Search from '../../../../../../views/components/Grid/Search'
 
-import './style.scss'
+const SearchContainer = styled.div`
+  margin-bottom: 40px;
+`
 
-Search.propTypes = {
-  disabled: PropTypes.bool,
-  handleOnChange: PropTypes.func.isRequired,
-  inputValue: PropTypes.string.isRequired,
-  isSearching: PropTypes.bool.isRequired
-}
+let persistentSearchInput = ''
+export class SearchContacts extends React.Component {
+  handleSearch = value => {
+    // set persistent search input
+    persistentSearchInput = value
+    this.props.onSearch(value)
+  }
 
-Search.defaultProps = {
-  disabled: false
-}
-
-export function Search(props) {
-  return (
-    <HeaderSearch
-      disabled={props.disabled}
-      inputValue={props.inputValue}
-      isSearching={props.isSearching}
-      onInputChange={props.handleOnChange}
-      placeholder="Search all contacts ..."
-    />
-  )
+  render() {
+    return (
+      <SearchContainer>
+        <Search
+          disableOnSearch={false}
+          showLoadingOnSearch
+          isSearching={this.props.isSearching}
+          placeholder="Search all contacts…"
+          onChange={this.handleSearch}
+          debounceTime={500}
+          minimumLength={1}
+          // /
+          defaultValue={persistentSearchInput}
+          onClearSearch={this.handleSearch}
+        />
+      </SearchContainer>
+    )
+  }
 }

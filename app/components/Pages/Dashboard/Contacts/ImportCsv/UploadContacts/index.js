@@ -14,8 +14,6 @@ import {
   getWorkerState
 } from '../../../../../../store_actions/contacts'
 
-import { selectDefinition } from '../../../../../../reducers/contacts/attributeDefs'
-
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import CancelButton from '../../../../../../views/components/Button/CancelButton'
 
@@ -230,11 +228,14 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  showMessageModal,
-  updateWizardStep,
-  requestImportCsv,
-  uploadCsvFile,
-  getWorkerState,
-  notify
-})(UploadContacts)
+export default connect(
+  mapStateToProps,
+  {
+    showMessageModal,
+    updateWizardStep,
+    requestImportCsv,
+    uploadCsvFile,
+    getWorkerState,
+    notify
+  }
+)(UploadContacts)

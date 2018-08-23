@@ -22,21 +22,25 @@ const TextInput = styled.input`
 
 TextField.propTypes = {
   format: PropTypes.func,
+  hint: PropTypes.string,
   label: PropTypes.string.isRequired,
   labelNote: PropTypes.string,
   name: PropTypes.string.isRequired,
   parse: PropTypes.func,
   placeholder: PropTypes.string,
   required: PropTypes.bool,
+  style: PropTypes.shape(),
   validate: PropTypes.func
 }
 
 TextField.defaultProps = {
-  format: t => t,
+  format: t => t || '',
+  hint: '',
   labelNote: '',
-  parse: t => t,
+  parse: t => t || '',
   placeholder: '',
   required: false,
+  style: {},
   validate: () => undefined
 }
 
@@ -53,7 +57,7 @@ export function TextField(props) {
         const hasError = meta.error && meta.touched
 
         return (
-          <Container>
+          <Container style={props.style}>
             <Label htmlFor={id} required={props.required}>
               {props.label}
               {props.labelNote &&
@@ -67,6 +71,19 @@ export function TextField(props) {
               autoComplete="off"
             />
             {hasError && <ErrorMessage>{meta.error}</ErrorMessage>}
+            {meta.active &&
+              props.hint && (
+                <div
+                  style={{
+                    marginTop: '0.5em',
+                    padding: '0.5em',
+                    borderRadius: 3,
+                    backgroundColor: '#f6fafb'
+                  }}
+                >
+                  {props.hint}
+                </div>
+              )}
           </Container>
         )
       }}

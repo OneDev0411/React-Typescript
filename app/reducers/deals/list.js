@@ -13,6 +13,15 @@ export default (state = null, action) => {
     case actionTypes.ARCHIVE_DEAL:
       return _.omit(state, deal => deal.id === action.deal_id)
 
+    case actionTypes.EJECT_DRAFT_MODE:
+      return {
+        ...state,
+        [action.dealId]: {
+          ...state[action.dealId],
+          is_draft: false
+        }
+      }
+
     case actionTypes.GET_DEALS:
       return action.deals
 

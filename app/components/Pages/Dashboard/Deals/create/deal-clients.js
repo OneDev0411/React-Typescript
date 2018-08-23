@@ -23,6 +23,7 @@ function getRoles(side) {
 }
 
 export default ({
+  isRequired,
   hasError,
   clients,
   dealSide,
@@ -47,7 +48,7 @@ export default ({
           ? 'Enter buyer information as shown on offer.'
           : 'Enter the seller’s legal information'}
         &nbsp;
-        <span className="required">*</span>
+        {isRequired && <span className="required">*</span>}
         {hasError && <RequiredIcon />}
       </div>
 

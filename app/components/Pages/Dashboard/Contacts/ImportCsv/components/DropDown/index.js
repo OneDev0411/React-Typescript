@@ -6,6 +6,8 @@ import IconSearch from '../../../../../../../views/components/SvgIcons/Search/Ic
 
 import { Icon as ArrowIcon } from '../../../../../../../views/components/BasicDropdown/styled'
 
+import DeleteIcon from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
+
 import {
   MenuContainer,
   MenuContent,
@@ -17,33 +19,10 @@ import {
   CallToActions
 } from './styled'
 
-export default class DropDown extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isMenuOpen: false,
-      filter: ''
-    }
-
-    this.handleSelectListItem = this.handleSelectListItem.bind(this)
-  }
-
-  static propTypes = {
-    options: PropTypes.array,
-    selectedField: PropTypes.objectOf(PropTypes.string),
-    showSearchInput: PropTypes.bool,
-    callToActions: PropTypes.element
-  }
-
-  static defaultProps = {
-    options: [],
-    selectedField: {
-      label: '',
-      value: ''
-    },
-    showSearchInput: true,
-    callToActions: null
+class DropDown extends React.Component {
+  state = {
+    isMenuOpen: false,
+    filter: ''
   }
 
   toggleOpenMenu = () =>
@@ -55,7 +34,7 @@ export default class DropDown extends React.Component {
   /**
    *
    */
-  handleSelectListItem(e) {
+  handleSelectListItem = e => {
     const { value, disabled } = e.target.dataset
 
     if (disabled === 'true') {
@@ -66,6 +45,11 @@ export default class DropDown extends React.Component {
 
     this.toggleOpenMenu()
     this.props.onChange(value)
+  }
+
+  handleUnselectField = e => {
+    e.stopPropagation()
+    this.props.onChange('')
   }
 
   render() {
@@ -84,10 +68,23 @@ export default class DropDown extends React.Component {
                 isPlaceholder={!selectedField.label}
               >
                 <div>{selectedField.label || 'Select...'}</div>
-                <ArrowIcon
-                  isOpen={isOpen}
-                  style={{ fill: '#506379', width: '24px', height: '24px' }}
-                />
+                <div>
+                  {selectedField.value && (
+                    <DeleteIcon
+                      onClick={this.handleUnselectField}
+                      style={{
+                        fill: '#506379',
+                        width: '16px',
+                        height: '16px',
+                        marginBottom: '4px'
+                      }}
+                    />
+                  )}
+                  <ArrowIcon
+                    isOpen={isOpen}
+                    style={{ fill: '#506379', width: '24px', height: '24px' }}
+                  />
+                </div>
               </MenuButton>
               {isOpen && (
                 <MenuContent style={this.props.contentStyle}>
@@ -140,3 +137,22 @@ export default class DropDown extends React.Component {
     )
   }
 }
+
+DropDown.propTypes = {
+  options: PropTypes.array,
+  selectedField: PropTypes.objectOf(PropTypes.string),
+  showSearchInput: PropTypes.bool,
+  callToActions: PropTypes.element
+}
+
+DropDown.defaultProps = {
+  options: [],
+  selectedField: {
+    label: '',
+    value: ''
+  },
+  showSearchInput: true,
+  callToActions: null
+}
+
+export default DropDown

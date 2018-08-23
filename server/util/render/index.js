@@ -17,23 +17,27 @@ function fetch(store, renderProps) {
 }
 
 function sanitize(state) {
-  return escape(JSON.stringify(state))
+  return new Promise(resolve => {
+    const newState = escape(JSON.stringify(state))
+
+    resolve(newState)
+  })
 }
 
 async function display(file, renderProps) {
-  let initialState = this.locals.appStore || {}
+  let initialState = {
+    user: this.session.user,
+    data: {
+      user: this.session.user
+    }
+  }
 
   try {
     const { hostname } = urlParser.parse(this.request.origin)
     const brand = await getBrand(hostname)
-    const { data } = initialState
 
     initialState = {
       ...initialState,
-      data: {
-        ...data,
-        brand
-      },
       brand
     }
   } catch (error) {
@@ -72,35 +76,18 @@ async function display(file, renderProps) {
   }
 
   // get store initial data
-  const store_data = sanitize(store.getState())
+  const store_data = await sanitize(store.getState())
 
   if (['production', 'stage'].indexOf(process.env.NODE_ENV) > -1) {
     await this.render(file || 'app', {
-      data: this.locals,
+      openGraph: this.state.openGraph,
+      variables: this.state.variables,
       store_data
     })
-
-    // if (/\/dashboard\/mls\/(\w+)/.test(this.request.url)) {
-    //   await this.render('app', {
-    //     store_data,
-    //     data: this.locals,
-    //     body: renderToString(
-    //       <Provider store={store}>
-    //         <RouterContext {...renderProps} />
-    //       </Provider>
-    //     )
-    //   })
-    // }
-    // else {
-    //   await this.render(file,  {
-    //     data: this.locals,
-    //     store_data
-    //   })
-    // }
   } else {
     await this.render('development', {
       store_data,
-      data: this.locals,
+      variables: this.state.variables,
       jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`,
       jsVendorBundle: `${config.compile.publicPath}/${
         config.compile.jsVendorBundle
@@ -109,13 +96,11 @@ async function display(file, renderProps) {
   }
 }
 
-module.exports = () =>
+export default () =>
   async function render(ctx, next) {
-    if (ctx.display) {
-      // eslint-disable-next-line
-      return await next()
+    if (!ctx.display) {
+      ctx.display = display.bind(ctx)
     }
 
-    ctx.display = display.bind(ctx)
-    await next()
+    return next()
   }

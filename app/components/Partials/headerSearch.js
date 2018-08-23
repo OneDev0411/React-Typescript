@@ -35,6 +35,8 @@ export default class HeaderSearch extends React.Component {
     ) {
       return { inputValue: nextProps.inputValue }
     }
+
+    return null
   }
 
   debouncedOnInputChange = _.debounce(

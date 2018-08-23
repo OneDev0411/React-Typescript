@@ -3,39 +3,28 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
 import PageHeader from '../../../../../../../views/components/PageHeader'
-import ToolTip from '../../../../../../../views/components/tooltip'
-
-import Excel from '../../../../Partials/Svgs/Excel'
-
 import { Trigger as MenuTrigger } from '../../../../../../../views/components/SlideMenu'
-
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
-import { getActiveTeamId } from '../../../../../../../utils/user-teams'
+import ExportDeals from './export-deals'
 
 const Header = ({
   user,
+  title,
   isSideMenuOpen,
   onMenuTriggerChange,
   showCreateDeal = true
 }) => (
-  <PageHeader isFlat>
-    <PageHeader.Title backButton={false}>
+  <PageHeader isFlat style={{ padding: '0 40px' }}>
+    <PageHeader.Title showBackButton={false}>
       <MenuTrigger
         tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}
         onClick={onMenuTriggerChange}
       />
-      <PageHeader.Heading>Deals</PageHeader.Heading>
+      <PageHeader.Heading>{title}</PageHeader.Heading>
     </PageHeader.Title>
 
     <PageHeader.Menu>
-      <ToolTip placement="bottom" caption="Download Report">
-        <a
-          href={`/api/deals/export/${getActiveTeamId(user)}`}
-          className="search-button"
-        >
-          <Excel />
-        </a>
-      </ToolTip>
+      <ExportDeals user={user} />
 
       {showCreateDeal && (
         <ActionButton

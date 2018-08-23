@@ -1,12 +1,12 @@
 import React from 'react'
 
-import DateTimeField from '../DateTimeField'
-import { getTodayDate } from '../../helpers/get-today-date'
+import { todayDate } from '../../../../../../../utils/today-date'
 import { getTime } from '../../../../../../../utils/get-time'
 import { getTimes } from '../../../../../../../utils/get-times'
+import { DateTimeField } from '../../../../../../components/final-form-fields/DateTimeField'
 
 const oneDay = 24 * 3600 * 1000
-const today = getTodayDate()
+const today = todayDate()
 
 const getItems = (dueDate = today, selectedDate) => {
   const timeDifference = getTimeDifference(dueDate)

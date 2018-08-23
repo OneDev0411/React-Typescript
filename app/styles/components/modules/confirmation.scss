@@ -3,8 +3,7 @@
 }
 
 .modal-confirmation {
-  width: 500px;
-  height: 200px;
+  width: 550px;
 
   .modal-content {
     border: none;
@@ -13,44 +12,39 @@
 
   .modal-body {
     text-align: center;
-    padding: 37px 18px 32px;
+    padding: 2em;
     background-color: #ffffff;
     box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
+    border-radius: 5px;
 
     .confirmation-title {
-      font-size: 26px;
+      margin-bottom: 0.5em; 
+      font-size: 2.6rem;
       font-weight: 600;
       color: #1e364b;
     }
-
+    
     .confirmation-descr {
-      padding-top: 16px;
-      font-size: 17px;
-      color: #8fa3b6;
+      margin-bottom: 2em;
+      font-size: 1.7rem;
+      color: #6e7d8c;
     }
 
     .confirmation-input {
-      textarea {
-        width: 400px;
-        height: 80px;
-        margin-top: 15px;
-        color: #324457;
-        font-size: 17px;
-        padding: 10px;
-        border-radius: 3px;
-        backdrop-filter: blur(10px);
-        background-color: #fafafa;
-        border: solid 1px #dce5eb;
-        resize: none;
-        &:focus {
-          outline: none;
-        }
-      }
-    }
+      width: 400px;
+      height: 80px;
+      padding: 0.5em;
+      margin-bottom: 2em;
+      font-size: 1.7rem;
+      resize: none;
+      color: #324457;
+      border-radius: 3px;
+      border: solid 1px #bcbcbc;
+      backdrop-filter: blur(10px);
 
-    .cta {
-      margin-top: 16px;
+      &:focus {
+        outline-width: 2px;
+      }
     }
 
     button {
@@ -58,7 +52,7 @@
       border-radius: 3px;
       box-shadow: 0 1px 1px 0 #eef1f2;
       border: solid 1px #f4f7f9;
-      margin-left: 12px;
+      margin-left: 1em;
       &:focus {
         outline: none;
       }

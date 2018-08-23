@@ -26,7 +26,15 @@ function getSortColumn(columns, sortBy) {
 }
 
 function defaultSortMethod({ accessor }) {
-  return accessor && accessor.toString().toLowerCase()
+  if (accessor === null || typeof accessor === 'undefined') {
+    return -1
+  }
+
+  if (typeof accessor === 'number') {
+    return accessor
+  }
+
+  return accessor.toString().toLowerCase()
 }
 
 export default sort

@@ -10,16 +10,20 @@ export default ({ selectedSide, onChangeDealSide }) => (
       Which side are you on? <span className="required">*</span>
     </div>
 
-    <RadioButton
-      selected={selectedSide === BUYING}
-      title="Buyer (or Tenant)"
-      onClick={() => onChangeDealSide(BUYING)}
-    />
+    <div className="deal-radio-row">
+      <RadioButton
+        selected={selectedSide === BUYING}
+        title="Buyer (or Tenant)"
+        onClick={() => onChangeDealSide(BUYING)}
+      />
+    </div>
 
-    <RadioButton
-      selected={selectedSide === SELLING}
-      title="Seller (or Landlord)"
-      onClick={() => onChangeDealSide(SELLING)}
-    />
+    <div className="deal-radio-row">
+      <RadioButton
+        selected={selectedSide === SELLING}
+        title="Seller (or Landlord)"
+        onClick={() => onChangeDealSide(SELLING)}
+      />
+    </div>
   </div>
 )

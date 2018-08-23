@@ -158,7 +158,7 @@ class Catalog extends React.Component {
               borderRadius: '3px',
               border: '1px solid #e1e9ef'
             }}
-            contact={contact}
+            contacts={[contact.id]}
           />
           {this.shouldShowChatButton(contact) && (
             <ActionButton

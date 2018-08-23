@@ -99,9 +99,9 @@ router.post('/deals/pdf-splitter', bodyParser(), async ctx => {
     const response = await promisifiedRequest.postAsync({
       url: `${config.api.url}/tasks/${task_id}/attachments`,
       json: true,
-      maxAttempts: 5,
-      retryDelay: 2000,
-      retryStrategy: request.RetryStrategies.HTTPOrNetworkError,
+      // maxAttempts: 5,
+      // retryDelay: 2000,
+      // retryStrategy: request.RetryStrategies.HTTPOrNetworkError,
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${user.access_token}`
@@ -116,6 +116,8 @@ router.post('/deals/pdf-splitter', bodyParser(), async ctx => {
         }
       }
     })
+
+    console.log('[ Splitter ] Attachment uplaod is done')
 
     // response is a file object
     if (response.statusCode !== 200) {

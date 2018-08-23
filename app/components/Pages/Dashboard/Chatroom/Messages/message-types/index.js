@@ -72,7 +72,7 @@ const MessageTypes = ({
 }
 
 function mapStateToProps({ chatroom }, props) {
-  const room = chatroom.rooms[props.roomId]
+  const room = chatroom.rooms && chatroom.rooms[props.roomId]
 
   return {
     members: room ? room.users : null

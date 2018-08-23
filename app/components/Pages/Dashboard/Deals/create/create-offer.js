@@ -108,7 +108,8 @@ class CreateOffer extends React.Component {
         ...newState[type],
         [item.id]: {
           ...item,
-          readOnly: true
+          isEditable: false,
+          isRemovable: false
         }
       }
     })
@@ -174,50 +175,9 @@ class CreateOffer extends React.Component {
   }
 
   validateForm() {
-    let validationTable = {}
-    const { deal } = this.props
-    const {
-      offerType,
-      contexts,
-      agents,
-      clients,
-      escrowOfficers,
-      buyerName,
-      enderType,
-      dealStatus
-    } = this.state
-
-    if (this.isBackupOffer()) {
-      validationTable = {
-        buyer_name: () => buyerName.length > 0
-      }
-    } else {
-      validationTable = {
-        offer_type: () => offerType.length > 0,
-        ender_type: () => enderType !== -1,
-        clients: () => _.size(clients) > 0,
-        agents: () => _.size(agents) > 0,
-        escrow_officers: () => {
-          if (!this.isLeaseDeal()) {
-            return _.size(escrowOfficers) > 0
-          }
-
-          return true
-        },
-        deal_status: () => dealStatus.length > 0,
-        contexts: () =>
-          DealContext.validateList(
-            contexts,
-            'Buying',
-            deal.property_type,
-            DealContext.getHasActiveOffer(deal)
-          )
-      }
-    }
-
     const validationErrors = []
 
-    _.each(validationTable, (validate, name) => {
+    _.each(this.Validators, (validate, name) => {
       if (validate() === false) {
         validationErrors.push(name)
       }
@@ -414,6 +374,56 @@ class CreateOffer extends React.Component {
     )
   }
 
+  get RequiredFields() {
+    return _.keys(this.Validators)
+  }
+
+  /**
+   * returns list of validators
+   */
+  get Validators() {
+    const { deal } = this.props
+
+    const {
+      offerType,
+      contexts,
+      agents,
+      clients,
+      escrowOfficers,
+      buyerName,
+      enderType,
+      dealStatus
+    } = this.state
+
+    if (this.isBackupOffer()) {
+      return {
+        buyer_name: () => buyerName.length > 0
+      }
+    }
+
+    return {
+      offer_type: () => offerType.length > 0,
+      ender_type: () => enderType !== -1,
+      clients: () => _.size(clients) > 0,
+      agents: () => _.size(agents) > 0,
+      escrow_officers: () => {
+        if (!this.isLeaseDeal()) {
+          return _.size(escrowOfficers) > 0
+        }
+
+        return true
+      },
+      deal_status: () => dealStatus.length > 0,
+      contexts: () =>
+        DealContext.validateList(
+          contexts,
+          'Buying',
+          deal.property_type,
+          DealContext.getHasActiveOffer(deal)
+        )
+    }
+  }
+
   render() {
     const {
       saving,
@@ -434,6 +444,7 @@ class CreateOffer extends React.Component {
 
     const dealContexts = this.getDealContexts()
     const isDoubleEndedAgent = enderType === 'AgentDoubleEnder'
+    const requiredFields = this.RequiredFields
 
     return (
       <div className="deal-create-offer">
@@ -462,6 +473,7 @@ class CreateOffer extends React.Component {
           {this.isPrimaryOffer() && (
             <div>
               <DealClients
+                isRequired={requiredFields.includes('clients')}
                 hasError={this.hasError('clients')}
                 dealSide="Buying"
                 clients={clients}
@@ -470,7 +482,7 @@ class CreateOffer extends React.Component {
               />
 
               <EnderType
-                isRequired
+                isRequired={requiredFields.includes('ender_type')}
                 hasError={this.hasError('ender_type')}
                 enderType={enderType}
                 showAgentDoubleEnder
@@ -478,6 +490,7 @@ class CreateOffer extends React.Component {
               />
 
               <DealAgents
+                isRequired={requiredFields.includes('agents')}
                 hasError={this.hasError('agents')}
                 scenario="CreateOffer"
                 showDealSideAs="Buying"
@@ -492,6 +505,7 @@ class CreateOffer extends React.Component {
 
               {!this.isLeaseDeal() && (
                 <EscrowOfficers
+                  isRequired={requiredFields.includes('escrow_officers')}
                   hasError={this.hasError('escrow_officers')}
                   escrowOfficers={escrowOfficers}
                   onUpsertEscrowOfficer={form =>
@@ -504,6 +518,7 @@ class CreateOffer extends React.Component {
               )}
 
               <DealStatus
+                isRequired={requiredFields.includes('deal_status')}
                 hasError={this.hasError('deal_status')}
                 property_type={deal.property_type}
                 dealStatus={dealStatus}
@@ -522,6 +537,7 @@ class CreateOffer extends React.Component {
               )}
 
               <Contexts
+                areContextsRequired={requiredFields.includes('contexts')}
                 hasError={this.hasError('contexts')}
                 contexts={contexts}
                 onChangeContext={(field, value) =>

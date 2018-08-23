@@ -5,6 +5,7 @@ import CrudRole from './crud-role'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 export default ({
+  isRequired,
   hasError,
   escrowOfficers,
   onRemoveEscrowOfficer,
@@ -20,7 +21,7 @@ export default ({
     <div className="form-section deal-people deal-client">
       <div className={cn('hero', { hasError })}>
         Do you have Title company and Escrow officer information? &nbsp;
-        <span className="required">*</span>
+        {isRequired && <span className="required">*</span>}
         {hasError && <RequiredIcon />}
       </div>
 

@@ -1,14 +1,8 @@
 import React from 'react'
-import { Field } from 'react-final-form'
 
-import { Item } from '../DropdownItem'
-import { Dropdown } from '../../../../../../components/Dropdown'
+import { Select } from '../../../../../../components/final-form-fields'
 
 const ITEMS = [
-  {
-    title: 'Call',
-    value: 'Call'
-  },
   {
     title: 'Closing',
     value: 'Closing'
@@ -26,10 +20,6 @@ const ITEMS = [
     value: 'Listing appointment'
   },
   {
-    title: 'Message',
-    value: 'Message'
-  },
-  {
     title: 'Open House',
     value: 'Open House'
   },
@@ -43,26 +33,8 @@ const ITEMS = [
   }
 ]
 
-export default function TaskType() {
+export function TaskType() {
   return (
-    <div className="c-new-task__type c-new-task__field">
-      <label htmlFor="new-task__type" className="c-new-task__field__label">
-        Type
-      </label>
-      <div style={{ display: 'flex' }}>
-        <Field
-          items={ITEMS}
-          name="task_type"
-          id="new-task__type"
-          component={Dropdown}
-          itemToString={({ title }) => title}
-          itemRenderer={({ item, ...props }) => (
-            <Item key={item.value} {...props}>
-              {item.title}
-            </Item>
-          )}
-        />
-      </div>
-    </div>
+    <Select hasEmptyItem={false} items={ITEMS} label="Type" name="task_type" />
   )
 }

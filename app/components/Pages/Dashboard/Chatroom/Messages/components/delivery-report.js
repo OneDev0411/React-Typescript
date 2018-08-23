@@ -154,7 +154,7 @@ const DeliveryReport = ({
 
 function mapStateToProps({ chatroom }, props) {
   return {
-    room: chatroom.rooms[props.message.room]
+    room: chatroom.rooms && chatroom.rooms[props.message.room]
   }
 }
 

@@ -13,6 +13,7 @@ import {
 } from '../../../../../../../../store_actions/contacts'
 import {
   getContactAvatar,
+  getContactNameInitials,
   getContactOnlineStatus,
   getAttributeFromSummary
 } from '../../../../../../../../models/contacts/helpers'
@@ -20,7 +21,10 @@ import {
 const AvatarUploader = props => (
   <Uploader
     {...props}
-    avatar={{ src: props.avatar, display_name: props.contact.display_name }}
+    avatar={{
+      src: props.avatar,
+      initials: getContactNameInitials(props.contact, props.attributeDefs)
+    }}
   />
 )
 

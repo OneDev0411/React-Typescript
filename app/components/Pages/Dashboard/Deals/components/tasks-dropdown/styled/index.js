@@ -18,6 +18,7 @@ export const DropDownMenu = styled.div`
   border-radius: 4px;
   max-height: 250px;
   border: 1px solid #eee;
+  min-width: 375px;
 `
 
 export const ChecklistTitle = styled.div`

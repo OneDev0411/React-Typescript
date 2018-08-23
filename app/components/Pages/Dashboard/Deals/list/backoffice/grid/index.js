@@ -31,14 +31,14 @@ class Grid extends React.Component {
     return [
       {
         id: 'address',
-        header: 'ADDRESS',
-        width: '24%',
+        header: 'Address',
+        width: '21%',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
       {
         id: 'status',
-        header: 'STATUS',
+        header: 'Status',
         width: '15%',
         accessor: deal => Deal.get.status(deal),
         sortMethod: statusSortMethod,
@@ -46,22 +46,22 @@ class Grid extends React.Component {
       },
       {
         id: 'property-type',
-        header: 'PROPERTY TYPE',
+        header: 'Property Type',
         accessor: 'property_type'
       },
       {
         id: 'agent-name',
-        header: 'AGENT NAME',
+        header: 'Agent Name',
         accessor: deal => getPrimaryAgent(deal, roles)
       },
       {
         id: 'office',
-        header: 'OFFICE',
+        header: 'Office',
         accessor: deal => this.getOffice(deal)
       },
       {
         id: 'critical-dates',
-        header: 'CRITICAL DATES',
+        header: 'Critical Dates',
         accessor: deal => getNextDateValue(deal),
         render: ({ rowData: deal, totalRows, rowIndex }) => (
           <CriticalDate
@@ -73,7 +73,7 @@ class Grid extends React.Component {
       },
       {
         id: 'submitted-at',
-        header: 'SUBMITTED AT',
+        header: 'Submitted At',
         accessor: 'attention_requested_at',
         render: ({ rowData: deal }) =>
           this.getSubmitTime(deal.attention_requested_at)
@@ -93,15 +93,22 @@ class Grid extends React.Component {
   }
 
   get Data() {
-    const { deals, activeFilter } = this.props
+    const { deals, activeFilter, searchCriteria } = this.props
 
     if (!deals) {
       return []
     }
 
+    // when user searching something in backoffice, we should show all
+    // deals except draft items
+    if (searchCriteria.length > 0) {
+      return Object.values(deals).filter(deal => deal.is_draft === false)
+    }
+
     return Object.values(deals).filter(
       deal =>
         deal.attention_requests > 0 &&
+        deal.is_draft === false &&
         deal.inboxes &&
         deal.inboxes.includes(activeFilter)
     )
@@ -158,6 +165,9 @@ class Grid extends React.Component {
     return (
       <Container>
         <Table
+          plugins={{
+            sortable: {}
+          }}
           isFetching={isFetchingDeals}
           columns={columns}
           data={data}

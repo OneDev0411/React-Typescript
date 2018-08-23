@@ -8,16 +8,18 @@ import AddIcon from '../../SvgIcons/AddCircleOutline/IconAddCircleOutline'
 import RemoveIcon from '../../SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
 TextFieldArray.propTypes = {
-  labelNote: PropTypes.string,
+  hint: PropTypes.string,
   format: PropTypes.func,
+  labelNote: PropTypes.string,
   parse: PropTypes.func,
   placeholder: PropTypes.string,
   validate: PropTypes.func
 }
 
 TextFieldArray.defaultProps = {
-  labelNote: '',
+  hint: '',
   format: t => t,
+  labelNote: '',
   parse: t => t,
   placeholder: '',
   validate: () => undefined
@@ -37,11 +39,12 @@ export function TextFieldArray(props) {
               parse={props.parse}
               placeholder={props.placeholder}
               validate={props.validate}
+              hint={props.hint}
             />
             <div
               style={{
                 position: 'absolute',
-                bottom: '0.5em',
+                top: '0.5em',
                 right: '0.5em'
               }}
             >

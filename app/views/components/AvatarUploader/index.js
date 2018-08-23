@@ -18,6 +18,7 @@ AvatarUploader.propTypes = {
   avatar: PropTypes.shape({
     size: PropTypes.number,
     src: PropTypes.string,
+    initials: PropTypes.string,
     display_name: PropTypes.string
   }),
   status: PropTypes.string,
@@ -28,6 +29,7 @@ AvatarUploader.propTypes = {
 
 AvatarUploader.defaultProps = {
   avatar: {
+    initials: '',
     size: 104,
     src: '',
     display_name: ''
@@ -46,7 +48,9 @@ export function AvatarUploader({
       {avatar.src ? (
         <Image src={avatar.src} alt="avatar" />
       ) : (
-        <Initials>{getNameInitials(avatar.display_name)}</Initials>
+        <Initials>
+          {avatar.initials || getNameInitials(avatar.display_name)}
+        </Initials>
       )}
       <Status isOnline={isOnline} />
       <Trigger htmlFor="avatarImage" hasImage={avatar.src}>

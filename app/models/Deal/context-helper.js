@@ -135,7 +135,7 @@ export function getFormattedPrice(
   style = 'currency',
   minimumFractionDigits = 2
 ) {
-  if (!number) {
+  if (typeof number !== 'number') {
     return number
   }
 

@@ -13,7 +13,7 @@ export const BasicDropdown = ({
   onSelect,
   onChange,
   fullWidth,
-  itemToString,
+  itemToString = item => item.label,
   itemRenderer,
   defaultSelectedItem
 }) => (
@@ -52,12 +52,12 @@ export const BasicDropdown = ({
               depth={3}
               style={{
                 maxHeight: 200,
-                width: fullWidth ? '100%' : 'auto',
+                minWidth: fullWidth ? '100%' : 'auto',
                 position: 'absolute',
                 left: 0,
                 top: 3,
                 zIndex: 1,
-                overflowY: 'scroll'
+                overflowY: 'auto'
               }}
               className="u-scrollbar--thinner--self"
             >
@@ -74,7 +74,7 @@ export const BasicDropdown = ({
                 return itemRenderer ? (
                   itemRenderer(props)
                 ) : (
-                  <Item {...props} key={item.label}>
+                  <Item {...props} key={item.value}>
                     {item.label}
                   </Item>
                 )

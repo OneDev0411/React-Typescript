@@ -50,14 +50,13 @@ class ContactFilters extends React.PureComponent {
   }
 
   render() {
-    const { onFilterChange } = this.props
-
     return (
       <Filters
         name="contacts"
         plugins={['segments']}
         config={this.Config}
-        onChange={onFilterChange}
+        onChange={this.props.onFilterChange}
+        attributeDefs={this.props.attributeDefs}
       >
         <SaveSegment />
       </Filters>

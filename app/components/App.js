@@ -29,7 +29,7 @@ const InstantChat = Load({
 
 // contacts definitions
 import { getAttributeDefs } from '../store_actions/contacts'
-import { contactDefsIsLoaded } from '../reducers/contacts/attributeDefs'
+import { isLoadedContactAttrDefs } from '../reducers/contacts/attributeDefs'
 
 // favorites
 import { selectListings } from '../reducers/listings'
@@ -43,6 +43,9 @@ import config from '../../config/public'
 import Intercom from './Pages/Dashboard/Partials/Intercom'
 import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 import { getAllNotifications } from '../store_actions/notifications'
+
+import bowser from 'bowser'
+import { confirmation } from '../store_actions/confirmation'
 
 class App extends Component {
   componentWillMount() {
@@ -95,7 +98,7 @@ class App extends Component {
       }
 
       // load contacts
-      if (!contactDefsIsLoaded(this.props.contactsAttributeDefs)) {
+      if (!isLoadedContactAttrDefs(this.props.contactsAttributeDefs)) {
         dispatch(getAttributeDefs())
       }
 
@@ -120,6 +123,8 @@ class App extends Component {
 
     // google analytics
     this.initialGoogleAnalytics(data)
+
+    dispatch(this.checkBrowser())
   }
 
   static async fetchData(dispatch, params) {
@@ -278,6 +283,70 @@ class App extends Component {
     )
   }
 
+  checkBrowser() {
+    return async dispatch => {
+      const browser = bowser.getParser(window.navigator.userAgent)
+      const browserInfo = browser.getBrowser()
+
+      const isValidBrowser = browser.satisfies({
+        // declare browsers per OS
+        windows: {
+          'internet explorer': '>11'
+        },
+        macos: {
+          safari: '>11'
+        },
+
+        // or in general
+        chrome: '>65',
+        firefox: '>60'
+      })
+
+      if (!isValidBrowser) {
+        let downloadLink
+
+        switch (browserInfo.name) {
+          case 'Internet Explorer':
+            downloadLink =
+              'https://www.microsoft.com/en-us/download/internet-explorer.aspx'
+            break
+          case 'Chrome':
+            downloadLink = 'https://www.google.com/chrome/'
+            break
+          case 'Firefox':
+            downloadLink = 'https://www.mozilla.org/en-US/firefox/new/'
+            break
+          default:
+            break
+        }
+
+        dispatch(
+          confirmation({
+            message: `Your web browser (${browserInfo.name} ${
+              browserInfo.version.split('.')[0]
+            }) is out of date.`,
+            description: (
+              <p>
+                We recommend updating your browser to
+                <a
+                  href="https://www.google.com/chrome/"
+                  target="_blank"
+                  style={{ margin: 'auto 4px' }}
+                >
+                  Chrome
+                </a>
+                for more security, speed and the best experience on Rechat.
+              </p>
+            ),
+            confirmLabel: 'Update Browser',
+            cancelLabel: 'No, thanks',
+            hideConfirmButton: !downloadLink,
+            onConfirm: () => window.open(downloadLink, '_blank')
+          })
+        )
+      }
+    }
+  }
   render() {
     const { data, user, rooms, location } = this.props
 

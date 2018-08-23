@@ -6,12 +6,13 @@ import { Tab, Nav, NavItem } from 'react-bootstrap'
 import { getContactAddresses } from '../../../../../models/contacts/helpers'
 
 // eslint-disable-next-line
-import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
+import { selectDefinitionByName, isLoadedContactAttrDefs } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
 import PageHeader from '../../../../../views/components/PageHeader'
 import Catalog from './Catalog'
 import { Dates } from './Dates'
+import { LastTouched } from './LastTouched'
 import { DealsListWidget } from './Deals'
 import { Details } from './Details'
 import Tags from './Tags'
@@ -21,6 +22,8 @@ import AddNote from './Add-Note'
 import Activities from './Activities'
 import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
+import Touch from '../../../../../views/CRM/touches/Touch'
+import IconTouch from '../../../../../views/components/SvgIcons/AddAlarm/IconAddAlarm'
 import IconNote from '../../../../../views/components/SvgIcons/Note/IconNote'
 import IconTodo from '../../../../../views/components/SvgIcons/Todo/IconTodo'
 import {
@@ -34,9 +37,11 @@ import {
 import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
 
 import { getTasks } from '../../../../../models/tasks'
+import { getTouches } from '../../../../../models/crm-touches/get-touches'
 
 import {
   getContact,
+  getContactActivities,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
 import { selectContact } from '../../../../../reducers/contacts/list'
@@ -46,7 +51,8 @@ import { normalizeContact } from '../../../../../views/utils/association-normali
 class ContactProfile extends React.Component {
   state = {
     tasks: [],
-    activeTab: 'timeline',
+    touches: [],
+    activeTab: 'all-activities',
     isDesktopScreen: true
   }
 
@@ -61,26 +67,27 @@ class ContactProfile extends React.Component {
   }
 
   detectScreenSize = () => {
-    if (window.innerWidth < 1600 && this.state.isDesktopScreen) {
+    if (window.innerWidth < 1280 && this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: false })
     }
 
-    if (window.innerWidth >= 1600 && !this.state.isDesktopScreen) {
+    if (window.innerWidth >= 1280 && !this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: true })
     }
   }
 
   async initializeContact() {
-    const {
-      contact,
-      getContact,
-      params: { id: contactId }
-    } = this.props
+    const contactId = this.props.params.id
 
-    if (!contact) {
-      await getContact(contactId)
+    if (!this.props.contact) {
+      await this.props.getContact(contactId)
     }
 
+    this.fetchTasks(contactId)
+    this.fetchTouches(contactId)
+  }
+
+  fetchTasks = async contactId => {
     const query = [
       'order=-updated_at',
       `contact=${contactId}`,
@@ -92,6 +99,18 @@ class ContactProfile extends React.Component {
     const { data: tasks } = response
 
     this.setState({ tasks })
+  }
+
+  fetchTouches = async contactId => {
+    const query = [
+      `contact=${contactId}`,
+      'associations[]=crm_touch.associations'
+    ].join('&')
+
+    const response = await getTouches(query)
+    const { data: touches } = response
+
+    this.setState({ touches })
   }
 
   goBack = () => browserHistory.push('/dashboard/contacts')
@@ -111,14 +130,15 @@ class ContactProfile extends React.Component {
 
     await upsertContactAttributes(contactId, attributes)
 
-    return this.setState({ activeTab: 'notes-list' })
+    return this.setState({ activeTab: 'notes' })
   }
 
   setNewTask = task => {
     this.setState(({ tasks }) => ({
       tasks: [task, ...tasks],
-      activeTab: 'tasks-list'
+      activeTab: 'tasks'
     }))
+    this.props.getContactActivities(this.props.contact.id)
   }
 
   removeTask = taskId => {
@@ -130,7 +150,6 @@ class ContactProfile extends React.Component {
   }
 
   render() {
-    const { tasks } = this.state
     const { contact, fetchError } = this.props
 
     if (fetchError) {
@@ -141,7 +160,7 @@ class ContactProfile extends React.Component {
       return <Container>{fetchError.message}</Container>
     }
 
-    if (!contact) {
+    if (!isLoadedContactAttrDefs(this.props.attributeDefs) || !contact) {
       return (
         <Container>
           <Loading />
@@ -151,9 +170,14 @@ class ContactProfile extends React.Component {
 
     const { activeTab } = this.state
     const hasAddress = getContactAddresses(contact)
+    const defaultAssociation = {
+      association_type: 'contact',
+      contact: normalizeContact(contact)
+    }
 
     const thirdColumn = (
       <ThirdColumn>
+        {this.state.isDesktopScreen && <LastTouched contact={contact} />}
         <Dates contact={contact} />
         <DealsListWidget contactId={contact.id} />
       </ThirdColumn>
@@ -167,6 +191,8 @@ class ContactProfile extends React.Component {
           <SideColumnWrapper>
             <div>
               <Catalog contact={contact} />
+
+              {!this.state.isDesktopScreen && <LastTouched contact={contact} />}
 
               <Tags contact={contact} />
 
@@ -184,18 +210,28 @@ class ContactProfile extends React.Component {
           <SecondColumn>
             <Tab.Container
               id="profile-todo-tabs"
-              defaultActiveKey="note"
+              defaultActiveKey="touch"
               className="c-contact-profile-todo-tabs c-contact-profile-card"
             >
               <div>
                 <Nav className="c-contact-profile-todo-tabs__tabs-list">
                   <NavItem
                     className="c-contact-profile-todo-tabs__tab"
+                    eventKey="touch"
+                  >
+                    <IconTouch />
+                    <span className="c-contact-profile-todo-tabs__tab__title">
+                      Add a Touch
+                    </span>
+                    <span className="c-contact-profile-todo-tabs__tab__indicator" />
+                  </NavItem>
+                  <NavItem
+                    className="c-contact-profile-todo-tabs__tab"
                     eventKey="note"
                   >
                     <IconNote />
                     <span className="c-contact-profile-todo-tabs__tab__title">
-                      New Note
+                      Add a Note
                     </span>
                     <span className="c-contact-profile-todo-tabs__tab__indicator" />
                   </NavItem>
@@ -205,7 +241,7 @@ class ContactProfile extends React.Component {
                   >
                     <IconTodo />
                     <span className="c-contact-profile-todo-tabs__tab__title">
-                      Create Task
+                      Add a Task
                     </span>
                     <span className="c-contact-profile-todo-tabs__tab__indicator" />
                   </NavItem>
@@ -215,6 +251,19 @@ class ContactProfile extends React.Component {
                   animation
                   className="c-contact-profile-todo-tabs__pane-container"
                 >
+                  <Tab.Pane
+                    eventKey="touch"
+                    className="c-contact-profile-todo-tabs__pane"
+                  >
+                    <Touch
+                      defaultAssociations={[defaultAssociation]}
+                      submitCallback={() => {
+                        this.setState({ activeTab: 'touches' })
+                        this.fetchTouches(contact.id)
+                        this.props.getContactActivities(contact.id)
+                      }}
+                    />
+                  </Tab.Pane>
                   <Tab.Pane
                     eventKey="note"
                     className="c-contact-profile-todo-tabs__pane"
@@ -228,10 +277,7 @@ class ContactProfile extends React.Component {
                     <NewTask
                       submitCallback={this.setNewTask}
                       deleteCallback={this.removeTask}
-                      defaultAssociation={{
-                        association_type: 'contact',
-                        contact: normalizeContact(contact)
-                      }}
+                      defaultAssociation={defaultAssociation}
                     />
                   </Tab.Pane>
                 </Tab.Content>
@@ -239,7 +285,8 @@ class ContactProfile extends React.Component {
             </Tab.Container>
 
             <Activities
-              tasks={tasks}
+              tasks={this.state.tasks}
+              touches={this.state.touches}
               contact={contact}
               activeTab={activeTab}
               onChangeTab={activeTab => this.setState({ activeTab })}
@@ -268,6 +315,7 @@ export default connect(
   mapStateToProps,
   {
     getContact,
+    getContactActivities,
     upsertContactAttributes
   }
 )(ContactProfile)

@@ -36,7 +36,12 @@ export function MultiField(props) {
   }
   const newMultiFieldWithoutLabel = {
     attribute: newAttribute,
-    value: ''
+    value: attribute_def.enum_values
+      ? {
+          title: '-Select-',
+          value: '-Select-'
+        }
+      : ''
   }
   const newMultiField = {
     attribute: newAttribute,
@@ -44,7 +49,12 @@ export function MultiField(props) {
       title: '-Select-',
       value: '-Select-'
     },
-    value: ''
+    value: attribute_def.enum_values
+      ? {
+          title: '-Select-',
+          value: '-Select-'
+        }
+      : ''
   }
 
   if (attribute_def.labels) {
@@ -82,7 +92,6 @@ export function MultiField(props) {
                   items={defaultOptions}
                   itemToString={({ title }) => title}
                   name={`${field}.label`}
-                  style={{ width: '100%' }}
                 />
               )}
             </Container>
@@ -91,22 +100,36 @@ export function MultiField(props) {
                 width: '60%',
                 display: 'flex',
                 alignItems: 'flex-end',
-                padding: '1em',
+                padding: attribute_def.enum_values ? '0.75em 1em' : '1em',
                 borderWidth: '0 0 1px 1px',
                 borderStyle: 'solid',
                 borderColor: '#dde5ec'
               }}
             >
-              <Field
-                component={TextField}
-                id={field}
-                format={props.format}
-                name={`${field}.value`}
-                parse={props.parse}
-                placeholder={props.placeholder}
-                readOnly={!attribute_def.editable}
-                validate={props.validate}
-              />
+              {attribute_def.enum_values ? (
+                <Field
+                  component={Dropdown}
+                  fullWidth
+                  items={attribute_def.enum_values.map(value => ({
+                    title: value,
+                    value
+                  }))}
+                  itemToString={({ title }) => title}
+                  name={`${field}.value`}
+                  style={{ width: '100%' }}
+                />
+              ) : (
+                <Field
+                  component={TextField}
+                  id={field}
+                  format={props.format}
+                  name={`${field}.value`}
+                  parse={props.parse}
+                  placeholder={props.placeholder}
+                  readOnly={!attribute_def.editable}
+                  validate={props.validate}
+                />
+              )}
               <div
                 style={{
                   display: 'flex',

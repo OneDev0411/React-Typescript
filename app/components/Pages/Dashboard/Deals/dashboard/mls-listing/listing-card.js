@@ -10,28 +10,23 @@ import Deal from '../../../../../../models/Deal'
 import { updateContext } from '../../../../../../store_actions/deals'
 
 class ListingCard extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isSavingAddress: false,
-      showAddressModal: false
-    }
+  state = {
+    isSavingAddress: false,
+    showAddressModal: false
   }
 
-  openListing(deal) {
+  openListing = deal => {
     if (deal.listing) {
       browserHistory.push(`/dashboard/mls/${deal.listing}`)
     }
   }
 
-  toggleShowAddressModal() {
+  toggleShowAddressModal = () =>
     this.setState({
       showAddressModal: !this.state.showAddressModal
     })
-  }
 
-  async onCreateAddress(address) {
+  onCreateAddress = async address => {
     const { address_components } = address
     const { deal, updateContext } = this.props
 
@@ -139,8 +134,8 @@ class ListingCard extends React.Component {
         <ManualAddress
           show={showAddressModal}
           deal={deal}
-          onHide={() => this.toggleShowAddressModal()}
-          onCreateAddress={address => this.onCreateAddress(address)}
+          onHide={this.toggleShowAddressModal}
+          onCreateAddress={this.onCreateAddress}
         />
       </div>
     )
@@ -157,4 +152,7 @@ function mapToProps({ deals }) {
   }
 }
 
-export default connect(mapToProps, { updateContext })(ListingCard)
+export default connect(
+  mapToProps,
+  { updateContext }
+)(ListingCard)

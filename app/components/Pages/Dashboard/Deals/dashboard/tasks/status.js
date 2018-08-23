@@ -4,7 +4,7 @@ import moment from 'moment'
 import ToolTip from '../../../../../../views/components/tooltip/index'
 import { isBackOffice } from '../../../../../../utils/user-teams'
 
-const TaskStatus = ({ task, noTip, isBackoffice }) => {
+const TaskStatus = ({ task, noTip, isBackoffice, isDraft }) => {
   const { review } = task
   let status = null
   let tooltip = null
@@ -27,7 +27,7 @@ const TaskStatus = ({ task, noTip, isBackoffice }) => {
   }
 
   if (!isBackoffice && status !== 'Submitted' && task.attention_requested) {
-    status = 'Notified'
+    status = isDraft ? 'Pending' : 'Notified'
   }
 
   if (!status) {

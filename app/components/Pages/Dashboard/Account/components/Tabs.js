@@ -10,16 +10,16 @@ export const ProfileTabs = ({ user }) => (
       to="/dashboard/account/upgrade"
       disabled={user.user_type === 'Agent'}
     />
-  </ul>
-)
-
-export const DealsTabs = ({ user }) => (
-  <ul className="c-tabs c-tabs--stack">
     <Tab
       indexed
       text="Form Templates"
       to="/dashboard/account/deal/templates"
       disabled={user.user_type !== 'Agent'}
+    />
+    <Tab
+      indexed
+      text="iCAL Feed"
+      to="/dashboard/account/deal/icalintegration"
     />
   </ul>
 )

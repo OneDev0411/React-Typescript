@@ -7,15 +7,15 @@ import cookie from 'koa-cookie'
 import path from 'path'
 import webpack from 'webpack'
 import _ from 'underscore'
+import blocked from 'blocked-at'
 
 import config from '../config/private'
 import render from './util/render'
-import request from './util/request'
 import pagesMiddleware from './util/pages'
+import fetch from './util/fetch'
 import universalMiddleware from './util/universal'
 import appConfig from '../config/webpack'
 import webpackConfig from '../webpack.config.babel'
-// import AppStore from '../app/stores/AppStore'
 
 const app = new Koa()
 const __DEV__ = process.env.NODE_ENV === 'development'
@@ -25,6 +25,15 @@ const { entry, output, publicPath } = appConfig.compile
 
 // app uses proxy
 app.proxy = true
+
+if (!__DEV__) {
+  blocked(
+    (time, stack) => {
+      console.log(time, stack)
+    },
+    { trimFalsePositives: true, threshold: 500 }
+  )
+}
 
 // handle application errors
 app.use(async (ctx, next) => {
@@ -59,35 +68,32 @@ app.use(render())
  */
 app.keys = ['r3ch4t@re4ct_rocks!!!']
 
-app.use(session(
-  {
-    key: 'rechat-webapp:session',
-    maxAge: 60 * 86400 * 1000, // 60 days
-    overwrite: true,
-    httpOnly: true,
-    signed: true
-  },
-  app
-))
+app.use(
+  session(
+    {
+      key: 'rechat-webapp:session',
+      maxAge: 60 * 86400 * 1000, // 60 days
+      overwrite: true,
+      httpOnly: true,
+      signed: true
+    },
+    app
+  )
+)
 
 /**
- * middleware for time and initial appStore
+ * middleware for global variables
  */
-
 app.use(async (ctx, next) => {
-  ctx.locals = {
-    ...ctx.locals,
+  ctx.state.variables = {
     intercomId: config.intercom.app_id,
-    sentryKey: config.sentry.api_url,
-    appStore: { data: {} },
-    time: new Date().getTime()
+    sentryKey: config.sentry.api_url
   }
 
-  await next()
+  return next()
 })
 
-// add request middleware
-app.use(request())
+app.use(fetch())
 
 _.each(require('./api/routes'), route => {
   // eslint-disable-next-line
@@ -107,10 +113,14 @@ if (__DEV__) {
 
   app.use(mount(publicPath, serve(path.join(entry, publicPath))))
 } else {
-  app.use(mount(serve(path.join(output), {
-    gzip: true,
-    maxage: 86400000
-  })))
+  app.use(
+    mount(
+      serve(path.join(output), {
+        gzip: true,
+        maxage: 86400000
+      })
+    )
+  )
 }
 
 // parse pages

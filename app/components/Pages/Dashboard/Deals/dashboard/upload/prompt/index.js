@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
@@ -18,12 +18,15 @@ import ToolTip from '../../../../../../../views/components/tooltip/index'
 import Checkbox from '../../../../../../../views/components/radio'
 import FileName from './file-name'
 
+import Deal from '../../../../../../../models/Deal'
+import UploadProgress from './upload-progress'
+
 const STATUS_UPLOADING = 'uploading'
 const STATUS_UPLOADED = 'uploaded'
 
 class UploadModal extends React.Component {
-  constructor(props) {
-    super(props)
+  state = {
+    uploadProgress: {}
   }
 
   closeModal() {
@@ -89,15 +92,34 @@ class UploadModal extends React.Component {
     const isBackupContract = this.isBackupContract(task)
 
     // get filename
-    const filename = properties.fileTitle || fileObject.name
+    const filename = this.getFileName({ fileObject, properties })
 
     // set status
     setUploadAttributes(id, { status: STATUS_UPLOADING })
 
+    // check the file is allowed to upload or not
+    const isFileAllowed = Deal.upload
+      .getAcceptedDocuments()
+      .split(',')
+      .some(extname => this.getFileExtension(fileObject.name) === extname)
+
+    if (!isFileAllowed) {
+      return notify({
+        message: 'This file is not allowed to upload in your documents',
+        status: 'error'
+      })
+    }
+
+    const progressFn = this.uploadProgress.bind(
+      this,
+      this.getFileUniqueId(fileObject),
+      filename || fileObject.name
+    )
+
     // upload file
     const file = task
-      ? await uploadTaskFile(user, task, fileObject, filename)
-      : await uploadStashFile(deal.id, fileObject, filename)
+      ? await uploadTaskFile(user, task, fileObject, filename, progressFn)
+      : await uploadStashFile(deal.id, fileObject, filename, progressFn)
 
     if (!file) {
       setUploadAttributes(id, { status: null })
@@ -121,6 +143,23 @@ class UploadModal extends React.Component {
     if (task && properties.notifyOffice === true && !isBackupContract) {
       changeNeedsAttention(task.deal, task.id, true)
     }
+  }
+
+  getFileName({ fileObject, properties }) {
+    // get file extension name
+    const extension = this.getFileExtension(fileObject.name)
+
+    // get file title
+    const filename = properties.fileTitle || fileObject.name
+
+    return filename.endsWith(extension) ? filename : `${filename}${extension}`
+  }
+
+  getFileExtension(filename) {
+    return `.${filename
+      .split('.')
+      .pop()
+      .toLowerCase()}`
   }
 
   getButtonCaption(file) {
@@ -170,6 +209,27 @@ class UploadModal extends React.Component {
     displaySplitter(files)
   }
 
+  getFileUniqueId(fileObject) {
+    return (
+      fileObject.name.replace(/[^a-z0-9]/gi, '_').toLowerCase() +
+      fileObject.lastModified
+    )
+  }
+
+  uploadProgress(id, filename, e) {
+    const uploadProgress = {
+      ...this.state.uploadProgress,
+      [id]: {
+        filename,
+        percent: e.percent
+      }
+    }
+
+    this.setState({
+      uploadProgress
+    })
+  }
+
   render() {
     const { deal, splitter, upload } = this.props
     const filesCount = _.size(upload.files)
@@ -201,39 +261,60 @@ class UploadModal extends React.Component {
               return (
                 <div key={id}>
                   <div className="upload-row">
-                    <div className="file-name">
-                      <FileName
-                        file={file}
-                        canEditName={file.properties.editNameEnabled}
-                      />
-                    </div>
+                    {!isUploading &&
+                      !isUploaded && (
+                        <Fragment>
+                          <div className="file-name">
+                            <FileName
+                              file={file}
+                              canEditName={file.properties.editNameEnabled}
+                            />
+                          </div>
 
-                    <div className="file-task">
-                      <TasksDropDown
-                        searchable
-                        showStashOption
-                        deal={deal}
-                        onSelectTask={taskId => this.onSelectTask(file, taskId)}
-                        selectedTask={selectedTask}
-                        shouldDropUp={
-                          filesCount > 4 && fileCounter + 2 >= filesCount
+                          <div className="file-task">
+                            <TasksDropDown
+                              searchable
+                              showStashOption
+                              deal={deal}
+                              onSelectTask={taskId =>
+                                this.onSelectTask(file, taskId)
+                              }
+                              selectedTask={selectedTask}
+                              shouldDropUp={
+                                filesCount > 4 && fileCounter + 2 >= filesCount
+                              }
+                            />
+                          </div>
+
+                          <div className="file-cta">
+                            <Button
+                              bsStyle="primary"
+                              className={cn({
+                                disabled:
+                                  isUploading || _.isUndefined(selectedTask),
+                                uploaded: isUploaded
+                              })}
+                              disabled={
+                                isUploading || _.isUndefined(selectedTask)
+                              }
+                              onClick={() => this.upload(file, selectedTask)}
+                            >
+                              {this.getButtonCaption(file)}
+                            </Button>
+                          </div>
+                        </Fragment>
+                      )}
+
+                    {(isUploading || isUploaded) && (
+                      <UploadProgress
+                        isUploadFinished={isUploaded}
+                        progress={
+                          this.state.uploadProgress[
+                            this.getFileUniqueId(file.fileObject)
+                          ]
                         }
                       />
-                    </div>
-
-                    <div className="file-cta">
-                      <Button
-                        bsStyle="primary"
-                        className={cn({
-                          disabled: isUploading || _.isUndefined(selectedTask),
-                          uploaded: isUploaded
-                        })}
-                        disabled={isUploading || _.isUndefined(selectedTask)}
-                        onClick={() => this.upload(file, selectedTask)}
-                      >
-                        {this.getButtonCaption(file)}
-                      </Button>
-                    </div>
+                    )}
                   </div>
                   <div className="notify-admin">
                     {!isBackupContract &&
@@ -293,13 +374,16 @@ function mapStateToProps({ deals, user }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  notify,
-  uploadTaskFile,
-  uploadStashFile,
-  resetUploadFiles,
-  resetSplitter,
-  displaySplitter,
-  setUploadAttributes,
-  changeNeedsAttention
-})(UploadModal)
+export default connect(
+  mapStateToProps,
+  {
+    notify,
+    uploadTaskFile,
+    uploadStashFile,
+    resetUploadFiles,
+    resetSplitter,
+    displaySplitter,
+    setUploadAttributes,
+    changeNeedsAttention
+  }
+)(UploadModal)

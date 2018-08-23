@@ -23,7 +23,7 @@ export async function createContacts(contacts, query = DEFAULT_QUERY) {
   }
 
   try {
-    const response = await new Fetch({ stream: true })
+    const response = await new Fetch()
       .post('/contacts')
       .send({ contacts })
       .query(query)

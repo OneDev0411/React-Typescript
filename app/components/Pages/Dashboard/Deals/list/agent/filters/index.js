@@ -1,10 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-
-import Deal from '../../../../../../../models/Deal'
-
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
+
+import Deal from '../../../../../../../models/Deal'
 import ToolTip from '../../../../../../../views/components/tooltip'
 
 import {
@@ -20,7 +19,8 @@ import {
 } from '../../styles/filters/styled'
 
 const FilterNames = {
-  Active: ['Active'],
+  Active: ['Active', 'Lease'],
+  Drafts: ['Drafts'],
   Pending: [
     'Active Contingent',
     'Active Kick Out',
@@ -42,11 +42,17 @@ const FilterNames = {
 export const Filters = {
   All: deal =>
     FilterNames.Archive.includes(Deal.get.status(deal)) === false &&
+    !deal.is_draft &&
     !deal.deleted_at,
+  Drafts: deal => deal.is_draft === true,
   Listings: deal =>
-    FilterNames.Active.includes(Deal.get.status(deal)) && !deal.deleted_at,
+    FilterNames.Active.includes(Deal.get.status(deal)) &&
+    !deal.is_draft &&
+    !deal.deleted_at,
   Pending: deal =>
-    FilterNames.Pending.includes(Deal.get.status(deal)) && !deal.deleted_at,
+    FilterNames.Pending.includes(Deal.get.status(deal)) &&
+    !deal.is_draft &&
+    !deal.deleted_at,
   Archive: deal =>
     FilterNames.Archive.includes(Deal.get.status(deal)) || !!deal.deleted_at
 }
@@ -76,9 +82,15 @@ class AgentFilters extends React.Component {
   /**
    * get badge counter
    */
-  getBadgeCounter = filterName =>
-    _.filter(this.props.deals, deal => Filters[filterName](deal)).length
+  getBadgeCounter = filterName => {
+    const { deals } = this.props
 
+    if (this.props.searchCriteria.length === 0) {
+      return _.filter(deals, deal => Filters[filterName](deal)).length
+    }
+
+    return Object.values(deals).length
+  }
   /**
    * get filter tab tooltip
    */
@@ -98,6 +110,10 @@ class AgentFilters extends React.Component {
         tooltip = FilterNames.Active
         break
 
+      case 'Drafts':
+        tooltip = FilterNames.Drafts
+        break
+
       default:
         tooltip = ['All']
     }
@@ -111,28 +127,37 @@ class AgentFilters extends React.Component {
     return (
       <Container>
         <ListTitle>Lists</ListTitle>
-
-        {_.map(Filters, (fn, filterName) => (
-          <ListItem
-            key={`FILTER_${filterName}`}
-            isSelected={filterName === activeFilter}
-            onClick={() => this.setFilter(filterName)}
-          >
-            <ListItemName>
-              <ToolTip
-                multiline
-                caption={this.getTooltipCaption(filterName)}
-                placement="right"
-              >
-                <span>{filterName}</span>
-              </ToolTip>
-            </ListItemName>
+        {this.props.searchCriteria.length > 0 ? (
+          <ListItem isSelected>
+            <ListItemName>Search Results</ListItemName>
 
             <ListIconContainer>
-              <BadgeCounter>{this.getBadgeCounter(filterName)}</BadgeCounter>
+              <BadgeCounter>{this.getBadgeCounter()}</BadgeCounter>
             </ListIconContainer>
           </ListItem>
-        ))}
+        ) : (
+          _.map(Filters, (fn, filterName) => (
+            <ListItem
+              key={`FILTER_${filterName}`}
+              isSelected={filterName === activeFilter}
+              onClick={() => this.setFilter(filterName)}
+            >
+              <ListItemName>
+                <ToolTip
+                  multiline
+                  caption={this.getTooltipCaption(filterName)}
+                  placement="right"
+                >
+                  <span>{filterName}</span>
+                </ToolTip>
+              </ListItemName>
+
+              <ListIconContainer>
+                <BadgeCounter>{this.getBadgeCounter(filterName)}</BadgeCounter>
+              </ListIconContainer>
+            </ListItem>
+          ))
+        )}
       </Container>
     )
   }

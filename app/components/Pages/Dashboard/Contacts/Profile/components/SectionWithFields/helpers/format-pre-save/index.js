@@ -1,5 +1,6 @@
 import { flatten, indexBy } from 'underscore'
 
+import { isNumeric } from '../../../../../../../../../utils/helpers'
 import { getParser } from '../get-parser'
 
 export function formatPreSave(previousFields, nextFields) {
@@ -99,6 +100,27 @@ export function formatPreSave(previousFields, nextFields) {
         })
       }
     }
+  })
+
+  // for parsing number fields
+  upsertedAttributeList = upsertedAttributeList.map(attribute => {
+    if (attribute.number != null) {
+      const number = parseFloat(attribute.number)
+
+      if (isNumeric(number)) {
+        return {
+          ...attribute,
+          number
+        }
+      }
+
+      return {
+        ...attribute,
+        number: null
+      }
+    }
+
+    return attribute
   })
 
   return {

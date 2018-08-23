@@ -9,9 +9,6 @@
 @import './todo-tabs';
 
 .profile {
-  @extend %contact-activities;
-  @extend %contact-timeline;
-
   .content {
     display: flex;
     flex-direction: row;

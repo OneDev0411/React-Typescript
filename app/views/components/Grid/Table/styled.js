@@ -5,15 +5,23 @@ export const Container = styled.div`
   margin-top: 16px;
 `
 
-export const Header = styled.div``
-export const Body = styled.div``
-
-const Row = styled.div`
+export const ToolbarContainer = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 32px;
 `
 
-export const HeaderRow = Row.extend`
-  margin-bottom: 32px;
+export const ActionsBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-left: 8px;
+`
+
+export const Body = styled.div``
+
+export const Row = styled.div`
+  display: flex;
 `
 
 export const BodyRow = Row.extend`
@@ -21,6 +29,7 @@ export const BodyRow = Row.extend`
   min-height: 48px;
   align-items: center;
   border-bottom: 1px solid #dce5eb;
+  padding: 8px 0;
 
   ${props =>
     props.hoverStyle &&
@@ -31,7 +40,7 @@ export const BodyRow = Row.extend`
   `};
 `
 
-const Cell = styled.div`
+export const Cell = styled.div`
   text-align: left;
 
   ${props =>
@@ -45,22 +54,6 @@ const Cell = styled.div`
     `
     :hover {
       ${props.hoverStyle}
-    }
-  `};
-`
-
-export const HeaderCell = Cell.extend`
-  font-size: 14px;
-  font-weight: 500;
-  color: #5a7390;
-  padding: 0 4px;
-
-  ${props =>
-    props.isSortable &&
-    `
-    cursor: pointer;
-    :hover {
-      opacity: 0.8;
     }
   `};
 `

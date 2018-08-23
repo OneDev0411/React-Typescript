@@ -5,7 +5,7 @@ export async function getContacts(start = 0, limit = 50) {
   const query = {
     start,
     limit,
-    order: '-updated_at',
+    order: '-created_at',
     ...defaultQuery
   }
 

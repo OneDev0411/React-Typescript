@@ -8,7 +8,7 @@ class Info extends React.Component {
 
     return (
       <div className="mls-info">
-        <ListingStatus deal={deal} />
+        {!deal.is_draft && <ListingStatus deal={deal} />}
 
         <div className="item">
           <div className="lbl">MLS#:</div>

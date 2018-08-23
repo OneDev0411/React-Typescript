@@ -6,8 +6,6 @@ import { Field, reduxForm } from 'redux-form'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import Brand from '../../../../../controllers/Brand'
-
 import signup from '../../../../../models/auth/signup'
 import { getBrandInfo, renderField } from '../../SignIn'
 import resetPassword from '../../../../../models/auth/password/reset'
@@ -34,7 +32,7 @@ const ForgotForm = ({
               <img
                 src={siteLogo}
                 alt={`${siteTitle} logo`}
-                className={'c-auth__logo'}
+                className="c-auth__logo"
               />
             </Link>
           )}
@@ -105,7 +103,7 @@ export const validateEmail = values => {
 }
 
 export default compose(
-  connect(({ brand, auth }, { location }) => {
+  connect(({ brand }, { location }) => {
     const { email } = location.query
 
     return {
@@ -125,23 +123,25 @@ export default compose(
       setIsSubmitting,
       setSubmitError,
       setResetSuccessfully
-    }) => async values => {
+    }) => async ({ email }) => {
       setIsSubmitting(true)
 
       try {
-        await resetPassword(values)
-        setIsSubmitting(false)
-        setResetSuccessfully(values.email)
+        const response = await resetPassword(email)
+
+        if (response.status === 204) {
+          setIsSubmitting(false)
+          setResetSuccessfully(email)
+        }
       } catch ({ status, response }) {
-
         if (status === 403) {
-
           try {
-            await signup(values.email)
+            await signup(email)
           } catch (error) {}
 
           setIsSubmitting(false)
-          setResetSuccessfully(values.email)
+          setResetSuccessfully(email)
+
           return
         }
 

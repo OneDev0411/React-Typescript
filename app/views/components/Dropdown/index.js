@@ -60,7 +60,7 @@ export const Dropdown = ({
       getButtonProps,
       highlightedIndex
     }) => {
-      if (inputValue === selectedItem.title) {
+      if (inputValue === selectedItem && selectedItem.title) {
         inputValue = ''
       }
 
@@ -117,8 +117,8 @@ export const Dropdown = ({
                   return itemRenderer ? (
                     itemRenderer(props)
                   ) : (
-                    <Item {...props} key={item.title}>
-                      {item.title}
+                    <Item {...props} key={item.value}>
+                      {`${item.title}${item.hint ? ` (${item.hint})` : ''}`}
                     </Item>
                   )
                 })}

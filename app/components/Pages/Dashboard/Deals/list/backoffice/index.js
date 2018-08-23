@@ -16,9 +16,12 @@ import Grid from './grid'
 import BackofficeFilters from './filters'
 import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
 
+let persistentSearchInput = ''
+
 class BackofficeTable extends React.Component {
   state = {
-    isSideMenuOpen: true
+    isSideMenuOpen: true,
+    searchCriteria: persistentSearchInput
   }
 
   toggleSideMenu = () =>
@@ -32,6 +35,13 @@ class BackofficeTable extends React.Component {
     if (isFetchingDeals) {
       return false
     }
+
+    this.setState({
+      searchCriteria: value
+    })
+
+    // set persistent search input
+    persistentSearchInput = value
 
     if (value.length === 0) {
       return getDeals(user)
@@ -51,11 +61,15 @@ class BackofficeTable extends React.Component {
           isSideMenuOpen={isSideMenuOpen}
           isOpen={isSideMenuOpen}
         >
-          <BackofficeFilters activeFilter={params.filter} />
+          <BackofficeFilters
+            activeFilter={params.filter}
+            searchCriteria={this.state.searchCriteria}
+          />
         </Menu>
 
         <PageContent>
           <Header
+            title={params.filter}
             onMenuTriggerChange={this.toggleSideMenu}
             showCreateDeal={false}
           />
@@ -65,15 +79,20 @@ class BackofficeTable extends React.Component {
               <Search
                 disableOnSearch
                 showLoadingOnSearch
+                defaultValue={persistentSearchInput}
                 isSearching={isFetchingDeals}
                 placeholder="Search deals by address, MLS # or agent name…"
                 onChange={this.handleSearch}
+                onClearSearch={this.handleSearch}
                 debounceTime={700}
-                minimumLength={3}
+                minimumLength={4}
               />
             </SearchContainer>
 
-            <Grid activeFilter={params.filter} />
+            <Grid
+              activeFilter={params.filter}
+              searchCriteria={this.state.searchCriteria}
+            />
           </GridContainer>
         </PageContent>
       </PageContainer>
@@ -85,6 +104,7 @@ function mapStateToProps({ user, deals }) {
   return { user, isFetchingDeals: deals.properties.isFetchingDeals }
 }
 
-export default connect(mapStateToProps, { searchDeals, getDeals })(
-  BackofficeTable
-)
+export default connect(
+  mapStateToProps,
+  { searchDeals, getDeals }
+)(BackofficeTable)
