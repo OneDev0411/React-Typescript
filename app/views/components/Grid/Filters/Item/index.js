@@ -57,7 +57,7 @@ export const FilterItem = props => {
           <div>
             <TitleContainer>
               <ItemTitle onClick={onToggleFilterActive}>
-                <b>{filterConfig.serverLabel || filterConfig.label} </b>
+                <b>{filterConfig.label} </b>
                 {operator && operator.name}&nbsp;
                 {getCurrentValues(isActive, values)}
               </ItemTitle>

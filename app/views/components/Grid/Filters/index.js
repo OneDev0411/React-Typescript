@@ -8,10 +8,6 @@ import { selectActiveSavedSegment } from '../../../../reducers/filter-segments'
 import { AddFilter } from './Create'
 import { FilterItem } from './Item'
 
-import createFilterCriteria from './helpers/create-filter-criteria'
-import createSegmentFilters from './helpers/create-segment-filters'
-import { selectDefinition } from '../../../../reducers/contacts/attributeDefs'
-
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -44,20 +40,21 @@ class Filters extends React.Component {
     }
   }
 
-  createFiltersFromSegment = segment =>
+  createFiltersFromSegment = segment => {
+    const activeFilters = this.props.createFiltersFromSegment(segment.filters)
+
     this.setState({
-      activeFilters: createSegmentFilters(segment.filters)
+      activeFilters: _.indexBy(activeFilters, 'id')
     })
+  }
 
   /**
    *
    */
   createFilter = ({ id }) => {
-    const uniqueId = _.uniqueId(`${id}-`)
-
     const activeFilters = {
       ...this.state.activeFilters,
-      [uniqueId]: { id, isActive: true }
+      [_.uniqueId(`${id}-`)]: { id, isActive: true }
     }
 
     this.setState({
@@ -88,7 +85,6 @@ class Filters extends React.Component {
    *
    */
   removeFilter = filterId => {
-    const { config } = this.props
     const { activeFilters } = this.state
 
     const isIncompleteFilter = activeFilters[filterId].isIncomplete === true
@@ -99,7 +95,7 @@ class Filters extends React.Component {
     })
 
     if (!isIncompleteFilter) {
-      this.props.onChange(createFilterCriteria(nextFilters, config))
+      this.onChangeFilters(nextFilters)
     }
   }
 
@@ -107,8 +103,6 @@ class Filters extends React.Component {
    *
    */
   onFilterChange = (id, values, operator) => {
-    const { config } = this.props
-
     const current = this.state.activeFilters[id]
     const isCompleted = this.isFilterCompleted({ values, operator })
 
@@ -123,7 +117,7 @@ class Filters extends React.Component {
     }
 
     if (isCompleted && this.isFilterChanged(current, { values, operator })) {
-      this.props.onChange(createFilterCriteria(nextFilters, config))
+      this.onChangeFilters(nextFilters)
     }
 
     this.setState({
@@ -145,22 +139,22 @@ class Filters extends React.Component {
   /**
    *
    */
-  findFilterById = filter => {
-    const { attributeDefs } = this.props
-    const filterConfig = this.props.config.find(
-      tempFilter => tempFilter.id === filter.id
+  findFilterById = id => this.props.config.find(filter => filter.id === id)
+
+  /**
+   *
+   */
+  onChangeFilters = filters => {
+    const completedFilters = _.filter(
+      filters,
+      item => item.isIncomplete === false
     )
 
-    if (attributeDefs && filter.attribute_def) {
-      const attribute = selectDefinition(attributeDefs, filter.attribute_def)
-
-      filterConfig.serverLabel = attribute.label
-    }
-
-    return filterConfig
+    this.props.onChange(this.props.createSegmentFromFilters(completedFilters))
   }
+
   render() {
-    const { children, attributeDefs, ...rest } = this.props
+    const { children, ...rest } = this.props
     const { config } = rest
     const { activeFilters } = this.state
 
@@ -170,7 +164,7 @@ class Filters extends React.Component {
           <FilterItem
             key={id}
             {...filter}
-            filterConfig={this.findFilterById(filter)}
+            filterConfig={this.findFilterById(filter.id)}
             onToggleFilterActive={() => this.toggleFilterActive(id)}
             onRemove={() => this.removeFilter(id)}
             onFilterChange={(values, operator) =>
