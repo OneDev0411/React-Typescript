@@ -12,7 +12,7 @@ const UserAvatar = ({
   name,
   image,
   state,
-  color,
+  color = '#D4D4D4',
   style,
   size = 50,
   borderColor = '#fff',

@@ -157,6 +157,7 @@ class TeamAgents extends React.Component {
                           name={user.display_name}
                           image={user.profile_image_url}
                           size={32}
+                          color="#D4D4D4"
                           showStateIndicator={false}
                         />
                       </div>
