@@ -51,8 +51,9 @@ class Builder extends React.Component {
     const components = this.editor.DomComponents
 
     this.editor.on('component:selected', selected => {
-      if (!selected.view.enableEditing)
+      if (!selected.view.enableEditing) {
         return
+      }
 
       selected.view.enableEditing(selected.view.el)
     })
@@ -65,13 +66,11 @@ class Builder extends React.Component {
 
     const defaults = image.model.prototype.defaults
 
-    const updated = image.model.extend(
-      {
-        defaults: Object.assign({}, defaults, {
-          resizable: false
-        })
-      }
-    )
+    const updated = image.model.extend({
+      defaults: Object.assign({}, defaults, {
+        resizable: false
+      })
+    })
 
     components.addType('image', {
       model: updated,
@@ -115,22 +114,22 @@ class Builder extends React.Component {
 
   lockIn = () => {
     const updateAll = model => {
-      const editable = model && model.view && model.view.$el.attr('rechat-editable')
+      const editable =
+        model && model.view && model.view.$el.attr('rechat-editable')
 
-      if (!editable)
+      if (!editable) {
         model.set({
           editable: false,
           selectable: false,
           hoverable: false
         })
+      }
 
       model.get('components').each(model => updateAll(model))
     }
 
     updateAll(this.editor.DomComponents.getWrapper())
   }
-
-
 
   onSave = () => {
     const css = this.editor.getCss()
@@ -161,7 +160,9 @@ class Builder extends React.Component {
 
   handleSelectTemplate = template => {
     this.selectedTemplate = template
+
     const components = this.editor.DomComponents
+
     components.clear()
     this.editor.setStyle('')
     this.editor.setComponents(template.template)
