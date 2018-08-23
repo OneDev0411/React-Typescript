@@ -52,7 +52,8 @@ class Search extends React.Component {
       disableOnSearch,
       showLoadingOnSearch,
       defaultValue = '',
-      showClearSearch
+      showClearSearch,
+      inputRef
     } = this.props
 
     return (
@@ -70,6 +71,7 @@ class Search extends React.Component {
           value={this.state.searchValue}
           placeholder={placeholder}
           onChange={this.handleChange}
+          innerRef={inputRef}
           readOnly={disableOnSearch && isSearching}
         />
 

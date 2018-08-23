@@ -18,6 +18,7 @@ import { sendContactsEmail } from '../../../../../../models/email-compose/send-c
 import { getTemplateScreenshot } from '../../../../../../models/instant-marketing'
 
 import { confirmation } from '../../../../../../store_actions/confirmation'
+import ActionButton from 'components/Button/ActionButton'
 
 class ShareListing extends React.Component {
   state = {
@@ -31,7 +32,7 @@ class ShareListing extends React.Component {
   }
 
   get Recipients() {
-    return this.props.selectedContacts
+    return this.props.selectedRows
       .map(id => {
         const contact = selectContact(this.props.contacts, id)
 
@@ -150,14 +151,13 @@ class ShareListing extends React.Component {
 
     return (
       <Fragment>
-        <div className="list--secondary-button">
-          <button
-            className="button c-button--shadow"
-            onClick={this.toggleListingModal}
-          >
-            Marketing Center
-          </button>
-        </div>
+        <ActionButton
+          onClick={this.toggleListingModal}
+          style={{ padding: '0.70em 1.5em' }}
+          inverse
+        >
+          Marketing Center
+        </ActionButton>
 
         <SearchListingDrawer
           isOpen={this.state.isListingsModalOpen}

@@ -13,6 +13,7 @@ import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
 import ChangeStageContacts from '../Actions/ChangeStageContacts'
+import ShareListing from '../Actions/ShareListing'
 
 import TagsOverlay from '../../components/TagsOverlay'
 
@@ -135,6 +136,10 @@ class ContactsList extends React.Component {
           resetSelectedRows={this.props.resetSelectedRows}
         />
       )
+    },
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: ({ selectedRows }) => <ShareListing selectedRows={selectedRows} />
     }
   ]
 
