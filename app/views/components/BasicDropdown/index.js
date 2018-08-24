@@ -3,10 +3,10 @@ import Downshift from 'downshift'
 
 import Card from '../Card'
 import { Item } from './Item'
-import { Button, Icon } from './styled'
+import DropButton from '../Button/DropButton'
 
 export const BasicDropdown = ({
-  buttonStyle = {},
+  buttonSize,
   disabled,
   items,
   style,
@@ -24,33 +24,15 @@ export const BasicDropdown = ({
     defaultSelectedItem={defaultSelectedItem}
     render={downshift => (
       <div style={{ position: 'relative', ...style }}>
-        <Button
+        <DropButton
           {...downshift.getButtonProps({
             disabled,
-            style: {
-              width: '100%',
-              height: '32px',
-              pointerEvents: disabled ? 'none' : 'initial',
-              ...buttonStyle,
-              backgroundColor: downshift.isOpen
-                ? '#f8fafb'
-                : buttonStyle.backgroundColor || '#fff'
-            },
-            fullWidth
+            isBlock: true,
+            size: buttonSize,
+            isOpen: downshift.isOpen,
+            text: downshift.selectedItem && downshift.selectedItem.label
           })}
-        >
-          {downshift.selectedItem && downshift.selectedItem.label}
-          <Icon
-            isOpen={downshift.isOpen}
-            style={{
-              width: '20px',
-              height: '20px',
-              fill: '#000',
-              marginTop: '3px',
-              marginLeft: '8px'
-            }}
-          />
-        </Button>
+        />
         {downshift.isOpen && (
           <Card
             depth={3}
@@ -59,7 +41,7 @@ export const BasicDropdown = ({
               minWidth: fullWidth ? '100%' : 'auto',
               position: 'absolute',
               left: 0,
-              top: '105%',
+              top: 'calc(100% + 8px)',
               zIndex: 1,
               overflowY: 'auto'
             }}
