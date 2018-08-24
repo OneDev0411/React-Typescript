@@ -15,10 +15,15 @@ export default ({ exportIds, disabled, filters }) => {
 
   return (
     <OverlayTrigger
-      placement="bottom"
+      placement="top"
       overlay={<Tooltip id="tooltip">Export contacts to a CSV file</Tooltip>}
     >
-      <LinkButton appearance="outline" disabled={disabled} to={url}>
+      <LinkButton
+        appearance="outline"
+        disabled={disabled}
+        size="small"
+        to={url}
+      >
         Export to CSV
       </LinkButton>
     </OverlayTrigger>

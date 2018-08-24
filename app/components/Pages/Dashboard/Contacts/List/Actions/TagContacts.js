@@ -16,7 +16,11 @@ export default class TagContacts extends React.Component {
 
     return (
       <Fragment>
-        <ActionButton appearance="outline" onClick={this.openOverLay}>
+        <ActionButton
+          appearance="outline"
+          onClick={this.openOverLay}
+          size="small"
+        >
           Tag
         </ActionButton>
 
