@@ -75,7 +75,6 @@ export const ButtonAppearances = {
 
     ${isNotDisableState}hover, ${isNotDisableState}focus {
       color: ${blue.A200};
-      font-weight: 700;
       text-decoration: none;
     }
   `,
