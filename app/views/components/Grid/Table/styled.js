@@ -31,7 +31,7 @@ export const Row = styled.div`
 
 export const BodyRow = Row.extend`
   display: flex;
-  height: 64px;
+  min-height: 64px;
   align-items: center;
   padding: 12px 0;
   border-top: ${border};
