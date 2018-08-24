@@ -35,6 +35,17 @@
     }
   }
 
+  &.error {
+    .tooltip-inner {
+      background-color: #fd3a57;
+      color: #fff;
+    }
+
+    .tooltip-arrow {
+      border-right-color: #fd3a57;
+    }
+  }
+
 
   &.is-customized {
     .tooltip-arrow {
