@@ -1,14 +1,14 @@
 import React from 'react'
-import nunjucks from 'nunjucks'
 
 import { getTemplates } from '../../../../models/instant-marketing/get-templates'
 
-import { Container, TemplateImage, Title } from './styled'
+import { Container, TemplateImage } from './styled'
 import Loader from '../../../../components/Partials/Loading'
 
 export default class Templates extends React.Component {
   state = {
     isLoading: true,
+    selectedTemplate: null,
     templates: []
   }
 
@@ -20,19 +20,13 @@ export default class Templates extends React.Component {
     try {
       const templates = await getTemplates()
 
-      const compiledTemplates = templates.map(item => ({
-        ...item,
-        template: nunjucks.renderString(item.template, {
-          ...this.props.templateData
-        })
-      }))
-
       this.setState({
-        templates: compiledTemplates
+        templates,
+        selectedTemplate: templates.length > 0 ? templates[0].id : null
       })
 
-      if (compiledTemplates.length > 0) {
-        this.props.onTemplateSelect(compiledTemplates[0])
+      if (templates.length > 0) {
+        this.props.onTemplateSelect(templates[0])
       }
     } catch (e) {
       console.log(e)
@@ -43,11 +37,17 @@ export default class Templates extends React.Component {
     }
   }
 
+  handleSelectTemplate = template => {
+    this.setState({
+      selectedTemplate: template.id
+    })
+
+    this.props.onTemplateSelect(template)
+  }
+
   render() {
     return (
       <Container>
-        <Title>Page Templates</Title>
-
         {this.state.isLoading && <Loader />}
 
         {this.state.templates.map(template => (
@@ -55,8 +55,8 @@ export default class Templates extends React.Component {
             key={template.id}
             src={template.thumbnail}
             title={template.name}
-            onClick={() => this.props.onTemplateSelect(template)}
-            alt=""
+            isSelected={this.state.selectedTemplate === template.id}
+            onClick={() => this.handleSelectTemplate(template)}
           />
         ))}
       </Container>

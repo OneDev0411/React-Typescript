@@ -20,7 +20,7 @@ class EmailCompose extends React.Component {
     }
 
     this.formObject = {
-      from: this.props.user.email,
+      from: `${this.props.user.display_name} <${this.props.user.email}>`,
       recipients: this.props.recipients || []
     }
 
@@ -58,11 +58,17 @@ class EmailCompose extends React.Component {
         closeDrawerOnBackdropClick={false}
         showCancel={false}
         showReset={false}
-        submitButtonLabel="Send email"
+        submitButtonLabel="Send"
         submittingButtonLabel="Sending ..."
         title="New Email"
         render={() => (
           <Fragment>
+            <Field
+              placeholder="To"
+              name="recipients"
+              component={MultipleContactsSelect}
+            />
+
             <Field
               placeholder="From"
               name="from"
@@ -71,12 +77,6 @@ class EmailCompose extends React.Component {
             />
 
             <Field placeholder="Subject" name="subject" component={TextInput} />
-
-            <Field
-              placeholder="BCC"
-              name="recipients"
-              component={MultipleContactsSelect}
-            />
 
             <EmailBody>
               {this.props.html === null && <Loading />}

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   position: fixed;
-  display: flex;
+  display: block;
   left: 0;
   top: 0;
   right: 0;
@@ -11,6 +11,31 @@ export const Container = styled.div`
   background-color: #fff;
 `
 export const TemplatesContainer = styled.div`
-  width: 300px;
-  border-right: 1px solid #ccc;
+  width: 320px;
+  border-right: 1px solid #d4d4d4;
+  background-color: #f2f2f2;
+`
+
+export const BuilderContainer = styled.div`
+  display: flex;
+  background: red;
+
+  #grapesjs-canvas {
+    height: 90vh !important;
+  }
+`
+
+export const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 10vh;
+  border-bottom: 1px solid #d4d4d4;
+  padding: 0 20px;
+
+  h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0 !important;
+  }
 `

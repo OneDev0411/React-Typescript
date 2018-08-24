@@ -4,13 +4,21 @@ import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import '../../../../styles/components/modules/template-builder.scss'
 
+import nunjucks from 'nunjucks'
+
 import './AssetManager'
 import config from './config'
 
-import { Container, TemplatesContainer } from './styled'
+import {
+  Container,
+  TemplatesContainer,
+  BuilderContainer,
+  Header
+} from './styled'
 import Templates from '../Templates'
 
 import juice from 'juice'
+import ActionButton from 'components/Button/ActionButton'
 
 class Builder extends React.Component {
   componentDidMount() {
@@ -35,8 +43,6 @@ class Builder extends React.Component {
   }
 
   setup = () => {
-    this.addCloseButton()
-    this.addSaveButton()
     this.lockIn()
     this.disableResize()
     this.singleClickTextEditing()
@@ -74,40 +80,6 @@ class Builder extends React.Component {
       model: updated,
       view: image.view
     })
-  }
-
-  addCloseButton = () => {
-    const command = {
-      id: 'close-builder',
-      run: this.props.onClose
-    }
-
-    const button = {
-      id: 'close-builder',
-      className: 'fa fa-close',
-      command
-    }
-
-    this.editor.Panels.addButton('views', button)
-  }
-
-  addSaveButton = () => {
-    if (!this.props.onSave) {
-      return false
-    }
-
-    const command = {
-      id: 'save',
-      run: this.onSave.bind(this)
-    }
-
-    const button = {
-      id: 'save',
-      className: 'fa fa-save',
-      command
-    }
-
-    this.editor.Panels.addButton('views', button)
   }
 
   lockIn = () => {
@@ -156,7 +128,14 @@ class Builder extends React.Component {
     }
   }
 
-  handleSelectTemplate = template => {
+  handleSelectTemplate = templateItem => {
+    const template = {
+      ...templateItem,
+      template: nunjucks.renderString(templateItem.template, {
+        ...this.props.templateData
+      })
+    }
+
     this.selectedTemplate = template
 
     const components = this.editor.DomComponents
@@ -170,14 +149,33 @@ class Builder extends React.Component {
   render() {
     return (
       <Container className="template-builder">
-        <TemplatesContainer>
-          <Templates
-            templateData={this.props.templateData}
-            onTemplateSelect={this.handleSelectTemplate}
-          />
-        </TemplatesContainer>
+        <Header>
+          <h1>Marketing Center</h1>
 
-        <div id="grapesjs-canvas" />
+          <div>
+            <ActionButton
+              inverse
+              style={{ padding: '0.9em 1.9em' }}
+              onClick={this.props.onClose}
+            >
+              Cancel
+            </ActionButton>
+
+            <ActionButton
+              style={{ padding: '0.9em 1.9em', marginLeft: '8px' }}
+              onClick={this.onSave}
+            >
+              Send
+            </ActionButton>
+          </div>
+        </Header>
+
+        <BuilderContainer>
+          <TemplatesContainer>
+            <Templates onTemplateSelect={this.handleSelectTemplate} />
+          </TemplatesContainer>
+          <div id="grapesjs-canvas" />
+        </BuilderContainer>
       </Container>
     )
   }

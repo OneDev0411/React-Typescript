@@ -84,7 +84,8 @@ class ShareListing extends React.Component {
     } finally {
       this.setState({
         isSendingEmail: false,
-        isComposeEmailOpen: false
+        isComposeEmailOpen: false,
+        isInstantMarketingBuilderOpen: false
       })
     }
   }
@@ -104,12 +105,13 @@ class ShareListing extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  requestCloseEmailDrawer = () =>
+  requestClose = () =>
     this.props.confirmation({
-      message: 'Cancel this email?',
-      cancelLabel: 'No',
-      confirmLabel: 'Yes, Cancel',
-      onConfirm: this.toggleComposeEmail
+      message: 'Don’t want to market?',
+      description: 'By canceling you will lose any changes you have made.',
+      cancelLabel: 'No, don’t cancel',
+      confirmLabel: 'Yes, cancel',
+      onConfirm: this.closeMarketing
     })
 
   onSelectListing = async listing =>
@@ -125,7 +127,7 @@ class ShareListing extends React.Component {
 
     this.setState({
       isComposeEmailOpen: true,
-      isInstantMarketingBuilderOpen: false,
+      isInstantMarketingBuilderOpen: true,
       htmlTemplate: template.result,
       templateScreenshot: null
     })
@@ -145,6 +147,12 @@ class ShareListing extends React.Component {
       templateScreenshot: `<img style="width: calc(100% - 2em); margin: 1em;" src="${imageUrl}" />`
     })
   }
+
+  closeMarketing = () =>
+    this.setState({
+      isInstantMarketingBuilderOpen: false,
+      isComposeEmailOpen: false
+    })
 
   render() {
     const { listing } = this.state
@@ -169,7 +177,7 @@ class ShareListing extends React.Component {
 
         <InstantMarketing
           isOpen={this.state.isInstantMarketingBuilderOpen}
-          onClose={this.toggleInstantMarketingBuilder}
+          onClose={this.requestClose}
           handleSave={this.handleSaveMarketingCard}
           templateData={{ listing, user: this.props.user }}
           assets={listing && listing.gallery_image_urls}
@@ -177,7 +185,7 @@ class ShareListing extends React.Component {
 
         <EmailCompose
           isOpen={this.state.isComposeEmailOpen}
-          onClose={this.requestCloseEmailDrawer}
+          onClose={this.toggleComposeEmail}
           recipients={this.Recipients}
           html={this.state.templateScreenshot}
           onClickSend={this.handleSendEmails}

@@ -6,14 +6,14 @@ export const SearchInputContainer = styled.div`
   i {
     position: absolute;
     left: ${props => props.textLength * 8}px;
-    top: 10px;
+    top: 17px;
     font-size: 10px;
   }
 `
 
 export const SearchInput = styled.input`
   width: 250px;
-  height: 30px;
+  height: 40px;
   border: none;
 
   :focus {
@@ -23,7 +23,7 @@ export const SearchInput = styled.input`
 
 export const SearchResults = styled.div`
   position: absolute;
-  top: 30px;
+  top: 40px;
   left: 0;
   min-width: 300px;
   max-height: 200px;

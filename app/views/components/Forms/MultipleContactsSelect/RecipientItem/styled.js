@@ -1,4 +1,10 @@
 import styled from 'styled-components'
+import IconButton from '../../../Button/IconButton'
+
+export const DeleteButton = IconButton.extend`
+  margin-left: 6px;
+  opacity: 0;
+`
 
 export const Recipient = styled.span`
   position: relative;
@@ -6,30 +12,28 @@ export const Recipient = styled.span`
   align-items: center;
   justify-content: space-between;
   min-width: 90px;
+  height: 40px;
   border: 1px solid #ccc;
-  border-radius: 2px;
+  border-radius: 3px;
   margin: 0 8px 8px 0;
   padding: 5px 6px;
   font-size: 14px;
+  background-color: #f2f2f2;
 
-  ${props =>
-    props.hasMultipleEmails &&
-    `
-    :hover {
-      background-color: #f5f5f5;
-      cursor: pointer;
-    }
-  `};
+  :hover {
+    cursor: ${props => (props.hasMultipleEmails ? 'pointer' : 'auto')};
+    background-color: #fff;
+    border: solid 1px #000;
+  }
+
+  :hover ${DeleteButton} {
+    opacity: 1;
+  }
 `
 
 export const Title = styled.span`
-  font-weight: 500;
-`
-
-export const EmailAddress = styled.span`
-  margin-left: 2px;
-  font-size: 12px;
-  color: #263445;
+  font-size: 16px;
+  font-weight: 400;
 `
 
 export const EmailItem = styled.div`
@@ -44,7 +48,7 @@ export const EmailItem = styled.div`
 
 export const EmailsList = styled.div`
   position: absolute;
-  top: 30px;
+  top: 40px;
   left: 0;
   width: 100%;
   max-height: 150px;

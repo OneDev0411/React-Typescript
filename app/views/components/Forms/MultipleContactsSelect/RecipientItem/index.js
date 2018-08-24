@@ -1,16 +1,16 @@
 import React from 'react'
 import Downshift from 'downshift'
+import Avatar from 'react-avatar'
 
 import CloseIcon from '../../../SvgIcons/Close/CloseIcon'
-import IconButton from '../../../Button/IconButton'
 
 import {
   Recipient,
   Title,
-  EmailAddress,
   EmailsList,
   EmailItem,
-  ArrowIcon
+  ArrowIcon,
+  DeleteButton
 } from './styled'
 
 export default class RecipientItem extends React.Component {
@@ -53,17 +53,20 @@ export default class RecipientItem extends React.Component {
 
     return (
       <Recipient hasMultipleEmails={hasMultipleEmails}>
-        <IconButton
-          size="16px"
-          onClick={this.omitRecipient}
-          style={{ marginRight: '6px' }}
-        >
-          <CloseIcon />
-        </IconButton>
+        <Avatar
+          className="avatar"
+          color="#D4D4D4"
+          round
+          name={recipient.name}
+          src={recipient.avatar}
+          size={25}
+          style={{
+            marginRight: '10px'
+          }}
+        />
 
         <div onClick={this.toggleOpenMenu}>
           <Title>{recipient.name}</Title>
-          <EmailAddress>&#60;{recipient.email}&#62;</EmailAddress>
 
           {hasMultipleEmails && (
             <ArrowIcon
@@ -71,6 +74,10 @@ export default class RecipientItem extends React.Component {
             />
           )}
         </div>
+
+        <DeleteButton size="16px" onClick={this.omitRecipient}>
+          <CloseIcon />
+        </DeleteButton>
 
         <Downshift
           isOpen={this.state.isMenuOpen}

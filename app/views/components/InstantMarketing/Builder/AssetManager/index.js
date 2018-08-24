@@ -11,20 +11,22 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
       const url = this.model.get('src')
 
       const setSrc = () => target.set('src', url)
-      const setBg  = () => {
+      const setBg = () => {
         const old = target.get('style')
         const style = { ...old }
+
         style['background-image'] = `url(${url})`
         target.set('style', style)
       }
 
       const setters = {
         image: setSrc,
-        cell:  setBg,
-        text:  setBg
+        cell: setBg,
+        text: setBg
       }
 
       const type = target.get('type')
+
       setters[type]()
     },
     initialize({ model }) {
@@ -34,7 +36,7 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
       this.$el.html(
         `<img src="${this.model.get(
           'src'
-        )}" style="margin: 16px 5% 0 5%; border-radius: 5px; width: 90%; cursor: pointer;"/>`
+        )}" style="margin: 8px 3% 8px 5%; border-radius: 2px; width: 90%; cursor: pointer;"/>`
       )
 
       return this
