@@ -61,9 +61,7 @@ class FormEdit extends React.Component {
     ])
 
     // set deal
-    this.frame.sendMessage('setDeal', [
-        deal
-    ])
+    this.frame.sendMessage('setDeal', [deal])
 
     // set roles
     this.frame.sendMessage('setRoles', [
@@ -187,7 +185,10 @@ class FormEdit extends React.Component {
       return this.close()
     } catch (err) {
       notify({
-        message: 'We were unable to save your form. Please try saving again',
+        message:
+          err && err.response && err.response.body
+            ? err.response.body.message
+            : 'We were unable to save your form. Please try saving again',
         status: 'error'
       })
     }
