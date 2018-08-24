@@ -15,6 +15,16 @@ const propTypes = {
   disabled: PropTypes.bool,
 
   /**
+   * When true, the button is activated.
+   */
+  isActive: PropTypes.bool,
+
+  /**
+   * When true, the button width is 100%.
+   */
+  isBlock: PropTypes.bool,
+
+  /**
    * DEPRECATED
    * When true, the button appearances should be ghost.
    */
@@ -29,6 +39,8 @@ const propTypes = {
 const defaultProps = {
   appearance: 'primary',
   disabled: false,
+  isActive: false,
+  isBlock: false,
   inverse: false,
   size: 'medium'
 }

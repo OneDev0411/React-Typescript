@@ -1,8 +1,10 @@
 import { css } from 'styled-components'
 
-import { blue } from '../../../utils/colors'
+import { blue, grey } from '../../../utils/colors'
 
 export const buttonBaseStyle = css`
+  width: ${props => (props.isBlock ? '100%' : 'auto')};
+
   cursor: pointer;
   -webkit-appearance: none;
   -webkit-font-smoothing: antialiased;
@@ -50,9 +52,10 @@ export const ButtonAppearances = {
     }
   `,
   outline: css`
-    ${buttonBaseStyle} background-color: transparent;
-    border: 1px solid #000;
+    ${buttonBaseStyle};
     color: #000;
+    border: 1px solid #000;
+    background-color: ${props => (props.isActive ? grey.A100 : 'transparent')};
 
     ${isNotDisableState}hover, ${isNotDisableState}focus {
       color: ${blue.A100};
