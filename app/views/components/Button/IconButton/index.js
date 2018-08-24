@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+import { css } from 'styled-components'
 /*
   This button is extend from ShadowButton.
   It is just a container for svg icons as a button.
@@ -9,13 +11,26 @@ import Button from '../ActionButton'
 import { getIconSize, getIconStatesStyle } from '../helpers'
 
 const propTypes = {
+  /**
+   * Composes the Button component as the base.
+   */
   ...Button.propTypes,
+
+  /**
+   * When true, the button size will be same as icon size.
+   */
+  isFit: PropTypes.bool,
+
+  /**
+   * The size of the button. {small, medium, large}
+   */
   iconSize: Button.propTypes.size
 }
 
 const defaultProps = {
   ...Button.defaultProps,
   appearance: 'icon',
+  isFit: false,
   iconSize: Button.defaultProps.size
 }
 
@@ -34,15 +49,28 @@ const getColor = props => {
   return blue.A100
 }
 
+const checkFit = props => {
+  if (props.isFit) {
+    const size = getIconSize(props.iconSize)
+
+    return css`
+      padding: 0;
+      width: ${size};
+      height: ${size};
+      line-height: ${size};
+    `
+  }
+}
+
 const IconButton = Button.extend`
-  padding: 0;
+  ${props => checkFit(props)};
 
   ${props =>
     props.appearance === 'icon' && props.inverse ? 'border: none;' : ''};
 
   > svg {
-    width: ${props => getIconSize(props.iconSize || props.size)};
-    height: ${props => getIconSize(props.iconSize || props.size)};
+    width: ${props => getIconSize(props.iconSize)};
+    height: ${props => getIconSize(props.iconSize)};
     fill: ${props => getColor(props)};
   }
 
