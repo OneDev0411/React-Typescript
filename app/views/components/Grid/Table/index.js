@@ -110,13 +110,16 @@ class Grid extends React.Component {
 
     return (
       <Container>
-        <ToolbarContainer>
-          <TableSummary {...this.props.summary} />
+        {(Object.keys(this.props.summary).length > 0 ||
+          this.actionablePlugin) && (
+          <ToolbarContainer>
+            <TableSummary {...this.props.summary} />
 
-          <ActionsBar>
-            {this.actionablePlugin && this.actionablePlugin.render()}
-          </ActionsBar>
-        </ToolbarContainer>
+            {this.actionablePlugin && (
+              <ActionsBar>{this.actionablePlugin.render()}</ActionsBar>
+            )}
+          </ToolbarContainer>
+        )}
 
         <BasicTable
           {...this.props}

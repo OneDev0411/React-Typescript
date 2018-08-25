@@ -15,7 +15,7 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin: 0 0 2em 1em;
+  margin-bottom: 2rem;
 `
 
 class Filters extends React.Component {

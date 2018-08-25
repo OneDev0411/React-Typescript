@@ -18,7 +18,6 @@ export const ToolbarContainer = styled.div`
 
 export const ActionsBar = styled.div`
   display: flex;
-  flex-direction: row;
   margin-left: 8px;
 `
 
@@ -30,8 +29,8 @@ export const Row = styled.div`
 `
 
 export const BodyRow = Row.extend`
-  display: flex;
   min-height: 64px;
+  display: flex;
   align-items: center;
   padding: 12px 0;
   border-top: ${border};
