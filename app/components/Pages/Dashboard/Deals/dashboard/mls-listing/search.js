@@ -78,13 +78,25 @@ export default class extends React.Component {
         })
       }
     } catch (err) {
-      this.setState({
-        searching: false,
-        failure: {
-          code: 500,
-          type: 'error'
-        }
-      })
+      if (err.status === 404) {
+        this.setState({
+          searching: false,
+          failure: {
+            type: 'warning',
+            code: err.status,
+            message:
+              err.response && err.response.body && err.response.body.message
+          }
+        })
+      } else {
+        this.setState({
+          searching: false,
+          failure: {
+            code: 500,
+            type: 'error'
+          }
+        })
+      }
     }
   }
 
