@@ -29,10 +29,6 @@ import {
   deleteContacts
 } from '../../../../../store_actions/contacts'
 
-const GridContainer = styled.div`
-  padding: 0 16px;
-`
-
 class ContactsList extends React.Component {
   state = {
     isSideMenuOpen: true,
@@ -212,26 +208,24 @@ class ContactsList extends React.Component {
 
           <ContactFilters onFilterChange={this.handleFilterChange} />
 
-          <GridContainer>
-            <SearchContacts
-              onSearch={this.handleSearch}
-              isSearching={this.state.isFetchingContacts}
-            />
-            <Table
-              data={contacts}
-              listInfo={this.props.listInfo}
-              isFetching={this.state.isFetchingContacts}
-              isFetchingMore={this.state.isFetchingMoreContacts}
-              isRowsUpdating={this.state.isRowsUpdating}
-              onRequestLoadMore={this.handleLoadMore}
-              rowsUpdating={this.rowsUpdating}
-              resetSelectedRows={this.resetSelectedRows}
-              onChangeSelectedRows={this.onChangeSelectedRows}
-              selectedRows={this.state.selectedRows}
-              onRequestDelete={this.handleOnDelete}
-              filters={this.state.filters}
-            />
-          </GridContainer>
+          <SearchContacts
+            onSearch={this.handleSearch}
+            isSearching={this.state.isFetchingContacts}
+          />
+          <Table
+            data={contacts}
+            listInfo={this.props.listInfo}
+            isFetching={this.state.isFetchingContacts}
+            isFetchingMore={this.state.isFetchingMoreContacts}
+            isRowsUpdating={this.state.isRowsUpdating}
+            onRequestLoadMore={this.handleLoadMore}
+            rowsUpdating={this.rowsUpdating}
+            resetSelectedRows={this.resetSelectedRows}
+            onChangeSelectedRows={this.onChangeSelectedRows}
+            selectedRows={this.state.selectedRows}
+            onRequestDelete={this.handleOnDelete}
+            filters={this.state.filters}
+          />
         </PageContent>
       </PageContainer>
     )
