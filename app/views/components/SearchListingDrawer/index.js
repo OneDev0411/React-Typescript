@@ -9,16 +9,11 @@ import SearchDrawer from '../SearchDrawer'
 import ListingItem from './ListingItem'
 
 class SearchListingDrawer extends React.Component {
-  constructor(props) {
-    super(props)
-    this.handleSelectListing = this.handleSelectListing.bind(this)
-  }
-
   state = {
     isWorking: false
   }
 
-  async handleSelectListing(listing) {
+  handleSelectListing = async listing => {
     const { onSelectListing, compact } = this.props
 
     if (compact !== false) {
