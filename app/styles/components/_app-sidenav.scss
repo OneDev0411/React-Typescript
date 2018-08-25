@@ -58,6 +58,7 @@ $item-height: 56px;
 
 .c-app-sidenav__item__title,
 .c-app-sidenav__item__title--button {
+  position: relative;
   color: #000;
   font-size: 16px;
   line-height: $item-height;

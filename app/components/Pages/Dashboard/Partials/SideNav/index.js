@@ -14,6 +14,7 @@ import Inbox from '../../Chatroom/Shared/instant-trigger'
 import DealsNotifications from '../../Deals/components/SideNavBadge'
 import { selectNotificationNewCount } from '../../../../../reducers/notifications'
 
+import Badge from '../../../../../views/components/Badge'
 import IconButton from '../../../../../views/components/Button/IconButton'
 import Link from '../../../../../views/components/Button/LinkButton'
 import DealsIcon from '../../../../../views/components/SvgIcons/Deals/IconDeal'
@@ -154,9 +155,9 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
                 className="c-app-sidenav__item__title"
               >
                 <DealsIcon />
+                <DealsNotifications />
               </Link>
             </SideNavTooltip>
-            <DealsNotifications />
           </SideNavItem>
         )}
 
@@ -182,9 +183,15 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
             >
               <NotificationsIcon />
               {appNotifications > 0 && (
-                <span className="c-app-sidenav__notification-badge">
+                <Badge
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 'calc(100% - 12px)'
+                  }}
+                >
                   {appNotifications}
-                </span>
+                </Badge>
               )}
             </Link>
           </SideNavTooltip>

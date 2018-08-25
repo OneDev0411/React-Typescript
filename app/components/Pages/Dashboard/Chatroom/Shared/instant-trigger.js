@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import Flex from 'styled-flex-component'
 
 import { toggleChatbar } from '../../../../../store_actions/chatroom'
 
+import Badge from '../../../../../views/components/Badge'
 import Tooltip from '../../../../../views/components/tooltip'
 import IconButton from '../../../../../views/components/Button/IconButton'
 import ChatIcon from '../../../../../views/components/SvgIcons/Chat/IconChat'
@@ -29,21 +29,27 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
   })
 
   return (
-    <Flex alignCenter>
-      <Tooltip caption="Chat" placement="right">
-        <IconButton
-          size="large"
-          iconSize="large"
-          className="c-app-sidenav__item__title--button"
-          onClick={() => openChatbar(toggleChatbar)}
-        >
-          <ChatIcon />
-        </IconButton>
-      </Tooltip>
-      {counter > 0 && (
-        <span className="c-app-sidenav__notification-badge">{counter}</span>
-      )}
-    </Flex>
+    <Tooltip caption="Chat" placement="right">
+      <IconButton
+        size="large"
+        iconSize="large"
+        className="c-app-sidenav__item__title--button"
+        onClick={() => openChatbar(toggleChatbar)}
+      >
+        <ChatIcon />
+        {counter > 0 && (
+          <Badge
+            style={{
+              position: 'absolute',
+              top: '4px',
+              left: 'calc(100% - 12px)'
+            }}
+          >
+            {counter > 99 ? '99+' : counter}
+          </Badge>
+        )}
+      </IconButton>
+    </Tooltip>
   )
 }
 export default connect(
