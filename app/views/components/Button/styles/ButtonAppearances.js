@@ -78,5 +78,8 @@ export const ButtonAppearances = {
       text-decoration: none;
     }
   `,
-  icon: buttonBaseStyle
+  icon: css`
+    ${buttonBaseStyle};
+    background-color: transparent;
+  `
 }
