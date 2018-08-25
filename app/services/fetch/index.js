@@ -3,34 +3,34 @@ import SuperAgent from 'superagent'
 import store from '../../stores'
 import config from '../../../config/public'
 import { getActiveTeamId } from '../../utils/user-teams'
-import decodeStream from './middlewares/decode-stream'
+
+import herokuFix from './middlewares/heroku-fix'
 
 export default class Fetch {
   constructor(options) {
     const isServerSide = typeof window === 'undefined'
-    const isTestEnv = process.env.NODE_ENV === 'test'
     const isProductionEnv = process.env.NODE_ENV === 'production'
 
     this.options = Object.assign(
       {
-        stream: false
+        proxy: false,
+        progress: null
       },
       options
     )
 
     this._middlewares = {}
-    this._autoLogin = true
     this._isServerSide = isServerSide
-    this._baseUrl = isServerSide || isTestEnv ? config.app.url : ''
-    this._proxyUrl = `${this._baseUrl}/api/proxifier`
+    this._appUrl = isServerSide ? config.app.url : ''
+    this._proxyUrl = `${this._appUrl}/api/proxifier`
     this._isProductionEnv = isProductionEnv
     this._startTime = null
   }
 
   _create(method, endpoint) {
-    const state = store.getState()
-    const { user } = state.data
+    const { user } = store.getState()
     const brandId = user ? getActiveTeamId(user) : null
+    const useProxy = this.options.proxy || this._isServerSide
 
     this._isLoggedIn = user && user.access_token !== undefined
 
@@ -40,15 +40,18 @@ export default class Fetch {
 
     this._startTime = Date.now()
 
-    const agent = SuperAgent.post(
-      `${this._proxyUrl}/${this.getEndpointKey(endpoint)}`
-    )
-      .set('X-Method', method)
-      .set('X-Endpoint', endpoint)
-      .set('X-Stream', this.options.stream)
+    let agent
+
+    if (useProxy) {
+      agent = SuperAgent.post(this._proxyUrl)
+        .set('X-Method', method)
+        .set('X-Endpoint', endpoint)
+    } else {
+      agent = SuperAgent[method](`${config.api_url}${endpoint}`)
+    }
 
     // auto append access-token
-    if (this._autoLogin && this._isLoggedIn) {
+    if (this._isLoggedIn) {
       agent.set('Authorization', `Bearer ${user.access_token}`)
     }
 
@@ -57,9 +60,16 @@ export default class Fetch {
     }
 
     // register events
-    agent.on('response', response => this.onResponse(response))
+    agent.on('response', response => {
+      herokuFix(response)
+
+      this.onResponse(response)
+    })
 
     agent.on('error', error => {
+      console.log(error.response)
+      console.log('[ Request Error ]', error)
+
       const errorCode = error.response && ~~error.response.statusCode
 
       // create error log
@@ -69,6 +79,10 @@ export default class Fetch {
         this.handle401Error(error)
       }
     })
+
+    if (typeof this.options.progress === 'function') {
+      agent.on('progress', this.options.progress)
+    }
 
     return agent
   }
@@ -88,13 +102,6 @@ export default class Fetch {
     if (!this._isServerSide && this._isLoggedIn && !isUpgradeToAgentRequest) {
       window.location.href = '/signout'
     }
-  }
-
-  getEndpointKey(url) {
-    return url
-      .split(/[?#]/)[0] // remove query string
-      .replace('/', '') // change first slash to null
-      .replace(/(?!^)\//g, '-') // change the rest slashes to dash
   }
 
   get(endpoint) {
@@ -118,14 +125,10 @@ export default class Fetch {
   }
 
   upload(endpoint, method = 'post') {
-    this._proxyUrl += '/upload'
-
     return this._create(method, endpoint)
   }
 
   onResponse(response) {
-    response = decodeStream(response, this.options)
-
     return response
   }
 

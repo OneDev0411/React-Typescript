@@ -47,6 +47,10 @@ class Grid extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.selectablePlugin && this.selectablePlugin.setData(this.props.data)
+  }
+
   componentWillReceiveProps({ data }) {
     this.selectablePlugin && this.selectablePlugin.setData(data)
   }

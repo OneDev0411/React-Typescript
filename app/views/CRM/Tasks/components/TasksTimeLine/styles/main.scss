@@ -21,6 +21,9 @@
   font-size: 1.6rem;
   font-weight: normal;
   color: #1e364b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .c-tasks-timeline__item__detail {

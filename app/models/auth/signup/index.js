@@ -13,14 +13,16 @@ const signupShadow = async email => {
   }
 
   try {
-    const response = await new Fetch()
+    const response = await new Fetch({ proxy: true })
       .post('/users')
       .set({ 'x-auth-mode': 'client_id' })
       .send(user)
 
     const { type, email_confirmed } = response.body.data
+
     if (type === 'user_reference' && !email_confirmed) {
       const error = { http: 202 }
+
       throw error
     }
 

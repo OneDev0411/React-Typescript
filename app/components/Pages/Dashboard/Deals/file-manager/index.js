@@ -34,6 +34,12 @@ export class FileManager extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.deal) {
+      browserHistory.push('/dashboard/deals')
+    }
+  }
+
   render() {
     const { deal, user } = this.props
     const traningAccount = isTrainingAccount(user)

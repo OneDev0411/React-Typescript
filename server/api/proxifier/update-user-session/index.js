@@ -1,4 +1,4 @@
-const updateSession = (ctx, user) => {
+export default function(ctx, user) {
   const { access_token, refresh_token, data } = user
 
   if (access_token) {
@@ -23,5 +23,3 @@ const updateSession = (ctx, user) => {
     }
   }
 }
-
-export default updateSession

@@ -77,7 +77,7 @@ class ContactsList extends React.Component {
       )
     },
     {
-      id: 'td-delete',
+      id: 'delete-contact',
       header: '',
       accessor: '',
       className: 'td--dropdown-container',
@@ -85,7 +85,7 @@ class ContactsList extends React.Component {
       render: ({ rowData: contact }) => (
         <DropDown
           contactId={contact.id}
-          handleOnDelete={this.props.handleOnDelete}
+          handleOnDelete={this.props.onRequestDelete}
         />
       )
     }
@@ -120,12 +120,20 @@ class ContactsList extends React.Component {
     },
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => <TagContacts selectedRows={selectedRows} />
+      render: ({ selectedRows }) => (
+        <TagContacts
+          selectedRows={selectedRows}
+          resetSelectedRows={this.props.resetSelectedRows}
+        />
+      )
     },
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows }) => (
-        <ChangeStageContacts selectedRows={selectedRows} />
+        <ChangeStageContacts
+          selectedRows={selectedRows}
+          resetSelectedRows={this.props.resetSelectedRows}
+        />
       )
     }
   ]
@@ -137,6 +145,16 @@ class ContactsList extends React.Component {
           opacity: 0.5,
           ponterEvents: 'none'
         }
+      }
+    }
+
+    return {}
+  }
+
+  getGridTdProps = (colIndex, { column, rowData: row }) => {
+    if (['plugin--selectable', 'delete-contact'].includes(column.id)) {
+      return {
+        onClick: e => e.stopPropagation()
       }
     }
 
@@ -181,24 +199,10 @@ class ContactsList extends React.Component {
           columns={this.columns}
           LoadingState={LoadingComponent}
           getTrProps={this.getGridTrProps}
+          getTdProps={this.getGridTdProps}
           EmptyState={() => (
             <NoSearchResults description="Try typing another name, email, phone or tag." />
           )}
-          // TdComponent={TrComponent}
-          // getTrProps={(state, { original: { id } }) => {
-          //   if (this.props.deleting && this.props.selectedRows.includes(id)) {
-          //     return {
-          //       style: {
-          //         opacity: 0.5,
-          //         ponterEvents: 'none'
-          //       }
-          //     }
-          //   }
-
-          //   return {
-          //     onClick: () => openContact(id)
-          //   }
-          // }}
         />
 
         <TagsOverlay

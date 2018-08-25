@@ -380,12 +380,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
+      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: "No, don't cancel",
+      cancelLabel: 'No, don\'t cancel',
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -823,7 +823,6 @@ class CreateDeal extends React.Component {
           {!deal && (
             <Fragment>
               <DealType
-                isNewDeal={!deal}
                 isDraft={isDraft}
                 onChangeDealType={this.changeDealType}
               />
@@ -995,7 +994,7 @@ class CreateDeal extends React.Component {
               onClick={this.goLive}
               disabled={!canSaveDeal}
             >
-              {saving ? 'Saving ...' : 'Go Live'}
+              {saving ? 'Saving ...' : 'Make visible to admin'}
             </Button>
           )}
 

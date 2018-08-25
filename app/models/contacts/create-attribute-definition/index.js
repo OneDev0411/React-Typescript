@@ -8,7 +8,7 @@ import Fetch from '../../../services/fetch'
 
 export async function createAttributeDefinition(attributeDefinition) {
   try {
-    const response = await new Fetch({ stream: true })
+    const response = await new Fetch()
       .post('/contacts/attribute_defs')
       .send(attributeDefinition)
 
