@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import BaseButton from '../ActionButton'
 import TextIconButton from '../../Button/TextIconButton'
 import IconDrop from '../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
@@ -9,21 +8,16 @@ const propTypes = {
   /**
    * Composes the TextIconButton component as the base.
    */
-  ...BaseButton.propTypes,
+  ...TextIconButton.propTypes,
 
   /**
    * A flag for checking active state
    */
-  isOpen: PropTypes.bool.isRequired,
-
-  /**
-   * Button text
-   */
-  text: PropTypes.string.isRequired
+  isOpen: PropTypes.bool.isRequired
 }
 
 const defaultProps = {
-  ...BaseButton.defaultProps,
+  ...TextIconButton.defaultProps,
   appearance: 'outline'
 }
 

@@ -6,7 +6,7 @@ import Button from '../ActionButton'
 import { isOutline, getIconSize, getStatesStyle, iconAims } from './helpers'
 
 class TextIconButton extends PureComponent {
-  propTypes = {
+  static propTypes = {
     /**
      * Composes the Button component as the base.
      */

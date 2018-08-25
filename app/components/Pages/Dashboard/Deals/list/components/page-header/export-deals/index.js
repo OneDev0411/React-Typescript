@@ -3,14 +3,9 @@ import moment from 'moment'
 import { getActiveTeamId } from '../../../../../../../../utils/user-teams'
 
 import XlsxIcon from '../../../../../../../../views/components/SvgIcons/Xlsx/XlsxIcon'
-import Dropdown from '../../../../../../../../views/components/SimpleDropdown/index'
+import { BasicDropdown } from '../../../../../../../../views/components/BasicDropdown'
 
-import {
-  DealsDownloadButton,
-  DropdownItem,
-  DropdownItemSub,
-  Icon
-} from './styled'
+import { DropdownItem, DropdownItemSub } from './styled'
 
 class ExportDeals extends React.Component {
   items = [
@@ -103,24 +98,13 @@ class ExportDeals extends React.Component {
   ]
   render() {
     return (
-      <Dropdown
-        renderToggleButton={isOpen => (
-          <DealsDownloadButton>
-            <XlsxIcon />
-            Download Report
-            <Icon
-              isOpen={isOpen}
-              style={{ fill: '#506379', width: '24px', height: '24px' }}
-            />
-          </DealsDownloadButton>
-        )}
+      <BasicDropdown
+        style={{ marginRight: '1rem' }}
         items={this.items}
-        renderItem={(item, closeMenu) => (
-          <DropdownItem
-            href={item.url}
-            key={item.title}
-            onClick={() => closeMenu()}
-          >
+        buttonIcon={XlsxIcon}
+        buttonText="Download Reoprt"
+        itemRenderer={({ item, ...rest }) => (
+          <DropdownItem href={item.url} key={item.title} {...rest}>
             {item.title} <DropdownItemSub>{item.subTitle}</DropdownItemSub>
           </DropdownItem>
         )}

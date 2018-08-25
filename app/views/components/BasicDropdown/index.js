@@ -7,12 +7,14 @@ import DropButton from '../Button/DropButton'
 
 export const BasicDropdown = ({
   buttonSize,
+  buttonText,
   disabled,
   items,
   style,
   onSelect,
   onChange,
   fullWidth,
+  buttonIcon,
   itemToString = item => item.label,
   itemRenderer,
   defaultSelectedItem
@@ -27,10 +29,13 @@ export const BasicDropdown = ({
         <DropButton
           {...downshift.getButtonProps({
             disabled,
+            iconLeft: buttonIcon,
             isBlock: true,
-            size: buttonSize,
             isOpen: downshift.isOpen,
-            text: downshift.selectedItem && downshift.selectedItem.label
+            size: buttonSize,
+            text:
+              buttonText ||
+              (downshift.selectedItem && downshift.selectedItem.label)
           })}
         />
         {downshift.isOpen && (
@@ -53,7 +58,9 @@ export const BasicDropdown = ({
                 ...downshift.getItemProps({
                   item,
                   isActive: downshift.highlightedIndex === index,
-                  isSelected: downshift.selectedItem.label === item.label
+                  isSelected:
+                    downshift.selectedItem &&
+                    downshift.selectedItem.label === item.label
                 })
               }
 
