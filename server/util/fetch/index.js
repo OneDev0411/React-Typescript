@@ -1,5 +1,4 @@
 import colors from 'colors'
-import request from 'request'
 import superagent from 'superagent'
 import _ from 'underscore'
 import config from '../../../config/private'
@@ -108,24 +107,7 @@ const requestMiddleware = async (ctx, next) => {
     }
   }
 
-  /**
-   * stream file
-   */
-  ctx.stream = async url => {
-    const download = request({
-      url: `${api_url}${url}`,
-      headers: {
-        authorization: `Bearer ${access_token}`
-      }
-    })
-
-    // log
-    console.log(`[ + ] Stream ${url}`)
-
-    return new Promise(resolve => resolve(download))
-  }
-
-  await next()
+  return next()
 }
 
 export default function() {

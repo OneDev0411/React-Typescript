@@ -42,7 +42,7 @@ export default class Message {
   static postMessage(roomId, message, qid) {
     window.socket.emit('Message.Send', roomId, message, (err, message) => {
       if (err) {
-        return reject(err)
+        return false
       }
 
       Message.create(roomId, message, qid)

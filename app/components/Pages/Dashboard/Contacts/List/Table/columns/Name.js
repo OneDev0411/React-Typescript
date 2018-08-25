@@ -24,6 +24,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
     <Flex nowrap>
       <Avatar
         className="avatar"
+        color="#D4D4D4"
         round
         name={contact.display_name}
         src={avatar}

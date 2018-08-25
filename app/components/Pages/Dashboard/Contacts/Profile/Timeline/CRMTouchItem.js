@@ -20,13 +20,14 @@ export class CRMTouchItem extends React.Component {
           <Icon style={{ width: 32, height: 32, fill: '#8da2b5' }} />
         </div>
 
-        <div className="info">
+        <div style={{ width: '100%' }}>
           <div
             className="desc"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              marginBottom: '.5em'
+              marginBottom: '.5em',
+              maxWidth: 'calc(100% - 48px)'
             }}
           >
             <span
@@ -45,12 +46,13 @@ export class CRMTouchItem extends React.Component {
               <span
                 style={{
                   lineHeight: 1,
-                  fontSize: '1.5rem'
+                  fontSize: '1.5rem',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
                 }}
               >
-                {touch.description.length > 33
-                  ? `${touch.description.slice(0, 33)}...`
-                  : touch.description}
+                {touch.description}
               </span>
             )}
           </div>

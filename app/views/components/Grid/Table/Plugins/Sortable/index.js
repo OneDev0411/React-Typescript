@@ -37,7 +37,11 @@ export class SortablePlugin {
       return accessor
     }
 
-    return accessor && accessor.toString().toLowerCase()
+    if (!accessor) {
+      return -Infinity
+    }
+
+    return accessor.toString().toLowerCase()
   }
 
   changeSort = cell => {

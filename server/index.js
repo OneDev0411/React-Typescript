@@ -11,12 +11,11 @@ import blocked from 'blocked-at'
 
 import config from '../config/private'
 import render from './util/render'
-import request from './util/request'
 import pagesMiddleware from './util/pages'
+import fetch from './util/fetch'
 import universalMiddleware from './util/universal'
 import appConfig from '../config/webpack'
 import webpackConfig from '../webpack.config.babel'
-// import AppStore from '../app/stores/AppStore'
 
 const app = new Koa()
 const __DEV__ = process.env.NODE_ENV === 'development'
@@ -83,23 +82,18 @@ app.use(
 )
 
 /**
- * middleware for time and initial appStore
+ * middleware for global variables
  */
-
 app.use(async (ctx, next) => {
-  ctx.locals = {
-    ...ctx.locals,
+  ctx.state.variables = {
     intercomId: config.intercom.app_id,
-    sentryKey: config.sentry.api_url,
-    appStore: { data: {} },
-    time: new Date().getTime()
+    sentryKey: config.sentry.api_url
   }
 
-  await next()
+  return next()
 })
 
-// add request middleware
-app.use(request())
+app.use(fetch())
 
 _.each(require('./api/routes'), route => {
   // eslint-disable-next-line

@@ -14,10 +14,7 @@ export function CRMActivityTimelineItem(props) {
       </div>
 
       <div style={{ overflow: ' hidden' }}>
-        <div
-          className="desc"
-          dangerouslySetInnerHTML={{ __html: attributes.title }}
-        />
+        <div className="desc">{attributes.title}</div>
 
         <div className="time">
           <img

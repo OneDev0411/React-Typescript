@@ -52,6 +52,13 @@ class CommentCreate extends React.Component {
 
     const { comment } = this.state
 
+    // clear message box
+    this.setState({
+      comment: '',
+      rows: 1,
+      isSaving: true
+    })
+
     if (comment) {
       const message = {
         comment,
@@ -60,15 +67,9 @@ class CommentCreate extends React.Component {
       }
 
       // send message
-      Message.postTaskComment(task, message).then(() => this.onCommentSaved())
+      await Message.postTaskComment(task, message)
+      this.onCommentSaved()
     }
-
-    // clear message box
-    this.setState({
-      comment: '',
-      rows: 1,
-      isSaving: true
-    })
 
     try {
       if (attention_requested !== null) {
@@ -77,7 +78,7 @@ class CommentCreate extends React.Component {
         if (deal.is_draft) {
           this.props.confirmation({
             description:
-              'We\'ve captured your Notify Office request. As soon as this deal goes live, we\'ll forward it on to your back office.',
+              "We've captured your Notify Office request. As soon as this deal goes live, we'll forward it on to your back office.",
             confirmLabel: 'Got it. Thanks.',
             hideCancelButton: true
           })

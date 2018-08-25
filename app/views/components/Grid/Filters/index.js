@@ -10,6 +10,7 @@ import { FilterItem } from './Item'
 
 import createFilterCriteria from './helpers/create-filter-criteria'
 import createSegmentFilters from './helpers/create-segment-filters'
+import { selectDefinition } from '../../../../reducers/contacts/attributeDefs'
 
 const Container = styled.div`
   display: flex;
@@ -144,10 +145,22 @@ class Filters extends React.Component {
   /**
    *
    */
-  findFilterById = id => this.props.config.find(filter => filter.id === id)
+  findFilterById = filter => {
+    const { attributeDefs } = this.props
+    const filterConfig = this.props.config.find(
+      tempFilter => tempFilter.id === filter.id
+    )
 
+    if (attributeDefs && filter.attribute_def) {
+      const attribute = selectDefinition(attributeDefs, filter.attribute_def)
+
+      filterConfig.serverLabel = attribute.label
+    }
+
+    return filterConfig
+  }
   render() {
-    const { children, ...rest } = this.props
+    const { children, attributeDefs, ...rest } = this.props
     const { config } = rest
     const { activeFilters } = this.state
 
@@ -157,7 +170,7 @@ class Filters extends React.Component {
           <FilterItem
             key={id}
             {...filter}
-            filterConfig={this.findFilterById(filter.id)}
+            filterConfig={this.findFilterById(filter)}
             onToggleFilterActive={() => this.toggleFilterActive(id)}
             onRemove={() => this.removeFilter(id)}
             onFilterChange={(values, operator) =>

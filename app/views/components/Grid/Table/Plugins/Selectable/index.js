@@ -2,25 +2,11 @@ import React from 'react'
 
 import { CheckBoxButton } from './Checkbox'
 
-const _externalStorageEngine = {}
-const _storageInterface = {
-  selectAllRows: false,
-  selectedRows: {}
-}
-
-const getStorage = (empty = false) => {
-  if (empty) {
-    return Object.assign({}, _storageInterface, {
-      selectAllRows: false,
-      selectedRows: {}
-    })
-  }
-
-  return _storageInterface
-}
+const SESSION_KEY_PREFIX = 'Rechat--Grid--Selectable--'
 
 export function resetGridSelectedItems(key) {
-  _externalStorageEngine[key] = getStorage(true)
+  console.log('[ Grids -> Selectable ] Reset Selected Items')
+  window.sessionStorage[`${SESSION_KEY_PREFIX}${key}`] = ''
 }
 
 export class SelectablePlugin {
@@ -35,10 +21,13 @@ export class SelectablePlugin {
       )
     }
 
-    if (options.persistent) {
-      _externalStorageEngine[this.StorageKey] = getStorage()
-    } else {
-      this.internalStorage = getStorage(true)
+    if (!options.persistent) {
+      this.StorageEngine = null
+    }
+
+    // callback previous selected rows
+    if (options.persistent && this.SelectedRows.length > 0) {
+      this.onChange()
     }
   }
 
@@ -48,37 +37,61 @@ export class SelectablePlugin {
   }
 
   /**
+   * save object
+   * @param {Object} object - data object
+   */
+  set StorageObject(object) {
+    this.StorageEngine = JSON.stringify({
+      ...this.StorageObject,
+      ...object
+    })
+  }
+
+  /**
+   * returns json object of storage
+   */
+  get StorageObject() {
+    return JSON.parse(this.StorageEngine) || {}
+  }
+
+  /**
    * returns whether a row is selected or not
    * @param { UUID } id - the row id
    */
-  isRowSelected = id => this.StorageEngine.selectedRows[id]
+  isRowSelected = id =>
+    this.StorageObject.selectedRows && this.StorageObject.selectedRows[id]
 
   /**
    * checks whether all rows are selected or not
    */
-  isAllRowsSelected = () => this.StorageEngine.selectAllRows === true
+  isAllRowsSelected = () => this.StorageObject.selectAllRows === true
 
   /**
    * returns storage key
    */
   get StorageKey() {
-    return this.options.persistent ? this.options.storageKey : 0
+    return `${SESSION_KEY_PREFIX}${this.options.storageKey}`
   }
 
   /**
    * returns all selected rows
    */
   get SelectedRows() {
-    return Object.keys(this.StorageEngine.selectedRows)
+    return Object.keys(this.StorageObject.selectedRows || {})
   }
 
   /**
    * returns storage engine
    */
   get StorageEngine() {
-    return this.options.persistent
-      ? _externalStorageEngine[this.StorageKey]
-      : this.internalStorage
+    return window.sessionStorage[this.StorageKey] || null
+  }
+
+  /**
+   * store object into storage
+   */
+  set StorageEngine(data) {
+    window.sessionStorage[this.StorageKey] = data
   }
 
   /**
@@ -94,11 +107,15 @@ export class SelectablePlugin {
       return false
     }
 
-    if (this.StorageEngine.selectedRows[id]) {
-      delete this.StorageEngine.selectedRows[id]
+    const { selectedRows = {} } = this.StorageObject
+
+    if (selectedRows[id]) {
+      delete selectedRows[id]
     } else {
-      this.StorageEngine.selectedRows[id] = true
+      selectedRows[id] = true
     }
+
+    this.StorageObject = { selectedRows }
 
     this.onChange()
     this.onRequestForceUpdate()
@@ -109,16 +126,18 @@ export class SelectablePlugin {
    */
   toggleSelectAllRows = () => {
     const selectedRows = {}
+    const { selectAllRows = false } = this.StorageObject
 
-    this.StorageEngine.selectAllRows = !this.StorageEngine.selectAllRows
-
-    if (this.StorageEngine.selectAllRows) {
+    if (selectAllRows === false) {
       this.data.forEach(row => {
         selectedRows[row.id] = true
       })
     }
 
-    this.StorageEngine.selectedRows = selectedRows
+    this.StorageObject = {
+      selectAllRows: !selectAllRows,
+      selectedRows
+    }
 
     this.onChange()
   }
