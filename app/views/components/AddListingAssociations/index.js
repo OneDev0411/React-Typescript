@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import AddAssociation from '../AddAssociation'
 // eslint-disable-next-line
-import SearchListingsModal from '../../../components/Pages/Dashboard/Deals/dashboard/mls-listing/search.js'
+import SearchListingsModal from '../SearchListing'
 
 import { normalizeListing } from '../../utils/association-normalizers'
 
