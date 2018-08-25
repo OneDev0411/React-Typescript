@@ -7,30 +7,36 @@ import {
   ListItemImage,
   ListItemAddress,
   ListItemStatus,
+  AddressContainer,
   Status,
   Address
 } from './styled'
 
 export default ({ item, ...rest }) => {
-  const c = item.address_components
+  const address = item.address_components
 
   return (
     <ListItem {...rest}>
-      <ListItemImage
-        alt=""
-        src={item.image || '/static/images/deals/home.svg'}
-      />
+      <AddressContainer>
+        <ListItemImage
+          alt=""
+          src={item.image || '/static/images/deals/home.svg'}
+        />
 
-      <ListItemAddress>
-        <Address style={{ color: '#5b6469', fontWeight: '500' }}>
-          {c.street_number} {c.street_name} {c.street_suffix}
-          {c.unit_number ? ` Unit ${c.unit_number}` : ''}
-        </Address>
+        <ListItemAddress>
+          <Address style={{ color: '#5b6469', fontWeight: '500' }}>
+            {address.street_number} {address.street_name}{' '}
+            {address.street_suffix}
+            {address.unit_number ? ` Unit ${address.unit_number}` : ''}
+          </Address>
 
-        <Address style={{ color: '#a0a0a0' }}>
-          {c.city}, {c.state}, {c.postal_code}, ${item.price}
-        </Address>
-      </ListItemAddress>
+          <Address style={{ color: '#a0a0a0' }}>
+            {address.city}, {address.state}, {address.postal_code}, ${
+              item.price
+            }
+          </Address>
+        </ListItemAddress>
+      </AddressContainer>
 
       <ListItemStatus>
         <Status

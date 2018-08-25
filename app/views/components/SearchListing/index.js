@@ -88,15 +88,13 @@ export default class ListingSearch extends React.Component {
     }
   }
 
-  onSelectListing = item =>
-    this.setState(
-      {
-        listings: null
-      },
-      () => {
-        this.props.onSelectListing(item)
-      }
-    )
+  onSelectListing = item => {
+    this.setState({
+      listings: null
+    })
+
+    this.props.onSelectListing(item)
+  }
 
   render() {
     const { modalTitle, onHide } = this.props

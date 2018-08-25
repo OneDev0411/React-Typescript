@@ -1,8 +1,7 @@
 import styled from 'styled-components'
 
 export const ListingsContainer = styled.div`
-  min-height: 420px;
-  max-height: 420px;
+  height: 420px;
   overflow: auto;
 
   ${props =>
