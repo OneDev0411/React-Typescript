@@ -56,11 +56,7 @@ class AgentTable extends React.Component {
 
     return (
       <PageContainer isTrainingAccount={isTrainingAccount}>
-        <Menu
-          width={160}
-          isSideMenuOpen={isSideMenuOpen}
-          isOpen={isSideMenuOpen}
-        >
+        <Menu isOpen={isSideMenuOpen}>
           <AgentFilters
             activeFilter={params.filter}
             searchCriteria={this.state.searchCriteria}
