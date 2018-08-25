@@ -1,3 +1,8 @@
+export const red = {
+  A100: '#fd3a57',
+  A200: '#f00'
+}
+
 export const blue = {
   A100: '#003bdf',
   A200: '#022ca0'
