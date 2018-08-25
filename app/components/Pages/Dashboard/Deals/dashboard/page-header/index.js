@@ -10,46 +10,42 @@ import ActionButton from '../../../../../../views/components/Button/ActionButton
 
 import InstantMarketing from './instant-marketing'
 
-const Header = ({ deal, showAttachments }) => {
-  const buttonStyle = {
-    marginLeft: '10px',
-    padding: '0.70em 1.5em'
-  }
+const buttonStyle = {
+  marginLeft: '10px',
+  padding: '0.70em 1.5em'
+}
 
-  return (
-    <PageHeader title="Deals" backUrl="/dashboard/deals">
-      <PageHeader.Menu>
-        <DealEmail dealEmail={deal.email} />
-        {deal.deal_type === 'Selling' && (
-          <ActionButton
-            style={buttonStyle}
-            onClick={() =>
-              browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)
-            }
-          >
-            Add New Offer
-          </ActionButton>
-        )}
-
+const Header = ({ deal, showAttachments }) => (
+  <PageHeader title="Deals" backUrl="/dashboard/deals">
+    <PageHeader.Menu>
+      <DealEmail dealEmail={deal.email} />
+      {deal.deal_type === 'Selling' && (
         <ActionButton
-          inverse
           style={buttonStyle}
           onClick={() =>
-            browserHistory.push(`/dashboard/deals/${deal.id}/files`)
+            browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)
           }
         >
-          View & Upload Files
+          Add New Offer
         </ActionButton>
+      )}
 
-        <ActionButton inverse style={buttonStyle} onClick={showAttachments}>
-          Get Signatures
-        </ActionButton>
+      <ActionButton
+        inverse
+        style={buttonStyle}
+        onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/files`)}
+      >
+        View & Upload Files
+      </ActionButton>
 
-        <InstantMarketing deal={deal} buttonStyle={buttonStyle} />
-      </PageHeader.Menu>
-    </PageHeader>
-  )
-}
+      <ActionButton inverse style={buttonStyle} onClick={showAttachments}>
+        Get Signatures
+      </ActionButton>
+
+      <InstantMarketing deal={deal} buttonStyle={buttonStyle} />
+    </PageHeader.Menu>
+  </PageHeader>
+)
 
 export default connect(
   null,
