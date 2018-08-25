@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { uppercaseFirstLetter } from '../../../../../utils/helpers'
+
 import {
   getSavedSegments,
   deleteFilterSegment,
@@ -15,14 +17,14 @@ import {
 } from '../../../../../reducers/filter-segments'
 
 import { confirmation } from '../../../../../store_actions/confirmation'
+import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
 
 import {
   Container,
   ListTitle,
   ListItem,
   ListItemName,
-  ListIconContainer,
-  Icon
+  DeleteButton
 } from './styled'
 
 class SegmentsList extends React.Component {
@@ -92,22 +94,33 @@ class SegmentsList extends React.Component {
       <Container>
         <ListTitle>Lists</ListTitle>
 
-        {list.map((item, index) => (
-          <ListItem
-            key={index}
-            isDeleting={isDeleting.includes(item.id)}
-            isSelected={isSelected(item.id)}
-          >
-            <ListItemName
-              onClick={() => !isSelected(item.id) && this.onSelectList(item)}
+        {list.map((item, index) => {
+          const id = item.id
+          let editable = true
+
+          if (item.editable != null) {
+            editable = item.editable
+          }
+
+          return (
+            <ListItem
+              key={index}
+              isDeleting={isDeleting.includes(id)}
+              isSelected={isSelected(id)}
             >
-              {item.name}
-            </ListItemName>
-            <ListIconContainer onClick={() => this.onRequestDelete(item)}>
-              {item.editable !== false && <Icon className="fa fa-times" />}
-            </ListIconContainer>
-          </ListItem>
-        ))}
+              <ListItemName
+                onClick={() => !isSelected(id) && this.onSelectList(item)}
+              >
+                {uppercaseFirstLetter(item.name)}
+              </ListItemName>
+              {editable && (
+                <DeleteButton onClick={() => this.onRequestDelete(item)} isFit>
+                  <IconClose />
+                </DeleteButton>
+              )}
+            </ListItem>
+          )
+        })}
 
         {isFetching && (
           <ListItem>
