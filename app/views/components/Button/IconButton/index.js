@@ -1,12 +1,8 @@
 import PropTypes from 'prop-types'
 import { css } from 'styled-components'
-/*
-  This button is extend from ShadowButton.
-  It is just a container for svg icons as a button.
-  Don't use with any text or another element as sibling.
-*/
 
 import { blue } from '../../../utils/colors'
+
 import Button from '../ActionButton'
 import { getIconSize, getIconStatesStyle } from '../helpers'
 

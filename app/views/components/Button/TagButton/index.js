@@ -1,12 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import Flex from 'styled-flex-component'
 
 import IconButton from '../../Button/IconButton'
 import IconClose from '../../SvgIcons/Close/CloseIcon'
-
-import { buttonBaseStyle } from '../styles/ButtonAppearances'
+import { Box, Button } from './styled'
 
 class TagButton extends React.Component {
   static propTypes = {
@@ -43,48 +40,11 @@ class TagButton extends React.Component {
   render() {
     const { RenderIcon, RenderText, ...rest } = this.props
 
-    const isNotDisableState = '&:not([disabled]):'
-
-    const Button = styled.button`
-      ${buttonBaseStyle};
-
-      padding: 0;
-      margin-left: 8px;
-      color: inherit;
-      background-color: inherit;
-
-      ${isNotDisableState}hover, ${isNotDisableState}focus {
-        color: inherit;
-      }
-    `
-
-    const Box = Flex.extend`
-      height: 40px;
-      font-size: 16px;
-      line-height: 38px;
-      padding: 0 8px 0 ${RenderIcon ? '8px' : '16px'};
-
-      color: #000;
-      background-color: #f2f2f2;
-
-      &[disabled] {
-        opacity: 0.5;
-      }
-
-      ${isNotDisableState}hover, ${isNotDisableState}focus {
-        background-color: #fff;
-        border: 1px solid #000;
-      }
-
-      svg {
-        width: 24px;
-        height: 24px;
-        fill: '#000';
-      }
-    `
-
     return (
-      <Box alignCenter>
+      <Box
+        alignCenter
+        style={{ padding: `0 8px 0 ${RenderIcon ? '8px' : '16px'}` }}
+      >
         <Button
           {...rest}
           onFocus={this.showCloseIcon}

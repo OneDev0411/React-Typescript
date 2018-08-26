@@ -5,7 +5,7 @@ import { ButtonAppearances } from '../styles/ButtonAppearances'
 
 const propTypes = {
   /**
-   * The appearance of the button.  {primary, outilne, icon, link}
+   * The appearance of the button.  {primary, outline, icon, link}
    */
   appearance: PropTypes.oneOf(Object.keys(ButtonAppearances)),
 
