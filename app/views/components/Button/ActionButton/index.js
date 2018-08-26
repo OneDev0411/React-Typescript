@@ -5,7 +5,7 @@ import { ButtonAppearances } from '../styles/ButtonAppearances'
 
 const propTypes = {
   /**
-   * The appearance of the button.  {primary, outilne, icon, link}
+   * The appearance of the button.  {primary, outline, icon, link}
    */
   appearance: PropTypes.oneOf(Object.keys(ButtonAppearances)),
 
@@ -13,6 +13,16 @@ const propTypes = {
    * When true, the button is disabled.
    */
   disabled: PropTypes.bool,
+
+  /**
+   * When true, the button is activated.
+   */
+  isActive: PropTypes.bool,
+
+  /**
+   * When true, the button width is 100%.
+   */
+  isBlock: PropTypes.bool,
 
   /**
    * DEPRECATED
@@ -29,6 +39,8 @@ const propTypes = {
 const defaultProps = {
   appearance: 'primary',
   disabled: false,
+  isActive: false,
+  isBlock: false,
   inverse: false,
   size: 'medium'
 }

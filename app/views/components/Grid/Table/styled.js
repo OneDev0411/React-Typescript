@@ -1,35 +1,39 @@
 import styled from 'styled-components'
 
+const border = '1px solid #d4d4d4'
+
 export const Container = styled.div`
   width: 100%;
-  margin-top: 16px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
 `
 
 export const ToolbarContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 `
 
 export const ActionsBar = styled.div`
   display: flex;
-  flex-direction: row;
   margin-left: 8px;
 `
 
-export const Body = styled.div``
+export const TBody = styled.div``
 
 export const Row = styled.div`
   display: flex;
+  justify-items: center;
 `
 
 export const BodyRow = Row.extend`
+  min-height: 64px;
   display: flex;
-  min-height: 48px;
   align-items: center;
-  border-bottom: 1px solid #dce5eb;
-  padding: 8px 0;
+  padding: 12px 0;
+  border-top: ${border};
 
   ${props =>
     props.hoverStyle &&
@@ -41,6 +45,7 @@ export const BodyRow = Row.extend`
 `
 
 export const Cell = styled.div`
+  align-self: ${props => props.verticalAlign || 'flex-start'};
   text-align: left;
 
   ${props =>
@@ -56,11 +61,4 @@ export const Cell = styled.div`
       ${props.hoverStyle}
     }
   `};
-`
-
-export const BodyCell = Cell.extend`
-  font-size: 14px;
-  font-weight: 400;
-  color: #1d364b;
-  padding: 0 4px;
 `

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import Table from '../../../../../../views/components/Grid/Table'
 
-import DropDown from './columns/Dropdown'
+import Menu from './columns/Menu'
 import TagsString from './columns/Tags'
 import Name from './columns/Name'
 import { LastTouchedCell } from './columns/LastTouched'
@@ -81,9 +81,9 @@ class ContactsList extends React.Component {
       header: '',
       accessor: '',
       className: 'td--dropdown-container',
-      width: '30px',
+      width: '24px',
       render: ({ rowData: contact }) => (
-        <DropDown
+        <Menu
           contactId={contact.id}
           handleOnDelete={this.props.onRequestDelete}
         />
@@ -189,8 +189,8 @@ class ContactsList extends React.Component {
           summary={{
             text:
               selectedRowsCount > 0
-                ? '[selectedRows] of <strong>[totalRows] Contacts</strong>'
-                : '<strong>[totalRows] Contacts</strong>',
+                ? '<strong style="color:#000;">[selectedRows]</strong> of [totalRows] contacts'
+                : '[totalRows] contacts',
             selectedRows: selectedRowsCount,
             totalRows: this.props.listInfo.total || 0
           }}

@@ -50,7 +50,6 @@ class Search extends React.Component {
       isSearching,
       disableOnSearch,
       showLoadingOnSearch,
-      defaultValue = '',
       showClearSearch
     } = this.props
 
@@ -60,12 +59,11 @@ class Search extends React.Component {
           {isSearching && showLoadingOnSearch ? (
             <i className="fa fa-spin fa-spinner" />
           ) : (
-            <IconSearch color="#8da2b5" />
+            <IconSearch color="#7F7F7F" />
           )}
         </Icon>
 
         <TextInput
-          defaultValue={defaultValue}
           value={this.state.searchValue}
           placeholder={placeholder}
           onChange={this.handleChange}

@@ -119,7 +119,7 @@ class Stage extends React.Component {
   render() {
     return (
       <BasicDropdown
-        buttonStyle={this.props.buttonStyle}
+        buttonSize={this.props.buttonSize}
         disabled={this.state.isSaving}
         fullWidth={this.props.fullWidth}
         items={getItems(this.props.attribute_def.enum_values)}

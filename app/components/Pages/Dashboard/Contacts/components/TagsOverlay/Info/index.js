@@ -37,12 +37,7 @@ export default class Info extends React.Component {
       <TaginfoContainer alignCenter justifyBetween>
         Tags are unique identifiers that you can use to make your contacts more
         human and allow you to filter contacts easier.
-        <CloseButton
-          color="#7b91a6"
-          hoverColor="#262626"
-          onClick={this.onClose}
-          size="20px"
-        >
+        <CloseButton iconSize="large" inverse onClick={this.onClose}>
           <CloseIcon />
         </CloseButton>
       </TaginfoContainer>

@@ -1,6 +1,6 @@
 // SideNav
 
-$item-height: 3.4rem;
+$item-height: 56px;
 
 .c-app-sidenav {
   width: $app-sidenav-width;
@@ -9,8 +9,7 @@ $item-height: 3.4rem;
   top: 0;
   left: 0;
   z-index: 100;
-  background-color: #f8fafb;
-  border-right: 1px solid #e2e4e5;
+  border-right: 1px solid #f2f2f2;
 }
 
 .c-app-sidenav__list {
@@ -31,14 +30,16 @@ $item-height: 3.4rem;
 
 .c-app-sidenav__item {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: $item-height;
-  padding-left: 1rem;
   cursor: pointer;
   transition: background-color 0.2s ease-in;
 
-  // &:not(.is-active):hover {
-  //   background-color: rgba(#62778c, 0.4);
-  // }
+  &.is-active {
+    background-color: #f2f2f2;
+  }
 }
 
 .c-app-sidenav__item__active-sign {
@@ -57,29 +58,29 @@ $item-height: 3.4rem;
 
 .c-app-sidenav__item__title,
 .c-app-sidenav__item__title--button {
-  width: 100%;
-  display: block;
-  padding: 0;
-  color: #17283a;
+  position: relative;
+  color: #000;
+  font-size: 16px;
   line-height: $item-height;
-  font-size: 1.5rem;
+  padding: 0 !important;
 
   &:hover,
   &:active,
   .c-app-sidenav__item.is-active & {
-    color: #2196f3;
-    text-decoration: none;
+      svg {
+        fill: #003bdf;
+    }
   }
 
   .c-app-sidenav__item.is-active & {
-    color: #2196f3;
-    font-weight: bold;
+    svg {
+      fill: #003bdf;
+    }
   }
 }
 
 .c-app-sidenav__item__title--button {
   border: none;
-  text-align: left;
   background: transparent;
 
   &:focus {
@@ -94,8 +95,8 @@ $item-height: 3.4rem;
 .c-app-sidenav__notification-badge {
   $size: 20px;
   position: absolute;
-  top: 0.7rem;
-  right: 1rem;
+  top: 10px;
+  right: 14px;
   width: $size;
   height: $size;
   text-align: center !important;
@@ -107,10 +108,12 @@ $item-height: 3.4rem;
 }
 
 .c-app-sidenav__account-dropdown {
-  width: 90%;
-  padding-left: 1rem;
-  margin-top: 1rem;
-
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 0;
+  border-bottom: 1px solid #d4d4d4;
+  
   > .c-app-sidenav__item__title--button {
     &:hover,
     &:focus,
@@ -127,11 +130,14 @@ $item-height: 3.4rem;
 
   .dropdown-menu {
     left: 1rem;
+    top: 100%;
     padding: 0;
     margin: 0;
     width: 250px;
+    height: min-content;
     border: none;
     border-radius: 5px;
+    background-color: #fff;
 
     > li.divider {
       margin: 0;
@@ -191,6 +197,7 @@ $item-height: 3.4rem;
   &.open > .c-app-sidenav__item__title--button {
     color: #fff;
     border: none;
+    box-shadow: none;
     background: transparent;
   }
 }

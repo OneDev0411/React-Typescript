@@ -1,5 +1,15 @@
 import { css } from 'styled-components'
 
+export const iconAims = {
+  none: null,
+  top: '0deg',
+  up: '0deg',
+  right: '90deg',
+  bottom: '180deg',
+  down: '180deg',
+  left: '270deg'
+}
+
 export function isOutline(props) {
   return props.appearance === 'outline' || props.inverse
 }

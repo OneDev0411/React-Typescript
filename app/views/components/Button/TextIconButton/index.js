@@ -1,11 +1,17 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import Flex from 'styled-flex-component'
 
 import Button from '../ActionButton'
-import { isOutline, getIconSize, getStatesStyle, iconAims } from './helpers'
+import {
+  isOutline,
+  getIconSize,
+  iconAims,
+  getIconStatesStyle
+} from '../helpers'
 
 class TextIconButton extends PureComponent {
-  propTypes = {
+  static propTypes = {
     /**
      * Composes the Button component as the base.
      */
@@ -72,21 +78,26 @@ class TextIconButton extends PureComponent {
     }
 
     const ExtendedButton = Button.extend`
+      justify-content: ${props =>
+        props.isBlock ? 'space-between' : 'initial'};
+
       > svg {
         width: ${props => getIconSize(props.size)};
         height: ${props => getIconSize(props.size)};
         fill: ${props => (isOutline(props) ? '#000' : '#fff')};
       }
 
-      ${props => getStatesStyle(props)};
+      ${props => getIconStatesStyle(props)};
     `
 
     const $text = text ? React.createElement('span', {}, text) : null
 
     return (
       <ExtendedButton {...rest}>
-        <IconLeft />
-        {$text}
+        <Flex alignCenter>
+          <IconLeft />
+          {$text}
+        </Flex>
         <IconRight />
       </ExtendedButton>
     )

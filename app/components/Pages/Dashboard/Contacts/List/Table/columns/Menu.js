@@ -1,22 +1,23 @@
 import React from 'react'
 import { Dropdown, MenuItem } from 'react-bootstrap'
 
-import ShadowButton from '../../../../../../../views/components/Button/ShadowButton'
-import VerticalDotsIcon from '../../../../Partials/Svgs/VerticalDots'
+import IconButton from 'components/Button/IconButton'
+import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 
-const ContactsDropDown = ({ contactId, handleOnDelete }) => (
+const Menu = ({ contactId, handleOnDelete }) => (
   <Dropdown
     pullRight
     className="c-react-table-menu"
     id={`contact_${contactId}__dropdown`}
   >
-    <ShadowButton
+    <IconButton
       bsRole="toggle"
-      style={{ marginTop: '5px' }}
-      onClick={e => e.stopPropagation()}
+      iconSize="large"
+      inverse
+      onClick={e => console.dir(e.target) || e.stopPropagation()}
     >
-      <VerticalDotsIcon fill="#D7DEE2" />
-    </ShadowButton>
+      <VerticalDotsIcon />
+    </IconButton>
 
     <Dropdown.Menu bsRole="menu">
       <MenuItem
@@ -35,4 +36,4 @@ const ContactsDropDown = ({ contactId, handleOnDelete }) => (
   </Dropdown>
 )
 
-export default ContactsDropDown
+export default Menu

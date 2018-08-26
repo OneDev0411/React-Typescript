@@ -3,29 +3,28 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 const Container = styled.div`
-  background-color: #f8fafb;
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.09);
   width: ${props => (props.isOpen ? props.width : 0)}px;
-  opacity: ${props => (props.isOpen ? 1 : 0)};
-  max-height: 100vh;
-  overflow: auto;
+  height: 100vh;
   overflow-x: hidden;
-  transition: 0.3s all ease-in;
+  padding-top: 1em;
+  font-family: 'Barlow', sans-serif;
+  background-color: #f2f2f2;
+  transition: 0.3s width ease-in;
 `
 
 const propTypes = {
-  isOpen: PropTypes.bool,
+  children: PropTypes.node,
+  isOpen: PropTypes.bool.isRequired,
   width: PropTypes.number
 }
 
 const defaultProps = {
-  isOpen: true,
-  width: 180
+  width: 164
 }
 
-export const Menu = ({ children, isOpen, width }) => (
-  <Container isOpen={isOpen} width={width}>
-    {children}
+export const Menu = props => (
+  <Container isOpen={props.isOpen} width={props.width}>
+    {props.children}
   </Container>
 )
 

@@ -1,59 +1,36 @@
 import styled from 'styled-components'
+import Flex from 'styled-flex-component'
 
-function getItemColor(props, defaultColor = '#2196f3') {
+import Card from 'components/Card'
+import { blue, grey } from 'views/utils/colors'
+
+import IconButton from 'components/Button/IconButton'
+
+function getItemColor(props) {
   if (props.isIncomplete && !props.isActive) {
     return '#fd3a57'
   }
 
-  if (props.isActive) {
-    return '#2196f3'
-  }
-
-  return defaultColor
+  return '#000'
 }
 
-export const TitleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 14px;
+export const RemoveButton = IconButton.extend`
+  visibility: hidden;
+  margin-left: 8px;
 `
 
-export const ItemTitle = styled.div`
-  font-weight: 500;
-  width: 95%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`
-
-export const IconContainer = styled.div`
-  width: 5%;
-`
-
-export const RemoveIcon = styled.i`
-  color: #7b91a6;
-  display: none;
-  margin-top: -2px;
-`
-
-export const Container = styled.div`
+export const Container = Flex.extend`
   position: relative;
-  min-width: 152px;
-  height: 32px;
-  line-height: 32px;
-  vertical-align: middle;
+  height: 40px;
+  margin-right: 8px;
+  line-height: 38px;
   border-radius: 3px;
-  background-color: ${props => (props.isActive ? '#fff' : '#dce5eb')};
-  border: solid 1px ${props => (props.isActive ? '#2196f3' : '#d4dfe6')};
-  margin: 0 5px 5px 0;
+  background-color: ${props => (props.isActive ? '#fff' : grey.A100)};
+  border: solid 1px ${props => (props.isActive ? '#000' : grey.A100)};
   cursor: pointer;
 
   ${ItemTitle} {
-    color: ${props => getItemColor(props, '#262626')};
-  }
-
-  ${RemoveIcon} {
-    display: ${props => (props.isActive ? 'block' : 'none')};
+    color: ${props => getItemColor(props, '#000')};
   }
 
   &:hover {
@@ -61,23 +38,34 @@ export const Container = styled.div`
     border: solid 1px ${props => getItemColor(props)};
   }
 
-  &:hover ${ItemTitle} {
-    color: ${props => getItemColor(props)};
-  }
-
-  &:hover ${RemoveIcon} {
-    display: block;
+  &:hover ${RemoveButton} {
+    visibility: visible;
   }
 `
 
-export const Menu = styled.div`
+export const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+`
+
+export const ItemTitle = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+export const Menu = Card.extend`
   position: absolute;
+  top: 48px;
+  left: 0;
   z-index: 1000;
   width: 280px;
   min-height: 190px;
-  border-radius: 3px;
-  background-color: #fff;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
 `
 
 export const Content = styled.div`
@@ -92,8 +80,8 @@ export const Button = styled.button`
   vertical-align: middle;
   background-color: #ffffff;
   border: none;
-  border-top: 1px solid #cad4db;
-  color: #2196f3;
+  border-top: 1px solid ${grey.A300};
+  color: ${blue.A100};
   font-size: 16px;
   font-weight: 500;
   border-radius: 0 0 3px 3px;

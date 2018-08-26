@@ -12,11 +12,8 @@ import {
   ListItem
 } from '../../../../../../../views/components/Grid/SavedSegments/List/styled'
 
-import {
-  ListItemName,
-  ListIconContainer,
-  BadgeCounter
-} from '../../styles/filters/styled'
+import { BadgeCounter } from '../../styles/filters/styled'
+import { ListItemName } from '../../../../../../../views/components/Grid/SavedSegments/List/styled'
 
 const FilterNames = {
   Active: ['Active', 'Lease'],
@@ -131,31 +128,25 @@ class AgentFilters extends React.Component {
           <ListItem isSelected>
             <ListItemName>Search Results</ListItemName>
 
-            <ListIconContainer>
-              <BadgeCounter>{this.getBadgeCounter()}</BadgeCounter>
-            </ListIconContainer>
+            <BadgeCounter>{this.getBadgeCounter()}</BadgeCounter>
           </ListItem>
         ) : (
           _.map(Filters, (fn, filterName) => (
-            <ListItem
-              key={`FILTER_${filterName}`}
-              isSelected={filterName === activeFilter}
-              onClick={() => this.setFilter(filterName)}
+            <ToolTip
+              multiline
+              caption={this.getTooltipCaption(filterName)}
+              placement="right"
             >
-              <ListItemName>
-                <ToolTip
-                  multiline
-                  caption={this.getTooltipCaption(filterName)}
-                  placement="right"
-                >
-                  <span>{filterName}</span>
-                </ToolTip>
-              </ListItemName>
+              <ListItem
+                key={`FILTER_${filterName}`}
+                isSelected={filterName === activeFilter}
+                onClick={() => this.setFilter(filterName)}
+              >
+                <ListItemName>{filterName}</ListItemName>
 
-              <ListIconContainer>
                 <BadgeCounter>{this.getBadgeCounter(filterName)}</BadgeCounter>
-              </ListIconContainer>
-            </ListItem>
+              </ListItem>
+            </ToolTip>
           ))
         )}
       </Container>

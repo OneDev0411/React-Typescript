@@ -14,7 +14,10 @@ const Header = ({
   onMenuTriggerChange,
   showCreateDeal = true
 }) => (
-  <PageHeader isFlat style={{ padding: '0 40px' }}>
+  <PageHeader
+    isFlat
+    style={{ padding: '0 2rem 0 1.5rem', marginBottom: '2rem' }}
+  >
     <PageHeader.Title showBackButton={false}>
       <MenuTrigger
         tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}

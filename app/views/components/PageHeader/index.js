@@ -5,13 +5,12 @@ import styled from 'styled-components'
 
 import Menu from './Menu'
 import { PageTitle } from './PageTitle'
-import { Title } from './PageTitle/styled'
+import { H1 } from '../Typography/headings'
 
 const Container = styled.div`
   width: 100%;
   height: 56px;
   display: flex;
-  padding: 0 16px;
   justify-content: space-between;
   background-color: ${props => (props.isFlat ? 'transparent' : '#fff')};
   border-bottom: ${props => (props.isFlat ? 'none' : '1px solid #e2e4e5')};
@@ -60,6 +59,6 @@ PageHeader.defaultProps = defaultProps
 
 PageHeader.Menu = Menu
 PageHeader.Title = PageTitle
-PageHeader.Heading = Title
+PageHeader.Heading = H1
 
 export default withRouter(PageHeader)
