@@ -1,4 +1,5 @@
 import { css } from 'styled-components'
+import { blue } from '../../../utils/colors'
 
 export const iconAims = {
   none: null,
@@ -24,7 +25,7 @@ export function getIconStatesStyle(props) {
       &:hover,
       &:hover {
         > svg {
-          fill: #003bdf;
+          fill: ${blue.A100};
         }
       }
     `
