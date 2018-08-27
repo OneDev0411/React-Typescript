@@ -26,7 +26,7 @@ export async function searchPlaces(address) {
  */
 export async function searchListings(criteria) {
   let queryName = 'q'
-  const isMlsNumber = /[0-9]{8}/.test(criteria)
+  const isMlsNumber = /\b[0-9]{5,8}\b/.test(criteria)
   const normalizeMlsObject = data => ({
     ...data.property,
     id: data.id,
