@@ -282,14 +282,19 @@ function getValidationFunction(name) {
  * validate a context
  */
 export function validate(ctx, value) {
-  if (value === undefined || value === null || value.length === 0) {
+  const isNumericField = ['Number', 'Numeric'].includes(ctx.data_type)
+
+  if (
+    isNumericField === false &&
+    (value === undefined || value === null || value.length === 0)
+  ) {
     return !ctx.mandatory
   }
 
   switch (ctx.data_type) {
     case 'Number':
     case 'Numeric':
-      return /^\d*\.?\d*$/.test(value)
+      return !Number.isNaN(parseFloat(value)) && /^\d*\.?\d*$/.test(value)
     case 'String':
     case 'Text':
       return value.length > 0
@@ -301,7 +306,7 @@ export function validate(ctx, value) {
 function validateYearBuilt(ctx, value) {
   const { max } = ctx.properties
 
-  if (value === undefined || value === null || value.length === 0) {
+  if (value === undefined || value === null) {
     return !ctx.mandatory
   }
 
@@ -365,7 +370,7 @@ function getFormattedValue(value) {
   }
 
   if (this.format === 'Currency') {
-    return Deal.get.formattedPrice(value, 'currency', 0)
+    return Deal.get.formattedPrice(parseFloat(value), 'currency', 0)
   }
 
   return value
