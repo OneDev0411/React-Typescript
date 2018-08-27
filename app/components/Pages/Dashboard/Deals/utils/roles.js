@@ -202,7 +202,8 @@ function getContactFields() {
     last_name: 'legal_last_name',
     email: 'email',
     phone_number: 'phone_number',
-    company: 'company_title'
+    company: 'company_title',
+    source_type: 'source_type'
   }
 }
 
