@@ -107,7 +107,7 @@ class TeamAgents extends React.Component {
       >
         <Modal.Header closeButton>Choose primary agent</Modal.Header>
 
-        <Modal.Body>
+        <Modal.Body className="u-scrollbar--thinner">
           <div className="deal-roles">
             {(isSearchingContacts || isLoading) && (
               <div className="search-overlay">
