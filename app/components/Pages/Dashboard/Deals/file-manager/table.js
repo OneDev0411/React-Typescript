@@ -186,7 +186,11 @@ export class FileManager extends React.Component {
       src = file.preview_url
     }
 
-    return <img className="icon" src={src} alt="" />
+    return (
+      <div className="icon-container">
+        <img className="icon" src={src} alt="" />
+      </div>
+    )
   }
 
   toggleSelectedRow(file) {
@@ -356,7 +360,7 @@ export class FileManager extends React.Component {
           <Fragment>
             <Link to={this.getFileLink(file)}>
               {this.getDocumentIcon(file)}
-              {file.name}
+              <div className="file-name-text"> {file.name}</div>
             </Link>
           </Fragment>
         )

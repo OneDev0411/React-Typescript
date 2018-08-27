@@ -84,20 +84,34 @@
       .rt-th.select-row-header {
         padding-left: 11px;
       }
-
+      
       .rt-td {
         &.select-row {
           padding-left: 10px;
         }
 
         &.name {
+          .icon-container{
+            width: 30px;
           .icon {
-            width: 20px;
+            max-width: 20px;
             margin-right: 10px;
+            max-height: 50px;
+          }
           }
 
+          .file-name-text{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: calc(100% - 31px)
+          }
+        
           a {
             color: #1d364b !important;
+            display: flex;
+            align-items: center;
+            width: 100%;
           }
 
           &:hover {
