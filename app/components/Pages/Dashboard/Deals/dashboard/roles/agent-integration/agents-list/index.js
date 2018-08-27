@@ -107,7 +107,7 @@ class TeamAgents extends React.Component {
       >
         <Modal.Header closeButton>Choose primary agent</Modal.Header>
 
-        <Modal.Body>
+        <Modal.Body className="u-scrollbar--thinner">
           <div className="deal-roles">
             {(isSearchingContacts || isLoading) && (
               <div className="search-overlay">
@@ -157,6 +157,7 @@ class TeamAgents extends React.Component {
                           name={user.display_name}
                           image={user.profile_image_url}
                           size={32}
+                          color="#D4D4D4"
                           showStateIndicator={false}
                         />
                       </div>
