@@ -135,10 +135,10 @@ class Body extends Component {
                 />
               </div>
             )}
-            <ContactsListContainer>
-              {isLoading && <Loading />}
-              {!isLoading &&
-                list.length > 0 && (
+            {isLoading && <Loading />}
+            {!isLoading &&
+              list.length > 0 && (
+                <ContactsListContainer>
                   <ContactsList>
                     {list.map((item, index) => (
                       <ContactItem
@@ -150,8 +150,8 @@ class Body extends Component {
                       />
                     ))}
                   </ContactsList>
-                )}
-            </ContactsListContainer>
+                </ContactsListContainer>
+              )}
           </div>
         )}
       />

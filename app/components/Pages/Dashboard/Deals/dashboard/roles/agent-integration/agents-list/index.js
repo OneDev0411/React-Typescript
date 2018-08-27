@@ -109,11 +109,7 @@ class TeamAgents extends React.Component {
 
         <Modal.Body className="u-scrollbar--thinner">
           <div className="deal-roles">
-            {(isSearchingContacts || isLoading) && (
-              <div className="search-overlay">
-                <Loading />
-              </div>
-            )}
+            {(isSearchingContacts || isLoading) && <Loading />}
 
             {!isLoading &&
               (!teamAgents || teamAgents.length === 0) && (
