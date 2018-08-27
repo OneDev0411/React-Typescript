@@ -33,7 +33,7 @@ export class SettingsDropdownButton extends Component {
           iconSize="large"
           inverse
           onClick={this.handleClick}
-          style={{ alignItems: 'flex-end' }}
+          style={{ alignItems: 'flex-end', padding: 0 }}
         >
           <Avatar user={this.props.user} size={32} />
           <ArrowDownIcon
