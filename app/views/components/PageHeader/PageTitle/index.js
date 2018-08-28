@@ -50,12 +50,12 @@ export function PageTitle(props) {
 
         <Flex alignCenter>
           <IconButton
-            size="32px"
-            color="#333"
-            hoverColor="#2196f3"
+            iconSize="XLarge"
+            inverse
+            isFit
             onClick={onClickCloseButton}
           >
-            <CloseIcon style={{ width: 32, height: 32 }} />
+            <CloseIcon />
           </IconButton>
         </Flex>
       </Flex>
@@ -67,12 +67,12 @@ export function PageTitle(props) {
       <Flex alignCenter>
         {props.showBackButton && (
           <IconButton
-            size="32px"
-            color="#333"
-            hoverColor="#2196f3"
+            iconSize="XLarge"
+            inverse
+            isFit
             onClick={props.onClickBackButton || handleOnBack}
           >
-            <BackIcon style={{ width: 32, height: 32 }} />
+            <BackIcon />
           </IconButton>
         )}
         {title && <H1>{title}</H1>}
