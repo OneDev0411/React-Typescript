@@ -31,9 +31,9 @@ const propTypes = {
   inverse: PropTypes.bool,
 
   /**
-   * The size of the button. {small, medium, large}
+   * The size of the button.
    */
-  size: PropTypes.oneOf(['small', 'medium', 'large'])
+  size: PropTypes.oneOf(['small', 'medium', 'large', 'XLarge'])
 }
 
 const defaultProps = {
