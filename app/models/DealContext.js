@@ -365,7 +365,7 @@ function getFormattedValue(value) {
   }
 
   if (this.format === 'Currency') {
-    return Deal.get.formattedPrice(value, 'currency', 0)
+    return Deal.get.formattedPrice(parseFloat(value), 'currency', 0)
   }
 
   return value
