@@ -22,7 +22,7 @@ export const BasicDropdown = ({
   <Downshift
     onChange={onChange}
     onSelect={onSelect}
-    itemToString={itemToString}
+    itemToString={() => (buttonText ? () => '' : itemToString)}
     defaultSelectedItem={defaultSelectedItem}
     render={downshift => (
       <div style={{ position: 'relative', ...style }}>
