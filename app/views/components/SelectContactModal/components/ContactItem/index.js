@@ -24,13 +24,16 @@ const Title = styled.div`
 const propTypes = {
   item: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired,
-  isHighlighted: PropTypes.bool.isRequired
+  isHighlighted: PropTypes.bool.isRequired,
+  summary: PropTypes.string
 }
 
 function ContactItem(props) {
   const { item, onClickHandler } = props
   const { phone_number, email, display_name: title } = item.summary
-  const summary = [email, phone_number].filter(i => i && i !== title).join(', ')
+  const summary =
+    props.summary ||
+    [email, phone_number].filter(i => i && i !== title).join(', ')
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
