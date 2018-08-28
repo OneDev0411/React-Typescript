@@ -72,6 +72,7 @@ export const Content = styled.div`
 `
 export const DoneButton = Button.extend`
   display: block;
+  width: 100%;
   text-align: center;
   border-top: 1px solid ${grey.A300};
 `
