@@ -1,5 +1,5 @@
 export const red = {
-  A100: '#fd3a57',
+  A100: '#fe3824',
   A200: '#f00'
 }
 

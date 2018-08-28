@@ -7,7 +7,6 @@ const Container = styled.div`
   height: 100vh;
   overflow-x: hidden;
   padding-top: 1em;
-  font-family: 'Barlow', sans-serif;
   background-color: #f2f2f2;
   transition: 0.3s width ease-in;
 `

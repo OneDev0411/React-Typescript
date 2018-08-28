@@ -18,10 +18,8 @@ export const List = Card.extend`
 `
 
 export const ListItem = styled.div`
-  padding: 0 16px;
-  font-family: 'Barlow', sans-serif;
-  font-size: 16px;
-  line-height: 36px;
+  padding: 0 1em;
+  line-height: 2.25; /* 36px */
   color: #000;
   cursor: pointer;
 

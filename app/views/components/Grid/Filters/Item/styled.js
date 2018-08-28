@@ -2,13 +2,14 @@ import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
 import Card from 'components/Card'
-import { blue, grey } from 'views/utils/colors'
+import { grey, red } from 'views/utils/colors'
 
+import Button from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 
 function getItemColor(props) {
   if (props.isIncomplete && !props.isActive) {
-    return '#fd3a57'
+    return red.A100
   }
 
   return '#000'
@@ -16,13 +17,14 @@ function getItemColor(props) {
 
 export const RemoveButton = IconButton.extend`
   visibility: hidden;
-  margin-left: 8px;
+  margin-left: 0.5em;
+  padding: 0;
 `
 
 export const Container = Flex.extend`
   position: relative;
   height: 40px;
-  margin-right: 8px;
+  margin-right: 0.5em;
   line-height: 38px;
   border-radius: 3px;
   background-color: ${props => (props.isActive ? '#fff' : grey.A100)};
@@ -46,11 +48,7 @@ export const Container = Flex.extend`
 export const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  font-family: 'Barlow', sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
+  padding: 0 1em;
 `
 
 export const ItemTitle = styled.div`
@@ -72,20 +70,8 @@ export const Content = styled.div`
   min-height: 150px;
   cursor: auto;
 `
-
-export const Button = styled.button`
-  width: 100%;
-  height: 40px;
-  line-height: 40px;
-  vertical-align: middle;
-  background-color: #ffffff;
-  border: none;
+export const DoneButton = Button.extend`
+  display: block;
+  text-align: center;
   border-top: 1px solid ${grey.A300};
-  color: ${blue.A100};
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 0 0 3px 3px;
-  &:focus {
-    outline: none;
-  }
 `

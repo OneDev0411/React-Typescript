@@ -13,7 +13,7 @@ import {
   ItemTitle,
   TitleContainer,
   RemoveButton,
-  Button
+  DoneButton
 } from './styled'
 
 const getComponent = (filterConfig, props) => {
@@ -72,7 +72,9 @@ export const FilterItem = props => {
             {isOpen && (
               <Menu depth={3}>
                 <Content>{getComponent(filterConfig, props)}</Content>
-                <Button onClick={onToggleFilterActive}>Done</Button>
+                <DoneButton appearance="link" onClick={onToggleFilterActive}>
+                  Done
+                </DoneButton>
               </Menu>
             )}
           </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Container, ToolbarContainer, ActionsBar } from './styled'
+import { ToolbarContainer, ActionsBar } from './styled'
 
 import BasicTable from './Tables/Basic'
 import MultipleTable from './Tables/Multiple'
@@ -99,7 +99,7 @@ class Grid extends React.Component {
 
     if (multiple) {
       return (
-        <Container>
+        <div>
           <MultipleTable
             {...this.props}
             columns={this.Columns}
@@ -108,12 +108,12 @@ class Grid extends React.Component {
             selectablePlugin={this.selectablePlugin}
             sortablePlugin={this.sortablePlugin}
           />
-        </Container>
+        </div>
       )
     }
 
     return (
-      <Container>
+      <div>
         {(Object.keys(this.props.summary).length > 0 ||
           this.actionablePlugin) && (
           <ToolbarContainer>
@@ -132,7 +132,7 @@ class Grid extends React.Component {
           selectablePlugin={this.selectablePlugin}
           sortablePlugin={this.sortablePlugin}
         />
-      </Container>
+      </div>
     )
   }
 }

@@ -5,10 +5,7 @@ import { blue, grey } from '../../../../../../../../views/utils/colors'
 export const DropdownItem = styled.a`
   color: #000;
   display: block;
-  font-family: 'Barlow', sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  padding: 8px 16px;
+  padding: 0.5em 1em;
   white-space: nowrap;
 
   &:hover,
