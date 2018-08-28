@@ -157,6 +157,9 @@ class ShareListing extends React.Component {
   render() {
     const { listing } = this.state
 
+    // hide marketing temporary
+    return false
+
     return (
       <Fragment>
         <ActionButton
