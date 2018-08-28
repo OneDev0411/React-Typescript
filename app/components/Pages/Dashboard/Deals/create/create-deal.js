@@ -39,7 +39,7 @@ import { isBackOffice } from '../../../../../utils/user-teams'
 class CreateDeal extends React.Component {
   state = {
     saving: false,
-    isDraft: true,
+    isDraft: -1,
     dealSide: '',
     dealPropertyType: '',
     dealAddress: null,
@@ -994,7 +994,7 @@ class CreateDeal extends React.Component {
               onClick={this.goLive}
               disabled={!canSaveDeal}
             >
-              {saving ? 'Saving ...' : 'Make visible to admin'}
+              {saving ? 'Saving ...' : 'Make Visible to Admin'}
             </Button>
           )}
 

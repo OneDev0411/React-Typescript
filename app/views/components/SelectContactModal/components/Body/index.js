@@ -121,7 +121,7 @@ class Body extends Component {
         itemToString={this.handleItemToString}
         defaultInputValue={defaultInputValue}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
-          <div style={{ paddingTop: '2rem' }}>
+          <div style={{ paddingTop: '2rem' }} className="u-scrollbar--thinner">
             {!this.props.isSearchDisabled && (
               <div style={{ padding: '0 2rem' }}>
                 <SearchInput
@@ -135,11 +135,11 @@ class Body extends Component {
                 />
               </div>
             )}
-            <ContactsListContainer>
-              {isLoading && <Loading />}
-              {!isLoading &&
-                list.length > 0 && (
-                  <ContactsList className="u-scrollbar--thinner">
+            {isLoading && <Loading />}
+            {!isLoading &&
+              list.length > 0 && (
+                <ContactsListContainer>
+                  <ContactsList>
                     {list.map((item, index) => (
                       <ContactItem
                         item={item}
@@ -150,8 +150,8 @@ class Body extends Component {
                       />
                     ))}
                   </ContactsList>
-                )}
-            </ContactsListContainer>
+                </ContactsListContainer>
+              )}
           </div>
         )}
       />

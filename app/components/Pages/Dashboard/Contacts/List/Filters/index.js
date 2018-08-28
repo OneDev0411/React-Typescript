@@ -24,27 +24,79 @@ class ContactFilters extends React.PureComponent {
     return _.uniq(_.pluck(tags, 'text'))
   }
 
-  getDef = (attributeDefs, name) => {
-    const definition = selectDefinitionByName(attributeDefs, name)
+  /**
+   * creates a search criteria for contacts filters
+   */
+  normalizeFilters = filters => {
+    const criteria = []
 
-    return definition ? definition.id : null
+    _.each(filters, filter => {
+      _.each(filter.values, value => {
+        criteria.push({
+          value,
+          invert: filter.operator.invert === true,
+          attribute_def: filter.id
+        })
+      })
+    })
+
+    return criteria
   }
+
+  normalizeSegment = filters =>
+    filters.map(filter => ({
+      id: filter.attribute_def,
+      isActive: false,
+      isIncomplete: false,
+      values: [filter.value],
+      operator: {
+        name: filter.invert ? 'is not' : 'is',
+        invert: filter.invert
+      }
+    }))
 
   get Config() {
     const { tags, attributeDefs } = this.props
 
+    const tagDefinition = selectDefinitionByName(attributeDefs, 'tag')
+    const stageDefinition = selectDefinitionByName(attributeDefs, 'stage')
+    const sourceDefinition = selectDefinitionByName(
+      attributeDefs,
+      'source_type'
+    )
+
     return [
       {
-        id: 'tag',
+        id: tagDefinition.id,
         label: 'Tag',
         type: 'Set',
         multi: false,
         options: this.getUniqTags(tags),
-        additionalParams: {
-          attribute_def: this.getDef(attributeDefs, 'tag')
-        },
         tooltip:
           'A group a person belongs to, based on a tag you’ve manually applied to them.'
+      },
+      {
+        id: stageDefinition.id,
+        label: 'Stage',
+        type: 'Set',
+        multi: false,
+        options: stageDefinition.enum_values,
+        tooltip: 'A group a person belongs to'
+      },
+      {
+        id: sourceDefinition.id,
+        label: 'Origin',
+        type: 'Set',
+        multi: false,
+        options: [
+          'BrokerageWidget',
+          'IOSAddressBook',
+          'SharesRoom',
+          'ExplicitlyCreated',
+          'External/Outlook',
+          'CSV'
+        ],
+        tooltip: 'Source type'
       }
     ]
   }
@@ -55,8 +107,9 @@ class ContactFilters extends React.PureComponent {
         name="contacts"
         plugins={['segments']}
         config={this.Config}
+        createFiltersFromSegment={this.normalizeSegment}
+        createSegmentFromFilters={this.normalizeFilters}
         onChange={this.props.onFilterChange}
-        attributeDefs={this.props.attributeDefs}
       >
         <SaveSegment />
       </Filters>

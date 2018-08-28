@@ -146,7 +146,8 @@ export class RoleFormModal extends React.Component {
       'role',
       'commission',
       'commission_dollar',
-      'commission_percentage'
+      'commission_percentage',
+      'source_type'
     ]
 
     if (commission_type === 'commission_dollar') {
@@ -155,6 +156,10 @@ export class RoleFormModal extends React.Component {
     } else if (commission_type === 'commission_percentage') {
       newValues.commission_percentage = parseFloat(commission)
       newValues.commission_dollar = null
+    }
+
+    if (!values.contact) {
+      newValues.source_type = 'ExplicitlyCreated'
     }
 
     return _.pick(

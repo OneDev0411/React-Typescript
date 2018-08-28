@@ -74,7 +74,8 @@ export default ({
                 showStateIndicator={false}
                 name={recp.display_name}
                 image={recp.image}
-                size={35}
+                size={36}
+                color="#D4D4D4"
               />
             </Col>
 
