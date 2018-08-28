@@ -16,3 +16,9 @@ export const grey = {
   A500: '#b4b4b4',
   A600: '#a4a4a4'
 }
+
+export const primary = blue.A100
+export const primaryDark = blue.A200
+export const error = red.A200
+
+export const borderColor = grey.A300
