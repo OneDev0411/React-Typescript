@@ -23,6 +23,7 @@ export const buttonBaseStyle = css`
   font-family: Barlow;
   font-weight: normal;
   text-decoration: none;
+  white-space: nowrap;
 
   &::-moz-focus-inner {
     border: 0;
