@@ -5,8 +5,6 @@ import { addNotification as notify } from 'reapop'
 import PageHeader from '../../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
-import Frame from '../../../../../../views/components/Deals/EmbedFormEdit'
-
 import {
   getFormTemplates,
   saveFormTemplate
@@ -129,12 +127,6 @@ class EditTemplate extends React.Component {
             </ActionButton>
           </PageHeader.Menu>
         </PageHeader>
-
-        <Frame
-          formId={form.id}
-          frameRef={ref => (this.frame = ref)}
-          onReceiveMessage={this.onReceiveMessage}
-        />
       </div>
     )
   }

@@ -116,7 +116,7 @@
     "offline-js": "^0.7.19",
     "papaparse": "^4.5.0",
     "parse-address": "^0.0.6",
-    "pdfjs-dist": "^2.0.489",
+    "pdfjs-dist": "https://github.com/rechat/pdfjs-dist.git",
     "points-cluster": "^0.1.4",
     "postcss-browser-reporter": "^0.5.0",
     "postcss-cssnext": "^3.0.2",
