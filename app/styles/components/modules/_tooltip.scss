@@ -1,7 +1,4 @@
 .rechat-tooltip {
-  &.in {
-    opacity: 1;
-  }
   
   .tooltip-inner {
     font-size: 16px;
@@ -19,30 +16,15 @@
       border-width: 16px 16px 16px 0;
     }
   }
-  
-  &.large {
-    .tooltip-inner {
-      font-weight: 500;
-      padding: 8px 16px 10px 16px; 
-    }
-    
-    &.right {
-      margin-left: 20px;
-      
-      .tooltip-arrow {
-        left: -12px;
-      }
-    }
-  }
 
   &.error {
     .tooltip-inner {
-      background-color: #fd3a57;
+      background-color: #fe3824;
       color: #fff;
     }
 
     .tooltip-arrow {
-      border-right-color: #fd3a57;
+      border-right-color: #fe3824;
     }
   }
 
