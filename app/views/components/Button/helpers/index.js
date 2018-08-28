@@ -40,6 +40,9 @@ export function getIconSize(size) {
     case 'large':
       return '24px'
 
+    case 'XLarge':
+      return '32px'
+
     default:
       return '16px'
   }
