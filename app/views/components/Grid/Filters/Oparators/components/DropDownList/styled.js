@@ -68,7 +68,7 @@ export const SelectedItem = styled.span`
 `
 
 export const ItemsContainer = styled.div`
-  padding: ${props => (props.selectedItems.length > 0 ? '0.5em' : 0)};
+  padding: ${props => (props.selectedItems.length > 1 ? '0.5em' : 0)};
   border-radius: 3px;
   background-color: ${grey.A200};
 `
