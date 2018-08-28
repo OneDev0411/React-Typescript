@@ -4,7 +4,7 @@ import Avatar from 'react-avatar'
 import Flex from 'styled-flex-component'
 
 import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
-
+import Link from '../../../../../../../views/components/ALink'
 import { getContactAttribute } from '../../../../../../../models/contacts/helpers'
 
 const ContactsListName = ({ contact, attributeDefs }) => {
@@ -30,9 +30,12 @@ const ContactsListName = ({ contact, attributeDefs }) => {
         src={avatar}
         size={40}
       />
-      <div style={{ fontWeight: 500, marginLeft: '16px' }}>
+      <Link
+        to={`dashboard/contacts/${contact.id}`}
+        style={{ fontWeight: 500, marginLeft: '16px', padding: 0 }}
+      >
         {contact.display_name}
-      </div>
+      </Link>
     </Flex>
   )
 }

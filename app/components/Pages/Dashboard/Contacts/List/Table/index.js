@@ -143,7 +143,7 @@ class ContactsList extends React.Component {
     }
   ]
 
-  getGridTrProps = (rowIndex, { original: row, isSelected }) => {
+  getGridTrProps = (rowIndex, { isSelected }) => {
     if (this.props.isRowsUpdating && isSelected) {
       return {
         style: {
@@ -154,21 +154,6 @@ class ContactsList extends React.Component {
     }
 
     return {}
-  }
-
-  getGridTdProps = (colIndex, { column, rowData: row }) => {
-    if (['plugin--selectable', 'delete-contact'].includes(column.id)) {
-      return {
-        onClick: e => e.stopPropagation()
-      }
-    }
-
-    return {
-      style: {
-        cursor: 'pointer'
-      },
-      onClick: () => this.openContact(row.id)
-    }
   }
 
   render() {
@@ -204,7 +189,6 @@ class ContactsList extends React.Component {
           columns={this.columns}
           LoadingState={LoadingComponent}
           getTrProps={this.getGridTrProps}
-          getTdProps={this.getGridTdProps}
           EmptyState={() => (
             <NoSearchResults description="Try typing another name, email, phone or tag." />
           )}
