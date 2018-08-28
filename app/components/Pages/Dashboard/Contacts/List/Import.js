@@ -1,13 +1,25 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { Dropdown, MenuItem } from 'react-bootstrap'
+
 import {
   getContacts,
   removeImportResult
 } from '../../../../../store_actions/contacts'
 import ModalImportLoading from './ModalImportLoading'
 import config from '../../../../../../config/public'
+import Button from '../../../../../views/components/Button/ActionButton'
+import { BasicDropdown } from '../../../../../views/components/BasicDropdown'
+import { primary } from '../../../../../views/utils/colors'
+
+const Item = Button.extend`
+  color: #000;
+
+  &:hover {
+    color: #fff !important;
+    background-color: ${primary};
+  }
+`
 
 class Import extends React.Component {
   constructor(props) {
@@ -42,53 +54,47 @@ class Import extends React.Component {
     }
   }
 
+  items = [
+    {
+      label: 'Import From CSV',
+      onClick: () => browserHistory.push('/dashboard/contacts/import/csv')
+    },
+    {
+      label: 'Connect to Outlook',
+      onClick: () => {
+        this.loginWindows = window.open(
+          this.url,
+          'myWindow',
+          'width=300,height=500'
+        )
+      }
+    }
+  ]
+
   render() {
     const { SuccessfulLogin } = this.props.importOutlook
 
     return (
-      <div className="list--secondary-button">
-        <Dropdown id="import-csv-dropdown">
-          <Dropdown.Toggle
-            className="button c-button--shadow"
-            style={{
-              color: '#000',
-              border: '1px solid #000',
-              boxShadow: 'none',
-              height: '40px'
-            }}
-          >
-            Import
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu className="import-dropdown">
-            <MenuItem
-              eventKey="2"
-              className="import-dropdown--item"
-              onClick={() =>
-                browserHistory.push('/dashboard/contacts/import/csv')
-              }
+      <React.Fragment>
+        <BasicDropdown
+          style={{ marginRight: '1rem' }}
+          items={this.items}
+          onChange={item => item.onClick()}
+          buttonText="Import"
+          itemRenderer={({ item, ...rest }) => (
+            <Item
+              appearance="link"
+              key={item.label}
+              style={{ width: '100%' }}
+              {...rest}
             >
-              Import From CSV
-            </MenuItem>
-
-            <MenuItem
-              eventKey="3"
-              className="import-dropdown--item"
-              onClick={() => {
-                this.loginWindows = window.open(
-                  this.url,
-                  'myWindow',
-                  'width=300,height=500'
-                )
-              }}
-            >
-              Connect to Outlook
-            </MenuItem>
-          </Dropdown.Menu>
-        </Dropdown>
+              {item.label}
+            </Item>
+          )}
+        />
 
         <ModalImportLoading show={SuccessfulLogin} />
-      </div>
+      </React.Fragment>
     )
   }
 }
