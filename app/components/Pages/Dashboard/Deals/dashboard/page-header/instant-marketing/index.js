@@ -117,7 +117,7 @@ class DealInstantMarketing extends React.Component {
     return (
       <Fragment>
         <ActionButton
-          inverse
+          appearance="outline"
           style={this.props.buttonStyle}
           onClick={this.toggleInstantMarketingBuilder}
         >
