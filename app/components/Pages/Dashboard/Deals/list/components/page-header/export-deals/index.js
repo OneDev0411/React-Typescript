@@ -10,11 +10,11 @@ import { DropdownItem, DropdownItemSub } from './styled'
 class ExportDeals extends React.Component {
   items = [
     {
-      title: 'All Deals',
+      label: 'All Deals',
       url: `/api/deals/export/${getActiveTeamId(this.props.user)}`
     },
     {
-      title: 'New Listings',
+      label: 'New Listings',
       subTitle: '(Past 7 days)',
       url: `/api/deals/report/${encodeURIComponent(
         JSON.stringify({
@@ -54,7 +54,7 @@ class ExportDeals extends React.Component {
       )}`
     },
     {
-      title: 'New Offers',
+      label: 'New Offers',
       subTitle: '(Past 7 days)',
       url: `/api/deals/report/${encodeURIComponent(
         JSON.stringify({
@@ -104,8 +104,8 @@ class ExportDeals extends React.Component {
         buttonIcon={XlsxIcon}
         buttonText="Download Reoprt"
         itemRenderer={({ item, ...rest }) => (
-          <DropdownItem href={item.url} key={item.title} {...rest}>
-            {item.title} <DropdownItemSub>{item.subTitle}</DropdownItemSub>
+          <DropdownItem href={item.url} key={item.label} {...rest}>
+            {item.label} <DropdownItemSub>{item.subTitle}</DropdownItemSub>
           </DropdownItem>
         )}
       />
