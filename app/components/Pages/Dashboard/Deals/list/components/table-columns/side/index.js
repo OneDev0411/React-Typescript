@@ -39,7 +39,8 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
                     <UserAvatar
                       name={`${role.legal_first_name} ${role.legal_last_name}`}
                       image={role.user ? role.user.profile_image_url : null}
-                      size={26}
+                      size={24}
+                      color="#d4d4d4"
                       showStateIndicator={false}
                     />
                   </div>
@@ -67,8 +68,8 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
 
         <span
           style={{
-            color: '#5b6469',
-            fontSize: '13px'
+            color: '#000',
+            fontSize: '14px'
           }}
         >
           {relatedRoleUser && relatedRoleUser.last_name
