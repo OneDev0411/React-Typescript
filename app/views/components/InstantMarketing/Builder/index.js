@@ -168,7 +168,7 @@ class Builder extends React.Component {
   handleSelectTemplate = templateItem => {
     const template = {
       ...templateItem,
-      template: nunjucks.renderString(templateItem.template, {
+      template: this.nunjucks.renderString(templateItem.template, {
         ...this.props.templateData
       })
     }
