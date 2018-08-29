@@ -51,9 +51,9 @@ class Builder extends React.Component {
   }
 
   setupNunjucks = () => {
-    const nunjucksEnv = new nunjucks.Environment()
+    this.nunjucks = new nunjucks.Environment()
 
-    nunjucksEnv.addFilter('currency', price =>
+    this.nunjucks.addFilter('currency', price =>
       new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -144,7 +144,7 @@ class Builder extends React.Component {
   handleSelectTemplate = templateItem => {
     const template = {
       ...templateItem,
-      template: nunjucks.renderString(templateItem.template, {
+      template: this.nunjucks.renderString(templateItem.template, {
         ...this.props.templateData
       })
     }
