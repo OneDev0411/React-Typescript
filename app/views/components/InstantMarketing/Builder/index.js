@@ -41,10 +41,11 @@ class Builder extends React.Component {
       plugins: ['asset-blocks']
     })
 
-    this.editor.on('load', this.setup.bind(this))
+    this.editor.on('load', this.setupGrapesJs.bind(this))
+    this.setupNunjucks()
   }
 
-  setup = () => {
+  setupGrapesJs = () => {
     this.lockIn()
     this.disableResize()
     this.singleClickTextEditing()
