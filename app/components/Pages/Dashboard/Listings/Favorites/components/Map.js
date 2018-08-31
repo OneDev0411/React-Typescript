@@ -23,7 +23,6 @@ const map = ({
   onGoogleApiLoaded,
   onMarkerMouseEnter,
   onMarkerMouseLeave,
-  onClickZoomHandler,
   map: { hoveredMarkerId },
   mapProps: { zoom, center }
 }) => (

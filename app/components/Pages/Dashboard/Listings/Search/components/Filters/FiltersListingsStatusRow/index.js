@@ -40,7 +40,6 @@ const FiltersListingsStatus = ({
   icon,
   title,
   color,
-  fields,
   isField,
   children,
   hasAccordion,
@@ -53,8 +52,6 @@ const FiltersListingsStatus = ({
   accordionIsActive = hasSwitchToggle
     ? accordionIsActive && statusIsActive
     : accordionIsActive
-
-  const AccordionTriggerIsActive = hasSwitchToggle ? statusIsActive : true
 
   return (
     <div>
@@ -91,7 +88,9 @@ const FiltersListingsStatus = ({
         </div>
       </div>
 
-      {hasAccordion && <Accordion active={accordionIsActive}>{children}</Accordion>}
+      {hasAccordion && (
+        <Accordion active={accordionIsActive}>{children}</Accordion>
+      )}
     </div>
   )
 }
@@ -108,7 +107,10 @@ export default compose(
     ({ hasSwitchToggle }) => hasSwitchToggle
   ),
   withHandlers({
-    onClickAccordionTriggger: ({ accordionIsActive, triggerAccordion }) => () => {
+    onClickAccordionTriggger: ({
+      accordionIsActive,
+      triggerAccordion
+    }) => () => {
       triggerAccordion(!accordionIsActive)
     }
   })

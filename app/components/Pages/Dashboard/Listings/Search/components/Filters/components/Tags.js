@@ -13,7 +13,7 @@ const arraysIsSame = (array1, array2) =>
   array1.every((element, index) => element === array2[index])
 
 const Tags = ({ name, label, fields, selectAllValue, toggleAll }) => (
-  <div style={{ marginBottom: '3rem' }}>
+  <div style={{ marginBottom: '2rem' }}>
     <div className="c-filters__tags__header clearfix">
       <span className="c-filters__tags__title">{label}</span>
       <div className="c-filters__tags__select-all">
