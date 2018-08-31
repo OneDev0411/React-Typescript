@@ -1,5 +1,4 @@
 import React from 'react'
-import actions from '../../../../../../../../../store_actions/listings/alerts'
 
 // https://github.com/DieterHolvoet/event-propagation-path
 Event.prototype.propagationPath = function propagationPath() {
@@ -57,7 +56,7 @@ class AlertListItemMenu extends React.Component {
 
   render() {
     const { isOpen } = this.state
-    const { alertId, onClickEdit, onClickDelete } = this.props
+    const { alertId, onClickDelete } = this.props
 
     return (
       <div
@@ -70,7 +69,11 @@ class AlertListItemMenu extends React.Component {
         <button
           onClick={() => {
             if (!isOpen) {
-              document.addEventListener('click', this._onCLickDocumentHandler, false)
+              document.addEventListener(
+                'click',
+                this._onCLickDocumentHandler,
+                false
+              )
             } else {
               document.removeEventListener(
                 'click',
@@ -84,7 +87,7 @@ class AlertListItemMenu extends React.Component {
           className="c-alertList__item__menu-trigger-btn"
         >
           <svg
-            fill="#78909c"
+            fill="#000"
             height="24"
             viewBox="0 0 24 24"
             width="24"
@@ -125,7 +128,7 @@ class AlertListItemMenu extends React.Component {
                 width="24"
                 height="19"
                 viewBox="0 0 18 19"
-                fill="#78909c"
+                fill="#000"
               >
                 <path d="M4 7h10l.001 10H4V7zM2 17c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2V5H2v12zM12 2V0H6v2H0v2h18V2z" />
                 <path d="M6 15h2V9H6zM10 15h2V9h-2z" />
