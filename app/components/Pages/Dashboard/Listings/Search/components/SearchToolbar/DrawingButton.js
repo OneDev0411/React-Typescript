@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import cn from 'classnames'
+
+import { grey } from '../../../../../../../views/utils/colors'
 import DrawIcon from '../../../../Partials/Svgs/PolygonDraw'
-import Brand from '../../../../../../../controllers/Brand'
 import {
   activeDrawing,
   inactiveDrawing
@@ -25,9 +26,7 @@ const DrawingButton = ({
       })}
       disabled={hasPolygon.length || isFetching}
     >
-      <DrawIcon
-        color={isDrawing ? `#${Brand.color('primary', '3388ff')}` : '#929292'}
-      />
+      <DrawIcon color={isDrawing ? grey.A300 : '#000'} />
     </button>
   )
 
