@@ -111,7 +111,8 @@ $item-height: 56px;
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  padding: 16px 0;
+  align-items: center;
+  height: $header-height;
   border-bottom: 1px solid #d4d4d4;
   
   > .c-app-sidenav__item__title--button {

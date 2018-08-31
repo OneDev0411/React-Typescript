@@ -18,7 +18,7 @@ const propTypes = {
   isFit: PropTypes.bool,
 
   /**
-   * The size of the button. {small, medium, large}
+   * The size of the button. {small, medium, large, XLarge}
    */
   iconSize: Button.propTypes.size
 }
