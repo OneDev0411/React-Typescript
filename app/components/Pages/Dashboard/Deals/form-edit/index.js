@@ -1,35 +1,81 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+// import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
-import { saveSubmission } from '../../../../../store_actions/deals'
-import Deal from '../../../../../models/Deal'
-import PDFJS from 'pdfjs-dist'
-import Preview from './preview'
+
+import {
+  saveSubmission,
+  getDeal,
+  getForms
+} from '../../../../../store_actions/deals'
+import { LoadingDealContainer } from './styled'
+
 import PageHeader from '../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
+import Spinner from '../../../../../views/components/Spinner'
 
-class FormEdit extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isLoaded: false,
-      isSaving: false,
-      document: null,
-      values: {}
+import PDFEdit from './editor'
+
+import importPdfJs from '../../../../../utils/import-pdf-js'
+import config from '../../../../../../config/public'
+
+class EditDigitalForm extends React.Component {
+  state = {
+    isFormLoaded: false,
+    isSaving: false,
+    pdfDocument: null,
+    values: {}
+  }
+
+  componentDidMount() {
+    this.initialize()
+  }
+
+  initialize = async () => {
+    const { deal } = this.props
+
+    if (deal && !deal.checklists) {
+      await this.props.getDeal(deal.id)
+    }
+
+    if (!this.state.pdfDocument) {
+      this.loadPdfDocument()
     }
   }
 
-  onValueUpdate(name, value) {
-    const { values } = this.state
+  loadPdfDocument = async () => {
+    const PDFJS = await importPdfJs()
 
-    const updated = { ...values }
-    updated[name] = value
+    const { task } = this.props
+    let forms = this.props.forms
 
-    this.setState({values:updated})
+    if (!forms) {
+      forms = await getForms()
+    }
+
+    const form = forms[task.form]
+    const url = task.submission
+      ? task.submission.file.url
+      : `${config.forms.files}/${form.formstack_id}.pdf`
+
+    const pdfDocument = await PDFJS.getDocument(url)
+
+    this.setState({
+      isFormLoaded: true,
+      pdfDocument
+    })
   }
 
-  setValues(values) {
+  changeFormValue = (name, value) => {
+    this.setState({
+      values: {
+        ...this.state.values,
+        [name]: value
+      }
+    })
+  }
+
+  setFormValues = values => {
     this.setState({
       values: {
         ...this.state.values,
@@ -38,102 +84,58 @@ class FormEdit extends React.Component {
     })
   }
 
-//   async saveForm(values) {
-//     const { saveSubmission, task, notify } = this.props
-//
-//     const status = 'Fair'
-//
-//     // save form
-//     try {
-//       await saveSubmission(task.id, task.form, status, values)
-//
-//       notify({
-//         message: 'The form has been saved!',
-//         status: 'success'
-//       })
-//
-//       // close form
-//       return this.close()
-//     } catch (err) {
-//       notify({
-//         message: 'We were unable to save your form. Please try saving again',
-//         status: 'error'
-//       })
-//     }
-//
-//     // don't show saving
-//     this.setState({ isSaving: false })
-//   }
-
-  close() {
-    const { deal } = this.props
-
-    browserHistory.push(`/dashboard/deals/${deal.id}`)
-  }
-
-  async componentDidMount() {
-    const url = this.getFormUrl()
-    const document = await PDFJS.getDocument(url)
-
-    this.setState({
-      isLoaded: true,
-      document
-    })
-  }
-
-  getFormUrl() {
+  render() {
+    const { isFormLoaded, isSaving, pdfDocument } = this.state
     const { task } = this.props
 
-    //TODO: Handle when submission doesn't exist
-    return task.submission.file.url
-  }
+    if (!task) {
+      return (
+        <LoadingDealContainer>
+          <Spinner />
+          Loading Deal
+        </LoadingDealContainer>
+      )
+    }
 
-  renderPdf() {
-    const { deal, roles } = this.props
-    const { isLoaded, values, document } = this.state
-
-    if (!isLoaded) {
-      return null
+    if (!pdfDocument) {
+      return (
+        <LoadingDealContainer>
+          <Spinner />
+          Loading Digital Form
+        </LoadingDealContainer>
+      )
     }
 
     return (
-      <Preview
-        document={ document }
-        values={ values }
-        deal={ deal }
-        roles={ roles }
-        onValueUpdate={ this.onValueUpdate.bind(this) }
-        setValues={ this.setValues.bind(this) }
-      />
-    )
-  }
-
-  render() {
-    const { isLoaded, isSaving } = this.state
-
-    const { task } = this.props
-
-    return (
-      <div>
+      <Fragment>
         <PageHeader backButton>
           <PageHeader.Title>
             <PageHeader.Heading>{task.title}</PageHeader.Heading>
           </PageHeader.Title>
 
           <PageHeader.Menu>
-            {(!isLoaded || isSaving) && <i className="icon-save fa fa-spin fa-spinner" />}
+            {(!isFormLoaded || isSaving) && (
+              <i className="icon-save fa fa-spin fa-spinner" />
+            )}
 
             <ActionButton
               style={{ padding: '0.75em' }}
-              disabled={!isLoaded || isSaving}
+              disabled={!isFormLoaded || isSaving}
             >
               Save
             </ActionButton>
           </PageHeader.Menu>
         </PageHeader>
 
-        { this.renderPdf() }
-      </div>
+        <PDFEdit
+          document={pdfDocument}
+          deal={this.props.deal}
+          roles={this.props.roles}
+          values={this.state.values}
+          onValueUpdate={this.changeFormValue}
+          onSetValues={this.setFormValues}
+        />
+      </Fragment>
     )
   }
 }
@@ -146,11 +148,11 @@ function mapStateToProps({ deals, user }, props) {
     user,
     task: tasks && tasks[taskId],
     deal: list && list[id],
-    roles: deals.roles
+    forms: deals.forms
   }
 }
 
 export default connect(
   mapStateToProps,
-  { saveSubmission, notify }
-)(FormEdit)
+  { saveSubmission, getDeal, getForms, notify }
+)(EditDigitalForm)

@@ -12,7 +12,8 @@ export default {
     url: process.env.RECHAT_STORE_URL
   },
   forms: {
-    url: process.env.RECHAT_FORMS_URL
+    url: process.env.RECHAT_FORMS_URL,
+    files: process.env.RECHAT_FORMS_FILES
   },
   cosmicjs: {
     bucket: {
