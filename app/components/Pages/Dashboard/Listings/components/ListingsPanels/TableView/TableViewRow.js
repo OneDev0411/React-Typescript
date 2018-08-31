@@ -26,7 +26,9 @@ const TableViewRow = ({
       onClick={() => {
         browserHistory.push(`/dashboard/mls/${listing.id}`)
       }}
-      onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : () => {}}
+      onMouseEnter={
+        mouseEventIsActive ? () => onMouseEnter(listing.id) : () => {}
+      }
       onMouseLeave={mouseEventIsActive ? onMouseLeave : () => {}}
     >
       <td className="c-tableview__address-cell">
@@ -36,7 +38,7 @@ const TableViewRow = ({
           )}
         </div>
         <div className="c-tableview__address-cell__body">
-          <h4 className="c-tableview__listing-address san-fran ellipses">
+          <h4 className="c-tableview__listing-address ellipses">
             {props.address}
           </h4>
           <p style={{ marginBottom: 0 }}>
@@ -62,7 +64,10 @@ const TableViewRow = ({
 }
 
 export default compose(
-  connect(({ data }) => ({ user: data.user }), { setMapHoveredMarkerId }),
+  connect(
+    ({ data }) => ({ user: data.user }),
+    { setMapHoveredMarkerId }
+  ),
   withHandlers({
     onMouseEnter: ({ setMapHoveredMarkerId, tabName }) => id => {
       setMapHoveredMarkerId(tabName, id)
