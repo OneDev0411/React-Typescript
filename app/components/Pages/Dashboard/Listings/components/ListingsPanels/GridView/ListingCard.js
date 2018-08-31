@@ -14,8 +14,8 @@ import changeListingFollowStatuses from '../../../../../../../store_actions/list
 
 const FollowContainer = styled.div`
   position: absolute;
-  left: 1rem;
-  top: 1rem;
+  left: 0.5em;
+  top: 0.5em;
 `
 
 const ListingCard = ({
