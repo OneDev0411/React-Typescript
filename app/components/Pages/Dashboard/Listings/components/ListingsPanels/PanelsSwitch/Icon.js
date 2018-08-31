@@ -2,13 +2,14 @@ import React from 'react'
 import SvgList from '../../../../Partials/Svgs/List'
 import SvgGlobe from '../../../../Partials/Svgs/Globe'
 import SvgPhotos from '../../../../Partials/Svgs/Photos'
-import Brand from '../../../../../../../controllers/Brand'
+
+import { primary } from '../../../../../../../views/utils/colors'
 
 const Icon = ({ name, active }) => {
-  let color = '#929292'
+  let color = '#000'
 
   if (active) {
-    color = `#${Brand.color('primary', '3388ff')}`
+    color = primary
   }
 
   const list = <SvgList color={color} />
