@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 
 import { confirmation } from '../../../../../../../store_actions/confirmation'
 
-import { Button, Checkbox, DropdownButton, MenuItem } from 'react-bootstrap'
-import Brand from '../../../../../../../controllers/Brand'
+import { Checkbox, DropdownButton, MenuItem } from 'react-bootstrap'
+import Button from '../../../../../../../views/components/Button/ActionButton'
 
 const getText = node => node.target.text.toLowerCase()
 
@@ -118,11 +118,7 @@ class PanelHeader extends React.Component {
             {this.props.isLoggedIn &&
               tabName === 'search' && (
                 <Button
-                  bsStyle="primary"
                   onClick={this.handleSaveSearch}
-                  style={{
-                    backgroundColor: `#${Brand.color('primary', '3388ff')}`
-                  }}
                   className="c-panel__header__button"
                 >
                   Save Search
