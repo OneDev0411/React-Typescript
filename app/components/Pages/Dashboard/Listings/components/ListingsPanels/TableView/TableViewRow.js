@@ -4,7 +4,6 @@ import compose from 'recompose/compose'
 import { browserHistory } from 'react-router'
 import withHandlers from 'recompose/withHandlers'
 
-import FavoriteHeart from '../../FavoriteHeart'
 import prepareListingViewItemProps from '../prepareListingViewItemProps'
 import { setMapHoveredMarkerId } from '../../../../../../../store_actions/listings/map'
 

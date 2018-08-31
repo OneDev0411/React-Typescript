@@ -61,10 +61,12 @@
 }
 
 .c-tableview__listing-address {
-  font-weight: normal;
-  line-height: 1;
-  margin-top: 0;
+  color: #000;
   margin-bottom: 0.25rem;
+
+  &:hover {
+    color: $brand-primary;
+  }
 }
 
 .c-tableview__listing-status__icon {
