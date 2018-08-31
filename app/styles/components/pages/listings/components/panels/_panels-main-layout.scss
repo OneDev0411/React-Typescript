@@ -9,12 +9,9 @@
   overflow-x: hidden;
   will-change: transform;
   .c-listings-panel--table & {
-    top: 160px;
+    top: 80px;
   }
   .l-listings__main--alert & {
     top: 1em;
-  }
-  .l-listings__main--alert .c-listings-panel--table & {
-    top: 52px;
   }
 }
