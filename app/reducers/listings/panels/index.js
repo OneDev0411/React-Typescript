@@ -5,7 +5,7 @@ import {
   TOGGLE_PANEL_SORTING_DIRECTION
 } from '../../../constants/listings/panels'
 
-const activePanel = (state = 'map', action) => {
+const activePanel = (state = 'table', action) => {
   switch (action.type) {
     case SET_ACTIVE_PANEL:
       return action.panelName
