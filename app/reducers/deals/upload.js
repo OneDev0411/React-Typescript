@@ -14,24 +14,23 @@ export default (state = initialState, action) => {
     case actionTypes.RESET_UPLOAD_FILES:
       return initialState
 
-    case actionTypes.SET_UPLOAD_ATTRIBUTES:
-      const { fileId } = action
-      const file = state.files[fileId]
-      const properties = {
-        ...file.properties,
-        ...action.attributes
-      }
+    case actionTypes.SET_UPLOAD_ATTRIBUTES: {
+      const file = state.files[action.fileId]
 
       return {
         ...state,
         files: {
           ...state.files,
-          [fileId]: {
+          [action.fileId]: {
             ...file,
-            properties
+            properties: {
+              ...file.properties,
+              ...action.attributes
+            }
           }
         }
       }
+    }
 
     default:
       return state
