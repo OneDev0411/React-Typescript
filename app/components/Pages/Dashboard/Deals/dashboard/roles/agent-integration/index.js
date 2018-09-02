@@ -162,8 +162,6 @@ class RoleAgentIntegration extends React.Component {
     } = this.state
     const { deal, modalTitle, onHide } = this.props
 
-    console.log(this.props)
-
     return (
       <Fragment>
         {showAgentModal && (
