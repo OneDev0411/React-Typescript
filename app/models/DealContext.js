@@ -294,10 +294,14 @@ export function validate(ctx, value) {
   switch (ctx.data_type) {
     case 'Number':
     case 'Numeric':
-      return !Number.isNaN(parseFloat(value)) && /^\d*\.?\d*$/.test(value)
+      return value.length === 0
+        ? !ctx.mandatory
+        : !Number.isNaN(parseFloat(value)) && /^\d*\.?\d*$/.test(value)
+
     case 'String':
     case 'Text':
       return value.length > 0
+
     case 'Date':
       return validateDate(value)
   }
