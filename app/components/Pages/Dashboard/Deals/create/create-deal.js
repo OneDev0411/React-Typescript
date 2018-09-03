@@ -381,12 +381,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
+      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -805,7 +805,10 @@ class CreateDeal extends React.Component {
     const requiredFields = this.RequiredFields
     const isLeaseDeal = dealPropertyType && dealPropertyType.includes('Lease')
     const canSaveDeal =
-      !saving && dealSide.length > 0 && dealPropertyType.length > 0
+      !saving &&
+      isDraft !== -1 &&
+      dealSide.length > 0 &&
+      dealPropertyType.length > 0
 
     return (
       <div className="deal-create">
