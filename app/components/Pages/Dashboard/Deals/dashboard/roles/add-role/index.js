@@ -1,22 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Downshift from 'downshift'
 
 import RoleAgentIntegration from '../agent-integration'
 import { ROLE_NAMES, roleName } from '../../../utils/roles'
 import Deal from '../../../../../../../models/Deal'
+import { BasicDropdown } from 'components/BasicDropdown'
+import AddIcon from 'components/SvgIcons/Add/AddIcon'
+
+function getItems(items) {
+  return items.map(item => ({ label: roleName(item), value: item }))
+}
 
 class AddRole extends React.Component {
   state = {
     isModalOpen: false,
-    showRolesMenu: false,
     selectedRole: null
   }
-
-  toggleRolesMenu = () =>
-    this.setState(state => ({
-      showRolesMenu: !state.showRolesMenu
-    }))
 
   closeModal = () =>
     this.setState({
@@ -24,18 +23,10 @@ class AddRole extends React.Component {
       selectedRole: null
     })
 
-  handleAddNewRole = () => {
-    const { allowedRoles } = this.props
-
-    if (!allowedRoles || allowedRoles.length > 0) {
-      return this.toggleRolesMenu()
-    }
-  }
-
-  handleSelectRole = name =>
+  handleSelectRole = item =>
     this.setState({
       isModalOpen: true,
-      selectedRole: name
+      selectedRole: item.value
     })
 
   get AllowedRoles() {
@@ -72,46 +63,23 @@ class AddRole extends React.Component {
     })
   }
 
+  itemToString = item => item.label
+
   render() {
     const { isModalOpen, selectedRole } = this.state
-    const { deal } = this.props
+    const { deal, allowedRoles } = this.props
 
     return (
       <div className="create-new-role">
-        <Downshift
-          isOpen={this.state.showRolesMenu}
-          onOuterClick={this.toggleRolesMenu}
-        >
-          {({ isOpen }) => (
-            <div>
-              <div className="item add-new" onClick={this.handleAddNewRole}>
-                <img
-                  src="/static/images/deals/contact-add.png"
-                  alt="add contact"
-                />
-
-                <div className="name">
-                  <div style={{ color: '#61778d' }}>Add a Contact</div>
-                </div>
-              </div>
-
-              {isOpen && (
-                <div className="deal-roles-menu">
-                  <ul>
-                    {this.Roles.map((name, index) => (
-                      <li
-                        key={index}
-                        onClick={() => this.handleSelectRole(name)}
-                      >
-                        {roleName(name)}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
-        </Downshift>
+        <BasicDropdown
+          buttonSize={this.props.buttonSize}
+          items={getItems(this.Roles)}
+          itemToString={this.itemToString}
+          onChange={this.handleSelectRole}
+          buttonIcon={AddIcon}
+          buttonText="Add a Contact"
+          disabled={allowedRoles && allowedRoles.length === 0}
+        />
 
         <RoleAgentIntegration
           deal={deal}

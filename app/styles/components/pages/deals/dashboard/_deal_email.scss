@@ -1,6 +1,6 @@
 .deal-email {
   margin-left: 0;
-  color: #263445;
+  color: #000000;
   font-weight: normal;
   background-color: #e1eaef;
   padding: 8px;
@@ -9,17 +9,12 @@
   justify-content: space-between;
   align-items: center;
 
-  &:hover {
-    color: #8da2b5;
-  }
-
   .deal-email__label {
-    color: #1d364b;
     margin-bottom: 0px;
   }
 
   .deal-email__text {
-    color: #2196f3;
+    color: #003bdf;
     margin-bottom: 0px;
     margin-left: 8px;
   }

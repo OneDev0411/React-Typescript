@@ -1,7 +1,29 @@
 import React from 'react'
-import cn from 'classnames'
 import ToolTip from '../../../../../../../views/components/tooltip/index'
+import ActionButton from 'components/Button/ActionButton'
+import { css } from 'styled-components'
+import IconButton from 'components/Button/IconButton'
+import { primary } from 'views/utils/colors'
 
+const EditButton = ActionButton.extend`
+  ${({ hide }) =>
+    hide &&
+    css`
+      display: none !important;
+    `};
+`
+
+const DeleteButton = IconButton.extend`
+  color: #a4a4a4;
+  &:hover {
+    color: ${primary};
+  }
+  ${({ hide }) =>
+    hide &&
+    css`
+      display: none !important;
+    `};
+`
 export default ({
   showCTA,
   needsApproval,
@@ -15,12 +37,15 @@ export default ({
         needsApproval ? 'This field needs office approval after changing' : null
       }
     >
-      <span
+      <EditButton
+        size="small"
+        appearance="link"
         onClick={handleEditField}
-        className={cn('cta__button', { hide: !showCTA })}
+        hide={!showCTA}
+        className="cta__button"
       >
         EDIT
-      </span>
+      </EditButton>
     </ToolTip>
 
     <ToolTip
@@ -28,16 +53,14 @@ export default ({
         needsApproval ? 'This field needs office approval after removing' : null
       }
     >
-      <button
-        className={cn(
-          'c-button--shadow cta__button ico-remove fa fa-times-circle',
-          {
-            hide:
-              !showCTA || !contextData.value || contextData.value.length === 0
-          }
-        )}
+      <DeleteButton
+        size="small"
         onClick={handleDeleteField}
-      />
+        hide={!showCTA || !contextData.value || contextData.value.length === 0}
+        className="cta__button"
+      >
+        <div className="fa fa-times-circle" />
+      </DeleteButton>
     </ToolTip>
   </span>
 )

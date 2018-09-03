@@ -4,8 +4,8 @@ import { Container } from '../../../../../../../views/components/SlideMenu'
 
 function getContainerHeight(isTrainingAccount) {
   return isTrainingAccount
-    ? 'calc(100vh - (56px + 48px))'
-    : 'calc(100vh - 56px)'
+    ? 'calc(100vh - (56px + 4rem + 48px))'
+    : 'calc(100vh - 56px - 4rem)'
 }
 
 export const PageContainer = Container.extend`

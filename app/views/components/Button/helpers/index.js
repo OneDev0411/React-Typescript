@@ -23,6 +23,7 @@ export function getIconStatesStyle(props) {
   if (isOutline(props) || props.appearance === 'icon') {
     return css`
       &:hover,
+      &:hover > div,
       &:hover {
         > svg {
           fill: ${blue.A100};

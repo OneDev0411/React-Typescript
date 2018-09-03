@@ -1,5 +1,20 @@
 import React from 'react'
 import ListingStatus from './listing-status'
+import ActionButton from 'components/Button/ActionButton'
+import IconButton from 'components/Button/IconButton'
+import { primary } from 'views/utils/colors'
+
+const EditButton = ActionButton.extend`
+  display: none;
+`
+
+const DeleteButton = IconButton.extend`
+  display: none;
+  color: #a4a4a4;
+  &:hover {
+    color: ${primary};
+  }
+`
 
 class Info extends React.Component {
   render() {
@@ -15,17 +30,23 @@ class Info extends React.Component {
           <div className="value mls-number">
             {(hasListing && deal.mls_context.mls_number) || '-'}
 
-            <button
-              className="c-button--shadow deals-info__edit-cta hidden"
+            <EditButton
+              size="small"
+              appearance="link"
+              className="deals-info__edit-cta"
               onClick={editMls}
             >
               EDIT
-            </button>
+            </EditButton>
 
             {hasListing && (
-              <button onClick={deleteMls} className="c-button--shadow">
+              <DeleteButton
+                size="small"
+                onClick={deleteMls}
+                className="deals-info__close-icon"
+              >
                 <i className="fa fa-times-circle" />
-              </button>
+              </DeleteButton>
             )}
           </div>
         </div>

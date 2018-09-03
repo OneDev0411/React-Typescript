@@ -1,13 +1,14 @@
 import React from 'react'
 
 import RadioButton from '../../../../../views/components/radio'
+import { H2 } from 'components/Typography/headings'
 
 export default ({ isDraft, isRequired, onChangeDealType }) => (
   <div className="form-section">
-    <div className="hero">
+    <H2 className="hero">
       What is the stage of this deal?&nbsp;
       {isRequired && <span className="required">*</span>}
-    </div>
+    </H2>
 
     <div className="deal-radio-row">
       <RadioButton

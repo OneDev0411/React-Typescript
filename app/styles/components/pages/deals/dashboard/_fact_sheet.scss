@@ -5,19 +5,6 @@
 %deal-fact-approve-row {
   .approve-row {
     text-align: right;
-    .btn-approve {
-      width: 58px;
-      height: 20px;
-      border-radius: 3px;
-      background-color: #2196f3;
-      color: #fff;
-      font-size: 12px;
-      border: none;
-      margin-top: 2px;
-      &:focus {
-        outline: none;
-      }
-    }
   }
 }
 
@@ -28,7 +15,6 @@
     font-size: 14px;
     border-collapse: separate;
     border-spacing: 0 1px;
-    color: #1d364b;
 
     @extend %deal-fact-approve-row;
 
@@ -39,6 +25,7 @@
     .fact-row {
       display: flex;
       flex-direction: row;
+      justify-content: space-between;
       min-height: 30px;
       align-items: center;
       cursor: pointer;
@@ -46,14 +33,15 @@
         cursor: inherit;
       }
       &:not(.disabled):hover {
-        border: 1px dashed #2196f3;
+        border: 1px dashed #003bdf;
         padding: 0 3px;
+        .cta__button {
+          display: inline-block;
+          
+        }
       }
 
       .name {
-        width: 50%;
-        color: #1d364b;
-
         .status {
           margin-right: 5px;
           color: #eeeeee;
@@ -74,35 +62,25 @@
       }
 
       .field {
-        width: 50%;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
         font-size: 14px;
-        color: #1d364b;
         text-align: right;
         border: 1px dashed #fff;
         transition: 0.1s ease-in all;
         cursor: pointer;
         border-radius: 3px;
 
+        .cta {
+          display: flex;
+        }
+        
         .cta__button {
           display: none;
         }
 
-        &.approved {
-          color: #1d364b;
-        }
-
-        &.editable {
-          &:hover {
-            .cta {
-              color: #2196f3;
-            }
-
-            .cta__button {
-              display: inline-block;
-              margin-left: 0.5rem;
-            }
-          }
-        }
+      
 
         &.disabled {
           &:hover {
@@ -126,13 +104,6 @@
           border-color: red;
         }
 
-        .ico-remove {
-          color: #afbbc8;
-
-          &:hover {
-            color: #2196f3;
-          }
-        }
       }
     }
   }

@@ -14,6 +14,16 @@ import {
 } from '../../../../../../store_actions/deals'
 
 import { isBackOffice } from '../../../../../../utils/user-teams'
+import ActionButton from 'components/Button/ActionButton'
+
+const Button = ActionButton.extend`
+  width: 100%;
+  justify-content: center;
+`
+
+const EditButton = ActionButton.extend`
+  display: none;
+`
 
 class ListingStatus extends React.Component {
   constructor(props) {
@@ -132,12 +142,14 @@ class ListingStatus extends React.Component {
 
             {isBackOffice &&
               !saving && (
-                <button
-                  className="deals-info__mls-status__edit-cta c-button--shadow"
+                <EditButton
+                  size="small"
+                  appearance="link"
+                  className="deals-info__mls-status__edit-cta"
                   onClick={() => this.toggleModal()}
                 >
                   EDIT
-                </button>
+                </EditButton>
               )}
           </div>
 
@@ -152,12 +164,9 @@ class ListingStatus extends React.Component {
         {!isBackOffice &&
           DealContext.getHasActiveOffer(deal) && (
             <div>
-              <button
-                onClick={() => this.toggleModal()}
-                className="btn-change-status"
-              >
+              <Button appearance="outline" onClick={() => this.toggleModal()}>
                 Change Status
-              </button>
+              </Button>
             </div>
           )}
       </Fragment>

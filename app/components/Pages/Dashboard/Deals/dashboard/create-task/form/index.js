@@ -1,5 +1,11 @@
 import React from 'react'
 import Forms from './forms-list'
+import Icon from 'components/SvgIcons/Add/AddIcon'
+import { primary } from 'views/utils/colors'
+
+const AddIcon = Icon.extend`
+  fill: ${primary};
+`
 
 class CreateForm extends React.Component {
   constructor(props) {
@@ -23,13 +29,7 @@ class CreateForm extends React.Component {
           className="add-task form-task"
           onClick={() => this.displayForms(true)}
         >
-          <div className="icon">
-            <img
-              className="img-add"
-              src="/static/images/deals/plus.svg"
-              alt=""
-            />
-          </div>
+          <AddIcon />
 
           <div className="title">Add checklist item</div>
         </div>

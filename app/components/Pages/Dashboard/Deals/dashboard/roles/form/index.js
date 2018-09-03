@@ -4,8 +4,7 @@ import _ from 'underscore'
 import { RoleFormContainer } from './form-container'
 import { Modal } from 'react-bootstrap'
 import { ROLE_NAMES } from '../../../utils/roles'
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
-import CancelButton from '../../../../../../../views/components/Button/CancelButton'
+import ActionButton from 'views/components/Button/ActionButton'
 
 import { TYPE_PERSON, TYPE_COMPANY } from './form-components/type-input'
 
@@ -456,9 +455,13 @@ export class RoleFormModal extends React.Component {
                 />
               </Modal.Body>
               <Modal.Footer>
-                <CancelButton disabled={isSubmitting} onClick={onHide}>
+                <ActionButton
+                  appearance="outline"
+                  disabled={isSubmitting}
+                  onClick={onHide}
+                >
                   Cancel
-                </CancelButton>
+                </ActionButton>
                 <ActionButton
                   onClick={() => handleSubmit(this.onSubmit)}
                   type="submit"

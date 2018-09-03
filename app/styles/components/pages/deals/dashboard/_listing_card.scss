@@ -26,7 +26,7 @@
       height: 16px;
       display: none;
       border-radius: 2px;
-      background-color: #2196f3;
+      background-color: #003bdf;
       font-size: 12px;
       text-align: center;
       color: #fff;
@@ -58,11 +58,6 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-    }
-
-    .open-listing {
-      cursor: pointer;
-      opacity: 0.8;
     }
   }
 }
@@ -98,14 +93,14 @@
     }
     &:after {
       content: 'EDIT';
-      font-size: 1.4rem;
+      font-size: 1em;
       font-weight: normal;
-      color: #2196f3;
+      color: #003bdf;
       align-self: flex-end;
       visibility: hidden;
     }
     &:hover {
-      border: 1px dashed #2196f3;
+      border: 1px dashed #003bdf;
 
       &:after {
         visibility: visible;
@@ -118,33 +113,3 @@
   fill: #263445;
 }
 
-.deal-listing-card__warning-tooltip {
-  display: flex;
-  flex-direction: row;
-  padding: 1rem 1rem 0.7rem;
-  left: -25%;
-  width: 25rem;
-  font-size: 1.3rem;
-  font-weight: normal;
-  color: #fff;
-  border-radius: 5px;
-  background-color: #263445;
-  transform: translate(0, 0);
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: -22%;
-    left: 15%;
-    width: 10px;
-    height: 10px;
-    border: 10px transparent solid;
-    border-bottom-color: #263445;
-  }
-
-  > span {
-    margin-top: -0.3rem;
-    margin-left: 1rem;
-    width: calc(100% - 3.4rem);
-  }
-}

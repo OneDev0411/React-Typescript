@@ -2,8 +2,8 @@ import React from 'react'
 import moment from 'moment'
 import { getActiveTeamId } from '../../../../../../../../utils/user-teams'
 
-import XlsxIcon from '../../../../../../../../views/components/SvgIcons/Xlsx/XlsxIcon'
-import { BasicDropdown } from '../../../../../../../../views/components/BasicDropdown'
+import XlsxIcon from 'views/components/SvgIcons/Xlsx/XlsxIcon'
+import { BasicDropdown } from 'views/components/BasicDropdown'
 
 import { DropdownItem, DropdownItemSub } from './styled'
 
@@ -102,7 +102,7 @@ class ExportDeals extends React.Component {
         style={{ marginRight: '1rem' }}
         items={this.items}
         buttonIcon={XlsxIcon}
-        buttonText="Download Reoprt"
+        buttonText="Download Report"
         itemRenderer={({ item, ...rest }) => (
           <DropdownItem href={item.url} key={item.label} {...rest}>
             {item.label} <DropdownItemSub>{item.subTitle}</DropdownItemSub>
