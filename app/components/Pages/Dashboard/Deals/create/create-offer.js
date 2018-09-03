@@ -28,6 +28,8 @@ import {
 } from '../../../../../store_actions/deals'
 import { getLegalFullName } from '../utils/roles'
 import { confirmation } from '../../../../../store_actions/confirmation'
+import { Action } from 'rxjs/scheduler/Action'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -576,15 +578,15 @@ class CreateOffer extends React.Component {
               </div>
             )}
 
-          <Button
-            className={cn('create-offer-button', {
-              disabled: saving || offerType.length === 0
-            })}
+          <ActionButton
+            // className={cn('create-offer-button', {
+            //   disabled: saving || offerType.length === 0
+            // })}
             disabled={saving || offerType.length === 0}
-            onClick={() => this.createOffer()}
+            onClick={this.createOffer}
           >
             {saving ? 'Creating Offer ...' : 'Create Offer'}
-          </Button>
+          </ActionButton>
 
           <div className="error-summary">
             {this.isFormSubmitted &&

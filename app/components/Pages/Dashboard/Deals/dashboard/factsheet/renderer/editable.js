@@ -7,6 +7,16 @@ import ToolTip from '../../../../../../../views/components/tooltip/index'
 import Input from '../../../../../../../views/components/Input'
 import EditableCta from './editable-cta'
 import ContextDiscrepency from '../../context-discrepency'
+import ActionButton from 'components/Button/ActionButton'
+import IconButton from 'components/Button/IconButton'
+import { primary } from 'views/utils/colors'
+
+const DeleteButton = IconButton.extend`
+  color: #a4a4a4;
+  &:hover {
+    color: ${primary};
+  }
+`
 
 export default class Editable extends React.Component {
   constructor(props) {
@@ -138,95 +148,97 @@ export default class Editable extends React.Component {
         </div>
 
         <div className={cn('field editable', { approved })}>
-          <div style={{ display: 'inline-block', minWidth: '80%' }}>
-            <ContextDiscrepency
-              disabled={editMode || !isBackOffice}
-              deal={deal}
-              contextName={field.name}
-              placement={sectionId === 'critical-dates' ? 'bottom' : 'top'}
-            />
+          <ContextDiscrepency
+            disabled={editMode || !isBackOffice}
+            deal={deal}
+            contextName={field.name}
+            placement={sectionId === 'critical-dates' ? 'bottom' : 'top'}
+          />
 
-            {(!editMode || (editMode && isDateType)) && (
-              <ToolTip
-                caption={
-                  approved || isBackOffice ? null : 'Pending Office Approval'
-                }
+          {(!editMode || (editMode && isDateType)) && (
+            <ToolTip
+              caption={
+                approved || isBackOffice ? null : 'Pending Office Approval'
+              }
+            >
+              <span
+                onClick={() => this.editField()}
+                style={{ textAlign: 'left', opacity: saving ? 0.8 : 1 }}
               >
-                <span
-                  onClick={() => this.editField()}
-                  style={{ opacity: saving ? 0.8 : 1 }}
+                {this.getFormattedValue()}
+              </span>
+            </ToolTip>
+          )}
+
+          {editMode &&
+            isStringType && (
+              <ClickOutside
+                onClickOutside={() => this.onFinishEditing()}
+                style={{ display: 'flex', alignItems: 'center' }}
+              >
+                <Input
+                  data-type={field.format || field.data_type}
+                  {...field.properties}
+                  className="input-edit"
+                  maxLength={15}
+                  value={this.getValue()}
+                  onKeyPress={e => this.onKeyPress(e)}
+                  ErrorMessageHandler={({ message }) => (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        right: '5px'
+                      }}
+                      data-balloon={message}
+                      data-balloon-pos="left"
+                    >
+                      <i
+                        style={{
+                          verticalAlign: 'middle',
+                          fontSize: '14px',
+                          color: '#ec4b35'
+                        }}
+                        className="fa fa-warning"
+                      />
+                    </span>
+                  )}
+                  onChange={(e, data = {}) =>
+                    this.setState({
+                      value: !_.isUndefined(data.value)
+                        ? data.value
+                        : e.target.value
+                    })
+                  }
+                />
+
+                <ActionButton
+                  size="small"
+                  appearance="link"
+                  onClick={e => {
+                    e.stopPropagation()
+                    this.onFinishEditing()
+                  }}
                 >
-                  {this.getFormattedValue()}
-                </span>
-              </ToolTip>
+                  SAVE
+                </ActionButton>
+
+                <DeleteButton
+                  size="small"
+                  onClick={e => this.cancelEdit(e)}
+                  // className="cta__button"
+                >
+                  <div className="fa fa-times-circle" />
+                </DeleteButton>
+              </ClickOutside>
             )}
 
-            {editMode &&
-              isStringType && (
-                <ClickOutside
-                  onClickOutside={() => this.onFinishEditing()}
-                  className="inline"
-                >
-                  <Input
-                    data-type={field.format || field.data_type}
-                    {...field.properties}
-                    className="input-edit"
-                    maxLength={15}
-                    value={this.getValue()}
-                    onKeyPress={e => this.onKeyPress(e)}
-                    ErrorMessageHandler={({ message }) => (
-                      <span
-                        style={{
-                          position: 'absolute',
-                          right: '5px'
-                        }}
-                        data-balloon={message}
-                        data-balloon-pos="left"
-                      >
-                        <i
-                          style={{
-                            verticalAlign: 'middle',
-                            fontSize: '14px',
-                            color: '#ec4b35'
-                          }}
-                          className="fa fa-warning"
-                        />
-                      </span>
-                    )}
-                    onChange={(e, data = {}) =>
-                      this.setState({
-                        value: !_.isUndefined(data.value)
-                          ? data.value
-                          : e.target.value
-                      })
-                    }
-                  />
-
-                  <button
-                    className="c-button--shadow"
-                    onClick={e => {
-                      e.stopPropagation()
-                      this.onFinishEditing()
-                    }}
-                  >
-                    SAVE
-                  </button>
-
-                  <button
-                    className="c-button--shadow ico-remove fa fa-times-circle"
-                    onClick={e => this.cancelEdit(e)}
-                  />
-                </ClickOutside>
-              )}
-
-            <EditableCta
-              needsApproval={needsApproval}
-              contextData={contextData}
-              showCTA={saving !== field.name && !editMode}
-              handleEditField={() => this.editField()}
-              handleDeleteField={e => this.deleteField(e, field)}
-            />
-          </div>
+          <EditableCta
+            needsApproval={needsApproval}
+            contextData={contextData}
+            showCTA={saving !== field.name && !editMode}
+            handleEditField={() => this.editField()}
+            handleDeleteField={e => this.deleteField(e, field)}
+          />
 
           {saving &&
             saving === field.name && (

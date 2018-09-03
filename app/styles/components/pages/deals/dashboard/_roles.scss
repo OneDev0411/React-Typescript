@@ -105,7 +105,6 @@
     }
 
     .name {
-      color: #263445;
       font-weight: 500;
       width: calc(100% - 55px - #{$col-padding});
 
@@ -123,25 +122,11 @@
       }
     }
 
-    .cta {
-      width: 15px;
-      position: absolute;
-      right: 0.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-
-      i {
-        color: #62778c;
-        cursor: pointer;
-        transition: 0.1s ease-in all;
-      }
-
-      i.fa-delete {
-        opacity: 0;
-      }
+    .delete-button {
+      opacity: 0;
     }
-
-    &:hover .cta > i {
+    
+    &:hover > .delete-button {
       opacity: 1;
     }
   }

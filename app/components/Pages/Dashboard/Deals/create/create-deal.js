@@ -35,6 +35,7 @@ import {
 } from '../../../../../store_actions/deals'
 import OpenDeal from '../utils/open-deal'
 import { isBackOffice } from '../../../../../utils/user-teams'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 class CreateDeal extends React.Component {
   state = {
@@ -975,27 +976,18 @@ class CreateDeal extends React.Component {
               />
             )}
 
-          <Button
-            className={cn('create-deal-button', {
-              disabled: !canSaveDeal
-            })}
+          <ActionButton
             style={{ marginRight: '10px' }}
             onClick={this.updateOrCreateDeal}
             disabled={!canSaveDeal}
           >
             {this.SubmitLabel}
-          </Button>
+          </ActionButton>
 
           {deal && (
-            <Button
-              className={cn('create-deal-button', {
-                disabled: !canSaveDeal
-              })}
-              onClick={this.goLive}
-              disabled={!canSaveDeal}
-            >
+            <ActionButton onClick={this.goLive} disabled={!canSaveDeal}>
               {saving ? 'Saving ...' : 'Make visible to admin'}
-            </Button>
+            </ActionButton>
           )}
 
           <div className="error-summary">

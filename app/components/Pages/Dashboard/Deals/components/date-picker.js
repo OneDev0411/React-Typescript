@@ -1,6 +1,7 @@
 import React from 'react'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import DatePicker from 'react-day-picker'
+import ActionButton from 'views/components/Button/ActionButton'
 
 export default class extends React.Component {
   state = {
@@ -62,17 +63,22 @@ export default class extends React.Component {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button className="deal-button cancel" onClick={() => this.onClose()}>
+          <ActionButton
+            appearance="outline"
+            style={{
+              marginRight: '1em'
+            }}
+            onClick={() => this.onClose()}
+          >
             Cancel
-          </Button>
+          </ActionButton>
 
-          <Button
-            className="deal-button"
+          <ActionButton
             onClick={() => this.onSelectDate(selectedDate || date)}
             disabled={!date}
           >
             {saveText || 'Update'}
-          </Button>
+          </ActionButton>
         </Modal.Footer>
       </Modal>
     )

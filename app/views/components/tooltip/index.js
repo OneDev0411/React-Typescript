@@ -28,6 +28,7 @@ export default ({
 
   return (
     <OverlayTrigger
+      trigger={['click']}
       placement={placement}
       overlay={
         <Tooltip

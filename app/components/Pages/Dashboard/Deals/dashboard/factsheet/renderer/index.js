@@ -10,6 +10,7 @@ import {
 } from '../../../../../../../store_actions/deals'
 
 import { isBackOffice } from '../../../../../../../utils/user-teams'
+import ActionButton from 'components/Button/ActionButton'
 
 class Table extends React.Component {
   constructor(props) {
@@ -72,8 +73,7 @@ class Table extends React.Component {
       deal,
       isBackOffice,
       showTitle,
-      title,
-      getValue
+      title
     } = this.props
 
     return (
@@ -109,14 +109,14 @@ class Table extends React.Component {
                       context &&
                       !approved &&
                       saving !== field.name && (
-                        <button
-                          className="btn-approve"
+                        <ActionButton
+                          size="small"
                           onClick={e =>
                             this.approveField(e, field.name, context)
                           }
                         >
                           Approve
-                        </button>
+                        </ActionButton>
                       )}
                   </div>
                 </div>

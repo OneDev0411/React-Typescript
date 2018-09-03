@@ -1,11 +1,12 @@
 import React from 'react'
 import RadioButton from '../../../../../views/components/radio'
+import { H2 } from 'components/Typography/headings'
 
 export default ({ isOfficeAgent, onChangeOfficeAgent }) => (
   <div className="form-section office-agent">
-    <div className="hero">
+    <H2 className="hero">
       Is the listing agent from your office? <span className="required">*</span>
-    </div>
+    </H2>
 
     <RadioButton
       selected={isOfficeAgent === true}

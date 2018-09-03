@@ -5,6 +5,8 @@ import _ from 'underscore'
 import DatePicker from '../components/date-picker'
 import Input from '../../../../../views/components/Input'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+import { H2 } from 'components/Typography/headings'
+import ActionButton from 'components/Button/ActionButton'
 
 const ContextValue = ({ name, date, onRemove, onEdit }) => (
   <div className="selected-field">
@@ -63,10 +65,10 @@ export default class extends React.Component {
 
     return (
       <div className="form-section contexts">
-        <div className={cn('hero no-margin-bottom', { hasError })}>
+        <H2 className={cn('hero', { hasError })}>
           Please provide the following information:&nbsp;
           {hasError && <RequiredIcon />}
-        </div>
+        </H2>
 
         {areContextsRequired && (
           <div className="hero-description">
@@ -128,7 +130,7 @@ export default class extends React.Component {
                     className="entity-item date new"
                     onClick={() => this.setSelectedField(field.name)}
                   >
-                    <div className="add-item">
+                    <ActionButton appearance="link" className="add-item">
                       <span className="icon">+</span>
                       <span
                         className={cn('text', {
@@ -138,7 +140,7 @@ export default class extends React.Component {
                         {field.label}{' '}
                         {areContextsRequired && field.mandatory && <sup>*</sup>}
                       </span>
-                    </div>
+                    </ActionButton>
                   </div>
                 )}
               </Fragment>
