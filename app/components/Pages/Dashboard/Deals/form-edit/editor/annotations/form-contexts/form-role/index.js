@@ -15,7 +15,7 @@ export default function FormRoles({ roles, deal }) {
 
           const text = deal.roles
             .map(id => roles[id])
-            .filter(role => role.role === role_name)[number][attribute]
+            .filter(role => role.role === roleName)[number][attribute]
 
           return (
             <ContextAnnotation
