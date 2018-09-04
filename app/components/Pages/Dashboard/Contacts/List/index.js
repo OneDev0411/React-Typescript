@@ -167,6 +167,7 @@ class ContactsList extends React.Component {
     try {
       this.rowsUpdating(true)
       this.setState({ isFetchingContacts: true })
+
       await this.props.deleteContacts(ids)
 
       this.rowsUpdating(false)
