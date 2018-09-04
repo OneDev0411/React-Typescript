@@ -1,18 +1,21 @@
 import React from 'react'
-import { SearchContainer, Input, Title, Indicator } from './styled'
+import { SearchContainer, Input, Title } from './styled'
+import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import IconKeyboardArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
+import Spinner from 'components/Spinner'
 
 function getIcon(isMenuOpen, isSaving) {
-  let iconName = 'fa-caret-down'
+  let Icon = <IconKeyboardArrowDown />
 
   if (isMenuOpen) {
-    iconName = 'fa-caret-up'
+    Icon = <IconKeyboardArrowUp />
   }
 
   if (isSaving) {
-    iconName = 'fa-spin fa-cog'
+    Icon = <Spinner />
   }
 
-  return `fa ${iconName}`
+  return Icon
 }
 
 export const SearchInput = ({
@@ -27,7 +30,7 @@ export const SearchInput = ({
   onFocus,
   disabled
 }) => (
-  <SearchContainer onClick={onClick} disabled={disabled}>
+  <SearchContainer appearance="outline" onClick={onClick} disabled={disabled}>
     {searchable && (
       <Input
         {...getInputProps({ placeholder, value })}
@@ -42,6 +45,6 @@ export const SearchInput = ({
       </Title>
     )}
 
-    <Indicator className={getIcon(isMenuOpen, isSaving)} />
+    {getIcon(isMenuOpen, isSaving)}
   </SearchContainer>
 )
