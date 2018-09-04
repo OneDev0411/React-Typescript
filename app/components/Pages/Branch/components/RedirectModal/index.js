@@ -15,7 +15,7 @@ const RedirectModal = ({ children, brandInfo }) => {
                 <img
                   src={siteLogo}
                   alt={`${siteTitle}`}
-                  className={'c-auth__logo'}
+                  className="c-auth__logo"
                 />
               </Link>
             )}

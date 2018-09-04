@@ -16,6 +16,7 @@ export const buttonBaseStyle = css`
   position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: ${props => (props.isBlock ? 'center' : 'initial')};
   flex-wrap: nowrap;
   vertical-align: middle;
   margin: 0;

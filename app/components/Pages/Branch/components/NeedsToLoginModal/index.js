@@ -1,12 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router'
+
 import RedirectModal from '../RedirectModal'
+import { SigninButton } from '../SigninButton'
 
 const NeedsToLoginModal = ({ params, brandInfo }) => {
-  const { brandColor } = brandInfo
-  const {
-    receivingUser, redirectTo, email, branchUrl
-  } = params
+  const { receivingUser, email, branchUrl } = params
 
   const username = encodeURIComponent(email || receivingUser.email)
 
@@ -16,17 +14,12 @@ const NeedsToLoginModal = ({ params, brandInfo }) => {
         <h3 className="c-confirm-modal__title">Needs To Login</h3>
         <p className="c-confirm-modal__message">Please login first.</p>
         <div>
-          <Link
-            style={{
-              marginLeft: '2rem',
-              textDecoration: 'none',
-              backgroundColor: brandColor
-            }}
-            className="c-confirm-modal__button"
+          <SigninButton
+            appearance="primary"
             to={`/signin?username=${username}&redirectTo=${branchUrl}`}
           >
             Sign In
-          </Link>
+          </SigninButton>
         </div>
       </div>
     </RedirectModal>

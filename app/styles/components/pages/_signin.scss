@@ -14,40 +14,32 @@
   }
 
   @media screen and (min-width: 50em) {
-    width: 70rem;
+    width: 700px;
     position: relative;
     margin: 0 auto;
   }
 }
 
 .c-auth {
-  max-width: 40rem;
-  padding: 3rem 2rem;
+  padding: 2rem;
   margin: 0 auto;
-  font-size: 1.6rem;
-  font-weight: 300;
   line-height: 1;
-  color: #88a3b7;
 
-  @media screen and (min-width: 35em) {
-    // 560px
-    width: 48rem;
-    max-width: 100%;
+  @media screen and (min-width: 35em) { // 560px
+    width: 600px;
     margin: 0;
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: #fff;
     box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1);
   }
 
   .c-auth--register > & {
-    @media screen and (min-width: 35em) {
-      // 560px
+    @media screen and (min-width: 35em) { // 560px
       border-radius: 0;
       box-shadow: none;
     }
 
-    @media screen and (min-width: 50em) {
-      // 800px
+    @media screen and (min-width: 50em) { // 800px
       width: 60%;
       left: right;
       padding: 0;
@@ -56,19 +48,19 @@
 }
 
 .c-auth__header {
-  margin-bottom: 6rem;
-  font-size: 1.8rem;
+  margin-bottom: 4rem;
+  font-size: 1.2rem;
   text-align: center;
 
   .c-confirm-modal & {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 }
 
 .c-auth__logo {
-  width: 6rem;
+  width: 64px;
   border-radius: 3px;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 
   .c-auth--register & {
     @media screen and (min-width: 50em) {
@@ -82,27 +74,20 @@
 }
 
 .c-auth__title {
-  margin: 0 0 1rem;
+  margin: 0 0 0.5em;
   font-weight: bold;
   letter-spacing: 1px;
-  color: #15374d;
 }
 
 .c-auth__subtitle {
   text-align: center;
-  font-size: 1.7rem;
-  line-height: 1;
-
-  // .c-auth__title + & {
-  //   margin-top: 2rem;
-  // }
 }
 
 .c-auth__field {
-  margin-bottom: 3rem;
+  margin-bottom: 3em;
 
   &:last-of-type {
-    margin-bottom: 1rem;
+    margin-bottom: 1em;
   }
 }
 
@@ -112,15 +97,14 @@
 
 .c-auth__field__input {
   width: 100%;
-  height: 4.4rem;
-  padding: 7px 1rem;
+  height: 36px;
+  padding: 0.5em 1em;
   transition: 0.4s;
-  color: #333;
+
   letter-spacing: 1px;
   border-radius: 3px;
-  color: #15374d;
   background: transparent;
-  border: 1px solid #A9BBCB;
+  border: 1px solid $gray;
 
   &:focus {
     outline: none;
@@ -135,7 +119,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #2196f3;
+  background-color: $brand-primary;
   transition: 0.3s;
 }
 
@@ -153,7 +137,7 @@
   left: 0;
   width: 2px;
   height: 0;
-  background-color: #2196f3;
+  background-color: $brand-primary;
   transition: 0.4s;
 }
 
@@ -188,7 +172,6 @@
   font-size: 1.7rem;
   font-weight: inherit;
   letter-spacing: 0.5px;
-  color: #768694;
 
   .c-auth__field__input:focus + &,
   .has-content.c-auth__field__input + & {
@@ -206,16 +189,14 @@
 
 .c-auth__submit-btn {
   width: 100%;
-  height: 4.4rem;
+  height: 48px;
   display: block;
   padding: 0;
   margin: 2rem 0 4rem;
-  line-height: 44px;
-  font-size: 1.8rem;
   color: #fff;
   border-radius: 3px;
   border-width: 0;
-  background-color: #2196f3;
+  background-color: $brand-primary;
   transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -226,19 +207,20 @@
 }
 
 .c-auth__field__error-alert {
-  margin-top: 1rem;
-  padding: 0.7rem 1rem;
+  margin-top: 0.5em;
+  padding: 0.5em;
 }
 
 .c-auth__field__error-alert {
   border-radius: 3px;
-  font-size: 1.4rem;
 }
 
 .c-auth__submit-alert,
 .c-auth__submit-error-alert,
 .c-auth__submit-alert--success {
   @extend .c-alert;
+  line-height: 1.5;
+  margin-bottom: 1em;
 }
 
 .c-auth__field__error-alert,
@@ -248,7 +230,6 @@
 
 .c-auth__submit-alert--success {
   @extend .c-alert--success;
-  margin-bottom: 3rem;
 }
 
 .c-auth__submit-alert--warning {
@@ -322,7 +303,7 @@
 }
 
 .c-auth__submit-error-alert__btn {
-  color: #2196f3;
+  color: $brand-primary;
   display: block;
   padding: 0;
   border-width: 0;
@@ -330,6 +311,6 @@
 }
 
 .c-forgot {
-  margin-top: -1rem;
-  font-size: 1.4rem;
+  margin: -1rem 0 2rem;
+  font-size: 0.875rem; // 14px
 }
