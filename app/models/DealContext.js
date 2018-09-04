@@ -294,7 +294,8 @@ export function validate(ctx, value) {
   switch (ctx.data_type) {
     case 'Number':
     case 'Numeric':
-      return typeof value === 'string' && value.length === 0
+      return _.isUndefined(value) ||
+        (typeof value === 'string' && value.length === 0)
         ? !ctx.mandatory
         : !Number.isNaN(parseFloat(value)) && /^\d*\.?\d*$/.test(value)
 
