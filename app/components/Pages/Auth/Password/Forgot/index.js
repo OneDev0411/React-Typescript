@@ -7,8 +7,10 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import signup from '../../../../../models/auth/signup'
-import { getBrandInfo, renderField } from '../../SignIn'
+import { getBrandInfo } from '../../SignIn'
 import resetPassword from '../../../../../models/auth/password/reset'
+import Button from '../../../../../views/components/Button/ActionButton'
+import SimpleField from '../../../../Pages/Dashboard/Account/Profile/components/SimpleField'
 
 const ForgotForm = ({
   brand,
@@ -54,22 +56,19 @@ const ForgotForm = ({
                     setSubmitError(false)
                   }
                 }}
-                component={renderField}
+                component={SimpleField}
               />
               {submitError && (
                 <div className="c-auth__submit-error-alert">{submitError}</div>
               )}
-              <button
+              <Button
                 type="submit"
-                className="c-auth__submit-btn"
+                isBlock
                 disabled={isDisabled}
-                style={{
-                  background: brandColor,
-                  opacity: isDisabled ? 0.7 : 1
-                }}
+                style={{ marginBottom: '2em' }}
               >
                 {isSubmitting ? 'Submitting...' : 'Reset Password'}
-              </button>
+              </Button>
               <p className="c-auth__subtitle">
                 <small>Change your mind?</small>&nbsp;&nbsp;
                 <Link to="/signin">Sign in</Link>

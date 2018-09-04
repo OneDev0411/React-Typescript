@@ -7,11 +7,11 @@
   }
 
   .modal-dialog {
-    max-width: 53rem;
+    max-width: 530px;
   }
 
   .modal-body {
-    padding: 4rem 8rem;
+    padding: 2rem 4rem;
   }
 
   .modal-content {
@@ -26,18 +26,16 @@
 .c-confirm-modal__title {
   line-height: 1;
   margin-top: 0;
-  font-size: 2.4rem;
+  font-size: 1.5rem;
 }
 
 .c-confirm-modal__message {
-  font-size: 1.7rem;
-  color: #78909c;
-  margin-bottom: 2rem;
+  margin-bottom: 2em;
 }
 
 .c-confirm-modal__button {
-  min-width: 11rem;
-  padding: .75rem 1rem;
+  min-width: 110px;
+  padding: .5rem 0.5rem;
   border-width: 0;
   color: #fff;
   border-radius: 3px;

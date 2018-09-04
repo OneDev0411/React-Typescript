@@ -96,9 +96,7 @@ const ListingDesktopView = ({
   setGalleryModalState,
   galleryModalIsActive,
   handleModalGalleryNav,
-  galleryModalActiveIndex,
-  setGalleryModalIsActive,
-  setGalleryModalActiveIndex
+  galleryModalActiveIndex
 }) => {
   const { user } = data
   const brand_agent = listing.proposed_agent
@@ -109,7 +107,7 @@ const ListingDesktopView = ({
     viewer_width = window.innerWidth
 
     if (user && !data.is_widget && container !== 'modal') {
-      viewer_width -= 130
+      viewer_width -= 80
     }
   }
 

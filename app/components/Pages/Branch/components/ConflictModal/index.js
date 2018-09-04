@@ -1,22 +1,18 @@
 import React from 'react'
-import { Link, browserHistory } from 'react-router'
+
 import RedirectModal from '../RedirectModal'
+import Button from '../../../../../views/components/Button/LinkButton'
+import { SigninButton } from '../SigninButton'
 
 const ConflictModal = ({ params, brandInfo }) => {
-  const { brandColor } = brandInfo
-  const {
-    action,
-    loggedInUser,
-    receivingUser,
-    redirectTo,
-    messageText,
-    actionButtonProps
-  } = params
+  const { receivingUser, redirectTo, messageText, actionButtonProps } = params
   const { is_shadow } = receivingUser
 
   const actionButton = actionButtonProps || {
     text: 'Sign in',
-    href: `/signout?username=${encodeURIComponent(receivingUser.email)}&redirectTo=${redirectTo}`
+    href: `/signout?username=${encodeURIComponent(
+      receivingUser.email
+    )}&redirectTo=${redirectTo}`
   }
 
   if (is_shadow) {
@@ -28,26 +24,19 @@ const ConflictModal = ({ params, brandInfo }) => {
     <RedirectModal brandInfo={brandInfo}>
       <div>
         <h3 className="c-confirm-modal__title">Conflict</h3>
-        <p className="c-confirm-modal__message">{messageText}</p>
+        <p
+          className="c-confirm-modal__message"
+          style={{ marginBottom: '2rem' }}
+        >
+          {messageText}
+        </p>
         <div>
-          <Link
-            to="/dashboard/mls"
-            style={{ textDecoration: 'none' }}
-            className="c-confirm-modal__button c-confirm-modal__button--ghost"
-          >
+          <Button appearance="outline" to="/dashboard/mls">
             Cancel
-          </Link>
-          <a
-            href={actionButton.href}
-            style={{
-              marginLeft: '2rem',
-              textDecoration: 'none',
-              backgroundColor: brandColor
-            }}
-            className="c-confirm-modal__button"
-          >
+          </Button>
+          <SigninButton appearance="primary" to={actionButton.href}>
             {actionButton.text}
-          </a>
+          </SigninButton>
         </div>
       </div>
     </RedirectModal>

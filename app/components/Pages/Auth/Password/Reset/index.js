@@ -6,17 +6,17 @@ import { Field, reduxForm } from 'redux-form'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import Brand from '../../../../../controllers/Brand'
-import { getBrandInfo, renderField } from '../../SignIn'
+import { getBrandInfo } from '../../SignIn'
 import ConflictModal from '../../../Branch/components/ConflictModal'
 import updatePassword from '../../../../../models/auth/password/update'
+import Button from '../../../../../views/components/Button/ActionButton'
+import SimpleField from '../../../../Pages/Dashboard/Account/Profile/components/SimpleField'
 
 const Reset = ({
   user,
   brand,
   invalid,
   pristine,
-  loginParams,
   submitError,
   isSubmitting,
   handleSubmit,
@@ -25,7 +25,7 @@ const Reset = ({
   submitSuccessfully
 }) => {
   const brandInfo = getBrandInfo(brand)
-  const { siteLogo, siteTitle, brandColor } = brandInfo
+  const { siteLogo, siteTitle } = brandInfo
   const isDisabled = isSubmitting || invalid || pristine
 
   let content = (
@@ -36,7 +36,7 @@ const Reset = ({
             <img
               src={siteLogo}
               alt={`${siteTitle} logo`}
-              className={'c-auth__logo'}
+              className="c-auth__logo"
             />
           </Link>
         )}
@@ -59,7 +59,7 @@ const Reset = ({
                   setSubmitError(false)
                 }
               }}
-              component={renderField}
+              component={SimpleField}
             />
             <Field
               type="password"
@@ -71,7 +71,7 @@ const Reset = ({
                   setSubmitError(false)
                 }
               }}
-              component={renderField}
+              component={SimpleField}
             />
             {submitError && (
               <div className="c-auth__submit-error-alert">
@@ -79,17 +79,14 @@ const Reset = ({
                 <Link to="/password/forgot">request a new password</Link>.
               </div>
             )}
-            <button
+            <Button
               type="submit"
-              className="c-auth__submit-btn"
+              isBlock
               disabled={isDisabled}
-              style={{
-                background: brandColor,
-                opacity: isDisabled ? 0.7 : 1
-              }}
+              style={{ marginBottom: '2em' }}
             >
               {isSubmitting ? 'Submitting...' : 'Reset Password'}
-            </button>
+            </Button>
             <p className="c-auth__subtitle">
               <small>Code not working?</small>&nbsp;&nbsp;
               <Link to="/password/forgot">Try sending it again</Link>
@@ -127,6 +124,7 @@ const Reset = ({
       messageText:
         'You are logged in on this device. To reset your password, please sign out.'
     }
+
     content = <ConflictModal params={params} brandInfo={brandInfo} />
   }
 
@@ -145,7 +143,7 @@ const validate = values => {
   if (!values.confirm_password) {
     errors.confirm_password = 'Required'
   } else if (values.confirm_password !== values.password) {
-    errors.confirm_password = 'Your passwords don\'t match'
+    errors.confirm_password = "Your passwords don't match"
   }
 
   return errors
