@@ -16,6 +16,12 @@ export const TemplateItem = styled.div`
   margin-bottom: 20px;
   box-shadow: 0px 5px 14px #c3c3c3;
   cursor: pointer;
+
+  border: 4px solid ${props => (props.isSelected ? '#003bdf' : 'transparent')};
+
+  :hover {
+    border: 4px solid #003bdf;
+  }
 `
 
 export const TemplateImageContainer = styled.div`
