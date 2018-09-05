@@ -11,7 +11,6 @@ export const TemplateImage = styled.img`
   display: block;
   width: 100%;
   min-height: 156px;
-  max-height: 300px;
   margin-bottom: 16px;
   border-radius: 3px;
   cursor: pointer;
