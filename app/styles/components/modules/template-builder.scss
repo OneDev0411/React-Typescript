@@ -6,6 +6,10 @@
   height: 100%;
   z-index: 100;
 
+  .gjs-pn-panels {
+    display: none;
+  }
+
   .gjs-pn-panel {
     &.gjs-pn-views{
       display: none;

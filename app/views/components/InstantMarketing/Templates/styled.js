@@ -23,16 +23,13 @@ export const TemplateImageContainer = styled.div`
   height: 85%;
   margin: auto;
   padding-top: 20px;
+  text-align: center;
 `
 
-export const TemplateImage = styled.div`
-  background-image: url(${props => props.src});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
+export const TemplateImage = styled.img`
   height: 90%;
+  box-shadow: 0px 5px 10px #c3c3c3;
 `
-
 
 export const TemplateName = styled.div`
   background: white;
