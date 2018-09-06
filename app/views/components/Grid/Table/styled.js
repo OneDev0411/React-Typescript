@@ -38,7 +38,7 @@ export const BodyRow = Row.extend`
 `
 
 export const Cell = styled.div`
-  align-self: ${props => props.verticalAlign || 'flex-start'};
+  align-self: ${props => props.verticalAlign || 'center'};
   text-align: left;
 
   ${props =>
