@@ -1,10 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-const width = '11'
-const height = '8'
-const viewBox = '0 0 11 8'
-const color = '#fff'
+const width = '24'
+const height = '24'
+const viewBox = '0 0 24 24'
 
 const getDimensions = () => ({
   height,
@@ -22,7 +21,8 @@ const Image = styled.svg`
 
 const defaultProps = {
   children: [
-    <path fill="none" stroke={color} d="M9.571 1L3.143 7 1 4.857" key="key-0" />
+    <path fill="none" d="M0 0h24v24H0z" key="key-0" />,
+    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" key="key-1" />
   ],
   viewBox
 }
@@ -31,5 +31,5 @@ export default Object.assign(Image, {
   getDimensions,
   getDimensionsCss,
   defaultProps,
-  displayName: 'Checkmark'
+  displayName: 'IconCheckmark'
 })
