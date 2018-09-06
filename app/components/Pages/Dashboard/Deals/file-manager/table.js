@@ -328,7 +328,7 @@ export class FileManager extends React.Component {
       },
       {
         id: 'created_at',
-        header: 'DATE UPLOADED',
+        header: 'Date Uploaded',
         accessor: 'created_at',
         width: '220px',
         render: ({ rowData: file }) => (
@@ -353,7 +353,7 @@ export class FileManager extends React.Component {
       },
       {
         id: 'envelope_name',
-        header: () => 'ENVELOPE NAME',
+        header: () => 'Envelope Name',
         accessor: 'envelope_name',
         render: ({ rowData: file }) => {
           const envelope = file.envelope
@@ -366,7 +366,7 @@ export class FileManager extends React.Component {
         }
       },
       {
-        header: () => 'FOLDER',
+        header: () => 'Folder',
         accessor: 'task',
         className: 'file-table__task',
         render: ({ rowData: file }) => {
