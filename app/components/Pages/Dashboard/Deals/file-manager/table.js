@@ -67,7 +67,7 @@ export class FileManager extends React.Component {
     return mime === 'application/pdf'
   }
 
-  onCellClick = (rowIndex, { rowData: file }) => ({
+  getTdProps = (rowIndex, { rowData: file }) => ({
     onClick: () => {
       this.openFile(file)
     }
@@ -302,6 +302,14 @@ export class FileManager extends React.Component {
     resetGridSelectedItems('dealFiles')
   }
 
+  getTrProps = () => ({
+    hoverStyle: `
+      #splitter-button{
+          display: block !important;
+      }
+        `
+  })
+
   getColumns() {
     const { isDeleting, updatingFiles } = this.state
     const { deal, tasks } = this.props
@@ -403,12 +411,13 @@ export class FileManager extends React.Component {
           <Fragment>
             {!file.envelope &&
               this.isPdfDocument(file.mime) && (
-                <button
-                  className="button split-button hide"
+                <ActionButton
+                  id="splitter-button"
+                  style={{ display: 'none' }}
                   onClick={() => this.splitSingleFile(file)}
                 >
                   Split PDF
-                </button>
+                </ActionButton>
               )}
           </Fragment>
         )
@@ -531,7 +540,8 @@ export class FileManager extends React.Component {
                 totalRows: this.data.length || 0
               }}
               columns={this.getColumns(this.data)}
-              getTdProps={this.onCellClick}
+              getTdProps={this.getTdProps}
+              getTrProps={this.getTrProps}
             />
           </Upload>
         )}
