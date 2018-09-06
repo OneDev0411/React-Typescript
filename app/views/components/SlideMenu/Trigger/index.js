@@ -15,7 +15,7 @@ const defaultProps = {
 }
 
 export const Trigger = ({ onClick, tooltip }) => (
-  <Tooltip caption={tooltip} placement="top">
+  <Tooltip caption={tooltip} placement="bottom">
     <Button onClick={onClick} style={{ marginRight: '1em' }} isFit>
       <IconNav />
     </Button>
