@@ -6,7 +6,7 @@
   height: 100%;
   z-index: 100;
 
-  .gjs-pn-panels {
+  .gjs-pn-commands {
     display: none;
   }
 
@@ -97,6 +97,8 @@
 
   .gjs-cv-canvas {
     width: 75%;
+    height: 100%;
+    top: 0;
   }
 
   .gjs-badge {
