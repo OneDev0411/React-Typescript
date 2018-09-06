@@ -31,8 +31,8 @@ export const buttonBaseStyle = css`
   }
 
   &[disabled] {
+    color: ${grey.A900};
     cursor: not-allowed;
-    opacity: 0.3;
   }
 `
 
@@ -45,8 +45,7 @@ export const ButtonAppearances = {
     background-color: ${blue.A100};
 
     &[disabled] {
-      background-color: #000;
-      color: #fff;
+      background-color: ${grey.A550};
     }
 
     ${isNotDisableState}hover, ${isNotDisableState}focus {
@@ -58,6 +57,10 @@ export const ButtonAppearances = {
     color: #000;
     border: 1px solid #000;
     background-color: ${props => (props.isActive ? grey.A100 : 'transparent')};
+
+    &[disabled] {
+      border-color: ${grey.A550};
+    }
 
     ${isNotDisableState}hover, ${isNotDisableState}focus {
       color: ${blue.A100};
@@ -71,7 +74,6 @@ export const ButtonAppearances = {
     background-color: transparent;
 
     &[disabled] {
-      color: #000;
       text-decoration: none;
     }
 
@@ -83,5 +85,9 @@ export const ButtonAppearances = {
   icon: css`
     ${buttonBaseStyle};
     background-color: transparent;
+
+    svg {
+      fill: ${grey.A900};
+    }
   `
 }
