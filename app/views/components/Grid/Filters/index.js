@@ -43,8 +43,15 @@ class Filters extends React.Component {
   createFiltersFromSegment = segment => {
     const activeFilters = this.props.createFiltersFromSegment(segment.filters)
 
+    const indexedFilters = {}
+    let filterCounter = 0
+
+    activeFilters.forEach(filter => {
+      indexedFilters[filterCounter++] = filter
+    })
+
     this.setState({
-      activeFilters: _.indexBy(activeFilters, 'id')
+      activeFilters: indexedFilters
     })
   }
 

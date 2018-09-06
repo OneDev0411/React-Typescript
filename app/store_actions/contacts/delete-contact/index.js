@@ -18,7 +18,7 @@ export function deleteContacts(contactIds) {
       })
 
       await removeContacts(contactIds)
-      afterDeleteContactsFetch(dispatch, getState, contactIds)
+      await afterDeleteContactsFetch(dispatch, getState, contactIds)
     } catch (error) {
       dispatch({
         error,

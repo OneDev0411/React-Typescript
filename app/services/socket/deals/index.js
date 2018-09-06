@@ -51,7 +51,7 @@ export default class DealSocket extends Socket {
     console.log('[Deal Socket] Deal Changed', action, dealId)
 
     if (!dealId) {
-      console.warn('[Deal Socket] received deal is not valid', deal)
+      console.warn('[Deal Socket] received deal is not valid', dealId)
 
       return false
     }
