@@ -330,7 +330,7 @@ export class FileManager extends React.Component {
         id: 'created_at',
         header: 'DATE UPLOADED',
         accessor: 'created_at',
-        width: '210px',
+        width: '220px',
         render: ({ rowData: file }) => (
           <TruncatedColumn>{this.getDate(file.created_at)}</TruncatedColumn>
         )
