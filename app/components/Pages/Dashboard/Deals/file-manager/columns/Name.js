@@ -41,8 +41,6 @@ export default class FilesListName extends React.Component {
       const fileNameDomNode = ReactDOM.findDOMNode(this.fileName)
 
       if (fileNameDomNode.offsetWidth - fileNameDomNode.scrollWidth < 0) {
-        console.log(fileNameDomNode.getBoundingClientRect())
-        
         this.setState({ showTooltip: true })
       }
     }
