@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import Table from 'views/components/Grid/Table'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { Dropdown, Button } from 'react-bootstrap'
+import { Dropdown } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
 import {
