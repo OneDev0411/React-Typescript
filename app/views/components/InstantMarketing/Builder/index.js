@@ -49,6 +49,19 @@ class Builder extends React.Component {
     this.disableAssetManager()
   }
 
+  setupNunjucks = () => {
+    this.nunjucks = new nunjucks.Environment()
+
+    this.nunjucks.addFilter('currency', price =>
+      new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 0
+      }).format(price)
+    )
+  }
+
   disableAssetManager = () => {
     this.editor.on('run:open-assets', () => this.editor.Modal.close())
   }
