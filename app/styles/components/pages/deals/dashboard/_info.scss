@@ -32,45 +32,6 @@
     }
   }
 
-  .deal-info-section.deal-roles {
-    padding: 0;
-    margin-bottom: 2rem;
-
-    .deal-info-title {
-      margin-bottom: 3px;
-    }
-
-    .create-new-role {
-      position: relative;
-    }
-
-    .deal-roles-menu {
-      position: absolute;
-      left: 12px;
-      top: 30px;
-      width: 200px;
-      max-height: 200px;
-      overflow: auto;
-      background: #fff;
-      border-radius: 5px;
-      box-shadow: 0 0 8px 0 rgba(0,0,0,0.2);
-      cursor: auto;
-
-      ul {
-        padding: 0;
-        margin: 10px;
-      }
-
-      ul li {
-        margin-bottom: 10px;
-        cursor: pointer;
-        &:hover {
-          color: #2196f3;
-        }
-      }
-    }
-  }
-
   .info-btn {
     width: calc(100% - 20px);
     margin: 10px 10px 0 10px;
@@ -97,9 +58,5 @@
 .c-add-signer-modal {
   .deal-info-title {
     display: none !important;
-  }
-
-  .deal-info-section.deal-roles {
-    padding: 0 !important;
   }
 }

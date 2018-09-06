@@ -265,11 +265,5 @@
     padding: 0;
     max-height: 320px;
     overflow: auto;
-    .deal-roles {
-      .deal-info-title {
-        display: none;
-      }
-      @extend %deal-roles;
-    }
   }
 }

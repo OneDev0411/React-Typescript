@@ -6,7 +6,16 @@ import RoleAgentIntegration from '../agent-integration'
 import { ROLE_NAMES, roleName } from '../../../utils/roles'
 import Deal from '../../../../../../../models/Deal'
 
-class AddRole extends React.Component {
+import {
+  Container,
+  RolesMenuContainer,
+  RolesMenu,
+  RolesMenuItem
+} from './styled'
+
+import { RoleItem as AddRole, RoleInfo, RoleTitle, RoleAvatar } from '../styled'
+
+class AddRoleForm extends React.Component {
   state = {
     isModalOpen: false,
     showRolesMenu: false,
@@ -27,6 +36,8 @@ class AddRole extends React.Component {
   handleAddNewRole = () => {
     const { allowedRoles } = this.props
 
+    console.log(allowedRoles)
+
     if (!allowedRoles || allowedRoles.length > 0) {
       return this.toggleRolesMenu()
     }
@@ -35,6 +46,7 @@ class AddRole extends React.Component {
   handleSelectRole = name =>
     this.setState({
       isModalOpen: true,
+      showRolesMenu: false,
       selectedRole: name
     })
 
@@ -77,37 +89,36 @@ class AddRole extends React.Component {
     const { deal } = this.props
 
     return (
-      <div className="create-new-role">
+      <Container>
         <Downshift
           isOpen={this.state.showRolesMenu}
           onOuterClick={this.toggleRolesMenu}
         >
           {({ isOpen }) => (
             <div>
-              <div className="item add-new" onClick={this.handleAddNewRole}>
-                <img
-                  src="/static/images/deals/contact-add.png"
-                  alt="add contact"
-                />
+              <AddRole onClick={this.handleAddNewRole} noBackgroundHover>
+                <RoleAvatar>
+                  <img src="/static/images/deals/contact-add.png" alt="" />
+                </RoleAvatar>
 
-                <div className="name">
-                  <div style={{ color: '#61778d' }}>Add a Contact</div>
-                </div>
-              </div>
+                <RoleInfo>
+                  <RoleTitle>Add Contact</RoleTitle>
+                </RoleInfo>
+              </AddRole>
 
               {isOpen && (
-                <div className="deal-roles-menu">
-                  <ul>
+                <RolesMenuContainer>
+                  <RolesMenu>
                     {this.Roles.map((name, index) => (
-                      <li
+                      <RolesMenuItem
                         key={index}
                         onClick={() => this.handleSelectRole(name)}
                       >
                         {roleName(name)}
-                      </li>
+                      </RolesMenuItem>
                     ))}
-                  </ul>
-                </div>
+                  </RolesMenu>
+                </RolesMenuContainer>
               )}
             </div>
           )}
@@ -122,7 +133,7 @@ class AddRole extends React.Component {
           modalTitle="Add to Deal"
           onHide={this.closeModal}
         />
-      </div>
+      </Container>
     )
   }
 }
@@ -133,4 +144,4 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(mapStateToProps)(AddRole)
+export default connect(mapStateToProps)(AddRoleForm)

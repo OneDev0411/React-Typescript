@@ -8,6 +8,17 @@ import { confirmation } from '../../../../../../store_actions/confirmation'
 import { roleName, getLegalFullName } from '../../utils/roles'
 import RoleCrmIntegration from './crm-integration'
 
+import {
+  RolesContainer,
+  RolesTitle,
+  RoleItem,
+  RoleAvatar,
+  RoleInfo,
+  RoleTitle,
+  RoleType,
+  RoleActions
+} from './styled'
+
 class Roles extends React.Component {
   state = {
     user: null,
@@ -115,8 +126,8 @@ class Roles extends React.Component {
     const { user, deletingRoleId, showRoleModal } = this.state
 
     return (
-      <div className="deal-info-section deal-roles">
-        <div className="deal-info-title">CONTACTS</div>
+      <RolesContainer style={this.props.containerStyle}>
+        {this.props.showTitle !== false && <RolesTitle>CONTACTS</RolesTitle>}
 
         {(deal.roles || [])
           .filter(
@@ -127,12 +138,12 @@ class Roles extends React.Component {
             const { id, user } = role
 
             return (
-              <div
+              <RoleItem
                 key={id}
                 className="item"
                 onClick={() => this.onSelectRole(role)}
               >
-                <div className="role-avatar">
+                <RoleAvatar>
                   <UserAvatar
                     size={32}
                     color="#D4D4D4"
@@ -140,15 +151,15 @@ class Roles extends React.Component {
                     name={this.getAvatarTitle(role)}
                     image={user ? user.profile_image_url : null}
                   />
-                </div>
+                </RoleAvatar>
 
-                <div className="name">
-                  <div className="title">{getLegalFullName(role)}</div>
-                  <div className="role">{roleName(role.role)}</div>
-                </div>
+                <RoleInfo>
+                  <RoleTitle>{getLegalFullName(role)}</RoleTitle>
+                  <RoleType>{roleName(role.role)}</RoleType>
+                </RoleInfo>
 
                 {allowDeleteRole && (
-                  <div className="cta">
+                  <RoleActions>
                     {deletingRoleId &&
                       id === deletingRoleId && (
                         <i className="fa fa-spinner fa-spin" />
@@ -160,9 +171,9 @@ class Roles extends React.Component {
                         className="fa fa-delete fa-times"
                       />
                     )}
-                  </div>
+                  </RoleActions>
                 )}
-              </div>
+              </RoleItem>
             )
           })}
 
@@ -176,7 +187,7 @@ class Roles extends React.Component {
         />
 
         <AddRole deal={deal} allowedRoles={allowedRoles} />
-      </div>
+      </RolesContainer>
     )
   }
 }
