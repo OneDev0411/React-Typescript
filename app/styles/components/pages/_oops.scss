@@ -2,7 +2,7 @@
   height: 100vh;
   position: relative;
   color: #fff;
-  background: #38f url('/static/images/oops/oops_bg.jpg') no-repeat center
+  background: #000 url('/static/images/oops/oops_bg.jpg') no-repeat center
     center;
   background-size: cover;
   background-position-x: -100px;
@@ -18,8 +18,7 @@
   top: 2rem;
   left: 2rem;
   display: block;
-  font-size: 2.7rem;
-  letter-spacing: 1px;
+  font-size: 1.5rem;
   color: inherit;
 
   &:hover {
@@ -42,15 +41,16 @@
 }
 
 .c-oops__body__title {
-  font-size: 2.8rem;
+  font-size: 1.7rem;
+  font-family: $font-family-sans-serif;
 
   @media screen and (min-width: 600px) {
     margin: 0 0 2rem;
-    font-size: 3.6rem;
+    font-size: 2.4rem;
   }
 
   @media screen and (min-width: 1200px) {
-    font-size: 4.6rem;
+    font-size: 3rem;
   }
 }
 
@@ -58,12 +58,12 @@
   font-weight: normal;
 
   @media screen and (min-width: 600px) {
-    font-size: 1.8rem;
+    font-size: 1.125rem;
   }
 
   @media screen and (min-width: 1200px) {
-    max-width: 90rem;
-    font-size: 2.2rem;
+    max-width: 900px;
+    font-size: 1.6rem;
     margin: 0 auto;
   }
 
