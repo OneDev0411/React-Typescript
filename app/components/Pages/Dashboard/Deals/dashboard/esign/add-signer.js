@@ -1,5 +1,5 @@
 import React from 'react'
-import Roles from '../roles'
+import Roles from '../../components/roles'
 import Modal from '../../../../../../views/components/BasicModal'
 import CancelButton from '../../../../../../views/components/Button/CancelButton'
 

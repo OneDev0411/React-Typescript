@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import RoleAgentIntegration from '../dashboard/roles/agent-integration'
+import RoleAgentIntegration from '../components/roles/agent-integration'
 import RoleItem from './role-item'
 
 class CrudRole extends React.Component {
