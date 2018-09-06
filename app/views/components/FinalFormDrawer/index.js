@@ -14,14 +14,16 @@ FinalFormDrawer.propTypes = {
   title: PropTypes.string.isRequired,
   showFooter: PropTypes.bool,
   showReset: PropTypes.bool,
-  validate: PropTypes.func
+  validate: PropTypes.func,
+  submitLabel: PropTypes.string
 }
 
 FinalFormDrawer.defaultProps = {
   initialValues: {},
   showReset: true,
   showFooter: true,
-  validate: () => ({})
+  validate: () => ({}),
+  submitLabel: 'Save'
 }
 
 export function FinalFormDrawer(props) {
@@ -97,7 +99,7 @@ export function FinalFormDrawer(props) {
                   disabled={submitting || validating}
                   onClick={() => handleSubmit(props.onSubmit)}
                 >
-                  {submitting ? 'Saving ...' : 'Save'}
+                  {submitting ? 'Saving ...' : props.submitLabel}
                 </ActionButton>
               </div>
             </Drawer.Footer>

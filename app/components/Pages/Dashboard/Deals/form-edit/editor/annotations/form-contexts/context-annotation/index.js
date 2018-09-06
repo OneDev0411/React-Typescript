@@ -1,44 +1,70 @@
 import React, { Fragment } from 'react'
+import styled from 'styled-components'
+
 import parseAppearanceString from '../../appearance'
 import linebreak from '../../linebreak'
-import Text from './text'
 
-export default function Context(props) {
-  const { annotations, value } = props
+const Container = styled.div`
+  font-size: ${props => props.fontSize};
+  font-family: ${props => props.fontName};
+  color: ${props => props.color};
+  font-weight: ${props => (props.bold ? 'bold' : 'normal')};
+  position: absolute;
+  left: ${props => props.rect.left}px;
+  top: ${props => props.rect.top}px;
+  width: ${props => props.rect.width}px;
+  height: ${props => props.rect.height}px;
+  border: 1px dotted green;
+  cursor: pointer;
 
-  const first = annotations[0]
-  const appearance = parseAppearanceString(first.defaultAppearance)
+  :hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+`
 
-  // TODO: Proper grouping
-  const rects = annotations.map(annotation => {
-    const rect = annotation.rect
+export default class Context extends React.Component {
+  render() {
+    const { annotations, value } = this.props
 
-    return {
-      left: rect[0],
-      top: rect[1],
-      width: Math.floor(rect[2] - rect[0]),
-      height: Math.floor(rect[3] - rect[1]),
-      multiline: annotation.multiLine
-    }
-  })
+    const first = annotations[0]
+    const appearance = parseAppearanceString(first.defaultAppearance)
 
-  let { values, fontSize } = linebreak(value, rects, appearance.size)
+    // TODO: Proper grouping
+    const rects = annotations.map(annotation => {
+      const rect = annotation.rect
 
-  fontSize = Math.min(fontSize, this.props.maxFontSize || fontSize)
+      return {
+        left: rect[0],
+        top: rect[1],
+        width: Math.floor(rect[2] - rect[0]),
+        height: Math.floor(rect[3] - rect[1]),
+        multiline: annotation.multiLine
+      }
+    })
 
-  return (
-    <Fragment>
-      {rects.map((rect, index) => (
-        <Text
-          key={index}
-          rect={rect}
-          text={values[index]}
-          fontSize={fontSize}
-          fontFamily={appearance.font}
-          color={appearance.color}
-          bold={appearance.bold}
-        />
-      ))}
-    </Fragment>
-  )
+    let { values, fontSize } = linebreak(value, rects, appearance.size)
+
+    fontSize = Math.min(fontSize, this.props.maxFontSize || fontSize)
+
+    return (
+      <div>
+        {rects.map((rect, index) => (
+          <Container
+            key={index}
+            fontName={appearance.font}
+            fontSize={fontSize}
+            bold={appearance.bold}
+            color={appearance.color}
+            rect={rect}
+            innerRef={ref => (this.container = ref)}
+            onClick={() =>
+              this.props.onClick(this.container.getBoundingClientRect())
+            }
+          >
+            {values[index]}
+          </Container>
+        ))}
+      </div>
+    )
+  }
 }

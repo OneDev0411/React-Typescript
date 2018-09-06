@@ -14,6 +14,20 @@ export function getList() {
 }
 
 /**
+ * search context by name
+ */
+export function searchContext(name) {
+  const context = _.find(getList(), { name })
+
+  return {
+    ...context,
+    validate: getValidationFunction(context.name),
+    properties: getFieldProperties(context.name),
+    getFormattedValue: getFormattedValue.bind(context)
+  }
+}
+
+/**
  * returns list of all checklists
  */
 export function getChecklists() {
@@ -229,7 +243,7 @@ export function getValue(deal, field) {
   }
 
   if (isCurrency(field)) {
-    dataObject.contextValue = Deal.get.formattedPrice(contextValue)
+    dataObject.value = Deal.get.formattedPrice(contextValue)
   }
 
   return dataObject
@@ -360,6 +374,8 @@ export function getValidItems(
 }
 
 function getFormattedValue(value) {
+  console.log('>>>>>>>', this, value)
+
   if (!value) {
     return value
   }
@@ -373,6 +389,7 @@ function getFormattedValue(value) {
 
 export default {
   getList,
+  searchContext,
   getChecklists,
   getDealTypeFlag,
   getPropertyTypeFlag,

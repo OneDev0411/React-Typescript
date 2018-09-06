@@ -10,7 +10,7 @@ import FormContexts from './form-contexts'
 const AnnotationsContainer = styled.div`
   position: absolute;
   top: 0;
-  left: 10px;
+  left: 0;
   bottom: 0;
   right: 0;
   /* background-color: rgba(255, 0, 0, 0.1); */
@@ -25,9 +25,12 @@ export default class Annotations extends React.Component {
     this.init()
   }
 
-  inputs = {}
-  contexts = {}
-  roles = {}
+  inputs = []
+  contexts = []
+  roles = {
+    all: [],
+    single: []
+  }
 
   init = async () => {
     await this.indexAnnotations()
@@ -152,6 +155,7 @@ export default class Annotations extends React.Component {
           roles={this.roles}
           values={this.props.values}
           onValueUpdate={this.props.onValueUpdate}
+          onClick={this.props.onClick}
         />
       </AnnotationsContainer>
     )

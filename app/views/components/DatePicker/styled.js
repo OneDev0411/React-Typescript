@@ -32,6 +32,10 @@ export const Container = styled.div`
     color: white;
   }
 
+  .DayPicker-Caption {
+    padding: 0 0 !important;
+  }
+
   .DayPicker-Day--range:hover {
     background-color: #dbdbdb !important;
     color: #262626 !important;

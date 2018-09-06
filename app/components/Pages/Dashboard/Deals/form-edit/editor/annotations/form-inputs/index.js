@@ -26,7 +26,7 @@ export default class FormInputs extends React.Component {
     return UNKNOWN_ANNOTATION
   }
 
-  createInput = info => {
+  createInput = (info, index) => {
     const { values } = this.props
 
     const { annotation } = info
@@ -35,7 +35,7 @@ export default class FormInputs extends React.Component {
     const value = values[annotation.fieldName]
 
     const props = {
-      key: annotation.fieldName,
+      key: `${annotation.fieldName}-${index}`,
       annotation,
       value,
       onValueUpdate: this.props.onValueUpdate.bind(this, annotation.fieldName)

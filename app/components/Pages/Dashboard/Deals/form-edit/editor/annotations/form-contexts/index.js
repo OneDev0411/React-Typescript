@@ -4,14 +4,24 @@ import FormRole from './form-role'
 import FormRoles from './form-roles'
 import FormContext from './form-context'
 
-export default class FormContexts extends React.Component {
-  render() {
-    return (
-      <Fragment>
-        <FormRole role={this.props.roles.single} />
-        <FormRoles roles={this.props.roles.all} />
-        <FormContext contexts={this.props.contexts} deal={this.props.deal} />
-      </Fragment>
-    )
-  }
+export default function FormContexts(props) {
+  return (
+    <Fragment>
+      <FormRole
+        roles={props.roles.single}
+        deal={props.deal}
+        onClick={props.onClick}
+      />
+      <FormRoles
+        roles={props.roles.all}
+        deal={props.deal}
+        onClick={props.onClick}
+      />
+      <FormContext
+        contexts={props.contexts}
+        deal={props.deal}
+        onClick={props.onClick}
+      />
+    </Fragment>
+  )
 }

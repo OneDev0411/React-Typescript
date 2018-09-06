@@ -9,18 +9,18 @@ const breakText = (text, rects, fontSize) => {
 
   const el = document.createElement('div')
 
-  el.style = {
-    ...el.style,
-    position: 'absolute',
-    whiteSpace: 'nowrap',
-    top: '-200px'
-  }
+  el.style.position = 'absolute'
+  el.style.whiteSpace = 'nowrap'
+  el.style.top = '-200px'
 
   document.body.appendChild(el)
 
   const values = {}
 
-  const words = text.trim().split(/\s{1,}/g)
+  const words = text
+    .toString()
+    .trim()
+    .split(/\s{1,}/g)
 
   let i = -1
   let line

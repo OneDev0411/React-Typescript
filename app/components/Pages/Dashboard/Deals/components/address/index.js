@@ -1,14 +1,10 @@
 import React, { Fragment } from 'react'
-import { Form, Field } from 'react-final-form'
+import { connect } from 'react-redux'
+import { Field } from 'react-final-form'
 import _ from 'underscore'
-
-import { Modal } from 'react-bootstrap'
 
 import { TextInput } from '../../../../../../views/components/Forms/TextInput'
 import { SelectInput } from '../../../../../../views/components/Forms/SelectInput'
-
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import CancelButton from '../../../../../../views/components/Button/CancelButton'
 
 import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDrawer'
 
@@ -19,20 +15,20 @@ import {
   STATES
 } from '../../utils/address'
 import Deal from '../../../../../../models/Deal'
+import { updateContext } from '../../../../../../store_actions/deals'
 
 const defaultState = 'Texas'
 
-export default class Address extends React.Component {
-  /**
-   *
-   */
-  onClose = () => this.props.onHide()
+class Address extends React.Component {
+  state = {
+    isSavingAddress: false
+  }
 
   /**
    *
    */
   onSubmit = values =>
-    this.props.onCreateAddress({
+    this.onCreateAddress({
       type: 'listing',
       address_components: this.getAddressComponent(values)
     })
@@ -48,9 +44,9 @@ export default class Address extends React.Component {
    *
    */
   getInitialValues = () => {
-    const { deal, saving } = this.props
+    const { deal } = this.props
 
-    if (saving) {
+    if (this.state.isSavingAddress) {
       return this.form
     }
 
@@ -210,17 +206,47 @@ export default class Address extends React.Component {
     }
   }
 
+  onCreateAddress = async address => {
+    const { address_components } = address
+
+    if (this.props.onCreateAddress) {
+      return this.props.onCreateAddress(address)
+    }
+
+    this.setState({
+      isSavingAddress: true
+    })
+
+    const context = {}
+
+    _.each(address_components, (value, name) => {
+      context[name] = {
+        value: address_components[name],
+        approved: true // none of address contexts, don't need admin approval
+      }
+    })
+
+    await this.props.updateContext(this.props.deal.id, context)
+
+    this.setState({
+      isSavingAddress: false
+    })
+
+    this.props.onClose()
+  }
+
   render() {
-    const { show, deal, saving } = this.props
+    const { deal } = this.props
 
     return (
       <FinalFormDrawer
         initialValues={this.getInitialValues()}
         title="Address"
         isOpen={this.props.show}
-        onClose={this.onClose}
+        onClose={this.props.onClose}
         onSubmit={this.onSubmit}
         validate={this.validate}
+        submitting={this.state.isSavingAddress}
         submitLabel={deal ? 'Update Address' : 'Add'}
         showReset={false}
         render={() => (
@@ -299,46 +325,10 @@ export default class Address extends React.Component {
         )}
       />
     )
-
-    return (
-      <FinalFormDrawer show={show} backdrop="static" onHide={this.onClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Address</Modal.Title>
-        </Modal.Header>
-
-        <Form
-          onSubmit={this.onSubmit}
-          validate={this.validate}
-          initialValues={this.getInitialValues()}
-          render={({ handleSubmit }) => (
-            <Fragment>
-              <Modal.Body
-                className="u-scrollbar--thinner"
-                style={{ padding: 0 }}
-              />
-
-              <Modal.Footer>
-                <CancelButton
-                  disabled={saving}
-                  onClick={this.onClose}
-                  style={{
-                    marginRight: '10px'
-                  }}
-                >
-                  Cancel
-                </CancelButton>
-
-                <ActionButton
-                  disabled={saving}
-                  onClick={() => handleSubmit(this.onSubmit)}
-                >
-                  {deal ? 'Update Address' : 'Add'}
-                </ActionButton>
-              </Modal.Footer>
-            </Fragment>
-          )}
-        />
-      </FinalFormDrawer>
-    )
   }
 }
+
+export default connect(
+  null,
+  { updateContext }
+)(Address)

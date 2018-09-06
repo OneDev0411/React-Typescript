@@ -26,31 +26,6 @@ class ListingCard extends React.Component {
       showAddressModal: !this.state.showAddressModal
     })
 
-  onCreateAddress = async address => {
-    const { address_components } = address
-    const { deal, updateContext } = this.props
-
-    this.setState({
-      isSavingAddress: true,
-      showAddressModal: false
-    })
-
-    const context = {}
-
-    _.each(address_components, (value, name) => {
-      context[name] = {
-        value: address_components[name],
-        approved: true // none of address contexts, don't need admin approval
-      }
-    })
-
-    await updateContext(deal.id, context)
-
-    this.setState({
-      isSavingAddress: false
-    })
-  }
-
   render() {
     const { deal, roles } = this.props
     const { showAddressModal, isSavingAddress } = this.state
@@ -134,8 +109,7 @@ class ListingCard extends React.Component {
         <ManualAddress
           show={showAddressModal}
           deal={deal}
-          onHide={this.toggleShowAddressModal}
-          onCreateAddress={this.onCreateAddress}
+          onClose={this.toggleShowAddressModal}
         />
       </div>
     )

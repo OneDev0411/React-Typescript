@@ -2,19 +2,41 @@ import React, { Fragment } from 'react'
 import _ from 'underscore'
 
 import ContextAnnotation from '../context-annotation'
-import Deal from '../../../../../../../../../models/Deal'
+import DealContext from '../../../../../../../../../models/DealContext'
 
-export default function FormContexts({ contexts, deal }) {
+function getContextType(context) {
+  if (context && context.priority === 'MLS') {
+    return 'Address'
+  }
+
+  return 'Singular'
+}
+
+export default function FormContexts({ contexts = {}, deal, onClick }) {
   return (
-    <Fragment>
-      {_.map(contexts, (context, index) => (
-        <ContextAnnotation
-          key={index}
-          annotations={contexts[context].map(item => item.annotation)}
-          value={Deal.get.field(deal, context)}
-          maxFontSize={20}
-        />
-      ))}
-    </Fragment>
+    <div>
+      {_.map(contexts, (context, name) => {
+        const ctx = DealContext.searchContext(name)
+
+        return (
+          <ContextAnnotation
+            key={name}
+            value={
+              DealContext.getValue(deal, DealContext.searchContext(name)).value
+            }
+            annotations={context.map(item => item.annotation)}
+            maxFontSize={20}
+            onClick={bounds => {
+              onClick('Context', {
+                name,
+                type: getContextType(ctx),
+                context: ctx,
+                bounds
+              })
+            }}
+          />
+        )
+      })}
+    </div>
   )
 }
