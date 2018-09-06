@@ -41,21 +41,21 @@ export default class Mentions extends React.Component {
       return false
     }
 
-    this.inputHandler = Observable
-      .fromEvent(this.input, 'keyup')
-      .subscribe(e => this.onKeyUp(e))
+    this.inputHandler = Observable.fromEvent(this.input, 'keyup').subscribe(e =>
+      this.onKeyUp(e)
+    )
 
-    this.cursorHandler = Observable
-      .fromEvent(this.input, 'keydown')
-      .subscribe(e => this.onKeyDown(e))
+    this.cursorHandler = Observable.fromEvent(this.input, 'keydown').subscribe(
+      e => this.onKeyDown(e)
+    )
 
-    this.blurHandler = Observable
-      .fromEvent(this.input, 'blur')
-      .subscribe(e => this.clearSuggestions())
+    this.blurHandler = Observable.fromEvent(this.input, 'blur').subscribe(e =>
+      this.clearSuggestions()
+    )
 
-    this.suggestionsHandler = Observable
-      .fromEvent(window, 'keyup')
-      .subscribe(e => this.handleSuggestionsKeyEvents(e))
+    this.suggestionsHandler = Observable.fromEvent(window, 'keyup').subscribe(
+      e => this.handleSuggestionsKeyEvents(e)
+    )
   }
 
   componentWillUnmount() {
@@ -95,7 +95,7 @@ export default class Mentions extends React.Component {
     }
 
     const isBackspaceOrDelete =
-      (KEYS[e.keyCode] === 'BACKSPACE' || KEYS[e.keyCode] === 'DELETE')
+      KEYS[e.keyCode] === 'BACKSPACE' || KEYS[e.keyCode] === 'DELETE'
 
     // prevent parsing non characters and backspace
     if (!isWordCharacter && !isBackspaceOrDelete) {
@@ -237,8 +237,9 @@ export default class Mentions extends React.Component {
     let result = source
 
     if (text.length > 0) {
-      result = source
-        .filter(user => user.username.toLowerCase().includes(text.toLowerCase()))
+      result = source.filter(user =>
+        user.username.toLowerCase().includes(text.toLowerCase())
+      )
     }
 
     this.setState({
@@ -260,8 +261,9 @@ export default class Mentions extends React.Component {
     const { input } = this
     const index = this.findTriggerIndex()
 
-    input.value =
-      `${input.value.substr(0, index) + text} ${input.value.substr(index + text.length)}`
+    input.value = `${input.value.substr(0, index) + text} ${input.value.substr(
+      index + text.length
+    )}`
 
     // change cursor position
     this.setCursorPosition(index + text.length + 1)
@@ -321,7 +323,7 @@ export default class Mentions extends React.Component {
     return (
       <div
         className="suggestions"
-        ref={ref => this.suggestions = ref}
+        ref={ref => (this.suggestions = ref)}
         style={{
           bottom: `${position}px`
         }}
@@ -329,39 +331,33 @@ export default class Mentions extends React.Component {
         <div className="heading">
           Users matching {query}
           <div className="hint">
-            <i className="fa fa-long-arrow-up" /><i
-              className="fa fa-long-arrow-down"
-            /> to navigate
-            &nbsp;&nbsp;&nbsp;
-            ↵ to select
-            &nbsp;&nbsp;&nbsp;
+            <i className="fa fa-long-arrow-up" />
+            <i className="fa fa-long-arrow-down" /> to navigate
+            &nbsp;&nbsp;&nbsp; ↵ to select &nbsp;&nbsp;&nbsp;
             <b>esc</b> to dismiss
           </div>
         </div>
         <div className="items">
-          {
-            suggestions.map((user, index) =>
-              <div
-                key={`SUGGESTION_${user.id}`}
-                className={cn('item', { selected: index === selectedIndex })}
-                onClick={() => this.selectMention(user)}
-              >
-                <UserAvatar
-                  style={{ float: 'left', marginRight: '5px' }}
-                  size={22}
-                  name={user.name}
-                  image={user.avatar}
-                  showStateIndicator={false}
-                />
-
-                <b>{user.username}</b> &nbsp;
-                {
-                  user.name !== user.username &&
-                  <span className="name">{user.name}</span>
-                }
-              </div>
-            )
-          }
+          {suggestions.map((user, index) => (
+            <div
+              key={`SUGGESTION_${user.id}`}
+              className={cn('item', { selected: index === selectedIndex })}
+              onClick={() => this.selectMention(user)}
+            >
+              <UserAvatar
+                style={{ float: 'left', marginRight: '5px' }}
+                size={24}
+                name={user.name}
+                image={user.avatar}
+                color="#D4D4D4"
+                showStateIndicator={false}
+              />
+              <b>{user.username}</b> &nbsp;
+              {user.name !== user.username && (
+                <span className="name">{user.name}</span>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     )

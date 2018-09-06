@@ -10,20 +10,19 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 100%;
-  border: solid 8px #f4f6f9;
-  background-color: #cad4db;
+  background-color: #d4d4d4;
 `
 
 export const Status = styled.div`
   position: absolute;
-  top: -8px;
-  right: -4px;
+  top: -4px;
+  right: 0px;
   width: 32px;
   height: 32px;
   z-index: 1;
-  border: solid 8px #f4f6f9;
+  border: solid 8px #fff;
   border-radius: 100%;
-  background-color: ${props => (props.isOnline ? '#35b863' : '#8DA2B5')};
+  background-color: ${props => (props.isOnline ? '#35b863' : '#D4D4D4')};
 `
 
 export const Image = styled.img`
@@ -35,7 +34,7 @@ export const Image = styled.img`
 
 export const Initials = styled.div`
   font-size: 3.6rem;
-  color: #8da2b5;
+  color: #fff;
 `
 
 export const TriggerText = styled.div`

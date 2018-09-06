@@ -18,7 +18,7 @@ export function deleteContacts(contactIds) {
       })
 
       await removeContacts(contactIds)
-      afterDeleteContactsFetch(dispatch, getState, contactIds)
+      await afterDeleteContactsFetch(dispatch, getState, contactIds)
     } catch (error) {
       dispatch({
         error,
@@ -33,22 +33,33 @@ export async function afterDeleteContactsFetch(dispatch, getState, contactIds) {
   const { list } = getState().contacts
   const listInfo = selectContactsInfo(list)
   const fetchedContactsLength = selectContacts(list).length
-  const startPoint =
-    fetchedContactsLength - contactIds.length > 0
-      ? fetchedContactsLength - contactIds.length
-      : 0
 
-  if (listInfo.type === 'general') {
-    await dispatch(getContacts(fetchedContactsLength, contactIds.length))
-  } else {
-    await dispatch(
-      searchContacts(
-        listInfo.filter,
-        startPoint,
-        contactIds.length,
-        listInfo.searchText
+  if (fetchedContactsLength < listInfo.total) {
+    const startPoint =
+      fetchedContactsLength - contactIds.length > 0
+        ? fetchedContactsLength - contactIds.length
+        : 0
+
+    if (listInfo.type === 'general') {
+      await dispatch(getContacts(fetchedContactsLength, contactIds.length))
+    } else {
+      await dispatch(
+        searchContacts(
+          listInfo.filter,
+          startPoint,
+          contactIds.length,
+          listInfo.searchText
+        )
       )
-    )
+    }
+  } else {
+    dispatch({
+      info: {
+        ...listInfo,
+        total: listInfo.total - contactIds.length
+      },
+      type: actionTypes.UPDATE_CONTACT_LIST_INFO
+    })
   }
 
   dispatch({

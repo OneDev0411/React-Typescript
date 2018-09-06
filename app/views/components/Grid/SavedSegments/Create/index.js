@@ -6,8 +6,6 @@ import Modal from '../../../BasicModal'
 import Button from '../../../Button/ActionButton'
 import { ItemRow, ItemTitle, TextInput } from './styled'
 
-import createFilterCriteria from '../../Filters/helpers/create-filter-criteria'
-
 import {
   createFilterSegment,
   updateFilterSegment,
@@ -51,7 +49,7 @@ class SaveSegment extends React.Component {
 
   getSegmentObject = () => {
     const { selectedOption, newFilterName } = this.state
-    const { segment, filters, config } = this.props
+    const { segment, filters } = this.props
 
     const list = {
       is_pinned: false
@@ -67,7 +65,7 @@ class SaveSegment extends React.Component {
 
     return {
       ...list,
-      filters: createFilterCriteria(filters, config)
+      filters: this.props.createSegmentFromFilters(filters)
     }
   }
 

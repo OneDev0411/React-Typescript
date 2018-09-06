@@ -36,7 +36,7 @@ class ShareListing extends React.Component {
       .map(id => {
         const contact = selectContact(this.props.contacts, id)
 
-        if (!contact.summary.email) {
+        if (!contact || !contact.summary.email) {
           return null
         }
 
@@ -156,6 +156,9 @@ class ShareListing extends React.Component {
 
   render() {
     const { listing } = this.state
+
+    // hide marketing temporary
+    return false
 
     return (
       <Fragment>

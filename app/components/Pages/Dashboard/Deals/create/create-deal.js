@@ -40,7 +40,7 @@ import ActionButton from '../../../../../views/components/Button/ActionButton'
 class CreateDeal extends React.Component {
   state = {
     saving: false,
-    isDraft: true,
+    isDraft: -1,
     dealSide: '',
     dealPropertyType: '',
     dealAddress: null,
@@ -370,7 +370,8 @@ class CreateDeal extends React.Component {
       return {
         side: validations.side,
         property_type: validations.property_type,
-        clients: validations.clients
+        clients: validations.clients,
+        agents: validations.agents
       }
     }
 
@@ -805,7 +806,10 @@ class CreateDeal extends React.Component {
     const requiredFields = this.RequiredFields
     const isLeaseDeal = dealPropertyType && dealPropertyType.includes('Lease')
     const canSaveDeal =
-      !saving && dealSide.length > 0 && dealPropertyType.length > 0
+      !saving &&
+      isDraft !== -1 &&
+      dealSide.length > 0 &&
+      dealPropertyType.length > 0
 
     return (
       <div className="deal-create">
@@ -840,7 +844,8 @@ class CreateDeal extends React.Component {
             </Fragment>
           )}
 
-          {dealSide.length > 0 &&
+          {isDraft !== -1 &&
+            dealSide.length > 0 &&
             dealPropertyType.length > 0 && (
               <div>
                 <DealClients

@@ -137,11 +137,15 @@ class UploadModal extends React.Component {
       status: 'success'
     })
 
-    // set status
-    setUploadAttributes(id, { status: STATUS_UPLOADED })
-
     if (task && properties.notifyOffice === true && !isBackupContract) {
       changeNeedsAttention(task.deal, task.id, true)
+    }
+
+    // set status
+    try {
+      setUploadAttributes(id, { status: STATUS_UPLOADED })
+    } catch (e) {
+      /* nothing */
     }
   }
 

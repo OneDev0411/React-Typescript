@@ -2,7 +2,7 @@ import React from 'react'
 
 import { getTemplates } from '../../../../models/instant-marketing/get-templates'
 
-import { Container, TemplateImage } from './styled'
+import { Container, TemplateItem, TemplateImageContainer, TemplateName, TemplateImage } from './styled'
 import Loader from '../../../../components/Partials/Loading'
 
 export default class Templates extends React.Component {
@@ -51,13 +51,22 @@ export default class Templates extends React.Component {
         {this.state.isLoading && <Loader />}
 
         {this.state.templates.map(template => (
-          <TemplateImage
+          <TemplateItem
             key={template.id}
-            src={template.thumbnail}
-            title={template.name}
-            isSelected={this.state.selectedTemplate === template.id}
             onClick={() => this.handleSelectTemplate(template)}
-          />
+            isSelected={this.state.selectedTemplate === template.id}
+          >
+            <TemplateImageContainer>
+              <TemplateImage
+                src={template.thumbnail}
+                title={template.name}
+              />
+            </TemplateImageContainer>
+
+            <TemplateName>
+              { template.name }
+            </TemplateName>
+          </TemplateItem>
         ))}
       </Container>
     )

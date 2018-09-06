@@ -35,6 +35,8 @@ const FollowComponent = ({
   onFollowClick,
   dropdownStyle
 }) => {
+  return null
+
   const isFollowing = activeStatuses.length > 0
 
   return (

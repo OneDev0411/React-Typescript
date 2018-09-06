@@ -17,7 +17,6 @@ export default class extends React.Component {
 
   getAvatar(brand) {
     const flatted = flattenBrand(brand)
-    const primaryColor = flatted.palette.primary
 
     return (
       <Avatar
@@ -26,12 +25,7 @@ export default class extends React.Component {
         name={flatted.name}
         size={30}
         src={flatted.assets ? flatted.assets.site_logo : null}
-        color={primaryColor}
-        fgColor={
-          primaryColor && primaryColor.toLowerCase() === '#ffffff'
-            ? '#000'
-            : '#fff'
-        }
+        color="#D4D4D4"
       />
     )
   }

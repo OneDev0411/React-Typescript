@@ -13,11 +13,8 @@ import { isBackOffice } from '../../../../../../../utils/user-teams'
 import ActionButton from 'components/Button/ActionButton'
 
 class Table extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      saving: false
-    }
+  state = {
+    isSaving: false
   }
 
   async approveField(e, name, context) {
@@ -30,12 +27,12 @@ class Table extends React.Component {
     }
 
     // set state
-    this.setState({ saving: name })
+    this.setState({ isSaving: name })
 
     await approveContext(deal.id, context.id)
 
     // set state
-    this.setState({ saving: false })
+    this.setState({ isSaving: false })
   }
 
   onChangeContext(field, value) {
@@ -48,7 +45,7 @@ class Table extends React.Component {
     const { deal, updateContext, isBackOffice } = this.props
 
     // set state
-    this.setState({ saving: field.name })
+    this.setState({ isSaving: field.name })
 
     await updateContext(deal.id, {
       [field.name]: {
@@ -58,7 +55,7 @@ class Table extends React.Component {
     })
 
     // set state
-    this.setState({ saving: null })
+    this.setState({ isSaving: null })
   }
 
   isSet(value) {
@@ -66,7 +63,7 @@ class Table extends React.Component {
   }
 
   render() {
-    const { saving } = this.state
+    const { isSaving } = this.state
     const {
       sectionId,
       table,
@@ -95,7 +92,7 @@ class Table extends React.Component {
                     sectionId={sectionId}
                     deal={deal}
                     field={field}
-                    saving={saving}
+                    saving={isSaving}
                     contextData={fieldData}
                     approved={approved}
                     isBackOffice={isBackOffice}
@@ -108,7 +105,7 @@ class Table extends React.Component {
                     {isBackOffice &&
                       context &&
                       !approved &&
-                      saving !== field.name && (
+                      isSaving !== field.name && (
                         <ActionButton
                           size="small"
                           onClick={e =>

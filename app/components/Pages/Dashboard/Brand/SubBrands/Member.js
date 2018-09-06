@@ -3,26 +3,23 @@ import cn from 'classnames'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 import UserAvatar from '../../../../Partials/UserAvatar'
 
-const Member = ({
-  member,
-  roles,
-  deleteMembers,
-  addMembers
-}) => {
+const Member = ({ member, roles, deleteMembers, addMembers }) => {
   const popoverHoverFocus = (
     <Popover
       id="popover-brand-user-avatar"
-      title={<div>
-        <strong>{member.display_name}</strong>
-        <p className="sub-title">{member.email}</p>
-      </div>}
+      title={
+        <div>
+          <strong>{member.display_name}</strong>
+          <p className="sub-title">{member.email}</p>
+        </div>
+      }
     >
       <strong>Member Roles:</strong>
-      {
-        roles.map((role, index) => {
-          let active = member.roles[role.id]
+      {roles.map((role, index) => {
+        let active = member.roles[role.id]
 
-          return <div
+        return (
+          <div
             key={index}
             className="row-container"
             onClick={() => {
@@ -39,28 +36,29 @@ const Member = ({
             />
             {role.role}
           </div>
-        })
-      }
+        )
+      })}
     </Popover>
   )
 
-  return <OverlayTrigger
-    trigger="click"
-    placement="bottom"
-    rootClose
-    overlay={popoverHoverFocus}
-  >
-    <div
-      className="avatar"
+  return (
+    <OverlayTrigger
+      trigger="click"
+      placement="bottom"
+      rootClose
+      overlay={popoverHoverFocus}
     >
-      <UserAvatar
-        userId={member.id}
-        name={member.display_name}
-        image={member.profile_image_url}
-        size={30}
-      />
-    </div>
-  </OverlayTrigger>
+      <div className="avatar">
+        <UserAvatar
+          userId={member.id}
+          name={member.display_name}
+          image={member.profile_image_url}
+          size={30}
+          color="#D4D4D4"
+        />
+      </div>
+    </OverlayTrigger>
+  )
 }
 
 export default Member
