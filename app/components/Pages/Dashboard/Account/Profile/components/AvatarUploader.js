@@ -22,8 +22,8 @@ const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
     ) : (
       <div className="c-avatar-uploader__placeholder">
         <svg
-          width="96"
-          height="96"
+          width="160"
+          height="160"
           fill="#fff"
           viewBox="0 0 24 24"
           className="c-avatar-uploader__svg"
