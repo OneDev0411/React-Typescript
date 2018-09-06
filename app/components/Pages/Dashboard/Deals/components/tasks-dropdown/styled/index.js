@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { grey, primary } from 'views/utils/colors'
+import { grey, blue } from 'views/utils/colors'
 
 export const DropDownContainer = styled.div`
   position: relative;
@@ -62,7 +62,7 @@ export const ChecklistItemContainer = styled.div`
   }
 
   &:hover ${ChecklistItemTitle} {
-    color: ${primary};
+    color: ${blue.A200};
   }
 `
 
