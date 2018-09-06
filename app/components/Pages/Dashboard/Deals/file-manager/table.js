@@ -22,12 +22,12 @@ import { TruncatedColumn } from './columns/styled'
 import ActionButton from 'components/Button/ActionButton'
 import { resetGridSelectedItems } from 'views/components/Grid/Table/Plugins/Selectable'
 import Spinner from 'components/Spinner'
-import VerticalDots from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
-import { primary } from 'views/utils/colors'
+import VerticalDotsIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
+import IconButton from 'components/Button/IconButton'
 
-const VerticalDotsIcon = VerticalDots.extend`
-  &:hover {
-    fill: ${primary};
+const OptionButton = IconButton.extend`
+  svg {
+    fill: #000000;
   }
 `
 
@@ -427,20 +427,21 @@ export class FileManager extends React.Component {
         header: '',
         accessor: '',
         className: 'td--dropdown-container',
-        width: '24px',
+        width: '48px',
         render: ({ rowData: file }) => (
           <Dropdown
             id={`file_${file.id}`}
             className="deal-file-cta-menu"
             pullRight
           >
-            <Button
+            <OptionButton
+              appearance="icon"
               onClick={e => e.stopPropagation()}
-              className="cta-btn btn-link"
+              // className="cta-btn btn-link"
               bsRole="toggle"
             >
-              <VerticalDotsIcon fill="#D7DEE2" />
-            </Button>
+              <VerticalDotsIcon />
+            </OptionButton>
 
             <Dropdown.Menu>
               <li>
