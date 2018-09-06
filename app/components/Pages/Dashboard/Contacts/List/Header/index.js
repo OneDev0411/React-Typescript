@@ -1,14 +1,13 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
 
-import Import from '../Import'
 import PageHeader from '../../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 import Tooltip from 'components/tooltip'
 
-export function Header({ user, title, isSideMenuOpen, onMenuTriggerChange }) {
+export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
   return (
     <PageHeader isFlat style={{ marginBottom: '32px' }}>
       <PageHeader.Title showBackButton={false}>
@@ -24,8 +23,8 @@ export function Header({ user, title, isSideMenuOpen, onMenuTriggerChange }) {
 
         <Tooltip caption="Import from CSV Spreadsheet" placement="bottom">
           <ActionButton
-            inverse
-            style={{ padding: '10px', marginRight: '16px' }}
+            appearance="outline"
+            style={{ marginRight: '1em' }}
             onClick={() =>
               browserHistory.push('/dashboard/contacts/import/csv')
             }
