@@ -67,25 +67,6 @@
   @include visually-hidden();
 }
 
-.c-avatar-uploader__remove-btn {
-  width: 11rem;
-  position: absolute;
-  left: 13.8rem;
-  bottom: 0;
-  display: block;
-  word-wrap: none;
-  padding: 0.5rem 0;
-  color: #969696;
-  border-radius: 3px;
-  background: transparent;
-  border: 1px solid #ccc;
-
-  &:hover {
-    color: #444;
-    border-color: #444;
-  }
-}
-
 
 .c-avatar-uploader__loading {
   position: absolute;

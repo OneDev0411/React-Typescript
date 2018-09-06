@@ -5,14 +5,13 @@ import { addNotification as notify } from 'reapop'
 import moment from 'moment-timezone'
 
 import FormCard from './FormCard'
-import { getBrandInfo } from '../../../../Auth/SignIn'
 import { Dropdown } from 'components/Dropdown'
 import { setUserTimezone } from 'models/user/set-user-timezone'
 import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
+import Button from '../../../../../../views/components/Button/ActionButton'
 
-const Timezone = ({ brand, timezone, dispatch }) => {
+const Timezone = ({ timezone, dispatch }) => {
   let submitError = null
-  const { brandColor } = getBrandInfo(brand)
 
   const timezones = moment.tz
     .names()
@@ -58,7 +57,7 @@ const Timezone = ({ brand, timezone, dispatch }) => {
       <Form
         onSubmit={onSubmit}
         initialValues={{ time_zone }}
-        render={({ handleSubmit, pristine, submitFailed, submitting }) => (
+        render={({ handleSubmit, submitFailed, submitting }) => (
           <form onSubmit={handleSubmit} className="c-account__form clearfix">
             <Field
               name="time_zone"
@@ -79,17 +78,11 @@ const Timezone = ({ brand, timezone, dispatch }) => {
                 {submitError.message}
               </div>
             )}
-            <button
-              type="submit"
-              className="c-auth__submit-btn"
-              disabled={submitting || pristine}
-              style={{
-                background: brandColor,
-                opacity: submitting || pristine ? 0.7 : 1
-              }}
-            >
-              {submitting ? 'Updating...' : 'Update'}
-            </button>
+            <div style={{ textAlign: 'right' }}>
+              <Button type="submit" disabled={submitting}>
+                {submitting ? 'Updating...' : 'Update'}
+              </Button>
+            </div>
           </form>
         )}
       />
