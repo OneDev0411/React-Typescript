@@ -160,7 +160,7 @@ class ContactsList extends React.Component {
     const selectedRowsCount = this.props.selectedRows.length
 
     return (
-      <Fragment>
+      <div style={{ padding: '0 1em' }}>
         <Table
           plugins={{
             selectable: {
@@ -199,7 +199,7 @@ class ContactsList extends React.Component {
           isOpen={this.state.selectedTagContact.length > 0}
           closeOverlay={this.closeTagsOverlay}
         />
-      </Fragment>
+      </div>
     )
   }
 }

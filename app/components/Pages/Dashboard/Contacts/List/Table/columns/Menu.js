@@ -14,6 +14,7 @@ const Menu = ({ contactId, handleOnDelete }) => (
       bsRole="toggle"
       iconSize="large"
       inverse
+      isFit
       onClick={e => console.dir(e.target) || e.stopPropagation()}
     >
       <VerticalDotsIcon />
