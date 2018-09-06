@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import { setUploadAttributes } from '../../../../../../../store_actions/deals'
+import ActionButton from 'components/Button/ActionButton'
 
 class FileName extends React.Component {
   constructor(props) {
@@ -56,22 +57,29 @@ class FileName extends React.Component {
         />
 
         {isActive ? (
-          <button className="c-button--shadow save" onClick={() => this.save(file)}>
+          <ActionButton
+            // className="c-button--shadow save"
+            onClick={() => this.save(file)}
+          >
             Save
-          </button>
+          </ActionButton>
         ) : (
-          <button
-            className={cn('c-button--shadow edit-icon', {
+          <ActionButton
+            appearance="link"
+            className={cn({
               canEditName: isActive
             })}
             onClick={() => this.setActiveState()}
           >
             EDIT
-          </button>
+          </ActionButton>
         )}
       </div>
     )
   }
 }
 
-export default connect(null, { setUploadAttributes })(FileName)
+export default connect(
+  null,
+  { setUploadAttributes }
+)(FileName)
