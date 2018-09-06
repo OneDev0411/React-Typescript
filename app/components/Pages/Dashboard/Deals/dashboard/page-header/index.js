@@ -38,7 +38,11 @@ const Header = ({ deal, showAttachments }) => (
         View & Upload Files
       </ActionButton>
 
-      <ActionButton inverse style={buttonStyle} onClick={showAttachments}>
+      <ActionButton
+        inverse
+        style={buttonStyle}
+        onClick={() => showAttachments()}
+      >
         Get Signatures
       </ActionButton>
 

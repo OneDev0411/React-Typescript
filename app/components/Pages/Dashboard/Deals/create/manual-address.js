@@ -39,7 +39,7 @@ export default class ManualAddress extends React.Component {
    *
    */
   get RequiredFields() {
-    return ['street_name', 'city', 'state', 'postal_code']
+    return ['street_name', 'street_number', 'city', 'state', 'postal_code']
   }
 
   /**
@@ -241,7 +241,7 @@ export default class ManualAddress extends React.Component {
                 <Field
                   name="street_number"
                   placeholder="Street #"
-                  isRequired={false}
+                  isRequired
                   component={TextInput}
                 />
 

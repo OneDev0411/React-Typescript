@@ -97,6 +97,24 @@ class RoleAgentIntegration extends React.Component {
     return false
   }
 
+  get IsPrimaryAgent() {
+    const { deal, allowedRoles } = this.props
+    const dealSide = deal ? deal.deal_type : this.props.dealSide
+    const role = allowedRoles && allowedRoles[0]
+
+    /**
+     * https://gitlab.com/rechat/web/issues/1668#note_97457381
+     */
+    if (dealSide === 'Buying' && role === 'BuyerAgent') {
+      return true
+    }
+
+    return (
+      this.props.isPrimaryAgent &&
+      this.props.dealEnderType !== 'OfficeDoubleEnder'
+    )
+  }
+
   onSelectAgent = (user, relatedContacts) => {
     let newState
 
@@ -148,10 +166,7 @@ class RoleAgentIntegration extends React.Component {
       <Fragment>
         {showAgentModal && (
           <AgentModal
-            isPrimaryAgent={
-              this.props.isPrimaryAgent &&
-              this.props.dealEnderType !== 'OfficeDoubleEnder'
-            }
+            isPrimaryAgent={this.IsPrimaryAgent}
             onHide={onHide}
             onSelectAgent={this.onSelectAgent}
           />
