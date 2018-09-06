@@ -4,23 +4,25 @@ import _ from 'underscore'
 
 import { Modal } from 'react-bootstrap'
 
-import { TextInput } from '../../../../../views/components/Forms/TextInput'
-import { SelectInput } from '../../../../../views/components/Forms/SelectInput'
+import { TextInput } from '../../../../../../views/components/Forms/TextInput'
+import { SelectInput } from '../../../../../../views/components/Forms/SelectInput'
 
-import ActionButton from '../../../../../views/components/Button/ActionButton'
-import CancelButton from '../../../../../views/components/Button/CancelButton'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import CancelButton from '../../../../../../views/components/Button/CancelButton'
+
+import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDrawer'
 
 import {
   stateToAbbreviated,
   STREET_SUFFIX,
   STREET_PREFIX,
   STATES
-} from '../utils/address'
-import Deal from '../../../../../models/Deal'
+} from '../../utils/address'
+import Deal from '../../../../../../models/Deal'
 
 const defaultState = 'Texas'
 
-export default class ManualAddress extends React.Component {
+export default class Address extends React.Component {
   /**
    *
    */
@@ -212,7 +214,94 @@ export default class ManualAddress extends React.Component {
     const { show, deal, saving } = this.props
 
     return (
-      <Modal show={show} backdrop="static" onHide={this.onClose}>
+      <FinalFormDrawer
+        initialValues={this.getInitialValues()}
+        title="Address"
+        isOpen={this.props.show}
+        onClose={this.onClose}
+        onSubmit={this.onSubmit}
+        validate={this.validate}
+        submitLabel={deal ? 'Update Address' : 'Add'}
+        showReset={false}
+        render={() => (
+          <Fragment>
+            <Field
+              name="street_dir_prefix"
+              clearable
+              placeholder="Street Prefix"
+              options={STREET_PREFIX.map(value => ({
+                value,
+                label: value
+              }))}
+              component={SelectInput}
+            />
+
+            <Field
+              name="street_number"
+              placeholder="Street #"
+              isRequired={false}
+              component={TextInput}
+            />
+
+            <Field
+              name="street_name"
+              placeholder="Street Name"
+              isRequired
+              component={TextInput}
+            />
+
+            <Field
+              name="street_suffix"
+              clearable
+              searchable
+              placeholder="Street Suffix"
+              options={STREET_SUFFIX.map(value => ({
+                value,
+                label: value
+              }))}
+              component={SelectInput}
+            />
+
+            <Field
+              name="unit_number"
+              placeholder="Apartment/Unit Number"
+              isRequired={false}
+              component={TextInput}
+            />
+
+            <Field
+              name="city"
+              placeholder="City"
+              isRequired
+              component={TextInput}
+            />
+
+            <Field
+              name="state"
+              searchable
+              clearable
+              isRequired
+              placeholder="State"
+              options={_.map(STATES, name => ({
+                value: name,
+                label: name
+              }))}
+              component={SelectInput}
+            />
+
+            <Field
+              name="postal_code"
+              placeholder="Zipcode"
+              isRequired
+              component={TextInput}
+            />
+          </Fragment>
+        )}
+      />
+    )
+
+    return (
+      <FinalFormDrawer show={show} backdrop="static" onHide={this.onClose}>
         <Modal.Header closeButton>
           <Modal.Title>Address</Modal.Title>
         </Modal.Header>
@@ -226,78 +315,7 @@ export default class ManualAddress extends React.Component {
               <Modal.Body
                 className="u-scrollbar--thinner"
                 style={{ padding: 0 }}
-              >
-                <Field
-                  name="street_dir_prefix"
-                  clearable
-                  placeholder="Street Prefix"
-                  options={STREET_PREFIX.map(value => ({
-                    value,
-                    label: value
-                  }))}
-                  component={SelectInput}
-                />
-
-                <Field
-                  name="street_number"
-                  placeholder="Street #"
-                  isRequired={false}
-                  component={TextInput}
-                />
-
-                <Field
-                  name="street_name"
-                  placeholder="Street Name"
-                  isRequired
-                  component={TextInput}
-                />
-
-                <Field
-                  name="street_suffix"
-                  clearable
-                  searchable
-                  placeholder="Street Suffix"
-                  options={STREET_SUFFIX.map(value => ({
-                    value,
-                    label: value
-                  }))}
-                  component={SelectInput}
-                />
-
-                <Field
-                  name="unit_number"
-                  placeholder="Apartment/Unit Number"
-                  isRequired={false}
-                  component={TextInput}
-                />
-
-                <Field
-                  name="city"
-                  placeholder="City"
-                  isRequired
-                  component={TextInput}
-                />
-
-                <Field
-                  name="state"
-                  searchable
-                  clearable
-                  isRequired
-                  placeholder="State"
-                  options={_.map(STATES, name => ({
-                    value: name,
-                    label: name
-                  }))}
-                  component={SelectInput}
-                />
-
-                <Field
-                  name="postal_code"
-                  placeholder="Zipcode"
-                  isRequired
-                  component={TextInput}
-                />
-              </Modal.Body>
+              />
 
               <Modal.Footer>
                 <CancelButton
@@ -320,7 +338,7 @@ export default class ManualAddress extends React.Component {
             </Fragment>
           )}
         />
-      </Modal>
+      </FinalFormDrawer>
     )
   }
 }

@@ -5,7 +5,7 @@ import cn from 'classnames'
 import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import Tooltip from '../../../../../../views/components/tooltip/index'
-import ManualAddress from '../../create/manual-address'
+import ManualAddress from '../../components/address'
 import Deal from '../../../../../../models/Deal'
 import { updateContext } from '../../../../../../store_actions/deals'
 

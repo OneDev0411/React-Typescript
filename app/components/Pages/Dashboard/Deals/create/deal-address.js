@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import ManualAddress from './manual-address'
+import ManualAddress from '../components/address'
 import MlsSearch from '../dashboard/mls-listing/search'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
