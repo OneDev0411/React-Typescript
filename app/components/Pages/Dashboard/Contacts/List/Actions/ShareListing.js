@@ -160,9 +160,9 @@ class ShareListing extends React.Component {
     return (
       <Fragment>
         <ActionButton
+          appearance="outline"
           onClick={this.toggleListingModal}
-          style={{ padding: '0.70em 1.5em' }}
-          inverse
+          size="small"
         >
           Marketing Center
         </ActionButton>
