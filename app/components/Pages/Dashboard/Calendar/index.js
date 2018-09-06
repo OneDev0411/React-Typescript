@@ -33,7 +33,7 @@ import DatePicker from '../../../../views/components/DatePicker'
 
 import CalendarTable from './Table'
 
-import { MenuContainer, CalendarContent, HeroTitle } from './styled'
+import { MenuContainer, GreetingTitle } from './styled'
 
 import ActionButton from '../../../../views/components/Button/ActionButton'
 
@@ -288,7 +288,7 @@ class CalendarContainer extends React.Component {
           onChangeTask={this.handleChangeTask}
         />
 
-        <Menu isOpen={isMenuOpen} width={265}>
+        <Menu isOpen={isMenuOpen} width={294}>
           <MenuContainer>
             <DatePicker
               selectedDate={selectedDate}
@@ -312,8 +312,8 @@ class CalendarContainer extends React.Component {
             </PageHeader.Menu>
           </PageHeader>
 
-          <CalendarContent>
-            <HeroTitle>Hello {user.first_name}</HeroTitle>
+          <div style={{ position: 'relative' }}>
+            <GreetingTitle>Hello {user.first_name}</GreetingTitle>
 
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
@@ -328,7 +328,7 @@ class CalendarContainer extends React.Component {
                 onRef={this.onTableRef}
               />
             </div>
-          </CalendarContent>
+          </div>
         </Content>
       </Container>
     )

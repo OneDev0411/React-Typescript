@@ -1,14 +1,16 @@
 // import styled from 'styled-components'
 import 'react-day-picker/lib/style.css'
 
-import ActionButton from '../Button/ActionButton'
+import { primary, grey } from '../../utils/colors'
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  .DayPicker-wrapper:focus,
-  .DayPicker-Day:focus {
-    outline: none !important;
-    box-shadow: none !important;
+  .DayPicker {
+    padding: 0 !important;
+  }
+
+  .DayPicker-Month {
+    margin: 0 !important;
   }
 
   .DayPicker-Week {
@@ -22,24 +24,37 @@ export const Container = styled.div`
     max-width: 27px !important;
   }
 
+  .DayPicker-wrapper:focus,
+  .DayPicker-Day:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
   .DayPicker-Day--selected {
-    background-color: #2196f3 !important;
+    background-color: ${primary} !important;
     border-radius: 100px !important;
   }
 
   .DayPicker-Day--range {
-    background-color: #dbdbdb;
-    color: white;
+    background-color: ${grey.A400};
+    color: #fff;
   }
 
   .DayPicker-Day--range:hover {
-    background-color: #dbdbdb !important;
-    color: #262626 !important;
+    color: #fff !important;
     border-radius: 0 !important;
+    background-color: ${grey.A500} !important;
   }
-`
 
-export const TodayButton = ActionButton.extend`
-  background-color: transparent;
-  width: 100%;
+  .DayPicker .DayPicker-Day:hover,
+  .DayPicker .DayPicker-Day--outside:hover {
+    background-color: transparent !important;
+  }
+
+  .DayPicker:not(.DayPicker--interactionDisabled)
+    .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
+    color: #fff !important;
+    background-color: ${primary} !important;
+    border-radius: 100px !important;
+  }
 `

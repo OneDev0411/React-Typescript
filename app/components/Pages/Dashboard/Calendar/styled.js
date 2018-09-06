@@ -1,22 +1,17 @@
 import styled from 'styled-components'
 
+import { H2 } from '../../../../views/components/Typography/headings'
+import { borderColor } from '../../../../views/utils/colors'
+
 export const MenuContainer = styled.div`
-  padding: 5px;
+  padding: 1em;
 
   &:focus {
     outline: none !important;
   }
 `
 
-export const CalendarContent = styled.div`
-  position: relative;
-`
-
-export const HeroTitle = styled.div`
-  height: 50px;
-  font-size: 30px;
-  font-weight: bold;
-  color: #17283a;
-  padding: 0 15px 15px 15px;
-  border-bottom: 1px solid #dce5eb;
+export const GreetingTitle = H2.extend`
+  padding: 0 2rem 1rem 1rem;
+  border-bottom: 1px solid ${borderColor};
 `
