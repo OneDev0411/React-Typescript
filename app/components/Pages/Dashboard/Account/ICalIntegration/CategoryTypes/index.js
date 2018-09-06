@@ -1,7 +1,7 @@
 import React from 'react'
-import RadioButton from '../../../../../../views/components/radio'
 
-import { TypesHeader } from './styled'
+import RadioButton from '../../../../../../views/components/radio'
+import { SectionTitle } from '../styled'
 
 const CategoryTypes = ({
   title,
@@ -9,8 +9,8 @@ const CategoryTypes = ({
   selectedTypes,
   onChangeSelectedTypes
 }) => (
-  <div>
-    <TypesHeader>{title}</TypesHeader>
+  <div style={{ marginBottom: '2em' }}>
+    <SectionTitle>{title}</SectionTitle>
     {types.map(type => (
       <RadioButton
         square
@@ -18,7 +18,7 @@ const CategoryTypes = ({
         selected={selectedTypes.includes(type.name)}
         title={type.label}
         onClick={() => onChangeSelectedTypes(type.name)}
-        style={{ display: 'block', marginTop: '2rem' }}
+        style={{ display: 'block', marginBottom: '2rem' }}
       />
     ))}
   </div>

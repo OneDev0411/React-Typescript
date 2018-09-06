@@ -1,12 +1,15 @@
 import React, { Fragment } from 'react'
-import { Header } from '../styled'
-import RadioButton from '../../../../../../views/components/radio'
 
-const radioButtonStyle = { display: 'block', marginTop: '2rem' }
+import RadioButton from '../../../../../../views/components/radio'
+import { SectionTitle } from '../styled'
+
+const radioButtonStyle = { display: 'block', marginBottom: '2rem' }
 
 const TeamTypes = ({ userTeams, selectedBrandId, onChangeTeam }) => (
   <Fragment>
-    <Header>Which team did you want to send calendar events from?</Header>
+    <SectionTitle>
+      Which team did you want to send calendar events from?
+    </SectionTitle>
     <RadioButton
       selected={!selectedBrandId}
       title="All Teams"
