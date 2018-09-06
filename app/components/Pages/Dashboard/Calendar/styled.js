@@ -1,9 +1,4 @@
 import styled from 'styled-components'
-import { Content } from '../../../../views/components/SlideMenu'
-
-export const PageContent = Content.extend`
-  overflow: hidden;
-`
 
 export const MenuContainer = styled.div`
   padding: 5px;

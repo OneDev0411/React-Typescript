@@ -23,7 +23,8 @@ import {
 import {
   Container,
   Menu,
-  Trigger
+  Trigger,
+  Content
 } from '../../../../views/components/SlideMenu'
 
 import TaskDrawer from './TaskDrawer'
@@ -32,12 +33,7 @@ import DatePicker from '../../../../views/components/DatePicker'
 
 import CalendarTable from './Table'
 
-import {
-  MenuContainer,
-  CalendarContent,
-  PageContent,
-  HeroTitle
-} from './styled'
+import { MenuContainer, CalendarContent, HeroTitle } from './styled'
 
 import ActionButton from '../../../../views/components/Button/ActionButton'
 
@@ -284,7 +280,7 @@ class CalendarContainer extends React.Component {
     const { user, selectedDate, isFetching } = this.props
 
     return (
-      <Container>
+      <Container isOpen={showCreateTaskMenu}>
         <TaskDrawer
           isOpen={showCreateTaskMenu}
           selectedTask={selectedTask}
@@ -302,7 +298,7 @@ class CalendarContainer extends React.Component {
           </MenuContainer>
         </Menu>
 
-        <PageContent>
+        <Content>
           <PageHeader isFlat>
             <PageHeader.Title showBackButton={false}>
               <Trigger onClick={this.toggleSideMenu} />
@@ -333,7 +329,7 @@ class CalendarContainer extends React.Component {
               />
             </div>
           </CalendarContent>
-        </PageContent>
+        </Content>
       </Container>
     )
   }
@@ -352,8 +348,11 @@ function mapStateToProps({ user, calendar }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  getCalendar,
-  setDate,
-  resetCalendar
-})(CalendarContainer)
+export default connect(
+  mapStateToProps,
+  {
+    getCalendar,
+    setDate,
+    resetCalendar
+  }
+)(CalendarContainer)

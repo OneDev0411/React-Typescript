@@ -1,6 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
 import { connect } from 'react-redux'
+
 import { confirmation } from '../../../../../store_actions/confirmation'
 
 import {
@@ -189,7 +189,7 @@ class ContactsList extends React.Component {
     const contacts = selectContacts(list)
 
     return (
-      <PageContainer>
+      <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen}>
           <SavedSegments
             name="contacts"

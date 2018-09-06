@@ -17,12 +17,6 @@ export const PageContainer = Container.extend`
   `};
 `
 
-export const PageContent = styled.div`
-  width: 100%;
-  overflow: hidden;
-  padding: 1rem 0;
-`
-
 export const GridContainer = styled.div`
   min-height: ${props => getContainerHeight(props.isTrainingAccount)};
   max-height: ${props => getContainerHeight(props.isTrainingAccount)};

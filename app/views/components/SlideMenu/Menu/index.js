@@ -8,7 +8,7 @@ const Container = styled.div`
   overflow-x: hidden;
   padding-top: 1em;
   background-color: #f2f2f2;
-  transition: 0.3s width ease-in;
+  transition: width 0.1s linear;
 `
 
 const propTypes = {

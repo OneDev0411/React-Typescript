@@ -1,12 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Menu } from '../../../../../../views/components/SlideMenu'
 import Search from '../../../../../../views/components/Grid/Search'
+import { Menu, Content } from '../../../../../../views/components/SlideMenu'
 
 import {
   PageContainer,
-  PageContent,
   GridContainer,
   SearchContainer
 } from '../styles/page-container/styled'
@@ -55,7 +54,10 @@ class BackofficeTable extends React.Component {
     const { params, isFetchingDeals, isTrainingAccount } = this.props
 
     return (
-      <PageContainer isTrainingAccount={isTrainingAccount}>
+      <PageContainer
+        isOpen={isSideMenuOpen}
+        isTrainingAccount={isTrainingAccount}
+      >
         <Menu
           width={180}
           isSideMenuOpen={isSideMenuOpen}
@@ -67,7 +69,7 @@ class BackofficeTable extends React.Component {
           />
         </Menu>
 
-        <PageContent>
+        <Content>
           <Header
             title={params.filter}
             onMenuTriggerChange={this.toggleSideMenu}
@@ -94,7 +96,7 @@ class BackofficeTable extends React.Component {
               searchCriteria={this.state.searchCriteria}
             />
           </GridContainer>
-        </PageContent>
+        </Content>
       </PageContainer>
     )
   }
