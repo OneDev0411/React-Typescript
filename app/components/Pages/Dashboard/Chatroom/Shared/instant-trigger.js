@@ -31,12 +31,12 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
   return (
     <Tooltip caption="Chat" placement="right">
       <IconButton
+        inverse
         size="large"
-        iconSize="large"
         className="c-app-sidenav__item__title--button"
         onClick={() => openChatbar(toggleChatbar)}
       >
-        <ChatIcon />
+        <ChatIcon style={{ width: '28px', height: '28px' }} />
         {counter > 0 && (
           <Badge
             style={{

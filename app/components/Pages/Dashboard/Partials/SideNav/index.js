@@ -202,7 +202,8 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
             <SideNavItem isActive={false}>
               <SideNavTooltip caption="Support">
                 <IconButton
-                  iconSize="large"
+                  iconSize="XLarge"
+                  inverse
                   onClick={!intercomIsActive ? activeIntercom : () => false}
                   className="c-app-sidenav__item__title--button"
                 >
