@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import Table from 'views/components/Grid/Table'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { Dropdown, Button } from 'react-bootstrap'
+import { Dropdown } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
 import {
@@ -22,12 +22,12 @@ import { TruncatedColumn } from './columns/styled'
 import ActionButton from 'components/Button/ActionButton'
 import { resetGridSelectedItems } from 'views/components/Grid/Table/Plugins/Selectable'
 import Spinner from 'components/Spinner'
-import VerticalDots from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
-import { primary } from 'views/utils/colors'
+import VerticalDotsIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
+import IconButton from 'components/Button/IconButton'
 
-const VerticalDotsIcon = VerticalDots.extend`
-  &:hover {
-    fill: ${primary};
+const OptionButton = IconButton.extend`
+  svg {
+    fill: #000000;
   }
 `
 
@@ -67,7 +67,7 @@ export class FileManager extends React.Component {
     return mime === 'application/pdf'
   }
 
-  onCellClick = (rowIndex, { rowData: file }) => ({
+  getTdProps = (rowIndex, { rowData: file }) => ({
     onClick: () => {
       this.openFile(file)
     }
@@ -306,6 +306,14 @@ export class FileManager extends React.Component {
     resetGridSelectedItems('dealFiles')
   }
 
+  getTrProps = () => ({
+    hoverStyle: `
+      #splitter-button{
+          display: block !important;
+      }
+        `
+  })
+
   getColumns() {
     const { isDeleting, updatingFiles } = this.state
     const { deal, tasks } = this.props
@@ -324,9 +332,9 @@ export class FileManager extends React.Component {
       },
       {
         id: 'created_at',
-        header: 'DATE UPLOADED',
+        header: 'Date Uploaded',
         accessor: 'created_at',
-        width: '210px',
+        width: '220px',
         render: ({ rowData: file }) => (
           <TruncatedColumn>{this.getDate(file.created_at)}</TruncatedColumn>
         )
@@ -349,7 +357,7 @@ export class FileManager extends React.Component {
       },
       {
         id: 'envelope_name',
-        header: () => 'ENVELOPE NAME',
+        header: () => 'Envelope Name',
         accessor: 'envelope_name',
         render: ({ rowData: file }) => {
           const envelope = file.envelope
@@ -362,7 +370,7 @@ export class FileManager extends React.Component {
         }
       },
       {
-        header: () => 'FOLDER',
+        header: () => 'Folder',
         accessor: 'task',
         className: 'file-table__task',
         render: ({ rowData: file }) => {
@@ -407,12 +415,13 @@ export class FileManager extends React.Component {
           <Fragment>
             {!file.envelope &&
               this.isPdfDocument(file.mime) && (
-                <button
-                  className="button split-button hide"
+                <ActionButton
+                  id="splitter-button"
+                  style={{ display: 'none' }}
                   onClick={() => this.splitSingleFile(file)}
                 >
                   Split PDF
-                </button>
+                </ActionButton>
               )}
           </Fragment>
         )
@@ -422,20 +431,21 @@ export class FileManager extends React.Component {
         header: '',
         accessor: '',
         className: 'td--dropdown-container',
-        width: '24px',
+        width: '48px',
         render: ({ rowData: file }) => (
           <Dropdown
             id={`file_${file.id}`}
             className="deal-file-cta-menu"
             pullRight
           >
-            <Button
+            <OptionButton
+              appearance="icon"
               onClick={e => e.stopPropagation()}
-              className="cta-btn btn-link"
+              // className="cta-btn btn-link"
               bsRole="toggle"
             >
-              <VerticalDotsIcon fill="#D7DEE2" />
-            </Button>
+              <VerticalDotsIcon />
+            </OptionButton>
 
             <Dropdown.Menu>
               <li>
@@ -535,7 +545,8 @@ export class FileManager extends React.Component {
                 totalRows: this.data.length || 0
               }}
               columns={this.getColumns(this.data)}
-              getTdProps={this.onCellClick}
+              getTdProps={this.getTdProps}
+              getTrProps={this.getTrProps}
             />
           </Upload>
         )}

@@ -14,7 +14,7 @@ const CheckBox = styled.span`
   cursor: pointer;
   border-radius: 3px;
   background-color: ${props => (props.isSelected ? blue.A100 : '#fff')};
-  border: solid 1px ${props => (props.isSelected ? blue.A100 : grey.A300)};
+  border: solid 1px ${props => (props.isSelected ? blue.A100 : '#000')};
 
   :hover {
     background-color: ${props => (props.isSelected ? blue.A200 : grey.A200)};
