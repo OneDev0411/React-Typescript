@@ -27,7 +27,7 @@ export const Icon = ArrowDropDown.extend`
   display: flex;
   width: 2em;
   height: 2em;
-  fill: #8da2b5;
+  fill: #000;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
 `
 
