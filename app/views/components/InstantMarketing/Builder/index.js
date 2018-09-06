@@ -61,6 +61,13 @@ class Builder extends React.Component {
         maximumFractionDigits: 0,
       }).format(price)
     )
+
+    this.nunjucks.addFilter('area', area_meters =>
+      new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(area_meters * 10.7639)
+    )
   }
 
   disableAssetManager = () => {
