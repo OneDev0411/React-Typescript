@@ -57,7 +57,7 @@ class Builder extends React.Component {
       new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-        minimumFractionDigits: 2
+        maximumFractionDigits: 0
       }).format(price)
     )
   }
