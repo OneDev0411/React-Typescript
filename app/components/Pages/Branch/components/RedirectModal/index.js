@@ -19,7 +19,7 @@ const RedirectModal = ({ children, brandInfo }) => {
                 />
               </Link>
             )}
-            <h1 className="c-auth__title din">{siteTitle}</h1>
+            <h1 className="c-auth__title">{siteTitle}</h1>
           </header>
           {children}
         </Modal.Body>

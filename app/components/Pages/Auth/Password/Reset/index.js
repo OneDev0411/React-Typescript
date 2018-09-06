@@ -40,7 +40,7 @@ const Reset = ({
             />
           </Link>
         )}
-        <h1 className="c-auth__title din">{siteTitle}</h1>
+        <h1 className="c-auth__title">{siteTitle}</h1>
         {!submitSuccessfully && (
           <p className="c-auth__subtitle">Reset your password</p>
         )}

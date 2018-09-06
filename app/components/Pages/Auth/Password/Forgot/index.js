@@ -38,7 +38,7 @@ const ForgotForm = ({
               />
             </Link>
           )}
-          <h1 className="c-auth__title din">{siteTitle}</h1>
+          <h1 className="c-auth__title">{siteTitle}</h1>
           {!resetSuccessfully && (
             <p className="c-auth__subtitle">Forgot your password?</p>
           )}

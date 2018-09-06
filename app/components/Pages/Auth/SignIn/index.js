@@ -85,7 +85,7 @@ const SigninForm = ({
               />
             </Link>
           )}
-          <h1 className="c-auth__title din">{siteTitle}</h1>
+          <h1 className="c-auth__title">{siteTitle}</h1>
           <p className="c-auth__subtitle">Hi, welcome back!</p>
         </header>
         <main className="c-auth__main">
