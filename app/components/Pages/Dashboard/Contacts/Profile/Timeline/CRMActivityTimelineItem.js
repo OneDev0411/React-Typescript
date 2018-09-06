@@ -9,7 +9,13 @@ export function CRMActivityTimelineItem(props) {
         {attributes.image ? (
           <img src={attributes.image} alt="activity" />
         ) : (
-          <Avatar round name={props.name} src={props.avatar} size={34} />
+          <Avatar
+            round
+            name={props.name}
+            src={props.avatar}
+            size={34}
+            color="#D4D4D4"
+          />
         )}
       </div>
 

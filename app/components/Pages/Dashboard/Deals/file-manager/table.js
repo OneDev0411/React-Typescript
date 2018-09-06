@@ -176,7 +176,11 @@ export class FileManager extends React.Component {
       src = file.preview_url
     }
 
-    return <img className="icon" src={src} alt="" />
+    return (
+      <div className="icon-container">
+        <img className="icon" src={src} alt="" />
+      </div>
+    )
   }
 
   splitMultipleFiles = () => {

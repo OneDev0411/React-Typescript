@@ -58,9 +58,7 @@ export const FilterItem = props => {
           <div>
             <TitleContainer>
               <ItemTitle onClick={onToggleFilterActive}>
-                <span style={{ fontWeight: 600 }}>
-                  {filterConfig.serverLabel || filterConfig.label}{' '}
-                </span>
+                <span style={{ fontWeight: 600 }}>{filterConfig.label} </span>
                 {operator && operator.name}&nbsp;
                 {getCurrentValues(isActive, values)}
               </ItemTitle>

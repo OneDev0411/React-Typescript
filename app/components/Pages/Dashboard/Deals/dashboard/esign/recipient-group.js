@@ -27,6 +27,7 @@ class RecipientGroup extends React.Component {
                 <UserAvatar
                   userId={user ? user.id : null}
                   size={30}
+                  color="#D4D4D4"
                   name={role.legal_full_name}
                   image={user ? user.profile_image_url : null}
                   showStateIndicator={false}
@@ -49,9 +50,7 @@ class RecipientGroup extends React.Component {
               &nbsp; Add Signer
             </span>
 
-            <span className="recp-description">
-              Sign order {order}
-            </span>
+            <span className="recp-description">Sign order {order}</span>
           </span>
         </div>
       </div>

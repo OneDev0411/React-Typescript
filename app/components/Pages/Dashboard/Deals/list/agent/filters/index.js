@@ -37,10 +37,7 @@ const FilterNames = {
 }
 
 export const Filters = {
-  All: deal =>
-    FilterNames.Archive.includes(Deal.get.status(deal)) === false &&
-    !deal.is_draft &&
-    !deal.deleted_at,
+  All: deal => !deal.deleted_at,
   Drafts: deal => deal.is_draft === true,
   Listings: deal =>
     FilterNames.Active.includes(Deal.get.status(deal)) &&

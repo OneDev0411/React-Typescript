@@ -15,7 +15,9 @@ export default ({
   captionIsHTML = false,
   placement = 'top',
   multiline = false,
-  overlayOptions = {},
+  overlayOptions = {
+    trigger: ['hover']
+  },
   tooltipStyles = {},
   children,
   size = '', // just accepet large for now

@@ -26,7 +26,7 @@ class BadgeCounter extends React.Component {
     let counter = 0
 
     _.each(this.props.deals, deal => {
-      if (~~deal.attention_requests > 0) {
+      if (!deal.is_draft && ~~deal.attention_requests > 0) {
         counter += 1
       }
     })

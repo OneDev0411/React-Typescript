@@ -13,7 +13,7 @@ const propTypes = {
 }
 
 const defaultProps = {
-  size: 48,
+  size: 36,
   image: '',
   title: '*',
   borderRadius: 100,

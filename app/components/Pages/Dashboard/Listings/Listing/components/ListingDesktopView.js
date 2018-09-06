@@ -751,7 +751,7 @@ const ListingDesktopView = ({
   }
 
   let viewer_wrap_style = S(
-    `absolute h-100p bg-fff t-0 l-0 z-10 ml-130 w-${viewer_width}`
+    `absolute h-100p bg-fff t-0 l-0 z-10 ml-80 w-${viewer_width}`
   )
 
   if (!user || data.is_widget) {
