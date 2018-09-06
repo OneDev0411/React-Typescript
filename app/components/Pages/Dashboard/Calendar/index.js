@@ -280,7 +280,7 @@ class CalendarContainer extends React.Component {
     const { user, selectedDate, isFetching } = this.props
 
     return (
-      <Container isOpen={showCreateTaskMenu}>
+      <Container isOpen={isMenuOpen}>
         <TaskDrawer
           isOpen={showCreateTaskMenu}
           selectedTask={selectedTask}
@@ -288,7 +288,7 @@ class CalendarContainer extends React.Component {
           onChangeTask={this.handleChangeTask}
         />
 
-        <Menu isOpen={isMenuOpen} width={294}>
+        <Menu isOpen={isMenuOpen} width={302}>
           <MenuContainer>
             <DatePicker
               selectedDate={selectedDate}
