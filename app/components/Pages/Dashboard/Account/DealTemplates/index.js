@@ -2,8 +2,6 @@ import React, { Fragment } from 'react'
 import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import cn from 'classnames'
-import _ from 'underscore'
 
 import PageTitle from '../components/PageTitle'
 import Search from '../../../../Partials/headerSearch'
@@ -50,7 +48,7 @@ class DealTemplates extends React.Component {
         style: { flexDirection: 'row-reverse' },
         Cell: ({ original: form }) => (
           <Fragment>
-            <ActionButton onClick={() => this.editTemplate(form)}>
+            <ActionButton size="small" onClick={() => this.editTemplate(form)}>
               Edit Template
             </ActionButton>
           </Fragment>
