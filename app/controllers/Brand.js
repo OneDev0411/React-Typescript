@@ -16,7 +16,7 @@ class Brand {
       const palette = brand.palette
 
       if (palette && palette[name]) {
-        return palette[name].replace('#', '')
+        return palette[name]
       }
 
       brand = brand.parent
