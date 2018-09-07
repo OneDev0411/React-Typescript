@@ -1,6 +1,7 @@
 import { css } from 'styled-components'
+import Chromath from 'chromath'
 
-import { blue, grey } from '../../../utils/colors'
+import { grey, primary, primaryDark } from '../../../utils/colors'
 
 export const buttonBaseStyle = css`
   width: ${props => (props.isBlock ? '100%' : 'auto')};
@@ -42,14 +43,19 @@ export const ButtonAppearances = {
   primary: css`
     ${buttonBaseStyle};
     color: #fff;
-    background-color: ${blue.A100};
+    background-color: ${props => props.brandColor || primary};
 
     &[disabled] {
       background-color: ${grey.A550};
     }
 
     ${isNotDisableState}hover, ${isNotDisableState}focus {
-      background-color: ${blue.A200};
+      color: #fff;
+      text-decoration: none;
+      background-color: ${props =>
+        props.brandColor
+          ? Chromath.towards(props.brandColor, 'black', 0.25).toString()
+          : primaryDark};
     }
   `,
   outline: css`
@@ -63,14 +69,14 @@ export const ButtonAppearances = {
     }
 
     ${isNotDisableState}hover, ${isNotDisableState}focus {
-      color: ${blue.A100};
-      border-color: ${blue.A100};
+      color: ${props => props.brandColor || primary};
+      border-color: ${props => props.brandColor || primary};
       text-decoration: none;
     }
   `,
   link: css`
     ${buttonBaseStyle};
-    color: ${blue.A100};
+    color: ${props => props.brandColor || primary};
     background-color: transparent;
 
     &[disabled] {
@@ -78,7 +84,10 @@ export const ButtonAppearances = {
     }
 
     ${isNotDisableState}hover, ${isNotDisableState}focus {
-      color: ${blue.A200};
+      color: ${props =>
+        props.brandColor
+          ? Chromath.towards(props.brandColor, 'black', 0.25).toString()
+          : primaryDark};
       text-decoration: none;
     }
   `,

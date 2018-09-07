@@ -33,7 +33,12 @@ const propTypes = {
   /**
    * The size of the button.
    */
-  size: PropTypes.oneOf(['small', 'medium', 'large', 'XLarge'])
+  size: PropTypes.oneOf(['small', 'medium', 'large', 'XLarge']),
+
+  /**
+   * The brand color of active team.
+   */
+  brandColor: PropTypes.string
 }
 
 const defaultProps = {
@@ -42,7 +47,8 @@ const defaultProps = {
   isActive: false,
   isBlock: false,
   inverse: false,
-  size: 'medium'
+  size: 'medium',
+  brandColor: ''
 }
 
 const isOutline = props => props.appearance === 'outline' || props.inverse
