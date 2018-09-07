@@ -9,6 +9,8 @@ import nunjucks from 'nunjucks'
 import './AssetManager'
 import config from './config'
 
+import PhoneNumber from 'google-libphonenumber'
+
 import {
   Container,
   TemplatesContainer,
@@ -67,6 +69,20 @@ class Builder extends React.Component {
         maximumFractionDigits: 0,
       }).format(area_meters * 10.7639)
     )
+
+    const pnu = new PhoneNumber.PhoneNumberUtil()
+
+    this.nunjucks.addFilter('phone', phone => {
+      let pn
+
+      try {
+        pn = pnu.parse(phone)
+      } catch(e) {
+        return phone // Cannot parse it.
+      }
+
+      return pnu.format(pn, PhoneNumber.PhoneNumberFormat.NATIONAL)
+    })
   }
 
   disableAssetManager = () => {
