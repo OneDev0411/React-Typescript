@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import Checkmark from '../../../../Partials/Svgs/Checkmark'
+import { primary } from 'views/utils/colors'
 
-const chooseColor = isSelected => (isSelected ? '#17283a' : '#2196f3')
+const chooseColor = isSelected => (isSelected ? '#000000' : primary)
 const TagContainer = styled.div`
   border-radius: 3px;
   background-color: #ffffff;
@@ -25,7 +26,7 @@ const Tag = ({ tag, onSelectionChange, tagDataType }) => (
   <TagContainer isSelected={tag.isSelected} onClick={onSelectionChange}>
     {tag.isSelected && (
       <CheckmarkContainer>
-        <Checkmark color="#17283a" />
+        <Checkmark color="#000000" />
       </CheckmarkContainer>
     )}
     {tag[tagDataType]}
