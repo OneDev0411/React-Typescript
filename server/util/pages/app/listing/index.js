@@ -5,13 +5,15 @@ import getListing from '../../../../../app/models/listings/listing/get-listing'
 const router = require('koa-router')()
 const app = new Koa()
 
+const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
 /**
  * route for /mls/:id
  */
 router.get('/dashboard/mls/:id', async (ctx, next) => {
   const { id } = ctx.params
 
-  if (!id) {
+  if (!id || uuidPattern.test(id) === false) {
     return next()
   }
 
