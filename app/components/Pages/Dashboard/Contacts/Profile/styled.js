@@ -1,5 +1,12 @@
 import styled from 'styled-components'
 
+import { brandBackground } from '../../../../../views/utils/colors'
+
+export const PageContainer = styled.div`
+  padding: 2.5em;
+  background-color: ${brandBackground};
+`
+
 export const ColumnsContainer = styled.div`
   padding: 1em;
 

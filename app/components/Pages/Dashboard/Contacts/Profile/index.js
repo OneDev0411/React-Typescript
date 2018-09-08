@@ -9,10 +9,7 @@ import { getContactAddresses } from '../../../../../models/contacts/helpers'
 import { selectDefinitionByName, isLoadedContactAttrDefs } from '../../../../../reducers/contacts/attributeDefs'
 
 import { Container } from '../components/Container'
-import PageHeader from '../../../../../views/components/PageHeader'
-import Catalog from './Catalog'
 import { Dates } from './Dates'
-import { LastTouched } from './LastTouched'
 import { DealsListWidget } from './Deals'
 import { Details } from './Details'
 import Tags from './Tags'
@@ -27,6 +24,7 @@ import IconTouch from '../../../../../views/components/SvgIcons/AddAlarm/IconAdd
 import IconNote from '../../../../../views/components/SvgIcons/Note/IconNote'
 import IconTodo from '../../../../../views/components/SvgIcons/Todo/IconTodo'
 import {
+  PageContainer,
   ColumnsContainer,
   SideColumnWrapper,
   SecondColumn,
@@ -47,6 +45,8 @@ import {
 import { selectContact } from '../../../../../reducers/contacts/list'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import { normalizeContact } from '../../../../../views/utils/association-normalizers'
+
+import { Header } from './Header'
 
 class ContactProfile extends React.Component {
   state = {
@@ -177,23 +177,18 @@ class ContactProfile extends React.Component {
 
     const thirdColumn = (
       <ThirdColumn>
-        {this.state.isDesktopScreen && <LastTouched contact={contact} />}
         <Dates contact={contact} />
         <DealsListWidget contactId={contact.id} />
       </ThirdColumn>
     )
 
     return (
-      <div className="profile">
-        <PageHeader title="All Contacts" backUrl="/dashboard/contacts" />
+      <PageContainer>
+        <Header contact={contact} />
 
         <ColumnsContainer>
           <SideColumnWrapper>
             <div>
-              <Catalog contact={contact} />
-
-              {!this.state.isDesktopScreen && <LastTouched contact={contact} />}
-
               <Tags contact={contact} />
 
               <ContactInfo contact={contact} />
@@ -295,7 +290,7 @@ class ContactProfile extends React.Component {
 
           {this.state.isDesktopScreen && thirdColumn}
         </ColumnsContainer>
-      </div>
+      </PageContainer>
     )
   }
 }
