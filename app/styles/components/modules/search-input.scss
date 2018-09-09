@@ -10,12 +10,12 @@
   border: solid 1px #394553;
   background-color: rgba(216, 216, 216, 0.1);
   input {
-    width: 42px;
+    width: 60px;
     padding: 0;
     background-color: transparent;
     border: none;
     height: 100%;
-    color: #9b9b9b;
+    color: #ffffff;
     display: inline-block;
     transition: width 700ms;
     &::-webkit-input-placeholder {
@@ -51,7 +51,7 @@
   .search-icon {
     display: inline-block;
     vertical-align: middle;
-    margin: 6px 8px 0 0;
+    margin: 3px 8px 0 0;
   }
   .close-icon {
     display: inline-block;
