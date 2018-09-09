@@ -7,15 +7,13 @@ import Avatar from './Avatar'
 import { LastTouched } from './LastTouched'
 
 export function Catalog(props) {
-  const { contact } = props.contact
-
-  console.log(contact)
+  const { contact } = props
 
   return (
     <Flex>
       <Avatar contact={contact} />
-      <Flex>
-        <H1>{contact.display_name}</H1>
+      <Flex column style={{ padding: '0.5em 1.5em' }}>
+        <H1 style={{ lineHeight: 1.5 }}>{contact.display_name}</H1>
         <LastTouched contact={contact} />
       </Flex>
     </Flex>
