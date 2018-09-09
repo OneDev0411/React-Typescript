@@ -31,7 +31,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
         size={40}
       />
       <Link
-        to={`dashboard/contacts/${contact.id}`}
+        to={`/dashboard/contacts/${contact.id}`}
         style={{ fontWeight: 500, marginLeft: '16px', padding: 0 }}
       >
         {contact.display_name}
