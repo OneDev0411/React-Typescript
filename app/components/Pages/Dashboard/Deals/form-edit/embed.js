@@ -2,6 +2,7 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import Frame from '../../../../../views/components/Deals/EmbedFormEdit'
 import IconDocument from '../../../../../views/components/SvgIcons/Document/IconDocument'
+import RadioWithState from '../../../../../views/components/radio/RadioWithState'
 
 export default ({
   task,
@@ -13,7 +14,8 @@ export default ({
   onClose,
   handleOpenPreview,
   onFrameRef,
-  onReceiveMessage
+  onReceiveMessage,
+  onChangeNotifyOffice
 }) => (
   <div className="deal-edit-form">
     <Row className="header">
@@ -23,12 +25,18 @@ export default ({
 
       <Col md={6} sm={6} xs={6} className="actions">
         {loaded && (
+          <span style={{ marginRight: '10px' }}>
+            <RadioWithState square onClick={onChangeNotifyOffice} />
+            Notify Office
+          </span>
+        )}
+
+        {loaded && (
           <button className="deal-button preview" onClick={handleOpenPreview}>
             <IconDocument />
             <span>Preview PDF</span>
           </button>
         )}
-
         {saving || !loaded ? (
           <span style={{ marginRight: '20px' }}>
             <i className="fa fa-spin fa-spinner" />&nbsp;
@@ -39,7 +47,6 @@ export default ({
             {incompleteFields.length === 0 ? 'Save' : 'Save Draft'}
           </button>
         )}
-
         <button className="deal-button exit" onClick={onClose}>
           X
         </button>
