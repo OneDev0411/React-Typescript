@@ -14,8 +14,14 @@ export default ({
 }) => {
   const { name, type, url, downloadUrl } = file
 
+  let style = { width }
+
+  if (file && type === 'image') {
+    style = { ...style, display: 'grid', overflow: 'scroll' }
+  }
+
   return (
-    <div style={{ width }} className="c-deal-form-viewer__viewer">
+    <div className="c-deal-form-viewer__viewer" style={style}>
       {file &&
         type === 'pdf' && (
           <PdfViewer

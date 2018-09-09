@@ -57,21 +57,7 @@ export function roleName(role) {
  * @param {Object} userRole - the roles including name parts
  */
 export function getLegalFullName(userRole) {
-  let name = []
-  const {
-    legal_prefix,
-    legal_first_name,
-    legal_last_name,
-    company_title
-  } = userRole
-
-  if (legal_first_name || legal_last_name) {
-    name = [legal_prefix, legal_first_name, legal_last_name]
-  } else {
-    name = [company_title]
-  }
-
-  return name.join(' ')
+  return userRole.legal_full_name
 }
 
 /**
