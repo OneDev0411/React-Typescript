@@ -1,5 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import _ from 'underscore'
+
 import { roleName } from '../../utils/roles'
 import UserAvatar from '../../../../../Partials/UserAvatar'
 
