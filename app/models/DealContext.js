@@ -384,8 +384,6 @@ export function getValidItems(
 }
 
 function getFormattedValue(value) {
-  console.log('>>>>>>>', this, value)
-
   if (!value) {
     return value
   }
