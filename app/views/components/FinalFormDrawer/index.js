@@ -16,6 +16,7 @@ FinalFormDrawer.propTypes = {
   submittingButtonLabel: PropTypes.string,
   showFooter: PropTypes.bool,
   closeDrawerOnBackdropClick: PropTypes.bool,
+  reinitializeAfterSubmit: PropTypes.bool,
   showReset: PropTypes.bool,
   showCancel: PropTypes.bool,
   validate: PropTypes.func
@@ -29,6 +30,7 @@ FinalFormDrawer.defaultProps = {
   submitButtonLabel: 'Save',
   submittingButtonLabel: 'Saving ...',
   closeDrawerOnBackdropClick: true,
+  reinitializeAfterSubmit: true,
   validate: () => ({})
 }
 
@@ -39,7 +41,10 @@ export function FinalFormDrawer(props) {
       onSubmit={async (values, form) => {
         form.initialize(values)
         await props.onSubmit(values)
-        form.initialize(props.initialValues)
+
+        if (props.reinitializeAfterSubmit) {
+          form.initialize(props.initialValues)
+        }
       }}
       mutators={{ ...arrayMutators }}
       initialValues={props.initialValues}

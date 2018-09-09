@@ -8,7 +8,7 @@ import Deal from '../../../../../../../models/Deal'
 
 class AddRole extends React.Component {
   state = {
-    isModalOpen: false,
+    isFormOpen: false,
     showRolesMenu: false,
     selectedRole: null
   }
@@ -18,9 +18,9 @@ class AddRole extends React.Component {
       showRolesMenu: !state.showRolesMenu
     }))
 
-  closeModal = () =>
+  closeDrawer = () =>
     this.setState({
-      isModalOpen: false,
+      isFormOpen: false,
       selectedRole: null
     })
 
@@ -34,7 +34,8 @@ class AddRole extends React.Component {
 
   handleSelectRole = name =>
     this.setState({
-      isModalOpen: true,
+      isFormOpen: true,
+      showRolesMenu: false,
       selectedRole: name
     })
 
@@ -73,7 +74,7 @@ class AddRole extends React.Component {
   }
 
   render() {
-    const { isModalOpen, selectedRole } = this.state
+    const { isFormOpen, selectedRole } = this.state
     const { deal } = this.props
 
     return (
@@ -118,9 +119,9 @@ class AddRole extends React.Component {
           allowedRoles={this.AllowedRoles}
           isDoubleEnded={this.isDoubleEnded}
           isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(selectedRole)}
-          isOpen={isModalOpen}
+          isOpen={isFormOpen}
           modalTitle="Add to Deal"
-          onHide={this.closeModal}
+          onHide={this.closeDrawer}
         />
       </div>
     )

@@ -41,7 +41,7 @@ class RoleFormWrapper extends React.Component {
       onUpsertRole = () => null,
       onHide = () => null
     } = this.props
-    const fullName = getLegalFullName(form)
+    const fullName = `${form.legal_first_name} ${form.legal_last_name}`
     const isNewRecord = !user || !user.role
 
     try {

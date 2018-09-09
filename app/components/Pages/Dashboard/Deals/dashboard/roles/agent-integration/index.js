@@ -10,7 +10,7 @@ import AgentModal from './agents-list'
 const initialState = {
   showAgentModal: false,
   showContactModal: false,
-  showRoleModal: false,
+  showRoleDrawer: false,
   role: null,
   selectedAgent: null
 }
@@ -19,20 +19,20 @@ class RoleAgentIntegration extends React.Component {
   state = initialState
 
   componentWillReceiveProps(nextProps) {
-    this.setState(this.getModalStates(nextProps))
-  }
+    let newState = initialState
 
-  getModalStates = props => {
-    const { isOpen, user } = props
-
-    if (!isOpen) {
-      return initialState
+    if (this.props.isOpen === false && nextProps.isOpen) {
+      newState = this.getNewStates(nextProps)
     }
 
-    if (user) {
+    this.setState(newState)
+  }
+
+  getNewStates = props => {
+    if (props.user) {
       return {
-        showRoleModal: true,
-        role: user
+        showRoleDrawer: true,
+        role: props.user
       }
     }
 
@@ -50,7 +50,7 @@ class RoleAgentIntegration extends React.Component {
   onSelectContactUser = contact =>
     this.setState({
       ...initialState,
-      showRoleModal: true,
+      showRoleDrawer: true,
       selectedAgent: this.state.selectedAgent,
       role: convertContactToRole(contact, this.props.attributeDefs)
     })
@@ -70,10 +70,10 @@ class RoleAgentIntegration extends React.Component {
     }
   }
 
-  showRoleModal = () =>
+  showRoleDrawer = () =>
     this.setState({
       ...initialState,
-      showRoleModal: true
+      showRoleDrawer: true
     })
 
   getShouldSelectRoleFromAgentsList(props) {
@@ -134,13 +134,13 @@ class RoleAgentIntegration extends React.Component {
           phone: phone_number || work_phone,
           company: office ? office.name : ''
         },
-        showRoleModal: true
+        showRoleDrawer: true
       }
     }
 
     if (relatedContacts.length > 0) {
       newState = {
-        showRoleModal: true,
+        showRoleDrawer: true,
         role: convertContactToRole(relatedContacts[0], this.props.attributeDefs)
       }
     }
@@ -152,43 +152,41 @@ class RoleAgentIntegration extends React.Component {
     })
   }
 
+  onClose = () => {
+    this.props.onHide()
+  }
+
   render() {
-    const {
-      showAgentModal,
-      showRoleModal,
-      showContactModal,
-      role,
-      selectedAgent
-    } = this.state
-    const { deal, modalTitle, onHide } = this.props
+    const { role, selectedAgent } = this.state
+    const { deal, modalTitle } = this.props
 
     return (
       <Fragment>
-        {showAgentModal && (
+        {this.state.showAgentModal && (
           <AgentModal
             isPrimaryAgent={this.IsPrimaryAgent}
-            onHide={onHide}
+            onHide={this.onClose}
             onSelectAgent={this.onSelectAgent}
           />
         )}
 
         <RoleCrmIntegration
           deal={deal}
-          isOpen={showRoleModal}
+          isOpen={this.state.showRoleDrawer}
           user={role}
           dealSide={this.props.dealSide}
           modalTitle={modalTitle}
           allowedRoles={this.props.allowedRoles}
           isCommissionRequired={this.props.isCommissionRequired}
-          onHide={onHide}
+          onHide={this.onClose}
           onUpsertRole={this.onUpsertRole}
         />
 
         <ContactModal
           title={modalTitle}
-          isOpen={showContactModal}
-          handleOnClose={onHide}
-          handleAddManually={selectedAgent ? null : this.showRoleModal}
+          isOpen={this.state.showContactModal}
+          handleOnClose={this.onClose}
+          handleAddManually={selectedAgent ? null : this.showRoleDrawer}
           handleSelectedItem={this.onSelectContactUser}
         />
       </Fragment>
