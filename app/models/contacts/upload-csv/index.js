@@ -2,7 +2,7 @@ import Fetch from '../../../services/fetch'
 
 export async function uploadCsvFile(file) {
   try {
-    const response = await new Fetch({ stream: true })
+    const response = await new Fetch()
       .upload('/contacts/upload')
       .attach('attachment', file, file.name)
 

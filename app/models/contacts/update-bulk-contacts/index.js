@@ -23,7 +23,7 @@ export async function upsertAttributesToContacts(updatedContacts) {
   }
 
   try {
-    const response = await new Fetch({ stream: true })
+    const response = await new Fetch()
       .patch('/contacts')
       .query(query)
       .send({ contacts: updatedContacts })

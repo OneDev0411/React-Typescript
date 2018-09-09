@@ -2,9 +2,7 @@
   position: relative;
   padding: 16px 8px 16px 16px;
   border-bottom: 1px solid #ececec;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: block;
   text-decoration: none;
   &:hover, &:focus {
     text-decoration: none;
@@ -29,7 +27,14 @@
 
 .c-alertList__item__info {
   display: inline-block;
-  width: calc(100% - 126px);
+  margin-top: 8px;
+}
+
+.c-alertList__item__buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+
 }
 
 .c-alertList__item__title {

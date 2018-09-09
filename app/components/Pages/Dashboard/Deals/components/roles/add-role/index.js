@@ -17,7 +17,7 @@ import { RoleItem as AddRole, RoleInfo, RoleTitle, RoleAvatar } from '../styled'
 
 class AddRoleForm extends React.Component {
   state = {
-    isModalOpen: false,
+    isFormOpen: false,
     showRolesMenu: false,
     selectedRole: null
   }
@@ -27,9 +27,9 @@ class AddRoleForm extends React.Component {
       showRolesMenu: !state.showRolesMenu
     }))
 
-  closeModal = () =>
+  closeDrawer = () =>
     this.setState({
-      isModalOpen: false,
+      isFormOpen: false,
       selectedRole: null
     })
 
@@ -45,7 +45,7 @@ class AddRoleForm extends React.Component {
 
   handleSelectRole = name =>
     this.setState({
-      isModalOpen: true,
+      isFormOpen: true,
       showRolesMenu: false,
       selectedRole: name
     })
@@ -85,7 +85,7 @@ class AddRoleForm extends React.Component {
   }
 
   render() {
-    const { isModalOpen, selectedRole } = this.state
+    const { isFormOpen, selectedRole } = this.state
     const { deal } = this.props
 
     return (
@@ -124,15 +124,18 @@ class AddRoleForm extends React.Component {
           )}
         </Downshift>
 
-        <RoleAgentIntegration
-          deal={deal}
-          allowedRoles={this.AllowedRoles}
-          isDoubleEnded={this.isDoubleEnded}
-          isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(selectedRole)}
-          isOpen={isModalOpen}
-          modalTitle="Add to Deal"
-          onHide={this.closeModal}
-        />
+        {isFormOpen && (
+          <RoleAgentIntegration
+            deal={deal}
+            allowedRoles={this.AllowedRoles}
+            isDoubleEnded={this.isDoubleEnded}
+            isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
+              selectedRole
+            )}
+            modalTitle="Add to Deal"
+            onHide={this.closeDrawer}
+          />
+        )}
       </Container>
     )
   }

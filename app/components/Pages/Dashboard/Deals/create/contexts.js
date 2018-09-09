@@ -85,8 +85,7 @@ export default class extends React.Component {
                       className={cn('text', {
                         hasError:
                           hasError &&
-                          field.mandatory &&
-                          _.isUndefined(contexts[field.name])
+                          !field.validate(field, contexts[field.name])
                       })}
                     >
                       {field.label}{' '}

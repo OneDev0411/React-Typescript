@@ -128,10 +128,21 @@ class PdfPage extends React.Component {
   }
 
   render() {
-    const { height } = this.state
-    const { doc, pageNumber, rotation, zoom, defaultContainerHeight } = this.props
+    const { height, width } = this.state
+    const {
+      doc,
+      pageNumber,
+      rotation,
+      zoom,
+      defaultContainerHeight
+    } = this.props
     const { pdfInfo } = doc
     const { numPages } = pdfInfo
+    let style = {}
+
+    if (rotation === 90 || rotation === 270) {
+      style.marginTop = `${(width - height) / 2}px`
+    }
 
     return (
       <div
@@ -146,8 +157,11 @@ class PdfPage extends React.Component {
             className={`pdf-page rotate${rotation}`}
             id="pdf-canvas"
             ref={ref => (this.canvas = ref)}
+            style={style}
           />
-          <div className="page-number">{pageNumber} / {numPages}</div>
+          <div className="page-number">
+            {pageNumber} / {numPages}
+          </div>
         </a>
       </div>
     )

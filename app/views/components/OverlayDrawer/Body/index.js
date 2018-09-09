@@ -1,8 +1,8 @@
 import React from 'react'
 import { Container } from './styled'
 
-const Body = ({ children, showFooter, style }) => (
-  <Container style={style} showFooter={showFooter}>
+const Body = ({ children, style, showFooter }) => (
+  <Container showFooter={showFooter} style={style}>
     {children}
   </Container>
 )

@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es5",
+    "strict": true,
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": false,
+    "baseUrl": ".",
+    "paths": {
+      "actions/*": [
+        "app/store_actions/*"
+      ],
+      "assets/*": [
+        "app/static/*"
+      ],
+      "components/*": [
+        "app/views/components/*"
+      ],
+      "constants/*": [
+        "app/constants/*"
+      ],
+      "dashboard/*": [
+        "app/components/Dashboard/*"
+      ],
+      "Models/*": [
+        "app/models/*"
+      ],
+      "reducers/*": [
+        "app/reducers/*"
+      ],
+      "routes/*": [
+        "app/routes/*"
+      ],
+      "partials/*": [
+        "app/components/Partials/*"
+      ],
+      "services/*": [
+        "app/services/*"
+      ],
+      "utils/*": [
+        "app/utils/*"
+      ],
+      "views/*": [
+        "app/views/*"
+      ],
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

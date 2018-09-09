@@ -45,8 +45,33 @@ const AlertListItem = ({
     to={`/dashboard/mls/alerts/${alert.id}`}
     onClick={() => onClickAlert(alert)}
   >
+    <div className="c-alertList__item__buttons">
+      {alert.new_recommendations &&
+        parseInt(alert.new_recommendations, 10) > 0 && (
+          <span
+            className="c-alertList__item__badge"
+            style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}
+          >
+            {alert.new_recommendations}
+          </span>
+        )}
+      <Follow
+        dropdownStyle={{ right: '40px' }}
+        statuses={alertStatuses}
+        activeStatuses={
+          alert.user_alert_setting && alert.user_alert_setting.status
+        }
+        isFetching={alert.isFetching}
+        onClick={onClickFollow}
+      />
+
+      <AlertListItemMenu
+        alertId={alert.id}
+        onClickDelete={() => onClickDelete(alert)}
+      />
+    </div>
     <div className="c-alertList__item__info">
-      <h3 className="c-alertList__item__title san-fran ellipses">
+      <h3 className="c-alertList__item__title san-fran">
         {alert.title || alert.proposed_title || 'without title'}
       </h3>
       {user.id !== alert.created_by.id && (
@@ -57,29 +82,6 @@ const AlertListItem = ({
       )}
       {alert.users && alert.users.length > 0 && <SharedWith alert={alert} />}
     </div>
-    {alert.new_recommendations &&
-      parseInt(alert.new_recommendations, 10) > 0 && (
-        <span
-          className="c-alertList__item__badge"
-          style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}
-        >
-          {alert.new_recommendations}
-        </span>
-      )}
-    <Follow
-      dropdownStyle={{ right: '40px' }}
-      statuses={alertStatuses}
-      activeStatuses={
-        alert.user_alert_setting && alert.user_alert_setting.status
-      }
-      isFetching={alert.isFetching}
-      onClick={onClickFollow}
-    />
-
-    <AlertListItemMenu
-      alertId={alert.id}
-      onClickDelete={() => onClickDelete(alert)}
-    />
   </IndexLink>
 )
 

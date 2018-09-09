@@ -72,8 +72,8 @@
         }
 
         &:hover i,
-        &:hover .deals-info__mls-status__edit-cta,
-        &:hover .deals-info__mls__edit-cta {
+        &:hover .deals-info__edit-cta,
+        &:hover .deals-info__mls-status__edit-cta {
           display: inline-block !important;
         }
       }
@@ -85,39 +85,6 @@
       height: 10px;
       border-radius: 2px;
       margin-right: 5px;
-    }
-  }
-}
-
-.deal-mls-search {
-  .modal-content {
-    border: none;
-  }
-
-  .modal-header {
-    @extend %deal-modal-header;
-  }
-
-  .modal-body {
-    min-height: 430px;
-    max-height: 430px;
-    overflow: auto;
-    padding: 0;
-    .rx-input {
-      width: calc(100% - 40px);
-      height: 44px;
-      margin: 20px;
-      margin-bottom: 0;
-    }
-
-    .listings {
-      @extend %listings;
-      padding: 0 2rem;
-
-      .list {
-        max-height: 336px;
-        margin: 0 -2rem;
-      }
     }
   }
 }

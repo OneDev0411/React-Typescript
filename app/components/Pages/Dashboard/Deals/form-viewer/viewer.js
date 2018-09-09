@@ -14,8 +14,14 @@ export default ({
 }) => {
   const { name, type, url, downloadUrl } = file
 
+  let style = { width }
+
+  if (file && type === 'image') {
+    style = { ...style, display: 'grid', overflow: 'scroll' }
+  }
+
   return (
-    <div style={{ width }} className="c-deal-form-viewer__viewer">
+    <div className="c-deal-form-viewer__viewer" style={style}>
       {file &&
         type === 'pdf' && (
           <PdfViewer
@@ -33,7 +39,13 @@ export default ({
 
       {file &&
         type === 'html' && (
-          <iframe frameBorder="0" src={url} width="90%" height="90%" />
+          <iframe
+            frameBorder="0"
+            src={url}
+            width="90%"
+            height="90%"
+            title="deal-viewer"
+          />
         )}
 
       {file &&

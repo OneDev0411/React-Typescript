@@ -1,26 +1,23 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import SearchModal from './search'
+// import SearchModal from './search'
+import SearchListingModal from '../../../../../../views/components/SearchListing'
 import ListingInfo from './info'
 import { updateListing } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
 class MlsListing extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      saving: false,
-      showMlsModal: false
-    }
+  state = {
+    saving: false,
+    showMlsModal: false
   }
 
-  toggleSearchModal() {
-    this.setState({
-      showMlsModal: !this.state.showMlsModal
-    })
-  }
+  toggleSearchModal = () =>
+    this.setState(state => ({
+      showMlsModal: !state.showMlsModal
+    }))
 
-  requestDeleteMls() {
+  requestDeleteMls = () => {
     const { confirmation } = this.props
 
     confirmation({
@@ -31,13 +28,9 @@ class MlsListing extends React.Component {
     })
   }
 
-  delete() {
-    const listing = { id: null }
+  delete = () => this.onSelectListing({ id: null })
 
-    this.onSelectListing(listing)
-  }
-
-  async onSelectListing(listing) {
+  onSelectListing = async listing => {
     const { deal, updateListing } = this.props
 
     this.setState({
@@ -71,14 +64,14 @@ class MlsListing extends React.Component {
         {!saving && (
           <ListingInfo
             deal={deal}
-            editMls={() => this.toggleSearchModal()}
-            deleteMls={() => this.requestDeleteMls()}
+            editMls={this.toggleSearchModal}
+            deleteMls={this.requestDeleteMls}
           />
         )}
 
-        <SearchModal
+        <SearchListingModal
           show={showMlsModal}
-          onHide={() => this.toggleSearchModal()}
+          onHide={this.toggleSearchModal}
           onSelectListing={listing => this.onSelectListing(listing)}
         />
       </div>

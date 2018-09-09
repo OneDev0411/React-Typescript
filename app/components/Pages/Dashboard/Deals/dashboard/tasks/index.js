@@ -2,6 +2,8 @@ import React from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import _ from 'underscore'
+
 import CreateTask from '../create-task'
 import TaskStatus from './status'
 import ChecklistPanel from '../checklists/panel'
@@ -31,10 +33,7 @@ const List = ({
   // select a task
   function selectTask(task) {
     if (task.room.new_notifications > 0) {
-      updateDealNotifications(
-        deal.id,
-        deal.new_notifications - task.room.new_notifications
-      )
+      updateDealNotifications(deal, task.room)
     }
 
     setSelectedTask(task)

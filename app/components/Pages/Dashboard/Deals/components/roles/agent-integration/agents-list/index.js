@@ -43,22 +43,19 @@ class TeamAgents extends React.Component {
     try {
       const teamAgents = await getAgents(brandId)
 
+      this.setState({
+        teamAgents,
+        isLoading: false
+      })
+
       // For primary agent if only one agent available automatically select them
       // issue: web#1148
       if (teamAgents && teamAgents.length === 1) {
         return this.handleSelectAgent(teamAgents[0])
       }
-
-      this.setState({
-        teamAgents
-      })
     } catch (e) {
       console.log(e)
-      this.setState({ teamAgents: [] })
-    } finally {
-      this.setState({
-        isLoading: false
-      })
+      this.setState({ teamAgents: [], isLoading: false })
     }
   }
 
@@ -119,7 +116,7 @@ class TeamAgents extends React.Component {
       >
         <Modal.Header closeButton>Choose primary agent</Modal.Header>
 
-        <Modal.Body>
+        <Modal.Body className="u-scrollbar--thinner">
           <Container>
             {(isSearchingContacts || isLoading) && (
               <SearchOverlay>
@@ -128,6 +125,7 @@ class TeamAgents extends React.Component {
             )}
 
             {!isLoading &&
+              !isSearchingContacts &&
               (!teamAgents || teamAgents.length === 0) && (
                 <EmptyState>
                   We cannot find any Primary Agent in your brand

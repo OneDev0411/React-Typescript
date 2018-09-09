@@ -12,18 +12,26 @@ FinalFormDrawer.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  submitButtonLabel: PropTypes.string,
+  submittingButtonLabel: PropTypes.string,
   showFooter: PropTypes.bool,
+  closeDrawerOnBackdropClick: PropTypes.bool,
+  reinitializeAfterSubmit: PropTypes.bool,
   showReset: PropTypes.bool,
-  validate: PropTypes.func,
-  submitLabel: PropTypes.string
+  showCancel: PropTypes.bool,
+  validate: PropTypes.func
 }
 
 FinalFormDrawer.defaultProps = {
   initialValues: {},
   showReset: true,
+  showCancel: true,
   showFooter: true,
-  validate: () => ({}),
-  submitLabel: 'Save'
+  submitButtonLabel: 'Save',
+  submittingButtonLabel: 'Saving ...',
+  closeDrawerOnBackdropClick: true,
+  reinitializeAfterSubmit: true,
+  validate: () => ({})
 }
 
 export function FinalFormDrawer(props) {
@@ -33,7 +41,10 @@ export function FinalFormDrawer(props) {
       onSubmit={async (values, form) => {
         form.initialize(values)
         await props.onSubmit(values)
-        form.initialize(props.initialValues)
+
+        if (props.reinitializeAfterSubmit) {
+          form.initialize(props.initialValues)
+        }
       }}
       mutators={{ ...arrayMutators }}
       initialValues={props.initialValues}
@@ -63,6 +74,7 @@ export function FinalFormDrawer(props) {
             isOpen={props.isOpen}
             onClose={handleOnClose}
             showFooter={props.showFooter}
+            closeOnBackdropClick={props.closeDrawerOnBackdropClick}
           >
             <Drawer.Header title={props.title} />
             <Drawer.Body>
@@ -73,14 +85,16 @@ export function FinalFormDrawer(props) {
 
             <Drawer.Footer>
               <div style={{ textAlign: 'left' }}>
-                <ActionButton
-                  disabled={submitting}
-                  inverse
-                  onClick={handleOnClose}
-                  type="button"
-                >
-                  Cancel
-                </ActionButton>
+                {props.showCancel && (
+                  <ActionButton
+                    disabled={submitting}
+                    inverse
+                    onClick={props.onClose}
+                    type="button"
+                  >
+                    Cancel
+                  </ActionButton>
+                )}
               </div>
               <div style={{ textAlign: 'right' }}>
                 {props.showReset && (
@@ -99,7 +113,9 @@ export function FinalFormDrawer(props) {
                   disabled={submitting || validating}
                   onClick={() => handleSubmit(props.onSubmit)}
                 >
-                  {submitting ? 'Saving ...' : props.submitLabel}
+                  {submitting
+                    ? props.submittingButtonLabel
+                    : props.submitButtonLabel}
                 </ActionButton>
               </div>
             </Drawer.Footer>
