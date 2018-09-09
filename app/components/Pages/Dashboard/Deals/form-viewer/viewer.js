@@ -33,7 +33,13 @@ export default ({
 
       {file &&
         type === 'html' && (
-          <iframe frameBorder="0" src={url} width="90%" height="90%" />
+          <iframe
+            frameBorder="0"
+            src={url}
+            width="90%"
+            height="90%"
+            title="deal-viewer"
+          />
         )}
 
       {file &&
