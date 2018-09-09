@@ -114,15 +114,18 @@ class AddRole extends React.Component {
           )}
         </Downshift>
 
-        <RoleAgentIntegration
-          deal={deal}
-          allowedRoles={this.AllowedRoles}
-          isDoubleEnded={this.isDoubleEnded}
-          isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(selectedRole)}
-          isOpen={isFormOpen}
-          modalTitle="Add to Deal"
-          onHide={this.closeDrawer}
-        />
+        {isFormOpen && (
+          <RoleAgentIntegration
+            deal={deal}
+            allowedRoles={this.AllowedRoles}
+            isDoubleEnded={this.isDoubleEnded}
+            isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
+              selectedRole
+            )}
+            modalTitle="Add to Deal"
+            onHide={this.closeDrawer}
+          />
+        )}
       </div>
     )
   }

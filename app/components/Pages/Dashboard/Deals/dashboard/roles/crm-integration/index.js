@@ -9,11 +9,9 @@ import {
   createContacts,
   upsertContactAttributes
 } from '../../../../../../../store_actions/contacts'
-import {
-  getLegalFullName,
-  convertRoleToContact,
-  getContactDiff
-} from '../../../utils/roles'
+import { confirmation } from '../../../../../../../store_actions/confirmation'
+
+import { convertRoleToContact, getContactDiff } from '../../../utils/roles'
 import RoleForm from '../form'
 
 const initialState = {
@@ -35,13 +33,11 @@ class RoleFormWrapper extends React.Component {
       user,
       attributeDefs,
       upsertContactAttributes,
-      createContacts,
       updateRole,
       createRoles,
       onUpsertRole = () => null,
       onHide = () => null
     } = this.props
-    const fullName = `${form.legal_first_name} ${form.legal_last_name}`
     const isNewRecord = !user || !user.role
 
     try {
@@ -56,16 +52,19 @@ class RoleFormWrapper extends React.Component {
           if (upsertedAttributes.length > 0) {
             await upsertContactAttributes(form.contact.id, upsertedAttributes)
 
-            this.showNotification(`${fullName} Updated.`)
+            this.showNotification(`${this.getFullName(form)} Updated.`)
           }
         } else {
-          await createContacts(convertRoleToContact(form, attributeDefs))
-          this.showNotification(`New Contact Created: ${fullName}`)
+          this.props.confirmation({
+            message: `Should we add ${form.legal_first_name} to your Contacts?`,
+            cancelLabel: 'No',
+            confirmLabel: 'Yes, Add',
+            onConfirm: () => this.createCrmContact(form)
+          })
         }
 
         if (deal) {
           await createRoles(deal.id, [form])
-          this.showNotification('Contact added to the deal.')
         }
       } else if (deal) {
         await updateRole(deal.id, form)
@@ -93,6 +92,16 @@ class RoleFormWrapper extends React.Component {
         isSaving: false
       })
     }
+  }
+
+  getFullName = form => `${form.legal_first_name} ${form.legal_last_name}`
+
+  createCrmContact = async form => {
+    await this.props.createContacts(
+      convertRoleToContact(form, this.props.attributeDefs)
+    )
+
+    this.showNotification(`New Contact Created: ${this.getFullName(form)}`)
   }
 
   render() {
@@ -137,6 +146,7 @@ export default connect(
     notify,
     updateRole,
     createRoles,
+    confirmation,
     createContacts,
     upsertContactAttributes
   }

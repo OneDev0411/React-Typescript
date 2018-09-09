@@ -16,27 +16,20 @@ const initialState = {
 }
 
 class RoleAgentIntegration extends React.Component {
-  state = initialState
-
-  componentWillReceiveProps(nextProps) {
-    let newState = initialState
-
-    if (this.props.isOpen === false && nextProps.isOpen) {
-      newState = this.getNewStates(nextProps)
-    }
-
-    this.setState(newState)
+  state = {
+    ...initialState,
+    ...this.InitialState
   }
 
-  getNewStates = props => {
-    if (props.user) {
+  get InitialState() {
+    if (this.props.user) {
       return {
         showRoleDrawer: true,
-        role: props.user
+        role: this.props.user
       }
     }
 
-    if (this.getShouldSelectRoleFromAgentsList(props)) {
+    if (this.getShouldSelectRoleFromAgentsList()) {
       return {
         showAgentModal: true
       }
@@ -76,9 +69,9 @@ class RoleAgentIntegration extends React.Component {
       showRoleDrawer: true
     })
 
-  getShouldSelectRoleFromAgentsList(props) {
-    const { deal, allowedRoles } = props
-    const dealSide = deal ? deal.deal_type : props.dealSide
+  getShouldSelectRoleFromAgentsList() {
+    const { deal, allowedRoles } = this.props
+    const dealSide = deal ? deal.deal_type : this.props.dealSide
     const role = allowedRoles && allowedRoles[0]
 
     if (!role || !AGENT_ROLES.includes(role)) {
@@ -86,7 +79,7 @@ class RoleAgentIntegration extends React.Component {
     }
 
     if (
-      props.isDoubleEnded ||
+      this.props.isDoubleEnded ||
       (dealSide === 'Selling' &&
         ['SellerAgent', 'CoSellerAgent'].includes(role)) ||
       (dealSide === 'Buying' && ['BuyerAgent', 'CoBuyerAgent'].includes(role))
