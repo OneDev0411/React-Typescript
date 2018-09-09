@@ -19,9 +19,11 @@ function FormRole({ roles, deal, dealsRoles, onClick }) {
         return _.map(groups, (group, groupIndex) => {
           const { attribute, number } = groups[groupIndex][0]
 
-          const text = deal.roles
+          const list = deal.roles
             .map(id => dealsRoles[id])
-            .filter(role => role.role === roleName)[number][attribute]
+            .filter(role => role.role === roleName)
+
+          const text = list.length > 0 ? list[number][attribute] : ''
 
           return (
             <ContextAnnotation
