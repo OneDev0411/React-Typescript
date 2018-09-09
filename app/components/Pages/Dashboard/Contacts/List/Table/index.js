@@ -30,10 +30,6 @@ class ContactsList extends React.Component {
 
   closeTagsOverlay = () => this.setState({ selectedTagContact: [] })
 
-  openContact = id => {
-    goTo(`/dashboard/contacts/${id}`, 'All Contacts')
-  }
-
   columns = [
     {
       header: 'Name',
