@@ -7,6 +7,8 @@ import { getAnnotationsValues } from '../../../utils/word-wrap'
 export default class AddressForm extends React.Component {
   onClose = deal => {
     if (!deal) {
+      this.props.onClose()
+
       return false
     }
 
@@ -21,8 +23,6 @@ export default class AddressForm extends React.Component {
     const values = getAnnotationsValues(annotations, text, {
       maxFontSize: 20
     })
-
-    console.log(values)
 
     this.props.onSetValues(values)
     this.props.onClose()

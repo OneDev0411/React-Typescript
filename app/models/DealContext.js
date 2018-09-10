@@ -17,6 +17,10 @@ export function getList() {
  * search context by name
  */
 export function searchContext(name) {
+  if (!name) {
+    return false
+  }
+
   const context = _.find(getList(), { name })
 
   return {

@@ -8,6 +8,7 @@ import {
   getDeal,
   getForms
 } from '../../../../../store_actions/deals'
+
 import { LoadingDealContainer } from './styled'
 
 import PageHeader from '../../../../../views/components/PageHeader'
@@ -23,7 +24,8 @@ class EditDigitalForm extends React.Component {
   state = {
     isFormLoaded: false,
     isSaving: false,
-    pdfDocument: null
+    pdfDocument: null,
+    pdfUrl: ''
   }
 
   componentDidMount() {
@@ -64,6 +66,7 @@ class EditDigitalForm extends React.Component {
 
     this.setState({
       isFormLoaded: true,
+      pdfUrl: url,
       pdfDocument
     })
   }
@@ -86,8 +89,39 @@ class EditDigitalForm extends React.Component {
     this.values = newValues
   }
 
-  handleSave = () => {
-    console.log('>>>>', this.values)
+  handleSave = async () => {
+    const { task, notify } = this.props
+    // const { notifyOffice } = this.state
+
+    const pdfUrl = 'https://s3-us-west-2.amazonaws.com/rechat-forms/2672324.pdf'
+
+    this.setState({ isSaving: true })
+
+    // save form
+    try {
+      await this.props.saveSubmission(task.id, pdfUrl, task.form, this.values)
+
+      // if (notifyOffice) {
+      //   await this.props.changeNeedsAttention(task.deal, task.id, true)
+      // }
+
+      notify({
+        message: 'The form has been saved!',
+        status: 'success'
+      })
+    } catch (err) {
+      console.log(err)
+
+      notify({
+        message:
+          err && err.response && err.response.body
+            ? err.response.body.message
+            : 'We were unable to save your form. Please try saving again',
+        status: 'error'
+      })
+    }
+
+    this.setState({ isSaving: false })
   }
 
   render() {
@@ -129,7 +163,7 @@ class EditDigitalForm extends React.Component {
               disabled={!isFormLoaded || isSaving}
               onClick={this.handleSave}
             >
-              Save
+              {isSaving ? 'Saving...' : 'Save'}
             </ActionButton>
           </PageHeader.Menu>
         </PageHeader>

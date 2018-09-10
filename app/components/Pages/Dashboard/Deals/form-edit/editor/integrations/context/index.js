@@ -75,7 +75,7 @@ class Context extends React.Component {
       handleSave: this.handleSave,
       onContextChange: this.onContextChange,
       value: this.state.value,
-      context: DealContext.searchContext(this.props.data.contextName),
+      context: DealContext.searchContext(data.contextName),
       defaultValue
     }
 
