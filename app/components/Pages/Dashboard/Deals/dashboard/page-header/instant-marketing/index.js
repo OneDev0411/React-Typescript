@@ -12,6 +12,7 @@ import { getTemplateScreenshot } from '../../../../../../../models/instant-marke
 
 import Listing from '../../../../../../../models/listings/listing'
 import Compose from '../../../../../../../views/components/EmailCompose'
+import { getActiveTeamACL } from '../../../../../../../utils/user-teams'
 
 class DealInstantMarketing extends React.Component {
   state = {
@@ -113,6 +114,13 @@ class DealInstantMarketing extends React.Component {
 
   render() {
     const { listing } = this.state
+    const { user } = this.props
+    const acl = getActiveTeamACL(user)
+    const hasMarketingPermission = acl.includes('Marketing')
+
+    if (!hasMarketingPermission) {
+      return null
+    }
 
     return (
       <Fragment>
@@ -128,7 +136,7 @@ class DealInstantMarketing extends React.Component {
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
-          templateData={{ listing, user: this.props.user }}
+          templateData={{ listing, user }}
           assets={listing && listing.gallery_image_urls}
         />
 
