@@ -2,11 +2,26 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
+
 // eslint-disable-next-line
 import { getContactAddresses } from '../../../../../models/contacts/helpers'
 
 // eslint-disable-next-line
 import { selectDefinitionByName, isLoadedContactAttrDefs } from '../../../../../reducers/contacts/attributeDefs'
+
+// eslint-disable-next-line
+import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
+
+import { getTasks } from '../../../../../models/tasks'
+
+import {
+  getContact,
+  getContactActivities,
+  upsertContactAttributes
+} from '../../../../../store_actions/contacts'
+import { selectContact } from '../../../../../reducers/contacts/list'
+import { selectContactError } from '../../../../../reducers/contacts/contact'
+import { normalizeContact } from '../../../../../views/utils/association-normalizers'
 
 import { Container } from '../components/Container'
 import { Dates } from './Dates'
@@ -19,10 +34,6 @@ import AddNote from './Add-Note'
 import Activities from './Activities'
 import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
-import Touch from '../../../../../views/CRM/touches/Touch'
-import IconTouch from '../../../../../views/components/SvgIcons/AddAlarm/IconAddAlarm'
-import IconNote from '../../../../../views/components/SvgIcons/Note/IconNote'
-import IconTodo from '../../../../../views/components/SvgIcons/Todo/IconTodo'
 import {
   PageContainer,
   ColumnsContainer,
@@ -33,27 +44,11 @@ import {
   Card
 } from './styled'
 
-// eslint-disable-next-line
-import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
-
-import { getTasks } from '../../../../../models/tasks'
-import { getTouches } from '../../../../../models/crm-touches/get-touches'
-
-import {
-  getContact,
-  getContactActivities,
-  upsertContactAttributes
-} from '../../../../../store_actions/contacts'
-import { selectContact } from '../../../../../reducers/contacts/list'
-import { selectContactError } from '../../../../../reducers/contacts/contact'
-import { normalizeContact } from '../../../../../views/utils/association-normalizers'
-
 import { PageHeader } from './PageHeader'
 
 class ContactProfile extends React.Component {
   state = {
     tasks: [],
-    touches: [],
     activeTab: 'all-activities',
     isDesktopScreen: true
   }
@@ -86,7 +81,6 @@ class ContactProfile extends React.Component {
     }
 
     this.fetchTasks(contactId)
-    this.fetchTouches(contactId)
   }
 
   fetchTasks = async contactId => {
@@ -102,20 +96,6 @@ class ContactProfile extends React.Component {
 
     this.setState({ tasks })
   }
-
-  fetchTouches = async contactId => {
-    const query = [
-      `contact=${contactId}`,
-      'associations[]=crm_touch.associations'
-    ].join('&')
-
-    const response = await getTouches(query)
-    const { data: touches } = response
-
-    this.setState({ touches })
-  }
-
-  goBack = () => browserHistory.push('/dashboard/contacts')
 
   handleAddNote = async text => {
     const { contact, upsertContactAttributes, attributeDefs } = this.props
@@ -138,7 +118,7 @@ class ContactProfile extends React.Component {
   setNewTask = task => {
     this.setState(({ tasks }) => ({
       tasks: [task, ...tasks],
-      activeTab: 'tasks'
+      activeTab: 'event'
     }))
     this.props.getContactActivities(this.props.contact.id)
   }
@@ -208,40 +188,23 @@ class ContactProfile extends React.Component {
             <SecondColumn>
               <Tab.Container
                 id="profile-todo-tabs"
-                defaultActiveKey="touch"
+                defaultActiveKey="event"
                 className="c-contact-profile-todo-tabs c-contact-profile-card"
               >
                 <div>
                   <Nav className="c-contact-profile-todo-tabs__tabs-list">
                     <NavItem
                       className="c-contact-profile-todo-tabs__tab"
-                      eventKey="touch"
+                      eventKey="event"
                     >
-                      <IconTouch />
-                      <span className="c-contact-profile-todo-tabs__tab__title">
-                        Add a Touch
-                      </span>
-                      <span className="c-contact-profile-todo-tabs__tab__indicator" />
+                      Add Event
                     </NavItem>
+
                     <NavItem
                       className="c-contact-profile-todo-tabs__tab"
                       eventKey="note"
                     >
-                      <IconNote />
-                      <span className="c-contact-profile-todo-tabs__tab__title">
-                        Add a Note
-                      </span>
-                      <span className="c-contact-profile-todo-tabs__tab__indicator" />
-                    </NavItem>
-                    <NavItem
-                      className="c-contact-profile-todo-tabs__tab"
-                      eventKey="task"
-                    >
-                      <IconTodo />
-                      <span className="c-contact-profile-todo-tabs__tab__title">
-                        Add a Task
-                      </span>
-                      <span className="c-contact-profile-todo-tabs__tab__indicator" />
+                      Add Note
                     </NavItem>
                   </Nav>
 
@@ -250,16 +213,13 @@ class ContactProfile extends React.Component {
                     className="c-contact-profile-todo-tabs__pane-container"
                   >
                     <Tab.Pane
-                      eventKey="touch"
+                      eventKey="event"
                       className="c-contact-profile-todo-tabs__pane"
                     >
-                      <Touch
-                        defaultAssociations={[defaultAssociation]}
-                        submitCallback={() => {
-                          this.setState({ activeTab: 'touches' })
-                          this.fetchTouches(contact.id)
-                          this.props.getContactActivities(contact.id)
-                        }}
+                      <NewTask
+                        submitCallback={this.setNewTask}
+                        deleteCallback={this.removeTask}
+                        defaultAssociation={defaultAssociation}
                       />
                     </Tab.Pane>
                     <Tab.Pane
@@ -271,23 +231,12 @@ class ContactProfile extends React.Component {
                         onSubmit={this.handleAddNote}
                       />
                     </Tab.Pane>
-                    <Tab.Pane
-                      eventKey="task"
-                      className="c-contact-profile-todo-tabs__pane"
-                    >
-                      <NewTask
-                        submitCallback={this.setNewTask}
-                        deleteCallback={this.removeTask}
-                        defaultAssociation={defaultAssociation}
-                      />
-                    </Tab.Pane>
                   </Tab.Content>
                 </div>
               </Tab.Container>
 
               <Activities
                 tasks={this.state.tasks}
-                touches={this.state.touches}
                 contact={contact}
                 activeTab={activeTab}
                 onChangeTab={activeTab => this.setState({ activeTab })}

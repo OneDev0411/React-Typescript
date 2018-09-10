@@ -8,7 +8,6 @@ import { selectDefinitionByName } from '../../../../../../reducers/contacts/attr
 import Timeline from '../Timeline'
 import Notes from '../Notes'
 import TasksTimeLine from '../../../../../../views/CRM/Tasks/components/TasksTimeLine'
-import { TouchesList } from '../../../../../../views/CRM/touches/TouchesList'
 import { goTo } from '../../../../../../utils/go-to'
 
 function Activities(props) {
@@ -18,12 +17,8 @@ function Activities(props) {
     goTo(`/crm/tasks/${task.id}`, `Contact - ${contact.display_name}`)
   }
 
-  function handleOnClickTouch(touch) {
-    goTo(`/crm/touches/${touch.id}`, `Contact - ${contact.display_name}`)
-  }
-
   function getListLength(list) {
-    return `( ${list.length} )`
+    return `(${list.length})`
   }
 
   return (
@@ -46,17 +41,17 @@ function Activities(props) {
         </Tab>
 
         <Tab
-          eventKey="touches"
+          eventKey="event"
           title={
             <div>
-              <span className="name">Touches</span>
-              <span className="bdg">{getListLength(props.touches)}</span>
+              <span className="name">Events</span>
+              <span className="bdg">{getListLength(props.tasks)}</span>
             </div>
           }
         >
-          <TouchesList
-            touches={props.touches}
-            handleOnClick={handleOnClickTouch}
+          <TasksTimeLine
+            tasks={props.tasks}
+            handleOnClick={handleOnClickTask}
           />
         </Tab>
 
@@ -70,21 +65,6 @@ function Activities(props) {
           }
         >
           <Notes notes={props.notes} contact={contact} />
-        </Tab>
-
-        <Tab
-          eventKey="tasks"
-          title={
-            <div>
-              <span className="name">Tasks</span>
-              <span className="bdg">{getListLength(props.tasks)}</span>
-            </div>
-          }
-        >
-          <TasksTimeLine
-            tasks={props.tasks}
-            handleOnClick={handleOnClickTask}
-          />
         </Tab>
       </Tabs>
     </div>
