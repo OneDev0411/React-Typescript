@@ -57,16 +57,16 @@ class EditDigitalForm extends React.Component {
     }
 
     const form = forms[task.form]
-    // const url = task.submission
+    // const pdfUrl = task.submission
     //   ? task.submission.file.url
     //   : `${config.forms.files}/${form.formstack_id}.pdf`
 
-    const url = 'http://localhost:8080/static/2672324.pdf'
-    const pdfDocument = await PDFJS.getDocument(url)
+    const pdfUrl = 'https://s3-us-west-2.amazonaws.com/rechat-forms/2672324.pdf'
+    const pdfDocument = await PDFJS.getDocument(pdfUrl)
 
     this.setState({
       isFormLoaded: true,
-      pdfUrl: url,
+      pdfUrl,
       pdfDocument
     })
   }
@@ -93,13 +93,16 @@ class EditDigitalForm extends React.Component {
     const { task, notify } = this.props
     // const { notifyOffice } = this.state
 
-    const pdfUrl = 'https://s3-us-west-2.amazonaws.com/rechat-forms/2672324.pdf'
-
     this.setState({ isSaving: true })
 
     // save form
     try {
-      await this.props.saveSubmission(task.id, pdfUrl, task.form, this.values)
+      await this.props.saveSubmission(
+        task.id,
+        this.state.pdfUrl,
+        task.form,
+        this.values
+      )
 
       // if (notifyOffice) {
       //   await this.props.changeNeedsAttention(task.deal, task.id, true)
@@ -154,10 +157,6 @@ class EditDigitalForm extends React.Component {
           </PageHeader.Title>
 
           <PageHeader.Menu>
-            {(!isFormLoaded || isSaving) && (
-              <i className="icon-save fa fa-spin fa-spinner" />
-            )}
-
             <ActionButton
               style={{ padding: '0.75em' }}
               disabled={!isFormLoaded || isSaving}
