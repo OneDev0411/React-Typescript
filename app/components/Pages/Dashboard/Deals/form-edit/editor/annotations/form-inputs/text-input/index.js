@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import parseAppearanceString from '../../appearance'
+import parseAppearanceString from '../../../../utils/appearance'
 
 const TextInput = styled.input`
   position: absolute;

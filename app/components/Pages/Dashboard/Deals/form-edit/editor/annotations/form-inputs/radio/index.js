@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 
-import parseAppearanceString from '../../appearance'
+import parseAppearanceString from '../../../../utils/appearance'
 
 export default function RadioAnnotation(props) {
   const { annotation } = props
