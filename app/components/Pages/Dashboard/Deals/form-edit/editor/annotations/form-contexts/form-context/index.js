@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import _ from 'underscore'
 
 import ContextAnnotation from '../context-annotation'
@@ -12,25 +12,29 @@ function getContextType(context) {
   return 'Singular'
 }
 
-export default function FormContexts({ contexts = {}, deal, onClick }) {
+export default function FormContexts(props) {
   return (
     <div>
-      {_.map(contexts, (context, name) => {
+      {_.map(props.contexts, (context, name) => {
         const ctx = DealContext.searchContext(name)
+        const annotations = context.map(item => item.annotation)
 
         return (
           <ContextAnnotation
             key={name}
             value={
-              DealContext.getValue(deal, DealContext.searchContext(name)).value
+              DealContext.getValue(props.deal, DealContext.searchContext(name))
+                .value
             }
-            annotations={context.map(item => item.annotation)}
+            annotations={annotations}
             maxFontSize={20}
+            onSetValues={props.onSetValues}
             onClick={bounds => {
-              onClick('Context', {
-                name,
+              props.onClick('Context', {
+                contextName: name,
                 type: getContextType(ctx),
                 context: ctx,
+                annotations,
                 bounds
               })
             }}

@@ -33,7 +33,7 @@ export default function CheckboxAnnotation(props) {
       style={style}
       className={cn('checkbox', { focused: props.focused })}
       onChange={e => props.onValueUpdate(e.target.checked)}
-      checked={Boolean(value)}
+      defaultChecked={Boolean(value)}
     />
   )
 }

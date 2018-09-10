@@ -1,11 +1,43 @@
 import React from 'react'
+import ClickOutside from 'react-click-outside'
+import _ from 'underscore'
 
+import Input from 'components/Input'
+import ActionButton from 'components/Button/ActionButton'
 import { Container } from './styled'
 
 export default class StringContext extends React.Component {
-  render() {
-    if (!this.props.isOpen) {
+  getValue() {
+    const { value } = this.props
+
+    return value !== null ? value : ''
+  }
+
+  onKeyPress(e) {
+    if (e.which === 13 || e.keyCode === 13) {
+      this.props.handleSave()
+    }
+  }
+
+  onClose = () => {
+    if (this.props.isSaving) {
       return false
+    }
+
+    this.position = null
+    this.props.onClose()
+  }
+
+  onChange = (e, data = {}) => {
+    const value =
+      _.isUndefined(data.value) === false ? data.value : e.target.value
+
+    this.props.onContextChange(value, data.maskedValue)
+  }
+
+  get Position() {
+    if (this.position) {
+      return this.position
     }
 
     const position = {
@@ -13,11 +45,41 @@ export default class StringContext extends React.Component {
       top: this.props.bounds.top + window.scrollY
     }
 
+    this.position = position
+
+    return this.position
+  }
+
+  render() {
+    if (!this.props.isOpen) {
+      return false
+    }
+
+    const position = this.Position
+
     return (
-      <Container position={position}>
-        <input />
-        <button>Save</button>
-      </Container>
+      <ClickOutside onClickOutside={this.onClose}>
+        <Container position={position}>
+          <Input
+            data-type={
+              this.props.context.format || this.props.context.data_type
+            }
+            {...this.props.context.properties}
+            className="input-edit"
+            maxLength={15}
+            value={this.getValue()}
+            onKeyPress={e => this.onKeyPress(e)}
+            onChange={this.onChange}
+          />
+
+          <ActionButton
+            onClick={this.props.handleSave}
+            disabled={this.props.isSaving}
+          >
+            {this.props.isSaving ? 'Saving...' : 'Save'}
+          </ActionButton>
+        </Container>
+      </ClickOutside>
     )
   }
 }

@@ -3,31 +3,42 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import ContextAnnotation from '../context-annotation'
+import { getRolesText } from '../../../../utils/get-roles-text'
 
-function FormRoles({ dealsRoles, roles, deal, onClick }) {
+function FormRoles(props) {
   return (
     <Fragment>
-      {_.map(roles, (list, roleName) => {
-        const info = roles[roleName]
+      {_.map(props.roles, (list, roleName) => {
+        const info = props.roles[roleName]
 
         const groups = _.groupBy(info, 'group')
 
         return _.map(groups, (group, groupIndex) => {
-          const { attribute } = groups[groupIndex][0]
+          const annotationContext = groups[groupIndex][0]
 
-          const text = deal.roles
-            .map(id => dealsRoles[id])
-            .filter(role => role.role === roleName)
-            .map(role => role[attribute])
-            .join(', ')
+          const annotations = groups[groupIndex].map(info => info.annotation)
+          const text = getRolesText(
+            props.dealsRoles,
+            props.deal,
+            roleName,
+            annotationContext
+          )
 
           return (
             <ContextAnnotation
               key={`${roleName}-${groupIndex}`}
-              annotations={groups[groupIndex].map(info => info.annotation)}
+              annotations={annotations}
               value={text}
               maxFontSize={20}
-              onClick={() => onClick('Role', groups[groupIndex][0])}
+              onClick={() =>
+                props.onClick('Role', {
+                  contextType: 'Roles',
+                  annotations,
+                  annotationContext,
+                  roleName
+                })
+              }
+              onSetValues={props.onSetValues}
             />
           )
         })

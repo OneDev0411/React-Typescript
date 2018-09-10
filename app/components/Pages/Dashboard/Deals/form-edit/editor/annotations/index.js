@@ -35,7 +35,6 @@ export default class Annotations extends React.Component {
   init = async () => {
     await this.indexAnnotations()
 
-    this.setDefaultValues()
     this.setState({ isLoaded: true })
   }
 
@@ -119,23 +118,6 @@ export default class Annotations extends React.Component {
     }
   }
 
-  setDefaultValues() {
-    const values = {}
-
-    this.annotations.forEach(annotation => {
-      const { fieldValue } = annotation
-      const { fieldName } = annotation
-
-      if (!fieldValue) {
-        return false
-      }
-
-      values[fieldName] = fieldValue
-    })
-
-    this.props.onSetValues(values)
-  }
-
   render() {
     if (!this.state.isLoaded) {
       return false
@@ -146,7 +128,9 @@ export default class Annotations extends React.Component {
         <FormInputs
           inputs={this.inputs}
           values={this.props.values}
+          annotations={this.annotations}
           onValueUpdate={this.props.onValueUpdate}
+          onSetValues={this.props.onSetValues}
         />
 
         <FormContexts
@@ -154,7 +138,7 @@ export default class Annotations extends React.Component {
           contexts={this.contexts}
           roles={this.roles}
           values={this.props.values}
-          onValueUpdate={this.props.onValueUpdate}
+          onSetValues={this.props.onSetValues}
           onClick={this.props.onClick}
         />
       </AnnotationsContainer>

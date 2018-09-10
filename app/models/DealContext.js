@@ -273,12 +273,16 @@ export function getDateValue(deal, field) {
   const date = Deal.get.field(deal, field.name)
 
   return {
-    value: date ? parseDate(date).format('MMM DD, YYYY') : ''
+    value: date ? parseDate(date).format(getDateFormatString()) : ''
   }
 }
 
 export function parseDate(date) {
   return moment.unix(date).utc()
+}
+
+export function getDateFormatString() {
+  return 'MMM DD, YYYY'
 }
 
 /**
@@ -413,6 +417,7 @@ export default {
   getValueByContext,
   getDateValue,
   parseDate,
+  getDateFormatString,
   validate,
   validateDate,
   validateList,

@@ -6,5 +6,7 @@ export function updateContext(dealId, ctx) {
     const deal = await Deal.updateContext(dealId, ctx)
 
     dispatch(updateDeal(deal))
+
+    return deal
   }
 }

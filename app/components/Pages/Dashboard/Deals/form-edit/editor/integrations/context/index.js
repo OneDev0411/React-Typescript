@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { updateContext } from '../../../../../../../../store_actions/deals'
 
 import Deal from '../../../../../../../../models/Deal'
+import DealContext from '../../../../../../../../models/DealContext'
 
 import DateContext from './date-context'
 import NormalContext from './string-context'
@@ -12,17 +13,19 @@ import NormalContext from './string-context'
 class Context extends React.Component {
   state = {
     isSaving: false,
-    value: null
+    value: null,
+    formattedValue: null
   }
 
-  onContextChange = value => {
+  onContextChange = (value, formattedValue) => {
     this.setState({
-      value
+      value,
+      formattedValue
     })
   }
 
   handleSave = async () => {
-    const contextName = this.props.data.name
+    const { contextName, annotations } = this.props.data
 
     const context = {
       [contextName]: {
@@ -41,8 +44,15 @@ class Context extends React.Component {
       console.log(e)
     }
 
+    this.props.onValueUpdate(
+      annotations[0].fieldName,
+      this.state.formattedValue
+    )
+
     this.setState({
-      isSaving: false
+      isSaving: false,
+      value: null,
+      formattedValue: null
     })
 
     this.props.onClose()
@@ -55,33 +65,26 @@ class Context extends React.Component {
       return false
     }
 
-    const defaultValue = Deal.get.field(this.props.deal, data.name)
+    const defaultValue = Deal.get.field(this.props.deal, data.contextName)
     const isDateContext = data.context && data.context.data_type === 'Date'
+
+    const sharedProps = {
+      isOpen: this.props.isOpen,
+      onClose: this.props.onClose,
+      isSaving: this.state.isSaving,
+      handleSave: this.handleSave,
+      onContextChange: this.onContextChange,
+      value: this.state.value,
+      context: DealContext.searchContext(this.props.data.contextName),
+      defaultValue
+    }
 
     return (
       <Fragment>
-        {isDateContext && (
-          <DateContext
-            onClose={this.props.onClose}
-            isOpen={this.props.isOpen}
-            isSaving={this.state.isSaving}
-            value={this.state.value}
-            defaultValue={defaultValue}
-            handleSave={this.handleSave}
-            onContextChange={this.onContextChange}
-          />
-        )}
+        {isDateContext && <DateContext {...sharedProps} />}
 
         {!isDateContext && (
-          <NormalContext
-            isOpen={this.props.isOpen}
-            isSaving={this.state.isSaving}
-            value={this.state.value}
-            defaultValue={defaultValue}
-            handleSave={this.handleSave}
-            onContextChange={this.onContextChange}
-            bounds={data.bounds}
-          />
+          <NormalContext {...sharedProps} bounds={data.bounds} />
         )}
       </Fragment>
     )

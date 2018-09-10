@@ -38,7 +38,7 @@ class TextAnnotation extends React.Component {
         fontSize={this.props.fontSize}
         rect={this.props.annotation.rect}
         onInput={this.onChange}
-        value={this.props.value || ''}
+        defaultValue={this.props.value || ''}
       />
     )
   }

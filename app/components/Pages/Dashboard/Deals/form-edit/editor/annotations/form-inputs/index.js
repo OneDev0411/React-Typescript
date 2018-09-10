@@ -10,6 +10,23 @@ const CHECKBOX_ANNOTATION = 3
 const UNKNOWN_ANNOTATION = 4
 
 export default class FormInputs extends React.Component {
+  componentDidMount() {
+    this.setDefaultValues()
+  }
+
+  setDefaultValues() {
+    const values = {}
+
+    this.props.annotations.forEach(annotation => {
+      const { fieldValue } = annotation
+      const { fieldName } = annotation
+
+      values[fieldName] = fieldValue || ''
+    })
+
+    this.props.onSetValues(values)
+  }
+
   getType(annotation) {
     if (annotation.fieldType === 'Tx') {
       return TEXT_ANNOTATION
@@ -38,7 +55,7 @@ export default class FormInputs extends React.Component {
       key: `${annotation.fieldName}-${index}`,
       annotation,
       value,
-      onValueUpdate: this.props.onValueUpdate.bind(this, annotation.fieldName)
+      onValueUpdate: this.props.onValueUpdate.bind(null, annotation.fieldName)
     }
 
     if (type === CHECKBOX_ANNOTATION) {

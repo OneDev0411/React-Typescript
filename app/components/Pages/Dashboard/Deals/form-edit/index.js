@@ -23,13 +23,14 @@ class EditDigitalForm extends React.Component {
   state = {
     isFormLoaded: false,
     isSaving: false,
-    pdfDocument: null,
-    values: {}
+    pdfDocument: null
   }
 
   componentDidMount() {
     this.initialize()
   }
+
+  values = {}
 
   initialize = async () => {
     const { deal } = this.props
@@ -68,21 +69,25 @@ class EditDigitalForm extends React.Component {
   }
 
   changeFormValue = (name, value) => {
-    this.setState({
-      values: {
-        ...this.state.values,
-        [name]: value
-      }
-    })
+    const newValues = {
+      ...this.values,
+      [name]: value
+    }
+
+    this.values = newValues
   }
 
   setFormValues = values => {
-    this.setState({
-      values: {
-        ...this.state.values,
-        ...values
-      }
-    })
+    const newValues = {
+      ...this.values,
+      ...values
+    }
+
+    this.values = newValues
+  }
+
+  handleSave = () => {
+    console.log('>>>>', this.values)
   }
 
   render() {
@@ -122,6 +127,7 @@ class EditDigitalForm extends React.Component {
             <ActionButton
               style={{ padding: '0.75em' }}
               disabled={!isFormLoaded || isSaving}
+              onClick={this.handleSave}
             >
               Save
             </ActionButton>
@@ -132,7 +138,7 @@ class EditDigitalForm extends React.Component {
           document={pdfDocument}
           deal={this.props.deal}
           roles={this.props.roles}
-          values={this.state.values}
+          values={this.values}
           onValueUpdate={this.changeFormValue}
           onSetValues={this.setFormValues}
         />

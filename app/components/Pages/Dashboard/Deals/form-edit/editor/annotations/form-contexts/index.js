@@ -5,23 +5,17 @@ import FormRoles from './form-roles'
 import FormContext from './form-context'
 
 export default function FormContexts(props) {
+  const sharedProps = {
+    deal: props.deal,
+    onClick: props.onClick,
+    onSetValues: props.onSetValues
+  }
+
   return (
     <Fragment>
-      <FormRole
-        roles={props.roles.single}
-        deal={props.deal}
-        onClick={props.onClick}
-      />
-      <FormRoles
-        roles={props.roles.all}
-        deal={props.deal}
-        onClick={props.onClick}
-      />
-      <FormContext
-        contexts={props.contexts}
-        deal={props.deal}
-        onClick={props.onClick}
-      />
+      <FormRole roles={props.roles.single} {...sharedProps} />
+      <FormRoles roles={props.roles.all} {...sharedProps} />
+      <FormContext contexts={props.contexts} {...sharedProps} />
     </Fragment>
   )
 }

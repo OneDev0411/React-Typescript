@@ -40,11 +40,10 @@ class PDFPreview extends React.Component {
     this.scale = availableWidth / viewport.width
   }
 
-  onSelectContext = (type, data) => {
+  onSelectContext = (type, data) =>
     this.setState({
       selectedAnnotation: { type, data }
     })
-  }
 
   deselectActiveAnnotation = () =>
     this.setState({
@@ -58,8 +57,6 @@ class PDFPreview extends React.Component {
     if (!document) {
       return false
     }
-
-    selectedAnnotation && console.log(selectedAnnotation)
 
     return (
       <Container innerRef={this.calculateSpace}>
@@ -88,12 +85,15 @@ class PDFPreview extends React.Component {
         )}
 
         <RolesManager
+          selectedAnnotation={selectedAnnotation}
           isOpen={selectedAnnotation && selectedAnnotation.type === 'Role'}
           onClose={this.deselectActiveAnnotation}
           deal={this.props.deal}
+          onSetValues={this.props.onSetValues}
         />
 
         <AddressForm
+          selectedAnnotation={selectedAnnotation}
           isOpen={
             selectedAnnotation &&
             selectedAnnotation.type === 'Context' &&
@@ -101,6 +101,7 @@ class PDFPreview extends React.Component {
           }
           data={selectedAnnotation && selectedAnnotation.data}
           onClose={this.deselectActiveAnnotation}
+          onSetValues={this.props.onSetValues}
           deal={this.props.deal}
         />
 
@@ -112,6 +113,7 @@ class PDFPreview extends React.Component {
           }
           onClose={this.deselectActiveAnnotation}
           data={selectedAnnotation && selectedAnnotation.data}
+          onValueUpdate={this.props.onValueUpdate}
           deal={this.props.deal}
         />
       </Container>

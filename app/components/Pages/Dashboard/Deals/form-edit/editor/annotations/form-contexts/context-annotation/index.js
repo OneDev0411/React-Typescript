@@ -1,8 +1,10 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
-import parseAppearanceString from '../../appearance'
-import linebreak from '../../linebreak'
+import {
+  calculateWordWrap,
+  getAnnotationsValues
+} from '../../../../utils/word-wrap'
 
 const Container = styled.div`
   font-size: ${props => props.fontSize};
@@ -23,28 +25,30 @@ const Container = styled.div`
 `
 
 export default class Context extends React.Component {
-  render() {
-    const { annotations, value } = this.props
+  componentDidMount() {
+    this.setDefaultValues()
+  }
 
-    const first = annotations[0]
-    const appearance = parseAppearanceString(first.defaultAppearance)
-
-    // TODO: Proper grouping
-    const rects = annotations.map(annotation => {
-      const rect = annotation.rect
-
-      return {
-        left: rect[0],
-        top: rect[1],
-        width: Math.floor(rect[2] - rect[0]),
-        height: Math.floor(rect[3] - rect[1]),
-        multiline: annotation.multiLine
+  setDefaultValues = () => {
+    const values = getAnnotationsValues(
+      this.props.annotations,
+      this.props.value,
+      {
+        maxFontSize: this.props.maxFontSize
       }
-    })
+    )
 
-    let { values, fontSize } = linebreak(value, rects, appearance.size)
+    this.props.onSetValues(values)
+  }
 
-    fontSize = Math.min(fontSize, this.props.maxFontSize || fontSize)
+  render() {
+    const { appearance, rects, values, fontSize } = calculateWordWrap(
+      this.props.annotations,
+      this.props.value,
+      {
+        maxFontSize: this.props.maxFontSize
+      }
+    )
 
     return (
       <div>

@@ -226,13 +226,13 @@ class Address extends React.Component {
       }
     })
 
-    await this.props.updateContext(this.props.deal.id, context)
+    const newDeal = await this.props.updateContext(this.props.deal.id, context)
 
     this.setState({
       isSavingAddress: false
     })
 
-    this.props.onClose()
+    this.props.onClose(newDeal, address)
   }
 
   render() {
