@@ -57,11 +57,10 @@ class EditDigitalForm extends React.Component {
     }
 
     const form = forms[task.form]
-    // const pdfUrl = task.submission
-    //   ? task.submission.file.url
-    //   : `${config.forms.files}/${form.formstack_id}.pdf`
+    const pdfUrl = task.submission
+      ? task.submission.file.url
+      : `${config.forms.files}/${form.id}.pdf`
 
-    const pdfUrl = 'https://s3-us-west-2.amazonaws.com/rechat-forms/2672324.pdf'
     const pdfDocument = await PDFJS.getDocument(pdfUrl)
 
     this.setState({

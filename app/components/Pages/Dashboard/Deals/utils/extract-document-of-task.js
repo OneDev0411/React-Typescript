@@ -1,7 +1,7 @@
 function getPdfFile(task) {
   return {
     name: task.title,
-    url: `https://rechat-forms.s3-us-west-2.amazonaws.com/${task.formstack_id}.pdf`
+    url: `https://rechat-forms.s3-us-west-2.amazonaws.com/${task.form}.pdf`
   }
 }
 
