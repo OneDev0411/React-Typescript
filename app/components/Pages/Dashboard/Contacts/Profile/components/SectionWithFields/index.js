@@ -144,9 +144,8 @@ class SectionWithFields extends React.Component {
           <dt
             key={`${key}_title`}
             style={{
-              color: '#758a9e',
-              fontWeight: '500',
-              marginBottom: '0.25em'
+              color: '#7f7f7f',
+              fontWeight: '300'
             }}
           >
             {getTitle()}
@@ -154,7 +153,6 @@ class SectionWithFields extends React.Component {
           <dd
             key={`${key}_value`}
             style={{
-              color: '#17283a',
               marginBottom: '1em',
               display: 'flex',
               alignItems: 'center'

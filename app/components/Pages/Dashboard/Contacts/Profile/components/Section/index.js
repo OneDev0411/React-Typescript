@@ -1,11 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-// import IconButton from '../../../../../../../views/components/Button/IconButton'
-// import MenuIcon from '../../../../../../../views/components/SvgIcons/MoreVert'
-
+import { Menu } from './Menu'
 import { Header, Title } from './styled'
-// import Tooltip from '../../../../../../../views/components/tooltip'
 
 Section.propTypes = {
   onAdd: PropTypes.func,
@@ -18,6 +15,7 @@ export function Section(props) {
     <div>
       <Header alignCenter justifyBetween>
         <Title>{props.title}</Title>
+        <Menu {...props} />
       </Header>
       <div>{props.children}</div>
     </div>
