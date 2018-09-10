@@ -28,24 +28,31 @@ export class Menu extends React.Component {
     if (this.props.onEdit) {
       items.push({
         label: 'Edit all properties',
-        onClick: this.props.onEdit,
-        value: ''
+        onClick: this.props.onEdit
       })
     }
 
     if (this.props.onAdd) {
       items.push({
         label: 'Add a property',
-        onClick: this.props.onAdd,
-        value: ''
+        onClick: this.props.onAdd
       })
     }
+
+    return items
   }
 
   render() {
+    const items = this.getItems()
+
+    if (items.length === 0) {
+      return null
+    }
+
     return (
       <BasicDropdown
-        items={this.getItems()}
+        items={items}
+        pullTo="right"
         buttonRenderer={props => (
           <IconButton isFit inverse {...props}>
             <MenuIcon />
