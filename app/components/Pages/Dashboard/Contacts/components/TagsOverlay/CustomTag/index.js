@@ -1,16 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 import TagIcon from '../../../../../../../views/components/SvgIcons/Tag/TagIcon'
+import { primary } from 'views/utils/colors'
 
 const borderColor = (inputFocused, error) => {
   /* inputFocused ? '#2196f3' : '#d4dfe6' */
   if (error) {
     return 'red'
   } else if (inputFocused) {
-    return '#2196f3'
+    return primary
   }
 
-  return '#d4dfe6'
+  return borderColor
 }
 
 const Container = styled.form`
@@ -28,10 +29,9 @@ const Container = styled.form`
 const Input = styled.input`
   width: 100%;
   margin-left: 12px;
-  font-size: 2rem;
+  font-size: 1.5rem;
   border-width: 0;
-  color: #263445;
-  caret-color: #2196f3;
+  caret-color: ${primary};
   :focus {
     outline: none;
   }
@@ -45,7 +45,7 @@ const AddButton = styled.button`
   line-height: normal;
   margin-right: 16px;
   color: ${({ inputFocused, disabled }) =>
-    !disabled && inputFocused ? '#2196f3' : '#8da2b5'};
+    !disabled && inputFocused ? primary : '#8da2b5'};
   font-weight: ${({ inputFocused }) => (inputFocused ? 'bold' : 'normal')};
 
   &:focus {
@@ -87,7 +87,7 @@ export default class CustomTag extends React.Component {
         onSubmit={this.props.onUpsert}
         error={error}
       >
-        <TagIcon color="#263445" style={{ marginLeft: '1em' }} />
+        <TagIcon style={{ marginLeft: '1em' }} />
         <Input
           value={inputValue}
           type="text"
