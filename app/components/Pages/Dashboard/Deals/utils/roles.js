@@ -62,6 +62,7 @@ export function getLegalFullName(userRole) {
     legal_prefix,
     legal_first_name,
     legal_last_name,
+    legal_middle_name,
     legal_full_name,
     company_title
   } = userRole
@@ -69,7 +70,7 @@ export function getLegalFullName(userRole) {
   if (legal_full_name) {
     name = [legal_full_name]
   } else if (legal_first_name || legal_last_name) {
-    name = [legal_prefix, legal_first_name, legal_last_name]
+    name = [legal_prefix, legal_first_name, legal_middle_name, legal_last_name]
   } else {
     name = [company_title]
   }
