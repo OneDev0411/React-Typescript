@@ -12,6 +12,7 @@ export const BasicDropdown = ({
   disabled,
   items,
   style,
+  pullTo,
   onSelect,
   onChange,
   fullWidth,
@@ -28,12 +29,12 @@ export const BasicDropdown = ({
     render={downshift => (
       <div style={{ position: 'relative', ...style }}>
         {buttonRenderer ? (
-          buttonRenderer(
+          buttonRenderer({
             ...downshift.getButtonProps({
               disabled,
               isOpen: downshift.isOpen
             })
-          )
+          })
         ) : (
           <DropButton
             {...downshift.getButtonProps({
@@ -55,7 +56,8 @@ export const BasicDropdown = ({
               maxHeight: 200,
               minWidth: fullWidth ? '100%' : 'auto',
               position: 'absolute',
-              left: 0,
+              left: pullTo !== 'right' ? 0 : 'auto',
+              right: pullTo === 'right' ? 0 : 'auto',
               top: 'calc(100% + 8px)',
               zIndex: 1,
               overflowY: 'auto'
