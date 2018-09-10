@@ -34,7 +34,7 @@ export const Image = styled.img`
 `
 
 export const Initials = styled.div`
-  font-size: 3.6rem;
+  font-size: 2.25rem;
   color: #fff;
 `
 
