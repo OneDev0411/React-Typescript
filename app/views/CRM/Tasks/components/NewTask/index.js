@@ -33,6 +33,7 @@ import DueDate from './components/DueDate'
 import Reminder from './components/Reminder'
 import { TaskType } from './components/TaskType'
 import Associations from './components/Associations'
+import { browserHistory } from 'react-router'
 
 const propTypes = {
   task: PropTypes.shape(),
@@ -75,7 +76,11 @@ class Task extends Component {
 
         return task
       } catch (error) {
-        return null
+        console.log(error)
+
+        if (error.status === 404) {
+          browserHistory.push('/404')
+        }
       }
     }
 
