@@ -95,9 +95,7 @@ export default class Annotations extends React.Component {
     let calculated
 
     try {
-      // TODO: Security. Easy code injection can happen here.
-      // It should be sandboxed. Later.
-      calculated = eval(`(${jsCode})`)
+      calculated = JSON.parse(jsCode)
     } catch (e) {}
 
     if (!calculated) {
