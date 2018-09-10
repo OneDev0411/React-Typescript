@@ -11,7 +11,11 @@ import {
 } from '../../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../../store_actions/confirmation'
 
-import { convertRoleToContact, getContactDiff } from '../../../utils/roles'
+import {
+  convertRoleToContact,
+  getLegalFullName,
+  getContactDiff
+} from '../../../utils/roles'
 import RoleForm from '../form'
 
 const initialState = {
@@ -52,7 +56,7 @@ class RoleFormWrapper extends React.Component {
           if (upsertedAttributes.length > 0) {
             await upsertContactAttributes(form.contact.id, upsertedAttributes)
 
-            this.showNotification(`${this.getFullName(form)} Updated.`)
+            this.showNotification(`${getLegalFullName(form)} Updated.`)
           }
         } else {
           this.props.confirmation({
@@ -94,14 +98,12 @@ class RoleFormWrapper extends React.Component {
     }
   }
 
-  getFullName = form => `${form.legal_first_name} ${form.legal_last_name}`
-
   createCrmContact = async form => {
     await this.props.createContacts(
       convertRoleToContact(form, this.props.attributeDefs)
     )
 
-    this.showNotification(`New Contact Created: ${this.getFullName(form)}`)
+    this.showNotification(`New Contact Created: ${getLegalFullName(form)}`)
   }
 
   render() {
