@@ -28,3 +28,5 @@ export const disabledBgColor = red.A550
 
 export const borderColor = grey.A300
 export const brandBackground = grey.A150
+export const placeholderColor = grey.A900
+export const InputFocusBgColor = grey.A100
