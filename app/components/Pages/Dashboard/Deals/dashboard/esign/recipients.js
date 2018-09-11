@@ -38,17 +38,17 @@ class AddRecipients extends React.Component {
     const { deal, recipients, onRemoveRecipient, allowedRoles } = this.props
 
     const groups = _.groupBy(recipients, 'order')
-    const next = _.max(recipients, 'order').order + 2 || 1
+    const max = _.max(recipients, 'order').order + 2 || 1
 
     return (
       <div style={{ width: '100%' }}>
         <div className="rcp-container">
-          {Array.apply(null, { length: next }).map((empty, order) => (
+          {Array.apply(null, { length: max }).map((empty, order) => (
             <RecipientGroup
               key={order}
-              group={groups[order]}
+              group={groups[order + 1]}
               order={order + 1}
-              onAddRecipient={() => this.showRolesModal(order)}
+              onAddRecipient={() => this.showRolesModal(order + 1)}
               onRemoveRecipient={onRemoveRecipient}
             />
           ))}

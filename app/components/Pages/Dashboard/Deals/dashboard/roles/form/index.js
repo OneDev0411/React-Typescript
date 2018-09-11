@@ -1,24 +1,19 @@
-import React, { Fragment } from 'react'
-import { Form } from 'react-final-form'
+import React from 'react'
 import _ from 'underscore'
 import { RoleFormContainer } from './form-container'
-import { Modal } from 'react-bootstrap'
 import { ROLE_NAMES } from '../../../utils/roles'
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
-import CancelButton from '../../../../../../../views/components/Button/CancelButton'
+import { FinalFormDrawer } from 'components/FinalFormDrawer'
 
 import { TYPE_PERSON, TYPE_COMPANY } from './form-components/type-input'
 
 export class RoleFormModal extends React.Component {
   getInitialValues = () => {
-    const { form, isSubmitting } = this.props
-
-    if (isSubmitting) {
+    if (this.props.isSubmitting) {
       return this.formObject
     }
 
     this.formObject = {
-      ...form,
+      ...this.props.form,
       ...this.FormType,
       ...this.PreselectRole,
       ...this.CommissionAttributes
@@ -87,12 +82,12 @@ export class RoleFormModal extends React.Component {
     }
   }
 
-  onSubmit = values => {
+  onSubmit = async values => {
     // keeps the last object of submitted form
     this.formObject = values
 
     // send form to the parent
-    this.props.onFormSubmit(this.normalizeForm(values))
+    await this.props.onFormSubmit(this.normalizeForm(values))
   }
 
   validate = async values => {
@@ -431,51 +426,30 @@ export class RoleFormModal extends React.Component {
   }
 
   render() {
-    const { form, isOpen, modalTitle, onHide, isSubmitting } = this.props
-
     return (
-      <Modal
-        dialogClassName="deals__role-form--modal"
-        show={isOpen}
-        onHide={onHide}
-        backdrop="static"
-      >
-        <Modal.Header closeButton>{modalTitle}</Modal.Header>
-        <Form
-          onSubmit={this.onSubmit}
-          validate={this.validate}
-          initialValues={this.getInitialValues()}
-          render={({ handleSubmit, values }) => (
-            <Fragment>
-              <Modal.Body
-                className="u-scrollbar--thinner"
-                style={{ padding: 0 }}
-              >
-                <RoleFormContainer
-                  form={form}
-                  values={values}
-                  handleSubmit={handleSubmit}
-                  shouldShowCommission={this.shouldShowCommission}
-                  isAllowedRole={this.isAllowedRole}
-                  requiredFields={this.getRequiredFields(values)}
-                />
-              </Modal.Body>
-              <Modal.Footer>
-                <CancelButton disabled={isSubmitting} onClick={onHide}>
-                  Cancel
-                </CancelButton>
-                <ActionButton
-                  onClick={() => handleSubmit(this.onSubmit)}
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  {this.submitCaption}
-                </ActionButton>
-              </Modal.Footer>
-            </Fragment>
-          )}
-        />
-      </Modal>
+      <FinalFormDrawer
+        onSubmit={this.onSubmit}
+        validate={this.validate}
+        initialValues={this.getInitialValues()}
+        isOpen={this.props.isOpen}
+        onClose={this.props.onHide}
+        title={this.props.modalTitle}
+        submitting={this.props.isSubmitting}
+        submitButtonLabel={this.submitCaption}
+        submittingButtonLabel={this.submitCaption}
+        showReset={false}
+        reinitializeAfterSubmit={false}
+        render={({ values, handleSubmit }) => (
+          <RoleFormContainer
+            form={this.props.form}
+            values={values}
+            handleSubmit={handleSubmit}
+            shouldShowCommission={this.shouldShowCommission}
+            isAllowedRole={this.isAllowedRole}
+            requiredFields={this.getRequiredFields(values)}
+          />
+        )}
+      />
     )
   }
 }

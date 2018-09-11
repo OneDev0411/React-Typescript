@@ -3,7 +3,7 @@ import { Popover, OverlayTrigger } from 'react-bootstrap'
 
 import UserAvatar from '../../../../../../../Partials/UserAvatar'
 import Deal from '../../../../../../../../models/Deal'
-import { roleName } from '../../../../utils/roles'
+import { roleName, getLegalFullName } from '../../../../utils/roles'
 
 const Side = ({ deal, roles, rowId, rowsCount }) => {
   const sideName = Deal.get.side(deal)
@@ -46,9 +46,7 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
                   </div>
                   <div className="info">
                     <div className="role-name-container">
-                      <div className="name">
-                        {`${role.legal_first_name} ${role.legal_last_name},`}
-                      </div>
+                      <div className="name">{`${getLegalFullName(role)},`}</div>
 
                       <div className="role">{roleName(role.role)}</div>
                     </div>

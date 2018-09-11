@@ -60,14 +60,14 @@ class Builder extends React.Component {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 0
       }).format(price)
     )
 
     this.nunjucks.addFilter('area', area_meters =>
       new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 0
       }).format(area_meters * 10.7639)
     )
 
@@ -78,7 +78,7 @@ class Builder extends React.Component {
 
       try {
         pn = pnu.parse(phone)
-      } catch(e) {
+      } catch (e) {
         return phone // Cannot parse it.
       }
 

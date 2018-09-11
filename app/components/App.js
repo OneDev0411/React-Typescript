@@ -10,6 +10,7 @@ import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'
 import ChatSocket from '../services/socket/chat'
 import DealSocket from '../services/socket/deals'
 import ContactSocket from '../services/socket/contacts'
+import NotificationSocket from '../services/socket/Notifications'
 
 // navs
 import SideNav from './Pages/Dashboard/Partials/SideNav'
@@ -145,6 +146,7 @@ class App extends Component {
     this.initializeChatSocket(user)
     this.initializeDealSocket(user)
     this.initializeContactSocket(user)
+    this.initializeNotificationsSocket(user)
   }
 
   initializeContactSocket(user) {
@@ -157,6 +159,10 @@ class App extends Component {
 
   initializeDealSocket(user) {
     new DealSocket(user)
+  }
+
+  initializeNotificationsSocket(user) {
+    new NotificationSocket(user)
   }
 
   async initialRooms() {

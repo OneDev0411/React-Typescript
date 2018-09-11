@@ -1,18 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import getBrand from '../../../models/brand'
 // favorites
 import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
 
 class App extends Component {
-  componentDidMount() {
-    const {
-      data, user
-    } = this.props
+  state = {
+    brand: this.props.brand
+  }
 
+  componentDidMount() {
+    const { brand, user } = this.props
 
     if (window) {
       require('offline-js')
+    }
+
+    if (!brand) {
+      this.fetchBrand()
     }
 
     if (user) {
@@ -23,10 +29,15 @@ class App extends Component {
       this.setFullStoryUser(user)
 
       // set user data for sentry
-      this.setSentryUser(user, data.brand)
+      this.setSentryUser(user, this.state.brand)
     }
   }
 
+  fetchBrand = async () => {
+    const brand = await getBrand(window.location.hostname)
+
+    this.setState({ brand })
+  }
 
   setFullStoryUser(user) {
     if (window.FS) {
@@ -54,30 +65,20 @@ class App extends Component {
     }
   }
 
-
   render() {
-    const {
-      data, user
-    } = this.props
-
-
     const children = React.cloneElement(this.props.children, {
-      data,
-      user
+      brand: this.state.brand,
+      user: this.props.user
     })
 
-
-    return (
-      <div>
-        {children}
-      </div>
-    )
+    return <div>{children}</div>
   }
 }
 
-export default connect(({
-  user, data
-}) => ({
-  data,
-  user
-}), { getFavorites })(App)
+export default connect(
+  ({ user, brand }) => ({
+    brand,
+    user
+  }),
+  { getFavorites }
+)(App)

@@ -19,6 +19,7 @@ import { getTemplateScreenshot } from '../../../../../../models/instant-marketin
 
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import ActionButton from 'components/Button/ActionButton'
+import { getActiveTeamACL } from 'utils/user-teams'
 
 class ShareListing extends React.Component {
   state = {
@@ -156,6 +157,13 @@ class ShareListing extends React.Component {
 
   render() {
     const { listing } = this.state
+    const { user } = this.props
+    const acl = getActiveTeamACL(user)
+    const hasMarketingPermission = acl.includes('Marketing')
+
+    if (!hasMarketingPermission) {
+      return null
+    }
 
     return (
       <Fragment>
@@ -179,7 +187,7 @@ class ShareListing extends React.Component {
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.requestClose}
           handleSave={this.handleSaveMarketingCard}
-          templateData={{ listing, user: this.props.user }}
+          templateData={{ listing, user }}
           assets={listing && listing.gallery_image_urls}
         />
 

@@ -2,20 +2,19 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
-import { saveSubmission } from '../../../../../store_actions/deals'
+import {
+  saveSubmission,
+  changeNeedsAttention
+} from '../../../../../store_actions/deals'
 import Deal from '../../../../../models/Deal'
 import EmbedForm from './embed'
 
 class FormEdit extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isLoaded: false,
-      isSaving: false,
-      incompleteFields: []
-    }
-
-    this.submissionValues = {}
+  state = {
+    isLoaded: false,
+    isSaving: false,
+    notifyOffice: false,
+    incompleteFields: []
   }
 
   shouldComponentUpdate(nextProps) {
@@ -24,6 +23,8 @@ class FormEdit extends React.Component {
 
     return this.frame !== null || task.form !== nextTask.form
   }
+
+  submissionValues = {}
 
   onReceiveMessage = (functionName, args) => {
     try {
@@ -167,14 +168,18 @@ class FormEdit extends React.Component {
    *
    */
   async saveForm(values) {
-    const { saveSubmission, task, notify } = this.props
-    const { incompleteFields } = this.state
+    const { task, notify } = this.props
+    const { incompleteFields, notifyOffice } = this.state
 
     const status = incompleteFields.length === 0 ? 'Fair' : 'Draft'
 
     // save form
     try {
-      await saveSubmission(task.id, task.form, status, values)
+      await this.props.saveSubmission(task.id, task.form, status, values)
+
+      if (notifyOffice) {
+        await this.props.changeNeedsAttention(task.deal, task.id, true)
+      }
 
       notify({
         message: 'The form has been saved!',
@@ -231,6 +236,12 @@ class FormEdit extends React.Component {
     return incompleteFields.length === 0 ? 'Save' : 'Save Draft'
   }
 
+  toggleNotifyOffice() {
+    this.setState(state => ({
+      notifyOffice: !state.notifyOffice
+    }))
+  }
+
   render() {
     const { task } = this.props
     const { isLoaded, isSaving, incompleteFields } = this.state
@@ -253,6 +264,7 @@ class FormEdit extends React.Component {
         onSave={() => this.onSave()}
         onClose={() => this.close()}
         handleOpenPreview={() => this.handleOpenPreview()}
+        onChangeNotifyOffice={() => this.toggleNotifyOffice()}
       />
     )
   }
@@ -272,5 +284,5 @@ function mapStateToProps({ deals, user }, props) {
 
 export default connect(
   mapStateToProps,
-  { saveSubmission, notify }
+  { saveSubmission, changeNeedsAttention, notify }
 )(FormEdit)
