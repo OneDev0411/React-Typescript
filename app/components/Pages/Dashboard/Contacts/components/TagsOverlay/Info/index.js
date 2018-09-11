@@ -4,14 +4,13 @@ import Cookies from 'universal-cookie'
 
 import CloseButton from 'components/Button/IconButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { grey } from 'views/utils/colors'
 
 export const TagInfoContainer = Flex.extend`
-  border-radius: 3px;
-  background-color: #dce5eb;
-  margin-bottom: 1em;
   padding: 1em;
-  font-size: 16px;
-  line-height: 1.5;
+  margin-bottom: 1em;
+  border-radius: 3px;
+  background-color: ${grey.A200};
 `
 export default class Info extends React.Component {
   constructor(props) {

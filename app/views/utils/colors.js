@@ -23,6 +23,8 @@ export const grey = {
 export const primary = blue.A100
 export const primaryDark = blue.A200
 export const error = red.A200
+export const disabledColor = red.A900
+export const disabledBgColor = red.A550
 
 export const borderColor = grey.A300
 export const brandBackground = grey.A150

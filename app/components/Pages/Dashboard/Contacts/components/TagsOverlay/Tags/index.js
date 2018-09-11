@@ -1,18 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
+import Flex from 'styled-flex-component'
+
 import Tag from './Tag'
 
-export const Container = styled.div`
-  margin-top: 16px;
-  margin-left: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-`
-
 const Tags = ({ tags, onSelectionChange, tagDataType }) => (
-  <Container>
+  <Flex alignCenter wrap style={{ padding: '0 1em' }}>
     {tags.map((tag, tagIndex) => (
       <Tag
         key={tagIndex}
@@ -21,7 +13,7 @@ const Tags = ({ tags, onSelectionChange, tagDataType }) => (
         onSelectionChange={() => onSelectionChange(tagIndex, !tag.isSelected)}
       />
     ))}
-  </Container>
+  </Flex>
 )
 
 export default Tags
