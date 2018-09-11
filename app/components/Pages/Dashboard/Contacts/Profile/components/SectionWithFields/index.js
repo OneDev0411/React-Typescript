@@ -202,15 +202,14 @@ class SectionWithFields extends React.Component {
         {(addNewFieldButtonText || showAddNewCustomAttributeButton) && (
           <div
             style={{
-              textAlign: 'center',
-              marginTop: sectionFields ? 0 : '0.5em',
-              marginBottom: '1.5em'
+              marginTop: sectionFields ? 0 : '0.5em'
             }}
           >
             {addNewFieldButtonText &&
               !sectionFields && (
                 <ActionButton
-                  inverse
+                  size="small"
+                  appearance="outline"
                   onClick={this.openEditAttributeDrawer}
                   style={{ marginRight: '1em' }}
                 >

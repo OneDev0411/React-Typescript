@@ -5,11 +5,7 @@ import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import { addNotification as notify } from 'reapop'
 
-import {
-  borderColor,
-  grey,
-  brandBackground
-} from '../../../../../../../views/utils/colors'
+import { grey, brandBackground } from '../../../../../../../views/utils/colors'
 
 import AddButton from '../../../../../../../views/components/Button/ActionButton'
 // import DeleteButton from '../../../../../../../views/components/Button/IconButton'
