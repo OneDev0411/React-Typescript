@@ -5,6 +5,12 @@ import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import { addNotification as notify } from 'reapop'
 
+import {
+  borderColor,
+  grey,
+  brandBackground
+} from '../../../../../../../views/utils/colors'
+
 import AddButton from '../../../../../../../views/components/Button/ActionButton'
 // import DeleteButton from '../../../../../../../views/components/Button/IconButton'
 // import DeleteIcon from '../../../../../../../views/components/SvgIcons/Delete/IconDelete'
@@ -101,19 +107,16 @@ class EditAddressesForm extends React.Component {
                         style={{
                           position: 'relative',
                           padding: '1em',
-                          backgroundColor: '#ecf1f6'
+                          backgroundColor: brandBackground
                         }}
                       >
-                        <p style={{ color: '#778a9f', fontWeight: 500 }}>
+                        <p style={{ color: grey.A900, fontWeight: 500 }}>
                           {address && address.label}
                         </p>
-                        <p style={{ color: '#263d50', fontSize: '1.6rem' }}>
+                        <p>
                           <b>{address && getFullAddress(address.fields)}</b>
                         </p>
-                        <label
-                          htmlFor={`is_primary_${index}`}
-                          style={{ color: '#415467' }}
-                        >
+                        <label htmlFor={`is_primary_${index}`}>
                           <Field
                             id={`is_primary_${index}`}
                             name="is_primary"
@@ -186,8 +189,7 @@ class EditAddressesForm extends React.Component {
 
               <div style={{ padding: '2em', textAlign: 'center' }}>
                 <AddButton
-                  inverse
-                  style={{ fontSize: '1.6rem' }}
+                  appearance="outline"
                   onClick={() =>
                     fields.push(
                       getEmptyAddress(
