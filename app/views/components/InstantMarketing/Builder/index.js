@@ -9,6 +9,8 @@ import nunjucks from 'nunjucks'
 import './AssetManager'
 import config from './config'
 
+import PhoneNumber from 'google-libphonenumber'
+
 import {
   Container,
   TemplatesContainer,
@@ -39,14 +41,49 @@ class Builder extends React.Component {
       plugins: ['asset-blocks']
     })
 
-    this.editor.on('load', this.setup.bind(this))
+    this.editor.on('load', this.setupGrapesJs.bind(this))
+    this.setupNunjucks()
   }
 
-  setup = () => {
+  setupGrapesJs = () => {
     this.lockIn()
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
+  }
+
+  setupNunjucks = () => {
+    this.nunjucks = new nunjucks.Environment()
+
+    this.nunjucks.addFilter('currency', price =>
+      new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(price)
+    )
+
+    this.nunjucks.addFilter('area', area_meters =>
+      new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(area_meters * 10.7639)
+    )
+
+    const pnu = new PhoneNumber.PhoneNumberUtil()
+
+    this.nunjucks.addFilter('phone', phone => {
+      let pn
+
+      try {
+        pn = pnu.parse(phone)
+      } catch(e) {
+        return phone // Cannot parse it.
+      }
+
+      return pnu.format(pn, PhoneNumber.PhoneNumberFormat.NATIONAL)
+    })
   }
 
   disableAssetManager = () => {
@@ -131,7 +168,7 @@ class Builder extends React.Component {
   handleSelectTemplate = templateItem => {
     const template = {
       ...templateItem,
-      template: nunjucks.renderString(templateItem.template, {
+      template: this.nunjucks.renderString(templateItem.template, {
         ...this.props.templateData
       })
     }

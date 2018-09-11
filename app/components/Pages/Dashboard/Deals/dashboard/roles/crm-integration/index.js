@@ -9,9 +9,11 @@ import {
   createContacts,
   upsertContactAttributes
 } from '../../../../../../../store_actions/contacts'
+import { confirmation } from '../../../../../../../store_actions/confirmation'
+
 import {
-  getLegalFullName,
   convertRoleToContact,
+  getLegalFullName,
   getContactDiff
 } from '../../../utils/roles'
 import RoleForm from '../form'
@@ -35,13 +37,11 @@ class RoleFormWrapper extends React.Component {
       user,
       attributeDefs,
       upsertContactAttributes,
-      createContacts,
       updateRole,
       createRoles,
       onUpsertRole = () => null,
       onHide = () => null
     } = this.props
-    const fullName = getLegalFullName(form)
     const isNewRecord = !user || !user.role
 
     try {
@@ -56,16 +56,19 @@ class RoleFormWrapper extends React.Component {
           if (upsertedAttributes.length > 0) {
             await upsertContactAttributes(form.contact.id, upsertedAttributes)
 
-            this.showNotification(`${fullName} Updated.`)
+            this.showNotification(`${getLegalFullName(form)} Updated.`)
           }
         } else {
-          await createContacts(convertRoleToContact(form, attributeDefs))
-          this.showNotification(`New Contact Created: ${fullName}`)
+          this.props.confirmation({
+            message: `Should we add ${form.legal_first_name} to your Contacts?`,
+            cancelLabel: 'No',
+            confirmLabel: 'Yes, Add',
+            onConfirm: () => this.createCrmContact(form)
+          })
         }
 
         if (deal) {
           await createRoles(deal.id, [form])
-          this.showNotification('Contact added to the deal.')
         }
       } else if (deal) {
         await updateRole(deal.id, form)
@@ -93,6 +96,14 @@ class RoleFormWrapper extends React.Component {
         isSaving: false
       })
     }
+  }
+
+  createCrmContact = async form => {
+    await this.props.createContacts(
+      convertRoleToContact(form, this.props.attributeDefs)
+    )
+
+    this.showNotification(`New Contact Created: ${getLegalFullName(form)}`)
   }
 
   render() {
@@ -137,6 +148,7 @@ export default connect(
     notify,
     updateRole,
     createRoles,
+    confirmation,
     createContacts,
     upsertContactAttributes
   }

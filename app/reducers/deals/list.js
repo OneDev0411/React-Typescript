@@ -111,7 +111,7 @@ export default (state = null, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          new_notifications: action.count
+          new_notifications: action.new_notifications
         }
       }
 
