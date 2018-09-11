@@ -1,4 +1,7 @@
 export function getRolesText(roles, deal, roleName, annotationContext) {
+  if (!Array.isArray(deal.roles))
+    return ''
+
   const { attribute } = annotationContext
 
   return deal.roles
@@ -9,6 +12,9 @@ export function getRolesText(roles, deal, roleName, annotationContext) {
 }
 
 export function getRoleText(roles, deal, roleName, annotationContext) {
+  if (!Array.isArray(deal.roles))
+    return ''
+
   const { attribute, number } = annotationContext
 
   const list = deal.roles
