@@ -10,6 +10,7 @@ export const blue = {
 
 export const grey = {
   A100: '#f2f2f2',
+  A150: '#f8f8f8',
   A200: '#eaeaea',
   A300: '#d4d4d4',
   A400: '#c4c4c4',
@@ -22,5 +23,10 @@ export const grey = {
 export const primary = blue.A100
 export const primaryDark = blue.A200
 export const error = red.A200
+export const disabledColor = red.A900
+export const disabledBgColor = red.A550
 
 export const borderColor = grey.A300
+export const brandBackground = grey.A150
+export const placeholderColor = grey.A900
+export const InputFocusBgColor = grey.A100

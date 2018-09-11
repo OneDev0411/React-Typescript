@@ -10,6 +10,8 @@ import IconButton from '../../../../../../../../../../views/components/Button/Ic
 import AddIcon from '../../../../../../../../../../views/components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 import RemoveIcon from '../../../../../../../../../../views/components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
+import { borderColor } from '../../../../../../../../../../views/utils/colors'
+
 MultiField.propTypes = {
   attribute: PropTypes.shape().isRequired,
   format: PropTypes.func,
@@ -103,7 +105,7 @@ export function MultiField(props) {
                 padding: attribute_def.enum_values ? '0.75em 1em' : '1em',
                 borderWidth: '0 0 1px 1px',
                 borderStyle: 'solid',
-                borderColor: '#dde5ec'
+                borderColor
               }}
             >
               {attribute_def.enum_values ? (
@@ -138,17 +140,13 @@ export function MultiField(props) {
                 }}
               >
                 {index + 1 === fields.length ? (
-                  <IconButton
-                    type="button"
-                    color="#2196f3"
-                    onClick={addNewField}
-                  >
+                  <IconButton isFit iconSize="large" onClick={addNewField}>
                     <AddIcon />
                   </IconButton>
                 ) : (
                   <IconButton
-                    type="button"
-                    color="#2196f3"
+                    isFit
+                    iconSize="large"
                     onClick={() => fields.remove(index)}
                   >
                     <RemoveIcon />

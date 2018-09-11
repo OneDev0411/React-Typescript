@@ -1,28 +1,29 @@
 import styled from 'styled-components'
 
 import { setVisuallyHidden } from '../../utils/visually-hidden'
+import { borderColor, brandBackground } from '../../utils/colors'
 
 export const Container = styled.div`
   position: relative;
-  width: ${props => props.size || 104}px;
-  height: ${props => props.size || 104}px;
+  width: ${props => props.size || 88}px;
+  height: ${props => props.size || 88}px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 100%;
-  background-color: #d4d4d4;
+  background-color: ${borderColor};
 `
 
 export const Status = styled.div`
   position: absolute;
-  top: -4px;
-  right: 0px;
-  width: 32px;
-  height: 32px;
+  bottom: 0;
+  right: 0;
+  width: 26px;
+  height: 26px;
   z-index: 1;
-  border: solid 8px #fff;
+  border: solid 5px ${brandBackground};
   border-radius: 100%;
-  background-color: ${props => (props.isOnline ? '#35b863' : '#D4D4D4')};
+  background-color: ${props => (props.isOnline ? '#35b863' : borderColor)};
 `
 
 export const Image = styled.img`
@@ -33,12 +34,12 @@ export const Image = styled.img`
 `
 
 export const Initials = styled.div`
-  font-size: 3.6rem;
+  font-size: 2.25rem;
   color: #fff;
 `
 
 export const TriggerText = styled.div`
-  color: #2196f3;
+  color: #fff;
   visibility: hidden;
   font-weight: normal;
   transition: visibility 0.1s 0.1s ease-in;
@@ -78,7 +79,7 @@ export const Loading = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #2196f3;
+  color: #fff;
   border-radius: 100%;
   background: rgb(54, 71, 85, 0.9);
 `

@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
 import { Container, Title, ErrorMessage } from '../styled'
+import { placeholderColor } from '../../../../../../../../../../views/utils/colors'
 
 const TextInput = styled.input`
   width: 100%;
   padding: 0;
-  font-size: 1.8rem;
   border-width: 0;
 
   &:focus {
@@ -16,7 +16,7 @@ const TextInput = styled.input`
   }
 
   &::placeholder {
-    color: #cad4db;
+    color: ${placeholderColor};
   }
 `
 

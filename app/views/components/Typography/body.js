@@ -4,12 +4,9 @@ import { barlowFamilyStyle } from './styles'
 
 export const smallText = styled.p`
   ${barlowFamilyStyle};
-  font-size: 14px;
-  line-height: 24px;
+  font-size: 0.875rem;
 `
 
 export const regularText = styled.p`
   ${barlowFamilyStyle};
-  font-size: 16px;
-  line-height: 24px;
 `

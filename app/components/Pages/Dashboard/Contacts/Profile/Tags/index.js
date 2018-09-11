@@ -25,16 +25,13 @@ class Tags extends React.Component {
         {hasTags ? (
           <TagsList tags={this.props.tags} />
         ) : (
-          <div
-            style={{
-              textAlign: 'center',
-              marginBottom: '1em'
-            }}
+          <ActionButton
+            appearance="outline"
+            onClick={this.openOverLay}
+            size="small"
           >
-            <ActionButton inverse onClick={this.openOverLay}>
-              Add tags
-            </ActionButton>
-          </div>
+            Add tag
+          </ActionButton>
         )}
 
         <TagsOverlay
