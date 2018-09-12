@@ -6,7 +6,7 @@ import Card from '../Card'
 import { Item } from './Item'
 import ShadowButton from '../Button/ShadowButton'
 import { SearchInput } from './SearchInput'
-import ArrowDropDown from '../SvgIcons/ArrowDropDown/IconArrowDropDown'
+import ArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 export const Button = ShadowButton.extend`
   position: relative;
@@ -22,11 +22,6 @@ export const Button = ShadowButton.extend`
 `
 
 export const Icon = ArrowDropDown.extend`
-  position: relative;
-  align-self: flex-end;
-  display: flex;
-  width: 2em;
-  height: 2em;
   fill: #000;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
 `
@@ -41,7 +36,8 @@ export const Dropdown = ({
   id: buttonId,
   itemToString = item => item.title,
   itemRenderer,
-  defaultSelectedItem
+  defaultSelectedItem,
+  buttonRenderer
 }) => (
   <Downshift
     {...input}
@@ -66,16 +62,27 @@ export const Dropdown = ({
 
       return (
         <div style={style}>
-          <Button
-            {...getButtonProps({
-              fullWidth,
-              id: buttonId,
-              name: input.name
-            })}
-          >
-            {selectedItem && selectedItem.title}
-            <Icon isOpen={isOpen} />
-          </Button>
+          {buttonRenderer ? (
+            buttonRenderer(
+              getButtonProps({
+                isBlock: fullWidth,
+                id: buttonId,
+                name: input.name,
+                value: selectedItem && selectedItem.title
+              })
+            )
+          ) : (
+            <Button
+              {...getButtonProps({
+                fullWidth,
+                id: buttonId,
+                name: input.name
+              })}
+            >
+              {selectedItem && selectedItem.title}
+              <Icon isOpen={isOpen} />
+            </Button>
+          )}
           <div style={{ position: 'relative' }}>
             {isOpen && (
               <Card
