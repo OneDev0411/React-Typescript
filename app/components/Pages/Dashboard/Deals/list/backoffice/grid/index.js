@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import merge from 'merge'
 import moment from 'moment'
 
-import { Container } from './styled'
 
 import Deal from '../../../../../../../models/Deal'
 
@@ -162,7 +161,6 @@ class Grid extends React.Component {
     const data = this.Data
 
     return (
-      <Container>
         <Table
           plugins={{
             sortable: {}
@@ -174,7 +172,6 @@ class Grid extends React.Component {
           EmptyState={EmptyState}
           LoadingState={LoadingState}
         />
-      </Container>
     )
   }
 }
