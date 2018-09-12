@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import TagIcon from '../../../../../../../views/components/SvgIcons/Tag/TagIcon'
-import { primary } from 'views/utils/colors'
+import { primary, disabledColor } from 'views/utils/colors'
 
 const borderColor = (inputFocused, error) => {
-  /* inputFocused ? '#2196f3' : '#d4dfe6' */
   if (error) {
     return 'red'
   } else if (inputFocused) {
@@ -20,7 +19,7 @@ const Container = styled.form`
   justify-content: center;
   height: 48px;
   border-radius: 3px;
-  background-color: #ffffff;
+  background-color: #fff;
   border: solid 1px;
   border-color: ${({ inputFocused, error }) =>
     borderColor(inputFocused, error)};
@@ -28,8 +27,7 @@ const Container = styled.form`
 
 const Input = styled.input`
   width: 100%;
-  margin-left: 12px;
-  font-size: 1.5rem;
+  margin-left: 0.5em;
   border-width: 0;
   caret-color: ${primary};
   :focus {
@@ -41,11 +39,10 @@ const AddButton = styled.button`
   padding: 0;
   border-width: 0;
   background: transparent;
-  font-size: 16px;
   line-height: normal;
-  margin-right: 16px;
+  margin-right: 1em;
   color: ${({ inputFocused, disabled }) =>
-    !disabled && inputFocused ? primary : '#8da2b5'};
+    !disabled && inputFocused ? primary : disabledColor};
   font-weight: ${({ inputFocused }) => (inputFocused ? 'bold' : 'normal')};
 
   &:focus {

@@ -80,7 +80,6 @@ class TextIconButton extends PureComponent {
     const ExtendedButton = Button.extend`
       justify-content: ${props =>
         props.isBlock ? 'space-between' : 'initial'};
-      padding: 0 0.75em 0 0.5em;
 
       > svg {
         width: ${props => getIconSize(props.size)};

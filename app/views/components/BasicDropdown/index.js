@@ -8,9 +8,11 @@ import DropButton from '../Button/DropButton'
 export const BasicDropdown = ({
   buttonSize,
   buttonText,
+  buttonRenderer,
   disabled,
   items,
   style,
+  pullTo,
   onSelect,
   onChange,
   fullWidth,
@@ -26,18 +28,27 @@ export const BasicDropdown = ({
     defaultSelectedItem={defaultSelectedItem}
     render={downshift => (
       <div style={{ position: 'relative', ...style }}>
-        <DropButton
-          {...downshift.getButtonProps({
-            disabled,
-            iconLeft: buttonIcon,
-            isBlock: true,
-            isOpen: downshift.isOpen,
-            size: buttonSize,
-            text:
-              buttonText ||
-              (downshift.selectedItem && downshift.selectedItem.label)
-          })}
-        />
+        {buttonRenderer ? (
+          buttonRenderer({
+            ...downshift.getButtonProps({
+              disabled,
+              isOpen: downshift.isOpen
+            })
+          })
+        ) : (
+          <DropButton
+            {...downshift.getButtonProps({
+              disabled,
+              iconLeft: buttonIcon,
+              isBlock: true,
+              isOpen: downshift.isOpen,
+              size: buttonSize,
+              text:
+                buttonText ||
+                (downshift.selectedItem && downshift.selectedItem.label)
+            })}
+          />
+        )}
         {downshift.isOpen && (
           <Card
             depth={3}
@@ -45,7 +56,8 @@ export const BasicDropdown = ({
               maxHeight: 200,
               minWidth: fullWidth ? '100%' : 'auto',
               position: 'absolute',
-              left: 0,
+              left: pullTo !== 'right' ? 0 : 'auto',
+              right: pullTo === 'right' ? 0 : 'auto',
               top: 'calc(100% + 8px)',
               zIndex: 1,
               overflowY: 'auto'
