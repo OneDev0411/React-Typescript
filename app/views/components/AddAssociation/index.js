@@ -1,37 +1,28 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
-import AddButton from './components/AddButton'
+export class AddAssociation extends React.Component {
+  static propTypes = {
+    render: PropTypes.func.isRequired
+  }
 
-class AddAssociations extends Component {
   state = {
-    isOpen: false
+    isActive: false
   }
 
   handleOpen = () => {
-    this.setState({ isOpen: true })
+    this.setState({ isActive: true })
   }
 
   handleClose = () => {
-    this.setState({ isOpen: false })
+    this.setState({ isActive: false })
   }
 
   render() {
-    const { isOpen } = this.state
-    const { title, render } = this.props
-
-    return (
-      <div>
-        <AddButton title={title} onClick={this.handleOpen} />
-        {render({ isOpen, handleClose: this.handleClose })}
-      </div>
-    )
+    return this.props.render({
+      handleOpen: this.handleOpen,
+      handleClose: this.handleClose,
+      isActive: this.state.isActive
+    })
   }
 }
-
-AddAssociations.propTypes = {
-  render: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired
-}
-
-export default AddAssociations

@@ -1,38 +1,42 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import AddAssociation from '../AddAssociation'
-// eslint-disable-next-line
+import Tooltip from '../tooltip'
+import Button from '../Button/IconButton'
+import { AddAssociation } from '../AddAssociation'
 import SearchListingsModal from '../SearchListing'
-
+import Icon from '../SvgIcons/Properties/IconProperties'
 import { normalizeListing } from '../../utils/association-normalizers'
 
-const title = 'Add a MLS listing'
+export class AddListingAssociation extends React.Component {
+  static propTypes = {
+    handleAdd: PropTypes.func.isRequired
+  }
 
-function AddListingAssociation({ handleAdd }) {
-  return (
-    <AddAssociation
-      title={title}
-      render={({ isOpen, handleClose }) => {
-        const add = listing => {
-          handleAdd(normalizeListing(listing), handleClose)
-        }
+  add = (contact, callback) =>
+    this.props.handleAdd(normalizeListing(contact), callback)
 
-        return (
-          <SearchListingsModal
-            show={isOpen}
-            modalTitle={title}
-            onHide={handleClose}
-            onSelectListing={add}
-          />
-        )
-      }}
-    />
-  )
+  render() {
+    const title = 'Attach Listing'
+
+    return (
+      <AddAssociation
+        render={({ isActive, handleClose, handleOpen }) => (
+          <div>
+            <Tooltip placement="bottom" caption={title}>
+              <Button isFit iconSize="large" inverse onClick={handleOpen}>
+                <Icon />
+              </Button>
+            </Tooltip>
+            <SearchListingsModal
+              show={isActive}
+              modalTitle={title}
+              onHide={handleClose}
+              onSelectListing={listing => this.add(listing, handleClose)}
+            />
+          </div>
+        )}
+      />
+    )
+  }
 }
-
-AddListingAssociation.propTypes = {
-  handleAdd: PropTypes.func.isRequired
-}
-
-export default AddListingAssociation
