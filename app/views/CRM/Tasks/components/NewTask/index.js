@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Field } from 'react-final-form'
 import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
+import Flex from 'styled-flex-component'
 
 import { getTask } from '../../../../../models/tasks/get-task'
 import {
@@ -14,14 +15,10 @@ import {
 import { createTaskAssociation } from '../../../../../models/tasks/create-task-association'
 import { deleteTaskAssociation } from '../../../../../models/tasks/delete-task-association'
 
-import IconButton from '../../../../components/Button/IconButton'
+// import IconButton from '../../../../components/Button/IconButton'
 import ActionButton from '../../../../components/Button/ActionButton'
-import IconDelete from '../../../../components/SvgIcons/Delete/IconDelete'
-import { CircleCheckbox } from '../../../../components/Input/CircleCheckbox'
-import {
-  TextField,
-  TextAreaField
-} from '../../../../components/final-form-fields'
+// import IconDelete from '../../../../components/SvgIcons/Delete/IconDelete'
+import { TextAreaField } from '../../../../components/final-form-fields'
 
 import LoadSaveReinitializeForm from '../../../../utils/LoadSaveReinitializeForm'
 import { goBackFromEditTask } from '../../helpers/go-back-from-edit'
@@ -29,10 +26,12 @@ import { goBackFromEditTask } from '../../helpers/go-back-from-edit'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
+import { Title } from './components/Title'
 import DueDate from './components/DueDate'
 import Reminder from './components/Reminder'
 import { TaskType } from './components/TaskType'
 import Associations from './components/Associations'
+import { Container } from './styled'
 
 const propTypes = {
   task: PropTypes.shape(),
@@ -196,100 +195,44 @@ class Task extends Component {
           preSaveFormat={preSaveFormat}
           save={this.save}
         >
-          {({
-            form,
-            values,
-            invalid,
-            pristine,
-            validating,
-            submitting,
-            handleSubmit
-          }) => (
-            <form onSubmit={handleSubmit} className="c-new-task__form">
-              <div className="c-new-task__body">
-                <div style={{ position: 'relative' }}>
-                  {!this.isNew && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '50%',
-                        right: '1em',
-                        transform: 'translateY(-50%)'
-                      }}
-                    >
-                      <Field
-                        size={36}
-                        name="status"
-                        id="task-status"
-                        component={CircleCheckbox}
+          {props => {
+            const { values } = props
+
+            return (
+              <Container onSubmit={props.handleSubmit}>
+                <div className="c-new-task__body">
+                  <Title />
+                  {props.dirty && (
+                    <div>
+                      <DueDate selectedDate={values.dueDate} />
+                      <TextAreaField label="Description" name="description" />
+                      <TaskType />
+                      <Reminder
+                        dueTime={values.dueTime.value}
+                        dueDate={values.dueDate.value}
+                        selectedDate={values.reminderDate}
                       />
                     </div>
                   )}
-                  <TextField
-                    label="Title"
-                    name="title"
-                    required
-                    style={{ paddingRight: '4.5em' }}
-                  />
                 </div>
-                <div>
-                  <DueDate selectedDate={values.dueDate} />
-                  <TextAreaField label="Description" name="description" />
-                  <TaskType />
-                  <Reminder
-                    dueTime={values.dueTime.value}
-                    dueDate={values.dueDate.value}
-                    selectedDate={values.reminderDate}
-                  />
-                  <Associations
-                    associations={values.associations}
-                    handleCreate={this.handleCreateAssociation}
-                    handleDelete={this.handleDeleteAssociation}
-                    defaultAssociation={defaultAssociation}
-                  />
-                </div>
-              </div>
-              <div
-                className="c-new-task__footer"
-                style={
-                  !this.isNew
-                    ? {
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                      }
-                    : {}
-                }
-              >
-                {!this.isNew &&
-                  (!isDeleting ? (
-                    <IconButton
-                      type="button"
-                      color="#78909c"
-                      hoverColor="#2196f3"
-                      onClick={this.delete}
-                    >
-                      <IconDelete />
-                    </IconButton>
-                  ) : (
-                    <span>
-                      <i className="fa fa-spin fa-spinner" /> Deleting...
-                    </span>
-                  ))}
-                {/*
-                  This is temporary until implemention of bulk
-                  delete/add associations and attachments
-                */}
-                <ActionButton
-                  type="submit"
-                  disabled={(!invalid && pristine) || isDeleting}
-                  style={{ marginLeft: '0.5em' }}
-                >
-                  {submitting || validating ? 'Saving...' : 'Save'}
-                </ActionButton>
-              </div>
-            </form>
-          )}
+                {props.dirty && (
+                  <Flex justifyBetween alignCenter>
+                    <Associations
+                      associations={values.associations}
+                      handleCreate={this.handleCreateAssociation}
+                      handleDelete={this.handleDeleteAssociation}
+                      defaultAssociation={defaultAssociation}
+                    />
+                    <ActionButton type="submit" disabled={isDeleting}>
+                      {props.submitting || props.validating
+                        ? 'Saving...'
+                        : 'Save'}
+                    </ActionButton>
+                  </Flex>
+                )}
+              </Container>
+            )
+          }}
         </LoadSaveReinitializeForm>
       </div>
     )
@@ -311,12 +254,7 @@ export default connect(
  */
 function validate(values) {
   const errors = {}
-  const requiredError = 'Required'
   const timeRequiredError = 'Time is required'
-
-  if (values.title == null || values.title.trim().length === 0) {
-    errors.title = requiredError
-  }
 
   if (values.dueTime.value == null) {
     errors.dueTime = timeRequiredError
