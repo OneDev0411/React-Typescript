@@ -217,17 +217,18 @@ class Task extends Component {
                 </div>
                 {props.dirty && (
                   <Flex justifyBetween alignCenter>
-                    <Associations
-                      associations={values.associations}
-                      handleCreate={this.handleCreateAssociation}
-                      handleDelete={this.handleDeleteAssociation}
-                      defaultAssociation={defaultAssociation}
+                  <AssociationsCTA
+                    addHandler={ass => {
+                      console.log(ass)
+                    }}
                     />
+                  {props.dirty && (
                     <ActionButton type="submit" disabled={isDeleting}>
                       {props.submitting || props.validating
                         ? 'Saving...'
                         : 'Save'}
                     </ActionButton>
+                  )}
                   </Flex>
                 )}
               </Container>
