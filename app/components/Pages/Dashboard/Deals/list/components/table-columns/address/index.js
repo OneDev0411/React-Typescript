@@ -5,7 +5,6 @@ import Deal from '../../../../../../../../models/Deal'
 
 const Container = styled.div`
   display: flex;
-  align-items: center;
 `
 
 const Image = styled.img`
