@@ -1,18 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import ToolTip from '../../../../../../../../views/components/tooltip'
-
-export const NotificationBadge = styled.div`
-  background-color: #ff4747;
-  border-radius: 50%;
-  color: #fff;
-  text-align: center;
-  width: 23px;
-  height: 23px;
-  font-size: 14px;
-  padding: 2px;
-`
+import Badge from '../../../../../../../../views/components/Badge'
 
 const Notification = ({ count, caption }) => {
   if (count === 0) {
@@ -21,7 +10,7 @@ const Notification = ({ count, caption }) => {
 
   return (
     <ToolTip caption={caption.replace('$count', count)}>
-      <NotificationBadge>{count}</NotificationBadge>
+      <Badge>{count > 99 ? '99+' : count}</Badge>
     </ToolTip>
   )
 }
