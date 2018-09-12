@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Container } from './styled'
 
 import Deal from '../../../../../../../models/Deal'
 
@@ -127,20 +126,18 @@ class Grid extends React.Component {
     const data = this.Data
 
     return (
-      <Container>
-        <Table
-          plugins={{
-            sortable: {}
-          }}
-          isFetching={isFetchingDeals}
-          columns={columns}
-          data={data}
-          getTrProps={getGridTrProps}
-          getTdProps={getGridTdProps}
-          EmptyState={EmptyState}
-          LoadingState={LoadingState}
-        />
-      </Container>
+      <Table
+        plugins={{
+          sortable: {}
+        }}
+        isFetching={isFetchingDeals}
+        columns={columns}
+        data={data}
+        getTrProps={getGridTrProps}
+        getTdProps={getGridTdProps}
+        EmptyState={EmptyState}
+        LoadingState={LoadingState}
+      />
     )
   }
 }

@@ -9,8 +9,8 @@ const Container = styled.div`
 `
 
 const Image = styled.img`
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   border-radius: 4px;
   margin-right: 12px;
 `
