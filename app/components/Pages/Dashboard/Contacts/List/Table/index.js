@@ -88,7 +88,7 @@ class ContactsList extends React.Component {
     }
   ]
 
-  actions = [
+  leftActions = [
     {
       render: ({ selectedRows }) => (
         <ExportContacts
@@ -152,6 +152,18 @@ class ContactsList extends React.Component {
     return {}
   }
 
+  rightActions = [
+    {
+      render: ({ selectedRows }) => (
+        <ExportContacts
+          filters={this.props.filters}
+          exportIds={selectedRows}
+          disabled={this.props.isFetching}
+        />
+      )
+    }
+  ]
+
   render() {
     const selectedRowsCount = this.props.selectedRows.length
 
@@ -169,7 +181,10 @@ class ContactsList extends React.Component {
               debounceTime: 300, // ms
               onTrigger: this.props.onRequestLoadMore
             },
-            actionable: this.actions
+            actionable: {
+              leftActions: this.leftActions,
+              rightActions: this.rightActions
+            }
           }}
           data={this.props.data}
           summary={{

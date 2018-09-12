@@ -1,7 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { ToolbarContainer, ActionsBar } from './styled'
+import {
+  ToolbarContainer,
+  ActionsBar,
+  LeftActions,
+  RightActions
+} from './styled'
 
 import BasicTable from './Tables/Basic'
 import MultipleTable from './Tables/Multiple'
@@ -41,7 +46,8 @@ class Grid extends React.Component {
 
     if (plugins.actionable) {
       this.actionablePlugin = new ActionablePlugin({
-        actions: plugins.actionable,
+        leftActions: plugins.actionable.leftActions,
+        rightActions: plugins.actionable.rightActions,
         selectablePlugin: this.selectablePlugin
       })
     }
@@ -120,7 +126,14 @@ class Grid extends React.Component {
             <TableSummary {...this.props.summary} />
 
             {this.actionablePlugin && (
-              <ActionsBar>{this.actionablePlugin.render()}</ActionsBar>
+              <ActionsBar>
+                <LeftActions>
+                  {this.actionablePlugin.renderLeftActions()}
+                </LeftActions>
+                <RightActions>
+                  {this.actionablePlugin.renderRightActions()}
+                </RightActions>
+              </ActionsBar>
             )}
           </ToolbarContainer>
         )}

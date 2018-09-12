@@ -11,7 +11,19 @@ export const ToolbarContainer = styled.div`
 
 export const ActionsBar = styled.div`
   display: flex;
+  flex: 1;
   margin-left: 8px;
+  justify-content: space-between;
+`
+
+export const LeftActions = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+export const RightActions = styled.div`
+  display: flex;
+  flex-direction: row;
 `
 
 export const TBody = styled.div``
