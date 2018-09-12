@@ -20,7 +20,6 @@ import CriticalDate, {
 import Notifications from '../../components/table-columns/notification-badge'
 
 import getGridTrProps from '../../helpers/get-tr-props'
-import getGridTdProps from '../../helpers/get-td-props'
 
 import { getPrimaryAgent } from '../../../utils/roles'
 
@@ -172,7 +171,6 @@ class Grid extends React.Component {
           columns={columns}
           data={data}
           getTrProps={getGridTrProps}
-          getGridTdProps={getGridTdProps}
           EmptyState={EmptyState}
           LoadingState={LoadingState}
         />

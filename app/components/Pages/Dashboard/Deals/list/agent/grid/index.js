@@ -19,7 +19,6 @@ import { getPrimaryAgent } from '../../../utils/roles'
 import { Filters } from '../filters'
 
 import getGridTrProps from '../../helpers/get-tr-props'
-import getGridTdProps from '../../helpers/get-td-props'
 
 class Grid extends React.Component {
   get Columns() {
@@ -134,7 +133,6 @@ class Grid extends React.Component {
         columns={columns}
         data={data}
         getTrProps={getGridTrProps}
-        getTdProps={getGridTdProps}
         EmptyState={EmptyState}
         LoadingState={LoadingState}
       />
