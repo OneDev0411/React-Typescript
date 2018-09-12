@@ -1,40 +1,78 @@
 import React from 'react'
+import { Field } from 'react-final-form'
 
-import { Select } from '../../../../../../components/final-form-fields'
+import { Dropdown } from '../../../../../../components/Dropdown'
+import LinkButton from '../../../../../../components/Button/LinkButton'
+import ArrowDropDown from '../../../../../../components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { grey, primary } from '../../../../../../utils/colors'
+
+export const Button = LinkButton.extend`
+  min-width: 160px;
+  font-weight: 500;
+  justify-content: space-between;
+  background-color: ${grey.A150};
+  color: ${({ isOpen }) => (isOpen ? primary : '#000')};
+
+  :hover {
+    > svg {
+      fill: ${primary};
+    }
+  }
+`
+
+export const Icon = ArrowDropDown.extend`
+  position: relative;
+  margin-left: 1em;
+  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
+`
 
 const ITEMS = [
   {
-    title: 'Closing',
-    value: 'Closing'
+    title: 'Call',
+    value: 'Call'
   },
   {
-    title: 'Follow up',
-    value: 'Follow up'
+    title: 'In Person Meeting',
+    value: 'In Person Meeting'
   },
   {
-    title: 'Inspection',
-    value: 'Inspection'
+    title: 'Text',
+    value: 'Text'
   },
   {
-    title: 'Listing appointment',
-    value: 'Listing appointment'
+    title: 'Mail',
+    value: 'Mail'
   },
   {
-    title: 'Open House',
-    value: 'Open House'
+    title: 'Social',
+    value: 'Social'
   },
   {
-    title: 'Todo',
-    value: 'Todo'
+    title: 'Email',
+    value: 'Email'
   },
   {
-    title: 'Tour',
-    value: 'Tour'
+    title: 'Other',
+    value: 'Other'
   }
 ]
 
 export function TaskType() {
   return (
-    <Select hasEmptyItem={false} items={ITEMS} label="Type" name="task_type" />
+    <Field
+      name="task_type"
+      render={({ input }) => (
+        <Dropdown
+          input={input}
+          items={ITEMS}
+          buttonRenderer={props => (
+            <Button {...props}>
+              {props.value}
+              <Icon isOpen={props.isOpen} />
+            </Button>
+          )}
+        />
+      )}
+    />
   )
 }

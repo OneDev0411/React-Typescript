@@ -9,7 +9,7 @@ const Input = styled.input`
   padding: 0;
   border-width: 0;
 
-  margin-bottom: 3.5rem;
+  margin-bottom: 2.5rem;
   font-size: 1.5rem;
   font-weight: 500;
 
@@ -27,7 +27,12 @@ export function Title() {
     <Field
       name="title"
       render={({ input }) => (
-        <Input {...input} type="text" placeholder="Add a descriptive title…" />
+        <Input
+          {...input}
+          type="text"
+          autoComplete="off"
+          placeholder="Add a descriptive title…"
+        />
       )}
     />
   )

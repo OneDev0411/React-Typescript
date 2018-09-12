@@ -20,7 +20,7 @@ export async function postLoadFormat(task, defaultAssociation) {
     value: null
   }
   let reminderTime = defaultTimeOption()
-  let task_type = { title: 'Todo', value: 'Todo' }
+  let task_type = { title: 'Call', value: 'Call' }
   let associations = []
 
   if (defaultAssociation) {

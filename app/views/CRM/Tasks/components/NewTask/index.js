@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Field } from 'react-final-form'
 import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
 import Flex from 'styled-flex-component'
@@ -30,8 +29,8 @@ import { Title } from './components/Title'
 import DueDate from './components/DueDate'
 import Reminder from './components/Reminder'
 import { TaskType } from './components/TaskType'
-import Associations from './components/Associations'
-import { Container } from './styled'
+import { AssociationsCTA } from './components/AssociationsCTA'
+import { FormContainer, FieldContainer } from './styled'
 
 const propTypes = {
   task: PropTypes.shape(),
@@ -199,29 +198,31 @@ class Task extends Component {
             const { values } = props
 
             return (
-              <Container onSubmit={props.handleSubmit}>
-                <div className="c-new-task__body">
-                  <Title />
-                  {props.dirty && (
-                    <div>
+              <FormContainer onSubmit={props.handleSubmit}>
+                <Title />
+                {props.dirty && (
+                  <Flex justifyBetween alignCenter>
+                    <TaskType />
+                    <FieldContainer
+                      justifyBetween
+                      alignCenter
+                      style={{ marginLeft: '1em', flex: 2 }}
+                    >
                       <DueDate selectedDate={values.dueDate} />
-                      <TextAreaField label="Description" name="description" />
-                      <TaskType />
                       <Reminder
                         dueTime={values.dueTime.value}
                         dueDate={values.dueDate.value}
                         selectedDate={values.reminderDate}
                       />
-                    </div>
-                  )}
-                </div>
-                {props.dirty && (
-                  <Flex justifyBetween alignCenter>
+                    </FieldContainer>
+                  </Flex>
+                )}
+                <Flex justifyBetween alignCenter>
                   <AssociationsCTA
                     addHandler={ass => {
                       console.log(ass)
                     }}
-                    />
+                  />
                   {props.dirty && (
                     <ActionButton type="submit" disabled={isDeleting}>
                       {props.submitting || props.validating
@@ -229,9 +230,8 @@ class Task extends Component {
                         : 'Save'}
                     </ActionButton>
                   )}
-                  </Flex>
-                )}
-              </Container>
+                </Flex>
+              </FormContainer>
             )
           }}
         </LoadSaveReinitializeForm>
