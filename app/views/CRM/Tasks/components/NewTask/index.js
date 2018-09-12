@@ -27,7 +27,7 @@ import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
 import DueDate from './components/DueDate'
-import Reminder from './components/Reminder'
+// import Reminder from './components/Reminder'
 import { TaskType } from './components/TaskType'
 import { AssociationsCTA } from './components/AssociationsCTA'
 import { FormContainer, FieldContainer } from './styled'
@@ -201,7 +201,11 @@ class Task extends Component {
               <FormContainer onSubmit={props.handleSubmit}>
                 <Title />
                 {props.dirty && (
-                  <Flex justifyBetween alignCenter>
+                  <Flex
+                    justifyBetween
+                    alignCenter
+                    style={{ marginBottom: '1.5em' }}
+                  >
                     <TaskType />
                     <FieldContainer
                       justifyBetween
@@ -209,11 +213,6 @@ class Task extends Component {
                       style={{ marginLeft: '1em', flex: 2 }}
                     >
                       <DueDate selectedDate={values.dueDate} />
-                      <Reminder
-                        dueTime={values.dueTime.value}
-                        dueDate={values.dueDate.value}
-                        selectedDate={values.reminderDate}
-                      />
                     </FieldContainer>
                   </Flex>
                 )}

@@ -11,9 +11,8 @@ import { createDateOptions } from './create-date-options'
  */
 export async function postLoadFormat(task, defaultAssociation) {
   const today = new Date().getTime()
-  const tomorrow = today + 24 * 60 * 60 * 1000
 
-  let dueDate = createDateOptions(today, tomorrow, 'due-date')
+  let dueDate = new Date()
   let dueTime = defaultTimeOption(null, '08:00 AM')
   let reminderDate = {
     title: 'No reminder',
