@@ -6,7 +6,10 @@ import PageHeader from '../../../../../views/components/PageHeader'
 
 export default ({ deal, onClose, envelope, file }) => (
   <div className="c-deal-form-viewer">
-    <PageHeader title={file.name} backUrl={`/dashboard/deals/${deal.id}`} />
+    <PageHeader
+      title={file.name}
+      backUrl={`/dashboard/deals/${deal.id}/files`}
+    />
 
     <div className="c-deal-form-viewer__body show-envelopes">
       <Viewer width="calc(100% - 375px)" file={file} />
