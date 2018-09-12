@@ -19,7 +19,8 @@ export const BasicDropdown = ({
   buttonIcon,
   itemToString = item => item.label,
   itemRenderer,
-  defaultSelectedItem
+  defaultSelectedItem,
+  menuStyle = {}
 }) => (
   <Downshift
     onChange={onChange}
@@ -60,7 +61,8 @@ export const BasicDropdown = ({
               right: pullTo === 'right' ? 0 : 'auto',
               top: 'calc(100% + 8px)',
               zIndex: 1,
-              overflowY: 'auto'
+              overflowY: 'auto',
+              ...menuStyle
             }}
             className="u-scrollbar--thinner--self"
           >

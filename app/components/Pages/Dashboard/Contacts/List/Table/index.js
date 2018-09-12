@@ -14,6 +14,7 @@ import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
 import ChangeStageContacts from '../Actions/ChangeStageContacts'
 import ShareListing from '../Actions/ShareListing'
+import SortContacts from '../Actions/SortContacts'
 
 import TagsOverlay from '../../components/TagsOverlay'
 
@@ -154,11 +155,10 @@ class ContactsList extends React.Component {
 
   rightActions = [
     {
-      render: ({ selectedRows }) => (
-        <ExportContacts
-          filters={this.props.filters}
-          exportIds={selectedRows}
-          disabled={this.props.isFetching}
+      render: () => (
+        <SortContacts
+          isFetching={this.props.isFetching}
+          handleChangeOrder={this.props.handleChangeOrder}
         />
       )
     }
