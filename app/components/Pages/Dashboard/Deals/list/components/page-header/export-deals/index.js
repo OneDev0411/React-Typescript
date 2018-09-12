@@ -99,7 +99,6 @@ class ExportDeals extends React.Component {
   render() {
     return (
       <BasicDropdown
-        style={{ marginRight: '1rem' }}
         items={this.items}
         buttonIcon={XlsxIcon}
         buttonText="Download Report"

@@ -31,6 +31,7 @@ const Header = ({
 
       {showCreateDeal && (
         <ActionButton
+          style={{ marginLeft: '1rem' }}
           onClick={() => browserHistory.push('/dashboard/deals/create')}
         >
           Create New Deal
