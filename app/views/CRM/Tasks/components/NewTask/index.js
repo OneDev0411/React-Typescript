@@ -17,7 +17,7 @@ import { deleteTaskAssociation } from '../../../../../models/tasks/delete-task-a
 // import IconButton from '../../../../components/Button/IconButton'
 import ActionButton from '../../../../components/Button/ActionButton'
 // import IconDelete from '../../../../components/SvgIcons/Delete/IconDelete'
-import { TextAreaField } from '../../../../components/final-form-fields'
+import { DateTimeField } from '../../../../components/final-form-fields/DateTimePicker'
 
 import LoadSaveReinitializeForm from '../../../../utils/LoadSaveReinitializeForm'
 import { goBackFromEditTask } from '../../helpers/go-back-from-edit'
@@ -26,7 +26,6 @@ import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
-import { DueDate } from './components/DueDate'
 // import Reminder from './components/Reminder'
 import { TaskType } from './components/TaskType'
 import { AssociationsCTA } from './components/AssociationsCTA'
@@ -209,7 +208,10 @@ class Task extends Component {
                     alignCenter
                     style={{ marginLeft: '1em', flex: 2 }}
                   >
-                    <DueDate selectedDate={values.dueDate} />
+                    <DateTimeField
+                      name="dueDate"
+                      selectedDate={values.dueDate}
+                    />
                   </FieldContainer>
                 </Flex>
                 <Flex justifyBetween alignCenter>
