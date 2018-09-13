@@ -1,15 +1,13 @@
 /**
  * Set a fixed time to a Date
- * @param {number} timestamp The Original date in timestamp
+ * @param {Date} date The original date
  * @param {number} time Fixed time of day
- * @returns {number} a timestamp time in seconds
+ * @returns {number} a Date in seconds
  */
-export function setTime(timestamp, time) {
-  const newDate = new Date(timestamp)
+export function setTime(date, time) {
+  date.setHours(Math.floor(time / 3600))
+  date.setMinutes(Math.floor((time % 3600) / 60))
+  date.setSeconds(0)
 
-  newDate.setHours(Math.floor(time / 3600))
-  newDate.setMinutes(Math.floor((time % 3600) / 60))
-  newDate.setSeconds(0)
-
-  return newDate.getTime()
+  return date
 }
