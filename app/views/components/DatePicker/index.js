@@ -17,13 +17,15 @@ export default class DatePicker extends React.Component {
     onChange: PropTypes.func.isRequired,
     fixedWeeks: PropTypes.bool,
     modifiers: PropTypes.object,
-    selectedDate: PropTypes.any
+    selectedDate: PropTypes.any,
+    showTodayButton: PropTypes.bool
   }
 
   static defaultProps = {
     fixedWeeks: false,
     modifiers: {},
-    selectedDate: null
+    selectedDate: null,
+    showTodayButton: true
   }
 
   state = initialState
@@ -109,15 +111,18 @@ export default class DatePicker extends React.Component {
             />
           )}
         />
-        <ActionButton
-          isBlock
-          appearance="outline"
-          onClick={this.handleToday}
-          data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
-          data-balloon-pos="down"
-        >
-          Today
-        </ActionButton>
+        {this.props.showTodayButton && (
+          <ActionButton
+            isBlock
+            type="button"
+            appearance="outline"
+            onClick={this.handleToday}
+            data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
+            data-balloon-pos="down"
+          >
+            Today
+          </ActionButton>
+        )}
       </Container>
     )
   }
