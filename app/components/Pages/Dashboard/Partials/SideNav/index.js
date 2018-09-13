@@ -187,7 +187,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
                   style={{
                     position: 'absolute',
                     top: 0,
-                    left: 'calc(100% - 12px)'
+                    left: 'calc(100% - 24px)'
                   }}
                 >
                   {appNotifications}
