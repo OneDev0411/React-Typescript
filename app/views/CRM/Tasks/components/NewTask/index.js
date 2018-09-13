@@ -17,7 +17,7 @@ import { deleteTaskAssociation } from '../../../../../models/tasks/delete-task-a
 // import IconButton from '../../../../components/Button/IconButton'
 import ActionButton from '../../../../components/Button/ActionButton'
 // import IconDelete from '../../../../components/SvgIcons/Delete/IconDelete'
-import { DateTimeField } from '../../../../components/final-form-fields/DateTimePicker'
+import { DateTimeField } from '../../../../components/final-form-fields/DateTimeField'
 
 import LoadSaveReinitializeForm from '../../../../utils/LoadSaveReinitializeForm'
 import { goBackFromEditTask } from '../../helpers/go-back-from-edit'

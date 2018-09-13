@@ -23,6 +23,7 @@ export const PickerContainer = Card.extend`
   .DayPicker-Caption {
     height: auto !important;
     border: none !important;
+    margin-bottom: 0.5em;
 
     > div {
       font-size: 1rem;
@@ -50,6 +51,11 @@ export const PickerContainer = Card.extend`
     background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+CiAgPHBhdGggZD0iTTE1LjQxIDE2LjU5TDEwLjgzIDEybDQuNTgtNC41OUwxNCA2bC02IDYgNiA2IDEuNDEtMS40MXoiLz4KICA8cGF0aCBmaWxsPSJub25lIiBkPSJNMCAwaDI0djI0SDBWMHoiLz4KPC9zdmc+');
   }
 
+  .DayPicker abbr[title],
+  .DayPicker abbr[data-original-title] {
+    text-decoration: none;
+  }
+
   .DayPicker-NavButton--next:hover,
   .DayPicker-NavButton--prev:hover {
     border-radius: 3px;
@@ -67,6 +73,7 @@ export const PickerContainer = Card.extend`
   .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
     font-weight: normal;
     color: #fff;
+    border-radius: 100%;
     background-color: ${primary};
 
     &:hover {
@@ -77,6 +84,7 @@ export const PickerContainer = Card.extend`
   .DayPicker:not(.DayPicker--interactionDisabled)
     .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
     color: #fff;
+    border-radius: 100%;
     background-color: ${primary};
   }
 `
