@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Spinner from '../../../../../../views/components/Spinner'
 
 const Container = styled.div`
   display: flex;
@@ -8,10 +9,6 @@ const Container = styled.div`
   margin: 30px 0;
   z-index: 10;
   margin: 0 auto;
-
-  i {
-    color: #2196f3;
-  }
 
   ${props =>
     props.absolute === true &&
@@ -23,9 +20,6 @@ const Container = styled.div`
     right: 0;
     background: rgba(255, 255, 255, 0.5);
     padding: 30px;
-    i {
-      font-size: 60px;
-    }
   `};
 `
 
@@ -36,7 +30,7 @@ const Fetching = ({ show, absolute }) => {
 
   return (
     <Container absolute={absolute}>
-      <i className="fa fa-spin fa-spinner fa-3x" />
+      <Spinner />
     </Container>
   )
 }
