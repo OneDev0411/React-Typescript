@@ -4,7 +4,7 @@
  * @param {number} time Fixed time of day
  * @returns {number} a Date in seconds
  */
-export function setTime(date, time) {
+export function setTime(date, time = 0) {
   date.setHours(Math.floor(time / 3600))
   date.setMinutes(Math.floor((time % 3600) / 60))
   date.setSeconds(0)
