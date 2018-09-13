@@ -1,14 +1,15 @@
 import React from 'react'
 import RadioButton from '../../../../../views/components/radio'
+import { H2 } from 'components/Typography/headings'
 
 const BUYING = 'Buying'
 const SELLING = 'Selling'
 
 export default ({ selectedSide, onChangeDealSide }) => (
   <div className="form-section deal-side">
-    <div className="hero">
+    <H2 className="hero">
       Which side are you on? <span className="required">*</span>
-    </div>
+    </H2>
 
     <div className="deal-radio-row">
       <RadioButton

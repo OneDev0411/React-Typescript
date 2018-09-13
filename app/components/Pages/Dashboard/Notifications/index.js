@@ -285,7 +285,12 @@ class Notifications extends Component {
   }
   render() {
     return (
-      <div>
+      <div
+        style={{
+          boxShadow:
+            '-1px 0 2px 0 rgba(0,0,0,0.04), -1px 0 20px 0 rgba(0,0,0,0.1)'
+        }}
+      >
         <Header />
         <div style={{ position: 'relative', height: '100vh' }}>
           <div
@@ -293,11 +298,10 @@ class Notifications extends Component {
               position: 'absolute',
               left: 0,
               top: 0,
-              width: '100%',
-              padding: '2rem'
+              width: '100%'
             }}
           >
-            <div>{this.getNotifications()}</div>
+            {this.getNotifications()}
           </div>
         </div>
       </div>

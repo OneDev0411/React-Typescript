@@ -21,7 +21,7 @@ const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
   const getShowingTags = () => showingTags.join(', ')
 
   if (tagsCount === 0) {
-    return <p style={{ color: '#8da2b5', marginBottom: 0 }}>No Tags</p>
+    return <div style={{ color: '#c5c5c5' }}>No Tags</div>
   }
 
   _.every(tags, item => {

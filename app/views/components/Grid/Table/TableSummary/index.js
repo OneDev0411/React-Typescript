@@ -4,8 +4,10 @@ import styled from 'styled-components'
 const Container = styled.div``
 
 const Title = styled.div`
-  font-size: 23px;
-  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 500;
+  line-height: 40px;
+}
 `
 
 function parseText({ text, ...parameters }) {

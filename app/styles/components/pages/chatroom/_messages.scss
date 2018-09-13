@@ -429,7 +429,7 @@ $left-w: 44px;
 
     &.selected,
     &:hover {
-      background-color: #2196f3;
+      background-color: #003bdf;
       color: #fff;
       .name {
         color: #fff;
@@ -474,8 +474,8 @@ $left-w: 44px;
     background-color: rgba(255, 255, 255, 0.9);
     z-index: 501;
     text-align: center;
-    color: #2196f3;
-    border: 2px dashed #2196f3;
+    color: #003bdf;
+    border: 2px dashed #003bdf;
     i {
       margin-bottom: 10px;
     }

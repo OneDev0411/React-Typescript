@@ -41,11 +41,6 @@
       text-decoration: underline;
     }
   }
-
-  .create-deal-button {
-    max-width: 150px;
-    margin: 0 auto;
-  }
 }
 
 /**
@@ -285,23 +280,16 @@
  *
  */
 .deal-list--popover {
-  max-width: inherit;
-  background-color: #303e4d;
-  border: none;
-  box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
   color: #fff;
+  max-width: inherit;
+  box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
   &.push-left {
     margin-left: -5px;
   }
 
-  .arrow:after {
-    border-bottom-color: #303e4d !important;
-    border-top-color: #303e4d !important;
-  }
-
   .popover-content {
-    padding: 10px;
+    padding: 8px;
   }
 
   .roles {
@@ -310,7 +298,7 @@
       flex-direction: row;
       align-items: center;
       font-size: 14px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       &:last-child {
         margin-bottom: 0;
       }
@@ -322,14 +310,14 @@
           flex-direction: row;
           white-space: nowrap;
           .role {
-            color: #78909c;
+            color: darken($color: #fff, $amount: 30%);
             padding-left: 4px;
           }
         }
         .email {
           display: block;
-          font-size: 13px;
-          color: #78909c;
+          font-size: 12px;
+          color: darken($color: #fff, $amount: 30%);
           margin-top: -1px;
         }
       }
@@ -344,14 +332,15 @@
     .fact-row {
       display: flex;
       flex-direction: row;
+      margin-bottom: 0.5em;
 
       .name {
-        color: #78909c;
-        font-size: 15px;
+        color: #fff;
+        font-size: 14px;
         width: 200px;
         .status {
-          margin-right: 5px;
-          color: #eeeeee;
+          margin-right: 0.5em;
+          color: darken($color: #fff, $amount: 30%);
 
           &.past {
             color: #35b863;
@@ -364,8 +353,8 @@
 
       .field {
         width: 100px;
-        color: #78909c;
-        font-size: 15px;
+        color: #fff;
+        font-size: 14px;
 
         .cta {
           display: none;

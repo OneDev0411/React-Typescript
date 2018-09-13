@@ -7,6 +7,8 @@ import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import { roleName, getLegalFullName } from '../../utils/roles'
 import RoleCrmIntegration from './crm-integration'
+import IconButton from 'components/Button/IconButton'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 class Roles extends React.Component {
   state = {
@@ -141,27 +143,26 @@ class Roles extends React.Component {
                     image={user ? user.profile_image_url : null}
                   />
                 </div>
-
                 <div className="name">
                   <div className="title">{getLegalFullName(role)}</div>
                   <div className="role">{roleName(role.role)}</div>
                 </div>
-
-                {allowDeleteRole && (
-                  <div className="cta">
-                    {deletingRoleId &&
-                      id === deletingRoleId && (
-                        <i className="fa fa-spinner fa-spin" />
-                      )}
-
-                    {!deletingRoleId && (
-                      <i
-                        onClick={e => this.onRequestRemoveRole(e, role)}
-                        className="fa fa-delete fa-times"
-                      />
-                    )}
-                  </div>
-                )}
+                {allowDeleteRole &&
+                  deletingRoleId &&
+                  id === deletingRoleId && (
+                    <i className="fa fa-spinner fa-spin" />
+                  )}
+                {allowDeleteRole &&
+                  !deletingRoleId && (
+                    <IconButton
+                      appearance="icon"
+                      inverse
+                      onClick={e => this.onRequestRemoveRole(e, role)}
+                      className="delete-button"
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  )}
               </div>
             )
           })}

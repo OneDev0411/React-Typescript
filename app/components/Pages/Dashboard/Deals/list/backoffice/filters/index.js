@@ -9,11 +9,8 @@ import {
   ListItem
 } from '../../../../../../../views/components/Grid/SavedSegments/List/styled'
 
-import {
-  ListItemName,
-  ListIconContainer,
-  BadgeCounter
-} from '../../styles/filters/styled'
+import { BadgeCounter } from '../../styles/filters/styled'
+import { ListItemName } from '../../../../../../../views/components/Grid/SavedSegments/List/styled'
 
 class BackofficeFilters extends React.Component {
   componentDidMount() {
@@ -90,9 +87,7 @@ class BackofficeFilters extends React.Component {
           <ListItem isSelected>
             <ListItemName>Search Results</ListItemName>
 
-            <ListIconContainer>
-              <BadgeCounter>{this.getBadgeCounter()}</BadgeCounter>
-            </ListIconContainer>
+            <BadgeCounter>{this.getBadgeCounter()}</BadgeCounter>
           </ListItem>
         ) : (
           <Fragment>
@@ -111,9 +106,7 @@ class BackofficeFilters extends React.Component {
                 >
                   <ListItemName>{tabName}</ListItemName>
 
-                  <ListIconContainer>
-                    <BadgeCounter>{counter}</BadgeCounter>
-                  </ListIconContainer>
+                  <BadgeCounter>{counter}</BadgeCounter>
                 </ListItem>
               )
             })}

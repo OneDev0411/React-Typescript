@@ -8,7 +8,6 @@ import { TextInput } from '../../../../../views/components/Forms/TextInput'
 import { SelectInput } from '../../../../../views/components/Forms/SelectInput'
 
 import ActionButton from '../../../../../views/components/Button/ActionButton'
-import CancelButton from '../../../../../views/components/Button/CancelButton'
 
 import {
   stateToAbbreviated,
@@ -300,15 +299,16 @@ export default class ManualAddress extends React.Component {
               </Modal.Body>
 
               <Modal.Footer>
-                <CancelButton
+                <ActionButton
+                  appearance="outline"
                   disabled={saving}
                   onClick={this.onClose}
                   style={{
-                    marginRight: '10px'
+                    marginRight: '1em'
                   }}
                 >
                   Cancel
-                </CancelButton>
+                </ActionButton>
 
                 <ActionButton
                   disabled={saving}

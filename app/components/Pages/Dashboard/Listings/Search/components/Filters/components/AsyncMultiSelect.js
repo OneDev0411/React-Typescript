@@ -2,8 +2,6 @@ import React from 'react'
 import Select from 'react-select'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
 import { change as updateField, formValueSelector } from 'redux-form'
 
 import Label from './Label'
@@ -13,7 +11,6 @@ const selector = formValueSelector(formName)
 
 const AsyncMultiSelect = ({
   label,
-  onChange,
   fieldName,
   loadOptions,
   placeholder,

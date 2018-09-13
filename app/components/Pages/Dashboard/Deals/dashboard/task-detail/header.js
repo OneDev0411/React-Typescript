@@ -7,6 +7,8 @@ import {
 } from '../../../../../../store_actions/deals'
 import TaskStatus from '../tasks/status'
 import DeleteTask from './delete-task'
+import IconButton from 'components/Button/IconButton'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 class Header extends React.Component {
   constructor(props) {
@@ -68,13 +70,14 @@ class Header extends React.Component {
           <div className="cta">
             <DeleteTask deal={deal} task={task} />
 
-            <span
-              className="close-task"
+            <IconButton
+              appearance="icon"
+              inverse
+              iconSize="large"
               onClick={() => setSelectedTask(null)}
-              title="Close Task"
             >
-              <img src="/static/images/deals/close.png" alt="" />
-            </span>
+              <CloseIcon />
+            </IconButton>
           </div>
         </div>
 

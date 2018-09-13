@@ -2,31 +2,29 @@ import styled from 'styled-components'
 import ShadowButton from '../../Button/ShadowButton'
 import UpArrow from '../../SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 import DownArrow from '../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { primary, grey, borderColor, primaryDark } from '../../../utils/colors'
 
 export const DropDownContainer = styled.div`
   position: relative;
   cursor: pointer;
   display: flex;
   border: solid 1px
-    ${({ isFollowing }) => (isFollowing ? '#d4dfe6' : '#2196f3')};
+    ${({ isFollowing }) => (isFollowing ? borderColor : primary)};
   border-radius: 3px;
-  background-color: #ffffff;
+  background-color: #fff;
   height: 32px;
 `
 
 export const DropDownMenu = styled.div`
   position: absolute;
+  width: 210px;
+  padding: 1em;
+  margin-top: 0.5em;
   z-index: 1000;
   background: #fff;
-  width: 210px;
-  border: 1px solid #eee;
-  color: black;
-  padding: 16px;
   border-radius: 6px;
+  border: 1px solid ${borderColor};
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.23);
-  font-size: 17px;
-  color: #263445;
-  margin-top: 8px;
 `
 
 export const DropDownMenuHeader = styled.div`
@@ -37,7 +35,7 @@ export const DropDownMenuItem = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 16px;
+  margin-top: 1em;
 `
 
 export const DropDownMenuItemText = styled.div`
@@ -46,7 +44,7 @@ export const DropDownMenuItemText = styled.div`
 
 export const FollowButton = styled.div`
   font-weight: normal;
-  color: ${({ isFollowing }) => (isFollowing ? '#263445' : '#2196f3')};
+  color: ${({ isFollowing }) => (isFollowing ? primaryDark : primary)};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -58,11 +56,12 @@ export const FollowButton = styled.div`
   .followCloseIcon {
     display: none;
     width: 16px;
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
   }
   &:hover {
-    background-color: #eff5fa;
+    background-color: ${grey.A100};
+
     .followBellIcon {
       display: none;
     }
@@ -74,7 +73,7 @@ export const FollowButton = styled.div`
     outline: none;
   }
   .arrowIcon {
-    border-left: solid 1px #d4dfe6;
+    border-left: solid 1px ${borderColor};
     padding-left: 2px;
     margin-left: 4px;
     margin-right: 4px;
@@ -82,25 +81,25 @@ export const FollowButton = styled.div`
 `
 export const ArrowButton = ShadowButton.extend`
   display: flex;
-  border-left: solid 1px #d4dfe6;
+  border-left: solid 1px ${borderColor};
   padding-left: 6px;
   padding-right: 6px;
   &:focus {
     outline: none;
   }
   &:hover {
-    background-color: #eff5fa;
+    background-color: ${grey.A100};
   }
 `
 
 export const DownArrowFollow = DownArrow.extend`
   > path {
-    fill: #506379;
+    fill: ${primary};
   }
 `
 
 export const UpArrowFollow = UpArrow.extend`
   > path {
-    fill: #506379;
+    fill: ${primary};
   }
 `

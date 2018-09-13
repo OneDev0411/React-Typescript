@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { isBackOffice } from '../../../../../utils/user-teams'
+import Badge from '../../../../../views/components/Badge'
 
 class BadgeCounter extends React.Component {
   constructor(props) {
@@ -44,7 +45,15 @@ class BadgeCounter extends React.Component {
 
     if (counter > 0) {
       return (
-        <span className="c-app-sidenav__notification-badge">{counter}</span>
+        <Badge
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 'calc(100% - 12px)'
+          }}
+        >
+          {counter > 99 ? '99+' : counter}
+        </Badge>
       )
     }
 

@@ -8,14 +8,13 @@ import IconButton from '../../../../../views/components/Button/IconButton'
 import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
 
 const Button = IconButton.extend`
-  width: 5rem;
-  height: 5rem;
+  width: 48px;
+  height: 48px;
   position: fixed;
-  right: 2rem;
-  bottom: 2rem;
+  right: 2em;
+  bottom: 2em;
   z-index: 3860017101;
   border-radius: 100%;
-  background: #2196f3;
 `
 
 const Intercom = ({ user, intercomIsActive, inactiveIntercom }) => {
@@ -34,12 +33,7 @@ const Intercom = ({ user, intercomIsActive, inactiveIntercom }) => {
         <IntercomSDK appID={window.INTERCOM_ID} {...getUserInfo} />
       )}
       {intercomIsActive && (
-        <Button
-          color="#fff"
-          title="Close"
-          onClick={inactiveIntercom}
-          className="intercom__close-btn"
-        >
+        <Button title="Close" appearance="primary" onClick={inactiveIntercom}>
           <IconClose />
         </Button>
       )}

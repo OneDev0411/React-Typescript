@@ -50,6 +50,7 @@ const FollowComponent = ({
           <DropDownContainer isFollowing={isFollowing}>
             <ToolTip
               placement="bottom"
+              tooltipStyles={{ textAlign: 'left' }}
               caption={
                 isFollowing
                   ? 'You will NOT receive updates via email & push notifications when any changes to a property take place.'

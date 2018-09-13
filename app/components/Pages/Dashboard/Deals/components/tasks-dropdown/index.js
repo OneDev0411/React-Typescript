@@ -249,7 +249,7 @@ class DropDownTasks extends React.Component {
         onInputValueChange={this.onInputValueChange}
       >
         {({ getInputProps, isOpen }) => (
-          <div style={{ width: '100%' }}>
+          <div style={{ display: 'inline-block' }}>
             <DropDownContainer>
               <SearchInput
                 disabled={disabled}

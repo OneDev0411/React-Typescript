@@ -1,6 +1,5 @@
 $margin: 20px;
 
-.create-deal-button,
 .create-offer-button {
   @extend %create-deal-button;
   display: block;
@@ -68,14 +67,7 @@ $margin: 20px;
   }
 
   .hero {
-    font-size: 30px;
-    font-weight: 600;
-    color: #263445;
-    margin-bottom: 18px;
-
-    &.no-margin-bottom {
-      margin-bottom: 0;
-    }
+    margin-bottom: 0.5em;
 
     .required {
       color: $required-color;
@@ -100,6 +92,7 @@ $margin: 20px;
   }
 
   .deal-radio {
+    margin-left: 16px;
     margin-right: 32px;
   }
 
@@ -117,15 +110,7 @@ $margin: 20px;
     .radio-button {
       line-height: 18px;
     }
-
-    .deal-type-dropdown {
-      @extend %deal-type-dropdown;
     }
-
-    .deal-type-dropdown-list {
-      @extend %deal-type-dropdown-list;
-    }
-  }
 
   .deal-people {
     .people-container {
@@ -153,13 +138,12 @@ $margin: 20px;
 
       .name {
         font-size: 15px;
-        color: #263445;
       }
     }
 
     .remove-address {
       cursor: pointer;
-      color: #2196f3;
+      color: #003bdf;
       margin-left: 20px;
       &:hover {
         cursor: pointer;
@@ -174,7 +158,6 @@ $margin: 20px;
 
     .radio-label {
       font-size: 14px;
-      color: #62778c;
 
       .status-color {
         display: inline-block;
@@ -200,23 +183,10 @@ $margin: 20px;
 
       .date,
       .remove {
-        color: #2196f3;
+        color: #003bdf;
         font-size: 15px;
         cursor: pointer;
       }
-    }
-  }
-
-  .create-deal-button {
-    margin-left: 0;
-    width: 150px;
-    &.disabled {
-      background-color: #dce5eb;
-      color: #8da2b5;
-    }
-
-    &:focus {
-      outline: none;
     }
   }
 
@@ -243,61 +213,9 @@ $margin: 20px;
   }
 }
 
-/**
-*
-*/
-%deal-type-dropdown {
-  width: 375px;
-  height: 40px;
-  border-radius: 3px;
-  font-size: 15px;
-  background-color: #ffffff;
-  border: solid 1px #e3e3e3;
-  text-align: left;
-  box-shadow: none;
-  color: #b0bfc7;
 
-  &.selected {
-    color: #262626;
-  }
 
-  .caret {
-    position: absolute;
-    right: 10px;
-    top: 17px;
-  }
 
-  &:hover {
-    border-color: #8bc9fe;
-  }
-}
-
-%deal-type-dropdown-list {
-  padding: 0;
-  width: 375px;
-  border: none !important;
-  border-radius: 4px;
-
-  li {
-    color: #5b6469;
-    font-size: 15px;
-    background-color: #ffffff;
-    box-shadow: 0 1px 0 0 #eaeaea, 0 -1px 0 0 #e9e9e9;
-
-    &:first-child {
-      border-radius: 4px 4px 0 0;
-      border-top: none;
-    }
-
-    &:last-child {
-      border-radius: 0 0 4px 4px;
-    }
-
-    a {
-      padding: 15px 10px;
-    }
-  }
-}
 
 /**
 *
@@ -359,26 +277,11 @@ $margin: 20px;
   }
 
   .add-item {
-    display: flex;
-
-    &:hover {
-      opacity: 0.7;
-      cursor: pointer;
-    }
-
-    &.text-input {
-      flex-direction: column;
-      &:hover {
-        opacity: 1;
-        cursor: auto;
-      }
-    }
-
     .icon {
       display: inline-block;
       width: 20px !important;
       height: 20px !important;
-      background-color: #2196f3;
+      background-color: #003bdf;
       color: #fff;
       text-align: center;
       font-size: 25px;
@@ -389,7 +292,6 @@ $margin: 20px;
 
     .text {
       font-size: 15px;
-      color: #263445;
       font-weight: 400;
       &.hasError {
         color: #ec4b35;
@@ -403,14 +305,21 @@ $margin: 20px;
       color: #262626;
       margin-top: 5px;
       padding: 0 5px;
+      border-radius: 3px;
+      border: solid 1px #d4d4d4;
+      backdrop-filter: blur(10px);
 
       &:focus {
         outline: none;
+        border-color: #003bdf;
       }
 
       &.invalid {
         border: 1px solid red;
       }
+    }
+    &.text-input {
+      margin-left: 16px;
     }
   }
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import Flex from 'styled-flex-component'
-import { getStatusColor } from '../../../../../../../../utils/listing'
+import _ from 'underscore'
+
 import * as Deal from '../../../../../../../../models/Deal/context-helper'
 import { roleName } from '../../../../../Deals/utils/roles'
 import {
@@ -12,43 +12,7 @@ import {
 } from '../../../../../../../../models/contacts/helpers'
 import { selectDefinitionByName } from '../../../../../../../../reducers/contacts/attributeDefs'
 
-const Container = styled.div`
-  display: flex;
-  margin: 0 -0.5em 0.5em;
-  padding: 0.5em;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
-
-  &:hover {
-    cursor: pointer;
-    background-color: #f5f5f5;
-  }
-`
-
-const Price = styled.b`
-  font-size: 1.5rem;
-  line-height: 1;
-  margin-right: 1em;
-  font-weight: bold;
-  color: #1e364b;
-`
-
-const Status = styled.span`
-  line-height: 1;
-  color: ${props => `#${getStatusColor(props.status)}`};
-`
-
-const Address = styled.div`
-  color: #758a9e;
-`
-
-const Role = styled.div`
-  color: #758a9e;
-  font-weight: 600;
-  margin-bottom: 0.5em;
-`
+import { Container, Price, Status, Address, Role } from './styled'
 
 function getPhoto(deal) {
   return Deal.getField(deal, 'photo') || '/static/images/deals/home.png'

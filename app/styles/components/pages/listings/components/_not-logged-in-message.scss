@@ -1,9 +1,9 @@
 .c-notLoggedIn-message {
   position: absolute;
-  bottom: 2.5rem;
-  left: 2rem;
+  bottom: 1em;
+  left: 1em;
   margin-bottom: 0;
-  padding: .5rem 1rem;
+  padding: 0.5em 1em;
   color: #fff;
   border-radius: 3px;
   background-color: rgba(0, 0, 0, 0.45);
@@ -14,5 +14,9 @@
   > a {
     color: inherit;
     text-decoration: underline;
+
+    &:hover {
+      color: $brand-primary;
+    }
   }
 }

@@ -1,12 +1,10 @@
-import styled from 'styled-components'
+import Flex from 'styled-flex-component'
 
-export const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+import { brandBackground, borderColor } from '../../../utils/colors'
+
+export const Container = Flex.extend`
   height: 63px;
   padding: 0 1em;
-  background-color: #f8fafb;
-  box-shadow: 0 -1px 0 0 #dce5eb;
-  padding: 0 1em;
+  border: 1px solid ${borderColor};
+  background-color: ${brandBackground};
 `

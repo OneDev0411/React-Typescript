@@ -11,6 +11,7 @@ import {
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
 import ActionButtons from './cta'
+import { blue } from 'views/utils/colors'
 
 class CommentCreate extends React.Component {
   constructor(props) {
@@ -125,7 +126,7 @@ class CommentCreate extends React.Component {
             width: '100%',
             height: `${height}px`,
             transition: '0.2s ease-in all',
-            border: hasComment ? '2px solid #2196f3' : ''
+            border: hasComment ? `1px solid ${blue.A200}` : ''
           }}
           onFocus={onFocus}
           onBlur={onBlur}

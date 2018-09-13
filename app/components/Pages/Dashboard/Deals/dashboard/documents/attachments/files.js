@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Dropdown, Button } from 'react-bootstrap'
-import _ from 'underscore'
+import { Dropdown } from 'react-bootstrap'
 import { syncDeleteFile } from '../../../../../../../store_actions/deals'
 import VerticalDotsIcon from '../../../../Partials/Svgs/VerticalDots'
 import FileLink from './link'
+import IconButton from 'components/Button/IconButton'
 
 /**
  * render pdf attachments
@@ -96,13 +96,13 @@ class FileAttachments extends React.Component {
                 className="deal-file-cta-menu"
                 pullRight
               >
-                <Button
+                <IconButton
                   onClick={e => e.preventDefault()}
-                  className="cta-btn btn-link"
+                  inverse
                   bsRole="toggle"
                 >
                   <VerticalDotsIcon fill="#D7DEE2" />
-                </Button>
+                </IconButton>
 
                 <Dropdown.Menu>
                   <li onClick={e => this.deleteFile(e, task, file)}>

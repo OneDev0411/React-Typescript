@@ -35,6 +35,7 @@ import {
 } from '../../../../../store_actions/deals'
 import OpenDeal from '../utils/open-deal'
 import { isBackOffice } from '../../../../../utils/user-teams'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 class CreateDeal extends React.Component {
   state = {
@@ -381,12 +382,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
+      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: "No, don't cancel",
+      cancelLabel: 'No, don\'t cancel',
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -980,27 +981,18 @@ class CreateDeal extends React.Component {
               />
             )}
 
-          <Button
-            className={cn('create-deal-button', {
-              disabled: !canSaveDeal
-            })}
+          <ActionButton
             style={{ marginRight: '10px' }}
             onClick={this.updateOrCreateDeal}
             disabled={!canSaveDeal}
           >
             {this.SubmitLabel}
-          </Button>
+          </ActionButton>
 
           {deal && (
-            <Button
-              className={cn('create-deal-button', {
-                disabled: !canSaveDeal
-              })}
-              onClick={this.goLive}
-              disabled={!canSaveDeal}
-            >
-              {saving ? 'Saving ...' : 'Make Visible to Admin'}
-            </Button>
+            <ActionButton onClick={this.goLive} disabled={!canSaveDeal}>
+              {saving ? 'Saving ...' : 'Make visible to admin'}
+            </ActionButton>
           )}
 
           <div className="error-summary">

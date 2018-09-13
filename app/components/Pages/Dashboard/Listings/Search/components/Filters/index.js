@@ -4,7 +4,6 @@ import compose from 'recompose/compose'
 import { reduxForm } from 'redux-form'
 import withHandlers from 'recompose/withHandlers'
 
-import Brand from '../../../../../../../controllers/Brand'
 import { getStatusColor } from '../../../../../../../utils/listing'
 
 import Price from './Price'
@@ -110,7 +109,7 @@ const Filters = ({
             <SubStatuses fields={otherStatuses} />
           </FiltersListingsStatusRow>
         </div>
-        <div style={{ padding: '3rem 2rem 8rem', backgroundColor: '#fff' }}>
+        <div style={{ padding: '2rem 1rem 5rem', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
           <Counties />
           <Price />
@@ -148,7 +147,6 @@ const Filters = ({
           onClick={reset}
           className="c-filters__reset-btn"
           disabled={isSubmitting || pristine}
-          style={{ color: `#${Brand.color('primary', '#2196f3')}` }}
         >
           Reset Filters
         </button>
@@ -156,7 +154,6 @@ const Filters = ({
           disabled={isSubmitting}
           className="c-filters__submit-btn"
           onClick={handleSubmit(onSubmitHandler)}
-          style={{ background: `#${Brand.color('primary', '#2196f3')}` }}
         >
           {isSubmitting ? 'Updating...' : 'Update Filters'}
         </button>

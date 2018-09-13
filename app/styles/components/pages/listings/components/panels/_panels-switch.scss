@@ -2,9 +2,9 @@
     display: none;
     @media screen and (min-width: 64em) {
         position: absolute;
-        top: -4.5rem;
-        right: 2rem;
-        width: 12.5rem;
+        top: -52px;
+        right: 0.5rem;
+        width: 125px;
         display: block;
     }
 }
@@ -12,17 +12,21 @@
 .c-panels-switch__btn {
     height: 36px;
     float: right;
-    padding: 0 10px;
+    padding: 0 0.5em;
     border-radius: 5px;
-    border-color: #d7d6d6;
-    background-color: #f8fafb;
+    border-color: #000;
+    background-color: #fff;
+
+    &:focus,
     &:hover,
-    &:focus {
-        outline-width: 0;
-        border-color: #d7d6d6;
-        background-color: darken(#f8fafb, 3%);
+    &.btn-default[disabled]:focus,
+    &.btn-default[disabled]:hover {
+      outline-width: 0;
+      border-color: $brand-primary;
+      background-color: $gray-light;
     }
-    >svg {
+
+    > svg {
         display: inline-block;
         vertical-align: middle;
     }

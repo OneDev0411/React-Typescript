@@ -4,20 +4,21 @@
     margin: 0;
     padding: 0;
     border: none !important;
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: #ffffff;
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.15), 0 8px 10px 0 rgba(0, 0, 0, 0.16);
 
     li {
       padding: 0 9px !important;
       height: 40px;
       line-height: 40px;
       vertical-align: middle;
-      color: #d0011b;
       font-size: 15px;
+      border-radius: 3px;
+      cursor: pointer;
       &:hover {
-        opacity: 0.7;
-        background-color: transparent;
+        color: #ffffff;
+        background-color: #003bdf;
       }
     }
   }

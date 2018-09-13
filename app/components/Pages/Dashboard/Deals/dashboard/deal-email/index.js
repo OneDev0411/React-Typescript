@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Tooltip from '../../../../../../views/components/tooltip/index'
-import LinkIcon from '../../../../../../views/components/SvgIcons/LinkIcon'
+import Tooltip from 'views/components/tooltip'
+import LinkIcon from 'views/components/SvgIcons/LinkIcon'
 import copy from '../../../../../../utils/copy-text-to-clipboard'
 import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
@@ -9,20 +9,15 @@ import cn from 'classnames'
 const DealEmail = ({ dealEmail, notify, marginBottom = false }) => (
   <Tooltip
     captionIsHTML
+    isCustom={false}
+    placement="bottom"
     tooltipStyles={{
       marginLeft: '-40px'
     }}
     overlayOptions={{
       delayHide: 200
     }}
-    caption={
-      <div className="deal-email__tooltip">
-        <p>Send documents to this deal by sending emails to this address:</p>
-        <br />
-        <p>{dealEmail}</p>
-      </div>
-    }
-    placement="bottom"
+    caption="Send documents to this deal by sending emails to this address."
     multiline
   >
     <button
@@ -44,4 +39,7 @@ const DealEmail = ({ dealEmail, notify, marginBottom = false }) => (
   </Tooltip>
 )
 
-export default connect(null, { notify })(DealEmail)
+export default connect(
+  null,
+  { notify }
+)(DealEmail)

@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Container } from './styled'
 
 import Deal from '../../../../../../../models/Deal'
 
@@ -20,7 +19,6 @@ import { getPrimaryAgent } from '../../../utils/roles'
 import { Filters } from '../filters'
 
 import getGridTrProps from '../../helpers/get-tr-props'
-import getGridTdProps from '../../helpers/get-td-props'
 
 class Grid extends React.Component {
   get Columns() {
@@ -127,20 +125,17 @@ class Grid extends React.Component {
     const data = this.Data
 
     return (
-      <Container>
-        <Table
-          plugins={{
-            sortable: {}
-          }}
-          isFetching={isFetchingDeals}
-          columns={columns}
-          data={data}
-          getTrProps={getGridTrProps}
-          getTdProps={getGridTdProps}
-          EmptyState={EmptyState}
-          LoadingState={LoadingState}
-        />
-      </Container>
+      <Table
+        plugins={{
+          sortable: {}
+        }}
+        isFetching={isFetchingDeals}
+        columns={columns}
+        data={data}
+        getTrProps={getGridTrProps}
+        EmptyState={EmptyState}
+        LoadingState={LoadingState}
+      />
     )
   }
 }

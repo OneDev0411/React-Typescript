@@ -1,16 +1,16 @@
 import styled from 'styled-components'
 
-export const Container = styled.div``
+import { blue, grey } from '../../../../../../utils/colors'
+import Card from '../../../../../Card'
 
-export const List = styled.div`
+export const List = Card.extend`
   position: absolute;
+  top: calc(100% + 8px);
+  overflow: auto;
+  left: 0;
   width: 300px;
   min-height: 32px;
   max-height: 300px;
-  overflow: auto;
-  border-radius: 5px;
-  background-color: #fff
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   z-index: 1001;
 `
 
@@ -24,7 +24,7 @@ export const ListItemTitle = styled.div`
 export const ListItemIconContainer = styled.div`
   width: 5%;
   text-align: right;
-  color: #2196f3;
+  color: ${blue.A100};
 `
 
 export const ListItem = styled.div`
@@ -40,7 +40,7 @@ export const ListItem = styled.div`
   font-weight: ${props => (props.isSelected ? 500 : 400)};
 
   :hover {
-    background-color: #2196f3;
+    background-color: ${blue.A100};
     color: #fff;
   }
 
@@ -53,43 +53,40 @@ export const SelectedItem = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #dbdbdb;
-  height: 20px;
   min-width: 40px;
   margin: 0 4px 0 4px;
-  text-align: center;
-  color: #ccc;
+  padding: 0 4px;
   font-size: 14px;
-  border-radius: 2px;
-  padding: 0 3px;
+  line-height: 24px;
+  border-radius: 3px;
+  color: #fff;
+  background-color: ${blue.A100};
 
   &:hover {
-    background-color: red;
-    border: none;
-    color: #fff;
+    background-color: ${blue.A200};
   }
 `
 
 export const ItemsContainer = styled.div`
-  background-color: #f8fafb;
+  padding: ${props => (props.selectedItems.length > 1 ? '0.5em' : 0)};
   border-radius: 3px;
+  background-color: ${grey.A200};
 `
 
 export const InputContainer = styled.div`
   position: relative;
   overflow: hidden;
   border-radius: 3px;
-  border: solid 1px #d4dfe6;
+  border: solid 1px ${grey.A300};
   min-height: 40px;
-  background-color: #f8fafb;
   cursor: pointer;
   margin: ${props => (props.withMargin ? '2px 4px' : '0')};
 `
 
 export const Input = styled.input`
   width: 100%;
-  height: 39px;
-  padding: 0 30px 0 10px;
+  height: 38px;
+  padding: 0 32px 0 8px;
   border: none;
   cursor: pointer;
 
@@ -102,5 +99,5 @@ export const InputIndicator = styled.i`
   position: absolute;
   right: 10px;
   top: 12px;
-  color: #7b91a6;
+  color: #000;
 `

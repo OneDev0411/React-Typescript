@@ -1,23 +1,23 @@
 .c-form-card {
-  margin-bottom: 6rem;
-  padding: 0 2rem;
+  margin-bottom: 4em;
+  padding: 0 1em;
 
   @media screen and (min-width: 1024px) {
-    max-width: 60rem;
+    max-width: 560px;
     margin-right: auto;
     margin-left: auto;
   }
 }
 
 .c-form-card__title {
-  font-size: 2rem;
+  font-size: 1.25em;
   line-height: 1;
   margin: 0 0 0.5rem;
 }
 
 .c-form-card__body {
-  padding: 2rem;
+  padding: 1em;
   border-radius: 3px;
   background-color: #fff;
-  border: 1px solid #CAD4DB;
+  border: 1px solid #d4d4d4;
 }

@@ -4,14 +4,21 @@ import { addNotification as notify } from 'reapop'
 
 import { Title } from './components/Title'
 import { Container } from './components/Container'
-import { TextButton } from './components/TextButton'
 import { CloseButton } from './components/CloseButton'
 import BareModal from '../../../views/components/BareModal'
 import ActionButton from '../../../views/components/Button/ActionButton'
+import { primary } from '../../../views/utils/colors'
 import IntercomTriger from '../../../components/Pages/Dashboard/Partials/IntercomTrigger'
 
 import getVerificationCode from '../../../models/verify/request'
 import VerifyPhoneNumber from '../../../models/verify/confirm'
+
+const LinkButton = ActionButton.extend`
+  padding: 0;
+  height: auto;
+  line-height: 1;
+  vertical-align: initial;
+`
 
 const INVALID_CODE_MESSAGE = 'Code is invalid! Please try again.'
 
@@ -174,7 +181,7 @@ class VerifyPhoneNumberModal extends Component {
 
           <Title>Please check your mobile phone</Title>
 
-          <p style={{ marginBottom: '24px' }}>
+          <p style={{ marginBottom: '1.5em' }}>
             <span>We sent a verification code to the number </span>
             <b>
               {!unclosable
@@ -227,13 +234,17 @@ class VerifyPhoneNumberModal extends Component {
           <p>
             <span>Didn't receive a code? </span>
             {isReSending ? (
-              <span style={{ color: '#2196f3' }}>
+              <span style={{ color: primary }}>
                 <i className="fa fa-spin fa-spinner" /> Sending...
               </span>
             ) : (
-              <TextButton onClick={this.handleReSendCode} disabled={isVerify}>
+              <LinkButton
+                appearance="link"
+                onClick={this.handleReSendCode}
+                disabled={isVerify}
+              >
                 Send a new code
-              </TextButton>
+              </LinkButton>
             )}
           </p>
 
@@ -242,11 +253,12 @@ class VerifyPhoneNumberModal extends Component {
               <span>Still experiencing issues? </span>
               <IntercomTriger
                 render={({ activeIntercom }) => (
-                  <TextButton
+                  <LinkButton
+                    appearance="link"
                     onClick={() => this.handleIntercomTrigger(activeIntercom)}
                   >
                     Contact Support
-                  </TextButton>
+                  </LinkButton>
                 )}
               />
             </p>

@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import IconNav from '../../SvgIcons/NavMenu/IconNav'
-import Tooltip from '../../tooltip'
 
-import { Container } from './styled'
+import Tooltip from '../../tooltip'
+import Button from '../../Button/IconButton'
+import IconNav from '../../SvgIcons/NavMenu/IconNav'
 
 const propTypes = {
   onClick: PropTypes.func.isRequired,
@@ -15,11 +15,11 @@ const defaultProps = {
 }
 
 export const Trigger = ({ onClick, tooltip }) => (
-  <Container>
-    <Tooltip caption={tooltip} placement="bottom">
-      <IconNav onClick={onClick} style={{ marginRight: '1em' }} />
-    </Tooltip>
-  </Container>
+  <Tooltip caption={tooltip} placement="bottom">
+    <Button onClick={onClick} style={{ marginRight: '1em' }} isFit>
+      <IconNav />
+    </Button>
+  </Tooltip>
 )
 
 Trigger.propTypes = propTypes

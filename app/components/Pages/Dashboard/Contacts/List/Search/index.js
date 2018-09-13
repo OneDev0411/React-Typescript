@@ -5,6 +5,7 @@ import Search from '../../../../../../views/components/Grid/Search'
 
 const SearchContainer = styled.div`
   margin-bottom: 40px;
+  padding: 0 1em;
 `
 
 let persistentSearchInput = ''
@@ -22,11 +23,10 @@ export class SearchContacts extends React.Component {
           disableOnSearch={false}
           showLoadingOnSearch
           isSearching={this.props.isSearching}
-          placeholder="Search all contacts…"
+          placeholder="Search"
           onChange={this.handleSearch}
           debounceTime={500}
           minimumLength={1}
-          // /
           defaultValue={persistentSearchInput}
           onClearSearch={this.handleSearch}
         />

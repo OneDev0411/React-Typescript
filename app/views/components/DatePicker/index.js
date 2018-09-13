@@ -5,7 +5,8 @@ import fecha from 'fecha'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import Toolbar from './Toolbar'
 
-import { Container, TodayButton } from './styled'
+import ActionButton from '../Button/ActionButton'
+import { Container } from './styled'
 
 const initialState = {
   currentDate: new Date()
@@ -108,14 +109,15 @@ export default class DatePicker extends React.Component {
             />
           )}
         />
-        <TodayButton
-          inverse
+        <ActionButton
+          isBlock
+          appearance="outline"
           onClick={this.handleToday}
           data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
           data-balloon-pos="down"
         >
           Today
-        </TodayButton>
+        </ActionButton>
       </Container>
     )
   }

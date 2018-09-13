@@ -8,7 +8,8 @@ export function searchContacts(
   filter,
   start = 0,
   limit = 50,
-  searchInputValue
+  searchInputValue,
+  order = '-created_at'
 ) {
   return async dispatch => {
     if (start === 0) {
@@ -22,7 +23,7 @@ export function searchContacts(
         ...defaultQuery,
         start,
         limit,
-        order: '-created_at'
+        order
       })
 
       dispatch({

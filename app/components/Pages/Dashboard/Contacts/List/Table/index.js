@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import Table from '../../../../../../views/components/Grid/Table'
 
-import DropDown from './columns/Dropdown'
+import Menu from './columns/Menu'
 import TagsString from './columns/Tags'
 import Name from './columns/Name'
 import { LastTouchedCell } from './columns/LastTouched'
@@ -14,6 +14,7 @@ import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
 import ChangeStageContacts from '../Actions/ChangeStageContacts'
 import ShareListing from '../Actions/ShareListing'
+import SortContacts from '../Actions/SortContacts'
 
 import TagsOverlay from '../../components/TagsOverlay'
 
@@ -29,10 +30,6 @@ class ContactsList extends React.Component {
     this.setState({ selectedTagContact: [selectedTagContact] })
 
   closeTagsOverlay = () => this.setState({ selectedTagContact: [] })
-
-  openContact = id => {
-    goTo(`/dashboard/contacts/${id}`, 'All Contacts')
-  }
 
   columns = [
     {
@@ -82,9 +79,9 @@ class ContactsList extends React.Component {
       header: '',
       accessor: '',
       className: 'td--dropdown-container',
-      width: '30px',
+      width: '24px',
       render: ({ rowData: contact }) => (
-        <DropDown
+        <Menu
           contactId={contact.id}
           handleOnDelete={this.props.onRequestDelete}
         />
@@ -92,7 +89,7 @@ class ContactsList extends React.Component {
     }
   ]
 
-  actions = [
+  leftActions = [
     {
       render: ({ selectedRows }) => (
         <ExportContacts
@@ -143,7 +140,7 @@ class ContactsList extends React.Component {
     }
   ]
 
-  getGridTrProps = (rowIndex, { original: row, isSelected }) => {
+  getGridTrProps = (rowIndex, { isSelected }) => {
     if (this.props.isRowsUpdating && isSelected) {
       return {
         style: {
@@ -156,26 +153,22 @@ class ContactsList extends React.Component {
     return {}
   }
 
-  getGridTdProps = (colIndex, { column, rowData: row }) => {
-    if (['plugin--selectable', 'delete-contact'].includes(column.id)) {
-      return {
-        onClick: e => e.stopPropagation()
-      }
+  rightActions = [
+    {
+      render: () => (
+        <SortContacts
+          isFetching={this.props.isFetching}
+          handleChangeOrder={this.props.handleChangeOrder}
+        />
+      )
     }
-
-    return {
-      style: {
-        cursor: 'pointer'
-      },
-      onClick: () => this.openContact(row.id)
-    }
-  }
+  ]
 
   render() {
     const selectedRowsCount = this.props.selectedRows.length
 
     return (
-      <Fragment>
+      <div style={{ padding: '0 1em' }}>
         <Table
           plugins={{
             selectable: {
@@ -188,14 +181,17 @@ class ContactsList extends React.Component {
               debounceTime: 300, // ms
               onTrigger: this.props.onRequestLoadMore
             },
-            actionable: this.actions
+            actionable: {
+              leftActions: this.leftActions,
+              rightActions: this.rightActions
+            }
           }}
           data={this.props.data}
           summary={{
             text:
               selectedRowsCount > 0
-                ? '[selectedRows] of <strong>[totalRows] Contacts</strong>'
-                : '<strong>[totalRows] Contacts</strong>',
+                ? '<strong style="color:#000;">[selectedRows]</strong> of [totalRows] contacts'
+                : '[totalRows] contacts',
             selectedRows: selectedRowsCount,
             totalRows: this.props.listInfo.total || 0
           }}
@@ -204,7 +200,6 @@ class ContactsList extends React.Component {
           columns={this.columns}
           LoadingState={LoadingComponent}
           getTrProps={this.getGridTrProps}
-          getTdProps={this.getGridTdProps}
           EmptyState={() => (
             <NoSearchResults description="Try typing another name, email, phone or tag." />
           )}
@@ -215,7 +210,7 @@ class ContactsList extends React.Component {
           isOpen={this.state.selectedTagContact.length > 0}
           closeOverlay={this.closeTagsOverlay}
         />
-      </Fragment>
+      </div>
     )
   }
 }

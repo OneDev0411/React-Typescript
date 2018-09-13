@@ -1,26 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-
-const Link = styled.a`
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-  pointerevents: ${props => (props.disabled ? 'none' : 'initial')};
-  text-decoration: none !important;
-
-  :hover {
-    color: #fff !important;
-  }
-`
-
-const Button = ActionButton.extend`
-  opacity: ${props => (props.disabled ? 0.7 : 1)};
-
-  :hover,
-  :hover a {
-    color: #fff !important;
-  }
-`
+import LinkButton from '../../../../../../views/components/Button/LinkButton'
 
 export default ({ exportIds, disabled, filters }) => {
   let url = '/api/contacts/export/outlook'
@@ -35,14 +15,17 @@ export default ({ exportIds, disabled, filters }) => {
 
   return (
     <OverlayTrigger
-      placement="bottom"
+      placement="top"
       overlay={<Tooltip id="tooltip">Export contacts to a CSV file</Tooltip>}
     >
-      <Button inverse disabled={disabled} style={{ padding: '0.70em 1.5em' }}>
-        <Link href={url} disabled={disabled}>
-          Export to CSV
-        </Link>
-      </Button>
+      <LinkButton
+        appearance="outline"
+        disabled={disabled}
+        size="small"
+        to={url}
+      >
+        Export to CSV
+      </LinkButton>
     </OverlayTrigger>
   )
 }

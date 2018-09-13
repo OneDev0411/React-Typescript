@@ -3,6 +3,7 @@ import cn from 'classnames'
 import RadioButton from '../../../../../views/components/radio'
 import { getStatusColorClass } from '../../../../../utils/listing'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+import { H2 } from 'components/Typography/headings'
 
 export default ({
   isRequired,
@@ -22,11 +23,11 @@ export default ({
 
   return (
     <div className="form-section deal-status">
-      <div className={cn('hero', { hasError })}>
+      <H2 className={cn('hero', { hasError })}>
         What is the status of the deal?{' '}
         {isRequired && <span className="required">*</span>}
         {hasError && <RequiredIcon />}
-      </div>
+      </H2>
 
       {statuses.map((name, key) => (
         <div key={key} className="deal-radio-row">

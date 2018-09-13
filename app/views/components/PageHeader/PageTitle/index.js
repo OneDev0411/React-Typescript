@@ -8,7 +8,7 @@ import IconButton from '../../Button/IconButton'
 import BackIcon from '../../SvgIcons/KeyboardArrowLeft/IconKeyboardArrowLeft'
 import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 
-import { Title } from './styled'
+import { H1 } from '../../Typography/headings'
 import { goTo } from '../../../../utils/go-to'
 
 PageTitle.propTypes = {
@@ -44,18 +44,18 @@ export function PageTitle(props) {
     return (
       <Flex justifyBetween style={{ width: '100%' }}>
         <Flex alignCenter>
-          {title && <Title>{title}</Title>}
+          {title && <H1>{title}</H1>}
           {!title && props.children}
         </Flex>
 
         <Flex alignCenter>
           <IconButton
-            size="32px"
-            color="#333"
-            hoverColor="#2196f3"
+            iconSize="XLarge"
+            inverse
+            isFit
             onClick={onClickCloseButton}
           >
-            <CloseIcon style={{ width: 32, height: 32 }} />
+            <CloseIcon />
           </IconButton>
         </Flex>
       </Flex>
@@ -67,15 +67,15 @@ export function PageTitle(props) {
       <Flex alignCenter>
         {props.showBackButton && (
           <IconButton
-            size="32px"
-            color="#333"
-            hoverColor="#2196f3"
+            iconSize="XLarge"
+            inverse
+            isFit
             onClick={props.onClickBackButton || handleOnBack}
           >
-            <BackIcon style={{ width: 32, height: 32 }} />
+            <BackIcon />
           </IconButton>
         )}
-        {title && <Title>{title}</Title>}
+        {title && <H1>{title}</H1>}
       </Flex>
       {props.children}
     </Flex>

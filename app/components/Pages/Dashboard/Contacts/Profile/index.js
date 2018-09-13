@@ -2,42 +2,17 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
+
 // eslint-disable-next-line
 import { getContactAddresses } from '../../../../../models/contacts/helpers'
 
 // eslint-disable-next-line
 import { selectDefinitionByName, isLoadedContactAttrDefs } from '../../../../../reducers/contacts/attributeDefs'
 
-import { Container } from '../components/Container'
-import PageHeader from '../../../../../views/components/PageHeader'
-import Catalog from './Catalog'
-import { Dates } from './Dates'
-import { LastTouched } from './LastTouched'
-import { DealsListWidget } from './Deals'
-import { Details } from './Details'
-import Tags from './Tags'
-import { ContactInfo } from './ContactInfo'
-import Addresses from './Addresses'
-import AddNote from './Add-Note'
-import Activities from './Activities'
-import Loading from '../../../../Partials/Loading'
-import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
-import Touch from '../../../../../views/CRM/touches/Touch'
-import IconTouch from '../../../../../views/components/SvgIcons/AddAlarm/IconAddAlarm'
-import IconNote from '../../../../../views/components/SvgIcons/Note/IconNote'
-import IconTodo from '../../../../../views/components/SvgIcons/Todo/IconTodo'
-import {
-  ColumnsContainer,
-  SideColumnWrapper,
-  SecondColumn,
-  ThirdColumn
-} from './styled'
-
 // eslint-disable-next-line
 import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
 
 import { getTasks } from '../../../../../models/tasks'
-import { getTouches } from '../../../../../models/crm-touches/get-touches'
 
 import {
   getContact,
@@ -48,10 +23,32 @@ import { selectContact } from '../../../../../reducers/contacts/list'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import { normalizeContact } from '../../../../../views/utils/association-normalizers'
 
+import { Container } from '../components/Container'
+import { Dates } from './Dates'
+import { DealsListWidget } from './Deals'
+import { Details } from './Details'
+import Tags from './Tags'
+import { ContactInfo } from './ContactInfo'
+import Addresses from './Addresses'
+import AddNote from './Add-Note'
+import Activities from './Activities'
+import Loading from '../../../../Partials/Loading'
+import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
+import {
+  PageContainer,
+  ColumnsContainer,
+  SideColumnWrapper,
+  SecondColumn,
+  ThirdColumn,
+  PageWrapper,
+  Card
+} from './styled'
+
+import { PageHeader } from './PageHeader'
+
 class ContactProfile extends React.Component {
   state = {
     tasks: [],
-    touches: [],
     activeTab: 'all-activities',
     isDesktopScreen: true
   }
@@ -67,11 +64,11 @@ class ContactProfile extends React.Component {
   }
 
   detectScreenSize = () => {
-    if (window.innerWidth < 1280 && this.state.isDesktopScreen) {
+    if (window.innerWidth < 1440 && this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: false })
     }
 
-    if (window.innerWidth >= 1280 && !this.state.isDesktopScreen) {
+    if (window.innerWidth >= 1440 && !this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: true })
     }
   }
@@ -84,7 +81,6 @@ class ContactProfile extends React.Component {
     }
 
     this.fetchTasks(contactId)
-    this.fetchTouches(contactId)
   }
 
   fetchTasks = async contactId => {
@@ -100,20 +96,6 @@ class ContactProfile extends React.Component {
 
     this.setState({ tasks })
   }
-
-  fetchTouches = async contactId => {
-    const query = [
-      `contact=${contactId}`,
-      'associations[]=crm_touch.associations'
-    ].join('&')
-
-    const response = await getTouches(query)
-    const { data: touches } = response
-
-    this.setState({ touches })
-  }
-
-  goBack = () => browserHistory.push('/dashboard/contacts')
 
   handleAddNote = async text => {
     const { contact, upsertContactAttributes, attributeDefs } = this.props
@@ -136,7 +118,7 @@ class ContactProfile extends React.Component {
   setNewTask = task => {
     this.setState(({ tasks }) => ({
       tasks: [task, ...tasks],
-      activeTab: 'tasks'
+      activeTab: 'event'
     }))
     this.props.getContactActivities(this.props.contact.id)
   }
@@ -175,127 +157,100 @@ class ContactProfile extends React.Component {
       contact: normalizeContact(contact)
     }
 
-    const thirdColumn = (
-      <ThirdColumn>
-        {this.state.isDesktopScreen && <LastTouched contact={contact} />}
-        <Dates contact={contact} />
-        <DealsListWidget contactId={contact.id} />
-      </ThirdColumn>
-    )
+    const thirdColumnSections = [
+      <Dates contact={contact} key="key-0" />,
+      <DealsListWidget contactId={contact.id} key="key-1" />
+    ]
 
     return (
-      <div className="profile">
-        <PageHeader title="All Contacts" backUrl="/dashboard/contacts" />
+      <PageWrapper>
+        <PageContainer>
+          <PageHeader contact={contact} />
 
-        <ColumnsContainer>
-          <SideColumnWrapper>
-            <div>
-              <Catalog contact={contact} />
+          <ColumnsContainer>
+            <SideColumnWrapper>
+              <Card>
+                <Tags contact={contact} />
+              </Card>
+              <Card>
+                <ContactInfo contact={contact} />
 
-              {!this.state.isDesktopScreen && <LastTouched contact={contact} />}
+                {hasAddress.length > 0 && <Addresses contact={contact} />}
 
-              <Tags contact={contact} />
+                <Details contact={contact} />
 
-              <ContactInfo contact={contact} />
+                {hasAddress.length === 0 && <Addresses contact={contact} />}
 
-              {hasAddress.length > 0 && <Addresses contact={contact} />}
+                {!this.state.isDesktopScreen && thirdColumnSections}
+              </Card>
+            </SideColumnWrapper>
 
-              <Details contact={contact} />
+            <SecondColumn>
+              <Tab.Container
+                id="profile-todo-tabs"
+                defaultActiveKey="event"
+                className="c-contact-profile-todo-tabs c-contact-profile-card"
+              >
+                <div>
+                  <Nav className="c-contact-profile-todo-tabs__tabs-list">
+                    <NavItem
+                      className="c-contact-profile-todo-tabs__tab"
+                      eventKey="event"
+                    >
+                      Add Event
+                    </NavItem>
 
-              {hasAddress.length === 0 && <Addresses contact={contact} />}
-            </div>
-            {!this.state.isDesktopScreen && thirdColumn}
-          </SideColumnWrapper>
+                    <NavItem
+                      className="c-contact-profile-todo-tabs__tab"
+                      eventKey="note"
+                    >
+                      Add Note
+                    </NavItem>
+                  </Nav>
 
-          <SecondColumn>
-            <Tab.Container
-              id="profile-todo-tabs"
-              defaultActiveKey="touch"
-              className="c-contact-profile-todo-tabs c-contact-profile-card"
-            >
-              <div>
-                <Nav className="c-contact-profile-todo-tabs__tabs-list">
-                  <NavItem
-                    className="c-contact-profile-todo-tabs__tab"
-                    eventKey="touch"
+                  <Tab.Content
+                    animation
+                    className="c-contact-profile-todo-tabs__pane-container"
                   >
-                    <IconTouch />
-                    <span className="c-contact-profile-todo-tabs__tab__title">
-                      Add a Touch
-                    </span>
-                    <span className="c-contact-profile-todo-tabs__tab__indicator" />
-                  </NavItem>
-                  <NavItem
-                    className="c-contact-profile-todo-tabs__tab"
-                    eventKey="note"
-                  >
-                    <IconNote />
-                    <span className="c-contact-profile-todo-tabs__tab__title">
-                      Add a Note
-                    </span>
-                    <span className="c-contact-profile-todo-tabs__tab__indicator" />
-                  </NavItem>
-                  <NavItem
-                    className="c-contact-profile-todo-tabs__tab"
-                    eventKey="task"
-                  >
-                    <IconTodo />
-                    <span className="c-contact-profile-todo-tabs__tab__title">
-                      Add a Task
-                    </span>
-                    <span className="c-contact-profile-todo-tabs__tab__indicator" />
-                  </NavItem>
-                </Nav>
+                    <Tab.Pane
+                      eventKey="event"
+                      className="c-contact-profile-todo-tabs__pane"
+                    >
+                      <NewTask
+                        submitCallback={this.setNewTask}
+                        deleteCallback={this.removeTask}
+                        defaultAssociation={defaultAssociation}
+                      />
+                    </Tab.Pane>
+                    <Tab.Pane
+                      eventKey="note"
+                      className="c-contact-profile-todo-tabs__pane"
+                    >
+                      <AddNote
+                        contact={contact}
+                        onSubmit={this.handleAddNote}
+                      />
+                    </Tab.Pane>
+                  </Tab.Content>
+                </div>
+              </Tab.Container>
 
-                <Tab.Content
-                  animation
-                  className="c-contact-profile-todo-tabs__pane-container"
-                >
-                  <Tab.Pane
-                    eventKey="touch"
-                    className="c-contact-profile-todo-tabs__pane"
-                  >
-                    <Touch
-                      defaultAssociations={[defaultAssociation]}
-                      submitCallback={() => {
-                        this.setState({ activeTab: 'touches' })
-                        this.fetchTouches(contact.id)
-                        this.props.getContactActivities(contact.id)
-                      }}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane
-                    eventKey="note"
-                    className="c-contact-profile-todo-tabs__pane"
-                  >
-                    <AddNote contact={contact} onSubmit={this.handleAddNote} />
-                  </Tab.Pane>
-                  <Tab.Pane
-                    eventKey="task"
-                    className="c-contact-profile-todo-tabs__pane"
-                  >
-                    <NewTask
-                      submitCallback={this.setNewTask}
-                      deleteCallback={this.removeTask}
-                      defaultAssociation={defaultAssociation}
-                    />
-                  </Tab.Pane>
-                </Tab.Content>
-              </div>
-            </Tab.Container>
+              <Activities
+                tasks={this.state.tasks}
+                contact={contact}
+                activeTab={activeTab}
+                onChangeTab={activeTab => this.setState({ activeTab })}
+              />
+            </SecondColumn>
 
-            <Activities
-              tasks={this.state.tasks}
-              touches={this.state.touches}
-              contact={contact}
-              activeTab={activeTab}
-              onChangeTab={activeTab => this.setState({ activeTab })}
-            />
-          </SecondColumn>
-
-          {this.state.isDesktopScreen && thirdColumn}
-        </ColumnsContainer>
-      </div>
+            {this.state.isDesktopScreen && (
+              <ThirdColumn>
+                <Card>{thirdColumnSections}</Card>
+              </ThirdColumn>
+            )}
+          </ColumnsContainer>
+        </PageContainer>
+      </PageWrapper>
     )
   }
 }

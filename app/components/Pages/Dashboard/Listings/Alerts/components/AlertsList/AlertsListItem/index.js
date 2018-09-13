@@ -23,7 +23,7 @@ const SharedWith = ({ alert }) => {
   }
 
   return (
-    <p className="c-alertList__item__shared-by san-fran">
+    <p className="c-alertList__item__shared-by">
       <span>Shared With: </span>
       {usersText}
     </p>
@@ -71,11 +71,11 @@ const AlertListItem = ({
       />
     </div>
     <div className="c-alertList__item__info">
-      <h3 className="c-alertList__item__title san-fran">
+      <h3 className="c-alertList__item__title">
         {alert.title || alert.proposed_title || 'without title'}
       </h3>
       {user.id !== alert.created_by.id && (
-        <p className="c-alertList__item__shared-by san-fran">
+        <p className="c-alertList__item__shared-by">
           <span>Shared By: </span>
           {alert.created_by.first_name}
         </p>

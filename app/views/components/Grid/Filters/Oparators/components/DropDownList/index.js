@@ -3,7 +3,6 @@ import Downshift from 'downshift'
 import _ from 'underscore'
 
 import {
-  Container,
   List,
   ListItem,
   ListItemTitle,
@@ -109,7 +108,7 @@ export class DropDownList extends React.Component {
     const { allowMultipleSelections } = this.props
 
     return (
-      <Container>
+      <div style={{ position: 'relative' }}>
         <Downshift
           isOpen={isMenuOpen}
           defaultInputValue={this.getDefaultInputValue()}
@@ -119,7 +118,7 @@ export class DropDownList extends React.Component {
         >
           {({ isOpen, getInputProps, getItemProps }) => (
             <div>
-              <ItemsContainer>
+              <ItemsContainer selectedItems={selectedItems}>
                 {allowMultipleSelections &&
                   _.map(selectedItems, (value, index) => (
                     <SelectedItem
@@ -149,7 +148,7 @@ export class DropDownList extends React.Component {
               </ItemsContainer>
 
               {isOpen && (
-                <List>
+                <List depth={3} className="u-scrollbar--thinner--self">
                   {this.getFilteredOptions(filterValue).map((item, index) => (
                     <ListItem
                       key={index}
@@ -172,7 +171,7 @@ export class DropDownList extends React.Component {
             </div>
           )}
         </Downshift>
-      </Container>
+      </div>
     )
   }
 }

@@ -23,7 +23,8 @@ import {
 import {
   Container,
   Menu,
-  Trigger
+  Trigger,
+  Content
 } from '../../../../views/components/SlideMenu'
 
 import TaskDrawer from './TaskDrawer'
@@ -32,12 +33,7 @@ import DatePicker from '../../../../views/components/DatePicker'
 
 import CalendarTable from './Table'
 
-import {
-  MenuContainer,
-  CalendarContent,
-  PageContent,
-  HeroTitle
-} from './styled'
+import { MenuContainer, GreetingTitle } from './styled'
 
 import ActionButton from '../../../../views/components/Button/ActionButton'
 
@@ -284,7 +280,7 @@ class CalendarContainer extends React.Component {
     const { user, selectedDate, isFetching } = this.props
 
     return (
-      <Container>
+      <Container isOpen={isMenuOpen}>
         <TaskDrawer
           isOpen={showCreateTaskMenu}
           selectedTask={selectedTask}
@@ -292,7 +288,7 @@ class CalendarContainer extends React.Component {
           onChangeTask={this.handleChangeTask}
         />
 
-        <Menu isOpen={isMenuOpen} width={265}>
+        <Menu isOpen={isMenuOpen} width={302}>
           <MenuContainer>
             <DatePicker
               selectedDate={selectedDate}
@@ -302,7 +298,7 @@ class CalendarContainer extends React.Component {
           </MenuContainer>
         </Menu>
 
-        <PageContent>
+        <Content>
           <PageHeader isFlat>
             <PageHeader.Title showBackButton={false}>
               <Trigger onClick={this.toggleSideMenu} />
@@ -316,8 +312,8 @@ class CalendarContainer extends React.Component {
             </PageHeader.Menu>
           </PageHeader>
 
-          <CalendarContent>
-            <HeroTitle>Hello {user.first_name}</HeroTitle>
+          <div style={{ position: 'relative' }}>
+            <GreetingTitle>Hello {user.first_name}</GreetingTitle>
 
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
@@ -332,8 +328,8 @@ class CalendarContainer extends React.Component {
                 onRef={this.onTableRef}
               />
             </div>
-          </CalendarContent>
-        </PageContent>
+          </div>
+        </Content>
       </Container>
     )
   }
@@ -352,8 +348,11 @@ function mapStateToProps({ user, calendar }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  getCalendar,
-  setDate,
-  resetCalendar
-})(CalendarContainer)
+export default connect(
+  mapStateToProps,
+  {
+    getCalendar,
+    setDate,
+    resetCalendar
+  }
+)(CalendarContainer)

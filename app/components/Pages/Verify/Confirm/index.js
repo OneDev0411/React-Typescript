@@ -7,7 +7,6 @@ import lifecycle from 'recompose/lifecycle'
 import withHandlers from 'recompose/withHandlers'
 
 import Alert from '../../Dashboard/Partials/Alert'
-import Brand from '../../../../controllers/Brand'
 import { getBrandInfo } from '../../Auth/SignIn'
 import verify from '../../../../models/verify'
 import { Spinner } from '../../../Partials/Loading'
@@ -23,7 +22,7 @@ const confirmVerify = ({
   isSubmitting,
   verifyQueryParams
 }) => {
-  const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
+  const { siteLogo, siteTitle } = getBrandInfo(brand)
 
   return (
     <div className="signin-page-wrapper">
@@ -38,7 +37,7 @@ const confirmVerify = ({
               />
             </Link>
           )}
-          <h1 className="c-auth__title din">{siteTitle}</h1>
+          <h1 className="c-auth__title">{siteTitle}</h1>
           <p className="c-auth__subticonfirmtle">Verification for</p>
           <p>
             {
@@ -53,10 +52,7 @@ const confirmVerify = ({
 
           {userMessage && (
             <div>
-              <Alert
-                {...userMessage}
-                style={{ marginBottom: '2rem', fontSize: '1.5rem' }}
-              >
+              <Alert {...userMessage} style={{ marginBottom: '1rem' }}>
                 {userMessage.text}
               </Alert>
               <div style={{ textAlign: 'center' }}>
