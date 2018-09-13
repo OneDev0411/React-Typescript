@@ -8,6 +8,7 @@ export function setTime(date, time) {
   date.setHours(Math.floor(time / 3600))
   date.setMinutes(Math.floor((time % 3600) / 60))
   date.setSeconds(0)
+  date.setMilliseconds(0)
 
   return date
 }
