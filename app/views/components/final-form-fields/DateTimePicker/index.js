@@ -1,21 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Field } from 'react-final-form'
 import DayPicker from 'react-day-picker'
-import 'react-day-picker/lib/style.css'
 
 import fecha from 'fecha'
 import ClickOutSide from 'react-click-outside'
 
-import Card from '../../../components/Card'
-import ActionButton from '../../../components/Button/ActionButton'
+import ActionButton from '../../Button/ActionButton'
+import { PickerContainer } from './styled'
 
-const formatDate = date => fecha.format(new Date(date), 'MMM D, YYYY HH:MM A')
+const formatDate = date => fecha.format(date, 'MMM D, YYYY HH:MM A')
 
 export class DateTimePicker extends React.Component {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
-    defaultSelectedDate: PropTypes.shape(),
+    defaultSelectedDate: PropTypes.instanceOf(Date),
     datePickerModifiers: PropTypes.shape()
   }
 
@@ -24,17 +22,15 @@ export class DateTimePicker extends React.Component {
     selectedDate: this.props.defaultSelectedDate || new Date()
   }
 
-  handleClose = () =>
-    this.setState({ isOpen: false }, () =>
-      this.props.onChange(this.state.selectedDate)
-    )
+  handleClose = () => this.setState({ isOpen: false })
 
   handleOpen = () => this.setState({ isOpen: true })
 
   handleSelectedDate = selectedDate => {
-    this.setState({
-      selectedDate
-    })
+    this.setState(
+      () => ({ selectedDate, isOpen: false }),
+      () => this.props.onChange(this.state.selectedDate)
+    )
   }
 
   render() {
@@ -54,23 +50,14 @@ export class DateTimePicker extends React.Component {
         <div style={{ position: 'relative' }}>
           {this.state.isOpen && (
             <ClickOutSide onClickOutside={this.handleClose}>
-              <Card
-                depth={3}
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: 3,
-                  zIndex: 1,
-                  overflow: 'hidden'
-                }}
-              >
+              <PickerContainer depth={3}>
                 <DayPicker
                   initialMonth={selectedDate}
                   selectedDays={selectedDate}
                   onDayClick={this.handleSelectedDate}
                   modifiers={this.props.datePickerModifiers}
                 />
-              </Card>
+              </PickerContainer>
             </ClickOutSide>
           )}
         </div>

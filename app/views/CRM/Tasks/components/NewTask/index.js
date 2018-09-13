@@ -26,7 +26,7 @@ import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
-import DueDate from './components/DueDate'
+import { DueDate } from './components/DueDate'
 // import Reminder from './components/Reminder'
 import { TaskType } from './components/TaskType'
 import { AssociationsCTA } from './components/AssociationsCTA'
@@ -189,51 +189,45 @@ class Task extends Component {
       <div className={cn('c-new-task', className)}>
         <LoadSaveReinitializeForm
           load={this.load}
-          validate={validate}
           postLoadFormat={task => postLoadFormat(task, defaultAssociation)}
           preSaveFormat={preSaveFormat}
           save={this.save}
-        >
-          {props => {
+          render={props => {
             const { values } = props
 
             return (
               <FormContainer onSubmit={props.handleSubmit}>
                 <Title />
-                {props.dirty && (
-                  <Flex
+                <Flex
+                  justifyBetween
+                  alignCenter
+                  style={{ marginBottom: '1.5em' }}
+                >
+                  <TaskType />
+                  <FieldContainer
                     justifyBetween
                     alignCenter
-                    style={{ marginBottom: '1.5em' }}
+                    style={{ marginLeft: '1em', flex: 2 }}
                   >
-                    <TaskType />
-                    <FieldContainer
-                      justifyBetween
-                      alignCenter
-                      style={{ marginLeft: '1em', flex: 2 }}
-                    >
-                      <DueDate selectedDate={values.dueDate} />
-                    </FieldContainer>
-                  </Flex>
-                )}
+                    <DueDate selectedDate={values.dueDate} />
+                  </FieldContainer>
+                </Flex>
                 <Flex justifyBetween alignCenter>
                   <AssociationsCTA
                     addHandler={ass => {
                       console.log(ass)
                     }}
                   />
-                  {props.dirty && (
-                    <ActionButton type="submit" disabled={isDeleting}>
-                      {props.submitting || props.validating
-                        ? 'Saving...'
-                        : 'Save'}
-                    </ActionButton>
-                  )}
+                  <ActionButton type="submit" disabled={isDeleting}>
+                    {props.submitting || props.validating
+                      ? 'Saving...'
+                      : 'Save'}
+                  </ActionButton>
                 </Flex>
               </FormContainer>
             )
           }}
-        </LoadSaveReinitializeForm>
+        />
       </div>
     )
   }
@@ -246,23 +240,3 @@ export default connect(
   null,
   { createTask, updateTask, deleteTask, notify }
 )(Task)
-
-/**
- * Fields validator
- * @param {object} values The form values
- * @returns {object} invalid fields
- */
-function validate(values) {
-  const errors = {}
-  const timeRequiredError = 'Time is required'
-
-  if (values.dueTime.value == null) {
-    errors.dueTime = timeRequiredError
-  }
-
-  if (values.reminderDate.value && values.reminderTime.value == null) {
-    errors.reminderTime = timeRequiredError
-  }
-
-  return errors
-}

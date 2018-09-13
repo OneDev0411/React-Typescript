@@ -10,15 +10,12 @@ export async function preSaveFormat(values, originalValues) {
     title,
     status,
     dueDate,
-    dueTime,
     task_type,
     description,
-    reminderDate,
-    reminderTime,
     associations
   } = values
 
-  const due_date = setTime(dueDate.value, dueTime.value) / 1000
+  const due_date = new Date(dueDate).getTime() / 1000
 
   const task = {
     title,
@@ -34,27 +31,27 @@ export async function preSaveFormat(values, originalValues) {
     task.description = description || ''
   }
 
-  if (reminderDate.value && reminderTime.value != null) {
-    const reminders = originalValues && originalValues.reminders
-    let reminder = {
-      is_relative: false,
-      timestamp: setTime(reminderDate.value, reminderTime.value) / 1000
-    }
+  // if (reminderDate.value && reminderTime.value != null) {
+  //   const reminders = originalValues && originalValues.reminders
+  //   let reminder = {
+  //     is_relative: false,
+  //     timestamp: setTime(reminderDate.value, reminderTime.value) / 1000
+  //   }
 
-    if (reminders) {
-      reminder = {
-        ...reminder,
-        id: reminders[0].id
-      }
-    }
+  //   if (reminders) {
+  //     reminder = {
+  //       ...reminder,
+  //       id: reminders[0].id
+  //     }
+  //   }
 
-    task.reminders = [reminder]
-  } else if (
-    (originalValues && originalValues.reminders == null) ||
-    (originalValues && originalValues.reminders && reminderDate.value == null)
-  ) {
-    task.reminders = []
-  }
+  //   task.reminders = [reminder]
+  // } else if (
+  //   (originalValues && originalValues.reminders == null) ||
+  //   (originalValues && originalValues.reminders && reminderDate.value == null)
+  // ) {
+  //   task.reminders = []
+  // }
 
   if (
     !originalValues &&
