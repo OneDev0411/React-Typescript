@@ -1,5 +1,4 @@
 import React from 'react'
-import fecha from 'fecha'
 import PropTypes from 'prop-types'
 import DayPicker from 'react-day-picker'
 import ClickOutSide from 'react-click-outside'
@@ -12,8 +11,7 @@ import { TimePicker } from '../TimePicker'
 import ActionButton from '../Button/ActionButton'
 
 import { PickerContainer } from './styled'
-
-const formatDate = date => fecha.format(date, 'MMM D, YYYY HH:MM A')
+import { today, formatDate, setTimeStringToDate } from './helpers'
 
 export class DateTimePicker extends React.Component {
   static propTypes = {
@@ -24,21 +22,12 @@ export class DateTimePicker extends React.Component {
 
   state = {
     isOpen: false,
-    selectedDate: this.props.defaultSelectedDate || new Date()
+    selectedDate: this.props.defaultSelectedDate || today
   }
 
   handleClose = () => this.setState({ isOpen: false })
 
   handleOpen = () => this.setState({ isOpen: true })
-
-  setTimeStringToDate = (date, time) => {
-    // [hours, minutes]
-    const timeArray = time.split(':').map(t => parseInt(t, 10))
-
-    return new Date(
-      setTime(date, 0).getTime() + timeArray[0] * 3600000 + timeArray[1] * 60000
-    )
-  }
 
   handleDate = date =>
     this.setState(state => {
@@ -50,7 +39,7 @@ export class DateTimePicker extends React.Component {
   handleTime = time =>
     this.setState(
       state => ({
-        selectedDate: this.setTimeStringToDate(state.selectedDate, time)
+        selectedDate: setTimeStringToDate(state.selectedDate, time)
       }),
       this.props.onChange(this.state.selectedDate)
     )
