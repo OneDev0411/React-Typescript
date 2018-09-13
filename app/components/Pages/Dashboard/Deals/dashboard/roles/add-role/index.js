@@ -14,14 +14,8 @@ function getItems(items) {
 class AddRole extends React.Component {
   state = {
     isFormOpen: false,
-    showRolesMenu: false,
     selectedRole: null
   }
-
-  toggleRolesMenu = () =>
-    this.setState(state => ({
-      showRolesMenu: !state.showRolesMenu
-    }))
 
   closeDrawer = () =>
     this.setState({
@@ -32,7 +26,6 @@ class AddRole extends React.Component {
   handleSelectRole = item =>
     this.setState({
       isFormOpen: true,
-      showRolesMenu: false,
       selectedRole: item.value
     })
 
