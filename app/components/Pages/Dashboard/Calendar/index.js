@@ -307,7 +307,7 @@ class CalendarContainer extends React.Component {
 
             <PageHeader.Menu>
               <ActionButton inverse onClick={this.toggleShowCreateTask}>
-                Add Task
+                Add Event
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>

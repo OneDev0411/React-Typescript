@@ -10,7 +10,7 @@ const TaskDrawer = ({ isOpen, selectedTask, onClose, onChangeTask }) => (
     showFooter={false}
     onClose={onClose}
   >
-    <OverlayDrawer.Header title={selectedTask ? 'Edit Task' : 'Add Task'} />
+    <OverlayDrawer.Header title={selectedTask ? 'Edit Event' : 'Add Event'} />
     <OverlayDrawer.Body>
       {isOpen && (
         <CreateTask
