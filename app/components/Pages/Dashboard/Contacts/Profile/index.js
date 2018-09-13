@@ -31,7 +31,6 @@ import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
 import AddNote from './Add-Note'
-import Activities from './Activities'
 import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 import {
@@ -48,8 +47,7 @@ import { PageHeader } from './PageHeader'
 
 class ContactProfile extends React.Component {
   state = {
-    tasks: [],
-    activeTab: 'all-activities',
+    // tasks: [],
     isDesktopScreen: true
   }
 
@@ -80,7 +78,7 @@ class ContactProfile extends React.Component {
       await this.props.getContact(contactId)
     }
 
-    this.fetchTasks(contactId)
+    // this.fetchTasks(contactId)
   }
 
   fetchTasks = async contactId => {
@@ -111,14 +109,11 @@ class ContactProfile extends React.Component {
     ]
 
     await upsertContactAttributes(contactId, attributes)
-
-    return this.setState({ activeTab: 'notes' })
   }
 
   setNewTask = task => {
     this.setState(({ tasks }) => ({
-      tasks: [task, ...tasks],
-      activeTab: 'event'
+      tasks: [task, ...tasks]
     }))
     this.props.getContactActivities(this.props.contact.id)
   }
@@ -150,7 +145,6 @@ class ContactProfile extends React.Component {
       )
     }
 
-    const { activeTab } = this.state
     const hasAddress = getContactAddresses(contact)
     const defaultAssociation = {
       association_type: 'contact',
@@ -234,13 +228,6 @@ class ContactProfile extends React.Component {
                   </Tab.Content>
                 </div>
               </Tab.Container>
-
-              <Activities
-                tasks={this.state.tasks}
-                contact={contact}
-                activeTab={activeTab}
-                onChangeTab={activeTab => this.setState({ activeTab })}
-              />
             </SecondColumn>
 
             {this.state.isDesktopScreen && (
