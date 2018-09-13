@@ -61,7 +61,8 @@ class BasicTable extends React.Component {
       plugins,
       EmptyState,
       LoadingState,
-      SubComponent
+      SubComponent,
+      multiple
     } = this.props
 
     if (data.length === 0 && EmptyState && !isFetching) {
@@ -88,6 +89,7 @@ class BasicTable extends React.Component {
 
           {this.Rows.map((row, rowIndex) => (
             <Row
+              multiple={multiple}
               key={row.key || rowIndex}
               firstRow={rowIndex === 0}
               lastRow={rowIndex === data.length - 1}

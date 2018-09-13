@@ -31,6 +31,13 @@ export const TBody = styled.div``
 export const Row = styled.div`
   display: flex;
   justify-items: center;
+  ${props =>
+    props.multiple &&
+    `
+  :first-child {
+    border-top: none !important;
+  }
+  `};
 `
 
 export const BodyRow = Row.extend`

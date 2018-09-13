@@ -26,7 +26,7 @@ const TableGroup = ({ group, onTableRef, SubComponent, ...rest }) => (
     innerRef={ref => onTableRef && onTableRef(group.refId, ref)}
   >
     {SubComponent && <SubComponent {...group} {...rest} />}
-    <BasicTable data={group.data} {...rest} showTableHeader={false} />
+    <BasicTable data={group.data} {...rest} showTableHeader={false} multiple />
   </div>
 )
 
