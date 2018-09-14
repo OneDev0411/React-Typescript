@@ -16,5 +16,5 @@ export function setTimeStringToDate(date, time) {
 }
 
 export function isToday(date) {
-  return setTime(date) === setTime(new Date())
+  return setTime(date).getTime() === setTime(new Date()).getTime()
 }
