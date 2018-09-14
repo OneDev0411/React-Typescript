@@ -7,6 +7,7 @@ import ShadowButton from '../../../../../../../views/components/Button/ShadowBut
 
 const TagsTextContainer = ShadowButton.extend`
   font-weight: normal;
+  text-align: left;
   :hover {
     text-decoration: underline;
   }
@@ -25,7 +26,7 @@ const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
   }
 
   _.every(tags, item => {
-    if (getShowingTags().length + item.text.length <= 23) {
+    if (getShowingTags().length + item.text.length <= 33) {
       showingTags.push(item.text)
 
       return true
