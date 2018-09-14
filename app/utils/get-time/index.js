@@ -1,13 +1,18 @@
-export const getTime = (timestamp, returnType = 'number') => {
-  if (!timestamp || Number.isNaN(timestamp)) {
-    throw new Error('Invalid timestamp')
-  }
-
-  const date = new Date(timestamp)
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
+export const getTime = (date, returnType = 'number') => {
+  let hours = date.getHours()
+  let minutes = date.getMinutes()
 
   if (returnType === 'string') {
+    if (hours > 12) {
+      hours -= 12
+    } else if (hours == 0) {
+      hours = 12
+    }
+
+    if (minutes < 10) {
+      minutes = `0${minutes}`
+    }
+
     return `${hours}:${minutes}`
   }
 

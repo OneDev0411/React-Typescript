@@ -5,10 +5,13 @@
  * @returns {number} a Date in seconds
  */
 export function setTime(date, time = 0) {
-  date.setHours(Math.floor(time / 3600))
-  date.setMinutes(Math.floor((time % 3600) / 60))
-  date.setSeconds(0)
-  date.setMilliseconds(0)
+  // prevent from overriding the reference date object
+  const _date = new Date(date)
+  
+  _date.setHours(Math.floor(time / 3600))
+  _date.setMinutes(Math.floor((time % 3600) / 60))
+  _date.setSeconds(0)
+  _date.setMilliseconds(0)
 
-  return date
+  return _date
 }
