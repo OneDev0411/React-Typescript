@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DayPicker from 'react-day-picker'
 import ClickOutSide from 'react-click-outside'
+import Flex from 'styled-flex-component'
 
 import { getTime } from '../../../utils/get-time'
 import { setTime } from '../../../utils/set-time'
@@ -69,10 +70,20 @@ export class DateTimePicker extends React.Component {
                   modifiers={this.props.datePickerModifiers}
                 />
                 <Divider marginTop="0.5em" marginBottom="0.5em" />
-                <TimePicker
-                  defaultTime={selectedDate}
-                  onChange={this.handleTime}
-                />
+                <Flex alignCenter justifyBetween>
+                  <TimePicker
+                    defaultTime={selectedDate}
+                    onChange={this.handleTime}
+                  />
+                  <ActionButton
+                    type="button"
+                    appearance="link"
+                    onClick={this.handleClose}
+                    style={{ fontWeight: 500 }}
+                  >
+                    Done
+                  </ActionButton>
+                </Flex>
               </PickerContainer>
             </ClickOutSide>
           )}
