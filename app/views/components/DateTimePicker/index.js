@@ -12,18 +12,23 @@ import { TimePicker } from '../TimePicker'
 import ActionButton from '../Button/ActionButton'
 
 import { PickerContainer } from './styled'
-import { today, formatDate, setTimeStringToDate } from './helpers'
+import { isToday, formatDate, setTimeStringToDate } from './helpers'
 
 export class DateTimePicker extends React.Component {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
-    defaultSelectedDate: PropTypes.instanceOf(Date),
-    datePickerModifiers: PropTypes.shape()
+    datePickerModifiers: PropTypes.shape(),
+    defaultSelectedDate: PropTypes.instanceOf(Date)
+  }
+
+  static defaultProps = {
+    datePickerModifiers: {},
+    defaultSelectedDate: new Date()
   }
 
   state = {
     isOpen: false,
-    selectedDate: this.props.defaultSelectedDate || today
+    selectedDate: this.props.defaultSelectedDate
   }
 
   handleClose = () => this.setState({ isOpen: false })
@@ -32,7 +37,7 @@ export class DateTimePicker extends React.Component {
 
   handleDate = date =>
     this.setState(state => {
-      const currentTime = getTime(new Date(state.selectedDate).getTime())
+      const currentTime = getTime(state.selectedDate)
 
       return { selectedDate: setTime(date, currentTime) }
     }, this.props.onChange(this.state.selectedDate))
@@ -57,7 +62,8 @@ export class DateTimePicker extends React.Component {
           onFocus={this.handleOpen}
           style={{ fontWeight: 500 }}
         >
-          {formatDate(selectedDate)}
+          {isToday(selectedDate) && <span>Today,&nbsp;</span>}
+          <span>{formatDate(selectedDate)}</span>
         </ActionButton>
         <div style={{ position: 'relative' }}>
           {this.state.isOpen && (
