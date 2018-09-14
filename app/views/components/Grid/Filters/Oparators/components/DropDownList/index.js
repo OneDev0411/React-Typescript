@@ -151,9 +151,6 @@ export class DropDownList extends React.Component {
                   ) : (
                     <IconKeyboardArrowDown />
                   )}
-                  {/* <InputIndicator
-                    className={`fa fa-caret-${isMenuOpen ? 'up' : 'down'}`}
-                  /> */}
                 </InputContainer>
               </ItemsContainer>
 
