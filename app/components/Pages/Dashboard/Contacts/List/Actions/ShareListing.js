@@ -172,7 +172,7 @@ class ShareListing extends React.Component {
           onClick={this.toggleListingModal}
           size="small"
         >
-          Marketing Center
+          Marketing
         </ActionButton>
 
         <SearchListingDrawer
