@@ -4,6 +4,7 @@ import Flex from 'styled-flex-component'
 
 import { AddContactAssociation } from '../../../../../../components/AddContactAssociations'
 import { AddListingAssociation } from '../../../../../../components/AddListingAssociations'
+import { AddDealAssociation } from '../../../../../../components/AddDealAssociation'
 
 const Container = Flex.extend`
   > div > button {
@@ -60,6 +61,7 @@ export class AssociationsCTA extends React.Component {
       <Container inline>
         <AddContactAssociation handleAdd={this.onAdd} />
         <AddListingAssociation handleAdd={this.onAdd} />
+        <AddDealAssociation handleAdd={this.onAdd} />
       </Container>
     )
   }
