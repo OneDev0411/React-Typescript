@@ -13,6 +13,8 @@ import {
   Input,
   InputIndicator
 } from './styled'
+import IconKeyboardArrowDown from '../../../../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import IconKeyboardArrowUp from '../../../../../SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 
 export class DropDownList extends React.Component {
   constructor(props) {
@@ -21,7 +23,8 @@ export class DropDownList extends React.Component {
     this.state = {
       isMenuOpen: false,
       selectedItems: this.getDefaultSelectedItem(),
-      filterValue: null
+      filterValue: null,
+      inputFocused: false
     }
   }
 
@@ -133,17 +136,24 @@ export class DropDownList extends React.Component {
                   withMargin={
                     allowMultipleSelections && _.size(selectedItems) > 0
                   }
+                  inputFocused={this.state.inputFocused}
                 >
                   <Input
                     {...getInputProps({
                       placeholder: 'Select'
                     })}
                     onClick={this.toggleMenu}
+                    onFocus={() => this.setState({ inputFocused: true })}
+                    onBlur={() => this.setState({ inputFocused: false })}
                   />
-
-                  <InputIndicator
+                  {isMenuOpen ? (
+                    <IconKeyboardArrowUp />
+                  ) : (
+                    <IconKeyboardArrowDown />
+                  )}
+                  {/* <InputIndicator
                     className={`fa fa-caret-${isMenuOpen ? 'up' : 'down'}`}
-                  />
+                  /> */}
                 </InputContainer>
               </ItemsContainer>
 

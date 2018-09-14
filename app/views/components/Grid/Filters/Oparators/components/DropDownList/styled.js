@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { blue, grey } from '../../../../../../utils/colors'
+import { blue, grey, primary } from '../../../../../../utils/colors'
 import Card from '../../../../../Card'
 
 export const List = Card.extend`
@@ -81,6 +81,15 @@ export const InputContainer = styled.div`
   min-height: 40px;
   cursor: pointer;
   margin: ${props => (props.withMargin ? '2px 4px' : '0')};
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  ${props =>
+    props.inputFocused &&
+    css`
+      border-color: ${primary};
+      caret-color: ${primary};
+    `};
 `
 
 export const Input = styled.input`
