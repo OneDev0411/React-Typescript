@@ -117,7 +117,7 @@ export const Dropdown = ({
                     ...getItemProps({
                       item,
                       isActive: highlightedIndex === index,
-                      isSelected: selectedItem === item
+                      isSelected: selectedItem.title === item.title
                     })
                   }
 

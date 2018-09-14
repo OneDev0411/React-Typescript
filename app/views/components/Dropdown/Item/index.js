@@ -6,11 +6,9 @@ export const Item = styled.div`
   cursor: pointer;
   padding: 0.5em 1em;
   white-space: nowrap;
-  font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
-  color: ${({ isActive, isSelected }) =>
-    isActive || isSelected ? '#fff' : '#000'};
-  background-color: ${({ isActive, isSelected }) =>
-    isActive || isSelected ? primary : '#fff'};
+  font-weight: ${({ isSelected }) => (isSelected ? 600 : 400)};
+  color: ${({ isActive }) => (isActive ? '#fff' : '#000')};
+  background-color: ${({ isActive }) => (isActive ? primary : '#fff')};
 
   &:hover,
   &:focus {
