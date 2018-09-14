@@ -65,7 +65,7 @@ export function normalizeContact(contact) {
       image,
       size: 32,
       borderRadius: 100,
-      placeHolderImage: '/static/images/contacts/ic_person_black_24dp_2x.png',
+      placeHolderImage: '/static/icons/contact-association-avatar.svg',
       title:
         email !== display_name && phone_number !== display_name
           ? display_name
