@@ -112,10 +112,10 @@ class ContactProfile extends React.Component {
   }
 
   setNewTask = task => {
-    this.setState(({ tasks }) => ({
-      tasks: [task, ...tasks]
-    }))
-    this.props.getContactActivities(this.props.contact.id)
+    // this.setState(({ tasks }) => ({
+    //   tasks: [task, ...tasks]
+    // }))
+    // this.props.getContactActivities(this.props.contact.id)
   }
 
   removeTask = taskId => {
