@@ -33,7 +33,7 @@ import DatePicker from '../../../../views/components/DatePicker'
 
 import CalendarTable from './Table'
 
-import { MenuContainer, GreetingTitle } from './styled'
+import { MenuContainer } from './styled'
 
 import ActionButton from '../../../../views/components/Button/ActionButton'
 
@@ -277,7 +277,7 @@ class CalendarContainer extends React.Component {
       loadingPosition,
       selectedTask
     } = this.state
-    const { user, selectedDate, isFetching } = this.props
+    const { selectedDate, isFetching } = this.props
 
     return (
       <Container isOpen={isMenuOpen}>
@@ -299,22 +299,28 @@ class CalendarContainer extends React.Component {
         </Menu>
 
         <Content>
-          <PageHeader isFlat style={{ paddingLeft: '2.5rem' }}>
+          <PageHeader
+            style={{
+              paddingBottom: '2.5rem',
+              height: 'auto',
+              margin: '0 2.5rem',
+              width: 'auto',
+              paddingRight: '0'
+            }}
+          >
             <PageHeader.Title showBackButton={false}>
               <Trigger onClick={this.toggleSideMenu} />
               <PageHeader.Heading>Calendar</PageHeader.Heading>
             </PageHeader.Title>
 
             <PageHeader.Menu>
-              <ActionButton inverse onClick={this.toggleShowCreateTask}>
+              <ActionButton onClick={this.toggleShowCreateTask}>
                 Add Event
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
 
           <div style={{ position: 'relative' }}>
-            <GreetingTitle>Hello {user.first_name}</GreetingTitle>
-
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
                 positions={LOADING_POSITIONS}
@@ -335,9 +341,8 @@ class CalendarContainer extends React.Component {
   }
 }
 
-function mapStateToProps({ user, calendar }) {
+function mapStateToProps({ calendar }) {
   return {
-    user,
     isFetching: calendar.isFetching,
     selectedDate: moment(calendar.selectedDate)
       .utcOffset(0)

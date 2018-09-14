@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-
+import { css } from 'styled-components'
 import Button from '../ActionButton'
 import {
   isOutline,
@@ -80,6 +80,11 @@ class TextIconButton extends PureComponent {
     const ExtendedButton = Button.extend`
       justify-content: ${props =>
         props.isBlock ? 'space-between' : 'initial'};
+      ${props =>
+        props.noBorder &&
+        css`
+          border: none;
+        `};
 
       > svg {
         width: ${props => getIconSize(props.size)};

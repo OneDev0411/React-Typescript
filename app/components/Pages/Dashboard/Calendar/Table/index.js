@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
 import ScrollDetector from 'react-scroll-detector'
 import moment from 'moment'
@@ -7,7 +8,7 @@ import _ from 'underscore'
 
 import { goTo } from '../../../../../utils/go-to'
 import Grid from '../../../../../views/components/Grid/Table'
-import { GridContainer, TableHeader } from './styled'
+import { GridContainer, TableHeader, Label, Indicator, Title } from './styled'
 import EmptyState from './EmptyState'
 import Fetching from './Fetching'
 
@@ -53,43 +54,32 @@ export class Table extends React.Component {
     return table
   }
 
+  time(rowData) {
+    if (rowData.object_type !== 'crm_task') {
+      return 'All day'
+    }
+
+    return moment.unix(rowData.timestamp).format('hh:mm A')
+  }
+
   get Columns() {
     return [
       {
         id: 'type',
-        header: 'Type',
-        width: '20%',
         isSortable: false,
         render: ({ rowData }) => (
-          <Fragment>
+          <Flex style={{ padding: '4px 1rem' }}>
             <EventIcon event={rowData} />
-            {rowData.type_label}
-          </Fragment>
+            <div>
+              <Title>{rowData.title}</Title>
+              <Flex>
+                {this.time(rowData)}
+                <Indicator>|</Indicator>
+                <Label>{rowData.type_label}</Label>
+              </Flex>
+            </div>
+          </Flex>
         )
-      },
-      {
-        id: 'name',
-        header: 'Name',
-        width: '30%',
-        isSortable: false,
-        accessor: 'title'
-      },
-      {
-        id: 'time',
-        header: 'Time',
-        isSortable: false,
-        render: ({ rowData }) => {
-          if (rowData.object_type !== 'crm_task') {
-            return 'All day'
-          }
-
-          return moment.unix(rowData.timestamp).format('hh:mm A')
-        }
-      },
-      {
-        id: 'menu',
-        header: '',
-        width: '10%'
       }
     ]
   }
