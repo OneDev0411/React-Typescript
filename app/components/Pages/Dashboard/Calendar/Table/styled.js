@@ -36,6 +36,6 @@ export const Label = styled.span`
 `
 
 export const Indicator = styled.div`
-  color: ${grey.A900};
+  color: ${grey.A300};
   margin: 0 0.5rem 0 0.5rem;
 `
