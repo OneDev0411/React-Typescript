@@ -11,17 +11,7 @@
  */
 export async function postLoadFormat(task, defaultAssociation) {
   let associations = []
-  let task_type = { title: 'Call', value: 'Call' }
-
-  let dueDate = new Date()
-
-  dueDate.setSeconds(0)
-  dueDate.setMilliseconds(0)
-
-  let reminder = {
-    title: 'At the time of event',
-    value: dueDate
-  }
+  const REMINDER_DEFAULT_LABEL = 'At the time of event'
 
   if (defaultAssociation) {
     associations.push(defaultAssociation)
@@ -29,10 +19,13 @@ export async function postLoadFormat(task, defaultAssociation) {
 
   if (!task) {
     return {
-      dueDate,
-      reminder,
-      task_type,
-      associations
+      associations,
+      dueDate: new Date(),
+      reminder: {
+        title: REMINDER_DEFAULT_LABEL,
+        value: REMINDER_DEFAULT_LABEL
+      },
+      task_type: { title: 'Call', value: 'Call' }
     }
   }
 

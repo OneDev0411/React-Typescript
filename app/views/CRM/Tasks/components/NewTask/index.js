@@ -194,7 +194,7 @@ class Task extends Component {
           render={props => {
             const { values } = props
 
-            console.log(values.dueDate, values.reminder.value)
+            // console.log(values.dueDate, values.reminder.value)
 
             return (
               <FormContainer onSubmit={props.handleSubmit}>

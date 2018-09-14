@@ -1,4 +1,5 @@
 // import { setTime } from '../../../../../../utils/set-time'
+import { getReminderValue } from './get-reminder-value'
 
 /**
  * Format form data for api model
@@ -10,12 +11,15 @@ export async function preSaveFormat(values, originalValues) {
     title,
     status,
     dueDate,
+    reminder,
     task_type,
     description,
     associations
   } = values
 
-  const due_date = new Date(dueDate).getTime() / 1000
+  // console.log('pre save', values.dueDate, values.reminder.value)
+
+  const due_date = dueDate.getTime() / 1000
 
   const task = {
     title,
@@ -31,27 +35,21 @@ export async function preSaveFormat(values, originalValues) {
     task.description = description || ''
   }
 
-  // if (reminderDate.value && reminderTime.value != null) {
-  //   const reminders = originalValues && originalValues.reminders
-  //   let reminder = {
-  //     is_relative: false,
-  //     timestamp: setTime(reminderDate.value, reminderTime.value) / 1000
-  //   }
+  const reminderDate = getReminderValue(reminder.value, dueDate)
 
-  //   if (reminders) {
-  //     reminder = {
-  //       ...reminder,
-  //       id: reminders[0].id
-  //     }
-  //   }
-
-  //   task.reminders = [reminder]
-  // } else if (
-  //   (originalValues && originalValues.reminders == null) ||
-  //   (originalValues && originalValues.reminders && reminderDate.value == null)
-  // ) {
-  //   task.reminders = []
-  // }
+  if (reminderDate != null) {
+    task.reminders = [
+      {
+        is_relative: false,
+        timestamp: reminderDate.getTime() / 1000
+      }
+    ]
+  } else if (
+    (originalValues && originalValues.reminders == null) ||
+    (originalValues && originalValues.reminders && reminderDate == null)
+  ) {
+    task.reminders = []
+  }
 
   if (
     !originalValues &&
