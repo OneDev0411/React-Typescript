@@ -27,14 +27,14 @@ export class Menu extends React.Component {
 
     if (this.props.onEdit) {
       items.push({
-        label: 'Edit all properties',
+        label: 'Edit',
         onClick: this.props.onEdit
       })
     }
 
     if (this.props.onAdd) {
       items.push({
-        label: 'Add a property',
+        label: 'Add Custom Field',
         onClick: this.props.onAdd
       })
     }
@@ -54,7 +54,7 @@ export class Menu extends React.Component {
         items={items}
         pullTo="right"
         buttonRenderer={props => (
-          <IconButton isFit inverse {...props}>
+          <IconButton isFit iconSize="large" inverse {...props}>
             <MenuIcon />
           </IconButton>
         )}
