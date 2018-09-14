@@ -26,7 +26,7 @@ import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
-// import Reminder from './components/Reminder'
+import { Reminder } from './components/Reminder'
 import { TaskType } from './components/TaskType'
 import { AssociationsCTA } from './components/AssociationsCTA'
 import { FormContainer, FieldContainer } from './styled'
@@ -194,6 +194,8 @@ class Task extends Component {
           render={props => {
             const { values } = props
 
+            console.log(values.dueDate, values.reminder.value)
+
             return (
               <FormContainer onSubmit={props.handleSubmit}>
                 <Title />
@@ -212,6 +214,7 @@ class Task extends Component {
                       name="dueDate"
                       selectedDate={values.dueDate}
                     />
+                    <Reminder dueDate={values.dueDate} />
                   </FieldContainer>
                 </Flex>
                 <Flex justifyBetween alignCenter>
