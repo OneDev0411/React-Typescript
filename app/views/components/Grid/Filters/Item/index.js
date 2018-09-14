@@ -62,7 +62,7 @@ export const FilterItem = props => {
                 {operator && operator.name}&nbsp;
                 {getCurrentValues(isActive, values)}
               </ItemTitle>
-              <RemoveButton iconSize="large" inverse onClick={onRemove}>
+              <RemoveButton inverse onClick={onRemove}>
                 <IconRemove />
               </RemoveButton>
             </TitleContainer>
