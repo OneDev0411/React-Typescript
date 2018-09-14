@@ -7,7 +7,7 @@ export const PageWrapper = styled.div`
 `
 
 export const PageContainer = styled.div`
-  max-width: 1440px;
+  max-width: 1680px;
   margin: 0 auto;
 `
 
@@ -37,8 +37,8 @@ export const SideColumnWrapper = styled.div`
     flex-direction: column;
   }
 
-  /* 1440px */
-  @media (min-width: 90em) {
+  /* 1681px */
+  @media (min-width: 105.0625em) {
     width: 25%;
     display: block;
   }
@@ -50,14 +50,14 @@ export const SecondColumn = styled.div`
     margin-left: 1em;
   }
 
-  @media (min-width: 90em) {
+  @media (min-width: 105.0625em) {
     margin: 0 1em;
     width: calc(50% - 2em);
   }
 `
 
 export const ThirdColumn = styled.div`
-  @media (min-width: 90em) {
+  @media (min-width: 105.0625em) {
     width: 25%;
   }
 `
