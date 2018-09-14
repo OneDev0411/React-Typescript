@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import Avatar from '../../../../../../components/Avatar'
 import Button from '../../../../../../components/Button/IconButton'
+import { ShadowLink } from '../../../../../../components/ShadowLink'
 import CloseIcon from '../../../../../../components/SvgIcons/Close/CloseIcon'
 
 import { Container, Title, Details } from './styled'
@@ -16,6 +17,7 @@ export class AssociationItem extends Component {
   onRemove = () => {
     this.props.handleRemove(this.props.record.id)
   }
+
   render() {
     const { record, removable } = this.props
 
@@ -26,14 +28,15 @@ export class AssociationItem extends Component {
           <Title>{record.title}</Title>
           <Details>{record.details}</Details>
         </div>
-        {/* {removable && <ShadowLink href={record.url} target="_blank" />} */}
+        {removable && <ShadowLink href={record.url} target="_blank" />}
         {removable && (
           <Button
             isFit
             inverse
             type="button"
             iconSize="large"
-            onClick={this.handleRemove}
+            onClick={this.onRemove}
+            style={{ marginLeft: '0.75em' }}
           >
             <CloseIcon />
           </Button>

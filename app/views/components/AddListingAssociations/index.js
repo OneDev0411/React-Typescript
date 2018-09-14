@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Tooltip from '../tooltip'
 import Button from '../Button/IconButton'
 import { AddAssociation } from '../AddAssociation'
-import SearchListingsModal from '../SearchListing'
+import SearchListingsDrawer from '../SearchListingDrawer'
 import Icon from '../SvgIcons/Properties/IconProperties'
 import { normalizeListing } from '../../utils/association-normalizers'
 
@@ -13,8 +13,8 @@ export class AddListingAssociation extends React.Component {
     handleAdd: PropTypes.func.isRequired
   }
 
-  add = (contact, callback) =>
-    this.props.handleAdd(normalizeListing(contact), callback)
+  onSelectHandler = (contact, closeHandler) =>
+    this.props.handleAdd(normalizeListing(contact), closeHandler)
 
   render() {
     const title = 'Attach Listing'
@@ -24,15 +24,24 @@ export class AddListingAssociation extends React.Component {
         render={({ isActive, handleClose, handleOpen }) => (
           <div>
             <Tooltip placement="bottom" caption={title}>
-              <Button isFit iconSize="large" inverse onClick={handleOpen}>
+              <Button
+                isFit
+                inverse
+                type="button"
+                iconSize="large"
+                onClick={handleOpen}
+              >
                 <Icon />
               </Button>
             </Tooltip>
-            <SearchListingsModal
-              show={isActive}
-              modalTitle={title}
-              onHide={handleClose}
-              onSelectListing={listing => this.add(listing, handleClose)}
+            <SearchListingsDrawer
+              isOpen={isActive}
+              compact={false}
+              title={title}
+              onClose={handleClose}
+              onSelectListing={listing =>
+                this.onSelectHandler(listing, handleClose)
+              }
             />
           </div>
         )}

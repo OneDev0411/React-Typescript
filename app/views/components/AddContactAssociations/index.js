@@ -25,7 +25,13 @@ export class AddContactAssociation extends React.Component {
         render={({ isActive, handleClose, handleOpen }) => (
           <div>
             <Tooltip placement="bottom" caption={title}>
-              <Button isFit iconSize="large" inverse onClick={handleOpen}>
+              <Button
+                isFit
+                inverse
+                type="button"
+                iconSize="large"
+                onClick={handleOpen}
+              >
                 <Icon />
               </Button>
             </Tooltip>

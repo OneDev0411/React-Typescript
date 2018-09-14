@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
 import Flex from 'styled-flex-component'
+import { Field } from 'react-final-form'
 
 import { getTask } from '../../../../../models/tasks/get-task'
 import {
@@ -225,15 +226,19 @@ class Task extends Component {
                 </Flex>
                 <AssociationsList
                   associations={values.associations}
-                  handleCreate={this.handleCreateAssociation}
-                  handleDelete={this.handleDeleteAssociation}
                   defaultAssociation={defaultAssociation}
+                  handleDelete={this.handleDeleteAssociation}
                 />
                 <Flex justifyBetween alignCenter>
-                  <AssociationsCTA
-                    addHandler={ass => {
-                      console.log(ass)
-                    }}
+                  <Field
+                    name="associations"
+                    render={({ input }) => (
+                      <AssociationsCTA
+                        associations={values.associations}
+                        handleCreate={this.handleCreateAssociation}
+                        onChange={input.onChange}
+                      />
+                    )}
                   />
                   <ActionButton type="submit" disabled={isDeleting}>
                     {props.submitting || props.validating
