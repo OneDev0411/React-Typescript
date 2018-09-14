@@ -299,7 +299,7 @@ class CalendarContainer extends React.Component {
         </Menu>
 
         <Content>
-          <PageHeader isFlat>
+          <PageHeader isFlat style={{ paddingLeft: '2.5rem' }}>
             <PageHeader.Title showBackButton={false}>
               <Trigger onClick={this.toggleSideMenu} />
               <PageHeader.Heading>Calendar</PageHeader.Heading>

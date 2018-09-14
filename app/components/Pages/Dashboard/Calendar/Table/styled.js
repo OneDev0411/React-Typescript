@@ -5,7 +5,7 @@ import { grey, primary } from '../../../../../views/utils/colors'
 export const GridContainer = styled.div`
   min-height: calc(100vh - 137px);
   max-height: calc(100vh - 137px);
-  padding: 1em;
+  padding: 2.5em;
   overflow: auto;
 `
 

@@ -12,6 +12,6 @@ export const MenuContainer = styled.div`
 `
 
 export const GreetingTitle = H2.extend`
-  padding: 0 2rem 1rem 1rem;
+  padding: 0 2rem 1rem 2.5rem;
   border-bottom: 1px solid ${borderColor};
 `
