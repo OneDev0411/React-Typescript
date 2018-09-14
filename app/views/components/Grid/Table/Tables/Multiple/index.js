@@ -23,10 +23,10 @@ const MultipleTable = ({ data, ...rest }) => (
 const TableGroup = ({ group, onTableRef, SubComponent, ...rest }) => (
   <div
     data-refid={group.refId}
-    innerRef={ref => onTableRef && onTableRef(group.refId, ref)}
+    ref={ref => onTableRef && onTableRef(group.refId, ref)}
   >
     {SubComponent && <SubComponent {...group} {...rest} />}
-    <BasicTable data={group.data} {...rest} showTableHeader={false} />
+    <BasicTable data={group.data} {...rest} showTableHeader={false} multiple />
   </div>
 )
 

@@ -5,7 +5,7 @@ import Search from '../../../../../../views/components/Grid/Search'
 
 const SearchContainer = styled.div`
   margin-bottom: 40px;
-  padding: 0 1em;
+  padding: 0 2.5em;
 `
 
 let persistentSearchInput = ''

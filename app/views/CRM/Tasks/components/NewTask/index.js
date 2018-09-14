@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
 import Flex from 'styled-flex-component'
@@ -72,7 +73,11 @@ class Task extends Component {
 
         return task
       } catch (error) {
-        return null
+        console.log(error)
+
+        if (error.status === 404) {
+          browserHistory.push('/404')
+        }
       }
     }
 

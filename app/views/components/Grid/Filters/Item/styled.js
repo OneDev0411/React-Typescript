@@ -48,7 +48,7 @@ export const Container = Flex.extend`
 export const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 1em;
+  padding: 0 0.5em;
 `
 
 export const ItemTitle = styled.div`

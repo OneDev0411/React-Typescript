@@ -32,7 +32,13 @@ const ContactsListName = ({ contact, attributeDefs }) => {
       />
       <Link
         to={`/dashboard/contacts/${contact.id}`}
-        style={{ fontWeight: 500, marginLeft: '16px', padding: 0 }}
+        style={{
+          fontWeight: 500,
+          marginLeft: '16px',
+          padding: 0,
+          display: 'flex',
+          alignItems: 'flex-start'
+        }}
       >
         {contact.display_name}
       </Link>

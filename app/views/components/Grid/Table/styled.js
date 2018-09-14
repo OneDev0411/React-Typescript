@@ -31,6 +31,13 @@ export const TBody = styled.div``
 export const Row = styled.div`
   display: flex;
   justify-items: center;
+  ${props =>
+    props.multiple &&
+    `
+  :first-child {
+    border-top: none !important;
+  }
+  `};
 `
 
 export const BodyRow = Row.extend`
@@ -50,7 +57,7 @@ export const BodyRow = Row.extend`
 `
 
 export const Cell = styled.div`
-  align-self: ${props => props.verticalAlign || 'center'};
+  align-self: ${props => props.verticalAlign || 'flex-start'};
   text-align: left;
 
   ${props =>

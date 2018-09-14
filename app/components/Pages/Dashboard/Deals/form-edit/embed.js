@@ -1,7 +1,9 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
-import Frame from 'views/components/Deals/EmbedFormEdit'
-import IconDocument from 'views/components/SvgIcons/Document/IconDocument'
+
+import Frame from '../../../../../views/components/Deals/EmbedFormEdit'
+import IconDocument from '../../../../../views/components/SvgIcons/Document/IconDocument'
+import RadioWithState from '../../../../../views/components/radio/RadioWithState'
 import ActionButton from 'components/Button/ActionButton'
 import TextIconButton from 'components/Button/TextIconButton'
 import { H1 } from 'components/Typography/headings'
@@ -22,13 +24,21 @@ export default ({
   onClose,
   handleOpenPreview,
   onFrameRef,
-  onReceiveMessage
+  onReceiveMessage,
+  onChangeNotifyOffice
 }) => (
   <div className="deal-edit-form">
     <div className="header">
       <H1>{task.title}</H1>
 
       <div>
+        {loaded && (
+          <span style={{ marginRight: '10px' }}>
+            <RadioWithState square onClick={onChangeNotifyOffice} />
+            Notify Office
+          </span>
+        )}
+
         {loaded && (
           <TextIconButton
             appearance="outline"
@@ -37,7 +47,6 @@ export default ({
             text="Preview PDF"
           />
         )}
-
         {saving || !loaded ? (
           <span style={{ marginRight: '20px' }}>
             <i className="fa fa-spin fa-spinner" />&nbsp;

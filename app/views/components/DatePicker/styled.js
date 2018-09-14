@@ -20,8 +20,8 @@ export const Container = styled.div`
 
   .DayPicker-Day {
     padding: 0 !important;
-    min-width: 27px !important;
-    max-width: 27px !important;
+    width: 29px !important;
+    height: 29px !important;
   }
 
   .DayPicker-wrapper:focus,
@@ -46,7 +46,6 @@ export const Container = styled.div`
     background-color: ${grey.A500} !important;
   }
 
-  .DayPicker .DayPicker-Day:hover,
   .DayPicker .DayPicker-Day--outside:hover {
     background-color: transparent !important;
   }

@@ -781,9 +781,7 @@ const ListingDesktopView = ({
           <CarouselItem key={`gallery-image-${gallery_image_url[0]}${i}`}>
             <div
               style={S(
-                `w-100p h-500
-                pull-left text-center
-                bg-efefef bg-cover bg-center bg-url(${gallery_image_url})`
+                `w-100p h-500 pull-left text-center bg-efefef bg-cover bg-center bg-url(${gallery_image_url})`
               )}
             />
           </CarouselItem>

@@ -1,5 +1,4 @@
 import * as actionTypes from '../../constants/notifications'
-import _ from 'underscore'
 
 export const notifications = (state = { info: {}, data: [] }, action) => {
   switch (action.type) {
@@ -14,6 +13,26 @@ export const notifications = (state = { info: {}, data: [] }, action) => {
         ...action.response,
         isFetching: false
       }
+    case actionTypes.RECEIVED_A_NOTIFICATION: {
+      // Sometimes there is a duplicate socket
+      if (
+        !state.data.some(
+          notification => notification.id === action.notification.id
+        )
+      ) {
+        return {
+          ...state,
+          data: [action.notification, ...state.data],
+          info: {
+            count: state.info.count + 1,
+            total: state.info.total + 1,
+            new: state.info.new + 1
+          }
+        }
+      }
+
+      return state
+    }
     case actionTypes.DELETE_NOTIFICATIONS_SUCCESS:
       return {
         ...state,

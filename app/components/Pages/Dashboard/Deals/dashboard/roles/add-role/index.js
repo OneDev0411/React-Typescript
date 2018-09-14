@@ -13,19 +13,19 @@ function getItems(items) {
 
 class AddRole extends React.Component {
   state = {
-    isModalOpen: false,
+    isFormOpen: false,
     selectedRole: null
   }
 
-  closeModal = () =>
+  closeDrawer = () =>
     this.setState({
-      isModalOpen: false,
+      isFormOpen: false,
       selectedRole: null
     })
 
   handleSelectRole = item =>
     this.setState({
-      isModalOpen: true,
+      isFormOpen: true,
       selectedRole: item.value
     })
 
@@ -66,8 +66,9 @@ class AddRole extends React.Component {
   itemToString = item => item.label
 
   render() {
-    const { isModalOpen, selectedRole } = this.state
-    const { deal, allowedRoles } = this.props
+    const { deal } = this.props
+    const { isFormOpen, selectedRole } = this.state
+    const allowedRoles = this.AllowedRoles
 
     return (
       <div className="create-new-role">
@@ -78,18 +79,21 @@ class AddRole extends React.Component {
           onChange={this.handleSelectRole}
           buttonIcon={AddIcon}
           buttonText="Add a Contact"
-          disabled={allowedRoles && allowedRoles.length === 0}
+          disabled={allowedRoles && allowedRoles.length > 0}
         />
 
-        <RoleAgentIntegration
-          deal={deal}
-          allowedRoles={this.AllowedRoles}
-          isDoubleEnded={this.isDoubleEnded}
-          isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(selectedRole)}
-          isOpen={isModalOpen}
-          modalTitle="Add to Deal"
-          onHide={this.closeModal}
-        />
+        {isFormOpen && (
+          <RoleAgentIntegration
+            deal={deal}
+            allowedRoles={allowedRoles}
+            isDoubleEnded={this.isDoubleEnded}
+            isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
+              selectedRole
+            )}
+            modalTitle="Add to Deal"
+            onHide={this.closeDrawer}
+          />
+        )}
       </div>
     )
   }

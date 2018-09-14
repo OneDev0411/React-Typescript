@@ -35,9 +35,7 @@ class CreateOffer extends React.Component {
   constructor(props) {
     super(props)
 
-    const { deal } = props
-
-    const dealHasPrimaryOffer = DealContext.getHasActiveOffer(deal)
+    const dealHasPrimaryOffer = DealContext.getHasActiveOffer(props.deal)
 
     this.state = {
       dealHasPrimaryOffer,
@@ -204,7 +202,7 @@ class CreateOffer extends React.Component {
       _.each(referrals, referral => roles.push(_.omit(referral, 'id')))
     }
 
-    return roles.filter(role => role.readOnly !== true)
+    return roles.filter(role => role.isEditable !== false)
   }
 
   getBuyerNames() {
