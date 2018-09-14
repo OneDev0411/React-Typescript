@@ -301,9 +301,11 @@ class CalendarContainer extends React.Component {
         <Content>
           <PageHeader
             style={{
-              paddingLeft: '2.5rem',
               paddingBottom: '2.5rem',
-              height: 'auto'
+              height: 'auto',
+              margin: '0 2.5rem',
+              width: 'auto',
+              paddingRight: '0'
             }}
           >
             <PageHeader.Title showBackButton={false}>
