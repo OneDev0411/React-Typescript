@@ -16,19 +16,18 @@ import { isToday, formatDate, setTimeStringToDate } from './helpers'
 
 export class DateTimePicker extends React.Component {
   static propTypes = {
-    onChange: PropTypes.func.isRequired,
     datePickerModifiers: PropTypes.shape(),
-    defaultSelectedDate: PropTypes.instanceOf(Date)
+    onChange: PropTypes.func.isRequired,
+    selectedDate: PropTypes.instanceOf(Date)
   }
 
   static defaultProps = {
     datePickerModifiers: {},
-    defaultSelectedDate: new Date()
+    selectedDate: new Date()
   }
 
   state = {
-    isOpen: false,
-    selectedDate: this.props.defaultSelectedDate
+    isOpen: false
   }
 
   handleClose = () => this.setState({ isOpen: false })
@@ -36,22 +35,13 @@ export class DateTimePicker extends React.Component {
   handleOpen = () => this.setState({ isOpen: true })
 
   handleDate = date =>
-    this.setState(state => {
-      const currentTime = getTime(state.selectedDate)
-
-      return { selectedDate: setTime(date, currentTime) }
-    }, this.props.onChange(this.state.selectedDate))
+    this.props.onChange(setTime(date, getTime(this.props.selectedDate)))
 
   handleTime = time =>
-    this.setState(
-      state => ({
-        selectedDate: setTimeStringToDate(state.selectedDate, time)
-      }),
-      this.props.onChange(this.state.selectedDate)
-    )
+    this.props.onChange(setTimeStringToDate(this.props.selectedDate, time))
 
   render() {
-    const { selectedDate } = this.state
+    const { selectedDate } = this.props
 
     return (
       <div style={this.props.style}>

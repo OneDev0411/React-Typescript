@@ -20,7 +20,7 @@ export function DateTimeField(props) {
       render={fieldProps => (
         <DateTimePicker
           onChange={fieldProps.input.onChange}
-          defaultSelectedDate={props.selectedDate}
+          selectedDate={props.selectedDate}
         />
       )}
     />
