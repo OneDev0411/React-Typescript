@@ -11,7 +11,6 @@ export const FormContainer = styled.form`
 
   /* &:hover {
     cursor: pointer;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   } */
 `
 export const FieldContainer = Flex.extend`

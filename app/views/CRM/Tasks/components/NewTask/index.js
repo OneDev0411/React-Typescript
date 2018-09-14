@@ -104,7 +104,7 @@ class Task extends Component {
       notify({
         status: 'success',
         dismissAfter: 4000,
-        title: `Task ${action}.`,
+        title: `Event ${action}.`,
         message: `${task.title}`
       })
 
@@ -206,29 +206,33 @@ class Task extends Component {
             return (
               <FormContainer onSubmit={props.handleSubmit}>
                 <Title />
-                <Flex
-                  justifyBetween
-                  alignCenter
-                  style={{ marginBottom: '1.5em' }}
-                >
-                  <TaskType />
-                  <FieldContainer
-                    justifyBetween
-                    alignCenter
-                    style={{ marginLeft: '1em', flex: 2 }}
-                  >
-                    <DateTimeField
-                      name="dueDate"
-                      selectedDate={values.dueDate}
+                {values.title && (
+                  <React.Fragment>
+                    <Flex
+                      justifyBetween
+                      alignCenter
+                      style={{ marginBottom: '1.5em' }}
+                    >
+                      <TaskType />
+                      <FieldContainer
+                        justifyBetween
+                        alignCenter
+                        style={{ marginLeft: '1em', flex: 2 }}
+                      >
+                        <DateTimeField
+                          name="dueDate"
+                          selectedDate={values.dueDate}
+                        />
+                        <Reminder dueDate={values.dueDate} />
+                      </FieldContainer>
+                    </Flex>
+                    <AssociationsList
+                      associations={values.associations}
+                      defaultAssociation={defaultAssociation}
+                      handleDelete={this.handleDeleteAssociation}
                     />
-                    <Reminder dueDate={values.dueDate} />
-                  </FieldContainer>
-                </Flex>
-                <AssociationsList
-                  associations={values.associations}
-                  defaultAssociation={defaultAssociation}
-                  handleDelete={this.handleDeleteAssociation}
-                />
+                  </React.Fragment>
+                )}
                 <Flex justifyBetween alignCenter>
                   <Field
                     name="associations"
@@ -240,11 +244,13 @@ class Task extends Component {
                       />
                     )}
                   />
-                  <ActionButton type="submit" disabled={isDeleting}>
-                    {props.submitting || props.validating
-                      ? 'Saving...'
-                      : 'Save'}
-                  </ActionButton>
+                  {values.title && (
+                    <ActionButton type="submit" disabled={isDeleting}>
+                      {props.submitting || props.validating
+                        ? 'Saving...'
+                        : 'Save'}
+                    </ActionButton>
+                  )}
                 </Flex>
               </FormContainer>
             )
