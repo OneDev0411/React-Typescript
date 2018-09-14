@@ -7,12 +7,15 @@ import { Container } from './styled'
 export class TimePicker extends React.Component {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
-    defaultSelectedDate: PropTypes.instanceOf(Date),
-    datePickerModifiers: PropTypes.shape()
+    defaultTime: PropTypes.instanceOf(Date)
+  }
+
+  static defaultProps = {
+    defaultTime: new Date()
   }
 
   state = {
-    time: this.props.defaultTime || new Date()
+    time: this.props.defaultTime
   }
 
   onChangeHandler = time => {
@@ -25,8 +28,8 @@ export class TimePicker extends React.Component {
         <ReactTimePicker
           disableClock
           clearIcon={null}
-          onChange={this.onChangeHandler}
           value={this.state.time}
+          onChange={this.onChangeHandler}
         />
       </Container>
     )
