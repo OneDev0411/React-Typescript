@@ -4,7 +4,8 @@ import styled from 'styled-components'
 const Image = styled.img`
   width: 16px;
   height: 16px;
-  margin-right: 12px;
+  margin-right: 1rem;
+  margin-top: 8px;
 `
 
 const getIcon = name => (

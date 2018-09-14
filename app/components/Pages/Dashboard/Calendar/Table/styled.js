@@ -23,6 +23,19 @@ export const TableHeader = styled.div`
   position: sticky;
   top: 32px;
   font-weight: ${props => (props.isSelectedDay ? 600 : 400)};
-  background-color: ${props => (props.isSelectedDay ? primary : grey.A100)};
-  color: ${props => (props.isSelectedDay ? '#fff' : '#000')};
+  background-color: ${props => (props.isSelectedDay ? '#eef0f5' : grey.A100)};
+  color: ${props => (props.isSelectedDay ? primary : '#000')};
+`
+
+export const Title = styled.div`
+  font-size: 1.25rem;
+  font-weight: 500;
+`
+export const Label = styled.span`
+  color: ${grey.A900};
+`
+
+export const Indicator = styled.div`
+  color: ${grey.A900};
+  margin: 0 0.5rem 0 0.5rem;
 `

@@ -33,7 +33,7 @@ import DatePicker from '../../../../views/components/DatePicker'
 
 import CalendarTable from './Table'
 
-import { MenuContainer, GreetingTitle } from './styled'
+import { MenuContainer } from './styled'
 
 import ActionButton from '../../../../views/components/Button/ActionButton'
 
@@ -299,22 +299,22 @@ class CalendarContainer extends React.Component {
         </Menu>
 
         <Content>
-          <PageHeader isFlat style={{ paddingLeft: '2.5rem' }}>
+          <PageHeader
+            style={{ paddingLeft: '2.5rem', paddingBottom: '2.5rem' }}
+          >
             <PageHeader.Title showBackButton={false}>
               <Trigger onClick={this.toggleSideMenu} />
               <PageHeader.Heading>Calendar</PageHeader.Heading>
             </PageHeader.Title>
 
             <PageHeader.Menu>
-              <ActionButton inverse onClick={this.toggleShowCreateTask}>
+              <ActionButton onClick={this.toggleShowCreateTask}>
                 Add Event
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
 
           <div style={{ position: 'relative' }}>
-            <GreetingTitle>Hello {user.first_name}</GreetingTitle>
-
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
                 positions={LOADING_POSITIONS}
