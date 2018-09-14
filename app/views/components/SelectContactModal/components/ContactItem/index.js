@@ -7,7 +7,7 @@ import Avatar from '../../../Avatar'
 const Container = styled.div`
   height: 48px;
   display: flex;
-  padding: 8px 2rem;
+  padding: 0.5em 1rem;
   background-color: ${props => (props.isHighlighted ? '#f5f5f5' : '#fff')};
 
   &:hover {
@@ -40,7 +40,7 @@ function ContactItem(props) {
       </div>
       <div style={{ paddingLeft: '1em' }}>
         <Title>{title}</Title>
-        <div style={{ color: '#8696a4' }}>{summary}</div>
+        <div style={{ color: '#7f7f7f' }}>{summary}</div>
       </div>
     </Container>
   )

@@ -14,7 +14,7 @@ import { normalizeContactAttribute } from '../../../../../store_actions/contacts
 const ContactsListContainer = styled.div`
   position: relative;
   height: calc(100vh - 172px);
-  padding: 2rem 0;
+  padding: 1rem 0;
   overflow-x: hidden;
   overflow-y: scroll;
 
@@ -121,11 +121,11 @@ class Body extends Component {
         itemToString={this.handleItemToString}
         defaultInputValue={defaultInputValue}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
-          <div style={{ paddingTop: '2rem' }} className="u-scrollbar--thinner">
+          <div style={{ paddingTop: '1em' }} className="u-scrollbar--thinner">
             {!this.props.isSearchDisabled && (
-              <div style={{ padding: '0 2rem' }}>
+              <div style={{ padding: '0 1em' }}>
                 <SearchInput
-                  style={{ marginBottom: '12px' }}
+                  style={{ marginBottom: '1em' }}
                   inputProps={{
                     ...getInputProps({
                       onChange: this.handleOnChange,
