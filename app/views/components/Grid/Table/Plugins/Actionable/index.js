@@ -18,6 +18,7 @@ export class ActionablePlugin {
   }
 
   renderLeftActions = () =>
+    this.leftActions &&
     this.leftActions.map((action, index) =>
       this.renderAction({
         ...action,
@@ -26,6 +27,7 @@ export class ActionablePlugin {
     )
 
   renderRightActions = () =>
+    this.rightActions &&
     this.rightActions.map((action, index) =>
       this.renderAction({
         ...action,
