@@ -37,7 +37,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           marginLeft: '16px',
           padding: 0,
           display: 'flex',
-          alignItems: 'center'
+          alignItems: 'flex-start'
         }}
       >
         {contact.display_name}
