@@ -37,3 +37,5 @@ export class CloseButton extends React.Component {
     )
   }
 }
+
+// todo - refactor its name to PageCloseButton

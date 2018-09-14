@@ -2,79 +2,29 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
-import Association from '../../../CRMTaskAssociation'
-import AddContactAssociation from '../../../../../../components/AddContactAssociations'
-import AddListingAssociation from '../../../../../../components/AddListingAssociations'
+import { AssociationItem } from '../AssocationItem'
 
-const propTypes = {
+AssociationsList.propTypes = {
   associations: PropTypes.arrayOf(PropTypes.shape()),
-  handleCreate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
   defaultAssociation: PropTypes.shape()
 }
 
-const defaultProps = {
+AssociationsList.defaultProps = {
   associations: []
 }
 
-function Associations({
+export function AssociationsList({
   associations,
-  handleCreate,
   handleDelete,
   defaultAssociation
 }) {
   return (
-    <div className="c-new-task__associations">
-      <div style={{ paddingTop: '0.5em', marginBottom: '1em' }}>
-        Associated Records
-      </div>
+    <div>
       <Field
         name="associations"
         id="new-task__associations"
         render={({ input }) => {
-          const addHandler = async (object = {}, handleClose) => {
-            const { type } = object
-
-            if (!type) {
-              return
-            }
-
-            const isDuplicate = associations.some(
-              association =>
-                association[type] && association[type].id === object.id
-            )
-
-            if (!isDuplicate) {
-              let nextAssociations
-
-              const newAssociation = await handleCreate({
-                [type]: object.id,
-                association_type: type
-              })
-
-              if (newAssociation) {
-                nextAssociations = [
-                  ...associations,
-                  {
-                    ...newAssociation,
-                    [type]: object
-                  }
-                ]
-              } else {
-                nextAssociations = [
-                  ...associations,
-                  {
-                    [type]: object,
-                    association_type: type
-                  }
-                ]
-              }
-
-              input.onChange(nextAssociations)
-              handleClose()
-            }
-          }
-
           const removeHandler = async association => {
             let newAssociations
 
@@ -126,7 +76,7 @@ function Associations({
                   const record = association[association.association_type]
 
                   return (
-                    <Association
+                    <AssociationItem
                       record={record}
                       key={record.id || record.title}
                       removable={removable(record.id)}
@@ -135,10 +85,6 @@ function Associations({
                   )
                 })}
               </div>
-              <div style={{ display: 'flex', marginBottom: '1em' }}>
-                <AddContactAssociation handleAdd={addHandler} />
-                <AddListingAssociation handleAdd={addHandler} />
-              </div>
             </Fragment>
           )
         }}
@@ -146,8 +92,3 @@ function Associations({
     </div>
   )
 }
-
-Associations.propTypes = propTypes
-Associations.defaultProps = defaultProps
-
-export default Associations

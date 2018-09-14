@@ -30,6 +30,7 @@ import { Title } from './components/Title'
 import { Reminder } from './components/Reminder'
 import { TaskType } from './components/TaskType'
 import { AssociationsCTA } from './components/AssociationsCTA'
+import { AssociationsList } from './components/AssociationsList'
 import { FormContainer, FieldContainer } from './styled'
 
 const propTypes = {
@@ -222,6 +223,12 @@ class Task extends Component {
                     <Reminder dueDate={values.dueDate} />
                   </FieldContainer>
                 </Flex>
+                <AssociationsList
+                  associations={values.associations}
+                  handleCreate={this.handleCreateAssociation}
+                  handleDelete={this.handleDeleteAssociation}
+                  defaultAssociation={defaultAssociation}
+                />
                 <Flex justifyBetween alignCenter>
                   <AssociationsCTA
                     addHandler={ass => {
