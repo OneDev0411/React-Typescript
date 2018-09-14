@@ -21,7 +21,8 @@ export const BasicDropdown = ({
   itemRenderer,
   defaultSelectedItem,
   menuStyle = {},
-  isBlock = true
+  isBlock = true,
+  noBorder = false
 }) => (
   <Downshift
     onChange={onChange}
@@ -45,6 +46,7 @@ export const BasicDropdown = ({
               isBlock,
               isOpen: downshift.isOpen,
               size: buttonSize,
+              noBorder,
               text:
                 buttonText ||
                 (downshift.selectedItem && downshift.selectedItem.label)

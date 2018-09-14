@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Container } from './styled'
 import { BasicDropdown } from '../../BasicDropdown'
+import TextIconButton from '../../Button/TextIconButton'
 
 function itemToString(item) {
   return item.label
@@ -42,6 +43,7 @@ class YearMonthList extends React.Component {
     return (
       <Container className="DayPicker-Caption">
         <BasicDropdown
+          noBorder
           isBlock={false}
           buttonSize="small"
           defaultSelectedItem={Months[this.defaultMonth]}
@@ -54,6 +56,7 @@ class YearMonthList extends React.Component {
           }}
         />
         <BasicDropdown
+          noBorder
           isBlock={false}
           buttonSize="small"
           defaultSelectedItem={Years[this.defaultYear]}
