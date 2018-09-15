@@ -34,7 +34,9 @@ function FormRole(props) {
               annotations={annotations}
               value={text}
               maxFontSize={20}
+              isReadOnly={annotationContext.readonly === true}
               onClick={() =>
+                annotationContext.readonly !== true &&
                 props.onClick('Role', {
                   contextType: 'Role',
                   annotations,

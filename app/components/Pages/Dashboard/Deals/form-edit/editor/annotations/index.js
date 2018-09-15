@@ -3,6 +3,7 @@ import _ from 'underscore'
 import styled from 'styled-components'
 
 import importPdfJs from '../../../../../../../utils/import-pdf-js'
+import uuid from 'utils/uuid'
 
 import FormInputs from './form-inputs'
 import FormContexts from './form-contexts'
@@ -109,7 +110,7 @@ export default class Annotations extends React.Component {
     }
 
     return {
-      group: Symbol(''),
+      group: uuid(),
       order: 0,
       ...calculated,
       annotation

@@ -3,21 +3,18 @@ import { connect } from 'react-redux'
 // import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
-import {
-  saveSubmission,
-  getDeal,
-  getForms
-} from '../../../../../store_actions/deals'
+import { saveSubmission, getDeal, getForms } from 'actions/deals'
 
+import { getSubmissionForm } from 'models/Deal/submission'
 import { LoadingDealContainer } from './styled'
 
-import PageHeader from '../../../../../views/components/PageHeader'
-import ActionButton from '../../../../../views/components/Button/ActionButton'
-import Spinner from '../../../../../views/components/Spinner'
+import PageHeader from 'components/PageHeader'
+import ActionButton from 'components/Button/ActionButton'
+import Spinner from 'components/Spinner'
 
 import PDFEdit from './editor'
 
-import importPdfJs from '../../../../../utils/import-pdf-js'
+import importPdfJs from 'utils/import-pdf-js'
 import config from '../../../../../../config/public'
 
 class EditDigitalForm extends React.Component {
@@ -59,7 +56,11 @@ class EditDigitalForm extends React.Component {
     const form = forms[task.form]
     const pdfUrl = task.submission
       ? task.submission.file.url
-      : `${config.forms.url}/${form.id}.pdf`
+      : `${config.forms.url}/api/pdf/download/${form.id}.pdf`
+
+    // const pdfUrl = 'http://localhost:8080/static/2672324.pdf'
+
+    await this.loadFormData(task)
 
     const pdfDocument = await PDFJS.getDocument(pdfUrl)
 
@@ -68,6 +69,23 @@ class EditDigitalForm extends React.Component {
       pdfUrl,
       pdfDocument
     })
+  }
+
+  loadFormData = async task => {
+    if (!task.submission) {
+      return false
+    }
+
+    try {
+      const formData = await getSubmissionForm(
+        task.id,
+        task.submission.last_revision
+      )
+
+      this.values = formData.values
+    } catch (e) {
+      console.log('Can not fetch form data - ', e)
+    }
   }
 
   changeFormValue = (name, value) => {
