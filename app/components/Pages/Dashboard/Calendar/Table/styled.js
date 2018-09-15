@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { grey, primary } from '../../../../../views/utils/colors'
+import ALink from '../../../../../views/components/ALink'
 
 export const GridContainer = styled.div`
   min-height: calc(100vh - 137px);
@@ -21,13 +22,13 @@ export const TableHeader = styled.div`
   font-size: 17px;
   font-weight: 600;
   position: sticky;
-  top: 32px;
+  top: 10px;
   font-weight: ${props => (props.isSelectedDay ? 600 : 400)};
   background-color: ${props => (props.isSelectedDay ? '#eef0f5' : grey.A100)};
   color: ${props => (props.isSelectedDay ? primary : '#000')};
 `
 
-export const Title = styled.div`
+export const Title = ALink.extend`
   font-size: 1.25rem;
   font-weight: 500;
 `
