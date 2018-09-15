@@ -56,7 +56,7 @@ class EditDigitalForm extends React.Component {
     const form = forms[task.form]
     const pdfUrl = task.submission
       ? task.submission.file.url
-      : `${config.forms.url}/api/pdf/download/${form.id}.pdf`
+      : `${config.forms.url}/${form.id}.pdf`
 
     // const pdfUrl = 'http://localhost:8080/static/2672324.pdf'
 
