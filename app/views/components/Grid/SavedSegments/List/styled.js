@@ -4,7 +4,7 @@ import { blue } from '../../../../utils/colors'
 import IconButton from '../../../../../views/components/Button/IconButton'
 
 export const Container = styled.div`
-  padding: 12px 16px;
+  padding: 2.5rem 1rem;
 `
 
 export const ListTitle = styled.div`
