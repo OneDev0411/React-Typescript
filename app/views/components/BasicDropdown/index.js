@@ -22,7 +22,8 @@ export const BasicDropdown = ({
   defaultSelectedItem,
   menuStyle = {},
   isBlock = true,
-  noBorder = false
+  noBorder = false,
+  maxHeight = 200
 }) => (
   <Downshift
     onChange={onChange}
@@ -57,7 +58,7 @@ export const BasicDropdown = ({
           <Card
             depth={3}
             style={{
-              maxHeight: 200,
+              maxHeight,
               minWidth: fullWidth ? '100%' : 'auto',
               position: 'absolute',
               left: pullTo !== 'right' ? 0 : 'auto',
