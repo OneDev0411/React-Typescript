@@ -32,6 +32,7 @@ export const Dropdown = ({
   style,
   onSelect,
   fullWidth,
+  fullHeight,
   hasSearch,
   id: buttonId,
   itemToString = item => item.title,
@@ -88,7 +89,7 @@ export const Dropdown = ({
               <Card
                 depth={3}
                 style={{
-                  maxHeight: 200,
+                  maxHeight: fullHeight ? 'auto' : '200px',
                   width: fullWidth ? '100%' : 'auto',
                   position: 'absolute',
                   left: 0,
