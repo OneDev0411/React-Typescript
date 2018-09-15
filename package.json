@@ -194,6 +194,7 @@
     "text-mask-addons": "^3.7.2",
     "timeago.js": "^3.0.2",
     "underscore": "^1.9.1",
+    "underscore.get": "^0.2.9",
     "universal-cookie": "^2.2.0",
     "validator": "^9.2.0",
     "webpack": "^3.12.0",

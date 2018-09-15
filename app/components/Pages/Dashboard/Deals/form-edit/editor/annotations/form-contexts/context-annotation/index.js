@@ -16,11 +16,13 @@ const Container = styled.div`
   top: ${props => props.rect.top}px;
   width: ${props => props.rect.width}px;
   height: ${props => props.rect.height}px;
-  border: 1px dotted green;
-  cursor: pointer;
+  border: ${props => (props.readOnly ? 'none' : '1px dotted green')};
+  cursor: ${props => (props.readOnly ? 'auto' : 'pointer')};
+  background-color: ${props => (props.readOnly ? '#eee' : '#fff')};
 
   :hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: ${props =>
+      props.readOnly ? 'transparent' : 'rgba(0, 0, 0, 0.1)'};
   }
 `
 
@@ -61,6 +63,7 @@ export default class Context extends React.Component {
             color={appearance.color}
             rect={rect}
             innerRef={ref => (this.container = ref)}
+            readOnly={this.props.isReadOnly}
             onClick={() =>
               this.props.onClick(this.container.getBoundingClientRect())
             }

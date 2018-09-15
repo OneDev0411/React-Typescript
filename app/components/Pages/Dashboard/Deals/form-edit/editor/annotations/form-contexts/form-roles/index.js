@@ -10,13 +10,12 @@ function FormRoles(props) {
     <Fragment>
       {_.map(props.roles, (list, roleName) => {
         const info = props.roles[roleName]
-
         const groups = _.groupBy(info, 'group')
 
         return _.map(groups, (group, groupIndex) => {
           const annotationContext = groups[groupIndex][0]
-
           const annotations = groups[groupIndex].map(info => info.annotation)
+
           const text = getRolesText(
             props.dealsRoles,
             props.deal,
@@ -30,7 +29,9 @@ function FormRoles(props) {
               annotations={annotations}
               value={text}
               maxFontSize={20}
+              readOnly={annotationContext.isReadOnly}
               onClick={() =>
+                annotationContext.readonly !== true &&
                 props.onClick('Role', {
                   contextType: 'Roles',
                   annotations,
