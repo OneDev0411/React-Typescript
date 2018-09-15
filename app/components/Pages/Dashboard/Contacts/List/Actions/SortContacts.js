@@ -18,7 +18,7 @@ function itemToString(item) {
 
 const SortContacts = ({ handleChangeOrder, isFetching }) => (
   <BasicDropdown
-    maxHeight="auto"
+    maxHeight="unset"
     noBorder
     buttonSize="small"
     disabled={isFetching}
