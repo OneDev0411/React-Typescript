@@ -65,6 +65,7 @@ export function TaskType() {
         <Dropdown
           input={input}
           items={ITEMS}
+          fullHeight
           buttonRenderer={props => (
             <Button {...props}>
               {props.value}
