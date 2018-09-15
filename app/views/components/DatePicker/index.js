@@ -110,6 +110,7 @@ export default class DatePicker extends React.Component {
           )}
         />
         <ActionButton
+          size="small"
           isBlock
           appearance="outline"
           onClick={this.handleToday}
