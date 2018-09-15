@@ -6,7 +6,9 @@ async function fetchContactActivities(contactId = '') {
   }
 
   try {
-    const response = await new Fetch().get(`/contacts/${contactId}/timeline`)
+    const response = await new Fetch()
+      .get(`/contacts/${contactId}/timeline`)
+      .query({ 'associations[]': 'crm_task.reminders' })
 
     return response.body.data
   } catch (error) {

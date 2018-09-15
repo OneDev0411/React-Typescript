@@ -65,7 +65,7 @@ export class DateTimePicker extends React.Component {
                   onDayClick={this.handleDate}
                   modifiers={this.props.datePickerModifiers}
                 />
-                <Divider marginTop="0.5em" marginBottom="0.5em" />
+                <Divider margin="0.5em 0" />
                 <Flex alignCenter justifyBetween>
                   <TimePicker
                     defaultTime={selectedDate}

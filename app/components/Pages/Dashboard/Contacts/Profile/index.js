@@ -12,7 +12,7 @@ import { selectDefinitionByName, isLoadedContactAttrDefs } from '../../../../../
 // eslint-disable-next-line
 import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
 
-import { getTasks } from '../../../../../models/tasks'
+// import { getTasks } from '../../../../../models/tasks'
 
 import {
   getContact,
@@ -44,10 +44,11 @@ import {
 } from './styled'
 
 import { PageHeader } from './PageHeader'
+import Timeline from './Timeline'
 
 class ContactProfile extends React.Component {
   state = {
-    // tasks: [],
+    tasks: [],
     isDesktopScreen: true
   }
 
@@ -81,19 +82,19 @@ class ContactProfile extends React.Component {
     // this.fetchTasks(contactId)
   }
 
-  fetchTasks = async contactId => {
-    const query = [
-      'order=-updated_at',
-      `contact=${contactId}`,
-      'associations[]=crm_task.reminders',
-      'associations[]=crm_task.associations'
-    ].join('&')
+  // fetchTasks = async contactId => {
+  //   const query = [
+  //     'order=-updated_at',
+  //     `contact=${contactId}`,
+  //     'associations[]=crm_task.reminders',
+  //     'associations[]=crm_task.associations'
+  //   ].join('&')
 
-    const response = await getTasks(query)
-    const { data: tasks } = response
+  //   const response = await getTasks(query)
+  //   const { data: tasks } = response
 
-    this.setState({ tasks })
-  }
+  //   this.setState({ tasks })
+  // }
 
   handleAddNote = async text => {
     const { contact, upsertContactAttributes, attributeDefs } = this.props
@@ -228,6 +229,7 @@ class ContactProfile extends React.Component {
                   </Tab.Content>
                 </div>
               </Tab.Container>
+              <Timeline contact={contact} />
             </SecondColumn>
 
             {this.state.isDesktopScreen && (

@@ -11,7 +11,7 @@ import { Container, Title, Details } from './styled'
 export class AssociationItem extends Component {
   static propTypes = {
     record: PropTypes.shape().isRequired,
-    handleRemove: PropTypes.func.isRequired
+    handleRemove: PropTypes.func
   }
 
   onRemove = () => {

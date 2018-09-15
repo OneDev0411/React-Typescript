@@ -9,6 +9,7 @@ export const blue = {
 }
 
 export const grey = {
+  A000: '#fafafa',
   A100: '#f2f2f2',
   A150: '#f8f8f8',
   A200: '#eaeaea',
