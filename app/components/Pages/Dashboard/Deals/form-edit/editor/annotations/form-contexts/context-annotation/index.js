@@ -18,7 +18,6 @@ const Container = styled.div`
   height: ${props => props.rect.height}px;
   border: ${props => (props.readOnly ? 'none' : '1px dotted green')};
   cursor: ${props => (props.readOnly ? 'auto' : 'pointer')};
-  background-color: ${props => (props.readOnly ? '#eee' : '#fff')};
 
   :hover {
     background-color: ${props =>

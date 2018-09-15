@@ -62,7 +62,11 @@ class EditDigitalForm extends React.Component {
 
     await this.loadFormData(task)
 
-    const pdfDocument = await PDFJS.getDocument(pdfUrl)
+    const pdfDocument = await PDFJS.getDocument({
+      url: pdfUrl,
+      renderInteractiveForms: false,
+      disableFontFace: true
+    })
 
     this.setState({
       isFormLoaded: true,

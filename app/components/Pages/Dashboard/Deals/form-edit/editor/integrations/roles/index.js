@@ -9,6 +9,10 @@ import { getAnnotationsValues } from '../../../utils/word-wrap'
 
 class RolesDrawer extends React.Component {
   onClose = () => {
+    if (!this.props.selectedAnnotation) {
+      return false
+    }
+
     const { data } = this.props.selectedAnnotation
     const { roleName, annotations, annotationContext, contextType } = data
 

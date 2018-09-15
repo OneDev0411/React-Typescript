@@ -12,6 +12,7 @@ export async function getById(id) {
       .query({ 'associations[]': ['deal.checklists'] })
       .query({ 'associations[]': ['deal.envelopes'] })
       .query({ 'associations[]': ['deal.files'] })
+      .query({ 'associations[]': ['user.agent'] })
       .query({ 'associations[]': ['agent.office'] })
 
     return response.body.data
