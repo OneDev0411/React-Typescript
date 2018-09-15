@@ -106,11 +106,7 @@ class CRMTaskItem extends React.Component {
           />
           <Flex column style={{ width: 'calc(100% - 40px)' }}>
             <Title>{task.title}</Title>
-            <Description>
-              We spoke about home types he likes. He mentioned, single-family
-              homes that are modern, ideally mid-modern century architecture.
-              1,500 sqft to 3,000 sqft. Must have backyard and a 2 carport.
-            </Description>
+            {task.description && <Description>{task.description}</Description>}
           </Flex>
         </Flex>
         <Flex wrap>

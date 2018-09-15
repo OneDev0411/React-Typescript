@@ -111,18 +111,16 @@ export default class DatePicker extends React.Component {
             />
           )}
         />
-        {this.props.showTodayButton && (
-          <ActionButton
-            isBlock
-            type="button"
-            appearance="outline"
-            onClick={this.handleToday}
-            data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
-            data-balloon-pos="down"
-          >
-            Today
-          </ActionButton>
-        )}
+        <ActionButton
+          size="small"
+          isBlock
+          appearance="outline"
+          onClick={this.handleToday}
+          data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
+          data-balloon-pos="down"
+        >
+          Today
+        </ActionButton>
       </Container>
     )
   }

@@ -17,7 +17,6 @@ const IconAdd = Icon.extend`
 const AddItem = Button.extend`
   padding: 0;
   margin-right: 16px;
-  font-weight: 500;
 
   &:hover > svg {
     fill: ${blue.A200};

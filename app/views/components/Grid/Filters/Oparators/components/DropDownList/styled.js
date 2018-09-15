@@ -21,12 +21,6 @@ export const ListItemTitle = styled.div`
   white-space: nowrap;
 `
 
-export const ListItemIconContainer = styled.div`
-  width: 5%;
-  text-align: right;
-  color: ${blue.A100};
-`
-
 export const ListItem = styled.div`
   display: flex;
   width: 100%;
@@ -37,14 +31,14 @@ export const ListItem = styled.div`
   color: #262626;
   font-size: 16px;
   cursor: pointer;
-  font-weight: ${props => (props.isSelected ? 500 : 400)};
+  ${props =>
+    props.isSelected &&
+    css`
+      color: ${primary};
+    `};
 
   :hover {
-    background-color: ${blue.A100};
-    color: #fff;
-  }
-
-  :hover ${ListItemIconContainer} {
+    background-color: ${primary};
     color: #fff;
   }
 `
@@ -60,7 +54,7 @@ export const SelectedItem = styled.span`
   line-height: 24px;
   border-radius: 3px;
   color: #fff;
-  background-color: ${blue.A100};
+  background-color: ${primary};
 
   &:hover {
     background-color: ${blue.A200};
@@ -84,6 +78,7 @@ export const InputContainer = styled.div`
   display: flex;
   align-items: center;
   background-color: #ffffff;
+  padding-right: 0.5rem;
   ${props =>
     props.inputFocused &&
     css`
@@ -102,11 +97,4 @@ export const Input = styled.input`
   &:focus {
     outline: none;
   }
-`
-
-export const InputIndicator = styled.i`
-  position: absolute;
-  right: 10px;
-  top: 12px;
-  color: #000;
 `
