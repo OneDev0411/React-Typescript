@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import Table from '../../../../../../views/components/Grid/Table'
 
 import Menu from './columns/Menu'
@@ -20,7 +20,6 @@ import TagsOverlay from '../../components/TagsOverlay'
 
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
-import { goTo } from '../../../../../../utils/go-to'
 import { TruncatedColumn } from './styled'
 
 class ContactsList extends React.Component {
