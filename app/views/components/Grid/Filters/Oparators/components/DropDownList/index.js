@@ -7,11 +7,9 @@ import {
   ListItem,
   ListItemTitle,
   SelectedItem,
-  ListItemIconContainer,
   ItemsContainer,
   InputContainer,
-  Input,
-  InputIndicator
+  Input
 } from './styled'
 import IconKeyboardArrowDown from '../../../../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import IconKeyboardArrowUp from '../../../../../SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
@@ -166,11 +164,6 @@ export class DropDownList extends React.Component {
                       })}
                     >
                       <ListItemTitle>{item}</ListItemTitle>
-                      <ListItemIconContainer>
-                        {this.isItemSelected(item) && (
-                          <i className="fa fa-check" />
-                        )}
-                      </ListItemIconContainer>
                     </ListItem>
                   ))}
                 </List>
