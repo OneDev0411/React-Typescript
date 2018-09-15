@@ -2,7 +2,9 @@ import React from 'react'
 
 import { DropDownList } from './components/DropDownList'
 import { TextInput } from './components/TextInput'
-import { Container, Operator, Input, Title } from './styled'
+import { Container, Operator, Title, InputContainer } from './styled'
+import IconSelectedRadio from '../../../SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
+import IconUnSelectedRadio from '../../../SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
 
 export class FilterOperators extends React.Component {
   constructor(props) {
@@ -80,14 +82,14 @@ export class FilterOperators extends React.Component {
       <Container>
         {allowedOperators.map((item, index) => (
           <Operator key={index} onClick={() => this.onOperatorChange(item)}>
-            <Input
-              type="radio"
-              name="operator"
-              onChange={() => null}
-              value={item.name}
-              checked={selectedOperator && selectedOperator.name === item.name}
-            />
-            <Title>{item.name}</Title>
+            <InputContainer>
+              {selectedOperator && selectedOperator.name === item.name ? (
+                <IconSelectedRadio />
+              ) : (
+                <IconUnSelectedRadio />
+              )}
+              <Title>{item.name}</Title>
+            </InputContainer>
             <div>
               {selectedOperator &&
                 selectedOperator.name === item.name &&
