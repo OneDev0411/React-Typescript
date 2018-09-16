@@ -6,11 +6,13 @@ import { addNotification as notify } from 'reapop'
 import { saveSubmission, getDeal, getForms } from 'actions/deals'
 
 import { getSubmissionForm } from 'models/Deal/submission'
+import { getFormSize } from 'models/Deal/form'
 import { LoadingDealContainer } from './styled'
 
 import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
 import Spinner from 'components/Spinner'
+import ProgressBar from 'components/ProgressBar'
 
 import PDFEdit from './editor'
 
@@ -22,7 +24,8 @@ class EditDigitalForm extends React.Component {
     isFormLoaded: false,
     isSaving: false,
     pdfDocument: null,
-    pdfUrl: ''
+    pdfUrl: '',
+    downloadPercents: 0
   }
 
   componentDidMount() {
@@ -58,20 +61,35 @@ class EditDigitalForm extends React.Component {
       ? task.submission.file.url
       : `${config.forms.url}/${form.id}.pdf`
 
-    // const pdfUrl = 'http://localhost:8080/static/2672324.pdf'
+    // get form size in bytes, because pdfjs sucks
+    const formSize = await getFormSize(form.id)
 
+    const pdfDocument = PDFJS.getDocument({
+      url: pdfUrl,
+      renderInteractiveForms: false,
+      length: formSize
+    })
+
+    pdfDocument.onProgress = progress => {
+      if (!progress.total) {
+        return false
+      }
+
+      this.setState({
+        downloadPercents: (progress.loaded / progress.total) * 100
+      })
+    }
+
+    // load form saved data
     await this.loadFormData(task)
 
-    const pdfDocument = await PDFJS.getDocument({
-      url: pdfUrl,
-      renderInteractiveForms: false
-    })
-
-    this.setState({
-      isFormLoaded: true,
-      pdfUrl,
-      pdfDocument
-    })
+    pdfDocument.then(document =>
+      this.setState({
+        isFormLoaded: true,
+        pdfUrl,
+        pdfDocument: document
+      })
+    )
   }
 
   loadFormData = async task => {
@@ -163,8 +181,8 @@ class EditDigitalForm extends React.Component {
     if (!pdfDocument) {
       return (
         <LoadingDealContainer>
-          <Spinner />
           Loading Digital Form
+          <ProgressBar percents={this.state.downloadPercents} />
         </LoadingDealContainer>
       )
     }
