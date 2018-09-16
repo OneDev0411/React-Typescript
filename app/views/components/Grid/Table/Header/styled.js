@@ -10,13 +10,4 @@ export const HeaderRow = Row.extend``
 
 export const HeaderCell = Cell.extend`
   align-self: center;
-
-  ${props =>
-    props.isSortable &&
-    `
-    cursor: pointer;
-    :hover {
-      opacity: 0.8;
-    }
-  `};
 `

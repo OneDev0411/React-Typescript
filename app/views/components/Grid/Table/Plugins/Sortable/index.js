@@ -1,4 +1,7 @@
+import React from 'react'
 import _ from 'underscore'
+
+import { BasicDropdown } from 'components/BasicDropdown'
 
 export class SortablePlugin {
   constructor({ options, onRequestForceUpdate }) {
@@ -44,12 +47,8 @@ export class SortablePlugin {
     return accessor.toString().toLowerCase()
   }
 
-  changeSort = cell => {
-    this.isAscendingSort = !(
-      this.isAscendingSort &&
-      this.sortBy &&
-      this.sortBy.id === cell.id
-    )
+  changeSort = (cell, isAscending) => {
+    this.isAscendingSort = isAscending
     this.sortBy = cell
 
     this.onRequestForceUpdate()
@@ -70,4 +69,55 @@ export class SortablePlugin {
       resolveAccessor
     })
   }
+
+  getSortableColumns = columns => {
+    const list = []
+
+    if (Array.isArray(this.options.columns)) {
+      return this.options.columns
+    }
+
+    columns.forEach(col => {
+      if (col.sortable === false || !col.header) {
+        return false
+      }
+
+      list.push(
+        {
+          column: col,
+          label: `${col.header} A-Z`,
+          value: col.id,
+          ascending: true
+        },
+        {
+          column: col,
+          label: `${col.header} Z-A`,
+          value: `-${col.id}`,
+          ascending: false
+        }
+      )
+    })
+
+    return list
+  }
+
+  render = (columns, isFetching) => (
+    <BasicDropdown
+      maxHeight={400}
+      noBorder
+      buttonSize="small"
+      buttonText="Sort by"
+      disabled={isFetching}
+      items={this.getSortableColumns(columns)}
+      itemToString={item => item.label}
+      onChange={item => {
+        if (this.options.onChange) {
+          return this.options.onChange(item)
+        }
+
+        this.changeSort(item.column, item.ascending)
+      }}
+      menuStyle={{ right: 0, left: 'auto' }}
+    />
+  )
 }

@@ -5,10 +5,6 @@ import { Header, HeaderRow, HeaderCell } from './styled'
 
 import SortIndicator from '../Plugins/Sortable/Indicator'
 
-function isSortable(sortablePlugin, column) {
-  return sortablePlugin && column.isSortable !== false && column.header
-}
-
 const TableHeader = ({
   columns,
   sizes,
@@ -20,15 +16,7 @@ const TableHeader = ({
     <HeaderRow {...getHeaderRowProps()}>
       {columns &&
         columns.map((column, index) => (
-          <HeaderCell
-            key={column.id || index}
-            width={sizes[index]}
-            isSortable={isSortable(sortablePlugin, column)}
-            onClick={() =>
-              isSortable(sortablePlugin, column) &&
-              sortablePlugin.changeSort(column)
-            }
-          >
+          <HeaderCell key={column.id || index} width={sizes[index]}>
             {typeof column.header === 'function'
               ? column.header(column, index)
               : column.header}

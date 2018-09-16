@@ -108,7 +108,7 @@ class ContactsList extends React.Component {
     this.handleFilterChange(this.state.filter, value)
   }
 
-  handleChangeOrder = order => {
+  handleChangeOrder = ({ value: order }) => {
     this.handleFilterChange(
       this.state.filters,
       this.state.searchInputValue,
