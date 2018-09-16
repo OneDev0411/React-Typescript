@@ -7,6 +7,8 @@ import { Menu } from './Menu'
 import { Header, Title } from './styled'
 
 const Container = styled.div`
+  padding: 1.5em;
+
   &:not(:last-of-type) {
     margin-bottom: 1.5em;
 
@@ -17,6 +19,10 @@ const Container = styled.div`
       width: 52px;
       background-color: ${borderColor};
     }
+  }
+
+  &:hover .menu__icon {
+    fill: #000 !important;
   }
 `
 

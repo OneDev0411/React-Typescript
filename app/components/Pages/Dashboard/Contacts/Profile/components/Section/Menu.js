@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import IconButton from '../../../../../../../views/components/Button/IconButton'
 import Button from '../../../../../../../views/components/Button/ActionButton'
-import { primary } from '../../../../../../../views/utils/colors'
+import { primary, grey } from '../../../../../../../views/utils/colors'
 import MenuIcon from '../../../../../../../views/components/SvgIcons/MoreVert/IconMoreVert'
 import { BasicDropdown } from '../../../../../../../views/components/BasicDropdown'
 
@@ -55,7 +55,7 @@ export class Menu extends React.Component {
         pullTo="right"
         buttonRenderer={props => (
           <IconButton isFit iconSize="large" inverse {...props}>
-            <MenuIcon />
+            <MenuIcon style={{ fill: grey.A550 }} className="menu__icon" />
           </IconButton>
         )}
         onChange={item => item.onClick()}

@@ -17,7 +17,6 @@ export const PageContainer = styled.div`
 `
 
 export const Card = styled.div`
-  padding: 1.5em;
   margin-bottom: 1em;
   background: #fff;
   border-radius: 3px;
