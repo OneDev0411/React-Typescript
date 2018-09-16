@@ -12,6 +12,7 @@ import { getContactActivities } from '../../../../../../store_actions/contacts'
 
 import { Card } from '../styled'
 import { Title } from '../Timeline/styled'
+import { EmptyState } from './EmptyState'
 
 class Timeline extends React.Component {
   componentDidMount() {
@@ -23,45 +24,30 @@ class Timeline extends React.Component {
   }
 
   render() {
-    let content
-    let activities = {}
-    const { contact, isFetching, activitiesError } = this.props
+    const { contact } = this.props
 
-    if (contact) {
-      activities = contact.activities
+    if (this.props.isFetching) {
+      return <Loading />
     }
 
-    if (activitiesError) {
-      content = (
-        <div className="empty-list">
-          <p>{activitiesError.message}</p>
-        </div>
-      )
+    if (_.size(contact.activities) === 0) {
+      return <EmptyState />
     }
-
-    if (_.size(activities) === 0) {
-      content = (
-        <div className="empty-list">
-          <img src="/static/images/contacts/activity.svg" alt="timeline" />
-          <p>no activity right now</p>
-        </div>
-      )
-    }
-
-    content = _.map(activities, activity => {
-      const key = `timeline_item_${activity.id}`
-
-      if (activity.type === 'crm_task') {
-        return <CRMTaskItem contact={contact} key={key} task={activity} />
-      }
-    })
 
     return (
       <div>
         <Title>
           <b>Upcoming Events</b>
         </Title>
-        <Card style={{ padding: 0 }}>{isFetching ? <Loading /> : content}</Card>
+        <Card>
+          {_.map(contact.activities, activity => {
+            const key = `timeline_item_${activity.id}`
+
+            if (activity.type === 'crm_task') {
+              return <CRMTaskItem contact={contact} key={key} task={activity} />
+            }
+          })}
+        </Card>
       </div>
     )
   }
