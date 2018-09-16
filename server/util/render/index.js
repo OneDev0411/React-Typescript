@@ -38,7 +38,12 @@ async function display(file, renderProps) {
 
     initialState = {
       ...initialState,
-      brand
+      brand,
+      // we are still depend to Flux and AppStore.data :(
+      data: {
+        ...initialState.data,
+        brand
+      }
     }
   } catch (error) {
     console.log(error)
