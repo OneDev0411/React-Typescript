@@ -18,11 +18,19 @@ router.get('/pdf/get-size/:id', async ctx => {
       return
     }
 
+    let totalSize = 0
     const url = `${config.forms.url}/${id}.pdf`
-    const response = await agent.head(url)
+
+    try {
+      const response = await agent.head(url)
+
+      totalSize = ~~response.headers['content-length']
+    } catch (e) {
+      /* nothing */
+    }
 
     ctx.body = {
-      total: response.headers['content-length']
+      total: totalSize
     }
   } catch (e) {
     console.log(e)
