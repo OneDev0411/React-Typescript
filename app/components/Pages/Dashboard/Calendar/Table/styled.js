@@ -5,7 +5,7 @@ import ALink from '../../../../../views/components/ALink'
 
 export const GridContainer = styled.div`
   height: calc(100vh - 121px);
-  padding: 2.5em 2.5rem 0 2.5rem;
+  padding: 0 30px 0 2.5rem;
   overflow: auto;
 `
 
@@ -16,7 +16,6 @@ export const TableHeader = styled.div`
   border-radius: 4px;
   background-color: ${grey.A100};
   padding: 0 16px;
-  margin: 15px 0;
   color: ${primary};
   font-size: 17px;
   font-weight: 600;
@@ -30,6 +29,7 @@ export const TableHeader = styled.div`
 export const Title = ALink.extend`
   font-size: 1.25rem;
   font-weight: 500;
+  cursor: pointer;
 `
 export const Label = styled.span`
   color: ${grey.A900};

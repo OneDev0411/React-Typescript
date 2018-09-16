@@ -190,16 +190,12 @@ class Builder extends React.Component {
           <h1>Marketing Center</h1>
 
           <div>
-            <ActionButton
-              inverse
-              style={{ padding: '0.9em 1.9em' }}
-              onClick={this.props.onClose}
-            >
+            <ActionButton inverse onClick={this.props.onClose}>
               Cancel
             </ActionButton>
 
             <ActionButton
-              style={{ padding: '0.9em 1.9em', marginLeft: '8px' }}
+              style={{ marginLeft: '0.5rem' }}
               onClick={this.onSave}
             >
               Send
