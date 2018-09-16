@@ -2,7 +2,6 @@ import React from 'react'
 
 import { Container } from './styled'
 import { BasicDropdown } from '../../BasicDropdown'
-import TextIconButton from '../../Button/TextIconButton'
 
 function itemToString(item) {
   return item.label
@@ -28,7 +27,7 @@ class YearMonthList extends React.Component {
 
     return [...Array(75).keys()].map(number => ({
       value: base - number,
-      label: base - number
+      label: `${base - number}`
     }))
   }
 
