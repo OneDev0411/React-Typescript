@@ -109,7 +109,7 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
           </li>
         </Dropdown.Menu>
       </Dropdown>
-      <ul className="c-app-sidenav__list c-app-sidenav__list--top">
+      <ul className="c-app-sidenav__list">
         {hasContactsPermission && (
           <SideNavItem isActive={activePath === 'CALENDAR'}>
             <SideNavTooltip caption="Calendar">
