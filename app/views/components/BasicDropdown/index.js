@@ -64,7 +64,7 @@ export const BasicDropdown = ({
               left: pullTo !== 'right' ? 0 : 'auto',
               right: pullTo === 'right' ? 0 : 'auto',
               top: 'calc(100% + 8px)',
-              zIndex: 1,
+              zIndex: 2,
               overflowY: 'auto',
               ...menuStyle
             }}

@@ -94,7 +94,7 @@ export const Dropdown = ({
                   position: 'absolute',
                   left: 0,
                   top: 3,
-                  zIndex: 1,
+                  zIndex: 2,
                   overflowY: 'scroll'
                 }}
                 className="u-scrollbar--thinner--self"
