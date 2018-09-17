@@ -18,50 +18,54 @@ class ListingsWidget extends Component {
   }
 
   _updateHeight() {
-    if (this.parentDiv &&
-      this.height !== this.parentDiv.scrollHeight) {
+    if (this.parentDiv && this.height !== this.parentDiv.scrollHeight) {
       window.parent.postMessage({ height: this.parentDiv.scrollHeight }, '*')
       this.height = this.parentDiv.scrollHeight
     }
   }
 
   render() {
-    const { user, data } = this.props
+    const { user, data, brand } = this.props
 
     let links_area = (
       <div>
-        <div style={S('color-9b9b9b font-15 mb-40 mt-40')} className="text-center">
-          Powered by <a href="https://rechat.com" target="_blank" style={S('color-2196f3 fw-500')}>
-          Rechat<span style={S('color-2196f3 font-9 relative t-7n fw-500')}>TM</span></a>
+        <div
+          style={S('color-9b9b9b font-15 mb-40 mt-40')}
+          className="text-center"
+        >
+          Powered by
+          <a
+            href="https://rechat.com"
+            target="_blank"
+            style={S('color-2196f3 fw-500')}
+          >
+            Rechat<span style={S('color-2196f3 font-9 relative t-7n fw-500')}>
+              TM
+            </span>
+          </a>
         </div>
       </div>
     )
 
     return (
-      <div
-        className="futurastd"
-        ref={ref => this.parentDiv = ref}
-      >
+      <div className="futurastd" ref={ref => (this.parentDiv = ref)}>
         <ListingSection
           title="Exclusive Listings"
           data={data}
           user={user}
+          brand={brand}
           type="active"
           updateHeight={this._updateHeight}
         />
-        <div
-          className="clearfix"
-        />
+        <div className="clearfix" />
         <ListingSection
           title="Sold"
           data={data}
-          user={user}
+          brand={brand}
           type="sold"
           updateHeight={this._updateHeight}
         />
-        <div
-          className="clearfix"
-        />
+        <div className="clearfix" />
         {links_area}
       </div>
     )
