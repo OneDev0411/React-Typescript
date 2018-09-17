@@ -64,8 +64,6 @@ export const Dropdown = ({
 
       const hasIcon = Object.keys(icons).length > 0
 
-      console.log(selectedItem)
-
       return (
         <div style={style}>
           {buttonRenderer ? (
@@ -125,10 +123,7 @@ export const Dropdown = ({
                 ).map((_item, index) => {
                   const item = {
                     ..._item,
-                    icon:
-                      Object.keys(icons).length > 0
-                        ? icons[_item.title].icon
-                        : null
+                    icon: hasIcon ? icons[_item.title].icon : null
                   }
 
                   const props = {
