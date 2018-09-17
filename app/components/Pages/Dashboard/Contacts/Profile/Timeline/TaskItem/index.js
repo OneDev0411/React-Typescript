@@ -11,6 +11,7 @@ import { icons } from '../../../../../../../views/CRM/Tasks/List/Table/columns/T
 // import { goTo } from '../../../../../../../utils/go-to'
 import { getAssociations } from '../../../../../../../views/CRM/Tasks/components/NewTask/helpers/get-associations'
 import { AssociationItem } from '../../../../../../../views/CRM/Tasks/components/NewTask/components/AssocationItem'
+import { getReminderLabel } from '../../../../../../../views/CRM/Tasks/components/NewTask/helpers/get-reminder-label'
 import { Status } from './Status'
 import { Container, Title, Description } from './styled'
 
@@ -60,15 +61,9 @@ class CRMTaskItem extends React.Component {
     }
   }
 
-  // onClick = () =>
-  //   goTo(
-  //     `/crm/tasks/${this.props.task.id}`,
-  //     `Contact - ${this.props.contact.display_name}`
-  //   )
-
   render() {
     const { task } = this.props
-    const { task_type } = task
+    const { task_type, reminders } = task
     const Icon = icons[task_type] ? icons[task_type].icon : icons.Todo
 
     return (
@@ -84,14 +79,14 @@ class CRMTaskItem extends React.Component {
                 'MMM D, YYYY hh:mm A'
               )}
             </div>
-            {task.reminders &&
-              task.reminders.length > 0 && (
+            {reminders &&
+              reminders.length > 0 && (
                 <Flex alignCenter style={{ marginLeft: '1em' }}>
                   <IconBell style={{ fill: '#7f7f7f' }} />
                   <span>
-                    {fecha.format(
-                      new Date(task.reminders[0].timestamp * 1000),
-                      'mm:dd:YYYY hh:mm A'
+                    {getReminderLabel(
+                      task.due_date * 1000,
+                      task.reminders[0].timestamp * 1000
                     )}
                   </span>
                 </Flex>
