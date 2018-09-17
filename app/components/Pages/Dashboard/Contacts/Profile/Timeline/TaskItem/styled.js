@@ -11,12 +11,7 @@ export const Container = styled.div`
   border-bottom: 1px solid ${borderColor};
 
   &:hover {
-    cursor: pointer;
     background-color: ${grey.A000};
-
-    h3 {
-      color: ${primary};
-    }
   }
 `
 
@@ -25,6 +20,11 @@ export const Title = styled.h3`
   font-size: 1.5rem;
   font-weight: 500;
   line-height: 1;
+
+  &:hover {
+    cursor: pointer;
+    color: ${primary};
+  }
 `
 
 export const Description = styled.p`
