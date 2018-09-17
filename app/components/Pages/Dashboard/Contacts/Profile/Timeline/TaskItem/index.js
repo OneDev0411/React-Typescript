@@ -68,9 +68,17 @@ class CRMTaskItem extends React.Component {
   render() {
     const { task } = this.props
     const { task_type, reminders } = task
-    const Icon = eventTypesIcons[task_type]
-      ? eventTypesIcons[task_type].icon
-      : eventTypesIcons.Other.icon
+
+    let iconColor = '#000'
+    let Icon = eventTypesIcons.Other.icon
+
+    if (eventTypesIcons[task_type]) {
+      Icon = eventTypesIcons[task_type].icon
+
+      if (eventTypesIcons[task_type].color) {
+        iconColor = eventTypesIcons[task_type].color
+      }
+    }
 
     return (
       <Container>
@@ -80,7 +88,7 @@ class CRMTaskItem extends React.Component {
             onClick={this.handleOnClick}
             className="u-cursor--pointer"
           >
-            <Icon style={{ marginRight: '0.5em' }} />
+            <Icon style={{ marginRight: '0.5em', fill: iconColor }} />
             <span>{task_type}</span>
           </Flex>
           <Divider margin="0 1em" width="1px" height="16px" />
