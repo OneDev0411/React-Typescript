@@ -13,6 +13,7 @@ const Input = styled.textarea`
   resize: none;
   border: none;
   font-size: 1.5rem;
+  font-weight: 500;
 
   &:focus {
     outline: none;

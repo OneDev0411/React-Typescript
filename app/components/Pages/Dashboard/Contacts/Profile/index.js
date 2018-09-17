@@ -11,10 +11,9 @@ import {
   isLoadedContactAttrDefs
 } from '../../../../../reducers/contacts/attributeDefs'
 
-import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
-
 import {
   getContact,
+  deleteAttributes,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
 import { selectContact } from '../../../../../reducers/contacts/list'
@@ -120,20 +119,27 @@ class ContactProfile extends React.Component {
   }
 
   handleAddNote = async text => {
-    const attribute_def = selectDefinitionByName(
-      this.props.attributeDefs,
-      'note'
-    )
-
-    const attributes = [
+    await this.props.upsertContactAttributes(this.props.contact.id, [
       {
         text,
-        attribute_def
+        attribute_def: selectDefinitionByName(this.props.attributeDefs, 'note')
       }
-    ]
+    ])
+    this.fetchTimeline()
+  }
 
-    await this.props.upsertContactAttributes(this.props.contact.id, attributes)
+  editNote = async note => {
+    await this.props.upsertContactAttributes(this.props.contact.id, [
+      {
+        id: note.id,
+        text: note.text
+      }
+    ])
+    this.fetchTimeline()
+  }
 
+  deleteNote = async note => {
+    await this.props.deleteAttributes(this.props.contact.id, [note.id])
     this.fetchTimeline()
   }
 
@@ -243,6 +249,8 @@ class ContactProfile extends React.Component {
                 contact={contact}
                 items={this.state.timeline}
                 isFetching={this.state.isFetchingTimeline}
+                editNoteHandler={this.editNote}
+                deleteNoteHandler={this.deleteNote}
               />
             </SecondColumn>
 
@@ -273,6 +281,7 @@ export default connect(
   mapStateToProps,
   {
     getContact,
+    deleteAttributes,
     upsertContactAttributes
   }
 )(ContactProfile)

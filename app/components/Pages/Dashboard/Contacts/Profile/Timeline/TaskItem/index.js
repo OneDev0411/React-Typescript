@@ -105,7 +105,7 @@ class CRMTaskItem extends React.Component {
             onClick={this.handleStatus}
           />
           <Flex column style={{ width: 'calc(100% - 40px)' }}>
-            <Title>{task.title}</Title>
+            <Title onClick={this.props.onClick}>{task.title}</Title>
             {task.description && <Description>{task.description}</Description>}
           </Flex>
         </Flex>

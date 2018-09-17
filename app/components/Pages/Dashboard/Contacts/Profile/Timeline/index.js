@@ -1,50 +1,80 @@
 import React from 'react'
 
 import Loading from '../../../../../Partials/Loading'
+import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawer'
+
 import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
 import CRMTaskItem from './TaskItem'
 import { Title } from '../Timeline/styled'
 import { EmptyState } from './EmptyState'
 
-export function Timeline(props) {
-  if (props.isFetching) {
-    return <Loading />
+export class Timeline extends React.Component {
+  state = {
+    selectedNote: null,
+    showEditNoteDrawer: false
   }
 
-  if (props.items.length > 0) {
-    return (
-      <div>
-        <Title>
-          <b>Upcoming Events</b>
-        </Title>
-        <Card>
-          {props.items.map(activity => {
-            const key = `timeline_item_${activity.id}`
+  openEditNoteDrawer = selectedNote =>
+    this.setState({ showEditNoteDrawer: true, selectedNote })
+  closeEditNoteDrawer = () =>
+    this.setState({ showEditNoteDrawer: false, selectedNote: null })
 
-            if (activity.type === 'crm_task') {
-              return (
-                <CRMTaskItem
-                  contact={props.contact}
-                  key={key}
-                  task={activity}
-                />
-              )
-            }
+  render() {
+    if (this.props.isFetching) {
+      return <Loading />
+    }
 
-            if (
-              activity.type === 'contact_attribute' &&
-              activity.attribute_type === 'note'
-            ) {
-              return (
-                <NoteItem contact={props.contact} key={key} note={activity} />
-              )
-            }
-          })}
-        </Card>
-      </div>
-    )
+    if (this.props.items.length > 0) {
+      return (
+        <div>
+          <Title>
+            <b>Upcoming Events</b>
+          </Title>
+          <Card>
+            {this.props.items.map(activity => {
+              const key = `timeline_item_${activity.id}`
+
+              if (activity.type === 'crm_task') {
+                return (
+                  <CRMTaskItem
+                    contact={this.props.contact}
+                    key={key}
+                    task={activity}
+                    onClick={this.onClickItemHandler}
+                  />
+                )
+              }
+
+              if (
+                activity.type === 'contact_attribute' &&
+                activity.attribute_type === 'note'
+              ) {
+                return (
+                  <NoteItem
+                    contact={this.props.contact}
+                    key={key}
+                    note={activity}
+                    onClick={this.openEditNoteDrawer}
+                  />
+                )
+              }
+            })}
+          </Card>
+
+          {this.state.selectedNote && (
+            <EditNoteDrawer
+              isOpen={this.state.showEditNoteDrawer}
+              note={this.state.selectedNote}
+              onClose={this.closeEditNoteDrawer}
+              onSubmit={this.props.editNoteHandler}
+              onDelete={this.props.deleteNoteHandler}
+            />
+          )}
+        </div>
+      )
+    }
+
+    return <EmptyState />
   }
-
-  return <EmptyState />
 }
