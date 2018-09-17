@@ -4,7 +4,7 @@ import { Field } from 'react-final-form'
 import { Dropdown } from '../../../../../../components/Dropdown'
 import IconBell from '../../../../../../components/SvgIcons/Bell/IconBell'
 
-import { compareDates } from '../../helpers/compare-dates'
+// import { compareDates } from '../../helpers/compare-dates'
 import { DropButton, IconDrop } from '../../styled'
 
 const items = [
@@ -18,10 +18,10 @@ const items = [
   '1 Week Before'
 ].map(value => ({ title: value, value }))
 
-export function Reminder(props) {
-  if (compareDates(props.dueDate, new Date()) === -1) {
-    return null
-  }
+export function Reminder() {
+  // if (compareDates(props.dueDate, new Date()) === -1) {
+  //   return null
+  // }
 
   return (
     <Field
