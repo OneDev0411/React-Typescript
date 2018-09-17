@@ -12,7 +12,7 @@ const propTypes = {
 
 const defaultProps = Drawer.defaultProps
 
-export class EditEventDrawer extends React.Component {
+export class EventDrawer extends React.Component {
   onSubmit = async event => {
     this.props.onSubmit(event)
     console.log(event)
@@ -26,8 +26,8 @@ export class EditEventDrawer extends React.Component {
         onClose={this.props.onClose}
         showFooter={false}
       >
-        <Drawer.Header title="Edit Note" />
-        <Drawer.Body style={{ overflow: 'hidden' }}>
+        <Drawer.Header title={this.props.title} />
+        <Drawer.Body>
           <EditEvent
             taskId={this.props.eventId}
             submitCallback={this.onSubmit}
@@ -38,5 +38,5 @@ export class EditEventDrawer extends React.Component {
   }
 }
 
-EditEventDrawer.propTypes = propTypes
-EditEventDrawer.defaultProps = defaultProps
+EventDrawer.propTypes = propTypes
+EventDrawer.defaultProps = defaultProps

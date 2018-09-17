@@ -2,7 +2,7 @@ import React from 'react'
 
 import Loading from '../../../../../Partials/Loading'
 import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawer'
-import { EditEventDrawer } from '../../../../../../views/components/EditEventDrawer'
+import { EventDrawer } from '../../../../../../views/components/EventDrawer'
 
 import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
@@ -81,7 +81,8 @@ export class Timeline extends React.Component {
           )}
 
           {this.state.selectedEvent && (
-            <EditEventDrawer
+            <EventDrawer
+              title="Edit Event"
               isOpen={this.state.showEditEventDrawer}
               eventId={this.state.selectedEvent.id}
               onClose={this.closeEditEventDrawer}
