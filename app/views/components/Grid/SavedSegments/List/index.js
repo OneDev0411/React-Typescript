@@ -26,6 +26,7 @@ import {
   ListItemName,
   DeleteButton
 } from './styled'
+import ToolTip from 'components/tooltip'
 
 class SegmentsList extends React.Component {
   state = {
@@ -103,22 +104,26 @@ class SegmentsList extends React.Component {
           }
 
           return (
-            <ListItem
-              key={index}
-              isDeleting={isDeleting.includes(id)}
-              isSelected={isSelected(id)}
-            >
-              <ListItemName
-                onClick={() => !isSelected(id) && this.onSelectList(item)}
+            <ToolTip key={index} caption={item.name} placement="right">
+              <ListItem
+                isDeleting={isDeleting.includes(id)}
+                isSelected={isSelected(id)}
               >
-                {uppercaseFirstLetter(item.name)}
-              </ListItemName>
-              {editable && (
-                <DeleteButton onClick={() => this.onRequestDelete(item)} isFit>
-                  <IconClose />
-                </DeleteButton>
-              )}
-            </ListItem>
+                <ListItemName
+                  onClick={() => !isSelected(id) && this.onSelectList(item)}
+                >
+                  {uppercaseFirstLetter(item.name)}
+                </ListItemName>
+                {editable && (
+                  <DeleteButton
+                    onClick={() => this.onRequestDelete(item)}
+                    isFit
+                  >
+                    <IconClose />
+                  </DeleteButton>
+                )}
+              </ListItem>
+            </ToolTip>
           )
         })}
 

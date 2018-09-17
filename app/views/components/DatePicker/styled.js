@@ -20,8 +20,8 @@ export const Container = styled.div`
 
   .DayPicker-Day {
     padding: 0 !important;
-    width: 29px !important;
-    height: 29px !important;
+    width: 32px !important;
+    height: 32px !important;
   }
 
   .DayPicker-wrapper:focus,
