@@ -2,6 +2,7 @@ import React from 'react'
 
 import Loading from '../../../../../Partials/Loading'
 import { Card } from '../styled'
+import { NoteItem } from './NoteItem'
 import CRMTaskItem from './TaskItem'
 import { Title } from '../Timeline/styled'
 import { EmptyState } from './EmptyState'
@@ -28,6 +29,15 @@ export function Timeline(props) {
                   key={key}
                   task={activity}
                 />
+              )
+            }
+
+            if (
+              activity.type === 'contact_attribute' &&
+              activity.attribute_type === 'note'
+            ) {
+              return (
+                <NoteItem contact={props.contact} key={key} note={activity} />
               )
             }
           })}

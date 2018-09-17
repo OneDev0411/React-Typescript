@@ -28,7 +28,7 @@ import { Details } from './Details'
 import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
-import AddNote from './Add-Note'
+import { AddNote } from './AddNote'
 import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 import {
@@ -100,8 +100,6 @@ class ContactProfile extends React.Component {
   }
 
   removeEvent = eventId => {
-    goBackFromEditTask()
-
     this.setState(state => ({
       timeline: state.timeline.filter(item => item.id !== eventId)
     }))
@@ -121,6 +119,7 @@ class ContactProfile extends React.Component {
     ]
 
     await this.props.upsertContactAttributes(this.props.contact.id, attributes)
+
     this.fetchTimeline()
   }
 

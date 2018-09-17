@@ -65,8 +65,6 @@ class CRMTaskItem extends React.Component {
   //   )
 
   render() {
-    console.log(this.props)
-
     const { task } = this.props
     const { task_type } = task
     const Icon = icons[task_type] ? icons[task_type].icon : icons.Todo
