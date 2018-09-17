@@ -30,15 +30,19 @@ import {
 } from '../../../../../store_actions/contacts'
 
 class ContactsList extends React.Component {
-  state = {
-    isSideMenuOpen: true,
-    pageTitle: 'All Contacts',
-    isFetchingContacts: false,
-    isFetchingMoreContacts: false,
-    isRowsUpdating: false,
-    filter: this.props.filter,
-    selectedRows: [],
-    searchInputValue: this.props.searchInputValue
+  constructor(props) {
+    super(props)
+    this.state = {
+      isSideMenuOpen: true,
+      pageTitle: 'All Contacts',
+      isFetchingContacts: false,
+      isFetchingMoreContacts: false,
+      isRowsUpdating: false,
+      filter: this.props.filter,
+      selectedRows: [],
+      searchInputValue: this.props.searchInputValue
+    }
+    this.order = this.props.listInfo.order
   }
 
   componentDidMount() {
@@ -58,7 +62,12 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
-        await this.handleFilterChange(filter, searchInputValue, start)
+        await this.handleFilterChange(
+          filter,
+          searchInputValue,
+          start,
+          this.order
+        )
       } else {
         await this.props.getContacts(start)
       }
@@ -109,6 +118,7 @@ class ContactsList extends React.Component {
   }
 
   handleChangeOrder = order => {
+    this.order = order
     this.handleFilterChange(
       this.state.filters,
       this.state.searchInputValue,
@@ -139,7 +149,9 @@ class ContactsList extends React.Component {
     } else {
       await this.handleFilterChange(
         this.state.filter,
-        this.state.searchInputValue
+        this.state.searchInputValue,
+        startFrom,
+        this.order
       )
     }
 
@@ -151,7 +163,8 @@ class ContactsList extends React.Component {
       selectedRows
     })
 
-  hasSearchState = () => this.state.filter || this.state.searchInputValue
+  hasSearchState = () =>
+    this.state.filter || this.state.searchInputValue || this.order
 
   handleOnDelete = (e, { selectedRows }) => {
     const selectedRowsLength = selectedRows.length
