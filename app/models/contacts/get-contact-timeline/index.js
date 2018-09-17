@@ -1,6 +1,8 @@
 import Fetch from '../../../services/fetch'
 
-async function fetchContactActivities(contactId = '') {
+const defaultQuery = { 'associations[]': 'crm_task.reminders' }
+
+export async function getContactTimeline(contactId, query = defaultQuery) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }
@@ -8,12 +10,10 @@ async function fetchContactActivities(contactId = '') {
   try {
     const response = await new Fetch()
       .get(`/contacts/${contactId}/timeline`)
-      .query({ 'associations[]': 'crm_task.reminders' })
+      .query(query)
 
     return response.body.data
   } catch (error) {
     throw error
   }
 }
-
-export default fetchContactActivities
