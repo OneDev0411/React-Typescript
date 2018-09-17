@@ -34,18 +34,6 @@ class SendSignatures extends React.Component {
     }
   }
 
-  componentDidMount() {
-    const { esign } = this.props
-
-    this.prefillRoles(esign)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { esign } = nextProps
-
-    this.prefillRoles(esign)
-  }
-
   /**
    * add new recipinet
    */
@@ -66,52 +54,6 @@ class SendSignatures extends React.Component {
     this.props.removeEsignRecipient(id)
   }
 
-  /**
-   * get all selected forms roles
-   */
-  getFormsRoles() {
-    const { deal, checklists } = this.props
-    let roles = []
-
-    // extract roles of selected documents
-    deal.checklists.forEach(id => {
-      const checklist = checklists[id]
-
-      if (checklist.is_terminated || !checklist.allowed_forms) {
-        return false
-      }
-
-      checklist.allowed_forms.forEach(form => {
-        roles = roles.concat(form.roles)
-      })
-    })
-
-    // get role names
-    return _.chain(roles)
-      .pluck('role')
-      .uniq()
-      .value()
-  }
-
-  /**
-   * prefill roles based on selected documents
-   */
-  prefillRoles(esign) {
-    if (!esign.show || esign.view !== 'compose') {
-      return false
-    }
-
-    const { deal } = this.props
-    const roleNames = this.getFormsRoles()
-
-    _.each(deal.roles, item => {
-      if (roleNames.indexOf(item.role) === -1) {
-        return false
-      }
-
-      this.addRecipients({ role: item.id })
-    })
-  }
 
   closeForm() {
     this.setState({
@@ -255,7 +197,6 @@ class SendSignatures extends React.Component {
             <Recipients
               deal={deal}
               recipients={recipients}
-              allowedRoles={this.getFormsRoles()}
               onAddRecipient={(recp, order) => this.addRecipients(recp, order)}
               onRemoveRecipient={email => this.removeRecipient(email)}
             />
