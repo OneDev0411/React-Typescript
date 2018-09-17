@@ -73,7 +73,14 @@ export const Dropdown = ({
                 id: buttonId,
                 name: input.name,
                 value: selectedItem && selectedItem.title,
-                icon: hasIcon ? icons[selectedItem.title].icon : null
+                icon:
+                  hasIcon && icons[selectedItem.title].icon
+                    ? icons[selectedItem.title].icon
+                    : null,
+                iconColor:
+                  hasIcon && icons[selectedItem.title].color
+                    ? icons[selectedItem.title].color
+                    : '#000'
               })
             )
           ) : (
@@ -86,7 +93,12 @@ export const Dropdown = ({
             >
               {selectedItem &&
                 selectedItem.icon && (
-                  <selectedItem.icon style={{ marginRight: '0.5em' }} />
+                  <selectedItem.icon
+                    style={{
+                      marginRight: '0.5em',
+                      fill: selectedItem.iconColor
+                    }}
+                  />
                 )}
               {selectedItem && selectedItem.title}
               <Icon isOpen={isOpen} />
@@ -120,10 +132,23 @@ export const Dropdown = ({
                 {(hasSearch && inputValue
                   ? matchSorter(items, inputValue, { keys: ['title'] })
                   : items
-                ).map((_item, index) => {
-                  const item = {
-                    ..._item,
-                    icon: hasIcon ? icons[_item.title].icon : null
+                ).map((item, index) => {
+                  let icon = null
+                  let iconColor = '#000'
+                  const { title } = item
+
+                  if (hasIcon && icons[title].icon) {
+                    icon = icons[title].icon
+
+                    if (icons[title].color) {
+                      iconColor = icons[title].color
+                    }
+                  }
+
+                  item = {
+                    ...item,
+                    icon,
+                    iconColor
                   }
 
                   const props = {
@@ -131,7 +156,7 @@ export const Dropdown = ({
                     ...getItemProps({
                       item,
                       isActive: highlightedIndex === index,
-                      isSelected: selectedItem.title === item.title
+                      isSelected: selectedItem.title === title
                     })
                   }
 
@@ -139,10 +164,8 @@ export const Dropdown = ({
                     itemRenderer(props)
                   ) : (
                     <Item {...props} key={item.value}>
-                      {item.icon && (
-                        <item.icon style={{ marginRight: '0.5em' }} />
-                      )}
-                      {`${item.title}${item.hint ? ` (${item.hint})` : ''}`}
+                      {item.icon && <item.icon />}
+                      {`${title}${item.hint ? ` (${item.hint})` : ''}`}
                     </Item>
                   )
                 })}

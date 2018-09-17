@@ -17,5 +17,14 @@ export const Item = styled.div`
   &:focus {
     border-color: ${borderColor};
     box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+
+    > svg {
+      fill: #fff;
+    }
+  }
+
+  > svg {
+    margin-right: 0.5em;
+    fill: ${props => (props.item.iconColor ? props.item.iconColor : '#000')};
   }
 `
