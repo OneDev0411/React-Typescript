@@ -27,9 +27,9 @@ import {
   Content
 } from '../../../../views/components/SlideMenu'
 
-import TaskDrawer from './TaskDrawer'
 import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
+import { EventDrawer } from '../../../../views/components/EventDrawer'
 
 import CalendarTable from './Table'
 
@@ -92,13 +92,22 @@ class CalendarContainer extends React.Component {
     }))
 
   /**
-   * close/open create task menu
+   * open create task menu
    */
-  toggleShowCreateTask = () =>
-    this.setState(state => ({
-      showCreateTaskMenu: !state.showCreateTaskMenu,
+  openEventDrawerHandler = (selectedTask = 'new') =>
+    this.setState({
+      showCreateTaskMenu: true,
+      selectedTask
+    })
+
+  /**
+   * close create task menu
+   */
+  closeEventDrawerHandler = () =>
+    this.setState({
+      showCreateTaskMenu: false,
       selectedTask: null
-    }))
+    })
 
   /**
    * sets calendar references
@@ -192,7 +201,7 @@ class CalendarContainer extends React.Component {
     }
 
     this.setState({
-      showCreateTaskMenu: false
+      selectedTask: null
     })
   }
 
@@ -263,13 +272,6 @@ class CalendarContainer extends React.Component {
     }
   }
 
-  handleSelectTask = row => {
-    this.setState({
-      showCreateTaskMenu: true,
-      selectedTask: row.crm_task
-    })
-  }
-
   render() {
     const {
       isMenuOpen,
@@ -281,12 +283,15 @@ class CalendarContainer extends React.Component {
 
     return (
       <Container isOpen={isMenuOpen}>
-        <TaskDrawer
-          isOpen={showCreateTaskMenu}
-          selectedTask={selectedTask}
-          onClose={this.toggleShowCreateTask}
-          onChangeTask={this.handleChangeTask}
-        />
+        {selectedTask && (
+          <EventDrawer
+            title={`${selectedTask ? 'Edit' : 'Add'} Event`}
+            isOpen={showCreateTaskMenu}
+            eventId={selectedTask}
+            onClose={this.closeEventDrawerHandler}
+            onSubmit={this.handleChangeTask}
+          />
+        )}
 
         <Menu isOpen={isMenuOpen} width={302}>
           <MenuContainer>
@@ -315,7 +320,7 @@ class CalendarContainer extends React.Component {
             </PageHeader.Title>
 
             <PageHeader.Menu>
-              <ActionButton onClick={this.toggleShowCreateTask}>
+              <ActionButton onClick={() => this.openEventDrawerHandler('new')}>
                 Add Event
               </ActionButton>
             </PageHeader.Menu>
@@ -331,7 +336,7 @@ class CalendarContainer extends React.Component {
                 onScrollTop={this.loadPreviousItems}
                 onScrollBottom={this.loadNextItems}
                 onContainerScroll={e => this.handleContainerScroll(e.target)}
-                onSelectTask={this.handleSelectTask}
+                onSelectTask={this.openEventDrawerHandler}
                 onRef={this.onTableRef}
               />
             </div>

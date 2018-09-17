@@ -6,7 +6,7 @@ import EditEvent from '../../CRM/Tasks/components/NewTask'
 
 const propTypes = {
   ...Drawer.propTypes,
-  event: PropTypes.shape().isRequired,
+  eventId: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired
 }
 
@@ -15,7 +15,6 @@ const defaultProps = Drawer.defaultProps
 export class EventDrawer extends React.Component {
   onSubmit = async event => {
     this.props.onSubmit(event)
-    console.log(event)
     this.props.onClose()
   }
 
@@ -29,6 +28,7 @@ export class EventDrawer extends React.Component {
         <Drawer.Header title={this.props.title} />
         <Drawer.Body>
           <EditEvent
+            display="drawer"
             taskId={this.props.eventId}
             submitCallback={this.onSubmit}
           />

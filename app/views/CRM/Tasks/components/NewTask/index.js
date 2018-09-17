@@ -201,7 +201,7 @@ class Task extends Component {
           render={props => {
             const { values } = props
 
-            // console.log(values.dueDate, values.reminder.value)
+            const isDrawer = this.props.display === 'drawer' || !this.isNew
 
             return (
               <FormContainer onSubmit={props.handleSubmit}>
@@ -209,9 +209,9 @@ class Task extends Component {
                 {values.title && (
                   <React.Fragment>
                     <Flex
-                      alignCenter={this.isNew}
-                      column={!this.isNew}
-                      justifyBetween={this.isNew}
+                      alignCenter={!isDrawer}
+                      column={isDrawer}
+                      justifyBetween={!isDrawer}
                       style={{ marginBottom: '1.5em' }}
                     >
                       <TaskType />
@@ -219,8 +219,8 @@ class Task extends Component {
                         justifyBetween
                         alignCenter
                         style={{
-                          margin: this.isNew ? '0 0 0 1em' : '1em 0 0 0',
-                          flex: this.isNew ? 2 : 1
+                          margin: isDrawer ? '1em 0 0 0' : '0 0 0 1em',
+                          flex: isDrawer ? 1 : 2
                         }}
                       >
                         <DateTimeField
