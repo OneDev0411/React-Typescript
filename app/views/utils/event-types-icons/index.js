@@ -11,31 +11,38 @@ function getIcons() {
   const iconsArray = [
     {
       name: 'Call',
-      icon: IconCall
+      icon: IconCall,
+      color: '#04C6D9'
     },
     {
       name: 'In Person Meeting',
-      icon: IconFollowUp
+      icon: IconFollowUp,
+      color: '#F7A700'
     },
     {
       name: 'Text',
-      icon: Text
+      icon: Text,
+      color: '#000'
     },
     {
       name: 'Mail',
-      icon: IconMessage
+      icon: IconMessage,
+      color: '#8F6CF0'
     },
     {
       name: 'Social',
-      icon: Social
+      icon: Social,
+      color: '#003BDF'
     },
     {
       name: 'Email',
-      icon: Email
+      icon: Email,
+      color: '#7ED321'
     },
     {
       name: 'Other',
-      icon: Other
+      icon: Other,
+      color: '#9013FE'
     }
   ]
 
