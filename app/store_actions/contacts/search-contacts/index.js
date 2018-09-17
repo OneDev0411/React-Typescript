@@ -31,6 +31,7 @@ export function searchContacts(
           info: {
             ...response.info,
             searchInputValue,
+            order,
             filter,
             type: 'filter'
           },
