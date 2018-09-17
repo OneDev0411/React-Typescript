@@ -22,11 +22,13 @@ const Image = styled.svg`
 const defaultProps = {
   children: [
     <g fill="none" key="key-0">
-      <path d="M0 0h24v24H0z" />
-      <path
-        fill="#8F6CF0"
-        d="M4.727 7.183A.741.741 0 0 0 4 7.917v9.166c0 .397.334.734.727.734h14.546a.741.741 0 0 0 .727-.734V7.917a.741.741 0 0 0-.727-.734H4.727zm.364 1.1h13.818v.27L12 13.646 5.09 8.553v-.27zm0 1.633l3.602 2.658-3.602 3.404V9.916zm13.818 0v6.062l-3.602-3.404 3.602-2.658zm-9.318 3.317l2.085 1.541a.542.542 0 0 0 .648 0l2.085-1.54 3.688 3.483H5.903l3.688-3.484z"
-      />
+      <path d="M24 0v24H0V0z" />
+      <g fill="#9013FE" transform="rotate(90 8 12)">
+        <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 14.4A6.4 6.4 0 1 1 8 1.6a6.4 6.4 0 0 1 0 12.8z" />
+        <circle cx="8" cy="11.812" r="1.288" />
+        <circle cx="8" cy="8" r="1.288" />
+        <circle cx="8" cy="4.188" r="1.288" />
+      </g>
     </g>
   ],
   viewBox
@@ -36,5 +38,5 @@ export default Object.assign(Image, {
   getDimensions,
   getDimensionsCss,
   defaultProps,
-  displayName: 'IconEmailOutline'
+  displayName: 'IconMenuRounded'
 })

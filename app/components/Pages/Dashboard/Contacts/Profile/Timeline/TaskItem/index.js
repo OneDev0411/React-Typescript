@@ -7,7 +7,7 @@ import { updateTask } from '../../../../../../../store_actions/tasks'
 
 import { Divider } from '../../../../../../../views/components/Divider'
 import IconBell from '../../../../../../../views/components/SvgIcons/Bell/IconBell'
-import { icons } from '../../../../../../../views/CRM/Tasks/List/Table/columns/Type/icons'
+import { eventTypesIcons } from '../../../../../../../views/utils/event-types-icons'
 // import { goTo } from '../../../../../../../utils/go-to'
 import { getAssociations } from '../../../../../../../views/CRM/Tasks/components/NewTask/helpers/get-associations'
 import { AssociationItem } from '../../../../../../../views/CRM/Tasks/components/NewTask/components/AssocationItem'
@@ -68,7 +68,9 @@ class CRMTaskItem extends React.Component {
   render() {
     const { task } = this.props
     const { task_type, reminders } = task
-    // const Icon = icons[task_type] ? icons[task_type].icon : icons.Todo
+    const Icon = eventTypesIcons[task_type]
+      ? eventTypesIcons[task_type].icon
+      : eventTypesIcons.Other.icon
 
     return (
       <Container>
@@ -78,7 +80,7 @@ class CRMTaskItem extends React.Component {
             onClick={this.handleOnClick}
             className="u-cursor--pointer"
           >
-            {/* <Icon style={{ marginRight: '0.5em' }} /> */}
+            <Icon style={{ marginRight: '0.5em' }} />
             <span>{task_type}</span>
           </Flex>
           <Divider margin="0 1em" width="1px" height="16px" />
