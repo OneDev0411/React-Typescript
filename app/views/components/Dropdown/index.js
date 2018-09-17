@@ -30,6 +30,7 @@ export const Dropdown = ({
   items,
   input,
   style,
+  icons = {},
   onSelect,
   fullWidth,
   fullHeight,
@@ -61,6 +62,10 @@ export const Dropdown = ({
         inputValue = ''
       }
 
+      const hasIcon = Object.keys(icons).length > 0
+
+      console.log(selectedItem)
+
       return (
         <div style={style}>
           {buttonRenderer ? (
@@ -69,7 +74,8 @@ export const Dropdown = ({
                 isBlock: fullWidth,
                 id: buttonId,
                 name: input.name,
-                value: selectedItem && selectedItem.title
+                value: selectedItem && selectedItem.title,
+                icon: hasIcon ? icons[selectedItem.title].icon : null
               })
             )
           ) : (
@@ -80,6 +86,10 @@ export const Dropdown = ({
                 name: input.name
               })}
             >
+              {selectedItem &&
+                selectedItem.icon && (
+                  <selectedItem.icon style={{ marginRight: '0.5em' }} />
+                )}
               {selectedItem && selectedItem.title}
               <Icon isOpen={isOpen} />
             </Button>
@@ -95,7 +105,7 @@ export const Dropdown = ({
                   left: 0,
                   top: 3,
                   zIndex: 2,
-                  overflowY: 'scroll'
+                  overflowY: fullHeight ? 'initial' : 'scroll'
                 }}
                 className="u-scrollbar--thinner--self"
               >
@@ -112,7 +122,15 @@ export const Dropdown = ({
                 {(hasSearch && inputValue
                   ? matchSorter(items, inputValue, { keys: ['title'] })
                   : items
-                ).map((item, index) => {
+                ).map((_item, index) => {
+                  const item = {
+                    ..._item,
+                    icon:
+                      Object.keys(icons).length > 0
+                        ? icons[_item.title].icon
+                        : null
+                  }
+
                   const props = {
                     item,
                     ...getItemProps({
@@ -126,6 +144,9 @@ export const Dropdown = ({
                     itemRenderer(props)
                   ) : (
                     <Item {...props} key={item.value}>
+                      {item.icon && (
+                        <item.icon style={{ marginRight: '0.5em' }} />
+                      )}
                       {`${item.title}${item.hint ? ` (${item.hint})` : ''}`}
                     </Item>
                   )
