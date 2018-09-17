@@ -29,7 +29,7 @@ export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
               browserHistory.push('/dashboard/contacts/import/csv')
             }
           >
-            Import
+            Import Contacts
           </ActionButton>
         </Tooltip>
 

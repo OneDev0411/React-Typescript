@@ -13,6 +13,7 @@ import EmptyState from './EmptyState'
 import Fetching from './Fetching'
 
 import EventIcon from './EventIcon'
+import { primary } from 'views/utils/colors'
 
 export class Table extends React.Component {
   constructor(props) {
@@ -71,7 +72,9 @@ export class Table extends React.Component {
           <Flex style={{ padding: '4px 1rem' }}>
             <EventIcon event={rowData} />
             <div>
-              <Title>{rowData.title}</Title>
+              <Title onClick={this.onTitleClick(rowData)}>
+                {rowData.title}
+              </Title>
               <Flex>
                 {this.time(rowData)}
                 <Indicator>|</Indicator>
@@ -82,6 +85,25 @@ export class Table extends React.Component {
         )
       }
     ]
+  }
+
+  onTitleClick = row => {
+    let onClick = () => {}
+
+    switch (row.object_type) {
+      case 'deal_context':
+        onClick = () => goTo(`/dashboard/deals/${row.deal}`, 'Calendar')
+        break
+
+      case 'contact_attribute':
+        onClick = () => goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
+        break
+      case 'crm_task':
+        onClick = () => this.props.onSelectTask(row)
+        break
+    }
+
+    return onClick
   }
 
   getGridHeaderProps = () => ({
@@ -103,31 +125,23 @@ export class Table extends React.Component {
   getGridTrProps = (rowIndex, { original: row }) => {
     const props = {}
 
-    switch (row.object_type) {
-      case 'deal_context':
-        props.onClick = () => goTo(`/dashboard/deals/${row.deal}`, 'Calendar')
-        break
-
-      case 'contact_attribute':
-        props.onClick = () =>
-          goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
-        break
-
-      case 'crm_task':
-        props.style =
-          row.status === 'DONE'
-            ? { textDecoration: 'line-through', opacity: 0.5 }
-            : {}
-
-        props.onClick = () => this.props.onSelectTask(row)
-        break
+    if (row.object_type === 'crm_task') {
+      props.style =
+        row.status === 'DONE'
+          ? { textDecoration: 'line-through', opacity: 0.5 }
+          : {}
     }
 
     return {
       ...props,
+      hoverStyle: `
+      background-color: #fafafa;
+       a {
+        color: ${primary}
+      }
+      `,
       style: {
-        ...props.style,
-        cursor: 'pointer'
+        ...props.style
       }
     }
   }
