@@ -93,10 +93,24 @@ class ContactProfile extends React.Component {
     }
   }
 
-  addEvent = task => {
+  addEvent = event => {
     this.setState(state => ({
-      timeline: [task, ...state.timeline]
+      timeline: [event, ...state.timeline]
     }))
+  }
+
+  editEvent = event => {
+    const indexedTimeline = {}
+
+    this.state.timeline.forEach(t => {
+      indexedTimeline[t.id] = t
+    })
+
+    indexedTimeline[event.id] = event
+
+    this.setState({
+      timeline: Object.values(indexedTimeline)
+    })
   }
 
   removeEvent = eventId => {
@@ -226,9 +240,9 @@ class ContactProfile extends React.Component {
                 </div>
               </Tab.Container>
               <Timeline
+                contact={contact}
                 items={this.state.timeline}
                 isFetching={this.state.isFetchingTimeline}
-                contact={contact}
               />
             </SecondColumn>
 
