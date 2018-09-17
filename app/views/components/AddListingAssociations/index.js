@@ -10,6 +10,7 @@ import { normalizeListing } from '../../utils/association-normalizers'
 
 export class AddListingAssociation extends React.Component {
   static propTypes = {
+    disabled: PropTypes.bool,
     handleAdd: PropTypes.func.isRequired
   }
 
@@ -30,6 +31,7 @@ export class AddListingAssociation extends React.Component {
                 type="button"
                 iconSize="large"
                 onClick={handleOpen}
+                disabled={this.props.disabled}
               >
                 <Icon />
               </Button>

@@ -11,6 +11,7 @@ import { normalizeContact } from '../../utils/association-normalizers'
 
 export class AddContactAssociation extends React.Component {
   static propTypes = {
+    disabled: PropTypes.bool,
     handleAdd: PropTypes.func.isRequired
   }
 
@@ -31,6 +32,7 @@ export class AddContactAssociation extends React.Component {
                 type="button"
                 iconSize="large"
                 onClick={handleOpen}
+                disabled={this.props.disabled}
               >
                 <Icon />
               </Button>

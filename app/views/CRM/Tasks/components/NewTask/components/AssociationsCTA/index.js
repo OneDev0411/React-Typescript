@@ -51,17 +51,19 @@ export class AssociationsCTA extends React.Component {
         ]
       }
 
-      this.props.onChange(nextAssociations)
+      this.props.onClick(nextAssociations)
       handleClose()
     }
   }
 
   render() {
+    const { disabled } = this.props
+
     return (
       <Container inline>
-        <AddContactAssociation handleAdd={this.onAdd} />
-        <AddListingAssociation handleAdd={this.onAdd} />
-        <AddDealAssociation handleAdd={this.onAdd} />
+        <AddContactAssociation disabled={disabled} handleAdd={this.onAdd} />
+        <AddListingAssociation disabled={disabled} handleAdd={this.onAdd} />
+        <AddDealAssociation disabled={disabled} handleAdd={this.onAdd} />
       </Container>
     )
   }
@@ -69,6 +71,7 @@ export class AssociationsCTA extends React.Component {
 
 AssociationsCTA.propTypes = {
   associations: PropTypes.arrayOf(PropTypes.shape()),
-  onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func.isRequired,
   handleCreate: PropTypes.func.isRequired
 }

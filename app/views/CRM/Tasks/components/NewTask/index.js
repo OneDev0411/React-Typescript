@@ -238,18 +238,21 @@ class Task extends Component {
                     name="associations"
                     render={({ input }) => (
                       <AssociationsCTA
+                        disabled={!values.title}
                         associations={values.associations}
                         handleCreate={this.handleCreateAssociation}
-                        onChange={input.onChange}
+                        onClick={input.onChange}
                       />
                     )}
                   />
                   {values.title && (
-                    <ActionButton type="submit" disabled={isDeleting}>
-                      {props.submitting || props.validating
-                        ? 'Saving...'
-                        : 'Save'}
-                    </ActionButton>
+                    <Flex justifyBetween alignCenter>
+                      <ActionButton type="submit" disabled={isDeleting}>
+                        {props.submitting || props.validating
+                          ? 'Saving...'
+                          : 'Save'}
+                      </ActionButton>
+                    </Flex>
                   )}
                 </Flex>
               </FormContainer>
