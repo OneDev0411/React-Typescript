@@ -72,7 +72,11 @@ export function TaskType() {
           buttonRenderer={props => (
             <Button {...props}>
               <Flex alignCenter>
-                {props.icon && <props.icon style={{ marginRight: '0.5em' }} />}
+                {props.icon && (
+                  <props.icon
+                    style={{ marginRight: '0.5em', fill: props.iconColor }}
+                  />
+                )}
                 {props.value}
               </Flex>
               <Icon isOpen={props.isOpen} />
