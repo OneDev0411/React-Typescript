@@ -23,6 +23,9 @@ const getImportantDateIcon = label => {
     case 'new home':
       return getIcon('important-date__new-home')
 
+    case 'home anniversary':
+      return getIcon('important-date__home-anniversary')
+
     case 'work anniversary':
       return getIcon('important-date__work-anniversary')
 
