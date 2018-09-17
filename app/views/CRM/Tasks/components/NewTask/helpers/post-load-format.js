@@ -11,7 +11,7 @@
  */
 export async function postLoadFormat(task, defaultAssociation) {
   let associations = []
-  const REMINDER_DEFAULT_LABEL = 'At the time of event'
+  const REMINDER_DEFAULT_LABEL = '15 Minutes Before'
 
   if (defaultAssociation) {
     associations.push(defaultAssociation)
