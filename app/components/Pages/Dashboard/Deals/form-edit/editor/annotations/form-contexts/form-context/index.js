@@ -12,32 +12,55 @@ function getContextType(context) {
   return 'Singular'
 }
 
-export default function FormContexts(props) {
+function ContextGroups(props) {
+  const { value, groups, onSetValues, context } = props
+
   return (
     <div>
-      {_.map(props.contexts, (context, name) => {
-        const ctx = DealContext.searchContext(name)
-        const annotations = context.map(item => item.annotation)
+      {_.map(groups, group => {
+        const annotations = group.map(i => i.annotation)
 
         return (
           <ContextAnnotation
-            key={name}
-            value={
-              DealContext.getValue(props.deal, DealContext.searchContext(name))
-                .value
-            }
-            annotations={annotations}
-            maxFontSize={20}
-            onSetValues={props.onSetValues}
+            value={ value }
+            maxFontSize={ 20 }
+            annotations={ annotations }
+            onSetValues={ onSetValues }
             onClick={bounds => {
               props.onClick('Context', {
-                contextName: name,
-                type: getContextType(ctx),
-                context: ctx,
+                contextName: context.name,
+                type: getContextType(context),
+                context,
                 annotations,
                 bounds
               })
             }}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+export default function FormContexts(props) {
+  const grouped = {}
+
+  for(const context_name in props.contexts)
+    grouped[context_name] = _.groupBy(props.contexts[context_name], 'group')
+
+  return (
+    <div>
+      {_.map(grouped, (groups, name) => {
+        const context = DealContext.searchContext(name)
+        const value = DealContext.getValue(props.deal, DealContext.searchContext(name)).value
+
+        return (
+          <ContextGroups
+            key={ name }
+            groups={ groups }
+            value={ value }
+            context={ context }
+            onSetValues={ props.onSetValues }
           />
         )
       })}
