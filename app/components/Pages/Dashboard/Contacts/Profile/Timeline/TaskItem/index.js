@@ -61,19 +61,29 @@ class CRMTaskItem extends React.Component {
     }
   }
 
+  handleOnClick = () => {
+    this.props.onClick(this.props.task)
+  }
+
   render() {
     const { task } = this.props
     const { task_type, reminders } = task
     const Icon = icons[task_type] ? icons[task_type].icon : icons.Todo
 
     return (
-      <Container onClick={() => this.props.onClick(task)}>
+      <Container>
         <Flex alignCenter style={{ marginBottom: '2em' }}>
-          <Icon style={{ marginRight: '0.5em' }} />
-          <div>{task_type}</div>
+          <Flex
+            alignCenter
+            onClick={this.handleOnClick}
+            className="u-cursor--pointer"
+          >
+            <Icon style={{ marginRight: '0.5em' }} />
+            <span>{task_type}</span>
+          </Flex>
           <Divider margin="0 1em" width="1px" height="16px" />
           <Flex alignCenter style={{ color: '#7f7f7f' }}>
-            <div>
+            <div className="u-cursor--pointer" onClick={this.handleOnClick}>
               {fecha.format(
                 new Date(task.due_date * 1000),
                 'MMM D, YYYY hh:mm A'
@@ -81,7 +91,12 @@ class CRMTaskItem extends React.Component {
             </div>
             {reminders &&
               reminders.length > 0 && (
-                <Flex alignCenter style={{ marginLeft: '1em' }}>
+                <Flex
+                  alignCenter
+                  style={{ marginLeft: '1em' }}
+                  onClick={this.handleOnClick}
+                  className="u-cursor--pointer"
+                >
                   <IconBell style={{ fill: '#7f7f7f' }} />
                   <span>
                     {getReminderLabel(
@@ -100,7 +115,9 @@ class CRMTaskItem extends React.Component {
             onClick={this.handleStatus}
           />
           <Flex column style={{ width: 'calc(100% - 40px)' }}>
-            <Title onClick={() => this.props.onClick(task)}>{task.title}</Title>
+            <Title className="u-cursor--pointer" onClick={this.handleOnClick}>
+              {task.title}
+            </Title>
             {task.description && <Description>{task.description}</Description>}
           </Flex>
         </Flex>

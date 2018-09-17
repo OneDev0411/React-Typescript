@@ -13,6 +13,10 @@ export const Container = styled.div`
   &:hover {
     background-color: ${grey.A000};
   }
+
+  .u-cursor--pointer:hover {
+    cursor: pointer;
+  }
 `
 
 export const Title = styled.h3`
@@ -22,7 +26,6 @@ export const Title = styled.h3`
   line-height: 1;
 
   &:hover {
-    cursor: pointer;
     color: ${primary};
   }
 `

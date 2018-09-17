@@ -285,3 +285,7 @@ export default connect(
     upsertContactAttributes
   }
 )(ContactProfile)
+
+// todo
+// infinit scroll + lazy loading
+// loading new event associationas after adding to timeline
