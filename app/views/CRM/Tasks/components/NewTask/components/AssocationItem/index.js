@@ -28,7 +28,7 @@ export class AssociationItem extends Component {
           <Title>{record.title}</Title>
           <Details>{record.details}</Details>
         </div>
-        {removable && <ShadowLink href={record.url} target="_blank" />}
+        <ShadowLink href={record.url} target="_blank" />
         {removable && (
           <Button
             isFit

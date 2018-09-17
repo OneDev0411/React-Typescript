@@ -12,6 +12,11 @@ export const Container = styled.div`
   padding: 0.75em;
   border-radius: 3px;
   background-color: ${grey.A100};
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${grey.A250};
+  }
 `
 
 export const Title = styled.div`
