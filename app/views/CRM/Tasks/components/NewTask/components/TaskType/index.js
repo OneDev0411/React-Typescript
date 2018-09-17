@@ -1,8 +1,10 @@
 import React from 'react'
 import { Field } from 'react-final-form'
+import Flex from 'styled-flex-component'
 
 import { Dropdown } from '../../../../../../components/Dropdown'
 import LinkButton from '../../../../../../components/Button/LinkButton'
+import { eventTypesIcons } from '../../../../../../utils/event-types-icons'
 import ArrowDropDown from '../../../../../../components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import { grey, primary } from '../../../../../../utils/colors'
 
@@ -64,11 +66,15 @@ export function TaskType() {
       render={({ input }) => (
         <Dropdown
           input={input}
+          icons={eventTypesIcons}
           items={ITEMS}
           fullHeight
           buttonRenderer={props => (
             <Button {...props}>
-              {props.value}
+              <Flex alignCenter>
+                {props.icon && <props.icon style={{ marginRight: '0.5em' }} />}
+                {props.value}
+              </Flex>
               <Icon isOpen={props.isOpen} />
             </Button>
           )}
