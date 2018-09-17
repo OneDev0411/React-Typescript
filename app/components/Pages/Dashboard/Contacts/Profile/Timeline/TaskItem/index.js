@@ -8,7 +8,7 @@ import { updateTask } from '../../../../../../../store_actions/tasks'
 import { Divider } from '../../../../../../../views/components/Divider'
 import IconBell from '../../../../../../../views/components/SvgIcons/Bell/IconBell'
 import { icons } from '../../../../../../../views/CRM/Tasks/List/Table/columns/Type/icons'
-import { goTo } from '../../../../../../../utils/go-to'
+// import { goTo } from '../../../../../../../utils/go-to'
 import { getAssociations } from '../../../../../../../views/CRM/Tasks/components/NewTask/helpers/get-associations'
 import { AssociationItem } from '../../../../../../../views/CRM/Tasks/components/NewTask/components/AssocationItem'
 import { Status } from './Status'
@@ -36,7 +36,7 @@ class CRMTaskItem extends React.Component {
   }
 
   handleStatus = async () => {
-    const newTask = {
+    const updatedTask = {
       ...this.props.task,
       status: this.state.isDone ? 'PENDING' : 'DONE'
     }
@@ -47,14 +47,16 @@ class CRMTaskItem extends React.Component {
     }))
 
     try {
-      await this.props.dispatch(updateTask(newTask))
+      await this.props.dispatch(updateTask(updatedTask))
+
+      this.setState({ disabled: false })
     } catch (error) {
-      throw error
-    } finally {
-      this.setState(({ isDone }) => ({
-        isDone: !isDone,
+      console.log(error)
+      this.setState(state => ({
+        isDone: !state.isDone,
         disabled: false
       }))
+      throw error
     }
   }
 
