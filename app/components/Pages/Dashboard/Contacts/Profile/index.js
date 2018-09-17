@@ -112,11 +112,11 @@ class ContactProfile extends React.Component {
     })
   }
 
-  removeEvent = eventId => {
-    this.setState(state => ({
-      timeline: state.timeline.filter(item => item.id !== eventId)
-    }))
-  }
+  // removeEvent = eventId => {
+  //   this.setState(state => ({
+  //     timeline: state.timeline.filter(item => item.id !== eventId)
+  //   }))
+  // }
 
   handleAddNote = async text => {
     await this.props.upsertContactAttributes(this.props.contact.id, [
@@ -229,7 +229,6 @@ class ContactProfile extends React.Component {
                     >
                       <NewTask
                         submitCallback={this.addEvent}
-                        deleteCallback={this.removeEvent}
                         defaultAssociation={defaultAssociation}
                       />
                     </Tab.Pane>
@@ -251,6 +250,7 @@ class ContactProfile extends React.Component {
                 isFetching={this.state.isFetchingTimeline}
                 editNoteHandler={this.editNote}
                 deleteNoteHandler={this.deleteNote}
+                editEventHandler={this.editEvent}
               />
             </SecondColumn>
 

@@ -72,7 +72,7 @@ class CRMTaskItem extends React.Component {
     const Icon = icons[task_type] ? icons[task_type].icon : icons.Todo
 
     return (
-      <Container>
+      <Container onClick={() => this.props.onClick(task)}>
         <Flex alignCenter style={{ marginBottom: '2em' }}>
           <Icon style={{ marginRight: '0.5em' }} />
           <div>{task_type}</div>
@@ -105,7 +105,7 @@ class CRMTaskItem extends React.Component {
             onClick={this.handleStatus}
           />
           <Flex column style={{ width: 'calc(100% - 40px)' }}>
-            <Title onClick={this.props.onClick}>{task.title}</Title>
+            <Title onClick={() => this.props.onClick(task)}>{task.title}</Title>
             {task.description && <Description>{task.description}</Description>}
           </Flex>
         </Flex>

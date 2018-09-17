@@ -209,15 +209,19 @@ class Task extends Component {
                 {values.title && (
                   <React.Fragment>
                     <Flex
-                      justifyBetween
-                      alignCenter
+                      alignCenter={this.isNew}
+                      column={!this.isNew}
+                      justifyBetween={this.isNew}
                       style={{ marginBottom: '1.5em' }}
                     >
                       <TaskType />
                       <FieldContainer
                         justifyBetween
                         alignCenter
-                        style={{ marginLeft: '1em', flex: 2 }}
+                        style={{
+                          margin: this.isNew ? '0 0 0 1em' : '1em 0 0 0',
+                          flex: this.isNew ? 2 : 1
+                        }}
                       >
                         <DateTimeField
                           name="dueDate"

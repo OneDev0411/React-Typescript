@@ -2,6 +2,7 @@ import React from 'react'
 
 import Loading from '../../../../../Partials/Loading'
 import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawer'
+import { EditEventDrawer } from '../../../../../../views/components/EditEventDrawer'
 
 import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
@@ -12,13 +13,20 @@ import { EmptyState } from './EmptyState'
 export class Timeline extends React.Component {
   state = {
     selectedNote: null,
-    showEditNoteDrawer: false
+    selectedEvent: null,
+    showEditNoteDrawer: false,
+    showEditEventDrawer: false
   }
 
   openEditNoteDrawer = selectedNote =>
     this.setState({ showEditNoteDrawer: true, selectedNote })
   closeEditNoteDrawer = () =>
     this.setState({ showEditNoteDrawer: false, selectedNote: null })
+
+  openEditEventDrawer = selectedEvent =>
+    this.setState({ showEditEventDrawer: true, selectedEvent })
+  closeEditEventDrawer = () =>
+    this.setState({ showEditEventDrawer: false, selectedEvent: null })
 
   render() {
     if (this.props.isFetching) {
@@ -41,7 +49,7 @@ export class Timeline extends React.Component {
                     contact={this.props.contact}
                     key={key}
                     task={activity}
-                    onClick={this.onClickItemHandler}
+                    onClick={this.openEditEventDrawer}
                   />
                 )
               }
@@ -69,6 +77,15 @@ export class Timeline extends React.Component {
               onClose={this.closeEditNoteDrawer}
               onSubmit={this.props.editNoteHandler}
               onDelete={this.props.deleteNoteHandler}
+            />
+          )}
+
+          {this.state.selectedEvent && (
+            <EditEventDrawer
+              isOpen={this.state.showEditEventDrawer}
+              eventId={this.state.selectedEvent.id}
+              onClose={this.closeEditEventDrawer}
+              onSubmit={this.props.editEventHandler}
             />
           )}
         </div>
