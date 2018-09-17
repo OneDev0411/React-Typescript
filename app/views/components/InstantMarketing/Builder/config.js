@@ -23,11 +23,6 @@ export default {
     textNoElement: '',
 
     sectors: [
-      {
-        name: 'Color',
-        open: true,
-        buildProps: ['background-color', 'color']
-      }
     ]
   },
   panels: {
