@@ -61,7 +61,7 @@ $margin: 20px;
 
   .form-section {
     margin-bottom: 30px;
-    sup {
+    .required {
       color: #fe3824;
     }
   }
@@ -278,12 +278,10 @@ $margin: 20px;
       font-size: 25px;
       line-height: 16px;
       border-radius: 40px;
-      margin-right: 5px;
+      margin-right: 0.5rem;
     }
 
     .text {
-      font-size: 15px;
-      font-weight: 400;
       &.hasError {
         color: #ec4b35;
         font-weight: 500;
