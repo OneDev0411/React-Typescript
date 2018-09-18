@@ -32,7 +32,7 @@ import {
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
-    state = {
+    this.state = {
       isSideMenuOpen: true,
       isFetchingContacts: false,
       isFetchingMoreContacts: false,
