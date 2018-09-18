@@ -12,11 +12,21 @@ const TextInput = styled.input`
   font-size: ${props => props.fontSize || 16}px;
   font-family: ${props => props.appearance.font};
   color: ${props => props.appearance.color};
-  border: 1px solid #262626;
-  border-radius: 2px;
   font-weight: ${props => (props.appearance.bold ? 'bold' : 'normal')}
   min-width: 15px;
-  background-color: lightyellow;
+  background-color: #d2e5f2;
+  border: 1px solid #ccc;
+  transition: 0.1s ease-in all;
+  padding: 0 3px;
+
+  :focus {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    font-size: ${props => (props.fontSize || 16) - 2}px;
+    font-weight: 400;
+    color: #262626;
+  }
 `
 
 class TextAnnotation extends React.Component {

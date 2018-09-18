@@ -20,6 +20,8 @@ export default class Page extends React.Component {
     canvas.height = height
 
     page.render({
+      renderInteractiveForms: true,
+      enableWebGL: true,
       canvasContext: context,
       viewport
     })

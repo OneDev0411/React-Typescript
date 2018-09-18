@@ -23,6 +23,12 @@ export function searchContext(name) {
 
   const context = _.find(getList(), { name })
 
+  if (!context) {
+    console.warn(`Could not find context: ${context}`)
+
+    return null
+  }
+
   return {
     ...context,
     validate: getValidationFunction(context.name),
@@ -228,6 +234,10 @@ export function isCurrency(field) {
  * returns value of context
  */
 export function getValue(deal, field) {
+  if (!field) {
+    return null
+  }
+
   if (field.data_type === 'Date') {
     return getDateValue(deal, field)
   }

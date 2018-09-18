@@ -1,5 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
+import PropTypes from 'prop-types'
 
 const infinityLoading = keyframes`
   from {
@@ -30,7 +31,7 @@ const Bar = styled.div`
   max-width: 100%;
 
   ${props =>
-    props.percents === 0 &&
+    props.indeterminate &&
     `
     position: absolute;
     top: 0;
@@ -41,10 +42,21 @@ const Bar = styled.div`
   `};
 `
 
-export default function ProgressBar(props) {
+function ProgressBar(props) {
   return (
     <Container>
-      <Bar percents={props.percents} />
+      <Bar percents={props.percents} indeterminate={props.indeterminate} />
     </Container>
   )
 }
+
+ProgressBar.propTypes = {
+  percents: PropTypes.number.isRequired,
+  indeterminate: PropTypes.bool
+}
+
+ProgressBar.defaultProps = {
+  indeterminate: false
+}
+
+export default ProgressBar

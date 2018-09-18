@@ -6,6 +6,7 @@ import FormContext from './form-context'
 
 export default function FormContexts(props) {
   const sharedProps = {
+    formValues: props.values,
     deal: props.deal,
     onClick: props.onClick,
     onSetValues: props.onSetValues

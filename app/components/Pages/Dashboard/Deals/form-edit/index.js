@@ -25,7 +25,7 @@ class EditDigitalForm extends React.Component {
     isSaving: false,
     pdfDocument: null,
     pdfUrl: '',
-    downloadPercents: 0
+    downloadPercents: 5
   }
 
   componentDidMount() {
@@ -64,9 +64,14 @@ class EditDigitalForm extends React.Component {
     // get form size in bytes, because pdfjs sucks
     const formSize = await getFormSize(form.id)
 
+    if (!formSize) {
+      this.setState({
+        downloadPercents: Infinity
+      })
+    }
+
     const pdfDocument = PDFJS.getDocument({
       url: pdfUrl,
-      renderInteractiveForms: false,
       length: formSize
     })
 
@@ -109,13 +114,17 @@ class EditDigitalForm extends React.Component {
     }
   }
 
-  changeFormValue = (name, value) => {
+  changeFormValue = (name, value, forceUpdate = false) => {
     const newValues = {
       ...this.values,
       [name]: value
     }
 
     this.values = newValues
+
+    if (forceUpdate) {
+      this.forceUpdate()
+    }
   }
 
   setFormValues = values => {
@@ -182,7 +191,10 @@ class EditDigitalForm extends React.Component {
       return (
         <LoadingDealContainer>
           Loading Digital Form
-          <ProgressBar percents={this.state.downloadPercents} />
+          <ProgressBar
+            percents={this.state.downloadPercents}
+            indeterminate={this.state.downloadPercents === Infinity}
+          />
         </LoadingDealContainer>
       )
     }

@@ -4,7 +4,8 @@ import _ from 'underscore'
 
 import Input from 'components/Input'
 import ActionButton from 'components/Button/ActionButton'
-import { Container } from './styled'
+import CancelButton from 'components/Button/CancelButton'
+import { Container, InputContainer, ActionsContainer } from './styled'
 
 export default class StringContext extends React.Component {
   getValue() {
@@ -50,6 +51,11 @@ export default class StringContext extends React.Component {
     return this.position
   }
 
+  saveDefaultValue = value => {
+    this.props.onClose()
+    this.props.onValueUpdate(this.props.contextName, value, true)
+  }
+
   render() {
     if (!this.props.isOpen) {
       return false
@@ -60,24 +66,37 @@ export default class StringContext extends React.Component {
     return (
       <ClickOutside onClickOutside={this.onClose}>
         <Container position={position}>
-          <Input
-            data-type={
-              this.props.context.format || this.props.context.data_type
-            }
-            {...this.props.context.properties}
-            className="input-edit"
-            maxLength={15}
-            value={this.getValue()}
-            onKeyPress={e => this.onKeyPress(e)}
-            onChange={this.onChange}
-          />
+          <InputContainer>
+            <Input
+              data-type={
+                this.props.context.format || this.props.context.data_type
+              }
+              {...this.props.context.properties}
+              style={{
+                width: '100%'
+              }}
+              maxLength={15}
+              value={this.getValue()}
+              onKeyPress={e => this.onKeyPress(e)}
+              onChange={this.onChange}
+            />
+          </InputContainer>
 
-          <ActionButton
-            onClick={this.props.handleSave}
-            disabled={this.props.isSaving}
-          >
-            {this.props.isSaving ? 'Saving...' : 'Save'}
-          </ActionButton>
+          <ActionsContainer>
+            <ActionButton
+              onClick={this.props.handleSave}
+              disabled={this.props.isSaving}
+            >
+              {this.props.isSaving ? 'Saving...' : 'Save Value'}
+            </ActionButton>
+
+            <CancelButton onClick={() => this.saveDefaultValue('TBD')}>
+              TBD
+            </CancelButton>
+            <CancelButton onClick={() => this.saveDefaultValue('N/A')}>
+              N/A
+            </CancelButton>
+          </ActionsContainer>
         </Container>
       </ClickOutside>
     )

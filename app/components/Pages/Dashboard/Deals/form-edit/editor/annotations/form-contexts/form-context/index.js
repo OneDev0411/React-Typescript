@@ -28,13 +28,13 @@ export default function FormContexts(props) {
           DealContext.searchContext(name)
         ).value
 
-        return _.map(groups, group => {
+        return _.map(groups, (group, id) => {
           const annotations = group.map(i => i.annotation)
 
           return (
             <ContextAnnotation
-              key={name}
-              value={value}
+              key={`${name}-${id}`}
+              value={props.formValues[annotations[0].fieldName] || value}
               maxFontSize={20}
               annotations={annotations}
               onSetValues={props.onSetValues}

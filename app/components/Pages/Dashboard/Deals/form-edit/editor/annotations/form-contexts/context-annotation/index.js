@@ -16,12 +16,11 @@ const Container = styled.div`
   top: ${props => props.rect.top}px;
   width: ${props => props.rect.width}px;
   height: ${props => props.rect.height}px;
-  border: ${props => (props.readOnly ? 'none' : '1px dotted green')};
+  background-color: #d2e5f2;
   cursor: ${props => (props.readOnly ? 'auto' : 'pointer')};
 
   :hover {
-    background-color: ${props =>
-      props.readOnly ? 'transparent' : 'rgba(0, 0, 0, 0.1)'};
+    opacity: ${props => (props.readOnly ? 1 : 0.8)};
   }
 `
 

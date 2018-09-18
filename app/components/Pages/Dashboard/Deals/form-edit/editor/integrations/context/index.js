@@ -73,7 +73,9 @@ class Context extends React.Component {
       onClose: this.props.onClose,
       isSaving: this.state.isSaving,
       handleSave: this.handleSave,
+      onValueUpdate: this.props.onValueUpdate,
       onContextChange: this.onContextChange,
+      contextName: this.props.data.annotations[0].fieldName,
       value: this.state.value,
       context: DealContext.searchContext(data.contextName),
       defaultValue
