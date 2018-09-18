@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import RadioButton from '../../../../../../views/components/radio'
+import RadioButton from '../../../../../../views/components/RadioButton'
 import { SectionTitle } from '../styled'
 
 const radioButtonStyle = { display: 'block', marginBottom: '2rem' }
