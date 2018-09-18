@@ -1,7 +1,4 @@
 import React from 'react'
-import { Dropdown, MenuItem } from 'react-bootstrap'
-import cn from 'classnames'
-import RadioButton from '../../../../../views/components/CheckmarkButton'
 import { BasicDropdown } from 'components/BasicDropdown'
 import { H2 } from 'components/Typography/headings'
 

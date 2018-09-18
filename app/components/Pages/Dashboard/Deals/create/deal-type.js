@@ -1,6 +1,6 @@
 import React from 'react'
 
-import RadioButton from '../../../../../views/components/CheckmarkButton'
+import RadioButton from '../../../../../views/components/RadioButton'
 import { H2 } from 'components/Typography/headings'
 
 export default ({ isDraft, isRequired, onChangeDealType }) => (

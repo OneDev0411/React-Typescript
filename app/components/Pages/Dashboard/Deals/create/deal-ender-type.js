@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import RadioButton from '../../../../../views/components/CheckmarkButton'
+import RadioButton from '../../../../../views/components/RadioButton'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 import { H2 } from 'components/Typography/headings'
 
