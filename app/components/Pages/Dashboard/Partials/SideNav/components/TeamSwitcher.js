@@ -22,7 +22,9 @@ const TeamName = styled.div`
 const Button = ActionButton.extend`
   width: 100%;
   height: 48px;
+  justify-content: space-between;
   color: ${props => (props.isSelected ? primary : '#000')};
+  font-weight: ${props => (props.isSelected ? 600 : 400)};
   border-radius: 0;
 
   &:not([disabled]):hover {
@@ -94,16 +96,19 @@ export default class extends React.Component {
                 appearance="link"
                 onClick={e => this.changeTeam(e, team)}
               >
-                {this.getAvatar(team.brand)}
+                <Flex alignCenter>
+                  {this.getAvatar(team.brand)}
 
-                <TeamName>{team.brand.name}</TeamName>
+                  <TeamName>{team.brand.name}</TeamName>
+                </Flex>
+                <Flex alignCenter>
+                  {!savingTeam &&
+                    isActiveTeam && <CheckmarkIcon style={{ fill: primary }} />}
 
-                {!savingTeam &&
-                  isActiveTeam && <CheckmarkIcon style={{ fill: primary }} />}
-
-                {savingTeam === team.brand.id && (
-                  <i className="fa fa-spinner fa-spin" />
-                )}
+                  {savingTeam === team.brand.id && (
+                    <i className="fa fa-spinner fa-spin" />
+                  )}
+                </Flex>
               </Button>
             </li>,
             <li
