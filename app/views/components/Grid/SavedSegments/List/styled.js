@@ -4,13 +4,12 @@ import { blue } from '../../../../utils/colors'
 import IconButton from '../../../../../views/components/Button/IconButton'
 
 export const Container = styled.div`
-  padding: 2.5rem 1rem;
+  padding: 1.5rem 1rem;
 `
 
 export const ListTitle = styled.div`
   font-size: 21px;
-  line-height: 24px;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
   font-weight: 500;
 `
 
@@ -31,9 +30,7 @@ export const ListItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 16px;
-  line-height: 24px;
+  margin-bottom: 0.5em;
 
   color: ${props => (props.isSelected ? blue.A100 : '#000')};
   font-weight: ${props => (props.isSelected ? 500 : 400)};

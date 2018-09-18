@@ -10,13 +10,13 @@ import Icon from '../../../SvgIcons/Add/AddIcon'
 
 const IconAdd = Icon.extend`
   fill: ${blue.A100};
-  width: 16px;
-  height: 16px;
+  width: 1em;
+  height: 1em;
 `
 
 const AddItem = Button.extend`
   padding: 0;
-  margin-right: 16px;
+  margin-right: 1em;
 
   &:hover > svg {
     fill: ${blue.A200};
