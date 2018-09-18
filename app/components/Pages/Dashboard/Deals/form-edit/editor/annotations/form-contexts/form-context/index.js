@@ -22,10 +22,10 @@ function ContextGroups(props) {
 
         return (
           <ContextAnnotation
-            value={ value }
-            maxFontSize={ 20 }
-            annotations={ annotations }
-            onSetValues={ onSetValues }
+            value={value}
+            maxFontSize={20}
+            annotations={annotations}
+            onSetValues={onSetValues}
             onClick={bounds => {
               props.onClick('Context', {
                 contextName: context.name,
@@ -45,22 +45,26 @@ function ContextGroups(props) {
 export default function FormContexts(props) {
   const grouped = {}
 
-  for(const context_name in props.contexts)
-    grouped[context_name] = _.groupBy(props.contexts[context_name], 'group')
+  _.each(props.contexts, name => {
+    grouped[name] = _.groupBy(props.contexts[name], 'group')
+  })
 
   return (
     <div>
       {_.map(grouped, (groups, name) => {
         const context = DealContext.searchContext(name)
-        const value = DealContext.getValue(props.deal, DealContext.searchContext(name)).value
+        const value = DealContext.getValue(
+          props.deal,
+          DealContext.searchContext(name)
+        ).value
 
         return (
           <ContextGroups
-            key={ name }
-            groups={ groups }
-            value={ value }
-            context={ context }
-            onSetValues={ props.onSetValues }
+            key={name}
+            groups={groups}
+            value={value}
+            context={context}
+            onSetValues={props.onSetValues}
           />
         )
       })}
