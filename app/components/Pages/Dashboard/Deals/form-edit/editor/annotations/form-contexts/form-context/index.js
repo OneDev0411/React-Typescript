@@ -12,41 +12,11 @@ function getContextType(context) {
   return 'Singular'
 }
 
-function ContextGroups(props) {
-  const { value, groups, onSetValues, context } = props
-
-  return (
-    <div>
-      {_.map(groups, group => {
-        const annotations = group.map(i => i.annotation)
-
-        return (
-          <ContextAnnotation
-            value={value}
-            maxFontSize={20}
-            annotations={annotations}
-            onSetValues={onSetValues}
-            onClick={bounds => {
-              props.onClick('Context', {
-                contextName: context.name,
-                type: getContextType(context),
-                context,
-                annotations,
-                bounds
-              })
-            }}
-          />
-        )
-      })}
-    </div>
-  )
-}
-
 export default function FormContexts(props) {
   const grouped = {}
 
-  _.each(props.contexts, name => {
-    grouped[name] = _.groupBy(props.contexts[name], 'group')
+  _.each(props.contexts, (data, context_name) => {
+    grouped[context_name] = _.groupBy(props.contexts[context_name], 'group')
   })
 
   return (
@@ -58,15 +28,28 @@ export default function FormContexts(props) {
           DealContext.searchContext(name)
         ).value
 
-        return (
-          <ContextGroups
-            key={name}
-            groups={groups}
-            value={value}
-            context={context}
-            onSetValues={props.onSetValues}
-          />
-        )
+        return _.map(groups, group => {
+          const annotations = group.map(i => i.annotation)
+
+          return (
+            <ContextAnnotation
+              key={name}
+              value={value}
+              maxFontSize={20}
+              annotations={annotations}
+              onSetValues={props.onSetValues}
+              onClick={bounds => {
+                props.onClick('Context', {
+                  contextName: context.name,
+                  type: getContextType(context),
+                  context,
+                  annotations,
+                  bounds
+                })
+              }}
+            />
+          )
+        })
       })}
     </div>
   )
