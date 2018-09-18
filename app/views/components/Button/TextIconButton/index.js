@@ -80,16 +80,10 @@ class TextIconButton extends PureComponent {
     const ExtendedButton = Button.extend`
       justify-content: ${props =>
         props.isBlock ? 'space-between' : 'initial'};
-      ${props =>
-        props.noBorder &&
-        css`
-          border: none;
-        `};
 
       > svg {
         width: ${props => getIconSize(props.size)};
         height: ${props => getIconSize(props.size)};
-        fill: ${props => (isOutline(props) ? '#000' : '#fff')};
       }
 
       ${props => getIconStatesStyle(props)};
