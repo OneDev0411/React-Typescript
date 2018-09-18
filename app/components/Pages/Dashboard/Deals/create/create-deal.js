@@ -2,15 +2,11 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { browserHistory } from 'react-router'
-
 import _ from 'underscore'
-import cn from 'classnames'
 import moment from 'moment'
 
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
-
-import Button from '../../../../../views/components/Button/ActionButton'
 
 import PageHeader from './page-header'
 import DealType from './deal-type'
@@ -382,12 +378,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
+      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -819,7 +815,6 @@ class CreateDeal extends React.Component {
           }
           handleOnClose={this.onClosePage}
         />
-
         <div className="form">
           {!deal && (
             <div className="swoosh">Swoosh! Another one in the bag.</div>
