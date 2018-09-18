@@ -167,7 +167,7 @@ class ContactsList extends React.Component {
     const selectedRowsCount = this.props.selectedRows.length
 
     return (
-      <div style={{ padding: '0 2.5em' }}>
+      <div style={{ padding: '0 1.5em' }}>
         <Table
           plugins={{
             selectable: {
