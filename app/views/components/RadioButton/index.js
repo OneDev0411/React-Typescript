@@ -5,26 +5,39 @@ import IconSelectedRadio from '../SvgIcons/Radio/SelectedRadio/IconSelectedRadio
 import IconUnSelectedRadio from '../SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
 import Flex from 'styled-flex-component'
 
-const RadioLabel = styled.span`
+const LabelContainer = styled.div`
+  margin-left: 0.5rem;
+`
+const RadioLabel = styled.div`
   ${({ disabled }) =>
     disabled &&
     css`
       opacity: 0.5;
     `};
 `
+const Caption = styled.div`
+  color: #7f7f7f;
+  font-size: 0.875rem;
+`
+
 export default ({
   selected,
   title,
   tooltip = null,
   disabled = false,
   onClick = () => null,
-  style = {}
+  style = {},
+  caption = ''
 }) => (
   <Flex justifyStart style={style} onClick={onClick}>
     <ToolTip caption={tooltip}>
-      <Flex alignCenter>
+      <Flex alignStart>
         {selected ? <IconSelectedRadio /> : <IconUnSelectedRadio />}
-        <RadioLabel disabled={disabled}>{title}</RadioLabel>
+        <LabelContainer>
+          <RadioLabel disabled={disabled}>{title}</RadioLabel>
+
+          <Caption>{caption}</Caption>
+        </LabelContainer>
       </Flex>
     </ToolTip>
   </Flex>
