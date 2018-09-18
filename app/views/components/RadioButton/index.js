@@ -1,10 +1,17 @@
 import React from 'react'
-import cn from 'classnames'
 import ToolTip from '../tooltip'
+import styled, { css } from 'styled-components'
 import IconSelectedRadio from '../SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
 import IconUnSelectedRadio from '../SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
 import Flex from 'styled-flex-component'
 
+const RadioLabel = styled.span`
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.5;
+    `};
+`
 export default ({
   selected,
   title,
@@ -17,12 +24,7 @@ export default ({
     <ToolTip caption={tooltip}>
       <Flex alignCenter>
         {selected ? <IconSelectedRadio /> : <IconUnSelectedRadio />}
-        <span
-          className={cn('radio-label', { disabled })}
-          data-test="radio-label"
-        >
-          {title}
-        </span>
+        <RadioLabel disabled={disabled}>{title}</RadioLabel>
       </Flex>
     </ToolTip>
   </Flex>
