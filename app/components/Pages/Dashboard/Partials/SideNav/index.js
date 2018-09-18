@@ -80,7 +80,8 @@ const appSideNav = ({ user, activePath, appNotifications }) => {
         <Dropdown.Menu>
           <TeamSwitcher user={user} />
 
-          <li className="separator">Account</li>
+          {user.teams &&
+            user.teams.length > 1 && <li className="separator">Account</li>}
 
           <li>
             <Link to="/dashboard/account">Settings</Link>
