@@ -180,7 +180,7 @@ class SaveSegment extends React.Component {
               appearance="outline"
               disabled={isSaving}
               onClick={this.toggleShowModal}
-              style={{ marginRight: '8px' }}
+              style={{ marginRight: '0.5em' }}
             >
               Cancel
             </Button>
