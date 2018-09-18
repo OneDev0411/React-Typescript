@@ -36,18 +36,30 @@ const GridContainer = styled.div`
 class ContactsList extends React.Component {
   state = {
     isSideMenuOpen: true,
-    pageTitle: 'All Contacts',
     isFetchingContacts: false,
     isFetchingMoreContacts: false,
     isRowsUpdating: false,
     filter: this.props.filter,
     selectedRows: [],
-    searchInputValue: this.props.searchInputValue
+    searchInputValue: this.props.searchInputValue,
+    activeSegment: {}
   }
 
   componentDidMount() {
     if (this.props.listInfo.count === 0) {
       this.fetchContacts()
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.filterSegments.activeSegmentId !==
+        this.props.filterSegments.activeSegmentId &&
+      nextProps.filterSegments.activeSegmentId !== this.state.activeSegment.id
+    ) {
+      this.handleChangeSavedSegment(
+        nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
+      )
     }
   }
 
@@ -76,7 +88,7 @@ class ContactsList extends React.Component {
   handleChangeSavedSegment = segment => {
     this.setState(
       {
-        pageTitle: segment.name
+        activeSegment: segment
       },
       () => {
         this.handleFilterChange(segment.filters, this.state.searchInputValue)
@@ -188,7 +200,7 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const { isSideMenuOpen } = this.state
+    const { isSideMenuOpen, activeSegment } = this.state
     const { user, list } = this.props
     const contacts = selectContacts(list)
 
@@ -203,7 +215,7 @@ class ContactsList extends React.Component {
 
         <PageContent>
           <Header
-            title={this.state.pageTitle}
+            title={activeSegment.name || 'All Contacts'}
             isSideMenuOpen={this.state.isSideMenuOpen}
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
@@ -244,7 +256,8 @@ function mapStateToUser({ user, contacts }) {
     listInfo,
     user,
     filter: listInfo.filter || [],
-    list: contacts.list
+    list: contacts.list,
+    filterSegments: contacts.filterSegments
   }
 }
 

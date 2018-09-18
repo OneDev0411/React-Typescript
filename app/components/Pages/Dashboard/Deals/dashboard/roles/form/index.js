@@ -8,6 +8,10 @@ import { TYPE_PERSON, TYPE_COMPANY } from './form-components/type-input'
 
 export class RoleFormModal extends React.Component {
   getInitialValues = () => {
+    if (!this.props.isOpen) {
+      return {}
+    }
+
     if (this.props.isSubmitting) {
       return this.formObject
     }
@@ -425,6 +429,11 @@ export class RoleFormModal extends React.Component {
     return !form || !form.role
   }
 
+  onClose = () => {
+    this.formObject = {}
+    this.props.onHide()
+  }
+
   render() {
     return (
       <FinalFormDrawer
@@ -432,7 +441,7 @@ export class RoleFormModal extends React.Component {
         validate={this.validate}
         initialValues={this.getInitialValues()}
         isOpen={this.props.isOpen}
-        onClose={this.props.onHide}
+        onClose={this.onClose}
         title={this.props.modalTitle}
         submitting={this.props.isSubmitting}
         submitButtonLabel={this.submitCaption}
