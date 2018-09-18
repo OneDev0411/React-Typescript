@@ -14,7 +14,7 @@ class Roles extends React.Component {
   state = {
     user: null,
     deletingRoleId: null,
-    showRoleModal: false
+    isRoleFormOpen: false
   }
 
   getAvatarTitle = role => {
@@ -104,17 +104,15 @@ class Roles extends React.Component {
   setSelectedRole = user => {
     this.setState({
       user,
-      showRoleModal: true
+      isRoleFormOpen: true
     })
   }
 
-  closeRoleModal = () => {
-    this.setState({ showRoleModal: false })
-  }
+  closeRoleForm = () => this.setState({ isRoleFormOpen: false, user: null })
 
   render() {
     const { deal, roles, allowedRoles, allowDeleteRole } = this.props
-    const { user, deletingRoleId, showRoleModal } = this.state
+    const { user, deletingRoleId, isRoleFormOpen } = this.state
 
     return (
       <div className="deal-info-section deal-roles">
@@ -167,14 +165,16 @@ class Roles extends React.Component {
             )
           })}
 
-        <RoleCrmIntegration
-          deal={deal}
-          user={user}
-          modalTitle="Update Contact"
-          isOpen={showRoleModal}
-          allowedRoles={allowedRoles}
-          onHide={this.closeRoleModal}
-        />
+        {isRoleFormOpen && (
+          <RoleCrmIntegration
+            isOpen
+            deal={deal}
+            user={user}
+            modalTitle="Update Contact"
+            allowedRoles={allowedRoles}
+            onHide={this.closeRoleForm}
+          />
+        )}
 
         <AddRole deal={deal} allowedRoles={allowedRoles} />
       </div>

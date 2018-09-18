@@ -14,3 +14,7 @@ body,
 .touch-scroll {
   -webkit-overflow-scrolling: touch;
 }
+
+[data-simplebar] {
+  z-index: inherit !important;
+}

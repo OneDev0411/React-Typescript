@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
+import { addNotification as notify } from 'reapop'
 
 import extractDocumentOfTask from '../utils/extract-document-of-task'
 import { getDeal, displaySplitter } from '../../../../../store_actions/deals'
@@ -9,7 +10,6 @@ import FileView from './file-view'
 import EnvelopeView from './envelope-view'
 
 import uuid from '../../../../../utils/uuid'
-import config from '../../../../../../config/public'
 
 import { isBackOffice } from '../../../../../utils/user-teams'
 
@@ -105,7 +105,7 @@ class FormViewer extends React.Component {
   }
 
   async getEnvelopeFile() {
-    const { user, tasks, envelopes, params } = this.props
+    const { tasks, envelopes, params } = this.props
     const { taskId, objectId } = params
 
     const envelope = envelopes[objectId]
@@ -135,12 +135,21 @@ class FormViewer extends React.Component {
       return null
     }
 
+    let url
+
+    if (!document.pdf) {
+      this.props.notify({
+        title: 'File not found',
+        status: 'error'
+      })
+    } else {
+      url = document.pdf.url
+    }
+
     return {
       name: envelope.title,
       type: 'pdf',
-      url: `${config.api_url}/envelopes/${envelope.id}/${
-        document.document_id
-      }.pdf?access_token=${user.access_token}`
+      url
     }
   }
 
@@ -263,5 +272,5 @@ function mapStateToProps({ user, deals }, props) {
 
 export default connect(
   mapStateToProps,
-  { getDeal, displaySplitter }
+  { getDeal, displaySplitter, notify }
 )(FormViewer)
