@@ -50,7 +50,7 @@ $margin: 20px;
 *
 */
 %deal-create-form {
-  padding: 20px 50px;
+  padding: 20px 2.5rem;
   $required-color: #fe3824;
 
   .swoosh {
@@ -61,7 +61,7 @@ $margin: 20px;
 
   .form-section {
     margin-bottom: 30px;
-    sup {
+    .required {
       color: #fe3824;
     }
   }
@@ -158,15 +158,6 @@ $margin: 20px;
 
     .radio-label {
       font-size: 14px;
-
-      .status-color {
-        display: inline-block;
-        width: 20px;
-        height: 12px;
-        border-radius: 2px;
-        background-color: #f5a623;
-        margin: 0 8px 0 9px;
-      }
     }
   }
 
@@ -287,12 +278,10 @@ $margin: 20px;
       font-size: 25px;
       line-height: 16px;
       border-radius: 40px;
-      margin-right: 5px;
+      margin-right: 0.5rem;
     }
 
     .text {
-      font-size: 15px;
-      font-weight: 400;
       &.hasError {
         color: #ec4b35;
         font-weight: 500;
