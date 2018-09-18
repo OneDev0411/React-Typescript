@@ -1,5 +1,5 @@
 import React from 'react'
-import RadioButton from '../../../../../views/components/radio'
+import RadioButton from '../../../../../views/components/CheckmarkButton'
 import { H2 } from 'components/Typography/headings'
 
 const BUYING = 'Buying'

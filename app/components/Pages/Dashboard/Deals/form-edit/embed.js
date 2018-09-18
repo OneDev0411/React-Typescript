@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap'
 
 import Frame from '../../../../../views/components/Deals/EmbedFormEdit'
 import IconDocument from '../../../../../views/components/SvgIcons/Document/IconDocument'
-import RadioWithState from '../../../../../views/components/radio/RadioWithState'
+import RadioWithState from '../../../../../views/components/CheckmarkButton/RadioWithState'
 import ActionButton from 'components/Button/ActionButton'
 import TextIconButton from 'components/Button/TextIconButton'
 import { H1 } from 'components/Typography/headings'

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { SectionTitle } from '../styled'
-import RadioButton from '../../../../../../views/components/radio'
+import RadioButton from '../../../../../../views/components/CheckmarkButton'
 import CategoryType from '../CategoryTypes'
 import { CategoryTypesContainer } from './styled'
 import { getContexts } from '../../../../../../store_actions/deals'
