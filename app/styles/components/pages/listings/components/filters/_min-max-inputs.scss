@@ -1,6 +1,6 @@
 .c-min-max-inputs {
   display: flex;
-  border: 1px solid #e2e6ea;
+  border: 1px solid $gray;
   > div {
     position: relative;
     display: flex;
@@ -18,16 +18,15 @@
 .c-min-max-inputs__label {
   display: block;
   margin: 0;
-  padding: 1rem;
+  padding: 0.5rem;
   cursor: pointer;
   font-weight: normal;
 }
 
 .c-min-max-inputs__field {
-  height: 4rem;
+  height: 40px;
   width: 100%;
-  padding: 0.5rem 1rem 1rem;
-  font-size: 1.7rem;
+  padding: 0.25rem 0.5rem 0.5rem;
   line-height: 1;
   border-width: 0;
 
@@ -37,19 +36,19 @@
 
   &::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: #2196f3;
+    color: $brand-primary;
   }
   &::-moz-placeholder {
     /* Firefox 19+ */
-    color: #2196f3;
+    color: $brand-primary;
   }
   &:-ms-input-placeholder {
     /* IE 10+ */
-    color: #2196f3;
+    color: $brand-primary;
   }
   &:-moz-placeholder {
     /* Firefox 18- */
-    color: #2196f3;
+    color: $brand-primary;
   }
 
   .c-min-max-inputs__alert + & {
@@ -59,16 +58,16 @@
 
 .c-min-max-inputs__alert {
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.5rem;
   border: 1px solid;
 
   &.has-error {
-    color: #d00023;
-    border-color: #d00023;
+    color: $brand-danger;
+    border-color: $brand-danger;
   }
 
   &.has-warning {
-    color: #e48b1f;
-    border-color: #e48b1f;
+    color: $brand-warning;
+    border-color: $brand-warning;
   }
 }

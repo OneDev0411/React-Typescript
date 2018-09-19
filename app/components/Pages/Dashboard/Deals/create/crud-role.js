@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 
 import RoleAgentIntegration from '../dashboard/roles/agent-integration'
 import RoleItem from './role-item'
+import ActionButton from 'components/Button/ActionButton'
 
 class CrudRole extends React.Component {
   state = {
@@ -31,13 +32,14 @@ class CrudRole extends React.Component {
           />
         ) : (
           <div className="entity-item people new">
-            <button
+            <ActionButton
+              appearance="link"
               onClick={this.showModal}
-              className="c-button--shadow add-item"
+              className=" add-item"
             >
               <span className="icon test">+</span>
               <span className="text">{ctaTitle}</span>
-            </button>
+            </ActionButton>
           </div>
         )}
 

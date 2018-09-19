@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 
-import Radio from '../../../../../../../../views/components/radio'
+import Radio from '../../../../../../../../views/components/CheckmarkButton'
 
 const DocumentRow = ({ isSelected, title, description, date, onToggle }) => (
   <div className="document-item" onClick={onToggle}>

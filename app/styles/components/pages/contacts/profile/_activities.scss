@@ -26,12 +26,12 @@
     margin-bottom: 1em;
 
     li {
-      font-size: 1.8rem;
+      font-size: 1.25rem;
       margin-right: 1em;
       a {
         margin: 0;
         padding: 0;
-        color: #9b9b9b;
+        color: #000;
         &:hover {
           border-color: transparent;
           background-color: transparent;
@@ -45,10 +45,10 @@
       }
 
       .bdg {
-        font-size: 1.2rem;
-        margin-left: 5px;
+        font-size: 0.75rem;
+        margin-left: 0.5em;
         font-weight: normal;
-        color: #9b9b9b;
+        color: $gray-darker;
       }
     }
 
@@ -58,9 +58,9 @@
       a {
         border: none;
         .name {
-          color: #2196f3;
+          color: $brand-primary;
           font-weight: bold;
-          border-bottom: 2px solid #2196f3;
+          border-bottom: 2px solid $brand-primary;
           padding-bottom: 0.5em;
         }
       }
@@ -75,7 +75,7 @@
   padding: 1em;
 
   &:hover {
-    background-color: rgba(32, 150, 243, 0.05);
+    background-color: $gray-lighter;
   }
 
   .image {
@@ -91,19 +91,18 @@
   }
 
   .desc {
-    font-size: 14px;
-    color: #39393a;
-    margin-left: 10px;
+    font-size: 0.875rem;
+    margin-left: 0.5714285714285714em;
   }
   
   .time {
-    font-size: 12px;
-    color: #c6c6c6;
-    margin-left: 10px;
+    font-size: 0.75em;
+    margin-left: 0.6666666666666666em;
+    color: $gray-darker;
     img {
       width: 8px;
       height: 8px;
-      margin-right: 5px;
+      margin-right: 0.3333333333333333em;
     }
   }
 }
@@ -114,7 +113,7 @@
   padding: 0 1em;
 
   .fa:not(.fa-trash) {
-    margin-right: .5em;
+    margin-right: 0.5em;
   }
 }
 
@@ -123,15 +122,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #2196f3;
-  background-color: rgba(255,255,255, 0.7)
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: $brand-primary;
+  background-color: $gray-lighter;
 }
 
 .c-notes-timeline__time {
   padding: 0.5em 1em;
-  color: #777;
   border-radius: 3px;
-  background-color: #f7f7f7;
+  color: $gray-darker;;
+  background-color: $gray-lighter;
 }

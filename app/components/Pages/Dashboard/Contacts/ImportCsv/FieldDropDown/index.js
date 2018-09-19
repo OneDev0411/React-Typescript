@@ -103,10 +103,8 @@ class FieldDropDown extends React.Component {
     }
 
     return _.chain(options)
-      .filter(
-        attr => !['stage'].includes(attr.name) && (attr.editable || attr.show)
-      )
-      .map(({ id, label, singular, index = 0 }) => ({
+      .filter(attr => attr.editable || attr.show)
+      .map(({ id, label, index = 0 }) => ({
         disabled: this.isOptionDisabled(attributes, mappedFields, id, index),
         value: `${id}:${index}`,
         label: index > 0 ? `${label} ${index}` : label

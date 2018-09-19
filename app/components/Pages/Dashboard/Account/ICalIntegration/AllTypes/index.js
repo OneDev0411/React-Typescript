@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import { Header } from '../styled'
-import RadioButton from '../../../../../../views/components/radio'
+
+import { SectionTitle } from '../styled'
+import RadioButton from '../../../../../../views/components/RadioButton'
 import CategoryType from '../CategoryTypes'
 import { CategoryTypesContainer } from './styled'
 import { getContexts } from '../../../../../../store_actions/deals'
@@ -74,7 +75,9 @@ class ICalAllTypes extends React.Component {
 
     return (
       <Fragment>
-        <Header>What event types would you like to export to your iCal?</Header>
+        <SectionTitle>
+          What event types would you like to export to your iCal?
+        </SectionTitle>
         <RadioButton
           selected={selectedTypes.length === allTypes.length}
           title="All of my dates from Rechat"

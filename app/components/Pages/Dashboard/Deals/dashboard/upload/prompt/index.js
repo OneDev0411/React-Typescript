@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
@@ -15,11 +15,12 @@ import {
 } from '../../../../../../../store_actions/deals'
 import TasksDropDown from '../../../components/tasks-dropdown'
 import ToolTip from '../../../../../../../views/components/tooltip/index'
-import Checkbox from '../../../../../../../views/components/radio'
+import Checkbox from '../../../../../../../views/components/CheckmarkButton'
 import FileName from './file-name'
 
 import Deal from '../../../../../../../models/Deal'
 import UploadProgress from './upload-progress'
+import ActionButton from 'components/Button/ActionButton'
 
 const STATUS_UPLOADING = 'uploading'
 const STATUS_UPLOADED = 'uploaded'
@@ -201,7 +202,7 @@ class UploadModal extends React.Component {
     )
   }
 
-  showSplitter() {
+  showSplitter = () => {
     const { displaySplitter } = this.props
 
     const files = this.getPdfFiles().map(item => ({
@@ -291,11 +292,8 @@ class UploadModal extends React.Component {
                           </div>
 
                           <div className="file-cta">
-                            <Button
-                              bsStyle="primary"
+                            <ActionButton
                               className={cn({
-                                disabled:
-                                  isUploading || _.isUndefined(selectedTask),
                                 uploaded: isUploaded
                               })}
                               disabled={
@@ -304,7 +302,7 @@ class UploadModal extends React.Component {
                               onClick={() => this.upload(file, selectedTask)}
                             >
                               {this.getButtonCaption(file)}
-                            </Button>
+                            </ActionButton>
                           </div>
                         </Fragment>
                       )}
@@ -353,14 +351,12 @@ class UploadModal extends React.Component {
             />
           </ToolTip>
 
-          <Button
-            bsStyle="primary"
-            className={cn('btn-split', { disabled: pdfsList.length === 0 })}
+          <ActionButton
             disabled={pdfsList.length === 0}
-            onClick={() => this.showSplitter()}
+            onClick={this.showSplitter}
           >
             Split PDFs
-          </Button>
+          </ActionButton>
         </Modal.Footer>
       </Modal>
     )

@@ -15,9 +15,14 @@ export default ({
   captionIsHTML = false,
   placement = 'top',
   multiline = false,
-  overlayOptions = {},
+  overlayOptions = {
+    trigger: ['hover']
+  },
   tooltipStyles = {},
-  children
+  children,
+  size = '', // just accepet large for now
+  type = '', // just accepet error for now
+  isCustom = true // this is a temporary prop. don't use it.
 }) => {
   if (!caption) {
     return children
@@ -29,7 +34,9 @@ export default ({
       overlay={
         <Tooltip
           id="rechat-tooltip"
-          className={cn('rechat-tooltip', { 'is-customized': captionIsHTML })}
+          className={cn(`rechat-tooltip ${size} ${type}`, {
+            'is-customized': captionIsHTML && isCustom
+          })}
           style={{ ...tooltipStyles }}
         >
           {multiline && !captionIsHTML ? br2nl(caption) : caption}

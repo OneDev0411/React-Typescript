@@ -1,31 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import ShadowButton from '../../../Button/ShadowButton'
 import AddIcon from '../../../SvgIcons/Add/AddIcon'
-
-const color = '#2196f3'
-
-const Button = ShadowButton.extend`
-  color: ${color};
-  display: flex;
-  align-items: center;
-  line-height: 1;
-  margin-right: 2em;
-`
-
-const Icon = AddIcon.extend`
-  width: 1.5em;
-  height: 1.5em;
-  fill: ${color};
-`
+import Button from '../../../Button/TextIconButton'
 
 function AddButton({ title, onClick }) {
   return (
-    <Button type="button" onClick={onClick}>
-      <Icon />
-      <span style={{ marginLeft: '0.5em' }}>{title}</span>
-    </Button>
+    <Button
+      appearance="link"
+      iconLeft={AddIcon}
+      onClick={onClick}
+      text={title}
+      type="button"
+      style={{
+        padding: 0,
+        marginRight: '2em'
+      }}
+    />
   )
 }
 

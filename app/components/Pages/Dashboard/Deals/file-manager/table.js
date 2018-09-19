@@ -1,12 +1,10 @@
 import React, { Fragment } from 'react'
-import ReactTable from 'react-table'
+import Table from 'views/components/Grid/Table'
 import { connect } from 'react-redux'
-import cn from 'classnames'
-import { browserHistory, Link } from 'react-router'
-import { Dropdown, Button } from 'react-bootstrap'
+import { browserHistory } from 'react-router'
+import { Dropdown } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
-import styled from 'styled-components'
 import {
   getDeal,
   displaySplitter,
@@ -14,17 +12,25 @@ import {
   moveTaskFile
 } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
-import Radio from '../../../../../views/components/radio'
-import VerticalDotsIcon from '../../Partials/Svgs/VerticalDots'
-import Search from '../../../../Partials/headerSearch'
+
+import { SearchFiles } from './Search'
 import Upload from '../dashboard/upload'
 import TasksDropDown from '../components/tasks-dropdown'
 import { getEnvelopeStatus } from '../utils/get-envelop-status'
+import FilesListName from './columns/Name'
+import { TruncatedColumn } from './columns/styled'
+import ActionButton from 'components/Button/ActionButton'
+import { resetGridSelectedItems } from 'views/components/Grid/Table/Plugins/Selectable'
+import Spinner from 'components/Spinner'
+import VerticalDotsIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
+import IconButton from 'components/Button/IconButton'
 
-const EllipsisColumn = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
+const OptionButton = IconButton.extend`
+  svg {
+    fill: #000000;
+  }
 `
+
 export class FileManager extends React.Component {
   constructor(props) {
     super(props)
@@ -32,10 +38,8 @@ export class FileManager extends React.Component {
       filter: '',
       isDeleting: [],
       updatingFiles: {},
-      selectedRows: {}
+      selectedRows: []
     }
-
-    this.onCellClick = this.onCellClick.bind(this)
   }
 
   getDate(date) {
@@ -63,25 +67,11 @@ export class FileManager extends React.Component {
     return mime === 'application/pdf'
   }
 
-  onCellClick(state, rowInfo, column) {
-    return {
-      onClick: (e, handleOriginal) => {
-        if (
-          ['td-select', 'td-delete', 'td-split'].includes(column.id) === false
-        ) {
-          return this.openFile(rowInfo.original)
-        }
-
-        if (column.id === 'td-select') {
-          this.toggleSelectedRow(rowInfo.original)
-        }
-
-        if (handleOriginal) {
-          handleOriginal()
-        }
-      }
+  getTdProps = (rowIndex, { rowData: file }) => ({
+    onClick: () => {
+      this.openFile(file)
     }
-  }
+  })
 
   getAllFiles() {
     const { deal, checklists, tasks, envelopes } = this.props
@@ -158,7 +148,7 @@ export class FileManager extends React.Component {
             file = submissionFile
           }
 
-          return { ...file, envelope }
+          return { ...file, envelope, id: envelope.id }
         })
 
         envelopesFiles = envelopesFiles.concat(envelopeFiles)
@@ -167,62 +157,13 @@ export class FileManager extends React.Component {
     return files.concat(envelopesFiles)
   }
 
-  getCellTitle(title) {
-    return (
-      <Fragment>
-        {title}
-        <i className="fa fa-caret-down" />
-        <i className="fa fa-caret-up" />
-      </Fragment>
-    )
-  }
-
-  getDocumentIcon(file) {
-    let src
-
-    if (this.isPdfDocument(file.mime) || file.envelope) {
-      src = '/static/images/deals/pdf-icon.svg'
-    } else if (file.mime.includes('image/')) {
-      src = file.preview_url
-    }
-
-    return (
-      <div className="icon-container">
-        <img className="icon" src={src} alt="" />
-      </div>
-    )
-  }
-
-  toggleSelectedRow(file) {
-    const { selectedRows } = this.state
-    let newSelectedRows = []
-
-    if (selectedRows[file.id]) {
-      newSelectedRows = _.omit(selectedRows, row => row.id === file.id)
-    } else {
-      newSelectedRows = {
-        ...selectedRows,
-        [file.id]: file
-      }
-    }
-
-    this.setState({ selectedRows: newSelectedRows })
-  }
-
-  toggleSelectAll(rows) {
-    const { selectedRows } = this.state
-    const shouldSelectAll = _.size(selectedRows) < rows.length
-
-    this.setState({
-      selectedRows: shouldSelectAll ? _.indexBy(rows, 'id') : {}
-    })
-  }
-
-  splitMultipleFiles() {
+  splitMultipleFiles = () => {
     const { selectedRows } = this.state
 
-    const files = _.chain(selectedRows)
-      .filter(file => this.isPdfDocument(file.mime))
+    const files = _.chain(this.data)
+      .filter(
+        file => selectedRows.includes(file.id) && this.isPdfDocument(file.mime)
+      )
       .map(file => ({
         id: file.id,
         file: { url: file.url },
@@ -247,17 +188,19 @@ export class FileManager extends React.Component {
     this.props.displaySplitter(files)
   }
 
-  requestDeleteSelectedFiles() {
+  requestDeleteSelectedFiles = () => {
     const { tasks, confirmation } = this.props
     const { selectedRows } = this.state
     const deleteList = {}
 
-    _.each(selectedRows, file => {
-      deleteList[file.id] = tasks[file.taskId]
+    _.each(selectedRows, fileId => {
+      const file = this.data.find(({ id }) => id === fileId)
+
+      deleteList[fileId] = tasks[file.taskId]
     })
 
     confirmation({
-      message: `Delete ${_.size(selectedRows)} files?`,
+      message: `Delete ${selectedRows.length} files?`,
       confirmLabel: 'Yes, Delete',
       onConfirm: () => this.deleteFiles(deleteList)
     })
@@ -280,7 +223,7 @@ export class FileManager extends React.Component {
     })
 
     await syncDeleteFile(deal.id, files)
-
+    this.resetSelectedRows()
     this.setState({
       selectedRows: [],
       isDeleting: _.filter(isDeleting, id => files[id] !== null)
@@ -328,59 +271,58 @@ export class FileManager extends React.Component {
     })
   }
 
-  getColumns(rows) {
-    const { selectedRows, isDeleting, updatingFiles } = this.state
+  onChangeSelectedRows = selectedRows =>
+    this.setState({
+      selectedRows
+    })
+
+  resetSelectedRows() {
+    resetGridSelectedItems('dealFiles')
+  }
+
+  getTrProps = () => ({
+    hoverStyle: `
+      #splitter-button{
+          display: block !important;
+      }
+        `
+  })
+
+  getColumns() {
+    const { isDeleting, updatingFiles } = this.state
     const { deal, tasks } = this.props
 
     return [
       {
-        id: 'td-select',
-        headerClassName: 'select-row-header',
-        Header: () => (
-          <Radio
-            square
-            selected={rows.length > 0 && rows.length === _.size(selectedRows)}
-            onClick={() => this.toggleSelectAll(rows)}
-          />
-        ),
-        accessor: '',
-        width: 40,
-        className: 'select-row',
-        sortable: false,
-        Cell: ({ original: file }) => (
-          <Radio square selected={selectedRows[file.id]} />
-        )
-      },
-      {
+        header: 'Name',
         id: 'name',
-        Header: () => this.getCellTitle('NAME'),
-        className: 'name',
-        accessor: 'name',
-        Cell: ({ original: file }) => (
-          <Fragment>
-            <Link to={this.getFileLink(file)}>
-              {this.getDocumentIcon(file)}
-              <div className="file-name-text"> {file.name}</div>
-            </Link>
-          </Fragment>
+        accessor: file => file.name,
+        render: ({ rowData: file }) => (
+          <FilesListName
+            file={file}
+            getFileLink={file => this.getFileLink(file)}
+          />
         )
       },
       {
         id: 'created_at',
-        Header: () => this.getCellTitle('DATE UPLOADED'),
+        header: 'Date Uploaded',
         accessor: 'created_at',
-        Cell: ({ value }) => this.getDate(value)
+        width: '220px',
+        render: ({ rowData: file }) => (
+          <TruncatedColumn>{this.getDate(file.created_at)}</TruncatedColumn>
+        )
       },
       {
         id: 'e_signature',
-        Header: () => this.getCellTitle('eSignature'),
+        header: 'eSignature',
         accessor: 'e_signature',
-        Cell: ({ original: file }) => {
+        render: ({ rowData: file }) => {
           const envelope = file.envelope
 
           if (envelope) {
             return (
-              <EllipsisColumn>{getEnvelopeStatus(envelope)}</EllipsisColumn>
+              <TruncatedColumn>{getEnvelopeStatus(envelope)}</TruncatedColumn>
             )
           }
 
@@ -389,25 +331,25 @@ export class FileManager extends React.Component {
       },
       {
         id: 'envelope_name',
-        Header: () => this.getCellTitle('ENVELOPE NAME'),
+        header: () => 'Envelope Name',
         accessor: 'envelope_name',
-        Cell: ({ original: file }) => {
+        render: ({ rowData: file }) => {
           const envelope = file.envelope
 
           if (envelope) {
-            return <EllipsisColumn>{envelope.title}</EllipsisColumn>
+            return <TruncatedColumn>{envelope.title}</TruncatedColumn>
           }
 
           return null
         }
       },
       {
-        Header: () => this.getCellTitle('FOLDER'),
+        header: () => 'Folder',
         accessor: 'task',
         className: 'file-table__task',
-        Cell: ({ original: file }) => {
+        render: ({ rowData: file }) => {
           if (file.envelope) {
-            return <EllipsisColumn>{file.task}</EllipsisColumn>
+            return <TruncatedColumn>{file.task}</TruncatedColumn>
           }
 
           return (
@@ -440,48 +382,50 @@ export class FileManager extends React.Component {
       },
       {
         id: 'td-split',
-        Header: '',
+        header: '',
         accessor: '',
-        width: 110,
-        Cell: ({ original: file }) => (
+        width: '110px',
+        render: ({ rowData: file }) => (
           <Fragment>
             {!file.envelope &&
               this.isPdfDocument(file.mime) && (
-                <button
-                  className="button split-button hide"
+                <ActionButton
+                  id="splitter-button"
+                  style={{ display: 'none' }}
                   onClick={() => this.splitSingleFile(file)}
                 >
                   Split PDF
-                </button>
+                </ActionButton>
               )}
           </Fragment>
         )
       },
       {
         id: 'td-delete',
-        Header: '',
+        header: '',
         accessor: '',
         className: 'td--dropdown-container',
-        width: 30,
-        Cell: ({ original: file }) => (
+        width: '48px',
+        render: ({ rowData: file }) => (
           <Dropdown
             id={`file_${file.id}`}
             className="deal-file-cta-menu"
             pullRight
           >
-            <Button
+            <OptionButton
+              appearance="icon"
               onClick={e => e.stopPropagation()}
-              className="cta-btn btn-link"
+              // className="cta-btn btn-link"
               bsRole="toggle"
             >
-              <VerticalDotsIcon fill="#D7DEE2" />
-            </Button>
+              <VerticalDotsIcon />
+            </OptionButton>
 
             <Dropdown.Menu>
               <li>
                 {isDeleting.includes(file.id) ? (
                   <span>
-                    <i className="fa fa-spinner fa-spin" /> Deleting ...
+                    <Spinner /> Deleting ...
                   </span>
                 ) : (
                   <span onClick={() => this.deleteSingleFile(file)}>
@@ -496,12 +440,43 @@ export class FileManager extends React.Component {
     ]
   }
 
-  render() {
-    const { filter, isDeleting, selectedRows } = this.state
-    const { deal } = this.props
-    const data = this.getAllFiles()
+  leftActions = [
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: () => (
+        <ActionButton
+          appearance="outline"
+          disabled={this.state.isDeleting.length > 0}
+          onClick={this.requestDeleteSelectedFiles}
+        >
+          {this.state.isDeleting.length === 0
+            ? 'Delete files'
+            : `Deleting ${this.state.isDeleting.length} files`}
+        </ActionButton>
+      )
+    },
+    {
+      display: ({ selectedRows }) =>
+        selectedRows.some(fileId => {
+          const file = this.data.find(({ id }) => id === fileId)
 
-    if (data.length === 0 && filter.length === 0) {
+          return file && this.isPdfDocument(file.mime)
+        }),
+      render: () => (
+        <ActionButton appearance="outline" onClick={this.splitMultipleFiles}>
+          Split PDFs
+        </ActionButton>
+      )
+    }
+  ]
+
+  render() {
+    const { filter, selectedRows } = this.state
+    const { deal } = this.props
+
+    this.data = this.getAllFiles()
+
+    if (this.data.length === 0 && filter.length === 0) {
       return (
         <Upload disableClick deal={deal}>
           <div className="empty-table">
@@ -514,58 +489,41 @@ export class FileManager extends React.Component {
 
     return (
       <Fragment>
-        <Search
-          onInputChange={filter => this.setState({ filter })}
-          debounceTime={100}
-          placeholder="Search all uploaded files in this deal…"
+        <SearchFiles
+          onSearch={filter => this.setState({ selectedRows: [], filter })}
         />
 
-        <div className="callToActions">
-          {_.size(selectedRows) > 0 && (
-            <button
-              className={cn('button inverse', {
-                disabled: isDeleting.length > 0
-              })}
-              disabled={isDeleting.length > 0}
-              onClick={() => this.requestDeleteSelectedFiles()}
-            >
-              {isDeleting.length === 0
-                ? 'Delete files'
-                : `Deleting ${isDeleting.length} files`}
-            </button>
-          )}
-
-          {_.some(selectedRows, file => this.isPdfDocument(file.mime)) && (
-            <button
-              className="button"
-              onClick={() => this.splitMultipleFiles()}
-            >
-              Split PDFs
-            </button>
-          )}
-        </div>
-
-        {data.length === 0 && filter.length !== 0 ? (
+        {this.data.length === 0 && filter.length !== 0 ? (
           <div className="empty-table" style={{ marginTop: '10vh' }}>
             <img src="/static/images/deals/files.svg" alt="" />
             No uploaded file found.
           </div>
         ) : (
           <Upload disableClick deal={deal}>
-            <ReactTable
-              showPagination={false}
-              data={data}
-              pageSize={data.length}
-              columns={this.getColumns(data)}
-              getTdProps={this.onCellClick}
-              defaultSorted={[
-                {
-                  id: 'created_at',
-                  desc: true
+            <Table
+              plugins={{
+                selectable: {
+                  persistent: false,
+                  storageKey: 'dealFiles',
+                  onChange: this.onChangeSelectedRows
+                },
+                actionable: {
+                  leftActions: this.leftActions,
+                  rightActions: this.rightActions
                 }
-              ]}
-              sortable
-              resizable
+              }}
+              data={this.data}
+              summary={{
+                text:
+                  selectedRows.length > 0
+                    ? '<strong style="color:#000;">[selectedRows]</strong> of [totalRows] Files'
+                    : '[totalRows] Files',
+                selectedRows: selectedRows.length,
+                totalRows: this.data.length || 0
+              }}
+              columns={this.getColumns(this.data)}
+              getTdProps={this.getTdProps}
+              getTrProps={this.getTrProps}
             />
           </Upload>
         )}

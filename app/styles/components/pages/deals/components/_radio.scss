@@ -26,8 +26,8 @@ $border-color: #CAD4DB;
     }
 
     &.selected {
-      background-color: #2196f3;
-      border-color: #2196f3;
+      background-color: #003bdf;
+      border-color: #003bdf;
       .svg-checkmark {
         margin: 1px;
       }
@@ -44,9 +44,8 @@ $border-color: #CAD4DB;
 
   .radio-label {
     display: inline;
-    margin-left: 5px;
+    margin-left: 0.5rem;
     font-size: 15px;
-    color: #263445;
     &.disabled {
       opacity: 0.7;
     }

@@ -67,7 +67,7 @@ class Builder extends React.Component {
     this.nunjucks.addFilter('area', area_meters =>
       new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 0
       }).format(area_meters * 10.7639)
     )
 
@@ -78,7 +78,7 @@ class Builder extends React.Component {
 
       try {
         pn = pnu.parse(phone)
-      } catch(e) {
+      } catch (e) {
         return phone // Cannot parse it.
       }
 
@@ -190,16 +190,12 @@ class Builder extends React.Component {
           <h1>Marketing Center</h1>
 
           <div>
-            <ActionButton
-              inverse
-              style={{ padding: '0.9em 1.9em' }}
-              onClick={this.props.onClose}
-            >
+            <ActionButton inverse onClick={this.props.onClose}>
               Cancel
             </ActionButton>
 
             <ActionButton
-              style={{ padding: '0.9em 1.9em', marginLeft: '8px' }}
+              style={{ marginLeft: '0.5rem' }}
               onClick={this.onSave}
             >
               Send

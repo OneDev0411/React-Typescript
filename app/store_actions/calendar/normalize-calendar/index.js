@@ -50,12 +50,15 @@ function getDays(fromUnix, toUnix) {
 export function normalizeByDays(fromUnix, toUnix, calendar) {
   const days = getDays(fromUnix, toUnix)
 
-  calendar &&
-    calendar.forEach(event => {
+  if (calendar) {
+    const sortedCalendar = calendar.sort((a, b) => a.timestamp - b.timestamp)
+
+    sortedCalendar.forEach(event => {
       const key = createEventKey(event, fromUnix, toUnix)
 
       days[key] = [...(days[key] || []), event.id]
     })
+  }
 
   return days
 }

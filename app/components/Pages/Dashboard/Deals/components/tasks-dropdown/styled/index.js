@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { grey, blue } from 'views/utils/colors'
 
 export const DropDownContainer = styled.div`
   position: relative;
@@ -25,11 +26,8 @@ export const ChecklistTitle = styled.div`
   display: flex;
   align-items: center;
   height: 40px;
-  background-color: #f8fafb;
-  font-size: 13px;
+  background-color: ${grey.A100};
   font-weight: 600;
-  letter-spacing: 0.5px;
-  color: #1d364b;
   padding: 0 11px;
 `
 
@@ -39,13 +37,13 @@ export const ChecklistItemTitle = styled.div`
   white-space: nowrap;
   font-size: 14px;
   padding-right: 10px;
-  color: ${props => props.color || '#1d364b'};
+  color: ${props => props.color || '#000000'};
   font-weight: ${props => (props.bold ? 'bold' : 'normal')};
   width: ${props => (props.fullWidth ? '100%' : '75%')};
 `
 
 export const ChecklistItemNotifyOffice = styled.div`
-  width: 25%;
+  width: 29%;
   margin-top: 5px;
   opacity: ${props => (props.isSelected ? 1 : 0)};
 `
@@ -63,8 +61,8 @@ export const ChecklistItemContainer = styled.div`
     opacity: 1;
   }
 
-  &:hover {
-    background-color: #f0f4f7;
+  &:hover ${ChecklistItemTitle} {
+    color: ${blue.A200};
   }
 `
 

@@ -1,7 +1,6 @@
 import React from 'react'
-import { Dropdown, MenuItem } from 'react-bootstrap'
-import cn from 'classnames'
-import RadioButton from '../../../../../views/components/radio'
+import { H2 } from '../../../../../views/components/Typography/headings'
+import { BasicDropdown } from '../../../../../views/components/BasicDropdown'
 
 const properties = [
   'Resale',
@@ -12,32 +11,26 @@ const properties = [
   'Commercial Lease'
 ]
 
+function getItems(items) {
+  return items.map(item => ({ label: item, value: item }))
+}
+function itemToString(item) {
+  return item.label
+}
+
 export default ({ selectedType, onChangeDealType }) => (
   <div className="form-section deal-type">
-    <div className="hero">
+    <H2 className="hero">
       Select a checklist type. <span className="required">*</span>
-    </div>
+    </H2>
 
-    <Dropdown id="deal-create-type-dropdown">
-      <Dropdown.Toggle
-        className={cn('deal-type-dropdown', {
-          selected: selectedType.length > 0
-        })}
-      >
-        {selectedType || 'Choose a checklist type'}
-      </Dropdown.Toggle>
-
-      <Dropdown.Menu className="deal-type-dropdown-list">
-        {properties.map((item, key) => (
-          <MenuItem
-            key={`MENU_ITEM_${key}`}
-            onClick={() => onChangeDealType(item)}
-            eventKey={key + 1}
-          >
-            <RadioButton selected={selectedType === item} title={item} />
-          </MenuItem>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
+    <BasicDropdown
+      maxHeight="unset"
+      style={{ display: 'inline-block' }}
+      items={getItems(properties)}
+      itemToString={itemToString}
+      buttonText={selectedType || 'Choose a checklist type'}
+      onChange={item => onChangeDealType(item.value)}
+    />
   </div>
 )

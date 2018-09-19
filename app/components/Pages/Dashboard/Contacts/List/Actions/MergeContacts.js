@@ -23,11 +23,7 @@ class MergeContacts extends React.Component {
   }
   render() {
     return (
-      <ActionButton
-        onClick={this.onClick}
-        inverse
-        style={{ padding: '0.70em 1.5em' }}
-      >
+      <ActionButton appearance="outline" onClick={this.onClick} size="small">
         Merge
       </ActionButton>
     )

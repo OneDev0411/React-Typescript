@@ -2,15 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Deal from '../../../../../../../../models/Deal'
+import ALink from '../../../../../../../../views/components/ALink'
 
 const Container = styled.div`
   display: flex;
-  align-items: center;
 `
 
 const Image = styled.img`
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   border-radius: 4px;
   margin-right: 12px;
 `
@@ -29,7 +29,7 @@ const Address = ({ deal }) => {
         hasPhoto={photo !== null}
         alt=""
       />
-      <Name>{deal.title}</Name>
+      <ALink>{deal.title}</ALink>
     </Container>
   )
 }

@@ -6,7 +6,7 @@ import cn from 'classnames'
 import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 import TasksDropDown from '../../components/tasks-dropdown'
-import Checkbox from '../../../../../../views/components/radio'
+import Checkbox from '../../../../../../views/components/CheckmarkButton'
 import Deal from '../../../../../../models/Deal'
 import {
   resetSplitterSelectedPages,

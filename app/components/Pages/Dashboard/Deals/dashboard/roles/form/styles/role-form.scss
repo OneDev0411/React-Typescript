@@ -23,3 +23,20 @@
     }
   }
 }
+
+.deals__role-form--modal {
+  .modal-header {
+    font-weight: 600;
+  }
+
+  .modal-content {
+    border: none;
+    box-shadow: 1px 1px 1px #ccc;
+  }
+
+  .modal-footer {
+    button {
+      margin-left: 10px;
+    }
+  }
+}

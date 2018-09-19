@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import Map from 'google-map-react'
 import React from 'react'
 import { browserHistory, Link } from 'react-router'
+import Flex from 'styled-flex-component'
 
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
@@ -14,6 +15,11 @@ import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
 import config from '../../../../../../../config/public'
 import Brand from '../../../../../../controllers/Brand'
 import listing_util from '../../../../../../utils/listing'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import TextIconButton from '../../../../../../views/components/Button/TextIconButton'
+import LinkButton from '../../../../../../views/components/Button/LinkButton'
+import { H2 } from '../../../../../../views/components/Typography/headings'
+import IconClose from '../../../../../../views/components/SvgIcons/Close/CloseIcon'
 
 import FetchError from './FetchError'
 import Loading from '../../../../../Partials/Loading'
@@ -52,19 +58,6 @@ import {
 } from 'react-bootstrap'
 import Follow from '../../../../../../views/components/Follow'
 import { listingStatuses } from '../../../../../../constants/listings/listing'
-import ShadowButton from '../../../../../../views/components/Button/ShadowButton'
-
-const ShareButton = ShadowButton.extend`
-  background-color: #${() => Brand.color('primary', '006aff')};
-  border: 1px solid #${() => Brand.color('primary', '006aff')};
-  color: rgb(255, 255, 255);
-  position: absolute;
-  right: 20px;
-  top: 8px;
-  padding: 0 12px;
-  height: 32px;
-  border-radius: 3px;
-`
 
 export const fadeIn = node => {
   const elem = ReactDOM.findDOMNode(node)
@@ -82,6 +75,8 @@ export const fadeIn = node => {
 
 const ListingDesktopView = ({
   data,
+  user,
+  brand,
   onHide,
   listing,
   hideModal,
@@ -96,11 +91,10 @@ const ListingDesktopView = ({
   setGalleryModalState,
   galleryModalIsActive,
   handleModalGalleryNav,
-  galleryModalActiveIndex,
-  setGalleryModalIsActive,
-  setGalleryModalActiveIndex
+  galleryModalActiveIndex
 }) => {
-  const { user } = data
+  const brandColor = Brand.color('primary', null, brand)
+
   const brand_agent = listing.proposed_agent
 
   let viewer_width = 0
@@ -109,7 +103,7 @@ const ListingDesktopView = ({
     viewer_width = window.innerWidth
 
     if (user && !data.is_widget && container !== 'modal') {
-      viewer_width -= 130
+      viewer_width -= 80
     }
   }
 
@@ -361,7 +355,7 @@ const ListingDesktopView = ({
           <div style={{ textAlign: 'center' }}>
             <img
               alt="agent"
-              style={{ maxWidth: '100%' }}
+              style={{ maxWidth: '300px' }}
               src={brand_agent.cover_image_url}
             />
           </div>
@@ -753,7 +747,7 @@ const ListingDesktopView = ({
   }
 
   let viewer_wrap_style = S(
-    `absolute h-100p bg-fff t-0 l-0 z-10 ml-130 w-${viewer_width}`
+    `absolute h-100p bg-fff t-0 l-0 z-10 ml-80 w-${viewer_width}`
   )
 
   if (!user || data.is_widget) {
@@ -764,8 +758,6 @@ const ListingDesktopView = ({
   }
 
   viewer_wrap_style = container !== 'modal' ? viewer_wrap_style : {}
-
-  const nav_bar_style = S('mb-0 p-0 h-54 pt-7 w-100p')
 
   let modal_gallery_area
 
@@ -798,82 +790,14 @@ const ListingDesktopView = ({
     )
   }
 
-  let left_area
-  const buttonCildernStyles = {
-    display: 'inline-block',
-    verticalAlign: 'middle'
-  }
-
-  if (user) {
-    left_area = (
-      <button
-        onClick={() => hideModal()}
-        style={{
-          position: 'absolute',
-          left: '20px',
-          top: '12px',
-          fontSize: '20px',
-          borderWidth: 0,
-          padding: 0,
-          backgroundColor: 'transparent'
-        }}
-      >
-        <svg
-          style={buttonCildernStyles}
-          fill="#cecece"
-          height="24"
-          viewBox="0 0 24 24"
-          width="24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-          <path d="M0 0h24v24H0z" fill="none" />
-        </svg>
-        <span style={buttonCildernStyles}>Close</span>
-      </button>
-    )
-  }
-
-  let right_area
-
-  if (user && Object.keys(listing).length > 0) {
-    right_area = (
-      <div style={nav_bar_style}>
-        <div
-          style={{
-            position: 'absolute',
-            right: '120px',
-            top: '4px',
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
-          <div style={{ marginRight: '16px' }}>
-            <FavoriteHeart listing={listing} width="40px" height="40px" />
-          </div>
-          <Follow
-            dropdownStyle={{ right: '0px' }}
-            statuses={listingStatuses}
-            activeStatuses={
-              (listing.user_listing_notification_setting &&
-                listing.user_listing_notification_setting.status) ||
-              []
-            }
-            isFetching={isFetching}
-            onClick={onClickFollow}
-          />
-        </div>
-        <ShareButton onClick={showShareModal}>
-          Share &nbsp;&nbsp;<i className="fa fa-share" />
-        </ShareButton>
-      </div>
-    )
-  }
-
-  let join_area
   let brand_logo = (
-    <a style={S('font-28')} href="/" className="tk-calluna-sans text-primary">
-      Rechat
+    <a
+      href="/"
+      style={{
+        textDecoration: 'none'
+      }}
+    >
+      <H2>Rechat</H2>
     </a>
   )
 
@@ -890,6 +814,53 @@ const ListingDesktopView = ({
       </a>
     )
   }
+
+  const headerProps = {
+    alignCenter: true,
+    justifyBetween: true,
+    style: { height: '70px', padding: '0 1em' }
+  }
+  const Header = user ? (
+    <Flex {...headerProps}>
+      <TextIconButton
+        appearance="outline"
+        onClick={hideModal}
+        iconLeft={IconClose}
+        text="Close"
+      />
+      <Flex alignCenter>
+        <div style={{ marginRight: '1em' }}>
+          <FavoriteHeart listing={listing} width="40px" height="40px" />
+        </div>
+        <ActionButton onClick={showShareModal} brandColor={brandColor}>
+          Share
+        </ActionButton>
+        {/* <Follow
+          dropdownStyle={{ right: '0px' }}
+          statuses={listingStatuses}
+          activeStatuses={
+            (listing.user_listing_notification_setting &&
+              listing.user_listing_notification_setting.status) ||
+            []
+          }
+          isFetching={isFetching}
+          onClick={onClickFollow}
+        /> */}
+      </Flex>
+    </Flex>
+  ) : (
+    <Flex {...headerProps}>
+      {brand_logo}
+      <LinkButton
+        appearance="primary"
+        to={`/signin?redirectTo=${encodeURIComponent(window.location.pathname)}
+        ${contact_info ? `&username=${contact_info}` : ''}
+        ${window.location.search}`}
+      >
+        Login
+      </LinkButton>
+    </Flex>
+  )
 
   // Claim account message
   let token
@@ -922,35 +893,6 @@ const ListingDesktopView = ({
         >
           Activate your account
         </Link>
-      </div>
-    )
-  }
-
-  if (!user) {
-    join_area = (
-      <div style={S('h-70')}>
-        <div style={S('pull-left p-16 h-35')}>{brand_logo}</div>
-        {(!token || (contact_info && contact_info.indexOf('%40') !== -1)) && (
-          <div style={S('pull-right p-16')}>
-            <Link
-              style={S(
-                `mr-15 bg-${Brand.color(
-                  'primary',
-                  'a1bde4'
-                )} border-1-solid-${Brand.color('primary', 'a1bde4')}`
-              )}
-              className="btn btn-primary"
-              to={`/signin?redirectTo=${encodeURIComponent(
-                window.location.pathname
-              )}${contact_info ? `&username=${contact_info}` : ''}${
-                window.location.search
-              }`}
-            >
-              Log in
-            </Link>
-            {/* <a className="btn btn-primary" href="/signup">Sign up</a> */}
-          </div>
-        )}
       </div>
     )
   }
@@ -1025,9 +967,7 @@ const ListingDesktopView = ({
   return (
     <div style={viewer_wrap_style}>
       {claim_account_message}
-      {join_area}
-      {left_area}
-      {right_area}
+      {Header}
       {main_content}
       {brand_agent_footer}
 
@@ -1101,7 +1041,6 @@ export default compose(
   withHandlers({
     handleModalGalleryNav: ({
       listing,
-      setGalleryModalDirection,
       galleryModalActiveIndex,
       setGalleryModalActiveIndex
     }) => (selectedIndex, selectedDirection) => {

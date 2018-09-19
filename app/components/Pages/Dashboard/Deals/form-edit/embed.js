@@ -1,8 +1,18 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
+
 import Frame from '../../../../../views/components/Deals/EmbedFormEdit'
 import IconDocument from '../../../../../views/components/SvgIcons/Document/IconDocument'
-import RadioWithState from '../../../../../views/components/radio/RadioWithState'
+import RadioWithState from '../../../../../views/components/CheckmarkButton/RadioWithState'
+import ActionButton from 'components/Button/ActionButton'
+import TextIconButton from 'components/Button/TextIconButton'
+import { H1 } from 'components/Typography/headings'
+import IconButton from 'components/Button/IconButton'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+
+const SaveButton = ActionButton.extend`
+  margin: 0 1em;
+`
 
 export default ({
   task,
@@ -18,12 +28,10 @@ export default ({
   onChangeNotifyOffice
 }) => (
   <div className="deal-edit-form">
-    <Row className="header">
-      <Col md={6} sm={6} xs={6}>
-        <span className="name">{task.title}</span>
-      </Col>
+    <div className="header">
+      <H1>{task.title}</H1>
 
-      <Col md={6} sm={6} xs={6} className="actions">
+      <div>
         {loaded && (
           <span style={{ marginRight: '10px' }}>
             <RadioWithState square onClick={onChangeNotifyOffice} />
@@ -32,10 +40,12 @@ export default ({
         )}
 
         {loaded && (
-          <button className="deal-button preview" onClick={handleOpenPreview}>
-            <IconDocument />
-            <span>Preview PDF</span>
-          </button>
+          <TextIconButton
+            appearance="outline"
+            iconLeft={IconDocument}
+            onClick={handleOpenPreview}
+            text="Preview PDF"
+          />
         )}
         {saving || !loaded ? (
           <span style={{ marginRight: '20px' }}>
@@ -43,15 +53,16 @@ export default ({
             {buttonCaption}
           </span>
         ) : (
-          <button className="deal-button save" onClick={onSave}>
+          <SaveButton onClick={onSave}>
             {incompleteFields.length === 0 ? 'Save' : 'Save Draft'}
-          </button>
+          </SaveButton>
         )}
-        <button className="deal-button exit" onClick={onClose}>
-          X
-        </button>
-      </Col>
-    </Row>
+
+        <IconButton iconSize="XLarge" inverse isFit onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      </div>
+    </div>
 
     <Row>
       <Col md={12} sm={12} xs={12} style={{ overflow: 'none' }}>

@@ -3,6 +3,7 @@ import _ from 'underscore'
 import cn from 'classnames'
 import CrudRole from './crud-role'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+import { H2 } from 'components/Typography/headings'
 
 const BUYING = 'Buying'
 const SELLING = 'Selling'
@@ -45,12 +46,12 @@ export default props => {
 
   return (
     <div className="form-section deal-people deal-agent">
-      <div className={cn('hero', { hasError })}>
+      <H2 className={cn('hero', { hasError })}>
         Enter {sideName === BUYING ? 'buyer' : 'listing'} agent’s
         information.&nbsp;
         {props.isRequired && <span className="required">*</span>}
         {hasError && <RequiredIcon />}
-      </div>
+      </H2>
 
       <div className="people-container">
         {_.map(agents, (agent, id) => (

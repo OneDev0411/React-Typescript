@@ -1,17 +1,12 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import copy from '../../../../../../utils/copy-text-to-clipboard'
 import IconCalendar from '../../../../../../views/components/SvgIcons/Calender/IconCalendar'
 import getCalenderFeed from '../../../../../../models/user/generate-calender-feed'
-import LinkIcon from '../../../../../../views/components/SvgIcons/LinkIcon'
-import {
-  GenerateUrlContainer,
-  GenerateUrlText,
-  GenerateUrlButton,
-  FeedUrl
-} from './styled'
+import Button from '../../../../../../views/components/Button/ActionButton'
+import { GenerateUrlContainer, GenerateUrlText, FeedUrl } from './styled'
 
 class GenerateUrl extends React.Component {
   state = {
@@ -60,6 +55,7 @@ class GenerateUrl extends React.Component {
         <GenerateUrlText> iCAL Feed URL:</GenerateUrlText>
         {feedURl ? (
           <FeedUrl
+            appearance="link"
             onClick={() => {
               copy(feedURl)
               this.props.notify({
@@ -69,20 +65,15 @@ class GenerateUrl extends React.Component {
             }}
           >
             {feedURl}
-            <LinkIcon
-              style={{
-                position: 'absolute',
-                right: '1.4rem'
-              }}
-            />
           </FeedUrl>
         ) : (
-          <GenerateUrlButton
+          <Button
+            style={{ marginLeft: '1em' }}
             onClick={this.generateUrlClick}
             disabled={isFetchingFeed || this.props.selectedTypes.length === 0}
           >
             {`Generate URL${isFetchingFeed ? '...' : ''}`}
-          </GenerateUrlButton>
+          </Button>
         )}
       </GenerateUrlContainer>
     )

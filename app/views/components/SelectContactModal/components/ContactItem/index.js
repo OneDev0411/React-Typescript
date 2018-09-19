@@ -16,9 +16,7 @@ const Container = styled.div`
 `
 
 const Title = styled.div`
-  font-size: 1.5rem;
   line-height: 1;
-  color: #1d364b;
 `
 
 const propTypes = {
@@ -40,7 +38,7 @@ function ContactItem(props) {
       <div style={{ width: '32px', height: '32px', borderRadius: '50%' }}>
         <Avatar {...getAvatarProps(item.summary)} />
       </div>
-      <div style={{ paddingLeft: '2rem', height: '32px' }}>
+      <div style={{ paddingLeft: '1em' }}>
         <Title>{title}</Title>
         <div style={{ color: '#8696a4' }}>{summary}</div>
       </div>

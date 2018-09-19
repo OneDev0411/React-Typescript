@@ -1,12 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Menu } from '../../../../../../views/components/SlideMenu'
+import { Menu, Content } from '../../../../../../views/components/SlideMenu'
 import Search from '../../../../../../views/components/Grid/Search'
 
 import {
   PageContainer,
-  PageContent,
   GridContainer,
   SearchContainer
 } from '../styles/page-container/styled'
@@ -55,22 +54,22 @@ class AgentTable extends React.Component {
     const { params, isFetchingDeals, isTrainingAccount } = this.props
 
     return (
-      <PageContainer isTrainingAccount={isTrainingAccount}>
-        <Menu
-          width={160}
-          isSideMenuOpen={isSideMenuOpen}
-          isOpen={isSideMenuOpen}
-        >
+      <PageContainer
+        isOpen={isSideMenuOpen}
+        isTrainingAccount={isTrainingAccount}
+      >
+        <Menu isOpen={isSideMenuOpen}>
           <AgentFilters
             activeFilter={params.filter}
             searchCriteria={this.state.searchCriteria}
           />
         </Menu>
 
-        <PageContent>
+        <Content>
           <Header
             title={params.filter || 'All'}
             showBackButton={false}
+            isSideMenuOpen={isSideMenuOpen}
             onMenuTriggerChange={this.toggleSideMenu}
           />
 
@@ -91,7 +90,7 @@ class AgentTable extends React.Component {
 
             <Grid activeFilter={params.filter} />
           </GridContainer>
-        </PageContent>
+        </Content>
       </PageContainer>
     )
   }

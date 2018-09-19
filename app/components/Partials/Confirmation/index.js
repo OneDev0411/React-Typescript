@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
+
 import { hideConfirmation } from '../../../store_actions/confirmation'
+import Button from '../../../views/components/Button/ActionButton'
 
 class Confirmation extends React.Component {
   constructor(props) {
@@ -67,18 +69,13 @@ class Confirmation extends React.Component {
 
             <div className="cta">
               {!confirmation.hideCancelButton && (
-                <Button
-                  className="cancel"
-                  bsStyle="default"
-                  onClick={() => this.onCancel()}
-                >
+                <Button appearance="outline" onClick={() => this.onCancel()}>
                   {confirmation.cancelLabel || 'Cancel'}
                 </Button>
               )}
               {!confirmation.hideConfirmButton && (
                 <Button
-                  bsStyle={confirmation.confirmButtonColor || 'primary'}
-                  className="confirm"
+                  style={{ marginLeft: '1em' }}
                   onClick={() => this.onConfirm()}
                 >
                   {confirmation.confirmLabel || 'Confirm'}

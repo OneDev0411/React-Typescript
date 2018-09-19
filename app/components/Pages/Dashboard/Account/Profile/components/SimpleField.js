@@ -19,7 +19,7 @@ const simpleField = ({
         type={type}
         id={input.name}
         placeholder={placeholder}
-        className={`c-simple-field__input ${hasError ? 'has-error' : ''}`}
+        className="c-simple-field__input"
       />
       {hasError && <div className="c-auth__field__error-alert">{error}</div>}
     </div>

@@ -24,9 +24,10 @@ const listViewItemProps = (user, listing) => {
     price = listing.close_price
   }
 
-  const pricePerSquareFoot = Math.floor(
-    price / listingUtils.metersToFeet(property.square_meters)
-  )
+  const pricePerSquareFoot =
+    price && property.square_meters
+      ? Math.floor(price / listingUtils.metersToFeet(property.square_meters))
+      : 0
 
   const backgroundImage = listing.cover_image_url && {
     backgroundImage: `url('${listing.cover_image_url}')`

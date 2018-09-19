@@ -1,48 +1,48 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Avatar from 'react-avatar'
+import Flex from 'styled-flex-component'
 
 import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
-
-import {
-  getAttributeFromSummary,
-  getContactAttribute
-} from '../../../../../../../models/contacts/helpers'
-import { TruncatedColumn } from '../styled'
+import Link from '../../../../../../../views/components/ALink'
+import { getContactAttribute } from '../../../../../../../models/contacts/helpers'
 
 const ContactsListName = ({ contact, attributeDefs }) => {
+  let avatar = ''
   const attribute_def = selectDefinitionByName(
     attributeDefs,
     'profile_image_url'
   )
 
-  if (!attribute_def) {
-    throw new Error(
-      'Something went wrong. Attribute definition is not found for profile_image_url'
-    )
+  if (attribute_def) {
+    const avatars = getContactAttribute(contact, attribute_def)
+
+    avatar = avatars && avatars[0] && avatars[0].text
   }
 
-  const avatars = getContactAttribute(contact, attribute_def)
-  const avatar = avatars && avatars[0] ? avatars[0].text : ''
-  const name = getAttributeFromSummary(contact, 'display_name')
-
   return (
-    <TruncatedColumn>
+    <Flex nowrap>
       <Avatar
         className="avatar"
         color="#D4D4D4"
         round
-        name={name}
+        name={contact.display_name}
         src={avatar}
-        size={35}
-        style={{
-          marginRight: '10px'
-        }}
+        size={40}
       />
-      <span className="contact-name" style={{ fontWeight: 500 }}>
-        {name}
-      </span>
-    </TruncatedColumn>
+      <Link
+        to={`/dashboard/contacts/${contact.id}`}
+        style={{
+          fontWeight: 500,
+          marginLeft: '16px',
+          padding: 0,
+          display: 'flex',
+          alignItems: 'flex-start'
+        }}
+      >
+        {contact.display_name}
+      </Link>
+    </Flex>
   )
 }
 

@@ -3,17 +3,16 @@ import Downshift from 'downshift'
 import _ from 'underscore'
 
 import {
-  Container,
   List,
   ListItem,
   ListItemTitle,
   SelectedItem,
-  ListItemIconContainer,
   ItemsContainer,
   InputContainer,
-  Input,
-  InputIndicator
+  Input
 } from './styled'
+import IconKeyboardArrowDown from '../../../../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import IconKeyboardArrowUp from '../../../../../SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 
 export class DropDownList extends React.Component {
   constructor(props) {
@@ -22,7 +21,8 @@ export class DropDownList extends React.Component {
     this.state = {
       isMenuOpen: false,
       selectedItems: this.getDefaultSelectedItem(),
-      filterValue: null
+      filterValue: null,
+      inputFocused: false
     }
   }
 
@@ -109,7 +109,7 @@ export class DropDownList extends React.Component {
     const { allowMultipleSelections } = this.props
 
     return (
-      <Container>
+      <div style={{ position: 'relative' }}>
         <Downshift
           isOpen={isMenuOpen}
           defaultInputValue={this.getDefaultInputValue()}
@@ -119,7 +119,7 @@ export class DropDownList extends React.Component {
         >
           {({ isOpen, getInputProps, getItemProps }) => (
             <div>
-              <ItemsContainer>
+              <ItemsContainer selectedItems={selectedItems}>
                 {allowMultipleSelections &&
                   _.map(selectedItems, (value, index) => (
                     <SelectedItem
@@ -134,22 +134,26 @@ export class DropDownList extends React.Component {
                   withMargin={
                     allowMultipleSelections && _.size(selectedItems) > 0
                   }
+                  inputFocused={this.state.inputFocused}
                 >
                   <Input
                     {...getInputProps({
                       placeholder: 'Select'
                     })}
                     onClick={this.toggleMenu}
+                    onFocus={() => this.setState({ inputFocused: true })}
+                    onBlur={() => this.setState({ inputFocused: false })}
                   />
-
-                  <InputIndicator
-                    className={`fa fa-caret-${isMenuOpen ? 'up' : 'down'}`}
-                  />
+                  {isMenuOpen ? (
+                    <IconKeyboardArrowUp />
+                  ) : (
+                    <IconKeyboardArrowDown />
+                  )}
                 </InputContainer>
               </ItemsContainer>
 
               {isOpen && (
-                <List>
+                <List depth={3} className="u-scrollbar--thinner--self">
                   {this.getFilteredOptions(filterValue).map((item, index) => (
                     <ListItem
                       key={index}
@@ -160,11 +164,6 @@ export class DropDownList extends React.Component {
                       })}
                     >
                       <ListItemTitle>{item}</ListItemTitle>
-                      <ListItemIconContainer>
-                        {this.isItemSelected(item) && (
-                          <i className="fa fa-check" />
-                        )}
-                      </ListItemIconContainer>
                     </ListItem>
                   ))}
                 </List>
@@ -172,7 +171,7 @@ export class DropDownList extends React.Component {
             </div>
           )}
         </Downshift>
-      </Container>
+      </div>
     )
   }
 }

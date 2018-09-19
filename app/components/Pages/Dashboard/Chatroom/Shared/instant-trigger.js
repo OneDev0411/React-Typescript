@@ -1,7 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
+
 import { toggleChatbar } from '../../../../../store_actions/chatroom'
+
+import Badge from '../../../../../views/components/Badge'
+import Tooltip from '../../../../../views/components/tooltip'
+import IconButton from '../../../../../views/components/Button/IconButton'
+import ChatIcon from '../../../../../views/components/SvgIcons/Chat/IconChat'
 
 const openChatbar = toggleChatbar => {
   if (window && window.location.pathname.includes('/recents/')) {
@@ -23,17 +29,27 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
   })
 
   return (
-    <div>
-      <button
+    <Tooltip caption="Chat" placement="right">
+      <IconButton
+        inverse
+        size="large"
         className="c-app-sidenav__item__title--button"
         onClick={() => openChatbar(toggleChatbar)}
       >
-        Inbox
+        <ChatIcon style={{ width: '28px', height: '28px' }} />
         {counter > 0 && (
-          <span className="c-app-sidenav__notification-badge">{counter}</span>
+          <Badge
+            style={{
+              position: 'absolute',
+              top: '4px',
+              left: 'calc(100% - 12px)'
+            }}
+          >
+            {counter > 99 ? '99+' : counter}
+          </Badge>
         )}
-      </button>
-    </div>
+      </IconButton>
+    </Tooltip>
   )
 }
 export default connect(

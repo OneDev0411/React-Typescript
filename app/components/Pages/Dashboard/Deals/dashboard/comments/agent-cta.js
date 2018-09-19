@@ -1,9 +1,14 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
 import ToolTip from '../../../../../../views/components/tooltip/index'
 import { confirmation } from '../../../../../../store_actions/confirmation'
+import ActionButton from 'components/Button/ActionButton'
 
+const CancelButton = ActionButton.extend`
+  margin-right: 1em;
+  color: #f6a623;
+  border-color: #f6a623;
+`
 const AgentCta = ({
   checklists,
   task,
@@ -41,22 +46,18 @@ const AgentCta = ({
   return (
     <Fragment>
       {task.attention_requested && (
-        <Button
-          className="deal-button enabled add-comment second-color"
+        <CancelButton
+          appearance="outline"
           disabled={isSaving}
           onClick={() => cancelNotify()}
         >
           Cancel Notify
-        </Button>
+        </CancelButton>
       )}
       <ToolTip caption={hasComment ? null : 'Notify office to Review'}>
-        <Button
-          className="deal-button enabled add-comment notify-admin"
-          disabled={isSaving}
-          onClick={() => sendComment()}
-        >
+        <ActionButton disabled={isSaving} onClick={() => sendComment()}>
           Notify Office
-        </Button>
+        </ActionButton>
       </ToolTip>
     </Fragment>
   )

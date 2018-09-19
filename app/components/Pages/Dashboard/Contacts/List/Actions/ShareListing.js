@@ -37,7 +37,7 @@ class ShareListing extends React.Component {
       .map(id => {
         const contact = selectContact(this.props.contacts, id)
 
-        if (!contact.summary.email) {
+        if (!contact || !contact.summary.email) {
           return null
         }
 
@@ -168,11 +168,11 @@ class ShareListing extends React.Component {
     return (
       <Fragment>
         <ActionButton
+          appearance="outline"
           onClick={this.toggleListingModal}
-          style={{ padding: '0.70em 1.5em' }}
-          inverse
+          size="small"
         >
-          Marketing Center
+          Marketing
         </ActionButton>
 
         <SearchListingDrawer

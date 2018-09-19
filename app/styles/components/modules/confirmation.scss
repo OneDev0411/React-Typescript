@@ -16,18 +16,16 @@
     background-color: #ffffff;
     box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-
+    
     .confirmation-title {
       margin-bottom: 0.5em; 
       font-size: 2.6rem;
       font-weight: 600;
-      color: #1e364b;
     }
     
     .confirmation-descr {
       margin-bottom: 2em;
       font-size: 1.7rem;
-      color: #6e7d8c;
     }
 
     .confirmation-input {
@@ -37,37 +35,12 @@
       margin-bottom: 2em;
       font-size: 1.7rem;
       resize: none;
-      color: #324457;
       border-radius: 3px;
-      border: solid 1px #bcbcbc;
+      border: solid 1px #d4d4d4;
       backdrop-filter: blur(10px);
 
       &:focus {
         outline-width: 2px;
-      }
-    }
-
-    button {
-      height: 34px;
-      border-radius: 3px;
-      box-shadow: 0 1px 1px 0 #eef1f2;
-      border: solid 1px #f4f7f9;
-      margin-left: 1em;
-      &:focus {
-        outline: none;
-      }
-
-      &.cancel {
-        color: #78909c;
-        min-width: 110px;
-        &:hover {
-          background-color: transparent;
-          color: #2196f3;
-        }
-      }
-      &.confirm {
-        border: none;
-        min-width: 148px;
       }
     }
   }

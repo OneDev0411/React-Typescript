@@ -8,7 +8,7 @@ const Header = ({ title, children, onClose }) => (
   <Container>
     {title && <Title>{title}</Title>}
     {children}
-    <IconButton color="#7b91a6" hoverColor="#333" onClick={onClose}>
+    <IconButton isFit iconSize="large" inverse onClick={onClose}>
       <CloseIcon />
     </IconButton>
   </Container>

@@ -13,6 +13,8 @@ import { getContactDeals } from '../../../../../../models/contacts/helpers/get-c
 import { normalizeContacts } from '../../../../../../store_actions/contacts/helpers/normalize-contacts'
 import SelectDealModal from '../../../../../../views/components/SelectDealModal'
 
+import { grey } from '../../../../../../views/utils/colors'
+
 export class DealsListWidget extends React.Component {
   state = {
     isOpen: false,
@@ -97,7 +99,7 @@ export class DealsListWidget extends React.Component {
           />
         ) : (
           <Flex center full>
-            <div style={{ color: '#8da2b5', padding: '0.5em 0 1.5em' }}>
+            <div style={{ color: grey.A900, padding: '0.5em 0 1.5em' }}>
               No deals connected to this contact.
             </div>
           </Flex>
