@@ -51,7 +51,8 @@ class YearMonthList extends React.Component {
           onChange={item => this.changeDate('month', item.value)}
           style={{
             display: 'inline-block',
-            minWidth: '50px'
+            minWidth: '50px',
+            marginLeft: '-0.5rem'
           }}
         />
         <BasicDropdown
@@ -64,8 +65,7 @@ class YearMonthList extends React.Component {
           onChange={item => this.changeDate('year', item.value)}
           style={{
             display: 'inline-block',
-            minWidth: '50px',
-            marginLeft: '6px'
+            minWidth: '50px'
           }}
         />
 
