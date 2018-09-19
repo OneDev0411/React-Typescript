@@ -37,7 +37,7 @@ const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
       htmlFor="avatarImage"
       className={`c-avatar-uploader__label ${avatar ? 'has-avatar' : ''}`}
     >
-      <span>{avatar ? 'Change' : 'Upload'} Avatar</span>
+      <span>{avatar ? 'Change' : 'Upload'} Photo</span>
     </label>
     <input
       type="file"
@@ -52,7 +52,7 @@ const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
         onClick={avatarRemoveHandler}
         size="small"
       >
-        Remove Avatar
+        Remove Photo
       </RemoveButton>
     )}
   </div>

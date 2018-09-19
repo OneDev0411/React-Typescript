@@ -32,7 +32,7 @@ export default class UpdateGenerateUrlInfo extends React.Component {
             type selection and copy and paste it into all the calendars you use.
           </InfoText>
         </InfoLeftSide>
-        <IconButton isFit iconSize="large" onClick={this.onClose}>
+        <IconButton isFit iconSize="large" inverse onClick={this.onClose}>
           <CloseIcon />
         </IconButton>
       </InfoContainer>

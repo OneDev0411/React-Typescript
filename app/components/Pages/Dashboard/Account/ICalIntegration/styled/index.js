@@ -14,4 +14,6 @@ export const PageDescription = styled.div`
 
 export const SectionTitle = H2.extend`
   margin-bottom: 1em;
+  font-size: 1.75rem;
+  font-weight: 500;
 `

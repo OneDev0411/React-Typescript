@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import LinkButton from '../../../../../../../views/components/Button/LinkButton'
 
 export const GenerateUrlContainer = styled.div`
   position: relative;
@@ -16,7 +17,7 @@ export const GenerateUrlText = styled.div`
   white-space: nowrap;
 `
 
-export const FeedUrl = ActionButton.extend`
+export const FeedUrl = LinkButton.extend`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

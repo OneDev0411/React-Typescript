@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 
 import _ from 'underscore'
 
-import IconSearch from '../../SvgIcons/Search/IconSearch'
 import IconClose from '../../SvgIcons/Close/CloseIcon'
 
 import IconButton from '../../Button/IconButton'
-import { Container, TextInput, Icon } from './styled'
+import { Container, TextInput, Icon, IconSearch } from './styled'
 
 class Search extends React.Component {
   constructor(props) {
@@ -16,7 +15,8 @@ class Search extends React.Component {
     const { onChange, debounceTime, defaultValue } = props
 
     this.state = {
-      searchValue: defaultValue || ''
+      searchValue: defaultValue || '',
+      isFocused: false
     }
 
     this.onChangeHandler =
@@ -40,9 +40,12 @@ class Search extends React.Component {
     this.setState({
       searchValue: ''
     })
-
+    this.onBlur()
     this.props.onClearSearch('')
   }
+
+  onBlur = () => this.setState({ isFocused: false })
+  onFocus = () => this.setState({ isFocused: true })
 
   render() {
     const {
@@ -56,12 +59,12 @@ class Search extends React.Component {
     } = this.props
 
     return (
-      <Container style={style}>
+      <Container style={style} isFocused={this.state.isFocused}>
         <Icon isSearching={isSearching}>
           {isSearching && showLoadingOnSearch ? (
             <i className="fa fa-spin fa-spinner" />
           ) : (
-            <IconSearch color="#7F7F7F" />
+            <IconSearch />
           )}
         </Icon>
 
@@ -69,6 +72,8 @@ class Search extends React.Component {
           value={this.state.searchValue}
           placeholder={placeholder}
           onChange={this.handleChange}
+          onBlur={this.onBlur}
+          onFocus={this.onFocus}
           innerRef={inputRef}
           readOnly={disableOnSearch && isSearching}
         />

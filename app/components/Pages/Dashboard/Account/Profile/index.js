@@ -1,16 +1,20 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import PageTitle from '../components/PageTitle'
 import Catalog from './components/ProfileCatalog'
 import CoverImage from './components/CoverImage'
 import PersonalInfo from './components/PersonalInfo'
 import Timezone from './components/Timezone'
 import ChangePassword from './components/ChangePassword'
+import PageHeader from '../../../../../views/components/PageHeader'
 
 const Profile = ({ user, brand }) => (
   <Fragment>
-    <PageTitle title="Profile" />
+    <PageHeader isFlat style={{ marginBottom: '1.5em' }}>
+      <PageHeader.Title showBackButton={false}>
+        <PageHeader.Heading>Profile </PageHeader.Heading>
+      </PageHeader.Title>
+    </PageHeader>
     <Fragment>
       <Catalog user={user} />
       <PersonalInfo />

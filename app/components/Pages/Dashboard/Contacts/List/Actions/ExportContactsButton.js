@@ -1,5 +1,4 @@
 import React from 'react'
-import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import LinkButton from '../../../../../../views/components/Button/LinkButton'
 
 export default ({ exportIds, disabled, filters }) => {
@@ -14,20 +13,8 @@ export default ({ exportIds, disabled, filters }) => {
   }
 
   return (
-    <OverlayTrigger
-      placement="top"
-      overlay={
-        <Tooltip id="tooltip">Export contacts to a spreadsheet file</Tooltip>
-      }
-    >
-      <LinkButton
-        appearance="outline"
-        disabled={disabled}
-        size="small"
-        to={url}
-      >
-        Export to Spreadsheet
-      </LinkButton>
-    </OverlayTrigger>
+    <LinkButton appearance="outline" disabled={disabled} size="small" to={url}>
+      Export to Spreadsheet
+    </LinkButton>
   )
 }

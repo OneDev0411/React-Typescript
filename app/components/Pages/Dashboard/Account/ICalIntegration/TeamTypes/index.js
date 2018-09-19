@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import RadioButton from '../../../../../../views/components/RadioButton'
 import { SectionTitle } from '../styled'
 
-const radioButtonStyle = { display: 'block', marginBottom: '2rem' }
+const radioButtonStyle = { display: 'block', marginBottom: '1rem' }
 
 const TeamTypes = ({ userTeams, selectedBrandId, onChangeTeam }) => (
   <Fragment>

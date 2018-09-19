@@ -1,7 +1,7 @@
 import React from 'react'
 
 import RadioButton from '../../../../../views/components/RadioButton'
-import { H2 } from 'components/Typography/headings'
+import { H2 } from '../../../../../views/components/Typography/headings'
 
 export default ({ isDraft, isRequired, onChangeDealType }) => (
   <div className="form-section">

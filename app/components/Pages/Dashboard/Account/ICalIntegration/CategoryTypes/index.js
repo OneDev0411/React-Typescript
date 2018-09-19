@@ -1,6 +1,6 @@
 import React from 'react'
 
-import RadioButton from '../../../../../../views/components/RadioButton'
+import RadioButton from '../../../../../../views/components/CheckmarkButton'
 import { SectionTitle } from '../styled'
 
 const CategoryTypes = ({

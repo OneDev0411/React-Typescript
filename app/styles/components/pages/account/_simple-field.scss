@@ -16,9 +16,17 @@
   line-height: 2.5;
   border-radius: 3px;
   border: 1px solid $gray;
+  background-color: #f9f9f9;
+  caret-color: #003bdf;
 
+  &:hover {
+    background-color: #f2f2f2;
+  }
+  
   &:focus {
-    outline-width: 2px;
+    border: 1px solid #003bdf;
+    outline-width: 0;
+    background-color: #ffffff;
   }
 
   &.has-error {
