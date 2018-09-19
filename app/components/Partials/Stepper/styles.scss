@@ -22,7 +22,7 @@
 
     &.completed {
       &:after {
-        background: #2196f3;
+        background: #003bdf;
       }
     }
 
@@ -105,11 +105,11 @@
   }
 
   .completed .round-tab {
-    background: #2196f3;
-    border: 2px solid #2196f3;
+    background: #003bdf;
+    border: 2px solid #003bdf;
 
     &:hover {
-      border: 2px solid #2196f3;
+      border: 2px solid #003bdf;
     }
     &::after {
       display: none;
