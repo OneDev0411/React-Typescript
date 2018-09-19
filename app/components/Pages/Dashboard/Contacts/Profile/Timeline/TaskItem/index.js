@@ -80,6 +80,11 @@ class CRMTaskItem extends React.Component {
       }
     }
 
+    const showReminder =
+      reminders &&
+      reminders.length > 0 &&
+      task.reminders[0].timestamp * 1000 > new Date().getTime()
+
     return (
       <Container>
         <Flex alignCenter style={{ marginBottom: '2em' }}>
@@ -99,23 +104,22 @@ class CRMTaskItem extends React.Component {
                 'MMM D, YYYY hh:mm A'
               )}
             </div>
-            {reminders &&
-              reminders.length > 0 && (
-                <Flex
-                  alignCenter
-                  style={{ marginLeft: '1em' }}
-                  onClick={this.handleOnClick}
-                  className="u-cursor--pointer"
-                >
-                  <IconBell style={{ fill: '#7f7f7f' }} />
-                  <span>
-                    {getReminderLabel(
-                      task.due_date * 1000,
-                      task.reminders[0].timestamp * 1000
-                    )}
-                  </span>
-                </Flex>
-              )}
+            {showReminder && (
+              <Flex
+                alignCenter
+                style={{ marginLeft: '1em' }}
+                onClick={this.handleOnClick}
+                className="u-cursor--pointer"
+              >
+                <IconBell style={{ fill: '#7f7f7f' }} />
+                <span>
+                  {getReminderLabel(
+                    task.due_date * 1000,
+                    task.reminders[0].timestamp * 1000
+                  )}
+                </span>
+              </Flex>
+            )}
           </Flex>
         </Flex>
         <Flex style={{ marginBottom: '2em' }}>
