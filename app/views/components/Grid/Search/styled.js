@@ -27,16 +27,14 @@ export const TextInput = styled.input`
   ::-webkit-input-placeholder {
     font-size: 1rem;
     font-weight: 500;
-    color: #000;
-    opacity: 0.5;
+    color: ${grey.A900};
     font-family: Barlow, sans-serif;
   }
 
   ::placeholder {
     font-size: 1rem;
     font-weight: 500;
-    color: #000;
-    opacity: 0.5;
+    color: ${grey.A900};
     font-family: Barlow, sans-serif;
   }
   :focus {
@@ -45,7 +43,7 @@ export const TextInput = styled.input`
 
   ${Container}:hover & {
     ::placeholder {
-      opacity: 1;
+      color: #000000;
     }
   }
 `

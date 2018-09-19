@@ -293,18 +293,39 @@ $margin: 20px;
     input {
       height: 35px;
       width: 200px;
-      color: #262626;
       margin-top: 5px;
       padding: 0 5px;
       border-radius: 3px;
       border: solid 1px #d4d4d4;
       backdrop-filter: blur(10px);
+      background-color: #f9f9f9;
+      caret-color: #003bdf;
+      ::-webkit-input-placeholder {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #7F7F7F;
+        font-family: Barlow, sans-serif;
+      }
+    
+      ::placeholder {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #7F7F7F;
+        font-family: Barlow, sans-serif;
+      }
+      &:hover{
+        background-color: #f2f2f2;
+        &::placeholder {
+          color: #000000;
+        }
+      }
 
       &:focus {
         outline: none;
         border-color: #003bdf;
+        background-color: #ffffff;
       }
-
+     
       &.invalid {
         border: 1px solid red;
       }
