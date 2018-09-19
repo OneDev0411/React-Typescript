@@ -1,13 +1,18 @@
 import React, { Fragment } from 'react'
-import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import styled from 'styled-components'
 
 import PageTitle from '../components/PageTitle'
-import Search from '../../../../Partials/headerSearch'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 import { getForms } from '../../../../../store_actions/deals'
+import Grid from '../../../../../views/components/Grid/Table'
+import Search from '../../../../../views/components/Grid/Search'
+
+const GridContainer = styled.div`
+  margin-top: 2rem;
+`
 
 class DealTemplates extends React.Component {
   state = {
@@ -39,14 +44,13 @@ class DealTemplates extends React.Component {
     return [
       {
         id: 'name',
-        Header: 'Name',
-        style: { paddingLeft: '15px', cursor: 'auto' },
+        header: 'Name',
         accessor: 'name',
-        Cell: ({ original: form }) => form.name
+        render: ({ rowData: form }) => form.name
       },
       {
-        style: { flexDirection: 'row-reverse' },
-        Cell: ({ original: form }) => (
+        width: '116px',
+        render: ({ rowData: form }) => (
           <Fragment>
             <ActionButton size="small" onClick={() => this.editTemplate(form)}>
               Edit Template
@@ -68,24 +72,26 @@ class DealTemplates extends React.Component {
         <PageTitle title="Form Templates" />
         <div className="c-deal-templates">
           <Search
-            onInputChange={filter => this.setState({ filter })}
-            debounceTime={100}
+            disableOnSearch={false}
             placeholder="Search all forms"
+            onChange={filter => this.setState({ filter })}
+            debounceTime={100}
+            minimumLength={1}
+            onClearSearch={() => this.setState({ filter: '' })}
           />
-
-          <ReactTable
-            showPagination={false}
-            data={data}
-            pageSize={data.length}
-            columns={this.Columns}
-            defaultSorted={[
-              {
-                id: 'name'
-              }
-            ]}
-            sortable
-            resizable
-          />
+          <GridContainer>
+            <Grid
+              showPagination={false}
+              data={data}
+              pageSize={data.length}
+              columns={this.Columns}
+              defaultSorted={[
+                {
+                  id: 'name'
+                }
+              ]}
+            />
+          </GridContainer>
         </div>
       </Fragment>
     )
