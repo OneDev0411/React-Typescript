@@ -7,10 +7,10 @@ export const Container = styled.div`
   align-items: center;
   padding-left: 16px;
   border-radius: 4px;
-  background-color: #f9f9f9;
+  background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
   border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
   :hover {
-    background-color: ${grey.A100};
+    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A100)};
   }
 `
 
