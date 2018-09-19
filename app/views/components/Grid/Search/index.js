@@ -64,9 +64,7 @@ class Search extends React.Component {
           {isSearching && showLoadingOnSearch ? (
             <i className="fa fa-spin fa-spinner" />
           ) : (
-            <IconSearch
-            // color="#7F7F7F"
-            />
+            <IconSearch />
           )}
         </Icon>
 

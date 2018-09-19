@@ -11,12 +11,6 @@ export const Container = styled.div`
   border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
   :hover {
     background-color: ${grey.A100};
-    & ${TextInput}::placeholder {
-      opacity: 1;
-    }
-    & ${IconSearch} path {
-      fill: #000000 !important;
-    }
   }
 `
 
@@ -48,11 +42,20 @@ export const TextInput = styled.input`
   :focus {
     outline: none;
   }
+
+  ${Container}:hover & {
+    ::placeholder {
+      opacity: 1;
+    }
+  }
 `
 
 export const IconSearch = IconSearchBase.extend`
   path {
     fill: ${grey.A900} !important;
+  }
+  ${Container}:hover & path {
+    fill: #000000 !important;
   }
 `
 export const Icon = styled.div`
