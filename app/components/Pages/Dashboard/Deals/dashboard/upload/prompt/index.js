@@ -15,7 +15,7 @@ import {
 } from '../../../../../../../store_actions/deals'
 import TasksDropDown from '../../../components/tasks-dropdown'
 import ToolTip from '../../../../../../../views/components/tooltip/index'
-import Checkbox from '../../../../../../../views/components/radio'
+import Checkbox from '../../../../../../../views/components/CheckmarkButton'
 import FileName from './file-name'
 
 import Deal from '../../../../../../../models/Deal'

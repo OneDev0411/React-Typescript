@@ -2,7 +2,7 @@ import React from 'react'
 import Downshift from 'downshift'
 
 import Card from '../Card'
-import { Item } from './Item'
+import { Item } from '../Dropdown/Item'
 import DropButton from '../Button/DropButton'
 
 export const BasicDropdown = ({

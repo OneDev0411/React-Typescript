@@ -91,7 +91,8 @@ export default class extends React.Component {
                       })}
                     >
                       {field.label}{' '}
-                      {areContextsRequired && field.mandatory && <sup>*</sup>}
+                      {areContextsRequired &&
+                        field.mandatory && <span className="required">*</span>}
                     </span>
                   </div>
                   <Input
@@ -137,7 +138,10 @@ export default class extends React.Component {
                         })}
                       >
                         {field.label}{' '}
-                        {areContextsRequired && field.mandatory && <sup>*</sup>}
+                        {areContextsRequired &&
+                          field.mandatory && (
+                            <span className="required">*</span>
+                          )}
                       </span>
                     </ActionButton>
                   </div>

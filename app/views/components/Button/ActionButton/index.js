@@ -59,24 +59,21 @@ const getStylesDependedSize = props => {
       return {
         height: '32px',
         fontSize: '14px',
-        lineHeight: isOutline(props) ? '30px' : '32px',
-        padding: '0 8px'
+        lineHeight: isOutline(props) ? '30px' : '32px'
       }
 
     case 'large':
       return {
         height: '48px',
         fontSize: '18px',
-        lineHeight: isOutline(props) ? '46px' : '48px',
-        padding: '0 16px'
+        lineHeight: isOutline(props) ? '46px' : '48px'
       }
 
     default:
       return {
         height: '40px',
         fontSize: '16px',
-        lineHeight: isOutline(props) ? '38px' : '40px',
-        padding: '0 16px'
+        lineHeight: isOutline(props) ? '38px' : '40px'
       }
   }
 }
@@ -91,6 +88,7 @@ const getAppearance = props => {
   return css`
     ${ButtonAppearances[appearance]};
     ${getStylesDependedSize(props)};
+    padding: 0 1rem;
   `
 }
 

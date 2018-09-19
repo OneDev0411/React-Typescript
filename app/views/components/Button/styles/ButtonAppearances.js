@@ -60,18 +60,32 @@ export const ButtonAppearances = {
   `,
   outline: css`
     ${buttonBaseStyle};
-    color: #000;
-    border: 1px solid #000;
+    border-style: solid;
+    border-color: ${props => (props.isOpen ? primary : '#000')};
+    border-width: ${props => (props.noBorder ? 0 : '1px')};
+    color: ${props => (props.isOpen ? primary : '#000')};
     background-color: ${props => (props.isActive ? grey.A100 : 'transparent')};
 
     &[disabled] {
       border-color: ${grey.A550};
+
+      svg {
+        fill: ${grey.A550};
+      }
     }
 
     ${isNotDisableState}hover, ${isNotDisableState}focus {
       color: ${props => props.brandColor || primary};
       border-color: ${props => props.brandColor || primary};
       text-decoration: none;
+
+      svg {
+        fill: ${props => props.brandColor || primary};
+      }
+    }
+
+    svg {
+      fill: ${props => (props.isOpen ? primary : '#000')};
     }
   `,
   link: css`

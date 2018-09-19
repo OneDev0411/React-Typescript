@@ -12,7 +12,6 @@ import NoSearchResults from '../../../../../Partials/no-search-results'
 import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
-import ChangeStageContacts from '../Actions/ChangeStageContacts'
 import ShareListing from '../Actions/ShareListing'
 import SortContacts from '../Actions/SortContacts'
 
@@ -119,15 +118,6 @@ class ContactsList extends React.Component {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows }) => (
         <TagContacts
-          selectedRows={selectedRows}
-          resetSelectedRows={this.props.resetSelectedRows}
-        />
-      )
-    },
-    {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => (
-        <ChangeStageContacts
           selectedRows={selectedRows}
           resetSelectedRows={this.props.resetSelectedRows}
         />

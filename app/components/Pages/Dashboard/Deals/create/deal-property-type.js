@@ -1,9 +1,6 @@
 import React from 'react'
-import { Dropdown, MenuItem } from 'react-bootstrap'
-import cn from 'classnames'
-import RadioButton from '../../../../../views/components/radio'
-import { BasicDropdown } from 'components/BasicDropdown'
-import { H2 } from 'components/Typography/headings'
+import { H2 } from '../../../../../views/components/Typography/headings'
+import { BasicDropdown } from '../../../../../views/components/BasicDropdown'
 
 const properties = [
   'Resale',
@@ -28,6 +25,7 @@ export default ({ selectedType, onChangeDealType }) => (
     </H2>
 
     <BasicDropdown
+      maxHeight="unset"
       style={{ display: 'inline-block' }}
       items={getItems(properties)}
       itemToString={itemToString}

@@ -12,7 +12,7 @@ export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
     <PageHeader isFlat style={{ marginBottom: '1.5em', padding: '0 1.5em' }}>
       <PageHeader.Title showBackButton={false}>
         <MenuTrigger
-          tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}
+          isExpended={isSideMenuOpen}
           onClick={onMenuTriggerChange}
         />
         <PageHeader.Heading>{title}</PageHeader.Heading>

@@ -1,6 +1,22 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { primary, borderColor } from '../../../../views/utils/colors'
+import { primary } from '../../../../views/utils/colors'
+
+const getStatesStyle = props => {
+  const { isActive, isSelected } = props
+
+  if (isActive) {
+    return css`
+      color: #fff;
+      background-color: ${primary};
+    `
+  } else if (isSelected) {
+    return css`
+      font-weight: 500;
+      color: ${primary};
+    `
+  }
+}
 
 export const Item = styled.div`
   width: '100%';
@@ -9,22 +25,12 @@ export const Item = styled.div`
   padding: 0.5em 1em;
   cursor: pointer;
   white-space: nowrap;
-  font-weight: ${({ isSelected }) => (isSelected ? 600 : 400)};
-  color: ${({ isActive }) => (isActive ? '#fff' : '#000')};
-  background-color: ${({ isActive }) => (isActive ? primary : '#fff')};
+  ${props => getStatesStyle(props)};
+  font-weight: ${({ isSelected }) => (isSelected ? 500 : 400)};
 
   &:hover,
   &:focus {
-    border-color: ${borderColor};
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-
-    > svg {
-      fill: #fff;
-    }
-  }
-
-  > svg {
-    margin-right: 0.5em;
-    fill: ${props => (props.item.iconColor ? props.item.iconColor : '#000')};
+    color: #fff;
+    background-color: ${primary};
   }
 `

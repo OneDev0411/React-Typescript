@@ -14,13 +14,21 @@ const defaultProps = {
   tooltip: null
 }
 
-export const Trigger = ({ onClick, tooltip }) => (
-  <Tooltip caption={tooltip} placement="bottom">
-    <Button onClick={onClick} style={{ marginRight: '1em' }} isFit>
-      <IconNav />
-    </Button>
-  </Tooltip>
-)
+export const Trigger = props => {
+  let { tooltip } = props
+
+  if (!tooltip) {
+    tooltip = props.isExpended ? 'Expand Menu' : 'Collapse Menu'
+  }
+
+  return (
+    <Tooltip caption={tooltip} placement="bottom">
+      <Button onClick={props.onClick} style={{ marginRight: '1em' }} isFit>
+        <IconNav />
+      </Button>
+    </Tooltip>
+  )
+}
 
 Trigger.propTypes = propTypes
 Trigger.defaultProps = defaultProps
