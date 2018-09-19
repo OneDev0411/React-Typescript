@@ -16,8 +16,6 @@ const Assignment = styled.div`
 `
 
 function getAssignmentComponent({ assignment }) {
-  console.log(assignment)
-
   switch (assignment) {
     case 'Initials':
       return <InitialsAssignment />
