@@ -57,6 +57,13 @@ class EditDigitalForm extends React.Component {
     }
 
     const form = forms[task.form]
+
+    if (!form) {
+      console.error('Form is null')
+
+      return false
+    }
+
     const pdfUrl = task.submission
       ? task.submission.file.url
       : `${config.forms.url}/${form.id}.pdf`

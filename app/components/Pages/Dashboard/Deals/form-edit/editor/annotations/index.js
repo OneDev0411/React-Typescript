@@ -7,6 +7,7 @@ import uuid from 'utils/uuid'
 
 import FormInputs from './form-inputs'
 import FormContexts from './form-contexts'
+import FormAssignments from './form-assignments'
 
 const AnnotationsContainer = styled.div`
   position: absolute;
@@ -59,6 +60,7 @@ export default class Annotations extends React.Component {
     const info = this.annotations.map(this.getInfo)
 
     this.inputs = _.filter(info, { type: 'Input' })
+    this.assignments = _.filter(info, { type: 'Assignment' })
 
     this.contexts = _.chain(info)
       .filter({ type: 'Context' })
@@ -139,6 +141,11 @@ export default class Annotations extends React.Component {
           values={this.props.values}
           onSetValues={this.props.onSetValues}
           onClick={this.props.onClick}
+        />
+
+        <FormAssignments
+          deal={this.props.deal}
+          assignments={this.assignments}
         />
       </AnnotationsContainer>
     )
