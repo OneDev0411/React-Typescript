@@ -18,7 +18,7 @@ export const Trigger = props => {
   let { tooltip } = props
 
   if (!tooltip) {
-    tooltip = props.isExpended ? 'Expand Menu' : 'Collapse Menu'
+    tooltip = props.isExpended || props.isOpen ? 'Collapse Menu' : 'Expand Menu'
   }
 
   return (

@@ -58,11 +58,7 @@ class BackofficeTable extends React.Component {
         isOpen={isSideMenuOpen}
         isTrainingAccount={isTrainingAccount}
       >
-        <Menu
-          width={180}
-          isSideMenuOpen={isSideMenuOpen}
-          isOpen={isSideMenuOpen}
-        >
+        <Menu width={180} isOpen={isSideMenuOpen}>
           <BackofficeFilters
             activeFilter={params.filter}
             searchCriteria={this.state.searchCriteria}
@@ -72,6 +68,7 @@ class BackofficeTable extends React.Component {
         <Content>
           <Header
             title={params.filter}
+            isSideMenuOpen={isSideMenuOpen}
             onMenuTriggerChange={this.toggleSideMenu}
             showCreateDeal={false}
           />
