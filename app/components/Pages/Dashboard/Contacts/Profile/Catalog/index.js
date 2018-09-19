@@ -19,7 +19,6 @@ import { deleteContacts } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
 import DeletingMessage from './components/DeletingMessage'
-import Stage from '../../../../../../views/components/ContactStage'
 import DeleteIcon from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import Tooltip from '../../../../../../views/components/tooltip'
 
@@ -146,20 +145,6 @@ class Catalog extends React.Component {
           )}
 
         <Flex full>
-          <Stage
-            style={{
-              width: 'calc(100% - 57px)'
-            }}
-            buttonStyle={{
-              width: '100%',
-              padding: '0 0.5em',
-              color: '#17283a',
-              background: '#fff',
-              borderRadius: '3px',
-              border: '1px solid #e1e9ef'
-            }}
-            contacts={[contact.id]}
-          />
           {this.shouldShowChatButton(contact) && (
             <ActionButton
               disabled={this.state.isCreatingRoom}

@@ -32,7 +32,6 @@ const INITIAL_VALUES = {
   middle_name: '',
   email: [{ label: { title: 'Personal', value: 'Personal' } }],
   phone_number: [{ label: { title: 'Mobile', value: 'Mobile' } }],
-  stage: { title: 'General', value: 'General' },
   title: { title: '-Select-', value: '-Select-' }
 }
 
@@ -40,7 +39,7 @@ class NewContactForm extends Component {
   preSaveFormat = values => {
     const attributes = []
     const { attributeDefs } = this.props
-    const selectFields = ['title', 'stage']
+    const selectFields = ['title']
     const multipleFields = ['email', 'phone_number']
     const textFields = ['first_name', 'middle_name', 'last_name']
 
@@ -186,12 +185,6 @@ class NewContactForm extends Component {
                 <Phones
                   labels={this.getDefaultValues('phone_number', 'labels')}
                   mutators={form.mutators}
-                />
-                <Select
-                  items={this.getDefaultValues('stage', 'enum_values')}
-                  name="stage"
-                  label="Stage"
-                  hasEmptyItem={false}
                 />
               </div>
               <Footer style={{ justifyContent: 'space-between' }}>
