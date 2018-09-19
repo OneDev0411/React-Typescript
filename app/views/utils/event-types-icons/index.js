@@ -1,8 +1,8 @@
 import IconCall from '../../components/SvgIcons/CallOutline/IconCallOutline'
 import IconFollowUp from '../../components/SvgIcons/FollowUp/IconFollowUp'
 import Text from '../../components/SvgIcons/Text/IconText'
+import Chat from '../../components/SvgIcons/Chat/IconChat'
 import IconMessage from '../../components/SvgIcons/EmailOutline/IconEmailOutline'
-import Social from '../../components/SvgIcons/Social/IconSocial'
 import Email from '../../components/SvgIcons/AtSign/IconAtSign'
 import Other from '../../components/SvgIcons/MenuRounded/IconMenuRounded'
 
@@ -15,7 +15,7 @@ function getIcons() {
       color: '#04C6D9'
     },
     {
-      name: 'In Person Meeting',
+      name: 'In-Person Meeting',
       icon: IconFollowUp,
       color: '#F7A700'
     },
@@ -25,14 +25,14 @@ function getIcons() {
       color: '#000'
     },
     {
+      name: 'Chat',
+      icon: Chat,
+      color: '#ff00bf'
+    },
+    {
       name: 'Mail',
       icon: IconMessage,
       color: '#8F6CF0'
-    },
-    {
-      name: 'Social',
-      icon: Social,
-      color: '#003BDF'
     },
     {
       name: 'Email',

@@ -34,20 +34,20 @@ const ITEMS = [
     value: 'Call'
   },
   {
-    title: 'In Person Meeting',
-    value: 'In Person Meeting'
+    title: 'In-Person Meeting',
+    value: 'In-Person Meeting'
   },
   {
     title: 'Text',
     value: 'Text'
   },
   {
-    title: 'Mail',
-    value: 'Mail'
+    title: 'Chat',
+    value: 'Chat'
   },
   {
-    title: 'Social',
-    value: 'Social'
+    title: 'Mail',
+    value: 'Mail'
   },
   {
     title: 'Email',
