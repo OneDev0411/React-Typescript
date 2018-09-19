@@ -32,5 +32,19 @@ export const Item = styled.div`
   &:focus {
     color: #fff;
     background-color: ${primary};
+
+    > svg {
+      fill: #fff;
+    }
   }
+
+  ${props =>
+    props.item.icon && props.item.iconColor
+      ? css`
+          > svg {
+            margin-right: 0.5em;
+            fill: ${props.item.iconColor};
+          }
+        `
+      : ''};
 `
