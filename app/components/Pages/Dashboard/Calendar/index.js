@@ -303,7 +303,8 @@ class CalendarContainer extends React.Component {
             style={{
               paddingBottom: '1.5rem',
               height: 'auto',
-              margin: '0 1.5rem',
+              marginLeft: '1.5rem',
+              marginRight: '1.5rem',
               width: 'auto',
               paddingRight: '0',
               paddingLeft: '0'

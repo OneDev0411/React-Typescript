@@ -6,11 +6,10 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import PageTitle from '../components/PageTitle'
-
 import searchAgent from '../../../../../models/agent/search'
 import Button from '../../../../../views/components/Button/ActionButton'
 import SecretQuestionModal from './components/SecretQuestionModal'
+import PageHeader from '../../../../../views/components/PageHeader'
 
 class AgentConfirm extends React.Component {
   onChange = e => {
@@ -37,7 +36,12 @@ class AgentConfirm extends React.Component {
 
     return (
       <div>
-        <PageTitle title="Upgrade Account" />
+        <PageHeader isFlat style={{ marginBottom: '1.5em' }}>
+          <PageHeader.Title showBackButton={false}>
+            <PageHeader.Heading>Upgrade Account1</PageHeader.Heading>
+          </PageHeader.Title>
+        </PageHeader>
+
         <div
           className="signin-page-wrapper c-auth--register clearfix"
           style={{

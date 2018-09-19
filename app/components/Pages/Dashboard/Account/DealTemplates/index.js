@@ -3,12 +3,12 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import styled from 'styled-components'
 
-import PageTitle from '../components/PageTitle'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 import { getForms } from '../../../../../store_actions/deals'
 import Grid from '../../../../../views/components/Grid/Table'
 import Search from '../../../../../views/components/Grid/Search'
+import PageHeader from '../../../../../views/components/PageHeader'
 
 const GridContainer = styled.div`
   margin-top: 2rem;
@@ -69,7 +69,11 @@ class DealTemplates extends React.Component {
 
     return (
       <Fragment>
-        <PageTitle title="Form Templates" />
+        <PageHeader isFlat style={{ marginBottom: '1.5em' }}>
+          <PageHeader.Title showBackButton={false}>
+            <PageHeader.Heading>Form Templates</PageHeader.Heading>
+          </PageHeader.Title>
+        </PageHeader>
         <div className="c-deal-templates">
           <Search
             disableOnSearch={false}
