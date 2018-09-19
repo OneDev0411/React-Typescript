@@ -310,7 +310,7 @@ class CalendarContainer extends React.Component {
             }}
           >
             <PageHeader.Title showBackButton={false}>
-              <Trigger onClick={this.toggleSideMenu} />
+              <Trigger isExpended={isMenuOpen} onClick={this.toggleSideMenu} />
               <PageHeader.Heading>Calendar</PageHeader.Heading>
             </PageHeader.Title>
 
