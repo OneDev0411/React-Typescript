@@ -16,7 +16,7 @@ const Container = styled.div`
   top: ${props => props.rect.top}px;
   width: ${props => props.rect.width}px;
   height: ${props => props.rect.height}px;
-  background-color: #d2e5f2;
+  background-color: ${props => (props.readOnly ? 'transparent' : '#d2e5f2')};
   cursor: ${props => (props.readOnly ? 'auto' : 'pointer')};
 
   :hover {

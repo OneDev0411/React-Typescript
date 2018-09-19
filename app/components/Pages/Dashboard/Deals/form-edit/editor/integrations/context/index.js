@@ -24,6 +24,15 @@ class Context extends React.Component {
     })
   }
 
+  saveDefaultValue = value => {
+    const { annotations } = this.props.data
+
+    const contextName = annotations[0].fieldName
+
+    this.props.onValueUpdate(contextName, value, true)
+    this.props.onClose()
+  }
+
   handleSave = async () => {
     const { contextName, annotations } = this.props.data
 
@@ -73,9 +82,8 @@ class Context extends React.Component {
       onClose: this.props.onClose,
       isSaving: this.state.isSaving,
       handleSave: this.handleSave,
-      onValueUpdate: this.props.onValueUpdate,
       onContextChange: this.onContextChange,
-      contextName: this.props.data.annotations[0].fieldName,
+      saveDefaultValue: this.saveDefaultValue,
       value: this.state.value,
       context: DealContext.searchContext(data.contextName),
       defaultValue

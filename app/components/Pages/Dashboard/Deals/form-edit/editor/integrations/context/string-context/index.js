@@ -51,11 +51,6 @@ export default class StringContext extends React.Component {
     return this.position
   }
 
-  saveDefaultValue = value => {
-    this.props.onClose()
-    this.props.onValueUpdate(this.props.contextName, value, true)
-  }
-
   render() {
     if (!this.props.isOpen) {
       return false
@@ -90,10 +85,10 @@ export default class StringContext extends React.Component {
               {this.props.isSaving ? 'Saving...' : 'Save Value'}
             </ActionButton>
 
-            <CancelButton onClick={() => this.saveDefaultValue('TBD')}>
+            <CancelButton onClick={() => this.props.saveDefaultValue('TBD')}>
               TBD
             </CancelButton>
-            <CancelButton onClick={() => this.saveDefaultValue('N/A')}>
+            <CancelButton onClick={() => this.props.saveDefaultValue('N/A')}>
               N/A
             </CancelButton>
           </ActionsContainer>

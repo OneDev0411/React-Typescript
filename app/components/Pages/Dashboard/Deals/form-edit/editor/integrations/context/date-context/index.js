@@ -1,8 +1,9 @@
 import React from 'react'
 import moment from 'moment'
 
-import OverlayDrawer from '../../../../../../../../../views/components/OverlayDrawer'
-import ActionButton from '../../../../../../../../../views/components/Button/ActionButton'
+import OverlayDrawer from 'components/OverlayDrawer'
+import ActionButton from 'components/Button/ActionButton'
+import CancelButton from 'components/Button/CancelButton'
 
 import DatePicker from '../../../../../../../../../views/components/DatePicker'
 import DealContext from '../../../../../../../../../models/DealContext'
@@ -36,6 +37,13 @@ export default function DateContext(props) {
           >
             Save
           </ActionButton>
+
+          <CancelButton onClick={() => props.saveDefaultValue('TBD')}>
+            TBD
+          </CancelButton>
+          <CancelButton onClick={() => props.saveDefaultValue('N/A')}>
+            N/A
+          </CancelButton>
         </OverlayFooter>
       </OverlayDrawer.Footer>
     </OverlayDrawer>
