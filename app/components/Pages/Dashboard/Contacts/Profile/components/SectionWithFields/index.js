@@ -202,6 +202,7 @@ class SectionWithFields extends React.Component {
         {(addNewFieldButtonText || showAddNewCustomAttributeButton) && (
           <div
             style={{
+              textAlign: 'center',
               marginTop: sectionFields ? 0 : '0.5em'
             }}
           >
