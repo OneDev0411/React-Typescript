@@ -16,21 +16,21 @@ class TextAnnotation extends React.Component {
     )
 
     const isTextArea = this.props.annotation.multiLine === true
+    const defaultValue = this.props.value || ''
 
     const props = {
       id: this.props.annotation.fieldName,
       appearance,
       fontSize: this.props.fontSize,
       rect: this.props.annotation.rect,
-      onInput: this.onChange,
-      defaultValue: this.props.value || ''
+      onInput: this.onChange
     }
 
     if (isTextArea) {
-      return <TextArea {...props} />
+      return <TextArea {...props}>{defaultValue}</TextArea>
     }
 
-    return <TextInput {...props} />
+    return <TextInput {...props} defaultValue={defaultValue} />
   }
 }
 

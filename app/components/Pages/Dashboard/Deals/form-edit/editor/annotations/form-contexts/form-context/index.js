@@ -22,7 +22,9 @@ export default function FormContexts(props) {
   return (
     <div>
       {_.map(grouped, (groups, name) => {
+        // get context
         const context = DealContext.searchContext(name)
+
         const value = DealContext.getValue(
           props.deal,
           DealContext.searchContext(name)
@@ -31,9 +33,15 @@ export default function FormContexts(props) {
         return _.map(groups, (group, id) => {
           const annotations = group.map(i => i.annotation)
 
+          const annotationContext = {
+            type: 'Context',
+            context
+          }
+
           return (
             <ContextAnnotation
               key={`${name}-${id}`}
+              annotationContext={annotationContext}
               value={props.formValues[annotations[0].fieldName] || value}
               maxFontSize={20}
               annotations={annotations}

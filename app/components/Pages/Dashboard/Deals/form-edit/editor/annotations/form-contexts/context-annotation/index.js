@@ -1,28 +1,13 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import {
   calculateWordWrap,
   getAnnotationsValues
 } from '../../../../utils/word-wrap'
 
-const Container = styled.div`
-  font-size: ${props => props.fontSize};
-  font-family: ${props => props.fontName};
-  color: ${props => props.color};
-  font-weight: ${props => (props.bold ? 'bold' : 'normal')};
-  position: absolute;
-  left: ${props => props.rect.left}px;
-  top: ${props => props.rect.top}px;
-  width: ${props => props.rect.width}px;
-  height: ${props => props.rect.height}px;
-  background-color: ${props => (props.readOnly ? 'transparent' : '#d2e5f2')};
-  cursor: ${props => (props.readOnly ? 'auto' : 'pointer')};
+import { Container } from './styled'
 
-  :hover {
-    opacity: ${props => (props.readOnly ? 1 : 0.8)};
-  }
-`
+import ToolTip from 'components/tooltip'
 
 export default class Context extends React.Component {
   componentDidMount() {
@@ -41,6 +26,38 @@ export default class Context extends React.Component {
     this.props.onSetValues(values)
   }
 
+  get ToolTipCaption() {
+    const { annotationContext } = this.props
+
+    const data = [`Type: ${annotationContext.type}`]
+
+    if (annotationContext.role) {
+      data.push(`Roles: ${annotationContext.role.join(' and ')}`)
+    }
+
+    if (annotationContext.attribute) {
+      data.push(`Attribute: ${annotationContext.attribute}`)
+    }
+
+    if (annotationContext.number !== undefined) {
+      data.push(`Number: ${annotationContext.number}`)
+    }
+
+    if (annotationContext.order !== undefined) {
+      data.push(`Order: ${annotationContext.order}`)
+    }
+
+    if (annotationContext.type === 'Context') {
+      annotationContext.context.priority &&
+        data.push(`Priority: ${annotationContext.context.priority}`)
+
+      data.push(`Name: ${annotationContext.context.name}`)
+      data.push(`Data Type: ${annotationContext.context.data_type}`)
+    }
+
+    return data.join('<br />')
+  }
+
   render() {
     const { appearance, rects, values, fontSize } = calculateWordWrap(
       this.props.annotations,
@@ -53,21 +70,27 @@ export default class Context extends React.Component {
     return (
       <div>
         {rects.map((rect, index) => (
-          <Container
+          <ToolTip
             key={index}
-            fontName={appearance.font}
-            fontSize={fontSize}
-            bold={appearance.bold}
-            color={appearance.color}
-            rect={rect}
-            innerRef={ref => (this.container = ref)}
-            readOnly={this.props.isReadOnly}
-            onClick={() =>
-              this.props.onClick(this.container.getBoundingClientRect())
-            }
+            placement="bottom"
+            caption={this.ToolTipCaption}
+            multiline
           >
-            {values[index]}
-          </Container>
+            <Container
+              fontName={appearance.font}
+              fontSize={fontSize}
+              bold={appearance.bold}
+              color={appearance.color}
+              rect={rect}
+              innerRef={ref => (this.container = ref)}
+              readOnly={this.props.isReadOnly}
+              onClick={() =>
+                this.props.onClick(this.container.getBoundingClientRect())
+              }
+            >
+              {values[index]}
+            </Container>
+          </ToolTip>
         ))}
       </div>
     )

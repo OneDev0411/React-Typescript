@@ -26,6 +26,7 @@ function FormRoles(props) {
           return (
             <ContextAnnotation
               key={`${roleName}-${groupIndex}`}
+              annotationContext={annotationContext}
               annotations={annotations}
               value={text}
               maxFontSize={20}
