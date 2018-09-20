@@ -16,15 +16,6 @@ position: absolute;
   border: 1px solid #ccc;
   transition: 0.1s ease-in all;
   padding: 0 3px;
-
-  :focus {
-    background-color: transparent;
-    outline: none;
-    border: none;
-    font-size: ${props => (props.fontSize || 16) - 2}px;
-    font-weight: 400;
-    color: #262626;
-  }
 `
 
 export const TextInput = styled.input`
