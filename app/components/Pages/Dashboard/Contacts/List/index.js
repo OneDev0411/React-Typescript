@@ -1,6 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
 import { connect } from 'react-redux'
+
 import { confirmation } from '../../../../../store_actions/confirmation'
 
 import {
@@ -29,25 +29,37 @@ import {
   deleteContacts
 } from '../../../../../store_actions/contacts'
 
-const GridContainer = styled.div`
-  padding: 0 16px;
-`
-
 class ContactsList extends React.Component {
-  state = {
-    isSideMenuOpen: true,
-    pageTitle: 'All Contacts',
-    isFetchingContacts: false,
-    isFetchingMoreContacts: false,
-    isRowsUpdating: false,
-    filter: this.props.filter,
-    selectedRows: [],
-    searchInputValue: this.props.searchInputValue
+  constructor(props) {
+    super(props)
+    this.state = {
+      isSideMenuOpen: true,
+      isFetchingContacts: false,
+      isFetchingMoreContacts: false,
+      isRowsUpdating: false,
+      filter: this.props.filter,
+      selectedRows: [],
+      searchInputValue: this.props.searchInputValue,
+      activeSegment: {}
+    }
+    this.order = this.props.listInfo.order
   }
 
   componentDidMount() {
     if (this.props.listInfo.count === 0) {
       this.fetchContacts()
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.filterSegments.activeSegmentId !==
+        this.props.filterSegments.activeSegmentId &&
+      nextProps.filterSegments.activeSegmentId !== this.state.activeSegment.id
+    ) {
+      this.handleChangeSavedSegment(
+        nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
+      )
     }
   }
 
@@ -62,7 +74,12 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
-        await this.handleFilterChange(filter, searchInputValue, start)
+        await this.handleFilterChange(
+          filter,
+          searchInputValue,
+          start,
+          this.order
+        )
       } else {
         await this.props.getContacts(start)
       }
@@ -76,7 +93,7 @@ class ContactsList extends React.Component {
   handleChangeSavedSegment = segment => {
     this.setState(
       {
-        pageTitle: segment.name
+        activeSegment: segment
       },
       () => {
         this.handleFilterChange(segment.filters, this.state.searchInputValue)
@@ -84,7 +101,7 @@ class ContactsList extends React.Component {
     )
   }
 
-  handleFilterChange = async (filter, searchInputValue, start = 0) => {
+  handleFilterChange = async (filter, searchInputValue, start = 0, order) => {
     this.setState({ isFetchingContacts: true, filter })
 
     if (start === 0) {
@@ -96,7 +113,8 @@ class ContactsList extends React.Component {
         filter,
         start,
         undefined,
-        searchInputValue
+        searchInputValue,
+        order
       )
     } catch (e) {
       // todo
@@ -109,6 +127,16 @@ class ContactsList extends React.Component {
     console.log(`[ Search ] ${value}`)
     this.setState({ searchInputValue: value })
     this.handleFilterChange(this.state.filter, value)
+  }
+
+  handleChangeOrder = order => {
+    this.order = order
+    this.handleFilterChange(
+      this.state.filters,
+      this.state.searchInputValue,
+      0,
+      order
+    )
   }
 
   toggleSideMenu = () =>
@@ -133,7 +161,9 @@ class ContactsList extends React.Component {
     } else {
       await this.handleFilterChange(
         this.state.filter,
-        this.state.searchInputValue
+        this.state.searchInputValue,
+        startFrom,
+        this.order
       )
     }
 
@@ -145,7 +175,8 @@ class ContactsList extends React.Component {
       selectedRows
     })
 
-  hasSearchState = () => this.state.filter || this.state.searchInputValue
+  hasSearchState = () =>
+    this.state.filter || this.state.searchInputValue || this.order
 
   handleOnDelete = (e, { selectedRows }) => {
     const selectedRowsLength = selectedRows.length
@@ -188,12 +219,12 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const { isSideMenuOpen } = this.state
+    const { isSideMenuOpen, activeSegment } = this.state
     const { user, list } = this.props
     const contacts = selectContacts(list)
 
     return (
-      <PageContainer>
+      <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen}>
           <SavedSegments
             name="contacts"
@@ -203,7 +234,7 @@ class ContactsList extends React.Component {
 
         <PageContent>
           <Header
-            title={this.state.pageTitle}
+            title={activeSegment.name || 'All Contacts'}
             isSideMenuOpen={this.state.isSideMenuOpen}
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
@@ -211,26 +242,25 @@ class ContactsList extends React.Component {
 
           <ContactFilters onFilterChange={this.handleFilterChange} />
 
-          <GridContainer>
-            <SearchContacts
-              onSearch={this.handleSearch}
-              isSearching={this.state.isFetchingContacts}
-            />
-            <Table
-              data={contacts}
-              listInfo={this.props.listInfo}
-              isFetching={this.state.isFetchingContacts}
-              isFetchingMore={this.state.isFetchingMoreContacts}
-              isRowsUpdating={this.state.isRowsUpdating}
-              onRequestLoadMore={this.handleLoadMore}
-              rowsUpdating={this.rowsUpdating}
-              resetSelectedRows={this.resetSelectedRows}
-              onChangeSelectedRows={this.onChangeSelectedRows}
-              selectedRows={this.state.selectedRows}
-              onRequestDelete={this.handleOnDelete}
-              filters={this.state.filters}
-            />
-          </GridContainer>
+          <SearchContacts
+            onSearch={this.handleSearch}
+            isSearching={this.state.isFetchingContacts}
+          />
+          <Table
+            handleChangeOrder={this.handleChangeOrder}
+            data={contacts}
+            listInfo={this.props.listInfo}
+            isFetching={this.state.isFetchingContacts}
+            isFetchingMore={this.state.isFetchingMoreContacts}
+            isRowsUpdating={this.state.isRowsUpdating}
+            onRequestLoadMore={this.handleLoadMore}
+            rowsUpdating={this.rowsUpdating}
+            resetSelectedRows={this.resetSelectedRows}
+            onChangeSelectedRows={this.onChangeSelectedRows}
+            selectedRows={this.state.selectedRows}
+            onRequestDelete={this.handleOnDelete}
+            filters={this.state.filters}
+          />
         </PageContent>
       </PageContainer>
     )
@@ -244,7 +274,8 @@ function mapStateToUser({ user, contacts }) {
     listInfo,
     user,
     filter: listInfo.filter || [],
-    list: contacts.list
+    list: contacts.list,
+    filterSegments: contacts.filterSegments
   }
 }
 

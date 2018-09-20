@@ -1,31 +1,19 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Downshift from 'downshift'
 
 import RoleAgentIntegration from '../agent-integration'
 import { ROLE_NAMES, roleName } from '../../../utils/roles'
 import Deal from '../../../../../../../models/Deal'
+import { BasicDropdown } from 'components/BasicDropdown'
+import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
-import {
-  Container,
-  RolesMenuContainer,
-  RolesMenu,
-  RolesMenuItem
-} from './styled'
-
-import { RoleItem as AddRole, RoleInfo, RoleTitle, RoleAvatar } from '../styled'
+import { Container } from './styled'
 
 class AddRoleForm extends React.Component {
   state = {
     isFormOpen: false,
-    showRolesMenu: false,
     selectedRole: null
   }
-
-  toggleRolesMenu = () =>
-    this.setState(state => ({
-      showRolesMenu: !state.showRolesMenu
-    }))
 
   closeDrawer = () =>
     this.setState({
@@ -33,21 +21,10 @@ class AddRoleForm extends React.Component {
       selectedRole: null
     })
 
-  handleAddNewRole = () => {
-    const { allowedRoles } = this.props
-
-    console.log(allowedRoles)
-
-    if (!allowedRoles || allowedRoles.length > 0) {
-      return this.toggleRolesMenu()
-    }
-  }
-
-  handleSelectRole = name =>
+  handleSelectRole = item =>
     this.setState({
       isFormOpen: true,
-      showRolesMenu: false,
-      selectedRole: name
+      selectedRole: item.value
     })
 
   get AllowedRoles() {
@@ -69,6 +46,11 @@ class AddRoleForm extends React.Component {
     return ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(enderType)
   }
 
+  getRoleItems = () =>
+    this.Roles.map(item => ({ label: roleName(item), value: item }))
+
+  itemToString = item => item.label
+
   get Roles() {
     const { deal_type } = this.props.deal
 
@@ -85,49 +67,26 @@ class AddRoleForm extends React.Component {
   }
 
   render() {
-    const { isFormOpen, selectedRole } = this.state
     const { deal } = this.props
+    const { isFormOpen, selectedRole } = this.state
+    const allowedRoles = this.AllowedRoles
 
     return (
       <Container>
-        <Downshift
-          isOpen={this.state.showRolesMenu}
-          onOuterClick={this.toggleRolesMenu}
-        >
-          {({ isOpen }) => (
-            <div>
-              <AddRole onClick={this.handleAddNewRole} noBackgroundHover>
-                <RoleAvatar>
-                  <img src="/static/images/deals/contact-add.png" alt="" />
-                </RoleAvatar>
-
-                <RoleInfo>
-                  <RoleTitle>Add Contact</RoleTitle>
-                </RoleInfo>
-              </AddRole>
-
-              {isOpen && (
-                <RolesMenuContainer>
-                  <RolesMenu>
-                    {this.Roles.map((name, index) => (
-                      <RolesMenuItem
-                        key={index}
-                        onClick={() => this.handleSelectRole(name)}
-                      >
-                        {roleName(name)}
-                      </RolesMenuItem>
-                    ))}
-                  </RolesMenu>
-                </RolesMenuContainer>
-              )}
-            </div>
-          )}
-        </Downshift>
+        <BasicDropdown
+          buttonSize={this.props.buttonSize}
+          items={this.getRoleItems()}
+          itemToString={this.itemToString}
+          onChange={this.handleSelectRole}
+          buttonIcon={AddIcon}
+          buttonText="Add a Contact"
+          disabled={allowedRoles && allowedRoles.length > 0}
+        />
 
         {isFormOpen && (
           <RoleAgentIntegration
             deal={deal}
-            allowedRoles={this.AllowedRoles}
+            allowedRoles={allowedRoles}
             isDoubleEnded={this.isDoubleEnded}
             isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
               selectedRole

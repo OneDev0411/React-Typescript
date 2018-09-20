@@ -3,8 +3,17 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+
 import editUser from '../../../../../../store_actions/user/edit'
 import uploadAvatar from '../../../../../../store_actions/user/upload-avatar'
+import Button from '../../../../../../views/components/Button/ActionButton'
+
+const RemoveButton = Button.extend`
+  position: absolute;
+  left: 13.8rem;
+  bottom: 0;
+  display: block;
+`
 
 const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
   <div className="c-avatar-uploader">
@@ -13,8 +22,8 @@ const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
     ) : (
       <div className="c-avatar-uploader__placeholder">
         <svg
-          width="96"
-          height="96"
+          width="160"
+          height="160"
           fill="#fff"
           viewBox="0 0 24 24"
           className="c-avatar-uploader__svg"
@@ -28,7 +37,7 @@ const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
       htmlFor="avatarImage"
       className={`c-avatar-uploader__label ${avatar ? 'has-avatar' : ''}`}
     >
-      <span>{avatar ? 'Change' : 'Upload'} Avatar</span>
+      <span>{avatar ? 'Change' : 'Upload'} Photo</span>
     </label>
     <input
       type="file"
@@ -38,18 +47,22 @@ const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
       className="c-avatar-uploader__input"
     />
     {avatar && (
-      <button
+      <RemoveButton
+        appearance="outline"
         onClick={avatarRemoveHandler}
-        className="c-avatar-uploader__remove-btn"
+        size="small"
       >
-        Remove Avatar
-      </button>
+        Remove Photo
+      </RemoveButton>
     )}
   </div>
 )
 
 export default compose(
-  connect(null, { uploadAvatar, editUser }),
+  connect(
+    null,
+    { uploadAvatar, editUser }
+  ),
   withState(
     'avatar',
     'setAvatar',

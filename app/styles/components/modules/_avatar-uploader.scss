@@ -19,7 +19,7 @@
   transition: background 0.2s ease-in;
 
   &:hover > span {
-    color: #6b7075;
+    color: #000000;
   }
 
   &.has-avatar {
@@ -52,7 +52,7 @@
 .c-avatar-uploader__placeholder {
   height: 100%;
   text-align: center;
-  background: #d6dce2;
+  background: #d4d4d4;
   border-radius: 100%;
 }
 
@@ -65,25 +65,6 @@
 
 .c-avatar-uploader__input {
   @include visually-hidden();
-}
-
-.c-avatar-uploader__remove-btn {
-  width: 11rem;
-  position: absolute;
-  left: 13.8rem;
-  bottom: 0;
-  display: block;
-  word-wrap: none;
-  padding: 0.5rem 0;
-  color: #969696;
-  border-radius: 3px;
-  background: transparent;
-  border: 1px solid #ccc;
-
-  &:hover {
-    color: #444;
-    border-color: #444;
-  }
 }
 
 

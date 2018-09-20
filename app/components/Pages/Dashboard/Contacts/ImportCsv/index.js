@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
 import Stepper from '../../../../Partials/Stepper'
-import Header from './Header'
 import Footer from './Footer'
 import SelectFile from './SelectFile'
 import Mapper from './Mapper'
@@ -15,6 +14,8 @@ import {
   CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS,
   CONTACTS__IMPORT_CSV__STEP_UPLOAD_CONTACTS
 } from '../../../../../constants/contacts'
+import PageHeader from '../../../../../views/components/PageHeader'
+import { CloseButton } from '../../../../../views/components/Button/CloseButton'
 
 class ImportCsv extends React.Component {
   componentWillUnmount() {
@@ -40,7 +41,20 @@ class ImportCsv extends React.Component {
 
     return (
       <div className="contact__import-csv">
-        <Header onClose={this.goBack} />
+        <PageHeader
+          isFlat
+          style={{
+            marginBottom: '1.5em',
+            marginTop: '1.5rem',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <PageHeader.Title showBackButton={false}>
+            <PageHeader.Heading>Import a CSV file</PageHeader.Heading>
+          </PageHeader.Title>
+          <CloseButton />
+        </PageHeader>
 
         <div className="contact__import-csv__container">
           <div className="current-step">

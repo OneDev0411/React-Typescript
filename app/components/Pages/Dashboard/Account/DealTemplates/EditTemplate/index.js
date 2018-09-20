@@ -119,7 +119,6 @@ class EditTemplate extends React.Component {
             {isWorking && <i className="icon-save fa fa-spin fa-spinner" />}
 
             <ActionButton
-              style={{ padding: '0.75em' }}
               disabled={isWorking || !isFrameLoaded}
               onClick={this.requestSave}
             >
@@ -139,4 +138,7 @@ function mapStateToProps({ deals, user }, { params }) {
   }
 }
 
-export default connect(mapStateToProps, { notify })(EditTemplate)
+export default connect(
+  mapStateToProps,
+  { notify }
+)(EditTemplate)

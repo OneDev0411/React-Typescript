@@ -78,7 +78,7 @@
         padding: .5rem;
         font-size: .875em;
         text-align: center;
-        color: #8b9898;
+        color: #7f7f7f !important;
       }
 
   .DayPicker-Body {
@@ -129,7 +129,7 @@
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
   color: #FFF;
-  background-color: #4A90E2;
+  background-color: #003bdf;
 }
 
 /* Locales */

@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import _ from 'underscore'
 
-import { Body } from '../../styled'
 import BasicTable from '../Basic'
 
 import TableHeader from '../../Header'
@@ -22,13 +21,13 @@ const MultipleTable = ({ data, ...rest }) => (
 )
 
 const TableGroup = ({ group, onTableRef, SubComponent, ...rest }) => (
-  <Body
+  <div
     data-refid={group.refId}
-    innerRef={ref => onTableRef && onTableRef(group.refId, ref)}
+    ref={ref => onTableRef && onTableRef(group.refId, ref)}
   >
     {SubComponent && <SubComponent {...group} {...rest} />}
-    <BasicTable data={group.data} {...rest} showTableHeader={false} />
-  </Body>
+    <BasicTable data={group.data} {...rest} showTableHeader={false} multiple />
+  </div>
 )
 
 export default MultipleTable

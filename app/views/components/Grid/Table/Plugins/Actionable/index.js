@@ -7,8 +7,9 @@ const ActionItem = styled.div`
 `
 
 export class ActionablePlugin {
-  constructor({ actions, selectablePlugin }) {
-    this.actions = actions
+  constructor({ leftActions, rightActions, selectablePlugin }) {
+    this.leftActions = leftActions
+    this.rightActions = rightActions
     this.selectablePlugin = selectablePlugin
   }
 
@@ -16,8 +17,18 @@ export class ActionablePlugin {
     return this.selectablePlugin ? this.selectablePlugin.SelectedRows : []
   }
 
-  render = () =>
-    this.actions.map((action, index) =>
+  renderLeftActions = () =>
+    this.leftActions &&
+    this.leftActions.map((action, index) =>
+      this.renderAction({
+        ...action,
+        key: index
+      })
+    )
+
+  renderRightActions = () =>
+    this.rightActions &&
+    this.rightActions.map((action, index) =>
       this.renderAction({
         ...action,
         key: index
@@ -46,7 +57,8 @@ export class ActionablePlugin {
         return (
           <ActionItem key={key}>
             <ActionButton
-              style={{ padding: '0.70em 1.5em' }}
+              appearance="outline"
+              size="small"
               {...otherProps}
               onClick={e => onClick && onClick(e, params)}
             >

@@ -4,10 +4,12 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import editUser from 'actions/user/edit'
+import uploadCoverImage from 'actions/user/upload-cover-image'
+
+import Button from 'components/Button/ActionButton'
+
 import FormCard from './FormCard'
-import { getBrandInfo } from '../../../../Auth/SignIn'
-import editUser from '../../../../../../store_actions/user/edit'
-import uploadCoverImage from '../../../../../../store_actions/user/upload-cover-image'
 
 const MAX_SIZE = 256
 const MIN_WIDTH = 240
@@ -16,8 +18,6 @@ const SUBMIT_LABEL_TEXT = 'Choose Image'
 const UNEXPECTED_ERROR = 'An unexpected error occurred. Please try again.'
 
 const CoverImage = ({
-  user,
-  brand,
   isDeleting,
   coverImage,
   submitError,
@@ -25,7 +25,6 @@ const CoverImage = ({
   deleteHandler,
   submitLabelText
 }) => {
-  const { brandColor } = getBrandInfo(brand)
   const isUploading = submitLabelText !== SUBMIT_LABEL_TEXT
 
   return (
@@ -65,22 +64,16 @@ const CoverImage = ({
             />
             <label
               htmlFor="image-cover-input"
-              className={`c-cover-image__upload-btn ${isDeleting || isUploading
-                ? 'is-disable'
-                : ''}`}
-              style={{
-                background: brandColor
-              }}
+              className={`c-cover-image__upload-btn ${
+                isDeleting || isUploading ? 'is-disable' : ''
+              }`}
             >
               {submitLabelText}
             </label>
             {((coverImage && !isUploading) || (!coverImage && isDeleting)) && (
-              <button
-                onClick={deleteHandler}
-                className="c-cover-image__delete-btn"
-              >
+              <Button appearance="outline" size="small" onClick={deleteHandler}>
                 {isDeleting ? 'Deleting...' : 'Delete Cover'}
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -101,10 +94,13 @@ const CoverImage = ({
 }
 
 export default compose(
-  connect(({ user, brand }) => ({ user, brand }), {
-    editUser,
-    uploadCoverImage
-  }),
+  connect(
+    ({ user, brand }) => ({ user, brand }),
+    {
+      editUser,
+      uploadCoverImage
+    }
+  ),
   withState(
     'coverImage',
     'setCoverImage',
@@ -149,7 +145,9 @@ export default compose(
             setCoverImage(src)
 
             setSubmitLabelText('Uploading...')
+
             const user = await uploadCoverImage(file)
+
             if (user instanceof Error) {
               throw user
             }

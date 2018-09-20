@@ -2,15 +2,11 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { browserHistory } from 'react-router'
-
 import _ from 'underscore'
-import cn from 'classnames'
 import moment from 'moment'
 
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
-
-import Button from '../../../../../views/components/Button/ActionButton'
 
 import PageHeader from './page-header'
 import DealType from './deal-type'
@@ -35,6 +31,7 @@ import {
 } from '../../../../../store_actions/deals'
 import OpenDeal from '../utils/open-deal'
 import { isBackOffice } from '../../../../../utils/user-teams'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 class CreateDeal extends React.Component {
   state = {
@@ -818,7 +815,6 @@ class CreateDeal extends React.Component {
           }
           handleOnClose={this.onClosePage}
         />
-
         <div className="form">
           {!deal && (
             <div className="swoosh">Swoosh! Another one in the bag.</div>
@@ -980,27 +976,18 @@ class CreateDeal extends React.Component {
               />
             )}
 
-          <Button
-            className={cn('create-deal-button', {
-              disabled: !canSaveDeal
-            })}
+          <ActionButton
             style={{ marginRight: '10px' }}
             onClick={this.updateOrCreateDeal}
             disabled={!canSaveDeal}
           >
             {this.SubmitLabel}
-          </Button>
+          </ActionButton>
 
           {deal && (
-            <Button
-              className={cn('create-deal-button', {
-                disabled: !canSaveDeal
-              })}
-              onClick={this.goLive}
-              disabled={!canSaveDeal}
-            >
-              {saving ? 'Saving ...' : 'Make Visible to Admin'}
-            </Button>
+            <ActionButton onClick={this.goLive} disabled={!canSaveDeal}>
+              {saving ? 'Saving ...' : 'Make visible to admin'}
+            </ActionButton>
           )}
 
           <div className="error-summary">

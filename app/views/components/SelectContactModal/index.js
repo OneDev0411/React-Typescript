@@ -5,8 +5,7 @@ import BareModal from '../BareModal'
 import Header from './components/Header'
 import Body from './components/Body'
 import Footer from './components/Footer'
-import AddManuallyButton from './components/AddManuallyButton'
-import CancelButton from '../Button/CancelButton'
+import ActionButton from 'components/Button/ActionButton'
 
 const propTypes = {
   title: PropTypes.string,
@@ -32,14 +31,20 @@ function SelectContactModal(props) {
       onRequestClose={handleOnClose}
     >
       <Header title={title}>
-        {handleAddManually && <AddManuallyButton onClick={handleAddManually} />}
+        {handleAddManually && (
+          <ActionButton onClick={handleAddManually}>
+            Add New Contact
+          </ActionButton>
+        )}
       </Header>
       <Body
         handleSelectedItem={props.handleSelectedItem}
         defaultSearchFilter={props.defaultSearchFilter}
       />
       <Footer>
-        <CancelButton onClick={handleOnClose}>Cancel</CancelButton>
+        <ActionButton appearance="outline" onClick={handleOnClose}>
+          Cancel
+        </ActionButton>
       </Footer>
     </BareModal>
   )

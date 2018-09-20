@@ -29,7 +29,7 @@ const ListingPanel = props => {
           )}
           <div className="c-panel__list-container">
             {activePanel === 'table' ? (
-              <TableView {...props} />
+              <TableView listings={listings} />
             ) : (
               <GridView {...props} />
             )}

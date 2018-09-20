@@ -14,6 +14,34 @@
   }
 }
 
+
+.deal-roles-menu {
+  position: absolute;
+  left: 12px;
+  top: 30px;
+  width: 200px;
+  max-height: 200px;
+  overflow: auto;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 8px 0 rgba(0,0,0,0.2);
+  cursor: auto;
+
+  ul {
+    padding: 0;
+    margin: 10px;
+  }
+
+  ul li {
+    margin-bottom: 10px;
+    cursor: pointer;
+    &:hover {
+      color: #2196f3;
+    }
+  }
+}
+
+
 %deal-info {
   border-right: 1px solid #e5e5e5;
   background-color: #fff;
@@ -27,8 +55,7 @@
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.5px;
-      color: #1d364b;
-      border-bottom: 1px solid rgba(220, 225, 229, 0.5);
+      border-bottom: 1px solid #d4d4d4;
     }
   }
 

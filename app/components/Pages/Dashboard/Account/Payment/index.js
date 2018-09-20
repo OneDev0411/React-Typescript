@@ -1,6 +1,11 @@
 import React from 'react'
-import PageTitle from '../components/PageTitle'
+import PageHeader from '../../../../../views/components/PageHeader'
 
-const Payment = () => <PageTitle title="Payment" />
-
+const Payment = () => (
+  <PageHeader isFlat style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}>
+    <PageHeader.Title showBackButton={false}>
+      <PageHeader.Heading>Payment</PageHeader.Heading>
+    </PageHeader.Title>
+  </PageHeader>
+)
 export default Payment

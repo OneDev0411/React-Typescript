@@ -4,9 +4,8 @@ import { Link } from 'react-router'
 import PropTypes from 'prop-types'
 import S from 'shorti'
 import listing_util from '../../../../../utils/listing'
-import { randomString, numberWithCommas } from '../../../../../utils/helpers'
+import { numberWithCommas } from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Listings/components/FavoriteHeart'
-import Brand from '../../../../../controllers/Brand'
 import AgentImage from './AgentImage'
 
 export default class ListingCard extends Component {
@@ -62,14 +61,20 @@ export default class ListingCard extends Component {
       address = property.address
     }
 
-    const square_feet = numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
+    const square_feet = numberWithCommas(
+      Math.floor(listing_util.metersToFeet(property.square_meters))
+    )
     let listing_card_style = {
       ...S('w-380 h-360 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'),
       boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)',
       overflow: 'hidden'
     }
     const listing_image_style = {
-      ...S(`bg-cover bg-url(${listing_util.getResizeUrl(listing.cover_image_url)}?w=800) bg-center w-380 h-260 relative`)
+      ...S(
+        `bg-cover bg-url(${listing_util.getResizeUrl(
+          listing.cover_image_url
+        )}?w=800) bg-center w-380 h-260 relative`
+      )
     }
 
     // Responsive
@@ -95,7 +100,11 @@ export default class ListingCard extends Component {
     }
     const price = numberWithCommas(listing.price)
     const price_tag_style = {
-      ...S(`absolute b-30 p-15 pt-6 h-48 bg-${Brand.color('primary')} font-26 fw-500 color-fff`),
+      ...S(
+        `absolute b-30 p-15 pt-6 h-48 bg-${
+          this.props.brandColor
+        } font-26 fw-500 color-fff`
+      ),
       borderTopRightRadius: '3px',
       borderBottomRightRadius: '3px'
     }
@@ -143,14 +152,20 @@ export default class ListingCard extends Component {
           </div>
           <div style={S('font-14')}>
             <div
-              style={S(`pull-left mr-15 mt-18${data.is_mobile ? ' font-14' : ''}`)}
+              style={S(
+                `pull-left mr-15 mt-18${data.is_mobile ? ' font-14' : ''}`
+              )}
             >
-              <div style={S(`pull-left w-10 h-10 br-100 mr-8 bg-${status_color}`)} />
+              <div
+                style={S(`pull-left w-10 h-10 br-100 mr-8 bg-${status_color}`)}
+              />
               <div style={S(`pull-left mt-5n color-${status_color}`)}>
                 {listing.status}
               </div>
             </div>
-            <div style={S('pull-left relative t-17 w-1 h-14 bg-e5e5e5 mr-15')} />
+            <div
+              style={S('pull-left relative t-17 w-1 h-14 bg-e5e5e5 mr-15')}
+            />
             <div style={S('pull-left mr-10 mt-13 color-8696a4')}>
               {this.side(listing)}
             </div>
@@ -161,7 +176,10 @@ export default class ListingCard extends Component {
           className="c-listing-card__link"
           to={`/dashboard/mls/${listing.id}`}
         />
-        <AgentImage listing={listing} />
+        <AgentImage
+          listing={listing}
+          defaultAvatar={this.props.defaultAvatar}
+        />
         {user && (
           <div className="c-listing-card__favorite-heart">
             <FavoriteHeart listing={listing} />

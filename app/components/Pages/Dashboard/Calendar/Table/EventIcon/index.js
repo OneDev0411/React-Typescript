@@ -4,7 +4,8 @@ import styled from 'styled-components'
 const Image = styled.img`
   width: 16px;
   height: 16px;
-  margin-right: 12px;
+  margin-right: 1rem;
+  margin-top: 8px;
 `
 
 const getIcon = name => (
@@ -21,6 +22,9 @@ const getImportantDateIcon = label => {
 
     case 'new home':
       return getIcon('important-date__new-home')
+
+    case 'home anniversary':
+      return getIcon('important-date__home-anniversary')
 
     case 'work anniversary':
       return getIcon('important-date__work-anniversary')

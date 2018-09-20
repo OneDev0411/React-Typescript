@@ -8,6 +8,8 @@ import {
   changeNeedsAttention
 } from '../../../../../../store_actions/deals'
 import { isBackOffice } from '../../../../../../utils/user-teams'
+import DeleteIcon from 'views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import IconButton from 'components/Button/IconButton'
 
 class DeleteTask extends React.Component {
   constructor(props) {
@@ -37,8 +39,8 @@ class DeleteTask extends React.Component {
     }
   }
 
-  requestDeleteTask(task) {
-    const { isBackOffice } = this.props
+  requestDeleteTask = () => {
+    const { isBackOffice, task } = this.props
 
     if (task.is_deletable === false && !isBackOffice) {
       return this.props.confirmation({
@@ -68,16 +70,15 @@ class DeleteTask extends React.Component {
   }
 
   render() {
-    const { task } = this.props
-
     return (
-      <span
-        className="delete-task"
-        onClick={() => this.requestDeleteTask(task)}
-        title="Delete Task"
+      <IconButton
+        appearance="icon"
+        inverse
+        iconSize="large"
+        onClick={this.requestDeleteTask}
       >
-        <img src="/static/images/deals/trashcan.png" alt="" />
-      </span>
+        <DeleteIcon />
+      </IconButton>
     )
   }
 }

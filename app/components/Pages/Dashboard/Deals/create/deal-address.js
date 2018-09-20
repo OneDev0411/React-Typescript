@@ -3,6 +3,8 @@ import cn from 'classnames'
 import ManualAddress from './manual-address'
 import MlsSearch from '../../../../../views/components/SearchListing'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+import { H2 } from 'components/Typography/headings'
+import ActionButton from 'components/Button/ActionButton'
 
 const BUYING = 'Buying'
 
@@ -49,11 +51,11 @@ export default class DealAddress extends React.Component {
 
     return (
       <div className="form-section deal-address">
-        <div className={cn('hero', { hasError })}>
+        <H2 className={cn('hero', { hasError })}>
           What is the address of the subject property?&nbsp;
           {isRequired && <span className="required">*</span>}
           {hasError && <RequiredIcon />}
-        </div>
+        </H2>
 
         <ManualAddress
           show={showManualAddress}
@@ -91,10 +93,10 @@ export default class DealAddress extends React.Component {
                 className="entity-item address new"
                 onClick={() => this.toggleMlsModal()}
               >
-                <span className="add-item">
+                <ActionButton appearance="link" className="add-item">
                   <span className="icon">+</span>
                   <span className="text">Enter MLS #</span>
-                </span>
+                </ActionButton>
               </div>
             )}
 
@@ -102,12 +104,12 @@ export default class DealAddress extends React.Component {
               className="entity-item address new"
               onClick={() => this.toggleManualAddressModal()}
             >
-              <span className="add-item">
+              <ActionButton appearance="link" className="add-item">
                 <span className="icon">+</span>
                 <span className="text">
                   {dealSide === BUYING ? 'Or manually input' : 'Add address'}
                 </span>
-              </span>
+              </ActionButton>
             </div>
           </div>
         )}

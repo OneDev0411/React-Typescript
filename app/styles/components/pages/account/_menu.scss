@@ -6,21 +6,23 @@
 
   a.c-tabs__tab {
     display: block;
-    padding: 0 2rem;
-    font-size: 1.5rem;
+    padding: 0 1em;
     line-height: 2.5;
-    color: #1c364c;
     text-decoration: none;
+    color: #000;
   }
 
   a.c-tabs__tab--disabled {
     pointer-events: none;
-    color: #ccc;
+    color: $gray-darker;
   }
 
   a.c-tabs__tab:hover,
   a.c-tabs__tab--active {
+    color: $brand-primary;
+  }
+  
+  a.c-tabs__tab--active {
     font-weight: bold;
-    background-color: #f0f4f7;
   }
 }

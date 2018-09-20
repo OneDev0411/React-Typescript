@@ -7,31 +7,23 @@
 
   .suggestions.suggestions.suggestions {
     margin-top: 0;
-    padding: 1rem 2rem;
+    padding: 0.5rem 1rem;
   }
 }
 
 .c-share-modal__title {
-  padding: 2rem;
-  font-size: 2.4rem;
+  padding: 1rem;
+  font-size: 1.5rem;
   line-height: 1;
-  color: #5b6469;
   border-radius: 0 0 3px 3px;
   background: #f9f9f9;
 }
 
 .c-share-modal__close-btn {
   position: absolute;
-  top: 2.5rem;
-  right: 2rem;
+  font-size: 0;
+  top: 1rem;
+  right: 1rem;
   border-width: 0;
   background: transparent;
-
-  & > svg {
-    transition: transform .3s ease-out;
-  }
-
-  &:hover > svg {
-    transform: scale(1.5);
-  }
 }

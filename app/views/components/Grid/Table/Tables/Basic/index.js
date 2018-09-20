@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import { BodyCell as Cell, BodyRow as Row } from '../../styled'
+import { Cell, TBody, BodyRow as Row } from '../../styled'
 import TableHeader from '../../Header'
 
 class BasicTable extends React.Component {
@@ -61,7 +61,8 @@ class BasicTable extends React.Component {
       plugins,
       EmptyState,
       LoadingState,
-      SubComponent
+      SubComponent,
+      multiple
     } = this.props
 
     if (data.length === 0 && EmptyState && !isFetching) {
@@ -82,44 +83,48 @@ class BasicTable extends React.Component {
           />
         )}
 
-        {isFetching && !isFetchingMore && <LoadingState />}
-        {SubComponent && <SubComponent data={data} columns={columns} />}
+        <TBody>
+          {isFetching && !isFetchingMore && <LoadingState />}
+          {SubComponent && <SubComponent data={data} columns={columns} />}
 
-        {this.Rows.map((row, rowIndex) => (
-          <Row
-            key={row.key || rowIndex}
-            firstRow={rowIndex === 0}
-            lastRow={rowIndex === data.length - 1}
-            {...getTrProps(rowIndex, {
-              original: row,
-              isSelected: this.props.selectablePlugin
-                ? this.props.selectablePlugin.isRowSelected(row.id)
-                : false
-            })}
-          >
-            {columns &&
-              columns.map((column, colIndex) => (
-                <Cell
-                  key={column.id || colIndex}
-                  width={sizes[colIndex]}
-                  {...getTdProps(colIndex, {
-                    column,
-                    rowIndex,
-                    rowData: row
-                  })}
-                >
-                  {this.getCell({
-                    column,
-                    row,
-                    rowIndex,
-                    total: data.length
-                  })}
-                </Cell>
-              ))}
-          </Row>
-        ))}
+          {this.Rows.map((row, rowIndex) => (
+            <Row
+              multiple={multiple}
+              key={row.key || rowIndex}
+              firstRow={rowIndex === 0}
+              lastRow={rowIndex === data.length - 1}
+              {...getTrProps(rowIndex, {
+                original: row,
+                isSelected: this.props.selectablePlugin
+                  ? this.props.selectablePlugin.isRowSelected(row.id)
+                  : false
+              })}
+            >
+              {columns &&
+                columns.map((column, colIndex) => (
+                  <Cell
+                    key={column.id || colIndex}
+                    width={sizes[colIndex]}
+                    verticalAlign={column.verticalAlign}
+                    {...getTdProps(colIndex, {
+                      column,
+                      rowIndex,
+                      rowData: row
+                    })}
+                  >
+                    {this.getCell({
+                      column,
+                      row,
+                      rowIndex,
+                      total: data.length
+                    })}
+                  </Cell>
+                ))}
+            </Row>
+          ))}
 
-        {isFetchingMore && <LoadingState isFetchingMore />}
+          {isFetchingMore && <LoadingState isFetchingMore />}
+        </TBody>
       </Fragment>
     )
   }

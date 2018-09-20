@@ -98,10 +98,9 @@ class Listing extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state
-
   return {
-    user
+    user: state.user,
+    brand: state.brand
   }
 }
 

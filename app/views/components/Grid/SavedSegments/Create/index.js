@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import Modal from '../../../BasicModal'
-import CancelButton from '../../../Button/CancelButton'
-import { Container, SaveButton, ItemRow, ItemTitle, TextInput } from './styled'
+import Button from '../../../Button/ActionButton'
+import { ItemRow, ItemTitle, TextInput } from './styled'
 
 import {
   createFilterSegment,
@@ -131,9 +131,9 @@ class SaveSegment extends React.Component {
     const hasFilters = _.size(filters) > 0 || this.isEditable(segment)
 
     return (
-      <Container>
+      <div>
         {hasFilters && (
-          <SaveButton onClick={this.toggleShowModal}>Save List</SaveButton>
+          <Button onClick={this.toggleShowModal}>Save List</Button>
         )}
 
         <Modal
@@ -175,19 +175,25 @@ class SaveSegment extends React.Component {
           </Modal.Body>
 
           <Modal.Footer>
-            <CancelButton disabled={isSaving} onClick={this.toggleShowModal}>
+            <Button
+              size="small"
+              appearance="outline"
+              disabled={isSaving}
+              onClick={this.toggleShowModal}
+              style={{ marginRight: '0.5em' }}
+            >
               Cancel
-            </CancelButton>
-            <SaveButton
+            </Button>
+            <Button
+              size="small"
               disabled={!this.canSaveList()}
-              padLeft={5}
               onClick={this.saveList}
             >
               {this.getButtonCaption()}
-            </SaveButton>
+            </Button>
           </Modal.Footer>
         </Modal>
-      </Container>
+      </div>
     )
   }
 }

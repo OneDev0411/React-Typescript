@@ -2,14 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import cn from 'classnames'
-import IconLocation from '../../../../../../../views/components/SvgIcons/Location/IconLocation.js'
 
+import IconLocation from '../../../../../../../views/components/SvgIcons/Location/IconLocation.js'
 import { getLocation } from '../../../../../../../store_actions/listings/map/user-location'
 import { getUserLocationIsFetching } from '../../../../../../../reducers/listings/map/user-location'
 import ToolTip from '../../../../../../../views/components/tooltip'
 
 const Icon = IconLocation.extend`
-  fill: #929292;
+  fill: #000;
 `
 const DrawingButton = ({ isFetching, getLocation }) => (
   <ToolTip caption="Get your exact location on the map" placement="bottom">

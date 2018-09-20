@@ -258,16 +258,16 @@ class Notifications extends Component {
             key={notification.id + i}
             className="clearfix"
             style={{
-              ...S('h-80 p-20 pointer relative'),
+              ...S('h-80 p-24 pointer relative'),
               backgroundColor: bg_color,
-              boxShadow: '0 1px 0 0 #f1f1f1'
+              padding: '1em',
+              margin: '0 1.5em',
+              borderBottom: '1px solid #d4d4d4'
             }}
           >
             {this.notificationIcon(notification)}
-            <div style={S('relative ml-70')}>
-              <div style={S('color-263445 font-17')}>
-                {notification.message}
-              </div>
+            <div style={S('relative')}>
+              <div style={S('color-263445')}>{notification.message}</div>
               <div style={S('color-c6c6c6')}>
                 {getTimeAgo(notification.created_at)} ago
               </div>
@@ -285,7 +285,12 @@ class Notifications extends Component {
   }
   render() {
     return (
-      <div>
+      <div
+        style={{
+          boxShadow:
+            '-1px 0 2px 0 rgba(0,0,0,0.04), -1px 0 20px 0 rgba(0,0,0,0.1)'
+        }}
+      >
         <Header />
         <div style={{ position: 'relative', height: '100vh' }}>
           <div
@@ -293,11 +298,10 @@ class Notifications extends Component {
               position: 'absolute',
               left: 0,
               top: 0,
-              width: '100%',
-              padding: '2rem'
+              width: '100%'
             }}
           >
-            <div>{this.getNotifications()}</div>
+            {this.getNotifications()}
           </div>
         </div>
       </div>

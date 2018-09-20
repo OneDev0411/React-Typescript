@@ -4,7 +4,7 @@ import Downshift from 'downshift'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import Radio from '../radio'
+import Radio from '../CheckmarkButton'
 import IconBell from '../SvgIcons/Bell/IconBell'
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
 
@@ -50,6 +50,7 @@ const FollowComponent = ({
           <DropDownContainer isFollowing={isFollowing}>
             <ToolTip
               placement="bottom"
+              tooltipStyles={{ textAlign: 'left' }}
               caption={
                 isFollowing
                   ? 'You will NOT receive updates via email & push notifications when any changes to a property take place.'

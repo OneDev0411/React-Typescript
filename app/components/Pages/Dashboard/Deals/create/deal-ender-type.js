@@ -1,7 +1,8 @@
 import React from 'react'
 import cn from 'classnames'
-import RadioButton from '../../../../../views/components/radio'
+import RadioButton from '../../../../../views/components/RadioButton'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+import { H2 } from 'components/Typography/headings'
 
 export default ({
   enderType,
@@ -11,11 +12,11 @@ export default ({
   onChangeEnderType
 }) => (
   <div className="form-section deal-offer">
-    <div className={cn('hero', { hasError })}>
+    <H2 className={cn('hero', { hasError })}>
       Is this an in-house deal?&nbsp;
       {isRequired && <span className="required">*</span>}
       {hasError && <RequiredIcon />}
-    </div>
+    </H2>
 
     <div className="deal-radio-row">
       <RadioButton

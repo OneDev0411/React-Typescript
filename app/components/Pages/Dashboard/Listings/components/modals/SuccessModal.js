@@ -22,7 +22,7 @@ const Icon = ({ type }) => {
 
 const SuccessModal = ({ isActive, type, text }) => (
   <Modal dialogClassName="c-success-modal" show={isActive}>
-    <div className="c-success-modal__body din">
+    <div className="c-success-modal__body">
       <span className="c-success-modal__icon">
         <Icon type={type} />
       </span>

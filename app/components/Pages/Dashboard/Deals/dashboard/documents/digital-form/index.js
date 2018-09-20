@@ -3,7 +3,11 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 import { isBackOffice } from '../../../../../../../utils/user-teams'
+import LinkButton from 'components/Button/LinkButton'
 
+const ViewButton = LinkButton.extend`
+  margin-right: 1em;
+`
 const DigitalForm = ({ deal, task, isBackOffice }) => {
   if (!task || !task.form) {
     return false
@@ -27,30 +31,35 @@ const DigitalForm = ({ deal, task, isBackOffice }) => {
           {task.submission && (
             <Fragment>
               {isBackOffice ? (
-                <Link
-                  className="button"
+                <ViewButton
+                  appearance="outline"
+                  size="small"
+                  // className="button"
                   to={`/dashboard/deals/${deal.id}/form-viewer/${task.id}`}
                 >
                   View
-                </Link>
+                </ViewButton>
               ) : (
-                <a
+                <ViewButton
+                  appearance="outline"
+                  size="small"
                   href={task.submission.file.url}
-                  className="button"
+                  // className="button"
                   target="_blank"
                 >
                   View
-                </a>
+                </ViewButton>
               )}
             </Fragment>
           )}
 
-          <Link
-            className="button"
+          <LinkButton
+            appearance="outline"
+            size="small"
             to={`/dashboard/deals/${deal.id}/form-edit/${task.id}`}
           >
             Edit
-          </Link>
+          </LinkButton>
         </div>
       </div>
     </div>

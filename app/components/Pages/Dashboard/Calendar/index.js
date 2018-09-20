@@ -23,7 +23,8 @@ import {
 import {
   Container,
   Menu,
-  Trigger
+  Trigger,
+  Content
 } from '../../../../views/components/SlideMenu'
 
 import TaskDrawer from './TaskDrawer'
@@ -32,12 +33,7 @@ import DatePicker from '../../../../views/components/DatePicker'
 
 import CalendarTable from './Table'
 
-import {
-  MenuContainer,
-  CalendarContent,
-  PageContent,
-  HeroTitle
-} from './styled'
+import { MenuContainer } from './styled'
 
 import ActionButton from '../../../../views/components/Button/ActionButton'
 
@@ -281,10 +277,10 @@ class CalendarContainer extends React.Component {
       loadingPosition,
       selectedTask
     } = this.state
-    const { user, selectedDate, isFetching } = this.props
+    const { selectedDate, isFetching } = this.props
 
     return (
-      <Container>
+      <Container isOpen={isMenuOpen}>
         <TaskDrawer
           isOpen={showCreateTaskMenu}
           selectedTask={selectedTask}
@@ -292,7 +288,7 @@ class CalendarContainer extends React.Component {
           onChangeTask={this.handleChangeTask}
         />
 
-        <Menu isOpen={isMenuOpen} width={265}>
+        <Menu isOpen={isMenuOpen} width={302}>
           <MenuContainer>
             <DatePicker
               selectedDate={selectedDate}
@@ -302,23 +298,31 @@ class CalendarContainer extends React.Component {
           </MenuContainer>
         </Menu>
 
-        <PageContent>
-          <PageHeader isFlat>
+        <Content>
+          <PageHeader
+            style={{
+              paddingBottom: '1.5rem',
+              height: 'auto',
+              marginLeft: '1.5rem',
+              marginRight: '1.5rem',
+              width: 'auto',
+              paddingRight: '0',
+              paddingLeft: '0'
+            }}
+          >
             <PageHeader.Title showBackButton={false}>
-              <Trigger onClick={this.toggleSideMenu} />
+              <Trigger isExpended={isMenuOpen} onClick={this.toggleSideMenu} />
               <PageHeader.Heading>Calendar</PageHeader.Heading>
             </PageHeader.Title>
 
             <PageHeader.Menu>
-              <ActionButton inverse onClick={this.toggleShowCreateTask}>
-                Add Task
+              <ActionButton onClick={this.toggleShowCreateTask}>
+                Add Event
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
 
-          <CalendarContent>
-            <HeroTitle>Hello {user.first_name}</HeroTitle>
-
+          <div style={{ position: 'relative' }}>
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
                 positions={LOADING_POSITIONS}
@@ -332,16 +336,15 @@ class CalendarContainer extends React.Component {
                 onRef={this.onTableRef}
               />
             </div>
-          </CalendarContent>
-        </PageContent>
+          </div>
+        </Content>
       </Container>
     )
   }
 }
 
-function mapStateToProps({ user, calendar }) {
+function mapStateToProps({ calendar }) {
   return {
-    user,
     isFetching: calendar.isFetching,
     selectedDate: moment(calendar.selectedDate)
       .utcOffset(0)
@@ -352,8 +355,11 @@ function mapStateToProps({ user, calendar }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  getCalendar,
-  setDate,
-  resetCalendar
-})(CalendarContainer)
+export default connect(
+  mapStateToProps,
+  {
+    getCalendar,
+    setDate,
+    resetCalendar
+  }
+)(CalendarContainer)

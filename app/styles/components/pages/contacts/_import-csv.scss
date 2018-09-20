@@ -12,8 +12,7 @@
 }
 
 .contact__import-csv > .contact__import-csv__container {
-  max-height: calc(100vh - 55px);
-  min-height: calc(100vh - 55px);
+  height: calc(100vh - 104px);
   overflow: auto;
 
   .current-step {
@@ -129,12 +128,6 @@
   background-color: #f8fafb;
   border-top: solid 1px #dce5eb;
 
-  button {
-    min-width: 90px;
-    &:focus {
-      outline: none;
-    }
-  }
 
   .contact__import-csv--upload__cancel-btn {
     margin-right: 10px;
@@ -145,7 +138,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 69vh;
+  min-height: 62vh;
 }
 
 .contact__import-csv--select-file
@@ -178,7 +171,7 @@
   }
 
   .inner .link {
-    color: #2196f3;
+    color: #003bdf;
     cursor: pointer;
   }
 }

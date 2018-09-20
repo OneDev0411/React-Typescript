@@ -7,7 +7,6 @@ import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { change as updateField } from 'redux-form'
-import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import Label from '../components/Label'
 import api from '../../../../../../../../models/listings/search'
@@ -22,10 +21,9 @@ const MlsAreaSelects = ({
   selectedAreas,
   onChangeAreas,
   loadingSubareas,
-  selectedSubareas,
-  onChangeSubareas
+  selectedSubareas
 }) => (
-  <div style={{ marginBottom: '3rem' }}>
+  <div style={{ marginBottom: '2rem' }}>
     <Label label="MLS Areas">
       <Select
         multi

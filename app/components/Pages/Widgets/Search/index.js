@@ -8,6 +8,7 @@ import config from '../../../../../config/public'
 export default class Search extends Component {
   componentDidMount() {
     const GoogleMapsLoader = require('google-maps')
+
     GoogleMapsLoader.LIBRARIES = ['places']
     GoogleMapsLoader.KEY = config.google.api_key
     GoogleMapsLoader.load(google => {
@@ -16,11 +17,12 @@ export default class Search extends Component {
   }
 
   _submitHandler(q) {
-    const { data } = this.props
+    const { brand } = this.props
+
     // Send to search map
     if (q) {
-      if (data.brand && data.brand.assets.map_url) {
-        window.top.location.href = `${data.brand.assets.map_url}?q=${q}`
+      if (brand && brand.assets.map_url) {
+        window.top.location.href = `${brand.assets.map_url}?q=${q}`
       } else {
         window.top.location.href = `https://rechat.com/dashboard/mls/?q=${q}`
       }
@@ -47,25 +49,26 @@ export default class Search extends Component {
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
       let q = place.formatted_address
+
       // Place not selected
       if (!q) {
         q = place.name
       }
+
       this._submitHandler(q)
     })
   }
 
   render() {
-    const { data } = this.props
+    const { brand } = this.props
 
     return (
       <div>
         <div
           style={S(
-            `absolute z-0 t-0 l-0 w-100p h-100p bg-cover bg-center bg-url(${data.brand &&
-            data.brand.assets.search_bg
-              ? data.brand.assets.search_bg
-              : ''})`
+            `absolute z-0 t-0 l-0 w-100p h-100p bg-cover bg-center bg-url(${
+              brand && brand.assets.search_bg ? brand.assets.search_bg : ''
+            })`
           )}
         />
         <div style={S('absolute z-1 t-0 l-0 w-100p h-100p bg-000 op-.5')} />
@@ -75,8 +78,8 @@ export default class Search extends Component {
               style={S('color-fff text-center font-58 mb-30')}
               className="tempo"
             >
-              {data.brand && data.brand.messages.search_headline
-                ? data.brand.messages.search_headline
+              {brand && brand.messages.search_headline
+                ? brand.messages.search_headline
                 : ''}
             </div>
             <FormControl
@@ -108,5 +111,5 @@ export default class Search extends Component {
 
 // PropTypes
 Search.propTypes = {
-  data: PropTypes.object
+  brand: PropTypes.shape()
 }

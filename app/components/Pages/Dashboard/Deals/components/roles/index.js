@@ -1,12 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+
 import UserAvatar from '../../../../../Partials/UserAvatar'
-import AddRole from './add-role'
 import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import { roleName, getLegalFullName } from '../../utils/roles'
 import RoleCrmIntegration from './crm-integration'
+
+import IconButton from 'components/Button/IconButton'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+
+import AddRole from './add-role'
 
 import {
   RolesContainer,
@@ -23,7 +28,7 @@ class Roles extends React.Component {
   state = {
     user: null,
     deletingRoleId: null,
-    showRoleModal: false
+    isRoleFormOpen: false
   }
 
   getAvatarTitle = role => {
@@ -113,17 +118,15 @@ class Roles extends React.Component {
   setSelectedRole = user => {
     this.setState({
       user,
-      showRoleModal: true
+      isRoleFormOpen: true
     })
   }
 
-  closeRoleModal = () => {
-    this.setState({ showRoleModal: false })
-  }
+  closeRoleForm = () => this.setState({ isRoleFormOpen: false, user: null })
 
   render() {
     const { deal, roles, allowedRoles, allowDeleteRole } = this.props
-    const { user, deletingRoleId, showRoleModal } = this.state
+    const { user, deletingRoleId, isRoleFormOpen } = this.state
 
     return (
       <RolesContainer style={this.props.containerStyle}>
@@ -166,10 +169,14 @@ class Roles extends React.Component {
                       )}
 
                     {!deletingRoleId && (
-                      <i
+                      <IconButton
+                        appearance="icon"
+                        inverse
                         onClick={e => this.onRequestRemoveRole(e, role)}
-                        className="fa fa-delete fa-times"
-                      />
+                        className="delete-button"
+                      >
+                        <CloseIcon />
+                      </IconButton>
                     )}
                   </RoleActions>
                 )}
@@ -177,14 +184,16 @@ class Roles extends React.Component {
             )
           })}
 
-        <RoleCrmIntegration
-          deal={deal}
-          user={user}
-          modalTitle="Update Contact"
-          isOpen={showRoleModal}
-          allowedRoles={allowedRoles}
-          onHide={this.closeRoleModal}
-        />
+        {isRoleFormOpen && (
+          <RoleCrmIntegration
+            isOpen
+            deal={deal}
+            user={user}
+            modalTitle="Update Contact"
+            allowedRoles={allowedRoles}
+            onHide={this.closeRoleForm}
+          />
+        )}
 
         <AddRole deal={deal} allowedRoles={allowedRoles} />
       </RolesContainer>

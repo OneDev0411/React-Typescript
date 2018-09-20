@@ -1,17 +1,6 @@
 import styled from 'styled-components'
-import ActionButton from '../../../Button/ActionButton'
 
-export const Container = styled.div``
-
-export const SaveButton = ActionButton.extend`
-  border: solid 1px ${props => (props.disabled ? '#cecece' : '#2196f3')};
-  margin-left: ${props => props.padLeft || 0}px;
-
-  &:hover {
-    background-color: ${props => (props.disabled ? '#cecece' : '#fff')};
-    color: ${props => (props.disabled ? '#333' : '#2196f3')};
-  }
-`
+import { blue } from '../../../../utils/colors'
 
 export const ItemRow = styled.div`
   display: flex;
@@ -24,7 +13,7 @@ export const ItemRow = styled.div`
 export const ItemTitle = styled.span`
   font-size: 16px;
   font-weight: 400;
-  color: #17283a;
+  color: #000;
   margin-left: 16px;
 `
 
@@ -34,6 +23,6 @@ export const TextInput = styled.input`
   margin-left: 15px;
   border-radius: 3px;
   background-color: #ffffff;
-  border: solid 1px #2196f3;
+  border: solid 1px ${blue.A100};
   padding: 0 15px;
 `

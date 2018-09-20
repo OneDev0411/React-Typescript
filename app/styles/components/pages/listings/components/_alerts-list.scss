@@ -1,21 +1,21 @@
 .c-alertList__item {
   position: relative;
-  padding: 16px 8px 16px 16px;
-  border-bottom: 1px solid #ececec;
+  padding: 1em 0.5em 1em 1em;
+  border-bottom: 1px solid $gray;
   display: block;
   text-decoration: none;
   &:hover, &:focus {
     text-decoration: none;
 }
   &--selected {
-    background-color: #f6f6f6;
+    background-color: $gray-lighter;
   }
 }
 
 .c-alertList__item__thumbnail {
   width: 54px;
   height: 54px;
-  margin-right: 2rem;
+  margin-right: 1rem;
   display: inline-block;
   vertical-align: top;
   > img {
@@ -39,18 +39,18 @@
 
 .c-alertList__item__title {
   margin-top: 0;
-  margin-bottom: 8px;
+  margin-bottom: 0.5em;
   line-height: 1;
-  font-weight: normal;
-  font-size: 1.6rem;
   font-weight: 600;
-  color: #263445;
+  font-size: 1rem;
+  color: #000;
 }
 
 .c-alertList__item__shared-by {
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
   line-height: 1;
-  color: #263445;
+  color: #000;
+  font-size: 0.8rem;
 }
 
 .c-alertList__item__menu,
@@ -64,7 +64,7 @@
   text-align: center;
   padding-top: 6px;
   margin-top: -4px;
-  margin-right: 8px;
+  margin-right: 0.5em;
   color: #fff;
   border-radius: 50%;
 }
@@ -76,7 +76,7 @@
 }
 
 .c-alertList__item__menu-trigger-btn {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
   @extend .c-alertList__item__btn;
   text-align: center;
   border-radius: 100%;
@@ -84,7 +84,7 @@
   &:focus,
   &:hover {
     outline-width: 1px;
-    background: #eaeaea;
+    background: $gray-lighter;
   }
 
   > svg {
@@ -95,7 +95,7 @@
 
 .c-alertList__item__menu {
   position: absolute;
-  right: 1rem;
+  right: 0.5em;
   width: 200px;
   height: auto;
   display: none;
@@ -112,7 +112,7 @@
 
   > li {
     margin: 0;
-    height: 4rem;
+    height: 40px;
   }
 }
 
@@ -122,8 +122,7 @@
   height: 100%;
   text-align: left;
   line-height: 1;
-  font-size: 1.5rem;
-  padding: 0 1rem;
+  padding: 0 0.5em;
 
   > span,
   > svg {
@@ -132,24 +131,24 @@
   }
 
   > svg {
-    margin-right: 1rem;
+    margin-right: 0.5em;
   }
 
   &:not([disabled]):hover {
     > span {
-      color: #2196f3;
+      color: $brand-primary;
     }
     > svg {
-      fill: #2196f3;
+      fill: $brand-primary;
     }
   }
 
   &[disabled] {
-    background: #eaeaea;
+    background: $gray-light;
   }
 }
 
 .c-alertList__item__menu__divider.c-alertList__item__menu__divider {
   height: 1px;
-  background: #e9e9e9;
+  background: $gray;
 }

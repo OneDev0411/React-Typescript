@@ -21,7 +21,7 @@ class MlsListing extends React.Component {
     const { confirmation } = this.props
 
     confirmation({
-      message: 'Delete MLS Listing?',
+      message: 'Remove MLS Listing?',
       description: 'Removing the MLS# will remove the property from your deal.',
       confirmLabel: 'Yes, I am sure',
       onConfirm: () => this.delete()

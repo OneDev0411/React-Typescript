@@ -1,12 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import moment from 'moment'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import Deal from '../../../../../models/Deal'
 import { voidEnvelope } from '../../../../../store_actions/deals'
 import { confirmation } from '../../../../../store_actions/confirmation'
+import ActionButton from 'components/Button/ActionButton'
+import { H4 } from 'components/Typography/headings'
+
+const VoidButton = ActionButton.extend`
+  margin-left: 1rem;
+  color: red;
+  border-color: red;
+  &:hover {
+    background-color: red;
+
+    color: #fff !important;
+  }
+`
 
 class WhoSigned extends React.Component {
   constructor(props) {
@@ -85,23 +97,20 @@ class WhoSigned extends React.Component {
     const declineds = recipients.filter(r => r.status === 'Declined')
 
     const isDraft = envelope.status === 'Created'
-    const isVoided = envelope.status === 'Voided'
-    const isCompleted = envelope.status === 'Completed'
     const isSent = envelope.status === 'Sent'
 
     return (
       <div className="who-signed">
         <div className="ws-head">
-          <div className="ttl">{isDraft ? 'Draft' : 'Who signed'}</div>
+          <H4 className="ttl">{isDraft ? 'Draft' : 'Who signed'}</H4>
           <div className="cta">
             {isSent && (
-              <Button
-                className="deal-button"
+              <ActionButton
                 disabled={resending}
                 onClick={() => this.resendDocs(envelope.id)}
               >
                 {resending ? 'Resending ...' : 'Resend docs'}
-              </Button>
+              </ActionButton>
             )}
 
             {isDraft && (
@@ -115,12 +124,12 @@ class WhoSigned extends React.Component {
             )}
 
             {(isDraft || isSent) && (
-              <Button
-                className="deal-button void"
+              <VoidButton
+                appearance="outline"
                 onClick={() => this.requestVoidEnvelope(envelope.id)}
               >
                 Void
-              </Button>
+              </VoidButton>
             )}
           </div>
         </div>

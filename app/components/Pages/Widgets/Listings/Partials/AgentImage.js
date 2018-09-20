@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import S from 'shorti'
-import Brand from '../../../../../controllers/Brand'
-import controller from '../../../Dashboard/controller'
 
 const AgentImage = ({ listing }) => {
   const { proposed_agent } = listing
@@ -24,13 +22,19 @@ const AgentImage = ({ listing }) => {
   if (profile_image_url) {
     avatar = (
       <div
-        style={S(`bg-url(${profile_image_url}) w-50 h-50 bg-center bg-cover br-100`)}
+        style={S(
+          `bg-url(${profile_image_url}) w-50 h-50 bg-center bg-cover br-100`
+        )}
       />
     )
   } else {
     avatar = (
       <div
-        style={S(`bg-url(${Brand.asset('default_avatar')}) w-50 h-50 bg-center bg-cover br-100`)}
+        style={S(
+          `bg-url(${
+            this.props.defaultAvatar
+          }) w-50 h-50 bg-center bg-cover br-100`
+        )}
       />
     )
   }
@@ -39,7 +43,8 @@ const AgentImage = ({ listing }) => {
 
   if (proposed_agent.agent && proposed_agent.agent.online_state) {
     if (
-      (proposed_agent.agent && proposed_agent.agent.online_state === 'Online') ||
+      (proposed_agent.agent &&
+        proposed_agent.agent.online_state === 'Online') ||
       proposed_agent.agent.online_state === 'Background'
     ) {
       bg_color = '35b863'
@@ -48,12 +53,16 @@ const AgentImage = ({ listing }) => {
 
   return (
     <div
-      style={S(`p-0 br-100 border-2-solid-fff absolute r-20 b-${
+      style={S(
+        `p-0 br-100 border-2-solid-fff absolute r-20 b-${
           is_mobile ? '103' : '80'
-        } bg-ccc`)}
+        } bg-ccc`
+      )}
     >
       <div
-        style={S(`br-100 bg-${bg_color} w-13 h-13 bw-2 solid bc-fff absolute z-2 t-2n r-2`)}
+        style={S(
+          `br-100 bg-${bg_color} w-13 h-13 bw-2 solid bc-fff absolute z-2 t-2n r-2`
+        )}
       />
       {avatar}
     </div>

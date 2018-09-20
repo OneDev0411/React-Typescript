@@ -14,9 +14,7 @@ export default function Tabs({ to, text, indexed }) {
           borderBottomColor: `#${Brand.color('primary', '3388ff')}`
         }}
       >
-        <span>
-          {text}
-        </span>
+        <span className="c-listings__tabs__link__text">{text}</span>
       </Link>
     </li>
   )

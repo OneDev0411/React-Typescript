@@ -16,11 +16,7 @@ class Listings extends Component {
     return (
       <div className={`l-listings ${user ? 'l-listings--logged' : ''}`}>
         <header className="l-listings__header">
-          {!user
-            ? <BrandLogo
-              styles={{ padding: '.9rem 2rem' }}
-            />
-            : <Tabs />}
+          {!user ? <BrandLogo /> : <Tabs />}
         </header>
         {this.props.children}
       </div>
@@ -28,6 +24,4 @@ class Listings extends Component {
   }
 }
 
-export default connect(
-  ({ user }) => ({ user })
-)(Listings)
+export default connect(({ user }) => ({ user }))(Listings)

@@ -11,7 +11,7 @@ import getListing from '../../../../../store_actions/widgets/listings/get-listin
 
 class Section extends Component {
   componentDidMount() {
-    const { data, user, location } = this.props
+    const { user, location } = this.props
 
     this.options = this.initOptions(
       location.query.brokerage,
@@ -48,7 +48,8 @@ class Section extends Component {
       (this.options.list_offices && this.options.list_offices.length) ||
       this.options.brand
     ) {
-      queryString += '?associations=compact_listing.proposed_agent&order_by[]=price'
+      queryString +=
+        '?associations=compact_listing.proposed_agent&order_by[]=price'
     }
 
     return {
@@ -138,7 +139,10 @@ class Section extends Component {
 
   render() {
     let showLoadMore
-    const { data, user } = this.props
+    const { data, user, brand } = this.props
+
+    const brandColor = Brand.color('primary', '#2196f3', brand)
+    const defaultAvatar = Brand.asset('default_avatar', '', brand)
 
     if (this.props.listingsInfo.total > this.props.listings.length) {
       showLoadMore = true
@@ -156,9 +160,11 @@ class Section extends Component {
           }}
         >
           <h1
-            style={S(`font-50 color-263445 mb-0${
+            style={S(
+              `font-50 color-263445 mb-0${
                 this.props.data.is_mobile ? ' ml-10 mr-10' : ''
-              }`)}
+              }`
+            )}
           >
             {this.props.title}
           </h1>
@@ -169,6 +175,8 @@ class Section extends Component {
             <ListingCard
               className="listing-card"
               key={i}
+              brandColor={brandColor}
+              defaultAvatar={defaultAvatar}
               data={data}
               user={user}
               listing={listing}
@@ -180,39 +188,41 @@ class Section extends Component {
             <Loading />
           </div>
         )}
-        {Brand.color('primary') &&
-          showLoadMore && (
-            <div style={S('text-center')}>
-              <Button
-                onClick={this.triggerNextPage.bind(this, 'active')}
-                style={{
-                  backgroundColor: `#${Brand.color('primary')}`,
-                  borderColor: `#${Brand.color('primary')}`,
-                  paddingLeft: '3em',
-                  paddingRight: '3em',
-                  fontSize: '1.2em'
-                }}
-                bsStyle="primary"
-              >
-                Load More
-              </Button>
-            </div>
-          )}
+
+        {showLoadMore && (
+          <div style={S('text-center')}>
+            <Button
+              onClick={this.triggerNextPage.bind(this, 'active')}
+              style={{
+                backgroundColor: `#${brandColor}`,
+                borderColor: `#${brandColor}`,
+                paddingLeft: '3em',
+                paddingRight: '3em',
+                fontSize: '1.2em'
+              }}
+              bsStyle="primary"
+            >
+              Load More
+            </Button>
+          </div>
+        )}
       </div>
     )
   }
 }
 
-export default withRouter(connect(
-  ({ widgets }, { type, location }) => {
-    const listings = widgets.listings[type] || {}
+export default withRouter(
+  connect(
+    ({ widgets }, { type, location }) => {
+      const listings = widgets.listings[type] || {}
 
-    return {
-      location,
-      listings: listings.listings || [],
-      listingsInfo: listings.listingsInfo || {},
-      isFetching: listings.isFetching || false
-    }
-  },
-  { getListing }
-)(Section))
+      return {
+        location,
+        listings: listings.listings || [],
+        listingsInfo: listings.listingsInfo || {},
+        isFetching: listings.isFetching || false
+      }
+    },
+    { getListing }
+  )(Section)
+)

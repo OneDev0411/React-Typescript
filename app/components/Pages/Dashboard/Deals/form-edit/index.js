@@ -181,6 +181,9 @@ class EditDigitalForm extends React.Component {
     this.setState({ isSaving: false })
   }
 
+  getHeaderTitle = title =>
+    title && title.length > 30 ? `${title.substring(0, 30)}...` : title
+
   render() {
     const { isFormLoaded, isSaving, pdfDocument } = this.state
     const { task } = this.props
@@ -209,13 +212,10 @@ class EditDigitalForm extends React.Component {
     return (
       <Fragment>
         <PageHeader backButton>
-          <PageHeader.Title>
-            <PageHeader.Heading>{task.title}</PageHeader.Heading>
-          </PageHeader.Title>
+          <PageHeader.Title title={this.getHeaderTitle(task.title)} />
 
           <PageHeader.Menu>
             <ActionButton
-              style={{ padding: '0.75em' }}
               disabled={!isFormLoaded || isSaving}
               onClick={this.handleSave}
             >

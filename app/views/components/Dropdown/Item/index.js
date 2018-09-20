@@ -1,17 +1,33 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import { primary } from '../../../../views/utils/colors'
+
+const getStatesStyle = props => {
+  const { isActive, isSelected } = props
+
+  if (isActive) {
+    return css`
+      color: #fff;
+      background-color: ${primary};
+    `
+  } else if (isSelected) {
+    return css`
+      font-weight: 500;
+      color: ${primary};
+    `
+  }
+}
 
 export const Item = styled.div`
   cursor: pointer;
-  line-height: 1em;
   padding: 0.5em 1em;
   white-space: nowrap;
-  font-size: 1.6rem;
-  font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
-  background-color: ${({ isActive }) => (isActive ? 'lightgrey' : 'white')};
+  ${props => getStatesStyle(props)};
+  font-weight: ${({ isSelected }) => (isSelected ? 500 : 400)};
 
   &:hover,
   &:focus {
-    border-color: #96c8da;
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+    color: #fff;
+    background-color: ${primary};
   }
 `

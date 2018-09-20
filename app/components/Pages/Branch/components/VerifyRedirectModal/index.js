@@ -1,17 +1,12 @@
 import React from 'react'
-import { Link, browserHistory } from 'react-router'
+
 import RedirectModal from '../RedirectModal'
+import { SigninButton } from '../SigninButton'
+import Button from '../../../../../views/components/Button/LinkButton'
 
 const VerifyRedirectModal = ({ type, params, brandInfo }) => {
-  const { brandColor } = brandInfo
-  const {
-    loggedInUser, receivingUser, redirectTo, verificationType
-  } = params
+  const { receivingUser, redirectTo, verificationType } = params
   const username = encodeURIComponent(receivingUser.email)
-  const verificationValue =
-    verificationType === 'email address'
-      ? receivingUser.email
-      : receivingUser.phone_number
 
   return (
     <RedirectModal brandInfo={brandInfo}>
@@ -23,43 +18,29 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
             verify this account.
           </p>
           <div>
-            <Link
-              to="/dashboard/mls"
-              style={{ textDecoration: 'none' }}
-              className="c-confirm-modal__button c-confirm-modal__button--ghost"
-            >
+            <Button appearance="outline" to="/dashboard/mls">
               Cancel
-            </Link>
-            <a
-              href={`/signout?redirectFromSignout=/signin&username=${username}&redirectTo=${redirectTo}`}
-              style={{
-                marginLeft: '2rem',
-                textDecoration: 'none',
-                backgroundColor: brandColor
-              }}
-              className="c-confirm-modal__button"
+            </Button>
+            <SigninButton
+              appearance="primary"
+              to={`/signout?redirectFromSignout=/signin&username=${username}&redirectTo=${redirectTo}`}
             >
               Sign out
-            </a>
+            </SigninButton>
           </div>
         </div>
       ) : (
         <div>
           <h3 className="c-confirm-modal__title">Invalid Request</h3>
-          <p className="c-confirm-modal__message" style={{ marginBottom: '3rem' }}>
+          <p
+            className="c-confirm-modal__message"
+            style={{ marginBottom: '3rem' }}
+          >
             {`This ${verificationType} was previously verified.`}
           </p>
-          <Link
-            to="/dashboard/mls"
-            style={{
-              padding: '1rem 2rem',
-              textDecoration: 'none',
-              backgroundColor: brandColor
-            }}
-            className="c-confirm-modal__button"
-          >
+          <SigninButton appearance="primary" to="/dashboard/mls">
             Go to the dashboard
-          </Link>
+          </SigninButton>
         </div>
       )}
     </RedirectModal>

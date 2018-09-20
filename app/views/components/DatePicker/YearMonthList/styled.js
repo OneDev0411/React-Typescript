@@ -5,4 +5,5 @@ export const Container = styled.div`
   border-bottom: none !important;
   height: 20px !important;
   text-align: left !important;
+  padding-left: 0 !important;
 `

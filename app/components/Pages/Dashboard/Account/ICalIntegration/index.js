@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { ICalContainer, PageDescription } from './styled'
 
-import PageTitle from '../components/PageTitle'
 import TeamType from './TeamTypes'
 import SelectedTypes from './AllTypes'
 import GenerateUrl from './GenerateUrl'
 import UpdateGenerateUrlInfo from './UpdateGenerateUrlInfo'
 import getCalenderFeedSetting from '../../../../../models/user/calendar-feed-setting'
 import Loading from '../../../../Partials/Loading'
+import PageHeader from '../../../../../views/components/PageHeader'
 
 class DealTemplates extends React.Component {
   state = {
@@ -69,7 +69,14 @@ class DealTemplates extends React.Component {
 
     return (
       <Fragment>
-        <PageTitle title="iCal Feed" />
+        <PageHeader
+          isFlat
+          style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}
+        >
+          <PageHeader.Title showBackButton={false}>
+            <PageHeader.Heading>iCal Feed</PageHeader.Heading>
+          </PageHeader.Title>
+        </PageHeader>
         <ICalContainer>
           <PageDescription>
             With iCal export, you can transfer any date based information on

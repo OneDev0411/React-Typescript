@@ -1,9 +1,20 @@
 import React from 'react'
 import cn from 'classnames'
-import RadioButton from '../../../../../views/components/radio'
+import RadioButton from '../../../../../views/components/RadioButton'
 import { getStatusColorClass } from '../../../../../utils/listing'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+import { H2 } from 'components/Typography/headings'
+import styled from 'styled-components'
 
+const LabelBox = styled.span`
+  display: inline-block;
+  width: 20px;
+  height: 12px;
+  border-radius: 2px;
+  background-color: #f5a623;
+  margin: 0 8px 0 9px;
+  background: ${({ name }) => getStatusColorClass(name)};
+`
 export default ({
   isRequired,
   hasError,
@@ -22,11 +33,11 @@ export default ({
 
   return (
     <div className="form-section deal-status">
-      <div className={cn('hero', { hasError })}>
-        What is the status of the deal?{' '}
+      <H2 className={cn('hero', { hasError })}>
+        What is the status of the deal?
         {isRequired && <span className="required">*</span>}
         {hasError && <RequiredIcon />}
-      </div>
+      </H2>
 
       {statuses.map((name, key) => (
         <div key={key} className="deal-radio-row">
@@ -34,11 +45,7 @@ export default ({
             selected={dealStatus === name}
             title={
               <span>
-                <span
-                  className="status-color"
-                  style={{ background: getStatusColorClass(name) }}
-                />
-
+                <LabelBox name={name} />
                 {name}
               </span>
             }

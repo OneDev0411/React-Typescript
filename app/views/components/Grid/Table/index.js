@@ -1,7 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Container, ToolbarContainer, ActionsBar } from './styled'
+import {
+  ToolbarContainer,
+  ActionsBar,
+  LeftActions,
+  RightActions
+} from './styled'
 
 import BasicTable from './Tables/Basic'
 import MultipleTable from './Tables/Multiple'
@@ -41,7 +46,8 @@ class Grid extends React.Component {
 
     if (plugins.actionable) {
       this.actionablePlugin = new ActionablePlugin({
-        actions: plugins.actionable,
+        leftActions: plugins.actionable.leftActions,
+        rightActions: plugins.actionable.rightActions,
         selectablePlugin: this.selectablePlugin
       })
     }
@@ -99,7 +105,7 @@ class Grid extends React.Component {
 
     if (multiple) {
       return (
-        <Container>
+        <div>
           <MultipleTable
             {...this.props}
             columns={this.Columns}
@@ -108,19 +114,29 @@ class Grid extends React.Component {
             selectablePlugin={this.selectablePlugin}
             sortablePlugin={this.sortablePlugin}
           />
-        </Container>
+        </div>
       )
     }
 
     return (
-      <Container>
-        <ToolbarContainer>
-          <TableSummary {...this.props.summary} />
+      <div>
+        {(Object.keys(this.props.summary).length > 0 ||
+          this.actionablePlugin) && (
+          <ToolbarContainer>
+            <TableSummary {...this.props.summary} />
 
-          <ActionsBar>
-            {this.actionablePlugin && this.actionablePlugin.render()}
-          </ActionsBar>
-        </ToolbarContainer>
+            {this.actionablePlugin && (
+              <ActionsBar>
+                <LeftActions>
+                  {this.actionablePlugin.renderLeftActions()}
+                </LeftActions>
+                <RightActions>
+                  {this.actionablePlugin.renderRightActions()}
+                </RightActions>
+              </ActionsBar>
+            )}
+          </ToolbarContainer>
+        )}
 
         <BasicTable
           {...this.props}
@@ -129,7 +145,7 @@ class Grid extends React.Component {
           selectablePlugin={this.selectablePlugin}
           sortablePlugin={this.sortablePlugin}
         />
-      </Container>
+      </div>
     )
   }
 }
