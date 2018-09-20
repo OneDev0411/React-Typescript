@@ -69,7 +69,10 @@ class DealTemplates extends React.Component {
 
     return (
       <Fragment>
-        <PageHeader isFlat style={{ marginBottom: '1.5em' }}>
+        <PageHeader
+          isFlat
+          style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}
+        >
           <PageHeader.Title showBackButton={false}>
             <PageHeader.Heading>Form Templates</PageHeader.Heading>
           </PageHeader.Title>

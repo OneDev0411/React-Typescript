@@ -157,32 +157,6 @@ export class FileManager extends React.Component {
     return files.concat(envelopesFiles)
   }
 
-  getCellTitle(title) {
-    return (
-      <Fragment>
-        {title}
-        <i className="fa fa-caret-down" />
-        <i className="fa fa-caret-up" />
-      </Fragment>
-    )
-  }
-
-  getDocumentIcon(file) {
-    let src
-
-    if (this.isPdfDocument(file.mime) || file.envelope) {
-      src = '/static/images/deals/pdf-icon.svg'
-    } else if (file.mime.includes('image/')) {
-      src = file.preview_url
-    }
-
-    return (
-      <div className="icon-container">
-        <img className="icon" src={src} alt="" />
-      </div>
-    )
-  }
-
   splitMultipleFiles = () => {
     const { selectedRows } = this.state
 

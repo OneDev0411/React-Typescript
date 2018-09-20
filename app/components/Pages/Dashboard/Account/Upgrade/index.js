@@ -36,7 +36,10 @@ class AgentConfirm extends React.Component {
 
     return (
       <div>
-        <PageHeader isFlat style={{ marginBottom: '1.5em' }}>
+        <PageHeader
+          isFlat
+          style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}
+        >
           <PageHeader.Title showBackButton={false}>
             <PageHeader.Heading>Upgrade Account1</PageHeader.Heading>
           </PageHeader.Title>

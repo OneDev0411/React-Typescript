@@ -40,12 +40,13 @@ class Footer extends React.Component {
           {this.getNextButtonCaption()}
         </ActionButton>
 
-        <CancelButton
+        <ActionButton
+          appearance="outline"
           className="contact__import-csv--upload__cancel-btn"
           onClick={this.onCancel}
         >
           Cancel
-        </CancelButton>
+        </ActionButton>
       </div>
     )
   }
@@ -62,7 +63,10 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  updateWizardStep,
-  confirmation
-})(Footer)
+export default connect(
+  mapStateToProps,
+  {
+    updateWizardStep,
+    confirmation
+  }
+)(Footer)
