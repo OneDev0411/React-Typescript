@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Flex from 'styled-flex-component'
+
 import AddManuallyButton from '../AddManuallyButton'
 
 const propTypes = {
@@ -7,20 +9,10 @@ const propTypes = {
 }
 
 const NoContacts = ({ handleAddManually }) => (
-  <div
-    style={{
-      height: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      flexDirection: 'column',
-      justifyContent: 'center'
-    }}
-  >
-    <p style={{ fontSize: '1.7rem', color: '#8da2b5' }}>
-      You don't have any contacts.
-    </p>
+  <Flex center column style={{ height: '100%' }}>
+    <p style={{ color: '#7f7f7f' }}>You don't have any contacts.</p>
     <AddManuallyButton onClick={handleAddManually} />
-  </div>
+  </Flex>
 )
 
 NoContacts.propTypes = propTypes

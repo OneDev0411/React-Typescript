@@ -17,13 +17,15 @@ export default class DatePicker extends React.Component {
     onChange: PropTypes.func.isRequired,
     fixedWeeks: PropTypes.bool,
     modifiers: PropTypes.object,
-    selectedDate: PropTypes.any
+    selectedDate: PropTypes.any,
+    showTodayButton: PropTypes.bool
   }
 
   static defaultProps = {
     fixedWeeks: false,
     modifiers: {},
-    selectedDate: null
+    selectedDate: null,
+    showTodayButton: true
   }
 
   state = initialState

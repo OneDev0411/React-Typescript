@@ -129,7 +129,10 @@ class NewContactForm extends Component {
         activity: false
       }
 
-      const contacts = await this.props.createContacts([{ attributes }], query)
+      const contacts = await this.props.createContacts(
+        [{ attributes, user: this.props.user.id }],
+        query
+      )
 
       browserHistory.push(`/dashboard/contacts/${contacts.data[0].id}`)
     } catch (error) {
@@ -223,7 +226,8 @@ function mapStateToProps(state) {
   } = state
 
   return {
-    attributeDefs
+    attributeDefs,
+    user: state.user
   }
 }
 

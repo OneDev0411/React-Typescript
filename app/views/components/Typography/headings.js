@@ -18,13 +18,14 @@ export const H2 = styled.h2`
 
 export const H3 = styled.h3`
   ${barlowFamilyStyle};
-  font-size: 1.3125rem; /* 21px */
+  font-size: 1.25rem; /* 20px */
   font-weight: 500;
-  line-height: 1.1428571428571428; /* 24px */
+  line-height: 1.2;
 `
 
 export const H4 = styled.h4`
   ${barlowFamilyStyle};
   font-size: 1rem;
+  line-height: 1.5;
   font-weight: 600;
 `
