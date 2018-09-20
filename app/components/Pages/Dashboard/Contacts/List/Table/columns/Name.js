@@ -36,8 +36,9 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           fontWeight: 500,
           marginLeft: '16px',
           padding: 0,
-          display: 'flex',
-          alignItems: 'flex-start'
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
         }}
       >
         {contact.display_name}
