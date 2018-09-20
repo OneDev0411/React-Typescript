@@ -74,11 +74,15 @@ export const Dropdown = ({
                 name: input.name,
                 value: selectedItem && selectedItem.title,
                 icon:
-                  hasIcon && icons[selectedItem.title].icon
+                  hasIcon &&
+                  icons[selectedItem.title] &&
+                  icons[selectedItem.title].icon
                     ? icons[selectedItem.title].icon
                     : null,
                 iconColor:
-                  hasIcon && icons[selectedItem.title].color
+                  hasIcon &&
+                  icons[selectedItem.title] &&
+                  icons[selectedItem.title].color
                     ? icons[selectedItem.title].color
                     : '#000'
               })
@@ -137,7 +141,7 @@ export const Dropdown = ({
                   let iconColor = '#000'
                   const { title } = item
 
-                  if (hasIcon && icons[title].icon) {
+                  if (hasIcon && icons[title] && icons[title].icon) {
                     icon = icons[title].icon
 
                     if (icons[title].color) {
