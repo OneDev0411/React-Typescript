@@ -1,85 +1,91 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Tabs, Tab } from 'react-bootstrap'
 
-import { getNotes } from '../../../../../../models/contacts/helpers/get-notes'
-import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
+import Loading from '../../../../../Partials/Loading'
+import {
+  isFetchingContactActivities,
+  selectContactActivitiesError
+} from '../../../../../../reducers/contacts/activities'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers/get-attribute-from-summary'
+import { getContactActivities } from '../../../../../../store_actions/contacts'
 
-import Timeline from '../Timeline'
-import Notes from '../Notes'
-import TasksTimeLine from '../../../../../../views/CRM/Tasks/components/TasksTimeLine'
-import { goTo } from '../../../../../../utils/go-to'
+// import { getNotes } from '../../../../../../models/contacts/helpers/get-notes'
+// import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
-function Activities(props) {
-  const { contact, activeTab } = props
+import { Card } from '../styled'
+import { Title } from './styled'
 
-  function handleOnClickTask(task) {
-    goTo(`/crm/tasks/${task.id}`, `Contact - ${contact.display_name}`)
+class ActivitiyLog extends React.Component {
+  componentDidMount() {
+    const { getContactActivities, contact } = this.props
+
+    if (contact && !contact.activities) {
+      getContactActivities(contact.id)
+    }
   }
 
-  function getListLength(list) {
-    return `(${list.length})`
+  getAttributes = (name, activity) => {
+    const actionFn = userActions[activity.action]
+    const attributes = actionFn ? actionFn(activity, name) : {}
+
+    return {
+      ...attributes,
+      time: timeago().format(activity.created_at * 1000)
+    }
   }
 
-  return (
-    <div className="c-contact-activities-list c-contact-profile-card">
-      <Tabs
-        activeKey={activeTab}
-        animation={false}
-        id="tabs"
-        onSelect={activeTab => props.onChangeTab(activeTab)}
-      >
-        <Tab
-          eventKey="all-activities"
-          title={
-            <div>
-              <span className="name">All Activities</span>
-            </div>
-          }
-        >
-          <Timeline contact={contact} />
-        </Tab>
+  render() {
+    let name
+    let avatar
+    let activities = {}
+    const { contact, isFetching, activitiesError } = this.props
 
-        <Tab
-          eventKey="event"
-          title={
-            <div>
-              <span className="name">Events</span>
-              <span className="bdg">{getListLength(props.tasks)}</span>
-            </div>
-          }
-        >
-          <TasksTimeLine
-            tasks={props.tasks}
-            handleOnClick={handleOnClickTask}
-          />
-        </Tab>
+    if (contact) {
+      name = getAttributeFromSummary(contact, 'display_name')
+      avatar = getAttributeFromSummary(contact, 'profile_image_url')
+      activities = contact.activities
+    }
 
-        <Tab
-          eventKey="notes"
-          title={
-            <div>
-              <span className="name">Notes</span>
-              <span className="bdg">{getListLength(props.notes)}</span>
-            </div>
-          }
-        >
-          <Notes notes={props.notes} contact={contact} />
-        </Tab>
-      </Tabs>
-    </div>
-  )
-}
+    if (isFetching) {
+      return <Loading />
+    }
 
-function mapStateToProps(state, props) {
-  const noteAttributeDef = selectDefinitionByName(
-    state.contacts.attributeDefs,
-    'note'
-  )
+    if (activitiesError) {
+      return (
+        <div className="empty-list">
+          <p>{activitiesError.message}</p>
+        </div>
+      )
+    }
 
-  return {
-    notes: noteAttributeDef ? getNotes(props.contact, noteAttributeDef.id) : []
+    if (_.size(activities) === 0) {
+      return (
+        <div className="empty-list">
+          <img src="/static/images/contacts/activity.svg" alt="timeline" />
+          <p>{name} has no activity right now</p>
+        </div>
+      )
+    }
+
+    return (
+      <div>
+        <Title>
+          <b>Upcoming Events</b>
+        </Title>
+        <Card>{}</Card>
+      </div>
+    )
   }
 }
 
-export default connect(mapStateToProps)(Activities)
+const mapStateToProps = ({ contacts: { activities } }) => ({
+  isFetching: isFetchingContactActivities(activities),
+  activitiesError: selectContactActivitiesError(activities)
+})
+
+export default connect(
+  mapStateToProps,
+  {
+    getContactActivities
+  }
+)(Timeline)

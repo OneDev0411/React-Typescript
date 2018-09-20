@@ -1,7 +1,7 @@
-import { defaultTimeOption } from '../../../../../../utils/default-time-option'
+// import { defaultTimeOption } from '../../../../../../utils/default-time-option'
 
 import { getAssociations } from './get-associations'
-import { createDateOptions } from './create-date-options'
+import { getReminderLabel } from './get-reminder-label'
 
 /**
  * Format form data for api model
@@ -10,17 +10,13 @@ import { createDateOptions } from './create-date-options'
  * @returns {Promise} a formated Task
  */
 export async function postLoadFormat(task, defaultAssociation) {
-  const today = new Date().getTime()
-  const tomorrow = today + 24 * 60 * 60 * 1000
+  const REMINDER_DEFAULT_LABEL = '15 Minutes Before'
 
-  let dueDate = createDateOptions(today, tomorrow, 'due-date')
-  let dueTime = defaultTimeOption(null, '08:00 AM')
-  let reminderDate = {
-    title: 'No reminder',
-    value: null
+  let reminder = {
+    title: REMINDER_DEFAULT_LABEL,
+    value: REMINDER_DEFAULT_LABEL
   }
-  let reminderTime = defaultTimeOption()
-  let task_type = { title: 'Todo', value: 'Todo' }
+
   let associations = []
 
   if (defaultAssociation) {
@@ -29,28 +25,15 @@ export async function postLoadFormat(task, defaultAssociation) {
 
   if (!task) {
     return {
-      dueDate,
-      dueTime,
-      task_type,
-      reminderDate,
-      reminderTime,
-      associations
+      reminder,
+      associations,
+      dueDate: new Date(),
+      task_type: { title: 'Call', value: 'Call' }
     }
   }
 
-  const { due_date, reminders, task_type: type } = task
-
-  if (type) {
-    task_type = {
-      title: type,
-      value: type
-    }
-  }
-
-  if (due_date) {
-    dueDate = createDateOptions(today, due_date * 1000, 'due-date')
-    dueTime = defaultTimeOption(due_date * 1000)
-  }
+  const { reminders, due_date } = task
+  const dueDate = due_date * 1000
 
   if (
     Array.isArray(reminders) &&
@@ -59,23 +42,21 @@ export async function postLoadFormat(task, defaultAssociation) {
   ) {
     const { timestamp } = reminders[reminders.length - 1]
 
-    reminderDate = createDateOptions(
-      due_date * 1000,
-      timestamp * 1000,
-      'reminder'
-    )
-    reminderTime = defaultTimeOption(timestamp * 1000)
+    const title = getReminderLabel(dueDate, timestamp * 1000)
+
+    reminder = { title, value: title }
   }
 
   associations = await getAssociations(task)
 
   return {
     ...task,
-    dueDate,
-    dueTime,
-    task_type,
-    reminderDate,
-    reminderTime,
+    task_type: {
+      title: task.task_type,
+      value: task.task_type
+    },
+    reminder,
+    dueDate: new Date(dueDate),
     associations
   }
 }

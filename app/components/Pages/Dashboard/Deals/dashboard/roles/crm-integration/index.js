@@ -100,7 +100,7 @@ class RoleFormWrapper extends React.Component {
 
   createCrmContact = async form => {
     await this.props.createContacts(
-      convertRoleToContact(form, this.props.attributeDefs)
+      convertRoleToContact(form, this.props.user.id, this.props.attributeDefs)
     )
 
     this.showNotification(`New Contact Created: ${getLegalFullName(form)}`)
@@ -136,8 +136,9 @@ class RoleFormWrapper extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ user, contacts }) {
   return {
+    user,
     attributeDefs: contacts.attributeDefs
   }
 }

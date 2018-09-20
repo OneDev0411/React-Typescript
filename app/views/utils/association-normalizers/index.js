@@ -65,7 +65,7 @@ export function normalizeContact(contact) {
       image,
       size: 32,
       borderRadius: 100,
-      placeHolderImage: '/static/images/contacts/ic_person_black_24dp_2x.png',
+      placeHolderImage: '/static/icons/contact-association-avatar.svg',
       title:
         email !== display_name && phone_number !== display_name
           ? display_name
@@ -92,7 +92,7 @@ export const normalizeListing = listing => {
     full_address,
     price,
     status,
-    image,
+    cover_image_url,
     property
   } = listing
 
@@ -107,10 +107,10 @@ export const normalizeListing = listing => {
     type,
     title,
     avatar: {
-      image,
+      image: cover_image_url,
       size: 32,
-      borderRadius: 3,
-      placeHolderImage: '/static/images/deals/home.png'
+      borderRadius: 100,
+      placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
     url: `/dashboard/mls/${id}`,
     details: detailText([status, price])
@@ -138,8 +138,8 @@ export const normalizeDeal = deal => {
     avatar: {
       image,
       size: 32,
-      borderRadius: 3,
-      placeHolderImage: '/static/images/deals/home.png'
+      borderRadius: 100,
+      placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
     url: `/dashboard/deals/${id}`,
     details: detailText([deal_type, property_type])
