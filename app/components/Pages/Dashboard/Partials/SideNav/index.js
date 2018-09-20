@@ -96,7 +96,7 @@ class appSideNav extends React.Component {
               user.teams.length > 1 && <li className="separator">Account</li>}
 
             <li>
-              <Link to="/dashboard/account">Settings1</Link>
+              <Link to="/dashboard/account">Settings</Link>
             </li>
 
             {hasBackOfficePermission && (
