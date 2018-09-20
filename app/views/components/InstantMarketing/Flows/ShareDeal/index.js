@@ -2,19 +2,19 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import InstantMarketing from '../../../../../../../views/components/InstantMarketing'
+import InstantMarketing from 'components/InstantMarketing'
 
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import ActionButton from 'components/Button/ActionButton'
 
-import { sendContactsEmail } from '../../../../../../../models/email-compose/send-contacts-email'
+import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
-import { getTemplateScreenshot } from '../../../../../../../models/instant-marketing'
+import { getTemplateScreenshot } from 'models/instant-marketing'
 
-import Listing from '../../../../../../../models/listings/listing'
-import Compose from '../../../../../../../views/components/EmailCompose'
-import { getActiveTeamACL } from '../../../../../../../utils/user-teams'
+import Listing from 'models/listings/listing'
+import Compose from 'components/EmailCompose'
+import { getActiveTeamACL } from 'utils/user-teams'
 
-class DealInstantMarketing extends React.Component {
+class ShareDeal extends React.Component {
   state = {
     listing: null,
     isInstantMarketingBuilderOpen: false,
@@ -129,7 +129,7 @@ class DealInstantMarketing extends React.Component {
           style={this.props.buttonStyle}
           onClick={this.toggleInstantMarketingBuilder}
         >
-          Promote
+          {this.props.children}
         </ActionButton>
 
         <InstantMarketing
@@ -162,4 +162,4 @@ function mapStateToProps({ user }) {
 export default connect(
   mapStateToProps,
   { notify }
-)(DealInstantMarketing)
+)(ShareDeal)

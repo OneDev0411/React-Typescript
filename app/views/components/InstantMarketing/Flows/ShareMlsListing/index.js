@@ -2,26 +2,25 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import SearchListingDrawer from '../../../../../../views/components/SearchListingDrawer'
-
-import EmailCompose from '../../../../../../views/components/EmailCompose'
-
-import InstantMarketing from '../../../../../../views/components/InstantMarketing'
-
-import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
-import { getContactAttribute } from '../../../../../../models/contacts/helpers/get-contact-attribute'
-
-import { selectContact } from '../../../../../../reducers/contacts/list'
-
-import { sendContactsEmail } from '../../../../../../models/email-compose/send-contacts-email'
-
-import { getTemplateScreenshot } from '../../../../../../models/instant-marketing'
-
-import { confirmation } from '../../../../../../store_actions/confirmation'
-import ActionButton from 'components/Button/ActionButton'
 import { getActiveTeamACL } from 'utils/user-teams'
 
-class ShareListing extends React.Component {
+import SearchListingDrawer from 'components/SearchListingDrawer'
+import EmailCompose from 'components/EmailCompose'
+import InstantMarketing from 'components/InstantMarketing'
+
+import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
+import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
+
+import { selectContact } from '../../../../../reducers/contacts/list'
+
+import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
+
+import { getTemplateScreenshot } from 'models/instant-marketing'
+
+import { confirmation } from 'actions/confirmation'
+import ActionButton from 'components/Button/ActionButton'
+
+class ShareMlsListing extends React.Component {
   state = {
     listing: null,
     isListingsModalOpen: false,
@@ -161,9 +160,9 @@ class ShareListing extends React.Component {
     const acl = getActiveTeamACL(user)
     const hasMarketingPermission = acl.includes('Marketing')
 
-    if (!hasMarketingPermission) {
-      return null
-    }
+    // if (!hasMarketingPermission) {
+    //   return null
+    // }
 
     return (
       <Fragment>
@@ -172,7 +171,7 @@ class ShareListing extends React.Component {
           onClick={this.toggleListingModal}
           size="small"
         >
-          Marketing
+          {this.props.children}
         </ActionButton>
 
         <SearchListingDrawer
@@ -215,4 +214,4 @@ function mapStateToProps({ contacts, user }) {
 export default connect(
   mapStateToProps,
   { notify, confirmation }
-)(ShareListing)
+)(ShareMlsListing)

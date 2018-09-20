@@ -5,14 +5,13 @@ import { showAttachments } from '../../../../../../store_actions/deals'
 
 import DealEmail from '../../dashboard/deal-email'
 
-import PageHeader from '../../../../../../views/components/PageHeader'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import PageHeader from 'components/PageHeader'
+import ActionButton from 'components/Button/ActionButton'
+import ShareDeal from 'components/InstantMarketing/Flows/ShareDeal'
 
 const Button = ActionButton.extend`
   margin-left: 0.5em;
 `
-
-import InstantMarketing from './instant-marketing'
 
 const Header = ({ deal, showAttachments }) => (
   <PageHeader title="Deals" backUrl="/dashboard/deals">
@@ -39,11 +38,7 @@ const Header = ({ deal, showAttachments }) => (
         Get Signatures
       </Button>
 
-      <InstantMarketing
-        appearance="outline"
-        buttonStyle={{ marginLeft: '0.5em' }}
-        deal={deal}
-      />
+      <ShareDeal deal={deal}>Promote</ShareDeal>
     </PageHeader.Menu>
   </PageHeader>
 )
