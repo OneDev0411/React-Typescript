@@ -278,25 +278,18 @@ class CalendarContainer extends React.Component {
   }
 
   render() {
-    const {
-      isMenuOpen,
-      showCreateTaskMenu,
-      loadingPosition,
-      selectedTaskId
-    } = this.state
+    const { isMenuOpen, loadingPosition, selectedTaskId } = this.state
     const { selectedDate, isFetching } = this.props
 
     return (
       <Container isOpen={isMenuOpen}>
-        {showCreateTaskMenu && (
-          <EventDrawer
-            eventId={selectedTaskId}
-            isOpen
-            onClose={this.closeEventDrawer}
-            submitCallback={this.handleEventChange}
-            deleteCallback={this.handleEventChange}
-          />
-        )}
+        <EventDrawer
+          eventId={selectedTaskId}
+          onClose={this.closeEventDrawer}
+          isOpen={this.state.showCreateTaskMenu}
+          submitCallback={this.handleEventChange}
+          deleteCallback={this.handleEventChange}
+        />
 
         <Menu isOpen={isMenuOpen} width={302}>
           <MenuContainer>
