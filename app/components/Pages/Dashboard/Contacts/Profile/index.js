@@ -3,20 +3,17 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 
-// eslint-disable-next-line
 import { getContactAddresses } from '../../../../../models/contacts/helpers'
+import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
 
-// eslint-disable-next-line
-import { selectDefinitionByName, isLoadedContactAttrDefs } from '../../../../../reducers/contacts/attributeDefs'
-
-// eslint-disable-next-line
-import { goBackFromEditTask } from '../../../../../views/CRM/Tasks/helpers/go-back-from-edit'
-
-import { getTasks } from '../../../../../models/tasks'
+import {
+  selectDefinitionByName,
+  isLoadedContactAttrDefs
+} from '../../../../../reducers/contacts/attributeDefs'
 
 import {
   getContact,
-  getContactActivities,
+  deleteAttributes,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
 import { selectContact } from '../../../../../reducers/contacts/list'
@@ -30,8 +27,7 @@ import { Details } from './Details'
 import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
-import AddNote from './Add-Note'
-import Activities from './Activities'
+import { AddNote } from './AddNote'
 import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 import {
@@ -45,12 +41,13 @@ import {
 } from './styled'
 
 import { PageHeader } from './PageHeader'
+import { Timeline } from './Timeline'
 
 class ContactProfile extends React.Component {
   state = {
-    tasks: [],
-    activeTab: 'all-activities',
-    isDesktopScreen: true
+    isDesktopScreen: true,
+    isFetchingTimeline: true,
+    timeline: []
   }
 
   componentDidMount() {
@@ -80,55 +77,70 @@ class ContactProfile extends React.Component {
       await this.props.getContact(contactId)
     }
 
-    this.fetchTasks(contactId)
+    this.fetchTimeline()
   }
 
-  fetchTasks = async contactId => {
-    const query = [
-      'order=-updated_at',
-      `contact=${contactId}`,
-      'associations[]=crm_task.reminders',
-      'associations[]=crm_task.associations'
-    ].join('&')
+  fetchTimeline = async () => {
+    try {
+      const timeline = await getContactTimeline(this.props.contact.id)
 
-    const response = await getTasks(query)
-    const { data: tasks } = response
+      this.setState({ isFetchingTimeline: false, timeline })
+    } catch (error) {
+      console.log(error)
 
-    this.setState({ tasks })
+      this.setState({ isFetchingTimeline: false })
+    }
   }
+
+  addEvent = event => {
+    this.setState(state => ({
+      timeline: [event, ...state.timeline]
+    }))
+  }
+
+  editEvent = event => {
+    const indexedTimeline = {}
+
+    this.state.timeline.forEach(t => {
+      indexedTimeline[t.id] = t
+    })
+
+    indexedTimeline[event.id] = event
+
+    this.setState({
+      timeline: Object.values(indexedTimeline)
+    })
+  }
+
+  // removeEvent = eventId => {
+  //   this.setState(state => ({
+  //     timeline: state.timeline.filter(item => item.id !== eventId)
+  //   }))
+  // }
 
   handleAddNote = async text => {
-    const { contact, upsertContactAttributes, attributeDefs } = this.props
-    const { id: contactId } = contact
-
-    const attribute_def = selectDefinitionByName(attributeDefs, 'note')
-
-    const attributes = [
+    await this.props.upsertContactAttributes(this.props.contact.id, [
       {
         text,
-        attribute_def
+        attribute_def: selectDefinitionByName(this.props.attributeDefs, 'note')
       }
-    ]
-
-    await upsertContactAttributes(contactId, attributes)
-
-    return this.setState({ activeTab: 'notes' })
+    ])
+    this.fetchTimeline()
   }
 
-  setNewTask = task => {
-    this.setState(({ tasks }) => ({
-      tasks: [task, ...tasks],
-      activeTab: 'event'
-    }))
-    this.props.getContactActivities(this.props.contact.id)
+  editNote = async note => {
+    await this.props.upsertContactAttributes(this.props.contact.id, [
+      {
+        id: note.id,
+        text: note.text
+      }
+    ])
+    this.fetchTimeline()
   }
 
-  removeTask = taskId => {
-    goBackFromEditTask()
-
-    this.setState(state => ({
-      tasks: state.tasks.filter(task => task.id !== taskId)
-    }))
+  deleteNote = async note => {
+    await this.props.deleteAttributes(this.props.contact.id, [note.id])
+    this.fetchTimeline()
   }
 
   render() {
@@ -150,7 +162,6 @@ class ContactProfile extends React.Component {
       )
     }
 
-    const { activeTab } = this.state
     const hasAddress = getContactAddresses(contact)
     const defaultAssociation = {
       association_type: 'contact',
@@ -217,8 +228,7 @@ class ContactProfile extends React.Component {
                       className="c-contact-profile-todo-tabs__pane"
                     >
                       <NewTask
-                        submitCallback={this.setNewTask}
-                        deleteCallback={this.removeTask}
+                        submitCallback={this.addEvent}
                         defaultAssociation={defaultAssociation}
                       />
                     </Tab.Pane>
@@ -234,12 +244,13 @@ class ContactProfile extends React.Component {
                   </Tab.Content>
                 </div>
               </Tab.Container>
-
-              <Activities
-                tasks={this.state.tasks}
+              <Timeline
                 contact={contact}
-                activeTab={activeTab}
-                onChangeTab={activeTab => this.setState({ activeTab })}
+                items={this.state.timeline}
+                isFetching={this.state.isFetchingTimeline}
+                editNoteHandler={this.editNote}
+                deleteNoteHandler={this.deleteNote}
+                editEventHandler={this.editEvent}
               />
             </SecondColumn>
 
@@ -270,7 +281,11 @@ export default connect(
   mapStateToProps,
   {
     getContact,
-    getContactActivities,
+    deleteAttributes,
     upsertContactAttributes
   }
 )(ContactProfile)
+
+// todo
+// infinit scroll + lazy loading
+// loading new event associationas after adding to timeline

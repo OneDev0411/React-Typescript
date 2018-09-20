@@ -17,17 +17,8 @@ export function LastTouchedCell(props) {
 
   return (
     <OverlayTrigger
-      trigger="hover"
-      placement="top"
       overlay={
-        <Popover
-          id={`last-touch-popover_${contact.id}`}
-          style={{
-            color: '#fff',
-            border: 'none',
-            backgroundColor: '#303e4d'
-          }}
-        >
+        <Popover id={`last-touch-popover_${contact.id}`}>
           <span>Last touch was </span>
           <b>{formatedLastTouch}, </b>
           <span>you wanted to be in touch every 7 days.</span>

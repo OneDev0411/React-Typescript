@@ -7,12 +7,16 @@ export const PageWrapper = styled.div`
 `
 
 export const PageContainer = styled.div`
-  max-width: 1680px;
+  max-width: 1456px;
   margin: 0 auto;
+
+  /* 1681px */
+  @media (min-width: 105.0625em) {
+    max-width: 1616px;
+  }
 `
 
 export const Card = styled.div`
-  padding: 1.5em;
   margin-bottom: 1em;
   background: #fff;
   border-radius: 3px;

@@ -215,9 +215,10 @@ function getContactFields() {
  * Converts a role object to a contact model
  * @param {Object} formData - Role's object
  */
-export function convertRoleToContact(form = {}, attributeDefs) {
+export function convertRoleToContact(form = {}, user, attributeDefs) {
   const contact = {
-    attributes: []
+    attributes: [],
+    user
   }
 
   _.each(getContactFields(), (roleAttribute, contactAttribute) => {

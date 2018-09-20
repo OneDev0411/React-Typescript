@@ -11,8 +11,6 @@ import store from '../stores'
 import { getContexts, getDeals } from '../store_actions/deals'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
-
-
 const AsyncAuthenticationLayout = Load({
   loader: () =>
     import('./components/Authentication' /* webpackChunkName: "authlay" */)
@@ -193,15 +191,6 @@ const AsyncCrmTasksList = Load({
 const AsyncCrmTask = Load({
   loader: () =>
     import('../views/CRM/Tasks/TaskPage' /* webpackChunkName: "crm_task_page" */)
-})
-
-/* ==================================== */
-//  CRM Touches
-/* ==================================== */
-
-const AsyncCrmTouchPage = Load({
-  loader: () =>
-    import('../views/CRM/touches/TouchPage' /* webpackChunkName: "crm_task_page" */)
 })
 
 /* ==================================== */
@@ -420,8 +409,6 @@ export default (
 
       <Route path="/crm/tasks" component={AsyncCrmTasksList} />
       <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
-
-      <Route path="/crm/touches/:id" component={AsyncCrmTouchPage} />
 
       <Route path="/dashboard/calendar" component={AsyncCalendar} />
 

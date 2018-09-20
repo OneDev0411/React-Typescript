@@ -4,6 +4,7 @@ export function todayDate() {
   today.setHours(0)
   today.setMinutes(0)
   today.setSeconds(0)
+  today.setMilliseconds(0)
 
   return today.getTime()
 }

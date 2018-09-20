@@ -1,37 +1,51 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import AddAssociation from '../AddAssociation'
+import Button from '../Button/IconButton'
+import { AddAssociation } from '../AddAssociation'
+import Icon from '../SvgIcons/Contacts/IconContacts'
 import SelectContactModal from '../SelectContactModal'
+import Tooltip from '../tooltip'
 
 import { normalizeContact } from '../../utils/association-normalizers'
 
-const title = 'Add a contact'
+export class AddContactAssociation extends React.Component {
+  static propTypes = {
+    disabled: PropTypes.bool,
+    handleAdd: PropTypes.func.isRequired
+  }
 
-function AddContactAssociation({ handleAdd }) {
-  return (
-    <AddAssociation
-      title={title}
-      render={({ isOpen, handleClose }) => {
-        const add = contact => {
-          handleAdd(normalizeContact(contact), handleClose)
-        }
+  add = (contact, callback) =>
+    this.props.handleAdd(normalizeContact(contact), callback)
 
-        return (
-          <SelectContactModal
-            title={title}
-            isOpen={isOpen}
-            handleSelectedItem={add}
-            handleOnClose={handleClose}
-          />
-        )
-      }}
-    />
-  )
+  render() {
+    const title = 'Attach Contact'
+
+    return (
+      <AddAssociation
+        render={({ isActive, handleClose, handleOpen }) => (
+          <div>
+            <Tooltip placement="bottom" caption={title}>
+              <Button
+                isFit
+                inverse
+                type="button"
+                iconSize="large"
+                onClick={handleOpen}
+                disabled={this.props.disabled}
+              >
+                <Icon />
+              </Button>
+            </Tooltip>
+            <SelectContactModal
+              title={title}
+              isOpen={isActive}
+              handleSelectedItem={contact => this.add(contact, handleClose)}
+              handleOnClose={handleClose}
+            />
+          </div>
+        )}
+      />
+    )
+  }
 }
-
-AddContactAssociation.propTypes = {
-  handleAdd: PropTypes.func.isRequired
-}
-
-export default AddContactAssociation
