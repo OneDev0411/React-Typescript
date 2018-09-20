@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-// import Flex from 'styled-flex-component'
+import Flex from 'styled-flex-component'
 // import { Field } from 'react-final-form'
 
 import {
@@ -16,7 +16,7 @@ import Drawer from '../OverlayDrawer'
 import IconButton from '../Button/IconButton'
 import ActionButton from '../Button/ActionButton'
 import IconDelete from '../SvgIcons/Delete/IconDelete'
-import { DateTimeField } from '../final-form-fields/DateTimeField'
+import { DateTimeField, CheckboxField } from '../final-form-fields'
 
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
@@ -47,7 +47,7 @@ const defaultProps = {
   deleteCallback: () => {}
 }
 
-export class EventDrawer extends React.Component {
+export class EventDrawer extends Component {
   state = {
     event: this.props.event,
     isDisabled: false,
@@ -181,7 +181,7 @@ export class EventDrawer extends React.Component {
   }
 
   render() {
-    const { isDisabled } = this.state
+    const { isDisabled, isNewEvent } = this.state
     const { defaultAssociation } = this.props
 
     if (!this.props.isOpen) {
@@ -203,14 +203,26 @@ export class EventDrawer extends React.Component {
             render={props => {
               const { values } = props
 
-              // console.log(values)
+              console.log(values)
 
               return (
                 <FormContainer
                   onSubmit={props.handleSubmit}
                   id="event-drawer-form"
                 >
-                  <Title />
+                  <Flex alignCenter style={{ marginBottom: '2.5em' }}>
+                    {isNewEvent ? (
+                      <Title fullWidth={isNewEvent} />
+                    ) : (
+                      <Fragment>
+                        <CheckboxField
+                          name="status"
+                          id="event-drawer__status-field"
+                        />
+                        <Title />
+                      </Fragment>
+                    )}
+                  </Flex>
                   <EventType />
                   <FieldContainer
                     alignCenter
