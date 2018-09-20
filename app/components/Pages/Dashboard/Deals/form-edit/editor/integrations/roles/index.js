@@ -44,6 +44,14 @@ class RolesDrawer extends React.Component {
     this.props.onClose()
   }
 
+  get AllowedRoles() {
+    if (!this.props.isOpen) {
+      return null
+    }
+
+    return this.props.selectedAnnotation.data.roleName.split(',')
+  }
+
   render() {
     return (
       <OverlayDrawer
@@ -57,6 +65,7 @@ class RolesDrawer extends React.Component {
             showTitle={false}
             deal={this.props.deal}
             containerStyle={{ padding: '1rem' }}
+            allowedRoles={this.AllowedRoles}
             allowDeleteRole
           />
         </OverlayDrawer.Body>

@@ -47,7 +47,10 @@ class AddRoleForm extends React.Component {
   }
 
   getRoleItems = () =>
-    this.Roles.map(item => ({ label: roleName(item), value: item }))
+    (this.AllowedRoles || this.Roles).map(item => ({
+      label: roleName(item),
+      value: item
+    }))
 
   itemToString = item => item.label
 
@@ -80,7 +83,7 @@ class AddRoleForm extends React.Component {
           onChange={this.handleSelectRole}
           buttonIcon={AddIcon}
           buttonText="Add a Contact"
-          disabled={allowedRoles && allowedRoles.length > 0}
+          disabled={allowedRoles && allowedRoles.length === 0}
         />
 
         {isFormOpen && (
