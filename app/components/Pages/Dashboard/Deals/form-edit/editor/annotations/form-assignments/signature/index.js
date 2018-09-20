@@ -1,12 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Image = styled.img`
+import IconSign from 'components/SvgIcons/FormSign/IconSign'
+
+const Container = styled.div`
   max-height: 100%;
-  margin: 0 auto;
-  display: block;
+  text-align: center;
 `
 
-export default function SignatureAssignment() {
-  return <Image src="/static/images/deals/forms/sign.png" alt="" />
+export default function SignatureAssignment({ height }) {
+  return (
+    <Container>
+      <IconSign style={{ height: `${height}px` }} />
+    </Container>
+  )
 }

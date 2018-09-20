@@ -1,12 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Image = styled.img`
+import IconInitial from 'components/SvgIcons/FormInitial/IconInitial'
+
+const Container = styled.div`
   max-height: 100%;
-  margin: 0 auto;
-  display: block;
+  text-align: center;
 `
 
-export default function InitialsAssignment() {
-  return <Image src="/static/images/deals/forms/initials.png" alt="" />
+export default function InitialsAssignment({ height }) {
+  return (
+    <Container>
+      <IconInitial style={{ height: `${height}px` }} />
+    </Container>
+  )
 }

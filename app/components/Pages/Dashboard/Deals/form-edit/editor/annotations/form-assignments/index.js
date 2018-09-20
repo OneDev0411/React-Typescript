@@ -15,16 +15,20 @@ const Assignment = styled.div`
   height: ${props => Math.floor(props.rect[3] - props.rect[1])}px;
 `
 
-function getAssignmentComponent({ assignment }) {
+function getAssignmentComponent({ assignment, annotation }) {
+  const props = {
+    height: Math.floor(annotation.rect[3] - annotation.rect[1])
+  }
+
   switch (assignment) {
     case 'Initials':
-      return <InitialsAssignment />
+      return <InitialsAssignment {...props} />
 
     case 'Signature':
-      return <SignatureAssignment />
+      return <SignatureAssignment {...props} />
 
     case 'Date':
-      return <DateAssignment />
+      return <DateAssignment {...props} />
 
     case 'Textbox':
       return <TextboxAssignment />

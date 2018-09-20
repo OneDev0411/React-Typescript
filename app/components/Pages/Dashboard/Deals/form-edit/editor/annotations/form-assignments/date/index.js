@@ -1,12 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Image = styled.img`
+import IconDateSigned from 'components/SvgIcons/FormDateSigned/IconDateSigned'
+
+const Container = styled.div`
   max-height: 100%;
-  margin: 0 auto;
-  display: block;
+  text-align: center;
 `
 
-export default function DateAssignment() {
-  return <Image src="/static/images/deals/forms/date.png" alt="" />
+export default function DateAssignment({ height }) {
+  return (
+    <Container>
+      <IconDateSigned style={{ height: `${height}px` }} />
+    </Container>
+  )
 }
