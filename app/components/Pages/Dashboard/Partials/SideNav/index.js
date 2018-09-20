@@ -59,164 +59,177 @@ const SideNavItem = ({ isActive, children }) => (
   </li>
 )
 
-const appSideNav = ({ user, activePath, appNotifications }) => {
-  const acl = getActiveTeamACL(user)
+class appSideNav extends React.Component {
+  state = {
+    isDropDownOpen: false
+  }
+  onToggle = isDropDownOpen => this.setState({ isDropDownOpen })
 
-  const hasDealsPermission = acl.includes('Deals')
-  const hasBackOfficePermission = acl.includes('BackOffice')
-  const hasContactsPermission =
-    user.user_type !== 'Client' ||
-    (user.features && user.features.includes('Contacts'))
+  render() {
+    const { user, activePath, appNotifications } = this.props
+    const acl = getActiveTeamACL(user)
 
-  return (
-    <aside className="c-app-sidenav">
-      <Dropdown
-        dropup
-        id="account-dropdown"
-        className="c-app-sidenav__account-dropdown"
-      >
-        <SettingsDropdownButton user={user} bsRole="toggle" />
+    const hasDealsPermission = acl.includes('Deals')
+    const hasBackOfficePermission = acl.includes('BackOffice')
+    const hasContactsPermission =
+      user.user_type !== 'Client' ||
+      (user.features && user.features.includes('Contacts'))
 
-        <Dropdown.Menu>
-          <TeamSwitcher user={user} />
+    return (
+      <aside className="c-app-sidenav">
+        <Dropdown
+          dropup
+          id="account-dropdown"
+          className="c-app-sidenav__account-dropdown"
+          onToggle={this.onToggle}
+        >
+          <SettingsDropdownButton
+            user={user}
+            bsRole="toggle"
+            isDropDownOpen={this.state.isDropDownOpen}
+          />
 
-          {user.teams &&
-            user.teams.length > 1 && <li className="separator">Account</li>}
+          <Dropdown.Menu>
+            <TeamSwitcher user={user} />
 
-          <li>
-            <Link to="/dashboard/account">Settings</Link>
-          </li>
+            {user.teams &&
+              user.teams.length > 1 && <li className="separator">Account</li>}
 
-          {hasBackOfficePermission && (
             <li>
-              <Link to="/dashboard/brands">Brands</Link>
+              <Link to="/dashboard/account">Settings1</Link>
             </li>
-          )}
-          {user.user_type === 'Admin' && (
+
+            {hasBackOfficePermission && (
+              <li>
+                <Link to="/dashboard/brands">Brands</Link>
+              </li>
+            )}
+            {user.user_type === 'Admin' && (
+              <li>
+                <Link to="/dashboard/forms">Forms</Link>
+              </li>
+            )}
+            <li role="separator" className="divider" />
             <li>
-              <Link to="/dashboard/forms">Forms</Link>
+              <a
+                href="/signout"
+                onClick={() => {
+                  window.localStorage.removeItem('verificationBanner')
+                }}
+              >
+                Sign out
+              </a>
             </li>
-          )}
-          <li role="separator" className="divider" />
-          <li>
-            <a
-              href="/signout"
-              onClick={() => {
-                window.localStorage.removeItem('verificationBanner')
-              }}
-            >
-              Sign out
-            </a>
-          </li>
-        </Dropdown.Menu>
-      </Dropdown>
-      <ul className="c-app-sidenav__list">
-        {hasContactsPermission && (
-          <SideNavItem isActive={activePath === 'CALENDAR'}>
-            <SideNavTooltip caption="Calendar">
-              <Link
-                to="/dashboard/calendar"
-                className="c-app-sidenav__item__title"
-              >
-                <CalendarIcon />
-              </Link>
-            </SideNavTooltip>
-          </SideNavItem>
-        )}
-        <SideNavItem>
-          <Inbox />
-        </SideNavItem>
-
-        <SideNavItem isActive={activePath === 'MAP'}>
-          <SideNavTooltip caption="Properties">
-            <Link to="/dashboard/mls" className="c-app-sidenav__item__title">
-              <IconProperties />
-            </Link>
-          </SideNavTooltip>
-        </SideNavItem>
-
-        {hasContactsPermission && (
-          <SideNavItem isActive={activePath === 'CONTACTS'}>
-            <SideNavTooltip caption="Contacts">
-              <Link
-                to="/dashboard/contacts"
-                className="c-app-sidenav__item__title"
-              >
-                <ContactsIcon />
-              </Link>
-            </SideNavTooltip>
-          </SideNavItem>
-        )}
-
-        {(hasDealsPermission || hasBackOfficePermission) && (
-          <SideNavItem isActive={activePath === 'DEALS'}>
-            <SideNavTooltip caption="Deals">
-              <Link
-                to="/dashboard/deals"
-                className="c-app-sidenav__item__title"
-              >
-                <DealsIcon />
-                <DealsNotifications />
-              </Link>
-            </SideNavTooltip>
-          </SideNavItem>
-        )}
-
-        {user.agent &&
-          user.user_type === 'Agent' &&
-          user.agent.office_mlsid === 'CSTPP01' && (
-            <SideNavItem isActive={activePath === 'STORE'} caption="Store">
-              <SideNavTooltip caption="Store">
-                <Link to="/dashboard/website">
-                  <MarketingIcon />
+          </Dropdown.Menu>
+        </Dropdown>
+        <ul className="c-app-sidenav__list">
+          {hasContactsPermission && (
+            <SideNavItem isActive={activePath === 'CALENDAR'}>
+              <SideNavTooltip caption="Calendar">
+                <Link
+                  to="/dashboard/calendar"
+                  className="c-app-sidenav__item__title"
+                >
+                  <CalendarIcon />
                 </Link>
               </SideNavTooltip>
             </SideNavItem>
           )}
-      </ul>
+          <SideNavItem>
+            <Inbox />
+          </SideNavItem>
 
-      <ul className="c-app-sidenav__list c-app-sidenav__list--bottom">
-        <SideNavItem isActive={activePath === 'NOTIF'}>
-          <SideNavTooltip caption="Notifications">
-            <Link
-              to="/dashboard/notifications"
-              className="c-app-sidenav__item__title"
-            >
-              <NotificationsIcon />
-              {appNotifications > 0 && (
-                <Badge
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 'calc(100% - 24px)'
-                  }}
-                >
-                  {appNotifications}
-                </Badge>
-              )}
-            </Link>
-          </SideNavTooltip>
-        </SideNavItem>
+          <SideNavItem isActive={activePath === 'MAP'}>
+            <SideNavTooltip caption="Properties">
+              <Link to="/dashboard/mls" className="c-app-sidenav__item__title">
+                <IconProperties />
+              </Link>
+            </SideNavTooltip>
+          </SideNavItem>
 
-        <IntercomTrigger
-          render={({ activeIntercom, intercomIsActive }) => (
-            <SideNavItem isActive={false}>
-              <SideNavTooltip caption="Support">
-                <IconButton
-                  iconSize="XLarge"
-                  inverse
-                  onClick={!intercomIsActive ? activeIntercom : () => false}
-                  className="c-app-sidenav__item__title--button"
+          {hasContactsPermission && (
+            <SideNavItem isActive={activePath === 'CONTACTS'}>
+              <SideNavTooltip caption="Contacts">
+                <Link
+                  to="/dashboard/contacts"
+                  className="c-app-sidenav__item__title"
                 >
-                  <SupportIcon />
-                </IconButton>
+                  <ContactsIcon />
+                </Link>
               </SideNavTooltip>
             </SideNavItem>
           )}
-        />
-      </ul>
-    </aside>
-  )
+
+          {(hasDealsPermission || hasBackOfficePermission) && (
+            <SideNavItem isActive={activePath === 'DEALS'}>
+              <SideNavTooltip caption="Deals">
+                <Link
+                  to="/dashboard/deals"
+                  className="c-app-sidenav__item__title"
+                >
+                  <DealsIcon />
+                  <DealsNotifications />
+                </Link>
+              </SideNavTooltip>
+            </SideNavItem>
+          )}
+
+          {user.agent &&
+            user.user_type === 'Agent' &&
+            user.agent.office_mlsid === 'CSTPP01' && (
+              <SideNavItem isActive={activePath === 'STORE'} caption="Store">
+                <SideNavTooltip caption="Store">
+                  <Link to="/dashboard/website">
+                    <MarketingIcon />
+                  </Link>
+                </SideNavTooltip>
+              </SideNavItem>
+            )}
+        </ul>
+
+        <ul className="c-app-sidenav__list c-app-sidenav__list--bottom">
+          <SideNavItem isActive={activePath === 'NOTIF'}>
+            <SideNavTooltip caption="Notifications">
+              <Link
+                to="/dashboard/notifications"
+                className="c-app-sidenav__item__title"
+              >
+                <NotificationsIcon />
+                {appNotifications > 0 && (
+                  <Badge
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 'calc(100% - 24px)'
+                    }}
+                  >
+                    {appNotifications}
+                  </Badge>
+                )}
+              </Link>
+            </SideNavTooltip>
+          </SideNavItem>
+
+          <IntercomTrigger
+            render={({ activeIntercom, intercomIsActive }) => (
+              <SideNavItem isActive={false}>
+                <SideNavTooltip caption="Support">
+                  <IconButton
+                    iconSize="XLarge"
+                    inverse
+                    onClick={!intercomIsActive ? activeIntercom : () => false}
+                    className="c-app-sidenav__item__title--button"
+                  >
+                    <SupportIcon />
+                  </IconButton>
+                </SideNavTooltip>
+              </SideNavItem>
+            )}
+          />
+        </ul>
+      </aside>
+    )
+  }
 }
 
 export default connect(({ globalNotifications, user }, { location }) => ({
