@@ -139,8 +139,6 @@ class ContactProfile extends React.Component {
   render() {
     const { contact, fetchError } = this.props
 
-    console.log('render', this.state.timeline)
-
     if (fetchError) {
       if (fetchError.status === 404) {
         browserHistory.push('/404')
