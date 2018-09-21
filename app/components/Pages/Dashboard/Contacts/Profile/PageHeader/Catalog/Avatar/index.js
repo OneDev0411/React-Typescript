@@ -4,8 +4,8 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import { AvatarUploader as Uploader } from '../../../../../../../../views/components/AvatarUploader/index.js'
-import uploadAttachments from '../../../../../../../../models/contacts/upload-attachments/index.js'
+import { AvatarUploader as Uploader } from '../../../../../../../../views/components/AvatarUploader'
+import uploadAttachments from '../../../../../../../../models/contacts/upload-attachments'
 import { selectDefinitionByName } from '../../../../../../../../reducers/contacts/attributeDefs'
 import {
   deleteAttributes,

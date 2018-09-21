@@ -195,6 +195,8 @@ class CalendarContainer extends React.Component {
     const isTaskUpdated = action === 'updated'
     const newSelectedDate = new Date(timestamp * 1000)
 
+    this.closeEventDrawer()
+
     if (isInRange || isTaskUpdated) {
       this.setLoadingPosition(LOADING_POSITIONS.Middle)
 
@@ -206,8 +208,6 @@ class CalendarContainer extends React.Component {
 
       this.scrollIntoView(newSelectedDate)
     }
-
-    this.closeEventDrawer()
   }
 
   scrollIntoView = (date, options = {}) => {
@@ -283,13 +283,15 @@ class CalendarContainer extends React.Component {
 
     return (
       <Container isOpen={isMenuOpen}>
-        <EventDrawer
-          eventId={selectedTaskId}
-          onClose={this.closeEventDrawer}
-          isOpen={this.state.showCreateTaskMenu}
-          submitCallback={this.handleEventChange}
-          deleteCallback={this.handleEventChange}
-        />
+        {this.state.showCreateTaskMenu && (
+          <EventDrawer
+            isOpen
+            eventId={selectedTaskId}
+            onClose={this.closeEventDrawer}
+            submitCallback={this.handleEventChange}
+            deleteCallback={this.handleEventChange}
+          />
+        )}
 
         <Menu isOpen={isMenuOpen} width={302}>
           <MenuContainer>
@@ -366,3 +368,5 @@ export default connect(
     resetCalendar
   }
 )(CalendarContainer)
+
+// bug: after editing the event calendar doesn't update

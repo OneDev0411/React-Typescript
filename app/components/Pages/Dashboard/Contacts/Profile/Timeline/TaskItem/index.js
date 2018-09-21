@@ -1,9 +1,8 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
-import { updateTask } from '../../../../../../../store_actions/tasks'
+import { updateTask } from '../../../../../../../models/tasks/update-task'
 
 import { Divider } from '../../../../../../../views/components/Divider'
 import IconBell from '../../../../../../../views/components/SvgIcons/Bell/IconBell'
@@ -15,11 +14,10 @@ import { getReminderLabel } from '../../../../../../../views/CRM/Tasks/component
 import { Status } from './Status'
 import { Container, Title, Description } from './styled'
 
-class CRMTaskItem extends React.Component {
+export class CRMTaskItem extends React.Component {
   state = {
     disabled: false,
-    associations: [],
-    isDone: this.props.task.status === 'DONE'
+    associations: []
   }
 
   componentDidMount() {
@@ -37,26 +35,22 @@ class CRMTaskItem extends React.Component {
   }
 
   handleStatus = async () => {
-    const updatedTask = {
-      ...this.props.task,
-      status: this.state.isDone ? 'PENDING' : 'DONE'
-    }
-
-    this.setState(state => ({
-      disabled: true,
-      isDone: !state.isDone
-    }))
-
     try {
-      await this.props.dispatch(updateTask(updatedTask))
+      this.setState({ disabled: true })
+
+      const updatedEvent = {
+        ...this.props.task,
+        status: this.props.task.status === 'DONE' ? 'PENDING' : 'DONE'
+      }
+
+      this.props.editCallback(updatedEvent)
+
+      await updateTask(updatedEvent)
 
       this.setState({ disabled: false })
     } catch (error) {
       console.log(error)
-      this.setState(state => ({
-        isDone: !state.isDone,
-        disabled: false
-      }))
+      this.setState({ disabled: false })
       throw error
     }
   }
@@ -125,7 +119,7 @@ class CRMTaskItem extends React.Component {
         <Flex style={{ marginBottom: '2em' }}>
           <Status
             disabled={this.state.disabled}
-            checked={this.state.isDone}
+            checked={task.status === 'DONE'}
             onClick={this.handleStatus}
           />
           <Flex column style={{ width: 'calc(100% - 40px)' }}>
@@ -156,5 +150,3 @@ class CRMTaskItem extends React.Component {
     )
   }
 }
-
-export default connect()(CRMTaskItem)

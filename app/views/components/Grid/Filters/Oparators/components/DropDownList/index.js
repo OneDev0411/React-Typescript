@@ -2,17 +2,17 @@ import React from 'react'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
+import { Item } from '../../../../../Dropdown/Item'
+import IconKeyboardArrowDown from '../../../../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import IconKeyboardArrowUp from '../../../../../SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
+
 import {
   List,
-  ListItem,
-  ListItemTitle,
   SelectedItem,
   ItemsContainer,
   InputContainer,
   Input
 } from './styled'
-import IconKeyboardArrowDown from '../../../../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import IconKeyboardArrowUp from '../../../../../SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 
 export class DropDownList extends React.Component {
   constructor(props) {
@@ -155,16 +155,16 @@ export class DropDownList extends React.Component {
               {isOpen && (
                 <List depth={3} className="u-scrollbar--thinner--self">
                   {this.getFilteredOptions(filterValue).map((item, index) => (
-                    <ListItem
+                    <Item
                       key={index}
-                      isSelected={this.isItemSelected(item)}
                       {...getItemProps({
                         index,
-                        item
+                        item,
+                        isSelected: this.isItemSelected(item)
                       })}
                     >
-                      <ListItemTitle>{item}</ListItemTitle>
-                    </ListItem>
+                      {item}
+                    </Item>
                   ))}
                 </List>
               )}

@@ -24,6 +24,7 @@ import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
+import { Description } from './components/Description'
 import { Reminder } from './components/Reminder'
 import { EventType } from './components/EventType'
 import { AssociationsList } from './components/AssociationsList'
@@ -47,27 +48,41 @@ const defaultProps = {
   deleteCallback: () => {}
 }
 
+/**
+ * Represents a CRM Event in a drawer view.
+ *
+ * NOTE: Its title and initial states controlling by props.
+ * Because of the drawer component nature, we have to
+ * unmount it after each time closing. And also mount it
+ * after opening until we can reinitialize it.
+ *
+ */
 export class EventDrawer extends Component {
-  state = {
-    event: this.props.event,
-    isDisabled: false,
-    isNewEvent: !this.props.event && !this.props.eventId
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      event: this.props.event,
+      isDisabled: false
+    }
+
+    this.isNewEvent = !this.props.event && !this.props.eventId
   }
 
   load = async () => {
-    let { event } = this.state
-    const { eventId } = this.props
-
-    if (event) {
-      this.setState({ isNewEvent: false })
-
-      return event
+    if (this.props.event) {
+      return this.props.event
     }
 
-    if (eventId) {
+    if (this.props.eventId) {
       try {
-        this.setState({ isNewEvent: false, isDisabled: true })
-        event = await getTask(eventId, 'associations[]=crm_task.reminders')
+        this.setState({ isDisabled: true })
+
+        const event = await getTask(
+          this.props.eventId,
+          'associations[]=crm_task.reminders'
+        )
+
         this.setState({ event, isDisabled: false })
 
         return event
@@ -81,10 +96,9 @@ export class EventDrawer extends Component {
   }
 
   save = async event => {
-    let newEvent
-    let action = 'created'
-
     try {
+      let newEvent
+      let action = 'created'
       const query = 'associations[]=crm_task.reminders'
 
       this.setState({ isDisabled: true })
@@ -96,9 +110,8 @@ export class EventDrawer extends Component {
         newEvent = await createTask(event, query)
       }
 
-      this.setState({ event: newEvent, isDisabled: false })
-
-      this.props.submitCallback(newEvent, action)
+      this.setState({ isDisabled: false })
+      await this.props.submitCallback(newEvent, action)
     } catch (error) {
       console.log(error)
       this.setState({ isDisabled: false })
@@ -110,12 +123,8 @@ export class EventDrawer extends Component {
     try {
       this.setState({ isDisabled: true })
       await deleteTask(this.state.event.id)
-
-      const deletedEvent = this.state.event
-
-      this.setState({ event: null, isDisabled: false })
-
-      this.props.deleteCallback(deletedEvent)
+      this.setState({ isDisabled: false })
+      this.props.deleteCallback(this.state.event)
     } catch (error) {
       console.log(error)
       this.setState({ isDisabled: false })
@@ -124,7 +133,7 @@ export class EventDrawer extends Component {
   }
 
   handleCreateAssociation = async association => {
-    if (this.state.isNewEvent) {
+    if (this.isNewEvent) {
       return Promise.resolve()
     }
 
@@ -150,7 +159,7 @@ export class EventDrawer extends Component {
   }
 
   handleDeleteAssociation = async associationId => {
-    if (this.state.isNewEvent) {
+    if (this.isNewEvent) {
       return Promise.resolve()
     }
 
@@ -170,10 +179,6 @@ export class EventDrawer extends Component {
     return Promise.resolve()
   }
 
-  handleClose = () => {
-    this.setState(() => ({ event: null, isNewEvent: true }), this.props.onClose)
-  }
-
   handleSubmit = () => {
     document
       .getElementById('event-drawer-form')
@@ -181,18 +186,12 @@ export class EventDrawer extends Component {
   }
 
   render() {
-    const { isDisabled, isNewEvent } = this.state
+    const { isDisabled } = this.state
     const { defaultAssociation } = this.props
 
-    if (!this.props.isOpen) {
-      return null
-    }
-
     return (
-      <Drawer isOpen={this.props.isOpen} onClose={this.handleClose}>
-        <Drawer.Header
-          title={`${this.state.isNewEvent ? 'Add' : 'Edit'} Event`}
-        />
+      <Drawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
+        <Drawer.Header title={`${this.isNewEvent ? 'Add' : 'Edit'} Event`} />
         <Drawer.Body>
           <LoadSaveReinitializeForm
             initialValues={this.props.initialValues}
@@ -203,16 +202,14 @@ export class EventDrawer extends Component {
             render={props => {
               const { values } = props
 
-              console.log(values)
-
               return (
                 <FormContainer
                   onSubmit={props.handleSubmit}
                   id="event-drawer-form"
                 >
-                  <Flex alignCenter style={{ marginBottom: '2.5em' }}>
-                    {isNewEvent ? (
-                      <Title fullWidth={isNewEvent} />
+                  <Flex alignCenter style={{ marginBottom: '1.25em' }}>
+                    {this.isNewEvent ? (
+                      <Title fullWidth={this.isNewEvent} />
                     ) : (
                       <Fragment>
                         <CheckboxField
@@ -223,6 +220,7 @@ export class EventDrawer extends Component {
                       </Fragment>
                     )}
                   </Flex>
+                  <Description />
                   <EventType />
                   <FieldContainer
                     alignCenter
@@ -248,10 +246,10 @@ export class EventDrawer extends Component {
         </Drawer.Body>
         <Drawer.Footer
           style={{
-            flexDirection: this.state.isNewEvent ? 'row-reverse' : 'initial'
+            flexDirection: this.isNewEvent ? 'row-reverse' : 'initial'
           }}
         >
-          {!this.state.isNewEvent && (
+          {!this.isNewEvent && (
             <IconButton
               isFit
               inverse

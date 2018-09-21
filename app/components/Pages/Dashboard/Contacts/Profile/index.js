@@ -50,15 +50,14 @@ class ContactProfile extends React.Component {
     timeline: []
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount = () =>
     window.removeEventListener('resize', this.detectScreenSize)
-  }
 
   detectScreenSize = () => {
     if (window.innerWidth < 1681 && this.state.isDesktopScreen) {
@@ -87,36 +86,30 @@ class ContactProfile extends React.Component {
       this.setState({ isFetchingTimeline: false, timeline })
     } catch (error) {
       console.log(error)
-
       this.setState({ isFetchingTimeline: false })
     }
   }
 
-  addEvent = event => {
+  addEvent = event =>
     this.setState(state => ({
       timeline: [event, ...state.timeline]
     }))
-  }
 
-  editEvent = event => {
-    const indexedTimeline = {}
+  filterTimelineById = (state, id) =>
+    state.timeline.filter(item => item.id !== id)
 
-    this.state.timeline.forEach(t => {
-      indexedTimeline[t.id] = t
-    })
+  editEvent = updatedEvent =>
+    this.setState(state => ({
+      timeline: [
+        ...this.filterTimelineById(state, updatedEvent.id),
+        updatedEvent
+      ]
+    }))
 
-    indexedTimeline[event.id] = event
-
-    this.setState({
-      timeline: Object.values(indexedTimeline)
-    })
-  }
-
-  // removeEvent = eventId => {
-  //   this.setState(state => ({
-  //     timeline: state.timeline.filter(item => item.id !== eventId)
-  //   }))
-  // }
+  deleteEvent = deletedEventId =>
+    this.setState(state => ({
+      timeline: this.filterTimelineById(state, deletedEventId)
+    }))
 
   handleAddNote = async text => {
     await this.props.upsertContactAttributes(this.props.contact.id, [
@@ -251,6 +244,7 @@ class ContactProfile extends React.Component {
                 editNoteHandler={this.editNote}
                 deleteNoteHandler={this.deleteNote}
                 editEventHandler={this.editEvent}
+                deleteEventHandler={this.deleteEvent}
               />
             </SecondColumn>
 
