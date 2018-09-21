@@ -21,8 +21,8 @@ export const TableHeader = styled.div`
   position: sticky;
   top: 0.5em;
   font-weight: ${props => (props.isSelectedDay ? 600 : 400)};
-  background-color: ${props => (props.isSelectedDay ? '#eef0f5' : grey.A100)};
-  color: ${props => (props.isSelectedDay ? primary : '#000')};
+  background-color: ${props => (props.isSelectedDay ? '#000000' : grey.A100)};
+  color: ${props => (props.isSelectedDay ? '#ffffff' : '#000')};
 `
 
 export const Title = ALink.extend`

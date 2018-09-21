@@ -130,12 +130,12 @@ class AgentFilters extends React.Component {
         ) : (
           _.map(Filters, (fn, filterName) => (
             <ToolTip
+              key={`FILTER_${filterName}`}
               multiline
               caption={this.getTooltipCaption(filterName)}
               placement="right"
             >
               <ListItem
-                key={`FILTER_${filterName}`}
                 isSelected={filterName === activeFilter}
                 onClick={() => this.setFilter(filterName)}
               >

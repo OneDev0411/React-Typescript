@@ -292,7 +292,7 @@ class Notifications extends Component {
         }}
       >
         <Header />
-        <div style={{ position: 'relative', height: '100vh' }}>
+        <div style={{ position: 'relative' }}>
           <div
             style={{
               position: 'absolute',

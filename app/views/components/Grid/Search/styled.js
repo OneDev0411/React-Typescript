@@ -24,6 +24,10 @@ export const TextInput = styled.input`
   background-color: transparent;
   caret-color: ${primary};
 
+  ::-ms-clear {
+    display: none;
+  }
+
   ::-webkit-input-placeholder {
     font-size: 1rem;
     font-weight: 500;
