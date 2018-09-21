@@ -58,6 +58,7 @@ import {
 } from 'react-bootstrap'
 import Follow from '../../../../../../views/components/Follow'
 import { listingStatuses } from '../../../../../../constants/listings/listing'
+import { primary } from '../../../../../../views/utils/colors'
 
 export const fadeIn = node => {
   const elem = ReactDOM.findDOMNode(node)
@@ -420,7 +421,9 @@ const ListingDesktopView = ({
             'mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center'
           )}
         >
-          <div style={S('font-18 mb-5 color-3388ff')}>
+          <div
+            style={{ fontSize: '18px', marginBottom: '5px', color: primary }}
+          >
             <span style={S('fw-400')}>
               {listing.list_agent_full_name}, Seller Agent
             </span>
