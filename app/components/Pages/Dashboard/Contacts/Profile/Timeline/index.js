@@ -17,6 +17,7 @@ export class Timeline extends React.Component {
     selectedEvent: null
   }
 
+  onClickNote = selectedNote => this.setState({ selectedNote })
   closeEditNoteDrawer = () => this.setState({ selectedNote: null })
 
   closeEventDrawer = () => this.setState({ selectedEvent: null })
@@ -62,7 +63,7 @@ export class Timeline extends React.Component {
                 contact={this.props.contact}
                 key={key}
                 note={activity}
-                onClick={this.openEditNoteDrawer}
+                onClick={this.onClickNote}
               />
             )
           }
