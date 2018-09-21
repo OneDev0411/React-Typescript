@@ -24,6 +24,7 @@ import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
+import { Description } from './components/Description'
 import { Reminder } from './components/Reminder'
 import { EventType } from './components/EventType'
 import { AssociationsList } from './components/AssociationsList'
@@ -206,7 +207,7 @@ export class EventDrawer extends Component {
                   onSubmit={props.handleSubmit}
                   id="event-drawer-form"
                 >
-                  <Flex alignCenter style={{ marginBottom: '2.5em' }}>
+                  <Flex alignCenter style={{ marginBottom: '1.25em' }}>
                     {this.isNewEvent ? (
                       <Title fullWidth={this.isNewEvent} />
                     ) : (
@@ -219,6 +220,7 @@ export class EventDrawer extends Component {
                       </Fragment>
                     )}
                   </Flex>
+                  <Description />
                   <EventType />
                   <FieldContainer
                     alignCenter

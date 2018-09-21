@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 
 import Loading from '../../../../../Partials/Loading'
 import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawer'
@@ -16,6 +17,7 @@ export class Timeline extends React.Component {
     selectedEvent: null
   }
 
+  onClickNote = selectedNote => this.setState({ selectedNote })
   closeEditNoteDrawer = () => this.setState({ selectedNote: null })
 
   closeEventDrawer = () => this.setState({ selectedEvent: null })
@@ -61,7 +63,7 @@ export class Timeline extends React.Component {
                 contact={this.props.contact}
                 key={key}
                 note={activity}
-                onClick={this.openEditNoteDrawer}
+                onClick={this.onClickNote}
               />
             )
           }
@@ -162,7 +164,7 @@ export class Timeline extends React.Component {
           <Container id="upcoming_events" key="upcoming_events">
             {this.renderItems({
               title: 'Upcoming Events',
-              items: upcomingEvents
+              items: upcomingEvents.sort((a, b) => a.due_date > b.due_date)
             })}
           </Container>
         )}
@@ -174,7 +176,14 @@ export class Timeline extends React.Component {
 
             return (
               <Container id={id} key={`past_events_${id}`}>
-                {this.renderItems(month)}
+                {this.renderItems({
+                  title: month.title,
+                  items: _.sortBy(
+                    month.items,
+                    item =>
+                      item.due_date != null ? !item.due_date : !item.created_at
+                  )
+                })}
               </Container>
             )
           })}
