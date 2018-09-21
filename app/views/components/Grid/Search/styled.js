@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { primary, grey } from '../../../utils/colors'
 import IconSearchBase from '../../SvgIcons/Search/IconSearch'
+import IconButtonFlex from '../../Button/IconButton'
 
 export const Container = styled.div`
   display: flex;
@@ -63,4 +64,8 @@ export const IconSearch = IconSearchBase.extend`
 export const Icon = styled.div`
   color: ${grey.A900};
   padding-top: ${props => (props.isSearching ? '0' : '9px')};
+`
+
+export const IconButton = IconButtonFlex.extend`
+  display: block;
 `
