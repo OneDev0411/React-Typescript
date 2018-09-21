@@ -24,7 +24,18 @@ class PDFPreview extends React.Component {
     selectedAnnotation: null
   }
 
+  roleColors = {}
+
   scale = 1
+
+  colors = [
+    '#ffe084',
+    '#d2dfec',
+    '#f9caaf',
+    '#b1d6cf',
+    '#d0bbdb',
+    '#c1e5ec'
+  ]
 
   calculateSpace = async el => {
     if (!el) {
@@ -50,6 +61,31 @@ class PDFPreview extends React.Component {
       selectedAnnotation: null
     })
 
+  getRoleForAssignment(assignment) {
+    const { deal, roles } = this.props
+
+    const matches = deal.roles
+      .map(role => roles[role])
+      .filter(role => assignment.role.includes(role.role))
+
+    return matches[assignment.number]
+  }
+
+  getRoleColor(assignment) {
+    const role = this.getRoleForAssignment(assignment)
+
+    if (!role)
+      return false
+
+    if (this.roleColors[role.id])
+      return this.roleColors[role.id]
+
+    const color = Object.entries(this.roleColors).length
+    this.roleColors[role.id] = this.colors[color]
+
+    return this.roleColors[role.id]
+ }
+
   render() {
     const { document } = this.props
     const { selectedAnnotation } = this.state
@@ -64,6 +100,7 @@ class PDFPreview extends React.Component {
           (value, index) => (
             <PageContainer key={index}>
               <Annotations
+                getRoleColor={this.getRoleColor.bind(this)}
                 deal={this.props.deal}
                 roles={this.props.roles}
                 document={document}

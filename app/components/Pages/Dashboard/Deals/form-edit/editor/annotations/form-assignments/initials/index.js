@@ -8,10 +8,10 @@ const Container = styled.div`
   text-align: center;
 `
 
-export default function InitialsAssignment({ height }) {
+export default function InitialsAssignment({ height, color }) {
   return (
     <Container>
-      <IconInitial style={{ height: `${height}px` }} />
+      <IconInitial style={{ height: `${height}px` }} fillColor={color} />
     </Container>
   )
 }

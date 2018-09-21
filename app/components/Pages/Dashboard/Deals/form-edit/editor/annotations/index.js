@@ -144,6 +144,7 @@ export default class Annotations extends React.Component {
         />
 
         <FormAssignments
+          getRoleColor={this.props.getRoleColor}
           deal={this.props.deal}
           assignments={this.assignments}
         />

@@ -15,40 +15,52 @@ const Assignment = styled.div`
   height: ${props => Math.floor(props.rect[3] - props.rect[1])}px;
 `
 
-function getAssignmentComponent({ assignment, annotation }) {
-  const props = {
-    height: Math.floor(annotation.rect[3] - annotation.rect[1])
-  }
+class FormAssignments extends React.Component {
+  getAssignmentComponent(assignment) {
+    const { annotation } = assignment
 
-  switch (assignment) {
-    case 'Initials':
-      return <InitialsAssignment {...props} />
+    const color = this.props.getRoleColor(assignment)
 
-    case 'Signature':
-      return <SignatureAssignment {...props} />
-
-    case 'Date':
-      return <DateAssignment {...props} />
-
-    case 'Textbox':
-      return <TextboxAssignment />
-
-    case 'Checkbox':
-      return <CheckboxAssignment />
-
-    default:
+    if (!color)
       return null
+
+    const props = {
+      height: Math.floor(annotation.rect[3] - annotation.rect[1]),
+      color
+    }
+
+    switch (assignment.assignment) {
+      case 'Initials':
+        return <InitialsAssignment {...props} />
+
+      case 'Signature':
+        return <SignatureAssignment {...props} />
+
+      case 'Date':
+        return <DateAssignment {...props} />
+
+      case 'Textbox':
+        return <TextboxAssignment {...props} />
+
+      case 'Checkbox':
+        return <CheckboxAssignment {...props} />
+
+      default:
+        return null
+    }
+  }
+
+  render() {
+    return (
+      <Fragment>
+        {this.props.assignments.map((assignment, key) => (
+          <Assignment key={key} rect={assignment.annotation.rect}>
+            {this.getAssignmentComponent(assignment)}
+          </Assignment>
+        ))}
+      </Fragment>
+    )
   }
 }
 
-export default function FormAssignments(props) {
-  return (
-    <Fragment>
-      {props.assignments.map((assignment, key) => (
-        <Assignment key={key} rect={assignment.annotation.rect}>
-          {getAssignmentComponent(assignment)}
-        </Assignment>
-      ))}
-    </Fragment>
-  )
-}
+export default FormAssignments
