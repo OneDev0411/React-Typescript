@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 
 import Loading from '../../../../../Partials/Loading'
 import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawer'
@@ -162,7 +163,7 @@ export class Timeline extends React.Component {
           <Container id="upcoming_events" key="upcoming_events">
             {this.renderItems({
               title: 'Upcoming Events',
-              items: upcomingEvents
+              items: upcomingEvents.sort((a, b) => a.due_date > b.due_date)
             })}
           </Container>
         )}
@@ -174,7 +175,14 @@ export class Timeline extends React.Component {
 
             return (
               <Container id={id} key={`past_events_${id}`}>
-                {this.renderItems(month)}
+                {this.renderItems({
+                  title: month.title,
+                  items: _.sortBy(
+                    month.items,
+                    item =>
+                      item.due_date != null ? !item.due_date : !item.created_at
+                  )
+                })}
               </Container>
             )
           })}
