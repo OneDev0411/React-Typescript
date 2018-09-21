@@ -19,14 +19,15 @@ class FormAssignments extends React.Component {
   getAssignmentComponent(assignment) {
     const { annotation } = assignment
 
-    const color = this.props.getRoleColor(assignment)
+    const roleColor = this.props.getRoleColor(assignment)
 
-    if (!color)
+    if (!roleColor) {
       return null
+    }
 
     const props = {
       height: Math.floor(annotation.rect[3] - annotation.rect[1]),
-      color
+      roleColor
     }
 
     switch (assignment.assignment) {

@@ -8,10 +8,10 @@ const Container = styled.div`
   text-align: center;
 `
 
-export default function DateAssignment({ height, color }) {
+export default function DateAssignment({ height, roleColor }) {
   return (
     <Container>
-      <IconDateSigned style={{ height: `${height}px` }} fillColor={color} />
+      <IconDateSigned style={{ height: `${height}px` }} fillColor={roleColor} />
     </Container>
   )
 }

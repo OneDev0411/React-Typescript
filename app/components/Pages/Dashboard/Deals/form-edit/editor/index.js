@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import _ from 'underscore'
 
 import styled from 'styled-components'
 
@@ -28,15 +29,6 @@ class PDFPreview extends React.Component {
 
   scale = 1
 
-  colors = [
-    '#ffe084',
-    '#d2dfec',
-    '#f9caaf',
-    '#b1d6cf',
-    '#d0bbdb',
-    '#c1e5ec'
-  ]
-
   calculateSpace = async el => {
     if (!el) {
       return false
@@ -61,30 +53,40 @@ class PDFPreview extends React.Component {
       selectedAnnotation: null
     })
 
-  getRoleForAssignment(assignment) {
+  getRoleColor = assignment => {
     const { deal, roles } = this.props
 
-    const matches = deal.roles
+    const colors = [
+      '#ffe084',
+      '#d2dfec',
+      '#f9caaf',
+      '#b1d6cf',
+      '#d0bbdb',
+      '#c1e5ec'
+    ]
+
+    const matchedRoles = deal.roles
       .map(role => roles[role])
       .filter(role => assignment.role.includes(role.role))
 
-    return matches[assignment.number]
-  }
-
-  getRoleColor(assignment) {
-    const role = this.getRoleForAssignment(assignment)
-
-    if (!role)
+    if (!matchedRoles || matchedRoles.length === 0) {
       return false
+    }
 
-    if (this.roleColors[role.id])
+    const role = matchedRoles[assignment.number]
+
+    if (!role) {
+      return false
+    }
+
+    if (this.roleColors[role.id]) {
       return this.roleColors[role.id]
+    }
 
-    const color = Object.entries(this.roleColors).length
-    this.roleColors[role.id] = this.colors[color]
+    this.roleColors[role.id] = colors[_.size(this.roleColors)]
 
     return this.roleColors[role.id]
- }
+  }
 
   render() {
     const { document } = this.props
@@ -100,7 +102,7 @@ class PDFPreview extends React.Component {
           (value, index) => (
             <PageContainer key={index}>
               <Annotations
-                getRoleColor={this.getRoleColor.bind(this)}
+                getRoleColor={this.getRoleColor}
                 deal={this.props.deal}
                 roles={this.props.roles}
                 document={document}

@@ -8,10 +8,10 @@ const Container = styled.div`
   text-align: center;
 `
 
-export default function SignatureAssignment({ height, color }) {
+export default function SignatureAssignment({ height, roleColor }) {
   return (
     <Container>
-      <IconSign style={{ height: `${height}px` }} fillColor={color} />
+      <IconSign style={{ height: `${height}px` }} fillColor={roleColor} />
     </Container>
   )
 }
