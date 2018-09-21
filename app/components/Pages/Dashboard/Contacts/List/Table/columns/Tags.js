@@ -4,12 +4,14 @@ import _ from 'underscore'
 import { getContactTags } from '../../../../../../../models/contacts/helpers'
 import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 import ShadowButton from '../../../../../../../views/components/Button/ShadowButton'
+import { primary } from '../../../../../../../views/utils/colors'
 
 const TagsTextContainer = ShadowButton.extend`
   font-weight: normal;
   text-align: left;
   :hover {
     text-decoration: underline;
+    color: ${primary};
   }
 `
 
