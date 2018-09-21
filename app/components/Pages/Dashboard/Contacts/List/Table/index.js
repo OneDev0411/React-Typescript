@@ -12,7 +12,7 @@ import NoSearchResults from '../../../../../Partials/no-search-results'
 import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
-import ShareMlsListing from 'components/InstantMarketing/Flows/ShareMlsListing'
+import SendMlsListingCard from 'components/InstantMarketing/Flows/SendMlsListingCard'
 import SortContacts from '../Actions/SortContacts'
 
 import TagsOverlay from '../../components/TagsOverlay'
@@ -126,7 +126,9 @@ class ContactsList extends React.Component {
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows }) => (
-        <ShareMlsListing selectedRows={selectedRows}>Marketing</ShareMlsListing>
+        <SendMlsListingCard selectedRows={selectedRows}>
+          Marketing
+        </SendMlsListingCard>
       )
     }
   ]

@@ -14,7 +14,7 @@ import Listing from 'models/listings/listing'
 import Compose from 'components/EmailCompose'
 import { getActiveTeamACL } from 'utils/user-teams'
 
-class ShareDeal extends React.Component {
+class SendDealPromotion extends React.Component {
   state = {
     listing: null,
     isInstantMarketingBuilderOpen: false,
@@ -162,4 +162,4 @@ function mapStateToProps({ user }) {
 export default connect(
   mapStateToProps,
   { notify }
-)(ShareDeal)
+)(SendDealPromotion)

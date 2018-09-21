@@ -7,7 +7,7 @@ import DealEmail from '../../dashboard/deal-email'
 
 import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
-import ShareDeal from 'components/InstantMarketing/Flows/ShareDeal'
+import SendDealPromotionCard from 'components/InstantMarketing/Flows/SendDealPromotion'
 
 const Button = ActionButton.extend`
   margin-left: 0.5em;
@@ -38,7 +38,7 @@ const Header = ({ deal, showAttachments }) => (
         Get Signatures
       </Button>
 
-      <ShareDeal deal={deal}>Promote</ShareDeal>
+      <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
     </PageHeader.Menu>
   </PageHeader>
 )

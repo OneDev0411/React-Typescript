@@ -20,7 +20,7 @@ import { getTemplateScreenshot } from 'models/instant-marketing'
 import { confirmation } from 'actions/confirmation'
 import ActionButton from 'components/Button/ActionButton'
 
-class ShareMlsListing extends React.Component {
+class SendMlsListingCard extends React.Component {
   state = {
     listing: null,
     isListingsModalOpen: false,
@@ -214,4 +214,4 @@ function mapStateToProps({ contacts, user }) {
 export default connect(
   mapStateToProps,
   { notify, confirmation }
-)(ShareMlsListing)
+)(SendMlsListingCard)
