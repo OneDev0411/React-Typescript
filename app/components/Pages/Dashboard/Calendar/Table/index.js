@@ -115,7 +115,7 @@ export class Table extends React.Component {
         onClick = () => goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
         break
       case 'crm_task':
-        onClick = () => this.props.onSelectTask(row)
+        onClick = () => this.props.onSelectTask(row.crm_task)
         break
     }
 

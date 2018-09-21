@@ -10,7 +10,7 @@
 
   &.c-full-screen-modal--page {
     @media screen and (min-width: 48em) {
-      left: 11rem;
+      left: 80px;
     }
   }
 }
@@ -27,7 +27,7 @@
   background: #fff;
 
   @media screen and (min-width: 48em) {
-    width: 60rem;
+    width: 600px;
     height: 450px;
     top: 50%;
     left: 50%;

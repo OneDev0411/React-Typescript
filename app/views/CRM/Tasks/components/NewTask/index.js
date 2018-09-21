@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Field } from 'react-final-form'
+import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import cn from 'classnames'
+import Flex from 'styled-flex-component'
+import { Field } from 'react-final-form'
 
 import { getTask } from '../../../../../models/tasks/get-task'
 import {
@@ -14,14 +16,10 @@ import {
 import { createTaskAssociation } from '../../../../../models/tasks/create-task-association'
 import { deleteTaskAssociation } from '../../../../../models/tasks/delete-task-association'
 
-import IconButton from '../../../../components/Button/IconButton'
+// import IconButton from '../../../../components/Button/IconButton'
 import ActionButton from '../../../../components/Button/ActionButton'
-import IconDelete from '../../../../components/SvgIcons/Delete/IconDelete'
-import { CircleCheckbox } from '../../../../components/Input/CircleCheckbox'
-import {
-  TextField,
-  TextAreaField
-} from '../../../../components/final-form-fields'
+// import IconDelete from '../../../../components/SvgIcons/Delete/IconDelete'
+import { DateTimeField } from '../../../../components/final-form-fields/DateTimeField'
 
 import LoadSaveReinitializeForm from '../../../../utils/LoadSaveReinitializeForm'
 import { goBackFromEditTask } from '../../helpers/go-back-from-edit'
@@ -29,11 +27,12 @@ import { goBackFromEditTask } from '../../helpers/go-back-from-edit'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
-import DueDate from './components/DueDate'
-import Reminder from './components/Reminder'
+import { Title } from './components/Title'
+import { Reminder } from './components/Reminder'
 import { TaskType } from './components/TaskType'
-import Associations from './components/Associations'
-import { browserHistory } from 'react-router'
+import { AssociationsCTA } from './components/AssociationsCTA'
+import { AssociationsList } from './components/AssociationsList'
+import { FormContainer, FieldContainer } from './styled'
 
 const propTypes = {
   task: PropTypes.shape(),
@@ -105,7 +104,7 @@ class Task extends Component {
       notify({
         status: 'success',
         dismissAfter: 4000,
-        title: `Task ${action}.`,
+        title: `Event ${action}.`,
         message: `${task.title}`
       })
 
@@ -196,106 +195,74 @@ class Task extends Component {
       <div className={cn('c-new-task', className)}>
         <LoadSaveReinitializeForm
           load={this.load}
-          validate={validate}
           postLoadFormat={task => postLoadFormat(task, defaultAssociation)}
           preSaveFormat={preSaveFormat}
           save={this.save}
-        >
-          {({
-            form,
-            values,
-            invalid,
-            pristine,
-            validating,
-            submitting,
-            handleSubmit
-          }) => (
-            <form onSubmit={handleSubmit} className="c-new-task__form">
-              <div className="c-new-task__body">
-                <div style={{ position: 'relative' }}>
-                  {!this.isNew && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '50%',
-                        right: '1em',
-                        transform: 'translateY(-50%)'
-                      }}
+          render={props => {
+            const { values } = props
+
+            const isDrawer = this.props.display === 'drawer' || !this.isNew
+
+            return (
+              <FormContainer onSubmit={props.handleSubmit}>
+                <Title />
+                {values.title && (
+                  <React.Fragment>
+                    <Flex
+                      alignCenter={!isDrawer}
+                      column={isDrawer}
+                      justifyBetween={!isDrawer}
+                      style={{ marginBottom: '1.5em' }}
                     >
-                      <Field
-                        size={36}
-                        name="status"
-                        id="task-status"
-                        component={CircleCheckbox}
+                      <TaskType />
+                      <FieldContainer
+                        justifyBetween
+                        alignCenter
+                        style={{
+                          margin: isDrawer ? '1em 0 0 0' : '0 0 0 1em',
+                          flex: isDrawer ? 1 : 2
+                        }}
+                      >
+                        <DateTimeField
+                          name="dueDate"
+                          selectedDate={values.dueDate}
+                        />
+                        <Reminder dueDate={values.dueDate} />
+                      </FieldContainer>
+                    </Flex>
+                    <AssociationsList
+                      associations={values.associations}
+                      defaultAssociation={defaultAssociation}
+                      handleDelete={this.handleDeleteAssociation}
+                    />
+                  </React.Fragment>
+                )}
+                <Flex justifyBetween alignCenter>
+                  <Field
+                    name="associations"
+                    render={({ input }) => (
+                      <AssociationsCTA
+                        disabled={!values.title}
+                        associations={values.associations}
+                        handleCreate={this.handleCreateAssociation}
+                        onClick={input.onChange}
                       />
-                    </div>
+                    )}
+                  />
+                  {values.title && (
+                    <Flex justifyBetween alignCenter>
+                      <ActionButton type="submit" disabled={isDeleting}>
+                        {props.submitting || props.validating
+                          ? 'Saving...'
+                          : 'Save'}
+                      </ActionButton>
+                    </Flex>
                   )}
-                  <TextField
-                    label="Title"
-                    name="title"
-                    required
-                    style={{ paddingRight: '4.5em' }}
-                  />
-                </div>
-                <div>
-                  <DueDate selectedDate={values.dueDate} />
-                  <TextAreaField label="Description" name="description" />
-                  <TaskType />
-                  <Reminder
-                    dueTime={values.dueTime.value}
-                    dueDate={values.dueDate.value}
-                    selectedDate={values.reminderDate}
-                  />
-                  <Associations
-                    associations={values.associations}
-                    handleCreate={this.handleCreateAssociation}
-                    handleDelete={this.handleDeleteAssociation}
-                    defaultAssociation={defaultAssociation}
-                  />
-                </div>
-              </div>
-              <div
-                className="c-new-task__footer"
-                style={
-                  !this.isNew
-                    ? {
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                      }
-                    : {}
-                }
-              >
-                {!this.isNew &&
-                  (!isDeleting ? (
-                    <IconButton
-                      type="button"
-                      color="#78909c"
-                      hoverColor="#2196f3"
-                      onClick={this.delete}
-                    >
-                      <IconDelete />
-                    </IconButton>
-                  ) : (
-                    <span>
-                      <i className="fa fa-spin fa-spinner" /> Deleting...
-                    </span>
-                  ))}
-                {/*
-                  This is temporary until implemention of bulk
-                  delete/add associations and attachments
-                */}
-                <ActionButton
-                  type="submit"
-                  disabled={(!invalid && pristine) || isDeleting}
-                  style={{ marginLeft: '0.5em' }}
-                >
-                  {submitting || validating ? 'Saving...' : 'Save'}
-                </ActionButton>
-              </div>
-            </form>
-          )}
-        </LoadSaveReinitializeForm>
+                </Flex>
+              </FormContainer>
+            )
+          }}
+        />
       </div>
     )
   }
@@ -308,28 +275,3 @@ export default connect(
   null,
   { createTask, updateTask, deleteTask, notify }
 )(Task)
-
-/**
- * Fields validator
- * @param {object} values The form values
- * @returns {object} invalid fields
- */
-function validate(values) {
-  const errors = {}
-  const requiredError = 'Required'
-  const timeRequiredError = 'Time is required'
-
-  if (values.title == null || values.title.trim().length === 0) {
-    errors.title = requiredError
-  }
-
-  if (values.dueTime.value == null) {
-    errors.dueTime = timeRequiredError
-  }
-
-  if (values.reminderDate.value && values.reminderTime.value == null) {
-    errors.reminderTime = timeRequiredError
-  }
-
-  return errors
-}
