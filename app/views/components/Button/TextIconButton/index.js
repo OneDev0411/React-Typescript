@@ -81,7 +81,7 @@ class TextIconButton extends PureComponent {
       justify-content: ${props =>
         props.isBlock ? 'space-between' : 'initial'};
 
-      > svg {
+      svg {
         width: ${props => getIconSize(props.size)};
         height: ${props => getIconSize(props.size)};
       }
