@@ -13,7 +13,6 @@ import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
 import SendMlsListingCard from 'components/InstantMarketing/Flows/SendMlsListingCard'
-import SortContacts from '../Actions/SortContacts'
 
 import TagsOverlay from '../../components/TagsOverlay'
 
@@ -77,6 +76,7 @@ class ContactsList extends React.Component {
       header: '',
       accessor: '',
       className: 'td--dropdown-container',
+      sortable: false,
       width: '24px',
       render: ({ rowData: contact }) => (
         <Menu
@@ -87,7 +87,7 @@ class ContactsList extends React.Component {
     }
   ]
 
-  leftActions = [
+  actions = [
     {
       render: ({ selectedRows }) => (
         <ExportContacts
@@ -146,17 +146,6 @@ class ContactsList extends React.Component {
     return {}
   }
 
-  rightActions = [
-    {
-      render: () => (
-        <SortContacts
-          isFetching={this.props.isFetching}
-          handleChangeOrder={this.props.handleChangeOrder}
-        />
-      )
-    }
-  ]
-
   render() {
     const selectedRowsCount = this.props.selectedRows.length
 
@@ -175,8 +164,20 @@ class ContactsList extends React.Component {
               onTrigger: this.props.onRequestLoadMore
             },
             actionable: {
-              leftActions: this.leftActions,
-              rightActions: this.rightActions
+              actions: this.actions
+            },
+            sortable: {
+              columns: [
+                { label: 'Most Recent', value: 'updated_at' },
+                { label: 'Last Touch', value: 'last_touch' },
+                { label: 'Next Touch', value: 'next_touch' },
+                { label: 'First name A-Z', value: 'display_name' },
+                { label: 'First name Z-A', value: '-display_name' },
+                { label: 'Last name A-Z', value: 'sort_field' },
+                { label: 'Last name Z-A', value: '-sort_field' },
+                { label: 'Created At', value: 'created_at' }
+              ],
+              onChange: this.props.handleChangeOrder
             }
           }}
           data={this.props.data}

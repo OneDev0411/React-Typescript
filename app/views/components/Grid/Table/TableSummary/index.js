@@ -7,7 +7,6 @@ const Title = styled.div`
   color: rgba(0, 0, 0, 0.5);
   font-weight: 500;
   line-height: 40px;
-}
 `
 
 function parseText({ text, ...parameters }) {
