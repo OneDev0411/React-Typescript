@@ -15,6 +15,8 @@ import Fetching from './Fetching'
 import EventIcon from './EventIcon'
 import { primary } from 'views/utils/colors'
 
+import SendBirthdayCard from 'components/InstantMarketing/Flows/SendBirthdayCard'
+
 export class Table extends React.Component {
   constructor(props) {
     super(props)
@@ -63,6 +65,14 @@ export class Table extends React.Component {
     return moment.unix(rowData.timestamp).format('hh:mm A')
   }
 
+  getEventActions = row => {
+    if (row.event_type === 'birthday') {
+      return (
+        <SendBirthdayCard contactId={row.contact}>Send a Card</SendBirthdayCard>
+      )
+    }
+  }
+
   get Columns() {
     return [
       {
@@ -83,6 +93,12 @@ export class Table extends React.Component {
             </div>
           </Flex>
         )
+      },
+      {
+        id: 'action',
+        isSortable: false,
+        width: '20%',
+        render: ({ rowData }) => this.getEventActions(rowData)
       }
     ]
   }

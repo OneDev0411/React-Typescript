@@ -187,6 +187,7 @@ class SendMlsListingCard extends React.Component {
           onClose={this.requestClose}
           handleSave={this.handleSaveMarketingCard}
           templateData={{ listing, user }}
+          templateTypes={['Listing']}
           assets={listing && listing.gallery_image_urls}
         />
 

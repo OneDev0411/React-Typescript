@@ -205,7 +205,10 @@ class Builder extends React.Component {
 
         <BuilderContainer>
           <TemplatesContainer>
-            <Templates onTemplateSelect={this.handleSelectTemplate} />
+            <Templates
+              onTemplateSelect={this.handleSelectTemplate}
+              templateTypes={this.props.templateTypes}
+            />
           </TemplatesContainer>
           <div id="grapesjs-canvas" />
         </BuilderContainer>
