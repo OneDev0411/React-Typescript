@@ -664,7 +664,7 @@ const ListingDesktopView = ({
                 <div className="clearfix" />
               </div>
             </Col>
-            <div style={S('mr-16 p-0 pull-right')}>
+            <div style={S('p-0 pull-right')}>
               {brand_agent_area}
               {list_agent_area}
             </div>
@@ -818,7 +818,7 @@ const ListingDesktopView = ({
   const headerProps = {
     alignCenter: true,
     justifyBetween: true,
-    style: { height: '70px', padding: '0 1em' }
+    style: { height: '70px', padding: '0 1.5rem' }
   }
   const Header = user ? (
     <Flex {...headerProps}>
