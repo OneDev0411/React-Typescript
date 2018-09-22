@@ -32,16 +32,23 @@ export default function DateContext(props) {
       <OverlayDrawer.Footer>
         <OverlayFooter>
           <ActionButton
+            size="small"
             disabled={props.isSaving || props.value === null}
             onClick={props.handleSave}
           >
             Save
           </ActionButton>
 
-          <CancelButton onClick={() => props.saveDefaultValue('TBD')}>
+          <CancelButton
+            size="small"
+            onClick={() => props.saveDefaultValue('TBD')}
+          >
             TBD
           </CancelButton>
-          <CancelButton onClick={() => props.saveDefaultValue('N/A')}>
+          <CancelButton
+            size="small"
+            onClick={() => props.saveDefaultValue('N/A')}
+          >
             N/A
           </CancelButton>
         </OverlayFooter>

@@ -79,16 +79,23 @@ export default class StringContext extends React.Component {
 
           <ActionsContainer>
             <ActionButton
+              size="small"
               onClick={this.props.handleSave}
               disabled={this.props.isSaving}
             >
               {this.props.isSaving ? 'Saving...' : 'Save Value'}
             </ActionButton>
 
-            <CancelButton onClick={() => this.props.saveDefaultValue('TBD')}>
+            <CancelButton
+              size="small"
+              onClick={() => this.props.saveDefaultValue('TBD')}
+            >
               TBD
             </CancelButton>
-            <CancelButton onClick={() => this.props.saveDefaultValue('N/A')}>
+            <CancelButton
+              size="small"
+              onClick={() => this.props.saveDefaultValue('N/A')}
+            >
               N/A
             </CancelButton>
           </ActionsContainer>
