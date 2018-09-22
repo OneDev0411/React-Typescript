@@ -70,27 +70,28 @@ export default class Context extends React.Component {
     return (
       <div>
         {rects.map((rect, index) => (
-          <ToolTip
+          // <ToolTip
+          //   key={index}
+          //   placement="bottom"
+          //   caption={this.ToolTipCaption}
+          //   multiline
+          // >
+          <Container
             key={index}
-            placement="bottom"
-            caption={this.ToolTipCaption}
-            multiline
+            fontName={appearance.font}
+            fontSize={fontSize}
+            bold={appearance.bold}
+            color={appearance.color}
+            rect={rect}
+            innerRef={ref => (this.container = ref)}
+            readOnly={this.props.isReadOnly}
+            onClick={() =>
+              this.props.onClick(this.container.getBoundingClientRect())
+            }
           >
-            <Container
-              fontName={appearance.font}
-              fontSize={fontSize}
-              bold={appearance.bold}
-              color={appearance.color}
-              rect={rect}
-              innerRef={ref => (this.container = ref)}
-              readOnly={this.props.isReadOnly}
-              onClick={() =>
-                this.props.onClick(this.container.getBoundingClientRect())
-              }
-            >
-              {values[index]}
-            </Container>
-          </ToolTip>
+            {values[index]}
+          </Container>
+          // </ToolTip>
         ))}
       </div>
     )
