@@ -44,7 +44,13 @@ export default class Annotations extends React.Component {
     const PDFJS = await importPdfJs()
 
     this.page = await this.props.document.getPage(this.props.page)
-    this.viewport = this.page.getViewport(this.props.scale)
+
+    // get width of actual viewport
+    const { width } = this.page.getViewport(this.props.scale)
+
+    this.viewport = this.page.getViewport(
+      this.props.displayWidth / (width / this.props.scale)
+    )
 
     const annotations = await this.page.getAnnotations()
 

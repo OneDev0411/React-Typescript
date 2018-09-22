@@ -19,6 +19,8 @@ export default class Page extends React.Component {
     canvas.width = width
     canvas.height = height
 
+    canvas.style.width = `${this.props.displayWidth}px`
+
     page.render({
       renderInteractiveForms: true,
       enableWebGL: true,

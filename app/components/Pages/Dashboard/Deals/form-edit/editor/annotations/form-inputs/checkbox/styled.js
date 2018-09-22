@@ -10,12 +10,10 @@ export const CheckboxInput = styled.input`
   top: ${props => props.box.top}px;
   width: ${props => props.box.width}px;
   height: ${props => props.box.height}px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
-  border: 1px solid black;
   background-color: #d2e5f2;
   border: 1px solid #cccd;
+  border-radius: 4px;
   cursor: pointer;
 
   :checked {

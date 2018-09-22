@@ -27,21 +27,8 @@ class PDFPreview extends React.Component {
 
   roleColors = {}
 
-  scale = 1
-
-  calculateSpace = async el => {
-    if (!el) {
-      return false
-    }
-
-    const { document } = this.props
-    const page = await document.getPage(1)
-    const viewport = page.getViewport(1)
-
-    const availableWidth = Math.min(el.clientWidth, 800)
-
-    this.scale = availableWidth / viewport.width
-  }
+  scale = window.devicePixelRatio * 1.8
+  displayWidth = window.innerWidth - 80
 
   onSelectContext = (type, data) =>
     this.setState({
@@ -97,7 +84,7 @@ class PDFPreview extends React.Component {
     }
 
     return (
-      <Container innerRef={this.calculateSpace}>
+      <Container>
         {Array.apply(null, { length: document.numPages }).map(
           (value, index) => (
             <PageContainer key={index}>
@@ -107,7 +94,8 @@ class PDFPreview extends React.Component {
                 roles={this.props.roles}
                 document={document}
                 page={index + 1}
-                scale={this.scale * 1.5}
+                scale={this.scale}
+                displayWidth={this.displayWidth}
                 values={this.props.values}
                 onSetValues={this.props.onSetValues}
                 onValueUpdate={this.props.onValueUpdate}
@@ -117,7 +105,8 @@ class PDFPreview extends React.Component {
               <PDFPage
                 document={document}
                 page={index + 1}
-                scale={this.scale * 1.5}
+                scale={this.scale}
+                displayWidth={this.displayWidth}
               />
             </PageContainer>
           )
