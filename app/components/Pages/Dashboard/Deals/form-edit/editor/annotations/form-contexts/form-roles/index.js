@@ -5,48 +5,50 @@ import _ from 'underscore'
 import ContextAnnotation from '../context-annotation'
 import { getRolesText } from '../../../../utils/get-roles-text'
 
-function FormRoles(props) {
-  return (
-    <Fragment>
-      {_.map(props.roles, (list, roleName) => {
-        const info = props.roles[roleName]
-        const groups = _.groupBy(info, 'group')
+class FormRoles extends React.PureComponent {
+  render() {
+    return (
+      <Fragment>
+        {_.map(this.props.roles, (list, roleName) => {
+          const info = this.props.roles[roleName]
+          const groups = _.groupBy(info, 'group')
 
-        return _.map(groups, (group, groupIndex) => {
-          const annotationContext = groups[groupIndex][0]
-          const annotations = groups[groupIndex].map(info => info.annotation)
+          return _.map(groups, (group, groupIndex) => {
+            const annotationContext = groups[groupIndex][0]
+            const annotations = groups[groupIndex].map(info => info.annotation)
 
-          const text = getRolesText(
-            props.dealsRoles,
-            props.deal,
-            roleName,
-            annotationContext
-          )
+            const text = getRolesText(
+              this.props.dealsRoles,
+              this.props.deal,
+              roleName,
+              annotationContext
+            )
 
-          return (
-            <ContextAnnotation
-              key={`${roleName}-${groupIndex}`}
-              annotationContext={annotationContext}
-              annotations={annotations}
-              value={text}
-              maxFontSize={20}
-              readOnly={annotationContext.isReadOnly}
-              onClick={() =>
-                annotationContext.readonly !== true &&
-                props.onClick('Role', {
-                  contextType: 'Roles',
-                  annotations,
-                  annotationContext,
-                  roleName
-                })
-              }
-              onSetValues={props.onSetValues}
-            />
-          )
-        })
-      })}
-    </Fragment>
-  )
+            return (
+              <ContextAnnotation
+                key={`${roleName}-${groupIndex}`}
+                annotationContext={annotationContext}
+                annotations={annotations}
+                value={text}
+                maxFontSize={20}
+                readOnly={annotationContext.isReadOnly}
+                onClick={() =>
+                  annotationContext.readonly !== true &&
+                  this.props.onClick('Role', {
+                    contextType: 'Roles',
+                    annotations,
+                    annotationContext,
+                    roleName
+                  })
+                }
+                onSetValues={this.props.onSetValues}
+              />
+            )
+          })
+        })}
+      </Fragment>
+    )
+  }
 }
 
 function mapStateToProps({ deals }) {

@@ -3,11 +3,7 @@ import parseAppearanceString from '../../../../utils/appearance'
 
 import { TextArea, TextInput } from './styled'
 
-class TextAnnotation extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return nextProps.value !== this.props.value
-  }
-
+class TextAnnotation extends React.PureComponent {
   onChange = e => this.props.onValueUpdate(e.target.value)
 
   render() {
