@@ -18,12 +18,18 @@ import { getContact } from 'models/contacts/get-contact'
 class SendBirthdayCard extends React.Component {
   state = {
     isFetchingContact: false,
-    contact: null,
+    contact: this.props.contact,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false
   }
 
   showMarketingBuilder = async () => {
+    if (this.state.contact) {
+      this.toggleInstantMarketingBuilder()
+
+      return false
+    }
+
     this.setState({
       isFetchingContact: true
     })
@@ -69,9 +75,9 @@ class SendBirthdayCard extends React.Component {
       <Fragment>
         <ActionButton
           appearance="outline"
-          size="small"
           onClick={this.showMarketingBuilder}
           disabled={this.state.isFetchingContact}
+          {...this.props.buttonStyle}
         >
           {this.props.children}
         </ActionButton>
