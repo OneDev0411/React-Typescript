@@ -39,7 +39,8 @@ export const Dropdown = ({
   itemToString = item => item.title,
   itemRenderer,
   defaultSelectedItem,
-  buttonRenderer
+  buttonRenderer,
+  pullRight = false
 }) => (
   <Downshift
     {...input}
@@ -71,6 +72,7 @@ export const Dropdown = ({
               getButtonProps({
                 isBlock: fullWidth,
                 id: buttonId,
+                isOpen,
                 name: input.name,
                 value: selectedItem && selectedItem.title,
                 icon:
@@ -116,7 +118,8 @@ export const Dropdown = ({
                   maxHeight: fullHeight ? 'auto' : '200px',
                   width: fullWidth ? '100%' : 'auto',
                   position: 'absolute',
-                  left: 0,
+                  left: pullRight ? 'auto' : 0,
+                  right: pullRight ? 0 : 'auto',
                   top: 3,
                   zIndex: 2,
                   overflowY: fullHeight ? 'initial' : 'scroll'
