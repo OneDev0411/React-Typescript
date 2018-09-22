@@ -22,6 +22,7 @@ export async function updateTask(task, query = {}) {
       'due_date',
       'task_type',
       'reminders',
+      'assignees',
       'description'
     ]
 
