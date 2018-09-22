@@ -114,23 +114,3 @@
     }
   }
 }
-
-.c-new-task-modal__submit-btn {
-  min-width: 110px;
-  border-radius: 3px;
-  background-color: #003bdf;
-  border: none;
-  &.inverse {
-    background-color: #fff;
-    border: 1px solid #003bdf;
-    color: #003bdf;
-    &:hover {
-      background-color: #003bdf;
-      color: #fff;
-    }
-  }
-
-  &:focus {
-    outline: none;
-  }
-}
