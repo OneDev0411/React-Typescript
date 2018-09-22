@@ -9,20 +9,18 @@ import * as Deal from '../../../../../../models/Deal/context-helper'
 const Container = styled.div`
   height: 48px;
   display: flex;
-  padding: 8px 2rem;
-  background-color: ${props => (props.isHighlighted ? '#f5f5f5' : '#fff')};
+  padding: 0.5em 1em;
+  background-color: ${props => (props.isHighlighted ? '#f2f2f2' : '#fff')};
 
   &:hover {
     cursor: pointer;
   }
 `
 
-const Price = styled.b`
-  font-size: 1.5rem;
-  line-height: 1;
-  margin-right: 1em;
-  font-weight: bold;
-  color: #1e364b;
+const Details = styled.span`
+  font-size: 0.875rem;
+  margin-right: 1rem;
+  font-weight: 500;
 `
 
 const Status = styled.span`
@@ -45,13 +43,15 @@ export function Item(props) {
       <div style={{ width: '32px', height: '32px', borderRadius: '50%' }}>
         <img src={getPhoto(item)} alt="home" style={{ width: '100%' }} />
       </div>
-      <div style={{ paddingLeft: '2rem', height: '32px' }}>
+      <div style={{ paddingLeft: '1em', height: '32px' }}>
         <Flex alignCenter>
-          <Price>{getPrice(item) || '$0'}</Price>
+          <Details>{getPrice(item) || '$0'}</Details>
           <Status status={status}>{status || 'Unknown'}</Status>
         </Flex>
-        <Flex alignCenter style={{ color: '#758a9e' }}>
-          <b style={{ marginRight: '1em' }}>{Deal.getSide(item)}</b>
+        <Flex alignCenter style={{ color: '#7f7f7f' }}>
+          <Details style={{ marginRight: '0.5em' }}>
+            {Deal.getSide(item)}
+          </Details>
           <span>{Deal.getAddress(item)}</span>
         </Flex>
       </div>

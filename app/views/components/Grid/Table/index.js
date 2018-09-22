@@ -1,12 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {
-  ToolbarContainer,
-  ActionsBar,
-  LeftActions,
-  RightActions
-} from './styled'
+import { ToolbarContainer, ActionsBar } from './styled'
+import { SortableContainer } from './Plugins/Sortable/styled'
 
 import BasicTable from './Tables/Basic'
 import MultipleTable from './Tables/Multiple'
@@ -46,8 +42,7 @@ class Grid extends React.Component {
 
     if (plugins.actionable) {
       this.actionablePlugin = new ActionablePlugin({
-        leftActions: plugins.actionable.leftActions,
-        rightActions: plugins.actionable.rightActions,
+        actions: plugins.actionable.actions,
         selectablePlugin: this.selectablePlugin
       })
     }
@@ -120,23 +115,21 @@ class Grid extends React.Component {
 
     return (
       <div>
-        {(Object.keys(this.props.summary).length > 0 ||
-          this.actionablePlugin) && (
-          <ToolbarContainer>
-            <TableSummary {...this.props.summary} />
+        <ToolbarContainer>
+          <TableSummary {...this.props.summary} />
 
-            {this.actionablePlugin && (
-              <ActionsBar>
-                <LeftActions>
-                  {this.actionablePlugin.renderLeftActions()}
-                </LeftActions>
-                <RightActions>
-                  {this.actionablePlugin.renderRightActions()}
-                </RightActions>
-              </ActionsBar>
-            )}
-          </ToolbarContainer>
-        )}
+          <ActionsBar>
+            {this.actionablePlugin && this.actionablePlugin.render()}
+          </ActionsBar>
+
+          <SortableContainer>
+            {this.sortablePlugin &&
+              this.sortablePlugin.render(
+                this.Columns,
+                this.props.isFetching || this.props.isFetchingMore
+              )}
+          </SortableContainer>
+        </ToolbarContainer>
 
         <BasicTable
           {...this.props}

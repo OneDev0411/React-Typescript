@@ -7,6 +7,7 @@ const InstantMarketing = props => (
     {props.isOpen && (
       <Builder
         templateData={props.templateData}
+        templateTypes={props.templateTypes}
         assets={props.assets}
         onSave={props.handleSave}
         onClose={props.onClose}

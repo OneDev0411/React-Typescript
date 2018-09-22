@@ -9,7 +9,11 @@ import nunjucks from 'nunjucks'
 import './AssetManager'
 import config from './config'
 
-import PhoneNumber from 'google-libphonenumber'
+import {
+  currencyFilter,
+  areaMeterFilter,
+  phoneNumberFilter
+} from '../helpers/NunjucksFilters'
 
 import {
   Container,
@@ -55,35 +59,9 @@ class Builder extends React.Component {
   setupNunjucks = () => {
     this.nunjucks = new nunjucks.Environment()
 
-    this.nunjucks.addFilter('currency', price =>
-      new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      }).format(price)
-    )
-
-    this.nunjucks.addFilter('area', area_meters =>
-      new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      }).format(area_meters * 10.7639)
-    )
-
-    const pnu = new PhoneNumber.PhoneNumberUtil()
-
-    this.nunjucks.addFilter('phone', phone => {
-      let pn
-
-      try {
-        pn = pnu.parse(phone)
-      } catch (e) {
-        return phone // Cannot parse it.
-      }
-
-      return pnu.format(pn, PhoneNumber.PhoneNumberFormat.NATIONAL)
-    })
+    this.nunjucks.addFilter('currency', currencyFilter)
+    this.nunjucks.addFilter('area', areaMeterFilter)
+    this.nunjucks.addFilter('phone', phoneNumberFilter)
   }
 
   disableAssetManager = () => {
@@ -205,7 +183,10 @@ class Builder extends React.Component {
 
         <BuilderContainer>
           <TemplatesContainer>
-            <Templates onTemplateSelect={this.handleSelectTemplate} />
+            <Templates
+              onTemplateSelect={this.handleSelectTemplate}
+              templateTypes={this.props.templateTypes}
+            />
           </TemplatesContainer>
           <div id="grapesjs-canvas" />
         </BuilderContainer>

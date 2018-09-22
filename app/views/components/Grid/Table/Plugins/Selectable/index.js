@@ -151,6 +151,7 @@ export class SelectablePlugin {
       id: 'plugin--selectable',
       width: '40px',
       verticalAlign: 'center',
+      sortable: false,
       header: () => (
         <CheckBoxButton
           onClick={this.toggleSelectAllRows}

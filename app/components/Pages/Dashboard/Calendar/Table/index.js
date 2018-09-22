@@ -15,6 +15,8 @@ import Fetching from './Fetching'
 import EventIcon from './EventIcon'
 import { primary } from 'views/utils/colors'
 
+import SendBirthdayCard from 'components/InstantMarketing/Flows/SendBirthdayCard'
+
 export class Table extends React.Component {
   constructor(props) {
     super(props)
@@ -63,6 +65,14 @@ export class Table extends React.Component {
     return moment.unix(rowData.timestamp).format('hh:mm A')
   }
 
+  getEventActions = row => {
+    if (row.event_type === 'birthday') {
+      return (
+        <SendBirthdayCard contactId={row.contact}>Send a Card</SendBirthdayCard>
+      )
+    }
+  }
+
   get Columns() {
     return [
       {
@@ -83,6 +93,12 @@ export class Table extends React.Component {
             </div>
           </Flex>
         )
+      },
+      {
+        id: 'action',
+        isSortable: false,
+        width: '20%',
+        render: ({ rowData }) => this.getEventActions(rowData)
       }
     ]
   }
@@ -98,8 +114,9 @@ export class Table extends React.Component {
       case 'contact_attribute':
         onClick = () => goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
         break
+
       case 'crm_task':
-        onClick = () => this.props.onSelectTask(row)
+        onClick = () => this.props.onSelectTask(row.crm_task)
         break
     }
 
@@ -135,15 +152,28 @@ export class Table extends React.Component {
     return {
       ...props,
       hoverStyle: `
-      background-color: #fafafa;
-       a {
-        color: ${primary}
-      }
+        background-color: #fafafa;
+        a {
+          color: ${primary}
+        }
       `,
       style: {
         ...props.style
       }
     }
+  }
+
+  getGridTdProps = (colIndex, { column }) => {
+    if (column.id === 'action') {
+      return {
+        style: {
+          textAlign: 'right',
+          paddingRight: '1rem'
+        }
+      }
+    }
+
+    return {}
   }
 
   render() {
@@ -185,6 +215,7 @@ export class Table extends React.Component {
             EmptyState={EmptyState}
             onTableRef={onRef}
             getTrProps={this.getGridTrProps}
+            getTdProps={this.getGridTdProps}
             getHeaderProps={this.getGridHeaderProps}
             getHeaderRowProps={this.getGridHeaderRowProps}
             SubComponent={({ date }) => (
