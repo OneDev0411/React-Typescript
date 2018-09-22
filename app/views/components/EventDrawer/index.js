@@ -13,10 +13,15 @@ import {
 } from '../../../models/tasks'
 
 import Drawer from '../OverlayDrawer'
+import { Divider } from '../Divider'
 import IconButton from '../Button/IconButton'
 import ActionButton from '../Button/ActionButton'
 import IconDelete from '../SvgIcons/Delete/IconDelete'
-import { DateTimeField, CheckboxField } from '../final-form-fields'
+import {
+  DateTimeField,
+  CheckboxField,
+  AssigneesField
+} from '../final-form-fields'
 
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
@@ -30,13 +35,18 @@ import { EventType } from './components/EventType'
 import { AssociationsList } from './components/AssociationsList'
 import { FormContainer, FieldContainer } from './styled'
 
+const QUERY = {
+  associations: ['crm_task.reminders', 'crm_task.assignees']
+}
+
 const propTypes = {
   ...Drawer.propTypes,
   event: PropTypes.any,
   eventId: PropTypes.any,
   initialValues: PropTypes.any,
   submitCallback: PropTypes.func,
-  deleteCallback: PropTypes.func
+  deleteCallback: PropTypes.func,
+  user: PropTypes.shape().isRequired
 }
 
 const defaultProps = {
@@ -78,10 +88,9 @@ export class EventDrawer extends Component {
       try {
         this.setState({ isDisabled: true })
 
-        const event = await getTask(
-          this.props.eventId,
-          'associations[]=crm_task.reminders'
-        )
+        const event = await getTask(this.props.eventId, QUERY)
+
+        console.log(event)
 
         this.setState({ event, isDisabled: false })
 
@@ -99,15 +108,14 @@ export class EventDrawer extends Component {
     try {
       let newEvent
       let action = 'created'
-      const query = 'associations[]=crm_task.reminders'
 
       this.setState({ isDisabled: true })
 
       if (event.id) {
-        newEvent = await updateTask(event, query)
+        newEvent = await updateTask(event, QUERY)
         action = 'updated'
       } else {
-        newEvent = await createTask(event, query)
+        newEvent = await createTask(event, QUERY)
       }
 
       this.setState({ isDisabled: false })
@@ -187,7 +195,7 @@ export class EventDrawer extends Component {
 
   render() {
     const { isDisabled } = this.state
-    const { defaultAssociation } = this.props
+    const { defaultAssociation, user } = this.props
 
     return (
       <Drawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
@@ -196,11 +204,17 @@ export class EventDrawer extends Component {
           <LoadSaveReinitializeForm
             initialValues={this.props.initialValues}
             load={this.load}
-            postLoadFormat={event => postLoadFormat(event, defaultAssociation)}
-            preSaveFormat={preSaveFormat}
+            postLoadFormat={event =>
+              postLoadFormat(event, user, defaultAssociation)
+            }
+            preSaveFormat={(values, originalValues) =>
+              preSaveFormat(values, originalValues, user)
+            }
             save={this.save}
             render={props => {
               const { values } = props
+
+              // console.log(values)
 
               return (
                 <FormContainer
@@ -225,7 +239,7 @@ export class EventDrawer extends Component {
                   <FieldContainer
                     alignCenter
                     justifyBetween
-                    style={{ marginBottom: '1em' }}
+                    style={{ marginBottom: '2em' }}
                   >
                     <DateTimeField
                       name="dueDate"
@@ -233,6 +247,10 @@ export class EventDrawer extends Component {
                     />
                     <Reminder dueDate={values.dueDate} />
                   </FieldContainer>
+
+                  <AssigneesField name="assignees" owner={user} />
+
+                  <Divider margin="2em 0" />
 
                   <AssociationsList
                     associations={values.associations}
