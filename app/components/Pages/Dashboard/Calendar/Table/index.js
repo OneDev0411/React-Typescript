@@ -68,7 +68,14 @@ export class Table extends React.Component {
   getEventActions = row => {
     if (row.event_type === 'birthday') {
       return (
-        <SendBirthdayCard contactId={row.contact}>Send a Card</SendBirthdayCard>
+        <SendBirthdayCard
+          contactId={row.contact}
+          buttonStyle={{
+            size: 'small'
+          }}
+        >
+          Send a Card
+        </SendBirthdayCard>
       )
     }
   }
