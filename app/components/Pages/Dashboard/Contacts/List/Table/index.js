@@ -19,7 +19,7 @@ import TagsOverlay from '../../components/TagsOverlay'
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
 import { TruncatedColumn } from './styled'
-import { primary } from '../../../../../../views/utils/colors'
+import { primary, grey } from '../../../../../../views/utils/colors'
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -136,7 +136,7 @@ class ContactsList extends React.Component {
 
   getGridTrProps = (rowIndex, { isSelected }) => {
     const hoverStyle = `
-    background-color: #fafafa;
+    background-color: ${grey.A100};
      a {
       color: ${primary}
     }

@@ -16,6 +16,7 @@ import EventIcon from './EventIcon'
 import { primary } from 'views/utils/colors'
 
 import SendBirthdayCard from 'components/InstantMarketing/Flows/SendBirthdayCard'
+import { grey } from '../../../../../views/utils/colors'
 
 export class Table extends React.Component {
   constructor(props) {
@@ -151,7 +152,7 @@ export class Table extends React.Component {
     return {
       ...props,
       hoverStyle: `
-      background-color: #fafafa;
+      background-color: ${grey.A100};
        a {
         color: ${primary}
       }
