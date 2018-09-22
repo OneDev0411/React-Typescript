@@ -13,6 +13,7 @@ export const Input = styled.input`
   border: none;
   cursor: pointer;
   background-color: transparent;
+  text-overflow: ellipsis;
 
   :focus {
     outline: none;
