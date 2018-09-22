@@ -5,7 +5,10 @@ import Flex from 'styled-flex-component'
 
 import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 import Link from '../../../../../../../views/components/ALink'
-import { getContactAttribute } from '../../../../../../../models/contacts/helpers'
+import {
+  getContactAttribute,
+  getAttributeFromSummary
+} from '../../../../../../../models/contacts/helpers'
 import styled from 'styled-components'
 
 const AvatarContainer = styled.div`
@@ -26,6 +29,8 @@ const ContactsListName = ({ contact, attributeDefs }) => {
     avatar = avatars && avatars[0] && avatars[0].text
   }
 
+  const name = getAttributeFromSummary(contact, 'display_name')
+
   return (
     <Flex nowrap>
       <AvatarContainer>
@@ -33,7 +38,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           className="avatar"
           color="#000000"
           round
-          name={contact.display_name}
+          name={name}
           src={avatar}
           size={40}
         />
@@ -49,7 +54,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           textOverflow: 'ellipsis'
         }}
       >
-        {contact.display_name}
+        {name}
       </Link>
     </Flex>
   )
