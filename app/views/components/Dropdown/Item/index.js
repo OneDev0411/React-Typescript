@@ -6,8 +6,7 @@ export const Item = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 0 1em;
-  line-height: 2.5;
+  padding: 0.5em 1em;
   cursor: pointer;
   white-space: nowrap;
   color: ${props => (props.isActive ? '#fff' : '#000')};
