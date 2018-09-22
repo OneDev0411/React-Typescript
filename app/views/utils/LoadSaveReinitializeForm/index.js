@@ -40,11 +40,11 @@ export default class LoadSaveReinitializeForm extends React.Component {
   }
 
   async load() {
-    const { load, postLoadFormat } = this.props
+    const { postLoadFormat } = this.props
 
     this.setState({ isLoading: true })
 
-    const originalValues = await load()
+    const originalValues = await this.props.load()
     const initialValues = postLoadFormat
       ? await postLoadFormat(originalValues)
       : originalValues
@@ -58,12 +58,12 @@ export default class LoadSaveReinitializeForm extends React.Component {
 
   async save(values) {
     try {
-      const { postLoadFormat, preSaveFormat, save } = this.props
+      const { postLoadFormat, preSaveFormat } = this.props
       let valuesToSave = preSaveFormat
         ? await preSaveFormat(values, this.state.originalValues)
         : values
 
-      await save(valuesToSave)
+      await this.props.save(valuesToSave)
 
       this.setState({
         originalValues: valuesToSave,

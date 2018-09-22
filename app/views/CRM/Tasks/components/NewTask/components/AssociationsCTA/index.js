@@ -26,32 +26,13 @@ export class AssociationsCTA extends React.Component {
     )
 
     if (!isDuplicate) {
-      let nextAssociations
-
-      const newAssociation = await this.props.handleCreate({
-        [type]: object.id,
-        association_type: type
-      })
-
-      if (newAssociation) {
-        nextAssociations = [
-          ...associations,
-          {
-            ...newAssociation,
-            [type]: object
-          }
-        ]
-      } else {
-        nextAssociations = [
-          ...associations,
-          {
-            [type]: object,
-            association_type: type
-          }
-        ]
-      }
-
-      this.props.onClick(nextAssociations)
+      this.props.onClick([
+        ...associations,
+        {
+          [type]: object,
+          association_type: type
+        }
+      ])
       handleClose()
     }
   }
@@ -72,6 +53,5 @@ export class AssociationsCTA extends React.Component {
 AssociationsCTA.propTypes = {
   associations: PropTypes.arrayOf(PropTypes.shape()),
   disabled: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
-  handleCreate: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired
 }

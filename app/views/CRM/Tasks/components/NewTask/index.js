@@ -1,28 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
-import { addNotification as notify } from 'reapop'
-import cn from 'classnames'
 import Flex from 'styled-flex-component'
 import { Field } from 'react-final-form'
 
-import { getTask } from '../../../../../models/tasks/get-task'
-import {
-  updateTask,
-  createTask,
-  deleteTask
-} from '../../../../../store_actions/tasks'
-import { createTaskAssociation } from '../../../../../models/tasks/create-task-association'
-import { deleteTaskAssociation } from '../../../../../models/tasks/delete-task-association'
+import { createTask } from '../../../../../models/tasks/create-task'
 
-// import IconButton from '../../../../components/Button/IconButton'
 import ActionButton from '../../../../components/Button/ActionButton'
-// import IconDelete from '../../../../components/SvgIcons/Delete/IconDelete'
 import { DateTimeField } from '../../../../components/final-form-fields/DateTimeField'
 
 import LoadSaveReinitializeForm from '../../../../utils/LoadSaveReinitializeForm'
-import { goBackFromEditTask } from '../../helpers/go-back-from-edit'
 
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
@@ -35,183 +21,56 @@ import { AssociationsList } from './components/AssociationsList'
 import { FormContainer, FieldContainer } from './styled'
 
 const propTypes = {
-  task: PropTypes.shape(),
-  taskId: PropTypes.string,
-  updateTask: PropTypes.func.isRequired,
-  createTask: PropTypes.func.isRequired,
-  deleteCallback: PropTypes.func,
-  submitCallback: PropTypes.func,
-  defaultAssociation: PropTypes.shape()
+  defaultAssociation: PropTypes.shape(),
+  submitCallback: PropTypes.func
 }
 
 const defaultProps = {
-  task: null,
-  taskId: null,
   submitCallback: t => t,
-  defaultAssociation: null,
-  deleteCallback: goBackFromEditTask
+  defaultAssociation: null
 }
-
-class Task extends Component {
-  state = {
-    isDeleting: false,
-    task: this.props.task
-  }
-
-  isNew = !this.props.taskId || this.props.taskId === 'new'
-
-  load = async () => {
-    let { task } = this.state
-    const { taskId } = this.props
-
-    if (task) {
-      return task
-    }
-
-    if (!this.isNew) {
-      try {
-        task = await getTask(taskId, 'associations[]=crm_task.reminders')
-        this.setState({ task })
-
-        return task
-      } catch (error) {
-        console.log(error)
-
-        if (error.status === 404) {
-          browserHistory.push('/404')
-        }
-      }
-    }
-
-    return null
-  }
-
+export default class Task extends Component {
   save = async task => {
-    let newTask
-    let action = 'created'
-    const { notify, updateTask, createTask, submitCallback } = this.props
-
     try {
       const query = 'associations[]=crm_task.reminders'
+      const newTask = await createTask(task, query)
 
-      if (task.id) {
-        newTask = await updateTask(task, query)
-        action = 'updated'
-      } else {
-        newTask = await createTask(task, query)
-      }
-
-      notify({
-        status: 'success',
-        dismissAfter: 4000,
-        title: `Event ${action}.`,
-        message: `${task.title}`
-      })
-
-      return submitCallback(newTask, action)
+      return this.props.submitCallback(newTask)
     } catch (error) {
       throw error
     }
-  }
-
-  delete = async () => {
-    const { task } = this.state
-    const { notify, deleteTask, deleteCallback } = this.props
-
-    try {
-      this.setState({ isDeleting: true })
-      await deleteTask(task.id)
-
-      notify({
-        status: 'success',
-        dismissAfter: 4000,
-        title: 'Task deleted.',
-        message: `${task.title}`
-      })
-
-      deleteCallback(task.id, task)
-    } catch (error) {
-      throw error
-    } finally {
-      this.setState({ isDeleting: false })
-    }
-  }
-
-  handleCreateAssociation = async association => {
-    const { task } = this.state
-    const { taskId } = this.props
-
-    if (this.isNew) {
-      return Promise.resolve()
-    }
-
-    const crm_task = taskId || (task && task.id)
-
-    if (crm_task) {
-      try {
-        const newAssociation = {
-          ...association,
-          crm_task
-        }
-        const response = await createTaskAssociation(crm_task, newAssociation)
-
-        return response
-      } catch (error) {
-        throw error
-      }
-    }
-
-    return Promise.resolve()
-  }
-
-  handleDeleteAssociation = async associationId => {
-    const { task } = this.state
-    const { taskId } = this.props
-
-    if (this.isNew) {
-      return Promise.resolve()
-    }
-
-    const id = taskId || (task && task.id)
-
-    if (id) {
-      try {
-        const response = await deleteTaskAssociation(id, associationId)
-
-        return response
-      } catch (error) {
-        throw error
-      }
-    }
-
-    return Promise.resolve()
   }
 
   render() {
-    const { isDeleting } = this.state
-    const { defaultAssociation, className } = this.props
+    const { defaultAssociation } = this.props
 
     return (
-      <div className={cn('c-new-task', className)}>
+      <div>
         <LoadSaveReinitializeForm
-          load={this.load}
-          postLoadFormat={task => postLoadFormat(task, defaultAssociation)}
+          load={() => null}
+          postLoadFormat={() =>
+            postLoadFormat(this.props.user, defaultAssociation)
+          }
           preSaveFormat={preSaveFormat}
           save={this.save}
           render={props => {
             const { values } = props
 
-            const isDrawer = this.props.display === 'drawer' || !this.isNew
+            const submitting = props.submitting || props.validating
+            const isActive =
+              values.title ||
+              (defaultAssociation
+                ? values.associations.length > 1
+                : values.associations.length > 0)
 
             return (
               <FormContainer onSubmit={props.handleSubmit}>
                 <Title />
-                {values.title && (
+                {isActive && (
                   <React.Fragment>
                     <Flex
-                      alignCenter={!isDrawer}
-                      column={isDrawer}
-                      justifyBetween={!isDrawer}
+                      alignCenter
+                      justifyBetween
                       style={{ marginBottom: '1.5em' }}
                     >
                       <TaskType />
@@ -219,8 +78,8 @@ class Task extends Component {
                         justifyBetween
                         alignCenter
                         style={{
-                          margin: isDrawer ? '1em 0 0 0' : '0 0 0 1em',
-                          flex: isDrawer ? 1 : 2
+                          margin: '0 0 0 1em',
+                          flex: 2
                         }}
                       >
                         <DateTimeField
@@ -233,7 +92,6 @@ class Task extends Component {
                     <AssociationsList
                       associations={values.associations}
                       defaultAssociation={defaultAssociation}
-                      handleDelete={this.handleDeleteAssociation}
                     />
                   </React.Fragment>
                 )}
@@ -242,19 +100,19 @@ class Task extends Component {
                     name="associations"
                     render={({ input }) => (
                       <AssociationsCTA
-                        disabled={!values.title}
+                        disabled={submitting}
                         associations={values.associations}
-                        handleCreate={this.handleCreateAssociation}
                         onClick={input.onChange}
                       />
                     )}
                   />
-                  {values.title && (
+                  {isActive && (
                     <Flex justifyBetween alignCenter>
-                      <ActionButton type="submit" disabled={isDeleting}>
-                        {props.submitting || props.validating
-                          ? 'Saving...'
-                          : 'Save'}
+                      <ActionButton
+                        type="submit"
+                        disabled={submitting || !values.title}
+                      >
+                        {submitting ? 'Saving...' : 'Save'}
                       </ActionButton>
                     </Flex>
                   )}
@@ -270,8 +128,3 @@ class Task extends Component {
 
 Task.propTypes = propTypes
 Task.defaultProps = defaultProps
-
-export default connect(
-  null,
-  { createTask, updateTask, deleteTask, notify }
-)(Task)
