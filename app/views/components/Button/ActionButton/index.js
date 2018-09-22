@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
+import { isOutline } from '../helpers'
 import { ButtonAppearances } from '../styles/ButtonAppearances'
 
 const propTypes = {
@@ -51,8 +52,6 @@ const defaultProps = {
   brandColor: ''
 }
 
-const isOutline = props => props.appearance === 'outline' || props.inverse
-
 const getStylesDependedSize = props => {
   switch (props.size) {
     case 'small':
@@ -80,10 +79,6 @@ const getStylesDependedSize = props => {
 
 const getAppearance = props => {
   let appearance = props.appearance
-
-  if (props.inverse) {
-    appearance = 'outline'
-  }
 
   return css`
     ${ButtonAppearances[appearance]};
