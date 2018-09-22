@@ -1,8 +1,6 @@
 import PhoneNumber from 'google-libphonenumber'
 import { formatNumber } from 'libphonenumber-js'
 
-const pnu = new PhoneNumber.PhoneNumberUtil()
-
 export function currencyFilter(price) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
