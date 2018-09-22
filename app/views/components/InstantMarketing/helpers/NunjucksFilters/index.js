@@ -1,4 +1,3 @@
-import PhoneNumber from 'google-libphonenumber'
 import { formatNumber } from 'libphonenumber-js'
 
 export function currencyFilter(price) {
