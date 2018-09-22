@@ -100,9 +100,12 @@ class appSideNav extends React.Component {
             </li>
 
             {hasBackOfficePermission && (
-              <li>
-                <Link to="/dashboard/brands">Brands</Link>
-              </li>
+              <React.Fragment>
+                <li role="separator" className="divider" />
+                <li>
+                  <Link to="/dashboard/brands">Brands</Link>
+                </li>
+              </React.Fragment>
             )}
             {user.user_type === 'Admin' && (
               <li>
