@@ -114,6 +114,7 @@ export class Table extends React.Component {
       case 'contact_attribute':
         onClick = () => goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
         break
+
       case 'crm_task':
         onClick = () => this.props.onSelectTask(row.crm_task)
         break
@@ -151,15 +152,28 @@ export class Table extends React.Component {
     return {
       ...props,
       hoverStyle: `
-      background-color: #fafafa;
-       a {
-        color: ${primary}
-      }
+        background-color: #fafafa;
+        a {
+          color: ${primary}
+        }
       `,
       style: {
         ...props.style
       }
     }
+  }
+
+  getGridTdProps = (colIndex, { column }) => {
+    if (column.id === 'action') {
+      return {
+        style: {
+          textAlign: 'right',
+          paddingRight: '1rem'
+        }
+      }
+    }
+
+    return {}
   }
 
   render() {
@@ -201,6 +215,7 @@ export class Table extends React.Component {
             EmptyState={EmptyState}
             onTableRef={onRef}
             getTrProps={this.getGridTrProps}
+            getTdProps={this.getGridTdProps}
             getHeaderProps={this.getGridHeaderProps}
             getHeaderRowProps={this.getGridHeaderRowProps}
             SubComponent={({ date }) => (
