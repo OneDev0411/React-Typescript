@@ -92,9 +92,6 @@ class EditDigitalForm extends React.Component {
       })
     }
 
-    // load form saved data
-    await this.loadFormData(task)
-
     pdfDocument.then(document =>
       this.setState({
         isFormLoaded: true,
@@ -102,23 +99,6 @@ class EditDigitalForm extends React.Component {
         pdfDocument: document
       })
     )
-  }
-
-  loadFormData = async task => {
-    if (!task.submission) {
-      return false
-    }
-
-    try {
-      const formData = await getSubmissionForm(
-        task.id,
-        task.submission.last_revision
-      )
-
-      this.values = formData.values
-    } catch (e) {
-      console.log('Can not fetch form data - ', e)
-    }
   }
 
   changeFormValue = (name, value, forceUpdate = false) => {
