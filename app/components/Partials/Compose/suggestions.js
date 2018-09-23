@@ -1,6 +1,7 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
+import _ from 'underscore'
 import UserAvatar from '../UserAvatar'
 
 export default ({
@@ -41,7 +42,7 @@ export default ({
   return (
     <div
       className="sg-container u-scrollbar"
-      data-simplebar={!isWebkit || null}
+      data-simplebar={(!isWebkit && _.size(viewList) > 0) || null}
     >
       <div
         className={cn('suggestions', { dropdown: dropDownBox === true })}
@@ -80,7 +81,7 @@ export default ({
             </Col>
 
             <Col sm={8} xs={8} md={8} className="vcenter">
-              <strong>{recp.display_name}</strong>
+              <strong className="suggestions__name">{recp.display_name}</strong>
               <div style={{ color: '#9b9a9b' }}>{getSubTitle(recp)}</div>
             </Col>
           </Row>
