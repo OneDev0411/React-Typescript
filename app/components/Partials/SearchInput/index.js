@@ -13,6 +13,7 @@ export default class SearchInput extends React.Component {
 
   onChangeValue(value) {
     const { onChange } = this.props
+
     this.setState({ value })
 
     if (onChange) {
@@ -37,7 +38,9 @@ export default class SearchInput extends React.Component {
         <input
           onFocus={() => this.setState({ searchBoxFocus: true })}
           onBlur={() => this.setState({ searchBoxFocus: false })}
-          ref={(input) => { this.nameInput = input }}
+          ref={input => {
+            this.nameInput = input
+          }}
           className={cn('form-control filter', { active: value })}
           type="text"
           placeholder={placeholder || 'Search'}
@@ -45,15 +48,11 @@ export default class SearchInput extends React.Component {
           value={value}
         />
 
-        {
-          value &&
-          <p
-            onClick={e => this.onChangeValue('')}
-            className="close-icon"
-          >
+        {value && (
+          <p onClick={() => this.onChangeValue('')} className="close-icon">
             &#215;
           </p>
-        }
+        )}
       </div>
     )
   }

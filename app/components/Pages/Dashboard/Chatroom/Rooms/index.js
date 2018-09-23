@@ -15,6 +15,7 @@ import {
   changeActiveRoom,
   toggleChatbar
 } from '../../../../../store_actions/chatroom'
+import Badge from '../../../../../views/components/Badge'
 
 class Rooms extends React.Component {
   constructor(props) {
@@ -64,10 +65,10 @@ class Rooms extends React.Component {
    */
   getRoomAvatar(room) {
     const { user, activeRoom } = this.props
-    const size = 20
-    const color = 'rgba(216, 216, 216, 0.3)'
+    const size = 30
+    const color = '#000000'
     const textSizeRatio = 2.5
-    const fgColor = '#263445'
+    const fgColor = '#ffffff'
 
     if (room.room_type === 'Group') {
       return (
@@ -155,7 +156,7 @@ class Rooms extends React.Component {
           <SocketStatus />
         </div>
 
-        <div className="list-container">
+        <div className="list-container u-scrollbar--thinner">
           <div className="list">
             {_.chain(rooms)
               .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
@@ -189,7 +190,11 @@ class Rooms extends React.Component {
 
                   <Col sm={1} xs={1} className="notifications vcenter">
                     {room.new_notifications > 0 && (
-                      <span className="count">{room.new_notifications}</span>
+                      <Badge>
+                        {room.new_notifications > 99
+                          ? '99+'
+                          : room.new_notifications}
+                      </Badge>
                     )}
                   </Col>
                 </Row>
