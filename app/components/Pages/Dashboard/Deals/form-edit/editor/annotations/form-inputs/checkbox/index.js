@@ -17,6 +17,8 @@ export default class CheckboxAnnotation extends React.PureComponent {
       height: Math.floor(rect[3] - rect[1])
     }
 
+    const checked = value && value !== 'Off'
+
     return (
       <CheckboxInput
         type="checkbox"
@@ -25,7 +27,7 @@ export default class CheckboxAnnotation extends React.PureComponent {
         appearance={appearance}
         key={annotation.fieldName}
         onChange={e => this.props.onValueUpdate(e.target.checked)}
-        defaultChecked={Boolean(value)}
+        defaultChecked={checked}
       />
     )
   }
