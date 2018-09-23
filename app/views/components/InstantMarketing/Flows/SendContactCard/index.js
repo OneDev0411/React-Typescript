@@ -10,12 +10,13 @@ import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
-import { getTemplateScreenshot } from 'models/instant-marketing'
-
 import Compose from 'components/EmailCompose'
-import { getActiveTeamACL } from 'utils/user-teams'
 
 import { getContact } from 'models/contacts/get-contact'
+
+import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
+
+import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 class SendContactCard extends React.Component {
   state = {
@@ -67,26 +68,16 @@ class SendContactCard extends React.Component {
 
     this.setState({
       isComposeEmailOpen: true,
-      isInstantMarketingBuilderOpen: false,
+      isInstantMarketingBuilderOpen: true,
       htmlTemplate: template.result,
       templateScreenshot: null
     })
   }
 
-  generatePreviewImage = async template => {
-    const imageUrl = await getTemplateScreenshot(
-      template.result,
-      [template.width, template.height],
-      {
-        width: template.width / 2,
-        height: template.height / 2
-      }
-    )
-
+  generatePreviewImage = async template =>
     this.setState({
-      templateScreenshot: `<img style="width: calc(100% - 2em); margin: 1em;" src="${imageUrl}" />`
+      templateScreenshot: await getTemplatePreviewImage(template)
     })
-  }
 
   handleSendEmails = async values => {
     this.setState({
@@ -117,16 +108,10 @@ class SendContactCard extends React.Component {
     } finally {
       this.setState({
         isSendingEmail: false,
-        isComposeEmailOpen: false
+        isComposeEmailOpen: false,
+        isInstantMarketingBuilderOpen: false
       })
     }
-  }
-
-  get HasMarketingAccess() {
-    const { user } = this.props
-    const acl = getActiveTeamACL(user)
-
-    return acl.includes('Marketing')
   }
 
   get Recipients() {
@@ -154,7 +139,7 @@ class SendContactCard extends React.Component {
   }
 
   render() {
-    if (!this.HasMarketingAccess) {
+    if (hasMarketingAccess(this.props.user) === false) {
       return null
     }
 
