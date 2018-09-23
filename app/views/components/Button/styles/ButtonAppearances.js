@@ -94,7 +94,7 @@ export const ButtonAppearances = {
   `,
   link: css`
     ${buttonBaseStyle};
-    color: ${props => props.brandColor || primary};
+    color: ${props => (props.inverse ? '#000' : props.brandColor || primary)};
     background-color: transparent;
 
     &[disabled] {
@@ -117,8 +117,7 @@ export const ButtonAppearances = {
     }
 
     svg {
-      fill: ${props =>
-        props.brandColor ? props.brandColor : props.inverse ? '#000' : primary};
+      fill: ${props => (props.inverse ? '#000' : props.brandColor || primary)};
     }
   `,
   icon: css`
