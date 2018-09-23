@@ -11,6 +11,8 @@ const Info = styled.div`
   color: ${grey.A500};
 `
 const Container = Item.extend`
+  pointer-events: ${props => (props.isDisabled ? 'none' : 'initial')};
+
   &:hover {
     ${Info} {
       color: ${grey.A300};
@@ -37,14 +39,14 @@ export function TeamMember(props) {
       <Flex
         column
         style={{
-          width: `calc(100% - ${props.selected ? '7em' : '3.5em'})`,
+          width: `calc(100% - ${props.isSelected ? '7em' : '3.5em'})`,
           marginLeft: '1em'
         }}
       >
         <div>{title}</div>
         <Info>{info}</Info>
       </Flex>
-      {props.selected && <CheckmarkIcon style={{ marginLeft: '2em' }} />}
+      {props.isSelected && <CheckmarkIcon style={{ marginLeft: '2em' }} />}
     </Container>
   )
 }

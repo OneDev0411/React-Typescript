@@ -59,7 +59,7 @@ export class Assignees extends React.Component {
     }
 
     const items = members.map(member => ({
-      title: getUserTitle(member),
+      label: getUserTitle(member),
       value: member
     }))
 
@@ -86,9 +86,9 @@ export class Assignees extends React.Component {
             <TeamMember
               {...itemProps}
               user={item.value}
-              title={item.title}
+              title={item.label}
               key={item.value.id}
-              selected={
+              isSelected={
                 Array.isArray(this.props.assignees) &&
                 this.props.assignees.some(a => a.id === item.value.id)
               }
