@@ -17,7 +17,7 @@ import { getActiveTeamACL } from 'utils/user-teams'
 
 import { getContact } from 'models/contacts/get-contact'
 
-class SendBirthdayCard extends React.Component {
+class SendContactCard extends React.Component {
   state = {
     isFetchingContact: false,
     contact: this.props.contact,
@@ -201,4 +201,4 @@ function mapStateToProps({ user, contacts }) {
 export default connect(
   mapStateToProps,
   { notify }
-)(SendBirthdayCard)
+)(SendContactCard)

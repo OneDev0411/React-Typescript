@@ -15,7 +15,7 @@ import Fetching from './Fetching'
 import EventIcon from './EventIcon'
 import { primary } from 'views/utils/colors'
 
-import SendBirthdayCard from 'components/InstantMarketing/Flows/SendBirthdayCard'
+import SendContactCard from 'components/InstantMarketing/Flows/SendContactCard'
 
 export class Table extends React.Component {
   constructor(props) {
@@ -68,14 +68,14 @@ export class Table extends React.Component {
   getEventActions = row => {
     if (row.event_type === 'birthday') {
       return (
-        <SendBirthdayCard
+        <SendContactCard
           contactId={row.contact}
           buttonStyle={{
             size: 'small'
           }}
         >
           Send a Card
-        </SendBirthdayCard>
+        </SendContactCard>
       )
     }
   }
