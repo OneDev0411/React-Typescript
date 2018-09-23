@@ -5,6 +5,7 @@ import { Field } from 'react-final-form'
 
 import { createTask } from '../../../../../models/tasks/create-task'
 
+import { EventDrawer } from '../../../../components/EventDrawer'
 import ActionButton from '../../../../components/Button/ActionButton'
 import { DateTimeField } from '../../../../components/final-form-fields/DateTimeField'
 
@@ -30,6 +31,10 @@ const defaultProps = {
   defaultAssociation: null
 }
 export default class Task extends Component {
+  state = {
+    formValues: null
+  }
+
   save = async task => {
     try {
       const query = 'associations[]=crm_task.reminders'
@@ -39,6 +44,15 @@ export default class Task extends Component {
     } catch (error) {
       throw error
     }
+  }
+
+  onClickMoreOptions = formValues => this.setState({ formValues })
+  handleDrawerClose = formProps => {
+    if (formProps && !formProps.preventDefault) {
+      formProps.form.reset()
+    }
+
+    this.setState({ formValues: null })
   }
 
   render() {
@@ -64,60 +78,81 @@ export default class Task extends Component {
                 : values.associations.length > 0)
 
             return (
-              <FormContainer onSubmit={props.handleSubmit}>
-                <Title />
-                {isActive && (
-                  <React.Fragment>
-                    <Flex
-                      alignCenter
-                      justifyBetween
-                      style={{ marginBottom: '1.5em' }}
-                    >
-                      <TaskType />
-                      <FieldContainer
-                        justifyBetween
-                        alignCenter
-                        style={{
-                          margin: '0 0 0 1em',
-                          flex: 2
-                        }}
-                      >
-                        <DateTimeField
-                          name="dueDate"
-                          selectedDate={values.dueDate}
-                        />
-                        <Reminder dueDate={values.dueDate} />
-                      </FieldContainer>
-                    </Flex>
-                    <AssociationsList
-                      associations={values.associations}
-                      defaultAssociation={defaultAssociation}
-                    />
-                  </React.Fragment>
-                )}
-                <Flex justifyBetween alignCenter>
-                  <Field
-                    name="associations"
-                    render={({ input }) => (
-                      <AssociationsCTA
-                        disabled={submitting}
-                        associations={values.associations}
-                        onClick={input.onChange}
-                      />
-                    )}
-                  />
+              <React.Fragment>
+                <FormContainer onSubmit={props.handleSubmit}>
+                  <Title />
                   {isActive && (
-                    <Flex justifyBetween alignCenter>
-                      <ActionButton
-                        type="submit"
-                        disabled={submitting || !values.title}
+                    <React.Fragment>
+                      <Flex
+                        alignCenter
+                        justifyBetween
+                        style={{ marginBottom: '1.5em' }}
                       >
-                        {submitting ? 'Saving...' : 'Save'}
-                      </ActionButton>
-                    </Flex>
+                        <TaskType />
+                        <FieldContainer
+                          justifyBetween
+                          alignCenter
+                          style={{
+                            margin: '0 0 0 1em',
+                            flex: 2
+                          }}
+                        >
+                          <DateTimeField
+                            name="dueDate"
+                            selectedDate={values.dueDate}
+                          />
+                          <Reminder dueDate={values.dueDate} />
+                        </FieldContainer>
+                      </Flex>
+                      <AssociationsList
+                        associations={values.associations}
+                        defaultAssociation={defaultAssociation}
+                      />
+                    </React.Fragment>
                   )}
-                </Flex>
-              </FormContainer>
+                  <Flex justifyBetween alignCenter>
+                    <Field
+                      name="associations"
+                      render={({ input }) => (
+                        <AssociationsCTA
+                          disabled={submitting}
+                          associations={values.associations}
+                          onClick={input.onChange}
+                        />
+                      )}
+                    />
+                    {isActive && (
+                      <Flex justifyBetween alignCenter>
+                        <ActionButton
+                          type="button"
+                          appearance="link"
+                          disabled={this.state.showDrawer}
+                          onClick={() => this.onClickMoreOptions(values)}
+                          style={{ fontWeight: 500 }}
+                        >
+                          More Options
+                        </ActionButton>
+                        <ActionButton
+                          type="submit"
+                          disabled={submitting || !values.title}
+                        >
+                          {submitting ? 'Saving...' : 'Save'}
+                        </ActionButton>
+                      </Flex>
+                    )}
+                  </Flex>
+                </FormContainer>
+
+                {this.state.formValues && (
+                  <EventDrawer
+                    isOpen
+                    user={this.props.user}
+                    initialValues={this.state.formValues}
+                    onClose={this.handleDrawerClose}
+                    submitCallback={() => this.handleDrawerClose(props)}
+                  />
+                )}
+              </React.Fragment>
             )
           }}
         />
@@ -128,3 +163,5 @@ export default class Task extends Component {
 
 Task.propTypes = propTypes
 Task.defaultProps = defaultProps
+
+// todo: final-form mutator

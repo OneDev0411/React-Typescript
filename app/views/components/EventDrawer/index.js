@@ -72,11 +72,11 @@ export class EventDrawer extends Component {
     super(props)
 
     this.state = {
-      event: this.props.event,
+      event: props.event,
       isDisabled: false
     }
 
-    this.isNewEvent = !this.props.event && !this.props.eventId
+    this.isNewEvent = !props.event && !props.eventId && props.initialValues
   }
 
   load = async () => {
