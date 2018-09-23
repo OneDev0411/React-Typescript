@@ -20,6 +20,7 @@ export default ({
   },
   tooltipStyles = {},
   children,
+  leftAlign = false,
   size = '', // just accepet large for now
   type = '', // just accepet error for now
   isCustom = true // this is a temporary prop. don't use it.
@@ -35,7 +36,8 @@ export default ({
         <Tooltip
           id="rechat-tooltip"
           className={cn(`rechat-tooltip ${size} ${type}`, {
-            'is-customized': captionIsHTML && isCustom
+            'is-customized': captionIsHTML && isCustom,
+            'text-align--left': leftAlign
           })}
           style={{ ...tooltipStyles }}
         >
