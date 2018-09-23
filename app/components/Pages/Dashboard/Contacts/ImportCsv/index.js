@@ -18,6 +18,10 @@ import PageHeader from '../../../../../views/components/PageHeader'
 import { CloseButton } from '../../../../../views/components/Button/CloseButton'
 
 class ImportCsv extends React.Component {
+  state = {
+    owner: this.props.user
+  }
+
   componentWillUnmount() {
     this.props.resetCsvImport()
   }
@@ -35,6 +39,9 @@ class ImportCsv extends React.Component {
 
     return currentWizardStep
   }
+
+  onChangeOwner = owner =>
+    console.log(owner) || this.setState({ owner: owner.value })
 
   render() {
     const { currentWizardStep, isCurrentStepValid } = this.props
@@ -70,13 +77,16 @@ class ImportCsv extends React.Component {
 
           {(currentWizardStep === CONTACTS__IMPORT_CSV__STEP_SELECT_FILE ||
             currentWizardStep === CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE) && (
-            <SelectFile />
+            <SelectFile
+              onChangeOwner={this.onChangeOwner}
+              owner={this.state.owner}
+            />
           )}
           {currentWizardStep === CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS && (
-            <Mapper />
+            <Mapper owner={this.state.owner} />
           )}
           {currentWizardStep === CONTACTS__IMPORT_CSV__STEP_UPLOAD_CONTACTS && (
-            <UploadContacts />
+            <UploadContacts owner={this.state.owner} />
           )}
 
           <Footer />
@@ -86,12 +96,13 @@ class ImportCsv extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ user, contacts }) {
   const { importCsv } = contacts
   const { file, currentWizardStep, isCurrentStepValid } = importCsv
 
   return {
     file,
+    user,
     currentWizardStep,
     isCurrentStepValid
   }
