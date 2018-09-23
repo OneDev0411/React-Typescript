@@ -11,7 +11,8 @@ export const Item = styled.div`
   white-space: nowrap;
   color: ${props => (props.isActive ? '#fff' : '#000')};
   background-color: ${props => (props.isActive ? primary : '#fff')};
-  font-weight: ${props => (props.isSelected && !props.isActive ? 700 : 400)};
+  font-weight: ${props =>
+    props.isSelected && !props.isActive && !props.isDisabled ? 700 : 400};
 
   &:hover,
   &:focus {
