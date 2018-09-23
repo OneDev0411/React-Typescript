@@ -134,13 +134,17 @@ class EditDigitalForm extends React.Component {
     }
   }
 
-  setFormValues = values => {
+  setFormValues = (values, forceUpdate = false) => {
     const newValues = {
       ...this.values,
       ...values
     }
 
     this.values = newValues
+
+    if (forceUpdate) {
+      return this.forceUpdate()
+    }
   }
 
   handleSave = async () => {
