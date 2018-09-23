@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import { compose, withState, pure } from 'recompose'
 import Compose from '../../../../Partials/Compose'
 import { hasRecipients } from '../../../../../utils/helpers'
-import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import LeaveIcon from '../../Partials/Svgs/LeaveIcon'
 import HelpIcon from '../../Partials/Svgs/HelpIcon'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
+import Tooltip from '../../../../../views/components/tooltip'
 
 const enhance = compose(
   pure,
@@ -49,13 +49,9 @@ const ComposeWrapper = ({
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
         {OnLeaveClick && (
-          <OverlayTrigger
+          <Tooltip
             placement="bottom"
-            overlay={
-              <Tooltip id="popover-leave">
-                {directRoom ? 'Archive chat' : 'Leave chat'}
-              </Tooltip>
-            }
+            caption={directRoom ? 'Archive chat' : 'Leave chat'}
           >
             <span
               className=" leave-icon"
@@ -76,21 +72,17 @@ const ComposeWrapper = ({
             >
               <LeaveIcon />
             </span>
-          </OverlayTrigger>
+          </Tooltip>
         )}
         {directRoom && (
-          <OverlayTrigger
+          <Tooltip
             placement="bottom"
-            overlay={
-              <Tooltip id="popover-leave">
-                You cannot add members to a direct message room
-              </Tooltip>
-            }
+            caption="You cannot add members to a direct message room"
           >
             <span className=" leave-icon">
               <HelpIcon />
             </span>
-          </OverlayTrigger>
+          </Tooltip>
         )}
       </Modal.Header>
 
