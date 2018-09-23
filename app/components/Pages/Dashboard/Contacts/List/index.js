@@ -258,7 +258,7 @@ class ContactsList extends React.Component {
             onChangeSelectedRows={this.onChangeSelectedRows}
             selectedRows={this.state.selectedRows}
             onRequestDelete={this.handleOnDelete}
-            filters={this.state.filters}
+            filters={this.state.filter}
           />
         </PageContent>
       </PageContainer>
