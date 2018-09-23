@@ -23,7 +23,7 @@ class TextAnnotation extends React.PureComponent {
     }
 
     if (isTextArea) {
-      return <TextArea {...props}>{defaultValue}</TextArea>
+      return <TextArea {...props} defaultValue={defaultValue} />
     }
 
     return <TextInput {...props} defaultValue={defaultValue} />
