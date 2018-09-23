@@ -13,17 +13,7 @@ export default class FormInputs extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      ready: false
-    }
-  }
-
-  componentDidMount() {
     this.setDefaultValues()
-
-    this.setState({
-      ready: true
-    })
   }
 
   setDefaultValues() {
@@ -81,11 +71,6 @@ export default class FormInputs extends React.Component {
   }
 
   render() {
-    const { ready } = this.state
-
-    if (!ready)
-      return null
-
     return <Fragment>{this.props.inputs.map(this.createInput)}</Fragment>
   }
 }

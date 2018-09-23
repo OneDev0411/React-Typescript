@@ -1,8 +1,6 @@
 import React from 'react'
-import cn from 'classnames'
 
 import parseAppearanceString from '../../../../utils/appearance'
-
 import { RadioInput } from './styled'
 
 export default class RadioAnnotation extends React.PureComponent {
@@ -19,19 +17,15 @@ export default class RadioAnnotation extends React.PureComponent {
       height: Math.floor(rect[3] - rect[1])
     }
 
-    const checked = annotation.buttonValue === value
-
-    const name = annotation.fieldName.split('.')[0]
-
     return (
       <RadioInput
-        name={name}
+        name={annotation.fieldName.split('.')[0]}
         appearance={appearance}
         box={box}
         type="radio"
         key={annotation.id}
         value={annotation.buttonValue}
-        defaultChecked={checked}
+        defaultChecked={annotation.buttonValue === value}
         onChange={e => this.props.onValueUpdate(e.target.value)}
       />
     )
