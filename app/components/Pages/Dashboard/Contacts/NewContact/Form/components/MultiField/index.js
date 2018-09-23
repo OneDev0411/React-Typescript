@@ -48,7 +48,7 @@ export function MultiField({
                 padding: '1em',
                 borderWidth: '0 0 1px 1px',
                 borderStyle: 'solid',
-                borderColor: '#dde5ec'
+                borderColor: '#d4d4d4'
               }}
             >
               <Field
@@ -66,8 +66,9 @@ export function MultiField({
               >
                 {index + 1 === fields.length ? (
                   <IconButton
+                    isFit
                     type="button"
-                    color="#2196f3"
+                    iconSize="large"
                     onClick={() =>
                       mutators.push(name, { label: defaultSelectedItem })
                     }
@@ -76,8 +77,9 @@ export function MultiField({
                   </IconButton>
                 ) : (
                   <IconButton
+                    isFit
                     type="button"
-                    color="#2196f3"
+                    iconSize="large"
                     onClick={() => fields.remove(index)}
                   >
                     <RemoveIcon />

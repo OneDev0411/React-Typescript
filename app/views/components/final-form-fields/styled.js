@@ -42,7 +42,8 @@ export const ErrorMessage = styled.div`
 export const Input = styled.input`
   width: 100%;
   padding: 0;
-  border-width: 0;
+  font-size: 1.125rem;
+  border: none;
 
   &:focus {
     outline: none;
