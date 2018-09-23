@@ -24,7 +24,7 @@ export default class Annotations extends React.Component {
   }
 
   componentDidMount() {
-    this.init()
+    setTimeout(() => this.init(), 0)
   }
 
   inputs = []

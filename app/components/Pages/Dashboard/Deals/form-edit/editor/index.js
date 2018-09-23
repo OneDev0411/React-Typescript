@@ -27,7 +27,7 @@ class PDFPreview extends React.Component {
 
   roleColors = {}
 
-  scale = window.devicePixelRatio * 1.8
+  scale = window.devicePixelRatio
   displayWidth = Math.min(window.innerWidth - 80, 900)
 
   onSelectContext = (type, data) =>

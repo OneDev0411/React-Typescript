@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const CheckboxInput = styled.input`
   color: ${props => props.appearance.color};
   font-weight: ${props => (props.appearance.bold ? 'bold' : 'normal')};
-  font-face: ${props => props.appearance.fontFace};
+  font-family: ${props => props.appearance.fontFace};
   position: absolute;
   text-align: center;
   left: ${props => props.box.left}px;
@@ -20,9 +20,5 @@ export const CheckboxInput = styled.input`
     :before {
       content: '✔';
     }
-  }
-
-  :focus {
-    outline: none;
   }
 `

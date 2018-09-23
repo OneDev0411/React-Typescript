@@ -5,7 +5,6 @@ import { addNotification as notify } from 'reapop'
 
 import { saveSubmission, getDeal, getForms } from 'actions/deals'
 
-import { getSubmissionForm } from 'models/Deal/submission'
 import { getFormSize } from 'models/Deal/form'
 import { LoadingDealContainer } from './styled'
 
@@ -25,7 +24,7 @@ class EditDigitalForm extends React.Component {
     isSaving: false,
     pdfDocument: null,
     pdfUrl: '',
-    downloadPercents: 5
+    downloadPercents: 1
   }
 
   componentDidMount() {
@@ -92,13 +91,21 @@ class EditDigitalForm extends React.Component {
       })
     }
 
-    pdfDocument.then(document =>
+    pdfDocument.then(document => {
       this.setState({
         isFormLoaded: true,
-        pdfUrl,
-        pdfDocument: document
+        downloadPercents: 100,
+        pdfUrl
       })
-    )
+
+      window.setTimeout(
+        () =>
+          this.setState({
+            pdfDocument: document
+          }),
+        500
+      )
+    })
   }
 
   changeFormValue = (name, value, forceUpdate = false) => {
@@ -181,10 +188,11 @@ class EditDigitalForm extends React.Component {
       )
     }
 
-    if (!pdfDocument) {
+    if (!pdfDocument || !isFormLoaded) {
       return (
         <LoadingDealContainer>
-          Loading Digital Form
+          {isFormLoaded ? 'Opening Digital Form' : 'Loading Digital Form'}
+
           <ProgressBar
             percents={this.state.downloadPercents}
             indeterminate={this.state.downloadPercents === Infinity}
