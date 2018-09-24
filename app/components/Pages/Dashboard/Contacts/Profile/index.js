@@ -40,7 +40,7 @@ import {
   Card
 } from './styled'
 
-import { PageHeader } from './PageHeader'
+import { Header } from './Header'
 import { Timeline } from './Timeline'
 
 class ContactProfile extends React.Component {
@@ -169,7 +169,7 @@ class ContactProfile extends React.Component {
     return (
       <PageWrapper>
         <PageContainer>
-          <PageHeader contact={contact} />
+          <Header contact={contact} />
 
           <ColumnsContainer>
             <SideColumnWrapper>
