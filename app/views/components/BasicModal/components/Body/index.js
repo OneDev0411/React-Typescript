@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   position: relative;
-  padding: 16px;
+  padding: 1em;
   overflow-x: hidden;
   overflow-y: scroll;
 
