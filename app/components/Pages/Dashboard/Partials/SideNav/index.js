@@ -130,6 +130,7 @@ class appSideNav extends React.Component {
             <SideNavItem isActive={activePath === 'CALENDAR'}>
               <SideNavTooltip caption="Calendar">
                 <Link
+                  inverse
                   to="/dashboard/calendar"
                   className="c-app-sidenav__item__title"
                 >
@@ -144,7 +145,11 @@ class appSideNav extends React.Component {
 
           <SideNavItem isActive={activePath === 'MAP'}>
             <SideNavTooltip caption="Properties">
-              <Link to="/dashboard/mls" className="c-app-sidenav__item__title">
+              <Link
+                inverse
+                to="/dashboard/mls"
+                className="c-app-sidenav__item__title"
+              >
                 <IconProperties />
               </Link>
             </SideNavTooltip>
@@ -154,6 +159,7 @@ class appSideNav extends React.Component {
             <SideNavItem isActive={activePath === 'CONTACTS'}>
               <SideNavTooltip caption="Contacts">
                 <Link
+                  inverse
                   to="/dashboard/contacts"
                   className="c-app-sidenav__item__title"
                 >
@@ -167,6 +173,7 @@ class appSideNav extends React.Component {
             <SideNavItem isActive={activePath === 'DEALS'}>
               <SideNavTooltip caption="Deals">
                 <Link
+                  inverse
                   to="/dashboard/deals"
                   className="c-app-sidenav__item__title"
                 >
@@ -182,7 +189,11 @@ class appSideNav extends React.Component {
             user.agent.office_mlsid === 'CSTPP01' && (
               <SideNavItem isActive={activePath === 'STORE'} caption="Store">
                 <SideNavTooltip caption="Store">
-                  <Link to="/dashboard/website">
+                  <Link
+                    inverse
+                    to="/dashboard/website"
+                    className="c-app-sidenav__item__title"
+                  >
                     <MarketingIcon />
                   </Link>
                 </SideNavTooltip>
@@ -194,6 +205,7 @@ class appSideNav extends React.Component {
           <SideNavItem isActive={activePath === 'NOTIF'}>
             <SideNavTooltip caption="Notifications">
               <Link
+                inverse
                 to="/dashboard/notifications"
                 className="c-app-sidenav__item__title"
               >

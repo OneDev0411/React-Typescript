@@ -201,6 +201,7 @@ export class Timeline extends React.Component {
         {this.state.selectedEvent && (
           <EventDrawer
             isOpen
+            user={this.props.user}
             onClose={this.closeEventDrawer}
             event={this.state.selectedEvent}
             submitCallback={this.handleEditEvent}

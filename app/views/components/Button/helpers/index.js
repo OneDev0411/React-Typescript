@@ -12,7 +12,7 @@ export const iconAims = {
 }
 
 export function isOutline(props) {
-  return props.appearance === 'outline' || props.inverse
+  return props.appearance === 'outline'
 }
 
 export function getIconStatesStyle(props) {

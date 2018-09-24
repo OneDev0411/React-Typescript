@@ -13,10 +13,15 @@ import {
 } from '../../../models/tasks'
 
 import Drawer from '../OverlayDrawer'
+import { Divider } from '../Divider'
 import IconButton from '../Button/IconButton'
 import ActionButton from '../Button/ActionButton'
 import IconDelete from '../SvgIcons/Delete/IconDelete'
-import { DateTimeField, CheckboxField } from '../final-form-fields'
+import {
+  DateTimeField,
+  CheckboxField,
+  AssigneesField
+} from '../final-form-fields'
 
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
@@ -27,23 +32,28 @@ import { Title } from './components/Title'
 import { Description } from './components/Description'
 import { Reminder } from './components/Reminder'
 import { EventType } from './components/EventType'
-import { AssociationsList } from './components/AssociationsList'
+import { Associations } from './components/Associations'
 import { FormContainer, FieldContainer } from './styled'
+
+const QUERY = {
+  associations: ['crm_task.reminders', 'crm_task.assignees']
+}
 
 const propTypes = {
   ...Drawer.propTypes,
   event: PropTypes.any,
   eventId: PropTypes.any,
-  initialValues: PropTypes.any,
+  initialValues: PropTypes.shape(),
   submitCallback: PropTypes.func,
-  deleteCallback: PropTypes.func
+  deleteCallback: PropTypes.func,
+  user: PropTypes.shape().isRequired
 }
 
 const defaultProps = {
   ...Drawer.defaultProps,
   event: null,
   eventId: undefined,
-  initialValues: null,
+  initialValues: {},
   submitCallback: () => {},
   deleteCallback: () => {}
 }
@@ -62,11 +72,13 @@ export class EventDrawer extends Component {
     super(props)
 
     this.state = {
-      event: this.props.event,
       isDisabled: false
     }
 
-    this.isNewEvent = !this.props.event && !this.props.eventId
+    this.isNewEvent =
+      !props.event &&
+      !props.eventId &&
+      Object.keys(props.initialValues).length === 0
   }
 
   load = async () => {
@@ -78,10 +90,9 @@ export class EventDrawer extends Component {
       try {
         this.setState({ isDisabled: true })
 
-        const event = await getTask(
-          this.props.eventId,
-          'associations[]=crm_task.reminders'
-        )
+        const event = await getTask(this.props.eventId, QUERY)
+
+        console.log(event)
 
         this.setState({ event, isDisabled: false })
 
@@ -99,15 +110,14 @@ export class EventDrawer extends Component {
     try {
       let newEvent
       let action = 'created'
-      const query = 'associations[]=crm_task.reminders'
 
       this.setState({ isDisabled: true })
 
       if (event.id) {
-        newEvent = await updateTask(event, query)
+        newEvent = await updateTask(event, QUERY)
         action = 'updated'
       } else {
-        newEvent = await createTask(event, query)
+        newEvent = await createTask(event, QUERY)
       }
 
       this.setState({ isDisabled: false })
@@ -122,9 +132,10 @@ export class EventDrawer extends Component {
   delete = async () => {
     try {
       this.setState({ isDisabled: true })
-      await deleteTask(this.state.event.id)
-      this.setState({ isDisabled: false })
-      this.props.deleteCallback(this.state.event)
+      await deleteTask(this.props.event.id)
+      this.setState({ isDisabled: false }, () =>
+        this.props.deleteCallback(this.props.event)
+      )
     } catch (error) {
       console.log(error)
       this.setState({ isDisabled: false })
@@ -133,20 +144,16 @@ export class EventDrawer extends Component {
   }
 
   handleCreateAssociation = async association => {
-    if (this.isNewEvent) {
-      return Promise.resolve()
-    }
+    const crm_task =
+      this.props.eventId || (this.props.event && this.props.event.id)
 
-    const crm_event =
-      this.props.eventId || (this.state.event && this.state.event.id)
-
-    if (crm_event) {
+    if (crm_task) {
       try {
         const newAssociation = {
           ...association,
-          crm_event
+          crm_task
         }
-        const response = await createTaskAssociation(crm_event, newAssociation)
+        const response = await createTaskAssociation(crm_task, newAssociation)
 
         return response
       } catch (error) {
@@ -158,16 +165,10 @@ export class EventDrawer extends Component {
     return Promise.resolve()
   }
 
-  handleDeleteAssociation = async associationId => {
-    if (this.isNewEvent) {
-      return Promise.resolve()
-    }
-
-    const id = this.props.eventId || (this.state.event && this.state.event.id)
-
-    if (id) {
+  handleDeleteAssociation = async (associationId, eventId) => {
+    if (eventId && associationId) {
       try {
-        const response = await deleteTaskAssociation(id, associationId)
+        const response = await deleteTaskAssociation(eventId, associationId)
 
         return response
       } catch (error) {
@@ -187,7 +188,7 @@ export class EventDrawer extends Component {
 
   render() {
     const { isDisabled } = this.state
-    const { defaultAssociation } = this.props
+    const { defaultAssociation, user } = this.props
 
     return (
       <Drawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
@@ -196,11 +197,17 @@ export class EventDrawer extends Component {
           <LoadSaveReinitializeForm
             initialValues={this.props.initialValues}
             load={this.load}
-            postLoadFormat={event => postLoadFormat(event, defaultAssociation)}
-            preSaveFormat={preSaveFormat}
+            postLoadFormat={event =>
+              postLoadFormat(event, user, defaultAssociation)
+            }
+            preSaveFormat={(values, originalValues) =>
+              preSaveFormat(values, originalValues, user)
+            }
             save={this.save}
             render={props => {
               const { values } = props
+
+              console.log(values, this.isNewEvent)
 
               return (
                 <FormContainer
@@ -225,7 +232,7 @@ export class EventDrawer extends Component {
                   <FieldContainer
                     alignCenter
                     justifyBetween
-                    style={{ marginBottom: '1em' }}
+                    style={{ marginBottom: '2em' }}
                   >
                     <DateTimeField
                       name="dueDate"
@@ -234,9 +241,14 @@ export class EventDrawer extends Component {
                     <Reminder dueDate={values.dueDate} />
                   </FieldContainer>
 
-                  <AssociationsList
+                  <AssigneesField name="assignees" owner={user} />
+
+                  <Divider margin="2em 0" />
+
+                  <Associations
                     associations={values.associations}
                     defaultAssociation={defaultAssociation}
+                    handleCreate={this.handleCreateAssociation}
                     handleDelete={this.handleDeleteAssociation}
                   />
                 </FormContainer>

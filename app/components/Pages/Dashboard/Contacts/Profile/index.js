@@ -106,9 +106,9 @@ class ContactProfile extends React.Component {
       ]
     }))
 
-  deleteEvent = deletedEventId =>
+  deleteEvent = id =>
     this.setState(state => ({
-      timeline: this.filterTimelineById(state, deletedEventId)
+      timeline: this.filterTimelineById(state, id)
     }))
 
   handleAddNote = async text => {
@@ -137,7 +137,7 @@ class ContactProfile extends React.Component {
   }
 
   render() {
-    const { contact, fetchError } = this.props
+    const { user, contact, fetchError } = this.props
 
     if (fetchError) {
       if (fetchError.status === 404) {
@@ -221,6 +221,7 @@ class ContactProfile extends React.Component {
                       className="c-contact-profile-todo-tabs__pane"
                     >
                       <NewTask
+                        user={user}
                         submitCallback={this.addEvent}
                         defaultAssociation={defaultAssociation}
                       />
@@ -238,6 +239,7 @@ class ContactProfile extends React.Component {
                 </div>
               </Tab.Container>
               <Timeline
+                user={user}
                 contact={contact}
                 items={this.state.timeline}
                 isFetching={this.state.isFetchingTimeline}
