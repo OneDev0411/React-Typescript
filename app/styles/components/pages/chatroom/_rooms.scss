@@ -2,7 +2,7 @@
 * Rooms
 */
 %rooms {
-  background-color: #000000;
+  background-color: #ffffff;
   min-height: 100vh;
   position: relative;
 
@@ -15,18 +15,6 @@
     min-height: 81vh;
     max-height: 81vh;
 
-    &::-webkit-scrollbar {
-      width: 7px;
-    }
-
-    &::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px #263445;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: #1A2430;
-    }
-
     .list {
       @extend %rooms-list;
     }
@@ -38,14 +26,14 @@
 }
 
 %rooms-list {
-  color: #fff;
+  color: #000000;
   .item {
     @extend %room-item;
   }
 }
 
 %room-new {
-  background-color: rgba(216, 216, 216, .2);
+  background-color:#003bdf;
   position: absolute;
   width: 290px;
   height: 40px;
@@ -66,7 +54,7 @@
   &:hover {
     cursor: pointer;
     color: #fff;
-    background-color: #003bdf;
+    background-color: #022ca0;
     svg g g {
       fill: #fff;
     }
@@ -88,25 +76,21 @@
   padding: 20px $rooms-padding 0 $rooms-padding;
   min-height: 70px;
   margin-bottom: 10px;
-  border-bottom: 1px solid #212e3d;
+  border-bottom: 1px solid #d4d4d4;
 
-  .focus {
-    border: solid 1px #ffffff;
-    background-color: rgba(216, 216, 216, 0.2);
-  }
   .toggle-sidebar {
     display: block;
     float: right;
     margin-left: 20px;
     height: 30px;
     width: 30px;
-    background-color: rgba(216, 216, 216, 0.2);
+    background-color: #ffffff;
     text-align: center;
     border-radius: 4px;
     padding: 0 4px;
     cursor: pointer;
     .btn-tgl {
-      color: #ffffff;
+      color: #000000;
       margin-left: 0;
       svg {
         display: inline-block;
@@ -115,6 +99,14 @@
     }
     &:hover {
       background-color: #003bdf;
+      .btn-tgl {
+        color: #ffffff;
+      }
+      svg {
+        path {
+          fill: #ffffff;
+        }
+      }
     }
   }
 
@@ -153,12 +145,13 @@
   }
   .title {
     padding: 0;
-    opacity: 0.8;
+    margin-left: 0.5rem;
 
     &.hasNotification {
       opacity: 1;
       span {
         font-weight: bold;
+        color: #003bdf;
       }
     }
     .message-typing {
@@ -185,7 +178,10 @@
     }
   }
   &:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: #f2f2f2;
+    .title{
+      color: #003bdf;
+    }
   }
   &.active {
     background-color: #003bdf;

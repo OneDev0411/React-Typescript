@@ -8,7 +8,6 @@
       font-size: 24px;
       font-weight: 600;
       line-height: 1.0;
-      color: #4a4a4a;
     }
     .close {
       opacity: 1;
@@ -31,17 +30,5 @@
         }
       }
     }
-  }
-}
-
-#popover-leave {
-  font-size: 13px;
-  font-weight: 500;
-  .tooltip-inner {
-    background-color: #333e4c;
-    border-radius: 4px;
-  }
-  .tooltip-arrow {
-    border-bottom-color: #333e4c;
   }
 }

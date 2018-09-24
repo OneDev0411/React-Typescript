@@ -131,7 +131,7 @@ class ContactsList extends React.Component {
 
   handleChangeOrder = ({ value: order }) => {
     this.handleFilterChange(
-      this.state.filters,
+      this.state.filter,
       this.state.searchInputValue,
       0,
       order
@@ -258,7 +258,7 @@ class ContactsList extends React.Component {
             onChangeSelectedRows={this.onChangeSelectedRows}
             selectedRows={this.state.selectedRows}
             onRequestDelete={this.handleOnDelete}
-            filters={this.state.filters}
+            filters={this.state.filter}
           />
         </PageContent>
       </PageContainer>

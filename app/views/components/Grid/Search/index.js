@@ -5,8 +5,7 @@ import _ from 'underscore'
 
 import IconClose from '../../SvgIcons/Close/CloseIcon'
 
-import IconButton from '../../Button/IconButton'
-import { Container, TextInput, Icon, IconSearch } from './styled'
+import { Container, TextInput, Icon, IconSearch, IconButton } from './styled'
 
 class Search extends React.Component {
   constructor(props) {

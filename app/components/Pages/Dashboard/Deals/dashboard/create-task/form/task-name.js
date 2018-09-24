@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Alert from '../../../../Partials/Alert'
 import { Modal, Button } from 'react-bootstrap'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 
 class NewTaskModal extends Component {
   constructor(props) {
@@ -76,23 +77,22 @@ class NewTaskModal extends Component {
           )}
 
           {!isCreatingTask && (
-            <Button
-              className="c-new-task-modal__submit-btn inverse"
+            <ActionButton
+              appearance="outline"
               disabled={!canCreateTask}
               onClick={this.handleCreateTask}
+              style={{ marginRight: '1rem' }}
             >
               Create Task
-            </Button>
+            </ActionButton>
           )}
 
-          <Button
-            bsStyle="primary"
-            className="c-new-task-modal__submit-btn"
+          <ActionButton
             disabled={!canCreateTask}
             onClick={this.handleCreateTaskAndUploadFile}
           >
             {isCreatingTask ? 'Creating Task ...' : 'Create & Upload'}
-          </Button>
+          </ActionButton>
         </Modal.Footer>
       </Modal>
     )

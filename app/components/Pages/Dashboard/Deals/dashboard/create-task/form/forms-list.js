@@ -11,6 +11,7 @@ import {
   setUploadFiles
 } from '../../../../../../../store_actions/deals'
 import TaskName from './task-name'
+import Search from '../../../../../../../views/components/Grid/Search'
 
 class Forms extends React.Component {
   constructor(props) {
@@ -143,9 +144,14 @@ class Forms extends React.Component {
 
           <Modal.Body>
             {_.size(forms) > 5 && (
-              <input
+              <Search
+                disableOnSearch={false}
                 placeholder="Type in to search ..."
                 onChange={e => this.setState({ filter: e.target.value })}
+                debounceTime={500}
+                minimumLength={1}
+                onClearSearch={() => this.setState({ filter: '' })}
+                style={{ margin: '1rem' }}
               />
             )}
 
@@ -216,8 +222,11 @@ function mapStateToProps({ deals }, props) {
   }
 }
 
-export default connect(mapStateToProps, {
-  createFormTask,
-  setSelectedTask,
-  setUploadFiles
-})(Forms)
+export default connect(
+  mapStateToProps,
+  {
+    createFormTask,
+    setSelectedTask,
+    setUploadFiles
+  }
+)(Forms)

@@ -3,19 +3,19 @@ import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import _ from 'underscore'
 import cn from 'classnames'
-import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import SocketStatus from '../SocketStatus'
 import CreateRoom from './create-room'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import UserTyping from '../UserTyping'
 import TwoDirectionArrow from '../../Partials/Svgs/TwoDirectionArrow'
 import SearchInput from '../../../../Partials/SearchInput'
-
+import Tooltip from '../../../../../views/components/tooltip'
 import {
   toggleInstantMode,
   changeActiveRoom,
   toggleChatbar
 } from '../../../../../store_actions/chatroom'
+import Badge from '../../../../../views/components/Badge'
 
 class Rooms extends React.Component {
   constructor(props) {
@@ -65,37 +65,42 @@ class Rooms extends React.Component {
    */
   getRoomAvatar(room) {
     const { user, activeRoom } = this.props
-    const size = 20
-    const color = 'rgba(216, 216, 216, 0.3)'
+    const size = 30
+    const color = '#000000'
     const textSizeRatio = 2.5
-    const fgColor = '#263445'
+    const fgColor = '#ffffff'
 
     if (room.room_type === 'Group') {
-      return <UserAvatar
-        name={room.users.length.toString()}
-        size={size}
-        showStateIndicator={false}
-        color={color}
-        textSizeRatio={textSizeRatio}
-        fgColor={fgColor}
-      />
+      return (
+        <UserAvatar
+          name={room.users.length.toString()}
+          size={size}
+          showStateIndicator={false}
+          color={color}
+          textSizeRatio={textSizeRatio}
+          fgColor={fgColor}
+        />
+      )
     }
 
     // get partner data
-    const User = room.users.length > 1
-      ? _.find(room.users, u => u.id !== user.id)
-      : room.users[0]
+    const User =
+      room.users.length > 1
+        ? _.find(room.users, u => u.id !== user.id)
+        : room.users[0]
 
-    return <UserAvatar
-      userId={User.id}
-      name={User.display_name}
-      image={User.profile_image_url}
-      size={size}
-      color={color}
-      borderColor={room.id === activeRoom ? '#2196f3' : '#303E4D'}
-      textSizeRatio={textSizeRatio}
-      fgColor={fgColor}
-    />
+    return (
+      <UserAvatar
+        userId={User.id}
+        name={User.display_name}
+        image={User.profile_image_url}
+        size={size}
+        color={color}
+        borderColor={room.id === activeRoom ? '#2196f3' : '#303E4D'}
+        textSizeRatio={textSizeRatio}
+        fgColor={fgColor}
+      />
+    )
   }
 
   /**
@@ -113,26 +118,17 @@ class Rooms extends React.Component {
 
   render() {
     const { filter } = this.state
-    const {
-      showChatbar, instantMode, rooms, activeRoom
-    } = this.props
+    const { showChatbar, instantMode, rooms, activeRoom } = this.props
 
     return (
       <div className="rooms">
         <div className="toolbar">
-
           <SearchInput
             onChange={filter => this.onChangeFilter(filter)}
             style={{ width: showChatbar ? 190 : 240 }}
           />
-
-          <OverlayTrigger
-            placement="bottom"
-            overlay={<Tooltip id="popover-leave">Close chat panel</Tooltip>}
-          >
-            <div
-              className="toggle-sidebar"
-            >
+          <Tooltip placement="bottom" caption="Close chat panel">
+            <div className="toggle-sidebar">
               <button
                 onClick={() => {
                   instantMode && this.props.toggleInstantMode()
@@ -143,17 +139,10 @@ class Rooms extends React.Component {
                 <i className="fa fa-angle-double-left fa-2x" />
               </button>
             </div>
-          </OverlayTrigger>
-
-          {
-            showChatbar &&
-            <OverlayTrigger
-              placement="bottom"
-              overlay={<Tooltip id="popover-leave">Expand Fullscreen</Tooltip>}
-            >
-              <div
-                className="toggle-sidebar two-direction-arrow-container"
-              >
+          </Tooltip>
+          {showChatbar && (
+            <Tooltip placement="bottom" caption="Expand Fullscreen">
+              <div className="toggle-sidebar two-direction-arrow-container">
                 <button
                   onClick={e => this.fullScreen(e)}
                   className="c-button--shadow btn-tgl"
@@ -161,57 +150,56 @@ class Rooms extends React.Component {
                   <TwoDirectionArrow className="two-direction-arrow" />
                 </button>
               </div>
-            </OverlayTrigger>
-          }
+            </Tooltip>
+          )}
 
           <SocketStatus />
         </div>
 
-        <div className="list-container">
+        <div className="list-container u-scrollbar--thinner">
           <div className="list">
-            {
-              _.chain(rooms)
-                .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
-                .filter(room =>
-                  room.proposed_title && room
-                    .proposed_title
+            {_.chain(rooms)
+              .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
+              .filter(
+                room =>
+                  room.proposed_title &&
+                  room.proposed_title
                     .toLowerCase()
-                    .includes(filter.toLowerCase()))
-                .sortBy(room => room.updated_at * -1)
-                .map(room =>
-                  <Row
-                    onClick={() => this.props.onSelectRoom(room.id)}
-                    key={`ROOM_CHANNEL_${room.id}`}
-                    className={cn('item', { active: room.id === activeRoom })}
+                    .includes(filter.toLowerCase())
+              )
+              .sortBy(room => room.updated_at * -1)
+              .map(room => (
+                <Row
+                  onClick={() => this.props.onSelectRoom(room.id)}
+                  key={`ROOM_CHANNEL_${room.id}`}
+                  className={cn('item', { active: room.id === activeRoom })}
+                >
+                  <Col sm={1} xs={1} className="avatar vcenter">
+                    {this.getRoomAvatar(room)}
+                  </Col>
+                  <Col
+                    sm={9}
+                    xs={9}
+                    className={cn('title vcenter', {
+                      hasNotification: room.new_notifications > 0
+                    })}
                   >
-                    <Col sm={1} xs={1} className="avatar vcenter">
-                      {this.getRoomAvatar(room)}
-                    </Col>
-                    <Col
-                      sm={9}
-                      xs={9}
-                      className={cn(
-'title vcenter',
-                        { hasNotification: room.new_notifications > 0 }
-                      )}
-                    >
-                      <span>
-                        {this.getRoomTitle(room.proposed_title)}
-                      </span>
-                      <UserTyping roomId={room.id} />
-                    </Col>
+                    <span>{this.getRoomTitle(room.proposed_title)}</span>
+                    <UserTyping roomId={room.id} />
+                  </Col>
 
-                    <Col sm={1} xs={1} className="notifications vcenter">
-                      {
-                        room.new_notifications > 0 &&
-                        <span className="count">
-                          {room.new_notifications}
-                        </span>
-                      }
-                    </Col>
-                  </Row>)
-                .value()
-            }
+                  <Col sm={1} xs={1} className="notifications vcenter">
+                    {room.new_notifications > 0 && (
+                      <Badge>
+                        {room.new_notifications > 99
+                          ? '99+'
+                          : room.new_notifications}
+                      </Badge>
+                    )}
+                  </Col>
+                </Row>
+              ))
+              .value()}
           </div>
         </div>
 

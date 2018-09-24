@@ -1,11 +1,23 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import styled, { css } from 'styled-components'
+
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import CancelButton from '../../../../../../views/components/Button/CancelButton'
 import { updateWizardStep } from '../../../../../../store_actions/contacts'
 import { CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS } from '../../../../../../constants/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
+
+const FooterContainer = styled.div`
+  ${({ bottom }) =>
+    bottom &&
+    css`
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    `};
+`
 
 class Footer extends React.Component {
   onCancel = () =>
@@ -32,10 +44,13 @@ class Footer extends React.Component {
   }
 
   render() {
-    const { isCurrentStepValid } = this.props
+    const { isCurrentStepValid, currentWizardStep } = this.props
 
     return (
-      <div className="contact__import-csv__footer">
+      <FooterContainer
+        bottom={currentWizardStep !== CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS}
+        className="contact__import-csv__footer"
+      >
         <ActionButton onClick={this.onClickNext} disabled={!isCurrentStepValid}>
           {this.getNextButtonCaption()}
         </ActionButton>
@@ -47,7 +62,7 @@ class Footer extends React.Component {
         >
           Cancel
         </ActionButton>
-      </div>
+      </FooterContainer>
     )
   }
 }

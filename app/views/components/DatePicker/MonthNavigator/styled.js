@@ -1,21 +1,22 @@
 import styled from 'styled-components'
+import { primary } from '../../../utils/colors'
 
 export const Container = styled.div`
   position: absolute;
-  right: 0.5rem;
-  top: 0;
+  right: 0rem;
+  top: 4px;
+  display: flex;
 `
 
 export const Button = styled.span`
-  margin-left: 15px;
   cursor: pointer;
-
-  i {
-    font-size: 18px;
-    color: #506379;
-
-    &:hover {
-      color: #2196f3;
+  display: flex;
+  svg > path {
+    fill: #506379;
+  }
+  &:hover {
+    svg > path {
+      fill: ${primary};
     }
   }
 `

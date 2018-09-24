@@ -27,6 +27,8 @@ export function EditForm({ fields, ...props }) {
   return (
     <FinalFormDrawer
       {...props}
+      showReset={false}
+      showCancel={false}
       render={({ form }) => getAllFields(fields, form.mutators)}
     />
   )

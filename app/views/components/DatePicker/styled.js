@@ -31,7 +31,7 @@ export const Container = styled.div`
   }
 
   .DayPicker-Day--selected {
-    background-color: ${primary} !important;
+    background-color: #000000 !important;
     border-radius: 100px !important;
   }
 
