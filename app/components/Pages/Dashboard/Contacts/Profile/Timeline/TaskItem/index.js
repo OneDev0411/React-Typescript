@@ -8,8 +8,8 @@ import { Divider } from '../../../../../../../views/components/Divider'
 import IconBell from '../../../../../../../views/components/SvgIcons/Bell/IconBell'
 import { eventTypesIcons } from '../../../../../../../views/utils/event-types-icons'
 // import { goTo } from '../../../../../../../utils/go-to'
-import { getAssociations } from '../../../../../../../views/CRM/Tasks/components/NewTask/helpers/get-associations'
-import { AssociationItem } from '../../../../../../../views/CRM/Tasks/components/NewTask/components/AssocationItem'
+import { getAssociations } from '../../../../../../../views/components/EventDrawer/helpers/get-associations'
+import { AssociationItem } from '../../../../../../../views/components/AssocationItem'
 import { getReminderLabel } from '../../../../../../../views/CRM/Tasks/components/NewTask/helpers/get-reminder-label'
 import { Status } from './Status'
 import { Container, Title, Description } from './styled'
@@ -130,18 +130,19 @@ export class CRMTaskItem extends React.Component {
           </Flex>
         </Flex>
         <Flex wrap>
-          {this.state.associations.map(association => {
-            const record = association[association.association_type]
-
-            if (record.id === this.props.contact.id) {
+          {this.state.associations.map((association, index) => {
+            if (
+              association[association.association_type].id ===
+              this.props.contact.id
+            ) {
               return null
             }
 
             return (
               <AssociationItem
-                record={record}
-                key={record.id || record.title}
-                removable={false}
+                association={association}
+                key={`association_${index}`}
+                isRemovable={false}
               />
             )
           })}

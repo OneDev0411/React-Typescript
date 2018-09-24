@@ -145,7 +145,7 @@ class UploadContacts extends React.Component {
     const { mappedFields, requestImportCsv } = this.props
 
     try {
-      await requestImportCsv(fileId, this.props.user.id, mappedFields)
+      await requestImportCsv(fileId, this.props.owner.id, mappedFields)
 
       // check worker state manually if socket didn't respond
       this.workerStateTimer = setTimeout(this.getWorkerStatus, 60000)
@@ -219,12 +219,11 @@ class UploadContacts extends React.Component {
   }
 }
 
-function mapStateToProps({ user, contacts }) {
+function mapStateToProps({ contacts }) {
   const { importCsv, attributeDefs } = contacts
 
   return {
     ...importCsv,
-    user,
     attributeDefs
   }
 }

@@ -13,6 +13,7 @@ export async function preSaveFormat(values, originalValues) {
     reminder,
     task_type,
     description,
+    assignees,
     associations
   } = values
 
@@ -23,7 +24,8 @@ export async function preSaveFormat(values, originalValues) {
   const task = {
     title,
     due_date,
-    task_type: task_type.value
+    task_type: task_type.value,
+    assignees: assignees.map(a => a.id)
   }
 
   if (originalValues && originalValues.id && status) {

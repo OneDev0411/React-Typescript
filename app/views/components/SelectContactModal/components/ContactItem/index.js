@@ -35,9 +35,7 @@ function ContactItem(props) {
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
-      <div style={{ width: '32px', height: '32px', borderRadius: '50%' }}>
-        <Avatar {...getAvatarProps(item.summary)} />
-      </div>
+      <Avatar {...getAvatarProps(item.summary)} />
       <div style={{ paddingLeft: '1em' }}>
         <Title>{title}</Title>
         <div style={{ color: '#7f7f7f' }}>{summary}</div>
@@ -55,7 +53,6 @@ function getAvatarProps(user) {
 
   return {
     size: 32,
-    borderRadius: 100,
     image: profile_image_url,
     title:
       email !== display_name && phone_number !== display_name

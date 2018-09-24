@@ -34,6 +34,10 @@ export const buttonBaseStyle = css`
   &[disabled] {
     color: ${grey.A900};
     cursor: not-allowed;
+
+    svg {
+      fill: ${grey.A900};
+    }
   }
 `
 
@@ -90,7 +94,7 @@ export const ButtonAppearances = {
   `,
   link: css`
     ${buttonBaseStyle};
-    color: ${props => props.brandColor || primary};
+    color: ${props => (props.inverse ? '#000' : props.brandColor || primary)};
     background-color: transparent;
 
     &[disabled] {
@@ -103,6 +107,17 @@ export const ButtonAppearances = {
           ? Chromath.towards(props.brandColor, 'black', 0.25).toString()
           : primaryDark};
       text-decoration: none;
+
+      svg {
+        fill: ${props =>
+          props.brandColor
+            ? Chromath.towards(props.brandColor, 'black', 0.25).toString()
+            : primaryDark};
+      }
+    }
+
+    svg {
+      fill: ${props => (props.inverse ? '#000' : props.brandColor || primary)};
     }
   `,
   icon: css`

@@ -1,6 +1,8 @@
 import Fetch from '../../../services/fetch'
 
-const defaultQuery = { 'associations[]': 'crm_task.reminders' }
+const defaultQuery = {
+  associations: ['crm_task.reminders', 'crm_task.assignees']
+}
 
 export async function getContactTimeline(contactId, query = defaultQuery) {
   if (!contactId) {

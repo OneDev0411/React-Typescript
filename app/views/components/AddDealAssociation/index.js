@@ -2,16 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Tooltip from '../tooltip'
-import Button from '../Button/IconButton'
 import { AddAssociation } from '../AddAssociation'
 import SelectDealModal from '../SelectDealModal'
-import Icon from '../SvgIcons/Deals/IconDeal'
 import { normalizeDeal } from '../../utils/association-normalizers'
 
 export class AddDealAssociation extends React.Component {
   static propTypes = {
-    disabled: PropTypes.bool,
-    handleAdd: PropTypes.func.isRequired
+    handleAdd: PropTypes.func.isRequired,
+    buttonRenderer: PropTypes.func.isRequired
   }
 
   onSelectHandler = (deal, closeHandler) =>
@@ -25,16 +23,7 @@ export class AddDealAssociation extends React.Component {
         render={({ isActive, handleClose, handleOpen }) => (
           <div>
             <Tooltip placement="bottom" caption={title}>
-              <Button
-                isFit
-                inverse
-                type="button"
-                iconSize="large"
-                onClick={handleOpen}
-                disabled={this.props.disabled}
-              >
-                <Icon />
-              </Button>
+              {this.props.buttonRenderer(handleOpen)}
             </Tooltip>
             <SelectDealModal
               isOpen={isActive}
