@@ -207,7 +207,7 @@ export class EventDrawer extends Component {
             render={props => {
               const { values } = props
 
-              console.log(values, this.isNewEvent)
+              // console.log(values)
 
               return (
                 <FormContainer
