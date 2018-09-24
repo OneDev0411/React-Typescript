@@ -54,14 +54,14 @@ class SearchDrawer extends React.Component {
 
   handleClose = () => {
     this.setState(initialState)
-    this.searchInputRef.value = ''
+    this.searchInputRef.clear()
 
     this.props.onClose()
   }
 
   handleSelectItem = item => {
     this.setState(initialState)
-    this.searchInputRef.value = ''
+    this.searchInputRef.clear()
 
     this.props.onSelectItem(item)
   }

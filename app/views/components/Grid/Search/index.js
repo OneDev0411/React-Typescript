@@ -42,6 +42,17 @@ class Search extends React.Component {
     this.props.onClearSearch('')
   }
 
+  onRef = ref => {
+    if (!ref || !this.props.inputRef) {
+      return false
+    }
+
+    // add a functionallity to be able clear input outside of the form
+    ref.clear = () => this.setState({ searchValue: '' })
+
+    this.props.inputRef(ref)
+  }
+
   render() {
     const {
       placeholder,
@@ -49,8 +60,7 @@ class Search extends React.Component {
       isSearching,
       disableOnSearch,
       showLoadingOnSearch,
-      showClearSearch,
-      inputRef
+      showClearSearch
     } = this.props
 
     return (
@@ -67,7 +77,7 @@ class Search extends React.Component {
           value={this.state.searchValue}
           placeholder={placeholder}
           onChange={this.handleChange}
-          innerRef={inputRef}
+          innerRef={this.onRef}
           readOnly={disableOnSearch && isSearching}
         />
 
