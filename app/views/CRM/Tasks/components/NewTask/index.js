@@ -17,7 +17,7 @@ import { postLoadFormat } from './helpers/post-load-format'
 import { Title } from './components/Title'
 import { Reminder } from './components/Reminder'
 import { TaskType } from './components/TaskType'
-import { AssociationsCTA } from './components/AssociationsCTA'
+import { AssociationsButtons } from './components/AssociationsButtons'
 import { AssociationsList } from './components/AssociationsList'
 import { FormContainer, FieldContainer } from './styled'
 
@@ -114,7 +114,7 @@ export default class Task extends Component {
                     <Field
                       name="associations"
                       render={({ input }) => (
-                        <AssociationsCTA
+                        <AssociationsButtons
                           disabled={submitting}
                           associations={values.associations}
                           onClick={input.onChange}

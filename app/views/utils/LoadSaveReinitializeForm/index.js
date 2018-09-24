@@ -7,7 +7,7 @@ import { Spinner } from '../../../components/Partials/Loading'
 
 export default class LoadSaveReinitializeForm extends React.Component {
   static propTypes = {
-    initialValues: PropTypes.any,
+    initialValues: PropTypes.shape(),
     load: PropTypes.func.isRequired,
     loading: PropTypes.node,
     postLoadFormat: PropTypes.func,
@@ -17,7 +17,7 @@ export default class LoadSaveReinitializeForm extends React.Component {
 
   static defaultProps = {
     loading: <Spinner />,
-    initialValues: undefined
+    initialValues: {}
   }
 
   constructor(props) {
@@ -34,7 +34,7 @@ export default class LoadSaveReinitializeForm extends React.Component {
   }
 
   componentDidMount() {
-    if (!this.props.initialValues) {
+    if (Object.keys(this.props.initialValues).length === 0) {
       this.load()
     }
   }
@@ -92,7 +92,7 @@ export default class LoadSaveReinitializeForm extends React.Component {
     } = this.props
     const { isLoading, initialValues } = this.state
 
-    return isLoading || !initialValues ? (
+    return isLoading || Object.keys(initialValues).length === 0 ? (
       loading
     ) : (
       <Form {...rest} initialValues={initialValues} onSubmit={this.save} />

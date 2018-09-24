@@ -286,6 +286,7 @@ class CalendarContainer extends React.Component {
         {this.state.showCreateTaskMenu && (
           <EventDrawer
             isOpen
+            user={this.props.user}
             eventId={selectedTaskId}
             onClose={this.closeEventDrawer}
             submitCallback={this.handleEventChange}
@@ -348,8 +349,9 @@ class CalendarContainer extends React.Component {
   }
 }
 
-function mapStateToProps({ calendar }) {
+function mapStateToProps({ user, calendar }) {
   return {
+    user,
     isFetching: calendar.isFetching,
     selectedDate: moment(calendar.selectedDate)
       .utcOffset(0)

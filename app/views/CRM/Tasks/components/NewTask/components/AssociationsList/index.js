@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
-import { AssociationItem } from '../AssocationItem'
+import { AssociationItem } from '../../../../../../components/AssocationItem'
 
 export class AssociationsList extends React.Component {
   isRemovable = id => {
@@ -34,7 +34,7 @@ export class AssociationsList extends React.Component {
         name="associations"
         render={({ input }) => (
           <Flex wrap>
-            {this.props.associations.map(association => {
+            {this.props.associations.map((association, index) => {
               if (!association || !association.association_type) {
                 return null
               }
@@ -43,9 +43,9 @@ export class AssociationsList extends React.Component {
 
               return (
                 <AssociationItem
-                  record={record}
-                  key={record.id || record.title}
-                  removable={this.isRemovable(record.id)}
+                  association={association}
+                  key={`association_${index}`}
+                  isRemovable={this.isRemovable(record.id)}
                   handleRemove={() => {
                     input.onChange(
                       this.props.associations.filter(

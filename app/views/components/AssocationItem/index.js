@@ -1,25 +1,34 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import Avatar from '../../../../components/Avatar'
-import Button from '../../../../components/Button/IconButton'
-import { ShadowLink } from '../../../../components/ShadowLink'
-import CloseIcon from '../../../../components/SvgIcons/Close/CloseIcon'
+import Avatar from '../Avatar'
+import Button from '../Button/IconButton'
+import { ShadowLink } from '../ShadowLink'
+import CloseIcon from '../SvgIcons/Close/CloseIcon'
 
 import { Container, Title, Details } from './styled'
 
 export class AssociationItem extends Component {
   static propTypes = {
-    record: PropTypes.shape().isRequired,
+    association: PropTypes.shape().isRequired,
+    isRemovable: PropTypes.bool,
     handleRemove: PropTypes.func
   }
 
-  onRemove = () => {
-    this.props.handleRemove(this.props.record.id)
-  }
+  onRemove = () =>
+    this.props.handleRemove(
+      this.props.association.id,
+      this.props.association.crm_task
+    )
 
   render() {
-    const { record, removable } = this.props
+    const { association, isRemovable } = this.props
+
+    if (!association.association_type) {
+      return null
+    }
+
+    const record = association[association.association_type]
 
     return (
       <Container>
@@ -29,7 +38,7 @@ export class AssociationItem extends Component {
           <Details>{record.details}</Details>
         </div>
         <ShadowLink href={record.url} target="_blank" />
-        {removable && (
+        {isRemovable && (
           <Button
             isFit
             inverse

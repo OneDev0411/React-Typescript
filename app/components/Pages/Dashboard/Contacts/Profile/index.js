@@ -106,9 +106,9 @@ class ContactProfile extends React.Component {
       ]
     }))
 
-  deleteEvent = deletedEventId =>
+  deleteEvent = id =>
     this.setState(state => ({
-      timeline: this.filterTimelineById(state, deletedEventId)
+      timeline: this.filterTimelineById(state, id)
     }))
 
   handleAddNote = async text => {

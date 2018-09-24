@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import { grey } from '../../../../utils/colors'
-import { merriweatherFamilyStyle } from '../../../../components/Typography/styles'
+import { grey } from '../../utils/colors'
+import { merriweatherFamilyStyle } from '../Typography/styles'
 
 export const Container = styled.div`
   position: relative;

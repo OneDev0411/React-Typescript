@@ -32,7 +32,7 @@ import { Title } from './components/Title'
 import { Description } from './components/Description'
 import { Reminder } from './components/Reminder'
 import { EventType } from './components/EventType'
-import { AssociationsList } from './components/AssociationsList'
+import { Associations } from './components/Associations'
 import { FormContainer, FieldContainer } from './styled'
 
 const QUERY = {
@@ -43,7 +43,7 @@ const propTypes = {
   ...Drawer.propTypes,
   event: PropTypes.any,
   eventId: PropTypes.any,
-  initialValues: PropTypes.any,
+  initialValues: PropTypes.shape(),
   submitCallback: PropTypes.func,
   deleteCallback: PropTypes.func,
   user: PropTypes.shape().isRequired
@@ -53,7 +53,7 @@ const defaultProps = {
   ...Drawer.defaultProps,
   event: null,
   eventId: undefined,
-  initialValues: null,
+  initialValues: {},
   submitCallback: () => {},
   deleteCallback: () => {}
 }
@@ -72,11 +72,13 @@ export class EventDrawer extends Component {
     super(props)
 
     this.state = {
-      event: props.event,
       isDisabled: false
     }
 
-    this.isNewEvent = !props.event && !props.eventId && props.initialValues
+    this.isNewEvent =
+      !props.event &&
+      !props.eventId &&
+      Object.keys(props.initialValues).length === 0
   }
 
   load = async () => {
@@ -130,9 +132,10 @@ export class EventDrawer extends Component {
   delete = async () => {
     try {
       this.setState({ isDisabled: true })
-      await deleteTask(this.state.event.id)
-      this.setState({ isDisabled: false })
-      this.props.deleteCallback(this.state.event)
+      await deleteTask(this.props.event.id)
+      this.setState({ isDisabled: false }, () =>
+        this.props.deleteCallback(this.props.event)
+      )
     } catch (error) {
       console.log(error)
       this.setState({ isDisabled: false })
@@ -141,20 +144,16 @@ export class EventDrawer extends Component {
   }
 
   handleCreateAssociation = async association => {
-    if (this.isNewEvent) {
-      return Promise.resolve()
-    }
+    const crm_task =
+      this.props.eventId || (this.props.event && this.props.event.id)
 
-    const crm_event =
-      this.props.eventId || (this.state.event && this.state.event.id)
-
-    if (crm_event) {
+    if (crm_task) {
       try {
         const newAssociation = {
           ...association,
-          crm_event
+          crm_task
         }
-        const response = await createTaskAssociation(crm_event, newAssociation)
+        const response = await createTaskAssociation(crm_task, newAssociation)
 
         return response
       } catch (error) {
@@ -166,16 +165,10 @@ export class EventDrawer extends Component {
     return Promise.resolve()
   }
 
-  handleDeleteAssociation = async associationId => {
-    if (this.isNewEvent) {
-      return Promise.resolve()
-    }
-
-    const id = this.props.eventId || (this.state.event && this.state.event.id)
-
-    if (id) {
+  handleDeleteAssociation = async (associationId, eventId) => {
+    if (eventId && associationId) {
       try {
-        const response = await deleteTaskAssociation(id, associationId)
+        const response = await deleteTaskAssociation(eventId, associationId)
 
         return response
       } catch (error) {
@@ -214,7 +207,7 @@ export class EventDrawer extends Component {
             render={props => {
               const { values } = props
 
-              // console.log(values)
+              console.log(values, this.isNewEvent)
 
               return (
                 <FormContainer
@@ -252,9 +245,10 @@ export class EventDrawer extends Component {
 
                   <Divider margin="2em 0" />
 
-                  <AssociationsList
+                  <Associations
                     associations={values.associations}
                     defaultAssociation={defaultAssociation}
+                    handleCreate={this.handleCreateAssociation}
                     handleDelete={this.handleDeleteAssociation}
                   />
                 </FormContainer>
