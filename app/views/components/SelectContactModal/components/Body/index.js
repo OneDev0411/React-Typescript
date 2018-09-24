@@ -36,6 +36,17 @@ export const List = styled.div`
   padding-bottom: ${props => (props.isDrawer ? '1em' : 0)};
 `
 
+const Alert = styled.div`
+  color: #f6a623;
+  background: rgba(245, 166, 35, 0.05);
+  border: 1px solid rgba(245, 166, 35, 0.2);
+  padding: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 4px;
+  margin: 10px 16px;
+`
+
 const propTypes = {
   defaultSearchFilter: PropTypes.string,
   handleSelectedItem: PropTypes.func.isRequired,
@@ -141,23 +152,25 @@ class Body extends Component {
                 />
               </div>
             )}
-            {isLoading && <Loading />}
-            {!isLoading &&
-              list.length > 0 && (
-                <ListContainer isDrawer={isDrawer}>
-                  <List isDrawer={isDrawer}>
-                    {list.map((item, index) => (
-                      <ContactItem
-                        item={item}
-                        key={item.id || `downshift_search_result_item_${index}`}
-                        {...getItemProps({ item })}
-                        onClickHandler={this.props.handleSelectedItem}
-                        isHighlighted={highlightedIndex === index}
-                      />
-                    ))}
-                  </List>
-                </ListContainer>
-              )}
+            <ListContainer isDrawer={isDrawer}>
+              <List isDrawer={isDrawer}>
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  list.map((item, index) => (
+                    <ContactItem
+                      item={item}
+                      key={item.id || `downshift_search_result_item_${index}`}
+                      {...getItemProps({ item })}
+                      onClickHandler={this.props.handleSelectedItem}
+                      isHighlighted={highlightedIndex === index}
+                    />
+                  ))
+                )}
+
+                {!isLoading && list.length === 0 && <Alert> No Results</Alert>}
+              </List>
+            </ListContainer>
           </div>
         )}
       />
