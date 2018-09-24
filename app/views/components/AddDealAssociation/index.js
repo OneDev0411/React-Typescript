@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Tooltip from '../tooltip'
 import { AddAssociation } from '../AddAssociation'
-import SelectDealModal from '../SelectDealModal'
+import SearchDealDrawer from '../SearchDealDrawer'
 import { normalizeDeal } from '../../utils/association-normalizers'
 
 export class AddDealAssociation extends React.Component {
@@ -25,13 +25,11 @@ export class AddDealAssociation extends React.Component {
             <Tooltip placement="bottom" caption={title}>
               {this.props.buttonRenderer(handleOpen)}
             </Tooltip>
-            <SelectDealModal
-              isOpen={isActive}
+            <SearchDealDrawer
               title={title}
-              handleOnClose={handleClose}
-              handleSelectedItem={deal =>
-                this.onSelectHandler(deal, handleClose)
-              }
+              isOpen={isActive}
+              onClose={handleClose}
+              onSelect={deal => this.onSelectHandler(deal, handleClose)}
             />
           </div>
         )}
