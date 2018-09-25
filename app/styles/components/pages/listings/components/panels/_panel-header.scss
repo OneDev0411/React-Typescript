@@ -13,15 +13,6 @@
   }
 }
 
-.c-panel__header__button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 140px;
-  height: 40px;
-  justify-content: center;
-}
-
 .c-panel__header__sorting {
   width: 100%;
   position: relative;
@@ -31,47 +22,4 @@
 
 .c-panel__header__sorting__title {
   margin-right: 0.5rem;
-}
-
-.c-panel__header__sorting__dropdown-wrapper {
-  position: relative;
-}
-
-.c-panel__header__sorting__dropdown {
-  padding: 0 1.5rem 0 0;
-  color: $brand-primary;
-  letter-spacing: 1px;
-  &:focus,
-  &:hover {
-    color: $brand-primary;
-    text-decoration: none;
-  }
-  &:after {
-    content: '';
-    position: absolute;
-    right: 0.5rem;
-    top: 8px;
-    width: 12px;
-    height: 7px;
-    background: transparent
-      url('data:image/svg+xml;base64,PHN2ZwogICAgICAgICAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgICAgICAgIHdpZHRoPSIxMiIKICAgICAgICAgICAgaGVpZ2h0PSI3IgogICAgICAgICAgICB2aWV3Qm94PSIwIDAgMTIgNyI+CiAgICAgICAgICAgIDxwYXRoCiAgICAgICAgICAgICAgZmlsbD0iIzIxOTZGMyIKICAgICAgICAgICAgICBkPSJNMTAuNzI1LjEyYS4zOC4zOCAwIDAgMSAuNTUzIDBsLjYwMi42MDFhLjM4LjM4IDAgMCAxIDAgLjU1M0w2LjI3NyA2Ljg3OGEuMzguMzggMCAwIDEtLjU1NCAwTC4xMiAxLjI3NWEuMzguMzggMCAwIDEgMC0uNTUzTC43MjEuMTJhLjM4LjM4IDAgMCAxIC41NTMgMEw2IDQuODQ2IDEwLjcyNS4xMnoiCiAgICAgICAgICAgIC8+CiAgICAgICAgICA8L3N2Zz4=')
-      no-repeat center center;
-  }
-}
-
-.c-panel__header__sorting__checkbox {
-  position: absolute;
-  right: 0;
-  top: -7px;
-
-  @media screen and (min-width: 1920px) {
-    right: auto;
-    left: 220px;
-  }
-
-  .c-listings-panel--table &,
-  .c-listings-panel--grid & {
-    right: auto;
-    left: 220px;
-  }
 }

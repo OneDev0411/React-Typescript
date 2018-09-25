@@ -87,6 +87,7 @@ export function FinalFormDrawer(props) {
               <div style={{ textAlign: 'left' }}>
                 {props.showCancel && (
                   <ActionButton
+                    appearance="outline"
                     disabled={submitting}
                     inverse
                     onClick={props.onClose}
