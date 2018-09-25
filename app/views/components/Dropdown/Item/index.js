@@ -2,31 +2,17 @@ import styled, { css } from 'styled-components'
 
 import { primary } from '../../../../views/utils/colors'
 
-const getStatesStyle = props => {
-  const { isActive, isSelected } = props
-
-  if (isActive) {
-    return css`
-      color: #fff;
-      background-color: ${primary};
-    `
-  } else if (isSelected) {
-    return css`
-      font-weight: 500;
-      color: ${primary};
-    `
-  }
-}
-
 export const Item = styled.div`
-  width: '100%';
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 0.5em 1em;
   cursor: pointer;
   white-space: nowrap;
-  ${props => getStatesStyle(props)};
-  font-weight: ${({ isSelected }) => (isSelected ? 500 : 400)};
+  color: ${props => (props.isActive ? '#fff' : '#000')};
+  background-color: ${props => (props.isActive ? primary : '#fff')};
+  font-weight: ${props =>
+    props.isSelected && !props.isActive && !props.isDisabled ? 700 : 400};
 
   &:hover,
   &:focus {
@@ -39,7 +25,7 @@ export const Item = styled.div`
   }
 
   ${props =>
-    props.item.icon && props.item.iconColor
+    props.item && props.item.icon && props.item.iconColor
       ? css`
           > svg {
             margin-right: 0.5em;

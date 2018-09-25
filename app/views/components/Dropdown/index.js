@@ -7,8 +7,10 @@ import { Item } from './Item'
 import ShadowButton from '../Button/ShadowButton'
 import { SearchInput } from './SearchInput'
 import ArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import ActionButton from '../Button/ActionButton'
+import { grey } from '../../utils/colors'
 
-export const Button = ShadowButton.extend`
+export const Button = ActionButton.extend`
   position: relative;
   width: ${props => (props.fullWidth ? '100%' : 'auto')};
   display: flex;
@@ -17,7 +19,7 @@ export const Button = ShadowButton.extend`
   font-weight: normal;
 
   &:focus {
-    outline-width: 2px;
+    background-color: ${grey.A100};
   }
 `
 
@@ -39,7 +41,8 @@ export const Dropdown = ({
   itemToString = item => item.title,
   itemRenderer,
   defaultSelectedItem,
-  buttonRenderer
+  buttonRenderer,
+  pullRight = false
 }) => (
   <Downshift
     {...input}
@@ -71,6 +74,7 @@ export const Dropdown = ({
               getButtonProps({
                 isBlock: fullWidth,
                 id: buttonId,
+                isOpen,
                 name: input.name,
                 value: selectedItem && selectedItem.title,
                 icon:
@@ -89,6 +93,8 @@ export const Dropdown = ({
             )
           ) : (
             <Button
+              appearance="outline"
+              noBorder
               {...getButtonProps({
                 fullWidth,
                 id: buttonId,
@@ -116,7 +122,8 @@ export const Dropdown = ({
                   maxHeight: fullHeight ? 'auto' : '200px',
                   width: fullWidth ? '100%' : 'auto',
                   position: 'absolute',
-                  left: 0,
+                  left: pullRight ? 'auto' : 0,
+                  right: pullRight ? 0 : 'auto',
                   top: 3,
                   zIndex: 2,
                   overflowY: fullHeight ? 'initial' : 'scroll'

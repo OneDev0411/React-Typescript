@@ -107,30 +107,18 @@ class RoleFormWrapper extends React.Component {
   }
 
   render() {
-    const { isSaving } = this.state
-    const {
-      deal,
-      dealSide,
-      user,
-      modalTitle,
-      allowedRoles,
-      onHide,
-      isOpen,
-      isCommissionRequired
-    } = this.props
-
     return (
       <RoleForm
-        form={user}
-        deal={deal}
-        dealSide={dealSide}
-        modalTitle={modalTitle}
-        isSubmitting={isSaving}
-        isCommissionRequired={isCommissionRequired}
-        isOpen={isOpen}
-        onHide={onHide}
+        form={this.props.role}
+        deal={this.props.deal}
+        dealSide={this.props.dealSide}
+        modalTitle={this.props.modalTitle}
+        isSubmitting={this.state.isSaving}
+        isCommissionRequired={this.props.isCommissionRequired}
+        isOpen={this.props.isOpen}
+        onHide={this.props.onHide}
         onFormSubmit={this.onSubmit}
-        allowedRoles={allowedRoles}
+        allowedRoles={this.props.allowedRoles}
       />
     )
   }

@@ -120,7 +120,7 @@ export function getTimeAgo(time) {
     if (diff < unit.limit || !unit.limit) {
       var diff = Math.floor(diff / unit.in_seconds)
 
-      return `${diff} ${unit.name}${diff > 1 ? 's' : ''}`
+      return `${diff} ${unit.name}${diff > 1 ? 's' : ''} ago`
     }
   }
 }

@@ -120,20 +120,24 @@ class SectionWithFields extends React.Component {
         const key = `${this.props.section}_field_${index}`
 
         const getTitle = () => {
-          let title = attribute_def.label
-
-          if (!field.label) {
-            return title
+          if (field.label) {
+            return field.label
           }
 
-          switch (attribute_def.name) {
-            case 'website':
-              return title
-            case 'important_date':
-              return field.label
-            default:
-              return `${field.label} ${title}`
+          if (value && attribute_def.has_label) {
+            return attribute_def.labels[0]
           }
+
+          return attribute_def.label
+
+          // switch (attribute_def.name) {
+          //   case 'website':
+          //     return title
+          //   case 'important_date':
+          //     return field.label
+          //   default:
+          //     return `${field.label} ${title}`
+          // }
         }
 
         if (attribute_def.name === 'source_type') {
@@ -202,6 +206,7 @@ class SectionWithFields extends React.Component {
         {(addNewFieldButtonText || showAddNewCustomAttributeButton) && (
           <div
             style={{
+              textAlign: 'center',
               marginTop: sectionFields ? 0 : '0.5em'
             }}
           >

@@ -1,5 +1,5 @@
 .contact__import-csv {
-  padding-bottom: 30px;
+  padding-bottom: 2em;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
@@ -16,35 +16,33 @@
   overflow: auto;
 
   .current-step {
-    margin-top: 20px;
+    margin-top: 1.5em;
     text-align: center;
     font-weight: 500;
-  }
+  } 
 }
 
 .contact__import-csv--mapper {
-  margin: 50px 0 250px 0;
-  padding: 0 16px;
+  margin: 3em 0 16em 0;
+  padding: 0 1.5em;
   min-height: 56.5vh;
 
   .column-row {
     display: flex;
     align-items: center;
-    font-size: 14px;
-    color: #17283a;
-    margin-bottom: 10px;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
     height: 56px;
-    border-radius: 4px;
+    border-radius: 3px;
     background-color: #ffffff;
-    border: solid 1px #e7eef2;
-    padding: 0 15px;
+    border: solid 1px $gray;
+    padding: 0 1rem;
 
     &.heading {
       padding: 0;
       background-color: transparent;
       border: none;
       font-weight: 500;
-      color: #8da2b5;
     }
 
     .name {
@@ -55,7 +53,6 @@
 
       &.show-empty-cta {
         cursor: pointer;
-        color: #62778c;
         text-decoration: underline;
         &:focus {
           outline: none;
@@ -134,24 +131,16 @@
   }
 }
 
-.contact__import-csv--select-file {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 62vh;
-}
-
-.contact__import-csv--select-file
-  > .contact__import-csv--select-file__dropzone {
+.contact__import-csv--select-file__dropzone {
+  height: 20vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 90%;
-  height: 210px;
   border-radius: 3px;
   background-color: #f0f4f7;
-  border: 1px dashed #62778c;
+  border: 1px dashed $gray;
   &.hasFile {
     background-color: rgba(33, 150, 243, 0.05);
   }
@@ -161,17 +150,16 @@
   }
 
   .inner {
-    font-size: 14px;
-    color: #758a9e;
+    font-size: 0.875rem;
   }
 
   .inner > img {
-    width: 50px;
-    margin-bottom: 15px;
+    width: 3rem;
+    margin-bottom: 1rem;
   }
 
   .inner .link {
-    color: #003bdf;
+    color: $brand-primary;
     cursor: pointer;
   }
 }

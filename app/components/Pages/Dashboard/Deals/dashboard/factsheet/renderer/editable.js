@@ -10,9 +10,15 @@ import ContextDiscrepency from '../../context-discrepency'
 import ActionButton from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 import { primary } from 'views/utils/colors'
+import { grey } from '../../../../../../../views/utils/colors'
+
+const SaveButton = ActionButton.extend`
+  padding: 0 0.5rem;
+`
 
 const DeleteButton = IconButton.extend`
-  color: #a4a4a4;
+  padding: 0;
+  color: ${grey.A600};
   &:hover {
     color: ${primary};
   }
@@ -211,7 +217,7 @@ export default class Editable extends React.Component {
                   }
                 />
 
-                <ActionButton
+                <SaveButton
                   size="small"
                   appearance="link"
                   onClick={e => {
@@ -220,7 +226,7 @@ export default class Editable extends React.Component {
                   }}
                 >
                   SAVE
-                </ActionButton>
+                </SaveButton>
 
                 <DeleteButton
                   size="small"

@@ -1,16 +1,27 @@
 import styled from 'styled-components'
 import { primary, grey } from '../../../utils/colors'
 import IconSearchBase from '../../SvgIcons/Search/IconSearch'
+import IconButtonFlex from '../../Button/IconButton'
 
 export const Container = styled.div`
   display: flex;
   align-items: center;
   padding-left: 16px;
   border-radius: 4px;
-  background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
-  border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
+  background-color: #f9f9f9;
+  border: solid 1px #d4d4d4;
+
   :hover {
-    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A100)};
+    background-color: ${grey.A100};
+  }
+
+  :focus-within {
+    background-color: #ffff;
+    border-color: ${primary};
+
+    :hover {
+      background-color: #fff;
+    }
   }
 `
 
@@ -23,6 +34,10 @@ export const TextInput = styled.input`
   font-family: Barlow, sans-serif;
   background-color: transparent;
   caret-color: ${primary};
+
+  ::-ms-clear {
+    display: none;
+  }
 
   ::-webkit-input-placeholder {
     font-size: 1rem;
@@ -59,4 +74,8 @@ export const IconSearch = IconSearchBase.extend`
 export const Icon = styled.div`
   color: ${grey.A900};
   padding-top: ${props => (props.isSearching ? '0' : '9px')};
+`
+
+export const IconButton = IconButtonFlex.extend`
+  display: block;
 `

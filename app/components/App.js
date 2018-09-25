@@ -297,10 +297,10 @@ class App extends Component {
       const isValidBrowser = browser.satisfies({
         // declare browsers per OS
         windows: {
-          'internet explorer': '>11'
+          'Internet Explorer': '>10'
         },
         macos: {
-          safari: '>11'
+          safari: '>10.1.2'
         },
 
         // or in general

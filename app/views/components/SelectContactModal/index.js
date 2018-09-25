@@ -26,8 +26,8 @@ function SelectContactModal(props) {
 
   return (
     <BareModal
-      isOpen={props.isOpen}
       contentLabel={title}
+      isOpen={props.isOpen}
       onRequestClose={handleOnClose}
     >
       <Header title={title}>

@@ -22,7 +22,7 @@ export const Button = LinkButton.extend`
   }
 `
 
-export const Icon = ArrowDropDown.extend`
+export const IconArrow = ArrowDropDown.extend`
   position: relative;
   margin-left: 1em;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
@@ -70,17 +70,20 @@ export function EventType() {
           items={ITEMS}
           fullHeight
           style={{ marginBottom: '1em' }}
-          buttonRenderer={props => (
+          buttonRenderer={({ icon: Icon, iconColor, ...props }) => (
             <Button {...props}>
               <Flex alignCenter>
-                {props.icon && (
-                  <props.icon
-                    style={{ marginRight: '0.5em', fill: props.iconColor }}
+                {Icon && (
+                  <Icon
+                    style={{
+                      marginRight: '0.5em',
+                      fill: iconColor || '#000'
+                    }}
                   />
                 )}
                 {props.value}
               </Flex>
-              <Icon isOpen={props.isOpen} />
+              <IconArrow isOpen={props.isOpen} />
             </Button>
           )}
         />

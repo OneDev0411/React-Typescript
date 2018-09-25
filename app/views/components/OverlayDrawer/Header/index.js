@@ -8,7 +8,7 @@ const Header = ({ title, children, onClose }) => (
   <Container>
     {title && <Title>{title}</Title>}
     {children}
-    <IconButton isFit iconSize="large" inverse onClick={onClose}>
+    <IconButton type="button" isFit iconSize="large" inverse onClick={onClose}>
       <CloseIcon />
     </IconButton>
   </Container>

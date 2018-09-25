@@ -94,12 +94,12 @@ class CalendarContainer extends React.Component {
   /**
    * open create task menu
    */
-  openEventDrawerHandler = () => this.setState({ showCreateTaskMenu: true })
+  openEventDrawer = () => this.setState({ showCreateTaskMenu: true })
 
   /**
    * close create task menu
    */
-  closeEventDrawerHandler = () =>
+  closeEventDrawer = () =>
     this.setState({
       showCreateTaskMenu: false,
       selectedTaskId: null
@@ -179,28 +179,35 @@ class CalendarContainer extends React.Component {
   }
 
   onClickTask = selectedTaskId =>
-    this.setState(() => ({ selectedTaskId }), this.openEventDrawerHandler)
+    this.setState(() => ({ selectedTaskId }), this.openEventDrawer)
 
-  handleCalendarStateAfterEventChanges = async task => {
-    // todo: after updating duedate and reminder calendar isn't updated
-    const { startRange, endRange, getCalendar, setDate } = this.props
+  handleEventChange = async (task, action) => {
+    const {
+      startRange,
+      endRange,
+      getCalendar,
+      setDate,
+      resetCalendar
+    } = this.props
     const timestamp = task.due_date
+
+    const isInRange = timestamp >= startRange && timestamp <= endRange
+    const isTaskUpdated = action === 'updated'
     const newSelectedDate = new Date(timestamp * 1000)
 
-    if (timestamp >= startRange && timestamp <= endRange) {
+    this.closeEventDrawer()
+
+    if (isInRange || isTaskUpdated) {
       this.setLoadingPosition(LOADING_POSITIONS.Middle)
 
-      const [startRange, endRange] = createDayRange(timestamp)
-
       batchActions([
+        resetCalendar(),
         setDate(newSelectedDate),
-        getCalendar(startRange, endRange)
+        await getCalendar(startRange, endRange)
       ])
 
       this.scrollIntoView(newSelectedDate)
     }
-
-    this.closeEventDrawerHandler()
   }
 
   scrollIntoView = (date, options = {}) => {
@@ -271,23 +278,21 @@ class CalendarContainer extends React.Component {
   }
 
   render() {
-    const {
-      isMenuOpen,
-      showCreateTaskMenu,
-      loadingPosition,
-      selectedTaskId
-    } = this.state
+    const { isMenuOpen, loadingPosition, selectedTaskId } = this.state
     const { selectedDate, isFetching } = this.props
 
     return (
       <Container isOpen={isMenuOpen}>
-        <EventDrawer
-          eventId={selectedTaskId}
-          isOpen={showCreateTaskMenu}
-          onClose={this.closeEventDrawerHandler}
-          submitCallback={this.handleCalendarStateAfterEventChanges}
-          deleteCallback={this.handleCalendarStateAfterEventChanges}
-        />
+        {this.state.showCreateTaskMenu && (
+          <EventDrawer
+            isOpen
+            user={this.props.user}
+            eventId={selectedTaskId}
+            onClose={this.closeEventDrawer}
+            submitCallback={this.handleEventChange}
+            deleteCallback={this.handleEventChange}
+          />
+        )}
 
         <Menu isOpen={isMenuOpen} width={302}>
           <MenuContainer>
@@ -317,7 +322,7 @@ class CalendarContainer extends React.Component {
             </PageHeader.Title>
 
             <PageHeader.Menu>
-              <ActionButton onClick={this.openEventDrawerHandler}>
+              <ActionButton onClick={this.openEventDrawer}>
                 Add Event
               </ActionButton>
             </PageHeader.Menu>
@@ -344,8 +349,9 @@ class CalendarContainer extends React.Component {
   }
 }
 
-function mapStateToProps({ calendar }) {
+function mapStateToProps({ user, calendar }) {
   return {
+    user,
     isFetching: calendar.isFetching,
     selectedDate: moment(calendar.selectedDate)
       .utcOffset(0)
@@ -364,3 +370,5 @@ export default connect(
     resetCalendar
   }
 )(CalendarContainer)
+
+// bug: after editing the event calendar doesn't update

@@ -1,18 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Button from '../Button/IconButton'
 import { AddAssociation } from '../AddAssociation'
-import Icon from '../SvgIcons/Contacts/IconContacts'
-import SelectContactModal from '../SelectContactModal'
+import { SearchContactDrawer } from '../SearchContactDrawer'
 import Tooltip from '../tooltip'
 
 import { normalizeContact } from '../../utils/association-normalizers'
 
 export class AddContactAssociation extends React.Component {
   static propTypes = {
-    disabled: PropTypes.bool,
-    handleAdd: PropTypes.func.isRequired
+    handleAdd: PropTypes.func.isRequired,
+    buttonRenderer: PropTypes.func.isRequired
   }
 
   add = (contact, callback) =>
@@ -26,22 +24,13 @@ export class AddContactAssociation extends React.Component {
         render={({ isActive, handleClose, handleOpen }) => (
           <div>
             <Tooltip placement="bottom" caption={title}>
-              <Button
-                isFit
-                inverse
-                type="button"
-                iconSize="large"
-                onClick={handleOpen}
-                disabled={this.props.disabled}
-              >
-                <Icon />
-              </Button>
+              {this.props.buttonRenderer(handleOpen)}
             </Tooltip>
-            <SelectContactModal
+            <SearchContactDrawer
               title={title}
               isOpen={isActive}
-              handleSelectedItem={contact => this.add(contact, handleClose)}
-              handleOnClose={handleClose}
+              onClose={handleClose}
+              onSelect={contact => this.add(contact, handleClose)}
             />
           </div>
         )}

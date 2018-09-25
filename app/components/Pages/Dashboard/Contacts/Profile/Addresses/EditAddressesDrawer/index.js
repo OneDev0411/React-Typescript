@@ -87,6 +87,8 @@ class EditAddressesForm extends React.Component {
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
         title="Edit Addresses"
+        showReset={false}
+        showCancel={false}
       >
         <FieldArray name="addresses">
           {({ fields }) => (
@@ -112,7 +114,10 @@ class EditAddressesForm extends React.Component {
                         <p>
                           <b>{address && getFullAddress(address.fields)}</b>
                         </p>
-                        <label htmlFor={`is_primary_${index}`}>
+                        <label
+                          htmlFor={`is_primary_${index}`}
+                          style={{ display: 'flex', alignItems: 'center' }}
+                        >
                           <Field
                             id={`is_primary_${index}`}
                             name="is_primary"

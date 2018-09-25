@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import Flex from 'styled-flex-component'
+
 import { setUploadAttributes } from '../../../../../../../store_actions/deals'
-import ActionButton from 'components/Button/ActionButton'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 
 class FileName extends React.Component {
   constructor(props) {
@@ -43,7 +45,7 @@ class FileName extends React.Component {
     const { isActive } = this.state
 
     return (
-      <div>
+      <Flex alignCenter style={{ height: '100%' }}>
         <img src="/static/images/deals/document.png" alt="" />
 
         <input
@@ -58,6 +60,7 @@ class FileName extends React.Component {
 
         {isActive ? (
           <ActionButton
+            size="small"
             // className="c-button--shadow save"
             onClick={() => this.save(file)}
           >
@@ -65,6 +68,7 @@ class FileName extends React.Component {
           </ActionButton>
         ) : (
           <ActionButton
+            size="small"
             appearance="link"
             className={cn({
               canEditName: isActive
@@ -74,7 +78,7 @@ class FileName extends React.Component {
             EDIT
           </ActionButton>
         )}
-      </div>
+      </Flex>
     )
   }
 }

@@ -26,7 +26,7 @@ class TableView extends React.Component {
       header: 'Price',
       id: 'price',
       accessor: listing => this.getProp(listing, 'price'),
-      render: ({ rowData: listing }) => this.getProp(listing, 'price')
+      render: ({ rowData: listing }) => `$${this.getProp(listing, 'price')}`
     },
     {
       header: 'Beds',
@@ -51,7 +51,7 @@ class TableView extends React.Component {
       id: 'pricePerSquareFoot',
       accessor: listing => this.getProp(listing, 'pricePerSquareFoot'),
       render: ({ rowData: listing }) =>
-        this.getProp(listing, 'pricePerSquareFoot')
+        `$${this.getProp(listing, 'pricePerSquareFoot')}`
     },
     {
       header: 'Built Year',

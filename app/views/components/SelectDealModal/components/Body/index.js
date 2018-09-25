@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
@@ -8,25 +7,10 @@ import { Item } from './Item'
 import SearchInput from './SearchInput'
 import Loading from '../../../../../components/Partials/Loading'
 import { searchDeals } from '../../../../../models/Deal/search'
-
-const ListContainer = styled.div`
-  position: relative;
-  height: calc(100vh - 172px);
-  padding: 1rem 0;
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  @media screen and (min-width: 48em) {
-    height: 280px;
-  }
-`
-
-const List = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-`
+import {
+  ListContainer,
+  List
+} from '../../../SelectContactModal/components/Body'
 
 const propTypes = {
   deals: PropTypes.arrayOf(PropTypes.shape),
@@ -85,7 +69,7 @@ class Body extends Component {
 
   render() {
     const { items, isSearching } = this.state
-    const { defaultSearchFilter } = this.props
+    const { defaultSearchFilter, isDrawer } = this.props
     const defaultInputValue =
       typeof defaultSearchFilter !== 'string' ? '' : defaultSearchFilter
 
@@ -102,12 +86,12 @@ class Body extends Component {
                 inputProps={{
                   ...getInputProps({
                     onChange: this.handleOnChange,
-                    placeholder: 'Search for a contact...'
+                    placeholder: 'Search for a deal...'
                   })
                 }}
               />
             </div>
-            <ListContainer>
+            <ListContainer isDrawer={isDrawer}>
               {isSearching && <Loading />}
               {!isSearching &&
                 this.state.error && (
@@ -126,7 +110,7 @@ class Body extends Component {
                 )}
               {!isSearching &&
                 items.length > 0 && (
-                  <List className="u-scrollbar--thinner">
+                  <List className="u-scrollbar--thinner" isDrawer={isDrawer}>
                     {items.map((item, index) => (
                       <Item
                         item={item}

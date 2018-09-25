@@ -4,10 +4,11 @@ import { getReminderLabel } from './get-reminder-label'
 /**
  * Format form data for api model
  * @param {object} task The Task entity
+ * @param {object} owner logged in user
  * @param {object} defaultAssociation The default association
  * @returns {Promise} a formated Task
  */
-export async function postLoadFormat(task, defaultAssociation) {
+export async function postLoadFormat(task, owner, defaultAssociation) {
   const REMINDER_DEFAULT_LABEL = '15 Minutes Before'
 
   let reminder = {
@@ -15,17 +16,12 @@ export async function postLoadFormat(task, defaultAssociation) {
     value: REMINDER_DEFAULT_LABEL
   }
 
-  let associations = []
-
-  if (defaultAssociation) {
-    associations.push(defaultAssociation)
-  }
-
   if (!task) {
     return {
-      reminder,
-      associations,
+      assignees: [owner],
+      associations: defaultAssociation ? [defaultAssociation] : [],
       dueDate: new Date(),
+      reminder,
       task_type: { title: 'Call', value: 'Call' }
     }
   }
@@ -45,7 +41,23 @@ export async function postLoadFormat(task, defaultAssociation) {
     reminder = { title, value: title }
   }
 
-  associations = await getAssociations(task)
+  if (
+    Array.isArray(reminders) &&
+    reminders.length > 0 &&
+    reminders[reminders.length - 1].timestamp
+  ) {
+    const { timestamp } = reminders[reminders.length - 1]
+
+    const title = getReminderLabel(dueDate, timestamp * 1000)
+
+    reminder = { title, value: title }
+  }
+
+  if (task.assignees == null) {
+    task.assignees = []
+  }
+
+  task.associations = await getAssociations(task)
 
   return {
     ...task,
@@ -54,7 +66,6 @@ export async function postLoadFormat(task, defaultAssociation) {
       value: task.task_type
     },
     reminder,
-    dueDate: new Date(dueDate),
-    associations
+    dueDate: new Date(dueDate)
   }
 }

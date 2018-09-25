@@ -1,9 +1,11 @@
 import React from 'react'
 import _ from 'underscore'
+import cn from 'classnames'
 import AutoSizeInput from '../AutoSizeInput'
 import UserAvatar from '../UserAvatar'
 
 export default class extends React.Component {
+  state = { isFocused: false }
   async componentDidMount() {
     const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
@@ -54,11 +56,15 @@ export default class extends React.Component {
     this.props.inputRef(ref.getInput())
   }
 
+  onBlur = () => this.setState({ isFocused: false })
+  onFocus = () => this.setState({ isFocused: true })
+
   render() {
     const { recipients } = this.props
+    const { isFocused } = this.state
 
     return (
-      <div className="tags-container">
+      <div className={cn('tags-container', { isFocused })}>
         <span className="to">To: </span>
 
         {_.map(recipients, recp => (
@@ -80,6 +86,8 @@ export default class extends React.Component {
         ))}
 
         <AutoSizeInput
+          onBlur={this.onBlur}
+          onFocus={this.onFocus}
           type="text"
           ref={ref => this.setInputRef(ref)}
           placeholder={

@@ -36,6 +36,12 @@ export function getActiveTeamACL(user) {
   return team && team.acl ? team.acl : []
 }
 
+export function isSoloActiveTeam(user) {
+  const team = getActiveTeam(user)
+
+  return team.brand && team.brand.member_count === 1
+}
+
 export function hasUserAccess(user, action) {
   return getActiveTeamACL(user).includes(action)
 }

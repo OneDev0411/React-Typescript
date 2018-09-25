@@ -5,8 +5,17 @@ import Flex from 'styled-flex-component'
 
 import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 import Link from '../../../../../../../views/components/ALink'
-import { getContactAttribute } from '../../../../../../../models/contacts/helpers'
+import {
+  getContactAttribute,
+  getAttributeFromSummary
+} from '../../../../../../../models/contacts/helpers'
+import styled from 'styled-components'
 
+const AvatarContainer = styled.div`
+  .avatar div {
+    font-weight: 700 !important;
+  }
+`
 const ContactsListName = ({ contact, attributeDefs }) => {
   let avatar = ''
   const attribute_def = selectDefinitionByName(
@@ -18,29 +27,42 @@ const ContactsListName = ({ contact, attributeDefs }) => {
     const avatars = getContactAttribute(contact, attribute_def)
 
     avatar = avatars && avatars[0] && avatars[0].text
+
+    if (
+      !/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(
+        avatar
+      )
+    ) {
+      avatar = ''
+    }
   }
+
+  const name = getAttributeFromSummary(contact, 'display_name')
 
   return (
     <Flex nowrap>
-      <Avatar
-        className="avatar"
-        color="#D4D4D4"
-        round
-        name={contact.display_name}
-        src={avatar}
-        size={40}
-      />
+      <AvatarContainer>
+        <Avatar
+          className="avatar"
+          color="#000000"
+          round
+          name={name}
+          src={avatar}
+          size={40}
+        />
+      </AvatarContainer>
       <Link
         to={`/dashboard/contacts/${contact.id}`}
         style={{
           fontWeight: 500,
           marginLeft: '16px',
           padding: 0,
-          display: 'flex',
-          alignItems: 'flex-start'
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
         }}
       >
-        {contact.display_name}
+        {name}
       </Link>
     </Flex>
   )

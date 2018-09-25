@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 import { primary } from 'views/utils/colors'
-import ActionButton from 'components/Button/ActionButton'
+import ActionButton from '../../../../../../../../views/components/Button/ActionButton'
 
 export const SearchContainer = ActionButton.extend`
   &:hover > svg {
     fill: ${primary};
   }
+  line-height: normal;
 `
 
 export const Input = styled.input`
@@ -13,6 +14,7 @@ export const Input = styled.input`
   border: none;
   cursor: pointer;
   background-color: transparent;
+  text-overflow: ellipsis;
 
   :focus {
     outline: none;
