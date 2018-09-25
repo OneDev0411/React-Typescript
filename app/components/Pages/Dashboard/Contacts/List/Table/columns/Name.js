@@ -27,6 +27,14 @@ const ContactsListName = ({ contact, attributeDefs }) => {
     const avatars = getContactAttribute(contact, attribute_def)
 
     avatar = avatars && avatars[0] && avatars[0].text
+
+    if (
+      !/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(
+        avatar
+      )
+    ) {
+      avatar = ''
+    }
   }
 
   const name = getAttributeFromSummary(contact, 'display_name')

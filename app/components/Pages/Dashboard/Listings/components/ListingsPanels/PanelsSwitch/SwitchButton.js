@@ -1,14 +1,12 @@
 import React from 'react'
-import { Button } from 'react-bootstrap'
 
 import Icon from './Icon'
+import IconButton from '../../../../../../../views/components/Button/IconButton'
 
-const SwitchButton = ({ active, clickHandler, icon }) =>
-  <Button
-    className="c-panels-switch__btn"
-    onClick={clickHandler}
-    disabled={active}>
+const SwitchButton = ({ active, clickHandler, icon }) => (
+  <IconButton onClick={clickHandler} disabled={active}>
     <Icon name={icon} active={active} />
-  </Button>
+  </IconButton>
+)
 
 export default SwitchButton

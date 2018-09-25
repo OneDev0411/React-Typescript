@@ -41,12 +41,18 @@ const defaultProps = {
 }
 
 const Avatar = ({ image, placeHolderImage, title, ...props }) => {
-  const hasImage = image || placeHolderImage
+  const imageUrl = image || placeHolderImage
+
+  const hasImage =
+    imageUrl &&
+    /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(
+      imageUrl
+    )
 
   return (
     <Container center hasImage={hasImage} {...props}>
       {hasImage ? (
-        <Image alt="rechat avatar" src={image || placeHolderImage} />
+        <Image alt="rechat avatar" src={imageUrl} />
       ) : (
         getNameInitials(title)
       )}

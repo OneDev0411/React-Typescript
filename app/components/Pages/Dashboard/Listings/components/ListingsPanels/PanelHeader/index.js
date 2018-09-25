@@ -3,12 +3,35 @@ import { connect } from 'react-redux'
 
 import { confirmation } from '../../../../../../../store_actions/confirmation'
 
-import { Checkbox, DropdownButton, MenuItem } from 'react-bootstrap'
-import Button from '../../../../../../../views/components/Button/ActionButton'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import Flex from 'styled-flex-component'
+import { CheckBoxButton } from '../../../../../../../views/components/Button/CheckboxButton'
+import { BasicDropdown } from '../../../../../../../views/components/BasicDropdown'
 
-const getText = node => node.target.text.toLowerCase()
+const Button = ActionButton.extend`
+  position: absolute;
+  right: 0;
+  top: 0;
+`
+
+function getItems(items) {
+  return items.map(item => ({ label: item, value: item.toLowerCase() }))
+}
+function itemToString(item) {
+  return item.label
+}
+
+const baseDropdown = getItems([
+  'Price',
+  'Bedrooms',
+  'Baths',
+  'Sqft',
+  '$/Sqft',
+  'Built'
+])
 
 class PanelHeader extends React.Component {
+  state = { reverse: false }
   handleSaveSearch = () => {
     if (this.props.info.total < 400) {
       return this.props.onClickShare()
@@ -34,6 +57,16 @@ class PanelHeader extends React.Component {
       onClickDropdownItem
     } = this.props
 
+    const dropDownItems = [...baseDropdown]
+
+    if (activePanel === 'table') {
+      dropDownItems.push({ label: 'Zip Code', value: 'Zip Code' })
+    }
+
+    if (activePanel === 'map') {
+      dropDownItems.push({ label: 'Distance to map center', value: 'distance' })
+    }
+
     return (
       <div className="c-panel__header">
         {tabName !== 'alerts' && (
@@ -53,82 +86,35 @@ class PanelHeader extends React.Component {
                 <span className="c-panel__header__sorting__title">
                   Sorting by
                 </span>
-                <span className="c-panel__header__sorting__dropdown-wrapper">
-                  <DropdownButton
-                    noCaret
-                    bsStyle="link"
-                    title={
-                      sortingIndex.charAt(0).toUpperCase() +
-                      sortingIndex.substr(1)
-                    }
-                    id="listings-sort-dropdown"
-                    className="c-panel__header__sorting__dropdown"
-                  >
-                    {sortingIndex !== 'price' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        Price
-                      </MenuItem>
-                    )}
-                    {sortingIndex !== 'bedrooms' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        Bedrooms
-                      </MenuItem>
-                    )}
-                    {sortingIndex !== 'baths' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        Baths
-                      </MenuItem>
-                    )}
-                    {sortingIndex !== 'sqft' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        Sqft
-                      </MenuItem>
-                    )}
-                    {sortingIndex !== '$/sqft' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        $/Sqft
-                      </MenuItem>
-                    )}
-                    {sortingIndex !== 'built' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        Built
-                      </MenuItem>
-                    )}
-                    {activePanel === 'table' &&
-                      sortingIndex !== 'Zip Code' && (
-                        <MenuItem
-                          onClick={e => onClickDropdownItem('Zip Code')}
-                        >
-                          Zip Code
-                        </MenuItem>
-                      )}
-                    {activePanel === 'map' &&
-                      sortingIndex !== 'distance' && (
-                        <MenuItem
-                          onClick={e => onClickDropdownItem('distance')}
-                        >
-                          Distance to map center
-                        </MenuItem>
-                      )}
-                  </DropdownButton>
-                </span>
-                <Checkbox
-                  onClick={this.props.onClickSortingDirection}
-                  className="c-panel__header__sorting__checkbox"
-                >
+                <BasicDropdown
+                  noBorder
+                  maxHeight="unset"
+                  style={{ display: 'inline-block' }}
+                  items={dropDownItems}
+                  itemToString={itemToString}
+                  buttonText={sortingIndex || 'Choose a checklist type'}
+                  onChange={item => onClickDropdownItem(item.value)}
+                />
+
+                <Flex alignCenter style={{ marginLeft: '4rem' }}>
+                  <CheckBoxButton
+                    square
+                    isSelected={this.state.reverse}
+                    title="Reverse"
+                    style={{ marginRight: '0.5rem' }}
+                    onClick={() => {
+                      this.setState({ reverse: !this.state.reverse })
+                      this.props.onClickSortingDirection()
+                    }}
+                  />
                   Reverse
-                </Checkbox>
+                </Flex>
               </div>
             )}
 
             {this.props.isLoggedIn &&
               tabName === 'search' && (
-                <Button
-                  onClick={this.handleSaveSearch}
-                  className="c-panel__header__button"
-                >
-                  Save Search
-                </Button>
+                <Button onClick={this.handleSaveSearch}>Save Search</Button>
               )}
           </div>
         )}
