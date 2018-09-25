@@ -4,11 +4,17 @@ import { connect } from 'react-redux'
 import { confirmation } from '../../../../../../../store_actions/confirmation'
 
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import Button from '../../../../../../../views/components/Button/ActionButton'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 import Flex from 'styled-flex-component'
 import { CheckBoxButton } from '../../../../../../../views/components/Button/CheckboxButton'
 
 const getText = node => node.target.text.toLowerCase()
+
+const Button = ActionButton.extend`
+  position: absolute;
+  right: 0;
+  top: 0;
+`
 
 class PanelHeader extends React.Component {
   state = { reverse: false }
@@ -137,12 +143,7 @@ class PanelHeader extends React.Component {
 
             {this.props.isLoggedIn &&
               tabName === 'search' && (
-                <Button
-                  onClick={this.handleSaveSearch}
-                  className="c-panel__header__button"
-                >
-                  Save Search
-                </Button>
+                <Button onClick={this.handleSaveSearch}>Save Search</Button>
               )}
           </div>
         )}
