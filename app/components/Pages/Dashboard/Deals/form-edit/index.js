@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-// import { browserHistory } from 'react-router'
+import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
 import { saveSubmission, getDeal, getForms } from 'actions/deals'
@@ -157,6 +157,8 @@ class EditDigitalForm extends React.Component {
         message: 'The form has been saved!',
         status: 'success'
       })
+
+      this.closeForm()
     } catch (err) {
       console.log(err)
 
@@ -174,6 +176,9 @@ class EditDigitalForm extends React.Component {
 
   getHeaderTitle = title =>
     title && title.length > 30 ? `${title.substring(0, 30)}...` : title
+
+  closeForm = () =>
+    browserHistory.push(`/dashboard/deals/${this.props.task.deal}`)
 
   render() {
     const { isFormLoaded, isSaving, pdfDocument } = this.state
