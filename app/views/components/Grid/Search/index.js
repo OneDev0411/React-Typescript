@@ -14,8 +14,7 @@ class Search extends React.Component {
     const { onChange, debounceTime, defaultValue } = props
 
     this.state = {
-      searchValue: defaultValue || '',
-      isFocused: false
+      searchValue: defaultValue || ''
     }
 
     this.onChangeHandler =
@@ -39,12 +38,20 @@ class Search extends React.Component {
     this.setState({
       searchValue: ''
     })
-    this.onBlur()
+
     this.props.onClearSearch('')
   }
 
-  onBlur = () => this.setState({ isFocused: false })
-  onFocus = () => this.setState({ isFocused: true })
+  onRef = ref => {
+    if (!ref || !this.props.inputRef) {
+      return false
+    }
+
+    // add a functionallity to be able clear input outside of the form
+    ref.clear = () => this.setState({ searchValue: '' })
+
+    this.props.inputRef(ref)
+  }
 
   render() {
     const {
@@ -53,12 +60,11 @@ class Search extends React.Component {
       isSearching,
       disableOnSearch,
       showLoadingOnSearch,
-      showClearSearch,
-      inputRef
+      showClearSearch
     } = this.props
 
     return (
-      <Container style={style} isFocused={this.state.isFocused}>
+      <Container style={style}>
         <Icon isSearching={isSearching}>
           {isSearching && showLoadingOnSearch ? (
             <i className="fa fa-spin fa-spinner" />
@@ -71,9 +77,7 @@ class Search extends React.Component {
           value={this.state.searchValue}
           placeholder={placeholder}
           onChange={this.handleChange}
-          onBlur={this.onBlur}
-          onFocus={this.onFocus}
-          innerRef={inputRef}
+          innerRef={this.onRef}
           readOnly={disableOnSearch && isSearching}
         />
 

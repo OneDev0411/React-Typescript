@@ -7,6 +7,7 @@ import {
 } from '../../../../../../../views/utils/colors'
 
 export const Container = styled.div`
+  position: relative;
   padding: 1.5em;
   border-bottom: 1px solid ${borderColor};
 
@@ -33,4 +34,25 @@ export const Title = styled.h3`
 export const Description = styled.p`
   color: ${grey.A900};
   margin: 0;
+`
+
+export const Assignee = styled.div`
+  position: relative;
+
+  &:not(:first-of-type) {
+    transform: translateX(${props => props.index}em);
+    transition: transform 0.2s ease;
+  }
+`
+
+export const Assignees = styled.div`
+  position: absolute;
+  top: 1.5em;
+  right: 1.5em;
+  display: flex;
+  flex-direction: row-reverse;
+
+  &:hover ${Assignee}:not(:first-of-type) {
+    transform: translateX(0);
+  }
 `

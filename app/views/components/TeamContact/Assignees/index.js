@@ -10,7 +10,7 @@ import AddIcon from '../../SvgIcons/Add/AddIcon'
 import { BasicDropdown } from '../../BasicDropdown'
 
 import { getUserTitle, getMembers } from '../helpers'
-import { AssigneeItem } from '../AssigneeItem'
+import { AssigneeItemInAvatar } from '../AssigneeItemInAvatar'
 
 const propTypes = {
   assignees: PropTypes.arrayOf(PropTypes.shape()).isRequired,
@@ -64,14 +64,14 @@ export class Assignees extends React.Component {
     }))
 
     return (
-      <Flex column>
+      <Flex alignCenter>
         <BasicDropdown
           {...this.props}
           items={items}
           isFetching={isFetching}
           onChange={this.props.onChangeHandler}
           itemToString={getUserTitle}
-          style={{ marginBottom: '1em', display: 'inline-flex' }}
+          style={{ display: 'inline-flex' }}
           buttonRenderer={buttonProps => (
             <Button
               {...buttonProps}
@@ -79,7 +79,12 @@ export class Assignees extends React.Component {
               text="Assignee"
               appearance="link"
               size="medium"
-              style={{ padding: '0.5em 0', fontWeight: 500 }}
+              style={{
+                height: 'auto',
+                padding: '0',
+                fontWeight: 500,
+                lineHeight: 1
+              }}
             />
           )}
           itemRenderer={({ item, ...itemProps }) => (
@@ -96,9 +101,9 @@ export class Assignees extends React.Component {
           )}
         />
         {this.props.assignees.length > 0 && (
-          <Flex wrap>
+          <Flex style={{ marginLeft: '1em' }}>
             {this.props.assignees.map(user => (
-              <AssigneeItem
+              <AssigneeItemInAvatar
                 user={user}
                 removeHandler={this.props.onRemoveHandler}
                 key={user.id}

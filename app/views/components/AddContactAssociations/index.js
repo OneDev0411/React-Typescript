@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { AddAssociation } from '../AddAssociation'
-import SelectContactModal from '../SelectContactModal'
+import { SearchContactDrawer } from '../SearchContactDrawer'
 import Tooltip from '../tooltip'
 
 import { normalizeContact } from '../../utils/association-normalizers'
@@ -26,11 +26,11 @@ export class AddContactAssociation extends React.Component {
             <Tooltip placement="bottom" caption={title}>
               {this.props.buttonRenderer(handleOpen)}
             </Tooltip>
-            <SelectContactModal
+            <SearchContactDrawer
               title={title}
               isOpen={isActive}
-              handleSelectedItem={contact => this.add(contact, handleClose)}
-              handleOnClose={handleClose}
+              onClose={handleClose}
+              onSelect={contact => this.add(contact, handleClose)}
             />
           </div>
         )}

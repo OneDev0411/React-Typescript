@@ -14,7 +14,7 @@ const Item = Container.extend`
   }
 `
 
-export class AssigneeItem extends Component {
+export class AssigneeItemWithDetails extends Component {
   static propTypes = {
     user: PropTypes.shape().isRequired,
     removeHandler: PropTypes.func.isRequired

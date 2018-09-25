@@ -6,7 +6,7 @@ import { H1 } from '../../../../../../../views/components/Typography/headings'
 import Avatar from './Avatar'
 import { getAttributeFromSummary } from '../../../../../../../models/contacts/helpers'
 
-// import { LastTouched } from './LastTouched'
+import { LastTouched } from './LastTouched'
 
 export function Catalog(props) {
   const { contact } = props
@@ -18,10 +18,7 @@ export function Catalog(props) {
         <H1 style={{ lineHeight: 1.5 }}>
           {getAttributeFromSummary(contact, 'display_name')}
         </H1>
-        {/* <LastTouched contact={contact} /> */}
-        <div>
-          Last Touch was <span style={{ fontWeight: 600 }}>2 days ago</span>.
-        </div>
+        <LastTouched contact={contact} />
       </Flex>
     </Flex>
   )

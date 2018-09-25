@@ -16,13 +16,14 @@ import Drawer from '../OverlayDrawer'
 import { Divider } from '../Divider'
 import IconButton from '../Button/IconButton'
 import ActionButton from '../Button/ActionButton'
-import IconDelete from '../SvgIcons/Delete/IconDelete'
+import IconDelete from '../SvgIcons/DeleteOutline/IconDeleteOutline'
 import {
   DateTimeField,
   CheckboxField,
   AssigneesField
 } from '../final-form-fields'
 
+import Tooltip from '../tooltip'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
 import { preSaveFormat } from './helpers/pre-save-format'
@@ -75,10 +76,9 @@ export class EventDrawer extends Component {
       isDisabled: false
     }
 
-    this.isNewEvent =
-      !props.event &&
-      !props.eventId &&
-      Object.keys(props.initialValues).length === 0
+    this.isNew =
+      (!props.event && !props.eventId) ||
+      Object(this.props.initialValues).length > 0
   }
 
   load = async () => {
@@ -92,9 +92,7 @@ export class EventDrawer extends Component {
 
         const event = await getTask(this.props.eventId, QUERY)
 
-        console.log(event)
-
-        this.setState({ event, isDisabled: false })
+        this.setState({ isDisabled: false })
 
         return event
       } catch (error) {
@@ -192,7 +190,7 @@ export class EventDrawer extends Component {
 
     return (
       <Drawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
-        <Drawer.Header title={`${this.isNewEvent ? 'Add' : 'Edit'} Event`} />
+        <Drawer.Header title={`${this.isNew ? 'Add' : 'Edit'} Event`} />
         <Drawer.Body>
           <LoadSaveReinitializeForm
             initialValues={this.props.initialValues}
@@ -204,19 +202,19 @@ export class EventDrawer extends Component {
               preSaveFormat(values, originalValues, user)
             }
             save={this.save}
-            render={props => {
-              const { values } = props
+            render={formProps => {
+              const { values } = formProps
 
-              console.log(values, this.isNewEvent)
+              // console.log(values)
 
               return (
                 <FormContainer
-                  onSubmit={props.handleSubmit}
+                  onSubmit={formProps.handleSubmit}
                   id="event-drawer-form"
                 >
                   <Flex alignCenter style={{ marginBottom: '1.25em' }}>
-                    {this.isNewEvent ? (
-                      <Title fullWidth={this.isNewEvent} />
+                    {this.isNew ? (
+                      <Title fullWidth />
                     ) : (
                       <Fragment>
                         <CheckboxField
@@ -258,20 +256,21 @@ export class EventDrawer extends Component {
         </Drawer.Body>
         <Drawer.Footer
           style={{
-            flexDirection: this.isNewEvent ? 'row-reverse' : 'initial'
+            flexDirection: this.isNew ? 'row-reverse' : 'initial'
           }}
         >
-          {!this.isNewEvent && (
-            <IconButton
-              isFit
-              inverse
-              type="button"
-              iconSize="large"
-              disabled={isDisabled}
-              onClick={this.delete}
-            >
-              <IconDelete />
-            </IconButton>
+          {!this.isNew && (
+            <Tooltip placement="top" caption="Delete">
+              <IconButton
+                isFit
+                inverse
+                type="button"
+                disabled={isDisabled}
+                onClick={this.delete}
+              >
+                <IconDelete />
+              </IconButton>
+            </Tooltip>
           )}
           <ActionButton
             type="button"

@@ -4,15 +4,17 @@ import Flex from 'styled-flex-component'
 
 import { updateTask } from '../../../../../../../models/tasks/update-task'
 
+import Avatar from '../../../../../../../views/components/Avatar'
+import Tooltip from '../../../../../../../views/components/tooltip'
+import { getUserTitle } from '../../../../../../../views/components/TeamContact/helpers'
 import { Divider } from '../../../../../../../views/components/Divider'
 import IconBell from '../../../../../../../views/components/SvgIcons/Bell/IconBell'
 import { eventTypesIcons } from '../../../../../../../views/utils/event-types-icons'
-// import { goTo } from '../../../../../../../utils/go-to'
 import { getAssociations } from '../../../../../../../views/components/EventDrawer/helpers/get-associations'
 import { AssociationItem } from '../../../../../../../views/components/AssocationItem'
 import { getReminderLabel } from '../../../../../../../views/CRM/Tasks/components/NewTask/helpers/get-reminder-label'
 import { Status } from './Status'
-import { Container, Title, Description } from './styled'
+import { Container, Title, Description, Assignees, Assignee } from './styled'
 
 export class CRMTaskItem extends React.Component {
   state = {
@@ -147,6 +149,26 @@ export class CRMTaskItem extends React.Component {
             )
           })}
         </Flex>
+        {Array.isArray(task.assignees) &&
+          task.assignees.length > 0 && (
+            <Assignees>
+              {task.assignees.map((assignee, index) => {
+                const title = getUserTitle(assignee)
+
+                return (
+                  <Assignee key={assignee.id} index={index}>
+                    <Tooltip placement="top" caption={title}>
+                      <Avatar
+                        image={assignee.profile_image_url}
+                        size={32}
+                        title={title}
+                      />
+                    </Tooltip>
+                  </Assignee>
+                )
+              })}
+            </Assignees>
+          )}
       </Container>
     )
   }
