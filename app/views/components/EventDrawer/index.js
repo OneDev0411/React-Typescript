@@ -16,13 +16,14 @@ import Drawer from '../OverlayDrawer'
 import { Divider } from '../Divider'
 import IconButton from '../Button/IconButton'
 import ActionButton from '../Button/ActionButton'
-import IconDelete from '../SvgIcons/Delete/IconDelete'
+import IconDelete from '../SvgIcons/DeleteOutline/IconDeleteOutline'
 import {
   DateTimeField,
   CheckboxField,
   AssigneesField
 } from '../final-form-fields'
 
+import Tooltip from '../tooltip'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
 import { preSaveFormat } from './helpers/pre-save-format'
@@ -262,16 +263,17 @@ export class EventDrawer extends Component {
           }}
         >
           {!this.isNewEvent && (
-            <IconButton
-              isFit
-              inverse
-              type="button"
-              iconSize="large"
-              disabled={isDisabled}
-              onClick={this.delete}
-            >
-              <IconDelete />
-            </IconButton>
+            <Tooltip placement="top" caption="Delete">
+              <IconButton
+                isFit
+                inverse
+                type="button"
+                disabled={isDisabled}
+                onClick={this.delete}
+              >
+                <IconDelete />
+              </IconButton>
+            </Tooltip>
           )}
           <ActionButton
             type="button"
