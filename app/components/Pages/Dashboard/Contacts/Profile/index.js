@@ -40,7 +40,7 @@ import {
   Card
 } from './styled'
 
-import { PageHeader } from './PageHeader'
+import { Header } from './Header'
 import { Timeline } from './Timeline'
 
 class ContactProfile extends React.Component {
@@ -50,15 +50,14 @@ class ContactProfile extends React.Component {
     timeline: []
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount = () =>
     window.removeEventListener('resize', this.detectScreenSize)
-  }
 
   detectScreenSize = () => {
     if (window.innerWidth < 1681 && this.state.isDesktopScreen) {
@@ -87,36 +86,30 @@ class ContactProfile extends React.Component {
       this.setState({ isFetchingTimeline: false, timeline })
     } catch (error) {
       console.log(error)
-
       this.setState({ isFetchingTimeline: false })
     }
   }
 
-  addEvent = event => {
+  addEvent = event =>
     this.setState(state => ({
       timeline: [event, ...state.timeline]
     }))
-  }
 
-  editEvent = event => {
-    const indexedTimeline = {}
+  filterTimelineById = (state, id) =>
+    state.timeline.filter(item => item.id !== id)
 
-    this.state.timeline.forEach(t => {
-      indexedTimeline[t.id] = t
-    })
+  editEvent = updatedEvent =>
+    this.setState(state => ({
+      timeline: [
+        ...this.filterTimelineById(state, updatedEvent.id),
+        updatedEvent
+      ]
+    }))
 
-    indexedTimeline[event.id] = event
-
-    this.setState({
-      timeline: Object.values(indexedTimeline)
-    })
-  }
-
-  // removeEvent = eventId => {
-  //   this.setState(state => ({
-  //     timeline: state.timeline.filter(item => item.id !== eventId)
-  //   }))
-  // }
+  deleteEvent = id =>
+    this.setState(state => ({
+      timeline: this.filterTimelineById(state, id)
+    }))
 
   handleAddNote = async text => {
     await this.props.upsertContactAttributes(this.props.contact.id, [
@@ -144,7 +137,7 @@ class ContactProfile extends React.Component {
   }
 
   render() {
-    const { contact, fetchError } = this.props
+    const { user, contact, fetchError } = this.props
 
     if (fetchError) {
       if (fetchError.status === 404) {
@@ -176,7 +169,7 @@ class ContactProfile extends React.Component {
     return (
       <PageWrapper>
         <PageContainer>
-          <PageHeader contact={contact} />
+          <Header contact={contact} />
 
           <ColumnsContainer>
             <SideColumnWrapper>
@@ -228,6 +221,7 @@ class ContactProfile extends React.Component {
                       className="c-contact-profile-todo-tabs__pane"
                     >
                       <NewTask
+                        user={user}
                         submitCallback={this.addEvent}
                         defaultAssociation={defaultAssociation}
                       />
@@ -245,12 +239,14 @@ class ContactProfile extends React.Component {
                 </div>
               </Tab.Container>
               <Timeline
+                user={user}
                 contact={contact}
                 items={this.state.timeline}
                 isFetching={this.state.isFetchingTimeline}
                 editNoteHandler={this.editNote}
                 deleteNoteHandler={this.deleteNote}
                 editEventHandler={this.editEvent}
+                deleteEventHandler={this.deleteEvent}
               />
             </SecondColumn>
 

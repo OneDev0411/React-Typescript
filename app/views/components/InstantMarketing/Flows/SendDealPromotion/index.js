@@ -8,11 +8,12 @@ import ActionButton from 'components/Button/ActionButton'
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
-import { getTemplateScreenshot } from 'models/instant-marketing'
-
 import Listing from 'models/listings/listing'
 import Compose from 'components/EmailCompose'
-import { getActiveTeamACL } from 'utils/user-teams'
+
+import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
+
+import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 class SendDealPromotion extends React.Component {
   state = {
@@ -79,20 +80,10 @@ class SendDealPromotion extends React.Component {
     }
   }
 
-  generatePreviewImage = async template => {
-    const imageUrl = await getTemplateScreenshot(
-      template.result,
-      [template.width, template.height],
-      {
-        width: template.width / 2,
-        height: template.height / 2
-      }
-    )
-
+  generatePreviewImage = async template =>
     this.setState({
-      templateScreenshot: `<img style="width: calc(100% - 2em); margin: 1em;" src="${imageUrl}" />`
+      templateScreenshot: await getTemplatePreviewImage(template)
     })
-  }
 
   getDealListing = async () => {
     const { deal } = this.props
@@ -115,10 +106,8 @@ class SendDealPromotion extends React.Component {
   render() {
     const { listing } = this.state
     const { user } = this.props
-    const acl = getActiveTeamACL(user)
-    const hasMarketingPermission = acl.includes('Marketing')
 
-    if (!hasMarketingPermission) {
+    if (hasMarketingAccess(user) === false) {
       return null
     }
 

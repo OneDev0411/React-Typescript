@@ -30,6 +30,7 @@ export function Reminder(props) {
           input={input}
           items={items}
           fullHeight
+          pullRight
           buttonRenderer={props => (
             <DropButton {...props} style={{ paddingLeft: 0 }}>
               <IconBell />

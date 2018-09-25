@@ -64,7 +64,6 @@ export function normalizeContact(contact) {
     avatar: {
       image,
       size: 32,
-      borderRadius: 100,
       placeHolderImage: '/static/icons/contact-association-avatar.svg',
       title:
         email !== display_name && phone_number !== display_name
@@ -109,7 +108,6 @@ export const normalizeListing = listing => {
     avatar: {
       image: cover_image_url,
       size: 32,
-      borderRadius: 100,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
     url: `/dashboard/mls/${id}`,
@@ -138,7 +136,6 @@ export const normalizeDeal = deal => {
     avatar: {
       image,
       size: 32,
-      borderRadius: 100,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
     url: `/dashboard/deals/${id}`,

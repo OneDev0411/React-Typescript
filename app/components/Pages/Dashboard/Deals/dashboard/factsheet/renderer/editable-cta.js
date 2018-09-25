@@ -4,8 +4,10 @@ import ActionButton from 'components/Button/ActionButton'
 import { css } from 'styled-components'
 import IconButton from 'components/Button/IconButton'
 import { primary } from 'views/utils/colors'
+import { grey } from '../../../../../../../views/utils/colors'
 
 const EditButton = ActionButton.extend`
+  padding: 0 0.5rem;
   ${({ hide }) =>
     hide &&
     css`
@@ -14,7 +16,8 @@ const EditButton = ActionButton.extend`
 `
 
 const DeleteButton = IconButton.extend`
-  color: #a4a4a4;
+  padding: 0;
+  color: ${grey.A600};
   &:hover {
     color: ${primary};
   }

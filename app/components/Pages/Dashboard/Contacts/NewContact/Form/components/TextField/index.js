@@ -2,19 +2,20 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Container, Title, ErrorMessage } from '../../styled-components/field'
+import { placeholderColor } from '../../../../../../../../views/utils/colors'
 
 const TextInput = styled.input`
   width: 100%;
   padding: 0;
-  font-size: 1.8rem;
-  border-width: 0;
+  font-size: 1.125rem;
+  border: none;
 
   &:focus {
     outline: none;
   }
 
   &::placeholder {
-    color: #cad4db;
+    color: ${placeholderColor};
   }
 `
 

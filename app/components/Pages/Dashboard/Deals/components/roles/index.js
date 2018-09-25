@@ -149,7 +149,7 @@ class Roles extends React.Component {
                 <RoleAvatar>
                   <UserAvatar
                     size={32}
-                    color="#D4D4D4"
+                    color="#000000"
                     showStateIndicator={false}
                     name={this.getAvatarTitle(role)}
                     image={user ? user.profile_image_url : null}
@@ -188,7 +188,7 @@ class Roles extends React.Component {
           <RoleCrmIntegration
             isOpen
             deal={deal}
-            user={user}
+            role={user}
             modalTitle="Update Contact"
             allowedRoles={allowedRoles}
             onHide={this.closeRoleForm}

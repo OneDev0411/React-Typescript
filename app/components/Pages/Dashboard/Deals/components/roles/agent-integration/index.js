@@ -166,7 +166,7 @@ class RoleAgentIntegration extends React.Component {
         <RoleCrmIntegration
           deal={deal}
           isOpen={this.state.showRoleDrawer}
-          user={role}
+          role={role}
           dealSide={this.props.dealSide}
           modalTitle={modalTitle}
           allowedRoles={this.props.allowedRoles}

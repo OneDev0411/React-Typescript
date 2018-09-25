@@ -14,6 +14,7 @@ import { normalizeContacts } from '../../../../../../store_actions/contacts/help
 import SelectDealModal from '../../../../../../views/components/SelectDealModal'
 
 import { grey } from '../../../../../../views/utils/colors'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
 export class DealsListWidget extends React.Component {
   state = {
@@ -81,7 +82,7 @@ export class DealsListWidget extends React.Component {
 
     goTo(
       `/dashboard/deals/${deal.id}`,
-      `Contact - ${this.state.contact.display_name}`
+      `Contact - ${getAttributeFromSummary(this.state.contact, 'display_name')}`
     )
   }
 

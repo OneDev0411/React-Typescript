@@ -4,7 +4,6 @@ import bodyParser from 'koa-bodyparser'
 
 const router = require('koa-router')()
 
-import updateUserSession from '../update-user-session'
 import config from '../../../../config/private'
 
 const app = new Koa()
@@ -48,11 +47,11 @@ router.post('/proxifier', bodyParser(), async ctx => {
 
     const response = await request
 
-    // update user session
-    const { data } = response.body
-
-    if (method !== 'get' && data && data.type === 'user') {
-      updateUserSession(ctx, response.body)
+    if (headers['x-auth-mode'] && response.body.access_token) {
+      ctx.session.user = {
+        access_token: response.body.access_token,
+        refresh_token: response.body.refresh_token
+      }
     }
 
     ctx.status = response.statusCode

@@ -17,13 +17,13 @@ export const BasicDropdown = ({
   onChange,
   fullWidth,
   buttonIcon,
-  itemToString = item => item.label,
   itemRenderer,
   defaultSelectedItem,
   menuStyle = {},
   isBlock = true,
   noBorder = false,
-  maxHeight = 200
+  maxHeight = 200,
+  itemToString = item => item.label
 }) => (
   <Downshift
     onChange={onChange}
@@ -36,7 +36,8 @@ export const BasicDropdown = ({
           buttonRenderer({
             ...downshift.getButtonProps({
               disabled,
-              isOpen: downshift.isOpen
+              isOpen: downshift.isOpen,
+              selectedItem: downshift.selectedItem
             })
           })
         ) : (

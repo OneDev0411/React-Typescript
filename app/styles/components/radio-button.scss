@@ -1,0 +1,19 @@
+input[type="radio"] {
+  /* remove standard background appearance */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* create custom radiobutton appearance */
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+
+  background-image: url(/static/images/Radio/IconUnSelectedRadio.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* appearance for checked radiobutton */
+input[type="radio"]:checked {
+  background-image: url(/static/images/Radio/IconSelectedRadio.svg);
+}

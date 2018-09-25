@@ -25,4 +25,7 @@ export const TextInput = styled.input`
   background-color: #ffffff;
   border: solid 1px ${blue.A100};
   padding: 0 15px;
+  :focus {
+    outline: none;
+  }
 `

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
@@ -11,23 +11,40 @@ import { getContacts } from '../../../../../models/contacts/get-contacts'
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
 import { normalizeContactAttribute } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
 
-const ContactsListContainer = styled.div`
+export const ListContainer = styled.div`
   position: relative;
-  height: calc(100vh - 172px);
-  padding: 1rem 0;
+  height: calc(100vh - ${props => (props.isDrawer ? 133 : 172)}px);
+  padding: ${props => (props.isDrawer ? 0 : '1em 0')};
   overflow-x: hidden;
   overflow-y: scroll;
 
-  @media screen and (min-width: 48em) {
-    height: 240px;
-  }
+  ${props =>
+    !props.isDrawer
+      ? css`
+          @media screen and (min-width: 48em) {
+            height: 240px;
+          }
+        `
+      : ''};
 `
 
-const ContactsList = styled.div`
+export const List = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
+  padding-bottom: ${props => (props.isDrawer ? '1em' : 0)};
+`
+
+const Alert = styled.div`
+  color: #f6a623;
+  background: rgba(245, 166, 35, 0.05);
+  border: 1px solid rgba(245, 166, 35, 0.2);
+  padding: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 4px;
+  margin: 10px 16px;
 `
 
 const propTypes = {
@@ -112,7 +129,7 @@ class Body extends Component {
 
   render() {
     const { list, isLoading } = this.state
-    const { defaultSearchFilter } = this.props
+    const { defaultSearchFilter, isDrawer } = this.props
     const defaultInputValue =
       typeof defaultSearchFilter !== 'string' ? '' : defaultSearchFilter
 
@@ -135,23 +152,25 @@ class Body extends Component {
                 />
               </div>
             )}
-            {isLoading && <Loading />}
-            {!isLoading &&
-              list.length > 0 && (
-                <ContactsListContainer>
-                  <ContactsList>
-                    {list.map((item, index) => (
-                      <ContactItem
-                        item={item}
-                        key={item.id || `downshift_search_result_item_${index}`}
-                        {...getItemProps({ item })}
-                        onClickHandler={this.props.handleSelectedItem}
-                        isHighlighted={highlightedIndex === index}
-                      />
-                    ))}
-                  </ContactsList>
-                </ContactsListContainer>
-              )}
+            <ListContainer isDrawer={isDrawer}>
+              <List isDrawer={isDrawer}>
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  list.map((item, index) => (
+                    <ContactItem
+                      item={item}
+                      key={item.id || `downshift_search_result_item_${index}`}
+                      {...getItemProps({ item })}
+                      onClickHandler={this.props.handleSelectedItem}
+                      isHighlighted={highlightedIndex === index}
+                    />
+                  ))
+                )}
+
+                {!isLoading && list.length === 0 && <Alert> No Results</Alert>}
+              </List>
+            </ListContainer>
           </div>
         )}
       />

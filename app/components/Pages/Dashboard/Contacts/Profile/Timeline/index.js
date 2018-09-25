@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 
 import Loading from '../../../../../Partials/Loading'
 import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawer'
@@ -6,27 +7,31 @@ import { EventDrawer } from '../../../../../../views/components/EventDrawer'
 
 import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
-import CRMTaskItem from './TaskItem'
+import { CRMTaskItem } from './TaskItem'
 import { EmptyState } from './EmptyState'
 import { Container, Title } from './styled'
 
 export class Timeline extends React.Component {
   state = {
     selectedNote: null,
-    selectedEvent: null,
-    showEditNoteDrawer: false,
-    showEditEventDrawer: false
+    selectedEvent: null
   }
 
-  openEditNoteDrawer = selectedNote =>
-    this.setState({ showEditNoteDrawer: true, selectedNote })
-  closeEditNoteDrawer = () =>
-    this.setState({ showEditNoteDrawer: false, selectedNote: null })
+  onClickNote = selectedNote => this.setState({ selectedNote })
+  closeEditNoteDrawer = () => this.setState({ selectedNote: null })
 
-  openEditEventDrawer = selectedEvent =>
-    this.setState({ showEditEventDrawer: true, selectedEvent })
-  closeEditEventDrawer = () =>
-    this.setState({ showEditEventDrawer: false, selectedEvent: null })
+  closeEventDrawer = () => this.setState({ selectedEvent: null })
+  onClickEvent = selectedEvent => this.setState({ selectedEvent })
+
+  handleEditEvent = updatedEvent => {
+    this.closeEventDrawer()
+    this.props.editEventHandler(updatedEvent)
+  }
+
+  handleDeleteEvent = deletedEvent => {
+    this.closeEventDrawer()
+    this.props.deleteEventHandler(deletedEvent.id)
+  }
 
   renderItems = month => (
     <React.Fragment>
@@ -43,7 +48,8 @@ export class Timeline extends React.Component {
                 contact={this.props.contact}
                 key={key}
                 task={activity}
-                onClick={this.openEditEventDrawer}
+                onClick={this.onClickEvent}
+                editCallback={this.props.editEventHandler}
               />
             )
           }
@@ -57,7 +63,7 @@ export class Timeline extends React.Component {
                 contact={this.props.contact}
                 key={key}
                 note={activity}
-                onClick={this.openEditNoteDrawer}
+                onClick={this.onClickNote}
               />
             )
           }
@@ -158,7 +164,7 @@ export class Timeline extends React.Component {
           <Container id="upcoming_events" key="upcoming_events">
             {this.renderItems({
               title: 'Upcoming Events',
-              items: upcomingEvents
+              items: upcomingEvents.sort((a, b) => a.due_date > b.due_date)
             })}
           </Container>
         )}
@@ -170,14 +176,21 @@ export class Timeline extends React.Component {
 
             return (
               <Container id={id} key={`past_events_${id}`}>
-                {this.renderItems(month)}
+                {this.renderItems({
+                  title: month.title,
+                  items: _.sortBy(
+                    month.items,
+                    item =>
+                      item.due_date != null ? !item.due_date : !item.created_at
+                  )
+                })}
               </Container>
             )
           })}
 
         {this.state.selectedNote && (
           <EditNoteDrawer
-            isOpen={this.state.showEditNoteDrawer}
+            isOpen
             note={this.state.selectedNote}
             onClose={this.closeEditNoteDrawer}
             onSubmit={this.props.editNoteHandler}
@@ -187,11 +200,12 @@ export class Timeline extends React.Component {
 
         {this.state.selectedEvent && (
           <EventDrawer
-            title="Edit Event"
-            isOpen={this.state.showEditEventDrawer}
-            eventId={this.state.selectedEvent.id}
-            onClose={this.closeEditEventDrawer}
-            onSubmit={this.props.editEventHandler}
+            isOpen
+            user={this.props.user}
+            onClose={this.closeEventDrawer}
+            event={this.state.selectedEvent}
+            submitCallback={this.handleEditEvent}
+            deleteCallback={this.handleDeleteEvent}
           />
         )}
       </div>

@@ -1,5 +1,7 @@
 import React from 'react'
-import LinkButton from '../../../../../../views/components/Button/LinkButton'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
+
+const Button = ActionButton.withComponent('a')
 
 export default ({ exportIds, disabled, filters }) => {
   let url = '/api/contacts/export/outlook'
@@ -13,8 +15,14 @@ export default ({ exportIds, disabled, filters }) => {
   }
 
   return (
-    <LinkButton appearance="outline" disabled={disabled} size="small" to={url}>
+    <Button
+      appearance="outline"
+      disabled={disabled}
+      size="small"
+      as="a"
+      href={url}
+    >
       Export to Spreadsheet
-    </LinkButton>
+    </Button>
   )
 }

@@ -266,10 +266,10 @@ class Notifications extends Component {
             }}
           >
             {this.notificationIcon(notification)}
-            <div style={S('relative')}>
+            <div style={{ position: 'relative', marginLeft: '4rem' }}>
               <div style={S('color-263445')}>{notification.message}</div>
               <div style={S('color-c6c6c6')}>
-                {getTimeAgo(notification.created_at)} ago
+                {getTimeAgo(notification.created_at)}
               </div>
             </div>
           </div>
@@ -292,7 +292,7 @@ class Notifications extends Component {
         }}
       >
         <Header />
-        <div style={{ position: 'relative', height: '100vh' }}>
+        <div style={{ position: 'relative' }}>
           <div
             style={{
               position: 'absolute',

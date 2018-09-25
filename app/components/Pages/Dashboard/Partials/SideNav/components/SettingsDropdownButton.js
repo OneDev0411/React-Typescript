@@ -13,17 +13,10 @@ export class SettingsDropdownButton extends Component {
     user: PropTypes.shape().isRequired
   }
 
-  state = {
-    isOpen: false
-  }
-
   handleClick = e => {
     e.preventDefault()
 
-    this.setState(
-      state => ({ isOpen: !state.isOpen }),
-      () => this.props.onClick(e)
-    )
+    this.props.onClick(e)
   }
 
   render() {
@@ -37,7 +30,9 @@ export class SettingsDropdownButton extends Component {
         >
           <Avatar user={this.props.user} size={32} />
           <ArrowDownIcon
-            style={{ transform: this.state.isOpen ? 'rotate(180deg)' : 'none' }}
+            style={{
+              transform: this.props.isDropDownOpen ? 'rotate(180deg)' : 'none'
+            }}
           />
         </IconButton>
       </SideNavTooltip>

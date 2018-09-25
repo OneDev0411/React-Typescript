@@ -2,16 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Tooltip from '../tooltip'
-import Button from '../Button/IconButton'
 import { AddAssociation } from '../AddAssociation'
 import SearchListingsDrawer from '../SearchListingDrawer'
-import Icon from '../SvgIcons/Properties/IconProperties'
 import { normalizeListing } from '../../utils/association-normalizers'
 
 export class AddListingAssociation extends React.Component {
   static propTypes = {
-    disabled: PropTypes.bool,
-    handleAdd: PropTypes.func.isRequired
+    handleAdd: PropTypes.func.isRequired,
+    buttonRenderer: PropTypes.func.isRequired
   }
 
   onSelectHandler = (contact, closeHandler) =>
@@ -25,16 +23,7 @@ export class AddListingAssociation extends React.Component {
         render={({ isActive, handleClose, handleOpen }) => (
           <div>
             <Tooltip placement="bottom" caption={title}>
-              <Button
-                isFit
-                inverse
-                type="button"
-                iconSize="large"
-                onClick={handleOpen}
-                disabled={this.props.disabled}
-              >
-                <Icon />
-              </Button>
+              {this.props.buttonRenderer(handleOpen)}
             </Tooltip>
             <SearchListingsDrawer
               isOpen={isActive}

@@ -13,7 +13,7 @@ import {
   currencyFilter,
   areaMeterFilter,
   phoneNumberFilter
-} from '../helpers/NunjucksFilters'
+} from '../helpers/nunjucks-filters'
 
 import {
   Container,

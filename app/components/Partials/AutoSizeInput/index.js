@@ -23,9 +23,10 @@ export default class AutoSizeInput extends React.Component {
     const value = input.value
 
     // get input string. if value is blank use placeholder instead
-    const width = (value.length === 0 && placeholder) ?
-      placeholder.length * 10 :
-      input.scrollWidth + 2
+    const width =
+      value.length === 0 && placeholder
+        ? placeholder.length * 10
+        : input.scrollWidth + 2
 
     input.style.width = `${width}px`
   }

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 import LinkButton from '../../../../../../../views/components/Button/LinkButton'
+import { grey } from '../../../../../../../views/utils/colors'
 
 export const GenerateUrlContainer = styled.div`
   position: relative;
@@ -8,7 +8,7 @@ export const GenerateUrlContainer = styled.div`
   align-items: center;
   padding: 1em;
   border-radius: 3px;
-  background-color: #f0f4f7;
+  background-color: ${grey.A100};
 `
 
 export const GenerateUrlText = styled.div`

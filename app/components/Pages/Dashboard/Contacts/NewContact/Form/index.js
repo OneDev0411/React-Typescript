@@ -164,7 +164,6 @@ class NewContactForm extends Component {
           initialValues={INITIAL_VALUES}
           render={({
             form,
-            pristine,
             validating,
             handleSubmit,
             submitting,
@@ -199,15 +198,6 @@ class NewContactForm extends Component {
                     {submitError}
                   </Alert>
                 )}
-                <ActionButton
-                  type="button"
-                  inverse
-                  onClick={() => form.reset(INITIAL_VALUES)}
-                  style={{ marginRight: '1em' }}
-                  disabled={submitting || pristine}
-                >
-                  Reset
-                </ActionButton>
                 <ActionButton type="submit" disabled={submitting || validating}>
                   {submitting ? 'Adding...' : 'Add'}
                 </ActionButton>

@@ -43,11 +43,33 @@
   border-radius: 3px;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  background-color: rgba(250, 250, 250, 0.9);
-  border: solid 1px #e2e2e2;
+  background-color: #f9f9f9;
+  border: solid 1px #d4d4d4;
+
+  &:hover {
+    background-color: #f2f2f2;
+    input::placeholder {
+      color: #000000;
+    }
+    .to {
+      color: #000000;
+    }
+  }
+
+  &.isFocused{
+    background-color:  #ffffff ;
+    border-color: #003bdf;
+    input::placeholder {
+      color: #000000;
+    }
+    .to {
+      color: #000000;
+    }
+  }
+
   .to {
     letter-spacing: -0.2px;
-    color: #8e8e93;
+    color: #7F7F7F;
     margin-right: 5px;
   }
   .tag {
@@ -63,7 +85,6 @@
     border: solid 1px #c2c2c2;
     font-size: 14px;
     font-weight: bold;
-    color: #4a494a;
     .display-name {
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -79,7 +100,7 @@
       transition: 0.3s ease-in all;
       color: #9a9b9a;
       &:hover {
-        color: rgba(0, 0, 0, 0.5);
+        color: #003bdf;
       }
     }
   }
@@ -89,6 +110,7 @@
     margin: 0 0 0 5px;
     background-color: transparent;
     border: none;
+    caret-color: #003bdf;
     &:focus {
       outline: 0;
     }
@@ -109,13 +131,18 @@
       display: inline-block;
       vertical-align: middle;
       float: none;
+      .suggestions__name:hover{
+        text-decoration: underline;
+        }
     }
     .user-avatar {
       display: inline;
       margin-right: 10px;
     }
     &:hover {
-      color: rgba(0, 0, 0, 0.7);
+      background-color: #f2f2f2;
+      color: #003bdf;
+      
     }
   }
 }

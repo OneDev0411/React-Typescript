@@ -1,14 +1,9 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { css } from 'styled-components'
+
 import Button from '../ActionButton'
-import {
-  isOutline,
-  getIconSize,
-  iconAims,
-  getIconStatesStyle
-} from '../helpers'
+import { getIconSize, iconAims, getIconStatesStyle } from '../helpers'
 
 class TextIconButton extends PureComponent {
   static propTypes = {
@@ -65,14 +60,14 @@ class TextIconButton extends PureComponent {
 
     if (iconLeft) {
       IconLeft = iconLeft.extend`
-        margin-right: ${text ? '8px' : 0};
+        margin-right: ${text ? '0.5em' : 0};
         transform: rotate(${iconAims[iconLeftAim]});
       `
     }
 
     if (iconRight) {
       IconRight = iconRight.extend`
-        margin-left: ${text ? '8px' : 0};
+        margin-left: ${text ? '0.5em' : 0};
         transform: rotate(${iconAims[iconRightAim]});
       `
     }
@@ -81,7 +76,7 @@ class TextIconButton extends PureComponent {
       justify-content: ${props =>
         props.isBlock ? 'space-between' : 'initial'};
 
-      > svg {
+      svg {
         width: ${props => getIconSize(props.size)};
         height: ${props => getIconSize(props.size)};
       }

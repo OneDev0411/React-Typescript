@@ -14,35 +14,6 @@ export const List = Card.extend`
   z-index: 1001;
 `
 
-export const ListItemTitle = styled.div`
-  width: 95%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`
-
-export const ListItem = styled.div`
-  display: flex;
-  width: 100%;
-  height: 32px;
-  line-height: 32px;
-  vertical-align: middle;
-  padding: 0 16px;
-  color: #262626;
-  font-size: 16px;
-  cursor: pointer;
-  ${props =>
-    props.isSelected &&
-    css`
-      color: ${primary};
-    `};
-
-  :hover {
-    background-color: ${primary};
-    color: #fff;
-  }
-`
-
 export const SelectedItem = styled.span`
   display: inline-flex;
   align-items: center;
