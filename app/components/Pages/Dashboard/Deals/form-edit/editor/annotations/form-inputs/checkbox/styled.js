@@ -4,6 +4,7 @@ export const CheckboxInput = styled.input`
   color: ${props => props.appearance.color};
   font-weight: ${props => (props.appearance.bold ? 'bold' : 'normal')};
   font-family: ${props => props.appearance.fontFace};
+  font-size: ${props => props.box.height}px;
   position: absolute;
   text-align: center;
   left: ${props => props.box.left}px;
@@ -12,13 +13,12 @@ export const CheckboxInput = styled.input`
   height: ${props => props.box.height}px;
   appearance: none;
   background-color: #d2e5f2;
-  border: 1px solid #cccd;
-  border-radius: 4px;
   cursor: pointer;
+  margin: 0 !important;
 
   :checked {
     :before {
-      content: '✔';
+      content: '❌';
     }
   }
 `
