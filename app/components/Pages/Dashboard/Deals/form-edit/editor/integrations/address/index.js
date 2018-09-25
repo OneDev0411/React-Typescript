@@ -32,6 +32,7 @@ export default class AddressForm extends React.Component {
     return (
       <Address
         show={this.props.isOpen || false}
+        closeOnBackdropClick={false}
         onClose={this.onClose}
         deal={this.props.deal}
       />

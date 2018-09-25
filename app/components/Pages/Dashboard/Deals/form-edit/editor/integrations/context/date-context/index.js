@@ -18,7 +18,12 @@ function onDateChange(props, value) {
 
 export default function DateContext(props) {
   return (
-    <OverlayDrawer isOpen={props.isOpen} onClose={props.onClose} width={37}>
+    <OverlayDrawer
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      closeOnBackdropClick={false}
+      width={35}
+    >
       <OverlayDrawer.Header title="Edit Field" />
       <OverlayDrawer.Body>
         <OverlayContainer>
