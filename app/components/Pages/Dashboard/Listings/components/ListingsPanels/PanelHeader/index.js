@@ -3,18 +3,32 @@ import { connect } from 'react-redux'
 
 import { confirmation } from '../../../../../../../store_actions/confirmation'
 
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 import Flex from 'styled-flex-component'
 import { CheckBoxButton } from '../../../../../../../views/components/Button/CheckboxButton'
-
-const getText = node => node.target.text.toLowerCase()
+import { BasicDropdown } from '../../../../../../../views/components/BasicDropdown'
 
 const Button = ActionButton.extend`
   position: absolute;
   right: 0;
   top: 0;
 `
+
+function getItems(items) {
+  return items.map(item => ({ label: item, value: item.toLowerCase() }))
+}
+function itemToString(item) {
+  return item.label
+}
+
+const baseDropdown = getItems([
+  'Price',
+  'Bedrooms',
+  'Baths',
+  'Sqft',
+  '$/Sqft',
+  'Built'
+])
 
 class PanelHeader extends React.Component {
   state = { reverse: false }
@@ -43,6 +57,16 @@ class PanelHeader extends React.Component {
       onClickDropdownItem
     } = this.props
 
+    const dropDownItems = [...baseDropdown]
+
+    if (activePanel === 'table') {
+      dropDownItems.push({ label: 'Zip Code', value: 'Zip Code' })
+    }
+
+    if (activePanel === 'map') {
+      dropDownItems.push({ label: 'Distance to map center', value: 'distance' })
+    }
+
     return (
       <div className="c-panel__header">
         {tabName !== 'alerts' && (
@@ -62,79 +86,26 @@ class PanelHeader extends React.Component {
                 <span className="c-panel__header__sorting__title">
                   Sorting by
                 </span>
-                <span className="c-panel__header__sorting__dropdown-wrapper">
-                  <DropdownButton
-                    noCaret
-                    bsStyle="link"
-                    title={
-                      sortingIndex.charAt(0).toUpperCase() +
-                      sortingIndex.substr(1)
-                    }
-                    id="listings-sort-dropdown"
-                    className="c-panel__header__sorting__dropdown"
-                  >
-                    {sortingIndex !== 'price' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        Price
-                      </MenuItem>
-                    )}
-                    {sortingIndex !== 'bedrooms' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        Bedrooms
-                      </MenuItem>
-                    )}
-                    {sortingIndex !== 'baths' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        Baths
-                      </MenuItem>
-                    )}
-                    {sortingIndex !== 'sqft' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        Sqft
-                      </MenuItem>
-                    )}
-                    {sortingIndex !== '$/sqft' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        $/Sqft
-                      </MenuItem>
-                    )}
-                    {sortingIndex !== 'built' && (
-                      <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-                        Built
-                      </MenuItem>
-                    )}
-                    {activePanel === 'table' &&
-                      sortingIndex !== 'Zip Code' && (
-                        <MenuItem
-                          onClick={() => onClickDropdownItem('Zip Code')}
-                        >
-                          Zip Code
-                        </MenuItem>
-                      )}
-                    {activePanel === 'map' &&
-                      sortingIndex !== 'distance' && (
-                        <MenuItem
-                          onClick={() => onClickDropdownItem('distance')}
-                        >
-                          Distance to map center
-                        </MenuItem>
-                      )}
-                  </DropdownButton>
-                </span>
+                <BasicDropdown
+                  noBorder
+                  maxHeight="unset"
+                  style={{ display: 'inline-block' }}
+                  items={dropDownItems}
+                  itemToString={itemToString}
+                  buttonText={sortingIndex || 'Choose a checklist type'}
+                  onChange={item => onClickDropdownItem(item.value)}
+                />
 
-                <Flex
-                  alignCenter
-                  style={{ marginLeft: '4rem' }}
-                  onClick={() => {
-                    this.setState({ reverse: !this.state.reverse })
-                    this.props.onClickSortingDirection()
-                  }}
-                >
+                <Flex alignCenter style={{ marginLeft: '4rem' }}>
                   <CheckBoxButton
                     square
                     isSelected={this.state.reverse}
                     title="Reverse"
                     style={{ marginRight: '0.5rem' }}
+                    onClick={() => {
+                      this.setState({ reverse: !this.state.reverse })
+                      this.props.onClickSortingDirection()
+                    }}
                   />
                   Reverse
                 </Flex>
