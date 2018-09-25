@@ -2,8 +2,6 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import { getActiveTeamACL } from 'utils/user-teams'
-
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import EmailCompose from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
@@ -15,10 +13,11 @@ import { selectContact } from '../../../../../reducers/contacts/list'
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
-import { getTemplateScreenshot } from 'models/instant-marketing'
+import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 
-import { confirmation } from 'actions/confirmation'
 import ActionButton from 'components/Button/ActionButton'
+
+import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 class SendMlsListingCard extends React.Component {
   state = {
@@ -72,7 +71,9 @@ class SendMlsListingCard extends React.Component {
       await sendContactsEmail(emails)
 
       // reset form
-      form.reset()
+      if (form) {
+        form.reset()
+      }
 
       this.props.notify({
         status: 'success',
@@ -105,15 +106,6 @@ class SendMlsListingCard extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  requestClose = () =>
-    this.props.confirmation({
-      message: 'Don’t want to market?',
-      description: 'By canceling you will lose any changes you have made.',
-      cancelLabel: 'No, don’t cancel',
-      confirmLabel: 'Yes, cancel',
-      onConfirm: this.closeMarketing
-    })
-
   onSelectListing = async listing =>
     this.setState({
       listing,
@@ -133,20 +125,10 @@ class SendMlsListingCard extends React.Component {
     })
   }
 
-  generatePreviewImage = async template => {
-    const imageUrl = await getTemplateScreenshot(
-      template.result,
-      [template.width, template.height],
-      {
-        width: template.width,
-        height: template.height
-      }
-    )
-
+  generatePreviewImage = async template =>
     this.setState({
-      templateScreenshot: `<img style="width: calc(100% - 2em); margin: 1em;" src="${imageUrl}" />`
+      templateScreenshot: await getTemplatePreviewImage(template)
     })
-  }
 
   closeMarketing = () =>
     this.setState({
@@ -157,12 +139,10 @@ class SendMlsListingCard extends React.Component {
   render() {
     const { listing } = this.state
     const { user } = this.props
-    const acl = getActiveTeamACL(user)
-    const hasMarketingPermission = acl.includes('Marketing')
 
-    // if (!hasMarketingPermission) {
-    //   return null
-    // }
+    if (hasMarketingAccess(user) === false) {
+      return false
+    }
 
     return (
       <Fragment>
@@ -184,7 +164,7 @@ class SendMlsListingCard extends React.Component {
 
         <InstantMarketing
           isOpen={this.state.isInstantMarketingBuilderOpen}
-          onClose={this.requestClose}
+          onClose={this.closeMarketing}
           handleSave={this.handleSaveMarketingCard}
           templateData={{ listing, user }}
           templateTypes={['Listing']}
@@ -214,5 +194,5 @@ function mapStateToProps({ contacts, user }) {
 
 export default connect(
   mapStateToProps,
-  { notify, confirmation }
+  { notify }
 )(SendMlsListingCard)

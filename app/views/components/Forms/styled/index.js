@@ -6,6 +6,7 @@ export const InputContainer = styled.div`
   justify-content: center;
   border-bottom: 1px solid #dce5eb;
   padding: 4px 10px;
+  text-align: left;
 `
 
 export const InputLabel = styled.label`

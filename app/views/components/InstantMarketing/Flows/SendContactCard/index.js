@@ -3,29 +3,53 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
 import InstantMarketing from 'components/InstantMarketing'
-
 import ActionButton from 'components/Button/ActionButton'
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
-import Listing from 'models/listings/listing'
+import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
+import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
+
 import Compose from 'components/EmailCompose'
+
+import { getContact } from 'models/contacts/get-contact'
 
 import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-class SendDealPromotion extends React.Component {
+class SendContactCard extends React.Component {
   state = {
-    listing: null,
+    isFetchingContact: false,
+    contact: this.props.contact,
     isInstantMarketingBuilderOpen: false,
-    isComposeEmailOpen: false,
-    htmlTemplate: '',
-    templateScreenshot: null
+    isComposeEmailOpen: false
   }
 
-  componentDidMount() {
-    this.getDealListing()
+  showMarketingBuilder = async () => {
+    if (this.state.contact) {
+      this.toggleInstantMarketingBuilder()
+
+      return false
+    }
+
+    this.setState({
+      isFetchingContact: true
+    })
+
+    try {
+      const response = await getContact(this.props.contactId)
+
+      this.setState({
+        contact: response.data,
+        isFetchingContact: false,
+        isInstantMarketingBuilderOpen: true
+      })
+    } catch (e) {
+      this.setState({
+        isFetchingContact: false
+      })
+    }
   }
 
   toggleInstantMarketingBuilder = () =>
@@ -44,23 +68,32 @@ class SendDealPromotion extends React.Component {
 
     this.setState({
       isComposeEmailOpen: true,
-      isInstantMarketingBuilderOpen: false,
+      isInstantMarketingBuilderOpen: true,
       htmlTemplate: template.result,
       templateScreenshot: null
     })
   }
+
+  generatePreviewImage = async template =>
+    this.setState({
+      templateScreenshot: await getTemplatePreviewImage(template)
+    })
 
   handleSendEmails = async values => {
     this.setState({
       isSendingEmail: true
     })
 
-    const emails = values.recipients.map(recipient => ({
-      to: recipient.email,
-      subject: values.subject,
-      html: this.state.htmlTemplate,
-      contact: recipient.contactId
-    }))
+    const recipient = values.recipients[0]
+
+    const emails = [
+      {
+        to: recipient.email,
+        subject: values.subject,
+        html: this.state.htmlTemplate,
+        contact: recipient.contactId
+      }
+    ]
 
     try {
       await sendContactsEmail(emails)
@@ -75,39 +108,38 @@ class SendDealPromotion extends React.Component {
     } finally {
       this.setState({
         isSendingEmail: false,
-        isComposeEmailOpen: false
+        isComposeEmailOpen: false,
+        isInstantMarketingBuilderOpen: false
       })
     }
   }
 
-  generatePreviewImage = async template =>
-    this.setState({
-      templateScreenshot: await getTemplatePreviewImage(template)
-    })
+  get Recipients() {
+    const { contact } = this.state
 
-  getDealListing = async () => {
-    const { deal } = this.props
-
-    let listing = {}
-
-    if (deal.listing) {
-      try {
-        listing = await Listing.getListing(deal.listing)
-      } catch (e) {
-        console.log(e)
-      }
+    if (!contact) {
+      return []
     }
 
-    this.setState({
-      listing
-    })
+    const emails = getContactAttribute(
+      contact,
+      selectDefinitionByName(this.props.attributeDefs, 'email')
+    )
+
+    return [
+      {
+        contactId: contact.id,
+        name: contact.summary.display_name,
+        avatar: contact.summary.profile_image_url,
+        email: contact.summary.email,
+        emails: emails.map(email => email.text),
+        readOnly: true
+      }
+    ]
   }
 
   render() {
-    const { listing } = this.state
-    const { user } = this.props
-
-    if (hasMarketingAccess(user) === false) {
+    if (hasMarketingAccess(this.props.user) === false) {
       return null
     }
 
@@ -115,8 +147,9 @@ class SendDealPromotion extends React.Component {
       <Fragment>
         <ActionButton
           appearance="outline"
-          style={this.props.buttonStyle}
-          onClick={this.toggleInstantMarketingBuilder}
+          onClick={this.showMarketingBuilder}
+          disabled={this.state.isFetchingContact}
+          {...this.props.buttonStyle}
         >
           {this.props.children}
         </ActionButton>
@@ -125,9 +158,8 @@ class SendDealPromotion extends React.Component {
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
-          templateData={{ listing, user }}
-          templateTypes={['Listing']}
-          assets={listing && listing.gallery_image_urls}
+          templateData={{ user: this.props.user, contact: this.state.contact }}
+          templateTypes={['Contact']}
         />
 
         <Compose
@@ -137,19 +169,21 @@ class SendDealPromotion extends React.Component {
           html={this.state.templateScreenshot}
           onClickSend={this.handleSendEmails}
           isSubmitting={this.state.isSendingEmail}
+          disableAddNewRecipient
         />
       </Fragment>
     )
   }
 }
 
-function mapStateToProps({ user }) {
+function mapStateToProps({ user, contacts }) {
   return {
-    user
+    user,
+    attributeDefs: contacts.attributeDefs
   }
 }
 
 export default connect(
   mapStateToProps,
   { notify }
-)(SendDealPromotion)
+)(SendContactCard)

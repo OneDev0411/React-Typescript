@@ -103,6 +103,7 @@
     "koa-static": "^4.0.3",
     "koa-views": "6.1.3",
     "koa2-session-redis": "0.0.1",
+    "libphonenumber-js": "^1.4.6",
     "linkifyjs": "github:izadmehr/linkifyjs#build",
     "lodash": "^4.17.10",
     "match-sorter": "^2.2.3",
