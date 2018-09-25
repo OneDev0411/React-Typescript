@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 import Icon from '../../../../../../../views/components/SvgIcons/Alert/AlertIcon'
+import { grey } from '../../../../../../../views/utils/colors'
 
 export const InfoContainer = styled.div`
   display: flex;
   border-radius: 3px;
-  background-color: #d4dfe6;
+  background-color: ${grey.A300};
   padding: 1em;
   align-items: center;
   justify-content: space-between;
