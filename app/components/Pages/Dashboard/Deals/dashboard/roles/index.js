@@ -169,7 +169,7 @@ class Roles extends React.Component {
           <RoleCrmIntegration
             isOpen
             deal={deal}
-            user={user}
+            role={user}
             modalTitle="Update Contact"
             allowedRoles={allowedRoles}
             onHide={this.closeRoleForm}
