@@ -3,12 +3,15 @@ import { connect } from 'react-redux'
 
 import { confirmation } from '../../../../../../../store_actions/confirmation'
 
-import { Checkbox, DropdownButton, MenuItem } from 'react-bootstrap'
+import { DropdownButton, MenuItem } from 'react-bootstrap'
 import Button from '../../../../../../../views/components/Button/ActionButton'
+import Flex from 'styled-flex-component'
+import { CheckBoxButton } from '../../../../../../../views/components/Button/CheckboxButton'
 
 const getText = node => node.target.text.toLowerCase()
 
 class PanelHeader extends React.Component {
+  state = { reverse: false }
   handleSaveSearch = () => {
     if (this.props.info.total < 400) {
       return this.props.onClickShare()
@@ -97,7 +100,7 @@ class PanelHeader extends React.Component {
                     {activePanel === 'table' &&
                       sortingIndex !== 'Zip Code' && (
                         <MenuItem
-                          onClick={e => onClickDropdownItem('Zip Code')}
+                          onClick={() => onClickDropdownItem('Zip Code')}
                         >
                           Zip Code
                         </MenuItem>
@@ -105,19 +108,30 @@ class PanelHeader extends React.Component {
                     {activePanel === 'map' &&
                       sortingIndex !== 'distance' && (
                         <MenuItem
-                          onClick={e => onClickDropdownItem('distance')}
+                          onClick={() => onClickDropdownItem('distance')}
                         >
                           Distance to map center
                         </MenuItem>
                       )}
                   </DropdownButton>
                 </span>
-                <Checkbox
-                  onClick={this.props.onClickSortingDirection}
-                  className="c-panel__header__sorting__checkbox"
+
+                <Flex
+                  alignCenter
+                  style={{ marginLeft: '4rem' }}
+                  onClick={() => {
+                    this.setState({ reverse: !this.state.reverse })
+                    this.props.onClickSortingDirection()
+                  }}
                 >
+                  <CheckBoxButton
+                    square
+                    isSelected={this.state.reverse}
+                    title="Reverse"
+                    style={{ marginRight: '0.5rem' }}
+                  />
                   Reverse
-                </Checkbox>
+                </Flex>
               </div>
             )}
 

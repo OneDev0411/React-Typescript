@@ -58,20 +58,3 @@
       no-repeat center center;
   }
 }
-
-.c-panel__header__sorting__checkbox {
-  position: absolute;
-  right: 0;
-  top: -7px;
-
-  @media screen and (min-width: 1920px) {
-    right: auto;
-    left: 220px;
-  }
-
-  .c-listings-panel--table &,
-  .c-listings-panel--grid & {
-    right: auto;
-    left: 220px;
-  }
-}
