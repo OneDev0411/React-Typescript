@@ -23,7 +23,7 @@ class TableView extends React.Component {
       )
     },
     {
-      header: 'Price',
+      header: '$ Price',
       id: 'price',
       accessor: listing => this.getProp(listing, 'price'),
       render: ({ rowData: listing }) => this.getProp(listing, 'price')
