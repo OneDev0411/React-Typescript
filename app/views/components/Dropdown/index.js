@@ -7,8 +7,10 @@ import { Item } from './Item'
 import ShadowButton from '../Button/ShadowButton'
 import { SearchInput } from './SearchInput'
 import ArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import ActionButton from '../Button/ActionButton'
+import { grey } from '../../utils/colors'
 
-export const Button = ShadowButton.extend`
+export const Button = ActionButton.extend`
   position: relative;
   width: ${props => (props.fullWidth ? '100%' : 'auto')};
   display: flex;
@@ -17,7 +19,7 @@ export const Button = ShadowButton.extend`
   font-weight: normal;
 
   &:focus {
-    outline-width: 2px;
+    background-color: ${grey.A100};
   }
 `
 
@@ -91,6 +93,8 @@ export const Dropdown = ({
             )
           ) : (
             <Button
+              appearance="outline"
+              noBorder
               {...getButtonProps({
                 fullWidth,
                 id: buttonId,
