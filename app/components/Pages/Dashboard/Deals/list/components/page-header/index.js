@@ -14,10 +14,7 @@ const Header = ({
   onMenuTriggerChange,
   showCreateDeal = true
 }) => (
-  <PageHeader
-    isFlat
-    style={{ padding: '0 2rem 0 1.5rem', marginBottom: '2rem' }}
-  >
+  <PageHeader isFlat>
     <PageHeader.Title showBackButton={false}>
       <MenuTrigger isExpended={isSideMenuOpen} onClick={onMenuTriggerChange} />
       <PageHeader.Heading>{title}</PageHeader.Heading>

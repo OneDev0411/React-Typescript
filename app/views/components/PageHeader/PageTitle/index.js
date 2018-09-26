@@ -26,7 +26,8 @@ PageTitle.defaultProps = {
 }
 
 export function PageTitle(props) {
-  const { title, backUrl, onClickCloseButton } = props
+  const subtitleStyle = { marginTop: '1em', color: '#8a8a8a' }
+  const { title, subtitle, backUrl, onClickCloseButton } = props
 
   function handleOnBack() {
     if (backUrl) {
@@ -44,8 +45,14 @@ export function PageTitle(props) {
     return (
       <Flex justifyBetween style={{ width: '100%' }}>
         <Flex alignCenter>
-          {title && <H1>{title}</H1>}
-          {!title && props.children}
+          {title ? (
+            <Flex column>
+              <H1>{title}</H1>
+              {subtitle && <div style={subtitleStyle}>{subtitle}</div>}
+            </Flex>
+          ) : (
+            props.children
+          )}
         </Flex>
 
         <Flex alignCenter>
@@ -75,7 +82,10 @@ export function PageTitle(props) {
             <BackIcon />
           </IconButton>
         )}
-        {title && <H1>{title}</H1>}
+        <Flex column>
+          {title && <H1>{title}</H1>}
+          {subtitle && <div style={subtitleStyle}>{subtitle}</div>}
+        </Flex>
       </Flex>
       {props.children}
     </Flex>
