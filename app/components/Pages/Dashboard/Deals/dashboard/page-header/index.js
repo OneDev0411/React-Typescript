@@ -39,17 +39,17 @@ const Header = ({ deal, showAttachments }) => (
         Get Signatures
       </Button>
 
-      <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
-
       {deal.listing && (
         <LinkButton
           appearance="outline"
-          style={{ marginLeft: '0.5em' }}
+          style={{ margin: '0 0.5em' }}
           to={`/dashboard/deals/${deal.id}/network`}
         >
           Network Agent
         </LinkButton>
       )}
+
+      <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
     </PageHeader.Menu>
   </PageHeader>
 )
