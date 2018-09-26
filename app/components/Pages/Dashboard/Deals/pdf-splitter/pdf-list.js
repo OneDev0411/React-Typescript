@@ -11,6 +11,7 @@ import {
   resetSplitter
 } from '../../../../../store_actions/deals'
 import importPdfJs from '../../../../../utils/import-pdf-js'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 class PDF extends React.Component {
   constructor(props) {
@@ -112,17 +113,23 @@ class PDF extends React.Component {
                       doc={doc}
                       pageNumber={i + 1}
                     >
-                      {isUsed && <span className="page-cta is-used">Used</span>}
+                      {isUsed && (
+                        <ActionButton className="page-cta is-used">
+                          Used
+                        </ActionButton>
+                      )}
 
                       {inUse ? (
-                        <span className="page-cta inuse">In Use</span>
+                        <ActionButton className="page-cta inuse">
+                          In Use
+                        </ActionButton>
                       ) : (
-                        <span
+                        <ActionButton
                           className="page-cta"
                           onClick={() => this.onSelectPage(i + 1, id)}
                         >
                           Add page
-                        </span>
+                        </ActionButton>
                       )}
                     </PageThumbnail>
                   )
@@ -142,9 +149,12 @@ function mapStateToProps({ deals }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  selectSplitterPage,
-  setSplitterPdfObject,
-  notify,
-  resetSplitter
-})(PDF)
+export default connect(
+  mapStateToProps,
+  {
+    selectSplitterPage,
+    setSplitterPdfObject,
+    notify,
+    resetSplitter
+  }
+)(PDF)
