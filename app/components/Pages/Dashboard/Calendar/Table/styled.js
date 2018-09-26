@@ -4,7 +4,7 @@ import { grey, primary } from '../../../../../views/utils/colors'
 import ALink from '../../../../../views/components/ALink'
 
 export const GridContainer = styled.div`
-  height: calc(100vh - 121px);
+  height: calc(100vh - 146px);
   padding: 0 1em 0 1.5em;
   overflow: auto;
 `
