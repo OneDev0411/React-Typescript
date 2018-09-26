@@ -168,7 +168,7 @@ class Builder extends React.Component {
           <h1>Marketing Center</h1>
 
           <div>
-            <ActionButton inverse onClick={this.props.onClose}>
+            <ActionButton appearance="outline" onClick={this.props.onClose}>
               Cancel
             </ActionButton>
 
