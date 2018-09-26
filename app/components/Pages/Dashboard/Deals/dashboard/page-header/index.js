@@ -6,6 +6,7 @@ import { showAttachments } from '../../../../../../store_actions/deals'
 import DealEmail from '../../dashboard/deal-email'
 
 import PageHeader from 'components/PageHeader'
+import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
 import SendDealPromotionCard from 'components/InstantMarketing/Flows/SendDealPromotion'
 
@@ -39,6 +40,16 @@ const Header = ({ deal, showAttachments }) => (
       </Button>
 
       <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
+
+      {deal.listing && (
+        <LinkButton
+          appearance="outline"
+          style={{ marginLeft: '0.5em' }}
+          to={`/dashboard/deals/${deal.id}/network`}
+        >
+          Network Agent
+        </LinkButton>
+      )}
     </PageHeader.Menu>
   </PageHeader>
 )
