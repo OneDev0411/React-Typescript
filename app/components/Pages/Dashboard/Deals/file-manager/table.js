@@ -512,14 +512,21 @@ export class FileManager extends React.Component {
                 }
               }}
               data={this.data}
-              summary={{
-                text:
-                  selectedRows.length > 0
-                    ? '<strong style="color:#000;">[selectedRows]</strong> of [totalRows] Files'
-                    : '[totalRows] Files',
-                selectedRows: selectedRows.length,
-                totalRows: this.data.length || 0
-              }}
+              summary={({ totalRowsCount, selectedRowsCount }) => (
+                <Fragment>
+                  {selectedRowsCount > 0 ? (
+                    <div>
+                      <strong style={{ color: '#000' }}>
+                        {selectedRowsCount}
+                      </strong>
+                      &nbsp;of&nbsp;
+                      {totalRowsCount} Files
+                    </div>
+                  ) : (
+                    <div>{totalRowsCount} Files</div>
+                  )}
+                </Fragment>
+              )}
               columns={this.getColumns(this.data)}
               getTdProps={this.getTdProps}
               getTrProps={this.getTrProps}

@@ -7,6 +7,7 @@ import Name from './columns/Name'
 import { LastTouchedCell } from './columns/LastTouched'
 
 import { LoadingComponent } from './components/LoadingComponent'
+import { TableSummary } from './components/TableSummary'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
 import MergeContacts from '../Actions/MergeContacts'
@@ -156,8 +157,6 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const selectedRowsCount = this.props.selectedRows.length
-
     return (
       <div style={{ padding: '0 1.5em' }}>
         <Table
@@ -190,14 +189,7 @@ class ContactsList extends React.Component {
             }
           }}
           data={this.props.data}
-          summary={{
-            text:
-              selectedRowsCount > 0
-                ? '<strong style="color:#000;">[selectedRows]</strong> of [totalRows] contacts'
-                : '[totalRows] contacts',
-            selectedRows: selectedRowsCount,
-            totalRows: this.props.listInfo.total || 0
-          }}
+          summary={TableSummary}
           isFetching={this.props.isFetching}
           isFetchingMore={this.props.isFetchingMore}
           columns={this.columns}
