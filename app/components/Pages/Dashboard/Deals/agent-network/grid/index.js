@@ -27,22 +27,22 @@ export class Grid extends React.Component {
     {
       id: 'listings',
       header: '# of Listings',
-      accessor: agent => Object.keys(agent.listings).length,
-      render: ({ rowData: agent }) => Object.keys(agent.listings).length
+      accessor: agent => agent.asListing.length,
+      render: ({ rowData: agent }) => agent.asListing.length
     },
     {
       id: 'buyers',
       header: '# of Buyers',
-      accessor: agent => agent.soldListings.length,
-      render: ({ rowData: agent }) => agent.soldListings.length
+      accessor: agent => agent.asBuyers.length,
+      render: ({ rowData: agent }) => agent.asBuyers.length
     },
     {
       id: 'value_in',
-      header: 'Value in $',
-      accessor: agent => agent.soldListingsTotalValue,
+      header: 'Volume in $',
+      accessor: agent => agent.listingsTotalVolume,
       render: ({ rowData: agent }) =>
-        agent.soldListingsTotalValue
-          ? `$${agent.soldListingsTotalValue.toLocaleString()}`
+        agent.listingsTotalVolume > 0
+          ? `$${agent.listingsTotalVolume.toLocaleString()}`
           : 0
     },
     {
@@ -50,7 +50,7 @@ export class Grid extends React.Component {
       header: 'Avg Price',
       accessor: agent => agent.listingsAveragePrice,
       render: ({ rowData: agent }) =>
-        agent.listingsAveragePrice
+        agent.listingsAveragePrice > 0
           ? `$${agent.listingsAveragePrice.toLocaleString()}`
           : 0
     },

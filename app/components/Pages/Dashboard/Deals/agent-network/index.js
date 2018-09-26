@@ -91,9 +91,17 @@ class AgentNetwork extends React.Component {
 
       const response = await byValert(query)
 
-      const list = this.createList(response.data)
+      const list = this.createList(response.data).sort(
+        (a, b) => b.listingsCount - a.listingsCount
+      )
 
-      this.setState({ isFetching: false, list, listInfo: response.info })
+      console.log(list)
+
+      this.setState({
+        isFetching: false,
+        listInfo: response.info,
+        list
+      })
     } catch (error) {
       console.log(error)
       this.setState({ isFetching: false })
@@ -143,22 +151,38 @@ class AgentNetwork extends React.Component {
     })
 
     return Object.values(initialList).map(({ listings, ...rest }) => {
-      const add = (accumulator, listing) => accumulator + listing.price
-      const soldListings = listings.filter(l => l.status === 'sold')
-      const soldListingsTotalValue = soldListings.reduce(add, 0)
-      const listingsAveragePrice = listings.reduce(add, 0)
+      const addPrice = (accumulator, listing) => accumulator + listing.price
 
+      const asBuyers = []
+      const asListing = []
       const indexedList = {}
+      const soldListings = []
+      const listingsTotalVolume = listings.reduce(addPrice, 0)
 
-      listings.forEach(l => (indexedList[l.id] = l))
+      listings.forEach(listing => {
+        if (listing.list_agent_mls_id) {
+          asListing.push(listing.id)
+        } else {
+          asBuyers.push(listing.id)
+        }
+
+        if (listing.status === 'sold') {
+          soldListings.push(listings)
+        }
+
+        indexedList[listing.id] = listing
+      })
 
       return {
         ...rest,
+        asListing,
+        asBuyers,
+        listingsTotalVolume,
         listings: indexedList,
+        listingsCount: listings.length,
         soldListings: soldListings.map(l => l.id),
-        soldListingsTotalValue,
         listingsAveragePrice:
-          listingsAveragePrice > 0 ? listingsAveragePrice / listings.length : 0
+          listingsTotalVolume > 0 ? listingsTotalVolume / listings.length : 0
       }
     })
   }
