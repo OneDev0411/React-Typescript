@@ -15,7 +15,7 @@ export const BasicDropdown = ({
   pullTo,
   onSelect,
   onChange,
-  fullWidth,
+  fullWidth = false,
   buttonIcon,
   itemRenderer,
   defaultSelectedItem,
@@ -23,7 +23,8 @@ export const BasicDropdown = ({
   isBlock = true,
   noBorder = false,
   maxHeight = 200,
-  itemToString = item => item.label
+  itemToString = item => item.label,
+  upsideDown = false
 }) => (
   <Downshift
     onChange={onChange}
@@ -36,6 +37,8 @@ export const BasicDropdown = ({
           buttonRenderer({
             ...downshift.getButtonProps({
               disabled,
+              isBlock: fullWidth,
+              noBorder,
               isOpen: downshift.isOpen,
               selectedItem: downshift.selectedItem
             })
@@ -64,7 +67,8 @@ export const BasicDropdown = ({
               position: 'absolute',
               left: pullTo !== 'right' ? 0 : 'auto',
               right: pullTo === 'right' ? 0 : 'auto',
-              top: 'calc(100% + 8px)',
+              top: upsideDown ? 'auto' : 'calc(100% + 8px)',
+              bottom: upsideDown ? 'calc(100% + 0.5em)' : 'auto',
               zIndex: 2,
               overflowY: 'auto',
               ...menuStyle
