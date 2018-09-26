@@ -21,7 +21,7 @@ class AgentNetwork extends React.Component {
     super(props)
 
     this.state = {
-      isFetching: false,
+      isFetching: true,
       list: [],
       listInfo: {
         total: 0,
@@ -49,52 +49,56 @@ class AgentNetwork extends React.Component {
     let query
     const { deal } = this.props
 
-    this.setState({ isFetching: true })
+    try {
+      if (deal) {
+        this.address = getAddress(deal)
 
-    if (deal) {
-      this.address = getAddress(deal)
+        const location = await getPlace(this.address)
 
-      const location = await getPlace(this.address)
+        if (location) {
+          points = getMapBoundsInCircle(location.center)
 
-      if (location) {
-        points = getMapBoundsInCircle(location.center)
+          if (deal.listing) {
+            const listing = await getListing(deal.listing)
 
-        if (deal.listing) {
-          const listing = await getListing(deal.listing)
+            const { property } = listing
 
-          const { property } = listing
+            query = {
+              ...valertOptions,
+              points,
+              architectural_style: property.architectural_style,
+              minimum_bedrooms: property.bedroom_count,
+              maximum_bedrooms: property.bedroom_count,
+              minimum_bathrooms: property.full_bathroom_count,
+              maximum_bathrooms: property.full_bathroom_count,
+              property_subtype: [property.property_subtype],
+              property_type: [property.property_type]
+            }
+          }
+        }
+      } else if (this.address) {
+        const location = await getPlace(this.address)
+
+        if (location) {
+          points = getMapBoundsInCircle(location.center)
 
           query = {
             ...valertOptions,
-            points,
-            architectural_style: property.architectural_style,
-            minimum_bedrooms: property.bedroom_count,
-            maximum_bedrooms: property.bedroom_count,
-            minimum_bathrooms: property.full_bathroom_count,
-            maximum_bathrooms: property.full_bathroom_count,
-            property_subtype: [property.property_subtype],
-            property_type: [property.property_type]
+            points
           }
         }
       }
-    } else if (this.address) {
-      const location = await getPlace(this.address)
 
-      if (location) {
-        points = getMapBoundsInCircle(location.center)
+      const response = await byValert(query)
 
-        query = {
-          ...valertOptions,
-          points
-        }
-      }
+      const list = this.createList(response.data)
+
+      this.setState({ isFetching: false, list, listInfo: response.info })
+    } catch (error) {
+      console.log(error)
+      this.setState({ isFetching: false })
+      throw error
     }
-
-    const response = await byValert(query)
-
-    const list = this.createList(response.data)
-
-    this.setState({ isFetching: false, list, listInfo: response.info })
   }
 
   createList = listings => {
