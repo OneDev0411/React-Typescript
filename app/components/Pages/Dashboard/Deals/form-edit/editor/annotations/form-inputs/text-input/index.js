@@ -12,7 +12,7 @@ class TextAnnotation extends React.PureComponent {
     )
 
     const isTextArea = this.props.annotation.multiLine === true
-    const defaultValue = this.props.value || ''
+    const defaultValue = this.props.value
 
     const props = {
       id: this.props.annotation.fieldName,

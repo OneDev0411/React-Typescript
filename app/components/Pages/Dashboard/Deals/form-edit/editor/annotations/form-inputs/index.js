@@ -16,13 +16,30 @@ export default class FormInputs extends React.Component {
     this.setDefaultValues()
   }
 
+  getValue(annotation) {
+    const { fieldName, fieldValue, buttonValue } = annotation
+
+    const type = this.getType(annotation)
+
+    if (type === TEXT_ANNOTATION)
+      return fieldValue || ''
+
+    if (type === CHECKBOX_ANNOTATION)
+      return fieldValue && fieldValue !== 'Off'
+
+    if (type === RADIO_ANNOTATION)
+      return fieldValue === buttonValue
+
+    return ''
+  }
+
   setDefaultValues() {
     const values = {}
 
     this.props.annotations.forEach(annotation => {
-      const { fieldName, fieldValue } = annotation
+      const { fieldName } = annotation
 
-      values[fieldName] = fieldValue
+      values[fieldName] = this.getValue(annotation)
     })
 
     this.props.onSetValues(values, true)
