@@ -12,6 +12,8 @@ export const CheckboxInput = styled.input`
   width: ${props => props.box.width}px;
   height: ${props => props.box.height}px;
   appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   background-color: #d2e5f2;
   cursor: pointer;
   margin: 0 !important;

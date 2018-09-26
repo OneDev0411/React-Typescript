@@ -25,7 +25,7 @@ export default class RadioAnnotation extends React.PureComponent {
         type="radio"
         key={annotation.id}
         value={annotation.buttonValue}
-        defaultChecked={annotation.buttonValue === value}
+        defaultChecked={value}
         onChange={e => this.props.onValueUpdate(e.target.value)}
       />
     )

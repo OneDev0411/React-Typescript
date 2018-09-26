@@ -4,6 +4,7 @@ export const RadioInput = styled.input`
   color: ${props => props.appearance.color};
   font-weight: ${props => (props.appearance.bold ? 'bold' : 'normal')};
   font-family: ${props => props.appearance.fontFace};
+  font-size: ${props => props.box.height}px;
   position: absolute;
   text-align: center;
   left: ${props => props.box.left}px;
@@ -11,6 +12,8 @@ export const RadioInput = styled.input`
   width: ${props => props.box.width}px;
   height: ${props => props.box.height}px;
   appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   background-color: #d2e5f2;
   border: 1px solid #cccd;
   border-radius: 4px;
@@ -18,7 +21,7 @@ export const RadioInput = styled.input`
 
   :checked {
     :before {
-      content: '✔';
+      content: '❌';
     }
   }
 `
