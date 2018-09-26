@@ -34,7 +34,7 @@ const Header = ({ deal, showAttachments }) => (
         View & Upload Files
       </Button>
 
-      <Button appearance="outline" onClick={showAttachments}>
+      <Button appearance="outline" onClick={() => showAttachments()}>
         Get Signatures
       </Button>
 
