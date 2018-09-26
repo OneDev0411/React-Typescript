@@ -45,7 +45,7 @@ const Header = ({ deal, showAttachments }) => (
           style={{ margin: '0 0.5em' }}
           to={`/dashboard/deals/${deal.id}/network`}
         >
-          Network Agent
+          Agent Network
         </LinkButton>
       )}
 
