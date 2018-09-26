@@ -51,6 +51,11 @@ export function isBackOffice(user) {
 }
 
 export function isTrainingAccount(user) {
+
+  // Hide training banner
+  // https://gitlab.com/rechat/web/issues/1688#note_104530885
+  return false
+  
   const activeTeam = getActiveTeam(user) || {}
   let { brand } = activeTeam
 
