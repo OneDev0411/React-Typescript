@@ -8,6 +8,8 @@ import { Container } from './styled'
 import { getBrandMembers } from 'actions/calendar/get-brand-members'
 import { setCalendarFilter } from 'actions/calendar/set-calendar-filter'
 
+import { getActiveTeamId } from 'utils/user-teams'
+
 class CalendarFilter extends React.Component {
   componentDidMount() {
     this.init()
@@ -18,7 +20,9 @@ class CalendarFilter extends React.Component {
       return false
     }
 
-    this.props.getBrandMembers(this.props.user.brand)
+    const brandId = getActiveTeamId(this.props.user)
+
+    this.props.getBrandMembers(brandId)
   }
 
   get MembersList() {
@@ -58,7 +62,7 @@ class CalendarFilter extends React.Component {
         const user = this.Members.find(member => member.id === userId)
 
         if (!user) {
-          return ''
+          return null
         }
 
         let name = user.display_name
@@ -71,7 +75,11 @@ class CalendarFilter extends React.Component {
       })
     }
 
-    return `Filter: ${names.join(', ')}`
+    let filterName = `Filter: ${names.filter(name => name !== null).join(', ')}`
+
+    return filterName.length < 35
+      ? filterName
+      : `${filterName.substring(0, 35)}...`
   }
 
   handleOnChange = selectedItems => {
@@ -101,7 +109,7 @@ class CalendarFilter extends React.Component {
           items={this.MembersList}
           onChange={this.handleOnChange}
           style={{
-            maxWidth: '18rem'
+            maxWidth: '20rem'
           }}
         />
       </Container>

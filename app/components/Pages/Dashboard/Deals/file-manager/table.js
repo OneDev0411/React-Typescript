@@ -513,12 +513,7 @@ export class FileManager extends React.Component {
               }}
               data={this.data}
               summary={{
-                text:
-                  selectedRows.length > 0
-                    ? '<strong style="color:#000;">[selectedRows]</strong> of [totalRows] Files'
-                    : '[totalRows] Files',
-                selectedRows: selectedRows.length,
-                totalRows: this.data.length || 0
+                entityName: 'Files'
               }}
               columns={this.getColumns(this.data)}
               getTdProps={this.getTdProps}
