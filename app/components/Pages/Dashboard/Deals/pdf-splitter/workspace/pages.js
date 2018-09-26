@@ -6,6 +6,7 @@ import { DropTarget } from 'react-dnd'
 import { deselectSplitterPage } from '../../../../../../store_actions/deals'
 import PageThumbnail from '../page/thumbnail'
 import EmptyState from './empty-state'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 /**
  * Specifies which props to inject into your component.
@@ -47,14 +48,14 @@ class WorkspacePdfList extends React.Component {
             doc={pdfObjects[page.documentId]}
             pageNumber={page.pageNumber}
           >
-            <span
+            <ActionButton
               className="page-cta remove"
               onClick={() =>
                 this.deselectPage(page.documentId, page.pageNumber)
               }
             >
               Remove
-            </span>
+            </ActionButton>
           </PageThumbnail>
         ))}
       </div>
@@ -64,9 +65,10 @@ class WorkspacePdfList extends React.Component {
   }
 }
 
-const connectedWorkSpacePdfList = connect(null, { deselectSplitterPage })(
-  WorkspacePdfList
-)
+const connectedWorkSpacePdfList = connect(
+  null,
+  { deselectSplitterPage }
+)(WorkspacePdfList)
 
 export default DropTarget('SPLITTER_PDF_PAGE', {}, collect)(
   connectedWorkSpacePdfList

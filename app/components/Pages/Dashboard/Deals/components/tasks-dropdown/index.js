@@ -238,7 +238,8 @@ class DropDownTasks extends React.Component {
       showNotifyOption,
       showStashOption,
       stashOptionText,
-      disabled = false
+      disabled = false,
+      isBlock = false
     } = this.props
 
     return (
@@ -249,7 +250,7 @@ class DropDownTasks extends React.Component {
         onInputValueChange={this.onInputValueChange}
       >
         {({ getInputProps, isOpen }) => (
-          <div style={{ display: 'inline-block' }}>
+          <div style={{ display: isBlock ? 'block' : 'inline-block' }}>
             <DropDownContainer>
               <SearchInput
                 disabled={disabled}

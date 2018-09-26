@@ -8,7 +8,7 @@ import DealEmail from '../../dashboard/deal-email'
 import PageHeader from 'components/PageHeader'
 import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
-import SendDealPromotionCard from 'components/InstantMarketing/Flows/SendDealPromotion'
+import SendDealPromotionCard from '../../../../../../views/components/InstantMarketing/Flows/SendDealPromotion'
 
 const Button = ActionButton.extend`
   margin-left: 0.5em;

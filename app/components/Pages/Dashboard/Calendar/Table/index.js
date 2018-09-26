@@ -15,7 +15,7 @@ import Fetching from './Fetching'
 import EventIcon from './EventIcon'
 import { primary } from 'views/utils/colors'
 
-import SendBirthdayCard from 'components/InstantMarketing/Flows/SendBirthdayCard'
+import SendContactCard from 'components/InstantMarketing/Flows/SendContactCard'
 import { grey } from '../../../../../views/utils/colors'
 
 export class Table extends React.Component {
@@ -69,7 +69,14 @@ export class Table extends React.Component {
   getEventActions = row => {
     if (row.event_type === 'birthday') {
       return (
-        <SendBirthdayCard contactId={row.contact}>Send a Card</SendBirthdayCard>
+        <SendContactCard
+          contactId={row.contact}
+          buttonStyle={{
+            size: 'small'
+          }}
+        >
+          Send a Card
+        </SendContactCard>
       )
     }
   }
@@ -115,6 +122,7 @@ export class Table extends React.Component {
       case 'contact_attribute':
         onClick = () => goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
         break
+
       case 'crm_task':
         onClick = () => this.props.onSelectTask(row.crm_task)
         break
@@ -152,15 +160,28 @@ export class Table extends React.Component {
     return {
       ...props,
       hoverStyle: `
-      background-color: ${grey.A100};
-       a {
-        color: ${primary}
-      }
+        background-color: ${grey.A100};
+        a {
+          color: ${primary}
+        }
       `,
       style: {
         ...props.style
       }
     }
+  }
+
+  getGridTdProps = (colIndex, { column }) => {
+    if (column.id === 'action') {
+      return {
+        style: {
+          textAlign: 'right',
+          paddingRight: '1rem'
+        }
+      }
+    }
+
+    return {}
   }
 
   render() {
@@ -183,7 +204,7 @@ export class Table extends React.Component {
         accuracy={60}
         debounceTime={50}
       >
-        <GridContainer>
+        <GridContainer isFilterHidden={this.props.isFilterHidden}>
           <Fetching
             show={
               isFetching && loadingPosition === positions.Top && data.length > 0
@@ -202,6 +223,7 @@ export class Table extends React.Component {
             EmptyState={EmptyState}
             onTableRef={onRef}
             getTrProps={this.getGridTrProps}
+            getTdProps={this.getGridTdProps}
             getHeaderProps={this.getGridHeaderProps}
             getHeaderRowProps={this.getGridHeaderRowProps}
             SubComponent={({ date }) => (
@@ -229,6 +251,7 @@ export class Table extends React.Component {
 function mapStateToProps({ calendar }) {
   return {
     selectedDate: new Date(calendar.selectedDate),
+    isFilterHidden: calendar.brandMembers.length <= 1,
     calendar: calendar.list,
     calendarDays: calendar.byDay
   }

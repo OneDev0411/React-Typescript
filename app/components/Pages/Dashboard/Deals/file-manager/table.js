@@ -440,7 +440,7 @@ export class FileManager extends React.Component {
     ]
   }
 
-  leftActions = [
+  actions = [
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: () => (
@@ -508,8 +508,7 @@ export class FileManager extends React.Component {
                   onChange: this.onChangeSelectedRows
                 },
                 actionable: {
-                  leftActions: this.leftActions,
-                  rightActions: this.rightActions
+                  actions: this.actions
                 }
               }}
               data={this.data}

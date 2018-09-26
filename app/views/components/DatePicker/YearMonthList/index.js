@@ -54,6 +54,7 @@ class YearMonthList extends React.Component {
             minWidth: '50px',
             marginLeft: '-0.5rem'
           }}
+          menuStyle={{ fontSize: '1rem' }}
         />
         <BasicDropdown
           noBorder
@@ -67,6 +68,7 @@ class YearMonthList extends React.Component {
             display: 'inline-block',
             minWidth: '50px'
           }}
+          menuStyle={{ fontSize: '1rem' }}
         />
 
         {React.cloneElement(children, {

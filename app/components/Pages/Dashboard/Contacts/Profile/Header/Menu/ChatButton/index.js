@@ -86,6 +86,7 @@ class ChatButton extends React.Component {
         appearance="outline"
         disabled={this.state.isCreatingRoom}
         onClick={this.onClick}
+        style={{ marginLeft: '1rem' }}
       >
         {this.state.isCreatingRoom ? 'Connecting...' : 'Chat'}
       </ActionButton>

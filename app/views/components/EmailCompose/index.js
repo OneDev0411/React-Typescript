@@ -66,6 +66,7 @@ class EmailCompose extends React.Component {
             <Field
               placeholder="To"
               name="recipients"
+              disableAddNewRecipient={this.props.disableAddNewRecipient}
               component={MultipleContactsSelect}
             />
 
