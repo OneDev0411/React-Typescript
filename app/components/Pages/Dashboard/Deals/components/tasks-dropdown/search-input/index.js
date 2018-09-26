@@ -30,7 +30,12 @@ export const SearchInput = ({
   onFocus,
   disabled
 }) => (
-  <SearchContainer appearance="outline" onClick={onClick} disabled={disabled}>
+  <SearchContainer
+    isBlock
+    appearance="outline"
+    onClick={onClick}
+    disabled={disabled}
+  >
     {searchable && (
       <Input
         {...getInputProps({ placeholder, value })}
