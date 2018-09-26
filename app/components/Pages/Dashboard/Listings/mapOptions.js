@@ -72,7 +72,7 @@ export const queryOptions = {
       longitude: -96.89115626525879
     }
   ],
-  property_subtypes: objectValueToArray(property_subtypes)
+  property_subtypes: Object.values(property_subtypes)
 }
 
 export const mapOptions = {
@@ -93,8 +93,4 @@ export default {
   queryOptions,
   mapInitialState,
   DECLUSTER_ZOOM_LEVEL
-}
-
-function objectValueToArray(obj = {}) {
-  return Object.keys(obj).map(prop => obj[prop])
 }
