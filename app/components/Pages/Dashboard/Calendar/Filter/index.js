@@ -84,6 +84,10 @@ class CalendarFilter extends React.Component {
   }
 
   render() {
+    if (this.Members.length <= 1) {
+      return false
+    }
+
     return (
       <Container>
         <MultiSelectDropdown
@@ -97,7 +101,7 @@ class CalendarFilter extends React.Component {
           items={this.MembersList}
           onChange={this.handleOnChange}
           style={{
-            width: '40%'
+            maxWidth: '18rem'
           }}
         />
       </Container>
