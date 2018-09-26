@@ -28,7 +28,7 @@ const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
   }
 
   _.every(tags, item => {
-    if (getShowingTags().length + item.text.length <= 33) {
+    if (getShowingTags().length + item.text.length <= 66) {
       showingTags.push(item.text)
 
       return true
