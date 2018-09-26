@@ -38,23 +38,18 @@ class ContactsList extends React.Component {
       render: ({ rowData: contact }) => <Name contact={contact} />
     },
     {
-      header: 'Email',
-      id: 'email',
+      header: 'Contact',
+      id: 'contact',
       accessor: contact => getAttributeFromSummary(contact, 'email'),
       render: ({ rowData: contact }) => (
-        <TruncatedColumn>
-          {getAttributeFromSummary(contact, 'email')}
-        </TruncatedColumn>
-      )
-    },
-    {
-      header: 'Phone',
-      id: 'phone',
-      accessor: contact => getAttributeFromSummary(contact, 'phone_number'),
-      render: ({ rowData: contact }) => (
-        <TruncatedColumn>
-          {getAttributeFromSummary(contact, 'phone_number')}
-        </TruncatedColumn>
+        <React.Fragment>
+          <TruncatedColumn>
+            {getAttributeFromSummary(contact, 'email')}
+          </TruncatedColumn>
+          <TruncatedColumn>
+            {getAttributeFromSummary(contact, 'phone_number')}
+          </TruncatedColumn>
+        </React.Fragment>
       )
     },
     {
