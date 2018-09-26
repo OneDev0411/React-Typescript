@@ -16,10 +16,23 @@
 
   .modal-footer {
     border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 
     .help {
-      width: 18px;
       margin-right: 20px;
+      color: #7F7F7F;
+      border: 1px solid #7F7F7F;
+      border-radius: 100%;
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      &:hover{
+        color: #003bdf;
+        border-color: #003bdf;
+      }
     }
   }
 }
@@ -60,22 +73,10 @@
       position: relative;
       width: 52%;
       height: 40px;
-      line-height: 40px;
       vertical-align: middle;
-      padding: 0 0 0 12px;
-      border-radius: 4px;
-      background-color: rgba(255, 255, 255, 0.9);
-      border: solid 1px #dce5eb;
-      font-size: 14px;
-      letter-spacing: -0.2px;
-      color: #1d364b;
       text-overflow: ellipsis;
       white-space: nowrap;
-      overflow: hidden;
-
-      button:focus {
-        outline: none;
-      }
+      overflow: hidden; 
 
       img {
         width: 17px;
@@ -92,7 +93,7 @@
         cursor: pointer;
 
         &:hover {
-          color: #2196f3;
+          color: #022ca0;
         }
 
         &.canEditName {
@@ -101,6 +102,8 @@
       }
 
       .input-edit-name {
+        color: #7F7F7F;
+        background-color: transparent;
         width: 79%;
         height: 30px;
         padding: 0 5px;
@@ -111,14 +114,9 @@
           border: none;
         }
 
-        &:hover {
-          background: #fafafa;
-        }
-
         &:focus {
-          background: #fafafa;
-          outline-width: 1px;
-          border-width: 0;
+          outline: none;
+          border: none;
         }
       }
 

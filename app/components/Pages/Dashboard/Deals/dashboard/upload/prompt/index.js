@@ -344,11 +344,7 @@ class UploadModal extends React.Component {
 
         <Modal.Footer>
           <ToolTip caption="Create new documents and save them to tasks">
-            <img
-              src="/static/images/deals/question.png"
-              className="help"
-              alt=""
-            />
+            <div className="help">?</div>
           </ToolTip>
 
           <ActionButton
