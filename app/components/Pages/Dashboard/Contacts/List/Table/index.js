@@ -7,7 +7,6 @@ import Name from './columns/Name'
 import { LastTouchedCell } from './columns/LastTouched'
 
 import { LoadingComponent } from './components/LoadingComponent'
-import { TableSummary } from './components/TableSummary'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
 import MergeContacts from '../Actions/MergeContacts'
@@ -184,7 +183,9 @@ class ContactsList extends React.Component {
             }
           }}
           data={this.props.data}
-          summary={TableSummary}
+          summary={{
+            entityName: 'Contacts'
+          }}
           isFetching={this.props.isFetching}
           isFetchingMore={this.props.isFetchingMore}
           columns={this.columns}

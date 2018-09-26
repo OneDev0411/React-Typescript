@@ -117,7 +117,8 @@ class Grid extends React.Component {
       <div>
         <ToolbarContainer>
           <TableSummary
-            Component={this.props.summary}
+            Component={this.props.summary.render}
+            entityName={this.props.summary.entityName}
             totalRowsCount={this.props.data.length}
             selectedRowsCount={
               this.selectablePlugin
@@ -163,7 +164,7 @@ Grid.propTypes = {
   onScrollTop: PropTypes.func,
   columns: PropTypes.array.isRequired,
   data: PropTypes.array,
-  summary: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
+  summary: PropTypes.object
 }
 
 Grid.defaultProps = {
@@ -176,7 +177,7 @@ Grid.defaultProps = {
   onScrollTop: () => {},
   plugins: {},
   data: [],
-  summary: null
+  summary: {}
 }
 
 export default Grid
