@@ -1,5 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Flex from 'styled-flex-component'
+
+import { getUserTitle } from '../../../../models/user/helpers'
+import { isSoloActiveTeam } from '../../../../utils/user-teams'
 
 import Avatar from '../../Avatar'
 import { TeamMember } from '../TeamMember'
@@ -7,23 +11,23 @@ import { BasicDropdown } from '../../BasicDropdown'
 import ActionButton from '../../Button/ActionButton'
 import { Icon } from '../../Dropdown'
 
-import { isSoloActiveTeam } from '../../../../utils/user-teams'
-import { getUserTitle, getMembers } from '../helpers'
+import { getMembers } from '../helpers'
 
 const propTypes = {
   onSelect: PropTypes.func.isRequired,
-  user: PropTypes.PropTypes.shape().isRequired
+  owner: PropTypes.shape().isRequired,
+  user: PropTypes.shape().isRequired
 }
 
 export class TeamContactSelect extends React.Component {
   constructor(props) {
     super(props)
 
-    this.isSolo = isSoloActiveTeam(props.owner)
+    this.isSolo = isSoloActiveTeam(props.user)
 
     this.state = {
       isFetching: false,
-      members: [props.owner]
+      members: [props.user]
     }
   }
 
@@ -37,7 +41,7 @@ export class TeamContactSelect extends React.Component {
     try {
       this.setState({ isFetching: true })
 
-      const members = await getMembers(this.props.owner)
+      const members = await getMembers(this.props.user)
 
       if (Array.isArray(members)) {
         this.setState({ isFetching: false, members })
@@ -63,7 +67,7 @@ export class TeamContactSelect extends React.Component {
       <BasicDropdown
         {...this.props}
         items={items}
-        onChange={this.props.onSelect}
+        onSelect={this.props.onSelect}
         isFetching={this.state.isFetching}
         defaultSelectedItem={{ label: getUserTitle(owner), value: owner }}
         buttonRenderer={buttonProps => {
@@ -80,13 +84,18 @@ export class TeamContactSelect extends React.Component {
                 fontWeight: 500
               }}
             >
-              <Avatar
-                size={32}
-                title={title}
-                image={buttonProps.selectedItem.value.profile_image_url}
+              <Flex alignCenter>
+                <Avatar
+                  size={32}
+                  title={title}
+                  image={buttonProps.selectedItem.value.profile_image_url}
+                />
+                <span style={{ margin: '0 0.5em 0 1em' }}>{title}</span>
+              </Flex>
+              <Icon
+                style={{ marginTop: '0.2em' }}
+                isOpen={buttonProps.isOpen}
               />
-              <span style={{ margin: '0 0.5em 0 1em' }}>{title}</span>
-              <Icon style={{ marginTop: '0.2em' }} />
             </ActionButton>
           )
         }}

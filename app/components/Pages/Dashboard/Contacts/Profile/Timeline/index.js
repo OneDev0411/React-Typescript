@@ -203,7 +203,7 @@ export class Timeline extends React.Component {
             isOpen
             user={this.props.user}
             onClose={this.closeEventDrawer}
-            event={this.state.selectedEvent}
+            eventId={this.state.selectedEvent.id}
             submitCallback={this.handleEditEvent}
             deleteCallback={this.handleDeleteEvent}
           />

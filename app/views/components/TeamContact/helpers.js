@@ -1,12 +1,6 @@
 import { getBrand } from '../../../models/brand/get-brand'
 import { getActiveTeamId } from '../../../utils/user-teams'
 
-export const getUserTitle = user =>
-  [user.first_name, user.last_name].filter(i => i != null).join(' ')
-
-export const getUserInfo = user =>
-  [user.email, user.phone_numner].filter(i => i != null).join(', ')
-
 export async function getMembers(user) {
   if (!user) {
     throw new Error(`User is ${user}`)

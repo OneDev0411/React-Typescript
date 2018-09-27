@@ -16,6 +16,7 @@ import Drawer from '../OverlayDrawer'
 import { Divider } from '../Divider'
 import IconButton from '../Button/IconButton'
 import ActionButton from '../Button/ActionButton'
+import { ItemChangelog } from '../TeamContact/ItemChangelog'
 import IconDelete from '../SvgIcons/DeleteOutline/IconDeleteOutline'
 import {
   DateTimeField,
@@ -37,7 +38,9 @@ import { Associations } from './components/Associations'
 import { FormContainer, FieldContainer } from './styled'
 
 const QUERY = {
-  associations: ['crm_task.reminders', 'crm_task.assignees']
+  associations: ['reminders', 'assignees', 'created_by', 'updated_by'].map(
+    a => `crm_task.${a}`
+  )
 }
 
 const propTypes = {
@@ -73,6 +76,7 @@ export class EventDrawer extends Component {
     super(props)
 
     this.state = {
+      event: null,
       isDisabled: false
     }
 
@@ -92,7 +96,7 @@ export class EventDrawer extends Component {
 
         const event = await getTask(this.props.eventId, QUERY)
 
-        this.setState({ isDisabled: false })
+        this.setState({ isDisabled: false, event })
 
         return event
       } catch (error) {
@@ -249,6 +253,8 @@ export class EventDrawer extends Component {
                     handleCreate={this.handleCreateAssociation}
                     handleDelete={this.handleDeleteAssociation}
                   />
+
+                  <ItemChangelog item={values} style={{ marginTop: '2em' }} />
                 </FormContainer>
               )
             }}

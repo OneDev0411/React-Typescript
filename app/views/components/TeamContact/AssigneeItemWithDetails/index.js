@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { getUserTitle, getUserInfo } from '../../../../models/user/helpers'
+
 import Avatar from '../../Avatar'
 import Button from '../../Button/IconButton'
 import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 import { Container, Title, Details } from '../../AssocationItem/styled'
-
-import { getUserTitle, getUserInfo } from '../helpers'
 
 const Item = Container.extend`
   &:hover {
