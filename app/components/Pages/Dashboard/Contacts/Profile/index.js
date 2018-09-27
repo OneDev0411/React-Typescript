@@ -153,8 +153,8 @@ class ContactProfile extends React.Component {
     const { user, contact, fetchError } = this.props
 
     if (fetchError) {
-      if (fetchError.status === 404) {
-        browserHistory.push('/404')
+      if (fetchError.status === 404 || fetchError.status === 400) {
+        browserHistory.push('/dashboard/contacts')
       }
 
       return <Container>{fetchError.message}</Container>
