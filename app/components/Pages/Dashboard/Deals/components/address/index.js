@@ -43,7 +43,7 @@ class Address extends React.Component {
   /**
    *
    */
-  getInitialValues = () => {
+  get InitialValues() {
     const { deal } = this.props
 
     if (this.state.isSavingAddress) {
@@ -240,11 +240,12 @@ class Address extends React.Component {
 
     return (
       <FinalFormDrawer
-        initialValues={this.getInitialValues()}
+        initialValues={this.InitialValues}
         title="Address"
         isOpen={this.props.show}
         onClose={this.props.onClose}
         closeDrawerOnBackdropClick={this.props.closeOnBackdropClick}
+        reinitializeAfterSubmit={false}
         onSubmit={this.onSubmit}
         validate={this.validate}
         submitting={this.state.isSavingAddress}
