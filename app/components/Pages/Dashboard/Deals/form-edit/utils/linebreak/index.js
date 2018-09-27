@@ -1,14 +1,15 @@
 /* eslint-disable no-cond-assign, no-continue */
 
 const maxSize = 15
+const el = document.createElement('div')
+document.body.appendChild(el)
 
 const breakText = (text, rects, fontSize, fontName, isBold) => {
   if (!text) {
     text = ''
   }
 
-  const el = document.createElement('div')
-
+  el.innerText = ''
   el.style.position = 'absolute'
   el.style.whiteSpace = 'nowrap'
   el.style.top = '-200px'
@@ -17,7 +18,6 @@ const breakText = (text, rects, fontSize, fontName, isBold) => {
   if (isBold)
     el.style.fontWeight = 'bold'
 
-  document.body.appendChild(el)
 
   const values = {}
 
@@ -86,8 +86,6 @@ const breakText = (text, rects, fontSize, fontName, isBold) => {
     values[i] = line.trim()
     words.shift()
   }
-
-  document.body.removeChild(el)
 
   return { values, fontSize }
 }
