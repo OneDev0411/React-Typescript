@@ -76,7 +76,6 @@ export class EventDrawer extends Component {
     super(props)
 
     this.state = {
-      event: null,
       isDisabled: false
     }
 
@@ -96,7 +95,7 @@ export class EventDrawer extends Component {
 
         const event = await getTask(this.props.eventId, QUERY)
 
-        this.setState({ isDisabled: false, event })
+        this.setState({ isDisabled: false })
 
         return event
       } catch (error) {

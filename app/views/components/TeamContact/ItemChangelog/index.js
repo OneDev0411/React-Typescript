@@ -17,7 +17,7 @@ ItemChangelog.defaultProps = {
 export function ItemChangelog(props) {
   const { item } = props
 
-  if (!item && !item.created_by) {
+  if (!item || !item.created_by) {
     return null
   }
 
