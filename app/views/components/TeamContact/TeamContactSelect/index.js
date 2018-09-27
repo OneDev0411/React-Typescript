@@ -2,14 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { getUserTitle } from '../../../../models/user/helpers'
+import { isSoloActiveTeam } from '../../../../utils/user-teams'
+
 import Avatar from '../../Avatar'
 import { TeamMember } from '../TeamMember'
 import { BasicDropdown } from '../../BasicDropdown'
 import ActionButton from '../../Button/ActionButton'
 import { Icon } from '../../Dropdown'
 
-import { isSoloActiveTeam } from '../../../../utils/user-teams'
-import { getUserTitle, getMembers } from '../helpers'
+import { getMembers } from '../helpers'
 
 const propTypes = {
   onSelect: PropTypes.func.isRequired,

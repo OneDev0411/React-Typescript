@@ -6,7 +6,7 @@ import { updateTask } from '../../../../../../../models/tasks/update-task'
 
 import Avatar from '../../../../../../../views/components/Avatar'
 import Tooltip from '../../../../../../../views/components/tooltip'
-import { getUserTitle } from '../../../../../../../views/components/TeamContact/helpers'
+import { getUserTitle } from '../../../../../../../models/user/helpers'
 import { Divider } from '../../../../../../../views/components/Divider'
 import IconBell from '../../../../../../../views/components/SvgIcons/Bell/IconBell'
 import { eventTypesIcons } from '../../../../../../../views/utils/event-types-icons'
