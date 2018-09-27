@@ -21,14 +21,14 @@ class AgentNetwork extends React.Component {
     super(props)
 
     this.state = {
+      query: {},
       isFetching: true,
+      isFetchingMore: false,
       list: [],
       listInfo: {
         total: 0,
-        count: 0,
-        proposed_title: ''
-      },
-      selectedAgents: []
+        count: 0
+      }
     }
 
     this.address = props.location.query.address || ''
@@ -95,12 +95,16 @@ class AgentNetwork extends React.Component {
         (a, b) => b.listingsCount - a.listingsCount
       )
 
-      console.log(list)
+      // console.log(list)
 
       this.setState({
         isFetching: false,
-        listInfo: response.info,
-        list
+        listInfo: {
+          count: response.info.count,
+          totall: response.info.totall
+        },
+        list,
+        query
       })
     } catch (error) {
       console.log(error)
@@ -187,10 +191,47 @@ class AgentNetwork extends React.Component {
     })
   }
 
-  onChangeSelectedRows = selectedAgents =>
-    this.setState({
-      selectedAgents
-    })
+  handleLoadMore = async () => {
+    const { total } = this.state.listInfo
+    const offset = this.state.list.length
+
+    if (this.state.isFetchingMore || offset === total) {
+      return false
+    }
+
+    console.log(`[ Loading More ] Start: ${offset}`)
+
+    this.setState({ isFetchingMore: true })
+
+    const query = {
+      ...this.state.query,
+      offset
+    }
+
+    try {
+      const response = await byValert(query)
+
+      const list = this.createList(response.data)
+
+      // console.log(list)
+
+      this.setState(state => ({
+        isFetchingMore: false,
+        listInfo: {
+          total: state.total,
+          count: state.count + response.info.count
+        },
+        list: [...state.list, ...list].sort(
+          (a, b) => b.listingsCount - a.listingsCount
+        ),
+        query
+      }))
+    } catch (error) {
+      console.log(error)
+      this.setState({ isFetchingMore: false })
+      throw error
+    }
+  }
 
   render() {
     return (
@@ -205,8 +246,9 @@ class AgentNetwork extends React.Component {
           data={this.state.list}
           deal={this.props.deal}
           isFetching={this.state.isFetching}
+          isFetchingMore={this.state.isFetchingMore}
+          onRequestLoadMore={this.handleLoadMore}
           onChangeSelectedRows={this.onChangeSelectedRows}
-          selectedRows={this.state.selectedAgents}
           listInfo={this.state.listInfo}
         />
       </React.Fragment>

@@ -67,10 +67,10 @@ export class Grid extends React.Component {
   actions = [
     {
       display: props => props.selectedRows.length > 0,
-      render: ({ selectedRows }) => (
+      render: props => (
         <SendDealPromotionCard
           deal={this.props.deal}
-          selectedRows={selectedRows}
+          selectedRows={props.selectedRows}
         >
           Promote Listing
         </SendDealPromotionCard>
@@ -79,32 +79,28 @@ export class Grid extends React.Component {
   ]
 
   render() {
-    const selectedRowsCount = this.props.selectedRows.length
-
     return (
       <div style={{ padding: '0 1.5em' }}>
         <Table
-          summary={{
-            text:
-              selectedRowsCount > 0
-                ? '<strong style="color:#000;">[selectedRows]</strong> of [totalRows] agents'
-                : '[totalRows] agents',
-            selectedRows: selectedRowsCount,
-            totalRows: this.props.listInfo.total || 0
-          }}
           data={this.props.data}
           columns={this.columns}
-          isFetching={this.props.isFetching}
           LoadingState={Loading}
+          isFetching={this.props.isFetching}
+          isFetchingMore={this.props.isFetchingMore}
+          summary={{ entityName: 'Agents' }}
           plugins={{
             sortable: {},
             selectable: {
               persistent: true,
-              storageKey: 'agents',
-              onChange: this.props.onChangeSelectedRows
+              storageKey: 'agents'
             },
             actionable: {
               actions: this.actions
+            },
+            loadable: {
+              accuracy: 300, // px
+              debounceTime: 300, // ms
+              onTrigger: this.props.onRequestLoadMore
             }
           }}
         />
