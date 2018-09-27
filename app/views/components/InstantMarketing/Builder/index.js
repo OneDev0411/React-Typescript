@@ -110,6 +110,11 @@ class Builder extends React.Component {
         })
       }
 
+      model.set({
+        draggable: false,
+        droppable: false
+      })
+
       model.get('components').each(model => updateAll(model))
     }
 

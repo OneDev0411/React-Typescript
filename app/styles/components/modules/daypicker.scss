@@ -1,6 +1,7 @@
 .DayPicker {
   outline: none;
 }
+
 .DayPicker {
   abbr[title], abbr[data-original-title] {
     border-bottom: none;
@@ -8,7 +9,8 @@
   .DayPicker-Day {
     border: none;
     &:hover {
-      background-color: #eeeeee !important;
+      background-color: #003bdf !important;
+      color: #ffffff;
     }
     &--outside {
       &:hover {
