@@ -204,7 +204,7 @@ export class Table extends React.Component {
         accuracy={60}
         debounceTime={50}
       >
-        <GridContainer>
+        <GridContainer isFilterHidden={this.props.isFilterHidden}>
           <Fetching
             show={
               isFetching && loadingPosition === positions.Top && data.length > 0
@@ -251,6 +251,7 @@ export class Table extends React.Component {
 function mapStateToProps({ calendar }) {
   return {
     selectedDate: new Date(calendar.selectedDate),
+    isFilterHidden: calendar.brandMembers.length <= 1,
     calendar: calendar.list,
     calendarDays: calendar.byDay
   }

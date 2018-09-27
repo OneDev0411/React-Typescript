@@ -440,7 +440,7 @@ export class FileManager extends React.Component {
     ]
   }
 
-  leftActions = [
+  actions = [
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: () => (
@@ -508,18 +508,12 @@ export class FileManager extends React.Component {
                   onChange: this.onChangeSelectedRows
                 },
                 actionable: {
-                  leftActions: this.leftActions,
-                  rightActions: this.rightActions
+                  actions: this.actions
                 }
               }}
               data={this.data}
               summary={{
-                text:
-                  selectedRows.length > 0
-                    ? '<strong style="color:#000;">[selectedRows]</strong> of [totalRows] Files'
-                    : '[totalRows] Files',
-                selectedRows: selectedRows.length,
-                totalRows: this.data.length || 0
+                entityName: 'Files'
               }}
               columns={this.getColumns(this.data)}
               getTdProps={this.getTdProps}

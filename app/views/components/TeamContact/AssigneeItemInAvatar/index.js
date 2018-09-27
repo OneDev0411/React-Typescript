@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { getUserTitle } from '../../../../models/user/helpers'
+
 import Avatar from '../../Avatar'
 import Tooltip from '../../tooltip'
 import IconButton from '../../Button/IconButton'
 import CloseIcon from '../../SvgIcons/Close/CloseIcon'
-
-import { getUserTitle } from '../helpers'
 
 const Icon = CloseIcon.extend`
   position: absolute;

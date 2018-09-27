@@ -1,8 +1,8 @@
 import Fetch from '../../../services/fetch'
-import { defaultQuery } from '../helpers/default-query'
+import { updateContactQuery } from '../helpers/default-query'
 
 const DEFAULT_QUERY = {
-  ...defaultQuery,
+  ...updateContactQuery,
   relax: true,
   activity: false
 }

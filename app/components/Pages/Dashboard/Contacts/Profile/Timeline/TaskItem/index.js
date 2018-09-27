@@ -6,7 +6,7 @@ import { updateTask } from '../../../../../../../models/tasks/update-task'
 
 import Avatar from '../../../../../../../views/components/Avatar'
 import Tooltip from '../../../../../../../views/components/tooltip'
-import { getUserTitle } from '../../../../../../../views/components/TeamContact/helpers'
+import { getUserTitle } from '../../../../../../../models/user/helpers'
 import { Divider } from '../../../../../../../views/components/Divider'
 import IconBell from '../../../../../../../views/components/SvgIcons/Bell/IconBell'
 import { eventTypesIcons } from '../../../../../../../views/utils/event-types-icons'
@@ -125,7 +125,11 @@ export class CRMTaskItem extends React.Component {
             onClick={this.handleStatus}
           />
           <Flex column style={{ width: 'calc(100% - 40px)' }}>
-            <Title className="u-cursor--pointer" onClick={this.handleOnClick}>
+            <Title
+              truncate
+              className="u-cursor--pointer"
+              onClick={this.handleOnClick}
+            >
               {task.title}
             </Title>
             {task.description && <Description>{task.description}</Description>}

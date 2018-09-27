@@ -116,7 +116,16 @@ class Grid extends React.Component {
     return (
       <div>
         <ToolbarContainer>
-          <TableSummary {...this.props.summary} />
+          <TableSummary
+            Component={this.props.summary.render}
+            entityName={this.props.summary.entityName}
+            totalRowsCount={this.props.data.length}
+            selectedRowsCount={
+              this.selectablePlugin
+                ? this.selectablePlugin.SelectedRows.length
+                : 0
+            }
+          />
 
           <ActionsBar>
             {this.actionablePlugin && this.actionablePlugin.render()}

@@ -39,4 +39,7 @@ const PageThumbnail = ({
   </Page>
 )
 
-export default connect(null, { setPagePreview })(PageThumbnail)
+export default connect(
+  null,
+  { setPagePreview }
+)(PageThumbnail)

@@ -17,6 +17,7 @@ import {
   uploadStashFile,
   addTaskFile
 } from '../../../../../../store_actions/deals'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 class WorkspaceForm extends React.Component {
   constructor(props) {
@@ -239,7 +240,7 @@ class WorkspaceForm extends React.Component {
 
             this.setState({
               statusMessage: `Uploading selected documents (${counter} / ${filesCount})`,
-              uploadProgressPercents: Math.floor(counter / filesCount * 100)
+              uploadProgressPercents: Math.floor((counter / filesCount) * 100)
             })
 
             notify({
@@ -311,6 +312,7 @@ class WorkspaceForm extends React.Component {
           Document Title <span className="required">*</span>
         </div>
         <TasksDropDown
+          isBlock
           searchable
           placeholder="Document"
           deal={deal}
@@ -328,21 +330,22 @@ class WorkspaceForm extends React.Component {
             onClick={() => this.setState({ notifyOffice: !notifyOffice })}
           />
 
-          <button
+          <ActionButton
+            appearance="outline"
+            size="small"
             onClick={() => this.saveAndQuit()}
             disabled={!isAnyPageSelected}
-            className={cn('save-quit', { disabled: !isAnyPageSelected })}
           >
             Save and quit
-          </button>
+          </ActionButton>
 
-          <button
-            className={cn('save-new', { disabled: !isAnyPageSelected })}
+          <ActionButton
+            size="small"
             disabled={!isAnyPageSelected}
             onClick={() => this.saveAndNew()}
           >
             Save and create another
-          </button>
+          </ActionButton>
         </div>
       </div>
     )
@@ -357,13 +360,16 @@ function mapStateToProps({ deals, user }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  notify,
-  resetSplitter,
-  resetUploadFiles,
-  resetSplitterSelectedPages,
-  setSplitterUsedPages,
-  changeNeedsAttention,
-  addTaskFile,
-  uploadStashFile
-})(WorkspaceForm)
+export default connect(
+  mapStateToProps,
+  {
+    notify,
+    resetSplitter,
+    resetUploadFiles,
+    resetSplitterSelectedPages,
+    setSplitterUsedPages,
+    changeNeedsAttention,
+    addTaskFile,
+    uploadStashFile
+  }
+)(WorkspaceForm)

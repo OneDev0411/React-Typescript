@@ -120,6 +120,8 @@ class SelectFile extends React.Component {
             </Tooltip>
           </Flex>
           <TeamContactSelect
+            upsideDown
+            user={this.props.user}
             owner={this.props.owner}
             onSelect={this.props.onChangeOwner}
           />
@@ -129,12 +131,13 @@ class SelectFile extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ user, contacts }) {
   const { importCsv } = contacts
   const { file } = importCsv
 
   return {
-    file
+    file,
+    user
   }
 }
 

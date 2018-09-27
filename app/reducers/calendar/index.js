@@ -9,7 +9,9 @@ const initialState = {
     .utcOffset(0)
     .toDate(),
   byDay: {},
-  list: []
+  list: [],
+  brandMembers: [],
+  filter: []
 }
 
 function ksort(object) {
@@ -80,8 +82,24 @@ export default (state = initialState, action) => {
         selectedDate: action.selectedDate
       }
 
+    case types.CALENDAR__SET_BRAND_MEMBERS:
+      return {
+        ...state,
+        brandMembers: action.brandMembers
+      }
+
+    case types.CALENDAR__SET_FILTER:
+      return {
+        ...state,
+        filter: action.filter
+      }
+
     case types.CALENDAR__RESET:
-      return initialState
+      return {
+        ...initialState,
+        brandMembers: state.brandMembers,
+        filter: state.filter
+      }
 
     default:
       return state

@@ -3,7 +3,10 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 
-import { getContactAddresses } from '../../../../../models/contacts/helpers'
+import {
+  getContactAddresses,
+  updateContactQuery
+} from '../../../../../models/contacts/helpers'
 import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
 
 import {
@@ -14,11 +17,15 @@ import {
 import {
   getContact,
   deleteAttributes,
+  updateContactSelf,
   upsertContactAttributes
 } from '../../../../../store_actions/contacts'
 import { selectContact } from '../../../../../reducers/contacts/list'
 import { selectContactError } from '../../../../../reducers/contacts/contact'
 import { normalizeContact } from '../../../../../views/utils/association-normalizers'
+
+import Loading from '../../../../Partials/Loading'
+import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 
 import { Container } from '../components/Container'
 import { Dates } from './Dates'
@@ -28,8 +35,7 @@ import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
 import { AddNote } from './AddNote'
-import Loading from '../../../../Partials/Loading'
-import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
+import { Owner } from './Owner'
 import {
   PageContainer,
   ColumnsContainer,
@@ -45,6 +51,7 @@ import { Timeline } from './Timeline'
 
 class ContactProfile extends React.Component {
   state = {
+    isUpdatingOwner: false,
     isDesktopScreen: true,
     isFetchingTimeline: true,
     timeline: []
@@ -70,10 +77,8 @@ class ContactProfile extends React.Component {
   }
 
   async initializeContact() {
-    const contactId = this.props.params.id
-
-    if (!this.props.contact) {
-      await this.props.getContact(contactId)
+    if (!this.props.contact || !this.props.contact.user) {
+      await this.props.getContact(this.props.params.id)
     }
 
     this.fetchTimeline()
@@ -81,7 +86,7 @@ class ContactProfile extends React.Component {
 
   fetchTimeline = async () => {
     try {
-      const timeline = await getContactTimeline(this.props.contact.id)
+      const timeline = await getContactTimeline(this.props.params.id)
 
       this.setState({ isFetchingTimeline: false, timeline })
     } catch (error) {
@@ -136,12 +141,20 @@ class ContactProfile extends React.Component {
     this.fetchTimeline()
   }
 
+  onChangeOwner = async item => {
+    this.setState({ isUpdatingOwner: true })
+    await this.props.updateContactSelf(this.props.contact.id, {
+      user: item.value.id
+    })
+    this.setState({ isUpdatingOwner: false })
+  }
+
   render() {
     const { user, contact, fetchError } = this.props
 
     if (fetchError) {
-      if (fetchError.status === 404) {
-        browserHistory.push('/404')
+      if (fetchError.status === 404 || fetchError.status === 400) {
+        browserHistory.push('/dashboard/contacts')
       }
 
       return <Container>{fetchError.message}</Container>
@@ -186,6 +199,13 @@ class ContactProfile extends React.Component {
                 {hasAddress.length === 0 && <Addresses contact={contact} />}
 
                 {!this.state.isDesktopScreen && thirdColumnSections}
+
+                <Owner
+                  onSelect={this.onChangeOwner}
+                  owner={contact.user}
+                  user={user}
+                  disabled={this.state.isUpdatingOwner}
+                />
               </Card>
             </SideColumnWrapper>
 
@@ -263,13 +283,19 @@ class ContactProfile extends React.Component {
 }
 
 const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
-  const { list, contact, attributeDefs } = contacts
+  const { list, contact: fetchContact, attributeDefs } = contacts
+
+  let contact = selectContact(list, contactId)
+
+  if (!contact || !contact.user) {
+    contact = null
+  }
 
   return {
     user,
     attributeDefs,
-    contact: selectContact(list, contactId),
-    fetchError: selectContactError(contact)
+    contact,
+    fetchError: selectContactError(fetchContact)
   }
 }
 
@@ -278,6 +304,7 @@ export default connect(
   {
     getContact,
     deleteAttributes,
+    updateContactSelf,
     upsertContactAttributes
   }
 )(ContactProfile)

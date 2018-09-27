@@ -256,7 +256,6 @@ class ContactsList extends React.Component {
             rowsUpdating={this.rowsUpdating}
             resetSelectedRows={this.resetSelectedRows}
             onChangeSelectedRows={this.onChangeSelectedRows}
-            selectedRows={this.state.selectedRows}
             onRequestDelete={this.handleOnDelete}
             filters={this.state.filter}
           />

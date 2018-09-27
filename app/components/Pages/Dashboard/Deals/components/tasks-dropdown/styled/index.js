@@ -88,5 +88,5 @@ export const ChecklistNewItemCancel = styled.span`
   right: 10px;
   top: 5px;
   font-weight: 400;
-  color: #2196f3;
+  color: #003bdf;
 `

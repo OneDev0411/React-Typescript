@@ -16,8 +16,7 @@ import {
 import {
   createDateRange,
   createPastRange,
-  createFutureRange,
-  createDayRange
+  createFutureRange
 } from '../../../../models/Calendar/helpers/create-date-range'
 
 import {
@@ -32,6 +31,7 @@ import DatePicker from '../../../../views/components/DatePicker'
 import { EventDrawer } from '../../../../views/components/EventDrawer'
 
 import CalendarTable from './Table'
+import CalendarFilter from './Filter'
 
 import { MenuContainer } from './styled'
 
@@ -44,44 +44,28 @@ const LOADING_POSITIONS = {
 }
 
 class CalendarContainer extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isMenuOpen: true,
-      showCreateTaskMenu: false,
-      selectedTaskId: null,
-      loadingPosition: LOADING_POSITIONS.Middle
-    }
-
-    this.isObserverEnabled = false
-    // this.onEventObserve = _.debounce(this.onEventObserve, 150)
+  state = {
+    isMenuOpen: true,
+    showCreateTaskMenu: false,
+    selectedTaskId: null,
+    loadingPosition: LOADING_POSITIONS.Middle
   }
 
   componentDidMount() {
     const { selectedDate } = this.props
 
     this.restartCalendar(selectedDate)
-
-    // this.observer = new IntersectionObserver(this.onEventObserve, {
-    //   root: this.calendarTableContainer,
-    //   rootMargin: '100px',
-    //   threshold: 0.8
-    // })
   }
 
-  // onEventObserve = entities => {
-  //   const { setDate, selectedDate } = this.props
-  //   const ref = entities && entities[0].target
-  //   const { refid } = ref.dataset
+  getCalendar = async (startRange, endRange, filter) => {
+    let calendarFilter = filter || this.props.filter
 
-  //   if (this.isObserverEnabled === false) {
-  //     return false
-  //   }
+    if (!calendarFilter || calendarFilter.length === 0) {
+      calendarFilter = [this.props.user.id]
+    }
 
-  //   if (refid !== moment(selectedDate).format('YYYY-MM-DD')) {
-  //     setDate(moment(refid).toDate())
-  //   }
-  // }
+    return this.props.getCalendar(startRange, endRange, calendarFilter)
+  }
 
   /**
    * close/open side menu
@@ -113,10 +97,6 @@ class CalendarContainer extends React.Component {
       ...this.refs,
       [refId]: ref
     }
-
-    // if (this.observer && ref !== null) {
-    //   this.observer.observe(ref)
-    // }
   }
 
   /**
@@ -128,24 +108,24 @@ class CalendarContainer extends React.Component {
       loadingPosition: position
     })
 
-  restartCalendar = async selectedDate => {
-    const { resetCalendar, setDate, getCalendar } = this.props
+  restartCalendar = async (selectedDate, filter) => {
     const [newStartRange, newEndRange] = createDateRange(selectedDate)
 
     this.setLoadingPosition(LOADING_POSITIONS.Middle)
-    resetCalendar()
+
+    this.props.resetCalendar()
     this.refs = {}
 
     batchActions([
-      setDate(selectedDate),
-      await getCalendar(newStartRange, newEndRange)
+      this.props.setDate(selectedDate),
+      await this.getCalendar(newStartRange, newEndRange, filter)
     ])
 
     this.scrollIntoView(selectedDate)
   }
 
   handleDateChange = async selectedDate => {
-    const { startRange, endRange, setDate, getCalendar } = this.props
+    const { startRange, endRange, setDate } = this.props
     const [newStartRange, newEndRange] = createDateRange(selectedDate)
     const timestamp = moment(selectedDate)
       .utcOffset(0)
@@ -174,21 +154,20 @@ class CalendarContainer extends React.Component {
 
     batchActions([
       setDate(selectedDate),
-      await getCalendar(newStartRange, newEndRange)
+      await this.getCalendar(newStartRange, newEndRange)
     ])
+  }
+
+  handleFilterChange = filter => {
+    this.setLoadingPosition(LOADING_POSITIONS.Middle)
+    this.restartCalendar(this.selectedDate, filter)
   }
 
   onClickTask = selectedTaskId =>
     this.setState(() => ({ selectedTaskId }), this.openEventDrawer)
 
   handleEventChange = async (task, action) => {
-    const {
-      startRange,
-      endRange,
-      getCalendar,
-      setDate,
-      resetCalendar
-    } = this.props
+    const { startRange, endRange } = this.props
     const timestamp = task.due_date
 
     const isInRange = timestamp >= startRange && timestamp <= endRange
@@ -201,9 +180,9 @@ class CalendarContainer extends React.Component {
       this.setLoadingPosition(LOADING_POSITIONS.Middle)
 
       batchActions([
-        resetCalendar(),
-        setDate(newSelectedDate),
-        await getCalendar(startRange, endRange)
+        this.props.resetCalendar(),
+        this.props.setDate(newSelectedDate),
+        await this.getCalendar(startRange, endRange)
       ])
 
       this.scrollIntoView(newSelectedDate)
@@ -227,15 +206,9 @@ class CalendarContainer extends React.Component {
   }
 
   loadPreviousItems = async () => {
-    const {
-      startRange,
-      getCalendar,
-      setDate,
-      isFetching,
-      calendarDays
-    } = this.props
+    const { startRange } = this.props
 
-    if (isFetching || _.isEmpty(calendarDays)) {
+    if (this.props.isFetching || _.isEmpty(this.props.calendarDays)) {
       return false
     }
 
@@ -245,22 +218,22 @@ class CalendarContainer extends React.Component {
     const newSelectedDate = new Date(startRange * 1000)
 
     batchActions([
-      setDate(newSelectedDate),
-      await getCalendar(newStartRange, newEndRange)
+      this.props.setDate(newSelectedDate),
+      await this.getCalendar(newStartRange, newEndRange)
     ])
 
     this.scrollIntoView(newSelectedDate)
   }
 
   loadNextItems = async () => {
-    const { endRange, getCalendar, isFetching, calendarDays } = this.props
+    const { endRange, isFetching, calendarDays } = this.props
 
     if (isFetching || _.isEmpty(calendarDays)) {
       return false
     }
 
     this.setLoadingPosition(LOADING_POSITIONS.Bottom)
-    getCalendar(...createFutureRange(endRange))
+    this.getCalendar(...createFutureRange(endRange))
   }
 
   get SelectedRange() {
@@ -313,7 +286,8 @@ class CalendarContainer extends React.Component {
               marginRight: '1.5rem',
               width: 'auto',
               paddingRight: '0',
-              paddingLeft: '0'
+              paddingLeft: '0',
+              border: 'none'
             }}
           >
             <PageHeader.Title showBackButton={false}>
@@ -327,6 +301,8 @@ class CalendarContainer extends React.Component {
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
+
+          <CalendarFilter onChange={this.handleFilterChange} />
 
           <div style={{ position: 'relative' }}>
             <div ref={ref => (this.calendarTableContainer = ref)}>
@@ -357,6 +333,7 @@ function mapStateToProps({ user, calendar }) {
       .utcOffset(0)
       .toDate(),
     calendarDays: calendar.byDay,
+    filter: calendar.filter,
     startRange: getStartRange(calendar),
     endRange: getEndRange(calendar)
   }
@@ -370,5 +347,3 @@ export default connect(
     resetCalendar
   }
 )(CalendarContainer)
-
-// bug: after editing the event calendar doesn't update

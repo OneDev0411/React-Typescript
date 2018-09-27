@@ -7,34 +7,7 @@
   z-index: 2;
   background: #fff;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.23);
+  display: flex;
+  justify-content: space-between;
 }
 
-%button {
-  height: 48px;
-  width: calc(50% - 0.5rem);
-  padding: 0;
-  display: inline-block;
-  font-size: 1rem;
-  border-width: 0;
-  border-radius: 3px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.23);
-
-  &:disabled,
-  &[disabled] {
-    box-shadow: none;
-    background: $gray-lighter !important;
-    color: $gray-darker !important;
-  }
-}
-
-.c-filters__submit-btn {
-  @extend %button;
-  color: #fff;
-  background: $brand-primary;
-}
-
-.c-filters__reset-btn {
-  @extend %button;
-  margin-right: 1rem;
-  color: $brand-primary;
-}

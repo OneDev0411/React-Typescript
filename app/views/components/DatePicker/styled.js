@@ -32,7 +32,6 @@ export const Container = styled.div`
 
   .DayPicker-Day--selected {
     background-color: #000000 !important;
-    border-radius: 100px !important;
   }
 
   .DayPicker-Day--range {
@@ -58,6 +57,5 @@ export const Container = styled.div`
     .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
     color: #fff !important;
     background-color: ${primary} !important;
-    border-radius: 100px !important;
   }
 `

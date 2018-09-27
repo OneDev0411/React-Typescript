@@ -21,6 +21,7 @@ import { pendingStatuses, otherStatuses } from './statuses'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
 import { property_subtypes, architectural_styles } from '../../../mapOptions'
 import actions from '../../../../../../../store_actions/listings/search/filters'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 
 const INITIAL_VALUES = {
   pool: 'either',
@@ -143,20 +144,22 @@ const Filters = ({
         </div>
       </form>
       <div className="c-filters__form-cta-buttons">
-        <button
+        <ActionButton
+          size="large"
+          style={{ marginRight: '1rem' }}
+          appearance="outline"
           onClick={reset}
-          className="c-filters__reset-btn"
           disabled={isSubmitting || pristine}
         >
           Reset Filters
-        </button>
-        <button
+        </ActionButton>
+        <ActionButton
+          size="large"
           disabled={isSubmitting}
-          className="c-filters__submit-btn"
           onClick={handleSubmit(onSubmitHandler)}
         >
           {isSubmitting ? 'Updating...' : 'Update Filters'}
-        </button>
+        </ActionButton>
       </div>
     </div>
   </div>

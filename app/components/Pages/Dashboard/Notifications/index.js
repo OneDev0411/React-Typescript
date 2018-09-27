@@ -46,9 +46,9 @@ class Notifications extends Component {
         break
 
       case 'CrmTaskIsDueCrmTask':
-        browserHistory.push(`/crm/tasks/${notification.object}`)
-        break
       case 'ReminderIsDueCrmTask':
+      case 'UserAssignedCrmTask':
+      case 'UserEditerCrmTask':
         browserHistory.push(`/crm/tasks/${notification.object}`)
         break
 

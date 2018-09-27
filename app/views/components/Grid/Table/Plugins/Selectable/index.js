@@ -143,6 +143,12 @@ export class SelectablePlugin {
   }
 
   onChange = () => {
+    if (!this.options.onChange) {
+      this.onRequestForceUpdate()
+
+      return
+    }
+
     this.options.onChange(this.SelectedRows)
   }
 

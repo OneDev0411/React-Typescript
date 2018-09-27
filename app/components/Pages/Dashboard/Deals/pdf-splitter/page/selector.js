@@ -4,6 +4,7 @@ import _ from 'underscore'
 import cn from 'classnames'
 import Radio from '../../../../../../views/components/CheckmarkButton'
 import { selectSplitterPage } from '../../../../../../store_actions/deals'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 class PageSelector extends React.Component {
   constructor(props) {
@@ -119,16 +120,19 @@ class PageSelector extends React.Component {
           placeholder="e.g. 1-5 or 8 11-13 or 1,2,3"
           onChange={e => this.setState({ inputText: e.target.value })}
         />
-        <button
+        <ActionButton
+          size="small"
           disabled={buttonDisabled}
-          className={cn('button', { disabled: buttonDisabled })}
           onClick={() => this.addPages()}
         >
           Add
-        </button>
+        </ActionButton>
       </div>
     )
   }
 }
 
-export default connect(null, { selectSplitterPage })(PageSelector)
+export default connect(
+  null,
+  { selectSplitterPage }
+)(PageSelector)
