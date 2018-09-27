@@ -16,6 +16,7 @@ position: absolute;
   border: 1px solid #ccc;
   transition: 0.1s ease-in all;
   padding: 0 3px;
+  line-height: normal;
 `
 
 export const TextInput = styled.input`
