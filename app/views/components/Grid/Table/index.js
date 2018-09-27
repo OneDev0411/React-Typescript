@@ -123,7 +123,7 @@ class Grid extends React.Component {
             selectedRowsCount={
               this.selectablePlugin
                 ? this.selectablePlugin.SelectedRows.length
-                : []
+                : 0
             }
           />
 
