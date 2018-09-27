@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Drawer from '../OverlayDrawer'
 import Button from '../Button/ActionButton'
 import IconButton from '../Button/IconButton'
-import IconDelete from '../SvgIcons/Delete/IconDelete'
+import IconDelete from '../SvgIcons/DeleteOutline/IconDeleteOutline'
 
 import { Container, Input, ErrorMessage } from './styled'
 
@@ -80,7 +80,6 @@ export class EditNoteDrawer extends React.Component {
           ) : (
             <IconButton
               isFit
-              iconSize="large"
               inverse
               onClick={this.onDelete}
               disabled={isSaving}
