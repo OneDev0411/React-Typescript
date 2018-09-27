@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  font-size: ${props => props.fontSize};
+  font-size: ${props => props.fontSize}px;
   font-family: ${props => props.fontName};
   color: ${props => props.color};
   font-weight: ${props => (props.bold ? 'bold' : 'normal')};

@@ -2,7 +2,7 @@
 
 const maxSize = 15
 
-const breakText = (text, rects, fontSize) => {
+const breakText = (text, rects, fontSize, fontName, isBold) => {
   if (!text) {
     text = ''
   }
@@ -12,6 +12,10 @@ const breakText = (text, rects, fontSize) => {
   el.style.position = 'absolute'
   el.style.whiteSpace = 'nowrap'
   el.style.top = '-200px'
+  el.style.fontFamily = fontName
+
+  if (isBold)
+    el.style.fontWeight = 'bold'
 
   document.body.appendChild(el)
 
@@ -75,7 +79,7 @@ const breakText = (text, rects, fontSize) => {
            because there is no more new text areas.
            We have to shrink the font size and try again
            */
-        return breakText(text, rects, fontSize - 1)
+        return breakText(text, rects, fontSize - 1, fontName, isBold)
       }
     }
 
