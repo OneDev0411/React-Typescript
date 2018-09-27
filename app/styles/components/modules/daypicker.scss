@@ -9,7 +9,8 @@
   .DayPicker-Day {
     border: none;
     &:hover {
-      background-color: #003bdf;
+      background-color: #003bdf !important;
+      color: #ffffff;
     }
     &--outside {
       &:hover {
