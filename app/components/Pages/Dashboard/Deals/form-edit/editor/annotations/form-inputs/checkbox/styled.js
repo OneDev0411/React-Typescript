@@ -23,4 +23,8 @@ export const CheckboxInput = styled.input`
       content: '❌';
     }
   }
+
+  :hover {
+    transform: scale(2);
+  }
 `

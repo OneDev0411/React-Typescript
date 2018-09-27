@@ -9,19 +9,24 @@ export const RadioInput = styled.input`
   text-align: center;
   left: ${props => props.box.left}px;
   top: ${props => props.box.top}px;
-  width: ${props => props.box.width}px;
-  height: ${props => props.box.height}px;
+  width: ${props => props.box.width}px !important;
+  height: ${props => props.box.height}px !important;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: #d2e5f2;
-  border: 1px solid #cccd;
-  border-radius: 4px;
   cursor: pointer;
+
+  margin: 0 !important;
+  background-image: none !important;
 
   :checked {
     :before {
       content: '❌';
     }
+  }
+
+  :hover {
+    transform: scale(2);
   }
 `
