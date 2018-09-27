@@ -27,6 +27,6 @@ export const RadioInput = styled.input`
   }
 
   :hover {
-    transform: scale(2);
+    transform: scale(2.5);
   }
 `

@@ -25,6 +25,6 @@ export const CheckboxInput = styled.input`
   }
 
   :hover {
-    transform: scale(2);
+    transform: scale(2.5);
   }
 `
