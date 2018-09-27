@@ -125,7 +125,11 @@ export class CRMTaskItem extends React.Component {
             onClick={this.handleStatus}
           />
           <Flex column style={{ width: 'calc(100% - 40px)' }}>
-            <Title className="u-cursor--pointer" onClick={this.handleOnClick}>
+            <Title
+              truncate
+              className="u-cursor--pointer"
+              onClick={this.handleOnClick}
+            >
               {task.title}
             </Title>
             {task.description && <Description>{task.description}</Description>}

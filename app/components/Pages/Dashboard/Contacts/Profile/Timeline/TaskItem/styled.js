@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import {
   borderColor,
@@ -26,8 +26,17 @@ export const Title = styled.h3`
   font-weight: 500;
   line-height: 1;
 
+  ${props =>
+    props.truncate &&
+    css`
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    `};
+
   &:hover {
     color: ${primary};
+    text-decoration: underline;
   }
 `
 

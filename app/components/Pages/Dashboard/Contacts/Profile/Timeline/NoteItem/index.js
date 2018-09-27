@@ -22,7 +22,7 @@ export function NoteItem(props) {
           )}
         </div>
       </Flex>
-      <Title>{note.text}</Title>
+      <Title style={{ lineHeight: 1.5 }}>{note.text}</Title>
     </Container>
   )
 }
