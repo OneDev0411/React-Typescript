@@ -18,7 +18,13 @@ export function calculateWordWrap(annotations, value, options = {}) {
     }
   })
 
-  let { values, fontSize } = linebreak(value, rects, appearance.size, appearance.font, appearance.bold)
+  let { values, fontSize } = linebreak(
+    value,
+    rects,
+    appearance.size,
+    appearance.font,
+    appearance.bold
+  )
 
   fontSize = Math.min(fontSize, options.maxFontSize || fontSize)
 

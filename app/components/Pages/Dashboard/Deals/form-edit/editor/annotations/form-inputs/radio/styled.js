@@ -19,7 +19,7 @@ export const RadioInput = styled.input`
 
   margin: 0 !important;
   background-image: none !important;
-  transition: transform .1s ease-out;
+  transition: transform 0.1s ease-out;
 
   :checked {
     :before {

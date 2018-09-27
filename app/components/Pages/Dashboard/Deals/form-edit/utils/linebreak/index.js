@@ -2,6 +2,7 @@
 
 const maxSize = 15
 const el = document.createElement('div')
+
 document.body.appendChild(el)
 
 const breakText = (text, rects, fontSize, fontName, isBold) => {
@@ -15,9 +16,9 @@ const breakText = (text, rects, fontSize, fontName, isBold) => {
   el.style.top = '-200px'
   el.style.fontFamily = fontName
 
-  if (isBold)
+  if (isBold) {
     el.style.fontWeight = 'bold'
-
+  }
 
   const values = {}
 
