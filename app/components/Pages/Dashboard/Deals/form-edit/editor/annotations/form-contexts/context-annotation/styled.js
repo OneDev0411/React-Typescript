@@ -12,6 +12,7 @@ export const Container = styled.div`
   height: ${props => props.rect.height}px;
   background-color: ${props => (props.readOnly ? 'transparent' : '#d2e5f2')};
   cursor: ${props => (props.readOnly ? 'auto' : 'pointer')};
+  line-height: normal;
 
   :hover {
     opacity: ${props => (props.readOnly ? 1 : 0.8)};
