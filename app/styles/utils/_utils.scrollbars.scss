@@ -1,4 +1,4 @@
-@mixin scrollbar($just-self: false, $width: 10px, $thumb-bgc: #d4d4d4, $track-bgc: #eeeeee) {
+@mixin scrollbar($just-self: false, $width: 0.5em, $thumb-bgc: #b2b2b2, $track-bgc: transparent) {
   @if $just-self {
     &::-webkit-scrollbar {
       width: $width;
@@ -57,9 +57,9 @@
 }
 
 .u-scrollbar--thinner {
-  @include scrollbar(false, 6px !important);
+  @include scrollbar(false, 0.375em !important);
 }
 
 .u-scrollbar--thinner--self {
-  @include scrollbar(true, 6px !important);
+  @include scrollbar(true, 0.375em !important);
 }
