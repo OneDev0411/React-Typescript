@@ -40,8 +40,7 @@ class ImportCsv extends React.Component {
     return currentWizardStep
   }
 
-  onChangeOwner = owner =>
-    console.log(owner) || this.setState({ owner: owner.value })
+  onChangeOwner = owner => this.setState({ owner: owner.value })
 
   render() {
     const { currentWizardStep, isCurrentStepValid } = this.props

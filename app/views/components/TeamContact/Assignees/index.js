@@ -3,13 +3,14 @@ import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
+import { getUserTitle } from '../../../../models/user/helpers'
 
 import { TeamMember } from '../TeamMember'
 import Button from '../../Button/TextIconButton'
 import AddIcon from '../../SvgIcons/Add/AddIcon'
 import { BasicDropdown } from '../../BasicDropdown'
 
-import { getUserTitle, getMembers } from '../helpers'
+import { getMembers } from '../helpers'
 import { AssigneeItemInAvatar } from '../AssigneeItemInAvatar'
 
 const propTypes = {

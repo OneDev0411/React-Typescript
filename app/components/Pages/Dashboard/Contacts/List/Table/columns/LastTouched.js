@@ -6,7 +6,7 @@ export function LastTouchedCell(props) {
   const { contact } = props
 
   if (!contact.last_touch) {
-    return null
+    return <div style={{ color: '#c5c5c5' }}>No Touches</div>
   }
 
   const formatedLastTouch = timeago().format(contact.last_touch * 1000)

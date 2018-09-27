@@ -37,23 +37,18 @@ class ContactsList extends React.Component {
       render: ({ rowData: contact }) => <Name contact={contact} />
     },
     {
-      header: 'Email',
-      id: 'email',
+      header: 'Contact',
+      id: 'contact',
       accessor: contact => getAttributeFromSummary(contact, 'email'),
       render: ({ rowData: contact }) => (
-        <TruncatedColumn>
-          {getAttributeFromSummary(contact, 'email')}
-        </TruncatedColumn>
-      )
-    },
-    {
-      header: 'Phone',
-      id: 'phone',
-      accessor: contact => getAttributeFromSummary(contact, 'phone_number'),
-      render: ({ rowData: contact }) => (
-        <TruncatedColumn>
-          {getAttributeFromSummary(contact, 'phone_number')}
-        </TruncatedColumn>
+        <React.Fragment>
+          <TruncatedColumn>
+            {getAttributeFromSummary(contact, 'email')}
+          </TruncatedColumn>
+          <TruncatedColumn>
+            {getAttributeFromSummary(contact, 'phone_number')}
+          </TruncatedColumn>
+        </React.Fragment>
       )
     },
     {
@@ -156,8 +151,6 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const selectedRowsCount = this.props.selectedRows.length
-
     return (
       <div style={{ padding: '0 1.5em' }}>
         <Table
@@ -191,12 +184,7 @@ class ContactsList extends React.Component {
           }}
           data={this.props.data}
           summary={{
-            text:
-              selectedRowsCount > 0
-                ? '<strong style="color:#000;">[selectedRows]</strong> of [totalRows] contacts'
-                : '[totalRows] contacts',
-            selectedRows: selectedRowsCount,
-            totalRows: this.props.listInfo.total || 0
+            entityName: 'Contacts'
           }}
           isFetching={this.props.isFetching}
           isFetchingMore={this.props.isFetchingMore}
