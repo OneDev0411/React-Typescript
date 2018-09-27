@@ -34,7 +34,7 @@ class RoleFormWrapper extends React.Component {
   onSubmit = async form => {
     const {
       deal,
-      user,
+      role,
       attributeDefs,
       upsertContactAttributes,
       updateRole,
@@ -42,7 +42,7 @@ class RoleFormWrapper extends React.Component {
       onUpsertRole = () => null,
       onHide = () => null
     } = this.props
-    const isNewRecord = !user || !user.role
+    const isNewRecord = !role || !role.role
 
     try {
       this.setState({
