@@ -48,6 +48,7 @@ export const BodyRow = Row.extend`
 export const Cell = styled.div`
   align-self: ${props => props.verticalAlign || 'flex-start'};
   text-align: left;
+  padding: 0 1em;
 
   ${props =>
     props.width &&
