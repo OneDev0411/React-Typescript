@@ -2,13 +2,30 @@ import React from 'react'
 
 import Loading from '../../../../../../views/components/Spinner'
 import Table from '../../../../../../views/components/Grid/Table'
+import Button from '../../../../../../views/components/Button/ActionButton'
 import SendDealPromotionCard from '../../../../../../views/components/InstantMarketing/Flows/SendDealPromotion'
 
 import { Name } from './columns/Name'
 import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
+import { ListingsListViewDrawer } from './listings-list-view-drawer'
 
 export class Grid extends React.Component {
+  state = {
+    selectedAgent: null
+  }
+
+  onCloseDrawer = () => this.setState({ selectedAgent: null })
+  onSelectAgent = (agent, listType) =>
+    this.setState({
+      selectedAgent: {
+        title: `${agent.name} ${
+          listType === 'asListing' ? 'listings' : 'Buyers'
+        } (${agent[listType].length})`,
+        list: agent[listType].map(id => agent.listings[id])
+      }
+    })
+
   columns = [
     {
       id: 'name',
@@ -28,13 +45,33 @@ export class Grid extends React.Component {
       id: 'listings',
       header: '# of Listings',
       accessor: agent => agent.asListing.length,
-      render: ({ rowData: agent }) => agent.asListing.length
+      render: ({ rowData: agent }) =>
+        agent.asListing.length > 0 ? (
+          <Button
+            appearance="link"
+            onClick={() => this.onSelectAgent(agent, 'asListing')}
+          >
+            {agent.asListing.length}
+          </Button>
+        ) : (
+          '0'
+        )
     },
     {
       id: 'buyers',
       header: '# of Buyers',
       accessor: agent => agent.asBuyers.length,
-      render: ({ rowData: agent }) => agent.asBuyers.length
+      render: ({ rowData: agent }) =>
+        agent.asBuyers.length > 0 ? (
+          <Button
+            appearance="link"
+            onClick={() => this.onSelectAgent(agent, 'asBuyers')}
+          >
+            {agent.asBuyers.length}
+          </Button>
+        ) : (
+          '0'
+        )
     },
     {
       id: 'value_in',
@@ -79,6 +116,8 @@ export class Grid extends React.Component {
   ]
 
   render() {
+    const { selectedAgent } = this.state
+
     return (
       <div style={{ padding: '0 1.5em' }}>
         <Table
@@ -104,6 +143,15 @@ export class Grid extends React.Component {
             }
           }}
         />
+
+        {selectedAgent && (
+          <ListingsListViewDrawer
+            isOpen
+            title={selectedAgent.title}
+            onClose={this.onCloseDrawer}
+            listings={selectedAgent.list}
+          />
+        )}
       </div>
     )
   }
