@@ -14,6 +14,7 @@ import Header from '../../../../../views/components/PageHeader'
 
 import { Grid } from './grid'
 import { getMapBoundsInCircle } from './helpers'
+import { normalizeList } from './helpers/normalize-list'
 import { valertOptions } from './helpers/valert-options'
 
 class AgentNetwork extends React.Component {
@@ -89,19 +90,17 @@ class AgentNetwork extends React.Component {
         }
       }
 
-      const response = await byValert(query)
+      const response = await byValert(query, null, false)
 
-      const list = this.createList(response.data).sort(
+      const list = normalizeList(response.data).sort(
         (a, b) => b.listingsCount - a.listingsCount
       )
-
-      // console.log(list)
 
       this.setState({
         isFetching: false,
         listInfo: {
           count: response.info.count,
-          totall: response.info.totall
+          total: response.info.total
         },
         list,
         query
@@ -113,118 +112,31 @@ class AgentNetwork extends React.Component {
     }
   }
 
-  createList = listings => {
-    const initialList = {}
-
-    const addTolist = (id, listing, type) => {
-      if (initialList[id]) {
-        initialList[id] = {
-          ...initialList[id],
-          listings: [...initialList[id].listings, listing]
-        }
-      } else {
-        const {
-          [`${type}_agent_mls_id`]: id,
-          [`${type}_agent_full_name`]: name,
-          [`${type}_office_name`]: company,
-          [`${type}_agent_email`]: email,
-          [`${type}_agent_direct_work_phone`]: phone
-        } = listing
-
-        initialList[id] = {
-          id,
-          name,
-          company,
-          email,
-          phone,
-          listings: [listing]
-        }
-      }
-    }
-
-    listings.forEach(listing => {
-      const { list_agent_mls_id, selling_agent_mls_id } = listing
-
-      if (list_agent_mls_id) {
-        addTolist(list_agent_mls_id, listing, 'list')
-      }
-
-      if (selling_agent_mls_id && selling_agent_mls_id !== list_agent_mls_id) {
-        addTolist(list_agent_mls_id, listing, 'selling')
-      }
-    })
-
-    return Object.values(initialList).map(({ listings, ...rest }) => {
-      const addPrice = (accumulator, listing) => accumulator + listing.price
-
-      const asBuyers = []
-      const asListing = []
-      const indexedList = {}
-      const soldListings = []
-      const listingsTotalVolume = listings.reduce(addPrice, 0)
-
-      listings.forEach(listing => {
-        if (listing.list_agent_mls_id) {
-          asListing.push(listing.id)
-        } else {
-          asBuyers.push(listing.id)
-        }
-
-        if (listing.status === 'sold') {
-          soldListings.push(listings)
-        }
-
-        indexedList[listing.id] = listing
-      })
-
-      return {
-        ...rest,
-        asListing,
-        asBuyers,
-        listingsTotalVolume,
-        listings: indexedList,
-        listingsCount: listings.length,
-        soldListings: soldListings.map(l => l.id),
-        listingsAveragePrice:
-          listingsTotalVolume > 0 ? listingsTotalVolume / listings.length : 0
-      }
-    })
-  }
-
   handleLoadMore = async () => {
-    const { total } = this.state.listInfo
-    const offset = this.state.list.length
+    const offset = this.state.listInfo.count + 1
 
-    if (this.state.isFetchingMore || offset === total) {
+    if (this.state.isFetchingMore || offset === this.state.listInfo.total) {
       return false
     }
 
-    console.log(`[ Loading More ] Start: ${offset}`)
+    // console.log(`[ Loading More ] Start: ${offset}`)
 
     this.setState({ isFetchingMore: true })
 
-    const query = {
-      ...this.state.query,
-      offset
-    }
-
     try {
-      const response = await byValert(query)
+      const response = await byValert(this.state.query, { offset }, false)
 
-      const list = this.createList(response.data)
-
-      // console.log(list)
+      const list = normalizeList(response.data)
 
       this.setState(state => ({
         isFetchingMore: false,
         listInfo: {
-          total: state.total,
-          count: state.count + response.info.count
+          total: state.listInfo.total,
+          count: state.listInfo.count + response.info.count
         },
         list: [...state.list, ...list].sort(
           (a, b) => b.listingsCount - a.listingsCount
-        ),
-        query
+        )
       }))
     } catch (error) {
       console.log(error)
