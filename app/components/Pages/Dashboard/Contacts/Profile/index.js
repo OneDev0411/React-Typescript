@@ -204,6 +204,7 @@ class ContactProfile extends React.Component {
                   onSelect={this.onChangeOwner}
                   owner={contact.user}
                   user={user}
+                  contact={contact}
                   disabled={this.state.isUpdatingOwner}
                 />
               </Card>
