@@ -2,17 +2,18 @@ import Fetch from '../../../services/fetch'
 import { normalize } from 'normalizr'
 import * as schema from '../schema'
 
-export const byValert = async (options, queryStrings, normalize = true) => {
+export const byValert = async (options, query, hasNeedNormalized = true) => {
   if (!options) {
     return
   }
 
   try {
-    const endpoint = !queryStrings ? '/valerts' : `/valerts${queryStrings}`
+    const response = await new Fetch()
+      .post('/valerts')
+      .send(options)
+      .query(query)
 
-    const response = await new Fetch().post(endpoint).send(options)
-
-    if (normalize) {
+    if (!hasNeedNormalized) {
       return response.body
     }
 
