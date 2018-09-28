@@ -4,7 +4,6 @@ import matchSorter from 'match-sorter'
 
 import Card from '../Card'
 import { Item } from './Item'
-import ShadowButton from '../Button/ShadowButton'
 import { SearchInput } from './SearchInput'
 import ArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import ActionButton from '../Button/ActionButton'
