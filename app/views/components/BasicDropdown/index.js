@@ -24,7 +24,8 @@ export const BasicDropdown = ({
   noBorder = false,
   maxHeight = 200,
   itemToString = item => item.label,
-  upsideDown = false
+  upsideDown = false,
+  buttonStyle = {}
 }) => (
   <Downshift
     onChange={onChange}
@@ -52,6 +53,7 @@ export const BasicDropdown = ({
               isOpen: downshift.isOpen,
               size: buttonSize,
               noBorder,
+              style: buttonStyle,
               text:
                 buttonText ||
                 (downshift.selectedItem && downshift.selectedItem.label)

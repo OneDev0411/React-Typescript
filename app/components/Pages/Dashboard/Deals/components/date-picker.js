@@ -1,7 +1,11 @@
 import React from 'react'
-import { Modal } from 'react-bootstrap'
 import DatePicker from 'react-day-picker'
+import ClickOutSide from 'react-click-outside'
+import Flex from 'styled-flex-component'
+
 import ActionButton from 'views/components/Button/ActionButton'
+import { PickerContainer } from '../../../../../views/components/DateTimePicker/styled'
+import { Divider } from '../../../../../views/components/Divider'
 
 export default class extends React.Component {
   state = {
@@ -29,7 +33,7 @@ export default class extends React.Component {
     return null
   }
 
-  onClose() {
+  onClose = () => {
     const { onClose } = this.props
 
     this.setState({ selectedDate: null }, onClose)
@@ -48,39 +52,41 @@ export default class extends React.Component {
     const date = this.getSelectedDate()
 
     return (
-      <Modal
-        show={show}
-        onHide={() => this.onClose()}
-        dialogClassName="modal-deal-date-picker"
-        backdrop="static"
-      >
-        <Modal.Body>
-          <DatePicker
-            selectedDays={date}
-            month={date}
-            onDayClick={date => this.onDateChange(date)}
-          />
-        </Modal.Body>
+      <div style={{ position: 'relative' }}>
+        {show && (
+          <ClickOutSide onClickOutside={this.onClose}>
+            <PickerContainer depth={3}>
+              <DatePicker
+                selectedDays={date}
+                month={date}
+                onDayClick={date => this.onDateChange(date)}
+              />
+              <Divider margin="0.5em 0" />
 
-        <Modal.Footer>
-          <ActionButton
-            appearance="outline"
-            style={{
-              marginRight: '1em'
-            }}
-            onClick={() => this.onClose()}
-          >
-            Cancel
-          </ActionButton>
+              <Flex alignCenter justifyBetween>
+                <ActionButton
+                  appearance="outline"
+                  size="small"
+                  style={{ fontWeight: 500 }}
+                  onClick={() => this.onClose()}
+                >
+                  Cancel
+                </ActionButton>
 
-          <ActionButton
-            onClick={() => this.onSelectDate(selectedDate || date)}
-            disabled={!date}
-          >
-            {saveText || 'Update'}
-          </ActionButton>
-        </Modal.Footer>
-      </Modal>
+                <ActionButton
+                  size="small"
+                  type="button"
+                  onClick={() => this.onSelectDate(selectedDate || date)}
+                  disabled={!date}
+                  style={{ fontWeight: 500 }}
+                >
+                  {saveText || 'Update'}
+                </ActionButton>
+              </Flex>
+            </PickerContainer>
+          </ClickOutSide>
+        )}
+      </div>
     )
   }
 }
