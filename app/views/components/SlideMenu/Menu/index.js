@@ -14,7 +14,7 @@ const Container = styled.div`
 const propTypes = {
   children: PropTypes.node,
   isOpen: PropTypes.bool.isRequired,
-  width: PropTypes.number
+  width: PropTypes.any
 }
 
 const defaultProps = {

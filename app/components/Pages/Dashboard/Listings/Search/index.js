@@ -2,13 +2,13 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
 import Map from './components/Map'
-import Filters from './components/Filters'
+import { Header } from './Header'
 import Loading from '../components/Loading'
-import SearchToolbar from './components/SearchToolbar'
 import ListingsPanel from '../components/ListingsPanels'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
 import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
+import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
 
 class Search extends Component {
   constructor(props) {
@@ -72,33 +72,33 @@ class Search extends Component {
   }
 
   render() {
-    const {
-      user,
-      isWidget,
-      listings,
-      isFetching,
-      isLoggedIn,
-      activePanel,
-      filterAreaIsOpen
-    } = this.props
+    const { user, isWidget, listings, isFetching, isLoggedIn } = this.props
 
     return (
-      <div className="l-listings__main clearfix">
-        <div className="l-listings__map">
-          {this.state.mapWithQueryIsInitialized && <Map {...this.props} />}
-          <SearchToolbar />
-          <Filters isOpen={filterAreaIsOpen} isSubmitting={isFetching} />
-          {isFetching && <Loading text="MLS®" />}
-        </div>
-        <div className="l-listings__panel">
-          <ListingsPanel
-            tabName="search"
-            isWidget={isWidget}
-            listings={listings}
-            isLoggedIn={isLoggedIn}
-            activePanel={activePanel}
-            onClickShare={this.shareModalActiveHandler}
-          />
+      <div>
+        <Header
+          user={user}
+          isFetching={isFetching}
+          filtersIsOpen={this.props.filtersIsOpen}
+          activePanel={this.props.activePanel}
+          isSideMenuOpen={this.props.isSideMenuOpen}
+          toggleSideMenu={this.props.toggleSideMenu}
+          saveSearchHandler={this.shareModalActiveHandler}
+          onClickFilter={this.props.toggleFilterArea}
+        />
+        <div className="l-listings__main clearfix">
+          <div className="l-listings__map">
+            {this.state.mapWithQueryIsInitialized && <Map {...this.props} />}
+            {isFetching && <Loading text="MLS®" />}
+          </div>
+          <div className="l-listings__panel">
+            <ListingsPanel
+              tabName="search"
+              isWidget={isWidget}
+              listings={listings}
+              isLoggedIn={isLoggedIn}
+            />
+          </div>
         </div>
         <CreateAlertModal
           user={user}
@@ -120,7 +120,7 @@ const mapStateToProps = ({ user, search }) => {
     isLoggedIn: user || false,
     activePanel: panels.activePanel,
     isFetching: listings.isFetching,
-    filterAreaIsOpen: filters.isOpen,
+    filtersIsOpen: filters.isOpen,
     listings: {
       data: selectListings(listings),
       info: listings.info
@@ -128,6 +128,10 @@ const mapStateToProps = ({ user, search }) => {
   }
 }
 
-export default connect(mapStateToProps, {
-  ...searchActions
-})(Search)
+export default connect(
+  mapStateToProps,
+  {
+    ...searchActions,
+    toggleFilterArea
+  }
+)(Search)

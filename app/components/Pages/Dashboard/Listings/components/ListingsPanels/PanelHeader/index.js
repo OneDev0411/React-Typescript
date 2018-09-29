@@ -3,16 +3,9 @@ import { connect } from 'react-redux'
 
 import { confirmation } from '../../../../../../../store_actions/confirmation'
 
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 import Flex from 'styled-flex-component'
 import { CheckBoxButton } from '../../../../../../../views/components/Button/CheckboxButton'
 import { BasicDropdown } from '../../../../../../../views/components/BasicDropdown'
-
-const Button = ActionButton.extend`
-  position: absolute;
-  right: 0;
-  top: 0;
-`
 
 function getItems(items) {
   return items.map(item => ({ label: item, value: item.toLowerCase() }))
@@ -111,11 +104,6 @@ class PanelHeader extends React.Component {
                 </Flex>
               </div>
             )}
-
-            {this.props.isLoggedIn &&
-              tabName === 'search' && (
-                <Button onClick={this.handleSaveSearch}>Save Search</Button>
-              )}
           </div>
         )}
       </div>

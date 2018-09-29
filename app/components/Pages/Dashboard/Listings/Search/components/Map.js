@@ -25,6 +25,9 @@ import * as mapActions from '../../../../../../store_actions/listings/map'
 import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
 import getListingsByMapBounds from '../../../../../../store_actions/listings/search/get-listings/by-map-bounds'
 
+import DrawingButton from './DrawingButton'
+import LocationButton from './LocationButton'
+
 import {
   bootstrapURLKeys,
   mapOptions,
@@ -111,6 +114,8 @@ const map = ({
       onClick={onClickRemovePolygon}
       points={drawing.points}
     />
+    <DrawingButton />
+    <LocationButton />
   </div>
 )
 

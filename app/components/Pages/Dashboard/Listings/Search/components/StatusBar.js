@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import branch from 'recompose/branch'
 import compose from 'recompose/compose'
-import { getListingsInfo } from '../../../../../../../reducers/listings'
-import { getUserLocationIsFetching } from '../../../../../../../reducers/listings/map/user-location'
+import { getListingsInfo } from '../../../../../../reducers/listings'
+import { getUserLocationIsFetching } from '../../../../../../reducers/listings/map/user-location'
 
 const emptyStatus = () => () => (
   <p className="c-mls-toolbar__status-bar c-mls-toolbar__status-bar--empty">

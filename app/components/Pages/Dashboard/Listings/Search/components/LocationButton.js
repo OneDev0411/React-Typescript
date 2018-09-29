@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import cn from 'classnames'
 
-import IconLocation from '../../../../../../../views/components/SvgIcons/Location/IconLocation.js'
-import { getLocation } from '../../../../../../../store_actions/listings/map/user-location'
-import { getUserLocationIsFetching } from '../../../../../../../reducers/listings/map/user-location'
-import ToolTip from '../../../../../../../views/components/tooltip'
+import IconLocation from '../../../../../../views/components/SvgIcons/Location/IconLocation.js'
+import { getLocation } from '../../../../../../store_actions/listings/map/user-location'
+import { getUserLocationIsFetching } from '../../../../../../reducers/listings/map/user-location'
+import ToolTip from '../../../../../../views/components/tooltip'
 
 const Icon = IconLocation.extend`
   fill: #000;

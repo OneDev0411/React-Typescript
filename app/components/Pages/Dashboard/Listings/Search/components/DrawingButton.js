@@ -4,12 +4,12 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import cn from 'classnames'
 
-import { grey } from '../../../../../../../views/utils/colors'
-import DrawIcon from '../../../../Partials/Svgs/PolygonDraw'
+import { grey } from '../../../../../../views/utils/colors'
+import DrawIcon from '../../../Partials/Svgs/PolygonDraw'
 import {
   activeDrawing,
   inactiveDrawing
-} from '../../../../../../../store_actions/listings/map/drawing'
+} from '../../../../../../store_actions/listings/map/drawing'
 
 const DrawingButton = ({
   isLoggedIn,
