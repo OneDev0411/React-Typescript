@@ -1,11 +1,12 @@
 import React from 'react'
-import ClickOutside from 'react-click-outside'
+import styled from 'styled-components'
 import _ from 'underscore'
 
 import Input from 'components/Input'
-import ActionButton from 'components/Button/ActionButton'
-import CancelButton from 'components/Button/CancelButton'
-import { Container, InputContainer, ActionsContainer } from './styled'
+
+export const InputContainer = styled.div`
+  width: 100%;
+`
 
 export default class StringContext extends React.Component {
   getValue() {
@@ -20,15 +21,6 @@ export default class StringContext extends React.Component {
     }
   }
 
-  onClose = () => {
-    if (this.props.isSaving) {
-      return false
-    }
-
-    this.position = null
-    this.props.onClose()
-  }
-
   onChange = (e, data = {}) => {
     const value =
       _.isUndefined(data.value) === false ? data.value : e.target.value
@@ -36,71 +28,24 @@ export default class StringContext extends React.Component {
     this.props.onContextChange(value, data.maskedValue)
   }
 
-  get Position() {
-    if (this.position) {
-      return this.position
-    }
-
-    const position = {
-      left: this.props.bounds.left + window.scrollX,
-      top: this.props.bounds.top + window.scrollY
-    }
-
-    this.position = position
-
-    return this.position
-  }
-
   render() {
-    if (!this.props.isOpen) {
-      return false
-    }
-
-    const position = this.Position
-
     return (
-      <ClickOutside onClickOutside={this.onClose}>
-        <Container position={position}>
-          <InputContainer>
-            <Input
-              data-type={
-                this.props.context.format || this.props.context.data_type
-              }
-              {...this.props.context.properties}
-              style={{
-                width: '100%'
-              }}
-              maxLength={15}
-              value={this.getValue()}
-              onKeyPress={e => this.onKeyPress(e)}
-              onChange={this.onChange}
-            />
-          </InputContainer>
-
-          <ActionsContainer>
-            <ActionButton
-              size="small"
-              onClick={this.props.handleSave}
-              disabled={this.props.isSaving}
-            >
-              {this.props.isSaving ? 'Saving...' : 'Save Value'}
-            </ActionButton>
-
-            <CancelButton
-              size="small"
-              onClick={() => this.props.saveDefaultValue('TBD')}
-            >
-              TBD
-            </CancelButton>
-            <CancelButton
-              size="small"
-              onClick={() => this.props.saveDefaultValue('N/A')}
-            >
-              N/A
-            </CancelButton>
-          </ActionsContainer>
-        </Container>
-      </ClickOutside>
+      <InputContainer>
+        <InputContainer>
+          <Input
+            data-type={
+              this.props.context.format || this.props.context.data_type
+            }
+            {...this.props.context.properties}
+            style={{
+              width: '100%'
+            }}
+            value={this.getValue()}
+            onKeyPress={e => this.onKeyPress(e)}
+            onChange={this.onChange}
+          />
+        </InputContainer>
+      </InputContainer>
     )
   }
 }
