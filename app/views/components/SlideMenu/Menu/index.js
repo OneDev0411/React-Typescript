@@ -6,7 +6,7 @@ const Container = styled.div`
   width: ${props => (props.isOpen ? props.width : 0)}px;
   height: 100vh;
   overflow-x: hidden;
-  padding-top: 1em;
+  padding: 2.5rem 1em 1em;
   background-color: #f2f2f2;
   transition: width 0.1s linear;
 `
