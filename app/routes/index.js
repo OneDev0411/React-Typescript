@@ -388,7 +388,7 @@ export default (
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
 
-        <Route path="actives" component={AsyncListingsFavorites} />
+        <Route path="favorites" component={AsyncListingsFavorites} />
         <Route path="alerts" component={AsyncListingsAlerts}>
           <Route path=":alertId" component={AsyncListingsAlerts} />
         </Route>
