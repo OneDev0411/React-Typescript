@@ -17,7 +17,7 @@ class GenerateUrl extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (
       this.state.feedURl !== '' &&
-      (nextProps.selectedBrandId !== this.props.selectedBrandId ||
+      (!_.isEqual(nextProps.selectedMembers, this.props.selectedMembers) ||
         !_.isEqual(nextProps.selectedTypes, this.props.selectedTypes))
     ) {
       this.setState({ feedURl: '' })
@@ -30,7 +30,7 @@ class GenerateUrl extends React.Component {
 
       const feedURl = await getCalenderFeed(
         this.props.selectedTypes,
-        this.props.selectedBrandId
+        this.props.selectedMembers
       )
 
       this.setState({ feedURl })

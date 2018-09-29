@@ -1,10 +1,12 @@
 import Fetch from '../../../services/fetch'
 
-const getCalenderFeed = async (types, brandId) => {
+const getCalenderFeed = async (types, selectedMembers) => {
   let url = `/calendar/feed?types[]=${types.join('&types[]=')}`
 
-  if (brandId) {
-    url += `&brandId=${brandId}`
+  if (selectedMembers) {
+    url += `&users[]=${[].concat
+      .apply([], Object.values(selectedMembers))
+      .join('&users[]=')}`
   }
 
   try {

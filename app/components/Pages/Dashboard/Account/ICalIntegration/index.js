@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import _ from 'underscore'
 import { ICalContainer, PageDescription } from './styled'
 
 import TeamType from './TeamTypes'
@@ -13,8 +14,8 @@ import PageHeader from '../../../../../views/components/PageHeader'
 
 class DealTemplates extends React.Component {
   state = {
-    selectedBrandId: null,
     selectedTypes: [],
+    selectedMembers: [],
     isFetchingSetting: true,
     feedURl: ''
   }
@@ -28,8 +29,8 @@ class DealTemplates extends React.Component {
       const setting = await getCalenderFeedSetting()
 
       this.setState({
-        selectedBrandId: (setting && setting.selected_brand) || null,
         selectedTypes: (setting && setting.selected_types) || [],
+        selectedMembers: (setting && setting.selected_users) || {},
         feedURl: (setting && setting.url) || ''
       })
     } catch (e) {
@@ -44,8 +45,6 @@ class DealTemplates extends React.Component {
     }
   }
 
-  onChangeTeam = selectedBrandId => this.setState({ selectedBrandId })
-
   onChangeSelectAllTypes = selectedTypes => this.setState({ selectedTypes })
 
   onChangeSelectedTypes = selectedType => {
@@ -59,9 +58,54 @@ class DealTemplates extends React.Component {
       this.setState({ selectedTypes: selectedTypes.concat(selectedType) })
     }
   }
+  onChangeSelectAllMembers = selectedMembers =>
+    this.setState({ selectedMembers })
+  onChangeSelectRole = (roleId, newSelectedMembers) => {
+    const { selectedMembers } = this.state
+
+    if (
+      selectedMembers[roleId] &&
+      selectedMembers[roleId].length === newSelectedMembers.length
+    ) {
+      this.setState({
+        selectedMembers: _.omit(selectedMembers, roleId)
+      })
+    } else {
+      this.setState({
+        selectedMembers: { ...selectedMembers, [roleId]: newSelectedMembers }
+      })
+    }
+  }
+  onChangeSelectedMember = (roleId, selectedMember) => {
+    const { selectedMembers } = this.state
+
+    if (selectedMembers[roleId]) {
+      if (selectedMembers[roleId].includes(selectedMember)) {
+        this.setState({
+          selectedMembers: {
+            ...selectedMembers,
+            [roleId]: selectedMembers[roleId].filter(
+              user => user !== selectedMember
+            )
+          }
+        })
+      } else {
+        this.setState({
+          selectedMembers: {
+            ...selectedMembers,
+            [roleId]: selectedMembers[roleId].concat(selectedMember)
+          }
+        })
+      }
+    } else {
+      this.setState({
+        selectedMembers: { ...selectedMembers, [roleId]: [selectedMember] }
+      })
+    }
+  }
 
   render() {
-    const { selectedTypes, selectedBrandId } = this.state
+    const { selectedTypes, selectedMembers } = this.state
 
     if (this.state.isFetchingSetting) {
       return <Loading />
@@ -85,7 +129,10 @@ class DealTemplates extends React.Component {
           <TeamType
             userTeams={this.props.userTeams}
             onChangeTeam={this.onChangeTeam}
-            selectedBrandId={selectedBrandId}
+            selectedMembers={selectedMembers}
+            onChangeSelectAllMembers={this.onChangeSelectAllMembers}
+            onChangeSelectedMember={this.onChangeSelectedMember}
+            onChangeSelectRole={this.onChangeSelectRole}
           />
           <SelectedTypes
             selectedTypes={selectedTypes}
@@ -94,7 +141,7 @@ class DealTemplates extends React.Component {
           />
           <GenerateUrl
             selectedTypes={selectedTypes}
-            selectedBrandId={selectedBrandId}
+            selectedMembers={selectedMembers}
             feedURl={this.state.feedURl}
           />
           <UpdateGenerateUrlInfo />

@@ -4,7 +4,9 @@ const getTeams = async (user = {}) => {
   const { access_token } = user
 
   try {
-    const fetchTeams = new Fetch().get('/users/self/roles')
+    const fetchTeams = new Fetch().get(
+      '/users/self/roles?associations[]=brand.roles&associations[]=brand_role.members'
+    )
 
     if (access_token) {
       fetchTeams.set({ Authorization: `Bearer ${access_token}` })
