@@ -1,13 +1,17 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
-import Map from './components/Map'
-import Loading from '../components/Loading'
-import ListingsPanel from '../components/ListingsPanels'
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
 import { selectListings } from '../../../../../reducers/listings'
 
+import Map from './Map'
+import { Header } from './Header'
+import { MapView } from '../components/MapView'
+
 class Favorites extends Component {
+  state = {
+    activeView: 'map'
+  }
   componentDidMount() {
     const { user, isFetching, getFavorites } = this.props
 
@@ -16,35 +20,58 @@ class Favorites extends Component {
     }
   }
 
-  render() {
-    const { user, listings, activePanel, isFetching } = this.props
-    const isLoggedIn = user || false
+  onChangeView = e =>
+    this.setState({ activeView: e.currentTarget.dataset.view })
 
-    return (
-      <div className="l-listings__main clearfix">
-        <div className="l-listings__map">
-          <Map markers={listings.data} />
-          {isFetching && !listings.data.length && <Loading text="Favorites" />}
-        </div>
-        <div className="l-listings__panel">
-          <ListingsPanel
-            tabName="favorites"
-            listings={listings}
-            isLoggedIn={isLoggedIn}
-            activePanel={activePanel}
+  renderMain() {
+    const _props = {
+      listings: this.props.listings,
+      isFetching: this.props.isFetching
+    }
+
+    switch (this.state.activeView) {
+      case 'grid':
+        return 'grid'
+
+      case 'map':
+        return (
+          <MapView
+            listings={_props.listings}
+            Map={
+              this.state.mapWithQueryIsInitialized ? <Map {..._props} /> : null
+            }
           />
-        </div>
-      </div>
+        )
+
+      case 'gallery':
+        return 'gallery'
+
+      default:
+        return 'grid'
+    }
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <Header
+          user={this.props.user}
+          activeView={this.state.activeView}
+          isSideMenuOpen={this.props.isSideMenuOpen}
+          toggleSideMenu={this.props.toggleSideMenu}
+          onChangeView={this.onChangeView}
+        />
+        {this.renderMain()}
+      </React.Fragment>
     )
   }
 }
 
 const mapStateToProps = ({ data, favorites }) => {
-  const { listings, panels } = favorites
+  const { listings } = favorites
 
   return {
     user: data.user,
-    activePanel: panels.activePanel,
     isFetching: listings.isFetching,
     listings: {
       data: selectListings(listings),
@@ -53,4 +80,7 @@ const mapStateToProps = ({ data, favorites }) => {
   }
 }
 
-export default connect(mapStateToProps, { getFavorites })(Favorites)
+export default connect(
+  mapStateToProps,
+  { getFavorites }
+)(Favorites)

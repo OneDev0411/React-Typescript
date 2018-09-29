@@ -100,7 +100,7 @@ class Search extends Component {
     const { user } = this.props
 
     return (
-      <div>
+      <React.Fragment>
         <Header
           user={user}
           isFetching={this.props.isFetching}
@@ -119,7 +119,7 @@ class Search extends Component {
           isActive={this.state.shareModalIsActive}
           alertProposedTitle={this.props.listings.info.proposed_title}
         />
-      </div>
+      </React.Fragment>
     )
   }
 }
