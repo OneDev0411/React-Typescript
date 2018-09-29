@@ -150,7 +150,7 @@ class WhoSigned extends React.Component {
                       signer.user && signer.user.profile_image_thumbnail_url
                     }
                     size={30}
-                    color="#D4D4D4"
+                    color="#000000"
                     showStateIndicator={false}
                   />
                 </div>
@@ -184,7 +184,7 @@ class WhoSigned extends React.Component {
                       signer.user && signer.user.profile_image_thumbnail_url
                     }
                     size={30}
-                    color="#D4D4D4"
+                    color="#000000"
                     showStateIndicator={false}
                   />
                 </div>
@@ -212,7 +212,7 @@ class WhoSigned extends React.Component {
                       signer.user && signer.user.profile_image_thumbnail_url
                     }
                     size={30}
-                    color="#D4D4D4"
+                    color="#000000"
                     showStateIndicator={false}
                   />
                 </div>
