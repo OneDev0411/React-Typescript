@@ -94,7 +94,6 @@
       .recp-title {
         font-size: 13px;
         font-weight: 600;
-        color: #1d364b;
       }
       .recp-description {
         display: block;
@@ -178,13 +177,13 @@
 
         .name {
           display: inline-block;
-          width: 300px;
+          width: 350px;
           text-overflow: ellipsis;
           white-space: nowrap;
           overflow: hidden;
           &:hover {
             text-decoration: underline;
-            color: #2196f3;
+            color: #003bdf;
           }
         }
 
@@ -194,6 +193,9 @@
           i {
             cursor: pointer;
             color: #62778c;
+            &:hover{
+              color: #003bdf;
+            }
           }
 
           .open-form {
@@ -209,44 +211,6 @@
       border-top: 1px solid #dce5eb;
       background-color: #f8fafb;
       padding: 1rem $pad-size;
-    }
-
-    .btn-send,
-    .btn-attach {
-      width: 100px;
-      height: 34px;
-      border-radius: 3px;
-      font-weight: 500;
-      font-size: 13px;
-
-      &:focus {
-        outline: none;
-      }
-    }
-
-    .btn-send {
-      background-color: #2196f3;
-      border-width: 0;
-      color: #fff;
-      margin-right: 10px;
-
-      &:hover {
-        background-color: darken($color: #2196f3, $amount: 7%);
-      }
-    }
-
-    .btn-attach {
-      background-color: #fff;
-      border-color: #dde2e6;
-      color: #8da2b5;
-
-      &:hover {
-        background-color: #f9f9f9;
-      }
-
-      i {
-        margin-right: 5px;
-      }
     }
   }
 }
