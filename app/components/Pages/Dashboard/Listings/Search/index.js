@@ -3,8 +3,7 @@ import React, { Component } from 'react'
 
 import Map from './components/Map'
 import { Header } from './Header'
-import Loading from '../components/Loading'
-import ListingsPanel from '../components/ListingsPanels'
+import { MapView } from '../components/MapView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
 import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
@@ -20,12 +19,10 @@ class Search extends Component {
       location && location.query && location.query.q ? location.query.q : ''
 
     this.state = {
+      activeView: 'map',
       shareModalIsActive: false,
       mapWithQueryIsInitialized: !this.searchQuery
     }
-
-    this.shareModalCloseHandler = this.shareModalCloseHandler.bind(this)
-    this.shareModalActiveHandler = this.shareModalActiveHandler.bind(this)
   }
 
   componentDidMount() {
@@ -37,9 +34,7 @@ class Search extends Component {
   async _findPlace(address) {
     const { searchByMlsNumber, searchByPostalCode, getPlace } = this.props
 
-    const initMap = () => {
-      this.setState({ mapWithQueryIsInitialized: true })
-    }
+    const initMap = () => this.setState({ mapWithQueryIsInitialized: true })
 
     try {
       if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
@@ -59,52 +54,70 @@ class Search extends Component {
     }
   }
 
-  shareModalCloseHandler() {
+  onChangeView = e =>
+    this.setState({ activeView: e.currentTarget.dataset.view })
+
+  shareModalCloseHandler = () =>
     this.setState({
       shareModalIsActive: false
     })
-  }
 
-  shareModalActiveHandler() {
+  shareModalActiveHandler = () =>
     this.setState({
       shareModalIsActive: true
     })
+
+  renderMain() {
+    const _props = {
+      listings: this.props.listings,
+      isFetching: this.props.isFetching,
+      isWidget: this.props.isWidget
+    }
+
+    switch (this.state.activeView) {
+      case 'grid':
+        return 'grid'
+
+      case 'map':
+        return (
+          <MapView
+            listings={_props.listings}
+            Map={
+              this.state.mapWithQueryIsInitialized ? <Map {..._props} /> : null
+            }
+          />
+        )
+
+      case 'gallery':
+        return 'gallery'
+
+      default:
+        return 'grid'
+    }
   }
 
   render() {
-    const { user, isWidget, listings, isFetching, isLoggedIn } = this.props
+    const { user } = this.props
 
     return (
       <div>
         <Header
           user={user}
-          isFetching={isFetching}
+          isFetching={this.props.isFetching}
           filtersIsOpen={this.props.filtersIsOpen}
-          activePanel={this.props.activePanel}
+          activeView={this.props.activeView}
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
           saveSearchHandler={this.shareModalActiveHandler}
           onClickFilter={this.props.toggleFilterArea}
+          onChangeView={this.onChangeView}
         />
-        <div className="l-listings__main clearfix">
-          <div className="l-listings__map">
-            {this.state.mapWithQueryIsInitialized && <Map {...this.props} />}
-            {isFetching && <Loading text="MLS®" />}
-          </div>
-          <div className="l-listings__panel">
-            <ListingsPanel
-              tabName="search"
-              isWidget={isWidget}
-              listings={listings}
-              isLoggedIn={isLoggedIn}
-            />
-          </div>
-        </div>
+        {this.renderMain()}
         <CreateAlertModal
           user={user}
           onHide={this.shareModalCloseHandler}
           isActive={this.state.shareModalIsActive}
-          alertProposedTitle={listings.info.proposed_title}
+          alertProposedTitle={this.props.listings.info.proposed_title}
         />
       </div>
     )
@@ -112,15 +125,13 @@ class Search extends Component {
 }
 
 const mapStateToProps = ({ user, search }) => {
-  const { listings, map, panels, filters } = search
+  const { listings } = search
 
   return {
-    map,
     user,
     isLoggedIn: user || false,
-    activePanel: panels.activePanel,
     isFetching: listings.isFetching,
-    filtersIsOpen: filters.isOpen,
+    filtersIsOpen: search.filters.isOpen,
     listings: {
       data: selectListings(listings),
       info: listings.info

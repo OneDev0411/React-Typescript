@@ -6,6 +6,7 @@ import IconButton from '../../../../../../views/components/Button/IconButton'
 const SwitchButton = ({ active, onClick, icon }) => (
   <IconButton
     isFit
+    data-view={icon}
     onClick={onClick}
     disabled={active}
     style={{ marginLeft: '1em' }}

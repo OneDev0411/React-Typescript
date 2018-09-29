@@ -135,6 +135,7 @@ const mapHOC = compose(
     ({ user, data, search }, { listings, isWidget }) => ({
       user,
       appData: data,
+      map: search.map,
       searchType: search.type,
       mapProps: search.map.props,
       markers: listings.data,
@@ -259,7 +260,7 @@ const mapHOC = compose(
         return { clusters }
       }
 
-      clusters = getCluster(mapProps).map(({ wx, wy, numPoints, points }) => ({
+      clusters = getCluster(mapProps).map(({ wx, wy, points }) => ({
         points,
         lat: wy,
         lng: wx

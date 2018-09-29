@@ -5,7 +5,7 @@ import Button from '../../../../../../views/components/Button/ActionButton'
 import FilterButton from '../../../../../../views/components/Button/DropButton'
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 
-import PanelsSwitch from '../../components/PanelsSwitch'
+import { ViewSwitcher } from '../../components/ViewSwitcher'
 import Filters from '../components/Filters'
 import SearchField from '../components/SearchToolbar'
 
@@ -51,7 +51,10 @@ export function Header(props) {
         </Button>
       </Flex>
 
-      <PanelsSwitch activePanel={props.activePanel} tabName="search" />
+      <ViewSwitcher
+        activeView={props.activeView}
+        onChange={props.onChangeView}
+      />
     </Flex>
   )
 }
