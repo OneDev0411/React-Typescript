@@ -1,7 +1,6 @@
 // layouts
 @import 'listings/main-layout';
 // components
-@import 'listings/components/tabs';
 @import 'listings/components/loading';
 @import 'listings/components/zoom-controller';
 @import 'listings/components/panels';
@@ -13,6 +12,6 @@
 
 // google place search autocomplete styles
 [data-page='mls'] .pac-container {
-  top: 143px !important;
+  top: 5rem !important;
 }
 

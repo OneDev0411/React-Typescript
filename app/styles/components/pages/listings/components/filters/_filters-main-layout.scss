@@ -10,6 +10,7 @@
   pointer-events: none;
   border-radius: 5px;
   background-color: #f8f8f8;
+  z-index: 1;
   .l-listings--logged & {
     left: $app-sidenav-width + 220px; 
   }

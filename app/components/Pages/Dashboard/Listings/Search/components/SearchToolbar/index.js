@@ -17,11 +17,9 @@ import {
   reset as resetSearchType,
   setSearchType
 } from '../../../../../../../store_actions/listings/search/set-type'
-import IconButton from '../../../../../../../views/components/Button/IconButton'
 import IconClose from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
-import IconSearch from '../../../../../../../views/components/SvgIcons/Search/IconSearch'
 
-import { Form, Input } from './styled'
+import { Form, Input, ClearButton, SearchIcon } from './styled'
 
 const findPlace = address => dispatch => {
   if (!address) {
@@ -43,7 +41,7 @@ const findPlace = address => dispatch => {
   dispatch(searchActions.getPlace(address))
 }
 
-let inputNode
+let inputNode = React.createRef()
 
 const field = ({
   onFocus,
@@ -55,12 +53,12 @@ const field = ({
   submitedValue
 }) => (
   <Form method="post" onSubmit={onSubmit}>
-    <IconSearch style={{ marginLeft: '1em', fill: '#7f7f7f' }} />
+    <SearchIcon />
     <Input
       type="text"
       value={searchInput}
       disabled={isFetching}
-      ref={node => (inputNode = node)}
+      innerRef={inputNode}
       onFocus={onFocus}
       onChange={event =>
         dispatch(searchActions.setSearchInput(event.target.value))
@@ -71,7 +69,7 @@ const field = ({
     />
 
     {searchInput && (
-      <IconButton
+      <ClearButton
         isFit
         inverse
         iconSize="large"
@@ -79,7 +77,7 @@ const field = ({
         onClick={onClear}
       >
         <IconClose />
-      </IconButton>
+      </ClearButton>
     )}
   </Form>
 )
@@ -139,13 +137,15 @@ const fieldHOC = compose(
         return false
       }
 
-      if (!inputNode) {
+      if (!inputNode || !inputNode.current) {
         return false
       }
 
       if (!autocompleteInstance) {
         const google = window.google
-        const autocomplete = new google.maps.places.Autocomplete(inputNode)
+        const autocomplete = new google.maps.places.Autocomplete(
+          inputNode.current
+        )
 
         autocomplete.setComponentRestrictions({ country: ['us'] })
 
@@ -170,7 +170,10 @@ const fieldHOC = compose(
           autoCompletePlaceChanged(autocomplete.getPlace())
         })
 
-        inputNode.addEventListener('keypress', formPreventDefaultHandler)
+        inputNode.current.addEventListener(
+          'keypress',
+          formPreventDefaultHandler
+        )
       }
     },
     onSubmit: ({
