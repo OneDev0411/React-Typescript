@@ -28,7 +28,7 @@ const TeamTypes = ({
         title="All Teams"
         style={{ marginBottom: '1rem' }}
         onClick={() => {
-          if (allMembers.length !== selectedMembers.length) {
+          if (!_.isEqual(allMembers, selectedMembers)) {
             onChangeSelectAllMembers(allMembers)
           } else {
             onChangeSelectAllMembers({})
