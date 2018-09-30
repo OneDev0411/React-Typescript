@@ -14,6 +14,9 @@ export default props => {
     props.options || {}
   )
 
+  const value =
+    props.value === null || props.value === undefined ? '' : props.value
+
   return (
     <Input
       placeholder="$0.00"
@@ -24,7 +27,8 @@ export default props => {
         allowLeadingZeroes: opt.allowLeadingZeroes,
         allowDecimal: opt.allowDecimal
       })}
-      {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
+      {..._.omit(props, 'ErrorMessageHandler', 'data-type', 'value')}
+      value={value}
       onChange={e => {
         const maskedValue = e.target.value
         const originalValue = maskedValue
