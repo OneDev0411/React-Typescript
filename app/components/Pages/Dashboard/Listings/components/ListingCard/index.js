@@ -39,16 +39,19 @@ const ListingCard = ({
             </div>
           )}
           <h4 className="c-listing-card__title">{listing.address}</h4>
-          <h5 className="c-listing-card__price">$ {listing.price}</h5>
+          <div className="c-listing-card__price">
+            $ {listing.price.toLocaleString()}
+          </div>
           <div className="c-listing-card__details">
             <span>{listing.beds} Beds</span>
             &nbsp;&nbsp;&middot;&nbsp;&nbsp;
             <span>{listing.baths} Baths</span>
             &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-            <span>{listing.sqft} Sqft</span>
+            <span>{listing.sqft.toLocaleString()} Sqft</span>
             {listing.lotSizeArea && (
               <span>
-                &nbsp;&nbsp;&middot;&nbsp;&nbsp;{listing.lotSizeArea} Acres
+                &nbsp;&nbsp;&middot;&nbsp;&nbsp;{listing.lotSizeArea.toLocaleString()}{' '}
+                Acres
               </span>
             )}
             &nbsp;&nbsp;&middot;&nbsp;&nbsp;
