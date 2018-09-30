@@ -5,6 +5,8 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import LazyLoad from 'react-lazy-load'
 
+import './style.scss'
+
 import FavoriteHeart from '../FavoriteHeart'
 import { setMapHoveredMarkerId } from '../../../../../../store_actions/listings/map'
 
