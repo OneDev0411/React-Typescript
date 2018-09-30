@@ -24,6 +24,7 @@ import { resetGridSelectedItems } from 'views/components/Grid/Table/Plugins/Sele
 import Spinner from 'components/Spinner'
 import VerticalDotsIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
 import IconButton from 'components/Button/IconButton'
+import { grey, primary } from '../../../../../views/utils/colors'
 
 const OptionButton = IconButton.extend`
   svg {
@@ -282,6 +283,10 @@ export class FileManager extends React.Component {
 
   getTrProps = () => ({
     hoverStyle: `
+    background-color: ${grey.A100};
+     a {
+      color: ${primary}
+    }
       #splitter-button{
           display: block !important;
       }
