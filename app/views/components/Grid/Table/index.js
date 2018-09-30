@@ -119,7 +119,7 @@ class Grid extends React.Component {
           <TableSummary
             Component={this.props.summary.render}
             entityName={this.props.summary.entityName}
-            totalRowsCount={this.props.data.length}
+            totalRowsCount={this.props.summary.total || this.props.data.length}
             selectedRowsCount={
               this.selectablePlugin
                 ? this.selectablePlugin.SelectedRows.length
