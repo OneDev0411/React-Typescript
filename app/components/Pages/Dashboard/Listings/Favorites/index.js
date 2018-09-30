@@ -7,6 +7,7 @@ import { selectListings } from '../../../../../reducers/listings'
 import Map from './Map'
 import { Header } from './Header'
 import { MapView } from '../components/MapView'
+import { GridView } from '../components/GridView'
 
 class Favorites extends Component {
   state = {
@@ -28,9 +29,6 @@ class Favorites extends Component {
     const { listings, isFetching } = this.props
 
     switch (this.state.activeView) {
-      case 'grid':
-        return 'grid'
-
       case 'map':
         return (
           <MapView
@@ -43,7 +41,7 @@ class Favorites extends Component {
         return 'gallery'
 
       default:
-        return 'grid'
+        return <GridView idFetching={isFetching} listings={listings} />
     }
   }
 

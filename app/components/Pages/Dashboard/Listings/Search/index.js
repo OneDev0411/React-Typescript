@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import Map from './components/Map'
 import { Header } from './Header'
 import { MapView } from '../components/MapView'
+import { GridView } from '../components/GridView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
 import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
@@ -70,9 +71,6 @@ class Search extends Component {
     }
 
     switch (this.state.activeView) {
-      case 'grid':
-        return 'grid'
-
       case 'map':
         return (
           <MapView
@@ -87,7 +85,7 @@ class Search extends Component {
         return 'gallery'
 
       default:
-        return 'grid'
+        return <GridView {..._props} />
     }
   }
 
@@ -141,3 +139,5 @@ export default connect(
     toggleFilterArea
   }
 )(Search)
+
+// todo: detect view from url
