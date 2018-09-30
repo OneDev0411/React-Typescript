@@ -119,7 +119,7 @@ class Grid extends React.Component {
           <TableSummary
             Component={this.props.summary.render}
             entityName={this.props.summary.entityName}
-            totalRowsCount={this.props.data.length}
+            totalRowsCount={this.props.summary.total || this.props.data.length}
             selectedRowsCount={
               this.selectablePlugin
                 ? this.selectablePlugin.SelectedRows.length
@@ -160,6 +160,7 @@ Grid.propTypes = {
   showTableHeader: PropTypes.bool,
   getTrProps: PropTypes.func,
   getTdProps: PropTypes.func,
+  getBodyProps: PropTypes.func,
   onScrollBottom: PropTypes.func,
   onScrollTop: PropTypes.func,
   columns: PropTypes.array.isRequired,
@@ -171,6 +172,7 @@ Grid.defaultProps = {
   isFetching: false,
   isFetchingMore: false,
   showTableHeader: true,
+  getBodyProps: () => {},
   getTrProps: () => {},
   getTdProps: () => {},
   onScrollBottom: () => {},

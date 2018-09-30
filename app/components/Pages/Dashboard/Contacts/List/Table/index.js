@@ -184,7 +184,8 @@ class ContactsList extends React.Component {
           }}
           data={this.props.data}
           summary={{
-            entityName: 'Contacts'
+            entityName: 'Contacts',
+            total: this.props.listInfo.total || 0
           }}
           isFetching={this.props.isFetching}
           isFetchingMore={this.props.isFetchingMore}
