@@ -10,7 +10,7 @@ export const MapContainer = styled.div`
   width: calc(100% - 26em - 1px);
 `
 
-export const ListViewContainer = styled.div`
+export const TableContainer = styled.div`
   width: 26em;
   padding: 1.5em;
   overflow-y: scroll;

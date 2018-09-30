@@ -20,6 +20,10 @@ class Search extends Component {
 
     this.state = {
       activeView: 'map',
+      sortBy: {
+        index: 'price',
+        isDescending: false
+      },
       shareModalIsActive: false,
       mapWithQueryIsInitialized: !this.searchQuery
     }
@@ -54,21 +58,35 @@ class Search extends Component {
     }
   }
 
-  onChangeView = e =>
+  onChangeView = e => {
     this.setState({ activeView: e.currentTarget.dataset.view })
+  }
 
-  shareModalCloseHandler = () =>
-    this.setState({
-      shareModalIsActive: false
-    })
+  shareModalCloseHandler = () => this.setState({ shareModalIsActive: false })
+  shareModalActiveHandler = () => this.setState({ shareModalIsActive: true })
 
-  shareModalActiveHandler = () =>
+  onChangeSort = ({ value: index }) => {
+    const isDescending = index.charAt(0) === '-'
+
+    if (isDescending) {
+      index = index.slice(1)
+    }
+
     this.setState({
-      shareModalIsActive: true
+      sortBy: {
+        index,
+        isDescending
+      }
     })
+  }
+
+  handleLoadMore = async () => {
+    console.log('more')
+  }
 
   renderMain() {
     const _props = {
+      user: this.props.user,
       listings: this.props.listings,
       isFetching: this.props.isFetching,
       isWidget: this.props.isWidget
@@ -81,7 +99,10 @@ class Search extends Component {
       case 'map':
         return (
           <MapView
-            listings={_props.listings}
+            {..._props}
+            sortBy={this.state.sortBy}
+            onChangeSort={this.onChangeSort}
+            onRequestLoadMore={this.handleLoadMore}
             Map={
               this.state.mapWithQueryIsInitialized ? <Map {..._props} /> : null
             }

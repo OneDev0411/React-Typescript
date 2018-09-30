@@ -6,7 +6,6 @@ import withHandlers from 'recompose/withHandlers'
 import LazyLoad from 'react-lazy-load'
 
 import FavoriteHeart from '../FavoriteHeart'
-import { prepareListingsProperties } from '../../helpers/prepare-listings-properties'
 import { setMapHoveredMarkerId } from '../../../../../../store_actions/listings/map'
 
 const ListingCard = ({
@@ -18,44 +17,42 @@ const ListingCard = ({
   onMouseLeave,
   isShowOnMap = false
 }) => {
-  const props = prepareListingsProperties(user, listing)
-
   const target = user && !isWidget ? '' : '_blank'
 
   return (
     <LazyLoad className="c-listing-card" height={200} offsetBottom={900}>
       <div
-        style={props.backgroundImage}
+        style={listing.backgroundImage}
         className="c-listing-card__inner"
         onMouseLeave={isShowOnMap ? onMouseLeave : () => {}}
         onMouseEnter={isShowOnMap ? () => onMouseEnter(listing.id) : () => {}}
       >
         <div className="c-listing-card__content-wrapper">
-          {props.statusColor && (
+          {listing.statusColor && (
             <div>
               <span
                 className="c-listing-card__status"
-                style={{ background: `#${props.statusColor}` }}
+                style={{ background: `#${listing.statusColor}` }}
               >
                 {listing.status}
               </span>
             </div>
           )}
-          <h4 className="c-listing-card__title">{props.address}</h4>
-          <h5 className="c-listing-card__price">$ {props.price}</h5>
+          <h4 className="c-listing-card__title">{listing.address}</h4>
+          <h5 className="c-listing-card__price">$ {listing.price}</h5>
           <div className="c-listing-card__details">
-            <span>{props.beds} Beds</span>
+            <span>{listing.beds} Beds</span>
             &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-            <span>{props.baths} Baths</span>
+            <span>{listing.baths} Baths</span>
             &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-            <span>{props.sqft} Sqft</span>
-            {props.lotSizeArea && (
+            <span>{listing.sqft} Sqft</span>
+            {listing.lotSizeArea && (
               <span>
-                &nbsp;&nbsp;&middot;&nbsp;&nbsp;{props.lotSizeArea} Acres
+                &nbsp;&nbsp;&middot;&nbsp;&nbsp;{listing.lotSizeArea} Acres
               </span>
             )}
             &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-            <span>{props.builtYear}</span>
+            <span>{listing.builtYear}</span>
           </div>
         </div>
         {listing.new && (
