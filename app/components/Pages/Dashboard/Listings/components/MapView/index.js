@@ -8,6 +8,13 @@ import { formatListing } from '../../helpers/format-listing'
 import { MainContainer, MapContainer, TableContainer } from './styled'
 
 export class MapView extends React.Component {
+  state = {
+    sortBy: {
+      index: 'price',
+      isDescending: false
+    }
+  }
+
   columns = [
     {
       id: 'price',
@@ -27,10 +34,25 @@ export class MapView extends React.Component {
 
   format = listing => formatListing(listing, this.props.user)
 
-  sort = (a, b) => {
-    const { index } = this.props.sortBy
+  onChangeSort = ({ value: index }) => {
+    const isDescending = index.charAt(0) === '-'
 
-    return this.props.sortBy.isDescending
+    if (isDescending) {
+      index = index.slice(1)
+    }
+
+    this.setState({
+      sortBy: {
+        index,
+        isDescending
+      }
+    })
+  }
+
+  sort = (a, b) => {
+    const { index } = this.state.sortBy
+
+    return this.state.sortBy.isDescending
       ? a[index] - b[index]
       : b[index] - a[index]
   }
@@ -66,7 +88,7 @@ export class MapView extends React.Component {
                   { label: 'Year Built A-Z', value: 'builtYear' },
                   { label: 'Year Built Z-A', value: '-builtYear' }
                 ],
-                onChange: this.props.onChangeSort
+                onChange: this.onChangeSort
               }
             }}
           />

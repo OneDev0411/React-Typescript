@@ -20,10 +20,6 @@ class Search extends Component {
 
     this.state = {
       activeView: 'map',
-      sortBy: {
-        index: 'price',
-        isDescending: false
-      },
       shareModalIsActive: false,
       mapWithQueryIsInitialized: !this.searchQuery
     }
@@ -65,21 +61,6 @@ class Search extends Component {
   shareModalCloseHandler = () => this.setState({ shareModalIsActive: false })
   shareModalActiveHandler = () => this.setState({ shareModalIsActive: true })
 
-  onChangeSort = ({ value: index }) => {
-    const isDescending = index.charAt(0) === '-'
-
-    if (isDescending) {
-      index = index.slice(1)
-    }
-
-    this.setState({
-      sortBy: {
-        index,
-        isDescending
-      }
-    })
-  }
-
   renderMain() {
     const _props = {
       user: this.props.user,
@@ -96,8 +77,6 @@ class Search extends Component {
         return (
           <MapView
             {..._props}
-            sortBy={this.state.sortBy}
-            onChangeSort={this.onChangeSort}
             Map={
               this.state.mapWithQueryIsInitialized ? <Map {..._props} /> : null
             }
