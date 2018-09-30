@@ -23,10 +23,12 @@ export const Row = styled.div`
   ${props =>
     props.multiple &&
     `
-  :first-child {
-    border-top: none !important;
-  }
+    :first-child {
+      border-top: none !important;
+    }
   `};
+
+  ${props => props.css};
 `
 
 export const BodyRow = Row.extend`
@@ -62,4 +64,6 @@ export const Cell = styled.div`
       ${props.hoverStyle}
     }
   `};
+
+  ${props => props.css};
 `
