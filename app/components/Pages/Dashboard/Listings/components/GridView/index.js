@@ -12,7 +12,6 @@ export class GridView extends React.Component {
       header: 'Address',
       id: 'adress',
       width: '30%',
-      accessor: null,
       render: ({ rowData: listing }) => <Address listing={listing} />
     },
     {
@@ -64,14 +63,14 @@ export class GridView extends React.Component {
 
   render() {
     return (
-      <div style={{ padding: '1.5em' }}>
+      <div style={{ padding: '1.5em 1.5em 0.5em' }}>
         <Table
           columns={this.columns}
           data={this.props.listings.data.map(this.format)}
           isFetching={this.props.isFetching}
           LoadingState={LoadingComponent}
           listInfo={this.props.listings.info}
-          summary={{ entityName: 'Listings' }}
+          summary={{ entityName: 'Listings', style: { color: '#000' } }}
           getTdProps={() => ({ style: { lineHeight: 1 } })}
           plugins={{
             sortable: {}
