@@ -11,7 +11,7 @@ export function MainNav() {
       <NavItem indexed text="Search" to="/dashboard/mls" Icon={IconSearch} />
       <NavItem
         text="Following"
-        to="/dashboard/mls/favorites"
+        to="/dashboard/mls/following"
         Icon={IconNotification}
       />
     </div>
