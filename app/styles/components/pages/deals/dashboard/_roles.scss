@@ -97,7 +97,10 @@
     border-radius: 3px;
 
     &:hover {
-      background: #f0f4f7;
+      background: #f2f2f2;
+      .title{
+        color: #003bdf;
+      }
     }
 
     .role-avatar {
