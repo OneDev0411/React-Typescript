@@ -15,7 +15,9 @@ export const ActionsBar = styled.div`
   margin-left: 8px;
 `
 
-export const TBody = styled.div``
+export const TBody = styled.div`
+  ${props => props.css};
+`
 
 export const Row = styled.div`
   display: flex;
