@@ -5,7 +5,13 @@ import { BasicDropdown } from 'components/BasicDropdown'
 
 export class SortablePlugin {
   constructor({ options, onRequestForceUpdate }) {
-    this.options = options
+    this.options = {
+      defaultIndex: {
+        label: 'Sort by',
+        value: 'Sort by'
+      },
+      ...options
+    }
     this.onRequestForceUpdate = onRequestForceUpdate
 
     this.sortBy = null
@@ -106,7 +112,7 @@ export class SortablePlugin {
       maxHeight={400}
       noBorder
       buttonSize="small"
-      buttonText={this.options.defaultIndex ? null : 'Sort by'}
+      buttonStyle={{ fontWeight: 500 }}
       defaultSelectedItem={this.options.defaultIndex}
       disabled={isFetching}
       items={this.getSortableColumns(columns)}
