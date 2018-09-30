@@ -106,7 +106,8 @@ export class SortablePlugin {
       maxHeight={400}
       noBorder
       buttonSize="small"
-      buttonText="Sort by"
+      buttonText={this.options.defaultIndex ? null : 'Sort by'}
+      defaultSelectedItem={this.options.defaultIndex}
       disabled={isFetching}
       items={this.getSortableColumns(columns)}
       itemToString={item => item.label}
