@@ -10,12 +10,8 @@ const CHECKBOX_ANNOTATION = 3
 const UNKNOWN_ANNOTATION = 4
 
 export default class FormInputs extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isLoaded: false
-    }
+  state = {
+    isLoaded: false
   }
 
   componentDidMount() {
@@ -53,7 +49,7 @@ export default class FormInputs extends React.Component {
 
     this.props.onSetValues(values, true)
 
-    this.setState({isLoaded: true})
+    this.setState({ isLoaded: true })
   }
 
   getType(annotation) {
@@ -99,9 +95,9 @@ export default class FormInputs extends React.Component {
   }
 
   render() {
-    const { isLoaded } = this.state
-    if (!isLoaded)
+    if (!this.state.isLoaded) {
       return null
+    }
 
     return <Fragment>{this.props.inputs.map(this.createInput)}</Fragment>
   }
