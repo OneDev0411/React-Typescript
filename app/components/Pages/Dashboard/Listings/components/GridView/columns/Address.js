@@ -21,7 +21,6 @@ const Thumbnail = styled.div`
 `
 
 const Title = styled.div`
-  margin-bottom: 0.25em;
   line-height: 1;
   overflow: hidden;
   white-space: nowrap;
@@ -43,7 +42,7 @@ export const Address = ({ listing }) => (
         <img alt="a listing" src={listing.cover_image_url} />
       )}
     </Thumbnail>
-    <Flex column style={{ width: 'calc(100% - 3.5rem)' }}>
+    <Flex column justifyBetween style={{ width: 'calc(100% - 3.5rem)' }}>
       <Title>
         <Link to={`/dashboard/mls/${listing.id}`}>{listing.address}</Link>
       </Title>
