@@ -24,7 +24,7 @@ export default class CheckboxAnnotation extends React.PureComponent {
         box={box}
         appearance={appearance}
         key={annotation.fieldName}
-        onChange={e => this.props.onValueUpdate(e.target.checked)}
+        onClick={e => this.props.onValueUpdate(e.target.checked)}
         defaultChecked={value}
       />
     )
