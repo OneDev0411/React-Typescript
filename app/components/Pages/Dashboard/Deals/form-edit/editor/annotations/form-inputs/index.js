@@ -13,6 +13,12 @@ export default class FormInputs extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      isLoaded: false
+    }
+  }
+
+  componentDidMount() {
     this.setDefaultValues()
   }
 
@@ -46,6 +52,8 @@ export default class FormInputs extends React.Component {
     })
 
     this.props.onSetValues(values, true)
+
+    this.setState({isLoaded: true})
   }
 
   getType(annotation) {
@@ -91,6 +99,10 @@ export default class FormInputs extends React.Component {
   }
 
   render() {
+    const { isLoaded } = this.state
+    if (!isLoaded)
+      return null
+
     return <Fragment>{this.props.inputs.map(this.createInput)}</Fragment>
   }
 }
