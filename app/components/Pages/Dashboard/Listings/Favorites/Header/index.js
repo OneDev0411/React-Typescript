@@ -17,7 +17,7 @@ export function Header(props) {
             isExpended={props.isSideMenuOpen}
           />
         )}
-        <H1 style={{ marginLeft: '0.5rem' }}>Following</H1>
+        <H1>Following</H1>
       </Flex>
 
       <ViewSwitcher
