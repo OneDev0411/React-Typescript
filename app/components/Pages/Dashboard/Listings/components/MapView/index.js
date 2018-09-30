@@ -45,17 +45,11 @@ export class MapView extends React.Component {
             data={this.props.listings.data.map(this.format).sort(this.sort)}
             getTrProps={this.getGridTrProps}
             isFetching={this.props.isFetching}
-            isFetchingMore={this.props.isFetching}
             LoadingState={LoadingComponent}
             listInfo={this.props.listings.info}
             showTableHeader={false}
             summary={{ entityName: 'Listings' }}
             plugins={{
-              loadable: {
-                accuracy: 300, // px
-                debounceTime: 300, // ms
-                onTrigger: this.props.onRequestLoadMore
-              },
               sortable: {
                 defaultIndex: { label: 'Price A-Z', value: 'price' },
                 columns: [

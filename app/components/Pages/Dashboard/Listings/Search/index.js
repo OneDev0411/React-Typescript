@@ -80,10 +80,6 @@ class Search extends Component {
     })
   }
 
-  handleLoadMore = async () => {
-    console.log('more')
-  }
-
   renderMain() {
     const _props = {
       user: this.props.user,
@@ -102,7 +98,6 @@ class Search extends Component {
             {..._props}
             sortBy={this.state.sortBy}
             onChangeSort={this.onChangeSort}
-            onRequestLoadMore={this.handleLoadMore}
             Map={
               this.state.mapWithQueryIsInitialized ? <Map {..._props} /> : null
             }
