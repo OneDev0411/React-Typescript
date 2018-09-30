@@ -55,6 +55,7 @@ class BasicTable extends React.Component {
       isFetchingMore,
       getHeaderProps,
       getHeaderRowProps,
+      getBodyProps,
       getTrProps,
       getTdProps,
       showTableHeader,
@@ -83,7 +84,7 @@ class BasicTable extends React.Component {
           />
         )}
 
-        <TBody>
+        <TBody {...getBodyProps()}>
           {isFetching && !isFetchingMore && <LoadingState />}
           {SubComponent && <SubComponent data={data} columns={columns} />}
 
