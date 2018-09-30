@@ -9,5 +9,6 @@ export const Header = styled.div`
 export const HeaderRow = Row.extend``
 
 export const HeaderCell = Cell.extend`
-  align-self: center;
+  display: flex;
+  align-items: center;
 `

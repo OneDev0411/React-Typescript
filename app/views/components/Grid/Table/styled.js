@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
-const border = '1px solid #d4d4d4'
+import { borderColor } from '../../../utils/colors'
+
+const border = `1px solid ${borderColor}`
 
 export const ToolbarContainer = styled.div`
   display: flex;
