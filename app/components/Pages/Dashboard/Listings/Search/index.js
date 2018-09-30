@@ -1,5 +1,6 @@
+import React from 'react'
 import { connect } from 'react-redux'
-import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 
 import Map from './components/Map'
 import { Header } from './Header'
@@ -11,18 +12,17 @@ import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
 import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
 
-class Search extends Component {
+class Search extends React.Component {
   constructor(props) {
     super(props)
 
-    const { location } = props
+    const { query } = props.location
 
-    this.searchQuery =
-      location && location.query && location.query.q ? location.query.q : ''
+    this.searchQuery = query.q || ''
 
     this.state = {
-      activeView: 'map',
       shareModalIsActive: false,
+      activeView: query.view || 'map',
       mapWithQueryIsInitialized: !this.searchQuery
     }
   }
@@ -57,7 +57,11 @@ class Search extends Component {
   }
 
   onChangeView = e => {
-    this.setState({ activeView: e.currentTarget.dataset.view })
+    const activeView = e.currentTarget.dataset.view
+
+    this.setState({ activeView }, () => {
+      browserHistory.push(`/dashboard/mls?view=${activeView}`)
+    })
   }
 
   shareModalCloseHandler = () => this.setState({ shareModalIsActive: false })

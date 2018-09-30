@@ -1,5 +1,6 @@
+import React from 'react'
 import { connect } from 'react-redux'
-import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
 import { selectListings } from '../../../../../reducers/listings'
@@ -10,9 +11,13 @@ import { MapView } from '../components/MapView'
 import { GridView } from '../components/GridView'
 import { GalleryView } from '../components/GalleryView'
 
-class Favorites extends Component {
-  state = {
-    activeView: 'map'
+class Favorites extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      activeView: props.location.query.view || 'map'
+    }
   }
 
   componentDidMount() {
@@ -23,8 +28,13 @@ class Favorites extends Component {
     }
   }
 
-  onChangeView = e =>
-    this.setState({ activeView: e.currentTarget.dataset.view })
+  onChangeView = e => {
+    const activeView = e.currentTarget.dataset.view
+
+    this.setState({ activeView }, () => {
+      browserHistory.push(`/dashboard/mls/following?view=${activeView}`)
+    })
+  }
 
   renderMain() {
     const { listings, isFetching } = this.props
