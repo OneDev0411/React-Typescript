@@ -87,6 +87,12 @@ export default class FormInputs extends React.Component {
       onValueUpdate: this.props.onValueUpdate.bind(null, annotation.fieldName)
     }
 
+    // Annotations like Signature which we dont support in here.
+    // Please note that we do support Signatures through text boxes
+    // Which have specific directions in their calculate field
+    if (type === UNKNOWN_ANNOTATION)
+      return null
+
     if (type === CHECKBOX_ANNOTATION) {
       return <CheckboxAnnotation {...props} />
     }
