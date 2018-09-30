@@ -51,6 +51,7 @@ const ManageMembers = ({
                   name={roomMember.display_name}
                   image={roomMember.profile_image_url}
                   size={30}
+                  color="#000000"
                 />
               </Col>
               <Col sm={10} md={10} className="vcenter" style={{ padding: 0 }}>
