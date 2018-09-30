@@ -5,14 +5,11 @@ import { Trigger as MenuTrigger } from '../../../../../../views/components/Slide
 import { H1 } from '../../../../../../views/components/Typography/headings'
 
 import { ViewSwitcher } from '../../components/ViewSwitcher'
+import { PageHeaderContainer } from '../../components/PageHeaderContainer'
 
 export function Header(props) {
   return (
-    <Flex
-      alignCenter
-      justifyBetween
-      style={{ padding: '1.5em', borderBottom: '1px solid #d4d4d4' }}
-    >
+    <PageHeaderContainer>
       <Flex alignCenter>
         {props.user && (
           <MenuTrigger
@@ -27,6 +24,6 @@ export function Header(props) {
         activeView={props.activeView}
         onChange={props.onChangeView}
       />
-    </Flex>
+    </PageHeaderContainer>
   )
 }

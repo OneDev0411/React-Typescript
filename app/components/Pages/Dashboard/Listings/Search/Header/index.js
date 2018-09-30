@@ -6,6 +6,7 @@ import FilterButton from '../../../../../../views/components/Button/DropButton'
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 
 import { ViewSwitcher } from '../../components/ViewSwitcher'
+import { PageHeaderContainer } from '../../components/PageHeaderContainer'
 import Filters from '../components/Filters'
 import SearchField from '../components/SearchToolbar'
 
@@ -13,11 +14,7 @@ export function Header(props) {
   const { isFetching, filtersIsOpen, onClickFilter, isSideMenuOpen } = props
 
   return (
-    <Flex
-      alignCenter
-      justifyBetween
-      style={{ padding: '1.5em', borderBottom: '1px solid #d4d4d4' }}
-    >
+    <PageHeaderContainer>
       <Flex alignCenter>
         {props.user && (
           <MenuTrigger
@@ -55,6 +52,6 @@ export function Header(props) {
         activeView={props.activeView}
         onChange={props.onChangeView}
       />
-    </Flex>
+    </PageHeaderContainer>
   )
 }
