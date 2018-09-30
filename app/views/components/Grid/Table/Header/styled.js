@@ -6,7 +6,11 @@ export const Header = styled.div`
   margin-bottom: 24px;
 `
 
-export const HeaderRow = Row.extend``
+export const HeaderRow = Row.extend`
+  min-height: auto;
+  padding: 0;
+  border: none;
+`
 
 export const HeaderCell = Cell.extend`
   display: flex;

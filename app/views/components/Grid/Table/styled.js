@@ -8,13 +8,13 @@ export const ToolbarContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: 24px;
+  margin-bottom: 1.5em;
 `
 
 export const ActionsBar = styled.div`
   display: flex;
   flex: 1;
-  margin-left: 8px;
+  margin-left: 0.5em;
 `
 
 export const TBody = styled.div`
@@ -24,22 +24,8 @@ export const TBody = styled.div`
 export const Row = styled.div`
   display: flex;
   justify-items: center;
-  ${props =>
-    props.multiple &&
-    `
-    :first-child {
-      border-top: none !important;
-    }
-  `};
-
-  ${props => props.css};
-`
-
-export const BodyRow = Row.extend`
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  padding: 12px 0;
+  min-height: 4em;
+  padding: 1em 0;
   border-top: ${border};
 
   ${props =>
@@ -49,6 +35,16 @@ export const BodyRow = Row.extend`
       ${props.hoverStyle}
     }
   `};
+
+  ${props =>
+    props.multiple &&
+    `
+    :first-child {
+      border-top: none !important;
+    }
+  `};
+
+  ${props => props.css};
 `
 
 export const Cell = styled.div`

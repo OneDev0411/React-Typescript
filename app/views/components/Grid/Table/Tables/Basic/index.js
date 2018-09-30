@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import { Cell, TBody, BodyRow as Row } from '../../styled'
+import { Cell, TBody, Row } from '../../styled'
 import TableHeader from '../../Header'
 
 class BasicTable extends React.Component {
