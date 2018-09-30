@@ -9,6 +9,7 @@ import { getForms } from '../../../../../store_actions/deals'
 import Grid from '../../../../../views/components/Grid/Table'
 import Search from '../../../../../views/components/Grid/Search'
 import PageHeader from '../../../../../views/components/PageHeader'
+import { grey } from '../../../../../views/utils/colors'
 
 const GridContainer = styled.div`
   margin-top: 2rem;
@@ -61,6 +62,12 @@ class DealTemplates extends React.Component {
     ]
   }
 
+  getGridTrProps = () => ({
+    hoverStyle: `
+    background-color: ${grey.A100};
+    `
+  })
+
   editTemplate = form =>
     browserHistory.push(`/dashboard/account/deal/templates/${form.id}`)
 
@@ -90,13 +97,8 @@ class DealTemplates extends React.Component {
             <Grid
               showPagination={false}
               data={data}
-              pageSize={data.length}
+              getTrProps={this.getGridTrProps}
               columns={this.Columns}
-              defaultSorted={[
-                {
-                  id: 'name'
-                }
-              ]}
             />
           </GridContainer>
         </div>
