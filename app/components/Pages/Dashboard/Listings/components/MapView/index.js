@@ -5,6 +5,7 @@ import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import ListingCard from '../ListingCard'
 import { formatListing } from '../../helpers/format-listing'
+import { sortOptions } from '../../helpers/sort-plugin-options'
 import { MainContainer, MapContainer, TableContainer } from './styled'
 
 export class MapView extends React.Component {
@@ -24,13 +25,6 @@ export class MapView extends React.Component {
       )
     }
   ]
-
-  getGridTrProps = () => ({
-    style: {
-      padding: 0,
-      border: 'none'
-    }
-  })
 
   format = listing => formatListing(listing, this.props.user)
 
@@ -65,29 +59,20 @@ export class MapView extends React.Component {
           <Table
             columns={this.columns}
             data={this.props.listings.data.map(this.format).sort(this.sort)}
-            getTrProps={this.getGridTrProps}
             isFetching={this.props.isFetching}
             LoadingState={LoadingComponent}
             listInfo={this.props.listings.info}
             showTableHeader={false}
-            summary={{ entityName: 'Listings' }}
+            summary={{ entityName: 'Listings', style: { color: '#000' } }}
+            getTrProps={() => ({
+              style: {
+                padding: 0,
+                border: 'none'
+              }
+            })}
             plugins={{
               sortable: {
-                defaultIndex: { label: 'Price A-Z', value: 'price' },
-                columns: [
-                  { label: 'Price A-Z', value: 'price' },
-                  { label: 'Price Z-A', value: '-price' },
-                  { label: 'Bedrooms A-Z', value: 'beds' },
-                  { label: 'Bedrooms Z-A', value: '-beds' },
-                  { label: 'Bathrooms A-Z', value: 'baths' },
-                  { label: 'Bathrooms Z-A', value: '-baths' },
-                  { label: 'Sqft A-Z', value: 'sqft' },
-                  { label: 'Sqft Z-A', value: '-sqft' },
-                  { label: 'Lot Size Area A-Z', value: 'lotSizeArea' },
-                  { label: 'Lot Size Area Z-A', value: '-lotSizeArea' },
-                  { label: 'Year Built A-Z', value: 'builtYear' },
-                  { label: 'Year Built Z-A', value: '-builtYear' }
-                ],
+                ...sortOptions,
                 onChange: this.onChangeSort
               }
             }}
