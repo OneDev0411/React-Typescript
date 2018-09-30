@@ -3,15 +3,15 @@ import React from 'react'
 import Icon from './Icon'
 import IconButton from '../../../../../../views/components/Button/IconButton'
 
-const SwitchButton = ({ active, onClick, icon }) => (
+const SwitchButton = ({ isActive, onClick, icon }) => (
   <IconButton
     isFit
     data-view={icon}
     onClick={onClick}
-    disabled={active}
+    disabled={isActive}
     style={{ marginLeft: '1em' }}
   >
-    <Icon name={icon} active={active} />
+    <Icon name={icon} isActive={isActive} />
   </IconButton>
 )
 

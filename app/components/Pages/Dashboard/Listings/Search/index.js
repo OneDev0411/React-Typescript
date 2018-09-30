@@ -98,7 +98,7 @@ class Search extends Component {
           user={user}
           isFetching={this.props.isFetching}
           filtersIsOpen={this.props.filtersIsOpen}
-          activeView={this.props.activeView}
+          activeView={this.state.activeView}
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
           saveSearchHandler={this.shareModalActiveHandler}
