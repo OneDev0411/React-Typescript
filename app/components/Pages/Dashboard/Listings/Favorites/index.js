@@ -12,11 +12,12 @@ class Favorites extends Component {
   state = {
     activeView: 'map'
   }
-  componentDidMount() {
-    const { user, isFetching, getFavorites } = this.props
 
-    if (user && !isFetching) {
-      getFavorites(user)
+  componentDidMount() {
+    const { user } = this.props
+
+    if (user && !this.props.isFetching) {
+      this.props.getFavorites(user)
     }
   }
 
@@ -24,10 +25,7 @@ class Favorites extends Component {
     this.setState({ activeView: e.currentTarget.dataset.view })
 
   renderMain() {
-    const _props = {
-      listings: this.props.listings,
-      isFetching: this.props.isFetching
-    }
+    const { listings, isFetching } = this.props
 
     switch (this.state.activeView) {
       case 'grid':
@@ -36,10 +34,8 @@ class Favorites extends Component {
       case 'map':
         return (
           <MapView
-            listings={_props.listings}
-            Map={
-              this.state.mapWithQueryIsInitialized ? <Map {..._props} /> : null
-            }
+            listings={listings}
+            Map={<Map markers={listings.data} isFetching={isFetching} />}
           />
         )
 
@@ -56,10 +52,10 @@ class Favorites extends Component {
       <React.Fragment>
         <Header
           user={this.props.user}
+          onChangeView={this.onChangeView}
           activeView={this.state.activeView}
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
-          onChangeView={this.onChangeView}
         />
         {this.renderMain()}
       </React.Fragment>
@@ -67,11 +63,11 @@ class Favorites extends Component {
   }
 }
 
-const mapStateToProps = ({ data, favorites }) => {
-  const { listings } = favorites
+const mapStateToProps = state => {
+  const { listings } = state.favorites
 
   return {
-    user: data.user,
+    user: state.user,
     isFetching: listings.isFetching,
     listings: {
       data: selectListings(listings),
