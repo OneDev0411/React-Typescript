@@ -8,6 +8,7 @@ import Map from './Map'
 import { Header } from './Header'
 import { MapView } from '../components/MapView'
 import { GridView } from '../components/GridView'
+import { GalleryView } from '../components/GalleryView'
 
 class Favorites extends Component {
   state = {
@@ -38,10 +39,10 @@ class Favorites extends Component {
         )
 
       case 'gallery':
-        return 'gallery'
+        return <GalleryView isFetching={isFetching} listings={listings} />
 
       default:
-        return <GridView idFetching={isFetching} listings={listings} />
+        return <GridView isFetching={isFetching} listings={listings} />
     }
   }
 

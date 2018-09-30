@@ -5,6 +5,7 @@ import Map from './components/Map'
 import { Header } from './Header'
 import { MapView } from '../components/MapView'
 import { GridView } from '../components/GridView'
+import { GalleryView } from '../components/GalleryView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
 import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
@@ -82,7 +83,7 @@ class Search extends Component {
         )
 
       case 'gallery':
-        return 'gallery'
+        return <GalleryView {..._props} />
 
       default:
         return <GridView {..._props} />
