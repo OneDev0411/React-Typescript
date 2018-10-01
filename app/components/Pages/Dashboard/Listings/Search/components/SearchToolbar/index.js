@@ -1,10 +1,12 @@
 import React from 'react'
+import _ from 'underscore'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { batchActions } from 'redux-batched-actions'
 
+import getPlace from '../../../../../../../models/listings/search/get-place'
 import { getMapBoundsInCircle } from '../../../../../../../utils/get-coordinates-points/index.js'
 import resetAreasOptions from '../../../../../../../store_actions/listings/search/reset-areas-options'
 import { goToPlace } from '../../../../../../../store_actions/listings/map'
@@ -20,7 +22,7 @@ import {
   setSearchType
 } from '../../../../../../../store_actions/listings/search/set-type'
 import IconClose from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
-import { mapInitialState, queryOptions } from '../../../mapOptions'
+import { mapInitialState } from '../../../mapOptions'
 import { Form, Input, ClearButton, SearchIcon } from './styled'
 
 let inputNode = React.createRef()
@@ -89,21 +91,33 @@ const fieldHOC = compose(
     }
   }),
   withHandlers({
-    findPlace: ({ activeView, dispatch }) => async address => {
+    findPlace: ({ activeView, filterOptions, dispatch }) => async address => {
       if (!address) {
         return null
       }
 
-      if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
-        return dispatch(searchActions.searchByPostalCode(address))
-      }
+      // if (address.match(/^\d{5}(?:[-\s]\d{4})?$/)) {
+      //   return dispatch(searchActions.searchByPostalCode(address))
+      // }
 
-      if (!Number.isNaN(address) && address.length > 7) {
+      if (address.length > 7 && address.match(/^\d+$/)) {
         return dispatch(searchActions.searchByMlsNumber(address))
       }
 
       if (activeView === 'map') {
         return dispatch(searchActions.getPlace(address))
+      }
+
+      const location = await getPlace(address)
+
+      if (location) {
+        dispatch(
+          searchActions.getListings.byValert({
+            ...filterOptions,
+            limit: 50,
+            points: getMapBoundsInCircle(location.center, 1)
+          })
+        )
       }
     }
   }),
@@ -111,7 +125,8 @@ const fieldHOC = compose(
     autoCompletePlaceChangedHandler: ({
       findPlace,
       activeView,
-      dispatch
+      dispatch,
+      filterOptions
     }) => async address => {
       dispatch(resetAreasOptions())
 
@@ -130,7 +145,7 @@ const fieldHOC = compose(
       } else {
         dispatch(
           searchActions.getListings.byValert({
-            ...queryOptions,
+            ...filterOptions,
             limit: 50,
             points: getMapBoundsInCircle(address.geometry.location, 1)
           })
