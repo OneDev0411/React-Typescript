@@ -7,7 +7,7 @@ import { grey, primary } from '../../utils/colors'
 
 export const FormContainer = styled.form`
   width: 100%;
-  padding: 1.5em;
+  padding: 1.5em 0;
 `
 export const FieldContainer = Flex.extend`
   height: 40px;
