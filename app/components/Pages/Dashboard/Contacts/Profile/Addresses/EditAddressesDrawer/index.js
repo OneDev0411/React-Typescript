@@ -200,7 +200,7 @@ class EditAddressesForm extends React.Component {
                     )
                   }
                 >
-                  Add a new address
+                  Add another address
                 </AddButton>
               </div>
             </div>
