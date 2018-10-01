@@ -37,7 +37,7 @@ export const BodyRow = Row.extend`
   min-height: 64px;
   display: flex;
   align-items: center;
-  padding: 12px 0;
+  padding: 12px 8px;
   border-top: ${border};
 
   ${props =>
