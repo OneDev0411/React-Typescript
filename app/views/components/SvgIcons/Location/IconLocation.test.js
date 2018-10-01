@@ -3,9 +3,8 @@ import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import Image from './IconLocation.js'
 
-describe('Noun_1608718.svg generated styled component', () => {
+describe('IconLocation.svg generated styled component', () => {
   let wrapper
-
   beforeEach(() => {
     wrapper = shallow(<Image />)
   })
@@ -20,7 +19,6 @@ describe('Noun_1608718.svg generated styled component', () => {
 
   it('has dimensions greater than zero', () => {
     const dimensions = Image.getDimensions()
-
     expect(dimensions.width).not.toBe('0')
     expect(parseInt(dimensions.width, 10)).toBeGreaterThan(0)
     expect(dimensions.height).not.toBe('0')
