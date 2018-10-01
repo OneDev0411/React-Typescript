@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import Marker from '../../components/Markers/SimpleMarker'
+import ZoomController from '../../components/ZoomController'
 import * as actions from '../../../../../../store_actions/listings/map'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
@@ -26,36 +27,39 @@ const map = ({
   map: { hoveredMarkerId },
   mapProps: { zoom, center }
 }) => (
-  <Map
-    zoom={zoom}
-    style={style}
-    center={center}
-    options={options}
-    onChange={onChange}
-    defaultZoom={defaultZoom}
-    defaultCenter={defaultCenter}
-    yesIWantToUseGoogleMapApiInternals
-    bootstrapURLKeys={bootstrapURLKeys}
-    onGoogleApiLoaded={onGoogleApiLoaded}
-  >
-    {markers.map(marker => {
-      const { id, lat, lng } = marker
+  <React.Fragment>
+    <Map
+      zoom={zoom}
+      style={style}
+      center={center}
+      options={options}
+      onChange={onChange}
+      defaultZoom={defaultZoom}
+      defaultCenter={defaultCenter}
+      yesIWantToUseGoogleMapApiInternals
+      bootstrapURLKeys={bootstrapURLKeys}
+      onGoogleApiLoaded={onGoogleApiLoaded}
+    >
+      {markers.map(marker => {
+        const { id, lat, lng } = marker
 
-      return (
-        <Marker
-          lat={lat}
-          lng={lng}
-          user={user}
-          data={appData}
-          listing={marker}
-          key={`MARKER_${id}`}
-          onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-          onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-          markerPopupIsActive={hoveredMarkerId === id}
-        />
-      )
-    })}
-  </Map>
+        return (
+          <Marker
+            lat={lat}
+            lng={lng}
+            user={user}
+            data={appData}
+            listing={marker}
+            key={`MARKER_${id}`}
+            onMouseEnterHandler={() => onMarkerMouseEnter(id)}
+            onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
+            markerPopupIsActive={hoveredMarkerId === id}
+          />
+        )
+      })}
+    </Map>
+    <ZoomController tabName="favorites" />
+  </React.Fragment>
 )
 
 const mapHOC = compose(

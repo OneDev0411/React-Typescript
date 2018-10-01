@@ -9,6 +9,7 @@ import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
+import ZoomController from '../../components/ZoomController'
 import SimpleMarker from '../../components/Markers/SimpleMarker'
 import ClusterMarker from '../../components/Markers/ClusterMarker'
 import NotLoggedInMessage from '../../components/NotLoggedInMessage'
@@ -114,6 +115,7 @@ const map = ({
       onClick={onClickRemovePolygon}
       points={drawing.points}
     />
+    <ZoomController tabName="search" isTopOfLocation />
     <LocationButton />
     {!isWidget && <NotLoggedInMessage isLoggedIn={user ? true : ''} />}
   </div>
