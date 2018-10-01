@@ -3,8 +3,11 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
 import { loadJS } from '../../../../../utils/load-js'
+import getPlace from '../../../../../models/listings/search/get-place'
+import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points/index.js'
 import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
+import getListingsByValert from '../../../../../store_actions/listings/search/get-listings/by-valert'
 import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
 
 import Map from './components/Map'
@@ -27,7 +30,8 @@ class Search extends React.Component {
     let activeView = query.view
 
     if (!activeView) {
-      activeView = props.user.user_type === 'Agent' ? 'grid' : 'map'
+      activeView =
+        props.user && props.user.user_type === 'Agent' ? 'grid' : 'map'
     }
 
     this.state = {
@@ -48,29 +52,56 @@ class Search extends React.Component {
 
     if (this.searchQuery) {
       this._findPlace(this.searchQuery)
+    } else if (this.props.listings.data.length === 0) {
+      this.fetchDallasListings()
     }
   }
 
-  async _findPlace(address) {
-    const { searchByMlsNumber, searchByPostalCode, getPlace } = this.props
+  fetchDallasListings = async () => {
+    await this.props.dispatch(
+      getListingsByValert({
+        ...this.props.queryOptions,
+        limit: 50
+      })
+    )
+  }
+
+  _findPlace = async address => {
+    const { dispatch } = this.props
+
+    const isMapView = this.state.activeView === 'map'
 
     const initMap = () => this.setState({ mapWithQueryIsInitialized: true })
 
     try {
-      if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
-        initMap()
-        searchByPostalCode(address)
+      if (address.length > 7 && address.match(/^\d+$/)) {
+        if (isMapView) {
+          initMap()
+        }
+
+        return dispatch(searchActions.searchByMlsNumber(address))
       }
 
-      if (!Number.isNaN(address) && address.length > 7) {
+      if (isMapView) {
+        await dispatch(searchActions.getPlace(address))
         initMap()
-        searchByMlsNumber(address)
       }
 
-      await getPlace(address)
-      initMap()
+      const location = await getPlace(address)
+
+      if (location) {
+        dispatch(
+          getListingsByValert({
+            ...this.props.queryOptions,
+            limit: 50,
+            points: getMapBoundsInCircle(location.center, 1)
+          })
+        )
+      }
     } catch ({ message }) {
-      initMap()
+      if (isMapView) {
+        initMap()
+      }
     }
   }
 
@@ -112,6 +143,8 @@ class Search extends React.Component {
     }
   }
 
+  onClickFilter = () => this.props.dispatch(toggleFilterArea())
+
   render() {
     const { user } = this.props
 
@@ -125,7 +158,7 @@ class Search extends React.Component {
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
           saveSearchHandler={this.shareModalActiveHandler}
-          onClickFilter={this.props.toggleFilterArea}
+          onClickFilter={this.onClickFilter}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
         />
@@ -147,6 +180,7 @@ const mapStateToProps = ({ user, search }) => {
   return {
     user,
     isLoggedIn: user || false,
+    queryOptions: search.options,
     isFetching: listings.isFetching,
     filtersIsOpen: search.filters.isOpen,
     listings: {
@@ -156,12 +190,6 @@ const mapStateToProps = ({ user, search }) => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    ...searchActions,
-    toggleFilterArea
-  }
-)(Search)
+export default connect(mapStateToProps)(Search)
 
 // todo: detect view from url
