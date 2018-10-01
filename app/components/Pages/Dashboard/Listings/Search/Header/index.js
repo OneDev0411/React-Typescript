@@ -22,10 +22,18 @@ export function Header(props) {
   return (
     <PageHeaderContainer>
       <Flex alignCenter>
-        {props.user && (
+        {props.user ? (
           <MenuTrigger
             onClick={props.toggleSideMenu}
             isExpended={isSideMenuOpen}
+          />
+        ) : (
+          <img
+            src="/static/images/logo.svg"
+            alt="Rechat"
+            width="98"
+            height="24"
+            style={{ marginRight: '1em' }}
           />
         )}
         <SearchField activeView={activeView} />
@@ -44,14 +52,16 @@ export function Header(props) {
           isSideMenuOpen={isSideMenuOpen}
           handleClose={onClickFilter}
         />
-        <Button
-          size="large"
-          disabled={isFetching}
-          onClick={props.saveSearchHandler}
-          style={{ marginLeft: '0.5em' }}
-        >
-          Save Search
-        </Button>
+        {props.user && (
+          <Button
+            size="large"
+            disabled={isFetching}
+            onClick={props.saveSearchHandler}
+            style={{ marginLeft: '0.5em' }}
+          >
+            Save Search
+          </Button>
+        )}
       </Flex>
 
       <ViewSwitcher activeView={activeView} onChange={props.onChangeView} />
