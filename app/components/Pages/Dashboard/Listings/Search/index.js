@@ -2,15 +2,19 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
-import Map from './components/Map'
-import { Header } from './Header'
-import { MapView } from '../components/MapView'
-import { GridView } from '../components/GridView'
-import { GalleryView } from '../components/GalleryView'
-import CreateAlertModal from '../components/modals/CreateAlertModal'
+import { loadJS } from '../../../../../utils/load-js'
 import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
 import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
+
+import Map from './components/Map'
+import { MapView } from '../components/MapView'
+import { bootstrapURLKeys } from '../mapOptions'
+import { GridView } from '../components/GridView'
+import { GalleryView } from '../components/GalleryView'
+import CreateAlertModal from '../components/modals/CreateAlertModal'
+
+import { Header } from './Header'
 
 class Search extends React.Component {
   constructor(props) {
@@ -20,14 +24,28 @@ class Search extends React.Component {
 
     this.searchQuery = query.q || ''
 
+    let activeView = query.view
+
+    if (!activeView) {
+      activeView = props.user.user_type === 'Agent' ? 'grid' : 'map'
+    }
+
     this.state = {
+      activeView,
       shareModalIsActive: false,
-      activeView: query.view || 'map',
       mapWithQueryIsInitialized: !this.searchQuery
     }
   }
 
   componentDidMount() {
+    if (!window.google) {
+      loadJS(
+        `https://maps.googleapis.com/maps/api/js?key=${
+          bootstrapURLKeys.key
+        }&libraries=${bootstrapURLKeys.libraries},`
+      )
+    }
+
     if (this.searchQuery) {
       this._findPlace(this.searchQuery)
     }
@@ -44,7 +62,7 @@ class Search extends React.Component {
         searchByPostalCode(address)
       }
 
-      if (!isNaN(address) && address.length > 7) {
+      if (!Number.isNaN(address) && address.length > 7) {
         initMap()
         searchByMlsNumber(address)
       }
@@ -109,6 +127,7 @@ class Search extends React.Component {
           saveSearchHandler={this.shareModalActiveHandler}
           onClickFilter={this.props.toggleFilterArea}
           onChangeView={this.onChangeView}
+          hasData={this.props.listings.data.length > 0}
         />
         {this.renderMain()}
         <CreateAlertModal

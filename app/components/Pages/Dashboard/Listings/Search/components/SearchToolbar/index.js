@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import { batchActions } from 'redux-batched-actions'
 
+import { getMapBoundsInCircle } from '../../../../../../../utils/get-coordinates-points/index.js'
 import resetAreasOptions from '../../../../../../../store_actions/listings/search/reset-areas-options'
 import { goToPlace } from '../../../../../../../store_actions/listings/map'
 import searchActions from '../../../../../../../store_actions/listings/search'
@@ -18,28 +20,8 @@ import {
   setSearchType
 } from '../../../../../../../store_actions/listings/search/set-type'
 import IconClose from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
-
+import { mapInitialState, queryOptions } from '../../../mapOptions'
 import { Form, Input, ClearButton, SearchIcon } from './styled'
-
-const findPlace = address => dispatch => {
-  if (!address) {
-    return
-  }
-
-  if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
-    dispatch(searchActions.searchByPostalCode(address))
-
-    return
-  }
-
-  if (!isNaN(address) && address.length > 7) {
-    dispatch(searchActions.searchByMlsNumber(address))
-
-    return
-  }
-
-  dispatch(searchActions.getPlace(address))
-}
 
 let inputNode = React.createRef()
 
@@ -99,28 +81,61 @@ const fieldHOC = compose(
   withHandlers({
     disableDrawing: ({ drawing, dispatch }) => () => {
       if (drawing.points.length > 2) {
-        dispatch(removePolygon(drawing.shape))
-        dispatch(inactiveDrawing())
+        batchActions([
+          dispatch(removePolygon(drawing.shape)),
+          dispatch(inactiveDrawing())
+        ])
       }
     }
   }),
   withHandlers({
-    autoCompletePlaceChanged: ({ dispatch }) => address => {
+    findPlace: ({ activeView, dispatch }) => async address => {
+      if (!address) {
+        return null
+      }
+
+      if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
+        return dispatch(searchActions.searchByPostalCode(address))
+      }
+
+      if (!Number.isNaN(address) && address.length > 7) {
+        return dispatch(searchActions.searchByMlsNumber(address))
+      }
+
+      if (activeView === 'map') {
+        return dispatch(searchActions.getPlace(address))
+      }
+    }
+  }),
+  withHandlers({
+    autoCompletePlaceChangedHandler: ({
+      findPlace,
+      activeView,
+      dispatch
+    }) => async address => {
       dispatch(resetAreasOptions())
 
       if (!address.formatted_address) {
-        findPlace(address.name)(dispatch)
-
-        return
+        return findPlace(address.name)
       }
 
-      const zoom = 16
-      const center = {
-        lat: address.geometry.location.lat(),
-        lng: address.geometry.location.lng()
-      }
+      if (activeView === 'map') {
+        const zoom = 16
+        const center = {
+          lat: address.geometry.location.lat(),
+          lng: address.geometry.location.lng()
+        }
 
-      dispatch(goToPlace({ center, zoom }))
+        dispatch(goToPlace({ center, zoom }))
+      } else {
+        dispatch(
+          searchActions.getListings.byValert({
+            ...queryOptions,
+            limit: 50,
+            points: getMapBoundsInCircle(address.geometry.location, 1)
+          })
+        )
+      }
     }
   }),
   withHandlers({
@@ -131,7 +146,7 @@ const fieldHOC = compose(
       updateSubmitedValue,
       autocompleteInstance,
       setAutocompleteInstance,
-      autoCompletePlaceChanged
+      autoCompletePlaceChangedHandler
     }) => () => {
       if (!window.google) {
         return false
@@ -150,7 +165,7 @@ const fieldHOC = compose(
         autocomplete.setComponentRestrictions({ country: ['us'] })
 
         const circle = new google.maps.Circle({
-          center: mapCenter,
+          center: mapCenter || mapInitialState.center,
           radius: 500
         })
 
@@ -163,11 +178,13 @@ const fieldHOC = compose(
             autocomplete.getPlace().name
 
           updateSubmitedValue(address)
-          dispatch(searchActions.setSearchInput(address))
-          dispatch(setSearchType(SEARCH_BY_GOOGLE_SUGGESTS))
-          dispatch(hideFilterArea())
-          disableDrawing()
-          autoCompletePlaceChanged(autocomplete.getPlace())
+          batchActions([
+            dispatch(searchActions.setSearchInput(address)),
+            dispatch(hideFilterArea()),
+            disableDrawing(),
+            dispatch(setSearchType(SEARCH_BY_GOOGLE_SUGGESTS))
+          ])
+          autoCompletePlaceChangedHandler(autocomplete.getPlace())
         })
 
         inputNode.current.addEventListener(
@@ -177,6 +194,7 @@ const fieldHOC = compose(
       }
     },
     onSubmit: ({
+      findPlace,
       dispatch,
       searchInput,
       disableDrawing,
@@ -184,15 +202,16 @@ const fieldHOC = compose(
     }) => async event => {
       event.preventDefault()
       updateSubmitedValue(searchInput)
-      dispatch(resetAreasOptions())
-      dispatch(hideFilterArea())
+      batchActions([dispatch(resetAreasOptions()), dispatch(hideFilterArea())])
       disableDrawing()
-      findPlace(searchInput)(dispatch)
+      findPlace(searchInput)
     },
     onClear: ({ dispatch }) => event => {
       event.preventDefault()
-      dispatch(searchActions.setSearchInput(''))
-      dispatch(resetSearchType())
+      batchActions([
+        dispatch(searchActions.setSearchInput('')),
+        dispatch(resetSearchType())
+      ])
     }
   })
 )

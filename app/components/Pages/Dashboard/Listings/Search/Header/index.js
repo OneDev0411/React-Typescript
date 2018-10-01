@@ -11,7 +11,13 @@ import Filters from '../components/Filters'
 import SearchField from '../components/SearchToolbar'
 
 export function Header(props) {
-  const { isFetching, filtersIsOpen, onClickFilter, isSideMenuOpen } = props
+  const {
+    isFetching,
+    filtersIsOpen,
+    onClickFilter,
+    isSideMenuOpen,
+    activeView
+  } = props
 
   return (
     <PageHeaderContainer>
@@ -22,12 +28,12 @@ export function Header(props) {
             isExpended={isSideMenuOpen}
           />
         )}
-        <SearchField />
+        <SearchField activeView={activeView} />
         <FilterButton
           style={{ marginLeft: '0.5em' }}
           onClick={onClickFilter}
           isOpen={filtersIsOpen}
-          disabled={isFetching}
+          disabled={isFetching || !props.hasData}
           text="Filter"
           size="large"
           appearance="outline"
@@ -48,10 +54,7 @@ export function Header(props) {
         </Button>
       </Flex>
 
-      <ViewSwitcher
-        activeView={props.activeView}
-        onChange={props.onChangeView}
-      />
+      <ViewSwitcher activeView={activeView} onChange={props.onChangeView} />
     </PageHeaderContainer>
   )
 }
