@@ -33,5 +33,6 @@ export const Status = styled.div`
   border-style: solid;
   border-color: ${brandBackground};
   border-radius: 100%;
-  background-color: ${props => (props.isOnline ? '#35b863' : borderColor)};
+  background-color: ${props =>
+    props.isOnline ? props.statusColor : borderColor};
 `

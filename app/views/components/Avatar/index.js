@@ -6,6 +6,7 @@ import { getNameInitials } from '../../..//utils/helpers'
 import { Container, Image, Status } from './styled'
 
 const propTypes = {
+  statusColor: PropTypes.string,
   showStatus: PropTypes.bool,
   isOnline: PropTypes.bool,
   size: PropTypes.number,
@@ -22,7 +23,8 @@ const defaultProps = {
   placeHolderImage: '',
   borderRadius: 100,
   isOnline: false,
-  showStatus: false
+  showStatus: false,
+  statusColor: '#35b863'
 }
 
 const Avatar = ({ image, placeHolderImage, title, isOnline, ...props }) => {
@@ -41,7 +43,13 @@ const Avatar = ({ image, placeHolderImage, title, isOnline, ...props }) => {
       ) : (
         getNameInitials(title)
       )}
-      {props.showStatus && <Status isOnline={isOnline} size={props.size} />}
+      {props.showStatus && (
+        <Status
+          isOnline={isOnline}
+          size={props.size}
+          statusColor={props.statusColor}
+        />
+      )}
     </Container>
   )
 }
