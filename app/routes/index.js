@@ -146,6 +146,11 @@ const AsyncDealFormEdit = Load({
     import('../components/Pages/Dashboard/Deals/form-edit' /* webpackChunkName: "deal_fe" */)
 })
 
+const AsyncAgentNetwork = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Deals/agent-network' /* webpackChunkName: "agent-network" */)
+})
+
 /* ==================================== */
 //  Calendar
 /* ==================================== */
@@ -437,6 +442,10 @@ export default (
         <Route
           path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
           component={AsyncDealFormViewer}
+        />
+        <Route
+          path="/dashboard/deals/:id/network"
+          component={AsyncAgentNetwork}
         />
       </Route>
 
