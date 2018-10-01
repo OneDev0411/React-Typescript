@@ -78,7 +78,7 @@ export const queryOptions = {
 export const mapOptions = {
   minZoom: 3,
   maxZoom: 25,
-  zoomControl: true,
+  // zoomControl: false,
   disableDefaultUI: true
   // draggable: true,
   // mapTypeControl: false,
