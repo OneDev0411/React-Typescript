@@ -140,8 +140,7 @@ const mapHOC = compose(
       mapProps: search.map.props,
       markers: listings.data,
       style: {
-        position: 'relative',
-        height: !isWidget ? 'calc(100vh - 72px)' : '100vh'
+        height: !isWidget ? 'calc(100vh - 9em - 1px)' : '100vh'
       }
     }),
     actions
