@@ -12,7 +12,6 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import SimpleMarker from '../../components/Markers/SimpleMarker'
 import ClusterMarker from '../../components/Markers/ClusterMarker'
 import NotLoggedInMessage from '../../components/NotLoggedInMessage'
-import DrawingRemoveButton from '../../components/DrawingRemoveButton'
 
 import { reset as resetSearchType } from '../../../../../../store_actions/listings/search/set-type'
 import { getLocationFromCookies } from '../../../../../../store_actions/listings/map/user-location'
@@ -27,6 +26,7 @@ import getListingsByMapBounds from '../../../../../../store_actions/listings/sea
 
 import DrawingButton from './DrawingButton'
 import LocationButton from './LocationButton'
+import { DrawingRemoveButton } from './DrawingRemoveButton'
 
 import {
   bootstrapURLKeys,
@@ -109,13 +109,13 @@ const map = ({
         )
       })}
     </Map>
-    {!isWidget && <NotLoggedInMessage isLoggedIn={user ? true : ''} />}
+    <DrawingButton />
     <DrawingRemoveButton
       onClick={onClickRemovePolygon}
       points={drawing.points}
     />
-    <DrawingButton />
     <LocationButton />
+    {!isWidget && <NotLoggedInMessage isLoggedIn={user ? true : ''} />}
   </div>
 )
 
