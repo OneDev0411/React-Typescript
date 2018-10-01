@@ -338,9 +338,7 @@ class TagsOverlay extends React.Component {
 
     return (
       <OverlayDrawer isOpen={isOpen} width={50} onClose={closeOverlay}>
-        <OverlayDrawer.Header>
-          <DrawerHeader text={DrawerHeaderText} />
-        </OverlayDrawer.Header>
+        <OverlayDrawer.Header title={`Tags for ${DrawerHeaderText}`} />
 
         <OverlayDrawer.Body>
           <SubHeaderContainer>
