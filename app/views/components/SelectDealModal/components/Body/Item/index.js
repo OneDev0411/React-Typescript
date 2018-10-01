@@ -7,7 +7,6 @@ import { getStatusColor } from '../../../../../../utils/listing'
 import * as Deal from '../../../../../../models/Deal/context-helper'
 
 const Container = styled.div`
-  height: 48px;
   display: flex;
   padding: 0.5em 1em;
   background-color: ${props => (props.isHighlighted ? '#f2f2f2' : '#fff')};
@@ -43,7 +42,7 @@ export function Item(props) {
       <div style={{ width: '32px', height: '32px', borderRadius: '50%' }}>
         <img src={getPhoto(item)} alt="home" style={{ width: '100%' }} />
       </div>
-      <div style={{ paddingLeft: '1em', height: '32px' }}>
+      <div style={{ paddingLeft: '1em' }}>
         <Flex alignCenter>
           <Details>{getPrice(item) || '$0'}</Details>
           <Status status={status}>{status || 'Unknown'}</Status>
