@@ -4,6 +4,7 @@ import { withRouter } from 'react-router'
 
 import config from '../../../../../../config/public'
 import { loadJS } from '../../../../../utils/load-js'
+import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
 import getPlace from '../../../../../models/listings/search/get-place'
 import { getAddress } from '../../../../../models/Deal/context-helper'
 import { byValert } from '../../../../../models/listings/search/get-listings'
@@ -13,7 +14,6 @@ import getListing from '../../../../../models/listings/listing/get-listing'
 import Header from '../../../../../views/components/PageHeader'
 
 import { Grid } from './grid'
-import { getMapBoundsInCircle } from './helpers'
 import { normalizeList } from './helpers/normalize-list'
 import { valertOptions } from './helpers/valert-options'
 
