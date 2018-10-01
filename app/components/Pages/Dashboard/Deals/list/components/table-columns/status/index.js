@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
-import Deal from '../../../../../../../../models/Deal'
-import { getStatusColorClass } from '../../../../../../../../utils/listing'
+import Deal from 'models/Deal'
+import { getStatusColorClass } from 'utils/listing'
 
 const StatusBullet = styled.span`
   display: inline-block;

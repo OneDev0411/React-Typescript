@@ -2,7 +2,7 @@ import React from 'react'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 
 import UserAvatar from '../../../../../../../Partials/UserAvatar'
-import Deal from '../../../../../../../../models/Deal'
+import Deal from 'models/Deal'
 import { roleName, getLegalFullName } from '../../../../utils/roles'
 
 const Side = ({ deal, roles, rowId, rowsCount }) => {

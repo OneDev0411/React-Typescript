@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import Deal from '../../../../../../../../models/Deal'
-import ALink from '../../../../../../../../views/components/ALink'
+import Deal from 'models/Deal'
+import ALink from 'components/ALink'
 
 const Container = styled.div`
   display: flex;

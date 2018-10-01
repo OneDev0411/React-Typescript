@@ -1,22 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import Deal from '../../../../../../../models/Deal'
+import Deal from 'models/Deal'
 
-import Table from '../../../../../../../views/components/Grid/Table'
-import EmptyState from './empty-state'
-import LoadingState from '../../components/loading-state'
+import Table from 'components/Grid/Table'
+import EmptyState from './EmptyState'
+import LoadingState from '../../components/LoadingState'
 
-import Address from '../../components/table-columns/address'
-import Status, { statusSortMethod } from '../../components/table-columns/status'
-import DealSide from '../../components/table-columns/side'
+import Address from '../../components/table-columns/Address'
+import Status, { statusSortMethod } from '../../components/table-columns/Status'
+import DealSide from '../../components/table-columns/Side'
 import CriticalDate, {
   getNextDateValue
-} from '../../components/table-columns/critical-date'
-import Notification from '../../components/table-columns/notification-badge'
+} from '../../components/table-columns/CriticalDate'
+import Notification from '../../components/table-columns/NotificationBadge'
 
 import { getPrimaryAgent } from '../../../utils/roles'
-import { Filters } from '../filters'
+import { Filters } from '../Filters'
 
 import getGridTrProps from '../../helpers/get-tr-props'
 

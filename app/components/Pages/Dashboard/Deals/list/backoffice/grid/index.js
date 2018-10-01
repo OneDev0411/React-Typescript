@@ -4,19 +4,18 @@ import { connect } from 'react-redux'
 import merge from 'merge'
 import moment from 'moment'
 
-
 import Deal from '../../../../../../../models/Deal'
 
 import Table from '../../../../../../../views/components/Grid/Table'
-import EmptyState from './empty-state'
-import LoadingState from '../../components/loading-state'
+import EmptyState from './EmptyState'
+import LoadingState from '../../components/LoadingState'
 
-import Address from '../../components/table-columns/address'
-import Status, { statusSortMethod } from '../../components/table-columns/status'
+import Address from '../../components/table-columns/Address'
+import Status, { statusSortMethod } from '../../components/table-columns/Status'
 import CriticalDate, {
   getNextDateValue
-} from '../../components/table-columns/critical-date'
-import Notifications from '../../components/table-columns/notification-badge'
+} from '../../components/table-columns/CriticalDate'
+import Notifications from '../../components/table-columns/NotificationBadge'
 
 import getGridTrProps from '../../helpers/get-tr-props'
 
@@ -161,17 +160,17 @@ class Grid extends React.Component {
     const data = this.Data
 
     return (
-        <Table
-          plugins={{
-            sortable: {}
-          }}
-          isFetching={isFetchingDeals}
-          columns={columns}
-          data={data}
-          getTrProps={getGridTrProps}
-          EmptyState={EmptyState}
-          LoadingState={LoadingState}
-        />
+      <Table
+        plugins={{
+          sortable: {}
+        }}
+        isFetching={isFetchingDeals}
+        columns={columns}
+        data={data}
+        getTrProps={getGridTrProps}
+        EmptyState={EmptyState}
+        LoadingState={LoadingState}
+      />
     )
   }
 }

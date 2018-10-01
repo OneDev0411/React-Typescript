@@ -96,19 +96,19 @@ const AsyncListingSinglePage = Load({
 
 const AsyncDealsLayout = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
-  fetchData: async (dispatch, params) => {
-    const { user } = params
+    import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */)
+  // fetchData: async (dispatch, params) => {
+  //   const { user } = params
 
-    if (!user) {
-      return Promise.resolve()
-    }
+  //   if (!user) {
+  //     return Promise.resolve()
+  //   }
 
-    return batchActions([
-      await dispatch(getContexts(user)),
-      await dispatch(getDeals(user))
-    ])
-  }
+  //   return batchActions([
+  //     await dispatch(getContexts(user)),
+  //     await dispatch(getDeals(user))
+  //   ])
+  // }
 })
 
 const AsyncDealCreate = Load({
@@ -128,18 +128,18 @@ const AsyncDealsList = Load({
 
 const AsyncDealDashboard = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/dashboard' /* webpackChunkName: "deal_d" */)
+    import('../components/Pages/Dashboard/Deals/Dashboard' /* webpackChunkName: "deal_d" */)
 })
 
-const AsyncDealFileManager = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Deals/file-manager' /* webpackChunkName: "deal_fm" */)
-})
+// const AsyncDealFileManager = Load({
+//   loader: () =>
+//     import('../components/Pages/Dashboard/Deals/file-manager' /* webpackChunkName: "deal_fm" */)
+// })
 
-const AsyncDealFormViewer = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Deals/form-viewer' /* webpackChunkName: "deal_fv" */)
-})
+// const AsyncDealFormViewer = Load({
+//   loader: () =>
+//     import('../components/Pages/Dashboard/Deals/form-viewer' /* webpackChunkName: "deal_fv" */)
+// })
 
 const AsyncDealFormEdit = Load({
   loader: () =>
@@ -422,10 +422,10 @@ export default (
           component={AsyncDealCreate}
         />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
-        <Route
+        {/* <Route
           path="/dashboard/deals/:id/files"
           component={AsyncDealFileManager}
-        />
+        /> */}
         <Route
           path="/dashboard/deals/:id/form-edit/:taskId"
           component={AsyncDealFormEdit}
@@ -434,10 +434,10 @@ export default (
           path="/dashboard/deals/:id/create-offer"
           component={AsyncDealCreateOffer}
         />
-        <Route
+        {/* <Route
           path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
           component={AsyncDealFormViewer}
-        />
+        /> */}
       </Route>
 
       <Route path="/dashboard/recents(/:roomId)">

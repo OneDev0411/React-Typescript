@@ -3,17 +3,17 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 
-import Deal from '../../../../../../../models/Deal'
-import ToolTip from '../../../../../../../views/components/tooltip'
+import Deal from 'models/Deal'
+import ToolTip from 'components/tooltip'
 
 import {
   Container,
   ListTitle,
   ListItem
-} from '../../../../../../../views/components/Grid/SavedSegments/List/styled'
+} from 'components/Grid/SavedSegments/List/styled'
 
 import { BadgeCounter } from '../../styles/filters/styled'
-import { ListItemName } from '../../../../../../../views/components/Grid/SavedSegments/List/styled'
+import { ListItemName } from 'components/Grid/SavedSegments/List/styled'
 
 const FilterNames = {
   Active: ['Active', 'Lease'],

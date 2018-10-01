@@ -2,7 +2,7 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 import styled from 'styled-components'
 
-import ActionButton from '../../../../../../../../views/components/Button/ActionButton'
+import ActionButton from 'components/Button/ActionButton'
 
 const Container = styled.div`
   display: flex;

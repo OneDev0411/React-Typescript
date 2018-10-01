@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
-import PageHeader from '../../../../../../../views/components/PageHeader'
-import { Trigger as MenuTrigger } from '../../../../../../../views/components/SlideMenu'
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
-import ExportDeals from './export-deals'
+import PageHeader from 'components/PageHeader'
+import { Trigger as MenuTrigger } from 'components/SlideMenu'
+import ActionButton from 'components/Button/ActionButton'
+import ExportDeals from './ExportDeals'
 
 const Header = ({
   user,

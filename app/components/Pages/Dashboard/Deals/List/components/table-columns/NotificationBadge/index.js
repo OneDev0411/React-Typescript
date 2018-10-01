@@ -1,7 +1,7 @@
 import React from 'react'
 
-import ToolTip from '../../../../../../../../views/components/tooltip'
-import Badge from '../../../../../../../../views/components/Badge'
+import ToolTip from 'components/tooltip'
+import Badge from 'components/Badge'
 import styled from 'styled-components'
 
 const NotificationsContainer = styled.div`

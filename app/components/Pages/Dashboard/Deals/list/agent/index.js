@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Menu, Content } from '../../../../../../views/components/SlideMenu'
-import Search from '../../../../../../views/components/Grid/Search'
+import { Menu, Content } from 'components/SlideMenu'
+import Search from 'components/Grid/Search'
 
 import {
   PageContainer,
@@ -10,10 +10,10 @@ import {
   SearchContainer
 } from '../styles/page-container/styled'
 
-import Header from '../components/page-header'
-import Grid from './grid'
-import AgentFilters from './filters'
-import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
+import Header from '../components/PageHeader'
+import Grid from './Grid'
+import AgentFilters from './Filters'
+import { searchDeals, getDeals } from 'actions/deals'
 
 let persistentSearchInput = ''
 
