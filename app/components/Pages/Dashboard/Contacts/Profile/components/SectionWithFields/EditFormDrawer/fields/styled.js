@@ -17,6 +17,7 @@ export const Container = styled.div`
 export const Title = styled.label`
   font-size: 1rem;
   font-weight: normal;
+  cursor: pointer;
   color: ${grey.A900};
 
   &::after {

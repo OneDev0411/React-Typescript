@@ -57,7 +57,12 @@ export function Select(props) {
               {props.labelNote &&
                 !props.required && <LabelNote>{props.labelNote}</LabelNote>}
             </Label>
-            <Dropdown fullWidth={props.fullWidth} input={input} items={items} />
+            <Dropdown
+              fullWidth={props.fullWidth}
+              input={input}
+              items={items}
+              style={{ margin: '0 -1em' }}
+            />
             {hasError && <ErrorMessage>{error}</ErrorMessage>}
           </Container>
         )

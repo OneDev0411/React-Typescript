@@ -45,7 +45,7 @@ export function TextFieldArray(props) {
               style={{
                 position: 'absolute',
                 top: '0.5em',
-                right: '0.5em'
+                right: '0em'
               }}
             >
               {index + 1 === fields.length ? (
