@@ -2,21 +2,59 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import SearchIcon from '../../../../SvgIcons/SearchIcon'
+import IconSearchBase from '../../../../SvgIcons/Search/IconSearch'
+import { grey, primary } from '../../../../../utils/colors'
 
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #f9f9f9;
+  border: solid 1px ${grey.A300};
+  padding: 0 0.5rem;
+  :hover {
+    background-color: ${grey.A100};
+  }
+
+  :focus-within {
+    background-color: #ffff;
+    border-color: ${primary};
+
+    :hover {
+      background-color: #fff;
+    }
+  }
+`
 const Input = styled.input`
   width: 100%;
   height: 42px;
-  padding: 0 1em 0 42px;
-  border-radius: 3px;
-  border: solid 1px #d4d4d4;
+  padding: 0 0.5em;
+  border: none;
 
-  &:focus {
-    outline-width: 1px;
+  background: transparent;
+  caret-color: ${primary};
+  ::placeholder {
+    font-size: 1rem;
+    font-weight: 500;
+    color: ${grey.A900};
+    font-family: Barlow, sans-serif;
+  }
+  :focus {
+    outline: none;
   }
 
-  &::placeholder {
-    color: #7f7f7f;
+  ${Container}:hover & {
+    ::placeholder {
+      color: #000000;
+    }
+  }
+`
+
+const IconSearch = IconSearchBase.extend`
+  path {
+    fill: ${grey.A900} !important;
+  }
+  ${Container}:hover & path {
+    fill: #000000 !important;
   }
 `
 
@@ -27,19 +65,10 @@ const propTypes = {
 
 function SearchInput({ style, inputProps }) {
   return (
-    <div style={{ position: 'relative', ...style }}>
+    <Container style={{ ...style }}>
+      <IconSearch />
       <Input {...inputProps} />
-      <SearchIcon
-        size={24}
-        style={{
-          position: 'absolute',
-          top: '13px',
-          left: '13px',
-          width: '24px',
-          height: '24px'
-        }}
-      />
-    </div>
+    </Container>
   )
 }
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const heightWithFooter = 'calc(100vh - (59px + 63px))'
+const heightWithFooter = 'calc(100vh - (59px + 72px))'
 const heightWithoutFooter = 'calc(100vh - 59px)'
 
 export const Container = styled.div`

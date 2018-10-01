@@ -13,7 +13,7 @@ import { normalizeContactAttribute } from '../../../../../store_actions/contacts
 
 export const ListContainer = styled.div`
   position: relative;
-  height: calc(100vh - ${props => (props.isDrawer ? 133 : 172)}px);
+  height: calc(100vh - ${props => (props.isDrawer ? 135 : 172)}px);
   padding: ${props => (props.isDrawer ? 0 : '1em 0')};
   overflow-x: hidden;
   overflow-y: scroll;
@@ -140,7 +140,7 @@ class Body extends Component {
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
           <div style={{ paddingTop: '1em' }} className="u-scrollbar--thinner">
             {!this.props.isSearchDisabled && (
-              <div style={{ padding: '0 1em' }}>
+              <div style={{ padding: isDrawer ? '0' : '0 1em' }}>
                 <SearchInput
                   style={{ marginBottom: '1em' }}
                   inputProps={{

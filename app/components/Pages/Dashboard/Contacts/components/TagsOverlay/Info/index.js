@@ -10,7 +10,7 @@ export const TagInfoContainer = Flex.extend`
   padding: 1em;
   margin-bottom: 1em;
   border-radius: 3px;
-  background-color: ${grey.A200};
+  background-color: ${grey.A100};
 `
 export default class Info extends React.Component {
   constructor(props) {

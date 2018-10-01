@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { grey } from '../../../utils/colors'
 
 export const InputField = styled.input`
   border: none;
@@ -7,7 +8,7 @@ export const InputField = styled.input`
   border-radius: 4px;
 
   ::placeholder {
-    color: #cad4db;
+    color: ${grey.A550};
     opacity: 1;
   }
 

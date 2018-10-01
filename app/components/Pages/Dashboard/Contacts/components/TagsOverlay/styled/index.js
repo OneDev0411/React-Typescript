@@ -1,8 +1,6 @@
 import styled from 'styled-components'
-import { brandBackground } from 'views/utils/colors'
 
 export const SubHeaderContainer = styled.div`
-  padding: 1em;
+  padding: 1em 0;
   margin-bottom: 1em;
-  background-color: ${brandBackground};
 `
