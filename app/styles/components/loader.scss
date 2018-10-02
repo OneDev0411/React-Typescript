@@ -1,8 +1,14 @@
 .sk-circle {
-    margin: 2.5em auto;
-    width: 2.5em;
-    height: 2.5em;
-    position: relative;
+  margin: 2.5em auto;
+  width: 2.5em;
+  height: 2.5em;
+  position: relative;
+  
+  &.c-loading--small {
+      margin: 0 auto;
+      width: 1em;
+      height: 1em;
+    }
 }
 
 .sk-circle .sk-child {
