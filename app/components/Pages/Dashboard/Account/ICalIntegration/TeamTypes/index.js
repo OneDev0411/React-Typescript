@@ -8,13 +8,17 @@ const TeamTypes = ({
   selectedMembers,
   onChangeSelectAllMembers,
   onChangeSelectedMember,
-  onChangeSelectRole
+  onSelectTeam,
+  onRemoveTeam
 }) => {
   let allMembers = {}
 
   userTeams.forEach(({ brand }) => {
     brand.roles.forEach(
-      role => (allMembers[role.id] = role.members.map(({ id }) => id))
+      role =>
+        (allMembers[brand.id] = (allMembers[brand.id] || []).concat(
+          role.members.map(({ id }) => id)
+        ))
     )
   })
 
@@ -35,49 +39,59 @@ const TeamTypes = ({
           }
         }}
       />
-      {_.map(userTeams, team => (
-        <React.Fragment key={team.brand.id}>
-          <div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>
-            {team.brand.name}
-          </div>
-          {team.brand.member_count > 1 && (
-            <div style={{ marginLeft: '2rem', marginBottom: '1rem' }}>
-              {team.brand.roles.map(role => (
-                <div key={role.id}>
-                  <MemberRow
-                    style={{ fontWeight: 'bold' }}
-                    selected={role.members.every(
-                      member =>
-                        selectedMembers[role.id] &&
-                        selectedMembers[role.id].includes(member.id)
-                    )}
-                    title={role.role}
-                    onClick={() =>
-                      onChangeSelectRole(
-                        role.id,
-                        role.members.map(({ id }) => id)
-                      )
-                    }
-                  />
+      {_.map(userTeams, team => {
+        let members = []
 
-                  {role.members.map((member, index) => (
-                    <MemberRow
-                      key={`${member.id}-${index}`}
-                      selected={
-                        selectedMembers[role.id] &&
-                        selectedMembers[role.id].includes(member.id)
-                      }
-                      title={member.display_name}
-                      onClick={() => onChangeSelectedMember(role.id, member.id)}
-                      style={{ marginLeft: '1rem' }}
-                    />
-                  ))}
-                </div>
-              ))}
-            </div>
-          )}
-        </React.Fragment>
-      ))}
+        team.brand.roles.forEach(
+          role => (members = members.concat(role.members.map(({ id }) => id)))
+        )
+
+        const teamMembers = { [team.brand.id]: members }
+        const isTeamSelected =
+          selectedMembers[team.brand.id] &&
+          members.every(member =>
+            selectedMembers[team.brand.id].includes(member)
+          )
+
+        return (
+          <React.Fragment key={team.brand.id}>
+            <MemberRow
+              style={{ fontWeight: 'bold', fontSize: '1.25rem' }}
+              selected={isTeamSelected}
+              title={team.brand.name}
+              onClick={() => {
+                if (!isTeamSelected) {
+                  onSelectTeam(teamMembers)
+                } else {
+                  onRemoveTeam(Object.keys(teamMembers))
+                }
+              }}
+            />
+            {team.brand.member_count > 1 && (
+              <div style={{ marginLeft: '2rem', marginBottom: '1rem' }}>
+                {team.brand.roles.map(role => (
+                  <div key={role.id}>
+                    {role.members.map((member, index) => (
+                      <MemberRow
+                        key={`${member.id}-${index}`}
+                        selected={
+                          selectedMembers[team.brand.id] &&
+                          selectedMembers[team.brand.id].includes(member.id)
+                        }
+                        title={member.display_name}
+                        onClick={() =>
+                          onChangeSelectedMember(team.brand.id, member.id)
+                        }
+                        style={{ marginLeft: '1rem' }}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </React.Fragment>
+        )
+      })}
     </Fragment>
   )
 }

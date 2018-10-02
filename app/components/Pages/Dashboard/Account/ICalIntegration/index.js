@@ -28,9 +28,15 @@ class DealTemplates extends React.Component {
     try {
       const setting = await getCalenderFeedSetting()
 
+      let normalizedSetting = {}
+
+      setting.filter &&
+        setting.filter.forEach(
+          filter => (normalizedSetting[filter.brand] = filter.users)
+        )
       this.setState({
         selectedTypes: (setting && setting.selected_types) || [],
-        selectedMembers: (setting && setting.selected_users) || {},
+        selectedMembers: (setting && normalizedSetting) || {},
         feedURl: (setting && setting.url) || ''
       })
     } catch (e) {
@@ -60,31 +66,30 @@ class DealTemplates extends React.Component {
   }
   onChangeSelectAllMembers = selectedMembers =>
     this.setState({ selectedMembers })
-  onChangeSelectRole = (roleId, newSelectedMembers) => {
-    const { selectedMembers } = this.state
 
-    if (
-      selectedMembers[roleId] &&
-      selectedMembers[roleId].length === newSelectedMembers.length
-    ) {
-      this.setState({
-        selectedMembers: _.omit(selectedMembers, roleId)
-      })
-    } else {
-      this.setState({
-        selectedMembers: { ...selectedMembers, [roleId]: newSelectedMembers }
-      })
-    }
+  onSelectTeam = newSelectedTeam => {
+    this.setState({
+      selectedMembers: { ...this.state.selectedMembers, ...newSelectedTeam }
+    })
   }
-  onChangeSelectedMember = (roleId, selectedMember) => {
+
+  onRemoveTeam = removedTeam => {
+    const newSelectedMembers = _.omit(this.state.selectedMembers, removedTeam)
+
+    this.setState({
+      selectedMembers: newSelectedMembers
+    })
+  }
+
+  onChangeSelectedMember = (brandId, selectedMember) => {
     const { selectedMembers } = this.state
 
-    if (selectedMembers[roleId]) {
-      if (selectedMembers[roleId].includes(selectedMember)) {
+    if (selectedMembers[brandId]) {
+      if (selectedMembers[brandId].includes(selectedMember)) {
         this.setState({
           selectedMembers: {
             ...selectedMembers,
-            [roleId]: selectedMembers[roleId].filter(
+            [brandId]: selectedMembers[brandId].filter(
               user => user !== selectedMember
             )
           }
@@ -93,13 +98,13 @@ class DealTemplates extends React.Component {
         this.setState({
           selectedMembers: {
             ...selectedMembers,
-            [roleId]: selectedMembers[roleId].concat(selectedMember)
+            [brandId]: selectedMembers[brandId].concat(selectedMember)
           }
         })
       }
     } else {
       this.setState({
-        selectedMembers: { ...selectedMembers, [roleId]: [selectedMember] }
+        selectedMembers: { ...selectedMembers, [brandId]: [selectedMember] }
       })
     }
   }
@@ -132,7 +137,8 @@ class DealTemplates extends React.Component {
             selectedMembers={selectedMembers}
             onChangeSelectAllMembers={this.onChangeSelectAllMembers}
             onChangeSelectedMember={this.onChangeSelectedMember}
-            onChangeSelectRole={this.onChangeSelectRole}
+            onSelectTeam={this.onSelectTeam}
+            onRemoveTeam={this.onRemoveTeam}
           />
           <SelectedTypes
             selectedTypes={selectedTypes}
@@ -140,6 +146,7 @@ class DealTemplates extends React.Component {
             onChangeSelectAllTypes={this.onChangeSelectAllTypes}
           />
           <GenerateUrl
+            userTeams={this.props.userTeams}
             selectedTypes={selectedTypes}
             selectedMembers={selectedMembers}
             feedURl={this.state.feedURl}
