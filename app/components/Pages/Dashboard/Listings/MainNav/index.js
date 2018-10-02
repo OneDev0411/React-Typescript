@@ -7,7 +7,7 @@ import { NavItem } from './Item'
 
 export function MainNav() {
   return (
-    <div>
+    <div style={{ marginBottom: '2.5em' }}>
       <NavItem indexed text="Search" to="/dashboard/mls" Icon={IconSearch} />
       <NavItem
         text="Following"

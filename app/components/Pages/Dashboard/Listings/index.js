@@ -9,6 +9,7 @@ import {
 import { ListTitle } from '../../../../views/components/SlideMenu/Menu/styled'
 
 import { MainNav } from './MainNav'
+import SavedSearchesList from './SavedSearchesList'
 
 class Listings extends Component {
   state = {
@@ -38,6 +39,8 @@ class Listings extends Component {
           <SideMenu isOpen={isSideMenuOpen}>
             <ListTitle>Properties</ListTitle>
             <MainNav />
+
+            <SavedSearchesList />
           </SideMenu>
         )}
 
