@@ -68,6 +68,7 @@ export class GalleryView extends React.Component {
           }}
           getBodyProps={() => ({ style: bodyStyle })}
           getTrProps={() => ({ css: rowStyle })}
+          getTdProps={() => ({ style: { padding: 0 } })}
           plugins={{
             sortable: {
               ...sortOptions,

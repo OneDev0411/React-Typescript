@@ -70,6 +70,7 @@ export class MapView extends React.Component {
                 border: 'none'
               }
             })}
+            getTdProps={() => ({ style: { padding: 0 } })}
             plugins={{
               sortable: {
                 ...sortOptions,
