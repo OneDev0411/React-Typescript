@@ -42,7 +42,7 @@ export default function FormContexts(props) {
             <ContextAnnotation
               key={`${name}-${id}`}
               annotationContext={annotationContext}
-              value={props.formValues[annotations[0].fieldName] || value}
+              value={value || props.formValues[annotations[0].fieldName]}
               maxFontSize={20}
               annotations={annotations}
               onSetValues={props.onSetValues}
