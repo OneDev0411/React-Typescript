@@ -99,11 +99,11 @@
 
 .c-listing-card__alertStatus {
   position: absolute;
-  top: 54px;
-  left: 0;
-  padding: 0.25em 0.5em;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  top: 1em;
+  left: 1em;
+  padding: 0.5em;
   color: #fff;
-  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+  background-color: #000;
+  font-family: Merriweather, sans-serif;
 }

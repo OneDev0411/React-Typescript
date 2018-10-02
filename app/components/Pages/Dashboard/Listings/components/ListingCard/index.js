@@ -103,3 +103,5 @@ export default compose(
     }
   })
 )(ListingCard)
+
+// todo: refactor setMapHoveredMarkerId to internal state
