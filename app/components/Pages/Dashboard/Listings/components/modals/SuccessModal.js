@@ -2,21 +2,19 @@ import React from 'react'
 import { Modal } from 'react-bootstrap'
 
 const Icon = ({ type }) => {
+  const style = { height: '5rem', marginLeft: '1.5rem 0 0 1rem' }
+
   switch (type) {
     case 'SAVED_ALERT':
       return (
         <img
-          style={{ height: '7rem', marginLeft: '1.3rem' }}
+          alt="bell"
+          style={style}
           src="/static/images/dashboard/mls/alert-bell-saved.svg"
         />
       )
     default:
-      return (
-        <i
-          className="fa fa-check"
-          style={{ height: '7rem', marginLeft: '0.5rem' }}
-        />
-      )
+      return <i className="fa fa-check" style={style} />
   }
 }
 
