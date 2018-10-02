@@ -14,5 +14,6 @@ export const HeaderRow = Row.extend`
 
 export const HeaderCell = Cell.extend`
   display: flex;
+  align-self: center;
   align-items: center;
 `
