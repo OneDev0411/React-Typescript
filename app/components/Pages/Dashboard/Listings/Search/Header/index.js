@@ -1,14 +1,23 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 
+import { borderColor } from '../../../../../../views/utils/colors'
 import Button from '../../../../../../views/components/Button/ActionButton'
 import FilterButton from '../../../../../../views/components/Button/DropButton'
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 
-import { ViewSwitcher } from '../../components/ViewSwitcher'
-import { PageHeaderContainer } from '../../components/PageHeaderContainer'
 import Filters from '../components/Filters'
 import SearchField from '../components/SearchToolbar'
+import { ViewSwitcher } from '../../components/ViewSwitcher'
+
+const Container = Flex.extend`
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5em;
+  border-bottom: 1px solid ${borderColor};
+`
 
 export function Header(props) {
   const {
@@ -20,7 +29,7 @@ export function Header(props) {
   } = props
 
   return (
-    <PageHeaderContainer>
+    <Container>
       <Flex alignCenter>
         {props.user ? (
           <MenuTrigger
@@ -65,6 +74,6 @@ export function Header(props) {
       </Flex>
 
       <ViewSwitcher activeView={activeView} onChange={props.onChangeView} />
-    </PageHeaderContainer>
+    </Container>
   )
 }
