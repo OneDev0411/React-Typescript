@@ -9,6 +9,8 @@ import SelectedTypes from './AllTypes'
 import GenerateUrl from './GenerateUrl'
 import UpdateGenerateUrlInfo from './UpdateGenerateUrlInfo'
 import getCalenderFeedSetting from '../../../../../models/user/calendar-feed-setting'
+import getTeams from '../../../../../store_actions/user/teams'
+
 import Loading from '../../../../Partials/Loading'
 import PageHeader from '../../../../../views/components/PageHeader'
 
@@ -26,7 +28,11 @@ class DealTemplates extends React.Component {
 
   fetchData = async () => {
     try {
-      const setting = await getCalenderFeedSetting()
+      const promiseSetting = getCalenderFeedSetting()
+
+      await this.props.getTeams(this.props.user, true)
+
+      const setting = await promiseSetting
 
       let normalizedSetting = {}
 
@@ -177,7 +183,8 @@ class DealTemplates extends React.Component {
 
 export default connect(
   ({ user }) => ({
-    userTeams: user.teams
+    userTeams: user.teams,
+    user
   }),
-  { notify }
+  { notify, getTeams }
 )(DealTemplates)
