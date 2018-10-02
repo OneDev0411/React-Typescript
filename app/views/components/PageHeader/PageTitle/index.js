@@ -11,6 +11,8 @@ import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 import { H1 } from '../../Typography/headings'
 import { goTo } from '../../../../utils/go-to'
 
+import { Subtitle } from './Subtitle'
+
 PageTitle.propTypes = {
   backUrl: PropTypes.string,
   showBackButton: PropTypes.bool,
@@ -26,7 +28,6 @@ PageTitle.defaultProps = {
 }
 
 export function PageTitle(props) {
-  const subtitleStyle = { marginTop: '1em', color: '#8a8a8a' }
   const { title, subtitle, backUrl, onClickCloseButton } = props
 
   function handleOnBack() {
@@ -48,7 +49,7 @@ export function PageTitle(props) {
           {title ? (
             <Flex column>
               <H1>{title}</H1>
-              {subtitle && <div style={subtitleStyle}>{subtitle}</div>}
+              {subtitle && <Subtitle>subtitle</Subtitle>}
             </Flex>
           ) : (
             props.children
@@ -84,7 +85,7 @@ export function PageTitle(props) {
         )}
         <Flex column>
           {title && <H1>{title}</H1>}
-          {subtitle && <div style={subtitleStyle}>{subtitle}</div>}
+          {subtitle && <Subtitle>subtitle</Subtitle>}
         </Flex>
       </Flex>
       {props.children}

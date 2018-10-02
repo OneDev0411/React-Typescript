@@ -5,11 +5,13 @@ import styled from 'styled-components'
 
 import Menu from './Menu'
 import { PageTitle } from './PageTitle'
+import { Subtitle } from './PageTitle/Subtitle'
 import { H1 } from '../Typography/headings'
 
 const Container = styled.div`
   width: calc(100% - 3em);
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 1.5em 0;
   margin: 0 1.5em 2em;
@@ -22,13 +24,17 @@ const propTypes = {
   showBackButton: PropTypes.bool,
   isFlat: PropTypes.bool,
   title: PropTypes.string,
-  style: PropTypes.object
+  subtitle: PropTypes.string,
+  style: PropTypes.shape()
 }
 
 const defaultProps = {
+  backUrl: '',
   showBackButton: true,
   isFlat: false,
-  style: {}
+  style: {},
+  title: '',
+  subtitle: ''
 }
 
 function PageHeader(props) {
@@ -66,5 +72,6 @@ PageHeader.defaultProps = defaultProps
 PageHeader.Menu = Menu
 PageHeader.Title = PageTitle
 PageHeader.Heading = H1
+PageHeader.Subtitle = Subtitle
 
 export default withRouter(PageHeader)
