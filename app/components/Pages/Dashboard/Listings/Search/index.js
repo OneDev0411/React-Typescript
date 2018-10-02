@@ -58,7 +58,11 @@ class Search extends React.Component {
   }
 
   fetchDallasListings = async () => {
-    await this.props.dispatch(
+    const { dispatch } = this.props
+
+    dispatch(searchActions.setSearchInput('Dallas TX, USA'))
+
+    await dispatch(
       getListingsByValert({
         ...this.props.queryOptions,
         limit: 50
@@ -74,6 +78,8 @@ class Search extends React.Component {
     const initMap = () => this.setState({ mapWithQueryIsInitialized: true })
 
     try {
+      dispatch(searchActions.setSearchInput(address))
+
       if (address.length > 7 && address.match(/^\d+$/)) {
         if (isMapView) {
           initMap()
@@ -84,7 +90,8 @@ class Search extends React.Component {
 
       if (isMapView) {
         await dispatch(searchActions.getPlace(address))
-        initMap()
+
+        return initMap()
       }
 
       const location = await getPlace(address)
