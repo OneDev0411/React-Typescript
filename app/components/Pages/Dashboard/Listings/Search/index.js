@@ -148,6 +148,7 @@ class Search extends React.Component {
         return (
           <MapView
             {..._props}
+            tabName="search"
             Map={
               this.state.mapWithQueryIsInitialized ? <Map {..._props} /> : null
             }

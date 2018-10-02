@@ -21,7 +21,12 @@ export class MapView extends React.Component {
       id: 'price',
       accessor: listing => listing.price,
       render: ({ rowData: listing }) => (
-        <ListingCard isShowOnMap listing={listing} key={listing.id} />
+        <ListingCard
+          isShowOnMap
+          key={listing.id}
+          listing={listing}
+          tabName={this.props.tabName}
+        />
       )
     }
   ]

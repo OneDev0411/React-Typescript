@@ -43,6 +43,7 @@ class Favorites extends React.Component {
       case 'map':
         return (
           <MapView
+            tabName="favorites"
             listings={listings}
             Map={<Map markers={listings.data} isFetching={isFetching} />}
           />
