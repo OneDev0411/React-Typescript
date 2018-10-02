@@ -152,14 +152,11 @@ class Address extends React.Component {
       return defaultValue
     }
 
-    // get field value from deal context
-    const contextValue = Deal.get.field(deal, field)
-
-    if (deal.listing && !contextValue) {
+    if (deal.listing) {
       return deal.mls_context[field] || defaultValue
     }
 
-    return contextValue || defaultValue
+    return Deal.get.field(deal, field) || defaultValue
   }
 
   /**
