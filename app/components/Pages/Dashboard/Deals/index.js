@@ -1,51 +1,68 @@
 import React from 'react'
+import styled from 'styled-components'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 
-import {
-  getDeals,
-  getContexts,
-  getForms
-} from '../../../../store_actions/deals'
-import { TrainingModeBanner } from '../Partials/TrainingModeBanner'
-import { isTrainingAccount } from '../../../../utils/user-teams'
+import { getDeals, getDeal, getContexts, getForms } from 'actions/deals'
+import { selectDealById } from 'reducers/deals/list'
+
+const Container = styled.div`
+  min-height: 100vh;
+`
 
 class DealsContainer extends React.Component {
-  componentDidMount() {
-    const {
-      getDeals,
-      getContexts,
-      getForms,
-      contexts,
-      forms,
-      deals,
-      isFetchingDeals,
-      user
-    } = this.props
+  state = {
+    isFetchingDeal: false
+  }
 
-    if (!deals && !isFetchingDeals) {
-      getDeals(user)
+  componentWillMount() {
+    const { id: dealId } = this.props.params
+
+    // if (!this.props.deals && !this.props.isFetchingDeals) {
+    //   this.props.getDeals(this.props.user)
+    // }
+
+    if (!this.props.contexts) {
+      this.props.getContexts()
     }
 
-    if (!contexts) {
-      getContexts()
+    if (!this.props.forms) {
+      this.props.getForms()
     }
 
-    if (!forms) {
-      getForms()
+    if (dealId) {
+      this.initializeDeal(dealId)
+    }
+  }
+
+  initializeDeal = async dealId => {
+    const deal = selectDealById(this.props.deals, dealId)
+
+    if (deal && deal.checklists) {
+      return
+    }
+
+    try {
+      if (!deal || !deal.checklist) {
+        this.setState({ isFetchingDeal: true })
+
+        // fetch deal by id
+        await this.props.getDeal(dealId)
+
+        this.setState({ isFetchingDeal: false })
+      }
+    } catch (e) {
+      browserHistory.push('/dashboard/deals')
+      console.error('Could not fetch deal')
     }
   }
 
   render() {
-    const { contexts, user } = this.props
+    if (this.state.isFetchingDeal) {
+      return <div>Is fetching deal</div>
+    }
 
-    return (
-      <div className="deals">
-        {contexts &&
-          isTrainingAccount(user) && <TrainingModeBanner user={user} />}
-
-        {this.props.children}
-      </div>
-    )
+    return <Container>{this.props.children}</Container>
   }
 }
 
@@ -58,5 +75,5 @@ export default connect(
     isFetchingDeals: deals.properties.isFetchingDeals,
     user
   }),
-  { getDeals, getContexts, getForms }
+  { getDeals, getDeal, getContexts, getForms }
 )(DealsContainer)

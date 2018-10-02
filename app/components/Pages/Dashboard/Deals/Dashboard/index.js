@@ -4,39 +4,17 @@ import { browserHistory } from 'react-router'
 import _ from 'underscore'
 
 import { deleteNotifications } from 'models/Deal/notification'
+
 import { getDeal } from 'actions/deals'
+import { selectDealById } from 'reducers/deals/list'
+
+import { PageHeader } from './Header'
+
+import { Container } from './styled'
 
 class DealDetails extends React.Component {
-  state = {
-    isFetchingDeal: false
-  }
-
   componentDidMount() {
-    this.initialize()
     this.handleNotifications(this.props.deal)
-  }
-
-  async initialize() {
-    const { deal, getDeal, params } = this.props
-
-    if (deal && deal.checklists) {
-      return
-    }
-
-    if (deal && !deal.checklists) {
-      return getDeal(deal.id)
-    }
-
-    try {
-      this.setState({ isFetchingDeal: true })
-
-      // try to get deal by id
-      await getDeal(params.id)
-
-      this.setState({ isFetchingDeal: false })
-    } catch (e) {
-      browserHistory.push('/dashboard/deals')
-    }
   }
 
   handleNotifications(deal) {
@@ -54,17 +32,18 @@ class DealDetails extends React.Component {
   }
 
   render() {
-    return <div>---</div>
+    return (
+      <Container>
+        <PageHeader deal={this.props.deal} />
+      </Container>
+    )
   }
 }
 
-function mapStateToProps({ deals, user }, props) {
-  const { id } = props.params
-
+function mapStateToProps({ deals }, props) {
   return {
     selectedTask: deals.properties.selectedTask,
-    deal: deals.list ? deals.list[id] : null,
-    user
+    deal: selectDealById(deals.list, props.params.id)
   }
 }
 
