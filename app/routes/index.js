@@ -75,9 +75,9 @@ const AsyncListingsSearch = Load({
 })
 // import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
 
-const AsyncListingsAlerts = Load({
+const AsyncMlsSavedSearch = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Listings/Alerts' /* webpackChunkName: "alerts" */)
+    import('../components/Pages/Dashboard/Listings/SavedSearch' /* webpackChunkName: "alerts" */)
 })
 
 const AsyncListingsFavorites = Load({
@@ -394,9 +394,7 @@ export default (
         <IndexRoute component={AsyncListingsSearch} />
 
         <Route path="following" component={AsyncListingsFavorites} />
-        <Route path="alerts" component={AsyncListingsAlerts}>
-          <Route path=":alertId" component={AsyncListingsAlerts} />
-        </Route>
+        <Route path="saved-searches/:alertId" component={AsyncMlsSavedSearch} />
       </Route>
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
