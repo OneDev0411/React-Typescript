@@ -9,6 +9,7 @@ import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
 import getListingsByValert from '../../../../../store_actions/listings/search/get-listings/by-valert'
 import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
+import { confirmation } from '../../../../../store_actions/confirmation'
 
 import Map from './components/Map'
 import { MapView } from '../components/MapView'
@@ -133,7 +134,22 @@ class Search extends React.Component {
   }
 
   shareModalCloseHandler = () => this.setState({ shareModalIsActive: false })
-  shareModalActiveHandler = () => this.setState({ shareModalIsActive: true })
+
+  handleSaveSearch = () => {
+    if (this.props.listings.info.total < 400) {
+      return () => this.setState({ shareModalIsActive: true })
+    }
+
+    this.props.dispatch(
+      confirmation({
+        confirmLabel: 'Ok',
+        description:
+          'Please zoom in or set more filters. You can save max 400 listings.',
+        hideCancelButton: true,
+        message: 'Too many matches!'
+      })
+    )
+  }
 
   renderMain() {
     const _props = {
@@ -177,7 +193,7 @@ class Search extends React.Component {
           activeView={this.state.activeView}
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
-          saveSearchHandler={this.shareModalActiveHandler}
+          saveSearchHandler={this.handleSaveSearch}
           onClickFilter={this.onClickFilter}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
