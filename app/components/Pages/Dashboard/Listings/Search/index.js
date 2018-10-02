@@ -42,20 +42,32 @@ class Search extends React.Component {
   }
 
   componentDidMount() {
+    window.initialize = this.initialize
+
     if (!window.google) {
       loadJS(
         `https://maps.googleapis.com/maps/api/js?key=${
           bootstrapURLKeys.key
-        }&libraries=${bootstrapURLKeys.libraries},`
+        }&libraries=${bootstrapURLKeys.libraries}&callback=initialize`
       )
+    }
+  }
+
+  initialize = () => {
+    const isMapView = this.state.activeView === 'map'
+
+    if (this.props.listings.data.length > 0) {
+      return isMapView ? this.initMap() : true
     }
 
     if (this.searchQuery) {
       this._findPlace(this.searchQuery)
-    } else if (this.props.listings.data.length === 0) {
+    } else if (!isMapView) {
       this.fetchDallasListings()
     }
   }
+
+  initMap = () => this.setState({ mapWithQueryIsInitialized: true })
 
   fetchDallasListings = async () => {
     const { dispatch } = this.props
@@ -75,14 +87,12 @@ class Search extends React.Component {
 
     const isMapView = this.state.activeView === 'map'
 
-    const initMap = () => this.setState({ mapWithQueryIsInitialized: true })
-
     try {
       dispatch(searchActions.setSearchInput(address))
 
       if (address.length > 7 && address.match(/^\d+$/)) {
         if (isMapView) {
-          initMap()
+          this.initMap()
         }
 
         return dispatch(searchActions.searchByMlsNumber(address))
@@ -91,13 +101,13 @@ class Search extends React.Component {
       if (isMapView) {
         await dispatch(searchActions.getPlace(address))
 
-        return initMap()
+        return this.initMap()
       }
 
       const location = await getPlace(address)
 
       if (location) {
-        dispatch(
+        await dispatch(
           getListingsByValert({
             ...this.props.queryOptions,
             limit: 50,
@@ -105,9 +115,11 @@ class Search extends React.Component {
           })
         )
       }
-    } catch ({ message }) {
+    } catch (error) {
+      console.log(error)
+
       if (isMapView) {
-        initMap()
+        this.initMap()
       }
     }
   }
@@ -199,4 +211,4 @@ const mapStateToProps = ({ user, search }) => {
 
 export default connect(mapStateToProps)(Search)
 
-// todo: detect view from url
+// todo: refactor initmap when there is a querystring
