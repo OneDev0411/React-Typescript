@@ -30,10 +30,27 @@ class DealTemplates extends React.Component {
 
       let normalizedSetting = {}
 
-      setting.filter &&
-        setting.filter.forEach(
-          filter => (normalizedSetting[filter.brand] = filter.users)
-        )
+      if (setting.filter) {
+        setting.filter.forEach(filter => {
+          if (filter.users) {
+            normalizedSetting[filter.brand] = filter.users
+          } else {
+            const filterTeam = this.props.userTeams.filter(
+              ({ brand }) => brand.id === filter.brand
+            )[0]
+
+            let members = []
+
+            filterTeam.brand.roles.forEach(
+              role =>
+                (members = members.concat(role.members.map(({ id }) => id)))
+            )
+
+            normalizedSetting[filter.brand] = members
+          }
+        })
+      }
+
       this.setState({
         selectedTypes: (setting && setting.selected_types) || [],
         selectedMembers: (setting && normalizedSetting) || {},
