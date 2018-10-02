@@ -394,7 +394,7 @@ export default (
         <IndexRoute component={AsyncListingsSearch} />
 
         <Route path="following" component={AsyncListingsFavorites} />
-        <Route path="saved-searches/:alertId" component={AsyncMlsSavedSearch} />
+        <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />

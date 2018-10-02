@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
@@ -95,11 +96,7 @@ const mapHOC = compose(
     defaultZoom: 13,
     bootstrapURLKeys,
     options: mapOptions,
-    defaultCenter: mapInitialState.center,
-    style: {
-      position: 'relative',
-      height: 'calc(100vh - 72px)'
-    }
+    defaultCenter: mapInitialState.center
   }),
   connect(
     ({ user, data, alerts }) => {
@@ -136,13 +133,7 @@ const mapHOC = compose(
   }),
   withPropsOnChange(
     (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),
-    ({
-      markers = [],
-      mapProps,
-      loggedAlert,
-      selectedAlert,
-      setActivityLog
-    }) => {
+    ({ markers = [], mapProps, loggedAlert, savedSearch, setActivityLog }) => {
       markers = setCssPositionToListingsWithSameBuilding(
         markers.map(marker => ({
           lat: marker.lat,
@@ -151,13 +142,13 @@ const mapHOC = compose(
         }))
       )
 
-      if (selectedAlert && selectedAlert.id !== loggedAlert) {
+      if (savedSearch && savedSearch.id !== loggedAlert) {
         logUserActivity({
-          object: selectedAlert.id,
+          object: savedSearch.id,
           object_class: 'alert',
           action: 'UserViewedAlert'
         })
-        setActivityLog(selectedAlert.id)
+        setActivityLog(savedSearch.id)
       }
 
       if (markersOverlay && markers.length === 0) {
@@ -176,8 +167,8 @@ const mapHOC = compose(
         let points
         const googleMaps = window.google.maps
 
-        if (selectedAlert.points) {
-          points = normalizePoints(selectedAlert.points)
+        if (savedSearch.points) {
+          points = normalizePoints(savedSearch.points)
           drawingOverlay(points)
         } else {
           const markersBounds = getBounds(markers)
