@@ -16,7 +16,7 @@ import {
   ListItemName,
   DeleteButton
 } from '../../../../../views/components/SlideMenu/Menu/styled'
-import Tooltip from '../../../../../views/components/tooltip'
+import { Tooltip } from './Tooltip'
 import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
 
 class SavedSearchesList extends Component {
@@ -81,11 +81,7 @@ class SavedSearchesList extends Component {
             const id = item.id
 
             return (
-              <Tooltip
-                key={index}
-                caption={item.title.length > 13 ? item.title : ''}
-                placement="top"
-              >
+              <Tooltip key={index} item={item}>
                 <Link to={`/dashboard/mls/saved-searches/${id}`}>
                   <ListItem
                     isDeleting={isDeleting}
