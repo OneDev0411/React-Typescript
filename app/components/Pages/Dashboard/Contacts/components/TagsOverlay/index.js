@@ -32,6 +32,9 @@ import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
 const defaultTags = [
+  'Warm List',
+  'Hot List',
+  'Past Client',
   'Seller',
   'Agent',
   'First Home',
