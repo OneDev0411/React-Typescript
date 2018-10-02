@@ -6,7 +6,7 @@ import getFavorites from '../../../../../store_actions/listings/favorites/get-fa
 import { selectListings } from '../../../../../reducers/listings'
 
 import Map from './Map'
-import { Header } from './Header'
+import { Header } from '../components/PageHeader'
 import { MapView } from '../components/MapView'
 import { GridView } from '../components/GridView'
 import { GalleryView } from '../components/GalleryView'
@@ -60,7 +60,7 @@ class Favorites extends React.Component {
     return (
       <React.Fragment>
         <Header
-          user={this.props.user}
+          title="Following"
           onChangeView={this.onChangeView}
           activeView={this.state.activeView}
           isSideMenuOpen={this.props.isSideMenuOpen}
