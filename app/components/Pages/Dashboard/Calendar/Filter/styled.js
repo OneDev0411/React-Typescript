@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 
+import { borderColor } from '../../../../../views/utils/colors'
+
 export const Container = styled.div`
-  margin: 0 1.5rem 0.5rem 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #d4d4d4;
+  margin: 0 1.5em 0.5em 1.5em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid ${borderColor};
 `
