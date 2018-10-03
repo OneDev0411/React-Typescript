@@ -9,7 +9,7 @@ import {
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding-top: 0.5rem;
+  padding: 0.5rem 0;
   border-bottom: 1px solid ${borderColor};
   justify-content: ${props => (props.withoutLabel ? 'flex-end' : 'initial')};
 `

@@ -85,7 +85,10 @@ export function MultiField(props) {
               display: 'flex'
             }}
           >
-            <Container withoutLabel={!defaultOptions} style={{ width: '40%' }}>
+            <Container
+              withoutLabel={!defaultOptions}
+              style={{ width: '40%', paddingBottom: 0 }}
+            >
               <Title htmlFor={field}>{attribute_def.label}</Title>
               {defaultOptions && (
                 <Field
