@@ -3,12 +3,10 @@ import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
 import Button from '../../../../../Button/TextIconButton'
-import IconDeal from '../../../../../SvgIcons/Deals/IconDeal'
 import IconContact from '../../../../../SvgIcons/Contacts/IconContacts'
-import IconListing from '../../../../../SvgIcons/Properties/IconProperties'
-import { AddDealAssociation } from '../../../../../AddDealAssociation'
+// import IconListing from '../../../../../SvgIcons/Properties/IconProperties'
 import { AddContactAssociation } from '../../../../../AddContactAssociations'
-import { AddListingAssociation } from '../../../../../AddListingAssociations'
+// import { AddListingAssociation } from '../../../../../AddListingAssociations'
 
 const Container = Flex.extend`
   margin-bottom: 1.5em;
@@ -43,24 +41,11 @@ export class AssociationsButtons extends React.Component {
     return (
       <Container inline>
         <AddContactAssociation
+          title="Add Client"
           disabled={disabled}
           handleAdd={this.props.handleSelect}
           buttonRenderer={onClick =>
-            this.renderButton(onClick, IconContact, 'Contact')
-          }
-        />
-        <AddListingAssociation
-          disabled={disabled}
-          handleAdd={this.props.handleSelect}
-          buttonRenderer={onClick =>
-            this.renderButton(onClick, IconListing, 'Listing')
-          }
-        />
-        <AddDealAssociation
-          disabled={disabled}
-          handleAdd={this.props.handleSelect}
-          buttonRenderer={onClick =>
-            this.renderButton(onClick, IconDeal, 'Deal')
+            this.renderButton(onClick, IconContact, 'Add Client')
           }
         />
       </Container>
