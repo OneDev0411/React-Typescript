@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
+// import Flex from 'styled-flex-component'
 
 import {
   getTask,
@@ -10,9 +10,9 @@ import {
   createTaskAssociation,
   deleteTaskAssociation
 } from '../../../../models/tasks'
+import { isSoloActiveTeam } from '../../../../utils/user-teams'
 
 import Drawer from '../../OverlayDrawer'
-import { Divider } from '../../Divider'
 import IconButton from '../../Button/IconButton'
 import ActionButton from '../../Button/ActionButton'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
@@ -21,11 +21,7 @@ import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
 import { Reminder } from '../../EventDrawer/components/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import {
-  DateTimeField,
-  CheckboxField,
-  AssigneesField
-} from '../../final-form-fields'
+import { DateTimeField, AssigneesField } from '../../final-form-fields'
 
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
@@ -33,6 +29,7 @@ import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
+import { Section } from './components/Section'
 import { Associations } from './components/Associations'
 
 const QUERY = {
@@ -71,7 +68,7 @@ const defaultProps = {
  * after opening until we can reinitialize it.
  *
  */
-export class TourDrawer extends Component {
+export class TourDrawer extends React.Component {
   constructor(props) {
     super(props)
 
@@ -194,7 +191,7 @@ export class TourDrawer extends Component {
 
     return (
       <Drawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
-        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Tour Sheets`} />
+        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Tour`} />
         <Drawer.Body>
           <LoadSaveReinitializeForm
             initialValues={this.props.initialValues}
@@ -221,42 +218,43 @@ export class TourDrawer extends Component {
                   onSubmit={formProps.handleSubmit}
                   id="tour-drawer-form"
                 >
-                  <Flex alignCenter style={{ marginBottom: '1.25em' }}>
-                    {this.isNew ? (
-                      <Title fullWidth />
-                    ) : (
-                      <Fragment>
-                        <CheckboxField
-                          name="status"
-                          id="tour-drawer__status-field"
-                        />
-                        <Title />
-                      </Fragment>
-                    )}
-                  </Flex>
-                  <Description />
-                  <FieldContainer
-                    alignCenter
-                    justifyBetween
-                    style={{ marginBottom: '2em' }}
-                  >
-                    <DateTimeField
-                      name="dueDate"
-                      selectedDate={values.dueDate}
-                    />
-                    <Reminder dueDate={values.dueDate} />
-                  </FieldContainer>
-
-                  <AssigneesField name="assignees" owner={user} />
-
-                  <Divider margin="2em 0" />
-
-                  <Associations
-                    associations={values.associations}
-                    defaultAssociation={defaultAssociation}
-                    handleCreate={this.handleCreateAssociation}
-                    handleDelete={this.handleDeleteAssociation}
+                  <Title
+                    fullWidth
+                    placeholder="Untitled tour name…"
+                    style={{ marginBottom: '2rem' }}
                   />
+                  <Description placeholder="Enter any general notes for your clients or for your own reference…" />
+
+                  <Section label="Itinerary Date">
+                    <FieldContainer alignCenter justifyBetween>
+                      <DateTimeField
+                        name="dueDate"
+                        selectedDate={values.dueDate}
+                      />
+                      <Reminder dueDate={values.dueDate} />
+                    </FieldContainer>
+                  </Section>
+
+                  <Section label="Properties">MAP</Section>
+
+                  {!isSoloActiveTeam(user) && (
+                    <Section label="Agents">
+                      <AssigneesField
+                        buttonText="Assign"
+                        name="assignees"
+                        owner={user}
+                      />
+                    </Section>
+                  )}
+
+                  <Section label="Clients">
+                    <Associations
+                      associations={values.associations}
+                      defaultAssociation={defaultAssociation}
+                      handleCreate={this.handleCreateAssociation}
+                      handleDelete={this.handleDeleteAssociation}
+                    />
+                  </Section>
 
                   <ItemChangelog item={values} style={{ marginTop: '2em' }} />
                 </FormContainer>
