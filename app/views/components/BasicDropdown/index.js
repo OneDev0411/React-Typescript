@@ -6,7 +6,9 @@ import { Item } from '../Dropdown/Item'
 import DropButton from '../Button/DropButton'
 
 export const BasicDropdown = ({
+  buttonIcon,
   buttonSize,
+  buttonStyle = {},
   buttonText,
   buttonRenderer,
   disabled,
@@ -16,7 +18,6 @@ export const BasicDropdown = ({
   onSelect,
   onChange,
   fullWidth = false,
-  buttonIcon,
   itemRenderer,
   defaultSelectedItem,
   menuStyle = {},
@@ -24,8 +25,7 @@ export const BasicDropdown = ({
   noBorder = false,
   maxHeight = 200,
   itemToString = item => item.label,
-  upsideDown = false,
-  buttonStyle = {}
+  upsideDown = false
 }) => (
   <Downshift
     onChange={onChange}

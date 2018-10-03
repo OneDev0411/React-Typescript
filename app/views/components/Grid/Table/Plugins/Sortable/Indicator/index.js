@@ -1,9 +1,11 @@
 import React from 'react'
-import styled from 'styled-components'
 
-const Icon = styled.i`
-  color: #5a7390;
-  margin-left: 5px;
+import ArrowDownIcon from '../../../../../SvgIcons/ArrowDropDown/IconArrowDropDown'
+
+const Icon = ArrowDownIcon.extend`
+  position: relative;
+  margin-left: 0.25em;
+  transform: rotate(${props => (props.isAscending ? '0deg' : '180deg')});
 `
 
 const SortIndicator = ({ column, sortBy, isAscending }) => {
@@ -11,7 +13,7 @@ const SortIndicator = ({ column, sortBy, isAscending }) => {
     return false
   }
 
-  return <Icon className={`fa fa-caret-${isAscending ? 'down' : 'up'}`} />
+  return <Icon isAscending={isAscending} />
 }
 
 export default SortIndicator
