@@ -8,15 +8,20 @@ import { normalizeDeal } from '../../utils/association-normalizers'
 
 export class AddDealAssociation extends React.Component {
   static propTypes = {
+    title: PropTypes.string,
     handleAdd: PropTypes.func.isRequired,
     buttonRenderer: PropTypes.func.isRequired
+  }
+
+  static defaultProps = {
+    title: 'Attach Deal'
   }
 
   onSelectHandler = (deal, closeHandler) =>
     this.props.handleAdd(normalizeDeal(deal), closeHandler)
 
   render() {
-    const title = 'Attach Deal'
+    const { title } = this.props
 
     return (
       <AddAssociation

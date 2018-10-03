@@ -9,15 +9,20 @@ import { normalizeContact } from '../../utils/association-normalizers'
 
 export class AddContactAssociation extends React.Component {
   static propTypes = {
+    title: PropTypes.string,
     handleAdd: PropTypes.func.isRequired,
     buttonRenderer: PropTypes.func.isRequired
+  }
+
+  static defaultProps = {
+    title: 'Attach Contact'
   }
 
   add = (contact, callback) =>
     this.props.handleAdd(normalizeContact(contact), callback)
 
   render() {
-    const title = 'Attach Contact'
+    const { title } = this.props
 
     return (
       <AddAssociation
