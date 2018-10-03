@@ -39,7 +39,7 @@ const Header = ({ deal, showAttachments }) => (
         Get Signatures
       </Button>
 
-      {deal.listing && (
+      {/* {deal.listing && (
         <LinkButton
           appearance="outline"
           style={{ margin: '0 0.5em' }}
@@ -47,7 +47,7 @@ const Header = ({ deal, showAttachments }) => (
         >
           Agent Network
         </LinkButton>
-      )}
+      )} */}
 
       <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
     </PageHeader.Menu>
