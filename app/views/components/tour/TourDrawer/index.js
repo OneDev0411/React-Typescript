@@ -29,6 +29,7 @@ import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
+import { Map } from './components/Map'
 import { Section } from './components/Section'
 import { Associations } from './components/Associations'
 
@@ -235,7 +236,11 @@ export class TourDrawer extends React.Component {
                     </FieldContainer>
                   </Section>
 
-                  <Section label="Properties">MAP</Section>
+                  <Section label="Properties">
+                    {this.props.isOpen && (
+                      <Map listings={this.props.listings} />
+                    )}
+                  </Section>
 
                   {!isSoloActiveTeam(user) && (
                     <Section label="Agents">
