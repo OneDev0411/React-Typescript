@@ -15,9 +15,14 @@ import { AssigneeItemInAvatar } from '../AssigneeItemInAvatar'
 
 const propTypes = {
   assignees: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  buttonText: PropTypes.string,
   onChangeHandler: PropTypes.func.isRequired,
   onRemoveHandler: PropTypes.func.isRequired,
   owner: PropTypes.PropTypes.shape().isRequired
+}
+
+const defaultProps = {
+  buttonText: 'Assignee'
 }
 
 export class Assignees extends React.Component {
@@ -77,7 +82,7 @@ export class Assignees extends React.Component {
             <Button
               {...buttonProps}
               iconLeft={AddIcon}
-              text="Assignee"
+              text={this.props.buttonText}
               appearance="link"
               size="medium"
               style={{
@@ -118,3 +123,4 @@ export class Assignees extends React.Component {
 }
 
 Assignees.propTypes = propTypes
+Assignees.defaultProps = defaultProps
