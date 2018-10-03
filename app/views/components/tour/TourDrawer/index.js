@@ -220,10 +220,10 @@ export class TourDrawer extends React.Component {
                 >
                   <Title
                     fullWidth
-                    placeholder="Untitled tour name…"
+                    placeholder="Untitled tour"
                     style={{ marginBottom: '2rem' }}
                   />
-                  <Description placeholder="Enter any general notes for your clients or for your own reference…" />
+                  <Description placeholder="Enter any general notes for your clients" />
 
                   <Section label="Itinerary Date">
                     <FieldContainer alignCenter justifyBetween>
