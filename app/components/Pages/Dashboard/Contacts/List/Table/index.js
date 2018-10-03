@@ -131,7 +131,7 @@ class ContactsList extends React.Component {
 
   getGridTrProps = (rowIndex, { isSelected }) => {
     const hoverStyle = `
-    background-color: ${grey.A100};
+    background-color: ${grey.A000};
      a {
       color: ${primary}
     }
@@ -184,7 +184,8 @@ class ContactsList extends React.Component {
           }}
           data={this.props.data}
           summary={{
-            entityName: 'Contacts'
+            entityName: 'Contacts',
+            total: this.props.listInfo.total || 0
           }}
           isFetching={this.props.isFetching}
           isFetchingMore={this.props.isFetchingMore}

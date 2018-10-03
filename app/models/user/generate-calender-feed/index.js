@@ -1,14 +1,10 @@
 import Fetch from '../../../services/fetch'
 
-const getCalenderFeed = async (types, brandId) => {
-  let url = `/calendar/feed?types[]=${types.join('&types[]=')}`
-
-  if (brandId) {
-    url += `&brandId=${brandId}`
-  }
-
+const getCalenderFeed = async (types, filter) => {
   try {
-    const response = await new Fetch().get(url)
+    const response = await new Fetch()
+      .post('/calendar/feed')
+      .send({ types, filter })
 
     return response.body.data
   } catch (e) {

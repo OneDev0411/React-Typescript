@@ -1,13 +1,16 @@
-// layouts
-@import 'listings/main-layout';
+
 // components
-@import 'listings/components/tabs';
 @import 'listings/components/loading';
 @import 'listings/components/zoom-controller';
-@import 'listings/components/mls-search-toolbar';
 @import 'listings/components/panels';
-@import 'listings/components/listing-card';
+// @import 'listings/components/listing-card';
 @import 'listings/components/table-view';
 @import 'listings/components/not-logged-in-message';
 @import 'listings/components/alerts-list';
 @import 'listings/components/filters';
+
+// google place search autocomplete styles
+[data-page='mls'] .pac-container {
+  top: 5rem !important;
+}
+

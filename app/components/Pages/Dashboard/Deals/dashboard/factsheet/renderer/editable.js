@@ -136,7 +136,118 @@ export default class Editable extends React.Component {
     const isStringType = !isDateType
 
     return (
-      <div className="fact-row">
+      <React.Fragment>
+        <div className="fact-row">
+          <div
+            className="name"
+            data-name={field.name}
+            onClick={() => this.editField()}
+          >
+            {field.label}
+          </div>
+
+          <div className={cn('field editable', { approved })}>
+            <ContextDiscrepency
+              disabled={editMode || !isBackOffice}
+              deal={deal}
+              contextName={field.name}
+              placement={sectionId === 'critical-dates' ? 'bottom' : 'top'}
+            />
+
+            {(!editMode || (editMode && isDateType)) && (
+              <ToolTip
+                caption={
+                  approved || isBackOffice ? null : 'Pending Office Approval'
+                }
+              >
+                <span
+                  onClick={() => this.editField()}
+                  style={{ textAlign: 'left', opacity: saving ? 0.8 : 1 }}
+                >
+                  {this.getFormattedValue()}
+                </span>
+              </ToolTip>
+            )}
+
+            {editMode &&
+              isStringType && (
+                <ClickOutside
+                  onClickOutside={() => this.onFinishEditing()}
+                  style={{ display: 'flex', alignItems: 'center' }}
+                >
+                  <Input
+                    data-type={field.format || field.data_type}
+                    {...field.properties}
+                    className="input-edit"
+                    maxLength={15}
+                    value={this.getValue()}
+                    onKeyPress={e => this.onKeyPress(e)}
+                    ErrorMessageHandler={({ message }) => (
+                      <span
+                        style={{
+                          position: 'absolute',
+                          right: '5px'
+                        }}
+                        data-balloon={message}
+                        data-balloon-pos="left"
+                      >
+                        <i
+                          style={{
+                            verticalAlign: 'middle',
+                            fontSize: '14px',
+                            color: '#ec4b35'
+                          }}
+                          className="fa fa-warning"
+                        />
+                      </span>
+                    )}
+                    onChange={(e, data = {}) =>
+                      this.setState({
+                        value: !_.isUndefined(data.value)
+                          ? data.value
+                          : e.target.value
+                      })
+                    }
+                  />
+
+                  <SaveButton
+                    size="small"
+                    appearance="link"
+                    onClick={e => {
+                      e.stopPropagation()
+                      this.onFinishEditing()
+                    }}
+                  >
+                    SAVE
+                  </SaveButton>
+
+                  <DeleteButton
+                    size="small"
+                    onClick={e => this.cancelEdit(e)}
+                    // className="cta__button"
+                  >
+                    <div className="fa fa-times-circle" />
+                  </DeleteButton>
+                </ClickOutside>
+              )}
+
+            <EditableCta
+              needsApproval={needsApproval}
+              contextData={contextData}
+              showCTA={saving !== field.name && !editMode}
+              handleEditField={() => this.editField()}
+              handleDeleteField={e => this.deleteField(e, field)}
+            />
+
+            {saving &&
+              saving === field.name && (
+                <i
+                  className="fa fa-spin fa-spinner"
+                  style={{ display: 'inline-block', marginLeft: '0.5rem' }}
+                />
+              )}
+          </div>
+        </div>
         <DatePicker
           show={editMode && isDateType}
           saveText={needsApproval ? 'Notify Office' : 'Update'}
@@ -144,117 +255,7 @@ export default class Editable extends React.Component {
           onClose={() => this.removeEditMode()}
           onSelectDate={date => this.onChangeDateContext(date)}
         />
-
-        <div
-          className="name"
-          data-name={field.name}
-          onClick={() => this.editField()}
-        >
-          {field.label}
-        </div>
-
-        <div className={cn('field editable', { approved })}>
-          <ContextDiscrepency
-            disabled={editMode || !isBackOffice}
-            deal={deal}
-            contextName={field.name}
-            placement={sectionId === 'critical-dates' ? 'bottom' : 'top'}
-          />
-
-          {(!editMode || (editMode && isDateType)) && (
-            <ToolTip
-              caption={
-                approved || isBackOffice ? null : 'Pending Office Approval'
-              }
-            >
-              <span
-                onClick={() => this.editField()}
-                style={{ textAlign: 'left', opacity: saving ? 0.8 : 1 }}
-              >
-                {this.getFormattedValue()}
-              </span>
-            </ToolTip>
-          )}
-
-          {editMode &&
-            isStringType && (
-              <ClickOutside
-                onClickOutside={() => this.onFinishEditing()}
-                style={{ display: 'flex', alignItems: 'center' }}
-              >
-                <Input
-                  data-type={field.format || field.data_type}
-                  {...field.properties}
-                  className="input-edit"
-                  maxLength={15}
-                  value={this.getValue()}
-                  onKeyPress={e => this.onKeyPress(e)}
-                  ErrorMessageHandler={({ message }) => (
-                    <span
-                      style={{
-                        position: 'absolute',
-                        right: '5px'
-                      }}
-                      data-balloon={message}
-                      data-balloon-pos="left"
-                    >
-                      <i
-                        style={{
-                          verticalAlign: 'middle',
-                          fontSize: '14px',
-                          color: '#ec4b35'
-                        }}
-                        className="fa fa-warning"
-                      />
-                    </span>
-                  )}
-                  onChange={(e, data = {}) =>
-                    this.setState({
-                      value: !_.isUndefined(data.value)
-                        ? data.value
-                        : e.target.value
-                    })
-                  }
-                />
-
-                <SaveButton
-                  size="small"
-                  appearance="link"
-                  onClick={e => {
-                    e.stopPropagation()
-                    this.onFinishEditing()
-                  }}
-                >
-                  SAVE
-                </SaveButton>
-
-                <DeleteButton
-                  size="small"
-                  onClick={e => this.cancelEdit(e)}
-                  // className="cta__button"
-                >
-                  <div className="fa fa-times-circle" />
-                </DeleteButton>
-              </ClickOutside>
-            )}
-
-          <EditableCta
-            needsApproval={needsApproval}
-            contextData={contextData}
-            showCTA={saving !== field.name && !editMode}
-            handleEditField={() => this.editField()}
-            handleDeleteField={e => this.deleteField(e, field)}
-          />
-
-          {saving &&
-            saving === field.name && (
-              <i
-                className="fa fa-spin fa-spinner"
-                style={{ display: 'inline-block', marginLeft: '0.5rem' }}
-              />
-            )}
-        </div>
-      </div>
+      </React.Fragment>
     )
   }
 }

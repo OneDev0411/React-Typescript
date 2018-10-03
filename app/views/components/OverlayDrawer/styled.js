@@ -13,7 +13,7 @@ export const Content = styled.div`
   background-color: #fff;
   transition: 0.2s ease-in all;
   z-index: 1001;
-  padding-top: 58px;
+  padding: 58px 1.5rem 0;
 
   ${props =>
     props.isOpen &&

@@ -10,36 +10,23 @@ import { getContexts } from '../../../../../../store_actions/deals'
 
 const radioButtonStyle = { display: 'block', marginTop: '2rem' }
 
-const taskTypes = [
-  {
-    name: 'Closing',
-    label: 'Closing'
-  },
-  {
-    name: 'Follow up',
-    label: 'Follow up'
-  },
-  {
-    name: 'Inspection',
-    label: 'Inspection'
-  },
-  {
-    name: 'Listing appointment',
-    label: 'Listing appointment'
-  },
-  {
-    name: 'Open House',
-    label: 'Open House'
-  },
-  {
-    name: 'Todo',
-    label: 'Todo'
-  },
-  {
-    name: 'Tour',
-    label: 'Tour'
-  }
+const defaultTaskTypes = [
+  'Call',
+  'In-Person Meeting',
+  'Text',
+  'Chat',
+  'Mail',
+  'Email',
+  'Open House',
+  'Tour',
+  'Other'
 ]
+
+function getItems(items) {
+  return items.map(item => ({ label: item, name: item }))
+}
+
+const taskTypes = getItems(defaultTaskTypes)
 
 class ICalAllTypes extends React.Component {
   componentDidMount() {
@@ -91,7 +78,7 @@ class ICalAllTypes extends React.Component {
         />
         <CategoryTypesContainer>
           <CategoryType
-            title="Task Types:"
+            title="Event Types:"
             types={taskTypes}
             selectedTypes={selectedTypes}
             onChangeSelectedTypes={onChangeSelectedTypes}

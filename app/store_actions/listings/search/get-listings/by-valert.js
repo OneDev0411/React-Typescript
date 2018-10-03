@@ -1,3 +1,5 @@
+import { batchActions } from 'redux-batched-actions'
+
 import api from '../../../../models/listings/search'
 import setSearchListingsOptions from '../set-options'
 import * as listingsTypes from '../../../../constants/listings'
@@ -21,12 +23,13 @@ const getListingsByValert = options => (dispatch, getState) => {
   }
 
   try {
-    dispatch(setSearchListingsOptions(options))
-
-    dispatch({
-      tabName: 'search',
-      type: listingsTypes.FETCH_LISTINGS_REQUEST
-    })
+    batchActions([
+      dispatch(setSearchListingsOptions(options)),
+      dispatch({
+        tabName: 'search',
+        type: listingsTypes.FETCH_LISTINGS_REQUEST
+      })
+    ])
 
     return api.getListings.byValert(options, query).then(
       response => {

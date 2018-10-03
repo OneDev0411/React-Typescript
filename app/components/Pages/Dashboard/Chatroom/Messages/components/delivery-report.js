@@ -58,7 +58,8 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
               <UserAvatar
                 style={{ float: 'left' }}
                 size={avatarSize}
-                color="#D4D4D4"
+                color="#ffffff"
+                fgColor="#000000"
                 name={user.display_name}
                 image={user.profile_image_url}
                 showStateIndicator={false}

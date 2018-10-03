@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
-import { Button } from 'react-bootstrap'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import Recipients from './recipients'
@@ -17,6 +16,7 @@ import {
   removeEsignRecipient
 } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 const ERROR_MESSAGES = {
   attachments: 'Please select a document to attach.',
@@ -231,21 +231,25 @@ class SendSignatures extends React.Component {
             <div className="footer__inner">
               {failure && <Alert {...failure} style={{ margin: '0 0 1rem' }} />}
               <div>
-                <Button
+                <ActionButton
                   disabled={isSending || !hasRecipients}
-                  className="btn-send"
                   onClick={() => this.send()}
                 >
                   {isSending ? 'Creating...' : 'Review'}
-                </Button>
+                </ActionButton>
 
-                <Button
+                <ActionButton
+                  appearance="outline"
+                  style={{ marginLeft: '0.5rem' }}
                   disabled={isSending}
                   onClick={() => showAttachments(true)}
-                  className="btn-attach"
                 >
-                  <i className="fa fa-paperclip fa-rotate-90" /> Attach
-                </Button>
+                  <i
+                    className="fa fa-paperclip fa-rotate-90"
+                    style={{ marginRight: '0.5rem' }}
+                  />
+                  Attach
+                </ActionButton>
               </div>
             </div>
           </div>

@@ -14,7 +14,7 @@ const Container = Flex.extend`
   background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
   border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
   :hover {
-    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A100)};
+    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A000)};
   }
 `
 

@@ -14,7 +14,7 @@ export default ({ user, onClick, onRemove }) => (
       name={`${user.legal_first_name} ${user.legal_last_name}`}
       image={user.profile_image_url}
       size={24}
-      color="#D4D4D4"
+      color="#000000"
       showStateIndicator={false}
     />
 

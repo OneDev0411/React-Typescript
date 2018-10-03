@@ -6,7 +6,7 @@ import {
   H4
 } from '../../../../../../../views/components/Typography/headings'
 
-const TagsOverlay = ({ text }) => (
+const TagsOverlayHeader = ({ text }) => (
   <Flex alignBaseline>
     <H3>Tags</H3>
     &nbsp;for&nbsp;
@@ -14,4 +14,4 @@ const TagsOverlay = ({ text }) => (
   </Flex>
 )
 
-export default TagsOverlay
+export default TagsOverlayHeader

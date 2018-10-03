@@ -146,18 +146,19 @@ export default class extends React.Component {
                     </ActionButton>
                   </div>
                 )}
+                <DatePicker
+                  show={selectedField === field.name}
+                  saveText={
+                    contexts[selectedField] ? 'Update Date' : 'Add Date'
+                  }
+                  initialDate={contexts[selectedField]}
+                  onClose={() => this.cancelEditing()}
+                  onSelectDate={date => this.onChangeDateContext(date)}
+                />
               </Fragment>
             )}
           </div>
         ))}
-
-        <DatePicker
-          show={selectedField !== null}
-          saveText={contexts[selectedField] ? 'Update Date' : 'Add Date'}
-          initialDate={contexts[selectedField]}
-          onClose={() => this.cancelEditing()}
-          onSelectDate={date => this.onChangeDateContext(date)}
-        />
       </div>
     )
   }

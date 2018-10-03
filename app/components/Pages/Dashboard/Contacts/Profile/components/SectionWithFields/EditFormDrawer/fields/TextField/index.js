@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
 import { Container, Title, ErrorMessage } from '../styled'
-import { placeholderColor } from '../../../../../../../../../../views/utils/colors'
+import { grey } from '../../../../../../../../../../views/utils/colors'
 
 const TextInput = styled.input`
   width: 100%;
@@ -16,7 +16,7 @@ const TextInput = styled.input`
   }
 
   &::placeholder {
-    color: ${placeholderColor};
+    color: ${grey.A550};
   }
 `
 

@@ -97,7 +97,10 @@
     border-radius: 3px;
 
     &:hover {
-      background: #f0f4f7;
+      background: #f2f2f2;
+      .title{
+        color: #003bdf;
+      }
     }
 
     .role-avatar {
@@ -218,7 +221,6 @@
 
   .deal-add-role-title--drpmenu,
   .deal-add-role--drpmenu {
-    @include scrollbar(6px);
     border: none;
     margin-left: 4px !important;
     margin-top: -4px !important;

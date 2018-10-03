@@ -23,12 +23,18 @@ export function ItemChangelog(props) {
 
   return (
     <div style={{ color: grey.A550, ...props.style }}>
-      {`Created by ${getUserTitle(item.created_by)}`}
-      {item.updated_by &&
-        `   .   Last edit by ${getUserTitle(item.updated_by)} in ${fecha.format(
-          new Date(item.updated_at * 1000),
-          'dd MMM YYYY'
-        )}`}
+      <div>{`Created by ${getUserTitle(item.created_by)} in ${fecha.format(
+        new Date(item.created_at * 1000),
+        'MMM DD, YYYY hh:mm A'
+      )}.`}</div>
+      {item.updated_by && (
+        <div>
+          {`Last edit by ${getUserTitle(item.updated_by)} in ${fecha.format(
+            new Date(item.updated_at * 1000),
+            'MMM DD, YYYY hh:mm A'
+          )}.`}
+        </div>
+      )}
     </div>
   )
 }
