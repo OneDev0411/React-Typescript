@@ -85,7 +85,7 @@ class SavedSearchesList extends Component {
                 <Link to={`/dashboard/mls/saved-searches/${id}`}>
                   <ListItem
                     isDeleting={isDeleting}
-                    isSelected={this.props.params.alertId === id}
+                    isSelected={this.props.params.id === id}
                   >
                     <ListItemName>
                       {uppercaseFirstLetter(item.title || '')}
@@ -117,3 +117,5 @@ const mapStateToProps = state => {
 }
 
 export default withRouter(connect(mapStateToProps)(SavedSearchesList))
+
+// to new items badge
