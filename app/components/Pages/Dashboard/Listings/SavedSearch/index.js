@@ -53,6 +53,12 @@ class SavedSearch extends React.Component {
     this.fetchListings()
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.params.id !== prevProps.params.id) {
+      this.fetchListings()
+    }
+  }
+
   fetchListings = async () => {
     const { savedSearch } = this.props
 
@@ -117,8 +123,6 @@ class SavedSearch extends React.Component {
   }
 
   render() {
-    console.log(this.props.savedSearch)
-
     return (
       <React.Fragment>
         <Header
