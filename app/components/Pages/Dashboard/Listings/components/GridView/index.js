@@ -2,6 +2,7 @@ import React from 'react'
 
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
+import { CreateTour } from '../../../../../../views/components/tour/CreateTour'
 
 import { formatListing } from '../../helpers/format-listing'
 import { Address } from './columns/Address'
@@ -59,6 +60,19 @@ export class GridView extends React.Component {
     }
   ]
 
+  actions = [
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: ({ selectedRows }) => {
+        const listings = this.props.listings.data.filter(l =>
+          selectedRows.some(id => id === l.id)
+        )
+
+        return <CreateTour listings={listings} user={this.props.user} />
+      }
+    }
+  ]
+
   format = listing => formatListing(listing, this.props.user)
 
   render() {
@@ -73,7 +87,14 @@ export class GridView extends React.Component {
           summary={{ entityName: 'Listings', style: { color: '#000' } }}
           getTdProps={() => ({ style: { lineHeight: 1 } })}
           plugins={{
-            sortable: {}
+            sortable: {},
+            actionable: {
+              actions: this.actions
+            },
+            selectable: {
+              persistent: true,
+              storageKey: 'listings'
+            }
           }}
         />
       </div>
