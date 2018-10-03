@@ -7,7 +7,7 @@ export default function(rowIndex, { original: deal }) {
     css: `
       cursor: pointer;
       :hover {
-        background-color: ${grey.A100}
+        background-color: ${grey.A000}
 
         a {
           color: ${primary}

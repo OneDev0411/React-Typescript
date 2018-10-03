@@ -64,7 +64,7 @@ class DealTemplates extends React.Component {
 
   getGridTrProps = () => ({
     hoverStyle: `
-    background-color: ${grey.A100};
+    background-color: ${grey.ClientRectListA000};
     `
   })
 

@@ -70,7 +70,7 @@ class TableView extends React.Component {
 
   getGridTrProps = () => ({
     hoverStyle: `
-    background-color: ${grey.A100};
+    background-color: ${grey.A000};
      a {
       color: ${primary}
     }

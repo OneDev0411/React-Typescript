@@ -283,7 +283,7 @@ export class FileManager extends React.Component {
 
   getTrProps = () => ({
     hoverStyle: `
-    background-color: ${grey.A100};
+    background-color: ${grey.A000};
      a {
       color: ${primary}
     }

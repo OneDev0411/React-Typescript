@@ -131,7 +131,7 @@ class ContactsList extends React.Component {
 
   getGridTrProps = (rowIndex, { isSelected }) => {
     const hoverStyle = `
-    background-color: ${grey.A100};
+    background-color: ${grey.A000};
      a {
       color: ${primary}
     }
