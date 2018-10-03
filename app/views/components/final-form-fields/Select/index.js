@@ -4,6 +4,7 @@ import { Field } from 'react-final-form'
 
 import { Dropdown } from '../../Dropdown'
 import { Container, Label, LabelNote, ErrorMessage } from '../styled'
+import { BasicDropdown } from '../../BasicDropdown'
 
 Select.propTypes = {
   format: PropTypes.func,
@@ -58,10 +59,12 @@ export function Select(props) {
                 !props.required && <LabelNote>{props.labelNote}</LabelNote>}
             </Label>
             <Dropdown
+              noBorder
               fullWidth={props.fullWidth}
               input={input}
               items={items}
-              style={{ margin: '0 -1em' }}
+              style={{ margin: 0 }}
+              buttonStyle={{ padding: 0 }}
             />
             {hasError && <ErrorMessage>{error}</ErrorMessage>}
           </Container>

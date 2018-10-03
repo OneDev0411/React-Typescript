@@ -4,7 +4,9 @@ import { grey, primary } from '../../../../../views/utils/colors'
 import ALink from '../../../../../views/components/ALink'
 
 export const GridContainer = styled.div`
-  height: calc(100vh - ${props => (props.isFilterHidden ? '88px' : '146px')});
+  height: calc(
+    100vh - ${props => (props.isFilterHidden ? '7.5625rem' : '12.125rem')}
+  );
   padding: 0 1em 0 1.5em;
   overflow: auto;
 `
@@ -12,7 +14,7 @@ export const GridContainer = styled.div`
 export const TableHeader = styled.div`
   display: flex;
   align-items: center;
-  height: 32px;
+  height: 2em;
   border-radius: 3px;
   background-color: ${grey.A100};
   padding: 0 1em;

@@ -42,7 +42,8 @@ export const Dropdown = ({
   defaultSelectedItem,
   buttonRenderer,
   pullRight = false,
-  noBorder = true
+  noBorder = true,
+  buttonStyle = {}
 }) => (
   <Downshift
     {...input}
@@ -97,6 +98,7 @@ export const Dropdown = ({
               noBorder={noBorder}
               {...getButtonProps({
                 fullWidth,
+                style: buttonStyle,
                 id: buttonId,
                 name: input.name
               })}

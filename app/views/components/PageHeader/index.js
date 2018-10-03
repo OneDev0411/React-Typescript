@@ -14,7 +14,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1.5em 0;
-  margin: 0 1.5em 2em;
+  margin: 0 1.5em 1.5em;
   background-color: ${props => (props.isFlat ? 'transparent' : '#fff')};
   border-bottom: ${props => (props.isFlat ? 'none' : '1px solid #d4d4d4')};
 `
