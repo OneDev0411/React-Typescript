@@ -5,7 +5,7 @@ import ContextAnnotation from '../context-annotation'
 import DealContext from '../../../../../../../../../models/DealContext'
 
 function getContextType(context) {
-  if (context && context.priority === 'MLS') {
+  if (context && DealContext.isAddressField(context.name)) {
     return 'Address'
   }
 
@@ -38,6 +38,8 @@ export default function FormContexts(props) {
             context
           }
 
+          const contextType = getContextType(context)
+
           return (
             <ContextAnnotation
               key={`${name}-${id}`}
@@ -46,10 +48,12 @@ export default function FormContexts(props) {
               maxFontSize={20}
               annotations={annotations}
               onSetValues={props.onSetValues}
+              isDealConnectedToMls={props.deal.listing !== null}
+              isAddressField={contextType === 'Address'}
               onClick={bounds => {
                 props.onClick('Context', {
                   contextName: context.name,
-                  type: getContextType(context),
+                  type: contextType,
                   context,
                   annotations,
                   bounds

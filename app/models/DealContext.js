@@ -1,5 +1,6 @@
 import moment from 'moment'
 import _ from 'underscore'
+
 import store from '../stores'
 import Deal from './Deal'
 
@@ -249,7 +250,10 @@ export function getValue(deal, field) {
   }
 
   // get field
-  const contextValue = Deal.get.field(deal, field.name)
+  const defaultContext =
+    isAddressField(field.name) && deal.listing ? deal.mls_context : null
+
+  const contextValue = Deal.get.field(deal, field.name, defaultContext)
 
   const dataObject = {
     value: contextValue,
@@ -401,6 +405,23 @@ export function getValidItems(
   return _.pick(list, (value, name) => validate(dealContexts[name], value))
 }
 
+export function isAddressField(name) {
+  return [
+    'street_dir_prefix',
+    'street_suffix',
+    'street_number',
+    'street_name',
+    'unit_number',
+    'city',
+    'county',
+    'state',
+    'state_code',
+    'postal_code',
+    'full_address',
+    'street_address'
+  ].includes(name)
+}
+
 function getFormattedValue(value) {
   if (!value) {
     return value
@@ -435,5 +456,6 @@ export default {
   validate,
   validateDate,
   validateList,
-  getValidItems
+  getValidItems,
+  isAddressField
 }
