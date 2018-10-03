@@ -13,6 +13,8 @@ export const Container = styled.div`
   justify-content: space-between;
   margin: 0 1.5rem;
   border-bottom: 1px solid ${borderColor};
+  background-color: #ffffff;
+  z-index: 1;
 `
 
 export const Title = styled.h2`
