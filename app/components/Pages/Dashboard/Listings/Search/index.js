@@ -45,7 +45,7 @@ class Search extends React.Component {
   componentDidMount() {
     window.initialize = this.initialize
 
-    if (!window.google) {
+    if (!window.google && this.state.activeView !== 'map') {
       loadJS(
         `https://maps.googleapis.com/maps/api/js?key=${
           bootstrapURLKeys.key
