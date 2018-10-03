@@ -160,7 +160,7 @@ export class Table extends React.Component {
     return {
       ...props,
       hoverStyle: `
-        background-color: ${grey.A100};
+        background-color: ${grey.A000};
         a {
           color: ${primary}
         }

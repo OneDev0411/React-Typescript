@@ -9,10 +9,10 @@ import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
+import ZoomController from '../../components/ZoomController'
 import SimpleMarker from '../../components/Markers/SimpleMarker'
 import ClusterMarker from '../../components/Markers/ClusterMarker'
 import NotLoggedInMessage from '../../components/NotLoggedInMessage'
-import DrawingRemoveButton from '../../components/DrawingRemoveButton'
 
 import { reset as resetSearchType } from '../../../../../../store_actions/listings/search/set-type'
 import { getLocationFromCookies } from '../../../../../../store_actions/listings/map/user-location'
@@ -24,6 +24,10 @@ import {
 import * as mapActions from '../../../../../../store_actions/listings/map'
 import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
 import getListingsByMapBounds from '../../../../../../store_actions/listings/search/get-listings/by-map-bounds'
+
+import DrawingButton from './DrawingButton'
+import LocationButton from './LocationButton'
+import { DrawingRemoveButton } from './DrawingRemoveButton'
 
 import {
   bootstrapURLKeys,
@@ -106,11 +110,14 @@ const map = ({
         )
       })}
     </Map>
-    {!isWidget && <NotLoggedInMessage isLoggedIn={user ? true : ''} />}
+    <DrawingButton />
     <DrawingRemoveButton
       onClick={onClickRemovePolygon}
       points={drawing.points}
     />
+    <ZoomController tabName="search" isTopOfLocation />
+    <LocationButton />
+    {!isWidget && <NotLoggedInMessage isLoggedIn={user ? true : ''} />}
   </div>
 )
 
@@ -130,12 +137,12 @@ const mapHOC = compose(
     ({ user, data, search }, { listings, isWidget }) => ({
       user,
       appData: data,
+      map: search.map,
       searchType: search.type,
       mapProps: search.map.props,
       markers: listings.data,
       style: {
-        position: 'relative',
-        height: !isWidget ? 'calc(100vh - 72px)' : '100vh'
+        height: !isWidget ? 'calc(100vh - 9em - 1px)' : '100vh'
       }
     }),
     actions
@@ -254,7 +261,7 @@ const mapHOC = compose(
         return { clusters }
       }
 
-      clusters = getCluster(mapProps).map(({ wx, wy, numPoints, points }) => ({
+      clusters = getCluster(mapProps).map(({ wx, wy, points }) => ({
         points,
         lat: wy,
         lng: wx

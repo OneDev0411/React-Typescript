@@ -1,126 +1,224 @@
+import React from 'react'
 import { connect } from 'react-redux'
-import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 
-import Map from './components/Map'
-import Filters from './components/Filters'
-import Loading from '../components/Loading'
-import SearchToolbar from './components/SearchToolbar'
-import ListingsPanel from '../components/ListingsPanels'
-import CreateAlertModal from '../components/modals/CreateAlertModal'
+import { loadJS } from '../../../../../utils/load-js'
+import getPlace from '../../../../../models/listings/search/get-place'
+import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points/index.js'
 import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
+import getListingsByValert from '../../../../../store_actions/listings/search/get-listings/by-valert'
+import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
+import { confirmation } from '../../../../../store_actions/confirmation'
 
-class Search extends Component {
+import Map from './components/Map'
+import { MapView } from '../components/MapView'
+import { bootstrapURLKeys } from '../mapOptions'
+import { GridView } from '../components/GridView'
+import { GalleryView } from '../components/GalleryView'
+import CreateAlertModal from '../components/modals/CreateAlertModal'
+
+import { Header } from './Header'
+
+class Search extends React.Component {
   constructor(props) {
     super(props)
 
-    const { location } = props
+    const { query } = props.location
 
-    this.searchQuery =
-      location && location.query && location.query.q ? location.query.q : ''
+    this.searchQuery = query.q || ''
+
+    let activeView = query.view
+
+    if (!activeView) {
+      activeView =
+        props.user && props.user.user_type === 'Agent' ? 'grid' : 'map'
+    }
 
     this.state = {
+      activeView,
       shareModalIsActive: false,
       mapWithQueryIsInitialized: !this.searchQuery
     }
-
-    this.shareModalCloseHandler = this.shareModalCloseHandler.bind(this)
-    this.shareModalActiveHandler = this.shareModalActiveHandler.bind(this)
   }
 
   componentDidMount() {
+    window.initialize = this.initialize
+
+    if (!window.google && this.state.activeView !== 'map') {
+      loadJS(
+        `https://maps.googleapis.com/maps/api/js?key=${
+          bootstrapURLKeys.key
+        }&libraries=${bootstrapURLKeys.libraries}&callback=initialize`
+      )
+    }
+  }
+
+  initialize = () => {
+    const isMapView = this.state.activeView === 'map'
+
+    if (this.props.listings.data.length > 0) {
+      return isMapView ? this.initMap() : true
+    }
+
     if (this.searchQuery) {
       this._findPlace(this.searchQuery)
+    } else if (!isMapView) {
+      this.fetchDallasListings()
     }
   }
 
-  async _findPlace(address) {
-    const { searchByMlsNumber, searchByPostalCode, getPlace } = this.props
+  initMap = () => this.setState({ mapWithQueryIsInitialized: true })
 
-    const initMap = () => {
-      this.setState({ mapWithQueryIsInitialized: true })
-    }
+  fetchDallasListings = async () => {
+    const { dispatch } = this.props
+
+    dispatch(searchActions.setSearchInput('Dallas TX, USA'))
+
+    await dispatch(
+      getListingsByValert({
+        ...this.props.queryOptions,
+        limit: 50
+      })
+    )
+  }
+
+  _findPlace = async address => {
+    const { dispatch } = this.props
+
+    const isMapView = this.state.activeView === 'map'
 
     try {
-      if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
-        initMap()
-        searchByPostalCode(address)
+      dispatch(searchActions.setSearchInput(address))
+
+      if (address.length > 7 && address.match(/^\d+$/)) {
+        if (isMapView) {
+          this.initMap()
+        }
+
+        return dispatch(searchActions.searchByMlsNumber(address))
       }
 
-      if (!isNaN(address) && address.length > 7) {
-        initMap()
-        searchByMlsNumber(address)
+      if (isMapView) {
+        await dispatch(searchActions.getPlace(address))
+
+        return this.initMap()
       }
 
-      await getPlace(address)
-      initMap()
-    } catch ({ message }) {
-      initMap()
+      const location = await getPlace(address)
+
+      if (location) {
+        await dispatch(
+          getListingsByValert({
+            ...this.props.queryOptions,
+            limit: 50,
+            points: getMapBoundsInCircle(location.center, 1)
+          })
+        )
+      }
+    } catch (error) {
+      console.log(error)
+
+      if (isMapView) {
+        this.initMap()
+      }
     }
   }
 
-  shareModalCloseHandler() {
-    this.setState({
-      shareModalIsActive: false
+  onChangeView = e => {
+    const activeView = e.currentTarget.dataset.view
+
+    this.setState({ activeView }, () => {
+      browserHistory.push(`/dashboard/mls?view=${activeView}`)
     })
   }
 
-  shareModalActiveHandler() {
-    this.setState({
-      shareModalIsActive: true
-    })
+  shareModalCloseHandler = () => this.setState({ shareModalIsActive: false })
+
+  handleSaveSearch = () => {
+    if (this.props.listings.info.total < 400) {
+      return () => this.setState({ shareModalIsActive: true })
+    }
+
+    this.props.dispatch(
+      confirmation({
+        confirmLabel: 'Ok',
+        description:
+          'Please zoom in or set more filters. You can save max 400 listings.',
+        hideCancelButton: true,
+        message: 'Too many matches!'
+      })
+    )
   }
+
+  renderMain() {
+    const _props = {
+      user: this.props.user,
+      listings: this.props.listings,
+      isFetching: this.props.isFetching,
+      isWidget: this.props.isWidget
+    }
+
+    switch (this.state.activeView) {
+      case 'map':
+        return (
+          <MapView
+            {..._props}
+            tabName="search"
+            Map={
+              this.state.mapWithQueryIsInitialized ? <Map {..._props} /> : null
+            }
+          />
+        )
+
+      case 'gallery':
+        return <GalleryView {..._props} />
+
+      default:
+        return <GridView {..._props} />
+    }
+  }
+
+  onClickFilter = () => this.props.dispatch(toggleFilterArea())
 
   render() {
-    const {
-      user,
-      isWidget,
-      listings,
-      isFetching,
-      isLoggedIn,
-      activePanel,
-      filterAreaIsOpen
-    } = this.props
+    const { user } = this.props
 
     return (
-      <div className="l-listings__main clearfix">
-        <div className="l-listings__map">
-          {this.state.mapWithQueryIsInitialized && <Map {...this.props} />}
-          <SearchToolbar />
-          <Filters isOpen={filterAreaIsOpen} isSubmitting={isFetching} />
-          {isFetching && <Loading text="MLS®" />}
-        </div>
-        <div className="l-listings__panel">
-          <ListingsPanel
-            tabName="search"
-            isWidget={isWidget}
-            listings={listings}
-            isLoggedIn={isLoggedIn}
-            activePanel={activePanel}
-            onClickShare={this.shareModalActiveHandler}
-          />
-        </div>
+      <React.Fragment>
+        <Header
+          user={user}
+          isFetching={this.props.isFetching}
+          filtersIsOpen={this.props.filtersIsOpen}
+          activeView={this.state.activeView}
+          isSideMenuOpen={this.props.isSideMenuOpen}
+          toggleSideMenu={this.props.toggleSideMenu}
+          saveSearchHandler={this.handleSaveSearch}
+          onClickFilter={this.onClickFilter}
+          onChangeView={this.onChangeView}
+          hasData={this.props.listings.data.length > 0}
+        />
+        {this.renderMain()}
         <CreateAlertModal
           user={user}
           onHide={this.shareModalCloseHandler}
           isActive={this.state.shareModalIsActive}
-          alertProposedTitle={listings.info.proposed_title}
+          alertProposedTitle={this.props.listings.info.proposed_title}
         />
-      </div>
+      </React.Fragment>
     )
   }
 }
 
 const mapStateToProps = ({ user, search }) => {
-  const { listings, map, panels, filters } = search
+  const { listings } = search
 
   return {
-    map,
     user,
     isLoggedIn: user || false,
-    activePanel: panels.activePanel,
+    queryOptions: search.options,
     isFetching: listings.isFetching,
-    filterAreaIsOpen: filters.isOpen,
+    filtersIsOpen: search.filters.isOpen,
     listings: {
       data: selectListings(listings),
       info: listings.info
@@ -128,6 +226,6 @@ const mapStateToProps = ({ user, search }) => {
   }
 }
 
-export default connect(mapStateToProps, {
-  ...searchActions
-})(Search)
+export default connect(mapStateToProps)(Search)
+
+// todo: refactor initmap when there is a querystring

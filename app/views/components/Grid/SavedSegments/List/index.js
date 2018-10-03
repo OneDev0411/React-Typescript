@@ -18,14 +18,13 @@ import {
 
 import { confirmation } from '../../../../../store_actions/confirmation'
 import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
-
 import {
-  Container,
   ListTitle,
   ListItem,
   ListItemName,
   DeleteButton
-} from './styled'
+} from '../../../../../views/components/SlideMenu/Menu/styled'
+
 import ToolTip from 'components/tooltip'
 
 class SegmentsList extends React.Component {
@@ -92,7 +91,7 @@ class SegmentsList extends React.Component {
     const isSelected = id => activeItem && activeItem.id === id
 
     return (
-      <Container>
+      <div>
         <ListTitle>Lists</ListTitle>
 
         {list.map((item, index) => {
@@ -132,7 +131,7 @@ class SegmentsList extends React.Component {
             <i className="fa fa-spin fa-spinner" />
           </ListItem>
         )}
-      </Container>
+      </div>
     )
   }
 }

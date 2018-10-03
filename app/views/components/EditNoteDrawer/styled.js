@@ -10,7 +10,7 @@ export const Container = styled.div`
 export const Input = styled.textarea`
   width: 100%;
   height: inherit;
-  padding: 1.5rem;
+  padding: 1.5rem 0;
   display: block;
   overflow: auto;
   resize: none;

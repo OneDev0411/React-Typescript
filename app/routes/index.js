@@ -75,9 +75,9 @@ const AsyncListingsSearch = Load({
 })
 // import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
 
-const AsyncListingsAlerts = Load({
+const AsyncMlsSavedSearch = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Listings/Alerts' /* webpackChunkName: "alerts" */)
+    import('../components/Pages/Dashboard/Listings/SavedSearch' /* webpackChunkName: "alerts" */)
 })
 
 const AsyncListingsFavorites = Load({
@@ -144,6 +144,11 @@ const AsyncDealFormViewer = Load({
 const AsyncDealFormEdit = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Deals/form-edit' /* webpackChunkName: "deal_fe" */)
+})
+
+const AsyncAgentNetwork = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Deals/agent-network' /* webpackChunkName: "agent-network" */)
 })
 
 /* ==================================== */
@@ -388,10 +393,8 @@ export default (
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
 
-        <Route path="actives" component={AsyncListingsFavorites} />
-        <Route path="alerts" component={AsyncListingsAlerts}>
-          <Route path=":alertId" component={AsyncListingsAlerts} />
-        </Route>
+        <Route path="following" component={AsyncListingsFavorites} />
+        <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
@@ -437,6 +440,10 @@ export default (
         <Route
           path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
           component={AsyncDealFormViewer}
+        />
+        <Route
+          path="/dashboard/deals/:id/network"
+          component={AsyncAgentNetwork}
         />
       </Route>
 

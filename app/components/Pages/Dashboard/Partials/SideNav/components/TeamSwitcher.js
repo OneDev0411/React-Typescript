@@ -55,7 +55,7 @@ export default class extends React.Component {
         name={flatted.name}
         size={30}
         src={flatted.assets ? flatted.assets.site_logo : null}
-        color="#D4D4D4"
+        color="#000000"
       />
     )
   }

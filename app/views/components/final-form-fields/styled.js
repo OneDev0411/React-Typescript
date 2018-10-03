@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 
-import { borderColor, error, grey, placeholderColor } from '../../utils/colors'
+import { borderColor, error, grey } from '../../utils/colors'
 
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.75em 1em;
+  padding-top: 0.5em;
   border-bottom: 1px solid ${borderColor};
   justify-content: ${props => (props.withoutLabel ? 'flex-end' : 'initial')};
 `
@@ -14,7 +14,7 @@ export const Label = styled.label`
   font-size: 0.875rem;
   font-weight: normal;
   cursor: pointer;
-
+  color: ${grey.A900};
   > span {
     display: inline-block;
   }
@@ -50,6 +50,6 @@ export const Input = styled.input`
   }
 
   &::placeholder {
-    color: ${placeholderColor};
+    color: ${grey.A550};
   }
 `
