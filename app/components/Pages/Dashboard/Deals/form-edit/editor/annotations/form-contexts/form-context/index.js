@@ -12,6 +12,16 @@ function getContextType(context) {
   return 'Singular'
 }
 
+function getContextValue(formValues, annotations, value) {
+  const formValue = formValues[annotations[0].fieldName]
+
+  if (['N/A', 'TBD'].includes(formValue)) {
+    return formValue
+  }
+
+  return value || formValue
+}
+
 export default function FormContexts(props) {
   const grouped = {}
 
@@ -44,7 +54,7 @@ export default function FormContexts(props) {
             <ContextAnnotation
               key={`${name}-${id}`}
               annotationContext={annotationContext}
-              value={value || props.formValues[annotations[0].fieldName]}
+              value={getContextValue(props.formValues, annotations, value)}
               maxFontSize={20}
               annotations={annotations}
               onSetValues={props.onSetValues}
