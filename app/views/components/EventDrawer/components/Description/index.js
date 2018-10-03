@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
@@ -22,14 +23,22 @@ const TextArea = styled.textarea`
   }
 `
 
-export function Description() {
+Description.propTypes = {
+  placeholder: PropTypes.string
+}
+
+Description.defaultProps = {
+  placeholder: 'Add a descriptive title…'
+}
+
+export function Description(props) {
   return (
     <Field
       name="description"
-      render={props => (
+      render={({ input }) => (
         <TextArea
-          {...props.input}
-          placeholder="Add a description about this event"
+          {...input}
+          placeholder={props.placeholder}
           style={{ marginBottom: '2em' }}
         />
       )}

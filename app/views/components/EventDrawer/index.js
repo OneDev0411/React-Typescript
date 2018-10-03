@@ -229,7 +229,7 @@ export class EventDrawer extends Component {
                       </Fragment>
                     )}
                   </Flex>
-                  <Description />
+                  <Description placeholder="Add a description about this event" />
                   <EventType />
                   <FieldContainer
                     alignCenter
