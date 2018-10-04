@@ -17,7 +17,9 @@ export async function getMembers(user) {
       let members = []
 
       brand.roles.forEach(role => {
-        members = [...members, ...role.members]
+        if (role.members) {
+          members = [...members, ...role.members]
+        }
       })
 
       return members
