@@ -19,6 +19,7 @@ import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
+import { Associations } from '../../EventDrawer/components/Associations'
 import { Reminder } from '../../EventDrawer/components/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { DateTimeField, AssigneesField } from '../../final-form-fields'
@@ -31,7 +32,6 @@ import { postLoadFormat } from './helpers/post-load-format'
 
 import { Locations } from './components/Locations'
 import { Section } from './components/Section'
-import { Associations } from './components/Associations'
 
 const QUERY = {
   associations: ['reminders', 'assignees', 'created_by', 'updated_by'].map(
@@ -190,8 +190,8 @@ export class TourDrawer extends React.Component {
   }
 
   render() {
+    const { user } = this.props
     const { isDisabled } = this.state
-    const { defaultAssociation, user } = this.props
 
     return (
       <Drawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
@@ -210,7 +210,7 @@ export class TourDrawer extends React.Component {
             render={formProps => {
               const { values } = formProps
 
-              console.log(values)
+              // console.log(values)
 
               return (
                 <FormContainer
@@ -253,8 +253,9 @@ export class TourDrawer extends React.Component {
 
                   <Section label="Clients">
                     <Associations
-                      associations={values.associations}
-                      defaultAssociation={defaultAssociation}
+                      name="clients"
+                      activeButtons={['contact']}
+                      associations={values.clients}
                       handleCreate={this.handleCreateAssociation}
                       handleDelete={this.handleDeleteAssociation}
                     />
