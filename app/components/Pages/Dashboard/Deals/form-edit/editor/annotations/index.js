@@ -65,13 +65,13 @@ export default class Annotations extends React.Component {
 
     const info = this.annotations.map(this.getInfo)
 
+    // get contexts
+    const contexts = _.filter(info, { type: 'Context' })
+
     this.inputs = _.filter(info, { type: 'Input' })
     // this.assignments = _.filter(info, { type: 'Assignment' })
 
-    this.contexts = _.chain(info)
-      .filter({ type: 'Context' })
-      .groupBy('context')
-      .value()
+    this.contexts = _.groupBy(contexts, 'context')
 
     this.roles.all = _.chain(info)
       .filter({ type: 'Roles' })
@@ -82,6 +82,8 @@ export default class Annotations extends React.Component {
       .filter({ type: 'Role' })
       .groupBy('role')
       .value()
+
+    this.props.onCalculateContextAnnotations(contexts)
   }
 
   getInfo = annotation => {

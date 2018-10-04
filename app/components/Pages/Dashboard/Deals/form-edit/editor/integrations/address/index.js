@@ -1,30 +1,58 @@
 import React from 'react'
+import _ from 'underscore'
 
 import Address from '../../../../components/address'
-import DealContext from '../../../../../../../../models/DealContext'
 import { getAnnotationsValues } from '../../../utils/word-wrap'
 
 export default class AddressForm extends React.Component {
-  onClose = deal => {
+  get GroupedContexts() {
+    const { contextsAnnotations } = this.props
+
+    const grouped = {}
+    const groupedContexts = _.groupBy(contextsAnnotations, 'context')
+
+    _.each(groupedContexts, (data, context_name) => {
+      grouped[context_name] = _.groupBy(groupedContexts[context_name], 'group')
+    })
+
+    return grouped
+  }
+
+  calculateAnnotationsValues(address_components) {
+    let formData = {}
+
+    const grouped = this.GroupedContexts
+
+    _.forEach(address_components, (fieldValue, fieldName) => {
+      const groups = grouped[fieldName]
+
+      _.map(groups, group => {
+        const annotations = group.map(i => i.annotation)
+
+        const values = getAnnotationsValues(annotations, fieldValue, {
+          maxFontSize: 20
+        })
+
+        formData = {
+          ...formData,
+          ...values
+        }
+      })
+    })
+
+    return formData
+  }
+
+  onClose = (deal, address) => {
     if (!deal) {
       this.props.onClose()
 
       return false
     }
 
-    const { data } = this.props.selectedAnnotation
-    const { contextName, annotations } = data
+    const formData = this.calculateAnnotationsValues(address.address_components)
 
-    const text = DealContext.getValue(
-      deal,
-      DealContext.searchContext(contextName)
-    ).value
-
-    const values = getAnnotationsValues(annotations, text, {
-      maxFontSize: 20
-    })
-
-    this.props.onSetValues(values)
+    this.props.onSetValues(formData, true)
     this.props.onClose()
   }
 

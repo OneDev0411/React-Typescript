@@ -25,7 +25,8 @@ class PDFPreview extends React.Component {
     selectedAnnotation: null
   }
 
-  roleColors = {}
+  // roleColors = {}
+  contextsAnnotations = {}
 
   scale = window.devicePixelRatio * 1.2
   displayWidth = Math.min(window.innerWidth - 80, 900)
@@ -39,6 +40,13 @@ class PDFPreview extends React.Component {
     this.setState({
       selectedAnnotation: null
     })
+
+  setPageContextsAnnotations = contexts => {
+    this.contextsAnnotations = {
+      ...this.contextsAnnotations,
+      ...contexts
+    }
+  }
 
   // getRoleColor = assignment => {
   //   const { deal, roles } = this.props
@@ -97,6 +105,7 @@ class PDFPreview extends React.Component {
                 scale={this.scale}
                 displayWidth={this.displayWidth}
                 values={this.props.values}
+                onCalculateContextAnnotations={this.setPageContextsAnnotations}
                 onSetValues={this.props.onSetValues}
                 onValueUpdate={this.props.onValueUpdate}
                 onClick={this.onSelectContext}
@@ -127,6 +136,7 @@ class PDFPreview extends React.Component {
             selectedAnnotation.type === 'Context' &&
             selectedAnnotation.data.type === 'Address'
           }
+          contextsAnnotations={this.contextsAnnotations}
           data={selectedAnnotation && selectedAnnotation.data}
           onClose={this.deselectActiveAnnotation}
           onSetValues={this.props.onSetValues}
