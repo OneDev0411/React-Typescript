@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
+import uniqBy from 'lodash/uniqBy'
 
 import { getUserTitle } from '../../../../models/user/helpers'
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
@@ -44,7 +45,10 @@ export class TeamContactSelect extends React.Component {
       const members = await getMembers(this.props.user)
 
       if (Array.isArray(members)) {
-        this.setState({ isFetching: false, members })
+        this.setState({
+          isFetching: false,
+          members: members ? uniqBy(members, 'id') : []
+        })
       } else {
         this.setState({ isFetching: false })
       }

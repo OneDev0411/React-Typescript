@@ -1,3 +1,7 @@
+export function onlyUnique(value, index, self) { 
+  return self.indexOf(value) === index;
+}
+
 export function uppercaseFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
