@@ -6,7 +6,7 @@ const SESSION_KEY_PREFIX = 'Rechat--Grid--Selectable--'
 
 export function resetGridSelectedItems(key) {
   console.log('[ Grids -> Selectable ] Reset Selected Items')
-  window.sessionStorage[`${SESSION_KEY_PREFIX}${key}`] = ''
+  window.gridSelectableStorage[`${SESSION_KEY_PREFIX}${key}`] = ''
 }
 
 export class SelectablePlugin {
@@ -19,6 +19,11 @@ export class SelectablePlugin {
       throw new Error(
         '[ Grids -> Selectable ] it should provide storage key on persistant mode'
       )
+    }
+
+    // create global storage if doesn't exists
+    if (!window.gridSelectableStorage) {
+      window.gridSelectableStorage = {}
     }
 
     if (!options.persistent) {
@@ -34,6 +39,19 @@ export class SelectablePlugin {
   setData(data = []) {
     // set new data
     this.data = data
+  }
+
+  /**
+   * reset all selected rows in persistent mode
+   */
+  resetSelectedItems = () => {
+    console.log(
+      `[ Grids -> Selectable -> ${this.StorageKey} ] Reset Selected Items`
+    )
+
+    window.gridSelectableStorage[this.StorageKey] = ''
+
+    this.onChange()
   }
 
   /**
@@ -84,14 +102,14 @@ export class SelectablePlugin {
    * returns storage engine
    */
   get StorageEngine() {
-    return window.sessionStorage[this.StorageKey] || null
+    return window.gridSelectableStorage[this.StorageKey] || null
   }
 
   /**
    * store object into storage
    */
   set StorageEngine(data) {
-    window.sessionStorage[this.StorageKey] = data
+    window.gridSelectableStorage[this.StorageKey] = data
   }
 
   /**

@@ -14,8 +14,6 @@ import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
 import SendMlsListingCard from 'components/InstantMarketing/Flows/SendMlsListingCard'
 
-import { resetGridSelectedItems } from '../../../../../../views/components/Grid/Table/Plugins/Selectable'
-
 import TagsOverlay from '../../components/TagsOverlay'
 
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
@@ -104,20 +102,20 @@ class ContactsList extends React.Component {
     },
     {
       display: ({ selectedRows }) => selectedRows.length >= 2,
-      render: ({ selectedRows }) => (
+      render: ({ selectedRows, resetSelectedRows }) => (
         <MergeContacts
           selectedRows={selectedRows}
           rowsUpdating={this.props.rowsUpdating}
-          resetSelectedRows={this.resetSelectedItems}
+          resetSelectedRows={resetSelectedRows}
         />
       )
     },
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => (
+      render: ({ selectedRows, resetSelectedRows }) => (
         <TagContacts
           selectedRows={selectedRows}
-          resetSelectedRows={this.resetSelectedItems}
+          resetSelectedRows={resetSelectedRows}
         />
       )
     },
@@ -130,8 +128,6 @@ class ContactsList extends React.Component {
       )
     }
   ]
-
-  resetSelectedItems = () => resetGridSelectedItems('contacts')
 
   getGridTrProps = (rowIndex, { isSelected }) => {
     const hoverStyle = `

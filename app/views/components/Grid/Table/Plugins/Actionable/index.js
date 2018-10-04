@@ -42,6 +42,10 @@ export class ActionablePlugin {
       return false
     }
 
+    if (this.selectablePlugin) {
+      params.resetSelectedRows = this.selectablePlugin.resetSelectedItems
+    }
+
     switch (type) {
       case 'button':
         return (
