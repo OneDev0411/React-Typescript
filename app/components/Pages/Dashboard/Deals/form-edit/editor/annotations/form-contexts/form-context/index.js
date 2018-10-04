@@ -14,7 +14,7 @@ function getContextType(context) {
 
 function getFormValue(values, annotations) {
   const relevant = annotations
-    .map(a => values[a.id])
+    .map(a => values[a.fieldName])
     .filter(Boolean)
 
   if (relevant.length < 1)
