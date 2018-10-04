@@ -67,10 +67,21 @@ export const feetToMeters = foot => foot / ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
 export const localAddress = address =>
   `${address.street_number} ${address.street_name} ST ${address.unit_number}`
 
-export const addressTitle = address =>
-  `${address.street_number} ${address.street_name} ${address.street_suffix} ${
-    address.unit_number ? `Unit ${address.unit_number}` : ''
+export const addressTitle = address => {
+  if (!address) {
+    return ''
+  }
+
+  const street = [
+    address.street_number,
+    address.street_name,
+    address.street_suffix
+  ].filter(a => a).join(' ')
+  
+  return `${street}${
+    address.unit_number ? ` Unit ${address.unit_number}` : ''
   }`
+}
 
 export const getListingAddress = address => {
   if (!address) {
