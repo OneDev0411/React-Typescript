@@ -85,33 +85,29 @@ export const normalizeListing = listing => {
     return null
   }
 
-  const {
-    id,
-    type = 'listing',
-    full_address,
-    price,
-    status,
-    cover_image_url,
-    property
-  } = listing
+  const { id, property } = listing
 
-  let title = full_address
+  let title = ''
+  let location = listing.location || property.address.location
 
-  if (!title && property) {
-    title = getListingAddress(property.address)
+  if (listing.type === 'listing') {
+    title = property.address.full_address || getListingAddress(property.address)
+  } else {
+    title = getListingAddress(listing.address)
   }
 
   return {
     id,
-    type,
     title,
     avatar: {
-      image: cover_image_url,
+      image: listing.cover_image_url,
       size: 32,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
+    location,
+    type: 'listing',
     url: `/dashboard/mls/${id}`,
-    details: detailText([status, price])
+    details: detailText([listing.status, `$${listing.price.toLocaleString()}`])
   }
 }
 
