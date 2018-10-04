@@ -20,7 +20,7 @@ export const CheckboxInput = styled.input`
 
   :checked {
     :before {
-      content: '❌';
+      content: 'X';
     }
   }
 
