@@ -10,6 +10,7 @@ import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDra
 
 import {
   stateToAbbreviated,
+  COUNTIES,
   STREET_SUFFIX,
   STREET_PREFIX,
   STATES
@@ -57,6 +58,7 @@ class Address extends React.Component {
       street_name: this.getAddressField(deal, 'street_name'),
       unit_number: this.getAddressField(deal, 'unit_number'),
       city: this.getAddressField(deal, 'city'),
+      county: this.getAddressField(deal, 'county'),
       state: this.getAddressField(deal, 'state', defaultState),
       postal_code: this.getAddressField(deal, 'postal_code')
     }
@@ -100,6 +102,7 @@ class Address extends React.Component {
       street_name: this.isValidString,
       unit_number: this.isValidString,
       city: this.isValidString,
+      county: this.isValidCounty,
       state: this.isValidState,
       postal_code: this.isValidPostalCode
     }
@@ -139,6 +142,11 @@ class Address extends React.Component {
   /**
    *
    */
+  isValidCounty = value => _.some(COUNTIES, name => name === value)
+
+  /**
+   *
+   */
   getAddressField = (deal, field, defaultValue = '') => {
     if (!deal) {
       return defaultValue
@@ -161,6 +169,7 @@ class Address extends React.Component {
       street_number,
       street_name,
       city,
+      county,
       state,
       unit_number,
       postal_code
@@ -173,6 +182,7 @@ class Address extends React.Component {
       street_suffix || '',
       unit_number ? `, Unit ${unit_number},` : '',
       city ? `, ${city}` : '',
+      county ? `, ${county}` : '',
       state ? `, ${state}` : '',
       postal_code ? `, ${postal_code}` : ''
     ]
@@ -198,6 +208,7 @@ class Address extends React.Component {
       street_name,
       unit_number,
       city,
+      county,
       state,
       state_code: stateToAbbreviated(state),
       postal_code,
@@ -302,6 +313,19 @@ class Address extends React.Component {
               placeholder="City"
               isRequired
               component={TextInput}
+            />
+
+            <Field
+              name="county"
+              searchable
+              clearable
+              isRequired
+              placeholder="County"
+              options={_.map(COUNTIES, name => ({
+                value: name,
+                label: name
+              }))}
+              component={SelectInput}
             />
 
             <Field

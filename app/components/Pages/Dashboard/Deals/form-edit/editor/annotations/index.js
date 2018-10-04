@@ -7,7 +7,7 @@ import uuid from 'utils/uuid'
 
 import FormInputs from './form-inputs'
 import FormContexts from './form-contexts'
-import FormAssignments from './form-assignments'
+// import FormAssignments from './form-assignments'
 
 const AnnotationsContainer = styled.div`
   position: absolute;
@@ -65,13 +65,13 @@ export default class Annotations extends React.Component {
 
     const info = this.annotations.map(this.getInfo)
 
-    this.inputs = _.filter(info, { type: 'Input' })
-    this.assignments = _.filter(info, { type: 'Assignment' })
+    // get contexts
+    const contexts = _.filter(info, { type: 'Context' })
 
-    this.contexts = _.chain(info)
-      .filter({ type: 'Context' })
-      .groupBy('context')
-      .value()
+    this.inputs = _.filter(info, { type: 'Input' })
+    // this.assignments = _.filter(info, { type: 'Assignment' })
+
+    this.contexts = _.groupBy(contexts, 'context')
 
     this.roles.all = _.chain(info)
       .filter({ type: 'Roles' })
@@ -82,6 +82,8 @@ export default class Annotations extends React.Component {
       .filter({ type: 'Role' })
       .groupBy('role')
       .value()
+
+    this.props.onCalculateContextAnnotations(contexts)
   }
 
   getInfo = annotation => {
@@ -149,11 +151,11 @@ export default class Annotations extends React.Component {
           onClick={this.props.onClick}
         />
 
-        <FormAssignments
+        {/* <FormAssignments
           getRoleColor={this.props.getRoleColor}
           deal={this.props.deal}
           assignments={this.assignments}
-        />
+        /> */}
       </AnnotationsContainer>
     )
   }

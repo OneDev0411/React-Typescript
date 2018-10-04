@@ -25,7 +25,8 @@ class PDFPreview extends React.Component {
     selectedAnnotation: null
   }
 
-  roleColors = {}
+  // roleColors = {}
+  contextsAnnotations = {}
 
   scale = window.devicePixelRatio * 1.2
   displayWidth = Math.min(window.innerWidth - 80, 900)
@@ -40,40 +41,47 @@ class PDFPreview extends React.Component {
       selectedAnnotation: null
     })
 
-  getRoleColor = assignment => {
-    const { deal, roles } = this.props
-
-    const colors = [
-      '#ffe084',
-      '#d2dfec',
-      '#f9caaf',
-      '#b1d6cf',
-      '#d0bbdb',
-      '#c1e5ec'
-    ]
-
-    const matchedRoles = deal.roles
-      .map(role => roles[role])
-      .filter(role => assignment.role.includes(role.role))
-
-    if (!matchedRoles || matchedRoles.length === 0) {
-      return false
+  setPageContextsAnnotations = contexts => {
+    this.contextsAnnotations = {
+      ...this.contextsAnnotations,
+      ...contexts
     }
-
-    const role = matchedRoles[assignment.number]
-
-    if (!role) {
-      return false
-    }
-
-    if (this.roleColors[role.id]) {
-      return this.roleColors[role.id]
-    }
-
-    this.roleColors[role.id] = colors[_.size(this.roleColors)]
-
-    return this.roleColors[role.id]
   }
+
+  // getRoleColor = assignment => {
+  //   const { deal, roles } = this.props
+
+  //   const colors = [
+  //     '#ffe084',
+  //     '#d2dfec',
+  //     '#f9caaf',
+  //     '#b1d6cf',
+  //     '#d0bbdb',
+  //     '#c1e5ec'
+  //   ]
+
+  //   const matchedRoles = deal.roles
+  //     .map(role => roles[role])
+  //     .filter(role => assignment.role.includes(role.role))
+
+  //   if (!matchedRoles || matchedRoles.length === 0) {
+  //     return false
+  //   }
+
+  //   const role = matchedRoles[assignment.number]
+
+  //   if (!role) {
+  //     return false
+  //   }
+
+  //   if (this.roleColors[role.id]) {
+  //     return this.roleColors[role.id]
+  //   }
+
+  //   this.roleColors[role.id] = colors[_.size(this.roleColors)]
+
+  //   return this.roleColors[role.id]
+  // }
 
   render() {
     const { document } = this.props
@@ -89,7 +97,7 @@ class PDFPreview extends React.Component {
           (value, index) => (
             <PageContainer key={index}>
               <Annotations
-                getRoleColor={this.getRoleColor}
+                // getRoleColor={this.getRoleColor}
                 deal={this.props.deal}
                 roles={this.props.roles}
                 document={document}
@@ -97,6 +105,7 @@ class PDFPreview extends React.Component {
                 scale={this.scale}
                 displayWidth={this.displayWidth}
                 values={this.props.values}
+                onCalculateContextAnnotations={this.setPageContextsAnnotations}
                 onSetValues={this.props.onSetValues}
                 onValueUpdate={this.props.onValueUpdate}
                 onClick={this.onSelectContext}
@@ -127,6 +136,7 @@ class PDFPreview extends React.Component {
             selectedAnnotation.type === 'Context' &&
             selectedAnnotation.data.type === 'Address'
           }
+          contextsAnnotations={this.contextsAnnotations}
           data={selectedAnnotation && selectedAnnotation.data}
           onClose={this.deselectActiveAnnotation}
           onSetValues={this.props.onSetValues}

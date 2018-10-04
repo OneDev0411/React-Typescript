@@ -5,9 +5,9 @@ import {
   getAnnotationsValues
 } from '../../../../utils/word-wrap'
 
-import { Container } from './styled'
+import ToolTip from './tooltip'
 
-import ToolTip from 'components/tooltip'
+import { Container } from './styled'
 
 export default class Context extends React.Component {
   componentDidMount() {
@@ -26,36 +26,12 @@ export default class Context extends React.Component {
     this.props.onSetValues(values)
   }
 
-  get ToolTipCaption() {
-    const { annotationContext } = this.props
-
-    const data = [`Type: ${annotationContext.type}`]
-
-    if (annotationContext.role) {
-      data.push(`Roles: ${annotationContext.role.join(' and ')}`)
+  get HasMlsLock() {
+    if (this.props.isAddressField && this.props.isDealConnectedToMls) {
+      return true
     }
 
-    if (annotationContext.attribute) {
-      data.push(`Attribute: ${annotationContext.attribute}`)
-    }
-
-    if (annotationContext.number !== undefined) {
-      data.push(`Number: ${annotationContext.number}`)
-    }
-
-    if (annotationContext.order !== undefined) {
-      data.push(`Order: ${annotationContext.order}`)
-    }
-
-    if (annotationContext.type === 'Context') {
-      annotationContext.context.priority &&
-        data.push(`Priority: ${annotationContext.context.priority}`)
-
-      data.push(`Name: ${annotationContext.context.name}`)
-      data.push(`Data Type: ${annotationContext.context.data_type}`)
-    }
-
-    return data.join('<br />')
+    return false
   }
 
   render() {
@@ -67,15 +43,13 @@ export default class Context extends React.Component {
       }
     )
 
+    const hasMlsLock = this.HasMlsLock
+    const isReadOnly = this.props.isReadOnly || hasMlsLock
+
     return (
       <div>
         {rects.map((rect, index) => (
-          <ToolTip
-            key={index}
-            placement="bottom"
-            caption={this.ToolTipCaption}
-            multiline
-          >
+          <ToolTip key={index} hasMlsLock={hasMlsLock}>
             <Container
               fontName={appearance.font}
               fontSize={fontSize}
@@ -83,8 +57,9 @@ export default class Context extends React.Component {
               color={appearance.color}
               rect={rect}
               innerRef={ref => (this.container = ref)}
-              readOnly={this.props.isReadOnly}
+              readOnly={isReadOnly}
               onClick={() =>
+                !isReadOnly &&
                 this.props.onClick(this.container.getBoundingClientRect())
               }
             >

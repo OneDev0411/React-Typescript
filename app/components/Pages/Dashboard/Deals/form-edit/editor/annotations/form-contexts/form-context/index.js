@@ -5,11 +5,22 @@ import ContextAnnotation from '../context-annotation'
 import DealContext from '../../../../../../../../../models/DealContext'
 
 function getContextType(context) {
-  if (context && context.priority === 'MLS') {
+  if (context && DealContext.isAddressField(context.name)) {
     return 'Address'
   }
 
   return 'Singular'
+}
+
+function getFormValue(values, annotations) {
+  if (_.size(values) === 0) {
+    return ''
+  }
+
+  return annotations.reduce(
+    (text, item) => `${text} ${values[item.fieldName]}`,
+    ''
+  )
 }
 
 export default function FormContexts(props) {
@@ -25,7 +36,7 @@ export default function FormContexts(props) {
         // get context
         const context = DealContext.searchContext(name)
 
-        const value = DealContext.getValue(
+        const contextValue = DealContext.getValue(
           props.deal,
           DealContext.searchContext(name)
         ).value
@@ -38,18 +49,23 @@ export default function FormContexts(props) {
             context
           }
 
+          const contextType = getContextType(context)
+          const formValue = getFormValue(props.formValues, annotations)
+
           return (
             <ContextAnnotation
               key={`${name}-${id}`}
               annotationContext={annotationContext}
-              value={props.formValues[annotations[0].fieldName] || value}
+              value={formValue || contextValue}
               maxFontSize={20}
               annotations={annotations}
               onSetValues={props.onSetValues}
+              isDealConnectedToMls={props.deal.listing !== null}
+              isAddressField={contextType === 'Address'}
               onClick={bounds => {
                 props.onClick('Context', {
                   contextName: context.name,
-                  type: getContextType(context),
+                  type: contextType,
                   context,
                   annotations,
                   bounds
