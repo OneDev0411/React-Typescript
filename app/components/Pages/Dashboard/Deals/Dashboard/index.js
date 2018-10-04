@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+// import { browserHistory } from 'react-router'
 import _ from 'underscore'
 
 import { deleteNotifications } from 'models/Deal/notification'
@@ -8,9 +8,16 @@ import { deleteNotifications } from 'models/Deal/notification'
 import { getDeal } from 'actions/deals'
 import { selectDealById } from 'reducers/deals/list'
 
+import FactsheetSection from './Factsheet'
+
 import { PageHeader } from './Header'
 
-import { Container } from './styled'
+import {
+  Container,
+  ColumnsContainer,
+  SideColumnContainer,
+  Card
+} from './styled'
 
 class DealDetails extends React.Component {
   componentDidMount() {
@@ -32,9 +39,35 @@ class DealDetails extends React.Component {
   }
 
   render() {
+    const { deal } = this.props
+
     return (
       <Container>
-        <PageHeader deal={this.props.deal} />
+        <PageHeader deal={deal} />
+
+        <ColumnsContainer>
+          <SideColumnContainer>
+            <Card>
+              <FactsheetSection
+                deal={deal}
+                section="CriticalDates"
+                title="Critical Dates"
+              />
+
+              <FactsheetSection
+                deal={deal}
+                section="CDA"
+                title="CDA Information"
+              />
+
+              <FactsheetSection
+                deal={deal}
+                section="Listing"
+                title="Listing Information"
+              />
+            </Card>
+          </SideColumnContainer>
+        </ColumnsContainer>
       </Container>
     )
   }
