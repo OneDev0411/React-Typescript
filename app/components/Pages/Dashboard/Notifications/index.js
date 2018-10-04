@@ -317,12 +317,7 @@ class Notifications extends Component {
   }
   render() {
     return (
-      <div
-        style={{
-          boxShadow:
-            '-1px 0 2px 0 rgba(0,0,0,0.04), -1px 0 20px 0 rgba(0,0,0,0.1)'
-        }}
-      >
+      <div>
         <Header />
         <div style={{ position: 'relative' }}>
           <div
