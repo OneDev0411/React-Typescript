@@ -12,14 +12,15 @@ function getContextType(context) {
   return 'Singular'
 }
 
-function getContextValue(formValues, annotations, value) {
-  const formValue = formValues[annotations[0].fieldName]
-
-  if (['N/A', 'TBD'].includes(formValue)) {
-    return formValue
+function getFormValue(values, annotations) {
+  if (_.size(values) === 0) {
+    return ''
   }
 
-  return value || formValue
+  return annotations.reduce(
+    (text, item) => `${text} ${values[item.fieldName]}`,
+    ''
+  )
 }
 
 export default function FormContexts(props) {
@@ -35,7 +36,7 @@ export default function FormContexts(props) {
         // get context
         const context = DealContext.searchContext(name)
 
-        const value = DealContext.getValue(
+        const contextValue = DealContext.getValue(
           props.deal,
           DealContext.searchContext(name)
         ).value
@@ -49,12 +50,13 @@ export default function FormContexts(props) {
           }
 
           const contextType = getContextType(context)
+          const formValue = getFormValue(props.formValues, annotations)
 
           return (
             <ContextAnnotation
               key={`${name}-${id}`}
               annotationContext={annotationContext}
-              value={getContextValue(props.formValues, annotations, value)}
+              value={formValue || contextValue}
               maxFontSize={20}
               annotations={annotations}
               onSetValues={props.onSetValues}
