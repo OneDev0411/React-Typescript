@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 
 import ActionButton from '../../../../views/components/Button/ActionButton'
+import { resetGridSelectedItems } from '../../../../views/components/Grid/Table/Plugins/Selectable'
 
 import { TourDrawer } from '../TourDrawer'
 
@@ -11,6 +12,11 @@ export class CreateTour extends React.Component {
 
   handleOpen = () => this.setState({ isOpen: true })
   handleClose = () => this.setState({ isOpen: false })
+
+  submitCallback = () => {
+    this.handleClose()
+    resetGridSelectedItems('listings')
+  }
 
   render() {
     return (
@@ -29,7 +35,7 @@ export class CreateTour extends React.Component {
             user={this.props.user}
             onClose={this.handleClose}
             listings={this.props.listings}
-            submitCallback={this.handleClose}
+            submitCallback={this.submitCallback}
           />
         )}
       </Fragment>
