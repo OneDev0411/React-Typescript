@@ -9,7 +9,7 @@ export const Container = Flex.extend`
   width: ${props => `${props.size / 16}em}`};
   color: #fff;
   border-radius: ${props => `${props.borderRadius}%`};
-  background: ${props => (props.hasImage ? 'transparent' : '#000')};
+  background-color: #000;
 `
 
 export const Image = styled.img`
