@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import Table from '../../../../../../../views/components/Grid/Table'
 import { Address } from './columns/Address'
 import prepareListingViewItemProps from '../prepareListingViewItemProps'
+import { grey, primary } from '../../../../../../../views/utils/colors'
 
 class TableView extends React.Component {
   getProp = (listing, prop) => {
@@ -67,11 +68,21 @@ class TableView extends React.Component {
     }
   ]
 
+  getGridTrProps = () => ({
+    hoverStyle: `
+    background-color: ${grey.A000};
+     a {
+      color: ${primary}
+    }
+    `
+  })
+
   render() {
     return (
       <Table
         columns={this.columns}
         data={this.props.listings.data}
+        getTrProps={this.getGridTrProps}
         plugins={{
           sortable: {}
         }}

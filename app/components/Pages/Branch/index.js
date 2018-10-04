@@ -26,7 +26,7 @@ const getActionRedirectURL = params => {
   }
 
   if (action === 'RedirectToAlert' && alert) {
-    return `/dashboard/mls/alerts/${alert}`
+    return `/dashboard/mls/saved-searches/${alert}`
   }
 
   if (action === 'RedirectToListing' && listing) {

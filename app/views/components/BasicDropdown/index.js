@@ -6,7 +6,9 @@ import { Item } from '../Dropdown/Item'
 import DropButton from '../Button/DropButton'
 
 export const BasicDropdown = ({
+  buttonIcon,
   buttonSize,
+  buttonStyle = {},
   buttonText,
   buttonRenderer,
   disabled,
@@ -16,7 +18,6 @@ export const BasicDropdown = ({
   onSelect,
   onChange,
   fullWidth = false,
-  buttonIcon,
   itemRenderer,
   defaultSelectedItem,
   menuStyle = {},
@@ -52,6 +53,7 @@ export const BasicDropdown = ({
               isOpen: downshift.isOpen,
               size: buttonSize,
               noBorder,
+              style: buttonStyle,
               text:
                 buttonText ||
                 (downshift.selectedItem && downshift.selectedItem.label)

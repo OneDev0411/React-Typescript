@@ -85,11 +85,15 @@ export function MultiField(props) {
               display: 'flex'
             }}
           >
-            <Container withoutLabel={!defaultOptions} style={{ width: '40%' }}>
+            <Container
+              withoutLabel={!defaultOptions}
+              style={{ width: '40%', paddingBottom: 0 }}
+            >
               <Title htmlFor={field}>{attribute_def.label}</Title>
               {defaultOptions && (
                 <Field
                   component={Dropdown}
+                  style={{ marginLeft: '-1rem' }}
                   fullWidth
                   items={defaultOptions}
                   itemToString={({ title }) => title}
@@ -102,7 +106,9 @@ export function MultiField(props) {
                 width: '60%',
                 display: 'flex',
                 alignItems: 'flex-end',
-                padding: attribute_def.enum_values ? '0.75em 1em' : '1em',
+                padding: attribute_def.enum_values
+                  ? '0'
+                  : '0.5rem 0 0.5rem 1rem',
                 borderWidth: '0 0 1px 1px',
                 borderStyle: 'solid',
                 borderColor
@@ -135,8 +141,9 @@ export function MultiField(props) {
               <div
                 style={{
                   display: 'flex',
-                  alignItems: 'flex-end',
-                  marginLeft: '1em'
+                  alignItems: 'center',
+                  marginLeft: '1em',
+                  height: attribute_def.enum_values ? '40px' : 'auto'
                 }}
               >
                 {index + 1 === fields.length ? (

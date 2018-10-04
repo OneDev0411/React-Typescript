@@ -11,6 +11,8 @@ import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 import { H1 } from '../../Typography/headings'
 import { goTo } from '../../../../utils/go-to'
 
+import { Subtitle } from './Subtitle'
+
 PageTitle.propTypes = {
   backUrl: PropTypes.string,
   showBackButton: PropTypes.bool,
@@ -26,7 +28,7 @@ PageTitle.defaultProps = {
 }
 
 export function PageTitle(props) {
-  const { title, backUrl, onClickCloseButton } = props
+  const { title, subtitle, backUrl, onClickCloseButton } = props
 
   function handleOnBack() {
     if (backUrl) {
@@ -44,8 +46,14 @@ export function PageTitle(props) {
     return (
       <Flex justifyBetween style={{ width: '100%' }}>
         <Flex alignCenter>
-          {title && <H1>{title}</H1>}
-          {!title && props.children}
+          {title ? (
+            <Flex column>
+              <H1>{title}</H1>
+              {subtitle && <Subtitle>subtitle</Subtitle>}
+            </Flex>
+          ) : (
+            props.children
+          )}
         </Flex>
 
         <Flex alignCenter>
@@ -75,7 +83,10 @@ export function PageTitle(props) {
             <BackIcon />
           </IconButton>
         )}
-        {title && <H1>{title}</H1>}
+        <Flex column>
+          {title && <H1>{title}</H1>}
+          {subtitle && <Subtitle>subtitle</Subtitle>}
+        </Flex>
       </Flex>
       {props.children}
     </Flex>

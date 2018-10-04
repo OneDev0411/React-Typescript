@@ -4,11 +4,9 @@ import matchSorter from 'match-sorter'
 
 import Card from '../Card'
 import { Item } from './Item'
-import ShadowButton from '../Button/ShadowButton'
 import { SearchInput } from './SearchInput'
 import ArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import ActionButton from '../Button/ActionButton'
-import { grey } from '../../utils/colors'
 
 export const Button = ActionButton.extend`
   position: relative;
@@ -17,10 +15,6 @@ export const Button = ActionButton.extend`
   align-items: center;
   justify-content: ${props => (props.fullWidth ? 'space-between' : 'initial')};
   font-weight: normal;
-
-  &:focus {
-    background-color: ${grey.A100};
-  }
 `
 
 export const Icon = ArrowDropDown.extend`
@@ -42,7 +36,9 @@ export const Dropdown = ({
   itemRenderer,
   defaultSelectedItem,
   buttonRenderer,
-  pullRight = false
+  pullRight = false,
+  noBorder = true,
+  buttonStyle = {}
 }) => (
   <Downshift
     {...input}
@@ -94,9 +90,10 @@ export const Dropdown = ({
           ) : (
             <Button
               appearance="outline"
-              noBorder
+              noBorder={noBorder}
               {...getButtonProps({
                 fullWidth,
+                style: buttonStyle,
                 id: buttonId,
                 name: input.name
               })}
@@ -172,7 +169,7 @@ export const Dropdown = ({
                   }
 
                   return itemRenderer ? (
-                    itemRenderer(props)
+                    itemRenderer(props, item)
                   ) : (
                     <Item {...props} key={item.value}>
                       {item.icon && <item.icon />}

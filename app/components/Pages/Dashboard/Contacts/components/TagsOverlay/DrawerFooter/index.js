@@ -6,7 +6,12 @@ const FooterContainer = Flex.extend`
   width: 100%;
 `
 
-const TagsOverlay = ({ tagsLength, onSubmit, closeOverlay, isSubmitting }) => (
+const TagsOverlayFooter = ({
+  tagsLength,
+  onSubmit,
+  closeOverlay,
+  isSubmitting
+}) => (
   <FooterContainer alignCenter justifyBetween>
     {`${tagsLength} tags selected`}
     <Flex center>
@@ -20,4 +25,4 @@ const TagsOverlay = ({ tagsLength, onSubmit, closeOverlay, isSubmitting }) => (
   </FooterContainer>
 )
 
-export default TagsOverlay
+export default TagsOverlayFooter

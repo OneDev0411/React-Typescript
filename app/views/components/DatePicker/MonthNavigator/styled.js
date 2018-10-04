@@ -12,7 +12,7 @@ export const Button = styled.span`
   cursor: pointer;
   display: flex;
   svg > path {
-    fill: #506379;
+    fill: #000000;
   }
   &:hover {
     svg > path {

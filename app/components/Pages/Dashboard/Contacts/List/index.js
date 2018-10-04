@@ -38,7 +38,6 @@ class ContactsList extends React.Component {
       isFetchingMoreContacts: false,
       isRowsUpdating: false,
       filter: this.props.filter,
-      selectedRows: [],
       searchInputValue: this.props.searchInputValue,
       activeSegment: {}
     }
@@ -130,6 +129,7 @@ class ContactsList extends React.Component {
   }
 
   handleChangeOrder = ({ value: order }) => {
+    this.order = order
     this.handleFilterChange(
       this.state.filter,
       this.state.searchInputValue,
@@ -169,11 +169,6 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContacts: false })
   }
 
-  onChangeSelectedRows = selectedRows =>
-    this.setState({
-      selectedRows
-    })
-
   hasSearchState = () =>
     this.state.filter || this.state.searchInputValue || this.order
 
@@ -212,9 +207,6 @@ class ContactsList extends React.Component {
 
   resetSelectedRows = () => {
     resetGridSelectedItems('contacts')
-    this.setState({
-      selectedRows: []
-    })
   }
 
   render() {
@@ -254,7 +246,6 @@ class ContactsList extends React.Component {
             isRowsUpdating={this.state.isRowsUpdating}
             onRequestLoadMore={this.handleLoadMore}
             rowsUpdating={this.rowsUpdating}
-            resetSelectedRows={this.resetSelectedRows}
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
             filters={this.state.filter}

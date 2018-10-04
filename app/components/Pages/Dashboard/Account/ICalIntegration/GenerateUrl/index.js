@@ -17,7 +17,7 @@ class GenerateUrl extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (
       this.state.feedURl !== '' &&
-      (nextProps.selectedBrandId !== this.props.selectedBrandId ||
+      (!_.isEqual(nextProps.selectedMembers, this.props.selectedMembers) ||
         !_.isEqual(nextProps.selectedTypes, this.props.selectedTypes))
     ) {
       this.setState({ feedURl: '' })
@@ -28,10 +28,19 @@ class GenerateUrl extends React.Component {
     try {
       this.setState({ isFetchingFeed: true })
 
-      const feedURl = await getCalenderFeed(
-        this.props.selectedTypes,
-        this.props.selectedBrandId
-      )
+      const { userTeams, selectedMembers } = this.props
+
+      const filter = userTeams
+        .filter(({ brand }) => selectedMembers[brand.id])
+        .map(({ brand }) => {
+          if (brand.member_count === selectedMembers[brand.id].length) {
+            return { brand: brand.id }
+          }
+
+          return { brand: brand.id, users: selectedMembers[brand.id] }
+        })
+
+      const feedURl = await getCalenderFeed(this.props.selectedTypes, filter)
 
       this.setState({ feedURl })
     } catch (e) {

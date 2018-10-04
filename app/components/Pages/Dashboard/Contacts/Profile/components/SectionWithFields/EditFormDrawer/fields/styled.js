@@ -3,21 +3,22 @@ import styled from 'styled-components'
 import {
   borderColor,
   error,
-  placeholderColor
+  grey
 } from '../../../../../../../../../views/utils/colors'
 
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.75em 1em;
+  padding: 0.5rem 0;
   border-bottom: 1px solid ${borderColor};
   justify-content: ${props => (props.withoutLabel ? 'flex-end' : 'initial')};
 `
 
 export const Title = styled.label`
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: normal;
   cursor: pointer;
+  color: ${grey.A900};
 
   &::after {
     content: '${props => (props.required ? '*' : '')}';
@@ -43,6 +44,6 @@ export const Input = styled.input`
   }
 
   &::placeholder {
-    color: ${placeholderColor};
+    color: ${grey.A550};
   }
 `

@@ -80,7 +80,7 @@ class Body extends Component {
         onSelect={this.props.handleSelectedItem}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
           <div style={{ paddingTop: '1rem' }}>
-            <div style={{ padding: '0 1rem' }}>
+            <div style={{ padding: isDrawer ? '0' : '0 1rem' }}>
               <SearchInput
                 style={{ marginBottom: '1em' }}
                 inputProps={{

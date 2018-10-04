@@ -118,6 +118,7 @@ export default class DatePicker extends React.Component {
           onClick={this.handleToday}
           data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
           data-balloon-pos="down"
+          style={{ fontSize: '1rem' }}
         >
           Today
         </ActionButton>

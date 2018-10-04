@@ -76,7 +76,8 @@ export class EventDrawer extends Component {
     super(props)
 
     this.state = {
-      isDisabled: false
+      isDisabled: false,
+      event: props.event
     }
 
     this.isNew =
@@ -95,7 +96,7 @@ export class EventDrawer extends Component {
 
         const event = await getTask(this.props.eventId, QUERY)
 
-        this.setState({ isDisabled: false })
+        this.setState({ isDisabled: false, event })
 
         return event
       } catch (error) {
@@ -121,7 +122,7 @@ export class EventDrawer extends Component {
         newEvent = await createTask(event, QUERY)
       }
 
-      this.setState({ isDisabled: false })
+      this.setState({ isDisabled: false, event: newEvent })
       await this.props.submitCallback(newEvent, action)
     } catch (error) {
       console.log(error)
@@ -133,9 +134,9 @@ export class EventDrawer extends Component {
   delete = async () => {
     try {
       this.setState({ isDisabled: true })
-      await deleteTask(this.props.event.id)
+      await deleteTask(this.state.event.id)
       this.setState({ isDisabled: false }, () =>
-        this.props.deleteCallback(this.props.event)
+        this.props.deleteCallback(this.state.event)
       )
     } catch (error) {
       console.log(error)

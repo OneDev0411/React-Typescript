@@ -1,8 +1,8 @@
 .c-filters {
   position: fixed;
-  top: 146px;
-  left: 134px;
-  width: 400px;
+  top: 5rem;
+  left: 18.75rem;
+  width: 25rem;
   height: calc(100vh - 170px);
   overflow: hidden;
   visibility: hidden;
@@ -10,8 +10,12 @@
   pointer-events: none;
   border-radius: 5px;
   background-color: #f8f8f8;
+  z-index: 1;
   .l-listings--logged & {
-    left: $app-sidenav-width + 134px;
+    left: $app-sidenav-width + 220px; 
+  }
+  .l-listings--logged &.side-menu--open {
+    left: $app-sidenav-width + 384px;
   }
   &.c-filters--isOpen {
     pointer-events: auto;

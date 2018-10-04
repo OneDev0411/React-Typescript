@@ -40,7 +40,8 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
                       name={`${role.legal_first_name} ${role.legal_last_name}`}
                       image={role.user ? role.user.profile_image_url : null}
                       size={24}
-                      color="#d4d4d4"
+                      color="#ffffff"
+                      fgColor="#000000"
                       showStateIndicator={false}
                     />
                   </div>

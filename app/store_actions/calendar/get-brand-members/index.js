@@ -9,7 +9,8 @@ export function getBrandMembers(brandId) {
       const data = await getMembers(brandId)
 
       const brandMembers = data.roles.reduce(
-        (members, role) => members.concat(role.members),
+        (members, role) =>
+          role.members ? members.concat(role.members) : members,
         []
       )
 
