@@ -4,7 +4,8 @@ import { Field } from 'react-final-form'
 
 import { Dropdown } from '../../Dropdown'
 import { Container, Label, LabelNote, ErrorMessage } from '../styled'
-import { BasicDropdown } from '../../BasicDropdown'
+import { Item } from '../../Dropdown/Item'
+import Tooltip from '../../tooltip'
 
 Select.propTypes = {
   format: PropTypes.func,
@@ -65,6 +66,13 @@ export function Select(props) {
               items={items}
               style={{ margin: 0 }}
               buttonStyle={{ padding: 0 }}
+              itemRenderer={(props, item) => (
+                <Tooltip caption={item.hint} placement="left">
+                  <Item {...props} key={item.value}>
+                    {item.title}
+                  </Item>
+                </Tooltip>
+              )}
             />
             {hasError && <ErrorMessage>{error}</ErrorMessage>}
           </Container>

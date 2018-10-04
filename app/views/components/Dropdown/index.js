@@ -174,7 +174,7 @@ export const Dropdown = ({
                   }
 
                   return itemRenderer ? (
-                    itemRenderer(props)
+                    itemRenderer(props, item)
                   ) : (
                     <Item {...props} key={item.value}>
                       {item.icon && <item.icon />}
