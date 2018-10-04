@@ -22,5 +22,6 @@ export const Container = styled.div`
     background: rgba(0, 0, 0, 0.7);
     will-change: opacity;
     transition: opacity 0.3s ease-out;
+    z-index: ${props => (props.isCalculating ? 1 : '-1')};
   }
 `
