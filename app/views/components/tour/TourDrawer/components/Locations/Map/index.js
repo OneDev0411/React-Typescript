@@ -1,7 +1,7 @@
 import React from 'react'
 
+import config from '../../../../../../../../config/public'
 import { loadJS } from '../../../../../../../utils/load-js'
-import config from '../../../../../../../../config/public/development'
 
 import { Container } from './styled'
 
