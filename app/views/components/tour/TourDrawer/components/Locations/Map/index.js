@@ -90,7 +90,6 @@ export class Map extends React.Component {
       (response, status) => {
         if (status === 'OK') {
           this.directionsDisplay.setDirections(response)
-          console.log(response)
           this.setState({ isCalculating: false })
         } else {
           console.log(`Directions request failed due to ${status}`)

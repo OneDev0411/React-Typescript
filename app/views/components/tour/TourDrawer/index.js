@@ -33,6 +33,8 @@ import { postLoadFormat } from './helpers/post-load-format'
 import { Locations } from './components/Locations'
 import { Section } from './components/Section'
 
+import { Footer } from './styled'
+
 const QUERY = {
   associations: ['reminders', 'assignees', 'created_by', 'updated_by'].map(
     a => `crm_task.${a}`
@@ -194,7 +196,11 @@ export class TourDrawer extends React.Component {
     const { isDisabled } = this.state
 
     return (
-      <Drawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
+      <Drawer
+        isOpen={this.props.isOpen}
+        onClose={this.props.onClose}
+        showFooter={false}
+      >
         <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Tour`} />
         <Drawer.Body>
           <LoadSaveReinitializeForm
@@ -213,86 +219,92 @@ export class TourDrawer extends React.Component {
               // console.log(values)
 
               return (
-                <FormContainer
-                  onSubmit={formProps.handleSubmit}
-                  id="tour-drawer-form"
-                >
-                  <Title
-                    fullWidth
-                    placeholder="Untitled tour"
-                    style={{ marginBottom: '2rem' }}
-                  />
-                  <Description placeholder="Enter any general notes for your clients" />
-
-                  <Section label="Itinerary Date">
-                    <FieldContainer alignCenter justifyBetween>
-                      <DateTimeField
-                        name="dueDate"
-                        selectedDate={values.dueDate}
-                      />
-                      <Reminder dueDate={values.dueDate} />
-                    </FieldContainer>
-                  </Section>
-
-                  <Section label="Properties">
-                    <Locations
-                      locations={values.locations}
-                      handleDelete={this.handleDeleteAssociation}
+                <div>
+                  <FormContainer
+                    id="tour-drawer-form"
+                    onSubmit={formProps.handleSubmit}
+                    style={{ paddingBottom: '3rem' }}
+                  >
+                    <Title
+                      fullWidth
+                      placeholder="Untitled tour"
+                      style={{ marginBottom: '2rem' }}
                     />
-                  </Section>
+                    <Description placeholder="Enter any general notes for your clients" />
 
-                  {!isSoloActiveTeam(user) && (
-                    <Section label="Agents">
-                      <AssigneesField
-                        buttonText="Assign"
-                        name="assignees"
-                        owner={user}
+                    <Section label="Itinerary Date">
+                      <FieldContainer alignCenter justifyBetween>
+                        <DateTimeField
+                          name="dueDate"
+                          selectedDate={values.dueDate}
+                        />
+                        <Reminder dueDate={values.dueDate} />
+                      </FieldContainer>
+                    </Section>
+
+                    <Section label="Properties">
+                      <Locations
+                        locations={values.locations}
+                        handleDelete={this.handleDeleteAssociation}
                       />
                     </Section>
-                  )}
 
-                  <Section label="Clients">
-                    <Associations
-                      name="clients"
-                      activeButtons={['contact']}
-                      associations={values.clients}
-                      handleCreate={this.handleCreateAssociation}
-                      handleDelete={this.handleDeleteAssociation}
-                    />
-                  </Section>
+                    {!isSoloActiveTeam(user) && (
+                      <Section label="Agents">
+                        <AssigneesField
+                          buttonText="Assign"
+                          name="assignees"
+                          owner={user}
+                        />
+                      </Section>
+                    )}
 
-                  <ItemChangelog item={values} style={{ marginTop: '2em' }} />
-                </FormContainer>
+                    <Section label="Clients">
+                      <Associations
+                        name="clients"
+                        activeButtons={['contact']}
+                        associations={values.clients}
+                        handleCreate={this.handleCreateAssociation}
+                        handleDelete={this.handleDeleteAssociation}
+                      />
+                    </Section>
+
+                    <ItemChangelog item={values} style={{ marginTop: '2em' }} />
+                  </FormContainer>
+                  <Footer alignCenter rowReverse>
+                    {!this.isNew && (
+                      <Tooltip placement="top" caption="Delete">
+                        <IconButton
+                          isFit
+                          inverse
+                          type="button"
+                          disabled={isDisabled}
+                          onClick={this.delete}
+                        >
+                          <IconDelete />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    <Tooltip
+                      placement="left"
+                      caption={
+                        values.title ? '' : "The title is empty. It's required."
+                      }
+                    >
+                      <ActionButton
+                        type="button"
+                        disabled={isDisabled || !values.title}
+                        onClick={this.handleSubmit}
+                      >
+                        {isDisabled ? 'Saving...' : 'Save'}
+                      </ActionButton>
+                    </Tooltip>
+                  </Footer>
+                </div>
               )
             }}
           />
         </Drawer.Body>
-        <Drawer.Footer
-          style={{
-            flexDirection: this.isNew ? 'row-reverse' : 'initial'
-          }}
-        >
-          {!this.isNew && (
-            <Tooltip placement="top" caption="Delete">
-              <IconButton
-                isFit
-                inverse
-                type="button"
-                disabled={isDisabled}
-                onClick={this.delete}
-              >
-                <IconDelete />
-              </IconButton>
-            </Tooltip>
-          )}
-          <ActionButton
-            type="button"
-            disabled={isDisabled}
-            onClick={this.handleSubmit}
-          >
-            {isDisabled ? 'Saving...' : 'Save'}
-          </ActionButton>
-        </Drawer.Footer>
       </Drawer>
     )
   }
