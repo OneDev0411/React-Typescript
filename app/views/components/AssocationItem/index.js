@@ -15,11 +15,7 @@ export class AssociationItem extends Component {
     handleRemove: PropTypes.func
   }
 
-  onRemove = () =>
-    this.props.handleRemove(
-      this.props.association.id,
-      this.props.association.crm_task
-    )
+  onRemove = () => this.props.handleRemove(this.props.association)
 
   render() {
     const { association, isRemovable } = this.props

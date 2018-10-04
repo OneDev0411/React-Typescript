@@ -50,12 +50,22 @@ class AssociationsComponent extends React.Component {
     }
   }
 
-  removeHandler = async (associationId, eventId) => {
-    await this.props.handleDelete(associationId, eventId)
+  removeHandler = async association => {
+    if (association.id) {
+      await this.props.handleDelete(association)
 
-    this.props.input.onChange(
-      this.props.associations.filter(a => a.id !== associationId)
-    )
+      this.props.input.onChange(
+        this.props.associations.filter(a => a.id !== association.id)
+      )
+    } else {
+      this.props.input.onChange(
+        this.props.associations.filter(
+          a =>
+            a[a.association_type].id !==
+            association[association.association_type].id
+        )
+      )
+    }
   }
 
   isRemovable = association => {
