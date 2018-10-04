@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { loadJS } from '../../../../../../utils/load-js'
-import config from '../../../../../../../config/public/development'
+import { loadJS } from '../../../../../../../utils/load-js'
+import config from '../../../../../../../../config/public/development'
 
 import { Container } from './styled'
 
@@ -48,18 +48,18 @@ export class Map extends React.Component {
     `${listing.location.latitude},${listing.location.longitude}`
 
   calculateAndDisplayRoute = (directionsService, directionsDisplay) => {
-    const { listings } = this.props
+    const { locations } = this.props
 
     this.setState({ isCalculating: true })
 
     directionsService.route(
       {
-        origin: this.getLatLng(listings[0]),
-        destination: this.getLatLng(listings[listings.length - 1]),
+        origin: this.getLatLng(locations[0]),
+        destination: this.getLatLng(locations[locations.length - 1]),
         waypoints:
-          listings.length > 2
-            ? listings
-                .slice(1, listings.length - 1)
+          locations.length > 2
+            ? locations
+                .slice(1, locations.length - 1)
                 .map(l => ({ location: this.getLatLng(l), stopover: true }))
             : [],
         optimizeWaypoints: true,

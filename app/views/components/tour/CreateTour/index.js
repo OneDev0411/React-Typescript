@@ -23,13 +23,15 @@ export class CreateTour extends React.Component {
           Create Tour Sheets
         </ActionButton>
 
-        <TourDrawer
-          user={this.props.user}
-          isOpen={this.state.isOpen}
-          onClose={this.handleClose}
-          listings={this.props.listings}
-          submitCallback={this.props.resetSelectedRows}
-        />
+        {this.state.isOpen && (
+          <TourDrawer
+            isOpen
+            user={this.props.user}
+            onClose={this.handleClose}
+            listings={this.props.listings}
+            submitCallback={this.props.resetSelectedRows}
+          />
+        )}
       </Fragment>
     )
   }

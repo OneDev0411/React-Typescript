@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const Container = styled.div`
   position: relative;
   height: 13rem;
+  margin-bottom: 1em;
 
   &:after {
     content: 'Calculating Direction ...';

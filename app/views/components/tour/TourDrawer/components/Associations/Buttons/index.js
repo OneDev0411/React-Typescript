@@ -4,9 +4,7 @@ import Flex from 'styled-flex-component'
 
 import Button from '../../../../../Button/TextIconButton'
 import IconContact from '../../../../../SvgIcons/Contacts/IconContacts'
-// import IconListing from '../../../../../SvgIcons/Properties/IconProperties'
 import { AddContactAssociation } from '../../../../../AddContactAssociations'
-// import { AddListingAssociation } from '../../../../../AddListingAssociations'
 
 const Container = Flex.extend`
   margin-bottom: 1.5em;

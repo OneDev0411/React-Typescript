@@ -29,7 +29,7 @@ import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
-import { Map } from './components/Map'
+import { Locations } from './components/Locations'
 import { Section } from './components/Section'
 import { Associations } from './components/Associations'
 
@@ -165,10 +165,13 @@ export class TourDrawer extends React.Component {
     return Promise.resolve()
   }
 
-  handleDeleteAssociation = async (associationId, tourId) => {
-    if (tourId && associationId) {
+  handleDeleteAssociation = async association => {
+    if (association.id) {
       try {
-        const response = await deleteTaskAssociation(tourId, associationId)
+        const response = await deleteTaskAssociation(
+          association.id,
+          association.crm_task
+        )
 
         return response
       } catch (error) {
@@ -198,12 +201,7 @@ export class TourDrawer extends React.Component {
             initialValues={this.props.initialValues}
             load={this.load}
             postLoadFormat={tour =>
-              postLoadFormat(
-                tour,
-                user,
-                defaultAssociation,
-                this.props.listings
-              )
+              postLoadFormat(tour, user, this.props.listings)
             }
             preSaveFormat={(values, originalValues) =>
               preSaveFormat(values, originalValues, user)
@@ -212,7 +210,7 @@ export class TourDrawer extends React.Component {
             render={formProps => {
               const { values } = formProps
 
-              // console.log(values)
+              console.log(values)
 
               return (
                 <FormContainer
@@ -237,9 +235,10 @@ export class TourDrawer extends React.Component {
                   </Section>
 
                   <Section label="Properties">
-                    {this.props.isOpen && (
-                      <Map listings={this.props.listings} />
-                    )}
+                    <Locations
+                      locations={values.locations}
+                      handleDelete={this.handleDeleteAssociation}
+                    />
                   </Section>
 
                   {!isSoloActiveTeam(user) && (

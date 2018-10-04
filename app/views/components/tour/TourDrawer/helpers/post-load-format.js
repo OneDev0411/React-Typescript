@@ -1,5 +1,6 @@
 import { getAssociations } from '../../../EventDrawer/helpers/get-associations'
 import { getReminderLabel } from '../../../EventDrawer/helpers/get-reminder-label'
+import { normalizeListing } from '../../../../utils/association-normalizers'
 
 /**
  * Format form data for api model
@@ -8,7 +9,7 @@ import { getReminderLabel } from '../../../EventDrawer/helpers/get-reminder-labe
  * @param {object} defaultAssociation The default association
  * @returns {Promise} a formated Task
  */
-export async function postLoadFormat(task, owner, defaultAssociation) {
+export async function postLoadFormat(task, owner, listings) {
   const REMINDER_DEFAULT_LABEL = '15 Minutes Before'
 
   let reminder = {
@@ -16,12 +17,21 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     value: REMINDER_DEFAULT_LABEL
   }
 
+  let locations = []
+
+  if (listings && listings.length > 0) {
+    locations = listings.map(listing => ({
+      association_type: 'listing',
+      listing: normalizeListing(listing)
+    }))
+  }
+
   if (!task) {
     return {
       assignees: [owner],
-      associations: defaultAssociation ? [defaultAssociation] : [],
       dueDate: new Date(),
       reminder,
+      locations,
       task_type: 'tour'
     }
   }
