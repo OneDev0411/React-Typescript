@@ -21,7 +21,7 @@ function TaskPage(props) {
         background: '#f0f4f7'
       }}
     >
-      <Header title={`${title} Task`} />
+      <Header title={`${title} Event`} />
       <Task
         task={task}
         taskId={id}
