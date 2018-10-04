@@ -7,7 +7,6 @@ import { Item } from './Item'
 import { SearchInput } from './SearchInput'
 import ArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import ActionButton from '../Button/ActionButton'
-import { grey } from '../../utils/colors'
 
 export const Button = ActionButton.extend`
   position: relative;
@@ -16,10 +15,6 @@ export const Button = ActionButton.extend`
   align-items: center;
   justify-content: ${props => (props.fullWidth ? 'space-between' : 'initial')};
   font-weight: normal;
-
-  &:focus {
-    background-color: ${grey.A100};
-  }
 `
 
 export const Icon = ArrowDropDown.extend`
