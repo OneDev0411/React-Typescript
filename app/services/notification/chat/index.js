@@ -221,8 +221,6 @@ export default class ChatNotification extends NotificationService {
   async onShareSomething(chatroom, notification) {
     const { subjects, objects } = notification
 
-    console.log('new share received')
-
     const message = {
       ...objects[0],
       ...{ author: subjects[0] }
