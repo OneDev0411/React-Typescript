@@ -163,7 +163,7 @@ class SectionWithFields extends React.Component {
             }}
           >
             {value ? getFormater(field)(value) : '-'}
-            {value &&
+            {/* {value &&
               field.is_primary && (
                 <Tooltip caption="Primary">
                   <StarIcon
@@ -175,7 +175,7 @@ class SectionWithFields extends React.Component {
                     }}
                   />
                 </Tooltip>
-              )}
+              )} */}
           </dd>
         ]
       })
