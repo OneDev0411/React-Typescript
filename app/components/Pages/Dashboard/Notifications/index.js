@@ -78,12 +78,20 @@ class Notifications extends Component {
                 `${
                   subject.profile_image_url
                     ? `bg-url(${subject.profile_image_url})`
-                    : 'bg-ccc'
+                    : 'bg-000'
                 } ${common_image_style}`
               )}
             >
               {!subject.profile_image_url && (
-                <div style={S('color-fff text-center font-10 mt-10')}>
+                <div
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '10px',
+                    marginTop: '10px',
+                    textAlign: 'center',
+                    fontWeight: '700'
+                  }}
+                >
                   No <br />image
                 </div>
               )}
@@ -143,12 +151,20 @@ class Notifications extends Component {
                 `${
                   subject.cover_image_url
                     ? `bg-url(${subject.cover_image_url})`
-                    : 'bg-ccc'
+                    : 'bg-000'
                 } ${common_image_style}`
               )}
             >
               {!subject.cover_image_url && (
-                <div style={S('color-fff text-center font-10 mt-10')}>
+                <div
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '10px',
+                    marginTop: '10px',
+                    textAlign: 'center',
+                    fontWeight: '700'
+                  }}
+                >
                   No <br />image
                 </div>
               )}
@@ -164,12 +180,20 @@ class Notifications extends Component {
                 `${
                   subject.cover_image_url
                     ? `bg-url(${subject.cover_image_url})`
-                    : 'bg-ccc'
+                    : 'bg-000'
                 } ${common_image_style}`
               )}
             >
               {!subject.cover_image_url && (
-                <div style={S('color-fff text-center font-10 mt-10')}>
+                <div
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '10px',
+                    marginTop: '10px',
+                    textAlign: 'center',
+                    fontWeight: '700'
+                  }}
+                >
                   No <br />image
                 </div>
               )}
@@ -185,12 +209,20 @@ class Notifications extends Component {
                 `${
                   subject.cover_image_url
                     ? `bg-url(${subject.cover_image_url})`
-                    : 'bg-ccc'
+                    : 'bg-000'
                 } ${common_image_style}`
               )}
             >
               {!subject.cover_image_url && (
-                <div style={S('color-fff text-center font-10 mt-10')}>
+                <div
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '10px',
+                    marginTop: '10px',
+                    textAlign: 'center',
+                    fontWeight: '700'
+                  }}
+                >
                   No <br />image
                 </div>
               )}
@@ -285,12 +317,7 @@ class Notifications extends Component {
   }
   render() {
     return (
-      <div
-        style={{
-          boxShadow:
-            '-1px 0 2px 0 rgba(0,0,0,0.04), -1px 0 20px 0 rgba(0,0,0,0.1)'
-        }}
-      >
+      <div>
         <Header />
         <div style={{ position: 'relative' }}>
           <div

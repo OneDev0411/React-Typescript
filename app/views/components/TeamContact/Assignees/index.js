@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
+import uniqBy from 'lodash/uniqBy'
 
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
 import { getUserTitle } from '../../../../models/user/helpers'
@@ -49,7 +50,10 @@ export class Assignees extends React.Component {
 
       const members = await getMembers(this.props.owner)
 
-      this.setState({ isFetching: false, members: members || [] })
+      this.setState({
+        isFetching: false,
+        members: members ? uniqBy(members, 'id') : []
+      })
     } catch (error) {
       console.log(error)
       this.setState({ isFetching: false })

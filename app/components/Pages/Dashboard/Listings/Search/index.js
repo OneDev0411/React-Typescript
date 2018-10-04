@@ -137,7 +137,7 @@ class Search extends React.Component {
 
   handleSaveSearch = () => {
     if (this.props.listings.info.total < 400) {
-      return () => this.setState({ shareModalIsActive: true })
+      return this.setState({ shareModalIsActive: true })
     }
 
     this.props.dispatch(

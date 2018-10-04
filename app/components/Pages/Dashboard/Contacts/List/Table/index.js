@@ -102,20 +102,20 @@ class ContactsList extends React.Component {
     },
     {
       display: ({ selectedRows }) => selectedRows.length >= 2,
-      render: ({ selectedRows }) => (
+      render: ({ selectedRows, resetSelectedRows }) => (
         <MergeContacts
           selectedRows={selectedRows}
           rowsUpdating={this.props.rowsUpdating}
-          resetSelectedRows={this.props.resetSelectedRows}
+          resetSelectedRows={resetSelectedRows}
         />
       )
     },
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => (
+      render: ({ selectedRows, resetSelectedRows }) => (
         <TagContacts
           selectedRows={selectedRows}
-          resetSelectedRows={this.props.resetSelectedRows}
+          resetSelectedRows={resetSelectedRows}
         />
       )
     },
@@ -157,8 +157,7 @@ class ContactsList extends React.Component {
           plugins={{
             selectable: {
               persistent: true,
-              storageKey: 'contacts',
-              onChange: this.props.onChangeSelectedRows
+              storageKey: 'contacts'
             },
             loadable: {
               accuracy: 300, // px
