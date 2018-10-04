@@ -17,6 +17,7 @@ export async function postLoadFormat(task, owner, listings) {
     value: REMINDER_DEFAULT_LABEL
   }
 
+  let clients = []
   let locations = []
 
   if (listings && listings.length > 0) {
@@ -29,9 +30,10 @@ export async function postLoadFormat(task, owner, listings) {
   if (!task) {
     return {
       assignees: [owner],
+      clients,
       dueDate: new Date(),
-      reminder,
       locations,
+      reminder,
       task_type: 'tour'
     }
   }
@@ -67,11 +69,28 @@ export async function postLoadFormat(task, owner, listings) {
     task.assignees = []
   }
 
-  task.associations = await getAssociations(task)
+  const allAssociations = await getAssociations(task)
+
+  if (allAssociations.length > 0) {
+    allAssociations.forEach(a => {
+      switch (a.association_type) {
+        case 'contact':
+          clients.push(a)
+          break
+        case 'listing':
+          locations.push(a)
+          break
+        default:
+          break
+      }
+    })
+  }
 
   return {
     ...task,
     reminder,
+    clients,
+    locations,
     dueDate: new Date(dueDate)
   }
 }

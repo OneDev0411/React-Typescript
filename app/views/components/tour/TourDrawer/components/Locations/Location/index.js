@@ -22,8 +22,6 @@ export class Location extends React.Component {
   render() {
     const listing = this.props.location[this.props.location.association_type]
 
-    console.log(this.props)
-
     return (
       <Container>
         <Flex alignCenter justifyBetween style={{ padding: '0 0.5em' }}>

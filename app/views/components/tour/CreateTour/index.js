@@ -29,7 +29,7 @@ export class CreateTour extends React.Component {
             user={this.props.user}
             onClose={this.handleClose}
             listings={this.props.listings}
-            submitCallback={this.props.resetSelectedRows}
+            submitCallback={this.handleClose}
           />
         )}
       </Fragment>

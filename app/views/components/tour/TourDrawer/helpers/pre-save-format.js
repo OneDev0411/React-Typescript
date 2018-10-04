@@ -13,7 +13,8 @@ export async function preSaveFormat(values, originalValues) {
     reminder,
     description,
     assignees,
-    associations
+    clients,
+    locations
   } = values
 
   // console.log('pre save', values.dueDate, values.reminder.value)
@@ -54,22 +55,29 @@ export async function preSaveFormat(values, originalValues) {
     task.reminders = []
   }
 
-  if (
-    !originalValues &&
-    Array.isArray(associations) &&
-    associations.length > 0
-  ) {
-    task.associations = []
-    associations.forEach(item => {
-      const { association_type } = item
+  let associations = []
 
-      if (association_type) {
-        task.associations.push({
-          association_type,
-          [association_type]: item[association_type].id
-        })
-      }
-    })
+  const addAssociation = (association, type) => {
+    const { association_type } = association
+
+    if (association_type && association_type === type) {
+      associations.push({
+        association_type,
+        [association_type]: association[association_type].id
+      })
+    }
+  }
+
+  if (!originalValues && Array.isArray(locations) && locations.length > 0) {
+    locations.forEach(l => addAssociation(l, 'listing'))
+  }
+
+  if (!originalValues && Array.isArray(clients) && clients.length > 0) {
+    clients.forEach(c => addAssociation(c, 'contact'))
+  }
+
+  if (associations.length > 0) {
+    task.associations = associations
   }
 
   if (originalValues) {
