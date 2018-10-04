@@ -12,6 +12,7 @@ const Icon = CloseIcon.extend`
   position: absolute;
   top: 50%;
   left: 50%;
+  z-index: 2;
   transform: translate(-50%, -50%);
 
   opacity: 0;
@@ -34,6 +35,7 @@ const Button = IconButton.extend`
       height: 100%;
       border-radius: 100%;
       background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1;
     }
 
     > ${Icon} {
