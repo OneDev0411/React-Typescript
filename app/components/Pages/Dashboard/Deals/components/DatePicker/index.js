@@ -55,7 +55,7 @@ export default class extends React.Component {
       <div style={{ position: 'relative' }}>
         {show && (
           <ClickOutSide onClickOutside={this.onClose}>
-            <PickerContainer depth={3}>
+            <PickerContainer depth={3} style={this.props.containerStyle}>
               <DatePicker
                 selectedDays={date}
                 month={date}

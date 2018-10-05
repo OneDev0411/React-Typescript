@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
@@ -145,6 +145,8 @@ class Factsheet extends React.Component {
             if (isActiveContext) {
               return (
                 <Item key={field.name} showBorder isDateContext>
+                  {isDateContext && <ItemLabel>{field.label}</ItemLabel>}
+
                   <Editable
                     field={field}
                     isDateContext={isDateContext}

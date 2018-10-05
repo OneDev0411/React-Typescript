@@ -29,6 +29,10 @@ export default class Editable extends React.Component {
       return (
         <DatePicker
           show
+          containerStyle={{
+            right: '0',
+            left: 'inherit'
+          }}
           saveText="Save Date"
           initialDate={new Date()}
           onClose={this.props.onCancel}
