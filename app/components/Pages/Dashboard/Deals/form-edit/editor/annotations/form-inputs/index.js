@@ -4,10 +4,7 @@ import CheckboxAnnotation from './checkbox'
 import RadioAnnotation from './radio'
 import TextInputAnnotation from './text-input'
 
-const TEXT_ANNOTATION = 1
-const RADIO_ANNOTATION = 2
-const CHECKBOX_ANNOTATION = 3
-const UNKNOWN_ANNOTATION = 4
+import { getType, getValue, Types } from '../../../utils/types'
 
 export default class FormInputs extends React.Component {
   state = {
@@ -18,33 +15,13 @@ export default class FormInputs extends React.Component {
     this.setDefaultValues()
   }
 
-  getValue(annotation) {
-    const { fieldValue, buttonValue } = annotation
-
-    const type = this.getType(annotation)
-
-    if (type === TEXT_ANNOTATION) {
-      return fieldValue || ''
-    }
-
-    if (type === CHECKBOX_ANNOTATION) {
-      return fieldValue && fieldValue !== 'Off'
-    }
-
-    if (type === RADIO_ANNOTATION) {
-      return fieldValue === buttonValue
-    }
-
-    return ''
-  }
-
   setDefaultValues() {
     const values = {}
 
     this.props.annotations.forEach(annotation => {
       const { fieldName } = annotation
 
-      values[fieldName] = this.getValue(annotation)
+      values[fieldName] = getValue(annotation)
     })
 
     this.props.onSetValues(values, true)
@@ -52,28 +29,12 @@ export default class FormInputs extends React.Component {
     this.setState({ isLoaded: true })
   }
 
-  getType(annotation) {
-    if (annotation.fieldType === 'Tx') {
-      return TEXT_ANNOTATION
-    }
-
-    if (annotation.fieldType === 'Btn') {
-      if (annotation.fieldFlags & 32768) {
-        return RADIO_ANNOTATION
-      }
-
-      return CHECKBOX_ANNOTATION
-    }
-
-    return UNKNOWN_ANNOTATION
-  }
-
   createInput = (info, index) => {
     const { values } = this.props
 
     const { annotation } = info
 
-    const type = this.getType(annotation)
+    const type = getType(annotation)
     const value = values[annotation.fieldName]
 
     const props = {
@@ -86,14 +47,14 @@ export default class FormInputs extends React.Component {
     // Annotations like Signature which we dont support in here.
     // Please note that we do support Signatures through text boxes
     // Which have specific directions in their calculate field
-    if (type === UNKNOWN_ANNOTATION)
+    if (type === Types.UNKNOWN_ANNOTATION)
       return null
 
-    if (type === CHECKBOX_ANNOTATION) {
+    if (type === Types.CHECKBOX_ANNOTATION) {
       return <CheckboxAnnotation {...props} />
     }
 
-    if (type === RADIO_ANNOTATION) {
+    if (type === Types.RADIO_ANNOTATION) {
       return <RadioAnnotation {...props} />
     }
 
