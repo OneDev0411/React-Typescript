@@ -1,7 +1,7 @@
 import _ from 'underscore'
 import * as actionTypes from '../../constants/deals'
 
-export default (state = null, action) => {
+export default (state = {}, action) => {
   switch (action.type) {
     case actionTypes.NO_DEAL:
     case actionTypes.CLEAR_DEALS:

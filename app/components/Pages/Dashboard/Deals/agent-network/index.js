@@ -8,7 +8,7 @@ import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-point
 import getPlace from '../../../../../models/listings/search/get-place'
 import { getAddress } from '../../../../../models/Deal/context-helper'
 import { byValert } from '../../../../../models/listings/search/get-listings'
-import { selectDeal } from '../../../../../reducers/deals/list'
+import { selectDealById } from '../../../../../reducers/deals/list'
 import getListing from '../../../../../models/listings/listing/get-listing'
 
 import Header from '../../../../../views/components/PageHeader'
@@ -169,7 +169,7 @@ class AgentNetwork extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  deal: selectDeal(state.deals.list, props.params.id)
+  deal: selectDealById(state.deals.list, props.params.id)
 })
 
 export default withRouter(connect(mapStateToProps)(AgentNetwork))

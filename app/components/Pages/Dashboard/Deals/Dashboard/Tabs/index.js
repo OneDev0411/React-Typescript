@@ -1,26 +1,53 @@
 import React from 'react'
-import { Container, TabItem } from './styled'
+import { Container, NavBar, NavItem, TabContent } from './styled'
+
+import ChecklistsPane from './Panes/Checklist'
+import FileManagerPane from './Panes/FileManager'
+import EventsPane from './Panes/Events'
+import MarketingPane from './Panes/Marketing'
 
 export default class Tabs extends React.Component {
   tabs = [
-    { id: 'checklists', label: 'Checklists' },
-    { id: 'files', label: 'Files' },
-    { id: 'events', label: 'Events' },
-    { id: 'marketing', label: 'Marketing' }
+    {
+      id: 'checklists',
+      label: 'Checklists',
+      render: props => <ChecklistsPane {...props} />
+    },
+    {
+      id: 'files',
+      label: 'Files',
+      render: props => <FileManagerPane {...props} />
+    },
+    {
+      id: 'events',
+      label: 'Events',
+      render: props => <EventsPane {...props} />
+    },
+    {
+      id: 'marketing',
+      label: 'Marketing',
+      render: props => <MarketingPane {...props} />
+    }
   ]
 
   render() {
+    const activeTab = this.tabs.find(tab => tab.id === this.props.activeTab)
+
     return (
       <Container>
-        {this.tabs.map(tab => (
-          <TabItem
-            key={tab.id}
-            isActive={tab.id === this.props.activeTab}
-            onClick={() => this.props.onChangeTab(tab)}
-          >
-            {tab.label}
-          </TabItem>
-        ))}
+        <NavBar>
+          {this.tabs.map(tab => (
+            <NavItem
+              key={tab.id}
+              isActive={tab.id === activeTab.id}
+              onClick={() => this.props.onChangeTab(tab)}
+            >
+              {tab.label}
+            </NavItem>
+          ))}
+        </NavBar>
+
+        <TabContent>{activeTab.render(this.props)}</TabContent>
       </Container>
     )
   }

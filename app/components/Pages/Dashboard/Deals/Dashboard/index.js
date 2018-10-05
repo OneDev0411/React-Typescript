@@ -9,17 +9,10 @@ import { getDeal } from 'actions/deals'
 import { selectDealById } from 'reducers/deals/list'
 
 import { PageHeader } from './Header'
-import Checklists from './Checklists'
-import Tabs from './Tabs'
 
-import {
-  Container,
-  PageContent,
-  SideColumnContainer,
-  MainContainer
-} from './styled'
+import TabSections from './Tabs'
 
-import SideNav from './SideNav'
+import { Container } from './styled'
 
 class DealDetails extends React.Component {
   state = {
@@ -52,24 +45,19 @@ class DealDetails extends React.Component {
   render() {
     const { deal } = this.props
 
+    if (!deal) {
+      return false
+    }
+
     return (
       <Container>
         <PageHeader deal={deal} />
 
-        <Tabs
+        <TabSections
+          deal={deal}
           activeTab={this.state.activeTab}
           onChangeTab={this.handleChangeActiveTab}
         />
-
-        {/* <PageContent>
-          <SideColumnContainer>
-            <SideNav deal={deal} />
-          </SideColumnContainer>
-
-          <MainContainer>
-            <Checklists deal={deal} />
-          </MainContainer>
-        </PageContent> */}
       </Container>
     )
   }
