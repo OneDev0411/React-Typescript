@@ -24,34 +24,24 @@ export const Container = styled.div`
   box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.04), -1px 0 20px 0 rgba(0, 0, 0, 0.1);
 `
 
+export const PageContent = styled.div`
+  display: flex;
+  padding: 0 2.5em;
+`
+
+export const SideColumnContainer = styled.div`
+  overflow: hidden;
+  width: 21rem;
+`
+
+export const MainContainer = styled.div`
+  flex: 1;
+  margin-left: 1.5rem;
+`
+
 export const Card = styled(AbstractCard)`
   border-radius: 3px;
   background-color: #ffffff;
   border: solid 1px ${borderColor};
   box-shadow: none;
-`
-
-export const ColumnsContainer = styled.div`
-  padding: 0 2.5em;
-
-  /* 768px */
-  @media (min-width: 48em) {
-    display: flex;
-  }
-`
-
-export const SideColumnContainer = styled.div`
-  overflow: hidden;
-
-  @media (min-width: 48em) {
-    width: 33%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* 1681px */
-  @media (min-width: 105.0625em) {
-    width: 25%;
-    display: block;
-  }
 `

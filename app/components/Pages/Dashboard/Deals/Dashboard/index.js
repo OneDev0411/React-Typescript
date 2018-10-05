@@ -9,15 +9,31 @@ import { getDeal } from 'actions/deals'
 import { selectDealById } from 'reducers/deals/list'
 
 import { PageHeader } from './Header'
+import Checklists from './Checklists'
+import Tabs from './Tabs'
 
-import { Container, ColumnsContainer } from './styled'
+import {
+  Container,
+  PageContent,
+  SideColumnContainer,
+  MainContainer
+} from './styled'
 
 import SideNav from './SideNav'
 
 class DealDetails extends React.Component {
+  state = {
+    activeTab: 'checklists'
+  }
+
   componentDidMount() {
     this.handleNotifications(this.props.deal)
   }
+
+  handleChangeActiveTab = tab =>
+    this.setState({
+      activeTab: tab.id
+    })
 
   handleNotifications(deal) {
     if (!deal || !Array.isArray(deal.new_notifications)) {
@@ -40,9 +56,20 @@ class DealDetails extends React.Component {
       <Container>
         <PageHeader deal={deal} />
 
-        <ColumnsContainer>
-          <SideNav deal={deal} />
-        </ColumnsContainer>
+        <Tabs
+          activeTab={this.state.activeTab}
+          onChangeTab={this.handleChangeActiveTab}
+        />
+
+        {/* <PageContent>
+          <SideColumnContainer>
+            <SideNav deal={deal} />
+          </SideColumnContainer>
+
+          <MainContainer>
+            <Checklists deal={deal} />
+          </MainContainer>
+        </PageContent> */}
       </Container>
     )
   }
