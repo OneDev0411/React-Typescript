@@ -1,16 +1,14 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 import _ from 'underscore'
-import { TextInput } from '../../../../../../../../views/components/Forms/TextInput'
-import { CommissionInput } from '../form-components/commission-input'
-import { TitleDropDown } from '../form-components/title-dropdown'
-import { RolesDropDown } from '../form-components/roles-dropdown'
-import { AutoCompleteInput } from '../form-components/autocomplete-input'
-import { FormType } from '../form-components/type-input'
+import { TextInput } from 'components/Forms/TextInput'
+import { CommissionInput } from '../FormComponents/CommissionInput'
+import { TitleDropDown } from '../FormComponents/TitleDropdown'
+import { RolesDropDown } from '../FormComponents/RolesDropdown'
+import { AutoCompleteInput } from '../FormComponents/AutocompleteInput'
+import { FormType, TYPE_PERSON } from '../FormComponents/TypeInput'
 import { FormContainer } from '../styles'
 import { ROLE_NAMES } from '../../../../utils/roles'
-
-import { TYPE_PERSON } from '../form-components/type-input'
 
 const getDropDownItems = ({ form = {}, singularName, pluralName }) => {
   if (_.size(form) === 0) {

@@ -1,17 +1,13 @@
 import styled from 'styled-components'
+import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 
 export const RolesContainer = styled.div`
-  margin-bottom: 2rem;
+  padding: 1.5rem; /* 24px */
 `
 
-export const RolesTitle = styled.div`
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  color: #1d364b;
-  border-bottom: 1px solid rgba(220, 225, 229, 0.5);
+export const RolesTitle = styled(SectionTitle)`
+  padding: 0;
+  margin-bottom: 1.5rem;
 `
 
 export const RoleActions = styled.div`
@@ -23,15 +19,9 @@ export const RoleActions = styled.div`
 export const RoleItem = styled.div`
   display: flex;
   align-items: center;
-  padding: 5px;
   border-radius: 3px;
-  margin-bottom: 7px;
+  margin-bottom: 1rem;
   cursor: pointer;
-
-  :hover {
-    background: ${props =>
-      props.noBackgroundHover ? 'transparent' : '#f0f4f7'};
-  }
 
   :hover ${RoleActions} {
     opacity: 1;
@@ -40,27 +30,21 @@ export const RoleItem = styled.div`
 
 export const RoleAvatar = styled.div`
   text-align: center;
-  width: 35px;
-
-  img {
-    height: 21px;
-  }
 `
 
 export const RoleInfo = styled.div`
-  width: calc(100% - 35px);
   text-align: left;
-  padding-left: 8px;
+  padding-left: 0.625rem;
 `
 
 export const RoleTitle = styled.div`
   color: #263445;
-  font-weight: 500;
+  font-size: 1rem;
 `
 
 export const RoleType = styled.div`
   font-weight: normal;
   color: #8696a4;
-  font-size: 14px;
+  font-size: 1rem;
   text-decoration: none;
 `

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import OverlayDrawer from '../../../../../../../../views/components/OverlayDrawer'
 
-import Roles from '../../../../components/roles'
+import Roles from '../../../../components/Roles'
 import { getRolesText, getRoleText } from '../../../utils/get-roles-text'
 import { getAnnotationsValues } from '../../../utils/word-wrap'
 

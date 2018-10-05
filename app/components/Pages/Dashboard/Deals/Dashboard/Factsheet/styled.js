@@ -34,6 +34,15 @@ export const Editable = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+
+  input {
+    width: 100%;
+    border: none;
+
+    :focus {
+      outline: none;
+    }
+  }
 `
 
 export const Item = styled.div`
@@ -41,8 +50,9 @@ export const Item = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 1px 0.5rem;
+  border-radius: 3px;
   padding: 0.5rem 1rem;
-  border: dashed 1px ${props => (props.isEditing ? '#0c45e1' : 'transparent')};
+  border: dashed 1px ${props => (props.showBorder ? '#0c45e1' : 'transparent')};
 
   :hover {
     border-radius: 3px;
@@ -58,6 +68,23 @@ export const Item = styled.div`
   :hover ${ItemActions} {
     display: inherit;
   }
+
+  ${props =>
+    props.isDateContext &&
+    `
+    border-color: transparent;
+    :hover {
+      border-color: transparent;
+    }
+  `};
+
+  ${props =>
+    props.isSaving &&
+    `
+    border: 1px solid #eee !important;
+    justify-content: center;
+    cursor: auto !important;
+  `};
 `
 
 export const ActionButton = styled(LinkButton)`

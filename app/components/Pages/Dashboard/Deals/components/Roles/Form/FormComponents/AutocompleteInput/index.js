@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
-import { TextInput } from '../../../../../../../../../views/components/Forms/TextInput'
+import { TextInput } from 'components/Forms/TextInput'
 import {
   AutoCompleteInputContainer,
   AutoCompleteInputOptions,

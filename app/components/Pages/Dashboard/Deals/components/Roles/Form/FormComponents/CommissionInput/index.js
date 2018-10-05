@@ -6,11 +6,11 @@ import {
   CommissionInputContainer
 } from './styled'
 
-import { InputLabel, InputRequired } from 'views/components/Forms/styled'
+import { InputLabel, InputRequired } from 'components/Forms/styled'
 
-import { TextInput } from 'views/components/Forms/TextInput'
+import { TextInput } from 'components/Forms/TextInput'
 
-import { RadioGroup } from 'views/components/Forms/RadioGroupInput'
+import { RadioGroup } from 'components/Forms/RadioGroupInput'
 
 export const CommissionInput = ({
   input,

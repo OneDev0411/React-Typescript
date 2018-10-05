@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'underscore'
 
-import Address from '../../../../components/address'
+import Address from '../../../../components/Address'
 import { getAnnotationsValues } from '../../../utils/word-wrap'
 
 export default class AddressForm extends React.Component {

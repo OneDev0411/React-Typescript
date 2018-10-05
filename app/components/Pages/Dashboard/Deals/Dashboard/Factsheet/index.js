@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import _ from 'underscore'
 
 import Deal from 'models/Deal'
 import DealContext from 'models/DealContext'
@@ -27,13 +28,9 @@ class Factsheet extends React.Component {
     isSavingContext: false
   }
 
-  handleRemoveContext = name => {
-    console.log(name)
-  }
-
-  handleStartEditContext = name => {
+  handleStartEditContext = field => {
     this.setState({
-      activeContext: name
+      activeContext: field.name
     })
   }
 
@@ -42,10 +39,48 @@ class Factsheet extends React.Component {
       activeContext: null
     })
 
-  handleSaveContext = () => {
-    // todo
+  handleChangeContext = (field, value) => {
+    const currentValueObject = DealContext.getValue(this.props.deal, field)
+
+    const isValueChanged = value !== this.getFieldValue(currentValueObject)
+    const isValueValid =
+      _.isUndefined(value) === false && field.validate(field, value)
+
+    if (isValueChanged === false || isValueValid === false) {
+      this.setState({
+        activeContext: false
+      })
+
+      return false
+    }
+
+    this.updateContext(field, value)
+  }
+
+  handleRemoveContext = field => {
+    this.updateContext(field, null)
+  }
+
+  updateContext = async (field, value) => {
     this.setState({
+      activeContext: field.name,
       isSavingContext: true
+    })
+
+    try {
+      await this.props.updateContext(this.props.deal.id, {
+        [field.name]: {
+          value,
+          approved: isBackOffice ? true : !field.needs_approval
+        }
+      })
+    } catch (e) {
+      console.log(e)
+    }
+
+    this.setState({
+      activeContext: false,
+      isSavingContext: false
     })
   }
 
@@ -94,15 +129,28 @@ class Factsheet extends React.Component {
             const valueObject = DealContext.getValue(deal, field)
             const value = this.getFieldValue(valueObject)
             const isApproved = this.isContextApproved(field)
+            const isDateContext = field.data_type === 'Date'
+            const isActiveContext = activeContext === field.name
 
-            if (activeContext === field.name) {
+            // if is saving active context, then show a loader
+            if (isActiveContext && this.state.isSavingContext) {
               return (
-                <Item key={field.name} isEditing>
+                <Item key={field.name} showBorder isSaving>
+                  Saving Field ...
+                </Item>
+              )
+            }
+
+            // if is editing active context, then show editing mode
+            if (isActiveContext) {
+              return (
+                <Item key={field.name} showBorder isDateContext>
                   <Editable
                     field={field}
+                    isDateContext={isDateContext}
                     defaultValue={value}
-                    onClickOutside={this.handleCancleEditContext}
-                    onClickSave={this.handleSaveContext}
+                    onCancel={this.handleCancleEditContext}
+                    onSave={this.handleChangeContext}
                   />
                 </Item>
               )

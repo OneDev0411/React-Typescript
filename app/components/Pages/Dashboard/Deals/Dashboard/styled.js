@@ -11,6 +11,14 @@ export const Divider = styled.div`
   background-color: ${borderColor};
 `
 
+export const FactsheetDivider = styled.div`
+  display: inline-block;
+  width: 3.3rem;
+  height: 1px;
+  margin: 0 1.5rem;
+  background-color: ${borderColor};
+`
+
 export const Container = styled.div`
   min-height: 100vh;
   background-color: #f2f2f2;

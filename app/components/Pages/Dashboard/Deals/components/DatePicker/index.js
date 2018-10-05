@@ -3,9 +3,9 @@ import DatePicker from 'react-day-picker'
 import ClickOutSide from 'react-click-outside'
 import Flex from 'styled-flex-component'
 
-import ActionButton from 'views/components/Button/ActionButton'
-import { PickerContainer } from '../../../../../views/components/DateTimePicker/styled'
-import { Divider } from '../../../../../views/components/Divider'
+import ActionButton from 'components/Button/ActionButton'
+import { PickerContainer } from 'components/DateTimePicker/styled'
+import { Divider } from 'components/Divider'
 
 export default class extends React.Component {
   state = {

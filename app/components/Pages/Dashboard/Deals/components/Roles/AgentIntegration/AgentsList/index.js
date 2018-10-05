@@ -5,13 +5,13 @@ import { Modal } from 'react-bootstrap'
 import UserAvatar from '../../../../../../../Partials/UserAvatar'
 import { roleName } from '../../../../utils/roles'
 
-import { searchContacts } from '../../../../../../../../models/contacts/search-contacts'
-import { normalizeContactAttribute } from '../../../../../../../../store_actions/contacts/helpers/normalize-contacts'
+import { searchContacts } from 'models/contacts/search-contacts'
+import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
 
-import { getActiveTeam } from '../../../../../../../../utils/user-teams'
+import { getActiveTeam } from 'utils/user-teams'
 
-import { getAgents } from '../../../../../../../../models/Deal/agent'
-import Loading from '../../../../../../../Partials/Loading'
+import { getAgents } from 'models/Deal/agent'
+import Loading from 'components/Spinner'
 
 import {
   RoleItem,

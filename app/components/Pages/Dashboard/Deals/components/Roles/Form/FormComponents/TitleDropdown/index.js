@@ -1,5 +1,5 @@
 import React from 'react'
-import { SelectInput } from 'views/components/Forms/SelectInput'
+import { SelectInput } from 'components/Forms/SelectInput'
 
 const OPTIONS = ['Mr', 'Ms', 'Mrs', 'Miss', 'Dr']
 

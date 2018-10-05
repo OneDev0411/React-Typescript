@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import RoleAgentIntegration from '../agent-integration'
+import RoleAgentIntegration from '../AgentIntegration'
 import { ROLE_NAMES, roleName } from '../../../utils/roles'
-import Deal from '../../../../../../../models/Deal'
+import Deal from 'models/Deal'
 import { BasicDropdown } from 'components/BasicDropdown'
 import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
@@ -77,6 +77,7 @@ class AddRoleForm extends React.Component {
     return (
       <Container>
         <BasicDropdown
+          fullWidth
           buttonSize={this.props.buttonSize}
           items={this.getRoleItems()}
           itemToString={this.itemToString}

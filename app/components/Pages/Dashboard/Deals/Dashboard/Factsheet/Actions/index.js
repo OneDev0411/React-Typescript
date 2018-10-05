@@ -7,14 +7,14 @@ import { ItemActions, ActionButton, DeleteButton } from '../styled'
 export default function Actions(props) {
   return (
     <ItemActions>
-      <ActionButton onClick={() => props.onClickEditContext(props.field.name)}>
+      <ActionButton onClick={() => props.onClickEditContext(props.field)}>
         Edit
       </ActionButton>
 
       <DeleteButton
         iconSize="large"
         isFit
-        onClick={() => props.onClickRemoveContext(props.field.name)}
+        onClick={() => props.onClickRemoveContext(props.field)}
       >
         <CloseIcon />
       </DeleteButton>

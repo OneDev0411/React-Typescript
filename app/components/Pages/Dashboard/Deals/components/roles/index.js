@@ -2,16 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import UserAvatar from '../../../../../Partials/UserAvatar'
-import { deleteRole } from '../../../../../../store_actions/deals'
-import { confirmation } from '../../../../../../store_actions/confirmation'
+import UserAvatar from 'components/Avatar'
+import { deleteRole } from 'actions/deals'
+import { confirmation } from 'actions/confirmation'
 import { roleName, getLegalFullName } from '../../utils/roles'
-import RoleCrmIntegration from './crm-integration'
+import RoleCrmIntegration from './CrmIntegration'
 
 import IconButton from 'components/Button/IconButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
-import AddRole from './add-role'
+import AddRole from './AddRole'
 
 import {
   RolesContainer,
@@ -130,7 +130,7 @@ class Roles extends React.Component {
 
     return (
       <RolesContainer style={this.props.containerStyle}>
-        {this.props.showTitle !== false && <RolesTitle>CONTACTS</RolesTitle>}
+        {this.props.showTitle !== false && <RolesTitle>Contacts</RolesTitle>}
 
         {(deal.roles || [])
           .filter(
@@ -148,10 +148,9 @@ class Roles extends React.Component {
               >
                 <RoleAvatar>
                   <UserAvatar
-                    size={32}
+                    size={40}
                     color="#000000"
-                    showStateIndicator={false}
-                    name={this.getAvatarTitle(role)}
+                    title={this.getAvatarTitle(role)}
                     image={user ? user.profile_image_url : null}
                   />
                 </RoleAvatar>

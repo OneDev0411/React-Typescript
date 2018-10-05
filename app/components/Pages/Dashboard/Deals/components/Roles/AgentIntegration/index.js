@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import ContactModal from '../../../../../../../views/components/SelectContactModal'
+import ContactModal from 'components/SelectContactModal'
 import { convertContactToRole, AGENT_ROLES } from '../../../utils/roles'
 
-import RoleCrmIntegration from '../crm-integration'
-import AgentModal from './agents-list'
+import RoleCrmIntegration from '../CrmIntegration'
+import AgentModal from './AgentsList'
 
 const initialState = {
   showAgentModal: false,

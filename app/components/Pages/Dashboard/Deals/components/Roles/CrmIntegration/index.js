@@ -1,22 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import {
-  createRoles,
-  updateRole
-} from '../../../../../../../store_actions/deals'
-import {
-  createContacts,
-  upsertContactAttributes
-} from '../../../../../../../store_actions/contacts'
-import { confirmation } from '../../../../../../../store_actions/confirmation'
+import { createRoles, updateRole } from 'actions/deals'
+import { createContacts, upsertContactAttributes } from 'actions/contacts'
+import { confirmation } from 'actions/confirmation'
 
 import {
   convertRoleToContact,
   getLegalFullName,
   getContactDiff
 } from '../../../utils/roles'
-import RoleForm from '../form'
+import RoleForm from '../Form'
 
 const initialState = {
   isSaving: false

@@ -1,10 +1,10 @@
 import React from 'react'
 import _ from 'underscore'
-import { RoleFormContainer } from './form-container'
+import { RoleFormContainer } from './FormContainer'
 import { ROLE_NAMES } from '../../../utils/roles'
 import { FinalFormDrawer } from 'components/FinalFormDrawer'
 
-import { TYPE_PERSON, TYPE_COMPANY } from './form-components/type-input'
+import { TYPE_PERSON, TYPE_COMPANY } from './FormComponents/TypeInput'
 
 export class RoleFormModal extends React.Component {
   getInitialValues = () => {

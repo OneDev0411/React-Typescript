@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Container } from './styled'
 
-import { RadioGroup } from '../../../../../../../../../views/components/Forms/RadioGroupInput'
+import { RadioGroup } from 'components/Forms/RadioGroupInput'
 
 export const TYPE_PERSON = 'person'
 export const TYPE_COMPANY = 'company'
