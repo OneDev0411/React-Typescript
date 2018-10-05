@@ -51,7 +51,7 @@ export class PreviewTourSheets extends React.Component {
           <TourSheets
             agent={this.props.user}
             isOpen
-            onRequestClose={this.handleClose}
+            handleClose={this.handleClose}
             tour={this.props.tour}
             tourFormDate={this.props.tourFormDate}
           />
