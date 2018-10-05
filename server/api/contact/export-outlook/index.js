@@ -4,10 +4,11 @@ const router = require('koa-router')()
 const PassThrough = require('stream').PassThrough
 const app = new Koa()
 
-router.get('/contacts/export/outlook', async ctx => {
+router.get('/contacts/export/outlook/:brand', async ctx => {
   try {
     const { user } = ctx.session
     const { 'ids[]': ids, 'filters[]': filters } = ctx.query
+    const { brand } = ctx.params
     let data = {}
 
     if (ids) {
@@ -38,6 +39,7 @@ router.get('/contacts/export/outlook', async ctx => {
     ctx.body = ctx
       .fetch('/contacts/outlook.csv', 'POST')
       .set('Authorization', `Bearer ${user.access_token}`)
+      .set({ 'X-RECHAT-BRAND': brand })
       .send(data)
       .on('response', res => {
         ctx.set('Content-Disposition', res.headers['content-disposition'])
