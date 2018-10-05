@@ -13,6 +13,9 @@ export function ListingImage({ deal }) {
       image={imageUrl || placeholderImageUrl}
       title={deal.title}
       placeHolderImage=""
+      statusColor="#35b863"
+      isOnline
+      showStatus
     />
   )
 }
