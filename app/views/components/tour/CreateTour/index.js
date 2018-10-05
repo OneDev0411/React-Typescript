@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 
-import ActionButton from '../../../../views/components/Button/ActionButton'
-import { resetGridSelectedItems } from '../../../../views/components/Grid/Table/Plugins/Selectable'
+import ActionButton from '../../Button/ActionButton'
+import { resetGridSelectedItems } from '../../Grid/Table/Plugins/Selectable'
 
 import { TourDrawer } from '../TourDrawer'
 

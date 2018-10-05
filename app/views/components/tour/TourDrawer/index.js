@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-// import Flex from 'styled-flex-component'
+import Flex from 'styled-flex-component'
 
 import {
   getTask,
@@ -23,9 +23,9 @@ import { Associations } from '../../EventDrawer/components/Associations'
 import { Reminder } from '../../EventDrawer/components/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { DateTimeField, AssigneesField } from '../../final-form-fields'
-
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
+import { PreviewTourSheets } from '../PreviewTourSheets'
 
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
@@ -271,34 +271,52 @@ export class TourDrawer extends React.Component {
 
                     <ItemChangelog item={values} style={{ marginTop: '2em' }} />
                   </FormContainer>
-                  <Footer alignCenter rowReverse>
-                    {!this.isNew && (
-                      <Tooltip placement="top" caption="Delete">
-                        <IconButton
-                          isFit
-                          inverse
-                          type="button"
-                          disabled={isDisabled}
-                          onClick={this.delete}
-                        >
-                          <IconDelete />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                    <Tooltip
-                      placement="left"
-                      caption={
-                        values.title ? '' : "The title is empty. It's required."
-                      }
-                    >
-                      <ActionButton
-                        type="button"
-                        disabled={isDisabled || !values.title}
-                        onClick={this.handleSubmit}
+                  <Footer justifyBetween>
+                    <Flex alignCenter>
+                      {!this.isNew && (
+                        <Tooltip placement="top" caption="Delete">
+                          <IconButton
+                            isFit
+                            inverse
+                            type="button"
+                            disabled={isDisabled}
+                            onClick={this.delete}
+                          >
+                            <IconDelete />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </Flex>
+                    <Flex alignCenter>
+                      <Tooltip
+                        placement="top"
+                        caption="Preview and print tour sheets"
                       >
-                        {isDisabled ? 'Saving...' : 'Save'}
-                      </ActionButton>
-                    </Tooltip>
+                        <PreviewTourSheets
+                          agent={user}
+                          disabled={isDisabled || !values.title}
+                          tourFormDate={values}
+                          style={{ marginRight: '0.5em' }}
+                        />
+                      </Tooltip>
+
+                      <Tooltip
+                        placement="left"
+                        caption={
+                          values.title
+                            ? ''
+                            : "The title is empty. It's required."
+                        }
+                      >
+                        <ActionButton
+                          type="button"
+                          disabled={isDisabled || !values.title}
+                          onClick={this.handleSubmit}
+                        >
+                          {isDisabled ? 'Saving...' : 'Save'}
+                        </ActionButton>
+                      </Tooltip>
+                    </Flex>
                   </Footer>
                 </div>
               )
