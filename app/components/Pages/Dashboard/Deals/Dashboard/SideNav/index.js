@@ -10,7 +10,11 @@ export default function SideNav(props) {
 
   return (
     <SideColumnContainer>
-      <Card>
+      <Card
+        style={{
+          padding: '1.5rem 0'
+        }}
+      >
         <FactsheetSection
           deal={deal}
           section="CriticalDates"

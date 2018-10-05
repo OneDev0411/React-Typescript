@@ -1,12 +1,10 @@
 import styled from 'styled-components'
 import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 
-export const RolesContainer = styled.div`
-  padding: 1.5rem; /* 24px */
-`
+export const RolesContainer = styled.div``
 
 export const RolesTitle = styled(SectionTitle)`
-  padding: 0;
+  padding: 0 1.5rem;
   margin-bottom: 1.5rem;
 `
 
@@ -21,7 +19,14 @@ export const RoleItem = styled.div`
   align-items: center;
   border-radius: 3px;
   margin-bottom: 1rem;
+  padding: 0 1.5rem;
   cursor: pointer;
+
+  :hover {
+    background: ${props =>
+      props.noBackgroundHover ? 'transparent' : '#f0f4f7'};
+    border-radius: 0;
+  }
 
   :hover ${RoleActions} {
     opacity: 1;

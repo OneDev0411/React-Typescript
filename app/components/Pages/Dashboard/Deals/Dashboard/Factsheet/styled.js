@@ -4,16 +4,15 @@ import { H3, H4 } from 'components/Typography/headings'
 import LinkButton from 'components/Button/LinkButton'
 import IconButton from 'components/Button/IconButton'
 
-export const Container = styled.div`
-  padding: 1.5rem 0; /* 24px */
-`
+export const Container = styled.div``
 
 export const SectionTitle = styled(H3)`
   padding: 0 1.5rem;
+  font-weight: bold;
 `
 
 export const ItemsContainer = styled.div`
-  margin-top: 1.5rem;
+  margin-top: 0.75rem;
 `
 
 export const ItemLabel = styled(H4)`
