@@ -1,0 +1,58 @@
+.c-tour-sheets__location-page {
+  font-size: 0.75rem;
+
+  .c-tour-sheets__brand-line {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 1rem;
+    
+    @media print {
+      display: none;
+    }
+  }
+}
+
+.c-tour-sheets__location-page__image {
+  position: relative;
+  height: 10.25rem;
+  margin-bottom: 1.5rem;
+  background-size: cover;
+  
+}
+
+.c-tour-sheets__location-page__location-index {
+  position: absolute;
+  width: 4rem;
+  height: 2.5rem;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 1.125rem;
+  font-weight: 600;
+  background-color: #fff;
+
+  > svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+.c-tour-sheets__location-page__title {
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.c-tour-sheets__location-page__description {
+  margin-bottom: 1.5rem;
+  font-size: 0.75rem;
+
+  @media print {
+    text-align: justify;
+  }
+}
+
+.c-tour-sheets__location-page__note-lines {
+  height: 1px;
+  margin-bottom: 1.5rem;
+  background-color: #d4d4d4;
+}

@@ -9,11 +9,11 @@ const propTypes = {
   agent: PropTypes.shape().isRequired,
   appearance: PropTypes.string,
   disabled: PropTypes.bool,
+  listings: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   size: PropTypes.string,
   style: PropTypes.shape(),
   title: PropTypes.string,
-  tour: PropTypes.shape(),
-  tourFormDate: PropTypes.shape()
+  tour: PropTypes.shape()
 }
 
 const defaultProps = {
@@ -21,8 +21,6 @@ const defaultProps = {
   disabled: false,
   size: 'medium',
   style: {},
-  tour: {},
-  tourFormDate: {},
   title: 'Preview'
 }
 
@@ -49,11 +47,11 @@ export class PreviewTourSheets extends React.Component {
 
         {this.state.isOpen && (
           <TourSheets
-            agent={this.props.user}
+            agent={this.props.agent}
             isOpen
             handleClose={this.handleClose}
             tour={this.props.tour}
-            tourFormDate={this.props.tourFormDate}
+            listings={this.props.listings}
           />
         )}
       </Fragment>
