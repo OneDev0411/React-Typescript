@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import merge from 'merge'
 import moment from 'moment'
 
-
 import Deal from '../../../../../../../models/Deal'
 
 import Table from '../../../../../../../views/components/Grid/Table'
@@ -33,19 +32,6 @@ class Grid extends React.Component {
         width: '21%',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
-      },
-      {
-        id: 'status',
-        header: 'Status',
-        width: '15%',
-        accessor: deal => Deal.get.status(deal),
-        sortMethod: statusSortMethod,
-        render: ({ rowData: deal }) => <Status deal={deal} />
-      },
-      {
-        id: 'property-type',
-        header: 'Property Type',
-        accessor: 'property_type'
       },
       {
         id: 'agent-name',
@@ -161,17 +147,17 @@ class Grid extends React.Component {
     const data = this.Data
 
     return (
-        <Table
-          plugins={{
-            sortable: {}
-          }}
-          isFetching={isFetchingDeals}
-          columns={columns}
-          data={data}
-          getTrProps={getGridTrProps}
-          EmptyState={EmptyState}
-          LoadingState={LoadingState}
-        />
+      <Table
+        plugins={{
+          sortable: {}
+        }}
+        isFetching={isFetchingDeals}
+        columns={columns}
+        data={data}
+        getTrProps={getGridTrProps}
+        EmptyState={EmptyState}
+        LoadingState={LoadingState}
+      />
     )
   }
 }

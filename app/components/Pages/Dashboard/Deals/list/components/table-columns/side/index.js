@@ -62,12 +62,11 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
         </Popover>
       }
     >
-      <div className="hoverable inline">
+      <div className="primaryHover inline">
         <span>{sideName}</span>
 
         <span
           style={{
-            color: '#000',
             fontSize: '14px'
           }}
         >

@@ -3,6 +3,7 @@ import { Popover, OverlayTrigger } from 'react-bootstrap'
 
 import DealContext from '../../../../../../../../models/DealContext'
 import CriticalDates from '../../../../dashboard/factsheet/critical-dates'
+import { grey } from '../../../../../../../../views/utils/colors'
 
 export const getNextDateValue = deal => CriticalDates.getNextDateValue(deal)
 
@@ -10,7 +11,7 @@ const CriticalDate = ({ deal, rowId, rowsCount }) => {
   const table = DealContext.getFactsheetSection(deal, 'CriticalDates')
 
   if (table.length === 0) {
-    return <span />
+    return <span style={{ color: grey.A550 }}>No Critical Dates</span>
   }
 
   return (
@@ -26,7 +27,9 @@ const CriticalDate = ({ deal, rowId, rowsCount }) => {
         </Popover>
       }
     >
-      <span className="hoverable">{CriticalDates.getNextDate(deal)}</span>
+      <div className="primaryHover inline">
+        {CriticalDates.getNextDate(deal)}
+      </div>
     </OverlayTrigger>
   )
 }

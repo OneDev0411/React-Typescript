@@ -33,19 +33,6 @@ class Grid extends React.Component {
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
       {
-        id: 'status',
-        header: 'Status',
-        width: '15%',
-        accessor: deal => Deal.get.status(deal),
-        sortMethod: statusSortMethod,
-        render: ({ rowData: deal }) => <Status deal={deal} />
-      },
-      {
-        id: 'checklist-type',
-        header: 'Checklist Type',
-        accessor: 'property_type'
-      },
-      {
         id: 'price',
         header: '$ Price',
         accessor: deal => this.getPriceValue(deal),
@@ -79,7 +66,7 @@ class Grid extends React.Component {
       },
       {
         id: 'agent-name',
-        header: 'Agent Name',
+        header: 'Agent',
         accessor: deal => getPrimaryAgent(deal, roles)
       },
       {
