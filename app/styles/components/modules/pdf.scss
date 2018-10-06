@@ -177,13 +177,3 @@
 .pdf-preview-modal__image {
   max-width: 100%;
 } // c-preview-modal__image
-
-@media print {
-  * {
-    display: none;
-  }
-  canvas,
-  .pdf-page {
-    display: block;
-  }
-}
