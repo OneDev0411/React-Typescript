@@ -19,6 +19,8 @@ import TagsOverlay from '../../components/TagsOverlay'
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
 import { Contact } from './columns/Contact'
+import IconButton from '../../../../../../views/components/Button/IconButton'
+import IconDeleteOutline from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -84,11 +86,21 @@ class ContactsList extends React.Component {
       )
     },
     {
-      type: 'button',
-      text: 'Delete',
-      inverse: true,
       display: ({ selectedRows }) => selectedRows.length > 0,
-      onClick: this.props.onRequestDelete
+      render: ({ selectedRows }) => (
+        <SendMlsListingCard selectedRows={selectedRows}>
+          Marketing
+        </SendMlsListingCard>
+      )
+    },
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: ({ selectedRows, resetSelectedRows }) => (
+        <TagContacts
+          selectedRows={selectedRows}
+          resetSelectedRows={resetSelectedRows}
+        />
+      )
     },
     {
       display: ({ selectedRows }) => selectedRows.length >= 2,
@@ -102,19 +114,14 @@ class ContactsList extends React.Component {
     },
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <TagContacts
-          selectedRows={selectedRows}
-          resetSelectedRows={resetSelectedRows}
-        />
-      )
-    },
-    {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => (
-        <SendMlsListingCard selectedRows={selectedRows}>
-          Marketing
-        </SendMlsListingCard>
+      render: rowData => (
+        <IconButton
+          size="small"
+          appearance="outline"
+          onClick={e => this.props.onRequestDelete(e, rowData)}
+        >
+          <IconDeleteOutline size={24} />
+        </IconButton>
       )
     }
   ]
