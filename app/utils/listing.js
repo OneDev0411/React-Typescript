@@ -67,6 +67,21 @@ export const feetToMeters = foot => foot / ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
 export const localAddress = address =>
   `${address.street_number} ${address.street_name} ST ${address.unit_number}`
 
+export const getListingLocation = (listing) => {
+  if (!listing || !listing.type) {
+    return null
+  }
+  
+  switch (listing.type) {
+    case 'compact_listing':
+      return listing.location
+    case 'listing':
+      return listing.property.address.location
+    default:
+      return null
+  }
+}
+
 export const addressTitle = address => {
   if (!address) {
     return ''
@@ -81,6 +96,36 @@ export const addressTitle = address => {
   return `${street}${
     address.unit_number ? ` Unit ${address.unit_number}` : ''
   }`
+}
+
+export const getListingAddressField = (listing, fieldName) => {
+  if (!listing || !listing.type) {
+    return null
+  }
+
+  switch (listing.type) {
+    case 'compact_listing':
+      return listing.address[fieldName]
+    case 'listing':
+      return listing.property.address[fieldName]
+    default:
+      return null
+  }
+}
+
+export const getListingAddressObj = (listing) => {
+  if (!listing || !listing.type) {
+    return null
+  }
+
+  switch (listing.type) {
+    case 'compact_listing':
+      return listing.address
+    case 'listing':
+      return listing.property.address
+    default:
+      return null
+  }
 }
 
 export const getListingAddress = address => {
