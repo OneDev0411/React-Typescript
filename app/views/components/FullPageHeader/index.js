@@ -16,6 +16,7 @@ export function FullPageHeader(props) {
     <PageHeader
       title={props.title}
       onClickCloseButton={props.handleClose}
+      className={props.className}
       style={{
         height: 'auto',
         margin: '0 2.5rem',
