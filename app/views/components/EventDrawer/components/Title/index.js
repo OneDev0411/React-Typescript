@@ -22,14 +22,18 @@ const Input = styled.input`
 `
 
 Title.propTypes = {
-  fullWidth: PropTypes.bool
+  fullWidth: PropTypes.bool,
+  placeholder: PropTypes.string,
+  style: PropTypes.shape()
 }
 
 Title.defaultProps = {
-  fullWidth: true
+  fullWidth: true,
+  placeholder: 'Add a descriptive title…',
+  style: {}
 }
 
-export function Title() {
+export function Title(props) {
   return (
     <Field
       name="title"
@@ -38,7 +42,8 @@ export function Title() {
           {...input}
           type="text"
           autoComplete="off"
-          placeholder="Add a descriptive title…"
+          style={props.style}
+          placeholder={props.placeholder}
         />
       )}
     />

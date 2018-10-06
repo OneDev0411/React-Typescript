@@ -167,10 +167,13 @@ export class EventDrawer extends Component {
     return Promise.resolve()
   }
 
-  handleDeleteAssociation = async (associationId, eventId) => {
-    if (eventId && associationId) {
+  handleDeleteAssociation = async association => {
+    if (association.id) {
       try {
-        const response = await deleteTaskAssociation(eventId, associationId)
+        const response = await deleteTaskAssociation(
+          association.id,
+          association.crm_task
+        )
 
         return response
       } catch (error) {
@@ -229,7 +232,7 @@ export class EventDrawer extends Component {
                       </Fragment>
                     )}
                   </Flex>
-                  <Description />
+                  <Description placeholder="Add a description about this event" />
                   <EventType />
                   <FieldContainer
                     alignCenter

@@ -59,6 +59,8 @@ export const prepareListingsProperties = (user, listing) => {
     sqft,
     pricePerSquareFoot,
     builtYear,
-    lotSizeArea
+    lotSizeArea,
+    description: property.description,
+    propertyType: property.property_type
   }
 }

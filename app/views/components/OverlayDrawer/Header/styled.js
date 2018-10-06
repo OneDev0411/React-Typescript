@@ -3,7 +3,7 @@ import { merriweatherFamilyStyle } from '../../Typography/styles'
 import { borderColor } from '../../../utils/colors'
 
 export const Container = styled.div`
-  height: 56px;
+  height: 3.5rem;
   position: absolute;
   top: 0;
   left: 0;

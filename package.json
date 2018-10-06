@@ -131,6 +131,7 @@
     "react": "^16.4.1",
     "react-addons-shallow-compare": "^15.6.2",
     "react-avatar": "github:allanhortle/react-avatar",
+    "react-beautiful-dnd": "^9.0.2",
     "react-bootstrap": "^0.31.5",
     "react-burger-menu": "^2.5.2",
     "react-click-outside": "github:tj/react-click-outside",

@@ -218,7 +218,7 @@ class appSideNav extends React.Component {
                       left: 'calc(100% - 24px)'
                     }}
                   >
-                    {appNotifications}
+                    {appNotifications > 99 ? '99+' : appNotifications}
                   </Badge>
                 )}
               </Link>

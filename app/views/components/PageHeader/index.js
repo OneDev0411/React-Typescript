@@ -25,7 +25,8 @@ const propTypes = {
   isFlat: PropTypes.bool,
   title: PropTypes.string,
   subtitle: PropTypes.string,
-  style: PropTypes.shape()
+  style: PropTypes.shape(),
+  className: PropTypes.string
 }
 
 const defaultProps = {
@@ -34,7 +35,8 @@ const defaultProps = {
   isFlat: false,
   style: {},
   title: '',
-  subtitle: ''
+  subtitle: '',
+  className: ''
 }
 
 function PageHeader(props) {
@@ -50,6 +52,7 @@ function PageHeader(props) {
       isFlat={props.isFlat}
       style={props.style}
       hasSubtitle={props.subtitle}
+      className={props.className}
     >
       {title && (
         <PageTitle

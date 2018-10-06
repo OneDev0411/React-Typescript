@@ -50,12 +50,22 @@ class AssociationsComponent extends React.Component {
     }
   }
 
-  removeHandler = async (associationId, eventId) => {
-    await this.props.handleDelete(associationId, eventId)
+  removeHandler = async association => {
+    if (association.id) {
+      await this.props.handleDelete(association)
 
-    this.props.input.onChange(
-      this.props.associations.filter(a => a.id !== associationId)
-    )
+      this.props.input.onChange(
+        this.props.associations.filter(a => a.id !== association.id)
+      )
+    } else {
+      this.props.input.onChange(
+        this.props.associations.filter(
+          a =>
+            a[a.association_type].id !==
+            association[association.association_type].id
+        )
+      )
+    }
   }
 
   isRemovable = association => {
@@ -92,6 +102,7 @@ class AssociationsComponent extends React.Component {
       <React.Fragment>
         <Flex>
           <AssociationsButtons
+            activeButtons={this.props.activeButtons}
             onClick={this.addHandler}
             associations={associations}
             handleSelect={this.addHandler}
@@ -120,18 +131,20 @@ class AssociationsComponent extends React.Component {
 }
 
 export function Associations(props) {
-  return (
-    <Field {...props} name="associations" component={AssociationsComponent} />
-  )
+  return <Field {...props} component={AssociationsComponent} />
 }
 
 Associations.propTypes = {
+  activeButtons: PropTypes.arrayOf(PropTypes.string),
   associations: PropTypes.arrayOf(PropTypes.shape()),
+  defaultAssociation: PropTypes.shape(),
   handleCreate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
-  defaultAssociation: PropTypes.shape()
+  name: PropTypes.string
 }
 
 Associations.defaultProps = {
-  associations: []
+  activeButtons: ['contact', 'deal', 'listing'],
+  associations: [],
+  name: 'associations'
 }

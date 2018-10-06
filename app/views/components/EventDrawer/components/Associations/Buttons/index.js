@@ -19,10 +19,15 @@ const Container = Flex.extend`
 `
 
 const propTypes = {
+  activeButtons: PropTypes.arrayOf(PropTypes.string),
   associations: PropTypes.arrayOf(PropTypes.shape()),
   disabled: PropTypes.bool,
   handleSelect: PropTypes.func.isRequired,
   onClick: PropTypes.func.isRequired
+}
+
+const defaultProps = {
+  activeButtons: ['contact', 'deal', 'listing']
 }
 
 export class AssociationsButtons extends React.Component {
@@ -38,34 +43,41 @@ export class AssociationsButtons extends React.Component {
   )
 
   render() {
-    const { disabled } = this.props
+    const { disabled, activeButtons } = this.props
 
     return (
       <Container inline>
-        <AddContactAssociation
-          disabled={disabled}
-          handleAdd={this.props.handleSelect}
-          buttonRenderer={onClick =>
-            this.renderButton(onClick, IconContact, 'Contact')
-          }
-        />
-        <AddListingAssociation
-          disabled={disabled}
-          handleAdd={this.props.handleSelect}
-          buttonRenderer={onClick =>
-            this.renderButton(onClick, IconListing, 'Listing')
-          }
-        />
-        <AddDealAssociation
-          disabled={disabled}
-          handleAdd={this.props.handleSelect}
-          buttonRenderer={onClick =>
-            this.renderButton(onClick, IconDeal, 'Deal')
-          }
-        />
+        {activeButtons.includes('contact') && (
+          <AddContactAssociation
+            disabled={disabled}
+            handleAdd={this.props.handleSelect}
+            buttonRenderer={onClick =>
+              this.renderButton(onClick, IconContact, 'Contact')
+            }
+          />
+        )}
+        {activeButtons.includes('listing') && (
+          <AddListingAssociation
+            disabled={disabled}
+            handleAdd={this.props.handleSelect}
+            buttonRenderer={onClick =>
+              this.renderButton(onClick, IconListing, 'Listing')
+            }
+          />
+        )}
+        {activeButtons.includes('deal') && (
+          <AddDealAssociation
+            disabled={disabled}
+            handleAdd={this.props.handleSelect}
+            buttonRenderer={onClick =>
+              this.renderButton(onClick, IconDeal, 'Deal')
+            }
+          />
+        )}
       </Container>
     )
   }
 }
 
 AssociationsButtons.propTypes = propTypes
+AssociationsButtons.defaultProps = defaultProps
