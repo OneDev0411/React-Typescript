@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import BareModal from '../../BareModal'
-import { FullPageHeader } from '../../FullPageHeader'
 
+import { Header } from './Header'
 import { CoverPage } from './CoverPage'
 import { LocationPage } from './LocationPage'
 import './style.scss'
@@ -17,7 +17,7 @@ TourSheets.propTypes = {
 }
 
 export function TourSheets(props) {
-  const { tour, listings } = props
+  const { tour, listings, handleClose } = props
   const pageTitle = 'Tour Sheets Preview'
   const agent = (tour && tour.created_by) || props.agent
 
@@ -27,23 +27,12 @@ export function TourSheets(props) {
       className="c-tour-sheets"
       overlayClassName="c-tour-sheets-modal"
       contentLabel={pageTitle}
-      onRequestClose={props.handleClose}
+      onRequestClose={handleClose}
     >
-      <FullPageHeader
-        title={pageTitle}
-        handleClose={props.handleClose}
+      <Header
         className="c-tour-sheets-modal__header"
-        style={{
-          position: 'fixed',
-          width: '100%',
-          margin: 0,
-          top: 0,
-          left: 0,
-          right: 0,
-          padding: '1.5rem',
-          backgroundColor: '#FFF',
-          zIndex: 1
-        }}
+        handleClose={handleClose}
+        title={pageTitle}
       />
       <CoverPage tour={tour} listings={listings} agent={agent} />
       {listings.map((listing, index) => (
