@@ -28,6 +28,7 @@ import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { PreviewTourSheets } from '../PreviewTourSheets'
 
 import { preSaveFormat } from './helpers/pre-save-format'
+import { prePreviewFormat } from './helpers/pre-preview-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
 import { Locations } from './components/Locations'
@@ -295,8 +296,11 @@ export class TourDrawer extends React.Component {
                         <PreviewTourSheets
                           agent={user}
                           disabled={isDisabled || !values.title}
-                          tourFormDate={values}
+                          listings={values.locations.map(
+                            l => l.listing.original
+                          )}
                           style={{ marginRight: '0.5em' }}
+                          tour={prePreviewFormat(values, this.state.tour)}
                         />
                       </Tooltip>
 
@@ -305,7 +309,7 @@ export class TourDrawer extends React.Component {
                         caption={
                           values.title
                             ? ''
-                            : "The title is empty. It's required."
+                            : 'The title is empty. It\'s required.'
                         }
                       >
                         <ActionButton

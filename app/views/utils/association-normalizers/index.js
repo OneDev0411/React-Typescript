@@ -107,7 +107,8 @@ export const normalizeListing = listing => {
     location,
     type: 'listing',
     url: `/dashboard/mls/${id}`,
-    details: detailText([listing.status, `$${listing.price.toLocaleString()}`])
+    details: detailText([listing.status, `$${listing.price.toLocaleString()}`]),
+    original: listing
   }
 }
 
