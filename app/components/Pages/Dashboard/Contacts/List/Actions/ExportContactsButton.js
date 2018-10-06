@@ -1,10 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
+
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import { getActiveTeam } from '../../../../../../utils/user-teams'
+import XlsxIcon from '../../../../../../views/components/SvgIcons/Xlsx/XlsxIcon'
 
 const Button = ActionButton.withComponent('a')
-
+const Xlsx = styled(XlsxIcon)`
+  margin-right: 0.5rem;
+`
 const ExportContacts = ({ exportIds, disabled, filters, user }) => {
   const activeTeam = getActiveTeam(user)
   const activeBrand = activeTeam.brand.id
@@ -26,6 +31,7 @@ const ExportContacts = ({ exportIds, disabled, filters, user }) => {
       as="a"
       href={url}
     >
+      <Xlsx />
       Export to Spreadsheet
     </Button>
   )
