@@ -178,6 +178,7 @@ export class SelectablePlugin {
       sortable: false,
       header: () => (
         <CheckBoxButton
+          allSelector
           onClick={this.toggleSelectAllRows}
           isSelected={this.isAllRowsSelected()}
         />

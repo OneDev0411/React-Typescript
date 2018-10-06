@@ -63,7 +63,20 @@ export class CheckBoxButton extends React.Component {
         onClick={this.handleClick}
         isSelected={this.state.isSelected}
       >
-        {this.state.isSelected && <Checkmark />}
+        {this.state.isSelected &&
+          (!this.props.allSelector ? (
+            <Checkmark />
+          ) : (
+            <span
+              style={{
+                color: '#ffffff',
+                marginTop: '-4px',
+                fontSize: '1.5rem'
+              }}
+            >
+              -
+            </span>
+          ))}
       </CheckBox>
     )
   }
