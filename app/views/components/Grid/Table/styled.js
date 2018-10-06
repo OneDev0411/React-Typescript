@@ -25,7 +25,7 @@ export const Row = styled.div`
   display: flex;
   justify-items: center;
   min-height: 4em;
-  padding: 1em 0;
+  padding: 1em 0.5rem;
   border-top: ${border};
 
   ${props =>
