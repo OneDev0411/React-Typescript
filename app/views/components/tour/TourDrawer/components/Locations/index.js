@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
-import { Map } from './Map'
+import { Map } from '../../../Map'
 import { Location } from './Location'
 
 class LocationsComponent extends React.Component {

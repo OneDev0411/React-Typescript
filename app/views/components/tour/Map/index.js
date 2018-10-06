@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import config from '../../../../../../../../config/public'
-import { loadJS } from '../../../../../../../utils/load-js'
+import config from '../../../../../config/public'
+import { loadJS } from '../../../../utils/load-js'
 
 import { Container } from './styled'
 
@@ -60,8 +60,6 @@ export class Map extends React.Component {
         ...this.props.defaultOptions
       }
     )
-
-    console.log(this.getLocations()[0].location)
 
     if (this.props.listings.length === 1) {
       this.setMarker(this.getLocations()[0].location)

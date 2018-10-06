@@ -7,7 +7,7 @@ import { getActiveTeam } from '../../../../../utils/user-teams'
 import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
 import { H1 } from '../../../Typography/headings'
 
-import { Map } from '../../TourDrawer/components/Locations/Map'
+import { Map } from '../../Map'
 
 import '../styles/shared.scss'
 import './style.scss'
