@@ -18,6 +18,7 @@ import { getPrimaryAgent } from '../../../utils/roles'
 import { Filters } from '../filters'
 
 import getGridTrProps from '../../helpers/get-tr-props'
+import AgentAvatars from '../../components/table-columns/AgentAvatars'
 
 class Grid extends React.Component {
   get Columns() {
@@ -27,7 +28,7 @@ class Grid extends React.Component {
       {
         id: 'address',
         header: 'Address',
-        width: '25%',
+        width: '30%',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
@@ -66,7 +67,8 @@ class Grid extends React.Component {
       {
         id: 'agent-name',
         header: 'Agent',
-        accessor: deal => getPrimaryAgent(deal, roles)
+        width: '100px',
+        accessor: deal => <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
       },
       {
         id: 'notification',

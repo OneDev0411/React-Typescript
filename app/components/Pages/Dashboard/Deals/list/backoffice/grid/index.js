@@ -18,7 +18,7 @@ import Notifications from '../../components/table-columns/notification-badge'
 
 import getGridTrProps from '../../helpers/get-tr-props'
 
-import { getPrimaryAgent } from '../../../utils/roles'
+import { getPrimaryAgentName } from '../../../utils/roles'
 
 class Grid extends React.Component {
   get Columns() {
@@ -35,7 +35,7 @@ class Grid extends React.Component {
       {
         id: 'agent-name',
         header: 'Agent Name',
-        accessor: deal => getPrimaryAgent(deal, roles)
+        accessor: deal => getPrimaryAgentName(deal, roles)
       },
       {
         id: 'office',
