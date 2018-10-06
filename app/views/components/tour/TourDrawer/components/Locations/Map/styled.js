@@ -2,8 +2,8 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   position: relative;
-  height: 13rem;
-  margin-bottom: 1em;
+  width: 100%;
+  height: 100%;
 
   &:after {
     content: 'Calculating Direction ...';

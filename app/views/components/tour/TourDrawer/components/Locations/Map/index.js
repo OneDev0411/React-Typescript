@@ -1,9 +1,30 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import config from '../../../../../../../../config/public'
 import { loadJS } from '../../../../../../../utils/load-js'
 
 import { Container } from './styled'
+
+const DEFAULT_OPTIONS = {
+  zoom: 15,
+  center: {
+    lat: 32.7767,
+    lng: -96.797
+  },
+  zoomControl: true,
+  disableDefaultUI: true
+}
+
+const propTypes = {
+  id: PropTypes.string.isRequired,
+  listings: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  defaultOptions: PropTypes.shape()
+}
+
+const defaultProps = {
+  defaultOptions: {}
+}
 
 export class Map extends React.Component {
   state = {
@@ -26,37 +47,51 @@ export class Map extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.locations.length !== prevProps.locations.length) {
+    if (this.props.listings.length !== prevProps.listings.length) {
       this.calculateAndDisplayRoute()
     }
   }
 
   initMap = () => {
-    this.directionsService = new window.google.maps.DirectionsService()
-    this.directionsDisplay = new window.google.maps.DirectionsRenderer()
-
     this.map = new window.google.maps.Map(
-      document.getElementById('tour-direction-map'),
+      document.getElementById(this.props.id),
       {
-        zoom: 15,
-        center: {
-          lat: 32.7767,
-          lng: -96.797
-        },
-        zoomControl: true,
-        disableDefaultUI: true
+        ...DEFAULT_OPTIONS,
+        ...this.props.defaultOptions
       }
     )
 
-    this.directionsDisplay.setMap(this.map)
-    this.calculateAndDisplayRoute()
+    console.log(this.getLocations()[0].location)
+
+    if (this.props.listings.length === 1) {
+      this.setMarker(this.getLocations()[0].location)
+    } else {
+      this.directionsService = new window.google.maps.DirectionsService()
+      this.directionsDisplay = new window.google.maps.DirectionsRenderer()
+      this.directionsDisplay.setMap(this.map)
+      this.calculateAndDisplayRoute()
+    }
   }
 
   getLatLng = listing =>
     `${listing.location.latitude},${listing.location.longitude}`
 
+  getLocations = () => {
+    let locations = []
+
+    this.props.listings.forEach(l => {
+      if (l.location) {
+        locations.push({ location: l.location })
+      } else if (l.property.address.location) {
+        locations.push({ location: l.property.address.location })
+      }
+    })
+
+    return locations
+  }
+
   calculateAndDisplayRoute = () => {
-    const { locations } = this.props
+    const locations = this.getLocations()
 
     if (locations.length === 0) {
       return this.marker.setMap(null)
@@ -113,17 +148,19 @@ export class Map extends React.Component {
     })
 
     this.marker.setMap(this.map)
+    this.map.setCenter(
+      new window.google.maps.LatLng(location.latitude, location.longitude)
+    )
 
     this.setState({ hasMarker: true })
   }
 
   render() {
     return (
-      <Container
-        id="tour-direction-map"
-        isCalculating={this.state.isCalculating}
-        style={{ height: '15rem', width: '100%' }}
-      />
+      <Container id={this.props.id} isCalculating={this.state.isCalculating} />
     )
   }
 }
+
+Map.propTypes = propTypes
+Map.defaultProps = defaultProps

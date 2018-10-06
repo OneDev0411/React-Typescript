@@ -25,7 +25,13 @@ class LocationsComponent extends React.Component {
 
     return (
       <React.Fragment>
-        <Map locations={locations.map(p => p.listing)} />
+        <div style={{ height: '15rem', marginBottom: '1rem' }}>
+          <Map
+            id="tour-direction-map"
+            listings={locations.map(l => l.listing)}
+          />
+        </div>
+
         {locations.map((location, index) => {
           if (!location || !location.association_type) {
             return null

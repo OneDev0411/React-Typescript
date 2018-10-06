@@ -3,13 +3,12 @@ import { Link } from 'react-router'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { getIndexLabel } from '../../../../../../../utils/helpers'
 import Avatar from '../../../../../Avatar'
 import Button from '../../../../../Button/IconButton'
 import IconPinOn from '../../../../../SvgIcons/MapPinOn/IconMapPinOn'
 
 import { Container, Listing, Title, Details, CloseIcon } from './styled'
-
-const ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 
 export class Location extends React.Component {
   static propTypes = {
@@ -27,9 +26,9 @@ export class Location extends React.Component {
         <Flex alignCenter justifyBetween style={{ padding: '0 0.5em' }}>
           <Flex alignCenter>
             <IconPinOn style={{ fill: '#fe2b27' }} />
-            <div style={{ fontSize: '1.5em', fontWeight: 500 }}>{`${
-              ALPHABET[this.props.index]
-            }`}</div>
+            <div
+              style={{ fontSize: '1.5em', fontWeight: 500 }}
+            >{`${getIndexLabel(this.props.index)}`}</div>
           </Flex>
           <Button isFit type="button" onClick={this.onRemove}>
             <CloseIcon />
