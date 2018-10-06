@@ -1,8 +1,16 @@
 import React from 'react'
 import { Dropdown, MenuItem } from 'react-bootstrap'
 
-import IconButton from 'components/Button/IconButton'
-import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
+import IconButtonBase from '../../../../../../../views/components/Button/IconButton'
+import VerticalDotsIcon from '../../../../../../../views/components/SvgIcons/VeriticalDots/VerticalDotsIcon'
+import styled from 'styled-components'
+import { grey } from '../../../../../../../views/utils/colors'
+
+const IconButton = styled(IconButtonBase)`
+  > svg {
+    fill: ${grey.A550};
+  }
+`
 
 const Menu = ({ contactId, handleOnDelete }) => (
   <Dropdown

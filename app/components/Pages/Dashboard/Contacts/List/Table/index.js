@@ -18,8 +18,7 @@ import TagsOverlay from '../../components/TagsOverlay'
 
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
-import { TruncatedColumn } from './styled'
-import { primary, grey } from '../../../../../../views/utils/colors'
+import { Contact } from './columns/Contact'
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -40,16 +39,7 @@ class ContactsList extends React.Component {
       header: 'Contact',
       id: 'contact',
       accessor: contact => getAttributeFromSummary(contact, 'email'),
-      render: ({ rowData: contact }) => (
-        <React.Fragment>
-          <TruncatedColumn>
-            {getAttributeFromSummary(contact, 'email')}
-          </TruncatedColumn>
-          <TruncatedColumn>
-            {getAttributeFromSummary(contact, 'phone_number')}
-          </TruncatedColumn>
-        </React.Fragment>
-      )
+      render: ({ rowData: contact }) => <Contact contact={contact} />
     },
     {
       header: 'Last Touched',
@@ -130,24 +120,14 @@ class ContactsList extends React.Component {
   ]
 
   getGridTrProps = (rowIndex, { isSelected }) => {
-    const hoverStyle = `
-    background-color: ${grey.A000};
-     a {
-      color: ${primary}
-    }
-    `
-
     if (this.props.isRowsUpdating && isSelected) {
       return {
-        hoverStyle,
         style: {
           opacity: 0.5,
           pointerEvents: 'none'
         }
       }
     }
-
-    return { hoverStyle }
   }
 
   render() {

@@ -1,20 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
+import styled from 'styled-components'
+
 import { getContactTags } from '../../../../../../../models/contacts/helpers'
 import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
-import ShadowButton from '../../../../../../../views/components/Button/ShadowButton'
-import { primary } from '../../../../../../../views/utils/colors'
+import ALink from '../../../../../../../views/components/ALink'
+import { grey } from '../../../../../../../views/utils/colors'
 
-const TagsTextContainer = ShadowButton.extend`
-  font-weight: normal;
-  text-align: left;
-  :hover {
-    text-decoration: underline;
-    color: ${primary};
-  }
+const AddTags = styled.span`
+  color: ${grey.A550};
 `
-
 const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
   const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
   const tags = getContactTags(contact, attribute_def)
@@ -22,10 +18,6 @@ const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
   const tagsCount = _.size(tags)
   const showingTags = []
   const getShowingTags = () => showingTags.join(', ')
-
-  if (tagsCount === 0) {
-    return <div style={{ color: '#c5c5c5' }}>No Tags</div>
-  }
 
   _.every(tags, item => {
     if (getShowingTags().length + item.text.length <= 66) {
@@ -40,15 +32,20 @@ const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
   const invisibleTagsCount = tagsCount - showingTags.length
 
   return (
-    <TagsTextContainer
+    <ALink
+      style={{ cursor: 'pointer' }}
       onClick={event => {
         event.stopPropagation()
         onSelectTagContact(contact.id)
       }}
     >
-      {getShowingTags()}
+      {tagsCount === 0 ? (
+        <AddTags className="primaryHover">Add Tags</AddTags>
+      ) : (
+        getShowingTags()
+      )}
       {invisibleTagsCount > 0 && <span> and {invisibleTagsCount} more</span>}
-    </TagsTextContainer>
+    </ALink>
   )
 }
 
