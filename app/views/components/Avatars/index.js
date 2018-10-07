@@ -61,7 +61,7 @@ const Avatars = ({ users, style, tooltipPlacement }) => (
   </React.Fragment>
 )
 
-Avatar.propTypes = propTypes
-Avatar.defaultProps = defaultProps
+Avatars.propTypes = propTypes
+Avatars.defaultProps = defaultProps
 
 export default Avatars

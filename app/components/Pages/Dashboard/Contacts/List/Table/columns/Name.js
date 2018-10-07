@@ -10,6 +10,7 @@ import {
   getAttributeFromSummary
 } from '../../../../../../../models/contacts/helpers'
 import styled from 'styled-components'
+import ImageStatus from '../../../../../../../views/components/ImageStatus'
 
 const AvatarContainer = styled.div`
   position: relative;
@@ -69,19 +70,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           src={avatar}
           size={40}
         />
-        {statusColor && (
-          <div
-            style={{
-              position: 'absolute',
-              width: '10px',
-              height: '10px',
-              backgroundColor: statusColor,
-              borderRadius: '50%',
-              bottom: '0',
-              right: '0'
-            }}
-          />
-        )}
+        <ImageStatus statusColor={statusColor} />
       </AvatarContainer>
       <Link
         to={`/dashboard/contacts/${contact.id}`}
