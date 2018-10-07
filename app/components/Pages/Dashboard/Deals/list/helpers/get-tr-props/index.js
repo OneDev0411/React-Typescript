@@ -6,13 +6,7 @@ export default function(rowIndex, { original: deal }) {
     onClick: () => OpenDeal(deal.id),
     css: `
       cursor: pointer;
-      :hover {
-        background-color: ${grey.A000}
-
-        a {
-          color: ${primary}
-        }
-      }
+      
     `
   }
 }

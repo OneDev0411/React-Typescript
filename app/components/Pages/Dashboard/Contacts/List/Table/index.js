@@ -18,8 +18,9 @@ import TagsOverlay from '../../components/TagsOverlay'
 
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
-import { TruncatedColumn } from './styled'
-import { primary, grey } from '../../../../../../views/utils/colors'
+import { Contact } from './columns/Contact'
+import IconButton from '../../../../../../views/components/Button/IconButton'
+import IconDeleteOutline from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -40,19 +41,10 @@ class ContactsList extends React.Component {
       header: 'Contact',
       id: 'contact',
       accessor: contact => getAttributeFromSummary(contact, 'email'),
-      render: ({ rowData: contact }) => (
-        <React.Fragment>
-          <TruncatedColumn>
-            {getAttributeFromSummary(contact, 'email')}
-          </TruncatedColumn>
-          <TruncatedColumn>
-            {getAttributeFromSummary(contact, 'phone_number')}
-          </TruncatedColumn>
-        </React.Fragment>
-      )
+      render: ({ rowData: contact }) => <Contact contact={contact} />
     },
     {
-      header: 'Last Touched',
+      header: 'Last Touch',
       id: 'last_touched',
       sortable: false,
       render: ({ rowData: contact }) => <LastTouchedCell contact={contact} />
@@ -94,11 +86,21 @@ class ContactsList extends React.Component {
       )
     },
     {
-      type: 'button',
-      text: 'Delete',
-      inverse: true,
       display: ({ selectedRows }) => selectedRows.length > 0,
-      onClick: this.props.onRequestDelete
+      render: ({ selectedRows }) => (
+        <SendMlsListingCard selectedRows={selectedRows}>
+          Marketing
+        </SendMlsListingCard>
+      )
+    },
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: ({ selectedRows, resetSelectedRows }) => (
+        <TagContacts
+          selectedRows={selectedRows}
+          resetSelectedRows={resetSelectedRows}
+        />
+      )
     },
     {
       display: ({ selectedRows }) => selectedRows.length >= 2,
@@ -112,42 +114,27 @@ class ContactsList extends React.Component {
     },
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <TagContacts
-          selectedRows={selectedRows}
-          resetSelectedRows={resetSelectedRows}
-        />
-      )
-    },
-    {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => (
-        <SendMlsListingCard selectedRows={selectedRows}>
-          Marketing
-        </SendMlsListingCard>
+      render: rowData => (
+        <IconButton
+          size="small"
+          appearance="outline"
+          onClick={e => this.props.onRequestDelete(e, rowData)}
+        >
+          <IconDeleteOutline size={24} />
+        </IconButton>
       )
     }
   ]
 
   getGridTrProps = (rowIndex, { isSelected }) => {
-    const hoverStyle = `
-    background-color: ${grey.A000};
-     a {
-      color: ${primary}
-    }
-    `
-
     if (this.props.isRowsUpdating && isSelected) {
       return {
-        hoverStyle,
         style: {
           opacity: 0.5,
           pointerEvents: 'none'
         }
       }
     }
-
-    return { hoverStyle }
   }
 
   render() {

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import merge from 'merge'
 import moment from 'moment'
 
-
 import Deal from '../../../../../../../models/Deal'
 
 import Table from '../../../../../../../views/components/Grid/Table'
@@ -12,7 +11,6 @@ import EmptyState from './empty-state'
 import LoadingState from '../../components/loading-state'
 
 import Address from '../../components/table-columns/address'
-import Status, { statusSortMethod } from '../../components/table-columns/status'
 import CriticalDate, {
   getNextDateValue
 } from '../../components/table-columns/critical-date'
@@ -20,7 +18,7 @@ import Notifications from '../../components/table-columns/notification-badge'
 
 import getGridTrProps from '../../helpers/get-tr-props'
 
-import { getPrimaryAgent } from '../../../utils/roles'
+import { getPrimaryAgentName } from '../../../utils/roles'
 
 class Grid extends React.Component {
   get Columns() {
@@ -30,27 +28,14 @@ class Grid extends React.Component {
       {
         id: 'address',
         header: 'Address',
-        width: '21%',
+        width: '25%',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
       {
-        id: 'status',
-        header: 'Status',
-        width: '15%',
-        accessor: deal => Deal.get.status(deal),
-        sortMethod: statusSortMethod,
-        render: ({ rowData: deal }) => <Status deal={deal} />
-      },
-      {
-        id: 'property-type',
-        header: 'Property Type',
-        accessor: 'property_type'
-      },
-      {
         id: 'agent-name',
         header: 'Agent Name',
-        accessor: deal => getPrimaryAgent(deal, roles)
+        accessor: deal => getPrimaryAgentName(deal, roles)
       },
       {
         id: 'office',
@@ -79,7 +64,7 @@ class Grid extends React.Component {
       {
         id: 'notification',
         header: '',
-        width: '40px',
+        width: '50px',
         render: ({ rowData: deal }) => (
           <Notifications
             count={deal.attention_requests}
@@ -161,17 +146,17 @@ class Grid extends React.Component {
     const data = this.Data
 
     return (
-        <Table
-          plugins={{
-            sortable: {}
-          }}
-          isFetching={isFetchingDeals}
-          columns={columns}
-          data={data}
-          getTrProps={getGridTrProps}
-          EmptyState={EmptyState}
-          LoadingState={LoadingState}
-        />
+      <Table
+        plugins={{
+          sortable: {}
+        }}
+        isFetching={isFetchingDeals}
+        columns={columns}
+        data={data}
+        getTrProps={getGridTrProps}
+        EmptyState={EmptyState}
+        LoadingState={LoadingState}
+      />
     )
   }
 }

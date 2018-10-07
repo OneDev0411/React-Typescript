@@ -21,7 +21,7 @@ export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
       <PageHeader.Menu>
         {/* <Import userId={user.id} /> */}
 
-        <Tooltip caption="Import from CSV Spreadsheet" placement="bottom">
+        <Tooltip caption="From CSV Spreadsheet" placement="bottom">
           <ActionButton
             appearance="outline"
             style={{ marginRight: '1em' }}

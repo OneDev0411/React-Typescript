@@ -8,7 +8,6 @@ import EmptyState from './empty-state'
 import LoadingState from '../../components/loading-state'
 
 import Address from '../../components/table-columns/address'
-import Status, { statusSortMethod } from '../../components/table-columns/status'
 import DealSide from '../../components/table-columns/side'
 import CriticalDate, {
   getNextDateValue
@@ -19,6 +18,7 @@ import { getPrimaryAgent } from '../../../utils/roles'
 import { Filters } from '../filters'
 
 import getGridTrProps from '../../helpers/get-tr-props'
+import AgentAvatars from '../../components/table-columns/AgentAvatars'
 
 class Grid extends React.Component {
   get Columns() {
@@ -28,22 +28,9 @@ class Grid extends React.Component {
       {
         id: 'address',
         header: 'Address',
-        width: '23%',
+        width: '30%',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
-      },
-      {
-        id: 'status',
-        header: 'Status',
-        width: '15%',
-        accessor: deal => Deal.get.status(deal),
-        sortMethod: statusSortMethod,
-        render: ({ rowData: deal }) => <Status deal={deal} />
-      },
-      {
-        id: 'checklist-type',
-        header: 'Checklist Type',
-        accessor: 'property_type'
       },
       {
         id: 'price',
@@ -79,13 +66,14 @@ class Grid extends React.Component {
       },
       {
         id: 'agent-name',
-        header: 'Agent Name',
-        accessor: deal => getPrimaryAgent(deal, roles)
+        header: 'Agent',
+        width: '100px',
+        accessor: deal => <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
       },
       {
         id: 'notification',
         header: '',
-        width: '40px',
+        width: '50px',
         render: ({ rowData: deal }) => (
           <Notification
             count={deal.new_notifications ? deal.new_notifications.length : 0}
