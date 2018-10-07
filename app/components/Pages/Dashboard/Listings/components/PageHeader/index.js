@@ -7,7 +7,7 @@ import PageHeader from '../../../../../../views/components/PageHeader'
 import { ViewSwitcher } from '../../components/ViewSwitcher'
 
 export function Header(props) {
-  const { subtitle } = props
+  const { subtitle, RightComponent } = props
 
   return (
     <PageHeader
@@ -38,6 +38,7 @@ export function Header(props) {
       </Flex>
 
       <PageHeader.Menu>
+        {RightComponent && <RightComponent />}
         <ViewSwitcher
           activeView={props.activeView}
           onChange={props.onChangeView}
