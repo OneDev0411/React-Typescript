@@ -17,5 +17,5 @@ export default function CallToAction({
     isSaving
   }
 
-  return !isBackoffice ? <BackOffice {...props} /> : <Agent {...props} />
+  return isBackoffice ? <BackOffice {...props} /> : <Agent {...props} />
 }
