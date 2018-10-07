@@ -6,7 +6,7 @@ import { Field } from 'react-final-form'
 import { grey } from '../../../../utils/colors'
 
 const Input = styled.input`
-  width: ${props => (props.fullWidth ? '100%' : 'calc(100% - 20px)')};
+  width: 100%;
   padding: 0;
   border-width: 0;
   font-size: 1.5rem;
@@ -37,14 +37,22 @@ export function Title(props) {
   return (
     <Field
       name="title"
-      render={({ input }) => (
-        <Input
-          {...input}
-          type="text"
-          autoComplete="off"
-          style={props.style}
-          placeholder={props.placeholder}
-        />
+      render={({ input, meta }) => (
+        <div
+          style={{
+            width: props.fullWidth ? '100%' : 'calc(100% - 20px)',
+            ...props.style
+          }}
+        >
+          <Input
+            {...input}
+            type="text"
+            autoComplete="off"
+            placeholder={props.placeholder}
+          />
+          {meta.error &&
+            meta.touched && <div style={{ color: 'red' }}>{meta.error}</div>}
+        </div>
       )}
     />
   )
