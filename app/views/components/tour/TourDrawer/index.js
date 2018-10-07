@@ -20,12 +20,12 @@ import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
-import { Associations } from '../../EventDrawer/components/Associations'
 import { Reminder } from '../../EventDrawer/components/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { validate } from '../../EventDrawer/helpers/validate'
 import { DateTimeField, AssigneesField } from '../../final-form-fields'
 import { AddAssociationButton } from '../../AddAssociationButton'
+import { AssociationsList } from '../../final-form-fields/AssociationsList'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 
@@ -265,11 +265,9 @@ export class TourDrawer extends React.Component {
                     )}
 
                     <Section label="Clients">
-                      <Associations
+                      <AssociationsList
                         name="clients"
-                        activeButtons={['contact']}
                         associations={values.clients}
-                        handleCreate={this.handleCreateAssociation}
                         handleDelete={this.handleDeleteAssociation}
                       />
                     </Section>
