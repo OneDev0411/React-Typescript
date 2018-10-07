@@ -7,6 +7,7 @@ import ALink from '../../../../../../../../views/components/ALink'
 import { grey } from '../../../../../../../../views/utils/colors'
 import { getStatusColor } from '../../../../../../../../utils/listing'
 import IconHome from '../../../../../../../../views/components/SvgIcons/NewHome/IconHome'
+import ImageStatus from '../../../../../../../../views/components/ImageStatus'
 
 const Container = styled.div`
   display: flex;
@@ -48,25 +49,18 @@ const Address = ({ deal }) => {
   const status = Deal.get.status(deal)
 
   return (
-    <Container>
-      {photo ? (
-        <Image src={photo} hasPhoto={photo !== null} alt="" />
-      ) : (
-        <IconContainer center>
-          <IconHome />
-        </IconContainer>
-      )}
-      <div
-        style={{
-          position: 'absolute',
-          width: '10px',
-          height: '10px',
-          backgroundColor: `#${getStatusColor(status)}`,
-          borderRadius: '50%',
-          bottom: '13px',
-          left: '22px'
-        }}
-      />
+    <Flex>
+      <Container>
+        {photo ? (
+          <Image src={photo} hasPhoto={photo !== null} alt="" />
+        ) : (
+          <IconContainer center>
+            <IconHome />
+          </IconContainer>
+        )}
+        <ImageStatus statusColor={`#${getStatusColor(status)}`} />
+      </Container>
+
       <Name>
         <ALink
           style={{
@@ -83,7 +77,7 @@ const Address = ({ deal }) => {
           <Status>{status}</Status>
         </SubAddress>
       </Name>
-    </Container>
+    </Flex>
   )
 }
 
