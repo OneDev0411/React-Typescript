@@ -5,6 +5,7 @@ import NewTask from 'views/CRM/Tasks/components/NewTask'
 
 import FactsheetSideNav from '../../components/FactsheetSideNav'
 import { FactsheetContainer, MainContainer, Card } from '../../styled'
+import { TimelineTitle } from './styled'
 
 export default class EventsPane extends React.Component {
   state = {
@@ -58,6 +59,10 @@ export default class EventsPane extends React.Component {
               defaultAssociation={this.DealAssociation}
             />
           </Card>
+
+          <TimelineTitle>Upcoming Events</TimelineTitle>
+
+          <Card>-------</Card>
         </MainContainer>
       </Fragment>
     )
