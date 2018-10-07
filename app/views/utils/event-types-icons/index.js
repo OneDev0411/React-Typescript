@@ -4,6 +4,8 @@ import Text from '../../components/SvgIcons/Text/IconText'
 import Chat from '../../components/SvgIcons/Chat/IconChat'
 import IconMessage from '../../components/SvgIcons/EmailOutline/IconEmailOutline'
 import Email from '../../components/SvgIcons/AtSign/IconAtSign'
+import OpenHouse from '../../components/SvgIcons/OpenHouse/IconOpenHouse'
+import Tour from '../../components/SvgIcons/Tour/IconTour'
 import Other from '../../components/SvgIcons/MenuRounded/IconMenuRounded'
 
 function getIcons() {
@@ -38,6 +40,16 @@ function getIcons() {
       name: 'Email',
       icon: Email,
       color: '#7ED321'
+    },
+    {
+      name: 'Open House',
+      icon: OpenHouse,
+      color: '#50E3C2'
+    },
+    {
+      name: 'Tour',
+      icon: Tour,
+      color: '#BD10E0'
     },
     {
       name: 'Other',
