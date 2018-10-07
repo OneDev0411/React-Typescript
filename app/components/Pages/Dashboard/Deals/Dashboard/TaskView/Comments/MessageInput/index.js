@@ -9,7 +9,7 @@ import { blue } from 'views/utils/colors'
 
 import CommentActions from '../CommentActions'
 
-import { Container, Actions, Textarea, Devider } from './styled'
+import { Container, Actions, Textarea, Divider } from './styled'
 
 class CommentInput extends React.Component {
   state = {
@@ -117,7 +117,7 @@ class CommentInput extends React.Component {
           onHeightChange={height => this.onHeightChangeHandler(height)}
         />
 
-        <Devider />
+        <Divider />
 
         <Actions>
           <CommentActions

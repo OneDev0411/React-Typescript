@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { borderColor } from '../../../../../views/utils/colors'
+import { borderColor } from 'views/utils/colors'
 
 export const Divider = styled.div`
   display: inline-block;

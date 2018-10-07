@@ -110,8 +110,12 @@ class Factsheet extends React.Component {
   }
 
   render() {
-    const { deal, isBackOffice } = this.props
+    const { deal, isBackOffice, display } = this.props
     const { activeContext } = this.state
+
+    if (!display) {
+      return false
+    }
 
     const table = DealContext.getFactsheetSection(deal, this.props.section)
 
@@ -183,7 +187,7 @@ class Factsheet extends React.Component {
           </ItemsContainer>
         </Container>
 
-        {this.props.showDevider && <FactsheetDivider />}
+        {this.props.showDivider && <FactsheetDivider />}
       </Fragment>
     )
   }

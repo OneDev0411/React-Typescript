@@ -34,7 +34,7 @@ export const Textarea = styled(AutoTextarea)`
   }
 `
 
-export const Devider = styled.div`
+export const Divider = styled.div`
   border-bottom: solid 1px #d4d4d4;
   margin: 1rem 0;
 `

@@ -86,7 +86,7 @@ class MultiSelectDropdown extends React.Component {
             appearance="link"
             key={item.label}
             style={{ width: '100%' }}
-            hasDevider={item.selectAll}
+            hasDivider={item.selectAll}
             {...rest}
           >
             <CheckBoxButton

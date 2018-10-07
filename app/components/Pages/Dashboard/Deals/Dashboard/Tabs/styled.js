@@ -1,11 +1,31 @@
 import styled from 'styled-components'
 
+import AbstractCard from 'components/Card'
+import { borderColor } from 'views/utils/colors'
+
 export const Container = styled.div`
   padding: 0 2.5rem;
 `
 
 export const TabContent = styled.div`
   display: flex;
+`
+
+export const Card = styled(AbstractCard)`
+  border-radius: 3px;
+  background-color: #ffffff;
+  border: solid 1px ${borderColor};
+  box-shadow: none;
+`
+
+export const FactsheetContainer = styled.div`
+  overflow: hidden;
+  width: 21rem;
+`
+
+export const MainContainer = styled.div`
+  flex: 1;
+  margin-left: 1.5rem;
 `
 
 export const NavBar = styled.div`

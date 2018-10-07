@@ -18,7 +18,7 @@ import { Container } from './styled'
 
 class DealDetails extends React.Component {
   state = {
-    activeTab: 'checklists'
+    activeTab: 'events'
   }
 
   componentDidMount() {
@@ -57,6 +57,7 @@ class DealDetails extends React.Component {
 
         <TabSections
           deal={deal}
+          user={this.props.user}
           activeTab={this.state.activeTab}
           onChangeTab={this.handleChangeActiveTab}
           isBackOffice={this.props.isBackOffice}
@@ -77,6 +78,7 @@ function mapStateToProps({ deals, user }, { params }) {
   const { selectedTask } = deals.properties
 
   return {
+    user,
     selectedTask: selectTaskById(deals.tasks, selectedTask && selectedTask.id),
     deal: selectDealById(deals.list, params.id),
     isBackOffice: isBackOffice(user)

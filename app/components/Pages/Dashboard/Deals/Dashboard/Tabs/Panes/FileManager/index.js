@@ -1,18 +1,18 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
-// import { FactsheetContainer, MainContainer } from '../styled'
+import SideNav from './SideNav'
+
+import { MainContainer } from './styled'
+import { Card } from '../../styled'
 
 export default function FileManagerPane({ deal }) {
-  return <div>--Files--</div>
-  // return (
-  //   <PageContent>
-  //     <SideColumnContainer>
-  //       <SideNav deal={deal} />
-  //     </SideColumnContainer>
+  return (
+    <Fragment>
+      <SideNav deal={deal} />
 
-  //     <MainContainer>
-  //       <Checklists deal={deal} />
-  //     </MainContainer>
-  //   </PageContent>
-  // )
+      <MainContainer>
+        <Card style={{ padding: '2rem' }}>++----+++</Card>
+      </MainContainer>
+    </Fragment>
+  )
 }
