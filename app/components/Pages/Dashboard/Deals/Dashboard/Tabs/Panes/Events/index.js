@@ -16,12 +16,27 @@ export default class EventsPane extends React.Component {
       timeline: [event, ...state.timeline]
     }))
 
-  render() {
-    const defaultAssociation = {
-      association_type: 'deal',
-      deal: this.props.deal
-    }
+  get DealAssociation() {
+    const { deal } = this.props
 
+    return {
+      association_type: 'deal',
+      deal: {
+        type: 'deal',
+        id: deal.id,
+        title: deal.title,
+        url: `/dashboard/deals/${deal.id}`,
+        details: `${deal.deal_type}, ${deal.property_type}`,
+        avatar: {
+          image: null,
+          placeHolderImage: '/static/icons/listing-place-holder.svg',
+          size: 32
+        }
+      }
+    }
+  }
+
+  render() {
     return (
       <Fragment>
         <FactsheetContainer>
@@ -40,7 +55,7 @@ export default class EventsPane extends React.Component {
             <NewTask
               user={this.props.user}
               submitCallback={this.addEvent}
-              defaultAssociation={defaultAssociation}
+              defaultAssociation={this.DealAssociation}
             />
           </Card>
         </MainContainer>
