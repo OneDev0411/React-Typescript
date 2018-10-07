@@ -9,7 +9,7 @@ import {
 import Tooltip from '../../../../../views/components/tooltip'
 
 const Item = ListItem.extend`
-  justify-content: initial;
+  justify-content: flex-start;
 
   .mls-nav-item--active > & {
     color: ${primary};
