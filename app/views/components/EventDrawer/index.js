@@ -225,12 +225,12 @@ export class EventDrawer extends Component {
                       <Title fullWidth />
                     ) : (
                       <Fragment>
-                        <div style={{ height: '2.25rem' }}>
+                        <Flex alignCenter style={{ height: '2.25rem' }}>
                           <CheckboxField
                             name="status"
                             id="event-drawer__status-field"
                           />
-                        </div>
+                        </Flex>
                         <Title />
                       </Fragment>
                     )}
