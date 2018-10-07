@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { mergeContact } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import IconButton from '../../../../../../views/components/Button/IconButton'
+import IconMerge from '../../../../../../views/components/SvgIcons/Merge/IconMerge'
 
 class MergeContacts extends React.Component {
   onClick = () => {
@@ -23,9 +24,9 @@ class MergeContacts extends React.Component {
   }
   render() {
     return (
-      <ActionButton appearance="outline" onClick={this.onClick} size="small">
-        Merge
-      </ActionButton>
+      <IconButton size="small" appearance="outline" onClick={this.onClick}>
+        <IconMerge />
+      </IconButton>
     )
   }
 }
