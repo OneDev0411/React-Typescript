@@ -20,7 +20,6 @@ const Menu = ({ contactId, handleOnDelete }) => (
   >
     <IconButton
       bsRole="toggle"
-      iconSize="large"
       inverse
       isFit
       onClick={e => console.dir(e.target) || e.stopPropagation()}

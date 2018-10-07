@@ -173,8 +173,7 @@ export class SelectablePlugin {
   registerColumn = columns => {
     const column = {
       id: 'plugin--selectable',
-      width: '40px',
-      verticalAlign: 'center',
+      width: '24px',
       sortable: false,
       header: () => (
         <CheckBoxButton
@@ -185,6 +184,7 @@ export class SelectablePlugin {
       ),
       render: ({ rowData: row }) => (
         <CheckBoxButton
+          style={{ marginTop: '0.5rem' }}
           onClick={() => this.toggleSelectRow(row.id)}
           isSelected={this.isRowSelected(row.id)}
         />
