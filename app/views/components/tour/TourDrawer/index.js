@@ -297,14 +297,14 @@ export class TourDrawer extends React.Component {
                         disabled={isDisabled}
                         type="contact"
                         name="clients"
-                        caption="Add Client"
+                        caption="Attach Client"
                       />
                       <AddAssociationButton
                         associations={values.locations}
                         disabled={isDisabled}
                         type="listing"
                         name="locations"
-                        caption="Add Property"
+                        caption="Attach Property"
                       />
                     </Flex>
                     <Flex alignCenter>
