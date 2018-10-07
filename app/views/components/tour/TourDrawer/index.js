@@ -12,6 +12,7 @@ import {
 } from '../../../../models/tasks'
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
 
+import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
 import IconButton from '../../Button/IconButton'
 import ActionButton from '../../Button/ActionButton'
@@ -23,16 +24,17 @@ import { Associations } from '../../EventDrawer/components/Associations'
 import { Reminder } from '../../EventDrawer/components/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { DateTimeField, AssigneesField } from '../../final-form-fields'
+import { AddAssociationButton } from '../../AddAssociationButton'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
-import { PreviewTourSheets } from '../PreviewTourSheets'
 
 import { preSaveFormat } from './helpers/pre-save-format'
 import { prePreviewFormat } from './helpers/pre-preview-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
-import { Locations } from './components/Locations'
 import { Section } from './components/Section'
+import { Locations } from './components/Locations'
+import { PreviewTourSheets } from '../PreviewTourSheets'
 
 import { Footer } from './styled'
 
@@ -275,22 +277,39 @@ export class TourDrawer extends React.Component {
                   <Footer justifyBetween>
                     <Flex alignCenter>
                       {!this.isNew && (
-                        <Tooltip placement="top" caption="Delete">
-                          <IconButton
-                            isFit
-                            inverse
-                            type="button"
-                            disabled={isDisabled}
-                            onClick={this.delete}
-                          >
-                            <IconDelete />
-                          </IconButton>
-                        </Tooltip>
+                        <React.Fragment>
+                          <Tooltip placement="top" caption="Delete">
+                            <IconButton
+                              isFit
+                              inverse
+                              type="button"
+                              disabled={isDisabled}
+                              onClick={this.delete}
+                            >
+                              <IconDelete />
+                            </IconButton>
+                          </Tooltip>
+                          <Divider margin="0 1rem" width="1px" height="2rem" />
+                        </React.Fragment>
                       )}
+                      <AddAssociationButton
+                        associations={values.clients}
+                        disabled={isDisabled}
+                        type="contact"
+                        name="clients"
+                        caption="Add Client"
+                      />
+                      <AddAssociationButton
+                        associations={values.locations}
+                        disabled={isDisabled}
+                        type="listing"
+                        name="locations"
+                        caption="Add Property"
+                      />
                     </Flex>
                     <Flex alignCenter>
                       <Tooltip
-                        placement="top"
+                        placement="left"
                         caption="Preview and print tour sheets"
                       >
                         <PreviewTourSheets
