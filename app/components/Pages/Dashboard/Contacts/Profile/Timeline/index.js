@@ -7,7 +7,7 @@ import { EventDrawer } from '../../../../../../views/components/EventDrawer'
 
 import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
-import { CRMTaskItem } from './TaskItem'
+import { EventItem } from './EventItem'
 import { EmptyState } from './EmptyState'
 import { Container, Title } from './styled'
 
@@ -33,6 +33,41 @@ export class Timeline extends React.Component {
     this.props.deleteEventHandler(deletedEvent.id)
   }
 
+  renderCRMTaskItem(key, task) {
+    const _props = {
+      contact: this.props.contact,
+      key,
+      task
+    }
+
+    switch (task.task_type) {
+      case 'Tour':
+        return (
+          <EventItem
+            {..._props}
+            onClick={this.onClickEvent}
+            editCallback={this.props.editEventHandler}
+          />
+        )
+      case 'Open House':
+        return (
+          <EventItem
+            {..._props}
+            onClick={this.onClickEvent}
+            editCallback={this.props.editEventHandler}
+          />
+        )
+      default:
+        return (
+          <EventItem
+            {..._props}
+            onClick={this.onClickEvent}
+            editCallback={this.props.editEventHandler}
+          />
+        )
+    }
+  }
+
   renderItems = month => (
     <React.Fragment>
       <Title>
@@ -43,15 +78,7 @@ export class Timeline extends React.Component {
           const key = `timeline_item_${activity.id}`
 
           if (activity.type === 'crm_task') {
-            return (
-              <CRMTaskItem
-                contact={this.props.contact}
-                key={key}
-                task={activity}
-                onClick={this.onClickEvent}
-                editCallback={this.props.editEventHandler}
-              />
-            )
+            return this.renderCRMTaskItem(key, activity)
           }
 
           if (
