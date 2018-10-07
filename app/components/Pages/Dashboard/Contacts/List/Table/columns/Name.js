@@ -12,6 +12,7 @@ import {
 import styled from 'styled-components'
 
 const AvatarContainer = styled.div`
+  position: relative;
   .avatar div {
     font-weight: 700 !important;
   }
@@ -39,6 +40,24 @@ const ContactsListName = ({ contact, attributeDefs }) => {
 
   const name = getAttributeFromSummary(contact, 'display_name')
 
+  let userStatuses = []
+
+  contact.sub_contacts.forEach(
+    ({ users: subContactUsers }) =>
+      subContactUsers &&
+      subContactUsers.forEach(user => userStatuses.push(user.user_status))
+  )
+
+  let statusColor
+
+  if (userStatuses.length > 0) {
+    if (userStatuses[0] === 'Active') {
+      statusColor = '#32b86d'
+    } else {
+      statusColor = '#c3c3c3'
+    }
+  }
+
   return (
     <Flex nowrap>
       <AvatarContainer>
@@ -50,6 +69,19 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           src={avatar}
           size={40}
         />
+        {statusColor && (
+          <div
+            style={{
+              position: 'absolute',
+              width: '10px',
+              height: '10px',
+              backgroundColor: statusColor,
+              borderRadius: '50%',
+              bottom: '0',
+              right: '0'
+            }}
+          />
+        )}
       </AvatarContainer>
       <Link
         to={`/dashboard/contacts/${contact.id}`}

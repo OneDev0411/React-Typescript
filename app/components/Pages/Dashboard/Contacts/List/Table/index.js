@@ -44,7 +44,7 @@ class ContactsList extends React.Component {
       render: ({ rowData: contact }) => <Contact contact={contact} />
     },
     {
-      header: 'Last Touched',
+      header: 'Last Touch',
       id: 'last_touched',
       sortable: false,
       render: ({ rowData: contact }) => <LastTouchedCell contact={contact} />

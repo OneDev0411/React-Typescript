@@ -15,7 +15,7 @@ const Container = Flex.extend`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5em;
+  margin: 0 1.5em;
   border-bottom: 1px solid ${borderColor};
 `
 

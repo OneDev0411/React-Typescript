@@ -12,6 +12,7 @@ import {
 } from '../../../../models/tasks'
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
 
+import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
 import IconButton from '../../Button/IconButton'
 import ActionButton from '../../Button/ActionButton'
@@ -19,20 +20,22 @@ import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
-import { Associations } from '../../EventDrawer/components/Associations'
 import { Reminder } from '../../EventDrawer/components/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
+import { validate } from '../../EventDrawer/helpers/validate'
 import { DateTimeField, AssigneesField } from '../../final-form-fields'
+import { AddAssociationButton } from '../../AddAssociationButton'
+import { AssociationsList } from '../../final-form-fields/AssociationsList'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
-import { PreviewTourSheets } from '../PreviewTourSheets'
 
 import { preSaveFormat } from './helpers/pre-save-format'
 import { prePreviewFormat } from './helpers/pre-preview-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
-import { Locations } from './components/Locations'
 import { Section } from './components/Section'
+import { Locations } from './components/Locations'
+import { PreviewTourSheets } from '../PreviewTourSheets'
 
 import { Footer } from './styled'
 
@@ -172,8 +175,8 @@ export class TourDrawer extends React.Component {
     if (association.id) {
       try {
         const response = await deleteTaskAssociation(
-          association.id,
-          association.crm_task
+          association.crm_task,
+          association.id
         )
 
         return response
@@ -214,6 +217,7 @@ export class TourDrawer extends React.Component {
               preSaveFormat(values, originalValues, user)
             }
             save={this.save}
+            validate={validate}
             render={formProps => {
               const { values } = formProps
 
@@ -229,7 +233,7 @@ export class TourDrawer extends React.Component {
                     <Title
                       fullWidth
                       placeholder="Untitled tour"
-                      style={{ marginBottom: '2rem' }}
+                      style={{ marginBottom: '1.5rem' }}
                     />
                     <Description placeholder="Enter any general notes for your clients" />
 
@@ -261,11 +265,9 @@ export class TourDrawer extends React.Component {
                     )}
 
                     <Section label="Clients">
-                      <Associations
+                      <AssociationsList
                         name="clients"
-                        activeButtons={['contact']}
                         associations={values.clients}
-                        handleCreate={this.handleCreateAssociation}
                         handleDelete={this.handleDeleteAssociation}
                       />
                     </Section>
@@ -275,51 +277,55 @@ export class TourDrawer extends React.Component {
                   <Footer justifyBetween>
                     <Flex alignCenter>
                       {!this.isNew && (
-                        <Tooltip placement="top" caption="Delete">
-                          <IconButton
-                            isFit
-                            inverse
-                            type="button"
-                            disabled={isDisabled}
-                            onClick={this.delete}
-                          >
-                            <IconDelete />
-                          </IconButton>
-                        </Tooltip>
+                        <React.Fragment>
+                          <Tooltip placement="top" caption="Delete">
+                            <IconButton
+                              isFit
+                              inverse
+                              type="button"
+                              disabled={isDisabled}
+                              onClick={this.delete}
+                            >
+                              <IconDelete />
+                            </IconButton>
+                          </Tooltip>
+                          <Divider margin="0 1rem" width="1px" height="2rem" />
+                        </React.Fragment>
                       )}
+                      <AddAssociationButton
+                        associations={values.clients}
+                        disabled={isDisabled}
+                        type="contact"
+                        name="clients"
+                        caption="Add Client"
+                      />
+                      <AddAssociationButton
+                        associations={values.locations}
+                        disabled={isDisabled}
+                        type="listing"
+                        name="locations"
+                        caption="Add Property"
+                      />
                     </Flex>
                     <Flex alignCenter>
-                      <Tooltip
-                        placement="top"
-                        caption="Preview and print tour sheets"
-                      >
+                      <Tooltip caption="Preview and print tour sheets">
                         <PreviewTourSheets
                           agent={user}
-                          disabled={isDisabled || !values.title}
+                          disabled={isDisabled}
                           listings={values.locations.map(
                             l => l.listing.original
                           )}
-                          style={{ marginRight: '0.5em' }}
                           tour={prePreviewFormat(values, this.state.tour)}
                         />
                       </Tooltip>
-
-                      <Tooltip
-                        placement="left"
-                        caption={
-                          values.title
-                            ? ''
-                            : 'The title is empty. It\'s required.'
-                        }
+                      <ActionButton
+                        type="button"
+                        disabled={isDisabled}
+                        onClick={this.handleSubmit}
+                        style={{ marginLeft: '0.5em' }}
                       >
-                        <ActionButton
-                          type="button"
-                          disabled={isDisabled || !values.title}
-                          onClick={this.handleSubmit}
-                        >
-                          {isDisabled ? 'Saving...' : 'Save'}
-                        </ActionButton>
-                      </Tooltip>
+                        {isDisabled ? 'Saving...' : 'Save'}
+                      </ActionButton>
                     </Flex>
                   </Footer>
                 </div>

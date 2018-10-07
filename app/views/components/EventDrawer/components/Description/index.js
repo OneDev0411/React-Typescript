@@ -7,7 +7,8 @@ import { grey } from '../../../../utils/colors'
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 150px;
+  height: 4rem;
+  margin-bottom: 2rem;
   display: block;
   padding: 0;
   border: none;
@@ -36,11 +37,7 @@ export function Description(props) {
     <Field
       name="description"
       render={({ input }) => (
-        <TextArea
-          {...input}
-          placeholder={props.placeholder}
-          style={{ marginBottom: '2em' }}
-        />
+        <TextArea {...input} placeholder={props.placeholder} />
       )}
     />
   )

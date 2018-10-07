@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-// import { Field } from 'react-final-form'
 
 import {
   getTask,
@@ -27,6 +26,7 @@ import {
 import Tooltip from '../tooltip'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
+import { validate } from './helpers/validate'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
@@ -171,8 +171,8 @@ export class EventDrawer extends Component {
     if (association.id) {
       try {
         const response = await deleteTaskAssociation(
-          association.id,
-          association.crm_task
+          association.crm_task,
+          association.id
         )
 
         return response
@@ -209,6 +209,7 @@ export class EventDrawer extends Component {
               preSaveFormat(values, originalValues, user)
             }
             save={this.save}
+            validate={validate}
             render={formProps => {
               const { values } = formProps
 
@@ -219,15 +220,17 @@ export class EventDrawer extends Component {
                   onSubmit={formProps.handleSubmit}
                   id="event-drawer-form"
                 >
-                  <Flex alignCenter style={{ marginBottom: '1.25em' }}>
+                  <Flex style={{ marginBottom: '1.5em' }}>
                     {this.isNew ? (
                       <Title fullWidth />
                     ) : (
                       <Fragment>
-                        <CheckboxField
-                          name="status"
-                          id="event-drawer__status-field"
-                        />
+                        <Flex alignCenter style={{ height: '2.25rem' }}>
+                          <CheckboxField
+                            name="status"
+                            id="event-drawer__status-field"
+                          />
+                        </Flex>
                         <Title />
                       </Fragment>
                     )}

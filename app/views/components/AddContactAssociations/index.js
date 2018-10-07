@@ -28,7 +28,7 @@ export class AddContactAssociation extends React.Component {
       <AddAssociation
         render={({ isActive, handleClose, handleOpen }) => (
           <div>
-            <Tooltip placement="bottom" caption={title}>
+            <Tooltip id={`tooltip_${title}`} caption={title}>
               {this.props.buttonRenderer(handleOpen)}
             </Tooltip>
             <SearchContactDrawer
