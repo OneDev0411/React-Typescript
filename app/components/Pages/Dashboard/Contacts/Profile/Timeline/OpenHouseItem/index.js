@@ -39,15 +39,15 @@ export class OpenHouseItem extends React.Component {
     return (
       <CRMTaskItem
         {...this.props}
-        render={({ onEdit, handleStatus, disabled }) => (
+        render={({ onEdit, statusHandler, disabled }) => (
           <React.Fragment>
             <MetaInfo task={task} onEdit={onEdit} />
             <Assignees task={task} />
             <GeneralInfo
-              task={task}
               disabled={disabled}
-              statusHandler={handleStatus}
               onEdit={onEdit}
+              statusHandler={statusHandler}
+              task={task}
             />
             {listing && (
               <Flex style={{ marginBottom: '1rem' }}>

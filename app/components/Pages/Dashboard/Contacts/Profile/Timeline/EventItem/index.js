@@ -13,14 +13,14 @@ export function EventItem(props) {
   return (
     <CRMTaskItem
       {...props}
-      render={({ onEdit, handleStatus, disabled }) => (
+      render={({ onEdit, statusHandler, disabled }) => (
         <React.Fragment>
           <MetaInfo task={task} onEdit={onEdit} />
           <GeneralInfo
-            task={task}
             disabled={disabled}
-            statusHandler={handleStatus}
             onEdit={onEdit}
+            statusHandler={statusHandler}
+            task={task}
           />
           <Associations task={task} user={props.user} contact={props.contact} />
           <Assignees task={task} />
