@@ -50,7 +50,7 @@ export class OpenHouseItem extends React.Component {
               task={task}
             />
             {listing && (
-              <Flex style={{ marginBottom: '1rem' }}>
+              <Flex style={{ marginBottom: '0.5rem' }}>
                 <MapContainer hasCoverImage={listingCoverImage}>
                   <SingleMarkerMap
                     id={`OH_${task.id.replace(/-/gi, '_')}_map`}
@@ -66,8 +66,7 @@ export class OpenHouseItem extends React.Component {
             )}
             <Associations
               task={task}
-              user={this.props.user}
-              contact={this.props.contact}
+              defaultAssociation={this.props.defaultAssociation}
             />
           </React.Fragment>
         )}

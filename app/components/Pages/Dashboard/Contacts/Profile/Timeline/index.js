@@ -9,6 +9,7 @@ import { OpenHouseDrawer } from '../../../../../../views/components/open-house/O
 
 import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
+import { TourItem } from './TourItem'
 import { EventItem } from './EventItem'
 import { OpenHouseItem } from './OpenHouseItem'
 import { EmptyState } from './EmptyState'
@@ -38,36 +39,20 @@ export class Timeline extends React.Component {
 
   renderCRMTaskItem(key, task) {
     const _props = {
-      contact: this.props.contact,
+      defaultAssociation: this.props.defaultAssociation,
+      editCallback: this.props.editEventHandler,
       key,
+      onClick: this.onClickEvent,
       task
     }
 
     switch (task.task_type) {
       case 'Tour':
-        return (
-          <EventItem
-            {..._props}
-            onClick={this.onClickEvent}
-            editCallback={this.props.editEventHandler}
-          />
-        )
+        return <TourItem {..._props} />
       case 'Open House':
-        return (
-          <OpenHouseItem
-            {..._props}
-            onClick={this.onClickEvent}
-            editCallback={this.props.editEventHandler}
-          />
-        )
+        return <OpenHouseItem {..._props} />
       default:
-        return (
-          <EventItem
-            {..._props}
-            onClick={this.onClickEvent}
-            editCallback={this.props.editEventHandler}
-          />
-        )
+        return <EventItem {..._props} />
     }
   }
 
@@ -110,12 +95,12 @@ export class Timeline extends React.Component {
     }
 
     const _props = {
-      contact: this.props.contact,
+      defaultAssociation: this.props.defaultAssociation,
+      deleteCallback: this.handleDeleteEvent,
       isOpen: true,
-      user: this.props.user,
       onClose: this.closeEventDrawer,
       submitCallback: this.handleEditEvent,
-      deleteCallback: this.handleDeleteEvent
+      user: this.props.user
     }
 
     const { id } = selectedEvent
