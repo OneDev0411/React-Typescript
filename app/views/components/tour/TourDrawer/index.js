@@ -175,8 +175,8 @@ export class TourDrawer extends React.Component {
     if (association.id) {
       try {
         const response = await deleteTaskAssociation(
-          association.id,
-          association.crm_task
+          association.crm_task,
+          association.id
         )
 
         return response

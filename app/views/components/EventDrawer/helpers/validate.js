@@ -5,7 +5,5 @@ export function validate(values) {
     errors.title = 'Required'
   }
 
-  console.log(errors)
-
   return errors
 }
