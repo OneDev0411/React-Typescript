@@ -11,7 +11,7 @@ const StatusComponent = styled.div`
   right: 0;
 `
 
-const Status = ({ statusColor }) => {
+const ImageStatus = ({ statusColor }) => {
   if (!statusColor) {
     return null
   }
@@ -19,4 +19,4 @@ const Status = ({ statusColor }) => {
   return <StatusComponent statusColor={statusColor} />
 }
 
-export default Status
+export default ImageStatus

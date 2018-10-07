@@ -5,7 +5,7 @@ import Flex from 'styled-flex-component'
 
 import { grey, primary } from '../../../../../../../views/utils/colors'
 import IconHome from '../../../../../../../views/components/SvgIcons/NewHome/IconHome'
-import Status from '../../../../../../../views/components/Status'
+import ImageStatus from '../../../../../../../views/components/ImageStatus'
 
 const Container = styled.div`
   display: flex;
@@ -58,7 +58,7 @@ export const Address = ({ listing }) => (
           <IconHome />
         </IconContainer>
       )}
-      <Status statusColor={`#${listing.statusColor}`} />
+      <ImageStatus statusColor={`#${listing.statusColor}`} />
     </Container>
     <Flex
       column
