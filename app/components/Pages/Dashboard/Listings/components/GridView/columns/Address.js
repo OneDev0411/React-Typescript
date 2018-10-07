@@ -8,7 +8,7 @@ import IconHome from '../../../../../../../views/components/SvgIcons/NewHome/Ico
 import ImageStatus from '../../../../../../../views/components/ImageStatus'
 
 const Container = styled.div`
-  display: flex;
+  display: table;
   position: relative;
 `
 const Image = styled.img`
@@ -34,7 +34,6 @@ const SubAddress = styled.div`
 `
 
 const Title = styled.div`
-  line-height: 1;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

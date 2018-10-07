@@ -13,6 +13,7 @@ import styled from 'styled-components'
 import ImageStatus from '../../../../../../../views/components/ImageStatus'
 
 const AvatarContainer = styled.div`
+  display: table;
   position: relative;
   .avatar div {
     font-weight: 700 !important;
@@ -68,7 +69,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           round
           name={name}
           src={avatar}
-          size={40}
+          size={32}
         />
         <ImageStatus statusColor={statusColor} />
       </AvatarContainer>
