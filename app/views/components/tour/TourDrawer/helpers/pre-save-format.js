@@ -44,7 +44,7 @@ export async function preSaveFormat(values, originalValues) {
   ) {
     task.reminders = [
       {
-        is_relative: false,
+        is_relative: true,
         timestamp: reminderDate.getTime() / 1000
       }
     ]
