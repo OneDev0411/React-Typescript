@@ -6,14 +6,10 @@ import {
   ListItem,
   ListItemName
 } from '../../../../../views/components/SlideMenu/Menu/styled'
+import Tooltip from '../../../../../views/components/tooltip'
 
 const Item = ListItem.extend`
   justify-content: initial;
-
-  > svg {
-    width: 1.5em;
-    height: 1.5em;
-  }
 
   .mls-nav-item--active > & {
     color: ${primary};
@@ -27,15 +23,17 @@ const Item = ListItem.extend`
 
 export function NavItem({ Icon, ...props }) {
   return (
-    <Link
-      to={props.to}
-      onlyActiveOnIndex={props.indexed}
-      activeClassName="mls-nav-item--active"
-    >
-      <Item>
-        <Icon style={{ marginRight: '0.5em' }} />
-        <ListItemName>{props.text}</ListItemName>
-      </Item>
-    </Link>
+    <Tooltip caption={props.caption} placement="right">
+      <Link
+        to={props.to}
+        onlyActiveOnIndex={props.indexed}
+        activeClassName="mls-nav-item--active"
+      >
+        <Item>
+          <Icon style={{ marginRight: props.marginRight }} />
+          <ListItemName>{props.text}</ListItemName>
+        </Item>
+      </Link>
+    </Tooltip>
   )
 }
