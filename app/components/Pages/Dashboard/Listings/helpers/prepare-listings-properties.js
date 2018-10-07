@@ -36,7 +36,7 @@ export const prepareListingsProperties = (user, listing) => {
   const zipCode = address.postal_code
   const builtYear = property.year_built
   const beds = property.bedroom_count || '-'
-  const lotSizeArea = property.lot_size_area
+  const lotSizeArea = property.lot_size_area || 0
   const baths =
     property.half_bathroom_count + property.full_bathroom_count || '-'
 
