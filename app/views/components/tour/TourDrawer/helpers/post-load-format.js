@@ -34,24 +34,12 @@ export async function postLoadFormat(task, owner, listings) {
       dueDate: new Date(),
       locations,
       reminder,
-      task_type: 'tour'
+      task_type: 'Tour'
     }
   }
 
   const { reminders, due_date } = task
   const dueDate = due_date * 1000
-
-  if (
-    Array.isArray(reminders) &&
-    reminders.length > 0 &&
-    reminders[reminders.length - 1].timestamp
-  ) {
-    const { timestamp } = reminders[reminders.length - 1]
-
-    const title = getReminderLabel(dueDate, timestamp * 1000)
-
-    reminder = { title, value: title }
-  }
 
   if (
     Array.isArray(reminders) &&

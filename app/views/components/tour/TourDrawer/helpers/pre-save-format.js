@@ -24,7 +24,7 @@ export async function preSaveFormat(values, originalValues) {
   const task = {
     title,
     due_date,
-    task_type: 'tour',
+    task_type: 'Tour',
     assignees: assignees.map(a => a.id)
   }
 
