@@ -17,7 +17,7 @@ const defaultProps = {
   options: {}
 }
 
-export class Map extends React.Component {
+export class DirectionMap extends React.Component {
   state = {
     hasMarker: false,
     isCalculating: false
@@ -138,5 +138,5 @@ export class Map extends React.Component {
   }
 }
 
-Map.propTypes = propTypes
-Map.defaultProps = defaultProps
+DirectionMap.propTypes = propTypes
+DirectionMap.defaultProps = defaultProps
