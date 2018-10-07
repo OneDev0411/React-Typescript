@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import Tooltip from '../../tooltip'
-import { getUserTitle } from '../../../../models/user/helpers'
-import Avatar from '../../Avatar'
+import Tooltip from '../tooltip'
+import { getUserTitle } from '../../../models/user/helpers'
+import Avatar from '../Avatar'
 
 const propTypes = {
   users: PropTypes.array,
