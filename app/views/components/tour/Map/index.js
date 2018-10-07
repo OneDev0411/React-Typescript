@@ -19,11 +19,13 @@ const DEFAULT_OPTIONS = {
 const propTypes = {
   id: PropTypes.string.isRequired,
   listings: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  defaultOptions: PropTypes.shape()
+  defaultOptions: PropTypes.shape(),
+  showDirection: PropTypes.bool
 }
 
 const defaultProps = {
-  defaultOptions: {}
+  defaultOptions: {},
+  showDirection: true
 }
 
 export class Map extends React.Component {
@@ -134,11 +136,13 @@ export class Map extends React.Component {
 
   setMarker = location => {
     this.marker = new window.google.maps.Marker({
-      label: {
-        text: 'A',
-        color: '#fff',
-        fontSize: '18px'
-      },
+      label: this.props.showDirection
+        ? {
+            text: 'A',
+            color: '#fff',
+            fontSize: '18px'
+          }
+        : null,
       position: new window.google.maps.LatLng(
         location.latitude,
         location.longitude

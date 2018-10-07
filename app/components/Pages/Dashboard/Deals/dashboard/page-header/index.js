@@ -6,15 +6,16 @@ import { showAttachments } from '../../../../../../store_actions/deals'
 import DealEmail from '../../dashboard/deal-email'
 
 import PageHeader from 'components/PageHeader'
-import LinkButton from 'components/Button/LinkButton'
+// import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
+import { CreateOpenHouse } from 'components/open-house/CreateOpenHouse'
 import SendDealPromotionCard from '../../../../../../views/components/InstantMarketing/Flows/SendDealPromotion'
 
 const Button = ActionButton.extend`
   margin-left: 0.5em;
 `
 
-const Header = ({ deal, showAttachments }) => (
+const Header = ({ user, deal, showAttachments }) => (
   <PageHeader title="Deals" backUrl="/dashboard/deals">
     <PageHeader.Menu>
       <DealEmail dealEmail={deal.email} />
@@ -49,12 +50,20 @@ const Header = ({ deal, showAttachments }) => (
         </LinkButton>
       )} */}
 
+      {deal.listing && (
+        <CreateOpenHouse
+          deal={deal}
+          user={user}
+          style={{ margin: '0 0.5em' }}
+        />
+      )}
+
       <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
     </PageHeader.Menu>
   </PageHeader>
 )
 
 export default connect(
-  null,
+  state => ({ user: state.user }),
   { showAttachments }
 )(Header)
