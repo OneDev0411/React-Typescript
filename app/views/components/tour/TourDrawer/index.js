@@ -23,6 +23,7 @@ import { Description } from '../../EventDrawer/components/Description'
 import { Associations } from '../../EventDrawer/components/Associations'
 import { Reminder } from '../../EventDrawer/components/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
+import { validate } from '../../EventDrawer/helpers/validate'
 import { DateTimeField, AssigneesField } from '../../final-form-fields'
 import { AddAssociationButton } from '../../AddAssociationButton'
 import Tooltip from '../../tooltip'
@@ -216,6 +217,7 @@ export class TourDrawer extends React.Component {
               preSaveFormat(values, originalValues, user)
             }
             save={this.save}
+            validate={validate}
             render={formProps => {
               const { values } = formProps
 
@@ -231,7 +233,7 @@ export class TourDrawer extends React.Component {
                     <Title
                       fullWidth
                       placeholder="Untitled tour"
-                      style={{ marginBottom: '2rem' }}
+                      style={{ marginBottom: '1.5rem' }}
                     />
                     <Description placeholder="Enter any general notes for your clients" />
 
@@ -308,37 +310,24 @@ export class TourDrawer extends React.Component {
                       />
                     </Flex>
                     <Flex alignCenter>
-                      <Tooltip
-                        placement="left"
-                        caption="Preview and print tour sheets"
-                      >
+                      <Tooltip caption="Preview and print tour sheets">
                         <PreviewTourSheets
                           agent={user}
-                          disabled={isDisabled || !values.title}
+                          disabled={isDisabled}
                           listings={values.locations.map(
                             l => l.listing.original
                           )}
-                          style={{ marginRight: '0.5em' }}
                           tour={prePreviewFormat(values, this.state.tour)}
                         />
                       </Tooltip>
-
-                      <Tooltip
-                        placement="left"
-                        caption={
-                          values.title
-                            ? ''
-                            : 'The title is empty. It\'s required.'
-                        }
+                      <ActionButton
+                        type="button"
+                        disabled={isDisabled}
+                        onClick={this.handleSubmit}
+                        style={{ marginLeft: '0.5em' }}
                       >
-                        <ActionButton
-                          type="button"
-                          disabled={isDisabled || !values.title}
-                          onClick={this.handleSubmit}
-                        >
-                          {isDisabled ? 'Saving...' : 'Save'}
-                        </ActionButton>
-                      </Tooltip>
+                        {isDisabled ? 'Saving...' : 'Save'}
+                      </ActionButton>
                     </Flex>
                   </Footer>
                 </div>
