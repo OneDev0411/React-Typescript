@@ -27,7 +27,7 @@ export class AddDealAssociation extends React.Component {
       <AddAssociation
         render={({ isActive, handleClose, handleOpen }) => (
           <div>
-            <Tooltip placement="bottom" caption={title}>
+            <Tooltip caption={title}>
               {this.props.buttonRenderer(handleOpen)}
             </Tooltip>
             <SearchDealDrawer
