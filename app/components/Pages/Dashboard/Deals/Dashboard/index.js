@@ -5,12 +5,14 @@ import _ from 'underscore'
 
 import { deleteNotifications } from 'models/Deal/notification'
 
+import { isBackOffice } from 'utils/user-teams'
 import { getDeal } from 'actions/deals'
 import { selectDealById } from 'reducers/deals/list'
+import { selectTaskById } from 'reducers/deals/tasks'
 
 import { PageHeader } from './Header'
-
 import TabSections from './Tabs'
+import TaskView from './TaskView'
 
 import { Container } from './styled'
 
@@ -50,23 +52,34 @@ class DealDetails extends React.Component {
     }
 
     return (
-      <Container>
+      <Container disableScroll={this.props.selectedTask !== null}>
         <PageHeader deal={deal} />
 
         <TabSections
           deal={deal}
           activeTab={this.state.activeTab}
           onChangeTab={this.handleChangeActiveTab}
+          isBackOffice={this.props.isBackOffice}
+        />
+
+        <TaskView
+          deal={deal}
+          task={this.props.selectedTask}
+          isOpen={this.props.selectedTask !== null}
+          isBackOffice={this.props.isBackOffice}
         />
       </Container>
     )
   }
 }
 
-function mapStateToProps({ deals }, props) {
+function mapStateToProps({ deals, user }, { params }) {
+  const { selectedTask } = deals.properties
+
   return {
-    selectedTask: deals.properties.selectedTask,
-    deal: selectDealById(deals.list, props.params.id)
+    selectedTask: selectTaskById(deals.tasks, selectedTask && selectedTask.id),
+    deal: selectDealById(deals.list, params.id),
+    isBackOffice: isBackOffice(user)
   }
 }
 

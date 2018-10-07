@@ -5,12 +5,15 @@ import { H4 } from 'components/Typography/headings'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 export const Container = styled.div`
+  border-bottom: solid 1px #f2f2f2;
+`
+
+export const Row = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: solid 1px #f2f2f2;
 `
 
 export const LeftColumn = styled.div`

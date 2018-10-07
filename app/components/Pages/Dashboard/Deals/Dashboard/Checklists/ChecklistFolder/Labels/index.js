@@ -5,6 +5,7 @@ import { H4 } from 'components/Typography/headings'
 
 const Container = styled(H4)`
   color: #7f7f7f;
+  font-weight: 500;
 
   /* &.BACKUP,
   &.PRIMARY {

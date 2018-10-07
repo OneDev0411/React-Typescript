@@ -3,10 +3,11 @@ import React from 'react'
 import FactsheetSection from '../../../Factsheet'
 import Roles from '../../../../components/Roles'
 
-import { FactsheetDivider, Card } from './styled'
+import { Card } from './styled'
+import { FactsheetDivider } from '../../../Factsheet/styled'
 
 export default function SideNav(props) {
-  const { deal } = props
+  const { deal, isBackOffice } = props
 
   return (
     <Card
@@ -15,23 +16,27 @@ export default function SideNav(props) {
       }}
     >
       <FactsheetSection
+        showDevider
         deal={deal}
+        isBackOffice={isBackOffice}
         section="CriticalDates"
         title="Critical Dates"
       />
 
-      <FactsheetDivider />
-
       <Roles deal={deal} />
-
-      <FactsheetDivider />
-
-      <FactsheetSection deal={deal} section="CDA" title="CDA Information" />
-
       <FactsheetDivider />
 
       <FactsheetSection
+        showDevider
         deal={deal}
+        isBackOffice={isBackOffice}
+        section="CDA"
+        title="CDA Information"
+      />
+
+      <FactsheetSection
+        deal={deal}
+        isBackOffice={isBackOffice}
         section="Listing"
         title="Listing Information"
       />

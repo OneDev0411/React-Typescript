@@ -3,6 +3,14 @@ import styled from 'styled-components'
 import { H3, H4 } from 'components/Typography/headings'
 import LinkButton from 'components/Button/LinkButton'
 import IconButton from 'components/Button/IconButton'
+import { borderColor } from 'views/utils/colors'
+
+export const FactsheetDivider = styled.div`
+  width: 3.3rem;
+  height: 1px;
+  margin: 1.5rem;
+  background-color: ${borderColor};
+`
 
 export const Container = styled.div``
 

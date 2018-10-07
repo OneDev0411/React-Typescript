@@ -5,8 +5,6 @@ import _ from 'underscore'
 import { Container } from './styled'
 import ChecklistFolder from './ChecklistFolder'
 
-import { isBackOffice } from 'utils/user-teams'
-
 class ChecklistTab extends React.Component {
   state = {
     showTerminatedChecklists: false,
@@ -78,8 +76,7 @@ class ChecklistTab extends React.Component {
   }
 }
 
-export default connect(({ deals, user }) => ({
-  isBackOffice: isBackOffice(user),
+export default connect(({ deals }) => ({
   checklists: deals.checklists,
   tasks: deals.tasks
 }))(ChecklistTab)

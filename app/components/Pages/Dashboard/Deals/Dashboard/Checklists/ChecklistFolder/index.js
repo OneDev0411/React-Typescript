@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import Labels from './Labels'
-import Task from '../../Task'
+import TaskRow from '../TaskRow'
 
 import {
   Container,
@@ -58,7 +58,12 @@ class ChecklistFolder extends React.Component {
 
         <TasksContainer isOpen={this.state.isFolderExpanded}>
           {this.SortedTasks.map(id => (
-            <Task key={id} task={this.props.tasks[id]} deal={this.props.deal} />
+            <TaskRow
+              key={id}
+              task={this.props.tasks[id]}
+              deal={this.props.deal}
+              isBackOffice={this.props.isBackOffice}
+            />
           ))}
         </TasksContainer>
       </Container>

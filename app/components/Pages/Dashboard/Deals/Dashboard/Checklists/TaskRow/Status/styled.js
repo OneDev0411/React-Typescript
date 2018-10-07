@@ -5,7 +5,7 @@ export const Label = styled.div`
   align-items: center;
   color: #fff;
   min-width: 3rem;
-  height: 1.1rem;
+  height: 1.3rem;
   border-radius: 2px;
   background: transparent;
   padding: 0 0.6rem;

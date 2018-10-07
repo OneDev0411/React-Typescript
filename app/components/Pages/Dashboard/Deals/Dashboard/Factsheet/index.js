@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
@@ -8,15 +8,14 @@ import ToolTip from 'components/tooltip'
 
 import { updateContext, approveContext } from 'actions/deals'
 
-import { isBackOffice } from 'utils/user-teams'
-
 import {
   Container,
   SectionTitle,
   ItemsContainer,
   Item,
   ItemLabel,
-  ItemValue
+  ItemValue,
+  FactsheetDivider
 } from './styled'
 
 import Actions from './Actions'
@@ -71,7 +70,7 @@ class Factsheet extends React.Component {
       await this.props.updateContext(this.props.deal.id, {
         [field.name]: {
           value,
-          approved: isBackOffice ? true : !field.needs_approval
+          approved: this.props.isBackOffice ? true : !field.needs_approval
         }
       })
     } catch (e) {
@@ -121,72 +120,76 @@ class Factsheet extends React.Component {
     }
 
     return (
-      <Container>
-        <SectionTitle>{this.props.title}</SectionTitle>
+      <Fragment>
+        <Container>
+          <SectionTitle>{this.props.title}</SectionTitle>
 
-        <ItemsContainer>
-          {table.map(field => {
-            const valueObject = DealContext.getValue(deal, field)
-            const value = this.getFieldValue(valueObject)
-            const isApproved = this.isContextApproved(field)
-            const isDateContext = field.data_type === 'Date'
-            const isActiveContext = activeContext === field.name
+          <ItemsContainer>
+            {table.map(field => {
+              const valueObject = DealContext.getValue(deal, field)
+              const value = this.getFieldValue(valueObject)
+              const isApproved = this.isContextApproved(field)
+              const isDateContext = field.data_type === 'Date'
+              const isActiveContext = activeContext === field.name
 
-            // if is saving active context, then show a loader
-            if (isActiveContext && this.state.isSavingContext) {
+              // if is saving active context, then show a loader
+              if (isActiveContext && this.state.isSavingContext) {
+                return (
+                  <Item key={field.name} showBorder isSaving>
+                    Saving Field ...
+                  </Item>
+                )
+              }
+
+              // if is editing active context, then show editing mode
+              if (isActiveContext) {
+                return (
+                  <Item key={field.name} showBorder isDateContext>
+                    {isDateContext && <ItemLabel>{field.label}</ItemLabel>}
+
+                    <Editable
+                      field={field}
+                      isDateContext={isDateContext}
+                      defaultValue={value}
+                      onCancel={this.handleCancleEditContext}
+                      onSave={this.handleChangeContext}
+                    />
+                  </Item>
+                )
+              }
+
               return (
-                <Item key={field.name} showBorder isSaving>
-                  Saving Field ...
-                </Item>
+                <ToolTip
+                  key={field.name}
+                  caption={
+                    isApproved || isBackOffice
+                      ? null
+                      : 'Pending Office Approval'
+                  }
+                >
+                  <Item>
+                    <ItemLabel>{field.label}</ItemLabel>
+                    <ItemValue>{field.getFormattedValue(value)}</ItemValue>
+
+                    <Actions
+                      field={field}
+                      onClickEditContext={this.handleStartEditContext}
+                      onClickRemoveContext={this.handleRemoveContext}
+                    />
+                  </Item>
+                </ToolTip>
               )
-            }
+            })}
+          </ItemsContainer>
+        </Container>
 
-            // if is editing active context, then show editing mode
-            if (isActiveContext) {
-              return (
-                <Item key={field.name} showBorder isDateContext>
-                  {isDateContext && <ItemLabel>{field.label}</ItemLabel>}
-
-                  <Editable
-                    field={field}
-                    isDateContext={isDateContext}
-                    defaultValue={value}
-                    onCancel={this.handleCancleEditContext}
-                    onSave={this.handleChangeContext}
-                  />
-                </Item>
-              )
-            }
-
-            return (
-              <ToolTip
-                key={field.name}
-                caption={
-                  isApproved || isBackOffice ? null : 'Pending Office Approval'
-                }
-              >
-                <Item>
-                  <ItemLabel>{field.label}</ItemLabel>
-                  <ItemValue>{field.getFormattedValue(value)}</ItemValue>
-
-                  <Actions
-                    field={field}
-                    onClickEditContext={this.handleStartEditContext}
-                    onClickRemoveContext={this.handleRemoveContext}
-                  />
-                </Item>
-              </ToolTip>
-            )
-          })}
-        </ItemsContainer>
-      </Container>
+        {this.props.showDevider && <FactsheetDivider />}
+      </Fragment>
     )
   }
 }
 
 export default connect(
-  ({ user }) => ({
-    isBackOffice: isBackOffice(user)
-  }),
+  null,
   { updateContext, approveContext }
 )(Factsheet)

@@ -1,14 +1,16 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import moment from 'moment'
 
 import ToolTip from 'components/tooltip'
-import { isBackOffice } from 'utils/user-teams'
 
 import { Label } from './styled'
 
-function TaskStatus(props) {
+export default function TaskStatus(props) {
   const { task, noTip, isBackoffice, isDraftDeal } = props
+
+  if (!task) {
+    return false
+  }
 
   const { review } = task
   let status = null
@@ -45,7 +47,3 @@ function TaskStatus(props) {
     </ToolTip>
   )
 }
-
-export default connect(({ user }) => ({
-  isBackoffice: isBackOffice(user)
-}))(TaskStatus)
