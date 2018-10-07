@@ -34,33 +34,22 @@ export function CoverPage(props) {
   return (
     <div className={`${TOUR_SHEETS_CSS_NAME}__page ${COVER_PAGE_CSS_NAME}`}>
       <div className={`${TOUR_SHEETS_CSS_NAME}__brand-line`} />
+      <H1 style={{ marginBottom: '0.5rem' }}>
+        {tour.title || '[Untitle Tour]'}
+      </H1>
+      <p style={{ marginBottom: '1rem' }}>
+        {fecha.format(
+          new Date(tour.due_date * 1000),
+          'dddd, MMMM DD, YYYY hh:mm A'
+        )}
+      </p>
       <div
         style={{
           fontSize: '0.75rem',
           marginBottom: '6rem'
         }}
       >
-        <H1 style={{ marginBottom: '0.5rem' }}>{tour.title}</H1>
-        <p
-          style={{
-            marginBottom: description ? '1rem' : 0
-          }}
-        >
-          {fecha.format(
-            new Date(tour.due_date * 1000),
-            'dddd, MMMM DD, YYYY hh:mm A'
-          )}
-        </p>
-        {description && (
-          <p
-            style={{
-              fontSize: '0.75rem',
-              margin: 0
-            }}
-          >
-            {description}
-          </p>
-        )}
+        {description || '[TOUR DESCRIPTION]'}
       </div>
       <div style={{ marginBottom: '2.5rem', fontSize: '0.75rem' }}>
         <p
