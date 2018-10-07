@@ -10,7 +10,7 @@ import { Header } from '../components/PageHeader'
 import { MapView } from '../components/MapView'
 import { GridView } from '../components/GridView'
 import { GalleryView } from '../components/GalleryView'
-import Avatars from '../../../../../views/components/Button/Avatars'
+import Avatars from '../../../../../views/components/Avatars'
 
 const mappingStatus = status => {
   switch (status) {

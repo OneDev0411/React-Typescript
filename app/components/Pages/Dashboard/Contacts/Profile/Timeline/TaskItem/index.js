@@ -12,7 +12,7 @@ import { AssociationItem } from '../../../../../../../views/components/Assocatio
 import { getReminderLabel } from '../../../../../../../views/CRM/Tasks/components/NewTask/helpers/get-reminder-label'
 import { Status } from './Status'
 import { Container, Title, Description } from './styled'
-import Avatars from '../../../../../../../views/components/Button/Avatars'
+import Avatars from '../../../../../../../views/components/Avatars'
 
 export class CRMTaskItem extends React.Component {
   state = {
