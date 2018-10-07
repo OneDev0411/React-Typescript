@@ -1,15 +1,16 @@
 import { getAssociations } from '../../../EventDrawer/helpers/get-associations'
 import { getReminderLabel } from '../../../EventDrawer/helpers/get-reminder-label'
 import { normalizeListing } from '../../../../utils/association-normalizers'
+import { addressTitle } from '../../../../../utils/listing'
 
 /**
  * Format form data for api model
  * @param {object} task The Task entity
  * @param {object} owner logged in user
- * @param {object} defaultAssociation The default association
+ * @param {object} listing The open house listing
  * @returns {Promise} a formated Task
  */
-export async function postLoadFormat(task, owner, listings) {
+export async function postLoadFormat(task, owner, listing) {
   const REMINDER_DEFAULT_LABEL = '15 Minutes Before'
 
   let reminder = {
@@ -17,24 +18,22 @@ export async function postLoadFormat(task, owner, listings) {
     value: REMINDER_DEFAULT_LABEL
   }
 
-  let clients = []
-  let locations = []
-
-  if (listings && listings.length > 0) {
-    locations = listings.map(listing => ({
-      association_type: 'listing',
-      listing: normalizeListing(listing)
-    }))
+  let location = {
+    association_type: 'listing',
+    listing: normalizeListing(listing)
   }
+
+  let registrants = []
 
   if (!task) {
     return {
       assignees: [owner],
-      clients,
+      registrants,
       dueDate: new Date(),
-      locations,
+      location,
       reminder,
-      task_type: 'Tour'
+      task_type: 'Open House',
+      title: addressTitle(listing.property.address)
     }
   }
 
@@ -63,10 +62,10 @@ export async function postLoadFormat(task, owner, listings) {
     allAssociations.forEach(a => {
       switch (a.association_type) {
         case 'contact':
-          clients.push(a)
+          registrants.push(a)
           break
         case 'listing':
-          locations.push(a)
+          location = a
           break
         default:
           break
@@ -76,9 +75,9 @@ export async function postLoadFormat(task, owner, listings) {
 
   return {
     ...task,
-    reminder,
-    clients,
-    locations,
-    dueDate: new Date(dueDate)
+    dueDate: new Date(dueDate),
+    location,
+    registrants,
+    reminder
   }
 }

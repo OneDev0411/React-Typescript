@@ -10,6 +10,7 @@ import {
   createTaskAssociation,
   deleteTaskAssociation
 } from '../../../../models/tasks'
+import getListing from '../../../../models/listings/listing/get-listing'
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
 
 import { Divider } from '../../Divider'
@@ -28,15 +29,12 @@ import { AddAssociationButton } from '../../AddAssociationButton'
 import { AssociationsList } from '../../final-form-fields/AssociationsList'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
+import { Section } from '../../tour/TourDrawer/components/Section'
 
 import { preSaveFormat } from './helpers/pre-save-format'
-import { prePreviewFormat } from './helpers/pre-preview-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
-import { Section } from './components/Section'
-import { Locations } from './components/Locations'
-import { PreviewTourSheets } from '../PreviewTourSheets'
-
+import { Location } from './Location'
 import { Footer } from './styled'
 
 const QUERY = {
@@ -47,8 +45,9 @@ const QUERY = {
 
 const propTypes = {
   ...Drawer.propTypes,
-  tour: PropTypes.any,
-  tourId: PropTypes.any,
+  deal: PropTypes.shape(),
+  openHouse: PropTypes.any,
+  openHouseId: PropTypes.any,
   initialValues: PropTypes.shape(),
   submitCallback: PropTypes.func,
   deleteCallback: PropTypes.func,
@@ -58,8 +57,8 @@ const propTypes = {
 
 const defaultProps = {
   ...Drawer.defaultProps,
-  tour: null,
-  tourId: undefined,
+  openHouse: null,
+  openHouseId: undefined,
   initialValues: {},
   listings: [],
   submitCallback: () => {},
@@ -67,7 +66,7 @@ const defaultProps = {
 }
 
 /**
- * Represents a CRM Tour in a drawer view.
+ * Represents a Open House Event in a drawer view.
  *
  * NOTE: Its title and initial states controlling by props.
  * Because of the drawer component nature, we have to
@@ -75,58 +74,68 @@ const defaultProps = {
  * after opening until we can reinitialize it.
  *
  */
-export class TourDrawer extends React.Component {
+export class OpenHouseDrawer extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
       isDisabled: false,
-      tour: props.tour
+      listing: null,
+      openHouse: props.openHouse
     }
 
     this.isNew =
-      (!props.tour && !props.tourId) ||
+      (!props.openHouse && !props.openHouseId) ||
       Object(this.props.initialValues).length > 0
   }
 
   load = async () => {
-    if (this.props.tour) {
-      return this.props.tour
+    if (this.props.openHouse) {
+      return this.props.openHouse
     }
 
-    if (this.props.tourId) {
+    if (this.props.openHouseId) {
       try {
-        this.setState({ isDisabled: true })
+        const openHouse = await getTask(this.props.openHouseId, QUERY)
 
-        const tour = await getTask(this.props.tourId, QUERY)
+        this.setState({ openHouse })
 
-        this.setState({ isDisabled: false, tour })
-
-        return tour
+        return openHouse
       } catch (error) {
         console.log(error)
-        this.setState({ isDisabled: false })
+      }
+    }
+
+    const { deal } = this.props
+
+    if (deal && deal.listing) {
+      try {
+        const listing = await getListing(deal.listing)
+
+        this.setState({ listing })
+      } catch (error) {
+        console.log(error)
       }
     }
 
     return null
   }
 
-  save = async tour => {
+  save = async openHouse => {
     try {
       let newTour
       let action = 'created'
 
       this.setState({ isDisabled: true })
 
-      if (tour.id) {
-        newTour = await updateTask(tour, QUERY)
+      if (openHouse.id) {
+        newTour = await updateTask(openHouse, QUERY)
         action = 'updated'
       } else {
-        newTour = await createTask(tour, QUERY)
+        newTour = await createTask(openHouse, QUERY)
       }
 
-      this.setState({ isDisabled: false, tour: newTour })
+      this.setState({ isDisabled: false, openHouse: newTour })
       await this.props.submitCallback(newTour, action)
     } catch (error) {
       console.log(error)
@@ -138,9 +147,9 @@ export class TourDrawer extends React.Component {
   delete = async () => {
     try {
       this.setState({ isDisabled: true })
-      await deleteTask(this.state.tour.id)
+      await deleteTask(this.state.openHouse.id)
       this.setState({ isDisabled: false }, () =>
-        this.props.deleteCallback(this.state.tour)
+        this.props.deleteCallback(this.state.openHouse)
       )
     } catch (error) {
       console.log(error)
@@ -151,7 +160,8 @@ export class TourDrawer extends React.Component {
 
   handleCreateAssociation = async association => {
     const crm_task =
-      this.props.tourId || (this.props.tour && this.props.tour.id)
+      this.props.openHouseId ||
+      (this.props.openHouse && this.props.openHouse.id)
 
     if (crm_task) {
       try {
@@ -191,7 +201,7 @@ export class TourDrawer extends React.Component {
 
   handleSubmit = () => {
     document
-      .getElementById('tour-drawer-form')
+      .getElementById('open-house-drawer-form')
       .dispatchEvent(new Event('submit', { cancelable: true }))
   }
 
@@ -205,16 +215,16 @@ export class TourDrawer extends React.Component {
         onClose={this.props.onClose}
         showFooter={false}
       >
-        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Tour`} />
+        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Open House`} />
         <Drawer.Body>
           <LoadSaveReinitializeForm
             initialValues={this.props.initialValues}
             load={this.load}
-            postLoadFormat={tour =>
-              postLoadFormat(tour, user, this.props.listings)
+            postLoadFormat={openHouse =>
+              postLoadFormat(openHouse, user, this.state.listing)
             }
             preSaveFormat={(values, originalValues) =>
-              preSaveFormat(values, originalValues, user)
+              preSaveFormat(values, originalValues, this.props.deal)
             }
             save={this.save}
             validate={validate}
@@ -226,18 +236,18 @@ export class TourDrawer extends React.Component {
               return (
                 <div>
                   <FormContainer
-                    id="tour-drawer-form"
+                    id="open-house-drawer-form"
                     onSubmit={formProps.handleSubmit}
                     style={{ paddingBottom: '3rem' }}
                   >
                     <Title
                       fullWidth
-                      placeholder="Untitled tour"
+                      placeholder="Untitled Open House"
                       style={{ marginBottom: '1.5rem' }}
                     />
                     <Description placeholder="Enter any general notes for your clients" />
 
-                    <Section label="Itinerary Date">
+                    <Section label="Event Date">
                       <FieldContainer alignCenter justifyBetween>
                         <DateTimeField
                           name="dueDate"
@@ -247,9 +257,9 @@ export class TourDrawer extends React.Component {
                       </FieldContainer>
                     </Section>
 
-                    <Section label="Properties">
-                      <Locations
-                        locations={values.locations}
+                    <Section label="Event Location">
+                      <Location
+                        location={values.location}
                         handleDelete={this.handleDeleteAssociation}
                       />
                     </Section>
@@ -264,10 +274,10 @@ export class TourDrawer extends React.Component {
                       </Section>
                     )}
 
-                    <Section label="Clients">
+                    <Section label="Registrants">
                       <AssociationsList
-                        name="clients"
-                        associations={values.clients}
+                        name="registrants"
+                        associations={values.registrants}
                         handleDelete={this.handleDeleteAssociation}
                       />
                     </Section>
@@ -293,31 +303,14 @@ export class TourDrawer extends React.Component {
                         </React.Fragment>
                       )}
                       <AddAssociationButton
-                        associations={values.clients}
+                        associations={values.registrants}
                         disabled={isDisabled}
                         type="contact"
-                        name="clients"
-                        caption="Attach Client"
-                      />
-                      <AddAssociationButton
-                        associations={values.locations}
-                        disabled={isDisabled}
-                        type="listing"
-                        name="locations"
-                        caption="Attach Property"
+                        name="registrants"
+                        caption="Attach Contact"
                       />
                     </Flex>
                     <Flex alignCenter>
-                      <Tooltip caption="Preview and print tour sheets">
-                        <PreviewTourSheets
-                          agent={user}
-                          disabled={isDisabled}
-                          listings={values.locations.map(
-                            l => l.listing.original
-                          )}
-                          tour={prePreviewFormat(values, this.state.tour)}
-                        />
-                      </Tooltip>
                       <ActionButton
                         type="button"
                         disabled={isDisabled}
@@ -338,5 +331,5 @@ export class TourDrawer extends React.Component {
   }
 }
 
-TourDrawer.propTypes = propTypes
-TourDrawer.defaultProps = defaultProps
+OpenHouseDrawer.propTypes = propTypes
+OpenHouseDrawer.defaultProps = defaultProps

@@ -5,16 +5,16 @@ import { getReminderValue } from '../../../EventDrawer/helpers/get-reminder-valu
  * @param {object} values The form values
  * @returns {object} a formated object
  */
-export async function preSaveFormat(values, originalValues) {
+export async function preSaveFormat(values, originalValues, deal) {
   const {
-    title,
-    status,
-    dueDate,
-    reminder,
-    description,
     assignees,
-    clients,
-    locations
+    description,
+    dueDate,
+    location,
+    registrants,
+    reminder,
+    status,
+    title
   } = values
 
   // console.log('pre save', values.dueDate, values.reminder.value)
@@ -24,7 +24,7 @@ export async function preSaveFormat(values, originalValues) {
   const task = {
     title,
     due_date,
-    task_type: 'Tour',
+    task_type: 'tour',
     assignees: assignees.map(a => a.id)
   }
 
@@ -57,6 +57,13 @@ export async function preSaveFormat(values, originalValues) {
 
   let associations = []
 
+  if (!originalValues && deal) {
+    associations.push({
+      association_type: 'deal',
+      deal: deal.id
+    })
+  }
+
   const addAssociation = (association, type) => {
     const { association_type } = association
 
@@ -68,12 +75,12 @@ export async function preSaveFormat(values, originalValues) {
     }
   }
 
-  if (!originalValues && Array.isArray(locations) && locations.length > 0) {
-    locations.forEach(l => addAssociation(l, 'listing'))
+  if (location) {
+    addAssociation(location, 'listing')
   }
 
-  if (!originalValues && Array.isArray(clients) && clients.length > 0) {
-    clients.forEach(c => addAssociation(c, 'contact'))
+  if (!originalValues && Array.isArray(registrants) && registrants.length > 0) {
+    registrants.forEach(c => addAssociation(c, 'contact'))
   }
 
   if (associations.length > 0) {
