@@ -133,7 +133,7 @@ export const normalizeDeal = deal => {
     avatar: {
       image,
       size: 32,
-      placeHolderImage: '/static/icons/listing-place-holder.svg'
+      placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
     },
     url: `/dashboard/deals/${id}`,
     details: detailText([deal_type, property_type])

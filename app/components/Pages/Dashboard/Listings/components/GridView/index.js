@@ -85,7 +85,6 @@ export class GridView extends React.Component {
           LoadingState={LoadingComponent}
           listInfo={this.props.listings.info}
           summary={{ entityName: 'Listings', style: { color: '#000' } }}
-          getTdProps={() => ({ style: { lineHeight: 1 } })}
           plugins={{
             sortable: {},
             actionable: {

@@ -20,11 +20,12 @@ export async function preSaveFormat(values, originalValues, deal) {
   // console.log('pre save', values.dueDate, values.reminder.value)
 
   const due_date = dueDate.getTime() / 1000
+  const task_type = 'Open House'
 
   const task = {
     title,
     due_date,
-    task_type: 'tour',
+    task_type,
     assignees: assignees.map(a => a.id)
   }
 
@@ -44,7 +45,7 @@ export async function preSaveFormat(values, originalValues, deal) {
   ) {
     task.reminders = [
       {
-        is_relative: false,
+        is_relative: true,
         timestamp: reminderDate.getTime() / 1000
       }
     ]
@@ -90,7 +91,8 @@ export async function preSaveFormat(values, originalValues, deal) {
   if (originalValues) {
     return {
       ...originalValues,
-      ...task
+      ...task,
+      task_type // todo: removing this and line 23
     }
   }
 
