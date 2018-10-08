@@ -24,9 +24,9 @@ export function EventItem(props) {
             task={task}
           />
           <Associations
-            task={task}
-            defaultAssociation={props.defaultAssociation}
+            defaultAssociationId={props.defaultAssociationId}
             setAssociations={this.setAssociations}
+            task={task}
           />
         </React.Fragment>
       )}
