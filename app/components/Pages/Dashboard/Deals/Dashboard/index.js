@@ -14,14 +14,12 @@ import { PageHeader } from './Header'
 import TabSections from './Tabs'
 import TaskView from './TaskView'
 
-import Spinner from 'components/Spinner'
-
 import { Container } from './styled'
 
 class DealDetails extends React.Component {
   state = {
     activeTab: 'checklists',
-    isFetchingDeal: false
+    isFetchingChecklists: false
   }
 
   componentDidMount() {
@@ -39,12 +37,12 @@ class DealDetails extends React.Component {
 
     try {
       if (!deal || !deal.checklist) {
-        this.setState({ isFetchingDeal: true })
+        this.setState({ isFetchingChecklists: true })
 
         // fetch deal by id
         await this.props.getDeal(deal.id)
 
-        this.setState({ isFetchingDeal: false })
+        this.setState({ isFetchingChecklists: false })
       }
     } catch (e) {
       console.log(e)
@@ -78,10 +76,6 @@ class DealDetails extends React.Component {
       return false
     }
 
-    if (this.state.isFetchingDeal) {
-      return <Spinner />
-    }
-
     return (
       <Container disableScroll={this.props.selectedTask !== null}>
         <PageHeader deal={deal} />
@@ -92,6 +86,7 @@ class DealDetails extends React.Component {
           activeTab={this.state.activeTab}
           onChangeTab={this.handleChangeActiveTab}
           isBackOffice={this.props.isBackOffice}
+          isFetchingChecklists={this.state.isFetchingChecklists}
         />
 
         <TaskView

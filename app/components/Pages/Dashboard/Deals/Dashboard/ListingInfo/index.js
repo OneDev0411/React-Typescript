@@ -10,18 +10,24 @@ import { Divider } from '../styled'
 import Deal from 'models/Deal'
 
 function getTitle(deal) {
-  return Deal.get.field(deal, 'street_address')
+  return Deal.get.field(deal, 'street_address') || deal.title
 }
 
 function getAddress(deal) {
-  const city = Deal.get.field(deal, 'city')
-  const state = Deal.get.field(deal, 'state')
-  const zipcode = Deal.get.field(deal, 'postal_code')
+  const city = Deal.get.field(deal, 'city') || ''
+  const state = Deal.get.field(deal, 'state') || ''
+  const zipcode = Deal.get.field(deal, 'postal_code') || ''
+
+  if ([city, state, zipcode].join('').length === 0) {
+    return ''
+  }
 
   return `${city}, ${state} ${zipcode}`
 }
 
 export function ListingInfo(props) {
+  const address = getAddress(props.deal)
+
   return (
     <Flex alignCenter>
       <ListingImage deal={props.deal} />
@@ -29,9 +35,8 @@ export function ListingInfo(props) {
       <Flex column style={{ padding: '0.5em 1.5em' }}>
         <H1 style={{ lineHeight: 1.5 }}>{getTitle(props.deal)}</H1>
         <Flex alignCenter>
-          {getAddress(props.deal)}
-
-          <Divider />
+          {address}
+          {address.length > 0 && <Divider />}
 
           <LinkButton style={{ padding: 0 }}>Add MLS# number</LinkButton>
         </Flex>

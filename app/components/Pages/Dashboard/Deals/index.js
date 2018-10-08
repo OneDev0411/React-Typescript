@@ -3,11 +3,19 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
+import Spinner from 'components/Spinner'
+
 import { getDeals, getDeal, getContexts, getForms } from 'actions/deals'
 import { selectDealById } from 'reducers/deals/list'
 
 const Container = styled.div`
   min-height: 100vh;
+`
+
+const Loading = styled(Container)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 class DealsContainer extends React.Component {
@@ -59,7 +67,11 @@ class DealsContainer extends React.Component {
 
   render() {
     if (this.state.isFetchingDeal) {
-      return <div>Is fetching deal</div>
+      return (
+        <Loading>
+          <Spinner />
+        </Loading>
+      )
     }
 
     return <Container>{this.props.children}</Container>
