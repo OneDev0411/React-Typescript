@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const heightWithFooter = 'calc(100vh - 72px)'
-const heightWithoutFooter = 'calc(100vh - 59px)'
+const heightWithoutFooter = '100vh'
 
 export const Container = styled.div`
   overflow: auto;

@@ -17,7 +17,6 @@ import Notification from '../../components/table-columns/notification-badge'
 import { getPrimaryAgent } from '../../../utils/roles'
 import { Filters } from '../filters'
 
-import getGridTrProps from '../../helpers/get-tr-props'
 import AgentAvatars from '../../components/table-columns/AgentAvatars'
 
 class Grid extends React.Component {
@@ -29,6 +28,7 @@ class Grid extends React.Component {
         id: 'address',
         header: 'Address',
         width: '30%',
+        verticalAlign: 'center',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
@@ -68,12 +68,15 @@ class Grid extends React.Component {
         id: 'agent-name',
         header: 'Agent',
         width: '100px',
+        verticalAlign: 'center',
         accessor: deal => <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
       },
       {
         id: 'notification',
         header: '',
         width: '50px',
+        verticalAlign: 'center',
+
         render: ({ rowData: deal }) => (
           <Notification
             count={deal.new_notifications ? deal.new_notifications.length : 0}
@@ -120,7 +123,6 @@ class Grid extends React.Component {
         isFetching={isFetchingDeals}
         columns={columns}
         data={data}
-        getTrProps={getGridTrProps}
         EmptyState={EmptyState}
         LoadingState={LoadingState}
       />

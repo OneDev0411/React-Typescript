@@ -8,10 +8,12 @@ import { grey } from '../../../../../../../../views/utils/colors'
 import { getStatusColor } from '../../../../../../../../utils/listing'
 import IconHome from '../../../../../../../../views/components/SvgIcons/NewHome/IconHome'
 import ImageStatus from '../../../../../../../../views/components/ImageStatus'
+import openDeal from '../../../../utils/open-deal'
 
 const Container = styled.div`
   display: table;
   position: relative;
+  align-self: center;
 `
 
 const Image = styled.img`
@@ -69,8 +71,11 @@ const Address = ({ deal }) => {
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             display: 'block',
-            fontWeight: 500
+            fontWeight: 500,
+            marginTop: '-4px'
           }}
+          onClick={() => openDeal(deal.id)}
+          to={`/dashboard/deals/${deal.id}`}
         >
           {deal.title}
         </ALink>

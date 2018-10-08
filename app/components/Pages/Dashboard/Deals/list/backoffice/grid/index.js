@@ -16,8 +16,6 @@ import CriticalDate, {
 } from '../../components/table-columns/critical-date'
 import Notifications from '../../components/table-columns/notification-badge'
 
-import getGridTrProps from '../../helpers/get-tr-props'
-
 import { getPrimaryAgentName } from '../../../utils/roles'
 
 class Grid extends React.Component {
@@ -29,6 +27,7 @@ class Grid extends React.Component {
         id: 'address',
         header: 'Address',
         width: '25%',
+        verticalAlign: 'center',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
@@ -65,6 +64,7 @@ class Grid extends React.Component {
         id: 'notification',
         header: '',
         width: '50px',
+        verticalAlign: 'center',
         render: ({ rowData: deal }) => (
           <Notifications
             count={deal.attention_requests}
@@ -153,7 +153,6 @@ class Grid extends React.Component {
         isFetching={isFetchingDeals}
         columns={columns}
         data={data}
-        getTrProps={getGridTrProps}
         EmptyState={EmptyState}
         LoadingState={LoadingState}
       />
