@@ -20,8 +20,10 @@ export const LeftColumn = styled.div`
 `
 
 export const RightColumn = styled.div`
+  display: flex;
   flex: 1;
   padding-left: 5rem;
+  align-items: center;
 `
 
 export const Title = styled(H3)`
