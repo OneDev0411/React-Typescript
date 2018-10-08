@@ -29,6 +29,7 @@ class Grid extends React.Component {
         id: 'address',
         header: 'Address',
         width: '25%',
+        verticalAlign: 'center',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
@@ -65,6 +66,7 @@ class Grid extends React.Component {
         id: 'notification',
         header: '',
         width: '50px',
+        verticalAlign: 'center',
         render: ({ rowData: deal }) => (
           <Notifications
             count={deal.attention_requests}

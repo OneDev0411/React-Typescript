@@ -29,6 +29,7 @@ class Grid extends React.Component {
         id: 'address',
         header: 'Address',
         width: '30%',
+        verticalAlign: 'center',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
@@ -68,12 +69,15 @@ class Grid extends React.Component {
         id: 'agent-name',
         header: 'Agent',
         width: '100px',
+        verticalAlign: 'center',
         accessor: deal => <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
       },
       {
         id: 'notification',
         header: '',
         width: '50px',
+        verticalAlign: 'center',
+
         render: ({ rowData: deal }) => (
           <Notification
             count={deal.new_notifications ? deal.new_notifications.length : 0}

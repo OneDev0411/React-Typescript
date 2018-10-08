@@ -175,6 +175,7 @@ export class SelectablePlugin {
       id: 'plugin--selectable',
       width: '24px',
       sortable: false,
+      verticalAlign: 'center',
       header: () => (
         <CheckBoxButton
           allSelector
@@ -184,7 +185,6 @@ export class SelectablePlugin {
       ),
       render: ({ rowData: row }) => (
         <CheckBoxButton
-          style={{ marginTop: '0.5rem' }}
           onClick={() => this.toggleSelectRow(row.id)}
           isSelected={this.isRowSelected(row.id)}
         />

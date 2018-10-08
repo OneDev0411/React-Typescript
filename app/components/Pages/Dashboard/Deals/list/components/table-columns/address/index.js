@@ -12,6 +12,7 @@ import ImageStatus from '../../../../../../../../views/components/ImageStatus'
 const Container = styled.div`
   display: table;
   position: relative;
+  align-self: center;
 `
 
 const Image = styled.img`
@@ -69,7 +70,8 @@ const Address = ({ deal }) => {
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             display: 'block',
-            fontWeight: 500
+            fontWeight: 500,
+            marginTop: '-4px'
           }}
         >
           {deal.title}
