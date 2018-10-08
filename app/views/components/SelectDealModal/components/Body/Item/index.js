@@ -5,6 +5,7 @@ import Flex from 'styled-flex-component'
 
 import { getStatusColor } from '../../../../../../utils/listing'
 import * as Deal from '../../../../../../models/Deal/context-helper'
+import IconHome from '../../../../SvgIcons/NewHome/IconHome'
 
 const Container = styled.div`
   display: flex;
@@ -13,6 +14,16 @@ const Container = styled.div`
 
   &:hover {
     cursor: pointer;
+  }
+`
+const IconContainer = styled(Flex)`
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+  border-radius: 50%;
+  > svg {
+    height: 16px;
+    width: 16px;
   }
 `
 
@@ -36,12 +47,21 @@ Item.propTypes = {
 export function Item(props) {
   const { item, onClickHandler } = props
   const status = Deal.getStatus(item)
+  const image = Deal.getField(item, 'photo')
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
-      <div style={{ width: '32px', height: '32px', borderRadius: '50%' }}>
-        <img src={getPhoto(item)} alt="home" style={{ width: '100%' }} />
-      </div>
+      {image ? (
+        <img
+          src={image}
+          alt="home"
+          style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+        />
+      ) : (
+        <IconContainer center>
+          <IconHome />
+        </IconContainer>
+      )}
       <div style={{ paddingLeft: '1em' }}>
         <Flex alignCenter>
           <Details>{getPrice(item) || '$0'}</Details>
@@ -56,10 +76,6 @@ export function Item(props) {
       </div>
     </Container>
   )
-}
-
-function getPhoto(deal) {
-  return Deal.getField(deal, 'photo') || '/static/images/deals/home.png'
 }
 
 function getPrice(deal) {

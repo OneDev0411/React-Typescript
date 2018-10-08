@@ -9,6 +9,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   background-color: #f9f9f9;
+  border-radius: 3px;
   border: solid 1px ${grey.A300};
   padding: 0 0.5rem;
   :hover {

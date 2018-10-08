@@ -19,7 +19,7 @@ export const TextInput = styled.input`
   width: 100%;
   height: 45px;
   border: none;
-  font-size: 13px;
+  font-size: 1rem;
   padding: 0 5px;
   font-family: Barlow, sans-serif;
   background-color: transparent;
