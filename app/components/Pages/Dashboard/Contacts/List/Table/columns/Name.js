@@ -69,7 +69,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           round
           name={name}
           src={avatar}
-          size={32}
+          size={40}
         />
         <ImageStatus statusColor={statusColor} />
       </AvatarContainer>
