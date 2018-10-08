@@ -14,6 +14,12 @@ export const TemplatesContainer = styled.div`
   width: 340px;
   border-right: 1px solid #d4d4d4;
   background-color: #f2f2f2;
+
+  ${props =>
+    props.isInvisible &&
+    `
+    display: none;
+  `};
 `
 
 export const BuilderContainer = styled.div`

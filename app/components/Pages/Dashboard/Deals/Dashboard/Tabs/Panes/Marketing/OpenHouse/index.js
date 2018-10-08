@@ -1,6 +1,7 @@
 import React from 'react'
 
 import ActionButton from 'components/Button/ActionButton'
+import { CreateOpenHouse } from 'components/open-house/CreateOpenHouse'
 
 import {
   Container,
@@ -11,14 +12,16 @@ import {
   Image
 } from '../styled'
 
-export default function OpenHouse({ deal }) {
+export default function OpenHouse(props) {
   return (
     <Container>
       <LeftColumn>
         <Title>Open House</Title>
         <Description>Customize your open house registration.</Description>
 
-        <ActionButton>Add Open House</ActionButton>
+        <CreateOpenHouse deal={props.deal} user={props.user}>
+          <ActionButton>Create Open House</ActionButton>
+        </CreateOpenHouse>
       </LeftColumn>
 
       <RightColumn>

@@ -3,12 +3,18 @@ import { H3 } from 'components/Typography/headings'
 
 import { Card } from '../../styled'
 
+export const MarketingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 export const Container = styled(Card)`
   display: flex;
   flex-direction: row;
   width: 100%;
   padding: 1.5rem 3.5rem;
   position: relative;
+  overflow: hidden;
 `
 
 export const Image = styled.img`

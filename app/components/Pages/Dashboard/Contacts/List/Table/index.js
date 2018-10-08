@@ -34,6 +34,7 @@ class ContactsList extends React.Component {
     {
       header: 'Name',
       id: 'name',
+      verticalAlign: 'center',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ rowData: contact }) => <Name contact={contact} />
     },
@@ -65,6 +66,7 @@ class ContactsList extends React.Component {
       accessor: '',
       className: 'td--dropdown-container',
       sortable: false,
+      verticalAlign: 'center',
       width: '24px',
       render: ({ rowData: contact }) => (
         <Menu

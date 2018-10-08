@@ -10,6 +10,7 @@ import ImageStatus from '../../../../../../../views/components/ImageStatus'
 const Container = styled.div`
   display: table;
   position: relative;
+  align-self: center;
 `
 const Image = styled.img`
   width: 40px;
