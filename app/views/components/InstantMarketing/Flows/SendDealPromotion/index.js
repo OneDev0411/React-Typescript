@@ -107,14 +107,14 @@ class SendDealPromotion extends React.Component {
     const { listing } = this.state
     const { user } = this.props
 
-    if (hasMarketingAccess(user) === false) {
-      return null
-    }
+    // if (hasMarketingAccess(user) === false) {
+    //   return null
+    // }
 
     return (
       <Fragment>
         <ActionButton
-          appearance="outline"
+          appearance="primary"
           style={this.props.buttonStyle}
           onClick={this.toggleInstantMarketingBuilder}
         >

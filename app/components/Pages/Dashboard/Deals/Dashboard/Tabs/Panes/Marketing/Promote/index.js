@@ -2,6 +2,7 @@ import React from 'react'
 
 import ActionButton from 'components/Button/ActionButton'
 import { CreateOpenHouse } from 'components/open-house/CreateOpenHouse'
+import SendDealPromotion from 'components/InstantMarketing/Flows/SendDealPromotion'
 
 import {
   Container,
@@ -12,16 +13,14 @@ import {
   Image
 } from '../styled'
 
-export default function OpenHouse(props) {
+export default function Promote(props) {
   return (
-    <Container style={{ marginBottom: '1.5rem' }}>
+    <Container>
       <LeftColumn>
-        <Title>Open House</Title>
-        <Description>Customize your open house registration.</Description>
+        <Title>Marketing Center</Title>
+        <Description>Beautiful email collaterals for your listing.</Description>
 
-        <CreateOpenHouse deal={props.deal} user={props.user}>
-          <ActionButton>Create Open House</ActionButton>
-        </CreateOpenHouse>
+        <SendDealPromotion deal={props.deal}>Explore</SendDealPromotion>
       </LeftColumn>
 
       <RightColumn>
@@ -30,7 +29,7 @@ export default function OpenHouse(props) {
             position: 'absolute',
             bottom: 0
           }}
-          src="/static/images/deals/openhouse/open-house-graphic@3x.png"
+          src="/static/images/deals/marketing/marketing-center-graphic@3x.png"
           alt=""
         />
       </RightColumn>
