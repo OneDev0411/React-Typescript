@@ -18,7 +18,7 @@ import { Container } from './styled'
 
 class DealDetails extends React.Component {
   state = {
-    activeTab: 'files',
+    activeTab: 'checklists',
     isFetchingChecklists: false
   }
 
