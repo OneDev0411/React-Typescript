@@ -1,4 +1,7 @@
 import styled from 'styled-components'
+import { grey } from '../../../utils/colors'
+
+import Flex from 'styled-flex-component'
 
 export const ListItem = styled.div`
   display: flex;
@@ -7,13 +10,13 @@ export const ListItem = styled.div`
   padding: 10px 16px;
   cursor: pointer;
   background-color: ${props =>
-    props.isHighlighted ? '#eff5fa' : 'transparent'};
+    props.isHighlighted ? grey.A100 : 'transparent'};
 `
 
 export const ListItemImage = styled.img`
-  width: 45px;
-  height: 45px;
-  border-radius: 2px;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
 `
 
 export const ListItemAddress = styled.div`
@@ -45,4 +48,15 @@ export const AddressContainer = styled.div`
 
 export const Address = styled.div`
   font-size: 14px;
+`
+
+export const IconContainer = styled(Flex)`
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+  border-radius: 50%;
+  > svg {
+    height: 16px;
+    width: 16px;
+  }
 `

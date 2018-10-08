@@ -10,6 +10,9 @@ export const HeaderRow = Row.extend`
   min-height: auto;
   padding: 0.5em;
   border: none;
+  :hover {
+    background-color: transparent;
+  }
 `
 
 export const HeaderCell = Cell.extend`
