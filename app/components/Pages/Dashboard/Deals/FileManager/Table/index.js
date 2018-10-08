@@ -60,6 +60,10 @@ export class FileManager extends React.Component {
   getAllFiles = () => {
     const { deal, checklists, tasks, envelopes } = this.props
 
+    if (!deal.checklists) {
+      return []
+    }
+
     let files = []
     const stashFiles = deal.files || []
 
