@@ -4,24 +4,36 @@ import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
 import { grey, primary } from '../../../../../../../views/utils/colors'
+import IconHome from '../../../../../../../views/components/SvgIcons/NewHome/IconHome'
+import ImageStatus from '../../../../../../../views/components/ImageStatus'
 
-const Thumbnail = styled.div`
+const Container = styled.div`
+  display: table;
   position: relative;
-  width: 2.5rem;
-  height: 2.5rem;
-  margin-right: 1rem;
-  border-radius: 3px;
-  background-color: ${grey.A200};
-
-  > img {
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
+`
+const Image = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+`
+const IconContainer = styled(Flex)`
+  width: 32px;
+  height: 32px;
+  background-color: #000;
+  border-radius: 50%;
+  > svg {
+    height: 16px;
+    width: 16px;
   }
 `
 
+const SubAddress = styled.div`
+  color: ${grey.A550};
+  display: flex;
+  font-size: 0.875rem;
+`
+
 const Title = styled.div`
-  line-height: 1;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -37,16 +49,25 @@ const Title = styled.div`
 
 export const Address = ({ listing }) => (
   <Flex>
-    <Thumbnail>
-      {listing.cover_image_url && (
-        <img alt="a listing" src={listing.cover_image_url} />
+    <Container>
+      {listing.cover_image_url ? (
+        <Image src={listing.cover_image_url} alt="a listing" />
+      ) : (
+        <IconContainer center>
+          <IconHome />
+        </IconContainer>
       )}
-    </Thumbnail>
-    <Flex column justifyBetween style={{ width: 'calc(100% - 3.5rem)' }}>
+      <ImageStatus statusColor={`#${listing.statusColor}`} />
+    </Container>
+    <Flex
+      column
+      justifyBetween
+      style={{ width: 'calc(100% - 3.5rem)', marginLeft: '1rem' }}
+    >
       <Title>
         <Link to={`/dashboard/mls/${listing.id}`}>{listing.address}</Link>
       </Title>
-      <div style={{ color: `#${listing.statusColor}` }}>{listing.status}</div>
+      <SubAddress className="blackHover">{listing.status}</SubAddress>
     </Flex>
   </Flex>
 )

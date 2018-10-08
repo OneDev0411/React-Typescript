@@ -8,7 +8,7 @@ import moment from 'moment'
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 
-import PageHeader from './page-header'
+import { FullPageHeader } from '../../../../../views/components/FullPageHeader'
 import DealType from './deal-type'
 import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
@@ -809,11 +809,11 @@ class CreateDeal extends React.Component {
 
     return (
       <div className="deal-create">
-        <PageHeader
+        <FullPageHeader
           title={
             deal ? 'Update deal information to Go Live' : 'Create New Deal'
           }
-          handleOnClose={this.onClosePage}
+          handleClose={this.onClosePage}
         />
         <div className="form">
           {!deal && (

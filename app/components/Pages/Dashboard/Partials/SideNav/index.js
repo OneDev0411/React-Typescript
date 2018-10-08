@@ -209,16 +209,16 @@ class appSideNav extends React.Component {
                 to="/dashboard/notifications"
                 className="c-app-sidenav__item__title"
               >
-                <NotificationsIcon />
+                <NotificationsIcon style={{ width: 24, height: 24 }} />
                 {appNotifications > 0 && (
                   <Badge
                     style={{
                       position: 'absolute',
                       top: 0,
-                      left: 'calc(100% - 24px)'
+                      left: 'calc(100% - 12px)'
                     }}
                   >
-                    {appNotifications}
+                    {appNotifications > 99 ? '99+' : appNotifications}
                   </Badge>
                 )}
               </Link>

@@ -111,8 +111,7 @@ export class SortablePlugin {
     <BasicDropdown
       maxHeight={400}
       noBorder
-      buttonSize="small"
-      buttonStyle={{ fontWeight: 500 }}
+      buttonStyle={{ fontWeight: 500, paddingRight: 0 }}
       defaultSelectedItem={this.options.defaultIndex}
       disabled={isFetching}
       items={this.getSortableColumns(columns)}

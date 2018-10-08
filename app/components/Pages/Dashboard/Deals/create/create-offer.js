@@ -7,7 +7,7 @@ import _ from 'underscore'
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 
-import PageHeader from './page-header'
+import { FullPageHeader } from '../../../../../views/components/FullPageHeader'
 import OfferType from './offer-type'
 import EnderType from './deal-ender-type'
 import DealClients from './deal-clients'
@@ -211,7 +211,7 @@ class CreateOffer extends React.Component {
       .value()
   }
 
-  async createOffer() {
+  createOffer = async () => {
     this.isFormSubmitted = true
 
     if (!this.validateForm(true)) {
@@ -347,7 +347,7 @@ class CreateOffer extends React.Component {
       message: 'Cancel offer creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: "No, don't cancel",
       onConfirm: this.backToDeal
     })
   }
@@ -444,9 +444,9 @@ class CreateOffer extends React.Component {
 
     return (
       <div className="deal-create-offer">
-        <PageHeader
+        <FullPageHeader
           title="Add New Offer"
-          handleOnClose={this.cancelCreateOffer}
+          handleClose={this.cancelCreateOffer}
         />
 
         <div className="form">

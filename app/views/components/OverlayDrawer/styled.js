@@ -22,18 +22,8 @@ export const Content = styled.div`
   `};
 
   @media (min-width: 48em) {
-    width: ${props => getWidth(props.width)}%;
-    right: -${props => (props.isOpen ? 0 : getWidth(props.width))}%;
-  }
-
-  @media (min-width: 75em) {
-    width: ${props => getWidth(props.width, 1)}%;
-    right: -${props => (props.isOpen ? 0 : getWidth(props.width, 1))}%;
-  }
-
-  @media (min-width: 100em) {
-    width: ${props => getWidth(props.width, 2)}%;
-    right: -${props => (props.isOpen ? 0 : getWidth(props.width, 2))}%;
+    width: 37rem;
+    right: ${props => (props.isOpen ? 0 : '-37rem')};
   }
 `
 

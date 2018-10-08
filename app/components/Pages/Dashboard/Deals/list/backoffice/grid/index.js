@@ -11,7 +11,6 @@ import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
 
 import Address from '../../components/table-columns/Address'
-import Status, { statusSortMethod } from '../../components/table-columns/Status'
 import CriticalDate, {
   getNextDateValue
 } from '../../components/table-columns/CriticalDate'
@@ -19,7 +18,7 @@ import Notifications from '../../components/table-columns/NotificationBadge'
 
 import getGridTrProps from '../../helpers/get-tr-props'
 
-import { getPrimaryAgent } from '../../../utils/roles'
+import { getPrimaryAgentName } from '../../../utils/roles'
 
 class Grid extends React.Component {
   get Columns() {
@@ -29,27 +28,14 @@ class Grid extends React.Component {
       {
         id: 'address',
         header: 'Address',
-        width: '21%',
+        width: '25%',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
       {
-        id: 'status',
-        header: 'Status',
-        width: '15%',
-        accessor: deal => Deal.get.status(deal),
-        sortMethod: statusSortMethod,
-        render: ({ rowData: deal }) => <Status deal={deal} />
-      },
-      {
-        id: 'property-type',
-        header: 'Property Type',
-        accessor: 'property_type'
-      },
-      {
         id: 'agent-name',
         header: 'Agent Name',
-        accessor: deal => getPrimaryAgent(deal, roles)
+        accessor: deal => getPrimaryAgentName(deal, roles)
       },
       {
         id: 'office',
@@ -78,7 +64,7 @@ class Grid extends React.Component {
       {
         id: 'notification',
         header: '',
-        width: '40px',
+        width: '50px',
         render: ({ rowData: deal }) => (
           <Notifications
             count={deal.attention_requests}

@@ -19,7 +19,7 @@ const propTypes = {
 const defaultProps = {
   size: 40,
   image: '',
-  title: '*',
+  title: '',
   placeHolderImage: '',
   borderRadius: 100,
   isOnline: false,
@@ -28,18 +28,18 @@ const defaultProps = {
 }
 
 const Avatar = ({ image, placeHolderImage, title, isOnline, ...props }) => {
-  const imageUrl = image || placeHolderImage
+  let imageSrc = ''
 
-  const hasImage =
-    imageUrl &&
-    /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(
-      imageUrl
-    )
+  if (image != null && image.length > 1) {
+    imageSrc = image
+  } else if (placeHolderImage && !title) {
+    imageSrc = placeHolderImage
+  }
 
   return (
-    <Container center hasImage={hasImage} {...props}>
-      {hasImage ? (
-        <Image alt="rechat avatar" src={imageUrl} />
+    <Container center {...props}>
+      {imageSrc ? (
+        <Image alt="rechat avatar" src={imageSrc} />
       ) : (
         getNameInitials(title)
       )}

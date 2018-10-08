@@ -260,14 +260,15 @@ class ContactProfile extends React.Component {
                 </div>
               </Tab.Container>
               <Timeline
-                user={user}
                 contact={contact}
-                items={this.state.timeline}
-                isFetching={this.state.isFetchingTimeline}
-                editNoteHandler={this.editNote}
+                defaultAssociation={contact.id}
+                deleteEventHandler={this.deleteEvent}
                 deleteNoteHandler={this.deleteNote}
                 editEventHandler={this.editEvent}
-                deleteEventHandler={this.deleteEvent}
+                editNoteHandler={this.editNote}
+                isFetching={this.state.isFetchingTimeline}
+                items={this.state.timeline}
+                user={user}
               />
             </SecondColumn>
 

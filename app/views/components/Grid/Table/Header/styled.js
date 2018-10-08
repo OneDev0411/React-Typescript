@@ -8,7 +8,7 @@ export const Header = styled.div`
 
 export const HeaderRow = Row.extend`
   min-height: auto;
-  padding: 0;
+  padding: 0.5em;
   border: none;
 `
 

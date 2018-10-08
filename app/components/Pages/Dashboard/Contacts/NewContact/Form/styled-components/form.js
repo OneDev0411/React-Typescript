@@ -13,6 +13,7 @@ export const FormContainer = styled.form`
   position: relative;
   background-color: #fff;
   border: 1px solid #ecf1f5;
+  padding: 1.5rem;
 `
 
 export const Footer = styled.div`

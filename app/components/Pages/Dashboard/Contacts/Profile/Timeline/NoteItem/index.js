@@ -4,7 +4,8 @@ import Flex from 'styled-flex-component'
 
 import Icon from '../../../../../../../views/components/SvgIcons/Note/IconNote'
 import { Divider } from '../../../../../../../views/components/Divider'
-import { Container, Title } from '../TaskItem/styled'
+import { Container } from '../CRMTaskItem/styled'
+import { Title } from '../components/GeneralInfo/styled'
 
 export function NoteItem(props) {
   const { note } = props

@@ -1,36 +1,83 @@
 import React from 'react'
 import styled from 'styled-components'
+import Flex from 'styled-flex-component'
 
 import Deal from 'models/Deal'
 import ALink from 'components/ALink'
+import { grey } from 'views/utils/colors'
+import { getStatusColor } from 'utils/listing'
+import IconHome from 'components/SvgIcons/NewHome/IconHome'
+import ImageStatus from 'components/ImageStatus'
 
 const Container = styled.div`
   display: flex;
+  position: relative;
 `
 
 const Image = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  margin-right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 `
 
 const Name = styled.div`
-  font-weight: 500;
+  width: calc(100% - 32px - 1.5rem);
+  margin-left: 1rem;
 `
 
+export const SubAddress = styled.div`
+  color: ${grey.A550};
+  display: flex;
+  font-size: 0.875rem;
+`
+
+const Status = styled.div`
+  margin-left: 1rem;
+`
+const IconContainer = styled(Flex)`
+  width: 32px;
+  height: 32px;
+  background-color: #000;
+  border-radius: 50%;
+  > svg {
+    height: 16px;
+    width: 16px;
+  }
+`
 const Address = ({ deal }) => {
   const photo = Deal.get.field(deal, 'photo')
+  const status = Deal.get.status(deal)
 
   return (
-    <Container>
-      <Image
-        src={photo || '/static/images/deals/home.png'}
-        hasPhoto={photo !== null}
-        alt=""
-      />
-      <ALink>{deal.title}</ALink>
-    </Container>
+    <Flex>
+      <Container>
+        {photo ? (
+          <Image src={photo} hasPhoto={photo !== null} alt="" />
+        ) : (
+          <IconContainer center>
+            <IconHome />
+          </IconContainer>
+        )}
+        <ImageStatus statusColor={`#${getStatusColor(status)}`} />
+      </Container>
+
+      <Name>
+        <ALink
+          style={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: 'block'
+          }}
+        >
+          {deal.title}
+        </ALink>
+        <SubAddress className="blackHover">
+          {deal.property_type}
+          <Status>{status}</Status>
+        </SubAddress>
+      </Name>
+    </Flex>
   )
 }
 

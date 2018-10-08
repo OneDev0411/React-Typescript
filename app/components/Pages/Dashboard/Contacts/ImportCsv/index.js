@@ -50,8 +50,6 @@ class ImportCsv extends React.Component {
         <PageHeader
           isFlat
           style={{
-            marginBottom: '1.5em',
-            marginTop: '1.5rem',
             display: 'flex',
             alignItems: 'center'
           }}

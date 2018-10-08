@@ -5,6 +5,7 @@ import Image from './IconOpenHouse.js'
 
 describe('IconOpenHouse.svg generated styled component', () => {
   let wrapper
+
   beforeEach(() => {
     wrapper = shallow(<Image />)
   })
@@ -19,6 +20,7 @@ describe('IconOpenHouse.svg generated styled component', () => {
 
   it('has dimensions greater than zero', () => {
     const dimensions = Image.getDimensions()
+
     expect(dimensions.width).not.toBe('0')
     expect(parseInt(dimensions.width, 10)).toBeGreaterThan(0)
     expect(dimensions.height).not.toBe('0')

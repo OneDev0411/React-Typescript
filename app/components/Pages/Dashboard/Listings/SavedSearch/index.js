@@ -10,6 +10,7 @@ import { Header } from '../components/PageHeader'
 import { MapView } from '../components/MapView'
 import { GridView } from '../components/GridView'
 import { GalleryView } from '../components/GalleryView'
+import Avatars from '../../../../../views/components/Avatars'
 
 const mappingStatus = status => {
   switch (status) {
@@ -132,6 +133,13 @@ class SavedSearch extends React.Component {
           activeView={this.state.activeView}
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
+          RightComponent={() => (
+            <Avatars
+              users={this.props.savedSearch.users}
+              style={{ marginRight: '2rem' }}
+              tooltipPlacement="bottom"
+            />
+          )}
         />
         {this.renderMain()}
       </React.Fragment>

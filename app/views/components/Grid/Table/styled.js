@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { borderColor } from '../../../utils/colors'
+import { borderColor, grey, primary } from '../../../utils/colors'
 
 const border = `1px solid ${borderColor}`
 
@@ -25,14 +25,28 @@ export const Row = styled.div`
   display: flex;
   justify-items: center;
   min-height: 4em;
-  padding: 1em 0;
+  padding: 0.5em;
   border-top: ${border};
 
   ${props =>
-    props.hoverStyle &&
     `
     :hover {
-      ${props.hoverStyle}
+      ${
+        props.hoverStyle
+          ? props.hoverStyle
+          : `
+     
+        background-color: ${grey.A000};
+
+        a, .primaryHover {
+          color: ${primary}
+        }
+        .blackHover{
+          color: #000000;
+        }
+      
+    `
+      }
     }
   `};
 

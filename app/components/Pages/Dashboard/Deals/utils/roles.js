@@ -298,10 +298,20 @@ export function getPrimaryAgent(deal, roles) {
     )
 
     if (primaryRole) {
-      return `${roles[primaryRole].legal_first_name} ${
-        roles[primaryRole].legal_last_name
-      }`
+      return roles[primaryRole]
     }
+  }
+}
+/**
+ *
+ * @param {Object} deal - deal object
+ * @param {Object} roles - objects of roles
+ */
+export function getPrimaryAgentName(deal, roles) {
+  const primaryRole = getPrimaryAgent(deal, roles)
+
+  if (primaryRole) {
+    return `${primaryRole.legal_first_name} ${primaryRole.legal_last_name}`
   }
 
   return ''

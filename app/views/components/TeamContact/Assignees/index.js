@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
+import uniqBy from 'lodash/uniqBy'
 
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
 import { getUserTitle } from '../../../../models/user/helpers'
@@ -15,9 +16,14 @@ import { AssigneeItemInAvatar } from '../AssigneeItemInAvatar'
 
 const propTypes = {
   assignees: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  buttonText: PropTypes.string,
   onChangeHandler: PropTypes.func.isRequired,
   onRemoveHandler: PropTypes.func.isRequired,
   owner: PropTypes.PropTypes.shape().isRequired
+}
+
+const defaultProps = {
+  buttonText: 'Assignee'
 }
 
 export class Assignees extends React.Component {
@@ -44,7 +50,10 @@ export class Assignees extends React.Component {
 
       const members = await getMembers(this.props.owner)
 
-      this.setState({ isFetching: false, members: members || [] })
+      this.setState({
+        isFetching: false,
+        members: members ? uniqBy(members, 'id') : []
+      })
     } catch (error) {
       console.log(error)
       this.setState({ isFetching: false })
@@ -77,7 +86,7 @@ export class Assignees extends React.Component {
             <Button
               {...buttonProps}
               iconLeft={AddIcon}
-              text="Assignee"
+              text={this.props.buttonText}
               appearance="link"
               size="medium"
               style={{
@@ -118,3 +127,4 @@ export class Assignees extends React.Component {
 }
 
 Assignees.propTypes = propTypes
+Assignees.defaultProps = defaultProps

@@ -94,7 +94,7 @@ const ListingDesktopView = ({
   handleModalGalleryNav,
   galleryModalActiveIndex
 }) => {
-  const brandColor = Brand.color('primary', null, brand)
+  const brandColor = Brand.color('primary', primary, brand)
 
   const brand_agent = listing.proposed_agent
 
@@ -800,7 +800,13 @@ const ListingDesktopView = ({
         textDecoration: 'none'
       }}
     >
-      <H2>Rechat</H2>
+      <H2
+        style={{
+          color: brandColor
+        }}
+      >
+        Rechat
+      </H2>
     </a>
   )
 
