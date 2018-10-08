@@ -159,7 +159,8 @@ class SectionWithFields extends React.Component {
             style={{
               marginBottom: '1em',
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
+              wordBreak: 'break-word'
             }}
           >
             {value ? getFormater(field)(value) : '-'}
