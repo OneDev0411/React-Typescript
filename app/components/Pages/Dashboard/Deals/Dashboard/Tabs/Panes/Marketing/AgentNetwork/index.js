@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ActionButton from 'components/Button/ActionButton'
+import LinkButton from 'components/Button/LinkButton'
 import AgentNetwork from '../../../../../AgentNetwork'
 
 import {
@@ -22,7 +22,12 @@ export default function AgentNetworkPane({ deal }) {
           relevant to your listing to co-broke within the community.
         </Description>
 
-        <ActionButton>View Network</ActionButton>
+        <LinkButton
+          appearance="primary"
+          to={`/dashboard/deals/${deal.id}/network`}
+        >
+          View Network
+        </LinkButton>
       </LeftColumn>
 
       <RightColumn>

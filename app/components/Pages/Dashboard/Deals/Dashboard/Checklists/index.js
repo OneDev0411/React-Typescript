@@ -56,9 +56,9 @@ class ChecklistTab extends React.Component {
 
   render() {
     const {
-      checklists,
-      terminatedChecklistsCount,
-      deactivatedChecklistsCount
+      checklists
+      // terminatedChecklistsCount,
+      // deactivatedChecklistsCount
     } = this.Checklists
 
     return (
