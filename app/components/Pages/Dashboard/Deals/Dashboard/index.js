@@ -14,15 +14,42 @@ import { PageHeader } from './Header'
 import TabSections from './Tabs'
 import TaskView from './TaskView'
 
+import Spinner from 'components/Spinner'
+
 import { Container } from './styled'
 
 class DealDetails extends React.Component {
   state = {
-    activeTab: 'marketing'
+    activeTab: 'checklists',
+    isFetchingDeal: false
   }
 
   componentDidMount() {
     this.handleNotifications(this.props.deal)
+
+    this.initializeDeal()
+  }
+
+  initializeDeal = async () => {
+    const { deal } = this.props
+
+    if (deal && deal.checklists) {
+      return false
+    }
+
+    try {
+      if (!deal || !deal.checklist) {
+        this.setState({ isFetchingDeal: true })
+
+        // fetch deal by id
+        await this.props.getDeal(deal.id)
+
+        this.setState({ isFetchingDeal: false })
+      }
+    } catch (e) {
+      console.log(e)
+      console.error('Could not fetch deal')
+    }
   }
 
   handleChangeActiveTab = tab =>
@@ -49,6 +76,10 @@ class DealDetails extends React.Component {
 
     if (!deal) {
       return false
+    }
+
+    if (this.state.isFetchingDeal) {
+      return <Spinner />
     }
 
     return (
