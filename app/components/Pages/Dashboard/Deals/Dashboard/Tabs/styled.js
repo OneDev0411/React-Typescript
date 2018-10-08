@@ -9,6 +9,7 @@ export const Container = styled.div`
 
 export const TabContent = styled.div`
   display: flex;
+  overflow-x: hidden;
 `
 
 export const Card = styled(AbstractCard)`
