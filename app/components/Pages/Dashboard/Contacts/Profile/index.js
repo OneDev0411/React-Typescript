@@ -187,13 +187,17 @@ class ContactProfile extends React.Component {
                 <Tags contact={contact} />
               </Card>
               <Card>
+                {!this.state.isDesktopScreen && <Dates contact={contact} />}
+
                 <ContactInfo contact={contact} />
 
                 <Addresses contact={contact} />
 
                 <Details contact={contact} />
 
-                {!this.state.isDesktopScreen && thirdColumnSections}
+                {!this.state.isDesktopScreen && (
+                  <DealsListWidget contactId={contact.id} />
+                )}
 
                 <Owner
                   onSelect={this.onChangeOwner}
