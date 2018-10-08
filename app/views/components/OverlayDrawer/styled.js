@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 
+function getWidth(base = 60, scale = 0) {
+  return base - scale * 15
+}
+
 export const Content = styled.div`
   position: fixed;
   top: 0;

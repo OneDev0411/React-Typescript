@@ -16,19 +16,15 @@ const getDimensionsCss = () => css`
 `
 
 const Image = styled.svg`
-  ${({noStyles}) => !noStyles ? getDimensionsCss() : null}
+  ${({ noStyles }) => (!noStyles ? getDimensionsCss() : null)};
 `
 
 const defaultProps = {
   children: [
+    <path fill="none" d="M0 0h24v24H0z" key="key-0" />,
     <path
-      fill='none'
-      d='M0 0h24v24H0z'
-      key='key-0'
-    />,
-    <path
-      d='M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z'
-      key='key-1'
+      d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+      key="key-1"
     />
   ],
   viewBox

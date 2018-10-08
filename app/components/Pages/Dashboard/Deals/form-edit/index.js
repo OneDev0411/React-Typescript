@@ -1,194 +1,167 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
-import {
-  saveSubmission,
-  changeNeedsAttention
-} from '../../../../../store_actions/deals'
-import Deal from '../../../../../models/Deal'
-import EmbedForm from './embed'
 
-class FormEdit extends React.Component {
+import { saveSubmission, getDeal, getForms } from 'actions/deals'
+
+import { getFormSize } from 'models/Deal/form'
+import { LoadingDealContainer } from './styled'
+
+import PageHeader from 'components/PageHeader'
+import ActionButton from 'components/Button/ActionButton'
+import Spinner from 'components/Spinner'
+import ProgressBar from 'components/ProgressBar'
+
+import PDFEdit from './editor'
+
+import importPdfJs from 'utils/import-pdf-js'
+import config from '../../../../../../config/public'
+
+class EditDigitalForm extends React.Component {
   state = {
-    isLoaded: false,
+    isFormLoaded: false,
     isSaving: false,
-    notifyOffice: false,
-    incompleteFields: []
+    pdfDocument: null,
+    pdfUrl: '',
+    downloadPercents: 1
   }
 
-  shouldComponentUpdate(nextProps) {
-    const task = this.props.task || {}
-    const nextTask = nextProps.task || {}
-
-    return this.frame !== null || task.form !== nextTask.form
+  componentDidMount() {
+    this.initialize()
   }
 
-  submissionValues = {}
+  values = {}
 
-  onReceiveMessage = (functionName, args) => {
-    try {
-      this[functionName](args)
-    } catch (e) {
-      console.warn(e.message)
+  initialize = async () => {
+    const { deal } = this.props
+
+    if (deal && !deal.checklists) {
+      await this.props.getDeal(deal.id)
+    }
+
+    if (!this.state.pdfDocument) {
+      this.loadPdfDocument()
     }
   }
 
-  /**
-   *
-   */
-  async onLoad() {
-    const { deal, task, roles } = this.props
+  loadPdfDocument = async () => {
+    const PDFJS = await importPdfJs()
 
-    let submission = {
-      values: {}
-    }
-
-    const templateValues = await this.getTemplates()
-
-    if (task && task.submission) {
-      submission = await Deal.getSubmissionForm(
-        task.id,
-        task.submission.last_revision
-      )
-    }
-
-    this.setState({ isLoaded: true })
-    this.submissionValues = submission.values
-
-    // set combination of template and submission
-    this.frame.sendMessage('setValues', [
-      Object.assign({}, templateValues, submission.values)
-    ])
-
-    // set deal
-    this.frame.sendMessage('setDeal', [deal])
-
-    // set roles
-    this.frame.sendMessage('setRoles', [
-      (deal.roles || []).map(role => roles[role])
-    ])
-
-    this.frame.sendMessage('prepare')
-  }
-
-  /**
-   *
-   */
-  async onSetDeal() {
-    console.log(this.submissionValues)
-    this.frame.sendMessage('setValues', [this.submissionValues])
-  }
-
-  /**
-   *
-   */
-  async getTemplates() {
-    const { task, deal } = this.props
-
-    try {
-      const templates = await Deal.getFormTemplates(deal.brand.id, task.form)
-
-      return this.getTemplatesValues(templates)
-    } catch (e) {
-      console.log(e)
-
-      return {}
-    }
-  }
-
-  /**
-   *
-   */
-  getTemplatesValues(templates) {
-    let values = {}
-
-    templates.forEach(
-      template => (values = Object.assign({}, values, template.values))
-    )
-
-    return values
-  }
-
-  /**
-   *
-   */
-  onUpdate() {
-    this.frame.sendMessage('incompleteFields')
-  }
-
-  /**
-   *
-   */
-  onSubmit() {
-    this.frame.sendMessage('incompleteFields')
-  }
-
-  /**
-   *
-   */
-  onIncompleteFields(data) {
-    this.setState({ incompleteFields: data })
-  }
-
-  /**
-   *
-   */
-  onHideOptionalRows() {
-    // do nothing
-  }
-
-  /**
-   *
-   */
-  onGetValues(data) {
     const { task } = this.props
-    const { isSaving } = this.state
+    let forms = this.props.forms
 
-    if (!task || isSaving) {
+    if (!forms) {
+      forms = await getForms()
+    }
+
+    const form = forms[task.form]
+
+    if (!form) {
+      console.error('Form is null')
+
       return false
     }
 
-    this.setState(
-      {
-        isSaving: true
-      },
-      () => this.saveForm(data)
-    )
+    const pdfUrl = task.submission
+      ? task.submission.file.url
+      : `${config.forms.url}/${form.id}.pdf`
+
+    // get form size in bytes, because pdfjs sucks
+    const formSize = await getFormSize(form.id)
+
+    if (!formSize) {
+      this.setState({
+        downloadPercents: Infinity
+      })
+    }
+
+    const pdfDocument = PDFJS.getDocument({
+      url: pdfUrl,
+      length: formSize
+    })
+
+    pdfDocument.onProgress = progress => {
+      if (!progress.total) {
+        return false
+      }
+
+      this.setState({
+        downloadPercents: (progress.loaded / progress.total) * 100
+      })
+    }
+
+    pdfDocument.then(document => {
+      this.setState({
+        isFormLoaded: true,
+        downloadPercents: 100,
+        pdfUrl
+      })
+
+      window.setTimeout(
+        () =>
+          this.setState({
+            pdfDocument: document
+          }),
+        500
+      )
+    })
   }
 
-  /**
-   *
-   */
-  onSave() {
-    this.frame.sendMessage('getValues')
+  changeFormValue = (name, value, forceUpdate = false) => {
+    const newValues = {
+      ...this.values,
+      [name]: value
+    }
+
+    this.values = newValues
+
+    if (forceUpdate) {
+      this.forceUpdate()
+    }
   }
 
-  /**
-   *
-   */
-  async saveForm(values) {
+  setFormValues = (values, forceUpdate = false) => {
+    const newValues = {
+      ...this.values,
+      ...values
+    }
+
+    this.values = newValues
+
+    if (forceUpdate) {
+      return this.forceUpdate()
+    }
+  }
+
+  handleSave = async () => {
     const { task, notify } = this.props
-    const { incompleteFields, notifyOffice } = this.state
+    // const { notifyOffice } = this.state
 
-    const status = incompleteFields.length === 0 ? 'Fair' : 'Draft'
+    this.setState({ isSaving: true })
 
     // save form
     try {
-      await this.props.saveSubmission(task.id, task.form, status, values)
+      await this.props.saveSubmission(
+        task.id,
+        this.state.pdfUrl,
+        task.form,
+        this.values
+      )
 
-      if (notifyOffice) {
-        await this.props.changeNeedsAttention(task.deal, task.id, true)
-      }
+      // if (notifyOffice) {
+      //   await this.props.changeNeedsAttention(task.deal, task.id, true)
+      // }
 
       notify({
         message: 'The form has been saved!',
         status: 'success'
       })
 
-      // close form
-      return this.close()
+      this.closeForm()
     } catch (err) {
+      console.log(err)
+
       notify({
         message:
           err && err.response && err.response.body
@@ -198,74 +171,65 @@ class FormEdit extends React.Component {
       })
     }
 
-    // don't show saving
     this.setState({ isSaving: false })
   }
 
-  /**
-   *
-   */
-  close() {
-    const { deal } = this.props
+  getHeaderTitle = title =>
+    title && title.length > 30 ? `${title.substring(0, 30)}...` : title
 
-    browserHistory.push(`/dashboard/deals/${deal.id}`)
-  }
-
-  /**
-   *
-   */
-  handleOpenPreview() {
-    const { params } = this.props
-    const { id, taskId } = params
-
-    browserHistory.push(`/dashboard/deals/${id}/form-viewer/${taskId}`)
-  }
-
-  /**
-   *
-   */
-  getButtonCaption() {
-    const { isSaving, isLoaded, incompleteFields } = this.state
-
-    if (isSaving) {
-      return 'Saving ...'
-    } else if (!isLoaded) {
-      return 'Loading ...'
-    }
-
-    return incompleteFields.length === 0 ? 'Save' : 'Save Draft'
-  }
-
-  toggleNotifyOffice() {
-    this.setState(state => ({
-      notifyOffice: !state.notifyOffice
-    }))
-  }
+  closeForm = () =>
+    browserHistory.push(`/dashboard/deals/${this.props.task.deal}`)
 
   render() {
+    const { isFormLoaded, isSaving, pdfDocument } = this.state
     const { task } = this.props
-    const { isLoaded, isSaving, incompleteFields } = this.state
 
-    const isValidForm = task && task.form && task.task_type === 'Form'
+    if (!task) {
+      return (
+        <LoadingDealContainer>
+          <Spinner />
+          Loading Deal
+        </LoadingDealContainer>
+      )
+    }
 
-    if (!isValidForm) {
-      return false
+    if (!pdfDocument || !isFormLoaded) {
+      return (
+        <LoadingDealContainer>
+          {isFormLoaded ? 'Opening Digital Form' : 'Loading Digital Form'}
+
+          <ProgressBar
+            percents={this.state.downloadPercents}
+            indeterminate={this.state.downloadPercents === Infinity}
+          />
+        </LoadingDealContainer>
+      )
     }
 
     return (
-      <EmbedForm
-        task={task}
-        loaded={isLoaded}
-        incompleteFields={incompleteFields}
-        saving={isSaving}
-        buttonCaption={this.getButtonCaption()}
-        onFrameRef={ref => (this.frame = ref)}
-        onReceiveMessage={this.onReceiveMessage}
-        onSave={() => this.onSave()}
-        onClose={() => this.close()}
-        handleOpenPreview={() => this.handleOpenPreview()}
-        onChangeNotifyOffice={() => this.toggleNotifyOffice()}
-      />
+      <Fragment>
+        <PageHeader backButton>
+          <PageHeader.Title title={this.getHeaderTitle(task.title)} />
+
+          <PageHeader.Menu>
+            <ActionButton
+              disabled={!isFormLoaded || isSaving}
+              onClick={this.handleSave}
+            >
+              {isSaving ? 'Saving...' : 'Save'}
+            </ActionButton>
+          </PageHeader.Menu>
+        </PageHeader>
+
+        <PDFEdit
+          document={pdfDocument}
+          deal={this.props.deal}
+          roles={this.props.roles}
+          values={this.values}
+          onValueUpdate={this.changeFormValue}
+          onSetValues={this.setFormValues}
+        />
+      </Fragment>
     )
   }
 }
@@ -278,11 +242,11 @@ function mapStateToProps({ deals, user }, props) {
     user,
     task: tasks && tasks[taskId],
     deal: list && list[id],
-    roles: deals.roles
+    forms: deals.forms
   }
 }
 
 export default connect(
   mapStateToProps,
-  { saveSubmission, changeNeedsAttention, notify }
-)(FormEdit)
+  { saveSubmission, getDeal, getForms, notify }
+)(EditDigitalForm)

@@ -59,19 +59,6 @@
     }
   }
 
-  .deal-info-section.deal-roles {
-    padding: 0;
-    margin-bottom: 2rem;
-
-    .deal-info-title {
-      margin-bottom: 3px;
-    }
-
-    .create-new-role {
-      position: relative;
-    }
-  }
-
   .info-btn {
     width: calc(100% - 20px);
     margin: 10px 10px 0 10px;
@@ -98,13 +85,5 @@
 .c-add-signer-modal {
   .deal-info-title {
     display: none !important;
-  }
-
-  .deal-info-section.deal-roles {
-    padding: 20px !important;
-  }
-
-  .create-new-role {
-    position: relative;
   }
 }

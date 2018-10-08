@@ -39,7 +39,7 @@ export class Timeline extends React.Component {
 
   renderCRMTaskItem(key, task) {
     const _props = {
-      defaultAssociation: this.props.defaultAssociation,
+      defaultAssociationId: this.props.defaultAssociationId,
       editCallback: this.props.editEventHandler,
       key,
       onClick: this.onClickEvent,
@@ -95,7 +95,7 @@ export class Timeline extends React.Component {
     }
 
     const _props = {
-      defaultAssociation: this.props.defaultAssociation,
+      defaultAssociationId: this.props.defaultAssociationId,
       deleteCallback: this.handleDeleteEvent,
       isOpen: true,
       onClose: this.closeEventDrawer,

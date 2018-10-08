@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -94,7 +95,7 @@ class App extends Component {
       this.initialRooms()
 
       // load deals
-      if (!deals) {
+      if (Object.keys(deals).length === 0) {
         dispatch(getDeals(user))
       }
 
