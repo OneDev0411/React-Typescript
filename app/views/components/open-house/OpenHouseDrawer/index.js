@@ -382,7 +382,7 @@ export class OpenHouseDrawer extends React.Component {
         </Drawer>
 
         <InstantMarketing
-          headerTitle="Registrtation Template"
+          headerTitle="Registration Template"
           closeConfirmation={false}
           showTemplatesColumn={false}
           saveButtonLabel="Save"
