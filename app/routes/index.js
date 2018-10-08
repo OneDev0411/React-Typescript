@@ -8,7 +8,6 @@ import Landing from '../components/Pages/Landing'
 import Load from '../loader'
 import store from '../stores'
 // actions
-import { getContexts, getDeals } from '../store_actions/deals'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
 const AsyncAuthenticationLayout = Load({
@@ -148,7 +147,7 @@ const AsyncDealFormEdit = Load({
 
 const AsyncAgentNetwork = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/agent-network' /* webpackChunkName: "agent-network" */)
+    import('../components/Pages/Dashboard/Deals/AgentNetwork' /* webpackChunkName: "agent-network" */)
 })
 
 /* ==================================== */
