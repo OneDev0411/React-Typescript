@@ -1,18 +1,13 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
-// import { FactsheetContainer, MainContainer } from '../styled'
+import AgentNetwork from './AgentNetwork'
+import OpenHouse from './OpenHouse'
 
 export default function MarketingPane({ deal }) {
-  return <div>--Marketing--</div>
-  // return (
-  //   <PageContent>
-  //     <SideColumnContainer>
-  //       <SideNav deal={deal} />
-  //     </SideColumnContainer>
-
-  //     <MainContainer>
-  //       <Checklists deal={deal} />
-  //     </MainContainer>
-  //   </PageContent>
-  // )
+  return (
+    <div>
+      <AgentNetwork deal={deal} />
+      <OpenHouse deal={deal} />
+    </div>
+  )
 }

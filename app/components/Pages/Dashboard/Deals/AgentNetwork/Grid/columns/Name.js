@@ -1,7 +1,7 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 
-import Avatar from '../../../../../../../views/components/Avatar'
+import Avatar from 'components/Avatar'
 
 export const Name = ({ name }) => (
   <Flex nowrap>

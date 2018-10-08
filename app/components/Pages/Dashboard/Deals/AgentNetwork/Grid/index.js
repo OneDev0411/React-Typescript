@@ -1,14 +1,14 @@
 import React from 'react'
 
-import Loading from '../../../../../../views/components/Spinner'
-import Table from '../../../../../../views/components/Grid/Table'
-import Button from '../../../../../../views/components/Button/ActionButton'
-import SendDealPromotionCard from '../../../../../../views/components/InstantMarketing/Flows/SendDealPromotion'
+import Loading from 'components/Spinner'
+import Table from 'components/Grid/Table'
+import Button from 'components/Button/ActionButton'
+import SendDealPromotionCard from 'components/InstantMarketing/Flows/SendDealPromotion'
 
 import { Name } from './columns/Name'
 import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
-import { ListingsListViewDrawer } from './listings-list-view-drawer'
+import { ListingsListViewDrawer } from './ListingsListViewDrawer'
 
 export class Grid extends React.Component {
   state = {
