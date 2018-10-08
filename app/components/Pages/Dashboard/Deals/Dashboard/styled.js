@@ -10,7 +10,17 @@ export const Divider = styled.div`
   background-color: ${borderColor};
 `
 
-export const Container = styled.div`
+export const PageWrapper = styled.div`
+  max-width: 1456px;
+  margin: 0 auto;
+
+  /* 1681px */
+  @media (min-width: 105.0625em) {
+    max-width: 1616px;
+  }
+`
+
+export const DealContainer = styled.div`
   min-height: 100vh;
   background-color: #f2f2f2;
   box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.04), -1px 0 20px 0 rgba(0, 0, 0, 0.1);

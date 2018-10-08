@@ -14,7 +14,7 @@ import { PageHeader } from './Header'
 import TabSections from './Tabs'
 import TaskView from './TaskView'
 
-import { Container } from './styled'
+import { DealContainer, PageWrapper } from './styled'
 
 class DealDetails extends React.Component {
   state = {
@@ -77,25 +77,27 @@ class DealDetails extends React.Component {
     }
 
     return (
-      <Container disableScroll={this.props.selectedTask !== null}>
-        <PageHeader deal={deal} />
+      <DealContainer disableScroll={this.props.selectedTask !== null}>
+        <PageWrapper>
+          <PageHeader deal={deal} />
 
-        <TabSections
-          deal={deal}
-          user={this.props.user}
-          activeTab={this.state.activeTab}
-          onChangeTab={this.handleChangeActiveTab}
-          isBackOffice={this.props.isBackOffice}
-          isFetchingChecklists={this.state.isFetchingChecklists}
-        />
+          <TabSections
+            deal={deal}
+            user={this.props.user}
+            activeTab={this.state.activeTab}
+            onChangeTab={this.handleChangeActiveTab}
+            isBackOffice={this.props.isBackOffice}
+            isFetchingChecklists={this.state.isFetchingChecklists}
+          />
 
-        <TaskView
-          deal={deal}
-          task={this.props.selectedTask}
-          isOpen={this.props.selectedTask !== null}
-          isBackOffice={this.props.isBackOffice}
-        />
-      </Container>
+          <TaskView
+            deal={deal}
+            task={this.props.selectedTask}
+            isOpen={this.props.selectedTask !== null}
+            isBackOffice={this.props.isBackOffice}
+          />
+        </PageWrapper>
+      </DealContainer>
     )
   }
 }
