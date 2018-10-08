@@ -86,7 +86,7 @@ export class OpenHouseDrawer extends React.Component {
       isDisabled: false,
       isTemplateBuilderOpen: false,
       listing: null,
-      registrationTemplate: '',
+      template: '',
       openHouse: props.openHouse
     }
 
@@ -130,21 +130,23 @@ export class OpenHouseDrawer extends React.Component {
   }
 
   loadRegistrationTemplate = async () => {
-    const list = await getTemplates(['CrmOpenHouse'])
-    const templateItem = list[0]
+    try {
+      const list = await getTemplates(['CrmOpenHouse'])
+      const templateItem = list[0]
 
-    const template = nunjucks.renderString(templateItem.template, {
-      ...this.props.templateData
-    })
+      const template = nunjucks.renderString(templateItem.template, {
+        ...this.props.templateData
+      })
 
-    this.setState({
-      registrationTemplate: template
-    })
+      this.setState({ template })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   handleSaveTemplate = ({ template }) =>
     this.setState({
-      registrationTemplate: template,
+      template,
       isTemplateBuilderOpen: false
     })
 
@@ -230,8 +232,6 @@ export class OpenHouseDrawer extends React.Component {
     document
       .getElementById('open-house-drawer-form')
       .dispatchEvent(new Event('submit', { cancelable: true }))
-
-    console.log(this.state)
   }
 
   toggleTemplateBuilder = () =>
@@ -259,7 +259,12 @@ export class OpenHouseDrawer extends React.Component {
                 postLoadFormat(openHouse, user, this.state.listing)
               }
               preSaveFormat={(values, originalValues) =>
-                preSaveFormat(values, originalValues, this.props.deal)
+                preSaveFormat(
+                  values,
+                  originalValues,
+                  this.props.deal,
+                  this.state.template
+                )
               }
               save={this.save}
               validate={validate}
