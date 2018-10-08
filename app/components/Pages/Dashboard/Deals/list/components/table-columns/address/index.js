@@ -67,7 +67,8 @@ const Address = ({ deal }) => {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            display: 'block'
+            display: 'block',
+            fontWeight: 500
           }}
         >
           {deal.title}
