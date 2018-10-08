@@ -3,12 +3,13 @@ import styled from 'styled-components'
 
 const StatusComponent = styled.div`
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 16px;
+  height: 16px;
   background-color: ${({ statusColor }) => statusColor};
   border-radius: 50%;
-  bottom: 0;
-  right: 0;
+  border: solid 3px #ffffff;
+  bottom: -3px;
+  right: -3px;
 `
 
 const ImageStatus = ({ statusColor }) => {

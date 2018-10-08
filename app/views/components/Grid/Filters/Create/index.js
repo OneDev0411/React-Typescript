@@ -70,7 +70,7 @@ export class AddFilter extends React.Component {
                 <MissingValueToolTip enabled={hasMissingValue}>
                   <Flex alignCenter>
                     <IconAdd />
-                    <span>Add Filter</span>
+                    <span style={{ fontWight: 500 }}>Add Filter</span>
                   </Flex>
                 </MissingValueToolTip>
               </AddItem>

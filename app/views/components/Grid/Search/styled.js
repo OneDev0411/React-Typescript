@@ -19,7 +19,7 @@ export const TextInput = styled.input`
   width: 100%;
   height: 45px;
   border: none;
-  font-size: 16px;
+  font-size: 13px;
   padding: 0 5px;
   font-family: Barlow, sans-serif;
   background-color: transparent;
@@ -63,7 +63,7 @@ export const IconSearch = IconSearchBase.extend`
 `
 export const Icon = styled.div`
   color: ${grey.A900};
-  padding-top: ${props => (props.isSearching ? '0' : '9px')};
+  padding-top: ${props => (props.isSearching ? '0' : '4px')};
 `
 
 export const IconButton = IconButtonFlex.extend`
