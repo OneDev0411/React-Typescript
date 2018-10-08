@@ -15,6 +15,7 @@ import ImageStatus from '../../../../../../../views/components/ImageStatus'
 const AvatarContainer = styled.div`
   display: table;
   position: relative;
+  align-self: center;
   .avatar div {
     font-weight: 700 !important;
   }
@@ -69,7 +70,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           round
           name={name}
           src={avatar}
-          size={32}
+          size={40}
         />
         <ImageStatus statusColor={statusColor} />
       </AvatarContainer>
@@ -81,7 +82,8 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           padding: 0,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
-          textOverflow: 'ellipsis'
+          textOverflow: 'ellipsis',
+          marginTop: '-4px'
         }}
       >
         {name}

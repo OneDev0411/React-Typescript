@@ -88,7 +88,7 @@ class SearchDrawer extends React.Component {
                   inputRef={ref => (this.searchInputRef = ref)}
                   style={{
                     ...this.props.searchInputOptions.style,
-                    margin: '16px'
+                    margin: '1rem 0'
                   }}
                 />
 
