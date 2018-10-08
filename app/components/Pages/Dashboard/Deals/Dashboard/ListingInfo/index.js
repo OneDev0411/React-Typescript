@@ -1,9 +1,10 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 
-import { ListingImage } from './Image'
 import { H1 } from 'components/Typography/headings'
-import LinkButton from 'components/Button/LinkButton'
+
+import { ListingImage } from './Image'
+import MlsConnect from './MlsConnect'
 
 import { Divider } from '../styled'
 
@@ -38,7 +39,7 @@ export function ListingInfo(props) {
           {address}
           {address.length > 0 && <Divider />}
 
-          <LinkButton style={{ padding: 0 }}>Add MLS# number</LinkButton>
+          <MlsConnect deal={props.deal} />
         </Flex>
       </Flex>
     </Flex>
