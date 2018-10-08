@@ -16,5 +16,6 @@ export const valertOptions = {
     'RES-Half Duplex',
     'RES-Townhouse',
     'RES-Single Family'
-  ]
+  ],
+  limit: 5000
 }
