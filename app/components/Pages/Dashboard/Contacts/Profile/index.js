@@ -187,6 +187,8 @@ class ContactProfile extends React.Component {
                 <Tags contact={contact} />
               </Card>
               <Card>
+                {!this.state.isDesktopScreen && <Dates contact={contact} />}
+
                 <ContactInfo contact={contact} />
 
                 {hasAddress.length > 0 && <Addresses contact={contact} />}
@@ -195,7 +197,9 @@ class ContactProfile extends React.Component {
 
                 {hasAddress.length === 0 && <Addresses contact={contact} />}
 
-                {!this.state.isDesktopScreen && thirdColumnSections}
+                {!this.state.isDesktopScreen && (
+                  <DealsListWidget contactId={contact.id} />
+                )}
 
                 <Owner
                   onSelect={this.onChangeOwner}
