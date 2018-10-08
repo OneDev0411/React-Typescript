@@ -4,16 +4,10 @@ import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import '../../../../styles/components/modules/template-builder.scss'
 
-import nunjucks from 'nunjucks'
-
 import './AssetManager'
 import config from './config'
 
-import {
-  currencyFilter,
-  areaMeterFilter,
-  phoneNumberFilter
-} from '../helpers/nunjucks-filters'
+import nunjucks from '../helpers/nunjucks'
 
 import {
   Container,
@@ -46,7 +40,6 @@ class Builder extends React.Component {
     })
 
     this.editor.on('load', this.setupGrapesJs.bind(this))
-    this.setupNunjucks()
   }
 
   setupGrapesJs = () => {
@@ -54,14 +47,6 @@ class Builder extends React.Component {
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
-  }
-
-  setupNunjucks = () => {
-    this.nunjucks = new nunjucks.Environment()
-
-    this.nunjucks.addFilter('currency', currencyFilter)
-    this.nunjucks.addFilter('area', areaMeterFilter)
-    this.nunjucks.addFilter('phone', phoneNumberFilter)
   }
 
   disableAssetManager = () => {
@@ -151,7 +136,7 @@ class Builder extends React.Component {
   handleSelectTemplate = templateItem => {
     const template = {
       ...templateItem,
-      template: this.nunjucks.renderString(templateItem.template, {
+      template: nunjucks.renderString(templateItem.template, {
         ...this.props.templateData
       })
     }
@@ -170,7 +155,7 @@ class Builder extends React.Component {
     return (
       <Container className="template-builder">
         <Header>
-          <h1>Marketing Center</h1>
+          <h1>{this.props.headerTitle}</h1>
 
           <div>
             <ActionButton appearance="outline" onClick={this.props.onClose}>
@@ -181,18 +166,21 @@ class Builder extends React.Component {
               style={{ marginLeft: '0.5rem' }}
               onClick={this.onSave}
             >
-              Send
+              {this.props.saveButtonLabel}
             </ActionButton>
           </div>
         </Header>
 
         <BuilderContainer>
-          <TemplatesContainer>
+          <TemplatesContainer
+            isInvisible={this.props.showTemplatesColumn === false}
+          >
             <Templates
               onTemplateSelect={this.handleSelectTemplate}
               templateTypes={this.props.templateTypes}
             />
           </TemplatesContainer>
+
           <div id="grapesjs-canvas" />
         </BuilderContainer>
       </Container>
