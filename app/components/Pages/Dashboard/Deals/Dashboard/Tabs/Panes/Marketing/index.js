@@ -1,13 +1,15 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import AgentNetwork from './AgentNetwork'
 import OpenHouse from './OpenHouse'
 
-export default function MarketingPane({ deal }) {
+import { MarketingContainer } from './styled'
+
+export default function MarketingPane(props) {
   return (
-    <div>
-      <AgentNetwork deal={deal} />
-      <OpenHouse deal={deal} />
-    </div>
+    <MarketingContainer>
+      <AgentNetwork deal={props.deal} />
+      <OpenHouse deal={props.deal} user={props.user} />
+    </MarketingContainer>
   )
 }

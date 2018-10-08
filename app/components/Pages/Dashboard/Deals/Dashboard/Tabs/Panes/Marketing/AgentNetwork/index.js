@@ -1,7 +1,6 @@
 import React from 'react'
 
 import LinkButton from 'components/Button/LinkButton'
-import AgentNetwork from '../../../../../AgentNetwork'
 
 import {
   Container,
