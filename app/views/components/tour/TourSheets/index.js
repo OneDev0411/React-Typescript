@@ -6,7 +6,7 @@ import BareModal from '../../BareModal'
 import { Header } from './Header'
 import { CoverPage } from './CoverPage'
 import { LocationPage } from './LocationPage'
-import './style.scss'
+import './styles/main.scss'
 
 TourSheets.propTypes = {
   agent: PropTypes.shape(),
