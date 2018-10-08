@@ -6,6 +6,7 @@ import { Card } from '../../styled'
 export const MarketingContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `
 
 export const Container = styled(Card)`
