@@ -52,9 +52,9 @@ export class TourItem extends React.Component {
               </div>
             )}
             <Associations
-              task={task}
-              defaultAssociation={this.props.defaultAssociation}
+              defaultAssociationId={this.props.defaultAssociationId}
               setAssociations={this.setAssociations}
+              task={task}
             />
           </React.Fragment>
         )}

@@ -66,7 +66,7 @@ export class OpenHouseItem extends React.Component {
             )}
             <Associations
               task={task}
-              defaultAssociation={this.props.defaultAssociation}
+              defaultAssociationId={this.props.defaultAssociationId}
             />
           </React.Fragment>
         )}

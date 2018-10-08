@@ -3,10 +3,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 
-import {
-  getContactAddresses,
-  updateContactQuery
-} from '../../../../../models/contacts/helpers'
+import { getContactAddresses } from '../../../../../models/contacts/helpers'
 import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
 
 import {
@@ -261,7 +258,7 @@ class ContactProfile extends React.Component {
               </Tab.Container>
               <Timeline
                 contact={contact}
-                defaultAssociation={contact.id}
+                defaultAssociationId={contact.id}
                 deleteEventHandler={this.deleteEvent}
                 deleteNoteHandler={this.deleteNote}
                 editEventHandler={this.editEvent}
