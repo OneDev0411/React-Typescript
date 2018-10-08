@@ -7,7 +7,6 @@ import Deal from '../../../../../../../models/Deal'
 import ToolTip from '../../../../../../../views/components/tooltip'
 
 import {
-  Container,
   ListTitle,
   ListItem
 } from '../../../../../../../views/components/Grid/SavedSegments/List/styled'
@@ -119,7 +118,7 @@ class AgentFilters extends React.Component {
     const activeFilter = this.props.activeFilter || 'All'
 
     return (
-      <Container>
+      <React.Fragment>
         <ListTitle>Lists</ListTitle>
         {this.props.searchCriteria.length > 0 ? (
           <ListItem isSelected>
@@ -146,7 +145,7 @@ class AgentFilters extends React.Component {
             </ToolTip>
           ))
         )}
-      </Container>
+      </React.Fragment>
     )
   }
 }

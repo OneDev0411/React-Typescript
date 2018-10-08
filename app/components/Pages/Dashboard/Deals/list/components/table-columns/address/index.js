@@ -10,18 +10,18 @@ import IconHome from '../../../../../../../../views/components/SvgIcons/NewHome/
 import ImageStatus from '../../../../../../../../views/components/ImageStatus'
 
 const Container = styled.div`
-  display: flex;
+  display: table;
   position: relative;
 `
 
 const Image = styled.img`
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 `
 
 const Name = styled.div`
-  width: calc(100% - 32px - 1.5rem);
+  width: calc(100% - 40px - 1.5rem);
   margin-left: 1rem;
 `
 
@@ -35,8 +35,8 @@ const Status = styled.div`
   margin-left: 1rem;
 `
 const IconContainer = styled(Flex)`
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   background-color: #000;
   border-radius: 50%;
   > svg {
@@ -44,6 +44,7 @@ const IconContainer = styled(Flex)`
     width: 16px;
   }
 `
+
 const Address = ({ deal }) => {
   const photo = Deal.get.field(deal, 'photo')
   const status = Deal.get.status(deal)
@@ -67,7 +68,8 @@ const Address = ({ deal }) => {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            display: 'block'
+            display: 'block',
+            fontWeight: 500
           }}
         >
           {deal.title}
