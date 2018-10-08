@@ -17,7 +17,6 @@ import Notification from '../../components/table-columns/notification-badge'
 import { getPrimaryAgent } from '../../../utils/roles'
 import { Filters } from '../filters'
 
-import getGridTrProps from '../../helpers/get-tr-props'
 import AgentAvatars from '../../components/table-columns/AgentAvatars'
 
 class Grid extends React.Component {
@@ -124,7 +123,6 @@ class Grid extends React.Component {
         isFetching={isFetchingDeals}
         columns={columns}
         data={data}
-        getTrProps={getGridTrProps}
         EmptyState={EmptyState}
         LoadingState={LoadingState}
       />

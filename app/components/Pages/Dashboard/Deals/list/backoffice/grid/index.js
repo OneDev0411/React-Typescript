@@ -16,8 +16,6 @@ import CriticalDate, {
 } from '../../components/table-columns/critical-date'
 import Notifications from '../../components/table-columns/notification-badge'
 
-import getGridTrProps from '../../helpers/get-tr-props'
-
 import { getPrimaryAgentName } from '../../../utils/roles'
 
 class Grid extends React.Component {
@@ -155,7 +153,6 @@ class Grid extends React.Component {
         isFetching={isFetchingDeals}
         columns={columns}
         data={data}
-        getTrProps={getGridTrProps}
         EmptyState={EmptyState}
         LoadingState={LoadingState}
       />
