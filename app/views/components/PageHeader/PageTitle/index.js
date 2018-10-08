@@ -49,7 +49,7 @@ export function PageTitle(props) {
           {title ? (
             <Flex column>
               <H1>{title}</H1>
-              {subtitle && <Subtitle>subtitle</Subtitle>}
+              {subtitle && <Subtitle>{subtitle}</Subtitle>}
             </Flex>
           ) : (
             props.children
@@ -85,7 +85,7 @@ export function PageTitle(props) {
         )}
         <Flex column>
           {title && <H1>{title}</H1>}
-          {subtitle && <Subtitle>subtitle</Subtitle>}
+          {subtitle && <Subtitle>{subtitle}</Subtitle>}
         </Flex>
       </Flex>
       {props.children}
