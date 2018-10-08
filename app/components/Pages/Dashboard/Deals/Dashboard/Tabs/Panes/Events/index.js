@@ -1,15 +1,43 @@
 import React, { Fragment } from 'react'
 
+import { searchEvents } from 'models/tasks/search-events'
+import { normalizeDeal } from 'views/utils/association-normalizers'
+
 import NewTask from 'views/CRM/Tasks/components/NewTask'
-// import { Timeline } from '../../../../../Contacts/Profile/Timeline'
+import { Timeline } from '../../../../../Contacts/Profile/Timeline'
 
 import FactsheetSideNav from '../../components/FactsheetSideNav'
 import { FactsheetContainer, MainContainer, Card } from '../../styled'
-import { TimelineTitle } from './styled'
 
 export default class EventsPane extends React.Component {
   state = {
+    isFetching: true,
     timeline: []
+  }
+
+  componentDidMount() {
+    this.fetchTimeline()
+  }
+
+  get defaultAssociation() {
+    return {
+      association_type: 'deal',
+      deal: normalizeDeal(this.props.deal)
+    }
+  }
+
+  fetchTimeline = async () => {
+    try {
+      const response = await searchEvents({
+        deal: this.props.deal.id,
+        associations: ['crm_task.reminder', 'crm_task.associations']
+      })
+
+      this.setState({ isFetching: false, timeline: response.data })
+    } catch (error) {
+      console.log(error)
+      this.setState({ isFetching: false })
+    }
   }
 
   addEvent = event =>
@@ -17,25 +45,21 @@ export default class EventsPane extends React.Component {
       timeline: [event, ...state.timeline]
     }))
 
-  get DealAssociation() {
-    const { deal } = this.props
+  filterTimelineById = (state, id) =>
+    state.timeline.filter(item => item.id !== id)
 
-    return {
-      association_type: 'deal',
-      deal: {
-        type: 'deal',
-        id: deal.id,
-        title: deal.title,
-        url: `/dashboard/deals/${deal.id}`,
-        details: `${deal.deal_type}, ${deal.property_type}`,
-        avatar: {
-          image: null,
-          placeHolderImage: '/static/icons/listing-place-holder.svg',
-          size: 32
-        }
-      }
-    }
-  }
+  editEvent = updatedEvent =>
+    this.setState(state => ({
+      timeline: [
+        ...this.filterTimelineById(state, updatedEvent.id),
+        updatedEvent
+      ]
+    }))
+
+  deleteEvent = id =>
+    this.setState(state => ({
+      timeline: this.filterTimelineById(state, id)
+    }))
 
   render() {
     return (
@@ -52,17 +76,22 @@ export default class EventsPane extends React.Component {
         </FactsheetContainer>
 
         <MainContainer>
-          <Card>
+          <Card style={{ marginBottom: '1.5rem' }}>
             <NewTask
               user={this.props.user}
               submitCallback={this.addEvent}
-              defaultAssociation={this.DealAssociation}
+              defaultAssociation={this.defaultAssociation}
             />
           </Card>
 
-          <TimelineTitle>Upcoming Events</TimelineTitle>
-
-          <Card>-------</Card>
+          <Timeline
+            defaultAssociationId={this.props.deal.id}
+            deleteEventHandler={this.deleteEvent}
+            editEventHandler={this.editEvent}
+            isFetching={this.state.isFetching}
+            items={this.state.timeline}
+            user={this.props.user}
+          />
         </MainContainer>
       </Fragment>
     )
