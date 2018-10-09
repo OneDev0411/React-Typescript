@@ -129,6 +129,9 @@ export class SelectablePlugin {
 
     if (selectedRows[id]) {
       delete selectedRows[id]
+
+      // deselect select-all checkbox in header if is selected
+      this.isAllRowsSelected() && this.toggleSelectAllRows()
     } else {
       selectedRows[id] = true
     }
