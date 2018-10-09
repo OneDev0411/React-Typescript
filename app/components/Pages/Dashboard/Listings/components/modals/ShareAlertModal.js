@@ -11,7 +11,7 @@ import { normalizeAlertOptions } from './CreateAlertModal'
 import Recipients from '../../../../../Partials/ShareView'
 import { hasRecipients } from '../../../../../../utils/helpers'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
-import createAlert from '../../../../../../models/listings/alerts/create-alert'
+import createAlert from '../../../../../../store_actions/listings/alerts/create-alert'
 
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import IconButton from '../../../../../../views/components/Button/IconButton'
@@ -72,7 +72,7 @@ export default compose(
       searchOptions: search.options,
       drawingPoints: search.map.drawing.points
     }),
-    { createRoom }
+    { createRoom, createAlert }
   ),
   withState('recipients', 'setRecipients', {}),
   withState('isSharing', 'setIsSharing', false),
@@ -87,7 +87,8 @@ export default compose(
       setIsSharing,
       drawingPoints,
       searchOptions,
-      setSuccessModalIsActive
+      setSuccessModalIsActive,
+      createAlert
     }) => () => {
       setIsSharing(true)
 
