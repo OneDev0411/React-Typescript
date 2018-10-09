@@ -56,6 +56,7 @@ class YearMonthList extends React.Component {
           }}
           menuStyle={{ fontSize: '1rem' }}
           buttonStyle={{ fontSize: '1rem' }}
+          centerSelected
         />
         <BasicDropdown
           noBorder
@@ -71,6 +72,7 @@ class YearMonthList extends React.Component {
           }}
           menuStyle={{ fontSize: '1rem' }}
           buttonStyle={{ fontSize: '1rem', paddingLeft: '0' }}
+          centerSelected
         />
 
         {React.cloneElement(children, {

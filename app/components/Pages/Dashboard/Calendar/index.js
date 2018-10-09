@@ -302,7 +302,6 @@ class CalendarContainer extends React.Component {
                 loadingPosition={loadingPosition}
                 onScrollTop={this.loadPreviousItems}
                 onScrollBottom={this.loadNextItems}
-                onContainerScroll={e => this.handleContainerScroll(e.target)}
                 onSelectTask={this.onClickTask}
                 onRef={this.onTableRef}
               />
