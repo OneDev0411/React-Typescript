@@ -133,11 +133,7 @@ export class Table extends React.Component {
 
   getGridHeaderProps = () => ({
     style: {
-      position: 'sticky',
-      top: '0',
-      zIndex: 5,
-      backgroundColor: '#fff',
-      padding: '5px 0'
+      display: 'none'
     }
   })
 
