@@ -2,7 +2,7 @@ import React from 'react'
 
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
-import { CreateTour } from '../../../../../../views/components/tour/CreateTour'
+// import { CreateTour } from '../../../../../../views/components/tour/CreateTour'
 
 import { formatListing } from '../../helpers/format-listing'
 import { Address } from './columns/Address'
@@ -60,18 +60,18 @@ export class GridView extends React.Component {
     }
   ]
 
-  actions = [
-    {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => {
-        const listings = this.props.listings.data.filter(l =>
-          selectedRows.some(id => id === l.id)
-        )
+  // actions = [
+  //   {
+  //     display: ({ selectedRows }) => selectedRows.length > 0,
+  //     render: ({ selectedRows }) => {
+  //       const listings = this.props.listings.data.filter(l =>
+  //         selectedRows.some(id => id === l.id)
+  //       )
 
-        return <CreateTour listings={listings} user={this.props.user} />
-      }
-    }
-  ]
+  //       return <CreateTour listings={listings} user={this.props.user} />
+  //     }
+  //   }
+  // ]
 
   format = listing => formatListing(listing, this.props.user)
 
@@ -86,14 +86,14 @@ export class GridView extends React.Component {
           listInfo={this.props.listings.info}
           summary={{ entityName: 'Listings', style: { color: '#000' } }}
           plugins={{
-            sortable: {},
-            actionable: {
-              actions: this.actions
-            },
-            selectable: {
-              persistent: true,
-              storageKey: 'listings'
-            }
+            sortable: {}
+            // actionable: {
+            //   actions: this.actions
+            // },
+            // selectable: {
+            //   persistent: true,
+            //   storageKey: 'listings'
+            // }
           }}
         />
       </div>
