@@ -13,14 +13,15 @@ function getContextType(context) {
 }
 
 function getFormValue(values, annotations) {
-  const relevant = annotations
-    .map(a => values[a.fieldName])
+  const valueList = annotations
+    .map(ann => values[ann.fieldName])
     .filter(Boolean)
 
-  if (relevant.length < 1)
+  if (valueList.length === 0) {
     return undefined
+  }
 
-  return relevant.join(' ')
+  return valueList.join(' ')
 }
 
 export default function FormContexts(props) {

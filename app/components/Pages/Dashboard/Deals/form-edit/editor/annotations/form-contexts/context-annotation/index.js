@@ -27,6 +27,7 @@ export default class Context extends React.Component {
       )
 
       this.props.onSetValues(values)
+
       return
     }
 

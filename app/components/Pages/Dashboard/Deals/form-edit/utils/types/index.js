@@ -10,8 +10,7 @@ const Types = {
   UNKNOWN_ANNOTATION
 }
 
-
-const getType = (annotation) => {
+const getType = annotation => {
   if (annotation.fieldType === 'Tx') {
     return TEXT_ANNOTATION
   }
@@ -27,7 +26,7 @@ const getType = (annotation) => {
   return UNKNOWN_ANNOTATION
 }
 
-const getValue = (annotation) => {
+const getValue = annotation => {
   const { fieldValue, buttonValue } = annotation
 
   const type = getType(annotation)
