@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { func } from 'prop-types'
 
 import { blue, grey } from 'views/utils/colors'
 import Checkmark from 'components/SvgIcons/Checkmark/IconCheckmark'
@@ -27,42 +26,24 @@ const CheckBox = styled.span`
   }
 `
 
-export class CheckBoxButton extends React.Component {
-  static propTypes = {
-    onClick: func.isRequired
-  }
-
-  state = {
-    isSelected: this.props.isSelected
-  }
-
-  componentWillReceiveProps({ isSelected }) {
-    if (this.state.isSelected === isSelected) {
-      return false
-    }
-
-    this.setState({
-      isSelected
-    })
-  }
-
-  handleClick = e => {
-    e.stopPropagation()
-
-    this.setState(state => ({
-      isSelected: !state.isSelected
-    }))
-
-    this.props.onClick(e)
-  }
-
-  render() {
-    const { isSelected } = this.state
-
-    return (
-      <CheckBox onClick={this.handleClick} isSelected={isSelected}>
-        {isSelected && <Checkmark />}
-      </CheckBox>
-    )
-  }
-}
+export const CheckBoxButtonWithoutState = props => (
+  <CheckBox
+    onClick={props.onClick}
+    isSelected={props.isSelected || props.someRowsSelected}
+  >
+    {props.isSelected &&
+      (!props.someRowsSelected ? (
+        <Checkmark />
+      ) : (
+        <span
+          style={{
+            color: '#ffffff',
+            marginTop: '-4px',
+            fontSize: '1.5rem'
+          }}
+        >
+          -
+        </span>
+      ))}
+  </CheckBox>
+)

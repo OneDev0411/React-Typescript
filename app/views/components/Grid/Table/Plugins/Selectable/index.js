@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { CheckBoxButton } from './Checkbox'
+import { CheckBoxButton } from '../../../../Button/CheckboxButton'
+import { CheckBoxButtonWithoutState } from '../../../../Button/CheckboxButton/CheckboxWithoutState'
 
 const SESSION_KEY_PREFIX = 'Rechat--Grid--Selectable--'
 
@@ -78,6 +79,14 @@ export class SelectablePlugin {
    */
   isRowSelected = id =>
     this.StorageObject.selectedRows && this.StorageObject.selectedRows[id]
+
+  /**
+   * returns true when at least one row is selected
+   */
+  anyRowSelected = () =>
+    !this.isAllRowsSelected() &&
+    this.StorageObject.selectedRows &&
+    Object.keys(this.StorageObject.selectedRows).length > 0
 
   /**
    * checks whether all rows are selected or not
@@ -180,10 +189,10 @@ export class SelectablePlugin {
       sortable: false,
       verticalAlign: 'center',
       header: () => (
-        <CheckBoxButton
-          allSelector
+        <CheckBoxButtonWithoutState
+          someRowsSelected={this.anyRowSelected()}
           onClick={this.toggleSelectAllRows}
-          isSelected={this.isAllRowsSelected()}
+          isSelected={this.isAllRowsSelected() || this.anyRowSelected()}
         />
       ),
       render: ({ rowData: row }) => (
