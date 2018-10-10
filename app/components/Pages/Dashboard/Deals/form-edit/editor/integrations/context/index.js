@@ -35,7 +35,7 @@ class Context extends React.Component {
 
     const contextName = annotations[0].fieldName
 
-    this.props.onValueUpdate(contextName, value, true)
+    this.props.onValueUpdate(contextName, value)
     this.props.onClose()
   }
 
