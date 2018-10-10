@@ -183,9 +183,17 @@ export class EventDrawer extends Component {
   }
 
   handleSubmit = () => {
-    document
-      .getElementById('event-drawer-form')
-      .dispatchEvent(new Event('submit', { cancelable: true }))
+    let event
+
+    if (typeof Event === 'function') {
+      event = new Event('submit', { cancelable: true })
+    } else {
+      event = document.createEvent('Event')
+
+      event.initEvent('submit', true, true)
+    }
+
+    document.getElementById('event-drawer-form').dispatchEvent(event)
   }
 
   render() {
