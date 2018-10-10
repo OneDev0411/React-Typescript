@@ -85,6 +85,11 @@ const AsyncListingsFavorites = Load({
     import('../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */)
 })
 
+const AsyncTours = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Listings/Tours' /* webpackChunkName: "fav" */)
+})
+
 const AsyncListingSinglePage = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
@@ -393,6 +398,7 @@ export default (
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
 
+        <Route path="tours" component={AsyncTours} />
         <Route path="following" component={AsyncListingsFavorites} />
         <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
