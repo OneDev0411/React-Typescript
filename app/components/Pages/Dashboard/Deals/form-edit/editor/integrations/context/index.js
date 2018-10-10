@@ -61,7 +61,8 @@ class Context extends React.Component {
 
     this.props.onValueUpdate(
       annotations[0].fieldName,
-      this.state.formattedValue
+      this.state.formattedValue || '',
+      true
     )
 
     this.setState({
@@ -155,7 +156,7 @@ class Context extends React.Component {
               onClick={this.handleSave}
               disabled={this.state.isSaving}
             >
-              {this.props.isSaving ? 'Saving...' : 'Save Value'}
+              {this.props.isSaving ? 'Saving...' : 'Save'}
             </ActionButton>
 
             <CancelButton
