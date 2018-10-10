@@ -26,7 +26,7 @@ export default class AddressForm extends React.Component {
     _.forEach(address_components, (fieldValue, fieldName) => {
       const groups = grouped[fieldName]
 
-      _.map(groups, group => {
+      _.forEach(groups, group => {
         const annotations = group.map(i => i.annotation)
 
         const values = getAnnotationsValues(annotations, fieldValue, {
@@ -44,7 +44,7 @@ export default class AddressForm extends React.Component {
   }
 
   onClose = (deal, address) => {
-    if (!deal) {
+    if (!address) {
       this.props.onClose()
 
       return false

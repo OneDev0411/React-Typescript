@@ -44,7 +44,7 @@ class PDFPreview extends React.Component {
   setPageContextsAnnotations = contexts => {
     this.contextsAnnotations = {
       ...this.contextsAnnotations,
-      ...contexts
+      ..._.indexBy(contexts, c => c.annotation.fieldName)
     }
   }
 

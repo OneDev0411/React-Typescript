@@ -65,6 +65,7 @@ export default class Context extends React.Component {
         {rects.map((rect, index) => (
           <ToolTip key={index} hasMlsLock={hasMlsLock}>
             <Container
+              id={this.props.annotations[index].fieldName}
               fontName={appearance.font}
               fontSize={fontSize}
               bold={appearance.bold}
