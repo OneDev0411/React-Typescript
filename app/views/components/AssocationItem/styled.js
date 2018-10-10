@@ -7,9 +7,8 @@ export const Container = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  margin-right: 1em;
-  margin-bottom: 1em;
-  padding: 0.75em;
+  margin: 0 0.5em 0.5em 0;
+  padding: 0.5em;
   border-radius: 3px;
   background-color: ${grey.A100};
 

@@ -4,10 +4,14 @@ import _ from 'underscore'
 import Loading from '../../../../../Partials/Loading'
 import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawer'
 import { EventDrawer } from '../../../../../../views/components/EventDrawer'
+import { TourDrawer } from '../../../../../../views/components/tour/TourDrawer'
+import { OpenHouseDrawer } from '../../../../../../views/components/open-house/OpenHouseDrawer'
 
 import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
-import { CRMTaskItem } from './TaskItem'
+import { TourItem } from './TourItem'
+import { EventItem } from './EventItem'
+import { OpenHouseItem } from './OpenHouseItem'
 import { EmptyState } from './EmptyState'
 import { Container, Title } from './styled'
 
@@ -33,6 +37,25 @@ export class Timeline extends React.Component {
     this.props.deleteEventHandler(deletedEvent.id)
   }
 
+  renderCRMTaskItem(key, task) {
+    const _props = {
+      defaultAssociationId: this.props.defaultAssociationId,
+      editCallback: this.props.editEventHandler,
+      key,
+      onClick: this.onClickEvent,
+      task
+    }
+
+    switch (task.task_type) {
+      case 'Tour':
+        return <TourItem {..._props} />
+      case 'Open House':
+        return <OpenHouseItem {..._props} />
+      default:
+        return <EventItem {..._props} />
+    }
+  }
+
   renderItems = month => (
     <React.Fragment>
       <Title>
@@ -43,15 +66,7 @@ export class Timeline extends React.Component {
           const key = `timeline_item_${activity.id}`
 
           if (activity.type === 'crm_task') {
-            return (
-              <CRMTaskItem
-                contact={this.props.contact}
-                key={key}
-                task={activity}
-                onClick={this.onClickEvent}
-                editCallback={this.props.editEventHandler}
-              />
-            )
+            return this.renderCRMTaskItem(key, activity)
           }
 
           if (
@@ -71,6 +86,34 @@ export class Timeline extends React.Component {
       </Card>
     </React.Fragment>
   )
+
+  renderCRMTaskItemsDrawer() {
+    const { selectedEvent } = this.state
+
+    if (!selectedEvent) {
+      return null
+    }
+
+    const _props = {
+      defaultAssociationId: this.props.defaultAssociationId,
+      deleteCallback: this.handleDeleteEvent,
+      isOpen: true,
+      onClose: this.closeEventDrawer,
+      submitCallback: this.handleEditEvent,
+      user: this.props.user
+    }
+
+    const { id } = selectedEvent
+
+    switch (selectedEvent.task_type) {
+      case 'Tour':
+        return <TourDrawer {..._props} tourId={id} />
+      case 'Open House':
+        return <OpenHouseDrawer {..._props} openHouseId={id} />
+      default:
+        return <EventDrawer {..._props} eventId={id} />
+    }
+  }
 
   render() {
     if (this.props.isFetching) {
@@ -198,16 +241,7 @@ export class Timeline extends React.Component {
           />
         )}
 
-        {this.state.selectedEvent && (
-          <EventDrawer
-            isOpen
-            user={this.props.user}
-            onClose={this.closeEventDrawer}
-            eventId={this.state.selectedEvent.id}
-            submitCallback={this.handleEditEvent}
-            deleteCallback={this.handleDeleteEvent}
-          />
-        )}
+        {this.renderCRMTaskItemsDrawer()}
       </div>
     )
   }

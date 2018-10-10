@@ -1,3 +1,7 @@
+export function joinItemsWithString(items = [], string = ', ') { 
+  return items.filter(i => typeof i === 'string').join(string)
+}
+
 export function onlyUnique(value, index, self) { 
   return self.indexOf(value) === index;
 }
@@ -285,4 +289,8 @@ export function round(number, precision) {
 
 export function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+export function getIndexLabel(index) {
+  return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')[index]
 }

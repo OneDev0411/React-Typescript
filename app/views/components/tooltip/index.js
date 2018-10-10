@@ -11,6 +11,7 @@ function br2nl(text) {
 }
 
 export default ({
+  id = 'rechat-tooltip',
   caption,
   captionIsHTML = false,
   placement = 'top',
@@ -34,7 +35,7 @@ export default ({
       placement={placement}
       overlay={
         <Tooltip
-          id="rechat-tooltip"
+          id={id}
           className={cn(`rechat-tooltip ${size} ${type}`, {
             'is-customized': captionIsHTML && isCustom,
             'text-align--left': leftAlign

@@ -54,6 +54,7 @@ function getAvatarProps(user) {
   return {
     size: 32,
     image: profile_image_url,
+    placeHolderImage: '/static/icons/contact-association-avatar.svg',
     title:
       email !== display_name && phone_number !== display_name
         ? display_name

@@ -33,7 +33,7 @@ export const buttonBaseStyle = css`
 
   &[disabled] {
     color: ${grey.A900};
-    cursor: not-allowed;
+    cursor: initial;
 
     svg {
       fill: ${grey.A900};

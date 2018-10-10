@@ -26,6 +26,7 @@ class DummyAssignees extends React.Component {
     return (
       <Assignees
         owner={this.props.owner}
+        buttonText={this.props.buttonText}
         assignees={this.props.input.value}
         teamMembers={this.props.teamMembers}
         onChangeHandler={this.onChangeHandler}

@@ -3,7 +3,7 @@ import Flex from 'styled-flex-component'
 import { borderColor } from '../../../utils/colors'
 
 export const Container = Flex.extend`
-  height: 72px;
+  height: 4.5rem;
   border-top: 1px solid ${borderColor};
   margin: 0 1.5rem;
 `
