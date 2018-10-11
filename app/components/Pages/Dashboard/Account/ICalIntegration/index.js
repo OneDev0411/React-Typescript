@@ -47,10 +47,11 @@ class DealTemplates extends React.Component {
 
             let members = []
 
-            filterTeam.brand.roles.forEach(
-              role =>
-                (members = members.concat(role.members.map(({ id }) => id)))
-            )
+            filterTeam &&
+              filterTeam.brand.roles.forEach(
+                role =>
+                  (members = members.concat(role.members.map(({ id }) => id)))
+              )
 
             normalizedSetting[filter.brand] = members
           }
