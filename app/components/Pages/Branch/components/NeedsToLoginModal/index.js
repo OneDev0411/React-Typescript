@@ -15,8 +15,7 @@ const NeedsToLoginModal = ({ params, brandInfo }) => {
         <p className="c-confirm-modal__message">Please login first.</p>
         <div>
           <SigninButton
-            appearance="primary"
-            to={`/signin?username=${username}&redirectTo=${branchUrl}`}
+            href={`/signin?username=${username}&redirectTo=${branchUrl}`}
           >
             Sign In
           </SigninButton>
