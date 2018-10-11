@@ -8,7 +8,6 @@ import DealEmail from '../../dashboard/deal-email'
 import PageHeader from 'components/PageHeader'
 // import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
-import { CreateOpenHouse } from 'components/open-house/CreateOpenHouse'
 import SendDealPromotionCard from '../../../../../../views/components/InstantMarketing/Flows/SendDealPromotion'
 
 const Button = ActionButton.extend`
@@ -36,27 +35,13 @@ const Header = ({ user, deal, showAttachments }) => (
         View & Upload Files
       </Button>
 
-      <Button appearance="outline" onClick={() => showAttachments()}>
+      <Button
+        appearance="outline"
+        onClick={() => showAttachments()}
+        style={{ marginRight: '0.5rem' }}
+      >
         Get Signatures
       </Button>
-
-      {/* {deal.listing && (
-        <LinkButton
-          appearance="outline"
-          style={{ margin: '0 0.5em' }}
-          to={`/dashboard/deals/${deal.id}/network`}
-        >
-          Agent Network
-        </LinkButton>
-      )} */}
-
-      {deal.listing && (
-        <CreateOpenHouse
-          deal={deal}
-          user={user}
-          style={{ margin: '0 0.5em' }}
-        />
-      )}
 
       <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
     </PageHeader.Menu>
