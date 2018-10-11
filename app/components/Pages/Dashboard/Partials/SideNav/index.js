@@ -71,9 +71,7 @@ class appSideNav extends React.Component {
 
     const hasDealsPermission = acl.includes('Deals')
     const hasBackOfficePermission = acl.includes('BackOffice')
-    const hasContactsPermission =
-      user.user_type !== 'Client' ||
-      (user.features && user.features.includes('Contacts'))
+    const hasContactsPermission = acl.includes('CRM')
 
     return (
       <aside className="c-app-sidenav">
