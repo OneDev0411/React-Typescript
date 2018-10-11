@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import { confirmation } from '../../../../../store_actions/confirmation'
 
@@ -28,6 +29,7 @@ import {
   searchContacts,
   deleteContacts
 } from '../../../../../store_actions/contacts'
+import { getActiveTeamACL } from '../../../../../utils/user-teams'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -45,6 +47,14 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
+    const acl = getActiveTeamACL(this.props.user)
+
+    const hasContactsPermission = acl.includes('CRM')
+
+    if (!hasContactsPermission) {
+      browserHistory.push('/404')
+    }
+
     if (this.props.listInfo.count === 0) {
       this.fetchContacts()
     }
