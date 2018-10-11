@@ -59,7 +59,7 @@ export const Trigger = styled.label`
   transition: background 0.2s ease-in;
 
   &:hover {
-    background: rgb(54, 71, 85, 0.9);
+    background: rgba(54, 71, 85, 0.9);
 
     > ${TriggerText} {
       visibility: visible;
