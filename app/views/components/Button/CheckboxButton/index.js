@@ -60,7 +60,11 @@ export class CheckBoxButton extends React.Component {
     const { isSelected } = this.state
 
     return (
-      <CheckBox onClick={this.handleClick} isSelected={isSelected}>
+      <CheckBox
+        {...this.props}
+        onClick={this.handleClick}
+        isSelected={isSelected}
+      >
         {isSelected && <Checkmark />}
       </CheckBox>
     )
