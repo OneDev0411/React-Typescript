@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Dropdown } from 'react-bootstrap'
+import { Dropdown, MenuItem } from 'react-bootstrap'
 
 import IntercomTrigger from '../IntercomTrigger'
 
@@ -93,9 +93,7 @@ class appSideNav extends React.Component {
             {user.teams &&
               user.teams.length > 1 && <li className="separator">Account</li>}
 
-            <li>
-              <Link to="/dashboard/account">Settings</Link>
-            </li>
+            <MenuItem href="/dashboard/account">Settings</MenuItem>
 
             {hasBackOfficePermission && (
               <React.Fragment>

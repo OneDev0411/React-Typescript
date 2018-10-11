@@ -67,7 +67,7 @@ const TeamTypes = ({
                 }
               }}
             />
-            {team.brand.member_count > 1 && (
+            {team.brand.member_count > 0 && (
               <div style={{ marginLeft: '2rem', marginBottom: '1rem' }}>
                 {team.brand.roles.map(role => (
                   <div key={role.id}>
