@@ -13,7 +13,7 @@ import SimpleField from '../../../Pages/Dashboard/Account/Profile/components/Sim
 
 export const getBrandInfo = brand => {
   let siteTitle = 'Rechat'
-  let siteLogo = '/static/images/logo-200w.png'
+  let siteLogo = '/static/images/appicon.png'
 
   if (brand) {
     siteLogo = Brand.asset('site_logo', null, brand)
