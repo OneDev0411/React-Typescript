@@ -30,6 +30,7 @@ export const CheckBoxButtonWithoutState = props => (
   <CheckBox
     onClick={props.onClick}
     isSelected={props.isSelected || props.someRowsSelected}
+    style={props.style}
   >
     {props.isSelected &&
       (!props.someRowsSelected ? (
