@@ -60,17 +60,9 @@ export const renderField = ({
   )
 }
 
-const SigninForm = ({
-  brand,
-  invalid,
-  pristine,
-  isLogging,
-  submitError,
-  handleSubmit,
-  onSubmitHandler
-}) => {
-  const isDisabled = isLogging || invalid || pristine
-  const { siteLogo, siteTitle } = getBrandInfo(brand)
+const SigninForm = props => {
+  const { isLogging } = props
+  const { siteLogo, siteTitle } = getBrandInfo(props.brand)
 
   return (
     <div className="signin-page-wrapper">
@@ -89,7 +81,7 @@ const SigninForm = ({
           <p className="c-auth__subtitle">Hi, welcome back!</p>
         </header>
         <main className="c-auth__main">
-          <form onSubmit={handleSubmit(onSubmitHandler)}>
+          <form onSubmit={props.handleSubmit(props.onSubmitHandler)}>
             <Field
               name="username"
               type="email"
@@ -106,7 +98,7 @@ const SigninForm = ({
             <div className="c-forgot u-align-right">
               <Link to="/password/forgot">Forgot your password?</Link>
             </div>
-            {submitError && (
+            {props.submitFailed && (
               <div className="c-auth__submit-error-alert">
                 The email or password is incorrect. Please try again.
               </div>
@@ -114,7 +106,7 @@ const SigninForm = ({
             <Button
               type="submit"
               isBlock
-              disabled={isDisabled}
+              disabled={isLogging}
               style={{ marginBottom: '2em' }}
             >
               {isLogging ? 'Signing in...' : 'Sign in'}
