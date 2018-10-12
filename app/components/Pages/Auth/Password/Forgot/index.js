@@ -14,7 +14,6 @@ import SimpleField from '../../../../Pages/Dashboard/Account/Profile/components/
 
 const ForgotForm = ({
   brand,
-  invalid,
   submitError,
   isSubmitting,
   handleSubmit,
@@ -22,8 +21,8 @@ const ForgotForm = ({
   onSubmitHandler,
   resetSuccessfully
 }) => {
-  const isDisabled = isSubmitting || invalid
-  const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
+  const isDisabled = isSubmitting
+  const { siteLogo, siteTitle } = getBrandInfo(brand)
 
   return (
     <div className="signin-page-wrapper">
