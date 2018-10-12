@@ -98,7 +98,7 @@ const SigninForm = props => {
             <div className="c-forgot u-align-right">
               <Link to="/password/forgot">Forgot your password?</Link>
             </div>
-            {props.submitFailed && (
+            {(props.submitFailed || props.submitError) && (
               <div className="c-auth__submit-error-alert">
                 The email or password is incorrect. Please try again.
               </div>
