@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import { grey } from '../../utils/colors'
 
 export const Container = styled.div`
-  height: calc(100vh - (56px + 63px + 32px));
+  height: calc(100vh - 9rem);
   overflow: auto;
+  margin: 0 -1.5rem;
 `
 
 export const Input = styled.textarea`
@@ -16,6 +17,7 @@ export const Input = styled.textarea`
   resize: none;
   border: none;
   font-size: 1.5rem;
+  padding: 1.5rem;
 
   &:focus {
     outline: none;
@@ -24,14 +26,4 @@ export const Input = styled.textarea`
   &::placeholder {
     color: ${grey.A550};
   }
-`
-
-export const ErrorMessage = styled.div`
-  padding: 1rem;
-  font-size: 0.875rem;
-  border-radius: 3px;
-  margin: 0 1rem;
-  background: rgba(255, 0, 0, 0.05);
-  border-color: rgba(255, 0, 0, 0.2);
-  color: rgba(255, 0, 0, 0.8);
 `
