@@ -3,7 +3,7 @@ import _ from 'underscore'
 
 import Loading from '../../../../../Partials/Loading'
 import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawer'
-import { EventDrawer } from '../../../../../../views/components/EventDrawer'
+import EventDrawer from '../../../../../../views/components/EventDrawer'
 import { TourDrawer } from '../../../../../../views/components/tour/TourDrawer'
 import { OpenHouseDrawer } from '../../../../../../views/components/open-house/OpenHouseDrawer'
 

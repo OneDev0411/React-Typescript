@@ -1,10 +1,11 @@
 import React from 'react'
 
-import { updateTask } from '../../../../../../../models/tasks/update-task'
+import { updateTask } from '../../../../../../../store_actions/tasks/update-task'
 
 import { Container } from './styled'
+import { connect } from 'react-redux'
 
-export class CRMTaskItem extends React.Component {
+class CRMTaskItemComponent extends React.Component {
   state = {
     disabled: false
   }
@@ -20,7 +21,7 @@ export class CRMTaskItem extends React.Component {
 
       this.props.editCallback(updatedEvent)
 
-      await updateTask(updatedEvent)
+      await this.props.updateTask(updatedEvent)
 
       this.setState({ disabled: false })
     } catch (error) {
@@ -46,5 +47,12 @@ export class CRMTaskItem extends React.Component {
     )
   }
 }
+
+const CRMTaskItem = connect(
+  null,
+  { updateTask }
+)(CRMTaskItemComponent)
+
+export { CRMTaskItem }
 
 // todo: feching contact for updating last_touch after updated a task.

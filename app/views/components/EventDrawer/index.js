@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
+
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
 import {
   getTask,
-  updateTask,
-  createTask,
   deleteTask,
   createTaskAssociation,
   deleteTaskAssociation
@@ -36,6 +36,7 @@ import { Reminder } from './components/Reminder'
 import { EventType } from './components/EventType'
 import { Associations } from './components/Associations'
 import { FormContainer, FieldContainer } from './styled'
+import { updateTask, createTask } from '../../../store_actions/tasks'
 
 const QUERY = {
   associations: ['reminders', 'assignees', 'created_by', 'updated_by'].map(
@@ -71,7 +72,7 @@ const defaultProps = {
  * after opening until we can reinitialize it.
  *
  */
-export class EventDrawer extends Component {
+class EventDrawer extends Component {
   constructor(props) {
     super(props)
 
@@ -96,7 +97,10 @@ export class EventDrawer extends Component {
 
         const event = await getTask(this.props.eventId, QUERY)
 
-        this.setState({ isDisabled: false, event })
+        this.setState({
+          isDisabled: false,
+          event
+        })
 
         return event
       } catch (error) {
@@ -116,13 +120,16 @@ export class EventDrawer extends Component {
       this.setState({ isDisabled: true })
 
       if (event.id) {
-        newEvent = await updateTask(event, QUERY)
+        newEvent = await this.props.updateTask(event, QUERY)
         action = 'updated'
       } else {
-        newEvent = await createTask(event, QUERY)
+        newEvent = await this.props.createTask(event, QUERY)
       }
 
-      this.setState({ isDisabled: false, event: newEvent })
+      this.setState({
+        isDisabled: false,
+        event: newEvent
+      })
       await this.props.submitCallback(newEvent, action)
     } catch (error) {
       console.log(error)
@@ -155,9 +162,8 @@ export class EventDrawer extends Component {
           ...association,
           crm_task
         }
-        const response = await createTaskAssociation(crm_task, newAssociation)
 
-        return response
+        return await createTaskAssociation(crm_task, newAssociation)
       } catch (error) {
         console.log(error)
         throw error
@@ -170,12 +176,7 @@ export class EventDrawer extends Component {
   handleDeleteAssociation = async association => {
     if (association.id) {
       try {
-        const response = await deleteTaskAssociation(
-          association.crm_task,
-          association.id
-        )
-
-        return response
+        return await deleteTaskAssociation(association.crm_task, association.id)
       } catch (error) {
         console.log(error)
         throw error
@@ -214,7 +215,7 @@ export class EventDrawer extends Component {
               postLoadFormat(event, user, defaultAssociation)
             }
             preSaveFormat={(values, originalValues) =>
-              preSaveFormat(values, originalValues, user)
+              preSaveFormat(values, originalValues)
             }
             save={this.save}
             validate={validate}
@@ -307,3 +308,8 @@ export class EventDrawer extends Component {
 
 EventDrawer.propTypes = propTypes
 EventDrawer.defaultProps = defaultProps
+
+export default connect(
+  null,
+  { updateTask, createTask }
+)(EventDrawer)
