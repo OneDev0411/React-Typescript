@@ -119,7 +119,10 @@ export const ButtonAppearances = {
     }
 
     svg {
-      fill: ${props => (props.inverse ? '#000' : props.brandColor || primary)};
+      fill: ${props =>
+        !props.inverse || props.isActive
+          ? props.brandColor || primary
+          : '#000'};
     }
   `,
   icon: css`
