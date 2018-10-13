@@ -10,7 +10,7 @@ export const FormContainer = styled.form`
   padding: 1.5em 0;
 `
 export const FieldContainer = Flex.extend`
-  height: 40px;
+  height: 2.5rem;
   border-radius: 3px;
   background-color: ${grey.A150};
 `
