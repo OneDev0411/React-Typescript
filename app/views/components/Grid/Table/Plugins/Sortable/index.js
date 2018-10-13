@@ -88,16 +88,19 @@ export class SortablePlugin {
         return false
       }
 
+      const lowText = col.sortType === 'number' ? 'Lo' : 'A'
+      const highText = col.sortType === 'number' ? 'Hi' : 'Z'
+
       list.push(
         {
           column: col,
-          label: `${col.header} A-Z`,
+          label: `${col.header} (${lowText}-${highText})`,
           value: col.id,
           ascending: true
         },
         {
           column: col,
-          label: `${col.header} Z-A`,
+          label: `${col.header} (${highText}-${lowText})`,
           value: `-${col.id}`,
           ascending: false
         }
