@@ -37,7 +37,8 @@ app.use(async (ctx, next) => {
 })
 
 const routes = {
-  app: ['signout', 'reset_password', 'listing']
+  app: ['signout', 'reset_password', 'listing'],
+  openhouse: ['registration']
 }
 
 _.each(routes, (group, name) => {
