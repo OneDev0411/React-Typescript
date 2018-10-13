@@ -1,8 +1,8 @@
-export default function (fn, req, res) {
+export default function(fn, req, res) {
   const end = res.end
 
-  return new Promise((resolve) => {
-    res.end = function c2k () {
+  return new Promise(resolve => {
+    res.end = function c2k() {
       end.apply(this, arguments)
       resolve(false)
     }
