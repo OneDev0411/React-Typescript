@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
@@ -10,42 +9,9 @@ import Loading from '../../../../../components/Partials/Loading'
 import { getContacts } from '../../../../../models/contacts/get-contacts'
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
 import { normalizeContactAttribute } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
+import Alert from '../../../../../components/Pages/Dashboard/Partials/Alert'
 
-export const ListContainer = styled.div`
-  position: relative;
-  height: calc(100vh - ${props => (props.isDrawer ? 135 : 172)}px);
-  padding: ${props => (props.isDrawer ? 0 : '1em 0')};
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  ${props =>
-    !props.isDrawer
-      ? css`
-          @media screen and (min-width: 48em) {
-            height: 240px;
-          }
-        `
-      : ''};
-`
-
-export const List = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding-bottom: ${props => (props.isDrawer ? '1em' : 0)};
-`
-
-const Alert = styled.div`
-  color: #f6a623;
-  background: rgba(245, 166, 35, 0.05);
-  border: 1px solid rgba(245, 166, 35, 0.2);
-  padding: 1rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 4px;
-  margin: 10px 16px;
-`
+import { ListContainer, List } from './styled'
 
 const propTypes = {
   defaultSearchFilter: PropTypes.string,
@@ -138,11 +104,20 @@ class Body extends Component {
         itemToString={this.handleItemToString}
         defaultInputValue={defaultInputValue}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
-          <div style={{ paddingTop: '1em' }} className="u-scrollbar--thinner">
+          <div
+            style={{
+              paddingTop: isDrawer ? '1.5rem' : '1rem',
+              margin: isDrawer ? '0 -1.5rem' : 0
+            }}
+          >
             {!this.props.isSearchDisabled && (
-              <div style={{ padding: isDrawer ? '0' : '0 1em' }}>
+              <div
+                style={{
+                  marginBottom: isDrawer ? '1.5rem' : '1rem',
+                  padding: isDrawer ? '0 1.5rem' : '0 1rem'
+                }}
+              >
                 <SearchInput
-                  style={{ marginBottom: '1em' }}
                   inputProps={{
                     ...getInputProps({
                       onChange: this.handleOnChange,
@@ -153,13 +128,14 @@ class Body extends Component {
               </div>
             )}
             <ListContainer isDrawer={isDrawer}>
-              <List isDrawer={isDrawer}>
+              <List isDrawer={isDrawer} className="u-scrollbar--thinner">
                 {isLoading ? (
                   <Loading />
                 ) : (
                   list.map((item, index) => (
                     <ContactItem
                       item={item}
+                      isDrawer={isDrawer}
                       key={item.id || `downshift_search_result_item_${index}`}
                       {...getItemProps({ item })}
                       onClickHandler={this.props.handleSelectedItem}
@@ -168,7 +144,16 @@ class Body extends Component {
                   ))
                 )}
 
-                {!isLoading && list.length === 0 && <Alert> No Results</Alert>}
+                {!isLoading &&
+                  list.length === 0 && (
+                    <Alert
+                      type="warning"
+                      style={{
+                        margin: isDrawer ? '0 1.5rem' : '0 1rem'
+                      }}
+                      message="No Result"
+                    />
+                  )}
               </List>
             </ListContainer>
           </div>

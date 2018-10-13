@@ -32,7 +32,12 @@ export function Reminder(props) {
           fullHeight
           pullRight
           buttonRenderer={props => (
-            <DropButton {...props} style={{ paddingLeft: 0 }}>
+            <DropButton
+              {...props}
+              style={{ paddingLeft: 0 }}
+              isActive={props.isOpen}
+              inverse
+            >
               <IconBell />
               {props.value}
               <IconDrop

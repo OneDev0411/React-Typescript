@@ -5,27 +5,9 @@ import Flex from 'styled-flex-component'
 
 import { getStatusColor } from '../../../../../../utils/listing'
 import * as Deal from '../../../../../../models/Deal/context-helper'
-import IconHome from '../../../../SvgIcons/NewHome/IconHome'
 
-const Container = styled.div`
-  display: flex;
-  padding: 0.5em 1em;
-  background-color: ${props => (props.isHighlighted ? '#f2f2f2' : '#fff')};
-
-  &:hover {
-    cursor: pointer;
-  }
-`
-const IconContainer = styled(Flex)`
-  width: 40px;
-  height: 40px;
-  background-color: #000;
-  border-radius: 50%;
-  > svg {
-    height: 16px;
-    width: 16px;
-  }
-`
+import Avatar from '../../../../Avatar'
+import { Container } from '../../../../SelectContactModal/components/ContactItem'
 
 const Details = styled.span`
   font-size: 0.875rem;
@@ -47,21 +29,10 @@ Item.propTypes = {
 export function Item(props) {
   const { item, onClickHandler } = props
   const status = Deal.getStatus(item)
-  const image = Deal.getField(item, 'photo')
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
-      {image ? (
-        <img
-          src={image}
-          alt="home"
-          style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-        />
-      ) : (
-        <IconContainer center>
-          <IconHome />
-        </IconContainer>
-      )}
+      <Avatar {...getAvatarProps(item)} />
       <div style={{ paddingLeft: '1em' }}>
         <Flex alignCenter>
           <Details>{getPrice(item) || '$0'}</Details>
@@ -76,6 +47,14 @@ export function Item(props) {
       </div>
     </Container>
   )
+}
+
+function getAvatarProps(deal) {
+  return {
+    size: 40,
+    image: Deal.getField(deal, 'photo'),
+    placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
+  }
 }
 
 function getPrice(deal) {
