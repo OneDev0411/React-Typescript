@@ -1,7 +1,7 @@
 import WebpackHotMiddleware from 'webpack-hot-middleware'
 import c2k from '../c2k'
 
-export default function (compiler) {
+export default function(compiler) {
   const middleware = WebpackHotMiddleware(compiler)
 
   return async function hmr(ctx, next) {
