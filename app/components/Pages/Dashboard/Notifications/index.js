@@ -317,20 +317,14 @@ class Notifications extends Component {
   }
   render() {
     return (
-      <div>
+      <div
+        style={{
+          height: '100vh',
+          overflowY: 'scroll'
+        }}
+      >
         <Header />
-        <div style={{ position: 'relative' }}>
-          <div
-            style={{
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              width: '100%'
-            }}
-          >
-            {this.getNotifications()}
-          </div>
-        </div>
+        {this.getNotifications()}
       </div>
     )
   }
