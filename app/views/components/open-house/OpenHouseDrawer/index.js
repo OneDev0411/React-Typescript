@@ -392,7 +392,7 @@ export class OpenHouseDrawer extends React.Component {
           assets={this.state.listing && this.state.listing.gallery_image_urls}
           templateData={{
             user: this.props.user,
-            listings: this.state.listing
+            listing: this.state.listing
           }}
           templateTypes={['CrmOpenHouse']}
         />
