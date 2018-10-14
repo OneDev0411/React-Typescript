@@ -77,6 +77,20 @@ class DealTemplates extends React.Component {
 
   onChangeSelectAllTypes = selectedTypes => this.setState({ selectedTypes })
 
+  onSelectOneCategoriesTypes = types => {
+    let selectedTypes = this.state.selectedTypes.slice(0)
+
+    types.forEach(selectedType => {
+      if (selectedTypes.includes(selectedType)) {
+        selectedTypes = selectedTypes.filter(type => type !== selectedType)
+      } else {
+        selectedTypes.push(selectedType)
+      }
+    })
+
+    this.setState({ selectedTypes })
+  }
+
   onChangeSelectedTypes = selectedType => {
     const { selectedTypes } = this.state
 
@@ -128,7 +142,10 @@ class DealTemplates extends React.Component {
       }
     } else {
       this.setState({
-        selectedMembers: { ...selectedMembers, [brandId]: [selectedMember] }
+        selectedMembers: {
+          ...selectedMembers,
+          [brandId]: [selectedMember]
+        }
       })
     }
   }
@@ -144,16 +161,19 @@ class DealTemplates extends React.Component {
       <Fragment>
         <PageHeader
           isFlat
-          style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}
+          style={{
+            marginBottom: '1.5em',
+            marginTop: '1.5rem'
+          }}
         >
           <PageHeader.Title showBackButton={false}>
-            <PageHeader.Heading>iCal Feed</PageHeader.Heading>
+            <PageHeader.Heading>Calendar Export</PageHeader.Heading>
           </PageHeader.Title>
         </PageHeader>
         <ICalContainer>
           <PageDescription>
-            With iCal export, you can transfer any date based information on
-            Rechat into your local iCal experience.
+            With calendar export, you can transfer any date based information on
+            Rechat into your local calendar experience.
           </PageDescription>
           <TeamType
             userTeams={this.props.userTeams}
@@ -168,6 +188,7 @@ class DealTemplates extends React.Component {
             selectedTypes={selectedTypes}
             onChangeSelectedTypes={this.onChangeSelectedTypes}
             onChangeSelectAllTypes={this.onChangeSelectAllTypes}
+            onSelectOneCategoriesTypes={this.onSelectOneCategoriesTypes}
           />
           <GenerateUrl
             userTeams={this.props.userTeams}
@@ -187,5 +208,8 @@ export default connect(
     userTeams: user.teams,
     user
   }),
-  { notify, getTeams }
+  {
+    notify,
+    getTeams
+  }
 )(DealTemplates)
