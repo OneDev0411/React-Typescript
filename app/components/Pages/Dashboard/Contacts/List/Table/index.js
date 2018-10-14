@@ -158,7 +158,7 @@ class ContactsList extends React.Component {
             },
             sortable: {
               columns: [
-                { label: 'Most Recent', value: 'updated_at' },
+                { label: 'Most Recent', value: '-updated_at' },
                 { label: 'Last Touch', value: 'last_touch' },
                 //  { label: 'Next Touch', value: 'next_touch' },
                 { label: 'First name A-Z', value: 'display_name' },

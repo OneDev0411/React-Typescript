@@ -36,7 +36,11 @@ class ICalAllTypes extends React.Component {
   }
 
   render() {
-    const { onChangeSelectedTypes, onChangeSelectAllTypes } = this.props
+    const {
+      onChangeSelectedTypes,
+      onChangeSelectAllTypes,
+      onSelectOneCategoriesTypes
+    } = this.props
     const filteredContexts =
       this.props.contexts &&
       this.props.contexts.filter(context => context.data_type === 'Date')
@@ -63,7 +67,7 @@ class ICalAllTypes extends React.Component {
     return (
       <Fragment>
         <SectionTitle>
-          What event types would you like to export to your iCal?
+          What event types would you like to export to your calendar?
         </SectionTitle>
         <RadioButton
           selected={selectedTypes.length === allTypes.length}
@@ -82,6 +86,7 @@ class ICalAllTypes extends React.Component {
             types={taskTypes}
             selectedTypes={selectedTypes}
             onChangeSelectedTypes={onChangeSelectedTypes}
+            onSelectOneCategoriesTypes={onSelectOneCategoriesTypes}
           />
           {filteredContexts && (
             <CategoryType
@@ -89,6 +94,7 @@ class ICalAllTypes extends React.Component {
               types={filteredContexts}
               selectedTypes={selectedTypes}
               onChangeSelectedTypes={onChangeSelectedTypes}
+              onSelectOneCategoriesTypes={onSelectOneCategoriesTypes}
             />
           )}
           {filteredContactsAttributesDefs && (
@@ -97,6 +103,7 @@ class ICalAllTypes extends React.Component {
               types={filteredContactsAttributesDefs}
               selectedTypes={selectedTypes}
               onChangeSelectedTypes={onChangeSelectedTypes}
+              onSelectOneCategoriesTypes={onSelectOneCategoriesTypes}
             />
           )}
         </CategoryTypesContainer>

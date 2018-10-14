@@ -105,7 +105,7 @@ class SelectFile extends React.Component {
 
         <div style={{ marginBottom: '4em' }}>
           <p>Importing To</p>
-          <Flex alignCenter style={{ marginBottom: '2em' }}>
+          <Flex alignCenter style={{ marginBottom: '1em' }}>
             <H1>
               {this.activeTeam &&
                 this.activeTeam.brand &&
@@ -119,6 +119,7 @@ class SelectFile extends React.Component {
               <InfoIcon style={{ fill: primary, marginLeft: '0.5em' }} />
             </Tooltip>
           </Flex>
+          <p>Owner</p>
           <TeamContactSelect
             upsideDown
             user={this.props.user}

@@ -35,6 +35,7 @@ class Grid extends React.Component {
       {
         id: 'price',
         header: '$ Price',
+        sortType: 'number',
         accessor: deal => this.getPriceValue(deal),
         render: ({ rowData: deal }) =>
           Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0)

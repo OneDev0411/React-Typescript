@@ -43,15 +43,17 @@ const TeamTypes = ({
         let members = []
 
         team.brand.roles.forEach(
-          role => (members = members.concat(role.members.map(({ id }) => id)))
+          role => (members = members.concat(role.members))
         )
 
-        const teamMembers = { [team.brand.id]: members }
+        const teamMembers = { [team.brand.id]: members.map(({ id }) => id) }
         const isTeamSelected =
           selectedMembers[team.brand.id] &&
           members.every(member =>
-            selectedMembers[team.brand.id].includes(member)
+            selectedMembers[team.brand.id].includes(member.id)
           )
+
+        members = _.uniq(members, 'id')
 
         return (
           <React.Fragment key={team.brand.id}>
@@ -69,23 +71,19 @@ const TeamTypes = ({
             />
             {team.brand.member_count > 0 && (
               <div style={{ marginLeft: '2rem', marginBottom: '1rem' }}>
-                {team.brand.roles.map(role => (
-                  <div key={role.id}>
-                    {role.members.map((member, index) => (
-                      <MemberRow
-                        key={`${member.id}-${index}`}
-                        selected={
-                          selectedMembers[team.brand.id] &&
-                          selectedMembers[team.brand.id].includes(member.id)
-                        }
-                        title={member.display_name}
-                        onClick={() =>
-                          onChangeSelectedMember(team.brand.id, member.id)
-                        }
-                        style={{ marginLeft: '1rem' }}
-                      />
-                    ))}
-                  </div>
+                {members.map((member, index) => (
+                  <MemberRow
+                    key={`${member.id}-${index}`}
+                    selected={
+                      selectedMembers[team.brand.id] &&
+                      selectedMembers[team.brand.id].includes(member.id)
+                    }
+                    title={member.display_name}
+                    onClick={() =>
+                      onChangeSelectedMember(team.brand.id, member.id)
+                    }
+                    style={{ marginLeft: '1rem' }}
+                  />
                 ))}
               </div>
             )}
