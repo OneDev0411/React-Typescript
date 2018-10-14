@@ -39,6 +39,7 @@ class CreateDeal extends React.Component {
     isDraft: -1,
     dealSide: '',
     dealPropertyType: '',
+    defaultDealAddress: null,
     dealAddress: null,
     dealStatus: '',
     enderType: -1,
@@ -69,6 +70,8 @@ class CreateDeal extends React.Component {
         ? Deal.get.field(deal, 'ender_type')
         : -1
 
+    const dealAddress = this.generateAddressFromDeal(deal)
+
     this.setState({
       isDraft: false,
       dealSide: deal.deal_type,
@@ -76,7 +79,8 @@ class CreateDeal extends React.Component {
       enderType,
       dealStatus: Deal.get.field(deal, 'listing_status') || '',
       contexts: this.generateContextsFromDeal(deal),
-      dealAddress: this.generateAddressFromDeal(deal),
+      defaultDealAddress: dealAddress,
+      dealAddress,
       ...this.generateRolesFromDeal(deal)
     })
   }
@@ -378,12 +382,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
+      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: "No, don't cancel",
+      cancelLabel: 'No, don\'t cancel',
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -944,6 +948,7 @@ class CreateDeal extends React.Component {
                   isRequired={requiredFields.includes('address')}
                   hasError={this.hasError('address')}
                   dealAddress={dealAddress}
+                  defaultDealAddress={this.state.defaultDealAddress}
                   dealSide={dealSide}
                   onCreateAddress={(component, type) =>
                     this.onCreateAddress(component, type)

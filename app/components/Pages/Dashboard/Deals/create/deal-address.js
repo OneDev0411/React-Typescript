@@ -44,10 +44,16 @@ export default class DealAddress extends React.Component {
     const {
       isRequired,
       hasError,
+      defaultDealAddress,
       dealAddress,
       dealSide,
       onRemoveAddress
     } = this.props
+
+    // don't show address component when deal is created (web#1610)
+    if (defaultDealAddress) {
+      return false
+    }
 
     return (
       <div className="form-section deal-address">
@@ -77,8 +83,10 @@ export default class DealAddress extends React.Component {
               src={this.getListingImage(dealAddress)}
             />
             <span className="name">
-              {dealAddress.address_components.street_number}&nbsp;
-              {dealAddress.address_components.street_name}&nbsp;
+              {dealAddress.address_components.street_number}
+              &nbsp;
+              {dealAddress.address_components.street_name}
+              &nbsp;
               {dealAddress.address_components.street_suffix}
             </span>
 
