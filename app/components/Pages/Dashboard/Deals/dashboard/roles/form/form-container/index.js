@@ -12,6 +12,9 @@ import { ROLE_NAMES } from '../../../../utils/roles'
 
 import { TYPE_PERSON } from '../form-components/type-input'
 
+const normalizeCommission = value =>
+  !value ? value : value.replace(/[^0-9.]/g, '')
+
 const getDropDownItems = ({ form = {}, singularName, pluralName }) => {
   if (_.size(form) === 0) {
     return []
@@ -138,6 +141,7 @@ export const RoleFormContainer = ({
 
       {shouldShowCommission(values.role) && (
         <Field
+          parse={normalizeCommission}
           isRequired={requiredFields.includes('commission')}
           name="commission"
           placeholder="Commission"
