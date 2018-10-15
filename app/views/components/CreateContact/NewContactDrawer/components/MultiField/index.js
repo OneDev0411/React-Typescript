@@ -1,14 +1,14 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
+import Flex from 'styled-flex-component'
 
 import { TextField } from './Input'
 import { Dropdown } from '../../../../Dropdown'
-import IconButton from '../../../..//Button/IconButton'
+import IconButton from '../../../../Button/IconButton'
+import { Select } from '../../../../final-form-fields/Select'
 import AddIcon from '../../../../SvgIcons/AddCircleOutline/IconAddCircleOutline'
 import RemoveIcon from '../../../../SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
-
-import { Container, Title } from './styled'
 
 export function MultiField({
   defaultOptions,
@@ -29,24 +29,22 @@ export function MultiField({
               display: 'flex'
             }}
           >
-            <Container style={{ width: '30%' }}>
-              <Title>{title}</Title>
-              <Field
+            <Flex style={{ width: '30%', borderRight: '1em' }}>
+              <Select
+                label={title}
                 component={Dropdown}
                 defaultSelectedItem={defaultSelectedItem}
                 fullWidth
                 items={defaultOptions}
-                itemToString={({ title }) => title}
                 name={`${field}.label`}
-                style={{ width: '100%' }}
               />
-            </Container>
+            </Flex>
             <div
               style={{
                 width: '70%',
                 display: 'flex',
                 alignItems: 'flex-end',
-                padding: '1em',
+                padding: '0.25em 1em',
                 borderWidth: '0 0 1px 1px',
                 borderStyle: 'solid',
                 borderColor: '#d4d4d4'

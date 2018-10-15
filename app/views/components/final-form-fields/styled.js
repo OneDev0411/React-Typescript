@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { borderColor, error, grey } from '../../utils/colors'
 
 export const Container = styled.div`
+  width: ${props => (props.fullWidth ? '100%' : 'auto')};
   display: flex;
   flex-direction: column;
   padding-top: 0.5em;

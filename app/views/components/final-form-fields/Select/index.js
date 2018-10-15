@@ -53,7 +53,7 @@ export function Select(props) {
         const hasError = error && touched
 
         return (
-          <Container>
+          <Container fullWidth={props.fullWidth}>
             <Label required={props.required}>
               <span>{props.label}</span>
               {props.labelNote &&

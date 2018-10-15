@@ -7,7 +7,7 @@ export function TextField({ input, meta, placeholder }) {
   const hasError = error && touched
 
   return (
-    <div style={{ width: 'calc(100% - 40px)' }}>
+    <div style={{ width: 'calc(100% - 2.5rem)' }}>
       <Input
         {...input}
         id={`new-contact__${input.name}`}
