@@ -21,8 +21,8 @@ import {
   getFormater,
   getInitialValues
 } from './helpers'
-// import StarIcon from '../../../../../../../views/components/SvgIcons/Star/StarIcon'
-// import Tooltip from '../../../../../../../views/components/tooltip'
+import StarIcon from '../../../../../../../views/components/SvgIcons/Star/StarIcon'
+import Tooltip from '../../../../../../../views/components/tooltip'
 
 const propTypes = {
   addNewFieldButtonText: PropTypes.string,
@@ -154,19 +154,20 @@ class SectionWithFields extends React.Component {
             }}
           >
             {value ? getFormater(field)(value) : '-'}
-            {/* {value &&
+            {this.props.section === 'Addresses' &&
+              value &&
               field.is_primary && (
                 <Tooltip caption="Primary">
                   <StarIcon
                     style={{
                       fill: '#f5a623',
-                      width: '16px',
-                      height: '16px',
-                      marginLeft: '5px'
+                      width: '1em',
+                      height: '1em',
+                      marginLeft: '0.5em'
                     }}
                   />
                 </Tooltip>
-              )} */}
+              )}
           </dd>
         ]
       })
