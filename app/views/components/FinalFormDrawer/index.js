@@ -17,9 +17,6 @@ export class FinalFormDrawer extends React.Component {
     submittingButtonLabel: PropTypes.string,
     showFooter: PropTypes.bool,
     closeDrawerOnBackdropClick: PropTypes.bool,
-    reinitializeAfterSubmit: PropTypes.bool,
-    showReset: PropTypes.bool,
-    showCancel: PropTypes.bool,
     validate: PropTypes.func,
     formId: PropTypes.string.isRequired
   }
@@ -30,13 +27,10 @@ export class FinalFormDrawer extends React.Component {
     submitButtonLabel: 'Save',
     submittingButtonLabel: 'Saving ...',
     closeDrawerOnBackdropClick: true,
-    reinitializeAfterSubmit: true,
     validate: () => ({})
   }
 
   handleOnClose = (e, formProps) => {
-    e.preventDefault()
-
     const { form, submitting } = formProps
 
     if (submitting) {

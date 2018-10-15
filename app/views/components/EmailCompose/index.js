@@ -55,8 +55,6 @@ class EmailCompose extends React.Component {
         validate={this.validate}
         submitting={this.props.isSubmitting}
         closeDrawerOnBackdropClick={false}
-        showCancel={false}
-        showReset={false}
         submitButtonLabel="Send"
         submittingButtonLabel="Sending ..."
         title="New Email"
