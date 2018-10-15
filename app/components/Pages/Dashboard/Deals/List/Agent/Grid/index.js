@@ -11,7 +11,7 @@ import AgentAvatars from '../../components/table-columns/AgentAvatars'
 import Address from '../../components/table-columns/Address'
 import DealSide from '../../components/table-columns/Side'
 import CriticalDate, {
-  getNextDateValue
+  getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
 import Notification from '../../components/table-columns/NotificationBadge'
 
@@ -54,7 +54,7 @@ class Grid extends React.Component {
       {
         id: 'critical-dates',
         header: 'Critical Dates',
-        accessor: deal => getNextDateValue(deal),
+        accessor: deal => getCriticalDateNextValue(deal),
         render: ({ rowData: deal, totalRows, rowIndex }) => (
           <CriticalDate
             deal={deal}

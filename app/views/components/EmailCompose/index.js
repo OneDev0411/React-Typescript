@@ -64,7 +64,7 @@ class EmailCompose extends React.Component {
         render={() => (
           <Fragment>
             <Field
-              placeholder="To"
+              placeholder="Bcc"
               name="recipients"
               disableAddNewRecipient={this.props.disableAddNewRecipient}
               component={MultipleContactsSelect}
