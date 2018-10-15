@@ -236,7 +236,6 @@ export class TourDrawer extends React.Component {
                   <FormContainer
                     id="tour-drawer-form"
                     onSubmit={formProps.handleSubmit}
-                    style={{ paddingBottom: '3rem' }}
                   >
                     <Title
                       fullWidth

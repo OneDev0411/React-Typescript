@@ -238,7 +238,6 @@ export class OpenHouseDrawer extends React.Component {
                   <FormContainer
                     id="open-house-drawer-form"
                     onSubmit={formProps.handleSubmit}
-                    style={{ paddingBottom: '3rem' }}
                   >
                     <Title
                       fullWidth
