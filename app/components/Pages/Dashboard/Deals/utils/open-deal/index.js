@@ -1,12 +1,13 @@
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
-import store from '../../../../../stores'
+
+import store from '../../../../../../stores'
 import {
   closeEsignWizard,
   setSelectedTask,
   resetSplitter,
   resetUploadFiles
-} from '../../../../../store_actions/deals'
+} from 'actions/deals'
 
 export default function(dealId) {
   const { dispatch } = store

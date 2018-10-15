@@ -1,4 +1,4 @@
-import { getLegalFullName } from './roles'
+import { getLegalFullName } from '../roles'
 
 function getRecipientsNames(recipients) {
   if (!recipients) {

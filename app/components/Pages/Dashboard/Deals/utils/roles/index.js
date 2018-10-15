@@ -1,6 +1,7 @@
 import _ from 'underscore'
-import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
-import { getContactAttribute } from '../../../../../models/contacts/helpers/get-contact-attribute'
+
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
 export const ROLE_NAMES = [
   'BuyerAgent',
