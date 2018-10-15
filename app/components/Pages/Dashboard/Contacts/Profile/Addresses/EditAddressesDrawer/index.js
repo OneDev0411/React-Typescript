@@ -88,8 +88,6 @@ class EditAddressesForm extends React.Component {
         onSubmit={this.onSubmit}
         title="Edit Addresses"
         formId="edit-address-form"
-        showReset={false}
-        showCancel={false}
       >
         <FieldArray name="addresses">
           {({ fields }) => (
