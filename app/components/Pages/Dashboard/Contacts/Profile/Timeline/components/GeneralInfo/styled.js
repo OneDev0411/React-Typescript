@@ -7,7 +7,7 @@ export const Title = styled.h3`
   font-size: 1.5rem;
   font-weight: 500;
   line-height: 1;
-  word-break: break-all;
+  word-break: break-word;
 
   ${props =>
     props.truncate &&
