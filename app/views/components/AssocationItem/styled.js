@@ -1,7 +1,13 @@
 import styled from 'styled-components'
 
 import { grey } from '../../utils/colors'
+import Button from '../Button/IconButton'
 import { merriweatherFamilyStyle } from '../Typography/styles'
+
+export const RemoveButton = Button.extend`
+  visibility: hidden;
+  margin-left: 0.75em;
+`
 
 export const Container = styled.div`
   position: relative;
@@ -15,6 +21,10 @@ export const Container = styled.div`
   &:hover {
     cursor: pointer;
     background-color: ${grey.A250};
+
+    ${RemoveButton} {
+      visibility: visible;
+    }
   }
 `
 

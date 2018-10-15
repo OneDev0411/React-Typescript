@@ -2,11 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import Avatar from '../Avatar'
-import Button from '../Button/IconButton'
 import { ShadowLink } from '../ShadowLink'
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
 
-import { Container, Title, Details } from './styled'
+import { Container, Title, Details, RemoveButton } from './styled'
 
 export class AssociationItem extends Component {
   static propTypes = {
@@ -35,16 +34,9 @@ export class AssociationItem extends Component {
         </div>
         <ShadowLink href={record.url} target="_blank" />
         {isRemovable && (
-          <Button
-            isFit
-            inverse
-            type="button"
-            iconSize="large"
-            onClick={this.onRemove}
-            style={{ marginLeft: '0.75em' }}
-          >
+          <RemoveButton isFit inverse type="button" onClick={this.onRemove}>
             <CloseIcon />
-          </Button>
+          </RemoveButton>
         )}
       </Container>
     )
