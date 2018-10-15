@@ -11,15 +11,17 @@ const CheckBox = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: ${props => (props.isDisabled ? 'not-allowed' : 'pointer')};
   border-radius: 3px;
   background-color: ${props => (props.isSelected ? blue.A100 : '#fff')};
   border: solid 1px ${props => (props.isSelected ? blue.A100 : '#000')};
+
   svg {
     path {
       fill: #ffffff;
     }
   }
+
   :hover {
     background-color: ${props => (props.isSelected ? blue.A200 : grey.A200)};
     border-color: ${props => (props.isSelected ? blue.A200 : '#000')};
@@ -49,6 +51,10 @@ export class CheckBoxButton extends React.Component {
   handleClick = e => {
     e.stopPropagation()
 
+    if (this.props.isDisabled) {
+      return false
+    }
+
     this.setState(state => ({
       isSelected: !state.isSelected
     }))
@@ -64,6 +70,7 @@ export class CheckBoxButton extends React.Component {
         {...this.props}
         onClick={this.handleClick}
         isSelected={isSelected}
+        isDisabled={this.props.isDisabled}
       >
         {isSelected && <Checkmark />}
       </CheckBox>
