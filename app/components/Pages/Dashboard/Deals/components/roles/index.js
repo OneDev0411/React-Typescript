@@ -1,14 +1,28 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+
 import UserAvatar from '../../../../../Partials/UserAvatar'
-import AddRole from './add-role'
 import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import { roleName, getLegalFullName } from '../../utils/roles'
 import RoleCrmIntegration from './crm-integration'
+
 import IconButton from 'components/Button/IconButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+
+import AddRole from './add-role'
+
+import {
+  RolesContainer,
+  RolesTitle,
+  RoleItem,
+  RoleAvatar,
+  RoleInfo,
+  RoleTitle,
+  RoleType,
+  RoleActions
+} from './styled'
 
 class Roles extends React.Component {
   state = {
@@ -115,8 +129,8 @@ class Roles extends React.Component {
     const { user, deletingRoleId, isRoleFormOpen } = this.state
 
     return (
-      <div className="deal-info-section deal-roles">
-        <div className="deal-info-title">CONTACTS</div>
+      <RolesContainer style={this.props.containerStyle}>
+        {this.props.showTitle !== false && <RolesTitle>CONTACTS</RolesTitle>}
 
         {(deal.roles || [])
           .filter(
@@ -127,12 +141,12 @@ class Roles extends React.Component {
             const { id, user } = role
 
             return (
-              <div
+              <RoleItem
                 key={id}
                 className="item"
                 onClick={() => this.onSelectRole(role)}
               >
-                <div className="role-avatar">
+                <RoleAvatar>
                   <UserAvatar
                     size={32}
                     color="#000000"
@@ -140,28 +154,33 @@ class Roles extends React.Component {
                     name={this.getAvatarTitle(role)}
                     image={user ? user.profile_image_url : null}
                   />
-                </div>
-                <div className="name">
-                  <div className="title">{getLegalFullName(role)}</div>
-                  <div className="role">{roleName(role.role)}</div>
-                </div>
-                {allowDeleteRole &&
-                  deletingRoleId &&
-                  id === deletingRoleId && (
-                    <i className="fa fa-spinner fa-spin" />
-                  )}
-                {allowDeleteRole &&
-                  !deletingRoleId && (
-                    <IconButton
-                      appearance="icon"
-                      inverse
-                      onClick={e => this.onRequestRemoveRole(e, role)}
-                      className="delete-button"
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  )}
-              </div>
+                </RoleAvatar>
+
+                <RoleInfo>
+                  <RoleTitle>{getLegalFullName(role)}</RoleTitle>
+                  <RoleType>{roleName(role.role)}</RoleType>
+                </RoleInfo>
+
+                {allowDeleteRole && (
+                  <RoleActions>
+                    {deletingRoleId &&
+                      id === deletingRoleId && (
+                        <i className="fa fa-spinner fa-spin" />
+                      )}
+
+                    {!deletingRoleId && (
+                      <IconButton
+                        appearance="icon"
+                        inverse
+                        onClick={e => this.onRequestRemoveRole(e, role)}
+                        className="delete-button"
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    )}
+                  </RoleActions>
+                )}
+              </RoleItem>
             )
           })}
 
@@ -177,7 +196,7 @@ class Roles extends React.Component {
         )}
 
         <AddRole deal={deal} allowedRoles={allowedRoles} />
-      </div>
+      </RolesContainer>
     )
   }
 }

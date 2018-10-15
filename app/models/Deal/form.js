@@ -1,3 +1,4 @@
+import agent from 'superagent'
 import Fetch from '../../services/fetch'
 
 /**
@@ -10,6 +11,21 @@ export async function getForms() {
     return response.body.data
   } catch (e) {
     console.log(e)
+  }
+}
+
+/**
+ * returns form size in bytes
+ */
+export async function getFormSize(formId) {
+  try {
+    const response = await agent.get(`/api/pdf/get-size/${formId}`)
+
+    return response.body.total
+  } catch (e) {
+    console.log(e)
+
+    return 0
   }
 }
 

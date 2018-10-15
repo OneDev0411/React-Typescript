@@ -13,6 +13,18 @@ import { getActiveTeam } from '../../../../../../../../utils/user-teams'
 import { getAgents } from '../../../../../../../../models/Deal/agent'
 import Loading from '../../../../../../../Partials/Loading'
 
+import {
+  RoleItem,
+  RoleAvatar,
+  RoleInfo,
+  RoleTitle,
+  RoleType
+} from '../../styled'
+
+import { Container, SearchInput, SearchOverlay, EmptyState } from './styled'
+
+import './modalStyle.scss'
+
 class TeamAgents extends React.Component {
   state = {
     isLoading: true,
@@ -105,27 +117,26 @@ class TeamAgents extends React.Component {
         <Modal.Header closeButton>Choose primary agent</Modal.Header>
 
         <Modal.Body className="u-scrollbar--thinner">
-          <div className="deal-roles">
+          <Container>
             {(isSearchingContacts || isLoading) && (
-              <div className="search-overlay">
+              <SearchOverlay>
                 <Loading />
-              </div>
+              </SearchOverlay>
             )}
 
             {!isLoading &&
               !isSearchingContacts &&
               (!teamAgents || teamAgents.length === 0) && (
-                <div className="deal-roles-empty-state">
+                <EmptyState>
                   We cannot find any Primary Agent in your brand
-                </div>
+                </EmptyState>
               )}
 
             {teamAgents && (
               <Fragment>
                 {teamAgents.length > 5 && (
-                  <input
+                  <SearchInput
                     type="text"
-                    className="search"
                     placeholder="Search Agent..."
                     value={searchFilter}
                     onChange={e =>
@@ -145,12 +156,11 @@ class TeamAgents extends React.Component {
                         .includes(searchFilter.toLowerCase())
                   )
                   .map(user => (
-                    <div
+                    <RoleItem
                       key={user.id}
-                      className="item"
                       onClick={() => this.handleSelectAgent(user)}
                     >
-                      <div className="role-avatar">
+                      <RoleAvatar>
                         <UserAvatar
                           name={user.display_name}
                           image={user.profile_image_url}
@@ -158,17 +168,17 @@ class TeamAgents extends React.Component {
                           color="#000000"
                           showStateIndicator={false}
                         />
-                      </div>
+                      </RoleAvatar>
 
-                      <div className="name">
-                        <div>{user.display_name}</div>
-                        <div className="role">{roleName(user.role || '')}</div>
-                      </div>
-                    </div>
+                      <RoleInfo>
+                        <RoleTitle>{user.display_name}</RoleTitle>
+                        <RoleType>{roleName(user.role || '')}</RoleType>
+                      </RoleInfo>
+                    </RoleItem>
                   ))}
               </Fragment>
             )}
-          </div>
+          </Container>
         </Modal.Body>
       </Modal>
     )

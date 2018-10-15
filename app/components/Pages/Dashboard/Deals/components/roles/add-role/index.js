@@ -7,11 +7,9 @@ import Deal from '../../../../../../../models/Deal'
 import { BasicDropdown } from 'components/BasicDropdown'
 import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
-function getItems(items) {
-  return items.map(item => ({ label: roleName(item), value: item }))
-}
+import { Container } from './styled'
 
-class AddRole extends React.Component {
+class AddRoleForm extends React.Component {
   state = {
     isFormOpen: false,
     selectedRole: null
@@ -48,6 +46,14 @@ class AddRole extends React.Component {
     return ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(enderType)
   }
 
+  getRoleItems = () =>
+    (this.AllowedRoles || this.Roles).map(item => ({
+      label: roleName(item),
+      value: item
+    }))
+
+  itemToString = item => item.label
+
   get Roles() {
     const { deal_type } = this.props.deal
 
@@ -63,23 +69,21 @@ class AddRole extends React.Component {
     })
   }
 
-  itemToString = item => item.label
-
   render() {
     const { deal } = this.props
     const { isFormOpen, selectedRole } = this.state
     const allowedRoles = this.AllowedRoles
 
     return (
-      <div className="create-new-role">
+      <Container>
         <BasicDropdown
           buttonSize={this.props.buttonSize}
-          items={getItems(this.Roles)}
+          items={this.getRoleItems()}
           itemToString={this.itemToString}
           onChange={this.handleSelectRole}
           buttonIcon={AddIcon}
           buttonText="Add a Contact"
-          disabled={allowedRoles && allowedRoles.length > 0}
+          disabled={allowedRoles && allowedRoles.length === 0}
         />
 
         {isFormOpen && (
@@ -94,7 +98,7 @@ class AddRole extends React.Component {
             onHide={this.closeDrawer}
           />
         )}
-      </div>
+      </Container>
     )
   }
 }
@@ -105,4 +109,4 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(mapStateToProps)(AddRole)
+export default connect(mapStateToProps)(AddRoleForm)
