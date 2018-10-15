@@ -44,7 +44,7 @@ class SendDealPromotion extends React.Component {
 
     this.setState({
       isComposeEmailOpen: true,
-      isInstantMarketingBuilderOpen: false,
+      isInstantMarketingBuilderOpen: true,
       htmlTemplate: template.result,
       templateScreenshot: null
     })
