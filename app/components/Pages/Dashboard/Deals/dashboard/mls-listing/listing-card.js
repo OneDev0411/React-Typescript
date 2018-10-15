@@ -5,7 +5,7 @@ import cn from 'classnames'
 import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import Tooltip from '../../../../../../views/components/tooltip/index'
-import ManualAddress from '../../create/manual-address'
+import ManualAddress from '../../components/address'
 import Deal from '../../../../../../models/Deal'
 import { updateContext } from '../../../../../../store_actions/deals'
 import LinkButton from 'components/Button/LinkButton'
@@ -26,31 +26,6 @@ class ListingCard extends React.Component {
     this.setState({
       showAddressModal: !this.state.showAddressModal
     })
-
-  onCreateAddress = async address => {
-    const { address_components } = address
-    const { deal, updateContext } = this.props
-
-    this.setState({
-      isSavingAddress: true,
-      showAddressModal: false
-    })
-
-    const context = {}
-
-    _.each(address_components, (value, name) => {
-      context[name] = {
-        value: address_components[name],
-        approved: true // none of address contexts, don't need admin approval
-      }
-    })
-
-    await updateContext(deal.id, context)
-
-    this.setState({
-      isSavingAddress: false
-    })
-  }
 
   render() {
     const { deal, roles } = this.props
@@ -131,8 +106,7 @@ class ListingCard extends React.Component {
         <ManualAddress
           show={showAddressModal}
           deal={deal}
-          onHide={this.toggleShowAddressModal}
-          onCreateAddress={this.onCreateAddress}
+          onClose={this.toggleShowAddressModal}
         />
       </div>
     )

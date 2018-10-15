@@ -42,8 +42,9 @@ const Header = ({ user, deal, showAttachments }) => (
       >
         Get Signatures
       </Button>
-
-      <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
+      {deal.listing && (
+        <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
+      )}
     </PageHeader.Menu>
   </PageHeader>
 )

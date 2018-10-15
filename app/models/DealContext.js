@@ -1,5 +1,6 @@
 import moment from 'moment'
 import _ from 'underscore'
+
 import store from '../stores'
 import Deal from './Deal'
 
@@ -11,6 +12,30 @@ export function getList() {
   const { deals } = state
 
   return deals && deals.contexts
+}
+
+/**
+ * search context by name
+ */
+export function searchContext(name) {
+  if (!name) {
+    return false
+  }
+
+  const context = _.find(getList(), { name })
+
+  if (!context) {
+    console.warn(`Could not find context: ${context}`)
+
+    return null
+  }
+
+  return {
+    ...context,
+    validate: getValidationFunction(context.name),
+    properties: getFieldProperties(context.name),
+    getFormattedValue: getFormattedValue.bind(context)
+  }
 }
 
 /**
@@ -210,6 +235,10 @@ export function isCurrency(field) {
  * returns value of context
  */
 export function getValue(deal, field) {
+  if (!field) {
+    return null
+  }
+
   if (field.data_type === 'Date') {
     return getDateValue(deal, field)
   }
@@ -221,7 +250,10 @@ export function getValue(deal, field) {
   }
 
   // get field
-  const contextValue = Deal.get.field(deal, field.name)
+  const defaultContext =
+    isAddressField(field.name) && deal.listing ? deal.mls_context : null
+
+  const contextValue = Deal.get.field(deal, field.name, defaultContext)
 
   const dataObject = {
     value: contextValue,
@@ -229,7 +261,7 @@ export function getValue(deal, field) {
   }
 
   if (isCurrency(field)) {
-    dataObject.contextValue = Deal.get.formattedPrice(contextValue)
+    dataObject.value = Deal.get.formattedPrice(contextValue)
   }
 
   return dataObject
@@ -259,12 +291,16 @@ export function getDateValue(deal, field) {
   const date = Deal.get.field(deal, field.name)
 
   return {
-    value: date ? parseDate(date).format('MMM DD, YYYY') : ''
+    value: date ? parseDate(date).format(getDateFormatString()) : ''
   }
 }
 
 export function parseDate(date) {
   return moment.unix(date).utc()
+}
+
+export function getDateFormatString() {
+  return 'MMM DD, YYYY'
 }
 
 /**
@@ -369,6 +405,23 @@ export function getValidItems(
   return _.pick(list, (value, name) => validate(dealContexts[name], value))
 }
 
+export function isAddressField(name) {
+  return [
+    'street_dir_prefix',
+    'street_suffix',
+    'street_number',
+    'street_name',
+    'unit_number',
+    'city',
+    'county',
+    'state',
+    'state_code',
+    'postal_code',
+    'full_address',
+    'street_address'
+  ].includes(name)
+}
+
 function getFormattedValue(value) {
   if (!value) {
     return value
@@ -383,6 +436,7 @@ function getFormattedValue(value) {
 
 export default {
   getList,
+  searchContext,
   getChecklists,
   getDealTypeFlag,
   getPropertyTypeFlag,
@@ -398,8 +452,10 @@ export default {
   getValueByContext,
   getDateValue,
   parseDate,
+  getDateFormatString,
   validate,
   validateDate,
   validateList,
-  getValidItems
+  getValidItems,
+  isAddressField
 }

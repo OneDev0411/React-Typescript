@@ -26,18 +26,25 @@ class CalendarFilter extends React.Component {
   }
 
   get MembersList() {
-    return this.Members.map(member => {
-      let name = member.display_name
+    const selectedItems = this.SelectedItems
 
-      if (member.id === this.props.user.id) {
-        name += ' (you)'
-      }
+    return _.chain(this.Members)
+      .uniq(member => member.id)
+      .map(member => {
+        let name = member.display_name
 
-      return {
-        label: name,
-        value: member.id
-      }
-    })
+        if (member.id === this.props.user.id) {
+          name += ' (you)'
+        }
+
+        return {
+          label: name,
+          value: member.id,
+          disabled:
+            selectedItems.includes(member.id) && selectedItems.length === 1
+        }
+      })
+      .value()
   }
 
   get SelectedItems() {

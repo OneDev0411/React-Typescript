@@ -1,9 +1,9 @@
 import React from 'react'
-import Roles from '../roles'
+import Roles from '../../components/roles'
 
 import OverlayDrawer from 'components/OverlayDrawer'
 
-export default ({ show, deal, onHide, allowedRoles, onAddRecipient }) => (
+export default ({ show, deal, onHide, onAddRecipient }) => (
   <OverlayDrawer isOpen={show} onClose={onHide} showFooter={false}>
     <OverlayDrawer.Header title="Add a Signer" />
 
@@ -13,7 +13,6 @@ export default ({ show, deal, onHide, allowedRoles, onAddRecipient }) => (
           deal={deal}
           isEmailRequired
           allowDeleteRole={false}
-          // allowedRoles={allowedRoles}
           onSelect={onAddRecipient}
         />
       </div>

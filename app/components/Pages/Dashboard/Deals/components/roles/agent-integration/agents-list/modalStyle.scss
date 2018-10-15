@@ -1,0 +1,29 @@
+.modal-deal-team-agents {
+  .modal-content {
+    border: none;
+    box-shadow: 1px 1px 1px #ccc;
+    overflow: auto;
+  }
+
+  .modal-header {
+    height: 55px;
+    line-height: 30px;
+    vertical-align: middle;
+    border-radius: 6px 6px 0 0;
+    background-color: #f8fafb;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1c364c;
+    .close {
+      margin-top: 3px;
+    }
+  }
+
+  .modal-body {
+    padding: 0;
+    min-height: 200px;
+    max-height: 400px;
+    position: relative;  
+  }
+}
+

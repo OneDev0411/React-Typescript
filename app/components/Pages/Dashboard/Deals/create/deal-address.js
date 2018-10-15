@@ -65,7 +65,7 @@ export default class DealAddress extends React.Component {
 
         <ManualAddress
           show={showManualAddress}
-          onHide={() => this.toggleManualAddressModal()}
+          onClose={() => this.toggleManualAddressModal()}
           onCreateAddress={address => this.onCreateAddress(address)}
         />
 

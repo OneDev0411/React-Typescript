@@ -35,7 +35,7 @@ class AddRecipients extends React.Component {
   }
 
   render() {
-    const { deal, recipients, onRemoveRecipient, allowedRoles } = this.props
+    const { deal, recipients, onRemoveRecipient } = this.props
 
     const groups = _.groupBy(recipients, 'order')
     const max = _.max(recipients, 'order').order + 2 || 1
@@ -56,7 +56,6 @@ class AddRecipients extends React.Component {
           <AddSigner
             show={this.state.showRolesModal}
             deal={deal}
-            allowedRoles={allowedRoles}
             onAddRecipient={role => this.onAddRecipient(role)}
             onHide={() => this.hideRolesModal()}
           />

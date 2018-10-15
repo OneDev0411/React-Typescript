@@ -35,6 +35,7 @@ export function MultiField({
                 component={Dropdown}
                 defaultSelectedItem={defaultSelectedItem}
                 fullWidth
+                hasEmptyItem={false}
                 items={defaultOptions}
                 name={`${field}.label`}
               />
