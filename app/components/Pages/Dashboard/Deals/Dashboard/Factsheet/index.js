@@ -126,7 +126,7 @@ class Factsheet extends React.Component {
     return (
       <Fragment>
         <Container>
-          <SectionTitle>{this.props.title}</SectionTitle>
+          {this.props.title && <SectionTitle>{this.props.title}</SectionTitle>}
 
           <ItemsContainer>
             {table.map(field => {

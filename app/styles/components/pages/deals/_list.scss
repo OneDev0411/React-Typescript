@@ -282,6 +282,7 @@
 .deal-list--popover {
   background-color: #fff;
   border: none;
+  min-width: 280px;;
   max-width: inherit;
   box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
@@ -297,6 +298,10 @@
 
   .popover-content {
     padding: 1rem;
+  }
+
+  &.no-padding .popover-content{
+    padding: 0;
   }
 
   .roles {

@@ -3,37 +3,46 @@ import { Popover, OverlayTrigger } from 'react-bootstrap'
 
 import DealContext from 'models/DealContext'
 
-// TODO
-// import CriticalDates from '../../../../Dashboard/factsheet/critical-dates'
+import FactsheetSection from '../../../../Dashboard/Factsheet'
+import { getNextDate, getNextDateValue } from '../../../../utils/critical-dates'
 
-// export const getNextDateValue = deal => CriticalDates.getNextDateValue(deal)
-export const getNextDateValue = deal => deal.id
+export const getCriticalDateNextValue = deal => getNextDateValue(deal)
 
-const CriticalDate = ({ deal, rowId, rowsCount }) => 
-  // const table = DealContext.getFactsheetSection(deal, 'CriticalDates')
+export default function CriticalDate(props) {
+  const { deal, rowId, rowsCount } = props
+  const table = DealContext.getFactsheetSection(deal, 'CriticalDates')
 
-   <span />
+  if (table.length === 0) {
+    return <span />
+  }
 
-  // if (table.length === 0) {
-  //   return <span />
-  // }
+  // get next critical date
+  const nextDate = getNextDate(deal)
 
-  // return (
-  //   <OverlayTrigger
-  //     trigger={['hover', 'focus']}
-  //     placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
-  //     overlay={
-  //       <Popover
-  //         className="deal-list--popover"
-  //         id={`popover-trigger-factsheet-${deal.id}`}
-  //       >
-  //         <CriticalDates deal={deal} showTitle={false} />
-  //       </Popover>
-  //     }
-  //   >
-  //     <span className="hoverable">{CriticalDates.getNextDate(deal)}</span>
-  //   </OverlayTrigger>
-  // )
+  if (!nextDate) {
+    return 'No closing date'
+  }
 
-
-export default CriticalDate
+  return (
+    <OverlayTrigger
+      trigger={['hover']}
+      placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
+      overlay={
+        <Popover
+          className="deal-list--popover no-padding"
+          id={`popover-trigger-factsheet-${deal.id}`}
+        >
+          <FactsheetSection
+            showDivider={false}
+            display
+            deal={deal}
+            isBackOffice={false}
+            section="CriticalDates"
+          />
+        </Popover>
+      }
+    >
+      <span className="hoverable">{nextDate}</span>
+    </OverlayTrigger>
+  )
+}
