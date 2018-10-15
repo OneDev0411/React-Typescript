@@ -18,6 +18,7 @@ export class Grid extends React.Component {
   }
 
   onCloseDrawer = () => this.setState({ selectedAgent: null })
+
   onSelectAgent = (agent, listType) =>
     this.setState({
       selectedAgent: {
@@ -27,6 +28,24 @@ export class Grid extends React.Component {
         list: agent[listType].map(id => agent.listings[id])
       }
     })
+
+  getRecipients = selectedRows => {
+    const { data } = this.props
+
+    if (
+      Array.isArray(data) === false ||
+      Array.isArray(selectedRows) === false ||
+      data.length === 0 ||
+      selectedRows.length === 0
+    ) {
+      return []
+    }
+
+    return data.filter(agent => selectedRows.includes(agent.id)).map(agent => ({
+      name: agent.name,
+      email: agent.email
+    }))
+  }
 
   columns = [
     {
@@ -111,6 +130,7 @@ export class Grid extends React.Component {
       render: props => (
         <SendDealPromotionCard
           deal={this.props.deal}
+          recipients={this.getRecipients(props.selectedRows)}
           selectedRows={props.selectedRows}
         >
           Promote Listing
