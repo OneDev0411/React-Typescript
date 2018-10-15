@@ -10,13 +10,12 @@ const Container = styled.div`
   padding: 1.5em;
 
   &:not(:last-of-type) {
-    margin-bottom: 1.5em;
-
     :after {
+      margin-top: 1.5em;
       display: block;
       content: '';
       height: 1px;
-      width: 52px;
+      width: 3.25rem;
       background-color: ${borderColor};
     }
   }

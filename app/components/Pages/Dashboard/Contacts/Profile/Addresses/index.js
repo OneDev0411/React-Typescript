@@ -87,7 +87,6 @@ class Addresses extends React.Component {
         ) : (
           <div
             style={{
-              textAlign: 'center',
               marginTop: hasAddresses ? 0 : '0.5em'
             }}
           >

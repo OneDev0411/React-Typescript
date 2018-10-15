@@ -99,11 +99,9 @@ export class DealsListWidget extends React.Component {
             list={this.state.list}
           />
         ) : (
-          <Flex center full>
-            <div style={{ color: grey.A900, padding: '0.5em 0 1.5em' }}>
-              No deals connected to this contact.
-            </div>
-          </Flex>
+          <div style={{ color: grey.A900 }}>
+            No deals connected to this contact.
+          </div>
         )}
 
         <SelectDealModal
