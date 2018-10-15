@@ -5,7 +5,7 @@ import { Field } from 'react-final-form'
 
 import { createTask } from '../../../../../models/tasks/create-task'
 
-import EventDrawer from '../../../../components/EventDrawer'
+import { EventDrawer } from '../../../../components/EventDrawer'
 import ActionButton from '../../../../components/Button/ActionButton'
 import { DateTimeField } from '../../../../components/final-form-fields/DateTimeField'
 

@@ -25,14 +25,19 @@ export function updateContact(contactId, attributes, query) {
 
       const response = await patchContact(contactId, attributes, query)
       const updatedContact = normalizeContactAttribute(response)
+      const { contacts: { list } } = getState()
+      const contact = selectContact(list, contactId)
+      const newContact = {
+        ...contact,
+        ...updatedContact[0]
+      }
 
-      const newContact = updateContactOnStore(
-        updatedContact[0],
-        dispatch,
-        getState
-      )
+      dispatch({
+        type: actionTypes.PATCH_CONTACT_SUCCESS,
+        response: normalize({ contacts: [newContact] }, contactsSchema)
+      })
 
-      return newContact
+      return contact
     } catch (error) {
       dispatch({
         error,
@@ -44,21 +49,3 @@ export function updateContact(contactId, attributes, query) {
 }
 
 export default updateContact
-
-export function updateContactOnStore(newContact, dispatch, getState) {
-  const {
-    contacts: { list }
-  } = getState()
-  const contact = selectContact(list, newContact.contactId)
-  const updatedContact = {
-    ...contact,
-    ...newContact
-  }
-
-  dispatch({
-    type: actionTypes.PATCH_CONTACT_SUCCESS,
-    response: normalize({ contacts: [updatedContact] }, contactsSchema)
-  })
-
-  return newContact
-}

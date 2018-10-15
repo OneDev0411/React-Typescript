@@ -5,7 +5,6 @@ import * as actionTypes from '../../../constants/tasks'
 import { tasksSchema } from '../../../models/tasks/schema'
 import { selectTasks } from '../../../reducers/tasks/list'
 import { createTask as createNewTask } from '../../../models/tasks'
-import { updateContacts } from '../update-task'
 
 export function createTask(task, query) {
   return async (dispatch, getState) => {
@@ -25,9 +24,7 @@ export function createTask(task, query) {
       })
 
       const newTask = await createNewTask(task, query)
-      const {
-        tasks: { list }
-      } = getState()
+      const { tasks: { list } } = getState()
       const tasks = [newTask, ...selectTasks(list)]
       const response = normalize({ tasks }, tasksSchema)
 
@@ -35,7 +32,6 @@ export function createTask(task, query) {
         response,
         type: actionTypes.CREATE_TASK_SUCCESS
       })
-      updateContacts(newTask, dispatch, getState)
 
       return newTask
     } catch (error) {

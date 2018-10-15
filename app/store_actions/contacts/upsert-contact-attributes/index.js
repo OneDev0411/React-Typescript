@@ -7,7 +7,7 @@ export function upsertContactAttributes(contactId, attributes, query) {
 
   // Filter attributes based on their fields.
   // If attribute had a id so it is a patch.
-  // But otherwise it is a new attribute and it has to be inserted.
+  // But otherwise it is a new attribute and it has to insert.
   attributes.forEach(attribute => {
     const normalizedAttribute = normalizeAttribute(attribute)
 

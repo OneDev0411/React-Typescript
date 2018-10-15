@@ -29,7 +29,7 @@ import {
 
 import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
-import EventDrawer from '../../../../views/components/EventDrawer'
+import { EventDrawer } from '../../../../views/components/EventDrawer'
 
 import CalendarTable from './Table'
 import CalendarFilter from './Filter'
