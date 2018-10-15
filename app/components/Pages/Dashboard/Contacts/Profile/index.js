@@ -189,11 +189,9 @@ class ContactProfile extends React.Component {
               <Card>
                 <ContactInfo contact={contact} />
 
-                {hasAddress.length > 0 && <Addresses contact={contact} />}
+                <Addresses contact={contact} />
 
                 <Details contact={contact} />
-
-                {hasAddress.length === 0 && <Addresses contact={contact} />}
 
                 {!this.state.isDesktopScreen && thirdColumnSections}
 
