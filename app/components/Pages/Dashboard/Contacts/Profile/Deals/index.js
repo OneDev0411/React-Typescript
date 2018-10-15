@@ -37,9 +37,9 @@ export class DealsListWidget extends React.Component {
       const response = await getContact(id, {
         associations: [
           'contact.sub_contacts',
-          'sub_contact.deals',
+          'contact.deals',
           'contact.summary',
-          'sub_contact.users',
+          'contact.users',
           'contact_attribute.attribute_def'
         ]
       })
