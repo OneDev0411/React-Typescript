@@ -47,6 +47,7 @@ class EmailCompose extends React.Component {
   render() {
     return (
       <FinalFormDrawer
+        formId="email-compose-form"
         isOpen={this.props.isOpen}
         initialValues={this.InitialValues}
         onClose={this.props.onClose}

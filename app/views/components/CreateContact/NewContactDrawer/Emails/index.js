@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { isEmail } from '../../../../../../../utils/validations'
+import { isEmail } from '../../../../../utils/validations'
 
 import { MultiField } from '../components/MultiField'
 
