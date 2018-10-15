@@ -77,11 +77,11 @@ class DealTemplates extends React.Component {
 
   onChangeSelectAllTypes = selectedTypes => this.setState({ selectedTypes })
 
-  onSelectOneCategoriesTypes = types => {
+  onSelectOneCategoriesTypes = (types, selected) => {
     let selectedTypes = this.state.selectedTypes.slice(0)
 
     types.forEach(selectedType => {
-      if (selectedTypes.includes(selectedType)) {
+      if (selected && selectedTypes.includes(selectedType)) {
         selectedTypes = selectedTypes.filter(type => type !== selectedType)
       } else {
         selectedTypes.push(selectedType)
