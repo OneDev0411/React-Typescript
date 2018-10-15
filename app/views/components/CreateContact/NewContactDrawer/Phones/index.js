@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { isPhoneNumber } from '../../../../../../../utils/validations'
+import { isPhoneNumber } from '../../../../../utils/validations'
 
 import { MultiField } from '../components/MultiField'
 

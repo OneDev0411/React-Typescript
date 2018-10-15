@@ -87,6 +87,7 @@ class EditAddressesForm extends React.Component {
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
         title="Edit Addresses"
+        formId="edit-address-form"
         showReset={false}
         showCancel={false}
       >

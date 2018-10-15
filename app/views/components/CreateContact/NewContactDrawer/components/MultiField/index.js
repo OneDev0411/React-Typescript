@@ -2,12 +2,13 @@ import React from 'react'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 
-import { Container, Title } from '../../styled-components/field'
-import { TextField } from './components/Input'
-import { Dropdown } from '../../../../../../../../views/components/Dropdown'
-import IconButton from '../../../../../../../../views/components/Button/IconButton'
-import AddIcon from '../../../../../../../../views/components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-import RemoveIcon from '../../../../../../../../views/components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
+import { TextField } from './Input'
+import { Dropdown } from '../../../../Dropdown'
+import IconButton from '../../../..//Button/IconButton'
+import AddIcon from '../../../../SvgIcons/AddCircleOutline/IconAddCircleOutline'
+import RemoveIcon from '../../../../SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
+
+import { Container, Title } from './styled'
 
 export function MultiField({
   defaultOptions,

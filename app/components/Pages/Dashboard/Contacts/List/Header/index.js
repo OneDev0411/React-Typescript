@@ -2,6 +2,7 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 
 import PageHeader from '../../../../../../views/components/PageHeader'
+import { CreateContact } from '../../../../../../views/components/CreateContact'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
@@ -33,11 +34,7 @@ export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
           </ActionButton>
         </Tooltip>
 
-        <ActionButton
-          onClick={() => browserHistory.push('/dashboard/contacts/new')}
-        >
-          New Contact
-        </ActionButton>
+        <CreateContact />
       </PageHeader.Menu>
     </PageHeader>
   )
