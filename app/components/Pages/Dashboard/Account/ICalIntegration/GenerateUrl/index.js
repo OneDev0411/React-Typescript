@@ -67,7 +67,7 @@ class GenerateUrl extends React.Component {
     return (
       <GenerateUrlContainer>
         <IconCalendar />
-        <GenerateUrlText> iCAL Feed URL:</GenerateUrlText>
+        <GenerateUrlText>Calendar Export URL:</GenerateUrlText>
         {feedURl ? (
           <FeedUrl
             appearance="link"
