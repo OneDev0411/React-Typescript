@@ -47,10 +47,10 @@ class ICalAllTypes extends React.Component {
 
     const filteredContactsAttributesDefs =
       this.props.contactsAttributesDefs &&
-      _.filter(
-        this.props.contactsAttributesDefs,
-        def => def.data_type === 'date' && def.show
-      )
+      _.chain(this.props.contactsAttributesDefs)
+        .filter(def => def.data_type === 'date' && def.show)
+        .map(type => ({ ...type, name: type.name || type.label }))
+        .value()
     const allTypes = taskTypes
       .map(type => type.name)
       .concat(
