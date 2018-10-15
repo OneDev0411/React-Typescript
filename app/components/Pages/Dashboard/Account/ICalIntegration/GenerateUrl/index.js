@@ -71,13 +71,17 @@ class GenerateUrl extends React.Component {
         {feedURl ? (
           <FeedUrl
             appearance="link"
-            onClick={() => {
+            onClick={event => {
+              event.preventDefault()
               copy(feedURl)
               this.props.notify({
                 message: 'Link Copied',
                 status: 'success'
               })
+
+              return false
             }}
+            href={feedURl}
           >
             {feedURl}
           </FeedUrl>
