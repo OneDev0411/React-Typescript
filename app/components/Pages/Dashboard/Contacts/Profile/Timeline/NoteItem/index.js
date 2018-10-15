@@ -28,7 +28,7 @@ export class NoteItem extends React.Component {
             )}
           </div>
         </Flex>
-        <Title style={{ lineHeight: 1.5 }}>{this.props.note.text}</Title>
+        <Title style={{ margin: 0 }}>{this.props.note.text}</Title>
       </ItemContainer>
     )
   }
