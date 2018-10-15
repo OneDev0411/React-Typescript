@@ -31,6 +31,7 @@ export function Select(props) {
             <Dropdown
               fullWidth
               input={input}
+              buttonStyle={{ padding: 0 }}
               items={['-Select-', ...attribute_def.enum_values].map(value => ({
                 title: value,
                 value
