@@ -1,9 +1,5 @@
 import styled from 'styled-components'
-import {
-  placeholderColor,
-  borderColor,
-  error
-} from '../../../../../../../views/utils/colors'
+import { borderColor, error } from '../../../../../utils/colors'
 
 export const Container = styled.div`
   display: flex;
@@ -22,25 +18,5 @@ export const Title = styled.label`
     margin-left: 0.5em;
     font-weight: bold;
     color: ${error};
-  }
-`
-
-export const ErrorMessage = styled.div`
-  color: ${error};
-  margin-top: 0.5em;
-`
-
-export const Input = styled.input`
-  width: 100%;
-  font-size: 1.125rem;
-  padding: 0;
-  border: none;
-
-  &:focus {
-    outline: none;
-  }
-
-  &::placeholder {
-    color: ${placeholderColor};
   }
 `

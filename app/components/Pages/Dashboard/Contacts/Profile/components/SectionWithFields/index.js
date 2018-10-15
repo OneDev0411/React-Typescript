@@ -21,8 +21,8 @@ import {
   getFormater,
   getInitialValues
 } from './helpers'
-import StarIcon from '../../../../../../../views/components/SvgIcons/Star/StarIcon'
-import Tooltip from '../../../../../../../views/components/tooltip'
+// import StarIcon from '../../../../../../../views/components/SvgIcons/Star/StarIcon'
+// import Tooltip from '../../../../../../../views/components/tooltip'
 
 const propTypes = {
   addNewFieldButtonText: PropTypes.string,
@@ -129,15 +129,6 @@ class SectionWithFields extends React.Component {
           }
 
           return attribute_def.label
-
-          // switch (attribute_def.name) {
-          //   case 'website':
-          //     return title
-          //   case 'important_date':
-          //     return field.label
-          //   default:
-          //     return `${field.label} ${title}`
-          // }
         }
 
         if (attribute_def.name === 'source_type') {

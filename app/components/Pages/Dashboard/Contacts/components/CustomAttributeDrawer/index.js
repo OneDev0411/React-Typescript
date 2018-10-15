@@ -73,8 +73,7 @@ class CustomAttributeDrawer extends React.Component {
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
         title="Add Custom Field"
-        showCancel={false}
-        showReset={false}
+        formId="add-custom-field-form"
         validate={validate}
         render={({ values }) => (
           <React.Fragment>

@@ -67,10 +67,8 @@ export function Select(props) {
               style={{ margin: 0 }}
               buttonStyle={{ padding: 0 }}
               itemRenderer={(props, item) => (
-                <Tooltip caption={item.hint} placement="left">
-                  <Item {...props} key={item.value}>
-                    {item.title}
-                  </Item>
+                <Tooltip caption={item.hint} placement="left" key={item.value}>
+                  <Item {...props}>{item.title}</Item>
                 </Tooltip>
               )}
             />
