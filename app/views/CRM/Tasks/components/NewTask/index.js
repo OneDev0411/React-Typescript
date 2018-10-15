@@ -47,9 +47,10 @@ export default class Task extends Component {
   }
 
   onClickMoreOptions = formValues => this.setState({ formValues })
-  handleDrawerClose = formProps => {
+  handleDrawerClose = (formProps, newEvent) => {
     if (formProps && !formProps.preventDefault) {
       formProps.form.reset()
+      this.props.submitCallback(newEvent)
     }
 
     this.setState({ formValues: null })
@@ -149,7 +150,9 @@ export default class Task extends Component {
                     user={this.props.user}
                     initialValues={this.state.formValues}
                     onClose={this.handleDrawerClose}
-                    submitCallback={() => this.handleDrawerClose(props)}
+                    submitCallback={newEvent =>
+                      this.handleDrawerClose(props, newEvent)
+                    }
                   />
                 )}
               </React.Fragment>
