@@ -24,6 +24,14 @@ export class CreateOpenHouse extends React.Component {
   handleOpen = () => this.setState({ isOpen: true })
   handleClose = () => this.setState({ isOpen: false })
 
+  handleSubmitCallback = event => {
+    if (this.props.submitCallback) {
+      this.props.submitCallback(event)
+    }
+
+    this.handleClose()
+  }
+
   render() {
     return (
       <Fragment>
@@ -47,7 +55,7 @@ export class CreateOpenHouse extends React.Component {
             user={this.props.user}
             deal={this.props.deal}
             onClose={this.handleClose}
-            submitCallback={this.handleClose}
+            submitCallback={this.handleSubmitCallback}
           />
         )}
       </Fragment>
