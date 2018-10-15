@@ -190,9 +190,17 @@ export class TourDrawer extends React.Component {
   }
 
   handleSubmit = () => {
-    document
-      .getElementById('tour-drawer-form')
-      .dispatchEvent(new Event('submit', { cancelable: true }))
+    let event
+
+    if (typeof Event === 'function') {
+      event = new Event('submit', { cancelable: true })
+    } else {
+      event = document.createEvent('Event')
+
+      event.initEvent('submit', true, true)
+    }
+
+    document.getElementById('tour-drawer-form').dispatchEvent(event)
   }
 
   render() {
