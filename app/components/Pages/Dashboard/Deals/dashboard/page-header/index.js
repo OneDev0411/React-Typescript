@@ -42,7 +42,7 @@ const Header = ({ user, deal, showAttachments }) => (
       >
         Get Signatures
       </Button>
-      {deal.mls_context && (
+      {deal.listing && (
         <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
       )}
     </PageHeader.Menu>
