@@ -35,8 +35,6 @@ export class FinalFormDrawer extends React.Component {
   }
 
   handleOnClose = (e, formProps) => {
-    e.preventDefault()
-
     const { form, submitting } = formProps
 
     if (submitting) {
