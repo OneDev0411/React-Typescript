@@ -209,9 +209,6 @@ export class EventDrawer extends Component {
       crm_task = event.id
     }
 
-    console.log(error)
-    console.dir(error)
-
     return (
       <Drawer
         isOpen={this.props.isOpen}

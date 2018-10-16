@@ -33,7 +33,15 @@ const getActionRedirectURL = params => {
     return `/dashboard/mls/${listing}`
   }
 
-  if (action === 'RedirectToCRMTask' && crm_task) {
+  if (
+    crm_task &&
+    [
+      'CrmTaskIsDueCrmTask',
+      'ReminderIsDueCrmTask',
+      'UserAssignedCrmTask',
+      'UserEditerCrmTask'
+    ].includes(action)
+  ) {
     return `/dashboard/notifications/crm/${crm_task}`
   }
 
