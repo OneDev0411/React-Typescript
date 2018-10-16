@@ -31,9 +31,11 @@ export const Container = styled.div`
 export const Title = styled.div`
   ${merriweatherFamilyStyle};
   font-size: 0.875rem;
+  line-height: 1.1428571428571428;
 `
 
 export const Details = styled.div`
   font-size: 0.875rem;
   color: ${grey.A900};
+  line-height: 1.1428571428571428;
 `
