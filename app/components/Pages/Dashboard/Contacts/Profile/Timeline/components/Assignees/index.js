@@ -9,7 +9,8 @@ export function Assignees(props) {
       style={{
         position: 'absolute',
         top: '1.5em',
-        right: '1.5em'
+        right: '1.5em',
+        cursor: 'pointer'
       }}
     />
   )
