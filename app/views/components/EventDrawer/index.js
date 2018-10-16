@@ -242,7 +242,7 @@ export class EventDrawer extends Component {
                       onSubmit={formProps.handleSubmit}
                       id="event-drawer-form"
                     >
-                      <Flex style={{ marginBottom: '1.5em' }}>
+                      <Flex style={{ marginBottom: '1rem' }}>
                         {this.isNew ? (
                           <Title fullWidth />
                         ) : (

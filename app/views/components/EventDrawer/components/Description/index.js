@@ -8,7 +8,7 @@ import { grey } from '../../../../utils/colors'
 const TextArea = styled.textarea`
   width: 100%;
   height: 4rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   display: block;
   padding: 0 0 0 2.5rem;
   border: none;
