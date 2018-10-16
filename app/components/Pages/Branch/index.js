@@ -39,7 +39,7 @@ const getActionRedirectURL = params => {
       'CrmTaskIsDueCrmTask',
       'ReminderIsDueCrmTask',
       'UserAssignedCrmTask',
-      'UserEditerCrmTask'
+      'UserEditedCrmTask'
     ].includes(action)
   ) {
     return `/dashboard/notifications/crm/${crm_task}`

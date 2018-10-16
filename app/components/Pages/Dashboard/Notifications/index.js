@@ -74,7 +74,7 @@ class Notifications extends Component {
       case 'CrmTaskIsDueCrmTask':
       case 'ReminderIsDueCrmTask':
       case 'UserAssignedCrmTask':
-      case 'UserEditerCrmTask':
+      case 'UserEditedCrmTask':
         this.openCRMTaskDrawer(notification.object)
         break
 
