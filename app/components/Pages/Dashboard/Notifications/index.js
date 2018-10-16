@@ -33,8 +33,17 @@ class Notifications extends Component {
     deleteNewNotifications()
   }
 
-  openCRMTaskDrawer = selectedEvent => this.setState({ selectedEvent })
-  closeCRMTaskDrawer = () => this.setState({ selectedEvent: null })
+  openCRMTaskDrawer = selectedEvent => {
+    this.setState(
+      { selectedEvent },
+      browserHistory.push(`/dashboard/notifications/crm/${selectedEvent}`)
+    )
+  }
+  closeCRMTaskDrawer = () => {
+    this.setState({ selectedEvent: null }, () =>
+      browserHistory.push('/dashboard/notifications')
+    )
+  }
 
   handleNotifClick = notification => {
     const { markNotificationAsSeen } = this.props
