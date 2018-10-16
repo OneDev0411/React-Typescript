@@ -33,10 +33,16 @@ const getActionRedirectURL = params => {
     return `/dashboard/mls/${listing}`
   }
 
-  if (action === 'RedirectToCRMTask' && crm_task) {
-    console.log('branch task', crm_task)
-
-    return `/crm/tasks/${crm_task}`
+  if (
+    crm_task &&
+    [
+      'CrmTaskIsDueCrmTask',
+      'ReminderIsDueCrmTask',
+      'UserAssignedCrmTask',
+      'UserEditedCrmTask'
+    ].includes(action)
+  ) {
+    return `/dashboard/notifications/crm/${crm_task}`
   }
 
   return '/dashboard/mls/'

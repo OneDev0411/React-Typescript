@@ -70,6 +70,10 @@ export const PickerContainer = Card.extend`
     padding: 0.25em 0.5em;
   }
 
+  .DayPicker .DayPicker-Day--outside:hover {
+    background-color: transparent !important;
+  }
+
   .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
     font-weight: normal;
     color: #fff;

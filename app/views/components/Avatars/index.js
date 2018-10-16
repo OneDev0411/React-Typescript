@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import Tooltip from '../tooltip'
 import { getUserTitle } from '../../../models/user/helpers'
@@ -31,16 +31,22 @@ const AvatarsContainer = styled.div`
   display: flex;
   flex-direction: row-reverse;
 
-  &:hover ${AvatarContainer}:not(:first-of-type) {
-    transform: translateX(0);
-  }
+  ${props =>
+    props.avatars.map(
+      (u, i) =>
+        css`
+          &:hover ${AvatarContainer}:nth-of-type(${i + 1}):not(:first-of-type) {
+            transform: translateX(-${i * 0.5}em);
+          }
+        `
+    )};
 `
 
 const Avatars = ({ users, style, tooltipPlacement }) => (
   <React.Fragment>
     {Array.isArray(users) &&
       users.length > 0 && (
-        <AvatarsContainer style={style}>
+        <AvatarsContainer style={style} avatars={users}>
           {users.map((user, index) => {
             const title = getUserTitle(user)
 
