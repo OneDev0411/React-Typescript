@@ -432,7 +432,7 @@ export default (
       </Route>
 
       <Route
-        path="/dashboard/notifications/:type/:id"
+        path="/dashboard/notifications(/:type/:id)"
         component={AsyncNotificationsPage}
       />
 
