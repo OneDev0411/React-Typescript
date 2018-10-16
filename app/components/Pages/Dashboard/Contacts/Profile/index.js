@@ -165,7 +165,6 @@ class ContactProfile extends React.Component {
       )
     }
 
-    const hasAddress = getContactAddresses(contact)
     const defaultAssociation = {
       association_type: 'contact',
       contact: normalizeContact(contact)
