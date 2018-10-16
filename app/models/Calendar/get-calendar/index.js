@@ -6,7 +6,7 @@ export async function getCalendar(low, high, filter = []) {
       .get('/calendar')
       .query({ low })
       .query({ high })
-      .query({ users: filter })
+      .query({ 'users[]': filter })
 
     return response.body && response.body.data
   } catch (e) {
