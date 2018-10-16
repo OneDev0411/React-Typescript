@@ -60,7 +60,8 @@ class RoleFormWrapper extends React.Component {
           }
         } else {
           this.props.confirmation({
-            message: `Should we add ${form.legal_first_name} to your Contacts?`,
+            message: `Should we add ${form.legal_first_name ||
+              form.company_title} to your Contacts?`,
             cancelLabel: 'No',
             confirmLabel: 'Yes, Add',
             onConfirm: () => this.createCrmContact(form)
