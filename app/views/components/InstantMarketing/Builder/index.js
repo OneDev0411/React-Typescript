@@ -25,6 +25,7 @@ import Templates from '../Templates'
 
 import juice from 'juice'
 import ActionButton from 'components/Button/ActionButton'
+import { H1 } from '../../Typography/headings'
 
 class Builder extends React.Component {
   componentDidMount() {
@@ -170,7 +171,7 @@ class Builder extends React.Component {
     return (
       <Container className="template-builder">
         <Header>
-          <h1>Marketing Center</h1>
+          <H1>Marketing Center</H1>
 
           <div>
             <ActionButton appearance="outline" onClick={this.props.onClose}>
