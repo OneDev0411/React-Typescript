@@ -10,7 +10,7 @@ const TextArea = styled.textarea`
   height: 4rem;
   margin-bottom: 2rem;
   display: block;
-  padding: 0;
+  padding: 0 0 0 2.5rem;
   border: none;
   resize: none;
   overflow: auto;
