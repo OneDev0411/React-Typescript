@@ -36,8 +36,12 @@ class EditDigitalForm extends React.Component {
   initialize = async () => {
     const { deal } = this.props
 
-    if (deal && !deal.checklists) {
-      await this.props.getDeal(deal.id)
+    try {
+      if (!deal || !deal.checklists) {
+        await this.props.getDeal(this.props.params.id)
+      }
+    } catch (e) {
+      return browserHistory.push('/dashboard/deals')
     }
 
     if (!this.state.pdfDocument) {
