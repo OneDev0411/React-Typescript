@@ -37,10 +37,13 @@ export default function FormContexts(props) {
         // get context
         const context = DealContext.searchContext(name)
 
-        const contextValue = DealContext.getValue(
-          props.deal,
-          DealContext.searchContext(name)
-        ).value
+        // find context object by its name
+        const contextObject = DealContext.searchContext(name)
+
+        // get context value
+        const contextValue = contextObject
+          ? DealContext.getValue(props.deal, contextObject).value
+          : ''
 
         return _.map(groups, (group, id) => {
           const annotations = group.map(i => i.annotation)
