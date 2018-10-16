@@ -14,8 +14,7 @@ import {
   CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS,
   CONTACTS__IMPORT_CSV__STEP_UPLOAD_CONTACTS
 } from '../../../../../constants/contacts'
-import PageHeader from '../../../../../views/components/PageHeader'
-import { CloseButton } from '../../../../../views/components/Button/CloseButton'
+import { FullPageHeader } from '../../../../../views/components/FullPageHeader'
 
 class ImportCsv extends React.Component {
   state = {
@@ -47,18 +46,11 @@ class ImportCsv extends React.Component {
 
     return (
       <div className="contact__import-csv">
-        <PageHeader
-          isFlat
-          style={{
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
-          <PageHeader.Title showBackButton={false}>
-            <PageHeader.Heading>Import a CSV file</PageHeader.Heading>
-          </PageHeader.Title>
-          <CloseButton />
-        </PageHeader>
+        <FullPageHeader
+          title="Import a CSV file"
+          handleClose={this.goBack}
+          style={{ marginBottom: '6rem' }}
+        />
 
         <div className="contact__import-csv__container">
           <div className="current-step">
