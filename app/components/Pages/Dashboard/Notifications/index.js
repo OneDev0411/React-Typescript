@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { browserHistory, withRouter } from 'react-router'
 import S from 'shorti'
 import timeago from 'timeago.js'
 
@@ -17,8 +17,14 @@ import { EventDrawer } from '../../../../views/components/EventDrawer'
 import Header from './Header'
 
 class Notifications extends Component {
-  state = {
-    selectedEvent: null
+  constructor(props) {
+    super(props)
+
+    const { params } = props
+
+    this.state = {
+      selectedEvent: (params.type && params.type === 'crm' && params.id) || null
+    }
   }
 
   componentDidMount() {
@@ -30,7 +36,7 @@ class Notifications extends Component {
   openCRMTaskDrawer = selectedEvent => this.setState({ selectedEvent })
   closeCRMTaskDrawer = () => this.setState({ selectedEvent: null })
 
-  handleNotifClick(notification) {
+  handleNotifClick = notification => {
     const { markNotificationAsSeen } = this.props
 
     markNotificationAsSeen(notification.id)
@@ -353,11 +359,13 @@ class Notifications extends Component {
   }
 }
 
-export default connect(
-  ({ user, globalNotifications }) => ({
-    user,
-    notifications: selectNotifications(globalNotifications),
-    isFetching: selectNotificationIsFetching(globalNotifications)
-  }),
-  { deleteNewNotifications, markNotificationAsSeen }
-)(Notifications)
+export default withRouter(
+  connect(
+    ({ user, globalNotifications }) => ({
+      user,
+      notifications: selectNotifications(globalNotifications),
+      isFetching: selectNotificationIsFetching(globalNotifications)
+    }),
+    { deleteNewNotifications, markNotificationAsSeen }
+  )(Notifications)
+)
