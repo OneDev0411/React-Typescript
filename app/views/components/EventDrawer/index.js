@@ -297,8 +297,17 @@ export class EventDrawer extends Component {
                                 type="button"
                                 disabled={isDisabled}
                                 onClick={this.delete}
+                                style={{
+                                  width: '1.375rem',
+                                  height: '1.375rem'
+                                }}
                               >
-                                <IconDelete />
+                                <IconDelete
+                                  style={{
+                                    width: '100%',
+                                    height: '100%'
+                                  }}
+                                />
                               </IconButton>
                             </Tooltip>
                             <Divider
