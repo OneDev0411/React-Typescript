@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import S from 'shorti'
-import { getTimeAgo } from '../../../../utils/helpers'
 import { browserHistory } from 'react-router'
-import Header from './Header'
+import S from 'shorti'
+import timeago from 'timeago.js'
+
 import {
   selectNotifications,
   selectNotificationIsFetching
@@ -12,13 +12,24 @@ import {
   deleteNewNotifications,
   markNotificationAsSeen
 } from '../../../../store_actions/notifications'
+import { EventDrawer } from '../../../../views/components/EventDrawer'
+
+import Header from './Header'
 
 class Notifications extends Component {
+  state = {
+    selectedEvent: null
+  }
+
   componentDidMount() {
     const { deleteNewNotifications } = this.props
 
     deleteNewNotifications()
   }
+
+  openCRMTaskDrawer = selectedEvent => this.setState({ selectedEvent })
+  closeCRMTaskDrawer = () => this.setState({ selectedEvent: null })
+
   handleNotifClick(notification) {
     const { markNotificationAsSeen } = this.props
 
@@ -49,13 +60,14 @@ class Notifications extends Component {
       case 'ReminderIsDueCrmTask':
       case 'UserAssignedCrmTask':
       case 'UserEditerCrmTask':
-        browserHistory.push(`/crm/tasks/${notification.object}`)
+        this.openCRMTaskDrawer(notification.object)
         break
 
       default:
         break
     }
   }
+
   notificationIcon(notification) {
     const type = notification.notification_type
     const subject = notification.subjects[0]
@@ -269,6 +281,7 @@ class Notifications extends Component {
 
     return icon
   }
+
   getNotifications() {
     const { notifications, isFetching } = this.props
 
@@ -301,7 +314,7 @@ class Notifications extends Component {
             <div style={{ position: 'relative', marginLeft: '4rem' }}>
               <div style={S('color-263445')}>{notification.message}</div>
               <div style={S('color-c6c6c6')}>
-                {getTimeAgo(notification.created_at)}
+                {timeago().format(notification.created_at * 1000)}
               </div>
             </div>
           </div>
@@ -325,13 +338,24 @@ class Notifications extends Component {
       >
         <Header />
         {this.getNotifications()}
+        {this.state.selectedEvent && (
+          <EventDrawer
+            eventId={this.state.selectedEvent}
+            isOpen
+            onClose={this.closeCRMTaskDrawer}
+            submitCallback={this.closeCRMTaskDrawer}
+            deleteCallback={this.closeCRMTaskDrawer}
+            user={this.props.user}
+          />
+        )}
       </div>
     )
   }
 }
 
 export default connect(
-  ({ globalNotifications }) => ({
+  ({ user, globalNotifications }) => ({
+    user,
     notifications: selectNotifications(globalNotifications),
     isFetching: selectNotificationIsFetching(globalNotifications)
   }),
