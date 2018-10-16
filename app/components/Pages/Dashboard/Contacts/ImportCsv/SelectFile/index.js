@@ -14,6 +14,8 @@ import {
 import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from '../../../../../../constants/contacts'
 import { getActiveTeam } from '../../../../../../utils/user-teams'
 import { H1 } from '../../../../../../views/components/Typography/headings'
+import Button from '../../../../../../views/components/Button/ActionButton'
+import { Divider } from '../../../../../../views/components/Divider'
 import InfoIcon from '../../../../../../views/components/SvgIcons/InfoOutline/IconInfoOutline'
 import Tooltip from '../../../../../../views/components/tooltip'
 import { TeamContactSelect } from '../../../../../../views/components/TeamContact/TeamContactSelect'
@@ -69,8 +71,8 @@ class SelectFile extends React.Component {
     const { file } = this.props
 
     return (
-      <div style={{ margin: '0 auto', maxWidth: '48em' }}>
-        <Flex center style={{ padding: '4em 0' }}>
+      <div style={{ padding: '0 1.5rem' }}>
+        <Flex center style={{ margin: '1.5em 0' }}>
           <Dropzone
             className={cn('contact__import-csv--select-file__dropzone', {
               isActive: isDropzoneActive,
@@ -95,18 +97,20 @@ class SelectFile extends React.Component {
 
               <div>
                 {!file && <p>Or</p>}
-                <span className="link" onClick={() => this.dropzone.open()}>
+                <Button appearance="link" onClick={() => this.dropzone.open()}>
                   {file ? 'Change File' : 'Select a file'}
-                </span>
+                </Button>
               </div>
             </div>
           </Dropzone>
         </Flex>
 
-        <div style={{ marginBottom: '4em' }}>
-          <p>Importing To</p>
-          <Flex alignCenter style={{ marginBottom: '1em' }}>
-            <H1>
+        <div style={{ margin: '0 auto 4em', maxWidth: '20rem' }}>
+          <p style={{ fontSize: '0.875rem', textAlign: 'center' }}>
+            Importing To
+          </p>
+          <Flex center style={{ marginBottom: '1em' }}>
+            <H1 style={{ fontSize: '1.125rem' }}>
               {this.activeTeam &&
                 this.activeTeam.brand &&
                 this.activeTeam.brand.name}
@@ -119,9 +123,11 @@ class SelectFile extends React.Component {
               <InfoIcon style={{ fill: primary, marginLeft: '0.5em' }} />
             </Tooltip>
           </Flex>
-          <p>Owner</p>
+          <Divider width="100%" height="1px" margin="0 0 1rem" />
+          <p style={{ fontSize: '0.875rem' }}>Contact Owner</p>
           <TeamContactSelect
             upsideDown
+            fullWidth
             user={this.props.user}
             owner={this.props.owner}
             onSelect={this.props.onChangeOwner}

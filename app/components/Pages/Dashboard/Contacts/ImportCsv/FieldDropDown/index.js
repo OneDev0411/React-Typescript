@@ -155,6 +155,7 @@ class FieldDropDown extends React.Component {
           onChange={this.onFieldChange}
           callToActions={
             <ActionButton
+              size="small"
               data-field={this.props.fieldName}
               onClick={this.props.toggleOpenDrawer}
             >
