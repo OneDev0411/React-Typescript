@@ -4,6 +4,7 @@ import { mergeContact } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import IconButton from '../../../../../../views/components/Button/IconButton'
 import IconMerge from '../../../../../../views/components/SvgIcons/Merge/IconMerge'
+import Tooltip from '../../../../../../views/components/tooltip'
 
 class MergeContacts extends React.Component {
   onClick = () => {
@@ -24,9 +25,11 @@ class MergeContacts extends React.Component {
   }
   render() {
     return (
-      <IconButton size="small" appearance="outline" onClick={this.onClick}>
-        <IconMerge />
-      </IconButton>
+      <Tooltip placement="bottom" caption="Merge">
+        <IconButton size="small" appearance="outline" onClick={this.onClick}>
+          <IconMerge />
+        </IconButton>
+      </Tooltip>
     )
   }
 }
