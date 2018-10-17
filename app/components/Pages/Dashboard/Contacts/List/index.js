@@ -52,7 +52,7 @@ class ContactsList extends React.Component {
     const hasContactsPermission = acl.includes('CRM')
 
     if (!hasContactsPermission) {
-      browserHistory.push('/404')
+      browserHistory.push('/dashboard/mls')
     }
 
     if (this.props.listInfo.count === 0) {
