@@ -1,9 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
-import Image from './IconFollowUp.js'
+import Image from './IconBirthday.js'
 
-describe('IconTaskFollowUp.svg generated styled component', () => {
+describe('IconBirthday.svg generated styled component', () => {
   let wrapper
   beforeEach(() => {
     wrapper = shallow(<Image />)

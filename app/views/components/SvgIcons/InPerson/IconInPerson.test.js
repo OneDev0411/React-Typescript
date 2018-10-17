@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import Image from './IconFollowUp.js'
 
-describe('IconTaskFollowUp.svg generated styled component', () => {
+describe('IconFollowUp.svg generated styled component', () => {
   let wrapper
   beforeEach(() => {
     wrapper = shallow(<Image />)
