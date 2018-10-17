@@ -49,7 +49,7 @@ class ImportCsv extends React.Component {
         <FullPageHeader
           title="Import a CSV file"
           handleClose={this.goBack}
-          style={{ marginBottom: '6rem' }}
+          style={{ marginBottom: '1rem' }}
         />
 
         <div className="contact__import-csv__container">

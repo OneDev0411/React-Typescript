@@ -9,6 +9,7 @@ import { CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS } from '../../../../../../constan
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
 const FooterContainer = styled.div`
+  background-color: #ffffff;
   ${({ bottom }) =>
     bottom &&
     css`
