@@ -1,5 +1,4 @@
 import Koa from 'koa'
-import { getTask } from '../../../../../app/models/tasks'
 
 const router = require('koa-router')()
 const app = new Koa()
@@ -23,8 +22,6 @@ router.get('/openhouse/:id/:brand/register', async ctx => {
       .set('X-RECHAT-BRAND', ctx.params.brand)
 
     openHouse = response.body.data
-
-    console.log(openHouse)
   } catch (e) {
     console.log(e)
 
