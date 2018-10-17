@@ -7,7 +7,7 @@ import {
 
 import { getValue } from '../../../../utils/types'
 
-import ToolTip from './tooltip'
+import ToolTip from 'components/tooltip'
 
 import { Container } from './styled'
 
@@ -40,14 +40,6 @@ export default class Context extends React.Component {
     this.props.onSetValues(values)
   }
 
-  get HasMlsLock() {
-    if (this.props.isAddressField && this.props.isDealConnectedToMls) {
-      return true
-    }
-
-    return false
-  }
-
   render() {
     const { appearance, rects, values, fontSize } = calculateWordWrap(
       this.props.annotations,
@@ -57,13 +49,17 @@ export default class Context extends React.Component {
       }
     )
 
-    const hasMlsLock = this.HasMlsLock
-    const isReadOnly = this.props.isReadOnly || hasMlsLock
-
     return (
       <div>
         {rects.map((rect, index) => (
-          <ToolTip key={index} hasMlsLock={hasMlsLock}>
+          <ToolTip
+            key={index}
+            captionIsHTML
+            isCustom={false}
+            caption={this.props.tooltip}
+            placement="bottom"
+            multiline
+          >
             <Container
               id={this.props.annotations[index].fieldName}
               fontName={appearance.font}
@@ -72,9 +68,9 @@ export default class Context extends React.Component {
               color={appearance.color}
               rect={rect}
               innerRef={ref => (this.container = ref)}
-              readOnly={isReadOnly}
+              readOnly={this.props.isReadOnly}
               onClick={() =>
-                !isReadOnly &&
+                !this.props.isReadOnly &&
                 this.props.onClick(this.container.getBoundingClientRect())
               }
             >

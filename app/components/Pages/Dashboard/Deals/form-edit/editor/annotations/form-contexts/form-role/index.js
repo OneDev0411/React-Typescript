@@ -5,6 +5,7 @@ import _ from 'underscore'
 
 import ContextAnnotation from '../context-annotation'
 import { getRoleText } from '../../../../utils/get-roles-text'
+import { getRoleTooltip } from '../../../../utils/get-role-tooltip'
 
 class FormRole extends React.PureComponent {
   render() {
@@ -20,13 +21,18 @@ class FormRole extends React.PureComponent {
 
           return _.map(groups, (group, groupIndex) => {
             const annotationContext = groups[groupIndex][0]
+            const formValue = this.props.formValues[
+              annotationContext.annotation.fieldName
+            ]
 
-            const text = getRoleText(
-              this.props.dealsRoles,
-              this.props.deal,
-              roleName,
-              annotationContext
-            )
+            const text =
+              formValue ||
+              getRoleText(
+                this.props.dealsRoles,
+                this.props.deal,
+                roleName,
+                annotationContext
+              )
             const annotations = groups[groupIndex].map(info => info.annotation)
 
             return (
@@ -37,6 +43,7 @@ class FormRole extends React.PureComponent {
                 value={text}
                 maxFontSize={20}
                 isReadOnly={annotationContext.readonly === true}
+                tooltip={getRoleTooltip(annotationContext)}
                 onClick={() =>
                   annotationContext.readonly !== true &&
                   this.props.onClick('Role', {

@@ -48,6 +48,29 @@ class PDFPreview extends React.Component {
     }
   }
 
+  get IsRolesManagerOpen() {
+    return (
+      this.state.selectedAnnotation &&
+      this.state.selectedAnnotation.type === 'Role'
+    )
+  }
+
+  get IsAddressFormOpen() {
+    return (
+      this.state.selectedAnnotation &&
+      this.state.selectedAnnotation.type === 'Context' &&
+      this.state.selectedAnnotation.data.type === 'Address'
+    )
+  }
+
+  get IsContextFormOpen() {
+    return (
+      this.state.selectedAnnotation &&
+      this.state.selectedAnnotation.type === 'Context' &&
+      this.state.selectedAnnotation.data.type === 'Singular'
+    )
+  }
+
   // getRoleColor = assignment => {
   //   const { deal, roles } = this.props
 
@@ -121,21 +144,19 @@ class PDFPreview extends React.Component {
           )
         )}
 
-        <RolesManager
-          selectedAnnotation={selectedAnnotation}
-          isOpen={selectedAnnotation && selectedAnnotation.type === 'Role'}
-          onClose={this.deselectActiveAnnotation}
-          deal={this.props.deal}
-          onSetValues={this.props.onSetValues}
-        />
+        {this.IsRolesManagerOpen && (
+          <RolesManager
+            selectedAnnotation={selectedAnnotation}
+            formValues={this.props.values}
+            deal={this.props.deal}
+            onClose={this.deselectActiveAnnotation}
+            onSetValues={this.props.onSetValues}
+          />
+        )}
 
         <AddressForm
           selectedAnnotation={selectedAnnotation}
-          isOpen={
-            selectedAnnotation &&
-            selectedAnnotation.type === 'Context' &&
-            selectedAnnotation.data.type === 'Address'
-          }
+          isOpen={this.IsAddressFormOpen}
           contextsAnnotations={this.contextsAnnotations}
           data={selectedAnnotation && selectedAnnotation.data}
           onClose={this.deselectActiveAnnotation}
@@ -144,11 +165,7 @@ class PDFPreview extends React.Component {
         />
 
         <ContextForm
-          isOpen={
-            selectedAnnotation &&
-            selectedAnnotation.type === 'Context' &&
-            selectedAnnotation.data.type === 'Singular'
-          }
+          isOpen={this.IsContextFormOpen}
           onClose={this.deselectActiveAnnotation}
           data={selectedAnnotation && selectedAnnotation.data}
           onValueUpdate={this.props.onValueUpdate}
