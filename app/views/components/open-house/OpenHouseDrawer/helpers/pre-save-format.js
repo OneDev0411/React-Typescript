@@ -17,8 +17,6 @@ export async function preSaveFormat(values, originalValues, deal, template) {
     title
   } = values
 
-  // console.log('pre save', values.dueDate, values.reminder.value)
-
   const due_date = dueDate.getTime() / 1000
   const task_type = 'Open House'
 

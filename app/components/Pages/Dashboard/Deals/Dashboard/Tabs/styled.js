@@ -45,7 +45,7 @@ export const NavItem = styled.div`
   padding: 0.6rem 0;
   font-weight: 500;
   color: #7f7f7f;
-  cursor: pointer;
+  cursor: ${props => (props.isDisabled ? 'not-allowed' : 'pointer')};
   border-bottom: 2px solid transparent;
 
   ${props =>

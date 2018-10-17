@@ -104,7 +104,10 @@ export class OpenHouseDrawer extends React.Component {
       try {
         const openHouse = await getTask(this.props.openHouseId, QUERY)
 
-        this.setState({ openHouse })
+        // get template if exists
+        const template = openHouse.metadata ? openHouse.metadata.template : null
+
+        this.setState({ openHouse, template })
 
         return openHouse
       } catch (error) {
@@ -135,7 +138,8 @@ export class OpenHouseDrawer extends React.Component {
       const templateItem = list[0]
 
       const template = nunjucks.renderString(templateItem.template, {
-        ...this.props.templateData
+        user: this.props.user,
+        listing: this.state.listing
       })
 
       this.setState({ template })
