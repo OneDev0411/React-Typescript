@@ -15,14 +15,16 @@ import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-tem
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
+const initialState = {
+  listing: null,
+  isInstantMarketingBuilderOpen: false,
+  isComposeEmailOpen: false,
+  htmlTemplate: '',
+  templateScreenshot: null
+}
+
 class SendDealPromotion extends React.Component {
-  state = {
-    listing: null,
-    isInstantMarketingBuilderOpen: false,
-    isComposeEmailOpen: false,
-    htmlTemplate: '',
-    templateScreenshot: null
-  }
+  state = initialState
 
   componentDidMount() {
     this.getDealListing()
@@ -73,10 +75,7 @@ class SendDealPromotion extends React.Component {
       console.log(e)
       // todo
     } finally {
-      this.setState({
-        isSendingEmail: false,
-        isComposeEmailOpen: false
-      })
+      this.setState(initialState)
     }
   }
 
