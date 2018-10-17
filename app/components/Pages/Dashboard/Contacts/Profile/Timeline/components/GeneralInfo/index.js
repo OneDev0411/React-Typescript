@@ -18,7 +18,7 @@ export function GeneralInfo(props) {
         checked={task.status === 'DONE'}
         onClick={props.statusHandler}
       />
-      <Flex column>
+      <Flex column style={{ width: 'calc(100% - 2.5rem)' }}>
         <Title
           className="u-cursor--pointer"
           onClick={props.onEdit}

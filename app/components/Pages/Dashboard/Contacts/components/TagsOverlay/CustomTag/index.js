@@ -94,7 +94,7 @@ export default class CustomTag extends React.Component {
           placeholder="Type in custom tag here…"
         />
         <AddButton
-          inputFocused={inputFocused}
+          inputFocused={inputFocused || inputValue}
           type="submit"
           disabled={error || !/\S/.test(inputValue)}
         >

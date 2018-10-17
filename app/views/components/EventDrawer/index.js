@@ -268,7 +268,7 @@ export class EventDrawer extends Component {
                           name="dueDate"
                           selectedDate={values.dueDate}
                         />
-                        <Reminder dueDate={values.dueDate} />
+                        <Reminder />
                       </FieldContainer>
 
                       <AssigneesField name="assignees" owner={user} />

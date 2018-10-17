@@ -25,6 +25,7 @@ export const Button = LinkButton.extend`
 export const IconArrow = ArrowDropDown.extend`
   position: relative;
   margin-left: 1em;
+  fill: ${({ isOpen }) => (isOpen ? primary : '#000')};
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
 `
 
@@ -70,7 +71,7 @@ export function TaskType() {
           items={ITEMS}
           fullHeight
           buttonRenderer={({ icon: Icon, iconColor, ...props }) => (
-            <Button {...props}>
+            <Button {...props} inverse>
               <Flex alignCenter>
                 {Icon && (
                   <Icon

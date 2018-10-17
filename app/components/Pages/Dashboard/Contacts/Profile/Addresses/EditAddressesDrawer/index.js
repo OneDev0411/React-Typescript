@@ -189,6 +189,7 @@ class EditAddressesForm extends React.Component {
 
               <div style={{ padding: '2em', textAlign: 'center' }}>
                 <AddButton
+                  type="button"
                   appearance="outline"
                   onClick={() =>
                     fields.push(

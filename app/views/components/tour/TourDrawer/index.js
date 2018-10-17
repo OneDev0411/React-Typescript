@@ -250,7 +250,7 @@ export class TourDrawer extends React.Component {
                           name="dueDate"
                           selectedDate={values.dueDate}
                         />
-                        <Reminder dueDate={values.dueDate} />
+                        <Reminder />
                       </FieldContainer>
                     </Section>
 
