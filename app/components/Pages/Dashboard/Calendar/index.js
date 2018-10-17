@@ -61,7 +61,7 @@ class CalendarContainer extends React.Component {
     const hasContactsPermission = acl.includes('CRM')
 
     if (!hasContactsPermission) {
-      browserHistory.push('/404')
+      browserHistory.push('/dashboard/mls')
     }
 
     this.restartCalendar(selectedDate)

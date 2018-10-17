@@ -128,16 +128,6 @@ class App extends Component {
     dispatch(this.checkBrowser())
   }
 
-  static async fetchData(dispatch, params) {
-    const { user } = params
-
-    if (!user) {
-      return Promise.resolve()
-    }
-
-    return dispatch(getRooms(user))
-  }
-
   getBrand() {
     this.props.dispatch(getBrand())
   }
