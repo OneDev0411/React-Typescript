@@ -7,9 +7,11 @@ import { Menu } from './Menu'
 import { Header, Title } from './styled'
 
 const Container = styled.div`
-  padding: 1.5em;
+  padding: 1.5rem;
 
   &:not(:last-of-type) {
+    padding-bottom: 0;
+
     :after {
       margin-top: 1.5em;
       display: block;
