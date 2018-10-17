@@ -17,11 +17,7 @@ const items = [
   '1 Week Before'
 ].map(value => ({ title: value, value }))
 
-export function Reminder(props) {
-  if (props.dueDate.getTime() < new Date().getTime() + 1800000) {
-    return null
-  }
-
+export function Reminder() {
   return (
     <Field
       name="reminder"
@@ -42,7 +38,7 @@ export function Reminder(props) {
               {props.value}
               <IconDrop
                 isOpen={props.isOpen}
-                style={{ margin: '4px 0 0 4px' }}
+                style={{ margin: '0.25rem 0 0 0.25rem' }}
               />
             </DropButton>
           )}

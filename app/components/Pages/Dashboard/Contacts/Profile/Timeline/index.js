@@ -271,3 +271,5 @@ export class Timeline extends React.Component {
 function isToday(date) {
   return setTime(new Date(date)).getTime() === setTime(new Date()).getTime()
 }
+
+// todo: bug - sorting of past events when a event is edited.

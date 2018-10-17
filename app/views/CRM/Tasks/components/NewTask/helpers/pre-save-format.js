@@ -25,17 +25,15 @@ export async function preSaveFormat(values) {
     assignees: assignees.map(a => a.id)
   }
 
-  if (dueDate.getTime() > new Date().getTime()) {
-    const reminderDate = getReminderValue(reminder.value, dueDate)
+  const reminderDate = getReminderValue(reminder.value, dueDate)
 
-    if (reminderDate != null) {
-      event.reminders = [
-        {
-          is_relative: true,
-          timestamp: reminderDate.getTime() / 1000
-        }
-      ]
-    }
+  if (reminderDate != null) {
+    event.reminders = [
+      {
+        is_relative: true,
+        timestamp: reminderDate.getTime() / 1000
+      }
+    ]
   }
 
   if (Array.isArray(associations) && associations.length > 0) {

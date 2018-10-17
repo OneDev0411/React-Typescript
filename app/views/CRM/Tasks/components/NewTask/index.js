@@ -102,7 +102,7 @@ export default class Task extends Component {
                             name="dueDate"
                             selectedDate={values.dueDate}
                           />
-                          <Reminder dueDate={values.dueDate} />
+                          <Reminder />
                         </FieldContainer>
                       </Flex>
                       <AssociationsList
