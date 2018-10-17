@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import styled from 'styled-components'
 
 import Stepper from '../../../../Partials/Stepper'
 import Footer from './Footer'
@@ -15,6 +16,13 @@ import {
   CONTACTS__IMPORT_CSV__STEP_UPLOAD_CONTACTS
 } from '../../../../../constants/contacts'
 import { FullPageHeader } from '../../../../../views/components/FullPageHeader'
+
+const Container = styled.div`
+  overflow: auto;
+  height: calc(
+    100vh - ${({ stickyFooter }) => (stickyFooter ? '13rem' : '10rem + 2.5em')}
+  );
+`
 
 class ImportCsv extends React.Component {
   state = {
@@ -49,10 +57,15 @@ class ImportCsv extends React.Component {
         <FullPageHeader
           title="Import a CSV file"
           handleClose={this.goBack}
-          style={{ marginBottom: '6rem' }}
+          style={{ marginBottom: '1rem' }}
         />
 
-        <div className="contact__import-csv__container">
+        <Container
+          stickyFooter={
+            currentWizardStep !== CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS
+          }
+          className="contact__import-csv__container"
+        >
           <div className="current-step">
             Step {this.getCurrentStepLabel()} of 3
           </div>
@@ -79,7 +92,7 @@ class ImportCsv extends React.Component {
           )}
 
           <Footer />
-        </div>
+        </Container>
       </div>
     )
   }

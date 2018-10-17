@@ -251,6 +251,7 @@ class Address extends React.Component {
 
     return (
       <FinalFormDrawer
+        formId="deal-address-form"
         initialValues={this.InitialValues}
         title="Address"
         isOpen={this.props.show}
