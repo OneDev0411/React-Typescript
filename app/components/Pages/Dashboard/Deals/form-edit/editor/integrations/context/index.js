@@ -29,7 +29,7 @@ class Context extends React.Component {
     }
 
     return this.props.data.annotations.reduce(
-      (acc, ann) => `${acc}${this.props.formValues[ann.fieldName]}`,
+      (acc, ann) => `${acc}${this.props.formValues[ann.fieldName] || ''}`,
       ''
     )
   }
