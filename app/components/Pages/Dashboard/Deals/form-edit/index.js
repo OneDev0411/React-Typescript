@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
 import { saveSubmission, getDeal, getForms } from 'actions/deals'
+import { confirmation } from 'actions/confirmation'
 
 import { getFormSize } from 'models/Deal/form'
 import { LoadingDealContainer } from './styled'
@@ -24,6 +25,7 @@ class EditDigitalForm extends React.Component {
     isSaving: false,
     pdfDocument: null,
     pdfUrl: '',
+    showConfirmationOnClose: false,
     downloadPercents: 1
   }
 
@@ -113,12 +115,10 @@ class EditDigitalForm extends React.Component {
   }
 
   changeFormValue = (name, value, forceUpdate = false) => {
-    const newValues = {
+    this.values = {
       ...this.values,
       [name]: value
     }
-
-    this.values = newValues
 
     if (forceUpdate) {
       this.forceUpdate()
@@ -126,15 +126,13 @@ class EditDigitalForm extends React.Component {
   }
 
   setFormValues = (values, forceUpdate = false) => {
-    const newValues = {
+    this.values = {
       ...this.values,
       ...values
     }
 
-    this.values = newValues
-
     if (forceUpdate) {
-      return this.forceUpdate()
+      this.forceUpdate()
     }
   }
 
@@ -184,6 +182,25 @@ class EditDigitalForm extends React.Component {
   closeForm = () =>
     browserHistory.push(`/dashboard/deals/${this.props.task.deal}`)
 
+  handleSelectContext = () =>
+    this.state.showConfirmationOnClose === false &&
+    this.setState({
+      showConfirmationOnClose: true
+    })
+
+  handleClose = () => {
+    if (!this.state.showConfirmationOnClose) {
+      return this.closeForm()
+    }
+
+    this.props.confirmation({
+      message: 'Save before exiting?',
+      description: 'You have made changes that you can save before canceling.',
+      confirmLabel: 'Save',
+      onConfirm: this.handleSave
+    })
+  }
+
   render() {
     const { isFormLoaded, isSaving, pdfDocument } = this.state
     const { task } = this.props
@@ -212,9 +229,10 @@ class EditDigitalForm extends React.Component {
 
     return (
       <Fragment>
-        <PageHeader backButton>
-          <PageHeader.Title title={this.getHeaderTitle(task.title)} />
-
+        <PageHeader
+          onClickBackButton={this.handleClose}
+          title={this.getHeaderTitle(task.title)}
+        >
           <PageHeader.Menu>
             <ActionButton
               disabled={!isFormLoaded || isSaving}
@@ -232,6 +250,7 @@ class EditDigitalForm extends React.Component {
           values={this.values}
           onValueUpdate={this.changeFormValue}
           onSetValues={this.setFormValues}
+          onSelectContext={this.handleSelectContext}
         />
       </Fragment>
     )
@@ -252,5 +271,5 @@ function mapStateToProps({ deals, user }, props) {
 
 export default connect(
   mapStateToProps,
-  { saveSubmission, getDeal, getForms, notify }
+  { saveSubmission, getDeal, getForms, notify, confirmation }
 )(EditDigitalForm)
