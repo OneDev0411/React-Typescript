@@ -51,6 +51,8 @@ class Search extends React.Component {
           bootstrapURLKeys.key
         }&libraries=${bootstrapURLKeys.libraries}&callback=initialize`
       )
+    } else {
+      this.initialize()
     }
   }
 
