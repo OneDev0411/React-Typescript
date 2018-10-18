@@ -19,8 +19,19 @@ import DateContext from './date-context'
 class Context extends React.Component {
   state = {
     isSaving: false,
-    value: null,
+    value: this.DefaultValue,
     formattedValue: null
+  }
+
+  get DefaultValue() {
+    if (this.IsDateContext) {
+      return ''
+    }
+
+    return this.props.data.annotations.reduce(
+      (acc, ann) => `${acc}${this.props.formValues[ann.fieldName]}`,
+      ''
+    )
   }
 
   onContextChange = (value, formattedValue) => {
@@ -74,10 +85,10 @@ class Context extends React.Component {
     this.props.onClose()
   }
 
-  getValue() {
-    const { value } = this.props
-
-    return value !== null ? value : ''
+  get IsDateContext() {
+    return (
+      this.props.data.context && this.props.data.context.data_type === 'Date'
+    )
   }
 
   onKeyPress(e) {
@@ -123,12 +134,7 @@ class Context extends React.Component {
   render() {
     const { data } = this.props
 
-    if (!data || !this.props.isOpen) {
-      return false
-    }
-
     const defaultValue = Deal.get.field(this.props.deal, data.contextName)
-    const isDateContext = data.context && data.context.data_type === 'Date'
     const position = this.Position
 
     const sharedProps = {
@@ -143,8 +149,8 @@ class Context extends React.Component {
 
     return (
       <ClickOutside onClickOutside={this.onClose}>
-        <Container position={position} isDateContext={isDateContext}>
-          {isDateContext ? (
+        <Container position={position} isDateContext={this.IsDateContext}>
+          {this.IsDateContext ? (
             <DateContext {...sharedProps} />
           ) : (
             <StringContext {...sharedProps} />
