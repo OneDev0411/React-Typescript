@@ -60,10 +60,6 @@ class RolesDrawer extends React.Component {
   handleChangeManualValue = e => this.setState({ manualValue: e.target.value })
 
   get AllowedRoles() {
-    if (!this.props.isOpen) {
-      return null
-    }
-
     return this.props.selectedAnnotation.data.roleName.split(',')
   }
 
@@ -123,7 +119,7 @@ class RolesDrawer extends React.Component {
         <OverlayDrawer.Header title={this.DrawerTitle} />
         <OverlayDrawer.Body>
           <ActionButton
-            appearance={this.state.showManualInput ? 'outline' : 'primary'}
+            appearance="outline"
             onClick={this.toggleManualInput}
             style={{
               margin: '1rem 0'
