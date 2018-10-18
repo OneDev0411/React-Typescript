@@ -147,12 +147,18 @@ export function MultiField(props) {
                 }}
               >
                 {index + 1 === fields.length ? (
-                  <IconButton isFit iconSize="large" onClick={addNewField}>
+                  <IconButton
+                    type="button"
+                    isFit
+                    iconSize="large"
+                    onClick={addNewField}
+                  >
                     <AddIcon />
                   </IconButton>
                 ) : (
                   <IconButton
                     isFit
+                    type="button"
                     iconSize="large"
                     onClick={() => fields.remove(index)}
                   >
