@@ -25,7 +25,8 @@ class EditDigitalForm extends React.Component {
     isSaving: false,
     pdfDocument: null,
     pdfUrl: '',
-    downloadPercents: 1
+    downloadPercents: 1,
+    promptOnQuit: false
   }
 
   componentDidMount() {
@@ -36,7 +37,11 @@ class EditDigitalForm extends React.Component {
 
   values = {}
 
-  routerWillLeave() {
+  routerWillLeave = () => {
+    if (this.state.promptOnQuit === false) {
+      return true
+    }
+
     return 'Your work is not saved! Are you sure you want to leave?'
   }
 
@@ -181,6 +186,8 @@ class EditDigitalForm extends React.Component {
     this.setState({ isSaving: false })
   }
 
+  handleSelectContext = () => this.setState({ promptOnQuit: true })
+
   getHeaderTitle = title =>
     title && title.length > 30 ? `${title.substring(0, 30)}...` : title
 
@@ -236,6 +243,7 @@ class EditDigitalForm extends React.Component {
           values={this.values}
           onValueUpdate={this.changeFormValue}
           onSetValues={this.setFormValues}
+          onSelectContext={this.handleSelectContext}
         />
       </Fragment>
     )

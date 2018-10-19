@@ -52,6 +52,8 @@ class PDFPreview extends React.Component {
       selectedAnnotation: { type, data }
     })
 
+    this.props.onSelectContext()
+
     this.disableScrolling()
   }
 
