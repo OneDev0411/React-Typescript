@@ -15,9 +15,11 @@
 
     .close {
       margin-top: 3px;
+      opacity: 1;
 
       :hover {
         color: #003bdf;
+        opacity: 1;
       }
     }
   }

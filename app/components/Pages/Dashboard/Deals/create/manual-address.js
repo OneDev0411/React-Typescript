@@ -23,7 +23,7 @@ export default class ManualAddress extends React.Component {
   /**
    *
    */
-  onClose = () => this.props.onHide()
+  onClose = () => this.props.onClose()
 
   /**
    *
