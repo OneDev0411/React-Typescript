@@ -53,7 +53,6 @@ class PDFPreview extends React.Component {
     })
 
     this.disableScrolling()
-    this.props.onSelectContext()
   }
 
   deselectActiveAnnotation = () => {
