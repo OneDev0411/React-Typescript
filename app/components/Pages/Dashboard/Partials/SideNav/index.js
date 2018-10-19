@@ -211,7 +211,7 @@ class appSideNav extends React.Component {
                     style={{
                       position: 'absolute',
                       top: 0,
-                      left: 'calc(100% - 12px)'
+                      left: '50%'
                     }}
                   >
                     {appNotifications > 99 ? '99+' : appNotifications}
