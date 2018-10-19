@@ -1,13 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import Flex from 'styled-flex-component'
-
-import OverlayDrawer from '../../../../../../../../views/components/OverlayDrawer'
+import OverlayDrawer from 'components/OverlayDrawer'
 
 import ActionButton from 'components/Button/ActionButton'
 
-import { Input } from './styled'
+import { Divider } from './styled'
+import ManualEntry from './manual-entry'
 
 import Roles from '../../../../components/roles'
 import { getRolesText, getRoleText } from '../../../utils/get-roles-text'
@@ -15,23 +14,6 @@ import { getRoleTooltip } from '../../../utils/get-role-tooltip'
 import { getAnnotationsValues } from '../../../utils/word-wrap'
 
 class RolesDrawer extends React.Component {
-  constructor(props) {
-    super(props)
-
-    const defaultManualValue = this.DefaultManualValue
-
-    this.state = {
-      manualValue: defaultManualValue,
-      showManualInput:
-        defaultManualValue && defaultManualValue !== this.ListValue
-    }
-  }
-
-  toggleManualInput = () =>
-    this.setState(state => ({
-      showManualInput: !state.showManualInput
-    }))
-
   handleClose = () => this.props.onClose()
 
   handleSaveAndClose = () => {
@@ -45,11 +27,11 @@ class RolesDrawer extends React.Component {
     this.props.onClose()
   }
 
-  handleSaveManualValue = () => {
+  handleSaveManualValue = value => {
     const { selectedAnnotation } = this.props
     const { annotations } = selectedAnnotation.data
 
-    const values = getAnnotationsValues(annotations, this.state.manualValue, {
+    const values = getAnnotationsValues(annotations, value, {
       maxFontSize: 20
     })
 
@@ -57,18 +39,8 @@ class RolesDrawer extends React.Component {
     this.props.onClose()
   }
 
-  handleChangeManualValue = e => this.setState({ manualValue: e.target.value })
-
   get AllowedRoles() {
     return this.props.selectedAnnotation.data.roleName.split(',')
-  }
-
-  get DefaultManualValue() {
-    const { selectedAnnotation } = this.props
-
-    return selectedAnnotation.data.annotations
-      .reduce((acc, ann) => `${acc}${this.props.formValues[ann.fieldName]}`, '')
-      .trim()
   }
 
   get ListValue() {
@@ -113,40 +85,27 @@ class RolesDrawer extends React.Component {
       <OverlayDrawer
         isOpen
         onClose={this.handleClose}
-        showFooter={!this.state.showManualInput}
         closeOnBackdropClick={false}
       >
         <OverlayDrawer.Header title={this.DrawerTitle} />
         <OverlayDrawer.Body>
-          <ActionButton
-            appearance="outline"
-            onClick={this.toggleManualInput}
-            style={{
-              margin: '1rem 0'
+          <Roles
+            containerStyle={{
+              paddingTop: '1rem'
             }}
-          >
-            {this.state.showManualInput ? 'Select from list' : 'Manual Input'}
-          </ActionButton>
+            showTitle={false}
+            deal={this.props.deal}
+            allowedRoles={this.AllowedRoles}
+            allowDeleteRole
+          />
 
-          {this.state.showManualInput ? (
-            <Flex full justifyBetween>
-              <Input
-                style={{ width: '85%', marginRight: '0.25rem' }}
-                value={this.state.manualValue}
-                onChange={this.handleChangeManualValue}
-              />
-              <ActionButton onClick={this.handleSaveManualValue}>
-                Save
-              </ActionButton>
-            </Flex>
-          ) : (
-            <Roles
-              showTitle={false}
-              deal={this.props.deal}
-              allowedRoles={this.AllowedRoles}
-              allowDeleteRole
-            />
-          )}
+          <Divider />
+
+          <ManualEntry
+            selectedAnnotation={this.props.selectedAnnotation}
+            formValues={this.props.formValues}
+            onSave={this.handleSaveManualValue}
+          />
         </OverlayDrawer.Body>
 
         <OverlayDrawer.Footer style={{ flexDirection: 'row-reverse' }}>

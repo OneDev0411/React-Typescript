@@ -12,3 +12,8 @@ export const Input = styled.input`
     background-color: #ffffff;
   }
 `
+
+export const Divider = styled.div`
+  border-bottom: 1px solid #d4d4d4;
+  margin: 1rem 0;
+`
