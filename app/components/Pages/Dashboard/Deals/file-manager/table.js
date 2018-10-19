@@ -68,12 +68,6 @@ export class FileManager extends React.Component {
     return mime === 'application/pdf'
   }
 
-  getTdProps = (rowIndex, { rowData: file }) => ({
-    onClick: () => {
-      this.openFile(file)
-    }
-  })
-
   getAllFiles() {
     const { deal, checklists, tasks, envelopes } = this.props
 
@@ -306,6 +300,7 @@ export class FileManager extends React.Component {
           <FilesListName
             file={file}
             getFileLink={file => this.getFileLink(file)}
+            onChange={() => this.openFile(file)}
           />
         )
       },
@@ -386,7 +381,7 @@ export class FileManager extends React.Component {
         }
       },
       {
-        id: 'td-split',
+        id: 'pdf-split',
         header: '',
         accessor: '',
         width: '110px',
@@ -521,7 +516,6 @@ export class FileManager extends React.Component {
                 entityName: 'Files'
               }}
               columns={this.getColumns(this.data)}
-              getTdProps={this.getTdProps}
               getTrProps={this.getTrProps}
             />
           </Upload>
