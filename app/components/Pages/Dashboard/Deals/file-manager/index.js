@@ -9,7 +9,7 @@ import { isTrainingAccount } from '../../../../../utils/user-teams'
 import { getDeal, setUploadFiles } from '../../../../../store_actions/deals'
 import UploadPromptModal from '../dashboard/upload/prompt'
 import PDFSplitterModal from '../pdf-splitter'
-import { Header } from './header'
+import Header from './header'
 import FilesTable from './table'
 
 const FileManagerContent = styled.div`
