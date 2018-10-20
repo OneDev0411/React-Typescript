@@ -29,7 +29,6 @@ import {
   searchContacts,
   deleteContacts
 } from '../../../../../store_actions/contacts'
-import { getActiveTeamACL } from '../../../../../utils/user-teams'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -47,14 +46,6 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    const acl = getActiveTeamACL(this.props.user)
-
-    const hasContactsPermission = acl.includes('CRM')
-
-    if (!hasContactsPermission) {
-      browserHistory.push('/dashboard/mls')
-    }
-
     if (this.props.listInfo.count === 0) {
       this.fetchContacts()
     }
