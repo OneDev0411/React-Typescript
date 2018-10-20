@@ -47,7 +47,6 @@ const actions = {
 let mapOnChangeDebounce = 0
 
 const map = ({
-  style,
   user,
   appData,
   options,
@@ -68,7 +67,6 @@ const map = ({
   <div>
     <Map
       zoom={zoom}
-      style={style}
       center={center}
       options={options}
       onChange={onChange}
@@ -78,6 +76,7 @@ const map = ({
       yesIWantToUseGoogleMapApiInternals
       bootstrapURLKeys={bootstrapURLKeys}
       onGoogleApiLoaded={onGoogleApiLoaded}
+      style={{ height: 'calc(100vh - 9em - 1px)' }}
     >
       {clusters.map(({ points, lat, lng }, index) => {
         if (points.length === 1) {
@@ -134,16 +133,13 @@ const mapHOC = compose(
     }
   }),
   connect(
-    ({ user, data, search }, { listings, isWidget }) => ({
+    ({ user, data, search }, { listings }) => ({
       user,
       appData: data,
       map: search.map,
       searchType: search.type,
       mapProps: search.map.props,
-      markers: listings.data,
-      style: {
-        height: !isWidget ? 'calc(100vh - 9em - 1px)' : '100vh'
-      }
+      markers: listings.data
     }),
     actions
   ),
