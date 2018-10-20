@@ -1,39 +1,48 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import SearchIcon from '../../../SvgIcons/SearchIcon'
+import { grey, primary, borderColor } from '../../../../utils/colors'
+import IconSearchBase from '../../../SvgIcons/Search/IconSearch'
+
+const Container = styled.div`
+  border-radius: 3px;
+  background-color: ${({ isFocused }) => (isFocused ? '#fff' : grey.A175)};
+  border: solid 1px ${({ isFocused }) => (isFocused ? primary : borderColor)};
+  :hover {
+    background-color: ${({ isFocused }) => (isFocused ? '#fff' : grey.A100)};
+  }
+`
 
 const Input = styled.input`
   width: 100%;
   height: 42px;
-  padding: 0 16px 0 42px;
-  font-size: 1.5rem;
-  color: #8da2b5;
+  padding: 0 1em 0 2.5em;
   border-radius: 3px;
-  background-color: #f0f4f7;
-  border: solid 1px #dce5eb;
+  border: none;
+  caret-color: ${primary};
+  background-color: transparent;
 
-  &:focus {
-    outline-width: 1px;
-    color: #333;
-    background-color: #fff;
+  ::placeholder {
+    color: ${grey.A900};
   }
 
-  ::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    color: #8da2b5;
+  :focus {
+    outline: none;
   }
-  ::-moz-placeholder {
-    /* Firefox 19+ */
-    color: #8da2b5;
+
+  ${Container}:hover & {
+    ::placeholder {
+      color: #000000;
+    }
   }
-  :-ms-input-placeholder {
-    /* IE 10+ */
-    color: #8da2b5;
+`
+
+const IconSearch = IconSearchBase.extend`
+  path {
+    fill: ${grey.A900} !important;
   }
-  :-moz-placeholder {
-    /* Firefox 18- */
-    color: #8da2b5;
+  ${Container}:hover & path {
+    fill: #000000 !important;
   }
 `
 
@@ -42,23 +51,32 @@ const propTypes = {
   inputProps: PropTypes.object.isRequired
 }
 
-function SearchInput({ style, inputProps }) {
-  return (
-    <div style={{ position: 'relative', ...style }}>
-      <Input {...inputProps} />
-      <SearchIcon
-        size={24}
-        color="#8DA2B5"
-        style={{
-          position: 'absolute',
-          top: '13px',
-          left: '13px',
-          width: '24px',
-          height: '24px'
-        }}
-      />
-    </div>
-  )
+class SearchInput extends React.Component {
+  state = { isFocused: false }
+  onBlur = () => this.setState({ isFocused: false })
+  onFocus = () => this.setState({ isFocused: true })
+
+  render() {
+    const { style, inputProps } = this.props
+
+    return (
+      <Container
+        isFocused={this.state.isFocused}
+        style={{ position: 'relative', ...style }}
+      >
+        <Input {...inputProps} onBlur={this.onBlur} onFocus={this.onFocus} />
+        <IconSearch
+          style={{
+            position: 'absolute',
+            top: '13px',
+            left: '13px',
+            width: '1em',
+            height: '1em'
+          }}
+        />
+      </Container>
+    )
+  }
 }
 
 SearchInput.propTypes = propTypes

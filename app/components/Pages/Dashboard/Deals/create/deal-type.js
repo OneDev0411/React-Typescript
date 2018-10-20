@@ -1,18 +1,20 @@
 import React from 'react'
 
-import RadioButton from '../../../../../views/components/radio'
+import RadioButton from '../../../../../views/components/RadioButton'
+import { H2 } from '../../../../../views/components/Typography/headings'
 
 export default ({ isDraft, isRequired, onChangeDealType }) => (
   <div className="form-section">
-    <div className="hero">
+    <H2 className="hero">
       What is the stage of this deal?&nbsp;
       {isRequired && <span className="required">*</span>}
-    </div>
+    </H2>
 
     <div className="deal-radio-row">
       <RadioButton
         selected={isDraft === true}
-        title="Draft (This deal is in an early stage & paperwork has just started)"
+        title="Draft"
+        caption="This deal is in an early stage & paperwork has just started"
         onClick={() => onChangeDealType(true)}
       />
     </div>
@@ -20,7 +22,8 @@ export default ({ isDraft, isRequired, onChangeDealType }) => (
     <div className="deal-radio-row">
       <RadioButton
         selected={isDraft === false}
-        title="Visible to admin (This deal is ready and I want to start submitting paperwork)"
+        title="Visible to admin"
+        caption="This deal is ready and I want to start submitting paperwork"
         onClick={() => onChangeDealType(false)}
       />
     </div>

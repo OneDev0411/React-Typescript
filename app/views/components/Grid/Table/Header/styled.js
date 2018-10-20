@@ -1,24 +1,22 @@
 import styled from 'styled-components'
 import { Row, Cell } from '../styled'
 
-export const Header = styled.div``
+export const Header = styled.div`
+  font-weight: 600;
+  margin-bottom: 24px;
+`
 
 export const HeaderRow = Row.extend`
-  margin-bottom: 32px;
+  min-height: auto;
+  padding: 0.5em;
+  border: none;
+  :hover {
+    background-color: transparent;
+  }
 `
 
 export const HeaderCell = Cell.extend`
-  font-size: 16px;
-  font-weight: 600;
-  color: #000;
-  padding: 0 4px;
-
-  ${props =>
-    props.isSortable &&
-    `
-    cursor: pointer;
-    :hover {
-      opacity: 0.8;
-    }
-  `};
+  display: flex;
+  align-self: center;
+  align-items: center;
 `

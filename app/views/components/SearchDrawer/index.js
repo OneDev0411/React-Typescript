@@ -5,8 +5,9 @@ import PropTypes from 'prop-types'
 import Drawer from '../OverlayDrawer'
 import Search from '../Grid/Search'
 import Loading from '../../../components/Partials/Loading'
+import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 
-import { ResultsContainer, ErrorMessage } from './styled'
+import { ResultsContainer } from './styled'
 
 const initialState = {
   isSearching: false,
@@ -54,14 +55,14 @@ class SearchDrawer extends React.Component {
 
   handleClose = () => {
     this.setState(initialState)
-    this.searchInputRef.value = ''
+    this.searchInputRef.clear()
 
     this.props.onClose()
   }
 
   handleSelectItem = item => {
     this.setState(initialState)
-    this.searchInputRef.value = ''
+    this.searchInputRef.clear()
 
     this.props.onSelectItem(item)
   }
@@ -88,7 +89,7 @@ class SearchDrawer extends React.Component {
                   inputRef={ref => (this.searchInputRef = ref)}
                   style={{
                     ...this.props.searchInputOptions.style,
-                    margin: '16px'
+                    margin: '1.5rem 0'
                   }}
                 />
 
@@ -96,9 +97,10 @@ class SearchDrawer extends React.Component {
 
                 <ResultsContainer>
                   {error && (
-                    <ErrorMessage type={error.type}>
-                      {error.message}
-                    </ErrorMessage>
+                    <Alert
+                      type={error.type === 'error' ? error.type : 'warning'}
+                      message={error.message}
+                    />
                   )}
 
                   {!showLoadingIndicator &&

@@ -9,9 +9,7 @@ const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8da2b5;
-  font-size: 17px;
-  min-height: 70px;
+  min-height: 64px;
   opacity: 0.4;
 `
 

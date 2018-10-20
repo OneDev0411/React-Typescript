@@ -1,23 +1,26 @@
 import styled from 'styled-components'
+import Flex from 'styled-flex-component'
+
+import { grey } from '../../../utils/colors'
 
 export const ListItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
+  padding: 0.5rem 1.5rem;
   cursor: pointer;
   background-color: ${props =>
-    props.isHighlighted ? '#eff5fa' : 'transparent'};
+    props.isHighlighted ? grey.A100 : 'transparent'};
 `
 
 export const ListItemImage = styled.img`
-  width: 45px;
-  height: 45px;
-  border-radius: 2px;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 100%;
 `
 
 export const ListItemAddress = styled.div`
-  padding-left: 10px;
+  padding-left: 0.5rem;
 `
 
 export const ListItemStatus = styled.div`
@@ -25,15 +28,9 @@ export const ListItemStatus = styled.div`
 `
 
 export const Status = styled.span`
-  display: inline-block;
   color: #fff;
-  padding: 0 4px;
-  font-size: 12px;
-  text-align: center;
-  min-width: 60px;
-  height: 28px;
-  line-height: 28px;
-  vertical-align: middle;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
   border-radius: 3px;
   font-weight: 500;
 `
@@ -44,5 +41,16 @@ export const AddressContainer = styled.div`
 `
 
 export const Address = styled.div`
-  font-size: 14px;
+  font-size: 0.875rem;
+`
+
+export const IconContainer = Flex.extend`
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #000;
+  border-radius: 50%;
+  > svg {
+    height: 1rem;
+    width: 1rem;
+  }
 `

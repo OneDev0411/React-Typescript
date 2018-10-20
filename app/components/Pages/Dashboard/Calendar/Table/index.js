@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
 import ScrollDetector from 'react-scroll-detector'
 import moment from 'moment'
@@ -7,11 +8,15 @@ import _ from 'underscore'
 
 import { goTo } from '../../../../../utils/go-to'
 import Grid from '../../../../../views/components/Grid/Table'
-import { GridContainer, TableHeader } from './styled'
+import { GridContainer, TableHeader, Label, Indicator, Title } from './styled'
 import EmptyState from './EmptyState'
 import Fetching from './Fetching'
 
 import EventIcon from './EventIcon'
+import { primary } from 'views/utils/colors'
+
+import SendContactCard from 'components/InstantMarketing/Flows/SendContactCard'
+import { grey } from '../../../../../views/utils/colors'
 
 export class Table extends React.Component {
   constructor(props) {
@@ -53,54 +58,82 @@ export class Table extends React.Component {
     return table
   }
 
+  time(rowData) {
+    if (rowData.object_type !== 'crm_task') {
+      return 'All day'
+    }
+
+    return moment.unix(rowData.timestamp).format('hh:mm A')
+  }
+
+  getEventActions = row => {
+    if (row.event_type === 'birthday') {
+      return (
+        <SendContactCard
+          contactId={row.contact}
+          buttonStyle={{
+            size: 'small'
+          }}
+        >
+          Send a Card
+        </SendContactCard>
+      )
+    }
+  }
+
   get Columns() {
     return [
       {
         id: 'type',
-        header: 'Type',
-        width: '20%',
         isSortable: false,
         render: ({ rowData }) => (
-          <Fragment>
+          <Flex style={{ padding: '4px 1rem' }}>
             <EventIcon event={rowData} />
-            {rowData.type_label}
-          </Fragment>
+            <div>
+              <Title onClick={this.onTitleClick(rowData)}>
+                {rowData.title}
+              </Title>
+              <Flex>
+                {this.time(rowData)}
+                <Indicator>|</Indicator>
+                <Label>{rowData.type_label}</Label>
+              </Flex>
+            </div>
+          </Flex>
         )
       },
       {
-        id: 'name',
-        header: 'Name',
-        width: '30%',
+        id: 'action',
         isSortable: false,
-        accessor: 'title'
-      },
-      {
-        id: 'time',
-        header: 'Time',
-        isSortable: false,
-        render: ({ rowData }) => {
-          if (rowData.object_type !== 'crm_task') {
-            return 'All day'
-          }
-
-          return moment.unix(rowData.timestamp).format('hh:mm A')
-        }
-      },
-      {
-        id: 'menu',
-        header: '',
-        width: '10%'
+        width: '20%',
+        render: ({ rowData }) => this.getEventActions(rowData)
       }
     ]
   }
 
+  onTitleClick = row => {
+    let onClick = () => {}
+
+    switch (row.object_type) {
+      case 'deal_context':
+        onClick = () => goTo(`/dashboard/deals/${row.deal}`, 'Calendar')
+        break
+
+      case 'contact_attribute':
+        onClick = () => goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
+        break
+
+      case 'crm_task':
+        onClick = () => this.props.onSelectTask(row.crm_task)
+        break
+    }
+
+    return onClick
+  }
+
   getGridHeaderProps = () => ({
     style: {
-      position: 'sticky',
-      top: '0',
-      zIndex: 5,
-      backgroundColor: '#fff',
-      padding: '5px 0'
+      display: 'none'
     }
   })
 
@@ -113,33 +146,35 @@ export class Table extends React.Component {
   getGridTrProps = (rowIndex, { original: row }) => {
     const props = {}
 
-    switch (row.object_type) {
-      case 'deal_context':
-        props.onClick = () => goTo(`/dashboard/deals/${row.deal}`, 'Calendar')
-        break
-
-      case 'contact_attribute':
-        props.onClick = () =>
-          goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
-        break
-
-      case 'crm_task':
-        props.style =
-          row.status === 'DONE'
-            ? { textDecoration: 'line-through', opacity: 0.5 }
-            : {}
-
-        props.onClick = () => this.props.onSelectTask(row)
-        break
+    if (row.object_type === 'crm_task' && row.status === 'DONE') {
+      props.style = { opacity: 0.5 }
     }
 
     return {
       ...props,
+      hoverStyle: `
+        background-color: ${grey.A000};
+        a {
+          color: ${primary}
+        }
+      `,
       style: {
-        ...props.style,
-        cursor: 'pointer'
+        ...props.style
       }
     }
+  }
+
+  getGridTdProps = (colIndex, { column }) => {
+    if (column.id === 'action') {
+      return {
+        style: {
+          textAlign: 'right',
+          paddingRight: '1rem'
+        }
+      }
+    }
+
+    return {}
   }
 
   render() {
@@ -162,7 +197,7 @@ export class Table extends React.Component {
         accuracy={60}
         debounceTime={50}
       >
-        <GridContainer>
+        <GridContainer isFilterHidden={this.props.isFilterHidden}>
           <Fetching
             show={
               isFetching && loadingPosition === positions.Top && data.length > 0
@@ -181,6 +216,7 @@ export class Table extends React.Component {
             EmptyState={EmptyState}
             onTableRef={onRef}
             getTrProps={this.getGridTrProps}
+            getTdProps={this.getGridTdProps}
             getHeaderProps={this.getGridHeaderProps}
             getHeaderRowProps={this.getGridHeaderRowProps}
             SubComponent={({ date }) => (
@@ -208,6 +244,7 @@ export class Table extends React.Component {
 function mapStateToProps({ calendar }) {
   return {
     selectedDate: new Date(calendar.selectedDate),
+    isFilterHidden: calendar.brandMembers.length <= 1,
     calendar: calendar.list,
     calendarDays: calendar.byDay
   }

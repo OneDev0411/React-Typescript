@@ -1,24 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import Flex from 'styled-flex-component'
 
 import Avatar from '../../../Avatar'
 
-const Container = styled.div`
-  height: 48px;
+export const Container = Flex.extend`
   display: flex;
-  padding: 8px 2rem;
+  padding: ${props => (props.isDrawer ? '0.5rem 1.5rem' : '0.5em 1rem')};
   background-color: ${props => (props.isHighlighted ? '#f5f5f5' : '#fff')};
 
   &:hover {
     cursor: pointer;
   }
-`
-
-const Title = styled.div`
-  font-size: 1.5rem;
-  line-height: 1;
-  color: #1d364b;
 `
 
 const propTypes = {
@@ -37,12 +30,10 @@ function ContactItem(props) {
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
-      <div style={{ width: '32px', height: '32px', borderRadius: '50%' }}>
-        <Avatar {...getAvatarProps(item.summary)} />
-      </div>
-      <div style={{ paddingLeft: '2rem', height: '32px' }}>
-        <Title>{title}</Title>
-        <div style={{ color: '#8696a4' }}>{summary}</div>
+      <Avatar {...getAvatarProps(item.summary)} />
+      <div style={{ paddingLeft: '1em' }}>
+        <div style={{ lineHeight: 1 }}>{title}</div>
+        <div style={{ color: '#7f7f7f' }}>{summary}</div>
       </div>
     </Container>
   )
@@ -56,9 +47,9 @@ function getAvatarProps(user) {
   const { email, phone_number, display_name, profile_image_url } = user
 
   return {
-    size: 32,
-    borderRadius: 100,
+    size: 40,
     image: profile_image_url,
+    placeHolderImage: '/static/icons/contact-association-avatar.svg',
     title:
       email !== display_name && phone_number !== display_name
         ? display_name

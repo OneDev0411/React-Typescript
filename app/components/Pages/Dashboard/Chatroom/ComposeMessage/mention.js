@@ -349,7 +349,7 @@ export default class Mentions extends React.Component {
                 size={24}
                 name={user.name}
                 image={user.avatar}
-                color="#D4D4D4"
+                color="#000000"
                 showStateIndicator={false}
               />
               <b>{user.username}</b> &nbsp;

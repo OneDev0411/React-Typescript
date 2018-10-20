@@ -6,6 +6,7 @@ const routes = {
   proxifier: ['passthrough'],
   message: ['messages'],
   contact: ['export-outlook'],
+  pdf: ['get-size'],
   deal: [
     'docusign-login',
     'envelope-sign',

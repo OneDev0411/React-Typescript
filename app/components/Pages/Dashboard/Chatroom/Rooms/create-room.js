@@ -2,7 +2,10 @@ import React from 'react'
 import { compose, withState, pure } from 'recompose'
 import { connect } from 'react-redux'
 import Compose from '../Shared/compose-wrapper'
-import { createRoom, toggleChatbar } from '../../../../../store_actions/chatroom'
+import {
+  createRoom,
+  toggleChatbar
+} from '../../../../../store_actions/chatroom'
 import Chatroom from '../Util/chatroom'
 import ComposeIcon from '../../Partials/Svgs/ComposeIcon'
 
@@ -17,9 +20,7 @@ async function createNewRoom(recipients, createRoom, toggleChatbar) {
   Chatroom.openChat(roomId)
 }
 
-const Button = ({
-  clickHandler
-}) => (
+const Button = ({ clickHandler }) => (
   <div className="new-room" onClick={() => clickHandler()}>
     <span className="compose-icon">
       <ComposeIcon />
@@ -31,7 +32,10 @@ const Button = ({
 const enhance = compose(
   pure,
   withState('creating', 'onCreating', false),
-  connect(null, { createRoom, toggleChatbar })
+  connect(
+    null,
+    { createRoom, toggleChatbar }
+  )
 )
 
 const CreateRoom = ({

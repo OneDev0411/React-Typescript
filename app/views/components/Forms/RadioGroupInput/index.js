@@ -1,7 +1,9 @@
 import React, { Fragment } from 'react'
 import { Field } from 'react-final-form'
 
-import { RadioContainer, InputRadio, RadioLabel } from './styled'
+import { RadioContainer, RadioLabel } from './styled'
+import IconSelectedRadio from '../../SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
+import IconUnSelectedRadio from '../../SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
 
 export const RadioGroup = ({ name, selectedValue, options }) => (
   <RadioContainer>
@@ -11,12 +13,21 @@ export const RadioGroup = ({ name, selectedValue, options }) => (
           type="radio"
           name={name}
           render={({ input, ...rest }) => (
-            <InputRadio
-              {...input}
-              value={option.name}
-              checked={selectedValue === option.name}
-              {...rest}
-            />
+            <React.Fragment>
+              {selectedValue === option.name ? (
+                <IconSelectedRadio
+                  onClick={() => input.onChange(option.name)}
+                  {...input}
+                  {...rest}
+                />
+              ) : (
+                <IconUnSelectedRadio
+                  onClick={() => input.onChange(option.name)}
+                  {...input}
+                  {...rest}
+                />
+              )}
+            </React.Fragment>
           )}
         />
 

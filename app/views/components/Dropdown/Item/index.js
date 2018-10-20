@@ -1,17 +1,35 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import { primary } from '../../../../views/utils/colors'
 
 export const Item = styled.div`
-  cursor: pointer;
-  line-height: 1em;
+  width: 100%;
+  display: flex;
+  align-items: center;
   padding: 0.5em 1em;
+  cursor: pointer;
   white-space: nowrap;
-  font-size: 1.6rem;
-  font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
-  background-color: ${({ isActive }) => (isActive ? 'lightgrey' : 'white')};
+  color: ${props => (props.isActive ? '#fff' : '#000')};
+  background-color: ${props => (props.isActive ? primary : '#fff')};
+  font-weight: ${props => (props.isSelected && !props.isDisabled ? 700 : 400)};
 
   &:hover,
   &:focus {
-    border-color: #96c8da;
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+    color: #fff;
+    background-color: ${primary};
+
+    > svg {
+      fill: #fff;
+    }
   }
+
+  ${props =>
+    props.item && props.item.icon && props.item.iconColor
+      ? css`
+          > svg {
+            margin-right: 0.5em;
+            fill: ${props.item.iconColor};
+          }
+        `
+      : ''};
 `

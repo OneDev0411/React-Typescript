@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button } from 'react-bootstrap'
 import cn from 'classnames'
-import ToolTip from '../../../../../../views/components/tooltip/index'
+import ToolTip from 'views/components/tooltip/index'
+import ActionButton from 'components/Button/ActionButton'
 
 const BackOfficeCta = ({ task, onSendComment, hasComment, isSaving }) => {
   const status = task.review ? task.review.status : ''
@@ -59,15 +59,13 @@ const BackOfficeCta = ({ task, onSendComment, hasComment, isSaving }) => {
         </div>
       )}
 
-      <Button
-        className={cn('deal-button add-comment', {
-          enabled: hasComment
-        })}
+      <ActionButton
+        appearance="outline"
         disabled={isSaving || !hasComment}
         onClick={() => onSendComment(false)}
       >
         Comment
-      </Button>
+      </ActionButton>
     </div>
   )
 }

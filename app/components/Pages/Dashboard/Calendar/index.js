@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { batchActions } from 'redux-batched-actions'
+import { browserHistory } from 'react-router'
 
 import moment from 'moment'
 import _ from 'underscore'
@@ -16,30 +17,27 @@ import {
 import {
   createDateRange,
   createPastRange,
-  createFutureRange,
-  createDayRange
+  createFutureRange
 } from '../../../../models/Calendar/helpers/create-date-range'
 
 import {
   Container,
   Menu,
-  Trigger
+  Trigger,
+  Content
 } from '../../../../views/components/SlideMenu'
 
-import TaskDrawer from './TaskDrawer'
 import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
+import { EventDrawer } from '../../../../views/components/EventDrawer'
 
 import CalendarTable from './Table'
+import CalendarFilter from './Filter'
 
-import {
-  MenuContainer,
-  CalendarContent,
-  PageContent,
-  HeroTitle
-} from './styled'
+import { MenuContainer } from './styled'
 
 import ActionButton from '../../../../views/components/Button/ActionButton'
+import { getActiveTeamACL } from '../../../../utils/user-teams'
 
 const LOADING_POSITIONS = {
   Top: 0,
@@ -48,44 +46,36 @@ const LOADING_POSITIONS = {
 }
 
 class CalendarContainer extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isMenuOpen: true,
-      showCreateTaskMenu: false,
-      selectedTask: null,
-      loadingPosition: LOADING_POSITIONS.Middle
-    }
-
-    this.isObserverEnabled = false
-    // this.onEventObserve = _.debounce(this.onEventObserve, 150)
+  state = {
+    isMenuOpen: true,
+    showCreateTaskMenu: false,
+    selectedTaskId: null,
+    loadingPosition: LOADING_POSITIONS.Middle
   }
 
   componentDidMount() {
     const { selectedDate } = this.props
 
-    this.restartCalendar(selectedDate)
+    const acl = getActiveTeamACL(this.props.user)
 
-    // this.observer = new IntersectionObserver(this.onEventObserve, {
-    //   root: this.calendarTableContainer,
-    //   rootMargin: '100px',
-    //   threshold: 0.8
-    // })
+    const hasContactsPermission = acl.includes('CRM')
+
+    if (!hasContactsPermission) {
+      browserHistory.push('/dashboard/mls')
+    }
+
+    this.restartCalendar(selectedDate)
   }
 
-  // onEventObserve = entities => {
-  //   const { setDate, selectedDate } = this.props
-  //   const ref = entities && entities[0].target
-  //   const { refid } = ref.dataset
+  getCalendar = async (startRange, endRange, filter) => {
+    let calendarFilter = filter || this.props.filter
 
-  //   if (this.isObserverEnabled === false) {
-  //     return false
-  //   }
+    if (!calendarFilter || calendarFilter.length === 0) {
+      calendarFilter = [this.props.user.id]
+    }
 
-  //   if (refid !== moment(selectedDate).format('YYYY-MM-DD')) {
-  //     setDate(moment(refid).toDate())
-  //   }
-  // }
+    return this.props.getCalendar(startRange, endRange, calendarFilter)
+  }
 
   /**
    * close/open side menu
@@ -96,13 +86,18 @@ class CalendarContainer extends React.Component {
     }))
 
   /**
-   * close/open create task menu
+   * open create task menu
    */
-  toggleShowCreateTask = () =>
-    this.setState(state => ({
-      showCreateTaskMenu: !state.showCreateTaskMenu,
-      selectedTask: null
-    }))
+  openEventDrawer = () => this.setState({ showCreateTaskMenu: true })
+
+  /**
+   * close create task menu
+   */
+  closeEventDrawer = () =>
+    this.setState({
+      showCreateTaskMenu: false,
+      selectedTaskId: null
+    })
 
   /**
    * sets calendar references
@@ -112,10 +107,6 @@ class CalendarContainer extends React.Component {
       ...this.refs,
       [refId]: ref
     }
-
-    // if (this.observer && ref !== null) {
-    //   this.observer.observe(ref)
-    // }
   }
 
   /**
@@ -127,24 +118,24 @@ class CalendarContainer extends React.Component {
       loadingPosition: position
     })
 
-  restartCalendar = async selectedDate => {
-    const { resetCalendar, setDate, getCalendar } = this.props
+  restartCalendar = async (selectedDate, filter) => {
     const [newStartRange, newEndRange] = createDateRange(selectedDate)
 
     this.setLoadingPosition(LOADING_POSITIONS.Middle)
-    resetCalendar()
+
+    this.props.resetCalendar()
     this.refs = {}
 
     batchActions([
-      setDate(selectedDate),
-      await getCalendar(newStartRange, newEndRange)
+      this.props.setDate(selectedDate),
+      await this.getCalendar(newStartRange, newEndRange, filter)
     ])
 
     this.scrollIntoView(selectedDate)
   }
 
   handleDateChange = async selectedDate => {
-    const { startRange, endRange, setDate, getCalendar } = this.props
+    const { startRange, endRange, setDate } = this.props
     const [newStartRange, newEndRange] = createDateRange(selectedDate)
     const timestamp = moment(selectedDate)
       .utcOffset(0)
@@ -173,31 +164,39 @@ class CalendarContainer extends React.Component {
 
     batchActions([
       setDate(selectedDate),
-      await getCalendar(newStartRange, newEndRange)
+      await this.getCalendar(newStartRange, newEndRange)
     ])
   }
 
-  handleChangeTask = async task => {
-    const { startRange, endRange, getCalendar, setDate } = this.props
+  handleFilterChange = filter => {
+    this.setLoadingPosition(LOADING_POSITIONS.Middle)
+    this.restartCalendar(this.selectedDate, filter)
+  }
+
+  onClickTask = selectedTaskId =>
+    this.setState(() => ({ selectedTaskId }), this.openEventDrawer)
+
+  handleEventChange = async (task, action) => {
+    const { startRange, endRange } = this.props
     const timestamp = task.due_date
+
+    const isInRange = timestamp >= startRange && timestamp <= endRange
+    const isTaskUpdated = action === 'updated'
     const newSelectedDate = new Date(timestamp * 1000)
 
-    if (timestamp >= startRange && timestamp <= endRange) {
+    this.closeEventDrawer()
+
+    if (isInRange || isTaskUpdated) {
       this.setLoadingPosition(LOADING_POSITIONS.Middle)
 
-      const [startRange, endRange] = createDayRange(timestamp)
-
       batchActions([
-        setDate(newSelectedDate),
-        getCalendar(startRange, endRange)
+        this.props.resetCalendar(),
+        this.props.setDate(newSelectedDate),
+        await this.getCalendar(startRange, endRange)
       ])
 
       this.scrollIntoView(newSelectedDate)
     }
-
-    this.setState({
-      showCreateTaskMenu: false
-    })
   }
 
   scrollIntoView = (date, options = {}) => {
@@ -217,15 +216,9 @@ class CalendarContainer extends React.Component {
   }
 
   loadPreviousItems = async () => {
-    const {
-      startRange,
-      getCalendar,
-      setDate,
-      isFetching,
-      calendarDays
-    } = this.props
+    const { startRange } = this.props
 
-    if (isFetching || _.isEmpty(calendarDays)) {
+    if (this.props.isFetching || _.isEmpty(this.props.calendarDays)) {
       return false
     }
 
@@ -235,22 +228,22 @@ class CalendarContainer extends React.Component {
     const newSelectedDate = new Date(startRange * 1000)
 
     batchActions([
-      setDate(newSelectedDate),
-      await getCalendar(newStartRange, newEndRange)
+      this.props.setDate(newSelectedDate),
+      await this.getCalendar(newStartRange, newEndRange)
     ])
 
     this.scrollIntoView(newSelectedDate)
   }
 
   loadNextItems = async () => {
-    const { endRange, getCalendar, isFetching, calendarDays } = this.props
+    const { endRange, isFetching, calendarDays } = this.props
 
     if (isFetching || _.isEmpty(calendarDays)) {
       return false
     }
 
     this.setLoadingPosition(LOADING_POSITIONS.Bottom)
-    getCalendar(...createFutureRange(endRange))
+    this.getCalendar(...createFutureRange(endRange))
   }
 
   get SelectedRange() {
@@ -267,32 +260,24 @@ class CalendarContainer extends React.Component {
     }
   }
 
-  handleSelectTask = row => {
-    this.setState({
-      showCreateTaskMenu: true,
-      selectedTask: row.crm_task
-    })
-  }
-
   render() {
-    const {
-      isMenuOpen,
-      showCreateTaskMenu,
-      loadingPosition,
-      selectedTask
-    } = this.state
-    const { user, selectedDate, isFetching } = this.props
+    const { isMenuOpen, loadingPosition, selectedTaskId } = this.state
+    const { selectedDate, isFetching } = this.props
 
     return (
-      <Container>
-        <TaskDrawer
-          isOpen={showCreateTaskMenu}
-          selectedTask={selectedTask}
-          onClose={this.toggleShowCreateTask}
-          onChangeTask={this.handleChangeTask}
-        />
+      <Container isOpen={isMenuOpen}>
+        {this.state.showCreateTaskMenu && (
+          <EventDrawer
+            isOpen
+            user={this.props.user}
+            eventId={selectedTaskId}
+            onClose={this.closeEventDrawer}
+            submitCallback={this.handleEventChange}
+            deleteCallback={this.handleEventChange}
+          />
+        )}
 
-        <Menu isOpen={isMenuOpen} width={265}>
+        <Menu isOpen={isMenuOpen} width={302}>
           <MenuContainer>
             <DatePicker
               selectedDate={selectedDate}
@@ -302,23 +287,23 @@ class CalendarContainer extends React.Component {
           </MenuContainer>
         </Menu>
 
-        <PageContent>
-          <PageHeader isFlat>
+        <Content>
+          <PageHeader>
             <PageHeader.Title showBackButton={false}>
-              <Trigger onClick={this.toggleSideMenu} />
+              <Trigger isExpended={isMenuOpen} onClick={this.toggleSideMenu} />
               <PageHeader.Heading>Calendar</PageHeader.Heading>
             </PageHeader.Title>
 
             <PageHeader.Menu>
-              <ActionButton inverse onClick={this.toggleShowCreateTask}>
-                Add Task
+              <ActionButton onClick={this.openEventDrawer}>
+                Add Event
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
 
-          <CalendarContent>
-            <HeroTitle>Hello {user.first_name}</HeroTitle>
+          <CalendarFilter onChange={this.handleFilterChange} />
 
+          <div style={{ position: 'relative' }}>
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
                 positions={LOADING_POSITIONS}
@@ -327,13 +312,12 @@ class CalendarContainer extends React.Component {
                 loadingPosition={loadingPosition}
                 onScrollTop={this.loadPreviousItems}
                 onScrollBottom={this.loadNextItems}
-                onContainerScroll={e => this.handleContainerScroll(e.target)}
-                onSelectTask={this.handleSelectTask}
+                onSelectTask={this.onClickTask}
                 onRef={this.onTableRef}
               />
             </div>
-          </CalendarContent>
-        </PageContent>
+          </div>
+        </Content>
       </Container>
     )
   }
@@ -347,13 +331,17 @@ function mapStateToProps({ user, calendar }) {
       .utcOffset(0)
       .toDate(),
     calendarDays: calendar.byDay,
+    filter: calendar.filter,
     startRange: getStartRange(calendar),
     endRange: getEndRange(calendar)
   }
 }
 
-export default connect(mapStateToProps, {
-  getCalendar,
-  setDate,
-  resetCalendar
-})(CalendarContainer)
+export default connect(
+  mapStateToProps,
+  {
+    getCalendar,
+    setDate,
+    resetCalendar
+  }
+)(CalendarContainer)

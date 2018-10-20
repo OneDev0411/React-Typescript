@@ -14,7 +14,7 @@ const MESSAGE = (
 
 const Oops = ({ title = TITLE, message = MESSAGE }) => (
   <div className="c-oops">
-    <Link to="/" className="c-oops__logo din">
+    <Link to="/" className="c-oops__logo">
       Rechat
     </Link>
     <div className="c-oops__body text-center">

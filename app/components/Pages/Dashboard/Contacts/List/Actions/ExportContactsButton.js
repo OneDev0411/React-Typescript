@@ -1,29 +1,19 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { Tooltip, OverlayTrigger } from 'react-bootstrap'
+
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import { getActiveTeam } from '../../../../../../utils/user-teams'
+import XlsxIcon from '../../../../../../views/components/SvgIcons/Xlsx/XlsxIcon'
 
-const Link = styled.a`
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-  pointerevents: ${props => (props.disabled ? 'none' : 'initial')};
-  text-decoration: none !important;
-
-  :hover {
-    color: #fff !important;
-  }
+const Button = ActionButton.withComponent('a')
+const Xlsx = styled(XlsxIcon)`
+  margin-right: 0.5rem;
 `
-
-const Button = ActionButton.extend`
-  opacity: ${props => (props.disabled ? 0.7 : 1)};
-
-  :hover,
-  :hover a {
-    color: #fff !important;
-  }
-`
-
-export default ({ exportIds, disabled, filters }) => {
-  let url = '/api/contacts/export/outlook'
+const ExportContacts = ({ exportIds, disabled, filters, user }) => {
+  const activeTeam = getActiveTeam(user)
+  const activeBrand = activeTeam.brand.id
+  let url = `/api/contacts/export/outlook/${activeBrand}/`
 
   if (Array.isArray(exportIds) && exportIds.length > 0) {
     url = `${url}?ids[]=${exportIds.join('&ids[]=')}`
@@ -34,15 +24,21 @@ export default ({ exportIds, disabled, filters }) => {
   }
 
   return (
-    <OverlayTrigger
-      placement="bottom"
-      overlay={<Tooltip id="tooltip">Export contacts to a CSV file</Tooltip>}
+    <Button
+      appearance="outline"
+      disabled={disabled}
+      size="small"
+      as="a"
+      href={url}
     >
-      <Button inverse disabled={disabled} style={{ padding: '0.70em 1.5em' }}>
-        <Link href={url} disabled={disabled}>
-          Export to CSV
-        </Link>
-      </Button>
-    </OverlayTrigger>
+      <Xlsx />
+      Export to Spreadsheet
+    </Button>
   )
 }
+
+function mapStateToProps({ user }) {
+  return { user }
+}
+
+export default connect(mapStateToProps)(ExportContacts)

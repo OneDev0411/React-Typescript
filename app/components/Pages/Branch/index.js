@@ -26,17 +26,15 @@ const getActionRedirectURL = params => {
   }
 
   if (action === 'RedirectToAlert' && alert) {
-    return `/dashboard/mls/alerts/${alert}`
+    return `/dashboard/mls/saved-searches/${alert}`
   }
 
   if (action === 'RedirectToListing' && listing) {
     return `/dashboard/mls/${listing}`
   }
 
-  if (action === 'RedirectToCRMTask' && crm_task) {
-    console.log('branch task', crm_task)
-
-    return `/crm/tasks/${crm_task}`
+  if (crm_task && action === 'RedirectToCRMTask') {
+    return `/dashboard/notifications/crm/${crm_task}`
   }
 
   return '/dashboard/mls/'

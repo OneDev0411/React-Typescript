@@ -1,108 +1,112 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link, browserHistory } from 'react-router'
+
 import compose from 'recompose/compose'
-import { Field, reduxForm } from 'redux-form'
+
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import PageTitle from '../components/PageTitle'
-import Brand from '../../../../../controllers/Brand'
 import searchAgent from '../../../../../models/agent/search'
-import { getBrandInfo, renderField } from '../../../Auth/SignIn'
+import Button from '../../../../../views/components/Button/ActionButton'
 import SecretQuestionModal from './components/SecretQuestionModal'
+import PageHeader from '../../../../../views/components/PageHeader'
 
-const AgentConfirm = ({
-  agent,
-  mlsid,
-  brand,
-  setMlsid,
-  redirectTo,
-  upgradeError,
-  isUpgrading,
-  onUpgradeHandler,
-  setUpgradeError,
-  onHideConfirmModal,
-  confirmModalIsActive
-}) => {
-  const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
+class AgentConfirm extends React.Component {
+  onChange = e => {
+    const newValue = e.target.value
 
-  return (
-    <div>
-      <PageTitle title="Upgrade Account" />
-      <div
-        className="signin-page-wrapper c-auth--register clearfix"
-        style={{ background: '#f0f4f7' }}
-      >
-        <article className="c-auth" style={{ background: 'inherit' }}>
-          <header className="c-auth__header" style={{ marginBottom: '4rem' }}>
-            <h1 className="c-auth__title din">{siteTitle}</h1>
-            <p className="c-auth__subtitle">Upgrade to agent account</p>
-            <div>
-              <small>Enter your agent license # to unlock MLS features.</small>
-            </div>
-          </header>
-          <main className="c-auth__main">
-            <form onSubmit={onUpgradeHandler}>
-              <div
-                style={{ marginBottom: '2rem' }}
-                className="c-auth__field__input-wrapper"
-              >
-                <input
-                  id="mlsid"
-                  type="text"
-                  onChange={e => {
-                    const newValue = e.target.value
+    this.props.setMlsid(newValue)
 
-                    setMlsid(newValue)
+    if (this.props.upgradeError && newValue) {
+      this.props.setUpgradeError(false)
+    }
+  }
 
-                    if (upgradeError && newValue) {
-                      setUpgradeError(false)
-                    }
-                  }}
-                  className={`c-auth__field__input ${!mlsid ? '' : 'has-content'}`}
-                />
-                <label htmlFor="mlsid" className="c-auth__field__label">
-                  Your Agent Number
-                </label>
-                <span className="focus-border">
-                  <i />
-                </span>
+  render() {
+    const {
+      agent,
+      mlsid,
+      redirectTo,
+      upgradeError,
+      isUpgrading,
+      onUpgradeHandler,
+      onHideConfirmModal,
+      confirmModalIsActive
+    } = this.props
+
+    return (
+      <div>
+        <PageHeader
+          isFlat
+          style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}
+        >
+          <PageHeader.Title showBackButton={false}>
+            <PageHeader.Heading>Upgrade Account1</PageHeader.Heading>
+          </PageHeader.Title>
+        </PageHeader>
+
+        <div
+          className="signin-page-wrapper c-auth--register clearfix"
+          style={{
+            borderRadius: '3px',
+            paddingTop: '3em',
+            paddingBottom: '2em',
+            border: '1px solid #d4d4d4'
+          }}
+        >
+          <article className="c-auth" style={{ background: 'inherit' }}>
+            <header className="c-auth__header" style={{ marginBottom: '4rem' }}>
+              <p className="c-auth__subtitle">
+                <b>Upgrade to agent account</b>
+              </p>
+              <div>
+                <small>
+                  Enter your agent license # to unlock MLS features.
+                </small>
               </div>
-              {upgradeError && (
-                <div className="c-auth__submit-error-alert">
-                  {upgradeError === 404
-                    ? `Agent corresponding to this MLS ID (${mlsid}) not found!`
-                    : 'There was an error with this request. Please try again.'}
+            </header>
+            <main className="c-auth__main">
+              <form onSubmit={onUpgradeHandler}>
+                <div className="c-simple-field">
+                  <label htmlFor="mlsid" className="c-simple-field__label">
+                    Your Agent Number
+                  </label>
+                  <input
+                    id="mlsid"
+                    type="text"
+                    onChange={this.onChange}
+                    className="c-simple-field__input"
+                  />
                 </div>
-              )}
-              <button
-                type="submit"
-                className="c-auth__submit-btn"
-                disabled={isUpgrading || !mlsid}
-                style={{
-                  background: brandColor,
-                  opacity: isUpgrading || !mlsid ? 0.7 : 1
-                }}
-              >
-                {isUpgrading ? 'Searching...' : 'Upgrade'}
-              </button>
-            </form>
-          </main>
-        </article>
-        {agent && (
-          <SecretQuestionModal
-            show={confirmModalIsActive}
-            onHide={onHideConfirmModal}
-            mlsid={mlsid}
-            agent={agent.id}
-            redirectTo={redirectTo}
-            question={agent.secret_questions[0]}
-          />
-        )}
+                {upgradeError && (
+                  <div className="c-auth__submit-error-alert">
+                    {upgradeError === 404
+                      ? `Agent corresponding to this MLS ID (${mlsid}) not found!`
+                      : 'There was an error with this request. Please try again.'}
+                  </div>
+                )}
+                <div style={{ textAlign: 'right' }}>
+                  <Button type="submit" disabled={isUpgrading || !mlsid}>
+                    {isUpgrading ? 'Searching...' : 'Upgrade'}
+                  </Button>
+                </div>
+              </form>
+            </main>
+          </article>
+          {agent && (
+            <SecretQuestionModal
+              show={confirmModalIsActive}
+              onHide={onHideConfirmModal}
+              mlsid={mlsid}
+              agent={agent.id}
+              redirectTo={redirectTo}
+              question={agent.secret_questions[0]}
+            />
+          )}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 export default compose(

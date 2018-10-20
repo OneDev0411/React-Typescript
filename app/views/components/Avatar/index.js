@@ -3,8 +3,12 @@ import PropTypes from 'prop-types'
 import pure from 'recompose/pure'
 
 import { getNameInitials } from '../../..//utils/helpers'
+import { Container, Image, Status } from './styled'
 
 const propTypes = {
+  statusColor: PropTypes.string,
+  showStatus: PropTypes.bool,
+  isOnline: PropTypes.bool,
   size: PropTypes.number,
   title: PropTypes.string,
   image: PropTypes.string,
@@ -13,39 +17,40 @@ const propTypes = {
 }
 
 const defaultProps = {
-  size: 36,
+  size: 40,
   image: '',
-  title: '*',
+  title: '',
+  placeHolderImage: '',
   borderRadius: 100,
-  placeHolderImage: ''
+  isOnline: false,
+  showStatus: false,
+  statusColor: '#35b863'
 }
 
-const Avatar = ({ image, title, size, placeHolderImage, borderRadius }) => {
-  const style = {
-    width: size,
-    height: size,
-    lineHeight: `${size}px`,
-    borderRadius
-  }
+const Avatar = ({ image, placeHolderImage, title, isOnline, ...props }) => {
+  let imageSrc = ''
 
-  if (image || placeHolderImage) {
-    style.background = 'transparent'
-
-    return (
-      <div className="c-avatar" style={style}>
-        <img
-          alt="rechat avatar"
-          className="c-avatar__image"
-          src={image || placeHolderImage}
-        />
-      </div>
-    )
+  if (image != null && image.length > 1) {
+    imageSrc = image
+  } else if (placeHolderImage && !title) {
+    imageSrc = placeHolderImage
   }
 
   return (
-    <div style={style} className="c-avatar">
-      {getNameInitials(title)}
-    </div>
+    <Container center {...props}>
+      {imageSrc ? (
+        <Image alt="rechat avatar" src={imageSrc} />
+      ) : (
+        getNameInitials(title)
+      )}
+      {props.showStatus && (
+        <Status
+          isOnline={isOnline}
+          size={props.size}
+          statusColor={props.statusColor}
+        />
+      )}
+    </Container>
   )
 }
 

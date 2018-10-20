@@ -1,11 +1,12 @@
 import React from 'react'
-import RadioButton from '../../../../../views/components/radio'
+import RadioButton from '../../../../../views/components/RadioButton'
+import { H2 } from 'components/Typography/headings'
 
 export default ({ dealHasPrimaryOffer, offerType, onChangeOfferType }) => (
   <div className="form-section deal-offer">
-    <div className="hero">
+    <H2 className="hero">
       Is this a primary or backup offer? <span className="required">*</span>
-    </div>
+    </H2>
 
     <RadioButton
       selected={offerType === 'primary'}

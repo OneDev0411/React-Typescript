@@ -1,87 +1,57 @@
 import React from 'react'
-import styled from 'styled-components'
+import { eventTypesIcons } from '../../../../../../views/utils/event-types-icons'
+import { importantDatesIcons } from '../../../../../../views/utils/important-dates-icons'
 
-const Image = styled.img`
-  width: 16px;
-  height: 16px;
-  margin-right: 12px;
-`
-
-const getIcon = name => (
-  <Image src={`/static/images/calendar/${name}.svg`} alt="" />
+const getIcon = Icon => (
+  <Icon.icon
+    style={{
+      marginRight: '1rem',
+      marginTop: '5px'
+    }}
+    fill={Icon.color}
+  />
 )
 
 const getImportantDateIcon = label => {
-  switch (label.toLowerCase()) {
-    case 'birthday':
-      return getIcon('important-date__birthday')
-
-    case 'graduation anniversary':
-      return getIcon('important-date__graduation-anniversary')
-
-    case 'new home':
-      return getIcon('important-date__new-home')
-
-    case 'work anniversary':
-      return getIcon('important-date__work-anniversary')
-
-    case 'wedding anniversary':
-      return getIcon('important-date__wedding-anniversary')
-
-    case 'child':
-      return getIcon('important-date__child')
-
-    case 'pet':
-      return getIcon('important-date__pet')
-
-    default:
-      return getIcon('default')
+  if (importantDatesIcons[label]) {
+    return importantDatesIcons[label]
+  } else if (label === 'Spouse birthday') {
+    return importantDatesIcons.Birthday
   }
+
+  return eventTypesIcons['Task Critical']
 }
 
 const getCrmTaskIcon = type => {
-  switch (type.toLowerCase()) {
-    case 'open house':
-      return getIcon('task__open-house')
-
-    case 'call':
-      return getIcon('task__call')
-
-    case 'closing':
-      return getIcon('task__closing')
-
-    case 'message':
-      return getIcon('task__message')
-
-    case 'follow up':
-    case 'todo':
-      return getIcon('task__followup')
-
-    case 'tour':
-      return getIcon('task__tour')
-
-    case 'listing appointment':
-      return getIcon('task__listing-appointment')
-
-    default:
-      return getIcon('default')
+  if (eventTypesIcons[type]) {
+    return eventTypesIcons[type]
+  } else if (type === 'Message') {
+    return eventTypesIcons.Mail
   }
+
+  return eventTypesIcons['Task Critical']
 }
 
 const EventIcon = ({ event }) => {
+  let icon
+
   switch (event.object_type) {
     case 'deal_context':
-      return getIcon('default')
-
+      icon = eventTypesIcons['Task Critical']
+      break
     case 'crm_task':
-      return getCrmTaskIcon(event.event_type)
+      icon = getCrmTaskIcon(event.event_type)
+      break
 
     case 'contact_attribute':
-      return getImportantDateIcon(event.type_label)
+      icon = getImportantDateIcon(event.type_label)
+      break
 
     default:
-      return getIcon('default')
+      icon = eventTypesIcons['Task Critical']
   }
+
+  return getIcon(icon)
 }
 
 export default EventIcon

@@ -15,9 +15,9 @@ const BrandLogo = ({ brand, user, isWidget, title = 'Rechat', styles }) => {
 
   const defaultStyle = {
     position: 'absolute',
-    float: 'left',
-    zIndex: 3,
-    padding: '16px'
+    top: '0.5em',
+    left: '1em',
+    zIndex: 3
   }
 
   return (
@@ -28,11 +28,11 @@ const BrandLogo = ({ brand, user, isWidget, title = 'Rechat', styles }) => {
           image
             ? {}
             : {
-              fontSize: '2.5rem',
-              fontWieght: 'bold',
-              paddingTop: '1rem',
-              color: `#${Brand.color('primary', '3388ff')}`
-            }
+                fontSize: '1.5rem',
+                fontWieght: 'bold',
+                textDecoration: 'none',
+                color: `#${Brand.color('primary', '3388ff')}`
+              }
         }
       >
         {image ? (

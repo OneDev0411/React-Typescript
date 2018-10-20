@@ -3,11 +3,9 @@ import PropTypes from 'prop-types'
 
 import _ from 'underscore'
 
-import IconSearch from '../../SvgIcons/Search/IconSearch'
 import IconClose from '../../SvgIcons/Close/CloseIcon'
 
-import IconButton from '../../Button/IconButton'
-import { Container, TextInput, Icon } from './styled'
+import { Container, TextInput, Icon, IconSearch, IconButton } from './styled'
 
 class Search extends React.Component {
   constructor(props) {
@@ -16,7 +14,8 @@ class Search extends React.Component {
     const { onChange, debounceTime, defaultValue } = props
 
     this.state = {
-      searchValue: defaultValue || ''
+      searchValue: defaultValue || '',
+      isFocused: false
     }
 
     this.onChangeHandler =
@@ -44,6 +43,20 @@ class Search extends React.Component {
     this.props.onClearSearch('')
   }
 
+  onRef = ref => {
+    if (!ref || !this.props.inputRef) {
+      return false
+    }
+
+    // add a functionality to be able clear input outside of the form
+    ref.clear = () => this.setState({ searchValue: '' })
+
+    this.props.inputRef(ref)
+  }
+
+  onBlur = () => this.setState({ isFocused: false })
+  onFocus = () => this.setState({ isFocused: true })
+
   render() {
     const {
       placeholder,
@@ -51,27 +64,26 @@ class Search extends React.Component {
       isSearching,
       disableOnSearch,
       showLoadingOnSearch,
-      defaultValue = '',
-      showClearSearch,
-      inputRef
+      showClearSearch
     } = this.props
 
     return (
-      <Container style={style}>
+      <Container style={style} isFocused={this.state.isFocused}>
         <Icon isSearching={isSearching}>
           {isSearching && showLoadingOnSearch ? (
             <i className="fa fa-spin fa-spinner" />
           ) : (
-            <IconSearch color="#8da2b5" />
+            <IconSearch />
           )}
         </Icon>
 
         <TextInput
-          defaultValue={defaultValue}
           value={this.state.searchValue}
           placeholder={placeholder}
           onChange={this.handleChange}
-          innerRef={inputRef}
+          onBlur={this.onBlur}
+          onFocus={this.onFocus}
+          innerRef={this.onRef}
           readOnly={disableOnSearch && isSearching}
         />
 

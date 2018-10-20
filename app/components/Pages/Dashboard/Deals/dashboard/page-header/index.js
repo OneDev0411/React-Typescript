@@ -5,53 +5,51 @@ import { showAttachments } from '../../../../../../store_actions/deals'
 
 import DealEmail from '../../dashboard/deal-email'
 
-import PageHeader from '../../../../../../views/components/PageHeader'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import PageHeader from 'components/PageHeader'
+// import LinkButton from 'components/Button/LinkButton'
+import ActionButton from 'components/Button/ActionButton'
+import SendDealPromotionCard from '../../../../../../views/components/InstantMarketing/Flows/SendDealPromotion'
 
-import InstantMarketing from './instant-marketing'
+const Button = ActionButton.extend`
+  margin-left: 0.5em;
+`
 
-const buttonStyle = {
-  marginLeft: '10px',
-  padding: '0.70em 1.5em'
-}
-
-const Header = ({ deal, showAttachments }) => (
+const Header = ({ user, deal, showAttachments }) => (
   <PageHeader title="Deals" backUrl="/dashboard/deals">
     <PageHeader.Menu>
       <DealEmail dealEmail={deal.email} />
       {deal.deal_type === 'Selling' && (
-        <ActionButton
-          style={buttonStyle}
+        <Button
           onClick={() =>
             browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)
           }
         >
           Add New Offer
-        </ActionButton>
+        </Button>
       )}
 
-      <ActionButton
-        inverse
-        style={buttonStyle}
+      <Button
+        appearance="outline"
         onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}/files`)}
       >
         View & Upload Files
-      </ActionButton>
+      </Button>
 
-      <ActionButton
-        inverse
-        style={buttonStyle}
+      <Button
+        appearance="outline"
         onClick={() => showAttachments()}
+        style={{ marginRight: '0.5rem' }}
       >
         Get Signatures
-      </ActionButton>
-
-      <InstantMarketing deal={deal} buttonStyle={buttonStyle} />
+      </Button>
+      {deal.listing && (
+        <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
+      )}
     </PageHeader.Menu>
   </PageHeader>
 )
 
 export default connect(
-  null,
+  state => ({ user: state.user }),
   { showAttachments }
 )(Header)

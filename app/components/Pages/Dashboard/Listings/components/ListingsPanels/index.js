@@ -8,7 +8,6 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import GridView from './GridView'
 import TableView from './TableView'
 import PanelHeader from './PanelHeader'
-import PanelsSwitch from './PanelsSwitch'
 import listingUtils from '../../../../../../utils/listing'
 import actions from '../../../../../../store_actions/listings/panels'
 
@@ -19,7 +18,6 @@ const ListingPanel = props => {
 
   return (
     <div className={panelClassName}>
-      <PanelsSwitch activePanel={activePanel} tabName={tabName} />
       {(tabName !== 'alerts' ||
         (tabName === 'alerts' && activePanel !== 'map')) && (
         <div className="l-listings__panel__container">
@@ -29,7 +27,7 @@ const ListingPanel = props => {
           )}
           <div className="c-panel__list-container">
             {activePanel === 'table' ? (
-              <TableView {...props} />
+              <TableView listings={listings} />
             ) : (
               <GridView {...props} />
             )}

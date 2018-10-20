@@ -1,24 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
-import { Container, Label, LabelNote, ErrorMessage } from '../styled'
-
-const TextInput = styled.input`
-  width: 100%;
-  padding: 0;
-  font-size: 1.8rem;
-  border-width: 0;
-
-  &:focus {
-    outline: none;
-  }
-
-  &::placeholder {
-    color: #cad4db;
-  }
-`
+import { Container, Label, LabelNote, ErrorMessage, Input } from '../styled'
+import { brandBackground } from '../../../utils/colors'
 
 TextField.propTypes = {
   format: PropTypes.func,
@@ -63,7 +48,7 @@ export function TextField(props) {
               {props.labelNote &&
                 !props.required && <LabelNote>{props.labelNote}</LabelNote>}
             </Label>
-            <TextInput
+            <Input
               {...input}
               id={id}
               placeholder={props.placeholder}
@@ -75,10 +60,11 @@ export function TextField(props) {
               props.hint && (
                 <div
                   style={{
-                    marginTop: '0.5em',
-                    padding: '0.5em',
+                    fontSize: '0.875rem',
+                    marginTop: '1rem',
+                    padding: '1rem',
                     borderRadius: 3,
-                    backgroundColor: '#f6fafb'
+                    backgroundColor: brandBackground
                   }}
                 >
                   {props.hint}

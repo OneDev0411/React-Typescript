@@ -5,8 +5,6 @@ import { addNotification as notify } from 'reapop'
 import PageHeader from '../../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
-import Frame from '../../../../../../views/components/Deals/EmbedFormEdit'
-
 import {
   getFormTemplates,
   saveFormTemplate
@@ -121,7 +119,6 @@ class EditTemplate extends React.Component {
             {isWorking && <i className="icon-save fa fa-spin fa-spinner" />}
 
             <ActionButton
-              style={{ padding: '0.75em' }}
               disabled={isWorking || !isFrameLoaded}
               onClick={this.requestSave}
             >
@@ -129,12 +126,6 @@ class EditTemplate extends React.Component {
             </ActionButton>
           </PageHeader.Menu>
         </PageHeader>
-
-        <Frame
-          formId={form.id}
-          frameRef={ref => (this.frame = ref)}
-          onReceiveMessage={this.onReceiveMessage}
-        />
       </div>
     )
   }
@@ -147,4 +138,7 @@ function mapStateToProps({ deals, user }, { params }) {
   }
 }
 
-export default connect(mapStateToProps, { notify })(EditTemplate)
+export default connect(
+  mapStateToProps,
+  { notify }
+)(EditTemplate)

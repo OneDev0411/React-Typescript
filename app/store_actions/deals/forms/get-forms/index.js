@@ -7,11 +7,14 @@ export function getForms() {
   return async dispatch => {
     try {
       const forms = await Deal.getForms()
+      const indexedForms = _.indexBy(forms, 'id')
 
       dispatch({
         type: actionTypes.GET_FORMS,
-        forms: _.indexBy(forms, 'id')
+        forms: indexedForms
       })
+
+      return indexedForms
     } catch (e) {
       throw e
     }

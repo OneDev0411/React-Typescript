@@ -5,9 +5,10 @@ import cn from 'classnames'
 import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import Tooltip from '../../../../../../views/components/tooltip/index'
-import ManualAddress from '../../create/manual-address'
+import ManualAddress from '../../components/address'
 import Deal from '../../../../../../models/Deal'
 import { updateContext } from '../../../../../../store_actions/deals'
+import LinkButton from 'components/Button/LinkButton'
 
 class ListingCard extends React.Component {
   state = {
@@ -25,31 +26,6 @@ class ListingCard extends React.Component {
     this.setState({
       showAddressModal: !this.state.showAddressModal
     })
-
-  onCreateAddress = async address => {
-    const { address_components } = address
-    const { deal, updateContext } = this.props
-
-    this.setState({
-      isSavingAddress: true,
-      showAddressModal: false
-    })
-
-    const context = {}
-
-    _.each(address_components, (value, name) => {
-      context[name] = {
-        value: address_components[name],
-        approved: true // none of address contexts, don't need admin approval
-      }
-    })
-
-    await updateContext(deal.id, context)
-
-    this.setState({
-      isSavingAddress: false
-    })
-  }
 
   render() {
     const { deal, roles } = this.props
@@ -71,21 +47,16 @@ class ListingCard extends React.Component {
         <div className="address-info">
           <Tooltip
             captionIsHTML
-            tooltipStyles={{
-              marginLeft: '-40px'
-            }}
-            overlayOptions={{
-              delayHide: 200
-            }}
+            isCustom={false}
             caption={
               deal.listing && (
-                <div className="deal-listing-card__warning-tooltip">
+                <React.Fragment>
                   <img src="/static/images/deals/lock.svg" alt="locked" />
-                  <span>
+                  <div>
                     Listing information can only be changed on MLS. Once
                     changed, the update will be reflected here.
-                  </span>
-                </div>
+                  </div>
+                </React.Fragment>
               )
             }
             placement="bottom"
@@ -112,8 +83,9 @@ class ListingCard extends React.Component {
           </Tooltip>
 
           {deal.listing && (
-            <Link
-              className="open-listing"
+            <LinkButton
+              appearance="link"
+              size="small"
               to={`/dashboard/mls/${deal.listing}`}
             >
               <svg
@@ -127,15 +99,14 @@ class ListingCard extends React.Component {
                 <path d="M14 16c1.103 0 2-.897 2-2v-4h-2v4H2V2h4V0H2C.897 0 0 .897 0 2v12c0 1.103.897 2 2 2h12z" />
                 <path d="M9 2h3.586L5.293 9.293l1.414 1.414L14 3.414V7h2V0H9z" />
               </svg>
-            </Link>
+            </LinkButton>
           )}
         </div>
 
         <ManualAddress
           show={showAddressModal}
           deal={deal}
-          onHide={this.toggleShowAddressModal}
-          onCreateAddress={this.onCreateAddress}
+          onClose={this.toggleShowAddressModal}
         />
       </div>
     )

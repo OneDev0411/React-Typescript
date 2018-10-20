@@ -14,6 +14,7 @@
 @import 'utils/utils.list';
 @import 'utils/utils.align';
 @import 'utils/utils.scrollbars';
+@import 'utils/utils.ie.input';
 
 @import 'components/typography';
 @import 'components/buttons';
@@ -43,6 +44,8 @@
 @import 'components/feed-modal';
 @import 'components/offline-banner';
 @import 'components/c-verify-phone-modal';
+@import 'components/radio-button';
+@import 'components/react-avatar';
 
 @import 'components/modules/alert';
 @import '../../node_modules/simplebar/dist/simplebar.css';

@@ -29,7 +29,7 @@ class RecipientGroup extends React.Component {
                 <UserAvatar
                   userId={user ? user.id : null}
                   size={30}
-                  color="#D4D4D4"
+                  color="#000000"
                   name={role.legal_full_name}
                   image={user ? user.profile_image_url : null}
                   showStateIndicator={false}

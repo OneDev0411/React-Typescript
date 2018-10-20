@@ -18,10 +18,10 @@ function TaskPage(props) {
       className="c-new-task--page"
       style={{
         minHeight: '100vh',
-        background: '#f0f4f7'
+        background: '#ffffff'
       }}
     >
-      <Header title={`${title} Task`} />
+      <Header title={`${title} Event`} />
       <Task
         task={task}
         taskId={id}

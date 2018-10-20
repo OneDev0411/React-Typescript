@@ -54,7 +54,7 @@ const Member = ({ member, roles, deleteMembers, addMembers }) => {
           name={member.display_name}
           image={member.profile_image_url}
           size={30}
-          color="#D4D4D4"
+          color="#000000"
         />
       </div>
     </OverlayTrigger>

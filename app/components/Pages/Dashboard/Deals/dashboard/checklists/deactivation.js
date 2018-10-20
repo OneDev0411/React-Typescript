@@ -16,9 +16,7 @@ class TaskDeactivation extends React.Component {
     // stop collapsing
     e.stopPropagation()
 
-    const {
-      deal, isBackoffice, confirmation, checklist
-    } = this.props
+    const { deal, isBackoffice, confirmation, checklist } = this.props
     const { saving } = this.state
 
     if (saving === true) {
@@ -106,7 +104,7 @@ class TaskDeactivation extends React.Component {
   render() {
     const { hasPermission } = this.props
     const { saving } = this.state
-    const color = '#6b7f93'
+    const color = '#000'
 
     if (!hasPermission) {
       return false
@@ -126,4 +124,7 @@ class TaskDeactivation extends React.Component {
   }
 }
 
-export default connect(null, { updateChecklist, notify, confirmation })(TaskDeactivation)
+export default connect(
+  null,
+  { updateChecklist, notify, confirmation }
+)(TaskDeactivation)

@@ -7,8 +7,9 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Field, reduxForm } from 'redux-form'
 
-import { getBrandInfo, renderField } from '../SignIn'
-import Brand from '../../../../controllers/Brand'
+import { getBrandInfo } from '../SignIn'
+import Button from '../../../../views/components/Button/ActionButton'
+import SimpleField from '../../../Pages/Dashboard/Account/Profile/components/SimpleField'
 
 import editUser from '../../../../store_actions/user/edit'
 import submitSigninForm from '../../../../store_actions/auth/signin'
@@ -49,7 +50,7 @@ const RegisterForm = ({
   handleSubmit,
   isSubmitting,
   onSubmitHandler,
-  paramsFromURI: { email, phone_number }
+  paramsFromURI: { phone_number }
 }) => {
   const isDisabled = isSubmitting || invalid || pristine
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
@@ -70,7 +71,7 @@ const RegisterForm = ({
               />
             </Link>
           )}
-          <h1 className="c-auth__title din">{siteTitle}</h1>
+          <h1 className="c-auth__title">{siteTitle}</h1>
           <p className="c-auth__subtitle">Thanks! You're almost there...</p>
           <div>
             <small>
@@ -85,32 +86,33 @@ const RegisterForm = ({
               type="text"
               label="First Name"
               tabIndex={0}
-              component={renderField}
+              component={SimpleField}
+              autoComplete="off"
             />
             <Field
               name="last_name"
               type="text"
               label="Last Name"
-              component={renderField}
-              autoComplete="new-password"
+              component={SimpleField}
+              autoComplete="off"
             />
             {phone_number && (
               <Field
                 name="email"
                 type="email"
                 label="Email"
-                component={renderField}
-                autoComplete="new-password"
+                component={SimpleField}
+                autoComplete="off"
               />
             )}
             <Field
               name="password"
               type="password"
               label="Password"
-              component={renderField}
-              autoComplete="new-password"
+              component={SimpleField}
+              autoComplete="off"
             />
-            <div className="clearfix" style={{ marginTop: '-1rem' }}>
+            <div className="clearfix" style={{ margin: '0 0 2rem' }}>
               <Field
                 checked
                 id="Client"
@@ -130,17 +132,14 @@ const RegisterForm = ({
                 An unexpected error occurred. Please try again.
               </div>
             )}
-            <button
+            <Button
               type="submit"
-              className="c-auth__submit-btn"
+              isBlock
               disabled={isDisabled}
-              style={{
-                background: brandColor,
-                opacity: isDisabled ? 0.7 : 1
-              }}
+              style={{ marginBottom: '2em' }}
             >
               {isSubmitting ? 'Submitting...' : 'Continue'}
-            </button>
+            </Button>
           </form>
         </main>
       </article>

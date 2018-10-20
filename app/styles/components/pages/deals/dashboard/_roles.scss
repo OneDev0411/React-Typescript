@@ -18,7 +18,7 @@
     min-height: 200px;
     max-height: 400px;
     position: relative;
-    
+
     input.search {
       width: 100%;
       height: 40px;
@@ -27,8 +27,25 @@
       margin-bottom: 10px;
       padding: 0 10px;
 
+      caret-color: #003bdf;
+      background-color: #f9f9f9;
+
+      &:hover {
+        background-color: #f2f2f2;
+
+        ::placeholder {
+          color: #000000;
+        }
+      }
+
       &:focus {
-        outline: none;
+        outline: 0;
+        background-color: #ffffff;
+        border-color: #003bdf;
+
+        ::placeholder {
+          color: #000000;
+        }
       }
     }
 
@@ -84,7 +101,11 @@
     border-radius: 3px;
 
     &:hover {
-      background: #f0f4f7;
+      background: #f2f2f2;
+
+      .title {
+        color: #003bdf;
+      }
     }
 
     .role-avatar {
@@ -106,7 +127,6 @@
     }
 
     .name {
-      color: #263445;
       font-weight: 500;
       width: calc(100% - 55px - #{$col-padding});
 
@@ -124,25 +144,11 @@
       }
     }
 
-    .cta {
-      width: 15px;
-      position: absolute;
-      right: 0.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-
-      i {
-        color: #62778c;
-        cursor: pointer;
-        transition: 0.1s ease-in all;
-      }
-
-      i.fa-delete {
-        opacity: 0;
-      }
+    .delete-button {
+      opacity: 0;
     }
 
-    &:hover .cta > i {
+    &:hover > .delete-button {
       opacity: 1;
     }
   }
@@ -172,6 +178,7 @@
 
         &.disabled {
           cursor: not-allowed;
+
           a {
             font-weight: normal;
             color: #8da2b5;
@@ -220,7 +227,6 @@
 
   .deal-add-role-title--drpmenu,
   .deal-add-role--drpmenu {
-    @include scrollbar(6px);
     border: none;
     margin-left: 4px !important;
     margin-top: -4px !important;

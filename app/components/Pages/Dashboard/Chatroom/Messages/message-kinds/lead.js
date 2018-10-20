@@ -25,7 +25,7 @@ export default props => {
             name={author.display_name}
             image={author.profile_image_url}
             size={28}
-            color="#D4D4D4"
+            color="#000000"
           />
         </div>
 

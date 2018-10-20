@@ -27,7 +27,6 @@ export function ErrorField(props) {
               <div
                 style={{
                   marginBottom: '1em',
-                  lineHeight: 1,
                   color: 'red'
                 }}
               >

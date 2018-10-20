@@ -1,7 +1,42 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import Flex from 'styled-flex-component'
+
 import { setUploadAttributes } from '../../../../../../../store_actions/deals'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import { primary, grey } from '../../../../../../../views/utils/colors'
+import styled from 'styled-components'
+
+const Container = Flex.extend`
+  height: 100%;
+  padding-left: 0.5rem;
+  background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
+  border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
+  :hover {
+    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A000)};
+  }
+`
+
+const Input = styled.input`
+  width: 79%;
+  height: 30px;
+  padding: 0 5px;
+  font-size: 14px;
+  caret-color: ${primary};
+  background-color: transparent;
+  color: ${grey.A900};
+  border: none;
+
+  :focus {
+    outline: none;
+    color: #000000;
+  }
+
+  ${Container}:hover & {
+    color: #000000;
+  }
+`
 
 class FileName extends React.Component {
   constructor(props) {
@@ -9,13 +44,13 @@ class FileName extends React.Component {
 
     this.inputs = []
     this.state = {
-      isActive: false
+      isFocused: false
     }
   }
 
-  setActiveState() {
+  setActiveState = () => {
     this.setState({
-      isActive: true
+      isFocused: true
     })
   }
 
@@ -25,7 +60,7 @@ class FileName extends React.Component {
     })
 
     this.setState({
-      isActive: false
+      isFocused: false
     })
   }
 
@@ -39,39 +74,48 @@ class FileName extends React.Component {
 
   render() {
     const { file } = this.props
-    const { isActive } = this.state
+    const { isFocused } = this.state
 
     return (
-      <div>
+      <Container alignCenter isFocused={isFocused}>
         <img src="/static/images/deals/document.png" alt="" />
 
-        <input
-          readOnly={!isActive}
+        <Input
+          readOnly={!isFocused}
           defaultValue={file.properties.fileTitle || file.fileObject.name}
           ref={ref => (this.inputs[file.id] = ref)}
           onBlur={() => this.save(file)}
           onKeyPress={e => this.onKeyPress(e, file)}
           onClick={() => this.setActiveState()}
-          className={cn('input-edit-name', { disabled: !isActive })}
+          // className={cn('input-edit-name', { disabled: !isFocused })}
         />
 
-        {isActive ? (
-          <button className="c-button--shadow save" onClick={() => this.save(file)}>
+        {isFocused ? (
+          <ActionButton
+            size="small"
+            // className="c-button--shadow save"
+            onClick={() => this.save(file)}
+          >
             Save
-          </button>
+          </ActionButton>
         ) : (
-          <button
-            className={cn('c-button--shadow edit-icon', {
-              canEditName: isActive
+          <ActionButton
+            size="small"
+            appearance="link"
+            className={cn({
+              canEditName: isFocused
             })}
             onClick={() => this.setActiveState()}
           >
             EDIT
-          </button>
+          </ActionButton>
         )}
-      </div>
+      </Container>
     )
   }
 }
 
-export default connect(null, { setUploadAttributes })(FileName)
+export default connect(
+  null,
+  { setUploadAttributes }
+)(FileName)

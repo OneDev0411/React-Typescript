@@ -1,6 +1,16 @@
 import React, { Fragment } from 'react'
+import styled from 'styled-components'
+
 import TagsOverlay from '../../components/TagsOverlay'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import TextIconButton from '../../../../../../views/components/Button/TextIconButton'
+import TagIcon from '../../../../../../views/components/SvgIcons/Tag/TagIcon'
+
+const Tag = styled(TagIcon)`
+  margin-right: 0.5rem;
+  width: 16px;
+  height: 16px;
+`
 
 export default class TagContacts extends React.Component {
   state = {
@@ -17,10 +27,11 @@ export default class TagContacts extends React.Component {
     return (
       <Fragment>
         <ActionButton
-          inverse
+          appearance="outline"
+          size="small"
           onClick={this.openOverLay}
-          style={{ padding: '0.70em 1.5em' }}
         >
+          <Tag />
           Tag
         </ActionButton>
 

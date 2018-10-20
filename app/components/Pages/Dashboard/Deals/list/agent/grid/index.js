@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Container } from './styled'
 
 import Deal from '../../../../../../../models/Deal'
 
@@ -9,7 +8,6 @@ import EmptyState from './empty-state'
 import LoadingState from '../../components/loading-state'
 
 import Address from '../../components/table-columns/address'
-import Status, { statusSortMethod } from '../../components/table-columns/status'
 import DealSide from '../../components/table-columns/side'
 import CriticalDate, {
   getNextDateValue
@@ -19,8 +17,7 @@ import Notification from '../../components/table-columns/notification-badge'
 import { getPrimaryAgent } from '../../../utils/roles'
 import { Filters } from '../filters'
 
-import getGridTrProps from '../../helpers/get-tr-props'
-import getGridTdProps from '../../helpers/get-td-props'
+import AgentAvatars from '../../components/table-columns/AgentAvatars'
 
 class Grid extends React.Component {
   get Columns() {
@@ -30,26 +27,15 @@ class Grid extends React.Component {
       {
         id: 'address',
         header: 'Address',
-        width: '23%',
+        width: '30%',
+        verticalAlign: 'center',
         accessor: deal => Deal.get.address(deal, roles),
         render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
       },
       {
-        id: 'status',
-        header: 'Status',
-        width: '15%',
-        accessor: deal => Deal.get.status(deal),
-        sortMethod: statusSortMethod,
-        render: ({ rowData: deal }) => <Status deal={deal} />
-      },
-      {
-        id: 'checklist-type',
-        header: 'Checklist Type',
-        accessor: 'property_type'
-      },
-      {
         id: 'price',
-        header: 'Price $',
+        header: '$ Price',
+        sortType: 'number',
         accessor: deal => this.getPriceValue(deal),
         render: ({ rowData: deal }) =>
           Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0)
@@ -81,13 +67,17 @@ class Grid extends React.Component {
       },
       {
         id: 'agent-name',
-        header: 'Agent Name',
-        accessor: deal => getPrimaryAgent(deal, roles)
+        header: 'Agent',
+        width: '100px',
+        verticalAlign: 'center',
+        accessor: deal => <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
       },
       {
         id: 'notification',
         header: '',
-        width: '40px',
+        width: '50px',
+        verticalAlign: 'center',
+
         render: ({ rowData: deal }) => (
           <Notification
             count={deal.new_notifications ? deal.new_notifications.length : 0}
@@ -127,20 +117,16 @@ class Grid extends React.Component {
     const data = this.Data
 
     return (
-      <Container>
-        <Table
-          plugins={{
-            sortable: {}
-          }}
-          isFetching={isFetchingDeals}
-          columns={columns}
-          data={data}
-          getTrProps={getGridTrProps}
-          getTdProps={getGridTdProps}
-          EmptyState={EmptyState}
-          LoadingState={LoadingState}
-        />
-      </Container>
+      <Table
+        plugins={{
+          sortable: {}
+        }}
+        isFetching={isFetchingDeals}
+        columns={columns}
+        data={data}
+        EmptyState={EmptyState}
+        LoadingState={LoadingState}
+      />
     )
   }
 }

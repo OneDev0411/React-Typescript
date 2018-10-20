@@ -1,11 +1,11 @@
 
 .c-group-radios {
-  margin-bottom: 3rem;
-  border: solid 1px #e2e6ea;
+  margin-bottom: 1.5rem;
+  border: solid 1px $gray;
 }
 
 .c-group-radios__item-label {
-  height: 4.8rem;
+  height: 48px;
   display: inline-block;
   margin: 0;
   padding: 0;
@@ -25,11 +25,10 @@
 
 .c-group-radios__item-label__text {
   line-height: 48px;
-  font-size: 1.7rem;
+  font-size: 1rem;
   font-weight: normal;
-  color: #9b9b9b;
 
   .c-group-radios__item-input:checked + & {
-    color: #2196f3;
+    color: $brand-primary;
   }
 }

@@ -1,37 +1,47 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import AddAssociation from '../AddAssociation'
-import SelectContactModal from '../SelectContactModal'
+import { AddAssociation } from '../AddAssociation'
+import { SearchContactDrawer } from '../SearchContactDrawer'
+import Tooltip from '../tooltip'
 
 import { normalizeContact } from '../../utils/association-normalizers'
 
-const title = 'Add a contact'
+export class AddContactAssociation extends React.Component {
+  static propTypes = {
+    title: PropTypes.string,
+    handleAdd: PropTypes.func.isRequired,
+    buttonRenderer: PropTypes.func.isRequired
+  }
 
-function AddContactAssociation({ handleAdd }) {
-  return (
-    <AddAssociation
-      title={title}
-      render={({ isOpen, handleClose }) => {
-        const add = contact => {
-          handleAdd(normalizeContact(contact), handleClose)
-        }
+  static defaultProps = {
+    title: 'Attach Contact'
+  }
 
-        return (
-          <SelectContactModal
-            title={title}
-            isOpen={isOpen}
-            handleSelectedItem={add}
-            handleOnClose={handleClose}
-          />
-        )
-      }}
-    />
-  )
+  add = (contact, callback) =>
+    this.props.handleAdd(normalizeContact(contact), callback)
+
+  render() {
+    const { title } = this.props
+
+    return (
+      <AddAssociation
+        render={({ isActive, handleClose, handleOpen }) => (
+          <div>
+            <Tooltip id={`tooltip_${title}`} caption={title}>
+              {this.props.buttonRenderer(handleOpen)}
+            </Tooltip>
+            {isActive && (
+              <SearchContactDrawer
+                isOpen
+                title={title}
+                onClose={handleClose}
+                onSelect={contact => this.add(contact, handleClose)}
+              />
+            )}
+          </div>
+        )}
+      />
+    )
+  }
 }
-
-AddContactAssociation.propTypes = {
-  handleAdd: PropTypes.func.isRequired
-}
-
-export default AddContactAssociation

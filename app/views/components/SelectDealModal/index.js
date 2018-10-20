@@ -8,8 +8,7 @@ import BareModal from '../BareModal'
 import Header from './components/Header'
 import Body from './components/Body'
 import Footer from './components/Footer'
-import AddManuallyButton from './components/AddManuallyButton'
-import CancelButton from '../Button/CancelButton'
+import Button from '../Button/ActionButton'
 
 const propTypes = {
   title: PropTypes.string,
@@ -36,11 +35,7 @@ class SelectDealModal extends React.Component {
         contentLabel={this.props.title}
         onRequestClose={this.props.handleOnClose}
       >
-        <Header title={this.props.title}>
-          {handleAddManually && (
-            <AddManuallyButton onClick={handleAddManually} />
-          )}
-        </Header>
+        <Header title={this.props.title} />
         <Body
           user={this.props.user}
           deals={this.props.deals}
@@ -49,7 +44,13 @@ class SelectDealModal extends React.Component {
           defaultSearchFilter={this.props.defaultSearchFilter}
         />
         <Footer>
-          <CancelButton onClick={this.props.handleOnClose}>Cancel</CancelButton>
+          <Button
+            size="small"
+            appearance="outline"
+            onClick={this.props.handleOnClose}
+          >
+            Cancel
+          </Button>
         </Footer>
       </BareModal>
     )

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 import cn from 'classnames'
 import Compose from '../Shared/compose-wrapper'
 import UserAvatar from '../../../../Partials/UserAvatar'
@@ -11,6 +11,7 @@ import {
 } from '../../../../../store_actions/chatroom'
 import LastSeen from './components/last-seen'
 import Chatroom from '../Util/chatroom'
+import Tooltip from '../../../../../views/components/tooltip'
 
 const ManageMembers = ({
   addRecipients,
@@ -24,15 +25,12 @@ const ManageMembers = ({
   const canAddMember = room.room_type !== 'Direct'
 
   const Button = ({ clickHandler }) => (
-    <OverlayTrigger
-      placement={isFullScreen ? 'bottom' : 'top'}
-      overlay={<Tooltip id="popover-leave">Members</Tooltip>}
-    >
+    <Tooltip placement={isFullScreen ? 'bottom' : 'top'} caption="Members">
       <span className="icon members" onClick={() => clickHandler()}>
         <MembersIcon width={iconSize} height={iconSize} />
         <span className="bdg">{room.users && room.users.length}</span>
       </span>
-    </OverlayTrigger>
+    </Tooltip>
   )
 
   const RoomMembers = () => (
@@ -53,6 +51,7 @@ const ManageMembers = ({
                   name={roomMember.display_name}
                   image={roomMember.profile_image_url}
                   size={30}
+                  color="#000000"
                 />
               </Col>
               <Col sm={10} md={10} className="vcenter" style={{ padding: 0 }}>

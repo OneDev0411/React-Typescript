@@ -45,22 +45,24 @@ export function TextFieldArray(props) {
               style={{
                 position: 'absolute',
                 top: '0.5em',
-                right: '0.5em'
+                right: '0em'
               }}
             >
               {index + 1 === fields.length ? (
                 <IconButton
-                  type="button"
-                  color="#2196f3"
+                  iconSize="large"
+                  isFit
                   onClick={() => fields.push('')}
+                  type="button"
                 >
                   <AddIcon />
                 </IconButton>
               ) : (
                 <IconButton
-                  type="button"
-                  color="#2196f3"
+                  iconSize="large"
+                  isFit
                   onClick={() => fields.remove(index)}
+                  type="button"
                 >
                   <RemoveIcon />
                 </IconButton>

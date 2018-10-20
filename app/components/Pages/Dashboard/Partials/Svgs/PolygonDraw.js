@@ -1,7 +1,7 @@
 // Draw.js
 import React from 'react'
 
-export default ({ color = '#8DA2B5', width = 24, height = 24 }) => (
+export default ({ color = '#000' }) => (
   <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
     <g fill={color} fillRule="evenodd">
       <path d="M12.554 1L23.253 14.21l-1.555 1.259L11 2.258z" />

@@ -4,13 +4,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1000;
+  z-index: 1002;
   background: rgba(4, 4, 15, 0.4);
 
 
   &.c-full-screen-modal--page {
     @media screen and (min-width: 48em) {
-      left: 11rem;
+      left: 80px;
     }
   }
 }
@@ -27,8 +27,8 @@
   background: #fff;
 
   @media screen and (min-width: 48em) {
-    width: 60rem;
-    height: 410px;
+    width: 600px;
+    height: 450px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -39,6 +39,7 @@
     }
   }
 
+  &.c-tour-sheets,
   &.c-full-screen-modal {
     @media screen and (min-width: 48em) {
       width: 100%;

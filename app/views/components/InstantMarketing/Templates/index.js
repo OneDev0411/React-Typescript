@@ -2,7 +2,13 @@ import React from 'react'
 
 import { getTemplates } from '../../../../models/instant-marketing/get-templates'
 
-import { Container, TemplateItem, TemplateImageContainer, TemplateName, TemplateImage } from './styled'
+import {
+  Container,
+  TemplateItem,
+  TemplateImageContainer,
+  TemplateName,
+  TemplateImage
+} from './styled'
 import Loader from '../../../../components/Partials/Loading'
 
 export default class Templates extends React.Component {
@@ -13,12 +19,12 @@ export default class Templates extends React.Component {
   }
 
   componentDidMount() {
-    this.getTemplatesList()
+    this.getTemplatesList(this.props.templateTypes)
   }
 
-  getTemplatesList = async () => {
+  getTemplatesList = async types => {
     try {
-      const templates = await getTemplates()
+      const templates = await getTemplates(types)
 
       this.setState({
         templates,
@@ -57,15 +63,10 @@ export default class Templates extends React.Component {
             isSelected={this.state.selectedTemplate === template.id}
           >
             <TemplateImageContainer>
-              <TemplateImage
-                src={template.thumbnail}
-                title={template.name}
-              />
+              <TemplateImage src={template.thumbnail} title={template.name} />
             </TemplateImageContainer>
 
-            <TemplateName>
-              { template.name }
-            </TemplateName>
+            <TemplateName>{template.name}</TemplateName>
           </TemplateItem>
         ))}
       </Container>

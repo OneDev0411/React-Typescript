@@ -7,16 +7,12 @@ import Deal from '../../../../../../../models/Deal'
 import ToolTip from '../../../../../../../views/components/tooltip'
 
 import {
-  Container,
   ListTitle,
   ListItem
 } from '../../../../../../../views/components/Grid/SavedSegments/List/styled'
 
-import {
-  ListItemName,
-  ListIconContainer,
-  BadgeCounter
-} from '../../styles/filters/styled'
+import { BadgeCounter } from '../../styles/filters/styled'
+import { ListItemName } from '../../../../../../../views/components/Grid/SavedSegments/List/styled'
 
 const FilterNames = {
   Active: ['Active', 'Lease'],
@@ -122,40 +118,34 @@ class AgentFilters extends React.Component {
     const activeFilter = this.props.activeFilter || 'All'
 
     return (
-      <Container>
+      <React.Fragment>
         <ListTitle>Lists</ListTitle>
         {this.props.searchCriteria.length > 0 ? (
           <ListItem isSelected>
             <ListItemName>Search Results</ListItemName>
 
-            <ListIconContainer>
-              <BadgeCounter>{this.getBadgeCounter()}</BadgeCounter>
-            </ListIconContainer>
+            <BadgeCounter>{this.getBadgeCounter()}</BadgeCounter>
           </ListItem>
         ) : (
           _.map(Filters, (fn, filterName) => (
-            <ListItem
+            <ToolTip
               key={`FILTER_${filterName}`}
-              isSelected={filterName === activeFilter}
-              onClick={() => this.setFilter(filterName)}
+              multiline
+              caption={this.getTooltipCaption(filterName)}
+              placement="right"
             >
-              <ListItemName>
-                <ToolTip
-                  multiline
-                  caption={this.getTooltipCaption(filterName)}
-                  placement="right"
-                >
-                  <span>{filterName}</span>
-                </ToolTip>
-              </ListItemName>
+              <ListItem
+                isSelected={filterName === activeFilter}
+                onClick={() => this.setFilter(filterName)}
+              >
+                <ListItemName>{filterName}</ListItemName>
 
-              <ListIconContainer>
                 <BadgeCounter>{this.getBadgeCounter(filterName)}</BadgeCounter>
-              </ListIconContainer>
-            </ListItem>
+              </ListItem>
+            </ToolTip>
           ))
         )}
-      </Container>
+      </React.Fragment>
     )
   }
 }

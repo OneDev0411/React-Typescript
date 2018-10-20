@@ -10,7 +10,7 @@ export function TextField(props) {
     <div style={{ width: 'calc(100% - 40px)' }}>
       <Input
         {...props.input}
-        id={props.id || `new-contact__${input.name}`}
+        id={props.id || `new-contact__${props.input.name}`}
         placeholder={props.placeholder}
         readOnly={props.readOnly}
         type="text"

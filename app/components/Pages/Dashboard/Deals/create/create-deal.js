@@ -2,17 +2,13 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { browserHistory } from 'react-router'
-
 import _ from 'underscore'
-import cn from 'classnames'
 import moment from 'moment'
 
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 
-import Button from '../../../../../views/components/Button/ActionButton'
-
-import PageHeader from './page-header'
+import { FullPageHeader } from '../../../../../views/components/FullPageHeader'
 import DealType from './deal-type'
 import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
@@ -35,6 +31,7 @@ import {
 } from '../../../../../store_actions/deals'
 import OpenDeal from '../utils/open-deal'
 import { isBackOffice } from '../../../../../utils/user-teams'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 class CreateDeal extends React.Component {
   state = {
@@ -42,6 +39,7 @@ class CreateDeal extends React.Component {
     isDraft: -1,
     dealSide: '',
     dealPropertyType: '',
+    defaultDealAddress: null,
     dealAddress: null,
     dealStatus: '',
     enderType: -1,
@@ -72,6 +70,8 @@ class CreateDeal extends React.Component {
         ? Deal.get.field(deal, 'ender_type')
         : -1
 
+    const dealAddress = this.generateAddressFromDeal(deal)
+
     this.setState({
       isDraft: false,
       dealSide: deal.deal_type,
@@ -79,7 +79,8 @@ class CreateDeal extends React.Component {
       enderType,
       dealStatus: Deal.get.field(deal, 'listing_status') || '',
       contexts: this.generateContextsFromDeal(deal),
-      dealAddress: this.generateAddressFromDeal(deal),
+      defaultDealAddress: dealAddress,
+      dealAddress,
       ...this.generateRolesFromDeal(deal)
     })
   }
@@ -381,12 +382,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? 'Don\'t want to go live?' : 'Cancel deal creation?',
+      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: "No, don't cancel",
+      cancelLabel: 'No, don\'t cancel',
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -812,13 +813,12 @@ class CreateDeal extends React.Component {
 
     return (
       <div className="deal-create">
-        <PageHeader
+        <FullPageHeader
           title={
             deal ? 'Update deal information to Go Live' : 'Create New Deal'
           }
-          handleOnClose={this.onClosePage}
+          handleClose={this.onClosePage}
         />
-
         <div className="form">
           {!deal && (
             <div className="swoosh">Swoosh! Another one in the bag.</div>
@@ -948,6 +948,7 @@ class CreateDeal extends React.Component {
                   isRequired={requiredFields.includes('address')}
                   hasError={this.hasError('address')}
                   dealAddress={dealAddress}
+                  defaultDealAddress={this.state.defaultDealAddress}
                   dealSide={dealSide}
                   onCreateAddress={(component, type) =>
                     this.onCreateAddress(component, type)
@@ -980,27 +981,18 @@ class CreateDeal extends React.Component {
               />
             )}
 
-          <Button
-            className={cn('create-deal-button', {
-              disabled: !canSaveDeal
-            })}
+          <ActionButton
             style={{ marginRight: '10px' }}
             onClick={this.updateOrCreateDeal}
             disabled={!canSaveDeal}
           >
             {this.SubmitLabel}
-          </Button>
+          </ActionButton>
 
           {deal && (
-            <Button
-              className={cn('create-deal-button', {
-                disabled: !canSaveDeal
-              })}
-              onClick={this.goLive}
-              disabled={!canSaveDeal}
-            >
-              {saving ? 'Saving ...' : 'Make Visible to Admin'}
-            </Button>
+            <ActionButton onClick={this.goLive} disabled={!canSaveDeal}>
+              {saving ? 'Saving ...' : 'Make visible to admin'}
+            </ActionButton>
           )}
 
           <div className="error-summary">

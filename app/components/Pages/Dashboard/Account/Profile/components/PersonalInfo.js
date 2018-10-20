@@ -10,11 +10,10 @@ import SimpleField from './SimpleField'
 import PhoneNumberField from './PhoneNumberField'
 import VerifyMobileNumber from './VerifyPhoneNumber'
 
-import { getBrandInfo } from '../../../../Auth/SignIn'
 import editUser from '../../../../../../store_actions/user/edit'
+import Button from '../../../../../../views/components/Button/ActionButton'
 
 let PersonalInfoForm = ({
-  brand,
   invalid,
   pristine,
   submitError,
@@ -23,8 +22,7 @@ let PersonalInfoForm = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
-  const { brandColor } = getBrandInfo(brand)
-  const isDisabled = isSubmitting || invalid || pristine
+  const isDisabled = isSubmitting || (invalid && !pristine)
 
   return (
     <FormCard title="Personal Info">
@@ -70,17 +68,11 @@ let PersonalInfoForm = ({
             </p>
           </div>
         )}
-        <button
-          type="submit"
-          className="c-auth__submit-btn"
-          disabled={isDisabled}
-          style={{
-            background: brandColor,
-            opacity: isDisabled ? 0.7 : 1
-          }}
-        >
-          {isSubmitting ? 'Updating...' : 'Update'}
-        </button>
+        <div style={{ textAlign: 'right' }}>
+          <Button type="submit" disabled={isDisabled}>
+            {isSubmitting ? 'Updating...' : 'Update'}
+          </Button>
+        </div>
       </form>
     </FormCard>
   )

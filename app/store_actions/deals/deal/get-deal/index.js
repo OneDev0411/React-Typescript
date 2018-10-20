@@ -18,6 +18,7 @@ export function getDeal(deal_id) {
           status: 'error'
         })
       )
+      throw e
     }
   }
 }

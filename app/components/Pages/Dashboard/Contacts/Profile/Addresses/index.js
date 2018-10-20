@@ -33,8 +33,8 @@ class Addresses extends React.Component {
         <dt
           key={`address_${address.index}_label`}
           style={{
-            color: '#758a9e',
-            fontWeight: '500',
+            color: '#7f7f7f',
+            fontWeight: '300',
             marginBottom: '0.25em',
             display: 'flex',
             alignItems: 'center'
@@ -57,7 +57,6 @@ class Addresses extends React.Component {
         <dd
           key={`address_${address.index}_value`}
           style={{
-            color: '#17283a',
             marginBottom: '1em'
           }}
         >
@@ -88,12 +87,14 @@ class Addresses extends React.Component {
         ) : (
           <div
             style={{
-              textAlign: 'center',
-              marginTop: hasAddresses ? 0 : '0.5em',
-              marginBottom: '1.5em'
+              marginTop: hasAddresses ? 0 : '0.5em'
             }}
           >
-            <ActionButton inverse onClick={this.openEditDrawer}>
+            <ActionButton
+              appearance="outline"
+              onClick={this.openEditDrawer}
+              size="small"
+            >
               Add Address
             </ActionButton>
           </div>

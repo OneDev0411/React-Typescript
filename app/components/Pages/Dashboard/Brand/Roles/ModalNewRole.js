@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Button } from 'react-bootstrap'
-import cn from 'classnames'
+import { CheckBoxButtonWithoutState } from '../../../../../views/components/Button/CheckboxButton/CheckboxWithoutState'
 
 class ModalNewRole extends React.Component {
   constructor(props) {
@@ -73,29 +73,35 @@ class ModalNewRole extends React.Component {
                 />
               </div>
               <div className="title">Roles:</div>
-              {aclTypes.map(permission => {
-                let active = acl && acl.indexOf(permission) > -1
+              <div style={{ display: 'flex' }}>
+                {aclTypes.map(permission => {
+                  let active = acl && acl.indexOf(permission) > -1
 
-                return (
-                  <span key={permission}>
-                    <Button
-                      className={cn('checkBoxIcon', { active })}
-                      onClick={() => {
-                        if (active) {
-                          acl.splice(acl.indexOf(permission), 1)
-                        } else {
-                          acl.push(permission)
-                        }
-
-                        this.setState({ acl })
-                      }}
+                  return (
+                    <div
+                      key={permission}
+                      style={{ display: 'flex', alignItems: 'center' }}
                     >
-                      <i className="fa fa-check" aria-hidden="true" />
-                    </Button>
-                    <span className="checkBoxText">{permission}</span>
-                  </span>
-                )
-              })}
+                      <CheckBoxButtonWithoutState
+                        square
+                        isSelected={active}
+                        onClick={() => {
+                          if (active) {
+                            acl.splice(acl.indexOf(permission), 1)
+                          } else {
+                            acl.push(permission)
+                          }
+
+                          this.setState({ acl })
+                        }}
+                        style={{ marginRight: '0.5rem' }}
+                      />
+
+                      <span className="checkBoxText">{permission}</span>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </Modal.Body>
           <Modal.Footer>

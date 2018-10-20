@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'underscore'
 import CrudRole from './crud-role'
+import { H2 } from 'components/Typography/headings'
 
 export default ({
   referrals,
@@ -17,9 +18,9 @@ export default ({
 
   return (
     <div className="form-section deal-people deal-referral">
-      <div className="hero">
+      <H2 className="hero">
         Did someone refer the {dealSide === 'Buying' ? 'buyer' : 'seller'}?
-      </div>
+      </H2>
 
       <div className="people-container">
         {_.map(referrals, (referral, id) => (

@@ -45,7 +45,7 @@ export default class MobileSplashViewer extends Component {
         </div>
         <div style={S('text-center color-fff absolute w-100p b-30 z-11')}>
           Powered by{' '}
-          <span className="din" style={S('fw-600')}>
+          <span style={S('fw-600')}>
             Rechat<sup>TM</sup>
           </span>
         </div>

@@ -31,9 +31,16 @@ const renderField = ({
     <label htmlFor={input.name} className="c-min-max-inputs__label">
       {label}
     </label>
-    <input {...input} type={type} className={className} placeholder={placeholder} />
+    <input
+      {...input}
+      type={type}
+      className={className}
+      placeholder={placeholder}
+    />
     {touched &&
-      (error && <div className="c-min-max-inputs__alert has-error">{error}</div>)}
+      (error && (
+        <div className="c-min-max-inputs__alert has-error">{error}</div>
+      ))}
     {touched &&
       (warning && (
         <div className="c-min-max-inputs__alert has-warning">{warning}</div>
@@ -44,7 +51,6 @@ const renderField = ({
 const MinMaxInputs = ({
   name,
   label,
-  humanNumber,
   onChangeMin,
   validateMin = [],
   validateMax = [],
@@ -72,7 +78,7 @@ const MinMaxInputs = ({
           format={formatHandler}
           placeholder={placeholder}
           normalize={normalizeHandler}
-          onChange={(e, value, nextValue) => onChangeMin(value)}
+          onChange={(e, value) => onChangeMin(value)}
           className="c-min-max-inputs__field"
         />
         <Field
@@ -102,8 +108,8 @@ export default compose(
     validateMinValue: ({ minimumValue, humanNumber }) => value =>
       value && minimumValue && turnToNumber(value) < minimumValue
         ? `Must be minimum ${
-          humanNumber ? minimumValue.toLocaleString() : minimumValue
-        }`
+            humanNumber ? minimumValue.toLocaleString() : minimumValue
+          }`
         : undefined
   })
 )(MinMaxInputs)

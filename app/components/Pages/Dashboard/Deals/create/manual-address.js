@@ -8,7 +8,6 @@ import { TextInput } from '../../../../../views/components/Forms/TextInput'
 import { SelectInput } from '../../../../../views/components/Forms/SelectInput'
 
 import ActionButton from '../../../../../views/components/Button/ActionButton'
-import CancelButton from '../../../../../views/components/Button/CancelButton'
 
 import {
   stateToAbbreviated,
@@ -24,7 +23,7 @@ export default class ManualAddress extends React.Component {
   /**
    *
    */
-  onClose = () => this.props.onHide()
+  onClose = () => this.props.onClose()
 
   /**
    *
@@ -225,7 +224,7 @@ export default class ManualAddress extends React.Component {
             <Fragment>
               <Modal.Body
                 className="u-scrollbar--thinner"
-                style={{ padding: 0 }}
+                style={{ padding: '0 2%' }}
               >
                 <Field
                   name="street_dir_prefix"
@@ -300,15 +299,16 @@ export default class ManualAddress extends React.Component {
               </Modal.Body>
 
               <Modal.Footer>
-                <CancelButton
+                <ActionButton
+                  appearance="outline"
                   disabled={saving}
                   onClick={this.onClose}
                   style={{
-                    marginRight: '10px'
+                    marginRight: '1em'
                   }}
                 >
                   Cancel
-                </CancelButton>
+                </ActionButton>
 
                 <ActionButton
                   disabled={saving}

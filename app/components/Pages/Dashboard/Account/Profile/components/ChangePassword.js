@@ -7,11 +7,10 @@ import { Field, reduxForm } from 'redux-form'
 
 import FormCard from './FormCard'
 import SimpleField from './SimpleField'
-import { getBrandInfo } from '../../../../Auth/SignIn'
 import changePassword from '../../../../../../models/user/change-password'
+import Button from '../../../../../../views/components/Button/ActionButton'
 
 const ChangePasswordForm = ({
-  brand,
   invalid,
   pristine,
   submitError,
@@ -21,8 +20,7 @@ const ChangePasswordForm = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
-  const isDisabled = isSubmitting || invalid || pristine
-  const { brandColor } = getBrandInfo(brand)
+  const isDisabled = isSubmitting || (invalid && !pristine)
 
   return (
     <FormCard title="Change Password">
@@ -31,37 +29,40 @@ const ChangePasswordForm = ({
         onSubmit={handleSubmit(onSubmitHandler)}
       >
         <Field
+          autoComplete="off"
+          component={SimpleField}
+          label="Current Password"
           name="old_password"
           type="password"
-          label="Current Password"
           onChange={(e, value, newValue) => {
             if (submitError && newValue) {
               setSubmitError(false)
             }
           }}
-          component={SimpleField}
         />
         <Field
+          autoComplete="off"
+          component={SimpleField}
+          label="New Password"
           name="new_password"
           type="password"
-          label="New Password"
           onChange={(e, value, newValue) => {
             if (submitError && newValue) {
               setSubmitError(false)
             }
           }}
-          component={SimpleField}
         />
         <Field
-          type="password"
-          name="confirm_password"
+          autoComplete="off"
+          component={SimpleField}
           label="Confirm New Password"
+          name="confirm_password"
+          type="password"
           onChange={(e, value, newValue) => {
             if (submitError && newValue) {
               setSubmitError(false)
             }
           }}
-          component={SimpleField}
         />
         {submitError && (
           <div className="c-auth__submit-error-alert">
@@ -75,17 +76,11 @@ const ChangePasswordForm = ({
             </p>
           </div>
         )}
-        <button
-          type="submit"
-          className="c-auth__submit-btn"
-          disabled={isDisabled}
-          style={{
-            background: brandColor,
-            opacity: isDisabled ? 0.7 : 1
-          }}
-        >
-          {isSubmitting ? 'Updating...' : 'Update'}
-        </button>
+        <div style={{ textAlign: 'right' }}>
+          <Button type="submit" disabled={isDisabled}>
+            {isSubmitting ? 'Updating...' : 'Update'}
+          </Button>
+        </div>
       </form>
     </FormCard>
   )
@@ -110,7 +105,7 @@ const validate = values => {
   if (!values.confirm_password) {
     errors.confirm_password = 'Required'
   } else if (values.confirm_password !== values.new_password) {
-    errors.confirm_password = 'Your passwords don\'t match'
+    errors.confirm_password = "Your passwords don't match"
   }
 
   return errors

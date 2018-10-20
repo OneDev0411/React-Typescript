@@ -58,25 +58,14 @@
       width: 40%;
       text-align: right;
       vertical-align: middle;
-      padding-right: 10px;
     }
 
-    .close-task,
-    .delete-task {
-      img {
-        height: 16px;
-        margin-left: 15px;
-        cursor: pointer;
-        &:hover {
-          opacity: 0.8;
-        }
-      }
-    }
+
   }
 
   .saving-title {
     i {
-      color: #2196f3;
+      color: #003bdf;
       font-size: 15px;
     }
   }
@@ -87,7 +76,6 @@
     font-size: 21px;
     letter-spacing: 0.8px;
     text-align: left;
-    color: #1d364b;
     padding: 1px 20px 1px 1px;
     display: flex;
     align-items: center;
@@ -105,11 +93,11 @@
 
     .cta {
       cursor: pointer;
-      color: #2196f3;
+      color: #003bdf;
       font-size: 13px;
 
       .save {
-        border: 1px solid #2196f3;
+        border: 1px solid #003bdf;
         padding: 3px;
         border-radius: 4px;
       }
@@ -122,7 +110,7 @@
     &.isEditingTitle,
     &:hover {
       padding: 0 20px 0 0;
-      border: dashed 1px #2196f3;
+      border: dashed 1px #003bdf;
       border-radius: 4px;
     }
   }

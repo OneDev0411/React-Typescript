@@ -72,13 +72,13 @@ export const queryOptions = {
       longitude: -96.89115626525879
     }
   ],
-  property_subtypes: objectValueToArray(property_subtypes)
+  property_subtypes: Object.values(property_subtypes)
 }
 
 export const mapOptions = {
   minZoom: 3,
   maxZoom: 25,
-  zoomControl: true,
+  // zoomControl: false,
   disableDefaultUI: true
   // draggable: true,
   // mapTypeControl: false,
@@ -93,8 +93,4 @@ export default {
   queryOptions,
   mapInitialState,
   DECLUSTER_ZOOM_LEVEL
-}
-
-function objectValueToArray(obj = {}) {
-  return Object.keys(obj).map(prop => obj[prop])
 }

@@ -2,7 +2,7 @@ import Brand from '../../../../controllers/Brand'
 import * as types from '../../../../constants/listings/map'
 import getListingsByPolygonPonits from '../../search/get-listings/by-polygon-points'
 
-const overlayColor = `#${Brand.color('primary', '3388ff')}`
+const overlayColor = `#${Brand.color('primary', '003bdf')}`
 
 const getPolygonBounds = polygon => {
   const points = polygon.getPath().b.map(bound => ({

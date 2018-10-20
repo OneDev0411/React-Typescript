@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import { ProfileTabs } from './components/Tabs'
 
 const AccountLayout = ({ user, children }) => (

@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Container, ToolbarContainer, ActionsBar } from './styled'
+import { ToolbarContainer, ActionsBar } from './styled'
+import { SortableContainer } from './Plugins/Sortable/styled'
 
 import BasicTable from './Tables/Basic'
 import MultipleTable from './Tables/Multiple'
@@ -41,7 +42,7 @@ class Grid extends React.Component {
 
     if (plugins.actionable) {
       this.actionablePlugin = new ActionablePlugin({
-        actions: plugins.actionable,
+        actions: plugins.actionable.actions,
         selectablePlugin: this.selectablePlugin
       })
     }
@@ -99,7 +100,7 @@ class Grid extends React.Component {
 
     if (multiple) {
       return (
-        <Container>
+        <div>
           <MultipleTable
             {...this.props}
             columns={this.Columns}
@@ -108,18 +109,36 @@ class Grid extends React.Component {
             selectablePlugin={this.selectablePlugin}
             sortablePlugin={this.sortablePlugin}
           />
-        </Container>
+        </div>
       )
     }
 
     return (
-      <Container>
+      <div>
         <ToolbarContainer>
-          <TableSummary {...this.props.summary} />
+          <TableSummary
+            Component={this.props.summary.render}
+            entityName={this.props.summary.entityName}
+            style={this.props.summary.style}
+            totalRowsCount={this.props.summary.total || this.props.data.length}
+            selectedRowsCount={
+              this.selectablePlugin
+                ? this.selectablePlugin.SelectedRows.length
+                : 0
+            }
+          />
 
           <ActionsBar>
             {this.actionablePlugin && this.actionablePlugin.render()}
           </ActionsBar>
+
+          <SortableContainer>
+            {this.sortablePlugin &&
+              this.sortablePlugin.render(
+                this.Columns,
+                this.props.isFetching || this.props.isFetchingMore
+              )}
+          </SortableContainer>
         </ToolbarContainer>
 
         <BasicTable
@@ -129,7 +148,7 @@ class Grid extends React.Component {
           selectablePlugin={this.selectablePlugin}
           sortablePlugin={this.sortablePlugin}
         />
-      </Container>
+      </div>
     )
   }
 }
@@ -142,6 +161,7 @@ Grid.propTypes = {
   showTableHeader: PropTypes.bool,
   getTrProps: PropTypes.func,
   getTdProps: PropTypes.func,
+  getBodyProps: PropTypes.func,
   onScrollBottom: PropTypes.func,
   onScrollTop: PropTypes.func,
   columns: PropTypes.array.isRequired,
@@ -153,6 +173,7 @@ Grid.defaultProps = {
   isFetching: false,
   isFetchingMore: false,
   showTableHeader: true,
+  getBodyProps: () => {},
   getTrProps: () => {},
   getTdProps: () => {},
   onScrollBottom: () => {},

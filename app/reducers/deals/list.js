@@ -121,3 +121,4 @@ export default (state = null, action) => {
 }
 
 export const selectDeals = state => (state == null ? [] : Object.values(state))
+export const selectDeal = (state, id) => (state == null ? null : state[id])

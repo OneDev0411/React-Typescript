@@ -1,19 +1,15 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import ToolTip from '../../../../../../../../views/components/tooltip'
+import Badge from '../../../../../../../../views/components/Badge'
+import styled from 'styled-components'
+import IconChat from '../../../../../../../../views/components/SvgIcons/NewChat/IconChat'
 
-export const NotificationBadge = styled.div`
-  background-color: #ff4747;
-  border-radius: 50%;
-  color: #fff;
-  text-align: center;
-  width: 23px;
-  height: 23px;
-  font-size: 14px;
-  padding: 2px;
+const NotificationsContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
 `
-
 const Notification = ({ count, caption }) => {
   if (count === 0) {
     return null
@@ -21,7 +17,18 @@ const Notification = ({ count, caption }) => {
 
   return (
     <ToolTip caption={caption.replace('$count', count)}>
-      <NotificationBadge>{count}</NotificationBadge>
+      <NotificationsContainer>
+        <IconChat />
+        <Badge
+          style={{
+            position: 'absolute',
+            top: '-11px',
+            left: 'calc(100% - 30px)'
+          }}
+        >
+          {count > 99 ? '99+' : count}
+        </Badge>
+      </NotificationsContainer>
     </ToolTip>
   )
 }

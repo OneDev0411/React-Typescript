@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
@@ -10,25 +9,9 @@ import Loading from '../../../../../components/Partials/Loading'
 import { getContacts } from '../../../../../models/contacts/get-contacts'
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
 import { normalizeContactAttribute } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
+import Alert from '../../../../../components/Pages/Dashboard/Partials/Alert'
 
-const ContactsListContainer = styled.div`
-  position: relative;
-  height: calc(100vh - 172px);
-  padding: 2rem 0;
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  @media screen and (min-width: 48em) {
-    height: 240px;
-  }
-`
-
-const ContactsList = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-`
+import { ListContainer, List } from './styled'
 
 const propTypes = {
   defaultSearchFilter: PropTypes.string,
@@ -112,7 +95,7 @@ class Body extends Component {
 
   render() {
     const { list, isLoading } = this.state
-    const { defaultSearchFilter } = this.props
+    const { defaultSearchFilter, isDrawer } = this.props
     const defaultInputValue =
       typeof defaultSearchFilter !== 'string' ? '' : defaultSearchFilter
 
@@ -121,11 +104,20 @@ class Body extends Component {
         itemToString={this.handleItemToString}
         defaultInputValue={defaultInputValue}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
-          <div style={{ paddingTop: '2rem' }} className="u-scrollbar--thinner">
+          <div
+            style={{
+              paddingTop: isDrawer ? '1.5rem' : '1rem',
+              margin: isDrawer ? '0 -1.5rem' : 0
+            }}
+          >
             {!this.props.isSearchDisabled && (
-              <div style={{ padding: '0 2rem' }}>
+              <div
+                style={{
+                  marginBottom: isDrawer ? '1.5rem' : '1rem',
+                  padding: isDrawer ? '0 1.5rem' : '0 1rem'
+                }}
+              >
                 <SearchInput
-                  style={{ marginBottom: '12px' }}
                   inputProps={{
                     ...getInputProps({
                       onChange: this.handleOnChange,
@@ -135,23 +127,35 @@ class Body extends Component {
                 />
               </div>
             )}
-            {isLoading && <Loading />}
-            {!isLoading &&
-              list.length > 0 && (
-                <ContactsListContainer>
-                  <ContactsList>
-                    {list.map((item, index) => (
-                      <ContactItem
-                        item={item}
-                        key={item.id || `downshift_search_result_item_${index}`}
-                        {...getItemProps({ item })}
-                        onClickHandler={this.props.handleSelectedItem}
-                        isHighlighted={highlightedIndex === index}
-                      />
-                    ))}
-                  </ContactsList>
-                </ContactsListContainer>
-              )}
+            <ListContainer isDrawer={isDrawer}>
+              <List isDrawer={isDrawer} className="u-scrollbar--thinner">
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  list.map((item, index) => (
+                    <ContactItem
+                      item={item}
+                      isDrawer={isDrawer}
+                      key={item.id || `downshift_search_result_item_${index}`}
+                      {...getItemProps({ item })}
+                      onClickHandler={this.props.handleSelectedItem}
+                      isHighlighted={highlightedIndex === index}
+                    />
+                  ))
+                )}
+
+                {!isLoading &&
+                  list.length === 0 && (
+                    <Alert
+                      type="warning"
+                      style={{
+                        margin: isDrawer ? '0 1.5rem' : '0 1rem'
+                      }}
+                      message="No Result"
+                    />
+                  )}
+              </List>
+            </ListContainer>
           </div>
         )}
       />

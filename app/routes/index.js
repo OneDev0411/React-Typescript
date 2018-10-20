@@ -11,8 +11,6 @@ import store from '../stores'
 import { getContexts, getDeals } from '../store_actions/deals'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
-
-
 const AsyncAuthenticationLayout = Load({
   loader: () =>
     import('./components/Authentication' /* webpackChunkName: "authlay" */)
@@ -77,14 +75,19 @@ const AsyncListingsSearch = Load({
 })
 // import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
 
-const AsyncListingsAlerts = Load({
+const AsyncMlsSavedSearch = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Listings/Alerts' /* webpackChunkName: "alerts" */)
+    import('../components/Pages/Dashboard/Listings/SavedSearch' /* webpackChunkName: "alerts" */)
 })
 
 const AsyncListingsFavorites = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */)
+})
+
+const AsyncTours = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Listings/Tours' /* webpackChunkName: "fav" */)
 })
 
 const AsyncListingSinglePage = Load({
@@ -148,6 +151,11 @@ const AsyncDealFormEdit = Load({
     import('../components/Pages/Dashboard/Deals/form-edit' /* webpackChunkName: "deal_fe" */)
 })
 
+const AsyncAgentNetwork = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Deals/agent-network' /* webpackChunkName: "agent-network" */)
+})
+
 /* ==================================== */
 //  Calendar
 /* ==================================== */
@@ -166,11 +174,6 @@ const AsyncContacts = Load({
     import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */)
 })
 
-const AsyncNewContact = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Contacts/NewContact' /* webpackChunkName: "contact" */)
-})
-
 const AsyncContactProfile = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */)
@@ -179,29 +182,6 @@ const AsyncContactProfile = Load({
 const AsyncContactsImportCsv = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
-})
-
-/* ==================================== */
-//  CRM Tasks
-/* ==================================== */
-
-const AsyncCrmTasksList = Load({
-  loader: () =>
-    import('../views/CRM/Tasks' /* webpackChunkName: "crm_tasks_list" */)
-})
-
-const AsyncCrmTask = Load({
-  loader: () =>
-    import('../views/CRM/Tasks/TaskPage' /* webpackChunkName: "crm_task_page" */)
-})
-
-/* ==================================== */
-//  CRM Touches
-/* ==================================== */
-
-const AsyncCrmTouchPage = Load({
-  loader: () =>
-    import('../views/CRM/touches/TouchPage' /* webpackChunkName: "crm_task_page" */)
 })
 
 /* ==================================== */
@@ -399,29 +379,19 @@ export default (
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
 
-        <Route path="actives" component={AsyncListingsFavorites} />
-        <Route path="alerts" component={AsyncListingsAlerts}>
-          <Route path=":alertId" component={AsyncListingsAlerts} />
-        </Route>
+        <Route path="tours" component={AsyncTours} />
+        <Route path="following" component={AsyncListingsFavorites} />
+        <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
-      <Route
-        component={AsyncContacts}
-        path="/dashboard/contacts(/page/:page)"
-      />
-      <Route path="/dashboard/contacts/new" component={AsyncNewContact} />
+      <Route component={AsyncContacts} path="/dashboard/contacts" />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route
         path="/dashboard/contacts/import/csv"
         component={AsyncContactsImportCsv}
       />
-
-      <Route path="/crm/tasks" component={AsyncCrmTasksList} />
-      <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
-
-      <Route path="/crm/touches/:id" component={AsyncCrmTouchPage} />
 
       <Route path="/dashboard/calendar" component={AsyncCalendar} />
 
@@ -451,6 +421,10 @@ export default (
           path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
           component={AsyncDealFormViewer}
         />
+        <Route
+          path="/dashboard/deals/:id/network"
+          component={AsyncAgentNetwork}
+        />
       </Route>
 
       <Route path="/dashboard/recents(/:roomId)">
@@ -458,7 +432,7 @@ export default (
       </Route>
 
       <Route
-        path="/dashboard/notifications"
+        path="/dashboard/notifications(/:type/:id)"
         component={AsyncNotificationsPage}
       />
 

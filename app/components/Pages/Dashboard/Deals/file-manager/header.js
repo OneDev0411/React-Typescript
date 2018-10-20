@@ -19,9 +19,9 @@ export class Header extends React.Component {
         <PageHeader.Menu>
           <DealEmail dealEmail={deal.email} />
           <ActionButton
-            inverse
+            appearance="outline"
             onClick={() => this.openUploadDialog()}
-            style={{ marginLeft: '10px', padding: '0.70em 1.5em' }}
+            style={{ marginLeft: '10px' }}
           >
             Upload
           </ActionButton>

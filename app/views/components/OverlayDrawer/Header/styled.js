@@ -1,8 +1,9 @@
 import styled from 'styled-components'
+import { merriweatherFamilyStyle } from '../../Typography/styles'
+import { borderColor } from '../../../utils/colors'
 
 export const Container = styled.div`
-  width: 100%;
-  height: 56px;
+  height: 4.5rem;
   position: absolute;
   top: 0;
   left: 0;
@@ -10,14 +11,14 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1em;
-  box-shadow: 2px 1px 2px 0px rgba(0, 0, 0, 0.2);
+  margin: 0 1.5rem;
+  border-bottom: 1px solid ${borderColor};
+  background-color: #fff;
+  z-index: 1;
 `
 
 export const Title = styled.h2`
-  margin: 0;
-  font-weight: 600;
-  color: #263445;
-  line-height: 1;
-  font-size: 1.7rem;
+  ${merriweatherFamilyStyle};
+  font-weight: 700;
+  font-size: 1.25rem;
 `

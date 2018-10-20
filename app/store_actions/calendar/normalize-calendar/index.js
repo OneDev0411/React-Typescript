@@ -50,12 +50,23 @@ function getDays(fromUnix, toUnix) {
 export function normalizeByDays(fromUnix, toUnix, calendar) {
   const days = getDays(fromUnix, toUnix)
 
-  calendar &&
-    calendar.forEach(event => {
+  if (calendar) {
+    const sortedCalendar = calendar.sort((a, b) => {
+      if (a.object_type !== 'crm_task' && b.object_type === 'crm_task') {
+        return -1
+      } else if (a.object_type === 'crm_task' && b.object_type !== 'crm_task') {
+        return 1
+      }
+
+      return a.timestamp - b.timestamp
+    })
+
+    sortedCalendar.forEach(event => {
       const key = createEventKey(event, fromUnix, toUnix)
 
       days[key] = [...(days[key] || []), event.id]
     })
+  }
 
   return days
 }

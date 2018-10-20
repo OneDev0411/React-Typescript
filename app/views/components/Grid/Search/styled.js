@@ -1,33 +1,71 @@
 import styled from 'styled-components'
+import { primary, grey } from '../../../utils/colors'
+import IconSearchBase from '../../SvgIcons/Search/IconSearch'
+import IconButtonFlex from '../../Button/IconButton'
 
 export const Container = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding-left: 16px;
   border-radius: 4px;
-  background-color: #fefefe;
-  border: solid 1px #dce5eb;
+  background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
+  border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
+  :hover {
+    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A100)};
+  }
 `
 
 export const TextInput = styled.input`
   width: 100%;
   height: 45px;
   border: none;
-  font-size: 16px;
+  font-size: 1rem;
   padding: 0 5px;
+  font-family: Barlow, sans-serif;
+  background-color: transparent;
+  caret-color: ${primary};
 
-  ::-webkit-input-placeholder {
-    font-size: 15px;
-    font-weight: 500;
-    color: #8da2b5;
+  ::-ms-clear {
+    display: none;
   }
 
+  ::-webkit-input-placeholder {
+    font-size: 1rem;
+    font-weight: 500;
+    color: ${grey.A900};
+    font-family: Barlow, sans-serif;
+  }
+
+  ::placeholder {
+    font-size: 1rem;
+    font-weight: 500;
+    color: ${grey.A900};
+    font-family: Barlow, sans-serif;
+  }
   :focus {
     outline: none;
   }
+
+  ${Container}:hover & {
+    ::placeholder {
+      color: #000000;
+    }
+  }
 `
 
+export const IconSearch = IconSearchBase.extend`
+  path {
+    fill: ${grey.A900} !important;
+  }
+  ${Container}:hover & path {
+    fill: #000000 !important;
+  }
+`
 export const Icon = styled.div`
-  color: #8da2b5;
-  padding-top: ${props => (props.isSearching ? '0' : '9px')};
+  color: ${grey.A900};
+  padding-top: ${props => (props.isSearching ? '0' : '4px')};
+`
+
+export const IconButton = IconButtonFlex.extend`
+  display: block;
 `

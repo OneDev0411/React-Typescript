@@ -1,7 +1,6 @@
 import React from 'react'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 import cn from 'classnames'
-import _ from 'underscore'
 import History from './modal'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import Deal from '../../../../../../models/Deal'

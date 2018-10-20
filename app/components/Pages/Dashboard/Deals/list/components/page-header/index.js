@@ -14,12 +14,9 @@ const Header = ({
   onMenuTriggerChange,
   showCreateDeal = true
 }) => (
-  <PageHeader isFlat style={{ padding: '0 40px' }}>
+  <PageHeader isFlat>
     <PageHeader.Title showBackButton={false}>
-      <MenuTrigger
-        tooltip={isSideMenuOpen ? 'Collapse Menu' : 'Expand Menu'}
-        onClick={onMenuTriggerChange}
-      />
+      <MenuTrigger isExpended={isSideMenuOpen} onClick={onMenuTriggerChange} />
       <PageHeader.Heading>{title}</PageHeader.Heading>
     </PageHeader.Title>
 
@@ -28,6 +25,7 @@ const Header = ({
 
       {showCreateDeal && (
         <ActionButton
+          style={{ marginLeft: '1rem' }}
           onClick={() => browserHistory.push('/dashboard/deals/create')}
         >
           Create New Deal

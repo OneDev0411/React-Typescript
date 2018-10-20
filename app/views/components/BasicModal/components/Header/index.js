@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import IconButton from 'components/Button/IconButton'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { H3 } from 'components/Typography/headings'
 
 const Container = styled.div`
   position: relative;
@@ -9,24 +12,8 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding-left: 1em;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-`
-
-const Title = styled.h3`
-  margin: 0;
-  font-size: 1.5em;
-  line-height: 1;
-  font-weight: 500;
-  color: #26465e;
-`
-
-const CloseButton = styled.i`
-  float: right;
-  cursor: pointer;
-  :hover {
-    color: red;
-  }
 `
 
 const propTypes = {
@@ -35,11 +22,18 @@ const propTypes = {
 
 const Header = ({ title, children, showClose, handleOnClose }) => (
   <Container>
-    <Title>{title}</Title>
+    <H3>{title}</H3>
     {children}
 
     {showClose && (
-      <CloseButton className="fa fa-times" onClick={handleOnClose} />
+      <IconButton
+        appearance="icon"
+        inverse
+        iconSize="large"
+        onClick={handleOnClose}
+      >
+        <CloseIcon />
+      </IconButton>
     )}
   </Container>
 )

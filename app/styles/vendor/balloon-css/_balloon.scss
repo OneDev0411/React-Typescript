@@ -1,2 +1,4 @@
-$balloon-bg: fade-out(#3c4854, 0.1) !default;
+$balloon-bg: fade-out(#000, .1) !default;
+$balloon-base-size: 12px !default;
+
 @import '../../../../node_modules/balloon-css/src/balloon.scss';

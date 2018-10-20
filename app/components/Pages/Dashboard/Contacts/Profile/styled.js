@@ -1,7 +1,30 @@
 import styled from 'styled-components'
 
+import { brandBackground, borderColor } from '../../../../../views/utils/colors'
+
+export const PageWrapper = styled.div`
+  background-color: ${brandBackground};
+`
+
+export const PageContainer = styled.div`
+  max-width: 1456px;
+  margin: 0 auto;
+
+  /* 1681px */
+  @media (min-width: 105.0625em) {
+    max-width: 1616px;
+  }
+`
+
+export const Card = styled.div`
+  margin-bottom: 1em;
+  background: #fff;
+  border-radius: 3px;
+  border: 1px solid ${borderColor};
+`
+
 export const ColumnsContainer = styled.div`
-  padding: 1em;
+  padding: 0 2.5em;
 
   /* 768px */
   @media (min-width: 48em) {
@@ -18,8 +41,8 @@ export const SideColumnWrapper = styled.div`
     flex-direction: column;
   }
 
-  /* 1280px */
-  @media (min-width: 80em) {
+  /* 1681px */
+  @media (min-width: 105.0625em) {
     width: 25%;
     display: block;
   }
@@ -31,14 +54,14 @@ export const SecondColumn = styled.div`
     margin-left: 1em;
   }
 
-  @media (min-width: 80em) {
+  @media (min-width: 105.0625em) {
     margin: 0 1em;
     width: calc(50% - 2em);
   }
 `
 
 export const ThirdColumn = styled.div`
-  @media (min-width: 80em) {
+  @media (min-width: 105.0625em) {
     width: 25%;
   }
 `

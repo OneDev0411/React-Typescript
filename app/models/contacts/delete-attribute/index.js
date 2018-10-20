@@ -1,5 +1,5 @@
 import Fetch from '../../../services/fetch'
-import { defaultQuery } from '../helpers/default-query'
+import { updateContactQuery } from '../helpers/default-query'
 
 /**
  * Deleting an attribute from existing contact.
@@ -11,7 +11,7 @@ import { defaultQuery } from '../helpers/default-query'
 export async function deleteAttribute(
   contactId,
   attributeId,
-  query = defaultQuery
+  query = updateContactQuery
 ) {
   if (!contactId) {
     throw new Error('Contact id is required.')

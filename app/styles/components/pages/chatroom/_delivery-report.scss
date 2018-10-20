@@ -31,7 +31,7 @@
   .read-by {
     .title {
       i {
-        color: #2196f3;
+        color: #003bdf;
       }
     }
   }
@@ -52,6 +52,7 @@
 
       .name-section {
         padding-left: 7px;
+        color: #ffffff;
         .via {
           font-size: 10px;
           color: #c3c3c3;
@@ -62,8 +63,8 @@
       .date-section {
         padding-right: 5px;
         line-height: 30px;
+        color: #ffffff;
         .date-day {
-          color: #c8c8c8;
           margin-right: 4px;
         }
       }
@@ -80,7 +81,7 @@
   }
   &.blue {
     i {
-      color: #2196f3;
+      color: #003bdf;
     }
   }
 }

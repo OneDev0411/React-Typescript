@@ -4,30 +4,21 @@ import matchSorter from 'match-sorter'
 
 import Card from '../Card'
 import { Item } from './Item'
-import ShadowButton from '../Button/ShadowButton'
 import { SearchInput } from './SearchInput'
-import ArrowDropDown from '../SvgIcons/ArrowDropDown/IconArrowDropDown'
+import ArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import ActionButton from '../Button/ActionButton'
 
-export const Button = ShadowButton.extend`
+export const Button = ActionButton.extend`
   position: relative;
   width: ${props => (props.fullWidth ? '100%' : 'auto')};
   display: flex;
   align-items: center;
   justify-content: ${props => (props.fullWidth ? 'space-between' : 'initial')};
   font-weight: normal;
-
-  &:focus {
-    outline-width: 2px;
-  }
 `
 
 export const Icon = ArrowDropDown.extend`
-  position: relative;
-  align-self: flex-end;
-  display: flex;
-  width: 2em;
-  height: 2em;
-  fill: #8da2b5;
+  fill: #000;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
 `
 
@@ -35,13 +26,19 @@ export const Dropdown = ({
   items,
   input,
   style,
+  icons = {},
   onSelect,
   fullWidth,
+  fullHeight,
   hasSearch,
   id: buttonId,
   itemToString = item => item.title,
   itemRenderer,
-  defaultSelectedItem
+  defaultSelectedItem,
+  buttonRenderer,
+  pullRight = false,
+  noBorder = true,
+  buttonStyle = {}
 }) => (
   <Downshift
     {...input}
@@ -64,30 +61,69 @@ export const Dropdown = ({
         inputValue = ''
       }
 
+      const hasIcon = Object.keys(icons).length > 0
+
       return (
         <div style={style}>
-          <Button
-            {...getButtonProps({
-              fullWidth,
-              id: buttonId,
-              name: input.name
-            })}
-          >
-            {selectedItem && selectedItem.title}
-            <Icon isOpen={isOpen} />
-          </Button>
+          {buttonRenderer ? (
+            buttonRenderer(
+              getButtonProps({
+                isBlock: fullWidth,
+                id: buttonId,
+                isOpen,
+                name: input.name,
+                value: selectedItem && selectedItem.title,
+                icon:
+                  hasIcon &&
+                  icons[selectedItem.title] &&
+                  icons[selectedItem.title].icon
+                    ? icons[selectedItem.title].icon
+                    : null,
+                iconColor:
+                  hasIcon &&
+                  icons[selectedItem.title] &&
+                  icons[selectedItem.title].color
+                    ? icons[selectedItem.title].color
+                    : '#000'
+              })
+            )
+          ) : (
+            <Button
+              appearance="outline"
+              noBorder={noBorder}
+              {...getButtonProps({
+                fullWidth,
+                style: buttonStyle,
+                id: buttonId,
+                name: input.name
+              })}
+            >
+              {selectedItem &&
+                selectedItem.icon && (
+                  <selectedItem.icon
+                    style={{
+                      marginRight: '0.5em',
+                      fill: selectedItem.iconColor
+                    }}
+                  />
+                )}
+              {selectedItem && selectedItem.title}
+              <Icon isOpen={isOpen} />
+            </Button>
+          )}
           <div style={{ position: 'relative' }}>
             {isOpen && (
               <Card
                 depth={3}
                 style={{
-                  maxHeight: 200,
+                  maxHeight: fullHeight ? 'auto' : '200px',
                   width: fullWidth ? '100%' : 'auto',
                   position: 'absolute',
-                  left: 0,
+                  left: pullRight ? 'auto' : 0,
+                  right: pullRight ? 0 : 'auto',
                   top: 3,
-                  zIndex: 1,
-                  overflowY: 'scroll'
+                  zIndex: 2,
+                  overflowY: fullHeight ? 'initial' : 'scroll'
                 }}
                 className="u-scrollbar--thinner--self"
               >
@@ -105,20 +141,39 @@ export const Dropdown = ({
                   ? matchSorter(items, inputValue, { keys: ['title'] })
                   : items
                 ).map((item, index) => {
+                  let icon = null
+                  let iconColor = '#000'
+                  const { title } = item
+
+                  if (hasIcon && icons[title] && icons[title].icon) {
+                    icon = icons[title].icon
+
+                    if (icons[title].color) {
+                      iconColor = icons[title].color
+                    }
+                  }
+
+                  item = {
+                    ...item,
+                    icon,
+                    iconColor
+                  }
+
                   const props = {
                     item,
                     ...getItemProps({
                       item,
                       isActive: highlightedIndex === index,
-                      isSelected: selectedItem === item
+                      isSelected: selectedItem.title === title
                     })
                   }
 
                   return itemRenderer ? (
-                    itemRenderer(props)
+                    itemRenderer(props, item)
                   ) : (
                     <Item {...props} key={item.value}>
-                      {`${item.title}${item.hint ? ` (${item.hint})` : ''}`}
+                      {item.icon && <item.icon />}
+                      {`${title}${item.hint ? ` (${item.hint})` : ''}`}
                     </Item>
                   )
                 })}

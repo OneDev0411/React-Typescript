@@ -1,18 +1,12 @@
 import styled from 'styled-components'
+import { primary } from 'views/utils/colors'
+import ActionButton from '../../../../../../../../views/components/Button/ActionButton'
 
-export const SearchContainer = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  border-radius: 3px;
-  border: 1px solid #eee;
-  padding: 7px 5px;
-  background-color: #fff;
-
-  &:hover {
-    background-color: #fff;
+export const SearchContainer = ActionButton.extend`
+  &:hover > svg {
+    fill: ${primary};
   }
+  line-height: normal;
 `
 
 export const Input = styled.input`
@@ -20,6 +14,7 @@ export const Input = styled.input`
   border: none;
   cursor: pointer;
   background-color: transparent;
+  text-overflow: ellipsis;
 
   :focus {
     outline: none;
@@ -32,9 +27,4 @@ export const Title = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   color: ${props => (props.hasTask ? '#000' : 'gray')};
-`
-
-export const Indicator = styled.i`
-  width: 5%;
-  color: #eee;
 `

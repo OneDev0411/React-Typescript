@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import cn from 'classnames'
 
 import DealInfo from '../dashboard/deal-info'
@@ -9,6 +9,9 @@ import Viewer from './viewer'
 import PageHeader from '../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
+const CommentsButton = ActionButton.extend`
+  margin-left: 1em;
+`
 export default class extends React.Component {
   constructor(props) {
     super(props)
@@ -36,30 +39,16 @@ export default class extends React.Component {
     const PDF_WIDTH = `calc(100% - ${COMMENTS_WIDTH} - ${FACTSHEET_WIDTH})`
 
     return (
-      <div className="c-deal-form-viewer">
+      <Fragment>
         <PageHeader
           title={decodeURI(file.name)}
           backUrl={`/dashboard/deals/${deal.id}`}
         >
           <PageHeader.Menu>
-            <ActionButton
-              className={cn({ 'is-active': showFactsheet })}
-              onClick={toggleFactsheet}
-              style={{ padding: '0.75em', marginRight: '8px' }}
-            >
-              Deal Facts
-            </ActionButton>
+            <ActionButton onClick={toggleFactsheet}>Deal Facts</ActionButton>
 
             {task && (
-              <ActionButton
-                className={cn('comments', {
-                  'is-active': showComments
-                })}
-                style={{ padding: '0.75em' }}
-                onClick={toggleComments}
-              >
-                Comments
-              </ActionButton>
+              <CommentsButton onClick={toggleComments}>Comments</CommentsButton>
             )}
           </PageHeader.Menu>
         </PageHeader>
@@ -112,7 +101,7 @@ export default class extends React.Component {
             </div>
           )}
         </div>
-      </div>
+      </Fragment>
     )
   }
 }

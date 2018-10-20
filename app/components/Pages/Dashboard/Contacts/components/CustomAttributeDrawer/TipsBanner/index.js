@@ -4,15 +4,10 @@ import Cookies from 'universal-cookie'
 
 import CloseButton from '../../../../../../../views/components/Button/IconButton'
 import CloseIcon from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
-
-export const Box = Flex.extend`
-  border-radius: 3px;
-  background-color: #dce5eb;
-  padding: 1em;
-  font-size: 1.6rem;
-  line-height: 1.5;
-  color: #1e364b;
-`
+import {
+  borderColor,
+  brandBackground
+} from '../../../../../../../views/utils/colors'
 
 export class TipsBanner extends React.Component {
   constructor(props) {
@@ -42,22 +37,17 @@ export class TipsBanner extends React.Component {
     return (
       <div
         style={{
-          padding: '1em',
-          backgroundColor: '#F6FAFB',
-          borderBottom: '1px solid #dde5ec'
+          margin: '1.5em 0',
+          padding: '1.5em',
+          backgroundColor: brandBackground
         }}
       >
-        <Box alignCenter justifyBetween>
+        <Flex alignCenter justifyBetween>
           Adding a custom field will add additional line items to all contacts.
-          <CloseButton
-            color="#7b91a6"
-            hoverColor="#262626"
-            onClick={this.onClose}
-            size="20px"
-          >
+          <CloseButton isFit iconSize="medium" inverse onClick={this.onClose}>
             <CloseIcon />
           </CloseButton>
-        </Box>
+        </Flex>
       </div>
     )
   }

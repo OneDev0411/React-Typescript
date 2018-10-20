@@ -3,14 +3,11 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
-import cn from 'classnames'
 
 import Deal from '../../../../../models/Deal'
 import DealContext from '../../../../../models/DealContext'
 
-import Button from '../../../../../views/components/Button/ActionButton'
-
-import PageHeader from './page-header'
+import { FullPageHeader } from '../../../../../views/components/FullPageHeader'
 import OfferType from './offer-type'
 import EnderType from './deal-ender-type'
 import DealClients from './deal-clients'
@@ -28,6 +25,7 @@ import {
 } from '../../../../../store_actions/deals'
 import { getLegalFullName } from '../utils/roles'
 import { confirmation } from '../../../../../store_actions/confirmation'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -213,7 +211,7 @@ class CreateOffer extends React.Component {
       .value()
   }
 
-  async createOffer() {
+  createOffer = async () => {
     this.isFormSubmitted = true
 
     if (!this.validateForm(true)) {
@@ -446,9 +444,9 @@ class CreateOffer extends React.Component {
 
     return (
       <div className="deal-create-offer">
-        <PageHeader
+        <FullPageHeader
           title="Add New Offer"
-          handleOnClose={this.cancelCreateOffer}
+          handleClose={this.cancelCreateOffer}
         />
 
         <div className="form">
@@ -574,15 +572,15 @@ class CreateOffer extends React.Component {
               </div>
             )}
 
-          <Button
-            className={cn('create-offer-button', {
-              disabled: saving || offerType.length === 0
-            })}
+          <ActionButton
+            // className={cn('create-offer-button', {
+            //   disabled: saving || offerType.length === 0
+            // })}
             disabled={saving || offerType.length === 0}
-            onClick={() => this.createOffer()}
+            onClick={this.createOffer}
           >
             {saving ? 'Creating Offer ...' : 'Create Offer'}
-          </Button>
+          </ActionButton>
 
           <div className="error-summary">
             {this.isFormSubmitted &&

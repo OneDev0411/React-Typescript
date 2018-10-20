@@ -1,41 +1,46 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
-const Container = styled.div``
+import { grey } from '../../../../utils/colors'
 
 const Title = styled.div`
-  font-size: 23px;
-  font-weight: 400;
+  font-weight: 500;
+  color: ${grey.A900};
 `
 
-function parseText({ text, ...parameters }) {
-  if (!text) {
-    return ''
-  }
-
-  let compiledText = text
-  const matches = text.match(/\[(.*?)\]/gi)
-
-  matches.forEach(variable => {
-    const variableName = variable.replace('[', '').replace(']', '')
-
-    compiledText = compiledText.replace(
-      variable,
-      parameters[variableName] || ''
+export const TableSummary = ({
+  Component,
+  style,
+  entityName,
+  selectedRowsCount,
+  totalRowsCount
+}) => {
+  if (!Component && entityName) {
+    return (
+      <Title style={style}>
+        {selectedRowsCount > 0 ? (
+          <Fragment>
+            <strong style={{ color: '#000' }}>{selectedRowsCount}</strong>
+            &nbsp;of&nbsp;
+            {totalRowsCount} {entityName}
+          </Fragment>
+        ) : (
+          <Fragment>
+            {totalRowsCount} {entityName}
+          </Fragment>
+        )}
+      </Title>
     )
-  })
-
-  return compiledText
-}
-
-export const TableSummary = props => {
-  if (typeof props.text === 'function') {
-    return props.text()
   }
 
   return (
-    <Container>
-      <Title dangerouslySetInnerHTML={{ __html: parseText(props) }} />
-    </Container>
+    <Title style={style}>
+      {Component && (
+        <Component
+          totalRowsCount={totalRowsCount}
+          selectedRowsCount={selectedRowsCount}
+        />
+      )}
+    </Title>
   )
 }

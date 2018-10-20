@@ -8,8 +8,10 @@ import IconButton from '../../Button/IconButton'
 import BackIcon from '../../SvgIcons/KeyboardArrowLeft/IconKeyboardArrowLeft'
 import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 
-import { Title } from './styled'
+import { H1 } from '../../Typography/headings'
 import { goTo } from '../../../../utils/go-to'
+
+import { Subtitle } from './Subtitle'
 
 PageTitle.propTypes = {
   backUrl: PropTypes.string,
@@ -26,7 +28,7 @@ PageTitle.defaultProps = {
 }
 
 export function PageTitle(props) {
-  const { title, backUrl, onClickCloseButton } = props
+  const { title, subtitle, backUrl, onClickCloseButton } = props
 
   function handleOnBack() {
     if (backUrl) {
@@ -44,18 +46,24 @@ export function PageTitle(props) {
     return (
       <Flex justifyBetween style={{ width: '100%' }}>
         <Flex alignCenter>
-          {title && <Title>{title}</Title>}
-          {!title && props.children}
+          {title ? (
+            <Flex column>
+              <H1>{title}</H1>
+              {subtitle && <Subtitle>subtitle</Subtitle>}
+            </Flex>
+          ) : (
+            props.children
+          )}
         </Flex>
 
         <Flex alignCenter>
           <IconButton
-            size="32px"
-            color="#333"
-            hoverColor="#2196f3"
+            iconSize="XLarge"
+            inverse
+            isFit
             onClick={onClickCloseButton}
           >
-            <CloseIcon style={{ width: 32, height: 32 }} />
+            <CloseIcon />
           </IconButton>
         </Flex>
       </Flex>
@@ -67,15 +75,18 @@ export function PageTitle(props) {
       <Flex alignCenter>
         {props.showBackButton && (
           <IconButton
-            size="32px"
-            color="#333"
-            hoverColor="#2196f3"
+            iconSize="XLarge"
+            inverse
+            isFit
             onClick={props.onClickBackButton || handleOnBack}
           >
-            <BackIcon style={{ width: 32, height: 32 }} />
+            <BackIcon />
           </IconButton>
         )}
-        {title && <Title>{title}</Title>}
+        <Flex column>
+          {title && <H1>{title}</H1>}
+          {subtitle && <Subtitle>subtitle</Subtitle>}
+        </Flex>
       </Flex>
       {props.children}
     </Flex>

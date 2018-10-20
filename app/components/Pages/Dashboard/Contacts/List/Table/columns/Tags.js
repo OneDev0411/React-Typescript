@@ -1,17 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
+import styled from 'styled-components'
+
 import { getContactTags } from '../../../../../../../models/contacts/helpers'
 import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
-import ShadowButton from '../../../../../../../views/components/Button/ShadowButton'
+import ALink from '../../../../../../../views/components/ALink'
+import { grey } from '../../../../../../../views/utils/colors'
 
-const TagsTextContainer = ShadowButton.extend`
-  font-weight: normal;
-  :hover {
-    text-decoration: underline;
-  }
+const AddTags = styled.span`
+  color: ${grey.A550};
 `
-
 const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
   const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
   const tags = getContactTags(contact, attribute_def)
@@ -20,12 +19,8 @@ const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
   const showingTags = []
   const getShowingTags = () => showingTags.join(', ')
 
-  if (tagsCount === 0) {
-    return <p style={{ color: '#8da2b5', marginBottom: 0 }}>No Tags</p>
-  }
-
   _.every(tags, item => {
-    if (getShowingTags().length + item.text.length <= 28) {
+    if (getShowingTags().length + item.text.length <= 66) {
       showingTags.push(item.text)
 
       return true
@@ -37,15 +32,20 @@ const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
   const invisibleTagsCount = tagsCount - showingTags.length
 
   return (
-    <TagsTextContainer
+    <ALink
+      style={{ cursor: 'pointer' }}
       onClick={event => {
         event.stopPropagation()
         onSelectTagContact(contact.id)
       }}
     >
-      {getShowingTags()}
+      {tagsCount === 0 ? (
+        <AddTags className="primaryHover">Add Tags</AddTags>
+      ) : (
+        getShowingTags()
+      )}
       {invisibleTagsCount > 0 && <span> and {invisibleTagsCount} more</span>}
-    </TagsTextContainer>
+    </ALink>
   )
 }
 

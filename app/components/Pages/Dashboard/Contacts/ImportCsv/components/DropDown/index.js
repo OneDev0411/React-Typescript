@@ -3,10 +3,15 @@ import Downshift from 'downshift'
 import PropTypes from 'prop-types'
 
 import IconSearch from '../../../../../../../views/components/SvgIcons/Search/IconSearch'
-
-import { Icon as ArrowIcon } from '../../../../../../../views/components/BasicDropdown/styled'
-
 import DeleteIcon from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
+import ArrowDownIcon from '../../../../../../../views/components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+
+export const DropIcon = ArrowDownIcon.extend`
+  width: 2em;
+  height: 2em;
+  fill: #8da2b5;
+  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'initial')};
+`
 
 import {
   MenuContainer,
@@ -80,7 +85,7 @@ class DropDown extends React.Component {
                       }}
                     />
                   )}
-                  <ArrowIcon
+                  <DropIcon
                     isOpen={isOpen}
                     style={{ fill: '#506379', width: '24px', height: '24px' }}
                   />

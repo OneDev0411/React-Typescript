@@ -2,20 +2,16 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import ShadowButton from '../../../../../../../views/components/Button/ShadowButton'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 // eslint-disable-next-line
 import VerifyPhoneNumberModal from '../../../../../../..//views/components/VerifyPhoneNumberModal'
 
 import getVerificationCode from '../../../../../../../models/verify/request'
+import { primary } from '../../../../../../../views/utils/colors'
 
-const INTERACTIVE_TEXT_COLOR = '#2196f3'
-
-const Button = ShadowButton.extend`
-  color: ${INTERACTIVE_TEXT_COLOR};
-
-  &:hover {
-    text-decoration: underline;
-  }
+const Button = ActionButton.extend`
+  padding: 0;
+  vertical-align: initial;
 `
 
 class VerifyPhoneNumber extends Component {
@@ -106,16 +102,20 @@ class VerifyPhoneNumber extends Component {
         <div className="c-auth__submit-alert--success">
           <p>
             We sent a verification code to your mobile number.{' '}
-            <Button onClick={this.handleOpenModal}>Submit the code</Button>
+            <Button appearance="link" onClick={this.handleOpenModal}>
+              Submit the code
+            </Button>
           </p>
           <p>
             Didn't receive a code?{' '}
             {isReSending ? (
-              <span style={{ color: INTERACTIVE_TEXT_COLOR }}>
+              <span style={{ color: primary }}>
                 <i className="fa fa-spin fa-spinner" /> Sending...
               </span>
             ) : (
-              <Button onClick={this.handleResend}>Send a new code</Button>
+              <Button appearance="link" onClick={this.handleResend}>
+                Send a new code
+              </Button>
             )}
           </p>
         </div>
@@ -129,4 +129,7 @@ class VerifyPhoneNumber extends Component {
   }
 }
 
-export default connect(({ user }) => ({ user }), { notify })(VerifyPhoneNumber)
+export default connect(
+  ({ user }) => ({ user }),
+  { notify }
+)(VerifyPhoneNumber)

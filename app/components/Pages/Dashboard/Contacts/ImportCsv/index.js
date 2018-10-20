@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import styled from 'styled-components'
 
 import Stepper from '../../../../Partials/Stepper'
-import Header from './Header'
 import Footer from './Footer'
 import SelectFile from './SelectFile'
 import Mapper from './Mapper'
@@ -15,8 +15,20 @@ import {
   CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS,
   CONTACTS__IMPORT_CSV__STEP_UPLOAD_CONTACTS
 } from '../../../../../constants/contacts'
+import { FullPageHeader } from '../../../../../views/components/FullPageHeader'
+
+const Container = styled.div`
+  overflow: auto;
+  height: calc(
+    100vh - ${({ stickyFooter }) => (stickyFooter ? '13rem' : '10rem + 2.5em')}
+  );
+`
 
 class ImportCsv extends React.Component {
+  state = {
+    owner: this.props.user
+  }
+
   componentWillUnmount() {
     this.props.resetCsvImport()
   }
@@ -35,14 +47,25 @@ class ImportCsv extends React.Component {
     return currentWizardStep
   }
 
+  onChangeOwner = owner => this.setState({ owner: owner.value })
+
   render() {
     const { currentWizardStep, isCurrentStepValid } = this.props
 
     return (
       <div className="contact__import-csv">
-        <Header onClose={this.goBack} />
+        <FullPageHeader
+          title="Import a CSV file"
+          handleClose={this.goBack}
+          style={{ marginBottom: '1rem' }}
+        />
 
-        <div className="contact__import-csv__container">
+        <Container
+          stickyFooter={
+            currentWizardStep !== CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS
+          }
+          className="contact__import-csv__container"
+        >
           <div className="current-step">
             Step {this.getCurrentStepLabel()} of 3
           </div>
@@ -56,28 +79,32 @@ class ImportCsv extends React.Component {
 
           {(currentWizardStep === CONTACTS__IMPORT_CSV__STEP_SELECT_FILE ||
             currentWizardStep === CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE) && (
-            <SelectFile />
+            <SelectFile
+              onChangeOwner={this.onChangeOwner}
+              owner={this.state.owner}
+            />
           )}
           {currentWizardStep === CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS && (
-            <Mapper />
+            <Mapper owner={this.state.owner} />
           )}
           {currentWizardStep === CONTACTS__IMPORT_CSV__STEP_UPLOAD_CONTACTS && (
-            <UploadContacts />
+            <UploadContacts owner={this.state.owner} />
           )}
 
           <Footer />
-        </div>
+        </Container>
       </div>
     )
   }
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ user, contacts }) {
   const { importCsv } = contacts
   const { file, currentWizardStep, isCurrentStepValid } = importCsv
 
   return {
     file,
+    user,
     currentWizardStep,
     isCurrentStepValid
   }

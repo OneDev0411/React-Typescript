@@ -2,39 +2,60 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import SearchIcon from '../../../../SvgIcons/SearchIcon'
+import IconSearchBase from '../../../../SvgIcons/Search/IconSearch'
+import { grey, primary } from '../../../../../utils/colors'
 
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #f9f9f9;
+  border-radius: 3px;
+  border: solid 1px ${grey.A300};
+  padding: 0 0.5rem;
+  :hover {
+    background-color: ${grey.A100};
+  }
+
+  :focus-within {
+    background-color: #ffff;
+    border-color: ${primary};
+
+    :hover {
+      background-color: #fff;
+    }
+  }
+`
 const Input = styled.input`
   width: 100%;
   height: 42px;
-  padding: 0 16px 0 42px;
-  font-size: 1.5rem;
-  color: #8da2b5;
-  border-radius: 3px;
-  background-color: #f0f4f7;
-  border: solid 1px #dce5eb;
+  padding: 0 0.5em;
+  border: none;
 
-  &:focus {
-    outline-width: 1px;
-    color: #333;
-    background-color: #fff;
+  background: transparent;
+  caret-color: ${primary};
+  ::placeholder {
+    font-size: 1rem;
+    font-weight: 500;
+    color: ${grey.A900};
+    font-family: Barlow, sans-serif;
+  }
+  :focus {
+    outline: none;
   }
 
-  ::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    color: #8da2b5;
+  ${Container}:hover & {
+    ::placeholder {
+      color: #000000;
+    }
   }
-  ::-moz-placeholder {
-    /* Firefox 19+ */
-    color: #8da2b5;
+`
+
+const IconSearch = IconSearchBase.extend`
+  path {
+    fill: ${grey.A900} !important;
   }
-  :-ms-input-placeholder {
-    /* IE 10+ */
-    color: #8da2b5;
-  }
-  :-moz-placeholder {
-    /* Firefox 18- */
-    color: #8da2b5;
+  ${Container}:hover & path {
+    fill: #000000 !important;
   }
 `
 
@@ -45,20 +66,10 @@ const propTypes = {
 
 function SearchInput({ style, inputProps }) {
   return (
-    <div style={{ position: 'relative', ...style }}>
+    <Container style={{ ...style }}>
+      <IconSearch />
       <Input {...inputProps} />
-      <SearchIcon
-        size={24}
-        color="#8DA2B5"
-        style={{
-          position: 'absolute',
-          top: '13px',
-          left: '13px',
-          width: '24px',
-          height: '24px'
-        }}
-      />
-    </div>
+    </Container>
   )
 }
 

@@ -6,23 +6,13 @@ import Flex from 'styled-flex-component'
 import { getStatusColor } from '../../../../../../utils/listing'
 import * as Deal from '../../../../../../models/Deal/context-helper'
 
-const Container = styled.div`
-  height: 48px;
-  display: flex;
-  padding: 8px 2rem;
-  background-color: ${props => (props.isHighlighted ? '#f5f5f5' : '#fff')};
+import Avatar from '../../../../Avatar'
+import { Container } from '../../../../SelectContactModal/components/ContactItem'
 
-  &:hover {
-    cursor: pointer;
-  }
-`
-
-const Price = styled.b`
-  font-size: 1.5rem;
-  line-height: 1;
-  margin-right: 1em;
-  font-weight: bold;
-  color: #1e364b;
+const Details = styled.span`
+  font-size: 0.875rem;
+  margin-right: 1rem;
+  font-weight: 500;
 `
 
 const Status = styled.span`
@@ -42,16 +32,16 @@ export function Item(props) {
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
-      <div style={{ width: '32px', height: '32px', borderRadius: '50%' }}>
-        <img src={getPhoto(item)} alt="home" style={{ width: '100%' }} />
-      </div>
-      <div style={{ paddingLeft: '2rem', height: '32px' }}>
+      <Avatar {...getAvatarProps(item)} />
+      <div style={{ paddingLeft: '1em' }}>
         <Flex alignCenter>
-          <Price>{getPrice(item) || '$0'}</Price>
+          <Details>{getPrice(item) || '$0'}</Details>
           <Status status={status}>{status || 'Unknown'}</Status>
         </Flex>
-        <Flex alignCenter style={{ color: '#758a9e' }}>
-          <b style={{ marginRight: '1em' }}>{Deal.getSide(item)}</b>
+        <Flex alignCenter style={{ color: '#7f7f7f' }}>
+          <Details style={{ marginRight: '0.5em' }}>
+            {Deal.getSide(item)}
+          </Details>
           <span>{Deal.getAddress(item)}</span>
         </Flex>
       </div>
@@ -59,8 +49,12 @@ export function Item(props) {
   )
 }
 
-function getPhoto(deal) {
-  return Deal.getField(deal, 'photo') || '/static/images/deals/home.png'
+function getAvatarProps(deal) {
+  return {
+    size: 40,
+    image: Deal.getField(deal, 'photo'),
+    placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
+  }
 }
 
 function getPrice(deal) {

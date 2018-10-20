@@ -63,7 +63,8 @@ const listInfoInitialState = {
   count: 0,
   type: 'general',
   filter: [],
-  searchInputValue: ''
+  searchInputValue: '',
+  order: '-created_at'
 }
 export const info = (state = listInfoInitialState, action) => {
   switch (action.type) {

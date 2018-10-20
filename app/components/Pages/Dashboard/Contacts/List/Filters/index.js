@@ -59,7 +59,6 @@ class ContactFilters extends React.PureComponent {
     const { tags, attributeDefs } = this.props
 
     const tagDefinition = selectDefinitionByName(attributeDefs, 'tag')
-    const stageDefinition = selectDefinitionByName(attributeDefs, 'stage')
     const sourceDefinition = selectDefinitionByName(
       attributeDefs,
       'source_type'
@@ -74,14 +73,6 @@ class ContactFilters extends React.PureComponent {
         options: this.getUniqTags(tags),
         tooltip:
           'A group a person belongs to, based on a tag you’ve manually applied to them.'
-      },
-      {
-        id: stageDefinition.id,
-        label: 'Stage',
-        type: 'Set',
-        multi: false,
-        options: stageDefinition.enum_values,
-        tooltip: 'A group a person belongs to'
       },
       {
         id: sourceDefinition.id,

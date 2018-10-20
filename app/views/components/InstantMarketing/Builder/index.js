@@ -9,7 +9,11 @@ import nunjucks from 'nunjucks'
 import './AssetManager'
 import config from './config'
 
-import PhoneNumber from 'google-libphonenumber'
+import {
+  currencyFilter,
+  areaMeterFilter,
+  phoneNumberFilter
+} from '../helpers/nunjucks-filters'
 
 import {
   Container,
@@ -21,6 +25,7 @@ import Templates from '../Templates'
 
 import juice from 'juice'
 import ActionButton from 'components/Button/ActionButton'
+import { H1 } from '../../Typography/headings'
 
 class Builder extends React.Component {
   componentDidMount() {
@@ -55,35 +60,9 @@ class Builder extends React.Component {
   setupNunjucks = () => {
     this.nunjucks = new nunjucks.Environment()
 
-    this.nunjucks.addFilter('currency', price =>
-      new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      }).format(price)
-    )
-
-    this.nunjucks.addFilter('area', area_meters =>
-      new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(area_meters * 10.7639)
-    )
-
-    const pnu = new PhoneNumber.PhoneNumberUtil()
-
-    this.nunjucks.addFilter('phone', phone => {
-      let pn
-
-      try {
-        pn = pnu.parse(phone)
-      } catch(e) {
-        return phone // Cannot parse it.
-      }
-
-      return pnu.format(pn, PhoneNumber.PhoneNumberFormat.NATIONAL)
-    })
+    this.nunjucks.addFilter('currency', currencyFilter)
+    this.nunjucks.addFilter('area', areaMeterFilter)
+    this.nunjucks.addFilter('phone', phoneNumberFilter)
   }
 
   disableAssetManager = () => {
@@ -131,6 +110,11 @@ class Builder extends React.Component {
           hoverable: false
         })
       }
+
+      model.set({
+        draggable: false,
+        droppable: false
+      })
 
       model.get('components').each(model => updateAll(model))
     }
@@ -187,19 +171,15 @@ class Builder extends React.Component {
     return (
       <Container className="template-builder">
         <Header>
-          <h1>Marketing Center</h1>
+          <H1>Marketing Center</H1>
 
           <div>
-            <ActionButton
-              inverse
-              style={{ padding: '0.9em 1.9em' }}
-              onClick={this.props.onClose}
-            >
+            <ActionButton appearance="outline" onClick={this.props.onClose}>
               Cancel
             </ActionButton>
 
             <ActionButton
-              style={{ padding: '0.9em 1.9em', marginLeft: '8px' }}
+              style={{ marginLeft: '0.5rem' }}
               onClick={this.onSave}
             >
               Send
@@ -209,7 +189,10 @@ class Builder extends React.Component {
 
         <BuilderContainer>
           <TemplatesContainer>
-            <Templates onTemplateSelect={this.handleSelectTemplate} />
+            <Templates
+              onTemplateSelect={this.handleSelectTemplate}
+              templateTypes={this.props.templateTypes}
+            />
           </TemplatesContainer>
           <div id="grapesjs-canvas" />
         </BuilderContainer>

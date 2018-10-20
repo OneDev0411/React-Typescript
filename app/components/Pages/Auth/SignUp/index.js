@@ -6,11 +6,11 @@ import { Field, reduxForm } from 'redux-form'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import Brand from '../../../../controllers/Brand'
-
 import { validateEmail } from '../Password/Forgot'
-import { getBrandInfo, renderField } from '../SignIn'
+import { getBrandInfo } from '../SignIn'
 import signup from '../../../../models/auth/signup'
+import Button from '../../../../views/components/Button/ActionButton'
+import SimpleField from '../../../Pages/Dashboard/Account/Profile/components/SimpleField'
 
 const getErrorMessage = (errorCode, email) => {
   if (errorCode === 409) {
@@ -37,8 +37,6 @@ const getErrorMessage = (errorCode, email) => {
 
 const Signup = ({
   brand,
-  invalid,
-  pristine,
   submitError,
   isSubmitting,
   handleSubmit,
@@ -46,8 +44,8 @@ const Signup = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
-  const isDisabled = isSubmitting || invalid || pristine
-  const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
+  const isDisabled = isSubmitting
+  const { siteLogo, siteTitle } = getBrandInfo(brand)
 
   return (
     <div className="signin-page-wrapper">
@@ -58,11 +56,11 @@ const Signup = ({
               <img
                 src={siteLogo}
                 alt={`${siteTitle} logo`}
-                className={'c-auth__logo'}
+                className="c-auth__logo"
               />
             </Link>
           )}
-          <h1 className="c-auth__title din">{`${siteTitle}`}</h1>
+          <h1 className="c-auth__title">{`${siteTitle}`}</h1>
           {!submitSuccessfully ? (
             <p className="c-auth__subtitle">Hello, lets get started.</p>
           ) : (
@@ -82,20 +80,17 @@ const Signup = ({
                     setSubmitError(false)
                   }
                 }}
-                component={renderField}
+                component={SimpleField}
               />
               {submitError && submitError.message}
-              <button
+              <Button
                 type="submit"
-                className="c-auth__submit-btn"
+                isBlock
                 disabled={isDisabled}
-                style={{
-                  background: brandColor,
-                  opacity: isDisabled ? 0.7 : 1
-                }}
+                style={{ marginBottom: '2rem' }}
               >
                 {isSubmitting ? 'Submitting...' : 'Sign up'}
-              </button>
+              </Button>
               <p className="c-auth__subtitle">
                 <small>Already have an account?</small>&nbsp;&nbsp;
                 <Link to="/signin">Sign in</Link>
@@ -104,14 +99,15 @@ const Signup = ({
           ) : (
             <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                We {submitSuccessfully.isShadow ? 'resent a new' : ' sent an'}  activation email.<br />
+                We {submitSuccessfully.isShadow ? 'resent a new' : ' sent an'}{' '}
+                activation email.<br />
                 Please check <b>{submitSuccessfully.email}</b>
               </p>
               <Link
-                  to={`/signin?username=${encodeURIComponent(
-                    submitSuccessfully.email
-                  )}`}
-                >
+                to={`/signin?username=${encodeURIComponent(
+                  submitSuccessfully.email
+                )}`}
+              >
                 Sign in
               </Link>
             </div>
@@ -155,6 +151,7 @@ export default compose(
             email,
             isShadow: true
           })
+
           return
         }
 

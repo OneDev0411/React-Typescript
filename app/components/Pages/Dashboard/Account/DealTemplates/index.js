@@ -1,15 +1,19 @@
 import React, { Fragment } from 'react'
-import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import cn from 'classnames'
-import _ from 'underscore'
+import styled from 'styled-components'
 
-import PageTitle from '../components/PageTitle'
-import Search from '../../../../Partials/headerSearch'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 import { getForms } from '../../../../../store_actions/deals'
+import Grid from '../../../../../views/components/Grid/Table'
+import Search from '../../../../../views/components/Grid/Search'
+import PageHeader from '../../../../../views/components/PageHeader'
+import { grey } from '../../../../../views/utils/colors'
+
+const GridContainer = styled.div`
+  margin-top: 2rem;
+`
 
 class DealTemplates extends React.Component {
   state = {
@@ -41,16 +45,15 @@ class DealTemplates extends React.Component {
     return [
       {
         id: 'name',
-        Header: 'Name',
-        style: { paddingLeft: '15px', cursor: 'auto' },
+        header: 'Name',
         accessor: 'name',
-        Cell: ({ original: form }) => form.name
+        render: ({ rowData: form }) => form.name
       },
       {
-        style: { flexDirection: 'row-reverse' },
-        Cell: ({ original: form }) => (
+        width: '116px',
+        render: ({ rowData: form }) => (
           <Fragment>
-            <ActionButton onClick={() => this.editTemplate(form)}>
+            <ActionButton size="small" onClick={() => this.editTemplate(form)}>
               Edit Template
             </ActionButton>
           </Fragment>
@@ -58,6 +61,12 @@ class DealTemplates extends React.Component {
       }
     ]
   }
+
+  getGridTrProps = () => ({
+    hoverStyle: `
+    background-color: ${grey.ClientRectListA000};
+    `
+  })
 
   editTemplate = form =>
     browserHistory.push(`/dashboard/account/deal/templates/${form.id}`)
@@ -67,27 +76,31 @@ class DealTemplates extends React.Component {
 
     return (
       <Fragment>
-        <PageTitle title="Form Templates" />
+        <PageHeader
+          isFlat
+          style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}
+        >
+          <PageHeader.Title showBackButton={false}>
+            <PageHeader.Heading>Form Templates</PageHeader.Heading>
+          </PageHeader.Title>
+        </PageHeader>
         <div className="c-deal-templates">
           <Search
-            onInputChange={filter => this.setState({ filter })}
-            debounceTime={100}
+            disableOnSearch={false}
             placeholder="Search all forms"
+            onChange={filter => this.setState({ filter })}
+            debounceTime={100}
+            minimumLength={1}
+            onClearSearch={() => this.setState({ filter: '' })}
           />
-
-          <ReactTable
-            showPagination={false}
-            data={data}
-            pageSize={data.length}
-            columns={this.Columns}
-            defaultSorted={[
-              {
-                id: 'name'
-              }
-            ]}
-            sortable
-            resizable
-          />
+          <GridContainer>
+            <Grid
+              showPagination={false}
+              data={data}
+              getTrProps={this.getGridTrProps}
+              columns={this.Columns}
+            />
+          </GridContainer>
         </div>
       </Fragment>
     )

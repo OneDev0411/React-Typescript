@@ -1,19 +1,19 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  padding: 15px;
+  padding: 1em;
 `
 
 export const Operator = styled.div`
   cursor: pointer;
 `
 
-export const Input = styled.input`
-  cursor: pointer;
-`
-
 export const Title = styled.span`
   font-size: 16px;
-  color: #17283a;
-  margin-left: 10px;
+  margin-left: 0.5em;
+`
+
+export const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
 `

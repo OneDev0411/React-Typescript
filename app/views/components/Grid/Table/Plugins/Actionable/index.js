@@ -17,6 +17,7 @@ export class ActionablePlugin {
   }
 
   render = () =>
+    this.actions &&
     this.actions.map((action, index) =>
       this.renderAction({
         ...action,
@@ -41,12 +42,17 @@ export class ActionablePlugin {
       return false
     }
 
+    if (this.selectablePlugin) {
+      params.resetSelectedRows = this.selectablePlugin.resetSelectedItems
+    }
+
     switch (type) {
       case 'button':
         return (
           <ActionItem key={key}>
             <ActionButton
-              style={{ padding: '0.70em 1.5em' }}
+              appearance="outline"
+              size="small"
               {...otherProps}
               onClick={e => onClick && onClick(e, params)}
             >

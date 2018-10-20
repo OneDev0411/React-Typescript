@@ -6,7 +6,7 @@ import { getStatusColor } from '../../../../../../../../utils/listing'
 
 const name = 'listing_statuses'
 
-const SubStatuses = ({ fields }) =>
+const SubStatuses = ({ fields }) => (
   <ul className="c-filters-sub-statuses">
     {Object.keys(fields).map(field => {
       const id = `${name}__${field}`
@@ -25,7 +25,6 @@ const SubStatuses = ({ fields }) =>
             <svg
               width="20"
               height="20"
-              fill="#2196f3"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -39,5 +38,6 @@ const SubStatuses = ({ fields }) =>
       )
     })}
   </ul>
+)
 
 export default SubStatuses

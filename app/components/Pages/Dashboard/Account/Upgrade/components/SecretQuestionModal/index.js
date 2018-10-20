@@ -1,26 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link, browserHistory } from 'react-router'
+import { browserHistory } from 'react-router'
 import { Modal } from 'react-bootstrap'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import Brand from '../../../../../../../controllers/Brand'
 import SuccessModal from '../../../../../Dashboard/Listings/components/modals/SuccessModal'
 import upgradeToAgent from '../../../../../../../store_actions/user/upgrade-to-agent'
-
-const brandColor = `#${Brand.color('primary', '3388ff')}`
+import Button from '../../../../../../../views/components/Button/ActionButton'
 
 const secretQuestionModal = ({
   show,
   onHide,
   // internals
-  mlsid,
   secret,
   question,
-  setSecret,
-  redirectTo,
+  onChange,
   confirmError,
   isConfirming,
   setConfirmError,
@@ -35,7 +31,7 @@ const secretQuestionModal = ({
         'is-confirming'}`}
     >
       <Modal.Body>
-        <div style={{ marginBottom: '2rem' }}>
+        <div style={{ marginBottom: '2rem', color: '#000' }}>
           <h2
             style={{ marginBottom: '4rem' }}
             className="c-confirm-modal__title"
@@ -45,32 +41,18 @@ const secretQuestionModal = ({
           <p>Enter the complete mobile number or email address below:</p>
 
           <p>
-            Hint:{' '}
-            <span style={{ color: '#333', fontWeight: 'bold' }}>
-              {question}
-            </span>
+            Hint: <span style={{ fontWeight: 'bold' }}>{question}</span>
           </p>
         </div>
         <form onSubmit={onConfirmHandler}>
-          <div className="c-auth__field__input-wrapper">
+          <div className="c-simple-field">
+            <label htmlFor="secret" className="c-simple-field__label" />
             <input
               id="secret"
               type="text"
-              onChange={e => {
-                const newValue = e.target.value
-
-                setSecret(newValue)
-
-                if (confirmError && newValue) {
-                  setConfirmError(false)
-                }
-              }}
-              className={`c-auth__field__input ${secret ? 'has-content' : ''}`}
+              onChange={onChange}
+              className="c-simple-field__input"
             />
-            <label htmlFor="secret" className="c-auth__field__label" />
-            <span className="focus-border">
-              <i />
-            </span>
           </div>
           {confirmError && (
             <div className="c-auth__submit-error-alert">
@@ -89,31 +71,27 @@ const secretQuestionModal = ({
               )}
             </div>
           )}
-          <button
-            type="submit"
-            className="c-auth__submit-btn"
-            disabled={isConfirming || !secret}
-            style={{
-              background: brandColor,
-              opacity: isConfirming || !secret ? 0.7 : 1
-            }}
-          >
-            {isConfirming ? 'Submitting...' : 'Confirm'}
-          </button>
+          <div style={{ textAlign: 'right' }}>
+            <Button
+              appearance="outline"
+              onClick={() => {
+                setConfirmError(false)
+                onHide()
+              }}
+              disabled={isConfirming}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ marginLeft: '1em' }}
+              type="submit"
+              disabled={isConfirming || !secret}
+            >
+              {isConfirming ? 'Submitting...' : 'Confirm'}
+            </Button>
+          </div>
         </form>
-        <div style={{ textAlign: 'right' }}>
-          <button
-            onClick={() => {
-              setConfirmError(false)
-              onHide()
-            }}
-            disabled={isConfirming}
-            style={{ display: 'inline-block' }}
-            className="c-auth__submit-error-alert__btn"
-          >
-            Cancel
-          </button>
-        </div>
       </Modal.Body>
     </Modal>
     <SuccessModal text="Agent Confirmed" isActive={successModalIsActive} />
@@ -121,7 +99,10 @@ const secretQuestionModal = ({
 )
 
 export default compose(
-  connect(null, { upgradeToAgent }),
+  connect(
+    null,
+    { upgradeToAgent }
+  ),
   withState('secret', 'setSecret', false),
   withState('confirmError', 'setConfirmError', false),
   withState('isConfirming', 'setIsConfirming', false),
@@ -132,7 +113,6 @@ export default compose(
       onHide,
       secret,
       redirectTo,
-      isConfirming,
       upgradeToAgent,
       setConfirmError,
       setIsConfirming,
@@ -153,6 +133,17 @@ export default compose(
       } catch ({ status }) {
         setIsConfirming(false)
         setConfirmError(status)
+      }
+    }
+  }),
+  withHandlers({
+    onChange: ({ setSecret, setConfirmError, confirmError }) => e => {
+      const newValue = e.target.value
+
+      setSecret(newValue)
+
+      if (confirmError && newValue) {
+        setConfirmError(false)
       }
     }
   })

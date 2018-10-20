@@ -27,6 +27,7 @@ export function EditForm({ fields, ...props }) {
   return (
     <FinalFormDrawer
       {...props}
+      formId={`edit-${fields[0].attribute_def.section.toLowerCase()}-form`}
       render={({ form }) => getAllFields(fields, form.mutators)}
     />
   )

@@ -1,32 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
 import { Item } from './Item'
 import SearchInput from './SearchInput'
-import Loading from '../../../../../components/Partials/Loading'
+import Loading from '../../../Spinner'
 import { searchDeals } from '../../../../../models/Deal/search'
-
-const ListContainer = styled.div`
-  position: relative;
-  height: calc(100vh - 172px);
-  padding: 2rem 0;
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  @media screen and (min-width: 48em) {
-    height: 240px;
-  }
-`
-
-const List = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-`
+import {
+  ListContainer,
+  List
+} from '../../../SelectContactModal/components/Body/styled'
+import Alert from '../../../../../components/Pages/Dashboard/Partials/Alert'
 
 const propTypes = {
   deals: PropTypes.arrayOf(PropTypes.shape),
@@ -85,7 +70,7 @@ class Body extends Component {
 
   render() {
     const { items, isSearching } = this.state
-    const { defaultSearchFilter } = this.props
+    const { defaultSearchFilter, isDrawer } = this.props
     const defaultInputValue =
       typeof defaultSearchFilter !== 'string' ? '' : defaultSearchFilter
 
@@ -95,42 +80,55 @@ class Body extends Component {
         defaultInputValue={defaultInputValue}
         onSelect={this.props.handleSelectedItem}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
-          <div style={{ paddingTop: '2rem' }}>
-            <div style={{ padding: '0 2rem' }}>
+          <div
+            style={{
+              paddingTop: isDrawer ? '1.5rem' : '1rem',
+              margin: isDrawer ? '0 -1.5rem' : 0
+            }}
+          >
+            <div style={{ padding: isDrawer ? '0 1.5rem' : '0 1rem' }}>
               <SearchInput
-                style={{ marginBottom: '12px' }}
+                style={{ marginBottom: '1em' }}
                 inputProps={{
                   ...getInputProps({
                     onChange: this.handleOnChange,
-                    placeholder: 'Search for a contact...'
+                    placeholder: 'Search for a deal...'
                   })
                 }}
               />
             </div>
-            <ListContainer>
+            <ListContainer isDrawer={isDrawer}>
               {isSearching && <Loading />}
               {!isSearching &&
                 this.state.error && (
-                  <div
+                  <Alert
+                    type="warning"
                     style={{
-                      marginTop: '2em',
-                      textAlign: 'center',
-                      color: '#62778c'
+                      margin: isDrawer ? '0 1.5rem' : '0 1rem'
                     }}
                   >
-                    <h3>Please type in at least 4 characters to see results</h3>
-                    <p>
+                    <div
+                      style={{
+                        fontWeight: 500,
+                        marginBottom: '1rem',
+                        fontSize: '1.125rem'
+                      }}
+                    >
+                      Please type in at least 4 characters to see results
+                    </div>
+                    <div>
                       So many deals, so little time. Search by address, MLS # or
                       agent name to narrow your results.
-                    </p>
-                  </div>
+                    </div>
+                  </Alert>
                 )}
               {!isSearching &&
                 items.length > 0 && (
-                  <List className="u-scrollbar--thinner">
+                  <List className="u-scrollbar--thinner" isDrawer={isDrawer}>
                     {items.map((item, index) => (
                       <Item
                         item={item}
+                        isDrawer={isDrawer}
                         key={item.id || `downshift_search_result_item_${index}`}
                         {...getItemProps({ item })}
                         onClickHandler={this.props.handleSelectedItem}

@@ -4,43 +4,32 @@
 }
 
 .l-account__sidenav {
-  width: 23rem;
-  background: #f8fafb;
-  border-right: 1px solid #dde7ec;
+  width: 230px;
+  background: #f2f2f2;
 }
 
 .l-account__sidenav__header {
-  height: 5.4rem;
+  height: 71px;
   display: flex;
   align-items: center;
-  padding: 0 2rem;
+  padding: 0 1em;
 
   > h1 {
     margin: 0;
     line-height: 1;
-    font-size: 1.8rem;
-    color: #1c364c;
+    font-size: 1.125rem;
   }
 }
 
 .l-account__main {
   position: relative;
-  width: calc(100% - 23rem);
+  width: calc(100% - 230px);
   overflow-x: hidden;
   overflow-y: scroll;
+  box-shadow: -1px 0 2px 0 rgba(0,0,0,0.04), -1px 0 20px 0 rgba(0,0,0,0.1);
 
   .signin-page-wrapper {
     height: auto;
-    padding-top: 8rem;
+    padding-top: 5em;
   }
-}
-
-.l-account__header {
-  padding: 3rem;
-}
-
-.l-account__page-title {
-  font-size: 36px;
-  line-height: 1;
-  margin: 0;
 }

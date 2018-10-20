@@ -214,19 +214,17 @@ class PdfViewer extends React.Component {
         {doc && (
           <div className="pdf-context" ref={ref => (this.pdfContext = ref)}>
             <div className="wrapper">
-              {Array.apply(null, { length: doc.pdfInfo.numPages }).map(
-                (v, i) => (
-                  <Page
-                    key={`page-${i}`}
-                    doc={doc}
-                    fitWindow={fitWindow}
-                    rotation={rotation}
-                    zoom={zoom}
-                    defaultContainerHeight={defaultContainerHeight || '85vh'}
-                    pageNumber={i + 1}
-                  />
-                )
-              )}
+              {Array.apply(null, { length: doc.numPages }).map((v, i) => (
+                <Page
+                  key={`page-${i}`}
+                  doc={doc}
+                  fitWindow={fitWindow}
+                  rotation={rotation}
+                  zoom={zoom}
+                  defaultContainerHeight={defaultContainerHeight || '85vh'}
+                  pageNumber={i + 1}
+                />
+              ))}
             </div>
 
             <div className="pdf-toolbar">

@@ -1,9 +1,11 @@
 // Loading.js
 import React from 'react'
 
-export default function Spinner() {
+export default function Spinner(props) {
   return (
-    <div className="sk-circle">
+    <div
+      className={`sk-circle ${props.size ? `sk-circle--${props.size}` : ''}`}
+    >
       <div className="sk-circle1 sk-child" />
       <div className="sk-circle2 sk-child" />
       <div className="sk-circle3 sk-child" />

@@ -1,40 +1,93 @@
 import React from 'react'
+import { Field } from 'react-final-form'
+import Flex from 'styled-flex-component'
 
-import { Select } from '../../../../../../components/final-form-fields'
+import { Dropdown } from '../../../../../../components/Dropdown'
+import LinkButton from '../../../../../../components/Button/LinkButton'
+import { eventTypesIcons } from '../../../../../../utils/event-types-icons'
+import ArrowDropDown from '../../../../../../components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { grey, primary } from '../../../../../../utils/colors'
+
+export const Button = LinkButton.extend`
+  min-width: 160px;
+  font-weight: 500;
+  justify-content: space-between;
+  background-color: ${grey.A150};
+  color: ${({ isOpen }) => (isOpen ? primary : '#000')};
+
+  :hover {
+    > svg {
+      fill: ${primary};
+    }
+  }
+`
+
+export const IconArrow = ArrowDropDown.extend`
+  position: relative;
+  margin-left: 1em;
+  fill: ${({ isOpen }) => (isOpen ? primary : '#000')};
+  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
+`
 
 const ITEMS = [
   {
-    title: 'Closing',
-    value: 'Closing'
+    title: 'Call',
+    value: 'Call'
   },
   {
-    title: 'Follow up',
-    value: 'Follow up'
+    title: 'In-Person Meeting',
+    value: 'In-Person Meeting'
   },
   {
-    title: 'Inspection',
-    value: 'Inspection'
+    title: 'Text',
+    value: 'Text'
   },
   {
-    title: 'Listing appointment',
-    value: 'Listing appointment'
+    title: 'Chat',
+    value: 'Chat'
   },
   {
-    title: 'Open House',
-    value: 'Open House'
+    title: 'Mail',
+    value: 'Mail'
   },
   {
-    title: 'Todo',
-    value: 'Todo'
+    title: 'Email',
+    value: 'Email'
   },
   {
-    title: 'Tour',
-    value: 'Tour'
+    title: 'Other',
+    value: 'Other'
   }
 ]
 
 export function TaskType() {
   return (
-    <Select hasEmptyItem={false} items={ITEMS} label="Type" name="task_type" />
+    <Field
+      name="task_type"
+      render={({ input }) => (
+        <Dropdown
+          input={input}
+          icons={eventTypesIcons}
+          items={ITEMS}
+          fullHeight
+          buttonRenderer={({ icon: Icon, iconColor, ...props }) => (
+            <Button {...props} inverse>
+              <Flex alignCenter>
+                {Icon && (
+                  <Icon
+                    style={{
+                      marginRight: '0.5em',
+                      fill: iconColor || '#000'
+                    }}
+                  />
+                )}
+                {props.value}
+              </Flex>
+              <IconArrow isOpen={props.isOpen} />
+            </Button>
+          )}
+        />
+      )}
+    />
   )
 }

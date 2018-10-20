@@ -1,7 +1,12 @@
 import React from 'react'
-import { Modal, Button, Row, Col } from 'react-bootstrap'
+import { Modal, Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import { getStatusColorClass } from '../../../../../../utils/listing'
+import ActionButton from 'components/Button/ActionButton'
+
+const CancelButton = ActionButton.extend`
+  margin-right: 1em;
+`
 
 export default class ListingStatusModal extends React.Component {
   constructor(props) {
@@ -111,24 +116,23 @@ export default class ListingStatusModal extends React.Component {
                   style={{ background: getStatusColorClass(status) }}
                 />
 
-                <span className="name">{status}</span>
+                <span>{status}</span>
               </Col>
             ))}
           </Row>
         </Modal.Body>
 
         <Modal.Footer>
-          <Button className="select-status__button cancel" onClick={onClose}>
+          <CancelButton appearance="outline" onClick={onClose}>
             Cancel
-          </Button>
+          </CancelButton>
 
-          <Button
+          <ActionButton
             disabled={selectedStatus === oldStatus}
-            className="select-status__button"
             onClick={() => onChangeStatus(selectedStatus)}
           >
             {saveText || 'Update'}
-          </Button>
+          </ActionButton>
         </Modal.Footer>
       </Modal>
     )

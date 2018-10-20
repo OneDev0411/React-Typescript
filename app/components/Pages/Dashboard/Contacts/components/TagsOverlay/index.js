@@ -32,6 +32,9 @@ import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
 const defaultTags = [
+  'Warm List',
+  'Hot List',
+  'Past Client',
   'Seller',
   'Agent',
   'First Home',
@@ -338,9 +341,7 @@ class TagsOverlay extends React.Component {
 
     return (
       <OverlayDrawer isOpen={isOpen} width={50} onClose={closeOverlay}>
-        <OverlayDrawer.Header>
-          <DrawerHeader text={DrawerHeaderText} />
-        </OverlayDrawer.Header>
+        <OverlayDrawer.Header title={`Tags for ${DrawerHeaderText}`} />
 
         <OverlayDrawer.Body>
           <SubHeaderContainer>

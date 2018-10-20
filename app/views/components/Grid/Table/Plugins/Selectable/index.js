@@ -1,12 +1,13 @@
 import React from 'react'
 
-import { CheckBoxButton } from './Checkbox'
+import { CheckBoxButton } from '../../../../Button/CheckboxButton'
+import { CheckBoxButtonWithoutState } from '../../../../Button/CheckboxButton/CheckboxWithoutState'
 
 const SESSION_KEY_PREFIX = 'Rechat--Grid--Selectable--'
 
 export function resetGridSelectedItems(key) {
   console.log('[ Grids -> Selectable ] Reset Selected Items')
-  window.sessionStorage[`${SESSION_KEY_PREFIX}${key}`] = ''
+  window.gridSelectableStorage[`${SESSION_KEY_PREFIX}${key}`] = ''
 }
 
 export class SelectablePlugin {
@@ -19,6 +20,11 @@ export class SelectablePlugin {
       throw new Error(
         '[ Grids -> Selectable ] it should provide storage key on persistant mode'
       )
+    }
+
+    // create global storage if doesn't exists
+    if (!window.gridSelectableStorage) {
+      window.gridSelectableStorage = {}
     }
 
     if (!options.persistent) {
@@ -34,6 +40,19 @@ export class SelectablePlugin {
   setData(data = []) {
     // set new data
     this.data = data
+  }
+
+  /**
+   * reset all selected rows in persistent mode
+   */
+  resetSelectedItems = () => {
+    console.log(
+      `[ Grids -> Selectable -> ${this.StorageKey} ] Reset Selected Items`
+    )
+
+    window.gridSelectableStorage[this.StorageKey] = ''
+
+    this.onChange()
   }
 
   /**
@@ -62,6 +81,14 @@ export class SelectablePlugin {
     this.StorageObject.selectedRows && this.StorageObject.selectedRows[id]
 
   /**
+   * returns true when at least one row is selected
+   */
+  anyRowSelected = () =>
+    !this.isAllRowsSelected() &&
+    this.StorageObject.selectedRows &&
+    Object.keys(this.StorageObject.selectedRows).length > 0
+
+  /**
    * checks whether all rows are selected or not
    */
   isAllRowsSelected = () => this.StorageObject.selectAllRows === true
@@ -84,14 +111,14 @@ export class SelectablePlugin {
    * returns storage engine
    */
   get StorageEngine() {
-    return window.sessionStorage[this.StorageKey] || null
+    return window.gridSelectableStorage[this.StorageKey] || null
   }
 
   /**
    * store object into storage
    */
   set StorageEngine(data) {
-    window.sessionStorage[this.StorageKey] = data
+    window.gridSelectableStorage[this.StorageKey] = data
   }
 
   /**
@@ -111,6 +138,9 @@ export class SelectablePlugin {
 
     if (selectedRows[id]) {
       delete selectedRows[id]
+
+      // deselect select-all checkbox in header if is selected
+      this.isAllRowsSelected() && this.toggleSelectAllRows()
     } else {
       selectedRows[id] = true
     }
@@ -143,17 +173,26 @@ export class SelectablePlugin {
   }
 
   onChange = () => {
+    if (!this.options.onChange) {
+      this.onRequestForceUpdate()
+
+      return
+    }
+
     this.options.onChange(this.SelectedRows)
   }
 
   registerColumn = columns => {
     const column = {
       id: 'plugin--selectable',
-      width: '40px',
+      width: '24px',
+      sortable: false,
+      verticalAlign: 'center',
       header: () => (
-        <CheckBoxButton
+        <CheckBoxButtonWithoutState
+          someRowsSelected={this.anyRowSelected()}
           onClick={this.toggleSelectAllRows}
-          isSelected={this.isAllRowsSelected()}
+          isSelected={this.isAllRowsSelected() || this.anyRowSelected()}
         />
       ),
       render: ({ rowData: row }) => (

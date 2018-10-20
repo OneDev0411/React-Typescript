@@ -8,8 +8,6 @@ import { FinalFormDrawer } from '../FinalFormDrawer'
 import { TextInput } from '../Forms/TextInput'
 import { MultipleContactsSelect } from '../Forms/MultipleContactsSelect'
 
-import { EmailBody } from './styled'
-
 class EmailCompose extends React.Component {
   get InitialValues() {
     if (
@@ -49,6 +47,7 @@ class EmailCompose extends React.Component {
   render() {
     return (
       <FinalFormDrawer
+        formId="email-compose-form"
         isOpen={this.props.isOpen}
         initialValues={this.InitialValues}
         onClose={this.props.onClose}
@@ -56,8 +55,6 @@ class EmailCompose extends React.Component {
         validate={this.validate}
         submitting={this.props.isSubmitting}
         closeDrawerOnBackdropClick={false}
-        showCancel={false}
-        showReset={false}
         submitButtonLabel="Send"
         submittingButtonLabel="Sending ..."
         title="New Email"
@@ -66,6 +63,7 @@ class EmailCompose extends React.Component {
             <Field
               placeholder="To"
               name="recipients"
+              disableAddNewRecipient={this.props.disableAddNewRecipient}
               component={MultipleContactsSelect}
             />
 
@@ -78,7 +76,7 @@ class EmailCompose extends React.Component {
 
             <Field placeholder="Subject" name="subject" component={TextInput} />
 
-            <EmailBody>
+            <div>
               {this.props.html === null && <Loading />}
 
               <div
@@ -86,7 +84,7 @@ class EmailCompose extends React.Component {
                   __html: this.props.html
                 }}
               />
-            </EmailBody>
+            </div>
           </Fragment>
         )}
       />

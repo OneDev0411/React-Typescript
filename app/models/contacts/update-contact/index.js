@@ -1,5 +1,5 @@
 import Fetch from '../../../services/fetch'
-import { defaultQuery } from '../helpers/default-query'
+import { updateContactQuery } from '../helpers/default-query'
 
 /**
  * Updating a contact (its attributes).
@@ -11,7 +11,7 @@ import { defaultQuery } from '../helpers/default-query'
 export async function updateContact(
   contactId,
   attributes,
-  query = defaultQuery
+  query = updateContactQuery
 ) {
   if (!contactId) {
     throw new Error('Contact id is required.')

@@ -6,13 +6,13 @@ import { markAllNotificationsAsSeen } from '../../../../../store_actions/notific
 import { selectNotificationIsFetching } from '../../../../../reducers/notifications'
 
 const NotificationsHeader = ({ isFetching, markAllNotificationsAsSeen }) => (
-  <PageHeader title="Notifications" showBackButton={false}>
+  <PageHeader
+    title="Notifications"
+    showBackButton={false}
+    style={{ height: '71px' }}
+  >
     <PageHeader.Menu>
-      <ActionButton
-        disabled={isFetching}
-        color="#2196f3"
-        onClick={markAllNotificationsAsSeen}
-      >
+      <ActionButton disabled={isFetching} onClick={markAllNotificationsAsSeen}>
         Mark all as read
       </ActionButton>
     </PageHeader.Menu>

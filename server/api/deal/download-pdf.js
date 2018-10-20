@@ -44,7 +44,7 @@ router.get('/deals/pdf/download/:dealId/:taskId/:type', async (ctx, next) => {
     let filename = null
 
     if (type === 'raw') {
-      filename = task.formstack_id
+      filename = task.form
       url = `${rawBaseUrl}/${filename}.pdf`
     }
 

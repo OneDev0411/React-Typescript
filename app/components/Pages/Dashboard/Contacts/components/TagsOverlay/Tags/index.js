@@ -1,18 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import Tag from './Tag'
 
-export const Container = styled.div`
-  margin-top: 16px;
-  margin-left: 16px;
+const TagsContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   flex-wrap: wrap;
+  padding: 0;
 `
-
 const Tags = ({ tags, onSelectionChange, tagDataType }) => (
-  <Container>
+  <TagsContainer>
     {tags.map((tag, tagIndex) => (
       <Tag
         key={tagIndex}
@@ -21,7 +19,7 @@ const Tags = ({ tags, onSelectionChange, tagDataType }) => (
         onSelectionChange={() => onSelectionChange(tagIndex, !tag.isSelected)}
       />
     ))}
-  </Container>
+  </TagsContainer>
 )
 
 export default Tags

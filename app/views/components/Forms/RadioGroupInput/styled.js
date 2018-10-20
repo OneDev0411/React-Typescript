@@ -5,10 +5,6 @@ export const RadioContainer = styled.div`
   flex-direction: row;
   align-items: center;
 `
-export const InputRadio = styled.input`
-  width: auto;
-  cursor: pointer;
-`
 
 export const RadioLabel = styled.label`
   margin: 0 8px;

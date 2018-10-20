@@ -8,13 +8,12 @@
       font-size: 24px;
       font-weight: 600;
       line-height: 1.0;
-      color: #4a4a4a;
     }
     .close {
       opacity: 1;
       color: #9b9b9b;
       &:hover, &:focus {
-        color: #2196f3;
+        color: #003bdf;
       }
     }
     .leave-icon {
@@ -27,21 +26,9 @@
       &:hover, &:focus {
         cursor: pointer;
         svg g {
-          fill: #2196f3;
+          fill: #003bdf;
         }
       }
     }
-  }
-}
-
-#popover-leave {
-  font-size: 13px;
-  font-weight: 500;
-  .tooltip-inner {
-    background-color: #333e4c;
-    border-radius: 4px;
-  }
-  .tooltip-arrow {
-    border-bottom-color: #333e4c;
   }
 }

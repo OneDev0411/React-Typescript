@@ -1,46 +1,95 @@
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import styled, { css } from 'styled-components'
 
-const propTypes = {
-  onClick: PropTypes.func,
-  inverse: PropTypes.bool
+import { isOutline } from '../helpers'
+import { ButtonAppearances } from '../styles/ButtonAppearances'
+
+export const propTypes = {
+  /**
+   * The appearance of the button.  {primary, outline, icon, link}
+   */
+  appearance: PropTypes.oneOf(Object.keys(ButtonAppearances)),
+
+  /**
+   * When true, the button is disabled.
+   */
+  disabled: PropTypes.bool,
+
+  /**
+   * When true, the button is activated.
+   */
+  isActive: PropTypes.bool,
+
+  /**
+   * When true, the button width is 100%.
+   */
+  isBlock: PropTypes.bool,
+
+  /**
+   * DEPRECATED
+   * When true, the button appearances should be ghost.
+   */
+  inverse: PropTypes.bool,
+
+  /**
+   * The size of the button.
+   */
+  size: PropTypes.oneOf(['small', 'medium', 'large', 'XLarge']),
+
+  /**
+   * The brand color of active team.
+   */
+  brandColor: PropTypes.string
 }
 
-const defaultProps = {
-  onClick: () => {},
-  inverse: false
+export const defaultProps = {
+  appearance: 'primary',
+  disabled: false,
+  isActive: false,
+  isBlock: false,
+  inverse: false,
+  size: 'medium',
+  brandColor: ''
 }
 
-const ActionButton = styled.button`
-  padding: 0.5em 1em;
-  line-height: 1;
-  border-width: 0;
-  border-radius: 3px;
-  color: ${props => (props.disabled ? '#333' : '#fff')};
-  background: ${props => (props.disabled ? '#cecece' : '#2196f3')};
+const getStylesDependedSize = props => {
+  switch (props.size) {
+    case 'small':
+      return {
+        height: '2.2857142857142856em',
+        fontSize: '0.875rem',
+        lineHeight: isOutline(props) ? 2.142857142857143 : 2.2857142857142856
+      }
 
-  ${props =>
-    !props.disabled &&
-    `&:hover {
-    background: #107CEB;
-  }`};
+    case 'large':
+      return {
+        height: '2.6666666666666665em',
+        fontSize: '1.125rem',
+        lineHeight: isOutline(props) ? 2.5555555555555554 : 2.6666666666666665
+      }
 
-  ${props =>
-    props.inverse &&
-    !props.disabled &&
-    `
-   background-color: #fff;
-   border: 1px solid #2196f3;
-   color: #2196f3;
+    default:
+      return {
+        height: '2.5em',
+        fontSize: '1rem',
+        lineHeight: isOutline(props) ? 2.375 : 2.5
+      }
+  }
+}
 
-   &:hover {
-     background-color: #2196f3;
-     color: #fff;
-   }
-  `};
-`
+export const getAppearance = props => {
+  let appearance = props.appearance
 
-ActionButton.propTypes = propTypes
-ActionButton.defaultProps = defaultProps
+  return css`
+    ${ButtonAppearances[appearance]};
+    ${getStylesDependedSize(props)};
+    padding: 0 1rem;
+  `
+}
 
-export default ActionButton
+const Button = styled.button(getAppearance)
+
+export default Object.assign(Button, {
+  propTypes,
+  defaultProps
+})

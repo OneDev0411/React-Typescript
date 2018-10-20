@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { isBackOffice } from '../../../../../utils/user-teams'
+import Badge from '../../../../../views/components/Badge'
 
 class BadgeCounter extends React.Component {
   constructor(props) {
@@ -44,7 +45,15 @@ class BadgeCounter extends React.Component {
 
     if (counter > 0) {
       return (
-        <span className="c-app-sidenav__notification-badge">{counter}</span>
+        <Badge
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '50%'
+          }}
+        >
+          {counter > 99 ? '99+' : counter}
+        </Badge>
       )
     }
 
@@ -52,10 +61,7 @@ class BadgeCounter extends React.Component {
   }
 }
 
-export default connect(({ deals, chatroom, user }) => ({
+export default connect(({ deals, user }) => ({
   deals: deals.list,
-  tasks: deals.tasks,
-  checklists: deals.checklists,
-  isBackOffice: isBackOffice(user),
-  rooms: chatroom.rooms
+  isBackOffice: isBackOffice(user)
 }))(BadgeCounter)

@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import Table from '../../../../../../views/components/Grid/Table'
 
-import DropDown from './columns/Dropdown'
+import Menu from './columns/Menu'
 import TagsString from './columns/Tags'
 import Name from './columns/Name'
 import { LastTouchedCell } from './columns/LastTouched'
@@ -12,15 +12,15 @@ import NoSearchResults from '../../../../../Partials/no-search-results'
 import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
-import ChangeStageContacts from '../Actions/ChangeStageContacts'
-import ShareListing from '../Actions/ShareListing'
+import SendMlsListingCard from 'components/InstantMarketing/Flows/SendMlsListingCard'
 
 import TagsOverlay from '../../components/TagsOverlay'
 
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
-import { goTo } from '../../../../../../utils/go-to'
-import { TruncatedColumn } from './styled'
+import { Contact } from './columns/Contact'
+import IconButton from '../../../../../../views/components/Button/IconButton'
+import IconDeleteOutline from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -30,39 +30,22 @@ class ContactsList extends React.Component {
 
   closeTagsOverlay = () => this.setState({ selectedTagContact: [] })
 
-  openContact = id => {
-    goTo(`/dashboard/contacts/${id}`, 'All Contacts')
-  }
-
   columns = [
     {
       header: 'Name',
       id: 'name',
+      verticalAlign: 'center',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ rowData: contact }) => <Name contact={contact} />
     },
     {
-      header: 'Email',
-      id: 'email',
+      header: 'Contact',
+      id: 'contact',
       accessor: contact => getAttributeFromSummary(contact, 'email'),
-      render: ({ rowData: contact }) => (
-        <TruncatedColumn>
-          {getAttributeFromSummary(contact, 'email')}
-        </TruncatedColumn>
-      )
+      render: ({ rowData: contact }) => <Contact contact={contact} />
     },
     {
-      header: 'Phone',
-      id: 'phone',
-      accessor: contact => getAttributeFromSummary(contact, 'phone_number'),
-      render: ({ rowData: contact }) => (
-        <TruncatedColumn>
-          {getAttributeFromSummary(contact, 'phone_number')}
-        </TruncatedColumn>
-      )
-    },
-    {
-      header: 'Last Touched',
+      header: 'Last Touch',
       id: 'last_touched',
       sortable: false,
       render: ({ rowData: contact }) => <LastTouchedCell contact={contact} />
@@ -82,9 +65,11 @@ class ContactsList extends React.Component {
       header: '',
       accessor: '',
       className: 'td--dropdown-container',
-      width: '30px',
+      sortable: false,
+      verticalAlign: 'center',
+      width: '24px',
       render: ({ rowData: contact }) => (
-        <DropDown
+        <Menu
           contactId={contact.id}
           handleOnDelete={this.props.onRequestDelete}
         />
@@ -103,108 +88,98 @@ class ContactsList extends React.Component {
       )
     },
     {
-      type: 'button',
-      text: 'Delete',
-      inverse: true,
       display: ({ selectedRows }) => selectedRows.length > 0,
-      onClick: this.props.onRequestDelete
+      render: ({ selectedRows }) => (
+        <SendMlsListingCard selectedRows={selectedRows}>
+          Marketing
+        </SendMlsListingCard>
+      )
+    },
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: ({ selectedRows, resetSelectedRows }) => (
+        <TagContacts
+          selectedRows={selectedRows}
+          resetSelectedRows={resetSelectedRows}
+        />
+      )
     },
     {
       display: ({ selectedRows }) => selectedRows.length >= 2,
-      render: ({ selectedRows }) => (
+      render: ({ selectedRows, resetSelectedRows }) => (
         <MergeContacts
           selectedRows={selectedRows}
           rowsUpdating={this.props.rowsUpdating}
-          resetSelectedRows={this.props.resetSelectedRows}
+          resetSelectedRows={resetSelectedRows}
         />
       )
     },
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => (
-        <TagContacts
-          selectedRows={selectedRows}
-          resetSelectedRows={this.props.resetSelectedRows}
-        />
+      render: rowData => (
+        <IconButton
+          size="small"
+          appearance="outline"
+          onClick={e => this.props.onRequestDelete(e, rowData)}
+        >
+          <IconDeleteOutline size={24} />
+        </IconButton>
       )
-    },
-    {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => (
-        <ChangeStageContacts
-          selectedRows={selectedRows}
-          resetSelectedRows={this.props.resetSelectedRows}
-        />
-      )
-    },
-    {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => <ShareListing selectedRows={selectedRows} />
     }
   ]
 
-  getGridTrProps = (rowIndex, { original: row, isSelected }) => {
+  getGridTrProps = (rowIndex, { isSelected }) => {
     if (this.props.isRowsUpdating && isSelected) {
       return {
         style: {
           opacity: 0.5,
-          ponterEvents: 'none'
+          pointerEvents: 'none'
         }
       }
-    }
-
-    return {}
-  }
-
-  getGridTdProps = (colIndex, { column, rowData: row }) => {
-    if (['plugin--selectable', 'delete-contact'].includes(column.id)) {
-      return {
-        onClick: e => e.stopPropagation()
-      }
-    }
-
-    return {
-      style: {
-        cursor: 'pointer'
-      },
-      onClick: () => this.openContact(row.id)
     }
   }
 
   render() {
-    const selectedRowsCount = this.props.selectedRows.length
-
     return (
-      <Fragment>
+      <div style={{ padding: '0 1.5em' }}>
         <Table
           plugins={{
             selectable: {
               persistent: true,
-              storageKey: 'contacts',
-              onChange: this.props.onChangeSelectedRows
+              storageKey: 'contacts'
             },
             loadable: {
               accuracy: 300, // px
               debounceTime: 300, // ms
               onTrigger: this.props.onRequestLoadMore
             },
-            actionable: this.actions
+            actionable: {
+              actions: this.actions
+            },
+            sortable: {
+              columns: [
+                { label: 'Most Recent', value: '-updated_at' },
+                { label: 'Last Touch', value: 'last_touch' },
+                //  { label: 'Next Touch', value: 'next_touch' },
+                { label: 'First name A-Z', value: 'display_name' },
+                { label: 'First name Z-A', value: '-display_name' },
+                { label: 'Last name A-Z', value: 'sort_field' },
+                { label: 'Last name Z-A', value: '-sort_field' },
+                { label: 'Created At', value: 'created_at' }
+              ],
+              onChange: this.props.handleChangeOrder
+            }
           }}
           data={this.props.data}
           summary={{
-            text:
-              selectedRowsCount > 0
-                ? '[selectedRows] of <strong>[totalRows] Contacts</strong>'
-                : '<strong>[totalRows] Contacts</strong>',
-            selectedRows: selectedRowsCount,
-            totalRows: this.props.listInfo.total || 0
+            entityName: 'Contacts',
+            total: this.props.listInfo.total || 0
           }}
           isFetching={this.props.isFetching}
           isFetchingMore={this.props.isFetchingMore}
           columns={this.columns}
           LoadingState={LoadingComponent}
           getTrProps={this.getGridTrProps}
-          getTdProps={this.getGridTdProps}
           EmptyState={() => (
             <NoSearchResults description="Try typing another name, email, phone or tag." />
           )}
@@ -215,7 +190,7 @@ class ContactsList extends React.Component {
           isOpen={this.state.selectedTagContact.length > 0}
           closeOverlay={this.closeTagsOverlay}
         />
-      </Fragment>
+      </div>
     )
   }
 }

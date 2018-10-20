@@ -41,7 +41,7 @@ export default class DropDownList extends React.Component {
         >
           {({ isOpen, getItemProps }) => (
             <div>
-              <LabelButton onClick={this.toggleMenu}>
+              <LabelButton type="button" onClick={this.toggleMenu}>
                 {this.LabelValue}
                 <i className={`fa fa-angle-${isOpen ? 'up' : 'down'}`} />
               </LabelButton>

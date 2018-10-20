@@ -120,20 +120,15 @@ class SectionWithFields extends React.Component {
         const key = `${this.props.section}_field_${index}`
 
         const getTitle = () => {
-          let title = attribute_def.label
-
-          if (!field.label) {
-            return title
+          if (field.label) {
+            return field.label
           }
 
-          switch (attribute_def.name) {
-            case 'website':
-              return title
-            case 'important_date':
-              return field.label
-            default:
-              return `${field.label} ${title}`
+          if (value && attribute_def.has_label) {
+            return attribute_def.labels[0]
           }
+
+          return attribute_def.label
         }
 
         if (attribute_def.name === 'source_type') {
@@ -144,9 +139,8 @@ class SectionWithFields extends React.Component {
           <dt
             key={`${key}_title`}
             style={{
-              color: '#758a9e',
-              fontWeight: '500',
-              marginBottom: '0.25em'
+              color: '#7f7f7f',
+              fontWeight: '300'
             }}
           >
             {getTitle()}
@@ -154,22 +148,22 @@ class SectionWithFields extends React.Component {
           <dd
             key={`${key}_value`}
             style={{
-              color: '#17283a',
               marginBottom: '1em',
               display: 'flex',
               alignItems: 'center'
             }}
           >
             {value ? getFormater(field)(value) : '-'}
-            {value &&
+            {this.props.section === 'Addresses' &&
+              value &&
               field.is_primary && (
                 <Tooltip caption="Primary">
                   <StarIcon
                     style={{
                       fill: '#f5a623',
-                      width: '16px',
-                      height: '16px',
-                      marginLeft: '5px'
+                      width: '1em',
+                      height: '1em',
+                      marginLeft: '0.5em'
                     }}
                   />
                 </Tooltip>
@@ -204,15 +198,14 @@ class SectionWithFields extends React.Component {
         {(addNewFieldButtonText || showAddNewCustomAttributeButton) && (
           <div
             style={{
-              textAlign: 'center',
-              marginTop: sectionFields ? 0 : '0.5em',
-              marginBottom: '1.5em'
+              marginTop: sectionFields ? 0 : '0.5em'
             }}
           >
             {addNewFieldButtonText &&
               !sectionFields && (
                 <ActionButton
-                  inverse
+                  size="small"
+                  appearance="outline"
                   onClick={this.openEditAttributeDrawer}
                   style={{ marginRight: '1em' }}
                 >

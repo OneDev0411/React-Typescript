@@ -1,7 +1,7 @@
 import upload from '../../models/user/upload-avatar'
 import * as actionsType from '../../constants/user'
 
-const uploadAvatar = image => async (dispatch, getState) => {
+const uploadAvatar = image => async dispatch => {
   dispatch({
     type: actionsType.UPLOAD_AVATAR_REQUEST
   })

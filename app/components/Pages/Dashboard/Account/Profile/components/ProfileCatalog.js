@@ -1,15 +1,15 @@
 import React from 'react'
 import FormCard from './FormCard'
-import AvatarUploader from './AvatarUploader'
+import Avatar from './Avatar'
 
-const ProfileCatalog = ({ user }) => {
-  const { first_name, last_name, email, phone_number } = user
+const ProfileCatalog = props => {
+  const { first_name, last_name, email, phone_number } = props.user
   const full_name = [first_name, last_name].join(' ').trim()
 
   return (
     <div className="c-profile-catalog">
       <FormCard>
-        <AvatarUploader user={user} />
+        <Avatar user={props.user} />
         <ul className="c-profile-catalog__list u-unstyled-list">
           <li className="c-profile-catalog__item--big">{full_name}</li>
           {full_name !== phone_number && (

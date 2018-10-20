@@ -13,6 +13,9 @@ import { getContactDeals } from '../../../../../../models/contacts/helpers/get-c
 import { normalizeContacts } from '../../../../../../store_actions/contacts/helpers/normalize-contacts'
 import SelectDealModal from '../../../../../../views/components/SelectDealModal'
 
+import { grey } from '../../../../../../views/utils/colors'
+import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
+
 export class DealsListWidget extends React.Component {
   state = {
     isOpen: false,
@@ -34,9 +37,9 @@ export class DealsListWidget extends React.Component {
       const response = await getContact(id, {
         associations: [
           'contact.sub_contacts',
-          'sub_contact.deals',
+          'contact.deals',
           'contact.summary',
-          'sub_contact.users',
+          'contact.users',
           'contact_attribute.attribute_def'
         ]
       })
@@ -79,7 +82,7 @@ export class DealsListWidget extends React.Component {
 
     goTo(
       `/dashboard/deals/${deal.id}`,
-      `Contact - ${this.state.contact.display_name}`
+      `Contact - ${getAttributeFromSummary(this.state.contact, 'display_name')}`
     )
   }
 
@@ -96,11 +99,9 @@ export class DealsListWidget extends React.Component {
             list={this.state.list}
           />
         ) : (
-          <Flex center full>
-            <div style={{ color: '#8da2b5', padding: '0.5em 0 1.5em' }}>
-              No deals connected to this contact.
-            </div>
-          </Flex>
+          <div style={{ color: grey.A900 }}>
+            No deals connected to this contact.
+          </div>
         )}
 
         <SelectDealModal

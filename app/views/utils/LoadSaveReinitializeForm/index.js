@@ -7,6 +7,7 @@ import { Spinner } from '../../../components/Partials/Loading'
 
 export default class LoadSaveReinitializeForm extends React.Component {
   static propTypes = {
+    initialValues: PropTypes.shape(),
     load: PropTypes.func.isRequired,
     loading: PropTypes.node,
     postLoadFormat: PropTypes.func,
@@ -15,7 +16,8 @@ export default class LoadSaveReinitializeForm extends React.Component {
   }
 
   static defaultProps = {
-    loading: <Spinner />
+    loading: <Spinner />,
+    initialValues: {}
   }
 
   constructor(props) {
@@ -24,7 +26,7 @@ export default class LoadSaveReinitializeForm extends React.Component {
     this.state = {
       isLoading: false,
       originalValues: undefined,
-      initialValues: undefined
+      initialValues: this.props.initialValues
     }
 
     this.load = this.load.bind(this)
@@ -32,15 +34,17 @@ export default class LoadSaveReinitializeForm extends React.Component {
   }
 
   componentDidMount() {
-    this.load()
+    if (Object.keys(this.props.initialValues).length === 0) {
+      this.load()
+    }
   }
 
   async load() {
-    const { load, postLoadFormat } = this.props
+    const { postLoadFormat } = this.props
 
     this.setState({ isLoading: true })
 
-    const originalValues = await load()
+    const originalValues = await this.props.load()
     const initialValues = postLoadFormat
       ? await postLoadFormat(originalValues)
       : originalValues
@@ -54,12 +58,12 @@ export default class LoadSaveReinitializeForm extends React.Component {
 
   async save(values) {
     try {
-      const { postLoadFormat, preSaveFormat, save } = this.props
+      const { postLoadFormat, preSaveFormat } = this.props
       let valuesToSave = preSaveFormat
         ? await preSaveFormat(values, this.state.originalValues)
         : values
 
-      await save(valuesToSave)
+      await this.props.save(valuesToSave)
 
       this.setState({
         originalValues: valuesToSave,
@@ -88,7 +92,7 @@ export default class LoadSaveReinitializeForm extends React.Component {
     } = this.props
     const { isLoading, initialValues } = this.state
 
-    return isLoading || !initialValues ? (
+    return isLoading || Object.keys(initialValues).length === 0 ? (
       loading
     ) : (
       <Form {...rest} initialValues={initialValues} onSubmit={this.save} />

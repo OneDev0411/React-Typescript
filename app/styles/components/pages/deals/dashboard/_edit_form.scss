@@ -13,62 +13,14 @@
 
   .header {
     height: $deal-dashboard-header-height;
-    line-height: 55px;
-    vertical-align: middle;
     background-color: #ffffff;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     margin-left: 0;
     margin-right: 0;
-
-    .exit {
-      margin-left: 8px;
-      width: 34px;
-      height: 34px;
-      font-weight: 600;
-      font-size: 16px;
-    }
-
-    .name {
-      margin-left: 14px;
-      font-size: 17px;
-      font-weight: 500;
-      line-height: 1;
-      text-align: left;
-      color: #000000;
-    }
-
-    .actions {
-      text-align: right;
-      .save {
-        background-color: #2196f3;
-        border-color: #2196f3;
-        color: #fff;
-        min-width: 80px;
-        margin-left: 8px;
-        font-weight: 500;
-      }
-
-      .preview {
-        background-color: #fff;
-        border-color: #2196f3;
-        color: #2196f3;
-        min-width: 100px;
-        font-weight: 500;
-        line-height: 17px;
-        vertical-align: middle;
-
-        svg {
-          margin-right: 8px;
-          vertical-align: middle;
-          height: 15px;
-        }
-
-        &:hover {
-          color: #2196f3;
-          background-color: #f1f7fb;
-        }
-      }
-    }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1em;
   }
 
   .form-iframe {

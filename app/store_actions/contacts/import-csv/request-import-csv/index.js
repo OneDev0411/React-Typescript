@@ -21,11 +21,11 @@ function normalizeMappedFields(fields) {
   return list
 }
 
-export function requestImportCsv(fileId, mappedFields) {
+export function requestImportCsv(fileId, owner, mappedFields) {
   return async dispatch => {
     try {
       const mappings = normalizeMappedFields(mappedFields)
-      const { job_id } = await importCsv(fileId, mappings)
+      const { job_id } = await importCsv(fileId, owner, mappings)
 
       dispatch(setWorkerId(job_id))
     } catch (e) {

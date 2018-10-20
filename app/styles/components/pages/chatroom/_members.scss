@@ -27,11 +27,11 @@
     }
 
     .group-members:hover {
-      background-color: #f4f9fe;
+      background-color: #fafafa;
       .delete-icon {
         visibility: visible;
         &:hover {
-          color: #2196f3;
+          color: #003bdf;
           cursor: pointer;
         }
       }

@@ -11,6 +11,7 @@ import {
   resetSplitter
 } from '../../../../../store_actions/deals'
 import importPdfJs from '../../../../../utils/import-pdf-js'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 class PDF extends React.Component {
   constructor(props) {
@@ -87,47 +88,49 @@ class PDF extends React.Component {
                   {files[id] && decodeURI(files[id].properties.name)}
                 </span>
 
-                <span className="pages-count">
-                  ({doc.pdfInfo.numPages} pages)
-                </span>
+                <span className="pages-count">({doc.numPages} pages)</span>
               </div>
 
-              <PageSelector pdfId={id} numPages={doc.pdfInfo.numPages} />
+              <PageSelector pdfId={id} numPages={doc.numPages} />
             </div>
 
             <div className="pdf-list-container">
-              {Array.apply(null, { length: doc.pdfInfo.numPages }).map(
-                (v, i) => {
-                  const pageId = `${id}_${i + 1}`
-                  const inUse = typeof pages[pageId] !== 'undefined'
-                  const isUsed = typeof usedPages[pageId] !== 'undefined'
+              {Array.apply(null, { length: doc.numPages }).map((v, i) => {
+                const pageId = `${id}_${i + 1}`
+                const inUse = typeof pages[pageId] !== 'undefined'
+                const isUsed = typeof usedPages[pageId] !== 'undefined'
 
-                  return (
-                    <PageThumbnail
-                      key={`page-${i}`}
-                      inUse={inUse}
-                      size="big"
-                      canvasClassName={cn({ inUse })}
-                      pdfId={id}
-                      doc={doc}
-                      pageNumber={i + 1}
-                    >
-                      {isUsed && <span className="page-cta is-used">Used</span>}
+                return (
+                  <PageThumbnail
+                    key={`page-${i}`}
+                    inUse={inUse}
+                    size="big"
+                    canvasClassName={cn({ inUse })}
+                    pdfId={id}
+                    doc={doc}
+                    pageNumber={i + 1}
+                  >
+                    {isUsed && (
+                      <ActionButton className="page-cta is-used">
+                        Used
+                      </ActionButton>
+                    )}
 
-                      {inUse ? (
-                        <span className="page-cta inuse">In Use</span>
-                      ) : (
-                        <span
-                          className="page-cta"
-                          onClick={() => this.onSelectPage(i + 1, id)}
-                        >
-                          Add page
-                        </span>
-                      )}
-                    </PageThumbnail>
-                  )
-                }
-              )}
+                    {inUse ? (
+                      <ActionButton className="page-cta inuse">
+                        In Use
+                      </ActionButton>
+                    ) : (
+                      <ActionButton
+                        className="page-cta"
+                        onClick={() => this.onSelectPage(i + 1, id)}
+                      >
+                        Add page
+                      </ActionButton>
+                    )}
+                  </PageThumbnail>
+                )
+              })}
             </div>
           </div>
         ))}
@@ -142,9 +145,12 @@ function mapStateToProps({ deals }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  selectSplitterPage,
-  setSplitterPdfObject,
-  notify,
-  resetSplitter
-})(PDF)
+export default connect(
+  mapStateToProps,
+  {
+    selectSplitterPage,
+    setSplitterPdfObject,
+    notify,
+    resetSplitter
+  }
+)(PDF)

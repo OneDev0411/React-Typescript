@@ -4,6 +4,7 @@ import thunk from 'redux-thunk'
 import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
 import getBrand from '../../../app/models/brand'
+import getUserProfile from '../../../app/models/user/get-self'
 import getTeams from '../../../app/store_actions/user/teams'
 
 function fetch(store, renderProps) {
@@ -25,10 +26,26 @@ function sanitize(state) {
 }
 
 async function display(file, renderProps) {
+  let user = null
+
+  try {
+    if (this.session.user) {
+      user = await getUserProfile(this.session.user.access_token)
+
+      // attach tokens into user profile object
+      user = {
+        ...user,
+        ...this.session.user
+      }
+    }
+  } catch (e) {
+    /* what should we do really? */
+  }
+
   let initialState = {
-    user: this.session.user,
+    user,
     data: {
-      user: this.session.user
+      user
     }
   }
 

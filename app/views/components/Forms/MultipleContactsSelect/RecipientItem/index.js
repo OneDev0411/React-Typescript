@@ -75,9 +75,11 @@ export default class RecipientItem extends React.Component {
           )}
         </div>
 
-        <DeleteButton size="16px" onClick={this.omitRecipient}>
-          <CloseIcon />
-        </DeleteButton>
+        {recipient.readOnly !== true && (
+          <DeleteButton size="16px" onClick={this.omitRecipient}>
+            <CloseIcon />
+          </DeleteButton>
+        )}
 
         <Downshift
           isOpen={this.state.isMenuOpen}

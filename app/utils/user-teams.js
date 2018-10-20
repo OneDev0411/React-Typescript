@@ -36,6 +36,12 @@ export function getActiveTeamACL(user) {
   return team && team.acl ? team.acl : []
 }
 
+export function isSoloActiveTeam(user) {
+  const team = getActiveTeam(user)
+
+  return team.brand && team.brand.member_count === 1
+}
+
 export function hasUserAccess(user, action) {
   return getActiveTeamACL(user).includes(action)
 }
@@ -45,6 +51,11 @@ export function isBackOffice(user) {
 }
 
 export function isTrainingAccount(user) {
+
+  // Hide training banner
+  // https://gitlab.com/rechat/web/issues/1688#note_104530885
+  return false
+  
   const activeTeam = getActiveTeam(user) || {}
   let { brand } = activeTeam
 

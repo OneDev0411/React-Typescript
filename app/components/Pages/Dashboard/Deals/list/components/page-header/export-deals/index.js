@@ -2,24 +2,19 @@ import React from 'react'
 import moment from 'moment'
 import { getActiveTeamId } from '../../../../../../../../utils/user-teams'
 
-import XlsxIcon from '../../../../../../../../views/components/SvgIcons/Xlsx/XlsxIcon'
-import Dropdown from '../../../../../../../../views/components/SimpleDropdown/index'
+import XlsxIcon from 'views/components/SvgIcons/Xlsx/XlsxIcon'
+import { BasicDropdown } from 'views/components/BasicDropdown'
 
-import {
-  DealsDownloadButton,
-  DropdownItem,
-  DropdownItemSub,
-  Icon
-} from './styled'
+import { DropdownItem, DropdownItemSub } from './styled'
 
 class ExportDeals extends React.Component {
   items = [
     {
-      title: 'All Deals',
+      label: 'All Deals',
       url: `/api/deals/export/${getActiveTeamId(this.props.user)}`
     },
     {
-      title: 'New Listings',
+      label: 'New Listings',
       subTitle: '(Past 7 days)',
       url: `/api/deals/report/${encodeURIComponent(
         JSON.stringify({
@@ -59,7 +54,7 @@ class ExportDeals extends React.Component {
       )}`
     },
     {
-      title: 'New Offers',
+      label: 'New Offers',
       subTitle: '(Past 7 days)',
       url: `/api/deals/report/${encodeURIComponent(
         JSON.stringify({
@@ -103,25 +98,13 @@ class ExportDeals extends React.Component {
   ]
   render() {
     return (
-      <Dropdown
-        renderToggleButton={isOpen => (
-          <DealsDownloadButton>
-            <XlsxIcon />
-            Download Report
-            <Icon
-              isOpen={isOpen}
-              style={{ fill: '#506379', width: '24px', height: '24px' }}
-            />
-          </DealsDownloadButton>
-        )}
+      <BasicDropdown
         items={this.items}
-        renderItem={(item, closeMenu) => (
-          <DropdownItem
-            href={item.url}
-            key={item.title}
-            onClick={() => closeMenu()}
-          >
-            {item.title} <DropdownItemSub>{item.subTitle}</DropdownItemSub>
+        buttonIcon={XlsxIcon}
+        buttonText="Download Report"
+        itemRenderer={({ item, ...rest }) => (
+          <DropdownItem href={item.url} key={item.label} {...rest}>
+            {item.label} <DropdownItemSub>{item.subTitle}</DropdownItemSub>
           </DropdownItem>
         )}
       />

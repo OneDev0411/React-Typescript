@@ -1,51 +1,50 @@
 .contact__import-csv {
-  padding-bottom: 30px;
-  overflow-x: hidden;
   position: relative;
   min-height: 100vh;
   max-height: 100vh;
   overflow: hidden;
+  padding-bottom: 2em;
+
   .c-stepper {
     margin: 0 auto;
-    width: 500px;
+
+    @media screen and (min-width: 48em) {
+      width: 33rem;
+    }
   }
 }
 
 .contact__import-csv > .contact__import-csv__container {
-  max-height: calc(100vh - 55px);
-  min-height: calc(100vh - 55px);
-  overflow: auto;
 
   .current-step {
-    margin-top: 20px;
     text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
     font-weight: 500;
   }
 }
 
 .contact__import-csv--mapper {
-  margin: 50px 0 250px 0;
-  padding: 0 16px;
+  margin: 3em 0 16em 0;
+  padding: 0 1.5em;
   min-height: 56.5vh;
 
   .column-row {
+    height: 3.5rem;
     display: flex;
     align-items: center;
-    font-size: 14px;
-    color: #17283a;
-    margin-bottom: 10px;
-    height: 56px;
-    border-radius: 4px;
-    background-color: #ffffff;
-    border: solid 1px #e7eef2;
-    padding: 0 15px;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    padding: 0 1rem;
+    border-radius: 3px;
+    border: solid 1px $gray;
+    background-color: #fff;
 
     &.heading {
       padding: 0;
       background-color: transparent;
       border: none;
       font-weight: 500;
-      color: #8da2b5;
     }
 
     .name {
@@ -56,7 +55,6 @@
 
       &.show-empty-cta {
         cursor: pointer;
-        color: #62778c;
         text-decoration: underline;
         &:focus {
           outline: none;
@@ -70,20 +68,20 @@
 
     .map-label {
       width: 25%;
-      padding-left: 10px;
+      padding-left: 0.5rem;
       position: relative;
       .isInvalid {
+        border-radius: 3px;
         border: 1px solid red;
-        border-radius: 4px;
       }
       .required {
-        background-color: red;
         color: #fff;
         position: absolute;
         right: 0;
         top: 0;
-        border-radius: 0 4px 0 4px;
-        padding: 4px 3px;
+        border-radius: 0 3px 0 3px;
+        padding: 0.25rem;
+        background-color: red;
       }
     }
   }
@@ -94,28 +92,27 @@
 }
 
 .contact__import-csv--upload-info {
-  color: #62778c;
-  font-size: 18px;
+  font-size: 1.125rem;
   text-align: center;
   font-weight: 500;
   margin-top: 10%;
   min-height: 57.5vh;
 
   button {
-    margin-left: 8px;
+    margin-left: 0.5rem;
   }
 
   .sk-circle {
-    margin-top: 25px;
-    margin-bottom: 40px;
+    margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
   }
 
   .error-message {
-    color: #fe3824;
+    color: red;
 
     .description {
-      margin: 10px 0 15px 0;
-      font-size: 20px;
+      margin: 0.5rem 0 1rem 0;
+      font-size: 1.25rem;
     }
   }
 }
@@ -124,43 +121,32 @@
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  height: 48px;
-  padding-right: 16px;
-  background-color: #f8fafb;
-  border-top: solid 1px #dce5eb;
+  padding: 1.5rem;
+  border-top: solid 1px $gray;
 
-  button {
-    min-width: 90px;
-    &:focus {
-      outline: none;
-    }
-  }
 
   .contact__import-csv--upload__cancel-btn {
-    margin-right: 10px;
+    margin-right: 0.5rem;
   }
 }
 
-.contact__import-csv--select-file {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 69vh;
-}
-
-.contact__import-csv--select-file
-  > .contact__import-csv--select-file__dropzone {
+.contact__import-csv--select-file__dropzone {
+  height: 28vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 90%;
-  height: 210px;
   border-radius: 3px;
-  background-color: #f0f4f7;
-  border: 1px dashed #62778c;
+  border: 1px dashed $gray;
+  background-color: #f2f2f2;
+
+  @media screen and (min-width: 80em) {
+    max-width: 64rem;
+  }
+
   &.hasFile {
-    background-color: rgba(33, 150, 243, 0.05);
+    background-color: #f8f8f8;
   }
 
   &.isActive {
@@ -168,17 +154,16 @@
   }
 
   .inner {
-    font-size: 14px;
-    color: #758a9e;
+    font-size: 0.875rem;
   }
 
   .inner > img {
-    width: 50px;
-    margin-bottom: 15px;
+    width: 3rem;
+    margin-bottom: 1rem;
   }
 
   .inner .link {
-    color: #2196f3;
+    color: $brand-primary;
     cursor: pointer;
   }
 }

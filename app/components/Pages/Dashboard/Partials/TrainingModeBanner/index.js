@@ -16,7 +16,7 @@ export function TrainingModeBanner({ user }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: '2.4rem',
+        fontSize: '1.5rem',
         color: '#fff',
         background: '#f4b656'
       }}
@@ -26,16 +26,20 @@ export function TrainingModeBanner({ user }) {
         user.teams.length > 1 && (
           <Dropdown
             id="account-dropdown"
-            style={{ width: 228, marginTop: 0 }}
+            style={{
+              width: 'auto',
+              marginTop: 0,
+              height: 'auto',
+              border: 'none'
+            }}
             className="c-app-sidenav__account-dropdown"
           >
             <Dropdown.Toggle
               style={{
                 background: '#fff',
                 color: '#f5a623',
-                fontSize: '1.6rem',
                 padding: '0.25em 0.75em',
-                marginLeft: '1em',
+                marginLeft: '1rem',
                 borderWidth: 0,
                 width: 'auto'
               }}
@@ -43,7 +47,7 @@ export function TrainingModeBanner({ user }) {
               Switch Teams
             </Dropdown.Toggle>
 
-            <Dropdown.Menu style={{ top: '2.5em', left: '2em' }}>
+            <Dropdown.Menu style={{ top: '2.2rem' }}>
               <TeamSwitcher user={user} />
             </Dropdown.Menu>
           </Dropdown>

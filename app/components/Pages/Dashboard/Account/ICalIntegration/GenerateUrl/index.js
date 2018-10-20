@@ -1,17 +1,18 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import copy from '../../../../../../utils/copy-text-to-clipboard'
-import IconCalendar from '../../../../../../views/components/SvgIcons/Calender/IconCalendar'
+import IconCalendarBase from '../../../../../../views/components/SvgIcons/Calender/IconCalendar'
 import getCalenderFeed from '../../../../../../models/user/generate-calender-feed'
-import LinkIcon from '../../../../../../views/components/SvgIcons/LinkIcon'
-import {
-  GenerateUrlContainer,
-  GenerateUrlText,
-  GenerateUrlButton,
-  FeedUrl
-} from './styled'
+import Button from '../../../../../../views/components/Button/ActionButton'
+import { GenerateUrlContainer, GenerateUrlText, FeedUrl } from './styled'
+
+const IconCalendar = IconCalendarBase.extend`
+  > g {
+    fill: #000000;
+  }
+`
 
 class GenerateUrl extends React.Component {
   state = {
@@ -22,7 +23,7 @@ class GenerateUrl extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (
       this.state.feedURl !== '' &&
-      (nextProps.selectedBrandId !== this.props.selectedBrandId ||
+      (!_.isEqual(nextProps.selectedMembers, this.props.selectedMembers) ||
         !_.isEqual(nextProps.selectedTypes, this.props.selectedTypes))
     ) {
       this.setState({ feedURl: '' })
@@ -33,10 +34,19 @@ class GenerateUrl extends React.Component {
     try {
       this.setState({ isFetchingFeed: true })
 
-      const feedURl = await getCalenderFeed(
-        this.props.selectedTypes,
-        this.props.selectedBrandId
-      )
+      const { userTeams, selectedMembers } = this.props
+
+      const filter = userTeams
+        .filter(({ brand }) => selectedMembers[brand.id])
+        .map(({ brand }) => {
+          if (brand.member_count === selectedMembers[brand.id].length) {
+            return { brand: brand.id }
+          }
+
+          return { brand: brand.id, users: selectedMembers[brand.id] }
+        })
+
+      const feedURl = await getCalenderFeed(this.props.selectedTypes, filter)
 
       this.setState({ feedURl })
     } catch (e) {
@@ -57,32 +67,32 @@ class GenerateUrl extends React.Component {
     return (
       <GenerateUrlContainer>
         <IconCalendar />
-        <GenerateUrlText> iCAL Feed URL:</GenerateUrlText>
+        <GenerateUrlText>Calendar Export URL:</GenerateUrlText>
         {feedURl ? (
           <FeedUrl
-            onClick={() => {
+            appearance="link"
+            onClick={event => {
+              event.preventDefault()
               copy(feedURl)
               this.props.notify({
                 message: 'Link Copied',
                 status: 'success'
               })
+
+              return false
             }}
+            href={feedURl}
           >
             {feedURl}
-            <LinkIcon
-              style={{
-                position: 'absolute',
-                right: '1.4rem'
-              }}
-            />
           </FeedUrl>
         ) : (
-          <GenerateUrlButton
+          <Button
+            style={{ marginLeft: '1em' }}
             onClick={this.generateUrlClick}
             disabled={isFetchingFeed || this.props.selectedTypes.length === 0}
           >
             {`Generate URL${isFetchingFeed ? '...' : ''}`}
-          </GenerateUrlButton>
+          </Button>
         )}
       </GenerateUrlContainer>
     )

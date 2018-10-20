@@ -1,12 +1,17 @@
 import React from 'react'
 import timeago from 'timeago.js'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
+import styled from 'styled-components'
+import { grey } from '../../../../../../../views/utils/colors'
 
+const NoTouches = styled.div`
+  color: ${grey.A550};
+`
 export function LastTouchedCell(props) {
   const { contact } = props
 
   if (!contact.last_touch) {
-    return null
+    return <NoTouches className="blackHover">No Touches</NoTouches>
   }
 
   const formatedLastTouch = timeago().format(contact.last_touch * 1000)
@@ -17,17 +22,8 @@ export function LastTouchedCell(props) {
 
   return (
     <OverlayTrigger
-      trigger="hover"
-      placement="top"
       overlay={
-        <Popover
-          id={`last-touch-popover_${contact.id}`}
-          style={{
-            color: '#fff',
-            border: 'none',
-            backgroundColor: '#303e4d'
-          }}
-        >
+        <Popover id={`last-touch-popover_${contact.id}`}>
           <span>Last touch was </span>
           <b>{formatedLastTouch}, </b>
           <span>you wanted to be in touch every 7 days.</span>

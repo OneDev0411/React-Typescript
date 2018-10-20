@@ -15,6 +15,7 @@ export const MultipleContactsSelect = ({
   input,
   hasLabel = true,
   showError = true,
+  disableAddNewRecipient = false,
   meta,
   isRequired,
   placeholder,
@@ -33,7 +34,7 @@ export const MultipleContactsSelect = ({
         <RecipientItem key={index} recipient={recipient} input={input} />
       ))}
 
-      <AddRecipient input={input} />
+      {!disableAddNewRecipient && <AddRecipient input={input} />}
     </RecipientContainer>
 
     {showError &&

@@ -54,7 +54,7 @@
 
   textarea {
     border-radius: 5px;
-    border: solid 2px #e7eef0;
+    border: solid 1px #D4D4D4;
     padding: 8px;
     resize: none;
     margin-bottom: 10px;
@@ -82,7 +82,7 @@
     width: 30px;
     height: 30px;
     vertical-align: middle;
-    line-height: 28px;
+    line-height: 25px;
     border: solid 2px #c9d7df;
     background-color: #fff;
     border-radius: 50%;
@@ -118,7 +118,7 @@
     }
 
     &.no-status {
-      line-height: 27px;
+      line-height: 25px;
       .ico {
         display: inline-block;
         border: solid 2px #c9d7df;
@@ -151,30 +151,5 @@
     border: solid 1px #e6eaec;
     margin-left: 3px;
     margin-bottom: 3px;
-
-    &.add-comment {
-      transition: 0.1s ease-in all;
-      &:hover {
-        color: #78909c;
-      }
-
-      &.enabled {
-        border: solid 1px #2196f3;
-        color: #2196f3;
-        &:hover {
-          color: #fff;
-          background-color: #2196f3;
-        }
-      }
-      &.second-color {
-        color: #f6a623;
-        border-color: #f6a623;
-        margin-right: 20px;
-        &:hover {
-          color: #fff;
-          background-color: #f6a623;
-        }
-      }
-    }
   }
 }

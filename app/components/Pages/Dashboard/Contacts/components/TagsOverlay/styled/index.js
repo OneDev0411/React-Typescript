@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
 export const SubHeaderContainer = styled.div`
-  background-color: #f8fafb;
-  padding: 1em;
+  padding: 1em 0;
+  margin-bottom: 1em;
 `

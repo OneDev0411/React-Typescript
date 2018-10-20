@@ -3,16 +3,16 @@
 }
 
 .c-filters__tags__body {
-  padding-top: 1rem;
-  margin-bottom: 2rem;
-  border-top: solid 1px #e2e6ea;
+  padding-top: 0.5em;
+  margin-bottom: 1em;
+  border-top: solid 1px $gray;
 }
 
 .c-filters__tag {
   width: 50%;
   float: left;
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   cursor: pointer;
 }
 
@@ -20,8 +20,8 @@
   @include visually-hidden();
 }
 
-$md-checkbox-checked-color: #2196f3;
-$md-checkbox-border-color: #e2e6ea;
+$md-checkbox-checked-color: $brand-primary;
+$md-checkbox-border-color: $gray;
 
 $md-checkbox-size: 16px;
 $md-checkbox-padding: 3px;
@@ -31,9 +31,8 @@ $md-checkmark-color: #fff;
 
 .c-filters__tag__text {
   position: relative;
-  padding-left: $md-checkbox-size + 5px;
+  padding-left: $md-checkbox-size + 4px;
   font-weight: normal;
-  color: #9b9b9b;
   cursor: pointer;
 
   &:before,
@@ -46,6 +45,7 @@ $md-checkmark-color: #fff;
 
   &:before {
     // box
+    top: 2px;
     width: $md-checkbox-size;
     height: $md-checkbox-size;
     transition: background 0.3s;
@@ -55,14 +55,7 @@ $md-checkmark-color: #fff;
     border: 1px solid $md-checkbox-border-color;
   }
 
-  // checkmark
-  // &:after {
-  // // checkmark
-  // }
-
   .c-filters__tag__input:checked + & {
-    color: #333;
-
     &:before {
       background: $md-checkbox-checked-color;
       border: none;
@@ -72,7 +65,7 @@ $md-checkmark-color: #fff;
 
       transform: rotate(-45deg);
 
-      top: ($md-checkbox-size / 2) - ($md-checkmark-size / 4) - $md-checkbox-size/10;
+      top: ($md-checkbox-size + 4 / 2) - ($md-checkmark-size + 4 / 4) - $md-checkbox-size/10;
       left: $md-checkbox-padding;
       width: $md-checkmark-size;
       height: $md-checkmark-size / 2;

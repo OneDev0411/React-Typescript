@@ -7,6 +7,22 @@ import ToolTip from '../../../../../../../views/components/tooltip/index'
 import Input from '../../../../../../../views/components/Input'
 import EditableCta from './editable-cta'
 import ContextDiscrepency from '../../context-discrepency'
+import ActionButton from 'components/Button/ActionButton'
+import IconButton from 'components/Button/IconButton'
+import { primary } from 'views/utils/colors'
+import { grey } from '../../../../../../../views/utils/colors'
+
+const SaveButton = ActionButton.extend`
+  padding: 0 0.5rem;
+`
+
+const DeleteButton = IconButton.extend`
+  padding: 0;
+  color: ${grey.A600};
+  &:hover {
+    color: ${primary};
+  }
+`
 
 export default class Editable extends React.Component {
   constructor(props) {
@@ -120,25 +136,17 @@ export default class Editable extends React.Component {
     const isStringType = !isDateType
 
     return (
-      <div className="fact-row">
-        <DatePicker
-          show={editMode && isDateType}
-          saveText={needsApproval ? 'Notify Office' : 'Update'}
-          initialDate={this.getValue()}
-          onClose={() => this.removeEditMode()}
-          onSelectDate={date => this.onChangeDateContext(date)}
-        />
+      <React.Fragment>
+        <div className="fact-row">
+          <div
+            className="name"
+            data-name={field.name}
+            onClick={() => this.editField()}
+          >
+            {field.label}
+          </div>
 
-        <div
-          className="name"
-          data-name={field.name}
-          onClick={() => this.editField()}
-        >
-          {field.label}
-        </div>
-
-        <div className={cn('field editable', { approved })}>
-          <div style={{ display: 'inline-block', minWidth: '80%' }}>
+          <div className={cn('field editable', { approved })}>
             <ContextDiscrepency
               disabled={editMode || !isBackOffice}
               deal={deal}
@@ -154,7 +162,7 @@ export default class Editable extends React.Component {
               >
                 <span
                   onClick={() => this.editField()}
-                  style={{ opacity: saving ? 0.8 : 1 }}
+                  style={{ textAlign: 'left', opacity: saving ? 0.8 : 1 }}
                 >
                   {this.getFormattedValue()}
                 </span>
@@ -165,7 +173,7 @@ export default class Editable extends React.Component {
               isStringType && (
                 <ClickOutside
                   onClickOutside={() => this.onFinishEditing()}
-                  className="inline"
+                  style={{ display: 'flex', alignItems: 'center' }}
                 >
                   <Input
                     data-type={field.format || field.data_type}
@@ -202,20 +210,24 @@ export default class Editable extends React.Component {
                     }
                   />
 
-                  <button
-                    className="c-button--shadow"
+                  <SaveButton
+                    size="small"
+                    appearance="link"
                     onClick={e => {
                       e.stopPropagation()
                       this.onFinishEditing()
                     }}
                   >
                     SAVE
-                  </button>
+                  </SaveButton>
 
-                  <button
-                    className="c-button--shadow ico-remove fa fa-times-circle"
+                  <DeleteButton
+                    size="small"
                     onClick={e => this.cancelEdit(e)}
-                  />
+                    // className="cta__button"
+                  >
+                    <div className="fa fa-times-circle" />
+                  </DeleteButton>
                 </ClickOutside>
               )}
 
@@ -226,17 +238,24 @@ export default class Editable extends React.Component {
               handleEditField={() => this.editField()}
               handleDeleteField={e => this.deleteField(e, field)}
             />
-          </div>
 
-          {saving &&
-            saving === field.name && (
-              <i
-                className="fa fa-spin fa-spinner"
-                style={{ display: 'inline-block', marginLeft: '0.5rem' }}
-              />
-            )}
+            {saving &&
+              saving === field.name && (
+                <i
+                  className="fa fa-spin fa-spinner"
+                  style={{ display: 'inline-block', marginLeft: '0.5rem' }}
+                />
+              )}
+          </div>
         </div>
-      </div>
+        <DatePicker
+          show={editMode && isDateType}
+          saveText={needsApproval ? 'Notify Office' : 'Update'}
+          initialDate={this.getValue()}
+          onClose={() => this.removeEditMode()}
+          onSelectDate={date => this.onChangeDateContext(date)}
+        />
+      </React.Fragment>
     )
   }
 }

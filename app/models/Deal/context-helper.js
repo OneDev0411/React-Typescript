@@ -45,6 +45,10 @@ export function getField(deal, field, ctx = null) {
     return context
   }
 
+  if (context.type === 'mls_context') {
+    return context[field]
+  }
+
   if (typeof context === 'object' && context.type === 'deal_context_item') {
     const { context_type } = context
 

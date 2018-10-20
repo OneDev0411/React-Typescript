@@ -10,6 +10,8 @@ import IconButton from '../../../../../../../../../../views/components/Button/Ic
 import AddIcon from '../../../../../../../../../../views/components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 import RemoveIcon from '../../../../../../../../../../views/components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
+import { borderColor } from '../../../../../../../../../../views/utils/colors'
+
 MultiField.propTypes = {
   attribute: PropTypes.shape().isRequired,
   format: PropTypes.func,
@@ -83,11 +85,15 @@ export function MultiField(props) {
               display: 'flex'
             }}
           >
-            <Container withoutLabel={!defaultOptions} style={{ width: '40%' }}>
+            <Container
+              withoutLabel={!defaultOptions}
+              style={{ width: '40%', paddingBottom: 0 }}
+            >
               <Title htmlFor={field}>{attribute_def.label}</Title>
               {defaultOptions && (
                 <Field
                   component={Dropdown}
+                  style={{ marginLeft: '-1rem' }}
                   fullWidth
                   items={defaultOptions}
                   itemToString={({ title }) => title}
@@ -100,10 +106,12 @@ export function MultiField(props) {
                 width: '60%',
                 display: 'flex',
                 alignItems: 'flex-end',
-                padding: attribute_def.enum_values ? '0.75em 1em' : '1em',
+                padding: attribute_def.enum_values
+                  ? '0'
+                  : '0.5rem 0 0.5rem 1rem',
                 borderWidth: '0 0 1px 1px',
                 borderStyle: 'solid',
-                borderColor: '#dde5ec'
+                borderColor
               }}
             >
               {attribute_def.enum_values ? (
@@ -133,22 +141,25 @@ export function MultiField(props) {
               <div
                 style={{
                   display: 'flex',
-                  alignItems: 'flex-end',
-                  marginLeft: '1em'
+                  alignItems: 'center',
+                  marginLeft: '1em',
+                  height: attribute_def.enum_values ? '40px' : 'auto'
                 }}
               >
                 {index + 1 === fields.length ? (
                   <IconButton
                     type="button"
-                    color="#2196f3"
+                    isFit
+                    iconSize="large"
                     onClick={addNewField}
                   >
                     <AddIcon />
                   </IconButton>
                 ) : (
                   <IconButton
+                    isFit
                     type="button"
-                    color="#2196f3"
+                    iconSize="large"
                     onClick={() => fields.remove(index)}
                   >
                     <RemoveIcon />

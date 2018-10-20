@@ -8,11 +8,16 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 
+  /* Fix IE issue: loading wasn't center */
+  .sk-circle {
+    margin: 100px;
+  }
+
   ${props =>
     props.isFetchingMore &&
     `
     .sk-circle {
-      margin: 30px auto;
+      margin: 30px;
     }
   `};
 `

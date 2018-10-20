@@ -15,45 +15,37 @@
 .c-cover-image__upload-btn {
   cursor: pointer;
   margin-bottom: 0;
-  margin-right: 1rem;
-  padding: 0.5rem 1rem;
+  margin-right: 1em;
+  padding: 0.25em 0.5em;
   line-height: 1.5;
   font-weight: normal;
-  color: #fff;
+  border: 1px solid #000;
   border-radius: 3px;
+  white-space: nowrap;
 
   &.is-disable {
-    opacity: 0.7;
+    opacity: 0.3;
     pointer-events: none;
   }
-}
 
-.c-cover-image__delete-btn {
-  padding: 0.5rem 1rem;
-  line-height: 1.4;
-  color: #969696;
-  border-radius: 3px;
-  background: transparent;
-  border: 1px solid #ccc;
-
-  &:hover {
-    color: #444;
-    border-color: #444;
+  &:not(.is-disable):hover {
+    color: $brand-primary;
+    border-color: $brand-primary;
   }
 }
 
 .c-cover-image__img,
 .c-cover-image__placeholder {
-  height: 28rem;
-  width: 24rem;
+  height: 280px;
+  width: 240px;
   float: left;
   background: #ececec;
 }
 
 .c-cover-image__note {
-  padding: 1rem;
-  margin: 2rem 0 0;
-  border: 1px solid #cecece;
+  padding: 0.5em;
+  margin: 1em 0 0;
+  border: 1px solid $gray;
 
   > dt,
   > dd {
@@ -62,7 +54,7 @@
 
   > dt {
     clear: left;
-    margin-right: 1rem;
+    margin-right: 1em;
   }
 }
 

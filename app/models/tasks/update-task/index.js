@@ -22,10 +22,18 @@ export async function updateTask(task, query = {}) {
       'due_date',
       'task_type',
       'reminders',
+      'assignees',
       'description'
     ]
 
     task = _.omit(_.pick(task, fields), value => value == null)
+
+    if (task.assignees && task.assignees.length > 0 && task.assignees[0].id) {
+      task = {
+        ...task,
+        assignees: task.assignees.map(a => a.id)
+      }
+    }
 
     const response = await new Fetch()
       .put(`/crm/tasks/${task.id}`)

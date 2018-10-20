@@ -6,6 +6,8 @@ import { Modal, Button } from 'react-bootstrap'
 import ListingModalViewer from '../../ListingModalViewer'
 import Loading from '../../../../../../../components/Partials/Loading'
 import ListingCard from '../../../../Listings/components/ListingsPanels/GridView/ListingCard'
+import PageHeader from '../../../../../../../views/components/PageHeader'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 
 class AlertViewerModal extends Component {
   constructor(props) {
@@ -31,14 +33,28 @@ class AlertViewerModal extends Component {
 
     return (
       <Modal show={show} onHide={onHide} className="c-feed-modal">
-        <Modal.Header className="c-feed-modal__header">
+        <PageHeader>
+          <PageHeader.Title showBackButton={false}>
+            <PageHeader.Heading>{`Shared Listings (${
+              feed.length
+            })`}</PageHeader.Heading>
+          </PageHeader.Title>
+
+          <PageHeader.Menu>
+            {/* <Import userId={user.id} /> */}
+
+            <ActionButton onClick={onHide}>Close</ActionButton>
+          </PageHeader.Menu>
+        </PageHeader>
+
+        {/* <Modal.Header className="c-feed-modal__header">
           <h3 className="c-feed-modal__title">
             {`Shared Listings (${feed.length})`}
           </h3>
           <button className="c-feed-modal__close-btn" onClick={onHide}>
             Close
           </button>
-        </Modal.Header>
+        </Modal.Header> */}
         <Modal.Body className="c-feed-modal__body clearfix">
           {feed.map((listing, index) => (
             <ListingCard

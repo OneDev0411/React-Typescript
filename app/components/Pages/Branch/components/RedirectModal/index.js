@@ -15,11 +15,11 @@ const RedirectModal = ({ children, brandInfo }) => {
                 <img
                   src={siteLogo}
                   alt={`${siteTitle}`}
-                  className={'c-auth__logo'}
+                  className="c-auth__logo"
                 />
               </Link>
             )}
-            <h1 className="c-auth__title din">{siteTitle}</h1>
+            <h1 className="c-auth__title">{siteTitle}</h1>
           </header>
           {children}
         </Modal.Body>

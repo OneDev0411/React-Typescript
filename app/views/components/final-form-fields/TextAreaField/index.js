@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
+import { grey } from '../../../utils/colors'
 import { Container, Label, LabelNote, ErrorMessage } from '../styled'
 
 const TextArea = styled.textarea`
@@ -10,15 +11,16 @@ const TextArea = styled.textarea`
   height: 150px;
   display: block;
   padding: 0;
-  line-height: 1.5;
   border-width: 0;
-  font-size: 2rem;
   resize: none;
   overflow: auto;
-  color: #26465e;
 
   &:focus {
     outline: none;
+  }
+
+  &::placeholder {
+    color: ${grey.A550};
   }
 `
 

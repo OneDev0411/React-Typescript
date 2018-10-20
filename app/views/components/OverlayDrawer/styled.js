@@ -9,7 +9,6 @@ export const Content = styled.div`
   background-color: #fff;
   transition: 0.2s ease-in all;
   z-index: 1001;
-  padding-top: 58px;
 
   ${props =>
     props.isOpen &&
@@ -19,18 +18,8 @@ export const Content = styled.div`
   `};
 
   @media (min-width: 48em) {
-    width: 60%;
-    right: ${props => (props.isOpen ? 0 : '-60%')};
-  }
-
-  @media (min-width: 75em) {
-    width: 45%;
-    right: ${props => (props.isOpen ? 0 : '-45%')};
-  }
-
-  @media (min-width: 100em) {
-    width: 30%;
-    right: ${props => (props.isOpen ? 0 : '-30%')};
+    width: 37rem;
+    right: ${props => (props.isOpen ? 0 : '-37rem')};
   }
 `
 

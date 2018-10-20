@@ -55,21 +55,7 @@
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.5px;
-      color: #1d364b;
-      border-bottom: 1px solid rgba(220, 225, 229, 0.5);
-    }
-  }
-
-  .deal-info-section.deal-roles {
-    padding: 0;
-    margin-bottom: 2rem;
-
-    .deal-info-title {
-      margin-bottom: 3px;
-    }
-
-    .create-new-role {
-      position: relative;
+      border-bottom: 1px solid #d4d4d4;
     }
   }
 
@@ -99,13 +85,5 @@
 .c-add-signer-modal {
   .deal-info-title {
     display: none !important;
-  }
-
-  .deal-info-section.deal-roles {
-    padding: 20px !important;
-  }
-
-  .create-new-role {
-    position: relative;
   }
 }

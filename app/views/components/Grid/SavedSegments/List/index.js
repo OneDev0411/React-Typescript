@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { uppercaseFirstLetter } from '../../../../../utils/helpers'
+
 import {
   getSavedSegments,
   deleteFilterSegment,
@@ -15,15 +17,15 @@ import {
 } from '../../../../../reducers/filter-segments'
 
 import { confirmation } from '../../../../../store_actions/confirmation'
-
+import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
 import {
-  Container,
   ListTitle,
   ListItem,
   ListItemName,
-  ListIconContainer,
-  Icon
-} from './styled'
+  DeleteButton
+} from '../../../../../views/components/SlideMenu/Menu/styled'
+
+import ToolTip from 'components/tooltip'
 
 class SegmentsList extends React.Component {
   state = {
@@ -89,32 +91,47 @@ class SegmentsList extends React.Component {
     const isSelected = id => activeItem && activeItem.id === id
 
     return (
-      <Container>
+      <div>
         <ListTitle>Lists</ListTitle>
 
-        {list.map((item, index) => (
-          <ListItem
-            key={index}
-            isDeleting={isDeleting.includes(item.id)}
-            isSelected={isSelected(item.id)}
-          >
-            <ListItemName
-              onClick={() => !isSelected(item.id) && this.onSelectList(item)}
-            >
-              {item.name}
-            </ListItemName>
-            <ListIconContainer onClick={() => this.onRequestDelete(item)}>
-              {item.editable !== false && <Icon className="fa fa-times" />}
-            </ListIconContainer>
-          </ListItem>
-        ))}
+        {list.map((item, index) => {
+          const id = item.id
+          let editable = true
+
+          if (item.editable != null) {
+            editable = item.editable
+          }
+
+          return (
+            <ToolTip key={index} caption={item.name} placement="right">
+              <ListItem
+                isDeleting={isDeleting.includes(id)}
+                isSelected={isSelected(id)}
+              >
+                <ListItemName
+                  onClick={() => !isSelected(id) && this.onSelectList(item)}
+                >
+                  {uppercaseFirstLetter(item.name)}
+                </ListItemName>
+                {editable && (
+                  <DeleteButton
+                    onClick={() => this.onRequestDelete(item)}
+                    isFit
+                  >
+                    <IconClose />
+                  </DeleteButton>
+                )}
+              </ListItem>
+            </ToolTip>
+          )
+        })}
 
         {isFetching && (
           <ListItem>
             <i className="fa fa-spin fa-spinner" />
           </ListItem>
         )}
-      </Container>
+      </div>
     )
   }
 }

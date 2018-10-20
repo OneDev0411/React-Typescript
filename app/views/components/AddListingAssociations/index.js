@@ -1,38 +1,47 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import AddAssociation from '../AddAssociation'
-// eslint-disable-next-line
-import SearchListingsModal from '../SearchListing'
-
+import Tooltip from '../tooltip'
+import { AddAssociation } from '../AddAssociation'
+import SearchListingsDrawer from '../SearchListingDrawer'
 import { normalizeListing } from '../../utils/association-normalizers'
 
-const title = 'Add a MLS listing'
+export class AddListingAssociation extends React.Component {
+  static propTypes = {
+    title: PropTypes.string,
+    handleAdd: PropTypes.func.isRequired,
+    buttonRenderer: PropTypes.func.isRequired
+  }
 
-function AddListingAssociation({ handleAdd }) {
-  return (
-    <AddAssociation
-      title={title}
-      render={({ isOpen, handleClose }) => {
-        const add = listing => {
-          handleAdd(normalizeListing(listing), handleClose)
-        }
+  static defaultProps = {
+    title: 'Attach Listing'
+  }
 
-        return (
-          <SearchListingsModal
-            show={isOpen}
-            modalTitle={title}
-            onHide={handleClose}
-            onSelectListing={add}
-          />
-        )
-      }}
-    />
-  )
+  onSelectHandler = (contact, closeHandler) =>
+    this.props.handleAdd(normalizeListing(contact), closeHandler)
+
+  render() {
+    const { title } = this.props
+
+    return (
+      <AddAssociation
+        render={({ isActive, handleClose, handleOpen }) => (
+          <div>
+            <Tooltip id={`tooltip_${title}`} caption={title}>
+              {this.props.buttonRenderer(handleOpen)}
+            </Tooltip>
+            <SearchListingsDrawer
+              isOpen={isActive}
+              compact={false}
+              title={title}
+              onClose={handleClose}
+              onSelectListing={listing =>
+                this.onSelectHandler(listing, handleClose)
+              }
+            />
+          </div>
+        )}
+      />
+    )
+  }
 }
-
-AddListingAssociation.propTypes = {
-  handleAdd: PropTypes.func.isRequired
-}
-
-export default AddListingAssociation

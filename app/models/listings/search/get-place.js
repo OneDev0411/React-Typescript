@@ -1,10 +1,14 @@
-const getPlace = async (address) => {
+import config from '../../../../config/public'
+
+const getPlace = async (address, compact = true) => {
   if (!address) {
     return
   }
 
   try {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}`
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?key=${
+      config.google.api_key
+    }&address=${address}`
     const request = new Request(url, {
       method: 'GET'
     })
@@ -13,23 +17,21 @@ const getPlace = async (address) => {
 
     if (response.status >= 200 && response.status < 300) {
       const parsedResponse = await response.json()
-      const geocode = parsedResponse.results[0]
+      const result = parsedResponse.results[0]
 
-      if (!geocode) {
-        return
-      }
+      if (result) {
+        if (!compact) {
+          return result
+        }
 
-      const center = {
-        lat: geocode.geometry.location.lat,
-        lng: geocode.geometry.location.lng
-      }
-      const zoom = 16
-
-      return {
-        zoom,
-        center
+        return {
+          zoom: 16,
+          center: result.geometry.location
+        }
       }
     }
+
+    return null
   } catch (error) {
     throw error
   }

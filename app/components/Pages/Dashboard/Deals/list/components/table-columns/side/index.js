@@ -39,8 +39,9 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
                     <UserAvatar
                       name={`${role.legal_first_name} ${role.legal_last_name}`}
                       image={role.user ? role.user.profile_image_url : null}
-                      size={26}
-                      color="#D4D4D4"
+                      size={40}
+                      fgColor="#ffffff"
+                      color="#000000"
                       showStateIndicator={false}
                     />
                   </div>
@@ -61,13 +62,12 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
         </Popover>
       }
     >
-      <div className="hoverable inline">
+      <div className="primaryHover inline">
         <span>{sideName}</span>
 
         <span
           style={{
-            color: '#5b6469',
-            fontSize: '13px'
+            fontSize: '14px'
           }}
         >
           {relatedRoleUser && relatedRoleUser.last_name

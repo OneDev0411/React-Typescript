@@ -3,6 +3,7 @@ import _ from 'underscore'
 import cn from 'classnames'
 import CrudRole from './crud-role'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+import { H2 } from 'components/Typography/headings'
 
 export default ({
   isRequired,
@@ -19,11 +20,11 @@ export default ({
 
   return (
     <div className="form-section deal-people deal-client">
-      <div className={cn('hero', { hasError })}>
+      <H2 className={cn('hero', { hasError })}>
         Do you have Title company and Escrow officer information? &nbsp;
         {isRequired && <span className="required">*</span>}
         {hasError && <RequiredIcon />}
-      </div>
+      </H2>
 
       <div className="people-container">
         {_.map(escrowOfficers, (agent, id) => (

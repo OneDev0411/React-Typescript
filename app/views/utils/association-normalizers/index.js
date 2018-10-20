@@ -64,8 +64,7 @@ export function normalizeContact(contact) {
     avatar: {
       image,
       size: 32,
-      borderRadius: 100,
-      placeHolderImage: '/static/images/contacts/ic_person_black_24dp_2x.png',
+      placeHolderImage: '/static/icons/contact-association-avatar.svg',
       title:
         email !== display_name && phone_number !== display_name
           ? display_name
@@ -86,34 +85,30 @@ export const normalizeListing = listing => {
     return null
   }
 
-  const {
-    id,
-    type = 'listing',
-    full_address,
-    price,
-    status,
-    image,
-    property
-  } = listing
+  const { id, property } = listing
 
-  let title = full_address
+  let title = ''
+  let location = listing.location || property.address.location
 
-  if (!title && property) {
-    title = getListingAddress(property.address)
+  if (listing.type === 'listing') {
+    title = property.address.full_address || getListingAddress(property.address)
+  } else {
+    title = getListingAddress(listing.address)
   }
 
   return {
     id,
-    type,
     title,
     avatar: {
-      image,
+      image: listing.cover_image_url,
       size: 32,
-      borderRadius: 3,
-      placeHolderImage: '/static/images/deals/home.png'
+      placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
+    location,
+    type: 'listing',
     url: `/dashboard/mls/${id}`,
-    details: detailText([status, price])
+    details: detailText([listing.status, `$${listing.price.toLocaleString()}`]),
+    original: listing
   }
 }
 
@@ -138,8 +133,7 @@ export const normalizeDeal = deal => {
     avatar: {
       image,
       size: 32,
-      borderRadius: 3,
-      placeHolderImage: '/static/images/deals/home.png'
+      placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
     },
     url: `/dashboard/deals/${id}`,
     details: detailText([deal_type, property_type])

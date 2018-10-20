@@ -3,7 +3,7 @@
     text-align: center;
     margin: 15px 0;
     i {
-      color: #2196f3;
+      color: #003bdf;
       font-size: 20px;
     }
   }
@@ -14,35 +14,19 @@
 }
 
 %deal-mls-info {
-  .btn-change-status {
-    background: #fff;
-    color: #2196f3;
-    border: 1px solid #2196f3;
-    border-radius: 3px;
-    width: 100%;
-    margin-bottom: 5px;
-    padding: 5px 0;
-    &:hover {
-      background: #2196f3;
-      color: #fff;
-    }
-    &:focus {
-      outline: none;
-    }
-  }
 
   .item {
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: #1d364b;
     font-size: 14px;
-    height: 3rem;
-    line-height: 3rem;
+    height: 2em;
+    line-height: 2em;
+    margin-top: 0.5em;
 
     &:hover {
       padding: 0 5px;
-      border: 1px dashed #2196f3;
+      border: 1px dashed #003bdf;
     }
 
     &.disabled:hover {
@@ -61,17 +45,9 @@
       &.mls-status {
         transition: 0.1s all ease-in;
 
-        i,
-        .deals-info__mls-status__edit-cta {
-          display: none;
-          color: #2196f3;
-          cursor: pointer;
-          &:hover {
-            opacity: 0.7;
-          }
-        }
+       
 
-        &:hover i,
+        &:hover .deals-info__close-icon,
         &:hover .deals-info__edit-cta,
         &:hover .deals-info__mls-status__edit-cta {
           display: inline-block !important;
