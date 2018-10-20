@@ -157,8 +157,7 @@ class Search extends React.Component {
     const _props = {
       user: this.props.user,
       listings: this.props.listings,
-      isFetching: this.props.isFetching,
-      isWidget: this.props.isWidget
+      isFetching: this.props.isFetching
     }
 
     switch (this.state.activeView) {
@@ -168,7 +167,9 @@ class Search extends React.Component {
             {..._props}
             tabName="search"
             Map={
-              this.state.mapWithQueryIsInitialized ? <Map {..._props} /> : null
+              this.state.mapWithQueryIsInitialized ? (
+                <Map {..._props} isWidget={this.props.isWidget} />
+              ) : null
             }
           />
         )
@@ -190,6 +191,7 @@ class Search extends React.Component {
       <React.Fragment>
         <Header
           user={user}
+          isWidget={this.props.isWidget}
           isFetching={this.props.isFetching}
           filtersIsOpen={this.props.filtersIsOpen}
           activeView={this.state.activeView}
