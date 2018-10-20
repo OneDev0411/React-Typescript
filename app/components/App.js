@@ -20,6 +20,7 @@ import { getRooms } from '../store_actions/chatroom'
 
 // get user roles
 import getTeams from '../store_actions/user/teams'
+import { hasUserAccess } from '../utils/user-teams'
 
 // deals featch on launch
 import { getDeals } from '../store_actions/deals'
@@ -90,16 +91,22 @@ class App extends Component {
         }
       }
 
+      this.hasCrmAccess = hasUserAccess(user, 'CRM')
+      this.hasDealsAccess = hasUserAccess(user, 'Deals')
+
       // load rooms
       this.initialRooms()
 
       // load deals
-      if (!deals) {
+      if (this.hasDealsAccess && !deals) {
         dispatch(getDeals(user))
       }
 
       // load contacts
-      if (!isLoadedContactAttrDefs(this.props.contactsAttributeDefs)) {
+      if (
+        this.hasCrmAccess &&
+        !isLoadedContactAttrDefs(this.props.contactsAttributeDefs)
+      ) {
         dispatch(getAttributeDefs())
       }
 
@@ -134,9 +141,15 @@ class App extends Component {
 
   initializeSockets(user) {
     this.initializeChatSocket(user)
-    this.initializeDealSocket(user)
-    this.initializeContactSocket(user)
     this.initializeNotificationsSocket(user)
+
+    if (this.hasCrmAccess) {
+      this.initializeContactSocket(user)
+    }
+
+    if (this.hasDealsAccess) {
+      this.initializeDealSocket(user)
+    }
   }
 
   initializeContactSocket(user) {
