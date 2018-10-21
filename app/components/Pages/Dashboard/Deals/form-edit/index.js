@@ -32,7 +32,14 @@ class EditDigitalForm extends React.Component {
   componentDidMount() {
     this.initialize()
 
-    this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave)
+    this.unregisterLeaveHook = this.props.router.setRouteLeaveHook(
+      this.props.route,
+      this.routerWillLeave
+    )
+  }
+
+  componentWillUnmount() {
+    this.unregisterLeaveHook()
   }
 
   values = {}

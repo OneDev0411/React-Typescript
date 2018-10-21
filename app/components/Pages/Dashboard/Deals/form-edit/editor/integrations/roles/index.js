@@ -65,7 +65,7 @@ class RolesDrawer extends React.Component {
       )
     }
 
-    return text.trim()
+    return text ? text.trim() : ''
   }
 
   get DrawerTitle() {

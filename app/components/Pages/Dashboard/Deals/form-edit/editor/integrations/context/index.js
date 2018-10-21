@@ -19,19 +19,27 @@ import DateContext from './date-context'
 class Context extends React.Component {
   state = {
     isSaving: false,
-    value: this.DefaultValue,
-    formattedValue: null
+    value: this.getDefaultValue(true),
+    formattedValue: this.getDefaultValue()
   }
 
-  get DefaultValue() {
+  getDefaultValue(rawValue = false) {
+    const { context } = this.props.data
+
     if (this.IsDateContext) {
       return ''
     }
 
-    return this.props.data.annotations.reduce(
+    let value = this.props.data.annotations.reduce(
       (acc, ann) => `${acc}${this.props.formValues[ann.fieldName] || ''}`,
       ''
     )
+
+    if (rawValue && context && context.format === 'Currency') {
+      value = Number(value.replace(/[^0-9.-]+/g, ''))
+    }
+
+    return value
   }
 
   onContextChange = (value, formattedValue) => {
@@ -52,10 +60,11 @@ class Context extends React.Component {
 
   handleSave = async () => {
     const { contextName, annotations } = this.props.data
+    const contextValue = this.state.value === '' ? null : this.state.value
 
     const context = {
       [contextName]: {
-        value: this.state.value,
+        value: contextValue,
         approved: false
       }
     }
@@ -64,17 +73,17 @@ class Context extends React.Component {
       isSaving: true
     })
 
-    try {
-      await this.props.updateContext(this.props.deal.id, context)
-    } catch (e) {
-      console.log(e)
-    }
-
     this.props.onValueUpdate(
       annotations[0].fieldName,
       this.state.formattedValue || '',
       true
     )
+
+    try {
+      this.props.updateContext(this.props.deal.id, context)
+    } catch (e) {
+      console.log(e)
+    }
 
     this.setState({
       isSaving: false,
