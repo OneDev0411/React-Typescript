@@ -1,26 +1,36 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import { isLoadedContactAttrDefs } from '../../../../reducers/contacts/attributeDefs'
-import Loading from '../../../Partials/Loading'
+import Loading from '../../../../views/components/Spinner'
+import { hasUserAccess } from '../../../../utils/user-teams'
 
 import ContactsList from './List'
 import { Container } from './components/Container'
 
-function Contacts(props) {
-  if (!isLoadedContactAttrDefs(props.attributeDefs)) {
-    return (
-      <Container>
-        <Loading />
-      </Container>
-    )
+class Contacts extends React.Component {
+  componentDidMount() {
+    if (!hasUserAccess(this.props.user, 'CRM')) {
+      browserHistory.push('/dashboard/mls')
+    }
   }
 
-  return (
-    <div className="contacts">
-      <ContactsList />
-    </div>
-  )
+  render() {
+    if (!isLoadedContactAttrDefs(this.props.attributeDefs)) {
+      return (
+        <Container>
+          <Loading />
+        </Container>
+      )
+    }
+
+    return (
+      <div className="contacts">
+        <ContactsList />
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = state => ({
