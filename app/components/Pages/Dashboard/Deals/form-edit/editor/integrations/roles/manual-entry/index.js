@@ -38,7 +38,12 @@ export default class ManualEntry extends React.Component {
             value={this.state.manualValue}
             onChange={this.handleChangeManualValue}
           />
-          <ActionButton onClick={this.handleSave}>Save</ActionButton>
+          <ActionButton
+            disabled={this.state.manualValue.length === 0}
+            onClick={this.handleSave}
+          >
+            Save
+          </ActionButton>
         </Flex>
       )
     }
