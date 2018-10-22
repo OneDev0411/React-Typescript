@@ -100,7 +100,7 @@ class App extends Component {
       this.initialRooms()
 
       // load deals
-      if (this.hasDealsAccess && !deals) {
+      if (this.hasDealsAccess && Object.keys(deals).length === 0) {
         dispatch(getDeals(user))
       }
 
@@ -358,6 +358,7 @@ class App extends Component {
       }
     }
   }
+
   render() {
     const { data, user, rooms, location } = this.props
 
