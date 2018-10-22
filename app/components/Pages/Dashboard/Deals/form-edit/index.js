@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { browserHistory, withRouter } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
 import { saveSubmission, getDeal, getForms } from 'actions/deals'
+import { confirmation } from 'actions/confirmation'
 
 import { getFormSize } from 'models/Deal/form'
 import { LoadingDealContainer } from './styled'
@@ -24,14 +25,32 @@ class EditDigitalForm extends React.Component {
     isSaving: false,
     pdfDocument: null,
     pdfUrl: '',
-    downloadPercents: 1
+    downloadPercents: 1,
+    promptOnQuit: false
   }
 
   componentDidMount() {
     this.initialize()
+
+    this.unregisterLeaveHook = this.props.router.setRouteLeaveHook(
+      this.props.route,
+      this.routerWillLeave
+    )
+  }
+
+  componentWillUnmount() {
+    this.unregisterLeaveHook()
   }
 
   values = {}
+
+  routerWillLeave = () => {
+    if (this.state.promptOnQuit === false) {
+      return true
+    }
+
+    return 'Your work is not saved! Are you sure you want to leave?'
+  }
 
   initialize = async () => {
     const { deal } = this.props
@@ -113,12 +132,10 @@ class EditDigitalForm extends React.Component {
   }
 
   changeFormValue = (name, value, forceUpdate = false) => {
-    const newValues = {
+    this.values = {
       ...this.values,
       [name]: value
     }
-
-    this.values = newValues
 
     if (forceUpdate) {
       this.forceUpdate()
@@ -126,15 +143,13 @@ class EditDigitalForm extends React.Component {
   }
 
   setFormValues = (values, forceUpdate = false) => {
-    const newValues = {
+    this.values = {
       ...this.values,
       ...values
     }
 
-    this.values = newValues
-
     if (forceUpdate) {
-      return this.forceUpdate()
+      this.forceUpdate()
     }
   }
 
@@ -178,6 +193,8 @@ class EditDigitalForm extends React.Component {
     this.setState({ isSaving: false })
   }
 
+  handleSelectContext = () => this.setState({ promptOnQuit: true })
+
   getHeaderTitle = title =>
     title && title.length > 30 ? `${title.substring(0, 30)}...` : title
 
@@ -212,9 +229,10 @@ class EditDigitalForm extends React.Component {
 
     return (
       <Fragment>
-        <PageHeader backButton>
-          <PageHeader.Title title={this.getHeaderTitle(task.title)} />
-
+        <PageHeader
+          title={this.getHeaderTitle(task.title)}
+          onClickBackButton={this.closeForm}
+        >
           <PageHeader.Menu>
             <ActionButton
               disabled={!isFormLoaded || isSaving}
@@ -232,6 +250,7 @@ class EditDigitalForm extends React.Component {
           values={this.values}
           onValueUpdate={this.changeFormValue}
           onSetValues={this.setFormValues}
+          onSelectContext={this.handleSelectContext}
         />
       </Fragment>
     )
@@ -250,7 +269,9 @@ function mapStateToProps({ deals, user }, props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { saveSubmission, getDeal, getForms, notify }
-)(EditDigitalForm)
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { saveSubmission, getDeal, getForms, notify, confirmation }
+  )(EditDigitalForm)
+)

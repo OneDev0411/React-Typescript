@@ -4,26 +4,20 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
 import Dropzone from 'react-dropzone'
-import Deal from '../../../../../../../models/Deal'
-import {
-  createFormTask,
-  setSelectedTask,
-  setUploadFiles
-} from '../../../../../../../store_actions/deals'
+import Deal from 'models/Deal'
+import { createFormTask, setSelectedTask, setUploadFiles } from 'actions/deals'
 import TaskName from './task-name'
-import Search from '../../../../../../../views/components/Grid/Search'
+import Search from 'components/Grid/Search'
 
 class Forms extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      filter: '',
-      isCreatingTask: null,
-      showNewTaskModal: false,
-      createTaskIsFailed: false
-    }
-    this.newTaskTitle = ''
+  state = {
+    filter: '',
+    isCreatingTask: null,
+    showNewTaskModal: false,
+    createTaskIsFailed: false
   }
+
+  newTaskTitle = ''
 
   async createTask(form) {
     const {
@@ -147,8 +141,8 @@ class Forms extends React.Component {
               <Search
                 disableOnSearch={false}
                 placeholder="Type in to search ..."
-                onChange={e => this.setState({ filter: e.target.value })}
-                debounceTime={500}
+                onChange={filter => this.setState({ filter })}
+                debounceTime={0}
                 minimumLength={1}
                 onClearSearch={() => this.setState({ filter: '' })}
                 style={{ margin: '1rem' }}

@@ -24,7 +24,6 @@ export const Input = styled.input`
 
   &:disabled {
     color: ${grey.A550};
-    cursor: not-allowed;
   }
 
   // remove clear icon on IE and Edge browser

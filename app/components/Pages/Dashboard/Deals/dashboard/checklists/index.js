@@ -82,13 +82,11 @@ class Checklist extends React.Component {
 
     return (
       <div className="checklists-container" data-simplebar={!isWebkit || null}>
-        {this.ShowDraftBanner && (
-          <DraftBanner>
-            <AlertIcon />
-            Your Notify Office requests have been saved and will be submitted
-            when your deal goes live.
-          </DraftBanner>
-        )}
+        <DraftBanner isOpen={this.ShowDraftBanner}>
+          <AlertIcon />
+          Your Notify Office requests have been saved and will be submitted when
+          your deal goes live.
+        </DraftBanner>
 
         <div>
           {!deal.checklists && (

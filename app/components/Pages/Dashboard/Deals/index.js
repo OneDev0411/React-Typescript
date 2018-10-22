@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import {
   getDeals,
@@ -7,31 +8,29 @@ import {
   getForms
 } from '../../../../store_actions/deals'
 import { TrainingModeBanner } from '../Partials/TrainingModeBanner'
-import { isTrainingAccount } from '../../../../utils/user-teams'
+import { isTrainingAccount, hasUserAccess } from '../../../../utils/user-teams'
 
 class DealsContainer extends React.Component {
   componentDidMount() {
-    const {
-      getDeals,
-      getContexts,
-      getForms,
-      contexts,
-      forms,
-      deals,
-      isFetchingDeals,
-      user
-    } = this.props
+    const { props } = this
 
-    if (!deals && !isFetchingDeals) {
-      getDeals(user)
+    if (
+      hasUserAccess(props.user, 'Deals') === false &&
+      hasUserAccess(props.user, 'BackOffice') === false
+    ) {
+      browserHistory.push('/dashboard/mls')
     }
 
-    if (!contexts) {
-      getContexts()
+    if (!props.deals && !props.isFetchingDeals) {
+      props.getDeals(props.user)
     }
 
-    if (!forms) {
-      getForms()
+    if (!props.contexts) {
+      props.getContexts()
+    }
+
+    if (!props.forms) {
+      props.getForms()
     }
   }
 

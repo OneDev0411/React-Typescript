@@ -29,16 +29,20 @@
 
       caret-color: #003bdf;
       background-color: #f9f9f9;
+
       &:hover {
         background-color: #f2f2f2;
+
         ::placeholder {
           color: #000000;
         }
       }
+
       &:focus {
         outline: 0;
         background-color: #ffffff;
         border-color: #003bdf;
+
         ::placeholder {
           color: #000000;
         }
@@ -98,7 +102,8 @@
 
     &:hover {
       background: #f2f2f2;
-      .title{
+
+      .title {
         color: #003bdf;
       }
     }
@@ -173,6 +178,7 @@
 
         &.disabled {
           cursor: not-allowed;
+
           a {
             font-weight: normal;
             color: #8da2b5;

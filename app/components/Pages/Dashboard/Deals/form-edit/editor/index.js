@@ -25,21 +25,45 @@ class PDFPreview extends React.Component {
     selectedAnnotation: null
   }
 
+  componentDidMount() {
+    this.enableScrolling()
+  }
+
   // roleColors = {}
   contextsAnnotations = {}
 
   scale = window.devicePixelRatio * 1.2
   displayWidth = Math.min(window.innerWidth - 80, 900)
 
-  onSelectContext = (type, data) =>
+  get AppContainerSelector() {
+    return document.getElementsByClassName('l-app__main')[0]
+  }
+
+  enableScrolling = () => {
+    this.AppContainerSelector.style.overflow = 'auto'
+  }
+
+  disableScrolling = () => {
+    this.AppContainerSelector.style.overflow = 'hidden'
+  }
+
+  onSelectContext = (type, data) => {
     this.setState({
       selectedAnnotation: { type, data }
     })
 
-  deselectActiveAnnotation = () =>
+    this.props.onSelectContext()
+
+    this.disableScrolling()
+  }
+
+  deselectActiveAnnotation = () => {
     this.setState({
       selectedAnnotation: null
     })
+
+    this.enableScrolling()
+  }
 
   setPageContextsAnnotations = contexts => {
     this.contextsAnnotations = {
@@ -164,13 +188,15 @@ class PDFPreview extends React.Component {
           deal={this.props.deal}
         />
 
-        <ContextForm
-          isOpen={this.IsContextFormOpen}
-          onClose={this.deselectActiveAnnotation}
-          data={selectedAnnotation && selectedAnnotation.data}
-          onValueUpdate={this.props.onValueUpdate}
-          deal={this.props.deal}
-        />
+        {this.IsContextFormOpen && (
+          <ContextForm
+            formValues={this.props.values}
+            data={selectedAnnotation && selectedAnnotation.data}
+            deal={this.props.deal}
+            onValueUpdate={this.props.onValueUpdate}
+            onClose={this.deselectActiveAnnotation}
+          />
+        )}
       </Container>
     )
   }

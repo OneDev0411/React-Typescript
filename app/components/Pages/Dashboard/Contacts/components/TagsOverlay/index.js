@@ -254,7 +254,7 @@ class TagsOverlay extends React.Component {
   getCommonTags = (selectedContactsIds, ContactListStore, existingTags) => {
     if (
       selectedContactsIds.length === 0 ||
-      selectContactsInfo(ContactListStore).count === 0
+      selectContactsInfo(ContactListStore).total === 0
     ) {
       return []
     }

@@ -23,7 +23,7 @@ function normalizeAttribute(context) {
   const text = attribute.split('.').map(fraction =>
     fraction
       .split('_')
-      .map(part => capitalize(part))
+      .map(capitalize)
       .join(' ')
   )
 

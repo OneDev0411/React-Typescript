@@ -82,7 +82,7 @@ class AddRoleForm extends React.Component {
           itemToString={this.itemToString}
           onChange={this.handleSelectRole}
           buttonIcon={AddIcon}
-          buttonText="Add a Contact"
+          buttonText="Add a new contact"
           disabled={allowedRoles && allowedRoles.length === 0}
         />
 

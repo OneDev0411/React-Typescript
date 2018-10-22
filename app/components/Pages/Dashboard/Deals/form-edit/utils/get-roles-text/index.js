@@ -1,4 +1,5 @@
 import { get as getAttribute } from 'underscore.get'
+import { getLegalFullName } from '../../../utils/roles'
 
 function normalizeRoleName(deal, roleName) {
   return roleName.split(',').map(name => {
@@ -18,6 +19,14 @@ function normalizeRoleName(deal, roleName) {
   })
 }
 
+function getAttributeValue(role, attribute, defaultValue) {
+  if (attribute === 'legal_full_name') {
+    return getLegalFullName(role)
+  }
+
+  return getAttribute(role, attribute, defaultValue)
+}
+
 export function getRolesText(roles, deal, roleName, annotationContext) {
   if (!Array.isArray(deal.roles)) {
     return ''
@@ -28,7 +37,7 @@ export function getRolesText(roles, deal, roleName, annotationContext) {
   return deal.roles
     .map(id => roles[id])
     .filter(role => normalizeRoleName(deal, roleName).includes(role.role))
-    .map(role => getAttribute(role, attribute, ''))
+    .map(role => getAttributeValue(role, attribute, ''))
     .join(', ')
 }
 
@@ -43,5 +52,5 @@ export function getRoleText(roles, deal, roleName, annotationContext) {
     .map(id => roles[id])
     .filter(role => normalizeRoleName(deal, roleName).includes(role.role))
 
-  return list.length > 0 ? getAttribute(list[number], attribute) : ''
+  return list.length > 0 ? getAttributeValue(list[number], attribute) : ''
 }

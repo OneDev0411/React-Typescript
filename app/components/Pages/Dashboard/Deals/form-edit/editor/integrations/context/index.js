@@ -19,8 +19,27 @@ import DateContext from './date-context'
 class Context extends React.Component {
   state = {
     isSaving: false,
-    value: null,
-    formattedValue: null
+    value: this.getDefaultValue(true),
+    formattedValue: this.getDefaultValue()
+  }
+
+  getDefaultValue(rawValue = false) {
+    const { context } = this.props.data
+
+    if (this.IsDateContext) {
+      return ''
+    }
+
+    let value = this.props.data.annotations.reduce(
+      (acc, ann) => `${acc}${this.props.formValues[ann.fieldName] || ''}`,
+      ''
+    )
+
+    if (rawValue && context && context.format === 'Currency') {
+      value = Number(value.replace(/[^0-9.-]+/g, ''))
+    }
+
+    return value
   }
 
   onContextChange = (value, formattedValue) => {
@@ -41,10 +60,11 @@ class Context extends React.Component {
 
   handleSave = async () => {
     const { contextName, annotations } = this.props.data
+    const contextValue = this.state.value === '' ? null : this.state.value
 
     const context = {
       [contextName]: {
-        value: this.state.value,
+        value: contextValue,
         approved: false
       }
     }
@@ -53,17 +73,17 @@ class Context extends React.Component {
       isSaving: true
     })
 
-    try {
-      await this.props.updateContext(this.props.deal.id, context)
-    } catch (e) {
-      console.log(e)
-    }
-
     this.props.onValueUpdate(
       annotations[0].fieldName,
       this.state.formattedValue || '',
       true
     )
+
+    try {
+      this.props.updateContext(this.props.deal.id, context)
+    } catch (e) {
+      console.log(e)
+    }
 
     this.setState({
       isSaving: false,
@@ -74,10 +94,10 @@ class Context extends React.Component {
     this.props.onClose()
   }
 
-  getValue() {
-    const { value } = this.props
-
-    return value !== null ? value : ''
+  get IsDateContext() {
+    return (
+      this.props.data.context && this.props.data.context.data_type === 'Date'
+    )
   }
 
   onKeyPress(e) {
@@ -123,12 +143,7 @@ class Context extends React.Component {
   render() {
     const { data } = this.props
 
-    if (!data || !this.props.isOpen) {
-      return false
-    }
-
     const defaultValue = Deal.get.field(this.props.deal, data.contextName)
-    const isDateContext = data.context && data.context.data_type === 'Date'
     const position = this.Position
 
     const sharedProps = {
@@ -143,8 +158,8 @@ class Context extends React.Component {
 
     return (
       <ClickOutside onClickOutside={this.onClose}>
-        <Container position={position} isDateContext={isDateContext}>
-          {isDateContext ? (
+        <Container position={position} isDateContext={this.IsDateContext}>
+          {this.IsDateContext ? (
             <DateContext {...sharedProps} />
           ) : (
             <StringContext {...sharedProps} />

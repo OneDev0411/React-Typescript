@@ -15,6 +15,8 @@ const getIcon = Icon => (
 const getImportantDateIcon = label => {
   if (importantDatesIcons[label]) {
     return importantDatesIcons[label]
+  } else if (label === 'Spouse birthday') {
+    return importantDatesIcons.Birthday
   }
 
   return eventTypesIcons['Task Critical']

@@ -58,11 +58,16 @@ export class FinalFormDrawer extends React.Component {
     document.getElementById(this.props.formId).dispatchEvent(event)
   }
 
+  onSubmit = async (values, form) => {
+    await this.props.onSubmit(values, form)
+    form.initialize(this.props.initialValues)
+  }
+
   render() {
     return (
       <Form
         validate={this.props.validate}
-        onSubmit={this.props.onSubmit}
+        onSubmit={this.onSubmit}
         mutators={{ ...arrayMutators }}
         initialValues={this.props.initialValues}
         render={formProps => {
