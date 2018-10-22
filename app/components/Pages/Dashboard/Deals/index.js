@@ -14,7 +14,10 @@ class DealsContainer extends React.Component {
   componentDidMount() {
     const { props } = this
 
-    if (!hasUserAccess(props.user, 'Deals')) {
+    if (
+      hasUserAccess(props.user, 'Deals') === false &&
+      hasUserAccess(props.user, 'BackOffice') === false
+    ) {
       browserHistory.push('/dashboard/mls')
     }
 

@@ -92,7 +92,8 @@ class App extends Component {
       }
 
       this.hasCrmAccess = hasUserAccess(user, 'CRM')
-      this.hasDealsAccess = hasUserAccess(user, 'Deals')
+      this.hasDealsAccess =
+        hasUserAccess(user, 'Deals') || hasUserAccess(user, 'BackOffice')
 
       // load rooms
       this.initialRooms()
