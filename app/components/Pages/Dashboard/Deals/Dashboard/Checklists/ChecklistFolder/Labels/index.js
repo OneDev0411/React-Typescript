@@ -6,6 +6,7 @@ import { H4 } from 'components/Typography/headings'
 const Container = styled(H4)`
   color: #7f7f7f;
   font-weight: 500;
+  font-size: 0.875rem;
 
   /* &.BACKUP,
   &.PRIMARY {
@@ -17,23 +18,23 @@ const Container = styled(H4)`
   } */
 `
 
-export default function ChecklistLabels(props) {
+export function ChecklistLabels(props) {
   const labels = []
   const { checklist } = props
 
   if (checklist.is_deactivated === true) {
-    labels.push('BACKUP')
+    labels.push('Backup')
   }
 
   if (
     checklist.checklist_type === 'Buying' &&
     checklist.is_deactivated === false
   ) {
-    labels.push('PRIMARY')
+    labels.push('Primary')
   }
 
   if (checklist.is_terminated) {
-    labels.push('TERMINATED')
+    labels.push('Terminated')
   }
 
   return <Container>{labels.join(' - ')}</Container>

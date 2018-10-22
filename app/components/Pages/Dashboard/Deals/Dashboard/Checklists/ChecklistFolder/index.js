@@ -2,7 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import Labels from './Labels'
+import { ChecklistLabels } from './Labels'
+import MessageAdmin from './MessageAdmin'
+
 import TaskRow from '../TaskRow'
 
 import {
@@ -24,6 +26,19 @@ class ChecklistFolder extends React.Component {
       isFolderExpanded: !state.isFolderExpanded
     }))
 
+  /**
+   * returns sorted tasks of current checklist.
+   * and GeneralComments task is ommitted
+   * Every Checklist *has one* GeneralComments task
+   * We hide this task from tasks table and show that as a "Message Admin" cta
+   * inside the checklist table
+   */
+  get Tasks() {
+    return this.SortedTasks.filter(this.isFormTask).map(
+      id => this.props.tasks[id]
+    )
+  }
+
   get SortedTasks() {
     const { tasks } = this.props.checklist
     let sortedTasks = tasks
@@ -38,6 +53,10 @@ class ChecklistFolder extends React.Component {
     return sortedTasks
   }
 
+  isFormTask = id =>
+    this.props.tasks[id].task_type === 'Form' &&
+    this.props.tasks[id].title.includes('General Comments') === false
+
   render() {
     const { checklist } = this.props
 
@@ -48,16 +67,18 @@ class ChecklistFolder extends React.Component {
             <ArrowIcon isOpen={this.state.isFolderExpanded} />
 
             <HeaderTitle>{checklist.title}</HeaderTitle>
+
+            <ChecklistLabels checklist={checklist} />
           </HeaderLeftColumn>
 
-          <Labels checklist={checklist} />
+          <MessageAdmin checklist={checklist} tasks={this.props.tasks} />
         </Header>
 
         <TasksContainer isOpen={this.state.isFolderExpanded}>
-          {this.SortedTasks.map(id => (
+          {this.Tasks.map(task => (
             <TaskRow
-              key={id}
-              task={this.props.tasks[id]}
+              key={task.id}
+              task={task}
               deal={this.props.deal}
               isBackOffice={this.props.isBackOffice}
             />

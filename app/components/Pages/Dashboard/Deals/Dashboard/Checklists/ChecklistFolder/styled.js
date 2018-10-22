@@ -27,6 +27,7 @@ export const HeaderLeftColumn = styled.div`
 
 export const HeaderTitle = styled(H4)`
   font-weight: 600;
+  margin-right: 0.5rem;
 `
 
 export const TasksContainer = styled.div`
