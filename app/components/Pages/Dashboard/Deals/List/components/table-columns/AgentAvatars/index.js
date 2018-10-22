@@ -1,7 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
+
 import Avatar from 'react-avatar'
-import Tooltip from '../../../../../../../../views/components/tooltip'
+import Tooltip from 'components/tooltip'
 
 const AgentAvatars = ({ agent }) => {
   if (!agent) {

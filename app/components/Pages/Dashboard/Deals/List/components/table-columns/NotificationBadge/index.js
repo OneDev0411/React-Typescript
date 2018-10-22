@@ -3,7 +3,7 @@ import React from 'react'
 import ToolTip from 'components/tooltip'
 import Badge from 'components/Badge'
 import styled from 'styled-components'
-import IconChat from '../../../../../../../../views/components/SvgIcons/NewChat/IconChat'
+import IconChat from 'components/SvgIcons/NewChat/IconChat'
 
 const NotificationsContainer = styled.div`
   display: flex;
