@@ -1,4 +1,4 @@
-@mixin scrollbar($just-self: false, $width: 0.5em, $thumb-bgc: #b2b2b2, $track-bgc: transparent) {
+@mixin scrollbar($just-self: false, $width: 0.5em, $thumb-bgc: #7F7F7F, $track-bgc: transparent) {
   @if $just-self {
     &::-webkit-scrollbar {
       width: $width;
