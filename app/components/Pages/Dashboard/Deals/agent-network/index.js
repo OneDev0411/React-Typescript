@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
+import { browserHistory, withRouter } from 'react-router'
 
 import config from '../../../../../../config/public'
 import { loadJS } from '../../../../../utils/load-js'
@@ -145,6 +145,8 @@ class AgentNetwork extends React.Component {
     }
   }
 
+  onClose = () => browserHistory.push(`/dashboard/deals/${this.props.deal.id}`)
+
   render() {
     return (
       <React.Fragment>
@@ -152,6 +154,7 @@ class AgentNetwork extends React.Component {
           title="Agent Network"
           subtitle={this.address}
           showBackButton={false}
+          onClickCloseButton={this.onClose}
         />
 
         <Grid
