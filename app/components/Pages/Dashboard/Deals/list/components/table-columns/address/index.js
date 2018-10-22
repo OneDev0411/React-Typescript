@@ -29,11 +29,14 @@ const Name = styled.div`
 
 export const SubAddress = styled.div`
   color: ${grey.A550};
-  display: flex;
   font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 `
 
-const Dot = styled.div`
+const Dot = styled.span`
   margin: 0 0.5rem;
   color: #000000;
 `
@@ -46,6 +49,15 @@ const IconContainer = styled(Flex)`
     height: 16px;
     width: 16px;
   }
+`
+
+const Link = styled(ALink)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  font-weight: 500;
+  margin-top: -4px;
 `
 
 const Address = ({ deal }) => {
@@ -66,20 +78,12 @@ const Address = ({ deal }) => {
       </Container>
 
       <Name>
-        <ALink
-          style={{
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: 'block',
-            fontWeight: 500,
-            marginTop: '-4px'
-          }}
+        <Link
           onClick={() => openDeal(deal.id)}
           to={`/dashboard/deals/${deal.id}`}
         >
           {deal.title}
-        </ALink>
+        </Link>
         <SubAddress className="blackHover">
           {status || '-'}
           <Dot>.</Dot>
