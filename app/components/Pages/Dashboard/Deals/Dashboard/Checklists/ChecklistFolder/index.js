@@ -44,11 +44,8 @@ class ChecklistFolder extends React.Component {
     return (
       <Container>
         <Header>
-          <HeaderLeftColumn>
-            <ArrowIcon
-              isOpen={this.state.isFolderExpanded}
-              onClick={this.toggleFolderOpen}
-            />
+          <HeaderLeftColumn onClick={this.toggleFolderOpen}>
+            <ArrowIcon isOpen={this.state.isFolderExpanded} />
 
             <HeaderTitle>{checklist.title}</HeaderTitle>
           </HeaderLeftColumn>

@@ -22,6 +22,7 @@ export const Header = styled.div`
 export const HeaderLeftColumn = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 `
 
 export const HeaderTitle = styled(H4)`
