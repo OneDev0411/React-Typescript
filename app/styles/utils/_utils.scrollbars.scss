@@ -1,27 +1,14 @@
-@mixin scrollbar($just-self: false, $is-thinner: false, $thumb-bgc: #7F7F7F, $track-bgc: transparent) {
+@mixin scrollbar($just-self: false, $width: 0.5em, $thumb-bgc: #b2b2b2, $track-bgc: transparent) {
   @if $just-self {
     &::-webkit-scrollbar {
+      width: $width;
       height: 0.5em;
-      
-      @if $is-thinner {
-        width: 0.5em;
-      } @else {
-        width: 1em;
-      }
+      padding-right: 3px;
     }
 
     &::-webkit-scrollbar-thumb {
-      background-clip: padding-box;
       background-color: $thumb-bgc;
-      border-style: solid;
-      border-color: rgba(0, 0, 0, 0);
-      border-radius: 8px;
-
-      @if $is-thinner {
-        border-width: 2px;
-      } @else {
-        border-width: 4px;
-      }      
+      border-radius: 5px;
     }
 
     &::-webkit-scrollbar-track {
@@ -39,27 +26,14 @@
     }
   } @else {
     ::-webkit-scrollbar {
+      width: $width;
       height: 0.5em;
-
-      @if $is-thinner {
-        width: 0.5em;
-      } @else {
-        width: 1em;
-      }
+      padding-right: 3px;
     }
 
     ::-webkit-scrollbar-thumb {
-      background-clip: padding-box;
       background-color: $thumb-bgc;
-      border-style: solid;
-      border-color: rgba(0, 0, 0, 0);
-      border-radius: 8px;
-
-      @if $just-self {
-        border-width: 2px;
-      } @else {
-        border-width: 4px;
-      }
+      border-radius: 5px;
     }
 
     ::-webkit-scrollbar-track {
@@ -83,9 +57,9 @@
 }
 
 .u-scrollbar--thinner {
-  @include scrollbar(false, true);
+  @include scrollbar(false, 0.375em !important);
 }
 
 .u-scrollbar--thinner--self {
-  @include scrollbar(true, true);
+  @include scrollbar(true, 0.375em !important);
 }
