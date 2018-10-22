@@ -53,7 +53,7 @@ export function Select(props) {
         const hasError = error && touched
 
         return (
-          <Container>
+          <Container fullWidth={props.fullWidth}>
             <Label required={props.required}>
               <span>{props.label}</span>
               {props.labelNote &&
@@ -67,10 +67,8 @@ export function Select(props) {
               style={{ margin: 0 }}
               buttonStyle={{ padding: 0 }}
               itemRenderer={(props, item) => (
-                <Tooltip caption={item.hint} placement="left">
-                  <Item {...props} key={item.value}>
-                    {item.title}
-                  </Item>
+                <Tooltip caption={item.hint} placement="left" key={item.value}>
+                  <Item {...props}>{item.title}</Item>
                 </Tooltip>
               )}
             />

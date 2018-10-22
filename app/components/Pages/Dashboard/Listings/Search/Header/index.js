@@ -25,26 +25,28 @@ export function Header(props) {
     filtersIsOpen,
     onClickFilter,
     isSideMenuOpen,
-    activeView
+    activeView,
+    isWidget
   } = props
 
   return (
     <Container>
       <Flex alignCenter>
-        {props.user ? (
-          <MenuTrigger
-            onClick={props.toggleSideMenu}
-            isExpended={isSideMenuOpen}
-          />
-        ) : (
-          <img
-            src="/static/images/logo.svg"
-            alt="Rechat"
-            width="98"
-            height="24"
-            style={{ marginRight: '1em' }}
-          />
-        )}
+        {!isWidget &&
+          (props.user ? (
+            <MenuTrigger
+              onClick={props.toggleSideMenu}
+              isExpended={isSideMenuOpen}
+            />
+          ) : (
+            <img
+              src="/static/images/logo.svg"
+              alt="Rechat"
+              width="98"
+              height="24"
+              style={{ marginRight: '1em' }}
+            />
+          ))}
         <SearchField activeView={activeView} />
         <FilterButton
           style={{ marginLeft: '0.5em' }}
@@ -61,19 +63,22 @@ export function Header(props) {
           isSideMenuOpen={isSideMenuOpen}
           handleClose={onClickFilter}
         />
-        {props.user && (
-          <Button
-            size="large"
-            disabled={isFetching}
-            onClick={props.saveSearchHandler}
-            style={{ marginLeft: '0.5em' }}
-          >
-            Save Search
-          </Button>
-        )}
+        {!isWidget &&
+          props.user && (
+            <Button
+              size="large"
+              disabled={isFetching}
+              onClick={props.saveSearchHandler}
+              style={{ marginLeft: '0.5em' }}
+            >
+              Save Search
+            </Button>
+          )}
       </Flex>
 
-      <ViewSwitcher activeView={activeView} onChange={props.onChangeView} />
+      {!isWidget && (
+        <ViewSwitcher activeView={activeView} onChange={props.onChangeView} />
+      )}
     </Container>
   )
 }

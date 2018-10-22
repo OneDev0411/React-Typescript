@@ -22,8 +22,7 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
               Cancel
             </Button>
             <SigninButton
-              appearance="primary"
-              to={`/signout?redirectFromSignout=/signin&username=${username}&redirectTo=${redirectTo}`}
+              href={`/signout?redirectFromSignout=/signin&username=${username}&redirectTo=${redirectTo}`}
             >
               Sign out
             </SigninButton>
@@ -38,9 +37,7 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
           >
             {`This ${verificationType} was previously verified.`}
           </p>
-          <SigninButton appearance="primary" to="/dashboard/mls">
-            Go to the dashboard
-          </SigninButton>
+          <SigninButton href="/dashboard/mls">Go to the dashboard</SigninButton>
         </div>
       )}
     </RedirectModal>

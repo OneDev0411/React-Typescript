@@ -1,9 +1,9 @@
 import React from 'react'
 import { Container } from './styled'
 
-const Footer = ({ showFooter, children, style }) =>
+const Footer = ({ showFooter, children, ...props }) =>
   showFooter && (
-    <Container alignCenter justifyBetween style={style}>
+    <Container alignCenter justifyBetween {...props}>
       {children}
     </Container>
   )

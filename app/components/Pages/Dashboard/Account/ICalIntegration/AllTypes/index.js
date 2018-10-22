@@ -36,17 +36,21 @@ class ICalAllTypes extends React.Component {
   }
 
   render() {
-    const { onChangeSelectedTypes, onChangeSelectAllTypes } = this.props
+    const {
+      onChangeSelectedTypes,
+      onChangeSelectAllTypes,
+      onSelectOneCategoriesTypes
+    } = this.props
     const filteredContexts =
       this.props.contexts &&
       this.props.contexts.filter(context => context.data_type === 'Date')
 
     const filteredContactsAttributesDefs =
       this.props.contactsAttributesDefs &&
-      _.filter(
-        this.props.contactsAttributesDefs,
-        def => def.data_type === 'date' && def.show
-      )
+      _.chain(this.props.contactsAttributesDefs)
+        .filter(def => def.data_type === 'date' && def.show)
+        .map(type => ({ ...type, name: type.name || type.label }))
+        .value()
     const allTypes = taskTypes
       .map(type => type.name)
       .concat(
@@ -63,7 +67,7 @@ class ICalAllTypes extends React.Component {
     return (
       <Fragment>
         <SectionTitle>
-          What event types would you like to export to your iCal?
+          What event types would you like to export to your calendar?
         </SectionTitle>
         <RadioButton
           selected={selectedTypes.length === allTypes.length}
@@ -82,6 +86,7 @@ class ICalAllTypes extends React.Component {
             types={taskTypes}
             selectedTypes={selectedTypes}
             onChangeSelectedTypes={onChangeSelectedTypes}
+            onSelectOneCategoriesTypes={onSelectOneCategoriesTypes}
           />
           {filteredContexts && (
             <CategoryType
@@ -89,6 +94,7 @@ class ICalAllTypes extends React.Component {
               types={filteredContexts}
               selectedTypes={selectedTypes}
               onChangeSelectedTypes={onChangeSelectedTypes}
+              onSelectOneCategoriesTypes={onSelectOneCategoriesTypes}
             />
           )}
           {filteredContactsAttributesDefs && (
@@ -97,6 +103,7 @@ class ICalAllTypes extends React.Component {
               types={filteredContactsAttributesDefs}
               selectedTypes={selectedTypes}
               onChangeSelectedTypes={onChangeSelectedTypes}
+              onSelectOneCategoriesTypes={onSelectOneCategoriesTypes}
             />
           )}
         </CategoryTypesContainer>

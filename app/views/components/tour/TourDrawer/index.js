@@ -190,9 +190,17 @@ export class TourDrawer extends React.Component {
   }
 
   handleSubmit = () => {
-    document
-      .getElementById('tour-drawer-form')
-      .dispatchEvent(new Event('submit', { cancelable: true }))
+    let event
+
+    if (typeof Event === 'function') {
+      event = new Event('submit', { cancelable: true })
+    } else {
+      event = document.createEvent('Event')
+
+      event.initEvent('submit', true, true)
+    }
+
+    document.getElementById('tour-drawer-form').dispatchEvent(event)
   }
 
   render() {
@@ -228,7 +236,6 @@ export class TourDrawer extends React.Component {
                   <FormContainer
                     id="tour-drawer-form"
                     onSubmit={formProps.handleSubmit}
-                    style={{ paddingBottom: '3rem' }}
                   >
                     <Title
                       fullWidth
@@ -243,7 +250,7 @@ export class TourDrawer extends React.Component {
                           name="dueDate"
                           selectedDate={values.dueDate}
                         />
-                        <Reminder dueDate={values.dueDate} />
+                        <Reminder />
                       </FieldContainer>
                     </Section>
 

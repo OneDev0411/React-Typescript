@@ -30,7 +30,7 @@ export function NavItem({ Icon, ...props }) {
         activeClassName="mls-nav-item--active"
       >
         <Item>
-          <Icon style={{ marginRight: props.marginRight }} />
+          <Icon style={{ marginRight: props.marginRight || '0.875rem' }} />
           <ListItemName>{props.text}</ListItemName>
         </Item>
       </Link>

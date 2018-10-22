@@ -129,15 +129,6 @@ class SectionWithFields extends React.Component {
           }
 
           return attribute_def.label
-
-          // switch (attribute_def.name) {
-          //   case 'website':
-          //     return title
-          //   case 'important_date':
-          //     return field.label
-          //   default:
-          //     return `${field.label} ${title}`
-          // }
         }
 
         if (attribute_def.name === 'source_type') {
@@ -164,19 +155,20 @@ class SectionWithFields extends React.Component {
             }}
           >
             {value ? getFormater(field)(value) : '-'}
-            {/* {value &&
+            {this.props.section === 'Addresses' &&
+              value &&
               field.is_primary && (
                 <Tooltip caption="Primary">
                   <StarIcon
                     style={{
                       fill: '#f5a623',
-                      width: '16px',
-                      height: '16px',
-                      marginLeft: '5px'
+                      width: '1em',
+                      height: '1em',
+                      marginLeft: '0.5em'
                     }}
                   />
                 </Tooltip>
-              )} */}
+              )}
           </dd>
         ]
       })
@@ -207,7 +199,6 @@ class SectionWithFields extends React.Component {
         {(addNewFieldButtonText || showAddNewCustomAttributeButton) && (
           <div
             style={{
-              textAlign: 'center',
               marginTop: sectionFields ? 0 : '0.5em'
             }}
           >

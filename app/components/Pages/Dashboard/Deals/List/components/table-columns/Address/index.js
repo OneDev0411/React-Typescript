@@ -33,8 +33,9 @@ export const SubAddress = styled.div`
   font-size: 0.875rem;
 `
 
-const Status = styled.div`
-  margin-left: 1rem;
+const Dot = styled.div`
+  margin: 0 0.5rem;
+  color: #000000;
 `
 const IconContainer = styled(Flex)`
   width: 40px;
@@ -80,8 +81,9 @@ const Address = ({ deal }) => {
           {deal.title}
         </ALink>
         <SubAddress className="blackHover">
+          {status || '-'}
+          <Dot>.</Dot>
           {deal.property_type}
-          <Status>{status}</Status>
         </SubAddress>
       </Name>
     </Flex>

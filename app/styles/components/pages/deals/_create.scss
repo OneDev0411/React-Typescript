@@ -70,7 +70,7 @@ $margin: 20px;
     margin-bottom: 0.5em;
     font-size: 1.75rem;
     font-weight: 500;
-    
+
     .required {
       color: $required-color;
       margin-right: 16px;
@@ -127,7 +127,7 @@ $margin: 20px;
   .deal-address {
     .entity-item {
       width: 200px;
-      margin-bottom: 0px !important;
+      margin-bottom: 0 !important;
     }
 
     .address-info {
@@ -306,7 +306,7 @@ $margin: 20px;
         color: #7F7F7F;
         font-family: Barlow, sans-serif;
       }
-    
+
       ::placeholder {
         font-size: 1rem;
         font-weight: 500;
@@ -325,7 +325,7 @@ $margin: 20px;
         border-color: #003bdf;
         background-color: #ffffff;
       }
-     
+
       &.invalid {
         border: 1px solid red;
       }
@@ -350,12 +350,11 @@ $margin: 20px;
 %create-deal-button {
   background-color: #2196f3;
   color: #fff;
-  margin-left: 7px;
   border: none;
   height: 34px;
   line-height: 17px;
   vertical-align: middle;
-  margin-left: 0px;
+  margin-left: 0;
   min-width: 150px;
 
   &:hover {

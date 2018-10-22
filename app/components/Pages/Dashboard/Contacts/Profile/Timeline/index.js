@@ -6,6 +6,7 @@ import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawe
 import { EventDrawer } from '../../../../../../views/components/EventDrawer'
 import { TourDrawer } from '../../../../../../views/components/tour/TourDrawer'
 import { OpenHouseDrawer } from '../../../../../../views/components/open-house/OpenHouseDrawer'
+import { setTime } from '../../../../../../utils/set-time'
 
 import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
@@ -124,6 +125,7 @@ export class Timeline extends React.Component {
       return <EmptyState />
     }
 
+    const todayEvents = []
     const upcomingEvents = []
     const pastEventsIndexedInMonths = {}
 
@@ -165,13 +167,23 @@ export class Timeline extends React.Component {
       if (due_date) {
         due_date *= 1000
 
+        if (isToday(due_date)) {
+          return todayEvents.push(item)
+        }
+
         if (due_date > new Date().getTime()) {
           return upcomingEvents.push(item)
         }
 
         date = new Date(due_date)
       } else {
-        date = new Date(item.created_at * 1000)
+        const createdAt = item.created_at * 1000
+
+        if (isToday(createdAt)) {
+          return todayEvents.push(item)
+        }
+
+        date = new Date(createdAt)
       }
 
       const monthAndYear = getDateMonthAndYear(date)
@@ -203,11 +215,20 @@ export class Timeline extends React.Component {
 
     return (
       <div>
+        {todayEvents.length > 0 && (
+          <Container id="today_events" key="today_events">
+            {this.renderItems({
+              title: 'Today Events',
+              items: todayEvents.sort((a, b) => a.due_date < b.due_date)
+            })}
+          </Container>
+        )}
+
         {upcomingEvents.length > 0 && (
           <Container id="upcoming_events" key="upcoming_events">
             {this.renderItems({
               title: 'Upcoming Events',
-              items: upcomingEvents.sort((a, b) => a.due_date > b.due_date)
+              items: upcomingEvents.sort((a, b) => a.due_date < b.due_date)
             })}
           </Container>
         )}
@@ -246,3 +267,9 @@ export class Timeline extends React.Component {
     )
   }
 }
+
+function isToday(date) {
+  return setTime(new Date(date)).getTime() === setTime(new Date()).getTime()
+}
+
+// todo: bug - sorting of past events when a event is edited.

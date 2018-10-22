@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Dropdown } from 'react-bootstrap'
+import { Dropdown, MenuItem } from 'react-bootstrap'
 
 import IntercomTrigger from '../IntercomTrigger'
 
@@ -71,9 +71,7 @@ class appSideNav extends React.Component {
 
     const hasDealsPermission = acl.includes('Deals')
     const hasBackOfficePermission = acl.includes('BackOffice')
-    const hasContactsPermission =
-      user.user_type !== 'Client' ||
-      (user.features && user.features.includes('Contacts'))
+    const hasContactsPermission = acl.includes('CRM')
 
     return (
       <aside className="c-app-sidenav">
@@ -95,9 +93,7 @@ class appSideNav extends React.Component {
             {user.teams &&
               user.teams.length > 1 && <li className="separator">Account</li>}
 
-            <li>
-              <Link to="/dashboard/account">Settings</Link>
-            </li>
+            <MenuItem href="/dashboard/account">Settings</MenuItem>
 
             {hasBackOfficePermission && (
               <React.Fragment>
@@ -215,7 +211,7 @@ class appSideNav extends React.Component {
                     style={{
                       position: 'absolute',
                       top: 0,
-                      left: 'calc(100% - 12px)'
+                      left: '50%'
                     }}
                   >
                     {appNotifications > 99 ? '99+' : appNotifications}

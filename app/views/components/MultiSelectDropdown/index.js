@@ -29,6 +29,10 @@ class MultiSelectDropdown extends React.Component {
   }
 
   handleOnChange = item => {
+    if (item.disabled === true) {
+      return false
+    }
+
     let selectedItems = item.selectAll
       ? this.toggleSelectAll()
       : this.toggleSelectItem(item)
@@ -86,10 +90,12 @@ class MultiSelectDropdown extends React.Component {
             appearance="link"
             key={item.label}
             style={{ width: '100%' }}
-            hasDivider={item.selectAll}
+            hasDevider={item.selectAll}
+            isDisabled={item.disabled === true}
             {...rest}
           >
             <CheckBoxButton
+              isDisabled={item.disabled === true}
               isSelected={this.getIsItemSelected(item)}
               onClick={() => this.handleOnChange(item)}
               style={{

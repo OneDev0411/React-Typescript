@@ -4,7 +4,7 @@ import Flex from 'styled-flex-component'
 import { CheckBoxButton } from '../../../../../../views/components/Button/CheckboxButton'
 
 const MemberRow = ({ title, selected, onClick, style }) => (
-  <Flex alignCenter style={{ marginTop: '1rem', ...style }}>
+  <Flex alignCenter style={{ margin: '1rem 0', ...style }}>
     <CheckBoxButton
       square
       isSelected={selected}

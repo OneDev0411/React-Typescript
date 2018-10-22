@@ -71,7 +71,7 @@ export function EventType() {
           fullHeight
           style={{ marginBottom: '1em' }}
           buttonRenderer={({ icon: Icon, iconColor, ...props }) => (
-            <Button {...props}>
+            <Button {...props} isActive={props.isOpen} inverse>
               <Flex alignCenter>
                 {Icon && (
                   <Icon

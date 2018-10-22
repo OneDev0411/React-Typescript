@@ -38,10 +38,7 @@ export async function preSaveFormat(values, originalValues, deal, template) {
 
   const reminderDate = getReminderValue(reminder.value, dueDate)
 
-  if (
-    reminderDate != null &&
-    dueDate.getTime() >= new Date().getTime() + 1800000
-  ) {
+  if (reminderDate != null) {
     task.reminders = [
       {
         is_relative: true,

@@ -58,6 +58,10 @@ export function roleName(role) {
  * @param {Object} userRole - the roles including name parts
  */
 export function getLegalFullName(userRole) {
+  if (!userRole) {
+    return ''
+  }
+
   let name = []
   const {
     legal_prefix,

@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { batchActions } from 'redux-batched-actions'
+import { browserHistory } from 'react-router'
 
 import moment from 'moment'
 import _ from 'underscore'
@@ -36,6 +37,7 @@ import CalendarFilter from './Filter'
 import { MenuContainer } from './styled'
 
 import ActionButton from '../../../../views/components/Button/ActionButton'
+import { getActiveTeamACL } from '../../../../utils/user-teams'
 
 const LOADING_POSITIONS = {
   Top: 0,
@@ -53,6 +55,14 @@ class CalendarContainer extends React.Component {
 
   componentDidMount() {
     const { selectedDate } = this.props
+
+    const acl = getActiveTeamACL(this.props.user)
+
+    const hasContactsPermission = acl.includes('CRM')
+
+    if (!hasContactsPermission) {
+      browserHistory.push('/dashboard/mls')
+    }
 
     this.restartCalendar(selectedDate)
   }
@@ -302,7 +312,6 @@ class CalendarContainer extends React.Component {
                 loadingPosition={loadingPosition}
                 onScrollTop={this.loadPreviousItems}
                 onScrollBottom={this.loadNextItems}
-                onContainerScroll={e => this.handleContainerScroll(e.target)}
                 onSelectTask={this.onClickTask}
                 onRef={this.onTableRef}
               />

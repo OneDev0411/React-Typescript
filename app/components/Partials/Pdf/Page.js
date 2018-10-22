@@ -136,8 +136,7 @@ class PdfPage extends React.Component {
       zoom,
       defaultContainerHeight
     } = this.props
-    const { pdfInfo } = doc
-    const { numPages } = pdfInfo
+    const { numPages } = doc
     let style = {}
 
     if (rotation === 90 || rotation === 270) {

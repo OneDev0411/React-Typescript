@@ -7,6 +7,12 @@ import Email from '../../components/SvgIcons/AtSign/IconAtSign'
 import OpenHouse from '../../components/SvgIcons/OpenHouse/IconOpenHouse'
 import Tour from '../../components/SvgIcons/Tour/IconTour'
 import Other from '../../components/SvgIcons/MenuRounded/IconMenuRounded'
+import Closing from '../../components/SvgIcons/Closing/IconClosing'
+import IconInPerson from '../../components/SvgIcons/InPerson/IconInPerson'
+import IconTodo from '../../components/SvgIcons/Todo/IconTodo'
+import IconListingAppointment from '../../components/SvgIcons/ListingAppointment/IconListingAppointment'
+import IconTaskCritical
+  from '../../components/SvgIcons/TaskCritical/IconTaskCritical'
 
 function getIcons() {
   const icons = {}
@@ -18,7 +24,7 @@ function getIcons() {
     },
     {
       name: 'In-Person Meeting',
-      icon: IconFollowUp,
+      icon: IconInPerson,
       color: '#F7A700'
     },
     {
@@ -55,6 +61,31 @@ function getIcons() {
       name: 'Other',
       icon: Other,
       color: '#9013FE'
+    },
+    {
+      name: 'Closing',
+      icon: Closing,
+      color: '#287700'
+    },
+    {
+      name: 'Follow Up',
+      icon: IconFollowUp,
+      color: '#9013FE'
+    },
+    {
+      name: 'Todo',
+      icon: IconTodo,
+      color: '#4e709d'
+    },
+    {
+      name: 'Todo',
+      icon: IconListingAppointment,
+      color: '#8B572A'
+    },
+    {
+      name: 'Task Critical',
+      icon: IconTaskCritical,
+      color: '#F5A623'
     }
   ]
 

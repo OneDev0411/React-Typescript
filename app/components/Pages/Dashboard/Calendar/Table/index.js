@@ -133,11 +133,7 @@ export class Table extends React.Component {
 
   getGridHeaderProps = () => ({
     style: {
-      position: 'sticky',
-      top: '0',
-      zIndex: 5,
-      backgroundColor: '#fff',
-      padding: '5px 0'
+      display: 'none'
     }
   })
 
@@ -150,11 +146,8 @@ export class Table extends React.Component {
   getGridTrProps = (rowIndex, { original: row }) => {
     const props = {}
 
-    if (row.object_type === 'crm_task') {
-      props.style =
-        row.status === 'DONE'
-          ? { textDecoration: 'line-through', opacity: 0.5 }
-          : {}
+    if (row.object_type === 'crm_task' && row.status === 'DONE') {
+      props.style = { opacity: 0.5 }
     }
 
     return {

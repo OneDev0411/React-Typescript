@@ -87,8 +87,7 @@ class EditAddressesForm extends React.Component {
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
         title="Edit Addresses"
-        showReset={false}
-        showCancel={false}
+        formId="edit-address-form"
       >
         <FieldArray name="addresses">
           {({ fields }) => (
@@ -190,6 +189,7 @@ class EditAddressesForm extends React.Component {
 
               <div style={{ padding: '2em', textAlign: 'center' }}>
                 <AddButton
+                  type="button"
                   appearance="outline"
                   onClick={() =>
                     fields.push(

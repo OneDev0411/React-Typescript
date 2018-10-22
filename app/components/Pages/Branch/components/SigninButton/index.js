@@ -1,4 +1,4 @@
-import Button from '../../../../../views/components/Button/LinkButton'
+import Button from '../../../../../views/components/Button/AButton'
 
 export const SigninButton = Button.extend`
   margin-left: 1rem;

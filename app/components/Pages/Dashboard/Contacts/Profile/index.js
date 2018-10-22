@@ -165,7 +165,6 @@ class ContactProfile extends React.Component {
       )
     }
 
-    const hasAddress = getContactAddresses(contact)
     const defaultAssociation = {
       association_type: 'contact',
       contact: normalizeContact(contact)
@@ -191,11 +190,9 @@ class ContactProfile extends React.Component {
 
                 <ContactInfo contact={contact} />
 
-                {hasAddress.length > 0 && <Addresses contact={contact} />}
+                <Addresses contact={contact} />
 
                 <Details contact={contact} />
-
-                {hasAddress.length === 0 && <Addresses contact={contact} />}
 
                 {!this.state.isDesktopScreen && (
                   <DealsListWidget contactId={contact.id} />

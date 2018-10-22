@@ -15,6 +15,7 @@ import {
   getContactAvatar,
   getContactAttribute
 } from '../../../models/contacts/helpers'
+import { getActiveTeamACL } from '../../../utils/user-teams'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -34,6 +35,10 @@ class Compose extends React.Component {
   componentDidMount() {
     // if component reopen, clear recipient
     this.onChangeRecipients()
+
+    const acl = getActiveTeamACL(this.props.user)
+
+    this.hasContactsPermission = acl.includes('CRM')
   }
 
   /**
@@ -67,7 +72,11 @@ class Compose extends React.Component {
       rooms = await this.searchInRooms(this.criteria)
     }
 
-    const contacts = await this.searchInContacts(this.criteria.toLowerCase())
+    let contacts = []
+
+    if (this.hasContactsPermission) {
+      await this.searchInContacts(this.criteria.toLowerCase())
+    }
 
     this.createListView(rooms, contacts)
 
@@ -380,11 +389,12 @@ Compose.defaultProps = {
   roomUsers: []
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ contacts, user }) {
   const { attributeDefs } = contacts
 
   return {
-    attributeDefs
+    attributeDefs,
+    user
   }
 }
 

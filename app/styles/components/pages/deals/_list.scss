@@ -15,12 +15,10 @@
     margin-bottom: 21px;
   }
   .fa-search {
-    color: #8da2b5;
     font-size: 82px;
     margin-bottom: 28px;
   }
   .title {
-    color: #62778c;
     margin-bottom: 10px;
     font-size: 26px;
     font-weight: bold;
@@ -29,7 +27,6 @@
   .descr {
     font-size: 14px;
     font-weight: 500;
-    color: #8da2b5;
     margin-bottom: 20px;
   }
 
@@ -285,6 +282,15 @@
   min-width: 280px;;
   max-width: inherit;
   box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+  &.top {
+    .arrow{
+      border-top-color:#fff;
+      &:after{
+        border-top-color: #fff !important;
+      }
+    }
+  }
 
   .arrow{
     border-bottom-color: #fff !important;

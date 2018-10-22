@@ -19,6 +19,7 @@ import Templates from '../Templates'
 
 import juice from 'juice'
 import ActionButton from 'components/Button/ActionButton'
+import { H1 } from '../../Typography/headings'
 
 class Builder extends React.Component {
   componentDidMount() {

@@ -25,27 +25,74 @@ class PDFPreview extends React.Component {
     selectedAnnotation: null
   }
 
+  componentDidMount() {
+    this.enableScrolling()
+  }
+
   // roleColors = {}
   contextsAnnotations = {}
 
   scale = window.devicePixelRatio * 1.2
   displayWidth = Math.min(window.innerWidth - 80, 900)
 
-  onSelectContext = (type, data) =>
+  get AppContainerSelector() {
+    return document.getElementsByClassName('l-app__main')[0]
+  }
+
+  enableScrolling = () => {
+    this.AppContainerSelector.style.overflow = 'auto'
+  }
+
+  disableScrolling = () => {
+    this.AppContainerSelector.style.overflow = 'hidden'
+  }
+
+  onSelectContext = (type, data) => {
     this.setState({
       selectedAnnotation: { type, data }
     })
 
-  deselectActiveAnnotation = () =>
+    this.props.onSelectContext()
+
+    this.disableScrolling()
+  }
+
+  deselectActiveAnnotation = () => {
     this.setState({
       selectedAnnotation: null
     })
 
+    this.enableScrolling()
+  }
+
   setPageContextsAnnotations = contexts => {
     this.contextsAnnotations = {
       ...this.contextsAnnotations,
-      ...contexts
+      ..._.indexBy(contexts, c => c.annotation.fieldName)
     }
+  }
+
+  get IsRolesManagerOpen() {
+    return (
+      this.state.selectedAnnotation &&
+      this.state.selectedAnnotation.type === 'Role'
+    )
+  }
+
+  get IsAddressFormOpen() {
+    return (
+      this.state.selectedAnnotation &&
+      this.state.selectedAnnotation.type === 'Context' &&
+      this.state.selectedAnnotation.data.type === 'Address'
+    )
+  }
+
+  get IsContextFormOpen() {
+    return (
+      this.state.selectedAnnotation &&
+      this.state.selectedAnnotation.type === 'Context' &&
+      this.state.selectedAnnotation.data.type === 'Singular'
+    )
   }
 
   // getRoleColor = assignment => {
@@ -121,21 +168,19 @@ class PDFPreview extends React.Component {
           )
         )}
 
-        <RolesManager
-          selectedAnnotation={selectedAnnotation}
-          isOpen={selectedAnnotation && selectedAnnotation.type === 'Role'}
-          onClose={this.deselectActiveAnnotation}
-          deal={this.props.deal}
-          onSetValues={this.props.onSetValues}
-        />
+        {this.IsRolesManagerOpen && (
+          <RolesManager
+            selectedAnnotation={selectedAnnotation}
+            formValues={this.props.values}
+            deal={this.props.deal}
+            onClose={this.deselectActiveAnnotation}
+            onSetValues={this.props.onSetValues}
+          />
+        )}
 
         <AddressForm
           selectedAnnotation={selectedAnnotation}
-          isOpen={
-            selectedAnnotation &&
-            selectedAnnotation.type === 'Context' &&
-            selectedAnnotation.data.type === 'Address'
-          }
+          isOpen={this.IsAddressFormOpen}
           contextsAnnotations={this.contextsAnnotations}
           data={selectedAnnotation && selectedAnnotation.data}
           onClose={this.deselectActiveAnnotation}
@@ -143,17 +188,15 @@ class PDFPreview extends React.Component {
           deal={this.props.deal}
         />
 
-        <ContextForm
-          isOpen={
-            selectedAnnotation &&
-            selectedAnnotation.type === 'Context' &&
-            selectedAnnotation.data.type === 'Singular'
-          }
-          onClose={this.deselectActiveAnnotation}
-          data={selectedAnnotation && selectedAnnotation.data}
-          onValueUpdate={this.props.onValueUpdate}
-          deal={this.props.deal}
-        />
+        {this.IsContextFormOpen && (
+          <ContextForm
+            formValues={this.props.values}
+            data={selectedAnnotation && selectedAnnotation.data}
+            deal={this.props.deal}
+            onValueUpdate={this.props.onValueUpdate}
+            onClose={this.deselectActiveAnnotation}
+          />
+        )}
       </Container>
     )
   }

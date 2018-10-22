@@ -437,6 +437,7 @@ export class RoleFormModal extends React.Component {
   render() {
     return (
       <FinalFormDrawer
+        formId="deal-role-form"
         onSubmit={this.onSubmit}
         validate={this.validate}
         initialValues={this.getInitialValues()}
@@ -446,8 +447,6 @@ export class RoleFormModal extends React.Component {
         submitting={this.props.isSubmitting}
         submitButtonLabel={this.submitCaption}
         submittingButtonLabel={this.submitCaption}
-        showReset={false}
-        reinitializeAfterSubmit={false}
         render={({ values, handleSubmit }) => (
           <RoleFormContainer
             form={this.props.form}

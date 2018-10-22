@@ -3,10 +3,16 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import copy from '../../../../../../utils/copy-text-to-clipboard'
-import IconCalendar from '../../../../../../views/components/SvgIcons/Calender/IconCalendar'
+import IconCalendarBase from '../../../../../../views/components/SvgIcons/Calender/IconCalendar'
 import getCalenderFeed from '../../../../../../models/user/generate-calender-feed'
 import Button from '../../../../../../views/components/Button/ActionButton'
 import { GenerateUrlContainer, GenerateUrlText, FeedUrl } from './styled'
+
+const IconCalendar = IconCalendarBase.extend`
+  > g {
+    fill: #000000;
+  }
+`
 
 class GenerateUrl extends React.Component {
   state = {
@@ -61,17 +67,21 @@ class GenerateUrl extends React.Component {
     return (
       <GenerateUrlContainer>
         <IconCalendar />
-        <GenerateUrlText> iCAL Feed URL:</GenerateUrlText>
+        <GenerateUrlText>Calendar Export URL:</GenerateUrlText>
         {feedURl ? (
           <FeedUrl
             appearance="link"
-            onClick={() => {
+            onClick={event => {
+              event.preventDefault()
               copy(feedURl)
               this.props.notify({
                 message: 'Link Copied',
                 status: 'success'
               })
+
+              return false
             }}
+            href={feedURl}
           >
             {feedURl}
           </FeedUrl>

@@ -5,8 +5,9 @@ import Drawer from '../OverlayDrawer'
 import Button from '../Button/ActionButton'
 import IconButton from '../Button/IconButton'
 import IconDelete from '../SvgIcons/DeleteOutline/IconDeleteOutline'
+import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 
-import { Container, Input, ErrorMessage } from './styled'
+import { Container, Input } from './styled'
 
 const propTypes = {
   ...Drawer.propTypes,
@@ -70,7 +71,7 @@ export class EditNoteDrawer extends React.Component {
               disabled={isSaving}
             />
             {this.state.error && (
-              <ErrorMessage>{this.state.error.message}</ErrorMessage>
+              <Alert type="error" message={this.state.error.message} />
             )}
           </Container>
         </Drawer.Body>

@@ -49,7 +49,7 @@ class BadgeCounter extends React.Component {
           style={{
             position: 'absolute',
             top: 0,
-            left: 'calc(100% - 12px)'
+            left: '50%'
           }}
         >
           {counter > 99 ? '99+' : counter}
@@ -61,10 +61,7 @@ class BadgeCounter extends React.Component {
   }
 }
 
-export default connect(({ deals, chatroom, user }) => ({
+export default connect(({ deals, user }) => ({
   deals: deals.list,
-  tasks: deals.tasks,
-  checklists: deals.checklists,
-  isBackOffice: isBackOffice(user),
-  rooms: chatroom.rooms
+  isBackOffice: isBackOffice(user)
 }))(BadgeCounter)

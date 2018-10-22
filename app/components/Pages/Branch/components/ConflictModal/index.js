@@ -34,7 +34,7 @@ const ConflictModal = ({ params, brandInfo }) => {
           <Button appearance="outline" to="/dashboard/mls">
             Cancel
           </Button>
-          <SigninButton appearance="primary" to={actionButton.href}>
+          <SigninButton href={actionButton.href}>
             {actionButton.text}
           </SigninButton>
         </div>

@@ -5,7 +5,9 @@ import {
   getAnnotationsValues
 } from '../../../../utils/word-wrap'
 
-import ToolTip from './tooltip'
+import { getValue } from '../../../../utils/types'
+
+import ToolTip from 'components/tooltip'
 
 import { Container } from './styled'
 
@@ -15,23 +17,27 @@ export default class Context extends React.Component {
   }
 
   setDefaultValues = () => {
-    const values = getAnnotationsValues(
-      this.props.annotations,
-      this.props.value,
-      {
-        maxFontSize: this.props.maxFontSize
-      }
-    )
+    if (this.props.value) {
+      const values = getAnnotationsValues(
+        this.props.annotations,
+        this.props.value,
+        {
+          maxFontSize: this.props.maxFontSize
+        }
+      )
 
-    this.props.onSetValues(values)
-  }
+      this.props.onSetValues(values)
 
-  get HasMlsLock() {
-    if (this.props.isAddressField && this.props.isDealConnectedToMls) {
-      return true
+      return
     }
 
-    return false
+    const values = {}
+
+    this.props.annotations.forEach(annotation => {
+      values[annotation.fieldName] = getValue(annotation)
+    })
+
+    this.props.onSetValues(values)
   }
 
   render() {
@@ -43,23 +49,28 @@ export default class Context extends React.Component {
       }
     )
 
-    const hasMlsLock = this.HasMlsLock
-    const isReadOnly = this.props.isReadOnly || hasMlsLock
-
     return (
       <div>
         {rects.map((rect, index) => (
-          <ToolTip key={index} hasMlsLock={hasMlsLock}>
+          <ToolTip
+            key={index}
+            captionIsHTML
+            isCustom={false}
+            caption={this.props.tooltip}
+            placement="bottom"
+            multiline
+          >
             <Container
+              id={this.props.annotations[index].fieldName}
               fontName={appearance.font}
               fontSize={fontSize}
               bold={appearance.bold}
               color={appearance.color}
               rect={rect}
               innerRef={ref => (this.container = ref)}
-              readOnly={isReadOnly}
+              readOnly={this.props.isReadOnly}
               onClick={() =>
-                !isReadOnly &&
+                !this.props.isReadOnly &&
                 this.props.onClick(this.container.getBoundingClientRect())
               }
             >

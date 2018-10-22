@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const DraftBanner = styled.div`
-  display: flex;
+  display: ${props => (props.isOpen ? 'flex' : 'none')};
   align-items: center;
   min-height: 48px;
   background-color: #f5a623;

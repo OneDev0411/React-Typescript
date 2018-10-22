@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 import { isOutline } from '../helpers'
 import { ButtonAppearances } from '../styles/ButtonAppearances'
 
-const propTypes = {
+export const propTypes = {
   /**
    * The appearance of the button.  {primary, outline, icon, link}
    */
@@ -42,7 +42,7 @@ const propTypes = {
   brandColor: PropTypes.string
 }
 
-const defaultProps = {
+export const defaultProps = {
   appearance: 'primary',
   disabled: false,
   isActive: false,
@@ -77,7 +77,7 @@ const getStylesDependedSize = props => {
   }
 }
 
-const getAppearance = props => {
+export const getAppearance = props => {
   let appearance = props.appearance
 
   return css`

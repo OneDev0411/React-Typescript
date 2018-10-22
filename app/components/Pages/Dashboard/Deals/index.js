@@ -7,6 +7,7 @@ import Spinner from 'components/Spinner'
 
 import { getDeals, getDeal, getContexts, getForms } from 'actions/deals'
 import { selectDealById } from 'reducers/deals/list'
+import { hasUserAccess } from 'utils/user-teams'
 
 const Container = styled.div`
   min-height: 100vh;
@@ -24,11 +25,14 @@ class DealsContainer extends React.Component {
   }
 
   componentWillMount() {
-    const { id: dealId } = this.props.params
+    if (
+      hasUserAccess(this.props.user, 'Deals') === false &&
+      hasUserAccess(this.props.user, 'BackOffice') === false
+    ) {
+      browserHistory.push('/dashboard/mls')
+    }
 
-    // if (!this.props.deals && !this.props.isFetchingDeals) {
-    //   this.props.getDeals(this.props.user)
-    // }
+    const { id: dealId } = this.props.params
 
     if (!this.props.contexts) {
       this.props.getContexts()

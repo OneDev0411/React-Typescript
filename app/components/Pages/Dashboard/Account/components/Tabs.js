@@ -18,7 +18,7 @@ export const ProfileTabs = ({ user }) => (
     />
     <Tab
       indexed
-      text="iCAL Feed"
+      text="Calendar Export"
       to="/dashboard/account/deal/icalintegration"
     />
   </ul>

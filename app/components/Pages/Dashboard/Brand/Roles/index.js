@@ -10,7 +10,7 @@ import { getRoles } from '../../../../../store_actions/brandConsole'
 class Roles extends React.Component {
   constructor(props) {
     super(props)
-    this.aclTypes = ['Deals', 'BackOffice', 'Admin', 'Marketing']
+    this.aclTypes = ['Deals', 'BackOffice', 'Admin', 'Marketing', 'CRM']
   }
 
   componentDidMount() {

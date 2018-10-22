@@ -15,8 +15,6 @@ import SimpleField from '../../../../Pages/Dashboard/Account/Profile/components/
 const Reset = ({
   user,
   brand,
-  invalid,
-  pristine,
   submitError,
   isSubmitting,
   handleSubmit,
@@ -26,7 +24,7 @@ const Reset = ({
 }) => {
   const brandInfo = getBrandInfo(brand)
   const { siteLogo, siteTitle } = brandInfo
-  const isDisabled = isSubmitting || invalid || pristine
+  const isDisabled = isSubmitting
 
   let content = (
     <article className="c-auth">
@@ -143,7 +141,7 @@ const validate = values => {
   if (!values.confirm_password) {
     errors.confirm_password = 'Required'
   } else if (values.confirm_password !== values.password) {
-    errors.confirm_password = "Your passwords don't match"
+    errors.confirm_password = 'Your passwords don\'t match'
   }
 
   return errors

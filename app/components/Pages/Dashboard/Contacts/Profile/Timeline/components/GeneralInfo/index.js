@@ -6,19 +6,28 @@ import { Title, Description } from './styled'
 
 export function GeneralInfo(props) {
   const { task } = props
+  const { description } = task
+
+  const hasAssociation =
+    task.contacts.length + task.deals.length + task.listings.length > 1
 
   return (
-    <Flex style={{ marginBottom: '2em' }}>
+    <Flex style={{ marginBottom: hasAssociation ? '2em' : 0 }}>
       <Status
         disabled={props.disabled}
         checked={task.status === 'DONE'}
         onClick={props.statusHandler}
       />
-      <Flex column style={{ width: 'calc(100% - 40px)' }}>
-        <Title truncate className="u-cursor--pointer" onClick={props.onEdit}>
+      <Flex column style={{ width: 'calc(100% - 2.5rem)' }}>
+        <Title
+          className="u-cursor--pointer"
+          onClick={props.onEdit}
+          style={{ margin: description ? '0 0 0.5em' : 0 }}
+          truncate
+        >
           {task.title}
         </Title>
-        {task.description && <Description>{task.description}</Description>}
+        {description && <Description>{description}</Description>}
       </Flex>
     </Flex>
   )

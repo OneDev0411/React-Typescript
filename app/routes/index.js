@@ -84,6 +84,11 @@ const AsyncListingsFavorites = Load({
     import('../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */)
 })
 
+const AsyncTours = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Listings/Tours' /* webpackChunkName: "fav" */)
+})
+
 const AsyncListingSinglePage = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
@@ -163,11 +168,6 @@ const AsyncContacts = Load({
     import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */)
 })
 
-const AsyncNewContact = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Contacts/NewContact' /* webpackChunkName: "contact" */)
-})
-
 const AsyncContactProfile = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */)
@@ -176,20 +176,6 @@ const AsyncContactProfile = Load({
 const AsyncContactsImportCsv = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
-})
-
-/* ==================================== */
-//  CRM Tasks
-/* ==================================== */
-
-const AsyncCrmTasksList = Load({
-  loader: () =>
-    import('../views/CRM/Tasks' /* webpackChunkName: "crm_tasks_list" */)
-})
-
-const AsyncCrmTask = Load({
-  loader: () =>
-    import('../views/CRM/Tasks/TaskPage' /* webpackChunkName: "crm_task_page" */)
 })
 
 /* ==================================== */
@@ -387,25 +373,19 @@ export default (
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
 
+        <Route path="tours" component={AsyncTours} />
         <Route path="following" component={AsyncListingsFavorites} />
         <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
-      <Route
-        component={AsyncContacts}
-        path="/dashboard/contacts(/page/:page)"
-      />
-      <Route path="/dashboard/contacts/new" component={AsyncNewContact} />
+      <Route component={AsyncContacts} path="/dashboard/contacts" />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route
         path="/dashboard/contacts/import/csv"
         component={AsyncContactsImportCsv}
       />
-
-      <Route path="/crm/tasks" component={AsyncCrmTasksList} />
-      <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
 
       <Route path="/dashboard/calendar" component={AsyncCalendar} />
 
@@ -444,7 +424,7 @@ export default (
       </Route>
 
       <Route
-        path="/dashboard/notifications"
+        path="/dashboard/notifications(/:type/:id)"
         component={AsyncNotificationsPage}
       />
 
