@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import LinkButton from 'components/Button/LinkButton'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import Spinner from 'components/Spinner'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import { updateListing } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
@@ -67,7 +68,10 @@ class MlsConnect extends React.Component {
     return (
       <Fragment>
         {deal.listing ? (
-          <MlsNumber>MLS# {deal.mls_context.mls_number}</MlsNumber>
+          <MlsNumber>
+            <span>MLS# {deal.mls_context.mls_number}</span>
+            <CloseIcon onClick={this.removeMlsConnection} />
+          </MlsNumber>
         ) : (
           <LinkButton style={this.buttonStyle} onClick={this.toggleDrawer}>
             Add MLS# number
