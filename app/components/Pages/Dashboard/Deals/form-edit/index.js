@@ -157,7 +157,7 @@ class EditDigitalForm extends React.Component {
     const { task, notify } = this.props
     // const { notifyOffice } = this.state
 
-    this.setState({ isSaving: true })
+    this.setState({ isSaving: true, promptOnQuit: false })
 
     // save form
     try {
