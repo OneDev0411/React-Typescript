@@ -2,11 +2,13 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 
 import { H1 } from 'components/Typography/headings'
+import IconLink from 'components/SvgIcons/LinkOpen/IconLink'
 
 import { ListingImage } from './Image'
 import MlsConnect from './MlsConnect'
 
 import { Divider } from '../styled'
+import { MLSLink } from './styled'
 
 import Deal from 'models/Deal'
 
@@ -34,7 +36,16 @@ export function ListingInfo(props) {
       <ListingImage deal={props.deal} />
 
       <Flex column style={{ padding: '0.5em 1.5em' }}>
-        <H1 style={{ lineHeight: 1.5 }}>{getTitle(props.deal)}</H1>
+        <Flex alignCenter>
+          <H1 style={{ lineHeight: 1.5 }}>{getTitle(props.deal)}</H1>
+
+          {props.deal.listing && (
+            <MLSLink to={`/dashboard/mls/${props.deal.listing}`}>
+              <IconLink />
+            </MLSLink>
+          )}
+        </Flex>
+
         <Flex alignCenter>
           {address}
           {address.length > 0 && <Divider />}
