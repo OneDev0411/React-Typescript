@@ -13,7 +13,7 @@ import { confirmation } from '../../../../../store_actions/confirmation'
 
 import Map from './components/Map'
 import { MapView } from '../components/MapView'
-import { bootstrapURLKeys } from '../mapOptions'
+import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
 import { GridView } from '../components/GridView'
 import { GalleryView } from '../components/GalleryView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
@@ -76,6 +76,7 @@ class Search extends React.Component {
     const { dispatch } = this.props
 
     dispatch(searchActions.setSearchInput('Dallas TX, USA'))
+    dispatch(searchActions.setSearchLocation(mapInitialState.center))
 
     await dispatch(
       getListingsByValert({

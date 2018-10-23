@@ -1,5 +1,4 @@
 import React from 'react'
-import _ from 'underscore'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -111,13 +110,21 @@ const fieldHOC = compose(
       const location = await getPlace(address)
 
       if (location) {
-        dispatch(
-          searchActions.getListings.byValert({
-            ...filterOptions,
-            limit: 50,
-            points: getMapBoundsInCircle(location.center, 1)
-          })
-        )
+        batchActions([
+          dispatch(
+            searchActions.setSearchLocation({
+              lat: address.geometry.location.lat(),
+              lng: address.geometry.location.lng()
+            }),
+            dispatch(
+              searchActions.getListings.byValert({
+                ...filterOptions,
+                limit: 50,
+                points: getMapBoundsInCircle(location.center, 1)
+              })
+            )
+          )
+        ])
       }
     }
   }),
@@ -134,12 +141,15 @@ const fieldHOC = compose(
         return findPlace(address.name)
       }
 
+      const center = {
+        lat: address.geometry.location.lat(),
+        lng: address.geometry.location.lng()
+      }
+
+      dispatch(searchActions.setSearchLocation(center))
+
       if (activeView === 'map') {
         const zoom = 16
-        const center = {
-          lat: address.geometry.location.lat(),
-          lng: address.geometry.location.lng()
-        }
 
         dispatch(goToPlace({ center, zoom }))
       } else {
