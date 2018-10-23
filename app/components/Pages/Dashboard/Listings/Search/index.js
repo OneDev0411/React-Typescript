@@ -10,6 +10,7 @@ import searchActions from '../../../../../store_actions/listings/search'
 import getListingsByValert from '../../../../../store_actions/listings/search/get-listings/by-valert'
 import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
 import { confirmation } from '../../../../../store_actions/confirmation'
+import { CreateTour } from '../../../../../views/components/tour/CreateTour'
 
 import Map from './components/Map'
 import { MapView } from '../components/MapView'
@@ -178,7 +179,36 @@ class Search extends React.Component {
         return <GalleryView {..._props} />
 
       default:
-        return <GridView {..._props} />
+        return (
+          <GridView
+            {..._props}
+            plugins={{
+              actionable: {
+                actions: [
+                  {
+                    display: ({ selectedRows }) => selectedRows.length > 0,
+                    render: ({ selectedRows }) => {
+                      const listings = this.props.listings.data.filter(l =>
+                        selectedRows.some(id => id === l.id)
+                      )
+
+                      return (
+                        <CreateTour
+                          listings={listings}
+                          user={this.props.user}
+                        />
+                      )
+                    }
+                  }
+                ]
+              },
+              selectable: {
+                persistent: true,
+                storageKey: 'listings'
+              }
+            }}
+          />
+        )
     }
   }
 

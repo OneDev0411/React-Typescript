@@ -2,7 +2,6 @@ import React from 'react'
 
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
-// import { CreateTour } from '../../../../../../views/components/tour/CreateTour'
 
 import { formatListing } from '../../helpers/format-listing'
 import { Address } from './columns/Address'
@@ -67,19 +66,6 @@ export class GridView extends React.Component {
     }
   ]
 
-  // actions = [
-  //   {
-  //     display: ({ selectedRows }) => selectedRows.length > 0,
-  //     render: ({ selectedRows }) => {
-  //       const listings = this.props.listings.data.filter(l =>
-  //         selectedRows.some(id => id === l.id)
-  //       )
-
-  //       return <CreateTour listings={listings} user={this.props.user} />
-  //     }
-  //   }
-  // ]
-
   format = listing => formatListing(listing, this.props.user)
 
   render() {
@@ -93,31 +79,8 @@ export class GridView extends React.Component {
           listInfo={this.props.listings.info}
           summary={{ entityName: 'Listings', style: { color: '#000' } }}
           plugins={{
-            sortable: {
-              // columns: [
-              //   { label: 'Address A-Z', value: 'address' },
-              //   { label: 'Address Z-A', value: '-address' },
-              //   { label: 'Price (Lo - Hi)', value: 'price' },
-              //   { label: 'Price (Hi - Lo)', value: '-price' },
-              //   { label: 'Beds (Lo - Hi)', value: 'beds' },
-              //   { label: 'Beds (Hi - Lo)', value: '-beds' },
-              //   { label: 'Baths (Lo - Hi)', value: 'baths' },
-              //   { label: 'Baths (Hi - Lo)', value: '-baths' },
-              //   { label: 'Sqft (Lo - Hi)', value: 'sqft' },
-              //   { label: 'Sqft (Hi - Lo)', value: '-sqft' },
-              //   { label: '$/Sqft (Lo - Hi)', value: '$/sqft' },
-              //   { label: '$/Sqft (Hi - Lo)', value: '-$/sqft' },
-              //   { label: 'Year Built (Lo - Hi)', value: 'builtYear' },
-              //   { label: 'Year Built (Hi - Lo)', value: '-builtYear' }
-              // ]
-            }
-            // actionable: {
-            //   actions: this.actions
-            // },
-            // selectable: {
-            //   persistent: true,
-            //   storageKey: 'listings'
-            // }
+            sortable: {},
+            ...this.props.plugins
           }}
         />
       </div>
