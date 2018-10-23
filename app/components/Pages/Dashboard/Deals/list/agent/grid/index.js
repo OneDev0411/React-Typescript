@@ -89,9 +89,12 @@ class Grid extends React.Component {
   }
 
   getPriceValue = deal => {
-    const field = ['sales_price', 'list_price', 'lease_price'].find(
-      name => Deal.get.field(deal, name) !== null
-    )
+    const field = [
+      'sales_price',
+      'leased_price',
+      'list_price',
+      'lease_price'
+    ].find(name => Deal.get.field(deal, name) !== null)
 
     return Deal.get.field(deal, field)
   }
