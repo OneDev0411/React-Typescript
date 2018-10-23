@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import { borderColor } from 'views/utils/colors'
 
 export const Divider = styled.div`
-  display: inline-block;
+  display: inline-flex;
   width: 1px;
-  height: 24px;
+  height: 1.5rem;
   margin: 0 1em;
   background-color: ${borderColor};
 `

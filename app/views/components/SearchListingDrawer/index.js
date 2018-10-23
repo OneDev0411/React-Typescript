@@ -65,6 +65,7 @@ class SearchListingDrawer extends React.Component {
   render() {
     return (
       <SearchDrawer
+        title={this.props.title}
         showLoadingIndicator={this.state.isWorking}
         searchInputOptions={{
           placeholder: 'Enter MLS # or address',
@@ -82,11 +83,13 @@ class SearchListingDrawer extends React.Component {
 
 SearchListingDrawer.propTypes = {
   compact: PropTypes.bool,
+  title: PropTypes.string,
   onSelectListing: PropTypes.func.isRequired
 }
 
 SearchListingDrawer.defaultProps = {
-  compact: true
+  compact: true,
+  title: ''
 }
 
 export default SearchListingDrawer

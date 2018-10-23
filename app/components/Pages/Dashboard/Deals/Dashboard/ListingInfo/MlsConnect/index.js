@@ -4,12 +4,12 @@ import { connect } from 'react-redux'
 import LinkButton from 'components/Button/LinkButton'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import Spinner from 'components/Spinner'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
 
 import { updateListing } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
-import { Loading, MlsNumber } from './styled'
+import { Loading, MlsNumber, EditMls } from './styled'
 
 class MlsConnect extends React.Component {
   state = {
@@ -69,8 +69,9 @@ class MlsConnect extends React.Component {
       <Fragment>
         {deal.listing ? (
           <MlsNumber>
-            <span>MLS# {deal.mls_context.mls_number}</span>
-            <CloseIcon onClick={this.removeMlsConnection} />
+            MLS# {deal.mls_context.mls_number}
+            <EditMls onClick={this.toggleDrawer}>Edit</EditMls>
+            <DeleteIcon onClick={this.removeMlsConnection} />
           </MlsNumber>
         ) : (
           <LinkButton style={this.buttonStyle} onClick={this.toggleDrawer}>
@@ -79,6 +80,7 @@ class MlsConnect extends React.Component {
         )}
 
         <SearchListingDrawer
+          title="Connect Deal to MLS"
           isOpen={this.state.isDrawerOpen}
           onClose={this.toggleDrawer}
           onSelectListing={this.handleSelectListing}
