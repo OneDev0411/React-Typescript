@@ -9,6 +9,7 @@ import { getStatusColor } from '../../../../../../../../utils/listing'
 import IconHome from '../../../../../../../../views/components/SvgIcons/NewHome/IconHome'
 import ImageStatus from '../../../../../../../../views/components/ImageStatus'
 import openDeal from '../../../../utils/open-deal'
+import DealSide from '../side'
 
 const Container = styled.div`
   display: table;
@@ -48,7 +49,7 @@ const IconContainer = styled(Flex)`
   }
 `
 
-const Address = ({ deal }) => {
+const Address = ({ deal, roles, rowIndex, totalRows }) => {
   const photo = Deal.get.field(deal, 'photo')
   const status = Deal.get.status(deal)
 
@@ -82,6 +83,17 @@ const Address = ({ deal }) => {
         </ALink>
         <SubAddress className="blackHover">
           {status || '-'}
+          {roles && (
+            <React.Fragment>
+              <Dot>.</Dot>
+              <DealSide
+                deal={deal}
+                roles={roles}
+                rowId={rowIndex + 1}
+                rowsCount={totalRows}
+              />
+            </React.Fragment>
+          )}
           <Dot>.</Dot>
           {deal.property_type}
         </SubAddress>
