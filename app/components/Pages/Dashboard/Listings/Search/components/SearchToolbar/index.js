@@ -42,7 +42,7 @@ const field = ({
       type="text"
       value={searchInput}
       disabled={isFetching}
-      innerRef={inputNode}
+      ref={inputNode}
       onFocus={onFocus}
       onChange={event =>
         dispatch(searchActions.setSearchInput(event.target.value))

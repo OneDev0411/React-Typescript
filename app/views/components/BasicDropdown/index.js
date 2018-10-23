@@ -108,7 +108,7 @@ export class BasicDropdown extends React.Component {
                     <Item
                       {...props}
                       key={item.value}
-                      innerRef={ref =>
+                      ref={ref =>
                         (this.refs = {
                           ...this.refs,
                           [item.value]: ref
