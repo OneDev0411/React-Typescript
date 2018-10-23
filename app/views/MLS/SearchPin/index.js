@@ -18,7 +18,7 @@ import Tooltip from 'components/tooltip'
 import { primary } from 'views/utils/colors'
 import Icon from 'components/SvgIcons/MapPinOn/IconMapPinOn'
 
-class Pin extends React.Component {
+class SearchPinComponent extends React.Component {
   static propTypes = {
     caption: PropTypes.string
   }
@@ -38,4 +38,4 @@ class Pin extends React.Component {
   }
 }
 
-export default onlyUpdateForKeys(['caption'])(Pin)
+export const SearchPin = onlyUpdateForKeys(['caption'])(SearchPinComponent)
