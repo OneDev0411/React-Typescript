@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -8,7 +9,7 @@ import getCalenderFeed from '../../../../../../models/user/generate-calender-fee
 import Button from '../../../../../../views/components/Button/ActionButton'
 import { GenerateUrlContainer, GenerateUrlText, FeedUrl } from './styled'
 
-const IconCalendar = IconCalendarBase.extend`
+const IconCalendar = styled(IconCalendarBase)`
   > g {
     fill: #000000;
   }

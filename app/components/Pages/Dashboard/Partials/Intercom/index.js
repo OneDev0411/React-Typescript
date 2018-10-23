@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import { connect } from 'react-redux'
 import IntercomSDK from 'react-intercom'
@@ -7,7 +8,7 @@ import { inactiveIntercom } from '../../../../../store_actions/intercom'
 import IconButton from '../../../../../views/components/Button/IconButton'
 import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
 
-const Button = IconButton.extend`
+const Button = styled(IconButton)`
   width: 48px;
   height: 48px;
   position: fixed;

@@ -1,10 +1,11 @@
+import styled from "styled-components"
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
 import Avatar from '../../../Avatar'
 
-export const Container = Flex.extend`
+export const Container = styled(Flex)`
   display: flex;
   padding: ${props => (props.isDrawer ? '0.5rem 1.5rem' : '0.5em 1rem')};
   background-color: ${props => (props.isHighlighted ? '#f5f5f5' : '#fff')};

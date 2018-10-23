@@ -3,7 +3,7 @@ import Flex from 'styled-flex-component'
 
 import { borderColor, brandBackground } from '../../utils/colors'
 
-export const Container = Flex.extend`
+export const Container = styled(Flex)`
   position: relative;
   height: ${props => `${props.size / 16}em}`};
   width: ${props => `${props.size / 16}em}`};

@@ -19,7 +19,7 @@ const TeamName = styled.div`
   max-width: 136px;
 `
 
-const Button = ActionButton.extend`
+const Button = styled(ActionButton)`
   width: 100%;
   height: 48px;
   justify-content: space-between;

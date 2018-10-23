@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import _ from 'lodash'
 import cuid from 'cuid'
 import React from 'react'
@@ -225,7 +226,7 @@ const mapHOC = compose(
 
       const bounds = new googleMaps.LatLngBounds()
 
-      points.forEach(point => bounds.extend(point))
+      points.forEach(point => styled(bounds)(point))
 
       window.currentMap.fitBounds(bounds)
     }

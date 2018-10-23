@@ -8,7 +8,7 @@ import ActionButton from '../../../../../../../views/components/Button/ActionBut
 import { primary, grey } from '../../../../../../../views/utils/colors'
 import styled from 'styled-components'
 
-const Container = Flex.extend`
+const Container = styled(Flex)`
   height: 100%;
   padding-left: 0.5rem;
   background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};

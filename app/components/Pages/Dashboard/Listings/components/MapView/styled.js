@@ -3,7 +3,7 @@ import Flex from 'styled-flex-component'
 
 import { borderColor } from '../../../../../../views/utils/colors'
 
-export const MainContainer = Flex.extend`
+export const MainContainer = styled(Flex)`
   height: calc(100vh - 6rem - 2px);
   overflow: hidden;
 `

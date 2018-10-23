@@ -5,6 +5,6 @@ export const Container = styled.div`
   margin-bottom: 2em;
 `
 
-export const Title = H3.extend`
+export const Title = styled(H3)`
   margin-bottom: 0.75em;
 `

@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Dropdown } from 'react-bootstrap'
@@ -5,7 +6,7 @@ import { Dropdown } from 'react-bootstrap'
 import TeamSwitcher from '../SideNav/components/TeamSwitcher'
 import ShadowButton from '../../../../../views/components/Button/ShadowButton'
 
-const CloseButton = ShadowButton.extend`
+const CloseButton = styled(ShadowButton)`
   position: absolute;
   top: 50%;
   right: 2rem;

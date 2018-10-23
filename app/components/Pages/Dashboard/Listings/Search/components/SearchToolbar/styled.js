@@ -31,14 +31,14 @@ export const Input = styled.input`
     display: none;
   }
 `
-export const SearchIcon = IconSearch.extend`
+export const SearchIcon = styled(IconSearch)`
   position: absolute;
   top: 1em;
   left: 1em;
   fill: ${grey.A900};
 `
 
-export const ClearButton = IconButton.extend`
+export const ClearButton = styled(IconButton)`
   position: absolute;
   top: 0.75em;
   right: 0.75em;

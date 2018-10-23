@@ -12,7 +12,7 @@ export const PageDescription = styled.div`
   border-bottom: 1px solid #eeeff0;
 `
 
-export const SectionTitle = H2.extend`
+export const SectionTitle = styled(H2)`
   margin-bottom: 1em;
   font-size: 1.75rem;
   font-weight: 500;
