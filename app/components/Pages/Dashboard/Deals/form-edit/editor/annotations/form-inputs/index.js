@@ -4,31 +4,9 @@ import CheckboxAnnotation from './checkbox'
 import RadioAnnotation from './radio'
 import TextInputAnnotation from './text-input'
 
-import { getType, getValue, Types } from '../../../utils/types'
+import { getType, Types } from '../../../utils/types'
 
 export default class FormInputs extends React.Component {
-  state = {
-    isLoaded: false
-  }
-
-  componentDidMount() {
-    this.setDefaultValues()
-  }
-
-  setDefaultValues() {
-    const values = {}
-
-    this.props.annotations.forEach(annotation => {
-      const { fieldName } = annotation
-
-      values[fieldName] = getValue(annotation)
-    })
-
-    this.props.onSetValues(values, true)
-
-    this.setState({ isLoaded: true })
-  }
-
   createInput = (info, index) => {
     const { values } = this.props
 
@@ -63,10 +41,6 @@ export default class FormInputs extends React.Component {
   }
 
   render() {
-    if (!this.state.isLoaded) {
-      return null
-    }
-
     return <Fragment>{this.props.inputs.map(this.createInput)}</Fragment>
   }
 }

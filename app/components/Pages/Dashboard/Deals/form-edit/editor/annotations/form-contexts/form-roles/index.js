@@ -12,9 +12,11 @@ class FormRoles extends React.PureComponent {
       <Fragment>
         {_.map(this.props.roles, (list, roleName) => {
           const info = this.props.roles[roleName]
-          const groups = _.groupBy(info, item => {
-            return `${item.role.sort().join('_')}-${item.attribute}-${item.group}`
-          })
+          const groups = _.groupBy(
+            info,
+            item =>
+              `${item.role.sort().join('_')}-${item.attribute}-${item.group}`
+          )
 
           return _.map(groups, (group, groupIndex) => {
             const annotationContext = groups[groupIndex][0]

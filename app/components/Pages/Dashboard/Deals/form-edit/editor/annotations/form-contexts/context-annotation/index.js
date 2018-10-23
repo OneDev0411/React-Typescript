@@ -5,8 +5,6 @@ import {
   getAnnotationsValues
 } from '../../../../utils/word-wrap'
 
-import { getValue } from '../../../../utils/types'
-
 import ToolTip from 'components/tooltip'
 
 import { Container } from './styled'
@@ -17,25 +15,17 @@ export default class Context extends React.Component {
   }
 
   setDefaultValues = () => {
-    if (this.props.value) {
-      const values = getAnnotationsValues(
-        this.props.annotations,
-        this.props.value,
-        {
-          maxFontSize: this.props.maxFontSize
-        }
-      )
-
-      this.props.onSetValues(values)
-
-      return
+    if (!this.props.value) {
+      return false
     }
 
-    const values = {}
-
-    this.props.annotations.forEach(annotation => {
-      values[annotation.fieldName] = getValue(annotation)
-    })
+    const values = getAnnotationsValues(
+      this.props.annotations,
+      this.props.value,
+      {
+        maxFontSize: this.props.maxFontSize
+      }
+    )
 
     this.props.onSetValues(values)
   }
