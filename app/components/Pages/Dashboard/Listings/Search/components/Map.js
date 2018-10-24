@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import _ from 'lodash'
 import cuid from 'cuid'
 import React from 'react'
@@ -9,11 +9,7 @@ import supercluster from 'points-cluster'
 import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
-
-import ZoomController from '../../components/ZoomController'
-import SimpleMarker from '../../components/Markers/SimpleMarker'
-import ClusterMarker from '../../components/Markers/ClusterMarker'
-import NotLoggedInMessage from '../../components/NotLoggedInMessage'
+import { batchActions } from 'redux-batched-actions'
 
 import { reset as resetSearchType } from '../../../../../../store_actions/listings/search/set-type'
 import { getLocationFromCookies } from '../../../../../../store_actions/listings/map/user-location'
@@ -23,8 +19,16 @@ import {
 } from '../../../../../../utils/map'
 
 import * as mapActions from '../../../../../../store_actions/listings/map'
+import setSearchInput from '../../../../../../store_actions/listings/search/set-search-input'
+import { setSearchLocation } from '../../../../../../store_actions/listings/search/set-search-location'
 import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
 import getListingsByMapBounds from '../../../../../../store_actions/listings/search/get-listings/by-map-bounds'
+import { SearchPin } from '../../../../../../views/MLS/SearchPin'
+
+import ZoomController from '../../components/ZoomController'
+import SimpleMarker from '../../components/Markers/SimpleMarker'
+import ClusterMarker from '../../components/Markers/ClusterMarker'
+import NotLoggedInMessage from '../../components/NotLoggedInMessage'
 
 import DrawingButton from './DrawingButton'
 import LocationButton from './LocationButton'
@@ -41,6 +45,8 @@ const actions = {
   ...mapActions,
   ...drawingActions,
   resetSearchType,
+  setSearchInput,
+  setSearchLocation,
   getListingsByMapBounds,
   getLocationFromCookies
 }
@@ -54,8 +60,10 @@ const map = ({
   isWidget,
   onChange,
   clusters,
+  searchText,
   defaultZoom,
   defaultCenter,
+  searchLocation,
   bootstrapURLKeys,
   onGoogleApiLoaded,
   onMarkerMouseEnter,
@@ -109,6 +117,7 @@ const map = ({
           />
         )
       })}
+      {searchLocation && <SearchPin {...searchLocation} caption={searchText} />}
     </Map>
     <DrawingButton />
     <DrawingRemoveButton
@@ -140,7 +149,9 @@ const mapHOC = compose(
       map: search.map,
       searchType: search.type,
       mapProps: search.map.props,
-      markers: listings.data
+      markers: listings.data,
+      searchText: search.input,
+      searchLocation: search.location
     }),
     actions
   ),
@@ -162,8 +173,11 @@ const mapHOC = compose(
     },
     onChange: ({
       map,
+      searchText,
       searchType,
       setMapProps,
+      setSearchInput,
+      setSearchLocation,
       resetSearchType,
       setOffMapAutoMove,
       getListingsByMapBounds
@@ -171,6 +185,10 @@ const mapHOC = compose(
       const { marginBounds } = gmap
 
       setMapProps('search', gmap)
+
+      if (!map.autoMove && searchText) {
+        batchActions([setSearchInput(''), setSearchLocation(null)])
+      }
 
       if (map.autoMove) {
         setOffMapAutoMove()
