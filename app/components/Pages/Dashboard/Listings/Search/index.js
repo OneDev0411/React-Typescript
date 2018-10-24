@@ -167,6 +167,7 @@ class Search extends React.Component {
           <MapView
             {..._props}
             tabName="search"
+            mapCenter={this.props.mapCenter}
             Map={
               this.state.mapWithQueryIsInitialized ? (
                 <Map {..._props} isWidget={this.props.isWidget} />
@@ -224,6 +225,7 @@ const mapStateToProps = ({ user, search }) => {
     queryOptions: search.options,
     isFetching: listings.isFetching,
     filtersIsOpen: search.filters.isOpen,
+    mapCenter: search.map.props.center,
     listings: {
       data: selectListings(listings),
       info: listings.info

@@ -33,6 +33,34 @@ export class MapView extends React.Component {
 
   format = listing => formatListing(listing, this.props.user)
 
+  addListingsDistanceFromCenter = listing => {
+    const { google } = window
+
+    if (!google || !this.props.mapCenter) {
+      return listing
+    }
+
+    const center = new window.google.maps.LatLng(
+      this.props.mapCenter.lat,
+      this.props.mapCenter.lng
+    )
+
+    const listingLocation = new window.google.maps.LatLng(
+      listing.location.latitude,
+      listing.location.longitude
+    )
+
+    const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
+      center,
+      listingLocation
+    )
+
+    return {
+      ...listing,
+      distanceFromCenter
+    }
+  }
+
   onChangeSort = ({ value: index }) => {
     const isDescending = index.charAt(0) === '-'
 
@@ -63,7 +91,10 @@ export class MapView extends React.Component {
         <TableContainer>
           <Table
             columns={this.columns}
-            data={this.props.listings.data.map(this.format).sort(this.sort)}
+            data={this.props.listings.data
+              .map(this.format)
+              .map(this.addListingsDistanceFromCenter)
+              .sort(this.sort)}
             isFetching={this.props.isFetching}
             LoadingState={LoadingComponent}
             listInfo={this.props.listings.info}
