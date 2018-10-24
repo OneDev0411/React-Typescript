@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import Flex from 'styled-flex-component'
 
@@ -8,12 +9,12 @@ import {
 import IconButton from '../../../../../../../../views/components/Button/IconButton'
 import IconCheck from '../../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
 
-const Container = Flex.extend`
+const Container = styled(Flex)`
   width: 2.5rem;
   height: 2.25rem;
 `
 
-const Button = IconButton.extend`
+const Button = styled(IconButton)`
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 8px;

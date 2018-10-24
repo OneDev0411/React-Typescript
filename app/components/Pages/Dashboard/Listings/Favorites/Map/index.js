@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import Map from 'google-map-react'
 import { connect } from 'react-redux'
@@ -112,7 +113,7 @@ const mapHOC = compose(
 
       const bounds = new googleMaps.LatLngBounds()
 
-      markers.forEach(point => bounds.extend(point))
+      markers.forEach(point => styled(bounds)(point))
 
       window.currentMap.fitBounds(bounds)
     }

@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import { Link } from 'react-router'
 
@@ -8,7 +9,7 @@ import {
 } from '../../../../../views/components/SlideMenu/Menu/styled'
 import Tooltip from '../../../../../views/components/tooltip'
 
-const Item = ListItem.extend`
+const Item = styled(ListItem)`
   justify-content: flex-start;
 
   .mls-nav-item--active > & {

@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
@@ -10,7 +11,7 @@ import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
 import SendDealPromotionCard from '../../../../../../views/components/InstantMarketing/Flows/SendDealPromotion'
 
-const Button = ActionButton.extend`
+const Button = styled(ActionButton)`
   margin-left: 0.5em;
 `
 

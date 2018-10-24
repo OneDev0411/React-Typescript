@@ -1,14 +1,15 @@
+import styled from "styled-components"
 import React from 'react'
 import ListingStatus from './listing-status'
 import ActionButton from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 import { primary } from 'views/utils/colors'
 
-const EditButton = ActionButton.extend`
+const EditButton = styled(ActionButton)`
   display: none;
 `
 
-const DeleteButton = IconButton.extend`
+const DeleteButton = styled(IconButton)`
   display: none;
   color: #a4a4a4;
   &:hover {

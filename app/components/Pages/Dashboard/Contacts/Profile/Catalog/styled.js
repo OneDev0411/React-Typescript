@@ -15,7 +15,7 @@ export const LastSeen = styled.p`
   color: #9eb2c2;
 `
 
-export const DeleteButton = IconButton.extend`
+export const DeleteButton = styled(IconButton)`
   position: absolute;
   top: 1rem;
   right: 1rem;

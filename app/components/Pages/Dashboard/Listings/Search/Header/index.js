@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import Flex from 'styled-flex-component'
 
@@ -10,7 +11,7 @@ import Filters from '../components/Filters'
 import SearchField from '../components/SearchToolbar'
 import { ViewSwitcher } from '../../components/ViewSwitcher'
 
-const Container = Flex.extend`
+const Container = styled(Flex)`
   height: 6rem;
   display: flex;
   align-items: center;

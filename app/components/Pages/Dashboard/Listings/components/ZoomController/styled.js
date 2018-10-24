@@ -14,7 +14,7 @@ export const Container = styled.div`
     0 8px 10px 0 rgba(0, 0, 0, 0.16);
 `
 
-export const Button = IconButton.extend`
+export const Button = styled(IconButton)`
   width: 2rem;
   height: 2rem;
   display: flex;

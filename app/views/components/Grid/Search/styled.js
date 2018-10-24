@@ -53,7 +53,7 @@ export const TextInput = styled.input`
   }
 `
 
-export const IconSearch = IconSearchBase.extend`
+export const IconSearch = styled(IconSearchBase)`
   path {
     fill: ${grey.A900} !important;
   }
@@ -66,6 +66,6 @@ export const Icon = styled.div`
   padding-top: ${props => (props.isSearching ? '0' : '4px')};
 `
 
-export const IconButton = IconButtonFlex.extend`
+export const IconButton = styled(IconButtonFlex)`
   display: block;
 `

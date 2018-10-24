@@ -1,9 +1,10 @@
+import styled from "styled-components"
 import grapesjs from 'grapesjs'
 import Backbone from 'backbone'
 
 export default grapesjs.plugins.add('asset-blocks', editor => {
   let target
-  const AssetView = Backbone.View.extend({
+  const AssetView = styled(Backbone.View)({
     events: {
       click: 'onClick'
     },
@@ -43,7 +44,7 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
     }
   })
 
-  const AssetsView = Backbone.View.extend({
+  const AssetsView = styled(Backbone.View)({
     initialize({ coll }) {
       this.collection = coll
     },

@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import PropTypes from 'prop-types'
 import { css } from 'styled-components'
 
@@ -58,7 +59,7 @@ const checkFit = props => {
   }
 }
 
-const IconButton = Button.extend`
+const IconButton = styled(Button)`
   ${props => checkFit(props)};
 
   ${props =>

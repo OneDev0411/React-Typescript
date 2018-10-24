@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React, { Fragment } from 'react'
 import cn from 'classnames'
 
@@ -9,7 +10,7 @@ import Viewer from './viewer'
 import PageHeader from '../../../../../views/components/PageHeader'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
-const CommentsButton = ActionButton.extend`
+const CommentsButton = styled(ActionButton)`
   margin-left: 1em;
 `
 export default class extends React.Component {

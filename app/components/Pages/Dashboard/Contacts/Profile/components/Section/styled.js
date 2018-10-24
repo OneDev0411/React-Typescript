@@ -1,11 +1,12 @@
+import styled from "styled-components"
 import Flex from 'styled-flex-component'
 
 import { H3 } from '../../../../../../../views/components/Typography/headings'
 
-export const Header = Flex.extend`
+export const Header = styled(Flex)`
   margin-bottom: 1.5em;
 `
 
-export const Title = H3.extend`
+export const Title = styled(H3)`
   margin: 0;
 `

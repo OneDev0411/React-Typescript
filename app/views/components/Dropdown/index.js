@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
@@ -8,7 +9,7 @@ import { SearchInput } from './SearchInput'
 import ArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import ActionButton from '../Button/ActionButton'
 
-export const Button = ActionButton.extend`
+export const Button = styled(ActionButton)`
   position: relative;
   width: ${props => (props.fullWidth ? '100%' : 'auto')};
   display: flex;
@@ -17,7 +18,7 @@ export const Button = ActionButton.extend`
   font-weight: normal;
 `
 
-export const Icon = ArrowDropDown.extend`
+export const Icon = styled(ArrowDropDown)`
   fill: #000;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
 `

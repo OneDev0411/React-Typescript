@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
@@ -5,7 +6,7 @@ import { Link } from 'react-router'
 import { isBackOffice } from '../../../../../../../utils/user-teams'
 import LinkButton from 'components/Button/LinkButton'
 
-const ViewButton = LinkButton.extend`
+const ViewButton = styled(LinkButton)`
   margin-right: 1em;
 `
 const DigitalForm = ({ deal, task, isBackOffice }) => {
