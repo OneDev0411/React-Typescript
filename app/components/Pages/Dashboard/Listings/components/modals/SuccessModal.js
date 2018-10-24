@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal } from 'react-bootstrap'
 
 const Icon = ({ type }) => {
-  const style = { height: '5rem', margin: '1rem 0 0 0.5rem' }
+  const style = { height: '5rem', margin: '2.5rem 0 0 0.5rem' }
 
   switch (type) {
     case 'SAVED_ALERT':

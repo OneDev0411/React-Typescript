@@ -50,7 +50,6 @@ class RoleAgentIntegration extends React.Component {
 
   onUpsertRole = role => {
     const { selectedAgent } = this.state
-    const { onUpsertRole } = this.props
 
     if (role && selectedAgent) {
       role.user = selectedAgent.id
@@ -58,8 +57,8 @@ class RoleAgentIntegration extends React.Component {
 
     this.setState(initialState)
 
-    if (onUpsertRole) {
-      onUpsertRole(role)
+    if (this.props.onUpsertRole) {
+      this.props.onUpsertRole(role)
     }
   }
 
