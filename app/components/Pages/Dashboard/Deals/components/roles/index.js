@@ -93,6 +93,11 @@ class Roles extends React.Component {
 
     try {
       await deleteRole(deal.id, role.id)
+
+      if (this.props.onDeleteRole) {
+        this.props.onDeleteRole(role)
+      }
+
       notify({
         message: 'The contact removed from this deal.',
         status: 'success'

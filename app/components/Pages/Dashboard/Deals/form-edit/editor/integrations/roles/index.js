@@ -3,8 +3,6 @@ import { connect } from 'react-redux'
 
 import OverlayDrawer from 'components/OverlayDrawer'
 
-import ActionButton from 'components/Button/ActionButton'
-
 import { Divider } from './styled'
 import ManualEntry from './manual-entry'
 
@@ -75,7 +73,7 @@ class RolesDrawer extends React.Component {
     return getRoleTooltip(data.annotationContext, data.contextType === 'Roles')
   }
 
-  onUpsertRole = () => {
+  onChangeRoles = () => {
     const { data } = this.props.selectedAnnotation
 
     const values = getAnnotationsValues(data.annotations, this.ListValue, {
@@ -103,8 +101,9 @@ class RolesDrawer extends React.Component {
             showTitle={false}
             deal={this.props.deal}
             allowedRoles={this.AllowedRoles}
-            onUpsertRole={this.onUpsertRole}
-            onCreateRole={this.onUpsertRole}
+            onUpsertRole={this.onChangeRoles}
+            onCreateRole={this.onChangeRoles}
+            onDeleteRole={this.onChangeRoles}
             allowDeleteRole
           />
 
