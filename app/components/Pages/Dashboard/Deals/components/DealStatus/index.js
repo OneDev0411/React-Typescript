@@ -176,6 +176,7 @@ class DealStatus extends React.Component {
     return (
       <BasicDropdown
         fullWidth
+        fullHeight
         pullTo="right"
         style={this.props.style}
         buttonSize={this.props.buttonSize}
