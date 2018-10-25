@@ -51,17 +51,12 @@ import { confirmation } from '../store_actions/confirmation'
 
 class App extends Component {
   componentWillMount() {
-    const { user, dispatch } = this.props
-
     // check branding
     this.getBrand()
 
-    // init sockets
-    this.initializeSockets(user)
-
     if (typeof window !== 'undefined') {
       window.Intercom &&
-        window.Intercom('onShow', () => dispatch(activeIntercom()))
+        window.Intercom('onShow', () => this.props.dispatch(activeIntercom()))
 
       import('offline-js')
 
@@ -69,6 +64,9 @@ class App extends Component {
         import('simplebar')
       }
     }
+
+    // start chat socket
+    new ChatSocket(this.props.user)
   }
 
   componentDidMount() {
@@ -111,6 +109,9 @@ class App extends Component {
         dispatch(getAttributeDefs())
       }
 
+      // init sockets
+      this.initializeSockets(user)
+
       // load notifications
       dispatch(getAllNotifications())
 
@@ -141,32 +142,15 @@ class App extends Component {
   }
 
   initializeSockets(user) {
-    this.initializeChatSocket(user)
-    this.initializeNotificationsSocket(user)
+    new NotificationSocket(user)
 
     if (this.hasCrmAccess) {
-      this.initializeContactSocket(user)
+      new ContactSocket(user)
     }
 
     if (this.hasDealsAccess) {
-      this.initializeDealSocket(user)
+      new DealSocket(user)
     }
-  }
-
-  initializeContactSocket(user) {
-    new ContactSocket(user)
-  }
-
-  initializeChatSocket(user) {
-    new ChatSocket(user)
-  }
-
-  initializeDealSocket(user) {
-    new DealSocket(user)
-  }
-
-  initializeNotificationsSocket(user) {
-    new NotificationSocket(user)
   }
 
   async initialRooms() {

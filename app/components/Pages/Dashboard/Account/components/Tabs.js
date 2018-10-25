@@ -14,7 +14,7 @@ export const ProfileTabs = ({ user }) => (
       indexed
       text="Form Templates"
       to="/dashboard/account/deal/templates"
-      disabled={user.user_type !== 'Agent'}
+      disabled
     />
     <Tab
       indexed
