@@ -36,7 +36,12 @@ export function Menu(props) {
 
       <Flex style={{ paddingTop: '0.5rem' }}>
         <Divider />
-        <CloseButton isFit iconSize="large" inverse />
+        <CloseButton
+          isFit
+          iconSize="large"
+          inverse
+          backUrl="/dashboard/deals"
+        />
       </Flex>
     </Flex>
   )
