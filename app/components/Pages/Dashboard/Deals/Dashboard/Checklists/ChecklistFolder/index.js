@@ -54,7 +54,7 @@ class ChecklistFolder extends React.Component {
   }
 
   isFormTask = id =>
-    this.props.tasks[id].task_type === 'Form' &&
+    ['Form', 'Generic'].includes(this.props.tasks[id].task_type) &&
     this.props.tasks[id].title.includes('General Comments') === false
 
   render() {

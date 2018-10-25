@@ -2,7 +2,7 @@ import React from 'react'
 import Avatar from 'components/Avatar'
 
 import Deal from 'models/Deal'
-import { getStatusColor } from 'utils/listing'
+import { getStatusColorClass } from 'utils/listing'
 
 export function ListingImage({ deal }) {
   const imageUrl = Deal.get.field(deal, 'photo')
@@ -15,7 +15,7 @@ export function ListingImage({ deal }) {
       image={imageUrl || placeholderImageUrl}
       title={deal.title}
       placeHolderImage=""
-      statusColor={`#${getStatusColor(status)}`}
+      statusColor={getStatusColorClass(status)}
       isOnline
       showStatus
     />

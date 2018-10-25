@@ -45,6 +45,7 @@ export const getStatusColorClass = status => {
     case 'Expired':
     case 'Archived':
     case 'Cancelled':
+    case 'Contract Terminated':
       return 'red'
 
     case 'Withdrawn':
