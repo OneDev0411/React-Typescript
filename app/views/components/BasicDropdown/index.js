@@ -20,6 +20,7 @@ export class BasicDropdown extends React.Component {
       onSelect,
       onChange,
       fullWidth = false,
+      fullHeight = false,
       itemRenderer,
       defaultSelectedItem,
       menuStyle = {},
@@ -77,8 +78,9 @@ export class BasicDropdown extends React.Component {
               <Card
                 depth={3}
                 style={{
-                  maxHeight,
                   minWidth: fullWidth ? '100%' : 'auto',
+                  maxHeight: fullHeight ? 'auto' : maxHeight,
+                  overflowY: fullHeight ? 'initial' : 'scroll',
                   position: 'absolute',
                   left: pullTo !== 'right' ? 0 : 'auto',
                   right: pullTo === 'right' ? 0 : 'auto',
