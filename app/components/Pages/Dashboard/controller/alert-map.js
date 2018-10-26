@@ -1,4 +1,3 @@
-import styled from "styled-components"
 // controller/alert-map.js
 import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
@@ -59,7 +58,7 @@ const controller = {
     const bound = new google.maps.LatLngBounds()
 
     points.forEach(point => {
-      styled(bound)(new google.maps.LatLng(point.latitude, point.longitude))
+      bound.extend(new google.maps.LatLng(point.latitude, point.longitude))
     })
 
     return bound.getCenter()

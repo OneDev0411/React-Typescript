@@ -1,4 +1,3 @@
-import styled from "styled-components"
 import React from 'react'
 import Map from 'google-map-react'
 import { connect } from 'react-redux'

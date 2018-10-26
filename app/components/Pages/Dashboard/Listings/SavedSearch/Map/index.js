@@ -1,4 +1,3 @@
-import styled from "styled-components"
 import React from 'react'
 import _ from 'underscore'
 import Map from 'google-map-react'
