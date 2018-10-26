@@ -132,15 +132,10 @@ const map = ({
 
 const mapHOC = compose(
   defaultProps({
-    clusterRadius: 60,
     bootstrapURLKeys,
     options: mapOptions,
     defaultZoom: mapInitialState.zoom,
-    defaultCenter: mapInitialState.center,
-    clusterOptions: {
-      minZoom: 12,
-      maxZoom: DECLUSTER_ZOOM_LEVEL - 1
-    }
+    defaultCenter: mapInitialState.center
   }),
   connect(
     ({ user, data, search }, { listings }) => ({
@@ -205,12 +200,8 @@ const mapHOC = compose(
       getListingsByMapBounds
     }) => (gmap = {}) => {
       if (!isInit) {
-        console.log('onChange fasle')
-
         return
       }
-
-      console.log('onChange true')
 
       const { bounds } = gmap
 
@@ -280,8 +271,6 @@ const mapHOC = compose(
         shape.setMap(googleMap)
       }
 
-      console.log('google init')
-
       if (markers.length > 0) {
         const normalizedMarkers = normalizeListingsForMarkers(markers)
 
@@ -318,13 +307,10 @@ const mapHOC = compose(
   }),
   withPropsOnChange(
     (props, nextProps) =>
-      // console.log(props.markers.length, nextProps.markers.length)
-
       !_.isEqual(props.mapProps, nextProps.mapProps) ||
       !_.isEqual(props.markers, nextProps.markers),
     ({ mapProps, markers, generateClusters, setClusters, isFetching }) => {
       if (!isFetching && !_.isEmpty(mapProps) && mapProps.bounds) {
-        console.log('marker or props')
         setClusters(
           generateClusters(normalizeListingsForMarkers(markers), mapProps)
         )

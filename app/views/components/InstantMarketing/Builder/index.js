@@ -1,4 +1,3 @@
-import styled from "styled-components"
 import React from 'react'
 
 import grapesjs from 'grapesjs'
@@ -87,7 +86,7 @@ class Builder extends React.Component {
 
     const defaults = image.model.prototype.defaults
 
-    const updated = styled(image.model)({
+    const updated = image.model.extend({
       defaults: Object.assign({}, defaults, {
         resizable: false
       })
