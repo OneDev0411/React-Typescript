@@ -113,7 +113,7 @@ const mapHOC = compose(
 
       const bounds = new googleMaps.LatLngBounds()
 
-      markers.forEach(point => styled(bounds)(point))
+      markers.forEach(point => bounds.extend(point))
 
       window.currentMap.fitBounds(bounds)
     }

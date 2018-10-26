@@ -244,7 +244,7 @@ const mapHOC = compose(
 
       const bounds = new googleMaps.LatLngBounds()
 
-      points.forEach(point => styled(bounds)(point))
+      points.forEach(point => bounds.extend(point))
 
       window.currentMap.fitBounds(bounds)
     }
