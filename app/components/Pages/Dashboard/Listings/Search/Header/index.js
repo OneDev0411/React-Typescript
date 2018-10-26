@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import React from 'react'
 import Flex from 'styled-flex-component'
 
@@ -53,7 +53,7 @@ export function Header(props) {
           style={{ marginLeft: '0.5em' }}
           onClick={onClickFilter}
           isOpen={filtersIsOpen}
-          disabled={isFetching || !props.hasData}
+          disabled={isFetching}
           text="Filter"
           size="large"
           appearance="outline"

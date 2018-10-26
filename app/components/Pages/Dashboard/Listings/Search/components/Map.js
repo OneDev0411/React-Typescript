@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import _ from 'lodash'
 import cuid from 'cuid'
 import React from 'react'
@@ -7,6 +6,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import supercluster from 'points-cluster'
 import defaultProps from 'recompose/defaultProps'
+import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 import { batchActions } from 'redux-batched-actions'
@@ -15,7 +15,8 @@ import { reset as resetSearchType } from '../../../../../../store_actions/listin
 import { getLocationFromCookies } from '../../../../../../store_actions/listings/map/user-location'
 import {
   setCssPositionToListingsWithSameBuilding,
-  normalizeListingsForMarkers
+  normalizeListingsForMarkers,
+  getBounds
 } from '../../../../../../utils/map'
 
 import * as mapActions from '../../../../../../store_actions/listings/map'
@@ -69,7 +70,7 @@ const map = ({
   onMarkerMouseEnter,
   onMarkerMouseLeave,
   onClickRemovePolygon,
-  onClusterMarkerClick,
+  fitBoundsByPoints,
   mapProps: { zoom, center },
   map: { hoveredMarkerId, drawing }
 }) => (
@@ -79,7 +80,6 @@ const map = ({
       center={center}
       options={options}
       onChange={onChange}
-      margin={[175, 50, 50, 50]}
       defaultZoom={defaultZoom}
       defaultCenter={defaultCenter}
       yesIWantToUseGoogleMapApiInternals
@@ -113,7 +113,7 @@ const map = ({
             lng={lng}
             text={points.length}
             key={`CLUSTER_MARKER_${index}`}
-            onClickHandler={() => onClusterMarkerClick(points)}
+            onClickHandler={() => fitBoundsByPoints(points)}
           />
         )
       })}
@@ -155,24 +155,46 @@ const mapHOC = compose(
     }),
     actions
   ),
-  // describe events
+  withState('isInit', 'setIsInit', false),
+  withState('clusters', 'setClusters', []),
   withHandlers({
-    onGoogleApiLoaded: ({ map, getLocationFromCookies }) => ({
-      map: googleMap
-    }) => {
-      googleMap.id = cuid()
-      window.currentMap = googleMap
+    fitBoundsByPoints: () => points => {
+      const googleMaps = window.google.maps
 
-      const { shape, points } = map.drawing
+      const bounds = new googleMaps.LatLngBounds()
 
-      if (points.length) {
-        shape.setMap(googleMap)
+      points.forEach(p => bounds.extend(p))
+
+      window.currentMap.fitBounds(bounds)
+    }
+  }),
+  withHandlers({
+    generateClusters: () => (markers = [], mapProps) => {
+      const getCluster = supercluster(markers, {
+        // min zoom to generate clusters on
+        minZoom: 12,
+        // max zoom level to cluster the points on
+        maxZoom: DECLUSTER_ZOOM_LEVEL - 1,
+        radius: 60 // cluster radius in pixels
+      })
+
+      let clusters = getCluster(mapProps).map(({ wx, wy, points }) => ({
+        points,
+        lat: wy,
+        lng: wx
+      }))
+
+      if (mapProps.zoom >= DECLUSTER_ZOOM_LEVEL) {
+        clusters = setCssPositionToListingsWithSameBuilding(clusters)
       }
 
-      getLocationFromCookies()
-    },
+      return clusters
+    }
+  }),
+  withHandlers({
     onChange: ({
       map,
+      isInit,
       searchText,
       searchType,
       setMapProps,
@@ -182,7 +204,15 @@ const mapHOC = compose(
       setOffMapAutoMove,
       getListingsByMapBounds
     }) => (gmap = {}) => {
-      const { marginBounds } = gmap
+      if (!isInit) {
+        console.log('onChange fasle')
+
+        return
+      }
+
+      console.log('onChange true')
+
+      const { bounds } = gmap
 
       setMapProps('search', gmap)
 
@@ -195,11 +225,11 @@ const mapHOC = compose(
 
         // search by our api
         if (searchType === 'by_map_bounds') {
-          getListingsByMapBounds(marginBounds)
+          getListingsByMapBounds(bounds)
         }
 
         if (searchType === 'by_google_suggests') {
-          getListingsByMapBounds(marginBounds)
+          getListingsByMapBounds(bounds)
           resetSearchType()
         }
 
@@ -210,17 +240,63 @@ const mapHOC = compose(
         return
       }
 
-      if (marginBounds) {
-        if (!mapOnChangeDebounce) {
-          mapOnChangeDebounce = 1
-          getListingsByMapBounds(marginBounds)
-        } else {
+      if (!mapOnChangeDebounce) {
+        mapOnChangeDebounce = 1
+        getListingsByMapBounds(bounds)
+      } else {
+        clearTimeout(mapOnChangeDebounce)
+        mapOnChangeDebounce = setTimeout(() => {
+          getListingsByMapBounds(bounds)
           clearTimeout(mapOnChangeDebounce)
-          mapOnChangeDebounce = setTimeout(() => {
-            getListingsByMapBounds(marginBounds)
-            clearTimeout(mapOnChangeDebounce)
-          }, 300)
-        }
+        }, 300)
+      }
+    }
+  }),
+  withHandlers({
+    getMapProps: () => googleMapObj => ({
+      bounds: getBounds(googleMapObj.getBounds(), true),
+      center: googleMapObj.getCenter().toJSON(),
+      zoom: googleMapObj.getZoom()
+    })
+  }),
+  withHandlers({
+    onGoogleApiLoaded: ({
+      markers,
+      setIsInit,
+      map,
+      onChange,
+      setClusters,
+      getMapProps,
+      generateClusters,
+      fitBoundsByPoints,
+      getLocationFromCookies
+    }) => ({ map: googleMap }) => {
+      googleMap.id = cuid()
+      window.currentMap = googleMap
+
+      const { shape, points } = map.drawing
+
+      if (points.length) {
+        shape.setMap(googleMap)
+      }
+
+      console.log('google init')
+
+      if (markers.length > 0) {
+        const normalizedMarkers = normalizeListingsForMarkers(markers)
+
+        fitBoundsByPoints(normalizedMarkers)
+
+        setClusters(generateClusters(normalizedMarkers, getMapProps(googleMap)))
+
+        const timeoutID = setTimeout(() => {
+          setIsInit(true)
+          clearTimeout(timeoutID)
+        }, 1000)
+      } else {
+        setIsInit(true)
+        onChange(getMapProps(googleMap))
+        getLocationFromCookies()
       }
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
@@ -238,55 +314,21 @@ const mapHOC = compose(
       removePolygon(map.drawing.shape)
       inactiveDrawing()
       getListingsByMapBounds(map.props.marginBounds)
-    },
-    onClusterMarkerClick: () => points => {
-      const googleMaps = window.google.maps
-
-      const bounds = new googleMaps.LatLngBounds()
-
-      points.forEach(point => bounds.extend(point))
-
-      window.currentMap.fitBounds(bounds)
     }
   }),
-  // precalculate clusters if markers data has changed
   withPropsOnChange(
-    (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),
-    ({
-      markers = [],
-      clusterRadius,
-      clusterOptions: { minZoom, maxZoom }
-    }) => ({
-      getCluster: supercluster(normalizeListingsForMarkers(markers), {
-        minZoom, // min zoom to generate clusters on
-        maxZoom, // max zoom level to cluster the points on
-        radius: clusterRadius // cluster radius in pixels
-      })
-    })
-  ),
-  // get clusters specific for current bounds and zoom
-  withPropsOnChange(
-    ['mapProps', 'getCluster'],
-    ({ mapProps, getCluster, isFetching }) => {
-      let clusters = []
+    (props, nextProps) =>
+      // console.log(props.markers.length, nextProps.markers.length)
 
-      isFetching = isFetching && mapProps.zoom < DECLUSTER_ZOOM_LEVEL
-
-      if (_.isEmpty(mapProps) || !mapProps.bounds || isFetching) {
-        return { clusters }
+      !_.isEqual(props.mapProps, nextProps.mapProps) ||
+      !_.isEqual(props.markers, nextProps.markers),
+    ({ mapProps, markers, generateClusters, setClusters, isFetching }) => {
+      if (!isFetching && !_.isEmpty(mapProps) && mapProps.bounds) {
+        console.log('marker or props')
+        setClusters(
+          generateClusters(normalizeListingsForMarkers(markers), mapProps)
+        )
       }
-
-      clusters = getCluster(mapProps).map(({ wx, wy, points }) => ({
-        points,
-        lat: wy,
-        lng: wx
-      }))
-
-      if (mapProps.zoom >= DECLUSTER_ZOOM_LEVEL) {
-        clusters = setCssPositionToListingsWithSameBuilding(clusters)
-      }
-
-      return { clusters }
     }
   )
 )
