@@ -13,6 +13,8 @@ import { PageHeader } from './Header'
 import TabSections from './Tabs'
 import TaskView from './TaskView'
 
+import UploadPrompt from '../UploadManager/prompt'
+
 import { DealContainer, PageWrapper } from './styled'
 
 class DealDetails extends React.Component {
@@ -96,6 +98,8 @@ class DealDetails extends React.Component {
             isBackOffice={this.props.isBackOffice}
           />
         </PageWrapper>
+
+        <UploadPrompt deal={deal} />
       </DealContainer>
     )
   }

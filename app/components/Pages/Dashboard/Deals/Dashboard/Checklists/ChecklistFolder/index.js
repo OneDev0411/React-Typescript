@@ -6,6 +6,7 @@ import { ChecklistLabels } from './Labels'
 import MessageAdmin from './MessageAdmin'
 
 import TaskRow from '../TaskRow'
+import NewTaskRow from '../NewTaskRow'
 
 import {
   Container,
@@ -34,7 +35,7 @@ class ChecklistFolder extends React.Component {
    * inside the checklist table
    */
   get Tasks() {
-    return this.SortedTasks.filter(this.isFormTask).map(
+    return this.SortedTasks.filter(this.canShowTask).map(
       id => this.props.tasks[id]
     )
   }
@@ -53,8 +54,7 @@ class ChecklistFolder extends React.Component {
     return sortedTasks
   }
 
-  isFormTask = id =>
-    ['Form', 'Generic'].includes(this.props.tasks[id].task_type) &&
+  canShowTask = id =>
     this.props.tasks[id].title.includes('General Comments') === false
 
   render() {
@@ -83,6 +83,8 @@ class ChecklistFolder extends React.Component {
               isBackOffice={this.props.isBackOffice}
             />
           ))}
+
+          <NewTaskRow deal={this.props.deal} checklist={checklist} />
         </TasksContainer>
       </Container>
     )
