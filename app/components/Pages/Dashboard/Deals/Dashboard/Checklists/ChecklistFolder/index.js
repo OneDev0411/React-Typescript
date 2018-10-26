@@ -1,9 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
+import Flex from 'styled-flex-component'
 
 import { ChecklistLabels } from './Labels'
 import MessageAdmin from './MessageAdmin'
+import Menu from './Menu'
 
 import TaskRow from '../TaskRow'
 import NewTaskRow from '../NewTaskRow'
@@ -11,7 +13,6 @@ import NewTaskRow from '../NewTaskRow'
 import {
   Container,
   Header,
-  HeaderLeftColumn,
   HeaderTitle,
   TasksContainer,
   ArrowIcon
@@ -63,15 +64,24 @@ class ChecklistFolder extends React.Component {
     return (
       <Container>
         <Header>
-          <HeaderLeftColumn onClick={this.toggleFolderOpen}>
+          <Flex
+            alignCenter
+            style={{ cursor: 'pointer' }}
+            onClick={this.toggleFolderOpen}
+          >
             <ArrowIcon isOpen={this.state.isFolderExpanded} />
-
             <HeaderTitle>{checklist.title}</HeaderTitle>
-
             <ChecklistLabels checklist={checklist} />
-          </HeaderLeftColumn>
+          </Flex>
 
-          <MessageAdmin checklist={checklist} tasks={this.props.tasks} />
+          <Flex alignCenter>
+            <MessageAdmin checklist={checklist} tasks={this.props.tasks} />
+            <Menu
+              deal={this.props.deal}
+              checklist={checklist}
+              isBackOffice={this.props.isBackOffice}
+            />
+          </Flex>
         </Header>
 
         <TasksContainer isOpen={this.state.isFolderExpanded}>

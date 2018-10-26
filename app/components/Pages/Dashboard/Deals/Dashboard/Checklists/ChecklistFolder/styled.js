@@ -14,15 +14,9 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 2.5rem;
+  height: 3.5rem;
   background-color: #d4d4d4;
   padding: 0 1rem;
-`
-
-export const HeaderLeftColumn = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
 `
 
 export const HeaderTitle = styled(H4)`
