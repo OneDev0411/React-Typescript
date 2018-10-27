@@ -4,6 +4,11 @@ import Badge from 'components/Badge'
 export const Container = styled.div`
   position: relative;
   margin-left: 1rem;
+  cursor: pointer;
+
+  svg path {
+    fill: ${props => (props.hasNotification ? '#17181a' : '#f5f5f5')};
+  }
 `
 
 export const BadgeCounter = styled(Badge)`

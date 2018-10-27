@@ -14,6 +14,12 @@ export const Row = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
+
+  :hover {
+    svg.deal--task-comments path {
+      fill: #17181a;
+    }
+  }
 `
 
 export const LeftColumn = styled.div`
@@ -39,7 +45,7 @@ export const ArrowIcon = ArrowDownIcon.extend`
   margin-right: 0.5rem;
   cursor: pointer;
   fill: #000 !important;
-  transition: all ease-in 0.5s;
+  transition: all ease-in 0.1s;
 
   transform: ${({ isOpen }) => (isOpen ? 'inherit' : 'rotateZ(-90deg)')};
 `

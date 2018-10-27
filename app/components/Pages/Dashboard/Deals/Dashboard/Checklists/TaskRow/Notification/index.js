@@ -9,14 +9,13 @@ function Notification(props) {
   const room = rooms && rooms[task.room.id] ? rooms[task.room.id] : task.room
   const { new_notifications } = room
 
-  if (!new_notifications || new_notifications === 0) {
-    return false
-  }
-
   return (
-    <Container>
-      <IconComment />
-      <BadgeCounter>{new_notifications}</BadgeCounter>
+    <Container hasNotification={new_notifications > 0} onClick={props.onClick}>
+      <IconComment className="deal--task-comments" />
+
+      {new_notifications > 0 && (
+        <BadgeCounter>{new_notifications}</BadgeCounter>
+      )}
     </Container>
   )
 }

@@ -43,21 +43,18 @@ class Task extends React.Component {
     return (
       <Container>
         <Row>
-          <LeftColumn>
-            <ArrowIcon
-              isOpen={this.state.isTaskExpanded}
-              onClick={this.toggleTaskOpen}
-            />
-            <Title onClick={this.handleSelectTask}>{task.title}</Title>
+          <LeftColumn onClick={this.toggleTaskOpen}>
+            <ArrowIcon isOpen={this.state.isTaskExpanded} />
+            <Title>{task.title}</Title>
           </LeftColumn>
 
-          <RightColumn onClick={this.handleSelectTask}>
+          <RightColumn>
             <TaskStatus
               task={task}
               isBackOffice={this.props.isBackOffice}
               isDraftDeal={this.props.deal.is_draft}
             />
-            <TaskNotifications task={task} />
+            <TaskNotifications task={task} onClick={this.handleSelectTask} />
           </RightColumn>
         </Row>
 
