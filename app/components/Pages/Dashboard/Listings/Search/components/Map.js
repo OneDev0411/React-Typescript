@@ -1,15 +1,14 @@
-import _ from 'lodash'
-import cuid from 'cuid'
 import React from 'react'
 import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import supercluster from 'points-cluster'
-import defaultProps from 'recompose/defaultProps'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 import { batchActions } from 'redux-batched-actions'
+import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
 
 import { reset as resetSearchType } from '../../../../../../store_actions/listings/search/set-type'
 import { getLocationFromCookies } from '../../../../../../store_actions/listings/map/user-location'
@@ -55,33 +54,28 @@ const actions = {
 let mapOnChangeDebounce = 0
 
 const map = ({
+  map,
   user,
   appData,
-  options,
   isWidget,
   onChange,
   clusters,
   searchText,
-  defaultZoom,
-  defaultCenter,
   searchLocation,
-  bootstrapURLKeys,
   onGoogleApiLoaded,
   onMarkerMouseEnter,
   onMarkerMouseLeave,
   onClickRemovePolygon,
-  fitBoundsByPoints,
-  mapProps: { zoom, center },
-  map: { hoveredMarkerId, drawing }
+  fitBoundsByPoints
 }) => (
   <div>
     <Map
-      zoom={zoom}
-      center={center}
-      options={options}
+      options={mapOptions}
       onChange={onChange}
-      defaultZoom={defaultZoom}
-      defaultCenter={defaultCenter}
+      zoom={map.props.zoom}
+      center={map.props.center}
+      defaultZoom={mapInitialState.zoom}
+      defaultCenter={mapInitialState.center}
       yesIWantToUseGoogleMapApiInternals
       bootstrapURLKeys={bootstrapURLKeys}
       onGoogleApiLoaded={onGoogleApiLoaded}
@@ -100,7 +94,7 @@ const map = ({
               listing={points[0]}
               isWidget={isWidget}
               key={`SIMPLE_MARKER_${id}`}
-              markerPopupIsActive={hoveredMarkerId === id}
+              markerPopupIsActive={map.hoveredMarkerId === id}
               onMouseEnterHandler={() => onMarkerMouseEnter(id)}
               onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
             />
@@ -122,7 +116,7 @@ const map = ({
     <DrawingButton />
     <DrawingRemoveButton
       onClick={onClickRemovePolygon}
-      points={drawing.points}
+      points={map.drawing.points}
     />
     <ZoomController tabName="search" isTopOfLocation />
     <LocationButton />
@@ -131,12 +125,6 @@ const map = ({
 )
 
 const mapHOC = compose(
-  defaultProps({
-    bootstrapURLKeys,
-    options: mapOptions,
-    defaultZoom: mapInitialState.zoom,
-    defaultCenter: mapInitialState.center
-  }),
   connect(
     ({ user, data, search }, { listings }) => ({
       user,
@@ -164,7 +152,7 @@ const mapHOC = compose(
     }
   }),
   withHandlers({
-    generateClusters: () => (markers = [], mapProps) => {
+    generateClusters: ({ setClusters }) => (markers = [], mapProps) => {
       const getCluster = supercluster(markers, {
         // min zoom to generate clusters on
         minZoom: 12,
@@ -183,7 +171,7 @@ const mapHOC = compose(
         clusters = setCssPositionToListingsWithSameBuilding(clusters)
       }
 
-      return clusters
+      setClusters(clusters)
     }
   }),
   withHandlers({
@@ -256,13 +244,12 @@ const mapHOC = compose(
       setIsInit,
       map,
       onChange,
-      setClusters,
       getMapProps,
       generateClusters,
       fitBoundsByPoints,
       getLocationFromCookies
     }) => ({ map: googleMap }) => {
-      googleMap.id = cuid()
+      googleMap.id = 'SEARCH_MAP'
       window.currentMap = googleMap
 
       const { shape, points } = map.drawing
@@ -276,7 +263,7 @@ const mapHOC = compose(
 
         fitBoundsByPoints(normalizedMarkers)
 
-        setClusters(generateClusters(normalizedMarkers, getMapProps(googleMap)))
+        generateClusters(normalizedMarkers, getMapProps(googleMap))
 
         const timeoutID = setTimeout(() => {
           setIsInit(true)
@@ -307,13 +294,11 @@ const mapHOC = compose(
   }),
   withPropsOnChange(
     (props, nextProps) =>
-      !_.isEqual(props.mapProps, nextProps.mapProps) ||
-      !_.isEqual(props.markers, nextProps.markers),
-    ({ mapProps, markers, generateClusters, setClusters, isFetching }) => {
-      if (!isFetching && !_.isEmpty(mapProps) && mapProps.bounds) {
-        setClusters(
-          generateClusters(normalizeListingsForMarkers(markers), mapProps)
-        )
+      !isEqual(props.mapProps, nextProps.mapProps) ||
+      !isEqual(props.markers, nextProps.markers),
+    ({ mapProps, markers, generateClusters, isFetching }) => {
+      if (!isFetching && !isEmpty(mapProps) && mapProps.bounds) {
+        generateClusters(normalizeListingsForMarkers(markers), mapProps)
       }
     }
   )
