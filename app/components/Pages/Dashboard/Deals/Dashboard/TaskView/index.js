@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import Drawer from 'components/OverlayDrawer'
-import ActionButton from 'components/Button/ActionButton'
 
 import Header from './Header'
 import Comments from './Comments'
+import DeleteTask from './DeleteTask'
 
 import { setSelectedTask } from 'actions/deals'
 
@@ -34,6 +34,12 @@ function TaskView(props) {
         }}
       >
         <Comments
+          deal={props.deal}
+          task={task}
+          isBackOffice={props.isBackOffice}
+        />
+
+        <DeleteTask
           deal={props.deal}
           task={task}
           isBackOffice={props.isBackOffice}

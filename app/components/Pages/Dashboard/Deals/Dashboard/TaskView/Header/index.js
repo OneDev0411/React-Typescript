@@ -1,5 +1,9 @@
 import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
 
+import { updateTask } from 'actions/deals'
+
+import Spinner from 'components/Spinner'
 import IconButton from 'components/Button/IconButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
@@ -7,6 +11,7 @@ import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 import TaskStatus from '../../Checklists/TaskRow/Status'
 
 import {
+  Input,
   Toolbar,
   StatusContainer,
   Actions,
@@ -14,47 +19,114 @@ import {
   Title
 } from './styled'
 
-export default function Header({ task, deal, onClose }) {
-  if (!task) {
-    return false
+class Header extends React.Component {
+  state = {
+    showEditName: false,
+    isSavingName: false
   }
 
-  return (
-    <Fragment>
-      <Toolbar>
-        <StatusContainer>
-          <TaskStatus task={task} isDraftDeal={deal.is_draft} />
-        </StatusContainer>
+  toggleEditName = () =>
+    this.setState(state => ({
+      showEditName: !state.showEditName
+    }))
 
-        <Actions>
-          <IconButton
-            type="button"
-            isFit
-            iconSize="large"
-            inverse
-            onClick={onClose}
-          >
-            <EditIcon />
-          </IconButton>
+  handleSaveName = async () => {
+    // todo
+    const newValue = this.nameInput.value.trim()
 
-          <IconButton
-            type="button"
-            isFit
-            iconSize="large"
-            inverse
-            style={{
-              marginLeft: '1.5rem'
-            }}
-            onClick={onClose}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Actions>
-      </Toolbar>
+    if (newValue.length === 0 && newValue === this.props.task.title) {
+      return false
+    }
 
-      <TitleContainer>
-        <Title>{task.title}</Title>
-      </TitleContainer>
-    </Fragment>
-  )
+    this.setState({
+      showEditName: false,
+      isSavingName: true
+    })
+
+    await this.props.updateTask(this.props.task.id, {
+      title: newValue
+    })
+
+    this.setState({
+      isSavingName: false
+    })
+  }
+
+  onInputKeyPress = e => {
+    if (e.which === 13) {
+      this.handleSaveName()
+    }
+  }
+
+  render() {
+    if (!this.props.task) {
+      return false
+    }
+
+    return (
+      <Fragment>
+        <Toolbar>
+          <StatusContainer>
+            <TaskStatus
+              task={this.props.task}
+              isDraftDeal={this.props.deal.is_draft}
+            />
+          </StatusContainer>
+
+          <Actions>
+            {this.state.isSavingName === false && (
+              <IconButton
+                isFit
+                iconSize="large"
+                inverse
+                onClick={this.toggleEditName}
+              >
+                <EditIcon />
+              </IconButton>
+            )}
+
+            <IconButton
+              isFit
+              iconSize="large"
+              inverse
+              style={{
+                marginLeft: '1.5rem'
+              }}
+              onClick={this.props.onClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Actions>
+        </Toolbar>
+
+        <TitleContainer>
+          {this.state.showEditName && (
+            <Input
+              autoFocus
+              innerRef={ref => (this.nameInput = ref)}
+              defaultValue={this.props.task.title}
+              onBlur={this.handleSaveName}
+              onKeyPress={this.onInputKeyPress}
+            />
+          )}
+
+          {this.state.showEditName === false &&
+            !this.state.isSavingName && (
+              <Title onDoubleClick={this.toggleEditName}>
+                {this.props.task.title}
+              </Title>
+            )}
+
+          {this.state.isSavingName && <Spinner />}
+        </TitleContainer>
+      </Fragment>
+    )
+  }
 }
+
+export default connect(
+  null,
+  {
+    updateTask
+  }
+)(Header)
