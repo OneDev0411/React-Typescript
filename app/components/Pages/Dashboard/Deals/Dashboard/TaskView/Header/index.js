@@ -10,14 +10,7 @@ import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 
 import TaskStatus from '../../Checklists/TaskRow/Status'
 
-import {
-  Input,
-  Toolbar,
-  StatusContainer,
-  Actions,
-  TitleContainer,
-  Title
-} from './styled'
+import { Input, Toolbar, TitleContainer, Title } from './styled'
 
 class Header extends React.Component {
   state = {
@@ -66,14 +59,14 @@ class Header extends React.Component {
     return (
       <Fragment>
         <Toolbar>
-          <StatusContainer>
+          <div>
             <TaskStatus
               task={this.props.task}
               isDraftDeal={this.props.deal.is_draft}
             />
-          </StatusContainer>
+          </div>
 
-          <Actions>
+          <div>
             {this.state.isSavingName === false && (
               <IconButton
                 isFit
@@ -96,7 +89,7 @@ class Header extends React.Component {
             >
               <CloseIcon />
             </IconButton>
-          </Actions>
+          </div>
         </Toolbar>
 
         <TitleContainer>

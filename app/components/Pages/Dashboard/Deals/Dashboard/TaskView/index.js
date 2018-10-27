@@ -6,6 +6,7 @@ import Drawer from 'components/OverlayDrawer'
 import Header from './Header'
 import Comments from './Comments'
 import DeleteTask from './DeleteTask'
+import DraftBanner from './DraftBanner'
 
 import { setSelectedTask } from 'actions/deals'
 
@@ -33,12 +34,13 @@ function TaskView(props) {
           paddingTop: headerHeight
         }}
       >
+        <DraftBanner isDraftDeal={props.deal.is_draft} />
+
         <Comments
           deal={props.deal}
           task={task}
           isBackOffice={props.isBackOffice}
         />
-
         <DeleteTask
           deal={props.deal}
           task={task}

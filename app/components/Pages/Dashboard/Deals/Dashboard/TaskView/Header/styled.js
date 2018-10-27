@@ -11,10 +11,6 @@ export const Toolbar = styled.div`
   height: 1.8rem;
 `
 
-export const StatusContainer = styled.div``
-
-export const Actions = styled.div``
-
 export const Input = styled.input`
   height: 2.3rem;
   border: 1px solid ${primary};
