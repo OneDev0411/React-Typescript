@@ -10,7 +10,7 @@ export const searchListings = async (text, query, hasNeedNormalized = true) => {
   try {
     const response = await new Fetch()
       .get('/listings/search')
-      .query({ q: text })
+      .query({ q: window.encodeURIComponent(text) })
       .query(query)
 
     if (!hasNeedNormalized) {
