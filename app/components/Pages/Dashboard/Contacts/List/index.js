@@ -79,8 +79,7 @@ class ContactsList extends React.Component {
         await this.handleFilterChange(
           filter,
           searchInputValue,
-          start,
-          this.order
+          start
         )
       } else {
         await this.props.getContacts(start)
@@ -107,7 +106,7 @@ class ContactsList extends React.Component {
     filter,
     searchInputValue,
     start = 0,
-    order,
+    order = this.order,
     users = this.state.users
   ) => {
     this.setState({ isFetchingContacts: true, filter, users })
@@ -143,8 +142,6 @@ class ContactsList extends React.Component {
     this.handleFilterChange(
       this.state.filter,
       this.state.searchInputValue,
-      0,
-      order
     )
   }
 
@@ -181,8 +178,7 @@ class ContactsList extends React.Component {
       await this.handleFilterChange(
         this.state.filter,
         this.state.searchInputValue,
-        startFrom,
-        this.order
+        startFrom
       )
     }
 
