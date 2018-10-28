@@ -27,7 +27,7 @@ export async function searchContacts(
       request.send({ filter })
     }
 
-    if (users) {
+    if (Array.isArray(users) && users.length) {
       request.query(`users[]=${users.join('&users[]=')}`)
     }
 
