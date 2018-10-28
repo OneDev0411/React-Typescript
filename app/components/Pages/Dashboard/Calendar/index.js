@@ -11,7 +11,8 @@ import { getStartRange, getEndRange } from '../../../../reducers/calendar'
 import {
   getCalendar,
   setDate,
-  resetCalendar
+  resetCalendar,
+  setCalendarFilter
 } from '../../../../store_actions/calendar'
 
 import {
@@ -32,7 +33,7 @@ import DatePicker from '../../../../views/components/DatePicker'
 import { EventDrawer } from '../../../../views/components/EventDrawer'
 
 import CalendarTable from './Table'
-import CalendarFilter from './Filter'
+import CalendarFilter from '../../../../views/components/Filter'
 
 import { MenuContainer } from './styled'
 
@@ -169,6 +170,7 @@ class CalendarContainer extends React.Component {
   }
 
   handleFilterChange = filter => {
+    this.props.setCalendarFilter(filter)
     this.setLoadingPosition(LOADING_POSITIONS.Middle)
     this.restartCalendar(this.selectedDate, filter)
   }
@@ -301,7 +303,10 @@ class CalendarContainer extends React.Component {
             </PageHeader.Menu>
           </PageHeader>
 
-          <CalendarFilter onChange={this.handleFilterChange} />
+          <CalendarFilter
+            onChange={this.handleFilterChange}
+            filter={this.props.filter}
+          />
 
           <div style={{ position: 'relative' }}>
             <div ref={ref => (this.calendarTableContainer = ref)}>
@@ -342,6 +347,7 @@ export default connect(
   {
     getCalendar,
     setDate,
-    resetCalendar
+    resetCalendar,
+    setCalendarFilter
   }
 )(CalendarContainer)
