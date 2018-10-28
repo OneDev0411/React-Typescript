@@ -29,6 +29,7 @@ import {
   searchContacts,
   deleteContacts
 } from '../../../../../store_actions/contacts'
+import UserFilter from '../../../../../views/components/Filter'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -40,7 +41,8 @@ class ContactsList extends React.Component {
       isRowsUpdating: false,
       filter: this.props.filter,
       searchInputValue: this.props.searchInputValue,
-      activeSegment: {}
+      activeSegment: {},
+      users: this.props.listInfo.users || []
     }
     this.order = this.props.listInfo.order
   }
@@ -84,7 +86,7 @@ class ContactsList extends React.Component {
         await this.props.getContacts(start)
       }
     } catch (e) {
-      // todo
+      console.log('fetch contacts error: ', e)
     }
 
     this.setState({ isFetchingContacts: false })
@@ -101,8 +103,14 @@ class ContactsList extends React.Component {
     )
   }
 
-  handleFilterChange = async (filter, searchInputValue, start = 0, order) => {
-    this.setState({ isFetchingContacts: true, filter })
+  handleFilterChange = async (
+    filter,
+    searchInputValue,
+    start = 0,
+    order,
+    users = this.state.users
+  ) => {
+    this.setState({ isFetchingContacts: true, filter, users })
 
     if (start === 0) {
       this.resetSelectedRows()
@@ -114,10 +122,11 @@ class ContactsList extends React.Component {
         start,
         undefined,
         searchInputValue,
-        order
+        order,
+        users
       )
     } catch (e) {
-      // todo
+      console.log('fetch search error: ', e)
     }
 
     this.setState({ isFetchingContacts: false })
@@ -136,6 +145,16 @@ class ContactsList extends React.Component {
       this.state.searchInputValue,
       0,
       order
+    )
+  }
+
+  handleChangeUsers = users => {
+    this.handleFilterChange(
+      this.state.filter,
+      this.state.searchInputValue,
+      0,
+      this.order,
+      users
     )
   }
 
@@ -232,6 +251,10 @@ class ContactsList extends React.Component {
             onMenuTriggerChange={this.toggleSideMenu}
           />
 
+          <UserFilter
+            onChange={this.handleChangeUsers}
+            filter={this.state.users}
+          />
           <ContactFilters onFilterChange={this.handleFilterChange} />
 
           <SearchContacts

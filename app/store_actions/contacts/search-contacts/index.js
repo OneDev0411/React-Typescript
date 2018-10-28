@@ -10,7 +10,8 @@ export function searchContacts(
   start = 0,
   limit = 50,
   searchInputValue,
-  order = '-created_at'
+  order = '-created_at',
+  users
 ) {
   return async (dispatch, getState) => {
     if (start === 0) {
@@ -20,12 +21,17 @@ export function searchContacts(
     }
 
     try {
-      const response = await search(searchInputValue, filter, {
-        ...defaultQuery,
-        start,
-        limit,
-        order
-      })
+      const response = await search(
+        searchInputValue,
+        filter,
+        {
+          ...defaultQuery,
+          start,
+          limit,
+          order
+        },
+        users
+      )
 
       const contactsLength = selectContacts(getState().contacts.list).length
 
@@ -41,6 +47,7 @@ export function searchContacts(
             ...response.info,
             searchInputValue,
             order,
+            users,
             filter,
             type: 'filter'
           },
