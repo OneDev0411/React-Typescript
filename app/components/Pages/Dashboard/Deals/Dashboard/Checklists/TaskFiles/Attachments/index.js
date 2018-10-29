@@ -89,7 +89,7 @@ class Attachments extends React.Component {
                   isBackOffice={this.props.isBackOffice}
                   fileType={file.type}
                   externalUrl={file.src}
-                  internalUrl={`/dashboard/deals/${deal.id}/form-viewer/${
+                  internalUrl={`/dashboard/deals/${deal.id}/view/${
                     task.id
                   }/attachment/${file.id}`}
                 >

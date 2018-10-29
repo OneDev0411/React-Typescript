@@ -229,9 +229,7 @@ export class FileManager extends React.Component {
     const type = file.envelope ? 'envelope' : 'attachment'
     const id = file.envelope ? file.envelope.id : file.id
 
-    return `/dashboard/deals/${
-      deal.id
-    }/form-viewer/${taskId}/${type}/${id}?backTo=files`
+    return `/dashboard/deals/${deal.id}/view/${taskId}/${type}/${id}`
   }
 
   onSelectTask = async (file, taskId = null, notifyOffice = false) => {

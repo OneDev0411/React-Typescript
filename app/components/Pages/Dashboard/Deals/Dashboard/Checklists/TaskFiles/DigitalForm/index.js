@@ -37,7 +37,7 @@ export default function DigitalForm({ deal, task, isBackOffice }) {
                 <LinkButton
                   appearance="outline"
                   size="small"
-                  to={`/dashboard/deals/${deal.id}/form-viewer/${task.id}`}
+                  to={`/dashboard/deals/${deal.id}/view/${task.id}`}
                 >
                   View
                 </LinkButton>
