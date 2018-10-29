@@ -27,7 +27,7 @@ function SideNav(props) {
 
       {props.showContacts && (
         <Fragment>
-          <Roles deal={deal} />
+          <Roles deal={deal} allowDeleteRole />
           <FactsheetDivider />
         </Fragment>
       )}

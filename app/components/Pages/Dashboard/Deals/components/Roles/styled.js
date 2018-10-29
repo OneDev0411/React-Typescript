@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 
+import { primary } from 'views/utils/colors'
+
 export const RolesContainer = styled.div``
 
 export const RolesTitle = styled(SectionTitle)`
@@ -11,7 +13,29 @@ export const RolesTitle = styled(SectionTitle)`
 export const RoleActions = styled.div`
   width: 5%;
   opacity: 0;
-  text-align: right;
+`
+
+export const RoleAvatar = styled.div`
+  text-align: center;
+  width: 45px;
+`
+
+export const RoleInfo = styled.div`
+  text-align: left;
+  padding-left: 0.625rem;
+  width: calc(100% - (5% + 50px));
+`
+
+export const RoleTitle = styled.div`
+  color: #263445;
+  font-size: 1rem;
+`
+
+export const RoleType = styled.div`
+  font-weight: normal;
+  color: #8696a4;
+  font-size: 1rem;
+  text-decoration: none;
 `
 
 export const RoleItem = styled.div`
@@ -31,25 +55,9 @@ export const RoleItem = styled.div`
   :hover ${RoleActions} {
     opacity: 1;
   }
-`
 
-export const RoleAvatar = styled.div`
-  text-align: center;
-`
-
-export const RoleInfo = styled.div`
-  text-align: left;
-  padding-left: 0.625rem;
-`
-
-export const RoleTitle = styled.div`
-  color: #263445;
-  font-size: 1rem;
-`
-
-export const RoleType = styled.div`
-  font-weight: normal;
-  color: #8696a4;
-  font-size: 1rem;
-  text-decoration: none;
+  :hover ${RoleTitle} {
+    color: ${primary};
+    text-decoration: underline;
+  }
 `
