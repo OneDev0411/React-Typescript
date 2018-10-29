@@ -1,4 +1,5 @@
 import React from 'react'
+import SendMlsListingCard from 'components/InstantMarketing/Flows/SendMlsListingCard'
 import Table from '../../../../../../views/components/Grid/Table'
 
 import Menu from './columns/Menu'
@@ -12,7 +13,6 @@ import NoSearchResults from '../../../../../Partials/no-search-results'
 import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
-import SendMlsListingCard from 'components/InstantMarketing/Flows/SendMlsListingCard'
 
 import TagsOverlay from '../../components/TagsOverlay'
 
@@ -101,6 +101,9 @@ class ContactsList extends React.Component {
         <TagContacts
           selectedRows={selectedRows}
           resetSelectedRows={resetSelectedRows}
+          handleChangeContactsAttributes={
+            this.props.handleChangeContactsAttributes
+          }
         />
       )
     },
@@ -189,6 +192,9 @@ class ContactsList extends React.Component {
           selectedContactsIds={this.state.selectedTagContact}
           isOpen={this.state.selectedTagContact.length > 0}
           closeOverlay={this.closeTagsOverlay}
+          handleChangeContactsAttributes={
+            this.props.handleChangeContactsAttributes
+          }
         />
       </div>
     )

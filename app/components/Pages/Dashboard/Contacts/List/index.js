@@ -76,11 +76,7 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
-        await this.handleFilterChange(
-          filter,
-          searchInputValue,
-          start
-        )
+        await this.handleFilterChange(filter, searchInputValue, start)
       } else {
         await this.props.getContacts(start)
       }
@@ -139,10 +135,7 @@ class ContactsList extends React.Component {
 
   handleChangeOrder = ({ value: order }) => {
     this.order = order
-    this.handleFilterChange(
-      this.state.filter,
-      this.state.searchInputValue,
-    )
+    this.handleFilterChange(this.state.filter, this.state.searchInputValue)
   }
 
   handleChangeUsers = users => {
@@ -154,6 +147,9 @@ class ContactsList extends React.Component {
       users
     )
   }
+
+  handleChangeContactsAttributes = () =>
+    this.handleFilterChange(this.state.filter, this.state.searchInputValue)
 
   toggleSideMenu = () =>
     this.setState(state => ({
@@ -259,6 +255,7 @@ class ContactsList extends React.Component {
           />
           <Table
             handleChangeOrder={this.handleChangeOrder}
+            handleChangeContactsAttributes={this.handleChangeContactsAttributes}
             data={contacts}
             listInfo={this.props.listInfo}
             isFetching={this.state.isFetchingContacts}
