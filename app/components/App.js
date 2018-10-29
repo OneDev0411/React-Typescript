@@ -103,7 +103,7 @@ class App extends Component {
 
       // load contacts
       if (
-        this.hasCrmAccess &&
+        (this.hasCrmAccess || this.hasDealsAccess) &&
         !isLoadedContactAttrDefs(this.props.contactsAttributeDefs)
       ) {
         dispatch(getAttributeDefs())
