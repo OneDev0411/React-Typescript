@@ -101,18 +101,6 @@ const AsyncListingSinglePage = Load({
 const AsyncDealsLayout = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */)
-  // fetchData: async (dispatch, params) => {
-  //   const { user } = params
-
-  //   if (!user) {
-  //     return Promise.resolve()
-  //   }
-
-  //   return batchActions([
-  //     await dispatch(getContexts(user)),
-  //     await dispatch(getDeals(user))
-  //   ])
-  // }
 })
 
 const AsyncDealCreate = Load({
@@ -135,10 +123,10 @@ const AsyncDealDashboard = Load({
     import('../components/Pages/Dashboard/Deals/Dashboard' /* webpackChunkName: "deal_d" */)
 })
 
-// const AsyncDealFormViewer = Load({
-//   loader: () =>
-//     import('../components/Pages/Dashboard/Deals/form-viewer' /* webpackChunkName: "deal_fv" */)
-// })
+const AsyncDealFileViewer = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Deals/FileViewer' /* webpackChunkName: "deal_fv" */)
+})
 
 const AsyncDealFormEdit = Load({
   loader: () =>
@@ -408,11 +396,10 @@ export default (
           path="/dashboard/deals/:id/create-offer"
           component={AsyncDealCreateOffer}
         />
-        {/* <Route
-          path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
-          component={AsyncDealFormViewer}
+        <Route
+          path="/dashboard/deals/:id/view/:taskId(/:type/:entityId)"
+          component={AsyncDealFileViewer}
         />
-        */}
         <Route
           path="/dashboard/deals/:id/network"
           component={AsyncAgentNetwork}
