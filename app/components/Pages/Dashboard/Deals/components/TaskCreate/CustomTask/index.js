@@ -75,12 +75,17 @@ class CustomTask extends React.Component {
           >
             <ActionButton
               style={{ marginLeft: '0.5rem' }}
+              disabled={this.state.taskName.length === 0}
               onClick={this.selectFiles}
             >
               Create Task & Upload
             </ActionButton>
 
-            <ActionButton appearance="outline" onClick={this.handleCreateTask}>
+            <ActionButton
+              appearance="outline"
+              disabled={this.state.taskName.length === 0}
+              onClick={this.handleCreateTask}
+            >
               Create Task
             </ActionButton>
           </OverlayDrawer.Footer>
