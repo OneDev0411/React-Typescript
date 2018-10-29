@@ -63,7 +63,7 @@ export class TaskCreate extends React.Component {
           }
           onClose={this.props.onClose}
         >
-          <OverlayDrawer.Header title="Add Task" />
+          <OverlayDrawer.Header title="Add New Task" />
           <OverlayDrawer.Body>
             {this.state.isSaving && <Spinner />}
 
@@ -103,11 +103,13 @@ export class TaskCreate extends React.Component {
 
           <OverlayDrawer.Footer style={{ flexDirection: 'row-reverse' }}>
             <ActionButton
-              appearance="outline"
               disabled={this.state.isSaving}
               onClick={this.toggleCustomTaskDrawer}
             >
-              <IconAdd style={{ marginRight: '0.5rem' }} /> Other
+              <IconAdd
+                style={{ fill: '#fff', width: '1rem', marginRight: '0.5rem' }}
+              />
+              &nbsp;Add New Item
             </ActionButton>
           </OverlayDrawer.Footer>
         </OverlayDrawer>
