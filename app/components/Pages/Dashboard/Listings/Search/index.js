@@ -81,7 +81,7 @@ class Search extends React.Component {
     await dispatch(
       getListingsByValert({
         ...this.props.queryOptions,
-        limit: 50
+        limit: 200
       })
     )
   }

@@ -6,7 +6,6 @@ import supercluster from 'points-cluster'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
-import { batchActions } from 'redux-batched-actions'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 
@@ -19,8 +18,6 @@ import {
 } from '../../../../../../utils/map'
 
 import * as mapActions from '../../../../../../store_actions/listings/map'
-import setSearchInput from '../../../../../../store_actions/listings/search/set-search-input'
-import { setSearchLocation } from '../../../../../../store_actions/listings/search/set-search-location'
 import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
 import getListingsByMapBounds from '../../../../../../store_actions/listings/search/get-listings/by-map-bounds'
 import { SearchPin } from '../../../../../../views/MLS/SearchPin'
@@ -45,8 +42,6 @@ const actions = {
   ...mapActions,
   ...drawingActions,
   resetSearchType,
-  setSearchInput,
-  setSearchLocation,
   getListingsByMapBounds,
   getLocationFromCookies
 }
@@ -178,11 +173,8 @@ const mapHOC = compose(
     onChange: ({
       map,
       isInit,
-      searchText,
       searchType,
       setMapProps,
-      setSearchInput,
-      setSearchLocation,
       resetSearchType,
       setOffMapAutoMove,
       getListingsByMapBounds
@@ -194,10 +186,6 @@ const mapHOC = compose(
       const { bounds } = gmap
 
       setMapProps('search', gmap)
-
-      if (!map.autoMove && searchText) {
-        batchActions([setSearchInput(''), setSearchLocation(null)])
-      }
 
       if (map.autoMove) {
         setOffMapAutoMove()
