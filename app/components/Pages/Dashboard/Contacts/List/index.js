@@ -57,7 +57,9 @@ class ContactsList extends React.Component {
     if (
       nextProps.filterSegments.activeSegmentId !==
         this.props.filterSegments.activeSegmentId &&
-      nextProps.filterSegments.activeSegmentId !== this.state.activeSegment.id
+      nextProps.filterSegments.activeSegmentId !==
+        this.state.activeSegment.id &&
+      nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
     ) {
       this.handleChangeSavedSegment(
         nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
