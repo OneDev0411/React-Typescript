@@ -8,7 +8,7 @@ import FilterButton from '../../../../../../views/components/Button/DropButton'
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 
 import Filters from '../components/Filters'
-import SearchField from '../components/SearchToolbar'
+import SearchField from '../components/SearchToolbar/mls-autocomplete'
 import { ViewSwitcher } from '../../components/ViewSwitcher'
 
 const Container = styled(Flex)`
