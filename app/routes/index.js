@@ -218,7 +218,7 @@ const AsyncDealTemplates = Load({
     import('../components/Pages/Dashboard/Account/DealTemplates' /* webpackChunkName: "deal_templates" */)
 })
 
-const AsyncICALIntegration = Load({
+const ExportCalendar = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */)
 })
@@ -442,7 +442,7 @@ export default (
 
         <Route path="deal/templates" component={AsyncDealTemplates} />
         <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
-        <Route path="deal/icalintegration" component={AsyncICALIntegration} />
+        <Route path="exportCalendar" component={ExportCalendar} />
       </Route>
 
       <Route path="/dashboard/brands">

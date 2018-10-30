@@ -6,6 +6,9 @@ import { browserHistory } from 'react-router'
 import moment from 'moment'
 import _ from 'underscore'
 
+import styled from 'styled-components'
+import PopOver from 'components/Popover'
+import Flex from 'styled-flex-component'
 import { getStartRange, getEndRange } from '../../../../reducers/calendar'
 
 import {
@@ -45,6 +48,19 @@ const LOADING_POSITIONS = {
   Bottom: 1,
   Middle: 2
 }
+
+const CalendarExport = styled(ActionButton)`
+  position: absolute;
+  bottom: 0;
+  margin: auto;
+  left: 50%;
+  transform: translateX(-50%);
+`
+
+const PopOverImage = styled.img`
+  width: 40px;
+  height: 40px;
+`
 
 class CalendarContainer extends React.Component {
   state = {
@@ -286,6 +302,34 @@ class CalendarContainer extends React.Component {
               onChange={this.handleDateChange}
               // modifiers={this.SelectedRange}
             />
+
+            <PopOver
+              popoverStyles={{ width: '250px', textAlign: 'center' }}
+              trigger="click"
+              caption={
+                <div>
+                  <div>
+                    Take your Rechat calendar events with you. Export them to
+                    other calendars like Outlook, Google, iCal and more
+                  </div>
+                  <Flex style={{ marginTop: '1rem' }} justifyAround>
+                    <PopOverImage src="/static/images/Calendar/outlook.png" />
+                    <PopOverImage src="/static/images/Calendar/gcal.png" />
+                    <PopOverImage src="/static/images/Calendar/ical.png" />
+                  </Flex>
+                </div>
+              }
+            >
+              <CalendarExport
+                noBorder
+                appearance="outline"
+                onClick={() => {
+                  browserHistory.push('/dashboard/account/exportCalendar')
+                }}
+              >
+                Calendar Export
+              </CalendarExport>
+            </PopOver>
           </MenuContainer>
         </Menu>
 
