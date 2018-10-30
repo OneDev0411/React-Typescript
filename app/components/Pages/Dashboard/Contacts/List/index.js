@@ -42,7 +42,7 @@ class ContactsList extends React.Component {
       filter: this.props.filter,
       searchInputValue: this.props.searchInputValue,
       activeSegment: {},
-      users: this.props.listInfo.users || []
+      users: this.props.listInfo.users || [this.props.user.id]
     }
     this.order = this.props.listInfo.order
   }
