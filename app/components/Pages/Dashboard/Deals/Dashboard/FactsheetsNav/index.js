@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
-import FactsheetSection from '../../../Factsheet'
-import Roles from '../../../../components/Roles'
+import FactsheetSection from '../Factsheet'
+import Roles from '../../components/Roles'
 
-import { Card } from '../../styled'
-import { FactsheetDivider } from '../../../Factsheet/styled'
+import { Card } from './styled'
+import { FactsheetDivider } from '../Factsheet/styled'
 
-function SideNav(props) {
+function FactsheetsSideNav(props) {
   const { deal, isBackOffice } = props
 
   return (
@@ -52,7 +52,7 @@ function SideNav(props) {
   )
 }
 
-SideNav.propTypes = {
+FactsheetsSideNav.propTypes = {
   showCriticalDates: PropTypes.bool,
   showCriticalDatesDivider: PropTypes.bool,
   showCDAInformation: PropTypes.bool,
@@ -60,7 +60,7 @@ SideNav.propTypes = {
   showContacts: PropTypes.bool
 }
 
-SideNav.defaultProps = {
+FactsheetsSideNav.defaultProps = {
   showCriticalDates: true,
   showCriticalDatesDivider: true,
   showCDAInformation: true,
@@ -68,4 +68,4 @@ SideNav.defaultProps = {
   showContacts: true
 }
 
-export default SideNav
+export default FactsheetsSideNav

@@ -397,7 +397,7 @@ export default (
           component={AsyncDealCreateOffer}
         />
         <Route
-          path="/dashboard/deals/:id/view/:taskId(/:type/:entityId)"
+          path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
           component={AsyncDealFileViewer}
         />
         <Route

@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import Spinner from 'components/Spinner'
 
 import Checklists from '../../../Checklists'
-import FactsheetSideNav from '../../components/FactsheetSideNav'
+import FactsheetsNav from '../../../FactsheetsNav'
 
 import { FactsheetContainer, MainContainer } from '../../styled'
 
@@ -11,7 +11,7 @@ export default function ChecklistPane(props) {
   return (
     <Fragment>
       <FactsheetContainer>
-        <FactsheetSideNav deal={props.deal} isBackOffice={props.isBackOffice} />
+        <FactsheetsNav deal={props.deal} isBackOffice={props.isBackOffice} />
       </FactsheetContainer>
 
       <MainContainer>

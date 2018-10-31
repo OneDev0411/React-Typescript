@@ -6,21 +6,7 @@ import Lightbox from 'react-images'
 import IconAttachment from 'components/SvgIcons/Attachment/IconAttacment'
 import PdfModal from '../../../../../Partials/Pdf/Modal'
 
-function truncate(string, len = 30) {
-  if (!string || string.length <= len) {
-    return string
-  }
-
-  const separator = '...'
-
-  const charsToShow = len - 3
-  const start = Math.ceil(charsToShow / 2)
-  const end = Math.floor(charsToShow / 2)
-
-  return (
-    string.substr(0, start) + separator + string.substr(string.length - end)
-  )
-}
+import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 
 export default ({ comment, attachments, openFilesInNewTab }) => (
   <div className="attachment">
@@ -55,7 +41,7 @@ class ImageAttachments extends React.Component {
       .map(file => ({
         id: file.id,
         src: file.url,
-        name: truncate(file.name),
+        name: truncateTextFromMiddle(file.name),
         preview_url: file.preview_url,
         date: moment.unix(file.updated_at).format('MMM DD, YYYY')
       }))
@@ -119,7 +105,7 @@ class PdfAttachments extends React.Component {
       .map(file => ({
         id: file.id,
         src: file.url,
-        name: truncate(file.name),
+        name: truncateTextFromMiddle(file.name),
         date: moment.unix(file.updated_at).format('MMM DD, YYYY')
       }))
 
@@ -149,7 +135,7 @@ class PdfAttachments extends React.Component {
         <PdfModal
           file={{
             type: 'pdf',
-            name: truncate(selectedFile.name),
+            name: truncateTextFromMiddle(selectedFile.name),
             src: selectedFile.src
           }}
           isActive={showViewer}
@@ -193,7 +179,7 @@ const UnknownAttachments = ({ attachments }) => {
     .map(file => ({
       id: file.id,
       url: file.url,
-      name: truncate(file.name),
+      name: truncateTextFromMiddle(file.name),
       date: moment.unix(file.updated_at).format('MMM DD, YYYY')
     }))
 

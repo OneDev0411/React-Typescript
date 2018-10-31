@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Container } from './styled'
@@ -13,11 +12,7 @@ const defaultProps = {
   width: '11em'
 }
 
-export const Menu = props => (
-  <Container isOpen={props.isOpen} width={props.width}>
-    {props.children}
-  </Container>
-)
+export const Menu = Container
 
 Menu.propTypes = propTypes
 Menu.defaultProps = defaultProps

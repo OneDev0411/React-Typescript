@@ -6,7 +6,7 @@ import { normalizeDeal } from 'views/utils/association-normalizers'
 import NewTask from 'views/CRM/Tasks/components/NewTask'
 import { Timeline } from '../../../../../Contacts/Profile/Timeline'
 
-import FactsheetSideNav from '../../components/FactsheetSideNav'
+import FactsheetsNav from '../../../FactsheetsNav'
 import { FactsheetContainer, MainContainer, Card } from '../../styled'
 
 export default class EventsPane extends React.Component {
@@ -65,7 +65,7 @@ export default class EventsPane extends React.Component {
     return (
       <Fragment>
         <FactsheetContainer>
-          <FactsheetSideNav
+          <FactsheetsNav
             deal={this.props.deal}
             isBackOffice={this.props.isBackOffice}
             showCriticalDatesDivider={false}

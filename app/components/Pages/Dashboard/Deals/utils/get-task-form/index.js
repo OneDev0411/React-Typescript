@@ -1,15 +1,13 @@
-function getPdfFile(task) {
-  return {
-    name: task.title,
-    url: `https://rechat-forms.s3-us-west-2.amazonaws.com/${task.form}.pdf`
-  }
-}
-
-export default function (deal, task) {
+export function getTaskForm(deal, task) {
   const { submission } = task
 
   // get or create pdfFile object
-  const file = submission ? submission.file : getPdfFile(task)
+  const file = submission
+    ? submission.file
+    : {
+        name: task.title,
+        url: `https://rechat-forms.s3-us-west-2.amazonaws.com/${task.form}.pdf`
+      }
 
   file.type = 'pdf'
 

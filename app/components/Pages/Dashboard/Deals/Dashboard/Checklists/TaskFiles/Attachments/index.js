@@ -33,7 +33,9 @@ class Attachments extends React.Component {
   getFileType = file => {
     if (this.isPdf(file)) {
       return 'pdf'
-    } else if (this.isImage(file)) {
+    }
+
+    if (this.isImage(file)) {
       return 'image'
     }
 

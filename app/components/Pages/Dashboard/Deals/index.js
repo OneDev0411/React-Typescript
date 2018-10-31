@@ -32,8 +32,6 @@ class DealsContainer extends React.Component {
       browserHistory.push('/dashboard/mls')
     }
 
-    const { id: dealId } = this.props.params
-
     if (!this.props.contexts) {
       this.props.getContexts()
     }
@@ -41,6 +39,8 @@ class DealsContainer extends React.Component {
     if (!this.props.forms) {
       this.props.getForms()
     }
+
+    const { id: dealId } = this.props.params
 
     if (dealId) {
       this.initializeDeal(dealId)

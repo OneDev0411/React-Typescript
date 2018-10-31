@@ -52,11 +52,13 @@ function ProgressBar(props) {
 
 ProgressBar.propTypes = {
   percents: PropTypes.number.isRequired,
-  indeterminate: PropTypes.bool
+  indeterminate: PropTypes.bool,
+  circular: PropTypes.bool
 }
 
 ProgressBar.defaultProps = {
-  indeterminate: false
+  indeterminate: false,
+  circular: false
 }
 
 export default ProgressBar

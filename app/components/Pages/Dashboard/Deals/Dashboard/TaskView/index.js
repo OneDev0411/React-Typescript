@@ -12,9 +12,15 @@ import { setSelectedTask } from 'actions/deals'
 
 function TaskView(props) {
   const { task } = props
-  const onClose = () => props.setSelectedTask(null)
-
   const headerHeight = '7.3rem'
+
+  const onClose = () => {
+    if (props.onClose) {
+      return props.onClose()
+    }
+
+    props.setSelectedTask(null)
+  }
 
   return (
     <Drawer isOpen={props.isOpen} onClose={onClose} noFooter>
