@@ -3,11 +3,8 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import MultiSelectDropdown from '../MultiSelectDropdown'
-
 import { getBrandMembers } from '../../../store_actions/user/get-brand-members'
-
 import { getActiveTeamId, getActiveTeam } from '../../../utils/user-teams'
-import { Container } from './styled'
 
 class UserFilter extends React.Component {
   componentDidMount() {
@@ -81,7 +78,9 @@ class UserFilter extends React.Component {
       })
     }
 
-    let filterName = `Owner is: ${names.filter(name => name !== null).join(', ')}`
+    let filterName = `Owner is: ${names
+      .filter(name => name !== null)
+      .join(', ')}`
 
     return filterName.length < 35
       ? filterName
@@ -102,22 +101,20 @@ class UserFilter extends React.Component {
     }
 
     return (
-      <Container>
-        <MultiSelectDropdown
-          title={this.DropdownTitle}
-          defaultSelectedItems={this.SelectedItems}
-          forcedSelectedItemsOnDeselectAll={[this.props.user.id]}
-          selectAllButton={{
-            label: 'Everyone on Team'
-          }}
-          fullWidth
-          items={this.MembersList}
-          onChange={this.handleOnChange}
-          style={{
-            maxWidth: '20rem'
-          }}
-        />
-      </Container>
+      <MultiSelectDropdown
+        title={this.DropdownTitle}
+        defaultSelectedItems={this.SelectedItems}
+        forcedSelectedItemsOnDeselectAll={[this.props.user.id]}
+        selectAllButton={{
+          label: 'Everyone on Team'
+        }}
+        fullWidth
+        items={this.MembersList}
+        onChange={this.handleOnChange}
+        style={{
+          maxWidth: '20rem'
+        }}
+      />
     )
   }
 }

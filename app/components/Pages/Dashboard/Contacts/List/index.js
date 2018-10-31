@@ -1,29 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import Flex from 'styled-flex-component'
 
 import { confirmation } from '../../../../../store_actions/confirmation'
-
 import {
   Container as PageContainer,
   Menu as SideMenu,
   Content as PageContent
 } from '../../../../../views/components/SlideMenu'
-
 import SavedSegments from '../../../../../views/components/Grid/SavedSegments/List'
-
 import ContactFilters from './Filters'
 import { Header } from './Header'
 import { SearchContacts } from './Search'
 import Table from './Table'
-
 import { resetGridSelectedItems } from '../../../../../views/components/Grid/Table/Plugins/Selectable'
-
 import {
   selectContacts,
   selectContactsInfo
 } from '../../../../../reducers/contacts/list'
-
 import {
   getContacts,
   searchContacts,
@@ -244,13 +239,13 @@ class ContactsList extends React.Component {
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
           />
-
-          <UserFilter
-            onChange={this.handleChangeUsers}
-            filter={this.state.users}
-          />
-          <ContactFilters onFilterChange={this.handleFilterChange} />
-
+          <Flex style={{ paddingLeft: '1.5em' }}>
+            <UserFilter
+              onChange={this.handleChangeUsers}
+              filter={this.state.users}
+            />
+            <ContactFilters onFilterChange={this.handleFilterChange} />
+          </Flex>
           <SearchContacts
             onSearch={this.handleSearch}
             isSearching={this.state.isFetchingContacts}
