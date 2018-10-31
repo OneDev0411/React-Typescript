@@ -16,21 +16,17 @@ import {
   normalizeListingsForMarkers,
   getBounds
 } from '../../../../../../utils/map'
-
 import * as mapActions from '../../../../../../store_actions/listings/map'
 import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
 import getListingsByMapBounds from '../../../../../../store_actions/listings/search/get-listings/by-map-bounds'
 import { SearchPin } from '../../../../../../views/MLS/SearchPin'
-
 import ZoomController from '../../components/ZoomController'
 import SimpleMarker from '../../components/Markers/SimpleMarker'
 import ClusterMarker from '../../components/Markers/ClusterMarker'
 import NotLoggedInMessage from '../../components/NotLoggedInMessage'
-
 import DrawingButton from './DrawingButton'
 import LocationButton from './LocationButton'
 import { DrawingRemoveButton } from './DrawingRemoveButton'
-
 import {
   bootstrapURLKeys,
   mapOptions,
@@ -240,16 +236,25 @@ const mapHOC = compose(
       googleMap.id = 'SEARCH_MAP'
       window.currentMap = googleMap
 
-      const { shape, points } = map.drawing
+      const { shape, points: drawingPoints } = map.drawing
 
-      if (points.length) {
+      if (drawingPoints.length > 0) {
         shape.setMap(googleMap)
       }
 
       if (markers.length > 0) {
         const normalizedMarkers = normalizeListingsForMarkers(markers)
 
-        fitBoundsByPoints(normalizedMarkers)
+        if (drawingPoints.length > 0) {
+          fitBoundsByPoints(
+            drawingPoints.map(({ latitude: lat, longitude: lng }) => ({
+              lat,
+              lng
+            }))
+          )
+        } else {
+          fitBoundsByPoints(normalizedMarkers)
+        }
 
         generateClusters(normalizedMarkers, getMapProps(googleMap))
 
