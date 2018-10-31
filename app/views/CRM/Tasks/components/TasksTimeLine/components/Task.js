@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import { connect } from 'react-redux'
 import timeago from 'timeago.js'
@@ -9,7 +10,7 @@ import CircleCheckButton from '../../../../../components/Button/CircleCheckButto
 import IconButton from '../../../../../components/Button/IconButton'
 import ArrowRightIcon from '../../../../../components/SvgIcons/KeyboardArrowRight/IconKeyboardArrowRight'
 
-const OpenTaskButton = IconButton.extend`
+const OpenTaskButton = styled(IconButton)`
   position: absolute;
   top: 50%;
   right: 1em;

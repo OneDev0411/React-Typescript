@@ -14,12 +14,12 @@ export const ProfileTabs = ({ user }) => (
       indexed
       text="Form Templates"
       to="/dashboard/account/deal/templates"
-      disabled={user.user_type !== 'Agent'}
+      disabled
     />
     <Tab
       indexed
       text="Calendar Export"
-      to="/dashboard/account/deal/icalintegration"
+      to="/dashboard/account/exportCalendar"
     />
   </ul>
 )

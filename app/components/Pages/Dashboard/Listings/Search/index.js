@@ -1,23 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { batchActions } from 'redux-batched-actions'
 
 import { loadJS } from '../../../../../utils/load-js'
+import { getBounds } from '../../../../../utils/map'
 import getPlace from '../../../../../models/listings/search/get-place'
-import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points/index.js'
+import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
 import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
+import { setMapProps } from '../../../../../store_actions/listings/map'
 import getListingsByValert from '../../../../../store_actions/listings/search/get-listings/by-valert'
 import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
 import { confirmation } from '../../../../../store_actions/confirmation'
-
 import Map from './components/Map'
 import { MapView } from '../components/MapView'
-import { bootstrapURLKeys } from '../mapOptions'
+import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
 import { GridView } from '../components/GridView'
 import { GalleryView } from '../components/GalleryView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
-
 import { Header } from './Header'
 
 class Search extends React.Component {
@@ -73,16 +74,32 @@ class Search extends React.Component {
   initMap = () => this.setState({ mapWithQueryIsInitialized: true })
 
   fetchDallasListings = async () => {
-    const { dispatch } = this.props
+    const { dispatch, queryOptions } = this.props
 
-    dispatch(searchActions.setSearchInput('Dallas TX, USA'))
-
-    await dispatch(
+    dispatch(
       getListingsByValert({
-        ...this.props.queryOptions,
-        limit: 50
+        ...queryOptions,
+        limit: 200
       })
     )
+
+    const bounds = new window.google.maps.LatLngBounds()
+
+    queryOptions.points.forEach(({ latitude: lat, longitude: lng }) =>
+      bounds.extend({ lat, lng })
+    )
+
+    batchActions([
+      dispatch(searchActions.setSearchInput('Dallas TX, USA')),
+      dispatch(searchActions.setSearchLocation(mapInitialState.center)),
+      dispatch(
+        setMapProps('search', {
+          bounds: getBounds(bounds),
+          center: mapInitialState.center,
+          zoom: 16
+        })
+      )
+    ])
   }
 
   _findPlace = async address => {
@@ -166,6 +183,7 @@ class Search extends React.Component {
           <MapView
             {..._props}
             tabName="search"
+            mapCenter={this.props.mapCenter}
             Map={
               this.state.mapWithQueryIsInitialized ? (
                 <Map {..._props} isWidget={this.props.isWidget} />
@@ -223,6 +241,7 @@ const mapStateToProps = ({ user, search }) => {
     queryOptions: search.options,
     isFetching: listings.isFetching,
     filtersIsOpen: search.filters.isOpen,
+    mapCenter: search.map.props.center,
     listings: {
       data: selectListings(listings),
       info: listings.info

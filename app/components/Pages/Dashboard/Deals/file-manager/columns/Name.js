@@ -11,7 +11,7 @@ const FileIcon = styled.img`
   max-height: 50px;
 `
 
-const FileNameLink = Link.extend`
+const FileNameLink = styled(Link)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -5,6 +5,7 @@ import Map from 'google-map-react'
 import React from 'react'
 import { browserHistory, Link } from 'react-router'
 import Flex from 'styled-flex-component'
+import styled from 'styled-components'
 
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
@@ -59,6 +60,17 @@ import {
 import Follow from '../../../../../../views/components/Follow'
 import { listingStatuses } from '../../../../../../constants/listings/listing'
 import { primary } from '../../../../../../views/utils/colors'
+import ArrowLeftIcon from 'components/SvgIcons/ArrowLeft/ArrowLeftIcon'
+import ArrowRightIcon from 'components/SvgIcons/ArrowRight/ArrowRightIcon'
+
+const ArrowContainer = styled(Flex)`
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 0 28px 0 rgba(0, 0, 0, 0.15), 0 0 10px 0 rgba(0, 0, 0, 0.16);
+  background-color: #000000;
+  border-radius: 50%;
+  margin: auto;
+`
 
 export const fadeIn = node => {
   const elem = ReactDOM.findDOMNode(node)
@@ -130,8 +142,16 @@ const ListingDesktopView = ({
   let bedroom_count
   let listing_title
   let bathroom_count
-  let prev_icon = '<'
-  let next_icon = '>'
+  let prev_icon = (
+    <ArrowContainer center>
+      <ArrowLeftIcon />
+    </ArrowContainer>
+  )
+  let next_icon = (
+    <ArrowContainer center>
+      <ArrowRightIcon />
+    </ArrowContainer>
+  )
   let listing_subtitle
   let brand_agent_area
   let bathroomBaloonText

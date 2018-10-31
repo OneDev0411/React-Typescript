@@ -2,8 +2,10 @@ import React from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
-import importPdfJs from '../../../../../../../utils/import-pdf-js'
+import importPdfJs from 'utils/import-pdf-js'
 import uuid from 'utils/uuid'
+
+import { getValue } from '../../utils/types'
 
 import FormInputs from './form-inputs'
 import FormContexts from './form-contexts'
@@ -15,7 +17,6 @@ const AnnotationsContainer = styled.div`
   left: 0;
   bottom: 0;
   right: 0;
-  /* background-color: rgba(255, 0, 0, 0.1); */
 `
 
 export default class Annotations extends React.Component {
@@ -83,7 +84,18 @@ export default class Annotations extends React.Component {
       .groupBy('role')
       .value()
 
+    this.setDefaultValues()
     this.props.onCalculateContextAnnotations(contexts)
+  }
+
+  setDefaultValues = () => {
+    const defaultValues = {}
+
+    this.annotations.forEach(annotation => {
+      defaultValues[annotation.fieldName] = getValue(annotation)
+    })
+
+    this.props.onSetValues(defaultValues, true)
   }
 
   getInfo = annotation => {

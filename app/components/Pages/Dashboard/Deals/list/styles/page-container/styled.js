@@ -8,7 +8,7 @@ function getContainerHeight(isTrainingAccount) {
     : 'calc(100vh - 56px - 4rem)'
 }
 
-export const PageContainer = Container.extend`
+export const PageContainer = styled(Container)`
   ${props =>
     props.isTrainingAccount &&
     `

@@ -7,7 +7,8 @@ export async function searchContacts(
   query = {
     ...defaultQuery,
     order: '-created_at'
-  }
+  },
+  users
 ) {
   try {
     const request = new Fetch().post('/contacts/filter').query(query)
@@ -24,6 +25,10 @@ export async function searchContacts(
 
     if (Array.isArray(filter) && filter.length) {
       request.send({ filter })
+    }
+
+    if (Array.isArray(users) && users.length) {
+      request.query(`users[]=${users.join('&users[]=')}`)
     }
 
     const response = await request

@@ -9,13 +9,13 @@ export const FormContainer = styled.form`
   width: 100%;
   padding: 1.5em 0 6rem;
 `
-export const FieldContainer = Flex.extend`
+export const FieldContainer = styled(Flex)`
   height: 2.5rem;
   border-radius: 3px;
   background-color: ${grey.A150};
 `
 
-export const DropButton = LinkButton.extend`
+export const DropButton = styled(LinkButton)`
   font-weight: 500;
   justify-content: space-between;
   background-color: ${grey.A150};
@@ -28,13 +28,13 @@ export const DropButton = LinkButton.extend`
   }
 `
 
-export const IconDrop = ArrowDropDown.extend`
+export const IconDrop = styled(ArrowDropDown)`
   position: relative;
   margin-left: 1em;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
 `
 
-export const Footer = Flex.extend`
+export const Footer = styled(Flex)`
   position: absolute;
   bottom: 0;
   left: 1.5rem;

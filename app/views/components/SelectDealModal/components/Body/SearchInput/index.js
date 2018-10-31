@@ -50,7 +50,7 @@ const Input = styled.input`
   }
 `
 
-const IconSearch = IconSearchBase.extend`
+const IconSearch = styled(IconSearchBase)`
   path {
     fill: ${grey.A900} !important;
   }

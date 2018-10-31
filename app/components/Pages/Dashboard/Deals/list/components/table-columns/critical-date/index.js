@@ -1,7 +1,7 @@
 import React from 'react'
-import { Popover, OverlayTrigger } from 'react-bootstrap'
 import styled from 'styled-components'
 
+import PopOver from 'components/Popover'
 import DealContext from '../../../../../../../../models/DealContext'
 import CriticalDates from '../../../../dashboard/factsheet/critical-dates'
 import { grey } from '../../../../../../../../views/utils/colors'
@@ -22,22 +22,15 @@ const CriticalDate = ({ deal, rowId, rowsCount }) => {
   }
 
   return (
-    <OverlayTrigger
-      trigger={['hover', 'focus']}
+    <PopOver
       placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
-      overlay={
-        <Popover
-          className="deal-list--popover"
-          id={`popover-trigger-factsheet-${deal.id}`}
-        >
-          <CriticalDates deal={deal} showTitle={false} />
-        </Popover>
-      }
+      caption={<CriticalDates deal={deal} showTitle={false} />}
+      id={`popover-trigger-factsheet-${deal.id}`}
     >
       <div className="primaryHover inline">
         {CriticalDates.getNextDate(deal)}
       </div>
-    </OverlayTrigger>
+    </PopOver>
   )
 }
 

@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -16,12 +17,12 @@ import {
 import { isBackOffice } from '../../../../../../utils/user-teams'
 import ActionButton from 'components/Button/ActionButton'
 
-const Button = ActionButton.extend`
+const Button = styled(ActionButton)`
   width: 100%;
   justify-content: center;
 `
 
-const EditButton = ActionButton.extend`
+const EditButton = styled(ActionButton)`
   display: none;
 `
 

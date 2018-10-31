@@ -1,4 +1,6 @@
 import React from 'react'
+import SendMlsListingCard from 'components/InstantMarketing/Flows/SendMlsListingCard'
+import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 import Table from '../../../../../../views/components/Grid/Table'
 
 import Menu from './columns/Menu'
@@ -12,7 +14,6 @@ import NoSearchResults from '../../../../../Partials/no-search-results'
 import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
-import SendMlsListingCard from 'components/InstantMarketing/Flows/SendMlsListingCard'
 
 import TagsOverlay from '../../components/TagsOverlay'
 
@@ -21,6 +22,7 @@ import { getAttributeFromSummary } from '../../../../../../models/contacts/helpe
 import { Contact } from './columns/Contact'
 import IconButton from '../../../../../../views/components/Button/IconButton'
 import IconDeleteOutline from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import Tooltip from '../../../../../../views/components/tooltip'
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -45,7 +47,17 @@ class ContactsList extends React.Component {
       render: ({ rowData: contact }) => <Contact contact={contact} />
     },
     {
-      header: 'Last Touch',
+      header: () => (
+        <React.Fragment>
+          Last Touch
+          <Tooltip
+            placement="bottom"
+            caption="This column shows the most recent event that has been marked as completed."
+          >
+            <IconInfoOutline style={{ marginLeft: '0.5rem' }} />
+          </Tooltip>
+        </React.Fragment>
+      ),
       id: 'last_touched',
       sortable: false,
       render: ({ rowData: contact }) => <LastTouchedCell contact={contact} />
@@ -101,6 +113,9 @@ class ContactsList extends React.Component {
         <TagContacts
           selectedRows={selectedRows}
           resetSelectedRows={resetSelectedRows}
+          handleChangeContactsAttributes={
+            this.props.handleChangeContactsAttributes
+          }
         />
       )
     },
@@ -189,6 +204,9 @@ class ContactsList extends React.Component {
           selectedContactsIds={this.state.selectedTagContact}
           isOpen={this.state.selectedTagContact.length > 0}
           closeOverlay={this.closeTagsOverlay}
+          handleChangeContactsAttributes={
+            this.props.handleChangeContactsAttributes
+          }
         />
       </div>
     )

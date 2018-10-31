@@ -1,7 +1,8 @@
+import styled from "styled-components"
 import Button from 'components/Button/ActionButton'
 import { primary } from '../../utils/colors'
 
-export const MenuItem = Button.extend`
+export const MenuItem = styled(Button)`
   color: #000 !important;
   border-radius: 0;
   border-bottom: ${props => (props.hasDevider ? '1px solid #d4d4d4' : 'none')};

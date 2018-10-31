@@ -6,7 +6,7 @@ export const Header = styled.div`
   margin-bottom: 24px;
 `
 
-export const HeaderRow = Row.extend`
+export const HeaderRow = styled(Row)`
   min-height: auto;
   padding: 0.5em;
   border: none;
@@ -15,7 +15,7 @@ export const HeaderRow = Row.extend`
   }
 `
 
-export const HeaderCell = Cell.extend`
+export const HeaderCell = styled(Cell)`
   display: flex;
   align-self: center;
   align-items: center;

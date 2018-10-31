@@ -22,6 +22,6 @@ export const InputError = styled.span`
   margin-top: 8px;
 `
 
-export const InputRequired = InputError.extend`
+export const InputRequired = styled(InputError)`
   font-size: 15px;
 `

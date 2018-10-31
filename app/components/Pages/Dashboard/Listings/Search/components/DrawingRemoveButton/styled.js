@@ -29,7 +29,7 @@ export const Button = styled.button`
   }
 `
 
-export const Icon = CloseIcon.extend`
+export const Icon = styled(CloseIcon)`
   width: 1rem;
   height: 1rem;
   margin-right: 0.25rem;

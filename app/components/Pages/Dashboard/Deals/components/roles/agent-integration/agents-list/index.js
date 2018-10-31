@@ -114,7 +114,7 @@ class TeamAgents extends React.Component {
         backdrop="static"
         onHide={onHide}
       >
-        <Modal.Header closeButton>Choose primary agent</Modal.Header>
+        <Modal.Header closeButton>{this.props.modalTitle}</Modal.Header>
 
         <Modal.Body className="u-scrollbar--thinner">
           <Container>

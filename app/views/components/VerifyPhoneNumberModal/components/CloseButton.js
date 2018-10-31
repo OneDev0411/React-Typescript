@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import { func } from 'prop-types'
 
@@ -6,7 +7,7 @@ import ShadowButton from '../../Button/ShadowButton'
 const largeSize = '32px'
 
 // todo: refactor shadowButton with IconButton
-const Button = ShadowButton.extend`
+const Button = styled(ShadowButton)`
   position: absolute;
   top: 16px;
   right: 16px;

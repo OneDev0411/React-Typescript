@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -9,7 +10,7 @@ import VerifyPhoneNumberModal from '../../../../../../..//views/components/Verif
 import getVerificationCode from '../../../../../../../models/verify/request'
 import { primary } from '../../../../../../../views/utils/colors'
 
-const Button = ActionButton.extend`
+const Button = styled(ActionButton)`
   padding: 0;
   vertical-align: initial;
 `

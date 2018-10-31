@@ -12,22 +12,24 @@ export const allLocationBasedFilterOptions = {
   intermediate_schools: null
 }
 
-export const normalizeListingsForMarkers = markers =>
-  markers.filter(marker => marker.location || marker.property).map(marker => {
-    if (marker.location) {
-      return {
-        ...marker,
-        lat: marker.location.latitude,
-        lng: marker.location.longitude
-      }
-    }
-
+export const normalizeListingLocation = listing => {
+  if (listing.location) {
     return {
-      ...marker,
-      lat: marker.property.address.location.latitude,
-      lng: marker.property.address.location.longitude
+      ...listing,
+      lat: listing.location.latitude,
+      lng: listing.location.longitude
     }
-  })
+  }
+
+  return {
+    ...listing,
+    lat: listing.property.address.location.latitude,
+    lng: listing.property.address.location.longitude
+  }
+}
+
+export const normalizeListingsForMarkers = markers =>
+  markers.filter(marker => marker.location || marker.property).map(normalizeListingLocation)
 
 const setCssPosition = buildings => {
   buildings.forEach((building, i) => {
@@ -84,3 +86,19 @@ export const generatePointsFromBounds = bounds => [
     longitude: bounds.ne.lng
   }
 ]
+
+export const getBounds = (bounds) => {
+  if (bounds == null) {
+    return {}
+  }
+
+  const northEast = bounds.getNorthEast()
+  const southWest = bounds.getSouthWest()
+
+  const nw = { lat: northEast.lat(), lng: southWest.lng() }
+  const sw = { lat: southWest.lat(), lng: southWest.lng() }
+  const se = { lat: southWest.lat(), lng: northEast.lng() }
+  const ne = { lat: northEast.lat(), lng: northEast.lng() }
+
+  return { nw, sw, se, ne }
+}

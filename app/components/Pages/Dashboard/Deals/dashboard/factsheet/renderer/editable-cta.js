@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import ToolTip from '../../../../../../../views/components/tooltip/index'
 import ActionButton from 'components/Button/ActionButton'
@@ -6,7 +7,7 @@ import IconButton from 'components/Button/IconButton'
 import { primary } from 'views/utils/colors'
 import { grey } from '../../../../../../../views/utils/colors'
 
-const EditButton = ActionButton.extend`
+const EditButton = styled(ActionButton)`
   padding: 0 0.5rem;
   ${({ hide }) =>
     hide &&
@@ -15,7 +16,7 @@ const EditButton = ActionButton.extend`
     `};
 `
 
-const DeleteButton = IconButton.extend`
+const DeleteButton = styled(IconButton)`
   padding: 0;
   color: ${grey.A600};
   &:hover {

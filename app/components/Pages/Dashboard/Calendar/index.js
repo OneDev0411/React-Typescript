@@ -2,40 +2,37 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { batchActions } from 'redux-batched-actions'
 import { browserHistory } from 'react-router'
-
 import moment from 'moment'
 import _ from 'underscore'
+import styled from 'styled-components'
+import Flex from 'styled-flex-component'
+
+import PopOver from 'components/Popover'
 
 import { getStartRange, getEndRange } from '../../../../reducers/calendar'
-
 import {
   getCalendar,
   setDate,
-  resetCalendar
+  resetCalendar,
+  setCalendarFilter
 } from '../../../../store_actions/calendar'
-
 import {
   createDateRange,
   createPastRange,
   createFutureRange
 } from '../../../../models/Calendar/helpers/create-date-range'
-
 import {
   Container,
   Menu,
   Trigger,
   Content
 } from '../../../../views/components/SlideMenu'
-
 import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
 import { EventDrawer } from '../../../../views/components/EventDrawer'
-
 import CalendarTable from './Table'
-import CalendarFilter from './Filter'
-
-import { MenuContainer } from './styled'
-
+import CalendarFilter from '../../../../views/components/Filter'
+import { MenuContainer, FilterContainer } from './styled'
 import ActionButton from '../../../../views/components/Button/ActionButton'
 import { getActiveTeamACL } from '../../../../utils/user-teams'
 
@@ -44,6 +41,19 @@ const LOADING_POSITIONS = {
   Bottom: 1,
   Middle: 2
 }
+
+const CalendarExport = styled(ActionButton)`
+  position: absolute;
+  bottom: 0;
+  margin: auto;
+  left: 50%;
+  transform: translateX(-50%);
+`
+
+const PopOverImage = styled.img`
+  width: 40px;
+  height: 40px;
+`
 
 class CalendarContainer extends React.Component {
   state = {
@@ -169,6 +179,7 @@ class CalendarContainer extends React.Component {
   }
 
   handleFilterChange = filter => {
+    this.props.setCalendarFilter(filter)
     this.setLoadingPosition(LOADING_POSITIONS.Middle)
     this.restartCalendar(this.selectedDate, filter)
   }
@@ -284,6 +295,34 @@ class CalendarContainer extends React.Component {
               onChange={this.handleDateChange}
               // modifiers={this.SelectedRange}
             />
+
+            <PopOver
+              popoverStyles={{ width: '250px', textAlign: 'center' }}
+              trigger="click"
+              caption={
+                <div>
+                  <div>
+                    Take your Rechat calendar events with you. Export them to
+                    other calendars like Outlook, Google, iCal and more
+                  </div>
+                  <Flex style={{ marginTop: '1rem' }} justifyAround>
+                    <PopOverImage src="/static/images/Calendar/outlook.png" />
+                    <PopOverImage src="/static/images/Calendar/gcal.png" />
+                    <PopOverImage src="/static/images/Calendar/ical.png" />
+                  </Flex>
+                </div>
+              }
+            >
+              <CalendarExport
+                noBorder
+                appearance="outline"
+                onClick={() => {
+                  browserHistory.push('/dashboard/account/exportCalendar')
+                }}
+              >
+                Calendar Export
+              </CalendarExport>
+            </PopOver>
           </MenuContainer>
         </Menu>
 
@@ -300,9 +339,12 @@ class CalendarContainer extends React.Component {
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
-
-          <CalendarFilter onChange={this.handleFilterChange} />
-
+          <FilterContainer>
+            <CalendarFilter
+              onChange={this.handleFilterChange}
+              filter={this.props.filter}
+            />
+          </FilterContainer>
           <div style={{ position: 'relative' }}>
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
@@ -342,6 +384,7 @@ export default connect(
   {
     getCalendar,
     setDate,
-    resetCalendar
+    resetCalendar,
+    setCalendarFilter
   }
 )(CalendarContainer)
