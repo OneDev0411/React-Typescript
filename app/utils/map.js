@@ -87,13 +87,9 @@ export const generatePointsFromBounds = bounds => [
   }
 ]
 
-export const getBounds = (bounds, shortName = false) => {
+export const getBounds = (bounds) => {
   if (bounds == null) {
     return {}
-  }
-
-  if (!shortName) {
-    return bounds.toJSON()
   }
 
   const northEast = bounds.getNorthEast()

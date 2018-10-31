@@ -26,13 +26,11 @@ import {
 } from '../../../../../../../store_actions/listings/search/set-type'
 import IconClose from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
 import Loading from '../../../../../../../views/components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
-
 import {
   getStatusColor,
   getListingAddressObj,
   getListingAddress
 } from '../../../../../../../utils/listing'
-
 import {
   ListContainer,
   Input,
@@ -122,7 +120,9 @@ class MlsAutocompleteSearch extends Component {
             points
           })
         ),
-        dispatch(setMapProps({ center, zoom, bounds: getBounds(bounds) }))
+        dispatch(
+          setMapProps('search', { center, zoom, bounds: getBounds(bounds) })
+        )
       ])
     }
 
