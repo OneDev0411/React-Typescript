@@ -296,7 +296,7 @@ class App extends Component {
         firefox: '>60'
       })
 
-      if (!isValidBrowser) {
+      if (isValidBrowser === false) {
         let downloadLink
 
         switch (browserInfo.name) {
