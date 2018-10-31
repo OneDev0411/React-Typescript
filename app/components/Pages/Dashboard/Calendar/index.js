@@ -2,44 +2,37 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { batchActions } from 'redux-batched-actions'
 import { browserHistory } from 'react-router'
-
 import moment from 'moment'
 import _ from 'underscore'
-
 import styled from 'styled-components'
-import PopOver from 'components/Popover'
 import Flex from 'styled-flex-component'
-import { getStartRange, getEndRange } from '../../../../reducers/calendar'
 
+import PopOver from 'components/Popover'
+
+import { getStartRange, getEndRange } from '../../../../reducers/calendar'
 import {
   getCalendar,
   setDate,
   resetCalendar,
   setCalendarFilter
 } from '../../../../store_actions/calendar'
-
 import {
   createDateRange,
   createPastRange,
   createFutureRange
 } from '../../../../models/Calendar/helpers/create-date-range'
-
 import {
   Container,
   Menu,
   Trigger,
   Content
 } from '../../../../views/components/SlideMenu'
-
 import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
 import { EventDrawer } from '../../../../views/components/EventDrawer'
-
 import CalendarTable from './Table'
 import CalendarFilter from '../../../../views/components/Filter'
-
-import { MenuContainer } from './styled'
-
+import { MenuContainer, FilterContainer } from './styled'
 import ActionButton from '../../../../views/components/Button/ActionButton'
 import { getActiveTeamACL } from '../../../../utils/user-teams'
 
@@ -346,12 +339,12 @@ class CalendarContainer extends React.Component {
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
-
-          <CalendarFilter
-            onChange={this.handleFilterChange}
-            filter={this.props.filter}
-          />
-
+          <FilterContainer>
+            <CalendarFilter
+              onChange={this.handleFilterChange}
+              filter={this.props.filter}
+            />
+          </FilterContainer>
           <div style={{ position: 'relative' }}>
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
