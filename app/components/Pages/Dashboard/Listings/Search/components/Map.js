@@ -240,19 +240,18 @@ const mapHOC = compose(
 
       if (drawingPoints.length > 0) {
         shape.setMap(googleMap)
+        fitBoundsByPoints(
+          drawingPoints.map(({ latitude: lat, longitude: lng }) => ({
+            lat,
+            lng
+          }))
+        )
       }
 
-      if (markers.length > 0) {
+      if (markers.length > 0 && !map.autoMove) {
         const normalizedMarkers = normalizeListingsForMarkers(markers)
 
-        if (drawingPoints.length > 0) {
-          fitBoundsByPoints(
-            drawingPoints.map(({ latitude: lat, longitude: lng }) => ({
-              lat,
-              lng
-            }))
-          )
-        } else {
+        if (drawingPoints.length === 0) {
           fitBoundsByPoints(normalizedMarkers)
         }
 
@@ -265,7 +264,10 @@ const mapHOC = compose(
       } else {
         setIsInit(true)
         onChange(getMapProps(googleMap))
-        getLocationFromCookies()
+
+        if (!map.autoMove) {
+          getLocationFromCookies()
+        }
       }
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {

@@ -74,18 +74,18 @@ class Search extends React.Component {
   initMap = () => this.setState({ mapWithQueryIsInitialized: true })
 
   fetchDallasListings = async () => {
-    const { dispatch, queryOptions } = this.props
+    const { dispatch, filterOptions } = this.props
 
     dispatch(
       getListingsByValert({
-        ...queryOptions,
+        ...filterOptions,
         limit: 200
       })
     )
 
     const bounds = new window.google.maps.LatLngBounds()
 
-    queryOptions.points.forEach(({ latitude: lat, longitude: lng }) =>
+    filterOptions.points.forEach(({ latitude: lat, longitude: lng }) =>
       bounds.extend({ lat, lng })
     )
 
@@ -124,23 +124,33 @@ class Search extends React.Component {
         return this.initMap()
       }
 
-      const location = await getPlace(address)
+      const place = await getPlace(address, false)
 
-      if (location) {
-        await dispatch(
-          getListingsByValert({
-            ...this.props.queryOptions,
-            limit: 50,
-            points: getMapBoundsInCircle(location.center, 1)
+      const zoom = 16
+      let center = place.geometry.location
+      const { points, bounds } = getMapBoundsInCircle(
+        center,
+        1.61803398875 / 2,
+        true
+      )
+
+      batchActions([
+        dispatch(
+          searchActions.getListings.byValert({
+            ...this.props.filterOptions,
+            limit: 200,
+            points
           })
+        ),
+        dispatch(searchActions.setSearchLocation(center)),
+        dispatch(
+          setMapProps('search', { center, zoom, bounds: getBounds(bounds) })
         )
-      }
+      ])
     } catch (error) {
       console.log(error)
-
-      if (isMapView) {
-        this.initMap()
-      }
+    } finally {
+      this.initMap()
     }
   }
 
@@ -238,7 +248,7 @@ const mapStateToProps = ({ user, search }) => {
   return {
     user,
     isLoggedIn: user || false,
-    queryOptions: search.options,
+    filterOptions: search.options,
     isFetching: listings.isFetching,
     filtersIsOpen: search.filters.isOpen,
     mapCenter: search.map.props.center,
