@@ -57,9 +57,11 @@ import {
   CarouselItem,
   OverlayTrigger
 } from 'react-bootstrap'
+
 import Follow from '../../../../../../views/components/Follow'
 import { listingStatuses } from '../../../../../../constants/listings/listing'
 import { primary } from '../../../../../../views/utils/colors'
+
 import ArrowLeftIcon from 'components/SvgIcons/ArrowLeft/ArrowLeftIcon'
 import ArrowRightIcon from 'components/SvgIcons/ArrowRight/ArrowRightIcon'
 
@@ -69,7 +71,8 @@ const ArrowContainer = styled(Flex)`
   box-shadow: 0 0 28px 0 rgba(0, 0, 0, 0.15), 0 0 10px 0 rgba(0, 0, 0, 0.16);
   background-color: #000000;
   border-radius: 50%;
-  margin: auto;
+  margin-left: ${({ left }) => (left ? '1.5rem' : 'auto')};
+  margin-right: ${({ left }) => (left ? 'auto' : '1.5rem')};
 `
 
 export const fadeIn = node => {
@@ -143,7 +146,7 @@ const ListingDesktopView = ({
   let listing_title
   let bathroom_count
   let prev_icon = (
-    <ArrowContainer center>
+    <ArrowContainer center left>
       <ArrowLeftIcon />
     </ArrowContainer>
   )
