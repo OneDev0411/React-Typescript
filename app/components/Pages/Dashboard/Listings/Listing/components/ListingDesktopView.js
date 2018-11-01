@@ -231,8 +231,9 @@ const ListingDesktopView = ({
       <Carousel
         interval={0}
         indicators={false}
-        prevIcon={prev_icon}
-        nextIcon={next_icon}
+        slide={false}
+        prevIcon={gallery_chunks.length > 1 && prev_icon}
+        nextIcon={gallery_chunks.length > 1 && next_icon}
         className="listing-viewer__carousel"
       >
         {gallery_chunks.map((gallery_image_url, i) => (
