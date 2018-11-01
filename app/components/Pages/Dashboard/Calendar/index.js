@@ -34,7 +34,7 @@ import CalendarTable from './Table'
 import CalendarFilter from '../../../../views/components/Filter'
 import { MenuContainer, FilterContainer } from './styled'
 import ActionButton from '../../../../views/components/Button/ActionButton'
-import { getActiveTeamACL } from '../../../../utils/user-teams'
+import { getActiveTeam, getActiveTeamACL } from '../../../../utils/user-teams'
 
 const LOADING_POSITIONS = {
   Top: 0,
@@ -56,11 +56,15 @@ const PopOverImage = styled.img`
 `
 
 class CalendarContainer extends React.Component {
-  state = {
-    isMenuOpen: true,
-    showCreateTaskMenu: false,
-    selectedTaskId: null,
-    loadingPosition: LOADING_POSITIONS.Middle
+  constructor(props) {
+    super(props)
+    this.state = {
+      isMenuOpen: true,
+      showCreateTaskMenu: false,
+      selectedTaskId: null,
+      loadingPosition: LOADING_POSITIONS.Middle
+    }
+    this.isFilterHidden = getActiveTeam(this.props.user).brand.member_count <= 1
   }
 
   componentDidMount() {
@@ -339,12 +343,14 @@ class CalendarContainer extends React.Component {
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
-          <FilterContainer>
-            <CalendarFilter
-              onChange={this.handleFilterChange}
-              filter={this.props.filter}
-            />
-          </FilterContainer>
+          {!this.isFilterHidden && (
+            <FilterContainer>
+              <CalendarFilter
+                onChange={this.handleFilterChange}
+                filter={this.props.filter}
+              />
+            </FilterContainer>
+          )}
           <div style={{ position: 'relative' }}>
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
@@ -356,6 +362,7 @@ class CalendarContainer extends React.Component {
                 onScrollBottom={this.loadNextItems}
                 onSelectTask={this.onClickTask}
                 onRef={this.onTableRef}
+                isFilterHidden={this.isFilterHidden}
               />
             </div>
           </div>
