@@ -1,10 +1,7 @@
-// import { setTime } from '../../../../../../utils/set-time'
-import { getReminderValue } from './get-reminder-value'
-
 /**
  * Format form data for api Event model
  * @param {object} values The form values
- * @returns {object} a formated event object
+ * @returns {object} a formated crm_event object
  */
 export async function preSaveFormat(values) {
   const {
@@ -16,33 +13,37 @@ export async function preSaveFormat(values) {
     associations
   } = values
 
-  const due_date = dueDate.getTime() / 1000
+  const dueDateTimestamp = dueDate.getTime()
 
-  const event = {
-    title,
-    due_date,
+  const crm_event = {
+    assignees: assignees.map(a => a.id),
+    due_date: dueDateTimestamp / 1000,
+    status: 'DONE',
     task_type: task_type.value,
-    assignees: assignees.map(a => a.id)
+    title
   }
 
-  const reminderDate = getReminderValue(reminder.value, dueDate)
-
-  if (reminderDate != null) {
-    event.reminders = [
+  if (
+    reminder.value != null &&
+    dueDateTimestamp >= dueDateTimestamp - reminder.value
+  ) {
+    crm_event.reminders = [
       {
         is_relative: true,
-        timestamp: reminderDate.getTime() / 1000
+        timestamp: (dueDateTimestamp - reminder.value) / 1000
       }
     ]
+
+    crm_event.status = 'PENDING'
   }
 
   if (Array.isArray(associations) && associations.length > 0) {
-    event.associations = []
+    crm_event.associations = []
     associations.forEach(item => {
       const { association_type } = item
 
       if (association_type) {
-        event.associations.push({
+        crm_event.associations.push({
           association_type,
           [association_type]: item[association_type].id
         })
@@ -50,5 +51,5 @@ export async function preSaveFormat(values) {
     })
   }
 
-  return event
+  return crm_event
 }
