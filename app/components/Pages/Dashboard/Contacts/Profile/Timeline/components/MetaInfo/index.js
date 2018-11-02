@@ -5,7 +5,7 @@ import Flex from 'styled-flex-component'
 import { Divider } from '../../../../../../../../views/components/Divider'
 import IconBell from '../../../../../../../../views/components/SvgIcons/Bell/IconBell'
 import { eventTypesIcons } from '../../../../../../../../views/utils/event-types-icons'
-import { getReminderLabel } from '../../../../../../../../views/CRM/Tasks/components/NewTask/helpers/get-reminder-label'
+import { getReminderLabel } from '../../../../../../../../views/utils/reminder'
 
 export function MetaInfo(props) {
   const { task } = props

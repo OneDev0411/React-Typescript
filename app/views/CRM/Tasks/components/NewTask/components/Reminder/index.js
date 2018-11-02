@@ -2,7 +2,7 @@ import React from 'react'
 import { Field } from 'react-final-form'
 
 import { Dropdown } from '../../../../../../components/Dropdown'
-import { REMINDER_ITEMS } from '../../../../../../utils/reminder-items'
+import { REMINDER_ITEMS } from '../../../../../../utils/reminder'
 import IconBell from '../../../../../../components/SvgIcons/Bell/IconBell'
 
 import { DropButton, IconDrop } from '../../styled'
