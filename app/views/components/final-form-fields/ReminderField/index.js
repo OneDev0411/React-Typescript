@@ -1,13 +1,13 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 
-import { Dropdown } from '../../../../../../components/Dropdown'
-import { REMINDER_ITEMS } from '../../../../../../utils/reminder'
-import IconBell from '../../../../../../components/SvgIcons/Bell/IconBell'
+import { Dropdown } from 'components/Dropdown'
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
+import IconBell from 'components/SvgIcons/Bell/IconBell'
 
-import { DropButton, IconDrop } from '../../styled'
+import { DropButton, IconDrop } from './styled'
 
-export function Reminder(props) {
+export function ReminderField(props) {
   const dueDateTimestamp = new Date(props.dueDate).getTime()
   const now = new Date().getTime()
 
@@ -21,10 +21,11 @@ export function Reminder(props) {
       render={({ input }) => (
         <Dropdown
           input={input}
-          items={REMINDER_ITEMS.filter(
+          items={REMINDER_DROPDOWN_OPTIONS.filter(
             ({ value }) => value == null || value <= dueDateTimestamp - now
           )}
           fullHeight
+          pullRight
           buttonRenderer={props => (
             <DropButton {...props} inverse style={{ paddingLeft: 0 }}>
               <IconBell />

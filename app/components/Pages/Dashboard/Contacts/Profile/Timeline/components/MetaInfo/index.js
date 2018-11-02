@@ -23,6 +23,7 @@ export function MetaInfo(props) {
   }
 
   const showReminder =
+    task.status !== 'DONE' &&
     reminders &&
     reminders.length > 0 &&
     task.reminders[0].timestamp * 1000 > new Date().getTime() - 24 * 3600000

@@ -7,7 +7,10 @@ import { createTask } from '../../../../../models/tasks/create-task'
 
 import { EventDrawer } from '../../../../components/EventDrawer'
 import ActionButton from '../../../../components/Button/ActionButton'
-import { DateTimeField } from '../../../../components/final-form-fields/DateTimeField'
+import {
+  DateTimeField,
+  ReminderField
+} from '../../../../components/final-form-fields'
 
 import LoadSaveReinitializeForm from '../../../../utils/LoadSaveReinitializeForm'
 
@@ -15,7 +18,6 @@ import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
-import { Reminder } from './components/Reminder'
 import { TaskType } from './components/TaskType'
 import { AssociationsButtons } from './components/AssociationsButtons'
 import { AssociationsList } from './components/AssociationsList'
@@ -102,7 +104,7 @@ export default class Task extends Component {
                             name="dueDate"
                             selectedDate={values.dueDate}
                           />
-                          <Reminder dueDate={values.dueDate} />
+                          <ReminderField dueDate={values.dueDate} />
                         </FieldContainer>
                       </Flex>
                       <AssociationsList

@@ -1,5 +1,6 @@
+import { getReminderItem } from 'views/utils/reminder'
+
 import { getAssociations } from '../../../EventDrawer/helpers/get-associations'
-import { getReminderLabel } from '../../../EventDrawer/helpers/get-reminder-label'
 import { normalizeListing } from '../../../../utils/association-normalizers'
 import { addressTitle } from '../../../../../utils/listing'
 
@@ -11,11 +12,9 @@ import { addressTitle } from '../../../../../utils/listing'
  * @returns {Promise} a formated Task
  */
 export async function postLoadFormat(task, owner, listing) {
-  const REMINDER_DEFAULT_LABEL = '15 Minutes Before'
-
   let reminder = {
-    title: REMINDER_DEFAULT_LABEL,
-    value: REMINDER_DEFAULT_LABEL
+    title: 'None',
+    value: null
   }
 
   let location = {
@@ -40,16 +39,12 @@ export async function postLoadFormat(task, owner, listing) {
   const { reminders, due_date } = task
   const dueDate = due_date * 1000
 
-  if (
-    Array.isArray(reminders) &&
-    reminders.length > 0 &&
-    reminders[reminders.length - 1].timestamp
-  ) {
+  if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]
 
-    const title = getReminderLabel(dueDate, timestamp * 1000)
-
-    reminder = { title, value: title }
+    if (timestamp && timestamp * 1000 > new Date().getTime()) {
+      reminder = getReminderItem(dueDate, timestamp * 1000)
+    }
   }
 
   if (task.assignees == null) {
