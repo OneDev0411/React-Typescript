@@ -10,6 +10,8 @@ import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
 
+const buttonStyle = { padding: 0, height: 'auto', lineHeight: 1 }
+
 export class Grid extends React.Component {
   state = {
     selectedAgent: null
@@ -68,6 +70,7 @@ export class Grid extends React.Component {
         agent.asListing.length > 0 ? (
           <Button
             appearance="link"
+            style={buttonStyle}
             onClick={() => this.onSelectAgent(agent, 'asListing')}
           >
             {agent.asListing.length}
@@ -84,6 +87,7 @@ export class Grid extends React.Component {
         agent.asBuyers.length > 0 ? (
           <Button
             appearance="link"
+            style={buttonStyle}
             onClick={() => this.onSelectAgent(agent, 'asBuyers')}
           >
             {agent.asBuyers.length}
