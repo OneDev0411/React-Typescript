@@ -5,6 +5,7 @@ export const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  text-align: center;
   width: 3rem;
   border-radius: 3px;
   background-color: ${primary};
@@ -21,7 +22,7 @@ export const MenuItem = styled.div`
     color: #fff;
     font-size: 1.5rem;
     :hover {
-      color: #000;
+      color: #d4d4d4;
     }
   }
 `

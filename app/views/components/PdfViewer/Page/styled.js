@@ -5,6 +5,7 @@ export const PageNumber = styled.div`
   margin-top: 0.5rem;
   color: rgba(0, 0, 0, 0.8);
   text-decoration: underline;
+  text-align: center;
 `
 
 export const Container = styled.div`
