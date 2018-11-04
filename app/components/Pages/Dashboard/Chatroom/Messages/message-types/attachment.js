@@ -4,7 +4,7 @@ import moment from 'moment'
 import Lightbox from 'react-images'
 
 import IconAttachment from 'components/SvgIcons/Attachment/IconAttacment'
-import PdfModal from '../../../../../Partials/Pdf/Modal'
+import { PdfViewerModal } from 'components/PdfViewer/Modal'
 
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 
@@ -14,10 +14,7 @@ export default ({ comment, attachments, openFilesInNewTab }) => (
 
     <div className="list">
       <ImageAttachments attachments={attachments} />
-      <PdfAttachments
-        attachments={attachments}
-        openFilesInNewTab={openFilesInNewTab}
-      />
+      <PdfAttachments attachments={attachments} openFilesInNewTab={false} />
       <UnknownAttachments attachments={attachments} />
     </div>
   </div>
@@ -132,14 +129,11 @@ class PdfAttachments extends React.Component {
 
     return (
       <div className="inline">
-        <PdfModal
-          file={{
-            type: 'pdf',
-            name: truncateTextFromMiddle(selectedFile.name),
-            src: selectedFile.src
-          }}
-          isActive={showViewer}
-          onCloseHandler={() => this.setState({ showViewer: false })}
+        <PdfViewerModal
+          title={truncateTextFromMiddle(selectedFile.name)}
+          url={selectedFile.src}
+          isOpen={showViewer}
+          onClose={() => this.setState({ showViewer: false })}
         />
 
         {pdfs.map((file, key) => (
