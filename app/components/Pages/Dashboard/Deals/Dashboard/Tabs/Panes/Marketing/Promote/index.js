@@ -1,6 +1,6 @@
 import React from 'react'
 
-import SendDealPromotion from 'components/InstantMarketing/components/SendDealPromotion'
+import SendDealPromotion from 'components/InstantMarketing/adapters/SendDealPromotion'
 
 import {
   Container,
