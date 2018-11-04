@@ -12,7 +12,7 @@ import NoSearchResults from '../../../../../Partials/no-search-results'
 import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
-import SendMlsListingCard from 'components/InstantMarketing/Flows/SendMlsListingCard'
+import SendMlsListingCard from 'components/InstantMarketing/components/SendMlsListingCard'
 
 import TagsOverlay from '../../components/TagsOverlay'
 

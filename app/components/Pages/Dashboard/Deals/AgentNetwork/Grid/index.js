@@ -3,7 +3,7 @@ import React from 'react'
 import Loading from 'components/Spinner'
 import Table from 'components/Grid/Table'
 import Button from 'components/Button/ActionButton'
-import SendDealPromotionCard from 'components/InstantMarketing/Flows/SendDealPromotion'
+import SendDealPromotionCard from 'components/InstantMarketing/components/SendDealPromotion'
 
 import { Name } from './columns/Name'
 import { Company } from './columns/Company'

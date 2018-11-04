@@ -41,15 +41,17 @@ class SendDealPromotion extends React.Component {
     }))
 
   handleSaveMarketingCard = async template => {
-    this.toggleInstantMarketingBuilder()
-    this.generatePreviewImage(template)
+    alert('>>>>>')
 
-    this.setState({
-      isComposeEmailOpen: true,
-      isInstantMarketingBuilderOpen: true,
-      htmlTemplate: template.result,
-      templateScreenshot: null
-    })
+    // this.toggleInstantMarketingBuilder()
+    // this.generatePreviewImage(template)
+
+    // this.setState({
+    //   isComposeEmailOpen: true,
+    //   isInstantMarketingBuilderOpen: true,
+    //   htmlTemplate: template.result,
+    //   templateScreenshot: null
+    // })
   }
 
   handleSendEmails = async values => {
@@ -113,7 +115,7 @@ class SendDealPromotion extends React.Component {
     return (
       <Fragment>
         <ActionButton
-          appearance="primary"
+          appearance="outline"
           style={this.props.buttonStyle}
           onClick={this.toggleInstantMarketingBuilder}
         >
@@ -132,7 +134,7 @@ class SendDealPromotion extends React.Component {
         <Compose
           isOpen={this.state.isComposeEmailOpen}
           onClose={this.toggleComposeEmail}
-          recipients={this.props.recipients}
+          recipients={this.Recipients}
           html={this.state.templateScreenshot}
           onClickSend={this.handleSendEmails}
           isSubmitting={this.state.isSendingEmail}

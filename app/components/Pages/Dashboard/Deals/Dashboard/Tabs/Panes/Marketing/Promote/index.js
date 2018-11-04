@@ -1,8 +1,6 @@
 import React from 'react'
 
-import ActionButton from 'components/Button/ActionButton'
-import { CreateOpenHouse } from 'components/open-house/CreateOpenHouse'
-import SendDealPromotion from 'components/InstantMarketing/Flows/SendDealPromotion'
+import SendDealPromotion from 'components/InstantMarketing/components/SendDealPromotion'
 
 import {
   Container,

@@ -15,7 +15,7 @@ import Fetching from './Fetching'
 import EventIcon from './EventIcon'
 import { primary } from 'views/utils/colors'
 
-import SendContactCard from 'components/InstantMarketing/Flows/SendContactCard'
+import SendContactCard from 'components/InstantMarketing/components/SendContactCard'
 import { grey } from '../../../../../views/utils/colors'
 
 export class Table extends React.Component {
