@@ -14,7 +14,10 @@ export default ({ comment, attachments, openFilesInNewTab }) => (
 
     <div className="list">
       <ImageAttachments attachments={attachments} />
-      <PdfAttachments attachments={attachments} openFilesInNewTab={false} />
+      <PdfAttachments
+        attachments={attachments}
+        openFilesInNewTab={openFilesInNewTab}
+      />
       <UnknownAttachments attachments={attachments} />
     </div>
   </div>
