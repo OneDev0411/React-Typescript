@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import { browserHistory } from 'react-router'
 
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
@@ -143,6 +144,9 @@ class FileViewer extends React.Component {
     return this.props.params.entityType || 'digital-form'
   }
 
+  handleBackButton = () =>
+    browserHistory.push(`/dashboard/deals/${this.props.deal.id}`)
+
   render() {
     const file = this.getFile()
     const isEnvelopeView = this.EntityType === 'envelope'
@@ -157,6 +161,7 @@ class FileViewer extends React.Component {
           isCommentsOpen={this.state.isCommentsOpen}
           onToggleFactsheet={this.toggleShowFactsheet}
           onToggleComments={this.toggleShowComments}
+          onClickBackButton={this.handleBackButton}
         />
 
         <PageContainer>

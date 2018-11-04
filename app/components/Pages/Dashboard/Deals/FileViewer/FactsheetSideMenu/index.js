@@ -10,7 +10,7 @@ export class FactsheetSideMenu extends React.Component {
     }
 
     return (
-      <SideMenu width="21rem" isOpen>
+      <SideMenu width="23rem" isOpen>
         <FactsheetsNav
           deal={this.props.deal}
           isBackOffice={this.props.isBackOffice}
