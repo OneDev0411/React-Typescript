@@ -14,7 +14,7 @@ export function ListingsListViewDrawer(props) {
     <Drawer isOpen={props.isOpen} onClose={props.onClose} showFooter={false}>
       <Drawer.Header title={props.title} />
       <Drawer.Body>
-        <div style={{ padding: '1.5em' }}>
+        <div style={{ padding: '1.5em 0' }}>
           {props.listings.map(listing => (
             <ListingCard listing={listing} key={listing.id} />
           ))}
