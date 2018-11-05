@@ -111,7 +111,7 @@ export class MapViewContainer extends React.Component {
 export const MapView = compose(
   withState('sortBy', 'changeSortBy', {
     index: 'price',
-    isDescending: false
+    isDescending: true
   }),
   withPropsOnChange(
     (props, nextProps) =>

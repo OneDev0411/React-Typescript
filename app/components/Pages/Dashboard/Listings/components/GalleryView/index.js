@@ -12,7 +12,7 @@ export class GalleryView extends React.Component {
   state = {
     sortBy: {
       index: 'price',
-      isDescending: false
+      isDescending: true
     }
   }
 
