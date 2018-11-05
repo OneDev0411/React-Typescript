@@ -28,26 +28,24 @@ import {
 
 class EnvelopeSideMenu extends React.Component {
   state = {
-    isResending: false
+    isResending: false,
+    isVoiding: false
   }
 
   resendDocs = async () => {
-    const { envelope } = this.props
-    const { notify } = this.props
-
     this.setState({
       isResending: true
     })
 
     // resending docs
     try {
-      await Deal.resendEnvelope(envelope.id)
-      notify({
+      await Deal.resendEnvelope(this.props.envelope.id)
+      this.props.notify({
         message: 'eSignature has resent',
         status: 'success'
       })
     } catch (e) {
-      notify({
+      this.props.notify({
         message: 'Could not resend eSignature, please try again',
         status: 'error'
       })
@@ -56,6 +54,32 @@ class EnvelopeSideMenu extends React.Component {
     this.setState({
       isResending: false
     })
+  }
+
+  requestVoidEnvelope = () =>
+    this.props.confirmation({
+      message: 'Once you void this form you cannot edit or send for signatures',
+      confirmLabel: 'Void',
+      onConfirm: this.voidEnvelope
+    })
+
+  voidEnvelope = async () => {
+    this.setState({
+      isVoiding: true
+    })
+
+    try {
+      await this.props.voidEnvelope(this.props.deal.id, this.props.envelope.id)
+
+      this.setState({
+        isVoiding: false
+      })
+    } catch (e) {
+      this.props.notify({
+        message: 'Can not void this eSign',
+        status: 'error'
+      })
+    }
   }
 
   render() {
@@ -68,6 +92,7 @@ class EnvelopeSideMenu extends React.Component {
 
     const isDraft = envelope.status === 'Created'
     const isSent = envelope.status === 'Sent'
+    const isVoided = envelope.status === 'Voided'
 
     return (
       <SideMenu width="35rem" isOpen style={{ marginRight: 0 }}>
@@ -100,8 +125,13 @@ class EnvelopeSideMenu extends React.Component {
                 </LinkButton>
               )}
 
-              <ActionButton size="small" appearance="outline">
-                Void
+              <ActionButton
+                size="small"
+                appearance="outline"
+                disabled={isVoided || this.state.isVoiding}
+                onClick={this.requestVoidEnvelope}
+              >
+                {isVoided ? 'Voided' : 'Void'}
               </ActionButton>
             </div>
           </Header>
