@@ -211,6 +211,16 @@ class MlsAutocompleteSearch extends Component {
 
   handleClose = () => this.setState({ isOpen: false })
 
+  handleInputFocus = () => {
+    if (this.state.input && !this.state.isOpen) {
+      if (this.state.listings.length > 0 || this.state.places.length > 0) {
+        this.setState({ isOpen: true })
+      } else {
+        this.search(this.state.input)
+      }
+    }
+  }
+
   handleSelectedItem = item => {
     this.setState({ input: item.description })
 
@@ -270,6 +280,7 @@ class MlsAutocompleteSearch extends Component {
                 <Input
                   value={this.state.input}
                   onChange={this.handleChangeInput}
+                  onFocus={this.handleInputFocus}
                   placeholder="Search location or MLS#"
                 />
                 {isOpen && (
