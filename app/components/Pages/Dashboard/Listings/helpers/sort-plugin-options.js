@@ -3,8 +3,6 @@ export const sortOptions = {
   columns: [
     { label: 'Price (High-Low)', value: 'price' },
     { label: 'Price (Low-High)', value: '-price' },
-    { label: 'Distance (High-Low)', value: 'distanceFromCenter' },
-    { label: 'Distance (Low-High)', value: '-distanceFromCenter' },
     { label: 'Bedrooms (High-Low)', value: 'beds' },
     { label: 'Bedrooms (Low-High)', value: '-beds' },
     { label: 'Bathrooms (High-Low)', value: 'baths' },

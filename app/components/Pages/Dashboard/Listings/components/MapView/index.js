@@ -97,7 +97,12 @@ export class MapViewContainer extends React.Component {
             getTdProps={() => ({ style: { padding: 0 } })}
             plugins={{
               sortable: {
-                ...sortOptions,
+                columns: [
+                  ...sortOptions.columns,
+                  { label: 'Distance (High-Low)', value: 'distanceFromCenter' },
+                  { label: 'Distance (Low-High)', value: '-distanceFromCenter' }
+                ],
+                defaultIndex: sortOptions.defaultIndex,
                 onChange: this.onChangeSort
               }
             }}
