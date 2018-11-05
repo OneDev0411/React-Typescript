@@ -13,7 +13,7 @@ import { selectContact } from '../../../../../reducers/contacts/list'
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
-import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
+import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get-template-preview-image'
 
 import ActionButton from 'components/Button/ActionButton'
 

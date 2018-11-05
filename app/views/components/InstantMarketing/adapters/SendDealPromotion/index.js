@@ -10,8 +10,9 @@ import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
 import Listing from 'models/listings/listing'
 import Compose from 'components/EmailCompose'
+import { SocialModal } from '../../components/SocialModal'
 
-import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
+import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
@@ -19,6 +20,7 @@ const initialState = {
   listing: null,
   isInstantMarketingBuilderOpen: false,
   isComposeEmailOpen: false,
+  isSocialModalOpen: false,
   htmlTemplate: '',
   templateScreenshot: null
 }
@@ -40,8 +42,11 @@ class SendDealPromotion extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  handleSaveMarketingCard = async template => {
-    alert('>>>>>')
+  handleSaveMarketingCard = template => {
+    this.setState({
+      htmlTemplate: template,
+      isSocialModalOpen: true
+    })
 
     // this.toggleInstantMarketingBuilder()
     // this.generatePreviewImage(template)
@@ -49,7 +54,7 @@ class SendDealPromotion extends React.Component {
     // this.setState({
     //   isComposeEmailOpen: true,
     //   isInstantMarketingBuilderOpen: true,
-    //   htmlTemplate: template.result,
+    //   htmlTemplate: template,
     //   templateScreenshot: null
     // })
   }
@@ -62,7 +67,7 @@ class SendDealPromotion extends React.Component {
     const emails = values.recipients.map(recipient => ({
       to: recipient.email,
       subject: values.subject,
-      html: this.state.htmlTemplate,
+      html: this.state.htmlTemplate.result,
       contact: recipient.contactId
     }))
 
@@ -139,6 +144,10 @@ class SendDealPromotion extends React.Component {
           onClickSend={this.handleSendEmails}
           isSubmitting={this.state.isSendingEmail}
         />
+
+        {this.state.isSocialModalOpen && (
+          <SocialModal template={this.state.htmlTemplate} />
+        )}
       </Fragment>
     )
   }

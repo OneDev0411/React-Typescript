@@ -14,7 +14,7 @@ import Compose from 'components/EmailCompose'
 
 import { getContact } from 'models/contacts/get-contact'
 
-import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
+import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get-template-preview-image'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
