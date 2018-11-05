@@ -53,6 +53,10 @@ class MlsAutocompleteSearch extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
+    if (props.drawing.points.length > 4) {
+      return { input: '' }
+    }
+
     if (!state.input && !state.isDrity && props.searchInput !== state.input) {
       return { input: props.searchInput }
     }
