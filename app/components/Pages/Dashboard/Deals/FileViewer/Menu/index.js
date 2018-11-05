@@ -18,8 +18,10 @@ export function Menu(props) {
         >
           <BackIcon />
         </IconButton>
+
         {props.title}
       </Title>
+
       <Actions>
         {props.showFactsheetButton && (
           <ActionButton appearance="outline" onClick={props.onToggleFactsheet}>

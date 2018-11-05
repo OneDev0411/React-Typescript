@@ -18,6 +18,7 @@ import {
   Container,
   Header,
   Title,
+  TitleContainer,
   WhoSignedContainer,
   WhoSignedHeader,
   WhoSignedRow,
@@ -30,8 +31,31 @@ class EnvelopeSideMenu extends React.Component {
     isResending: false
   }
 
-  resendDocs = () => {
+  resendDocs = async () => {
     const { envelope } = this.props
+    const { notify } = this.props
+
+    this.setState({
+      isResending: true
+    })
+
+    // resending docs
+    try {
+      await Deal.resendEnvelope(envelope.id)
+      notify({
+        message: 'eSignature has resent',
+        status: 'success'
+      })
+    } catch (e) {
+      notify({
+        message: 'Could not resend eSignature, please try again',
+        status: 'error'
+      })
+    }
+
+    this.setState({
+      isResending: false
+    })
   }
 
   render() {
@@ -96,7 +120,7 @@ class EnvelopeSideMenu extends React.Component {
                     size={30}
                   />
 
-                  <div>
+                  <TitleContainer>
                     <RoleName>{getLegalFullName(signer.role)}</RoleName>
                     <SignDate>
                       Signed&nbsp;
@@ -104,7 +128,7 @@ class EnvelopeSideMenu extends React.Component {
                         .unix(signer.updated_at)
                         .format('HH:mm A dddd MMM DD, YYYY')}
                     </SignDate>
-                  </div>
+                  </TitleContainer>
                 </WhoSignedRow>
               ))}
             </WhoSignedContainer>
