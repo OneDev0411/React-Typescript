@@ -116,6 +116,10 @@ class SectionWithFields extends React.Component {
       this.props.fieldsOrder
     )
 
+    if (orderedFields.every(f => !f[f.attribute_def.data_type])) {
+      return null
+    }
+
     const fields = orderedFields
       .filter(field => field.attribute_def.show)
       .map((field, index) => {
