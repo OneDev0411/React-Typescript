@@ -28,6 +28,20 @@ import ActionButton from 'components/Button/ActionButton'
 import { H1 } from '../../Typography/headings'
 
 class Builder extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.traits = {
+      link: [
+        {
+          type: 'text',
+          label: 'Link',
+          name: 'href',
+        }
+      ]
+    }
+  }
+
   componentDidMount() {
     this.editor = grapesjs.init({
       ...config,
@@ -113,7 +127,8 @@ class Builder extends React.Component {
 
       model.set({
         draggable: false,
-        droppable: false
+        droppable: false,
+        traits: this.traits[model.get('type')] || []
       })
 
       model.get('components').each(model => updateAll(model))

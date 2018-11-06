@@ -10,7 +10,7 @@ import Tooltip from 'components/tooltip'
 
 export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
   return (
-    <PageHeader isFlat style={{ marginBottom: '1.5em' }}>
+    <PageHeader>
       <PageHeader.Title showBackButton={false}>
         <MenuTrigger
           isExpended={isSideMenuOpen}

@@ -35,6 +35,26 @@
     "import/namespace": 2,
     "import/default": 2,
     "import/export": 2,
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always-and-inside-groups",
+        "groups": [
+          "builtin",
+          "external",
+          // Built-in & external types are first
+          "internal",
+          [
+            "sibling",
+            "parent"
+          ],
+          // Then sibling and parent types. They can be mingled together
+          "index"
+          // Then the index file
+          // Then the rest: internal and external type
+        ]
+      }
+    ],
     "no-new": 0,
     "curly": [
       2,
@@ -46,9 +66,12 @@
         "allowShortCircuit": true
       }
     ],
-    "max-len": [
-      "error",
-      85
+    "max-line-length": [
+      true,
+      {
+        "limit": 85,
+        "ignore-pattern": "^import [^,]+ from"
+      }
     ],
     "comma-dangle": [
       2,
@@ -129,6 +152,7 @@
     "import/extensions": 0,
     "no-useless-constructor": 0,
     "import/prefer-default-export": 0,
+    "react/destructuring-assignment": 0,
     "react/sort-comp": [
       1,
       {

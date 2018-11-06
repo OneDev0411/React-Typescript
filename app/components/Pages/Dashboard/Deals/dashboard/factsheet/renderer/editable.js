@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
@@ -12,11 +13,11 @@ import IconButton from 'components/Button/IconButton'
 import { primary } from 'views/utils/colors'
 import { grey } from '../../../../../../../views/utils/colors'
 
-const SaveButton = ActionButton.extend`
+const SaveButton = styled(ActionButton)`
   padding: 0 0.5rem;
 `
 
-const DeleteButton = IconButton.extend`
+const DeleteButton = styled(IconButton)`
   padding: 0;
   color: ${grey.A600};
   &:hover {

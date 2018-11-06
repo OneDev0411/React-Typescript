@@ -27,7 +27,7 @@ export const TableHeader = styled.div`
   color: ${props => (props.isSelectedDay ? '#ffffff' : '#000')};
 `
 
-export const Title = ALink.extend`
+export const Title = styled(ALink)`
   font-size: 1.25rem;
   font-weight: 500;
   cursor: pointer;

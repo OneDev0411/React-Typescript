@@ -8,7 +8,6 @@ import EmptyState from './empty-state'
 import LoadingState from '../../components/loading-state'
 
 import Address from '../../components/table-columns/address'
-import DealSide from '../../components/table-columns/side'
 import CriticalDate, {
   getNextDateValue
 } from '../../components/table-columns/critical-date'
@@ -27,10 +26,17 @@ class Grid extends React.Component {
       {
         id: 'address',
         header: 'Address',
-        width: '30%',
+        width: '50%',
         verticalAlign: 'center',
         accessor: deal => Deal.get.address(deal, roles),
-        render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
+        render: ({ rowData: deal, totalRows, rowIndex }) => (
+          <Address
+            deal={deal}
+            roles={roles}
+            totalRows={totalRows}
+            rowIndex={rowIndex}
+          />
+        )
       },
       {
         id: 'price',
@@ -40,19 +46,7 @@ class Grid extends React.Component {
         render: ({ rowData: deal }) =>
           Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0)
       },
-      {
-        id: 'side',
-        header: 'Side',
-        accessor: deal => deal.deal_type,
-        render: ({ rowData: deal, totalRows, rowIndex }) => (
-          <DealSide
-            deal={deal}
-            roles={roles}
-            rowId={rowIndex + 1}
-            rowsCount={totalRows}
-          />
-        )
-      },
+
       {
         id: 'critical-dates',
         header: 'Critical Dates',
@@ -89,9 +83,12 @@ class Grid extends React.Component {
   }
 
   getPriceValue = deal => {
-    const field = ['sales_price', 'list_price', 'lease_price'].find(
-      name => Deal.get.field(deal, name) !== null
-    )
+    const field = [
+      'sales_price',
+      'leased_price',
+      'list_price',
+      'lease_price'
+    ].find(name => Deal.get.field(deal, name) !== null)
 
     return Deal.get.field(deal, field)
   }

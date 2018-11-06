@@ -4,7 +4,7 @@ import { grey } from '../../utils/colors'
 import Button from '../Button/IconButton'
 import { merriweatherFamilyStyle } from '../Typography/styles'
 
-export const RemoveButton = Button.extend`
+export const RemoveButton = styled(Button)`
   visibility: hidden;
   margin-left: 0.75em;
 `

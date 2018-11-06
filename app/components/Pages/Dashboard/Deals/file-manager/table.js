@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React, { Fragment } from 'react'
 import Table from 'views/components/Grid/Table'
 import { connect } from 'react-redux'
@@ -26,7 +27,7 @@ import VerticalDotsIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon
 import IconButton from 'components/Button/IconButton'
 import { grey, primary } from '../../../../../views/utils/colors'
 
-const OptionButton = IconButton.extend`
+const OptionButton = styled(IconButton)`
   svg {
     fill: #000000;
   }

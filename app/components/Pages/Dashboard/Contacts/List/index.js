@@ -1,34 +1,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import Flex from 'styled-flex-component'
 
 import { confirmation } from '../../../../../store_actions/confirmation'
-
 import {
   Container as PageContainer,
   Menu as SideMenu,
   Content as PageContent
 } from '../../../../../views/components/SlideMenu'
-
 import SavedSegments from '../../../../../views/components/Grid/SavedSegments/List'
-
 import ContactFilters from './Filters'
 import { Header } from './Header'
 import { SearchContacts } from './Search'
 import Table from './Table'
-
 import { resetGridSelectedItems } from '../../../../../views/components/Grid/Table/Plugins/Selectable'
-
 import {
   selectContacts,
   selectContactsInfo
 } from '../../../../../reducers/contacts/list'
-
 import {
   getContacts,
   searchContacts,
   deleteContacts
 } from '../../../../../store_actions/contacts'
+import UserFilter from '../../../../../views/components/Filter'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -40,7 +36,8 @@ class ContactsList extends React.Component {
       isRowsUpdating: false,
       filter: this.props.filter,
       searchInputValue: this.props.searchInputValue,
-      activeSegment: {}
+      activeSegment: {},
+      users: this.props.listInfo.users || [this.props.user.id]
     }
     this.order = this.props.listInfo.order
   }
@@ -55,7 +52,9 @@ class ContactsList extends React.Component {
     if (
       nextProps.filterSegments.activeSegmentId !==
         this.props.filterSegments.activeSegmentId &&
-      nextProps.filterSegments.activeSegmentId !== this.state.activeSegment.id
+      nextProps.filterSegments.activeSegmentId !==
+        this.state.activeSegment.id &&
+      nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
     ) {
       this.handleChangeSavedSegment(
         nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
@@ -74,17 +73,12 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
-        await this.handleFilterChange(
-          filter,
-          searchInputValue,
-          start,
-          this.order
-        )
+        await this.handleFilterChange(filter, searchInputValue, start)
       } else {
         await this.props.getContacts(start)
       }
     } catch (e) {
-      // todo
+      console.log('fetch contacts error: ', e)
     }
 
     this.setState({ isFetchingContacts: false })
@@ -101,8 +95,14 @@ class ContactsList extends React.Component {
     )
   }
 
-  handleFilterChange = async (filter, searchInputValue, start = 0, order) => {
-    this.setState({ isFetchingContacts: true, filter })
+  handleFilterChange = async (
+    filter,
+    searchInputValue,
+    start = 0,
+    order = this.order,
+    users = this.state.users
+  ) => {
+    this.setState({ isFetchingContacts: true, filter, users })
 
     if (start === 0) {
       this.resetSelectedRows()
@@ -114,10 +114,11 @@ class ContactsList extends React.Component {
         start,
         undefined,
         searchInputValue,
-        order
+        order,
+        users
       )
     } catch (e) {
-      // todo
+      console.log('fetch search error: ', e)
     }
 
     this.setState({ isFetchingContacts: false })
@@ -131,13 +132,21 @@ class ContactsList extends React.Component {
 
   handleChangeOrder = ({ value: order }) => {
     this.order = order
+    this.handleFilterChange(this.state.filter, this.state.searchInputValue)
+  }
+
+  handleChangeUsers = users => {
     this.handleFilterChange(
       this.state.filter,
       this.state.searchInputValue,
       0,
-      order
+      this.order,
+      users
     )
   }
+
+  handleChangeContactsAttributes = () =>
+    this.handleFilterChange(this.state.filter, this.state.searchInputValue)
 
   toggleSideMenu = () =>
     this.setState(state => ({
@@ -162,8 +171,7 @@ class ContactsList extends React.Component {
       await this.handleFilterChange(
         this.state.filter,
         this.state.searchInputValue,
-        startFrom,
-        this.order
+        startFrom
       )
     }
 
@@ -231,15 +239,20 @@ class ContactsList extends React.Component {
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
           />
-
-          <ContactFilters onFilterChange={this.handleFilterChange} />
-
+          <Flex style={{ paddingLeft: '1.5em' }}>
+            <UserFilter
+              onChange={this.handleChangeUsers}
+              filter={this.state.users}
+            />
+            <ContactFilters onFilterChange={this.handleFilterChange} />
+          </Flex>
           <SearchContacts
             onSearch={this.handleSearch}
             isSearching={this.state.isFetchingContacts}
           />
           <Table
             handleChangeOrder={this.handleChangeOrder}
+            handleChangeContactsAttributes={this.handleChangeContactsAttributes}
             data={contacts}
             listInfo={this.props.listInfo}
             isFetching={this.state.isFetchingContacts}

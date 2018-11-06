@@ -20,7 +20,7 @@ export const ListItemName = styled.div`
   padding-right: 0.5em;
 `
 
-export const DeleteButton = IconButton.extend`
+export const DeleteButton = styled(IconButton)`
   opacity: 0;
   visibility: hidden;
   transition: all 0.3 linear;

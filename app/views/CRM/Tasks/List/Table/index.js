@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
@@ -22,7 +23,7 @@ import {
   More
 } from './columns'
 
-const Container = FlexContainer.extend`
+const Container = styled(FlexContainer)`
   background: #f0f4f7;
 `
 

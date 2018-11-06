@@ -1,20 +1,21 @@
 import styled from 'styled-components'
 
-import { primary, grey } from '../../../../../../../views/utils/colors'
+import {
+  primary,
+  grey,
+  borderColor
+} from '../../../../../../../views/utils/colors'
+import Card from '../../../../../../../views/components/Card'
 import IconButton from '../../../../../../../views/components/Button/IconButton'
 import IconSearch from '../../../../../../../views/components/SvgIcons/Search/IconSearch'
-
-export const Form = styled.form`
-  position: relative;
-`
 
 export const Input = styled.input`
   width: 28em;
   height: 3em;
   padding: 0.5em 2.75em 0.5em 2.5em;
   border-radius: 3px;
-  background-color: ${grey.A125};
-  border: solid 1px ${grey.A400};
+  background-color: ${props => (props.value ? '#fff' : grey.A125)};
+  border: solid 1px ${props => (props.value ? primary : grey.A400)};
 
   &:focus {
     outline: none;
@@ -31,15 +32,67 @@ export const Input = styled.input`
     display: none;
   }
 `
-export const SearchIcon = IconSearch.extend`
+export const SearchIcon = styled(IconSearch)`
   position: absolute;
   top: 1em;
   left: 1em;
   fill: ${grey.A900};
 `
 
-export const ClearButton = IconButton.extend`
+export const ClearButton = styled(IconButton)`
   position: absolute;
   top: 0.75em;
   right: 0.75em;
+`
+export const LoadingContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > svg {
+    width: 100%;
+    height: 100%;
+    fill: ${primary};
+  }
+`
+
+export const ListContainer = styled(Card)`
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  width: 100%;
+  z-index: 1;
+`
+
+export const ListTitle = styled.div`
+  color: ${grey.A900};
+  padding: 0.5rem 0;
+  font-weight: 500;
+`
+
+export const Item = styled.div`
+  cursor: default;
+  padding: 0 0.25rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 2rem;
+  border-top: 1px solid ${borderColor};
+  font-size: 0.75rem;
+  color: ${grey.A900};
+
+  .item__query {
+    font-size: 0.875rem;
+    padding-right: 0.25rem;
+    color: #000;
+
+    .item__matched {
+      font-weight: 600;
+    }
+  }
 `

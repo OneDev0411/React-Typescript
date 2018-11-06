@@ -57,7 +57,7 @@ export default class Context extends React.Component {
               bold={appearance.bold}
               color={appearance.color}
               rect={rect}
-              innerRef={ref => (this.container = ref)}
+              ref={ref => (this.container = ref)}
               readOnly={this.props.isReadOnly}
               onClick={() =>
                 !this.props.isReadOnly &&

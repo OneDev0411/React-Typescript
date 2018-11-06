@@ -1,9 +1,10 @@
+import styled from "styled-components"
 import React, { Component } from 'react'
 import ClickOutside from 'react-click-outside'
 import ShadowButton from '../Button/ShadowButton'
 import Card from '../Card'
 
-const ToggleButton = ShadowButton.extend`
+const ToggleButton = styled(ShadowButton)`
   &:focus {
     outline: none;
   }

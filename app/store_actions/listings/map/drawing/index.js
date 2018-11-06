@@ -5,10 +5,17 @@ import getListingsByPolygonPonits from '../../search/get-listings/by-polygon-poi
 const overlayColor = `#${Brand.color('primary', '003bdf')}`
 
 const getPolygonBounds = polygon => {
-  const points = polygon.getPath().b.map(bound => ({
-    latitude: bound.lat(),
-    longitude: bound.lng()
-  }))
+  const points = polygon
+    .getPath()
+    .getArray()
+    .map(a => {
+      const { lat: latitude, lng: longitude } = a.toJSON()
+
+      return {
+        latitude,
+        longitude
+      }
+    })
 
   return [...points, points[0]]
 }
@@ -16,6 +23,8 @@ const getPolygonBounds = polygon => {
 let drawingManager
 
 const setDrawingManager = (dispatch, getState) => {
+  const { google } = window
+
   drawingManager = new google.maps.drawing.DrawingManager({
     drawingControl: false,
     drawingMode: google.maps.drawing.OverlayType.POLYGON,
@@ -39,11 +48,11 @@ const setDrawingManager = (dispatch, getState) => {
       })
     )
     drawingManager.setDrawingMode(null)
-    getListingsByPolygonPonits(points)(dispatch, getState)
+    dispatch(getListingsByPolygonPonits(points))
   })
 }
 
-export const activeDrawing = isDrawing => (dispatch, getState) => {
+export const activeDrawing = () => (dispatch, getState) => {
   dispatch({
     tabName: 'search',
     type: types.ACTIVE_DRAWING
@@ -63,7 +72,7 @@ export const inactiveDrawing = () => dispatch => {
   })
 }
 
-export const removePolygon = polygon => (dispatch, getState) => {
+export const removePolygon = polygon => dispatch => {
   polygon.setMap(null)
 
   dispatch({

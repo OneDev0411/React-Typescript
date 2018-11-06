@@ -1,7 +1,8 @@
+import styled from "styled-components"
 import React from 'react'
 import Flex from 'styled-flex-component'
 
-const Container = Flex.extend`
+const Container = styled(Flex)`
   max-width: 558px;
   padding: 1em 0;
   color: #9c9c9c;

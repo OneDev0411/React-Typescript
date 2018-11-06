@@ -13,14 +13,21 @@ export class CRMTaskItem extends React.Component {
     try {
       this.setState({ disabled: true })
 
-      const updatedEvent = {
-        ...this.props.task,
-        status: this.props.task.status === 'DONE' ? 'PENDING' : 'DONE'
+      const { task } = this.props
+      const status = task.status === 'DONE' ? 'PENDING' : 'DONE'
+
+      const newTask = {
+        ...task,
+        status
       }
 
-      this.props.editCallback(updatedEvent)
+      if (status === 'DONE' && Array.isArray(task.reminders)) {
+        newTask.reminders = []
+      }
 
-      await updateTask(updatedEvent)
+      this.props.editCallback(newTask)
+
+      await updateTask(newTask)
 
       this.setState({ disabled: false })
     } catch (error) {

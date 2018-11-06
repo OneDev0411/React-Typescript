@@ -1,4 +1,4 @@
-const calculatePointsFromBounds = bounds => {
+export const calculatePointsFromBounds = bounds => {
   const sw = bounds.getSouthWest()
   const ne = bounds.getNorthEast()
 
@@ -13,7 +13,7 @@ const calculatePointsFromBounds = bounds => {
   }))
 }
 
-export const getMapBoundsInCircle = (center, radius = 3) => {
+export const getMapBoundsInCircle = (center, radius = 3, returnBound = false) => {
   if (!window.google) {
     throw new Error('Google api not found!')
   }
@@ -27,6 +27,15 @@ export const getMapBoundsInCircle = (center, radius = 3) => {
     radius: radius * 1609.34
   })
 
+  if (returnBound) {
+    const bounds = circle.getBounds()
+
+    return {
+      bounds,
+      points: calculatePointsFromBounds(bounds)
+    }
+  }
+  
   return calculatePointsFromBounds(circle.getBounds())
 }
 

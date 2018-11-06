@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -7,7 +8,7 @@ import { primary, grey } from '../../../../../../../views/utils/colors'
 import MenuIcon from '../../../../../../../views/components/SvgIcons/MoreVert/IconMoreVert'
 import { BasicDropdown } from '../../../../../../../views/components/BasicDropdown'
 
-const Item = Button.extend`
+const Item = styled(Button)`
   color: #000;
 
   &:hover {

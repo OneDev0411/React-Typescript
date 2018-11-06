@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
@@ -10,7 +11,7 @@ import IconContact from '../../../../../../components/SvgIcons/Contacts/IconCont
 import IconListing from '../../../../../../components/SvgIcons/Properties/IconProperties'
 import IconDeal from '../../../../../../components/SvgIcons/Deals/IconDeal'
 
-const Container = Flex.extend`
+const Container = styled(Flex)`
   > div > button {
     margin-right: 1em;
   }

@@ -21,12 +21,11 @@ import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
-import { Reminder } from '../../EventDrawer/components/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { validate } from '../../EventDrawer/helpers/validate'
 import { DateTimeField, AssigneesField } from '../../final-form-fields'
 import { AddAssociationButton } from '../../AddAssociationButton'
-import { AssociationsList } from '../../final-form-fields/AssociationsList'
+import { AssociationsList, ReminderField } from '../../final-form-fields'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { Section } from '../../tour/TourDrawer/components/Section'
@@ -252,7 +251,9 @@ export class OpenHouseDrawer extends React.Component {
                           name="dueDate"
                           selectedDate={values.dueDate}
                         />
-                        <Reminder />
+                        {values.status !== 'DONE' && (
+                          <ReminderField dueDate={values.dueDate} />
+                        )}
                       </FieldContainer>
                     </Section>
 

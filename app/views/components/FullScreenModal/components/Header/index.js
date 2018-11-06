@@ -24,11 +24,11 @@ const Title = styled.h1`
   color: #1e364b;
 `
 
-const CloseButton = ShadowButton.extend`
+const CloseButton = styled(ShadowButton)`
   font-size: 0;
 `
 
-const Icon = CloseIcon.extend`
+const Icon = styled(CloseIcon)`
   fill: #7b91a6;
 
   &:hover: {

@@ -79,7 +79,7 @@ export const FollowButton = styled.div`
     margin-right: 4px;
   }
 `
-export const ArrowButton = ShadowButton.extend`
+export const ArrowButton = styled(ShadowButton)`
   display: flex;
   border-left: solid 1px ${borderColor};
   padding-left: 6px;
@@ -92,13 +92,13 @@ export const ArrowButton = ShadowButton.extend`
   }
 `
 
-export const DownArrowFollow = DownArrow.extend`
+export const DownArrowFollow = styled(DownArrow)`
   > path {
     fill: ${primary};
   }
 `
 
-export const UpArrowFollow = UpArrow.extend`
+export const UpArrowFollow = styled(UpArrow)`
   > path {
     fill: ${primary};
   }

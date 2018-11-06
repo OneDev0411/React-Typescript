@@ -2,15 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import MultiSelectDropdown from 'components/MultiSelectDropdown'
-import { Container } from './styled'
+import MultiSelectDropdown from '../MultiSelectDropdown'
+import { getBrandMembers } from '../../../store_actions/user/get-brand-members'
+import { getActiveTeamId, getActiveTeam } from '../../../utils/user-teams'
 
-import { getBrandMembers } from 'actions/calendar/get-brand-members'
-import { setCalendarFilter } from 'actions/calendar/set-calendar-filter'
-
-import { getActiveTeamId } from 'utils/user-teams'
-
-class CalendarFilter extends React.Component {
+class UserFilter extends React.Component {
   componentDidMount() {
     this.init()
   }
@@ -82,7 +78,9 @@ class CalendarFilter extends React.Component {
       })
     }
 
-    let filterName = `Filter: ${names.filter(name => name !== null).join(', ')}`
+    let filterName = `Owner is: ${names
+      .filter(name => name !== null)
+      .join(', ')}`
 
     return filterName.length < 35
       ? filterName
@@ -94,7 +92,6 @@ class CalendarFilter extends React.Component {
       selectedItems = [this.props.user.id]
     }
 
-    this.props.setCalendarFilter(selectedItems)
     this.props.onChange(selectedItems)
   }
 
@@ -104,38 +101,49 @@ class CalendarFilter extends React.Component {
     }
 
     return (
-      <Container>
-        <MultiSelectDropdown
-          title={this.DropdownTitle}
-          defaultSelectedItems={this.SelectedItems}
-          forcedSelectedItemsOnDeselectAll={[this.props.user.id]}
-          selectAllButton={{
-            label: 'Everyone on Team'
-          }}
-          fullWidth
-          items={this.MembersList}
-          onChange={this.handleOnChange}
-          style={{
-            maxWidth: '20rem'
-          }}
-        />
-      </Container>
+      <MultiSelectDropdown
+        title={this.DropdownTitle}
+        defaultSelectedItems={this.SelectedItems}
+        forcedSelectedItemsOnDeselectAll={[this.props.user.id]}
+        selectAllButton={{
+          label: 'Everyone on Team'
+        }}
+        fullWidth
+        items={this.MembersList}
+        onChange={this.handleOnChange}
+        style={{
+          maxWidth: '20rem'
+        }}
+      />
     )
   }
 }
 
-function mapStateToProps({ calendar, user }) {
+function mapStateToProps({ user }) {
+  const activeTeam = getActiveTeam(user)
+  const brandMembers = activeTeam.brand.roles
+    ? activeTeam.brand.roles.reduce(
+        (members, role) =>
+          role.members ? members.concat(role.members) : members,
+        []
+      )
+    : []
+
   return {
     user,
-    brandMembers: calendar.brandMembers,
-    filter: calendar.filter
+    brandMembers
   }
 }
+
+const defaultProps = {
+  filter: []
+}
+
+UserFilter.defaultProps = defaultProps
 
 export default connect(
   mapStateToProps,
   {
-    getBrandMembers,
-    setCalendarFilter
+    getBrandMembers
   }
-)(CalendarFilter)
+)(UserFilter)

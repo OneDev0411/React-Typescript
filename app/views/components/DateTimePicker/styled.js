@@ -1,9 +1,10 @@
+import styled from "styled-components"
 // import styled from 'styled-components'
 
 import Card from '../Card'
 import { grey, primary } from '../../utils/colors'
 
-export const PickerContainer = Card.extend`
+export const PickerContainer = styled(Card)`
   position: absolute;
   left: 0;
   top: 3px;
