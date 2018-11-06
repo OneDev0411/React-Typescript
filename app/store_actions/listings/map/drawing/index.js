@@ -48,7 +48,7 @@ const setDrawingManager = (dispatch, getState) => {
       })
     )
     drawingManager.setDrawingMode(null)
-    getListingsByPolygonPonits(points)(dispatch, getState)
+    dispatch(getListingsByPolygonPonits(points))
   })
 }
 

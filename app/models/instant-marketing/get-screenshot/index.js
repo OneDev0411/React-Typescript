@@ -5,7 +5,7 @@ export async function getTemplateScreenshot(html, dimensions, viewport) {
 
   try {
     response = await agent
-      .post('https://screenshots.api.rechat.com/screenshot')
+      .post('https://screenshots.api.rechat.com/screenshot.png')
       .responseType('blob')
       .send({
         html,

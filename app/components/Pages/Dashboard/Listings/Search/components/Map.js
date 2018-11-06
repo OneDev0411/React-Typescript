@@ -229,7 +229,6 @@ const mapHOC = compose(
       map,
       onChange,
       getMapProps,
-      generateClusters,
       fitBoundsByPoints,
       getLocationFromCookies
     }) => ({ map: googleMap }) => {
@@ -249,13 +248,11 @@ const mapHOC = compose(
       }
 
       if (markers.length > 0 && !map.autoMove) {
-        const normalizedMarkers = normalizeListingsForMarkers(markers)
+        if (drawingPoints.length === 0 && Object.keys(map.props).length === 0) {
+          const normalizedMarkers = normalizeListingsForMarkers(markers)
 
-        if (drawingPoints.length === 0) {
           fitBoundsByPoints(normalizedMarkers)
         }
-
-        generateClusters(normalizedMarkers, getMapProps(googleMap))
 
         const timeoutID = setTimeout(() => {
           setIsInit(true)
