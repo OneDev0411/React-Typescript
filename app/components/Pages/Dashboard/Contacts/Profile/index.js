@@ -3,7 +3,6 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 
-import { getContactAddresses } from '../../../../../models/contacts/helpers'
 import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
 
 import {
@@ -28,6 +27,7 @@ import { Container } from '../components/Container'
 import { Dates } from './Dates'
 import { DealsListWidget } from './Deals'
 import { Details } from './Details'
+import { Partner } from './Partner'
 import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
@@ -193,6 +193,8 @@ class ContactProfile extends React.Component {
                 <Addresses contact={contact} />
 
                 <Details contact={contact} />
+
+                <Partner contact={contact} />
 
                 {!this.state.isDesktopScreen && (
                   <DealsListWidget contactId={contact.id} />

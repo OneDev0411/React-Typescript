@@ -61,7 +61,9 @@ class SectionWithFields extends React.Component {
       if (upsertedAttributeList.length > 0) {
         await this.props.upsertContactAttributes(
           this.props.contact.id,
-          upsertedAttributeList
+          upsertedAttributeList.map(
+            a => (this.props.isPartner ? { ...a, is_partner: true } : a)
+          )
         )
       }
 
@@ -76,7 +78,7 @@ class SectionWithFields extends React.Component {
       this.props.notify({
         status: 'success',
         dismissAfter: 4000,
-        message: `${this.props.section} updated.`
+        message: `${this.props.title || this.props.section} updated.`
       })
     } catch (error) {
       console.log(error)
@@ -94,6 +96,7 @@ class SectionWithFields extends React.Component {
       .map(attribute_def => ({
         attribute_def,
         id: undefined,
+        is_partner: this.props.isPartner,
         [attribute_def.data_type]: ''
       }))
 
@@ -107,6 +110,7 @@ class SectionWithFields extends React.Component {
   }
 
   getSectionFields = () => {
+    const { isPartner } = this.props
     const orderedFields = orderFields(
       [...this.props.fields, ...this.getEmptyFields()],
       this.props.fieldsOrder
@@ -117,7 +121,11 @@ class SectionWithFields extends React.Component {
       .map((field, index) => {
         const { attribute_def } = field
         let value = field[attribute_def.data_type]
-        const key = `${this.props.section}_field_${index}`
+        let key = `${this.props.section}_field_${index}`
+
+        if (isPartner) {
+          key = `partner_${key}`
+        }
 
         const getTitle = () => {
           if (field.label) {
@@ -181,18 +189,20 @@ class SectionWithFields extends React.Component {
 
   render() {
     const {
+      section,
+      isPartner,
       addNewFieldButtonText,
       showAddNewCustomAttributeButton
     } = this.props
     const modalFields = this.getModalFields()
-    const sectionTitle = this.props.title || this.props.section
     const sectionFields = this.getSectionFields()
+    const sectionTitle = this.props.title || section
 
     return (
       <Section
-        title={sectionTitle}
+        onAdd={!isPartner && this.openNewAttributeDrawer}
         onEdit={sectionFields ? this.openEditAttributeDrawer : undefined}
-        onAdd={this.openNewAttributeDrawer}
+        title={sectionTitle}
       >
         {sectionFields}
         {(addNewFieldButtonText || showAddNewCustomAttributeButton) && (
@@ -215,19 +225,22 @@ class SectionWithFields extends React.Component {
           </div>
         )}
 
-        <EditForm
-          fields={modalFields}
-          initialValues={getInitialValues(modalFields)}
-          isOpen={this.state.isOpenEditDrawer}
-          onClose={this.closeEditAttributeDrawer}
-          title={`Edit ${sectionTitle}`}
-          onSubmit={this.handleOnSubmit}
-        />
+        {this.state.isOpenEditDrawer && (
+          <EditForm
+            fields={modalFields}
+            initialValues={getInitialValues(modalFields)}
+            isOpen
+            isPartner={isPartner}
+            onClose={this.closeEditAttributeDrawer}
+            title={`Edit ${sectionTitle}`}
+            onSubmit={this.handleOnSubmit}
+          />
+        )}
 
         <CustomAttributeDrawer
           isOpen={this.state.isOpenNewAttributeDrawer}
           onClose={this.closeNewAttributeDrawer}
-          section={this.props.section}
+          section={Array.isArray(section) ? undefined : section}
         />
       </Section>
     )
@@ -238,13 +251,40 @@ SectionWithFields.propTypes = propTypes
 SectionWithFields.defaultProps = defaultProps
 
 function mapStateToProps(state, props) {
+  let fields = []
+  let sectionAttributesDef = []
+  const { contact, section } = props
+  const { attributeDefs } = state.contacts
+
+  const isParnter = f => (props.isPartner ? f.is_partner : !f.is_partner)
+
+  if (Array.isArray(section)) {
+    section.forEach(s => {
+      fields = [
+        ...fields,
+        ...getContactAttributesBySection(contact, s).filter(isParnter)
+      ]
+      sectionAttributesDef = [
+        ...sectionAttributesDef,
+        ...selectDefsBySection(attributeDefs, s)
+      ]
+    })
+  } else {
+    fields = getContactAttributesBySection(contact, section).filter(isParnter)
+    sectionAttributesDef = selectDefsBySection(attributeDefs, section)
+  }
+
+  if (Array.isArray(props.validFields)) {
+    const isValid = a => a.name && props.validFields.some(vf => vf === a.name)
+
+    fields = fields.filter(f => isValid(f.attribute_def))
+    sectionAttributesDef = sectionAttributesDef.filter(isValid)
+  }
+
   return {
-    attributeDefs: state.contacts.attribute_def,
-    fields: getContactAttributesBySection(props.contact, props.section),
-    sectionAttributesDef: selectDefsBySection(
-      state.contacts.attributeDefs,
-      props.section
-    )
+    attributeDefs,
+    fields,
+    sectionAttributesDef
   }
 }
 
