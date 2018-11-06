@@ -75,7 +75,7 @@ export function formatPreSave(previousFields, nextFields) {
             [type]: newValue
           })
         }
-      } else if (newValue || newValue !== previousValue) {
+      } else if (newValue != null) {
         upsertedAttributeList.push({
           id: attribute.id,
           [type]: newValue
