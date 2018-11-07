@@ -1,7 +1,8 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { borderColor, grey, primary } from '../../../utils/colors'
 
+const importantBlack = '#000 !important'
 const border = `1px solid ${borderColor}`
 
 export const ToolbarContainer = styled.div`
@@ -29,34 +30,36 @@ export const Row = styled.div`
   border-top: ${border};
 
   ${props =>
-    `
-    :hover {
-      ${
-        props.hoverStyle
+    css`
+      :hover {
+        ${props.hoverStyle
           ? props.hoverStyle
-          : `
-     
-        background-color: ${grey.A000};
+          : css`
+              background-color: ${grey.A000};
 
-        a, .primaryHover {
-          color: ${primary}
-        }
-        .blackHover{
-          color: #000000;
-        }
-      
-    `
+              a,
+              .primaryHover {
+                color: ${primary};
+              }
+              .hover-color--black {
+                color: ${importantBlack};
+                fill: ${importantBlack};
+
+                svg {
+                  fill: ${importantBlack};
+                }
+              }
+            `};
       }
-    }
-  `};
+    `};
 
   ${props =>
     props.multiple &&
-    `
-    :first-child {
-      border-top: none !important;
-    }
-  `};
+    css`
+      :first-child {
+        border-top: none !important;
+      }
+    `};
 
   ${props => props.css};
 `
@@ -76,17 +79,17 @@ export const Cell = styled.div`
 
   ${props =>
     props.width &&
-    `
-    width: ${props.width}
-  `};
+    css`
+      width: ${props.width};
+    `};
 
   ${props =>
     props.hoverStyle &&
-    `
-    :hover {
-      ${props.hoverStyle}
-    }
-  `};
+    css`
+      :hover {
+        ${props.hoverStyle};
+      }
+    `};
 
   ${props => props.css};
 `
