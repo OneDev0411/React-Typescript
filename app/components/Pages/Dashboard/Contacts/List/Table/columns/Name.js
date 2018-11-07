@@ -9,7 +9,7 @@ import { selectDefinitionByName } from '../../../../../../../reducers/contacts/a
 import { grey } from '../../../../../../../views/utils/colors'
 import Link from '../../../../../../../views/components/ALink'
 import Tooltip from '../../../../../../../views/components/tooltip'
-import InPersonIcon from '../../../../../../../views/components/SvgIcons/InPerson/IconInPerson'
+import PartnerIcon from '../../../../../../../views/components/SvgIcons/Partner/IconPartner'
 import {
   getContactAttribute,
   getAttributeFromSummary
@@ -106,7 +106,9 @@ const ContactsListName = ({ contact, attributeDefs }) => {
         {contact.partner_name && (
           <Tooltip caption="Partner/Spouse">
             <Flex alignCenter>
-              <InPersonIcon style={{ fill: grey.A550 }} />
+              <PartnerIcon
+                style={{ width: '1rem', height: '1rem', fill: grey.A550 }}
+              />
               <span
                 style={{
                   ...ellipsis,
