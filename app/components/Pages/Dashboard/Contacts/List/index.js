@@ -45,7 +45,13 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.listInfo.count === 0) {
+    if (this.props.filterSegments.activeSegmentId !== 'default') {
+      this.handleChangeSavedSegment(
+        this.props.filterSegments.list[
+          this.props.filterSegments.activeSegmentId
+        ]
+      )
+    } else {
       this.fetchContacts()
     }
   }
