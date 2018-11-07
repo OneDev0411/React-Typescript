@@ -15,7 +15,7 @@ export function Contact(props) {
   return (
     <React.Fragment>
       <TruncatedColumn>{email}</TruncatedColumn>
-      <PhoneNumber email={email} className="blackHover">
+      <PhoneNumber email={email} className="hover-color--black">
         {getAttributeFromSummary(contact, 'phone_number')}
       </PhoneNumber>
     </React.Fragment>

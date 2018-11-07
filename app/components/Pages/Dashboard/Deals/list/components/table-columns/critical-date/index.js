@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import PopOver from 'components/Popover'
+
 import DealContext from '../../../../../../../../models/DealContext'
 import CriticalDates from '../../../../dashboard/factsheet/critical-dates'
 import { grey } from '../../../../../../../../views/utils/colors'
@@ -17,7 +18,9 @@ const CriticalDate = ({ deal, rowId, rowsCount }) => {
 
   if (table.length === 0) {
     return (
-      <NoCriticalDate className="blackHover">No Critical Dates</NoCriticalDate>
+      <NoCriticalDate className="hover-color--black">
+        No Critical Dates
+      </NoCriticalDate>
     )
   }
 
