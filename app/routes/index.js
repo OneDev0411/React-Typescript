@@ -1,6 +1,7 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
+
 // Containers
 import AppLayout from '../components/App'
 // Pages
@@ -182,6 +183,11 @@ const AsyncContactProfile = Load({
 const AsyncContactsImportCsv = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
+})
+
+const AsyncContactsDuplicateContacts = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Contacts/DuplicateContacts' /* webpackChunkName: "duplicate-contacts" */)
 })
 
 /* ==================================== */
@@ -387,6 +393,10 @@ export default (
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
       <Route component={AsyncContacts} path="/dashboard/contacts" />
+      <Route
+        path="/dashboard/contacts/duplicate-contacts"
+        component={AsyncContactsDuplicateContacts}
+      />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route
         path="/dashboard/contacts/import/csv"
