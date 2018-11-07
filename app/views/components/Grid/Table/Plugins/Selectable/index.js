@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 
 import { CheckBoxButton } from '../../../../Button/CheckboxButton'
 import { CheckBoxButtonWithoutState } from '../../../../Button/CheckboxButton/CheckboxWithoutState'
@@ -81,10 +82,9 @@ export class SelectablePlugin {
     this.StorageObject.selectedRows && this.StorageObject.selectedRows[id]
 
   /**
-   * returns true when at least one row is selected
+   * returns true when some rows is selected
    */
-  anyRowSelected = () =>
-    !this.isAllRowsSelected() &&
+  someRowsSelected = () =>
     this.StorageObject.selectedRows &&
     Object.keys(this.StorageObject.selectedRows).length > 0
 
@@ -92,6 +92,20 @@ export class SelectablePlugin {
    * checks whether all rows are selected or not
    */
   isAllRowsSelected = () => this.StorageObject.selectAllRows === true
+
+  /**
+   * checks whether all rows of subTable selected or not
+   */
+  isAllSubTableRowsSelected = data =>
+    this.StorageObject.selectedRows &&
+    data.every(({ id }) => this.StorageObject.selectedRows[id])
+
+  /**
+   * returns true when some rows is selected in subTable
+   */
+  anySubTableRowsSelected = data =>
+    this.StorageObject.selectedRows &&
+    data.some(({ id }) => this.StorageObject.selectedRows[id])
 
   /**
    * returns storage key
@@ -172,6 +186,31 @@ export class SelectablePlugin {
     this.onChange()
   }
 
+  /**
+   * toggles selecting all rows
+   */
+  toggleSelectAllSubTableRows = data => {
+    const { selectedRows } = this.StorageObject
+    let newSelectedRows = { ...selectedRows }
+    const allRowsSelected = data.every(({ id }) => newSelectedRows[id])
+
+    if (!allRowsSelected) {
+      data.forEach(row => {
+        newSelectedRows[row.id] = true
+      })
+    } else {
+      newSelectedRows = _.omit(newSelectedRows, (value, key) =>
+        data.some(({ id }) => key === id)
+      )
+    }
+
+    this.StorageObject = {
+      selectedRows: newSelectedRows
+    }
+
+    this.onChange()
+  }
+
   onChange = () => {
     if (!this.options.onChange) {
       this.onRequestForceUpdate()
@@ -182,17 +221,35 @@ export class SelectablePlugin {
     this.options.onChange(this.SelectedRows)
   }
 
-  registerColumn = columns => {
+  registerColumn = (columns, noCheckboxInHeader) => {
     const column = {
       id: 'plugin--selectable',
       width: '24px',
       sortable: false,
       verticalAlign: 'center',
-      header: () => (
+      header: () =>
+        noCheckboxInHeader ? (
+          ''
+        ) : (
+          <CheckBoxButtonWithoutState
+            someRowsSelected={
+              !this.isAllRowsSelected() && this.someRowsSelected()
+            }
+            onClick={this.toggleSelectAllRows}
+            isSelected={this.isAllRowsSelected() || this.someRowsSelected()}
+          />
+        ),
+      subHeader: data => (
         <CheckBoxButtonWithoutState
-          someRowsSelected={this.anyRowSelected()}
-          onClick={this.toggleSelectAllRows}
-          isSelected={this.isAllRowsSelected() || this.anyRowSelected()}
+          onClick={() => this.toggleSelectAllSubTableRows(data)}
+          someRowsSelected={
+            !this.isAllSubTableRowsSelected(data) &&
+            this.anySubTableRowsSelected(data)
+          }
+          isSelected={
+            this.isAllSubTableRowsSelected(data) ||
+            this.anySubTableRowsSelected(data)
+          }
         />
       ),
       render: ({ rowData: row }) => (
