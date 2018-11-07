@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
+
+import DuplicateContacts from './DuplicateContacts'
 
 import { confirmation } from '../../../../../store_actions/confirmation'
 import {
@@ -13,6 +14,7 @@ import SavedSegments from '../../../../../views/components/Grid/SavedSegments/Li
 import ContactFilters from './Filters'
 import { Header } from './Header'
 import { SearchContacts } from './Search'
+
 import Table from './Table'
 import { resetGridSelectedItems } from '../../../../../views/components/Grid/Table/Plugins/Selectable'
 import {
@@ -230,6 +232,7 @@ class ContactsList extends React.Component {
             name="contacts"
             onChange={this.handleChangeSavedSegment}
           />
+          <DuplicateContacts />
         </SideMenu>
 
         <PageContent>
