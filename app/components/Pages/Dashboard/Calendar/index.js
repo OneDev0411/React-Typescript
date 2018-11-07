@@ -64,7 +64,10 @@ class CalendarContainer extends React.Component {
       selectedTaskId: null,
       loadingPosition: LOADING_POSITIONS.Middle
     }
-    this.isFilterHidden = getActiveTeam(this.props.user).brand.member_count <= 1
+
+    const activeTeam = getActiveTeam(this.props.user)
+
+    this.isFilterHidden = activeTeam && activeTeam.brand.member_count <= 1
   }
 
   componentDidMount() {
