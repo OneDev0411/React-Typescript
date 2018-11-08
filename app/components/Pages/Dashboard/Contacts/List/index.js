@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
 
 import { confirmation } from '../../../../../store_actions/confirmation'
@@ -24,6 +23,7 @@ import {
   searchContacts,
   deleteContacts
 } from '../../../../../store_actions/contacts'
+import { setContactsListTextFilter } from '../../../../../store_actions/contacts/set-contacts-list-text-filter'
 import UserFilter from '../../../../../views/components/Filter'
 
 class ContactsList extends React.Component {
@@ -35,7 +35,7 @@ class ContactsList extends React.Component {
       isFetchingMoreContacts: false,
       isRowsUpdating: false,
       filter: this.props.filter,
-      searchInputValue: this.props.searchInputValue,
+      searchInputValue: this.props.list.textFilter,
       activeSegment: {},
       users: this.props.listInfo.users || [this.props.user.id]
     }
@@ -43,9 +43,7 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.listInfo.count === 0) {
-      this.fetchContacts()
-    }
+    this.fetchList()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -61,8 +59,14 @@ class ContactsList extends React.Component {
       )
     }
   }
+  componentWillUnmount() {
+    this.props.setContactsListTextFilter(this.state.searchInputValue)
+  }
 
-  fetchContacts = async (start = 0) => {
+  hasSearchState = () =>
+    this.state.filter || this.state.searchInputValue || this.order
+
+  fetchList = async (start = 0) => {
     const { filter, searchInputValue } = this.state
 
     this.setState({ isFetchingContacts: true })
@@ -166,7 +170,7 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContacts: true })
 
     if (this.hasSearchState()) {
-      await this.fetchContacts(startFrom)
+      await this.fetchList(startFrom)
     } else {
       await this.handleFilterChange(
         this.state.filter,
@@ -177,9 +181,6 @@ class ContactsList extends React.Component {
 
     this.setState({ isFetchingMoreContacts: false })
   }
-
-  hasSearchState = () =>
-    this.state.filter || this.state.searchInputValue || this.order
 
   handleOnDelete = (e, { selectedRows }) => {
     const selectedRowsLength = selectedRows.length
@@ -284,5 +285,11 @@ function mapStateToUser({ user, contacts }) {
 
 export default connect(
   mapStateToUser,
-  { getContacts, searchContacts, deleteContacts, confirmation }
+  {
+    getContacts,
+    searchContacts,
+    deleteContacts,
+    confirmation,
+    setContactsListTextFilter
+  }
 )(ContactsList)
