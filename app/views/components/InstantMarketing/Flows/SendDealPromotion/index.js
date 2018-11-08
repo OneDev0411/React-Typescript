@@ -126,7 +126,7 @@ class SendDealPromotion extends React.Component {
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
           templateData={{ listing, user }}
-          templateTypes={['Listing']}
+          templateTypes={['Listing', 'JustListed', 'JustSold', 'OpenHouse']}
           assets={listing && listing.gallery_image_urls}
         />
 
