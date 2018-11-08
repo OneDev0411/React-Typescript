@@ -43,20 +43,23 @@ class SendDealPromotion extends React.Component {
     }))
 
   handleSaveMarketingCard = template => {
+    if (template.medium === 'Social') {
+      this.setState({
+        htmlTemplate: template,
+        isSocialModalOpen: true
+      })
+
+      return
+    }
+
+    this.generatePreviewImage(template)
+
     this.setState({
+      isComposeEmailOpen: true,
+      isInstantMarketingBuilderOpen: true,
       htmlTemplate: template,
-      isSocialModalOpen: true
+      templateScreenshot: null
     })
-
-    // this.toggleInstantMarketingBuilder()
-    // this.generatePreviewImage(template)
-
-    // this.setState({
-    //   isComposeEmailOpen: true,
-    //   isInstantMarketingBuilderOpen: true,
-    //   htmlTemplate: template,
-    //   templateScreenshot: null
-    // })
   }
 
   handleSendEmails = async values => {
@@ -89,6 +92,11 @@ class SendDealPromotion extends React.Component {
   generatePreviewImage = async template =>
     this.setState({
       templateScreenshot: await getTemplatePreviewImage(template)
+    })
+
+  closeSocialModal = () =>
+    this.setState({
+      isSocialModalOpen: false
     })
 
   getDealListing = async () => {
@@ -133,6 +141,7 @@ class SendDealPromotion extends React.Component {
           handleSave={this.handleSaveMarketingCard}
           templateData={{ listing, user }}
           templateTypes={['Listing']}
+          mediums={this.props.mediums}
           assets={listing && listing.gallery_image_urls}
         />
 
@@ -146,7 +155,10 @@ class SendDealPromotion extends React.Component {
         />
 
         {this.state.isSocialModalOpen && (
-          <SocialModal template={this.state.htmlTemplate} />
+          <SocialModal
+            template={this.state.htmlTemplate}
+            onClose={this.closeSocialModal}
+          />
         )}
       </Fragment>
     )

@@ -33,6 +33,7 @@ export const TemplateImageContainer = styled.div`
 `
 
 export const TemplateImage = styled.img`
+  max-width: 90%;
   height: 90%;
   box-shadow: 0px 5px 10px #c3c3c3;
 `

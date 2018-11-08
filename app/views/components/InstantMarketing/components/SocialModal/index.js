@@ -3,8 +3,10 @@ import React from 'react'
 import { FacebookProvider, Share } from 'react-facebook'
 
 import ActionButton from 'components/Button/ActionButton'
-import { H3 } from 'components/Typography/headings'
 import Modal from 'components/BasicModal'
+import Spinner from 'components/Spinner'
+
+import { Container, Heading } from './styled'
 
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 
@@ -20,38 +22,49 @@ export class SocialModal extends React.Component {
   facebookAppId = '1084664458366273'
 
   loadImage = async () => {
-    // const image = await getTemplatePreviewImage(this.props.template, false)
-    // this.setState({
-    //   image
-    // })
+    const image = await getTemplatePreviewImage(this.props.template, {
+      absolute: true
+    })
+
+    this.setState({
+      image
+    })
   }
 
   render() {
     return (
       <Modal
         isOpen
-        shouldCloseOnOverlayClick={false}
+        shouldCloseOnOverlayClick
+        handleOnClose={this.props.onClose}
         style={{
           content: {
-            height: '10rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
+            height: '10rem'
           }
         }}
       >
         <Modal.Body>
-          <H3>Share On Social Networks</H3>
+          <Container>
+            <Heading>Share On Social Networks</Heading>
 
-          <FacebookProvider appId={this.facebookAppId}>
-            <Share href="https://assets.rechat.com/marketing/dc6466e2-a87e-11e8-b68a-0a95998482ac/thumbnail.jpg">
-              {({ handleClick, loading }) => (
-                <ActionButton disabled={loading} onClick={handleClick}>
-                  Share on fb
-                </ActionButton>
-              )}
-            </Share>
-          </FacebookProvider>
+            {!this.state.image && <Spinner />}
+
+            {this.state.image && (
+              <FacebookProvider appId={this.facebookAppId}>
+                <Share href={this.state.image}>
+                  {({ handleClick, loading }) => (
+                    <ActionButton disabled={loading} onClick={handleClick}>
+                      <i
+                        className="fa fa-facebook-square fa-2x"
+                        style={{ marginRight: '1rem' }}
+                      />
+                      Share on Facebook
+                    </ActionButton>
+                  )}
+                </Share>
+              </FacebookProvider>
+            )}
+          </Container>
         </Modal.Body>
       </Modal>
     )

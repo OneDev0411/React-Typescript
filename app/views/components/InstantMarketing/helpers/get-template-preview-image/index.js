@@ -1,9 +1,9 @@
 import templateToImage from '../template-to-image'
 
-export async function getTemplatePreviewImage(template, imageTag = true) {
-  const imageUrl = await templateToImage(template)
+export async function getTemplatePreviewImage(template, options = {}) {
+  const imageUrl = await templateToImage(template, options)
 
-  if (!imageTag) {
+  if (options.absolute === true) {
     return imageUrl
   }
 

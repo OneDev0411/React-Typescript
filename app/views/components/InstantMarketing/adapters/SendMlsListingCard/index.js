@@ -5,6 +5,7 @@ import { addNotification as notify } from 'reapop'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import EmailCompose from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
+import { SocialModal } from '../../components/SocialModal'
 
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
@@ -26,6 +27,7 @@ class SendMlsListingCard extends React.Component {
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
     isSendingEmail: false,
+    isSocialModalOpen: false,
     htmlTemplate: '',
     templateScreenshot: null
   }
@@ -63,7 +65,7 @@ class SendMlsListingCard extends React.Component {
     const emails = values.recipients.map(recipient => ({
       to: recipient.email,
       subject: values.subject,
-      html: this.state.htmlTemplate,
+      html: this.state.htmlTemplate.result,
       contact: recipient.contactId
     }))
 
@@ -95,12 +97,6 @@ class SendMlsListingCard extends React.Component {
     this.setState(state => ({
       isListingsModalOpen: !state.isListingsModalOpen
     }))
-
-  toggleInstantMarketingBuilder = () =>
-    this.setState(state => ({
-      isInstantMarketingBuilderOpen: !state.isInstantMarketingBuilderOpen
-    }))
-
   toggleComposeEmail = () =>
     this.setState(state => ({
       isComposeEmailOpen: !state.isComposeEmailOpen
@@ -114,13 +110,21 @@ class SendMlsListingCard extends React.Component {
     })
 
   handleSaveMarketingCard = async template => {
-    this.toggleInstantMarketingBuilder()
+    if (template.medium === 'Social') {
+      this.setState({
+        htmlTemplate: template,
+        isSocialModalOpen: true
+      })
+
+      return
+    }
+
     this.generatePreviewImage(template)
 
     this.setState({
       isComposeEmailOpen: true,
       isInstantMarketingBuilderOpen: true,
-      htmlTemplate: template.result,
+      htmlTemplate: template,
       templateScreenshot: null
     })
   }
@@ -134,6 +138,11 @@ class SendMlsListingCard extends React.Component {
     this.setState({
       isInstantMarketingBuilderOpen: false,
       isComposeEmailOpen: false
+    })
+
+  closeSocialModal = () =>
+    this.setState({
+      isSocialModalOpen: false
     })
 
   render() {
@@ -179,6 +188,13 @@ class SendMlsListingCard extends React.Component {
           onClickSend={this.handleSendEmails}
           isSubmitting={this.state.isSendingEmail}
         />
+
+        {this.state.isSocialModalOpen && (
+          <SocialModal
+            template={this.state.htmlTemplate}
+            onClose={this.closeSocialModal}
+          />
+        )}
       </Fragment>
     )
   }

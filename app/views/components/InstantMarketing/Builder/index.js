@@ -19,7 +19,6 @@ import Templates from '../Templates'
 
 import juice from 'juice'
 import ActionButton from 'components/Button/ActionButton'
-import { H1 } from '../../Typography/headings'
 
 class Builder extends React.Component {
   componentDidMount() {
@@ -124,14 +123,12 @@ class Builder extends React.Component {
 
     const result = juice(assembled)
 
-    if (this.props.onSave) {
-      this.props.onSave({
-        ...this.selectedTemplate,
-        result
-      })
+    this.props.onSave({
+      ...this.selectedTemplate,
+      result
+    })
 
-      this.selectedTemplate = null
-    }
+    this.selectedTemplate = null
   }
 
   handleSelectTemplate = templateItem => {
@@ -179,6 +176,7 @@ class Builder extends React.Component {
             <Templates
               onTemplateSelect={this.handleSelectTemplate}
               templateTypes={this.props.templateTypes}
+              mediums={this.props.mediums}
             />
           </TemplatesContainer>
 

@@ -11,11 +11,11 @@ import {
   Image
 } from '../styled'
 
-export default function Promote(props) {
+export default function EmailMarketing(props) {
   return (
-    <Container>
+    <Container style={{ marginBottom: '1.5rem' }}>
       <LeftColumn>
-        <Title>Marketing Center</Title>
+        <Title>Email Marketing</Title>
         <Description>Beautiful email collaterals for your listing.</Description>
 
         <SendDealPromotion deal={props.deal}>Explore</SendDealPromotion>

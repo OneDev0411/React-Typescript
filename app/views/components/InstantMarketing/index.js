@@ -43,6 +43,7 @@ InstantMarketing.propTypes = {
   showTemplatesColumn: PropTypes.bool,
   templateData: PropTypes.object,
   templateTypes: PropTypes.array,
+  mediums: PropTypes.array,
   assets: PropTypes.array
 }
 
@@ -53,6 +54,7 @@ InstantMarketing.defaultProps = {
   showTemplatesColumn: true,
   templateData: {},
   templateTypes: [],
+  mediums: [],
   assets: []
 }
 
