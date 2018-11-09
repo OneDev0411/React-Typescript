@@ -19,6 +19,7 @@ export default {
   }
   `,
   height: '100%',
+  allowScripts: true,
   styleManager: {
     textNoElement: '',
 

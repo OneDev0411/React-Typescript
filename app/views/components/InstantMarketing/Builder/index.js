@@ -21,6 +21,12 @@ import juice from 'juice'
 import ActionButton from 'components/Button/ActionButton'
 
 class Builder extends React.Component {
+  keyframe = 0
+
+  state = {
+    template: null
+  }
+
   componentDidMount() {
     this.editor = grapesjs.init({
       ...config,
@@ -47,6 +53,10 @@ class Builder extends React.Component {
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
+  }
+
+  get timeline() {
+    return this.editor.DomComponents.getWrapper().view.el.ownerDocument.defaultView.Timeline
   }
 
   disableAssetManager = () => {
@@ -91,7 +101,7 @@ class Builder extends React.Component {
         model.set({
           editable: false,
           selectable: false,
-          hoverable: false
+          hoverable: false,
         })
       }
 
@@ -132,6 +142,10 @@ class Builder extends React.Component {
   }
 
   handleSelectTemplate = templateItem => {
+    this.setState({
+      template: templateItem
+    })
+
     const template = {
       ...templateItem,
       template: nunjucks.renderString(templateItem.template, {
@@ -149,7 +163,35 @@ class Builder extends React.Component {
     this.lockIn()
   }
 
+  onNext = () => {
+    this.keyframe++
+
+    const keyframe = this.timeline.keyframes[this.keyframe]
+
+    if (!keyframe)
+      return
+
+    this.timeline.seekTo(keyframe.at)
+  }
+
+  onPrevious = () => {
+    if (this.keyframe === 0)
+      return
+
+    this.keyframe--
+
+    const keyframe = this.timeline.keyframes[this.keyframe]
+
+    this.timeline.seekTo(keyframe.at)
+  }
+
+  onRestart = () => {
+    this.postMessage('restart')
+  }
+
   render() {
+    const { template } = this.state
+
     return (
       <Container className="template-builder">
         <Header>
@@ -166,6 +208,23 @@ class Builder extends React.Component {
             >
               {this.props.saveButtonLabel}
             </ActionButton>
+
+            { template && template.video &&
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                onClick={this.onPrevious}
+              >
+                Previous
+              </ActionButton> }
+
+            { template && template.video &&
+              <ActionButton
+                onClick={this.onNext.bind(this)}
+              >
+                Next
+              </ActionButton>
+            }
+
           </div>
         </Header>
 
