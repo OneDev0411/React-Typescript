@@ -1,5 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
+import { primary } from 'views/utils/colors'
+
 import Brand from '../../../../../../controllers/Brand'
 
 const BrandLogo = ({ brand, user, isWidget, title = 'Rechat', styles }) => {
@@ -31,7 +34,7 @@ const BrandLogo = ({ brand, user, isWidget, title = 'Rechat', styles }) => {
                 fontSize: '1.5rem',
                 fontWieght: 'bold',
                 textDecoration: 'none',
-                color: `#${Brand.color('primary', '3388ff')}`
+                color: Brand.color('primary', primary)
               }
         }
       >

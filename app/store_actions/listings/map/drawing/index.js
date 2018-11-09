@@ -1,8 +1,10 @@
+import { primary } from 'views/utils/colors'
+
 import Brand from '../../../../controllers/Brand'
 import * as types from '../../../../constants/listings/map'
 import getListingsByPolygonPonits from '../../search/get-listings/by-polygon-points'
 
-const overlayColor = `#${Brand.color('primary', '003bdf')}`
+const overlayColor = Brand.color('primary', primary)
 
 const getPolygonBounds = polygon => {
   const points = polygon

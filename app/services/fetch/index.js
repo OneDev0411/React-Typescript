@@ -28,8 +28,18 @@ export default class Fetch {
   }
 
   _create(method, endpoint) {
-    const { user } = store.getState()
-    const brandId = user ? getActiveTeamId(user) : null
+    const { user, brand } = store.getState()
+
+    let brandId
+
+    if (user) {
+      brandId = getActiveTeamId(user)
+    }
+
+    if (!brandId && brand) {
+      brandId = brand.id
+    }
+
     const useProxy = this.options.proxy || this._isServerSide
 
     this._isLoggedIn = user && user.access_token !== undefined
