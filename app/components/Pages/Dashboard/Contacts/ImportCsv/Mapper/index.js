@@ -12,6 +12,7 @@ import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
 import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
 import Loading from '../../../../../Partials/Loading'
+import RadioButton from '../../../../../../views/components/RadioButton'
 
 import {
   updateCsvFieldsMap,
@@ -98,12 +99,7 @@ class Mapper extends React.Component {
     const { attributeDefs } = this.props
     const mappedFields = {}
 
-    const total = Object.keys(csvColoumns).length
-    let counter = 0
-
     _.each(csvColoumns, ({ name: columnName }) => {
-      counter += 1
-
       let index = 0
       const attribute = this.findMatchedAttribute(columnName)
 
@@ -256,6 +252,11 @@ class Mapper extends React.Component {
     })
   }
 
+  handlePartner = (fieldName, is_partner) =>
+    this.props.updateCsvFieldsMap(fieldName, {
+      is_partner
+    })
+
   render() {
     const { columns } = this.props
 
@@ -275,6 +276,7 @@ class Mapper extends React.Component {
       <div className="contact__import-csv--mapper">
         <div className="column-row heading">
           <div className="name">Columns Label From CSV</div>
+          <div className="primary-partner">Contact Type</div>
           <div className="map-list">Rechat Property</div>
           <div className="map-label">Assign Label</div>
         </div>
@@ -285,9 +287,23 @@ class Mapper extends React.Component {
             .map((info, colName) => {
               const mappedField = this.getMappedField(colName)
 
+              const isPartner = mappedField.is_partner
+
               return (
                 <div key={info.index} className="column-row">
                   <div className="name">{colName}</div>
+                  <div className="primary-partner">
+                    <RadioButton
+                      selected={!isPartner}
+                      title="Primary"
+                      onClick={() => this.handlePartner(colName, false)}
+                    />
+                    <RadioButton
+                      selected={isPartner}
+                      title="Partner/Spouse"
+                      onClick={() => this.handlePartner(colName, true)}
+                    />
+                  </div>
                   <div className="map-list">
                     <FieldDropDown
                       fieldName={colName}
