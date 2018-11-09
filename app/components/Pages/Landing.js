@@ -5,16 +5,10 @@ import { Link } from 'react-router'
 import { Col } from 'react-bootstrap'
 import S from 'shorti'
 import Typist from 'react-typist'
+
 import Brand from '../../controllers/Brand'
 
 import getDefaultHomePage from '../../utils/get-default-home-page'
-
-const BUTTON_STYLE = {
-  backgroundColor: '#2196f3',
-  borderWidth: 0,
-  color: '#fff',
-  padding: '8px'
-}
 
 const ANIMATED_TEXT = ['seamless', 'smarter', 'faster', 'more knowledgeable']
 
@@ -37,6 +31,13 @@ class Landing extends Component {
     const { user } = this.props
     const { renderTypest } = this.state
 
+    const BUTTON_STYLE = {
+      backgroundColor: Brand.color('primary'),
+      borderWidth: 0,
+      color: '#fff',
+      padding: '8px'
+    }
+
     // Styles
     const page_style = {
       height: '100vh',
@@ -51,7 +52,8 @@ class Landing extends Component {
     // Get video and text from random number
     const headline_text = (
       <div>
-        From search to close be<br />
+        From search to close be
+        <br />
         {renderTypest && (
           <Typist onTypingDone={this.onTypingDone}>
             {ANIMATED_TEXT.map(text => (
@@ -94,11 +96,14 @@ class Landing extends Component {
           }}
         >
           <span
-            style={S(
-              `inline-block font-30 mr-15 relative t-1n color-${Brand.color(
-                'primary'
-              )}`
-            )}
+            style={{
+              display: 'inline-block',
+              fontSize: '30px',
+              marginRight: '15px',
+              position: 'relative',
+              top: '-1px',
+              color: Brand.color('primary')
+            }}
           >
             +
           </span>

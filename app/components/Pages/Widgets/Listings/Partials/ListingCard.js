@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import PropTypes from 'prop-types'
 import S from 'shorti'
+
 import listing_util from '../../../../../utils/listing'
 import { numberWithCommas } from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Listings/components/FavoriteHeart'
@@ -99,25 +100,27 @@ export default class ListingCard extends Component {
       ...S('absolute w-100p h-100p br-3')
     }
     const price = numberWithCommas(listing.price)
-    const price_tag_style = {
-      ...S(
-        `absolute b-30 p-15 pt-6 h-48 bg-${
-          this.props.brandColor
-        } font-26 fw-500 color-fff`
-      ),
-      borderTopRightRadius: '3px',
-      borderBottomRightRadius: '3px'
-    }
 
+    const price_tag_style = {
+      bottom: '30px',
+      color: '#ffffff',
+      fontSize: '26px',
+      fontWeight: '500',
+      height: '48px',
+      padding: '6px 15px 15px',
+      position: 'absolute',
+      borderTopRightRadius: '3px',
+      borderBottomRightRadius: '3px',
+      backgroundColor: this.props.brandColor
+    }
     const status_color = listing_util.getStatusColor(listing.status)
     let year_built_area
 
     if (property.year_built) {
       year_built_area = (
         <span>
-          &nbsp;&middot;&nbsp;{property.year_built
-            ? `Built in ${property.year_built}`
-            : ''}
+          &nbsp;&middot;&nbsp;
+          {property.year_built ? `Built in ${property.year_built}` : ''}
         </span>
       )
     }

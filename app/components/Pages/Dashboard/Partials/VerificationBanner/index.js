@@ -5,11 +5,11 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import { primary } from 'views/utils/colors'
+
 import Brand from '../../../../../controllers/Brand'
 
-const VerificationBanner = ({
-  brand, isShow, email, onClickHandler
-}) => {
+const VerificationBanner = ({ brand, isShow, email, onClickHandler }) => {
   if (!isShow) {
     return <div />
   }
@@ -17,7 +17,7 @@ const VerificationBanner = ({
   return (
     <div
       className="c-verify-banner"
-      style={{ background: `#${Brand.color('primary', '2196f3', brand)}` }}
+      style={{ background: Brand.color('primary', primary, brand) }}
     >
       <div className="c-verify-banner__content">
         {`To verify that it's you, please confirm your email ${email}`}
