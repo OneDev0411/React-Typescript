@@ -276,7 +276,7 @@ class Mapper extends React.Component {
       <div className="contact__import-csv--mapper">
         <div className="column-row heading">
           <div className="name">Columns Label From CSV</div>
-          <div className="primary-partner">Is Partner?</div>
+          <div className="primary-partner">Contact Type</div>
           <div className="map-list">Rechat Property</div>
           <div className="map-label">Assign Label</div>
         </div>
