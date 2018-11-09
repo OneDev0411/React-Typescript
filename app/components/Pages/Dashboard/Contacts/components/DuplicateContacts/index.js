@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 
 import { blue } from 'views/utils/colors'
+import ToolTip from 'views/components/tooltip'
 
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 
@@ -31,7 +32,7 @@ export const ListItemName = styled.div`
   padding-right: 0.5em;
 `
 
-class DuplicateContacts extends React.Component {
+class Index extends React.Component {
   isSelected = () => this.props.activeItem === 'duplicate contacts'
 
   onClick = () => {
@@ -43,9 +44,11 @@ class DuplicateContacts extends React.Component {
 
   render() {
     return (
-      <ListItem isSelected={this.isSelected()}>
-        <ListItemName onClick={this.onClick}>Duplicate Contacts</ListItemName>
-      </ListItem>
+      <ToolTip caption="Duplicate Contacts" placement="right">
+        <ListItem isSelected={this.isSelected()}>
+          <ListItemName onClick={this.onClick}>Duplicate Contacts</ListItemName>
+        </ListItem>
+      </ToolTip>
     )
   }
 }
@@ -61,4 +64,4 @@ export default connect(
   {
     changeActiveFilterSegment
   }
-)(DuplicateContacts)
+)(Index)
