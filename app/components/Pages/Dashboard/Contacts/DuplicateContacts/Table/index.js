@@ -15,6 +15,8 @@ import Merge from 'components/SvgIcons/Merge/IconMerge'
 import Table from 'components/Grid/Table'
 import ArrowLeftTopIcon from 'components/SvgIcons/ArrowLeftTop/ArrowLeftTopIcon'
 
+import { getContactsJob } from 'models/contacts/get-contacts-job'
+
 import { TruncatedColumn } from '../../List/Table/styled'
 import Name from '../../List/Table/columns/Name'
 import { LoadingComponent } from '../../List/Table/components/LoadingComponent'
@@ -98,40 +100,62 @@ class DuplicateContactsList extends React.Component {
 
   onMergeClick = () => {
     this.props.confirmation({
-      message: `Merge ${this.selectedRowLength} Contacts?`,
+      message: `Merge ${this.selectedRowLength ||
+        this.totalContactLength} Contacts?`,
       description:
         'The selected contacts will be merged into one contact.\n' +
         'Are you sure you want to continue?',
       confirmLabel: 'Yes, merge',
-      onConfirm: async () => {
-        const { setIsFetching, data, fetchContacts } = this.props
-        const { selected } = this.state
+      onConfirm: this.onMerge
+    })
+  }
 
-        setIsFetching(true)
+  onMerge = async () => {
+    const { setIsFetching, data, fetchContacts } = this.props
+    const { selected } = this.state
 
-        let clusters
+    setIsFetching(true)
 
-        if (selected.length === 0) {
-          clusters = data.map(temp => ({
-            parent: temp.header.id,
-            sub_contacts: temp.data.map(({ id }) => id)
-          }))
-        } else {
-          clusters = data
-            .filter(({ data }) => data.some(({ id }) => selected.includes(id)))
-            .map(temp => ({
-              parent: temp.header.id,
-              sub_contacts: temp.data
-                .filter(({ id }) => selected.includes(id))
-                .map(({ id }) => id)
-            }))
+    let clusters
+
+    if (selected.length === 0) {
+      clusters = data.map(temp => ({
+        parent: temp.header.id,
+        sub_contacts: temp.data.map(({ id }) => id)
+      }))
+    } else {
+      clusters = data
+        .filter(({ data }) => data.some(({ id }) => selected.includes(id)))
+        .map(temp => ({
+          parent: temp.header.id,
+          sub_contacts: temp.data
+            .filter(({ id }) => selected.includes(id))
+            .map(({ id }) => id)
+        }))
+    }
+
+    const { data: mergeResponse } = await mergeMultipleContacts(clusters)
+
+    const run = async () => {
+      const { data: jobStatus } = await getContactsJob(mergeResponse.job_id)
+
+      if (jobStatus.state === 'active' || jobStatus.state === 'inactive') {
+        setTimeout(run, 3000)
+      } else if (
+        jobStatus.state === 'complete' ||
+        jobStatus.state === 'failed'
+      ) {
+        if (jobStatus.state === 'failed') {
+          console.log('job status: ', jobStatus)
         }
 
-        await mergeMultipleContacts(clusters)
-        this.onSelectedChanged([])
-        await fetchContacts()
+        fetchContacts()
       }
-    })
+    }
+
+    setTimeout(run, 1000)
+    this.onSelectedChanged([])
+    await fetchContacts()
   }
 
   onSelectedChanged = selected => this.setState({ selected })
