@@ -17,7 +17,7 @@ import SavedSegments from 'views/components/Grid/SavedSegments/List'
 import { resetGridSelectedItems } from 'views/components/Grid/Table/Plugins/Selectable'
 import PageHeader from 'components/PageHeader'
 
-import DuplicateContacts from '../List/DuplicateContacts'
+import DuplicateContacts from '../components/DuplicateContacts'
 
 import Table from './Table'
 import { NoDuplicateContacts } from './NoDuplicateContacts'
@@ -122,7 +122,7 @@ class ContactsList extends React.Component {
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen}>
+        <SideMenu isOpen={isSideMenuOpen} width="12.1em">
           <SavedSegments
             name="contacts"
             onChange={this.handleChangeSavedSegment}

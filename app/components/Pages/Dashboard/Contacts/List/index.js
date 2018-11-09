@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
-import DuplicateContacts from './DuplicateContacts'
+import DuplicateContacts from '../components/DuplicateContacts'
 
 import { confirmation } from '../../../../../store_actions/confirmation'
 import {
@@ -233,7 +233,7 @@ class ContactsList extends React.Component {
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen}>
+        <SideMenu isOpen={isSideMenuOpen} width="12.1em">
           <SavedSegments
             name="contacts"
             onChange={this.handleChangeSavedSegment}
