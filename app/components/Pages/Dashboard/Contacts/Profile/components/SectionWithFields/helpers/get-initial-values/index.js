@@ -1,4 +1,4 @@
-import { getFormater } from '../get-formater'
+import { months } from 'utils/date-times'
 
 const SELECT_FIELD_DEFAULT_VALUE = {
   title: '-Select-',
@@ -12,11 +12,9 @@ export function getInitialValues(attributes) {
     const { attribute_def } = attribute
     const { id, data_type, singular, labels } = attribute_def
 
+    const value = attribute[data_type]
+    const isDateType = data_type === 'date'
     const isSelectField = singular && attribute_def.enum_values
-    const isMultiFields = !singular && labels
-    const isMultiFieldsWithoutLabels = !singular && !labels
-
-    const value = getFormater(attribute)(attribute[data_type])
 
     const arrayFieldValue = value => {
       if (attribute_def.enum_values) {
@@ -24,6 +22,58 @@ export function getInitialValues(attributes) {
       }
 
       return value || ''
+    }
+
+    const getDateFieldsValue = date => {
+      if (!date) {
+        return {
+          day: { title: 'Day', value: null },
+          month: { title: 'Month', value: null },
+          year: null
+        }
+      }
+
+      const _date = new Date(date * 1000)
+      const day = _date.getDay()
+      const month = _date.getMonth()
+
+      return {
+        day: { title: day, value: day },
+        month: { title: months[month - 1], value: month },
+        year: _date.getFullYear()
+      }
+    }
+
+    const getMultiField = () => {
+      let newField = { attribute }
+
+      if (isDateType) {
+        newField = {
+          ...newField,
+          ...getDateFieldsValue(value)
+        }
+      } else {
+        newField = {
+          ...newField,
+          value: arrayFieldValue(value)
+        }
+      }
+
+      if (labels) {
+        newField = {
+          ...newField,
+          label: value
+            ? attribute.label == null
+              ? SELECT_FIELD_DEFAULT_VALUE
+              : {
+                  title: attribute.label,
+                  value: attribute.label
+                }
+            : SELECT_FIELD_DEFAULT_VALUE
+        }
+      }
+
+      return newField
     }
 
     if (value) {
@@ -35,33 +85,18 @@ export function getInitialValues(attributes) {
             title: value
           }
         }
-      } else if (isMultiFields) {
-        const label =
-          attribute.label == null
-            ? SELECT_FIELD_DEFAULT_VALUE
-            : {
-                title: attribute.label,
-                value: attribute.label
-              }
+      } else if (!singular) {
+        const newField = getMultiField()
 
-        const newField = {
+        if (Array.isArray(initialValues[id])) {
+          initialValues[id] = [...initialValues[id], newField]
+        } else {
+          initialValues[id] = [newField]
+        }
+      } else if (isDateType) {
+        initialValues[id] = {
           attribute,
-          label,
-          value: arrayFieldValue(value)
-        }
-
-        if (Array.isArray(initialValues[id])) {
-          initialValues[id] = [...initialValues[id], newField]
-        } else {
-          initialValues[id] = [newField]
-        }
-      } else if (isMultiFieldsWithoutLabels) {
-        const newField = { attribute, value: arrayFieldValue(value) }
-
-        if (Array.isArray(initialValues[id])) {
-          initialValues[id] = [...initialValues[id], newField]
-        } else {
-          initialValues[id] = [newField]
+          ...getDateFieldsValue(value)
         }
       } else {
         initialValues[id] = { attribute, value }
@@ -75,21 +110,13 @@ export function getInitialValues(attributes) {
         attribute,
         value: SELECT_FIELD_DEFAULT_VALUE
       }
-    } else if (isMultiFields) {
-      initialValues[id] = [
-        {
-          attribute,
-          label: SELECT_FIELD_DEFAULT_VALUE,
-          value: arrayFieldValue()
-        }
-      ]
-    } else if (isMultiFieldsWithoutLabels) {
-      initialValues[id] = [
-        {
-          attribute,
-          value: arrayFieldValue()
-        }
-      ]
+    } else if (!singular) {
+      initialValues[id] = [getMultiField()]
+    } else if (isDateType) {
+      initialValues[id] = {
+        attribute,
+        ...getDateFieldsValue()
+      }
     } else {
       initialValues[id] = { attribute, value: '' }
     }

@@ -3,173 +3,182 @@ import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 
+import { borderColor } from 'views/utils/colors'
+import { Dropdown } from 'components/Dropdown'
+import { DateField } from 'components/final-form-fields/DateField'
+import IconButton from 'components/Button/IconButton'
+import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+import RemoveIcon from 'components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
+
 import { Container, Title } from '../styled'
 import { TextField } from './TextField'
-import { Dropdown } from '../../../../../../../../../../views/components/Dropdown'
-import IconButton from '../../../../../../../../../../views/components/Button/IconButton'
-import AddIcon from '../../../../../../../../../../views/components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-import RemoveIcon from '../../../../../../../../../../views/components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
-import { borderColor } from '../../../../../../../../../../views/utils/colors'
-
-MultiField.propTypes = {
-  attribute: PropTypes.shape().isRequired,
-  format: PropTypes.func,
-  mutators: PropTypes.shape().isRequired,
-  parse: PropTypes.func,
-  placeholder: PropTypes.string,
-  validate: PropTypes.func
-}
-
-MultiField.defaultProps = {
-  placeholder: '',
-  format: t => t,
-  parse: t => t,
-  validate: () => undefined
-}
-
-export function MultiField(props) {
-  const { attribute_def } = props.attribute
-  let defaultOptions
-  const newAttribute = {
-    attribute_def,
-    id: undefined,
-    [attribute_def.data_type]: ''
+export class MultiField extends React.Component {
+  static propTypes = {
+    attribute: PropTypes.shape().isRequired,
+    format: PropTypes.func,
+    mutators: PropTypes.shape().isRequired,
+    parse: PropTypes.func,
+    placeholder: PropTypes.string,
+    validate: PropTypes.func
   }
-  const newMultiFieldWithoutLabel = {
-    attribute: newAttribute,
-    value: attribute_def.enum_values
-      ? {
-          title: '-Select-',
-          value: '-Select-'
-        }
-      : ''
+
+  static defaultProps = {
+    placeholder: '',
+    format: t => t,
+    parse: t => t,
+    validate: () => undefined
   }
-  const newMultiField = {
-    attribute: newAttribute,
-    label: {
+
+  renderRightSide = field => {
+    const { attribute_def } = this.props.attribute
+
+    if (attribute_def.data_type === 'date') {
+      return <DateField name={field} />
+    }
+
+    return attribute_def.enum_values ? (
+      <Field
+        component={Dropdown}
+        fullWidth
+        items={attribute_def.enum_values.map(value => ({
+          title: value,
+          value
+        }))}
+        itemToString={({ title }) => title}
+        name={`${field}.value`}
+        style={{ width: '100%' }}
+      />
+    ) : (
+      <Field
+        component={TextField}
+        id={field}
+        format={this.props.format}
+        name={`${field}.value`}
+        parse={this.props.parse}
+        placeholder={this.props.placeholder}
+        readOnly={!attribute_def.editable}
+        validate={this.props.validate}
+      />
+    )
+  }
+
+  addNewField = () => {
+    const { attribute_def } = this.props.attribute
+    const SELECT_INITIAL_STATE = {
       title: '-Select-',
       value: '-Select-'
-    },
-    value: attribute_def.enum_values
-      ? {
-          title: '-Select-',
-          value: '-Select-'
-        }
-      : ''
-  }
+    }
 
-  if (attribute_def.labels) {
-    defaultOptions = attribute_def.labels.map(label => ({
-      title: label,
-      value: label
-    }))
-  }
+    const newAttribute = {
+      attribute_def,
+      id: undefined,
+      [attribute_def.data_type]: ''
+    }
 
-  function addNewField() {
-    if (defaultOptions) {
-      props.mutators.push(attribute_def.id, newMultiField)
+    const newMultiFieldWithoutLabel = {
+      attribute: newAttribute,
+      value: attribute_def.enum_values
+        ? SELECT_INITIAL_STATE
+        : ''
+    }
+    const newMultiField = {
+      attribute: newAttribute,
+      label: SELECT_INITIAL_STATE,
+      value: attribute_def.enum_values
+        ? SELECT_INITIAL_STATE
+        : ''
+    }
+
+    if (attribute_def.labels) {
+      this.props.mutators.push(attribute_def.id, newMultiField)
     } else {
-      props.mutators.push(attribute_def.id, newMultiFieldWithoutLabel)
+      this.props.mutators.push(attribute_def.id, newMultiFieldWithoutLabel)
     }
   }
 
-  return (
-    <FieldArray name={attribute_def.id}>
-      {({ fields }) =>
-        fields.map((field, index) => (
-          <div
-            key={field}
-            style={{
-              width: '100%',
-              display: 'flex'
-            }}
-          >
-            <Container
-              withoutLabel={!defaultOptions}
-              style={{ width: '40%', paddingBottom: 0 }}
-            >
-              <Title htmlFor={field}>{attribute_def.label}</Title>
-              {defaultOptions && (
-                <Field
-                  component={Dropdown}
-                  style={{ marginLeft: '-1rem' }}
-                  fullWidth
-                  items={defaultOptions}
-                  itemToString={({ title }) => title}
-                  name={`${field}.label`}
-                />
-              )}
-            </Container>
+  render() {
+    const { attribute_def } = this.props.attribute
+    const defaultOptions = attribute_def.labels ?
+      attribute_def.labels.map(label => ({
+        title: label,
+        value: label
+      })) : null
+
+    return (
+      <FieldArray name={attribute_def.id}>
+        {({ fields }) =>
+          fields.map((field, index) => (
             <div
+              key={field}
               style={{
-                width: '60%',
-                display: 'flex',
-                alignItems: 'flex-end',
-                padding: attribute_def.enum_values
-                  ? '0'
-                  : '0.5rem 0 0.5rem 1rem',
-                borderWidth: '0 0 1px 1px',
-                borderStyle: 'solid',
-                borderColor
+                width: '100%',
+                display: 'flex'
               }}
             >
-              {attribute_def.enum_values ? (
-                <Field
-                  component={Dropdown}
-                  fullWidth
-                  items={attribute_def.enum_values.map(value => ({
-                    title: value,
-                    value
-                  }))}
-                  itemToString={({ title }) => title}
-                  name={`${field}.value`}
-                  style={{ width: '100%' }}
-                />
-              ) : (
-                <Field
-                  component={TextField}
-                  id={field}
-                  format={props.format}
-                  name={`${field}.value`}
-                  parse={props.parse}
-                  placeholder={props.placeholder}
-                  readOnly={!attribute_def.editable}
-                  validate={props.validate}
-                />
-              )}
+              <Container
+                withoutLabel={!defaultOptions}
+                style={{ width: '40%', paddingBottom: 0 }}
+              >
+                <Title htmlFor={field}>{attribute_def.label}</Title>
+                {defaultOptions && (
+                  <Field
+                    component={Dropdown}
+                    style={{ marginLeft: '-1rem' }}
+                    fullWidth
+                    items={defaultOptions}
+                    itemToString={({ title }) => title}
+                    name={`${field}.label`}
+                  />
+                )}
+              </Container>
               <div
                 style={{
+                  width: '60%',
                   display: 'flex',
-                  alignItems: 'center',
-                  marginLeft: '1em',
-                  height: attribute_def.enum_values ? '40px' : 'auto'
+                  alignItems: 'flex-end',
+                  padding: attribute_def.enum_values
+                    ? '0'
+                    : '0.5rem 0 0.5rem 1rem',
+                  borderWidth: '0 0 1px 1px',
+                  borderStyle: 'solid',
+                  borderColor
                 }}
               >
-                {index + 1 === fields.length ? (
-                  <IconButton
-                    type="button"
-                    isFit
-                    iconSize="large"
-                    onClick={addNewField}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    isFit
-                    type="button"
-                    iconSize="large"
-                    onClick={() => fields.remove(index)}
-                  >
-                    <RemoveIcon />
-                  </IconButton>
-                )}
+                {this.renderRightSide(field)}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginLeft: '1em',
+                    height: attribute_def.enum_values ? '40px' : 'auto'
+                  }}
+                >
+                  {index + 1 === fields.length ? (
+                    <IconButton
+                      type="button"
+                      isFit
+                      iconSize="large"
+                      onClick={this.addNewField}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      isFit
+                      type="button"
+                      iconSize="large"
+                      onClick={() => fields.remove(index)}
+                    >
+                      <RemoveIcon />
+                    </IconButton>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))
-      }
-    </FieldArray>
-  )
+          ))
+        }
+      </FieldArray>
+    )
+  }
 }

@@ -1,6 +1,8 @@
 import { flatten, indexBy } from 'underscore'
 
-import { isNumeric } from '../../../../../../../../../utils/helpers'
+import { isNumeric } from 'utils/helpers'
+import { months } from 'utils/date-times'
+
 import { getParser } from '../get-parser'
 
 export function formatPreSave(previousFields, nextFields) {
@@ -43,10 +45,22 @@ export function formatPreSave(previousFields, nextFields) {
       previousLabel = previousAttribute.label
     }
 
-    let newValue =
-      typeof value === 'string'
-        ? getParser(attribute)(value)
-        : getParser(attribute)(value.value)
+    let newValue
+
+    if (type === 'date') {
+      const { day, month, year } = nextField
+
+      if (day.value && month.value) {
+        newValue =
+          new Date(
+            `${day.value}/${months.indexOf(month.value) + 1}/${year || 1800}`
+          ).getTime() / 1000
+      }
+    } else if (typeof value === 'string') {
+      newValue = getParser(attribute)(value)
+    } else {
+      newValue = getParser(attribute)(value.value)
+    }
 
     previousValue = previousValue == null ? '' : previousValue
 
