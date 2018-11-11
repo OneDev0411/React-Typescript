@@ -2,7 +2,7 @@ import React from 'react'
 
 import SectionWithFields from '../components/SectionWithFields'
 
-const fieldsOrder = [
+export const fieldsOrder = [
   'first_name',
   'last_name',
   'email',

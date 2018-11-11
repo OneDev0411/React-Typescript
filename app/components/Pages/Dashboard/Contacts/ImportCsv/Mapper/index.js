@@ -7,6 +7,7 @@ import _ from 'underscore'
 
 import { compareTwoStrings } from '../../../../../../utils/dice-coefficient'
 import { isAddressField } from '../helpers/address'
+import { fieldsOrder as partnerFields } from '../../Profile/Partner/index.js'
 
 import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
@@ -289,20 +290,28 @@ class Mapper extends React.Component {
 
               const isPartner = mappedField.is_partner
 
+              console.log(info, mappedField, colName)
+
               return (
                 <div key={info.index} className="column-row">
                   <div className="name">{colName}</div>
+
                   <div className="primary-partner">
-                    <RadioButton
-                      selected={!isPartner}
-                      title="Primary"
-                      onClick={() => this.handlePartner(colName, false)}
-                    />
-                    <RadioButton
-                      selected={isPartner}
-                      title="Partner/Spouse"
-                      onClick={() => this.handlePartner(colName, true)}
-                    />
+                    {mappedField.definition.name &&
+                      partnerFields.includes(mappedField.definition.name) && (
+                        <React.Fragment>
+                          <RadioButton
+                            selected={!isPartner}
+                            title="Primary"
+                            onClick={() => this.handlePartner(colName, false)}
+                          />
+                          <RadioButton
+                            selected={isPartner}
+                            title="Partner/Spouse"
+                            onClick={() => this.handlePartner(colName, true)}
+                          />
+                        </React.Fragment>
+                      )}
                   </div>
                   <div className="map-list">
                     <FieldDropDown
