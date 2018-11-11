@@ -24,7 +24,7 @@ import {
   deleteContacts
 } from '../../../../../store_actions/contacts'
 import { setContactsListTextFilter } from '../../../../../store_actions/contacts/set-contacts-list-text-filter'
-import UserFilter from '../../../../../views/components/Filter'
+import UserFilter from '../../../../../views/components/UserFilter'
 
 class ContactsList extends React.Component {
   constructor(props) {
