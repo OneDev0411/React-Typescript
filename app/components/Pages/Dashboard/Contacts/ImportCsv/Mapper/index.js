@@ -290,8 +290,6 @@ class Mapper extends React.Component {
 
               const isPartner = mappedField.is_partner
 
-              console.log(info, mappedField, colName)
-
               return (
                 <div key={info.index} className="column-row">
                   <div className="name">{colName}</div>
