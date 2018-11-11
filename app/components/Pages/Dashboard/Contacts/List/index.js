@@ -220,7 +220,7 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const { isSideMenuOpen, activeSegment } = this.state
+    const { isSideMenuOpen, activeSegment, users } = this.state
     const { user, list } = this.props
     const contacts = selectContacts(list)
 
@@ -243,7 +243,7 @@ class ContactsList extends React.Component {
           <Flex style={{ paddingLeft: '1.5em' }}>
             <UserFilter
               onChange={this.handleChangeUsers}
-              filter={this.state.users}
+              filter={users}
             />
             <ContactFilters onFilterChange={this.handleFilterChange} />
           </Flex>
@@ -264,6 +264,7 @@ class ContactsList extends React.Component {
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
             filters={this.state.filter}
+            users={users}
           />
         </PageContent>
       </PageContainer>
