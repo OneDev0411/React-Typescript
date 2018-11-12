@@ -7,9 +7,9 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../controllers/Brand'
 import submitSigninForm from '../../../../store_actions/auth/signin'
-import { grey } from '../../../../views/utils/colors'
+import { grey, primary } from '../../../../views/utils/colors'
 import Button from '../../../../views/components/Button/ActionButton'
-import SimpleField from '../../../Pages/Dashboard/Account/Profile/components/SimpleField'
+import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
 
 export const getBrandInfo = brand => {
   let siteTitle = 'Rechat'
@@ -108,12 +108,14 @@ const SigninForm = props => {
               isBlock
               disabled={isLogging}
               style={{ marginBottom: '2em' }}
+              brandColor={Brand.color('primary', primary)}
             >
               {isLogging ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
           <p style={{ textAlign: 'center', color: grey.A600 }}>
-            <small>Don't have an account?</small>&nbsp;&nbsp;
+            <small>Don't have an account?</small>
+            &nbsp;&nbsp;
             <Link to="/signup">Sign up</Link>
           </p>
         </main>

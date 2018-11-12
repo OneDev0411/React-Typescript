@@ -1,4 +1,6 @@
 // controller/listing-map.js
+import { primary } from 'views/utils/colors'
+
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import Brand from '../../../../controllers/Brand'
@@ -324,7 +326,7 @@ const controller = {
       clickable: false,
       map,
       path,
-      strokeColor: `#${Brand.color('primary', '3388ff')}`,
+      strokeColor: Brand.color('primary', primary),
       strokeWeight: 10
     })
     window.poly_search = window.poly
@@ -383,7 +385,7 @@ const controller = {
         map,
         clickable: false,
         strokeWeight: 10,
-        strokeColor: `#${Brand.color('primary', '3388ff')}`
+        strokeColor: Brand.color('primary', primary)
       })
 
       AppStore.data.listing_map.no_popup = true

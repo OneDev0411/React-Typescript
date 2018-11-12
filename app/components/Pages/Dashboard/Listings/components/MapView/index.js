@@ -2,6 +2,7 @@ import React from 'react'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withPropsOnChange from 'recompose/withPropsOnChange'
+import idx from 'idx'
 
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
@@ -13,15 +14,18 @@ import { sortOptions } from '../../helpers/sort-plugin-options'
 import { MainContainer, MapContainer, TableContainer } from './styled'
 
 const addListingsDistanceFromCenter = (listing, center) => {
-  const { google } = window
-
-  if (!google || !center) {
+  if (
+    !center ||
+    !idx(window, w => w.google.maps.geometry)
+  ) {
     return listing
   }
 
-  const centerLatLng = new window.google.maps.LatLng(center.lat, center.lng)
+  const { google } = window
 
-  const listingLocation = new window.google.maps.LatLng(
+  const centerLatLng = new google.maps.LatLng(center.lat, center.lng)
+
+  const listingLocation = new google.maps.LatLng(
     listing.lat,
     listing.lng
   )
