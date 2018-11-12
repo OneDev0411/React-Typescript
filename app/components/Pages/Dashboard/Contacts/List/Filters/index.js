@@ -40,7 +40,7 @@ class ContactFilters extends React.PureComponent {
       })
     })
 
-    return criteria
+    return { filters: criteria, args: { users: this.props.users } }
   }
 
   normalizeSegment = filters =>

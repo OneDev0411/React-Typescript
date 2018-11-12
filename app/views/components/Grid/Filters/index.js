@@ -158,7 +158,9 @@ class Filters extends React.Component {
       item => item.isIncomplete === false
     )
 
-    this.props.onChange(this.props.createSegmentFromFilters(completedFilters))
+    this.props.onChange(
+      this.props.createSegmentFromFilters(completedFilters).filters
+    )
   }
 
   render() {
