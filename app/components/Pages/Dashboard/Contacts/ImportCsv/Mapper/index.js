@@ -7,13 +7,11 @@ import _ from 'underscore'
 
 import { compareTwoStrings } from '../../../../../../utils/dice-coefficient'
 import { isAddressField } from '../helpers/address'
-import { fieldsOrder as partnerFields } from '../../Profile/Partner/index.js'
 
 import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
 import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
 import Loading from '../../../../../Partials/Loading'
-import RadioButton from '../../../../../../views/components/RadioButton'
 
 import {
   updateCsvFieldsMap,
@@ -219,11 +217,20 @@ class Mapper extends React.Component {
       return updateCsvFieldsMap(fieldName, { definitionId: null, label: null })
     }
 
-    const [definitionId, index] = fieldValue.split(':')
+    let is_partner = false
+    let [definitionId, index] = fieldValue.split(':')
+
+    if (index === 'partner') {
+      index = 0
+      is_partner = true
+    } else {
+      index = parseInt(index, 10)
+    }
 
     updateCsvFieldsMap(fieldName, {
       definitionId,
-      index: parseInt(index, 10)
+      is_partner,
+      index
     })
   }
 
@@ -253,11 +260,6 @@ class Mapper extends React.Component {
     })
   }
 
-  handlePartner = (fieldName, is_partner) =>
-    this.props.updateCsvFieldsMap(fieldName, {
-      is_partner
-    })
-
   render() {
     const { columns } = this.props
 
@@ -277,7 +279,6 @@ class Mapper extends React.Component {
       <div className="contact__import-csv--mapper">
         <div className="column-row heading">
           <div className="name">Columns Label From CSV</div>
-          <div className="primary-partner">Contact Type</div>
           <div className="map-list">Rechat Property</div>
           <div className="map-label">Assign Label</div>
         </div>
@@ -288,34 +289,13 @@ class Mapper extends React.Component {
             .map((info, colName) => {
               const mappedField = this.getMappedField(colName)
 
-              const isPartner = mappedField.is_partner
-
               return (
                 <div key={info.index} className="column-row">
                   <div className="name">{colName}</div>
-
-                  <div className="primary-partner">
-                    {mappedField.definition.name &&
-                      partnerFields.includes(mappedField.definition.name) && (
-                        <React.Fragment>
-                          <RadioButton
-                            selected={!isPartner}
-                            title="Primary"
-                            onClick={() => this.handlePartner(colName, false)}
-                          />
-                          <RadioButton
-                            selected={isPartner}
-                            title="Partner/Spouse"
-                            onClick={() => this.handlePartner(colName, true)}
-                          />
-                        </React.Fragment>
-                      )}
-                  </div>
                   <div className="map-list">
                     <FieldDropDown
                       fieldName={colName}
-                      selectedField={mappedField.definitionId}
-                      selectedFieldIndex={mappedField.index}
+                      selectedField={mappedField}
                       toggleOpenDrawer={this.toggleOpenDrawer}
                       onChange={this.onChangeField}
                     />
