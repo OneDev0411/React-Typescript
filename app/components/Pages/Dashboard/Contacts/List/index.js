@@ -59,6 +59,7 @@ class ContactsList extends React.Component {
       )
     }
   }
+
   componentWillUnmount() {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
@@ -89,12 +90,23 @@ class ContactsList extends React.Component {
   }
 
   handleChangeSavedSegment = segment => {
+    const users =
+      segment.args && segment.args.users
+        ? segment.args.users
+        : [this.props.user.id]
+
     this.setState(
       {
         activeSegment: segment
       },
       () => {
-        this.handleFilterChange(segment.filters, this.state.searchInputValue)
+        this.handleFilterChange(
+          segment.filters,
+          this.state.searchInputValue,
+          0,
+          this.order,
+          users
+        )
       }
     )
   }
@@ -241,11 +253,11 @@ class ContactsList extends React.Component {
             onMenuTriggerChange={this.toggleSideMenu}
           />
           <Flex style={{ paddingLeft: '1.5em' }}>
-            <UserFilter
-              onChange={this.handleChangeUsers}
-              filter={users}
+            <UserFilter onChange={this.handleChangeUsers} filter={users} />
+            <ContactFilters
+              onFilterChange={this.handleFilterChange}
+              users={users}
             />
-            <ContactFilters onFilterChange={this.handleFilterChange} />
           </Flex>
           <SearchContacts
             onSearch={this.handleSearch}
