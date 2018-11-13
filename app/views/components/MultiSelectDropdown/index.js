@@ -12,6 +12,12 @@ class MultiSelectDropdown extends React.Component {
     selectedItems: this.props.defaultSelectedItems
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!_.isEqual(nextProps.defaultSelectedItems, this.state.selectedItems)) {
+      this.setState({ selectedItems: nextProps.defaultSelectedItems })
+    }
+  }
+
   get Items() {
     const { items, selectAllButton } = this.props
 
