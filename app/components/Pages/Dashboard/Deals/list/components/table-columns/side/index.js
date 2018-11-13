@@ -1,6 +1,7 @@
 import React from 'react'
 
 import PopOver from 'components/Popover'
+
 import UserAvatar from '../../../../../../../Partials/UserAvatar'
 import Deal from '../../../../../../../../models/Deal'
 import { roleName, getLegalFullName } from '../../../../utils/roles'
@@ -22,6 +23,7 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
 
   return (
     <PopOver
+      containerStyle={{ display: 'inline-block' }}
       placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
       id={`popover-trigger-sides-${deal.id}`}
       caption={
@@ -55,7 +57,7 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
         </div>
       }
     >
-      <div className="primaryHover inline">
+      <div className="primaryHover">
         <span>{sideName}</span>
 
         <span

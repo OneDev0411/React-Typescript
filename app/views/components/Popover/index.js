@@ -1,37 +1,57 @@
 import React from 'react'
-import { OverlayTrigger, Popover } from 'react-bootstrap'
+import { Overlay, Popover } from 'react-bootstrap'
 
-const PopOver = ({
-  id = 'rechat-tooltip',
-  caption,
-  placement = 'top',
-  overlayOptions = {
-    trigger: ['hover']
-  },
-  popoverStyles = {},
-  children
-}) => {
-  if (!caption) {
-    return children
+class PopOver extends React.Component {
+  state = {
+    show: false
   }
 
-  return (
-    <OverlayTrigger
-      placement={placement}
-      overlay={
-        <Popover
-          className="white--popover"
-          id={id}
-          style={{ ...popoverStyles }}
+  onMouseEnter = () => this.setState({ show: true })
+
+  onMouseLeave = () => this.setState({ show: false })
+
+  render() {
+    const {
+      id = 'rechat-tooltip',
+      caption,
+      placement = 'top',
+      overlayOptions = {
+        trigger: ['hover']
+      },
+      popoverStyles = {},
+      containerStyle = {},
+      children
+    } = this.props
+
+    if (!caption) {
+      return children
+    }
+
+    return (
+      <div
+        style={containerStyle}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      >
+        {children}
+
+        <Overlay
+          show={this.state.show}
+          target={this}
+          placement={placement}
+          {...overlayOptions}
         >
-          {caption}
-        </Popover>
-      }
-      {...overlayOptions}
-    >
-      {children}
-    </OverlayTrigger>
-  )
+          <Popover
+            className="white--popover"
+            id={id}
+            style={{ ...popoverStyles }}
+          >
+            {caption}
+          </Popover>
+        </Overlay>
+      </div>
+    )
+  }
 }
 
 export default PopOver

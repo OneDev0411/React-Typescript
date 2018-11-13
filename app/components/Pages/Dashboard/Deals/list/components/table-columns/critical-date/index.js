@@ -26,13 +26,12 @@ const CriticalDate = ({ deal, rowId, rowsCount }) => {
 
   return (
     <PopOver
+      containerStyle={{ display: 'inline-block' }}
       placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
       caption={<CriticalDates deal={deal} showTitle={false} />}
-      id={`popover-trigger-factsheet-${deal.id}`}
+      id={`popover-trigger-factSheet-${deal.id}`}
     >
-      <div className="primaryHover inline">
-        {CriticalDates.getNextDate(deal)}
-      </div>
+      <div className="primaryHover">{CriticalDates.getNextDate(deal)}</div>
     </PopOver>
   )
 }
