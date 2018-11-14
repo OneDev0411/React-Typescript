@@ -124,7 +124,7 @@ class RoleAgentIntegration extends React.Component {
           email,
           legal_last_name: last_name,
           legal_first_name: first_name,
-          phone: phone_number || work_phone,
+          phone_number: phone_number || work_phone,
           company: office ? office.name : ''
         },
         showRoleDrawer: true
