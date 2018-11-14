@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
+
 import { ICalContainer, PageDescription } from './styled'
 
 import TeamType from './TeamTypes'
@@ -17,7 +18,7 @@ import PageHeader from '../../../../../views/components/PageHeader'
 class DealTemplates extends React.Component {
   state = {
     selectedTypes: [],
-    selectedMembers: [],
+    selectedMembers: {},
     isFetchingSetting: true,
     feedURl: ''
   }
@@ -38,7 +39,7 @@ class DealTemplates extends React.Component {
 
       if (setting.filter) {
         setting.filter.forEach(filter => {
-          if (filter.users) {
+          if (filter.users && filter.users.length > 1) {
             normalizedSetting[filter.brand] = filter.users
           } else {
             const filterTeam = this.props.userTeams.filter(
@@ -102,6 +103,7 @@ class DealTemplates extends React.Component {
       this.setState({ selectedTypes: selectedTypes.concat(selectedType) })
     }
   }
+
   onChangeSelectAllMembers = selectedMembers =>
     this.setState({ selectedMembers })
 
@@ -177,7 +179,6 @@ class DealTemplates extends React.Component {
           </PageDescription>
           <TeamType
             userTeams={this.props.userTeams}
-            onChangeTeam={this.onChangeTeam}
             selectedMembers={selectedMembers}
             onChangeSelectAllMembers={this.onChangeSelectAllMembers}
             onChangeSelectedMember={this.onChangeSelectedMember}
