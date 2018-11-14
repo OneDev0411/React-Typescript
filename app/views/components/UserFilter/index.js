@@ -58,7 +58,7 @@ class UserFilter extends React.Component {
   get DropdownTitle() {
     let names = []
 
-    if (this.SelectedItems.length === this.Members.length) {
+    if (this.SelectedItems.length === this.MembersList.length) {
       names = ['Everyone on Team']
     } else {
       names = this.SelectedItems.map(userId => {
@@ -112,7 +112,8 @@ class UserFilter extends React.Component {
         items={this.MembersList}
         onChange={this.handleOnChange}
         style={{
-          maxWidth: '20rem'
+          maxWidth: '20rem',
+          height: '100%'
         }}
       />
     )

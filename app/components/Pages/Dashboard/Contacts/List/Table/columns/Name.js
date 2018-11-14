@@ -73,7 +73,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
   }
 
   return (
-    <Flex nowrap>
+    <Flex nowrap style={{ minWidth: '0' }}>
       <AvatarContainer>
         <Avatar
           className="avatar"
