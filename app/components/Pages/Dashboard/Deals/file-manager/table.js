@@ -1,17 +1,24 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import React, { Fragment } from 'react'
-import Table from 'views/components/Grid/Table'
+
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Dropdown } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
-import {
-  getDeal,
-  displaySplitter,
-  syncDeleteFile,
-  moveTaskFile
-} from '../../../../../store_actions/deals'
+
+import Table from 'views/components/Grid/Table'
+
+import ActionButton from 'components/Button/ActionButton'
+
+import { resetGridSelectedItems } from 'views/components/Grid/Table/Plugins/Selectable'
+
+import Spinner from 'components/Spinner'
+
+import VerticalDotsIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
+
+import IconButton from 'components/Button/IconButton'
+
 import { confirmation } from '../../../../../store_actions/confirmation'
 
 import { SearchFiles } from './Search'
@@ -20,11 +27,13 @@ import TasksDropDown from '../components/tasks-dropdown'
 import { getEnvelopeStatus } from '../utils/get-envelop-status'
 import FilesListName from './columns/Name'
 import { TruncatedColumn } from './columns/styled'
-import ActionButton from 'components/Button/ActionButton'
-import { resetGridSelectedItems } from 'views/components/Grid/Table/Plugins/Selectable'
-import Spinner from 'components/Spinner'
-import VerticalDotsIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
-import IconButton from 'components/Button/IconButton'
+
+import {
+  getDeal,
+  displaySplitter,
+  syncDeleteFile,
+  moveTaskFile
+} from '../../../../../store_actions/deals'
 import { grey, primary } from '../../../../../views/utils/colors'
 
 const OptionButton = styled(IconButton)`
@@ -106,7 +115,7 @@ export class FileManager extends React.Component {
       })
     })
 
-    let envelopesFiles = []
+    this.envelopesFiles = []
 
     deal.envelopes &&
       deal.envelopes.forEach(envelopeId => {
@@ -147,10 +156,10 @@ export class FileManager extends React.Component {
           return { ...file, envelope, id: envelope.id }
         })
 
-        envelopesFiles = envelopesFiles.concat(envelopeFiles)
+        this.envelopesFiles = this.envelopesFiles.concat(envelopeFiles)
       })
 
-    return files.concat(envelopesFiles)
+    return files.concat(this.envelopesFiles)
   }
 
   splitMultipleFiles = () => {
@@ -505,7 +514,6 @@ export class FileManager extends React.Component {
               plugins={{
                 selectable: {
                   persistent: false,
-                  storageKey: 'dealFiles',
                   onChange: this.onChangeSelectedRows
                 },
                 actionable: {
