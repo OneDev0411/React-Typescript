@@ -112,7 +112,8 @@ class UserFilter extends React.Component {
         items={this.MembersList}
         onChange={this.handleOnChange}
         style={{
-          maxWidth: '20rem'
+          maxWidth: '20rem',
+          height: '100%'
         }}
       />
     )
