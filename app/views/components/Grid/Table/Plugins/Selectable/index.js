@@ -197,18 +197,18 @@ export class SelectablePlugin {
   /**
    * toggles selecting all rows
    */
-  toggleSelectAllSubTableRows = data => {
+  toggleSelectAllSubTableRows = subData => {
     const { selectedRows } = this.StorageObject
     let newSelectedRows = { ...selectedRows }
-    const allRowsSelected = data.every(({ id }) => newSelectedRows[id])
+    const allRowsSelected = subData.every(({ id }) => newSelectedRows[id])
 
     if (!allRowsSelected) {
-      data.forEach(row => {
+      subData.forEach(row => {
         newSelectedRows[row.id] = true
       })
     } else {
       newSelectedRows = _.omit(newSelectedRows, (value, key) =>
-        data.some(({ id }) => key === id)
+        subData.some(({ id }) => key === id)
       )
     }
 
@@ -248,16 +248,16 @@ export class SelectablePlugin {
           )}
         </Fragment>
       ),
-      subHeader: data => (
+      subHeader: subData => (
         <CheckBoxButtonWithoutState
-          onClick={() => this.toggleSelectAllSubTableRows(data)}
+          onClick={() => this.toggleSelectAllSubTableRows(subData)}
           someRowsSelected={
-            !this.isAllSubTableRowsSelected(data) &&
-            this.anySubTableRowsSelected(data)
+            !this.isAllSubTableRowsSelected(subData) &&
+            this.anySubTableRowsSelected(subData)
           }
           isSelected={
-            this.isAllSubTableRowsSelected(data) ||
-            this.anySubTableRowsSelected(data)
+            this.isAllSubTableRowsSelected(subData) ||
+            this.anySubTableRowsSelected(subData)
           }
         />
       ),
