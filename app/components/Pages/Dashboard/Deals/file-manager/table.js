@@ -416,36 +416,42 @@ export class FileManager extends React.Component {
         accessor: '',
         className: 'td--dropdown-container',
         width: '48px',
-        render: ({ rowData: file }) => (
-          <Dropdown
-            id={`file_${file.id}`}
-            className="deal-file-cta-menu"
-            pullRight
-          >
-            <OptionButton
-              appearance="icon"
-              onClick={e => e.stopPropagation()}
-              // className="cta-btn btn-link"
-              bsRole="toggle"
-            >
-              <VerticalDotsIcon />
-            </OptionButton>
+        render: ({ rowData: file }) => {
+          if (file.envelope) {
+            return false
+          }
 
-            <Dropdown.Menu>
-              <li>
-                {isDeleting.includes(file.id) ? (
-                  <span>
-                    <Spinner /> Deleting ...
-                  </span>
-                ) : (
-                  <span onClick={() => this.deleteSingleFile(file)}>
-                    Delete file
-                  </span>
-                )}
-              </li>
-            </Dropdown.Menu>
-          </Dropdown>
-        )
+          return (
+            <Dropdown
+              id={`file_${file.id}`}
+              className="deal-file-cta-menu"
+              pullRight
+            >
+              <OptionButton
+                appearance="icon"
+                onClick={e => e.stopPropagation()}
+                // className="cta-btn btn-link"
+                bsRole="toggle"
+              >
+                <VerticalDotsIcon />
+              </OptionButton>
+
+              <Dropdown.Menu>
+                <li>
+                  {isDeleting.includes(file.id) ? (
+                    <span>
+                      <Spinner /> Deleting ...
+                    </span>
+                  ) : (
+                    <span onClick={() => this.deleteSingleFile(file)}>
+                      Delete file
+                    </span>
+                  )}
+                </li>
+              </Dropdown.Menu>
+            </Dropdown>
+          )
+        }
       }
     ]
   }
@@ -481,7 +487,7 @@ export class FileManager extends React.Component {
   ]
 
   render() {
-    const { filter, selectedRows } = this.state
+    const { filter } = this.state
     const { deal } = this.props
 
     this.data = this.getAllFiles()
