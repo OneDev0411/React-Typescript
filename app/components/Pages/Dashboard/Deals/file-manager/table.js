@@ -514,7 +514,11 @@ export class FileManager extends React.Component {
               plugins={{
                 selectable: {
                   persistent: false,
-                  onChange: this.onChangeSelectedRows
+                  onChange: this.onChangeSelectedRows,
+                  allowSelectAll: this.envelopesFiles.length === 0,
+                  unselectableRow: this.envelopesFiles.map(
+                    envelop => envelop.id
+                  )
                 },
                 actionable: {
                   actions: this.actions
