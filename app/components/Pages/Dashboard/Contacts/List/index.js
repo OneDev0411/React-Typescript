@@ -1,6 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
+import _ from 'underscore'
+
+import { getActiveTeam } from 'utils/user-teams'
 
 import DuplicateContacts from '../components/DuplicateContacts'
 
@@ -122,6 +125,25 @@ class ContactsList extends React.Component {
     )
   }
 
+  clearUsersIfAllSelected = users => {
+    const activeTeam = getActiveTeam(this.props.user)
+    const brandMembers = activeTeam.brand.roles
+      ? activeTeam.brand.roles.reduce(
+          (members, role) =>
+            role.members ? members.concat(role.members) : members,
+          []
+        )
+      : []
+
+    const brandMembersCount = _.uniq(brandMembers, member => member.id).length
+
+    if (brandMembersCount === users.length) {
+      return []
+    }
+
+    return users
+  }
+
   handleFilterChange = async (
     filter,
     searchInputValue,
@@ -142,7 +164,7 @@ class ContactsList extends React.Component {
         undefined,
         searchInputValue,
         order,
-        users
+        this.clearUsersIfAllSelected(users)
       )
     } catch (e) {
       console.log('fetch search error: ', e)
