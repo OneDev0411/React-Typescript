@@ -87,8 +87,7 @@ class Grid extends React.Component {
 
     if (this.selectablePlugin) {
       columnsWithPlugins = this.selectablePlugin.registerColumn(
-        columnsWithPlugins,
-        this.props.noCheckboxInHeader
+        columnsWithPlugins
       )
     }
 
@@ -127,6 +126,7 @@ class Grid extends React.Component {
               )}
           </SortableContainer>
         </ToolbarContainer>
+
         {multiple ? (
           <MultipleTable
             {...this.props}

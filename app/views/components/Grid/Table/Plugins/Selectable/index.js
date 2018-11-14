@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import _ from 'underscore'
 
 import { CheckBoxButton } from '../../../../Button/CheckboxButton'
@@ -221,24 +221,25 @@ export class SelectablePlugin {
     this.options.onChange(this.SelectedRows)
   }
 
-  registerColumn = (columns, noCheckboxInHeader) => {
+  registerColumn = columns => {
     const column = {
       id: 'plugin--selectable',
       width: '24px',
       sortable: false,
       verticalAlign: 'center',
-      header: () =>
-        noCheckboxInHeader ? (
-          ''
-        ) : (
-          <CheckBoxButtonWithoutState
-            someRowsSelected={
-              !this.isAllRowsSelected() && this.someRowsSelected()
-            }
-            onClick={this.toggleSelectAllRows}
-            isSelected={this.isAllRowsSelected() || this.someRowsSelected()}
-          />
-        ),
+      header: () => (
+        <Fragment>
+          {this.options.allowSelectAll !== false && (
+            <CheckBoxButtonWithoutState
+              someRowsSelected={
+                !this.isAllRowsSelected() && this.someRowsSelected()
+              }
+              onClick={this.toggleSelectAllRows}
+              isSelected={this.isAllRowsSelected() || this.someRowsSelected()}
+            />
+          )}
+        </Fragment>
+      ),
       subHeader: data => (
         <CheckBoxButtonWithoutState
           onClick={() => this.toggleSelectAllSubTableRows(data)}

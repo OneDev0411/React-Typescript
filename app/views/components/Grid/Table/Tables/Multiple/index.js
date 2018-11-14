@@ -5,7 +5,7 @@ import BasicTable from '../Basic'
 
 import TableHeader from '../../Header'
 
-const MultipleTable = ({ data, LoadingState, ...rest }) => (
+const MultipleTable = ({ data, LoadingState, isFetching, ...rest }) => (
   <Fragment>
     <TableHeader
       columns={rest.columns}
@@ -13,11 +13,17 @@ const MultipleTable = ({ data, LoadingState, ...rest }) => (
       getHeaderProps={rest.getHeaderProps}
       getHeaderRowProps={rest.getHeaderRowProps}
     />
-    {rest.isFetching && LoadingState ? (
+
+    {isFetching && LoadingState ? (
       <LoadingState />
     ) : (
       _.map(data, (group, key) => (
-        <TableGroup key={group.key || key} group={group} {...rest} />
+        <TableGroup
+          key={group.key || key}
+          group={group}
+          isFetching={isFetching}
+          {...rest}
+        />
       ))
     )}
   </Fragment>

@@ -189,7 +189,8 @@ class DuplicateContactsList extends React.Component {
             selectable: {
               persistent: true,
               storageKey: 'contacts',
-              onChange: this.onSelectedChanged
+              onChange: this.onSelectedChanged,
+              allowSelectAll: false
             },
             actionable: {
               actions: this.actions
@@ -201,8 +202,6 @@ class DuplicateContactsList extends React.Component {
             selectedRowsCount: this.selectedRowLength
           }}
           multiple
-          noCheckboxInHeader
-          subHeaderCheckbox
           data={this.props.data}
           isFetching={this.props.isFetching}
           columns={this.columns}
