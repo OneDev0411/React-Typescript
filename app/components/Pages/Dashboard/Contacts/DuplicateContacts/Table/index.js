@@ -41,7 +41,9 @@ class DuplicateContactsList extends React.Component {
       verticalAlign: 'center',
       render: ({ rowData: contact, subHeader }) => (
         <Flex alignCenter>
-          {!subHeader && <ArrowLeftTopIcon style={{ marginRight: '16px' }} />}
+          {!subHeader && (
+            <ArrowLeftTopIcon style={{ marginRight: '16px', minWidth: '0' }} />
+          )}
           <Name contact={contact} />
         </Flex>
       )

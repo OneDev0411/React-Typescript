@@ -73,7 +73,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
   }
 
   return (
-    <Flex nowrap>
+    <Flex nowrap style={{ minWidth: '0' }}>
       <AvatarContainer>
         <Avatar
           className="avatar"
@@ -101,6 +101,9 @@ const ContactsListName = ({ contact, attributeDefs }) => {
             padding: 0
           }}
         >
+          {name}
+          {name}
+          {name}
           {name}
         </Link>
         {contact.partner_name && (
