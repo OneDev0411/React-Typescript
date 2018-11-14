@@ -31,7 +31,7 @@ import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
 import { EventDrawer } from '../../../../views/components/EventDrawer'
 import CalendarTable from './Table'
-import CalendarFilter from '../../../../views/components/Filter'
+import CalendarFilter from '../../../../views/components/UserFilter'
 import { MenuContainer, FilterContainer } from './styled'
 import ActionButton from '../../../../views/components/Button/ActionButton'
 import { getActiveTeam, getActiveTeamACL } from '../../../../utils/user-teams'
@@ -41,14 +41,6 @@ const LOADING_POSITIONS = {
   Bottom: 1,
   Middle: 2
 }
-
-const CalendarExport = styled(ActionButton)`
-  position: absolute;
-  bottom: 0;
-  margin: auto;
-  left: 50%;
-  transform: translateX(-50%);
-`
 
 const PopOverImage = styled.img`
   width: 40px;
@@ -64,7 +56,10 @@ class CalendarContainer extends React.Component {
       selectedTaskId: null,
       loadingPosition: LOADING_POSITIONS.Middle
     }
-    this.isFilterHidden = getActiveTeam(this.props.user).brand.member_count <= 1
+
+    const activeTeam = getActiveTeam(this.props.user)
+
+    this.isFilterHidden = activeTeam && activeTeam.brand.member_count <= 1
   }
 
   componentDidMount() {
@@ -301,8 +296,13 @@ class CalendarContainer extends React.Component {
             />
 
             <PopOver
+              containerStyle={{
+                position: 'absolute',
+                bottom: '0',
+                left: '50%',
+                transform: 'translateX(-50%)'
+              }}
               popoverStyles={{ width: '250px', textAlign: 'center' }}
-              trigger="click"
               caption={
                 <div>
                   <div>
@@ -317,7 +317,7 @@ class CalendarContainer extends React.Component {
                 </div>
               }
             >
-              <CalendarExport
+              <ActionButton
                 noBorder
                 appearance="outline"
                 onClick={() => {
@@ -325,7 +325,7 @@ class CalendarContainer extends React.Component {
                 }}
               >
                 Calendar Export
-              </CalendarExport>
+              </ActionButton>
             </PopOver>
           </MenuContainer>
         </Menu>

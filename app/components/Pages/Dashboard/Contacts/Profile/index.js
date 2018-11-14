@@ -81,6 +81,10 @@ class ContactProfile extends React.Component {
     this.fetchTimeline()
   }
 
+  updateContact() {
+    this.props.getContact(this.props.params.id)
+  }
+
   fetchTimeline = async () => {
     try {
       const timeline = await getContactTimeline(this.props.params.id)
@@ -92,21 +96,28 @@ class ContactProfile extends React.Component {
     }
   }
 
-  addEvent = event =>
-    this.setState(state => ({
-      timeline: [event, ...state.timeline]
-    }))
+  addEvent = crm_event => {
+    this.setState(
+      state => ({
+        timeline: [crm_event, ...state.timeline]
+      }),
+      this.updateContact
+    )
+  }
 
   filterTimelineById = (state, id) =>
     state.timeline.filter(item => item.id !== id)
 
   editEvent = updatedEvent =>
-    this.setState(state => ({
-      timeline: [
-        ...this.filterTimelineById(state, updatedEvent.id),
-        updatedEvent
-      ]
-    }))
+    this.setState(
+      state => ({
+        timeline: [
+          ...this.filterTimelineById(state, updatedEvent.id),
+          updatedEvent
+        ]
+      }),
+      this.updateContact
+    )
 
   deleteEvent = id =>
     this.setState(state => ({

@@ -121,13 +121,14 @@ class UserFilter extends React.Component {
 
 function mapStateToProps({ user }) {
   const activeTeam = getActiveTeam(user)
-  const brandMembers = activeTeam.brand.roles
-    ? activeTeam.brand.roles.reduce(
-        (members, role) =>
-          role.members ? members.concat(role.members) : members,
-        []
-      )
-    : []
+  const brandMembers =
+    activeTeam && activeTeam.brand.roles
+      ? activeTeam.brand.roles.reduce(
+          (members, role) =>
+            role.members ? members.concat(role.members) : members,
+          []
+        )
+      : []
 
   return {
     user,

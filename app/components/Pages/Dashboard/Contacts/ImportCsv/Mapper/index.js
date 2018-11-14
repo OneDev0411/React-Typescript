@@ -98,12 +98,7 @@ class Mapper extends React.Component {
     const { attributeDefs } = this.props
     const mappedFields = {}
 
-    const total = Object.keys(csvColoumns).length
-    let counter = 0
-
     _.each(csvColoumns, ({ name: columnName }) => {
-      counter += 1
-
       let index = 0
       const attribute = this.findMatchedAttribute(columnName)
 
@@ -222,11 +217,20 @@ class Mapper extends React.Component {
       return updateCsvFieldsMap(fieldName, { definitionId: null, label: null })
     }
 
-    const [definitionId, index] = fieldValue.split(':')
+    let is_partner = false
+    let [definitionId, index] = fieldValue.split(':')
+
+    if (index === 'partner') {
+      index = 0
+      is_partner = true
+    } else {
+      index = parseInt(index, 10)
+    }
 
     updateCsvFieldsMap(fieldName, {
       definitionId,
-      index: parseInt(index, 10)
+      is_partner,
+      index
     })
   }
 
@@ -291,8 +295,7 @@ class Mapper extends React.Component {
                   <div className="map-list">
                     <FieldDropDown
                       fieldName={colName}
-                      selectedField={mappedField.definitionId}
-                      selectedFieldIndex={mappedField.index}
+                      selectedField={mappedField}
                       toggleOpenDrawer={this.toggleOpenDrawer}
                       onChange={this.onChangeField}
                     />

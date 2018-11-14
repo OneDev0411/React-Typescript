@@ -48,7 +48,7 @@
     }
 
     .name {
-      width: 40%;
+      width: 25%;
       &.is-empty {
         color: gray;
       }
@@ -60,6 +60,10 @@
           outline: none;
         }
       }
+    }
+
+    .primary-partner {
+      width: 15%;
     }
 
     .map-list {

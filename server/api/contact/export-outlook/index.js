@@ -1,15 +1,18 @@
 import Koa from 'koa'
 
-const router = require('koa-router')()
 const PassThrough = require('stream').PassThrough
+
+const router = require('koa-router')()
+
 const app = new Koa()
 
 router.get('/contacts/export/outlook/:brand', async ctx => {
   try {
     const { user } = ctx.session
-    const { 'ids[]': ids, 'filters[]': filters } = ctx.query
+    const { 'ids[]': ids, 'filters[]': filters, 'users[]': users } = ctx.query
     const { brand } = ctx.params
     let data = {}
+    let usersString
 
     if (ids) {
       if (typeof ids === 'string') {
@@ -29,6 +32,12 @@ router.get('/contacts/export/outlook/:brand', async ctx => {
       }
     }
 
+    if (typeof users === 'string') {
+      usersString = users
+    } else if (Array.isArray(users)) {
+      usersString = users.join('&users[]=')
+    }
+
     if (!user) {
       ctx.status = 401
       ctx.body = 'Unauthorized'
@@ -37,7 +46,7 @@ router.get('/contacts/export/outlook/:brand', async ctx => {
     }
 
     ctx.body = ctx
-      .fetch('/contacts/outlook.csv', 'POST')
+      .fetch(`/contacts/outlook.csv?users[]=${usersString}`, 'POST')
       .set('Authorization', `Bearer ${user.access_token}`)
       .set({ 'X-RECHAT-BRAND': brand })
       .send(data)

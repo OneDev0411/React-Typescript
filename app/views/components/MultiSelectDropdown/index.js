@@ -2,14 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'underscore'
 
+import { CheckBoxButton } from 'components/Button/CheckboxButton'
+
 import { BasicDropdown } from '../BasicDropdown'
 
-import { CheckBoxButton } from 'components/Button/CheckboxButton'
 import { MenuItem } from './styled'
 
 class MultiSelectDropdown extends React.Component {
   state = {
     selectedItems: this.props.defaultSelectedItems
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!_.isEqual(nextProps.defaultSelectedItems, this.state.selectedItems)) {
+      this.setState({ selectedItems: nextProps.defaultSelectedItems })
+    }
   }
 
   get Items() {
@@ -90,7 +97,7 @@ class MultiSelectDropdown extends React.Component {
             appearance="link"
             key={item.label}
             style={{ width: '100%' }}
-            hasDevider={item.selectAll}
+            hasDivider={item.selectAll}
             isDisabled={item.disabled === true}
             {...rest}
           >
@@ -118,8 +125,8 @@ MultiSelectDropdown.propTypes = {
   fullWidth: PropTypes.bool,
   items: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
-  /* use this prop when you need to have some re-selected items 
-  * when user deselects all options (see Calendar Filters for instnace)
+  /* use this prop when you need to have some re-selected items
+  * when user deselects all options (see Calendar Filters for instance)
   */
   forcedSelectedItemsOnDeselectAll: PropTypes.array
 }

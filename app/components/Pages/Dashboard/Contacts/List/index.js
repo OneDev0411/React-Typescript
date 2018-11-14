@@ -26,7 +26,8 @@ import {
   searchContacts,
   deleteContacts
 } from '../../../../../store_actions/contacts'
-import UserFilter from '../../../../../views/components/Filter'
+import { setContactsListTextFilter } from '../../../../../store_actions/contacts/set-contacts-list-text-filter'
+import UserFilter from '../../../../../views/components/UserFilter'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class ContactsList extends React.Component {
       isFetchingMoreContacts: false,
       isRowsUpdating: false,
       filter: this.props.filter,
-      searchInputValue: this.props.searchInputValue,
+      searchInputValue: this.props.list.textFilter,
       activeSegment: {},
       users: this.props.listInfo.users || [this.props.user.id]
     }
@@ -70,7 +71,14 @@ class ContactsList extends React.Component {
     }
   }
 
-  fetchContacts = async (start = 0) => {
+  componentWillUnmount() {
+    this.props.setContactsListTextFilter(this.state.searchInputValue)
+  }
+
+  hasSearchState = () =>
+    this.state.filter || this.state.searchInputValue || this.order
+
+  fetchList = async (start = 0) => {
     const { filter, searchInputValue } = this.state
 
     this.setState({ isFetchingContacts: true })
@@ -93,12 +101,23 @@ class ContactsList extends React.Component {
   }
 
   handleChangeSavedSegment = segment => {
+    const users =
+      segment.args && segment.args.users
+        ? segment.args.users
+        : [this.props.user.id]
+
     this.setState(
       {
         activeSegment: segment
       },
       () => {
-        this.handleFilterChange(segment.filters, this.state.searchInputValue)
+        this.handleFilterChange(
+          segment.filters,
+          this.state.searchInputValue,
+          0,
+          this.order,
+          users
+        )
       }
     )
   }
@@ -174,7 +193,7 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContacts: true })
 
     if (this.hasSearchState()) {
-      await this.fetchContacts(startFrom)
+      await this.fetchList(startFrom)
     } else {
       await this.handleFilterChange(
         this.state.filter,
@@ -185,9 +204,6 @@ class ContactsList extends React.Component {
 
     this.setState({ isFetchingMoreContacts: false })
   }
-
-  hasSearchState = () =>
-    this.state.filter || this.state.searchInputValue || this.order
 
   handleOnDelete = (e, { selectedRows }) => {
     const selectedRowsLength = selectedRows.length
@@ -227,7 +243,7 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const { isSideMenuOpen, activeSegment } = this.state
+    const { isSideMenuOpen, activeSegment, users } = this.state
     const { user, list } = this.props
     const contacts = selectContacts(list)
 
@@ -249,11 +265,11 @@ class ContactsList extends React.Component {
             onMenuTriggerChange={this.toggleSideMenu}
           />
           <Flex style={{ paddingLeft: '1.5em' }}>
-            <UserFilter
-              onChange={this.handleChangeUsers}
-              filter={this.state.users}
+            <UserFilter onChange={this.handleChangeUsers} filter={users} />
+            <ContactFilters
+              onFilterChange={this.handleFilterChange}
+              users={users}
             />
-            <ContactFilters onFilterChange={this.handleFilterChange} />
           </Flex>
           <SearchContacts
             onSearch={this.handleSearch}
@@ -272,6 +288,7 @@ class ContactsList extends React.Component {
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
             filters={this.state.filter}
+            users={users}
           />
         </PageContent>
       </PageContainer>
@@ -293,5 +310,11 @@ function mapStateToUser({ user, contacts }) {
 
 export default connect(
   mapStateToUser,
-  { getContacts, searchContacts, deleteContacts, confirmation }
+  {
+    getContacts,
+    searchContacts,
+    deleteContacts,
+    confirmation,
+    setContactsListTextFilter
+  }
 )(ContactsList)
