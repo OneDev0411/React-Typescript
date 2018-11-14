@@ -56,7 +56,7 @@ class ContactsList extends React.Component {
         ]
       )
     } else {
-      this.fetchContacts()
+      this.fetchList()
     }
   }
 
