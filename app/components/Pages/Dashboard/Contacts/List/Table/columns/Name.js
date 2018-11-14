@@ -102,9 +102,6 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           }}
         >
           {name}
-          {name}
-          {name}
-          {name}
         </Link>
         {contact.partner_name && (
           <Tooltip caption="Partner/Spouse">
