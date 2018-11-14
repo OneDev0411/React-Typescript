@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
+import DuplicateContacts from '../components/DuplicateContacts'
+
 import { confirmation } from '../../../../../store_actions/confirmation'
 import {
   Container as PageContainer,
@@ -12,6 +14,7 @@ import SavedSegments from '../../../../../views/components/Grid/SavedSegments/Li
 import ContactFilters from './Filters'
 import { Header } from './Header'
 import { SearchContacts } from './Search'
+
 import Table from './Table'
 import { resetGridSelectedItems } from '../../../../../views/components/Grid/Table/Plugins/Selectable'
 import {
@@ -43,7 +46,15 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchList()
+    if (this.props.filterSegments.activeSegmentId !== 'default') {
+      this.handleChangeSavedSegment(
+        this.props.filterSegments.list[
+          this.props.filterSegments.activeSegmentId
+        ]
+      )
+    } else {
+      this.fetchContacts()
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -238,11 +249,12 @@ class ContactsList extends React.Component {
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen}>
+        <SideMenu isOpen={isSideMenuOpen} width="12.1em">
           <SavedSegments
             name="contacts"
             onChange={this.handleChangeSavedSegment}
           />
+          <DuplicateContacts />
         </SideMenu>
 
         <PageContent>
