@@ -13,7 +13,15 @@ export function resetGridSelectedItems(key) {
 
 export class SelectablePlugin {
   constructor({ options, onRequestForceUpdate }) {
-    this.options = options
+    this.options = Object.assign(
+      {
+        persistent: false,
+        allowSelectAll: true,
+        unselectableRow: []
+      },
+      options
+    )
+
     this.onRequestForceUpdate = onRequestForceUpdate
     this.data = []
 
@@ -254,10 +262,14 @@ export class SelectablePlugin {
         />
       ),
       render: ({ rowData: row }) => (
-        <CheckBoxButton
-          onClick={() => this.toggleSelectRow(row.id)}
-          isSelected={this.isRowSelected(row.id)}
-        />
+        <Fragment>
+          {this.options.unselectableRow.includes(row.id) === false && (
+            <CheckBoxButton
+              onClick={() => this.toggleSelectRow(row.id)}
+              isSelected={this.isRowSelected(row.id)}
+            />
+          )}
+        </Fragment>
       )
     }
 
