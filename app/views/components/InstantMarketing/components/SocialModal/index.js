@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { FacebookProvider, Share } from 'react-facebook'
+import { FacebookProvider, Feed } from 'react-facebook'
 
 import ActionButton from 'components/Button/ActionButton'
 import Modal from 'components/BasicModal'
@@ -19,7 +19,8 @@ export class SocialModal extends React.Component {
     this.loadImage()
   }
 
-  facebookAppId = '1084664458366273'
+  // facebookAppId = '1084664458366273'
+  facebookAppId = '194803481403883'
 
   loadImage = async () => {
     const image = await getTemplatePreviewImage(this.props.template, {
@@ -51,7 +52,7 @@ export class SocialModal extends React.Component {
 
             {this.state.image && (
               <FacebookProvider appId={this.facebookAppId}>
-                <Share href={this.state.image}>
+                <Feed link={this.state.image} source={this.state.image}>
                   {({ handleClick, loading }) => (
                     <ActionButton disabled={loading} onClick={handleClick}>
                       <i
@@ -61,7 +62,7 @@ export class SocialModal extends React.Component {
                       Share on Facebook
                     </ActionButton>
                   )}
-                </Share>
+                </Feed>
               </FacebookProvider>
             )}
           </Container>
