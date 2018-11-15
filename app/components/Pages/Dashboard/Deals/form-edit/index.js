@@ -7,16 +7,17 @@ import { saveSubmission, getDeal, getForms } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
 import { getFormSize } from 'models/Deal/form'
-import { LoadingDealContainer } from './styled'
 
 import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
 import Spinner from 'components/Spinner'
 import ProgressBar from 'components/ProgressBar'
 
+import importPdfJs from 'utils/import-pdf-js'
+
 import PDFEdit from './editor'
 
-import importPdfJs from 'utils/import-pdf-js'
+import { LoadingDealContainer } from './styled'
 import config from '../../../../../../config/public'
 
 class EditDigitalForm extends React.Component {
@@ -135,6 +136,12 @@ class EditDigitalForm extends React.Component {
     this.values = {
       ...this.values,
       [name]: value
+    }
+
+    if (!this.state.promptOnQuit) {
+      this.setState({
+        promptOnQuit: true
+      })
     }
 
     if (forceUpdate) {
