@@ -1,8 +1,10 @@
 import React from 'react'
+
 import {
   ChecklistNewItemInputContainer,
   ChecklistNewItemInput,
   ChecklistNewItemCancel,
+  ChecklistNewItemSave,
   ChecklistItemContainer,
   ChecklistItemNotifyOffice,
   ChecklistItemTitle
@@ -22,8 +24,6 @@ export class CreateTaskForm extends React.Component {
     this.setState({ notifyOffice: !this.state.notifyOffice })
 
   onKeyPress = e => {
-    const { onFinish, checklist } = this.props
-    const { notifyOffice } = this.state
     const { value } = e.target
 
     if (value.length === 0) {
@@ -31,9 +31,20 @@ export class CreateTaskForm extends React.Component {
     }
 
     if (e.which === 13) {
-      onFinish(checklist.id, value, notifyOffice)
+      this.props.onFinish(
+        this.props.checklist.id,
+        value,
+        this.state.notifyOffice
+      )
     }
   }
+
+  handleSave = () =>
+    this.props.onFinish(
+      this.props.checklist.id,
+      this.input.value,
+      this.state.notifyOffice
+    )
 
   render() {
     const { notifyOffice } = this.state
@@ -55,11 +66,16 @@ export class CreateTaskForm extends React.Component {
           <ChecklistNewItemInputContainer>
             <ChecklistNewItemInput
               autoFocus
+              innerRef={ref => (this.input = ref)}
               placeholder="Name task and press enter"
               onKeyPress={this.onKeyPress}
             />
+            <ChecklistNewItemSave onClick={this.handleSave}>
+              Save
+            </ChecklistNewItemSave>
+
             <ChecklistNewItemCancel onClick={onCancel}>
-              Cancel
+              <i className="fa fa-times" />
             </ChecklistNewItemCancel>
           </ChecklistNewItemInputContainer>
         </ChecklistItemTitle>
