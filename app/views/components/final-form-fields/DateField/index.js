@@ -10,6 +10,9 @@ import Button from '../../Button/ActionButton'
 
 import { Input } from './styled'
 
+const getValidateFields = name =>
+  ['month', 'day', 'year'].map(n => `${name}.${n}`)
+
 const daysItems = days.map(day => ({
   title: day < 10 ? `0${day}` : day.toString(),
   value: day
@@ -37,12 +40,19 @@ export class DateField extends React.Component {
 
   render() {
     const { name } = this.props
+    const validateFields = getValidateFields(name)
 
     return (
       <Flex style={{ width: 'calc(100% - 2.5rem)' }} column>
         <Flex>
           <Field
             name={`${name}.month`}
+            validate={item => {
+              if (item && item.value == null) {
+                return 'Month is required!'
+              }
+            }}
+            validateFields={validateFields}
             render={fieldProps => (
               <Dropdown
                 noBorder
@@ -55,6 +65,12 @@ export class DateField extends React.Component {
           />
           <Field
             name={`${name}.day`}
+            validateFields={validateFields}
+            validate={item => {
+              if (item && item.value == null) {
+                return 'Day is required!'
+              }
+            }}
             render={fieldProps => (
               <Dropdown
                 noBorder
@@ -67,6 +83,7 @@ export class DateField extends React.Component {
           />
           <Field
             name={`${name}.year`}
+            validateFields={validateFields}
             parse={value => {
               if (value == null || Number.isNaN(value)) {
                 return ''
@@ -105,15 +122,18 @@ export class DateField extends React.Component {
             }
           />
         </Flex>
-        <Field
-          name={`${name}.year`}
-          subscription={{ error: true, touched: true }}
-          render={({ meta }) =>
-            meta.touched && meta.error ? (
-              <span style={{ color: '#f00' }}>{meta.error}</span>
-            ) : null
-          }
-        />
+        {validateFields.map((name, index) => (
+          <Field
+            key={index}
+            name={name}
+            subscription={{ error: true, touched: true }}
+            render={({ meta }) =>
+              meta.touched && meta.error ? (
+                <div style={{ color: '#f00' }}>{meta.error}</div>
+              ) : null
+            }
+          />
+        ))}
       </Flex>
     )
   }
