@@ -1,11 +1,11 @@
 import React from 'react'
 
 import ToolTip from 'components/tooltip'
+
 import {
   calculateWordWrap,
   getAnnotationsValues
 } from '../../../../utils/word-wrap'
-
 
 import { Container } from './styled'
 
@@ -28,6 +28,10 @@ export default class Context extends React.Component {
     )
 
     this.props.onSetValues(values)
+  }
+
+  onRef = ref => {
+    this.container = ref
   }
 
   render() {
@@ -57,7 +61,7 @@ export default class Context extends React.Component {
               bold={appearance.bold}
               color={appearance.color}
               rect={rect}
-              innerRef={ref => (this.container = ref)}
+              innerRef={this.onRef}
               readOnly={this.props.isReadOnly}
               onClick={() =>
                 !this.props.isReadOnly &&
