@@ -159,7 +159,7 @@ class SendContactCard extends React.Component {
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
           templateData={{ user: this.props.user, contact: this.state.contact }}
-          templateTypes={['Contact']}
+          templateTypes={['Birthday']}
         />
 
         <Compose
