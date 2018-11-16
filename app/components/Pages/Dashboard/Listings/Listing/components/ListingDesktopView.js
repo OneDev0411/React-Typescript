@@ -107,7 +107,8 @@ const ListingDesktopView = ({
   setGalleryModalState,
   galleryModalIsActive,
   handleModalGalleryNav,
-  galleryModalActiveIndex
+  galleryModalActiveIndex,
+  galleryModalDirection
 }) => {
   const brandColor = Brand.color('primary', primary, brand)
 
@@ -797,7 +798,7 @@ const ListingDesktopView = ({
 
     modal_gallery_area = (
       <Carousel
-        direction={galleryModalActiveIndex === 0 ? 'next' : undefined}
+        direction={galleryModalDirection}
         interval={0}
         indicators={false}
         prevIcon={prev_icon}
@@ -1036,6 +1037,7 @@ export default compose(
   withState('galleryModalIsActive', 'setGalleryModalState', false),
   withState('galleryModalDirection', 'setGalleryModalDirection', ''),
   withState('galleryModalActiveIndex', 'setGalleryModalActiveIndex', 0),
+  withState('galleryModalDirection', 'setGalleryModalDirection', 'next'),
   withHandlers({
     hideModal: () => () => {
       const currentLocation = browserHistory.getCurrentLocation()
@@ -1076,7 +1078,8 @@ export default compose(
     handleModalGalleryNav: ({
       listing,
       galleryModalActiveIndex,
-      setGalleryModalActiveIndex
+      setGalleryModalActiveIndex,
+      setGalleryModalDirection
     }) => (selectedIndex, selectedDirection) => {
       const { gallery_image_urls } = listing
       const gallerLength = gallery_image_urls.length - 1
@@ -1098,6 +1101,8 @@ export default compose(
       if (selectedDirection === 'next' && currentIndex === gallerLength) {
         setGalleryModalActiveIndex(0)
       }
+
+      setGalleryModalDirection(selectedDirection)
     }
   }),
   withHandlers({
