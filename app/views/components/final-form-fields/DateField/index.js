@@ -22,13 +22,11 @@ const monthsItems = months.map((month, index) => ({
 export class DateField extends React.Component {
   static propTypes = {
     yearIsOptional: PropTypes.bool,
-    name: PropTypes.string.isRequired,
-    required: PropTypes.bool
+    name: PropTypes.string.isRequired
   }
 
   static defaultProps = {
-    yearIsOptional: false,
-    required: false
+    yearIsOptional: false
   }
 
   state = {
@@ -41,48 +39,79 @@ export class DateField extends React.Component {
     const { name } = this.props
 
     return (
-      <Flex>
-        <Field
-          name={`${name}.month`}
-          render={fieldProps => (
-            <Dropdown
-              noBorder
-              input={fieldProps.input}
-              items={monthsItems}
-              style={{ margin: '0 0 0 0.5rem' }}
-              buttonStyle={{ padding: 0 }}
-            />
-          )}
-        />
-        <Field
-          name={`${name}.day`}
-          render={fieldProps => (
-            <Dropdown
-              noBorder
-              input={fieldProps.input}
-              items={daysItems}
-              style={{ margin: 0 }}
-              buttonStyle={{ padding: 0 }}
-            />
-          )}
-        />
+      <Flex style={{ width: 'calc(100% - 2.5rem)' }} column>
+        <Flex>
+          <Field
+            name={`${name}.month`}
+            render={fieldProps => (
+              <Dropdown
+                noBorder
+                input={fieldProps.input}
+                items={monthsItems}
+                style={{ margin: '0 0.5rem 0 0' }}
+                buttonStyle={{ padding: 0 }}
+              />
+            )}
+          />
+          <Field
+            name={`${name}.day`}
+            render={fieldProps => (
+              <Dropdown
+                noBorder
+                input={fieldProps.input}
+                items={daysItems}
+                style={{ margin: 0 }}
+                buttonStyle={{ padding: 0 }}
+              />
+            )}
+          />
+          <Field
+            name={`${name}.year`}
+            parse={value => {
+              if (value == null || Number.isNaN(value)) {
+                return ''
+              }
+
+              const r = value.toString().replace(/[^0-9]/g, '')
+
+              return r ? Number(r) : ''
+            }}
+            validate={value => {
+              if (!value && !this.props.yearIsOptional) {
+                return 'Year is Required!'
+              }
+
+              if (
+                value &&
+                (value < 1800 || value > new Date().getUTCFullYear())
+              ) {
+                return 'Invalid Year!'
+              }
+            }}
+            render={({ input, meta }) =>
+              this.state.showYear || input.value || meta.dirty ? (
+                <Input
+                  {...input}
+                  type="text"
+                  autoComplete="off"
+                  placeholder="Year"
+                  maxLength="4"
+                />
+              ) : (
+                <Button appearance="link" onClick={this.handleAddYear}>
+                  + Add Year
+                </Button>
+              )
+            }
+          />
+        </Flex>
         <Field
           name={`${name}.year`}
-          format={value =>
-            value == null
-              ? ''
-              : Number.isNaN(value)
-                ? Number(value.toString().replace(/[^0-9]/g, ''))
-                : value
-          }
-          render={({ input }) =>
-            this.state.showYear || input.value ? (
-              <Input {...input} type="text" placeholder="Year" maxLength="4" />
-            ) : (
-              <Button appearance="link" onClick={this.handleAddYear}>
-                + Add Year
-              </Button>
-            )
+          subscription={{ error: true, touched: true }}
+          render={({ meta }) =>
+            meta.touched && meta.error ? (
+              <span style={{ color: '#f00' }}>{meta.error}</span>
+            ) : null
           }
         />
       </Flex>

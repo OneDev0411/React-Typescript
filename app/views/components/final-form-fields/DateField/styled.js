@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { primary, borderColor, grey } from 'views/utils/colors'
 
 export const Input = styled.input`
-  width: 5rem;
+  width: 4rem;
   height: 2.5rem;
   padding: 0 0.5rem;
   margin: 0 0 0 0.5rem;

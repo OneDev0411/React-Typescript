@@ -37,6 +37,7 @@ export function getInitialValues(attributes) {
       const utcDate = new Date(unixUTC * 1000)
       const day = utcDate.getUTCDate()
       const month = utcDate.getUTCMonth()
+      const year = utcDate.getUTCFullYear()
 
       return {
         day: { title: addZero(day), value: day },
@@ -44,7 +45,7 @@ export function getInitialValues(attributes) {
           title: months[month],
           value: month
         },
-        year: utcDate.getUTCFullYear()
+        year: year === 1800 ? null : year
       }
     }
 

@@ -34,7 +34,7 @@ export class MultiField extends React.Component {
     const { attribute_def } = this.props.attribute
 
     if (attribute_def.data_type === 'date') {
-      return <DateField name={field} />
+      return <DateField yearIsOptional name={field} />
     }
 
     return attribute_def.enum_values ? (
@@ -159,7 +159,7 @@ export class MultiField extends React.Component {
                     display: 'flex',
                     alignItems: 'center',
                     marginLeft: '1em',
-                    height: attribute_def.enum_values ? '40px' : 'auto'
+                    height: attribute_def.enum_values ? '2.5rem' : 'auto'
                   }}
                 >
                   {index + 1 === fields.length ? (
