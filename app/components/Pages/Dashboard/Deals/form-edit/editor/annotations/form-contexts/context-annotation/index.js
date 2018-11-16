@@ -34,6 +34,16 @@ export default class Context extends React.Component {
     this.container = ref
   }
 
+  handleClick = () => {
+    console.log(this.container)
+
+    if (this.props.isReadOnly) {
+      return false
+    }
+
+    this.props.onClick(this.container.getBoundingClientRect())
+  }
+
   render() {
     const { appearance, rects, values, fontSize } = calculateWordWrap(
       this.props.annotations,
@@ -61,12 +71,9 @@ export default class Context extends React.Component {
               bold={appearance.bold}
               color={appearance.color}
               rect={rect}
-              innerRef={this.onRef}
+              ref={this.onRef}
               readOnly={this.props.isReadOnly}
-              onClick={() =>
-                !this.props.isReadOnly &&
-                this.props.onClick(this.container.getBoundingClientRect())
-              }
+              onClick={this.handleClick}
             >
               {values[index]}
             </Container>

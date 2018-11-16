@@ -66,7 +66,7 @@ export class CreateTaskForm extends React.Component {
           <ChecklistNewItemInputContainer>
             <ChecklistNewItemInput
               autoFocus
-              innerRef={ref => (this.input = ref)}
+              ref={ref => (this.input = ref)}
               placeholder="Name task and press enter"
               onKeyPress={this.onKeyPress}
             />
