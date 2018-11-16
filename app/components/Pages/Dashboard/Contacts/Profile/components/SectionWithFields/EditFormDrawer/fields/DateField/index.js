@@ -15,7 +15,7 @@ export function DateField(props) {
   return (
     <Container>
       <Title required={attribute_def.required}>{attribute_def.label}</Title>
-      <DateFieldComponent name={attribute_def.id} />
+      <DateFieldComponent yearIsOptional name={attribute_def.id} />
     </Container>
   )
 }

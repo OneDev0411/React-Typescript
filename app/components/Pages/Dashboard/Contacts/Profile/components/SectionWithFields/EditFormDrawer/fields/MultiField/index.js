@@ -65,6 +65,7 @@ export class MultiField extends React.Component {
 
   addNewField = () => {
     const { attribute_def } = this.props.attribute
+
     const SELECT_INITIAL_STATE = {
       title: '-Select-',
       value: '-Select-'
@@ -76,18 +77,24 @@ export class MultiField extends React.Component {
       [attribute_def.data_type]: ''
     }
 
+    if (attribute_def.data_type === 'date') {
+      return this.props.mutators.push(attribute_def.id, {
+        attribute: newAttribute,
+        label: SELECT_INITIAL_STATE,
+        day: { title: 'Day', value: null },
+        month: { title: 'Month', value: null },
+        year: null
+      })
+    }
+
     const newMultiFieldWithoutLabel = {
       attribute: newAttribute,
-      value: attribute_def.enum_values
-        ? SELECT_INITIAL_STATE
-        : ''
+      value: attribute_def.enum_values ? SELECT_INITIAL_STATE : ''
     }
     const newMultiField = {
       attribute: newAttribute,
       label: SELECT_INITIAL_STATE,
-      value: attribute_def.enum_values
-        ? SELECT_INITIAL_STATE
-        : ''
+      value: attribute_def.enum_values ? SELECT_INITIAL_STATE : ''
     }
 
     if (attribute_def.labels) {
@@ -99,11 +106,12 @@ export class MultiField extends React.Component {
 
   render() {
     const { attribute_def } = this.props.attribute
-    const defaultOptions = attribute_def.labels ?
-      attribute_def.labels.map(label => ({
-        title: label,
-        value: label
-      })) : null
+    const defaultOptions = attribute_def.labels
+      ? attribute_def.labels.map(label => ({
+          title: label,
+          value: label
+        }))
+      : null
 
     return (
       <FieldArray name={attribute_def.id}>

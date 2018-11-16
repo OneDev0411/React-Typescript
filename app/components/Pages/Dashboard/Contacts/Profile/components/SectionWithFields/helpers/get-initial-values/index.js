@@ -24,8 +24,8 @@ export function getInitialValues(attributes) {
       return value || ''
     }
 
-    const getDateFieldsValue = date => {
-      if (!date) {
+    const getDateFieldsValue = unixUTC => {
+      if (!unixUTC) {
         return {
           day: { title: 'Day', value: null },
           month: { title: 'Month', value: null },
@@ -33,14 +33,18 @@ export function getInitialValues(attributes) {
         }
       }
 
-      const _date = new Date(date * 1000)
-      const day = _date.getDay()
-      const month = _date.getMonth()
+      const addZero = n => (n > 10 ? n : `0${n}`)
+      const utcDate = new Date(unixUTC * 1000)
+      const day = utcDate.getUTCDate()
+      const month = utcDate.getUTCMonth()
 
       return {
-        day: { title: day, value: day },
-        month: { title: months[month - 1], value: month },
-        year: _date.getFullYear()
+        day: { title: addZero(day), value: day },
+        month: {
+          title: months[month],
+          value: month
+        },
+        year: utcDate.getUTCFullYear()
       }
     }
 

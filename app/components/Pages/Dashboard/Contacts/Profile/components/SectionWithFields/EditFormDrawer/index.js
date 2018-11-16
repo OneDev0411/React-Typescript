@@ -50,7 +50,14 @@ const getAllFields = (attributes, mutators) => {
 
     if (attribute_def.singular) {
       if (attribute_def.data_type === 'date') {
-        return allFields.push(<DateField key={key} name={attribute_def.id} attribute={attribute} />)
+        return allFields.push(
+          <DateField
+            key={key}
+            name={attribute_def.id}
+            attribute={attribute}
+            yearIsOptional
+          />
+        )
       }
 
       if (attribute_def.enum_values) {
