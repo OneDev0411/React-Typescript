@@ -797,6 +797,7 @@ const ListingDesktopView = ({
 
     modal_gallery_area = (
       <Carousel
+        direction={galleryModalActiveIndex === 0 ? 'next' : undefined}
         interval={0}
         indicators={false}
         prevIcon={prev_icon}
