@@ -35,8 +35,6 @@ export default class Context extends React.Component {
   }
 
   handleClick = () => {
-    console.log(this.container)
-
     if (this.props.isReadOnly) {
       return false
     }
