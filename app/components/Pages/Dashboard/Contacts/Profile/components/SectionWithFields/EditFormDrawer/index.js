@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { FinalFormDrawer } from '../../../../../../../../views/components/FinalFormDrawer'
+import { FinalFormDrawer } from 'components/FinalFormDrawer'
 
 import { Select } from './fields/Select'
 import { TextField } from './fields/TextField'
+import { DateField } from './fields/DateField'
 import { MultiField } from './fields/MultiField'
 
 import { getPlaceholder, getValidator } from './helpers'
@@ -48,6 +49,17 @@ const getAllFields = (attributes, mutators) => {
     const validate = getValidator(attribute)
 
     if (attribute_def.singular) {
+      if (attribute_def.data_type === 'date') {
+        return allFields.push(
+          <DateField
+            key={key}
+            name={attribute_def.id}
+            attribute={attribute}
+            yearIsOptional
+          />
+        )
+      }
+
       if (attribute_def.enum_values) {
         return allFields.push(<Select key={key} attribute={attribute} />)
       }
