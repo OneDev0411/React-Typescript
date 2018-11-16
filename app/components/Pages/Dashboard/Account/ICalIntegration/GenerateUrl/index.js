@@ -87,11 +87,11 @@ class GenerateUrl extends React.Component {
 
   get getErrorMessage() {
     if (Object.keys(this.props.selectedMembers).length === 0) {
-      return 'Please select a team or team members. Once selected we can generate your calendar export link.'
+      return 'Please select a team or team members.'
     }
 
     if (this.props.selectedTypes.length === 0) {
-      return 'Please select data you want to export. Once selected we can generate your calendar export link.'
+      return 'Please select data you want to export.'
     }
 
     return ''
