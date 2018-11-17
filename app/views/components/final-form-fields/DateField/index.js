@@ -38,6 +38,34 @@ export class DateField extends React.Component {
 
   handleAddYear = () => this.setState({ showYear: true })
 
+  validateSelect = (meta, allValues, parentName) => {
+    const { name, value } = meta
+    if (!value) {
+      return
+    }
+
+    const fieldName = name.substring(name.indexOf('.') + 1)
+    let parent = allValues[parentName]
+    const startingBracketIndex = parentName.indexOf('[')
+    
+    if (!parent && startingBracketIndex !== -1) {
+      const id = parentName.substring(0, startingBracketIndex)
+      const index = parentName.substring(startingBracketIndex + 1, parentName.indexOf(']'))
+      parent = allValues[id][Number(index)]
+    }
+
+    // console.log(fieldName, meta, allValues, parent)
+    let siblingName = 'day'
+    if (fieldName === siblingName) {
+      siblingName = 'month'
+    }
+    const siblingValue = parent[siblingName] && parent[siblingName].value
+
+    if (value.value == null && (siblingValue != null || parent.year)) {
+      return `${value.title} is required!`
+    }
+  }
+
   render() {
     const { name } = this.props
     const validateFields = getValidateFields(name)
@@ -47,11 +75,9 @@ export class DateField extends React.Component {
         <Flex>
           <Field
             name={`${name}.month`}
-            validate={item => {
-              if (item && item.value == null) {
-                return 'Month is required!'
-              }
-            }}
+            validate={(item, allValues, meta) =>
+              this.validateSelect(meta, allValues, name)
+            }
             validateFields={validateFields}
             render={fieldProps => (
               <Dropdown
@@ -66,11 +92,9 @@ export class DateField extends React.Component {
           <Field
             name={`${name}.day`}
             validateFields={validateFields}
-            validate={item => {
-              if (item && item.value == null) {
-                return 'Day is required!'
-              }
-            }}
+            validate={(item, allValues, meta) =>
+              this.validateSelect(meta, allValues, name)
+            }
             render={fieldProps => (
               <Dropdown
                 noBorder
