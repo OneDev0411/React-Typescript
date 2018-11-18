@@ -1,7 +1,9 @@
-import styled from "styled-components"
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import Flex from 'styled-flex-component'
+
+import { formatPhoneNumber } from 'utils/format'
 
 import Avatar from '../../../Avatar'
 
@@ -25,9 +27,10 @@ const propTypes = {
 function ContactItem(props) {
   const { item, onClickHandler } = props
   const { phone_number, email, display_name: title } = item.summary
+  const formatedPhoneNumber = formatPhoneNumber(phone_number)
   const summary =
     props.summary ||
-    [email, phone_number].filter(i => i && i !== title).join(', ')
+    [email, formatedPhoneNumber].filter(i => i && i !== title).join(', ')
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
