@@ -12,6 +12,7 @@ import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import { formatPhoneNumber } from '../../../../../../utils/format'
 import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
 import config from '../../../../../../../config/public'
 import Brand from '../../../../../../controllers/Brand'
@@ -107,7 +108,8 @@ const ListingDesktopView = ({
   setGalleryModalState,
   galleryModalIsActive,
   handleModalGalleryNav,
-  galleryModalActiveIndex
+  galleryModalActiveIndex,
+  galleryModalDirection
 }) => {
   const brandColor = Brand.color('primary', primary, brand)
 
@@ -175,10 +177,9 @@ const ListingDesktopView = ({
 
   let main_content = isFetching && <Loading />
 
-  main_content = !isFetching &&
-    errorMessage && (
-      <FetchError message={errorMessage} backButtonHandler={hideModal} />
-    )
+  main_content = !isFetching && errorMessage && (
+    <FetchError message={errorMessage} backButtonHandler={hideModal} />
+  )
 
   if (listing && listing.property) {
     property = listing.property
@@ -391,7 +392,9 @@ const ListingDesktopView = ({
 
       if (brand_agent.phone_number) {
         phone_area = (
-          <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
+          <div style={S('font-15 mb-5')}>
+            M: {formatPhoneNumber(brand_agent.phone_number)}
+          </div>
         )
       }
 
@@ -797,6 +800,7 @@ const ListingDesktopView = ({
 
     modal_gallery_area = (
       <Carousel
+        direction={galleryModalDirection}
         interval={0}
         indicators={false}
         prevIcon={prev_icon}
@@ -951,7 +955,9 @@ const ListingDesktopView = ({
 
     if (brand_agent.phone_number) {
       phone_area = (
-        <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
+        <div style={S('font-15 mb-5')}>
+          M: {formatPhoneNumber(brand_agent.phone_number)}
+        </div>
       )
     }
 
@@ -1035,6 +1041,7 @@ export default compose(
   withState('galleryModalIsActive', 'setGalleryModalState', false),
   withState('galleryModalDirection', 'setGalleryModalDirection', ''),
   withState('galleryModalActiveIndex', 'setGalleryModalActiveIndex', 0),
+  withState('galleryModalDirection', 'setGalleryModalDirection', 'next'),
   withHandlers({
     hideModal: () => () => {
       const currentLocation = browserHistory.getCurrentLocation()
@@ -1075,7 +1082,8 @@ export default compose(
     handleModalGalleryNav: ({
       listing,
       galleryModalActiveIndex,
-      setGalleryModalActiveIndex
+      setGalleryModalActiveIndex,
+      setGalleryModalDirection
     }) => (selectedIndex, selectedDirection) => {
       const { gallery_image_urls } = listing
       const gallerLength = gallery_image_urls.length - 1
@@ -1097,6 +1105,8 @@ export default compose(
       if (selectedDirection === 'next' && currentIndex === gallerLength) {
         setGalleryModalActiveIndex(0)
       }
+
+      setGalleryModalDirection(selectedDirection)
     }
   }),
   withHandlers({

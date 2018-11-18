@@ -49,7 +49,7 @@ export function formatPreSave(previousFields, nextFields) {
       const { day, month, year } = nextField
 
       if (day.value != null && month.value != null) {
-        const y = year == null || Number.isNaN(year) ? 1800 : year
+        const y = year && isNumeric(year) ? year : 1800
 
         // UTC time in unix
         value = Date.UTC(y, month.value, day.value) / 1000

@@ -44,7 +44,7 @@ const getAllFields = (attributes, mutators) => {
       return
     }
 
-    const key = `${attribute_def.section}_modal_field_${index}`
+    const key = `${attribute_def.section}_drawer_field_${index}`
     const placeholder = getPlaceholder(attribute)
     const validate = getValidator(attribute)
 

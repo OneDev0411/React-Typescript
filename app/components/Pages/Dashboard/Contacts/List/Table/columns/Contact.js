@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { formatPhoneNumber } from 'utils/format'
+
 import { TruncatedColumn } from '../styled'
 import { getAttributeFromSummary } from '../../../../../../../models/contacts/helpers'
 import { grey } from '../../../../../../../views/utils/colors'
@@ -16,7 +18,7 @@ export function Contact(props) {
     <React.Fragment>
       <TruncatedColumn>{email}</TruncatedColumn>
       <PhoneNumber email={email} className="hover-color--black">
-        {getAttributeFromSummary(contact, 'phone_number')}
+        {formatPhoneNumber(getAttributeFromSummary(contact, 'phone_number'))}
       </PhoneNumber>
     </React.Fragment>
   )

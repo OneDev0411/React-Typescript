@@ -166,8 +166,7 @@ class SectionWithFields extends React.Component {
             }}
           >
             {value ? getFormater(field)(value) : '-'}
-            {this.props.section === 'Addresses' &&
-              value &&
+            {value &&
               field.is_primary && (
                 <Tooltip caption="Primary">
                   <StarIcon
