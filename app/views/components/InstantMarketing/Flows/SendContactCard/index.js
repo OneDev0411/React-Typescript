@@ -20,6 +20,7 @@ import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketin
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 
 import { addCRMLog } from '../../helpers/add-crm-log'
+import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 
 class SendContactCard extends React.Component {
   state = {
@@ -100,7 +101,12 @@ class SendContactCard extends React.Component {
 
     try {
       await sendContactsEmail(emails)
-      addCRMLog(values.subject, [recipient.contactId], this.props.user.id)
+      addCRMLog(this.props.user.id, values.subject, [
+        ...getCRMLogAssociations(
+          'contact',
+          values.recipients.filter(r => r.contactId).map(r => r.contactId)
+        )
+      ])
 
       this.props.notify({
         status: 'success',

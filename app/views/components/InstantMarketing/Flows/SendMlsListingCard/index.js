@@ -20,6 +20,7 @@ import { selectDefinitionByName } from '../../../../../reducers/contacts/attribu
 import { selectContact } from '../../../../../reducers/contacts/list'
 
 import { addCRMLog } from '../../helpers/add-crm-log'
+import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 
 class SendMlsListingCard extends React.Component {
   state = {
@@ -76,6 +77,13 @@ class SendMlsListingCard extends React.Component {
         values.recipients.filter(r => r.contactId).map(r => r.contactId),
         this.props.user.id
       )
+      addCRMLog(this.props.user.id, values.subject, [
+        ...getCRMLogAssociations([
+          'contact',
+          values.recipients.filter(r => r.contactId).map(r => r.contactId)
+        ]),
+        ...getCRMLogAssociations('listing', [this.state.listing])
+      ])
 
       // reset form
       if (form) {
