@@ -8,7 +8,7 @@ export const valertOptions = {
     'Active Contingent',
     'Active Option Contract'
   ],
-  minimum_sold_date: (new Date().getTime() + 90 * 24 * 3600000) / 1000,
+  minimum_sold_date: (new Date().getTime() - 180 * 24 * 3600000) / 1000,
   property_types: ['Residential'],
   property_subtypes: [
     'RES-Condo',
@@ -16,5 +16,6 @@ export const valertOptions = {
     'RES-Half Duplex',
     'RES-Townhouse',
     'RES-Single Family'
-  ]
+  ],
+  limit: 333
 }

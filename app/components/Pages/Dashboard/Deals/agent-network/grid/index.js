@@ -10,12 +10,15 @@ import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
 import { ListingsListViewDrawer } from './listings-list-view-drawer'
 
+const buttonStyle = { padding: 0, height: 'auto', lineHeight: 1 }
+
 export class Grid extends React.Component {
   state = {
     selectedAgent: null
   }
 
   onCloseDrawer = () => this.setState({ selectedAgent: null })
+
   onSelectAgent = (agent, listType) =>
     this.setState({
       selectedAgent: {
@@ -25,6 +28,24 @@ export class Grid extends React.Component {
         list: agent[listType].map(id => agent.listings[id])
       }
     })
+
+  getRecipients = selectedRows => {
+    const { data } = this.props
+
+    if (
+      Array.isArray(data) === false ||
+      Array.isArray(selectedRows) === false ||
+      data.length === 0 ||
+      selectedRows.length === 0
+    ) {
+      return []
+    }
+
+    return data.filter(agent => selectedRows.includes(agent.id)).map(agent => ({
+      name: agent.name,
+      email: agent.email
+    }))
+  }
 
   columns = [
     {
@@ -49,6 +70,7 @@ export class Grid extends React.Component {
         agent.asListing.length > 0 ? (
           <Button
             appearance="link"
+            style={buttonStyle}
             onClick={() => this.onSelectAgent(agent, 'asListing')}
           >
             {agent.asListing.length}
@@ -65,6 +87,7 @@ export class Grid extends React.Component {
         agent.asBuyers.length > 0 ? (
           <Button
             appearance="link"
+            style={buttonStyle}
             onClick={() => this.onSelectAgent(agent, 'asBuyers')}
           >
             {agent.asBuyers.length}
@@ -107,6 +130,7 @@ export class Grid extends React.Component {
       render: props => (
         <SendDealPromotionCard
           deal={this.props.deal}
+          recipients={this.getRecipients(props.selectedRows)}
           selectedRows={props.selectedRows}
         >
           Promote Listing

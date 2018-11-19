@@ -3,16 +3,14 @@ import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import { Field } from 'react-final-form'
 
-import { createTask } from '../../../../../models/tasks/create-task'
+import { createTask } from 'models/tasks/create-task'
 
-import { EventDrawer } from '../../../../components/EventDrawer'
-import ActionButton from '../../../../components/Button/ActionButton'
-import {
-  DateTimeField,
-  ReminderField
-} from '../../../../components/final-form-fields'
+import { EventDrawer } from 'components/EventDrawer'
+import ActionButton from 'components/Button/ActionButton'
+import { DateTimeField, ReminderField } from 'components/final-form-fields'
 
-import LoadSaveReinitializeForm from '../../../../utils/LoadSaveReinitializeForm'
+import { QUERY } from 'components/EventDrawer/index.js'
+import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
@@ -39,8 +37,7 @@ export default class Task extends Component {
 
   save = async task => {
     try {
-      const query = 'associations[]=crm_task.reminders'
-      const newTask = await createTask(task, query)
+      const newTask = await createTask(task, QUERY)
 
       return this.props.submitCallback(newTask)
     } catch (error) {
@@ -49,6 +46,7 @@ export default class Task extends Component {
   }
 
   onClickMoreOptions = formValues => this.setState({ formValues })
+
   handleDrawerClose = (formProps, newEvent) => {
     if (formProps && !formProps.preventDefault) {
       formProps.form.reset()

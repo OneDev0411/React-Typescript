@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
+import { browserHistory, withRouter } from 'react-router'
 
 import config from '../../../../../../config/public'
 import { loadJS } from '../../../../../utils/load-js'
@@ -57,8 +57,6 @@ class AgentNetwork extends React.Component {
         const location = await getPlace(this.address)
 
         if (location) {
-          points = getMapBoundsInCircle(location.center)
-
           if (deal.listing) {
             const listing = await getListing(deal.listing)
 
@@ -66,14 +64,14 @@ class AgentNetwork extends React.Component {
 
             query = {
               ...valertOptions,
-              points,
               architectural_style: property.architectural_style,
               minimum_bedrooms: property.bedroom_count,
               maximum_bedrooms: property.bedroom_count,
               minimum_bathrooms: property.full_bathroom_count,
               maximum_bathrooms: property.full_bathroom_count,
               property_subtype: [property.property_subtype],
-              property_type: [property.property_type]
+              property_type: [property.property_type],
+              points: getMapBoundsInCircle(location.center, 1)
             }
           }
         }
@@ -81,7 +79,7 @@ class AgentNetwork extends React.Component {
         const location = await getPlace(this.address)
 
         if (location) {
-          points = getMapBoundsInCircle(location.center)
+          points = getMapBoundsInCircle(location.center, 1)
 
           query = {
             ...valertOptions,
@@ -115,11 +113,9 @@ class AgentNetwork extends React.Component {
   handleLoadMore = async () => {
     const offset = this.state.listInfo.count + 1
 
-    if (this.state.isFetchingMore || offset === this.state.listInfo.total) {
+    if (this.state.isFetchingMore || offset >= this.state.listInfo.total) {
       return false
     }
-
-    // console.log(`[ Loading More ] Start: ${offset}`)
 
     this.setState({ isFetchingMore: true })
 
@@ -145,6 +141,8 @@ class AgentNetwork extends React.Component {
     }
   }
 
+  onClose = () => browserHistory.push(`/dashboard/deals/${this.props.deal.id}`)
+
   render() {
     return (
       <React.Fragment>
@@ -152,6 +150,7 @@ class AgentNetwork extends React.Component {
           title="Agent Network"
           subtitle={this.address}
           showBackButton={false}
+          onClickCloseButton={this.onClose}
         />
 
         <Grid

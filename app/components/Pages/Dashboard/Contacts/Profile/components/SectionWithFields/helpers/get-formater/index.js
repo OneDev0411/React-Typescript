@@ -2,7 +2,7 @@ import { formatPhoneNumber } from 'utils/format'
 
 export function getFormater({ attribute_def }) {
   if (attribute_def.data_type === 'date') {
-    const addZero = n => (n > 10 ? n : `0${n}`)
+    const addZero = n => (n >= 10 ? n : `0${n}`)
 
     return unixUTC => {
       const utcDate = new Date(unixUTC * 1000)

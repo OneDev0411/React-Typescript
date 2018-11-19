@@ -15,6 +15,9 @@ import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-tem
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
+import { addCRMLog } from '../../helpers/add-crm-log'
+import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
+
 const initialState = {
   listing: null,
   isInstantMarketingBuilderOpen: false,
@@ -66,6 +69,13 @@ class SendDealPromotion extends React.Component {
 
     try {
       await sendContactsEmail(emails)
+      addCRMLog(this.props.user.id, values.subject, [
+        ...getCRMLogAssociations(
+          'contact',
+          values.recipients.filter(r => r.contactId).map(r => r.contactId)
+        ),
+        ...getCRMLogAssociations('listing', [this.state.listing.id])
+      ])
 
       this.props.notify({
         status: 'success',
@@ -132,7 +142,7 @@ class SendDealPromotion extends React.Component {
         <Compose
           isOpen={this.state.isComposeEmailOpen}
           onClose={this.toggleComposeEmail}
-          recipients={this.Recipients}
+          recipients={this.props.recipients}
           html={this.state.templateScreenshot}
           onClickSend={this.handleSendEmails}
           isSubmitting={this.state.isSendingEmail}

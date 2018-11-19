@@ -35,11 +35,11 @@ export function normalizeList(listings) {
     }
 
     if (selling_agent_mls_id && selling_agent_mls_id !== list_agent_mls_id) {
-      addTolist(list_agent_mls_id, listing, 'selling')
+      addTolist(selling_agent_mls_id, listing, 'selling')
     }
   })
 
-  return Object.values(initialList).map(({ listings, ...rest }) => {
+  return Object.values(initialList).map(({ listings, id, ...rest }) => {
     const addPrice = (accumulator, listing) => accumulator + listing.price
 
     const asBuyers = []
@@ -49,13 +49,15 @@ export function normalizeList(listings) {
     const listingsTotalVolume = listings.reduce(addPrice, 0)
 
     listings.forEach(listing => {
-      if (listing.list_agent_mls_id) {
+      if (listing.list_agent_mls_id && listing.list_agent_mls_id === id) {
         asListing.push(listing.id)
-      } else {
+      }
+
+      if (listing.selling_agent_mls_id && listing.selling_agent_mls_id === id) {
         asBuyers.push(listing.id)
       }
 
-      if (listing.status === 'sold') {
+      if (listing.status === 'Sold') {
         soldListings.push(listings)
       }
 
@@ -64,6 +66,7 @@ export function normalizeList(listings) {
 
     return {
       ...rest,
+      id,
       asListing,
       asBuyers,
       listingsTotalVolume,
