@@ -20,6 +20,7 @@ import { selectDefinitionByName } from '../../../../../reducers/contacts/attribu
 import { selectContact } from '../../../../../reducers/contacts/list'
 
 import { addCRMLog } from '../../helpers/add-crm-log'
+import { getTemplateTypes } from '../../helpers/get-template-types'
 import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 
 class SendMlsListingCard extends React.Component {
@@ -182,7 +183,7 @@ class SendMlsListingCard extends React.Component {
           onClose={this.closeMarketing}
           handleSave={this.handleSaveMarketingCard}
           templateData={{ listing, user }}
-          templateTypes={['Listing']}
+          templateTypes={getTemplateTypes(listing)}
           assets={listing && listing.gallery_image_urls}
         />
 

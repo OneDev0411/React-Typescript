@@ -16,6 +16,7 @@ import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-tem
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 import { addCRMLog } from '../../helpers/add-crm-log'
+import { getTemplateTypes } from '../../helpers/get-template-types'
 import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 
 const initialState = {
@@ -135,7 +136,7 @@ class SendDealPromotion extends React.Component {
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
           templateData={{ listing, user }}
-          templateTypes={['Listing', 'JustListed', 'JustSold', 'OpenHouse']}
+          templateTypes={getTemplateTypes(listing)}
           assets={listing && listing.gallery_image_urls}
         />
 
