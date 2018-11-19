@@ -6,10 +6,7 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import EmailCompose from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 
-import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
-
-import { selectContact } from '../../../../../reducers/contacts/list'
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
@@ -18,6 +15,11 @@ import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-tem
 import ActionButton from 'components/Button/ActionButton'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+
+import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
+import { selectContact } from '../../../../../reducers/contacts/list'
+
+import { addCRMLog } from '../../helpers/add-crm-log'
 
 class SendMlsListingCard extends React.Component {
   state = {
@@ -69,6 +71,11 @@ class SendMlsListingCard extends React.Component {
 
     try {
       await sendContactsEmail(emails)
+      addCRMLog(
+        values.subject,
+        values.recipients.filter(r => r.contactId).map(r => r.contactId),
+        this.props.user.id
+      )
 
       // reset form
       if (form) {

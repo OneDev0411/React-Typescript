@@ -15,6 +15,8 @@ import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-tem
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
+import { addCRMLog } from '../../helpers/add-crm-log'
+
 const initialState = {
   listing: null,
   isInstantMarketingBuilderOpen: false,
@@ -66,6 +68,11 @@ class SendDealPromotion extends React.Component {
 
     try {
       await sendContactsEmail(emails)
+      addCRMLog(
+        values.subject,
+        values.recipients.filter(r => r.contactId).map(r => r.contactId),
+        this.props.user.id
+      )
 
       this.props.notify({
         status: 'success',

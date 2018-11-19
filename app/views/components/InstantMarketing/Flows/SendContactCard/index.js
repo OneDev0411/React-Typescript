@@ -7,7 +7,6 @@ import ActionButton from 'components/Button/ActionButton'
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
-import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
 import Compose from 'components/EmailCompose'
@@ -17,6 +16,10 @@ import { getContact } from 'models/contacts/get-contact'
 import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+
+import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
+
+import { addCRMLog } from '../../helpers/add-crm-log'
 
 class SendContactCard extends React.Component {
   state = {
@@ -97,6 +100,7 @@ class SendContactCard extends React.Component {
 
     try {
       await sendContactsEmail(emails)
+      addCRMLog(values.subject, [recipient.contactId], this.props.user.id)
 
       this.props.notify({
         status: 'success',
