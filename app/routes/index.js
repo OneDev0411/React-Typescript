@@ -1,6 +1,7 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
+
 // Containers
 import AppLayout from '../components/App'
 // Pages
@@ -166,6 +167,11 @@ const AsyncContactsImportCsv = Load({
     import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
 })
 
+const AsyncContactsDuplicateContacts = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Contacts/DuplicateContacts' /* webpackChunkName: "duplicate-contacts" */)
+})
+
 /* ==================================== */
 //  Chatroom
 /* ==================================== */
@@ -200,7 +206,7 @@ const AsyncDealTemplates = Load({
     import('../components/Pages/Dashboard/Account/DealTemplates' /* webpackChunkName: "deal_templates" */)
 })
 
-const AsyncICALIntegration = Load({
+const ExportCalendar = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */)
 })
@@ -369,6 +375,10 @@ export default (
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
       <Route component={AsyncContacts} path="/dashboard/contacts" />
+      <Route
+        path="/dashboard/contacts/duplicate-contacts"
+        component={AsyncContactsDuplicateContacts}
+      />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route
         path="/dashboard/contacts/import/csv"
@@ -421,7 +431,7 @@ export default (
 
         <Route path="deal/templates" component={AsyncDealTemplates} />
         <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
-        <Route path="deal/icalintegration" component={AsyncICALIntegration} />
+        <Route path="exportCalendar" component={ExportCalendar} />
       </Route>
 
       <Route path="/dashboard/brands">

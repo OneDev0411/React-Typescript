@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import React from 'react'
 import Flex from 'styled-flex-component'
 
@@ -7,10 +8,10 @@ import FilterButton from '../../../../../../views/components/Button/DropButton'
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 
 import Filters from '../components/Filters'
-import SearchField from '../components/SearchToolbar'
+import SearchField from '../components/SearchToolbar/mls-autocomplete'
 import { ViewSwitcher } from '../../components/ViewSwitcher'
 
-const Container = Flex.extend`
+const Container = styled(Flex)`
   height: 6rem;
   display: flex;
   align-items: center;
@@ -52,7 +53,7 @@ export function Header(props) {
           style={{ marginLeft: '0.5em' }}
           onClick={onClickFilter}
           isOpen={filtersIsOpen}
-          disabled={isFetching || !props.hasData}
+          disabled={isFetching}
           text="Filter"
           size="large"
           appearance="outline"

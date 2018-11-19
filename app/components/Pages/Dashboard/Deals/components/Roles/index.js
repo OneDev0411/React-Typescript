@@ -39,16 +39,29 @@ class Roles extends React.Component {
     return fullName || (user && user.display_name)
   }
 
+  canRemoveRole = role => {
+    const { deal_type } = this.props.deal
+
+    if (
+      (deal_type === 'Buying' && role === 'BuyerAgent') ||
+      (deal_type === 'Selling' && role === 'SellerAgent')
+    ) {
+      return false
+    }
+
+    return true
+  }
+
+  canAddRole = role => {
+    // todo
+  }
+
   onRequestRemoveRole = (e, user) => {
     e.stopPropagation()
 
-    const { deal, confirmation } = this.props
-    const { deal_type } = deal
+    const { confirmation } = this.props
 
-    if (
-      (deal_type === 'Buying' && user.role === 'BuyerAgent') ||
-      (deal_type === 'Selling' && user.role === 'SellerAgent')
-    ) {
+    if (this.canRemoveRole(user.role) === false) {
       return confirmation({
         message: 'You cannot delete the primary agent for the deal',
         hideCancelButton: true,
@@ -80,6 +93,11 @@ class Roles extends React.Component {
 
     try {
       await deleteRole(deal.id, role.id)
+
+      if (this.props.onDeleteRole) {
+        this.props.onDeleteRole(role)
+      }
+
       notify({
         message: 'The contact removed from this deal.',
         status: 'success'
@@ -120,6 +138,10 @@ class Roles extends React.Component {
       user,
       isRoleFormOpen: true
     })
+  }
+
+  get AllowedRoles() {
+    return this.props.allowedRoles
   }
 
   closeRoleForm = () => this.setState({ isRoleFormOpen: false, user: null })
@@ -190,11 +212,16 @@ class Roles extends React.Component {
             role={user}
             modalTitle="Update Contact"
             allowedRoles={allowedRoles}
+            onUpsertRole={this.props.onUpsertRole}
             onHide={this.closeRoleForm}
           />
         )}
 
-        <AddRole deal={deal} allowedRoles={allowedRoles} />
+        <AddRole
+          deal={deal}
+          allowedRoles={this.AllowedRoles}
+          onCreateRole={this.props.onCreateRole}
+        />
       </RolesContainer>
     )
   }

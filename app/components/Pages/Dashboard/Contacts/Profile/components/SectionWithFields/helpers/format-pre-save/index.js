@@ -1,7 +1,6 @@
 import { flatten, indexBy } from 'underscore'
 
-import { isNumeric } from '../../../../../../../../../utils/helpers'
-import { getParser } from '../get-parser'
+import { isNumeric } from 'utils/helpers'
 
 export function formatPreSave(previousFields, nextFields) {
   let upsertedAttributeList = []
@@ -22,7 +21,7 @@ export function formatPreSave(previousFields, nextFields) {
   })
 
   nextFields.forEach(nextField => {
-    const { attribute, value, label } = nextField
+    let { attribute, value, label } = nextField
 
     if (!attribute) {
       throw new Error(
@@ -31,30 +30,43 @@ export function formatPreSave(previousFields, nextFields) {
       )
     }
 
+    let newValue
     let previousValue
     let previousLabel
     const selectInitialValue = '-Select-'
     const { attribute_def } = attribute
     const type = attribute_def.data_type
+    const isDate = type === 'date'
     const previousAttribute = previousFieldsIndexedById[attribute.id]
 
     if (previousAttribute) {
-      previousValue = previousAttribute[type]
       previousLabel = previousAttribute.label
+      previousValue =
+        previousAttribute[type] == null ? '' : previousAttribute[type]
     }
 
-    let newValue =
-      typeof value === 'string'
-        ? getParser(attribute)(value)
-        : getParser(attribute)(value.value)
+    if (isDate) {
+      const { day, month, year } = nextField
 
-    previousValue = previousValue == null ? '' : previousValue
+      if (day.value != null && month.value != null) {
+        const y = year && isNumeric(year) ? year : 1800
+
+        // UTC time in unix
+        value = Date.UTC(y, month.value, day.value) / 1000
+        newValue = value
+      }
+    } else if (typeof value === 'string') {
+      newValue = value
+    } else {
+      newValue = value.value
+    }
 
     if (newValue === previousValue) {
       newValue = undefined
     }
 
     if (attribute.id) {
+      // when label is changed
       if (
         value &&
         label &&
@@ -63,7 +75,7 @@ export function formatPreSave(previousFields, nextFields) {
       ) {
         upsertedAttributeList.push({
           id: attribute.id,
-          [type]: getParser(attribute)(value),
+          [type]: value,
           label: label && label.value
         })
       } else if (attribute_def.enum_values && newValue) {
@@ -75,7 +87,7 @@ export function formatPreSave(previousFields, nextFields) {
             [type]: newValue
           })
         }
-      } else if (newValue || newValue !== previousValue) {
+      } else if (newValue != null) {
         upsertedAttributeList.push({
           id: attribute.id,
           [type]: newValue
@@ -128,3 +140,5 @@ export function formatPreSave(previousFields, nextFields) {
     deletedAttributesList
   }
 }
+
+// todo: remove moment

@@ -3,29 +3,20 @@ import { connect } from 'react-redux'
 
 import OverlayDrawer from 'components/OverlayDrawer'
 
-import ActionButton from 'components/Button/ActionButton'
-
 import { Divider } from './styled'
 import ManualEntry from './manual-entry'
 
 import Roles from '../../../../components/Roles'
-import { getRolesText, getRoleText } from '../../../utils/get-roles-text'
+import {
+  getRolesText,
+  getRoleText,
+  normalizeRoleNames
+} from '../../../utils/get-roles-text'
 import { getRoleTooltip } from '../../../utils/get-role-tooltip'
 import { getAnnotationsValues } from '../../../utils/word-wrap'
 
 class RolesDrawer extends React.Component {
   handleClose = () => this.props.onClose()
-
-  handleSaveAndClose = () => {
-    const { data } = this.props.selectedAnnotation
-
-    const values = getAnnotationsValues(data.annotations, this.ListValue, {
-      maxFontSize: 20
-    })
-
-    this.props.onSetValues(values, true)
-    this.props.onClose()
-  }
 
   handleSaveManualValue = value => {
     const { selectedAnnotation } = this.props
@@ -40,7 +31,9 @@ class RolesDrawer extends React.Component {
   }
 
   get AllowedRoles() {
-    return this.props.selectedAnnotation.data.roleName.split(',')
+    const roles = this.props.selectedAnnotation.data.roleName
+
+    return normalizeRoleNames(this.props.deal, roles)
   }
 
   get ListValue() {
@@ -80,10 +73,22 @@ class RolesDrawer extends React.Component {
     return getRoleTooltip(data.annotationContext, data.contextType === 'Roles')
   }
 
+  onChangeRoles = () => {
+    const { data } = this.props.selectedAnnotation
+
+    const values = getAnnotationsValues(data.annotations, this.ListValue, {
+      maxFontSize: 20
+    })
+
+    this.props.onSetValues(values, true)
+    this.props.onClose()
+  }
+
   render() {
     return (
       <OverlayDrawer
         isOpen
+        showFooter={false}
         onClose={this.handleClose}
         closeOnBackdropClick={false}
       >
@@ -96,6 +101,9 @@ class RolesDrawer extends React.Component {
             showTitle={false}
             deal={this.props.deal}
             allowedRoles={this.AllowedRoles}
+            onUpsertRole={this.onChangeRoles}
+            onCreateRole={this.onChangeRoles}
+            onDeleteRole={this.onChangeRoles}
             allowDeleteRole
           />
 
@@ -107,12 +115,6 @@ class RolesDrawer extends React.Component {
             onSave={this.handleSaveManualValue}
           />
         </OverlayDrawer.Body>
-
-        <OverlayDrawer.Footer style={{ flexDirection: 'row-reverse' }}>
-          <ActionButton onClick={this.handleSaveAndClose}>
-            Save and Close
-          </ActionButton>
-        </OverlayDrawer.Footer>
       </OverlayDrawer>
     )
   }

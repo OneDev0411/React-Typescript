@@ -1,10 +1,11 @@
+import styled from "styled-components"
 import React from 'react'
 
 import { TruncateText } from '../../../../../../components/TruncateText'
 import FlexContainer from '../../../../../../components/FlexContainer'
 import CircleCheckButton from '../../../../../../components/Button/CircleCheckButton'
 
-const Title = TruncateText('h3').extend`
+const Title = styled(TruncateText('h3'))`
   margin: 0;
   line-height: 1;
   font-size: 1.6rem;
@@ -12,7 +13,7 @@ const Title = TruncateText('h3').extend`
   text-decoration: ${props => (props.done ? 'line-through' : 'none')};
   `
 
-const Note = TruncateText('div').extend`
+const Note = styled(TruncateText('div'))`
   margin: 0;
   line-height: 1;
   color: #8da2b5;

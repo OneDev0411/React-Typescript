@@ -18,7 +18,7 @@
   }
 
   .scrollable {
-    $hg: calc(100vh - 110px - 77px);
+    $hg: calc(100vh - 110px - 113px);
     height: $hg;
     overflow: auto;
     &[data-simplebar] {

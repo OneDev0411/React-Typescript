@@ -4,7 +4,7 @@ import { grey, borderColor, primary } from '../../../../../../utils/colors'
 import { merriweatherFamilyStyle } from '../../../../../Typography/styles'
 import IconClose from '../../../../../SvgIcons/Close/CloseIcon'
 
-export const CloseIcon = IconClose.extend`
+export const CloseIcon = styled(IconClose)`
   fill: ${grey.A900} !important;
 
   &:hover {

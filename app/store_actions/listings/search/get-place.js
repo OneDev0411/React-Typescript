@@ -1,6 +1,7 @@
 import { batchActions } from 'redux-batched-actions'
 
 import { goToPlace } from '../map'
+import { setSearchLocation } from './set-search-location'
 import api from '../../../models/listings/search'
 import * as actionsType from '../../../constants/listings/search'
 
@@ -14,6 +15,7 @@ const getPlace = address => dispatch => {
   return api.getPlace(address).then(
     response => {
       batchActions([
+        dispatch(setSearchLocation(response.center)),
         dispatch({ type: actionsType.GET_PLACE_SUCCESS }),
         dispatch(goToPlace(response))
       ])

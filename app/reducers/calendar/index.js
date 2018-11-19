@@ -82,12 +82,6 @@ export default (state = initialState, action) => {
         selectedDate: action.selectedDate
       }
 
-    case types.CALENDAR__SET_BRAND_MEMBERS:
-      return {
-        ...state,
-        brandMembers: action.brandMembers
-      }
-
     case types.CALENDAR__SET_FILTER:
       return {
         ...state,

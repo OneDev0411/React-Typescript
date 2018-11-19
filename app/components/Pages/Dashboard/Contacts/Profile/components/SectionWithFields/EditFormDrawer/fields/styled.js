@@ -19,6 +19,7 @@ export const Title = styled.label`
   font-weight: normal;
   cursor: pointer;
   color: ${grey.A900};
+  margin: 0;
 
   &::after {
     content: '${props => (props.required ? '*' : '')}';

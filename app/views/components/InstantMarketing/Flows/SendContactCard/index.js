@@ -7,7 +7,6 @@ import ActionButton from 'components/Button/ActionButton'
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
-import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
 import Compose from 'components/EmailCompose'
@@ -17,6 +16,11 @@ import { getContact } from 'models/contacts/get-contact'
 import getTemplatePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+
+import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
+
+import { addCRMLog } from '../../helpers/add-crm-log'
+import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 
 class SendContactCard extends React.Component {
   state = {
@@ -97,6 +101,12 @@ class SendContactCard extends React.Component {
 
     try {
       await sendContactsEmail(emails)
+      addCRMLog(this.props.user.id, values.subject, [
+        ...getCRMLogAssociations(
+          'contact',
+          values.recipients.filter(r => r.contactId).map(r => r.contactId)
+        )
+      ])
 
       this.props.notify({
         status: 'success',
@@ -159,7 +169,7 @@ class SendContactCard extends React.Component {
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
           templateData={{ user: this.props.user, contact: this.state.contact }}
-          templateTypes={['Contact']}
+          templateTypes={['Birthday']}
         />
 
         <Compose

@@ -10,17 +10,28 @@ const Button = ActionButton.withComponent('a')
 const Xlsx = styled(XlsxIcon)`
   margin-right: 0.5rem;
 `
-const ExportContacts = ({ exportIds, disabled, filters, user }) => {
+const ExportContacts = ({ exportIds, disabled, filters, user, users }) => {
   const activeTeam = getActiveTeam(user)
   const activeBrand = activeTeam.brand.id
   let url = `/api/contacts/export/outlook/${activeBrand}/`
 
   if (Array.isArray(exportIds) && exportIds.length > 0) {
     url = `${url}?ids[]=${exportIds.join('&ids[]=')}`
-  } else if (filters && typeof filters === 'object') {
-    url = `${url}?filters[]=${filters
-      .map(filter => encodeURIComponent(JSON.stringify(filter)))
-      .join('&filters[]=')}`
+  } else {
+    const filtersExits = filters && typeof filters === 'object'
+
+    if (filtersExits) {
+      url = `${url}?filters[]=${filters
+        .map(filter => encodeURIComponent(JSON.stringify(filter)))
+        .join('&filters[]=')}`
+    }
+
+    if (users && typeof users === 'object') {
+      url += filtersExits ? '&' : '?'
+      url = `${url}users[]=${users
+        .map(user => encodeURIComponent(user))
+        .join('&users[]=')}`
+    }
   }
 
   return (

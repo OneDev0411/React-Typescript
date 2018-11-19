@@ -1,8 +1,9 @@
+import styled from "styled-components"
 import Flex from 'styled-flex-component'
 
 import { borderColor } from '../../../utils/colors'
 
-export const Footer = Flex.extend`
+export const Footer = styled(Flex)`
   position: absolute;
   bottom: 0;
   left: 1.5rem;

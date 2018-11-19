@@ -2,6 +2,11 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import InstantMarketing from 'components/InstantMarketing'
+
+import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
+
+import { getTemplates } from 'models/instant-marketing'
 import {
   getTask,
   updateTask,
@@ -21,20 +26,17 @@ import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
-import { Reminder } from '../../EventDrawer/components/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { validate } from '../../EventDrawer/helpers/validate'
 import { DateTimeField, AssigneesField } from '../../final-form-fields'
 import { AddAssociationButton } from '../../AddAssociationButton'
-import { AssociationsList } from '../../final-form-fields/AssociationsList'
+import { AssociationsList, ReminderField } from '../../final-form-fields'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { Section } from '../../tour/TourDrawer/components/Section'
 
-import InstantMarketing from 'components/InstantMarketing'
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
-import { getTemplates } from 'models/instant-marketing'
+
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
@@ -280,7 +282,6 @@ export class OpenHouseDrawer extends React.Component {
                     <FormContainer
                       id="open-house-drawer-form"
                       onSubmit={formProps.handleSubmit}
-                      style={{ paddingBottom: '3rem' }}
                     >
                       <Title
                         fullWidth
@@ -295,7 +296,9 @@ export class OpenHouseDrawer extends React.Component {
                             name="dueDate"
                             selectedDate={values.dueDate}
                           />
-                          <Reminder dueDate={values.dueDate} />
+                          {values.status !== 'DONE' && (
+                            <ReminderField dueDate={values.dueDate} />
+                          )}
                         </FieldContainer>
                       </Section>
 

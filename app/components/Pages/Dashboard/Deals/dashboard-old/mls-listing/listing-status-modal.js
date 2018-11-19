@@ -1,10 +1,11 @@
+import styled from "styled-components"
 import React from 'react'
 import { Modal, Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import { getStatusColorClass } from '../../../../../../utils/listing'
 import ActionButton from 'components/Button/ActionButton'
 
-const CancelButton = ActionButton.extend`
+const CancelButton = styled(ActionButton)`
   margin-right: 1em;
 `
 

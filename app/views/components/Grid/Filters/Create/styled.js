@@ -7,7 +7,7 @@ export const Container = styled.div`
   position: relative;
 `
 
-export const List = Card.extend`
+export const List = styled(Card)`
   position: absolute;
   top: 40px;
   left: 0;

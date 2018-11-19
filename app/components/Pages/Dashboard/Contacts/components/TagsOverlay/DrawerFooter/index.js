@@ -1,8 +1,9 @@
+import styled from "styled-components"
 import React from 'react'
 import ActionButton from 'components/Button/ActionButton'
 import Flex from 'styled-flex-component'
 
-const FooterContainer = Flex.extend`
+const FooterContainer = styled(Flex)`
   width: 100%;
 `
 

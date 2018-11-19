@@ -2,42 +2,39 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { batchActions } from 'redux-batched-actions'
 import { browserHistory } from 'react-router'
-
 import moment from 'moment'
 import _ from 'underscore'
+import styled from 'styled-components'
+import Flex from 'styled-flex-component'
+
+import PopOver from 'components/Popover'
 
 import { getStartRange, getEndRange } from '../../../../reducers/calendar'
-
 import {
   getCalendar,
   setDate,
-  resetCalendar
+  resetCalendar,
+  setCalendarFilter
 } from '../../../../store_actions/calendar'
-
 import {
   createDateRange,
   createPastRange,
   createFutureRange
 } from '../../../../models/Calendar/helpers/create-date-range'
-
 import {
   Container,
   Menu,
   Trigger,
   Content
 } from '../../../../views/components/SlideMenu'
-
 import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
 import { EventDrawer } from '../../../../views/components/EventDrawer'
-
 import CalendarTable from './Table'
-import CalendarFilter from './Filter'
-
-import { MenuContainer } from './styled'
-
+import CalendarFilter from '../../../../views/components/UserFilter'
+import { MenuContainer, FilterContainer } from './styled'
 import ActionButton from '../../../../views/components/Button/ActionButton'
-import { getActiveTeamACL } from '../../../../utils/user-teams'
+import { getActiveTeam, getActiveTeamACL } from '../../../../utils/user-teams'
 
 const LOADING_POSITIONS = {
   Top: 0,
@@ -45,12 +42,24 @@ const LOADING_POSITIONS = {
   Middle: 2
 }
 
+const PopOverImage = styled.img`
+  width: 40px;
+  height: 40px;
+`
+
 class CalendarContainer extends React.Component {
-  state = {
-    isMenuOpen: true,
-    showCreateTaskMenu: false,
-    selectedTaskId: null,
-    loadingPosition: LOADING_POSITIONS.Middle
+  constructor(props) {
+    super(props)
+    this.state = {
+      isMenuOpen: true,
+      showCreateTaskMenu: false,
+      selectedTaskId: null,
+      loadingPosition: LOADING_POSITIONS.Middle
+    }
+
+    const activeTeam = getActiveTeam(this.props.user)
+
+    this.isFilterHidden = activeTeam && activeTeam.brand.member_count <= 1
   }
 
   componentDidMount() {
@@ -169,6 +178,7 @@ class CalendarContainer extends React.Component {
   }
 
   handleFilterChange = filter => {
+    this.props.setCalendarFilter(filter)
     this.setLoadingPosition(LOADING_POSITIONS.Middle)
     this.restartCalendar(this.selectedDate, filter)
   }
@@ -284,6 +294,39 @@ class CalendarContainer extends React.Component {
               onChange={this.handleDateChange}
               // modifiers={this.SelectedRange}
             />
+
+            <PopOver
+              containerStyle={{
+                position: 'absolute',
+                bottom: '0',
+                left: '50%',
+                transform: 'translateX(-50%)'
+              }}
+              popoverStyles={{ width: '250px', textAlign: 'center' }}
+              caption={
+                <div>
+                  <div>
+                    Take your Rechat calendar events with you. Export them to
+                    other calendars like Outlook, Google, iCal and more
+                  </div>
+                  <Flex style={{ marginTop: '1rem' }} justifyAround>
+                    <PopOverImage src="/static/images/Calendar/outlook.png" />
+                    <PopOverImage src="/static/images/Calendar/gcal.png" />
+                    <PopOverImage src="/static/images/Calendar/ical.png" />
+                  </Flex>
+                </div>
+              }
+            >
+              <ActionButton
+                noBorder
+                appearance="outline"
+                onClick={() => {
+                  browserHistory.push('/dashboard/account/exportCalendar')
+                }}
+              >
+                Calendar Export
+              </ActionButton>
+            </PopOver>
           </MenuContainer>
         </Menu>
 
@@ -300,9 +343,14 @@ class CalendarContainer extends React.Component {
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
-
-          <CalendarFilter onChange={this.handleFilterChange} />
-
+          {!this.isFilterHidden && (
+            <FilterContainer>
+              <CalendarFilter
+                onChange={this.handleFilterChange}
+                filter={this.props.filter}
+              />
+            </FilterContainer>
+          )}
           <div style={{ position: 'relative' }}>
             <div ref={ref => (this.calendarTableContainer = ref)}>
               <CalendarTable
@@ -314,6 +362,7 @@ class CalendarContainer extends React.Component {
                 onScrollBottom={this.loadNextItems}
                 onSelectTask={this.onClickTask}
                 onRef={this.onTableRef}
+                isFilterHidden={this.isFilterHidden}
               />
             </div>
           </div>
@@ -342,6 +391,7 @@ export default connect(
   {
     getCalendar,
     setDate,
-    resetCalendar
+    resetCalendar,
+    setCalendarFilter
   }
 )(CalendarContainer)

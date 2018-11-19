@@ -8,6 +8,8 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
+import { primary } from 'views/utils/colors'
+
 import Brand from '../../../../../../controllers/Brand'
 import Marker from '../../components/Markers/SimpleMarker'
 import {
@@ -70,7 +72,7 @@ const map = ({
 )
 
 let markersOverlay = null
-const overlayColor = `#${Brand.color('primary', '3388ff')}`
+const overlayColor = Brand.color('primary', primary)
 
 const normalizePoints = points =>
   points.map(point => ({

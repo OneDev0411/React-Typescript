@@ -12,6 +12,8 @@ import { ListingsListViewDrawer } from './ListingsListViewDrawer'
 
 const buttonStyle = { padding: 0, height: 'auto', lineHeight: 1 }
 
+const buttonStyle = { padding: 0, height: 'auto', lineHeight: 1 }
+
 export class Grid extends React.Component {
   state = {
     selectedAgent: null

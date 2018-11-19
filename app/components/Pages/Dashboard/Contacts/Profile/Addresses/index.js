@@ -100,13 +100,15 @@ class Addresses extends React.Component {
           </div>
         )}
 
-        <EditDrawer
-          addresses={this.props.addresses}
-          addressAttributeDefs={this.props.addressAttributeDefs}
-          contact={this.props.contact}
-          isOpen={this.state.isOpenEditDrawer}
-          onClose={this.closeEditDrawer}
-        />
+        {this.state.isOpenEditDrawer && (
+          <EditDrawer
+            isOpen
+            addresses={this.props.addresses}
+            addressAttributeDefs={this.props.addressAttributeDefs}
+            contact={this.props.contact}
+            onClose={this.closeEditDrawer}
+          />
+        )}
       </Section>
     )
   }

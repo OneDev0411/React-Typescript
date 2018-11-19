@@ -9,6 +9,7 @@ import { getStatusColor } from 'utils/listing'
 import IconHome from 'components/SvgIcons/NewHome/IconHome'
 import ImageStatus from 'views/components/ImageStatus'
 import openDeal from '../../../../utils/open-deal'
+import DealSide from '../side'
 
 const Container = styled.div`
   display: table;
@@ -29,11 +30,14 @@ const Name = styled.div`
 
 export const SubAddress = styled.div`
   color: ${grey.A550};
-  display: flex;
   font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 `
 
-const Dot = styled.div`
+const Dot = styled.span`
   margin: 0 0.5rem;
   color: #000000;
 `
@@ -48,7 +52,16 @@ const IconContainer = styled(Flex)`
   }
 `
 
-const Address = ({ deal }) => {
+const Link = styled(ALink)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  font-weight: 500;
+  margin-top: -4px;
+`
+
+const Address = ({ deal, roles, rowIndex, totalRows }) => {
   const photo = Deal.get.field(deal, 'photo')
   const status = Deal.get.status(deal)
 
@@ -66,22 +79,25 @@ const Address = ({ deal }) => {
       </Container>
 
       <Name>
-        <ALink
-          style={{
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: 'block',
-            fontWeight: 500,
-            marginTop: '-4px'
-          }}
+        <Link
           onClick={() => openDeal(deal.id)}
           to={`/dashboard/deals/${deal.id}`}
         >
           {deal.title}
-        </ALink>
-        <SubAddress className="blackHover">
+        </Link>
+        <SubAddress className="hover-color--black">
           {status || '-'}
+          {roles && (
+            <React.Fragment>
+              <Dot>.</Dot>
+              <DealSide
+                deal={deal}
+                roles={roles}
+                rowId={rowIndex + 1}
+                rowsCount={totalRows}
+              />
+            </React.Fragment>
+          )}
           <Dot>.</Dot>
           {deal.property_type}
         </SubAddress>

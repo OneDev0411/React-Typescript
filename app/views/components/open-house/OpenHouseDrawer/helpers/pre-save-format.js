@@ -1,5 +1,3 @@
-import { getReminderValue } from '../../../EventDrawer/helpers/get-reminder-value'
-
 /**
  * Format form data for api model
  * @param {object} values The form values
@@ -17,37 +15,36 @@ export async function preSaveFormat(values, originalValues, deal, template) {
     title
   } = values
 
-  const due_date = dueDate.getTime() / 1000
+  // console.log('pre save', values.dueDate, values.reminder.value)
+
+  const dueDateTimestamp = dueDate.getTime()
   const task_type = 'Open House'
 
   const task = {
     title,
-    due_date,
+    due_date: dueDateTimestamp / 1000,
     task_type,
-    metadata: { template },
-    assignees: assignees.map(a => a.id)
-  }
-
-  if (originalValues && originalValues.id && status) {
-    task.status = status
+    assignees: assignees.map(a => a.id),
+    status:
+      dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
   }
 
   if ((originalValues && originalValues.id) || description) {
     task.description = description || ''
   }
 
-  const reminderDate = getReminderValue(reminder.value, dueDate)
-
-  if (reminderDate != null) {
+  if (task.status === 'DONE') {
+    task.reminders = []
+  } else if (reminder.value != null) {
     task.reminders = [
       {
         is_relative: true,
-        timestamp: reminderDate.getTime() / 1000
+        timestamp: (dueDateTimestamp - reminder.value) / 1000
       }
     ]
   } else if (
     (originalValues && originalValues.reminders == null) ||
-    (originalValues && originalValues.reminders && reminderDate == null)
+    (originalValues && originalValues.reminders && reminder.value == null)
   ) {
     task.reminders = []
   }

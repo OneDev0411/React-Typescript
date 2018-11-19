@@ -1,6 +1,7 @@
+import styled from "styled-components"
 import IconButton from '../../../../../../../views/components/Button/IconButton'
 
-export const Button = IconButton.extend`
+export const Button = styled(IconButton)`
   position: absolute;
   bottom: 1.5rem;
   right: 1.5rem;
