@@ -107,8 +107,6 @@ export class MultiField extends React.Component {
   }
 
   render() {
-    console.log(this.props.attribute)
-
     const { attribute_def, is_primary } = this.props.attribute
     const defaultOptions = attribute_def.labels
       ? attribute_def.labels.map(label => ({
