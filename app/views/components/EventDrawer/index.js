@@ -39,7 +39,7 @@ import { Description } from './components/Description'
 import { EventType } from './components/EventType'
 import { FormContainer, FieldContainer, Footer } from './styled'
 
-const QUERY = {
+export const QUERY = {
   associations: ['reminders', 'assignees', 'created_by', 'updated_by'].map(
     a => `crm_task.${a}`
   )
