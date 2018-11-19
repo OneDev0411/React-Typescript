@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
+import Flex from 'styled-flex-component'
 
 import { borderColor } from 'views/utils/colors'
 import { Dropdown } from 'components/Dropdown'
@@ -10,6 +11,7 @@ import IconButton from 'components/Button/IconButton'
 import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 import RemoveIcon from 'components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
+import { PrimaryStar } from '../../../../../../components/PrimaryStar'
 import { Container, Title } from '../styled'
 import { TextField } from './TextField'
 
@@ -105,7 +107,9 @@ export class MultiField extends React.Component {
   }
 
   render() {
-    const { attribute_def } = this.props.attribute
+    console.log(this.props.attribute)
+
+    const { attribute_def, is_primary } = this.props.attribute
     const defaultOptions = attribute_def.labels
       ? attribute_def.labels.map(label => ({
           title: label,
@@ -128,7 +132,10 @@ export class MultiField extends React.Component {
                 withoutLabel={!defaultOptions}
                 style={{ width: '40%', paddingBottom: 0 }}
               >
-                <Title htmlFor={field}>{attribute_def.label}</Title>
+                <Flex alignCenter>
+                  <Title htmlFor={field}>{attribute_def.label}</Title>
+                  {is_primary && <PrimaryStar />}
+                </Flex>
                 {defaultOptions && (
                   <Field
                     component={Dropdown}

@@ -13,6 +13,7 @@ import ActionButton from '../../../../../../../views/components/Button/ActionBut
 import { getContactOriginalSourceTitle } from '../../../../../../../utils/get-contact-original-source-title'
 
 import { EditForm } from './EditFormDrawer'
+import { PrimaryStar } from '../../../components/PrimaryStar'
 import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 import { Section } from '../Section'
 import {
@@ -21,8 +22,6 @@ import {
   getFormater,
   getInitialValues
 } from './helpers'
-import StarIcon from '../../../../../../../views/components/SvgIcons/Star/StarIcon'
-import Tooltip from '../../../../../../../views/components/tooltip'
 
 const propTypes = {
   addNewFieldButtonText: PropTypes.string,
@@ -41,10 +40,12 @@ class SectionWithFields extends React.Component {
   }
 
   openEditAttributeDrawer = () => this.setState({ isOpenEditDrawer: true })
+
   closeEditAttributeDrawer = () => this.setState({ isOpenEditDrawer: false })
 
   openNewAttributeDrawer = () =>
     this.setState({ isOpenNewAttributeDrawer: true })
+
   closeNewAttributeDrawer = () =>
     this.setState({ isOpenNewAttributeDrawer: false })
 
@@ -61,8 +62,8 @@ class SectionWithFields extends React.Component {
       if (upsertedAttributeList.length > 0) {
         await this.props.upsertContactAttributes(
           this.props.contact.id,
-          upsertedAttributeList.map(
-            a => (this.props.isPartner ? { ...a, is_partner: true } : a)
+          upsertedAttributeList.map(a =>
+            this.props.isPartner ? { ...a, is_partner: true } : a
           )
         )
       }
@@ -166,19 +167,9 @@ class SectionWithFields extends React.Component {
             }}
           >
             {value ? getFormater(field)(value) : '-'}
-            {value &&
-              field.is_primary && (
-                <Tooltip caption="Primary">
-                  <StarIcon
-                    style={{
-                      fill: '#f5a623',
-                      width: '1em',
-                      height: '1em',
-                      marginLeft: '0.5em'
-                    }}
-                  />
-                </Tooltip>
-              )}
+            {value && field.is_primary && (
+              <PrimaryStar style={{ marginLeft: '0.5em' }} />
+            )}
           </dd>
         ]
       })
@@ -214,17 +205,16 @@ class SectionWithFields extends React.Component {
               marginTop: sectionFields ? 0 : '0.5em'
             }}
           >
-            {addNewFieldButtonText &&
-              !sectionFields && (
-                <ActionButton
-                  size="small"
-                  appearance="outline"
-                  onClick={this.openEditAttributeDrawer}
-                  style={{ marginRight: '1em' }}
-                >
-                  {addNewFieldButtonText}
-                </ActionButton>
-              )}
+            {addNewFieldButtonText && !sectionFields && (
+              <ActionButton
+                size="small"
+                appearance="outline"
+                onClick={this.openEditAttributeDrawer}
+                style={{ marginRight: '1em' }}
+              >
+                {addNewFieldButtonText}
+              </ActionButton>
+            )}
           </div>
         )}
 
