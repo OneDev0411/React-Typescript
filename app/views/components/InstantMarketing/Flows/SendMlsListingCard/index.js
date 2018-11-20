@@ -73,17 +73,12 @@ class SendMlsListingCard extends React.Component {
 
     try {
       await sendContactsEmail(emails)
-      addCRMLog(
-        values.subject,
-        values.recipients.filter(r => r.contactId).map(r => r.contactId),
-        this.props.user.id
-      )
       addCRMLog(this.props.user.id, values.subject, [
-        ...getCRMLogAssociations([
+        ...getCRMLogAssociations(
           'contact',
           values.recipients.filter(r => r.contactId).map(r => r.contactId)
-        ]),
-        ...getCRMLogAssociations('listing', [this.state.listing])
+        ),
+        ...getCRMLogAssociations('listing', [this.state.listing.id])
       ])
 
       // reset form
