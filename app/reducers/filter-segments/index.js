@@ -6,7 +6,8 @@ const initialState = {
   list: null,
   isFetching: false,
   activeSegmentId: 'default',
-  fetchError: null
+  fetchError: null,
+  activeFilters: {}
 }
 
 export const getDefaultList = (name = '') => ({
@@ -58,6 +59,63 @@ const filterSegments = (state, action) => {
         ...state,
         list: _.omit(state.list, item => item.id === action.segmentId)
       }
+    case types.CREATE_ACTIVE_FILTERS: {
+      let activeFilters = {}
+      let filterCounter = 0
+
+      action.filters.forEach(filter => {
+        activeFilters[filterCounter++] = filter
+      })
+
+      return {
+        ...state,
+        activeFilters
+      }
+    }
+    case types.ADD_ACTIVE_FILTER:
+      return {
+        ...state,
+        activeFilters: {
+          ...state.activeFilters,
+          [_.uniqueId(`${action.filterId}-`)]: {
+            id: action.filterId,
+            isActive: true
+          }
+        }
+      }
+    case types.TOGGLE_FILTER_ACTIVE: {
+      const filter = state.activeFilters[action.filterId]
+
+      return {
+        ...state,
+        activeFilters: {
+          ...state.activeFilters,
+          [action.filterId]: {
+            ...filter,
+            isActive: !filter.isActive
+          }
+        }
+      }
+    }
+    case types.UPDATE_ACTIVE_FILTER: {
+      const filter = state.activeFilters[action.filterId]
+
+      return {
+        ...state,
+        activeFilters: {
+          ...state.activeFilters,
+          [action.filterId]: { ...filter, ...action.filterData }
+        }
+      }
+    }
+    case types.REMOVE_ACTIVE_FILTER:
+      return {
+        ...state,
+        activeFilters: _.omit(
+          state.activeFilters,
+          (filter, id) => id === action.filterId
+        )
+      }
 
     default:
       return state
@@ -95,3 +153,5 @@ export const getSegments = (state, listName) =>
 
 export const selectSavedSegmentById = (state, id) =>
   state.list && state.list[id]
+
+export const selectActiveFilters = state => state.activeFilters
