@@ -92,7 +92,7 @@ class FieldDropDown extends React.Component {
 
       return {
         is_partner: true,
-        label: `Partner/Spouse - ${definition.label}`,
+        label: `Spouse/Partner - ${definition.label}`,
         value: `${definition.id}:partner`
       }
     })

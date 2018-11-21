@@ -12,12 +12,13 @@ import Listing from 'models/listings/listing'
 import Compose from 'components/EmailCompose'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+
 import { SocialModal } from '../../components/SocialModal'
 
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 
-
 import { addCRMLog } from '../../helpers/add-crm-log'
+import { getTemplateTypes } from '../../helpers/get-template-types'
 import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 
 const initialState = {
@@ -152,7 +153,7 @@ class SendDealPromotion extends React.Component {
           handleSave={this.handleSaveMarketingCard}
           templateData={{ listing, user }}
           mediums={this.props.mediums}
-          templateTypes={['Listing', 'JustListed', 'JustSold', 'OpenHouse']}
+          templateTypes={getTemplateTypes(listing)}
           assets={listing && listing.gallery_image_urls}
         />
 

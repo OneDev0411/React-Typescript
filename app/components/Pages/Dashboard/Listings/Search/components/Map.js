@@ -61,6 +61,9 @@ const map = ({
 }) => (
   <div>
     <Map
+      drawingLibrary
+      placesLibrary
+      geometryLibrary
       options={mapOptions}
       onChange={onChange}
       zoom={map.props.zoom}
@@ -68,9 +71,9 @@ const map = ({
       defaultZoom={mapInitialState.zoom}
       defaultCenter={mapInitialState.center}
       yesIWantToUseGoogleMapApiInternals
-      bootstrapURLKeys={bootstrapURLKeys}
       onGoogleApiLoaded={onGoogleApiLoaded}
       style={{ height: 'calc(100vh - 9em - 1px)' }}
+      bootstrapURLKeys={{ key: bootstrapURLKeys.key }}
     >
       {clusters.map(({ points, lat, lng }, index) => {
         if (points.length === 1) {

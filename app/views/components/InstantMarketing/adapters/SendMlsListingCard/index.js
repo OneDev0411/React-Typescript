@@ -21,6 +21,7 @@ import { selectDefinitionByName } from '../../../../../reducers/contacts/attribu
 import { selectContact } from '../../../../../reducers/contacts/list'
 
 import { addCRMLog } from '../../helpers/add-crm-log'
+import { getTemplateTypes } from '../../helpers/get-template-types'
 import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 
 class SendMlsListingCard extends React.Component {
@@ -74,17 +75,12 @@ class SendMlsListingCard extends React.Component {
 
     try {
       await sendContactsEmail(emails)
-      addCRMLog(
-        values.subject,
-        values.recipients.filter(r => r.contactId).map(r => r.contactId),
-        this.props.user.id
-      )
       addCRMLog(this.props.user.id, values.subject, [
-        ...getCRMLogAssociations([
+        ...getCRMLogAssociations(
           'contact',
           values.recipients.filter(r => r.contactId).map(r => r.contactId)
-        ]),
-        ...getCRMLogAssociations('listing', [this.state.listing])
+        ),
+        ...getCRMLogAssociations('listing', [this.state.listing.id])
       ])
 
       // reset form
@@ -191,7 +187,7 @@ class SendMlsListingCard extends React.Component {
           onClose={this.closeMarketing}
           handleSave={this.handleSaveMarketingCard}
           templateData={{ listing, user }}
-          templateTypes={['Listing']}
+          templateTypes={getTemplateTypes(listing)}
           assets={listing && listing.gallery_image_urls}
         />
 
