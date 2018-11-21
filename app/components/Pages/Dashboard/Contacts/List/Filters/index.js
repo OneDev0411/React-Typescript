@@ -8,6 +8,7 @@ import { selectDefinitionByName } from '../../../../../../reducers/contacts/attr
 
 import Filters from '../../../../../../views/components/Grid/Filters'
 import SaveSegment from '../../../../../../views/components/Grid/SavedSegments/Create'
+import { normalizeFilters } from '../utils'
 
 class ContactFilters extends React.PureComponent {
   componentDidMount() {
@@ -27,21 +28,10 @@ class ContactFilters extends React.PureComponent {
   /**
    * creates a search criteria for contacts filters
    */
-  normalizeFilters = filters => {
-    const criteria = []
-
-    _.each(filters, filter => {
-      _.each(filter.values, value => {
-        criteria.push({
-          value,
-          invert: filter.operator.invert === true,
-          attribute_def: filter.id
-        })
-      })
-    })
-
-    return { filters: criteria, args: { users: this.props.users } }
-  }
+  normalizeFilters = filters => ({
+    filters: normalizeFilters(filters),
+    args: { users: this.props.users }
+  })
 
   normalizeSegment = filters =>
     filters.map(filter => ({

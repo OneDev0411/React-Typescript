@@ -5,6 +5,8 @@ import _ from 'underscore'
 
 import { getActiveTeam } from 'utils/user-teams'
 
+import TagsList from './TagsList'
+
 import DuplicateContacts from '../components/DuplicateContacts'
 
 import { confirmation } from '../../../../../store_actions/confirmation'
@@ -277,6 +279,7 @@ class ContactsList extends React.Component {
             onChange={this.handleChangeSavedSegment}
           />
           <DuplicateContacts />
+          <TagsList onFilterChange={this.handleFilterChange} />
         </SideMenu>
 
         <PageContent>
