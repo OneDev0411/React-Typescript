@@ -104,7 +104,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           {name}
         </Link>
         {contact.partner_name && (
-          <Tooltip caption="Partner/Spouse">
+          <Tooltip caption="Spouse/Partner">
             <Flex alignCenter>
               <PartnerIcon
                 style={{ width: '1rem', height: '1rem', fill: grey.A550 }}

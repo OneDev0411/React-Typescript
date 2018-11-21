@@ -101,7 +101,11 @@ class SendContactCard extends React.Component {
 
     try {
       await sendContactsEmail(emails)
-      addCRMLog(this.props.user.id, values.subject, [recipient.contactId])
+      addCRMLog(
+        this.props.user.id,
+        values.subject,
+        getCRMLogAssociations('contact', [recipient.contactId])
+      )
 
       this.props.notify({
         status: 'success',
