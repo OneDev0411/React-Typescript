@@ -347,9 +347,9 @@ const ListingMobileView = ({
               zoom={12}
               key="map"
               style={S('w-100p h-300')}
-              bootstrapURLKeys={bootstrap_url_keys}
               center={{ lat: latitude, lng: longitude }}
               options={{ scrollwheel: false, draggable: false }}
+              bootstrapURLKeys={{ key: bootstrap_url_keys.key }}
             >
               <ListingMapMarker
                 lat={latitude}
