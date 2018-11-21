@@ -126,14 +126,20 @@ class DealTemplates extends React.Component {
 
     if (selectedMembers[brandId]) {
       if (selectedMembers[brandId].includes(selectedMember)) {
-        this.setState({
-          selectedMembers: {
-            ...selectedMembers,
-            [brandId]: selectedMembers[brandId].filter(
-              user => user !== selectedMember
-            )
-          }
-        })
+        if (selectedMembers[brandId].length > 1) {
+          this.setState({
+            selectedMembers: {
+              ...selectedMembers,
+              [brandId]: selectedMembers[brandId].filter(
+                user => user !== selectedMember
+              )
+            }
+          })
+        } else {
+          this.setState({
+            selectedMembers: _.omit(selectedMembers, brandId)
+          })
+        }
       } else {
         this.setState({
           selectedMembers: {
