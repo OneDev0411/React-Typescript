@@ -80,9 +80,7 @@ export default class Templates extends React.Component {
             onClick={() => this.handleSelectTemplate(template)}
             isSelected={this.state.selectedTemplate === template.id}
           >
-            <TemplateImageContainer>
-              <TemplateImage src={template.url + '/thumbnail.png'} title={template.name} />
-            </TemplateImageContainer>
+            <TemplateImage src={template.url + '/thumbnail.png'} title={template.name} />
           </TemplateItem>
         ))}
       </Container>
