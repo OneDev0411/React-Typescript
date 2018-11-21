@@ -15,6 +15,7 @@ export const TemplateItem = styled.div`
   margin-bottom: 20px;
   cursor: pointer;
   width: 292px;
+  text-align: center;
 
   border: 4px solid ${props => (props.isSelected ? '#003bdf' : 'transparent')};
 
@@ -24,6 +25,6 @@ export const TemplateItem = styled.div`
 `
 export const TemplateImage = styled.img`
   max-width: 100%;
-  max-height: 100%;
+  max-height: 400px;
   box-shadow: 0px 5px 10px #c3c3c3;
 `
