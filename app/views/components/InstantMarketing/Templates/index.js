@@ -83,8 +83,6 @@ export default class Templates extends React.Component {
             <TemplateImageContainer>
               <TemplateImage src={template.url + '/thumbnail.png'} title={template.name} />
             </TemplateImageContainer>
-
-            <TemplateName>{template.name}</TemplateName>
           </TemplateItem>
         ))}
       </Container>
