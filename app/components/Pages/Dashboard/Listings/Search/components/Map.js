@@ -1,34 +1,32 @@
-import _ from 'lodash'
-import cuid from 'cuid'
 import React from 'react'
 import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import supercluster from 'points-cluster'
-import defaultProps from 'recompose/defaultProps'
+import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
-
-import ZoomController from '../../components/ZoomController'
-import SimpleMarker from '../../components/Markers/SimpleMarker'
-import ClusterMarker from '../../components/Markers/ClusterMarker'
-import NotLoggedInMessage from '../../components/NotLoggedInMessage'
+import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
 
 import { reset as resetSearchType } from '../../../../../../store_actions/listings/search/set-type'
 import { getLocationFromCookies } from '../../../../../../store_actions/listings/map/user-location'
 import {
   setCssPositionToListingsWithSameBuilding,
-  normalizeListingsForMarkers
+  normalizeListingsForMarkers,
+  getBounds
 } from '../../../../../../utils/map'
-
 import * as mapActions from '../../../../../../store_actions/listings/map'
 import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
 import getListingsByMapBounds from '../../../../../../store_actions/listings/search/get-listings/by-map-bounds'
-
+import { SearchPin } from '../../../../../../views/MLS/SearchPin'
+import ZoomController from '../../components/ZoomController'
+import SimpleMarker from '../../components/Markers/SimpleMarker'
+import ClusterMarker from '../../components/Markers/ClusterMarker'
+import NotLoggedInMessage from '../../components/NotLoggedInMessage'
 import DrawingButton from './DrawingButton'
 import LocationButton from './LocationButton'
 import { DrawingRemoveButton } from './DrawingRemoveButton'
-
 import {
   bootstrapURLKeys,
   mapOptions,
@@ -47,36 +45,35 @@ const actions = {
 let mapOnChangeDebounce = 0
 
 const map = ({
+  map,
   user,
   appData,
-  options,
   isWidget,
   onChange,
   clusters,
-  defaultZoom,
-  defaultCenter,
-  bootstrapURLKeys,
+  searchText,
+  searchLocation,
   onGoogleApiLoaded,
   onMarkerMouseEnter,
   onMarkerMouseLeave,
   onClickRemovePolygon,
-  onClusterMarkerClick,
-  mapProps: { zoom, center },
-  map: { hoveredMarkerId, drawing }
+  fitBoundsByPoints
 }) => (
   <div>
     <Map
-      zoom={zoom}
-      center={center}
-      options={options}
+      drawingLibrary
+      placesLibrary
+      geometryLibrary
+      options={mapOptions}
       onChange={onChange}
-      margin={[175, 50, 50, 50]}
-      defaultZoom={defaultZoom}
-      defaultCenter={defaultCenter}
+      zoom={map.props.zoom}
+      center={map.props.center}
+      defaultZoom={mapInitialState.zoom}
+      defaultCenter={mapInitialState.center}
       yesIWantToUseGoogleMapApiInternals
-      bootstrapURLKeys={bootstrapURLKeys}
       onGoogleApiLoaded={onGoogleApiLoaded}
       style={{ height: 'calc(100vh - 9em - 1px)' }}
+      bootstrapURLKeys={{ key: bootstrapURLKeys.key }}
     >
       {clusters.map(({ points, lat, lng }, index) => {
         if (points.length === 1) {
@@ -91,7 +88,7 @@ const map = ({
               listing={points[0]}
               isWidget={isWidget}
               key={`SIMPLE_MARKER_${id}`}
-              markerPopupIsActive={hoveredMarkerId === id}
+              markerPopupIsActive={map.hoveredMarkerId === id}
               onMouseEnterHandler={() => onMarkerMouseEnter(id)}
               onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
             />
@@ -104,15 +101,16 @@ const map = ({
             lng={lng}
             text={points.length}
             key={`CLUSTER_MARKER_${index}`}
-            onClickHandler={() => onClusterMarkerClick(points)}
+            onClickHandler={() => fitBoundsByPoints(points)}
           />
         )
       })}
+      {searchLocation && <SearchPin {...searchLocation} caption={searchText} />}
     </Map>
     <DrawingButton />
     <DrawingRemoveButton
       onClick={onClickRemovePolygon}
-      points={drawing.points}
+      points={map.drawing.points}
     />
     <ZoomController tabName="search" isTopOfLocation />
     <LocationButton />
@@ -121,17 +119,6 @@ const map = ({
 )
 
 const mapHOC = compose(
-  defaultProps({
-    clusterRadius: 60,
-    bootstrapURLKeys,
-    options: mapOptions,
-    defaultZoom: mapInitialState.zoom,
-    defaultCenter: mapInitialState.center,
-    clusterOptions: {
-      minZoom: 12,
-      maxZoom: DECLUSTER_ZOOM_LEVEL - 1
-    }
-  }),
   connect(
     ({ user, data, search }, { listings }) => ({
       user,
@@ -139,35 +126,63 @@ const mapHOC = compose(
       map: search.map,
       searchType: search.type,
       mapProps: search.map.props,
-      markers: listings.data
+      markers: listings.data,
+      searchText: search.input,
+      searchLocation: search.location
     }),
     actions
   ),
-  // describe events
+  withState('isInit', 'setIsInit', false),
+  withState('clusters', 'setClusters', []),
   withHandlers({
-    onGoogleApiLoaded: ({ map, getLocationFromCookies }) => ({
-      map: googleMap
-    }) => {
-      googleMap.id = cuid()
-      window.currentMap = googleMap
+    fitBoundsByPoints: () => points => {
+      const googleMaps = window.google.maps
 
-      const { shape, points } = map.drawing
+      const bounds = new googleMaps.LatLngBounds()
 
-      if (points.length) {
-        shape.setMap(googleMap)
+      points.forEach(p => bounds.extend(p))
+
+      window.currentMap.fitBounds(bounds)
+    }
+  }),
+  withHandlers({
+    generateClusters: ({ setClusters }) => (markers = [], mapProps) => {
+      const getCluster = supercluster(markers, {
+        // min zoom to generate clusters on
+        minZoom: 12,
+        // max zoom level to cluster the points on
+        maxZoom: DECLUSTER_ZOOM_LEVEL - 1,
+        radius: 60 // cluster radius in pixels
+      })
+
+      let clusters = getCluster(mapProps).map(({ wx, wy, points }) => ({
+        points,
+        lat: wy,
+        lng: wx
+      }))
+
+      if (mapProps.zoom >= DECLUSTER_ZOOM_LEVEL) {
+        clusters = setCssPositionToListingsWithSameBuilding(clusters)
       }
 
-      getLocationFromCookies()
-    },
+      setClusters(clusters)
+    }
+  }),
+  withHandlers({
     onChange: ({
       map,
+      isInit,
       searchType,
       setMapProps,
       resetSearchType,
       setOffMapAutoMove,
       getListingsByMapBounds
     }) => (gmap = {}) => {
-      const { marginBounds } = gmap
+      if (!isInit) {
+        return
+      }
+
+      const { bounds } = gmap
 
       setMapProps('search', gmap)
 
@@ -176,11 +191,11 @@ const mapHOC = compose(
 
         // search by our api
         if (searchType === 'by_map_bounds') {
-          getListingsByMapBounds(marginBounds)
+          getListingsByMapBounds(bounds)
         }
 
         if (searchType === 'by_google_suggests') {
-          getListingsByMapBounds(marginBounds)
+          getListingsByMapBounds(bounds)
           resetSearchType()
         }
 
@@ -191,16 +206,67 @@ const mapHOC = compose(
         return
       }
 
-      if (marginBounds) {
-        if (!mapOnChangeDebounce) {
-          mapOnChangeDebounce = 1
-          getListingsByMapBounds(marginBounds)
-        } else {
+      if (!mapOnChangeDebounce) {
+        mapOnChangeDebounce = 1
+        getListingsByMapBounds(bounds)
+      } else {
+        clearTimeout(mapOnChangeDebounce)
+        mapOnChangeDebounce = setTimeout(() => {
+          getListingsByMapBounds(bounds)
           clearTimeout(mapOnChangeDebounce)
-          mapOnChangeDebounce = setTimeout(() => {
-            getListingsByMapBounds(marginBounds)
-            clearTimeout(mapOnChangeDebounce)
-          }, 300)
+        }, 300)
+      }
+    }
+  }),
+  withHandlers({
+    getMapProps: () => googleMapObj => ({
+      bounds: getBounds(googleMapObj.getBounds(), true),
+      center: googleMapObj.getCenter().toJSON(),
+      zoom: googleMapObj.getZoom()
+    })
+  }),
+  withHandlers({
+    onGoogleApiLoaded: ({
+      markers,
+      setIsInit,
+      map,
+      onChange,
+      getMapProps,
+      fitBoundsByPoints,
+      getLocationFromCookies
+    }) => ({ map: googleMap }) => {
+      googleMap.id = 'SEARCH_MAP'
+      window.currentMap = googleMap
+
+      const { shape, points: drawingPoints } = map.drawing
+
+      if (drawingPoints.length > 0) {
+        shape.setMap(googleMap)
+        fitBoundsByPoints(
+          drawingPoints.map(({ latitude: lat, longitude: lng }) => ({
+            lat,
+            lng
+          }))
+        )
+      }
+
+      if (markers.length > 0 && !map.autoMove) {
+        if (drawingPoints.length === 0 && Object.keys(map.props).length === 0) {
+          const normalizedMarkers = normalizeListingsForMarkers(markers)
+
+          fitBoundsByPoints(normalizedMarkers)
+        }
+
+        const timeoutID = setTimeout(() => {
+          setIsInit(true)
+          clearTimeout(timeoutID)
+        }, 1000)
+      } else {
+        setIsInit(true)
+        onChange(getMapProps(googleMap))
+
+        if (!map.autoMove) {
+          getLocationFromCookies()
         }
       }
     },
@@ -219,55 +285,16 @@ const mapHOC = compose(
       removePolygon(map.drawing.shape)
       inactiveDrawing()
       getListingsByMapBounds(map.props.marginBounds)
-    },
-    onClusterMarkerClick: () => points => {
-      const googleMaps = window.google.maps
-
-      const bounds = new googleMaps.LatLngBounds()
-
-      points.forEach(point => bounds.extend(point))
-
-      window.currentMap.fitBounds(bounds)
     }
   }),
-  // precalculate clusters if markers data has changed
   withPropsOnChange(
-    (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),
-    ({
-      markers = [],
-      clusterRadius,
-      clusterOptions: { minZoom, maxZoom }
-    }) => ({
-      getCluster: supercluster(normalizeListingsForMarkers(markers), {
-        minZoom, // min zoom to generate clusters on
-        maxZoom, // max zoom level to cluster the points on
-        radius: clusterRadius // cluster radius in pixels
-      })
-    })
-  ),
-  // get clusters specific for current bounds and zoom
-  withPropsOnChange(
-    ['mapProps', 'getCluster'],
-    ({ mapProps, getCluster, isFetching }) => {
-      let clusters = []
-
-      isFetching = isFetching && mapProps.zoom < DECLUSTER_ZOOM_LEVEL
-
-      if (_.isEmpty(mapProps) || !mapProps.bounds || isFetching) {
-        return { clusters }
+    (props, nextProps) =>
+      !isEqual(props.mapProps, nextProps.mapProps) ||
+      !isEqual(props.markers, nextProps.markers),
+    ({ mapProps, markers, generateClusters, isFetching }) => {
+      if (!isFetching && !isEmpty(mapProps) && mapProps.bounds) {
+        generateClusters(normalizeListingsForMarkers(markers), mapProps)
       }
-
-      clusters = getCluster(mapProps).map(({ wx, wy, points }) => ({
-        points,
-        lat: wy,
-        lng: wx
-      }))
-
-      if (mapProps.zoom >= DECLUSTER_ZOOM_LEVEL) {
-        clusters = setCssPositionToListingsWithSameBuilding(clusters)
-      }
-
-      return { clusters }
     }
   )
 )

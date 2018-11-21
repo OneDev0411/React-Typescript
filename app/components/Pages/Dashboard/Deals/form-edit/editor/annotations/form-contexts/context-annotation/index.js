@@ -1,13 +1,11 @@
 import React from 'react'
 
+import ToolTip from 'components/tooltip'
+
 import {
   calculateWordWrap,
   getAnnotationsValues
 } from '../../../../utils/word-wrap'
-
-import { getValue } from '../../../../utils/types'
-
-import ToolTip from 'components/tooltip'
 
 import { Container } from './styled'
 
@@ -17,27 +15,31 @@ export default class Context extends React.Component {
   }
 
   setDefaultValues = () => {
-    if (this.props.value) {
-      const values = getAnnotationsValues(
-        this.props.annotations,
-        this.props.value,
-        {
-          maxFontSize: this.props.maxFontSize
-        }
-      )
-
-      this.props.onSetValues(values)
-
-      return
+    if (!this.props.value) {
+      return false
     }
 
-    const values = {}
-
-    this.props.annotations.forEach(annotation => {
-      values[annotation.fieldName] = getValue(annotation)
-    })
+    const values = getAnnotationsValues(
+      this.props.annotations,
+      this.props.value,
+      {
+        maxFontSize: this.props.maxFontSize
+      }
+    )
 
     this.props.onSetValues(values)
+  }
+
+  onRef = ref => {
+    this.container = ref
+  }
+
+  handleClick = () => {
+    if (this.props.isReadOnly) {
+      return false
+    }
+
+    this.props.onClick(this.container.getBoundingClientRect())
   }
 
   render() {
@@ -67,12 +69,9 @@ export default class Context extends React.Component {
               bold={appearance.bold}
               color={appearance.color}
               rect={rect}
-              innerRef={ref => (this.container = ref)}
+              ref={this.onRef}
               readOnly={this.props.isReadOnly}
-              onClick={() =>
-                !this.props.isReadOnly &&
-                this.props.onClick(this.container.getBoundingClientRect())
-              }
+              onClick={this.handleClick}
             >
               {values[index]}
             </Container>

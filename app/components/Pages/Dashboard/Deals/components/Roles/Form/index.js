@@ -1,8 +1,10 @@
 import React from 'react'
 import _ from 'underscore'
+
+import { FinalFormDrawer } from 'components/FinalFormDrawer'
+
 import { RoleFormContainer } from './FormContainer'
 import { ROLE_NAMES } from '../../../utils/roles'
-import { FinalFormDrawer } from 'components/FinalFormDrawer'
 
 import { TYPE_PERSON, TYPE_COMPANY } from './FormComponents/TypeInput'
 

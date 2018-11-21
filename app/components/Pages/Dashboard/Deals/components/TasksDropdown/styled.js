@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { grey, blue } from 'views/utils/colors'
 
 export const DropDownContainer = styled.div`
@@ -86,6 +87,14 @@ export const ChecklistNewItemInput = styled.input`
 export const ChecklistNewItemCancel = styled.span`
   position: absolute;
   right: 10px;
+  top: 5px;
+  font-weight: 400;
+  color: #003bdf;
+`
+
+export const ChecklistNewItemSave = styled.span`
+  position: absolute;
+  right: 25px;
   top: 5px;
   font-weight: 400;
   color: #003bdf;

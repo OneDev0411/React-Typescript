@@ -83,7 +83,7 @@ class Search extends React.Component {
           onChange={this.handleChange}
           onBlur={this.onBlur}
           onFocus={this.onFocus}
-          innerRef={this.onRef}
+          ref={this.onRef}
           readOnly={disableOnSearch && isSearching}
         />
 

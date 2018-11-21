@@ -3,12 +3,13 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import Flex from 'styled-flex-component'
 
+import styled from 'styled-components'
+
 import { setUploadAttributes } from 'actions/deals'
 import ActionButton from 'components/Button/ActionButton'
 import { primary, grey } from 'views/utils/colors'
-import styled from 'styled-components'
 
-const Container = Flex.extend`
+const Container = styled(Flex)`
   height: 100%;
   padding-left: 0.5rem;
   background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};

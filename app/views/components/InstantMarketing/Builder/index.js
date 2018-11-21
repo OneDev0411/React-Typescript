@@ -5,6 +5,10 @@ import 'grapesjs/dist/css/grapes.min.css'
 import '../../../../styles/components/modules/template-builder.scss'
 
 import './AssetManager'
+import juice from 'juice'
+
+import ActionButton from 'components/Button/ActionButton'
+
 import config from './config'
 
 import nunjucks from '../helpers/nunjucks'
@@ -17,14 +21,25 @@ import {
 } from './styled'
 import Templates from '../Templates'
 
-import juice from 'juice'
-import ActionButton from 'components/Button/ActionButton'
-
 class Builder extends React.Component {
-  keyframe = 0
+  constructor(props) {
+    super(props)
 
-  state = {
-    template: null
+    this.state = {
+      template: null
+    }
+
+    this.keyframe = 0
+
+    this.traits = {
+      link: [
+        {
+          type: 'text',
+          label: 'Link',
+          name: 'href'
+        }
+      ]
+    }
   }
 
   componentDidMount() {
@@ -56,7 +71,8 @@ class Builder extends React.Component {
   }
 
   get timeline() {
-    return this.editor.DomComponents.getWrapper().view.el.ownerDocument.defaultView.Timeline
+    return this.editor.DomComponents.getWrapper().view.el.ownerDocument
+      .defaultView.Timeline
   }
 
   disableAssetManager = () => {
@@ -101,13 +117,14 @@ class Builder extends React.Component {
         model.set({
           editable: false,
           selectable: false,
-          hoverable: false,
+          hoverable: false
         })
       }
 
       model.set({
         draggable: false,
-        droppable: false
+        droppable: false,
+        traits: this.traits[model.get('type')] || []
       })
 
       model.get('components').each(model => updateAll(model))
@@ -168,15 +185,17 @@ class Builder extends React.Component {
 
     const keyframe = this.timeline.keyframes[this.keyframe]
 
-    if (!keyframe)
+    if (!keyframe) {
       return
+    }
 
     this.timeline.seekTo(keyframe.at)
   }
 
   onPrevious = () => {
-    if (this.keyframe === 0)
+    if (this.keyframe === 0) {
       return
+    }
 
     this.keyframe--
 
@@ -209,22 +228,22 @@ class Builder extends React.Component {
               {this.props.saveButtonLabel}
             </ActionButton>
 
-            { template && template.video &&
-              <ActionButton
-                style={{ marginLeft: '0.5rem' }}
-                onClick={this.onPrevious}
-              >
-                Previous
-              </ActionButton> }
+            {template &&
+              template.video && (
+                <ActionButton
+                  style={{ marginLeft: '0.5rem' }}
+                  onClick={this.onPrevious}
+                >
+                  Previous
+                </ActionButton>
+              )}
 
-            { template && template.video &&
-              <ActionButton
-                onClick={this.onNext.bind(this)}
-              >
-                Next
-              </ActionButton>
-            }
-
+            {template &&
+              template.video && (
+                <ActionButton onClick={this.onNext.bind(this)}>
+                  Next
+                </ActionButton>
+              )}
           </div>
         </Header>
 

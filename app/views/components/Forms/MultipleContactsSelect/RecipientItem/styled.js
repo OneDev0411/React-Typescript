@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import IconButton from '../../../Button/IconButton'
 
-export const DeleteButton = IconButton.extend`
+export const DeleteButton = styled(IconButton)`
   margin-left: 6px;
   opacity: 0;
 `

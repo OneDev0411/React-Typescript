@@ -5,12 +5,14 @@ import Map from 'google-map-react'
 import React from 'react'
 import { browserHistory, Link } from 'react-router'
 import Flex from 'styled-flex-component'
+import styled from 'styled-components'
 
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import { formatPhoneNumber } from '../../../../../../utils/format'
 import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
 import config from '../../../../../../../config/public'
 import Brand from '../../../../../../controllers/Brand'
@@ -56,9 +58,23 @@ import {
   CarouselItem,
   OverlayTrigger
 } from 'react-bootstrap'
+
 import Follow from '../../../../../../views/components/Follow'
 import { listingStatuses } from '../../../../../../constants/listings/listing'
 import { primary } from '../../../../../../views/utils/colors'
+
+import ArrowLeftIcon from 'components/SvgIcons/ArrowLeft/ArrowLeftIcon'
+import ArrowRightIcon from 'components/SvgIcons/ArrowRight/ArrowRightIcon'
+
+const ArrowContainer = styled(Flex)`
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 0 28px 0 rgba(0, 0, 0, 0.15), 0 0 10px 0 rgba(0, 0, 0, 0.16);
+  background-color: #000000;
+  border-radius: 50%;
+  margin-left: ${({ left }) => (left ? '1.5rem' : 'auto')};
+  margin-right: ${({ left }) => (left ? 'auto' : '1.5rem')};
+`
 
 export const fadeIn = node => {
   const elem = ReactDOM.findDOMNode(node)
@@ -92,7 +108,8 @@ const ListingDesktopView = ({
   setGalleryModalState,
   galleryModalIsActive,
   handleModalGalleryNav,
-  galleryModalActiveIndex
+  galleryModalActiveIndex,
+  galleryModalDirection
 }) => {
   const brandColor = Brand.color('primary', primary, brand)
 
@@ -130,8 +147,16 @@ const ListingDesktopView = ({
   let bedroom_count
   let listing_title
   let bathroom_count
-  let prev_icon = '<'
-  let next_icon = '>'
+  let prev_icon = (
+    <ArrowContainer center left>
+      <ArrowLeftIcon />
+    </ArrowContainer>
+  )
+  let next_icon = (
+    <ArrowContainer center>
+      <ArrowRightIcon />
+    </ArrowContainer>
+  )
   let listing_subtitle
   let brand_agent_area
   let bathroomBaloonText
@@ -152,10 +177,9 @@ const ListingDesktopView = ({
 
   let main_content = isFetching && <Loading />
 
-  main_content = !isFetching &&
-    errorMessage && (
-      <FetchError message={errorMessage} backButtonHandler={hideModal} />
-    )
+  main_content = !isFetching && errorMessage && (
+    <FetchError message={errorMessage} backButtonHandler={hideModal} />
+  )
 
   if (listing && listing.property) {
     property = listing.property
@@ -208,8 +232,9 @@ const ListingDesktopView = ({
       <Carousel
         interval={0}
         indicators={false}
-        prevIcon={prev_icon}
-        nextIcon={next_icon}
+        slide={false}
+        prevIcon={gallery_chunks.length > 1 && prev_icon}
+        nextIcon={gallery_chunks.length > 1 && next_icon}
         className="listing-viewer__carousel"
       >
         {gallery_chunks.map((gallery_image_url, i) => (
@@ -367,7 +392,9 @@ const ListingDesktopView = ({
 
       if (brand_agent.phone_number) {
         phone_area = (
-          <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
+          <div style={S('font-15 mb-5')}>
+            M: {formatPhoneNumber(brand_agent.phone_number)}
+          </div>
         )
       }
 
@@ -474,7 +501,7 @@ const ListingDesktopView = ({
             scrollwheel: false,
             disableDefaultUI: true
           }}
-          bootstrapURLKeys={bootstrap_url_keys}
+          bootstrapURLKeys={{ key: bootstrap_url_keys.key }}
         >
           <ListingMapMarker
             style={S('pointer mt-10')}
@@ -773,6 +800,7 @@ const ListingDesktopView = ({
 
     modal_gallery_area = (
       <Carousel
+        direction={galleryModalDirection}
         interval={0}
         indicators={false}
         prevIcon={prev_icon}
@@ -927,7 +955,9 @@ const ListingDesktopView = ({
 
     if (brand_agent.phone_number) {
       phone_area = (
-        <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
+        <div style={S('font-15 mb-5')}>
+          M: {formatPhoneNumber(brand_agent.phone_number)}
+        </div>
       )
     }
 
@@ -1011,6 +1041,7 @@ export default compose(
   withState('galleryModalIsActive', 'setGalleryModalState', false),
   withState('galleryModalDirection', 'setGalleryModalDirection', ''),
   withState('galleryModalActiveIndex', 'setGalleryModalActiveIndex', 0),
+  withState('galleryModalDirection', 'setGalleryModalDirection', 'next'),
   withHandlers({
     hideModal: () => () => {
       const currentLocation = browserHistory.getCurrentLocation()
@@ -1051,7 +1082,8 @@ export default compose(
     handleModalGalleryNav: ({
       listing,
       galleryModalActiveIndex,
-      setGalleryModalActiveIndex
+      setGalleryModalActiveIndex,
+      setGalleryModalDirection
     }) => (selectedIndex, selectedDirection) => {
       const { gallery_image_urls } = listing
       const gallerLength = gallery_image_urls.length - 1
@@ -1073,6 +1105,8 @@ export default compose(
       if (selectedDirection === 'next' && currentIndex === gallerLength) {
         setGalleryModalActiveIndex(0)
       }
+
+      setGalleryModalDirection(selectedDirection)
     }
   }),
   withHandlers({

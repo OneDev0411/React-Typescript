@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -9,7 +10,7 @@ import { confirmation } from '../../../../../store_actions/confirmation'
 import ActionButton from 'components/Button/ActionButton'
 import { H4 } from 'components/Typography/headings'
 
-const VoidButton = ActionButton.extend`
+const VoidButton = styled(ActionButton)`
   margin-left: 1rem;
   color: red;
   border-color: red;

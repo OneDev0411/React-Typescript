@@ -1,16 +1,25 @@
+import styled from 'styled-components'
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { showAttachments } from '../../../../../../store_actions/deals'
-
-import DealEmail from '../../dashboard/deal-email'
 
 import PageHeader from 'components/PageHeader'
-// import LinkButton from 'components/Button/LinkButton'
-import ActionButton from 'components/Button/ActionButton'
-import SendDealPromotionCard from '../../../../../../views/components/InstantMarketing/adapters/SendDealPromotion'
 
-const Button = ActionButton.extend`
+import ActionButton from 'components/Button/ActionButton'
+import LinkButton from 'components/Button/LinkButton'
+import SendDealPromotionCard from 'components/InstantMarketing/adapters/SendDealPromotion'
+
+import { showAttachments } from 'actions/deals'
+
+import DealEmail from '../deal-email'
+
+const agentNetworkValidUsers = [
+  'shayan.hamidi@gmail.com',
+  'snhasani+a@gmail.com',
+  'emil+agent@rechat.com'
+]
+
+const Button = styled(ActionButton)`
   margin-left: 0.5em;
 `
 
@@ -42,6 +51,18 @@ const Header = ({ user, deal, showAttachments }) => (
       >
         Get Signatures
       </Button>
+
+      {deal.listing &&
+        agentNetworkValidUsers.includes(user.email) && (
+          <LinkButton
+            appearance="outline"
+            to={`/dashboard/deals/${deal.id}/network`}
+            style={{ margin: '0 0.5rem 0 0' }}
+          >
+            Network
+          </LinkButton>
+        )}
+
       {deal.listing && (
         <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
       )}

@@ -18,6 +18,7 @@ export default class TagContacts extends React.Component {
   }
 
   openOverLay = () => this.setState({ overlayIsOpen: true })
+
   closeOverlay = () => this.setState({ overlayIsOpen: false })
 
   render() {
@@ -40,6 +41,9 @@ export default class TagContacts extends React.Component {
           isOpen={overlayIsOpen}
           closeOverlay={this.closeOverlay}
           resetSelectedRows={this.props.resetSelectedRows}
+          handleChangeContactsAttributes={
+            this.props.handleChangeContactsAttributes
+          }
         />
       </Fragment>
     )

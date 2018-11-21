@@ -4,6 +4,8 @@ import { IndexLink } from 'react-router'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
+import { primary } from 'views/utils/colors'
+
 import Brand from '../../../../../../../../controllers/Brand'
 import actions from '../../../../../../../../store_actions/listings/alerts'
 import { alertStatuses } from '../../../../../../../../constants/listings/alerts'
@@ -50,7 +52,7 @@ const AlertListItem = ({
         parseInt(alert.new_recommendations, 10) > 0 && (
           <span
             className="c-alertList__item__badge"
-            style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}
+            style={{ backgroundColor: Brand.color('primary', primary) }}
           >
             {alert.new_recommendations}
           </span>

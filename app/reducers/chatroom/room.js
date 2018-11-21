@@ -1,4 +1,5 @@
 import _ from 'underscore'
+
 import types from '../../constants/chatroom'
 
 /**
@@ -117,7 +118,7 @@ function addMessageTyping(state, action) {
  * remove "user is typing"
  */
 function removeMessageTyping(state, action) {
-  let typing = state[action.roomId] && state[action.roomId].typing
+  let typing = state && state[action.roomId] && state[action.roomId].typing
 
   return updateRoom(state, action.roomId, {
     typing: typing && _.omit(typing, user => user.id === action.userId)

@@ -69,7 +69,7 @@ export const Address = ({ listing }) => (
       <Title>
         <Link to={`/dashboard/mls/${listing.id}`}>{listing.address}</Link>
       </Title>
-      <SubAddress className="blackHover">{listing.status}</SubAddress>
+      <SubAddress className="hover-color--black">{listing.status}</SubAddress>
     </Flex>
   </Flex>
 )

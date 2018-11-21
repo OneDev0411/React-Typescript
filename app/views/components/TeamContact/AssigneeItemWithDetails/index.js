@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
@@ -8,7 +9,7 @@ import Button from '../../Button/IconButton'
 import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 import { Container, Title, Details } from '../../AssocationItem/styled'
 
-const Item = Container.extend`
+const Item = styled(Container)`
   &:hover {
     cursor: initial;
   }

@@ -1,5 +1,6 @@
-import Fetch from '../../services/fetch'
 import _ from 'underscore'
+
+import Fetch from '../../services/fetch'
 
 /**
  * resend specific envelope
@@ -35,9 +36,26 @@ export async function sendEnvelope(
   try {
     const response = await new Fetch().post('/envelopes').send(data)
 
+    if (response.body && ~~response.body.http === 412) {
+      throw new Error(
+        JSON.stringify({
+          status: response.body.http,
+          message: response.body.message
+        })
+      )
+    }
+
     return response.body.data
   } catch (e) {
-    throw e
+    let error = e
+
+    try {
+      error = JSON.parse(e.message)
+    } catch (oops) {
+      /* nothing */
+    }
+
+    throw error
   }
 }
 

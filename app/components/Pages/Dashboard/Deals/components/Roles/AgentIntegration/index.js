@@ -50,7 +50,6 @@ class RoleAgentIntegration extends React.Component {
 
   onUpsertRole = role => {
     const { selectedAgent } = this.state
-    const { onUpsertRole } = this.props
 
     if (role && selectedAgent) {
       role.user = selectedAgent.id
@@ -58,8 +57,8 @@ class RoleAgentIntegration extends React.Component {
 
     this.setState(initialState)
 
-    if (onUpsertRole) {
-      onUpsertRole(role)
+    if (this.props.onUpsertRole) {
+      this.props.onUpsertRole(role)
     }
   }
 
@@ -124,7 +123,7 @@ class RoleAgentIntegration extends React.Component {
           email,
           legal_last_name: last_name,
           legal_first_name: first_name,
-          phone: phone_number || work_phone,
+          phone_number: phone_number || work_phone,
           company: office ? office.name : ''
         },
         showRoleDrawer: true
@@ -157,6 +156,7 @@ class RoleAgentIntegration extends React.Component {
       <Fragment>
         {this.state.showAgentModal && (
           <AgentModal
+            modalTitle={modalTitle}
             isPrimaryAgent={this.IsPrimaryAgent}
             onHide={this.onClose}
             onSelectAgent={this.onSelectAgent}

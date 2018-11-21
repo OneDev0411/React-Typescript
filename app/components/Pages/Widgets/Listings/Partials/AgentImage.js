@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import S from 'shorti'
 
-const AgentImage = ({ listing }) => {
+const AgentImage = ({ listing, defaultAvatar }) => {
   const { proposed_agent } = listing
 
   if (!proposed_agent) {
@@ -31,9 +31,7 @@ const AgentImage = ({ listing }) => {
     avatar = (
       <div
         style={S(
-          `bg-url(${
-            this.props.defaultAvatar
-          }) w-50 h-50 bg-center bg-cover br-100`
+          `bg-url(${defaultAvatar}) w-50 h-50 bg-center bg-cover br-100`
         )}
       />
     )

@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
+
 import { ICalContainer, PageDescription } from './styled'
 
 import TeamType from './TeamTypes'
@@ -17,7 +18,7 @@ import PageHeader from '../../../../../views/components/PageHeader'
 class DealTemplates extends React.Component {
   state = {
     selectedTypes: [],
-    selectedMembers: [],
+    selectedMembers: {},
     isFetchingSetting: true,
     feedURl: ''
   }
@@ -36,9 +37,9 @@ class DealTemplates extends React.Component {
 
       let normalizedSetting = {}
 
-      if (setting.filter) {
+      if (setting.filter && setting.filter.length > 0) {
         setting.filter.forEach(filter => {
-          if (filter.users) {
+          if (filter.users && filter.users.length > 1) {
             normalizedSetting[filter.brand] = filter.users
           } else {
             const filterTeam = this.props.userTeams.filter(
@@ -55,6 +56,18 @@ class DealTemplates extends React.Component {
 
             normalizedSetting[filter.brand] = members
           }
+        })
+      } else {
+        this.props.userTeams.forEach(team => {
+          let members = []
+
+          team &&
+            team.brand.roles.forEach(
+              role =>
+                (members = members.concat(role.members.map(({ id }) => id)))
+            )
+
+          normalizedSetting[team.brand.id] = members
         })
       }
 
@@ -102,6 +115,7 @@ class DealTemplates extends React.Component {
       this.setState({ selectedTypes: selectedTypes.concat(selectedType) })
     }
   }
+
   onChangeSelectAllMembers = selectedMembers =>
     this.setState({ selectedMembers })
 
@@ -124,14 +138,20 @@ class DealTemplates extends React.Component {
 
     if (selectedMembers[brandId]) {
       if (selectedMembers[brandId].includes(selectedMember)) {
-        this.setState({
-          selectedMembers: {
-            ...selectedMembers,
-            [brandId]: selectedMembers[brandId].filter(
-              user => user !== selectedMember
-            )
-          }
-        })
+        if (selectedMembers[brandId].length > 1) {
+          this.setState({
+            selectedMembers: {
+              ...selectedMembers,
+              [brandId]: selectedMembers[brandId].filter(
+                user => user !== selectedMember
+              )
+            }
+          })
+        } else {
+          this.setState({
+            selectedMembers: _.omit(selectedMembers, brandId)
+          })
+        }
       } else {
         this.setState({
           selectedMembers: {
@@ -177,7 +197,6 @@ class DealTemplates extends React.Component {
           </PageDescription>
           <TeamType
             userTeams={this.props.userTeams}
-            onChangeTeam={this.onChangeTeam}
             selectedMembers={selectedMembers}
             onChangeSelectAllMembers={this.onChangeSelectAllMembers}
             onChangeSelectedMember={this.onChangeSelectedMember}

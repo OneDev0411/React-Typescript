@@ -1,9 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import { createRoles, updateRole } from 'actions/deals'
-import { createContacts, upsertContactAttributes } from 'actions/contacts'
-import { confirmation } from 'actions/confirmation'
+
+import {
+  createRoles,
+  updateRole
+} from '../../../../../../../store_actions/deals'
+import {
+  createContacts,
+  upsertContactAttributes
+} from '../../../../../../../store_actions/contacts'
+import { confirmation } from '../../../../../../../store_actions/confirmation'
 
 import {
   convertRoleToContact,
@@ -29,10 +36,6 @@ class RoleFormWrapper extends React.Component {
     const {
       deal,
       role,
-      attributeDefs,
-      upsertContactAttributes,
-      updateRole,
-      createRoles,
       onUpsertRole = () => null,
       onHide = () => null
     } = this.props
@@ -45,28 +48,28 @@ class RoleFormWrapper extends React.Component {
 
       if (isNewRecord) {
         if (form.contact) {
-          const upsertedAttributes = getContactDiff(form, attributeDefs)
+          const upsertedAttributes = getContactDiff(
+            form,
+            this.props.attributeDefs
+          )
 
           if (upsertedAttributes.length > 0) {
-            await upsertContactAttributes(form.contact.id, upsertedAttributes)
+            await this.props.upsertContactAttributes(
+              form.contact.id,
+              upsertedAttributes
+            )
 
             this.showNotification(`${getLegalFullName(form)} Updated.`)
           }
         } else {
-          this.props.confirmation({
-            message: `Should we add ${form.legal_first_name ||
-              form.company_title} to your Contacts?`,
-            cancelLabel: 'No',
-            confirmLabel: 'Yes, Add',
-            onConfirm: () => this.createCrmContact(form)
-          })
+          this.askCreateContact(form, role)
         }
 
         if (deal) {
-          await createRoles(deal.id, [form])
+          await this.props.createRoles(deal.id, [form])
         }
       } else if (deal) {
-        await updateRole(deal.id, form)
+        await this.props.updateRole(deal.id, form)
       }
 
       onUpsertRole({
@@ -99,6 +102,20 @@ class RoleFormWrapper extends React.Component {
     )
 
     this.showNotification(`New Contact Created: ${getLegalFullName(form)}`)
+  }
+
+  askCreateContact = form => {
+    if (this.props.user.email === form.email) {
+      return false
+    }
+
+    this.props.confirmation({
+      message: `Should we add ${form.legal_first_name ||
+        form.company_title} to your Contacts?`,
+      cancelLabel: 'No',
+      confirmLabel: 'Yes, Add',
+      onConfirm: () => this.createCrmContact(form)
+    })
   }
 
   render() {

@@ -10,6 +10,10 @@
 
 @import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
 
+// Fonts
+@import 'fonts/barlow.scss';
+@import 'fonts/merriweather.scss';
+
 // utilities
 @import 'utils/utils.list';
 @import 'utils/utils.align';
@@ -91,12 +95,6 @@
 @import 'vendor/react-day-picker/style.scss';
 @import 'vendor/react-ios-switch/index.scss';
 @import 'vendor/react-select/index.scss';
-
-// Fonts
-@import 'fonts/sf.scss';
-@import 'fonts/tempos-headline.scss';
-@import 'fonts/din.scss';
-@import 'fonts/futurastd.scss';
 
 // Stepper
 @import '../components/Partials/Stepper/styles.scss';

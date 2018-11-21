@@ -39,7 +39,7 @@ export const Title = styled(H4)`
   }
 `
 
-export const ArrowIcon = ArrowDownIcon.extend`
+export const ArrowIcon = styled(ArrowDownIcon)`
   width: 1.5em;
   height: 1.5em;
   margin-right: 0.5rem;

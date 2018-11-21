@@ -10,7 +10,7 @@ import CheckmarkIcon from '../../SvgIcons/Checkmark/IconCheckmark'
 const Info = styled.div`
   color: ${grey.A500};
 `
-const Container = Item.extend`
+const Container = styled(Item)`
   pointer-events: ${props => (props.isDisabled ? 'none' : 'initial')};
 
   &:hover {

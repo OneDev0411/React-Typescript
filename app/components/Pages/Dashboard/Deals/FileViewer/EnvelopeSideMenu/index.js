@@ -18,6 +18,7 @@ import {
   Container,
   Header,
   Title,
+  TitleContainer,
   WhoSignedContainer,
   WhoSignedHeader,
   WhoSignedRow,
@@ -27,11 +28,58 @@ import {
 
 class EnvelopeSideMenu extends React.Component {
   state = {
-    isResending: false
+    isResending: false,
+    isVoiding: false
   }
 
-  resendDocs = () => {
-    const { envelope } = this.props
+  resendDocs = async () => {
+    this.setState({
+      isResending: true
+    })
+
+    // resending docs
+    try {
+      await Deal.resendEnvelope(this.props.envelope.id)
+      this.props.notify({
+        message: 'eSignature has resent',
+        status: 'success'
+      })
+    } catch (e) {
+      this.props.notify({
+        message: 'Could not resend eSignature, please try again',
+        status: 'error'
+      })
+    }
+
+    this.setState({
+      isResending: false
+    })
+  }
+
+  requestVoidEnvelope = () =>
+    this.props.confirmation({
+      message: 'Once you void this form you cannot edit or send for signatures',
+      confirmLabel: 'Void',
+      onConfirm: this.voidEnvelope
+    })
+
+  voidEnvelope = async () => {
+    this.setState({
+      isVoiding: true
+    })
+
+    try {
+      await this.props.voidEnvelope(this.props.deal.id, this.props.envelope.id)
+
+      this.setState({
+        isVoiding: false
+      })
+    } catch (e) {
+      this.props.notify({
+        message: 'Can not void this eSign',
+        status: 'error'
+      })
+    }
   }
 
   render() {
@@ -44,6 +92,7 @@ class EnvelopeSideMenu extends React.Component {
 
     const isDraft = envelope.status === 'Created'
     const isSent = envelope.status === 'Sent'
+    const isVoided = envelope.status === 'Voided'
 
     return (
       <SideMenu width="35rem" isOpen style={{ marginRight: 0 }}>
@@ -76,8 +125,13 @@ class EnvelopeSideMenu extends React.Component {
                 </LinkButton>
               )}
 
-              <ActionButton size="small" appearance="outline">
-                Void
+              <ActionButton
+                size="small"
+                appearance="outline"
+                disabled={isVoided || this.state.isVoiding}
+                onClick={this.requestVoidEnvelope}
+              >
+                {isVoided ? 'Voided' : 'Void'}
               </ActionButton>
             </div>
           </Header>
@@ -96,7 +150,7 @@ class EnvelopeSideMenu extends React.Component {
                     size={30}
                   />
 
-                  <div>
+                  <TitleContainer>
                     <RoleName>{getLegalFullName(signer.role)}</RoleName>
                     <SignDate>
                       Signed&nbsp;
@@ -104,7 +158,7 @@ class EnvelopeSideMenu extends React.Component {
                         .unix(signer.updated_at)
                         .format('HH:mm A dddd MMM DD, YYYY')}
                     </SignDate>
-                  </div>
+                  </TitleContainer>
                 </WhoSignedRow>
               ))}
             </WhoSignedContainer>

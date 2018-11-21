@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import styled from 'style-loader'
 import Flex from 'styled-flex-component'
 
@@ -18,7 +19,7 @@ export const Button = styled.button`
   }
 `
 
-export const Box = Flex.extend`
+export const Box = styled(Flex)`
   height: 40px;
   font-size: 16px;
   line-height: 38px;

@@ -21,7 +21,7 @@ export const InfoText = styled.div`
   margin-left: 1em;
 `
 
-export const AlertIcon = Icon.extend`
+export const AlertIcon = styled(Icon)`
   > g {
     > path {
       fill: #000;

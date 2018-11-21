@@ -1,6 +1,9 @@
 import React from 'react'
+import styled from 'styled-components'
+
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
+
 import ActionButton from '../../../app/views/components/Button/ActionButton'
 import IconButton from '../../../app/views/components/Button/IconButton'
 import CloseIcon from '../../../app/views/components/SvgIcons/Close/CloseIcon'
@@ -62,7 +65,7 @@ function Secondary() {
 }
 
 function WithIcon() {
-  const GhostButton = ActionButton.extend`
+  const GhostButton = styled(ActionButton)`
     &:hover svg {
       fill: #fff !important;
     }

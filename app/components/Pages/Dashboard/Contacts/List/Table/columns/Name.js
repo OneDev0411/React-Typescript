@@ -3,14 +3,25 @@ import { connect } from 'react-redux'
 import Avatar from 'react-avatar'
 import Flex from 'styled-flex-component'
 
+import styled from 'styled-components'
+
 import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
+import { grey } from '../../../../../../../views/utils/colors'
 import Link from '../../../../../../../views/components/ALink'
+import Tooltip from '../../../../../../../views/components/tooltip'
+import PartnerIcon from '../../../../../../../views/components/SvgIcons/Partner/IconPartner'
 import {
   getContactAttribute,
   getAttributeFromSummary
 } from '../../../../../../../models/contacts/helpers'
-import styled from 'styled-components'
+
 import ImageStatus from '../../../../../../../views/components/ImageStatus'
+
+const ellipsis = {
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis'
+}
 
 const AvatarContainer = styled.div`
   display: table;
@@ -62,11 +73,11 @@ const ContactsListName = ({ contact, attributeDefs }) => {
   }
 
   return (
-    <Flex nowrap>
+    <Flex nowrap style={{ minWidth: '0' }}>
       <AvatarContainer>
         <Avatar
           className="avatar"
-          color="#000000"
+          color="#000"
           round
           name={name}
           src={avatar}
@@ -74,20 +85,45 @@ const ContactsListName = ({ contact, attributeDefs }) => {
         />
         <ImageStatus statusColor={statusColor} />
       </AvatarContainer>
-      <Link
-        to={`/dashboard/contacts/${contact.id}`}
+      <Flex
+        column
         style={{
-          fontWeight: 500,
-          marginLeft: '16px',
-          padding: 0,
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          marginTop: '-4px'
+          marginLeft: '1rem',
+          marginTop: '-0.25rem',
+          overflow: 'hidden'
         }}
       >
-        {name}
-      </Link>
+        <Link
+          to={`/dashboard/contacts/${contact.id}`}
+          style={{
+            ...ellipsis,
+            fontWeight: 500,
+            padding: 0
+          }}
+        >
+          {name}
+        </Link>
+        {contact.partner_name && (
+          <Tooltip caption="Spouse/Partner">
+            <Flex alignCenter>
+              <PartnerIcon
+                style={{ width: '1rem', height: '1rem', fill: grey.A550 }}
+              />
+              <span
+                style={{
+                  ...ellipsis,
+                  width: 'calc(100% - 1.24rem)',
+                  marginLeft: '0.25rem',
+                  color: grey.A550
+                }}
+                className="hover-color--black"
+              >
+                {contact.partner_name}
+              </span>
+            </Flex>
+          </Tooltip>
+        )}
+      </Flex>
     </Flex>
   )
 }

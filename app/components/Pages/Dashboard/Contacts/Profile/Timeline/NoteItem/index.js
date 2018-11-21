@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
@@ -7,7 +8,7 @@ import { Divider } from '../../../../../../../views/components/Divider'
 import { Container } from '../CRMTaskItem/styled'
 import { Title } from '../components/GeneralInfo/styled'
 
-const ItemContainer = Container.extend`
+const ItemContainer = styled(Container)`
   cursor: pointer;
 `
 

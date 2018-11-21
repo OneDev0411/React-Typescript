@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { primary } from 'views/utils/colors'
 import ActionButton from 'components/Button/ActionButton'
 
-export const SearchContainer = ActionButton.extend`
+export const SearchContainer = styled(ActionButton)`
   &:hover > svg {
     fill: ${primary};
   }

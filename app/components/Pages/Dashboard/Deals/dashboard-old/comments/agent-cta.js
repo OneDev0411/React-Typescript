@@ -1,10 +1,11 @@
+import styled from "styled-components"
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import ToolTip from '../../../../../../views/components/tooltip/index'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import ActionButton from 'components/Button/ActionButton'
 
-const CancelButton = ActionButton.extend`
+const CancelButton = styled(ActionButton)`
   margin-right: 1em;
   color: #f6a623;
   border-color: #f6a623;

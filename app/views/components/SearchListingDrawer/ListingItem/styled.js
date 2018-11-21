@@ -44,7 +44,7 @@ export const Address = styled.div`
   font-size: 0.875rem;
 `
 
-export const IconContainer = Flex.extend`
+export const IconContainer = styled(Flex)`
   width: 2.5rem;
   height: 2.5rem;
   background-color: #000;

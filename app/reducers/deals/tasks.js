@@ -1,4 +1,5 @@
 import _ from 'underscore'
+
 import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {
@@ -89,7 +90,7 @@ export default (state = null, action) => {
           ...state[action.task_id],
           room: {
             ...state[action.task_id].room,
-            attachments: state[action.task_id].room.attachments.filter(
+            attachments: (state[action.task_id].room.attachments || []).filter(
               file => file.id !== action.file_id
             )
           }
