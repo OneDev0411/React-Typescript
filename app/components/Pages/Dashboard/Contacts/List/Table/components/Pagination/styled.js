@@ -1,8 +1,9 @@
+import styled from "styled-components"
 import ActionButton from '../../../../../../../../views/components/Button/ActionButton'
 
 const SELECTED_BGC = '#2196f3'
 
-export const Button = ActionButton.extend`
+export const Button = styled(ActionButton)`
   border-width: 1px;
   border-style: solid;
   border-color: ${props => (props.selected ? SELECTED_BGC : '#CAD4DB')};

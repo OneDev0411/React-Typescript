@@ -24,7 +24,17 @@ export default {
     textNoElement: '',
 
     sectors: [
-    ]
+      {
+        name: 'Color',
+        open: true,
+//         buildProps: ['background-color', 'color']
+      }
+    ],
+
+    appendTo: '.gjs-pn-views-container'
+  },
+  traitManager: {
+    appendTo: '.gjs-pn-views-container'
   },
   panels: {
     stylePrefix: 'pn-',
@@ -33,18 +43,7 @@ export default {
         id: 'commands',
         buttons: [{}]
       },
-      {
-        id: 'views',
-        buttons: [
-          {
-            id: 'open-sm',
-            className: 'fa fa-paint-brush',
-            command: 'open-sm',
-            active: true,
-            attributes: { title: 'Open Style Manager' }
-          }
-        ]
-      }
+
     ]
   }
 }

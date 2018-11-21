@@ -1,9 +1,10 @@
+import styled from "styled-components"
 import React from 'react'
 import Forms from './forms-list'
 import Icon from 'components/SvgIcons/Add/AddIcon'
 import { primary } from 'views/utils/colors'
 
-const AddIcon = Icon.extend`
+const AddIcon = styled(Icon)`
   fill: ${primary};
 `
 

@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import Flex from 'styled-flex-component'
 import Cookies from 'universal-cookie'
@@ -6,7 +7,7 @@ import CloseButton from 'components/Button/IconButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { grey } from 'views/utils/colors'
 
-export const TagInfoContainer = Flex.extend`
+export const TagInfoContainer = styled(Flex)`
   padding: 1em;
   margin-bottom: 1em;
   border-radius: 3px;

@@ -63,6 +63,8 @@ export default function FormContexts(props) {
 
         return _.map(groups, (group, id) => {
           const annotations = group.map(i => i.annotation)
+          const info = group[0]
+          const { disableAutopopulate } = info
 
           const annotationContext = {
             type: 'Context',
@@ -74,11 +76,13 @@ export default function FormContexts(props) {
           const isDealConnectedToMls = props.deal.listing !== null
           const isAddressField = contextType === 'Address'
 
+          const value = formValue || (disableAutopopulate ? null : contextValue)
+
           return (
             <ContextAnnotation
               key={`${name}-${id}`}
               annotationContext={annotationContext}
-              value={formValue || contextValue}
+              value={value}
               maxFontSize={20}
               annotations={annotations}
               onSetValues={props.onSetValues}

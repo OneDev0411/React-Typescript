@@ -6,7 +6,7 @@ export const DealTasks = styled.div`
   max-height: ${({ traningAccount }) => getDashboardHeight(traningAccount)};
 `
 
-export const DealContent = DealTasks.extend`
+export const DealContent = styled(DealTasks)`
   position: relative;
   display: flex;
   flex-direction: row;

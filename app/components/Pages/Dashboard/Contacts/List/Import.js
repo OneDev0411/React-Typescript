@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
@@ -12,7 +13,7 @@ import Button from '../../../../../views/components/Button/ActionButton'
 import { BasicDropdown } from '../../../../../views/components/BasicDropdown'
 import { primary } from '../../../../../views/utils/colors'
 
-const Item = Button.extend`
+const Item = styled(Button)`
   color: #000;
 
   &:hover {

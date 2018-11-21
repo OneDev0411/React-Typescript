@@ -10,11 +10,15 @@ import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
 import Listing from 'models/listings/listing'
 import Compose from 'components/EmailCompose'
+
+import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { SocialModal } from '../../components/SocialModal'
 
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 
-import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+
+import { addCRMLog } from '../../helpers/add-crm-log'
+import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 
 const initialState = {
   listing: null,
@@ -76,6 +80,13 @@ class SendDealPromotion extends React.Component {
 
     try {
       await sendContactsEmail(emails)
+      addCRMLog(this.props.user.id, values.subject, [
+        ...getCRMLogAssociations(
+          'contact',
+          values.recipients.filter(r => r.contactId).map(r => r.contactId)
+        ),
+        ...getCRMLogAssociations('listing', [this.state.listing.id])
+      ])
 
       this.props.notify({
         status: 'success',
@@ -140,8 +151,8 @@ class SendDealPromotion extends React.Component {
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
           templateData={{ listing, user }}
-          templateTypes={['Listing']}
           mediums={this.props.mediums}
+          templateTypes={['Listing', 'JustListed', 'JustSold', 'OpenHouse']}
           assets={listing && listing.gallery_image_urls}
         />
 

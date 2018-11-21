@@ -1,5 +1,6 @@
 import React from 'react'
-import { Popover, OverlayTrigger } from 'react-bootstrap'
+
+import PopOver from 'components/Popover'
 
 import UserAvatar from '../../../../../../../Partials/UserAvatar'
 import Deal from 'models/Deal'
@@ -21,48 +22,42 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
   }
 
   return (
-    <OverlayTrigger
-      trigger={['hover', 'focus']}
+    <PopOver
+      containerStyle={{ display: 'inline-block' }}
       placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
-      overlay={
-        <Popover
-          className="deal-list--popover push-left"
-          id={`popover-trigger-sides-${deal.id}`}
-        >
-          <div className="roles">
-            {deal.roles.map(id => {
-              const role = roles[id]
+      id={`popover-trigger-sides-${deal.id}`}
+      caption={
+        <div className="roles">
+          {deal.roles.map(id => {
+            const role = roles[id]
 
-              return (
-                <div key={`ROLE_${role.id}`} className="item">
-                  <div className="avatar">
-                    <UserAvatar
-                      name={`${role.legal_first_name} ${role.legal_last_name}`}
-                      image={role.user ? role.user.profile_image_url : null}
-                      size={40}
-                      fgColor="#ffffff"
-                      color="#000000"
-                      showStateIndicator={false}
-                    />
-                  </div>
-                  <div className="info">
-                    <div className="role-name-container">
-                      <div className="name">{`${getLegalFullName(role)},`}</div>
-
-                      <div className="role">{roleName(role.role)}</div>
-                    </div>
-                    {role.user && (
-                      <div className="email">{role.user.email}</div>
-                    )}
-                  </div>
+            return (
+              <div key={`ROLE_${role.id}`} className="item">
+                <div className="avatar">
+                  <UserAvatar
+                    name={`${role.legal_first_name} ${role.legal_last_name}`}
+                    image={role.user ? role.user.profile_image_url : null}
+                    size={40}
+                    fgColor="#ffffff"
+                    color="#000000"
+                    showStateIndicator={false}
+                  />
                 </div>
-              )
-            })}
-          </div>
-        </Popover>
+                <div className="info">
+                  <div className="role-name-container">
+                    <div className="name">{`${getLegalFullName(role)},`}</div>
+
+                    <div className="role">{roleName(role.role)}</div>
+                  </div>
+                  {role.user && <div className="email">{role.user.email}</div>}
+                </div>
+              </div>
+            )
+          })}
+        </div>
       }
     >
-      <div className="primaryHover inline">
+      <div className="primaryHover">
         <span>{sideName}</span>
 
         <span
@@ -75,7 +70,7 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
             : ''}
         </span>
       </div>
-    </OverlayTrigger>
+    </PopOver>
   )
 }
 

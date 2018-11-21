@@ -65,7 +65,7 @@ class SaveSegment extends React.Component {
 
     return {
       ...list,
-      filters: this.props.createSegmentFromFilters(filters)
+      ...this.props.createSegmentFromFilters(filters)
     }
   }
 

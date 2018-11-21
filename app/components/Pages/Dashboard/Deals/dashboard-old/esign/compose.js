@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
+
 import Recipients from './recipients'
 import ComposeAttachments from './compose-attachments'
 import Docusign from './docusign'
@@ -53,7 +54,6 @@ class SendSignatures extends React.Component {
   removeRecipient(id) {
     this.props.removeEsignRecipient(id)
   }
-
 
   closeForm() {
     this.setState({

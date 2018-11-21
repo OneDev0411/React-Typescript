@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Viewer from './viewer'
 import WhoSigned from './who-signed'
 
@@ -6,10 +7,7 @@ import PageHeader from '../../../../../views/components/PageHeader'
 
 export default ({ deal, onClose, envelope, file }) => (
   <div className="c-deal-form-viewer">
-    <PageHeader
-      title={file.name}
-      backUrl={`/dashboard/deals/${deal.id}/files`}
-    />
+    <PageHeader title={file.name} backUrl={`/dashboard/deals/${deal.id}`} />
 
     <div className="c-deal-form-viewer__body show-envelopes">
       <Viewer width="calc(100% - 375px)" file={file} />

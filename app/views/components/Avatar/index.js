@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import pure from 'recompose/pure'
 
-import { getNameInitials } from '../../..//utils/helpers'
+import { getNameInitials } from '../../../utils/helpers'
 import { Container, Image, Status } from './styled'
 
 const propTypes = {

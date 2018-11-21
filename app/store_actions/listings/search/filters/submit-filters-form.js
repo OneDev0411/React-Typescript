@@ -16,10 +16,7 @@ import { feetToMeters, acresToMeters } from '../../../../../app/utils/listing'
 import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/Schools'
 
 import { SEARCH_BY_FILTERS_AREAS } from '../../../../constants/listings/search'
-import {
-  reset as resetSearchType,
-  setSearchType
-} from '../../../../store_actions/listings/search/set-type'
+import { setSearchType } from '../../../../store_actions/listings/search/set-type'
 
 // Initial valert options {
 //   limit: '250',
@@ -285,9 +282,7 @@ const normalizeValues = (values, options, state) => {
   })
 
   if (typeof queryOptions.points === 'undefined' && !hasAreasOptions) {
-    const { map } = state
-
-    queryOptions.points = generatePointsFromBounds(map.props.marginBounds)
+    queryOptions.points = generatePointsFromBounds(state.map.props.bounds)
   }
 
   // console.group('Submitted Filters')
@@ -337,11 +332,15 @@ const submitFiltersForm = values => async (dispatch, getState) => {
     //   goToPlace({ center: { lat, lng } })(dispatch, getState)
     // }
 
-    if (queryOptions.points == null && listings.length && window.google) {
-      const extendedProps = extendedBounds(
-        normalizeListingsForMarkers(listings),
-        search.map.props
-      )
+    if (queryOptions.points == null && listings.length > 0 && window.google) {
+      let extendedProps
+
+      if (search.map.props.size) {
+        extendedProps = extendedBounds(
+          normalizeListingsForMarkers(listings),
+          search.map.props
+        )
+      }
 
       dispatch(setSearchType(SEARCH_BY_FILTERS_AREAS))
 

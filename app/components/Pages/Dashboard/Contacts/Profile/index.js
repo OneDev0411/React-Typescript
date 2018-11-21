@@ -3,7 +3,6 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 
-import { getContactAddresses } from '../../../../../models/contacts/helpers'
 import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
 
 import {
@@ -28,6 +27,7 @@ import { Container } from '../components/Container'
 import { Dates } from './Dates'
 import { DealsListWidget } from './Deals'
 import { Details } from './Details'
+import { Partner } from './Partner'
 import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
@@ -81,6 +81,10 @@ class ContactProfile extends React.Component {
     this.fetchTimeline()
   }
 
+  updateContact() {
+    this.props.getContact(this.props.params.id)
+  }
+
   fetchTimeline = async () => {
     try {
       const timeline = await getContactTimeline(this.props.params.id)
@@ -92,21 +96,28 @@ class ContactProfile extends React.Component {
     }
   }
 
-  addEvent = event =>
-    this.setState(state => ({
-      timeline: [event, ...state.timeline]
-    }))
+  addEvent = crm_event => {
+    this.setState(
+      state => ({
+        timeline: [crm_event, ...state.timeline]
+      }),
+      this.updateContact
+    )
+  }
 
   filterTimelineById = (state, id) =>
     state.timeline.filter(item => item.id !== id)
 
   editEvent = updatedEvent =>
-    this.setState(state => ({
-      timeline: [
-        ...this.filterTimelineById(state, updatedEvent.id),
-        updatedEvent
-      ]
-    }))
+    this.setState(
+      state => ({
+        timeline: [
+          ...this.filterTimelineById(state, updatedEvent.id),
+          updatedEvent
+        ]
+      }),
+      this.updateContact
+    )
 
   deleteEvent = id =>
     this.setState(state => ({
@@ -193,6 +204,8 @@ class ContactProfile extends React.Component {
                 <Addresses contact={contact} />
 
                 <Details contact={contact} />
+
+                <Partner contact={contact} />
 
                 {!this.state.isDesktopScreen && (
                   <DealsListWidget contactId={contact.id} />

@@ -6,17 +6,18 @@ import { addNotification as notify } from 'reapop'
 import { saveSubmission, getDeal, getForms } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
-import { getPdfSize } from 'models/Deal/form'
-import { LoadingDealContainer } from './styled'
+import { getFormSize } from 'models/Deal/form'
 
 import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
 import Spinner from 'components/Spinner'
 import ProgressBar from 'components/ProgressBar'
 
+import importPdfJs from 'utils/import-pdf-js'
+
 import PDFEdit from './editor'
 
-import importPdfJs from 'utils/import-pdf-js'
+import { LoadingDealContainer } from './styled'
 import config from '../../../../../../config/public'
 
 class EditDigitalForm extends React.Component {
@@ -137,6 +138,12 @@ class EditDigitalForm extends React.Component {
       [name]: value
     }
 
+    if (!this.state.promptOnQuit) {
+      this.setState({
+        promptOnQuit: true
+      })
+    }
+
     if (forceUpdate) {
       this.forceUpdate()
     }
@@ -157,7 +164,7 @@ class EditDigitalForm extends React.Component {
     const { task, notify } = this.props
     // const { notifyOffice } = this.state
 
-    this.setState({ isSaving: true })
+    this.setState({ isSaving: true, promptOnQuit: false })
 
     // save form
     try {

@@ -1,7 +1,8 @@
 import React from 'react'
 import timeago from 'timeago.js'
-import { Popover, OverlayTrigger } from 'react-bootstrap'
 import styled from 'styled-components'
+import { Popover, OverlayTrigger } from 'react-bootstrap'
+
 import { grey } from '../../../../../../../views/utils/colors'
 
 const NoTouches = styled.div`
@@ -11,7 +12,7 @@ export function LastTouchedCell(props) {
   const { contact } = props
 
   if (!contact.last_touch) {
-    return <NoTouches className="blackHover">No Touches</NoTouches>
+    return <NoTouches className="hover-color--black">No Touches</NoTouches>
   }
 
   const formatedLastTouch = timeago().format(contact.last_touch * 1000)

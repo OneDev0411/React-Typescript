@@ -42,7 +42,7 @@ export async function searchListings(criteria) {
     }
 
     const response = await new Fetch().get(
-      `/listings/search?${queryName}=${criteria}`
+      `/listings/search?${queryName}=${encodeURIComponent(criteria)}`
     )
 
     const { data } = response.body

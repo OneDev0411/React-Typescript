@@ -29,7 +29,7 @@ class Grid extends React.Component {
         width: '25%',
         verticalAlign: 'center',
         accessor: deal => Deal.get.address(deal, roles),
-        render: ({ rowData: deal }) => <Address deal={deal} roles={roles} />
+        render: ({ rowData: deal }) => <Address deal={deal} />
       },
       {
         id: 'agent-name',

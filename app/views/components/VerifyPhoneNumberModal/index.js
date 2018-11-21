@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -13,7 +14,7 @@ import IntercomTriger from '../../../components/Pages/Dashboard/Partials/Interco
 import getVerificationCode from '../../../models/verify/request'
 import VerifyPhoneNumber from '../../../models/verify/confirm'
 
-const LinkButton = ActionButton.extend`
+const LinkButton = styled(ActionButton)`
   padding: 0;
   height: auto;
   line-height: 1;

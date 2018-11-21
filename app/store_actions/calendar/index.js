@@ -1,5 +1,4 @@
 export * from './get-calendar'
 export * from './set-date'
 export * from './reset-calendar'
-export * from './get-brand-members'
 export * from './set-calendar-filter'

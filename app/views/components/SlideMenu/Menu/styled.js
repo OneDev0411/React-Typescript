@@ -18,7 +18,7 @@ export const ListTitle = styled.div`
   font-weight: 500;
 `
 
-export const DeleteButton = IconButton.extend`
+export const DeleteButton = styled(IconButton)`
   opacity: 0;
   visibility: hidden;
   transition: all 0.3 linear;

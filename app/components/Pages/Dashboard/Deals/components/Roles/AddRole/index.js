@@ -40,57 +40,62 @@ class AddRoleForm extends React.Component {
       : [selectedRole]
   }
 
+  get RoleItems() {
+    const { deal_type } = this.props.deal
+    const roles = this.AllowedRoles || ROLE_NAMES
+
+    return roles
+      .filter(name => {
+        if (
+          (name === 'BuyerAgent' && deal_type === 'Buying') ||
+          (name === 'SellerAgent' && deal_type === 'Selling')
+        ) {
+          return false
+        }
+
+        return true
+      })
+      .map(name => ({
+        label: roleName(name),
+        value: name
+      }))
+  }
+
   get isDoubleEnded() {
     const enderType = Deal.get.field(this.props.deal, 'ender_type')
 
     return ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(enderType)
   }
 
-  getRoleItems = () =>
-    (this.AllowedRoles || this.Roles).map(item => ({
-      label: roleName(item),
-      value: item
-    }))
-
   itemToString = item => item.label
-
-  get Roles() {
-    const { deal_type } = this.props.deal
-
-    return ROLE_NAMES.filter(name => {
-      if (
-        (name === 'BuyerAgent' && deal_type === 'Buying') ||
-        (name === 'SellerAgent' && deal_type === 'Selling')
-      ) {
-        return false
-      }
-
-      return true
-    })
-  }
 
   render() {
     const { deal } = this.props
     const { isFormOpen, selectedRole } = this.state
-    const allowedRoles = this.AllowedRoles
+    const roleItems = this.RoleItems
+
+    if (roleItems.length === 0) {
+      return false
+    }
 
     return (
       <Container>
         <BasicDropdown
           fullWidth
           buttonSize={this.props.buttonSize}
-          items={this.getRoleItems()}
+          items={roleItems}
           itemToString={this.itemToString}
           onChange={this.handleSelectRole}
           buttonIcon={AddIcon}
           buttonText="Add a new contact"
-          disabled={allowedRoles && allowedRoles.length === 0}
+          disabled={roleItems.length === 0}
         />
 
         {isFormOpen && (
           <RoleAgentIntegration
             deal={deal}
-            allowedRoles={allowedRoles}
+            onUpsertRole={this.props.onCreateRole}
+            allowedRoles={this.AllowedRoles}
             isDoubleEnded={this.isDoubleEnded}
             isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
               selectedRole

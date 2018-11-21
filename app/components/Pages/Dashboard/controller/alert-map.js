@@ -1,4 +1,6 @@
 // controller/alert-map.js
+import { primary } from 'views/utils/colors'
+
 import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -81,7 +83,7 @@ const controller = {
       clickable: false,
       map: window.map,
       paths,
-      strokeColor: `#${Brand.color('primary', '3388ff')}`,
+      strokeColor: Brand.color('primary', primary),
       strokeWeight: 10
     })
     window.poly_alerts = window.poly

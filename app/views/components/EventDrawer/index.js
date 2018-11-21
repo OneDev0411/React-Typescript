@@ -22,7 +22,8 @@ import {
   DateTimeField,
   CheckboxField,
   AssigneesField,
-  AssociationsList
+  AssociationsList,
+  ReminderField
 } from '../final-form-fields'
 
 import Tooltip from '../tooltip'
@@ -35,11 +36,10 @@ import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
 import { Description } from './components/Description'
-import { Reminder } from './components/Reminder'
 import { EventType } from './components/EventType'
 import { FormContainer, FieldContainer, Footer } from './styled'
 
-const QUERY = {
+export const QUERY = {
   associations: ['reminders', 'assignees', 'created_by', 'updated_by'].map(
     a => `crm_task.${a}`
   )
@@ -271,7 +271,9 @@ export class EventDrawer extends Component {
                           name="dueDate"
                           selectedDate={values.dueDate}
                         />
-                        <Reminder />
+                        {values.status !== 'DONE' && (
+                          <ReminderField dueDate={values.dueDate} />
+                        )}
                       </FieldContainer>
 
                       <AssigneesField name="assignees" owner={user} />

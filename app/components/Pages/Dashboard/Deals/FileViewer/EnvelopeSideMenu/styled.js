@@ -25,6 +25,10 @@ export const Title = styled.div`
   font-weight: 500;
 `
 
+export const TitleContainer = styled.div`
+  text-align: right;
+`
+
 export const WhoSignedContainer = styled.div``
 
 export const WhoSignedHeader = styled.div`
@@ -43,4 +47,7 @@ export const WhoSignedRow = styled.div`
 
 export const RoleName = styled.div``
 
-export const SignDate = styled.div``
+export const SignDate = styled.div`
+  font-size: 0.875rem;
+  color: #ccc;
+`
