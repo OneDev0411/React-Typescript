@@ -5,7 +5,7 @@ export async function shareInstance(instanceId, recipients, text) {
     const response = await new Fetch()
       .post(`/templates/instances/${instanceId}/share`)
       .send({
-        text: '[Text TBD]',
+        text: 'SMS TBD',
         recipients
       })
 
