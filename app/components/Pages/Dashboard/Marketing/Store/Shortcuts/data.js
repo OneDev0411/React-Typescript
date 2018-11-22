@@ -1,31 +1,35 @@
-export const basePath = '/static/images/marketing/store/shortcuts'
-
 export const items = [
   {
     name: 'social',
-    title: 'Social Media'
+    size: { width: 96, height: 96 },
+    title: 'Social Media',
+    url: 'Social'
   },
   {
     name: 'email',
-    title: 'Email'
+    size: { width: 88, height: 108 },
+    title: 'Email',
+    url: 'Email'
   },
   {
     name: 'instagram',
-    title: 'Instagram Stories'
+    size: { width: 64, height: 96 },
+    title: 'Instagram Stories',
+    url: 'Social'
   },
   {
     name: 'postcards',
-    title: 'Postcards',
-    is_coming_soon: true
+    size: { width: 104, height: 72 },
+    title: 'Postcards'
   },
   {
     name: 'brochures',
-    title: 'Brochures',
-    is_coming_soon: true
+    size: { width: 64, height: 102 },
+    title: 'Brochures'
   },
   {
     name: 'business_cards',
-    title: 'Business Cards',
-    is_coming_soon: true
+    size: { width: 100, height: 64 },
+    title: 'Business Cards'
   }
 ]

@@ -8,9 +8,9 @@ import { Shortcut } from './Shortcut'
 
 export function Shortcuts() {
   return (
-    <div>
+    <div style={{ marginBottom: '1rem' }}>
       <H3 style={{ padding: '1rem 0' }}>Select a Design</H3>
-      <Flex justifyBetween>
+      <Flex wrap>
         {items.map((item, index) => (
           <Shortcut key={index} item={item} />
         ))}

@@ -1,18 +1,21 @@
 import React from 'react'
 
-import { basePath } from '../data'
-import { Placeholder } from './styled'
+import { Container, Placeholder, Title, Anchor } from './styled'
+
+const baseURL = '/dashboard/marketing/'
+const imgBasePath = '/static/images/marketing/store/shortcuts'
 
 export function Shortcut({ item }) {
-  const { is_coming_soon, name } = item
-  const file = is_coming_soon ? `${name}.svg` : `${name}@3x.jpg`
+  const { url, name } = item
+  const file = url ? `${name}@3x.png` : `${name}.svg`
 
   return (
-    <div>
+    <Container className={url ? 'c-shortcut--active' : ''}>
       <Placeholder center>
-        <img src={`${basePath}/${name}/${file}`} alt={name} />
+        <img {...item.size} src={`${imgBasePath}/${name}/${file}`} alt={name} />
       </Placeholder>
-      <div style={{ textAlign: 'center', fontWeight: 500 }}>{item.title}</div>
-    </div>
+      <Title>{item.title}</Title>
+      {url && <Anchor to={`${baseURL}${url}`} />}
+    </Container>
   )
 }
