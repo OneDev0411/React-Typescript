@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
+import _ from 'underscore'
 
 import {
   addActiveFilter,
@@ -40,7 +41,8 @@ class TagsList extends React.Component {
 
     if (this.isSelected(item.id)) {
       this.props.removeActiveFilter('contacts', item.id)
-      nextFilters = this.props.activeFilters.filter(
+      nextFilters = _.filter(
+        this.props.activeFilters,
         filter =>
           filter.attribute_def !== tagDefinition.id ||
           filter.value !== item.text
