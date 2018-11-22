@@ -18,7 +18,8 @@ import Badge from '../../../../../views/components/Badge'
 import IconButton from '../../../../../views/components/Button/IconButton'
 import Link from '../../../../../views/components/Button/LinkButton'
 import DealsIcon from '../../../../../views/components/SvgIcons/Deals/IconDeal'
-import MarketingIcon from '../../../../../views/components/SvgIcons/Marketing/IconMarketing'
+import StoreIcon from '../../../../../views/components/SvgIcons/Marketing/IconMarketing'
+import MarketingIcon from '../../../../../views/components/SvgIcons/PencilRuler/IconPencilRuler'
 import ContactsIcon from '../../../../../views/components/SvgIcons/Contacts/IconContacts'
 import NotificationsIcon from '../../../../../views/components/SvgIcons/Notifications/IconNotifications'
 import SupportIcon from '../../../../../views/components/SvgIcons/Support/IconSupport'
@@ -43,8 +44,8 @@ const getActivePath = path => {
       return 'STORE'
     case checkPath(/\/dashboard\/deals/):
       return 'DEALS'
-    case checkPath(/\/crm\/tasks/):
-      return 'TASKS'
+    case checkPath(/\/dashboard\/marketing/):
+      return 'MARKETING'
     case checkPath(/\/dashboard\/calendar/):
       return 'CALENDAR'
 
@@ -63,6 +64,7 @@ class appSideNav extends React.Component {
   state = {
     isDropDownOpen: false
   }
+
   onToggle = isDropDownOpen => this.setState({ isDropDownOpen })
 
   render() {
@@ -72,6 +74,7 @@ class appSideNav extends React.Component {
     const hasDealsPermission = acl.includes('Deals')
     const hasBackOfficePermission = acl.includes('BackOffice')
     const hasContactsPermission = acl.includes('CRM')
+    const hasMarketingPermission = acl.includes('Marketing')
 
     return (
       <aside className="c-app-sidenav">
@@ -90,8 +93,9 @@ class appSideNav extends React.Component {
           <Dropdown.Menu>
             <TeamSwitcher user={user} />
 
-            {user.teams &&
-              user.teams.length > 1 && <li className="separator">Account</li>}
+            {user.teams && user.teams.length > 1 && (
+              <li className="separator">Account</li>
+            )}
 
             <MenuItem href="/dashboard/account">Settings</MenuItem>
 
@@ -183,18 +187,32 @@ class appSideNav extends React.Component {
           {user.agent &&
             user.user_type === 'Agent' &&
             user.agent.office_mlsid === 'CSTPP01' && (
-              <SideNavItem isActive={activePath === 'STORE'} caption="Store">
+              <SideNavItem isActive={activePath === 'STORE'}>
                 <SideNavTooltip caption="Store">
                   <Link
                     inverse
                     to="/dashboard/website"
                     className="c-app-sidenav__item__title"
                   >
-                    <MarketingIcon />
+                    <StoreIcon />
                   </Link>
                 </SideNavTooltip>
               </SideNavItem>
             )}
+
+          {hasMarketingPermission && (
+            <SideNavItem isActive={activePath === 'MARKETING'}>
+              <SideNavTooltip caption="Marketing Center">
+                <Link
+                  inverse
+                  to="/dashboard/marketing"
+                  className="c-app-sidenav__item__title"
+                >
+                  <MarketingIcon />
+                </Link>
+              </SideNavTooltip>
+            </SideNavItem>
+          )}
         </ul>
 
         <ul className="c-app-sidenav__list c-app-sidenav__list--bottom">
