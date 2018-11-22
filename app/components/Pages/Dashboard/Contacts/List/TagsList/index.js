@@ -48,8 +48,8 @@ class TagsList extends React.Component {
       nextFilters = _.filter(
         this.props.activeFilters,
         filter =>
-          filter.attribute_def !== this.tagDefinitionId ||
-          filter.value !== item.text
+          filter.id !== this.tagDefinitionId ||
+          !filter.values.includes(item.text)
       )
     } else {
       const filter = {
