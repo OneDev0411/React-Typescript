@@ -60,7 +60,7 @@ class GenerateUrl extends React.Component {
 
       const { userTeams, selectedMembers } = this.props
 
-      let filter = userTeams
+      const filter = userTeams
         .filter(({ brand }) => selectedMembers[brand.id])
         .map(({ brand }) => {
           if (brand.member_count === selectedMembers[brand.id].length) {
@@ -69,10 +69,6 @@ class GenerateUrl extends React.Component {
 
           return { brand: brand.id, users: selectedMembers[brand.id] }
         })
-
-      if (filter.length === userTeams.length) {
-        filter = []
-      }
 
       const feedURl = await getCalenderFeed(this.props.selectedTypes, filter)
 
