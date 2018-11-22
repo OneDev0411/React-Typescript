@@ -11,7 +11,6 @@ import Drawer from 'components/OverlayDrawer'
 import { getBrandAgents } from 'views/utils/brand-members'
 
 import { formatPhoneNumber } from 'utils/format'
-import { confirmation } from 'actions/confirmation'
 
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 import { shareInstance } from 'models/instant-marketing/instance-share'
@@ -172,7 +171,4 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { confirmation }
-)(SocialDrawer)
+export default connect(mapStateToProps)(SocialDrawer)
