@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
@@ -7,7 +7,9 @@ import '../../../../styles/components/modules/template-builder.scss'
 import './AssetManager'
 import juice from 'juice'
 
+import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import config from './config'
 
@@ -15,9 +17,11 @@ import nunjucks from '../helpers/nunjucks'
 
 import {
   Container,
+  Actions,
   TemplatesContainer,
   BuilderContainer,
-  Header
+  Header,
+  Divider
 } from './styled'
 import Templates from '../Templates'
 
@@ -133,7 +137,7 @@ class Builder extends React.Component {
     updateAll(this.editor.DomComponents.getWrapper())
   }
 
-  onSave = () => {
+  getSavedTempldate() {
     const css = this.editor.getCss()
     const html = this.editor.getHtml()
 
@@ -150,13 +154,20 @@ class Builder extends React.Component {
 
     const result = juice(assembled)
 
-    this.props.onSave({
-      ...this.selectedTemplate,
-      result
-    })
+    const selectedTemplate = this.selectedTemplate
 
     this.selectedTemplate = null
+
+    return {
+      ...selectedTemplate,
+      result
+    }
   }
+
+  handleSave = () => this.props.onSave(this.getSavedTempldate())
+
+  handleSocialSharing = socialName =>
+    this.props.onSocialSharing(this.getSavedTempldate(), socialName)
 
   handleSelectTemplate = templateItem => {
     this.setState({
@@ -208,6 +219,10 @@ class Builder extends React.Component {
     this.postMessage('restart')
   }
 
+  get ShowSocialButtons() {
+    return this.props.mediums.includes('Social')
+  }
+
   render() {
     const { template } = this.state
 
@@ -216,17 +231,44 @@ class Builder extends React.Component {
         <Header>
           <h1>{this.props.headerTitle}</h1>
 
-          <div>
-            <ActionButton appearance="outline" onClick={this.props.onClose}>
-              Cancel
-            </ActionButton>
+          <Actions>
+            {this.ShowSocialButtons ? (
+              <Fragment>
+                <ActionButton
+                  onClick={() => this.handleSocialSharing('Instagram')}
+                >
+                  <i
+                    className="fa fa-instagram"
+                    style={{
+                      fontSize: '1.5rem',
+                      marginRight: '0.5rem'
+                    }}
+                  />
+                  Post to Instagram
+                </ActionButton>
 
-            <ActionButton
-              style={{ marginLeft: '0.5rem' }}
-              onClick={this.onSave}
-            >
-              {this.props.saveButtonLabel}
-            </ActionButton>
+                <ActionButton
+                  style={{ marginLeft: '0.5rem' }}
+                  onClick={() => this.handleSocialSharing('Facebook')}
+                >
+                  <i
+                    className="fa fa-facebook-square"
+                    style={{
+                      fontSize: '1.5rem',
+                      marginRight: '0.5rem'
+                    }}
+                  />
+                  Post to Facebook
+                </ActionButton>
+              </Fragment>
+            ) : (
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                onClick={this.handleSave}
+              >
+                {this.props.saveButtonLabel}
+              </ActionButton>
+            )}
 
             {template &&
               template.video && (
@@ -244,7 +286,17 @@ class Builder extends React.Component {
                   Next
                 </ActionButton>
               )}
-          </div>
+
+            <Divider />
+            <IconButton
+              isFit
+              iconSize="large"
+              inverse
+              onClick={this.props.onClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Actions>
         </Header>
 
         <BuilderContainer>
