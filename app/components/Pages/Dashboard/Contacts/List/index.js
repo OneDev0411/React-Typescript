@@ -3,40 +3,31 @@ import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 import _ from 'underscore'
 
-import { getActiveTeam } from 'utils/user-teams'
-
+import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
+import { getContacts, searchContacts, deleteContacts } from 'actions/contacts'
+import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
+import { selectContacts, selectContactsInfo } from 'reducers/contacts/list'
 
-import TagsList from './TagsList'
+import { getActiveTeam } from 'utils/user-teams'
 
-import DuplicateContacts from '../components/DuplicateContacts'
-
-import { confirmation } from '../../../../../store_actions/confirmation'
 import {
   Container as PageContainer,
   Menu as SideMenu,
   Content as PageContent
-} from '../../../../../views/components/SlideMenu'
-import SavedSegments from '../../../../../views/components/Grid/SavedSegments/List'
-import ContactFilters from './Filters'
-import { Header } from './Header'
-import { SearchContacts } from './Search'
+} from 'components/SlideMenu'
+import SavedSegments from 'components/Grid/SavedSegments/List'
+import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
+import UserFilter from 'components/UserFilter'
 
 import Table from './Table'
-import { resetGridSelectedItems } from '../../../../../views/components/Grid/Table/Plugins/Selectable'
-import {
-  selectContacts,
-  selectContactsInfo
-} from '../../../../../reducers/contacts/list'
-import {
-  getContacts,
-  searchContacts,
-  deleteContacts
-} from '../../../../../store_actions/contacts'
-import { setContactsListTextFilter } from '../../../../../store_actions/contacts/set-contacts-list-text-filter'
-import UserFilter from '../../../../../views/components/UserFilter'
+import { SearchContacts } from './Search'
+import { Header } from './Header'
+import DuplicateContacts from '../components/DuplicateContacts'
+import ContactFilters from './Filters'
+import TagsList from './TagsList'
 
 class ContactsList extends React.Component {
   constructor(props) {
