@@ -9,7 +9,7 @@ import { getStatusColor } from 'utils/listing'
 import IconHome from 'components/SvgIcons/NewHome/IconHome'
 import ImageStatus from 'views/components/ImageStatus'
 import openDeal from '../../../../utils/open-deal'
-import DealSide from '../side'
+import DealSide from '../Side'
 
 const Container = styled.div`
   display: table;
