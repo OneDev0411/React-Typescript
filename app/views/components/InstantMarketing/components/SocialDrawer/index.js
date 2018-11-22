@@ -102,7 +102,7 @@ class SocialDrawer extends React.Component {
   render() {
     return (
       <Drawer isOpen onClose={this.props.onClose} showFooter={false}>
-        <Drawer.Header title="Share on Instagram" />
+        <Drawer.Header title={`Share on ${this.props.socialName}`} />
         <Drawer.Body>
           <HelpIntro />
 

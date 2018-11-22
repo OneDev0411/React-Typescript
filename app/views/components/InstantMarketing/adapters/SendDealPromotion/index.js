@@ -169,6 +169,7 @@ class SendDealPromotion extends React.Component {
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer
+            socialName={this.state.socialName}
             template={this.state.htmlTemplate}
             templateInstanceData={{
               deals: [this.props.deal.id]
