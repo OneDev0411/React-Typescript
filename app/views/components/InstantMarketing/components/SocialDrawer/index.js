@@ -65,15 +65,6 @@ class SocialDrawer extends React.Component {
   isSent = user => this.state.sentList.includes(user.id)
 
   handleSend = async agent => {
-    if (!agent.phone_number) {
-      return this.props.confirmation({
-        message:
-          'This user does not have phone number, need some product designs to develop that',
-        confirmLabel: 'Forward this message to Brandon',
-        onConfirm: () => alert('the message forwarded successfully')
-      })
-    }
-
     this.setState(state => ({
       isSending: [...state.isSending, agent.id]
     }))
@@ -94,7 +85,9 @@ class SocialDrawer extends React.Component {
   }
 
   isSendButtonDisabled = agent =>
-    this.state.instance === null || this.state.isSending.includes(agent.id)
+    this.state.instance === null ||
+    !agent.phone_number ||
+    this.state.isSending.includes(agent.id)
 
   getSendButtonCaption = agent =>
     this.state.isSending.includes(agent.id) ? 'Sending...' : 'Send'
