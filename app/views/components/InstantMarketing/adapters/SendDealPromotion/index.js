@@ -13,7 +13,7 @@ import Compose from 'components/EmailCompose'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { SocialModal } from '../../components/SocialModal'
+import SocialDrawer from '../../components/SocialDrawer'
 
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 
@@ -23,9 +23,10 @@ import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 
 const initialState = {
   listing: null,
+  socialName: null,
   isInstantMarketingBuilderOpen: false,
   isComposeEmailOpen: false,
-  isSocialModalOpen: false,
+  isSocialDrawerOpen: false,
   htmlTemplate: '',
   templateScreenshot: null
 }
@@ -48,15 +49,6 @@ class SendDealPromotion extends React.Component {
     }))
 
   handleSaveMarketingCard = template => {
-    if (template.medium === 'Social') {
-      this.setState({
-        htmlTemplate: template,
-        isSocialModalOpen: true
-      })
-
-      return
-    }
-
     this.generatePreviewImage(template)
 
     this.setState({
@@ -64,6 +56,14 @@ class SendDealPromotion extends React.Component {
       isInstantMarketingBuilderOpen: true,
       htmlTemplate: template,
       templateScreenshot: null
+    })
+  }
+
+  handleSocialSharing = (template, socialName) => {
+    this.setState({
+      socialName,
+      htmlTemplate: template,
+      isSocialDrawerOpen: true
     })
   }
 
@@ -108,7 +108,7 @@ class SendDealPromotion extends React.Component {
 
   closeSocialModal = () =>
     this.setState({
-      isSocialModalOpen: false
+      isSocialDrawerOpen: false
     })
 
   getDealListing = async () => {
@@ -151,6 +151,7 @@ class SendDealPromotion extends React.Component {
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
+          handleSocialSharing={this.handleSocialSharing}
           templateData={{ listing, user }}
           mediums={this.props.mediums}
           templateTypes={getTemplateTypes(listing)}
@@ -166,9 +167,13 @@ class SendDealPromotion extends React.Component {
           isSubmitting={this.state.isSendingEmail}
         />
 
-        {this.state.isSocialModalOpen && (
-          <SocialModal
+        {this.state.isSocialDrawerOpen && (
+          <SocialDrawer
+            socialName={this.state.socialName}
             template={this.state.htmlTemplate}
+            templateInstanceData={{
+              deals: [this.props.deal.id]
+            }}
             onClose={this.closeSocialModal}
           />
         )}

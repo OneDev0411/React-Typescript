@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Avatar from 'react-avatar'
+
 import Tooltip from 'components/tooltip'
 
 const AgentAvatars = ({ agent }) => {

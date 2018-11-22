@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 
 import { connect } from 'react-redux'
 
-import Builder from './Builder'
 import { confirmation } from 'actions/confirmation'
+
+import Builder from './Builder'
 
 class InstantMarketing extends React.Component {
   handleCloseRequest = () => {
@@ -30,6 +31,7 @@ class InstantMarketing extends React.Component {
       <Builder
         onClose={this.handleCloseRequest}
         onSave={this.props.handleSave}
+        onSocialSharing={this.props.handleSocialSharing}
         {...this.props}
       />
     )

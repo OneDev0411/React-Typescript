@@ -8,6 +8,7 @@ import Table from 'components/Grid/Table'
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
 
+import AgentAvatars from '../../components/table-columns/AgentAvatars'
 import Address from '../../components/table-columns/Address'
 import CriticalDate, {
   getCriticalDateNextValue
