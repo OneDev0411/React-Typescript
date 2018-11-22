@@ -5,6 +5,10 @@ import _ from 'underscore'
 
 import { getActiveTeam } from 'utils/user-teams'
 
+import { getContactsTags } from 'actions/contacts/get-contacts-tags'
+
+import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
+
 import TagsList from './TagsList'
 
 import DuplicateContacts from '../components/DuplicateContacts'
@@ -59,6 +63,10 @@ class ContactsList extends React.Component {
       )
     } else {
       this.fetchList()
+    }
+
+    if (this.props.fetchTags) {
+      this.props.getContactsTags()
     }
   }
 
@@ -323,13 +331,16 @@ class ContactsList extends React.Component {
 
 function mapStateToUser({ user, contacts }) {
   const listInfo = selectContactsInfo(contacts.list)
+  const tags = contacts.list
+  const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
   return {
     listInfo,
     user,
     filter: listInfo.filter || [],
     list: contacts.list,
-    filterSegments: contacts.filterSegments
+    filterSegments: contacts.filterSegments,
+    fetchTags
   }
 }
 
@@ -340,6 +351,7 @@ export default connect(
     searchContacts,
     deleteContacts,
     confirmation,
-    setContactsListTextFilter
+    setContactsListTextFilter,
+    getContactsTags
   }
 )(ContactsList)

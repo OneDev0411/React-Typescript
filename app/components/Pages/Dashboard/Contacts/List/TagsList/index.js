@@ -1,9 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import _ from 'underscore'
 import styled from 'styled-components'
 
-import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import {
   addActiveFilter,
   removeActiveFilter,
@@ -33,15 +31,6 @@ const CustomListItemName = styled(ListItemName)`
 `
 
 class TagsList extends React.Component {
-  componentDidMount() {
-    if (
-      this.props.isFetching === false &&
-      this.props.existingTags.length === 0
-    ) {
-      this.props.getContactsTags()
-    }
-  }
-
   onSelectList = item => {
     let nextFilters
     const tagDefinition = selectDefinitionByName(
@@ -136,7 +125,6 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   {
-    getContactsTags,
     addActiveFilter,
     removeActiveFilter,
     updateActiveFilter
