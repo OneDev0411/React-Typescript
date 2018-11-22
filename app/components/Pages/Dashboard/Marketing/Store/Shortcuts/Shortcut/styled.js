@@ -6,7 +6,7 @@ import { grey, primary } from 'views/utils/colors'
 
 export const Title = styled.div`
   text-align: center;
-  color: ${grey.A900};
+  color: ${grey.A550};
 
   .c-shortcut--active > & {
     font-weight: 500;
@@ -21,6 +21,10 @@ export const Placeholder = styled(Flex)`
   margin-bottom: 0.5rem;
   border-radius: 3px;
   background-color: ${grey.A100};
+
+  .c-shortcut--active:hover > & {
+    background-color: ${grey.A300};
+  }
 `
 
 export const Container = styled.div`
@@ -45,7 +49,7 @@ export const Container = styled.div`
       right: 0;
       bottom: 0;
       border-radius: 3px;
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.15);
     }
 
     ${Placeholder}:after {
