@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Header } from './Header'
+import { Shortcuts } from './Shortcuts'
 
 export default class Store extends React.Component {
   render() {
@@ -10,7 +11,7 @@ export default class Store extends React.Component {
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
         />
-        <div>Store</div>
+        <Shortcuts />
       </React.Fragment>
     )
   }
