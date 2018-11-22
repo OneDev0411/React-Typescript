@@ -32,24 +32,28 @@ const CustomListItemName = styled(ListItemName)`
 `
 
 class TagsList extends React.Component {
-  onSelectList = item => {
-    let nextFilters
-    const tagDefinition = selectDefinitionByName(
+  constructor(props) {
+    super(props)
+    this.tagDefinitionId = selectDefinitionByName(
       this.props.attributeDefs,
       'tag'
-    )
+    ).id
+  }
 
-    if (this.isSelected(item.id)) {
+  onSelectList = item => {
+    let nextFilters
+
+    if (this.isSelected(item.text)) {
       this.props.removeActiveFilter('contacts', item.id)
       nextFilters = _.filter(
         this.props.activeFilters,
         filter =>
-          filter.attribute_def !== tagDefinition.id ||
+          filter.attribute_def !== this.tagDefinitionId ||
           filter.value !== item.text
       )
     } else {
       const filter = {
-        id: tagDefinition.id,
+        id: this.tagDefinitionId,
         values: [item.text],
         operator: {
           name: 'is',
@@ -67,7 +71,14 @@ class TagsList extends React.Component {
     this.props.onFilterChange(normalizeFilters(nextFilters))
   }
 
-  isSelected = id => this.props.activeFilters[id]
+  isSelected = text =>
+    _.some(
+      this.props.activeFilters,
+      filter =>
+        filter.id === this.tagDefinitionId &&
+        filter.values &&
+        filter.values.includes(text)
+    )
 
   render() {
     const { existingTags, isFetching } = this.props
@@ -77,7 +88,7 @@ class TagsList extends React.Component {
         <ListTitle>Tags</ListTitle>
 
         {existingTags.map((item, index) => {
-          const isSelected = this.isSelected(item.id)
+          const isSelected = this.isSelected(item.text)
 
           return (
             <ToolTip key={index} caption={item.text} placement="right">
