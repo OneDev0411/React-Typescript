@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router'
 
 import {
   Container as PageContainer,
@@ -7,7 +8,7 @@ import {
 } from 'components/SlideMenu'
 import { ListTitle } from 'components/SlideMenu/Menu/styled'
 
-export default class Marketing extends Component {
+class Marketing extends Component {
   state = {
     isSideMenuOpen: true
   }
@@ -19,6 +20,7 @@ export default class Marketing extends Component {
 
   render() {
     const { isSideMenuOpen } = this.state
+    const { params } = this.props
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
@@ -29,6 +31,7 @@ export default class Marketing extends Component {
         <PageContent style={{ padding: '0 1.5rem' }}>
           {React.Children.map(this.props.children, child =>
             React.cloneElement(child, {
+              ...params,
               isSideMenuOpen,
               toggleSideMenu: this.toggleSideMenu
             })
@@ -38,3 +41,5 @@ export default class Marketing extends Component {
     )
   }
 }
+
+export default withRouter(Marketing)
