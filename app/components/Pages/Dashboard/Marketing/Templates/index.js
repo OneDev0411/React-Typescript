@@ -5,7 +5,7 @@ import { getTemplates } from 'models/instant-marketing/get-templates'
 
 import { templateTypes } from './data'
 import { Header } from './Header'
-import Main from './Main'
+import List from './List'
 
 export default class Templates extends Component {
   state = {
@@ -58,7 +58,7 @@ export default class Templates extends Component {
           isSideMenuOpen={props.isSideMenuOpen}
           toggleSideMenu={props.toggleSideMenu}
         />
-        <Main
+        <List
           tabs={state.tabs}
           templates={state.templates}
           isLoading={state.isLoading}
