@@ -28,7 +28,7 @@ class Marketing extends Component {
           <ListTitle>Marketing</ListTitle>
         </SideMenu>
 
-        <PageContent style={{ padding: '0 1.5rem' }}>
+        <PageContent>
           {React.Children.map(this.props.children, child =>
             React.cloneElement(child, {
               ...params,

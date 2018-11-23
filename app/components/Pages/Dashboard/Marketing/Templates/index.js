@@ -3,6 +3,8 @@ import { indexBy } from 'underscore'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
 
+import { Header } from './Header'
+
 export default class Templates extends Component {
   state = {
     list: {},
@@ -10,7 +12,7 @@ export default class Templates extends Component {
   }
 
   componentDidMount() {
-    this.fetch()
+    // this.fetch()
   }
 
   fetch = async () => {
@@ -37,11 +39,16 @@ export default class Templates extends Component {
   }
 
   render() {
-    const { medium, types } = this.props
+    const { medium } = this.props
 
-    console.log(this.state.list)
-    console.log(this.state.isLoading)
-
-    return <div>{[medium, types].join(', ')}</div>
+    return (
+      <React.Fragment>
+        <Header
+          medium={medium}
+          isSideMenuOpen={this.props.isSideMenuOpen}
+          toggleSideMenu={this.props.toggleSideMenu}
+        />
+      </React.Fragment>
+    )
   }
 }
