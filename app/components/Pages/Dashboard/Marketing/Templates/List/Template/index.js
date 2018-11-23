@@ -1,11 +1,25 @@
 import React from 'react'
+import Flex from 'styled-flex-component'
+
+import Button from 'components/Button/ActionButton'
 
 import { Container } from './styled'
 
-export function Template({ template }) {
+export function Template(props) {
   return (
     <Container>
-      <img src={`${template.url}/thumbnail.png`} alt={template.template_type} />
+      <img
+        src={`${props.template.url}/thumbnail.png`}
+        alt={props.template.template_type}
+      />
+      <Flex justifyBetween className="action-bar">
+        <Button size="small" appearance="outline" onClick={props.handlePreview}>
+          Preview
+        </Button>
+        <Button size="small" onClick={props.handleCusomize}>
+          Customize
+        </Button>
+      </Flex>
     </Container>
   )
 }
