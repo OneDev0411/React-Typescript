@@ -8,6 +8,8 @@ import {
 } from 'components/SlideMenu'
 import { ListTitle } from 'components/SlideMenu/Menu/styled'
 
+import { Menu } from './Menu'
+
 class Marketing extends Component {
   state = {
     isSideMenuOpen: true
@@ -26,6 +28,7 @@ class Marketing extends Component {
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen}>
           <ListTitle>Marketing</ListTitle>
+          <Menu />
         </SideMenu>
 
         <PageContent>

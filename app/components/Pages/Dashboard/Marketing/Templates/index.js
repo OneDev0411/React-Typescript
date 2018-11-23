@@ -18,6 +18,12 @@ export default class Templates extends Component {
     this.fetch()
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.medium !== this.props.medium) {
+      this.fetch()
+    }
+  }
+
   fetch = async () => {
     try {
       this.setState({ isLoading: true })
