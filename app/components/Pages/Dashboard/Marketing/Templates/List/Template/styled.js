@@ -17,7 +17,6 @@ export const Container = styled.div`
     border-color: ${grey.A300};
 
     .action-bar {
-      opacity: 1;
       visibility: visible;
     }
   }
@@ -35,11 +34,8 @@ export const Container = styled.div`
     bottom: 0;
     left: 0;
     right: 0;
-    opacity: 0;
     visibility: hidden;
     padding: 1rem;
     background-color: #fff;
-    will-change: opacity;
-    transition: opacity 0.3s ease-in;
   }
 `

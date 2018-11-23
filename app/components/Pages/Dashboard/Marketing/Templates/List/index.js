@@ -3,12 +3,23 @@ import { browserHistory, withRouter } from 'react-router'
 import Flex from 'styled-flex-component'
 import { groupBy } from 'lodash'
 
-import { templateTypes } from '../data'
+import { PreviewImageModal } from 'components/PreviewImageModal'
 
+import { templateTypes } from '../data'
 import { Template } from './Template'
 import { Loader, Tab } from './styled'
 
 class List extends React.Component {
+  state = {
+    selectedTemplate: null
+  }
+
+  closePreviewModal = () => {
+    this.setState({ selectedTemplate: null })
+  }
+
+  openPreviewModal = selectedTemplate => this.setState({ selectedTemplate })
+
   handleSelectedType = event => {
     browserHistory.push(
       `/dashboard/marketing/${this.props.params.medium}/${
@@ -18,7 +29,11 @@ class List extends React.Component {
   }
 
   renderTemplate = template => (
-    <Template key={template.id} template={template} />
+    <Template
+      key={template.id}
+      template={template}
+      handlePreview={() => this.openPreviewModal(template)}
+    />
   )
 
   renderTemplates = templates => (
@@ -54,7 +69,8 @@ class List extends React.Component {
   }
 
   render() {
-    const { props } = this
+    const { props, state } = this
+    const { selectedTemplate } = state
     const selectedType = props.params.types || 'All'
 
     if (props.isLoading) {
@@ -82,6 +98,14 @@ class List extends React.Component {
           ))}
         </Flex>
         {this.renderPanel(selectedType)}
+        {selectedTemplate && (
+          <PreviewImageModal
+            isOpen
+            handleClose={this.closePreviewModal}
+            title={selectedTemplate.name || ''}
+            imgSrc={`${selectedTemplate.url}/thumbnail.png`}
+          />
+        )}
       </div>
     )
   }
