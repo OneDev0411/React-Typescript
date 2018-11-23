@@ -5,5 +5,6 @@ export const templateTypes = {
   JustSold: 'Just Sold',
   JustListed: 'Just Listed',
   Birthday: 'Birthday',
-  ThankYou: 'Thank You'
+  ThankYou: 'Thank You',
+  AsSeenIn: 'As Seen In'
 }
