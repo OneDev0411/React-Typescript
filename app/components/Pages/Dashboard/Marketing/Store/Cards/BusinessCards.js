@@ -5,6 +5,7 @@ import Flex from 'styled-flex-component'
 import { Jumbo } from 'components/Typography/headings'
 
 import { getMQWidth } from './helpers'
+import ComingSoon from './components/ComingSoonBadge'
 
 const Container = styled(Flex)`
   height: 25rem;
@@ -23,20 +24,13 @@ const Container = styled(Flex)`
   }
 `
 
-const ComingSoon = styled.div`
-  padding: 0.25em 0.5em;
-  color: #fff;
-  border-radius: 3px;
-  background: #000;
-`
-
 export default function BusinessCards(props) {
   return (
     <Container center column isSideMenuOpen={props.isSideMenuOpen}>
       <Jumbo style={{ marginBottom: '1rem', color: '#fff' }}>
         Business Cards
       </Jumbo>
-      <ComingSoon>Comin Soon</ComingSoon>
+      <ComingSoon />
     </Container>
   )
 }
