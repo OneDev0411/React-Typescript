@@ -7,24 +7,30 @@ import Button from 'components/Button/LinkButton'
 
 const Container = styled.div`
   padding: 1.5rem;
-  margin-bottom: 1.4rem;
+  margin-bottom: 1.5rem;
   text-align: center;
   color: #fff;
   border-radius: 3px;
   background-color: #002344;
 
   > img {
-    width: ${415 / 16}rem;
-    height: ${266 / 16}rem;
+    max-width: 100%;
     margin-bottom: 1.5rem;
   }
 
   @media screen and (min-width: 80em) {
+    height: 25rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: row-reverse;
-    padding: 4.5rem;
+    padding: 0 4.5rem;
+
+    > img {
+      width: ${415 / 16}rem;
+      height: ${266 / 16}rem;
+      margin-bottom: 0;
+    }
   }
 `
 
