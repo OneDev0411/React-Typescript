@@ -1,11 +1,12 @@
 import React from 'react'
+import pure from 'recompose/pure'
 
 import { Container, Placeholder, Title, Anchor } from './styled'
 
 const baseURL = '/dashboard/marketing/'
 const imgBasePath = '/static/images/marketing/store/shortcuts'
 
-export function Shortcut({ item }) {
+function Shortcut({ item }) {
   const { url, name } = item
   const file = url ? `${name}@3x.png` : `${name}.svg`
 
@@ -19,3 +20,5 @@ export function Shortcut({ item }) {
     </Container>
   )
 }
+
+export default pure(Shortcut)
