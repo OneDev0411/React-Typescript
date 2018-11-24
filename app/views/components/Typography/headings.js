@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { barlowFamilyStyle, merriweatherFamilyStyle } from './styles'
 
-export const Jumbo = styled.h1`
+export const Jumbo = styled.div`
   ${merriweatherFamilyStyle};
   font-size: 2.5rem;
   line-height: 1.2;
