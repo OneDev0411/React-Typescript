@@ -1,5 +1,4 @@
 import React from 'react'
-import { browserHistory, withRouter } from 'react-router'
 import Flex from 'styled-flex-component'
 import { groupBy } from 'lodash'
 
@@ -9,7 +8,7 @@ import { templateTypes } from '../data'
 import { Template } from './Template'
 import { Loader, Tab } from './styled'
 
-class List extends React.Component {
+export class List extends React.Component {
   state = {
     selectedTemplate: null
   }
@@ -19,14 +18,6 @@ class List extends React.Component {
   }
 
   openPreviewModal = selectedTemplate => this.setState({ selectedTemplate })
-
-  handleSelectedType = event => {
-    browserHistory.push(
-      `/dashboard/marketing/${this.props.params.medium}/${
-        event.target.dataset.type
-      }`
-    )
-  }
 
   renderTemplate = template => (
     <Template
@@ -71,7 +62,7 @@ class List extends React.Component {
   render() {
     const { props, state } = this
     const { selectedTemplate } = state
-    const selectedType = props.params.types || 'All'
+    const selectedType = props.types || 'All'
 
     if (props.isLoading) {
       return <Loader />
@@ -84,16 +75,15 @@ class List extends React.Component {
     return (
       <div style={{ padding: '0 1.5rem' }}>
         <Flex style={{ marginBottom: '2rem' }}>
-          {this.props.tabs.map((tab, index) => (
+          {props.tabs.map(({ title, type }, index) => (
             <Tab
-              key={index}
               inverse
-              appearance="link"
-              data-type={tab.type}
-              onClick={this.handleSelectedType}
-              selected={selectedType === tab.type}
+              key={index}
+              data-type={type}
+              to={`/dashboard/marketing/${props.medium}/${type}`}
+              selected={selectedType === type}
             >
-              {tab.title}
+              {title}
             </Tab>
           ))}
         </Flex>
@@ -110,5 +100,3 @@ class List extends React.Component {
     )
   }
 }
-
-export default withRouter(List)

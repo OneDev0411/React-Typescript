@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components'
 
 import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import Button from 'components/Button/ActionButton'
+import LinkButton from 'components/Button/LinkButton'
 import { primary } from 'views/utils/colors'
 
-export const Tab = styled(Button)`
+export const Tab = styled(LinkButton)`
   margin-right: 3rem;
   font-weight: 600;
   padding: 0;
