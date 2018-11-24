@@ -1,7 +1,8 @@
 import React from 'react'
 
 import { Header } from './Header'
-import { Shortcuts } from './Shortcuts'
+import Shortcuts from './Shortcuts'
+import Cards from './Cards'
 
 export default class Store extends React.Component {
   render() {
@@ -12,6 +13,7 @@ export default class Store extends React.Component {
           toggleSideMenu={this.props.toggleSideMenu}
         />
         <Shortcuts />
+        <Cards />
       </div>
     )
   }
