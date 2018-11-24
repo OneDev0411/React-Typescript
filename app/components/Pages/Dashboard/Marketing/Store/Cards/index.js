@@ -8,6 +8,7 @@ import SocialListings from './SocialListings'
 import EmailListings from './EmailListings'
 import Company from './Company'
 import Instagram from './Instagram'
+import FacebookCovers from './FacebookCovers'
 
 const ResponsiveRow = styled.div`
   @media screen and (min-width: ${props => getMQWidth(75, props)}) {
@@ -26,6 +27,9 @@ function Cards({ isSideMenuOpen }) {
       <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>
         <Company isSideMenuOpen={isSideMenuOpen} />
         <Instagram isSideMenuOpen={isSideMenuOpen} />
+      </ResponsiveRow>
+      <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>
+        <FacebookCovers isSideMenuOpen={isSideMenuOpen} />
       </ResponsiveRow>
     </React.Fragment>
   )
