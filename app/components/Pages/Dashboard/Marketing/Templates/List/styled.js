@@ -28,7 +28,7 @@ export const Tab = styled(LinkButton)`
 `
 
 export const Loader = styled(Spinner)`
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 5rem;
+  height: 5rem;
   fill: ${primary};
 `

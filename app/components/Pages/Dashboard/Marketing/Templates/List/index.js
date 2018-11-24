@@ -66,7 +66,11 @@ export class List extends React.Component {
     const selectedType = props.types || 'All'
 
     if (props.isLoading) {
-      return <Loader />
+      return (
+        <Flex center style={{ paddingTop: '5rem' }}>
+          <Loader />
+        </Flex>
+      )
     }
 
     if (props.templates.length === 0) {
