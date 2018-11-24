@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { merriweatherFamilyStyle } from 'components/Typography/styles'
+import { Jumbo } from 'components/Typography/headings'
 
 const baseBackgroundImgUrl = '/static/images/marketing/templates/headers'
 
@@ -30,10 +30,7 @@ export const Container = styled.div`
   }
 `
 
-export const Title = styled.h1`
-  ${merriweatherFamilyStyle};
+export const Title = styled(Jumbo)`
   max-width: 28rem;
   margin-bottom: 1rem;
-  font-size: 2.5rem;
-  line-height: 1.2;
 `
