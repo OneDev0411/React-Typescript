@@ -6,7 +6,7 @@ import { Jumbo } from 'components/Typography/headings'
 import Button from 'components/Button/LinkButton'
 
 const Container = styled.div`
-  padding: 1.5rem;
+  padding: 2rem;
   margin-bottom: 1.5rem;
   text-align: center;
   color: #fff;
