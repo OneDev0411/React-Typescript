@@ -11,7 +11,7 @@ const Container = styled.div`
   margin-bottom: 1.5rem;
   text-align: center;
   border-radius: 3px;
-  background-color: #f4ead7;
+  background-color: #eaebec;
 
   > img {
     max-width: 100%;
@@ -19,33 +19,35 @@ const Container = styled.div`
 
   @media screen and (min-width: ${props => getMQWidth(75, props)}) {
     height: 25rem;
-    width: calc(100% - 26.5rem);
+    width: 25rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
+    margin-left: 1.5rem;
 
     > img {
-      width: ${570 / 16}rem;
-      height: ${226 / 16}rem;
+      width: ${330 / 16}rem;
+      height: ${195 / 16}rem;
     }
   }
 `
 
-export default function SocialListings(props) {
+export default function EmailListings(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      <div style={{ marginBottom: '2.5rem' }}>
+      <div style={{ marginBottom: '1rem' }}>
         <Jumbo style={{ marginBottom: '1rem' }}>
-          Post listings on social media
+          Promote listings with email
         </Jumbo>
-        <Button appearance="outline" to="/dashboard/marketing/Social">
+        <Button appearance="outline" to="/dashboard/marketing/Email">
           Browse Designs
         </Button>
       </div>
       <img
-        src="/static/images/marketing/store/cards/social-listings/social-listings.png"
-        alt="Post listings on social media"
+        src="/static/images/marketing/store/cards/email-listings/email-listings.png"
+        alt="Promote listings
+        with email"
       />
     </Container>
   )

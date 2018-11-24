@@ -1,17 +1,26 @@
 import React from 'react'
 import pure from 'recompose/pure'
-import Flex from 'styled-flex-component'
+import styled from 'styled-components'
 
+import { getMQWidth } from './helpers'
 import Video from './Video'
 import SocialListings from './SocialListings'
+import EmailListings from './EmailListings'
 
-function Cards() {
+const SecondRow = styled.div`
+  @media screen and (min-width: ${props => getMQWidth(75, props)}) {
+    display: flex;
+  }
+`
+
+function Cards({ isSideMenuOpen }) {
   return (
     <div>
       <Video />
-      <Flex>
-        <SocialListings />
-      </Flex>
+      <SecondRow isSideMenuOpen={isSideMenuOpen}>
+        <SocialListings isSideMenuOpen={isSideMenuOpen} />
+        <EmailListings isSideMenuOpen={isSideMenuOpen} />
+      </SecondRow>
     </div>
   )
 }

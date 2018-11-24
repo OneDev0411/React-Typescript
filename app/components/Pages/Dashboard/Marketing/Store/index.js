@@ -13,7 +13,7 @@ export default class Store extends React.Component {
           toggleSideMenu={this.props.toggleSideMenu}
         />
         <Shortcuts />
-        <Cards />
+        <Cards isSideMenuOpen={this.props.isSideMenuOpen} />
       </div>
     )
   }
