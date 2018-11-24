@@ -14,6 +14,7 @@ export function Header(props) {
       name={props.medium}
       size={data.size}
       position={data.position}
+      isSideMenuOpen={props.isSideMenuOpen}
     >
       <MenuTrigger
         onClick={props.toggleSideMenu}

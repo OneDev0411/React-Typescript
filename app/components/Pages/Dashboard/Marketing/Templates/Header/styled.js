@@ -11,12 +11,17 @@ export const Container = styled.div`
   padding-left: 5.5rem;
   margin-bottom: 2rem;
   background-color: ${props => props.brandColor};
-  background-repeat: no-repeat;
-  background-image: ${({ name }) =>
-    `url('${baseBackgroundImgUrl}/${name}/${name}.png')`};
-  background-size: ${({ size: { width, height } }) =>
-    `${width / 16}rem ${height / 16}rem`};
-  background-position: ${props => props.position || 'calc(100% - 2rem) bottom'};
+
+  @media screen and (min-width: ${props =>
+      props.isSideMenuOpen ? 75 + 10.2578125 : 75}em) {
+    background-repeat: no-repeat;
+    background-image: ${({ name }) =>
+      `url('${baseBackgroundImgUrl}/${name}/${name}.png')`};
+    background-size: ${({ size: { width, height } }) =>
+      `${width / 16}rem ${height / 16}rem`};
+    background-position: ${props =>
+      props.position || 'calc(100% - 2rem) bottom'};
+  }
 
   .c-menu-trigger {
     position: absolute;
