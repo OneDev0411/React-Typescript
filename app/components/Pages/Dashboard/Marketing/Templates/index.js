@@ -66,6 +66,7 @@ export default class Templates extends Component {
         />
         <List
           isLoading={state.isLoading}
+          isSideMenuOpen={props.isSideMenuOpen}
           medium={props.medium}
           tabs={state.tabs}
           templates={state.templates}

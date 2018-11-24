@@ -7,7 +7,7 @@ import { Container } from './styled'
 
 export function Template(props) {
   return (
-    <Container>
+    <Container isSideMenuOpen={props.isSideMenuOpen}>
       <img
         src={`${props.template.url}/thumbnail.png`}
         alt={props.template.template_type}

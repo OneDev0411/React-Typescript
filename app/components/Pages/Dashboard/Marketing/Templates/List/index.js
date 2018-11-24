@@ -23,6 +23,7 @@ export class List extends React.Component {
     <Template
       key={template.id}
       template={template}
+      isSideMenuOpen={this.props.isSideMenuOpen}
       handlePreview={() => this.openPreviewModal(template)}
     />
   )
@@ -74,7 +75,7 @@ export class List extends React.Component {
 
     return (
       <div style={{ padding: '0 1.5rem' }}>
-        <Flex style={{ marginBottom: '2rem' }}>
+        <Flex wrap style={{ marginBottom: '2rem' }}>
           {props.tabs.map(({ title, type }, index) => (
             <Tab
               inverse
