@@ -23,16 +23,14 @@ export function Header(props) {
         borderBottom: '1px solid #d4d4d4'
       }}
     >
-      <Flex>
+      <Flex alignCenter>
         <MenuTrigger
           onClick={props.toggleSideMenu}
           isExpended={props.isSideMenuOpen}
           style={{ width: '1.5em', height: '1.5em', marginRight: '0.5em' }}
         />
         <Flex column>
-          <PageHeader.Heading style={{ fontSize: '1.5rem', lineHeight: 1 }}>
-            Marketing Center
-          </PageHeader.Heading>
+          <PageHeader.Heading>Marketing Center</PageHeader.Heading>
         </Flex>
       </Flex>
     </PageHeader>
