@@ -1,9 +1,10 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import styled from 'styled-components'
 
 import { Jumbo } from 'components/Typography/headings'
 import Button from 'components/Button/LinkButton'
+
+import { getMQWidth } from './helpers'
 
 const Container = styled.div`
   padding: 2rem;
@@ -15,32 +16,28 @@ const Container = styled.div`
 
   > img {
     max-width: 100%;
-    margin-bottom: 1.5rem;
+    margin-top: 2rem;
   }
 
-  @media screen and (min-width: 80em) {
+  @media screen and (min-width: ${props => getMQWidth(75, props)}) {
     height: 25rem;
     display: flex;
     align-items: center;
+    text-align: left;
     justify-content: space-between;
-    flex-direction: row-reverse;
     padding: 0 4.5rem;
 
     > img {
       width: ${415 / 16}rem;
       height: ${266 / 16}rem;
-      margin-bottom: 0;
+      margin: 0;
     }
   }
 `
 
-function Video() {
+export default function Video(props) {
   return (
-    <Container>
-      <img
-        src="/static/images/marketing/store/cards/video/video.png"
-        alt="video"
-      />
+    <Container isSideMenuOpen={props.isSideMenuOpen}>
       <div>
         <Jumbo style={{ color: '#fff', marginBottom: '1rem' }}>
           Create Engaging Videos
@@ -52,8 +49,10 @@ function Video() {
           Browse Designs
         </Button>
       </div>
+      <img
+        src="/static/images/marketing/store/cards/video/video.png"
+        alt="video"
+      />
     </Container>
   )
 }
-
-export default pure(Video)

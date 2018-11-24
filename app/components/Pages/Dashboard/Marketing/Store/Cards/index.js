@@ -15,13 +15,13 @@ const SecondRow = styled.div`
 
 function Cards({ isSideMenuOpen }) {
   return (
-    <div>
-      <Video />
+    <React.Fragment>
+      <Video isSideMenuOpen={isSideMenuOpen} />
       <SecondRow isSideMenuOpen={isSideMenuOpen}>
         <SocialListings isSideMenuOpen={isSideMenuOpen} />
         <EmailListings isSideMenuOpen={isSideMenuOpen} />
       </SecondRow>
-    </div>
+    </React.Fragment>
   )
 }
 
