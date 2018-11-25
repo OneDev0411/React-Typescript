@@ -61,6 +61,8 @@ class SendContactCard extends React.Component {
         isSearchDrawerOpen: false
       }
     }
+
+    return state
   }
 
   showMarketingBuilder = async () => {
