@@ -11,6 +11,7 @@ import { Loader, Tab } from './styled'
 
 export class List extends React.Component {
   state = {
+    activeFlow: '',
     selectedTemplate: null,
     isTriggeredContactFlow: false
   }
@@ -32,7 +33,11 @@ export class List extends React.Component {
       template={template}
       isSideMenuOpen={this.props.isSideMenuOpen}
       handlePreview={() => this.openPreviewModal(template)}
-      handleCustomize={() => this.triggerContactFlow(template)}
+      handleCustomize={() =>
+        this.setState({ activeFlow: template.template_type }, () =>
+          this.triggerContactFlow(template)
+        )
+      }
     />
   )
 
@@ -68,8 +73,8 @@ export class List extends React.Component {
     return this.renderByType(selectedType)
   }
 
-  renderFlow = type => {
-    switch (type) {
+  renderFlow = () => {
+    switch (this.state.activeFlow) {
       case 'Birthday':
         return (
           <ContactFlow
@@ -124,7 +129,7 @@ export class List extends React.Component {
             imgSrc={`${selectedTemplate.url}/thumbnail.png`}
           />
         )}
-        {this.renderFlow(selectedType)}
+        {this.renderFlow()}
       </div>
     )
   }
