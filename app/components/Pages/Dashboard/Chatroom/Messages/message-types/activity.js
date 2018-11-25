@@ -3,7 +3,9 @@ import moment from 'moment'
 
 export default ({ message }) => (
   <div className="activity">
-    {message.comment},&nbsp;
-    {moment.unix(message.created_at).format('MMM DD, YYYY, h:mm A')}
+    <span className="name">{message.comment}</span>
+    <span>
+      {moment.unix(message.created_at).format('MMM DD, YYYY, h:mm A')}
+    </span>
   </div>
 )

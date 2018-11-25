@@ -1,7 +1,19 @@
 import agent from 'superagent'
 
-export async function getTemplateScreenshot(html, dimensions, viewport) {
+export async function getTemplateScreenshot(
+  html,
+  dimensions,
+  viewport,
+  options
+) {
   let response
+
+  options = Object.assign(
+    {
+      absolute: false
+    },
+    options
+  )
 
   try {
     response = await agent
@@ -15,6 +27,10 @@ export async function getTemplateScreenshot(html, dimensions, viewport) {
       })
   } catch (e) {
     throw e
+  }
+
+  if (options.absolute) {
+    return response.body.url
   }
 
   return new Promise(resolve => {

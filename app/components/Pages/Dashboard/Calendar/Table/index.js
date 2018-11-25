@@ -5,11 +5,11 @@ import ScrollDetector from 'react-scroll-detector'
 import moment from 'moment'
 import _ from 'underscore'
 
+import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
+
 import { primary } from 'views/utils/colors'
 import Grid from 'views/components/Grid/Table'
 import { grey } from 'views/utils/colors'
-
-import SendContactCard from 'components/InstantMarketing/Flows/SendContactCard'
 
 import { goTo } from 'utils/go-to'
 

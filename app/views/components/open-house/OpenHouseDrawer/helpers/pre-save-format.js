@@ -3,7 +3,7 @@
  * @param {object} values The form values
  * @returns {object} a formated object
  */
-export async function preSaveFormat(values, originalValues, deal) {
+export async function preSaveFormat(values, originalValues, deal, template) {
   const {
     assignees,
     description,

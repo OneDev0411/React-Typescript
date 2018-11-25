@@ -1,50 +1,84 @@
 import React from 'react'
+import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
-import {
-  getDeals,
-  getContexts,
-  getForms
-} from '../../../../store_actions/deals'
-import { TrainingModeBanner } from '../Partials/TrainingModeBanner'
-import { isTrainingAccount, hasUserAccess } from '../../../../utils/user-teams'
+import Spinner from 'components/Spinner'
+
+import { getDeals, getDeal, getContexts, getForms } from 'actions/deals'
+import { selectDealById } from 'reducers/deals/list'
+import { hasUserAccess } from 'utils/user-teams'
+
+const Container = styled.div`
+  min-height: 100vh;
+`
+
+const Loading = styled(Container)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 
 class DealsContainer extends React.Component {
-  componentDidMount() {
-    const { props } = this
+  state = {
+    isFetchingDeal: false
+  }
 
+  componentWillMount() {
     if (
-      hasUserAccess(props.user, 'Deals') === false &&
-      hasUserAccess(props.user, 'BackOffice') === false
+      hasUserAccess(this.props.user, 'Deals') === false &&
+      hasUserAccess(this.props.user, 'BackOffice') === false
     ) {
       browserHistory.push('/dashboard/mls')
     }
 
-    if (!props.deals && !props.isFetchingDeals) {
-      props.getDeals(props.user)
+    if (!this.props.contexts) {
+      this.props.getContexts()
     }
 
-    if (!props.contexts) {
-      props.getContexts()
+    if (!this.props.forms) {
+      this.props.getForms()
     }
 
-    if (!props.forms) {
-      props.getForms()
+    const { id: dealId } = this.props.params
+
+    if (dealId) {
+      this.initializeDeal(dealId)
+    }
+  }
+
+  initializeDeal = async dealId => {
+    const deal = selectDealById(this.props.deals, dealId)
+
+    if (deal && deal.checklists) {
+      return
+    }
+
+    try {
+      if (!deal || !deal.checklist) {
+        this.setState({ isFetchingDeal: true })
+
+        // fetch deal by id
+        await this.props.getDeal(dealId)
+
+        this.setState({ isFetchingDeal: false })
+      }
+    } catch (e) {
+      browserHistory.push('/dashboard/deals')
+      console.error('Could not fetch deal')
     }
   }
 
   render() {
-    const { contexts, user } = this.props
+    if (this.state.isFetchingDeal) {
+      return (
+        <Loading>
+          <Spinner />
+        </Loading>
+      )
+    }
 
-    return (
-      <div className="deals">
-        {contexts &&
-          isTrainingAccount(user) && <TrainingModeBanner user={user} />}
-
-        {this.props.children}
-      </div>
-    )
+    return <Container>{this.props.children}</Container>
   }
 }
 
@@ -57,5 +91,5 @@ export default connect(
     isFetchingDeals: deals.properties.isFetchingDeals,
     user
   }),
-  { getDeals, getContexts, getForms }
+  { getDeals, getDeal, getContexts, getForms }
 )(DealsContainer)

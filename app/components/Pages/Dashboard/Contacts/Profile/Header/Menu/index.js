@@ -4,7 +4,7 @@ import Flex from 'styled-flex-component'
 import Chat from './ChatButton'
 import { Divider } from './Divider'
 import { CloseButton } from '../../../../../../../views/components/Button/CloseButton'
-import SendContactCard from 'components/InstantMarketing/Flows/SendContactCard'
+import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 
 export function Menu(props) {
   const { contact } = props

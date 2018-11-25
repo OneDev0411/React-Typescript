@@ -206,7 +206,36 @@ class Search extends React.Component {
         return <GalleryView {..._props} />
 
       default:
-        return <GridView {..._props} />
+        return (
+          <GridView
+            {..._props}
+            plugins={{
+              actionable: {
+                actions: [
+                  {
+                    display: ({ selectedRows }) => selectedRows.length > 0,
+                    render: ({ selectedRows }) => {
+                      const listings = this.props.listings.data.filter(l =>
+                        selectedRows.some(id => id === l.id)
+                      )
+
+                      return (
+                        <CreateTour
+                          listings={listings}
+                          user={this.props.user}
+                        />
+                      )
+                    }
+                  }
+                ]
+              },
+              selectable: {
+                persistent: true,
+                storageKey: 'listings'
+              }
+            }}
+          />
+        )
     }
   }
 

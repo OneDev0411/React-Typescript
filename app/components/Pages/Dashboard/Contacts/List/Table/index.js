@@ -1,6 +1,9 @@
 import React from 'react'
-import SendMlsListingCard from 'components/InstantMarketing/Flows/SendMlsListingCard'
+
 import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
+
+import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
+
 import Table from '../../../../../../views/components/Grid/Table'
 
 import Menu from './columns/Menu'

@@ -101,3 +101,5 @@ export default (state = null, action) => {
       return state
   }
 }
+
+export const selectTaskById = (state, id) => (state && id ? state[id] : null)

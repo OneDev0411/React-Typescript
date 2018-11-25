@@ -4,48 +4,42 @@ import { batchActions } from 'redux-batched-actions'
 import { browserHistory } from 'react-router'
 import moment from 'moment'
 import _ from 'underscore'
-import styled from 'styled-components'
-import Flex from 'styled-flex-component'
 
-import PopOver from 'components/Popover'
-
-import { getStartRange, getEndRange } from '../../../../reducers/calendar'
 import {
   getCalendar,
   setDate,
   resetCalendar,
   setCalendarFilter
-} from '../../../../store_actions/calendar'
+} from 'actions/calendar'
 import {
   createDateRange,
   createPastRange,
   createFutureRange
-} from '../../../../models/Calendar/helpers/create-date-range'
-import {
-  Container,
-  Menu,
-  Trigger,
-  Content
-} from '../../../../views/components/SlideMenu'
-import PageHeader from '../../../../views/components/PageHeader'
-import DatePicker from '../../../../views/components/DatePicker'
-import { EventDrawer } from '../../../../views/components/EventDrawer'
+} from 'models/Calendar/helpers/create-date-range'
+import { Container, Menu, Trigger, Content } from 'components/SlideMenu'
+import PageHeader from 'components/PageHeader'
+import DatePicker from 'components/DatePicker'
+import { EventDrawer } from 'components/EventDrawer'
+
+import CalendarFilter from 'components/UserFilter'
+
+import ActionButton from 'components/Button/ActionButton'
+
+import { getActiveTeam, getActiveTeamACL } from 'utils/user-teams'
+
 import CalendarTable from './Table'
-import CalendarFilter from '../../../../views/components/UserFilter'
+
 import { MenuContainer, FilterContainer } from './styled'
-import ActionButton from '../../../../views/components/Button/ActionButton'
-import { getActiveTeam, getActiveTeamACL } from '../../../../utils/user-teams'
+
+import Export from './Export'
+
+import { getStartRange, getEndRange } from '../../../../reducers/calendar'
 
 const LOADING_POSITIONS = {
   Top: 0,
   Bottom: 1,
   Middle: 2
 }
-
-const PopOverImage = styled.img`
-  width: 40px;
-  height: 40px;
-`
 
 class CalendarContainer extends React.Component {
   constructor(props) {
@@ -295,38 +289,7 @@ class CalendarContainer extends React.Component {
               // modifiers={this.SelectedRange}
             />
 
-            <PopOver
-              containerStyle={{
-                position: 'absolute',
-                bottom: '0',
-                left: '50%',
-                transform: 'translateX(-50%)'
-              }}
-              popoverStyles={{ width: '250px', textAlign: 'center' }}
-              caption={
-                <div>
-                  <div>
-                    Take your Rechat calendar events with you. Export them to
-                    other calendars like Outlook, Google, iCal and more
-                  </div>
-                  <Flex style={{ marginTop: '1rem' }} justifyAround>
-                    <PopOverImage src="/static/images/Calendar/outlook.png" />
-                    <PopOverImage src="/static/images/Calendar/gcal.png" />
-                    <PopOverImage src="/static/images/Calendar/ical.png" />
-                  </Flex>
-                </div>
-              }
-            >
-              <ActionButton
-                noBorder
-                appearance="outline"
-                onClick={() => {
-                  browserHistory.push('/dashboard/account/exportCalendar')
-                }}
-              >
-                Calendar Export
-              </ActionButton>
-            </PopOver>
+            <Export />
           </MenuContainer>
         </Menu>
 

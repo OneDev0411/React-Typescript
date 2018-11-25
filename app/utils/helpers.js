@@ -17,8 +17,10 @@ export function getNameInitials(name) {
 
   return name
     .split(' ')
-    .map(word => word.charAt(0).toUpperCase())
+    .map(word => /^[A-Za-z\s]+$/.test(word) ? word.charAt(0).toUpperCase() : '')
     .join('')
+    .trim()
+    .substring(0, 3)
 }
 
 async function getPhoneNumberUtil() {

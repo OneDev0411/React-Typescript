@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -97,7 +98,7 @@ class App extends Component {
       this.initialRooms()
 
       // load deals
-      if (this.hasDealsAccess && !deals) {
+      if (this.hasDealsAccess && Object.keys(deals).length === 0) {
         dispatch(getDeals(user))
       }
 
@@ -341,6 +342,7 @@ class App extends Component {
       }
     }
   }
+
   render() {
     const { data, user, rooms, location } = this.props
 

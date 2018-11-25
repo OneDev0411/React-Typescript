@@ -17,9 +17,9 @@ export async function getForms() {
 /**
  * returns form size in bytes
  */
-export async function getFormSize(formId) {
+export async function getPdfSize(data) {
   try {
-    const response = await agent.get(`/api/pdf/get-size/${formId}`)
+    const response = await agent.post('/api/pdf/get-size').send(data)
 
     return response.body.total
   } catch (e) {
