@@ -227,6 +227,7 @@ class SendContactCard extends React.Component {
           handleSave={this.handleSaveMarketingCard}
           templateData={{ user: this.props.user, contact: this.state.contact }}
           templateTypes={['Birthday']}
+          defaultTemplate={this.props.selectedTemplate}
         />
 
         <Compose
