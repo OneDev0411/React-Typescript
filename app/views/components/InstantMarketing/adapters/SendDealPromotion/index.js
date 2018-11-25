@@ -106,7 +106,7 @@ class SendDealPromotion extends React.Component {
       templateScreenshot: await getTemplatePreviewImage(template)
     })
 
-  closeSocialModal = () =>
+  closeSocialDrawer = () =>
     this.setState({
       isSocialDrawerOpen: false
     })
@@ -174,7 +174,7 @@ class SendDealPromotion extends React.Component {
             templateInstanceData={{
               deals: [this.props.deal.id]
             }}
-            onClose={this.closeSocialModal}
+            onClose={this.closeSocialDrawer}
           />
         )}
       </Fragment>

@@ -30,7 +30,8 @@ class Builder extends React.Component {
     super(props)
 
     this.state = {
-      template: null
+      template: null,
+      selectedTemplate: null
     }
 
     this.keyframe = 0
@@ -154,12 +155,8 @@ class Builder extends React.Component {
 
     const result = juice(assembled)
 
-    const selectedTemplate = this.selectedTemplate
-
-    this.selectedTemplate = null
-
     return {
-      ...selectedTemplate,
+      ...this.state.selectedTemplate,
       result
     }
   }
@@ -181,7 +178,9 @@ class Builder extends React.Component {
       })
     }
 
-    this.selectedTemplate = template
+    this.setState({
+      selectedTemplate: template
+    })
 
     const components = this.editor.DomComponents
 
@@ -232,7 +231,7 @@ class Builder extends React.Component {
           <h1>{this.props.headerTitle}</h1>
 
           <Actions>
-            {this.ShowSocialButtons ? (
+            {this.ShowSocialButtons && this.state.selectedTemplate ? (
               <Fragment>
                 <ActionButton
                   onClick={() => this.handleSocialSharing('Instagram')}
