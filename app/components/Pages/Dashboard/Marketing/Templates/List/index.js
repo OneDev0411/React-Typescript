@@ -4,6 +4,7 @@ import { groupBy } from 'lodash'
 
 import { PreviewImageModal } from 'components/PreviewImageModal'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
+import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
 import { templateTypes } from '../data'
 import { Template } from './Template'
@@ -14,7 +15,8 @@ export class List extends React.Component {
     activeFlow: '',
     selectedTemplate: null,
     isPreviewModalOpen: false,
-    isContactFlowOpen: false
+    isContactFlowActive: false,
+    isListingFlowActive: false
   }
 
   closePreviewModal = () => {
@@ -24,15 +26,39 @@ export class List extends React.Component {
   openPreviewModal = selectedTemplate =>
     this.setState({ selectedTemplate, isPreviewModalOpen: true })
 
-  openContactFlow = selectedTemplate =>
+  activeContactFlow = selectedTemplate =>
     this.setState({
       selectedTemplate,
-      isContactFlowOpen: true
+      isContactFlowActive: true
     })
 
-  closeContactFlow = () =>
+  deActiveContactFlow = () =>
     this.setState({
-      isContactFlowOpen: false
+      isContactFlowActive: false
+    })
+
+  activeListingFlow = selectedTemplate =>
+    this.setState({
+      selectedTemplate,
+      isListingFlowActive: true
+    })
+
+  deActiveListingFlow = () =>
+    this.setState({
+      isListingFlowActive: false
+    })
+
+  handleCustomize = template =>
+    this.setState({ activeFlow: template.template_type }, () => {
+      switch (template.template_type) {
+        case 'Birthday':
+          this.activeContactFlow(template)
+          break
+
+        default:
+          this.activeListingFlow(template)
+          break
+      }
     })
 
   renderTemplate = template => (
@@ -41,11 +67,7 @@ export class List extends React.Component {
       template={template}
       isSideMenuOpen={this.props.isSideMenuOpen}
       handlePreview={() => this.openPreviewModal(template)}
-      handleCustomize={() =>
-        this.setState({ activeFlow: template.template_type }, () =>
-          this.openContactFlow(template)
-        )
-      }
+      handleCustomize={() => this.handleCustomize(template)}
     />
   )
 
@@ -87,13 +109,20 @@ export class List extends React.Component {
         return (
           <ContactFlow
             selectedTemplate={this.state.selectedTemplate}
-            isTriggered={this.state.isContactFlowOpen}
-            handleTrigger={this.closeContactFlow}
+            isTriggered={this.state.isContactFlowActive}
+            handleTrigger={this.deActiveContactFlow}
           />
         )
 
       default:
-        return null
+        return (
+          <ListingFlow
+            hasExternalTrigger
+            selectedTemplate={this.state.selectedTemplate}
+            isTriggered={this.state.isListingFlowActive}
+            handleTrigger={this.deActiveListingFlow}
+          />
+        )
     }
   }
 
