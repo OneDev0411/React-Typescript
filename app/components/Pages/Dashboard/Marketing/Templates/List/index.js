@@ -3,6 +3,7 @@ import Flex from 'styled-flex-component'
 import { groupBy } from 'lodash'
 
 import { PreviewImageModal } from 'components/PreviewImageModal'
+import ContactFlow from 'components/InstantMarketing/Flows/SendContactCard'
 
 import { templateTypes } from '../data'
 import { Template } from './Template'
@@ -10,7 +11,8 @@ import { Loader, Tab } from './styled'
 
 export class List extends React.Component {
   state = {
-    selectedTemplate: null
+    selectedTemplate: null,
+    isTriggeredContactFlow: false
   }
 
   closePreviewModal = () => {
@@ -19,12 +21,18 @@ export class List extends React.Component {
 
   openPreviewModal = selectedTemplate => this.setState({ selectedTemplate })
 
+  triggerContactFlow = () =>
+    this.setState(state => ({
+      isTriggeredContactFlow: !state.isTriggeredContactFlow
+    }))
+
   renderTemplate = template => (
     <Template
       key={template.id}
       template={template}
       isSideMenuOpen={this.props.isSideMenuOpen}
       handlePreview={() => this.openPreviewModal(template)}
+      handleCustomize={() => this.triggerContactFlow(template)}
     />
   )
 
@@ -58,6 +66,21 @@ export class List extends React.Component {
     }
 
     return this.renderByType(selectedType)
+  }
+
+  renderFlow = type => {
+    switch (type) {
+      case 'Birthday':
+        return (
+          <ContactFlow
+            isTriggered={this.state.isTriggeredContactFlow}
+            handleTrigger={this.triggerContactFlow}
+          />
+        )
+
+      default:
+        return null
+    }
   }
 
   render() {
@@ -101,6 +124,7 @@ export class List extends React.Component {
             imgSrc={`${selectedTemplate.url}/thumbnail.png`}
           />
         )}
+        {this.renderFlow(selectedType)}
       </div>
     )
   }

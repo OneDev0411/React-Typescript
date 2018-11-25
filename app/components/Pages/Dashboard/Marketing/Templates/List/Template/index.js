@@ -16,7 +16,7 @@ export function Template(props) {
         <Button size="small" appearance="outline" onClick={props.handlePreview}>
           Preview
         </Button>
-        <Button size="small" onClick={props.handleCusomize}>
+        <Button size="small" onClick={props.handleCustomize}>
           Customize
         </Button>
       </Flex>
