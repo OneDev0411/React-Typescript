@@ -8,44 +8,44 @@ export const items = [
     // url: '/Customs'
   },
   {
-    title: 'Social Media',
-    url: '/Social'
-  },
-  {
-    title: 'Emails',
-    url: '/Email'
-  },
-  {
-    title: 'Instagram Stories'
-    // url: '/Instagram'
-  },
-  {
-    title: 'Facebook Cover'
-    // url: '/FacebookCover'
-  },
-  {
-    title: 'As Seen In'
-    // url: '/AsSeenIn'
+    title: 'As Seen In',
+    url: '/Social/AsSeenIn'
   },
   {
     title: 'Birthday Emails',
     url: '/Email/Birthday'
   },
   {
+    title: 'Brochures'
+  },
+  {
+    title: 'Business Cards'
+  },
+  {
+    title: 'Emails',
+    url: '/Email'
+  },
+  {
+    title: 'Facebook Cover'
+    // url: '/FacebookCover'
+  },
+  {
     title: 'Holiday'
     // url: '/Holiday'
   },
   {
-    title: 'Your Company'
-    // url: '/Company'
+    title: 'Instagram Stories'
+    // url: '/Instagram'
   },
   {
     title: 'Postcards'
   },
   {
-    title: 'Brochures'
+    title: 'Social Media',
+    url: '/Social'
   },
   {
-    title: 'Business Cards'
+    title: 'Your Company'
+    // url: '/Company'
   }
 ]
