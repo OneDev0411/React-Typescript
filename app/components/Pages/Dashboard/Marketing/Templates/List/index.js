@@ -13,19 +13,27 @@ export class List extends React.Component {
   state = {
     activeFlow: '',
     selectedTemplate: null,
-    isTriggeredContactFlow: false
+    isPreviewModalOpen: false,
+    isContactFlowOpen: false
   }
 
   closePreviewModal = () => {
-    this.setState({ selectedTemplate: null })
+    this.setState({ isPreviewModalOpen: false, selectedTemplate: null })
   }
 
-  openPreviewModal = selectedTemplate => this.setState({ selectedTemplate })
+  openPreviewModal = selectedTemplate =>
+    this.setState({ selectedTemplate, isPreviewModalOpen: true })
 
-  triggerContactFlow = () =>
-    this.setState(state => ({
-      isTriggeredContactFlow: !state.isTriggeredContactFlow
-    }))
+  openContactFlow = selectedTemplate =>
+    this.setState({
+      selectedTemplate,
+      isContactFlowOpen: true
+    })
+
+  closeContactFlow = () =>
+    this.setState({
+      isContactFlowOpen: false
+    })
 
   renderTemplate = template => (
     <Template
@@ -35,7 +43,7 @@ export class List extends React.Component {
       handlePreview={() => this.openPreviewModal(template)}
       handleCustomize={() =>
         this.setState({ activeFlow: template.template_type }, () =>
-          this.triggerContactFlow(template)
+          this.openContactFlow(template)
         )
       }
     />
@@ -78,8 +86,9 @@ export class List extends React.Component {
       case 'Birthday':
         return (
           <ContactFlow
-            isTriggered={this.state.isTriggeredContactFlow}
-            handleTrigger={this.triggerContactFlow}
+            selectedTemplate={this.state.selectedTemplate}
+            isTriggered={this.state.isContactFlowOpen}
+            handleTrigger={this.closeContactFlow}
           />
         )
 
@@ -121,7 +130,7 @@ export class List extends React.Component {
           ))}
         </Flex>
         {this.renderPanel(selectedType)}
-        {selectedTemplate && (
+        {state.isPreviewModalOpen && (
           <PreviewImageModal
             isOpen
             handleClose={this.closePreviewModal}
