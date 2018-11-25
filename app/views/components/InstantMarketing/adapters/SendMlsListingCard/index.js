@@ -139,7 +139,8 @@ class SendMlsListingCard extends React.Component {
 
   openListingModal = () => this.setState({ isListingsModalOpen: true })
 
-  closeListingModal = () => this.setState({ isListingsModalOpen: false })
+  closeListingModal = () =>
+    this.setState({ isListingsModalOpen: false }, this.props.handleTrigger)
 
   toggleComposeEmail = () =>
     this.setState(state => ({
