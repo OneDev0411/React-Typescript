@@ -18,7 +18,7 @@ export default class Templates extends React.Component {
   }
 
   getTemplatesList = async () => {
-    const { mediums, templateTypes: types } = this.props
+    const { mediums, defaultTemplate, templateTypes: types } = this.props
 
     try {
       const templates = await getTemplates(types, mediums)
@@ -29,7 +29,11 @@ export default class Templates extends React.Component {
       })
 
       if (templates.length > 0) {
-        this.handleSelectTemplate(templates[0])
+        const selectedTemplate = defaultTemplate
+          ? templates.filter(t => t.id === defaultTemplate.id)
+          : templates
+
+        this.handleSelectTemplate(selectedTemplate[0])
       }
     } catch (e) {
       console.log(e)
@@ -55,20 +59,30 @@ export default class Templates extends React.Component {
     this.props.onTemplateSelect(template)
   }
 
-  updateTemplate = template => {
-    const templates = this.state.templates.map(
-      item => (item.id === template.id ? template : item)
-    )
-
-    this.setState({ templates })
-  }
+  updateTemplate = template =>
+    this.setState(state => ({
+      templates: state.templates.map(item =>
+        item.id === template.id ? template : item
+      )
+    }))
 
   render() {
+    let { templates, selectedTemplate } = this.state
+
+    // Reordering templates list and show the default tempalte as the first item
+    // of the list
+    if (templates.length > 0 && selectedTemplate !== templates[0].id) {
+      templates = [
+        this.props.defaultTemplate,
+        ...templates.filter(t => t.id !== selectedTemplate)
+      ]
+    }
+
     return (
       <Container>
         {this.state.isLoading && <Loader />}
 
-        {this.state.templates.map(template => (
+        {templates.map(template => (
           <TemplateItem
             key={template.id}
             onClick={() => this.handleSelectTemplate(template)}

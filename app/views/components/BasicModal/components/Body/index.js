@@ -8,7 +8,8 @@ const Container = styled.div`
   overflow-y: scroll;
 
   @media screen and (min-width: 48em) {
-    height: ${({ noFooter }) => (noFooter ? 410 : 314)}px
+    height: ${({ noFooter }) => (noFooter ? 410 : 314)}px;
+  }
 `
 
 export default props => <Container {...props}>{props.children}</Container>
