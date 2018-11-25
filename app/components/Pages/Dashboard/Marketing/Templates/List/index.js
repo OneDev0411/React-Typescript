@@ -3,7 +3,7 @@ import Flex from 'styled-flex-component'
 import { groupBy } from 'lodash'
 
 import { PreviewImageModal } from 'components/PreviewImageModal'
-import ContactFlow from 'components/InstantMarketing/Flows/SendContactCard'
+import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 
 import { templateTypes } from '../data'
 import { Template } from './Template'
