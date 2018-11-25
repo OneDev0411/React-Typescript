@@ -28,6 +28,8 @@ export default class Templates extends React.Component {
       let templates = await getTemplates(types, mediums)
 
       if (templates.length > 0) {
+        // Reordering templates list and show the default tempalte
+        // as the first item of the list
         if (defaultTemplate) {
           templates = [
             defaultTemplate,
@@ -79,8 +81,8 @@ export default class Templates extends React.Component {
 
   updateTemplate = template =>
     this.setState(state => ({
-      templates: state.templates.map(
-        item => (item.id === template.id ? template : item)
+      templates: state.templates.map(item =>
+        item.id === template.id ? template : item
       )
     }))
 
