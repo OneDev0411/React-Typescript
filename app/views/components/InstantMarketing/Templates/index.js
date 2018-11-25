@@ -1,4 +1,5 @@
 import React from 'react'
+import idx from 'idx'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
@@ -21,19 +22,23 @@ export default class Templates extends React.Component {
     const { mediums, defaultTemplate, templateTypes: types } = this.props
 
     try {
-      const templates = await getTemplates(types, mediums)
-
-      this.setState({
-        templates,
-        selectedTemplate: templates.length > 0 ? templates[0].id : null
-      })
+      let templates = await getTemplates(types, mediums)
 
       if (templates.length > 0) {
-        const selectedTemplate = defaultTemplate
-          ? templates.filter(t => t.id === defaultTemplate.id)
-          : templates
+        if (defaultTemplate) {
+          templates = [
+            defaultTemplate,
+            ...templates.filter(t => t.id !== defaultTemplate.id)
+          ]
+        }
 
-        this.handleSelectTemplate(selectedTemplate[0])
+        this.setState(
+          {
+            templates,
+            selectedTemplate: templates[0].id
+          },
+          () => this.handleSelectTemplate(templates[0])
+        )
       }
     } catch (e) {
       console.log(e)
@@ -67,22 +72,11 @@ export default class Templates extends React.Component {
     }))
 
   render() {
-    let { templates, selectedTemplate } = this.state
-
-    // Reordering templates list and show the default tempalte as the first item
-    // of the list
-    if (templates.length > 0 && selectedTemplate !== templates[0].id) {
-      templates = [
-        this.props.defaultTemplate,
-        ...templates.filter(t => t.id !== selectedTemplate)
-      ]
-    }
-
     return (
       <Container>
         {this.state.isLoading && <Loader />}
 
-        {templates.map(template => (
+        {this.state.templates.map(template => (
           <TemplateItem
             key={template.id}
             onClick={() => this.handleSelectTemplate(template)}
