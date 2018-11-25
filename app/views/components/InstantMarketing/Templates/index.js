@@ -1,5 +1,4 @@
 import React from 'react'
-import idx from 'idx'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
