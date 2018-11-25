@@ -4,12 +4,15 @@ import idx from 'idx'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 
-import { Container, TemplateItem, TemplateImage } from './styled'
-import Loader from '../../../../components/Partials/Loading'
+import Image from 'components/ImageLoader'
+import Spinner from 'components/Spinner'
+
+import { Container, TemplateItem, LoaderIndicator } from './styled'
 
 export default class Templates extends React.Component {
   state = {
     isLoading: true,
+    isFetchingTemplate: [],
     selectedTemplate: null,
     templates: []
   }
@@ -55,10 +58,20 @@ export default class Templates extends React.Component {
     })
 
     if (!template.template) {
+      this.setState(state => ({
+        isFetchingTemplate: [...state.isFetchingTemplate, template.id]
+      }))
+
       template.template = await loadTemplateHtml(`${template.url}/index.html`)
 
       // append fetched html into template data
       this.updateTemplate(template)
+
+      this.setState(state => ({
+        isFetchingTemplate: state.isFetchingTemplate.filter(
+          id => id !== template.id
+        )
+      }))
     }
 
     this.props.onTemplateSelect(template)
@@ -66,15 +79,17 @@ export default class Templates extends React.Component {
 
   updateTemplate = template =>
     this.setState(state => ({
-      templates: state.templates.map(item =>
-        item.id === template.id ? template : item
+      templates: state.templates.map(
+        item => (item.id === template.id ? template : item)
       )
     }))
+
+  isLoadingTemplate = id => this.state.isFetchingTemplate.includes(id)
 
   render() {
     return (
       <Container>
-        {this.state.isLoading && <Loader />}
+        {this.state.isLoading && <Spinner />}
 
         {this.state.templates.map(template => (
           <TemplateItem
@@ -82,9 +97,20 @@ export default class Templates extends React.Component {
             onClick={() => this.handleSelectTemplate(template)}
             isSelected={this.state.selectedTemplate === template.id}
           >
-            <TemplateImage
+            {this.isLoadingTemplate(template.id) && <LoaderIndicator />}
+
+            <Image
               src={`${template.url}/thumbnail.png`}
               title={template.name}
+              width="97%"
+              style={{
+                minHeight: '200px',
+                margin: '1.5%',
+                boxShadow: '0px 5px 10px #c3c3c3',
+                filter: this.isLoadingTemplate(template.id)
+                  ? 'blur(4px)'
+                  : 'none'
+              }}
             />
           </TemplateItem>
         ))}
