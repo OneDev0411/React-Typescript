@@ -4,21 +4,37 @@ import { connect } from 'react-redux'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
+import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
+import { getSegments, isListFetched } from 'reducers/filter-segments'
+
+import { getContactsTags } from 'actions/contacts/get-contacts-tags'
+import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
+
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
+import { getContactAttribute } from '../../../../../models/contacts/helpers/get-contact-attribute'
+
 import { normalizeContactAttribute } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
 
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
-import { getContactAttribute } from '../../../../../models/contacts/helpers/get-contact-attribute'
 
-import { SearchInput, SearchInputContainer, SearchResults } from './styled'
+import {
+  SearchInput,
+  SearchInputContainer,
+  SearchResults,
+  Title,
+  SectionSeparator
+} from './styled'
 
 import ContactItem from '../../../SelectContactModal/components/ContactItem'
+import { ListRow } from './ListRow'
 
 const initialState = {
   isLoading: false,
   isListMenuOpen: false,
   searchText: '',
-  list: []
+  list: [],
+  filteredTags: [],
+  filteredList: []
 }
 
 class AddRecipient extends React.Component {
@@ -27,6 +43,22 @@ class AddRecipient extends React.Component {
 
     this.state = initialState
     this.search = _.debounce(this.search, 500)
+  }
+
+  componentDidMount() {
+    const fetchTags =
+      !this.props.tagsIsFetching && this.props.existingTags.length === 0
+
+    if (fetchTags) {
+      this.props.getContactsTags()
+    }
+
+    if (
+      this.props.isSegmentsList === false &&
+      this.props.segmentsList.length === 1
+    ) {
+      this.props.getSavedSegments('contacts')
+    }
   }
 
   isEmail = (email = '') => {
@@ -53,7 +85,8 @@ class AddRecipient extends React.Component {
         name: contact.summary.display_name,
         avatar: contact.summary.profile_image_url,
         email: contact.summary.email,
-        emails: emails.map(email => email.text)
+        emails: emails.map(email => email.text),
+        type: 'contact'
       }
 
       this.props.input.onChange([...this.props.input.value, newRecipient])
@@ -63,7 +96,28 @@ class AddRecipient extends React.Component {
       newRecipient = {
         name: contact.summary.display_name,
         email: contact.summary.email,
-        emails: []
+        emails: [],
+        type: 'contact'
+      }
+
+      this.props.input.onChange([...this.props.input.value, newRecipient])
+    }
+
+    this.setState(initialState)
+  }
+
+  handleSelectNewListItem = (item, type) => {
+    let newRecipient
+
+    const isItemExists = this.props.input.value.some(
+      recipient => recipient.name === item.text
+    )
+
+    if (!isItemExists) {
+      newRecipient = {
+        [type]: item.id,
+        name: type === 'tag' ? item.text : item.name,
+        type
       }
 
       this.props.input.onChange([...this.props.input.value, newRecipient])
@@ -103,10 +157,21 @@ class AddRecipient extends React.Component {
         })
       }
 
+      const regEx = new RegExp(value, 'i')
+
+      const filteredTags = this.props.existingTags.filter(({ text }) =>
+        text.match(regEx)
+      )
+      const filteredList = this.props.segmentsList.filter(
+        ({ name, id }) => name.match(regEx) && id !== 'default'
+      )
+
       this.setState({
         isLoading: false,
         isListMenuOpen: true,
-        list
+        list,
+        filteredTags,
+        filteredList
       })
     } catch (e) {
       console.log(e)
@@ -119,7 +184,7 @@ class AddRecipient extends React.Component {
       <Downshift
         isOpen={this.state.isListMenuOpen}
         onOuterClick={() => this.setState({ isListMenuOpen: false })}
-        render={({ isOpen, getInputProps, getItemProps, highlightedIndex }) => (
+        render={({ isOpen, getInputProps, getItemProps }) => (
           <div style={{ position: 'relative' }}>
             <SearchInputContainer textLength={this.state.searchText.length}>
               <SearchInput
@@ -136,6 +201,28 @@ class AddRecipient extends React.Component {
 
             {isOpen && (
               <SearchResults>
+                {this.state.filteredTags.length > 0 && <Title>Tags</Title>}
+                {this.state.filteredTags.map((tag, index) => (
+                  <ListRow
+                    key={tag.id || index}
+                    text={tag.text}
+                    type="tag"
+                    onClick={() => this.handleSelectNewListItem(tag, 'tag')}
+                  />
+                ))}
+                <SectionSeparator />
+                {this.state.filteredList.length > 0 && <Title>Lists</Title>}
+                {this.state.filteredList.map((list, index) => (
+                  <ListRow
+                    key={list.id || index}
+                    text={list.name}
+                    member_count={list.member_count}
+                    type="list"
+                    onClick={() => this.handleSelectNewListItem(list, 'list')}
+                  />
+                ))}
+                <SectionSeparator />
+                {this.state.list.length > 0 && <Title>Contacts</Title>}
                 {this.state.list
                   .filter(item => !!item.summary.email)
                   .map((item, index) => (
@@ -145,7 +232,7 @@ class AddRecipient extends React.Component {
                       {...getItemProps({ item })}
                       summary={item.summary.email || ''}
                       onClickHandler={this.handleSelectNewContact}
-                      isHighlighted={highlightedIndex === index}
+                      isHighlighted={false}
                     />
                   ))}
               </SearchResults>
@@ -158,7 +245,21 @@ class AddRecipient extends React.Component {
 }
 
 function mapStateToProps({ contacts }) {
-  return { contacts: contacts.list, attributeDefs: contacts.attributeDefs }
+  const existingTags = selectTags(contacts.tags)
+  const tagsIsFetching = isFetchingTags(contacts.tags)
+  const segmentsList = getSegments(contacts.filterSegments, 'contacts')
+
+  return {
+    contacts: contacts.list,
+    attributeDefs: contacts.attributeDefs,
+    existingTags,
+    tagsIsFetching,
+    segmentsList,
+    isSegmentsList: isListFetched(contacts.filterSegments)
+  }
 }
 
-export default connect(mapStateToProps)(AddRecipient)
+export default connect(
+  mapStateToProps,
+  { getContactsTags, getSavedSegments }
+)(AddRecipient)
