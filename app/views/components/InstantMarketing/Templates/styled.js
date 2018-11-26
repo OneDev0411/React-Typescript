@@ -28,3 +28,8 @@ export const TemplateImage = styled.img`
   max-height: 400px;
   box-shadow: 0px 5px 10px #c3c3c3;
 `
+export const TemplateVideo = styled.video`
+  max-width: 100%;
+  max-height: 400px;
+  box-shadow: 0px 5px 10px #c3c3c3;
+`

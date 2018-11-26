@@ -3,7 +3,7 @@ import React from 'react'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 
-import { Container, TemplateItem, TemplateImage } from './styled'
+import { Container, TemplateItem, TemplateImage, TemplateVideo } from './styled'
 import Loader from '../../../../components/Partials/Loading'
 
 export default class Templates extends React.Component {
@@ -74,10 +74,20 @@ export default class Templates extends React.Component {
             onClick={() => this.handleSelectTemplate(template)}
             isSelected={this.state.selectedTemplate === template.id}
           >
-            <TemplateImage
-              src={`${template.url}/thumbnail.png`}
-              title={template.name}
-            />
+            {!template.video &&
+              <TemplateImage
+                src={`${template.url}/thumbnail.png`}
+              />
+            }
+
+            {template.video &&
+              <TemplateVideo
+                autoplay="true"
+                loop="true"
+                type="video/webm"
+                src={`${template.url}/thumbnail.webm`}
+              />
+            }
           </TemplateItem>
         ))}
       </Container>
