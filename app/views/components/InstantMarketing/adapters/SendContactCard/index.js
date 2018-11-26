@@ -10,6 +10,7 @@ import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
 import Compose from 'components/EmailCompose'
+import { SearchContactDrawer } from 'components/SearchContactDrawer'
 
 import { getContact } from 'models/contacts/get-contact'
 
@@ -27,7 +28,41 @@ class SendContactCard extends React.Component {
     isFetchingContact: false,
     contact: this.props.contact,
     isInstantMarketingBuilderOpen: false,
-    isComposeEmailOpen: false
+    isComposeEmailOpen: false,
+    isSearchDrawerOpen: false
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    // For Opening Search Drawer
+    if (
+      props.isTriggered &&
+      !state.isSearchDrawerOpen &&
+      !state.isInstantMarketingBuilderOpen
+    ) {
+      return {
+        isSearchDrawerOpen: true
+      }
+    }
+
+    // For just closing search drawer through its close CTA
+    if (!props.isTriggered && state.isSearchDrawerOpen) {
+      return {
+        isSearchDrawerOpen: false
+      }
+    }
+
+    // For Closing Search Drawer after selecting a contact
+    if (
+      !props.isTriggered &&
+      state.isSearchDrawerOpen &&
+      state.isInstantMarketingBuilderOpen
+    ) {
+      return {
+        isSearchDrawerOpen: false
+      }
+    }
+
+    return state
   }
 
   showMarketingBuilder = async () => {
@@ -65,6 +100,21 @@ class SendContactCard extends React.Component {
     this.setState(state => ({
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
+
+  closeSearchDrawer = () =>
+    this.setState({ isSearchDrawerOpen: false }, this.props.handleTrigger)
+
+  handleSelectedContact = contact =>
+    this.setState(
+      {
+        contact,
+        isSearchDrawerOpen: false
+      },
+      () => {
+        this.props.handleTrigger()
+        this.toggleInstantMarketingBuilder()
+      }
+    )
 
   handleSaveMarketingCard = async template => {
     this.toggleInstantMarketingBuilder()
@@ -154,14 +204,22 @@ class SendContactCard extends React.Component {
 
     return (
       <Fragment>
-        <ActionButton
-          appearance="outline"
-          onClick={this.showMarketingBuilder}
-          disabled={this.state.isFetchingContact}
-          {...this.props.buttonStyle}
-        >
-          {this.props.children}
-        </ActionButton>
+        {this.props.contact ? (
+          <ActionButton
+            appearance="outline"
+            onClick={this.showMarketingBuilder}
+            disabled={this.state.isFetchingContact}
+            {...this.props.buttonStyle}
+          >
+            {this.props.children}
+          </ActionButton>
+        ) : (
+          <SearchContactDrawer
+            isOpen={this.state.isSearchDrawerOpen}
+            onSelect={this.handleSelectedContact}
+            onClose={this.closeSearchDrawer}
+          />
+        )}
 
         <InstantMarketing
           isOpen={this.state.isInstantMarketingBuilderOpen}
@@ -169,6 +227,7 @@ class SendContactCard extends React.Component {
           handleSave={this.handleSaveMarketingCard}
           templateData={{ user: this.props.user, contact: this.state.contact }}
           templateTypes={['Birthday']}
+          defaultTemplate={this.props.selectedTemplate}
         />
 
         <Compose

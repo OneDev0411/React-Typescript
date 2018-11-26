@@ -30,7 +30,8 @@ class Builder extends React.Component {
     super(props)
 
     this.state = {
-      template: null
+      template: null,
+      selectedTemplate: null
     }
 
     this.keyframe = 0
@@ -154,12 +155,8 @@ class Builder extends React.Component {
 
     const result = juice(assembled)
 
-    const selectedTemplate = this.selectedTemplate
-
-    this.selectedTemplate = null
-
     return {
-      ...selectedTemplate,
+      ...this.state.selectedTemplate,
       result
     }
   }
@@ -181,7 +178,9 @@ class Builder extends React.Component {
       })
     }
 
-    this.selectedTemplate = template
+    this.setState({
+      selectedTemplate: template
+    })
 
     const components = this.editor.DomComponents
 
@@ -232,7 +231,7 @@ class Builder extends React.Component {
           <h1>{this.props.headerTitle}</h1>
 
           <Actions>
-            {this.ShowSocialButtons ? (
+            {this.ShowSocialButtons && this.state.selectedTemplate ? (
               <Fragment>
                 <ActionButton
                   onClick={() => this.handleSocialSharing('Instagram')}
@@ -270,22 +269,18 @@ class Builder extends React.Component {
               </ActionButton>
             )}
 
-            {template &&
-              template.video && (
-                <ActionButton
-                  style={{ marginLeft: '0.5rem' }}
-                  onClick={this.onPrevious}
-                >
-                  Previous
-                </ActionButton>
-              )}
+            {template && template.video && (
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                onClick={this.onPrevious}
+              >
+                Previous
+              </ActionButton>
+            )}
 
-            {template &&
-              template.video && (
-                <ActionButton onClick={this.onNext.bind(this)}>
-                  Next
-                </ActionButton>
-              )}
+            {template && template.video && (
+              <ActionButton onClick={this.onNext.bind(this)}>Next</ActionButton>
+            )}
 
             <Divider />
             <IconButton
@@ -304,9 +299,10 @@ class Builder extends React.Component {
             isInvisible={this.props.showTemplatesColumn === false}
           >
             <Templates
+              defaultTemplate={this.props.defaultTemplate}
+              mediums={this.props.mediums}
               onTemplateSelect={this.handleSelectTemplate}
               templateTypes={this.props.templateTypes}
-              mediums={this.props.mediums}
             />
           </TemplatesContainer>
 

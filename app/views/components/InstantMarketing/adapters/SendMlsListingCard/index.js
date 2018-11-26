@@ -2,27 +2,23 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
+import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
+
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import { selectContact } from 'reducers/contacts/list'
+
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import EmailCompose from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
-import { SocialModal } from '../../components/SocialModal'
-
-import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
-
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
-
 import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get-template-preview-image'
-
 import ActionButton from 'components/Button/ActionButton'
-
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
-
-import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
-import { selectContact } from '../../../../../reducers/contacts/list'
 
 import { addCRMLog } from '../../helpers/add-crm-log'
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
+import { SocialModal } from '../../components/SocialModal'
 
 class SendMlsListingCard extends React.Component {
   state = {
@@ -36,29 +32,66 @@ class SendMlsListingCard extends React.Component {
     templateScreenshot: null
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (props.isTriggered != null) {
+      // For Opening Search Drawer
+      if (
+        props.isTriggered &&
+        !state.isListingsModalOpen &&
+        !state.isInstantMarketingBuilderOpen
+      ) {
+        return {
+          isListingsModalOpen: true
+        }
+      }
+
+      // For just closing search drawer through its close CTA
+      if (!props.isTriggered && state.isListingsModalOpen) {
+        return {
+          isListingsModalOpen: false
+        }
+      }
+
+      // For Closing Search Drawer after selecting a contact
+      if (
+        !props.isTriggered &&
+        state.isListingsModalOpen &&
+        state.isInstantMarketingBuilderOpen
+      ) {
+        return {
+          isListingsModalOpen: false
+        }
+      }
+    }
+
+    return state
+  }
+
   get Recipients() {
     return this.props.selectedRows
-      .map(id => {
-        const contact = selectContact(this.props.contacts, id)
+      ? this.props.selectedRows
+          .map(id => {
+            const contact = selectContact(this.props.contacts, id)
 
-        if (!contact || !contact.summary.email) {
-          return null
-        }
+            if (!contact || !contact.summary.email) {
+              return null
+            }
 
-        const emails = getContactAttribute(
-          contact,
-          selectDefinitionByName(this.props.attributeDefs, 'email')
-        )
+            const emails = getContactAttribute(
+              contact,
+              selectDefinitionByName(this.props.attributeDefs, 'email')
+            )
 
-        return {
-          contactId: contact.id,
-          name: contact.summary.display_name,
-          avatar: contact.summary.profile_image_url,
-          email: contact.summary.email,
-          emails: emails.map(email => email.text)
-        }
-      })
-      .filter(recipient => recipient !== null)
+            return {
+              contactId: contact.id,
+              name: contact.summary.display_name,
+              avatar: contact.summary.profile_image_url,
+              email: contact.summary.email,
+              emails: emails.map(email => email.text)
+            }
+          })
+          .filter(recipient => recipient !== null)
+      : []
   }
 
   handleSendEmails = async (values, form) => {
@@ -104,21 +137,25 @@ class SendMlsListingCard extends React.Component {
     }
   }
 
-  toggleListingModal = () =>
-    this.setState(state => ({
-      isListingsModalOpen: !state.isListingsModalOpen
-    }))
+  openListingModal = () => this.setState({ isListingsModalOpen: true })
+
+  closeListingModal = () =>
+    this.setState({ isListingsModalOpen: false }, this.props.handleTrigger)
+
   toggleComposeEmail = () =>
     this.setState(state => ({
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
   onSelectListing = async listing =>
-    this.setState({
-      listing,
-      isListingsModalOpen: false,
-      isInstantMarketingBuilderOpen: true
-    })
+    this.setState(
+      {
+        listing,
+        isListingsModalOpen: false,
+        isInstantMarketingBuilderOpen: true
+      },
+      this.props.handleTrigger
+    )
 
   handleSaveMarketingCard = async template => {
     if (template.medium === 'Social') {
@@ -166,19 +203,21 @@ class SendMlsListingCard extends React.Component {
 
     return (
       <Fragment>
-        <ActionButton
-          appearance="outline"
-          onClick={this.toggleListingModal}
-          size="small"
-        >
-          {this.props.children}
-        </ActionButton>
+        {!this.props.hasExternalTrigger && (
+          <ActionButton
+            appearance="outline"
+            onClick={this.openListingModal}
+            size="small"
+          >
+            {this.props.children}
+          </ActionButton>
+        )}
 
         <SearchListingDrawer
           isOpen={this.state.isListingsModalOpen}
           compact={false}
           title="Select a Listing"
-          onClose={this.toggleListingModal}
+          onClose={this.closeListingModal}
           onSelectListing={this.onSelectListing}
         />
 
@@ -189,6 +228,7 @@ class SendMlsListingCard extends React.Component {
           templateData={{ listing, user }}
           templateTypes={getTemplateTypes(listing)}
           assets={listing && listing.gallery_image_urls}
+          defaultTemplate={this.props.selectedTemplate}
         />
 
         <EmailCompose
