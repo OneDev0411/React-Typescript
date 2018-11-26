@@ -2,20 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import { getContactsTags } from '../../../../../../store_actions/contacts/get-contacts-tags'
 import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
 import Filters from '../../../../../../views/components/Grid/Filters'
 import SaveSegment from '../../../../../../views/components/Grid/SavedSegments/Create'
+import { normalizeFilters } from '../utils'
 
 class ContactFilters extends React.PureComponent {
-  componentDidMount() {
-    if (this.props.tags.length === 0) {
-      this.props.getContactsTags()
-    }
-  }
-
   getUniqTags = tags => {
     if (!tags || tags.length === 0) {
       return []
@@ -27,21 +21,10 @@ class ContactFilters extends React.PureComponent {
   /**
    * creates a search criteria for contacts filters
    */
-  normalizeFilters = filters => {
-    const criteria = []
-
-    _.each(filters, filter => {
-      _.each(filter.values, value => {
-        criteria.push({
-          value,
-          invert: filter.operator.invert === true,
-          attribute_def: filter.id
-        })
-      })
-    })
-
-    return { filters: criteria, args: { users: this.props.users } }
-  }
+  normalizeFilters = filters => ({
+    filters: normalizeFilters(filters),
+    args: { users: this.props.users }
+  })
 
   normalizeSegment = filters =>
     filters.map(filter => ({
@@ -117,7 +100,4 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { getContactsTags }
-)(ContactFilters)
+export default connect(mapStateToProps)(ContactFilters)

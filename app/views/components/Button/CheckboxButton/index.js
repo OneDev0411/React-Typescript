@@ -15,6 +15,7 @@ const CheckBox = styled.span`
   border-radius: 3px;
   background-color: ${props => (props.isSelected ? blue.A100 : '#fff')};
   border: solid 1px ${props => (props.isSelected ? blue.A100 : '#000')};
+  flex-shrink: 0;
 
   svg {
     path {

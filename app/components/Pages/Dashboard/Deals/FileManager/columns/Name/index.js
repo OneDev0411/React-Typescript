@@ -29,7 +29,7 @@ export default class FilesListName extends React.Component {
 
     if (this.isPdfDocument(file.mime) || file.envelope) {
       src = '/static/images/deals/pdf-icon.svg'
-    } else if (file.mime.includes('image/')) {
+    } else if (file.mime.includes('image/') || file.preview_url) {
       src = file.preview_url
     }
 
