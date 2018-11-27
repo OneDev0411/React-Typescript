@@ -6,6 +6,9 @@ import ListIcon from 'components/SvgIcons/List/ListIcon'
 import { IconContainer, RowContainer } from './styled'
 
 export function ListRow({ text, member_count, onClick, type = 'tag' }) {
+  const summery =
+    member_count && `${member_count} Contact${member_count > 1 ? 's' : ''}`
+
   return (
     <RowContainer onClick={onClick}>
       <IconContainer center>
@@ -13,7 +16,7 @@ export function ListRow({ text, member_count, onClick, type = 'tag' }) {
       </IconContainer>
       <div style={{ paddingLeft: '1em' }}>
         <div style={{ lineHeight: 1 }}>{text}</div>
-        <div style={{ color: '#7f7f7f' }}>{member_count}</div>
+        {summery && <div style={{ color: '#7f7f7f' }}>{summery}</div>}
       </div>
     </RowContainer>
   )
