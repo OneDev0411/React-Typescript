@@ -16,6 +16,8 @@ import ActionButton from 'components/Button/ActionButton'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
+import { convertRecipientsToEmails } from 'components/InstantMarketing/Flows/utils'
+
 import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
 import { selectContact } from '../../../../../reducers/contacts/list'
 
@@ -64,12 +66,11 @@ class SendMlsListingCard extends React.Component {
       isSendingEmail: true
     })
 
-    const emails = values.recipients.map(recipient => ({
-      to: recipient.email,
-      subject: values.subject,
-      html: this.state.htmlTemplate,
-      contact: recipient.contactId
-    }))
+    const emails = convertRecipientsToEmails(
+      values.recipients,
+      values.subject,
+      this.state.htmlTemplate
+    )
 
     try {
       await sendContactsEmail(emails)

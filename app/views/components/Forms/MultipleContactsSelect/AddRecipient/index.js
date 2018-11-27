@@ -115,7 +115,7 @@ class AddRecipient extends React.Component {
 
     if (!isItemExists) {
       newRecipient = {
-        [type]: item.id,
+        [`${type}Id`]: item.id,
         name: type === 'tag' ? item.text : item.name,
         type
       }
