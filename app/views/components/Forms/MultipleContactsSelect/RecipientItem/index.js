@@ -8,12 +8,10 @@ import ListItem from './ListItem'
  */
 export function RecipientItem({ recipient, input }) {
   switch (recipient.type) {
-    case 'contact':
-      return <ContactItem recipient={recipient} input={input} />
     case 'tag':
     case 'list':
       return <ListItem recipient={recipient} input={input} />
     default:
-      return null
+      return <ContactItem recipient={recipient} input={input} />
   }
 }
