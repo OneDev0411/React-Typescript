@@ -46,17 +46,13 @@ class AddRecipient extends React.Component {
   }
 
   componentDidMount() {
-    const fetchTags =
-      !this.props.tagsIsFetching && this.props.existingTags.length === 0
+    const fetchTags = !this.props.tagsIsFetching
 
     if (fetchTags) {
       this.props.getContactsTags()
     }
 
-    if (
-      this.props.isSegmentsList === false &&
-      this.props.segmentsList.length === 1
-    ) {
+    if (this.props.isSegmentsList === false) {
       this.props.getSavedSegments('contacts')
     }
   }
